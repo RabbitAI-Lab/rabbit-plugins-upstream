@@ -31,12 +31,13 @@ jobs:
       fail-fast: false
       matrix:
         source: [clawhub, skills-sh, hermes]
-    if: ${{ github.event_name == 'schedule' || inputs.source == 'all' || inputs.source == matrix.source }}
     concurrency:
       group: sync-upstream-${{ matrix.source }}
       cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 300
+    env:
+      SOURCE_SELECTED: ${{ github.event_name == 'schedule' || inputs.source == 'all' || inputs.source == matrix.source }}
     steps:
       - uses: actions/checkout@v4
 
@@ -45,12 +46,15 @@ jobs:
           node-version: 22
 
       - name: Sync ${{ matrix.source }}
+        if: ${{ env.SOURCE_SELECTED == 'true' }}
         run: node scripts/sync-${{ matrix.source }}.mjs
 
       - name: Build index
+        if: ${{ env.SOURCE_SELECTED == 'true' }}
         run: node scripts/build-index.mjs ${{ matrix.source }}
 
       - name: Create PR with changes
+        if: ${{ env.SOURCE_SELECTED == 'true' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SRC: ${{ matrix.source }}
