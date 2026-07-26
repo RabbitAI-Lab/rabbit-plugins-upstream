@@ -1,0 +1,407 @@
+{
+  "generatedAt": "2026-07-26T17:50:20.191Z",
+  "source": "clawhub",
+  "total": 50,
+  "skills": [
+    {
+      "id": "clawhub/git-cli-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/git-cli-tool-free",
+      "version": "1.0.2",
+      "contentHash": "74426e99f8134b8f3df7163a154bd5e95dc9c52fee4bad0afc8734406dd7d67c",
+      "fetchedAt": "2026-07-26T17:50:18.751Z"
+    },
+    {
+      "id": "clawhub/git-helper-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/git-helper-tool-free",
+      "version": "1.0.2",
+      "contentHash": "9075a19201835f505cedd867c92d9f05eaaa4aa4cf4a42bb2b34ca477d317c7a",
+      "fetchedAt": "2026-07-26T17:50:20.135Z"
+    },
+    {
+      "id": "clawhub/git-workflows-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/git-workflows-tool-free",
+      "version": "1.0.2",
+      "contentHash": "871c77cf70187cc4ec9849aa1edf2fd00f92412779ab10fcd315788179ffd24d",
+      "fetchedAt": "2026-07-26T17:50:19.301Z"
+    },
+    {
+      "id": "clawhub/gitcrawl-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/gitcrawl-tool-free",
+      "version": "1.0.1",
+      "contentHash": "b321d5b63c8cf362918cfd092965815171a9994f19a865d2e63d35533e99ef34",
+      "fetchedAt": "2026-07-26T17:50:16.830Z"
+    },
+    {
+      "id": "clawhub/glitch-dashboard-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/glitch-dashboard-tool-free",
+      "version": "1.0.1",
+      "contentHash": "a6355e60f727e738b52be5217d7d930db977d21267d126ebdb7594132df421fd",
+      "fetchedAt": "2026-07-26T17:50:17.866Z"
+    },
+    {
+      "id": "clawhub/go-linter-config-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/go-linter-config-tool-free",
+      "version": "1.0.1",
+      "contentHash": "cfa8e61462566bd3c4c0bcff32a3d33db6ddb4df6d52a63dcfa93dc9e857374f",
+      "fetchedAt": "2026-07-26T17:50:17.869Z"
+    },
+    {
+      "id": "clawhub/go-security-vuln-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/go-security-vuln-tool-free",
+      "version": "1.0.1",
+      "contentHash": "f2a8f025f7854d250335a4e073028e81e2d28bbc7d72474fc7b9c3fbbdf570f6",
+      "fetchedAt": "2026-07-26T17:50:16.551Z"
+    },
+    {
+      "id": "clawhub/google-fonts-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/google-fonts-tool-free",
+      "version": "1.0.1",
+      "contentHash": "b9f2fb62caa8c6feedc0c89d1fad012914883cb341b388a5d0105698cf73f5e6",
+      "fetchedAt": "2026-07-26T17:50:16.898Z"
+    },
+    {
+      "id": "clawhub/google-search-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/google-search-tool-free",
+      "version": "1.0.1",
+      "contentHash": "e101cd0dd9a659e6911bce286d81d9165d08766c50674c19f13da44699c09f1f",
+      "fetchedAt": "2026-07-26T17:50:15.462Z"
+    },
+    {
+      "id": "clawhub/graph-query-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/graph-query-tool-free",
+      "version": "1.0.3",
+      "contentHash": "18bc7dc06ca563f19c3d68b06b8e2bc6206261594520e994c227c74158fec686",
+      "fetchedAt": "2026-07-26T17:50:15.436Z"
+    },
+    {
+      "id": "clawhub/grok-image-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/grok-image-tool-free",
+      "version": "1.0.2",
+      "contentHash": "afb97995c8d5d2a1c1bfed55867f720a6c8d2f2c467ed999726cbdaf55302048",
+      "fetchedAt": "2026-07-26T17:50:15.156Z"
+    },
+    {
+      "id": "clawhub/group-agent-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/group-agent-tool-free",
+      "version": "1.0.1",
+      "contentHash": "fc1ddb7361349c702b19d1aa9f7dfd0be28940ad8d474f25fbd51470db7851e7",
+      "fetchedAt": "2026-07-26T17:50:15.507Z"
+    },
+    {
+      "id": "clawhub/heygen-tts-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/heygen-tts-tool-free",
+      "version": "1.0.2",
+      "contentHash": "0d159409e2a6ff69ed1bd9f7003add49c833d0025ebfa4e9e8181e5908d9224b",
+      "fetchedAt": "2026-07-26T17:50:13.508Z"
+    },
+    {
+      "id": "clawhub/hot-news-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/hot-news-tool-free",
+      "version": "1.0.1",
+      "contentHash": "0cc41abb145591dbb40ad2002d98e17fbd667918c4ba561455898011fd5a51ea",
+      "fetchedAt": "2026-07-26T17:50:13.769Z"
+    },
+    {
+      "id": "clawhub/html-coder-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/html-coder-tool-free",
+      "version": "1.0.2",
+      "contentHash": "49ffedda8674cfcff0cc8382cc3da7aaa2d0f0568fa7955f9d4d6bdf7e58dfc2",
+      "fetchedAt": "2026-07-26T17:50:12.405Z"
+    },
+    {
+      "id": "clawhub/html-designer-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/html-designer-tool-free",
+      "version": "1.0.2",
+      "contentHash": "995f6768cc7009f155731a69e05dc3409338ccb7f67df06c2cfdd78bda8df72e",
+      "fetchedAt": "2026-07-26T17:50:12.406Z"
+    },
+    {
+      "id": "clawhub/hugo-blog-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/hugo-blog-tool-free",
+      "version": "1.0.2",
+      "contentHash": "90737fea489d5452c1a0d4b42fd2c466190f786053c68fee6728bea344d6928c",
+      "fetchedAt": "2026-07-26T17:50:11.554Z"
+    },
+    {
+      "id": "clawhub/humanizer-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/humanizer-tool-free",
+      "version": "1.0.1",
+      "contentHash": "18d268638819d81bcf66abca86ed18bf21b77acc8f2396ab130d14b69c22e24f",
+      "fetchedAt": "2026-07-26T17:50:11.801Z"
+    },
+    {
+      "id": "clawhub/image-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/image-tool-free",
+      "version": "1.0.1",
+      "contentHash": "ca59c0f6a676879e83357a96f45f08d5f39e11477b0662e8d8e01aaa1172105b",
+      "fetchedAt": "2026-07-26T17:50:10.488Z"
+    },
+    {
+      "id": "clawhub/internet-search-pro-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/internet-search-pro-tool-free",
+      "version": "1.0.1",
+      "contentHash": "95b20baa3adc33e8e7ccf65aab6c8a1f41c625d85d683b0ff4a4c1ed6de96dbb",
+      "fetchedAt": "2026-07-26T17:50:10.382Z"
+    },
+    {
+      "id": "clawhub/internet-search-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/internet-search-tool-free",
+      "version": "1.0.1",
+      "contentHash": "6c24a7f8307b17cdb5f5e0960a5aa5b98fad6c9a2a1c935d05f60571fad4226c",
+      "fetchedAt": "2026-07-26T17:50:10.683Z"
+    },
+    {
+      "id": "clawhub/interview-sim-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/interview-sim-tool-free",
+      "version": "1.0.1",
+      "contentHash": "93963a182c33415f873bb661cc57d9e9c3678dec8555b726ac1a05c134271178",
+      "fetchedAt": "2026-07-26T17:50:09.796Z"
+    },
+    {
+      "id": "clawhub/iris-formatter-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/iris-formatter-tool-free",
+      "version": "1.0.2",
+      "contentHash": "b5c201238a655f09ede2d21d0a570ef6015523da54aabf149a80787fbbc3bdcb",
+      "fetchedAt": "2026-07-26T17:50:09.037Z"
+    },
+    {
+      "id": "clawhub/java-dev-manual-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/java-dev-manual-tool-free",
+      "version": "1.0.2",
+      "contentHash": "baf61bda5b208a3b6d63875147985ebd5204f2fca5ce06fbf04ff2577962f4bd",
+      "fetchedAt": "2026-07-26T17:50:08.474Z"
+    },
+    {
+      "id": "clawhub/java-reviewer-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/java-reviewer-tool-free",
+      "version": "1.0.2",
+      "contentHash": "1ac0729c90b4c3374120dec2ce4ab6f2003e114cc77846218ceb81d2f1185f87",
+      "fetchedAt": "2026-07-26T17:50:08.921Z"
+    },
+    {
+      "id": "clawhub/javascript-sdk-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/javascript-sdk-tool-free",
+      "version": "1.0.2",
+      "contentHash": "420d09c75b0f3056ff1daf148e344046b9ab407970afe75f10d2a17de49fa5bd",
+      "fetchedAt": "2026-07-26T17:50:07.282Z"
+    },
+    {
+      "id": "clawhub/javascript-skills-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/javascript-skills-tool-free",
+      "version": "1.0.2",
+      "contentHash": "c4a10b3d62fa073b95b74ca5bcd2bab84586726cfa84dd6162a289a298d864f6",
+      "fetchedAt": "2026-07-26T17:50:07.307Z"
+    },
+    {
+      "id": "clawhub/jellyfin-control-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/jellyfin-control-tool-free",
+      "version": "1.0.1",
+      "contentHash": "bdf95ca5f3c7c1a8bb4f511a3ee39087ac68e79ad0edf20023af5a71e536b6fc",
+      "fetchedAt": "2026-07-26T17:50:06.805Z"
+    },
+    {
+      "id": "clawhub/minimalist-design-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/minimalist-design-tool-free",
+      "version": "1.0.2",
+      "contentHash": "b806485549d1d577b87a6ad8cdb875cbfc456624aad1fba5c5d18dd0ea963149",
+      "fetchedAt": "2026-07-26T17:50:19.709Z"
+    },
+    {
+      "id": "clawhub/miniprogram-dev-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/miniprogram-dev-tool-free",
+      "version": "1.0.1",
+      "contentHash": "526e9759bfab0603498116f5432c60dd42c405cf947fdacf60348dba8006933a",
+      "fetchedAt": "2026-07-26T17:50:18.675Z"
+    },
+    {
+      "id": "clawhub/model-routing-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/model-routing-tool-free",
+      "version": "1.0.2",
+      "contentHash": "51dda73bfc5c60555e72bee102a16befd4304a84f6fdce2bea4825256720f8b2",
+      "fetchedAt": "2026-07-26T17:50:18.601Z"
+    },
+    {
+      "id": "clawhub/model-switching-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/model-switching-tool-free",
+      "version": "1.0.2",
+      "contentHash": "aeb3d17e2b2a0f92e73071bd5632d04ecbe2ad8f1bc70bb1db1caa99444d8ecf",
+      "fetchedAt": "2026-07-26T17:50:17.034Z"
+    },
+    {
+      "id": "clawhub/moltbook-firewall-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/moltbook-firewall-tool-free",
+      "version": "1.0.1",
+      "contentHash": "860fbe15d06462a5c7835b639a718fc5c018868c8887167e03515d97d218006e",
+      "fetchedAt": "2026-07-26T17:50:16.467Z"
+    },
+    {
+      "id": "clawhub/molted-work-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/molted-work-tool-free",
+      "version": "1.0.1",
+      "contentHash": "be674cea9af588e09c1145d6eddd8e856034507686ebaded208463b0e47a5ec9",
+      "fetchedAt": "2026-07-26T17:50:17.532Z"
+    },
+    {
+      "id": "clawhub/monad-dev-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/monad-dev-tool-free",
+      "version": "1.0.1",
+      "contentHash": "ae4820041237a206ab1d6bd5499a168cd9309922fd1f4da1fd3a83ca870b18ca",
+      "fetchedAt": "2026-07-26T17:50:14.896Z"
+    },
+    {
+      "id": "clawhub/multi-search-engine-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/multi-search-engine-tool-free",
+      "version": "1.0.1",
+      "contentHash": "c6df244abc0d65985be452e024481c44ff40d5ecb0eec6e9eb164eacdc82c8f3",
+      "fetchedAt": "2026-07-26T17:50:15.644Z"
+    },
+    {
+      "id": "clawhub/multi-search-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/multi-search-tool-free",
+      "version": "1.0.1",
+      "contentHash": "10c3646e908bd76b86660816b31f203f34509e568f1b2727235280a455bdf895",
+      "fetchedAt": "2026-07-26T17:50:14.035Z"
+    },
+    {
+      "id": "clawhub/multi-source-research-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/multi-source-research-tool-free",
+      "version": "1.0.1",
+      "contentHash": "702ec7e36d848e4c542da1a516dade418a799b49df4476a710ffd7dbf2ae04b1",
+      "fetchedAt": "2026-07-26T17:50:14.089Z"
+    },
+    {
+      "id": "clawhub/music-gen-cellcog-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/music-gen-cellcog-tool-free",
+      "version": "1.0.2",
+      "contentHash": "38f71bbe256f2c5ba4f606f028e9d85c4729cd6cf71a96a0c7c3dc17ca446bfd",
+      "fetchedAt": "2026-07-26T17:50:13.926Z"
+    },
+    {
+      "id": "clawhub/music-gen-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/music-gen-tool-free",
+      "version": "1.0.2",
+      "contentHash": "f6271aef1941a9e149bdcc78035edb54fd1f1d66bc68c7cd7db408ecc3cef945",
+      "fetchedAt": "2026-07-26T17:50:13.278Z"
+    },
+    {
+      "id": "clawhub/namecheap-dns-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/namecheap-dns-tool-free",
+      "version": "1.0.2",
+      "contentHash": "532db7af6f0d4d25df4bd46f630ff882ada3b6d146a3aef20022eeb30709592d",
+      "fetchedAt": "2026-07-26T17:50:12.184Z"
+    },
+    {
+      "id": "clawhub/nano-pdf-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/nano-pdf-tool-free",
+      "version": "1.0.2",
+      "contentHash": "a758fb666108bb6d1d12d2a676c4cee43e670757078073bd75520f401d267bcc",
+      "fetchedAt": "2026-07-26T17:50:12.382Z"
+    },
+    {
+      "id": "clawhub/news-feed-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/news-feed-tool-free",
+      "version": "1.0.1",
+      "contentHash": "e0283810f8f51c92dff39f823ea5928f6eed9d2db4e1bc45b4f47bdeb44052bb",
+      "fetchedAt": "2026-07-26T17:50:10.796Z"
+    },
+    {
+      "id": "clawhub/news-sentiment-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/news-sentiment-tool-free",
+      "version": "1.0.2",
+      "contentHash": "dd34584605d95d80ba01680a6e329073791b90d88957ede818ec1f473d420b38",
+      "fetchedAt": "2026-07-26T17:50:10.743Z"
+    },
+    {
+      "id": "clawhub/news-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/news-tool-free",
+      "version": "1.0.1",
+      "contentHash": "3632976a45c71c91d96a4d24c970a80aab8a33efcc5ab33207a2eb7cef73edc4",
+      "fetchedAt": "2026-07-26T17:50:09.035Z"
+    },
+    {
+      "id": "clawhub/node-connect-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/node-connect-tool-free",
+      "version": "1.0.2",
+      "contentHash": "ca314aa1d82b20f68d2319bf07949e83ee5e418969431779f48ebd9200a62850",
+      "fetchedAt": "2026-07-26T17:50:09.086Z"
+    },
+    {
+      "id": "clawhub/note-taker-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/note-taker-tool-free",
+      "version": "1.0.1",
+      "contentHash": "4f076c15ab02a9654f5fa83c01dc1eefed4d9ec5572259cee8f60c0bd118d4ec",
+      "fetchedAt": "2026-07-26T17:50:09.052Z"
+    },
+    {
+      "id": "clawhub/notion-cli-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/notion-cli-tool-free",
+      "version": "1.0.2",
+      "contentHash": "631b4efbf867c2f1c201b4fe2c7330ac3d5604ed107fc64b8bf973c1703ab19a",
+      "fetchedAt": "2026-07-26T17:50:07.335Z"
+    },
+    {
+      "id": "clawhub/notion-pages-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/notion-pages-tool-free",
+      "version": "1.0.1",
+      "contentHash": "f4f467a76291bac13470692a5384bcfb0f7e38266a4879457ab668d69226fd93",
+      "fetchedAt": "2026-07-26T17:50:07.036Z"
+    },
+    {
+      "id": "clawhub/notion-skill-tool-free",
+      "source": "clawhub",
+      "url": "https://clawhub.ai/skills/notion-skill-tool-free",
+      "version": "1.0.1",
+      "contentHash": "e5b97298befdd0a70221ce82e2c6768a3f46ad3b81a3624358579616e94563dc",
+      "fetchedAt": "2026-07-26T17:50:07.306Z"
+    }
+  ]
+}

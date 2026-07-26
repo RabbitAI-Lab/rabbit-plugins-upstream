@@ -55,7 +55,9 @@ node scripts/build-index.mjs clawhub   # 重新生成 index/<source>.json 与下
 ### ClawHub
 
 <!-- INDEX:clawhub:START -->
-（尚未同步，运行 `node scripts/build-index.mjs clawhub` 后自动生成）
+最后同步：2026-07-26T17:50:20.191Z
+
+已镜像完整内容：**50** 个 skill，明细见 `index/clawhub.json` 与 `skills/clawhub/`。
 <!-- INDEX:clawhub:END -->
 
 ### skills.sh
