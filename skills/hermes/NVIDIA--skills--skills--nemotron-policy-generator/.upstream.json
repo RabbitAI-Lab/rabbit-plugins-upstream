@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemotron-policy-generator",
+  "identifier": "NVIDIA/skills/skills/nemotron-policy-generator",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemotron-policy-generator",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "4cf1f813614cac79f1cf62aca472678d671ebee4e8fb2d6365818d381c8db2ae",
+  "fetchedAt": "2026-07-26T17:03:52.349Z"
+}

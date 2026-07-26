@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-customize-usb",
+  "identifier": "NVIDIA/skills/skills/jetson-customize-usb",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-customize-usb",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "bdf50d891c27ba792b2eca8d1c80258eb1ded8ae7d84dddb63fd979ab5e59ea1",
+  "fetchedAt": "2026-07-26T17:03:52.315Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/hatch-pet",
+  "identifier": "openai/skills/skills/.curated/hatch-pet",
+  "repo": "openai/skills",
+  "path": "skills/.curated/hatch-pet",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "f61841ec0faf90a34f41fb9d62251616c4d9bbdecd2017f804f1a1df93504b7a",
+  "fetchedAt": "2026-07-26T17:03:51.153Z"
+}

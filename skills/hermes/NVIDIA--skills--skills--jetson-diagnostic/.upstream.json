@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-diagnostic",
+  "identifier": "NVIDIA/skills/skills/jetson-diagnostic",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-diagnostic",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "6712553b42575f133e051ec481f80862feb15e2344ca6be3f7de017df9ecbbd0",
+  "fetchedAt": "2026-07-26T17:03:52.317Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/chatgpt-apps",
+  "identifier": "openai/skills/skills/.curated/chatgpt-apps",
+  "repo": "openai/skills",
+  "path": "skills/.curated/chatgpt-apps",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "22c222d78e07c731d53ce69676ed9c0b7657bda6d8b8e2f45dab2e8f82791c46",
+  "fetchedAt": "2026-07-26T17:03:51.127Z"
+}

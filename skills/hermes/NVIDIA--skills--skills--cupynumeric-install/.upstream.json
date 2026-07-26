@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cupynumeric-install",
+  "identifier": "NVIDIA/skills/skills/cupynumeric-install",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cupynumeric-install",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "1642a8ddfab09838349f14f956fc3e749f165e21e46e88aecff9d04784966e18",
+  "fetchedAt": "2026-07-26T17:03:52.246Z"
+}

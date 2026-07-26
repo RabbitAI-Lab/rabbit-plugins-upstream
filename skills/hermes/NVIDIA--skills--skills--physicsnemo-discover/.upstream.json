@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/physicsnemo-discover",
+  "identifier": "NVIDIA/skills/skills/physicsnemo-discover",
+  "repo": "NVIDIA/skills",
+  "path": "skills/physicsnemo-discover",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "dbf12802ae5789dd84261f1c8c3d605a188a52d61167d76167b3885c8f0d40fb",
+  "fetchedAt": "2026-07-26T17:03:52.390Z"
+}

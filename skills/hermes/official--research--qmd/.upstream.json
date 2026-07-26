@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/qmd",
+  "identifier": "official/research/qmd",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/research/qmd",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "7c8c26f105dc4df01fc7ebc366c29c2da25ae66fc208ed4c9882d09687621a54",
+  "fetchedAt": "2026-07-26T17:03:57.015Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/finance/pptx-author",
+  "identifier": "official/finance/pptx-author",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/finance/pptx-author",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "8c3c3eee8bfd6120eb733835080eb4a85646edcc823946697f64e7211474cd90",
+  "fetchedAt": "2026-07-26T17:03:57.011Z"
+}

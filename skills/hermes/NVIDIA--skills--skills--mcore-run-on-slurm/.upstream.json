@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/mcore-run-on-slurm",
+  "identifier": "NVIDIA/skills/skills/mcore-run-on-slurm",
+  "repo": "NVIDIA/skills",
+  "path": "skills/mcore-run-on-slurm",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "0f991af3581fe6a2618b2c2f045601294cee5fab154d88a66e68f6b972cf26c4",
+  "fetchedAt": "2026-07-26T17:03:52.328Z"
+}

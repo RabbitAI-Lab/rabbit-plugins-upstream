@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/instructor",
+  "identifier": "official/mlops/instructor",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/instructor",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "15f4638418b940281697dd3e9c32cfdffffbd67e79324cbd441ec5df9a599cea",
+  "fetchedAt": "2026-07-26T17:03:56.990Z"
+}

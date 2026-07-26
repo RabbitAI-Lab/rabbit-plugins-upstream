@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cuopt-developer",
+  "identifier": "NVIDIA/skills/skills/cuopt-developer",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cuopt-developer",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "7c813a278be7430ff7e28bfb9dec85e7a5750c7b37ad862a5b0e9ab539df9132",
+  "fetchedAt": "2026-07-26T17:03:52.237Z"
+}

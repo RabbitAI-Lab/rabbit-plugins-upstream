@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/duckduckgo-search",
+  "identifier": "official/research/duckduckgo-search",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/research/duckduckgo-search",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "9fd8a22636750965ee1d0bd53f2466573d71f42d1adb059e4357e0e95b316300",
+  "fetchedAt": "2026-07-26T17:03:56.977Z"
+}

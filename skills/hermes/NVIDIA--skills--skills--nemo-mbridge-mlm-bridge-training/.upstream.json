@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-mlm-bridge-training",
+  "identifier": "NVIDIA/skills/skills/nemo-mbridge-mlm-bridge-training",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-mbridge-mlm-bridge-training",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "4ac8967865d66e8d18a35f05f4f84bb14494d6e70e9178bda45073066ebb2838",
+  "fetchedAt": "2026-07-26T17:03:52.332Z"
+}

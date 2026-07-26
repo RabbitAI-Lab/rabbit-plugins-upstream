@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/dynamo-router-starter",
+  "identifier": "NVIDIA/skills/skills/dynamo-router-starter",
+  "repo": "NVIDIA/skills",
+  "path": "skills/dynamo-router-starter",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "f335e3d197ca703026916428aae14ebc37f5cea3cf669856e468cd43a8afb292",
+  "fetchedAt": "2026-07-26T17:03:52.298Z"
+}

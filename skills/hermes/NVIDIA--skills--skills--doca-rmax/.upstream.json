@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-rmax",
+  "identifier": "NVIDIA/skills/skills/doca-rmax",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-rmax",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "b6fe77c18b742ee32623970449cf87150a96dbcfa812602ffadc04b2120015fa",
+  "fetchedAt": "2026-07-26T17:03:52.288Z"
+}

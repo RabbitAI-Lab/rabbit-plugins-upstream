@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/dali-dynamic-mode",
+  "identifier": "NVIDIA/skills/skills/dali-dynamic-mode",
+  "repo": "NVIDIA/skills",
+  "path": "skills/dali-dynamic-mode",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "08f5dc39b2babca4660e7a582d86654795793a9fb4f94f5a073fa093240bc645",
+  "fetchedAt": "2026-07-26T17:03:52.250Z"
+}

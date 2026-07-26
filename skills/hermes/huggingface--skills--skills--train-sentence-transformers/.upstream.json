@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/train-sentence-transformers",
+  "identifier": "huggingface/skills/skills/train-sentence-transformers",
+  "repo": "huggingface/skills",
+  "path": "skills/train-sentence-transformers",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "2d0a425da328bf9ba1694f4036de5fd07bf46ccac4d9cf909e89d0dea5439baa",
+  "fetchedAt": "2026-07-26T17:03:50.919Z"
+}

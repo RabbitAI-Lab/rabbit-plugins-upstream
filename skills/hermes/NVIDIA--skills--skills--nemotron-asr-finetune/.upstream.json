@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemotron-asr-finetune",
+  "identifier": "NVIDIA/skills/skills/nemotron-asr-finetune",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemotron-asr-finetune",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "c06e54c66817b13c3ed9f380db706e8b1c70f07c9e2df31d788a31a1f4a9e213",
+  "fetchedAt": "2026-07-26T17:03:52.346Z"
+}

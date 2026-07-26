@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/clip",
+  "identifier": "official/mlops/clip",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/clip",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "ee752cab63648d9e45266e7e91f298992f950e567be09abb5d45454c86b860f7",
+  "fetchedAt": "2026-07-26T17:03:56.967Z"
+}

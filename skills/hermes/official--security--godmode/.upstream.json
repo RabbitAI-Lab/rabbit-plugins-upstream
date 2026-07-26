@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/security/godmode",
+  "identifier": "official/security/godmode",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/security/godmode",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "f57d20054b11e679353c9d032d6b958ba16c07458b290ecca31167fc48c80d6f",
+  "fetchedAt": "2026-07-26T17:03:56.982Z"
+}

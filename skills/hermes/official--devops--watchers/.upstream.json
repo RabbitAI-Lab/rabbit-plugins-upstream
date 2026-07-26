@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/devops/watchers",
+  "identifier": "official/devops/watchers",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/devops/watchers",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "416be4a1fc22948d16f7b13999183ccd0fde2562c21f78fc1542e5336ec73f2e",
+  "fetchedAt": "2026-07-26T17:03:57.031Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/scrapling",
+  "identifier": "official/research/scrapling",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/research/scrapling",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "7e3200b84046a8610ede02a5966edb8e7f8e37c2ad073a1a0aa868749eeb59ce",
+  "fetchedAt": "2026-07-26T17:03:57.016Z"
+}

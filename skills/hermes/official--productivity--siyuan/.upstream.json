@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/siyuan",
+  "identifier": "official/productivity/siyuan",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/siyuan",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "06840173d1ff4b906c2a0aabd7b54712d9b9c2ba3bbde6edff648dea4fa6c402",
+  "fetchedAt": "2026-07-26T17:03:57.019Z"
+}

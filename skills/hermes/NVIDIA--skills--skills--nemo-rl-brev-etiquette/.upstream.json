@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-rl-brev-etiquette",
+  "identifier": "NVIDIA/skills/skills/nemo-rl-brev-etiquette",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-rl-brev-etiquette",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "61fff57e2a4febb3d0b281229cd73c379d17f54af00b5eb758bd92b362fc951d",
+  "fetchedAt": "2026-07-26T17:03:52.344Z"
+}

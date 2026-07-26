@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/huggingface-llm-trainer",
+  "identifier": "huggingface/skills/skills/huggingface-llm-trainer",
+  "repo": "huggingface/skills",
+  "path": "skills/huggingface-llm-trainer",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "7d89e01764b250a76627695df2adcf87997680643ebc4b31a5b47a445e6ee32d",
+  "fetchedAt": "2026-07-26T17:03:50.912Z"
+}

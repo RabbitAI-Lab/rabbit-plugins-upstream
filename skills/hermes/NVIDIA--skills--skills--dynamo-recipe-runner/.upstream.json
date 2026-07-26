@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/dynamo-recipe-runner",
+  "identifier": "NVIDIA/skills/skills/dynamo-recipe-runner",
+  "repo": "NVIDIA/skills",
+  "path": "skills/dynamo-recipe-runner",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "06a84277056f6eab97a9726bb9780d3c19221d04dd2bc87943193b7141661a62",
+  "fetchedAt": "2026-07-26T17:03:52.298Z"
+}

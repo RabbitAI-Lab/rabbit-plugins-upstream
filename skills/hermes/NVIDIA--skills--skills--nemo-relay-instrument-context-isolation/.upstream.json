@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-relay-instrument-context-isolation",
+  "identifier": "NVIDIA/skills/skills/nemo-relay-instrument-context-isolation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-relay-instrument-context-isolation",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "0d2d102839db9e7e0e58fb12f538ca55089687e1427a30508205ba634661d2f4",
+  "fetchedAt": "2026-07-26T17:03:52.341Z"
+}

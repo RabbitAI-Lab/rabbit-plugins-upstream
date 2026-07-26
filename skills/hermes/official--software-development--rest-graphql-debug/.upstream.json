@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/software-development/rest-graphql-debug",
+  "identifier": "official/software-development/rest-graphql-debug",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/software-development/rest-graphql-debug",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "e2b87278021373360468cb129649c3320d406fbcdef7bfe1a495699778a829a7",
+  "fetchedAt": "2026-07-26T17:03:57.016Z"
+}

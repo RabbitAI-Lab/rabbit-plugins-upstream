@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/gh-address-comments",
+  "identifier": "openai/skills/skills/.curated/gh-address-comments",
+  "repo": "openai/skills",
+  "path": "skills/.curated/gh-address-comments",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "cd406b1d6f0e0680817b4b3a5b7c77dc5968694c1d3c0901f5288f128972552d",
+  "fetchedAt": "2026-07-26T17:03:51.152Z"
+}

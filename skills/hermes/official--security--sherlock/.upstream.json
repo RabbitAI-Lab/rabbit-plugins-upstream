@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/security/sherlock",
+  "identifier": "official/security/sherlock",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/security/sherlock",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "fd666c3a22118350e889cc453d54ecf0a448ff44866f748465a3db5f4f3e19cb",
+  "fetchedAt": "2026-07-26T17:03:57.017Z"
+}

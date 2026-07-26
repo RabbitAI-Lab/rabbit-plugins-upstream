@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-telemetry",
+  "identifier": "NVIDIA/skills/skills/doca-telemetry",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-telemetry",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "0d4b7454136cadee12678e70fdd54abf4bdd22d7d65ed4dfc174862c9769be53",
+  "fetchedAt": "2026-07-26T17:03:52.293Z"
+}

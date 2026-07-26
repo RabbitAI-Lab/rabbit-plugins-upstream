@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/software-development/subagent-driven-development",
+  "identifier": "official/software-development/subagent-driven-development",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/software-development/subagent-driven-development",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "e9f6858c068a063bc457acfd2a056a34ce3402e32d87beb68dbe2aeba2e8c41c",
+  "fetchedAt": "2026-07-26T17:03:57.022Z"
+}

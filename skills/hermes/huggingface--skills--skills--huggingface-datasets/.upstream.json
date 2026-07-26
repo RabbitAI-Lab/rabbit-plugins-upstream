@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/huggingface-datasets",
+  "identifier": "huggingface/skills/skills/huggingface-datasets",
+  "repo": "huggingface/skills",
+  "path": "skills/huggingface-datasets",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "a4c7a02a81f5e19e03636c9616c574cb87dc6ec5ba5dbbe66decc1320a27e162",
+  "fetchedAt": "2026-07-26T17:03:50.911Z"
+}

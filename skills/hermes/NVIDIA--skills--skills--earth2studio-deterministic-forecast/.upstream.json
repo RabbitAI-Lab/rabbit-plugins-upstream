@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/earth2studio-deterministic-forecast",
+  "identifier": "NVIDIA/skills/skills/earth2studio-deterministic-forecast",
+  "repo": "NVIDIA/skills",
+  "path": "skills/earth2studio-deterministic-forecast",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "1db7527adbfa7b7bb6d661a8ddbeec02514261b45fdda180b51ec1b899c8de3e",
+  "fetchedAt": "2026-07-26T17:03:52.303Z"
+}

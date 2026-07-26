@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nv-generate-ct-rflow",
+  "identifier": "NVIDIA/skills/skills/nv-generate-ct-rflow",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nv-generate-ct-rflow",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "66e878781c8de965887b6813a4f5610f640b140b3c32f3e55fed51bf3b340414",
+  "fetchedAt": "2026-07-26T17:03:52.353Z"
+}

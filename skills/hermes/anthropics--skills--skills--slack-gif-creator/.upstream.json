@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/anthropics/skills/tree/main/skills/slack-gif-creator",
+  "identifier": "anthropics/skills/skills/slack-gif-creator",
+  "repo": "anthropics/skills",
+  "path": "skills/slack-gif-creator",
+  "branch": "main",
+  "pushedAt": "2026-07-24T20:12:36Z",
+  "contentHash": "4d8f2d75bc0f0ff84efe56ee3abf91ac9ae14a892b48c32f0222df14c6eb96fb",
+  "fetchedAt": "2026-07-26T17:03:51.061Z"
+}

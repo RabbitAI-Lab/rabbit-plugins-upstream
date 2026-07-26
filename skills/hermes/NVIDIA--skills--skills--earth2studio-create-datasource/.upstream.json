@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/earth2studio-create-datasource",
+  "identifier": "NVIDIA/skills/skills/earth2studio-create-datasource",
+  "repo": "NVIDIA/skills",
+  "path": "skills/earth2studio-create-datasource",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "61ec0fa9b77c6e4518adac334d455ac0959c690e29df40a014e696bbc8e706c7",
+  "fetchedAt": "2026-07-26T17:03:52.300Z"
+}

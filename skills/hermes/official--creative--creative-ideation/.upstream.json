@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/creative-ideation",
+  "identifier": "official/creative/creative-ideation",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/creative-ideation",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "491628c81810300b23cb6ed9ea49cf0122262da0158edbf4ffd12b86c2a1e9b7",
+  "fetchedAt": "2026-07-26T17:03:56.972Z"
+}

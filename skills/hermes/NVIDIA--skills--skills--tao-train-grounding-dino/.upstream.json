@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-grounding-dino",
+  "identifier": "NVIDIA/skills/skills/tao-train-grounding-dino",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-grounding-dino",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "d477c10a6bc88a4dbc844598c1e70b644519619f7832c10f380b1fcfd428272c",
+  "fetchedAt": "2026-07-26T17:03:52.429Z"
+}

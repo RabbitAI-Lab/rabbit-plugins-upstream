@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-hierarchical-context-parallel",
+  "identifier": "NVIDIA/skills/skills/nemo-mbridge-perf-hierarchical-context-parallel",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-mbridge-perf-hierarchical-context-parallel",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "d203e7d3c6ec3e5d355abff191de832e53f4eb19f8b3f2c4668f737856d3453f",
+  "fetchedAt": "2026-07-26T17:03:52.334Z"
+}

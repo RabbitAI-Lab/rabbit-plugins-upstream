@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-rl-docs",
+  "identifier": "NVIDIA/skills/skills/nemo-rl-docs",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-rl-docs",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "5b754c0b9569c028a47cea3eb54f0ea74d7aeea65692e374a07dfd9cc442b25c",
+  "fetchedAt": "2026-07-26T17:03:52.344Z"
+}

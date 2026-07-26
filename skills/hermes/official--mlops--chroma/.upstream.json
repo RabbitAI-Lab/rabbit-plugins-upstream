@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/chroma",
+  "identifier": "official/mlops/chroma",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/chroma",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "7bf35ed66957c81ea8d064e066e8f46348bf1b99828a71cbca8c391e3930f970",
+  "fetchedAt": "2026-07-26T17:03:56.967Z"
+}

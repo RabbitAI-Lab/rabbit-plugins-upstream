@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-setup-nvidia-gpu-host",
+  "identifier": "NVIDIA/skills/skills/tao-setup-nvidia-gpu-host",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-setup-nvidia-gpu-host",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "8a66534e0c67c473ad5d8aa7d759d59fd21528d9f8870774cde4a5b6636f11ad",
+  "fetchedAt": "2026-07-26T17:03:52.412Z"
+}

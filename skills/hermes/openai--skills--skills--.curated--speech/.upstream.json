@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/speech",
+  "identifier": "openai/skills/skills/.curated/speech",
+  "repo": "openai/skills",
+  "path": "skills/.curated/speech",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "875ceee2fb8302d3602ff1314e78f05a66b9f6f5f441c2f54656276ce22c43dc",
+  "fetchedAt": "2026-07-26T17:03:51.170Z"
+}

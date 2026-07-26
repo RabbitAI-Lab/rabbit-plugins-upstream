@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemotron-retrieval-recipes",
+  "identifier": "NVIDIA/skills/skills/nemotron-retrieval-recipes",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemotron-retrieval-recipes",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "ddea4d001a371f9752a39ac21b544fce0b79d9708923c301648e4fcd03ad8337",
+  "fetchedAt": "2026-07-26T17:03:52.350Z"
+}

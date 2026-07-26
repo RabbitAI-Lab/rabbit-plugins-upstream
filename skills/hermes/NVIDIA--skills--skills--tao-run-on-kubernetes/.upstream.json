@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-on-kubernetes",
+  "identifier": "NVIDIA/skills/skills/tao-run-on-kubernetes",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-run-on-kubernetes",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "d4b77b9999c651ad6835f625e097c08da171f46e83c76c8df97800827752275c",
+  "fetchedAt": "2026-07-26T17:03:52.411Z"
+}

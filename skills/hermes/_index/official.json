@@ -1,0 +1,1960 @@
+[
+  {
+    "name": "antigravity-cli",
+    "description": "Operate the Antigravity CLI (agy): plugins, auth, sandbox.",
+    "source": "official",
+    "identifier": "official/autonomous-ai-agents/antigravity-cli",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/autonomous-ai-agents/antigravity-cli",
+    "tags": [
+      "Coding-Agent",
+      "Antigravity",
+      "CLI",
+      "Auth",
+      "Plugins",
+      "Sandbox"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "blackbox",
+    "description": "Delegate coding tasks to Blackbox AI CLI agent. Multi-model agent with built-in judge that runs tasks through multiple LLMs and picks the best result. Requires the blackbox CLI and a Blackbox AI API k",
+    "source": "official",
+    "identifier": "official/autonomous-ai-agents/blackbox",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/autonomous-ai-agents/blackbox",
+    "tags": [
+      "Coding-Agent",
+      "Blackbox",
+      "Multi-Agent",
+      "Judge",
+      "Multi-Model"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "grok",
+    "description": "Delegate coding to xAI Grok Build CLI (features, PRs).",
+    "source": "official",
+    "identifier": "official/autonomous-ai-agents/grok",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/autonomous-ai-agents/grok",
+    "tags": [
+      "Coding-Agent",
+      "Grok",
+      "xAI",
+      "Code-Review",
+      "Refactoring",
+      "Automation"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "honcho",
+    "description": "Configure and use Honcho memory with Hermes -- cross-session user modeling, multi-profile peer isolation, observation config, dialectic reasoning, session summaries, and context budget enforcement. Us",
+    "source": "official",
+    "identifier": "official/autonomous-ai-agents/honcho",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/autonomous-ai-agents/honcho",
+    "tags": [
+      "Honcho",
+      "Memory",
+      "Profiles",
+      "Observation",
+      "Dialectic",
+      "User-Modeling",
+      "Session-Summary"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "openhands",
+    "description": "Delegate coding to OpenHands CLI (model-agnostic, LiteLLM).",
+    "source": "official",
+    "identifier": "official/autonomous-ai-agents/openhands",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/autonomous-ai-agents/openhands",
+    "tags": [
+      "Coding-Agent",
+      "OpenHands",
+      "Model-Agnostic",
+      "LiteLLM"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "evm",
+    "description": "Read-only EVM client: wallets, tokens, gas across 8 chains.",
+    "source": "official",
+    "identifier": "official/blockchain/evm",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/blockchain/evm",
+    "tags": [
+      "EVM",
+      "Ethereum",
+      "BNB",
+      "BSC",
+      "Base",
+      "Arbitrum",
+      "Polygon",
+      "Optimism",
+      "Avalanche",
+      "zkSync",
+      "Blockchain",
+      "Crypto",
+      "Web3",
+      "DeFi",
+      "NFT",
+      "ENS",
+      "Whale",
+      "Security"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "hyperliquid",
+    "description": "Hyperliquid market data, account history, trade review.",
+    "source": "official",
+    "identifier": "official/blockchain/hyperliquid",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/blockchain/hyperliquid",
+    "tags": [
+      "Hyperliquid",
+      "Blockchain",
+      "Crypto",
+      "Trading",
+      "Perpetuals",
+      "Spot",
+      "DeFi"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "solana",
+    "description": "Query Solana blockchain data with USD pricing — wallet balances, token portfolios with values, transaction details, NFTs, whale detection, and live network stats. Uses Solana RPC + CoinGecko. No API k",
+    "source": "official",
+    "identifier": "official/blockchain/solana",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/blockchain/solana",
+    "tags": [
+      "Solana",
+      "Blockchain",
+      "Crypto",
+      "Web3",
+      "RPC",
+      "DeFi",
+      "NFT"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "one-three-one-rule",
+    "description": "Structured decision-making framework for technical proposals and trade-off analysis. When the user faces a choice between multiple approaches (architecture decisions, tool selection, refactoring strat",
+    "source": "official",
+    "identifier": "official/communication/one-three-one-rule",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/communication/one-three-one-rule",
+    "tags": [
+      "communication",
+      "decision-making",
+      "proposals",
+      "trade-offs"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "baoyu-article-illustrator",
+    "description": "Article illustrations: type × style × palette consistency.",
+    "source": "official",
+    "identifier": "official/creative/baoyu-article-illustrator",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/creative/baoyu-article-illustrator",
+    "tags": [
+      "article-illustration",
+      "creative",
+      "image-generation"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "baoyu-comic",
+    "description": "Knowledge comics (知识漫画): educational, biography, tutorial.",
+    "source": "official",
+    "identifier": "official/creative/baoyu-comic",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/creative/baoyu-comic",
+    "tags": [
+      "comic",
+      "knowledge-comic",
+      "creative",
+      "image-generation"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "blender-mcp",
+    "description": "Drive Blender via the catalog blender MCP, with bpy recipes.",
+    "source": "official",
+    "identifier": "official/creative/blender-mcp",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/creative/blender-mcp",
+    "tags": [],
+    "extra": {}
+  },
+  {
+    "name": "concept-diagrams",
+    "description": "Generate flat, minimal light/dark-aware SVG diagrams as standalone HTML files, using a unified educational visual language with 9 semantic color ramps, sentence-case typography, and automatic dark mod",
+    "source": "official",
+    "identifier": "official/creative/concept-diagrams",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/creative/concept-diagrams",
+    "tags": [
+      "diagrams",
+      "svg",
+      "visualization",
+      "education",
+      "physics",
+      "chemistry",
+      "engineering"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "creative-ideation",
+    "description": "Generate ideas via named methods from creative practice.",
+    "source": "official",
+    "identifier": "official/creative/creative-ideation",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/creative/creative-ideation",
+    "tags": [
+      "Creative",
+      "Ideation",
+      "Brainstorming",
+      "Methods",
+      "Inspiration"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "hyperframes",
+    "description": "Create HTML-based video compositions, animated title cards, social overlays, captioned talking-head videos, audio-reactive visuals, and shader transitions using HyperFrames. HTML is the source of trut",
+    "source": "official",
+    "identifier": "official/creative/hyperframes",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/creative/hyperframes",
+    "tags": [
+      "creative",
+      "video",
+      "animation",
+      "html",
+      "gsap",
+      "motion-graphics"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "kanban-video-orchestrator",
+    "description": "Plan, set up, and monitor a multi-agent video production pipeline backed by Hermes Kanban. Use when the user wants to make ANY video — narrative film, product/marketing, music video, explainer, ASCII/",
+    "source": "official",
+    "identifier": "official/creative/kanban-video-orchestrator",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/creative/kanban-video-orchestrator",
+    "tags": [
+      "video",
+      "kanban",
+      "multi-agent",
+      "orchestration",
+      "production-pipeline"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "meme-generation",
+    "description": "Generate real meme images by picking a template and overlaying text with Pillow. Produces actual .png meme files.",
+    "source": "official",
+    "identifier": "official/creative/meme-generation",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/creative/meme-generation",
+    "tags": [
+      "creative",
+      "memes",
+      "humor",
+      "images"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "pixel-art",
+    "description": "Pixel art w/ era palettes (NES, Game Boy, PICO-8).",
+    "source": "official",
+    "identifier": "official/creative/pixel-art",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/creative/pixel-art",
+    "tags": [
+      "creative",
+      "pixel-art",
+      "arcade",
+      "snes",
+      "nes",
+      "gameboy",
+      "retro",
+      "image",
+      "video"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "unreal-mcp",
+    "description": "Use when the user wants to do anything in Unreal Engine through Epic's official editor-embedded MCP server (catalog entry: unreal-engine) — build/light/populate scenes, place and transform actors, aut",
+    "source": "official",
+    "identifier": "official/creative/unreal-mcp",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/creative/unreal-mcp",
+    "tags": [
+      "unreal",
+      "unreal-engine",
+      "ue5",
+      "3d",
+      "mcp",
+      "scenes",
+      "cinematics",
+      "lighting",
+      "gamedev"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "inference-sh-cli",
+    "description": "Run 150+ AI apps via inference.sh CLI (infsh) — image generation, video creation, LLMs, search, 3D, social automation. Uses the terminal tool. Triggers: inference.sh, infsh, ai apps, flux, veo, image ",
+    "source": "official",
+    "identifier": "official/devops/cli",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/devops/cli",
+    "tags": [
+      "AI",
+      "image-generation",
+      "video",
+      "LLM",
+      "search",
+      "inference",
+      "FLUX",
+      "Veo",
+      "Claude"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "docker-management",
+    "description": "Manage Docker containers, images, volumes, networks, and Compose stacks — lifecycle ops, debugging, cleanup, and Dockerfile optimization.",
+    "source": "official",
+    "identifier": "official/devops/docker-management",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/devops/docker-management",
+    "tags": [
+      "docker",
+      "containers",
+      "devops",
+      "infrastructure",
+      "compose",
+      "images",
+      "volumes",
+      "networks",
+      "debugging"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "hermes-s6-container-supervision",
+    "description": "Modify, debug, or extend the s6-overlay supervision tree inside the Hermes Agent Docker image — adding new services, debugging profile gateways, understanding the Architecture B main-program pattern.",
+    "source": "official",
+    "identifier": "official/devops/hermes-s6-container-supervision",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/devops/hermes-s6-container-supervision",
+    "tags": [
+      "docker",
+      "s6",
+      "supervision",
+      "gateway",
+      "profiles"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "pinggy-tunnel",
+    "description": "Zero-install localhost tunnels over SSH via Pinggy.",
+    "source": "official",
+    "identifier": "official/devops/pinggy-tunnel",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/devops/pinggy-tunnel",
+    "tags": [
+      "Pinggy",
+      "Tunnel",
+      "Networking",
+      "SSH",
+      "Webhook",
+      "Localhost"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "watchers",
+    "description": "Poll RSS, JSON APIs, and GitHub with watermark dedup.",
+    "source": "official",
+    "identifier": "official/devops/watchers",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/devops/watchers",
+    "tags": [
+      "cron",
+      "polling",
+      "rss",
+      "github",
+      "http",
+      "automation",
+      "monitoring"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "adversarial-ux-test",
+    "description": "Roleplay the most difficult, tech-resistant user for your product. Browse the app as that persona, find every UX pain point, then filter complaints through a pragmatism layer to separate real problems",
+    "source": "official",
+    "identifier": "official/dogfood/adversarial-ux-test",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/dogfood/adversarial-ux-test",
+    "tags": [
+      "qa",
+      "ux",
+      "testing",
+      "adversarial",
+      "dogfood",
+      "personas",
+      "user-testing"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "agentmail",
+    "description": "Give the agent its own dedicated email inbox via AgentMail. Send, receive, and manage email autonomously using agent-owned email addresses (e.g. hermes-agent@agentmail.to).",
+    "source": "official",
+    "identifier": "official/email/agentmail",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/email/agentmail",
+    "tags": [
+      "email",
+      "communication",
+      "agentmail",
+      "mcp"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "3-statement-model",
+    "description": "Build fully-integrated 3-statement models (IS, BS, CF) in Excel with working capital schedules, D&A roll-forwards, debt schedule, and the plugs that make cash and retained earnings tie. Pairs with exc",
+    "source": "official",
+    "identifier": "official/finance/3-statement-model",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/finance/3-statement-model",
+    "tags": [
+      "finance",
+      "three-statement",
+      "income-statement",
+      "balance-sheet",
+      "cash-flow",
+      "excel",
+      "openpyxl",
+      "modeling"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "comps-analysis",
+    "description": "Build comparable company analysis in Excel — operating metrics, valuation multiples, statistical benchmarking vs peer sets. Pairs with excel-author. Use for public-company valuation, IPO pricing, sect",
+    "source": "official",
+    "identifier": "official/finance/comps-analysis",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/finance/comps-analysis",
+    "tags": [
+      "finance",
+      "valuation",
+      "comps",
+      "excel",
+      "openpyxl",
+      "modeling",
+      "investment-banking"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "dcf-model",
+    "description": "Build institutional-quality DCF valuation models in Excel — revenue projections, FCF build, WACC, terminal value, Bear/Base/Bull scenarios, 5x5 sensitivity tables. Pairs with excel-author. Use for int",
+    "source": "official",
+    "identifier": "official/finance/dcf-model",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/finance/dcf-model",
+    "tags": [
+      "finance",
+      "valuation",
+      "dcf",
+      "excel",
+      "openpyxl",
+      "modeling",
+      "investment-banking"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "excel-author",
+    "description": "Build auditable Excel workbooks headless with openpyxl — blue/black/green cell conventions, formulas over hardcodes, named ranges, balance checks, sensitivity tables. Use for financial models, audit o",
+    "source": "official",
+    "identifier": "official/finance/excel-author",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/finance/excel-author",
+    "tags": [
+      "excel",
+      "openpyxl",
+      "finance",
+      "spreadsheet",
+      "modeling"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "lbo-model",
+    "description": "Build leveraged buyout models in Excel — sources & uses, debt schedule, cash sweep, exit multiple, IRR/MOIC sensitivity. Pairs with excel-author. Use for PE screening, sponsor-case valuation, or illus",
+    "source": "official",
+    "identifier": "official/finance/lbo-model",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/finance/lbo-model",
+    "tags": [
+      "finance",
+      "valuation",
+      "lbo",
+      "private-equity",
+      "excel",
+      "openpyxl",
+      "modeling"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "merger-model",
+    "description": "Build accretion/dilution (merger) models in Excel — pro-forma P&L, synergies, financing mix, EPS impact. Pairs with excel-author. Use for M&A pitches, board materials, or deal evaluation.",
+    "source": "official",
+    "identifier": "official/finance/merger-model",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/finance/merger-model",
+    "tags": [
+      "finance",
+      "m-and-a",
+      "merger",
+      "accretion-dilution",
+      "excel",
+      "openpyxl",
+      "modeling",
+      "investment-banking"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "pptx-author",
+    "description": "Build PowerPoint decks headless with python-pptx. Pairs with excel-author for model-backed decks where every number traces to a workbook cell. Use for pitch decks, IC memos, earnings notes.",
+    "source": "official",
+    "identifier": "official/finance/pptx-author",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/finance/pptx-author",
+    "tags": [
+      "powerpoint",
+      "pptx",
+      "python-pptx",
+      "presentation",
+      "finance"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "stocks",
+    "description": "Stock quotes, history, search, compare, crypto via Yahoo.",
+    "source": "official",
+    "identifier": "official/finance/stocks",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/finance/stocks",
+    "tags": [
+      "Stocks",
+      "Finance",
+      "Market",
+      "Crypto",
+      "Investing"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "minecraft-modpack-server",
+    "description": "Host modded Minecraft servers (CurseForge, Modrinth).",
+    "source": "official",
+    "identifier": "official/gaming/minecraft-modpack-server",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/gaming/minecraft-modpack-server",
+    "tags": [],
+    "extra": {}
+  },
+  {
+    "name": "pokemon-player",
+    "description": "Play Pokemon via headless emulator + RAM reads.",
+    "source": "official",
+    "identifier": "official/gaming/pokemon-player",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/gaming/pokemon-player",
+    "tags": [],
+    "extra": {}
+  },
+  {
+    "name": "fitness-nutrition",
+    "description": "Gym workout planner and nutrition tracker. Search 690+ exercises by muscle, equipment, or category via wger. Look up macros and calories for 380,000+ foods via USDA FoodData Central. Compute BMI, TDEE",
+    "source": "official",
+    "identifier": "official/health/fitness-nutrition",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/health/fitness-nutrition",
+    "tags": [
+      "health",
+      "fitness",
+      "nutrition",
+      "gym",
+      "workout",
+      "diet",
+      "exercise"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "neuroskill-bci",
+    "description": "Connect to a running NeuroSkill instance and incorporate the user's real-time cognitive and emotional state (focus, relaxation, mood, cognitive load, drowsiness, heart rate, HRV, sleep staging, and 40",
+    "source": "official",
+    "identifier": "official/health/neuroskill-bci",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/health/neuroskill-bci",
+    "tags": [
+      "BCI",
+      "neurofeedback",
+      "health",
+      "focus",
+      "EEG",
+      "cognitive-state",
+      "biometrics",
+      "neuroskill"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "fastmcp",
+    "description": "Build, test, inspect, install, and deploy MCP servers with FastMCP in Python. Use when creating a new MCP server, wrapping an API or database as MCP tools, exposing resources or prompts, or preparing ",
+    "source": "official",
+    "identifier": "official/mcp/fastmcp",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mcp/fastmcp",
+    "tags": [
+      "MCP",
+      "FastMCP",
+      "Python",
+      "Tools",
+      "Resources",
+      "Prompts",
+      "Deployment"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "mcp-oauth-remote-gateway",
+    "description": "Manual OAuth for remote MCP servers on headless gateways.",
+    "source": "official",
+    "identifier": "official/mcp/mcp-oauth-remote-gateway",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mcp/mcp-oauth-remote-gateway",
+    "tags": [
+      "MCP",
+      "OAuth",
+      "PKCE",
+      "Remote-Deployment"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "mcporter",
+    "description": "Use the mcporter CLI to list, configure, auth, and call MCP servers/tools directly (HTTP or stdio), including ad-hoc servers, config edits, and CLI/type generation.",
+    "source": "official",
+    "identifier": "official/mcp/mcporter",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mcp/mcporter",
+    "tags": [
+      "MCP",
+      "Tools",
+      "API",
+      "Integrations",
+      "Interop"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "openclaw-migration",
+    "description": "Migrate a user's OpenClaw customization footprint into Hermes Agent. Imports Hermes-compatible memories, SOUL.md, command allowlists, user skills, and selected workspace assets from ~/.openclaw, then ",
+    "source": "official",
+    "identifier": "official/migration/openclaw-migration",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/migration/openclaw-migration",
+    "tags": [
+      "Migration",
+      "OpenClaw",
+      "Hermes",
+      "Memory",
+      "Persona",
+      "Import"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "huggingface-accelerate",
+    "description": "Simplest distributed training API. 4 lines to add distributed support to any PyTorch script. Unified API for DeepSpeed/FSDP/Megatron/DDP. Automatic device placement, mixed precision (FP16/BF16/FP8). I",
+    "source": "official",
+    "identifier": "official/mlops/accelerate",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/accelerate",
+    "tags": [
+      "Distributed Training",
+      "HuggingFace",
+      "Accelerate",
+      "DeepSpeed",
+      "FSDP",
+      "Mixed Precision",
+      "PyTorch",
+      "DDP",
+      "Unified API",
+      "Simple"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "chroma",
+    "description": "Open-source embedding database for AI applications. Store embeddings and metadata, perform vector and full-text search, filter by metadata. Simple 4-function API. Scales from notebooks to production c",
+    "source": "official",
+    "identifier": "official/mlops/chroma",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/chroma",
+    "tags": [
+      "RAG",
+      "Chroma",
+      "Vector Database",
+      "Embeddings",
+      "Semantic Search",
+      "Open Source",
+      "Self-Hosted",
+      "Document Retrieval",
+      "Metadata Filtering"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "clip",
+    "description": "OpenAI's model connecting vision and language. Enables zero-shot image classification, image-text matching, and cross-modal retrieval. Trained on 400M image-text pairs. Use for image search, content m",
+    "source": "official",
+    "identifier": "official/mlops/clip",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/clip",
+    "tags": [
+      "Multimodal",
+      "CLIP",
+      "Vision-Language",
+      "Zero-Shot",
+      "Image Classification",
+      "OpenAI",
+      "Image Search",
+      "Cross-Modal Retrieval",
+      "Content Moderation"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "faiss",
+    "description": "Facebook's library for efficient similarity search and clustering of dense vectors. Supports billions of vectors, GPU acceleration, and various index types (Flat, IVF, HNSW). Use for fast k-NN search,",
+    "source": "official",
+    "identifier": "official/mlops/faiss",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/faiss",
+    "tags": [
+      "RAG",
+      "FAISS",
+      "Similarity Search",
+      "Vector Search",
+      "Facebook AI",
+      "GPU Acceleration",
+      "Billion-Scale",
+      "K-NN",
+      "HNSW",
+      "High Performance",
+      "Large Scale"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "optimizing-attention-flash",
+    "description": "Optimizes transformer attention with Flash Attention for 2-4x speedup and 10-20x memory reduction. Use when training/running transformers with long sequences (>512 tokens), encountering GPU memory iss",
+    "source": "official",
+    "identifier": "official/mlops/flash-attention",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/flash-attention",
+    "tags": [
+      "Optimization",
+      "Flash Attention",
+      "Attention Optimization",
+      "Memory Efficiency",
+      "Speed Optimization",
+      "Long Context",
+      "PyTorch",
+      "SDPA",
+      "H100",
+      "FP8",
+      "Transformers"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "guidance",
+    "description": "Control LLM output with regex and grammars, guarantee valid JSON/XML/code generation, enforce structured formats, and build multi-step workflows with Guidance - Microsoft Research's constrained genera",
+    "source": "official",
+    "identifier": "official/mlops/guidance",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/guidance",
+    "tags": [
+      "Prompt Engineering",
+      "Guidance",
+      "Constrained Generation",
+      "Structured Output",
+      "JSON Validation",
+      "Grammar",
+      "Microsoft Research",
+      "Format Enforcement",
+      "Multi-Step Workflows"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "huggingface-tokenizers",
+    "description": "Fast tokenizers optimized for research and production. Rust-based implementation tokenizes 1GB in <20 seconds. Supports BPE, WordPiece, and Unigram algorithms. Train custom vocabularies, track alignme",
+    "source": "official",
+    "identifier": "official/mlops/huggingface-tokenizers",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/huggingface-tokenizers",
+    "tags": [
+      "Tokenization",
+      "HuggingFace",
+      "BPE",
+      "WordPiece",
+      "Unigram",
+      "Fast Tokenization",
+      "Rust",
+      "Custom Tokenizer",
+      "Alignment Tracking",
+      "Production"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "outlines",
+    "description": "Outlines: structured JSON/regex/Pydantic LLM generation.",
+    "source": "official",
+    "identifier": "official/mlops/inference/outlines",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/inference/outlines",
+    "tags": [
+      "Prompt Engineering",
+      "Outlines",
+      "Structured Generation",
+      "JSON Schema",
+      "Pydantic",
+      "Local Models",
+      "Grammar-Based Generation",
+      "vLLM",
+      "Transformers",
+      "Type Safety"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "instructor",
+    "description": "Extract structured data from LLM responses with Pydantic validation, retry failed extractions automatically, parse complex JSON with type safety, and stream partial results with Instructor - battle-te",
+    "source": "official",
+    "identifier": "official/mlops/instructor",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/instructor",
+    "tags": [
+      "Prompt Engineering",
+      "Instructor",
+      "Structured Output",
+      "Pydantic",
+      "Data Extraction",
+      "JSON Parsing",
+      "Type Safety",
+      "Validation",
+      "Streaming",
+      "OpenAI",
+      "Anthropic"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "lambda-labs-gpu-cloud",
+    "description": "Reserved and on-demand GPU cloud instances for ML training and inference. Use when you need dedicated GPU instances with simple SSH access, persistent filesystems, or high-performance multi-node clust",
+    "source": "official",
+    "identifier": "official/mlops/lambda-labs",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/lambda-labs",
+    "tags": [
+      "Infrastructure",
+      "GPU Cloud",
+      "Training",
+      "Inference",
+      "Lambda Labs"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "llava",
+    "description": "Large Language and Vision Assistant. Enables visual instruction tuning and image-based conversations. Combines CLIP vision encoder with Vicuna/LLaMA language models. Supports multi-turn image chat, vi",
+    "source": "official",
+    "identifier": "official/mlops/llava",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/llava",
+    "tags": [
+      "LLaVA",
+      "Vision-Language",
+      "Multimodal",
+      "Visual Question Answering",
+      "Image Chat",
+      "CLIP",
+      "Vicuna",
+      "Conversational AI",
+      "Instruction Tuning",
+      "VQA"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "modal-serverless-gpu",
+    "description": "Serverless GPU cloud platform for running ML workloads. Use when you need on-demand GPU access without infrastructure management, deploying ML models as APIs, or running batch jobs with automatic scal",
+    "source": "official",
+    "identifier": "official/mlops/modal",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/modal",
+    "tags": [
+      "Infrastructure",
+      "Serverless",
+      "GPU",
+      "Cloud",
+      "Deployment",
+      "Modal"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "nemo-curator",
+    "description": "GPU-accelerated data curation for LLM training. Supports text/image/video/audio. Features fuzzy deduplication (16× faster), quality filtering (30+ heuristics), semantic deduplication, PII redaction, N",
+    "source": "official",
+    "identifier": "official/mlops/nemo-curator",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/nemo-curator",
+    "tags": [
+      "Data Processing",
+      "NeMo Curator",
+      "Data Curation",
+      "GPU Acceleration",
+      "Deduplication",
+      "Quality Filtering",
+      "NVIDIA",
+      "RAPIDS",
+      "PII Redaction",
+      "Multimodal",
+      "LLM Training Data"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "obliteratus",
+    "description": "OBLITERATUS: abliterate LLM refusals (diff-in-means).",
+    "source": "official",
+    "identifier": "official/mlops/obliteratus",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/obliteratus",
+    "tags": [
+      "Abliteration",
+      "Uncensoring",
+      "Refusal-Removal",
+      "LLM",
+      "Weight-Projection",
+      "SVD",
+      "Mechanistic-Interpretability",
+      "HuggingFace",
+      "Model-Surgery"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "peft-fine-tuning",
+    "description": "Parameter-efficient fine-tuning for LLMs using LoRA, QLoRA, and 25+ methods. Use when fine-tuning large models (7B-70B) with limited GPU memory, when you need to train <1% of parameters with minimal a",
+    "source": "official",
+    "identifier": "official/mlops/peft",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/peft",
+    "tags": [
+      "Fine-Tuning",
+      "PEFT",
+      "LoRA",
+      "QLoRA",
+      "Parameter-Efficient",
+      "Adapters",
+      "Low-Rank",
+      "Memory Optimization",
+      "Multi-Adapter"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "pinecone",
+    "description": "Managed vector database for production AI applications. Fully managed, auto-scaling, with hybrid search (dense + sparse), metadata filtering, and namespaces. Low latency (<100ms p95). Use for producti",
+    "source": "official",
+    "identifier": "official/mlops/pinecone",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/pinecone",
+    "tags": [
+      "RAG",
+      "Pinecone",
+      "Vector Database",
+      "Managed Service",
+      "Serverless",
+      "Hybrid Search",
+      "Production",
+      "Auto-Scaling",
+      "Low Latency",
+      "Recommendations"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "pytorch-fsdp",
+    "description": "Expert guidance for Fully Sharded Data Parallel training with PyTorch FSDP - parameter sharding, mixed precision, CPU offloading, FSDP2",
+    "source": "official",
+    "identifier": "official/mlops/pytorch-fsdp",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/pytorch-fsdp",
+    "tags": [
+      "Distributed Training",
+      "PyTorch",
+      "FSDP",
+      "Data Parallel",
+      "Sharding",
+      "Mixed Precision",
+      "CPU Offloading",
+      "FSDP2",
+      "Large-Scale Training"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "pytorch-lightning",
+    "description": "High-level PyTorch framework with Trainer class, automatic distributed training (DDP/FSDP/DeepSpeed), callbacks system, and minimal boilerplate. Scales from laptop to supercomputer with same code. Use",
+    "source": "official",
+    "identifier": "official/mlops/pytorch-lightning",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/pytorch-lightning",
+    "tags": [
+      "PyTorch Lightning",
+      "Training Framework",
+      "Distributed Training",
+      "DDP",
+      "FSDP",
+      "DeepSpeed",
+      "High-Level API",
+      "Callbacks",
+      "Best Practices",
+      "Scalable"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "qdrant-vector-search",
+    "description": "High-performance vector similarity search engine for RAG and semantic search. Use when building production RAG systems requiring fast nearest neighbor search, hybrid search with filtering, or scalable",
+    "source": "official",
+    "identifier": "official/mlops/qdrant",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/qdrant",
+    "tags": [
+      "RAG",
+      "Vector Search",
+      "Qdrant",
+      "Semantic Search",
+      "Embeddings",
+      "Similarity Search",
+      "HNSW",
+      "Production",
+      "Distributed"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "dspy",
+    "description": "DSPy: declarative LM programs, auto-optimize prompts, RAG.",
+    "source": "official",
+    "identifier": "official/mlops/research/dspy",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/research/dspy",
+    "tags": [
+      "Prompt Engineering",
+      "DSPy",
+      "Declarative Programming",
+      "RAG",
+      "Agents",
+      "Prompt Optimization",
+      "LM Programming",
+      "Stanford NLP",
+      "Automatic Optimization",
+      "Modular AI"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "sparse-autoencoder-training",
+    "description": "Provides guidance for training and analyzing Sparse Autoencoders (SAEs) using SAELens to decompose neural network activations into interpretable features. Use when discovering interpretable features, ",
+    "source": "official",
+    "identifier": "official/mlops/saelens",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/saelens",
+    "tags": [
+      "Sparse Autoencoders",
+      "SAE",
+      "Mechanistic Interpretability",
+      "Feature Discovery",
+      "Superposition"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "simpo-training",
+    "description": "Simple Preference Optimization for LLM alignment. Reference-free alternative to DPO with better performance (+6.4 points on AlpacaEval 2.0). No reference model needed, more efficient than DPO. Use for",
+    "source": "official",
+    "identifier": "official/mlops/simpo",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/simpo",
+    "tags": [
+      "Post-Training",
+      "SimPO",
+      "Preference Optimization",
+      "Alignment",
+      "DPO Alternative",
+      "Reference-Free",
+      "LLM Alignment",
+      "Efficient Training"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "slime-rl-training",
+    "description": "Provides guidance for LLM post-training with RL using slime, a Megatron+SGLang framework. Use when training GLM models, implementing custom data generation workflows, or needing tight Megatron-LM inte",
+    "source": "official",
+    "identifier": "official/mlops/slime",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/slime",
+    "tags": [
+      "Reinforcement Learning",
+      "Megatron-LM",
+      "SGLang",
+      "GRPO",
+      "Post-Training",
+      "GLM"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "stable-diffusion-image-generation",
+    "description": "State-of-the-art text-to-image generation with Stable Diffusion models via HuggingFace Diffusers. Use when generating images from text prompts, performing image-to-image translation, inpainting, or bu",
+    "source": "official",
+    "identifier": "official/mlops/stable-diffusion",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/stable-diffusion",
+    "tags": [
+      "Image Generation",
+      "Stable Diffusion",
+      "Diffusers",
+      "Text-to-Image",
+      "Multimodal",
+      "Computer Vision"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "tensorrt-llm",
+    "description": "Optimizes LLM inference with NVIDIA TensorRT for maximum throughput and lowest latency. Use for production deployment on NVIDIA GPUs (A100/H100), when you need 10-100x faster inference than PyTorch, o",
+    "source": "official",
+    "identifier": "official/mlops/tensorrt-llm",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/tensorrt-llm",
+    "tags": [
+      "Inference Serving",
+      "TensorRT-LLM",
+      "NVIDIA",
+      "Inference Optimization",
+      "High Throughput",
+      "Low Latency",
+      "Production",
+      "FP8",
+      "INT4",
+      "In-Flight Batching",
+      "Multi-GPU"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "distributed-llm-pretraining-torchtitan",
+    "description": "Provides PyTorch-native distributed LLM pretraining using torchtitan with 4D parallelism (FSDP2, TP, PP, CP). Use when pretraining Llama 3.1, DeepSeek V3, or custom models at scale from 8 to 512+ GPUs",
+    "source": "official",
+    "identifier": "official/mlops/torchtitan",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/torchtitan",
+    "tags": [
+      "Model Architecture",
+      "Distributed Training",
+      "TorchTitan",
+      "FSDP2",
+      "Tensor Parallel",
+      "Pipeline Parallel",
+      "Context Parallel",
+      "Float8",
+      "Llama",
+      "Pretraining"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "axolotl",
+    "description": "Axolotl: YAML LLM fine-tuning (LoRA, DPO, GRPO).",
+    "source": "official",
+    "identifier": "official/mlops/training/axolotl",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/training/axolotl",
+    "tags": [
+      "Fine-Tuning",
+      "Axolotl",
+      "LLM",
+      "LoRA",
+      "QLoRA",
+      "DPO",
+      "KTO",
+      "ORPO",
+      "GRPO",
+      "YAML",
+      "HuggingFace",
+      "DeepSpeed",
+      "Multimodal"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "fine-tuning-with-trl",
+    "description": "TRL: SFT, DPO, PPO, GRPO, reward modeling for LLM RLHF.",
+    "source": "official",
+    "identifier": "official/mlops/training/trl-fine-tuning",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/training/trl-fine-tuning",
+    "tags": [
+      "Post-Training",
+      "TRL",
+      "Reinforcement Learning",
+      "Fine-Tuning",
+      "SFT",
+      "DPO",
+      "PPO",
+      "GRPO",
+      "RLHF",
+      "Preference Alignment",
+      "HuggingFace"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "unsloth",
+    "description": "Unsloth: 2-5x faster LoRA/QLoRA fine-tuning, less VRAM.",
+    "source": "official",
+    "identifier": "official/mlops/training/unsloth",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/training/unsloth",
+    "tags": [
+      "Fine-Tuning",
+      "Unsloth",
+      "Fast Training",
+      "LoRA",
+      "QLoRA",
+      "Memory-Efficient",
+      "Optimization",
+      "Llama",
+      "Mistral",
+      "Gemma",
+      "Qwen"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "whisper",
+    "description": "OpenAI's general-purpose speech recognition model. Supports 99 languages, transcription, translation to English, and language identification. Six model sizes from tiny (39M params) to large (1550M par",
+    "source": "official",
+    "identifier": "official/mlops/whisper",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/mlops/whisper",
+    "tags": [
+      "Whisper",
+      "Speech Recognition",
+      "ASR",
+      "Multimodal",
+      "Multilingual",
+      "OpenAI",
+      "Speech-To-Text",
+      "Transcription",
+      "Translation",
+      "Audio Processing"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "mpp-agent",
+    "description": "Pay HTTP 402 APIs via Machine Payments Protocol (MPP).",
+    "source": "official",
+    "identifier": "official/payments/mpp-agent",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/payments/mpp-agent",
+    "tags": [
+      "Payments",
+      "MPP",
+      "HTTP-402",
+      "Tempo",
+      "Stripe"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "stripe-link-cli",
+    "description": "Agent payments via Stripe Link — cards, SPT, approvals.",
+    "source": "official",
+    "identifier": "official/payments/stripe-link-cli",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/payments/stripe-link-cli",
+    "tags": [
+      "Payments",
+      "Stripe",
+      "Link",
+      "Checkout",
+      "MPP"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "stripe-projects",
+    "description": "Provision SaaS services + sync creds via Stripe Projects.",
+    "source": "official",
+    "identifier": "official/payments/stripe-projects",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/payments/stripe-projects",
+    "tags": [
+      "Payments",
+      "Stripe",
+      "Projects",
+      "Provisioning",
+      "Infrastructure"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "canvas",
+    "description": "Canvas LMS integration — fetch enrolled courses and assignments using API token authentication.",
+    "source": "official",
+    "identifier": "official/productivity/canvas",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/productivity/canvas",
+    "tags": [
+      "Canvas",
+      "LMS",
+      "Education",
+      "Courses",
+      "Assignments"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "here.now",
+    "description": "Publish static sites to {slug}.here.now and store private files in cloud Drives for agent-to-agent handoff.",
+    "source": "official",
+    "identifier": "official/productivity/here-now",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/productivity/here-now",
+    "tags": [
+      "here.now",
+      "herenow",
+      "publish",
+      "deploy",
+      "hosting",
+      "static-site",
+      "web",
+      "share",
+      "URL",
+      "drive",
+      "storage"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "memento-flashcards",
+    "description": "Spaced-repetition flashcard system. Create cards from facts or text, chat with flashcards using free-text answers graded by the agent, generate quizzes from YouTube transcripts, review due cards with ",
+    "source": "official",
+    "identifier": "official/productivity/memento-flashcards",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/productivity/memento-flashcards",
+    "tags": [
+      "Education",
+      "Flashcards",
+      "Spaced Repetition",
+      "Learning",
+      "Quiz",
+      "YouTube"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "shop",
+    "description": "Shop catalog search, checkout, order tracking, returns.",
+    "source": "official",
+    "identifier": "official/productivity/shop",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/productivity/shop",
+    "tags": [
+      "Shopping",
+      "E-commerce",
+      "Shop",
+      "Products",
+      "Orders",
+      "Returns",
+      "Checkout",
+      "Reorder"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "shopify",
+    "description": "Shopify Admin & Storefront GraphQL APIs via curl. Products, orders, customers, inventory, metafields.",
+    "source": "official",
+    "identifier": "official/productivity/shopify",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/productivity/shopify",
+    "tags": [
+      "Shopify",
+      "E-commerce",
+      "Commerce",
+      "API",
+      "GraphQL"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "siyuan",
+    "description": "SiYuan Note API for searching, reading, creating, and managing blocks and documents in a self-hosted knowledge base via curl.",
+    "source": "official",
+    "identifier": "official/productivity/siyuan",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/productivity/siyuan",
+    "tags": [
+      "SiYuan",
+      "Notes",
+      "Knowledge Base",
+      "PKM",
+      "API"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "telephony",
+    "description": "Give Hermes phone capabilities without core tool changes. Provision and persist a Twilio number, send and receive SMS/MMS, make direct calls, and place AI-driven outbound calls through Bland.ai or Vap",
+    "source": "official",
+    "identifier": "official/productivity/telephony",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/productivity/telephony",
+    "tags": [
+      "telephony",
+      "phone",
+      "sms",
+      "mms",
+      "voice",
+      "twilio",
+      "bland.ai",
+      "vapi",
+      "calling",
+      "texting"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "bioinformatics",
+    "description": "Gateway to 400+ bioinformatics skills from bioSkills and ClawBio. Covers genomics, transcriptomics, single-cell, variant calling, pharmacogenomics, metagenomics, structural biology, and more. Fetches ",
+    "source": "official",
+    "identifier": "official/research/bioinformatics",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/research/bioinformatics",
+    "tags": [
+      "bioinformatics",
+      "genomics",
+      "sequencing",
+      "biology",
+      "research",
+      "science"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "darwinian-evolver",
+    "description": "Evolve prompts/regex/SQL/code with Imbue's evolution loop.",
+    "source": "official",
+    "identifier": "official/research/darwinian-evolver",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/research/darwinian-evolver",
+    "tags": [
+      "evolution",
+      "optimization",
+      "prompt-engineering",
+      "research"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "domain-intel",
+    "description": "Passive domain reconnaissance using Python stdlib. Subdomain discovery, SSL certificate inspection, WHOIS lookups, DNS records, domain availability checks, and bulk multi-domain analysis. No API keys ",
+    "source": "official",
+    "identifier": "official/research/domain-intel",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/research/domain-intel",
+    "tags": [],
+    "extra": {}
+  },
+  {
+    "name": "drug-discovery",
+    "description": "Pharmaceutical research assistant for drug discovery workflows. Search bioactive compounds on ChEMBL, calculate drug-likeness (Lipinski Ro5, QED, TPSA, synthetic accessibility), look up drug-drug inte",
+    "source": "official",
+    "identifier": "official/research/drug-discovery",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/research/drug-discovery",
+    "tags": [
+      "science",
+      "chemistry",
+      "pharmacology",
+      "research",
+      "health"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "duckduckgo-search",
+    "description": "Free web search via DuckDuckGo — text, news, images, videos. No API key needed. Prefer the `ddgs` CLI when installed; use the Python DDGS library only after verifying that `ddgs` is available in the c",
+    "source": "official",
+    "identifier": "official/research/duckduckgo-search",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/research/duckduckgo-search",
+    "tags": [
+      "search",
+      "duckduckgo",
+      "web-search",
+      "free",
+      "fallback"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "gitnexus-explorer",
+    "description": "Index a codebase with GitNexus and serve an interactive knowledge graph via web UI + Cloudflare tunnel.",
+    "source": "official",
+    "identifier": "official/research/gitnexus-explorer",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/research/gitnexus-explorer",
+    "tags": [
+      "gitnexus",
+      "code-intelligence",
+      "knowledge-graph",
+      "visualization"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "osint-investigation",
+    "description": "Public-records OSINT investigation framework — SEC EDGAR filings, USAspending contracts, Senate lobbying, OFAC sanctions, ICIJ offshore leaks, NYC property records (ACRIS), OpenCorporates registries, ",
+    "source": "official",
+    "identifier": "official/research/osint-investigation",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/research/osint-investigation",
+    "tags": [
+      "osint",
+      "investigation",
+      "public-records",
+      "sec",
+      "sanctions",
+      "corporate-registry",
+      "property",
+      "courts",
+      "due-diligence",
+      "journalism"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "parallel-cli",
+    "description": "Optional vendor skill for Parallel CLI — agent-native web search, extraction, deep research, enrichment, FindAll, and monitoring. Prefer JSON output and non-interactive flows.",
+    "source": "official",
+    "identifier": "official/research/parallel-cli",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/research/parallel-cli",
+    "tags": [
+      "Research",
+      "Web",
+      "Search",
+      "Deep-Research",
+      "Enrichment",
+      "CLI"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "qmd",
+    "description": "Search personal knowledge bases, notes, docs, and meeting transcripts locally using qmd — a hybrid retrieval engine with BM25, vector search, and LLM reranking. Supports CLI and MCP integration.",
+    "source": "official",
+    "identifier": "official/research/qmd",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/research/qmd",
+    "tags": [
+      "Search",
+      "Knowledge-Base",
+      "RAG",
+      "Notes",
+      "MCP",
+      "Local-AI"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "scrapling",
+    "description": "Web scraping with Scrapling - HTTP fetching, stealth browser automation, Cloudflare bypass, and spider crawling via CLI and Python.",
+    "source": "official",
+    "identifier": "official/research/scrapling",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/research/scrapling",
+    "tags": [
+      "Web Scraping",
+      "Browser",
+      "Cloudflare",
+      "Stealth",
+      "Crawling",
+      "Spider"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "searxng-search",
+    "description": "Free meta-search via SearXNG — aggregates results from 70+ search engines. Self-hosted or use a public instance. No API key needed. Falls back automatically when the web search toolset is unavailable.",
+    "source": "official",
+    "identifier": "official/research/searxng-search",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/research/searxng-search",
+    "tags": [
+      "search",
+      "searxng",
+      "meta-search",
+      "self-hosted",
+      "free",
+      "fallback"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "1password",
+    "description": "Set up and use 1Password CLI (op). Use when installing the CLI, enabling desktop app integration, signing in, and reading/injecting secrets for commands.",
+    "source": "official",
+    "identifier": "official/security/1password",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/security/1password",
+    "tags": [
+      "security",
+      "secrets",
+      "1password",
+      "op",
+      "cli"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "godmode",
+    "description": "Jailbreak LLMs: Parseltongue, GODMODE, ULTRAPLINIAN.",
+    "source": "official",
+    "identifier": "official/security/godmode",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/security/godmode",
+    "tags": [
+      "jailbreak",
+      "red-teaming",
+      "G0DM0D3",
+      "Parseltongue",
+      "GODMODE",
+      "uncensoring",
+      "safety-bypass",
+      "prompt-engineering",
+      "L1B3RT4S"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "oss-forensics",
+    "description": "Supply chain investigation, evidence recovery, and forensic analysis for GitHub repositories.\nCovers deleted commit recovery, force-push detection, IOC extraction, multi-source evidence\ncollection, hy",
+    "source": "official",
+    "identifier": "official/security/oss-forensics",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/security/oss-forensics",
+    "tags": [],
+    "extra": {}
+  },
+  {
+    "name": "sherlock",
+    "description": "OSINT username search across 400+ social networks. Hunt down social media accounts by username.",
+    "source": "official",
+    "identifier": "official/security/sherlock",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/security/sherlock",
+    "tags": [
+      "osint",
+      "security",
+      "username",
+      "social-media",
+      "reconnaissance"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "unbroker",
+    "description": "Autonomously remove your info from data-broker sites.",
+    "source": "official",
+    "identifier": "official/security/unbroker",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/security/unbroker",
+    "tags": [
+      "privacy",
+      "data-broker",
+      "opt-out",
+      "ccpa",
+      "gdpr",
+      "security",
+      "doxxing"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "web-pentest",
+    "description": "Authorized web application penetration testing — reconnaissance, vulnerability\nanalysis, proof-based exploitation, and professional reporting. Adapts\nShannon's \"No Exploit, No Report\" methodology with",
+    "source": "official",
+    "identifier": "official/security/web-pentest",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/security/web-pentest",
+    "tags": [],
+    "extra": {}
+  },
+  {
+    "name": "code-wiki",
+    "description": "Generate wiki docs + Mermaid diagrams for any codebase.",
+    "source": "official",
+    "identifier": "official/software-development/code-wiki",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/software-development/code-wiki",
+    "tags": [
+      "Documentation",
+      "Mermaid",
+      "Architecture",
+      "Diagrams",
+      "Wiki",
+      "Code-Analysis"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "rest-graphql-debug",
+    "description": "Debug REST/GraphQL APIs: status codes, auth, schemas, repro.",
+    "source": "official",
+    "identifier": "official/software-development/rest-graphql-debug",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/software-development/rest-graphql-debug",
+    "tags": [
+      "api",
+      "rest",
+      "graphql",
+      "http",
+      "debugging",
+      "testing",
+      "curl",
+      "integration"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "subagent-driven-development",
+    "description": "Execute plans via delegate_task subagents (2-stage review).",
+    "source": "official",
+    "identifier": "official/software-development/subagent-driven-development",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/software-development/subagent-driven-development",
+    "tags": [
+      "delegation",
+      "subagent",
+      "implementation",
+      "workflow",
+      "parallel"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "cloudflare-temporary-deploy",
+    "description": "Deploy a Worker live, no account, via wrangler --temporary.",
+    "source": "official",
+    "identifier": "official/web-development/cloudflare-temporary-deploy",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/web-development/cloudflare-temporary-deploy",
+    "tags": [
+      "cloudflare",
+      "workers",
+      "wrangler",
+      "deploy",
+      "temporary",
+      "agent",
+      "serverless",
+      "web-development"
+    ],
+    "extra": {}
+  },
+  {
+    "name": "page-agent",
+    "description": "Embed alibaba/page-agent into your own web application — a pure-JavaScript in-page GUI agent that ships as a single <script> tag or npm package and lets end-users of your site drive the UI with natura",
+    "source": "official",
+    "identifier": "official/web-development/page-agent",
+    "trust_level": "builtin",
+    "repo": "NousResearch/hermes-agent",
+    "path": "optional-skills/web-development/page-agent",
+    "tags": [
+      "web",
+      "javascript",
+      "agent",
+      "browser",
+      "gui",
+      "alibaba",
+      "embed",
+      "copilot",
+      "saas"
+    ],
+    "extra": {}
+  }
+]

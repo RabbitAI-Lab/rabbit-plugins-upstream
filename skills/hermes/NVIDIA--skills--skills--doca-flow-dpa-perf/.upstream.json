@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-flow-dpa-perf",
+  "identifier": "NVIDIA/skills/skills/doca-flow-dpa-perf",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-flow-dpa-perf",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "fe3e34001ff72507a910832c19f02eef08e8e9424fd1cfd9f90b64760007bf9c",
+  "fetchedAt": "2026-07-26T17:03:52.278Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/huggingface-local-models",
+  "identifier": "huggingface/skills/skills/huggingface-local-models",
+  "repo": "huggingface/skills",
+  "path": "skills/huggingface-local-models",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "5266228fb59c2b729a77acc788a0b7de6393cbd1f5ad82aac7fa7bc5c1763b2e",
+  "fetchedAt": "2026-07-26T17:03:50.913Z"
+}

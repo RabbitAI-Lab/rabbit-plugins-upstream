@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-resiliency",
+  "identifier": "NVIDIA/skills/skills/nemo-mbridge-resiliency",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-mbridge-resiliency",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "9a894a06cc33cc54e31f1c7781b5d3057f6b73ebcd7d0a6e79b932bbaa2c71a1",
+  "fetchedAt": "2026-07-26T17:03:52.339Z"
+}

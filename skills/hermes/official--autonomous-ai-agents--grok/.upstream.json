@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/autonomous-ai-agents/grok",
+  "identifier": "official/autonomous-ai-agents/grok",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/autonomous-ai-agents/grok",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "c7266a5f5d046b7da642cf89ecdd596b479be6dca4cc91b42805c9433a1cd5fe",
+  "fetchedAt": "2026-07-26T17:03:56.983Z"
+}

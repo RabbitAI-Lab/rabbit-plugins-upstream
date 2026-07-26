@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/anthropics/skills/tree/main/skills/internal-comms",
+  "identifier": "anthropics/skills/skills/internal-comms",
+  "repo": "anthropics/skills",
+  "path": "skills/internal-comms",
+  "branch": "main",
+  "pushedAt": "2026-07-24T20:12:36Z",
+  "contentHash": "9ad903576ebda039209c784708f8a69135aef47ce3532438d0870a00ca30d00d",
+  "fetchedAt": "2026-07-26T17:03:51.049Z"
+}

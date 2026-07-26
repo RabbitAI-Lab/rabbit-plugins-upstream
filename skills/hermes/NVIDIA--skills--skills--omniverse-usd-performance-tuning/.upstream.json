@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/omniverse-usd-performance-tuning",
+  "identifier": "NVIDIA/skills/skills/omniverse-usd-performance-tuning",
+  "repo": "NVIDIA/skills",
+  "path": "skills/omniverse-usd-performance-tuning",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "e980eab39efbc0707a91c2f4b5e9839db0c8d03139e630d0f6660952bfbb70c3",
+  "fetchedAt": "2026-07-26T17:03:52.377Z"
+}

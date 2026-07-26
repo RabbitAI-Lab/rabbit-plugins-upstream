@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mcp/mcporter",
+  "identifier": "official/mcp/mcporter",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mcp/mcporter",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "cdb917c6228567de9a38598942ea7f2f44464cde9c717f5c33f0b918af04c52a",
+  "fetchedAt": "2026-07-26T17:03:56.994Z"
+}

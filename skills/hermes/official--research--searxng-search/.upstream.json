@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/searxng-search",
+  "identifier": "official/research/searxng-search",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/research/searxng-search",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "ed579dfaf2f1e7fe4eec6b8914b4354f0f124e5b3eec65ae3b014fbdb6f775b1",
+  "fetchedAt": "2026-07-26T17:03:57.017Z"
+}

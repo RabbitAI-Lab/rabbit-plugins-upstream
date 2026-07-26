@@ -1,0 +1,17 @@
+{
+  "source": "hermes",
+  "url": "https://hermes-agent.nousresearch.com/docs/api/skills-index.json",
+  "version": 1,
+  "generated_at": "2026-07-20T18:55:15.264264+00:00",
+  "skill_count": 90605,
+  "bySource": {
+    "browse-sh": 440,
+    "claude-marketplace": 1,
+    "clawhub": 69150,
+    "github": 438,
+    "lobehub": 505,
+    "official": 104,
+    "skills.sh": 19967
+  },
+  "fetchedAt": "2026-07-26T17:03:49.612Z"
+}

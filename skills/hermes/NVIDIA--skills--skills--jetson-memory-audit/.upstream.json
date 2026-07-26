@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-memory-audit",
+  "identifier": "NVIDIA/skills/skills/jetson-memory-audit",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-memory-audit",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "2018ff6f1e23093ff666f5b07bec268bee418f538710440a79e3209f24c7cf5b",
+  "fetchedAt": "2026-07-26T17:03:52.323Z"
+}

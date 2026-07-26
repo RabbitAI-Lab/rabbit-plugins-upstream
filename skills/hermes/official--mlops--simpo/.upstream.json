@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/simpo",
+  "identifier": "official/mlops/simpo",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/simpo",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "d852ba8ce5f4d6eb50f94d689a90bcc6b04a6d3cfe29e462549ef9e3c9b146f9",
+  "fetchedAt": "2026-07-26T17:03:57.019Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-cuda-graphs",
+  "identifier": "NVIDIA/skills/skills/nemo-mbridge-perf-cuda-graphs",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-mbridge-perf-cuda-graphs",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "761f758608d76d07bd31d4490a219a2eaa22f05f9776993d3ac7d1956da9338b",
+  "fetchedAt": "2026-07-26T17:03:52.333Z"
+}

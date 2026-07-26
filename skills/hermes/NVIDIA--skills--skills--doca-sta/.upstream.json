@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-sta",
+  "identifier": "NVIDIA/skills/skills/doca-sta",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-sta",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "ad92209650e4f46d68fc0f67e03eafa22eb8ee756def6d085d4a399a6c79d866",
+  "fetchedAt": "2026-07-26T17:03:52.292Z"
+}

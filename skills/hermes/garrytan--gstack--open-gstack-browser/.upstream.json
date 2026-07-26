@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/garrytan/gstack/tree/main/open-gstack-browser",
+  "identifier": "garrytan/gstack/open-gstack-browser",
+  "repo": "garrytan/gstack",
+  "path": "open-gstack-browser",
+  "branch": "main",
+  "pushedAt": "2026-07-15T01:33:47Z",
+  "contentHash": "a8e7928a00041c936dbccc4386ba27e65fbd15088efbc4688da616db0f3ae69d",
+  "fetchedAt": "2026-07-26T17:03:53.107Z"
+}

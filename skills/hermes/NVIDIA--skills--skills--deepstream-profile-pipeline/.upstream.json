@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/deepstream-profile-pipeline",
+  "identifier": "NVIDIA/skills/skills/deepstream-profile-pipeline",
+  "repo": "NVIDIA/skills",
+  "path": "skills/deepstream-profile-pipeline",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "9439b48a2030ee27386f6972b8eef3425b8ca5438fb032bf12138e927e12f6e0",
+  "fetchedAt": "2026-07-26T17:03:52.256Z"
+}

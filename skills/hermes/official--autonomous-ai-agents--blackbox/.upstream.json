@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/autonomous-ai-agents/blackbox",
+  "identifier": "official/autonomous-ai-agents/blackbox",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/autonomous-ai-agents/blackbox",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "8895164e934ae142afd0f0eed33a3752f204af8e29b1ae224d6aaa969273f9b3",
+  "fetchedAt": "2026-07-26T17:03:56.965Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-generate-kb",
+  "identifier": "NVIDIA/skills/skills/jetson-generate-kb",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-generate-kb",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "d25e128efe7edc141f47be616fdb0c768624c558640682a87534ef4e58773aff",
+  "fetchedAt": "2026-07-26T17:03:52.319Z"
+}

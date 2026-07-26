@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/security-ownership-map",
+  "identifier": "openai/skills/skills/.curated/security-ownership-map",
+  "repo": "openai/skills",
+  "path": "skills/.curated/security-ownership-map",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "accc2056aa2e80424484aa203358b0a841c9a67f86d251e89b410ae541f3a611",
+  "fetchedAt": "2026-07-26T17:03:51.168Z"
+}

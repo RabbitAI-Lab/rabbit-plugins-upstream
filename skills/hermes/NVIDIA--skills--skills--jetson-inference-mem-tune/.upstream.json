@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-inference-mem-tune",
+  "identifier": "NVIDIA/skills/skills/jetson-inference-mem-tune",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-inference-mem-tune",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "26add5b381d417bff27ff41dabe32203db7931d84ed1fc45ceec752b4b6486ce",
+  "fetchedAt": "2026-07-26T17:03:52.320Z"
+}

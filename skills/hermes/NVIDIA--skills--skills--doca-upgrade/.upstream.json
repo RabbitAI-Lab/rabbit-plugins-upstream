@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-upgrade",
+  "identifier": "NVIDIA/skills/skills/doca-upgrade",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-upgrade",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "5d6d606013b51abd204de00a6cda5ea6d11bf469651e2590cbdefccd87eebf34",
+  "fetchedAt": "2026-07-26T17:03:52.295Z"
+}

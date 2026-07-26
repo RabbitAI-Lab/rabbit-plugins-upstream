@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/figma-create-new-file",
+  "identifier": "openai/skills/skills/.curated/figma-create-new-file",
+  "repo": "openai/skills",
+  "path": "skills/.curated/figma-create-new-file",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "2f7e835603650206c49aa7255ae57e1f4711e19f447f29d82899102355fdd897",
+  "fetchedAt": "2026-07-26T17:03:51.146Z"
+}

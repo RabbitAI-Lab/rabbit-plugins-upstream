@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/slime",
+  "identifier": "official/mlops/slime",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/slime",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "a94d74dce7769a26d8ca94d9556de762161c584d170462d9d902523cedca2df0",
+  "fetchedAt": "2026-07-26T17:03:57.020Z"
+}

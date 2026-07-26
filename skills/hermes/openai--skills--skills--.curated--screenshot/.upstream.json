@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/screenshot",
+  "identifier": "openai/skills/skills/.curated/screenshot",
+  "repo": "openai/skills",
+  "path": "skills/.curated/screenshot",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "9c5ac885e307dbb85aea5353a04fabc91ad238fae378d5069ba4dfe01eec3339",
+  "fetchedAt": "2026-07-26T17:03:51.165Z"
+}

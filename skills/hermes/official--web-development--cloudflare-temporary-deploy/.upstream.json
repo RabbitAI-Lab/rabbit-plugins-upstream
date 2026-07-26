@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/web-development/cloudflare-temporary-deploy",
+  "identifier": "official/web-development/cloudflare-temporary-deploy",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/web-development/cloudflare-temporary-deploy",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "2435a81358450cba112ce5b29cc55cb407960ab626533174127121234cbb6ba6",
+  "fetchedAt": "2026-07-26T17:03:56.967Z"
+}

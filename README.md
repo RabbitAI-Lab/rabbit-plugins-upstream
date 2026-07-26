@@ -67,5 +67,17 @@ node scripts/build-index.mjs clawhub   # 重新生成 index/<source>.json 与下
 ### Hermes 聚合索引
 
 <!-- INDEX:hermes:START -->
-（尚未同步，运行 `node scripts/build-index.mjs hermes` 后自动生成）
+最后同步：2026-07-26T17:03:57.216Z（上游索引生成于 2026-07-20T18:55:15.264264+00:00）
+
+| 上游来源 | skill 数（元数据） |
+|---|---|
+| browse-sh | 440 |
+| claude-marketplace | 1 |
+| clawhub | 69150 |
+| github | 438 |
+| lobehub | 505 |
+| official | 104 |
+| skills.sh | 19967 |
+
+其中已镜像完整内容：**542** 个（official / github 等来源，见 `skills/hermes/`）；元数据明细见 `skills/hermes/_index/`。
 <!-- INDEX:hermes:END -->

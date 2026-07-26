@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mcp/fastmcp",
+  "identifier": "official/mcp/fastmcp",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mcp/fastmcp",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "fd8ebf2424f57ae58909fbfd3ed05a344b84c86d1db52dfa2851db21dd079e33",
+  "fetchedAt": "2026-07-26T17:03:56.979Z"
+}

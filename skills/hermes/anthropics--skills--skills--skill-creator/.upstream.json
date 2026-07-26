@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/anthropics/skills/tree/main/skills/skill-creator",
+  "identifier": "anthropics/skills/skills/skill-creator",
+  "repo": "anthropics/skills",
+  "path": "skills/skill-creator",
+  "branch": "main",
+  "pushedAt": "2026-07-24T20:12:36Z",
+  "contentHash": "4557d54c524c67984e4bab23fa436e90196292ae8df4d2093f0ce0e6951bfc1c",
+  "fetchedAt": "2026-07-26T17:03:51.060Z"
+}

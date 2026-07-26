@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-foundation-stereo",
+  "identifier": "NVIDIA/skills/skills/tao-train-foundation-stereo",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-foundation-stereo",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "242ca618a56f587911408370fa803cc6ed4a02daaeb0af7dd29eb16d36ad973f",
+  "fetchedAt": "2026-07-26T17:03:52.425Z"
+}

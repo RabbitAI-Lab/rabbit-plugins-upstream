@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-centerpose",
+  "identifier": "NVIDIA/skills/skills/tao-train-centerpose",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-centerpose",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "efeb4c9ae72846c145d9a8023ef6bc94a3619de1d2779e6dda4feb8e194a6dd4",
+  "fetchedAt": "2026-07-26T17:03:52.416Z"
+}

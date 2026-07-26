@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/anthropics/skills/tree/main/skills/xlsx",
+  "identifier": "anthropics/skills/skills/xlsx",
+  "repo": "anthropics/skills",
+  "path": "skills/xlsx",
+  "branch": "main",
+  "pushedAt": "2026-07-24T20:12:36Z",
+  "contentHash": "f38e1245e48604aada998d989633de07e4c4fb9a8ddc0872219d2d36e6c538b6",
+  "fetchedAt": "2026-07-26T17:03:51.068Z"
+}

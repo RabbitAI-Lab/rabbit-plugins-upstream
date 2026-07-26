@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-sha-offload-engine",
+  "identifier": "NVIDIA/skills/skills/doca-sha-offload-engine",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-sha-offload-engine",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "a73b9574a32636bddfeaa7f00bde127c6c304d20133eaf10217319819e8096ef",
+  "fetchedAt": "2026-07-26T17:03:52.290Z"
+}

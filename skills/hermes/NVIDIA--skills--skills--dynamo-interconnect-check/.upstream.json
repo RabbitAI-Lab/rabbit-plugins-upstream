@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/dynamo-interconnect-check",
+  "identifier": "NVIDIA/skills/skills/dynamo-interconnect-check",
+  "repo": "NVIDIA/skills",
+  "path": "skills/dynamo-interconnect-check",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "a5ecc993de4682f534ffe0b4275f28d0ae362eaebe47bca1ee25ff3fdb91d43e",
+  "fetchedAt": "2026-07-26T17:03:52.297Z"
+}

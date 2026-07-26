@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/hf-mem",
+  "identifier": "huggingface/skills/skills/hf-mem",
+  "repo": "huggingface/skills",
+  "path": "skills/hf-mem",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "3aff722cc14f7e96bd4ee560c604ef6878e7e1274053339e0ca5592b04126e8f",
+  "fetchedAt": "2026-07-26T17:03:50.910Z"
+}

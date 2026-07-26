@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/finance/merger-model",
+  "identifier": "official/finance/merger-model",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/finance/merger-model",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "bf03ae39c6c3266b5805d1d974559d56c2d02f747022b0366b16c7699daf1c3f",
+  "fetchedAt": "2026-07-26T17:03:56.996Z"
+}

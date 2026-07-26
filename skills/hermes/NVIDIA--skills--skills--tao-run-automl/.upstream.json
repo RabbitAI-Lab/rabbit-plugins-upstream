@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-automl",
+  "identifier": "NVIDIA/skills/skills/tao-run-automl",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-run-automl",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "90b787dc152456cbb61ae12f44203aaa455b6dea1d3eb10c7bbf394fbb255510",
+  "fetchedAt": "2026-07-26T17:03:52.407Z"
+}

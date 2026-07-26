@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/huggingface-tool-builder",
+  "identifier": "huggingface/skills/skills/huggingface-tool-builder",
+  "repo": "huggingface/skills",
+  "path": "skills/huggingface-tool-builder",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "4f6ed880aca2e6ed03d8ab6727534be4756d049b56024c11fb8e7941f331b6c4",
+  "fetchedAt": "2026-07-26T17:03:50.916Z"
+}

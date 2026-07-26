@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/huggingface-community-evals",
+  "identifier": "huggingface/skills/skills/huggingface-community-evals",
+  "repo": "huggingface/skills",
+  "path": "skills/huggingface-community-evals",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "bae75cff5774c2c8dcaef0fb4c0c0a5e939d4980cfa5e5905f9ecfac3d4fc191",
+  "fetchedAt": "2026-07-26T17:03:50.911Z"
+}

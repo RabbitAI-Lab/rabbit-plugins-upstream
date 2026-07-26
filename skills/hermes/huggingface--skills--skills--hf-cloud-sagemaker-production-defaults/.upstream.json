@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/hf-cloud-sagemaker-production-defaults",
+  "identifier": "huggingface/skills/skills/hf-cloud-sagemaker-production-defaults",
+  "repo": "huggingface/skills",
+  "path": "skills/hf-cloud-sagemaker-production-defaults",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "8360e265f19804dffb853ea959db33cd9772dd43ee350d85df9721d32c794cac",
+  "fetchedAt": "2026-07-26T17:03:50.909Z"
+}

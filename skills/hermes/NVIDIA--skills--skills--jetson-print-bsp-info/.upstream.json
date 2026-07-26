@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-print-bsp-info",
+  "identifier": "NVIDIA/skills/skills/jetson-print-bsp-info",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-print-bsp-info",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "23df100a4429c73e737c2ca4b06d7f782c91187dfc00a4ee44f4fe2bc9750018",
+  "fetchedAt": "2026-07-26T17:03:52.324Z"
+}

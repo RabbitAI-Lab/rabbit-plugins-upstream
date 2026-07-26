@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-oneformer",
+  "identifier": "NVIDIA/skills/skills/tao-train-oneformer",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-oneformer",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "719d85cd828e10b8b69a7fdb7adcd433d5a525dd4f08168b1143019c08ed9451",
+  "fetchedAt": "2026-07-26T17:03:52.446Z"
+}

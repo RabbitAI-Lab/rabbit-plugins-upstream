@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-rl-auto-research",
+  "identifier": "NVIDIA/skills/skills/nemo-rl-auto-research",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-rl-auto-research",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "b220f0002f18e3c879035b0345beed2122f4189105b621fe11531f9cbaa20c9e",
+  "fetchedAt": "2026-07-26T17:03:52.344Z"
+}

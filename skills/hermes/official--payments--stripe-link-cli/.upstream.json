@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/payments/stripe-link-cli",
+  "identifier": "official/payments/stripe-link-cli",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/payments/stripe-link-cli",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "3f370f171e3d4b5a9c7d1fea0225f42b1fee9a2cd3b2eeae270270e005de73b8",
+  "fetchedAt": "2026-07-26T17:03:57.022Z"
+}

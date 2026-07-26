@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/bioinformatics",
+  "identifier": "official/research/bioinformatics",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/research/bioinformatics",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "182cc106ea42ef06636c01e674846b39176c403f37eda61a68949c15f7878229",
+  "fetchedAt": "2026-07-26T17:03:56.965Z"
+}

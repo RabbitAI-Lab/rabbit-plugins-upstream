@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/figma-generate-design",
+  "identifier": "openai/skills/skills/.curated/figma-generate-design",
+  "repo": "openai/skills",
+  "path": "skills/.curated/figma-generate-design",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "386146dd42255ef009c6f33400d396a1ca764f3802131e7967985b1afb24184a",
+  "fetchedAt": "2026-07-26T17:03:51.147Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/research/dspy",
+  "identifier": "official/mlops/research/dspy",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/research/dspy",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "eed8df1d7735fa5ed5f6fb6a08485945266a4eea2de9816a0d6b8423f0e53e6e",
+  "fetchedAt": "2026-07-26T17:03:56.977Z"
+}

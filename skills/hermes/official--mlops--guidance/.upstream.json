@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/guidance",
+  "identifier": "official/mlops/guidance",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/guidance",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "5aa17514576cbc6beb71ac6caad6e8bfa51e24007ed8bac058c06dfe7795fac1",
+  "fetchedAt": "2026-07-26T17:03:56.984Z"
+}

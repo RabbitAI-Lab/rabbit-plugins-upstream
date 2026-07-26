@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/gitnexus-explorer",
+  "identifier": "official/research/gitnexus-explorer",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/research/gitnexus-explorer",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "6bf4f230e99b862cf1b9502b886b25a0f7ff0e726b00e0b03a9fe2db0f88caf3",
+  "fetchedAt": "2026-07-26T17:03:56.981Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/hf-cloud-serving-image-selection",
+  "identifier": "huggingface/skills/skills/hf-cloud-serving-image-selection",
+  "repo": "huggingface/skills",
+  "path": "skills/hf-cloud-serving-image-selection",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "a4400b71c5fd6c8fb415edbafa1698eb97919b7f701b73995efb4c18ecfc5dbf",
+  "fetchedAt": "2026-07-26T17:03:50.910Z"
+}

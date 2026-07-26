@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/hsb-setup",
+  "identifier": "NVIDIA/skills/skills/hsb-setup",
+  "repo": "NVIDIA/skills",
+  "path": "skills/hsb-setup",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "bd02bd37fd4645dde03fe2f92c4db66e3ee34fd2d8f2b75889306f95da66309b",
+  "fetchedAt": "2026-07-26T17:03:52.308Z"
+}

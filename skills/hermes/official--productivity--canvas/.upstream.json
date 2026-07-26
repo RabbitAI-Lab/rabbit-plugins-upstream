@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/canvas",
+  "identifier": "official/productivity/canvas",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/canvas",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "acdd9f7e2d2fe0bc8892c89a1eeeaacc886694ff92042258c1977484621ca87c",
+  "fetchedAt": "2026-07-26T17:03:56.966Z"
+}

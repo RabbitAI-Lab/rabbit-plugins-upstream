@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-automodel-distributed-training",
+  "identifier": "NVIDIA/skills/skills/nemo-automodel-distributed-training",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-automodel-distributed-training",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "0dff14df2a60134f4cb7dc889ae4634e61e89ce64883b2058ac554eb0a44bb19",
+  "fetchedAt": "2026-07-26T17:03:52.328Z"
+}

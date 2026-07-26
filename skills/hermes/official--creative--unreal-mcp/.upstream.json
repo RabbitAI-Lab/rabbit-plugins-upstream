@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/unreal-mcp",
+  "identifier": "official/creative/unreal-mcp",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/unreal-mcp",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "6c89e28bb61d9ca7a67b420f4bcfa40e5cd9dd38d6861f31bf7505fd80a6b7bb",
+  "fetchedAt": "2026-07-26T17:03:57.026Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-promote-image",
+  "identifier": "NVIDIA/skills/skills/jetson-promote-image",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-promote-image",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "dc92a15e21bf30d9189b30068a0624d58211ec69cbbb5d07a6fd3e20aa739fff",
+  "fetchedAt": "2026-07-26T17:03:52.325Z"
+}

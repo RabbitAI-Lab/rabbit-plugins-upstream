@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-customize-pinmux",
+  "identifier": "NVIDIA/skills/skills/jetson-customize-pinmux",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-customize-pinmux",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "6580f884324721b9af77ffa9be152b0a876e78f523220ac24b758ff402334952",
+  "fetchedAt": "2026-07-26T17:03:52.313Z"
+}

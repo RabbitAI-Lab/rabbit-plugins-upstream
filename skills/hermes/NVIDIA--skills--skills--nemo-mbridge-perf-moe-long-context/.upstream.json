@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-moe-long-context",
+  "identifier": "NVIDIA/skills/skills/nemo-mbridge-perf-moe-long-context",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-mbridge-perf-moe-long-context",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "75001392a946ac9be112a22e021590f4f35aa2c30ac083ceefa493b88251fbf5",
+  "fetchedAt": "2026-07-26T17:03:52.336Z"
+}

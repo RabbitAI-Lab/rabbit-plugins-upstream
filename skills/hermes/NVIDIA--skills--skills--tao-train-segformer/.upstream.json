@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-segformer",
+  "identifier": "NVIDIA/skills/skills/tao-train-segformer",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-segformer",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "426a2b57d2bf95c91e4ceefcabcf7f9ce59f1fa4fcdc1c499b472b11846e033f",
+  "fetchedAt": "2026-07-26T17:03:52.455Z"
+}

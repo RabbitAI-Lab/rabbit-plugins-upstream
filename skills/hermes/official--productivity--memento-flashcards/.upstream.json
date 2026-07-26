@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/memento-flashcards",
+  "identifier": "official/productivity/memento-flashcards",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/memento-flashcards",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "5d40e85642685ac2fd4749dec28b1048253da42e4cfa68d274c6ae04adb9c04b",
+  "fetchedAt": "2026-07-26T17:03:56.995Z"
+}

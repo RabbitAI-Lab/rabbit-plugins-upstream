@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/security-threat-model",
+  "identifier": "openai/skills/skills/.curated/security-threat-model",
+  "repo": "openai/skills",
+  "path": "skills/.curated/security-threat-model",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "c3a968004c25b9c7aaf133801adba36962e7ab34a7d073834c084472d7854eee",
+  "fetchedAt": "2026-07-26T17:03:51.168Z"
+}

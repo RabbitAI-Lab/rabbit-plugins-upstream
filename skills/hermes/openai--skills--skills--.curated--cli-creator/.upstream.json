@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/cli-creator",
+  "identifier": "openai/skills/skills/.curated/cli-creator",
+  "repo": "openai/skills",
+  "path": "skills/.curated/cli-creator",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "d5aadc749e871b0edf63d60727674585109fa7d500116ecd42125538e4d9f62c",
+  "fetchedAt": "2026-07-26T17:03:51.128Z"
+}

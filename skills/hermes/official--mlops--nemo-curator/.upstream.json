@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/nemo-curator",
+  "identifier": "official/mlops/nemo-curator",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/nemo-curator",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "4bb700c78f3ec80dc86dee422706b828c01bc09a4074602659799d058f27ba40",
+  "fetchedAt": "2026-07-26T17:03:56.998Z"
+}

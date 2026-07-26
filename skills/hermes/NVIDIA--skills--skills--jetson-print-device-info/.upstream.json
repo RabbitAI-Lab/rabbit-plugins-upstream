@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-print-device-info",
+  "identifier": "NVIDIA/skills/skills/jetson-print-device-info",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-print-device-info",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "ccea95939f0aceca98813e14c5a6d22d192a042f660b3474d589f1fc444b6476",
+  "fetchedAt": "2026-07-26T17:03:52.324Z"
+}

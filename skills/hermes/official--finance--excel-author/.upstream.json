@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/finance/excel-author",
+  "identifier": "official/finance/excel-author",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/finance/excel-author",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "494f254f5d2537ac867ccac25d33947ad32ed58292c0060cede742bcb9a71558",
+  "fetchedAt": "2026-07-26T17:03:56.978Z"
+}

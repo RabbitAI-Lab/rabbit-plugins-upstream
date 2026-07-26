@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-activation-recompute",
+  "identifier": "NVIDIA/skills/skills/nemo-mbridge-perf-activation-recompute",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-mbridge-perf-activation-recompute",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "50c9c976597f589ad1f3aaf730fb0f0f54493513539d3fe2a0ac83246c6c8a75",
+  "fetchedAt": "2026-07-26T17:03:52.332Z"
+}

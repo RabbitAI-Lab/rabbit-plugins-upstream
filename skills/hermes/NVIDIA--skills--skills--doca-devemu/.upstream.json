@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-devemu",
+  "identifier": "NVIDIA/skills/skills/doca-devemu",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-devemu",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "3c3fd281b3d2e3b055193ec22d4e03c7308ec1a7142e242066e91a1695f378f3",
+  "fetchedAt": "2026-07-26T17:03:52.273Z"
+}

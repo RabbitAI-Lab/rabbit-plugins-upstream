@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/earth2studio-create-diagnostic",
+  "identifier": "NVIDIA/skills/skills/earth2studio-create-diagnostic",
+  "repo": "NVIDIA/skills",
+  "path": "skills/earth2studio-create-diagnostic",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "378aabe8be16cd60d617085544b59f7d93232e97d162dc716d8ab31bf26c06c2",
+  "fetchedAt": "2026-07-26T17:03:52.301Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/physical-ai-video-data-augmentation",
+  "identifier": "NVIDIA/skills/skills/physical-ai-video-data-augmentation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/physical-ai-video-data-augmentation",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "ba95a6b820ac656f624a70315fdf015b38b222dcc174ca761ccaa6c6e94e0f70",
+  "fetchedAt": "2026-07-26T17:03:52.389Z"
+}

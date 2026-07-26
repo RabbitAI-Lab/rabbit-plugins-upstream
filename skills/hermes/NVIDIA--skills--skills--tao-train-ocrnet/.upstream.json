@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-ocrnet",
+  "identifier": "NVIDIA/skills/skills/tao-train-ocrnet",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-ocrnet",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "8d27c0941769aef817b5856bd2e096f0f304484ecc0eae21f146551ad990223d",
+  "fetchedAt": "2026-07-26T17:03:52.444Z"
+}

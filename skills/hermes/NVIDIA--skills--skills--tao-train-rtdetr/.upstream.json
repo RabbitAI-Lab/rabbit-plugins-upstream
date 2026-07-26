@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-rtdetr",
+  "identifier": "NVIDIA/skills/skills/tao-train-rtdetr",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-rtdetr",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "65209764d7d33be8e411e6e839ad283ffed19bae6cde0690aa8e3f577996589b",
+  "fetchedAt": "2026-07-26T17:03:52.453Z"
+}

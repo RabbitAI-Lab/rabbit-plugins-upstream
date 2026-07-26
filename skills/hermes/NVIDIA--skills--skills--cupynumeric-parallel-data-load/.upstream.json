@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cupynumeric-parallel-data-load",
+  "identifier": "NVIDIA/skills/skills/cupynumeric-parallel-data-load",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cupynumeric-parallel-data-load",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "5fcdeb0a4dcafadc9b27fe93390918e9ef83a060c6b4f135d733c07363e41a7a",
+  "fetchedAt": "2026-07-26T17:03:52.249Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-cpu-offloading",
+  "identifier": "NVIDIA/skills/skills/nemo-mbridge-perf-cpu-offloading",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-mbridge-perf-cpu-offloading",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "a7d704c51a66738f84499e15ce0acb3fe099d911675b777974da63bd819112e8",
+  "fetchedAt": "2026-07-26T17:03:52.333Z"
+}

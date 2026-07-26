@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/stable-diffusion",
+  "identifier": "official/mlops/stable-diffusion",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/stable-diffusion",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "be38800dcdf0ada42a2c54a16ee0d9b37cccf0e8a980103258edc2ad1f9e7746",
+  "fetchedAt": "2026-07-26T17:03:57.021Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/huggingface-lora-space-builder",
+  "identifier": "huggingface/skills/skills/huggingface-lora-space-builder",
+  "repo": "huggingface/skills",
+  "path": "skills/huggingface-lora-space-builder",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "d0e32d306d231e926653b16127641e0b832d2d0112c14e45ed76799b7d8a3a1d",
+  "fetchedAt": "2026-07-26T17:03:50.913Z"
+}

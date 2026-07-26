@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-build-source",
+  "identifier": "NVIDIA/skills/skills/jetson-build-source",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-build-source",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "ab3209c8b36a410b868b0131880dcfc71549aade650af90bbad83f3183fc6ec2",
+  "fetchedAt": "2026-07-26T17:03:52.309Z"
+}

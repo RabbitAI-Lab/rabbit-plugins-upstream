@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/modal",
+  "identifier": "official/mlops/modal",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/modal",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "6bfbe30c610f68c0bc902aabc99fe9cab5c84bcf204b96505de895c5c6f19d6b",
+  "fetchedAt": "2026-07-26T17:03:56.997Z"
+}

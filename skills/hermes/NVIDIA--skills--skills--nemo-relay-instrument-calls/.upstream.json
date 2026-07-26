@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-relay-instrument-calls",
+  "identifier": "NVIDIA/skills/skills/nemo-relay-instrument-calls",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-relay-instrument-calls",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "879d5f4745be39487be63353cd68c1f53a78841ce44139cf5b64e3de30dd29fc",
+  "fetchedAt": "2026-07-26T17:03:52.341Z"
+}

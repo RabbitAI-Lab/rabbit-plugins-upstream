@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/finance/3-statement-model",
+  "identifier": "official/finance/3-statement-model",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/finance/3-statement-model",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "d57ba45dd2739113c645aefd7a3e69048a708c01aa61876f867975d1477ca831",
+  "fetchedAt": "2026-07-26T17:03:56.957Z"
+}

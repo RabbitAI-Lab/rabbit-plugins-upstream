@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/blockchain/hyperliquid",
+  "identifier": "official/blockchain/hyperliquid",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/blockchain/hyperliquid",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "9145ae6e9dba3b0553ba0e1330730d165c4264e21eaa7b1a4604097f56c2e92a",
+  "fetchedAt": "2026-07-26T17:03:56.988Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-customize-clocks",
+  "identifier": "NVIDIA/skills/skills/jetson-customize-clocks",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-customize-clocks",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "95b646aeb8d5fdfa50cf776ca997cd998aea942ff9e4b767905e98acc8eb2d01",
+  "fetchedAt": "2026-07-26T17:03:52.310Z"
+}
