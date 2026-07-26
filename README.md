@@ -10,7 +10,7 @@
 |---|---|---|
 | [ClawHub](https://clawhub.ai) | OpenClaw 官方 skill 注册表（约 69k skills） | `/api/v1/skills` 全量枚举 + `/api/v1/download` 下载完整内容 |
 | [skills.sh](https://www.skills.sh) | Vercel 的 agent skills 目录（约 20k skills） | sitemap 枚举 + 从对应 GitHub 仓库拉取 skill 目录内容 |
-| [Hermes Agent](https://hermes-agent.nousresearch.com/docs/skills) | Nous Research 的聚合索引（约 90k skills，含上述两者） | 镜像其 unified index（元数据），按来源拆分存储 |
+| [Hermes Agent](https://hermes-agent.nousresearch.com/docs/skills) | Nous Research 的聚合索引（约 90k skills，含上述两者） | 镜像其 unified index（元数据，按来源拆分）；其中 official / github 等带仓库路径的条目额外镜像完整内容 |
 
 ## 目录结构
 
@@ -19,6 +19,7 @@ skills/
   clawhub/<slug>/ 或 <owner>--<slug>/    # ClawHub skill 完整内容（slug 撞名时带 owner 前缀）
   skills-sh/<owner>--<repo>--<skillId>/  # skills.sh skill 完整内容
   hermes/_index/<source>.json            # Hermes 聚合索引（仅元数据）
+  hermes/<identifier>/                   # Hermes 索引中 official / github 等来源的 skill 完整内容
 index/<source>.json                      # 各来源索引（由 build-index 生成）
 sync-state/<source>.json                 # 各来源增量同步状态（按源隔离，支持并行同步）
 scripts/                                 # 同步脚本（Node.js，零第三方依赖）

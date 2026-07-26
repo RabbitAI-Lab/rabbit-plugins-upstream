@@ -56,26 +56,35 @@ function main() {
   fs.mkdirSync(path.join(ROOT, "index"), { recursive: true });
 
   if (source === "hermes") {
-    // Hermes 只镜像元数据索引，统计直接读 _meta.json
+    // Hermes = 元数据索引 + 部分来源的完整内容镜像
     const metaFile = path.join(ROOT, "skills", "hermes", "_index", "_meta.json");
     if (!fs.existsSync(metaFile)) {
       console.log("[index] hermes 尚未同步，跳过");
       return;
     }
     const meta = JSON.parse(fs.readFileSync(metaFile, "utf8"));
-    const index = { generatedAt, source, skillCount: meta.skill_count, upstreamGeneratedAt: meta.generated_at, bySource: meta.bySource };
+    const mirrored = walkSkills(path.join(ROOT, "skills", source)); // _index 无 .upstream.json，自动跳过
+    const index = {
+      generatedAt,
+      source,
+      skillCount: meta.skill_count,
+      upstreamGeneratedAt: meta.generated_at,
+      bySource: meta.bySource,
+      mirroredContent: mirrored.length,
+      skills: mirrored,
+    };
     fs.writeFileSync(path.join(ROOT, "index", "hermes.json"), JSON.stringify(index, null, 2) + "\n");
     const lines = [
       `最后同步：${generatedAt}（上游索引生成于 ${meta.generated_at}）`,
       "",
-      "| 上游来源 | skill 数（仅元数据） |",
+      "| 上游来源 | skill 数（元数据） |",
       "|---|---|",
       ...Object.entries(meta.bySource || {}).map(([s, n]) => `| ${s} | ${n} |`),
       "",
-      "明细见 `skills/hermes/_index/`。",
+      `其中已镜像完整内容：**${mirrored.length}** 个（official / github 等来源，见 \`skills/hermes/\`）；元数据明细见 \`skills/hermes/_index/\`。`,
     ].join("\n");
     updateReadme(source, lines);
-    console.log(`[index] index/hermes.json: ${meta.skill_count} 个 skill（仅元数据）`);
+    console.log(`[index] index/hermes.json: 元数据 ${meta.skill_count} 个，完整内容 ${mirrored.length} 个`);
     return;
   }
 
