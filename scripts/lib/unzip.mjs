@@ -22,31 +22,50 @@ export function unzip(buf) {
   const count = buf.readUInt16LE(eocd + 10);
   let offset = buf.readUInt32LE(eocd + 16);
 
-  const files = new Map();
+  // 第一遍：解析中央目录。注意有些打包器会生成不带尾部斜杠的“目录条目”
+  // （0 字节、名字是其他条目的父路径），需要识别并跳过。
+  const entries = [];
+  const parentDirs = new Set();
   for (let n = 0; n < count; n++) {
     if (buf.readUInt32LE(offset) !== CEN_SIG) throw new Error("invalid zip: bad central directory");
     const method = buf.readUInt16LE(offset + 10);
     const compSize = buf.readUInt32LE(offset + 20);
+    const uncompSize = buf.readUInt32LE(offset + 24);
     const nameLen = buf.readUInt16LE(offset + 28);
     const extraLen = buf.readUInt16LE(offset + 30);
     const commentLen = buf.readUInt16LE(offset + 32);
+    const extAttrs = buf.readUInt32LE(offset + 38);
     const localOffset = buf.readUInt32LE(offset + 42);
     const name = buf.subarray(offset + 46, offset + 46 + nameLen).toString("utf8");
     offset += 46 + nameLen + extraLen + commentLen;
 
-    if (name.endsWith("/")) continue; // 目录项
+    entries.push({ name, method, compSize, uncompSize, extAttrs, localOffset });
+    // 收集所有条目的祖先目录路径
+    for (let i = name.indexOf("/"); i !== -1; i = name.indexOf("/", i + 1)) {
+      parentDirs.add(name.slice(0, i));
+    }
+  }
 
-    if (buf.readUInt32LE(localOffset) !== LOC_SIG) throw new Error(`invalid zip: bad local header for ${name}`);
-    const lNameLen = buf.readUInt16LE(localOffset + 26);
-    const lExtraLen = buf.readUInt16LE(localOffset + 28);
-    const dataStart = localOffset + 30 + lNameLen + lExtraLen;
-    const raw = buf.subarray(dataStart, dataStart + compSize);
+  const files = new Map();
+  for (const e of entries) {
+    const unixMode = e.extAttrs >>> 16;
+    const isDir =
+      e.name.endsWith("/") ||
+      (unixMode & 0o170000) === 0o040000 ||
+      (e.uncompSize === 0 && parentDirs.has(e.name));
+    if (isDir) continue;
+
+    if (buf.readUInt32LE(e.localOffset) !== LOC_SIG) throw new Error(`invalid zip: bad local header for ${e.name}`);
+    const lNameLen = buf.readUInt16LE(e.localOffset + 26);
+    const lExtraLen = buf.readUInt16LE(e.localOffset + 28);
+    const dataStart = e.localOffset + 30 + lNameLen + lExtraLen;
+    const raw = buf.subarray(dataStart, dataStart + e.compSize);
 
     let data;
-    if (method === 0) data = Buffer.from(raw);
-    else if (method === 8) data = zlib.inflateRawSync(raw);
+    if (e.method === 0) data = Buffer.from(raw);
+    else if (e.method === 8) data = zlib.inflateRawSync(raw);
     else continue; // 不支持的压缩方式，跳过
-    files.set(name, data);
+    files.set(e.name, data);
   }
   return files;
 }

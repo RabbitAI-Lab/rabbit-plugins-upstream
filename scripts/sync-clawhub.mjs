@@ -14,6 +14,8 @@ import { MAX_ITEMS, CONCURRENCY, safeName } from "./lib/config.mjs";
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const API = "https://clawhub.ai/api/v1";
 const SOURCE = "clawhub";
+// 镜像格式版本：写入/解析逻辑修复后递增，强制重下旧格式条目
+const FORMAT = 2;
 
 async function enumerateAll() {
   const maxPages = Number(process.env.SYNC_ENUM_PAGES || Infinity); // 调试用：限制枚举页数
@@ -52,9 +54,9 @@ async function downloadOne(slug, ownerHandle) {
 }
 
 async function main() {
-  const state = loadState(ROOT);
-  state[SOURCE] ??= { skills: {} };
-  const stored = state[SOURCE].skills;
+  const state = loadState(ROOT, SOURCE);
+  state.skills ??= {};
+  const stored = state.skills;
   const stats = new SyncStats(SOURCE);
 
   console.log("[clawhub] 开始全量枚举…");
@@ -85,7 +87,12 @@ async function main() {
     const existing = bySlug.get(slug) || [];
     const fresh =
       existing.length > 0 &&
-      existing.every((id) => stored[id].version === info.version && stored[id].updatedAt === info.updatedAt);
+      existing.every(
+        (id) =>
+          stored[id].format === FORMAT &&
+          stored[id].version === info.version &&
+          stored[id].updatedAt === info.updatedAt
+      );
     if (!fresh) todo.push({ slug, ...info });
   }
   console.log(`[clawhub] 待下载 ${todo.length} 个（本轮上限 ${MAX_ITEMS}）`);
@@ -128,7 +135,7 @@ async function main() {
               updatedAt,
             });
             stats.record(result);
-            stored[id] = { slug, ownerHandle: owner, version, updatedAt, contentHash: contentHash(files) };
+            stored[id] = { slug, ownerHandle: owner, version, updatedAt, contentHash: contentHash(files), format: FORMAT };
           }
           for (const oldId of bySlug.get(slug) || []) {
             if (!newIds.has(oldId)) {
@@ -147,7 +154,7 @@ async function main() {
     )
   );
 
-  saveState(ROOT, state);
+  saveState(ROOT, SOURCE, state);
   stats.report();
   // 枚举或大面积失败视为失败：失败率 >20% 且数量可观时非零退出，阻断 PR
   if (stats.failed > 50 && stats.failed > (stats.added + stats.updated + stats.unchanged) * 0.2) {

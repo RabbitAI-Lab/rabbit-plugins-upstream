@@ -19,20 +19,20 @@ skills/
   clawhub/<slug>/ 或 <owner>--<slug>/    # ClawHub skill 完整内容（slug 撞名时带 owner 前缀）
   skills-sh/<owner>--<repo>--<skillId>/  # skills.sh skill 完整内容
   hermes/_index/<source>.json            # Hermes 聚合索引（仅元数据）
-INDEX.json                               # 全量索引（由 build-index 生成）
-sync-state.json                          # 增量同步状态
+index/<source>.json                      # 各来源索引（由 build-index 生成）
+sync-state/<source>.json                 # 各来源增量同步状态（按源隔离，支持并行同步）
 scripts/                                 # 同步脚本（Node.js，零第三方依赖）
-.github/workflows/sync.yml               # 定时同步 workflow
+.github/workflows/sync.yml               # 定时同步 workflow（matrix 三 job 并行）
 ```
 
 每个 skill 目录内含 `.upstream.json`，记录来源 URL、版本、内容哈希与同步时间。
 
 ## 同步机制
 
-- **定时**：每天通过 `.github/workflows/sync.yml` 运行，也可手动 `workflow_dispatch` 触发。
-- **增量**：以 `sync-state.json` 对比上游版本/哈希，只拉新增与变更；上游下架的 skill 会被删除（在 PR diff 中可见）。
-- **分批**：全量约 9 万 skill，单次运行处理量受 `SYNC_MAX_ITEMS`（默认 3000）限制，状态随每次提交持久化，多轮运行后收敛。
-- **落地**：检测到变更后自动建分支 `sync/<date>` 并开 PR；无变更则不开。
+- **定时**：每天通过 `.github/workflows/sync.yml` 运行，三个来源 **matrix 并行**，也可手动 `workflow_dispatch` 触发（可选单一来源）。
+- **增量**：以 `sync-state/<source>.json` 对比上游版本/哈希，只拉新增与变更；上游下架的 skill 会被删除（在 PR diff 中可见）。
+- **分批**：全量约 9 万 skill，单次运行处理量受 `SYNC_MAX_ITEMS`（默认 3000/来源）限制，状态随每次提交持久化，多轮运行后收敛。
+- **落地**：每个来源独立建分支 `sync/<source>/<date>` 并开独立 PR（文件路径互不重叠，可分别审查合并）；无变更则不开。
 
 ## 本地运行
 
@@ -44,13 +44,27 @@ SYNC_MAX_ITEMS=20 npm run sync:clawhub
 GITHUB_TOKEN=$(gh auth token) SYNC_MAX_ITEMS=20 npm run sync:skills-sh
 
 npm run sync:hermes   # 只拉一个约 35MB 的索引 JSON
-npm run index         # 重新生成 INDEX.json 与下方统计
+node scripts/build-index.mjs clawhub   # 重新生成 index/<source>.json 与下方对应统计区
 ```
 
 环境变量：`SYNC_MAX_ITEMS`（每轮处理上限）、`SYNC_CONCURRENCY`（并发数，默认 6）、`GITHUB_TOKEN`。
 
 ## 索引统计
 
-<!-- INDEX:START -->
-（尚未同步，运行 `npm run index` 后自动生成）
-<!-- INDEX:END -->
+### ClawHub
+
+<!-- INDEX:clawhub:START -->
+（尚未同步，运行 `node scripts/build-index.mjs clawhub` 后自动生成）
+<!-- INDEX:clawhub:END -->
+
+### skills.sh
+
+<!-- INDEX:skills-sh:START -->
+（尚未同步，运行 `node scripts/build-index.mjs skills-sh` 后自动生成）
+<!-- INDEX:skills-sh:END -->
+
+### Hermes 聚合索引
+
+<!-- INDEX:hermes:START -->
+（尚未同步，运行 `node scripts/build-index.mjs hermes` 后自动生成）
+<!-- INDEX:hermes:END -->

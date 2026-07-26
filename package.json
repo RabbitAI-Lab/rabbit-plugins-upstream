@@ -7,7 +7,7 @@
     "sync:clawhub": "node scripts/sync-clawhub.mjs",
     "sync:skills-sh": "node scripts/sync-skills-sh.mjs",
     "sync:hermes": "node scripts/sync-hermes.mjs",
-    "sync:all": "node scripts/sync-clawhub.mjs && node scripts/sync-skills-sh.mjs && node scripts/sync-hermes.mjs && node scripts/build-index.mjs",
-    "index": "node scripts/build-index.mjs"
+    "sync:all": "node scripts/sync-clawhub.mjs && node scripts/sync-skills-sh.mjs && node scripts/sync-hermes.mjs && npm run index",
+    "index": "node scripts/build-index.mjs clawhub && node scripts/build-index.mjs skills-sh && node scripts/build-index.mjs hermes"
   }
 }

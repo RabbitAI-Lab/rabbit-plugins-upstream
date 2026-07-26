@@ -15,8 +15,7 @@ const SOURCE = "hermes";
 const INDEX_URL = "https://hermes-agent.nousresearch.com/docs/api/skills-index.json";
 
 async function main() {
-  const state = loadState(ROOT);
-  state[SOURCE] ??= {};
+  const state = loadState(ROOT, SOURCE);
   const stats = new SyncStats(SOURCE);
 
   console.log("[hermes] 下载聚合索引…");
@@ -24,7 +23,7 @@ async function main() {
   if (!data || !Array.isArray(data.skills)) throw new Error("索引格式异常：缺少 skills 数组");
   console.log(`[hermes] 索引生成于 ${data.generated_at}，共 ${data.skills.length} 个 skill`);
 
-  if (state[SOURCE].generatedAt === data.generated_at) {
+  if (state.generatedAt === data.generated_at) {
     console.log("[hermes] 索引未变化，跳过");
     stats.unchanged = data.skills.length;
     stats.report();
@@ -35,24 +34,26 @@ async function main() {
   fs.rmSync(outDir, { recursive: true, force: true });
   fs.mkdirSync(outDir, { recursive: true });
 
-  // meta 文件
-  const meta = {
-    source: SOURCE,
-    url: INDEX_URL,
-    version: data.version,
-    generated_at: data.generated_at,
-    skill_count: data.skill_count,
-    fetchedAt: new Date().toISOString(),
-  };
-  fs.writeFileSync(path.join(outDir, "_meta.json"), JSON.stringify(meta, null, 2) + "\n");
-
-  // 按来源拆分，identifier 排序保证 diff 稳定
+  // 按来源分组（identifier 排序保证 diff 稳定）
   const groups = new Map();
   for (const s of data.skills) {
     const key = s.source || "unknown";
     if (!groups.has(key)) groups.set(key, []);
     groups.get(key).push(s);
   }
+
+  // meta 文件（含各来源计数，供 build-index 直接使用）
+  const meta = {
+    source: SOURCE,
+    url: INDEX_URL,
+    version: data.version,
+    generated_at: data.generated_at,
+    skill_count: data.skill_count,
+    bySource: Object.fromEntries([...groups.entries()].sort().map(([k, v]) => [k, v.length])),
+    fetchedAt: new Date().toISOString(),
+  };
+  fs.writeFileSync(path.join(outDir, "_meta.json"), JSON.stringify(meta, null, 2) + "\n");
+
   for (const [source, list] of [...groups.entries()].sort()) {
     list.sort((a, b) => String(a.identifier).localeCompare(String(b.identifier)));
     fs.writeFileSync(path.join(outDir, `${safeName(source)}.json`), JSON.stringify(list, null, 2) + "\n");
@@ -60,9 +61,9 @@ async function main() {
   }
 
   stats.added = data.skills.length; // 索引整体替换，统一计为新增/更新
-  state[SOURCE].generatedAt = data.generated_at;
-  state[SOURCE].skillCount = data.skill_count;
-  saveState(ROOT, state);
+  state.generatedAt = data.generated_at;
+  state.skillCount = data.skill_count;
+  saveState(ROOT, SOURCE, state);
   stats.report();
 }
 

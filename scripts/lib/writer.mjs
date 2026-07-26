@@ -43,13 +43,9 @@ export function writeSkill(root, source, id, files, meta) {
     // 防 zip-slip：拒绝绝对路径与 .. 逃逸
     const target = path.join(dir, name);
     if (!target.startsWith(dir + path.sep)) continue;
-    // 异常 zip 结构（如同名文件与目录共存）不阻断整个 skill
-    try {
-      fs.mkdirSync(path.dirname(target), { recursive: true });
-      fs.writeFileSync(target, buf);
-    } catch (e) {
-      console.warn(`  [writer] 跳过无法写入的文件 ${id}/${name}: ${e.message}`);
-    }
+    // 写入失败直接抛出（skill 记为失败、下轮重试），避免留下残缺镜像
+    fs.mkdirSync(path.dirname(target), { recursive: true });
+    fs.writeFileSync(target, buf);
   }
   const upstream = { ...meta, contentHash: hash, fetchedAt: new Date().toISOString() };
   fs.writeFileSync(path.join(dir, ".upstream.json"), JSON.stringify(upstream, null, 2) + "\n");

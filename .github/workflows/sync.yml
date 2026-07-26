@@ -19,16 +19,22 @@ permissions:
   contents: write
   pull-requests: write
 
-concurrency:
-  group: sync-upstream
-  cancel-in-progress: false
-
 env:
   SYNC_MAX_ITEMS: ${{ inputs.max_items || '3000' }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   sync:
+    # 三个来源并行：状态文件（sync-state/<source>.json）、内容目录（skills/<source>/）、
+    # 索引（index/<source>.json）与 PR 分支（sync/<source>/<date>）均按源隔离，互不冲突。
+    strategy:
+      fail-fast: false
+      matrix:
+        source: [clawhub, skills-sh, hermes]
+    if: ${{ github.event_name == 'schedule' || inputs.source == 'all' || inputs.source == matrix.source }}
+    concurrency:
+      group: sync-upstream-${{ matrix.source }}
+      cancel-in-progress: false
     runs-on: ubuntu-latest
     timeout-minutes: 300
     steps:
@@ -38,30 +44,16 @@ jobs:
         with:
           node-version: 22
 
-      - name: Sync ClawHub
-        id: clawhub
-        if: ${{ inputs.source == 'clawhub' || inputs.source == 'all' || inputs.source == '' }}
-        continue-on-error: true
-        run: node scripts/sync-clawhub.mjs
-
-      - name: Sync skills.sh
-        id: skillssh
-        if: ${{ inputs.source == 'skills-sh' || inputs.source == 'all' || inputs.source == '' }}
-        continue-on-error: true
-        run: node scripts/sync-skills-sh.mjs
-
-      - name: Sync Hermes index
-        id: hermes
-        if: ${{ inputs.source == 'hermes' || inputs.source == 'all' || inputs.source == '' }}
-        continue-on-error: true
-        run: node scripts/sync-hermes.mjs
+      - name: Sync ${{ matrix.source }}
+        run: node scripts/sync-${{ matrix.source }}.mjs
 
       - name: Build index
-        run: node scripts/build-index.mjs
+        run: node scripts/build-index.mjs ${{ matrix.source }}
 
       - name: Create PR with changes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SRC: ${{ matrix.source }}
         run: |
           set -e
           if [ -z "$(git status --porcelain)" ]; then
@@ -69,20 +61,20 @@ jobs:
             exit 0
           fi
           DATE=$(date -u +%Y%m%d)
-          BRANCH="sync/$DATE"
+          BRANCH="sync/$SRC/$DATE"
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git checkout -B "$BRANCH"
           git add -A
-          git commit -m "sync: upstream skills $DATE"
+          git commit -m "sync($SRC): upstream skills $DATE"
           git push -f origin "$BRANCH"
           if gh pr view "$BRANCH" >/dev/null 2>&1; then
             echo "PR 已存在，已强推更新: $BRANCH"
           else
             STAT=$(git diff --stat main..."$BRANCH" | tail -5)
             gh pr create --base main --head "$BRANCH" \
-              --title "sync: 上游 skills 更新 $DATE" \
-              --body "自动同步上游 skills（ClawHub / skills.sh / Hermes 索引）。
+              --title "sync($SRC): 上游更新 $DATE" \
+              --body "自动同步 **$SRC** 上游 skills。
 
           ⚠️ skill 内容本质是 prompt 与脚本，合并前请审查变更。
 
@@ -90,9 +82,3 @@ jobs:
           $STAT
           \`\`\`"
           fi
-
-      - name: Fail if any source failed
-        if: ${{ steps.clawhub.outcome == 'failure' || steps.skillssh.outcome == 'failure' || steps.hermes.outcome == 'failure' }}
-        run: |
-          echo "部分来源同步失败：clawhub=${{ steps.clawhub.outcome }} skills-sh=${{ steps.skillssh.outcome }} hermes=${{ steps.hermes.outcome }}"
-          exit 1

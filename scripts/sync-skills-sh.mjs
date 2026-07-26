@@ -82,9 +82,10 @@ function locateSkillDir(repoDir, skillId) {
 
 async function main() {
   if (!TOKEN) console.warn("[skills-sh] 未设置 GITHUB_TOKEN，GitHub API 限流 60 次/小时，仅适合小批量试跑");
-  const state = loadState(ROOT);
-  state[SOURCE] ??= { repos: {}, skills: {} };
-  const { repos, skills } = state[SOURCE];
+  const state = loadState(ROOT, SOURCE);
+  state.repos ??= {};
+  state.skills ??= {};
+  const { repos, skills } = state;
   const stats = new SyncStats(SOURCE);
 
   console.log("[skills-sh] 开始全量枚举…");
@@ -194,7 +195,7 @@ async function main() {
     )
   );
 
-  saveState(ROOT, state);
+  saveState(ROOT, SOURCE, state);
   stats.report();
   if (stats.failed > 50 && stats.failed > (stats.added + stats.updated + stats.unchanged) * 0.2) {
     process.exitCode = 1;
