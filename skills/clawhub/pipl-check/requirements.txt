@@ -1,0 +1,4 @@
+# pipl-check 依赖
+# 基础功能无需额外依赖（Python标准库即可）
+# reportlab（可选，用于PDF报告生成）
+reportlab>=4.0

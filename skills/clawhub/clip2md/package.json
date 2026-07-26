@@ -1,0 +1,9 @@
+{
+  "name": "clip2md",
+  "version": "1.0.0",
+  "description": "clip2md 网页剪藏 Skill - 剪藏链接、查询额度",
+  "main": "scripts/clip2md.js",
+  "bin": { "clip2md": "scripts/clip2md.js" },
+  "keywords": ["clip2md", "clip", "markdown", "openclaw", "skill"],
+  "license": "MIT-0"
+}

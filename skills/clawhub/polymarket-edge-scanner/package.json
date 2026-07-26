@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "@maton/cli": "^0.1.6"
+  }
+}

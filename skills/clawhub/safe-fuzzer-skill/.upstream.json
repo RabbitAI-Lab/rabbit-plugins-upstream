@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/safe-fuzzer-skill",
+  "slug": "safe-fuzzer-skill",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1778492283432,
+  "contentHash": "6593b178355e07f5e4f85ce216d8e11d5fc8af39b89f43e352967db52a2a1813",
+  "fetchedAt": "2026-07-26T19:43:05.501Z"
+}

@@ -1,0 +1,32 @@
+{
+  "emoji": "⚖️",
+  "primaryEnv": "SIMMER_API_KEY",
+  "tags": ["arbitrage", "multi-market", "world-cup"],
+  "requires": {
+    "pip": ["simmer-sdk"],
+    "env": ["SIMMER_API_KEY"]
+  },
+  "envVars": [
+    {
+      "name": "SIMMER_API_KEY",
+      "required": true,
+      "description": "Your Simmer SDK API key. Get one from simmer.markets/dashboard."
+    },
+    {
+      "name": "TRADING_VENUE",
+      "required": false,
+      "description": "Venue for scans and for scripts/status.py: 'sim' (default, paper), 'polymarket', or 'kalshi'. Real venues only take orders when you also pass --live."
+    },
+    {
+      "name": "WALLET_PRIVATE_KEY",
+      "required": false,
+      "description": "Only needed for external-wallet self-custody trading on a real venue. Leave unset when using a Simmer managed wallet or the default sim venue."
+    }
+  ],
+  "cron": null,
+  "autostart": false,
+  "automaton": {
+    "managed": false,
+    "entrypoint": "coherence_scanner.py"
+  }
+}

@@ -1,0 +1,52 @@
+#!/usr/bin/env node
+
+const { execSync } = require("child_process");
+
+function askOllama(prompt) {
+  try {
+    const result = execSync(
+      `ollama run gemma3:1b "${prompt.replace(/"/g, '\\"')}"`,
+      { encoding: "utf8", stdio: ["pipe", "pipe", "ignore"] }
+    );
+
+    return result.trim();
+  } catch (err) {
+    return "Error menjalankan Ollama";
+  }
+}
+
+function main() {
+  const args = process.argv.slice(2);
+  const command = args[0];
+  const input = args.slice(1).join(" ");
+
+  console.log("🚀 Skill Loaded");
+  console.log("Name: yusufidproject-skill");
+  console.log("Owner: Yusufid");
+  console.log("Version: 1.3.0");
+
+  switch (command) {
+    case "chat":
+      console.log({
+        type: "chat",
+        input,
+        reply: askOllama(input)
+      });
+      break;
+
+    case "serve":
+      console.log({
+        type: "server",
+        status: "running"
+      });
+      break;
+
+    default:
+      console.log({
+        type: "basic",
+        input
+      });
+  }
+}
+
+main();+

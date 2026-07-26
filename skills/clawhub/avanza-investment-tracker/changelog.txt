@@ -1,0 +1,2 @@
+- Fix native-currency prices to convert to SEK (#81)
+- Fix parent-to-virtual transfers to shift deposit column (#82)

@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/fhir-questionnaire",
+  "slug": "fhir-questionnaire",
+  "ownerHandle": null,
+  "version": "0.2.4",
+  "updatedAt": 1778486991803,
+  "contentHash": "a3815f6c67f4658abf88a1a59b33834de367c4da2972e85615989c0edd5db1b1",
+  "fetchedAt": "2026-07-26T20:25:55.647Z"
+}

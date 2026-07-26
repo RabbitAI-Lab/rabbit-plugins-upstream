@@ -1,0 +1,110 @@
+# 政府采购智能分析 Skill (gov-procurement-analyst)
+
+## 简介
+
+面向投标人（供应商）、招标代理、采购单位的**政府采购全流程智能分析助手**，覆盖 16 大模块（含 AI 投标书撰写引擎），增值功能：智能洞察引擎、投标实操指引、政策影响评估。AI 投标书撰写引擎已从「模板填空」升级为「智能生成 + 人工审核」，支持技术方案智能生成、资质自动填充、项目案例引用、格式合规检查与标书素材库。
+
+## 文件结构
+
+```
+gov-procurement-analyst/
+├── SKILL.md                           # 核心技能文件（入口）
+├── README.md                          # 本文件
+├── references/                        # 参考文档
+│   ├── procurement-platforms.md       # 数据源平台清单与合规指南
+│   ├── anti-scraping-best-practices.md # 反爬策略与最佳实践
+│   └── enterprise-profiling.md        # 企业画像构建与匹配算法
+└── scripts/                           # 辅助脚本
+    ├── collected_data.py              # 数据采集（合规版）
+    ├── enterprise_matcher.py          # 企业画像匹配与商机评分
+    ├── bid_decision_analyzer.py       # 投标决策分析器
+    └── compliance_checker.py          # 合规审计辅助工具
+```
+
+## 核心能力
+
+| 模块 | 功能 | 触发词 |
+|------|------|--------|
+| 商机发现 | 多平台采集 + 智能匹配 + 日报推送 | "政府采购"、"采购公告"、"帮我找项目" |
+| 投标决策 | 资质检查 + 竞对分析 + 报价策略 + SWOT | "这个标能不能投"、"报价多少"、"中标概率" |
+| 文件编制 | 招标文件解析 + 评分自检 + 内容生成 | "编制投标文件"、"生成技术方案" |
+| 供应商背调 | 企业画像 + 诉讼/处罚/经营异常查询 | "查一下XX公司"、"企业背调" |
+| 合规审计 | 围标串标检测 + 时间节点合规 + 评分异常 | "围标串标"、"采购合规检查" |
+
+## 数据采集合规性
+
+本 Skill 仅采集公开信息，严格遵守以下原则：
+
+- ✅ 遵守各平台 robots.txt
+- ✅ 请求间隔 ≥3 秒
+- ✅ 明确的 User-Agent 标识
+- ✅ 不破解验证码、不绕过付费墙
+- ✅ 24 小时缓存，不重复请求
+- ❌ 不使用代理池、不伪造身份
+- ❌ 不采集非公开信息
+- ❌ 不转售原始数据
+
+详见 [references/anti-scraping-best-practices.md](references/anti-scraping-best-practices.md)
+
+## 使用方式
+
+### 在 WorkBuddy 中直接使用
+
+安装后，在对话中使用触发词即可：
+
+```
+用户：帮我找北京的IT设备政府采购项目
+Skill：[自动触发，执行商机发现流程]
+```
+
+### 脚本独立运行
+
+```bash
+# 1. 数据采集
+python scripts/collected_data.py --url "http://search.ccgp.gov.cn/..." --output data.json
+
+# 2. 企业匹配
+python scripts/enterprise_matcher.py --projects data.json --enterprise my_company.json --output results.json
+
+# 3. 投标决策
+python scripts/bid_decision_analyzer.py --project project.json --enterprise company.json --output decision.json
+
+# 4. 合规审计
+python scripts/compliance_checker.py --projects projects.json --output audit.json
+```
+
+## 依赖
+
+**必需**：
+- Python 3.10+
+- requests, beautifulsoup4
+
+**推荐**：
+- pdfplumber（PDF 解析 / 文本型资质文件解析）
+- python-docx（Word 生成）
+- reportlab（PDF 标书生成）
+- jinja2（技术方案模板渲染 / 素材库）
+- pandas（数据处理）
+
+**可选**：
+- OCR / 多模态识别（图片型资质文件识别，无则降级手动录入）
+
+## 版本历史
+
+- v4.7.0 (2026-07-23)：AI 投标书撰写引擎深度升级——技术方案6子块智能生成、资质自动填充、项目案例引用、格式合规检查、标书素材库
+- v4.5.0 (2026-07-15)：新增智能投标文档生成引擎，模块总数15→16
+- v4.0.0 (2026-07-10)：全面升级FAQ为分类速查索引+20问，新增智能洞察引擎
+- v3.6.0 (2026-07-09)：全部15模块补全输入/输出模板和边界条件
+- v3.5.1 (2026-07-04)：根据第二次评测反馈针对性改进
+- v3.5.0 (2026-07-03)：根据4.5分评测反馈改进
+- v3.0.0 (2026-07-03)：新增7大模块
+- v2.0.0 (2026-07-03)：新增3大板块
+- v1.0.0 (2026-07-03)：初版
+
+## 许可证
+
+MIT License
+
+## 免责声明
+
+本 Skill 提供的所有分析、建议均基于公开信息和统计模型，仅供参考，不构成法律、财务或投资建议。

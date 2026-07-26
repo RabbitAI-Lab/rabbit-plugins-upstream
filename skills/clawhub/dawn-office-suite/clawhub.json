@@ -1,0 +1,15 @@
+{
+  "name": "dawn-office-suite",
+  "version": "2.0.0",
+  "description": "办公文档全栈 — Word、PowerPoint、Excel、PDF、Office综合处理。",
+  "license": "MIT",
+  "tags": [
+    "office",
+    "docx",
+    "pptx",
+    "xlsx",
+    "pdf",
+    "办公",
+    "文档"
+  ]
+}

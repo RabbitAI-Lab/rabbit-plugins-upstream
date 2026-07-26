@@ -1,0 +1,59 @@
+platform: workbuddy
+# WorkBuddy 技能市场平台配置
+# 安装路径: ~/.workbuddy/skills/skills-audit/
+#
+# ⚠️ 触发词权威来源：SKILL.md 触发词矩阵。此文件不重复定义。
+
+# 技能元数据（市场展示用）
+display_name: "Skills Audit / 技能审查"
+category: "开发工具"  # 市场分类
+tags: ["审计", "项目管理", "技能管理", "画像", "audit", "project-management", "skill-management"]
+
+# 技能安装路径
+install_path: "~/.workbuddy/skills/skills-audit/"
+
+# ⚠️ 触发词来源: SKILL.md（WorkBuddy 兼容格式不再重复定义）
+trigger_mode: standalone
+
+# 归档路径
+archive_dir: "~/.workbuddy/skills-archived/"
+
+# 扫描配置
+project_scan_default_depth: 10
+
+# 市场展示信息
+marketplace:
+  # 中英双语简介（各≤40字符）
+  description_zh: "技能审查·项目审计 → 画像驱动·七维评分·逐技能优化"
+  description_en: "Skill Audit·Project Audit → profile·7dim·deep opt"
+  # 长简介（市场详情页）
+  long_description_zh: |
+    扫描项目文件夹，构建项目画像，对已安装技能/工具/MCP进行七维评分（匹配度/价值/时效/社区/ROI/新颖性/污染度），
+    推荐匹配技能并附带信心指数和成本分析。核心特色：自动将技能描述翻译为中文触发词+简介，
+    方便中文区用户快速了解技能功能。
+  long_description_en: |
+    Scans project folders, builds project profiles, scores installed skills/tools/MCP
+    on 7 dimensions (Fit/Value/Fresh/Community/ROI/Novelty/Contamination), recommends matching skills with
+    confidence scores and cost analysis. Core feature: auto-translates skill descriptions
+    into Chinese trigger words + summaries for cross-language discoverability.
+  # 使用示例
+  examples:
+    - input: "技能审查"
+      description: "对当前项目进行完整技能审计"
+    - input: "项目审计"
+      description: "快速了解项目技术栈和工具链健康度"
+    - input: "技能审计 推荐"
+      description: "仅执行推荐引擎，获取匹配的技能建议"
+    - input: "skills-audit"
+      description: "Run full skill audit (English mode)"
+  # 截图/演示（可选）
+  screenshots: []
+  # 版本要求
+  min_workbuddy_version: "1.0.0"
+  # 依赖声明
+  dependencies: []
+  # 权限声明
+  permissions:
+    - "read"   # 读取项目文件
+    - "write"  # 写入画像、日志、缓存（均在技能目录内）
+    - "web"    # WebFetch 获取外部信号

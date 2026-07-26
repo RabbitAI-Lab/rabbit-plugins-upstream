@@ -1,0 +1,8 @@
+{
+  "name": "schedule-planner-cxf",
+  "version": "1.0.12",
+  "description": "全能出行管家技能 - 出行规划/行程安排/出差旅游，整合高德地图与途牛价格查询比价，仅查询不代订不代付不上传PII，本地生成行程网页",
+  "author": "cryptocxf",
+  "tags": ["travel", "trip-planning", "flight", "hotel"],
+  "entry": "scripts/generate-trip-page.js"
+}

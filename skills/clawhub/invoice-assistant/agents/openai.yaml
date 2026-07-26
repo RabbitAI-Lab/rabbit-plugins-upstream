@@ -1,0 +1,3 @@
+display_name: 小河狸发票助手
+short_description: 连接本机发票助手，读取发票台账并分析
+default_prompt: 请连接本机小河狸发票助手，读取发票台账并分析。

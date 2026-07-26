@@ -1,0 +1,81 @@
+{
+  "operators": [
+    {
+      "name": "Betway South Africa",
+      "keywords": [
+        "Betway South Africa",
+        "Betway review",
+        "Betway SA"
+      ],
+      "reviewed": true,
+      "blacklisted": true
+    },
+    {
+      "name": "Hollywoodbets",
+      "keywords": [
+        "Hollywoodbets review",
+        "Hollywoodbets casino",
+        "Hollywoodbets South Africa"
+      ],
+      "reviewed": true
+    },
+    {
+      "name": "Lulabet",
+      "keywords": [
+        "Lulabet review",
+        "Lulabet South Africa",
+        "Lulabet casino"
+      ],
+      "reviewed": false,
+      "no_affiliate": true
+    },
+    {
+      "name": "10bet South Africa",
+      "keywords": [
+        "10bet South Africa",
+        "10bet review",
+        "10bet SA"
+      ],
+      "reviewed": false,
+      "no_affiliate": true
+    },
+    {
+      "name": "Sportingbet SA",
+      "keywords": [
+        "Sportingbet SA",
+        "Sportingbet South Africa",
+        "Sportingbet review"
+      ],
+      "reviewed": false,
+      "no_affiliate": true
+    },
+    {
+      "name": "Gbets",
+      "keywords": [
+        "Gbets review",
+        "Gbets South Africa",
+        "Gbets welcome bonus"
+      ],
+      "reviewed": true
+    },
+    {
+      "name": "Bet.co.za",
+      "keywords": [
+        "Bet.co.za review",
+        "Bet.co.za South Africa",
+        "Betzaaa"
+      ],
+      "reviewed": false,
+      "no_affiliate": true
+    },
+    {
+      "name": "Supabets",
+      "keywords": [
+        "Supabets review",
+        "Supabets South Africa",
+        "Supabets welcome bonus"
+      ],
+      "reviewed": true
+    }
+  ]
+}

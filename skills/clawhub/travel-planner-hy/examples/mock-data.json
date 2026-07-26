@@ -1,0 +1,20 @@
+{
+  "tripTitle": "重庆3日游 - Mock演示数据",
+  "destination": "重庆",
+  "days": 3,
+  "travelers": 2,
+  "budget": 5000,
+  "preferences": ["美食", "自然", "网红打卡", "人文"],
+  "includeSpots": ["洪崖洞"],
+  "excludeSpots": [],
+  "pace": "moderate",
+  "arrivalDate": "2026-07-15",
+  "attractions": [
+    { "name": "洪崖洞", "type": ["人文", "网红打卡"], "ticketPrice": 0, "rating": 4.6, "openingHours": "11:00-23:00", "estimatedDuration": "1.5-2小时" },
+    { "name": "解放碑", "type": ["人文", "购物"], "ticketPrice": 0, "rating": 4.5, "openingHours": "全天", "estimatedDuration": "1小时" },
+    { "name": "长江索道", "type": ["网红打卡", "自然"], "ticketPrice": 30, "rating": 4.4, "openingHours": "07:30-22:00", "estimatedDuration": "0.5小时" },
+    { "name": "磁器口古镇", "type": ["人文", "美食"], "ticketPrice": 0, "rating": 4.3, "openingHours": "全天", "estimatedDuration": "2-3小时" },
+    { "name": "三峡博物馆", "type": ["人文"], "ticketPrice": 0, "rating": 4.5, "openingHours": "09:00-17:00（周一闭馆）", "estimatedDuration": "2-3小时" },
+    { "name": "南山一棵树", "type": ["自然", "网红打卡"], "ticketPrice": 30, "rating": 4.5, "openingHours": "09:00-22:30", "estimatedDuration": "1-2小时" }
+  ]
+}

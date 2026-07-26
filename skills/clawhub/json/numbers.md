@@ -1,0 +1,87 @@
+# Numbers — Precision, Money, and Ids
+
+JSON has one numeric type and no precision statement. The grammar allows arbitrary digits; every parser maps them onto a fixed machine type, and the mapping is where the money goes missing.
+
+**Contents:** [The Only Number Facts That Matter](#the-only-number-facts-that-matter) · [Ids](#ids) · [Money](#money) · [Where Precision Is Lost](#where-precision-is-lost) · [Keeping Precision Per Language](#keeping-precision-per-language) · [Integers vs Floats on Output](#integers-vs-floats-on-output) · [Quantities, Percentages, Coordinates](#quantities-percentages-coordinates)
+
+## The Only Number Facts That Matter
+
+| Fact | Number | Consequence |
+|---|---|---|
+| Largest exactly representable integer in a double | 2^53−1 = **9007199254740991** | Above it, distinct integers collide: `9007199254740993` becomes `...992` |
+| Signed 64-bit maximum | 9223372036854775807 | Database ids and snowflakes live here, ~1000× past the safe double range |
+| Decimal digits a double can hold | ~15-17 significant | A 19-digit id is hopeless; a 15-digit one is luck |
+| `0.1 + 0.2` | 0.30000000000000004 | Binary fractions cannot represent decimal tenths — this is arithmetic, not JSON |
+| Base64 expansion | +33% exactly (4 chars per 3 bytes) | Relevant when someone proposes encoding numbers as binary (`performance.md`) |
+| Overflow to infinity | `1e400` parses, is `Infinity`, re-serializes as `null` | A valid document that destroys its own value on the next hop |
+
+Formula for whether an integer is safe on the wire: it is safe when |n| ≤ 9007199254740991. Anything produced by a 64-bit sequence, a snowflake generator, a hash, or a nanosecond timestamp **is not**, regardless of how small today's values look — the failure arrives the day the sequence grows a digit.
+
+## Ids
+
+- Ids are opaque labels, not quantities. Nothing arithmetic is ever done to them, so their type on the wire costs nothing and buys exactness: **string** (Rule 2).
+- The historically decisive example is Twitter's API, which had to add an `id_str` field alongside `id` because JavaScript clients silently truncated the numeric form. Every id-as-number API eventually ships the same workaround.
+- Emitting both `id` and `id_str` is a migration tactic, not a design: it doubles the field and consumers pick the wrong one. New APIs emit one string field.
+- Do not zero-pad or prefix ids to "make them clearly strings" — that changes the value and breaks equality against the database.
+- Sorting: string ids sort lexicographically, so `"10" < "9"`. If the client sorts by id, either the server sorts, or the payload carries a separate numeric `sequence` field that is safe (below 2^53−1) or also a string with a documented comparator.
+- Hex, UUID and ULID ids sidestep the problem entirely, and ULIDs keep lexicographic sort order equal to creation order.
+
+## Money
+
+Two acceptable representations, one field for the currency, never a float:
+
+| Form | Example | Use when |
+|---|---|---|
+| Minor-unit integer | `{"amount_cents": 1999, "currency": "USD"}` | Default. Exact, sortable, arithmetic-safe, obvious in every language |
+| Decimal string | `{"amount": "19.99", "currency": "USD"}` | The domain has more than two decimals (fuel, FX rates, crypto) or amounts exceed 2^53−1 minor units |
+
+- **Currency lives in its own field**, always, and never inside the amount string. A shared box of amounts is only summable if nobody has to guess the unit.
+- Minor units are not always two decimals: JPY has 0, KWD and BHD have 3. Hardcoding ÷100 breaks in three currencies before it breaks in any test. Take the exponent from an ISO 4217 table, and store it alongside the amount when the payload crosses systems.
+- Never mix representations in one API. A payload with `amount_cents` on one endpoint and `"amount": "19.99"` on another produces a conversion bug in the client that nobody sees until a refund.
+- Rounding is a business decision, not a serialization one: state where it happens (usually once, at the point of charge) and never let two services round independently.
+- Rates and multipliers (tax, FX) need more digits than money: keep them as decimal strings with the precision the source published, and record which source and when as a row in `## Conventions` (`memory-template.md`) — or under the `conventions` key of `config.yaml` if the user picked the source.
+
+## Where Precision Is Lost
+
+The loss is always at a boundary, and each boundary is silent:
+
+1. **Parse** — a 19-digit integer read into a double. The document was correct; the object is not.
+2. **A middle hop** — a gateway, logger, or ETL job that parses and re-serializes. It never touched the field, and it changed it (Rule 5).
+3. **A query tool** — a jq or JSONPath filter that converts numbers to doubles while transforming.
+4. **A database round trip** — a JSON column that normalizes numeric literals, or a `float8` column receiving a `numeric` value (`databases.md`).
+5. **A test fixture** — regenerated by a tool that lost precision, so the expected value is now the wrong one and the test enforces the bug (`testing.md`).
+
+Detection: compare the string form before and after, not the parsed value. `original_bytes == reserialized_bytes` is the only check that catches every case, and it is exactly the check canonicalization enables (`signing.md`).
+
+## Keeping Precision Per Language
+
+| Stack | Exact large integers | Exact decimals |
+|---|---|---|
+| JavaScript | `BigInt` — but `JSON.parse` cannot produce one without a reviver, and `JSON.stringify` throws on one. In practice: keep it a string | `decimal.js`/`big.js`, or minor-unit integers |
+| Python | Native (arbitrary precision ints) | `json.loads(s, parse_float=Decimal)`, and an encoder for `Decimal` on output |
+| Go | `json.Number` via `Decoder.UseNumber()`, then `.Int64()`; or a `string` field with `,string` tag | `shopspring/decimal` or minor units; `float64` never |
+| Java | `long` binds fine; for anything wider, `BigInteger` | `USE_BIG_DECIMAL_FOR_FLOATS`, then `BigDecimal` throughout |
+| .NET | `long`/`Int64`; `System.Text.Json` reads them exactly | `decimal` (128-bit, base-10) — the best native money type of the set |
+| PHP | `JSON_BIGINT_AS_STRING` on decode | `bcmath`/`brick/math`; PHP floats are doubles |
+| Rust | `i64`/`u64` bind exactly; `arbitrary_precision` keeps the literal | `rust_decimal` |
+| jq | jq ≥1.7 preserves the literal text of numbers it does not modify; any arithmetic converts to double | Do the arithmetic elsewhere (`querying.md`) |
+
+## Integers vs Floats on Output
+
+JSON does not distinguish them; the serializer decides, and consumers with static types care:
+
+- `1.0` is emitted by some encoders as `1.0` and by others as `1`. A Java consumer expecting `double` handles both; one expecting `int` fails on `1.0`.
+- Schema `type: "integer"` accepts `1.0` in JSON Schema semantics (a number with zero fractional part), which surprises people who expect a syntactic check. Add `multipleOf: 1` only if the *syntax* must be integral, and know that most validators still accept `1.0`.
+- Scientific notation is legal and some encoders use it for large or small magnitudes: `1e-7`, `1.5E+10`. A consumer parsing with a regex instead of a JSON parser breaks here.
+- `-0` survives parsing and disappears on the next serialization. If a sign on zero carries meaning (a signed delta), carry the sign in a separate field.
+- Never emit a number as `"1,234.56"` with grouping separators. Formatting is the client's job, and locale belongs to the presentation layer, not the payload.
+
+## Quantities, Percentages, Coordinates
+
+- **Percentages**: pick ratio (`0.075`) or percent (`7.5`) once, put the unit in the field name (`discount_ratio`, `discount_percent`), and never rely on the range to disambiguate — 0.5 is a valid value in both.
+- **Physical quantities**: the unit goes in the field name or an adjacent field (`weight_kg`, or `{"value": 3.2, "unit": "kg"}`). A bare `weight` is a future incident.
+- **Coordinates**: doubles are exact enough — 15-17 significant digits gives sub-millimetre resolution — but GeoJSON orders them `[longitude, latitude]`, the reverse of how humans say it, and swapping them is the most common geospatial bug in JSON.
+- **Durations**: integers with the unit in the name (`timeout_ms`), or ISO 8601 durations (`PT30S`) when the value must be human-editable. Never a bare float of seconds.
+- **Counts that can exceed 2^53−1** (byte counts of large storage, event totals) follow the id rule: string.
+
+**When a precision decision is settled for a codebase** — string ids, minor units, decimal strings — write it as a row in `## Conventions` of `memory.md` with the date; when the user declares it as a standing preference, it belongs in `config.yaml` under `id_as_string` or the `restrictions` area (`memory-template.md`).

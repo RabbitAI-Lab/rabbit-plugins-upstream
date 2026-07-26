@@ -1,0 +1,1 @@
+window.Toast={show:function(t){let e=document.querySelector(".toast");e||(e=document.createElement("div"),e.className="toast",document.body.appendChild(e)),e.textContent=t,e.classList.add("show"),clearTimeout(window.__toastT),window.__toastT=setTimeout(()=>e.classList.remove("show"),2e3)}};

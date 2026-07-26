@@ -1,0 +1,4 @@
+interface:
+  display_name: "World Cup Predictor"
+  short_description: "World Cup and international football analysis workflow"
+  default_prompt: "Use $worldcup-predictor for informational World Cup or international football analysis with evidence snapshots, market odds, team news, data, style matchup, card/discipline risk, and group or knockout match-state incentives."

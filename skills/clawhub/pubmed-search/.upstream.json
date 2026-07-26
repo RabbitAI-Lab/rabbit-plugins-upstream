@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/pubmed-search",
+  "slug": "pubmed-search",
+  "ownerHandle": null,
+  "version": "0.1.0",
+  "updatedAt": 1782225502225,
+  "contentHash": "45a10f5a178f789d19edb164fb4dac3333da0b7fec538f98dd89d2be6f724f01",
+  "fetchedAt": "2026-07-26T18:24:42.020Z"
+}

@@ -1,0 +1,15 @@
+{
+  "name": "dawn-search-suite",
+  "version": "2.0.0",
+  "description": "综合搜索与信息抓取 — 实时搜索引擎、JS渲染页面抓取、内容采集研究、AI资讯热点。",
+  "license": "MIT",
+  "tags": [
+    "search",
+    "scraping",
+    "AI",
+    "news",
+    "搜索",
+    "抓取",
+    "资讯"
+  ]
+}

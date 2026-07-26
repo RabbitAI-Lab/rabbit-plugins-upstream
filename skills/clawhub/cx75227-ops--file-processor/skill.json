@@ -1,0 +1,18 @@
+﻿{
+  "name": "file-processor",
+  "version": "2.0.0",
+  "display_name": "批量文件处理工具箱",
+  "description": "文件整理、格式转换、批量重命名、压缩解压一键搞定 - 按月18 USDT / 按请求计费0.025 USDT每次",
+  "icon": "📦",
+  "categories": ["utility", "automation"],
+  "tags": ["file-management", "batch-processing", "productivity", "paid"],
+  "author": "@cx75227-ops",
+  "license": "MIT-0",
+  "pricing": {
+    "currency": "USDT",
+    "plans": [
+      { "type": "subscription", "name": "月付", "price": 18, "period": "monthly" },
+      { "type": "pay_per_request", "name": "按次", "price": 0.025, "unit": "request" }
+    ]
+  }
+}

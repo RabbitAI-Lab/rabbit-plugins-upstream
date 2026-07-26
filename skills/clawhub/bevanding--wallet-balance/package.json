@@ -1,0 +1,30 @@
+{
+  "name": "wallet-balance-gateway",
+  "version": "1.4.0",
+  "description": "Wallet balance skill gateway (multi-chain + BTC); MCP wallet-balance-query with deterministic balance summaries, EVM public fallback, and address memory.",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "check": "node --check server.js"
+  },
+  "keywords": [
+    "web3",
+    "assets",
+    "agent-skill",
+    "antalpha",
+    "mcp",
+    "bitcoin"
+  ],
+  "author": "Antalpha",
+  "license": "MIT",
+  "dependencies": {
+    "decimal.js": "^10.5.0",
+    "dotenv": "^17.3.1",
+    "ethers": "^6.13.2",
+    "express": "^4.21.2",
+    "helmet": "^8.1.0",
+    "redis": "^4.7.0"
+  }
+}

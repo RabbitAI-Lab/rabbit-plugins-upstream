@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Knowledge Companion"
+  short_description: "English knowledge management companion for Obsidian"
+  default_prompt: "Use $shutong-en to organize knowledge, maintain notes, explain concepts, plan study, research topics, or manage my Obsidian vault."

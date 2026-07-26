@@ -1,0 +1,385 @@
+---
+name: pscale-branch
+description: Create, delete, promote, diff, inspect query patterns, and manage PlanetScale database branches, Postgres parameters, and Vitess workflows. Use when creating development branches for schema changes, viewing schema diffs, downloading query pattern reports, changing Postgres branch size, replicas, or parameters, promoting branches to production, managing branch lifecycle, or creating vtctld MoveTables workflows. Essential for schema migration workflows and branch-level query analysis. Triggers on branch, create branch, schema diff, query patterns, query pattern report, resize branch, Postgres parameters, promote branch, development branch, database branch, MoveTables, global keyspace.
+---
+
+# pscale branch
+
+Create, delete, diff, and manage database branches.
+
+## Common Commands
+
+```bash
+# Create branch from main
+pscale branch create <database> <branch-name>
+
+# Create branch from specific source
+pscale branch create <database> <branch-name> --from <source-branch>
+
+# List the default page (up to 100 branches)
+pscale branch list <database>
+
+# Page through larger branch sets
+pscale branch list <database> --page 2 --per-page 100 --format json
+
+# Show branch details
+pscale branch show <database> <branch-name>
+
+# Inspect branch infrastructure/pods (supports Postgres and Vitess)
+pscale branch infra <database> <branch-name> --format json
+
+# View schema diff
+pscale branch diff <database> <branch-name>
+
+# View schema
+pscale branch schema <database> <branch-name>
+
+# Inspect configurable Postgres parameters before changing them
+pscale branch parameters list <database> <branch-name> --format json
+
+# Queue one Postgres branch change request for size, replicas, and/or parameters
+pscale branch resize <database> <branch-name> \
+  --cluster-size PS_10_GCP_X86 \
+  --replicas 2 \
+  --parameters pgconf.max_connections=500 \
+  --wait
+
+# Inspect or cancel the latest queued change request
+pscale branch resize status <database> <branch-name> --format json
+pscale branch resize cancel <database> <branch-name> --format json
+
+# Inspect live branch connections (Postgres and Vitess)
+pscale branch connections show <database> <branch-name> --format json
+pscale branch connections top <database> <branch-name>
+
+# Download a branch query patterns CSV report
+pscale branch query-patterns download <database> <branch-name> --output query-patterns.csv
+
+# Stream the CSV to stdout for pipelines
+pscale branch query-patterns download <database> <branch-name> --output - > query-patterns.csv
+
+# Inspect Vitess routing rules
+pscale branch routing-rules get <database> <branch-name>
+pscale branch vtctld get-routing-rules <database> <branch-name>
+pscale branch vtctld get-shard <database> <branch-name> --keyspace <keyspace> --shard <shard>
+
+# Create a Vitess MoveTables workflow whose generated sequence tables live in a global keyspace
+pscale branch vtctld move-tables create <database> <branch-name> \
+  --workflow <workflow> \
+  --source-keyspace <source-keyspace> \
+  --target-keyspace <target-keyspace> \
+  --all-tables \
+  --sharded-auto-increment-handling REPLACE \
+  --global-keyspace <unsharded-global-keyspace>
+
+# Delete branch
+pscale branch delete <database> <branch-name>
+
+# Promote to production
+pscale branch promote <database> <branch-name>
+```
+
+## Workflows
+
+### Paginate branch inventory
+
+`pscale branch list` returns one page with up to 100 branches by default. For databases with larger branch inventories, request subsequent pages explicitly with `--page`; use `--format json` for automation and stop when a page is empty.
+
+```bash
+pscale branch list <database> --page 1 --per-page 100 --format json
+pscale branch list <database> --page 2 --per-page 100 --format json
+```
+
+### Schema Migration Workflow (Standard)
+
+```bash
+# 1. Create development branch
+pscale branch create my-database feature-migration --from main
+
+# 2. Make schema changes (via shell, ORM, or direct SQL)
+pscale shell my-database feature-migration
+# ... run ALTER TABLE, CREATE TABLE, etc.
+
+# 3. View changes
+pscale branch diff my-database feature-migration
+
+# 4. Create deploy request (safer than direct promotion)
+pscale deploy-request create my-database feature-migration
+
+# 5. Deploy via deploy request (see pscale-deploy-request)
+```
+
+### Quick Branch for MR/PR
+
+```bash
+# Match PlanetScale branch to your MR/PR branch
+BRANCH_NAME="feature-add-user-preferences"
+pscale branch create my-database $BRANCH_NAME --from main
+```
+
+See `scripts/create-branch-for-mr.sh` for automation.
+
+### Schema Comparison
+
+```bash
+# Compare branch schema with main
+pscale branch diff <database> <branch-name>
+
+# View full branch schema
+pscale branch schema <database> <branch-name>
+
+# Export schema to file
+pscale branch schema <database> <branch-name> > schema.sql
+```
+
+### Branch infrastructure
+
+`pscale branch infra` shows branch infrastructure/pod state for Postgres and Vitess branches. Prefer JSON output when an agent needs to inspect or compare infrastructure state.
+
+```bash
+pscale branch infra <database> <branch-name> --org <org> --format json
+```
+
+Use this for read-only diagnostics. Do not infer that a schema/deploy operation is safe solely from infra output; combine it with branch status, schema diff, and deploy-request checks.
+
+### Connection inspection and safe termination
+
+`pscale branch connections` replaced the older MySQL-only process view with a shared Postgres/Vitess connection view. Prefer JSON output for agent workflows so action IDs are explicit and not truncated.
+
+```bash
+# Inspect current connections once
+pscale branch connections show <database> <branch-name> --format json
+
+# Watch live connection activity
+pscale branch connections top <database> <branch-name>
+
+# Cancel a query only after confirming the query_id with the user
+pscale branch connections kill <database> <branch-name> <query-id> --query
+
+# Terminate a connection only after explicit user approval
+pscale branch connections kill <database> <branch-name> <connection-id>
+
+# Postgres only: terminate a transaction after explicit user approval
+pscale branch connections kill-transaction <database> <branch-name> <transaction-id>
+```
+
+Treat `kill` and `kill-transaction` as destructive operational actions: show the selected row, explain the effect, get confirmation, run exactly one action, then verify with `connections show`.
+
+### Query pattern reports
+
+`pscale branch query-patterns download` generates a branch-level query patterns report, polls until PlanetScale finishes it, and downloads the resulting CSV. Use it for query-shape analysis before tuning indexes, schema, or application query patterns.
+
+```bash
+# Download with an explicit output path
+pscale branch query-patterns download <database> <branch-name> --org <org> --output query-patterns.csv
+
+# If --output is omitted, pscale writes a timestamped file in the current directory:
+# query-patterns-<organization>-<database>-<branch>-<timestamp>.csv
+pscale branch query-patterns download <database> <branch-name> --org <org>
+
+# Use --output - to write the CSV to stdout for shell pipelines
+pscale branch query-patterns download <database> <branch-name> --org <org> --output - > query-patterns.csv
+```
+
+The command requires Query Insights to be enabled for the database. A not-found error can mean either the branch does not exist or Query Insights is disabled. Prefer an explicit `--output` path in automation so downstream analysis can find the CSV deterministically; use `--output -` when a pipeline should consume the CSV from stdout.
+
+### Change a Postgres branch
+
+`pscale branch resize` queues one asynchronous change request that can combine cluster size, replica count, and configuration parameter changes. At least one of `--cluster-size`, `--replicas`, or repeatable `--parameters namespace.name=value` is required. This command rejects MySQL databases; use `pscale keyspace resize` for Vitess keyspaces.
+
+```bash
+# Inspect the parameter catalog first. The bare `parameters` form is equivalent.
+pscale branch parameters list <database> <branch-name> --org <org> --format json
+pscale branch parameters list <database> <branch-name> --org <org> --namespace pgconf --format json
+
+# List valid Postgres cluster sizes
+pscale size cluster list --engine postgresql --org <org>
+
+# Combine desired changes into one request and wait up to 20 minutes
+pscale branch resize <database> <branch-name> --org <org> --format json \
+  --cluster-size PS_10_GCP_X86 \
+  --replicas 2 \
+  --parameters pgconf.max_connections=500 \
+  --wait --wait-timeout 20m
+
+# Without --wait, inspect the latest request before assuming completion
+pscale branch resize status <database> <branch-name> --org <org> --format json
+
+# Cancel only while the change request is still queued
+pscale branch resize cancel <database> <branch-name> --org <org> --format json
+```
+
+Review the parameter catalog's `restart` and `immutable` fields before proposing a change. Surface restart impact and capacity/cost impact to the user, then obtain approval before running `resize`. Request states include `queued`, `pending`, `resizing`, `completed`, and `canceled`; only the last two are terminal. A JSON no-op returns `{"result":"no_change","branch":"<branch>"}` rather than a change request. After completion, verify with both `resize status` and `branch show`.
+
+### Routing rules
+
+```bash
+# Read routing rules from the branch schema snapshot
+pscale branch routing-rules get <database> <branch-name>
+
+# Vitess only: read live routing rules from vtctld/current cluster state
+pscale branch vtctld get-routing-rules <database> <branch-name>
+
+# Update routing rules from a file
+pscale branch routing-rules update <database> <branch-name> --routing-rules routing-rules.json
+```
+
+Use `vtctld get-routing-rules` when debugging propagation/live cluster state; use `routing-rules get` when you need the schema snapshot contract.
+
+### Vitess shard inspection
+
+`pscale branch vtctld get-shard` reads a live shard record from vtctld, including tablet controls and denied tables. It is Vitess-only and requires both `--keyspace` and `--shard`.
+
+```bash
+# Inspect an unsharded keyspace
+pscale branch vtctld get-shard <database> <branch-name> \
+  --keyspace main \
+  --shard '-'
+
+# Inspect a sharded keyspace shard
+pscale branch vtctld get-shard <database> <branch-name> \
+  --keyspace commerce \
+  --shard '-80'
+```
+
+### Vitess MoveTables and global sequences
+
+`pscale branch vtctld move-tables create` supports `--global-keyspace`. Use it with `--sharded-auto-increment-handling REPLACE` when backing sequence tables for sharded auto-increment columns must be created in a specific unsharded keyspace.
+
+```bash
+pscale branch vtctld move-tables create <database> <branch-name> \
+  --workflow move-commerce \
+  --source-keyspace source \
+  --target-keyspace commerce \
+  --tables orders,order_items \
+  --sharded-auto-increment-handling REPLACE \
+  --global-keyspace global \
+  --stop-after-copy
+```
+
+This command creates a data-movement workflow and starts it automatically unless `--auto-start=false` is supplied. Before running it, confirm the database, branch, source and target keyspaces, table selection, workflow name, and global keyspace with the user. Prefer `--stop-after-copy` or `--auto-start=false` when the workflow requires review before traffic switching.
+
+### Branch Cleanup
+
+```bash
+# List all branches
+pscale branch list <database>
+
+# Delete merged/stale branches
+pscale branch delete <database> <old-branch-name>
+```
+
+## Decision Trees
+
+### Should I promote directly or use deploy request?
+
+```
+What's your environment?
+├─ Production database → ALWAYS use deploy request (safe, reviewable)
+├─ Pre-production database with team → Use deploy request (review workflow)
+├─ Personal dev database → Direct promotion OK (but deploy request still safer)
+└─ Experimental changes → Keep as branch, don't promote
+```
+
+### When to create a new branch?
+
+```
+What's your goal?
+├─ Schema migration for feature → Create branch (from main)
+├─ Testing schema changes → Create branch (isolated)
+├─ Hotfix schema change → Create branch (from production)
+├─ Experiment / spike → Create branch (delete after)
+└─ Working on existing schema → Use existing branch
+```
+
+## Troubleshooting
+
+### "Branch already exists"
+
+**Solution:**
+```bash
+# Check existing branches
+pscale branch list <database>
+
+# Use different name or delete existing
+pscale branch delete <database> <existing-branch>
+```
+
+### Schema diff shows no changes
+
+**Causes:**
+- No schema changes made yet
+- Changes not committed in database session
+- Comparing branch to itself
+
+**Solution:**
+```bash
+# Verify schema was modified
+pscale branch schema <database> <branch-name>
+
+# Ensure you're in the right branch when making changes
+pscale shell <database> <branch-name>
+```
+
+### Cannot delete branch
+
+**Error:** "Branch is protected" or "Branch is a production branch"
+
+**Solution:**
+```bash
+# Demote production branch first
+pscale branch demote <database> <branch-name>
+
+# Then delete
+pscale branch delete <database> <branch-name>
+```
+
+### Branch creation fails
+
+**Common causes:**
+- Invalid branch name (spaces, special chars)
+- Source branch doesn't exist
+- Insufficient permissions
+
+**Solution:**
+```bash
+# Use valid branch name (alphanumeric, hyphens, underscores)
+pscale branch create <database> my-feature-branch --from main
+
+# Verify source branch exists
+pscale branch list <database> | grep main
+```
+
+## Related Skills
+
+- **pscale-deploy-request** - Create deploy requests from branches (safer than direct promotion)
+- **pscale-database** - Database management
+- **drizzle-kit** - ORM-based schema migrations (generates SQL for pscale shell)
+- **gitlab-cli-skills** - MR/PR integration (match branch names across tools)
+
+## References
+
+See `references/commands.md` for complete `pscale branch` command reference.
+
+## Branch Lifecycle
+
+```
+main (production)
+  │
+  ├─ Create branch ──> feature-branch (development)
+  │                         │
+  │                         ├─ Make schema changes
+  │                         ├─ Test changes
+  │                         └─ Create deploy request
+  │                               │
+  └─ Deploy ←──────────────────────┘
+```
+
+## Best Practices
+
+1. **Always create branches from main** for schema changes
+2. **Use descriptive branch names** matching MR/PR numbers when applicable
+3. **Run diff before deploy request** to review changes
+4. **Delete merged branches** to keep branch list clean
+5. **Use deploy requests** instead of direct promotion (reviewable, revertable)
+6. **Test schema changes** in branch before deploying

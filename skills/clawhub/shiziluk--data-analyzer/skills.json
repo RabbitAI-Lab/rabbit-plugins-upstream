@@ -1,0 +1,7 @@
+{
+  "name": "data_analyzer",
+  "version": "1.0.0",
+  "description": "数据分析助手技能，支持销售数据分析与预测",
+  "author": "shiziluk",
+  "license": "MIT"
+}

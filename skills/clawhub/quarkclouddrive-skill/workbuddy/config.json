@@ -1,0 +1,18 @@
+{
+  "deviceId": "f246d6ddb57175814f0d01d3edd4ae89",
+  "platform": "MacBook Air",
+  "currentUserId": "a7e0d395e91046e2bceb6312a41cf5d9",
+  "agent_auth": {
+    "workbuddy": {
+      "userId": "a7e0d395e91046e2bceb6312a41cf5d9",
+      "login_time": 1784976389053
+    }
+  },
+  "a7e0d395e91046e2bceb6312a41cf5d9": {
+    "accessToken": "~10DmRGDLSkN9Nw5imiSmiDaUGhInEvK-Nvpjoa7MVqBEjj_F6-ehat43aEmnevgn2VfXJMsngbuVsF5mhOLcTFw-xpTBQbr4mZZNJAIutgh_vpngx0zOtUFMwtDo3ZgQnASXrnPkD7z0Xo6yP-Cjz0tKjOCMe4cK6RvRSi2o8rFwptU8RKZ1gB9UVR7MPLrGYYlOgmQf6jnwSQ8wlNUeJPcCNwPLfSx3rVx9tZRVRVDgE661EwJB_rTLA6F8jK-j8KDny7Fj-a0teMkBuQU3jLLa_vRC4GXFfenx7vI7tTfNh0HVqYvx1RTmxndbyaXsQmvkBXr0i8u38igpV1MlaqHeISLKrAs5zPTl8AYrWYPF_tVOpaePqKaw9yf9WmqqNSXvuDSHQ2ehvfPKqxLSF7jbPgcFhbZWgN56bh0zGeX4bZOvZeDPlo9whytzaMg4Rpdl6VI2m3kitiFWwTughX5xhQ0cqyuU2x_bHflKi2DpNX3kwA0O7",
+    "refreshToken": "eyJhbGciOiJIUzI1NiIsIlR5cGUiOiJKd3QiLCJ0eXAiOiJKV1QifQ.eyJvcGVuSWQiOiJhN2UwZDM5NWU5MTA0NmUyYmNlYjYzMTJhNDFjZjVkOSIsImV4cCI6MTgwMDUyODM4OSwidG9rZW4iOiIxOWM0YzRlYjEzMGU0ZTllOTM5YzIxNzA3MmRjMjYwOSJ9.WLe4pTrDgK7a5E9jLfut4N9Lyc00jZuZa3AO9ZoB-cs",
+    "clientToken": "",
+    "userId": "a7e0d395e91046e2bceb6312a41cf5d9",
+    "update_time": 1784976389053
+  }
+}

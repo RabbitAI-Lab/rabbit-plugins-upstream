@@ -1,0 +1,33 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "skill-radar"
+version = "1.1.0"
+description = "Declarative skill routing engine for multi-skill AI agents"
+readme = "README.md"
+license = {text = "MIT"}
+requires-python = ">=3.10"
+authors = [{name = "ninetyhe-90"}]
+keywords = ["agent", "skill", "routing", "llm", "ai"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Topic :: Software Development :: Libraries",
+    "Programming Language :: Python :: 3",
+]
+dependencies = ["pyyaml>=6.0"]
+
+[project.optional-dependencies]
+serve = []
+
+[project.scripts]
+skill-radar = "skill_radar.cli:main"
+
+[project.urls]
+Homepage = "https://github.com/ninetyhe-90/skill-radar"
+Repository = "https://github.com/ninetyhe-90/skill-radar"
+
+[tool.setuptools.packages.find]
+include = ["skill_radar*"]

@@ -1,0 +1,4 @@
+interface:
+  display_name: "eKYC Suite Document OCR"
+  short_description: "Extract structured fields from eKYC documents"
+  default_prompt: "Use eKYC Suite Document OCR to extract structured fields from a consented ID card, bank card, driver license, or vehicle license image."

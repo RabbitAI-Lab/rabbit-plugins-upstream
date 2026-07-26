@@ -1,0 +1,7 @@
+{
+  "name": "yusufidproject-skill",
+  "owner": "Yusufid",
+  "version": "1.0.0",
+  "useCase": "CLI skill test",
+  "description": "Basic skill runner"
+}

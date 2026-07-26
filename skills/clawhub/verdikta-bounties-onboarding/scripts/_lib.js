@@ -1,0 +1,359 @@
+import './_env.js';
+import readline from 'node:readline/promises';
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { JsonRpcProvider, Wallet, Contract, parseEther, formatEther } from 'ethers';
+import { defaultSecretsDir } from './_paths.js';
+
+export const LINK = {
+  base: '0x88Fb150BDc53A65fe94Dea0c9BA0a6dAf8C6e196',
+  'base-sepolia': '0xE4aB69C077896252FAFBD49EFD26B5D171A32410'
+};
+
+export const ERC20_ABI = [
+  'function balanceOf(address) view returns (uint256)',
+  'function decimals() view returns (uint8)',
+  'function symbol() view returns (string)',
+  'function transfer(address,uint256) returns (bool)'
+];
+
+// ---- BountyEscrow contract addresses (canonical, from Blockchain docs) ----
+
+export const ESCROW = {
+  'base': process.env.BOUNTY_ESCROW_ADDRESS_BASE || '0x2ae271f5e86bee449a36b943414b7c1a7b39772d',
+  'base-sepolia': process.env.BOUNTY_ESCROW_ADDRESS_BASE_SEPOLIA || '0xAA67686Bb09F569C2C3b663BB3679dD9f9F60BDC',
+};
+
+export const CHAIN_IDS = {
+  base: 8453,
+  'base-sepolia': 84532,
+};
+
+// ---- BountyEscrow ABI (subset needed by scripts) ----
+
+export const BOUNTY_ESCROW_ABI = [
+  // Events
+  'event BountyCreated(uint256 indexed bountyId, address indexed creator, string evaluationCid, uint64 classId, uint8 threshold, uint256 payoutWei, uint64 submissionDeadline)',
+  'event SubmissionPrepared(uint256 indexed bountyId, uint256 indexed submissionId, address indexed hunter, address evalWallet, string evaluationCid, uint256 linkMaxBudget)',
+  'event WorkSubmitted(uint256 indexed bountyId, uint256 indexed submissionId, bytes32 verdiktaAggId)',
+  'event SubmissionFinalized(uint256 indexed bountyId, uint256 indexed submissionId, uint8 status, uint256 acceptance)',
+  'event PayoutSent(uint256 indexed bountyId, address indexed winner, uint256 amount)',
+  // Write
+  'function createBounty(string evaluationCid, uint64 requestedClass, uint8 threshold, uint64 submissionDeadline, address targetHunter) payable returns (uint256)',
+  'function prepareSubmission(uint256 bountyId, string evaluationCid, string hunterCid, string addendum, uint256 alpha, uint256 maxOracleFee, uint256 estimatedBaseCost, uint256 maxFeeBasedScaling) returns (uint256 submissionId, address evalWallet, uint256 linkMaxBudget)',
+  'function startPreparedSubmission(uint256 bountyId, uint256 submissionId)',
+  'function finalizeSubmission(uint256 bountyId, uint256 submissionId)',
+  'function closeExpiredBounty(uint256 bountyId)',
+  'function failTimedOutSubmission(uint256 bountyId, uint256 submissionId)',
+  // Read
+  'function bountyCount() view returns (uint256)',
+  // getBounty returns Bounty memory (a struct) — must use tuple() for correct ABI decoding
+  'function getBounty(uint256 bountyId) view returns (tuple(address creator, string evaluationCid, uint64 requestedClass, uint8 threshold, uint256 payoutWei, uint256 createdAt, uint64 submissionDeadline, uint8 status, address winner, uint256 submissions))',
+  'function getSubmission(uint256 bountyId, uint256 submissionId) view returns (tuple(address hunter, string evaluationCid, string hunterCid, address evalWallet, bytes32 verdiktaAggId, uint8 status, uint256 acceptance, uint256 rejection, string justificationCids, uint256 submittedAt, uint256 finalizedAt, uint256 linkMaxBudget, uint256 maxOracleFee, uint256 alpha, uint256 estimatedBaseCost, uint256 maxFeeBasedScaling, string addendum))',
+  'function getEffectiveBountyStatus(uint256 bountyId) view returns (string)',
+  'function isAcceptingSubmissions(uint256 bountyId) view returns (bool)',
+  'function verdikta() view returns (address)',
+];
+
+/**
+ * Return a connected BountyEscrow Contract instance.
+ * @param {string} network  - 'base' or 'base-sepolia'
+ * @param {import('ethers').Signer|import('ethers').Provider} signerOrProvider
+ */
+export function escrowContract(network, signerOrProvider) {
+  const addr = ESCROW[network];
+  if (!addr) throw new Error(`No escrow address for network ${network}`);
+  return new Contract(addr, BOUNTY_ESCROW_ABI, signerOrProvider);
+}
+
+/**
+ * Redact an API key for safe logging (shows first 4 + last 4 chars).
+ * @param {string} key
+ * @returns {string}
+ */
+export function redactApiKey(key) {
+  if (!key || key.length < 12) return '***';
+  return `${key.slice(0, 4)}…${key.slice(-4)}`;
+}
+
+export function getNetwork() {
+  return process.env.VERDIKTA_NETWORK || 'base';
+}
+
+export function expectedChainId(network = getNetwork()) {
+  const id = CHAIN_IDS[network];
+  if (!id) throw new Error(`Unsupported VERDIKTA_NETWORK: ${network}`);
+  return id;
+}
+
+export function getRpcUrl(network) {
+  if (network === 'base') return process.env.BASE_RPC_URL || 'https://mainnet.base.org';
+  return process.env.BASE_SEPOLIA_RPC_URL || 'https://sepolia.base.org';
+}
+
+export function resolvePath(p) {
+  if (!p) return p;
+  let s = String(p);
+  // Expand ~ to home for convenience in .env files
+  if (s.startsWith('~/')) {
+    s = path.join(process.env.HOME || '', s.slice(2));
+  }
+  // Resolve relative paths against the scripts directory (not the caller's CWD).
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  return path.isAbsolute(s) ? s : path.resolve(here, s);
+}
+
+export async function loadWallet() {
+  const keystorePathRaw = process.env.VERDIKTA_KEYSTORE_PATH;
+  const password = process.env.VERDIKTA_WALLET_PASSWORD;
+  if (!keystorePathRaw || !password) {
+    throw new Error(
+      'Set VERDIKTA_KEYSTORE_PATH and VERDIKTA_WALLET_PASSWORD. ' +
+      'To import an existing wallet, run: node wallet_init.js --import'
+    );
+  }
+  const keystorePath = resolvePath(keystorePathRaw);
+  const json = await fs.readFile(keystorePath, 'utf-8');
+  return Wallet.fromEncryptedJson(json, password);
+}
+
+export function providerFor(network) {
+  return new JsonRpcProvider(getRpcUrl(network));
+}
+
+export async function linkBalance(network, provider, address) {
+  const linkAddr = LINK[network];
+  const link = new Contract(linkAddr, ERC20_ABI, provider);
+  const [bal, dec] = await Promise.all([link.balanceOf(address), link.decimals()]);
+  return { bal, dec, linkAddr };
+}
+
+export function parseEth(s) {
+  return parseEther(String(s));
+}
+
+// ---- CLI argument helpers ----
+
+export function arg(name, def = null) {
+  const i = process.argv.indexOf(`--${name}`);
+  return i >= 0 ? process.argv[i + 1] : def;
+}
+
+export function hasFlag(name) {
+  return process.argv.includes(`--${name}`);
+}
+
+export function argAll(name) {
+  const vals = [];
+  for (let i = 0; i < process.argv.length; i++) {
+    if (process.argv[i] === `--${name}` && i + 1 < process.argv.length) {
+      vals.push(process.argv[i + 1]);
+    }
+  }
+  return vals;
+}
+
+// ---- API key loading ----
+
+export async function loadApiKey() {
+  const botFile = process.env.VERDIKTA_BOT_FILE || `${defaultSecretsDir()}/verdikta-bounties-bot.json`;
+  const abs = resolvePath(botFile);
+  const raw = await fs.readFile(abs, 'utf8');
+  const j = JSON.parse(raw);
+  return j.apiKey || j.api_key || j.bot?.apiKey || j.bot?.api_key;
+}
+
+// ---- Spending confirmation helpers ----
+
+export function hasSpendConfirmationFlag() {
+  return hasFlag('yes') || hasFlag('confirm-spend');
+}
+
+export async function confirmSpendOrExit(summary, { requiredText = 'YES' } = {}) {
+  if (hasSpendConfirmationFlag()) return;
+
+  console.log('\nSPEND REVIEW');
+  for (const line of summary) console.log(`  ${line}`);
+
+  if (!process.stdin.isTTY) {
+    console.error(`\nRefusing to continue without explicit spend authorization. Re-run with --yes or --confirm-spend after reviewing the operation.`);
+    process.exit(1);
+  }
+
+  const rl = readline.createInterface({ input: process.stdin, output: process.stdout });
+  try {
+    const answer = (await rl.question(`Type ${requiredText} to sign/broadcast transactions: `)).trim();
+    if (answer !== requiredText) {
+      console.error('Spend not confirmed. Aborting before signing.');
+      process.exit(1);
+    }
+  } finally {
+    rl.close();
+  }
+}
+
+export function isDryRun() {
+  return hasFlag('dry-run') || hasFlag('dryRun');
+}
+
+// ---- Class models (supported jury nodes) ----
+
+export function normalizeProvider(p) {
+  return String(p || '').trim().toLowerCase();
+}
+
+export function juryKey(provider, model) {
+  return `${normalizeProvider(provider)}/${String(model || '').trim()}`;
+}
+
+/**
+ * Fetch supported models for a Verdikta class.
+ * Uses X-Bot-API-Key auth.
+ */
+export async function getSupportedModelsForClass(baseUrl, apiKey, classId) {
+  const url = `${baseUrl.replace(/\/+$/, '')}/api/classes/${classId}/models`;
+  const res = await fetch(url, { headers: { 'X-Bot-API-Key': apiKey } });
+  if (!res.ok) {
+    const text = await res.text().catch(() => '');
+    throw new Error(`Failed to fetch supported models for class ${classId}: HTTP ${res.status} ${text}`);
+  }
+  const data = await res.json();
+  const models = data.models || [];
+  return models.map(m => ({ provider: normalizeProvider(m.provider), model: String(m.model) }));
+}
+
+/**
+ * Strictly validate juryNodes against the supported model list for the class.
+ * Returns a normalized juryNodes array (providers lowercased).
+ * Throws on any unsupported node.
+ */
+export function validateAndNormalizeJuryNodes({ classId, juryNodes, supported }) {
+  const allowed = new Set(supported.map(m => juryKey(m.provider, m.model)));
+  const normalized = (juryNodes || []).map(n => ({ ...n, provider: normalizeProvider(n.provider) }));
+
+  const invalid = normalized
+    .map(n => ({ key: juryKey(n.provider, n.model), provider: n.provider, model: n.model }))
+    .filter(x => !allowed.has(x.key));
+
+  if (invalid.length) {
+    const examples = supported
+      .slice(0, 12)
+      .map(m => `- ${juryKey(m.provider, m.model)}`)
+      .join('\n');
+
+    const bad = invalid.map(x => `- ${x.key}`).join('\n');
+    throw new Error(
+      `Unsupported jury model(s) for class ${classId}:\n${bad}\n\nSupported examples (query /api/classes/${classId}/models):\n${examples}`
+    );
+  }
+
+  return normalized;
+}
+
+// ---- Transaction helper ----
+
+/**
+ * Sign and broadcast a transaction, with dry-run gas estimation.
+ * Exits the process on revert to prevent wasted gas.
+ * @param {import('ethers').Signer} signer
+ * @param {string} label - Human-readable label for logging
+ * @param {object} txObj - Transaction object from API ({ to, data, value, gasLimit? })
+ * @param {object} [opts]
+ * @param {boolean} [opts.useApiGasLimit] - Use the gasLimit from txObj instead of estimating
+ */
+function normalizeTxValue(v) {
+  if (v == null || v === '') return 0n;
+  return BigInt(v);
+}
+
+function requireHexData(data, label) {
+  if (data == null) return;
+  if (typeof data !== 'string' || !/^0x([0-9a-fA-F]{2})*$/.test(data)) {
+    throw new Error(`${label} transaction has invalid calldata`);
+  }
+}
+
+function sameAddress(a, b) {
+  return String(a || '').toLowerCase() === String(b || '').toLowerCase();
+}
+
+/**
+ * Sign and broadcast a transaction, with recipient, chain, value, and calldata checks.
+ * Exits the process on revert to prevent wasted gas.
+ * @param {import('ethers').Signer} signer
+ * @param {string} label - Human-readable label for logging
+ * @param {object} txObj - Transaction object from API ({ to, data, value, gasLimit?, chainId? })
+ * @param {object} [opts]
+ * @param {boolean} [opts.useApiGasLimit] - Use the gasLimit from txObj instead of estimating
+ * @param {string} [opts.network] - Expected Verdikta network
+ * @param {string} [opts.expectedTo] - Required transaction recipient
+ * @param {boolean} [opts.allowValue] - Allow nonzero ETH value
+ * @param {bigint|string|number} [opts.maxValueWei] - Maximum allowed ETH value
+ */
+export async function sendTx(
+  signer,
+  label,
+  txObj,
+  { useApiGasLimit = false, network = getNetwork(), expectedTo = null, allowValue = false, maxValueWei = null } = {}
+) {
+  console.log(`\n→ ${label}: sending transaction...`);
+
+  if (!txObj || typeof txObj !== 'object') {
+    throw new Error(`${label} transaction missing`);
+  }
+  if (!txObj.to) {
+    throw new Error(`${label} transaction missing recipient`);
+  }
+
+  const chainId = expectedChainId(network);
+  if (txObj.chainId != null && Number(txObj.chainId) !== chainId) {
+    throw new Error(`${label} transaction chainId mismatch: got ${txObj.chainId}, expected ${chainId} (${network})`);
+  }
+  if (expectedTo && !sameAddress(txObj.to, expectedTo)) {
+    throw new Error(`${label} transaction recipient mismatch: got ${txObj.to}, expected ${expectedTo}`);
+  }
+
+  requireHexData(txObj.data, label);
+  const valueWei = normalizeTxValue(txObj.value);
+  if (!allowValue && valueWei !== 0n) {
+    throw new Error(`${label} transaction unexpectedly includes ETH value ${formatEther(valueWei)} ETH`);
+  }
+  if (maxValueWei != null && valueWei > BigInt(maxValueWei)) {
+    throw new Error(`${label} transaction value ${formatEther(valueWei)} ETH exceeds limit ${formatEther(BigInt(maxValueWei))} ETH`);
+  }
+
+  const baseTx = {
+    to: txObj.to,
+    data: txObj.data,
+    value: valueWei,
+  };
+
+  console.log(`  chainId: ${chainId} (${network})`);
+  console.log(`  to:      ${baseTx.to}`);
+  console.log(`  value:   ${formatEther(valueWei)} ETH`);
+
+  let gasLimit;
+
+  if (useApiGasLimit && txObj.gasLimit) {
+    gasLimit = BigInt(txObj.gasLimit);
+    console.log(`  using API-recommended gasLimit: ${gasLimit.toString()}`);
+  } else {
+    try {
+      const estimated = await signer.estimateGas(baseTx);
+      gasLimit = (estimated * 120n) / 100n;
+      console.log(`  estimated gas: ${estimated.toString()} (limit: ${gasLimit.toString()})`);
+    } catch (err) {
+      const reason = err.reason || err.shortMessage || err.message || 'unknown';
+      console.error(`\n✖ ${label} will revert! Reason: ${reason}`);
+      if (err.data) console.error(`  revert data: ${err.data}`);
+      process.exit(1);
+    }
+  }
+
+  const tx = await signer.sendTransaction({ ...baseTx, gasLimit });
+  console.log(`  tx: ${tx.hash}`);
+  const receipt = await tx.wait();
+  console.log(`  confirmed in block ${receipt.blockNumber}`);
+  return receipt;
+}

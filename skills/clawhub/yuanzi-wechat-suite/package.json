@@ -1,0 +1,13 @@
+﻿{
+  "name": "yuanzi-wechat-suite",
+  "version": "2.0.0",
+  "description": "元子公众号图文系列整合版 - 1 装即用 4 站流水线",
+  "keywords": ["yuanzi", "gzh", "wechat", "suite", "master", "extractor", "image", "publisher"],
+  "author": {"name": "Golikegod"},
+  "license": "MIT-0",
+  "scripts": {
+    "install:all": "bash install-requirements.sh",
+    "install:all:win": "powershell -ExecutionPolicy Bypass -File install-requirements.ps1",
+    "check": "bash bin/yuanzi-extract --check && bash bin/yuanzi-image --check && bash bin/yuanzi-publish --check"
+  }
+}

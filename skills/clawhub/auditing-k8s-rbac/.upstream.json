@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/auditing-k8s-rbac",
+  "slug": "auditing-k8s-rbac",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1779788095841,
+  "contentHash": "573b3139b1aaa68ae37b940748777a45253ec49aa272e4611500592749015706",
+  "fetchedAt": "2026-07-26T18:39:45.974Z"
+}

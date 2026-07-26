@@ -1,0 +1,16 @@
+{
+  "total_executed": 1,
+  "total_failed": 0,
+  "process_ids": [
+    11180
+  ],
+  "results": [
+    {
+      "id": 2,
+      "label": "safe",
+      "status": "detached",
+      "pid": 11180
+    }
+  ],
+  "timestamp": 1783559656.8011656
+}

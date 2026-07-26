@@ -1,0 +1,18 @@
+slug: smart-files
+name: smart-files
+owner: jlacroix82
+description: Secure file search, dedup, organize, and rename for workspace files. Watch mode is opt-in with explicit warnings. Content-aware but privacy-first — never scans binary files, respects size limits, and can suppress content snippets.
+version: 99.0.1
+type: skill
+author: OpenClaw
+license: MIT
+keywords:
+  - files
+  - analysis
+  - search
+  - code
+  - agent
+  - security
+  - privacy
+entry: SKILL.md
+dependencies: []

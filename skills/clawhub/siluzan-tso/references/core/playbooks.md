@@ -1,0 +1,183 @@
+﻿# 工作流目录 · 分析 / 报告类（P1–P9）
+
+> **范围**：CLI 拉数 → 脚本读盘 → Agent 撰稿 → 交付的报告/分析任务。操作/管理类见 `references/core/workflows.md`（W1–W12）。
+> **通用纪律见 `references/core/agent-conventions.md`**（读盘、时间范围、币种、交付自检）；各卡片只写本任务步骤。卡片字段：`触发 / 必读 / 步骤 / 产物`。完整参数表见「必读」指向的命令文档。
+> **用户模糊话术**（只说「报告/诊断/分析/检测/监测」、对象不清）：**必须先 Read `references/core/intent-routing.md`**，再读本节对应 P 卡片。
+
+| 编号  | 业务                   | 一句话                                 |
+| ----- | ---------------------- | -------------------------------------- |
+| P1    | 单账户投放画像         | 单户拉数 + 诊断画像                    |
+| P2    | 多账户余额扫描         | 续航不足/充值预警巡检                  |
+| P3    | 多账户投放画像汇总     | accounts-digest 多户对比表             |
+| P4    | Google 账户周期报告    | 默认 8 维周期汇总                      |
+| P4-FB | Meta/Facebook 周期报告 | facebook-analysis 5–7 维，默认 HTML    |
+| P5    | 多账户多维度批处理     | google-analysis-batch，禁外层 for-loop |
+| P6    | OKKI 周报              | 固定模板多 Sheet xlsx                  |
+| P7    | Google 询盘分析        | 严格 3 个月 8 Sheet xlsx               |
+| P8    | 网站诊断               | website-diagnosis，默认 HTML           |
+| P9    | 战略市场分析           | market-analysis，默认 HTML             |
+
+---
+
+## P1 · 单账户投放画像
+
+- **触发**：对单个 Google 账户做投放画像/诊断/健康检查。
+- **必读**：`references/analytics/account-analytics.md`；诊断报告加 `report-templates/google-ads-diagnosis.md` + `report-templates/google-account-diagnosis-report.md`。
+- **步骤**：
+  1. 确认统计区间（规则见 conventions §五）。
+  2. `list-accounts -m Google -k <mediaCustomerId> --json-out ./snap-p1`（取 `currencyCode`）。
+  3. `stats -m Google -a <mediaCustomerId> --start <S> --end <D> --json-out ./snap-p1`。
+  4. `google-ads-diagnosis collect -a <mediaCustomerId> --start <S> --end <D> --json-out ./snap-p1`（含对比周期 campaigns/geographic/keywords + `daily-metrics` 按日趋势；产出 `google-ads-diagnosis-collect.json`，**仅事实**）。部分维度失败（exit 2）时 collect 仍产出 JSON，**禁止**用 `--skip-fetch` 或脚本绕过 CLI 重映射快照。
+  5. **outline 门禁**（若手写脚本读盘）：对**每个** section Read 其 `<section>-<accountId>_*.outline.txt` 确认字段树——字段名以 outline 为准。
+  6. **Agent 撰写**：读 `google-ads-diagnosis-collect.json`（`reportData` + `agentBrief`）+ `google-ads-diagnosis.md`，填写全部 `analysis` / `suggestions` / `diagnosisOverview` / `summary` 等，保存 `google-ads-diagnosis.json`。
+  7. **渲染终稿**：`google-ads-diagnosis render --data ./snap-p1/google-ads-diagnosis.json --out ./snap-p1/google-ads-diagnosis-report.html`（模板与 MarkAI `GoogleAdsDiagnosisReport.html` 一致）。
+- **产物**：HTML（`google-ads-diagnosis-report.html` 路径）；按 conventions §七 自检。
+
+---
+
+## P2 · 多账户余额扫描
+
+- **触发**：多账户余额续航不足、充值预警、僵尸账户巡检。
+- **必读**：`references/accounts/accounts-balance-stats.md`（§ balance-scan）。
+- **反模式**：`meta.dataIssue` 非空或 exit 2 → 向用户说明数据异常（余额全 null / OAuth 失效），**禁止**当成「无预警命中」。
+- **步骤**：
+  1. 全量巡检：`balance-scan -m <媒体> --threshold-days 7 --json-out ./snap-p2`（可选 `--min-balance 100` / `--target-days 60`）。
+  2. 已知子集：`balance-scan -m <媒体> -a id1,id2,id3 --json-out ./snap-p2-subset`（跳过翻页）。
+- **产物**：按 `remainingDays` 升序；`hitReason="none"` 表示未触阈值；消耗过低的僵尸账户不纳入预警。**禁止**逐账户 `balance`。
+
+---
+
+## P3 · 多账户投放画像汇总
+
+- **触发**：多账户消耗/点击/转化/CTR/CPC/CPA 汇总对比表、跨账户巡检；**转化成本监控 / 零转化 / 口语「零询盘」（无 CRM）**（见 `intent-routing.md` **§零·D**）。
+- **必读**：`references/accounts/accounts-balance-stats.md`（§ accounts-digest）。
+- **反模式**：
+  - **有 CRM 询盘附件/字段表** → 改 **P7**，不要用本卡片。
+  - **禁止**猜 `--period` / `--date-start`；只用 `--start`/`--end`（或 `--start-date`/`--end-date`）。
+  - `conversions`/`cpa` 为 null 时写「转化未返回」，**禁止**对 null 做 `>` 比较导致脚本崩溃。
+- **步骤**：
+  1. 确认时间范围后执行 `accounts-digest -m <媒体> -a id1,id2,... --start <S> --end <D> --json-out ./snap-p3`（全量则省略 `-a`）。
+  2. **高 CPA 巡检**：加 `--max-cpa <n>`（保留 CPA > n，或有消耗且转化为 0 的账户）。
+  3. **零转化 / 零询盘巡检**：加 `--zero-conversions`（有消耗且转化 = 0 或未返回）。
+  4. 基于落盘 `data.items` 与 `meta.totals` 生成报告，**不要**再逐账户 `stats`。
+- **产物**：向用户交付排序表（或明确「无命中」）；表格覆盖用户请求的**每一个** ID（未返回的占一行标注「未返回」）。**禁止**只落盘不说话。
+
+---
+
+## P4 · Google 账户周期报告
+
+- **触发**：Google 账户某区间的周期/月度/季度汇总报告；或用户列出 Sheet/章节要 **Excel**（非 OKKI / 询盘）。
+- **必读**：`report-templates/google-period-report.md` + `references/analytics/account-analytics.md`；**要 Excel** 加 `report-templates/google-period-report-excel.md`（全文）。
+- **步骤**：
+  1. **账户核验**：`list-accounts -m Google -k <mediaCustomerId> --json-out <dir>`；无记录则停止并告知用户。
+  2. 确认时间范围；区间 > 3 个月时分段（季度/月）。
+  3. **拉数**：用户已指定 Sheet/维度 → 只拉对应 `--sections`（见 `google-period-report-excel.md` 映射表）；未指定 → 按 `google-period-report.md` 默认 8 维，并可并行追问可选追加。
+  4. **门禁**：对每个 section Read `<section>-<accountId>_*.outline.txt` 后再写脚本。
+  5. 脚本读盘写产物：默认 **HTML**（`report-template*.html` 版式参考）；用户要 **Excel** → Agent 脚本写 xlsx（**禁止**宿主第三方 xlsx Skill；**无** CLI excel 子命令）。
+  6. 默认 HTML 报告须含：账户概览、投放趋势、Top 关键词/系列/地区分布、优化建议；用户定制 Excel 以用户 Sheet 清单为准。
+- **产物**：按 conventions §七 自检；`accountId` 须与用户给的 `mediaCustomerId` 一致。
+
+> 用户用「OKKI 周报」固定话术 → 改走 **P6**，不按默认 8 维追问。
+> 只要账户级按日 Excel（无多维章节）→ **P4-DAILY**。
+
+---
+
+## P4-DAILY · 按日投放 Excel
+
+- **触发**：按天导出 / 投放数据做成 Excel（非 Google/Meta 多维报告）。
+- **必读**：`report-templates/stats-daily-excel.md`。
+- **步骤**：核验账户 → `stats … --by-day --json-out` → 脚本写 xlsx。
+
+---
+
+## P4-FB · Meta/Facebook 账户周期报告
+
+- **触发**：Meta/Facebook 账户周期/月报/周报或诊断报告。
+- **必读**：`report-templates/meta-period-report.md` + `assets/meta-period-report-rules.md`（内容丰富度必读）+ `references/analytics/facebook-analysis-guide.md`；要 Excel 加 `report-templates/meta-period-report-excel.md`。
+- **默认产物**：**HTML**（`facebook-analysis render`）；用户明确要 Excel 时 Agent 脚本写 xlsx（步骤 1–3 不变，不调 `render`）。
+- **步骤**：
+  1. `list-accounts -m MetaAd -k <mediaCustomerId> --json-out ./snap-fb` 确认账户与 `currencyCode`。
+  2. 确认 `--start` / `--end`（>3 个月可分段）。
+  3. **拉数**（默认 5 维，要创意加 `creative`）：`facebook-analysis -a <id> --start <S> --end <D> --json-out ./snap-fb --sections overview,ad-sets,platform,country,audience`。
+  4. **分析**：脚本读落盘 JSON 聚合（见 `facebook-analysis-guide.md`）。
+  5. **写 JSON**：按 `meta-period-report-rules.md` 落盘 `meta-period-report.json`（`narrative` 4 条建议各 ≥150 字 + `supplementaryRecommendations` 7 维 + HTML 必填扩展）；无按日/关键词等写「接口未提供」，**禁止编造**。
+  6. **交付**：`facebook-analysis render --data ./meta-period-report.json --snapshot-dir ./snap-fb --out ./meta-period-report.html`。
+- **产物**：按 conventions §七 自检。诊断场景改用 `report-templates/meta-account-diagnosis-report.md`，拉数省略 `--sections` 拉全 7 维。
+
+---
+
+## P5 · 多账户多维度批处理
+
+- **触发**：账户数 ≥ 2 且需拉取 ≥ 2 个 google-analysis 维度。**禁止**外层 for-loop。
+- **必读**：`references/analytics/google-analysis-batch.md` + `references/analytics/account-analytics.md`；可选 `references/core/subagent-orchestration.md`。
+- **入口选择**：全量 → 省略 `-a`；2~10 子集 → `google-analysis -a id1,id2,...`；≥10 子集或需 resume → `google-analysis-batch run -a id1,id2,...`。
+- **步骤**：
+  1. （可选）Read `subagent-orchestration.md` § P5 决定执行模式。
+  2. 确认时间范围 + 维度（默认 `campaigns,geographic,keywords`）。
+  3. 执行（推荐全量省略 `-a`）：
+     ```bash
+     siluzan-tso google-analysis-batch run --start <S> --end <D> \
+       --sections campaigns,geographic,keywords \
+       --account-concurrency 4 --section-concurrency 6 \
+       --min-spend 1 --keyword-limit 1000 --json-out ./snap-p5
+     ```
+  4. **中断只能 resume**：`google-analysis-batch resume --json-out ./snap-p5 --run-id <runId>`；只读进度用 `status`。
+  5. **outline 门禁（消费产物前）**：每个维度 Read 其一份 `results/<accountId>/<section>-<accountId>.outline.txt`（同维度多账户同结构，读其一即可代表该维度；一批并行把所有维度 outline 读全）确认字段树后再写聚合脚本，**禁止**凭模板字段名直接写（详见 conventions §三 outline 门禁 + `references/analytics/google-analysis-batch.md` §产物消费）。
+- **产物**：**禁止**重新 `run` 续跑；401 → 整批终止，重登录后 `resume`。
+
+---
+
+## P6 · OKKI 周报
+
+- **触发**：话术含 `使用 okki 周报模板` / `OKKI 周报` / `okki 周报`，且指向 Google 账户 + 日期区间。
+- **必读**：`report-templates/okki-weekly-google-client.md`（**全文**）+ `references/analytics/account-analytics.md`；可选 `references/core/subagent-orchestration.md`。
+- **步骤**：
+  1. （可选）Read `subagent-orchestration.md` § P6 决定是否分阶段委派。
+  2. 确认 `mediaCustomerId` 与 `--start` / `--end`。
+  3. 同一 `--json-out` 目录执行模板命令组合：`stats`、`balance`、`google-analysis --sections overview,campaigns,keywords,search-terms,campaign-device,campaign-geo-matched`。
+  4. 脚本读盘 → 按 `okki-weekly-google-client.md` **默认客户话术**填数交付（用户另有话术/增删条目时从其自定义）；并产出多 Sheet `.xlsx`（无 CLI 写表命令）。
+- **产物**：**不**按 P4 默认 8 维追加；金额读 `*Yuan` 字段；对外话术数值须与 xlsx 一致。
+
+---
+
+## P7 · Google 账户询盘分析
+
+- **触发**：话术含 `Google 账户询盘分析` / `分析 XXX Google 账号的询盘效果`，或同时含「询盘 + 账户 + Google」。
+- **必读**：`report-templates/google-inquiry-analysis.md`（**全文**）+ `references/analytics/account-analytics.md` + `references/analytics/geo-continents.json`；可选 `references/core/subagent-orchestration.md`。
+- **时间窗口强约束**：**严格 3 个月** = 分析月份 + 向前 2 个完整自然月，**禁止**扩展到 7 个月。
+- **步骤**：
+  1. （可选）Read `subagent-orchestration.md` § P7。
+  2. 询盘资料入场：用户附文件 → 解析落盘 `./snap-inquiry/inquiries.json`；仅给账户 ID → 反问账户 + 分析月份并贴字段清单，**禁止编造询盘数据**。
+  3. CLI 拉数（同一目录）：`list-accounts`、`google-analysis --sections campaigns,keywords,search-terms,campaign-geo`，并按月拉 `m1/m2/m3` 的 `campaigns,geographic`。
+  4. 脚本聚合计算 8 Sheet 数据；国家→大洲映射读 `geo-continents.json`，**禁止**硬编码国家名。
+- **产物**：必产 8 Sheet xlsx（版式见模板），**只能**由 Agent 脚本生成，**禁止**假设 `… excel` 子命令存在。
+
+---
+
+## P8 · 网站诊断
+
+- **触发**：对某 URL 做网站/落地页诊断、投放前网站评分；话术含「网站诊断/检测/监测/质量**报告**」「落地页报告」「官网体检」（**非** Google 账户诊断、**非** 行业报告）。同义词见 `intent-routing.md` §二 P8。
+- **必读**：`references/analytics/website-diagnosis-guide.md` + `assets/website-diagnosis-rules.md` + `report-templates/website-diagnosis-report.md`。
+- **默认产物**：**HTML**（`website-diagnosis render`）；**禁止**仅 Markdown 摘要或纯 JSON 充当终稿。
+- **步骤**：
+  1. 确认完整 URL（`https://` 可省略，CLI 自动补全）。
+  2. 采集：`website-diagnosis collect --url <url> --json-out ./snap-web --include-html`（落盘含 `signals` / `dataAvailability`）。
+  3. 脚手架：`website-diagnosis prepare --collect ./snap-web/<collect>.json`（Lighthouse 失败时 m2i1/m5i1 预填 Absent）。
+  4. 按 `signals` + `website-diagnosis-rules.md` 补全 `needsAgent=true` 项 → 落盘 `diagnosis.json`。
+  5. 出 HTML：`website-diagnosis render --data ./diagnosis.json --collect ./snap-web/<collect>.json --out ./snap-web/website-diagnosis-report.html`。
+- **产物**：交付 HTML 路径；Lighthouse 缺失时性能项标「未测到」、禁止编造分；仅需历史 ARIT 分时用 `website-diagnosis search --ids <websiteDiagnoseId>`。
+
+---
+
+## P9 · 战略市场分析
+
+- **触发**：话术含「市场分析」「**行业分析**」「**行业分析报告**」「生成/写一份 **XX 行业** 报告」（如「电商行业」「制造业」）、「战略市场报告」「KA 市场报告」，或对某客户/行业做竞品/GTM 战略分析（**非** `google-analysis`、**非** 网站诊断、**非** 账户周期 P4）。
+- **典型误路由**：用户只说「帮我生成一份电商行业的行业分析报告」→ **仍是 P9**；须 `market-analysis collect --industry "电商" --json-out …`，**禁止**跳过 CLI 直接 WebSearch 写 Markdown。
+- **必读**：`references/analytics/market-analysis-guide.md` + `assets/market-analysis-rules.md`（原始业务维度清单）+ `report-templates/market-analysis-report.md`。
+- **默认产物**：**HTML**（`market-analysis render`）。
+- **步骤**：
+  1. 确认客户信息（客户名称/网站/行业/核心产品至少一项）；`targetMarket` 默认「全球」、`timeRange` 默认「近12个月」（未给须写明）。
+  2. 采集：`market-analysis collect --customer-name "<name>" --website <url> --industry "<industry>" --core-products "<products>" --target-market "<market>" --time-range "<range>" --json-out ./snap-market`。**仅给行业时**可简化为 `--industry "电商" --json-out ./snap-market`（四选一至少一项即可）。
+  3. 按 `market-analysis-rules.md` 维度表**逐章 WebSearch** 撰写，脚本落盘 `./snap-market/market-report.json`。
+  4. 渲染：`market-analysis render --data ./snap-market/market-report.json --out ./snap-market/market-analysis-report.html`；报缺项时**只补缺失维度**后重写 JSON。
+- **产物**：交付 HTML 路径并说明需联网加载 CDN。

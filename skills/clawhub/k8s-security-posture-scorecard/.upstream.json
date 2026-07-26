@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/k8s-security-posture-scorecard",
+  "slug": "k8s-security-posture-scorecard",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1779002256375,
+  "contentHash": "b6e21b67a756fd8d80add132bcbc2b8662bec19bb78e2bd0c10d5e66b53905dd",
+  "fetchedAt": "2026-07-26T19:03:16.974Z"
+}

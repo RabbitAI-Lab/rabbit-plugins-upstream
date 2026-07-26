@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/dep-vuln-scanner",
+  "slug": "dep-vuln-scanner",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1778492087267,
+  "contentHash": "bf613e14538eaa2e1b03f1afc0cb30465e1ca91f05f7e8df7e3dad021de93e54",
+  "fetchedAt": "2026-07-26T19:54:46.188Z"
+}

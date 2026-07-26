@@ -1,0 +1,10 @@
+# Packaged bundle (redundant snapshot of the source; attach to a Release instead)
+Amazon-VOC.zip
+
+# Local API key / config — never commit
+config.json
+.ari/
+
+# Python caches
+__pycache__/
+*.pyc

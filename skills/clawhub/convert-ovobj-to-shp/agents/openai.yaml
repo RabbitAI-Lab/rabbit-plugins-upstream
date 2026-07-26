@@ -1,0 +1,4 @@
+interface:
+  display_name: "奥维 OVOBJ 转 SHP"
+  short_description: "将奥维 OVOBJ 或 OVKML 点转换为校验过的 Shapefile"
+  default_prompt: "使用 $convert-ovobj-to-shp 将奥维 OVOBJ 或 OVKML 采样点转换为 WGS84 Shapefile，并核对坐标类型与点数。"

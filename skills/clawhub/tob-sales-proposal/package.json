@@ -1,0 +1,32 @@
+{
+  "name": "tob-sales-proposal",
+  "version": "1.2.0",
+  "description": "ToB\u9500\u552e\u63d0\u6848\u751f\u6210\u5668 - \u57fa\u4e8e19\u5e74\u5b9e\u6218\u7ecf\u9a8c",
+  "main": "src/index.js",
+  "bin": {
+    "tob-sales-proposal": "./src/cli.js"
+  },
+  "scripts": {
+    "start": "node src/cli.js",
+    "test": "node tests/run-tests.js"
+  },
+  "keywords": [
+    "tob",
+    "sales",
+    "proposal",
+    "b2b",
+    "skill"
+  ],
+  "author": "ToB Skills Team",
+  "license": "MIT",
+  "dependencies": {
+    "commander": "^11.0.0",
+    "inquirer": "^8.2.6",
+    "chalk": "^4.1.2",
+    "handlebars": "^4.7.8",
+    "fs-extra": "^11.1.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

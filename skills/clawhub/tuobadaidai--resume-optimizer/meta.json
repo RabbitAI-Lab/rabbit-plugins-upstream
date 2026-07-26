@@ -1,0 +1,10 @@
+{
+  "slug": "resume-optimizer",
+  "name": "Resume Optimizer",
+  "version": "1.5.1",
+  "description": "求职简历三阶段优化引擎+效果对比报告：先全局评估（含JD匹配度雷达图），再简历改写（工作经验STAR+项目经验软性叙述+数据补全追问），最后效果对比+Word/PDF导出",
+  "author": "tuobadaidai",
+  "tags": ["resume", "career", "job-search", "ATS", "STAR", "中文", "JD", "求职", "docx", "pdf", "项目经验", "追问", "评分对比"],
+  "license": "MIT",
+  "category": "career"
+}

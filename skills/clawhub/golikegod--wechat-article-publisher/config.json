@@ -1,0 +1,7 @@
+{
+  "wechat": {
+    "app_id": "<your-app-id>",
+    "app_secret": "USE_KEYRING",
+    "author": "龙虾5号"
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "name": "gdpr-compliance",
+  "version": "1.2.0",
+  "description": "欧盟通用数据保护条例（GDPR）合规检查、风险评估和文档生成工具。提供全面的GDPR合规解决方案。",
+  "author": "Wei Wu (wwumit)",
+  "license": "MIT",
+  "keywords": [
+    "GDPR", "欧盟合规", "数据保护", "privacy", "合规检查",
+    "DPIA", "data-protection", "eu-compliance"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wwumit/gdpr-compliance"
+  },
+  "homepage": "https://github.com/wwumit/gdpr-compliance",
+  "features": [
+    "GDPR合规检查",
+    "数据保护影响评估(DPIA)",
+    "数据主体权利检查",
+    "跨境数据传输合规",
+    "合规文档生成",
+    "纯本地运行"
+  ],
+  "regions": ["EU/EEA", "UK"],
+  "security": {
+    "network_access": "local_only",
+    "data_collection": "none",
+    "external_dependencies": "pandas/jinja2 (optional)"
+  },
+  "legal": {
+    "disclaimer": "此技能提供GDPR合规指导，不构成法律意见。重要合规决策必须咨询专业律师或数据保护官(DPO)。",
+    "jurisdiction": "EU/EEA/UK",
+    "applicable_law": "GDPR (Regulation (EU) 2016/679)"
+  },
+  "scripts": {
+    "check": "python scripts/gdpr-check.py",
+    "dpia": "python scripts/dpia-generator.py",
+    "rights": "python scripts/data-subject-rights.py",
+    "cross-border": "python scripts/cross-border-transfer.py"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/uniprot-query",
+  "slug": "uniprot-query",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1778492477474,
+  "contentHash": "3d51d1d07e855fa30844f1a820f4b14fe68915003d9aa6e35ec17108d2f5d11d",
+  "fetchedAt": "2026-07-26T19:32:43.929Z"
+}

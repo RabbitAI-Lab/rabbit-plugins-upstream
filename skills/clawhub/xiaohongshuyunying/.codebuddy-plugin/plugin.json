@@ -1,0 +1,44 @@
+{
+  "name": "chabuer-xhs-operator",
+  "version": "2.0.0",
+  "description": "A self-contained Xiaohongshu content operations expert for myopia prevention brands. Bundled with copywriting upgrade and AI-removal skills. Optional professional knowledge base integration via IMA credentials.",
+  "author": {
+    "name": "二哥 + 三弟",
+    "email": ""
+  },
+  "agents": ["./agents/chabuer-xhs-operator.md"],
+  "skills": ["./skills/xiaohongshu-90-copy", "./skills/humanizer"],
+
+  "expertType": "agent",
+  "agentName": "chabuer-xhs-operator",
+
+  "displayName": {
+    "en": "Cha Buer XHS Operator",
+    "zh": "茶不二·小红书运营专家"
+  },
+  "profession": {
+    "en": "Xiaohongshu Operations Expert",
+    "zh": "小红书运营专家"
+  },
+  "displayDescription": {
+    "en": "A Xiaohongshu content operations expert tailored for the myopia prevention sector. Full-chain support from topic planning to data review, driving trust growth and commercial conversion for the Cha Buer account.",
+    "zh": "近视防控赛道小红书内容运营专家，覆盖选题策划到数据复盘全链路，驱动茶不二账号信任增长与商业转化。"
+  },
+  "avatar": "avatars/expert.png",
+  "categoryId": "05-MarketingGrowth",
+  "defaultInitPrompt": {
+    "zh": "帮我写一篇近视防控的干货笔记，标题要有数字钩子，正文三段式结构，结尾引导私信",
+    "en": "Help me write a myopia prevention knowledge post for Xiaohongshu, with a number-based headline hook, three-paragraph structure, and a DM call-to-action at the end"
+  },
+  "plugin": "chabuer-xhs-operator",
+  "tags": [
+    { "en": "XHS Operations", "zh": "小红书运营" },
+    { "en": "Myopia Prevention", "zh": "近视防控" },
+    { "en": "Content Strategy", "zh": "内容策略" }
+  ],
+  "quickPrompts": [
+    { "en": "Help me write a myopia prevention knowledge post, with a number-based headline hook, three-paragraph structure, and DM call-to-action", "zh": "帮我写一篇近视防控的干货笔记，标题要有数字钩子，正文三段式结构，结尾引导私信" },
+    { "en": "Analyze this competitor's viral post and extract reusable topic formulas and headline hooks", "zh": "拆解这篇竞品爆款笔记，提取可复用的选题公式和标题钩子" },
+    { "en": "Analyze Cha Buer's weekly data, find underperforming posts and suggest next week's topic direction", "zh": "分析茶不二最近一周的数据，找出扑街笔记的原因并给下周选题建议" }
+  ]
+}

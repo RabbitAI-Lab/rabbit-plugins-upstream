@@ -1,0 +1,35 @@
+{
+  "swing": {
+    "last_check": "2026-07-17T16:00:06.001528+00:00",
+    "equity": 59308.37,
+    "cash": 13663.9,
+    "buying_power": 182460.12,
+    "market_value": 45644.13,
+    "unrealized_pl": -691.9600069999999,
+    "positions_count": 5,
+    "open_orders_count": 1,
+    "alerts": [
+      "AAPL position size 15.1% > max 15%",
+      "SPY position size 21.4% > max 15%",
+      "AAPL has no visible stop-loss order",
+      "GOOGL has no visible stop-loss order",
+      "MSFT has no visible stop-loss order",
+      "QQQ has no visible stop-loss order"
+    ]
+  },
+  "daytrader": {
+    "last_check": "2026-07-17T16:00:07.217164+00:00",
+    "equity": 4980.9,
+    "cash": 3023.06,
+    "buying_power": 17574.19,
+    "market_value": 1957.8375,
+    "unrealized_pl": -8.1525,
+    "positions_count": 3,
+    "open_orders_count": 1,
+    "alerts": [
+      "DIA has no visible stop-loss order",
+      "SPY has no visible stop-loss order",
+      "VOO has no visible stop-loss order"
+    ]
+  }
+}

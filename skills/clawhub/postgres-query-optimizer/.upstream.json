@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/postgres-query-optimizer",
+  "slug": "postgres-query-optimizer",
+  "ownerHandle": null,
+  "version": "1.0.1",
+  "updatedAt": 1778492805944,
+  "contentHash": "cd1fe1de95ff8d5e48b77575395f99580aa77a6ec181aff9c46bc8c4d9ea8226",
+  "fetchedAt": "2026-07-26T19:18:24.108Z"
+}

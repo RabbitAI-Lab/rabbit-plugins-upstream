@@ -1,0 +1,69 @@
+#!/usr/bin/env bash
+# Agent Relay — Inbox Fallback Poller
+# Catches messages webhook delivery missed (dedup by message.id, re-submits to webhook).
+# Run via cron every 2 min.
+#
+# Credentials from pass:
+#   pass insert alvinmedia/agent-relay/api_key
+#   pass insert alvinmedia/agent-relay/base_url
+#   pass insert alvinmedia/agent-relay/hook_token
+#
+# Override: export RELAY_PASS_PREFIX=your/prefix
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PASS_PREFIX="${RELAY_PASS_PREFIX:-alvinmedia/agent-relay}"
+SEEN_FILE="${RELAY_SEEN_FILE:-$SCRIPT_DIR/../.webhook_seen}"
+
+API_KEY="$(pass show "$PASS_PREFIX/api_key" 2>/dev/null | head -1 || true)"
+BASE_URL="$(pass show "$PASS_PREFIX/base_url" 2>/dev/null | head -1 || true)"
+HOOK_TOKEN="$(pass show "$PASS_PREFIX/hook_token" 2>/dev/null | head -1 || true)"
+HOOK_URL="${RELAY_HOOK_URL:-http://127.0.0.1:18789/hooks/agent-relay}"
+
+if [ -z "$API_KEY" ] || [ -z "$BASE_URL" ] || [ -z "$HOOK_TOKEN" ]; then
+  echo "ERROR: Missing credentials in pass at: $PASS_PREFIX"
+  exit 1
+fi
+
+touch "$SEEN_FILE"
+
+RESP=$(curl -sf -H "Authorization: Bearer $API_KEY" "$BASE_URL/relay/inbox" 2>/dev/null || true)
+if [ -z "$RESP" ] || [ "$RESP" = "[]" ]; then
+  exit 0
+fi
+
+echo "$RESP" | python3 -c "
+import json, sys, subprocess
+
+seen = set()
+try:
+    with open('$SEEN_FILE') as f:
+        seen = set(line.strip() for line in f if line.strip())
+except FileNotFoundError:
+    pass
+
+messages = json.load(sys.stdin)
+new_count = 0
+for msg in messages:
+    mid = msg.get('id', '')
+    if mid and mid not in seen:
+        seen.add(mid)
+        payload = json.dumps({'source': 'agent-relay', 'message': msg})
+        r = subprocess.run([
+            'curl', '-sf', '-X', 'POST', '$HOOK_URL',
+            '-H', 'Authorization: Bearer $HOOK_TOKEN',
+            '-H', 'Content-Type: application/json',
+            '-d', payload
+        ], capture_output=True, timeout=30, text=True)
+        if r.returncode == 0:
+            new_count += 1
+
+with open('$SEEN_FILE', 'w') as f:
+    for mid in sorted(seen):
+        f.write(mid + '\n')
+
+if new_count:
+    print(f'Re-submitted {new_count} undelivered message(s) via webhook')
+" 2>/dev/null || true
+
+exit 0

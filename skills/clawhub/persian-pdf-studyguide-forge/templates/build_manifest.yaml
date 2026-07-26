@@ -1,0 +1,26 @@
+project:
+  title: ""
+  language: fa
+  direction: rtl
+  source_directory: uploads
+  output_directory: output
+  offline_first: true
+sources:
+  - pdf: ""
+    guide: ""
+    pages_total: null
+    units_kept: null
+    pages_dropped:
+      - page: null
+        classification: ceremonial
+        reason: ""
+assets:
+  local_fonts: []
+  extracted_figures: 0
+  approved_supplementary_figures: 0
+qa:
+  source_coverage: pending
+  anchors: pending
+  local_assets: pending
+  shared_template_hash: pending
+  package_freshness: pending

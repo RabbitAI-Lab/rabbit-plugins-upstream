@@ -1,0 +1,1 @@
+- Require python3 for skill and update CLI reference

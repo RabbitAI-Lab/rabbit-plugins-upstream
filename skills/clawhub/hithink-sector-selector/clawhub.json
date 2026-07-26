@@ -1,0 +1,15 @@
+{
+  "name": "hithink-sector-selector",
+  "version": "1.0.0",
+  "description": "通过行业估值、资金流向、涨跌幅、板块类型等多条件组合筛选市场板块。",
+  "license": "MIT",
+  "tags": [
+    "sector",
+    "stock",
+    "finance",
+    "板块",
+    "行业",
+    "同花顺",
+    "问财"
+  ]
+}

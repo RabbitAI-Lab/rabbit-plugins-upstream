@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: ampan
+Version: 1.0.0
+Summary: 暗盘系统 Dark Market System — 足球价值投注八维分析引擎
+Requires-Python: >=3.10
+Requires-Dist: pandas>=2.0
+Requires-Dist: numpy>=1.24
+Requires-Dist: scipy>=1.10
+Requires-Dist: requests>=2.28
+Requires-Dist: rich>=13.0
+Requires-Dist: click>=8.1
+Provides-Extra: dev
+Requires-Dist: pytest>=7.0; extra == "dev"

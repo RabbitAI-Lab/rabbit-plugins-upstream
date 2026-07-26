@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/deploy-k8s-cluster",
+  "slug": "deploy-k8s-cluster",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1779078795420,
+  "contentHash": "642a056bed9aca90410852692c63351b46976b3fe89ad6902e4f52e6704712a8",
+  "fetchedAt": "2026-07-26T18:46:39.404Z"
+}

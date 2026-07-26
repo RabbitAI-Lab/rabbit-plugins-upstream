@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/ssh-executor",
+  "slug": "ssh-executor",
+  "ownerHandle": null,
+  "version": "2.4.2",
+  "updatedAt": 1784867849879,
+  "contentHash": "dba76f91c4c0d7cf29499e0a741bf0db0766872656802b89d97bad03f4e7fbb4",
+  "fetchedAt": "2026-07-26T18:06:17.909Z"
+}

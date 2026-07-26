@@ -1,0 +1,26 @@
+{
+  "name": "wechat-image-generator",
+  "version": "1.0.3",
+  "description": "Generate beautiful images for WeChat articles (covers, comparisons, charts) with zero token cost",
+  "keywords": [
+    "wechat",
+    "image",
+    "generator",
+    "cover",
+    "social-media",
+    "openclaw",
+    "skill",
+    "yuanzi",
+    "gzh"
+  ],
+  "author": {
+    "name": "Golikegod",
+    "url": "https://github.com/Golikegod"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Golikegod/wechat-image-generator"
+  },
+  "homepage": "https://github.com/Golikegod/wechat-image-generator"
+}

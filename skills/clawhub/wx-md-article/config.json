@@ -1,0 +1,11 @@
+{
+  "default_author": "",
+  "style": {
+    "primary_color": "#07c160",
+    "text_color": "#333"
+  },
+  "formatting_rules": {
+    "use_emoji": false,
+    "max_colors": 2
+  }
+}

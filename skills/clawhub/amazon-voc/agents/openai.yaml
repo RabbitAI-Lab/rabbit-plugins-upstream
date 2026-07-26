@@ -1,0 +1,4 @@
+interface:
+  display_name: "ARI 评论智能"
+  short_description: "通过 ARI 采集并分析 Amazon 评论，生成可执行消费者洞察"
+  default_prompt: "使用 $amazon-review-intelligence-extractor 采集并分析一个 Amazon ASIN 的评论。"

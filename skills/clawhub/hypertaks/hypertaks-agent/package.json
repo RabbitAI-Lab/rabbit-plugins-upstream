@@ -1,0 +1,39 @@
+{
+  "name": "hypertaks",
+  "version": "4.3.0",
+  "description": "Hypertaks Founder Operating System - cross-agent plugin with business-health judgment, tiered specialist agents, and relevance-bound host capabilities.",
+  "license": "MIT",
+  "author": "abrur <abrur_nic@yahoo.com>",
+  "homepage": "https://github.com/aabrur/hypertaks-agent#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aabrur/hypertaks-agent.git"
+  },
+  "keywords": [
+    "claude-code",
+    "plugin",
+    "skill",
+    "founder",
+    "multi-agent",
+    "solidity",
+    "web3",
+    "strategy",
+    "finance",
+    "supply-chain",
+    "iot"
+  ],
+  "files": [
+    "skills/",
+    ".claude-plugin/",
+    ".codex-plugin/",
+    ".cursor-plugin/",
+    ".kimi-plugin/",
+    ".openclaw/",
+    ".hermes/",
+    ".opencode/",
+    ".pi/",
+    ".agents/",
+    "README.md",
+    "LICENSE"
+  ]
+}

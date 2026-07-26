@@ -1,0 +1,650 @@
+{
+  "schema_version": "1.0",
+  "context_id": "alazab-portal-ai-global",
+  "context_name": "Alazab Portal AI Global Production Context",
+  "environment": "production",
+  "scope": "global",
+  "auto_attach": true,
+  "applies_to": {
+    "agents": [
+      "*"
+    ],
+    "models": [
+      "*"
+    ],
+    "runtimes": [
+      "*"
+    ],
+    "sessions": [
+      "*"
+    ],
+    "projects": [
+      "*"
+    ],
+    "nodes": [
+      "*"
+    ]
+  },
+  "organization": {
+    "legal_name": "AZAB FOR IMPLEMENTATION MANAGEMENT WORKS FOR INDUSTRIAL PROJECTS",
+    "display_name_ar": "مجموعة العزب",
+    "display_name_en": "Alazab Group",
+    "owner_role": "Founder & CEO",
+    "primary_language": "ar",
+    "timezone": "Africa/Cairo",
+    "brand": {
+      "primary_navy": "#030957",
+      "primary_yellow": "#FFB900",
+      "direction": "rtl"
+    }
+  },
+  "platform": {
+    "name": "Alazab AI Portal",
+    "control_plane_domain": "portal-ai.alazab.com",
+    "execution_plane_domain": "portal-ai.alazab.cloud",
+    "architecture": {
+      "control_plane": "core",
+      "execution_plane": "cloud",
+      "manager_role": "ChatGPT manager/orchestrator",
+      "execution_role": "Codex, Gemini, Azure agents, Ollama and specialized workers"
+    },
+    "repository": {
+      "upstream": "builderz-labs/mission-control",
+      "local_name": "mission-control",
+      "license": "MIT",
+      "upstream_remote": "upstream",
+      "production_remote": "origin"
+    }
+  },
+  "network": {
+    "private_overlay": {
+      "type": "wireguard",
+      "subnet": "10.77.0.0/24",
+      "interface": "wg-ai",
+      "udp_port": 51820,
+      "core_address": "10.77.0.1/24",
+      "cloud_address": "10.77.0.2/24"
+    },
+    "public_dns": {
+      "core": {
+        "fqdn": "portal-ai.alazab.com",
+        "record_type": "A",
+        "target": "${CORE_PUBLIC_IP}"
+      },
+      "cloud": {
+        "fqdn": "portal-ai.alazab.cloud",
+        "record_type": "A",
+        "target": "${CLOUD_PUBLIC_IP}"
+      }
+    },
+    "internal_api": {
+      "core_base_url": "http://10.77.0.1:8200",
+      "cloud_base_url": "http://10.77.0.2:8100",
+      "authentication": {
+        "bearer_secret_ref": "PORTAL_AI_SERVICE_TOKEN",
+        "hmac_secret_ref": "PORTAL_AI_HMAC_SECRET",
+        "timestamp_header": "X-Alazab-Timestamp",
+        "signature_header": "X-Alazab-Signature",
+        "node_header": "X-Alazab-Node"
+      }
+    }
+  },
+  "nodes": {
+    "core": {
+      "id": "core-server",
+      "role": "control-plane",
+      "fqdn": "portal-ai.alazab.com",
+      "private_ip": "10.77.0.1",
+      "app_port": 8200,
+      "responsibilities": [
+        "User interface and authentication",
+        "Project, mission and task management",
+        "Manager/orchestrator",
+        "Project context and decisions",
+        "Approval gates",
+        "Audit and final reports",
+        "Primary metadata database"
+      ],
+      "paths": {
+        "root": "/var/www/core/portal-ai",
+        "repository": "/var/www/core/portal-ai/mission-control",
+        "current_release": "/var/www/core/portal-ai/current",
+        "releases": "/var/www/core/portal-ai/releases",
+        "shared": "/var/www/core/portal-ai/shared",
+        "config": "/etc/portal-ai/core",
+        "env_file": "/etc/portal-ai/core/portal-ai.env",
+        "context_file": "/etc/portal-ai/shared/alazab-portal-ai-global-context.yaml",
+        "runtime": "/run/portal-ai/core",
+        "state": "/var/lib/portal-ai/core",
+        "data": "/var/lib/portal-ai/core/data",
+        "database": "/var/lib/portal-ai/core/database",
+        "uploads": "/var/lib/portal-ai/core/uploads",
+        "artifacts": "/var/lib/portal-ai/core/artifacts",
+        "cache": "/var/cache/portal-ai/core",
+        "logs": "/var/log/portal-ai/core",
+        "audit_logs": "/var/log/portal-ai/core/audit",
+        "backups": "/var/backups/portal-ai/core",
+        "nginx_site": "/etc/nginx/sites-available/portal-ai.alazab.com",
+        "systemd_service": "/etc/systemd/system/portal-ai-core.service",
+        "systemd_worker": "/etc/systemd/system/portal-ai-core-worker.service"
+      }
+    },
+    "cloud": {
+      "id": "cloud-server",
+      "role": "execution-plane",
+      "fqdn": "portal-ai.alazab.cloud",
+      "private_ip": "10.77.0.2",
+      "app_port": 8100,
+      "responsibilities": [
+        "Codex execution",
+        "CLI and PTY sessions",
+        "Task workers and queues",
+        "Ollama and model runtimes",
+        "Raw execution logs",
+        "Temporary artifacts",
+        "Remote node coordination"
+      ],
+      "paths": {
+        "root": "/var/www/apps/portal-ai",
+        "repository": "/var/www/apps/portal-ai/mission-control",
+        "current_release": "/var/www/apps/portal-ai/current",
+        "releases": "/var/www/apps/portal-ai/releases",
+        "shared": "/var/www/apps/portal-ai/shared",
+        "config": "/etc/portal-ai/cloud",
+        "env_file": "/etc/portal-ai/cloud/portal-ai.env",
+        "context_file": "/etc/portal-ai/shared/alazab-portal-ai-global-context.yaml",
+        "runtime": "/run/portal-ai/cloud",
+        "state": "/var/lib/portal-ai/cloud",
+        "data": "/var/lib/portal-ai/cloud/data",
+        "sessions": "/var/lib/portal-ai/cloud/sessions",
+        "workspaces": "/var/lib/portal-ai/cloud/workspaces",
+        "task_runs": "/var/lib/portal-ai/cloud/runs",
+        "artifacts": "/var/lib/portal-ai/cloud/artifacts",
+        "cache": "/var/cache/portal-ai/cloud",
+        "logs": "/var/log/portal-ai/cloud",
+        "codex_logs": "/var/log/portal-ai/cloud/codex",
+        "worker_logs": "/var/log/portal-ai/cloud/workers",
+        "backups": "/var/backups/portal-ai/cloud",
+        "tmux_socket": "/run/portal-ai/cloud/tmux",
+        "nginx_site": "/etc/nginx/sites-available/portal-ai.alazab.cloud",
+        "systemd_service": "/etc/systemd/system/portal-ai-cloud.service",
+        "systemd_worker": "/etc/systemd/system/portal-ai-cloud-worker.service",
+        "systemd_executor": "/etc/systemd/system/portal-ai-executor.service"
+      }
+    }
+  },
+  "shared_paths": {
+    "canonical_context": "/etc/portal-ai/shared/alazab-portal-ai-global-context.yaml",
+    "skill_root": "/etc/portal-ai/shared/skills",
+    "global_skill": "/etc/portal-ai/shared/skills/alazab-global-context",
+    "policies": "/etc/portal-ai/shared/policies",
+    "schemas": "/etc/portal-ai/shared/schemas",
+    "templates": "/etc/portal-ai/shared/templates",
+    "certificates": "/etc/portal-ai/shared/certificates",
+    "node_registry": "/etc/portal-ai/shared/nodes.yaml",
+    "model_registry": "/etc/portal-ai/shared/models.yaml",
+    "agent_registry": "/etc/portal-ai/shared/agents.yaml"
+  },
+  "application": {
+    "framework": "Next.js",
+    "package_manager": "pnpm",
+    "node_runtime": {
+      "version_policy": "use version required by package.json",
+      "production_env": "NODE_ENV=production"
+    },
+    "build": {
+      "command": "pnpm install --frozen-lockfile && pnpm build",
+      "output_mode": "standalone"
+    },
+    "health": {
+      "public_path": "/health",
+      "api_path": "/api/health"
+    },
+    "api": {
+      "prefix": "/api",
+      "openapi_file": "openapi.json"
+    },
+    "streaming": {
+      "sse": true,
+      "websocket": true
+    },
+    "storage": {
+      "control_plane_primary": "PostgreSQL",
+      "execution_plane_runtime": "filesystem + queue"
+    },
+    "session_runtime": {
+      "terminal": "PTY",
+      "supervisor": "systemd",
+      "persistent_shell": "tmux"
+    }
+  },
+  "services": {
+    "core": {
+      "web": "portal-ai-core.service",
+      "worker": "portal-ai-core-worker.service",
+      "nginx": "nginx.service",
+      "database": "postgresql.service",
+      "redis": "redis-server.service",
+      "wireguard": "wg-quick@wg-ai.service"
+    },
+    "cloud": {
+      "web": "portal-ai-cloud.service",
+      "worker": "portal-ai-cloud-worker.service",
+      "executor": "portal-ai-executor.service",
+      "nginx": "nginx.service",
+      "redis": "redis-server.service",
+      "ollama": "ollama.service",
+      "wireguard": "wg-quick@wg-ai.service"
+    }
+  },
+  "ports": {
+    "public": {
+      "http": 80,
+      "https": 443,
+      "wireguard_udp": 51820
+    },
+    "private": {
+      "core_app": 8200,
+      "cloud_app": 8100,
+      "core_postgresql": 5432,
+      "core_redis": 6379,
+      "cloud_redis": 6379,
+      "ollama": 11434
+    },
+    "policy": {
+      "expose_publicly": [
+        80,
+        443,
+        "51820/udp"
+      ],
+      "private_only": [
+        8200,
+        8100,
+        5432,
+        6379,
+        11434
+      ]
+    }
+  },
+  "database": {
+    "primary_node": "core",
+    "engine": "PostgreSQL",
+    "database_name": "portal_ai",
+    "application_user": "portal_ai",
+    "host": "127.0.0.1",
+    "port": 5432,
+    "ssl_mode": "prefer",
+    "secret_refs": {
+      "password": "PORTAL_AI_DB_PASSWORD",
+      "database_url": "PORTAL_AI_DATABASE_URL"
+    },
+    "migrations": {
+      "source": "src/lib/migrations.ts",
+      "schema": "src/lib/schema.sql"
+    },
+    "backup": {
+      "logical": {
+        "path": "/var/backups/portal-ai/core/postgresql",
+        "retention_daily": 7,
+        "retention_weekly": 4,
+        "retention_monthly": 6
+      },
+      "pre_deploy_required": true,
+      "restore_test_required": true
+    }
+  },
+  "queue": {
+    "engine": "Redis",
+    "control_host": "127.0.0.1",
+    "cloud_host": "127.0.0.1",
+    "port": 6379,
+    "secret_ref": "PORTAL_AI_REDIS_URL",
+    "namespaces": {
+      "core": "portal-ai:core",
+      "cloud": "portal-ai:cloud"
+    }
+  },
+  "security": {
+    "secret_manager": {
+      "provider": "Infisical",
+      "base_url": "https://env.alazab.com",
+      "project_ref": "PORTAL_AI_INFISICAL_PROJECT",
+      "environment": "production"
+    },
+    "prohibited": [
+      "Hard-coded secrets",
+      "Public PostgreSQL",
+      "Public Redis",
+      "Unrestricted execution API",
+      "Shared root SSH keys between nodes",
+      "Direct catalog manipulation"
+    ],
+    "authentication": {
+      "session_cookie_secure": true,
+      "session_cookie_http_only": true,
+      "csrf_required": true,
+      "rate_limit_required": true
+    },
+    "execution": {
+      "default_approval_policy": "gated",
+      "non_destructive_auto_approve": true,
+      "destructive_requires_owner": true,
+      "forbidden_without_explicit_approval": [
+        "DROP DATABASE",
+        "DROP SCHEMA",
+        "rm -rf",
+        "pg_dropcluster",
+        "initdb on existing data",
+        "pg_resetwal",
+        "force push",
+        "DNS deletion",
+        "firewall flush",
+        "secret rotation"
+      ]
+    },
+    "audit": {
+      "enabled": true,
+      "immutable_receipts": true,
+      "command_logging": true,
+      "actor_attribution": true
+    }
+  },
+  "directories": {
+    "ownership": {
+      "application_user": "portal-ai",
+      "application_group": "portal-ai",
+      "runtime_user": "portal-ai"
+    },
+    "modes": {
+      "config_dir": "0750",
+      "secret_file": "0640",
+      "runtime_dir": "0750",
+      "data_dir": "0750",
+      "log_dir": "0750",
+      "backup_dir": "0750",
+      "public_assets": "0755"
+    },
+    "create_on_both_nodes": [
+      "/etc/portal-ai/shared",
+      "/etc/portal-ai/shared/skills",
+      "/etc/portal-ai/shared/policies",
+      "/etc/portal-ai/shared/schemas",
+      "/etc/portal-ai/shared/templates",
+      "/var/log/portal-ai",
+      "/var/backups/portal-ai",
+      "/run/portal-ai",
+      "/var/lib/portal-ai",
+      "/var/cache/portal-ai"
+    ]
+  },
+  "agents": {
+    "manager": {
+      "id": "alazab-manager",
+      "role": "global-manager-orchestrator",
+      "authority": [
+        "Mission decomposition",
+        "Agent selection",
+        "Execution supervision",
+        "Independent review",
+        "Final synthesis"
+      ]
+    },
+    "azure": [
+      {
+        "id": "az-agent-auth",
+        "version": 2
+      },
+      {
+        "id": "az-agent-copilot",
+        "version": 3
+      },
+      {
+        "id": "az-agent-prod",
+        "version": 4
+      },
+      {
+        "id": "az-agent-finance",
+        "version": 4
+      },
+      {
+        "id": "az-agent-core",
+        "version": 3
+      },
+      {
+        "id": "az-agent-maint",
+        "version": 15
+      },
+      {
+        "id": "az-agent-project",
+        "version": 2
+      },
+      {
+        "id": "az-agent-vision",
+        "version": 3
+      }
+    ],
+    "executors": [
+      {
+        "id": "codex-executor",
+        "node": "cloud",
+        "runtime": "codex-cli",
+        "workspace_root": "/var/lib/portal-ai/cloud/workspaces/codex",
+        "sessions_root": "/var/lib/portal-ai/cloud/sessions/codex",
+        "logs_root": "/var/log/portal-ai/cloud/codex"
+      },
+      {
+        "id": "gemini-android-studio",
+        "node": "android-studio-node",
+        "runtime": "android-studio",
+        "workspace_root": "${ANDROID_STUDIO_WORKSPACE_ROOT}"
+      },
+      {
+        "id": "shell-executor",
+        "node": "cloud",
+        "runtime": "pty"
+      }
+    ],
+    "reviewers": [
+      "qa-agent",
+      "security-reviewer",
+      "database-reviewer",
+      "infrastructure-reviewer",
+      "code-reviewer"
+    ]
+  },
+  "models": {
+    "azure": [
+      {
+        "id": "az-model-core",
+        "version": "gpt-5.5",
+        "use": "manager reasoning and architecture"
+      },
+      {
+        "id": "az-model-maint",
+        "version": "gpt-5.1",
+        "use": "maintenance operations"
+      },
+      {
+        "id": "az-model-finance",
+        "version": "DeepSeek-V4-Pro",
+        "use": "financial analysis"
+      },
+      {
+        "id": "az-modelspeech",
+        "version": "Azure-Speech-Speech-to-text",
+        "use": "speech recognition"
+      },
+      {
+        "id": "az-model-voice",
+        "version": "Azure-Speech-Voice-Live",
+        "use": "voice interaction"
+      },
+      {
+        "id": "az-models-text",
+        "version": "text-embedding-3-small",
+        "use": "embeddings and semantic memory"
+      }
+    ],
+    "local": {
+      "endpoint": "https://ollama.alazab.cloud",
+      "models": [
+        "gemma4:e4b",
+        "gemini-3-flash-preview:cloud",
+        "llama3.1:8b-instruct-fp16",
+        "deepseek-coder-v2:16b",
+        "AgentBDW/gir4b:latest",
+        "deepseek-ocr:latest",
+        "gemma4:latest",
+        "llama3.2-vision:11b",
+        "llama3.2:1b",
+        "ministral-3:14b"
+      ]
+    }
+  },
+  "context_inheritance": {
+    "order": [
+      "global_context",
+      "organization_policy",
+      "project_context",
+      "agent_role",
+      "mission_context",
+      "task_context",
+      "current_user_instruction"
+    ],
+    "precedence": "later entries override earlier entries only within their permitted scope",
+    "required_fields": [
+      "project_id",
+      "mission_id",
+      "task_id",
+      "environment",
+      "target_node",
+      "allowed_paths",
+      "forbidden_operations",
+      "acceptance_tests",
+      "rollback_plan"
+    ]
+  },
+  "mission_lifecycle": {
+    "states": [
+      "draft",
+      "discovery",
+      "planned",
+      "approved",
+      "queued",
+      "running",
+      "waiting_for_approval",
+      "review",
+      "completed",
+      "failed",
+      "cancelled"
+    ],
+    "mandatory_flow": [
+      "request",
+      "discovery",
+      "plan",
+      "backup_or_snapshot",
+      "execution",
+      "tests",
+      "independent_review",
+      "final_report",
+      "context_update"
+    ]
+  },
+  "project_layout": {
+    "root_template": "/var/lib/portal-ai/{node}/workspaces/{project_slug}",
+    "required": [
+      "PROJECT.md",
+      "ARCHITECTURE.md",
+      "DECISIONS.md",
+      "CURRENT_STATE.md",
+      "KNOWN_ISSUES.md",
+      "SERVICE_MAP.md",
+      "EXECUTION_PLAN.md",
+      "TASKS",
+      "REPORTS",
+      "RUNS",
+      "ARTIFACTS",
+      "BACKUPS"
+    ]
+  },
+  "logging": {
+    "format": "jsonl",
+    "required_fields": [
+      "timestamp",
+      "node_id",
+      "project_id",
+      "mission_id",
+      "task_id",
+      "agent_id",
+      "session_id",
+      "event_type",
+      "status",
+      "message"
+    ],
+    "retention": {
+      "execution_days": 30,
+      "audit_days": 365,
+      "artifacts_days": 90
+    }
+  },
+  "deployment": {
+    "strategy": "release directories with atomic current symlink",
+    "release_path_template": {
+      "core": "/var/www/core/portal-ai/releases/{release_id}",
+      "cloud": "/var/www/apps/portal-ai/releases/{release_id}"
+    },
+    "current_symlink": {
+      "core": "/var/www/core/portal-ai/current",
+      "cloud": "/var/www/apps/portal-ai/current"
+    },
+    "pre_deploy": [
+      "configuration validation",
+      "database backup",
+      "dependency lock verification",
+      "test suite",
+      "security audit"
+    ],
+    "post_deploy": [
+      "health check",
+      "API contract check",
+      "worker heartbeat",
+      "gateway connectivity",
+      "smoke test"
+    ],
+    "rollback": {
+      "method": "switch current symlink to previous release and restart services",
+      "database": "restore only with explicit approved recovery plan"
+    }
+  },
+  "monitoring": {
+    "health_checks": {
+      "core": "https://portal-ai.alazab.com/health",
+      "cloud": "https://portal-ai.alazab.cloud/health",
+      "private_core_api": "http://10.77.0.1:8200/api/health",
+      "private_cloud_api": "http://10.77.0.2:8100/api/health"
+    },
+    "heartbeat_seconds": 30,
+    "node_unavailable_after_seconds": 120,
+    "alerts": [
+      "node_unavailable",
+      "worker_stalled",
+      "approval_waiting",
+      "task_failed",
+      "database_unavailable",
+      "disk_threshold",
+      "backup_failed",
+      "security_event"
+    ]
+  },
+  "production_rules": [
+    "Core is the authoritative control plane.",
+    "Cloud is the authoritative execution plane.",
+    "Execution nodes never write directly to the Core database.",
+    "All inter-node commands pass through authenticated internal APIs.",
+    "All production changes require evidence, tests and rollback.",
+    "No agent may expand task scope without manager approval.",
+    "No task is considered complete without independent validation.",
+    "The global context file is read-only during runtime.",
+    "Changes to this file require version increment, review and deployment to both nodes."
+  ]
+}

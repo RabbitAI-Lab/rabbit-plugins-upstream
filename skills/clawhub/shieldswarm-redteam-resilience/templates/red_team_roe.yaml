@@ -1,0 +1,43 @@
+# ShieldSwarm Red-Team Rules of Engagement
+exercise_name: ""
+authorized_by: ""
+signed_approval_location: ""
+scope:
+  domains: []
+  environments: ["staging"]
+  excluded_assets: []
+allowed_test_types:
+  - threat_modeling
+  - configuration_review
+  - tabletop
+  - sanitized_log_replay
+  - staging_only_control_validation
+  - model_safety_prompt_tests
+explicitly_forbidden:
+  - production_ddos_or_stress_traffic
+  - credential_stuffing
+  - waf_or_captcha_bypass
+  - exploit_execution
+  - secret_exfiltration
+  - persistence_or_stealth
+traffic_limits:
+  production: "no generated load beyond approved low-rate health checks"
+  staging: "operator-defined cap only"
+test_window:
+  start: ""
+  end: ""
+  timezone: ""
+monitoring_owner_present: ""
+communication_channel: ""
+emergency_stop_phrase: "STOP SHIELDSWARM EXERCISE NOW"
+abort_conditions:
+  - unexpected_production_impact
+  - 5xx_above_threshold
+  - latency_above_threshold
+  - operator_calls_stop
+rollback_owner: ""
+evidence_handling:
+  redact_pii: true
+  redact_secrets: true
+  use_synthetic_data: true
+  storage_location: ""

@@ -1,0 +1,15 @@
+- Work linearly and deterministically.
+- Run `marktplaats-copy-qa` before touching Marktplaats; stop if it fails.
+- Keep descriptions around 3200-3500 characters, with a hard stop below 2800.
+- Use natural SEO in prose; never publish `Zoektermen:` or keyword-dump footers.
+- Include one subtle product-relevant typo/search variant in context.
+- Prefer one dedicated browser window/tab for a single ad flow.
+- Avoid extra screens, helper windows, and parallel UI actions.
+- Rotate photos only when preview/orientation shows it is needed.
+- Use ASCII-safe text if live rendering shows mojibake.
+- Verify live seller-view as source of truth.
+- Keep the flow understandable for light/mini models such as GPT-4.5 mini or the local mini route: one command, one proof, one next step.
+- Prefer background-safe probes before visible UI: `--browser-fetch --url ...` or `--browser --open-background ...`.
+- Do not activate Safari, move windows, or use coordinate clicks unless a foreground UI check is truly required.
+- Select Safari tabs/documents by Marktplaats URL or ad id, never by screen position.
+- Register update only after successful live verification, unless explicitly tracking a draft with `--allow-unverified`.

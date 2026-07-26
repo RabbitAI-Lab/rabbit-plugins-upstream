@@ -1,0 +1,15 @@
+{
+  "name": "dawn-memory-system",
+  "version": "2.0.0",
+  "description": "三层存储+四大机制的 Agent 长期记忆系统。长短期记忆管理、主动代理、会话收尾、向量检索、对话压缩、自我进化。",
+  "license": "MIT",
+  "tags": [
+    "memory",
+    "agent",
+    "AI",
+    "vecdb",
+    "learning",
+    "记忆",
+    "向量"
+  ]
+}

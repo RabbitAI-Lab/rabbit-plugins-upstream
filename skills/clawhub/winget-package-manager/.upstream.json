@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/winget-package-manager",
+  "slug": "winget-package-manager",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1778492279313,
+  "contentHash": "190f1377c3559e2c4537b6c990905d1064b62d313f154f9677c69fdd7566006d",
+  "fetchedAt": "2026-07-26T19:43:33.560Z"
+}

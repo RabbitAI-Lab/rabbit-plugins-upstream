@@ -1,0 +1,48 @@
+#!/usr/bin/env bash
+# Agent Relay — single-turn prompt builder
+# Outputs the next unprocessed message as a clean agent prompt.
+# Used by isolated cron sessions: one poll, one question, one answer, done.
+set -euo pipefail
+
+RELAY="/home/ally/openclaw/skills/agent-relay/relay"
+STATE_FILE="/home/ally/openclaw/skills/agent-relay/.last_seen"
+
+INBOX=$("$RELAY" inbox 2>/dev/null) || exit 0
+
+IDS=$(echo "$INBOX" | jq -r '.messages[]?.id // empty' 2>/dev/null)
+[ -z "$IDS" ] || [ "$IDS" = "null" ] && exit 0
+
+LAST_SEEN=""
+[ -f "$STATE_FILE" ] && LAST_SEEN=$(cat "$STATE_FILE")
+
+MESSAGES_JSON=$(echo "$INBOX" | jq -c '.messages')
+PROMPT=""
+MSG_COUNT=0
+
+while IFS= read -r msg_id; do
+  [ "$msg_id" = "$LAST_SEEN" ] && break
+  MSG_COUNT=$((MSG_COUNT + 1))
+  
+  TEXT=$(echo "$MESSAGES_JSON" | jq -r --arg id "$msg_id" '.[] | select(.id==$id) | .text')
+  ATT_URL=$(echo "$MESSAGES_JSON" | jq -r --arg id "$msg_id" '.[] | select(.id==$id) | .attachment.url // empty')
+  ATT_TYPE=$(echo "$MESSAGES_JSON" | jq -r --arg id "$msg_id" '.[] | select(.id==$id) | .attachment.type // empty')
+  ATT_NAME=$(echo "$MESSAGES_JSON" | jq -r --arg id "$msg_id" '.[] | select(.id==$id) | .attachment.name // empty')
+  
+  PART="  Message ($msg_id): $TEXT"
+  [ -n "$ATT_URL" ] && PART="$PART [Attachment: $ATT_NAME ($ATT_TYPE)]"
+  PROMPT="$PART"$'\n'"$PROMPT"
+done <<< "$IDS"
+
+echo "$IDS" | head -1 > "$STATE_FILE"
+
+[ -z "$PROMPT" ] && exit 0
+
+echo "Allison sent $MSG_COUNT message(s) via Agent Relay on her phone:"
+echo "$PROMPT"
+echo ""
+echo "Process these as a FULL agent turn. Reply directly to Allison using:"
+echo "  /home/ally/openclaw/skills/agent-relay/relay send \"<reply>\""
+echo "  /home/ally/openclaw/skills/agent-relay/relay attach \"<text>\" <url> <mime> <name>"
+echo ""
+echo "RELAY ETIQUETTE: Short (1-3 lines). No greetings/sign-offs/fluff. Direct answers."
+echo "Match Allison's efficiency. Actions over words."

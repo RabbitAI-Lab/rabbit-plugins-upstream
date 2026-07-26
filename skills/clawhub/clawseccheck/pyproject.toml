@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "clawseccheck"
+dynamic = ["version"]
+description = "Local, read-only OpenClaw security self-audit (zero dependencies)."
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.9"
+authors = [{ name = "gl0di" }]
+keywords = ["openclaw", "security", "audit", "ai-agent", "prompt-injection", "clawhub"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: System Administrators",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Security",
+]
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/gl0di/clawseccheck"
+Documentation = "https://github.com/gl0di/clawseccheck/blob/main/docs/README.md"
+Changelog = "https://github.com/gl0di/clawseccheck/blob/main/CHANGELOG.md"
+Security = "https://github.com/gl0di/clawseccheck/blob/main/SECURITY.md"
+Releases = "https://github.com/gl0di/clawseccheck/releases"
+ClawHub = "https://clawhub.ai/gl0di/skills/clawseccheck"
+Issues = "https://github.com/gl0di/clawseccheck/issues"
+
+[project.scripts]
+clawseccheck = "clawseccheck.cli:main"
+
+[tool.setuptools]
+packages = ["clawseccheck", "clawseccheck.checks"]
+
+[tool.setuptools.dynamic]
+version = { attr = "clawseccheck.__version__" }
+
+[tool.ruff.lint.per-file-ignores]
+# The checks/ aggregator re-exports every topic module's symbols (incl. privates) so
+# they stay importable as `from clawseccheck.checks import X`. It deliberately has no
+# __all__ (see clawseccheck/checks/__init__.py), so those re-export imports read as
+# "unused" to pyflakes.
+# F811: the aggregator also keeps in-function lazy re-imports (to avoid load cycles)
+# that shadow a top-level import once the top-level user moves to a topic module.
+"clawseccheck/checks/__init__.py" = ["F401", "F811"]

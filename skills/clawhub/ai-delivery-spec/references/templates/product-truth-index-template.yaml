@@ -1,0 +1,18 @@
+schema_version: 5.1.0
+target_schema_version: 5.1.0
+truth_id: TRUTH-PRODUCT-001
+layout: progressive_shards
+compiled_output: compiled/product-truth.yaml
+fragments:
+  - id: FRAG-CORE
+    path: fragments/00-core.yaml
+    owner: product owner
+    status: draft
+    scope_ids: [TRUTH-PRODUCT-001]
+    checkpoint: null
+  - id: FRAG-MODULE-EXAMPLE
+    path: fragments/MOD-EXAMPLE.yaml
+    owner: module owner
+    status: draft
+    scope_ids: [MOD-EXAMPLE]
+    checkpoint: null

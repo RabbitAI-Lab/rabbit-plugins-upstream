@@ -1,0 +1,26 @@
+Use case: stylized-concept.
+Asset type: WeChat public account cover image.
+
+Primary request:
+公众号文章封面，主题是一次发布工作流复盘，一张编辑部桌面上的稿纸、检查清单、草稿箱隐喻和温暖台灯，从混乱到秩序，克制高级，不要文字，不要 logo
+
+Scene/backdrop:
+Create a visually clear, high-impact scene that directly expresses the user's request. Use a polished editorial cover composition suitable for a WeChat public account article.
+
+Subject:
+Make the main subject immediately recognizable, centered or strongly framed, with rich detail and a strong focal point.
+
+Style/medium:
+Ultra-detailed cinematic visual, high-quality image2 rendering, realistic lighting and refined art direction. Avoid a cheap stock-photo look.
+
+Composition/framing:
+Vertical poster composition. Keep the image clean and readable at mobile size. Leave some usable negative space near the top or side for a possible article title overlay, but do not render any text.
+
+Lighting/mood:
+Dramatic but tasteful lighting, strong depth, atmospheric contrast, and a clear emotional tone matching the request.
+
+Color palette:
+Use a coherent cinematic palette with strong contrast and enough separation between subject and background.
+
+Constraints:
+No text, no watermark, no logos, no random UI, no malformed characters, no extra unrelated subjects, no political symbols unless explicitly requested.

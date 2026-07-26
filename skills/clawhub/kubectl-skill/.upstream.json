@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/kubectl-skill",
+  "slug": "kubectl-skill",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1778492776923,
+  "contentHash": "9316e71026dfafeb8a5033185ce2f73372b0f0e3f8c231a403224912cdd3afb3",
+  "fetchedAt": "2026-07-26T19:19:38.649Z"
+}

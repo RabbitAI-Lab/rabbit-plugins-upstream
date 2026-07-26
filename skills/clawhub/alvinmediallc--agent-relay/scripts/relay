@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+# Agent Relay CLI — bridge between an AI agent and its human's phone
+#
+# Setup:
+#   1. Deploy Agent Relay server on Replit (or any Node.js host)
+#   2. Create an agent in the Relay UI → get your API key
+#   3. Store credentials in pass:
+#      pass insert alvinmedia/agent-relay/api_key
+#      pass insert alvinmedia/agent-relay/base_url
+#   4. Override prefix: export RELAY_PASS_PREFIX=your/prefix
+#   5. Place this script in your agent's skills directory
+#
+# Usage: ./relay <action> [args...]
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PASS_PREFIX="${RELAY_PASS_PREFIX:-alvinmedia/agent-relay}"
+
+API_KEY="$(pass show "$PASS_PREFIX/api_key" 2>/dev/null | head -1 || true)"
+BASE_URL="$(pass show "$PASS_PREFIX/base_url" 2>/dev/null | head -1 || true)"
+
+if [ -z "$API_KEY" ] || [ -z "$BASE_URL" ]; then
+  echo "ERROR: Credentials not found in pass at: $PASS_PREFIX"
+  echo "  pass show $PASS_PREFIX/api_key"
+  echo "  pass show $PASS_PREFIX/base_url"
+  exit 1
+fi
+
+do_whoami() {
+  curl -sf "$BASE_URL/relay/whoami" \
+    -H "Authorization: Bearer $API_KEY"
+}
+
+do_inbox() {
+  curl -sf "$BASE_URL/relay/inbox" \
+    -H "Authorization: Bearer $API_KEY"
+}
+
+do_send() {
+  local text="$1"
+  curl -sf -X POST "$BASE_URL/relay/messages" \
+    -H "Authorization: Bearer $API_KEY" \
+    -H "Content-Type: application/json" \
+    -d "$(jq -n --arg t "$text" '{text: $t}')"
+}
+
+do_send_attachment() {
+  local text="$1"
+  local url="$2"
+  local type="$3"
+  local name="$4"
+  curl -sf -X POST "$BASE_URL/relay/messages" \
+    -H "Authorization: Bearer $API_KEY" \
+    -H "Content-Type: application/json" \
+    -d "$(jq -n --arg t "$text" --arg u "$url" --arg tp "$type" --arg n "$name" \
+      '{text: $t, attachment: {url: $u, type: $tp, name: $n}}')"
+}
+
+do_notify() {
+  local title="$1"
+  local body="$2"
+  curl -sf -X POST "$BASE_URL/relay/notify" \
+    -H "Authorization: Bearer $API_KEY" \
+    -H "Content-Type: application/json" \
+    -d "$(jq -n --arg t "$title" --arg b "$body" '{title: $t, body: $b}')"
+}
+
+usage() {
+  cat <<'EOF'
+Agent Relay CLI
+  relay whoami                             — check connection
+  relay inbox                              — read pending messages (JSON)
+  relay send <text>                        — send text message
+  relay attach <text> <url> <type> <name>  — send with attachment
+  relay notify <title> <body>              — push notification (no chat)
+EOF
+}
+
+case "${1:-}" in
+  whoami) do_whoami ;;
+  inbox)  do_inbox ;;
+  send)   do_send "${2:-}" ;;
+  attach) do_send_attachment "${2:-}" "${3:-}" "${4:-}" "${5:-}" ;;
+  notify) do_notify "${2:-}" "${3:-}" ;;
+  *)      usage ;;
+esac

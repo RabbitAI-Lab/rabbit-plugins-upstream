@@ -1,0 +1,5 @@
+interface:
+  display_name: "Wechat Content Studio"
+  short_description: "公众号文章全流程写作排版发布"
+  default_prompt: "Use $wechat-content-studio to write, typeset, generate a cover for, publish, and verify a WeChat article draft."
+  brand_color: "#059669"

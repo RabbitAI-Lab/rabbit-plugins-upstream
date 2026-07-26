@@ -1,0 +1,131 @@
+{
+  "skill_name": "x-design",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我下周要给一家上海的精品咖啡店做品牌提案,他们刚发了小红书账号,@叫 '山茶花咖啡 SHANCHA',风格是那种很温柔的、偏日式侘寂的感觉,主色好像是米白和深绿。我想要一份 12 页的 pitch deck,周一上午要拿去给老板看,你能帮我做吗?",
+      "expected_output": "XDesign 路由到 Mode 1 (Presentation),先问 3-5 个澄清问题(目标受众 / 演示场景 / 是否带演讲稿 / 输出格式),然后基于侘寂风品牌色派生 aurora 或 japanese-minimal 主题,产出 12 页 pitch-deck 模板填充,关键页含:cover / brand story / menu highlight / space moodboard / pricing / team / contact。",
+      "files": [],
+      "expectations": [
+        "Skill 在产出前先问澄清问题(目标受众、演示场景、是否要演讲者模式),而不是直接生成",
+        "最终路由到 Mode 1(Presentation),走 deck-studio/ 路径",
+        "主题选择与侘寂风匹配(japanese-minimal 或 aurora 派生米白+深绿)",
+        "使用 deck-studio/templates/full-decks/pitch-deck/ 或 templates/single-page/ 的既有布局,不重新发明轮子",
+        "输出 12 页结构,含 cover / brand story / pricing / contact 等 pitch deck 必备页",
+        "HTML 单文件可直接在浏览器打开,无构建步骤"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "我现在在做一个 AI 客服的 SaaS 产品,需要给客户演示一个 admin dashboard。要求:左侧固定导航栏(消息、客户、数据、设置),顶部 4 个 KPI 卡片(今日会话量、解决率、平均时长、CSAT),中间主区域是一个折线图(过去 7 天会话量趋势),底部是一个表格(最近 10 条会话记录,含客户名、状态、最后回复时间)。视觉要现代专业,接近 Linear 或 Vercel 那种感觉。",
+      "expected_output": "XDesign 路由到 Mode 2 (Visual Design),先读取 linear.app 和 vercel 的 DESIGN.md 提取设计令牌(色彩 / 字号 / 圆角 / 阴影),然后用 React + Tailwind 思路但走原生 CSS 变量输出单文件 HTML,含完整 dashboard 交互态(hover、active、loading)。",
+      "files": [],
+      "expectations": [
+        "Skill 路由到 Mode 2(Visual Design / Prototype),不走到 deck-studio",
+        "读取 references/design-system-catalog.md 找到 linear.app 和 vercel 的 DESIGN.md,提取设计令牌",
+        "输出单文件 HTML(含 React + Babel 或纯原生实现),不需要构建",
+        "实现 4 个 KPI 卡片,使用渐变数字 / micro-animation / hover 态",
+        "折线图使用 SVG 手绘(不依赖 chart.js 等构建库),数据可视化规范",
+        "表格含分页 / 排序 / 状态 badge 等微交互",
+        "色彩 / 字号 / 圆角严格遵循 linear 或 vercel 的设计令牌,不是凭空捏造"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "上一版 dashboard 整体偏冷色,客户反馈太严肃了,能不能把主色从蓝色换成暖橙红色(类似 Stripe 或 Notion 那种温度感)?另外中间那个折线图我想加一个 loading 时的骨架屏动效,数字从 0 滚动到目标值的动效也想要。预算 30 分钟迭代,不要再做大改动了。",
+      "expected_output": "XDesign 识别为迭代修改场景,增量编辑上一版 HTML(不重写),用 Edit 工具精准替换 CSS 变量和组件,加入骨架屏 CSS 动画和数字滚动 JS,保持其他部分不变。",
+      "files": [],
+      "expectations": [
+        "Skill 识别为迭代场景,先定位上一版输出文件(在 conversation 历史中)",
+        "不重新生成整个 dashboard,只做精准修改(Eval plan 强调 increment)",
+        "主色从蓝色替换为暖橙红,使用 CSS 变量批量替换(而非逐个元素)",
+        "骨架屏动效用纯 CSS keyframes 实现(无 JS),不依赖外部动画库",
+        "数字滚动动效用 requestAnimationFrame + easing 实现,2 秒内完成",
+        "30 分钟内完成,产出 diff 摘要告诉用户改了什么"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "can you extract the brand colors and font from https://linear.app and save it as a DESIGN.md so I can build a matching landing page? Then use that DESIGN.md to create a landing page with hero section + 3 feature blocks + CTA.",
+      "expected_output": "XDesign 路由到 URL-to-brand 模式,先提取 linear.app 的 DESIGN.md(品牌色/字体/圆角/间距),保存至 deck-studio/design-systems/linear.md,然后基于提取的令牌产出单文件 landing page HTML。",
+      "files": [
+        "deck-studio/design-systems/linear.md"
+      ],
+      "expectations": [
+        "Skill 先提取 URL 品牌 tokens 生成 DESIGN.md,不直接猜测品牌色",
+        "如果 WebFetch linear.app 失败,应走 fallback 策略(读 references/design-system-catalog.md)",
+        "DESIGN.md 格式符合 references/schemas.md 的 CSS Design Token 合同",
+        "落地页使用提取的 tokens 作为 CSS 变量,不是分开的样式",
+        "响应式:桌面 3 列 grid → 平板 2 列 → 移动 1 列"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "帮我做一个产品发布会的 key visual 动效视频,大概 15 秒,要那种 logo morphing + particle burst + 文字 reveal 的感觉,我们的品牌名是 'Nova',主色是电光蓝 #4F46E5,要能直接播放在浏览器里。",
+      "expected_output": "XDesign 路由到 Mode 3 (Animation/Video),先问 2-3 个澄清问题(logo 形状/动画风格/帧率),然后用 Canvas CSS + requestAnimationFrame 实现 logo morphing + particle burst + text reveal,不含外部库。",
+      "files": [],
+      "expectations": [
+        "Skill 先问澄清问题(logo 形状/是否要音频/交付格式),不直接生成",
+        "路由到 Mode 3(Animation),不使用 deck-studio 路径",
+        "使用原生 Canvas + CSS animation + requestAnimationFrame,无外部依赖",
+        "实现 3 阶段动画:logo morphing → particle burst → text reveal,顺序执行",
+        "提供交互控制(重播/暂停),方便用户预览不同阶段",
+        "16:9 宽屏,自动全屏或居中对齐",
+        "品牌色使用 #4F46E5 作为主色,派生渐变/发光效果"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "做一个 landing page 给我看看,卖高端护肤品的,主打'科学配方+天然成分',目标用户是 25-40 岁女性。",
+      "expected_output": "Vibe test — 检查输出是否避开 AI slop 套路(紫色渐变/Inter 默认/三张等高 feature 卡)。应该有明确的视觉方向选择,暖色调或干净白色优先,衬线仅在品牌明确需要时使用。",
+      "files": [],
+      "expectations": [
+        "Output does NOT use aggressive purple-to-blue gradient as default",
+        "Output does NOT default to Inter as display font without brand justification",
+        "Output avoids 3 equal-height feature cards with identical structure",
+        "Output presents clear visual direction before full build (Design Direction Advisor or intake)",
+        "If premium-consumer: questions warm-beige default, picks palette based on brand emotion",
+        "Images: either real photos (Wikimedia/Unsplash) or honest placeholders, never CSS silhouettes"
+      ],
+      "eval_type": "vibe-test",
+      "vibe_dimensions": [
+        "anti-slop:gradient",
+        "anti-slop:typography",
+        "anti-slop:layout",
+        "process:design-direction-first",
+        "content:real-images-not-css-silhouettes"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "帮我做一个 10 页的技术分享 PPT,主题是'我们如何用 Rust 重写数据库引擎',听众是内部工程师。",
+      "expected_output": "Vibe test — 检查叙事节奏(Pattern P4 或自定义结构清晰),层级分明,代码页有真实感,数字页有冲击。",
+      "files": [],
+      "expectations": "Output has a clear narrative arc (not just 10 random slides). Code slides use real code examples (not lorem ipsum). At least one 'impact moment' with a big number or result. Consistent spacing scale across all slides. Theme appropriate for engineering audience.",
+      "eval_type": "vibe-test",
+      "vibe_dimensions": [
+        "pattern:narrative-arc",
+        "hierarchy:clear-primary-secondary",
+        "content:real-code-not-placeholder",
+        "rhythm:consistent-spacing-scale",
+        "theme:audience-appropriate"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "做一个 8 秒的 logo 揭示动画,logo 是一个简单的圆形变成星形,品牌是儿童教育产品 'Sparkle'。",
+      "expected_output": "Vibe test — 检查动效是否有合理理由,时长边界, reduced-motion 降级,且不会在高频操作上添加冗余动效。",
+      "files": [],
+      "expectations": "Logo morph has a valid animation reason (entrance/reveal, not just 'looks cool'). Duration is within bounds (≤800ms for entrance). Motion is GPU-layer only (transform/opacity). Reduced-motion alternative exists. No ambient particles without narrative purpose. Touch device safe (hover wrapped in @media hover).",
+      "eval_type": "vibe-test",
+      "vibe_dimensions": [
+        "animation:valid-reason",
+        "animation:duration-bounds",
+        "animation:gpu-layer-only",
+        "animation:reduced-motion-granularity",
+        "animation:no-ambient-particles",
+        "input:touch-safe"
+      ]
+    }
+  ]
+}

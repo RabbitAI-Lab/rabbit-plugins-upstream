@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/weather-open-meteo",
+  "slug": "weather-open-meteo",
+  "ownerHandle": null,
+  "version": "0.1.5",
+  "updatedAt": 1778491578254,
+  "contentHash": "1bfde09d7d24981db048727ae17d8d51831c6c631ea6bd554b855b6b7181f13b",
+  "fetchedAt": "2026-07-26T20:22:22.595Z"
+}

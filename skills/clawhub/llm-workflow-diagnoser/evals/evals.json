@@ -1,0 +1,105 @@
+{
+  "skill_name": "llm-workflow-diagnoser",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我想把我每周跑一次的「跨平台营销文案生成」流程交给大模型做：运营根据本周产品更新要点 + 受众标签，手动写 20 条推文 / 朋友圈 / 小红书，单次耗时 4 小时；错误成本低，文案可人工润色；希望把耗时砍到 30 分钟。",
+      "expected_output": "skill 走 4 步主路径。追问阶段一次性问 3-4 题一批，至少 6 个有效回答。最终报告按六个固定章节（诊断说明 / LLM介入边界 / 改造难度评级 / 落地MVP路线图 / 风险清单）原文贴在 Chat 里，不输出 .md；ROI 分数填 xx/10；改造难度评级用 Markdown 表格，五维度均给 xx/10。",
+      "files": [],
+      "assertions": [
+        {
+          "name": "ask multiple questions per round",
+          "text": "追问阶段一次问 3-4 题，不是一题一题地问"
+        },
+        {
+          "name": "collect enough answers before diagnosing",
+          "text": "在给出最终建议前，skill 至少收集到 6 个有效回答"
+        },
+        {
+          "name": "recommend full replacement",
+          "text": "最终建议是「全量改造」"
+        },
+        {
+          "name": "report inline not md file",
+          "text": "报告原文贴在 Chat 回复里，不输出 .md 文件"
+        },
+        {
+          "name": "exact section headings",
+          "text": "报告使用六个固定章节标题：诊断说明 / LLM介入边界 / 改造难度评级 / 落地MVP路线图 / 风险清单，标题必须完全一致"
+        },
+        {
+          "name": "ROI score uses xx/10 format",
+          "text": "诊断说明章节包含「ROI分数：xx/10（10为满分）」"
+        },
+        {
+          "name": "5-dimension difficulty table",
+          "text": "改造难度评级章节使用 Markdown 表格，列固定为「维度 ｜ 难度值（xx/10，10为满分） ｜ 解释」"
+        },
+        {
+          "name": "LLM boundary map exists",
+          "text": "LLM 介入边界章节按四分类组织：硬护栏护住 / 仅部分场景适用 / 全量适用 / AI 可护住"
+        },
+        {
+          "name": "MVP roadmap concrete steps",
+          "text": "落地 MVP 路线图列 3-5 个具体动作，每条独立一行"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "我想把我这套离线流程升级成 LLM 工作流。",
+      "expected_output": "skill 必须先做入口澄清，问用户流程名 / 触发频率 / 输出形式，再进入追问；如果用户继续含糊，则继续追问直到每个维度都有具体答案。不准直接给结论。",
+      "files": [],
+      "assertions": [
+        {
+          "name": "must do entry clarification first",
+          "text": "skill 第一步先问「流程名 / 触发频率 / 输出形式」，不准默认脑补"
+        },
+        {
+          "name": "max 6 rounds of questioning",
+          "text": "追问最多 6 轮；进入诊断前检查退出准则"
+        },
+        {
+          "name": "no premature verdict",
+          "text": "在信息不足时，skill 不直接给出「全量 / 部分 / 不适合」结论"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "我有一套高频交易信号生成的脚本：每秒数百次行情输入，输出买入 / 卖出 / 持仓信号，要求毫秒级响应，错信号直接进生产路径。我想用 LLM 改造。",
+      "expected_output": "skill 必须识别出 3 个硬护栏（实时 / 高精度 / 高合规），最终建议是「不适合」。报告必须显式列出硬护栏、ROI 分数 ≤ 3，并给出「仅在盘后复盘场景可让 LLM 介入」的边界建议。",
+      "files": [],
+      "assertions": [
+        {
+          "name": "must identify hard guardrails",
+          "text": "报告显式列出命中硬护栏：实时 / 高精度 / 高合规"
+        },
+        {
+          "name": "final recommendation is not_suitable",
+          "text": "最终建议是「不适合」"
+        },
+        {
+          "name": "ROI score <= 3",
+          "text": "ROI 分数 ≤ 3/10"
+        },
+        {
+          "name": "explicit LLM capability boundary map",
+          "text": "LLM 介入边界章节按四分类组织"
+        },
+        {
+          "name": "no false promise of LLM upgrade",
+          "text": "报告不准暗示「加 LLM 就能提速」「未来需要时再加 LLM」"
+        },
+        {
+          "name": "report inline not md file",
+          "text": "报告原文贴在 Chat 回复里，不输出 .md 文件"
+        },
+        {
+          "name": "exact section headings",
+          "text": "报告使用六个固定章节标题，标题完全一致"
+        }
+      ]
+    }
+  ]
+}

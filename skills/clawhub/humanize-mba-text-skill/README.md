@@ -1,0 +1,730 @@
+# Humanize MBA Text - 去除 AI 写作痕迹
+
+<p align="center">
+  <img src="https://img.shields.io/badge/Python-3.7+-blue.svg" alt="Python 3.7+">
+  <img src="https://img.shields.io/badge/License-MIT-green.svg" alt="License: MIT">
+  <img src="https://img.shields.io/badge/Claude-Skill-orange.svg" alt="Claude Skill">
+  <img src="https://img.shields.io/badge/Version-1.5-brightgreen.svg" alt="Version: 1.5">
+  <img src="https://img.shields.io/badge/Kimi-CLI-blue.svg" alt="Kimi CLI">
+  <img src="https://img.shields.io/badge/中文-🇨🇳-red.svg" alt="中文">
+  <a href="README_EN.md"><img src="https://img.shields.io/badge/English-🇺🇸-inactive.svg" alt="English"></a>
+  <a href="README_KR.md"><img src="https://img.shields.io/badge/한국어-🇰🇷-inactive.svg" alt="한국어"></a>
+  <a href="README_JP.md"><img src="https://img.shields.io/badge/日本語-🇯🇵-inactive.svg" alt="日本語"></a>
+</p>
+
+<p align="center">
+  <b>专门针对中国 MBA 毕业论文的 AI 写作痕迹检测与去除工具</b>
+</p>
+
+<p align="center">
+  <code>#AI-Detection</code> <code>#Academic-Writing</code> <code>#MBA-Thesis</code> <code>#Claude-Skill</code> <code>#Text-Humanization</code> <code>#ChatGPT-Alternative</code> <code>#LLM-Writing</code> <code>#Research-Tools</code> <code>#Academic-Integrity</code> <code>#Chinese-NLP</code>
+</p>
+
+---
+
+## 🎯 项目简介
+
+这是一个专门为**中国 MBA 毕业论文**设计的 AI 写作痕迹检测与去除工具。基于 MBA 论文的学术规范和实践要求，通过多维度检测方法识别文本中的 AI 生成特征，并提供具体的修改建议，帮助你将 AI 生成的文本改写为自然、人类化的学术写作风格。
+
+### ✨ 版本 1.5 新特性（段落级句长 CV + 报告可读性升级）
+
+- 📐 **段落级句长 CV 分析**：参考 `AI_artifact_detection` 方法，以段落内句子长度的变异系数（CV）作为核心 AI 信号，中文按 CJK 字符、英文按单词计数
+- 📊 **中文 CV 报告**：检测 Markdown 报告末尾自动附加五段式 CV 报告——整体统计 / CV 分布 / Uniform 段落详情 / 章节汇总 / 句长分布
+- 🔁 **改写前后对比**：新增 `scripts/detect_compare.py`，输入改写前、改写后两个文本，输出中文 Before/After 对比 Markdown
+- 🌐 **可选英文检测模式**：`sentence_length.analyze(text, language="en")` 支持英文散文的句长 CV 检测
+- 🎯 **内容片段带上下文**：详细问题列表中的内容片段现在显示匹配处前后约 20 字，便于快速定位
+- 📝 **修改建议完整显示**：不再截断修改建议，完整输出所有提示
+- 📋 **Uniform 段落完整表格**：CV < 0.30 的段落全部以表格列出，不再限制 20 条
+- ⏰ **真实生成时间**：报告末尾显示实际生成时间（YYYY-MM-DD HH:MM:SS）
+
+> 历史版本（1.4 / 1.3 / 1.2）特性已归档至 [`FEATURE.md`](FEATURE.md)。
+
+### 核心功能
+
+- ✅ **多层级 AI 检测**：从规则匹配（regex）→ 散文统计（5 维 CV/指纹）→ 语义链（10 维跨段/跨章）三层叠加
+- ✅ **段落级句长 CV 报告**：基于 `AI_artifact_detection` 方法，输出 Uniform 段落、CV 分布、章节汇总、句长分布
+- ✅ **改写前后对比**：`scripts/detect_compare.py` 一键生成 Before/After 中文对比报告
+- ✅ **章节特定规则**：针对绪论、理论、分析、建议、结论 5 个章节的优化策略
+- ✅ **MBA 论文规范**：符合中国高校 MBA 论文字数、结构、格式要求
+- ✅ **结构化改写计划**：每个 issue 都附 location + skeleton + recommended replacements + 目标字数
+- ✅ **自动修复**：自动处理中英文混排空格等简单问题
+- ✅ **智能反馈**：生成详细的修改建议和前后对比示例
+- ✅ **Claude Skill 集成**：可作为 Claude Code 的 Skill 直接使用
+
+### 技术参考
+
+本项目在优化策略设计上参考了 [thesis-optimizer](https://github.com/Haimbeau1o/thesis-optimizer) 项目的三维协同优化理念：
+- 🔍 **降AI检测率**：句式多样化、语气自然化、逻辑人性化
+- 📉 **降查重率**：深度语义改写、引用规范化、专业术语处理  
+- ✨ **学术润色**：表达精准化、学术规范性、可读性优化
+
+---
+
+## 🎓 MBA 论文核心原则
+
+本工具基于中国 MBA 论文的学术规范设计，遵循以下核心原则：
+
+### 1. 实践导向
+- 必须来源于企业管理实际，解决具体管理问题
+- 避免纯理论空谈
+
+### 2. 小题大做
+- 选题聚焦明确，"小题深做"
+- 核心概念不超过 2-3 个
+- 避免选题过大、过于宽泛
+
+### 3. 数据溯源
+- 所有数据必须注明来源
+- 确保准确性和可信度
+- 删除"相关数据显示"等模糊表述
+
+### 4. 理论支撑
+- 运用 1-2 个相关理论作为分析框架
+- 避免就事论事
+
+### 5. 结构规范
+- 正文字数 ≥ 3 万字
+- 每章至少 4 节（含本章小结）
+- 每节内容充实，避免一节不足一页
+
+### 6. 学术诚信
+- 复制率 < 15%
+- 不编造数据，所有引用可核实
+
+---
+
+## 🚀 快速开始
+
+### 安装
+
+```bash
+# 克隆仓库
+git clone https://github.com/stephenlzc/humanize-mba-text-skill.git
+cd humanize-mba-text-skill
+
+# 安装依赖（如需使用 transformers 模型）
+pip install transformers torch
+```
+
+### 基础使用
+
+#### 1. 基础检测
+
+```bash
+# 使用基础规则检测
+python scripts/detect_ai_patterns.py your_text.txt --format markdown --output report.md
+```
+
+#### 2. 多维度融合检测（推荐）
+
+```bash
+# 使用多维度检测
+python scripts/multi_detector.py your_text.txt --format markdown --output report.md --plan plan.json
+```
+
+#### 3. 生成修改建议
+
+```bash
+# 基于检测结果生成反馈
+python scripts/feedback_generator.py detection_result.json --text your_text.txt --output feedback.md
+```
+
+#### 4. 应用自动修复
+
+```bash
+# 自动修复空格等简单问题
+python scripts/feedback_generator.py detection_result.json --text your_text.txt --apply
+```
+
+#### 5. 改写前后对比（CV 报告）
+
+```bash
+# 对比改写前后的句长 CV 变化，输出中文 Markdown
+python scripts/detect_compare.py before.txt after.txt --output compare.md
+
+# 同时输出结构化 JSON
+python scripts/detect_compare.py before.txt after.txt --output compare.md --json compare.json
+```
+
+示例文件见 `examples/cv_before.txt`、`examples/cv_after.txt`、`examples/cv_compare.md`。
+
+### 作为 Claude Skill 使用
+
+1. 将本仓库克隆到 Claude Code 的 skills 目录：
+
+```bash
+cd ~/.config/opencode/skills
+git clone https://github.com/stephenlzc/humanize-mba-text-skill.git
+```
+
+2. 在 Claude Code 中触发 Skill：
+
+```
+去 AI 痕迹：[粘贴你的文本]
+```
+
+或
+
+```
+帮我去除这段文字的 AI 写作痕迹
+```
+
+---
+
+## 📊 检测维度
+
+### 1. 规则匹配检测
+
+识别以下 AI 写作特征：
+
+- **AI 词汇**：赋能、抓手、闭环、痛点、赛道等
+- **模糊归因**："有研究指出"、"专家认为"等
+- **过度强调**："关键"、"核心"、"至关重要"等
+- **宏观叙事**："时代"、"趋势"、"浪潮"等
+- **表面分析**："凸显了"、"反映了"等 -ing 结尾分析
+- **套话结尾**："综上所述"、"由此可见"等
+- **连接词过多**："首先...其次...最后"等
+- **中英文混排空格**："MBA 论文" → "MBA论文"
+
+### 2. 统计分析检测
+
+- **句子长度均匀度**：AI 文本通常句子长度更均匀
+- **词汇多样性**：AI 文本词汇多样性较低
+- **标点符号分布**：分析标点使用模式
+- **段落结构**：检测段落长度分布
+
+### 3. 语言特征检测
+
+- **连接词密度**：统计逻辑连接词使用频率
+- **正式表达模式**：识别过度正式的学术表达
+- **句式复杂度**：分析复杂句式使用情况
+
+### 4. 散文结构分析器（v1.3）
+
+每个分析器返回 `AnalyzerIssue`(analyzer_id / severity / confidence / location / evidence / suggestion) 和统计指标：
+
+| 维度 | analyzer_id | 触发 |
+| --- | --- | --- |
+| 6 | `uniform_sentence_length` | 段落级 + 全文级句长方差/CV 超阈值 |
+| 9 | `uniform_paragraph_length` | 段间字数高度均匀（CV < 0.25） |
+| 10 | `paragraph_edge_template_repeat` | 段首/段末指纹连续 ≥ 3 段相同 |
+| 8a | `paragraph_structure_uniformity` | 跨段四元句式指纹连续 ≥ 3 段相同 |
+| 8b | `chapter_template_repeat` | 单章内 ≥ 3 节使用同一章法模板 |
+
+### 5. 语义链分析器（v1.3）
+
+跨段、跨章节检测 AI 在成链动作上的痕迹：
+
+| 维度 | analyzer_id | 触发 |
+| --- | --- | --- |
+| 3 | `chain_three_part_rule` | 连续 3+ 段使用「一是...二是...三是」或「首先...其次...最后」 |
+| 3 | `chain_author_listing` | 单章 4+ 处「作者(年份)指出/认为」罗列 |
+| 3 | `chain_method_name` | 单段堆叠 2+ 个方法/模型/理论名且无逐方法说明 |
+| 3 | `chain_abstract_template` | 单段命中 3+ 个摘要模板短语 |
+| 3 | `chain_conclusion_echo` | 结论章首段与绪论首段字符级 Jaccard ≥ 0.30 |
+| 4 | `chain_vague_problem_statement` | 2+ 处笼统问题表述且 30 字内无数字支撑 |
+| 4 | `chain_unsupported_quantification` | 2+ 个百分比/排名断言 80 字内无根据/N= 标记 |
+| 4 | `chain_macro_narrative` | 1000 字窗口内 3+ 个宏观叙事短语 |
+| 5 | `evidence_chain_completeness` | 跨 content+evidence 规则：2+ 个量化/调研断言无方法锚点 |
+| 5 | `cross_section_problem_trace` | 问题章 ↔ 对策章关键词重叠率 < 30% |
+
+### 6. 结构化改写计划（v1.3）
+
+`detect_ai_patterns.AIPatternDetector.generate_report()` 和 `multi_detector.FusionEngine.detect()` 都会暴露 `modify_plan` 键，每行一条 `ModifyEntry`：
+
+```json
+{
+  "analyzer_id": "chain_unsupported_quantification",
+  "severity": "high",
+  "location": "global",
+  "evidence": "出现 7 个百分比/排名类断言，其中 5 个 80 字内没有根据/来源",
+  "suggestion": "为每个量化断言补齐来源",
+  "rewrite_template": "为每个量化断言补齐来源：样本、时间、统计口径。",
+  "recommended_replacements": [
+    "根据 2023 年 12 月客户问卷（N=120），...",
+    "样本说明：'问卷采用 5 分制李克特量表'",
+    "无法核实时标注：'该指标需要进一步核实'"
+  ],
+  "target_word_count_range": [60, 140],
+  "before_after_example": {
+    "before": "客户满意度提升20%。",
+    "after": "根据2023年12月客户问卷（N=120），客户满意度从3.8分升至4.5分。"
+  }
+}
+```
+
+### 7. 按句聚合的高风险标注（v1.4）
+
+`report["high_risk_annotations"]` 是新增的第三数组——**一句话一条**，把正则命中和结构/链 issue 合并到同一个句子，避免 `matches[]`（540 条但每条只有笼统建议）与 `modify_plan[]`（4 条聚合但无具体行号）的信息断层。
+
+```json
+{
+  "sentence_index": 17,
+  "char_offset_start": 1287,
+  "char_offset_end": 1335,
+  "sentence_text": "数字化转型赋能业务创新，形成从生产到服务的完整闭环。",
+  "line_number": 24,
+  "severity": "high",
+  "triggered_rules": [
+    {
+      "rule_id": "ai_buzzwords",
+      "pattern_name": "AI词汇/互联网黑话",
+      "pattern_type": "regex",
+      "evidence": "赋能",
+      "confidence": 1.0,
+      "severity": "high",
+      "phrase_replacements": [
+        "赋能 → 促进/支持",
+        "闭环 → 闭合回路/完整流程",
+        "抓手 → 切入点/措施"
+      ],
+      "before_after_example": {
+        "before": "数字化转型赋能业务创新，形成从生产到服务的完整闭环。",
+        "after": "数字化改造使生产到售后的流程数据打通，订单处理时长从5天缩短至2天。"
+      }
+    }
+  ],
+  "rewrite_template": "把互联网黑话替换为传统管理学术语。",
+  "recommended_replacements": [
+    "赋能 → 促进/支持",
+    "闭环 → 闭合回路/完整流程"
+  ]
+}
+```
+
+**字段含义**：
+
+| 字段 | 说明 |
+| --- | --- |
+| `sentence_text` | 原始句子原文 |
+| `char_offset_start/end` | 在原文中的字符偏移（含终止符） |
+| `line_number` | 原文 1-based 行号 |
+| `severity` | 该句所有规则中的最高严重度 |
+| `triggered_rules[].rule_id` | `ai_buzzwords` / `empty_solution_verbs` / `chain_three_part_rule` 等 |
+| `triggered_rules[].phrase_replacements` | 来自 TOML `phrase_replacements`：可直接复制的短语替换（如 "赋能 → 促进/支持"） |
+| `triggered_rules[].before_after_example` | 来自 TOML `[[categories.examples]]`：真实改写对 |
+| `rewrite_template` | 来自 `rewrite_planner._SKELETONS`：该句最高优先级规则的改写骨架 |
+| `recommended_replacements` | 同句所有规则替换短语的去重并集 |
+
+**保证**：
+
+- 数组按 `severity` 高→低、再按 `char_offset_start` 升序排序，可直接对接 LLM humanizer agent 逐句处理
+- 同句多条规则 → 一条 annotation，`triggered_rules[]` 聚合
+- 现有 `matches` / `modify_plan` / `summary` / `metrics` 字段**完全不变**
+
+---
+
+## 🎓 分章节写作指南
+
+本工具提供针对 MBA 论文 5 个核心章节的详细写作指南：
+
+### 第1章 绪论
+
+**常见问题**：
+- ❌ 宏大叙事式开头："随着经济的发展..."
+- ❌ 研究意义空泛："具有重要理论意义和实践价值"
+- ❌ 文献综述罗列：A说、B说、C说
+- ❌ 研究方法简单罗列
+
+**改进策略**：
+- ✅ 开门见山：直接点明研究企业、具体问题
+- ✅ 意义具体：说明解决什么问题、带来什么价值
+- ✅ 综述主题化：按主题组织，有批判性分析
+- ✅ 方法具体：说明数据来源、样本、分析工具
+
+📄 **详细指南**：[chapter-1-introduction.md](references/chapter-1-introduction.md)
+
+### 第2章 理论基础
+
+**常见问题**：
+- ❌ 教科书式定义堆砌
+- ❌ 理论罗列：介绍5-6个理论
+- ❌ 理论与实践脱节
+
+**改进策略**：
+- ✅ 简洁界定：2-3 个核心概念
+- ✅ 精选理论：1-2 个核心理论，说明选择理由
+- ✅ 应用导向：理论为后续分析提供框架
+
+📄 **详细指南**：[chapter-2-theory.md](references/chapter-2-theory.md)
+
+### 第3章 现状与问题分析
+
+**常见问题**：
+- ❌ 企业概况资料堆砌，与研究关联度低
+- ❌ 现状描述定性为主，缺乏数据
+- ❌ 问题识别笼统："管理不善"、"效率低下"
+- ❌ 成因分析表面化：停留在现象描述
+
+**改进策略**：
+- ✅ 聚焦相关：只提供与研究相关的背景
+- ✅ 数据说话：用具体指标和时间序列数据
+- ✅ 问题具体：每个问题都有衡量指标和调研数据
+- ✅ 深入挖掘：用理论框架分析根本原因
+
+📄 **详细指南**：[chapter-3-analysis.md](references/chapter-3-analysis.md)
+
+### 第4章 对策建议
+
+**常见问题**：
+- ❌ 建议空泛："加强管理"、"优化流程"
+- ❌ 缺乏可操作性
+- ❌ 忽视约束条件
+- ❌ 套用模板：SWOT 流于形式
+
+**改进策略**：
+- ✅ 具体可操作：明确做什么、怎么做、谁来做
+- ✅ 分阶段实施：区分短期、中期、长期
+- ✅ 考虑约束：分析资源、能力、文化限制
+- ✅ 效果量化：预期效果尽可能量化
+
+📄 **详细指南**：[chapter-4-solutions.md](references/chapter-4-solutions.md)
+
+### 第5章 结论
+
+**常见问题**：
+- ❌ 重复摘要内容
+- ❌ 简单罗列各章内容
+- ❌ 创新点空泛："首次研究"、"填补空白"
+- ❌ 回避研究局限
+
+**改进策略**：
+- ✅ 研究发现：突出核心发现，不与摘要重复
+- ✅ 创新具体：客观说明理论、方法、应用创新
+- ✅ 诚实局限：具体分析局限和影响
+- ✅ 未来展望：提出具体可行的研究方向
+
+📄 **详细指南**：[chapter-5-conclusion.md](references/chapter-5-conclusion.md)
+
+---
+
+## 📝 格式规范
+
+独立的格式规范文档覆盖：
+
+- 中英文/数字混排规范
+- 图表编号与排版规范
+- 引用与参考文献规范
+- 数字与单位规范
+- 标点符号规范
+- 段落与层级规范
+
+📄 **详细规范**：[format-standards.md](references/format-standards.md)
+
+---
+
+## 📈 检测结果解读
+
+检测报告包含以下维度：
+
+- **AI 生成概率**：0-100%，分数越高 AI 痕迹越明显
+- **风险等级**：🔴 高风险 / 🟡 中风险 / 🟢 低风险
+- **检测器一致性**：三种检测方法的结果一致性
+- **优先修复项**：按严重程度排序的修改建议
+- **章节特定建议**：根据检测到的章节类型提供针对性建议
+
+### 修改策略
+
+根据 AI 概率分数采取不同策略：
+
+**🔴 高风险 (>70%)**：深度改写
+- 全面重构段落结构
+- 删除所有 AI 特征词汇
+- 补充具体数据和案例
+- 预计时间：2-3小时
+
+**🟡 中风险 (40-70%)**：针对性优化
+- 修复高优先级 AI 特征
+- 调整套话和模板化表达
+- 补充关键数据支撑
+- 预计时间：1-2小时
+
+**🟢 低风险 (<40%)**：细节润色
+- 修复少量 AI 痕迹
+- 优化语言表达
+- 最终校对
+- 预计时间：30分钟-1小时
+
+---
+
+## 💡 使用示例
+
+### 示例 1：去除 AI 词汇
+
+**原文**：
+```
+数字化转型已成为推动企业高质量发展的关键抓手，
+通过赋能业务创新，为企业创造显著价值。
+```
+
+**改写后**：
+```
+本研究探讨数字化转型对企业绩效的影响。
+通过分析XX公司2018-2023年的财务数据，
+发现数字化投入与营业收入增长呈正相关关系。
+```
+
+### 示例 2：去除模糊归因
+
+**原文**：
+```
+有研究指出，企业文化对组织绩效具有重要影响。
+```
+
+**改写后**：
+```
+Schein(2010)的研究表明，强势企业文化与组织绩效
+存在正相关关系（r=0.42, p<0.05）。
+```
+
+### 示例 3：MBA 论文小题大做
+
+**原文**：
+```
+企业数字化转型研究
+```
+
+**改写后**：
+```
+XX公司生产部门数字化转型中的流程优化研究
+```
+
+### 示例 4：数据溯源
+
+**原文**：
+```
+企业营收增长20%，员工满意度为85%。
+```
+
+**改写后**：
+```
+根据XX公司2023年年报，企业营收同比增长20%。
+根据2023年12月开展的问卷调查（N=120），员工满意度为85%。
+```
+
+### 示例 5：修复中英文混排空格
+
+**原文**：
+```
+MBA 论文写作需要关注 AI 痕迹问题。
+2023 年的研究表明，15 % 的企业存在此类问题。
+```
+
+**改写后**：
+```
+MBA论文写作需要关注AI痕迹问题。
+2023年的研究表明，15%的企业存在此类问题。
+```
+
+---
+
+## 📁 项目结构
+
+```
+humanize-mba-text-skill/
+├── SKILL.md                          # Claude Skill 主文件
+├── README.md                         # 本文件（中文）
+├── README_EN.md                      # English README
+├── README_JP.md                      # 日本語 README
+├── README_KR.md                      # 한국어 README
+├── LICENSE                           # MIT 许可证
+│
+├── references/                       # 参考文档 + AI 检测规则数据
+│   ├── ai-writing-patterns.md        # AI写作特征详细指南
+│   ├── chapter-1-introduction.md     # 第1章：绪论写作指南
+│   ├── chapter-2-theory.md           # 第2章：理论基础写作指南
+│   ├── chapter-3-analysis.md         # 第3章：现状与问题分析写作指南
+│   ├── chapter-4-solutions.md        # 第4章：对策建议写作指南
+│   ├── chapter-5-conclusion.md       # 第5章：结论写作指南
+│   ├── format-standards.md           # 格式规范
+│   ├── strategy_ai_reduction.md      # 降AI检测率策略
+│   ├── strategy_plagiarism.md        # 降查重率策略
+│   ├── strategy_polishing.md         # 学术润色策略
+│   ├── chinese-paper-humanization-rules.toml   # 规则单体入口（fallback）
+│   └── rules/                        # ⭐v1.3：渐进式加载的 AI 规则集
+│       ├── index.toml                #   轻量 manifest
+│       ├── categories/
+│       │   ├── structure.toml        #   句法结构类
+│       │   ├── rhythm_quality.toml  #   节奏类
+│       │   ├── formatting.toml       #   格式类
+│       │   ├── content.toml          #   内容类（含宏观叙事/笼统问题/无来源量化）
+│       │   ├── evidence.toml         #   证据类（含数据无方法/因果跳跃）
+│       │   └── language.toml         #   语言类
+│       ├── chapter-categories.toml  #   章节类型识别
+│       └── metrics.toml              #   通用度量词表
+│
+└── scripts/                          # 检测脚本
+    ├── rule_loader.py                # ⭐v1.3：TOML 规则渐进式加载器
+    ├── detect_ai_patterns.py         # AIPatternDetector 入口（含 modify_plan）
+    ├── multi_detector.py             # FusionEngine 多源融合入口
+    ├── feedback_generator.py         # 反馈生成器
+    └── analyzers/                    # ⭐v1.3：分析器包（散文 + 语义链 + planner）
+        ├── __init__.py               #   统一导出 run_prose_analyzers / run_semantic_chain_analyzers / build_modify_plan
+        ├── _types.py                 #   AnalyzerIssue / AnalyzerReport 数据契约
+        ├── _segments.py              #   共享分词工具
+        ├── _regex_categories.py      #   hit-level 包装（供链层用）
+        ├── sentence_length.py        #   维度 6
+        ├── paragraph_length.py       #   维度 9
+        ├── paragraph_edges.py        #   维度 10
+        ├── paragraph_structure.py    #   维度 8a
+        ├── chapter_template.py       #   维度 8b
+        ├── semantic_chain.py         #   维度 3/4/5：10 个链分析器
+        └── rewrite_planner.py        #   AnalyzerIssue → 结构化 ModifyEntry
+```
+
+---
+
+## 🔧 高级用法
+
+### 交互式修改
+
+```bash
+python scripts/multi_detector.py your_text.txt --interactive
+```
+
+### 导出修改计划
+
+```bash
+python scripts/multi_detector.py your_text.txt --plan modification_plan.json
+```
+
+### 批量处理
+
+```bash
+# 处理多个文件
+for file in *.txt; do
+    python scripts/multi_detector.py "$file" --output "reports/${file%.txt}_report.md"
+done
+```
+
+---
+
+## ⚠️ 注意事项
+
+1. **学术诚信**：改写时保持学术诚信，不编造数据；所有数据必须有真实来源
+2. **数据核实**：对于不确定的引用和数据，建议用户核实原始资料
+3. **理论适配**：建议用户根据具体研究问题选择合适的理论框架
+4. **企业授权**：如涉及企业内部数据，建议获得企业书面授权或做脱敏处理
+5. **查重控制**：改写后建议进行查重，确保复制率 < 15%
+6. **个性化调整**：改写后的文本需用户根据具体学校和导师要求调整
+7. **范围限制**：本工具专注于去除 AI 痕迹和格式规范，不涉及学术内容深度审查
+8. **参考文献**：改写不自动生成参考文献，需用户根据实际引用补充完整
+
+---
+
+## 🤝 贡献指南
+
+欢迎提交 Issue 和 Pull Request！
+
+### 提交 Issue
+
+- 描述清楚遇到的问题
+- 提供示例文本（可脱敏）
+- 说明期望的行为
+
+### 提交 Pull Request
+
+1. Fork 本仓库
+2. 创建你的特性分支 (`git checkout -b feature/AmazingFeature`)
+3. 提交你的修改 (`git commit -m 'Add some AmazingFeature'`)
+4. 推送到分支 (`git push origin feature/AmazingFeature`)
+5. 打开一个 Pull Request
+
+---
+
+## 📝 更新日志
+
+### v1.4.0 (2026-07-05)
+
+- 🧭 **`high_risk_annotations[]` 按句聚合**：`detect_ai_patterns.generate_report` 返回的 JSON 新增顶层键，把正则命中和结构/链 issue 按句合并；每条标注同时具备句级字符偏移、原文、触发的全部规则、每条规则的短语替换字典与真实改写对
+- 🔁 **TOML `phrase_replacements` 字段**：为 4 类高频规则提供短语级替换映射（`ai_buzzwords` / `empty_solution_verbs` / `vague_attribution` / `unsupported_quantification`）；接口预留 LLM 兜底扩展点
+- 📐 **`ModifyEntry.before_after_example`**：`modify_plan` 现有 schema 增量增加 `before_after_example` 字段（None 或 `{before, after}`），直接复用 `[[categories.examples]]` 中的真实改写对
+- 🆕 **`scripts/analyzers/high_risk_annotator.py`**：新模块负责句子切分（带字符偏移）+ 双轨桶聚合（regex 按行号 / issue 按 location + evidence 子串）+ 严重度排序；与 `detect_ai_patterns.py` 通过懒导入解耦
+- ✅ **向后兼容**：现有 `matches` / `modify_plan` / `summary` / `metrics` 字段顺序与类型完全不变；`target_word_count_range` 仍为 2 元素 list；117 个测试全部通过
+
+### v1.3.0 (2026-07-05)
+
+#### 主体发布 — `feat: rule-driven AI-trace detection with prose + semantic-chain analyzers`
+
+- 🔬 **规则外置**：所有 AI 检测规则改为外部 TOML，按 7 个分类目录拆分；`scripts/rule_loader.py` 提供渐进加载
+- 📊 **散文结构分析器**：新增 5 个统计 / 指纹分析器（维度 6 / 8a / 8b / 9 / 10）
+- 🔗 **语义链分析器**：新增 10 个跨段 / 跨章节链分析器（维度 3 / 4 / 5）
+- 📋 **结构化改写计划**：`detect_ai_patterns.generate_report` 返回 `modify_plan` 键
+- 🎯 **三方统一接入**：`AIPatternDetector` / `StatisticalDetector` / `FeedbackGenerator` 共用同一份 TOML 规则
+- 🛠 **新增 scripts/analyzers/**：作为分析器包统一目录
+
+#### v1.3.0 增量
+
+- 📐 **SKILL.md Harris 拆分**：576 行 → 197 行（-66%）；识别与改写策略 / 三维协同 + 评估 / 改写检查清单 / 章节特定规则等数据化到 `references/strategy_optimization.toml` / `mba_rewrite_checklist.toml` / `chapter_rewrite_rules.toml`；SKILL.md 仅保留导航入口
+- 🔁 **与 [humanizer-academic-zh](https://github.com/cangtianhuang/humanizer-academic-zh) 互引**：检测（我们）↔ 改写（他们）路径互补，模式 21-25 通过渐进式 manifest 接进 `references/rules/categories/*.toml`
+- 📊 **规则 data 升级**：
+  - `filler_phrases`（模式 21 填充短语）：5 → 8 条 regex
+  - `chatbot_conversation_residue`（模式 23 协作式沟通痕迹）：4 → 7 条 regex
+  - 新增 `sycophantic_praise`（模式 25 谄媚语气）：9 条 regex + 3 条 before/after 示例，severity=medium / weight=0.5
+- 🌐 **多语言 README 同步**：v1.3.0 内容同步到中文 / 英文 / 日文 / 韩文四份，致谢与「相关项目」节都加 cross-link 到 `humanizer-academic-zh`
+
+### v1.2.0 (2024-03-11)
+
+- 📚 **三维优化策略文档化**：新增 AI 检测率降低 / 查重率降低 / 学术润色三份策略文档
+- 🔍 **增强检测能力**：规则匹配、统计分析、语言特征三层全面调优
+- 🎓 **细化 MBA 规范**：MBA 论文核心原则和分章节写作指南进一步细化
+- 📝 **完善格式规范**：扩展格式标准文档的边界场景覆盖
+- 🌐 **多语言 README**：补齐英文 / 日文 / 韩文版本
+
+### v1.1.0 (2024-02-05)
+
+- 📚 **重构章节文档**：将章节规则拆分为 5 个独立文件
+  - chapter-1-introduction.md：绪论详细指南
+  - chapter-2-theory.md：理论基础详细指南
+  - chapter-3-analysis.md：现状与问题分析详细指南
+  - chapter-4-solutions.md：对策建议详细指南
+  - chapter-5-conclusion.md：结论详细指南
+  - format-standards.md：格式规范独立文档
+- 🎓 **细化 MBA 规范**：新增 MBA 论文核心原则章节
+- 🎯 **强化实践导向**：更强调数据支撑、理论应用和具体案例
+- 📝 **完善格式规范**：独立整理格式标准，覆盖中英文混排、图表、引用等
+- 🏗️ **优化项目结构**：更清晰的文件组织和索引
+
+### v1.0.0 (2024-02-04)
+
+- ✨ 初始版本发布
+- 🎯 支持多维度 AI 特征检测
+- 📚 添加章节特定规则
+- 🔧 实现自动修复功能
+- 🎓 集成 Claude Skill
+
+---
+
+## 📄 许可证
+
+本项目采用 [MIT 许可证](LICENSE) - 详见 LICENSE 文件
+
+---
+
+## 🙏 致谢
+
+- 感谢 Claude Code 提供的 Skill 框架
+- 感谢 Kimi CLI 提供的 Agent 并行执行工具
+- 感谢所有提供反馈和建议的用户
+- **特别感谢 [Haimbeau1o/thesis-optimizer](https://github.com/Haimbeau1o/thesis-optimizer) 项目**，本项目的三维协同优化策略（降AI检测率、降查重率、学术润色提升）参考了该项目的优秀设计
+- **改写策略参考 [cangtianhuang/humanizer-academic-zh](https://github.com/cangtianhuang/humanizer-academic-zh)**：本项目走「检测 + 量化定位」路径，该项目走「改写 + 润色」路径；其 25 类语义模式（按表达/语言/风格/填充词/交流痕迹五大类组织）的「模式 21-25」被本项目 SKILL.md 的补充参考节交叉引用
+
+---
+
+## 📮 联系方式
+
+- GitHub Issues: [https://github.com/stephenlzc/humanize-mba-text-skill/issues](https://github.com/stephenlzc/humanize-mba-text-skill/issues)
+- 作者：stephenlzc
+
+---
+
+## 🔗 相关项目
+
+- [thesis-optimizer](https://github.com/Haimbeau1o/thesis-optimizer) - 学术论文智能优化系统（计算机深度学习方向）
+- [cangtianhuang/humanizer-academic-zh](https://github.com/cangtianhuang/humanizer-academic-zh) - Humanizer 中文学术版：与本项目「检测 + 量化定位」路径互补的「改写 + 润色」Skill；25 类语义模式按表达 / 语言 / 风格 / 填充词 / 交流痕迹五大类组织。本项目 v1.3.0 已将其中「模式 21-25」并入渐进式加载的 `references/rules/categories/*.toml`（`filler_phrases` / `chatbot_conversation_residue` / `sycophantic_praise` 等）。
+
+---
+
+<p align="center">
+  如果这个项目对你有帮助，请给个 ⭐ Star！
+</p>

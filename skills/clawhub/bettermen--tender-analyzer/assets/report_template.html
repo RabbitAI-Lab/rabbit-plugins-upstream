@@ -1,0 +1,516 @@
+<!--
+Tender Analyzer — HTML Report Template
+投标分析报告基础模板，含完整CSS样式和JS交互框架
+使用时替换 {{PLACEHOLDER}} 变量
+-->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{PROJECT_NAME}} — 投标分析报告</title>
+<style>
+:root {
+  --primary: #2563EB;
+  --secondary: #7C3AED;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --danger: #EF4444;
+  --bg: #F8FAFC;
+  --card-bg: #FFFFFF;
+  --text: #1E293B;
+  --text-secondary: #64748B;
+  --border: #E2E8F0;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* ========== 导航栏 ========== */
+.nav-bar {
+  position: sticky;
+  top: 0;
+  background: var(--card-bg);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 20px;
+  display: flex;
+  gap: 16px;
+  overflow-x: auto;
+  z-index: 100;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.nav-bar a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9em;
+  white-space: nowrap;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+
+.nav-bar a:hover, .nav-bar a.active {
+  color: var(--primary);
+  background: #EFF6FF;
+}
+
+/* ========== 头部 ========== */
+.header {
+  text-align: center;
+  padding: 48px 20px;
+  background: linear-gradient(135deg, #1E40AF, #7C3AED);
+  color: white;
+  border-radius: 16px;
+  margin-bottom: 24px;
+}
+
+.header h1 {
+  font-size: 2.2em;
+  margin-bottom: 8px;
+  font-weight: 800;
+}
+
+.header .subtitle {
+  font-size: 1em;
+  opacity: 0.85;
+}
+
+/* ========== 通用分区 ========== */
+.section {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 28px;
+  margin-bottom: 20px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}
+
+.section h2 {
+  color: #1E40AF;
+  margin-bottom: 20px;
+  font-size: 1.5em;
+  font-weight: 700;
+  border-bottom: 2px solid var(--border);
+  padding-bottom: 10px;
+}
+
+.section h3 {
+  color: var(--text);
+  margin: 20px 0 12px;
+  font-size: 1.15em;
+}
+
+/* ========== 信息卡片 ========== */
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 14px;
+}
+
+.info-card {
+  background: #F8FAFC;
+  padding: 14px 18px;
+  border-radius: 10px;
+  border-left: 4px solid var(--primary);
+}
+
+.info-label {
+  display: block;
+  font-size: 0.8em;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-value {
+  display: block;
+  font-weight: 600;
+  font-size: 1.05em;
+  margin-top: 4px;
+}
+
+/* ========== 数据表格 ========== */
+.table-container {
+  overflow-x: auto;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9em;
+}
+
+.data-table thead th {
+  background: #1E40AF;
+  color: white;
+  padding: 12px 14px;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+
+.data-table thead th:hover {
+  background: #2563EB;
+}
+
+.data-table tbody td {
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--border);
+}
+
+.data-table tbody tr:hover {
+  background: #F1F5F9;
+}
+
+/* 风险行颜色 */
+tr.risk-critical { background: #FEE2E2; }
+tr.risk-high { background: #FEF3C7; }
+tr.risk-low { background: transparent; }
+
+/* ========== 评分卡片 ========== */
+.score-card {
+  text-align: center;
+  padding: 40px 20px;
+}
+
+.total-score {
+  font-size: 5em;
+  font-weight: 800;
+  line-height: 1;
+  transition: color 0.3s;
+}
+
+.total-score span {
+  font-size: 0.35em;
+  font-weight: 500;
+}
+
+.rating {
+  font-size: 1.3em;
+  margin-top: 10px;
+  font-weight: 600;
+}
+
+.score-bar {
+  height: 10px;
+  background: var(--border);
+  border-radius: 5px;
+  margin: 16px auto;
+  max-width: 400px;
+  overflow: hidden;
+}
+
+.score-bar-fill {
+  height: 100%;
+  border-radius: 5px;
+  transition: width 0.5s ease;
+}
+
+/* ========== 专家评分 ========== */
+.expert-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 12px;
+  margin: 20px 0;
+}
+
+.expert-card {
+  background: #F8FAFC;
+  padding: 18px;
+  border-radius: 10px;
+  text-align: center;
+  border-top: 3px solid var(--primary);
+}
+
+.expert-card h4 {
+  font-size: 0.95em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+
+.expert-score {
+  font-size: 2em;
+  font-weight: 800;
+}
+
+/* ========== MECE分析 ========== */
+.mece-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  margin: 16px 0;
+}
+
+.mece-dim-card {
+  background: #F8FAFC;
+  padding: 18px;
+  border-radius: 10px;
+  border-left: 4px solid var(--secondary);
+}
+
+.mece-dim-card h3 {
+  margin: 0 0 10px;
+  color: var(--text);
+}
+
+.progress-bar {
+  height: 8px;
+  background: var(--border);
+  border-radius: 4px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+  border-radius: 4px;
+  transition: width 0.5s ease;
+}
+
+.dim-weight,
+.dim-mandatory {
+  display: block;
+  font-size: 0.82em;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+
+/* ========== 版本时间线 ========== */
+.version-timeline {
+  border-left: 3px solid var(--primary);
+  padding-left: 24px;
+  margin: 16px 0;
+}
+
+.version-item {
+  margin: 14px 0;
+  position: relative;
+}
+
+.version-item::before {
+  content: '';
+  position: absolute;
+  left: -31px;
+  top: 6px;
+  width: 12px;
+  height: 12px;
+  background: var(--primary);
+  border-radius: 50%;
+  border: 3px solid var(--card-bg);
+}
+
+.ver-badge {
+  display: inline-block;
+  background: var(--primary);
+  color: white;
+  padding: 3px 12px;
+  border-radius: 14px;
+  font-size: 0.85em;
+  font-weight: 600;
+}
+
+.ver-info {
+  display: block;
+  font-size: 0.85em;
+  color: var(--text-secondary);
+  margin-top: 6px;
+}
+
+/* ========== 修订记录 ========== */
+.revision-item {
+  background: #F8FAFC;
+  padding: 14px 18px;
+  border-radius: 8px;
+  margin: 10px 0;
+  border-left: 4px solid var(--secondary);
+}
+
+.rev-header {
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.rev-rationale {
+  font-size: 0.9em;
+  color: var(--text-secondary);
+}
+
+/* ========== 风险清单 ========== */
+.risk-item {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.risk-level {
+  font-size: 1.3em;
+  flex-shrink: 0;
+}
+
+.risk-desc {
+  flex: 1;
+  font-weight: 500;
+}
+
+.risk-impact {
+  font-size: 0.85em;
+  color: var(--text-secondary);
+  flex-shrink: 0;
+}
+
+/* ========== 扣分高亮 ========== */
+.deduction {
+  color: var(--danger);
+  font-weight: 700;
+}
+
+/* ========== 图表容器 ========== */
+.chart-container {
+  margin: 20px 0;
+  padding: 16px;
+  background: #FAFBFC;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  text-align: center;
+}
+
+.chart-container svg {
+  max-width: 100%;
+  height: auto;
+}
+
+/* ========== 响应式 ========== */
+@media (max-width: 768px) {
+  .container { padding: 10px; }
+  .header { padding: 32px 16px; }
+  .header h1 { font-size: 1.6em; }
+  .section { padding: 18px; }
+  .info-grid { grid-template-columns: 1fr; }
+  .mece-grid { grid-template-columns: 1fr; }
+  .expert-grid { grid-template-columns: repeat(2, 1fr); }
+  .total-score { font-size: 3.5em; }
+}
+
+/* ========== 打印优化 ========== */
+@media print {
+  .nav-bar { display: none; }
+  .section { break-inside: avoid; box-shadow: none; border: 1px solid #ddd; }
+  body { background: white; }
+}
+</style>
+</head>
+<body>
+
+<!-- 导航栏 -->
+<nav class="nav-bar">
+  <a href="#overview" class="active">概览</a>
+  <a href="#requirements">需求清单</a>
+  <a href="#mece">MECE分析</a>
+  <a href="#review">评审结果</a>
+  <a href="#revisions">修订记录</a>
+  <a href="#versions">版本演化</a>
+  <a href="#risks">风险清单</a>
+</nav>
+
+<div class="container">
+
+  <!-- 头部 -->
+  <div class="header">
+    <h1>{{PROJECT_NAME}}</h1>
+    <p class="subtitle">投标智能分析报告 | 生成时间: {{REPORT_DATE}}</p>
+  </div>
+
+  <!-- 1. 项目概览 -->
+  <div class="section" id="overview">
+    {{OVERVIEW_SECTION}}
+  </div>
+
+  <!-- 2. 需求清单 -->
+  <div class="section" id="requirements">
+    {{REQUIREMENTS_SECTION}}
+  </div>
+
+  <!-- 3. MECE分析 -->
+  <div class="section" id="mece">
+    {{MECE_SECTION}}
+  </div>
+
+  <!-- 4. 评审结果 -->
+  <div class="section" id="review">
+    {{REVIEW_SECTION}}
+  </div>
+
+  <!-- 5. 修订记录 -->
+  <div class="section" id="revisions">
+    {{REVISION_SECTION}}
+  </div>
+
+  <!-- 6. 版本演化 -->
+  <div class="section" id="versions">
+    {{VERSION_SECTION}}
+  </div>
+
+  <!-- 7. 风险清单 -->
+  <div class="section" id="risks">
+    {{RISK_SECTION}}
+  </div>
+
+</div>
+
+<!-- 交互脚本 -->
+<script>
+// 导航高亮
+document.querySelectorAll('.nav-bar a').forEach(link => {
+  link.addEventListener('click', function(e) {
+    e.preventDefault();
+    const target = document.querySelector(this.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    document.querySelectorAll('.nav-bar a').forEach(l => l.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+// 滚动监听：自动更新导航高亮
+window.addEventListener('scroll', () => {
+  const sections = document.querySelectorAll('.section');
+  let current = '';
+  sections.forEach(section => {
+    const top = section.offsetTop - 80;
+    if (window.scrollY >= top) {
+      current = section.id;
+    }
+  });
+  document.querySelectorAll('.nav-bar a').forEach(link => {
+    link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+  });
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,10 @@
+{
+  "name": "alazab-global-context",
+  "slug": "alazab-global-context",
+  "version": "1.0.0",
+  "owner": "alazabdev",
+  "entrypoint": "SKILL.md",
+  "context_file": "alazab-portal-ai-global-context.json",
+  "scope": "global",
+  "environment": "production"
+}

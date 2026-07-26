@@ -1,0 +1,7 @@
+interface:
+  display_name: "Find Community Help"
+  short_description: "Dry-run outside-help plan for blocked threads"
+  default_prompt: "Use $find-community-help only when current work is clearly blocked, looping, version-sensitive, likely already solved upstream, or the user asks official/community help for that stuck task. Emit a redacted dry-run plan only; no browsing, no durable memory, current-response advisory scope."
+
+policy:
+  allow_implicit_invocation: false

@@ -1,0 +1,18 @@
+# Tender Analyzer - Python Dependencies
+# 投标文件智能分析技能 - Python依赖包
+
+# Document parsing (文档解析)
+pymupdf>=1.21.0
+python-docx>=0.8.11
+openpyxl>=3.0.10
+
+# Data processing (数据处理)
+pandas>=1.5.0
+numpy>=1.24.0
+
+# Optional: ML/NLP for advanced analysis (高级分析，可选)
+# scikit-learn>=1.2.0
+# sentence-transformers>=2.2.0
+
+# Report generation (报告生成)
+# jinja2>=3.1.0

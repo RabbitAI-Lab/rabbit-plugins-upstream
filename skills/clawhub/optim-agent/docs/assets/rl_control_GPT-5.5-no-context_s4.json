@@ -1,0 +1,256 @@
+{
+ "schema_version": 1,
+ "protocol": "rl-control-qlearning-v2",
+ "method": "GPT-5.5-no-context",
+ "backend": "codex",
+ "model": "gpt-5.5",
+ "agent_effort": "high",
+ "history": 5,
+ "parameter_context": null,
+ "explicit_reasoning": true,
+ "qualitative_notes": true,
+ "use_context": false,
+ "context_policy": "no supplied task context",
+ "task_context": null,
+ "agent_failure_policy": "fail_closed",
+ "n_init": 3,
+ "seed": 4,
+ "trials": 20,
+ "environments": [
+  "Acrobot-v1",
+  "LunarLander-v3"
+ ],
+ "objective": "mean evaluation return",
+ "created_at": "2026-07-13T17:00:08.743727+00:00",
+ "values": {
+  "Acrobot-v1": [
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0,
+   -200.0
+  ],
+  "LunarLander-v3": [
+   -296.07605069498754,
+   -178.63679518866576,
+   -174.47113462678112,
+   -85.90753144378455,
+   -58.58755286543287,
+   -379.5223879245817,
+   -157.84589016206783,
+   -228.03704958378114,
+   -91.29515073703516,
+   -377.9123451807611,
+   -180.9182812548736,
+   -202.37876826536814,
+   -487.16026539845575,
+   -96.6030569069068,
+   -111.95803200797948,
+   -318.07434554635694,
+   -157.08708778477697,
+   -99.11542678732502,
+   -118.24245719900857,
+   -50.176142982450585
+  ]
+ },
+ "params": [
+  {
+   "learning_rate": 0.04777417502091842,
+   "gamma": 0.8653717391003767,
+   "epsilon_decay": 0.9392097660184574,
+   "min_epsilon": 0.0169399777315975,
+   "bins": 6,
+   "train_episodes": 8
+  },
+  {
+   "learning_rate": 0.08798383600495369,
+   "gamma": 0.9867753014200701,
+   "epsilon_decay": 0.979244782798085,
+   "min_epsilon": 0.134970216176244,
+   "bins": 8,
+   "train_episodes": 24
+  },
+  {
+   "learning_rate": 0.05549989851849261,
+   "gamma": 0.8757270148635199,
+   "epsilon_decay": 0.9105121459507215,
+   "min_epsilon": 0.0207345892273454,
+   "bins": 6,
+   "train_episodes": 24
+  },
+  {
+   "learning_rate": 0.38317348851557864,
+   "gamma": 0.8788219070848667,
+   "epsilon_decay": 0.9306751457726541,
+   "min_epsilon": 0.0843565847272917,
+   "bins": 10,
+   "train_episodes": 8
+  },
+  {
+   "learning_rate": 0.52,
+   "gamma": 0.887,
+   "epsilon_decay": 0.925,
+   "min_epsilon": 0.07,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.46,
+   "gamma": 0.872,
+   "epsilon_decay": 0.925,
+   "min_epsilon": 0.075,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.62,
+   "gamma": 0.884,
+   "epsilon_decay": 0.922,
+   "min_epsilon": 0.06,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.54,
+   "gamma": 0.889,
+   "epsilon_decay": 0.926,
+   "min_epsilon": 0.068,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.54,
+   "gamma": 0.89,
+   "epsilon_decay": 0.928,
+   "min_epsilon": 0.073,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.51,
+   "gamma": 0.888,
+   "epsilon_decay": 0.926,
+   "min_epsilon": 0.07,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.515,
+   "gamma": 0.888,
+   "epsilon_decay": 0.926,
+   "min_epsilon": 0.071,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.525,
+   "gamma": 0.887,
+   "epsilon_decay": 0.924,
+   "min_epsilon": 0.069,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.53,
+   "gamma": 0.889,
+   "epsilon_decay": 0.928,
+   "min_epsilon": 0.075,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.545,
+   "gamma": 0.891,
+   "epsilon_decay": 0.929,
+   "min_epsilon": 0.076,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.56,
+   "gamma": 0.892,
+   "epsilon_decay": 0.93,
+   "min_epsilon": 0.078,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.565,
+   "gamma": 0.891,
+   "epsilon_decay": 0.929,
+   "min_epsilon": 0.076,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.505,
+   "gamma": 0.886,
+   "epsilon_decay": 0.923,
+   "min_epsilon": 0.066,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.512,
+   "gamma": 0.886,
+   "epsilon_decay": 0.924,
+   "min_epsilon": 0.068,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.518,
+   "gamma": 0.887,
+   "epsilon_decay": 0.925,
+   "min_epsilon": 0.069,
+   "bins": 10,
+   "train_episodes": 16
+  },
+  {
+   "learning_rate": 0.518,
+   "gamma": 0.8875,
+   "epsilon_decay": 0.9245,
+   "min_epsilon": 0.069,
+   "bins": 10,
+   "train_episodes": 16
+  }
+ ],
+ "best_values": {
+  "Acrobot-v1": -200.0,
+  "LunarLander-v3": -50.176142982450585
+ },
+ "best_params": {
+  "Acrobot-v1": {
+   "learning_rate": 0.04777417502091842,
+   "gamma": 0.8653717391003767,
+   "epsilon_decay": 0.9392097660184574,
+   "min_epsilon": 0.0169399777315975,
+   "bins": 6,
+   "train_episodes": 8
+  },
+  "LunarLander-v3": {
+   "learning_rate": 0.518,
+   "gamma": 0.8875,
+   "epsilon_decay": 0.9245,
+   "min_epsilon": 0.069,
+   "bins": 10,
+   "train_episodes": 16
+  }
+ },
+ "elapsed_seconds": 301.7565244169673
+}

@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{TITLE}} — 知识卡片</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Noto+Serif+SC:wght@400;700&display=swap');
+
+  /* === Kindle 纸书配色系统 (锁定) === */
+  :root {
+    --bg-outer:        #e8e0d5;
+    --card-bg:         #f5f0eb;
+    --header-bg:       #3c3a37;
+    --accent:          #b8a088;
+    --divider:         #e0d5c8;
+
+    --summary-text:    #3c3a37;
+    --body-text:       #7a7062;
+    --aux-text:        #8a8072;
+    --footer-text:     #b0a898;
+
+    --header-title:    #f0ebe4;
+    --header-en:       #a09888;
+    --header-number:   #8a8072;
+
+    --cog-bg:          #ede6dc;
+    --action-bg:       #f5f0eb;
+    --action-border:   #e8e0d5;
+
+    --tag-colors: #d4a76a;
+    /* 分区色板 */
+    --group-red:       #d4a0a0;
+    --group-yellow:    #d4c88a;
+    --group-green:     #a0c8a0;
+    --group-blue:      #a0b8d4;
+    --group-purple:    #c0a0d4;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Noto Sans SC', 'Inter', sans-serif;
+    background: var(--bg-outer);
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    padding: 40px 20px;
+  }
+
+  /* === 卡片容器 === */
+  .card {
+    width: 100%;
+    max-width: 640px;
+    background: var(--card-bg);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 12px 40px rgba(60, 58, 55, 0.15), 0 2px 8px rgba(60, 58, 55, 0.08);
+  }
+
+  /* === Header === */
+  .card-header {
+    height: 128px;
+    background: var(--header-bg);
+    border-bottom: 3px solid var(--accent);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 20px 32px;
+    position: relative;
+  }
+
+  .card-header .header-tag {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--tag-colors);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  .card-header .header-number {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--header-number);
+    letter-spacing: 0.05em;
+    position: absolute;
+    top: 20px;
+    right: 32px;
+  }
+
+  .card-header .header-title {
+    font-family: 'Noto Serif SC', 'Noto Sans SC', serif;
+    font-size: 28px;
+    font-weight: 900;
+    color: var(--header-title);
+    line-height: 1.3;
+  }
+
+  .card-header .header-subtitle {
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    color: var(--header-en);
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* === Body === */
+  .card-body {
+    padding: 32px;
+  }
+
+  /* === 认知组 (Cognition Group) === */
+  .cognition-group {
+    margin-bottom: 28px;
+  }
+
+  /* 摘要区 */
+  .summary-block {
+    border-left: 4px solid var(--accent);
+    padding: 14px 0 14px 18px;
+    margin-bottom: 16px;
+  }
+
+  .summary-block .summary-text {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--summary-text);
+    line-height: 1.7;
+  }
+
+  /* 机制区 */
+  .mechanism-block {
+    background: var(--cog-bg);
+    border-radius: 6px;
+    padding: 14px 18px;
+  }
+
+  .mechanism-block .mechanism-text {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 13px;
+    font-weight: 400;
+    color: var(--body-text);
+    line-height: 1.8;
+  }
+
+  /* === 执行组 (Action Group) === */
+  .action-group {
+    background: rgba(184, 160, 136, 0.08);
+    border: 1px solid var(--action-border);
+    border-radius: 8px;
+    padding: 22px 24px;
+    margin-bottom: 24px;
+  }
+
+  .action-group .action-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--accent);
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .action-group .action-title::before {
+    content: '◈';
+    font-size: 14px;
+  }
+
+  .action-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .action-item {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+  }
+
+  .action-item .action-step {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    color: var(--accent);
+    min-width: 18px;
+    flex-shrink: 0;
+  }
+
+  .action-item .action-content {
+    font-family: 'Noto Sans SC', sans-serif;
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .action-item .action-content .action-name {
+    font-weight: 700;
+    color: var(--summary-text);
+  }
+
+  .action-item .action-content .action-desc {
+    color: var(--body-text);
+    font-size: 12px;
+    margin-top: 2px;
+  }
+
+  /* === 对比分区 (Compare Groups) === */
+  .compare-groups {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 14px;
+    margin-bottom: 24px;
+  }
+
+  .compare-group {
+    border-radius: 8px;
+    padding: 18px 20px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .compare-group::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+  }
+
+  .compare-group.red::before    { background: var(--group-red); }
+  .compare-group.yellow::before  { background: var(--group-yellow); }
+  .compare-group.green::before   { background: var(--group-green); }
+  .compare-group.blue::before    { background: var(--group-blue); }
+  .compare-group.purple::before  { background: var(--group-purple); }
+
+  .compare-group.red    { background: rgba(212, 160, 160, 0.08); }
+  .compare-group.yellow { background: rgba(212, 200, 138, 0.08); }
+  .compare-group.green  { background: rgba(160, 200, 160, 0.08); }
+  .compare-group.blue   { background: rgba(160, 184, 212, 0.08); }
+  .compare-group.purple { background: rgba(192, 160, 212, 0.08); }
+
+  .compare-group .group-label {
+    font-family: 'Inter', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+
+  .compare-group.red .group-label    { color: #b08080; }
+  .compare-group.yellow .group-label { color: #a09040; }
+  .compare-group.green .group-label  { color: #609060; }
+  .compare-group.blue .group-label   { color: #6080a0; }
+  .compare-group.purple .group-label { color: #8060a0; }
+
+  .compare-group .group-badge {
+    display: inline-block;
+    font-family: 'Inter', sans-serif;
+    font-size: 11px;
+    font-weight: 500;
+    padding: 2px 8px;
+    border-radius: 3px;
+    margin-bottom: 10px;
+    letter-spacing: 0.03em;
+  }
+
+  .compare-group.red .group-badge    { background: rgba(212, 160, 160, 0.2); color: #a06060; }
+  .compare-group.yellow .group-badge { background: rgba(212, 200, 138, 0.2); color: #8a7020; }
+  .compare-group.green .group-badge  { background: rgba(160, 200, 160, 0.2); color: #407040; }
+  .compare-group.blue .group-badge   { background: rgba(160, 184, 212, 0.2); color: #406080; }
+  .compare-group.purple .group-badge { background: rgba(192, 160, 212, 0.2); color: #604080; }
+
+  .compare-group .group-title {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--summary-text);
+    margin-bottom: 6px;
+  }
+
+  .compare-group .group-desc {
+    font-size: 13px;
+    color: var(--body-text);
+    line-height: 1.6;
+  }
+
+  /* === 分隔线 === */
+  .divider {
+    height: 1px;
+    background: var(--divider);
+    margin: 20px 0;
+  }
+
+  /* === 金句 === */
+  .quote-block {
+    padding: 16px 20px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  .quote-block .quote-text {
+    font-family: 'Noto Serif SC', serif;
+    font-size: 16px;
+    font-style: italic;
+    color: var(--aux-text);
+    line-height: 1.7;
+  }
+
+  .quote-block .quote-text::before { content: '\201C'; }
+  .quote-block .quote-text::after  { content: '\201D'; }
+
+  /* === Footer === */
+  .card-footer {
+    padding: 0 32px 28px;
+    text-align: center;
+  }
+
+  .card-footer .footer-text {
+    font-family: 'Inter', 'Noto Sans SC', sans-serif;
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--footer-text);
+    letter-spacing: 0.05em;
+  }
+
+  /* === 打印优化 === */
+  @media print {
+    body { background: white; padding: 0; }
+    .card { box-shadow: none; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+<div class="card">
+  <!-- ===== HEADER ===== -->
+  <div class="card-header">
+    <div class="header-number">NO.{{NUMBER}}</div>
+    <div class="header-tag">{{TAG}}</div>
+    <div class="header-title">{{TITLE}}</div>
+    <div class="header-subtitle">{{SUBTITLE}}</div>
+  </div>
+
+  <!-- ===== BODY ===== -->
+  <div class="card-body">
+    <!-- 认知组 -->
+    <div class="cognition-group">
+      <!-- 摘要 -->
+      <div class="summary-block">
+        <p class="summary-text">{{SUMMARY}}</p>
+      </div>
+
+      <!-- 机制（可选） -->
+      {{MECHANISM_BLOCK}}
+    </div>
+
+    <!-- 执行组 或 对比分区 -->
+    {{BODY_CONTENT}}
+
+    <!-- 金句（可选） -->
+    {{QUOTE_BLOCK}}
+
+    <!-- 分隔线 -->
+    <div class="divider"></div>
+  </div>
+
+  <!-- ===== FOOTER ===== -->
+  <div class="card-footer">
+    <p class="footer-text">BY {{AUTHOR}}</p>
+  </div>
+</div>
+</body>
+</html>

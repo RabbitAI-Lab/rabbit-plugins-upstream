@@ -1,0 +1,9 @@
+{
+  "api_key": "",
+  "secret_key": "",
+  "audio_dir": "",
+  "text_dir": "",
+  "file_format": "wav",
+  "rate": 16000,
+  "dev_pid": 1537
+}

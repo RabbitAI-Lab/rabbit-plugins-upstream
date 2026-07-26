@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>__VENUE_TITLE__</title>
+<style>
+__LEAFLET_CSS__
+:root{
+  --bg:#f4f5f7;--surface:#ffffff;--surface2:#f0f1f3;--border:#dde1e7;
+  --accent:#1565C0;--accent2:#1976D2;--green:#2E7D32;--orange:#E65100;
+  --red:#C62828;--purple:#6A1B9A;--text:#1a1e26;--muted:#5a6272;--tag:#eef0f4;
+  --header-bg:#1a2332;--header-text:#e6edf3;--header-muted:#8b949e;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;height:100vh;display:flex;flex-direction:column;overflow:hidden;}
+.header{background:var(--header-bg);border-bottom:1px solid #30363d;padding:10px 20px;display:flex;align-items:center;gap:12px;flex-shrink:0;}
+.logo{width:34px;height:34px;background:var(--accent);border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;}
+.header-titles h1{font-size:15px;font-weight:700;color:var(--header-text);}
+.header-titles p{font-size:10px;color:var(--header-muted);margin-top:1px;}
+.header-right{margin-left:auto;display:flex;align-items:center;gap:8px;}
+.badge{font-size:10px;padding:3px 9px;border-radius:10px;border:1px solid #30363d;color:var(--header-muted);}
+.floor-bar{background:var(--surface);border-bottom:2px solid var(--border);padding:8px 20px;display:flex;align-items:center;gap:6px;flex-shrink:0;overflow-x:auto;}
+.floor-tab{background:var(--tag);border:1px solid var(--border);color:var(--muted);font-size:11px;font-weight:600;padding:5px 14px;border-radius:6px;cursor:pointer;white-space:nowrap;transition:all .15s;}
+.floor-tab:hover{border-color:var(--accent2);color:var(--accent2);}
+.floor-tab.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+.legend-bar{background:var(--surface);border-bottom:1px solid var(--border);padding:6px 20px;display:flex;align-items:center;gap:16px;flex-shrink:0;overflow-x:auto;}
+.legend-item{display:flex;align-items:center;gap:5px;font-size:10px;color:var(--muted);white-space:nowrap;}
+.legend-swatch{width:14px;height:14px;border-radius:3px;border:1.5px solid;flex-shrink:0;}
+.toolbar{background:var(--surface2);border-bottom:1px solid var(--border);padding:7px 20px;display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap;}
+.tool-btn{background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:11px;padding:5px 12px;border-radius:6px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.tool-btn:hover{border-color:var(--accent2);color:var(--accent2);}
+.tool-btn.active{background:#e3f2fd;border-color:var(--accent);color:var(--accent);font-weight:600;}
+.tool-btn.danger:hover{border-color:var(--red);color:var(--red);}
+.tool-btn.group-btn{background:#fff3e0;border-color:#E65100;color:#E65100;}
+.tool-btn.group-btn.active{background:#E65100;border-color:#E65100;color:#fff;}
+.vdiv{width:1px;height:22px;background:var(--border);flex-shrink:0;}
+.cam-count{font-size:11px;color:var(--muted);white-space:nowrap;}
+.cam-count span{color:var(--accent);font-weight:600;}
+.floor-cam-count{font-size:10px;color:var(--muted);background:var(--tag);border:1px solid var(--border);padding:3px 9px;border-radius:10px;white-space:nowrap;}
+.floor-cam-count span{color:var(--accent);font-weight:700;}
+.plot-hint{font-size:10px;color:var(--orange);display:none;align-items:center;gap:5px;}
+.plot-hint.show{display:flex;}
+.main{display:flex;flex:1;overflow:hidden;}
+#map{flex:1;background:#e8ecf0;}
+.leaflet-container{background:#e8ecf0!important;}
+.sidebar{width:285px;flex-shrink:0;background:var(--surface);border-left:2px solid var(--border);display:flex;flex-direction:column;overflow:hidden;}
+.sidebar-header{padding:10px 14px;border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;display:flex;align-items:center;justify-content:space-between;}
+.sidebar-floor-label{font-size:10px;color:var(--accent);font-weight:600;text-transform:none;letter-spacing:0;}
+.sidebar-list{flex:1;overflow-y:auto;padding:8px;}
+.cam-item{background:var(--surface2);border:1.5px solid var(--border);border-radius:8px;padding:10px;margin-bottom:6px;cursor:pointer;transition:all .15s;}
+.cam-item:hover{border-color:var(--accent2);box-shadow:0 2px 8px #1976D222;}
+.cam-item.selected{border-color:var(--accent);background:#e3f2fd;}
+.cam-item.grp-item{border-left:3px solid var(--orange);}
+.cam-item.grp-item.selected{background:#fff3e0;border-color:#E65100;}
+.cam-item-header{display:flex;align-items:center;gap:7px;margin-bottom:6px;}
+.cam-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;border:1.5px solid rgba(0,0,0,.2);}
+.cam-dot.grp-dot{border-radius:2px;}
+.cam-item-id{font-size:12px;font-weight:700;color:var(--text);}
+.cam-item-floor{font-size:10px;color:var(--muted);margin-left:auto;background:var(--tag);padding:1px 6px;border-radius:8px;flex-shrink:0;}
+.cam-item-stats{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+.cam-stat{font-size:10px;color:var(--muted);}
+.cam-stat span{color:var(--text);font-weight:600;}
+.cam-delete{background:transparent;border:none;color:var(--muted);font-size:11px;cursor:pointer;padding:2px 5px;border-radius:3px;flex-shrink:0;}
+.cam-delete:hover{color:var(--red);background:#fce4ec;}
+.empty-state{text-align:center;padding:40px 16px;color:var(--muted);font-size:12px;line-height:1.8;}
+.grp-panel{width:300px;flex-shrink:0;background:#fffdf8;border-left:2px solid #f0e0c0;display:none;flex-direction:column;overflow:hidden;}
+.grp-panel.show{display:flex;}
+.grp-panel-header{padding:10px 14px;border-bottom:1px solid #f0e0c0;display:flex;align-items:center;justify-content:space-between;}
+.grp-panel-header h2{font-size:12px;font-weight:700;color:#5a3e00;}
+.grp-panel-close{background:none;border:none;font-size:16px;color:#9a7b40;cursor:pointer;}
+.grp-panel-body{flex:1;overflow-y:auto;padding:10px;}
+.grp-list-item{background:#fff;border:1.5px solid #f0e0c0;border-radius:8px;padding:9px 11px;margin-bottom:7px;display:flex;align-items:center;gap:8px;}
+.grp-color-dot{width:12px;height:12px;border-radius:3px;flex-shrink:0;}
+.grp-list-name{font-size:12px;font-weight:600;color:#2a1800;flex:1;}
+.grp-list-cams{font-size:10px;color:#9a7b40;white-space:nowrap;}
+.grp-list-btns{display:flex;gap:4px;}
+.grp-icon-btn{background:none;border:1px solid #f0e0c0;border-radius:5px;padding:3px 7px;font-size:11px;cursor:pointer;color:#9a7b40;}
+.grp-icon-btn:hover{border-color:#E65100;color:#E65100;}
+.grp-add-btn{width:100%;background:#fff3e0;border:1.5px dashed #E65100;color:#E65100;font-size:11px;font-weight:600;padding:8px;border-radius:8px;cursor:pointer;margin-top:4px;}
+.grp-add-btn:hover{background:#ffe0b2;}
+.grp-panel-empty{text-align:center;padding:30px 16px;color:#9a7b40;font-size:12px;line-height:1.7;}
+.modal-overlay{position:fixed;inset:0;background:#00000066;z-index:10000;display:none;align-items:center;justify-content:center;}
+.modal-overlay.show{display:flex;}
+.modal{background:var(--surface);border:1.5px solid var(--border);border-radius:12px;padding:24px;width:380px;box-shadow:0 16px 48px #00000030;max-height:90vh;overflow-y:auto;}
+.modal h2{font-size:14px;font-weight:700;margin-bottom:16px;color:var(--text);}
+.form-group{margin-bottom:13px;}
+.form-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px;display:block;font-weight:600;}
+.form-select,.form-input{width:100%;background:var(--tag);border:1.5px solid var(--border);color:var(--text);font-size:12px;padding:7px 10px;border-radius:7px;}
+.form-select:focus,.form-input:focus{outline:none;border-color:var(--accent);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.modal-actions{display:flex;gap:8px;margin-top:18px;}
+.btn-primary{flex:1;background:var(--accent);border:none;color:#fff;font-size:12px;font-weight:600;padding:8px;border-radius:7px;cursor:pointer;}
+.btn-cancel{flex:1;background:var(--tag);border:1.5px solid var(--border);color:var(--muted);font-size:12px;padding:8px;border-radius:7px;cursor:pointer;}
+.coords-display{font-size:10px;color:var(--muted);background:var(--tag);padding:5px 8px;border-radius:5px;font-family:monospace;margin-top:4px;}
+.plot-tabs{display:flex;gap:4px;margin-bottom:16px;background:var(--tag);border-radius:7px;padding:3px;}
+.plot-tab{flex:1;padding:6px;font-size:11px;font-weight:600;border:none;border-radius:5px;cursor:pointer;background:transparent;color:var(--muted);}
+.plot-tab.active{background:#fff;color:var(--accent);box-shadow:0 1px 4px #00000018;}
+.plot-pane{display:none;}
+.plot-pane.active{display:block;}
+.cam-check-list{max-height:200px;overflow-y:auto;background:var(--tag);border:1.5px solid var(--border);border-radius:7px;padding:6px;}
+.cam-check-item{display:flex;align-items:center;gap:8px;padding:5px 6px;border-radius:5px;cursor:pointer;}
+.cam-check-item:hover{background:var(--surface);}
+.cam-check-item input[type=checkbox]{accent-color:var(--accent);width:14px;height:14px;}
+.cam-check-label{font-size:11px;color:var(--text);flex:1;}
+.cam-check-total{font-size:10px;color:var(--muted);}
+.color-swatches{display:flex;gap:7px;flex-wrap:wrap;margin-top:5px;}
+.color-swatch{width:22px;height:22px;border-radius:5px;border:2.5px solid transparent;cursor:pointer;transition:transform .1s;}
+.color-swatch.selected{border-color:#fff;box-shadow:0 0 0 2px #1565C0;transform:scale(1.15);}
+.grp-option-item{display:flex;align-items:center;gap:8px;padding:7px 9px;border:1.5px solid var(--border);border-radius:7px;cursor:pointer;margin-bottom:6px;transition:all .15s;}
+.grp-option-item:hover{border-color:var(--orange);}
+.grp-option-item.selected-opt{border-color:var(--orange);background:#fff3e0;}
+.grp-option-item.already-placed{opacity:.4;cursor:not-allowed;pointer-events:none;}
+.grp-opt-dot{width:14px;height:14px;border-radius:3px;flex-shrink:0;}
+.grp-opt-name{font-size:12px;font-weight:600;color:var(--text);flex:1;}
+.grp-opt-cams{font-size:10px;color:var(--muted);}
+.grp-opt-badge{font-size:9px;color:white;background:#999;padding:1px 7px;border-radius:8px;}
+.loading{position:fixed;inset:0;background:#f4f5f7;z-index:99999;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;}
+.spinner{width:38px;height:38px;border:3px solid #dde1e7;border-top-color:var(--accent);border-radius:50%;animation:spin .8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loading-text{font-size:13px;color:var(--muted);}
+.leaflet-popup-content-wrapper{background:#fff!important;border:1.5px solid #dde1e7!important;border-radius:10px!important;box-shadow:0 8px 32px #00000020!important;color:#1a1e26!important;}
+.leaflet-popup-tip{background:#fff!important;}
+.leaflet-popup-content{margin:12px 14px!important;}
+.popup-title{font-size:13px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:7px;color:#1a1e26;}
+.popup-subtitle{font-size:10px;color:#5a6272;margin-bottom:8px;}
+.popup-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:8px;}
+.popup-stat{background:#f4f5f7;border-radius:6px;padding:6px 8px;border:1px solid #eee;}
+.popup-stat-label{font-size:9px;color:#5a6272;text-transform:uppercase;letter-spacing:.5px;font-weight:600;}
+.popup-stat-val{font-size:14px;font-weight:700;margin-top:1px;color:#1a1e26;}
+.gender-bar{height:7px;border-radius:4px;background:#eee;overflow:hidden;margin-top:6px;display:flex;}
+.gender-m{background:#1565C0;height:100%;}
+.gender-f{background:#E91E63;height:100%;}
+.age-bars{margin-top:9px;}
+.age-bar-row{display:flex;align-items:center;gap:6px;margin-bottom:3px;}
+.age-bar-lbl{font-size:9px;color:#5a6272;width:44px;text-align:right;flex-shrink:0;}
+.age-bar-track{flex:1;height:7px;background:#eee;border-radius:3px;overflow:hidden;}
+.age-bar-fill{height:100%;border-radius:3px;}
+.age-bar-val{font-size:9px;color:#5a6272;width:32px;text-align:right;flex-shrink:0;}
+.top-cam-box{background:#fff3e0;border:1px solid #f0c080;border-radius:6px;padding:7px 9px;margin-top:8px;}
+.top-cam-label{font-size:9px;color:#9a5000;font-weight:700;text-transform:uppercase;letter-spacing:.5px;}
+.top-cam-val{font-size:12px;font-weight:700;color:#C25000;margin-top:2px;}
+.cam-list-mini{margin-top:8px;border-top:1px solid #eee;padding-top:6px;}
+.cam-list-row{display:flex;align-items:center;gap:6px;padding:3px 0;}
+.cam-list-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.cam-list-name{font-size:10px;color:#1a1e26;flex:1;}
+.cam-list-val{font-size:10px;font-weight:600;color:#5a6272;}
+.popup-floor{font-size:10px;color:#5a6272;margin-top:8px;padding-top:6px;border-top:1px solid #eee;}
+body.plot-mode #map{cursor:crosshair!important;}
+</style>
+</head>
+<body>
+<div class="loading" id="loading">
+  <div style="font-size:32px;margin-bottom:6px">__VENUE_EMOJI__</div>
+  <div class="spinner"></div>
+  <div class="loading-text" id="loadingText">Loading floor plan data&hellip;</div>
+</div>
+<div class="header">
+  <div class="logo">__VENUE_EMOJI__</div>
+  <div class="header-titles">
+    <h1>__VENUE_TITLE__</h1>
+    <p>__VENUE_SUBTITLE__</p>
+  </div>
+  <div class="header-right">
+    <div class="badge" id="headerGroupCount">0 Groups</div>
+    <div class="badge" id="headerFloorCount"></div>
+  </div>
+</div>
+<div class="floor-bar" id="floorBar"></div>
+<div class="legend-bar">
+  <span style="font-size:10px;color:var(--muted);font-weight:600;margin-right:4px;">Legend:</span>
+  <div class="legend-item"><div class="legend-swatch" style="background:#dbeafe;border-color:#1565C0;"></div>Retail/Room</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#fefce8;border-color:#CA8A04;"></div>Walkway</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#dcfce7;border-color:#15803D;"></div>Escalator</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#ede9fe;border-color:#7C3AED;"></div>Elevator</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#fce7f3;border-color:#BE185D;"></div>Restroom</div>
+  <div class="legend-item"><div class="legend-swatch" style="background:#fff7ed;border-color:#C2410C;"></div>Stairs</div>
+  <div class="legend-item">&#128247; Sensor &nbsp;&#11035; Group</div>
+</div>
+<div class="toolbar">
+  <button class="tool-btn" id="btnPlot">&#128247; Plot Sensor</button>
+  <button class="tool-btn group-btn" id="btnPlotGroup">&#11035; Plot Group</button>
+  <div class="vdiv"></div>
+  <button class="tool-btn" id="btnManageGroups">&#9881; Manage Groups</button>
+  <div class="vdiv"></div>
+  <button class="tool-btn" id="btnExport">&#8595; Export JSON</button>
+  <button class="tool-btn" id="btnImport">&#8593; Import JSON</button>
+  <input type="file" id="importFile" accept=".json" style="display:none;">
+  <div class="vdiv"></div>
+  <button class="tool-btn danger" id="btnClear">&#128465; Clear Floor</button>
+  <div class="vdiv"></div>
+  <div class="cam-count">Sensors: <span id="camCountVal">0</span> &nbsp;|&nbsp; Groups: <span id="grpCountVal">0</span></div>
+  <div class="floor-cam-count">This floor: <span id="floorCamCount">0</span></div>
+  <div class="plot-hint" id="plotHint"></div>
+</div>
+<div class="main">
+  <div id="map"></div>
+  <div class="grp-panel" id="grpPanel">
+    <div class="grp-panel-header">
+      <h2>&#9881; Sensor Groups</h2>
+      <button class="grp-panel-close" id="grpPanelClose">&#10005;</button>
+    </div>
+    <div class="grp-panel-body" id="grpPanelBody"></div>
+  </div>
+  <div class="sidebar">
+    <div class="sidebar-header">
+      This Floor &mdash; <span class="sidebar-floor-label" id="sidebarFloorLabel">—</span>
+      <span id="sidebarCount" style="color:var(--accent);font-weight:700;">0</span>
+    </div>
+    <div class="sidebar-list" id="sidebarList">
+      <div class="empty-state">&#128247;<br>No sensors or groups placed here.<br>Enable a plot mode and click the map.</div>
+    </div>
+  </div>
+</div>
+
+<!-- Plot Modal -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <h2>&#128247; Place on Map</h2>
+    <div class="plot-tabs">
+      <button class="plot-tab active" id="tabSingle" onclick="switchTab('single')">&#128247; Single Sensor</button>
+      <button class="plot-tab" id="tabGroup" onclick="switchTab('group')">&#11035; Sensor Group</button>
+    </div>
+    <div class="plot-pane active" id="paneSingle">
+      <div class="form-group">
+        <label class="form-label">Sensor / Camera ID</label>
+        <select class="form-select" id="modalCamId">
+          <option value="">&#8212; Select Sensor ID &#8212;</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Label / Name</label>
+        <input class="form-input" id="modalCamName" type="text" placeholder="e.g. Entrance Gate A">
+      </div>
+    </div>
+    <div class="plot-pane" id="paneGroup">
+      <div class="form-group">
+        <label class="form-label">Select Group</label>
+        <div id="grpSelectList" style="max-height:200px;overflow-y:auto;"></div>
+        <div id="noGroupsHint" style="display:none;font-size:11px;color:var(--orange);margin-top:6px;">
+          &#9888; No groups defined. <a href="#" onclick="openManageGroups();return false;">Create one first.</a>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Group Marker Label</label>
+        <input class="form-input" id="modalGrpLabel" type="text" placeholder="Auto-filled from group name">
+      </div>
+    </div>
+    <div class="form-row" style="margin-top:4px;">
+      <div class="form-group">
+        <label class="form-label">Floor</label>
+        <input class="form-input" id="modalFloor" type="text" readonly>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Coordinates</label>
+        <div class="coords-display" id="modalCoords">—</div>
+      </div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="modalCancel">Cancel</button>
+      <button class="btn-primary" id="modalConfirm">&#10003; Place on Map</button>
+    </div>
+  </div>
+</div>
+
+<!-- Group Editor Modal -->
+<div class="modal-overlay" id="grpEditorOverlay">
+  <div class="modal" style="width:420px;">
+    <h2 id="grpEditorTitle">&#11035; New Sensor Group</h2>
+    <div class="form-group">
+      <label class="form-label">Group Name</label>
+      <input class="form-input" id="grpEditorName" type="text" placeholder="e.g. Arrival Hall, East Wing">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Group Color</label>
+      <div class="color-swatches" id="grpEditorColors"></div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Assign Sensors to Group</label>
+      <div class="cam-check-list" id="grpEditorCamList"></div>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" id="grpEditorCancel">Cancel</button>
+      <button class="btn-primary" id="grpEditorSave">&#10003; Save Group</button>
+    </div>
+  </div>
+</div>
+
+<script>__LEAFLET_JS__</script>
+<script>
+const VA = __VA_DATA__;
+
+const SENSOR_COLORS = __SENSOR_COLORS__;
+const GROUP_PALETTE = ['#E65100','#1565C0','#2E7D32','#C62828','#6A1B9A','#00838F','#AD1457','#F57F17','#0277BD','#558B2F','#BF360C','#4527A0'];
+const AGE_ORDER = __AGE_ORDER__;
+
+function fmt(n){ return n>=1000?(n/1000).toFixed(1)+'K':String(n); }
+function fmtN(n){ return Number(n).toLocaleString(); }
+function sensorColor(id){ return SENSOR_COLORS[id]||'#455A64'; }
+function genId(){ return Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+function escHtml(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+const CAT_STYLE = {
+  room:        {fillColor:'#dbeafe',color:'#1565C0',weight:1.5,fillOpacity:.95,smoothFactor:0},
+  walkway:     {fillColor:'#fefce8',color:'#CA8A04',weight:1,  fillOpacity:.90,smoothFactor:0},
+  restroom:    {fillColor:'#fce7f3',color:'#BE185D',weight:1.5,fillOpacity:.95,smoothFactor:0},
+  escalator:   {fillColor:'#dcfce7',color:'#15803D',weight:1.5,fillOpacity:.95,smoothFactor:0},
+  elevator:    {fillColor:'#ede9fe',color:'#7C3AED',weight:1.5,fillOpacity:.95,smoothFactor:0},
+  stairs:      {fillColor:'#fff7ed',color:'#C2410C',weight:1.5,fillOpacity:.95,smoothFactor:0},
+  nonpublic:   {fillColor:'#f1f5f9',color:'#475569',weight:1,  fillOpacity:.85,smoothFactor:0},
+  opentobelow: {fillColor:'#e0f2fe',color:'#0369A1',weight:1,  fillOpacity:.70,smoothFactor:0},
+  default:     {fillColor:'#f8fafc',color:'#94A3B8',weight:1,  fillOpacity:.80,smoothFactor:0},
+};
+function unitStyle(cat){ return CAT_STYLE[cat]||CAT_STYLE.default; }
+
+const IMDF_B64 = '__IMDF_B64__';
+async function decompressIMDF(b64){
+  document.getElementById('loadingText').textContent='Decompressing floor plan…';
+  const bin=atob(b64), bytes=new Uint8Array(bin.length);
+  for(let i=0;i<bin.length;i++) bytes[i]=bin.charCodeAt(i);
+  const ds=new DecompressionStream('gzip');
+  const w=ds.writable.getWriter(); w.write(bytes); w.close();
+  const chunks=[],r=ds.readable.getReader();
+  while(true){const{done,value}=await r.read();if(done)break;chunks.push(value);}
+  const total=chunks.reduce((s,c)=>s+c.length,0);
+  const out=new Uint8Array(total); let off=0;
+  for(const c of chunks){out.set(c,off);off+=c.length;}
+  document.getElementById('loadingText').textContent='Parsing features…';
+  return JSON.parse(new TextDecoder().decode(out));
+}
+
+const LS_PLACEMENTS='__LS_KEY___placements';
+const LS_GROUPS='__LS_KEY___groups';
+function loadPlacements(){ try{return JSON.parse(localStorage.getItem(LS_PLACEMENTS)||'[]');}catch(e){return[];} }
+function savePlacements(){ localStorage.setItem(LS_PLACEMENTS,JSON.stringify(placements)); }
+function loadGroups(){ try{return JSON.parse(localStorage.getItem(LS_GROUPS)||'[]');}catch(e){return[];} }
+function saveGroups(){ localStorage.setItem(LS_GROUPS,JSON.stringify(groups)); }
+
+let placements=loadPlacements(), groups=loadGroups();
+let map,imdf,currentLevel=null,levelLayers={},markerMap={};
+let pendingClick=null,activePlotType=null,selectedGroupId=null,editingGroupId=null;
+let selectedGroupEditorColor=GROUP_PALETTE[0];
+
+function aggregateGroup(groupId){
+  const grp=groups.find(g=>g.id===groupId); if(!grp) return null;
+  let total=0,male=0,female=0; const ageAgg={},hourAgg={};
+  AGE_ORDER.forEach(a=>ageAgg[a]=0);
+  for(let h=0;h<24;h++) hourAgg[String(h)]=0;
+  let topCamId=null,topCamTotal=0;
+  grp.sensorIds.forEach(sid=>{
+    const cd=VA.cam_data[sid]; if(!cd) return;
+    total+=cd.total||0; male+=(cd.gender&&cd.gender['MALE'])||0; female+=(cd.gender&&cd.gender['FEMALE'])||0;
+    AGE_ORDER.forEach(a=>{ ageAgg[a]+=(cd.age&&cd.age[a])||0; });
+    Object.entries(cd.footfall_hour||{}).forEach(([h,v])=>{ hourAgg[h]=(hourAgg[h]||0)+v; });
+    if(cd.total>topCamTotal){topCamTotal=cd.total;topCamId=sid;}
+  });
+  const peakH=Object.entries(hourAgg).sort((a,b)=>b[1]-a[1])[0];
+  return {total,male,female,ageAgg,peakH:peakH?String(peakH[0]).padStart(2,'0')+':00':'—',topCamId,topCamTotal,grp};
+}
+
+function placedSensorIds(){ return new Set(placements.filter(p=>p.type==='single').map(p=>p.sensorId)); }
+function placedGroupIds(){   return new Set(placements.filter(p=>p.type==='group').map(p=>p.groupId)); }
+
+async function init(){
+  imdf=await decompressIMDF(IMDF_B64);
+  map=L.map('map',{center:imdf.center,zoom:17,zoomControl:true,attributionControl:false,maxZoom:22,minZoom:14});
+  document.getElementById('headerFloorCount').textContent=imdf.levels.length+' Floors';
+  buildFloorTabs();
+  const defaultLevel=imdf.levels.find(l=>l.ordinal===0)||imdf.levels[0];
+  showLevel(defaultLevel.id);
+  placements.forEach(p=>addMarker(p,false));
+  syncMarkerVisibility(); updateSidebar(); updateHeaderCounts();
+  document.getElementById('loading').style.display='none';
+  map.on('click',onMapClick);
+}
+
+function buildFloorTabs(){
+  const bar=document.getElementById('floorBar');
+  [...imdf.levels].sort((a,b)=>b.ordinal-a.ordinal).forEach(lv=>{
+    const btn=document.createElement('button');
+    btn.className='floor-tab'; btn.textContent=lv.name; btn.dataset.levelId=lv.id;
+    btn.addEventListener('click',()=>showLevel(lv.id)); bar.appendChild(btn);
+  });
+}
+
+function showLevel(levelId){
+  currentLevel=levelId;
+  Object.values(levelLayers).forEach(g=>{if(map.hasLayer(g))map.removeLayer(g);});
+  document.querySelectorAll('.floor-tab').forEach(b=>b.classList.toggle('active',b.dataset.levelId===levelId));
+  if(!levelLayers[levelId]) levelLayers[levelId]=buildLevelLayer(levelId);
+  levelLayers[levelId].addTo(map);
+  const lv=imdf.levels.find(l=>l.id===levelId);
+  const lvName=lv?lv.name:'?';
+  document.getElementById('modalFloor').value=lvName;
+  document.getElementById('sidebarFloorLabel').textContent=lvName;
+  syncMarkerVisibility(); updateSidebar();
+}
+
+function syncMarkerVisibility(){
+  placements.forEach(p=>{
+    const m=markerMap[p.uuid]; if(!m) return;
+    if(p.levelId===currentLevel){if(!map.hasLayer(m))m.addTo(map);}
+    else{if(map.hasLayer(m))map.removeLayer(m);}
+  });
+  const floorCount=placements.filter(p=>p.levelId===currentLevel).length;
+  document.getElementById('floorCamCount').textContent=floorCount;
+  document.getElementById('camCountVal').textContent=placements.filter(p=>p.type==='single').length;
+  document.getElementById('grpCountVal').textContent=placements.filter(p=>p.type==='group').length;
+}
+
+function updateHeaderCounts(){
+  document.getElementById('headerGroupCount').textContent=groups.length+' Group'+(groups.length===1?'':'s');
+}
+
+function buildLevelLayer(levelId){
+  const group=L.layerGroup();
+  imdf.units.filter(u=>u.level_id===levelId).forEach(u=>{
+    if(!u.geometry) return;
+    L.geoJSON({type:'Feature',geometry:u.geometry,properties:{}},{
+      style:()=>unitStyle(u.category), smoothFactor:0,
+      onEachFeature:(_,layer)=>{ if(u.name) layer.bindTooltip(u.name,{permanent:false,direction:'center',opacity:.95}); }
+    }).addTo(group);
+  });
+  imdf.openings.filter(o=>o.level_id===levelId).forEach(o=>{
+    if(!o.geometry) return;
+    L.geoJSON({type:'Feature',geometry:o.geometry,properties:{}},{
+      style:()=>({color:'#64748B',weight:2,opacity:.7,smoothFactor:0})
+    }).addTo(group);
+  });
+  return group;
+}
+
+function addMarker(p, addToMapNow=true){
+  let icon;
+  if(p.type==='single'){
+    const color=sensorColor(p.sensorId);
+    icon=L.divIcon({
+      html:`<div style="width:30px;height:30px;border-radius:50%;background:${color};border:2.5px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;font-size:13px;cursor:pointer;">&#128247;</div>`,
+      className:'',iconSize:[30,30],iconAnchor:[15,15],popupAnchor:[0,-18]
+    });
+  } else {
+    const grp=groups.find(g=>g.id===p.groupId)||{color:'#E65100',sensorIds:[]};
+    const cnt=grp.sensorIds.length;
+    icon=L.divIcon({
+      html:`<div style="background:${grp.color};border:2.5px solid #fff;border-radius:8px;box-shadow:0 3px 10px rgba(0,0,0,.4);padding:4px 9px;cursor:pointer;display:flex;align-items:center;gap:5px;white-space:nowrap;min-width:60px;">
+        <span style="font-size:14px;">&#11035;</span>
+        <div><div style="font-size:10px;font-weight:700;color:#fff;line-height:1.1;">${escHtml(p.label)}</div>
+        <div style="font-size:9px;color:rgba(255,255,255,.85);">${cnt} sensor${cnt!==1?'s':''}</div></div></div>`,
+      className:'',iconSize:null,iconAnchor:[0,0],popupAnchor:[0,-10]
+    });
+  }
+  const marker=L.marker([p.lat,p.lng],{icon,draggable:true})
+    .bindPopup(p.type==='single'?buildSinglePopup(p):buildGroupPopup(p),{maxWidth:300,minWidth:250});
+  marker.on('dragend',e=>{ const pos=e.target.getLatLng(); p.lat=pos.lat; p.lng=pos.lng; savePlacements(); });
+  marker.on('click',()=>selectPlacement(p.uuid));
+  markerMap[p.uuid]=marker;
+  if(addToMapNow && p.levelId===currentLevel) marker.addTo(map);
+}
+
+function buildSinglePopup(p){
+  const cd=VA.cam_data[p.sensorId];
+  const lvName=(imdf.levels.find(l=>l.id===p.levelId)||{}).name||'?';
+  const color=sensorColor(p.sensorId);
+  if(!cd) return `<div class="popup-title"><span style="background:${color};width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0;"></span>${escHtml(p.label||p.sensorId)}</div><div class="popup-subtitle">No data linked &bull; Floor: ${escHtml(lvName)}</div>`;
+  const male=cd.gender['MALE']||0, female=cd.gender['FEMALE']||0;
+  const id2=male+female, mp=id2?Math.round(male/id2*100):50;
+  const peakH=(Object.entries(cd.footfall_hour||{}).sort((a,b)=>b[1]-a[1])[0]||['0'])[0].padStart(2,'0')+':00';
+  const ac=AGE_ORDER.map(a=>cd.age[a]||0), am=Math.max(...ac)||1;
+  return `<div class="popup-title"><span style="background:${color};width:10px;height:10px;border-radius:50%;display:inline-block;flex-shrink:0;"></span>${escHtml(p.label||('Sensor '+p.sensorId))}</div>
+  <div class="popup-grid">
+    <div class="popup-stat"><div class="popup-stat-label">Total Det.</div><div class="popup-stat-val">${fmtN(cd.total)}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Peak Hour</div><div class="popup-stat-val">${peakH}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Male</div><div class="popup-stat-val" style="color:#1565C0">${mp}%</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Female</div><div class="popup-stat-val" style="color:#BE185D">${100-mp}%</div></div>
+  </div>
+  <div class="gender-bar"><div class="gender-m" style="width:${mp}%"></div><div class="gender-f" style="width:${100-mp}%"></div></div>
+  <div class="age-bars">${AGE_ORDER.map((a,i)=>{const pct=Math.round(ac[i]/am*100);return`<div class="age-bar-row"><div class="age-bar-lbl">${a}</div><div class="age-bar-track"><div class="age-bar-fill" style="width:${pct}%;background:#2E7D32;"></div></div><div class="age-bar-val">${fmt(ac[i])}</div></div>`;}).join('')}</div>
+  <div class="popup-floor">&#128247; ID: ${escHtml(p.sensorId)} &bull; Floor: ${escHtml(lvName)}</div>`;
+}
+
+function buildGroupPopup(p){
+  const agg=aggregateGroup(p.groupId);
+  const lvName=(imdf.levels.find(l=>l.id===p.levelId)||{}).name||'?';
+  if(!agg) return `<div class="popup-title">&#11035; ${escHtml(p.label)}</div><div class="popup-subtitle">Group not found</div>`;
+  const {total,male,female,ageAgg,peakH,topCamId,topCamTotal,grp}=agg;
+  const id2=male+female, mp=id2?Math.round(male/id2*100):50;
+  const ac=AGE_ORDER.map(a=>ageAgg[a]||0), am=Math.max(...ac)||1;
+  return `<div class="popup-title"><span style="background:${grp.color};width:12px;height:12px;border-radius:3px;display:inline-block;flex-shrink:0;"></span>${escHtml(p.label)}</div>
+  <div class="popup-subtitle">${grp.sensorIds.length} sensors &bull; Floor: ${escHtml(lvName)}</div>
+  <div class="popup-grid">
+    <div class="popup-stat"><div class="popup-stat-label">Total Det.</div><div class="popup-stat-val">${fmtN(total)}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Peak Hour</div><div class="popup-stat-val">${peakH}</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Male</div><div class="popup-stat-val" style="color:#1565C0">${mp}%</div></div>
+    <div class="popup-stat"><div class="popup-stat-label">Female</div><div class="popup-stat-val" style="color:#BE185D">${100-mp}%</div></div>
+  </div>
+  <div class="gender-bar"><div class="gender-m" style="width:${mp}%"></div><div class="gender-f" style="width:${100-mp}%"></div></div>
+  <div class="age-bars">${AGE_ORDER.map((a,i)=>{const pct=Math.round(ac[i]/am*100);return`<div class="age-bar-row"><div class="age-bar-lbl">${a}</div><div class="age-bar-track"><div class="age-bar-fill" style="width:${pct}%;background:${grp.color};"></div></div><div class="age-bar-val">${fmt(ac[i])}</div></div>`;}).join('')}</div>
+  <div class="top-cam-box"><div class="top-cam-label">&#127942; Top Detection Sensor</div><div class="top-cam-val">${escHtml(topCamId?'Sensor '+topCamId:'—')} <span style="font-size:11px;font-weight:400;color:#9a5000;">${fmtN(topCamTotal)} detections</span></div></div>
+  <div class="cam-list-mini"><div style="font-size:9px;color:#888;font-weight:600;text-transform:uppercase;margin-bottom:3px;">All Sensors in Group</div>${grp.sensorIds.map(sid=>{const cd=VA.cam_data[sid];return`<div class="cam-list-row"><div class="cam-list-dot" style="background:${sensorColor(sid)}"></div><div class="cam-list-name">Sensor ${escHtml(sid)}</div><div class="cam-list-val">${cd?fmtN(cd.total):'-'}</div></div>`;}).join('')}</div>
+  <div class="popup-floor">&#11035; Group: ${escHtml(grp.name)} &bull; Floor: ${escHtml(lvName)}</div>`;
+}
+
+function updateSidebar(){
+  const list=document.getElementById('sidebarList');
+  const floorItems=placements.filter(p=>p.levelId===currentLevel);
+  document.getElementById('sidebarCount').textContent=floorItems.length;
+  if(!floorItems.length){list.innerHTML='<div class="empty-state">&#128247;<br>No sensors or groups on this floor.<br>Enable a plot mode and click the map.</div>';return;}
+  list.innerHTML=floorItems.map(p=>{
+    if(p.type==='single'){
+      const color=sensorColor(p.sensorId);
+      const cd=VA.cam_data[p.sensorId];
+      const lv=(imdf.levels.find(l=>l.id===p.levelId)||{}).name||'?';
+      return `<div class="cam-item" data-uuid="${p.uuid}" onclick="selectPlacement('${p.uuid}')">
+        <div class="cam-item-header"><div class="cam-dot" style="background:${color}"></div><div class="cam-item-id">${escHtml(p.label||p.sensorId)}</div><div class="cam-item-floor">${escHtml(lv)}</div><button class="cam-delete" onclick="event.stopPropagation();deletePlacement('${p.uuid}')">&#10005;</button></div>
+        <div class="cam-item-stats"><div class="cam-stat">ID: <span>${escHtml(p.sensorId)}</span></div><div class="cam-stat">Total: <span>${cd?fmtN(cd.total):'N/A'}</span></div></div></div>`;
+    } else {
+      const grp=groups.find(g=>g.id===p.groupId)||{color:'#E65100',name:'?',sensorIds:[]};
+      const agg=aggregateGroup(p.groupId);
+      const lv=(imdf.levels.find(l=>l.id===p.levelId)||{}).name||'?';
+      return `<div class="cam-item grp-item" data-uuid="${p.uuid}" onclick="selectPlacement('${p.uuid}')">
+        <div class="cam-item-header"><div class="cam-dot grp-dot" style="background:${grp.color}"></div><div class="cam-item-id">&#11035; ${escHtml(p.label)}</div><div class="cam-item-floor">${escHtml(lv)}</div><button class="cam-delete" onclick="event.stopPropagation();deletePlacement('${p.uuid}')">&#10005;</button></div>
+        <div class="cam-item-stats"><div class="cam-stat">Sensors: <span>${grp.sensorIds.length}</span></div><div class="cam-stat">Total: <span>${agg?fmtN(agg.total):'N/A'}</span></div></div></div>`;
+    }
+  }).join('');
+}
+
+function selectPlacement(uuid){
+  document.querySelectorAll('.cam-item').forEach(el=>el.classList.toggle('selected',el.dataset.uuid===uuid));
+  const m=markerMap[uuid]; if(m){m.openPopup();map.panTo(m.getLatLng());}
+}
+function deletePlacement(uuid){
+  placements=placements.filter(p=>p.uuid!==uuid); savePlacements();
+  const m=markerMap[uuid]; if(m) map.removeLayer(m); delete markerMap[uuid];
+  syncMarkerVisibility(); updateSidebar();
+}
+
+function setPlotMode(type){
+  activePlotType=activePlotType===type?null:type;
+  document.getElementById('btnPlot').classList.toggle('active',activePlotType==='single');
+  document.getElementById('btnPlotGroup').classList.toggle('active',activePlotType==='group');
+  const hint=document.getElementById('plotHint');
+  hint.classList.toggle('show',activePlotType!==null);
+  hint.textContent=activePlotType?'▶ Click floor plan to place '+(activePlotType==='group'?'group':'sensor'):'';
+  document.body.classList.toggle('plot-mode',activePlotType!==null);
+}
+document.getElementById('btnPlot').addEventListener('click',()=>setPlotMode('single'));
+document.getElementById('btnPlotGroup').addEventListener('click',()=>setPlotMode('group'));
+
+function onMapClick(e){
+  if(!activePlotType) return;
+  pendingClick=e.latlng;
+  document.getElementById('modalFloor').value=(imdf.levels.find(l=>l.id===currentLevel)||{}).name||'?';
+  document.getElementById('modalCoords').textContent=e.latlng.lat.toFixed(6)+', '+e.latlng.lng.toFixed(6);
+  switchTab(activePlotType); openPlotModal();
+}
+
+function switchTab(tab){
+  document.getElementById('tabSingle').classList.toggle('active',tab==='single');
+  document.getElementById('tabGroup').classList.toggle('active',tab==='group');
+  document.getElementById('paneSingle').classList.toggle('active',tab==='single');
+  document.getElementById('paneGroup').classList.toggle('active',tab==='group');
+}
+
+function openPlotModal(){
+  const placed=placedSensorIds();
+  const sel=document.getElementById('modalCamId');
+  sel.innerHTML='<option value="">— Select Sensor ID —</option>';
+  VA.cameras.forEach(id=>{
+    const o=document.createElement('option'); o.value=id;
+    o.textContent='Sensor '+id+(placed.has(id)?' (placed)':''); o.disabled=placed.has(id);
+    if(placed.has(id)) o.style.color='#aaa'; sel.appendChild(o);
+  });
+  document.getElementById('modalCamName').value='';
+  const placedGrps=placedGroupIds();
+  const grpList=document.getElementById('grpSelectList');
+  selectedGroupId=null;
+  if(!groups.length){grpList.innerHTML='';document.getElementById('noGroupsHint').style.display='block';}
+  else{
+    document.getElementById('noGroupsHint').style.display='none';
+    grpList.innerHTML=groups.map(g=>{
+      const isPlaced=placedGrps.has(g.id);
+      return `<div class="grp-option-item${isPlaced?' already-placed':''}" data-gid="${g.id}" onclick="selectGroupOption('${g.id}',this)">
+        <div class="grp-opt-dot" style="background:${g.color}"></div><div class="grp-opt-name">${escHtml(g.name)}</div>
+        <div class="grp-opt-cams">${(g.sensorIds||[]).length} sensors</div>${isPlaced?'<span class="grp-opt-badge">placed</span>':''}
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('modalGrpLabel').value='';
+  document.getElementById('modalOverlay').classList.add('show');
+}
+
+function selectGroupOption(gid,el){
+  selectedGroupId=gid;
+  document.querySelectorAll('.grp-option-item').forEach(e=>e.classList.remove('selected-opt'));
+  el.classList.add('selected-opt');
+  const grp=groups.find(g=>g.id===gid);
+  if(grp && !document.getElementById('modalGrpLabel').value) document.getElementById('modalGrpLabel').value=grp.name;
+}
+
+document.getElementById('modalCamId').addEventListener('change',e=>{
+  const id=e.target.value;
+  if(id && !document.getElementById('modalCamName').value) document.getElementById('modalCamName').value='Sensor '+id;
+});
+document.getElementById('modalCancel').addEventListener('click',()=>{document.getElementById('modalOverlay').classList.remove('show');pendingClick=null;});
+document.getElementById('modalConfirm').addEventListener('click',()=>{
+  const tab=document.getElementById('tabSingle').classList.contains('active')?'single':'group';
+  if(!pendingClick) return;
+  if(tab==='single'){
+    const sensorId=document.getElementById('modalCamId').value;
+    const label=document.getElementById('modalCamName').value.trim();
+    if(!sensorId){alert('Please select a Sensor ID.');return;}
+    if(!label){alert('Please enter a label.');return;}
+    const p={uuid:genId(),type:'single',sensorId,label,levelId:currentLevel,lat:pendingClick.lat,lng:pendingClick.lng};
+    placements.push(p); savePlacements(); addMarker(p,true);
+  } else {
+    if(!selectedGroupId){alert('Please select a group.');return;}
+    const label=document.getElementById('modalGrpLabel').value.trim()||groups.find(g=>g.id===selectedGroupId)?.name||'Group';
+    const p={uuid:genId(),type:'group',groupId:selectedGroupId,label,levelId:currentLevel,lat:pendingClick.lat,lng:pendingClick.lng};
+    placements.push(p); savePlacements(); addMarker(p,true);
+  }
+  syncMarkerVisibility(); updateSidebar();
+  document.getElementById('modalOverlay').classList.remove('show'); pendingClick=null;
+});
+
+function openManageGroups(){renderGroupPanel();document.getElementById('grpPanel').classList.add('show');}
+document.getElementById('btnManageGroups').addEventListener('click',openManageGroups);
+document.getElementById('grpPanelClose').addEventListener('click',()=>document.getElementById('grpPanel').classList.remove('show'));
+
+function renderGroupPanel(){
+  const body=document.getElementById('grpPanelBody');
+  body.innerHTML=(!groups.length?'<div class="grp-panel-empty">&#11035;<br>No groups yet.<br>Create your first group to cluster sensors by zone.</div>':
+    groups.map(g=>`<div class="grp-list-item">
+      <div class="grp-color-dot" style="background:${g.color}"></div>
+      <div class="grp-list-name">${escHtml(g.name)}</div>
+      <div class="grp-list-cams">${(g.sensorIds||[]).length} sensor${(g.sensorIds||[]).length!==1?'s':''}</div>
+      <div class="grp-list-btns"><button class="grp-icon-btn" onclick="openGroupEditor('${g.id}')">&#9998;</button><button class="grp-icon-btn" onclick="deleteGroup('${g.id}')" style="color:#C62828;">&#128465;</button></div>
+    </div>`).join('')
+  )+'<button class="grp-add-btn" onclick="openGroupEditor(null)">+ New Group</button>';
+  updateHeaderCounts();
+}
+
+function openGroupEditor(groupId){
+  editingGroupId=groupId;
+  const grp=groupId?groups.find(g=>g.id===groupId):null;
+  document.getElementById('grpEditorTitle').textContent=grp?'✏ Edit Group':'⬛ New Sensor Group';
+  document.getElementById('grpEditorName').value=grp?grp.name:'';
+  selectedGroupEditorColor=grp?grp.color:GROUP_PALETTE[0];
+  document.getElementById('grpEditorColors').innerHTML=GROUP_PALETTE.map(c=>`<div class="color-swatch${c===selectedGroupEditorColor?' selected':''}" style="background:${c}" data-color="${c}" onclick="pickEditorColor('${c}',this)"></div>`).join('');
+  const assigned=grp?new Set(grp.sensorIds):new Set();
+  document.getElementById('grpEditorCamList').innerHTML=VA.cameras.map(id=>{
+    const cd=VA.cam_data[id];
+    return `<label class="cam-check-item"><input type="checkbox" value="${id}" ${assigned.has(id)?'checked':''}><span class="cam-check-label">Sensor ${escHtml(id)}</span><span class="cam-check-total">${cd?fmtN(cd.total)+' det.':''}</span></label>`;
+  }).join('');
+  document.getElementById('grpEditorOverlay').classList.add('show');
+}
+
+function pickEditorColor(color,el){
+  selectedGroupEditorColor=color;
+  document.querySelectorAll('.color-swatch').forEach(e=>e.classList.remove('selected'));
+  el.classList.add('selected');
+}
+
+document.getElementById('grpEditorCancel').addEventListener('click',()=>document.getElementById('grpEditorOverlay').classList.remove('show'));
+document.getElementById('grpEditorSave').addEventListener('click',()=>{
+  const name=document.getElementById('grpEditorName').value.trim();
+  if(!name){alert('Please enter a group name.');return;}
+  const sensorIds=[...document.querySelectorAll('#grpEditorCamList input:checked')].map(i=>i.value);
+  if(!sensorIds.length){alert('Please assign at least one sensor.');return;}
+  if(editingGroupId){
+    const grp=groups.find(g=>g.id===editingGroupId);
+    if(grp){grp.name=name;grp.color=selectedGroupEditorColor;grp.sensorIds=sensorIds;}
+    placements.filter(p=>p.type==='group'&&p.groupId===editingGroupId).forEach(p=>{
+      const m=markerMap[p.uuid]; if(m) map.removeLayer(m); delete markerMap[p.uuid]; addMarker(p,p.levelId===currentLevel);
+    });
+  } else {
+    groups.push({id:genId(),name,color:selectedGroupEditorColor,sensorIds});
+  }
+  saveGroups(); renderGroupPanel(); updateSidebar(); updateHeaderCounts();
+  document.getElementById('grpEditorOverlay').classList.remove('show');
+});
+
+function deleteGroup(groupId){
+  const grp=groups.find(g=>g.id===groupId); if(!grp) return;
+  const placed=placements.filter(p=>p.type==='group'&&p.groupId===groupId);
+  if(!confirm('Delete group "'+grp.name+'"?'+(placed.length?'\nAlso removes '+placed.length+' placement(s).':''))) return;
+  placed.forEach(p=>{const m=markerMap[p.uuid];if(m)map.removeLayer(m);delete markerMap[p.uuid];});
+  placements=placements.filter(p=>!(p.type==='group'&&p.groupId===groupId));
+  groups=groups.filter(g=>g.id!==groupId);
+  savePlacements(); saveGroups(); renderGroupPanel(); syncMarkerVisibility(); updateSidebar();
+}
+
+document.getElementById('btnExport').addEventListener('click',()=>{
+  const blob=new Blob([JSON.stringify({placements,groups},null,2)],{type:'application/json'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='venue_map_'+(new Date().toISOString().slice(0,10))+'.json'; a.click();
+});
+document.getElementById('btnImport').addEventListener('click',()=>document.getElementById('importFile').click());
+document.getElementById('importFile').addEventListener('change',e=>{
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    try{
+      const data=JSON.parse(ev.target.result);
+      const importedPlacements=Array.isArray(data)?data:(data.placements||[]);
+      const importedGroups=Array.isArray(data)?[]:(data.groups||[]);
+      placements.forEach(p=>{const m=markerMap[p.uuid];if(m)map.removeLayer(m);});
+      Object.keys(markerMap).forEach(k=>delete markerMap[k]);
+      placements=importedPlacements; groups=importedGroups;
+      savePlacements(); saveGroups();
+      placements.forEach(p=>addMarker(p,false));
+      syncMarkerVisibility(); updateSidebar(); renderGroupPanel();
+      alert('Imported '+importedPlacements.length+' placement(s) and '+importedGroups.length+' group(s).');
+    }catch(err){alert('Error: '+err.message);}
+    e.target.value='';
+  };
+  reader.readAsText(file);
+});
+
+document.getElementById('btnClear').addEventListener('click',()=>{
+  const floorItems=placements.filter(p=>p.levelId===currentLevel);
+  if(!floorItems.length) return;
+  const lv=(imdf.levels.find(l=>l.id===currentLevel)||{}).name||'this floor';
+  if(!confirm('Remove all '+floorItems.length+' item(s) from '+lv+'?')) return;
+  floorItems.forEach(p=>{const m=markerMap[p.uuid];if(m)map.removeLayer(m);delete markerMap[p.uuid];});
+  placements=placements.filter(p=>p.levelId!==currentLevel);
+  savePlacements(); syncMarkerVisibility(); updateSidebar();
+});
+
+init().catch(err=>{document.getElementById('loadingText').textContent='Error: '+err.message;console.error(err);});
+</script>
+</body>
+</html>

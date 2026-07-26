@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/trivy-security-scanner",
+  "slug": "trivy-security-scanner",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1778492821950,
+  "contentHash": "bb4f60627033c57e1fa72a4bb756badb0208e3e539319dde28771b14f4bda375",
+  "fetchedAt": "2026-07-26T19:17:29.198Z"
+}

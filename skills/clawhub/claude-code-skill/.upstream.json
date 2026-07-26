@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/claude-code-skill",
+  "slug": "claude-code-skill",
+  "ownerHandle": null,
+  "version": "0.2.0",
+  "updatedAt": 1779076600574,
+  "contentHash": "576d465e39080ade3d554334629430de26db9db8e510f2f4ac9aff744f5dc43a",
+  "fetchedAt": "2026-07-26T18:56:08.300Z"
+}

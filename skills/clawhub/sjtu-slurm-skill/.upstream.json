@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/sjtu-slurm-skill",
+  "slug": "sjtu-slurm-skill",
+  "ownerHandle": null,
+  "version": "0.2.3",
+  "updatedAt": 1778492631819,
+  "contentHash": "534ca61dc803f9c0b1b866bd535dc159d9b22b207ff03016cacc3bb367026ac2",
+  "fetchedAt": "2026-07-26T19:25:46.429Z"
+}

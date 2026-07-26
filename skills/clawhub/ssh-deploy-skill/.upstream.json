@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/ssh-deploy-skill",
+  "slug": "ssh-deploy-skill",
+  "ownerHandle": null,
+  "version": "1.2.2",
+  "updatedAt": 1778492436422,
+  "contentHash": "036d6669df0c82e8e5ac7fc9127e62fda2b70e8c6ae3fff94e7843f1bd5ee3e9",
+  "fetchedAt": "2026-07-26T19:34:45.721Z"
+}

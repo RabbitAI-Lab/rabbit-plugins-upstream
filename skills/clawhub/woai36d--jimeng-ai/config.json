@@ -1,0 +1,7 @@
+{
+  "sessionid": "4038bb9936557b368ba757feb7950085",
+  "default_model": "jimeng-3.0",
+  "output_dir": "~/.openclaw/workspace/output/jimeng/",
+  "port": 8000,
+  "service_pid": null
+}

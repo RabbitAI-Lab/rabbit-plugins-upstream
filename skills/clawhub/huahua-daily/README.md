@@ -1,0 +1,429 @@
+# 花花日记 MCP 服务（HuahuaDaily）
+
+通过 MCP 让 Codex、Codex CLI、Claude Code、Claude Code CLI、Claude Desktop、Cursor、Windsurf、OpenClaw 以及其他支持 MCP 的 Agent 读取花花日记后端数据、查询市场行情、识别截图，并向 App 发送待确认交易或导入请求。
+
+交易和导入不会由 Agent 直接写入。Agent 只负责识别、轻确认和发起请求，最终写入必须回到花花日记 App 的现有确认页。
+
+社区授权、取消授权、关注/取消关注、社区收益同步属于直接后端写操作，不走 App 待确认页；Agent 只有在用户明确确认该社区操作后才应调用。
+
+MCP 可读取完整持仓、交易流水、云端实时同步主数据和截图内容，可能包含金额、成本、收益率等敏感投资数据。生成 Agent Token 即表示授权所接入的 Agent 在其权限范围内读取这些数据。
+
+## 前置条件
+
+- **Python 3.10+**
+- 花花日记账号已开通 PRO。
+- 在 App「小窝 / 设置 → Agent 访问令牌」生成新的 Agent Token。
+- Token 只显示一次，配置为环境变量 `HUAHUA_AGENT_TOKEN`。
+
+官方 API 默认地址：`https://api.huahuadaily.cn`，可通过 `HUAHUA_API_BASE` 覆盖。
+
+MCP 启动时会在后台读取公开仓库中的版本声明，不延迟协议初始化；标准 MCP
+`instructions` 会要求 Agent 在每个会话首次使用前调用 `get_tool_manifest()` 读取结果。
+首次查询最多等待 2 秒，成功结果在当前进程缓存 6 小时，失败结果 15 分钟后重试。
+检查失败只返回 `updateCheck.status=unavailable`，不会阻断其他工具；发现新版时返回
+`updateAvailable=true` 和分安装方式的更新步骤。该机制只提示，不会自行安装或覆盖
+用户环境。特殊离线环境可设置 `HUAHUA_MCP_UPDATE_CHECK=0` 关闭。
+
+## 安装方式
+
+### 方式一：uvx（推荐）
+
+[uv](https://docs.astral.sh/uv/) 是快速的 Python 包管理器，`uvx` 可直接运行 Python 工具，无需手动安装依赖。
+
+**安装 uv**（如果尚未安装）：
+
+```bash
+# macOS / Linux
+curl -LsSf https://astral.sh/uv/install.sh | sh
+
+# Windows
+powershell -c "irm https://astral.sh/uv/install.ps1 | iex"
+```
+
+**MCP 配置**：
+
+```json
+{
+  "mcpServers": {
+    "huahua-daily": {
+      "command": "uvx",
+      "args": [
+        "--from",
+        "git+https://github.com/baiye1997/HuaHuaDailyMCP",
+        "huahua-daily"
+      ],
+      "env": {
+        "HUAHUA_API_BASE": "https://api.huahuadaily.cn",
+        "HUAHUA_AGENT_TOKEN": "粘贴你的 Agent Token"
+      }
+    }
+  }
+}
+```
+
+### 方式二：pip 安装
+
+如果不想安装 uv，可以用 pip 全局安装：
+
+```bash
+pip install git+https://github.com/baiye1997/HuaHuaDailyMCP
+```
+
+**MCP 配置**：
+
+```json
+{
+  "mcpServers": {
+    "huahua-daily": {
+      "command": "huahua-daily",
+      "env": {
+        "HUAHUA_AGENT_TOKEN": "粘贴你的 Agent Token"
+      }
+    }
+  }
+}
+```
+
+### 方式三：本地运行
+
+```bash
+# 克隆仓库
+git clone https://github.com/baiye1997/HuaHuaDailyMCP.git
+cd HuaHuaDailyMCP
+
+# 安装依赖
+pip install -r requirements.txt
+
+# 运行
+HUAHUA_AGENT_TOKEN=你的Token python server.py
+```
+
+HuahuaDaily 主仓库联调使用工作区 MCP，避免调用已安装的生产版本。启动本地 PostgreSQL、Redis 和后端后运行：
+
+```bash
+./scripts/dev-mcp.sh
+```
+
+该脚本只在 development/test 环境为本地内置 `admin` 账号创建 token，并直接执行当前目录的 `mcp-server/server.py`。若该账号尚无持仓，会写入确定性的两基金验收样例；已有持仓不会被覆盖。自动验收量化工具可运行：
+
+```bash
+.venv/bin/python scripts/test-local-quant-mcp.py
+```
+
+### 包结构
+
+发行物由兼容入口和 runtime package 共同组成，不支持 `server.py` 单文件分发：
+
+```text
+mcp-server/
+├── server.py                    # 兼容 facade 与 huahua-daily 控制台入口
+├── pyproject.toml               # 同时打包 server 与 runtime packages
+└── huahua_mcp_runtime/
+    ├── client.py                # HTTP、认证、会话与缓存
+    ├── facade_helpers.py        # facade 的估算/组合 helper
+    ├── manifest.py              # 工具 manifest
+    ├── update_check.py          # 有界、可降级的版本检查
+    ├── version.py               # MCP 运行时版本单一来源
+    ├── portfolio_adapter.py     # 云端组合适配
+    ├── portfolio_math.py        # 组合计算兼容函数
+    ├── tool_registry.py         # 81 个工具的固定顺序与注册
+    ├── validation.py            # 输入校验
+    └── tools/                   # fund/market/portfolio/community/quant 等领域工具
+```
+
+`server.py` 保留历史导出和 monkeypatch 兼容；工具实现位于 `huahua_mcp_runtime`。本地开发安装完整包：
+
+```bash
+python -m pip install -e ./mcp-server
+huahua-daily
+```
+
+发布前从主仓库运行：
+
+```bash
+npm run mcp:version:check
+npm run backend:lint
+.venv/bin/python -m pytest \
+  backend/tests/test_mcp_server_surface.py \
+  backend/tests/test_mcp_portfolio_adapter.py
+```
+
+修改 `server.py`、runtime package、MCP 依赖或 `SKILL.md` 契约时，必须先提升
+`huahua_mcp_runtime/version.py` 中的版本。仓库质量门会比较 Git 基线并阻止遗漏；
+单纯修改 README 不要求提升运行时版本。
+
+MCP surface 测试构建 wheel，校验 runtime/tools、console entry point 和 81 个工具，并在隔离目录完成安装导入。测试产物写入临时目录；`mcp-server/` 不保留 `build/`、`dist/`、`*.egg-info` 或 wheel。MCP 独立发布，`mcp-server/**` 变更归入人工发布复核。
+
+## 各 Agent 配置示例
+
+### Claude Code
+
+```bash
+claude mcp add huahua-daily \
+  -e HUAHUA_AGENT_TOKEN=你的Token \
+  -- uvx --from git+https://github.com/baiye1997/HuaHuaDailyMCP huahua-daily
+```
+
+或手动编辑 `~/.claude.json`：
+
+```json
+{
+  "mcpServers": {
+    "huahua-daily": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/baiye1997/HuaHuaDailyMCP", "huahua-daily"],
+      "env": {
+        "HUAHUA_API_BASE": "https://api.huahuadaily.cn",
+        "HUAHUA_AGENT_TOKEN": "你的Token"
+      }
+    }
+  }
+}
+```
+
+### Claude Desktop
+
+编辑 `~/Library/Application Support/Claude/claude_desktop_config.json`（macOS）或 `%APPDATA%\Claude\claude_desktop_config.json`（Windows）：
+
+```json
+{
+  "mcpServers": {
+    "huahua-daily": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/baiye1997/HuaHuaDailyMCP", "huahua-daily"],
+      "env": {
+        "HUAHUA_AGENT_TOKEN": "你的Token"
+      }
+    }
+  }
+}
+```
+
+### Cursor
+
+编辑 `~/.cursor/mcp.json`：
+
+```json
+{
+  "mcpServers": {
+    "huahua-daily": {
+      "command": "uvx",
+      "args": ["--from", "git+https://github.com/baiye1997/HuaHuaDailyMCP", "huahua-daily"],
+      "env": {
+        "HUAHUA_AGENT_TOKEN": "你的Token"
+      }
+    }
+  }
+}
+```
+
+### Windsurf
+
+编辑 `~/.windsurf/mcp.json`，格式同上。
+
+## OpenClaw / ClawHub
+
+```bash
+clawhub install huahua-daily
+```
+
+然后配置环境变量 `HUAHUA_AGENT_TOKEN`。
+
+## System Prompt 模板
+
+```text
+你可以使用花花日记 HuahuaDaily MCP 工具查询用户基金持仓、交易流水、云同步状态、市场行情和公告，也可以识别截图并把导入结果发送到 App 确认页。
+
+调用规则：
+- 会话开始可调用 get_tool_manifest 自检能力和安全边界。
+- 查询资产概况优先调用 get_summary；需要明细再调用 get_records。
+- 需要审计交易流水或重算收益时，调用 get_transactions 或 get_records(include_transactions=true)。
+- 需要完整云端实时同步主数据时，调用 get_raw_sync_data；不要默认请求 include_json_text=true。
+- 若 `get_sync_meta` / `get_raw_sync_data.meta` 返回 `empty_portfolio_confirmed=true` 且 `has_restorable_sync_payload=true`，表示这是用户在 App 确认过的空组合主数据，不是云端损坏。
+- 查询某只基金行情：已知代码直接 get_item_estimate；未知代码先 search_item。
+- 对比单只基金不同行情源：调用 get_fund_source_previews。
+- 用户想买入/卖出时，必须先确认基金名称、代码、金额或份额、卖出模式和分组，再调用 request_transaction；指定分组时优先传稳定的 `group_id`。
+- request_transaction 只发送待确认信号，必须明确告知用户需要打开 App 确认。
+- 7 天内重试同一交易或导入请求时必须复用 `client_request_id`，服务端会保留该窗口内的幂等记录，避免产生重复待确认 Banner；超过窗口请生成新的请求 ID。
+- 用户明确要求生成个人组合报告时，可以基于其授权读取的持仓、交易和行情数据生成，并调用 submit_personal_strategy_report 投递到当前 token 用户自己的报告中心。
+- submit_personal_strategy_report 需要 `messages:write` scope；如需同一个 token 同时读取持仓并投递个人报告，使用 `agent:full messages:write`。默认 `agent:full` 不含个人报告写入。
+- submit_personal_strategy_report 只能写当前 Agent Token 所属用户，不能广播，不能指定 user_id，不得声称发送给所有用户。
+- 不得调用 /api/hermes/reports；公开 MCP 不提供管理员公共报告写入能力。
+- 截图导入先调用 import_holding_screenshots 或 import_transaction_screenshots。
+- 对 unmatched / ambiguous 条目只做轻确认，补齐基金代码、日期、金额、份额等识别歧义。
+- 轻确认后调用 request_import_review，把整批结果发送到 App 现有导入确认页。
+- 不要直接写云同步，不要声称导入已完成；用户必须在 App 批量确认后才会写入。
+- 数据来自云端实时同步主数据，MCP 固定读取结构化组合接口，不读取旧同步大包或云端历史备份快照。若用户刚在 App 操作，提醒其确认实时同步已完成再查询。
+- `get_records` 的市值/持有收益只按 App 云端主数据中的官方 `lastNav` 计算；盘中估算只用于今日收益，不用于持仓市值。
+- QDII/T+N 最新官方净值缺少可靠 G 日时，`todayProfit` 和归属日分母不会提前计入；检查 `summary.displayedDayCompleteness.complete` 与 `pendingAttributionCount`，不得把残缺组合描述成完整当日收益。
+- `summary.estimateCompleteness.complete=false` 或 `timeoutCount>0` 表示至少一只持仓缺少可用估值帧；此时 0 元不是已确认的真实零涨跌。用 `unavailableCodes` / `timeoutCodes` 定位基金；`staleCount>0` 与 `staleCodes` 表示使用了可用但陈旧的 last-good 帧。
+- 查询 QDII 夜盘估值时，先调用 get_night_watchlist 获取用户自选列表，再调用 get_night_estimate。
+- 查询资金流向时调用 get_fund_flow（需 PRO 会员）。
+- 社区授权/关注/同步等写操作须向用户确认后再执行。
+- 社区写操作会直接生效，不是 App 待确认请求；收益同步不要凭空编造收益率，通常交给 App 自动同步。
+- 截图工具的 image_paths 会读取本机图片文件；只使用用户明确提供的路径，无法确认来源时优先使用 images_base64。
+- 用户完成 JCTI 答题后可调用 analyze_jcti 获取 AI 人格分析。
+- 查询 App 版本信息使用 get_app_version 或 get_app_versions。
+```
+
+## 工具能力
+
+认证与自检：
+
+- `set_token(token)`：运行时设置 Agent Token。
+- `get_tool_manifest()`：返回能力边界、认证方式、安全说明、MCP 更新预检和 `backendCompatibility` 后端量化契约握手。Agent 在每个会话首次使用 HuahuaDaily 时调用；若 `runtime.updateCheck.updateAvailable=true`，应按 `updateInstructions` 提示用户更新并重启 MCP；若 `backendCompatibility.compatible=false`，不要继续调用量化写入工具。
+- `get_current_user()`：读取当前账号和会员信息。
+
+云端实时同步与持仓：
+
+- `get_sync_meta()`：读取云端实时同步主数据更新时间、etag、大小，并返回最新云端历史快照摘要。
+- `get_raw_sync_data(include_json_text=false)`：读取解析后的完整云端实时同步主数据，优先结构化组合接口。
+- `get_records(include_transactions=false)`：读取持仓、App 中可见的自选、今日估算收益和汇总；不返回已送养隐藏项，同代码的显式自选优先；会自动使用云端主数据里的全局/单基金行情源偏好，并在已配置时返回 `autoInvestPlans`。
+- `get_summary()`：读取资产摘要。
+- `get_transactions(code="", include_pending=true)`：读取交易流水。
+- `get_transaction_ledger(start_date="", end_date="", codes?, transaction_types?, statuses?, group_id="", cursor="", limit=100, order="desc")`：读取服务端完整交易账本，含金额、份额、费用、净值日和确认日；可按持仓分组筛选；筛选与排序按 `effectiveDate = confirmDate || tradeDate`；永久删除基金不再出现。
+- `get_groups()`：读取持仓分组和自选分组。
+- `get_tags()`：读取全局标签和基金标签。
+- `get_purchase_limit_watchlist()`：读取 App 限购观察列表（来自云端实时同步主数据）。
+- `get_auto_invest_plans(code="")`：只读查询 App 定投计划，兼容旧版单计划和新版多计划；可按基金代码筛选，不提供任何写入能力。
+- `get_fund_disciplines(code="")`：只读查询 App 中设置的基金止盈止损纪律及触发状态；可按基金代码筛选，不提供任何写入能力。
+
+策略实验室：
+
+- `get_portfolio_nav_history(start_date="", end_date="", benchmark_code="000300", group_id="")`：真实组合单位净值、累计收益、每日收益和回撤；与 App“策略 → 我的组合”同口径。
+- `get_portfolio_trade_review(start_date, end_date, benchmark_code="000300", group_id="")`：读取与 App 相同的加减仓复盘，以及 T1/T7/T20/T60 后续表现。
+- `get_batch_fund_nav_history(codes, start_date="", end_date="", order="asc")`：一次读取最多 20 只基金的官方历史净值，DB-only，不逐只请求上游；每只基金返回 `coverageStart/coverageEnd/baselineDate/complete`，`complete` 仅在请求区间首尾严格覆盖时为 true。
+- `get_quant_strategy_context(as_of_date="", group_id="", mode="live", history_window="1y", benchmark_code="000300", view="compact")`：一次返回真实持仓、D 日基金指标、G 日组合风险、实时估值、QDII 夜盘执行参考、交易门禁、有效定投、在途金额和服务端预计算市场结果。MCP 默认 `view="compact"`，保留分析就绪状态、风控、执行、全市场聚合与主基准逐指数明细；需要完整份额、成本、官方净值、全部启用指数明细和下钻引用时使用 `view="full"`。两种视图复用同一 canonical Context 缓存。默认轮询池只读缓存，非默认指数按需由后端读穿；历史模式使用可按 `as_of_date` 截止的日线来源。不返回原始日序列，也不要求 Agent 自行计算。
+- `run_portfolio_backtest(funds, start_date, end_date, initial_capital=100000, strategy_type="target_rebalance", rebalance_frequency="monthly", take_profit_rate=0.15, stop_loss_rate=0.10, reentry_rate=0.05, benchmark_code="000300", name="Agent 回测", client_run_id="", group_id="")`：运行并保存零费率历史试算；`funds` 为 `[{"code":"000001","name":"基金名称","weight":0.5}, ...]`，`name` 可选，权重和必须为 1。分析某个资产分组时传 `group_id`，服务端会校验并保存方案起点。`strategy_type` 支持固定比例 `target_rebalance` 和止盈止损再买入 `threshold_reentry`；固定比例的调仓频率支持 `none/daily/weekly/monthly/quarterly`。
+- `get_portfolio_backtest(run_id, trade_offset=0, trade_limit=100, max_series_points=300)`：按 `run_portfolio_backtest` 返回的 `run_id` 读取已保存结果；走势最多抽样 500 点，交易按 offset/limit 分页，使用 `nextTradeOffset` 继续读取，适合审计长周期结果。
+- `save_quant_snapshot(snapshot_key, snapshot_date, strategy_id, data_cutoff_at, strategy_version="", fund_signals?, market_mode?, features?, risk?, data_quality?, group_id="")`：幂等归档当天策略观察；`data_cutoff_at` 必填。可传资产分组 ID，将真实持仓和逐基金判断限定在该分组；真实持仓、组合版本和内容哈希由服务端捕获。不接受历史回填、虚拟持仓、建议金额或收益字段。
+- `get_quant_snapshots(strategy_id="", latest_only=false, limit=50, cursor="", start_date="", end_date="", snapshot_id=0, group_id="")`：分页读取不可变信号档案；传 `group_id` 只读取以该分组保存的判断，旧快照归入全部持仓；列表返回摘要，传 `snapshot_id` 读取完整内容。
+- `get_quant_snapshot_review(snapshot_id, benchmark_code="000300")`：读取与 App 相同的不可变信号快照 T1/T7/T20/T60 权威复盘。
+
+回测与信号档案是研究和复盘记录，不会直接下单。基金“清仓”保留真实交易历史；App 永久删除基金后，真实组合账本及引用该真实组合的信号档案视为从未拥有，独立历史试算结果不受影响。
+
+市场与基金：
+
+- `search_item(query)`
+- `get_item_estimate(codes, default_data_source_mode="huahua", data_source_mode_by_code?)`：最多 50 只；行情源只支持 `huahua/a/b/c`，拼写错误会直接报错；检查 `complete`、`missingCodes`、`invalidCodes`、`unavailableCodes` 和 `timeoutCodes`，不能把部分返回或 timeout 占位帧当成完整行情。
+- `get_fund_source_previews(code)`：单只基金 huahua/a/b/c 多行情源估算预览，用于解释或选择数据源。
+- `get_item_detail(code)`：读取单基金基础详情与持仓信息，不触发量化计算。
+- `get_item_history(code)`
+- `get_item_dividends(code)`
+- `get_fund_timeline(code, source_mode="huahua")`
+- `get_fund_fees(code)`：确认天数、申购状态、QDII/限大额日累计限购金额等交易规则。
+- `get_batch_fund_fees(codes)`：批量获取费率/申购状态/限购规则，最多 50 只；检查 `complete` 和 `missingCodes`。
+- `get_fund_period_rank(code)`
+- `get_batch_fund_period_ranks(codes)`：批量获取多只基金排名，最多 50 只；结果位于 `data`，检查 `complete` 和 `missingCodes`。
+- `get_night_estimate(codes, force=false, view="forecast")`：QDII 基金夜间实时估值，含持仓穿透、汇率变动（需会员）。`force=true` 跳过服务端缓存；`view` 可为 `forecast` 或 `last_close`。
+- `get_night_watchlist()`：读取用户在 App 夜盘估值页手动添加的基金代码列表（来自云端实时同步主数据），通常作为 `get_night_estimate` 的前置工具，免去用户手动报代码。
+- `get_purchase_limit_watchlist()`：读取用户在 App 限购观察页保存的基金列表；可配合 `get_fund_fees` 检查申购状态和限购额度。
+- `get_daily_rank()`
+- `get_status()`
+- `get_overview()`
+- `get_sector_wind()`：板块风向，返回领涨/领跌板块和数据时间。
+- `get_index_metrics(codes=None)`：不依赖持仓，返回全部或指定指数的服务端 MA、收益、趋势、回撤、波动和强弱排名；例如 `codes=["KS11"]` 直接取得韩国指数 MA20。`historyExpectedAsOf` 与 `historyFreshness` 按所属市场时区、收盘时刻和交易日历判定日线是否到位，`historyFreshnessBasis` 会显式标记交易日历或市场配置不可用的降级，`historyLagCalendarDays` 仅作跨度展示。
+- `get_sector_metrics()`：全部行业/主题 ETF 代理的服务端 MA、收益、回撤、波动和强弱排名；同样返回独立历史新鲜度，Agent 不再自行计算。
+- `get_yesterday_rank()`：上一交易日基金涨跌榜。
+- `get_fund_flow()`：资金流向数据（需 PRO 会员）；`sectorFlow` 非空时同时提供 industry 与 concept，分类由 last-good 补齐时返回 `categoryFreshness`、`categoryPolledAt`。
+- `get_indices()`
+- `get_benchmark_history(code="sh000300")`
+- `calculate_trading_dates(date, time_mode="PRE_MARKET", confirm_days=1)`：返回的 `data_date` 是按 `nav_date` 与 `confirm_days` 反推的估值反映日，并以 `data_date_inferred=true`、`data_date_basis=nav_date_minus_confirm_days_offset` 公示来源；它不是上游已观察到的官方净值 D 日、公布日或收益归属 G 日。
+- `get_next_trading_day(date)`
+- `get_fund_profile(code)`：基金画像（综合信息）。
+- `get_batch_fund_profiles(codes)`：批量基金画像，最多 20 只；非法代码直接报错；返回 `data`、`complete`、`missingCodes`、`timedOut`，服务端总预算 20 秒。
+- `get_fund_quant_metrics(code, view, ...)`：按需读取后端统一计算的单基金量化数据。`technical` 返回技术卡与历史统计，`momentum` 返回短中期收益/均线偏离/连跌，`risk` 返回中长期收益/回撤/波动，`full` 才组合全部数据；不要无条件请求 `full`。实时估算帧只适用于 `technical/full`。官方口径不接受客户端自定义净值，不输出买卖建议。
+- `get_batch_fund_quant_metrics(codes, view, current_frames=None)`：按相同语义视图批量取数；`technical/momentum/risk` 最多 50 只，`full` 最多 10 只。Agent 不应并发调用多次单只接口，也不应重复拉 NAV 历史计算。顶层 `complete` 只表示所有代码至少有一条官方净值；指标窗口检查 `item.metrics.complete`（`full` 为 `item.official.metrics.complete`），历史统计检查 `item.current.status`。`computing` 按 `retryAfterMs` 稍后重试；使用当前帧时还必须检查 freshness/stale。
+- `get_holder_ranking()`：App 内持有人数排行榜。
+- `get_instrument_catalog()`：指数/ETF 目录。
+- `get_instrument_quotes(codes)`：严格按目录标准代码返回指数/ETF实时行情，不补默认标的；最多20个。
+- `get_instrument_timeline(code, range="1d")`：使用目录标准代码读取指数/ETF分时走势，例如 `000300`、`399006`、`KS11`。
+- `get_instrument_history(code, period="1m")`：使用目录标准代码读取指数/ETF历史数据；周期仅支持 `1m/3m/6m/1y`。
+
+交易请求：
+
+- `request_transaction(item_code, item_name, record_type, amount=0, date="", note="", group_name="", group_id="", sell_mode="AMOUNT", shares=0, client_request_id="")`：买入使用 `amount`；卖出明确选择 `AMOUNT` 或 `SHARES`。指定分组优先传 `group_id`；7 天内重试必须复用 `client_request_id`。
+- `get_agent_requests()`
+- `update_agent_request(request_id, status="DISMISSED")`：只允许撤回待确认提示；`PROCESSED` 必须由 App 在用户确认后设置。
+
+个人报告：
+
+- `submit_personal_strategy_report(title, summary, payload, client_message_id="")`：将个人策略报告投递到当前 Agent Token 所属用户的报告中心。需要显式 `messages:write` scope；如需同一个 token 同时读取持仓并投递个人报告，使用 `agent:full messages:write`。可基于用户明确授权的持仓、交易和行情数据生成。该工具不能广播，不能指定 `user_id`，不能写公共 Hermes 报告，也不得调用 `/api/hermes/reports`。
+
+截图导入：
+
+- `import_holding_screenshots(image_paths?, images_base64?, import_type="HOLDINGS")`：识别持仓/自选截图，返回 `items`、`summary`、`resolution_required` 等字段，不写入数据。`import_type` 只能是 `HOLDINGS`（默认，按基金名称匹配）或 `WATCHLIST`（按 6 位代码优先精确匹配，自选截图务必传此值以提高准确率），未知值会直接报错。
+- `import_transaction_screenshots(image_paths?, images_base64?)`：识别交易流水截图，返回交易类型、基金匹配、日期、金额/份额和歧义标记，不写入数据。
+- `request_import_review(import_type, items, source_note="Agent screenshot import", client_request_id="")`：把轻确认后的整批结果发送到 App 现有确认页。`import_type` 只能是 `HOLDINGS`、`WATCHLIST`、`TRANSACTIONS`；7 天内重试必须复用 `client_request_id`。
+
+社区与公告：
+
+- `get_danmaku(code)`
+- `send_danmaku(fund_code, text)`：发送弹幕，颜色由 App 根据涨跌自动设置
+- `get_notices(since=0)`
+- `get_community_ranking(tab="weekly", page=1, page_size=50)`：收益率排行榜（周/月/总）。
+- `get_community_my_rank()`：我的排名。
+- `get_community_user(uid)`：用户详情（十大重仓前5）。
+- `get_community_stats()`：关注/粉丝数。
+- `get_community_following()`：关注列表。
+- `search_community_users(query)`：搜索用户（UID/昵称）。
+- `get_community_notices(since=0)`：社区定向通知。
+- `get_community_authorization()`：查询社区授权状态。
+- `authorize_community(show_amount, anonymous)`：授权参与喵舍排行，直接生效，调用前必须确认。
+- `revoke_community_authorization()`：取消授权，退出排行，直接生效，调用前必须确认。
+- `follow_community_user(target_uid)`：关注/取消关注用户（取反操作），直接生效，调用前必须确认。
+
+JCTI 投资人格：
+
+- `analyze_jcti(personality_id, ye, wen, sui, duan)`：提交四维分数，获取 AI 个性化投资人格分析。
+
+版本信息：
+
+- `get_app_version()`：最新版本号、更新日志、下载地址。
+- `get_app_versions(page, page_size)`：版本历史列表（分页）。
+
+## 截图导入流程
+
+1. Agent 调用截图识别工具，获取结构化结果。
+2. Agent 只对未匹配或有歧义的条目做轻确认。
+3. Agent 调用 `request_import_review` 创建一个批量导入请求。
+4. App 展示一个 Agent Banner。
+5. 用户点击后进入现有确认页：
+   - `IMPORT_HOLDINGS` → 持仓截图导入确认页
+   - `IMPORT_WATCHLIST` → 自选截图导入确认页
+   - `IMPORT_TRANSACTIONS` → 交易记录截图导入确认页
+6. 用户在 App 中批量编辑、分组、去重并确认后才写入。
+
+## 数据完整性说明
+
+云端实时同步主数据用于多端一致，包含：
+
+- `funds`：基金、自选、持仓、成本、交易记录、标签、纪律、定投、基金级 `dataSourceMode`，以及恢复前展示所需的最后官方净值基线。
+- `groups` / `watchlistGroups`：分组。
+- `globalTags`：全局标签注册表。
+- `fieldConfigs` / `watchlistFieldConfigs`：字段显示配置。
+- `nightWatchCodes`：夜盘估值自选基金。
+- `purchaseLimitWatchItems`：限购观察列表。
+- `purchaseLimitWatchNightDefaultsMigrated`：限购观察是否已并入夜盘默认基金的迁移标记。
+- `marketIndexSelection`：市场指数/ETF 看板选择。
+- `userPreferences.fundDataSourceMode`：全局基金估值行情源模式。
+- `userPreferences.strategyMaxDrawdownLimitPct`：策略实验室组合回撤阈值百分数，`0` 表示未启用；`get_records.strategyPreferences` 会向 Agent 返回该值。
+- `emptyPortfolioConfirmed` / `clearedAt`：用户确认清空组合后生成的空组合主数据标记；这类主数据可恢复为空组合，不应当作异常空数据。
+- `timestamp` / `version`：客户端导出时间和数据版本。
+
+云端实时同步主数据只保留已删除基金不可重建的归档账本；当前基金的收益日历会用交易记录和历史净值重建。手动本地备份包含并恢复完整 ledger 和基金元数据，可离线恢复。
+
+Agent 如需完整审计，应优先读取 `get_transactions` 和 `get_raw_sync_data`，不要只依赖 `get_summary`。
+
+## 安全边界
+
+- Agent Token 存储为 SHA256，不保存明文。
+- Token 可设置有效期，可在 App 内撤销。
+- 后端对 AgentToken 使用权限白名单。
+- Agent Token 需要 PRO 会员；过期、撤销或会员状态不满足时会被拒绝。
+- MCP 可读取敏感投资数据，包括持仓金额、交易流水和原始云端实时同步主数据；请只授权可信 Agent。
+- 交易类能力只创建待确认请求，不直接写入交易。
+- 截图导入只把识别结果发送到 App 确认页，不直接写入数据。
+- 本地截图路径 `image_paths` 会读取并上传本机图片文件；只使用用户明确提供的路径。
+- 社区授权、取消授权、关注/取消关注、社区收益同步是直接写操作，不经过 App 确认页。
+- MCP 不提供云同步覆盖写入工具。

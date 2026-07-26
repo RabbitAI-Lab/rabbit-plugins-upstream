@@ -1,0 +1,5 @@
+{
+    "name":  "daily-news",
+    "version":  "1.0.0",
+    "description":  "Fetch top news from Baidu, Google, and other sources daily."
+}

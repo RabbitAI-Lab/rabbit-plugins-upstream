@@ -1,0 +1,56 @@
+[
+  {
+    "key": "epl",
+    "name": "English Premier League",
+    "sport": "Soccer",
+    "league_id": "4328"
+  },
+  {
+    "key": "ucl",
+    "name": "UEFA Champions League",
+    "sport": "Soccer",
+    "league_id": "4480"
+  },
+  {
+    "key": "psl",
+    "name": "South African Premier Soccer League",
+    "sport": "Soccer",
+    "league_id": "4802"
+  },
+  {
+    "key": "nba",
+    "name": "NBA",
+    "sport": "Basketball",
+    "league_id": "4387"
+  },
+  {
+    "key": "wnba",
+    "name": "WNBA",
+    "sport": "Basketball",
+    "league_id": "4516"
+  },
+  {
+    "key": "f1",
+    "name": "Formula 1",
+    "sport": "Motorsport",
+    "league_id": "4370"
+  },
+  {
+    "key": "urc",
+    "name": "United Rugby Championship",
+    "sport": "Rugby",
+    "league_id": "4446"
+  },
+  {
+    "key": "ipl",
+    "name": "Indian Premier League",
+    "sport": "Cricket",
+    "league_id": "4460"
+  },
+  {
+    "key": "sa20",
+    "name": "SA20",
+    "sport": "Cricket",
+    "league_id": "5532"
+  }
+]

@@ -1,0 +1,4 @@
+interface:
+  display_name: "ZeroToken"
+  short_description: "Token-efficient, safe agent execution"
+  default_prompt: "Use $zerotoken-skill to solve this task with minimal context and tool calls; state the result first and run proportionate validation."

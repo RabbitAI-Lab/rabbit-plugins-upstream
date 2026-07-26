@@ -1,0 +1,16 @@
+{
+  "name": "zhihu-research-page",
+  "version": "v21",
+  "description": "通过大规模联网搜索自动创建知乎风格的深度知识网页。生成 10 章节多答主模拟回答，含 ≥10 万字和 ≥500 次搜索引用。支持任意比例裁剪（1%-500%）。",
+  "author": "zhihu-research-page",
+  "license": "MIT",
+  "skills": [
+    {
+      "name": "zhihu-research-page",
+      "description": "通过大规模联网搜索自动创建知乎风格的深度知识网页，样式高度还原 zhihu.com。生成 10 个章节的多答主模拟回答页面，含 ≥10 万有效中文字和 ≥500 次真实搜索引用。支持手动裁剪为任意比例版本。适用于生成知识专题页、学习路径教程、产品深度百科、行业研究报告等场景。",
+      "path": "."
+    }
+  ],
+  "tags": ["content-creation", "research", "web-generation", "chinese", "knowledge-base"],
+  "platforms": ["claude-code", "claude-ai"]
+}

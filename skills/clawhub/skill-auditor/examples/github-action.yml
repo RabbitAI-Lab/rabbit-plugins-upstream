@@ -1,0 +1,40 @@
+name: Audit Agent Skills
+
+on:
+  pull_request:
+    paths:
+      - 'skills/**'
+  schedule:
+    # Re-audit every Monday 03:00 UTC for upstream drift
+    - cron: '0 3 * * 1'
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Audit all skills (batch mode)
+        run: |
+          # Fail the job if any skill reaches HIGH tier (>=71)
+          python3 skills/skill-auditor/scripts/vet.py --batch skills/ --fail-on high
+
+      - name: Generate JSON report
+        if: always()
+        run: |
+          python3 skills/skill-auditor/scripts/vet.py --batch skills/ --json > audit-report.json
+
+      - name: Upload audit reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: skill-audit-reports
+          path: |
+            audit-report.json
+            skills/
+          retention-days: 30

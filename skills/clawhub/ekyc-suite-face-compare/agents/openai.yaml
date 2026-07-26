@@ -1,0 +1,4 @@
+interface:
+  display_name: "eKYC Suite Face Compare"
+  short_description: "Compare two faces for eKYC identity verification"
+  default_prompt: "Use eKYC Suite Face Compare to compare two consented face images and explain the similarity result."

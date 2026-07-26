@@ -1,0 +1,6 @@
+anthropic
+openpyxl
+pillow
+requests
+pandas
+streamlit>=1.35.0

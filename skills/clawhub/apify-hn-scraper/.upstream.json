@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/apify-hn-scraper",
+  "slug": "apify-hn-scraper",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1778996263486,
+  "contentHash": "a7aa0f01bcc1559f3c96f662e3ac6612b514aba7cc257cb58a521a1ebb399ed0",
+  "fetchedAt": "2026-07-26T19:05:34.944Z"
+}

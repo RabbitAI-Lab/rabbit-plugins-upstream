@@ -1,0 +1,21 @@
+routing:
+  keywords:
+    - "weather"
+    - "temperature"
+    - "forecast"
+    - "rain"
+    - "sunny"
+    - "cloudy"
+    - "humidity"
+  patterns:
+    - "(today|tomorrow|this week).{0,6}(weather|temperature|forecast)"
+    - "(weather|temperature|forecast).{0,6}(today|tomorrow|this week)"
+    - "(will it|is it going to).{0,6}(rain|snow|be sunny|be cold)"
+    - "what.{0,4}(weather|temperature)"
+  anti_patterns:
+    - "climate change"
+    - "weather API"
+    - "weather app"
+  priority: 60
+  context:
+    workspace_hints: ["personal", "assistant"]

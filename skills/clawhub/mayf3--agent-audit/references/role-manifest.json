@@ -1,0 +1,368 @@
+{
+  "cto@agent.local": {
+    "role": "admin",
+    "internal": "cto",
+    "dept": "研发",
+    "name": "CTO"
+  },
+  "agent-dev-engineer@agent.local": {
+    "role": "developer",
+    "internal": "developer",
+    "dept": "研发",
+    "name": "研发工程师"
+  },
+  "devtools-agent@agent.local": {
+    "role": "developer",
+    "internal": "developer",
+    "dept": "研发",
+    "name": "前端开发工具"
+  },
+  "frontend-react-engineer@agent.local": {
+    "role": "developer",
+    "internal": "developer",
+    "dept": "研发",
+    "name": "React前端"
+  },
+  "mobile-app-engineer@agent.local": {
+    "role": "developer",
+    "internal": "developer",
+    "dept": "研发",
+    "name": "移动端开发"
+  },
+  "miniapp-game-engineer@agent.local": {
+    "role": "developer",
+    "internal": "developer",
+    "dept": "研发",
+    "name": "小程序游戏开发"
+  },
+  "backend-engineer-2@agent.local": {
+    "role": "developer",
+    "internal": "developer",
+    "dept": "研发",
+    "name": "后端开发"
+  },
+  "game-dev-agent@agent.local": {
+    "role": "developer",
+    "internal": "developer",
+    "dept": "研发",
+    "name": "游戏开发"
+  },
+  "3d-print-agent@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "研发",
+    "name": "3D打印"
+  },
+  "test-engineer@agent.local": {
+    "role": "developer",
+    "internal": "tester",
+    "dept": "研发",
+    "name": "测试工程师"
+  },
+  "voice-tech-agent@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "研发",
+    "name": "语音技术"
+  },
+  "image-gen-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "研发",
+    "name": "图像生成"
+  },
+  "blog-agent@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "内容",
+    "name": "博客写作"
+  },
+  "article-publisher-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "内容",
+    "name": "文章发布"
+  },
+  "content-ops-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "内容",
+    "name": "内容运营"
+  },
+  "creative-writer@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "内容",
+    "name": "文学创作"
+  },
+  "novel-writer@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "内容",
+    "name": "网文写手"
+  },
+  "writing-style-analyst-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "内容",
+    "name": "文风分析师"
+  },
+  "podcast-producer-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "内容",
+    "name": "播客制作人"
+  },
+  "video-producer@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "内容",
+    "name": "视频制作"
+  },
+  "paper-reviewer-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "内容",
+    "name": "论文审稿"
+  },
+  "daily-thought-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "内容",
+    "name": "随想记录"
+  },
+  "stock-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "投资",
+    "name": "股票分析"
+  },
+  "investment-debater@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "投资",
+    "name": "投资辩论"
+  },
+  "quant-trading-agent@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "投资",
+    "name": "量化交易"
+  },
+  "efficiency-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "管家",
+    "name": "效率管家"
+  },
+  "hr-agent@agent.local": {
+    "role": "admin",
+    "internal": null,
+    "dept": "管家",
+    "name": "HR助手"
+  },
+  "lobster-agent@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "管家",
+    "name": "龙虾"
+  },
+  "lobster-guide-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "管家",
+    "name": "龙虾新手指导"
+  },
+  "soul-questioner-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "管家",
+    "name": "灵魂拷问"
+  },
+  "travel-planner-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "管家",
+    "name": "旅游规划"
+  },
+  "shopping-list-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "管家",
+    "name": "购物清单"
+  },
+  "social-butterfly-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "管家",
+    "name": "社交达人"
+  },
+  "smart-home-agent@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "管家",
+    "name": "智居管家"
+  },
+  "finance-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "管家",
+    "name": "财务监控"
+  },
+  "finance-housekeeper-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "管家",
+    "name": "财务管家"
+  },
+  "reimbursement-expert@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "管家",
+    "name": "报销专家"
+  },
+  "discipline-coach-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "管家",
+    "name": "工作规范教练"
+  },
+  "education-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "育儿",
+    "name": "AI教育顾问"
+  },
+  "family-doctor-2-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "育儿",
+    "name": "家庭医生"
+  },
+  "psychology-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "育儿",
+    "name": "心理学研究"
+  },
+  "itops-agent@agent.local": {
+    "role": "developer",
+    "internal": "ops",
+    "dept": "基础设施",
+    "name": "IT运维"
+  },
+  "security-agent@agent.local": {
+    "role": "developer",
+    "internal": "security",
+    "dept": "基础设施",
+    "name": "安全卫士"
+  },
+  "healthcheck-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "基础设施",
+    "name": "健康检查"
+  },
+  "skill-engineer-agent@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "基础设施",
+    "name": "技能研究员"
+  },
+  "knowledge-curator-agent@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "基础设施",
+    "name": "知识管家"
+  },
+  "open-source-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "基础设施",
+    "name": "开源管家"
+  },
+  "email-manager-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "基础设施",
+    "name": "邮箱管理"
+  },
+  "feishu-expert-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "基础设施",
+    "name": "飞书专家"
+  },
+  "feishu-expert-2-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "基础设施",
+    "name": "飞书专家2"
+  },
+  "product-manager@agent.local": {
+    "role": "requester",
+    "internal": "pm",
+    "dept": "产品",
+    "name": "产品经理"
+  },
+  "product-designer@agent.local": {
+    "role": "requester",
+    "internal": "pm",
+    "dept": "产品",
+    "name": "产品设计师"
+  },
+  "biz-explorer@agent.local": {
+    "role": "requester",
+    "internal": "pm",
+    "dept": "产品",
+    "name": "商业探索"
+  },
+  "trend-tracker@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "产品",
+    "name": "前沿观察"
+  },
+  "learning-expert@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "学习",
+    "name": "学习专家"
+  },
+  "research-agent@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "学习",
+    "name": "深度研究"
+  },
+  "qa-reviewer@agent.local": {
+    "role": "developer",
+    "internal": "qa",
+    "dept": "质量",
+    "name": "QA审查"
+  },
+  "qa-reviewer-2@agent.local": {
+    "role": "developer",
+    "internal": "qa",
+    "dept": "质量",
+    "name": "QA审查二号"
+  },
+  "account-manager-agent@agent.local": {
+    "role": "requester",
+    "internal": null,
+    "dept": "管家",
+    "name": "账号管理"
+  },
+  "ceo-agent@agent.local": {
+    "role": "developer",
+    "internal": null,
+    "dept": "管家",
+    "name": "CEO"
+  },
+  "cto-agent@agent.local": {
+    "role": "cto_agent",
+    "internal": "cto",
+    "dept": "研发",
+    "name": "CTO"
+  }
+}

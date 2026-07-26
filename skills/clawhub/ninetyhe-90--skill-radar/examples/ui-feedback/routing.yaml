@@ -1,0 +1,25 @@
+name: ui-feedback
+description: "Provide UI/UX design feedback and review"
+
+routing:
+  keywords:
+    - "UI review"
+    - "design feedback"
+    - "UX review"
+    - "interface feedback"
+    - "design review"
+    - "usability"
+    - "visual review"
+  patterns:
+    - "(review|feedback|check|evaluate).{0,6}(UI|UX|design|interface|layout)"
+    - "(UI|UX|design|interface).{0,6}(issue|problem|feedback|suggestion|improvement)"
+    - "(look at|check|evaluate).{0,6}(page|screen|layout|component|design)"
+    - "(visual|interaction|usability).{0,6}(review|issue|problem|feedback)"
+  anti_patterns:
+    - "(create|draw|design from scratch)"
+    - "wireframe"
+    - "mockup from scratch"
+  priority: 70
+  context:
+    file_types: [".fig", ".sketch", ".png", ".jpg"]
+    workspace_hints: ["design", "frontend", "product"]

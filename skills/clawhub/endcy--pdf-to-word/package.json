@@ -1,0 +1,42 @@
+{
+  "name": "pdf-to-word",
+  "version": "1.0.0",
+  "description": "极速PDF转Word - 将PDF文档转换为Word格式，保留原文档的段落布局、表格和样式。支持企业安全策略环境。",
+  "author": "aclory",
+  "license": "MIT",
+  "keywords": [
+    "pdf",
+    "word",
+    "docx",
+    "converter",
+    "pdf-to-word",
+    "document-conversion",
+    "enterprise"
+  ],
+  "main": "SKILL.md",
+  "scripts": {
+    "convert": "python convert_pdf.py",
+    "test": "echo \"No tests specified\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aclory/pdf-to-word.git"
+  },
+  "homepage": "https://clawhub.com/skills/pdf-to-word",
+  "engines": {
+    "openclaw": ">=1.0.0",
+    "python": ">=3.6"
+  },
+  "dependencies": {
+    "pdf2docx": ">=0.5.0",
+    "python-docx": ">=0.8.10",
+    "PyMuPDF": ">=1.19.0"
+  },
+  "peerDependencies": {
+    "openclaw": ">=1.0.0"
+  },
+  "config": {
+    "pythonPath": "python",
+    "scriptPath": "convert_pdf.py"
+  }
+}

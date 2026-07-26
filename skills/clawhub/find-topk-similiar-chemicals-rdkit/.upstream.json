@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/find-topk-similiar-chemicals-rdkit",
+  "slug": "find-topk-similiar-chemicals-rdkit",
+  "ownerHandle": null,
+  "version": "0.1.0",
+  "updatedAt": 1778492599015,
+  "contentHash": "19d64441eb333767b5007685192d03c4fcc6b32de5fa97788117a85e946f7c29",
+  "fetchedAt": "2026-07-26T19:27:13.632Z"
+}

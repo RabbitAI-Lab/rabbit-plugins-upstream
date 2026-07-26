@@ -1,0 +1,18 @@
+{
+  "BTC": {
+    "balance": 1043.0399999999936,
+    "position": {
+      "entry": 63563.24
+    }
+  },
+  "ETH": {
+    "balance": 999.6500000000001,
+    "position": null
+  },
+  "SOL": {
+    "balance": 999.98,
+    "position": {
+      "entry": 70.8
+    }
+  }
+}

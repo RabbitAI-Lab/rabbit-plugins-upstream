@@ -1,0 +1,50 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Podcast channel config",
+  "description": "频道配置 schema。--init 时按此向用户收集真实值，写成 JSON 实例后经 --config 传入；实例上传至 TOS podcasts/config.json 作为事实源。",
+  "type": "object",
+  "required": ["title", "description", "author", "email", "site_url"],
+  "additionalProperties": false,
+  "properties": {
+    "title": {
+      "type": "string",
+      "minLength": 1,
+      "description": "频道名称"
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1,
+      "description": "频道简介（小宇宙节目页展示）"
+    },
+    "author": {
+      "type": "string",
+      "minLength": 1,
+      "description": "作者名（itunes:author 与 itunes:owner name）"
+    },
+    "email": {
+      "type": "string",
+      "format": "email",
+      "description": "作者邮箱；小宇宙认领节目时向它发送验证码"
+    },
+    "site_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "节目主页 URL（RSS channel link，不是 feed 地址）"
+    },
+    "language": {
+      "type": "string",
+      "default": "zh-cn",
+      "description": "RSS language 代码"
+    },
+    "category": {
+      "type": "string",
+      "default": "Technology",
+      "description": "Apple Podcasts 分类名"
+    },
+    "cover_url": {
+      "type": "string",
+      "format": "uri",
+      "description": "封面图公网 URL。--init 的输出而非输入：初始化时上传 --cover 指定的 PNG 并生成（{base_url}/podcasts/cover_YYYYMMDD.png），用户实例无需填写；播客平台会缓存，更新封面时必须换新文件名"
+    }
+  }
+}

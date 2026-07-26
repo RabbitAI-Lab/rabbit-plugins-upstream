@@ -1,0 +1,21 @@
+{
+  "name": "gpt-image-2-prompts-skill",
+  "owner": {
+    "name": "GokuOpenLab"
+  },
+  "metadata": {
+    "description": "Recommend from 15,600+ GPT Image 2 image generation prompts based on user needs",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "gpt-image-2-prompts",
+      "description": "AI skill for recommending GPT Image 2 image generation prompts",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./"
+      ]
+    }
+  ]
+}

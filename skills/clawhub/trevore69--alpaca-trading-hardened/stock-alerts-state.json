@@ -1,0 +1,25 @@
+{
+  "lastCheck": "2026-07-17T16:00:00Z",
+  "source": "alpaca quote (latestTrade.p vs prevDailyBar.c)",
+  "prices": {
+    "CPNG": 16.73,
+    "INFQ": 9.25,
+    "NFLX": 68.81,
+    "NB": 4.33,
+    "SPCX": 124.67
+  },
+  "dayChangePct": {
+    "CPNG": -0.77,
+    "INFQ": 2.10,
+    "NFLX": -7.74,
+    "NB": -1.03,
+    "SPCX": -4.92
+  },
+  "prevCheck_1500": {
+    "CPNG": 16.61,
+    "INFQ": 9.09,
+    "NFLX": 68.56,
+    "NB": 4.26,
+    "SPCX": 124.34
+  }
+}

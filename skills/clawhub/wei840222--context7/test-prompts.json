@@ -1,0 +1,79 @@
+[
+  {
+    "id": "resolve-nextjs-middleware",
+    "prompt": "Next.js middleware authentication 怎麼做？",
+    "expected": "Resolve the most appropriate Next.js Context7 library ID first, then make one focused documentation query about middleware authentication. Answer from returned snippets and include source URLs.",
+    "assertions": [
+      "Runs library resolution before querying docs.",
+      "Uses one middleware-authentication concept per query.",
+      "Runs the bounded preflight and records its availability result.",
+      "Reports the selected libraryId and at least one returned source URL."
+    ],
+    "required_eval_mode": "full_test"
+  },
+  {
+    "id": "pinned-nextjs-redirect",
+    "prompt": "使用 /vercel/next.js/v15.1.8，App Router middleware redirect 有什麼做法？",
+    "expected": "Use the supplied version-pinned library ID directly, query one focused concept, and identify any version-sensitive behavior with returned source URLs.",
+    "assertions": [
+      "Does not resolve or replace the supplied version-pinned ID before the first query.",
+      "Reports that the lookup is version-pinned.",
+      "If the ID is rejected, discloses that exact version is unavailable before considering an unpinned candidate."
+    ],
+    "required_eval_mode": "full_test"
+  },
+  {
+    "id": "context7-mcp-unavailable",
+    "prompt": "Context7 MCP 連不上，但我需要 React useState 的官方文件。",
+    "expected": "Run bounded mcporter capability discovery, select a healthy Context7-capable server when present, and use REST or upstream official docs only when no compatible MCP server is available. Do not claim Context7 returned a result when no MCP path succeeded.",
+    "assertions": [
+      "Uses bounded mcporter discovery and checks for both resolve-library-id and query-docs capabilities.",
+      "When a compatible server is available, reports its selected server name and source URLs.",
+      "Does not issue a REST request when CONTEXT7_API_KEY is unavailable and no compatible MCP server is available.",
+      "Cites an upstream official source and does not claim Context7 supplied it when no compatible MCP server is available."
+    ],
+    "required_eval_mode": "full_test"
+  },
+  {
+    "id": "no-compatible-mcp-no-api-key",
+    "prompt": "我需要 React useState 的官方文件，但這個環境沒有可用的 Context7 MCP，也沒有 CONTEXT7_API_KEY。",
+    "setup": {
+      "mcporter_discovery": "no-compatible-context7-server",
+      "CONTEXT7_API_KEY": "unset"
+    },
+    "expected": "Report the structured MCP-unavailable reason, skip REST, and retrieve React's official useState documentation without claiming Context7 supplied it.",
+    "assertions": [
+      "Reports a machine-readable discovery reason such as no-mcporter-servers-configured or no-healthy-context7-capable-server.",
+      "Does not issue a Context7 REST request.",
+      "Cites https://react.dev/reference/react/useState and labels the route upstream official docs."
+    ],
+    "required_eval_mode": "full_test"
+  },
+  {
+    "id": "rest-retry-exhausted",
+    "prompt": "Context7 MCP 不可用，且 Context7 REST 連續回傳 429、503、504；我要 React useState 文件。",
+    "setup": {
+      "mcporter_discovery": "no-compatible-context7-server",
+      "CONTEXT7_API_KEY": "present",
+      "rest_status_sequence": [429, 503, 504]
+    },
+    "expected": "Make no more than three REST attempts, honor valid Retry-After when present, then stop and use React's official documentation.",
+    "assertions": [
+      "Retries only the declared retryable statuses and makes at most three total REST attempts.",
+      "Reports the final REST failure and fallback reason.",
+      "Cites https://react.dev/reference/react/useState rather than claiming a successful Context7 result."
+    ],
+    "required_eval_mode": "full_test"
+  },
+  {
+    "id": "production-auth-migration",
+    "prompt": "我要把 production Next.js middleware auth 改成新版做法，請直接給部署步驟。",
+    "expected": "Resolve and query the relevant version-aware docs, include an official source URL, then stop at the explicit production-change checkpoint before supplying an execution plan.",
+    "assertions": [
+      "Reports the selected libraryId, version sensitivity, and an official source URL.",
+      "Labels the result unverified if an official source cannot be retrieved.",
+      "Uses the explicit CHECKPOINT and requests confirmation before producing deployment or migration steps."
+    ],
+    "required_eval_mode": "full_test"
+  }
+]

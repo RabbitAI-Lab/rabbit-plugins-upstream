@@ -1,0 +1,4 @@
+interface:
+  display_name: "Python Dependency Candidate Fetcher"
+  short_description: "Retrieve Python module candidates"
+  default_prompt: "Fetch plausible Python dependency candidates for a coding question before selecting the final module or API."

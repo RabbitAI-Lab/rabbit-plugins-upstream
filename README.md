@@ -31,8 +31,9 @@ scripts/                                 # 同步脚本（Node.js，零第三方
 ## 同步机制
 
 - **定时**：每天通过 `.github/workflows/sync.yml` 运行，三个来源 **matrix 并行**，也可手动 `workflow_dispatch` 触发（可选单一来源）。
-- **增量**：以 `sync-state/<source>.json` 对比上游版本/哈希，只拉新增与变更；上游下架的 skill 会被删除（在 PR diff 中可见）。
-- **分批**：全量约 9 万 skill，单次运行处理量受 `SYNC_MAX_ITEMS`（默认 3000/来源）限制，状态随每次提交持久化，多轮运行后收敛。
+- **首次全量**：ClawHub 全量（约 69k）在本地跑 `npm run sync:clawhub` 后直接提交 main；Actions 不承担首轮全量。
+- **增量**：以 `sync-state/<source>.json` 对比上游版本/哈希，只拉新增与变更；ClawHub 枚举按最近活跃排序，每日 3000 条即可覆盖日常 churn；上游下架的 skill 会被删除（在 PR diff 中可见）。
+- **分批**：单次运行处理量受 `SYNC_MAX_ITEMS`（默认 3000/来源）限制，状态随每次提交持久化。
 - **落地**：每个来源独立建分支 `sync/<source>/<date>` 并开独立 PR（文件路径互不重叠，可分别审查合并）；无变更则不开。
 
 ## 本地运行
@@ -55,7 +56,9 @@ node scripts/build-index.mjs clawhub   # 重新生成 index/<source>.json 与下
 ### ClawHub
 
 <!-- INDEX:clawhub:START -->
-（尚未同步，运行 `node scripts/build-index.mjs clawhub` 后自动生成）
+最后同步：2026-07-26T20:32:47.298Z
+
+已镜像完整内容：**71024** 个 skill，明细见 `index/clawhub.json` 与 `skills/clawhub/`。
 <!-- INDEX:clawhub:END -->
 
 ### skills.sh

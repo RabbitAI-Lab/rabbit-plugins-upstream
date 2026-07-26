@@ -1,0 +1,22 @@
+routing:
+  keywords:
+    - "contract review"
+    - "review contract"
+    - "review agreement"
+    - "NDA"
+    - "confidentiality agreement"
+    - "clause analysis"
+    - "contract risk"
+    - "legal review"
+  patterns:
+    - "(review|check|audit|examine).{0,8}(contract|agreement|NDA|terms|clause)"
+    - "(contract|agreement|NDA).{0,8}(review|risk|check|audit|analysis)"
+    - "(legal|compliance).{0,6}(review|check|audit)"
+  anti_patterns:
+    - "(draft|write|create).{0,6}(contract|agreement)"
+    - "contract template"
+    - "generate a contract"
+  priority: 75
+  context:
+    file_types: [".docx", ".pdf"]
+    workspace_hints: ["legal", "compliance"]

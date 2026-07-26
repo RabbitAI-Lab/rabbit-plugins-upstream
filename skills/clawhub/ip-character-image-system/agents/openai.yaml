@@ -1,0 +1,4 @@
+interface:
+  display_name: "IP Character Image System"
+  short_description: "Turn IP ideas into full image asset systems"
+  default_prompt: "Use $ip-character-image-system to turn my rough IP character idea into a complete modular prompt and image asset production system."

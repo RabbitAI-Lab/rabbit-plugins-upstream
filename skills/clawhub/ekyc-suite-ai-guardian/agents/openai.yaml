@@ -1,0 +1,4 @@
+interface:
+  display_name: "eKYC Suite AI Guardian"
+  short_description: "Detect face liveness, replay and deepfake risk"
+  default_prompt: "Use eKYC Suite AI Guardian to check a consented face photo or video for liveness, replay, synthetic-media, or deepfake risk."

@@ -1,0 +1,8 @@
+interface:
+  display_name: "小河狸财报助手"
+  short_description: "读取本机小河狸财报助手数据"
+  brand_color: "#2563EB"
+  default_prompt: "Use $littlebeaver-financial-assistant to query local financial statement data from 小河狸财报助手."
+
+policy:
+  allow_implicit_invocation: true

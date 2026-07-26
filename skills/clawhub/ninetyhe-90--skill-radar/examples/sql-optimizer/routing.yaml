@@ -1,0 +1,29 @@
+name: sql-optimizer
+description: "Analyze and optimize slow SQL queries"
+
+routing:
+  keywords:
+    - "slow query"
+    - "SQL optimization"
+    - "query optimization"
+    - "execution plan"
+    - "index optimization"
+    - "explain"
+    - "query performance"
+    - "deadlock"
+  patterns:
+    - "(query|SQL).{0,6}(slow|timeout|performance|optimize)"
+    - "(slow|optimize|improve).{0,6}(query|SQL|database)"
+    - "(execution|query).{0,4}(plan|explain)"
+    - "(index|join).{0,6}(optimization|performance|missing)"
+  intents:
+    - "data.sql.optimize"
+    - "data.query.performance"
+  anti_patterns:
+    - "(write|create|build).{0,6}(query|SQL|table)"
+    - "create table"
+    - "insert into"
+  priority: 75
+  context:
+    file_types: [".sql"]
+    workspace_hints: ["data", "backend", "dba"]

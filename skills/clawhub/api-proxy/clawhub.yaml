@@ -1,0 +1,34 @@
+slug: api-proxy
+name: api-gateway
+owner: jlacroix82
+description: Smart proxy for external API calls with retry, caching, circuit breaker, and rate limiting. PERSISTS: API keys (chmod 0600 plaintext in keys.json), request/response cache metadata, and request logs. Network: outbound HTTPS only, with a strict provider-domain allowlist. Caches metadata by default; full response bodies are opt-in per provider.
+version: 1.1.3
+type: skill
+author: OpenClaw
+license: MIT
+keywords:
+  - api
+  - proxy
+  - gateway
+  - circuit-breaker
+  - caching
+  - rate-limit
+  - allowlist
+  - security
+capabilities:
+  - network
+  - filesystem
+  - environment
+entry: SKILL.md
+dependencies: []
+permissions:
+  - name: network.outbound
+    description: Outbound HTTPS to provider allowlist domains
+  - name: filesystem.read-write
+    description: Read/write data files in memory/api-gateway/ (keys.json chmod 0600)
+  - name: environment.read
+    description: Read PROVIDER_API_KEY environment variables
+data_retention:
+  cache: 'metadata-only by default; full body opt-in per provider'
+  log: 'coarse: provider, status class, timestamp, path (no query strings)'
+  keys: 'plaintext on disk with chmod 0600; env var override supported'

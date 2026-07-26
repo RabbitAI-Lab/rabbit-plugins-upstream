@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/terraform-module-linter",
+  "slug": "terraform-module-linter",
+  "ownerHandle": null,
+  "version": "1.0.1",
+  "updatedAt": 1778492575478,
+  "contentHash": "dc4054fd4dde99252d5215c68ef3f65ec616a1fc4cb607216aa522db345fa7de",
+  "fetchedAt": "2026-07-26T19:28:21.203Z"
+}

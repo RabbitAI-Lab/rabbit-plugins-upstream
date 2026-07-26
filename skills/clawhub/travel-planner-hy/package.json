@@ -1,0 +1,44 @@
+{
+  "name": "travel-planner-hy",
+  "version": "1.0.1",
+  "description": "智能旅行规划工具 - 行程编排、景点推荐、预算管理、方案输出。仅做信息规划与展示，不代订不代付；QR/链接仅跳转第三方平台，用户自行完成预订支付。",
+  "main": "scripts/generate-trip-page.js",
+  "bin": {
+    "travel-planner-hy": "scripts/generate-trip-page.js"
+  },
+  "scripts": {
+    "generate-trip": "node scripts/generate-trip-page.js",
+    "start": "node scripts/generate-trip-page.js",
+    "mock": "node scripts/generate-trip-page.js --mock"
+  },
+  "keywords": [
+    "travel",
+    "trip-planning",
+    "itinerary",
+    "travel-planner",
+    "行程规划",
+    "旅游"
+  ],
+  "author": "cryptocxf",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cryptocxf/travel-planner-hy.git"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "os": [
+    "win32",
+    "darwin",
+    "linux"
+  ],
+  "files": [
+    "scripts/",
+    "references/",
+    "SKILL.md"
+  ],
+  "dependencies": {
+    "qrcode": "1.5.4"
+  }
+}

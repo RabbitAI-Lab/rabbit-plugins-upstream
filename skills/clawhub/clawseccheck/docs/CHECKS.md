@@ -1,0 +1,2452 @@
+# Check Catalog Reference
+
+Generated from [clawseccheck/catalog.py](../clawseccheck/catalog.py) and [clawseccheck/risk.py](../clawseccheck/risk.py).
+
+Regenerate with `python3 scripts/gen_checks_docs.py --write`.
+
+## Verdict semantics
+
+- PASS: no positive evidence for the issue
+- FAIL: positive evidence for the issue
+- WARN: partial or likely-insecure default; counts half-weight in the score
+- UNKNOWN: cannot be determined from the available evidence; excluded from the score
+
+Advisory checks are recorded for coverage but are not scored.
+
+## Trifecta
+
+### A1 - Lethal Trifecta (untrusted input × sensitive data × outbound)
+
+- Severity: CRITICAL
+- Block: trifecta
+- Framework: Lethal Trifecta
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM01 Prompt Injection, LLM06 Excessive Agency
+- What it checks: Lethal Trifecta (untrusted input × sensitive data × outbound)
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B1 - Secrets in plaintext config / bootstrap files
+
+- Severity: CRITICAL
+- Block: hardening
+- Framework: Secrets Vault
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM02 Sensitive Information Disclosure
+- What it checks: Secrets in plaintext config / bootstrap files
+- Remediation:
+  - command: `openclaw secrets configure`
+  - command: `chmod 600 ~/.openclaw/openclaw.json`
+  - command: `chmod 700 ~/.openclaw`
+
+### B2 - Gateway exposure & channel authentication
+
+- Severity: CRITICAL
+- Block: hardening
+- Framework: Zero Trust / Gateway
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM01 Prompt Injection
+- What it checks: Gateway exposure & channel authentication
+- Remediation:
+  - config: `gateway.auth` - enable gateway auth and restrict channels to an allowlist
+
+### B3 - Least privilege (elevated tools / allowlists)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Least Privilege
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: Least privilege (elevated tools / allowlists)
+- Remediation:
+  - config: `tools.elevated.allowFrom` - restrict to an explicit allowlist (no wildcards)
+
+### B4 - Execution sandbox
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Least Privilege / Sandbox
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: Execution sandbox
+- Remediation:
+  - config: `agents.defaults.sandbox.mode` = `"non-main"` - run exec tools in a sandbox
+
+### B5 - Plugin / skill supply-chain integrity
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Supply Chain
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: Plugin / skill supply-chain integrity
+- Remediation:
+  - none
+
+### B6 - Bootstrap-file injection surface (SOUL.md/AGENTS.md/TOOLS.md)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Untrusted↔Trusted separation
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM01 Prompt Injection
+- What it checks: Bootstrap-file injection surface (SOUL.md/AGENTS.md/TOOLS.md)
+- Remediation:
+  - none
+
+### B7 - Memory poisoning surface (MEMORY.md / memory dir)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Memory integrity
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM04 Data and Model Poisoning
+- What it checks: Memory poisoning surface (MEMORY.md / memory dir)
+- Remediation:
+  - none
+
+### B8 - Human approval on destructive actions
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Human Approval
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: Human approval on destructive actions
+- Remediation:
+  - config: `tools.exec.mode` = `"ask"` - require human approval before exec
+
+### B9 - System-prompt / secret leak in tool output
+
+- Severity: LOW
+- Block: hardening
+- Framework: Egress / Leak
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM07 System Prompt Leakage, LLM02 Sensitive Information Disclosure
+- What it checks: System-prompt / secret leak in tool output
+- Remediation:
+  - none
+
+### B10 - Audit log & sensitive redaction
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Audit Log
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Audit log & sensitive redaction
+- Remediation:
+  - none
+
+### B11 - Transport TLS & at-rest protection
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: TLS & Encryption
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM02 Sensitive Information Disclosure
+- What it checks: Transport TLS & at-rest protection
+- Remediation:
+  - none
+
+### B12 - Local-first & model hygiene
+
+- Severity: LOW
+- Block: hardening
+- Framework: Local First
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM02 Sensitive Information Disclosure
+- What it checks: Local-first & model hygiene
+- Remediation:
+  - none
+
+### B13 - Installed skill / plugin safety (downloaded, not self-made)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Supply Chain / ClawHavoc
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM03 Supply Chain
+- What it checks: Installed skill / plugin safety (downloaded, not self-made)
+- Remediation:
+  - none
+
+### B14 - Egress surface (where the agent can reach out)
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Egress Control
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM02 Sensitive Information Disclosure
+- What it checks: Egress surface (where the agent can reach out)
+- Remediation:
+  - none
+
+### B15 - MCP server trust boundaries
+
+- Severity: HIGH
+- Block: hardening
+- Framework: MCP Trust
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: MCP server trust boundaries
+- Remediation:
+  - none
+
+### B16 - Threat monitoring / detection in place
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Monitoring
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Threat monitoring / detection in place
+- Remediation:
+  - none
+
+### B17 - Autonomy / heartbeat actions
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Autonomy Control
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency, LLM10 Unbounded Consumption
+- What it checks: Autonomy / heartbeat actions
+- Remediation:
+  - none
+
+### B18 - Subagent delegation
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Least Privilege / Subagents
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: Subagent delegation
+- Remediation:
+  - none
+
+### B19 - Data at-rest protection (memory/logs)
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Data Protection
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM02 Sensitive Information Disclosure
+- What it checks: Data at-rest protection (memory/logs)
+- Remediation:
+  - command: `chmod 700 ~/.openclaw`
+
+### B20 - Bootstrap / memory write protection
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Write Integrity
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM04 Data and Model Poisoning
+- What it checks: Bootstrap / memory write protection
+- Remediation:
+  - command: `chmod 700 <workspace>`
+  - command: `chmod 600 <workspace>/SOUL.md <workspace>/AGENTS.md <workspace>/TOOLS.md <workspace>/MEMORY.md`
+
+### B21 - Tool-output / retrieved-content trust boundary
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Prompt Injection / Trust Boundary
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM01 Prompt Injection, LLM05 Improper Output Handling
+- What it checks: Tool-output / retrieved-content trust boundary
+- Remediation:
+  - none
+
+### B22 - Self-modification risk (identity/skill files writable + tools enabled)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Write Integrity / Self-Modification
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM04 Data and Model Poisoning, LLM06 Excessive Agency
+- What it checks: Self-modification risk (identity/skill files writable + tools enabled)
+- Remediation:
+  - command: `chmod 600 <workspace>/SOUL.md`
+  - command: `chmod 700 <workspace>/skills`
+
+### B23 - Approval-bypass directives in bootstrap
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Human Approval
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM01 Prompt Injection, LLM06 Excessive Agency
+- What it checks: Approval-bypass directives in bootstrap
+- Remediation:
+  - config: `tools.exec.mode` = `"ask"` - enforce the approval gate; do not let bootstrap text weaken it
+
+### B24 - MCP server hardening
+
+- Severity: HIGH
+- Block: hardening
+- Framework: MCP Trust
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: MCP server hardening
+- Remediation:
+  - none
+
+### B25 - Update / pinning hygiene
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Supply Chain
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: Update / pinning hygiene
+- Remediation:
+  - none
+
+### B30 - Sender identity strength (name-matching / mutable-ID bypass)
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Sender Identity
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM01 Prompt Injection
+- What it checks: Sender identity strength (name-matching / mutable-ID bypass)
+- Remediation:
+  - config: `channels.<provider>.dangerouslyAllowNameMatching` - remove this flag — a mutable display-name allowlist is trivially bypassed
+
+### B31 - Effective-tools bypass (illusory deny — write blocked but apply_patch/exec still write)
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Least Privilege / Tool Policy
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: Effective-tools bypass (illusory deny — write blocked but apply_patch/exec still write)
+- Remediation:
+  - none
+
+### B32 - Control-plane mutation reachability via gateway
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Control Plane
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: Control-plane mutation reachability via gateway
+- Remediation:
+  - none
+
+### B38 - Browser control / cookie & SSRF exposure
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Browser / SSRF
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Browser control / cookie & SSRF exposure
+- Remediation:
+  - config: `browser.ssrfPolicy.dangerouslyAllowPrivateNetwork` = `false` - block private-network requests from the browser tool
+
+### B195 - browser.extraArgs dangerous Chrome launch flags
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Browser / SSRF
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: browser.extraArgs dangerous Chrome launch flags
+- Remediation:
+  - config: `browser.extraArgs` - remove --disable-web-security / --load-extension / a non-loopback --remote-debugging-address / unreviewed --proxy-server
+
+### B196 - browser.evaluateEnabled arbitrary-JS sink
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Browser / SSRF
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: browser.evaluateEnabled arbitrary-JS sink
+- Remediation:
+  - config: `browser.evaluateEnabled` = `false` - disable the browser's arbitrary-JS evaluate sink unless a workflow genuinely requires it
+
+### B321 - browser.executablePath / profiles.*.executablePath / mcpCommand
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Browser / SSRF
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: browser.executablePath / profiles.*.executablePath / mcpCommand
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B322 - browser.profiles.*.userDataDir / cdpUrl / driver:"existing-session"
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Browser / SSRF
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: browser.profiles.*.userDataDir / cdpUrl / driver:"existing-session"
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B323 - env.vars.PATH / env.<KEY> catchall PATH override
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Config Integrity
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: env.vars.PATH / env.<KEY> catchall PATH override
+- Remediation:
+  - none
+
+### B325 - marketplaces.feeds points at a non-canonical registry
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Supply Chain / Install Policy
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: marketplaces.feeds points at a non-canonical registry
+- Remediation:
+  - none
+
+### B327 - agents.defaults.embeddedAgent.projectSettingsPolicy trusts workspace settings
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Untrusted↔Trusted separation
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: agents.defaults.embeddedAgent.projectSettingsPolicy trusts workspace settings
+- Remediation:
+  - none
+
+### B328 - tools.exec.safeBinTrustedDirs writable-dir promotion
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Supply Chain / Install Policy
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: tools.exec.safeBinTrustedDirs writable-dir promotion
+- Remediation:
+  - none
+
+### B155 - Outbound proxy hardening (credential leak / TLS-verify / SSRF-guard bypass)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Proxy / Egress Hardening
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Outbound proxy hardening (credential leak / TLS-verify / SSRF-guard bypass)
+- Remediation:
+  - none
+
+### B178 - Cleartext http:// baseUrl on a model provider (API-key + traffic leak)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Proxy / Egress Hardening
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Cleartext http:// baseUrl on a model provider (API-key + traffic leak)
+- Remediation:
+  - none
+
+### B39 - Session visibility / cross-user transcript leak
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Session Isolation
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM02 Sensitive Information Disclosure
+- What it checks: Session visibility / cross-user transcript leak
+- Remediation:
+  - config: `session.dmScope` - isolate DM sessions per user; do not use "main"
+
+### B26 - Untrusted-context exposure (channels.contextVisibility)
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Injection Surface
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM01 Prompt Injection
+- What it checks: Untrusted-context exposure (channels.contextVisibility)
+- Remediation:
+  - none
+
+### B140 - Wildcard group ingress with no allowFrom restriction
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Injection Surface
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM01 Prompt Injection
+- What it checks: Wildcard group ingress with no allowFrom restriction
+- Remediation:
+  - none
+
+### B33 - Known-vulnerable OpenClaw version gate
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Patch hygiene
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: Known-vulnerable OpenClaw version gate
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B41 - Credential blast-radius assessment
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Credential / Blast Radius
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM02 Sensitive Information Disclosure, LLM06 Excessive Agency
+- What it checks: Credential blast-radius assessment
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B42 - Skill/plugin install-time policy (postinstall hooks, writable skill dirs)
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Supply Chain / Install Policy
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM03 Supply Chain
+- What it checks: Skill/plugin install-time policy (postinstall hooks, writable skill dirs)
+- Remediation:
+  - none
+
+### B174 - security.installPolicy.* operator gate + exec-hook escape flags
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Supply Chain / Install Policy
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: security.installPolicy.* operator gate + exec-hook escape flags
+- Remediation:
+  - none
+
+### B194 - secrets.providers.* exec-source escape flags (allowInsecurePath/allowSymlinkCommand)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Supply Chain / Install Policy
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: secrets.providers.* exec-source escape flags (allowInsecurePath/allowSymlinkCommand)
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B43 - Capability blast-radius / dangerous-verb inventory
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Least Privilege / Blast Radius
+- Scored: no
+- Confidence: ATTESTED
+- OWASP: LLM06 Excessive Agency
+- What it checks: Capability blast-radius / dangerous-verb inventory
+- Remediation:
+  - none
+
+### B44 - Attestation ⇄ config mismatch (undisclosed capability)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Trust Boundary / Drift
+- Scored: no
+- Confidence: ATTESTED
+- OWASP: LLM06 Excessive Agency
+- What it checks: Attestation ⇄ config mismatch (undisclosed capability)
+- Remediation:
+  - none
+
+### B45 - Per-agent privilege separation (trifecta decomposition)
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Privilege Separation / Lethal Trifecta
+- Scored: no
+- Confidence: ATTESTED
+- OWASP: LLM06 Excessive Agency
+- What it checks: Per-agent privilege separation (trifecta decomposition)
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B46 - Multi-agent trifecta exposure
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Least Privilege / Agents
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: Multi-agent trifecta exposure
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B47 - Cross-agent trifecta reassembly (delegation graph)
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Privilege Separation / Delegation
+- Scored: no
+- Confidence: ATTESTED
+- OWASP: LLM05 Improper Output Handling, LLM06 Excessive Agency
+- What it checks: Cross-agent trifecta reassembly (delegation graph)
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B48 - Dangerous break-glass overrides enabled
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Least Privilege / Break-Glass
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM01 Prompt Injection, LLM06 Excessive Agency
+- What it checks: Dangerous break-glass overrides enabled
+- Remediation:
+  - none
+
+### B50 - Host network monitoring / IDS
+
+- Severity: LOW
+- Block: hardening
+- Framework: Host Watch / Network IDS
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Host network monitoring / IDS
+- Remediation:
+  - none
+
+### B51 - Host audit / syscall logging
+
+- Severity: LOW
+- Block: hardening
+- Framework: Host Watch / Audit
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Host audit / syscall logging
+- Remediation:
+  - none
+
+### B52 - Host file-integrity monitoring
+
+- Severity: LOW
+- Block: hardening
+- Framework: Host Watch / FIM
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Host file-integrity monitoring
+- Remediation:
+  - none
+
+### B53 - Host endpoint protection / EDR
+
+- Severity: LOW
+- Block: hardening
+- Framework: Host Watch / EDR
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Host endpoint protection / EDR
+- Remediation:
+  - none
+
+### B54 - Host firewall active
+
+- Severity: LOW
+- Block: hardening
+- Framework: Host Watch / Firewall
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Host firewall active
+- Remediation:
+  - none
+
+### B101 - Outbound (egress) filtering posture
+
+- Severity: LOW
+- Block: hardening
+- Framework: Host Watch / Egress Posture
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Outbound (egress) filtering posture
+- Remediation:
+  - none
+
+### B55 - Filesystem-write tool exposure (broad fs-write without scoping)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Least Privilege / Filesystem Write
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency, LLM04 Data and Model Poisoning
+- What it checks: Filesystem-write tool exposure (broad fs-write without scoping)
+- Remediation:
+  - none
+
+### B56 - Control-UI cross-origin allow-all (allowedOrigins "*")
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Zero Trust / Control-UI Origin
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM01 Prompt Injection
+- What it checks: Control-UI cross-origin allow-all (allowedOrigins "*")
+- Remediation:
+  - none
+
+### B57 - Plugin auto-approve (permissionMode=approve-all)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Least Privilege / Plugin Approval
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency, LLM03 Supply Chain
+- What it checks: Plugin auto-approve (permissionMode=approve-all)
+- Remediation:
+  - none
+
+### B58 - Unicode-obfuscated injection / hidden-text evasion
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Prompt Injection / Unicode Evasion
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM01 Prompt Injection
+- What it checks: Unicode-obfuscated injection / hidden-text evasion
+- Remediation:
+  - none
+
+### B59 - Markdown-image data-exfil via remote URL
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Data Exfiltration / Markdown Injection
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM02 Sensitive Information Disclosure, LLM01 Prompt Injection
+- What it checks: Markdown-image data-exfil via remote URL
+- Remediation:
+  - none
+
+### B60 - Prompt self-replication / propagation directive
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Agentic Worm / Self-Replication
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM01 Prompt Injection
+- What it checks: Prompt self-replication / propagation directive
+- Remediation:
+  - none
+
+### B61 - Cross-agent config snooping / credential theft
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Credential Theft / Supply Chain
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM02 Sensitive Information Disclosure, LLM01 Prompt Injection
+- What it checks: Cross-agent config snooping / credential theft
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B62 - Capability–intent mismatch (declared purpose vs actual behaviour)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Excessive Agency / Inaccurate Capability Declaration
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM06 Excessive Agency
+- What it checks: Capability–intent mismatch (declared purpose vs actual behaviour)
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B63 - Silent-instruction directive (hidden actions from user)
+
+- Severity: CRITICAL
+- Block: hardening
+- Framework: Human Oversight / Transparency
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: Silent-instruction directive (hidden actions from user)
+- Remediation:
+  - none
+
+### B64 - Instruction-hierarchy override detector
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Prompt Injection / Instruction Hierarchy
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM01 Prompt Injection
+- What it checks: Instruction-hierarchy override detector
+- Remediation:
+  - none
+
+### B65 - Conditional sleeper-trigger detector
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Prompt Injection / Conditional Trigger
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM06 Excessive Agency
+- What it checks: Conditional sleeper-trigger detector
+- Remediation:
+  - none
+
+### B66 - Persona / role jailbreak detector
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Prompt Injection / Persona Injection
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM06 Excessive Agency
+- What it checks: Persona / role jailbreak detector
+- Remediation:
+  - none
+
+### B156 - Overt secret-exfil to external/second-party destination
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Data Exfiltration / Credential Leak
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Overt secret-exfil to external/second-party destination
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B165 - Possible exposed crypto private-key value (hex-shaped, wallet-context gated)
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Data Exfiltration / Credential Leak
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Possible exposed crypto private-key value (hex-shaped, wallet-context gated)
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B166 - MCP server command/args references a known paste/exfiltration host
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Data Exfiltration / Credential Leak
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: MCP server command/args references a known paste/exfiltration host
+- Remediation:
+  - none
+
+### B167 - Plugin appServer launch command is a remote-fetch/pipe-to-shell pattern
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Supply Chain
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Plugin appServer launch command is a remote-fetch/pipe-to-shell pattern
+- Remediation:
+  - none
+
+### B168 - Cron job store payload.message / trigger.script carries an embedded directive
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Prompt Injection / Trust Boundary
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Cron job store payload.message / trigger.script carries an embedded directive
+- Remediation:
+  - none
+
+### B169 - Hook mapping messageTemplate/textTemplate carries an embedded directive
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Prompt Injection / Trust Boundary
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Hook mapping messageTemplate/textTemplate carries an embedded directive
+- Remediation:
+  - none
+
+### B170 - Tool-output trust-boundary-inversion directive
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Prompt Injection / Trust Boundary
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM01 Prompt Injection, LLM02 Sensitive Information Disclosure
+- What it checks: Tool-output trust-boundary-inversion directive
+- Remediation:
+  - none
+
+### B171 - In-chat privileged command surface (commands.bash/config/mcp/plugins) weakly gated
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Least Privilege / Break-Glass
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: In-chat privileged command surface (commands.bash/config/mcp/plugins) weakly gated
+- Remediation:
+  - none
+
+### B172 - Standing exec-approvals.json allow-always grant (uninventoried persisted authority)
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Least Privilege / Exec Approvals
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Standing exec-approvals.json allow-always grant (uninventoried persisted authority)
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B158 - Declared skill-load source not present on disk (unaudited auto-load surface)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Supply Chain
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Declared skill-load source not present on disk (unaudited auto-load surface)
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B157 - Non-registry / remote-code dependency source in a skill package.json
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Supply Chain
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Non-registry / remote-code dependency source in a skill package.json
+- Remediation:
+  - none
+
+### B159 - Self-privilege-escalation directive in skill prose
+
+- Severity: CRITICAL
+- Block: hardening
+- Framework: Prompt Injection / Privilege Escalation
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Self-privilege-escalation directive in skill prose
+- Remediation:
+  - none
+
+### B160 - Prose-intent bulk-data exfiltration directive
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Data Exfiltration / Prompt Injection
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Prose-intent bulk-data exfiltration directive
+- Remediation:
+  - none
+
+### B161 - Identity-file injection (override/jailbreak directive in bootstrap files)
+
+- Severity: CRITICAL
+- Block: hardening
+- Framework: Prompt Injection / Identity Rewrite
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Identity-file injection (override/jailbreak directive in bootstrap files)
+- Remediation:
+  - none
+
+### B163 - Social-engineering / credential-phishing prose directive
+
+- Severity: CRITICAL
+- Block: hardening
+- Framework: Prompt Injection / Social Engineering
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Social-engineering / credential-phishing prose directive
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B164 - Threats surfaced in agent logs (content scan)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Log Threat Intel
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Threats surfaced in agent logs (content scan)
+- Remediation:
+  - none
+
+### B180 - Injected directive found in agent memory (untrusted re-consumption surface)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Log Threat Intel / Memory Re-consumption
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM01 Prompt Injection, LLM04 Data and Model Poisoning
+- What it checks: Injected directive found in agent memory (untrusted re-consumption surface)
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B67 - Per-source tool-output trust contracts
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Prompt Injection / Trust Boundary
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: LLM01 Prompt Injection, LLM02 Sensitive Information Disclosure
+- What it checks: Per-source tool-output trust contracts
+- Remediation:
+  - none
+
+### B68 - File tools (fs / apply_patch) workspace-only confinement disabled
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Least Privilege / Filesystem Write
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: File tools (fs / apply_patch) workspace-only confinement disabled
+- Remediation:
+  - none
+
+### B69 - exec inline-eval gate missing when exec enabled
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Least Privilege / Inline Eval
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: exec inline-eval gate missing when exec enabled
+- Remediation:
+  - none
+
+### B70 - trusted-proxy auth without identity constraints on non-loopback bind (header-spoof surface)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Zero Trust / Proxy Headers
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: trusted-proxy auth without identity constraints on non-loopback bind (header-spoof surface)
+- Remediation:
+  - none
+
+### B71 - gateway.nodes.denyCommands ineffective patterns (non-exact entries)
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Least Privilege / Node Commands
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: gateway.nodes.denyCommands ineffective patterns (non-exact entries)
+- Remediation:
+  - none
+
+### B72 - subagents.allowAgents wildcard (any agent as spawn target)
+
+- Severity: LOW
+- Block: hardening
+- Framework: Least Privilege / Subagents
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: subagents.allowAgents wildcard (any agent as spawn target)
+- Remediation:
+  - none
+
+### B73 - mDNS full advertisement on non-loopback gateway bind
+
+- Severity: LOW
+- Block: hardening
+- Framework: Least Privilege / Discovery
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: mDNS full advertisement on non-loopback gateway bind
+- Remediation:
+  - none
+
+### B74 - Forged role/system block or false-provenance attribution in content
+
+- Severity: CRITICAL
+- Block: hardening
+- Framework: Prompt Injection / Provenance Forgery
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM01 Prompt Injection
+- What it checks: Forged role/system block or false-provenance attribution in content
+- Remediation:
+  - none
+
+### B75 - MCP tool-inheritance bypass — per-agent filter circumvented (attested)
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Least Privilege / MCP Tool Inheritance
+- Scored: no
+- Confidence: ATTESTED
+- OWASP: none
+- What it checks: MCP tool-inheritance bypass — per-agent filter circumvented (attested)
+- Remediation:
+  - none
+
+### B76 - High-blast MCP tool-inheritance bypass (attested)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Least Privilege / MCP Tool Inheritance
+- Scored: yes
+- Confidence: ATTESTED
+- OWASP: LLM06 Excessive Agency
+- What it checks: High-blast MCP tool-inheritance bypass (attested)
+- Remediation:
+  - none
+
+### B77 - Config-write audit log review (suspicious / unexpected writer)
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Audit Log / Config Provenance
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Config-write audit log review (suspicious / unexpected writer)
+- Remediation:
+  - none
+
+### B78 - Config-health integrity alert (observed suspicious signature)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Config Integrity / Tamper Detection
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Config-health integrity alert (observed suspicious signature)
+- Remediation:
+  - none
+
+### B79 - Codex session approval-policy posture (approval=never)
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Human Approval
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM06 Excessive Agency
+- What it checks: Codex session approval-policy posture (approval=never)
+- Remediation:
+  - none
+
+### B80 - Gateway auth without rate limiting on a non-loopback bind
+
+- Severity: LOW
+- Block: hardening
+- Framework: Least Privilege / Rate Limiting
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM10 Unbounded Consumption
+- What it checks: Gateway auth without rate limiting on a non-loopback bind
+- Remediation:
+  - none
+
+### B81 - Subagent spawn limits raised beyond recommended defaults
+
+- Severity: LOW
+- Block: hardening
+- Framework: Least Privilege / Subagents
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM06 Excessive Agency
+- What it checks: Subagent spawn limits raised beyond recommended defaults
+- Remediation:
+  - none
+
+### B82 - Cache-trace diagnostics persist full turn transcripts to disk
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Data Protection
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM02 Sensitive Information Disclosure
+- What it checks: Cache-trace diagnostics persist full turn transcripts to disk
+- Remediation:
+  - none
+
+### B83 - Web-fetch tool allows excessive redirect following
+
+- Severity: LOW
+- Block: hardening
+- Framework: SSRF / Redirect Hardening
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM02 Sensitive Information Disclosure
+- What it checks: Web-fetch tool allows excessive redirect following
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B84 - Declared vs. effective vs. proven tool use
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Least Privilege / Blast Radius
+- Scored: no
+- Confidence: ATTESTED
+- OWASP: LLM06 Excessive Agency
+- What it checks: Declared vs. effective vs. proven tool use
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B85 - Incident readiness — tool-use trail present and tamper-resistant
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Incident Response / Audit Trail
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Incident readiness — tool-use trail present and tamper-resistant
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B86 - Import-path hijack surface (sys.path from writable/relative location)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Defensibility / Supply-Chain Tamper
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Import-path hijack surface (sys.path from writable/relative location)
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B87 - Symlink escape to sensitive host path (skill / workspace)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Weak Isolation / Path Escape
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Symlink escape to sensitive host path (skill / workspace)
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B88 - SKILL.md frontmatter authoring hygiene (tag-shaped values / cross-skill squatting)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Authoring Hygiene / Insecure Metadata
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM01 Prompt Injection
+- What it checks: SKILL.md frontmatter authoring hygiene (tag-shaped values / cross-skill squatting)
+- Remediation:
+  - none
+
+### B89 - Dormant-capability skill (unreachable by user and model, yet ships code)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Dormant Capability / Malicious Skill
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Dormant-capability skill (unreachable by user and model, yet ships code)
+- Remediation:
+  - none
+
+### B90 - Cross-file split base64 payload (reassembled from string literals)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Obfuscation / Malicious Skill
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Cross-file split base64 payload (reassembled from string literals)
+- Remediation:
+  - none
+
+### B102 - Base64 payload split exactly at a file-section boundary
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Obfuscation / Malicious Skill
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Base64 payload split exactly at a file-section boundary
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B103 - Install-directive supply-chain (plaintext/IP/onion fetch in metadata.openclaw.install[])
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Supply Chain / ClawHavoc
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: Install-directive supply-chain (plaintext/IP/onion fetch in metadata.openclaw.install[])
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B104 - Offboarding hygiene (duplicate skill installs / dead MCP command paths)
+
+- Severity: LOW
+- Block: advisory
+- Framework: Decommissioning / NHI Offboarding
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Offboarding hygiene (duplicate skill installs / dead MCP command paths)
+- Remediation:
+  - none
+
+### B91 - Dynamic-dispatch sink obfuscation (computed getattr/import_module name)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Obfuscation / Malicious Skill
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Dynamic-dispatch sink obfuscation (computed getattr/import_module name)
+- Remediation:
+  - none
+
+### B92 - Unsafe deserialization sink (pickle/marshal/dill/torch.load, unsafe yaml.load)
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Supply-Chain Tamper / Malicious Skill
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Unsafe deserialization sink (pickle/marshal/dill/torch.load, unsafe yaml.load)
+- Remediation:
+  - none
+
+### B93 - Confusable/mixed-script characters in a skill's trigger description
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Obfuscation / Trigger-Squatting
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Confusable/mixed-script characters in a skill's trigger description
+- Remediation:
+  - none
+
+### B94 - Extended lifecycle hooks (npm prepare/preversion/..., setup.py cmdclass override)
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Supply-Chain Tamper / Malicious Skill
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Extended lifecycle hooks (npm prepare/preversion/..., setup.py cmdclass override)
+- Remediation:
+  - none
+
+### B95 - Dependency confusion (unpinned version + name resembling a well-known package)
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Supply-Chain Tamper / Malicious Skill
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Dependency confusion (unpinned version + name resembling a well-known package)
+- Remediation:
+  - none
+
+### B105 - Cross-skill combined effect (secrecy framing + credential exfil split across skills)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Human Oversight / Transparency
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM06 Excessive Agency
+- What it checks: Cross-skill combined effect (secrecy framing + credential exfil split across skills)
+- Remediation:
+  - none
+
+### B97 - Per-turn event-hook file shipped in a skill (hooks/openclaw/*)
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Persistent Review Surface / Malicious Skill
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Per-turn event-hook file shipped in a skill (hooks/openclaw/*)
+- Remediation:
+  - none
+
+### B96 - Config-driven trust widening (approve-all wording / telemetry-callback URL)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Insecure Metadata / Excessive Agency
+- Scored: no
+- Confidence: LOW
+- OWASP: none
+- What it checks: Config-driven trust widening (approve-all wording / telemetry-callback URL)
+- Remediation:
+  - none
+
+### B98 - Undeclared capabilities (risky effects, no allowed-tools manifest)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Least Privilege / Excessive Agency
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Undeclared capabilities (risky effects, no allowed-tools manifest)
+- Remediation:
+  - none
+
+### B99 - Executable .pth file / sitecustomize auto-execution persistence
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Defensibility / Supply-Chain Tamper
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Executable .pth file / sitecustomize auto-execution persistence
+- Remediation:
+  - none
+
+### B100 - ClickFix-style paste-into-terminal setup instruction
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Supply Chain / ClawHavoc
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: ClickFix-style paste-into-terminal setup instruction
+- Remediation:
+  - none
+
+### C3 - Backups of SOUL.md / memory
+
+- Severity: LOW
+- Block: advisory
+- Framework: Backups
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Backups of SOUL.md / memory
+- Remediation:
+  - none
+
+### C4 - OpenClaw version / update hygiene
+
+- Severity: LOW
+- Block: advisory
+- Framework: Patch hygiene
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: OpenClaw version / update hygiene
+- Remediation:
+  - none
+
+### C5 - Native binary PATH safety
+
+- Severity: LOW
+- Block: advisory
+- Framework: Binary Integrity
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM03 Supply Chain
+- What it checks: Native binary PATH safety
+- Remediation:
+  - command: `chmod o-w,g-w <dir>`
+
+### C6 - Hook-composition tool-policy drop (pre-v2026.6.10)
+
+- Severity: LOW
+- Block: advisory
+- Framework: Patch hygiene
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Hook-composition tool-policy drop (pre-v2026.6.10)
+- Remediation:
+  - none
+
+### C032 - Proxy header trust when real-IP fallback is enabled
+
+- Severity: LOW
+- Block: advisory
+- Framework: Gateway / Proxy Header Trust
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Proxy header trust when real-IP fallback is enabled
+- Remediation:
+  - none
+
+### C014 - Egress inventory (outbound-capable surface enumeration)
+
+- Severity: LOW
+- Block: advisory
+- Framework: Egress Inventory
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM02 Sensitive Information Disclosure
+- What it checks: Egress inventory (outbound-capable surface enumeration)
+- Remediation:
+  - none
+
+### C015 - Secrets-at-rest scan of the OpenClaw home
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Secrets / Filesystem
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM02 Sensitive Information Disclosure
+- What it checks: Secrets-at-rest scan of the OpenClaw home
+- Remediation:
+  - none
+
+### C047 - Non-local MCP server endpoint (manual review)
+
+- Severity: LOW
+- Block: advisory
+- Framework: MCP / External Endpoint Review
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: Non-local MCP server endpoint (manual review)
+- Remediation:
+  - none
+
+### C048 - Cron scheduler persistence surface (top-level cron)
+
+- Severity: LOW
+- Block: advisory
+- Framework: Persistence / Scheduled Execution
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Cron scheduler persistence surface (top-level cron)
+- Remediation:
+  - none
+
+### C074 - Injection-like text in HTML image attributes
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Prompt Injection / HTML Attribute
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM01 Prompt Injection
+- What it checks: Injection-like text in HTML image attributes
+- Remediation:
+  - none
+
+### B136 - Codex CLI project trust_level="trusted" (codex-home/config.toml)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Human Approval
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM06 Excessive Agency
+- What it checks: Codex CLI project trust_level="trusted" (codex-home/config.toml)
+- Remediation:
+  - none
+
+### B138 - Dangling high-scope pending device pairing (devices/pending.json)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Control Plane / Human Approval
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM06 Excessive Agency
+- What it checks: Dangling high-scope pending device pairing (devices/pending.json)
+- Remediation:
+  - none
+
+### B176 - Standing operator authority in paired device store (devices/paired.json)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Identity / Standing Authority
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM06 Excessive Agency
+- What it checks: Standing operator authority in paired device store (devices/paired.json)
+- Remediation:
+  - none
+
+### B135 - Accepted-despite-failed-verification skill install (.clawhub/lock.json)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Supply Chain / Human Approval
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: Accepted-despite-failed-verification skill install (.clawhub/lock.json)
+- Remediation:
+  - none
+
+### B150 - Systemd user-unit Restart=always persistence (OpenClaw-related)
+
+- Severity: LOW
+- Block: advisory
+- Framework: Persistence / Host Watch
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM06 Excessive Agency, LLM10 Unbounded Consumption
+- What it checks: Systemd user-unit Restart=always persistence (OpenClaw-related)
+- Remediation:
+  - none
+
+### B151 - Codex connector shell hooks in the plugin doc-cache
+
+- Severity: LOW
+- Block: advisory
+- Framework: Supply Chain / Connector Hooks
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM03 Supply Chain
+- What it checks: Codex connector shell hooks in the plugin doc-cache
+- Remediation:
+  - none
+
+### B152 - Orphaned plugin cache not declared in plugins.entries
+
+- Severity: LOW
+- Block: advisory
+- Framework: Supply Chain / Plugin Hygiene
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM03 Supply Chain
+- What it checks: Orphaned plugin cache not declared in plugins.entries
+- Remediation:
+  - none
+
+### B153 - Untrusted interpolation into an interpreter one-liner (python -c / node -e / bun -e)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Command Injection
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Untrusted interpolation into an interpreter one-liner (python -c / node -e / bun -e)
+- Remediation:
+  - none
+
+### B154 - Cross-file split plaintext payload (reassembled from string literals)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Obfuscation / Malicious Skill
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Cross-file split plaintext payload (reassembled from string literals)
+- Remediation:
+  - none
+
+### B173 - OpenClaw native-audit suppression list (security.audit.suppressions)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Transparency / Audit Suppression
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: OpenClaw native-audit suppression list (security.audit.suppressions)
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B175 - Skill Workshop autonomous authoring + no-review install (approvalPolicy=auto)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Write Integrity / Self-Modification
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM04 Data and Model Poisoning, LLM06 Excessive Agency
+- What it checks: Skill Workshop autonomous authoring + no-review install (approvalPolicy=auto)
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B179 - Hooks enable-toggle attack-surface inventory (hooks.enabled / hooks.internal.load.extraDirs)
+
+- Severity: LOW
+- Block: advisory
+- Framework: Attack Surface / Hook Exposure
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Hooks enable-toggle attack-surface inventory (hooks.enabled / hooks.internal.load.extraDirs)
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B181 - Installed skill modified after install (recorded ClawHub install hashes)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Supply Chain / Post-Install Integrity
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: Installed skill modified after install (recorded ClawHub install hashes)
+- Remediation:
+  - none
+
+### B182 - ClawHub CLI API token store readable by others (outside the OpenClaw home)
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Secrets Vault / Supply Chain
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM02 Sensitive Information Disclosure, LLM03 Supply Chain
+- What it checks: ClawHub CLI API token store readable by others (outside the OpenClaw home)
+- Remediation:
+  - none
+
+### B183 - Audited config file differs from the one OpenClaw resolves
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Config Integrity
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Audited config file differs from the one OpenClaw resolves
+- Remediation:
+  - none
+
+### B184 - Skills installed from a ClawHub endpoint other than the public registry
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Supply Chain / Provenance
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: Skills installed from a ClawHub endpoint other than the public registry
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B186 - Bundled skills/hooks code-load root relocated by an environment override
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Supply Chain / Code Load Roots
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: Bundled skills/hooks code-load root relocated by an environment override
+- Remediation:
+  - none
+
+### B193 - Gateway credential embedded in plaintext in a systemd user unit
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Secrets Vault / Gateway
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM02 Sensitive Information Disclosure
+- What it checks: Gateway credential embedded in plaintext in a systemd user unit
+- Remediation:
+  - none
+
+### B185 - Poisoned tool description in what OpenClaw actually sent to the model
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Prompt Injection / Tool Poisoning
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM01 Prompt Injection
+- What it checks: Poisoned tool description in what OpenClaw actually sent to the model
+- Remediation:
+  - none
+
+### B190 - Debug traffic-capture proxy enabled, redirected, or holding captured traffic
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Data at Rest / Egress Interception
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Debug traffic-capture proxy enabled, redirected, or holding captured traffic
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B188 - State database with device keys and auth tokens is readable by other users
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Data at Rest / Credential Exposure
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: State database with device keys and auth tokens is readable by other users
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B189 - Cron job executed and erased its own definition (run log without a job)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Scheduled Task Integrity
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Cron job executed and erased its own definition (run log without a job)
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B192 - Break-glass environment toggle left enabled in a global dotenv file
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Config Integrity
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Break-glass environment toggle left enabled in a global dotenv file
+- Remediation:
+  - none
+
+### B324 - env.shellEnv.enabled — agent-startup login-shell environment import
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Config Integrity
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: env.shellEnv.enabled — agent-startup login-shell environment import
+- Remediation:
+  - none
+
+### B177 - OpenClaw's own persisted ClawHub trust verdict for an installed plugin
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Supply Chain / Third-Party Trust Verdict
+- Scored: yes
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain
+- What it checks: OpenClaw's own persisted ClawHub trust verdict for an installed plugin
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B187 - Non-bundled plugin declares the agentToolResultMiddleware tool-result-interception contract
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Supply Chain / Plugin Capability Disclosure
+- Scored: no
+- Confidence: HIGH
+- OWASP: LLM03 Supply Chain, LLM05 Improper Output Handling
+- What it checks: Non-bundled plugin declares the agentToolResultMiddleware tool-result-interception contract
+- Remediation:
+  - none
+
+### T1 - Behavioral trifecta (observed ingress -> sensitive -> egress verb sequence)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Lethal Trifecta (behavioral)
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM06 Excessive Agency
+- What it checks: Behavioral trifecta (observed ingress -> sensitive -> egress verb sequence)
+- Remediation:
+  - none
+
+### T2 - Outcome anomaly (fail→fail→success series on a sensitive verb)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Anomalous Behavior
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Outcome anomaly (fail→fail→success series on a sensitive verb)
+- Remediation:
+  - none
+
+### T3 - Runtime capability drift (proven high-blast verb never declared)
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Excessive Agency (behavioral)
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: LLM06 Excessive Agency
+- What it checks: Runtime capability drift (proven high-blast verb never declared)
+- Remediation:
+  - none
+
+### B191 - OpenClaw's runtime audit_events trail — coverage, policy-blocked tools, and evasive tool names
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Incident Response / Runtime Audit Trail (behavioral)
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: OpenClaw's runtime audit_events trail — coverage, policy-blocked tools, and evasive tool names
+- Remediation:
+  - none
+
+## Compound risk chains
+
+These paths are computed from multiple checks. They fire only when every leg is positively evidenced.
+
+### RISK-01 - Untrusted sender can reach host execution
+
+- Severity: CRITICAL
+- Pattern: CRITICAL: public/group sender + exec/write/elevated tool.
+- Chain: channel_label -> tool_label -> host / filesystem
+- Why:
+  The channel '{channel_label}' accepts messages from anyone (dmPolicy or groupPolicy is
+  'open'). The agent also has {tool_label} enabled. Any anonymous actor can craft a
+  message that causes the agent to execute code or mutate files on the host — no
+  additional privilege escalation required.
+- Fix:
+  Lock every channel's dmPolicy and groupPolicy to 'allowlist' so only known, trusted
+  senders can reach the agent. If open channels are required, remove or gate
+  exec/write/elevated tools behind human approval (tools.exec.mode='ask' or
+  tools.exec.security='ask').
+
+### RISK-02 - Lethal Trifecta: untrusted input → sensitive data → outbound
+
+- Severity: HIGH
+- Pattern: HIGH: dirty input + sensitive data + outbound/exec — the explicit Trifecta path.
+- Chain: input_label -> sensitive_label -> outbound_label
+- Why:
+  All three legs of the Lethal Trifecta are active simultaneously: the agent ingests
+  untrusted content, has access to sensitive data, and can take outbound or exec actions.
+  A single prompt-injection in the untrusted input is sufficient to exfiltrate secrets or
+  execute arbitrary commands.
+- Fix:
+  Break at least one leg: (1) lock channels to allowlist and remove web/email input tools,
+  OR (2) move secrets out of the agent's reach (use tools.exec.security='deny' for
+  sensitive-data contexts), OR (3) gate ALL outbound/exec actions behind human approval.
+  Keeping all three legs active is the highest-risk configuration possible.
+
+### RISK-03 - No sandbox + untrusted ingress + exec/write tools
+
+- Severity: HIGH
+- Pattern: HIGH: sandbox off + untrusted ingress + fs_write/exec.
+- Chain: ingress_label -> no execution sandbox -> exec/write directly on host
+- Why:
+  The execution sandbox is disabled (agents.defaults.sandbox.mode is 'off' or absent),
+  meaning exec and fs_write tools run directly on the host OS. Combined with an untrusted
+  ingress channel, a prompt-injection payload delivered via that channel can execute code
+  or write files on the host without any containment.
+- Fix:
+  Enable the sandbox: set agents.defaults.sandbox.mode to 'non-main' or 'all', and
+  configure agents.defaults.sandbox.docker (network='bridge', no broad host binds). If
+  sandboxing is not possible, remove exec/write tools or lock all ingress channels to a
+  strict allowlist.
+
+### RISK-04 - Mutable agent identity + elevated/privileged tools
+
+- Severity: HIGH
+- Pattern: HIGH: mutable identity + elevated/privileged tools.
+- Chain: identity spoofing or name-matching bypass -> elevated / exec tools -> privilege escalation
+- Why:
+  The agent's identity can be impersonated or matched by name
+  (dangerouslyAllowNameMatching is enabled or B30 fails), AND elevated or exec tools are
+  present. An attacker who spoofs the agent's name in a channel can cause the agent to
+  treat their messages as coming from a trusted source and invoke privileged capabilities.
+- Fix:
+  Disable dangerouslyAllowNameMatching in all channel configurations and require
+  cryptographic identity verification (e.g. token-based auth). Restrict elevated tool
+  allowFrom to explicit, verified sender IDs — never '*' or name-matched identities.
+
+### RISK-05 - Browser SSRF to private network + secrets reachable
+
+- Severity: HIGH
+- Pattern: HIGH: browser SSRF + secrets reachable.
+- Chain: browser tool -> SSRF to private/internal network -> secrets / credentials exfiltration
+- Why:
+  The browser tool is allowed to reach private or internal network addresses
+  (browser.ssrfPolicy.dangerouslyAllowPrivateNetwork is set or B38 fails), and the agent
+  has access to sensitive credentials. A prompt-injection payload in a web page can
+  redirect the browser to internal services (metadata APIs, credential stores) and
+  exfiltrate the retrieved data.
+- Fix:
+  Set browser.ssrfPolicy.dangerouslyAllowPrivateNetwork to false (or remove it). Configure
+  an explicit allowlist of permitted domains. Move credentials out of the agent's reach,
+  or gate browser tool invocations behind human approval.
+
+### RISK-06 - Control plane reachable from open/exposed surface
+
+- Severity: CRITICAL
+- Pattern: CRITICAL: control-plane reachable from an exposed/open surface.
+- Chain: surface_label -> control-plane endpoint -> full agent takeover
+- Why:
+  The agent's control plane (management API, admin interface) is reachable from an open or
+  untrusted surface (B32 fails). An attacker with access to an open channel or input
+  vector can send commands directly to the control plane, potentially taking over the
+  agent configuration, installing skills, or reading all secrets.
+- Fix:
+  Restrict control-plane access to loopback or a trusted VPN interface only. Lock all
+  external channels to an allowlist. Enable strong auth (token ≥ 24 chars) on the control-
+  plane endpoint and never expose it on a public or open interface.
+
+### RISK-07 - Self-modification: writable identity/bootstrap + exec without approval
+
+- Severity: HIGH
+- Pattern: HIGH: writable bootstrap + exec/fs_write without approval.
+- Chain: exec / fs_write tool (no approval gate) -> writable bootstrap/identity files -> agent identity rewritten → persistent compromise
+- Why:
+  Bootstrap or identity files (SOUL.md / AGENTS.md / TOOLS.md) are group- or world-
+  writable (B20 or B22 fails), AND the agent has exec or fs_write tools enabled without a
+  human approval gate. The agent can therefore rewrite its own instructions, identity, or
+  installed skills — a single successful prompt-injection makes the compromise persistent
+  across restarts.
+- Fix:
+  Run 'chmod 700 workspace/ && chmod 600 workspace/SOUL.md workspace/AGENTS.md
+  workspace/TOOLS.md' to remove group/world write access. Also add an approval gate: set
+  tools.exec.mode='ask'/'allowlist' (or tools.exec.security='ask') so every write action
+  needs explicit human sign-off.
+
+### RISK-08 - Session context shared across users in a multi-user channel
+
+- Severity: MEDIUM
+- Pattern: MEDIUM: session cross-user data leak + multi-user channel.
+- Chain: multi-user channel -> session.dmScope='main' (shared session) -> cross-user data leak
+- Why:
+  The session scope is set to 'main' (or B39 fails), meaning all users in a multi-user
+  channel share the same session context. A message from one user can inadvertently reveal
+  another user's conversation history, personal data, or injected context.
+- Fix:
+  Set session.dmScope to 'per-user' so each DM participant receives an isolated session
+  context. Audit channel configurations to ensure no group channel inadvertently shares
+  session state across users.
+
+### RISK-09 - Malicious installed skill can exfiltrate your data
+
+- Severity: CRITICAL
+- Pattern: CRITICAL: a malicious installed skill (B13 FAIL) + outbound egress = active exfiltration.
+- Chain: malicious installed skill (B13) -> runs with full agent permissions -> outbound egress (channels / external skills) -> credential & data exfiltration
+- Why:
+  ClawSecCheck flagged an installed skill as malicious (B13 — the ClawHavoc class). Skills
+  run with the agent's FULL permissions, and this agent has an outbound egress surface
+  (messaging channels and/or external-service skills). The malicious skill can read your
+  secrets and conversation data and send them out — this is an active exfiltration path,
+  not theoretical.
+- Fix:
+  Uninstall the flagged skill(s) NOW (see the B13 finding for the name), and ROTATE every
+  secret it could have reached — channel tokens, cloud keys, password managers. Only
+  reinstall skills whose source you have read.
+
+### RISK-10 - Powerful agent on an unmonitored host — a breach would be invisible
+
+- Severity: MEDIUM
+- Pattern: MEDIUM: a high-privilege agent on a host with no CONFIRMED detection monitoring.
+- Chain: untrusted input reaches the agent -> agent can execute / write on the host -> no host detection (IDS / audit / file-integrity / EDR) -> a compromise would leave no trace
+- Why:
+  This agent can act on the host (exec / write / elevated tools) and is reachable by
+  untrusted input, yet ClawSecCheck found no evidence of any host detection monitoring —
+  no confirmed network IDS, audit logging, file-integrity monitor, or endpoint/EDR sensor
+  (some of these may simply be unreadable by a non-root scan). If the agent were
+  compromised via a prompt injection, the resulting activity would very likely go unseen.
+- Fix:
+  Add at least one host detection layer so a compromise is observable: enable auditd with
+  watches on the agent's files, install a file-integrity monitor (AIDE), and/or deploy an
+  EDR/IDS (Wazuh, Suricata). Alternatively, shrink the agent's blast radius (sandbox it,
+  lock channels to an allowlist, remove exec/write tools) so an unseen compromise matters
+  less.
+
+### RISK-11 - Cross-agent trifecta reassembly (confused deputy)
+
+- Severity: HIGH
+- Pattern: HIGH: the trifecta reassembles ACROSS agents via the attested delegation graph.
+- Chain: {entry} (untrusted input) -> {sens} (sensitive data) -> {outb} (outbound)
+- Why:
+  No single agent holds the full Lethal Trifecta, but the untrusted-input agent '{entry}'
+  can drive a sensitive-data agent and an outbound agent across delegation edges that are
+  not structural walls (raw passthrough / text filter / undeclared return). A single
+  prompt-injection at the entry agent can orchestrate the others to exfiltrate secrets or
+  take action — the trifecta reassembles across the graph (a confused-deputy chain).
+- Fix:
+  Break one edge: make the callee return a typed/structured value (a wall) so injected
+  instructions and raw data cannot flow back, OR remove the delegation reach so '{entry}'
+  cannot drive both a sensitive-data and an outbound agent.
+
+### RISK-12 - Untrusted input + broad filesystem-write = tamper / persistence
+
+- Severity: HIGH
+- Pattern: HIGH: broad filesystem-write capability (B55) + untrusted ingress = tamper/persistence.
+- Chain: ingress_label -> broad fs-write tool (unscoped, no approval gate) -> files overwritten → tamper / persistence implant
+- Why:
+  The agent is granted a filesystem-write tool (fs_write / apply_patch) that B55 found
+  broadly reachable or ungated, AND untrusted content can reach the agent (an open channel
+  or an input tool). A single prompt-injection in that untrusted input can drive arbitrary
+  file writes — overwriting bootstrap or skill files to implant persistent instructions,
+  or tampering with data the agent later trusts.
+- Fix:
+  Scope the write capability: set tools.exec.mode='ask' so writes need human sign-off,
+  restrict tools.elevated.allowFrom to an explicit allowlist (no '*'), and lock ingress
+  channels to 'allowlist'. Removing the fs_write/apply_patch grant entirely also breaks
+  the chain.
+
+### RISK-13 - Markdown-image exfil + writable memory/bootstrap = persistence / exfil
+
+- Severity: HIGH
+- Pattern: HIGH (RISK-13): markdown-image exfil + writable bootstrap/memory = persistence/exfil.
+- Chain: remote markdown image URL with data-bearing query params -> writable bootstrap / memory files -> persisted payload + exfiltration channel
+- Why:
+  B59 shows that a remote markdown/image URL can carry data out of the agent context. If
+  bootstrap or memory files are writable (B20 or B22 fails), the same attacker can write a
+  payload or instruction back into files the agent reloads later. The result is a
+  persistence-plus-exfil chain: steal data now, leave behind code or instructions that
+  survive restart.
+- Fix:
+  Remove remote markdown/image URLs from untrusted content, keep bootstrap and memory
+  files read-only, and require approval for any filesystem write that could persist
+  instructions.
+
+### RISK-14 - Wildcard-elevated sender + heartbeat = self-escalating autonomy loop
+
+- Severity: HIGH
+- Pattern: HIGH (RISK-14): wildcard-elevated sender + heartbeat = self-escalating loop.
+- Chain: any sender via wildcard elevated provider(s): {', '.join(providers)} -> injected instruction invokes elevated tools -> heartbeat re-runs the agent unattended -> self-escalating privilege loop
+- Why:
+  A provider in tools.elevated.allowFrom is set to '*', so any sender on that channel can
+  invoke elevated tools, and a heartbeat (agents.defaults.heartbeat or a per-agent
+  heartbeat) makes the agent act on its own schedule. Together, a single prompt-injection
+  from an untrusted sender can trigger elevated actions that the heartbeat keeps re-
+  running unattended — a self-escalating autonomous privilege loop with no human in the
+  path.
+- Fix:
+  Replace the '*' in tools.elevated.allowFrom with an explicit per-provider sender
+  allowlist, and gate elevated execution (tools.exec.mode='ask'). If unattended autonomy
+  is not required, disable the heartbeat. Breaking either leg breaks the chain.
+
+### RISK-15 - Untrusted context + browser SSRF to private network = metadata/credential exfil
+
+- Severity: HIGH
+- Pattern: HIGH (RISK-15): untrusted-context ingress + browser SSRF to private network.
+- Chain: untrusted message content (channels.<p>.contextVisibility='all') -> agent browses an attacker-controlled URL -> SSRF to internal metadata/credential endpoint -> data in tool output
+- Why:
+  A channel exposes full untrusted context to the agent
+  (channels.<p>.contextVisibility='all', B26), and the browser is allowed to reach
+  private/internal addresses (browser.ssrfPolicy.dangerouslyAllowPrivateNetwork, B38). A
+  prompt-injection in an untrusted message can make the agent fetch an internal URL —
+  cloud metadata or a credential store — and the response surfaces in tool output.
+  OpenClaw has no built-in egress allowlist, so the attacker-fetch leg is structurally
+  unconstrained.
+- Fix:
+  Set channels.<provider>.contextVisibility (or channels.defaults) to 'allowlist' or
+  'allowlist_quote', and set browser.ssrfPolicy.dangerouslyAllowPrivateNetwork to false
+  with an explicit browser.ssrfPolicy.hostnameAllowlist. Breaking either leg breaks the
+  chain.
+
+### RISK-16 - Sandbox host-reach + plaintext gateway credential = control-plane takeover
+
+- Severity: HIGH
+- Pattern: HIGH (RISK-16): rw workspace + host-reaching bind + plaintext gateway password.
+- Chain: rw workspace + {bind_label} -> agent reads plaintext gateway.auth.password from openclaw.json on the host -> authenticates to the control plane as admin -> takeover
+- Why:
+  The default agent sandbox grants workspaceAccess='rw' AND a docker bind that reaches the
+  host filesystem broadly (docker.sock or a root-level source), so an exec-capable agent
+  can read arbitrary host files. The gateway credential is stored in plaintext at
+  gateway.auth.password in openclaw.json, so the agent can read it and authenticate to the
+  control plane as admin — a sandbox weakness escalates to full control-plane takeover.
+- Fix:
+  Set agents.defaults.sandbox.workspaceAccess to 'ro' or 'none', remove docker.sock and
+  root-level host binds from agents.defaults.sandbox.docker.binds, and stop storing
+  gateway.auth.password in plaintext (use gateway.auth.mode='token' with a secret from the
+  environment / a manager). Breaking any one leg breaks the chain.
+
+### RISK-17 - Conditional sleeper trigger + scheduled execution = delayed RCE
+
+- Severity: HIGH
+- Pattern: HIGH (RISK-17): conditional sleeper trigger + scheduled exec = delayed RCE.
+- Chain: conditional sleeper trigger in bootstrap or skill -> {schedule_label} keeps the agent running later -> exec/write tool fires when the trigger condition appears -> delayed RCE
+- Why:
+  B65 surfaces hidden instructions that wait for a future trigger. If the agent also runs
+  on a schedule and can execute code or write files, the hidden payload can sit dormant
+  until the trigger appears and then run without another review. That turns a delayed
+  instruction into a delayed remote code execution path.
+- Fix:
+  Remove sleeper-trigger instructions, disable cron or heartbeat where they are not
+  needed, and gate exec/write tools behind human approval.
+
+### RISK-18 - Untrusted context + cron + heartbeat = persistent autonomous foothold
+
+- Severity: HIGH
+- Pattern: HIGH (RISK-18): contextVisibility=all + cron + heartbeat = persistent foothold.
+- Chain: channel '{ch_label}' contextVisibility='all' → prompt injection via untrusted input -> injected instruction schedules a cron task (persistent scheduler surface) -> heartbeat re-executes cron task autonomously with no human review -> persistent autonomous foothold
+- Why:
+  A channel exposes full untrusted context to the agent
+  (channels.<p>.contextVisibility='all'), a cron scheduler surface is active, and the
+  agent runs autonomously on a heartbeat (agents.defaults.heartbeat). A prompt-injection
+  in untrusted input can plant a cron task that the heartbeat re-executes indefinitely —
+  no human approval is required after the initial injection. The result is a persistent
+  autonomous foothold that survives restarts and continues running without further
+  attacker interaction.
+- Fix:
+  Set channels.<provider>.contextVisibility (or channels.defaults.contextVisibility) to
+  'allowlist' or 'allowlist_quote' to prevent untrusted content from reaching the agent.
+  Disable the cron scheduler (remove the top-level 'cron' key) if scheduled tasks are not
+  required. Set agents.defaults.heartbeat to a falsy value or add a human-approval gate
+  for autonomous re-execution. Breaking any one leg breaks the chain.
+
+### RISK-19 - Audit/security-themed skill co-installed with a high-capability skill
+
+- Severity: MEDIUM
+- Pattern: MEDIUM (RISK-19, C-197): Skill Composition Risk — Trust Transfer.
+- Chain: {audit_name} (audit/security/verification-themed output) -> agent reads its output as an implicit approval signal -> {blast_name} (exec / network / write capability)
+- Why:
+  '{audit_name}' presents itself as an audit/security/verification tool, and
+  '{blast_name}' is a separate installed skill with exec, network, or write capability.
+  Per the Skill Composition Risk literature (arXiv 2606.15242), a prompt injection can
+  borrow the audit-themed skill's implied authority — its benign-sounding summary ('looks
+  clean', 'verified') — to green-light '{blast_name}'s risky action, even though neither
+  skill is individually malicious and no single skill holds both roles.
+- Fix:
+  Never let '{audit_name}'s output serve as an approval gate for '{blast_name}' or any
+  other high-capability skill's action — route genuinely risky actions
+  (exec/network/write) through a human-approval step that reads the actual action, not a
+  different skill's summary of it.
+
+### RISK-20 - Remotely reachable hook ingress with an unconstrained session-key policy
+
+- Severity: HIGH
+- Pattern: HIGH (RISK-20, B-288): remotely-reachable hook ingress with an unconstrained
+- Chain: gateway reachable beyond loopback ({exposure}) -> hooks.enabled — inbound /hooks/agent endpoint serving -> detail
+- Why:
+  The gateway is reachable beyond loopback ({exposure}) and the inbound hook endpoint is
+  enabled, while its session/agent policy is unconstrained: {detail}. A caller holding the
+  hook token can therefore write into session keys it was never meant to touch — placing
+  content into another session's history, where the agent reads it as trusted prior
+  context — and/or route its request to any configured agent, including the default one.
+  OpenClaw's own audit rates each of these critical under exactly this remote-exposure
+  condition; ClawSecCheck reports it one notch lower because the endpoint still requires
+  hooks.token, so this is blast-radius amplification for a token holder rather than an
+  unauthenticated takeover. It is not evidence that the endpoint has been reached: every
+  link here is config posture.
+- Fix:
+  Constrain the hook policy rather than the network path, since the point of hooks is to
+  be reachable. Set hooks.allowedSessionKeyPrefixes to a narrow prefix (for example
+  ["hook:"]) so request-supplied keys cannot escape their own namespace — or set
+  hooks.allowRequestSessionKey=false and let hooks.defaultSessionKey decide the session.
+  Set hooks.allowedAgentIds to an explicit allowlist of the agents hooks may drive (or []
+  to deny hook agent routing entirely). If the gateway does not need to be remotely
+  reachable, setting gateway.bind to the loopback profile closes the chain instead.
+
+### RISK-21 - Group-origin session provably reached a high-blast tool
+
+- Severity: MEDIUM
+- Pattern: MEDIUM (RISK-21, F-135): open group ingress + a high-blast verb PROVEN from it.
+- Chain: {channel_name} (open to non-owner senders: {reason}) -> group / channel-origin session in the trajectory log -> proven high-blast tool call ({shown})
+- Why:
+  The channel '{channel_name}' admits group messages from senders who are not the owner
+  ({reason}), and the trajectory log records a session opened from a group or channel
+  surface on '{channel_name}' in which the agent actually invoked {shown}. Both halves of
+  this exposure were already visible in isolation — the posture as a config finding, the
+  tool use as a log observation — but nothing related them, so a setup where an untrusted
+  surface has demonstrably reached a high-blast primitive looked the same as one where it
+  never had. It is not proof that a group sender caused those specific calls: that needs
+  the call arguments, which this tool never reads.
+- Fix:
+  Decide whether group senders on '{channel_name}' are meant to reach
+  exec/destructive/mailbox-config tools at all. If not, restrict the channel (set
+  groupPolicy to 'allowlist' and list the permitted senders in groupAllowFrom, or scope
+  the groups entry so it is not '*'). If open group access is intentional — a community
+  bot, say — put the high-blast tools behind a human approval step (tools.exec.mode='ask')
+  so an untrusted message cannot reach them unattended.

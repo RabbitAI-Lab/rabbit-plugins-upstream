@@ -1,0 +1,36 @@
+name: incident-triage
+description: "Triage production incidents, alerts, and service outages"
+
+routing:
+  keywords:
+    - "alert"
+    - "incident"
+    - "outage"
+    - "service down"
+    - "on-call"
+    - "P0"
+    - "500 error"
+    - "timeout"
+    - "circuit breaker"
+    - "crash"
+    - "OOM"
+  patterns:
+    - "(alert|alarm|incident).{0,6}(handle|triage|investigate|respond)"
+    - "(service|API|endpoint).{0,6}(down|unavailable|timeout|error|crash)"
+    - "(CPU|memory|disk|OOM).{0,4}(high|full|overflow|spike)"
+    - "P[0-2].{0,4}(incident|outage|issue)"
+    - "(production|prod|live).{0,6}(error|issue|down|500|crash)"
+    - "(returning|getting).{0,4}(500|502|503|504|error)"
+  intents:
+    - "ops.incident.triage"
+    - "ops.alert.handle"
+  anti_patterns:
+    - "deploy"
+    - "release"
+    - "go live"
+    - "set up monitoring"
+    - "configure alerts"
+  priority: 90
+  context:
+    file_types: [".log", ".json"]
+    workspace_hints: ["ops", "sre", "infra", "backend"]

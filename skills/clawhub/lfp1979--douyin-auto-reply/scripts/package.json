@@ -1,0 +1,13 @@
+{
+  "name": "douyin-auto-reply-scripts",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Self-contained CLI for Douyin Creator Center comment fetch + bulk reply (bundled with the douyin-auto-reply skill).",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "dependencies": {
+    "playwright": "^1.40.0"
+  }
+}

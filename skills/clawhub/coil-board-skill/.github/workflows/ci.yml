@@ -1,0 +1,23 @@
+name: ci
+on:
+  push:
+  pull_request:
+  schedule: [{cron: "0 14 * * 1"}]   # weekly: catch drift even with no commits
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: SKILL.md must match the published canonical copy
+        # coil.trade is the single source of truth (it serves the sha256 that
+        # /.well-known/agent-skills/index.json advertises). A repo copy that drifts
+        # is how a skill starts telling people things that are no longer true.
+        run: |
+          curl -sS https://coil.trade/skills/coil-board/SKILL.md -o /tmp/live.md
+          diff -u /tmp/live.md SKILL.md || {
+            echo "::error::SKILL.md has drifted from https://coil.trade/skills/coil-board/SKILL.md"
+            exit 1; }
+      - name: Helper script runs against the live free board
+        run: python3 scripts/coil_board.py

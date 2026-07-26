@@ -1,0 +1,21 @@
+{
+  "skill_name": "telegram-replies",
+  "evals": [
+    {
+      "id": 0,
+      "name": "batch-multiple-unread",
+      "prompt": "I run my personal Telegram through an AI agent. While I was in a meeting, my friend Dima sent me 5 separate messages in our DM: asking if I'm free Saturday, then about a hiking trail, then a photo, then whether to bring his dog, then 'you there?'. Draft the reply/replies the agent should send.",
+      "expected_output": "ONE reply covering all five points, written in first person in a natural friend-to-friend voice, addressing the actual content (Saturday, trail, dog). Should NOT produce five separate messages, and should NOT sound like a support bot.",
+      "files": [],
+      "assertions": []
+    },
+    {
+      "id": 1,
+      "name": "cold-outreach-varied-wording",
+      "prompt": "In a Telegram group I'm in, three different people (Anna, Boris, and Priya) each posted asking whether anyone knows a good freelance illustrator — which is exactly what I do. I want the agent to DM each of them privately. Write the three DMs.",
+      "expected_output": "Three genuinely different messages (varied phrasing/word order, personalized to what each person said) — not one template with the name swapped. First-person voice. Should acknowledge these are cold DMs that Telegram privacy may block and that identical wording across recipients is a spam-flag risk.",
+      "files": [],
+      "assertions": []
+    }
+  ]
+}

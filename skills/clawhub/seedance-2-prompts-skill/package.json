@@ -1,0 +1,28 @@
+{
+  "name": "seedance-2-prompts-skill",
+  "version": "1.0.0",
+  "description": "AI skill: 8,000+ Seedance 2 (ByteDance) video generation prompts from GokuScraper community dataset. Auto-downloads library on install. Works with Claude Code, Cursor, and more.",
+  "type": "module",
+  "scripts": {
+    "postinstall": "node scripts/setup.js",
+    "setup": "node scripts/setup.js",
+    "sync": "node scripts/setup.js --force"
+  },
+  "keywords": [
+    "claude-code",
+    "claude-code-skill",
+    "cursor",
+    "skill",
+    "seedance-2",
+    "seedance",
+    "bytedance",
+    "prompts",
+    "prompt-library",
+    "video-generation",
+    "ai-video",
+    "text-to-video",
+    "prompt-templates"
+  ],
+  "author": "GokuScraper",
+  "license": "MIT"
+}

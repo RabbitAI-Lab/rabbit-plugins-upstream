@@ -1,0 +1,536 @@
+#!/usr/bin/env python3
+"""Compose a narrated tier-list video with a scrolling board background.
+
+Usage:
+    python generate_video.py <work_dir> [-o output.mp4] [--resolution 1920x1080]
+
+Expects in <work_dir>:
+    manifest.json           - from fetch_tierlist.py
+    narration_script.json   - AI-generated script with segments
+    audio_manifest.json     - from tts_narration.py
+    board_source.<ext>      - the real server board image (from fetch_tierlist.py)
+                              OR board.png (fallback render from render_board.py)
+    images/                 - card images
+    audio/                  - narration audio files
+"""
+
+import argparse
+import json
+import os
+import platform
+import sys
+
+
+def ensure_deps():
+    missing = []
+    try:
+        import moviepy  # noqa: F401
+    except ImportError:
+        missing.append("moviepy>=2.0")
+    try:
+        from PIL import Image  # noqa: F401
+    except ImportError:
+        missing.append("Pillow")
+    try:
+        import numpy  # noqa: F401
+    except ImportError:
+        missing.append("numpy")
+    if missing:
+        import subprocess
+        print(f"Installing: {', '.join(missing)}...", file=sys.stderr)
+        subprocess.check_call([sys.executable, "-m", "pip", "install", *missing, "-q"])
+
+
+ensure_deps()
+
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
+import numpy as np
+
+
+# ---------------------------------------------------------------------------
+# Cross-platform font helper
+# ---------------------------------------------------------------------------
+def get_font(size: int):
+    system = platform.system()
+    if system == "Windows":
+        candidates = ["msyh.ttc", "msyhbd.ttc", "simhei.ttf", "arial.ttf"]
+    elif system == "Darwin":
+        candidates = [
+            "/System/Library/Fonts/PingFang.ttc",
+            "/System/Library/Fonts/STHeiti Light.ttc",
+            "/Library/Fonts/Arial.ttf",
+        ]
+    else:
+        candidates = [
+            "/usr/share/fonts/opentype/noto/NotoSansCJK-Regular.ttc",
+            "/usr/share/fonts/truetype/noto/NotoSansCJK-Regular.ttc",
+            "/usr/share/fonts/noto-cjk/NotoSansCJK-Regular.ttc",
+            "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",
+        ]
+    for path in candidates:
+        try:
+            return ImageFont.truetype(path, size)
+        except (OSError, IOError):
+            continue
+    return ImageFont.load_default()
+
+
+# ---------------------------------------------------------------------------
+# Image helpers
+# ---------------------------------------------------------------------------
+def darken(img: Image.Image, factor: float = 0.4) -> Image.Image:
+    arr = np.array(img).astype(np.float32) * factor
+    return Image.fromarray(arr.clip(0, 255).astype(np.uint8))
+
+
+def add_rounded_border(img: Image.Image, border: int = 5,
+                       color=(255, 255, 255), radius: int = 16) -> Image.Image:
+    w, h = img.size
+    bordered = Image.new("RGBA", (w + border * 2, h + border * 2), (0, 0, 0, 0))
+    draw = ImageDraw.Draw(bordered)
+    draw.rounded_rectangle(
+        [0, 0, w + border * 2 - 1, h + border * 2 - 1],
+        radius=radius, fill=(*color, 255),
+    )
+    bordered.paste(img.convert("RGBA"), (border, border))
+    return bordered
+
+
+# ---------------------------------------------------------------------------
+# Frame builders
+# ---------------------------------------------------------------------------
+def crop_board_at(board: Image.Image, scroll_y: int,
+                 target_w: int, target_h: int) -> Image.Image:
+    board_w, board_h = board.size
+    max_scroll = max(0, board_h - target_h)
+    scroll_y = max(0, min(int(scroll_y), max_scroll))
+    return board.crop((0, scroll_y, target_w, scroll_y + target_h))
+
+
+def create_card_overlay(frame: Image.Image, card_img: Image.Image,
+                        tier_name: str, tier_color: str, card_label: str,
+                        target_w: int, target_h: int) -> Image.Image:
+    result = frame.copy()
+
+    card_target_h = int(target_h * 0.50)
+    scale = card_target_h / card_img.height
+    card_target_w = int(card_img.width * scale)
+    if card_target_w > target_w * 0.65:
+        card_target_w = int(target_w * 0.65)
+        scale = card_target_w / card_img.width
+        card_target_h = int(card_img.height * scale)
+    # Square card, no white border. Keep a semi-transparent dark backing behind
+    # it (SQUARE, not rounded) so the card stays visible when the blurred
+    # background happens to match its colors. User feedback: keep the outer
+    # dark tint, but no border, square corners, no layered frames.
+    card_resized = card_img.resize((card_target_w, card_target_h), Image.LANCZOS).convert("RGB")
+    cx = (target_w - card_resized.width) // 2
+    cy = (target_h - card_resized.height) // 2 - int(target_h * 0.03)
+    pad = 24
+    backing = Image.new("RGBA", (target_w, target_h), (0, 0, 0, 0))
+    ImageDraw.Draw(backing).rectangle(
+        [cx - pad, cy - pad, cx + card_resized.width + pad, cy + card_resized.height + pad],
+        fill=(0, 0, 0, 140),
+    )
+    result = Image.alpha_composite(result.convert("RGBA"), backing).convert("RGB")
+    result.paste(card_resized, (cx, cy))
+
+    # No tier badge (top-left): the scrolling background already shows the full
+    # board with every tier label, so a badge here is redundant (user feedback).
+    # No card label text: the card image is clear on its own, and a wrong
+    # AI-guessed label under it would be misleading (user feedback).
+
+    return result
+
+
+def create_title_frame(board: Image.Image, title: str,
+                      target_w: int, target_h: int) -> Image.Image:
+    board_h = board.size[1]
+    mid_scroll = max(0, (board_h - target_h) // 2)
+    frame = crop_board_at(board, mid_scroll, target_w, target_h)
+    frame = darken(frame, 0.45)
+
+    draw = ImageDraw.Draw(frame)
+    font = get_font(max(38, target_h // 16))
+    bb = draw.textbbox((0, 0), title, font=font)
+    tw, th = bb[2] - bb[0], bb[3] - bb[1]
+    x, y = (target_w - tw) // 2, (target_h - th) // 2
+    draw.text((x + 3, y + 3), title, fill=(0, 0, 0), font=font)
+    draw.text((x, y), title, fill=(255, 255, 255), font=font)
+    return frame
+
+
+# ---------------------------------------------------------------------------
+# Audio helper
+# ---------------------------------------------------------------------------
+def get_audio_duration(audio_path: str) -> float:
+    try:
+        from mutagen.mp3 import MP3
+        return MP3(audio_path).info.length
+    except Exception:
+        pass
+    try:
+        from moviepy import AudioFileClip
+        clip = AudioFileClip(audio_path)
+        dur = clip.duration
+        clip.close()
+        return dur
+    except Exception:
+        # Neither probe worked (mutagen missing / 0-byte file / decode error).
+        # Falling back to a 5.0s guess will desync subtitles from the real audio
+        # if the audio later loads in moviepy with a different length — warn so
+        # the operator knows a guess was used.
+        print(f"  [WARN] could not probe audio duration for {audio_path}; "
+              f"assuming 5.0s (subtitles may desync).", file=sys.stderr)
+        return 5.0
+
+
+# ---------------------------------------------------------------------------
+# Subtitle generation (SRT)
+# ---------------------------------------------------------------------------
+def _srt_time(seconds: float) -> str:
+    h = int(seconds // 3600)
+    m = int((seconds % 3600) // 60)
+    s = int(seconds % 60)
+    ms = int((seconds % 1) * 1000)
+    return f"{h:02d}:{m:02d}:{s:02d},{ms:03d}"
+
+
+def generate_srt(script: dict, audio_map: dict, work_dir: str,
+                 intro_duration: float, gap_duration: float,
+                 intro_dur_actual: float = None,
+                 outro_dur_actual: float = None,
+                 seg_durations: dict = None) -> str:
+    """Generate subtitles.
+
+    Timing MUST follow the actual audio-clip durations used by generate_video,
+    not a fixed --intro-duration. The old code used ``intro_duration`` (default
+    3.0s) as the intro subtitle end AND as the start offset for every segment,
+    while the real intro clip was ``intro_audio.duration + 0.3`` — so when intro
+    audio ran 6s, the subtitle vanished at 3s and every later subtitle fired
+    ~3s early. Caller passes the measured durations; we only fall back to
+    probing when the caller didn't (legacy callers / no audio).
+    """
+    segments = script.get("segments", [])
+    srt_path = os.path.join(work_dir, "subtitles.srt")
+    lines = []
+    sub_idx = 1
+
+    intro_real = intro_dur_actual if intro_dur_actual is not None else intro_duration
+    outro_real = outro_dur_actual if outro_dur_actual is not None else intro_duration
+    current_time = intro_real
+
+    intro_text = script.get("intro", "")
+    if intro_text:
+        lines.append(str(sub_idx))
+        lines.append(f"{_srt_time(0)} --> {_srt_time(intro_real)}")
+        lines.append(intro_text)
+        lines.append("")
+        sub_idx += 1
+
+    for seg in segments:
+        idx = seg["index"]
+        text = seg.get("narration", "")
+        if not text.strip():
+            continue
+        # When the caller passed real per-segment durations (generate_video
+        # does), an idx missing from seg_durations means that card was SKIPPED
+        # in the video loop (missing image_file / file not on disk). The video
+        # has NO clip for it, so emitting a subtitle + advancing the timeline
+        # by 5.0s+ would desync every later subtitle (F2). Skip it + warn.
+        if seg_durations is not None and idx not in seg_durations:
+            print(f"  [WARN] segment index {idx} has narration but no video "
+                  f"clip (card image missing?) — subtitle skipped to avoid "
+                  f"SRT drift.", file=sys.stderr)
+            continue
+        if seg_durations and idx in seg_durations:
+            dur = seg_durations[idx]
+        else:
+            audio_path = audio_map.get(idx)
+            if audio_path and os.path.exists(audio_path):
+                dur = get_audio_duration(audio_path) + 0.5
+            else:
+                dur = 5.0
+        start = current_time
+        end = current_time + dur
+        lines.append(str(sub_idx))
+        lines.append(f"{_srt_time(start)} --> {_srt_time(end)}")
+        lines.append(text)
+        lines.append("")
+        sub_idx += 1
+        current_time = end + gap_duration
+
+    outro_text = script.get("outro", "")
+    if outro_text:
+        lines.append(str(sub_idx))
+        lines.append(f"{_srt_time(current_time)} --> {_srt_time(current_time + outro_real)}")
+        lines.append(outro_text)
+        lines.append("")
+
+    with open(srt_path, "w", encoding="utf-8") as f:
+        f.write("\n".join(lines))
+    print(f"Subtitles saved: {srt_path}")
+    return srt_path
+
+
+# ---------------------------------------------------------------------------
+# Board selection
+# ---------------------------------------------------------------------------
+def resolve_board_path(work_dir: str, manifest: dict) -> str:
+    """Prefer the high-res Playwright capture, then the server thumb, then fallback render."""
+    hd = os.path.join(work_dir, "board_hd.png")
+    if os.path.exists(hd):
+        print("Using high-res board: board_hd.png (captured from public page)")
+        return hd
+    board_file = manifest.get("board_image_file")
+    if board_file:
+        p = os.path.join(work_dir, board_file)
+        if os.path.exists(p):
+            print(f"Using server board image: {board_file} [{manifest.get('board_image_source')}] (600px)")
+            return p
+    rendered = os.path.join(work_dir, "board.png")
+    if os.path.exists(rendered):
+        print("Using rendered fallback board: board.png")
+        return rendered
+    raise SystemExit(
+        "No board image found. Run capture_board.py for a high-res board, "
+        "or fetch_tierlist.py for the server thumb, or render_board.py for a fallback."
+    )
+
+
+# ---------------------------------------------------------------------------
+# Resolution parsing
+# ---------------------------------------------------------------------------
+def _parse_resolution(resolution: str):
+    """Parse a WxH string into (width, height) ints, with a clear error."""
+    try:
+        parts = resolution.lower().split("x")
+        if len(parts) != 2:
+            raise ValueError
+        w, h = int(parts[0].strip()), int(parts[1].strip())
+        if w <= 0 or h <= 0:
+            raise ValueError
+        return w, h
+    except ValueError:
+        raise SystemExit(
+            f"Invalid --resolution {resolution!r}; use WxH, e.g. 1920x1080 "
+            f"(landscape) or 1080x1920 (vertical)."
+        )
+
+
+# ---------------------------------------------------------------------------
+# Main video generation
+# ---------------------------------------------------------------------------
+def generate_video(work_dir: str, output_path: str, resolution: str = "1920x1080",
+                   intro_duration: float = 3.0, gap_duration: float = 0.8):
+    from moviepy import ImageClip, AudioFileClip, concatenate_videoclips
+
+    target_w, target_h = _parse_resolution(resolution)
+
+    with open(os.path.join(work_dir, "manifest.json"), "r", encoding="utf-8") as f:
+        manifest = json.load(f)
+    with open(os.path.join(work_dir, "narration_script.json"), "r", encoding="utf-8") as f:
+        script = json.load(f)
+
+    audio_map = {}
+    intro_audio = None
+    outro_audio = None
+    audio_manifest_path = os.path.join(work_dir, "audio_manifest.json")
+    if os.path.exists(audio_manifest_path):
+        with open(audio_manifest_path, "r", encoding="utf-8") as f:
+            am = json.load(f)
+        for seg in am.get("segments", []):
+            if seg.get("audio_file"):
+                audio_map[seg["index"]] = os.path.join(work_dir, "audio", seg["audio_file"])
+        if am.get("intro_audio"):
+            intro_audio = os.path.join(work_dir, "audio", am["intro_audio"])
+        if am.get("outro_audio"):
+            outro_audio = os.path.join(work_dir, "audio", am["outro_audio"])
+
+    # Audio diagnostic summary — surface silent intro/outro at compose time so
+    # "no voiceover" is visible in the log, not buried. (The intro/outro TTS
+    # bug manifested as a silent title frame with no obvious cause.)
+    intro_present = bool(intro_audio and os.path.exists(intro_audio))
+    outro_present = bool(outro_audio and os.path.exists(outro_audio))
+    if not intro_present:
+        print("  [WARN] intro audio MISSING — intro will be a SILENT title frame. "
+              "Did tts_narration.py run with a non-empty `intro` in narration_script.json?",
+              file=sys.stderr)
+    if not outro_present:
+        print("  [WARN] outro audio MISSING — outro will be a SILENT frame. "
+              "Did tts_narration.py run with a non-empty `outro` in narration_script.json?",
+              file=sys.stderr)
+    print(f"Audio: intro={'attached' if intro_present else 'MISSING'} "
+          f"| outro={'attached' if outro_present else 'MISSING'}")
+
+    board_path = resolve_board_path(work_dir, manifest)
+    board = Image.open(board_path).convert("RGB")
+
+    if board.width != target_w:
+        scale = target_w / board.width
+        new_h = int(board.height * scale)
+        board = board.resize((target_w, new_h), Image.LANCZOS)
+    board_w, board_h = board.size
+    max_scroll = max(0, board_h - target_h)
+    print(f"Board: {board_w}x{board_h}, max scroll: {max_scroll}px")
+
+    title = manifest.get("title", "Tier List")
+    seg_lookup = {s["index"]: s for s in script.get("segments", [])}
+    scripted_indices = {s["index"] for s in script.get("segments", []) if s.get("index", -1) >= 0}
+
+    clips_info = []
+    img_dir = os.path.join(work_dir, "images")
+
+    for tier in manifest.get("tiers", []):
+        for card in tier.get("cards", []):
+            idx = card["index"]
+            if scripted_indices and idx not in scripted_indices:
+                continue
+            img_file = card.get("image_file")
+            if not img_file:
+                continue
+            card_path = os.path.join(img_dir, img_file)
+            if not os.path.exists(card_path):
+                continue
+            audio_path = audio_map.get(idx)
+            # NOTE: do NOT probe audio duration here. The clip's real duration
+            # is loaded via AudioFileClip in the second loop (real_dur, used for
+            # both the clip and seg_durations). Probing here too would open
+            # every MP3 twice (C3) and feed a guessed 5.0s-fallback duration
+            # into the "Compositing N clips (Xs total)" log (C4). The clips_info
+            # tuple carries (tier, card, audio_path) — no dur.
+            clips_info.append((tier, card, audio_path))
+
+    clips = []
+
+    # Intro: show the board TOP as-is — the branded title bar (title, up to 2
+    # lines, + logo) is already baked into board_hd.png by capture_board. No
+    # overlaid centered title, no darkening: the viewer opens on the full board
+    # carrying its own title. (user feedback)
+    intro_img = crop_board_at(board, 0, target_w, target_h)
+    intro_dur = intro_duration
+    intro_audio_clip = None
+    if intro_audio and os.path.exists(intro_audio):
+        try:
+            intro_audio_clip = AudioFileClip(intro_audio)
+            intro_dur = max(0.1, intro_audio_clip.duration) + 0.3
+        except Exception as e:
+            print(f"  [WARN] intro audio load failed: {e}", file=sys.stderr)
+    _intro_clip = ImageClip(np.array(intro_img), duration=intro_dur)
+    if intro_audio_clip is not None:
+        _intro_clip = _intro_clip.with_audio(intro_audio_clip)
+    clips.append(_intro_clip)
+
+    elapsed = intro_duration
+    n_cards = len(clips_info)
+    # Collect each segment's real (audio-true) duration so generate_srt can use
+    # the SAME durations the clips actually play at — subtitle timing must
+    # follow audio, not a re-probe that can fall back to a 5.0s guess.
+    seg_durations = {}
+    for k, (tier, card, audio_path) in enumerate(clips_info):
+        idx = card["index"]
+        seg = seg_lookup.get(idx, {})
+        card_label = seg.get("label", card.get("label", ""))
+        tier_name = tier["name"]
+        tier_color = tier["color"]
+
+        # Scroll by CARD INDEX (k of n), not by elapsed time — so the background
+        # reaches the k-th card's area as that card is narrated, instead of
+        # stalling when one card's audio runs long (the old time-proportional
+        # scroll desynced from the narration).
+        if n_cards > 1:
+            scroll_progress = k / (n_cards - 1)
+            gap_progress = (k + 0.5) / (n_cards - 1)
+        else:
+            scroll_progress = gap_progress = 0.0
+        scroll_y = int(scroll_progress * max_scroll)
+
+        bg_frame = crop_board_at(board, scroll_y, target_w, target_h)
+        bg_frame = darken(bg_frame, 0.55).filter(ImageFilter.GaussianBlur(radius=12))
+
+        card_path = os.path.join(img_dir, card["image_file"])
+        card_img = Image.open(card_path).convert("RGB")
+        frame = create_card_overlay(bg_frame, card_img, tier_name, tier_color,
+                                     card_label, target_w, target_h)
+
+        # Audio-true duration: load the ACTUAL audio clip and use its real
+        # length (+0.5s tail) so the frame matches the spoken audio exactly.
+        # This kills the 5.0s-fallback desync (get_audio_duration could guess
+        # wrong while the real audio played a different length). Keep the clip
+        # object to attach it.
+        audio_clip = None
+        real_dur = 5.0
+        if audio_path and os.path.exists(audio_path):
+            try:
+                audio_clip = AudioFileClip(audio_path)
+                real_dur = max(0.1, audio_clip.duration) + 0.5
+            except Exception as e:
+                print(f"  [WARN] audio load failed for card {idx}: {e}; frame=5.0s", file=sys.stderr)
+        seg_durations[idx] = real_dur
+        clip = ImageClip(np.array(frame), duration=real_dur)
+        if audio_clip is not None:
+            clip = clip.with_audio(audio_clip)
+        clips.append(clip)
+
+        gap_scroll = int(gap_progress * max_scroll)
+        gap_bg = crop_board_at(board, gap_scroll, target_w, target_h)
+        gap_bg = darken(gap_bg, 0.55).filter(ImageFilter.GaussianBlur(radius=12))
+        clips.append(ImageClip(np.array(gap_bg), duration=gap_duration))
+
+        elapsed += real_dur + gap_duration
+
+    # Outro: NO title frame (don't repeat the title). Plain darkened+blurred
+    # background scrolled to the end + the outro audio (user feedback).
+    outro_frame = crop_board_at(board, max_scroll, target_w, target_h)
+    outro_frame = darken(outro_frame, 0.55).filter(ImageFilter.GaussianBlur(radius=12))
+    outro_dur = intro_duration
+    outro_audio_clip = None
+    if outro_audio and os.path.exists(outro_audio):
+        try:
+            outro_audio_clip = AudioFileClip(outro_audio)
+            outro_dur = max(0.1, outro_audio_clip.duration) + 0.3
+        except Exception as e:
+            print(f"  [WARN] outro audio load failed: {e}", file=sys.stderr)
+    _outro_clip = ImageClip(np.array(outro_frame), duration=outro_dur)
+    if outro_audio_clip is not None:
+        _outro_clip = _outro_clip.with_audio(outro_audio_clip)
+    clips.append(_outro_clip)
+
+    # Total content duration from the REAL durations actually used (intro_dur,
+    # outro_dur, each card's real_dur + gap), not the old get_audio_duration
+    # guesses that could fall back to 5.0s and mislead the log (C4).
+    total_content_dur = (intro_dur + outro_dur
+                        + sum(seg_durations.values())
+                        + gap_duration * len(clips_info))
+
+    generate_srt(script, audio_map, work_dir, intro_duration, gap_duration,
+                 intro_dur_actual=intro_dur,
+                 outro_dur_actual=outro_dur,
+                 seg_durations=seg_durations)
+
+    print(f"Compositing {len(clips)} clips ({total_content_dur:.1f}s total)...")
+    final = concatenate_videoclips(clips, method="compose")
+
+    print(f"Writing video to {output_path}...")
+    final.write_videofile(
+        output_path,
+        fps=24,
+        codec="libx264",
+        audio_codec="aac",
+        preset="medium",
+        threads=4,
+        logger="bar",
+    )
+    final.close()
+    print(f"Done! Video saved: {output_path}")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Generate tier-list video")
+    parser.add_argument("work_dir", help="Working directory")
+    parser.add_argument("-o", "--output", default=None, help="Output MP4 path")
+    parser.add_argument("--resolution", default="1920x1080", help="WxH")
+    parser.add_argument("--intro-duration", type=float, default=3.0)
+    args = parser.parse_args()
+    output = args.output or os.path.join(args.work_dir, "tierlist_video.mp4")
+    generate_video(args.work_dir, output, args.resolution, args.intro_duration)

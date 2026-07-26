@@ -1,0 +1,58 @@
+#!/usr/bin/env bash
+# Agent Relay — Inbox Poller (Polling-Only Mode)
+# Use this if you are NOT using webhook/push delivery.
+# Reads the inbox and formats messages for agent processing.
+#
+# Setup:
+#   1. Export: RELAY_API_KEY, RELAY_BASE_URL
+#   2. Schedule as cron (e.g., every 15s)
+#   3. Directs new messages to agent session
+#
+# Usage: ./poll-inbox
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+LAST_SEEN="${RELAY_LAST_SEEN:-$SCRIPT_DIR/.last_seen}"
+API_KEY="${RELAY_API_KEY:-}"
+BASE_URL="${RELAY_BASE_URL:-}"
+
+if [ -z "$API_KEY" ] || [ -z "$BASE_URL" ]; then
+  echo "ERROR: Set RELAY_API_KEY and RELAY_BASE_URL"
+  exit 1
+fi
+
+touch "$LAST_SEEN"
+
+RESP=$(curl -sf -H "Authorization: Bearer $API_KEY" "$BASE_URL/relay/inbox" 2>/dev/null || true)
+if [ -z "$RESP" ] || [ "$RESP" = "[]" ]; then
+  exit 0
+fi
+
+# Format messages for agent and update last-seen
+echo "$RESP" | python3 -c "
+import json, sys
+
+messages = json.load(sys.stdin)
+for msg in messages:
+    mid = msg.get('id', '')
+    text = msg.get('text', '')
+    att = msg.get('attachment')
+    created = msg.get('createdAt', '')
+
+    print(f'--- Message from User via Relay ({mid}) ---')
+    print(text)
+    if att:
+        print(f'Attachment: {att.get(\"name\",\"\")} ({att.get(\"type\",\"\")})')
+        print(f'URL: {att.get(\"url\",\"\")}')
+        print('Download the attachment to inspect it.')
+    print('--- End relay ---')
+    print()
+
+# Save last seen ID
+if messages:
+    with open('$LAST_SEEN', 'w') as f:
+        f.write(messages[-1].get('id', ''))
+" 2>/dev/null || true
+
+exit 0

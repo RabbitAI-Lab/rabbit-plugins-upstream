@@ -1,0 +1,5 @@
+{
+  "name": "porteden-email",
+  "version": "1.0.0",
+  "description": "基于官方Porteden CLI实现的安全邮件管理工具，支持Gmail、Outlook、Exchange等主流邮箱平台，提供邮件读取、搜索、发送、附件处理、多账户管理等功能，凭证安全存储在系统密钥环，无明文泄露风险。"
+}

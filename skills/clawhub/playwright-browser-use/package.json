@@ -1,0 +1,26 @@
+{
+  "name": "pw-browser",
+  "version": "1.1.0",
+  "description": "Playwright-based browser automation CLI — daemon + client architecture, system Chrome/Edge, no browser download required.",
+  "license": "MIT",
+  "author": "Yicko",
+  "keywords": [
+    "playwright",
+    "browser-automation",
+    "cli",
+    "web-scraping",
+    "browser",
+    "automation"
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "homepage": "",
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "playwright": "1.61.1"
+  }
+}

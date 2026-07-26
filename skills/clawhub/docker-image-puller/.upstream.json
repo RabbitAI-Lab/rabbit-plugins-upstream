@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/docker-image-puller",
+  "slug": "docker-image-puller",
+  "ownerHandle": null,
+  "version": "1.3.0",
+  "updatedAt": 1779033409364,
+  "contentHash": "3114f78da737cdb8bf420734fb8ceaac759ca5d994ecfb7226e5f925c8e3ba3a",
+  "fetchedAt": "2026-07-26T19:02:21.302Z"
+}

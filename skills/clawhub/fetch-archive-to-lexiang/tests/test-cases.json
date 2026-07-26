@@ -1,0 +1,95 @@
+[
+  {
+    "id": "tc-001",
+    "type": "youtube-work-package",
+    "name": "YouTube 下载转录生成标准工作包",
+    "steps": [
+      "yt-dlp 下载视频并提取 description",
+      "Whisper 转录",
+      "生成 source.md 和 meta.json",
+      "非中文包交给 trans-doc-to-md Prepared Markdown Package 模式",
+      "uploader 写入最终 Markdown 页面",
+      "VOD 脚本独立上传视频"
+    ],
+    "expected_output": {
+      "files": ["source.md", "meta.json"],
+      "source_type": "youtube",
+      "script_translates": false,
+      "markdown_uploader": "upload-markdown-to-lexiang",
+      "media_uploader": "upload_video_via_openapi.py"
+    },
+    "coverage": ["youtube", "whisper", "standard-package", "delegated-translation", "vod"]
+  },
+  {
+    "id": "tc-002",
+    "type": "article-work-package",
+    "name": "付费文章 CDP 抓取生成标准工作包",
+    "steps": [
+      "预检 CDP 9222 和登录态",
+      "fetch_article.py 抓取全文与图片",
+      "生成不可变 source.md、images/、meta.json",
+      "内容加工后由 uploader 写入页面"
+    ],
+    "expected_output": {
+      "files": ["source.md", "meta.json", "images/"],
+      "source_type": "article",
+      "overwrite_different_source": "error"
+    },
+    "coverage": ["article", "cdp", "images", "standard-package", "immutable-source"]
+  },
+  {
+    "id": "tc-003",
+    "type": "podcast-work-package",
+    "name": "播客 Show Notes 和转录生成标准工作包",
+    "steps": [
+      "抓取 Show Notes",
+      "下载并切分音频",
+      "FunASR 转录",
+      "生成 source.md、meta.json 和音频产物",
+      "编排层分别调用 uploader 和 VOD 脚本"
+    ],
+    "expected_output": {
+      "files": ["source.md", "meta.json", "segments.json"],
+      "source_type": "podcast",
+      "script_uploads_markdown": false,
+      "shownotes_before_transcript": true
+    },
+    "coverage": ["podcast", "shownotes", "standard-package", "no-inline-upload", "audio-vod"]
+  },
+  {
+    "id": "tc-004",
+    "type": "non-chinese-processing",
+    "name": "非中文 Prepared Markdown Package 加工",
+    "steps": [
+      "保留不可变 source.md",
+      "trans-doc-to-md 清洗、翻译并验证完整性",
+      "生成以原文标题命名的最终 Markdown",
+      "uploader 直接渲染富元素标注"
+    ],
+    "expected_output": {
+      "processor": "trans-doc-to-md",
+      "mode": "Prepared Markdown Package",
+      "uploader_min_version": "1.1.0",
+      "normal_mcp_post_render": false
+    },
+    "coverage": ["delegated-processing", "rich-elements", "integrity", "direct-render"]
+  },
+  {
+    "id": "tc-005",
+    "type": "dedup-and-media",
+    "name": "日期目录去重与媒体独立归档",
+    "steps": [
+      "复用或创建日期目录",
+      "按规范化标题、来源 URL 和类型去重",
+      "视频/播客复用标题目录",
+      "Markdown 页面用 uploader",
+      "媒体用 VOD 脚本"
+    ],
+    "expected_output": {
+      "duplicate_pages": 0,
+      "markdown_entry_type": "page",
+      "media_entry_type": "video|audio"
+    },
+    "coverage": ["date-folder", "dedup", "title-folder", "uploader", "vod"]
+  }
+]

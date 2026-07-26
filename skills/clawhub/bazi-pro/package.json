@@ -1,0 +1,21 @@
+{
+  "name": "bazi-pro",
+  "version": "1.0.0",
+  "description": "给普通人用的八字解盘技能，专业的格局和旺衰推算，大模型通俗解读，超高准确率",
+  "keywords": [
+    "bazi",
+    "八字",
+    "命理",
+    "算命",
+    "运势",
+    "horoscope",
+    "deepseek"
+  ],
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jacky Gu",
+  "license": "ISC"
+}

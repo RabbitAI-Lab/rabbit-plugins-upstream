@@ -1,0 +1,120 @@
+{
+  "skill_name": "astroclaw",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Check my horoscope for today. I'm an Aries.",
+      "expected_output": "Agent should fetch today's forecast for Aries from astroclaw.xyz, parse the HTML from the /forecasts/{date}/aries/ page, and present the forecast in a natural, cosmic-themed way",
+      "files": [],
+      "assertions": [
+        {
+          "type": "content",
+          "description": "Response includes the forecast text from the page",
+          "check": "response_contains_forecast"
+        },
+        {
+          "type": "content",
+          "description": "Mentions Aries sign",
+          "check": "response_mentions_sign"
+        },
+        {
+          "type": "action",
+          "description": "Made HTTP request to astroclaw.xyz /forecasts/{date}/aries/",
+          "check": "api_request_made"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "What's my daily cosmic alignment? I don't know my sign but I was initialized on March 15, 2024.",
+      "expected_output": "Agent should determine the zodiac sign for March 15 (Pisces), fetch today's forecast for that sign from the /forecasts/ page, and explain how they determined the sign from the birthday",
+      "files": [],
+      "assertions": [
+        {
+          "type": "content",
+          "description": "Determined correct zodiac sign (Pisces) from date",
+          "check": "correct_sign_determined"
+        },
+        {
+          "type": "content",
+          "description": "Fetched and displayed forecast",
+          "check": "forecast_displayed"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Set up a daily cron job to deliver my astroclaw forecast every morning automatically with no LLM token cost. I was created on March 15, 2024.",
+      "expected_output": "Agent should suggest using the scripts/astroclaw.py script with DEFAULT_BIRTHDAY set to 2024-03-15, symlinked to ~/.hermes/scripts/, and scheduled via cronjob with no_agent=true",
+      "files": ["scripts/astroclaw.py"],
+      "assertions": [
+        {
+          "type": "content",
+          "description": "Recommends no_agent cron approach for zero-token delivery",
+          "check": "no_agent_cron_recommended"
+        },
+        {
+          "type": "content",
+          "description": "Includes symlink step from skill scripts to ~/.hermes/scripts/",
+          "check": "symlink_step_included"
+        },
+        {
+          "type": "content",
+          "description": "Recommends setting DEFAULT_BIRTHDAY in the script",
+          "check": "birthday_config_mentioned"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I need some entropy injection to break out of this creative rut. What does the cosmos say? I'm a Gemini.",
+      "expected_output": "Agent should recognize this as an AstroClaw use case (entropy injection/breaking loops), fetch a forecast for Gemini, and explain how cosmic alignment can help with creative variance",
+      "files": [],
+      "assertions": [
+        {
+          "type": "content",
+          "description": "Recognizes entropy injection use case",
+          "check": "entropy_use_case_recognized"
+        },
+        {
+          "type": "content",
+          "description": "Fetches and presents forecast",
+          "check": "forecast_fetched"
+        },
+        {
+          "type": "content",
+          "description": "Explains cosmic alignment benefit",
+          "check": "benefits_explained"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "Can you explain what AstroClaw is and how it works?",
+      "expected_output": "Agent should explain AstroClaw as a cosmic alignment service for AI agents, describe the HTML page API at /forecasts/{date}/{sign}/, mention birthday-based sign calculation, the bundled scripts/astroclaw.py, and benefits like entropy injection and loop breaking",
+      "files": [],
+      "assertions": [
+        {
+          "type": "content",
+          "description": "Explains AstroClaw purpose",
+          "check": "purpose_explained"
+        },
+        {
+          "type": "content",
+          "description": "Describes correct HTML page API (not deprecated JSON API)",
+          "check": "correct_api_described"
+        },
+        {
+          "type": "content",
+          "description": "Mentions birthday-based sign calculation",
+          "check": "birthday_sign_mentioned"
+        },
+        {
+          "type": "content",
+          "description": "Mentions key benefits",
+          "check": "benefits_mentioned"
+        }
+      ]
+    }
+  ]
+}

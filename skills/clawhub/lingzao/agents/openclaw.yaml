@@ -1,0 +1,12 @@
+interface:
+  display_name: "灵造"
+  short_description: "小红书、抖音、TikTok、Instagram 与 YouTube 创作者研究及运营 Skill"
+  emoji: "🔎"
+  homepage: "https://lingzao.atian.vip"
+requires:
+  env:
+    - "LINGZAO_API_KEY"
+  bins:
+    - "python3"
+    - "bash"
+primary_env: "LINGZAO_API_KEY"

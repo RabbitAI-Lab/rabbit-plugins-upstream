@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/rocm-vllm-deployment",
+  "slug": "rocm-vllm-deployment",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1778994190018,
+  "contentHash": "e05092839a054435bd7730746309082f1ac0fc89f48632d0ebca2bffd2cc28e3",
+  "fetchedAt": "2026-07-26T19:07:00.982Z"
+}

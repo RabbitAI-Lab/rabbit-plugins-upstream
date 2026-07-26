@@ -1,0 +1,40 @@
+name: 音频转文字
+description: 使用百度智能云语音识别API将音频文件转换为文字
+version: 1.0.0
+author: Claude Code
+language: python
+entrypoint: audio_to_text.py
+parameters:
+  - name: api_key
+    description: 百度智能云API Key
+    type: string
+    required: true
+  - name: secret_key
+    description: 百度智能云Secret Key
+    type: string
+    required: true
+  - name: audio_dir
+    description: 音频文件目录（默认：当前目录下的"音频"文件夹）
+    type: string
+    default: "./音频"
+  - name: text_dir
+    description: 文字输出目录（默认：当前目录下的"文字"文件夹）
+    type: string
+    default: "./文字"
+  - name: file_format
+    description: 音频文件格式（支持pcm、wav、amr、m4a）
+    type: string
+    default: "wav"
+  - name: rate
+    description: 采样率（16000或8000）
+    type: integer
+    default: 16000
+  - name: dev_pid
+    description: 语言模型ID（1537-普通话，1737-英语，1637-粤语，1837-四川话）
+    type: integer
+    default: 1537
+triggers:
+  - command: 音频转文字
+    description: 将音频文件夹中的文件转换为文字
+  - command: audio2text
+    description: Convert audio files to text

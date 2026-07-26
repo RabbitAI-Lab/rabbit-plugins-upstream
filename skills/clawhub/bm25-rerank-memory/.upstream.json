@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/bm25-rerank-memory",
+  "slug": "bm25-rerank-memory",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1778492544359,
+  "contentHash": "3c944ef82d0a91ae593db989f9d53b54c290f00a027a3b82740da49a89572e8c",
+  "fetchedAt": "2026-07-26T19:29:41.178Z"
+}

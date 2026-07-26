@@ -1,0 +1,23 @@
+{
+ "categories": [
+  {
+   "path": "Sports & Outdoors,Exercise & Fitness",
+   "marketplace": "US",
+   "pageSize": 20,
+   "pages": 2
+  }
+ ],
+ "hotSubcategories": [
+  "Sports & Outdoors,Exercise & Fitness,Cardio Training,Treadmills",
+  "Sports & Outdoors,Exercise & Fitness,Cardio Training,Vibration Platform Machines"
+ ],
+ "alertThresholds": {
+  "demandSurgePct": 20,
+  "redOceanTopBrandRate": 0.7,
+  "newSkuRateJumpPts": 5,
+  "brandLooseningPts": 3,
+  "priceShiftPct": 10,
+  "aPlusShiftPts": 5
+ },
+ "createdAt": "2026-07-23"
+}

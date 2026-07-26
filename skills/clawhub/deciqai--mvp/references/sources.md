@@ -1,0 +1,12 @@
+# Sources — mvp
+
+> *Primary sources for the [mvp](../SKILL.md) skill.*
+
+- **Ries, Eric.** *The Lean Startup: How Today's Entrepreneurs Use Continuous Innovation to Create Radically Successful Businesses*. Crown, 2011. **Canonical primary source for the MVP definition**; pp. 76–81; the verbatim Overview quote is from p. 77.
+- **Blank, Steve.** "An MVP is not a Cheaper Product, It's about Smart Learning." Blog post, July 22, 2013. https://steveblank.com/2013/07/22/an-mvp-is-not-a-cheaper-product-its-about-smart-learning/ Verbatim Overview quote.
+- **Robinson, Frank.** Originator of the term "minimum viable product" at SyncDev, 2001. https://www.syncdev.com/minimum-viable-product/
+- **Hsieh, Tony.** *Delivering Happiness: A Path to Profits, Passion, and Purpose*. Business Plus, 2010 — Zappos founding-era account.
+- **Gallagher, Leigh.** *The Airbnb Story: How Three Ordinary Guys Disrupted an Industry, Made Billions… and Created Plenty of Controversy*. Houghton Mifflin Harcourt, 2017 — primary account of the 2007 air-mattress concierge MVP and the 2008 event-driven relaunches; ch. 1.
+- The popular framing "MVP = launch fast" is **not** cited as a source — by this skill's own rule, an aphorism is not evidence. The MVP is more precisely "smallest test instrument for one specific assumption," not "first release of the product."
+- Blank, S. (2013). "Why the Lean Start-Up Changes Everything." *Harvard Business Review*, May 2013. https://hbr.org/2013/05/why-the-lean-start-up-changes-everything — customer-development framing behind MVP-as-experiment, applied in the AI-era example.
+- On the 2023–2026 collapse in prototype cost (AI coding assistants / agentic coding tools, from GitHub Copilot's 2022 general availability onward): widely documented in industry reporting; team-size and build-time figures vary by case — the AI-era example presents the shift as a pattern, not a measurement.

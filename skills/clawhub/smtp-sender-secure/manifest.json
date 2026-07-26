@@ -1,0 +1,32 @@
+{
+  "id": "zero_exposure_smtp_sender",
+  "version": "2.0.0",
+  "name": "Zero-Exposure SMTP Mail Sender",
+  "description": "Send emails securely without exposing SMTP passwords. Users store email scripts in MGC, AI executes scripts via mgc_get without ever seeing credentials. This is a documentation skill.",
+  "author": "MirginCipher Team",
+  "license": "MIT",
+  "tags": ["security", "email", "smtp", "mgc", "zero-exposure", "sandbox"],
+  "platform_compatibility": ["windows", "macos", "linux"],
+  "mcp_tools": ["mgc_save", "mgc_get", "mgc_list"],
+  "install": "pip install mgc-blackbox",
+  "runtime": "mgc",
+  "port": 57219,
+  "links": {
+    "homepage": "https://github.com/zkeviny/MGC-Blackbox",
+    "issues": "https://github.com/zkeviny/MGC-Blackbox/issues",
+    "contact": "mirgincipher@outlook.com"
+  },
+  "keywords": [
+    "email",
+    "smtp",
+    "zero-exposure",
+    "secure email",
+    "script execution"
+  ],
+  "disclaimers": [
+    "This skill only executes scripts with explicit user authorization.",
+    "Credentials must be stored by user via WebUI.",
+    "AI never sees credentials or script content.",
+    "This skill does not provide executable code, only documentation."
+  ]
+}

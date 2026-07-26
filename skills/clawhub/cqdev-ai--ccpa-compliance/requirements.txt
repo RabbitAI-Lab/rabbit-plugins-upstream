@@ -1,0 +1,5 @@
+# Ccpa-compliance Skill - 纯本地合规检查工具
+# 所有依赖版本锁定以确保运行稳定
+
+pandas>=2.0.0
+jinja2>=3.1.6

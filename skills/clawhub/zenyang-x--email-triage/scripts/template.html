@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>邮件早报 {{DATE}}</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, 'Segoe UI', 'Microsoft YaHei', sans-serif; background: #f5f5f5; color: #333; line-height: 1.6; }
+.container { max-width: 900px; margin: 0 auto; padding: 20px; }
+.header { background: #fff; border-radius: 12px; padding: 24px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+.header h1 { font-size: 22px; margin-bottom: 8px; }
+.header .stats { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 12px; }
+.stat-badge { padding: 6px 14px; border-radius: 20px; font-size: 14px; font-weight: 600; }
+.stat-t0 { background: #fee; color: #c00; }
+.stat-t1 { background: #fff8e1; color: #f80; }
+.stat-t2 { background: #e8f5e9; color: #2e7d32; }
+.stat-t3 { background: #f0f0f0; color: #999; }
+.section { background: #fff; border-radius: 12px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); overflow: hidden; }
+.section-header { padding: 16px 20px; font-size: 16px; font-weight: 700; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+.section-t0 { border-left: 4px solid #d32f2f; }
+.section-t0 .section-header { background: #fff5f5; color: #c62828; }
+.section-t1 { border-left: 4px solid #f9a825; }
+.section-t1 .section-header { background: #fffdf5; color: #ef6c00; }
+.section-t2 { border-left: 4px solid #43a047; }
+.section-t2 .section-header { background: #f5fbf5; color: #2e7d32; }
+.section-t3 { border-left: 4px solid #bdbdbd; }
+.section-t3 .section-header { background: #fafafa; color: #757575; }
+.section-body { padding: 0; }
+.email-card { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; }
+.email-card:last-child { border-bottom: none; }
+.email-from { font-size: 13px; color: #666; margin-bottom: 2px; }
+.email-subject { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+.email-summary { font-size: 13px; color: #555; margin-bottom: 4px; }
+.email-meta { display: flex; gap: 12px; font-size: 12px; color: #999; align-items: center; }
+.email-meta .tag { padding: 2px 6px; border-radius: 4px; font-size: 11px; }
+.tag-attach { background: #e3f2fd; color: #1565c0; }
+.tag-flag { background: #fce4ec; color: #c62828; }
+.tag-cat { background: #f3e5f5; color: #7b1fa2; }
+.tag-zen { background: #e8f5e9; color: #2e7d32; }
+.t3-list { padding: 8px 20px; }
+.t3-item { padding: 6px 0; font-size: 13px; color: #888; border-bottom: 1px solid #f5f5f5; }
+.t3-item:last-child { border-bottom: none; }
+.t3-item .from { color: #aaa; }
+.footer { text-align: center; padding: 20px; font-size: 12px; color: #bbb; }
+.collapsed .section-body { display: none; }
+@media (max-width: 600px) {
+  .container { padding: 10px; }
+  .header h1 { font-size: 18px; }
+  .email-card { padding: 12px 14px; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <h1>📬 邮件早报 {{DATE}}</h1>
+    <div class="stats">
+      <span class="stat-badge stat-t0">🔴 T0 × {{T0_COUNT}}</span>
+      <span class="stat-badge stat-t1">🟡 T1 × {{T1_COUNT}}</span>
+      <span class="stat-badge stat-t2">🟢 T2 × {{T2_COUNT}}</span>
+      <span class="stat-badge stat-t3">⚪ T3 × {{T3_COUNT}}</span>
+    </div>
+  </div>
+
+  <!-- T0 Section -->
+  {{T0_SECTION}}
+
+  <!-- T1 Section -->
+  {{T1_SECTION}}
+
+  <!-- T2 Section -->
+  {{T2_SECTION}}
+
+  <!-- T3 Section -->
+  {{T3_SECTION}}
+
+  <div class="footer">
+    由 WorkBuddy Agent 自动生成 | {{TIMESTAMP}}
+  </div>
+</div>
+<script>
+document.querySelectorAll('.section-header').forEach(h => {
+  h.addEventListener('click', () => h.parentElement.classList.toggle('collapsed'));
+});
+</script>
+</body>
+</html>

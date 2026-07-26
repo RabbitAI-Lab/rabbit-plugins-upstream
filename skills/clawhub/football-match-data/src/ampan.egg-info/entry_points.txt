@@ -1,0 +1,3 @@
+[console_scripts]
+ampan = footy.cli:main
+footy = footy.cli:main

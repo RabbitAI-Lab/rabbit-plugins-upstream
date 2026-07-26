@@ -1,0 +1,15 @@
+{
+  "$schema": "https://raw.githubusercontent.com/openclaw/openclaw/main/docs/skills/skill-manifest.schema.json",
+  "id": "moa",
+  "name": "MoA (Mixture of Agents)",
+  "version": "1.0.0",
+  "description": "Run multiple reference models in parallel, then aggregate with current agent",
+  "author": "OpenClaw",
+  "trigger": "command",
+  "commands": ["/moa"],
+  "runtime": "exec",
+  "executor": "moa-executor.js",
+  "config": "presets.default.yaml",
+  "readme": "SKILL.md",
+  "license": "MIT"
+}

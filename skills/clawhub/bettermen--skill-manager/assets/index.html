@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skill Manager SaaS — WorkBuddy Skill 管理平台</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js">
+</script>
+<style>
+:root {
+  --bg: #f8f9fb;
+  --card-bg: #ffffff;
+  --text: #1a1a2e;
+  --text-secondary: #6b7280;
+  --border: #e5e7eb;
+  --primary: #6366f1;
+  --primary-light: #eef2ff;
+  --danger: #ef4444;
+  --danger-light: #fef2f2;
+  --warning: #f59e0b;
+  --warning-light: #fffbeb;
+  --success: #10b981;
+  --success-light: #ecfdf5;
+  --radius: 12px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg: 0 4px 12px rgba(0,0,0,.08);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; min-height: 100vh; }
+
+/* Header */
+.header { background: var(--card-bg); border-bottom: 1px solid var(--border); padding: 0 24px; height: 60px; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+.header h1 { font-size: 20px; font-weight: 700; display: flex; align-items: center; gap: 10px; }
+.header h1 span.icon { font-size: 24px; }
+.header-actions { display: flex; gap: 8px; align-items: center; }
+.status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
+.status-dot.online { background: var(--success); animation: pulse 2s infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+/* Layout */
+.container { max-width: 1400px; margin: 0 auto; padding: 24px; }
+
+/* Tabs */
+.tabs { display: flex; gap: 4px; background: var(--card-bg); border-radius: var(--radius); padding: 4px; margin-bottom: 24px; box-shadow: var(--shadow); }
+.tab-btn { flex: 1; padding: 10px 20px; border: none; background: transparent; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 500; color: var(--text-secondary); transition: all .2s; }
+.tab-btn:hover { color: var(--text); background: var(--bg); }
+.tab-btn.active { background: var(--primary); color: white; }
+
+/* Cards Grid */
+.cards-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 24px; }
+.card { background: var(--card-bg); border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow); transition: box-shadow .2s; }
+.card:hover { box-shadow: var(--shadow-lg); }
+.card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.card-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+.card-num { font-size: 32px; font-weight: 700; }
+.card-label { font-size: 13px; color: var(--text-secondary); }
+
+/* Panels */
+.panel { display: none; }
+.panel.active { display: block; }
+
+/* Toolbar */
+.toolbar { display: flex; gap: 12px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+.search-box { flex: 1; min-width: 200px; padding: 10px 16px; border: 1px solid var(--border); border-radius: 8px; font-size: 14px; outline: none; transition: border-color .2s; }
+.search-box:focus { border-color: var(--primary); }
+.filter-group { display: flex; gap: 8px; }
+.filter-select { padding: 10px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13px; outline: none; background: white; cursor: pointer; }
+
+/* Buttons */
+.btn { padding: 8px 16px; border: none; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .2s; display: inline-flex; align-items: center; gap: 6px; }
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { filter: brightness(1.1); }
+.btn-danger { background: var(--danger-light); color: var(--danger); }
+.btn-danger:hover { background: var(--danger); color: white; }
+.btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
+.btn-outline:hover { background: var(--bg); }
+.btn-sm { padding: 5px 10px; font-size: 12px; }
+
+/* Table */
+.table-wrap { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
+table { width: 100%; border-collapse: collapse; }
+th { text-align: left; padding: 12px 16px; font-size: 12px; font-weight: 600; color: var(--text-secondary); text-transform: uppercase; letter-spacing: .5px; border-bottom: 1px solid var(--border); cursor: pointer; user-select: none; }
+th:hover { color: var(--primary); }
+td { padding: 10px 16px; font-size: 14px; border-bottom: 1px solid var(--border); }
+tr:last-child td { border-bottom: none; }
+tr:hover td { background: var(--bg); }
+.badge { display: inline-block; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+.badge-ok { background: var(--success-light); color: var(--success); }
+.badge-p2 { background: #f0f9ff; color: #0ea5e9; }
+.badge-p1 { background: var(--warning-light); color: var(--warning); }
+.badge-p0 { background: var(--danger-light); color: var(--danger); }
+.badge-agent { background: var(--primary-light); color: var(--primary); }
+.badge-market { background: #fdf2f8; color: #ec4899; }
+.badge-unknown { background: #f3f4f6; color: #9ca3af; }
+
+/* Audit Report */
+.audit-section { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; margin-bottom: 16px; }
+.audit-section h3 { font-size: 16px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+.issue-item { padding: 10px 12px; border-radius: 8px; margin-bottom: 6px; font-size: 13px; border-left: 3px solid transparent; }
+.issue-P0 { background: var(--danger-light); border-left-color: var(--danger); }
+.issue-P1 { background: var(--warning-light); border-left-color: var(--warning); }
+.issue-P2 { background: #f0f9ff; border-left-color: #0ea5e9; }
+
+/* Chart */
+.chart-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.chart-box { background: var(--card-bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; }
+.chart-box h3 { font-size: 14px; color: var(--text-secondary); margin-bottom: 16px; }
+canvas { max-height: 250px; }
+
+/* Drawer */
+.drawer-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.4); z-index: 200; display: none; align-items: flex-end; justify-content: center; }
+.drawer-overlay.open { display: flex; }
+.drawer { background: var(--card-bg); border-radius: 16px 16px 0 0; width: 100%; max-width: 800px; max-height: 85vh; overflow-y: auto; padding: 32px; box-shadow: 0 -4px 24px rgba(0,0,0,.12); }
+.drawer-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+.drawer-close { width: 32px; height: 32px; border-radius: 50%; border: none; background: var(--bg); font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+.drawer-meta { display: grid; grid-template-columns: auto 1fr; gap: 8px 16px; margin-bottom: 20px; }
+.drawer-meta dt { font-size: 12px; color: var(--text-secondary); font-weight: 600; }
+.drawer-meta dd { font-size: 14px; }
+.drawer-content { background: #1e1e2e; color: #cdd6f4; border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 13px; max-height: 400px; overflow-y: auto; white-space: pre-wrap; font-family: 'SF Mono', 'Fira Code', monospace; }
+.drawer-actions { display: flex; gap: 8px; margin-top: 20px; }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .cards-grid { grid-template-columns: repeat(2, 1fr); }
+  .chart-grid { grid-template-columns: 1fr; }
+  .toolbar { flex-direction: column; }
+  .filter-group { width: 100%; }
+  .filter-select { flex: 1; }
+}
+@media (max-width: 480px) {
+  .cards-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header class="header">
+  <h1><span class="icon">🗂️</span> Skill Manager SaaS</h1>
+  <div class="header-actions">
+    <span style="font-size:13px;color:var(--text-secondary)"><span class="status-dot online"></span>API 在线</span>
+    <button class="btn btn-outline btn-sm" onclick="refreshAll()">🔄 刷新</button>
+    <button class="btn btn-outline btn-sm" onclick="window.open('/docs')">📖 API</button>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- Stats Cards -->
+  <div class="cards-grid" id="stats-cards">
+    <div class="card"><div class="card-header"><div class="card-icon" style="background:var(--primary-light)">📦</div></div><div class="card-num" id="stat-total">—</div><div class="card-label">Skill 总数</div></div>
+    <div class="card"><div class="card-header"><div class="card-icon" style="background:var(--danger-light)">🔴</div></div><div class="card-num" id="stat-p0">—</div><div class="card-label">P0 严重问题</div></div>
+    <div class="card"><div class="card-header"><div class="card-icon" style="background:var(--warning-light)">🟡</div></div><div class="card-num" id="stat-p1">—</div><div class="card-label">P1 警告</div></div>
+    <div class="card"><div class="card-header"><div class="card-icon" style="background:#f0f9ff">🟢</div></div><div class="card-num" id="stat-p2">—</div><div class="card-label">P2 建议</div></div>
+    <div class="card"><div class="card-header"><div class="card-icon" style="background:var(--success-light)">✅</div></div><div class="card-num" id="stat-ok">—</div><div class="card-label">健康</div></div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchTab('list')">📋 技能列表</button>
+    <button class="tab-btn" onclick="switchTab('audit')">🩺 审计报告</button>
+  </div>
+
+  <!-- Skills List Panel -->
+  <div class="panel active" id="panel-list">
+    <div class="toolbar">
+      <input type="text" class="search-box" placeholder="搜索技能名称或描述..." id="search-input" oninput="renderSkills()">
+      <div class="filter-group">
+        <select class="filter-select" id="filter-source" onchange="renderSkills()">
+          <option value="">全部来源</option>
+          <option value="agent">自建</option>
+          <option value="marketplace">市场</option>
+          <option value="unknown">未知</option>
+        </select>
+        <select class="filter-select" id="filter-level" onchange="renderSkills()">
+          <option value="">全部状态</option>
+          <option value="ok">✅ 健康</option>
+          <option value="P2">🟢 P2 建议</option>
+          <option value="P1">🟡 P1 警告</option>
+          <option value="P0">🔴 P0 严重</option>
+        </select>
+      </div>
+      <button class="btn btn-outline btn-sm" onclick="exportData()">📥 导出</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th onclick="setSort('name')">名称 ↕</th>
+            <th onclick="setSort('version')">版本 ↕</th>
+            <th onclick="setSort('source_type')">来源 ↕</th>
+            <th onclick="setSort('level')">状态 ↕</th>
+            <th>资源</th>
+            <th>操作</th>
+          </tr>
+        </thead>
+        <tbody id="skills-tbody"></tbody>
+      </table>
+    </div>
+    <div style="margin-top:12px;font-size:13px;color:var(--text-secondary);text-align:center" id="skills-count"></div>
+  </div>
+
+  <!-- Audit Panel -->
+  <div class="panel" id="panel-audit">
+    <div class="toolbar">
+      <button class="btn btn-primary" onclick="runAudit()">🔄 重新审计</button>
+      <button class="btn btn-danger" onclick="fixIssues()">🔧 自动修复 (zip/backup)</button>
+      <span style="font-size:13px;color:var(--text-secondary)" id="audit-time"></span>
+    </div>
+
+    <div class="chart-grid">
+      <div class="chart-box"><h3>技能健康分布</h3><canvas id="chart-health"></canvas></div>
+      <div class="chart-box"><h3>来源分布</h3><canvas id="chart-source"></canvas></div>
+    </div>
+
+    <div id="audit-issues"></div>
+  </div>
+
+</div>
+
+<!-- Detail Drawer -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer(event)">
+  <div class="drawer" onclick="event.stopPropagation()">
+    <div class="drawer-header">
+      <h2 id="drawer-title">Skill 详情</h2>
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <dl class="drawer-meta" id="drawer-meta"></dl>
+    <div class="drawer-content" id="drawer-content"></div>
+    <div class="drawer-actions" id="drawer-actions"></div>
+  </div>
+</div>
+
+<script>
+// ========== State ==========
+let allSkills = [];
+let auditData = null;
+let currentSort = 'name';
+let healthChart = null;
+let sourceChart = null;
+
+// ========== API ==========
+const API = '/api';
+
+async function fetchJSON(url) {
+  const r = await fetch(url);
+  if (!r.ok) throw new Error(await r.text());
+  return r.json();
+}
+
+async function loadStats() {
+  const s = await fetchJSON(`${API}/stats`);
+  document.getElementById('stat-total').textContent = s.total_skills;
+  document.getElementById('stat-p0').textContent = s.p0_count;
+  document.getElementById('stat-p1').textContent = s.p1_count;
+  document.getElementById('stat-p2').textContent = s.p2_count;
+  document.getElementById('stat-ok').textContent = s.ok_count;
+}
+
+async function loadSkills() {
+  const res = await fetchJSON(`${API}/skills?page_size=200`);
+  allSkills = res.skills;
+  renderSkills();
+}
+
+async function loadAudit() {
+  auditData = await fetchJSON(`${API}/audit`);
+  renderAudit();
+}
+
+// ========== Render ==========
+function getLevelBadge(level) {
+  const map = { ok: 'badge-ok', P2: 'badge-p2', P1: 'badge-p1', P0: 'badge-p0' };
+  const labels = { ok: '健康', P2: 'P2', P1: 'P1', P0: 'P0' };
+  return `<span class="badge ${map[level] || 'badge-unknown'}">${labels[level] || level}</span>`;
+}
+
+function getSourceBadge(type) {
+  const map = { agent: 'badge-agent', marketplace: 'badge-market', unknown: 'badge-unknown' };
+  const labels = { agent: '自建', marketplace: '市场', unknown: '未知' };
+  return `<span class="badge ${map[type] || 'badge-unknown'}">${labels[type] || type}</span>`;
+}
+
+function getResourceIcons(r) {
+  const parts = [];
+  if (r?.scripts) parts.push('📜');
+  if (r?.references) parts.push('📖');
+  if (r?.assets) parts.push('🎨');
+  if (r?.marketplace_meta) parts.push('🏪');
+  return parts.length ? parts.join(' ') : '—';
+}
+
+function renderSkills() {
+  const q = (document.getElementById('search-input').value || '').toLowerCase();
+  const source = document.getElementById('filter-source').value;
+  const level = document.getElementById('filter-level').value;
+
+  let filtered = [...allSkills];
+  if (q) filtered = filtered.filter(s => (s.name||'').toLowerCase().includes(q) || (s.description||'').toLowerCase().includes(q));
+  if (source) filtered = filtered.filter(s => s.source_type === source);
+  if (level) filtered = filtered.filter(s => s.level === level);
+
+  if (currentSort) {
+    filtered.sort((a,b) => String(a[currentSort]||'').localeCompare(String(b[currentSort]||'')));
+  }
+
+  const tbody = document.getElementById('skills-tbody');
+  tbody.innerHTML = filtered.map(s => `
+    <tr>
+      <td><strong>${esc(s.name)}</strong>${s.description ? `<br><small style="color:var(--text-secondary)">${esc(s.description.substring(0,80))}</small>` : ''}</td>
+      <td>v${s.version}</td>
+      <td>${getSourceBadge(s.source_type)}</td>
+      <td>${getLevelBadge(s.level)}${s.issue_count ? ` <small>(${s.issue_count})</small>` : ''}</td>
+      <td>${getResourceIcons(s.resources)}</td>
+      <td>
+        <button class="btn btn-outline btn-sm" onclick="showDetail('${esc(s.dir_name)}')">查看</button>
+      </td>
+    </tr>
+  `).join('');
+
+  document.getElementById('skills-count').textContent = `共 ${filtered.length} 个 Skill${filtered.length !== allSkills.length ? ` (已过滤，总数 ${allSkills.length})` : ''}`;
+}
+
+function setSort(field) {
+  currentSort = field;
+  renderSkills();
+}
+
+function renderAudit() {
+  if (!auditData) return;
+
+  const s = auditData.summary;
+  document.getElementById('audit-time').textContent = new Date().toLocaleString();
+
+  // Health chart
+  const hCtx = document.getElementById('chart-health');
+  if (healthChart) healthChart.destroy();
+  healthChart = new Chart(hCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['健康', 'P2 建议', 'P1 警告', 'P0 严重'],
+      datasets: [{
+        data: [s.ok_count, s.p2_count, s.p1_count, s.p0_count],
+        backgroundColor: ['#10b981', '#0ea5e9', '#f59e0b', '#ef4444'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true } } }
+    }
+  });
+
+  // Source chart
+  const sCtx = document.getElementById('chart-source');
+  if (sourceChart) sourceChart.destroy();
+  const agentCount = auditData.skills.filter(s => s.source_type === 'agent').length;
+  const marketCount = auditData.skills.filter(s => s.source_type === 'marketplace').length;
+  const unknownCount = auditData.skills.filter(s => s.source_type === 'unknown').length;
+  sourceChart = new Chart(sCtx, {
+    type: 'doughnut',
+    data: {
+      labels: ['自建', '市场', '未知'],
+      datasets: [{
+        data: [agentCount, marketCount, unknownCount],
+        backgroundColor: ['#6366f1', '#ec4899', '#9ca3af'],
+        borderWidth: 0,
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: { legend: { position: 'bottom', labels: { padding: 16, usePointStyle: true } } }
+    }
+  });
+
+  // Issues
+  const container = document.getElementById('audit-issues');
+  let html = '';
+
+  const sections = [
+    { key: 'P0', label: '🔴 P0 — 严重问题', cls: 'issue-P0' },
+    { key: 'P1', label: '🟡 P1 — 警告', cls: 'issue-P1' },
+    { key: 'P2', label: '🟢 P2 — 优化建议', cls: 'issue-P2' },
+  ];
+
+  for (const sec of sections) {
+    const issues = auditData.issues[sec.key] || [];
+    if (issues.length === 0) continue;
+    html += `<div class="audit-section"><h3>${sec.label} (${issues.length})</h3>`;
+    for (const issue of issues) {
+      html += `<div class="issue-item ${sec.cls}">${esc(issue.message)}</div>`;
+    }
+    html += `</div>`;
+  }
+
+  if (!html) html = '<div class="audit-section"><h3>🎉 所有 Skill 状态良好！</h3></div>';
+  container.innerHTML = html;
+}
+
+// ========== Drawer ==========
+async function showDetail(dirName) {
+  try {
+    const detail = await fetchJSON(`${API}/skills/${encodeURIComponent(dirName)}`);
+    document.getElementById('drawer-title').textContent = detail.display_name || detail.name;
+
+    const meta = document.getElementById('drawer-meta');
+    meta.innerHTML = `
+      <dt>目录名</dt><dd>${esc(detail.dir_name)}</dd>
+      <dt>版本</dt><dd>v${esc(detail.version)}</dd>
+      <dt>来源</dt><dd>${getSourceBadge(detail.source_type)}</dd>
+      <dt>自建</dt><dd>${detail.agent_created ? '✅ 是' : '❌ 否'}</dd>
+      <dt>文件数</dt><dd>${detail.total_files} 个 (${(detail.total_size/1024).toFixed(1)} KB)</dd>
+      <dt>资源</dt><dd>${getResourceIcons(detail.resources)}</dd>
+      <dt>描述</dt><dd>${esc(detail.description || '无')}</dd>
+    `;
+
+    document.getElementById('drawer-content').textContent = detail.raw_content || '(无 SKILL.md 内容)';
+
+    const actions = document.getElementById('drawer-actions');
+    actions.innerHTML = detail.agent_created
+      ? `<button class="btn btn-danger btn-sm" onclick="deleteSkill('${esc(detail.dir_name)}')">🗑️ 删除</button>`
+      : `<span style="font-size:12px;color:var(--text-secondary)">非自建技能，请在 WorkBuddy 技能管理面板操作</span>`;
+    actions.innerHTML += `<button class="btn btn-outline btn-sm" onclick="exportSingle('${esc(detail.dir_name)}')">📥 导出</button>`;
+
+    document.getElementById('drawer-overlay').classList.add('open');
+  } catch (e) {
+    alert('加载失败: ' + e.message);
+  }
+}
+
+function closeDrawer(e) {
+  if (e && e.target !== document.getElementById('drawer-overlay')) return;
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+
+async function deleteSkill(dirName) {
+  if (!confirm(`确定要删除 ${dirName} 吗？此操作不可撤销！`)) return;
+  if (!confirm(`再次确认：删除 ${dirName}？`)) return;
+  try {
+    const res = await fetch(`${API}/skills/${encodeURIComponent(dirName)}?confirm=true`, { method: 'DELETE' });
+    const data = await res.json();
+    if (res.ok) {
+      alert('✅ ' + data.message);
+      closeDrawer();
+      refreshAll();
+    } else {
+      alert('❌ ' + (data.detail || JSON.stringify(data)));
+    }
+  } catch (e) {
+    alert('删除失败: ' + e.message);
+  }
+}
+
+// ========== Actions ==========
+async function runAudit() {
+  document.getElementById('audit-time').textContent = '审计中...';
+  await loadAudit();
+}
+
+async function fixIssues() {
+  if (!confirm('将自动修复以下问题：\n- 删除遗留的 .zip 文件\n\n确认执行？')) return;
+  try {
+    const res = await fetch(`${API}/audit/fix?confirm=true`, { method: 'POST' });
+    const data = await res.json();
+    alert('修复完成！\n' + data.fixed.join('\n'));
+    refreshAll();
+  } catch (e) {
+    alert('修复失败: ' + e.message);
+  }
+}
+
+async function exportData() {
+  const data = JSON.stringify(allSkills, null, 2);
+  const blob = new Blob([data], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `skill-manager-export-${new Date().toISOString().slice(0,10)}.json`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function exportSingle(dirName) {
+  window.open(`${API}/skills/${encodeURIComponent(dirName)}/raw`);
+}
+
+async function refreshAll() {
+  await loadStats();
+  await loadSkills();
+  await loadAudit();
+}
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById(`panel-${tab}`).classList.add('active');
+}
+
+function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
+// ========== Init ==========
+refreshAll();
+</script>
+</body>
+</html>

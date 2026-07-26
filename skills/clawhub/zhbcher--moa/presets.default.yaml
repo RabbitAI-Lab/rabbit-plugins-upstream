@@ -1,0 +1,118 @@
+# Default MoA presets
+moa:
+  default_preset: default
+  presets:
+
+    default:
+      reference_models:
+        - provider: sensenova
+          model: deepseek-v4-flash
+      reference_max_tokens: 512
+      reference_temperature: 0.7
+      timeout_seconds: 30
+      total_timeout_seconds: 60
+      task_type: general
+      keep_top_k: 1
+      aggregation:
+        dedup_enabled: false
+        dedup_threshold: 0.6
+        sort_criteria: rank
+
+    balanced:
+      reference_models:
+        - provider: nvidia
+          model: nvidia/nemotron-3-ultra-550b-a55b
+          timeout_seconds: 60
+        - provider: sensenova
+          model: deepseek-v4-flash
+      reference_max_tokens: 800
+      reference_temperature: 0.5
+      timeout_seconds: 45
+      total_timeout_seconds: 90
+      task_type: general
+      keep_top_k: 2
+      aggregation:
+        dedup_enabled: true
+        dedup_threshold: 0.55
+        sort_criteria: rank
+
+    deep:
+      reference_models:
+        - provider: nvidia
+          model: nvidia/nemotron-3-ultra-550b-a55b
+          timeout_seconds: 60
+        - provider: sensenova
+          model: deepseek-v4-flash
+          timeout_seconds: 30
+        - provider: nvidia
+          model: stepfun-ai/step-3.5-flash
+          timeout_seconds: 30
+      reference_max_tokens: 1024
+      reference_temperature: 0.7
+      timeout_seconds: 30
+      total_timeout_seconds: 120
+      task_type: general
+      keep_top_k: 3
+      aggregation:
+        dedup_enabled: true
+        dedup_threshold: 0.5
+        sort_criteria: rank
+
+    # Task-specific presets
+    code-review:
+      reference_models:
+        - provider: nvidia
+          model: nvidia/llama-3.3-nemotron-super-49b-v1
+          timeout_seconds: 60
+        - provider: nvidia
+          model: stepfun-ai/step-3.7-flash
+          timeout_seconds: 45
+      reference_max_tokens: 1024
+      reference_temperature: 0.3
+      timeout_seconds: 45
+      total_timeout_seconds: 90
+      task_type: coding
+      keep_top_k: 2
+      aggregation:
+        dedup_enabled: true
+        dedup_threshold: 0.5
+        sort_criteria: rank
+
+    arch-review:
+      reference_models:
+        - provider: nvidia
+          model: nvidia/nemotron-3-ultra-550b-a55b
+          timeout_seconds: 60
+        - provider: nvidia
+          model: nvidia/llama-3.3-nemotron-super-49b-v1
+          timeout_seconds: 60
+        - provider: sensenova
+          model: deepseek-v4-flash
+          timeout_seconds: 30
+      reference_max_tokens: 1200
+      reference_temperature: 0.5
+      timeout_seconds: 60
+      total_timeout_seconds: 180
+      task_type: architecture
+      keep_top_k: 3
+      aggregation:
+        dedup_enabled: true
+        dedup_threshold: 0.45
+        sort_criteria: rank
+
+    writing:
+      reference_models:
+        - provider: sensenova
+          model: deepseek-v4-flash
+        - provider: nvidia
+          model: stepfun-ai/step-3.7-flash
+      reference_max_tokens: 800
+      reference_temperature: 0.7
+      timeout_seconds: 45
+      total_timeout_seconds: 90
+      task_type: writing
+      keep_top_k: 2
+      aggregation:
+        dedup_enabled: true
+        dedup_threshold: 0.6
+        sort_criteria: rank

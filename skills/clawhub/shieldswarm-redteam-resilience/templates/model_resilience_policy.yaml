@@ -1,0 +1,23 @@
+# Model resilience policy
+task_risk_levels:
+  low:
+    examples: ["formatting", "simple summarization", "casual chat"]
+    allowed_fallback: "small_model_with_basic_guardrails_and_disclosure"
+  medium:
+    examples: ["coding help", "research summaries", "business writing"]
+    allowed_fallback: "medium_or_strong_model_with_quality_check"
+  high:
+    examples: ["security-sensitive code", "legal", "medical", "financial", "account recovery", "production deployment"]
+    allowed_fallback: "no_weak_fallback_require_strong_model_or_human"
+controls:
+  degraded_mode_disclosure: true
+  safety_filters_remain_enabled: true
+  tool_execution_blocked_without_approval: true
+  fallback_audit_log: true
+  retry_after_for_overload: true
+never_fallback_for:
+  - legal_medical_financial
+  - security_sensitive_execution
+  - account_recovery_or_auth
+  - production_deploy_commands
+  - user_data_deletion

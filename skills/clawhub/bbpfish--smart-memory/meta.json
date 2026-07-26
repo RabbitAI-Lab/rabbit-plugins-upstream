@@ -1,0 +1,14 @@
+{
+  "author": "marvisd",
+  "description": "线索驱动分层长期记忆管理系统：任务前 TF-IDF 语义召回，任务后 LLM 结构化收割知识卡片，支持语义去重、时间衰减权重、四级 GC 状态机、信号分析与成熟度报告、跨卡关联与聚类合成。三语文档（简中/EN/繁中）。",
+  "detail_describe": "init-db: 初始化数据库（幂等）\nrecall: 任务前 TF-IDF 渐进式召回（L1 关键词 + L2 语义）\nrecord: 记录知识卡片，自动语义去重\nsignal: 记录信号驱动 retention 浮动\ndecay-report: 时间衰减报告\nstale-detect: 巡检过期卡片\ngc: 四级 GC 状态机垃圾回收\nvalidate: 一致性校验\nscan-round: 扫描 docs/ 更新 manifest\nslim: 文档瘦身\nmigrate: 从 v2 JSONL 迁移",
+  "display_description": "智能长期记忆：线索驱动、自动召回、语义去重",
+  "display_name": "智能记忆",
+  "id": 998,
+  "is_downloaded": true,
+  "last_modified_time": "2026-07-04 18:42:00",
+  "name": "smart-memory",
+  "scope": ["main"],
+  "type": "效率工具",
+  "version": "1.0.1"
+}

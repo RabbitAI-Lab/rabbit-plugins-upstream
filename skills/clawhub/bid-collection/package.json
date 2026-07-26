@@ -1,0 +1,41 @@
+{
+  "name": "bid-collection",
+  "version": "1.0.1",
+  "description": "招投标商机采集 Skill — 7x24自动监控全网招投标公开信息，智能筛选适配公司业务的高价值商机线索。Tender & Procurement Lead Collection Skill for Claude Code.",
+  "keywords": [
+    "claude-code",
+    "claude-code-skill",
+    "bid",
+    "procurement",
+    "tender",
+    "lead-collection",
+    "business-intelligence",
+    "government-procurement",
+    "SOE-procurement",
+    "招投标",
+    "采购",
+    "商机",
+    "线索采集"
+  ],
+  "homepage": "https://github.com/Cryptocxf/bid-collection#readme",
+  "bugs": {
+    "url": "https://github.com/Cryptocxf/bid-collection/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cryptocxf/bid-collection.git"
+  },
+  "license": "MIT",
+  "author": "Cryptocxf",
+  "files": [
+    "SKILL.md",
+    ".claude-plugin/plugin.json",
+    "references/*.md"
+  ],
+  "claude-code": {
+    "skill": true,
+    "name": "bid-collection",
+    "title": "招投标商机采集 / Tender & Procurement Lead Collection",
+    "icon": "🎯"
+  }
+}

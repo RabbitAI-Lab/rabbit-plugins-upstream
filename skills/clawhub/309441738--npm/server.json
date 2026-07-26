@@ -1,0 +1,12 @@
+{
+  "$schema": "https://static.modelcontextprotocol.io/schemas/2025-07-09/server.schema.json",
+  "name": "io.github.309441738/npm",
+  "description": "通过 NPM 使用邮轮产品 API，开发者可以在自己的应用中集成邮轮产品信息。",
+  "version": "0.1.0",
+  "remotes": [
+    {
+      "type": "streamable-http",
+      "url": "https://cruise-mcp.olavacations.com/api/gw/s/d7f4b5ce-46c8-4a1f-a270-e04b0fe32424/invoke"
+    }
+  ]
+}

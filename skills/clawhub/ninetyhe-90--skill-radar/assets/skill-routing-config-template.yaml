@@ -1,0 +1,58 @@
+# Skill Routing Configuration Template
+# Copy this file to your skill directory as "routing.yaml"
+# and customize the values below.
+
+name: your-skill-name              # Must match your skill directory name
+description: "Brief description"   # What this skill does (one sentence)
+
+routing:
+  # --- Trigger keywords ---
+  # Substring match (case-insensitive). List common ways users refer to this skill.
+  keywords:
+    - "keyword1"
+    - "keyword phrase"
+    - "alternate term"
+
+  # --- Regex patterns ---
+  # Python regex syntax. More precise than keywords.
+  # Use .{0,N} for flexible gaps between key terms.
+  patterns:
+    - "(verb1|verb2).{0,6}(noun1|noun2)"
+
+  # --- Intent tags (optional) ---
+  # Dot-separated semantic labels. Split into parts and matched against query.
+  intents:
+    - "domain.action.target"
+
+  # --- Exclusion rules ---
+  # Hard exclusion: any match = this skill is immediately disqualified.
+  # Use to prevent stealing queries meant for other skills.
+  anti_patterns:
+    - "(write|create|generate).{0,6}(something)"
+
+  # --- Soft penalty words (optional) ---
+  # Each hit subtracts 0.15 from score (max -0.5). Softer than anti_patterns.
+  anti_keywords:
+    - "unrelated term"
+
+  # --- Priority (0-100) ---
+  # Higher = more likely to be recalled when signals are weak.
+  # Default: 50. High-frequency skills: 70-90. Niche skills: 30-50.
+  priority: 50
+
+  # --- Keyword matching mode ---
+  # any (default): score = hit_count / total
+  # all: score = 1.0 only if ALL keywords match
+  # threshold: score = 1.0 if hit_ratio >= threshold_ratio
+  mode: any
+
+  # --- Context bonuses (optional) ---
+  # Extra score when environment matches these conditions.
+  context:
+    file_types: [".ext1", ".ext2"]
+    workspace_hints: ["domain1", "domain2"]
+
+  # --- Advanced (optional) ---
+  # weight_overrides: {keyword: 0.40}  # Override global weights for this skill
+  # exclusive_with: ["other-skill"]     # Mutual exclusion
+  # requires_skills: ["dependency"]     # Auto-load dependencies

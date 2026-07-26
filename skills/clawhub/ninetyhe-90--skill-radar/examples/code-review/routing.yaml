@@ -1,0 +1,23 @@
+routing:
+  keywords:
+    - "code review"
+    - "review code"
+    - "review PR"
+    - "check code"
+    - "code quality"
+    - "CR"
+    - "pull request"
+    - "bug"
+    - "code"
+  patterns:
+    - "(review|check|audit).{0,6}(code|PR|MR|pull request)"
+    - "(code|PR|MR).{0,8}(review|check|quality|issue|bug)"
+    - "(look at|check|examine).{0,6}(code|implementation)"
+    - "(find|fix).{0,4}(bug|issue|problem).{0,6}(code|implementation)"
+  anti_patterns:
+    - "(write|generate|create).{0,6}(code|function|class)"
+    - "new feature"
+  priority: 70
+  context:
+    file_types: [".py", ".js", ".ts", ".go", ".java"]
+    workspace_hints: ["dev", "engineering"]

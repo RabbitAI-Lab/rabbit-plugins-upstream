@@ -1,0 +1,23 @@
+{
+  "skill_name": "image-editor",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "把这张图上的'知了电力'改成'晋普山煤业'",
+      "expected_output": "图片中标题区域文字被替换为'晋普山煤业'，原分辨率不变，文字自然无痕迹拼接",
+      "files": ["evals/files/test_title.jpg"]
+    },
+    {
+      "id": 2,
+      "prompt": "在这张图片的右下角加上水印'晋普山煤业 2026'",
+      "expected_output": "右下角有'晋普山煤业 2026'半透明水印，原图其他区域不变",
+      "files": ["evals/files/test_watermark.jpg"]
+    },
+    {
+      "id": 3,
+      "prompt": "把图片中这个电话号码123-456-7890抹掉",
+      "expected_output": "电话号码区域被背景色覆盖，看不出痕迹",
+      "files": ["evals/files/test_phone.jpg"]
+    }
+  ]
+}

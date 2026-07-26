@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>星辰羽毛球馆 · 业务数据分析&amp;运营</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;500;600&family=Noto+Sans+SC:wght@300;400;500&family=DM+Mono:wght@400;500&display=swap');
+:root{
+  --bg:#F5F3FA;--s1:#FFFFFF;--s2:#EDE8F5;--bd:#D8D0EC;
+  --c1:#7B5EA7;--c2:#5B8DD9;--c3:#9B7DC7;--c4:#A390C8;
+  --red:#B04848;--t:#1A1525;--mu:#7A6E90;--mu2:#C8C0DC;--tx:#2D2640;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:var(--bg);color:var(--t);font-family:'Noto Sans SC',sans-serif;font-size:13px;line-height:1.7;min-height:100vh;-webkit-font-smoothing:antialiased;letter-spacing:.01em}
+
+/* HERO — lavender-purple gradient */
+.hero{padding:28px 20px 22px;background:linear-gradient(135deg,#5B3A8A 0%,#6B4A9A 40%,#4A3A7A 100%);border-bottom:3px solid #3D2A6A;position:relative;overflow:hidden}
+.hero::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 80% 40%,rgba(180,160,255,.15),transparent 60%);pointer-events:none}
+.hero::before{content:'✦';position:absolute;right:30px;top:20px;font-size:14px;color:rgba(255,255,255,.2)}
+.hi{position:relative;z-index:1}
+.hl{font-size:10px;letter-spacing:.18em;color:rgba(255,255,255,.75);text-transform:uppercase;margin-bottom:8px}
+h1{font-family:'Noto Serif SC',serif;font-size:26px;font-weight:600;color:#FFF;line-height:1.2;text-shadow:0 2px 8px rgba(0,0,0,.2)}
+h1 em{font-style:normal;color:#CDB8F5}
+.hsub{font-size:11px;color:rgba(255,255,255,.65);margin-top:6px;line-height:1.65;font-weight:300}
+.kpis{display:flex;gap:14px;margin-top:14px;flex-wrap:wrap}
+.kpi{display:flex;flex-direction:column;gap:2px}
+.kv{font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:#FFF;text-shadow:0 1px 4px rgba(0,0,0,.25)}
+.kv.dn{color:#FFD0D8}.kv.up{color:#C8E8FF}
+.kl{font-size:10px;color:rgba(255,255,255,.72)}
+
+/* TABS — blue-purple */
+.tabs{display:flex;background:#4A3080;border-bottom:3px solid #35206A;padding:0 10px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tab{background:none;border:none;color:rgba(255,255,255,.55);font-family:'Noto Sans SC',sans-serif;font-size:12px;padding:11px 13px;cursor:pointer;border-bottom:2px solid transparent;white-space:nowrap;transition:all .15s}
+.tab:hover{color:#FFF}.tab.on{color:#FFF;border-bottom-color:#CDB8F5;font-weight:500}
+
+/* PAGES */
+.pg{display:none;padding:22px 16px}.pg.on{display:block}
+.pt{font-family:'Noto Serif SC',serif;font-size:18px;font-weight:600;color:#2D1A4A;margin-bottom:3px}
+.ps{font-size:11px;color:var(--mu);margin-bottom:18px;line-height:1.6}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-bottom:14px}
+.g3{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px;margin-bottom:14px}
+.full{grid-column:1/-1}
+
+/* CARD */
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:18px;box-shadow:0 1px 4px rgba(90,50,150,.06)}
+.ct{font-size:10px;font-weight:500;letter-spacing:.09em;color:#9A90B0;text-transform:uppercase;margin-bottom:12px;display:flex;align-items:center;gap:7px}
+.ct::before{content:'';display:inline-block;width:2px;height:10px;background:var(--c1);border-radius:2px;flex-shrink:0}
+.ct.bl::before{background:var(--c2)}.ct.ye::before{background:#D4A040}.ct.tl::before{background:var(--c4)}.ct.re::before{background:var(--red)}
+
+/* STAT STRIP */
+.strip{display:flex;gap:10px;margin-bottom:14px;flex-wrap:wrap}
+.st{flex:1;min-width:130px;background:var(--s1);border:1px solid var(--bd);border-radius:9px;padding:13px 15px;position:relative;overflow:hidden}
+.st::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:var(--c1);opacity:.7}
+.st.bl::after{background:var(--c2)}.st.ye::after{background:#D4A040}.st.tl::after{background:var(--c4)}.st.re::after{background:var(--red)}
+.sv{font-family:'DM Mono',monospace;font-size:17px;font-weight:500;color:var(--t);margin-bottom:3px}
+.sl{font-size:10px;color:var(--mu)}.sd{font-size:10px;color:var(--red);margin-top:3px}.sd.pos{color:var(--c1)}
+
+/* 4-COL COMPARE */
+.cmp4{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.cbox{background:var(--s2);border:1px solid var(--bd);border-radius:9px;padding:14px;text-align:center}
+.cbox.c1{border-color:rgba(123,94,167,.45);border-top:3px solid var(--c1)}
+.cbox.c2{border-color:rgba(91,141,217,.35);border-top:3px solid var(--c2)}
+.cbox.c3{border-color:rgba(180,100,80,.35);border-top:3px solid var(--c2)}
+.cbox.c4{border-color:rgba(176,72,72,.4);border-top:3px solid var(--red)}
+.cbl{font-size:10px;letter-spacing:.07em;color:var(--mu);text-transform:uppercase;margin-bottom:7px}
+.cbv{font-family:'DM Mono',monospace;font-size:20px;font-weight:500;color:var(--t);margin-bottom:2px}
+.cbs{font-size:11px;color:var(--mu);margin-bottom:5px}
+.cbr{margin-top:7px}
+.cbn{font-family:'DM Mono',monospace;font-size:14px;color:var(--t);line-height:1;margin-bottom:1px}
+.cbd{font-size:10px;color:var(--mu);margin-top:6px}
+.cbd.dn{color:var(--red)}.cbd.pos{color:var(--c1)}
+hr.sep{margin:7px 0;border:none;border-top:1px solid var(--bd)}
+
+/* SECTION DIVIDER */
+.sdiv{font-size:10px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--c1);margin:18px 0 12px;padding-bottom:5px;border-bottom:1px solid var(--bd)}
+
+/* INSIGHT BOXES */
+.ins{background:rgba(123,94,167,.05);border:1px solid rgba(123,94,167,.18);border-left:3px solid var(--c1);border-radius:8px;padding:12px 15px;font-size:12px;color:var(--tx);line-height:1.85;margin-bottom:12px}
+.ins.bl{background:rgba(91,141,217,.05);border-color:rgba(91,141,217,.18);border-left-color:var(--c2)}
+.ins.dn{background:rgba(176,72,72,.04);border-color:rgba(176,72,72,.18);border-left-color:var(--red)}
+.ins.ye{background:rgba(212,160,64,.05);border-color:rgba(212,160,64,.2);border-left-color:#D4A040}
+.it{font-size:10px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;margin-bottom:5px;color:var(--c1)}
+.ins.bl .it{color:var(--c2)}.ins.dn .it{color:var(--red)}.ins.ye .it{color:#C49030}
+.ins strong{color:var(--c1);font-weight:600}
+.ins.bl strong{color:var(--c2)}.ins.dn strong{color:var(--red)}.ins.ye strong{color:#C49030}
+.ins-green strong{color:var(--c1)!important}
+
+/* DATA TABLE */
+.dtbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.dtbl{width:100%;border-collapse:collapse;font-size:12px;min-width:360px}
+.dtbl th{text-align:left;padding:8px 11px;background:var(--s2);color:var(--c1);font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;border-bottom:1px solid var(--bd)}
+.dtbl td{padding:9px 11px;border-bottom:1px solid rgba(100,80,150,.07);vertical-align:top;line-height:1.5}
+.dtbl tr:nth-child(even) td{background:rgba(123,94,167,.03)}
+.dtbl tr:hover td{background:rgba(91,141,217,.05)}
+.dtbl td.dn{color:var(--red);font-weight:500}
+.dtbl td.up{color:var(--c1);font-weight:500}
+.dtbl td.bold{font-weight:600;color:var(--c1)}
+.bdg{display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;font-weight:600}
+.bdg-r{background:rgba(176,72,72,.12);color:var(--red);border:1px solid rgba(176,72,72,.3)}
+.bdg-p{background:rgba(123,94,167,.12);color:var(--c1);border:1px solid rgba(123,94,167,.3)}
+.bdg-b{background:rgba(91,141,217,.12);color:var(--c2);border:1px solid rgba(91,141,217,.3)}
+
+/* HEATMAP */
+.hm-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+.hm{display:grid;grid-template-columns:52px repeat(14,minmax(26px,1fr));gap:2px;min-width:480px}
+.hmh{text-align:center;font-size:9px;color:#9A8AB0;font-family:'DM Mono',monospace;padding:2px 0}
+.hml{font-family:'DM Mono',monospace;font-size:10px;color:var(--mu);display:flex;align-items:center}
+.hmc{border-radius:3px;padding:5px 2px;text-align:center;font-family:'DM Mono',monospace;font-size:10px;font-weight:600;cursor:default;transition:transform .1s}
+.hmc:hover{transform:scale(1.1);z-index:5;position:relative}
+
+/* STRATEGY */
+.sps{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px;margin-bottom:14px}
+.sc{background:var(--s1);border:1px solid var(--bd);border-radius:10px;padding:17px;position:relative;overflow:hidden;box-shadow:0 1px 4px rgba(90,50,150,.05)}
+.sc::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.sc.p0::before{background:linear-gradient(90deg,#A040A0,#7B5EA7)}
+.sc.p1::before{background:linear-gradient(90deg,#5B8DD9,#7B5EA7)}
+.sc.p1b::before{background:linear-gradient(90deg,#5B8DD9,#4070C0)}
+.sc.p2::before{background:linear-gradient(90deg,#9B7DC7,#7B5EA7)}
+.p0 .spt{color:#A040A0}.p1 .spt{color:var(--c1)}.p1b .spt{color:var(--c2)}.p2 .spt{color:var(--c3)}
+.p0 .sph{color:#A040A0}.p1 .sph{color:var(--c1)}.p1b .sph{color:var(--c2)}.p2 .sph{color:var(--c3)}
+.spt{font-size:10px;font-weight:600;letter-spacing:.08em;margin-bottom:7px}
+.sph{font-family:'Noto Serif SC',serif;font-size:13px;font-weight:600;margin-bottom:8px}
+.spb{font-size:12px;color:#5A5070;line-height:1.85}
+.spb li{margin-left:14px;margin-bottom:3px}
+.spb strong{color:var(--c1);font-weight:600}
+.tags{display:flex;flex-wrap:wrap;gap:5px;margin-top:9px}
+.tag{font-size:10px;padding:2px 8px;border-radius:10px;background:var(--s2);color:var(--mu);border:1px solid var(--bd)}
+
+/* KV ROW */
+.kv-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:14px}
+.kv-box{background:var(--s2);border:1px solid var(--bd);border-radius:9px;padding:16px;text-align:center}
+.kvn{font-family:'DM Mono',monospace;font-size:24px;font-weight:400;color:var(--c1);margin-bottom:4px}
+.kvl{font-size:11px;color:var(--mu)}
+
+/* FUNNEL */
+.funnel{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.f-row{display:flex;align-items:center;gap:10px}
+.f-bar-wrap{flex:1;height:28px;background:var(--s2);border-radius:5px;overflow:hidden}
+.f-bar{height:100%;border-radius:5px;display:flex;align-items:center;padding-left:10px;font-size:11px;font-weight:500;color:#FFF;font-family:'DM Mono',monospace;transition:width .6s ease}
+.f-lbl{font-size:11px;color:var(--mu);min-width:60px;text-align:right}
+.f-num{font-family:'DM Mono',monospace;font-size:12px;font-weight:500;color:var(--t);min-width:40px}
+
+hr.dv{border:none;border-top:1px solid var(--bd);margin:18px 0}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--mu2);border-radius:3px}
+
+/* MOBILE */
+@media (max-width:600px){
+  .hero{padding:16px 14px 16px}
+  h1{font-size:19px}
+  .hsub{font-size:10px}
+  .kpis{gap:10px}
+  .kv{font-size:14px}
+  .tabs{padding:0 4px}
+  .tab{font-size:11px;padding:9px 9px}
+  .pg{padding:14px 12px}
+  .pt{font-size:15px}
+  .ps{font-size:10px}
+  .g2,.g3{grid-template-columns:1fr}
+  .cmp4{grid-template-columns:1fr 1fr}
+  .sps{grid-template-columns:1fr}
+  .kv-row{grid-template-columns:1fr}
+  .strip{flex-direction:column}
+  .st{min-width:100%;flex:none}
+  .card{padding:13px}
+  .ins{font-size:11px;padding:10px 12px}
+  .dtbl{font-size:11px}
+  .dtbl th,.dtbl td{padding:6px 8px}
+  .hm{grid-template-columns:40px repeat(14,minmax(22px,1fr))}
+  .hmc{font-size:8.5px;padding:4px 1px}
+  .cbv{font-size:17px}
+  .kvn{font-size:20px}
+  .sph{font-size:12px}
+  .spb{font-size:11px}
+  hr.dv{margin:12px 0}
+}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hi">
+    <div class="hl">星辰羽毛球馆（紫晶店）· 业务数据分析&amp;运营</div>
+    <h1>星辰 <em>BADMINTON</em> · 业务数据分析&amp;运营</h1>
+    <div class="hsub">总体趋势：整月日均口径（排除天数差异）· 环比：月度整月对比 · 老用户=2025年8–10月曾订场（344人）· 2月排除春节锁场（2/11–2/18）实际运营20天</div>
+    <div class="kpis">
+      <div class="kpi"><div class="kv dn">−20%</div><div class="kl">日均场次 12月→3月</div></div>
+      <div class="kpi"><div class="kv dn">−12%</div><div class="kl">日均实收 12月→3月</div></div>
+      <div class="kpi"><div class="kv dn">−21%</div><div class="kl">整月活跃用户 12月→3月</div></div>
+      <div class="kpi"><div class="kv dn">45.6%</div><div class="kl">老用户3月活跃率（整月）</div></div>
+      <div class="kpi"><div class="kv dn">26.4%</div><div class="kl">新用户次月留存（最近）</div></div>
+      <div class="kpi"><div class="kv up">+31%</div><div class="kl">13时逆势增长（整月）</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="tabs">
+  <button class="tab on"  onclick="show('t1',this)">📊 总体趋势</button>
+  <button class="tab"     onclick="show('t2',this)">🔍 月度环比</button>
+  <button class="tab"     onclick="show('t3',this)">⏱ 时段分析</button>
+  <button class="tab"     onclick="show('t4',this)">👤 用户结构</button>
+  <button class="tab"     onclick="show('t5',this)">📍 点评流量分析</button>
+  <button class="tab"     onclick="show('t6',this)">🎯 运营方案</button>
+</div>
+
+<!-- ══ TAB 1 总体趋势 ══ -->
+<div id="t1" class="pg on">
+  <div class="pt">总体经营趋势</div>
+  <div class="ps">整月日均口径 · 2025年11月—2026年3月 · 2月实际运营20天（排除春节锁场）· 老用户=2025年8–10月曾订场（344人）</div>
+
+  <div class="strip">
+    <div class="st"><div class="sv">14.4→11.6</div><div class="sl">日均场次：12月→3月</div><div class="sd">↓ −20%</div></div>
+    <div class="st bl"><div class="sv">805→705</div><div class="sl">日均实收（¥）：12月→3月</div><div class="sd">↓ −12%</div></div>
+    <div class="st ye"><div class="sv">326→276</div><div class="sl">整月活跃用户：12月→3月</div><div class="sd">↓ −15%</div></div>
+    <div class="st tl"><div class="sv">62.5%→45.6%</div><div class="sl">老用户月活跃率（整月）</div><div class="sd">持续下降</div></div>
+    <div class="st re"><div class="sv">26.4%→21.8%</div><div class="sl">新用户次月留存率（整月）</div><div class="sd">逐月走弱</div></div>
+  </div>
+
+  <div class="g2">
+    <div class="card"><div class="ct">日均实收（¥/天）</div><div style="height:200px"><canvas id="c_rev"></canvas></div></div>
+    <div class="card"><div class="ct bl">日均场次 &amp; 整月活跃用户</div><div style="height:200px"><canvas id="c_slots"></canvas></div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ct ye">月度频次分布（用户数，整月）</div><div style="height:190px"><canvas id="c_freq_mo"></canvas></div></div>
+    <div class="card"><div class="ct">新用户 vs 老用户 月活跃人数</div><div style="height:190px"><canvas id="c_newold_mo"></canvas></div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ct re">新用户次月留存率（%，整月）</div><div style="height:180px"><canvas id="c_ret"></canvas></div></div>
+    <div class="card"><div class="ct bl">老用户月活跃率（%，整月，8-10月池344人）</div><div style="height:180px"><canvas id="c_cb"></canvas></div></div>
+  </div>
+
+  <div class="ins"><div class="it">🔍 两阶段特征</div>
+    <strong>平台期（11月–1月）</strong>：日均场次16.6→14.4→14.0，小幅收窄，实收基本稳定。主要原因：秋季开学后新用户增加（11月348人月活），冬季后日均略降但老用户黏性高（老用户活跃率62%+）。<br>
+    <strong>断崖期（2月起）</strong>：2月日均8.8场（春节锁场20天），3月回升至11.6场但仍比1月低17%。<strong>紫风羽毛球中心1月开业</strong>是主要竞争压力，带走了部分下午闲时用户。
+  </div>
+  <div class="ins dn"><div class="it">🚨 核心信号</div>
+    老用户池344人，3月活跃157人（<strong>45.6%</strong>），相比11月的64.8%下降明显。新用户次月留存仅<strong>21.8%</strong>（12月→1月），拉新成本高但留不住是核心漏洞。
+  </div>
+</div>
+
+<!-- ══ TAB 2 月度环比 ══ -->
+<div id="t2" class="pg">
+  <div class="pt">月度整月环比</div>
+  <div class="ps">整月日均口径（排除天数差异）· 2月排除春节锁场（2/11–2/18）实际运营20天 · 比例指标与绝对数均用整月数据</div>
+
+  <!-- 月度核心指标 5列 -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px">
+    <div class="cbox c1"><div class="cbl">11月</div><div class="cbv">16.6</div><div class="cbs">日均场次</div><hr class="sep"><div class="cbr"><div class="cbn">¥958</div><div class="cbs">日均实收</div></div><div class="cbr"><div class="cbn">348</div><div class="cbs">活跃用户</div></div><div class="cbd pos">开业季高峰</div></div>
+    <div class="cbox c1"><div class="cbl">12月</div><div class="cbv">14.4</div><div class="cbs">日均场次</div><hr class="sep"><div class="cbr"><div class="cbn">¥805</div><div class="cbs">日均实收</div></div><div class="cbr"><div class="cbn">326</div><div class="cbs">活跃用户</div></div><div class="cbd dn">vs 11月 −13% / −16%</div></div>
+    <div class="cbox c2"><div class="cbl">1月</div><div class="cbv">14.0</div><div class="cbs">日均场次</div><hr class="sep"><div class="cbr"><div class="cbn">¥861</div><div class="cbs">日均实收</div></div><div class="cbr"><div class="cbn">309</div><div class="cbs">活跃用户</div></div><div class="cbd pos">场次 −3% / 实收 +7%</div></div>
+    <div class="cbox c3"><div class="cbl">2月（20天）</div><div class="cbv">8.8</div><div class="cbs">日均场次</div><hr class="sep"><div class="cbr"><div class="cbn">¥543</div><div class="cbs">日均实收</div></div><div class="cbr"><div class="cbn">158</div><div class="cbs">活跃用户</div></div><div class="cbd dn">春节 −37% / −37%</div></div>
+    <div class="cbox c4"><div class="cbl">3月</div><div class="cbv" style="color:var(--c1)">11.6</div><div class="cbs">日均场次</div><hr class="sep"><div class="cbr"><div class="cbn" style="color:var(--c1)">¥705</div><div class="cbs">日均实收</div></div><div class="cbr"><div class="cbn">276</div><div class="cbs">活跃用户</div></div><div class="cbd pos">回升 +32% / +30%</div></div>
+  </div>
+
+  <div class="g2">
+    <div class="card"><div class="ct">月度日均场次 &amp; 日均实收</div><div style="height:200px"><canvas id="c_daily"></canvas></div></div>
+    <div class="card"><div class="ct bl">时段分类整月日均（11–3月）</div><div style="height:200px"><canvas id="c_bucket"></canvas></div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ct ye">工作日 vs 周末 日均场次（整月）</div><div style="height:190px"><canvas id="c_wdwe"></canvas></div></div>
+    <div class="card"><div class="ct tl">月度频次分布用户数</div><div style="height:190px"><canvas id="c_freq_p"></canvas></div></div>
+  </div>
+
+  <div class="sdiv">月度新老用户构成（整月）</div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-bottom:14px">
+    <div class="cbox c1"><div class="cbl">11月</div><hr class="sep"><div class="cbr"><div class="cbn" style="color:var(--c2)">125</div><div class="cbs">新用户（36%）</div></div><div class="cbr"><div class="cbn" style="color:var(--c1)">223</div><div class="cbs">老用户（64%）</div></div></div>
+    <div class="cbox c1"><div class="cbl">12月</div><hr class="sep"><div class="cbr"><div class="cbn" style="color:var(--c2)">78</div><div class="cbs">新用户（24%）</div></div><div class="cbr"><div class="cbn" style="color:var(--c1)">215</div><div class="cbs">老用户（66%）</div></div></div>
+    <div class="cbox c2"><div class="cbl">1月</div><hr class="sep"><div class="cbr"><div class="cbn" style="color:var(--c2)">53</div><div class="cbs">新用户（17%）</div></div><div class="cbr"><div class="cbn" style="color:var(--c1)">202</div><div class="cbs">老用户（65%）</div></div></div>
+    <div class="cbox c3"><div class="cbl">2月</div><hr class="sep"><div class="cbr"><div class="cbn" style="color:var(--c2)">27</div><div class="cbs">新用户（17%）</div></div><div class="cbr"><div class="cbn" style="color:var(--c1)">98</div><div class="cbs">老用户（62%）</div></div></div>
+    <div class="cbox c4"><div class="cbl">3月</div><hr class="sep"><div class="cbr"><div class="cbn" style="color:var(--c2)">40</div><div class="cbs">新用户（14%）</div></div><div class="cbr"><div class="cbn" style="color:var(--c1)">157</div><div class="cbs">老用户（57%）</div></div></div>
+  </div>
+
+  <div class="card full" style="margin-bottom:14px"><div class="ct">新老用户月度对比（整月）</div><div style="height:180px"><canvas id="c_newold_p"></canvas></div></div>
+
+  <div class="g2">
+    <div class="ins bl"><div class="it">📊 月度环比结论</div>
+      <strong>11月→12月</strong>：场次日均小幅下降（−13%），属冬季正常季节性收窄，实收同步降16%。<br>
+      <strong>12月→1月</strong>：场次基本持平（−3%），但实收反升+7%，元旦前后高峰场、B厅占比提升，客单价走高。<br>
+      <strong>1月→2月</strong>：春节锁场8天+节日出行，日均骤降至8.8场（−37%），属不可抗力。<br>
+      <strong>2月→3月</strong>：显著回升+32%，但仍比12月低20%。<strong>紫风竞品1月开业</strong>留住了部分春节后回归用户。
+    </div>
+    <div class="ins"><div class="it">📋 时段月度特征</div>
+      晚场（17–22时）全程最稳：9.0→7.8→7.4→4.8→6.6场/日，3月较12月−15%，远低于下午（−26%）和上午（−21%）跌幅。<br>
+      下午（12–17时）：5.0→4.2→4.2→2.5→3.1场/日，3月较12月<strong>−26%</strong>，是竞品紫风分流最集中的时段。
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB 3 时段分析 ══ -->
+<div id="t3" class="pg">
+  <div class="pt">逐小时时段变化分析</div>
+  <div class="ps">基于整月完整数据（11–3月，排除2月春节锁场）· 日均=当月总场次÷实际运营天数 · 12月→3月变化幅度</div>
+
+  <div class="card full" style="margin-bottom:14px"><div class="ct">逐小时日均场次（整月，5期折线图）</div><div style="height:250px"><canvas id="c_hour"></canvas></div></div>
+
+  <div class="card full" style="margin-bottom:14px">
+    <div class="ct bl">热力图 — 整月日均场次 · 颜色=12月→3月涨跌幅</div>
+    <div class="hm-wrap"><div id="hm" class="hm" style="min-width:480px;margin-top:8px"></div></div>
+    <div style="display:flex;align-items:center;gap:9px;margin-top:10px;font-size:10px;color:var(--mu)">
+      跌幅大&nbsp;<div style="display:flex;gap:2px">
+        <div style="width:15px;height:8px;border-radius:2px;background:rgba(150,40,120,.75)"></div>
+        <div style="width:15px;height:8px;border-radius:2px;background:rgba(180,80,50,.65)"></div>
+        <div style="width:15px;height:8px;border-radius:2px;background:rgba(180,150,40,.6)"></div>
+        <div style="width:15px;height:8px;border-radius:2px;background:rgba(80,140,100,.65)"></div>
+        <div style="width:15px;height:8px;border-radius:2px;background:rgba(60,120,80,.85)"></div>
+      </div>&nbsp;增长
+    </div>
+  </div>
+
+  <div class="g2" style="margin-bottom:14px">
+    <div class="card"><div class="ct ye">时段分类整月日均场次（5期）</div><div style="height:205px"><canvas id="c_bkt_full"></canvas></div></div>
+    <div class="card">
+      <div class="ct re">关键时段变化（整月，12月→3月）</div>
+      <div class="dtbl-wrap"><table class="dtbl" style="min-width:300px">
+        <thead><tr><th>时段</th><th>12月日均</th><th>3月日均</th><th>变化</th></tr></thead>
+        <tbody>
+          <tr><td class="bold" style="color:#A040A0">15时</td><td>1.10</td><td style="color:var(--red)">0.58</td><td class="dn">−47.3%</td></tr>
+          <tr><td>9时</td><td>0.68</td><td style="color:var(--red)">0.42</td><td class="dn">−38.2%</td></tr>
+          <tr><td>12时</td><td>0.68</td><td style="color:var(--red)">0.45</td><td class="dn">−33.8%</td></tr>
+          <tr><td>11时</td><td>0.77</td><td style="color:var(--red)">0.55</td><td class="dn">−28.6%</td></tr>
+          <tr><td class="bold" style="color:var(--c1)">13时</td><td>0.52</td><td style="color:var(--c1)">0.68</td><td class="up">+30.8%</td></tr>
+          <tr><td class="bold" style="color:var(--c1)">10时</td><td>0.71</td><td style="color:var(--c1)">0.81</td><td class="up">+14.1%</td></div></td></tr>
+        </tbody>
+      </table></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="ins dn"><div class="it">📉 跌幅集中时段（整月数据）</div>
+      <strong>15时（−47%）</strong>：1.10→0.58场/日，下午中段跌幅最大，紫风竞品下午套餐直接抢占<br>
+      <strong>9时（−38%）</strong>：0.68→0.42场/日，早场人气下降<br>
+      <strong>12时（−34%）</strong>：0.68→0.45场/日，午间首小时流失<br>
+      <strong>11时（−29%）</strong>：0.77→0.55场/日<br><br>
+      下午（12–17时）整体从4.2场/日降至3.1场/日（−26%），与竞品定价重叠区高度吻合。
+    </div>
+    <div class="ins ins-green"><div class="it" style="color:var(--c1)">📈 逆势增长时段（整月）</div>
+      <strong>13时（+31%）</strong>：0.52→0.68场/日 — 最强增长，午后第一场需求回升<br>
+      <strong>10时（+14%）</strong>：0.71→0.81场/日，上午中段有需求转移<br>
+      <strong>21时（−7%，相对稳定）</strong>：1.32→1.23场/日，晚场末段最抗压<br>
+      <strong>19时（−18%）</strong>：晚场主力时段仍有压力但好于下午<br><br>
+      晚场（17–22时）从7.8→6.6场/日（−15%），是所有时段跌幅最小的区间，本馆晚场性价比优势明显。
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB 4 用户结构 ══ -->
+<div id="t4" class="pg">
+  <div class="pt">用户结构分析</div>
+  <div class="ps">老用户=2025年8–10月曾订场（344人）；新用户=首次订场在统计期内且不在老用户池 · 整月数据</div>
+
+  <div class="g2">
+    <div class="card"><div class="ct">新老用户月活跃人数（整月）</div><div style="height:200px"><canvas id="c_newold_mo2"></canvas></div></div>
+    <div class="card"><div class="ct bl">月度频次分布（用户数，整月）</div><div style="height:200px"><canvas id="c_freq_mo2"></canvas></div></div>
+  </div>
+  <div class="g2">
+    <div class="card"><div class="ct re">新用户次月留存率（%，整月）</div><div style="height:185px"><canvas id="c_ret2"></canvas></div></div>
+    <div class="card"><div class="ct tl">老用户月活跃率（%，整月）</div><div style="height:185px"><canvas id="c_cb2"></canvas></div></div>
+  </div>
+  <div class="g2">
+    <div class="ins dn"><div class="it">🚨 老用户变化</div>
+      月度老用户活跃：223→248→256→<strong style="color:var(--red)">98</strong>→<strong>157</strong>（2月春节骤降，3月回升但仍显著低于12/1月水平）。<br>
+      与网球场馆不同，羽毛球老用户春节后回归率更高（3月45.6% vs 2月28.5%），说明羽毛球用户习惯恢复更快，春节断档不是永久流失。
+    </div>
+    <div class="ins bl"><div class="it">🌱 新用户特征</div>
+      11月新用户125人占比36%，是全期最高。但次月留存仅<strong>26.4%</strong>（11月→12月），此后持续走低至21.8%。<br>
+      3月新用户40人，占比14%，新用户占比走低说明<strong>复购老用户是支撑</strong>。主要问题：①首单后无强力回访机制；②竞品也有团购首单低价吸引，回访比拼的是体验差异化。
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB 5 点评流量分析 ══ -->
+<div id="t5" class="pg">
+  <div class="pt">点评商户通流量分析</div>
+  <div class="ps">商户通已于2026年1月开通 · 数据区间：2026年1–3月 · 本馆在黄浦区羽毛球场馆好评榜排名第2</div>
+
+  <div class="kv-row">
+    <div class="kv-box"><div class="kvn">112</div><div class="kvl">3月点评渠道新客/月</div></div>
+    <div class="kv-box"><div class="kvn">4.8</div><div class="kvl">综合评分（满5分）</div></div>
+    <div class="kv-box"><div class="kvn">¥8,036</div><div class="kvl">3月点评渠道净新增收入</div></div>
+  </div>
+
+  <div class="sdiv">一、新客来源与转化</div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct">3月新客渠道来源分布</div>
+      <div style="height:220px"><canvas id="c_source"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct bl">点评转化漏斗（3月）</div>
+      <div class="funnel" style="margin-top:16px">
+        <div class="f-row">
+          <div class="f-lbl" style="font-size:10px;color:var(--mu)">店铺浏览</div>
+          <div class="f-bar-wrap">
+            <div class="f-bar" style="width:100%;background:linear-gradient(90deg,#7B5EA7,#9B7DC7)">1,240</div>
+          </div>
+        </div>
+        <div class="f-row">
+          <div class="f-lbl" style="font-size:10px;color:var(--mu)">查看团购</div>
+          <div class="f-bar-wrap">
+            <div class="f-bar" style="width:54.8%;background:linear-gradient(90deg,#5B8DD9,#7B9DC9)">680 <span style="font-size:9px;opacity:.8">55%</span></div>
+          </div>
+        </div>
+        <div class="f-row">
+          <div class="f-lbl" style="font-size:10px;color:var(--mu)">咨询/问答</div>
+          <div class="f-bar-wrap">
+            <div class="f-bar" style="width:16.9%;background:linear-gradient(90deg,#9B7DC7,#B09DD7)">210 <span style="font-size:9px;opacity:.8">17%</span></div>
+          </div>
+        </div>
+        <div class="f-row">
+          <div class="f-lbl" style="font-size:10px;color:var(--mu)">核销到店</div>
+          <div class="f-bar-wrap">
+            <div class="f-bar" style="width:7.9%;background:linear-gradient(90deg,#A040A0,#C060C0)">98 <span style="font-size:9px;opacity:.8">8%</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="ins ye" style="margin-top:12px;margin-bottom:0"><div class="it">💡 转化洞察</div>
+        查看团购→核销到店转化率约<strong>14.4%</strong>（98/680），高于行业均值约10%，团购产品设计较好。主要流失在<strong>浏览→团购</strong>环节（55%转化），优化团购首图和简介可进一步提升。
+      </div>
+    </div>
+  </div>
+
+  <div class="sdiv">二、团购产品表现</div>
+  <div class="card full" style="margin-bottom:14px">
+    <div class="dtbl-wrap"><table class="dtbl">
+      <thead><tr><th>团购产品</th><th>售价</th><th>销量（3月）</th><th>评分</th><th>GMV</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td class="bold">首次体验券·1小时·工作日</td><td>¥55</td><td class="bold up">186份</td><td>⭐ 4.8</td><td>¥10,230</td><td><span class="bdg bdg-p">爆款</span></td></tr>
+        <tr><td>新客3小时套餐·工作日通用</td><td>¥168</td><td>74份</td><td>⭐ 4.7</td><td>¥12,432</td><td><span class="bdg bdg-b">稳定</span></td></tr>
+        <tr><td>周末体验券·1小时</td><td>¥75</td><td>52份</td><td>⭐ 4.9</td><td>¥3,900</td><td><span class="bdg bdg-b">成长</span></td></tr>
+      </tbody>
+    </table></div>
+  </div>
+
+  <div class="sdiv">三、评价与口碑</div>
+  <div class="g2">
+    <div class="card">
+      <div class="ct tl">评分分布（累计186条评价）</div>
+      <div style="height:175px"><canvas id="c_reviews"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="ct re">月度流量增长趋势</div>
+      <div style="height:175px"><canvas id="c_traffic"></canvas></div>
+    </div>
+  </div>
+
+  <div class="g2">
+    <div class="ins bl"><div class="it">🏆 平台排名</div>
+      黄浦区羽毛球场馆：<strong>热门榜第3名</strong>（共28家）、<strong>好评榜第2名</strong>、<strong>新开门店榜第1名</strong><br><br>
+      1月开通以来，3月店铺月访问量达<strong>1,240次</strong>，较1月（820次）增长51%。团购曝光持续提升，预计4月访问量突破1,500次。<br><br>
+      高频评价关键词：<strong>环境好、场地干净、预订方便、教练专业、性价比高</strong>
+    </div>
+    <div class="ins ye"><div class="it">📈 增长预测</div>
+      随评价积累和排名提升，预计4–5月店铺月访问量突破<strong>1,500次</strong>，点评新客可达<strong>140–150人/月</strong>。<br><br>
+      关键动作：持续邀评（冲好评榜第1名）+ 优化团购首图视频 + 增加周末家庭套餐产品线，进一步扩大搜索曝光。
+    </div>
+  </div>
+</div>
+
+<!-- ══ TAB 6 运营方案 ══ -->
+<div id="t6" class="pg">
+  <div class="pt">运营恢复方案</div>
+  <div class="ps">已开通大众点评商户通（1月） · 现有次卡、会员卡产品 · 竞品紫风羽毛球中心1月开业，主打下午套餐 · 基于数据的优先行动</div>
+
+  <div class="ins dn" style="margin-bottom:16px"><div class="it">📌 三大核心问题</div>
+    <strong>① 下午时段被竞品直接分流（P0）</strong>：12–17时整月−26%，15时单独−47%，竞品下午套餐直接竞争，需快速对冲产品<br>
+    <strong>② 新用户留存链路薄弱（P1）</strong>：留存率21.8%并走低，团购首单转化好，但首单后缺乏回访钩子<br>
+    <strong>③ 春节后老用户回归激活（P1）</strong>：3月老用户157人活跃，但春节前（12/1月）高达240–256人，还有80–100人尚未回来
+  </div>
+
+  <div class="sps">
+    <div class="sc p0">
+      <div class="spt">⚡ P0 · 本周执行</div>
+      <div class="sph">下午时段对冲产品</div>
+      <div class="spb"><ul>
+        <li><strong>「下午欢乐场」</strong>：工作日12–17时，2人拼场各付¥38（标准场），限量每日8个名额</li>
+        <li>推出<strong>「下午5次卡」</strong>：工作日12–17时专用，5次¥290（¥58/次），低于竞品紫风¥65/次</li>
+        <li>微信/短信向历史下午订场用户精准推送，话术：「你常来的下午场，现在专属优惠价，5次卡限时¥290」</li>
+        <li>目标：3月下午整月日均3.1场→4月日均4.0场（+29%）</li>
+      </ul></div>
+      <div class="tags"><span class="tag">价格对冲</span><span class="tag">本周执行</span><span class="tag">精准推送</span></div>
+    </div>
+    <div class="sc p1">
+      <div class="spt">🎯 P1 · 2周内</div>
+      <div class="sph">团购首单→复购激活</div>
+      <div class="spb"><ul>
+        <li>团购首单核销后<strong>自动推送</strong>：「感谢首次到访，本月再订享9折 + 优先预订B厅高品质场」</li>
+        <li>设置<strong>「连打卡3次」</strong>机制：当月累计到场3次，第3次半价（成本可控，激活频次）</li>
+        <li>上线<strong>「拼场匹配」</strong>：单人报名→系统自动匹配搭档，适合独自来练球的用户</li>
+        <li>目标：新用户次月留存率从21.8%提升至30%+</li>
+      </ul></div>
+      <div class="tags"><span class="tag">留存提升</span><span class="tag">自动化</span><span class="tag">拉频次</span></div>
+    </div>
+    <div class="sc p1">
+      <div class="spt">🎯 P1 · 2周内</div>
+      <div class="sph">春节后老用户召回</div>
+      <div class="spb"><ul>
+        <li>筛出<strong>30–60天未订场</strong>的历史老用户（约80–100人），按最后一次订场时段分层</li>
+        <li>话术A（下午用户）：「好久不见！下午场新推5次卡¥290，专属老顾客优先抢购」</li>
+        <li>话术B（晚场用户）：「3月晚场刚开了新的B厅优先预订权，老顾客现在锁定每周固定时段可享85折」</li>
+        <li>VIP用户（历史3次以上，约60人）：直接微信/电话一对一跟进，送200积分</li>
+      </ul></div>
+      <div class="tags"><span class="tag">老用户</span><span class="tag">分层触达</span><span class="tag">零成本</span></div>
+    </div>
+  </div>
+
+  <div class="sps">
+    <div class="sc p1b">
+      <div class="spt">📊 P1 · 2周内</div>
+      <div class="sph">点评团购优化</div>
+      <div class="spb"><ul>
+        <li>当前转化漏斗：浏览→团购（55%）→核销（8%），优化<strong>团购首图+主图视频</strong>，目标浏览→团购提升到65%</li>
+        <li>新增<strong>「周末2小时家庭套餐」¥180</strong>（2大1小），差异化切入家庭羽毛球需求</li>
+        <li>邀请3月到访评分高用户（4.8+）写图文评价（奖励：¥15优惠券），冲刺<strong>好评榜第1名</strong></li>
+        <li>目标：4月点评新客突破140人</li>
+      </ul></div>
+      <div class="tags"><span class="tag">点评优化</span><span class="tag">转化率</span><span class="tag">口碑</span></div>
+    </div>
+    <div class="sc p2">
+      <div class="spt">📈 P2 · 1个月内</div>
+      <div class="sph">晚场固定档位计划</div>
+      <div class="spb"><ul>
+        <li>19–21时是跌幅最小区间（−15%），核心用户群稳定</li>
+        <li>推出<strong>「固定档位会员」</strong>：每周同时段锁定，85折+提前7天优先预订权</li>
+        <li>「连续4周晚场打卡」：每周同时段到场，第4次赠¥20券，强化习惯周期</li>
+        <li>晚场是竞品紫风定价最高的时段（¥120+），本馆晚场折后仍更有性价比</li>
+      </ul></div>
+      <div class="tags"><span class="tag">黏性培养</span><span class="tag">价格优势</span><span class="tag">固定收入</span></div>
+    </div>
+    <div class="sc p2">
+      <div class="spt">📈 P2 · 差异化</div>
+      <div class="sph">教练陪练 &amp; 技能课</div>
+      <div class="spb"><ul>
+        <li>点评高频关键词「教练专业」说明用户有教练需求，变现潜力大</li>
+        <li>上线<strong>「1对1陪练课」</strong>：¥180/小时（含场地），团购专属价¥150首次</li>
+        <li>「4人组合训练课」：4人+教练，每人¥80/1.5小时，填充下午闲时</li>
+        <li>差异化竞争：技能课是纯场地竞品无法直接复制的护城河</li>
+      </ul></div>
+      <div class="tags"><span class="tag">差异化</span><span class="tag">高客单</span><span class="tag">护城河</span></div>
+    </div>
+  </div>
+
+  <hr class="dv">
+  <div class="sdiv">竞品参考（黄浦区羽毛球场馆）</div>
+  <div class="card">
+    <div class="dtbl-wrap"><table class="dtbl">
+      <thead><tr><th>场馆</th><th>开业</th><th>工作日闲时/h</th><th>工作日晚场/h</th><th>核心优惠</th><th>点评评分</th><th>威胁</th></tr></thead>
+      <tbody>
+        <tr><td><strong>本馆（星辰）</strong></td><td>2025.07</td><td>标准¥60–70</td><td>¥90（85折≈¥77）</td><td>次卡/会员折/拼场</td><td>⭐4.8</td><td><span class="bdg bdg-p">基准</span></td></tr>
+        <tr><td><strong>紫风羽毛球中心</strong></td><td>2026.01</td><td class="dn">¥55–65（更便宜）</td><td>¥120</td><td>下午3小时包¥150，首次¥40</td><td>⭐4.6</td><td><span class="bdg bdg-r">⚡ 高</span></td></tr>
+        <tr><td>飞羽运动馆（新天地）</td><td>2024.03</td><td>¥75</td><td>¥100</td><td>月卡¥680不限次工作日</td><td>⭐4.7</td><td><span class="bdg bdg-b">中</span></td></tr>
+        <tr><td>金羽球馆（豫园）</td><td>2023.06</td><td>¥65</td><td>¥90</td><td>5次卡¥280，储值8折</td><td>⭐4.5</td><td><span class="bdg bdg-b">中</span></td></tr>
+        <tr><td>城市运动汇（外滩）</td><td>2025.09</td><td>¥80</td><td>¥110</td><td>企业包场折扣，团建套餐</td><td>⭐4.6</td><td><span class="bdg bdg-b">低</span></td></tr>
+      </tbody>
+    </table></div>
+    <div class="ins ye" style="margin-top:12px;margin-bottom:0"><div class="it">💡 价格策略</div>
+      下午次卡¥58/次（低于紫风¥65）；晚场保持85折优惠（竞品晚场普遍¥100–120，本馆折后¥77竞争力强）；团购首单¥55/h（低于紫风首单¥40但差距不大，应在体验和服务差异化上加强）。
+    </div>
+  </div>
+</div>
+
+<!-- ══ SCRIPTS ══ -->
+<script>
+// DATA
+const ML=['11月','12月','1月','2月','3月'];
+const mRev=[958,805,861,543,705];
+const mSlots=[16.6,14.4,14.0,8.8,11.6];
+const mUsers=[348,326,309,158,276];
+const mOld=[223,233,256,98,157];
+const mNew=[125,78,53,27,40];
+const mFreq={'1次':[228,231,218,141,211],'2次':[93,74,61,17,51],'3-5次':[27,21,30,0,14],'5+次':[0,0,0,0,0]};
+const retLbl=['11→12月','12→1月','1→2月'];
+const retRate=[26.4,21.8,11.3];
+const cbRate=[64.8,62.5,58.7,28.5,45.6];
+
+const PL=['11月','12月','1月','2月','3月'];
+// pSlots replaced by mSlots
+const pDaily=[16.6,14.4,14.0,8.8,11.6];
+const pDRev=[958,805,861,543,705];
+const pNew=[125,78,53,27,40];
+const pOld=[223,215,202,98,157];
+const pWD=[15.1,13.0,13.0,8.0,10.6];
+const pWE=[19.7,18.6,16.4,10.5,14.1];
+const pBkt={'上午(8-12)':[2.6,2.4,2.4,1.5,1.9],'下午(12-17)':[5.0,4.2,4.2,2.5,3.1],'晚场(17-22)':[9.0,7.8,7.4,4.8,6.6]};
+const pFD={'1次':[228,231,218,141,211],'2次':[93,74,61,17,51],'3-5次':[27,21,30,0,14]};
+
+// HOURLY — FULL MONTH
+const hours=[8,9,10,11,12,13,14,15,16,17,18,19,20,21];
+const hLbl=hours.map(h=>h+'时');
+const hNov=[0.20,0.23,1.13,1.03,0.93,0.63,0.97,1.27,1.23,1.53,2.27,2.13,1.57,1.50];
+const hDec=[0.23,0.68,0.71,0.77,0.68,0.52,0.77,1.10,1.16,1.61,1.39,1.81,1.68,1.32];
+const hJan=[0.35,0.65,0.77,0.65,0.55,0.68,0.65,1.06,1.29,1.26,1.29,2.00,1.58,1.26];
+const hFeb=[0.20,0.30,0.30,0.70,0.50,0.10,0.45,0.65,0.75,0.60,0.95,1.40,0.95,0.90];
+const hMar=[0.16,0.42,0.81,0.55,0.45,0.68,0.58,0.58,0.81,1.32,1.10,1.48,1.45,1.23];
+const hChg=[-30.4,-38.2,14.1,-28.6,-33.8,30.8,-24.7,-47.3,-30.2,-18.0,-20.9,-18.2,-13.7,-6.8];
+const bktFull={'上午(8-12)':[2.6,2.4,2.4,1.5,1.9],'下午(12-17)':[5.0,4.2,4.2,2.5,3.1],'晚场(17-22)':[9.0,7.8,7.4,4.8,6.6]};
+
+// DIANPING
+const dpSrcLbl=['点评搜索','点评团购','附近推荐','朋友推荐','小红书','其他'];
+const dpSrcVals=[28.4,22.6,18.2,15.8,9.2,5.8];
+const dpMonths=['1月','2月','3月'];
+const dpNewCust=[48,31,112];
+const dpVisits=[820,510,1240];
+const reviewDist=[72,21,7];
+
+// CHART SETUP
+Chart.defaults.color='#8A80A0';
+Chart.defaults.borderColor='#D8D0EC';
+Chart.defaults.font.family="'Noto Sans SC',sans-serif";
+Chart.defaults.font.size=11;
+const C1='#7B5EA7',C2='#5B8DD9',C3='#9B7DC7',C4='#A390C8',RED='#B04848',PUR='#A040A0';
+const B={responsive:true,maintainAspectRatio:false,
+  plugins:{legend:{display:false},tooltip:{backgroundColor:'#1A1525',borderColor:C1,borderWidth:1,titleColor:'#E8E0F5',bodyColor:'#B0A8CC',padding:10,cornerRadius:6}},
+  scales:{x:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}}}};
+const LG={display:true,labels:{color:'#8A80A0',boxWidth:11,font:{size:10}}};
+function gr(ctx,c,a1=.28,a2=.04){
+  const g=ctx.createLinearGradient(0,0,0,200);
+  g.addColorStop(0,c+Math.round(a1*255).toString(16).padStart(2,'0'));
+  g.addColorStop(1,c+Math.round(a2*255).toString(16).padStart(2,'0'));
+  return g;
+}
+
+// TAB1
+(()=>{const c=document.getElementById('c_rev').getContext('2d');new Chart(c,{type:'line',data:{labels:ML,datasets:[{data:mRev,borderColor:C1,backgroundColor:gr(c,C1),borderWidth:2.5,pointBackgroundColor:C1,pointRadius:4,fill:true,tension:.35}]},options:{...B,plugins:{...B.plugins,tooltip:{...B.plugins.tooltip,callbacks:{label:v=>`  ¥${v.raw.toLocaleString()}/天`}}}}});})();
+(()=>{const c=document.getElementById('c_slots').getContext('2d');new Chart(c,{type:'bar',data:{labels:ML,datasets:[{label:'日均场次',data:mSlots,backgroundColor:C1+'55',borderColor:C1,borderWidth:1.5,borderRadius:4,yAxisID:'y'},{label:'月活用户',data:mUsers,type:'line',borderColor:C2,backgroundColor:'transparent',borderWidth:2,pointBackgroundColor:C2,pointRadius:3,tension:.35,yAxisID:'y2'}]},options:{...B,plugins:{...B.plugins,legend:{...LG}},scales:{x:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y2:{grid:{display:false},ticks:{color:C2},position:'right'}}}});})();
+(()=>{const c=document.getElementById('c_freq_mo').getContext('2d');new Chart(c,{type:'bar',data:{labels:ML,datasets:[{label:'3-5次',data:mFreq['3-5次'],backgroundColor:PUR+'cc',borderRadius:3},{label:'2次',data:mFreq['2次'],backgroundColor:C3+'cc',borderRadius:3},{label:'1次',data:mFreq['1次'],backgroundColor:C1+'44',borderRadius:3}]},options:{...B,plugins:{...B.plugins,legend:{...LG,position:'bottom'}},scales:{x:{stacked:true,grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{stacked:true,grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}}}}});})();
+(()=>{const c=document.getElementById('c_newold_mo').getContext('2d');new Chart(c,{type:'bar',data:{labels:ML,datasets:[{label:'老用户（8-10月池）',data:mOld,backgroundColor:C1+'66',borderColor:C1,borderWidth:1.5,borderRadius:4},{label:'新用户',data:mNew,backgroundColor:C2+'55',borderColor:C2,borderWidth:1.5,borderRadius:4}]},options:{...B,plugins:{...B.plugins,legend:{...LG,position:'bottom'}},scales:{x:{stacked:true,grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{stacked:true,grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}}}}});})();
+(()=>{const c=document.getElementById('c_ret').getContext('2d');const cols=retRate.map(v=>v>25?C3:v>20?C2:RED);new Chart(c,{type:'bar',data:{labels:retLbl,datasets:[{data:retRate,backgroundColor:cols.map(x=>x+'99'),borderColor:cols,borderWidth:1.5,borderRadius:4}]},options:{...B,plugins:{...B.plugins,tooltip:{...B.plugins.tooltip,callbacks:{label:v=>`  ${v.raw}%`}}},scales:{x:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0',maxRotation:25}},y:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0',callback:v=>v+'%'},max:35}}}});})();
+(()=>{const c=document.getElementById('c_cb').getContext('2d');new Chart(c,{type:'line',data:{labels:ML,datasets:[{data:cbRate,borderColor:C2,backgroundColor:gr(c,C2),borderWidth:2.5,pointBackgroundColor:C2,pointRadius:5,fill:true,tension:.3}]},options:{...B,plugins:{...B.plugins,tooltip:{...B.plugins.tooltip,callbacks:{label:v=>`  ${v.raw}%`}}},scales:{x:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0',callback:v=>v+'%'},max:80}}}});})();
+
+// TAB2
+(()=>{const c=document.getElementById('c_daily').getContext('2d');new Chart(c,{type:'bar',data:{labels:PL,datasets:[{label:'日均场次',data:pDaily,backgroundColor:[C1+'66',C1+'55',C2+'44',C3+'44',RED+'44'],borderColor:[C1,C1,C2,C3,RED],borderWidth:1.5,borderRadius:5,yAxisID:'y'},{label:'日均实收÷10',data:pDRev.map(v=>v/10),type:'line',borderColor:PUR,backgroundColor:'transparent',borderWidth:2,pointBackgroundColor:PUR,pointRadius:5,tension:.3,yAxisID:'y2'}]},options:{...B,plugins:{...B.plugins,legend:{...LG}},scales:{x:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y2:{grid:{display:false},ticks:{color:PUR,callback:v=>v>0?'¥'+Math.round(v*10):''},position:'right'}}}});})();
+(()=>{const c=document.getElementById('c_bucket').getContext('2d');new Chart(c,{type:'bar',data:{labels:PL,datasets:Object.entries(pBkt).map(([k,v],i)=>({label:k,data:v,backgroundColor:[C1,C3,C2][i]+'55',borderColor:[C1,C3,C2][i],borderWidth:1.5,borderRadius:4}))},options:{...B,plugins:{...B.plugins,legend:{...LG,position:'bottom'}}}});})();
+(()=>{const c=document.getElementById('c_wdwe').getContext('2d');new Chart(c,{type:'bar',data:{labels:PL,datasets:[{label:'工作日日均',data:pWD,backgroundColor:C1+'55',borderColor:C1,borderWidth:1.5,borderRadius:4},{label:'周末日均',data:pWE,backgroundColor:C4+'55',borderColor:C4,borderWidth:1.5,borderRadius:4}]},options:{...B,plugins:{...B.plugins,legend:{...LG,position:'bottom'}}}});})();
+(()=>{const c=document.getElementById('c_freq_p').getContext('2d');new Chart(c,{type:'bar',data:{labels:PL,datasets:[{label:'3-5次',data:pFD['3-5次'],backgroundColor:PUR+'cc',borderRadius:3},{label:'2次',data:pFD['2次'],backgroundColor:C3+'cc',borderRadius:3},{label:'1次',data:pFD['1次'],backgroundColor:C1+'44',borderRadius:3}]},options:{...B,plugins:{...B.plugins,legend:{...LG,position:'bottom'}},scales:{x:{stacked:true,grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{stacked:true,grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}}}}});})();
+(()=>{const c=document.getElementById('c_newold_p').getContext('2d');new Chart(c,{type:'bar',data:{labels:PL,datasets:[{label:'老用户',data:pOld,backgroundColor:C1+'66',borderColor:C1,borderWidth:1.5,borderRadius:4},{label:'新用户',data:pNew,backgroundColor:C2+'55',borderColor:C2,borderWidth:1.5,borderRadius:4}]},options:{...B,plugins:{...B.plugins,legend:{...LG,position:'bottom'}},scales:{x:{stacked:true,grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{stacked:true,grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}}}}});})();
+
+// TAB3
+(()=>{const c=document.getElementById('c_hour').getContext('2d');new Chart(c,{type:'line',data:{labels:hLbl,datasets:[
+  {label:'11月',data:hNov,borderColor:'#B0A0D0',backgroundColor:'transparent',borderWidth:1.5,pointRadius:2,tension:.35,borderDash:[4,3]},
+  {label:'12月',data:hDec,borderColor:C1,backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,pointBackgroundColor:C1,tension:.35},
+  {label:'1月',data:hJan,borderColor:C3,backgroundColor:'transparent',borderWidth:2,pointRadius:2,pointBackgroundColor:C3,tension:.35,borderDash:[3,2]},
+  {label:'2月',data:hFeb,borderColor:C2,backgroundColor:'transparent',borderWidth:2,pointRadius:2,pointBackgroundColor:C2,tension:.35,borderDash:[5,3]},
+  {label:'3月',data:hMar,borderColor:RED,backgroundColor:'transparent',borderWidth:2.5,pointRadius:3,pointBackgroundColor:RED,tension:.35},
+]},options:{...B,maintainAspectRatio:false,
+  plugins:{...B.plugins,legend:{...LG,position:'top'},
+    tooltip:{...B.plugins.tooltip,mode:'index',intersect:false,
+      callbacks:{title:items=>`${items[0].label}  日均场次`,label:item=>`  ${item.dataset.label}：${item.raw} 场/日`}}},
+  interaction:{mode:'index',intersect:false}}});})();
+
+(()=>{const con=document.getElementById('hm');
+  const rows=[['11月',hNov],['12月',hDec],['1月',hJan],['2月',hFeb],['3月',hMar]];
+  const ec=document.createElement('div');ec.className='hmh';con.appendChild(ec);
+  hours.forEach(h=>{const d=document.createElement('div');d.className='hmh';d.textContent=h+'时';con.appendChild(d);});
+  function col(v){if(v>=15)return'rgba(60,120,80,.85)';if(v>=0)return'rgba(80,140,100,.55)';if(v>=-20)return'rgba(180,150,40,.6)';if(v>=-40)return'rgba(180,80,50,.65)';return'rgba(150,40,120,.75)';}
+  rows.forEach(([lbl,vals])=>{
+    const lb=document.createElement('div');lb.className='hml';lb.textContent=lbl;con.appendChild(lb);
+    vals.forEach((v,i)=>{
+      const cell=document.createElement('div');cell.className='hmc';
+      cell.style.background=col(hChg[i]);cell.style.color='#FFF';cell.style.fontWeight='600';
+      cell.textContent=v.toFixed(1);
+      cell.title=`${lbl} ${hours[i]}时 日均${v}场 · 12→3月${hChg[i]>=0?'+':''}${hChg[i]}%`;
+      con.appendChild(cell);
+    });
+  });
+})();
+
+(()=>{const c=document.getElementById('c_bkt_full').getContext('2d');new Chart(c,{type:'bar',data:{labels:ML,datasets:Object.entries(bktFull).map(([k,v],i)=>({label:k,data:v,backgroundColor:[C1,C3,C2][i]+'55',borderColor:[C1,C3,C2][i],borderWidth:1.5,borderRadius:4}))},options:{...B,plugins:{...B.plugins,legend:{...LG,position:'bottom'}}}});})();
+
+// TAB4
+(()=>{const c=document.getElementById('c_newold_mo2').getContext('2d');new Chart(c,{type:'bar',data:{labels:ML,datasets:[{label:'老用户（8-10月池）',data:mOld,backgroundColor:C1+'66',borderColor:C1,borderWidth:1.5,borderRadius:4},{label:'新用户',data:mNew,backgroundColor:C2+'55',borderColor:C2,borderWidth:1.5,borderRadius:4}]},options:{...B,plugins:{...B.plugins,legend:{...LG,position:'bottom'}},scales:{x:{stacked:true,grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{stacked:true,grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}}}}});})();
+(()=>{const c=document.getElementById('c_freq_mo2').getContext('2d');new Chart(c,{type:'bar',data:{labels:ML,datasets:[{label:'3-5次',data:mFreq['3-5次'],backgroundColor:PUR+'cc',borderRadius:3},{label:'2次',data:mFreq['2次'],backgroundColor:C3+'cc',borderRadius:3},{label:'1次',data:mFreq['1次'],backgroundColor:C1+'44',borderRadius:3}]},options:{...B,plugins:{...B.plugins,legend:{...LG,position:'bottom'}},scales:{x:{stacked:true,grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{stacked:true,grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}}}}});})();
+(()=>{const c=document.getElementById('c_ret2').getContext('2d');const cols=retRate.map(v=>v>25?C3:v>20?C2:RED);new Chart(c,{type:'bar',data:{labels:retLbl,datasets:[{data:retRate,backgroundColor:cols.map(x=>x+'99'),borderColor:cols,borderWidth:1.5,borderRadius:4}]},options:{...B,plugins:{...B.plugins,tooltip:{...B.plugins.tooltip,callbacks:{label:v=>`  ${v.raw}%`}}},scales:{x:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0',maxRotation:25}},y:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0',callback:v=>v+'%'},max:35}}}});})();
+(()=>{const c=document.getElementById('c_cb2').getContext('2d');new Chart(c,{type:'line',data:{labels:ML,datasets:[{data:cbRate,borderColor:C4,backgroundColor:gr(c,C4),borderWidth:2.5,pointBackgroundColor:C4,pointRadius:5,fill:true,tension:.3}]},options:{...B,plugins:{...B.plugins,tooltip:{...B.plugins.tooltip,callbacks:{label:v=>`  ${v.raw}%`}}},scales:{x:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0',callback:v=>v+'%'},max:80}}}});})();
+
+// TAB5 DIANPING
+(()=>{const c=document.getElementById('c_source').getContext('2d');
+new Chart(c,{type:'doughnut',data:{labels:dpSrcLbl,
+  datasets:[{data:dpSrcVals,
+    backgroundColor:[C1+'ee',C2+'dd',C3+'dd',C4+'cc','#A040A0cc','#C0B0D8aa'],
+    borderColor:'#F5F3FA',borderWidth:2}]},
+options:{responsive:true,maintainAspectRatio:false,plugins:{
+  legend:{display:true,position:'right',labels:{color:'#8A80A0',boxWidth:12,font:{size:11},padding:8}},
+  tooltip:{backgroundColor:'#1A1525',bodyColor:'#C8C0DC',titleColor:'#E8E0F5',padding:10,
+    callbacks:{label:v=>`  ${v.label}: ${v.raw}%`}}}}});})();
+
+(()=>{const c=document.getElementById('c_reviews').getContext('2d');
+new Chart(c,{type:'bar',data:{labels:['⭐⭐⭐⭐⭐ 5星','⭐⭐⭐⭐ 4星','⭐⭐⭐ 3星以下'],
+  datasets:[{data:reviewDist,backgroundColor:[C1+'cc',C3+'cc',RED+'88'],borderRadius:5}]},
+options:{...B,plugins:{...B.plugins,tooltip:{...B.plugins.tooltip,callbacks:{label:v=>`  ${v.raw}%`}}},
+scales:{x:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0',callback:v=>v+'%'},max:80}}}});})();
+
+(()=>{const c=document.getElementById('c_traffic').getContext('2d');
+new Chart(c,{type:'bar',data:{labels:dpMonths,datasets:[
+  {label:'点评新客',data:dpNewCust,backgroundColor:C1+'66',borderColor:C1,borderWidth:1.5,borderRadius:4,yAxisID:'y'},
+  {label:'店铺访问',data:dpVisits,type:'line',borderColor:C2,backgroundColor:'transparent',borderWidth:2,pointBackgroundColor:C2,pointRadius:4,tension:.35,yAxisID:'y2'},
+]},options:{...B,plugins:{...B.plugins,legend:{...LG}},
+scales:{x:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},y:{grid:{color:'#EDE8F5'},ticks:{color:'#8A80A0'}},
+y2:{grid:{display:false},ticks:{color:C2},position:'right'}}}});})();
+
+function show(id,btn){document.querySelectorAll('.pg').forEach(p=>p.classList.remove('on'));document.querySelectorAll('.tab').forEach(b=>b.classList.remove('on'));document.getElementById(id).classList.add('on');btn.classList.add('on');}
+</script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+# robots.txt template — replace ${SITE} with your domain.
+# Posture: we want to be cited. Allowlist is NAMED, per agent, never wholesale.
+# Re-verify every agent name against each vendor's current docs before shipping —
+# this list moves. See SKILL.md §1 for the taxonomy behind the grouping.
+#
+# TWO RULES THAT DECIDE WHETHER THIS FILE DOES WHAT YOU THINK (RFC 9309):
+#  1. GROUPS DO NOT INHERIT. An agent that matches a named group ignores the
+#     `User-agent: *` group entirely. Every internal Disallow must be repeated
+#     in EVERY group, or it does not apply to the agents you just allowlisted.
+#  2. A GROUP RUNS UNTIL THE NEXT `User-agent:` LINE. Blank lines and comments
+#     do NOT end it. A Disallow written under the wrong heading silently
+#     belongs to the agent above it.
+#
+# One group may carry several User-agent lines — that is why the classes below
+# are written as one block each, with the internal Disallow list repeated.
+#
+# robots.txt IS PUBLIC. A Disallow advertises a path, it does not protect it.
+# Never list a path whose existence is itself sensitive — protect those with
+# auth or a noindex header. Keep host-specific paths (platform build/preview
+# trees) out of this file too: they name your vendor to every reader.
+# Replace the /internal/ /private/ /admin/ examples with your own trees.
+
+User-agent: *
+Disallow: /internal/
+Disallow: /private/
+Disallow: /admin/
+Allow: /
+
+# ── Search crawlers — build the answer index assistants retrieve from.
+# Blocking any of these removes you from answers entirely.
+User-agent: OAI-SearchBot
+User-agent: Claude-SearchBot
+User-agent: PerplexityBot
+User-agent: Applebot
+Disallow: /internal/
+Disallow: /private/
+Disallow: /admin/
+Allow: /
+
+# ── On-demand fetchers — fire when a user explicitly asks the assistant to
+# read a URL. Blocking these = "I can't access that page" on your own link.
+User-agent: ChatGPT-User
+User-agent: Claude-User
+User-agent: Perplexity-User
+Disallow: /internal/
+Disallow: /private/
+Disallow: /admin/
+Allow: /
+
+# ── Training crawlers — allow or disallow. This is a business decision, not a
+# technical one, and it does not affect the two classes above.
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: CCBot
+User-agent: Meta-ExternalAgent
+Disallow: /internal/
+Disallow: /private/
+Disallow: /admin/
+Allow: /
+
+# Google-Extended / Applebot-Extended are TRAINING OPT-OUT CONTROLS, not
+# crawlers. Disallowing them does not remove you from that vendor's search
+# index; allowing them does not add you. Set per your training stance only.
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+Disallow: /internal/
+Disallow: /private/
+Disallow: /admin/
+Allow: /
+
+# ── Abusive scrapers that ignore crawl-delay: named block only, never a
+# wildcard that would catch the search and on-demand classes.
+# Disallow: / covers everything, so no internal lines are needed here.
+User-agent: Bytespider
+Disallow: /
+
+Sitemap: https://${SITE}/sitemap.xml

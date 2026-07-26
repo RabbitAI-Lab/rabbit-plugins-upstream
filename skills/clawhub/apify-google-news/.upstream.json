@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/apify-google-news",
+  "slug": "apify-google-news",
+  "ownerHandle": null,
+  "version": "0.1.1",
+  "updatedAt": 1778492525637,
+  "contentHash": "60f9678d87da8b0a7266f67828493c5f80ac36acde69c3fdf3ee7ccdf9c9a561",
+  "fetchedAt": "2026-07-26T19:30:16.444Z"
+}

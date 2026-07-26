@@ -1,0 +1,115 @@
+{
+  "_comment": [
+    "Fictional example @graph. Domain: acme-corp.com. Replace every [BRACKET].",
+    "The point of this file: ONE graph per page, entities reference each other by",
+    "{\"@id\": ...} instead of being duplicated, and the SAME @id values are reused",
+    "on every page of the site — homepage, pricing, and every blog article template.",
+    "That reuse is what lets an engine resolve one entity instead of N weak ones.",
+    "@id fragments are ROLE-based (#founder), never patronymic: they are permanent",
+    "keys, so they must survive a person leaving and must not carry PII.",
+    "Delete this _comment key before shipping."
+  ],
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://acme-corp.com/#organization",
+      "name": "[BRAND]",
+      "alternateName": "[TRADING NAME]",
+      "url": "https://acme-corp.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://acme-corp.com/assets/icon-512.png",
+        "width": 512,
+        "height": 512
+      },
+      "image": "https://acme-corp.com/assets/og-default.png",
+      "description": "[One sentence. Same wording as llms.txt positioning.]",
+      "founder": { "@id": "https://acme-corp.com/#founder" },
+      "foundingDate": "2024",
+      "areaServed": [
+        { "@type": "Country", "name": "France" },
+        { "@type": "Place", "name": "Worldwide (remote)" }
+      ],
+      "knowsLanguage": ["fr", "en"],
+      "sameAs": [
+        "https://www.wikidata.org/wiki/QXXXXXXX",
+        "https://[one-canonical-profile]"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "Sales",
+        "url": "https://acme-corp.com/contact/",
+        "availableLanguage": ["French", "English"]
+      }
+    },
+    {
+      "@type": "Person",
+      "@id": "https://acme-corp.com/#founder",
+      "name": "[FOUNDER NAME]",
+      "url": "https://acme-corp.com/about/",
+      "jobTitle": "[TITLE]",
+      "worksFor": { "@id": "https://acme-corp.com/#organization" },
+      "knowsAbout": ["[topic A]", "[topic B]", "[topic C]"],
+      "sameAs": ["https://[one-canonical-profile]"]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://acme-corp.com/#website",
+      "url": "https://acme-corp.com/",
+      "name": "[BRAND]",
+      "publisher": { "@id": "https://acme-corp.com/#organization" },
+      "inLanguage": ["fr-FR", "en-US"]
+    },
+    {
+      "@type": "WebPage",
+      "@id": "https://acme-corp.com/#webpage",
+      "url": "https://acme-corp.com/",
+      "name": "[PAGE TITLE]",
+      "isPartOf": { "@id": "https://acme-corp.com/#website" },
+      "about": { "@id": "https://acme-corp.com/#organization" },
+      "primaryImageOfPage": "https://acme-corp.com/assets/og-default.png",
+      "inLanguage": "fr-FR",
+      "datePublished": "2026-01-15",
+      "dateModified": "2026-02-01",
+      "breadcrumb": { "@id": "https://acme-corp.com/#breadcrumb" }
+    },
+    {
+      "@type": "BreadcrumbList",
+      "@id": "https://acme-corp.com/#breadcrumb",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://acme-corp.com/" }
+      ]
+    },
+    {
+      "@type": "Service",
+      "@id": "https://acme-corp.com/#service",
+      "name": "[SERVICE NAME]",
+      "serviceType": "[SERVICE TYPE]",
+      "provider": { "@id": "https://acme-corp.com/#organization" },
+      "areaServed": [{ "@type": "Country", "name": "France" }],
+      "description": "[What it is, in the client's words.]",
+      "offers": {
+        "@type": "AggregateOffer",
+        "priceCurrency": "EUR",
+        "lowPrice": "0000",
+        "offerCount": "3",
+        "url": "https://acme-corp.com/pricing/"
+      }
+    },
+    {
+      "@type": "FAQPage",
+      "@id": "https://acme-corp.com/#faq",
+      "mainEntity": [
+        {
+          "@type": "Question",
+          "name": "[The question, phrased as the user types it]",
+          "acceptedAnswer": {
+            "@type": "Answer",
+            "text": "[40-60 words. Self-contained: it must make sense quoted with no page around it. Contains the number and names its source.]"
+          }
+        }
+      ]
+    }
+  ]
+}

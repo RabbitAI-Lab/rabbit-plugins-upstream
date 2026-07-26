@@ -1,0 +1,4 @@
+interface:
+  display_name: "Money Claw · US Stocks"
+  short_description: "基于回测因子筛选低流通盘美股极端涨幅候选并生成开盘执行与风险清单"
+  default_prompt: "Use $money-claw-us-stocks to screen today's U.S. premarket movers, rank extreme-squeeze candidates, and provide official-open confirmation and risk controls."

@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/fhir-upstream-proxy",
+  "slug": "fhir-upstream-proxy",
+  "ownerHandle": null,
+  "version": "1.6.0",
+  "updatedAt": 1783291113440,
+  "contentHash": "e10c4ed08249aec6e0fe3c4837c2081d3b393d00aac4eb36f4494e01abda9fc3",
+  "fetchedAt": "2026-07-26T18:20:06.285Z"
+}

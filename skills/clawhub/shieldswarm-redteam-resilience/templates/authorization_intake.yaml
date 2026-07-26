@@ -1,0 +1,30 @@
+# ShieldSwarm authorization intake
+service_name: ""
+authorized_operator: ""
+operator_role: ""
+domains_in_scope: []
+infrastructure_in_scope:
+  cloud_provider: ""
+  accounts_or_projects: []
+  clusters_or_regions: []
+environments_allowed: []
+allowed_actions:
+  read_only: true
+  write_drafts: true
+  staging_changes: false
+  production_changes: false
+forbidden_actions:
+  - attack_traffic
+  - login_bypass
+  - unapproved_production_changes
+  - secret_exposure
+approvers:
+  production_change: ""
+  emergency: ""
+  rollback_owner: ""
+legal_or_compliance_contact: ""
+maintenance_window: ""
+data_handling:
+  redact_pii: true
+  redact_secrets: true
+  retention_location: ""

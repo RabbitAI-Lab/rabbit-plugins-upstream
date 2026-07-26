@@ -1,0 +1,141 @@
+# icon_config.yaml - folder-icon Skill 配置示例
+# 放置位置: skills/folder-icon/scripts/icon_config.yaml
+# 使用: python folder_icon.py "D:\目标目录"
+#
+# icon_dir: 图标目录名（相对于目标目录），脚本会拼接为目标目录内的子目录
+# 例如 icon_dir: '.folder-icons' → D:\目标目录\.folder-icons\
+icon_dir: '.folder-icons'
+svg_source: tabler
+
+# 本地图标目录：优先从本地 .ico 文件复制，不存在再从网络生成
+# Windows 路径，脚本内部会自动转换
+# icon_local_dir: 'C:\Users\YourName\Pictures\Icon'
+
+# 文件夹名 → 图标文件名 → RGB 三元组
+# ⚠ folder 须与目标目录下子文件夹名完全一致
+explicit_mappings:
+  # 🏢 公司 / 安全
+  - folder: "Company"
+    icon: "shield-check-outline.ico"
+    rgb: [0, 160, 220]
+    color: "蓝"
+
+  # 🎮 游戏工作室（蓝紫主调，细微色差）
+  - folder: "GameStudioA"
+    icon: "gamepad-outline.ico"
+    rgb: [100, 30, 220]
+    color: "深紫"
+
+  - folder: "GameStudioB"
+    icon: "gamepad-outline.ico"
+    rgb: [156, 39, 176]
+    color: "品红"
+
+  - folder: "GameStudioC"
+    icon: "gamepad-outline.ico"
+    rgb: [121, 85, 72]
+    color: "棕橙"
+
+  # 🕵️ 逆向分析
+  - folder: "ReverseEngineering"
+    icon: "code-outline.ico"
+    rgb: [255, 140, 0]
+    color: "深橙"
+
+  # 📦 虚拟机
+  - folder: "VMWare"
+    icon: "device-laptop-outline.ico"
+    rgb: [0, 188, 212]
+    color: "青"
+
+  - folder: "VirtualMachines"
+    icon: "device-laptop-outline.ico"
+    rgb: [0, 150, 136]
+    color: "青绿"
+
+  # 💻 IDE / 开发
+  - folder: "DebugExe"
+    icon: "code-outline.ico"
+    rgb: [63, 81, 181]
+    color: "靛蓝"
+
+  - folder: "IDE2022"
+    icon: "code-outline.ico"
+    rgb: [63, 81, 181]
+    color: "靛蓝"
+
+  # 📖 书籍
+  - folder: "Books"
+    icon: "book-outline.ico"
+    rgb: [121, 85, 72]
+    color: "棕色"
+
+  # 📑 笔记
+  - folder: "Notebooks"
+    icon: "notebook-outline.ico"
+    rgb: [33, 150, 243]
+    color: "蓝色"
+
+  # 📊 PPT
+  - folder: "Presentations"
+    icon: "presentation-outline.ico"
+    rgb: [255, 87, 34]
+    color: "深橙"
+
+  # 💾 数据库 / 数据
+  - folder: "DatabaseA"
+    icon: "database-outline.ico"
+    rgb: [0, 150, 136]
+    color: "青绿"
+
+  - folder: "DatabaseB"
+    icon: "database-outline.ico"
+    rgb: [0, 150, 136]
+    color: "青绿"
+
+  # 🛡️ 安全 / 证书
+  - folder: "Certificates"
+    icon: "shield-check-outline.ico"
+    rgb: [76, 175, 80]
+    color: "绿色"
+
+  # 🌐 抓包
+  - folder: "Captures"
+    icon: "signal-outline.ico"
+    rgb: [76, 175, 80]
+    color: "绿色"
+
+  # 💬 文件 / 消息
+  - folder: "Messages"
+    icon: "mail-outline.ico"
+    rgb: [76, 175, 80]
+    color: "绿色"
+
+  # ⚙️ 系统工具
+  - folder: "PowerShell"
+    icon: "terminal-outline.ico"
+    rgb: [33, 150, 243]
+    color: "蓝色"
+
+  # ☁️ 云盘
+  - folder: "CloudDrive"
+    icon: "cloud-upload-outline.ico"
+    rgb: [33, 150, 243]
+    color: "蓝色"
+
+  # 🛠️ 系统工具
+  - folder: "SystemTools"
+    icon: "tool-outline.ico"
+    rgb: [158, 158, 158]
+    color: "灰色"
+
+  # ❓ 杂项
+  - folder: "Misc"
+    icon: "folder-outline.ico"
+    rgb: [158, 158, 158]
+    color: "灰色"
+
+  - folder: "Housing"
+    icon: "folder-outline.ico"
+    rgb: [158, 158, 158]
+    color: "灰色"

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Premier League Fan Hub | igamingreviews.org</title>
+<meta name="description" content="Pick your club and get fixtures, results, lineups and stats in your club's colours.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">
+    <span class="nav-ball">&#9917;</span>
+    <span id="navLeague">Premier League</span> <span class="nav-sub">hub</span>
+  </div>
+  <div class="nav-right">
+    <span class="nav-site">igamingreviews.org</span>
+    <a href="#picker" id="changeClub" class="nav-change hidden">Change club</a>
+  </div>
+</nav>
+
+<header class="hero" id="hero">
+  <div class="hero-glow"></div>
+  <div class="hero-grain"></div>
+  <div class="hero-inner">
+    <img id="heroCrest" class="hero-crest hidden" src="" alt="Club crest">
+    <div class="hero-tag" id="heroTag">YOUR LEAGUE</div>
+    <h1 class="hero-name" id="heroName">Premier League</h1>
+    <p class="hero-meta" id="heroMeta">Pick your club and the whole page turns your colours.</p>
+    <a href="#picker" class="hero-cta" id="heroCta">Pick your club</a>
+  </div>
+</header>
+
+<section class="section" id="picker">
+  <h2 class="section-title">Pick your club</h2>
+  <p class="section-sub">One tap. Your club, your colours, saved for next time.</p>
+  <div class="picker-grid" id="pickerGrid"></div>
+</section>
+
+<div id="clubContent" class="hidden">
+
+<section class="section" id="fixtures">
+  <h2 class="section-title">Next fixtures</h2>
+  <div class="card-grid" id="clubFixtures"></div>
+  <h3 class="section-sub2">Around the league</h3>
+  <div class="strip" id="leagueFixtures"></div>
+</section>
+
+<section class="section" id="results">
+  <h2 class="section-title">Last results</h2>
+  <div class="result-wrap">
+    <div class="result-card" id="resultCard"></div>
+    <div class="writeup-card" id="writeupCard">
+      <h3 class="writeup-title">Match report</h3>
+      <p id="writeupText"></p>
+    </div>
+  </div>
+  <h3 class="section-sub2">Around the league</h3>
+  <div class="strip" id="leagueResults"></div>
+</section>
+
+<section class="section" id="formation">
+  <h2 class="section-title">On the pitch</h2>
+  <p class="section-sub">Pick a shape. Names fill in where we have squad data.</p>
+  <div class="formation-btns" id="formationBtns">
+    <button data-f="433" class="fbtn active">4-3-3</button>
+    <button data-f="442" class="fbtn">4-4-2</button>
+    <button data-f="352" class="fbtn">3-5-2</button>
+  </div>
+  <div class="pitch-wrap">
+    <svg id="pitch" viewBox="0 0 400 620" role="img" aria-label="Football pitch formation"></svg>
+  </div>
+</section>
+
+<section class="section" id="squad">
+  <h2 class="section-title">Squad</h2>
+  <div id="squadGroups"></div>
+</section>
+
+<section class="section" id="stats">
+  <h2 class="section-title">Punter stats</h2>
+  <p class="section-sub">Numbers from recent league results.</p>
+  <div class="stats-strip" id="statsStrip"></div>
+</section>
+
+</div>
+
+<section class="cta-band" id="cta">
+  <h2 class="cta-title">Bet on the <span id="ctaLeague">Premier League</span></h2>
+  <p class="cta-sub">Compare odds with our partners before you put money down.</p>
+  <div class="cta-btns">
+    <a href="#" class="cta-btn">Hollywoodbets</a>
+    <a href="#" class="cta-btn">Supabets</a>
+    <a href="#" class="cta-btn">BetXchange</a>
+  </div>
+  <p class="cta-disclaimer">18+ | Bet responsibly</p>
+</section>
+
+<footer class="footer">
+  <p>Part of igamingreviews.org. Data from TheSportsDB. Built for fans, by fans.</p>
+</footer>
+
+<script src="data.js"></script>
+<script>try{localStorage.setItem("hub_team_4328","133604");}catch(e){}</script><script src="assets/_app_noscroll.js"></script>
+</body>
+</html>

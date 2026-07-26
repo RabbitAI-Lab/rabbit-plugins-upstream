@@ -1,0 +1,7 @@
+{
+  "name": "shiziluk-tools",
+  "version": "1.0.0",
+  "description": "我的自定义工具集，提供获取当前时间和计算数学表达式的功能",
+  "author": "shiziluk",
+  "license": "MIT"
+}

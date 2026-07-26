@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1280 1080" font-family="'PingFang SC','Hiragino Sans GB','Microsoft YaHei',sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#718096"/>
+    </marker>
+    <style>
+      .title{fill:#102A43;font-weight:700}.body{fill:#334E68}.muted{fill:#627D98}
+      .cardTitle{fill:#102A43;font-size:18px;font-weight:700}
+      .cardBody{fill:#486581;font-size:14px}
+      .chip{fill:#FFFFFF;font-size:13px;font-weight:700}
+      .section{fill:#243B53;font-size:15px;font-weight:700}
+    </style>
+  </defs>
+
+  <rect width="1280" height="1080" fill="#F7FAFC"/>
+
+  <text x="60" y="62" class="title" font-size="34">ChatCut口播 · 可验证生产系统</text>
+  <text x="60" y="98" class="body" font-size="18">从剪辑经验包升级为：规则 → IR/SRT → 审批 → 可恢复执行 → 媒体 QA → 交付 → 反馈治理</text>
+  <rect x="1080" y="42" width="140" height="34" rx="17" fill="#0F766E"/>
+  <text x="1150" y="64" class="chip" text-anchor="middle">v1.4.0</text>
+
+  <rect x="60" y="130" width="1160" height="78" rx="14" fill="#E8F1E4" stroke="#7A9B61" stroke-width="1.5"/>
+  <text x="86" y="162" class="title" font-size="20">官方 ChatCut skill / MCP 工具面</text>
+  <text x="86" y="190" class="body" font-size="15">工具与参数以当前宿主描述为真相源；本 skill 提供生产纪律、离线契约与安全路由，不冒充官方工具实现</text>
+
+  <path d="M640,208 L640,244" stroke="#718096" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <text x="60" y="268" class="section">① 规则与内容计划 · 机器可读的生产真相</text>
+  <g>
+    <rect x="60" y="286" width="360" height="146" rx="14" fill="#E6FFFA" stroke="#319795" stroke-width="1.5"/>
+    <text x="82" y="320" class="cardTitle">Rule Registry</text>
+    <text x="82" y="350" class="cardBody">14 条 runtime rule · 六个治理域</text>
+    <text x="82" y="375" class="cardBody">hard policy 不可被 profile 放宽</text>
+    <text x="82" y="400" class="cardBody">稳定 ID / 来源 / waiver / fallback</text>
+
+    <rect x="460" y="286" width="360" height="146" rx="14" fill="#E6FFFA" stroke="#319795" stroke-width="1.5"/>
+    <text x="482" y="320" class="cardTitle">Creator OS IR + Rational Time</text>
+    <text x="482" y="350" class="cardBody">project / transcript / edit / state / owner</text>
+    <text x="482" y="375" class="cardBody">caption / evidence · [start,end)</text>
+    <text x="482" y="400" class="cardBody">revision / coverage / owner 跨文档校验</text>
+
+    <rect x="860" y="286" width="360" height="146" rx="14" fill="#E6FFFA" stroke="#319795" stroke-width="1.5"/>
+    <text x="882" y="320" class="cardTitle">SRT + Explainable Planner</text>
+    <text x="882" y="350" class="cardBody">SRT 人工视图 + sidecar 机器真相</text>
+    <text x="882" y="375" class="cardBody">可复算信号 + source refs</text>
+    <text x="882" y="400" class="cardBody">不生成台词 · 不输出“爆款概率”</text>
+  </g>
+
+  <path d="M640,432 L640,474" stroke="#718096" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <text x="60" y="498" class="section">② 审批与执行 · 先批准、可恢复、证据先于完成</text>
+  <g>
+    <rect x="60" y="516" width="360" height="146" rx="14" fill="#EBF8FF" stroke="#3182CE" stroke-width="1.5"/>
+    <text x="82" y="550" class="cardTitle">Preview Approval</text>
+    <text x="82" y="580" class="cardBody">首 60 秒 / 复杂段 / 隐私段 / 片尾</text>
+    <text x="82" y="605" class="cardBody">actor + scope + plan/style/timeline 指纹</text>
+    <text x="82" y="630" class="cardBody">任何漂移自动关闭执行门</text>
+
+    <rect x="460" y="516" width="360" height="146" rx="14" fill="#EBF8FF" stroke="#3182CE" stroke-width="1.5"/>
+    <text x="482" y="550" class="cardTitle">Recoverable Executor + Evidence</text>
+    <text x="482" y="580" class="cardBody">幂等 / revision lock / 写后回读</text>
+    <text x="482" y="605" class="cardBody">scene compensation / checkpoint / resume</text>
+    <text x="482" y="630" class="cardBody">依赖变化递归失效下游 evidence</text>
+
+    <rect x="860" y="516" width="360" height="146" rx="14" fill="#EBF8FF" stroke="#3182CE" stroke-width="1.5"/>
+    <text x="882" y="550" class="cardTitle">Capability Profile + Live Gate</text>
+    <text x="882" y="580" class="cardBody">build / schema hash / TTL / probes</text>
+    <text x="882" y="605" class="cardBody">content-free canary + per-capability fallback</text>
+    <text x="882" y="630" class="cardBody">无当前证据：live=false / unverified</text>
+  </g>
+
+  <path d="M640,662 L640,704" stroke="#718096" stroke-width="1.6" marker-end="url(#arrow)"/>
+
+  <text x="60" y="728" class="section">③ 发布与复盘 · 最终文件、无自动发布、反馈不直改规则</text>
+  <g>
+    <rect x="60" y="746" width="360" height="146" rx="14" fill="#FFF5EB" stroke="#DD6B20" stroke-width="1.5"/>
+    <text x="82" y="780" class="cardTitle">Local Media QA + Export Auth</text>
+    <text x="82" y="810" class="cardBody">hash / codec / timebase / 音频 / 黑冻帧</text>
+    <text x="82" y="835" class="cardBody">隐私 coverage + 确定性抽帧</text>
+    <text x="82" y="860" class="cardBody">授权精确绑定 artifact + plan hash</text>
+
+    <rect x="460" y="746" width="360" height="146" rx="14" fill="#FFF5EB" stroke="#DD6B20" stroke-width="1.5"/>
+    <text x="482" y="780" class="cardTitle">Governed Distribution Pack</text>
+    <text x="482" y="810" class="cardBody">平台规则来源 / 日期 / 可信度 / 过期</text>
+    <text x="482" y="835" class="cardBody">母片 hash / revision / content truth 绑定</text>
+    <text x="482" y="860" class="cardBody">publishAction = none</text>
+
+    <rect x="860" y="746" width="360" height="146" rx="14" fill="#FFF5EB" stroke="#DD6B20" stroke-width="1.5"/>
+    <text x="882" y="780" class="cardTitle">Feedback Governance</text>
+    <text x="882" y="810" class="cardBody">匿名事件 → repeated samples → review</text>
+    <text x="882" y="835" class="cardBody">证据 / 反例 / owner / rollback</text>
+    <text x="882" y="860" class="cardBody">autoApply=false · 人工 release</text>
+  </g>
+
+  <rect x="60" y="930" width="1160" height="92" rx="14" fill="#FFF5F5" stroke="#C53030" stroke-width="1.5"/>
+  <text x="86" y="964" class="title" font-size="18">真实环境安全边界</text>
+  <text x="86" y="992" class="body" font-size="15">已验证：Schema、匿名 fixtures、fake adapter、报告审计与 fail-closed 路由</text>
+  <text x="86" y="1015" class="body" font-size="15">未宣称：真实 ChatCut adapter、真实媒体探针/渲染、平台发布；这些动作不会自动执行</text>
+
+  <text x="60" y="1058" class="muted" font-size="13">ChatCut口播 · 马甲实战版 · v1.4.0 · slug / frontmatter / install commands unchanged</text>
+</svg>

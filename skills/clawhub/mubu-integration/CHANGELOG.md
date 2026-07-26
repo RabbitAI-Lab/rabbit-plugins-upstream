@@ -1,0 +1,229 @@
+# Changelog
+
+记录 mubu-integration Skill 的里程碑演化。
+
+## M1 (P0) — 基础能力
+- 登录（手机号密码 → JWT Token，请求头 `jwt-token`）
+- 文档/文件夹 CRUD：create_folder / create_doc / get_doc / save_doc / delete / move
+- Markdown 双向：doc_to_markdown / export_markdown / markdown_to_doc（含 note 备注、勾选 [x] 往返）
+- Token 本地缓存 + 临近过期自动重登（仅重试 1 次，杜绝死循环）
+- 发布 GitHub tag 1.0.0
+
+## M2 (P1) — 网络健壮性 + 本地搜索
+- 网络层 5xx 指数退避重试（最多 2 次，与 401 重登分层互不干扰）
+- 非 JSON 响应友好异常 + body 截断
+- .env 凭据加载（仅环境变量未设置时补全）
+- Token 文件权限 0o600（原子写 + chmod）
+- 本地搜索 search()（递归遍历 + 按名称过滤）+ CLI search 子命令
+- 发布 ClawHub v1.1.0
+
+## M3 (P2) — 工程化收尾
+- scripts/mubu_api.py 全量类型注解（typing 模块，Python 3.8+ 兼容，100% 覆盖）
+- 新增 requirements.txt（requests + pytest + responses，.env.mubu 手写解析无 dotenv 依赖）
+- 新增 .github/workflows/test.yml CI（push/PR 触发，Python 3.9–3.12 矩阵，41 用例全过）
+- README 美化：CI 状态徽章、架构/双向转换 Mermaid 图、30 秒快速体验、FAQ
+
+## M4 (P0/P1/P2) — 完善阶段（本期）
+- P1-5：ENDPOINTS 元组化 (method, path)，消除调用点硬编码 "POST"
+- P0-2：search() 上限（max_depth / limit / max_requests）经核实仓库原版已具备，CLI 透传 --max-depth / --limit（本期仅核对确认，非新增）
+- P1-3：_http_request 兜底消息避免渲染字面 : None
+- P2-6：_save_token 增加 fcntl.flock 跨进程 advisory 锁（已加固为跨平台安全：try/except ImportError，无 fcntl 平台如 Windows 降级为无锁）
+- P1-4 / P2-7：补充网络层（5xx 混合降级、ConnectionError）与 .env 回归测试
+- P0-1：SKILL.md 清理旧版独立函数，改为指向 MubuClient 的引用与示例
+- T2 收尾：新增 `test_search_global_limit_enforced`，真实验证 `search()` 全局 `limit` 上限被强制执行（破坏性验证：移除上限逻辑则用例失败）
+- SKILL.md「Token 管理建议」示例修正：朴素 `open()+json.dump` 改为原子写（tempfile + os.replace）+ chmod 0o600，并注明真实 `_save_token` 还含跨进程 fcntl 锁；删除误导性的 `is_token_valid`
+
+## M5 (审计整改) — ClawHub Security Audit 全量修复（1 High + 6 Medium）
+- **High · 供应链（依赖未锁定 CVE）**：`requirements.txt` `requests>=2.28,<3` → `requests>=2.32.4,<3`，修复 CVE-2024-47081（.netrc 凭据泄漏）、CVE-2024-35195（Session 复用 `verify` 被覆盖）。CVE-2026-25645（extract_zipped_paths 临时文件复用）经核查本代码路径不可达，仅作升级加固。
+- **Medium · MCP 最小权限（Lp3）**：SKILL.md 新增 `## 权限与安全边界` 段落，明确声明只读/写入/网络/破坏性操作需确认/信任边界 5 条约束。
+- **Medium · 触发词歧义（Vague Triggers ×2）**：frontmatter `description` 与激活指引触发词收窄为 `幕布、mubu、幕布同步、幕布大纲导出`，移除易误触的 `大纲笔记`、`思维导图导出`；全仓 grep 复核 0 残留。
+- **Medium · 缺失破坏性操作警示（Missing User Warnings ×3）**：`delete` 增加 `⚠️ 删除不可逆` 明确提示；CLI 增加 `--yes` 显式确认标志，`main()` 删除分支硬拦截（未传 `--yes` 则打印警示并 `sys.exit(1)`，0 网络请求）。README 删除示例同步更新为 `delete <id> --yes`。
+- **验证**：pytest 45 用例全过；`py_compile` 通过；QA 独立 monkeypatch 复验确认 delete 无 `--yes` 时实际发出 0 次网络请求；7 项审计发现全部 RESOLVED，路由判定 NoOne。
+- 发布 ClawHub v1.1.4（清除 Review 状态）。
+
+## M6 (遗留清理) — 根节点 note 导出修复
+- 修复 `export_markdown()` 遗漏根节点 note 输出的 Bug：children 循环后追加 `f"> {note}"`（与子节点 note 格式一致）。
+- 新增 3 个测试：根 note 存在性与位置（在 children 之后）、空 note 省略（不产生孤立 `> ` 行）、含根 note 文档往返一致性（md→doc→md）。
+- 工程师 IS_PASS YES，QA 独立验证 48/48 全过（45 既有 + 3 新增），路由 NoOne。
+- 发布 ClawHub v1.1.5。
+
+## M7 (审计补充) — pytest CVE 版本锁定
+- `requirements.txt` `pytest>=7,<9` → `pytest>=8.3.5,<9`，修复 CVE-2025-71176（pytest tmpdir 处理漏洞；仅测试依赖，运行时不受影响）。
+- 48/48 测试全过（pytest 8.x 兼容）。
+- 发布 ClawHub v1.1.6。
+
+## M8 (安全加固) — 凭据 / 路径 / 文档一致性（本期）
+- **安全官 #1/#2/#12**：`.env.mubu` 加载时强制 `chmod 0o600`；CLI 移除 `--phone`/`--password` 明文参数，凭据改由环境变量 / `.env.mubu` 提供，`login` 子命令缺失时交互式 `getpass` 输入密码；SKILL.md 删除"直接在脚本中配置"类表述。
+- **安全官 #3**：新增 `_safe_local_path()`，在 `create --md` / `save --file` 读取本地文件前校验路径——拒绝绝对路径、`..` 越界路径及当前工作目录之外的路径，防任意文件读取外发。
+- **安全官 #8 / 排障手 #8**：实现 `MUBU_BASE_URL` 环境变量覆盖，仅限 `mubu.com` 家族域名白名单（防 MITM 指向恶意服务器）；SKILL.md「网络」边界说明同步更新。
+- **排障手 #7**：收紧 `_is_auth_error` 关键字匹配（移除 "token"/"auth"/"expire"/"login"/"过期" 等泛化词，仅保留明确登录失效短语），避免正常业务错误误触发重登。
+- **He H3**：`_http_request` 兜底消息避免渲染字面 `None`（非预期 + `last_err or '未知错误'`）。
+- **文档一致性**：CONTRIBUTING 修正开发/运行指令（`git clone` + `pip install -r requirements.txt` + `PYTHONPATH=scripts python -m pytest -v` + 入口 `python3 scripts/mubu_api.py`）；README 版本号统一为 v1.1.6、测试数统一为 69、去除割裂的双版本叙事。
+- **测试补充（排障手 #5/#6、He H4）**：新增真实 API 方法 payload 单测（create_folder/create_doc/get_doc/save_doc/delete/move 的请求体 JSON 与返回 id 提取）、`delete --yes` 守卫回归（无 `--yes` 0 网络调用且 `sys.exit(1)`）、`login` CLI 无明文参数 + getpass 交互测试；全量测试 69 用例通过（48 既有 + 20 新增 + 1 路径校验补强）。
+- **说明**：`search()` 的 `max_depth`/`limit`/`max_requests` 上限经核实为仓库原版已具备（非本期新增），对应方案 He H2 审计结论已修正。
+- （已随 v1.2.0 发布；详情见文末「v1.2.0」段。）
+
+## M9 (P1 第一批) — 产品文案 / 错误指引 / 日志 / 搜索截断 / CI 加固
+
+- **产品官 #10/#11/#15**：README「双向同步」表述改为「Markdown 导入/导出（往返保真）」，明确说明**非**真正双向同步（无 diff/merge，重复导入生成新副本），并加 true-sync「不在本期范围」说明；README 顶部新增显眼「第一步：配置凭据」块（环境变量 / `~/.workbuddy/.env.mubu`，不假设用户已就绪）；新增 `examples/weekly.md` 示例大纲供 `create --md examples/weekly.md` 直接体验。SKILL.md 同步修正「幕布同步」触发词与 `search()` 示例（`["results"]` 解包）。
+- **产品官+排障手 #15 / 错误操作指引**：`_http_request` / `_request` 按 HTTP 状态码给出下一步文案并打到 stderr——401→「登录失效或密码错误，请检查凭据后重试」；403→「权限不足，请确认账号权限」；5xx→「幕布服务暂不可用，请稍后重试」；网络异常→「网络连接失败，请检查网络」。
+- **排障手 #17 / 搜索截断 + 环检测**：`search()` 返回值由 `List` 改为含 `truncated: bool` 的字典结构（`{"results", "truncated", "limit", "max_depth"}`），到达 `limit`/`max_depth`/`max_requests` 上限时标记 `truncated=True`（不再静默丢失）；新增已访问 `folder_id` 的 `visited` 集合去重，防止幕布环引用导致无限递归（双保险）。`main()` 与测试同步适配，调用方可知结果不完整。
+- **排障手 #19 / 移除冗余 ensure_login**：`get_list`/`create_folder`/`create_doc`/`get_doc`/`save_doc`/`delete`/`move` 移除冗余 `ensure_login()` 调用，统一走 `auth=True`（`_request` 内 `ensure_valid_token` 已处理），行为不变；`ensure_login` 方法保留作兼容。
+- **排障手+安全官 #16 / 日志规范**：引入 `logging` 取代散落 `print`；`warning`/`error` 分级，CLI 加 `--verbose` 开关控制 `debug`；异常只记 `msg`、不记请求/响应体（`body` 200 字符截断保留），确认明文密码 / token 不进日志。
+- **安全官 #20 / CI hash pinning + Dependabot**：`.github/workflows/test.yml` 将 `actions/checkout@v4` 锁定为完整 commit SHA `11bd71901bbe5b1630ceea73d27597364c9af683`(v4.2.2)、`actions/setup-python@v5` 锁定为 `a26af69be951a213d495a4c3e4e4022e16d87065`(v5)，并加最小 `permissions: contents: read`；新增 `.github/dependabot.yml` 启用 GitHub Actions 与 pip 依赖每周自动更新 PR（SHA 钉死由人工 review 确认）。
+- **测试补充（+11，共 80）**：搜索 `truncated` 标记（limit 命中 / 环检测无无限递归）、错误指引 4 类状态码文案、ensure_login 冗余已移除（2 处不触发 ensure_login 调用）、日志脱敏（明文密码不进日志）+ `--verbose` 启用 debug、`examples/weekly.md` 可解析。全量测试 **80 用例通过**（69 既有 + 11 新增）。
+- 已随 **v1.2.0** 发布（GitHub tag v1.2.0，2026-07-14）。
+
+## v1.2.0（本期发布版本 · 2026-07-14）
+
+本期合并发布 **M8（安全加固）+ M9（P1 第一批：产品文案 / 错误指引 / 日志 / 搜索截断 / CI）+ P2（工程化增强）**，构成自 v1.1.6 以来的完整能力跃升（GitHub tag v1.2.0）。
+
+- **安全（M8）**：凭据文件强制 `0o600`、移除明文 CLI 参数改交互式 `getpass`、本地路径越界防护 `_safe_local_path`、API 域名白名单（`MUBU_BASE_URL` 仅限 mubu.com 家族）防 MITM。
+- **健壮性（M9）**：`search()` 返回含 `truncated: bool` 并加 `visited` 集合防环；标准 `logging` + 敏感信息脱敏 + `--verbose`；401/403/5xx/网络错误打到 stderr 的下一步指引；CI 钉死 `actions/checkout@v4` / `actions/setup-python@v5` 完整 SHA + 新增 Dependabot 周更。
+- **工程化（P2）**：`MubuClient` 复用 `requests.Session` 连接池；依赖拆分为 `requirements.txt`（运行时）+ `requirements-dev.txt`（pytest / responses `<1`）；新增本 Roadmap 段。
+- 测试覆盖：**84 用例全过**（69 P0 基线 + 11 P1 + 4 P2），CI 矩阵 Python 3.9–3.12。
+- 删除操作保留 `--yes` 守卫与「不可逆」stderr 警示（无回收站，软删除待幕布 API 能力确认）。
+
+## M10 (Roadmap 实施) — 整树导出 / 重命名 / OPML·FreeMind（本期）
+
+- **整树导出**：新增 `MubuClient.export_tree(root_folder_id, output_dir, max_depth)` 与 CLI `export-tree` 子命令，递归遍历文件夹树并将每个文档写为 `<name>.md`，子文件夹创建为同级子目录；单点拉取失败不阻断整体遍历（记入 `errors` 统计）。
+- **重命名**：新增 `rename_doc(doc_id, new_name)`（走 `save_doc` 的 `name` 参数，round-trip 保内容）+ CLI `rename --type doc`；新增 `rename_folder(folder_id, new_name)` 走逆向推测端点 `/list/update_folder`（幕布无官方 API 文档，真实环境需验证），对应 CLI `rename --type folder`。
+- **OPML / FreeMind 导出**：新增模块级 `doc_to_opml(doc)` / `doc_to_freeplane(doc)` 与 CLI `opml <doc_id> --format opml|freeplane`，将幕布大纲转为 OPML 2.0 / FreeMind XML，兼容 XMind 等其它大纲工具。
+- **软删除降级说明**：幕布回收站 API 未文档化，本期维持 `delete` 硬删 + `--yes` 守卫 + 「不可逆」stderr 警示，**不实现软删除**（避免引入未经证实的 API 调用）。
+- **测试补充（+9，共 93）**：export_tree 嵌套文件生成 / 单点失败处理、rename_doc 调 save 带 name / rename_folder 走推测端点、doc_to_opml / doc_to_freeplane 合法 XML、_safe_filename 非法字符替换。全量测试 **93 用例通过**。
+- 模块拆分（单文件 → 包）已在 M11 完成。
+
+## M11 (Roadmap · 大重构) — 模块拆分（单文件 → 包，非 breaking）
+
+将单文件 `scripts/mubu_api.py` 按职责拆分为正式 Python 包 `scripts/mubu/`，`mubu_api.py` 降级为向后兼容 shim（重新导出全部公开符号），**对外接口零破坏**。
+
+- **`scripts/mubu/config.py`**：常量 / 配置（`DEFAULT_BASE_URL` / `ENDPOINTS` / 重试与搜索上限）、日志、异常 `MubuError`、路径安全 `_safe_local_path`、Token 文件锁 `_token_file_lock`、域名白名单解析。
+- **`scripts/mubu/convert.py`**：文档结构 ↔ Markdown / OPML / FreeMind 转换（`doc_to_markdown` / `export_markdown` / `markdown_to_doc` / `doc_to_opml` / `doc_to_freeplane`）与展示格式化（`_safe_filename` / `format_list` / `format_search`）。
+- **`scripts/mubu/client.py`**：`MubuClient`（鉴权 / 请求 / 文档·文件夹·搜索·整树导出）。
+- **`scripts/mubu/cli.py`**：命令行入口 `main()` + `_configure_logging()`。
+- **`scripts/mubu/__init__.py`**：包标识（`__version__ = "1.3.0"`）。
+- **`scripts/mubu_api.py`（shim）**：`from mubu.* import ...` 重新导出全部公开符号（含 `os` / `sys` / `json` / `Path` 等标准库模块级名称，保持旧调用方与既有测试兼容）；`__main__` 仍调用 `main()`。
+
+**兼容性验证**：
+- `import mubu_api` 及其公开符号（`MubuClient` / `MubuError` / `doc_to_markdown` / ...）全部可用；`python scripts/mubu_api.py <subcommand>` 行为不变。
+- 新增包内导入路径：`from mubu.client import MubuClient`、`from mubu.convert import export_markdown`、`from mubu.config import MubuError` 等均可独立使用。
+- 既有测试适配：因 `os` / `getpass` 为单例模块，`monkeypatch(mubu_api.os / mubu_api.getpass)` 仍生效；函数 / `Path` / `TOKEN_FILE` / `ENV_FILE` 的 patch 目标修正为使用点（`mubu.cli.*`、`mubu.client.TOKEN_FILE`、`mubu.client.ENV_FILE`、`mubu.config.Path`）。全量测试 **93 用例通过**（无用例增减，纯结构重构）。
+
+## M12 (Roadmap · 真机验证 + 端点修正) — rename_folder / delete 实测修正（2026-07-15）
+
+用真实幕布账号逐端点实测，修正此前逆向推测的多处错误写端点：
+
+- **rename_folder 修正（关键）**：原 `/list/update_folder` 实测返回 `code 17 illegal request`。正确端点为 **`POST /list/rename_folder`**，且必须同时携带 `id` 与 `folderId`，**`folderId` 必须填文件夹自身真实 id（不能填根目录魔法值 `"0"`，否则 `code 5`）**。已用真实账号验证改名生效（建临时文件夹 → 改名 → 回查确认 → 删除，无残留）。
+- **delete 修正（关键 latent bug）**：原 `delete` 走 `/list/delete` 实测返回 `code 17 illegal request`。正确端点须按类型区分：**`/list/delete_folder`**（文件夹）、**`/list/delete_doc`**（文档），均 `{"id": ...}`。已拆为 `delete_folder()` / `delete_doc()`，`delete(item_id, item_type="folder")` 兼容分发；CLI `delete` 新增 `--type doc|folder`（默认 folder）。
+- **move 仍待验证**：`/list/move` 及多种变体（`move_folder` / `move_doc` / 不同字段名 `folderId`/`toFolderId`/`parentId`/`targetId`）实测均返回 `illegal request`，真实端点未知。本期**不改动 move 代码**，标记为「未实测验证待抓包」，待浏览器 DevTools 抓包确认正确端点后再修。
+- **测试适配（+0 用例，仍为 93）**：`test_rename_folder_uses_update_endpoint` 改为断言 `/list/rename_folder` + `folderId`；`test_delete_*` 三个用例 mock URL 由 `/list/delete` 改为 `/list/delete_folder`。全量 **93 用例通过**。
+- 账号清理：验证过程产生的临时文件夹均已通过 `delete_folder` 删除，无残留。
+
+## v1.3.1（本期发布版本 · 2026-07-15）
+
+本期合并发布 **M12（真机验证 + 端点修正）**，构成自 v1.3.0 以来的关键正确性修复（GitHub tag v1.3.1）。
+
+- **rename_folder 真机可用**：端点 `/list/rename_folder`，`folderId` 填自身 id。
+- **delete 真机可用**：拆分 `delete_folder` / `delete_doc`（原 `/list/delete` 为错误端点）；CLI `delete` 加 `--type`。
+- **move 已知未验证**：保留原实现并标注待抓包确认。
+- 测试覆盖：**93 用例全过**，无任何端点相关回归。
+
+## M13 (Roadmap · 真机验证) — get_list 字段名修正 + get_doc 待抓包（2026-07-15）
+
+用真实账号实测 `list` / `search` / `export-tree` 时发现隐藏缺陷并修正：
+
+- **get_list 字段名修正（关键 latent bug）**：代码与测试均假设 `get_list` 返回文档列表字段为 `docs`，但幕布真机返回的是 **`documents`**（带 s）。导致 `list` / `export-tree` / `search` / `format_list` 在真机上**读不到任何文档**（单元测试因 mock 同样用 `docs` 键而假绿，93 用例全过却掩盖了真机失效）。
+  - 修复：`client.export_tree` / `client.search` / `convert.format_list` 统一改为读取 `data.get("documents")`，并保留对旧 `docs` 键的兜底兼容（防御字段名变化）。
+  - 测试：将 `test_documents_key_is_ignored`（错误假设「忽略 documents 键」）改为 `test_documents_key_is_used`（验证 documents 被正确读取 + 兼容 docs），使测试真正反映真机结构。
+  - 真机验证：`search("三级等保")` 命中 1 个文档（修复前 0）、根目录文档总数读到 **80 个**（修复前 0）。
+- **get_doc 端点不可用（待抓包）**：`get_doc`（`POST /doc/get`）在真机对所有文档（含新建文档）均返回 `code 17 illegal request`；额外探测 `/doc/detail` / `/doc/info` / `/doc/open` / `/doc/load` / `/doc/getContent` / `/list/doc` 等 11 个变体**全部 illegal request**。文档正文获取机制与当前端点对不上，需浏览器 DevTools 抓包确认幕布真实的文档加载 API 后才能修复。
+  - **影响**：`export-tree`（导出正文）、`rename_doc`（依赖 get_doc）当前真机不可用；两者均已有 try/except 优雅降级（export_tree 记 errors 继续，不会崩溃）。`list` / `search`（仅列目录）已恢复可用。
+- **move 仍待验证**：同 M12，真实端点未知，保留原实现并标注待抓包。
+- 测试覆盖：**93 用例全过**，docs/documents 修复零回归。
+
+## v1.3.2（本期发布版本 · 2026-07-15）
+
+本期合并发布 **M13（get_list 字段名修正）**，修复 `list` / `search` / `format_list` 在真机上读不到文档的隐藏缺陷（GitHub tag v1.3.2）。
+
+- **list / search 真机可用**：统一读取 `documents` 字段（兼容旧 `docs`）。
+- **export-tree / rename_doc 正文功能暂不可用**：因 `get_doc`（`/doc/get`）真机返回 illegal request，待抓包确认文档加载 API 后修复；列目录能力正常。
+- **move 已知未验证**：保留原实现并标注待抓包确认。
+- 测试覆盖：**93 用例全过**。
+
+## M14 (Roadmap · 真机验证) — get_doc 真实端点与 definition 解析修复（2026-07-15）
+
+用真实幕布账号抓包确认 `get_doc` 文档加载机制并修复（M13 标记为待抓包）：
+
+- get_doc 端点由错误 `/doc/get` 修正为真实 `POST /document/edit/get`。
+- 请求体由 `{"id":...}` 修正为 `{"docId":..., "password":"", "isFromDocDir":true}`。
+- 响应 `data.definition` 为 JSON 字符串，二次解析为 `{"nodes":[...]}`；`get_doc` 现返回 `{"name":..., "nodes":[...]}`（与旧 `{"node":{...}}` 形状不同）。
+- `convert.export_markdown` 支持新 `nodes` 形状（保留旧 `node` 形状向后兼容）；`doc_to_markdown` 支持真实 `finish` 勾选态渲染为 `- [x]` / `- [ ]`。
+- SKILL.md 校正 get_doc 端点（`POST /document/edit/get`）、`Jwt-Token` 请求头、移除不存在的 `refresh_token 30天` 描述。
+- 无破坏性变更；93 用例全过。
+
+## v1.3.3（本期发布版本 · 2026-07-15）
+
+本期合并发布 **M14（get_doc 真实端点与 definition 解析修复）**，修复文档正文获取在真机上失效的问题（GitHub tag v1.3.3）。
+
+- fix: `get_doc` 改用真实端点 `POST /document/edit/get`（原 `/doc/get` 为错误端点，导致取不到文档）
+- fix: 请求体改为 `{"docId":..., "password":"", "isFromDocDir":true}`（原 `{"id":...}` 错误）
+- fix: 解析响应 `data.definition`（JSON 字符串）为 `{"nodes":[...]}`，`get_doc` 现返回 `{"name":..., "nodes":[...]}`
+- fix: `convert.export_markdown` 支持新 `nodes` 形状（保留旧 `node` 形状向后兼容）；`doc_to_markdown` 支持真实 `finish` 勾选态渲染为 `- [x]`/`- [ ]`
+- docs: SKILL.md 校正 get_doc 端点、`Jwt-Token` 请求头、移除不存在的 `refresh_token 30天` 描述
+- 依赖/破坏性：无破坏性变更
+
+## v1.3.4（本期发布版本 · 2026-07-15）
+
+本期为 OPML/FreeMind 导出兼容真实 nodes 形状修复 + save_doc 客户端契约校验（GitHub tag v1.3.4）。
+
+- fix: `doc_to_opml` / `doc_to_freeplane` 支持真实 `nodes` 形状（双形状兼容旧 `node`）；OPML/FreeMind 导出不再产出空大纲
+- fix: `cli` 的 `create` / `save` 回写 content 使用 `{"nodes":[node]}` definition 字符串，与 `get_doc` 同构
+- verify: `save_doc` 真机 round-trip 被幕布服务端签名/反爬校验拒绝（`illegal request`, code 17），与请求体形状无关；客户端契约（content = definition JSON 字符串 `json.dumps({"nodes":[...]}, ensure_ascii=False)`）正确，**无需改代码**，docstring 已标注此已知限制
+- test: 96 passed（修正 1 个过时 rename 夹具 + 新增 OPML/FreeMind nodes 形状测试）
+- 已知限制: `save_doc` / `rename_doc` 真机写回需服务端对该客户端放行（反爬签名），目前端到端落库不可达
+- 依赖/破坏性：无破坏性变更
+
+## M15 (Roadmap · 软删除/锁文件) — 本地回收站软删除 + pip-tools 依赖锁文件（2026-07-15）
+
+- feat: `delete` 改为本地软删除——仅将文档标记写入 `~/.workbuddy/.mubu_trash.json`，**零网络调用**，云端副本保留；新增 `restore <id>`（仅移除本地标记、零风险）、`purge <id> --yes`（真实服务端删除 + 移除标记，不可逆）、`trash`（列出回收站项）；`list` / `search` 默认过滤已软删项，新增 `--include-trash` 可包含。
+- feat: 引入 pip-tools 锁文件——新增 `requirements.in`（requests）/ `requirements-dev.in`（pytest, responses），`requirements.txt` / `requirements-dev.txt` 重写为 `pip-compile --generate-hashes` 精确锁定 + 哈希；CI 新增锁文件漂移校验步骤。
+- docs: README / SKILL 版本号 → 1.3.5、新增软删除 / 回收站章节、安装说明改锁定文件、`delete` 不再标记为「不可逆」（仅 `purge --yes` 为不可逆）。
+- test: 100 passed（迁移 `test_delete_with_yes_calls_api` → `test_delete_with_yes_marks_trash`（0 网络 + 校验回收站写入），新增 `TestTrash`：restore / purge --yes 调 API / list 过滤 / search 过滤 + `--include-trash` 反例）。
+- 已知限制: 锁文件在本机 Python 3.13 解释器上生成（pip-tools 7.5.3 已移除 `--python-version` / `--check` flag）；锁定版本 requests 2.34.2 / pytest 9.1.1 / responses 0.26.2 及其传递依赖均支持 CI 的 3.9–3.12 矩阵，非阻塞。
+- 依赖/破坏性：无破坏性变更（注意 `delete` 语义由「永久删除」变为「本地软删除」，属行为变更但保留 `--yes` 守卫）。
+
+## v1.3.5（本期发布版本 · 2026-07-15）
+
+本期为本地回收站软删除（restore / purge / trash）+ pip-tools 依赖锁文件（GitHub tag v1.3.5）。详见上方 M15。
+
+- 依赖/破坏性：无破坏性变更（`delete` 语义由「永久删除」变为「本地软删除」，保留 `--yes` 守卫；`purge --yes` 为唯一不可逆操作）
+
+## M16 (安全姿态补丁) — client.delete 对齐软删除 + 文档修正（2026-07-15）
+
+ClawHub SkillSpector 复审（GO；1 项 High 降为 Medium）3 项真实发现的修复：
+
+- fix: `client.delete()` 现路由到 `trash_item`（本地软删除，零网络），与 v1.3.5 CLI 语义及 `client.py` 设计注释（"delete = 软删除（仅本地标记，云端仍在）"）一致；真实硬删仅保留 `purge_item` / `delete_doc` / `delete_folder`（由 `purge --yes` 调用）。此前 `client.delete()` 实际走 `delete_folder`/`delete_doc` 远程硬删，与注释及 CLI 语义矛盾，程序化调用方会触发不可逆云端删除。
+- docs: README `delete` 命令描述由「不可逆」修正为「软删除（本地回收站）」；`purge --yes` 才是不可逆。同步修正 P2 里程碑表对 `delete` 的「不可逆」表述。
+- test: 100 passed（无回归）。`client.delete()` 现不触发任何网络调用，既有 `delete --yes` 守卫 / 回收站写入 / `purge` 行为测试全部保持。
+- 依赖/破坏性：无破坏性变更（`delete()` 由「远程硬删」收敛为「本地软删」，与文档语义一致）。
+
+## v1.3.6（本期发布版本 · 2026-07-15）
+
+本期为 SkillSpector 复审安全姿态补丁（GitHub tag v1.3.6）。详见上方 M16。
+
+- fix: `client.delete()` 对齐 v1.3.5 CLI 软删除语义（本地标记、零网络）；真实硬删仅 `purge --yes`。
+- docs: README L261 `delete` 由「不可逆」改为「软删除（本地回收站）」；Roadmap 软删除 / 依赖锁文件项标记为已在 M15/v1.3.5 完成。
+- test: 100 passed（无回归）。
+- 依赖/破坏性：无破坏性变更。
+
+## Roadmap（向前展望，尚未实现）
+
+以下为已识别、尚未排入实施的能力增强与重构方向，供后续迭代参考：
+
+- **模块拆分（排障手 #18）**：✅ 已在 M11 完成——`scripts/mubu_api.py` 拆分为 `scripts/mubu/`（config / convert / client / cli），`mubu_api.py` 保留为向后兼容 shim，93 用例通过。
+- **文件夹重命名 / 移动增强（产品官 #14）**：补全 `rename_folder` 等高层方法，提升目录管理能力。
+- **整树递归导出（产品官 #14）**：支持将整个文件夹树递归导出为单一 Markdown / JSON，便于整体备份。
+- **软删除 / 回收站（产品官 #14 P2）**：✅ 已在 M15/v1.3.5 完成——`delete` 改为本地软删除（仅标记进 `~/.workbuddy/.mubu_trash.json`，零网络），`restore` 恢复、`purge <id> --yes` 真实硬删、`trash` 列出；`list`/`search` 默认过滤已软删项。
+- **互操作导出（产品官 #25）**：导出支持 OPML / FreeMind 格式，便于导入到其他大纲工具。
+- **依赖锁文件（排障手 #21）**：✅ 已在 M15/v1.3.5 完成——引入 `pip-tools`，`requirements.in`/`requirements-dev.in` 由 `pip-compile --generate-hashes` 生成精确版本 + 哈希锁文件，CI 校验漂移。
+

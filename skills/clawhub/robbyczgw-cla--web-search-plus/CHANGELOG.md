@@ -1,0 +1,671 @@
+# Changelog - Web Search Plus
+
+## [3.3.0] - 2026-07-05
+
+Feature sync with `web-search-plus-plugin` v3.2.0 (hermes-web-search-plus v2.5.0–v2.9.0), adapted for this skill's CLI/filesystem runtime.
+
+### Added
+- **Keenable provider** (search + extraction) using Keenable's independent web index: keyed via `KEENABLE_API_KEY` (`X-API-Key`), or keyless against the **opt-in** public tier (`WSP_KEENABLE_ALLOW_PUBLIC=1` or `"keenable": {"allow_public": true}` in config.json; ~1000 req/hour shared, no SLA, warning in result metadata). Lowest priority in auto routing (score 0, excluded from ties) and extraction fallback so it never displaces a configured keyed provider. (Plugin/hermes v2.6.0)
+- **Unified `--freshness`** (`day`/`week`/`month`/`year`): providers with native date filters (Serper, Brave, Querit, Firecrawl, Keenable, SerpBase, You.com, Perplexity, SearXNG) receive the mapped value; providers without support run the normal search and report `freshness.applied=false` in `metadata.freshness`. Research mode reports per-provider application. (Hermes v2.8.0)
+- **News vertical**: `--type news` on Serper now parses the `news` response field correctly (date, source, thumbnail, position) instead of silently returning zero results; other providers report `search_type.applied=false` in `metadata.search_type`. (Hermes v2.9.0)
+- **Serper extraction**: `scripts/extract.py --provider serper` scrapes pages via Serper's webpage scraper (`https://scrape.serper.dev`, markdown preferred, per-URL error items). It joins the auto-extraction fallback chain in last position. (Hermes v2.9.0)
+- **Tavily-first extraction fallback** (plugin v2.6/v3 parity): auto order is now tavily → exa → linkup → firecrawl → you → keenable → serper (was firecrawl-first).
+- **Configurable search locale defaults** with lightweight query language detection (new `scripts/search_locale.py`): `locale.country` (ISO 3166-1 alpha-2) and `locale.language` (ISO 639-1 or `"auto"`) in config.json — or `WSP_LOCALE_COUNTRY`/`WSP_LOCALE_LANGUAGE` — replace the hardcoded us/en defaults for Serper, Brave, Querit, Firecrawl, You.com, and SearXNG. Explicit `--country`/`--language` CLI flags always win; explicit location hints from a curated city/country table win over config ("mejores restaurantes Madrid" → `es`); `locale.language: "auto"` enables a conservative stopword/character heuristic for de/es/fr/it/pt/nl/en (at least two distinct signals with a single unambiguous winner). Query language never implies the country. `metadata.locale` reports the resolved values and per-value source. Without configuration behavior stays exactly us/en. (Hermes v2.9.0)
+- **Spam/mirror result filtering** (new helpers in `scripts/quality.py`): results from known Stack Overflow/GitHub/documentation mirror domains are removed (strict exact-domain/true-subdomain matching, no look-alike false positives). Operators can extend via `quality.blocked_domains` or rescue via `quality.allowed_domains` in config.json. Domain-diversity reranking caps a single domain at 2 head slots (overflow demoted, not dropped). Explicit domain intent (`site:` queries, `--include-domains`) bypasses both. Removals and demotions are reported in `metadata.result_filter`. (Hermes v2.5.0)
+- **Adaptive provider performance memory** (new `scripts/provider_stats.py`): every provider call records latency/result-count/error into a rolling window (50 samples, 7-day freshness) that feeds bounded (±1.0) routing-score adjustments after 5 fresh samples — enough to break ties and nudge close calls, never enough to override a clear query-class winner. Reported as `routing.adaptive_adjustments`. Skill adaptation: the window is persisted to `provider_stats.json` in the cache directory (0700/0600, atomic writes) because each CLI call is a fresh process; `WSP_DISABLE_CACHE=1` keeps samples process-local. (Hermes v2.5.0)
+
+### Security
+- Extraction SSRF guard extended: CGNAT/shared address space (`100.64.0.0/10`) and IPv4-mapped IPv6 addresses (`::ffff:10.0.0.1`) are now blocked like the other private ranges. (Hermes v2.7.0 parity)
+- Domain boost matching no longer grants authority boosts (or spam-block matches) to look-alike domains that merely contain a trusted domain string (for example `openai.com.evil.example`); label-prefix rules such as `docs.` now match only a leading host label. (Hermes v2.8.0)
+- Inline base64 image data in extracted content is replaced with `[IMAGE: alt]` placeholders before measuring content, preventing data-URI token bombs while preserving normal `http(s)` image links. (Hermes v2.8.0)
+
+### Improved
+- Rate-limit handling: 429 responses parse `Retry-After` (delta-seconds or HTTP-date), retry at most once (short waits ≤30s honored inline), and feed the provider's requested wait into the cooldown ladder (capped at the 1h ladder max) instead of hanging the request. (Hermes v2.5.0)
+- Provider cooldown escalation now decays stale failure history (older than 30 minutes) instead of punishing isolated old failures forever. (Hermes v2.5.0)
+- Provider configuration errors such as missing API keys no longer mark providers unhealthy, trigger cooldowns, or skew the adaptive performance memory; cooldown stays reserved for real provider/network failures. (Hermes v2.7.0)
+- Oversized extracted pages return a head/tail window plus an explanatory footer; the inline budget is configurable via `WSP_EXTRACT_CHAR_LIMIT` or `--extract-char-limit` (default 15000). (Hermes v2.8.0)
+- Provider JSON decode failures now surface as clear transient provider errors, improving retry/fallback behavior. (Hermes v2.8.0)
+- Transient HTTP codes extended from {429, 503} to {408, 425, 429, 500, 502, 503, 504}, matching the plugin's retry classification.
+
+### Not ported
+- The Parallel provider (plugin v3.0.0) remains out of scope for the skill, matching the 3.1.0 parity decision.
+- Plugin-only surfaces (`web_routing_config_plus`, in-memory-only cache/health, onboarding CLI) are host-runtime specific; the skill keeps its CLI flags, config.json, and disk cache equivalents.
+
+### Tests
+- New `tests/test_v33_plugin_sync.py`: freshness/search-type metadata, Serper news parsing, Keenable endpoint/public-tier/tie-exclusion, spam filter + allowlist + look-alike immunity, domain diversity, domain constraints, adaptive stats bounds/staleness, Retry-After parsing, cooldown decay + Retry-After cap, base64 sanitization, head/tail truncation, extraction order, keenable extraction fallback, CGNAT + IPv4-mapped IPv6 SSRF blocks.
+
+## [3.2.0] - 2026-06-10
+
+Feature sync with `hermes-web-search-plus` v2.3.0/v2.4.0 plus security fixes for the SkillSpector scan findings.
+
+### Added
+- **Research mode** (`--mode research`, port of hermes v2.4.0): queries up to three providers **concurrently** (wall-clock cost ≈ slowest provider instead of the sum), deduplicates across providers with deterministic ordering (preserved by submission order regardless of completion order), then extracts the top sources for grounding via `scripts/extract.py`. New flags: `--research-providers`, `--research-extract-count` (default 3), `--research-time-budget` (default 55s — gates which providers launch and whether extraction runs; exhausted steps surface as diagnostics instead of failures).
+- **Canonical-source intent reranking** (port of hermes v2.3.0): `rerank_results_for_intent()` + `CANONICAL_DOMAIN_RULES` boost primary sources and demote mirror/aggregator domains for the routing classes `official_vendor_release`, `official_docs`, `policy_pdf`, `finance_earnings_official`, and `security_advisory` (detected via a new compact `QueryAnalyzer._detect_routing_class()`). Reordered results are flagged in `metadata.intent_rerank`.
+- **Quality reports** (`--quality-report`): transparent routing/result diagnostics including `authority_signals` (`canonical_domain_hits`, `demoted_domain_hits`, `canonical_top_result`). Research mode always attaches a quality report.
+- **ProviderSpec registry** (`scripts/provider_registry.py`, port of hermes v2.3.0): single source of truth for provider metadata (env vars, API hosts, capabilities, signup URLs). `search.py` key resolution/validation, `extract.py` credentials, and CLI provider choices now read from it.
+- New modules `scripts/quality.py` and `scripts/research.py`; `scripts/search.py` re-exports the shared helpers (`normalize_result_url`, `deduplicate_results_across_providers`, `_choose_tie_winner`, …) so existing imports keep working.
+
+### Security (SkillSpector findings)
+- **Vague triggers (HIGH)**: replaced the generic manifest triggers (`search`, `find`, `look up`, `research`) with narrowly scoped phrases (`web search plus`, `wsp search`, `search the web for`, `multi-provider web search`, `extract url content`, `extract content from url`). Remaining triggers documented in SKILL.md.
+- **Undisclosed third-party transmission (MEDIUM)**: added prominent "Data handling & privacy" sections to SKILL.md, README, and FAQ stating that search queries and extraction URLs are sent to the configured third-party providers, with guidance to use explicit provider selection for sensitive work and avoid submitting internal/private URLs.
+- **Silent local caching (MEDIUM)**: caching of queries/results/provider failure history under `WSP_CACHE_DIR` (`.cache` default, including `provider_health.json`) is now disclosed in all docs; cache directory is created mode `0700` and cache/health files are written mode `0600` via atomic temp-file replace; added `WSP_DISABLE_CACHE=1` global toggle (the existing `--no-cache` / `--clear-cache` / `--cache-stats` flags are now documented prominently).
+- **SSRF / tainted URL flow (MEDIUM)**: new `scripts/url_security.py` guard (mirrors the SearXNG SSRF guard) validates all user-supplied URLs before extraction or forwarding (`scripts/extract.py` URLs and `--similar-url`): http/https only, hostname resolution with private/loopback/link-local/reserved ranges blocked (10/8, 127/8, 169.254/16, 172.16/12, 192.168/16, ::1, fc00::/7, fe80::/10, 0.0.0.0), and cloud metadata endpoints (169.254.169.254, metadata.google.internal) always blocked. Explicit opt-out for trusted private networks via `--allow-private-urls` or `WSP_ALLOW_PRIVATE_URLS=1` (off by default).
+- **Missing permission declarations (MEDIUM)**: `package.json → clawhub.permissions` and the SKILL.md metadata now declare outbound network access (listed provider API hosts only), environment reads (`*_API_KEY`, `SEARXNG_*`, `WSP_*`), and filesystem writes (cache directory only).
+- **Description-behavior mismatch (LOW)**: skill descriptions in `package.json` and SKILL.md now mention local caching and provider-health persistence.
+- **Credential redaction (defense in depth)**: provider error messages are scrubbed of any configured credential values (env- and config.json-sourced) before they reach stderr, fallback error lists, extraction error fields, or the persisted `provider_health.json` — even if a provider echoes a key back in an error body, it never leaves memory.
+
+### Improved
+- Retry backoff now adds bounded random jitter (`RETRY_JITTER_FRACTION = 0.5`) so concurrent or repeated retries against a recovering provider do not synchronize into bursts (port of hermes v2.4.0).
+- Provider-health read-modify-write is guarded by a lock and written atomically, so concurrent in-process provider calls (research mode) cannot lose cooldown updates or tear the file (port of hermes v2.4.0).
+
+### Fixed
+- Auto-routing's suggested Exa depth (`deep`/`deep-reasoning`) is now actually propagated into the provider call: `routing_info` previously never carried `exa_depth` (or `analysis_summary`), so the auto-upgrade path was dead code.
+- In Docker environments without a configured SearXNG instance, the auto-detected local URL no longer raises an unhandled `ValueError` out of `get_api_key()` when it fails SSRF validation — SearXNG is treated as unconfigured instead.
+
+### Tests
+- New `tests/test_security.py`: trigger-scope checks, manifest permission declarations, SSRF validation (scheme rejection, private IP literals, metadata endpoints with opt-in still blocked, mocked private/public DNS resolution, extract-level blocking), cache dir/file permissions (0700/0600), cache roundtrip, and `--no-cache` / `WSP_DISABLE_CACHE` behavior through `main()`.
+- New `tests/test_research_and_quality.py`: research-mode merge/dedup/extraction, out-of-order completion ordering, time-budget gating, extraction-failure resilience, provider selection, quality reports, authority signals, canonical reranking, routing-class detection, retry-jitter bounds, registry consistency, and an end-to-end rerank + quality-report pipeline regression test.
+
+### Compatibility
+- Fully backward compatible CLI: all existing flags, defaults, output fields, and the `scripts.search` import surface are unchanged; new behavior is opt-in (`--mode research`, `--quality-report`) except for (a) intent reranking, which can reorder results for the five canonical-source query classes, (b) the SSRF guard, which now rejects private/metadata extraction targets unless explicitly allowed, and (c) stricter cache file permissions.
+- Skill manifest triggers are intentionally narrower; invoke the skill with the scoped phrases documented in SKILL.md.
+
+## [3.1.0] - 2026-05-25
+
+### Added
+- **SerpBase provider integration** (closes [#4](https://github.com/robbyczgw-cla/web-search-plus/issues/4)) — low-cost Google SERP API with prepaid credits. Brings the skill to parity with `web-search-plus-plugin` v3.0.0.
+  - New `search_serpbase()` function in `scripts/search.py` (Python port of plugin's canonical `searchSerpBase()` impl)
+  - Explicit/fallback-only by design — NOT in default `provider_priority`. Opt-in via `--provider serpbase` OR append to `auto_routing.provider_priority` in `config.json`
+  - New env var `SERPBASE_API_KEY` (https://serpbase.dev)
+  - Treats HTTP 402/429 as transient (quota/rate-limit retry); business-error status fields surface as `ProviderRequestError`
+  - SKILL.md + README + `.env.example` + `config.example.json` updated; package version bumped 3.0.3 → 3.1.0
+
+## Unreleased
+
+### Removed
+- Removed the stale standalone homepage HTML from the OpenClaw Skill repository; `websearchplus.xyz` is maintained in the dedicated `websearchplus-xyz` homepage repository.
+
+## [3.0.3] - 2026-05-06
+
+### Fixed
+- Version bump (previous version already published)
+
+## [3.0.2] - 2026-05-06
+
+### Fixed
+- Fixed gzip/deflate/brotli decompression for HTTP responses across all providers
+  - Added `_response_header()` and `_read_response_body()` helpers with Content-Encoding handling
+  - Fixed 4 vulnerable `response.read().decode()` calls in `search.py` (make_request, make_get_request, search_youcom, search_searxng)
+  - Fixed 1 vulnerable call in `extract.py` (request_json)
+  - Removed forced `Accept-Encoding: gzip` header from Brave search (was causing guaranteed crash)
+  - Added magic-number fallback (`b"\x1f\x8b"`) for mislabeled gzip responses
+  - Brotli-encoded responses raise clear error instead of silent corruption
+
+## [3.0.1] - 2026-05-03
+
+### Fixed
+- Version bump (previous version already published)
+
+## [3.0.0] - 2026-05-03
+
+### Added
+- Added **Brave**, **Linkup**, and **Firecrawl** as first-class Python search providers, bringing provider parity to 10 search backends.
+- Added `scripts/extract.py` for **URL extraction with automatic fallback** across Firecrawl, Linkup, Tavily, Exa, and You.com.
+- Added targeted unit tests for routing parity, deterministic tie-breaking, extraction URL validation, and extraction fallback behavior.
+
+### Changed
+- Rebased `scripts/search.py` on newer Hermes parity logic while preserving this skill's Docker-aware SearXNG handling and local protections.
+- Updated setup wizard, env template, config example, README, package metadata, and SKILL metadata for the 3.0.0 release.
+- Default provider priority is now `tavily -> linkup -> querit -> exa -> firecrawl -> perplexity -> brave -> serper -> you -> searxng`.
+
+### Notes
+- Search parity is substantially improved with the OpenClaw plugin and Hermes port, but this skill still exposes the extraction flow as a companion script rather than a separate OpenClaw tool wrapper.
+
+## [2.9.3] - 2026-04-20
+
+### Added
+- Docker-aware SearXNG auto-detection for zero-config local setups
+- New `scripts/docker_detect.py` helper that detects containerized execution via `/.dockerenv`, `/proc/1/cgroup`, and `DOCKER`
+
+### Changed
+- `get_searxng_instance_url()` now falls back to auto-detected defaults when no explicit SearXNG URL is configured
+- Uses `http://172.17.0.1:8080` inside Docker sandboxes and `http://127.0.0.1:8080` on the host for smoother local SearXNG access
+
+### Release Notes
+- Bumped skill/package metadata for the 2.9.3 ClawHub publish
+- Based on merged GitHub PR #2: `feat: add Docker-aware SearXNG auto-detection`
+
+## [2.9.2] - 2026-03-27
+
+### Fixed
+- Replaced hardcoded temporary cache path examples with portable `$TMP_DIR` placeholders in `TROUBLESHOOTING.md`
+
+## [2.9.0] - 2026-03-12
+
+### ✨ New Provider: Querit (Multilingual AI Search)
+
+[Querit.ai](https://querit.ai) is a Singapore-based multilingual AI search API purpose-built for LLMs and RAG pipelines. 300 billion page index, 20+ countries, 10+ languages.
+
+- Added **Querit** as the 7th search provider via `https://api.querit.ai/v1/search`
+- Configure via `QUERIT_API_KEY` — optional, gracefully skipped if not set
+- Routing score: `research * 0.65 + rag * 0.35 + recency * 0.45` — favored for multilingual and real-time queries
+- Handles Querit's quirky `error_code=200` responses as success (not an error)
+- Handles `IncompleteRead` as transient/retryable failure
+- Live-tested with 10 benchmark queries ✅
+
+### 🔧 Fixed: Fallback chain dies on unconfigured provider
+
+- `sys.exit(1)` in `validate_api_key()` raised `SystemExit` (inherits from `BaseException`), which bypassed the `except Exception` fallback loop and killed the entire process instead of trying the next provider
+- Replaced with catchable `ProviderConfigError` — fallback chain now continues correctly through all configured providers
+
+### 🔧 Fixed: Perplexity citations are generic placeholders
+
+- Previously extracted citation URLs via regex from the answer text, resulting in generic "Source 1" / "Source 2" labels
+- Now uses the structured `data["citations"]` array from the Perplexity API response directly — results have readable titles
+- Regex extraction kept as fallback when API doesn't return a `citations` field
+
+### ✨ Improved: German locale routing patterns
+
+- Added German-language signal patterns for local and news queries
+- Improves auto-routing for queries like `"aktuelle Nachrichten"`, `"beste Restaurants Graz"`, `"KI Regulierung Europa"`
+
+### 📝 Documentation
+
+- Added Querit to README provider tables, routing examples, and API key setup section
+- Added `querit_api_key` to `config.example.json`
+- Updated `SKILL.md` provider mentions and env metadata
+- Bumped package version to `2.9.0`
+
+
+## [2.8.6] - 2026-03-03
+
+### Changed
+- Documented Perplexity Sonar Pro usage and refreshed release docs.
+
+
+## [2.8.5] - 2026-02-20
+
+### ✨ Feature: Perplexity freshness filter
+
+- Added `freshness` parameter to Perplexity provider (`day`, `week`, `month`, `year`)
+- Maps to Perplexity's native `search_recency_filter` parameter
+- Example: `python3 scripts/search.py -p perplexity -q "latest AI news" --freshness day`
+- Consistent with freshness support in Serper and Brave providers
+
+## [2.8.4] - 2026-02-20
+
+### 🔒 Security Fix: SSRF protection in setup wizard
+
+- **Fixed:** `setup.py` SearXNG connection test had no SSRF protection (unlike `search.py`)
+- **Before:** Operator could be tricked into probing internal networks during setup
+- **After:** Same IP validation as `search.py` — blocks private IPs, cloud metadata, loopback
+- **Credit:** ClawHub security scanner
+
+## [2.8.3] - 2026-02-20
+
+### 🐛 Critical Fix: Perplexity results empty
+
+- **Fixed:** Perplexity provider returned 0 results because the AI-synthesized answer wasn't mapped into the results array
+- **Before:** Only extracted URLs from the answer text were returned as results (often 0)
+- **After:** The full answer is now the primary result (title, snippet with cleaned text), extracted source URLs follow as additional results
+- **Impact:** Perplexity queries now always return at least 1 result with the synthesized answer
+
+## [2.8.0] - 2026-02-20
+
+### 🆕 New Provider: Perplexity (AI-Synthesized Answers)
+
+Added Perplexity as the 6th search provider via Kilo Gateway — the first provider that returns **direct answers with citations** instead of just links:
+
+#### Features
+- **AI-Synthesized Answers**: Get a complete answer, not a list of links
+- **Inline Citations**: Every claim backed by `[1][2][3]` source references
+- **Real-Time Web Search**: Perplexity searches the web live, reads pages, and summarizes
+- **Zero Extra Config**: Works through Kilo Gateway with your existing `KILOCODE_API_KEY`
+- **Model**: `perplexity/sonar-pro` (best quality, supports complex queries)
+
+#### Auto-Routing Signals
+New direct-answer intent detection routes to Perplexity for:
+- Status queries: "status of", "current state of", "what is the status"
+- Local info: "events in [city]", "things to do in", "what's happening in"
+- Direct questions: "what is", "who is", "when did", "how many"
+- Current affairs: "this week", "this weekend", "right now", "today"
+
+#### Usage Examples
+```bash
+# Auto-routed
+python3 scripts/search.py -q "events in Graz Austria this weekend"  # → Perplexity
+python3 scripts/search.py -q "what is the current status of Ethereum"  # → Perplexity
+
+# Explicit
+python3 scripts/search.py -p perplexity -q "latest AI regulation news"
+```
+
+#### Configuration
+Requires `KILOCODE_API_KEY` environment variable (Kilo Gateway account).
+No additional API key needed — Perplexity is accessed through Kilo's unified API.
+
+```bash
+export KILOCODE_API_KEY="your-kilo-key"
+```
+
+### 🔧 Routing Rebalance
+
+Major overhaul of the auto-routing confidence scoring to fix Serper dominance:
+
+#### Problem
+Serper (Google) was winning ~90% of queries due to:
+- High recency multiplier boosting Serper on any query with dates/years
+- Default provider priority placing Serper first in ties
+- Research and discovery signals not strong enough to override
+
+#### Changes
+- **Lowered Serper recency multiplier** — date mentions no longer auto-route to Google
+- **Strengthened research signals** for Tavily:
+  - Added: "status of", "what happened with", "how does X compare"
+  - Boosted weights for comparison patterns (4.0 → 5.0)
+- **Strengthened discovery signals** for Exa:
+  - Added: "events in", "things to do in", "startups similar to"
+  - Boosted weights for local discovery patterns
+- **Updated provider priority order**: `tavily → exa → perplexity → serper → you → searxng`
+  - Serper moved from 1st to 4th in tie-breaking
+  - Research/discovery providers now win on ambiguous queries
+
+#### Routing Test Results
+
+| Query | Before | After | ✓ |
+|-------|--------|-------|---|
+| "latest OpenClaw version Feb 2026" | Serper | Serper | ✅ |
+| "Ethereum Pectra upgrade status" | Serper | **Tavily** | ✅ |
+| "events in Graz this weekend" | Serper | **Perplexity** | ✅ |
+| "compare SearXNG vs Brave for AI agents" | Serper | **Tavily** | ✅ |
+| "Sam Altman OpenAI news this week" | Serper | Serper | ✅ |
+| "find startups similar to Kilo Code" | Serper | **Exa** | ✅ |
+
+### 📊 Updated Provider Comparison
+
+| Feature | Serper | Tavily | Exa | Perplexity | You.com | SearXNG |
+|---------|:------:|:------:|:---:|:----------:|:-------:|:-------:|
+| Speed | ⚡⚡⚡ | ⚡⚡ | ⚡⚡ | ⚡⚡ | ⚡⚡⚡ | ⚡ |
+| Direct Answers | ✗ | ✗ | ✗ | ✓✓ | ✗ | ✗ |
+| Citations | ✗ | ✗ | ✗ | ✓ | ✗ | ✗ |
+| Local Events | ✓ | ✗ | ✓ | ✓✓ | ✗ | ✓ |
+| Research | ✗ | ✓✓ | ✓ | ✓ | ✓ | ✗ |
+| Discovery | ✗ | ✗ | ✓✓ | ✗ | ✗ | ✗ |
+| Self-Hosted | ✗ | ✗ | ✗ | ✗ | ✗ | ✓ |
+
+## [2.7.0] - 2026-02-14
+
+### ✨ Added
+- Provider cooldown tracking in `.cache/provider_health.json`
+- Exponential cooldown on provider failures: **1m → 5m → 25m → 1h (cap)**
+- Retry strategy for transient failures (timeout, 429, 503): up to 2 retries with backoff **1s → 3s → 9s**
+- Smarter cache keys hashed from full request context (query/provider/max_results + locale, freshness, time_range, topic, search_engines, include_news, and related params)
+- Cross-provider result deduplication by normalized URL during fallback merge
+
+### 🔧 Changed
+- Cooldown providers are skipped in routing while their cooldown is active
+- Provider health is reset automatically after successful requests
+- Fallback output now includes dedup metadata:
+  - `deduplicated: true|false`
+  - `metadata.dedup_count`
+
+
+## [2.6.5] - 2026-02-11
+
+### 🆕 File-Based Result Caching
+
+Added local caching to save API costs on repeated searches:
+
+#### Features
+- **Automatic Caching**: Search results cached locally by default
+- **1-Hour TTL**: Results expire after 3600 seconds (configurable)
+- **Cache Indicators**: Response includes `cached: true/false` and `cache_age_seconds`
+- **Zero-Cost Repeats**: Cached requests don't hit APIs
+
+#### New CLI Options
+- `--cache-ttl SECONDS` — Custom cache TTL (default: 3600)
+- `--no-cache` — Bypass cache, always fetch fresh
+- `--clear-cache` — Delete all cached results
+- `--cache-stats` — Show cache statistics (entries, size, age)
+
+#### Configuration
+- **Cache directory**: `.cache/` in skill directory
+- **Environment variable**: `WSP_CACHE_DIR` to override location
+- **Cache key**: Based on query + provider + max_results (SHA256)
+
+#### Usage Examples
+```bash
+# First request costs API credits
+python3 scripts/search.py -q "AI startups"
+
+# Second request is FREE (uses cache)
+python3 scripts/search.py -q "AI startups"
+
+# Force fresh results
+python3 scripts/search.py -q "AI startups" --no-cache
+
+# View stats
+python3 scripts/search.py --cache-stats
+
+# Clear everything
+python3 scripts/search.py --clear-cache
+```
+
+#### Technical Details
+- Cache files: JSON with metadata (_cache_timestamp, _cache_key, etc.)
+- Automatic cleanup of expired entries on access
+- Graceful handling of corrupted cache files
+
+## [2.6.1] - 2026-02-04
+
+- Privacy cleanup: removed hardcoded paths and personal info from docs
+
+## [2.5.0] - 2026-02-03
+
+### 🆕 New Provider: SearXNG (Privacy-First Meta-Search)
+
+Added SearXNG as the 5th search provider, focused on privacy and self-hosted search:
+
+#### Features
+- **Privacy-Preserving**: No tracking, no profiling — your searches stay private
+- **Multi-Source Aggregation**: Queries 70+ upstream engines (Google, Bing, DuckDuckGo, etc.)
+- **$0 API Cost**: Self-hosted = unlimited queries with no API fees
+- **Diverse Results**: Get perspectives from multiple search engines in one query
+- **Customizable**: Choose which engines to use, set SafeSearch levels, language preferences
+
+#### Auto-Routing Signals
+New privacy/multi-source intent detection routes to SearXNG for:
+- Privacy queries: "private", "anonymous", "without tracking", "no tracking"
+- Multi-source: "aggregate results", "multiple sources", "diverse perspectives"
+- Budget/free: "free search", "no api cost", "self-hosted search"
+- German: "privat", "anonym", "ohne tracking", "verschiedene quellen"
+
+#### Usage Examples
+```bash
+# Auto-routed
+python3 scripts/search.py -q "search privately without tracking"  # → SearXNG
+
+# Explicit
+python3 scripts/search.py -p searxng -q "linux distros"
+python3 scripts/search.py -p searxng -q "AI news" --engines "google,bing,duckduckgo"
+python3 scripts/search.py -p searxng -q "privacy tools" --searxng-safesearch 2
+```
+
+#### Configuration
+```json
+{
+  "searxng": {
+    "instance_url": "https://your-instance.example.com",
+    "safesearch": 0,
+    "engines": null,
+    "language": "en"
+  }
+}
+```
+
+#### Setup
+SearXNG requires a self-hosted instance with JSON format enabled:
+```bash
+# Docker setup (5 minutes)
+docker run -d -p 8080:8080 searxng/searxng
+
+# Enable JSON in settings.yml:
+# search:
+#   formats: [html, json]
+
+# Set instance URL
+export SEARXNG_INSTANCE_URL="http://localhost:8080"
+```
+
+See: https://docs.searxng.org/admin/installation.html
+
+### 📊 Updated Provider Comparison
+
+| Feature | Serper | Tavily | Exa | You.com | SearXNG |
+|---------|:------:|:------:|:---:|:-------:|:-------:|
+| Privacy-First | ✗ | ✗ | ✗ | ✗ | ✓✓ |
+| Self-Hosted | ✗ | ✗ | ✗ | ✗ | ✓ |
+| API Cost | $$ | $$ | $$ | $ | **FREE** |
+| Multi-Engine | ✗ | ✗ | ✗ | ✗ | ✓ (70+) |
+
+### 🔧 Technical Changes
+
+- Added `search_searxng()` function with full error handling
+- Added `PRIVACY_SIGNALS` to QueryAnalyzer for auto-routing
+- Updated setup wizard with SearXNG option (instance URL validation)
+- Updated config.example.json with searxng section
+- New CLI args: `--searxng-url`, `--searxng-safesearch`, `--engines`, `--categories`
+
+---
+
+## [2.4.4] - 2026-02-03
+
+### 📝 Documentation: Provider Count Fix
+
+- **Fixed:** "You can use 1, 2, or all 3" → "1, 2, 3, or all 4" (we have 4 providers now!)
+- **Impact:** Accurate documentation for setup wizard
+
+## [2.4.3] - 2026-02-03
+
+### 📝 Documentation: Updated README
+
+- **Added:** "NEW in v2.4.2" badge for You.com in SKILL.md
+- **Impact:** ClawHub README now properly highlights You.com as new feature
+
+## [2.4.2] - 2026-02-03
+
+### 🐛 Critical Fix: You.com API Configuration
+
+- **Fixed:** Incorrect hostname (`api.ydc-index.io` → `ydc-index.io`)
+- **Fixed:** Incorrect header name (`X-API-Key` → `X-API-KEY` uppercase)
+- **Impact:** You.com now works correctly - was giving 403 Forbidden before
+- **Status:** ✅ Fully tested and working
+
+## [2.4.1] - 2026-02-03
+
+### 🐛 Bugfix: You.com URL Encoding
+
+- **Fixed:** URL encoding for You.com queries - spaces and special characters now properly encoded
+- **Impact:** Queries with spaces (e.g., "OpenClaw AI framework") work correctly now
+- **Technical:** Added `urllib.parse.quote` for parameter encoding
+
+## [2.4.0] - 2026-02-03
+
+### 🆕 New Provider: You.com
+
+Added You.com as the 4th search provider, optimized for RAG applications and real-time information:
+
+#### Features
+- **LLM-Ready Snippets**: Pre-extracted, query-aware text excerpts perfect for feeding into AI models
+- **Unified Web + News**: Get both web pages and news articles in a single API call
+- **Live Crawling**: Fetch full page content on-demand in Markdown format (`--livecrawl`)
+- **Automatic News Classification**: Intelligently includes news results based on query intent
+- **Freshness Controls**: Filter by recency (day, week, month, year, or date range)
+- **SafeSearch Support**: Content filtering (off, moderate, strict)
+
+#### Auto-Routing Signals
+New RAG/Real-time intent detection routes to You.com for:
+- RAG context queries: "summarize", "key points", "tldr", "context for"
+- Real-time info: "latest news", "current status", "right now", "what's happening"
+- Information synthesis: "updates on", "situation", "main takeaways"
+
+#### Usage Examples
+```bash
+# Auto-routed
+python3 scripts/search.py -q "summarize key points about AI regulation"  # → You.com
+
+# Explicit
+python3 scripts/search.py -p you -q "climate change" --livecrawl all
+python3 scripts/search.py -p you -q "tech news" --freshness week
+```
+
+#### Configuration
+```json
+{
+  "you": {
+    "country": "US",
+    "language": "en",
+    "safesearch": "moderate",
+    "include_news": true
+  }
+}
+```
+
+#### API Key Setup
+```bash
+export YOU_API_KEY="your-key"  # Get from https://api.you.com
+```
+
+### 📊 Updated Provider Comparison
+
+| Feature | Serper | Tavily | Exa | You.com |
+|---------|:------:|:------:|:---:|:-------:|
+| Speed | ⚡⚡⚡ | ⚡⚡ | ⚡⚡ | ⚡⚡⚡ |
+| News Integration | ✓ | ✗ | ✗ | ✓ |
+| RAG-Optimized | ✗ | ✓ | ✗ | ✓✓ |
+| Full Page Content | ✗ | ✓ | ✓ | ✓ |
+
+---
+
+## [2.1.5] - 2026-01-27
+
+### 📝 Documentation
+
+- Added warning about NOT using Tavily/Serper/Exa in core OpenClaw config
+- Core OpenClaw only supports `brave` as the built-in provider
+- This skill's providers must be used via environment variables and scripts, not `openclaw.json`
+
+## [2.1.0] - 2026-01-23
+
+### 🧠 Intelligent Multi-Signal Routing
+
+Completely overhauled auto-routing with sophisticated query analysis:
+
+#### Intent Classification
+- **Shopping Intent**: Detects price patterns ("how much", "cost of"), purchase signals ("buy", "order"), deal keywords, and product+brand combinations
+- **Research Intent**: Identifies explanation patterns ("how does", "why does"), analysis signals ("pros and cons", "compare"), learning keywords, and complex multi-clause queries
+- **Discovery Intent**: Recognizes similarity patterns ("similar to", "alternatives"), company discovery signals, URL/domain detection, and academic patterns
+
+#### Linguistic Pattern Detection
+- "How much" / "price of" → Shopping (Serper)
+- "How does" / "Why does" / "Explain" → Research (Tavily)
+- "Companies like" / "Similar to" / "Alternatives" → Discovery (Exa)
+- Product + Brand name combos → Shopping (Serper)
+- URLs and domains in query → Similar search (Exa)
+
+#### Query Analysis Features
+- **Complexity scoring**: Long, multi-clause queries get routed to research providers
+- **URL detection**: Automatic detection of URLs/domains triggers Exa similar search
+- **Brand recognition**: Tech brands (Apple, Samsung, Sony, etc.) with product terms → shopping
+- **Recency signals**: "latest", "2026", "breaking" boost news mode
+
+#### Confidence Scoring
+- **HIGH (70-100%)**: Strong signal match, very reliable routing
+- **MEDIUM (40-69%)**: Good match, should work well
+- **LOW (0-39%)**: Ambiguous query, using fallback provider
+- Confidence based on absolute signal strength + relative margin over alternatives
+
+#### Enhanced Debug Mode
+```bash
+python3 scripts/search.py --explain-routing -q "your query"
+```
+
+Now shows:
+- Routing decision with confidence level
+- All provider scores
+- Top matched signals with weights
+- Query analysis (complexity, URL detection, recency focus)
+- All matched patterns per provider
+
+### 🔧 Technical Changes
+
+#### QueryAnalyzer Class
+New `QueryAnalyzer` class with:
+- `SHOPPING_SIGNALS`: 25+ weighted patterns for shopping intent
+- `RESEARCH_SIGNALS`: 30+ weighted patterns for research intent
+- `DISCOVERY_SIGNALS`: 20+ weighted patterns for discovery intent
+- `LOCAL_NEWS_SIGNALS`: 25+ patterns for local/news queries
+- `BRAND_PATTERNS`: Tech brand detection regex
+
+#### Signal Weighting
+- Multi-word phrases get higher weights (e.g., "how much" = 4.0 vs "price" = 3.0)
+- Strong signals: price patterns (4.0), similarity patterns (5.0), URLs (5.0)
+- Medium signals: product terms (2.5), learning keywords (2.5)
+- Bonus scoring: Product+brand combo (+3.0), complex query (+2.5)
+
+#### Improved Output Format
+```json
+{
+  "routing": {
+    "auto_routed": true,
+    "provider": "serper",
+    "confidence": 0.78,
+    "confidence_level": "high",
+    "reason": "high_confidence_match",
+    "top_signals": [{"matched": "price", "weight": 3.0}],
+    "scores": {"serper": 7.0, "tavily": 0.0, "exa": 0.0}
+  }
+}
+```
+
+### 📚 Documentation Updates
+
+- **SKILL.md**: Complete rewrite with signal tables and confidence scoring guide
+- **README.md**: Updated with intelligent routing examples and confidence levels
+- **FAQ**: Updated to explain multi-signal analysis
+
+### 🧪 Test Results
+
+| Query | Provider | Confidence | Signals |
+|-------|----------|------------|---------|
+| "how much does iPhone 16 cost" | Serper | 68% | "how much", brand+product |
+| "how does quantum entanglement work" | Tavily | 86% HIGH | "how does", "what are", "implications" |
+| "startups similar to Notion" | Exa | 76% HIGH | "similar to", "Series A" |
+| "companies like stripe.com" | Exa | 100% HIGH | URL detected, "companies like" |
+| "MacBook Pro M3 specs review" | Serper | 70% HIGH | brand+product, "specs", "review" |
+| "Tesla" | Serper | 0% LOW | No signals (fallback) |
+| "arxiv papers on transformers" | Exa | 58% | "arxiv" |
+| "latest AI news 2026" | Serper | 77% HIGH | "latest", "news", "2026" |
+
+---
+
+## [2.0.0] - 2026-01-23
+
+### 🎉 Major Features
+
+#### Smart Auto-Routing
+- **Automatic provider selection** based on query analysis
+- No need to manually choose provider - just search!
+- Intelligent keyword matching for routing decisions
+- Pattern detection for query types (shopping, research, discovery)
+- Scoring system for provider selection
+
+#### User Configuration
+- **config.json**: Full control over auto-routing behavior
+- **Configurable keyword mappings**: Add your own routing keywords
+- **Provider priority**: Set tie-breaker order
+- **Disable providers**: Turn off providers you don't have API keys for
+- **Enable/disable auto-routing**: Opt-in or opt-out as needed
+
+#### Debugging Tools
+- **--explain-routing** flag: See exactly why a provider was selected
+- Detailed routing metadata in JSON responses
+- Shows matched keywords and routing scores
+
+### 📚 Documentation
+
+- **README.md**: Complete auto-routing guide with examples
+- **SKILL.md**: Detailed routing logic and configuration reference
+- **FAQ section**: Common questions about auto-routing
+- **Configuration examples**: Pre-built configs for common use cases
+
+---
+
+## [1.0.x] - Initial Release
+
+- Multi-provider search: Serper, Tavily, Exa
+- Manual provider selection with `-p` flag
+- Unified JSON output format
+- Provider-specific options (--depth, --category, --similar-url, etc.)
+- Domain filtering for Tavily/Exa
+- Date filtering for Exa

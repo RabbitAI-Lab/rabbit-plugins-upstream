@@ -1,0 +1,21 @@
+{
+  "name": "seedance-2-prompts-skill",
+  "owner": {
+    "name": "GokuScraper"
+  },
+  "metadata": {
+    "description": "Recommend from 8,000+ Seedance 2 video generation prompts based on user needs",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "seedance-2-prompts",
+      "description": "AI skill for recommending Seedance 2 video generation prompts",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./"
+      ]
+    }
+  ]
+}

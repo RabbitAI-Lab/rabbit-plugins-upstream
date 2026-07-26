@@ -1,0 +1,17 @@
+# Authenticated operator authorization
+service: ""
+operator_name_or_team: ""
+role: ""
+evidence_of_authority: ""
+environments_allowed: []
+allowed_actions: []
+approval_required_for:
+  - production_changes
+  - waf_cdn_firewall_dns
+  - database_migrations
+  - model_router_policy
+  - destructive_actions
+forbidden_actions: []
+rollback_owner: ""
+legal_or_compliance_contact: ""
+audit_log_location: ""

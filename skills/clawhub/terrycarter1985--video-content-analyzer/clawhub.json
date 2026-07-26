@@ -1,0 +1,70 @@
+{
+  "name": "video-content-analyzer",
+  "version": "1.1.0",
+  "description": "Analyze video content (single or batch), extract keyframes, search web for references, store in Supabase, generate category-grouped Feishu Wiki reports",
+  "author": "ClawHub Team",
+  "license": "MIT",
+  "main": "src/main.py",
+  "dependencies": [
+    "ffmpeg-python>=0.2.0",
+    "supabase>=2.0.0",
+    "requests>=2.31.0",
+    "python-dotenv>=1.0.0"
+  ],
+  "skills": [
+    {
+      "name": "process_video",
+      "description": "Process a video file and generate analysis report in Feishu Wiki",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "video_path": {
+            "type": "string",
+            "description": "Path to the input video file"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "UUID of the user running the analysis"
+          },
+          "space_id": {
+            "type": "string",
+            "description": "Feishu Wiki space ID where the report should be published"
+          }
+        },
+        "required": ["video_path", "user_id", "space_id"]
+      }
+    },
+    {
+      "name": "process_directory",
+      "description": "Batch process all videos in a directory: store results in Supabase and publish category-grouped reports to Feishu Wiki",
+      "parameters": {
+        "type": "object",
+        "properties": {
+          "directory": {
+            "type": "string",
+            "description": "Path to a directory containing video files"
+          },
+          "user_id": {
+            "type": "string",
+            "description": "UUID of the user running the analysis"
+          },
+          "space_id": {
+            "type": "string",
+            "description": "Feishu Wiki space ID where reports should be published"
+          },
+          "recursive": {
+            "type": "boolean",
+            "description": "Whether to scan sub-directories (default true)"
+          },
+          "category_rules": {
+            "type": "object",
+            "description": "Optional map of path keyword -> category name; overrides folder-based grouping"
+          }
+        },
+        "required": ["directory", "user_id", "space_id"]
+      }
+    }
+  ],
+  "tags": ["video", "analysis", "wiki", "search", "supabase"],
+  "repository": "https://clawhub.com/skills/video-content-analyzer"
+}

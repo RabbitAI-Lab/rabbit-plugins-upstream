@@ -1,0 +1,168 @@
+# Openquok CLI — command reference
+
+Agent-oriented reference for `@openquok/auto-cli` (`openquok`). Hard rules, auth, and workflows live in [SKILL.md](../SKILL.md).
+
+## Environment variables
+
+| Variable | Required | Default | Description |
+|----------|----------|---------|-------------|
+| `OPENQUOK_API_KEY` | No* | — | Bearer `opo_` programmatic access token |
+| `OPENQUOK_API_URL` | No | `https://api.openquok.com` | API base (`{OPENQUOK_API_URL}/api/v1/...`) |
+| `OPENQUOK_AUTH_SERVER` | No | `https://cli-auth.openquok.com` | OAuth2 device-flow server (`/device/*`, `/health`) |
+
+\*Either `OPENQUOK_API_KEY` or stored credentials from `openquok auth:login` is required. **Stored credentials take priority** over the env var until `auth:logout`.
+
+## Config
+
+```bash
+openquok config:show
+```
+
+Prints resolved `api_url`, `auth_server_url`, deployment mode (`openquok_cloud` vs `custom`), and value sources — no secrets.
+
+## Authentication
+
+```bash
+# Messaging agents (Telegram/Hermes) — two steps; do not use auth:login --json alone
+openquok auth:login --json --no-poll
+openquok auth:login:poll --device-code "<device_code from stdout>"
+
+# CI / long-running shell — single process may use auth:login --json (polls until done)
+openquok auth:login --json
+
+openquok auth:login --apiKey "opo_…"   # fallback when device flow cannot complete
+openquok auth:status
+openquok auth:workspace             # { workspace: { id, name } } for current credentials
+openquok auth:logout
+```
+
+- **Preference:** device OAuth before a programmatic token when the user can open a browser link.
+- **Messaging hosts:** `--json --no-poll` then `auth:login:poll` after the user authorizes — otherwise credentials are never stored.
+- **Agents:** forward `verification_uri_complete` from stdout only — never fabricate codes or URLs.
+- **Humans with TTY:** `openquok auth:login` without `--json` is fine locally.
+- **Session start:** see Rule 0 in [SKILL.md](../SKILL.md) — run version + `auth:status` (+ `auth:workspace` when connected) via shell before the first assistant message; greet as the Openquok bot, not the host persona.
+- **Invalid or expired code:** Re-run `auth:login --json --no-poll` and `auth:login:poll` with a fresh `device_code` (~30 min).
+
+
+## Integrations
+
+```bash
+# List all connected social channels (integration UUIDs)
+openquok integrations:list
+
+# List integrations belonging to a specific channel group (customer)
+openquok integrations:list --group <customer-group-id>
+
+# List all channel groups (customers) as {id, name}
+openquok integrations:groups
+
+# Get posting rules, character limits, and settings schema for an integration
+openquok integrations:settings <integration-uuid>
+
+# Trigger an allow-listed provider method to fetch dynamic data
+openquok integrations:trigger <integration-uuid> <method-name> [--data '<json>' | -d '<json>']
+```
+
+- `integrations:groups` — channel groups (`integration_customers`); pass an `id` to `integrations:list --group`.
+- `integrations:settings` — rules, `maxLength`, settings schema, allow-listed `tools` (`methodName`, `dataSchema`). Publish-time keys per channel: [provider-settings.md](./provider-settings.md).
+- `integrations:trigger` — single allow-listed method; `--data` must be a JSON object when required.
+- New channels are connected in the web app; the CLI uses integration UUIDs from `integrations:list`.
+
+## Posts
+
+```bash
+# List posts (default ±30 local calendar days from today)
+openquok posts:list
+openquok posts:list --start "2026-01-01T00:00:00Z" --end "2026-02-01T00:00:00Z"
+
+# Create or schedule posts (-s / scheduledAt is REQUIRED unless using --json)
+openquok posts:create -c "…" -s "2026-01-01T12:00:00Z" -i "<uuid>"
+openquok posts:create -c "…" -s "…" -t draft -i "<uuid>"
+openquok posts:create -c "…" -s "…" -i "<uuid>" -m '<[{id,path}]>'
+openquok posts:create -c "main" -c "reply" -s "…" -d 5000 -i "<uuid>"
+openquok posts:create --json ./post.json
+
+# Manage post rows
+openquok posts:status <post-id> --status draft
+openquok posts:status <post-id> -s schedule
+openquok posts:review-todo <post-id> --note "…"
+openquok posts:delete <post-id>
+
+# Resolve missing release_id before per-post analytics
+openquok posts:missing <post-id>
+openquok posts:connect <post-id> --release-id "<provider-release-id>"
+```
+
+### `posts:list`
+
+- Default window: ±30 **local calendar** days from today (ISO on the wire).
+- Override: `--start` / `--end` (aliases `--startDate` / `--endDate`).
+- Filter: `-i` / `--integrations` / `--integrationIds` (CSV), `--customer` / `--customerGroupId`.
+
+### `posts:status`
+
+- Takes a **post row** id from `posts:list` (same as `posts:delete`).
+- Flips `draft` ↔ `scheduled` at the stored publish time.
+
+### `posts:missing` / `posts:connect`
+
+- Use when `release_id` is `"missing"`: list provider candidates, then link with `--release-id` (aliases `--releaseId`, `-r`) for per-post analytics.
+
+### Media flags (`-m` / `--media`)
+
+- Value must be a JSON array of `{ "id", "path" }` from `openquok upload` or `openquok upload-from-url` (see Rule 2 in SKILL.md).
+- **Thread-style posts:** repeated `-c` for segments; optional repeated `-m` pairs with leading segments. `-d` is **milliseconds** between segments (default 5000).
+
+### `--json` / `-j`
+
+- Full `POST /public/posts` payload: `scheduledAt`, `status`, `bodiesByIntegrationId`, `providerSettingsByIntegrationId`, `media`, tags, etc.
+
+## Analytics
+
+```bash
+# Platform-level metrics for a connected channel (7, 30, or 90 days)
+openquok analytics:platform <integration-uuid> [--days 7|30|90]
+
+# Per-post metrics for a published post row
+openquok analytics:post <post-id> [--days 7|30|90]
+```
+
+- `--days` / `-d` must be **7**, **30**, or **90** (default 7).
+- `analytics:post` returns `[]` for drafts/queued rows.
+
+## Plugs
+
+| Type | CLI support | How |
+| --- | --- | --- |
+| **Internal plugs** | Yes | Per-post `providerSettingsByIntegrationId` on `posts:create` — `threads.internalEngagementPlug`, `*.crossAccountPlugs` |
+| **Global plugs** | Yes | `plugs:catalog`, `plugs:list <integration-id>`, `plugs:upsert`, `plugs:activate`, `plugs:delete` |
+
+```bash
+openquok plugs:catalog
+openquok plugs:list <integration-id>
+openquok plugs:upsert <integration-id> --func autoPlugPost \
+  --fields '[{"name":"likesAmount","value":"100"},{"name":"post","value":"Thanks!"}]'
+openquok plugs:activate <plug-id> --activated true
+openquok plugs:delete <plug-id>
+```
+
+Channels with plugs: Threads, X, LinkedIn, LinkedIn Page. Full catalog: [plugs.md](./plugs.md).
+
+## Media upload
+
+```bash
+# Upload a local file; returns media id and path for posts:create
+openquok upload ./image.png
+
+# Upload from a remote URL; returns media id and path
+openquok upload-from-url "https://cdn.example.com/banner.png"
+```
+
+Both return `data.id` and `data.path` or `data.filePath` for use in `-m` / JSON `media`.
+
+## Help
+
+```bash
+openquok --help
+openquok posts:create --help
+```

@@ -1,0 +1,57 @@
+# [BRAND]
+
+> Fictional example. Domain: acme-corp.com. Replace every [BRACKET].
+> This file is a brief for an engine reading you cold. It is PUBLIC and will be
+> reproduced verbatim by anything that reads it: everything below must already
+> be published on the site. See SKILL.md §2 for the rule behind each section.
+> Delete these quoted lines before shipping.
+
+[2-3 sentences: what you do, for whom, where. This is the paragraph an engine
+will paraphrase when asked "what is [BRAND]". Same wording as the Organization
+description in your @graph — one entity, one story.]
+
+## Core pages
+
+Annotation beats link. A bare list is worthless — say what each page answers.
+
+- [Homepage](https://acme-corp.com/): what [BRAND] does and who it is for.
+- [Pricing](https://acme-corp.com/pricing/): the three tiers, what each includes.
+- [How it works](https://acme-corp.com/how-it-works/): the process, step by step.
+- [FAQ](https://acme-corp.com/faq/): the full Q/A set — canonical source.
+- [About](https://acme-corp.com/about/): who runs this, credentials, bio.
+
+## Service taxonomy
+
+Numbered, stable names. This hands the engine your vocabulary.
+
+1. [Category A] — [one line: what it is]
+2. [Category B] — [one line]
+3. [Category C] — [one line]
+
+## Methodology
+
+How you work, in steps. Answers "how does [BRAND] do it".
+
+1. [Step 1 — what happens, what the client gets]
+2. [Step 2]
+3. [Step 3]
+
+## Proof
+
+Third-party and verifiable only. Facts, dated.
+
+- [Award / press mention], [source], [date]
+- [Documented outcome with a number and its source], [date]
+
+## Differentiators
+
+3-5 claims, each falsifiable. No superlatives.
+
+- [Claim with a number a reader could check]
+- [Claim a competitor could not truthfully copy]
+- [Claim tied to a published page]
+
+## Never include here
+
+Vendor stack · internal pricing logic · personal email · private booking links ·
+unpublished client names · anything not already public on the site.

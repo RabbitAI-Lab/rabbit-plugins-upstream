@@ -1,0 +1,151 @@
+{
+  "updated_utc": "2026-07-17T12:23:09.571704+00:00",
+  "leagues": [
+    {
+      "key": "epl",
+      "name": "English Premier League",
+      "sport": "Soccer",
+      "results": [
+        {
+          "event": "West Ham United vs Leeds United",
+          "home_score": "3",
+          "away_score": "0",
+          "timestamp": "2026-05-24T15:00:00"
+        }
+      ],
+      "upcoming": [
+        {
+          "event": "Arsenal vs Coventry City",
+          "timestamp": "2026-08-21T19:00:00"
+        }
+      ]
+    },
+    {
+      "key": "ucl",
+      "name": "UEFA Champions League",
+      "sport": "Soccer",
+      "results": [
+        {
+          "event": "Egnatia vs Petrocub H\u00eence\u0219ti",
+          "home_score": "6",
+          "away_score": "1",
+          "timestamp": "2026-07-15T19:00:00"
+        }
+      ],
+      "upcoming": [
+        {
+          "event": "Mj\u00e4llby vs Lincoln Red Imps",
+          "timestamp": "2026-07-21T16:00:00"
+        }
+      ]
+    },
+    {
+      "key": "psl",
+      "name": "South African Premier Soccer League",
+      "sport": "Soccer",
+      "results": [
+        {
+          "event": "Cape Town City vs Magesi",
+          "home_score": "1",
+          "away_score": "1",
+          "timestamp": "2026-06-10T13:00:00"
+        }
+      ],
+      "upcoming": []
+    },
+    {
+      "key": "nba",
+      "name": "NBA",
+      "sport": "Basketball",
+      "results": [
+        {
+          "event": "San Antonio Spurs vs New York Knicks",
+          "home_score": "90",
+          "away_score": "94",
+          "timestamp": "2026-06-14T00:30:00"
+        }
+      ],
+      "upcoming": []
+    },
+    {
+      "key": "wnba",
+      "name": "WNBA",
+      "sport": "Basketball",
+      "results": [
+        {
+          "event": "Dallas Wings vs New York Liberty",
+          "home_score": null,
+          "away_score": null,
+          "timestamp": "2026-07-17T01:00:00"
+        }
+      ],
+      "upcoming": [
+        {
+          "event": "Chicago Sky vs Los Angeles Sparks",
+          "timestamp": "2026-07-17T23:30:00"
+        }
+      ]
+    },
+    {
+      "key": "f1",
+      "name": "Formula 1",
+      "sport": "Motorsport",
+      "results": [
+        {
+          "event": "Belgian Grand Prix Practice 1",
+          "home_score": null,
+          "away_score": null,
+          "timestamp": "2026-07-17T11:30:00"
+        }
+      ],
+      "upcoming": [
+        {
+          "event": "Belgian Grand Prix Practice 2",
+          "timestamp": "2026-07-17T15:00:00"
+        }
+      ]
+    },
+    {
+      "key": "urc",
+      "name": "United Rugby Championship",
+      "sport": "Rugby",
+      "results": [
+        {
+          "event": "Leinster vs Bulls",
+          "home_score": "36",
+          "away_score": "7",
+          "timestamp": "2026-06-19T18:30:00"
+        }
+      ],
+      "upcoming": []
+    },
+    {
+      "key": "ipl",
+      "name": "Indian Premier League",
+      "sport": "Cricket",
+      "results": [
+        {
+          "event": "Gujarat Titans vs Royal Challengers Bangalore",
+          "home_score": "156",
+          "away_score": "161",
+          "timestamp": "2026-05-31T14:00:00"
+        }
+      ],
+      "upcoming": []
+    },
+    {
+      "key": "sa20",
+      "name": "SA20",
+      "sport": "Cricket",
+      "results": [
+        {
+          "event": "Pretoria Capitals vs Sunrisers Eastern Cape",
+          "home_score": "158",
+          "away_score": "162",
+          "timestamp": "2026-01-25T15:30:00"
+        }
+      ],
+      "upcoming": []
+    }
+  ]
+}

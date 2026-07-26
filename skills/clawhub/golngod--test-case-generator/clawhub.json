@@ -1,0 +1,13 @@
+{
+  "name": "test-case-generator",
+  "displayName": "测试用例生成器",
+  "version": "1.0.0",
+  "description": "根据系统架构方案和验收清单，自动生成结构化的全量测试用例，覆盖功能测试、性能测试、安全测试和兼容性测试，按P0/P1/P2优先级排序。",
+  "author": "golngod",
+  "license": "MIT",
+  "pricing": {
+    "model": "free"
+  },
+  "tags": ["testing", "test-case", "qa", "quality-assurance", "verification"],
+  "minOpenClawVersion": "1.2.0"
+}

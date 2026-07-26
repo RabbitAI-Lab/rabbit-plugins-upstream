@@ -1,0 +1,29 @@
+{
+  "name": "klyc-pmm",
+  "version": "7.0.3",
+  "description": "KLYC-PMM v7.0.3。第0步写日记→蒸馏→压缩→加密→上传。按文件名自动分类容灾/日记/配置域。默认私密。",
+  "author": "昆仑瑶池",
+  "category": "知识管理",
+  "tags": [
+    "memory",
+    "knowledge-management",
+    "backup",
+    "indexing",
+    "ai-agent",
+    "identity-verification",
+    "semantic-search"
+  ],
+  "config": {
+    "api_endpoint": "",
+    "identity_check": true
+  },
+  "keywords": [
+    "KLYC-PMM",
+    "昆仑令",
+    "AI记忆恢复",
+    "memory recovery",
+    "talisman",
+    "klyc-pmm-recover",
+    "ai.syln.cn"
+  ]
+}

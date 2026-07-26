@@ -1,0 +1,4 @@
+interface:
+  display_name: "WeChat Article Archive"
+  short_description: "Archive WeChat articles and image notes locally"
+  default_prompt: "Use $wechat-article-archive to save this WeChat article or image note as Markdown with local images."

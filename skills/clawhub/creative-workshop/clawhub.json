@@ -1,0 +1,13 @@
+{
+  "name": "creative-workshop",
+  "displayName": "创意造物局Agent",
+  "version": "1.0.0",
+  "description": "统筹5位顶级专家角色，提供从0到1的创意项目全流程服务。覆盖方向确定、MVP方案、商业模式、IP保护、交互设计与技术规格书，交付可直接开发的产品Demo级完整方案。",
+  "author": "golngod",
+  "license": "MIT",
+  "pricing": {
+    "model": "free"
+  },
+  "tags": ["innovation", "product-design", "MVP", "creative", "entrepreneurship"],
+  "minOpenClawVersion": "1.2.0"
+}

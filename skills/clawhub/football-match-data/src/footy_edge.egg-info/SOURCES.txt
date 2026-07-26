@@ -1,0 +1,17 @@
+pyproject.toml
+src/footy/__init__.py
+src/footy/cli.py
+src/footy/config.py
+src/footy/data/__init__.py
+src/footy/data/base.py
+src/footy/data/footballdata.py
+src/footy/data/schema.py
+src/footy/data/store.py
+src/footy/models/__init__.py
+src/footy/models/poisson.py
+src/footy_edge.egg-info/PKG-INFO
+src/footy_edge.egg-info/SOURCES.txt
+src/footy_edge.egg-info/dependency_links.txt
+src/footy_edge.egg-info/entry_points.txt
+src/footy_edge.egg-info/requires.txt
+src/footy_edge.egg-info/top_level.txt

@@ -1,0 +1,4 @@
+interface:
+  display_name: "eKYC Suite Media Labeling"
+  short_description: "Review portrait and scene labels for eKYC workflows"
+  default_prompt: "Use eKYC Suite Media Labeling to review selected portrait or scene labels in a consented image or video."

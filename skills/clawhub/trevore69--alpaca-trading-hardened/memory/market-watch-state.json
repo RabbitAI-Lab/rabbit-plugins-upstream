@@ -1,0 +1,12 @@
+{
+  "lastCheck": "2026-07-16T20:00:00Z",
+  "prices": {
+    "CMCSA": {"price": 24.09, "previousClose": 23.48, "change": 0.61, "changePct": 2.60},
+    "CPNG":  {"price": 16.86, "previousClose": 17.39, "change": -0.53, "changePct": -3.08},
+    "INFQ":  {"price": 9.06,  "previousClose": 9.86,  "change": -0.80, "changePct": -8.11},
+    "NFLX":  {"price": 74.58, "previousClose": 73.67, "change": 0.91, "changePct": 1.24},
+    "NVDA":  {"price": 207.46,"previousClose": 212.50,"change": -5.04, "changePct": -2.37},
+    "SPCX":  {"price": 131.11,"previousClose": 135.31,"change": -4.20, "changePct": -3.10}
+  },
+  "notes": "Quotes from Alpaca snapshot as of 2026-07-16 20:00 UTC. Change vs previous trading-day close. Since 19:00 UTC check: INFQ +$0.17 (+1.91%), NFLX +$0.22 (+0.30%), NVDA +$0.30 (+0.14%); CMCSA -$0.18 (-0.74%), CPNG -$0.12 (-0.71%), SPCX -$0.07 (-0.05%)."
+}

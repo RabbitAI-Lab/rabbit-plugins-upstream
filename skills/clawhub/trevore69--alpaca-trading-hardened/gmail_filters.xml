@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom" xmlns:apps="http://schemas.google.com/apps/2006">
+  <title>Mail Filters</title>
+
+  <!-- Jobs -->
+  <entry>
+    <category term="filter"></category>
+    <title>Jobs - LinkedIn Job Alerts</title>
+    <apps:property name="from" value="jobalerts-noreply@linkedin.com OR jobs-noreply@linkedin.com"/>
+    <apps:property name="label" value="INBOX/Jobs"/>
+    <apps:property name="shouldArchive" value="false"/>
+  </entry>
+  <entry>
+    <category term="filter"></category>
+    <title>Jobs - Indeed / Pnet / Greenhouse / Recruitment</title>
+    <apps:property name="from" value="donotreply@match.indeed.com OR info@jobalerts.pnet.co.za OR no-reply@us.greenhouse-mail.io OR noreply@us.greenhouse-jobs.com OR noreply@placementpartner.com OR bbhkft-candidate@apply.simplify.hr OR info@jobstellen.de"/>
+    <apps:property name="label" value="INBOX/Jobs"/>
+  </entry>
+
+  <!-- LinkedIn general -->
+  <entry>
+    <category term="filter"></category>
+    <title>LinkedIn</title>
+    <apps:property name="from" value="*@linkedin.com"/>
+    <apps:property name="label" value="INBOX/LinkedIn"/>
+  </entry>
+
+  <!-- Finance -->
+  <entry>
+    <category term="filter"></category>
+    <title>Finance - Banking &amp; Payments</title>
+    <apps:property name="from" value="inContact@fnb.co.za OR no-reply@discoverybank.co.za OR no-reply@discovery.bank OR *@stripe.com OR team@info.hostinger.com"/>
+    <apps:property name="label" value="INBOX/Finance"/>
+  </entry>
+
+  <!-- Newsletters / Learning -->
+  <entry>
+    <category term="filter"></category>
+    <title>Newsletters - Udemy</title>
+    <apps:property name="from" value="*@udemy.com OR *@udemymail.com OR hello@students.udemy.com"/>
+    <apps:property name="label" value="INBOX/Newsletters"/>
+  </entry>
+
+  <!-- iGaming -->
+  <entry>
+    <category term="filter"></category>
+    <title>iGaming Reviews</title>
+    <apps:property name="from" value="wordpress@igamingreviews.org"/>
+    <apps:property name="label" value="INBOX/iGaming"/>
+  </entry>
+
+  <!-- Tech / Security -->
+  <entry>
+    <category term="filter"></category>
+    <title>Tech / Security alerts</title>
+    <apps:property name="from" value="*@anthropic.com OR hello@1password.com OR notifications@link.com"/>
+    <apps:property name="label" value="INBOX/Security"/>
+  </entry>
+
+  <!-- Promotions - mark read and archive -->
+  <entry>
+    <category term="filter"></category>
+    <title>Promotions - shopping noise</title>
+    <apps:property name="from" value="MichaelKors@michaelkorsmail.com OR hello@mail.checkers.co.za OR picknpayasap@pnp.co.za OR info@global.fortinet.com OR info@samuraiguitartheory.com OR noreply@onedealaday.co.za OR enquiries@firstshop.co.za OR info@oldjwauctioneers.com OR news@e.sunglasshut.com OR news@stevenslateaudio.com OR no-reply@fanvue.com"/>
+    <apps:property name="label" value="INBOX/Promotions"/>
+    <apps:property name="markAsRead" value="true"/>
+    <apps:property name="shouldArchive" value="true"/>
+  </entry>
+
+</feed>

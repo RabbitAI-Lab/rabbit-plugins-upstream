@@ -1,0 +1,5 @@
+# PDF import (required for scripts/extract_from_pdf.py)
+pymupdf==1.26.5
+
+# PDF export (requires a follow-up browser install: playwright install chromium)
+playwright==1.60.0

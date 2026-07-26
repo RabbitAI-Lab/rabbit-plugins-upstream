@@ -1,0 +1,18 @@
+whatsapp:
+  read_receipts: false
+  media_max_mb: 50
+  send_delay_ms: 1000
+
+constraints:
+  default: none
+  chats:
+    "*@g.us":
+      mode: read
+    "finance-alerts@g.us":
+      mode: full
+
+db:
+  path: ./data/wacli.db
+
+log:
+  level: info

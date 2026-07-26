@@ -1,0 +1,2 @@
+{"contract_version":"2.0","timestamp":"2026-01-01T00:00:00Z","packet_id":"GOAL-001","stage":1,"loop":1,"agent":"developer","result":"In Progress","summary":"已建立授权范围的基线。","acceptance_refs":["AC-01"],"commands":[{"command":"项目测试命令","exit_code":0,"summary":"针对性检查通过。"}],"evidence":["证据/路径"],"risks":[],"next_action":"实现最小而完整的授权垂直切片。"}
+

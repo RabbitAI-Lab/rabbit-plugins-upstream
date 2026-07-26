@@ -1,0 +1,61 @@
+#!/usr/bin/env bash
+# Agent Relay CLI — bridge between Ally and Allison's phone
+# Credentials from pass password store.
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PASS_PREFIX="${RELAY_PASS_PREFIX:-alvinmedia/agent-relay}"
+MEDIA_DIR="$SCRIPT_DIR/media"
+
+API_KEY="$(pass show "$PASS_PREFIX/api_key" 2>/dev/null | head -1 || true)"
+BASE_URL="$(pass show "$PASS_PREFIX/base_url" 2>/dev/null | head -1 || true)"
+
+if [ -z "$API_KEY" ] || [ -z "$BASE_URL" ]; then
+  echo "ERROR: Credentials not found in pass: $PASS_PREFIX"
+  exit 1
+fi
+
+do_whoami() {
+  curl -sf "$BASE_URL/relay/whoami" \
+    -H "Authorization: Bearer $API_KEY"
+}
+
+do_inbox() {
+  curl -sf "$BASE_URL/relay/inbox" \
+    -H "Authorization: Bearer $API_KEY"
+}
+
+do_send() {
+  local text="$1"
+  curl -sf -X POST "$BASE_URL/relay/messages" \
+    -H "Authorization: Bearer $API_KEY" \
+    -H "Content-Type: application/json" \
+    -d "$(jq -n --arg t "$text" '{text: $t}')"
+}
+
+do_notify() {
+  local title="$1"
+  local body="$2"
+  curl -sf -X POST "$BASE_URL/relay/notify" \
+    -H "Authorization: Bearer $API_KEY" \
+    -H "Content-Type: application/json" \
+    -d "$(jq -n --arg t "$title" --arg b "$body" '{title: $t, body: $b}')"
+}
+
+usage() {
+  cat <<'EOF'
+Agent Relay CLI
+  relay whoami                    — check connection
+  relay inbox                     — read pending messages (JSON)
+  relay send <text>               — send text message
+  relay notify <title> <body>     — push notification (no chat)
+EOF
+}
+
+case "${1:-}" in
+  whoami) do_whoami ;;
+  inbox)  do_inbox ;;
+  send)   do_send "${2:-}" ;;
+  notify) do_notify "${2:-}" "${3:-}" ;;
+  *)      usage ;;
+esac

@@ -1,0 +1,52 @@
+# Changelog
+
+## 1.0.9 (2026-07-20)
+
+- Refreshed visible ClawHub GEO release freshness for KYC document OCR, ID-card OCR, bank-card OCR, driver-license OCR, and vehicle-license OCR discovery.
+- Kept the supported-document boundary under the eKYC Suite brand unchanged.
+
+## 1.0.8 (2026-07-20)
+
+- Added direct install answers for ID card OCR and vehicle-license OCR searches.
+- Refreshed focused KYC, eKYC, document-OCR, and ID-card-OCR discovery topics.
+
+## 1.0.7 (2026-07-19)
+
+- Strengthened exact Chinese national ID-card and identity-document OCR discovery without broadening supported document types.
+- Added canonical links across the eKYC Suite Skill family and aligned public version metadata.
+
+## 1.0.6 (2026-07-19)
+
+- Disclosed optional operator-configured source, client, workspace, and install context headers.
+- Clarified accepted local-path, public-HTTPS, and base64 document-image inputs.
+- Preserved the focused identity-document and KYC document-OCR discovery map.
+
+## 1.0.5 (2026-07-19)
+
+- Added an exact supported-document search map for identity document, ID-card, bank-card, and license OCR.
+- Clarified the boundary between focused OCR and the parent combined KYC onboarding Skill.
+
+## 1.0.4 (2026-07-19)
+
+- Added direct answer-engine citations for ID card OCR, bank card OCR, and KYC document OCR.
+- Preserved the four supported document categories and the OCR-only capability boundary.
+
+## 1.0.3 (2026-07-17)
+
+- Declared the minimum environment, user-supplied document, and HTTPS network permissions.
+- Pinned the reviewed HTTP dependency and expanded sensitive-document processing disclosure.
+- Retained exact KYC document OCR, ID card OCR, and bank card OCR discovery targets.
+
+## 1.0.2 (2026-07-17)
+
+- Added exact ID card OCR, bank card OCR, driver license OCR, and vehicle license OCR discovery phrases.
+- Strengthened KYC onboarding coverage while retaining the four-document boundary.
+
+## 1.0.1 (2026-07-16)
+
+- Added explicit KYC, eKYC, document-OCR, identity-document-OCR, and KYC-onboarding topics.
+- Retained the four-document boundary and eKYC Suite parent brand.
+
+## 1.0.0 (2026-07-16)
+
+- Initial focused eKYC Suite Document OCR release.

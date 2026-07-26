@@ -1,0 +1,21 @@
+{
+  "name": "nano-banana-pro-prompts-skill",
+  "owner": {
+    "name": "GokuOpenLab"
+  },
+  "metadata": {
+    "description": "Recommend from 26,000+ Nano Banana Pro image generation prompts based on user needs",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "nano-banana-pro-prompts",
+      "description": "AI skill for recommending image generation prompts",
+      "source": "./",
+      "strict": false,
+      "skills": [
+        "./"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+# 黄金追踪技能元数据（ClawHub 兼容）
+name: gold-tracker
+version: 1.1.0
+description: >
+  轻量级金价追踪和分析技能。自动化数据获取、验证、日志记录和摘要生成，
+  让智能体专注于市场推理而非重复工作。
+author: gold-tracker
+tags:
+  - gold
+  - finance
+  - tracking
+  - analysis
+  - commodity
+language: zh-CN
+entrypoint: SKILL.md
+runtime:
+  requires_python: ">=3.8"
+  third_party_dependencies: []
+  platforms:
+    - macos
+    - linux
+    - windows
+directories:
+  scripts: scripts/
+  logs: logs/
+  archive: archive/
+  alerts: alerts/
+  cache: .cache/
+files:
+  config: config.yaml
+  state: state.json
+  analysis: analysis.md
+commands:
+  setup: python3 scripts/setup.py
+  fetch: python3 scripts/fetch.py
+  validate: python3 scripts/validate.py
+  normalize: python3 scripts/normalize.py
+  alert: python3 scripts/alert_manager.py [detect|list|status|auto_resolve|cleanup|threshold]
+  archive: python3 scripts/archive_manager.py [archive|find|history|cleanup|rebuild|summary]
+  summary: python3 scripts/summary.py [brief|full]
+  maintain: python3 scripts/validate.py && python3 scripts/normalize.py && python3 scripts/archive_manager.py archive && python3 scripts/alert_manager.py auto_resolve && python3 scripts/alert_manager.py cleanup

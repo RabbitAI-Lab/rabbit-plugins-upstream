@@ -1,0 +1,28 @@
+{
+  "name": "gpt-image-2-prompts-skill",
+  "version": "1.0.0",
+  "description": "AI skill: 15,600+ GPT Image 2 (OpenAI) image generation prompts from GokuOpenLab community dataset. Auto-downloads library on install. Works with Claude Code, Cursor, and more.",
+  "type": "module",
+  "scripts": {
+    "postinstall": "node scripts/setup.js",
+    "setup": "node scripts/setup.js",
+    "sync": "node scripts/setup.js --force"
+  },
+  "keywords": [
+    "claude-code",
+    "claude-code-skill",
+    "cursor",
+    "skill",
+    "gpt-image-2",
+    "gpt-image",
+    "openai",
+    "prompts",
+    "prompt-library",
+    "image-generation",
+    "ai-image",
+    "text-to-image",
+    "prompt-templates"
+  ],
+  "author": "GokuOpenLab",
+  "license": "MIT"
+}

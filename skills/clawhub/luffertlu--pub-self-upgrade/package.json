@@ -1,0 +1,13 @@
+{
+  "name": "openclaw-self-update-zero-downtime",
+  "version": "1.0.0",
+  "description": "Zero-downtime OpenClaw upgrade with backup/rollback, release notes review, and user confirmation",
+  "keywords": ["openclaw", "update", "upgrade", "zero-downtime", "blue-green"],
+  "license": "MIT-0",
+  "author": "",
+  "main": "SKILL.md",
+  "files": [
+    "SKILL.md",
+    "scripts/upgrade-openclaw.sh"
+  ]
+}

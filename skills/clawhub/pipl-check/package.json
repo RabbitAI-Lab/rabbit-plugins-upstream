@@ -1,0 +1,44 @@
+{
+  "name": "pipl-check",
+  "version": "1.1.0",
+  "description": "个人信息保护合规审计自查工具。依据《小型个人信息处理者个人信息保护简化措施规定》（国家互联网信息办公室、公安部令第25号）（2026-09-01施行）附件1的24项审计事项与附件2影响评估，引导企业逐项自查并输出PDF/Markdown报告。",
+  "keywords": [
+    "PIPL",
+    "中国合规",
+    "个人信息保护法",
+    "合规审计",
+    "自查表",
+    "小型个人信息处理者",
+    "简化措施"
+  ],
+  "author": "Wei Wu (wwumit)",
+  "license": "MIT",
+  "files": [
+    "SKILL.md",
+    "package.json",
+    "CHANGELOG.md",
+    "DISCLAIMER.md",
+    "requirements.txt",
+    "references/",
+    "scripts/",
+    "scripts/core/"
+  ],
+  "scripts": {
+    "check": "python3 scripts/check.py"
+  },
+  "openclaw": {
+    "skill": true,
+    "category": "compliance",
+    "region": "cn",
+    "dependencies": [],
+    "compatibility": {
+      "minOpenClawVersion": "1.0.0"
+    },
+    "emoji": "📋"
+  },
+  "security": {
+    "scanned": false,
+    "last_scan_date": "",
+    "scan_result": "PENDING"
+  }
+}

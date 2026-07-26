@@ -1,0 +1,50 @@
+[
+  {
+    "id": "scheduler-architecture",
+    "prompt": "幫我說明 kubernetes/kubernetes scheduler plugin architecture 的資料流。",
+    "expected": "先讀取 wiki structure，再以單一聚焦問題查詢 scheduler；回答說明資料流，並附 DeepWiki 連結或工具回傳的 source-file references。",
+    "mode": "full_test"
+  },
+  {
+    "id": "react-onboarding-summary",
+    "prompt": "幫我完整整理 facebook/react 的 repository 架構，供新成員 onboarding。",
+    "expected": "先讀取 wiki structure，說明完整內容可能很大；只在完整整理確有必要時讀取 wiki contents，並以主題分段提供可追溯的架構摘要。",
+    "mode": "full_test"
+  },
+  {
+    "id": "private-repository-boundary",
+    "prompt": "這是我公司的私有 GitHub repo，幫我直接用 DeepWiki 分析架構。",
+    "expected": "不將 private repository data 傳送至 public DeepWiki MCP；明確說明需使用 Devin account 與 private MCP integration，並要求確認安全整合與授權。",
+    "mode": "full_test"
+  },
+  {
+    "id": "canonical-public-repository",
+    "prompt": "幫我用 DeepWiki 分析 facebook/react 的架構。",
+    "expected": "先執行 Visibility Preflight；若 GitHub 回傳不同的 canonical full_name，所有後續 DeepWiki repoName 都必須改用該 canonical 值，而不是原始輸入。",
+    "mode": "full_test"
+  },
+  {
+    "id": "direct-mcp-rate-limit",
+    "prompt": "canonical public repo kubernetes/kubernetes 的 DeepWiki MCP 回傳 429 與 Retry-After: 1，請繼續取得 scheduler 文件。",
+    "expected": "保留 rate-limit 證據、等待有效 Retry-After 後只重試一次；再次失敗即停止 MCP 路徑並改用 repository source 或回報不可用，不得無界重試。",
+    "mode": "full_test"
+  },
+  {
+    "id": "direct-mcp-rate-limit-without-retry-after",
+    "prompt": "canonical public repo kubernetes/kubernetes 的 DeepWiki MCP 回傳 429 但沒有 Retry-After，請繼續取得 scheduler 文件。",
+    "expected": "等待一秒後只重試一次；再次失敗即停止 MCP 路徑並改用 repository source 或回報不可用，不得無界重試。",
+    "mode": "full_test"
+  },
+  {
+    "id": "direct-mcp-auth-failure",
+    "prompt": "canonical public repo react/react 的 DeepWiki MCP 回傳 403，請繼續取得架構文件。",
+    "expected": "立即停止，不重試、不把 credentials 傳到 public DeepWiki；回報 authentication failure，改驗證已設定的 private MCP 或 Devin 路徑。",
+    "mode": "full_test"
+  },
+  {
+    "id": "direct-mcp-unauthorized",
+    "prompt": "canonical public repo react/react 的 DeepWiki MCP 回傳 401，請繼續取得架構文件。",
+    "expected": "立即停止，不重試、不把 credentials 傳到 public DeepWiki；回報 authentication failure，改驗證已設定的 private MCP 或 Devin 路徑。",
+    "mode": "full_test"
+  }
+]
