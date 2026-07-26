@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/mcore-testing",
+  "identifier": "NVIDIA/skills/skills/mcore-testing",
+  "repo": "NVIDIA/skills",
+  "path": "skills/mcore-testing",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "cdf295866635248a3445b0b56dc91b3f47e0f57c17f188790587e1d0b391e703",
+  "fetchedAt": "2026-07-26T17:03:52.328Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-multi-node-slurm",
+  "identifier": "NVIDIA/skills/skills/nemo-mbridge-multi-node-slurm",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-mbridge-multi-node-slurm",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "358da5db3831fc2147cdbf56d520a5cd8cbd56f456b394abfc76cada62e1ede9",
+  "fetchedAt": "2026-07-26T17:03:52.332Z"
+}

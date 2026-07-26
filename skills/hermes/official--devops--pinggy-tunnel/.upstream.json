@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/devops/pinggy-tunnel",
+  "identifier": "official/devops/pinggy-tunnel",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/devops/pinggy-tunnel",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "b81adf019729dc40ea7ad21f6b51aa5d967cf7987166850022d0d04dab7bea3a",
+  "fetchedAt": "2026-07-26T17:03:57.010Z"
+}

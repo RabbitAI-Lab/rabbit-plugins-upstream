@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-finetune-huggingface-model",
+  "identifier": "NVIDIA/skills/skills/tao-finetune-huggingface-model",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-finetune-huggingface-model",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "3a7272bbb7ba72fe265f98a6961283e0dc897bd0c23e8a7967ce9be14d0f995f",
+  "fetchedAt": "2026-07-26T17:03:52.401Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/notion-research-documentation",
+  "identifier": "openai/skills/skills/.curated/notion-research-documentation",
+  "repo": "openai/skills",
+  "path": "skills/.curated/notion-research-documentation",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "b6fe75b4b1bc66497648f77011f5c19e47e74c9f659844ff99e4fd2bab6fbce4",
+  "fetchedAt": "2026-07-26T17:03:51.159Z"
+}

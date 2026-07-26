@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-relay-plugin-adaptive-tuning",
+  "identifier": "NVIDIA/skills/skills/nemo-relay-plugin-adaptive-tuning",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-relay-plugin-adaptive-tuning",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "85ef05d7513db6d0b57bf61b708961de6e462d2e15b5fb4eb091bf51dd36e3f1",
+  "fetchedAt": "2026-07-26T17:03:52.342Z"
+}

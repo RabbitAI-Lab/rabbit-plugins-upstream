@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/kanban-video-orchestrator",
+  "identifier": "official/creative/kanban-video-orchestrator",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/kanban-video-orchestrator",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "4910a5ff2611b3e1390d90a0f7b4c3c92c4178d07e72c5348ca438a173e9b752",
+  "fetchedAt": "2026-07-26T17:03:56.991Z"
+}

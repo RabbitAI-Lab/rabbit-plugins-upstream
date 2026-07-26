@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.system/openai-docs",
+  "identifier": "openai/skills/skills/.system/openai-docs",
+  "repo": "openai/skills",
+  "path": "skills/.system/openai-docs",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "4492ce8a1f75813ec5d9751a65ffcebb79404044c3b4884937dd72034dca8c71",
+  "fetchedAt": "2026-07-26T17:03:51.162Z"
+}

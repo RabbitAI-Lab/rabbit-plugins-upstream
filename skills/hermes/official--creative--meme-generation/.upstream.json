@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/meme-generation",
+  "identifier": "official/creative/meme-generation",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/meme-generation",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "3d439257cc3937d2d08238c7d4581777afae0833a593514df9adaa45823012c5",
+  "fetchedAt": "2026-07-26T17:03:56.995Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-container-deployment",
+  "identifier": "NVIDIA/skills/skills/doca-container-deployment",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-container-deployment",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "3257975bc10ae742a73b8fdd7f760b5966fce84145e3e950a39484a7dc2390be",
+  "fetchedAt": "2026-07-26T17:03:52.272Z"
+}

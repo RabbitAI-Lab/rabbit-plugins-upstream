@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/garrytan/gstack/tree/main/context-restore",
+  "identifier": "garrytan/gstack/context-restore",
+  "repo": "garrytan/gstack",
+  "path": "context-restore",
+  "branch": "main",
+  "pushedAt": "2026-07-15T01:33:47Z",
+  "contentHash": "82050355de5f1bfea23268c5e4f06ed9375031ef308c07202b5d16dca2522e12",
+  "fetchedAt": "2026-07-26T17:03:53.092Z"
+}

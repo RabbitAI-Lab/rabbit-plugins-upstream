@@ -1,0 +1,13 @@
+[
+  {
+    "name": "document-skills",
+    "description": "Collection of document processing suite including Excel, Word, PowerPoint, and PDF capabilities",
+    "source": "claude-marketplace",
+    "identifier": "anthropics/skills/",
+    "trust_level": "trusted",
+    "repo": "anthropics/skills",
+    "path": "",
+    "tags": [],
+    "extra": {}
+  }
+]

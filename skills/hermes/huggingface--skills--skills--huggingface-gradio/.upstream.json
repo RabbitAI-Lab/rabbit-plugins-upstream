@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/huggingface-gradio",
+  "identifier": "huggingface/skills/skills/huggingface-gradio",
+  "repo": "huggingface/skills",
+  "path": "skills/huggingface-gradio",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "4a61841a5d979b80f10ef83161fcb2c7cba2737b75ba5737f9dafcbbff652c8d",
+  "fetchedAt": "2026-07-26T17:03:50.911Z"
+}

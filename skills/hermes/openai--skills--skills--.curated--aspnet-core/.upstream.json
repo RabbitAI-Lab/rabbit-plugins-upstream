@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/aspnet-core",
+  "identifier": "openai/skills/skills/.curated/aspnet-core",
+  "repo": "openai/skills",
+  "path": "skills/.curated/aspnet-core",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "975d7ccac5a9f84b858786a8c4e0a10c00dadcfc871e71f85520e54f6d3347a4",
+  "fetchedAt": "2026-07-26T17:03:51.127Z"
+}

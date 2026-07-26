@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-bench",
+  "identifier": "NVIDIA/skills/skills/doca-bench",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-bench",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "a19c8986b98b91ad7853524268f38d8bcea9583a218b62df752c52fd08c4506a",
+  "fetchedAt": "2026-07-26T17:03:52.266Z"
+}

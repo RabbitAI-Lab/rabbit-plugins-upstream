@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-speculative-decoding",
+  "identifier": "NVIDIA/skills/skills/jetson-speculative-decoding",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-speculative-decoding",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "02260969bbc810aacad3a2c2c5a4827d3540708965630b7a31b4e05c7c93869d",
+  "fetchedAt": "2026-07-26T17:03:52.326Z"
+}

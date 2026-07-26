@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/payments/mpp-agent",
+  "identifier": "official/payments/mpp-agent",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/payments/mpp-agent",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "68b938688cef8b1cd17a2ed8b8f82e0ca465c5d7d8770ed710f8ea2899ed7d97",
+  "fetchedAt": "2026-07-26T17:03:56.997Z"
+}

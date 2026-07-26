@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-automodel-recipe-development",
+  "identifier": "NVIDIA/skills/skills/nemo-automodel-recipe-development",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-automodel-recipe-development",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "a53d4d8608cdb6b9c21d2062d113ccd506e8aae60b3847fed250ee88ba49da1f",
+  "fetchedAt": "2026-07-26T17:03:52.330Z"
+}

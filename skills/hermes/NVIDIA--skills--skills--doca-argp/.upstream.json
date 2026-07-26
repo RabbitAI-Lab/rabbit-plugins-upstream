@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-argp",
+  "identifier": "NVIDIA/skills/skills/doca-argp",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-argp",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "439b0b8ba25861899d69bc87549357234b73ff8090fc5c49981011eb643d64d5",
+  "fetchedAt": "2026-07-26T17:03:52.264Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-comm-channel-admin",
+  "identifier": "NVIDIA/skills/skills/doca-comm-channel-admin",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-comm-channel-admin",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "304a8311974514636be9752281cc3875d79cdf29ee813217670d5d35ed2b16cd",
+  "fetchedAt": "2026-07-26T17:03:52.270Z"
+}

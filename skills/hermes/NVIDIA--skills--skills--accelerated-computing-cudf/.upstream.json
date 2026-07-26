@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/accelerated-computing-cudf",
+  "identifier": "NVIDIA/skills/skills/accelerated-computing-cudf",
+  "repo": "NVIDIA/skills",
+  "path": "skills/accelerated-computing-cudf",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "3d4b629caafef2f0a968c1f8ebf16363b358bf18787a2b4a10a21b3acfc4ba0a",
+  "fetchedAt": "2026-07-26T17:03:52.229Z"
+}

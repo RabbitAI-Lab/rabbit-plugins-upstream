@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/faiss",
+  "identifier": "official/mlops/faiss",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/faiss",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "15ecdfdc9d7dbe5cf358faedbe05d1832bd20c425d6bb3ab012073d10f18f7e9",
+  "fetchedAt": "2026-07-26T17:03:56.978Z"
+}

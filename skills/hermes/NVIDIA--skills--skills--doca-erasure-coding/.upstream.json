@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-erasure-coding",
+  "identifier": "NVIDIA/skills/skills/doca-erasure-coding",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-erasure-coding",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "697e6a45db3c8dba7156c122f414d7448b64722798599ed39f48f517599051bb",
+  "fetchedAt": "2026-07-26T17:03:52.276Z"
+}

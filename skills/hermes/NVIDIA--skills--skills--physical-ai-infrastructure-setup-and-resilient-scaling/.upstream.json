@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/physical-ai-infrastructure-setup-and-resilient-scaling",
+  "identifier": "NVIDIA/skills/skills/physical-ai-infrastructure-setup-and-resilient-scaling",
+  "repo": "NVIDIA/skills",
+  "path": "skills/physical-ai-infrastructure-setup-and-resilient-scaling",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "3f58e1173cdbbf9a5467a362214437418839da6c7e649d77de475fad5aac0fcd",
+  "fetchedAt": "2026-07-26T17:03:52.384Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/vss-setup-video-analytics-api",
+  "identifier": "NVIDIA/skills/skills/vss-setup-video-analytics-api",
+  "repo": "NVIDIA/skills",
+  "path": "skills/vss-setup-video-analytics-api",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "4911755cd88ff95819e9fc1e4df4777320146369b08c7a1a6d65e12850151684",
+  "fetchedAt": "2026-07-26T17:03:52.482Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-optimize-memory",
+  "identifier": "NVIDIA/skills/skills/jetson-optimize-memory",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-optimize-memory",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "238be5da06491c041c3ad73affeb2d51da97065d6d9c27ed0101bc3b77a66d61",
+  "fetchedAt": "2026-07-26T17:03:52.323Z"
+}

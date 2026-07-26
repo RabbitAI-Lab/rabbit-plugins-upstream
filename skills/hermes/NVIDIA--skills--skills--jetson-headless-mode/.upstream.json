@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-headless-mode",
+  "identifier": "NVIDIA/skills/skills/jetson-headless-mode",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-headless-mode",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "55f30a73358e897de319b8f947e8e0c9714bbb589c2b3e2511490ecae8557db8",
+  "fetchedAt": "2026-07-26T17:03:52.319Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-public-knowledge-map",
+  "identifier": "NVIDIA/skills/skills/doca-public-knowledge-map",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-public-knowledge-map",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "46828e0e551d3654753e33ce96a1745223b3d16f32ccdefcbdf89c009beeb204",
+  "fetchedAt": "2026-07-26T17:03:52.287Z"
+}

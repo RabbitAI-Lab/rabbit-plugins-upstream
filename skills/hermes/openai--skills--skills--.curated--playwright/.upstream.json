@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/playwright",
+  "identifier": "openai/skills/skills/.curated/playwright",
+  "repo": "openai/skills",
+  "path": "skills/.curated/playwright",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "2b1315e0e6c865783aaf7fb8d5455920a4bdc4e46511ed2ad78584e3d553cbf0",
+  "fetchedAt": "2026-07-26T17:03:51.163Z"
+}

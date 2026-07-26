@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/figma-code-connect-components",
+  "identifier": "openai/skills/skills/.curated/figma-code-connect-components",
+  "repo": "openai/skills",
+  "path": "skills/.curated/figma-code-connect-components",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "82ad434bb835cda2a357999142e9bd9e8f8d93865d2d19128e9dff994371336f",
+  "fetchedAt": "2026-07-26T17:03:51.146Z"
+}

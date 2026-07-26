@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-relay-instrument-typed-wrappers",
+  "identifier": "NVIDIA/skills/skills/nemo-relay-instrument-typed-wrappers",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-relay-instrument-typed-wrappers",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "7786ea865b7644150947ccea3f8019b255e85cd369efd0d7b7b3132eba983f56",
+  "fetchedAt": "2026-07-26T17:03:52.341Z"
+}

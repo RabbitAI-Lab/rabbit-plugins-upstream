@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/huggingface-tokenizers",
+  "identifier": "official/mlops/huggingface-tokenizers",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/huggingface-tokenizers",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "87ec2965b62b2d63b86a48e5a7f83f8acb7a112f44c3a55af3707431d33b7e51",
+  "fetchedAt": "2026-07-26T17:03:56.987Z"
+}

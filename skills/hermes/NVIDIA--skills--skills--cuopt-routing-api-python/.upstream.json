@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cuopt-routing-api-python",
+  "identifier": "NVIDIA/skills/skills/cuopt-routing-api-python",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cuopt-routing-api-python",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "3dee4f00a1f5a8736c12622a9b8bf32d714185ad217d6bd4c02f8a2b71b0fc95",
+  "fetchedAt": "2026-07-26T17:03:52.244Z"
+}

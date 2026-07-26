@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-sha",
+  "identifier": "NVIDIA/skills/skills/doca-sha",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-sha",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "9076fcf925c0e941c338d5cb62951229a7ae27e90ff4bfc4fba14deb8c673c4c",
+  "fetchedAt": "2026-07-26T17:03:52.290Z"
+}

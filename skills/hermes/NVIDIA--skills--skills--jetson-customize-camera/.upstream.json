@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-customize-camera",
+  "identifier": "NVIDIA/skills/skills/jetson-customize-camera",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-customize-camera",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "2079e0d76368ef562c896a0606ad4541c415462c2842ccd247d524c8f4ae223e",
+  "fetchedAt": "2026-07-26T17:03:52.310Z"
+}

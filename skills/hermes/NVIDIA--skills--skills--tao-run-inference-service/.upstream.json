@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-inference-service",
+  "identifier": "NVIDIA/skills/skills/tao-run-inference-service",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-run-inference-service",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "de9b5b3bb2cf407331ee361ecd85c7b3240fe4e71b17c4725a134c53520eee16",
+  "fetchedAt": "2026-07-26T17:03:52.410Z"
+}

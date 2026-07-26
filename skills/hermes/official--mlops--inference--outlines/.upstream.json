@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/inference/outlines",
+  "identifier": "official/mlops/inference/outlines",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/inference/outlines",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "543ae89da4165d295b02d1a4eb8f0d14f4b62979ce58d72333f5b0811b5ecd2a",
+  "fetchedAt": "2026-07-26T17:03:57.006Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/vss-deploy-detection-tracking-2d",
+  "identifier": "NVIDIA/skills/skills/vss-deploy-detection-tracking-2d",
+  "repo": "NVIDIA/skills",
+  "path": "skills/vss-deploy-detection-tracking-2d",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "e0c11bc079033463ec8cab88868b2bfba33caadd42267bea9a4ac831b62f25dc",
+  "fetchedAt": "2026-07-26T17:03:52.473Z"
+}

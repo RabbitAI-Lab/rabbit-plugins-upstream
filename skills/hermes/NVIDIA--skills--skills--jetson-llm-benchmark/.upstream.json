@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-llm-benchmark",
+  "identifier": "NVIDIA/skills/skills/jetson-llm-benchmark",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-llm-benchmark",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "413d6fa5a54e3095e72fe2b85e32a1baedc2e8a19bc97bc80c515cf2eb013965",
+  "fetchedAt": "2026-07-26T17:03:52.322Z"
+}

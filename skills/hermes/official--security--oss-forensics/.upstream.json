@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/security/oss-forensics",
+  "identifier": "official/security/oss-forensics",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/security/oss-forensics",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "fecceec0df7bc9881b8b16bb47bb60f3d5611c67cae77c49c3252fabb77abfd1",
+  "fetchedAt": "2026-07-26T17:03:57.005Z"
+}

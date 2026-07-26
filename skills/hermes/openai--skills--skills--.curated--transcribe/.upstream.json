@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/transcribe",
+  "identifier": "openai/skills/skills/.curated/transcribe",
+  "repo": "openai/skills",
+  "path": "skills/.curated/transcribe",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "79b2e228221ce7f95dbdac179e7845f0152b4695d4ac74292b4eea58a83bf9de",
+  "fetchedAt": "2026-07-26T17:03:51.171Z"
+}

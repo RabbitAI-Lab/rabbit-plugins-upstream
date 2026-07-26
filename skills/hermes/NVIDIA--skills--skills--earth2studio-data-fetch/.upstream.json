@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/earth2studio-data-fetch",
+  "identifier": "NVIDIA/skills/skills/earth2studio-data-fetch",
+  "repo": "NVIDIA/skills",
+  "path": "skills/earth2studio-data-fetch",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "d8d0c786826da4ea4210c952533bcdd587a2bf30f65753b5b88e047b9c44bcb2",
+  "fetchedAt": "2026-07-26T17:03:52.302Z"
+}

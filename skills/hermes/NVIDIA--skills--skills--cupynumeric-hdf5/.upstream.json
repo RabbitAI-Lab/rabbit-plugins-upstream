@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cupynumeric-hdf5",
+  "identifier": "NVIDIA/skills/skills/cupynumeric-hdf5",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cupynumeric-hdf5",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "489fe6a38b98ada84232622b33a3891a73d0a78bd09db8beb5e154e26f1ef5d8",
+  "fetchedAt": "2026-07-26T17:03:52.246Z"
+}

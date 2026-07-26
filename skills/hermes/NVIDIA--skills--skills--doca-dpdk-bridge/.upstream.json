@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-dpdk-bridge",
+  "identifier": "NVIDIA/skills/skills/doca-dpdk-bridge",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-dpdk-bridge",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "6d50a62c8705d88dd50b436c4c8527233d410acdef7d45e0b631bbaad99e506a",
+  "fetchedAt": "2026-07-26T17:03:52.275Z"
+}

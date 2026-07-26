@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/anthropics/skills/tree/main/skills/frontend-design",
+  "identifier": "anthropics/skills/skills/frontend-design",
+  "repo": "anthropics/skills",
+  "path": "skills/frontend-design",
+  "branch": "main",
+  "pushedAt": "2026-07-24T20:12:36Z",
+  "contentHash": "665c585455decbcb02116bc928adf5148b9cd0f67b7eb4908c8c0d647c00f68a",
+  "fetchedAt": "2026-07-26T17:03:51.049Z"
+}

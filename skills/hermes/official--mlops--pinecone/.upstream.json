@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/pinecone",
+  "identifier": "official/mlops/pinecone",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/pinecone",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "1f7ec9ca6f6d2b8b114f45da4f4cc9f585c9ac18487d7cbd9db14057830cc202",
+  "fetchedAt": "2026-07-26T17:03:57.008Z"
+}

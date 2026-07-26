@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/hf-cloud-python-env-setup",
+  "identifier": "huggingface/skills/skills/hf-cloud-python-env-setup",
+  "repo": "huggingface/skills",
+  "path": "skills/hf-cloud-python-env-setup",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "6fd9a0c8d73c24e0029d173a3dc7a1f6290deb3406f86ff90dd55c5509a80b6e",
+  "fetchedAt": "2026-07-26T17:03:50.908Z"
+}

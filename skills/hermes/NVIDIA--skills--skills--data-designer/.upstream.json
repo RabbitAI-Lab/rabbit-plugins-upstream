@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/data-designer",
+  "identifier": "NVIDIA/skills/skills/data-designer",
+  "repo": "NVIDIA/skills",
+  "path": "skills/data-designer",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "b85b68ea6bcc4477d9a84087419172ab62f84ad3750a23f47bffb251a0a4cbd8",
+  "fetchedAt": "2026-07-26T17:03:52.250Z"
+}

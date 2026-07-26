@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-metric-learning-recognition",
+  "identifier": "NVIDIA/skills/skills/tao-train-metric-learning-recognition",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-metric-learning-recognition",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "4276c6ceda1ad83f0aea8991003a4d6f529e262d8206e639fc29f5c323f897a1",
+  "fetchedAt": "2026-07-26T17:03:52.438Z"
+}

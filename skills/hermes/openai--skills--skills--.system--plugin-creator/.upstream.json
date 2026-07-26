@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.system/plugin-creator",
+  "identifier": "openai/skills/skills/.system/plugin-creator",
+  "repo": "openai/skills",
+  "path": "skills/.system/plugin-creator",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "d5da50d0c8d2776d5b0666855b04fa66795ca505577762428ae0a84594b6fa58",
+  "fetchedAt": "2026-07-26T17:03:51.164Z"
+}

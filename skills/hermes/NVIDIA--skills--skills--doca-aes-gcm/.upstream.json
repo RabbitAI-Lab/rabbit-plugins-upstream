@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-aes-gcm",
+  "identifier": "NVIDIA/skills/skills/doca-aes-gcm",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-aes-gcm",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "8d105bbc2db5df7eb412a574247d5d47c72f4ae16655cae25c21f670ab086b8e",
+  "fetchedAt": "2026-07-26T17:03:52.264Z"
+}

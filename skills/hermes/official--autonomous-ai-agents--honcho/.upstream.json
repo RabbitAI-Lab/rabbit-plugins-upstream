@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/autonomous-ai-agents/honcho",
+  "identifier": "official/autonomous-ai-agents/honcho",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/autonomous-ai-agents/honcho",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "f48bad220f31f8dc3a98d8404c6e8b9f4812eaa12af1e38c86d1a3e1f686c77c",
+  "fetchedAt": "2026-07-26T17:03:56.985Z"
+}

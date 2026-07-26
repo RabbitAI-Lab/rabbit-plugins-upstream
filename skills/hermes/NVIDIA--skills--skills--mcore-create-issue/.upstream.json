@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/mcore-create-issue",
+  "identifier": "NVIDIA/skills/skills/mcore-create-issue",
+  "repo": "NVIDIA/skills",
+  "path": "skills/mcore-create-issue",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "4cf78297d5b78d968562a3a1801f3dba557501b23eaf27ca0fcdef80ac4f2d73",
+  "fetchedAt": "2026-07-26T17:03:52.327Z"
+}

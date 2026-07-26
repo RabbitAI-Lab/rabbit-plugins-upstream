@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-memory-tuning",
+  "identifier": "NVIDIA/skills/skills/nemo-mbridge-perf-memory-tuning",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-mbridge-perf-memory-tuning",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "9804e741314804db5cb85f1b0f0332b75406abd1467e35337314feccb8b5677e",
+  "fetchedAt": "2026-07-26T17:03:52.335Z"
+}

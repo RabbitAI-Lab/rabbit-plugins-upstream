@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/shopify",
+  "identifier": "official/productivity/shopify",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/shopify",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "9cf85e9ea6985f72f41f007b081163097a1dd0da5a31d401f138ca8512a109d4",
+  "fetchedAt": "2026-07-26T17:03:57.018Z"
+}

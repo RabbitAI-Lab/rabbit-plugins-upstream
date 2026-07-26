@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/huggingface-spaces",
+  "identifier": "huggingface/skills/skills/huggingface-spaces",
+  "repo": "huggingface/skills",
+  "path": "skills/huggingface-spaces",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "6a22f572157818351164f72a7a1261e8c89c20a860fec448707d5e4d1928a8be",
+  "fetchedAt": "2026-07-26T17:03:50.915Z"
+}

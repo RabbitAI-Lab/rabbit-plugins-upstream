@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-customize-mgbe",
+  "identifier": "NVIDIA/skills/skills/jetson-customize-mgbe",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-customize-mgbe",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "306f5877e1b989df5263bf93cd25fd436168b16a49e6fc46450fdc7e0afcdd97",
+  "fetchedAt": "2026-07-26T17:03:52.311Z"
+}

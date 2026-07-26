@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-data-designer-plugin",
+  "identifier": "NVIDIA/skills/skills/nemo-data-designer-plugin",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-data-designer-plugin",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "bc1f5085bc5c30f1ff3d3ce4e84e62e425155b01796fc2517557745041d98041",
+  "fetchedAt": "2026-07-26T17:03:52.330Z"
+}

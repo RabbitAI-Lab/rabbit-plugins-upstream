@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/notion-meeting-intelligence",
+  "identifier": "openai/skills/skills/.curated/notion-meeting-intelligence",
+  "repo": "openai/skills",
+  "path": "skills/.curated/notion-meeting-intelligence",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "999fcfe19a461d16295aa1e5d9f89b5d1f4d0d2a5deeda4af3696d91f29027b6",
+  "fetchedAt": "2026-07-26T17:03:51.158Z"
+}

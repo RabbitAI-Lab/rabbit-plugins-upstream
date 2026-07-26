@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-set-target",
+  "identifier": "NVIDIA/skills/skills/jetson-set-target",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-set-target",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "01342fcbc8217b6dfaab61134a1c63ea6fc567511354c6d021560be38e28baf8",
+  "fetchedAt": "2026-07-26T17:03:52.325Z"
+}

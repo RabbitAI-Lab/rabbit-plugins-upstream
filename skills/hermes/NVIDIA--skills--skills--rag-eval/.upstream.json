@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/rag-eval",
+  "identifier": "NVIDIA/skills/skills/rag-eval",
+  "repo": "NVIDIA/skills",
+  "path": "skills/rag-eval",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "d5bcd1c664211ef06b5f697adbad1e7369980e963409a71c406cdcfa301625cd",
+  "fetchedAt": "2026-07-26T17:03:52.392Z"
+}

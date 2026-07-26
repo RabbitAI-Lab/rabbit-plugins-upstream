@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-gpi",
+  "identifier": "NVIDIA/skills/skills/doca-gpi",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-gpi",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "519d68e8ebfe2c6ab7308642c7f85f835df044467265b51bb24b7fb520cc19d9",
+  "fetchedAt": "2026-07-26T17:03:52.281Z"
+}

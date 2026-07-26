@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/health/fitness-nutrition",
+  "identifier": "official/health/fitness-nutrition",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/health/fitness-nutrition",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "c892293c8319044eddc530f69e019649f16040ef68daad77fc288cb7c3888c36",
+  "fetchedAt": "2026-07-26T17:03:56.980Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/pytorch-lightning",
+  "identifier": "official/mlops/pytorch-lightning",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/pytorch-lightning",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "18d05d02a12525c3262dc186d5a1a95557faa84fba44399c700bb0d65b103427",
+  "fetchedAt": "2026-07-26T17:03:57.014Z"
+}

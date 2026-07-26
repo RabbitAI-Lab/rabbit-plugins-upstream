@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cupynumeric-migration-readiness",
+  "identifier": "NVIDIA/skills/skills/cupynumeric-migration-readiness",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cupynumeric-migration-readiness",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "ef2d0f2c86e7f4e8a0c99c90f369441c053071ac32ad103f03b328f564393cd1",
+  "fetchedAt": "2026-07-26T17:03:52.248Z"
+}

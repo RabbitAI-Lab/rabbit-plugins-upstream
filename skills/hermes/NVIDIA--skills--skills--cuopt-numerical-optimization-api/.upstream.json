@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cuopt-numerical-optimization-api",
+  "identifier": "NVIDIA/skills/skills/cuopt-numerical-optimization-api",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cuopt-numerical-optimization-api",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "800b1eacc801f96b41aa523df9b71b766c3a60c384f88f2d8a890eaf33c50551",
+  "fetchedAt": "2026-07-26T17:03:52.242Z"
+}

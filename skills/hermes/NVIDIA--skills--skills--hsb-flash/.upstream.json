@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/hsb-flash",
+  "identifier": "NVIDIA/skills/skills/hsb-flash",
+  "repo": "NVIDIA/skills",
+  "path": "skills/hsb-flash",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "262c9a7e54558064be44874dcfe0d96f90fe885becf8b7578952e6db9c04ef45",
+  "fetchedAt": "2026-07-26T17:03:52.307Z"
+}

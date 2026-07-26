@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/here-now",
+  "identifier": "official/productivity/here-now",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/here-now",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "0f71509954e34ec71a1f04533a1bfd26c0f7b40963eea751aa4cec512bc82d56",
+  "fetchedAt": "2026-07-26T17:03:56.985Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/aiq-deploy",
+  "identifier": "NVIDIA/skills/skills/aiq-deploy",
+  "repo": "NVIDIA/skills",
+  "path": "skills/aiq-deploy",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "e875e32020700f1c859235bf415d5271ec2be2c4044ea245489d2c283c3e37fd",
+  "fetchedAt": "2026-07-26T17:03:52.230Z"
+}

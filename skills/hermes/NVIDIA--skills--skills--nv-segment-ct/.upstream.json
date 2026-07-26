@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nv-segment-ct",
+  "identifier": "NVIDIA/skills/skills/nv-segment-ct",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nv-segment-ct",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "b6c129707ed3d42bdbf5024d53fb8634b9669759ad5f6c5aba6baaee426da3bc",
+  "fetchedAt": "2026-07-26T17:03:52.357Z"
+}

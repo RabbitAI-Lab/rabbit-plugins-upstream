@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-list-capabilities",
+  "identifier": "NVIDIA/skills/skills/tao-list-capabilities",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-list-capabilities",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "ae4768647d3a8cf44921b9e39b9c4795372695b2e70f9106dac41422ced55f99",
+  "fetchedAt": "2026-07-26T17:03:52.404Z"
+}

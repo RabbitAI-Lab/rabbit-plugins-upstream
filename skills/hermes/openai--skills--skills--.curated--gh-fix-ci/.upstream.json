@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/gh-fix-ci",
+  "identifier": "openai/skills/skills/.curated/gh-fix-ci",
+  "repo": "openai/skills",
+  "path": "skills/.curated/gh-fix-ci",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "cfd48b5727ca3e6fd4906fa5c472739a73301c99f5b4dc30b1589cfdc6cd1a0e",
+  "fetchedAt": "2026-07-26T17:03:51.152Z"
+}

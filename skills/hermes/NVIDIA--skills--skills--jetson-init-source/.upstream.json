@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-init-source",
+  "identifier": "NVIDIA/skills/skills/jetson-init-source",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-init-source",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "a8d8924eca68e0b35147b67d5c38520e1a2a703658081f63ae0264dfa4863401",
+  "fetchedAt": "2026-07-26T17:03:52.321Z"
+}

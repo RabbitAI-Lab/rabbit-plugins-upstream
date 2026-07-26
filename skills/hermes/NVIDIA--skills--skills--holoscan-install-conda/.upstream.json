@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/holoscan-install-conda",
+  "identifier": "NVIDIA/skills/skills/holoscan-install-conda",
+  "repo": "NVIDIA/skills",
+  "path": "skills/holoscan-install-conda",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "6b33b481a001009baf260e563fa4f9b052b350212a19c785325ecd660fef8d70",
+  "fetchedAt": "2026-07-26T17:03:52.304Z"
+}

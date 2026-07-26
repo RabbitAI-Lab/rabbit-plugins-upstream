@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-automodel-launcher-config",
+  "identifier": "NVIDIA/skills/skills/nemo-automodel-launcher-config",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-automodel-launcher-config",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "49bbcf4087b5489d5c38475e8937b0eabc73854ee4bfb6eda77e79b7830e0b5d",
+  "fetchedAt": "2026-07-26T17:03:52.329Z"
+}

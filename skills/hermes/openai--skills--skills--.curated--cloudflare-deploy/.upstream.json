@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/cloudflare-deploy",
+  "identifier": "openai/skills/skills/.curated/cloudflare-deploy",
+  "repo": "openai/skills",
+  "path": "skills/.curated/cloudflare-deploy",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "17f60031b4e15153401ce26eb635b4be51cb05fd0a114e601ae835aec2080756",
+  "fetchedAt": "2026-07-26T17:03:51.143Z"
+}

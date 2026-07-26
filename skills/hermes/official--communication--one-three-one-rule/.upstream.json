@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/communication/one-three-one-rule",
+  "identifier": "official/communication/one-three-one-rule",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/communication/one-three-one-rule",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "194ca759562a73ac1cd1b7b9e789598159cf787ca48f5a03c7476eb892d29477",
+  "fetchedAt": "2026-07-26T17:03:57.001Z"
+}

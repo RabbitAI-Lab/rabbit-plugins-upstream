@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/devops/docker-management",
+  "identifier": "official/devops/docker-management",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/devops/docker-management",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "eb95e33dd5dc50157bc475844d836e6b94c3a3a9649c6f57b854387b0ec9c7e1",
+  "fetchedAt": "2026-07-26T17:03:56.975Z"
+}

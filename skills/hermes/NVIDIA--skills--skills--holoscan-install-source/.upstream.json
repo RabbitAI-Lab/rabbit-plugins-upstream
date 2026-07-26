@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/holoscan-install-source",
+  "identifier": "NVIDIA/skills/skills/holoscan-install-source",
+  "repo": "NVIDIA/skills",
+  "path": "skills/holoscan-install-source",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "f5f67cd6ca2e4459f4a331b3a1c103953fcb8781b197ae74cbf4c952042a4dd8",
+  "fetchedAt": "2026-07-26T17:03:52.305Z"
+}

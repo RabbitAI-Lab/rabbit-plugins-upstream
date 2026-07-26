@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-analyze-gaps-vlm-bcq",
+  "identifier": "NVIDIA/skills/skills/tao-analyze-gaps-vlm-bcq",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-analyze-gaps-vlm-bcq",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "5271986b19168ddc62fe75461a67bc3d2064e5c8aca60b3025c157d4ba4abbce",
+  "fetchedAt": "2026-07-26T17:03:52.396Z"
+}

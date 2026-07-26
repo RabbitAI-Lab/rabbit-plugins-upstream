@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/devops/cli",
+  "identifier": "official/devops/cli",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/devops/cli",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "676d081a4ae62386d0e92be08b1ebe46d16a541caacb6e85e96968fdc90fe9d4",
+  "fetchedAt": "2026-07-26T17:03:56.989Z"
+}

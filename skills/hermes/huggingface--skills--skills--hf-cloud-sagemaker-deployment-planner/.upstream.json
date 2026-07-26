@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/hf-cloud-sagemaker-deployment-planner",
+  "identifier": "huggingface/skills/skills/hf-cloud-sagemaker-deployment-planner",
+  "repo": "huggingface/skills",
+  "path": "skills/hf-cloud-sagemaker-deployment-planner",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "a74e44ef1c6ed89b2f543441750e73d302c6bac5f86e291529cc7d79d6a35320",
+  "fetchedAt": "2026-07-26T17:03:50.908Z"
+}

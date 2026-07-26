@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/anthropics/skills/tree/main/skills/theme-factory",
+  "identifier": "anthropics/skills/skills/theme-factory",
+  "repo": "anthropics/skills",
+  "path": "skills/theme-factory",
+  "branch": "main",
+  "pushedAt": "2026-07-24T20:12:36Z",
+  "contentHash": "50bc5c8d91691c22c80aa3a77d437243398121a724531737530f4ed30cddf879",
+  "fetchedAt": "2026-07-26T17:03:51.062Z"
+}

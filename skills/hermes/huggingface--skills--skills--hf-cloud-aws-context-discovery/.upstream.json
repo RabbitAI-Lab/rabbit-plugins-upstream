@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/hf-cloud-aws-context-discovery",
+  "identifier": "huggingface/skills/skills/hf-cloud-aws-context-discovery",
+  "repo": "huggingface/skills",
+  "path": "skills/hf-cloud-aws-context-discovery",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "9bdde665f2671fda65aa0b19deec79ce44068c86e098048cf9ea65ffc0a43ae8",
+  "fetchedAt": "2026-07-26T17:03:50.907Z"
+}

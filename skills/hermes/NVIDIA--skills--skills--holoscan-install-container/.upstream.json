@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/holoscan-install-container",
+  "identifier": "NVIDIA/skills/skills/holoscan-install-container",
+  "repo": "NVIDIA/skills",
+  "path": "skills/holoscan-install-container",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "5b9bfdac9759d0ad9f6ea041b2ad71c001d4563a42525a55554f846e0f617b77",
+  "fetchedAt": "2026-07-26T17:03:52.304Z"
+}

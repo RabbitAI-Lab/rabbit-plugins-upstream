@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-deformable-detr",
+  "identifier": "NVIDIA/skills/skills/tao-train-deformable-detr",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-deformable-detr",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "e684f93cbf4241e6bb5bc0f7e2f0b77c49fcff521aa9d772e792aa115384342a",
+  "fetchedAt": "2026-07-26T17:03:52.417Z"
+}

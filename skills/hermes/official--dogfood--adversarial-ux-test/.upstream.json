@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/dogfood/adversarial-ux-test",
+  "identifier": "official/dogfood/adversarial-ux-test",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/dogfood/adversarial-ux-test",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "7d934904e69969119c9b9f9ddcb635e648356e82c846802c445d6f88f2ebf793",
+  "fetchedAt": "2026-07-26T17:03:56.958Z"
+}

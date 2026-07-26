@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/anthropics/skills/tree/main/skills/mcp-builder",
+  "identifier": "anthropics/skills/skills/mcp-builder",
+  "repo": "anthropics/skills",
+  "path": "skills/mcp-builder",
+  "branch": "main",
+  "pushedAt": "2026-07-24T20:12:36Z",
+  "contentHash": "5a904ea67e691bc7454cc2a631f24a52f3a95f397d76862cdfc6a9370d79363d",
+  "fetchedAt": "2026-07-26T17:03:51.051Z"
+}

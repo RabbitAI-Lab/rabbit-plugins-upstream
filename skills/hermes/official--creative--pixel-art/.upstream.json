@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/pixel-art",
+  "identifier": "official/creative/pixel-art",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/pixel-art",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "06ef8938adeb9ce005edaf026397a6851f5f15d9765a6af29316538ce10ae086",
+  "fetchedAt": "2026-07-26T17:03:57.010Z"
+}

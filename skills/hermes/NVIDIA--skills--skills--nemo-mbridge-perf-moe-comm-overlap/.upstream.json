@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-moe-comm-overlap",
+  "identifier": "NVIDIA/skills/skills/nemo-mbridge-perf-moe-comm-overlap",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-mbridge-perf-moe-comm-overlap",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "7cb1e41661b20ecca671c45fec8ce9ad130ffd680d59f49f33904c892b76c690",
+  "fetchedAt": "2026-07-26T17:03:52.335Z"
+}

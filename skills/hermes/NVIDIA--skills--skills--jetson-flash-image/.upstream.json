@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-flash-image",
+  "identifier": "NVIDIA/skills/skills/jetson-flash-image",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-flash-image",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "094129e2f132817e8be079113ae8546983bc1281a7f2c26af76f6de6bd9c071e",
+  "fetchedAt": "2026-07-26T17:03:52.318Z"
+}

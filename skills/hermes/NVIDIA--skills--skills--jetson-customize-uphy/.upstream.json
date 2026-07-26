@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-customize-uphy",
+  "identifier": "NVIDIA/skills/skills/jetson-customize-uphy",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-customize-uphy",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "a30eafbcd29b07f7ff09dedf5ea879d7d03adbaf95f67bfdd894564fc7311463",
+  "fetchedAt": "2026-07-26T17:03:52.314Z"
+}

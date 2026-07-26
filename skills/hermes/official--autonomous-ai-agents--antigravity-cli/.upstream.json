@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/autonomous-ai-agents/antigravity-cli",
+  "identifier": "official/autonomous-ai-agents/antigravity-cli",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/autonomous-ai-agents/antigravity-cli",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "c3db7bd765b769c6c5f9ae02a70145fe060541eed5a82adcdc6b1870cf3d316d",
+  "fetchedAt": "2026-07-26T17:03:56.958Z"
+}

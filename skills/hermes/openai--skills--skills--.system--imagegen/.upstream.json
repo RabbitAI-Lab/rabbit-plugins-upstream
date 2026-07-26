@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.system/imagegen",
+  "identifier": "openai/skills/skills/.system/imagegen",
+  "repo": "openai/skills",
+  "path": "skills/.system/imagegen",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "0db6b41f6507dc5c3bd3d2507d55367b517b2e9a2d6e3374e7ace40999cfa12e",
+  "fetchedAt": "2026-07-26T17:03:51.154Z"
+}

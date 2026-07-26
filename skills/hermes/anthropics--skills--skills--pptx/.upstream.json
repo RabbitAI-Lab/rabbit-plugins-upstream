@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/anthropics/skills/tree/main/skills/pptx",
+  "identifier": "anthropics/skills/skills/pptx",
+  "repo": "anthropics/skills",
+  "path": "skills/pptx",
+  "branch": "main",
+  "pushedAt": "2026-07-24T20:12:36Z",
+  "contentHash": "542c716c50714598b19d12ba977d6c878d650b5798a8588026700d11bcd854bf",
+  "fetchedAt": "2026-07-26T17:03:51.057Z"
+}

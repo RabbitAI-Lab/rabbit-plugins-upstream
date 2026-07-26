@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/huggingface-paper-publisher",
+  "identifier": "huggingface/skills/skills/huggingface-paper-publisher",
+  "repo": "huggingface/skills",
+  "path": "skills/huggingface-paper-publisher",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "50d1b50a60449863e55f824fd6f4eb0f75852336d0b7ad013be086859611a5ec",
+  "fetchedAt": "2026-07-26T17:03:50.914Z"
+}

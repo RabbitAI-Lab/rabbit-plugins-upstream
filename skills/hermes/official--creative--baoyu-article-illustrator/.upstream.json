@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/baoyu-article-illustrator",
+  "identifier": "official/creative/baoyu-article-illustrator",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/baoyu-article-illustrator",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "f2216ccfa81b7cc521424963075dea218b6e3cc00152e889a6372a5c288b44ae",
+  "fetchedAt": "2026-07-26T17:03:56.962Z"
+}

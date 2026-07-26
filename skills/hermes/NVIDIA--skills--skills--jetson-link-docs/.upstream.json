@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-link-docs",
+  "identifier": "NVIDIA/skills/skills/jetson-link-docs",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-link-docs",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "4d43d04c7f49f3f5db325f357d46a8b2c558fd5067d7ec01b1be0a1a112e4e91",
+  "fetchedAt": "2026-07-26T17:03:52.322Z"
+}

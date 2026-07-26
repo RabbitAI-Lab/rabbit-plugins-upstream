@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/rag-perf",
+  "identifier": "NVIDIA/skills/skills/rag-perf",
+  "repo": "NVIDIA/skills",
+  "path": "skills/rag-perf",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "326046f246511f64b2d8bbe668568493f02d2ffec69f7e5599fccf041e964fa6",
+  "fetchedAt": "2026-07-26T17:03:52.393Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/amc-run-video-calibration",
+  "identifier": "NVIDIA/skills/skills/amc-run-video-calibration",
+  "repo": "NVIDIA/skills",
+  "path": "skills/amc-run-video-calibration",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "7ad15a473d3a3f8dc21700cebf3aa40cccdf9e789facb85ab9da62a230eb0569",
+  "fetchedAt": "2026-07-26T17:03:52.233Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-quick-start",
+  "identifier": "NVIDIA/skills/skills/jetson-quick-start",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-quick-start",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "332d53001554b5cb06cecfd11a47249fd9619ace59d873323e71c5c8d58693c4",
+  "fetchedAt": "2026-07-26T17:03:52.325Z"
+}

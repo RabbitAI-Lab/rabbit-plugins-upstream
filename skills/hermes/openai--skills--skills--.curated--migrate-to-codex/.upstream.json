@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/openai/skills/tree/main/skills/.curated/migrate-to-codex",
+  "identifier": "openai/skills/skills/.curated/migrate-to-codex",
+  "repo": "openai/skills",
+  "path": "skills/.curated/migrate-to-codex",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "03642ca8f58f283cd1e8601d5885c5e7f82f4bda51bb69959cf7925c5e3f9895",
+  "fetchedAt": "2026-07-26T17:03:51.156Z"
+}

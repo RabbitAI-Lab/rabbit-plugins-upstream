@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/osint-investigation",
+  "identifier": "official/research/osint-investigation",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/research/osint-investigation",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "e609f9dae3389d1cd021a4e3ccaf2518d722eb23c301b1d34a854507ef922e80",
+  "fetchedAt": "2026-07-26T17:03:57.004Z"
+}

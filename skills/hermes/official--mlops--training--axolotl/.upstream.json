@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/training/axolotl",
+  "identifier": "official/mlops/training/axolotl",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/training/axolotl",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "536b20695a1499177e974faafd743a45eb6f3f008307ce4b2b00d48413c104fa",
+  "fetchedAt": "2026-07-26T17:03:56.959Z"
+}

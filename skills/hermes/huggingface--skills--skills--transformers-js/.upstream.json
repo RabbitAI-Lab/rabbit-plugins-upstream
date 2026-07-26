@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/transformers-js",
+  "identifier": "huggingface/skills/skills/transformers-js",
+  "repo": "huggingface/skills",
+  "path": "skills/transformers-js",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "6dd75a09bf111379baf3be7d4c6c56da61a1dcf5d1c06f8ee1f3063d5b232d5b",
+  "fetchedAt": "2026-07-26T17:03:50.920Z"
+}

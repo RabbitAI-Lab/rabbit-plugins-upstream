@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/mcore-linting-and-formatting",
+  "identifier": "NVIDIA/skills/skills/mcore-linting-and-formatting",
+  "repo": "NVIDIA/skills",
+  "path": "skills/mcore-linting-and-formatting",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "089312da655fd59d609a92958dc46bb14fc05b92ba84a026b45d4d413dd4f90a",
+  "fetchedAt": "2026-07-26T17:03:52.327Z"
+}

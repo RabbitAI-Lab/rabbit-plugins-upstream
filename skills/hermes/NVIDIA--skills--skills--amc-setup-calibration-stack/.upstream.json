@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/amc-setup-calibration-stack",
+  "identifier": "NVIDIA/skills/skills/amc-setup-calibration-stack",
+  "repo": "NVIDIA/skills",
+  "path": "skills/amc-setup-calibration-stack",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "7ab49dacd55bd57704ad193eca6417b00802a5175ec00d638f29f63dba8680db",
+  "fetchedAt": "2026-07-26T17:03:52.234Z"
+}

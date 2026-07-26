@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cudaq-guide",
+  "identifier": "NVIDIA/skills/skills/cudaq-guide",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cudaq-guide",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "2b4d51cebe31386c4f79b4d201fc7447e9489fd9f4f0bb302e512c5065a563de",
+  "fetchedAt": "2026-07-26T17:03:52.234Z"
+}

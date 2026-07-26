@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-generate-image-grounding",
+  "identifier": "NVIDIA/skills/skills/tao-generate-image-grounding",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-generate-image-grounding",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "93942743217021ed1cf9b6712c74dd806c6bb0151bf6614ccb066ea57da3a57b",
+  "fetchedAt": "2026-07-26T17:03:52.402Z"
+}

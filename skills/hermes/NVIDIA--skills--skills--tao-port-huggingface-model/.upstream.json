@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-port-huggingface-model",
+  "identifier": "NVIDIA/skills/skills/tao-port-huggingface-model",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-port-huggingface-model",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "7a9e1fc8e68c63fb8587235fe4f8b1e119ac65acb6f17b2f432d857ce06d3ec3",
+  "fetchedAt": "2026-07-26T17:03:52.405Z"
+}

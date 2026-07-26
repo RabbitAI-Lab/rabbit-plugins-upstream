@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-pointpillars",
+  "identifier": "NVIDIA/skills/skills/tao-train-pointpillars",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-pointpillars",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "05c540909a848e42eb4644702e49c7a8117a68e9279029165c2672e67b332144",
+  "fetchedAt": "2026-07-26T17:03:52.449Z"
+}

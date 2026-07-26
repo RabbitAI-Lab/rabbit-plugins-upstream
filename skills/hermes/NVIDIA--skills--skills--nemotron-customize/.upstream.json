@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemotron-customize",
+  "identifier": "NVIDIA/skills/skills/nemotron-customize",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemotron-customize",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "507798bdc1f5c6505b21a169d786059ae3ccfde0b92aeb280df964ed04a0ad31",
+  "fetchedAt": "2026-07-26T17:03:52.348Z"
+}

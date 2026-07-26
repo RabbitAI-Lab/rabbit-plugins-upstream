@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/holoscan-install-wheel",
+  "identifier": "NVIDIA/skills/skills/holoscan-install-wheel",
+  "repo": "NVIDIA/skills",
+  "path": "skills/holoscan-install-wheel",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "51d4617ba0f84a2b6824f565161512408746602a4575fd0249e86d2c672127ce",
+  "fetchedAt": "2026-07-26T17:03:52.305Z"
+}

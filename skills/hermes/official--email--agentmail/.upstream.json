@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/email/agentmail",
+  "identifier": "official/email/agentmail",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/email/agentmail",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "dff0ea4c2c1a7973a81b989686fdf4515af6c2876c2ee0cf35ee4591f8fd909f",
+  "fetchedAt": "2026-07-26T17:03:56.958Z"
+}

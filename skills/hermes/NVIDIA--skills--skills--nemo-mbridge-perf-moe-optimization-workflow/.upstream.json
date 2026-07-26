@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-moe-optimization-workflow",
+  "identifier": "NVIDIA/skills/skills/nemo-mbridge-perf-moe-optimization-workflow",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-mbridge-perf-moe-optimization-workflow",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "9736873ba37e3697e13dfce296771adae457d57297bf1ea46eefba2023c7c20e",
+  "fetchedAt": "2026-07-26T17:03:52.336Z"
+}

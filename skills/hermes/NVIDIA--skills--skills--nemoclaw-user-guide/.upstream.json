@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemoclaw-user-guide",
+  "identifier": "NVIDIA/skills/skills/nemoclaw-user-guide",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemoclaw-user-guide",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "4e81c3b7b8bf1e7c8a8f3002ed553e88589fd5a1532f4a10e3a150141da67eb8",
+  "fetchedAt": "2026-07-26T17:03:52.345Z"
+}

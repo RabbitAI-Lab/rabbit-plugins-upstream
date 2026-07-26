@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-customize-nvpmodel",
+  "identifier": "NVIDIA/skills/skills/jetson-customize-nvpmodel",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-customize-nvpmodel",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "2b3296c2aaad9070841bc021c7f5466394ac361f5183308ba846917d9f05f9df",
+  "fetchedAt": "2026-07-26T17:03:52.312Z"
+}

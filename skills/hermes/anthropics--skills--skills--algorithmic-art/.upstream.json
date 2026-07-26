@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/anthropics/skills/tree/main/skills/algorithmic-art",
+  "identifier": "anthropics/skills/skills/algorithmic-art",
+  "repo": "anthropics/skills",
+  "path": "skills/algorithmic-art",
+  "branch": "main",
+  "pushedAt": "2026-07-24T20:12:36Z",
+  "contentHash": "8c15717769d76330df4387b85402a3754d858b97749ae259d3365ea9ea394f89",
+  "fetchedAt": "2026-07-26T17:03:51.022Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/digital-health-clinical-asr-setup",
+  "identifier": "NVIDIA/skills/skills/digital-health-clinical-asr-setup",
+  "repo": "NVIDIA/skills",
+  "path": "skills/digital-health-clinical-asr-setup",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "121c161294b5697035c9f0d1e96e789566f84c64b53d4c623a3172aa53bc00b3",
+  "fetchedAt": "2026-07-26T17:03:52.263Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/digital-health-clinical-asr-eval",
+  "identifier": "NVIDIA/skills/skills/digital-health-clinical-asr-eval",
+  "repo": "NVIDIA/skills",
+  "path": "skills/digital-health-clinical-asr-eval",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "73b7ec147f68e362700b93512b3d489b1d0aec901f499ce3f86a98a1e3a1547d",
+  "fetchedAt": "2026-07-26T17:03:52.262Z"
+}

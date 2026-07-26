@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-compress",
+  "identifier": "NVIDIA/skills/skills/doca-compress",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-compress",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "4215e412debdb3d4b535fb8b25698e0057317c001334da84879ba327e3714e31",
+  "fetchedAt": "2026-07-26T17:03:52.271Z"
+}

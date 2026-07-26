@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/whisper",
+  "identifier": "official/mlops/whisper",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/whisper",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "db746eaaff11f3a673c144d5d013eb9212964880b73e11c9f9447bd86d509117",
+  "fetchedAt": "2026-07-26T17:03:57.032Z"
+}

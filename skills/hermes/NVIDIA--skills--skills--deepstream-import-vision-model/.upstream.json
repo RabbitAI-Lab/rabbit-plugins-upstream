@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/deepstream-import-vision-model",
+  "identifier": "NVIDIA/skills/skills/deepstream-import-vision-model",
+  "repo": "NVIDIA/skills",
+  "path": "skills/deepstream-import-vision-model",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "aadfba4f5adca661a09865a0475e54d4008c558af6c27643ab487f474bd44355",
+  "fetchedAt": "2026-07-26T17:03:52.255Z"
+}

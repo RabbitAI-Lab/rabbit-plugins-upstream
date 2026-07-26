@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/concept-diagrams",
+  "identifier": "official/creative/concept-diagrams",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/concept-diagrams",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "24d4ce99e632746eca65aa5010e04e762b8a2554be41d1ce8f461559abed3eda",
+  "fetchedAt": "2026-07-26T17:03:56.970Z"
+}

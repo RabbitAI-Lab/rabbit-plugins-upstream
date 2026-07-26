@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/dicom-series-to-volume",
+  "identifier": "NVIDIA/skills/skills/dicom-series-to-volume",
+  "repo": "NVIDIA/skills",
+  "path": "skills/dicom-series-to-volume",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "c386e6d3d2bb44a7fc2f15a51f5da86563e8b428ae71c611d04726ba3b50cfba",
+  "fetchedAt": "2026-07-26T17:03:52.261Z"
+}

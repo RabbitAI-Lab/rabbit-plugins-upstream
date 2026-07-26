@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/rag-blueprint",
+  "identifier": "NVIDIA/skills/skills/rag-blueprint",
+  "repo": "NVIDIA/skills",
+  "path": "skills/rag-blueprint",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "3316593cfe176a9f4c39e9eef092aa3374866fb9de5325851ffebe2b0a374e73",
+  "fetchedAt": "2026-07-26T17:03:52.392Z"
+}

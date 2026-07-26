@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-visual-changenet",
+  "identifier": "NVIDIA/skills/skills/tao-train-visual-changenet",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-visual-changenet",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "ef5fe6815868e2adf740b3487a95dbeed1f494277d0ad6b1a36d17a255ba4cbf",
+  "fetchedAt": "2026-07-26T17:03:52.459Z"
+}

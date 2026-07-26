@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-mbridge-perf-parallelism-strategies",
+  "identifier": "NVIDIA/skills/skills/nemo-mbridge-perf-parallelism-strategies",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-mbridge-perf-parallelism-strategies",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "27d8f909e627490bd7c765473b2d414f688d6d04f67acface98a9184d9f0e1e5",
+  "fetchedAt": "2026-07-26T17:03:52.337Z"
+}

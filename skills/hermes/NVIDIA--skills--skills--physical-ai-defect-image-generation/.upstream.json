@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/physical-ai-defect-image-generation",
+  "identifier": "NVIDIA/skills/skills/physical-ai-defect-image-generation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/physical-ai-defect-image-generation",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "04e375473c2fa6cd10b67ba3766f28e7488db13da6a07e253aced6b839bfd8e9",
+  "fetchedAt": "2026-07-26T17:03:52.381Z"
+}

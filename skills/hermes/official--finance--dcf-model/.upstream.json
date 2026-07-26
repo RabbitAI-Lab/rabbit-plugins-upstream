@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/finance/dcf-model",
+  "identifier": "official/finance/dcf-model",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/finance/dcf-model",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "c2230d31823cc7bd4b8bde55ec7b9d9370722af952d30a134c848b4ca5af32d0",
+  "fetchedAt": "2026-07-26T17:03:56.974Z"
+}

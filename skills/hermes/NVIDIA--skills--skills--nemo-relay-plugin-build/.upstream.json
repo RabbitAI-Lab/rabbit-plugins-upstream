@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-relay-plugin-build",
+  "identifier": "NVIDIA/skills/skills/nemo-relay-plugin-build",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-relay-plugin-build",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "fe98f586c435d807b511d61e920174e62f10f32061946d98a1efa4dd4819c93a",
+  "fetchedAt": "2026-07-26T17:03:52.342Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/skill-card-generator",
+  "identifier": "NVIDIA/skills/skills/skill-card-generator",
+  "repo": "NVIDIA/skills",
+  "path": "skills/skill-card-generator",
+  "branch": "main",
+  "pushedAt": "2026-07-24T21:26:54Z",
+  "contentHash": "fc02c3d6d1396660dbf2de80f53e68b9553d9f6cec17122f03715b2b2b589a6b",
+  "fetchedAt": "2026-07-26T17:03:52.394Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mcp/mcp-oauth-remote-gateway",
+  "identifier": "official/mcp/mcp-oauth-remote-gateway",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mcp/mcp-oauth-remote-gateway",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "ae368ea6d9be56765ed45fffd2ecfb67317092103ecb205162d454fadbe4472f",
+  "fetchedAt": "2026-07-26T17:03:56.994Z"
+}

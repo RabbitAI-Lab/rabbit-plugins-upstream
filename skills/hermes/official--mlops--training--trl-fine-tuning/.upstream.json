@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/training/trl-fine-tuning",
+  "identifier": "official/mlops/training/trl-fine-tuning",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/training/trl-fine-tuning",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "39a0cb9885435f5eb0fd57e3ad8df0de603ca9d5a0697b78747b14def640eb9c",
+  "fetchedAt": "2026-07-26T17:03:56.980Z"
+}

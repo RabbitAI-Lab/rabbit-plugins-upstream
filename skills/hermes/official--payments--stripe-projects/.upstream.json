@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/payments/stripe-projects",
+  "identifier": "official/payments/stripe-projects",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/payments/stripe-projects",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "78e1e6ae521e9516b6d066ad60c29fa9fda891379991f49c7b6dc55470e12b1c",
+  "fetchedAt": "2026-07-26T17:03:57.022Z"
+}

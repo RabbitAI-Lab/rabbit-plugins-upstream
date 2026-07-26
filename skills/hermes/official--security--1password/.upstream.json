@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/security/1password",
+  "identifier": "official/security/1password",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/security/1password",
+  "branch": "main",
+  "pushedAt": "2026-07-26T15:43:26Z",
+  "contentHash": "029c44800a5f283375d73ab651c4c9a5ad116c3b286858332c0ab25eb5eacd28",
+  "fetchedAt": "2026-07-26T17:03:56.957Z"
+}

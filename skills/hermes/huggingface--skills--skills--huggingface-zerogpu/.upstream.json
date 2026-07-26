@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/huggingface/skills/tree/main/skills/huggingface-zerogpu",
+  "identifier": "huggingface/skills/skills/huggingface-zerogpu",
+  "repo": "huggingface/skills",
+  "path": "skills/huggingface-zerogpu",
+  "branch": "main",
+  "pushedAt": "2026-07-25T04:31:32Z",
+  "contentHash": "ebd3fcb4dd14feaf878780031c0656dfc328fe49f2d922c02e0df13d3c498682",
+  "fetchedAt": "2026-07-26T17:03:50.918Z"
+}
