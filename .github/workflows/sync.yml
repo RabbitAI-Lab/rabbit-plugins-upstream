@@ -1,0 +1,98 @@
+name: Sync upstream skills
+
+on:
+  schedule:
+    # 每天 UTC 07:23（北京时间 15:23），避开整点
+    - cron: "23 7 * * *"
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "同步哪个来源"
+        type: choice
+        options: [all, clawhub, skills-sh, hermes]
+        default: all
+      max_items:
+        description: "本轮每个来源最多处理的 skill 数"
+        default: "3000"
+
+permissions:
+  contents: write
+  pull-requests: write
+
+concurrency:
+  group: sync-upstream
+  cancel-in-progress: false
+
+env:
+  SYNC_MAX_ITEMS: ${{ inputs.max_items || '3000' }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 300
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Sync ClawHub
+        id: clawhub
+        if: ${{ inputs.source == 'clawhub' || inputs.source == 'all' || inputs.source == '' }}
+        continue-on-error: true
+        run: node scripts/sync-clawhub.mjs
+
+      - name: Sync skills.sh
+        id: skillssh
+        if: ${{ inputs.source == 'skills-sh' || inputs.source == 'all' || inputs.source == '' }}
+        continue-on-error: true
+        run: node scripts/sync-skills-sh.mjs
+
+      - name: Sync Hermes index
+        id: hermes
+        if: ${{ inputs.source == 'hermes' || inputs.source == 'all' || inputs.source == '' }}
+        continue-on-error: true
+        run: node scripts/sync-hermes.mjs
+
+      - name: Build index
+        run: node scripts/build-index.mjs
+
+      - name: Create PR with changes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "无变更，不开 PR"
+            exit 0
+          fi
+          DATE=$(date -u +%Y%m%d)
+          BRANCH="sync/$DATE"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -B "$BRANCH"
+          git add -A
+          git commit -m "sync: upstream skills $DATE"
+          git push -f origin "$BRANCH"
+          if gh pr view "$BRANCH" >/dev/null 2>&1; then
+            echo "PR 已存在，已强推更新: $BRANCH"
+          else
+            STAT=$(git diff --stat main..."$BRANCH" | tail -5)
+            gh pr create --base main --head "$BRANCH" \
+              --title "sync: 上游 skills 更新 $DATE" \
+              --body "自动同步上游 skills（ClawHub / skills.sh / Hermes 索引）。
+
+          ⚠️ skill 内容本质是 prompt 与脚本，合并前请审查变更。
+
+          \`\`\`
+          $STAT
+          \`\`\`"
+          fi
+
+      - name: Fail if any source failed
+        if: ${{ steps.clawhub.outcome == 'failure' || steps.skillssh.outcome == 'failure' || steps.hermes.outcome == 'failure' }}
+        run: |
+          echo "部分来源同步失败：clawhub=${{ steps.clawhub.outcome }} skills-sh=${{ steps.skillssh.outcome }} hermes=${{ steps.hermes.outcome }}"
+          exit 1

@@ -1,0 +1,13 @@
+{
+  "name": "rabbit-plugins-upstream",
+  "private": true,
+  "type": "module",
+  "description": "Mirror of upstream agent skills (ClawHub / skills.sh / Hermes)",
+  "scripts": {
+    "sync:clawhub": "node scripts/sync-clawhub.mjs",
+    "sync:skills-sh": "node scripts/sync-skills-sh.mjs",
+    "sync:hermes": "node scripts/sync-hermes.mjs",
+    "sync:all": "node scripts/sync-clawhub.mjs && node scripts/sync-skills-sh.mjs && node scripts/sync-hermes.mjs && node scripts/build-index.mjs",
+    "index": "node scripts/build-index.mjs"
+  }
+}

@@ -1,0 +1,56 @@
+# rabbit-plugins-upstream
+
+上游 Agent Skills 的全量镜像仓库。内容由 GitHub Actions 定时同步，变更以 Pull Request 形式进入，请通过 PR 审查后再合并。
+
+> ⚠️ 本仓库内容均为上游公开内容的**镜像**，版权归原作者/发布者所有，各 skill 目录内保留其原始 LICENSE。skill 内容本质上是 prompt 与可执行脚本，**合并 PR 前请人工审查上游变更**。
+
+## 上游来源
+
+| 来源 | 说明 | 镜像方式 |
+|---|---|---|
+| [ClawHub](https://clawhub.ai) | OpenClaw 官方 skill 注册表（约 69k skills） | `/api/v1/skills` 全量枚举 + `/api/v1/download` 下载完整内容 |
+| [skills.sh](https://www.skills.sh) | Vercel 的 agent skills 目录（约 20k skills） | sitemap 枚举 + 从对应 GitHub 仓库拉取 skill 目录内容 |
+| [Hermes Agent](https://hermes-agent.nousresearch.com/docs/skills) | Nous Research 的聚合索引（约 90k skills，含上述两者） | 镜像其 unified index（元数据），按来源拆分存储 |
+
+## 目录结构
+
+```
+skills/
+  clawhub/<slug>/ 或 <owner>--<slug>/    # ClawHub skill 完整内容（slug 撞名时带 owner 前缀）
+  skills-sh/<owner>--<repo>--<skillId>/  # skills.sh skill 完整内容
+  hermes/_index/<source>.json            # Hermes 聚合索引（仅元数据）
+INDEX.json                               # 全量索引（由 build-index 生成）
+sync-state.json                          # 增量同步状态
+scripts/                                 # 同步脚本（Node.js，零第三方依赖）
+.github/workflows/sync.yml               # 定时同步 workflow
+```
+
+每个 skill 目录内含 `.upstream.json`，记录来源 URL、版本、内容哈希与同步时间。
+
+## 同步机制
+
+- **定时**：每天通过 `.github/workflows/sync.yml` 运行，也可手动 `workflow_dispatch` 触发。
+- **增量**：以 `sync-state.json` 对比上游版本/哈希，只拉新增与变更；上游下架的 skill 会被删除（在 PR diff 中可见）。
+- **分批**：全量约 9 万 skill，单次运行处理量受 `SYNC_MAX_ITEMS`（默认 3000）限制，状态随每次提交持久化，多轮运行后收敛。
+- **落地**：检测到变更后自动建分支 `sync/<date>` 并开 PR；无变更则不开。
+
+## 本地运行
+
+```bash
+# 小批量试跑
+SYNC_MAX_ITEMS=20 npm run sync:clawhub
+
+# skills.sh 源需要 GitHub token（仓库 API 限流），Actions 中自动注入
+GITHUB_TOKEN=$(gh auth token) SYNC_MAX_ITEMS=20 npm run sync:skills-sh
+
+npm run sync:hermes   # 只拉一个约 35MB 的索引 JSON
+npm run index         # 重新生成 INDEX.json 与下方统计
+```
+
+环境变量：`SYNC_MAX_ITEMS`（每轮处理上限）、`SYNC_CONCURRENCY`（并发数，默认 6）、`GITHUB_TOKEN`。
+
+## 索引统计
+
+<!-- INDEX:START -->
+（尚未同步，运行 `npm run index` 后自动生成）
+<!-- INDEX:END -->
