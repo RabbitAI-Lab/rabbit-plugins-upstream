@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/skills/template-skill",
+  "repo": "anthropics/skills",
+  "skillId": "template-skill",
+  "branch": "main",
+  "pushedAt": "2026-07-24T20:12:36Z",
+  "contentHash": "619080fb158d282e55835131603a5114a03c77a1b4336af992f61e5c064d832f",
+  "fetchedAt": "2026-07-26T17:03:49.354Z"
+}

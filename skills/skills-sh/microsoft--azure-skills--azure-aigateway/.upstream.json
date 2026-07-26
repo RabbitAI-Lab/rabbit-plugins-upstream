@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/azure-aigateway",
+  "repo": "microsoft/azure-skills",
+  "skillId": "azure-aigateway",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "4acba93a31518473d38fb75ab022819f37a82d9c0ab643c02e7e5bbe0e62e117",
+  "fetchedAt": "2026-07-26T17:03:49.713Z"
+}

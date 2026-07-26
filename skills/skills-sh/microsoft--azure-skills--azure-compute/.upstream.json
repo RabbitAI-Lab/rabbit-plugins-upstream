@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/azure-compute",
+  "repo": "microsoft/azure-skills",
+  "skillId": "azure-compute",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "cadd7ecc0c9cc5bcc56e2fc5e44d904c4f97ff7a23e65941e5b74992678cf1aa",
+  "fetchedAt": "2026-07-26T17:03:49.757Z"
+}

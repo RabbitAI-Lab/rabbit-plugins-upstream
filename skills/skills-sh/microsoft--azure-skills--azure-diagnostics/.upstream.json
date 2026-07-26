@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/azure-diagnostics",
+  "repo": "microsoft/azure-skills",
+  "skillId": "azure-diagnostics",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "2c8131578068ed74abce26d6bb2610af8ed819f350fabd7a702165068bf263b7",
+  "fetchedAt": "2026-07-26T17:03:49.634Z"
+}

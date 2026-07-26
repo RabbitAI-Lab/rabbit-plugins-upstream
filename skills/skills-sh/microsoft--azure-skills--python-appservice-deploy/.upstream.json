@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/python-appservice-deploy",
+  "repo": "microsoft/azure-skills",
+  "skillId": "python-appservice-deploy",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "0184d80d4ac8c7ef3591c3d8da53b7ede425d8778c5bad21756225b38d3ced7a",
+  "fetchedAt": "2026-07-26T17:03:49.850Z"
+}

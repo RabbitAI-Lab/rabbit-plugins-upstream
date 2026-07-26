@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/azure-enterprise-infra-planner",
+  "repo": "microsoft/azure-skills",
+  "skillId": "azure-enterprise-infra-planner",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "e2e2895217bf0220eb693d188d7d2bb60d23290129aa2c3f1ad7b9ec7967ac5e",
+  "fetchedAt": "2026-07-26T17:03:49.790Z"
+}

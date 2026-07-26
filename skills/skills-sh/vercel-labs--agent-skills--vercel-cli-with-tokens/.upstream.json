@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/vercel-labs/agent-skills/vercel-cli-with-tokens",
+  "repo": "vercel-labs/agent-skills",
+  "skillId": "vercel-cli-with-tokens",
+  "branch": "main",
+  "pushedAt": "2026-07-24T10:25:29Z",
+  "contentHash": "eb16b20dcbe6ce51e0372083d624e0847af1b09487ec99249227d5a8eddebfc0",
+  "fetchedAt": "2026-07-26T17:03:49.196Z"
+}

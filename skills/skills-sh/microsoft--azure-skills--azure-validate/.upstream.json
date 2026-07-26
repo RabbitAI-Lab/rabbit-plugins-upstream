@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/azure-validate",
+  "repo": "microsoft/azure-skills",
+  "skillId": "azure-validate",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "4cdd17ec90017686da6bab23165b8d4a4c17fe30c22c7d1d467288a5ad76fa78",
+  "fetchedAt": "2026-07-26T17:03:49.676Z"
+}

@@ -1,0 +1,830 @@
+{
+  "repos": {
+    "mattpocock/skills": {
+      "defaultBranch": "main",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "skillIds": [
+        "mattpocock--skills--grill-me",
+        "mattpocock--skills--grill-with-docs",
+        "mattpocock--skills--improve-codebase-architecture",
+        "mattpocock--skills--tdd",
+        "mattpocock--skills--setup-matt-pocock-skills",
+        "mattpocock--skills--triage",
+        "mattpocock--skills--handoff",
+        "mattpocock--skills--prototype",
+        "mattpocock--skills--to-prd",
+        "mattpocock--skills--to-issues",
+        "mattpocock--skills--teach",
+        "mattpocock--skills--grilling",
+        "mattpocock--skills--domain-modeling",
+        "mattpocock--skills--codebase-design",
+        "mattpocock--skills--writing-great-skills",
+        "mattpocock--skills--diagnosing-bugs",
+        "mattpocock--skills--diagnose",
+        "mattpocock--skills--ask-matt",
+        "mattpocock--skills--write-a-skill",
+        "mattpocock--skills--zoom-out",
+        "mattpocock--skills--caveman",
+        "mattpocock--skills--implement",
+        "mattpocock--skills--code-review",
+        "mattpocock--skills--design-an-interface",
+        "mattpocock--skills--request-refactor-plan",
+        "mattpocock--skills--qa",
+        "mattpocock--skills--ubiquitous-language",
+        "mattpocock--skills--obsidian-vault",
+        "mattpocock--skills--git-guardrails-claude-code",
+        "mattpocock--skills--resolving-merge-conflicts",
+        "mattpocock--skills--research",
+        "mattpocock--skills--edit-article",
+        "mattpocock--skills--setup-pre-commit",
+        "mattpocock--skills--scaffold-exercises",
+        "mattpocock--skills--wayfinder",
+        "mattpocock--skills--writing-shape",
+        "mattpocock--skills--writing-fragments",
+        "mattpocock--skills--migrate-to-shoehorn",
+        "mattpocock--skills--writing-beats",
+        "mattpocock--skills--to-spec",
+        "mattpocock--skills--to-tickets",
+        "mattpocock--skills--loop-me",
+        "mattpocock--skills--review",
+        "mattpocock--skills--wizard",
+        "mattpocock--skills--claude-handoff",
+        "mattpocock--skills--setup-ts-deep-modules",
+        "mattpocock--skills--decision-mapping",
+        "mattpocock--skills--to-questionnaire",
+        "mattpocock--skills--batch-grill-me"
+      ]
+    },
+    "vercel-labs/skills": {
+      "defaultBranch": "main",
+      "pushedAt": "2026-07-22T21:14:21Z",
+      "skillIds": [
+        "vercel-labs--skills--find-skills"
+      ]
+    },
+    "vercel-labs/agent-skills": {
+      "defaultBranch": "main",
+      "pushedAt": "2026-07-24T10:25:29Z",
+      "skillIds": [
+        "vercel-labs--agent-skills--vercel-react-best-practices",
+        "vercel-labs--agent-skills--web-design-guidelines",
+        "vercel-labs--agent-skills--vercel-composition-patterns",
+        "vercel-labs--agent-skills--vercel-react-native-skills",
+        "vercel-labs--agent-skills--deploy-to-vercel",
+        "vercel-labs--agent-skills--vercel-react-view-transitions",
+        "vercel-labs--agent-skills--vercel-cli-with-tokens",
+        "vercel-labs--agent-skills--vercel-optimize",
+        "vercel-labs--agent-skills--writing-guidelines",
+        "vercel-labs--agent-skills--vercel-deploy"
+      ]
+    },
+    "anthropics/skills": {
+      "defaultBranch": "main",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "skillIds": [
+        "anthropics--skills--frontend-design",
+        "anthropics--skills--skill-creator",
+        "anthropics--skills--pptx",
+        "anthropics--skills--pdf",
+        "anthropics--skills--docx",
+        "anthropics--skills--xlsx",
+        "anthropics--skills--webapp-testing",
+        "anthropics--skills--mcp-builder",
+        "anthropics--skills--canvas-design",
+        "anthropics--skills--web-artifacts-builder",
+        "anthropics--skills--theme-factory",
+        "anthropics--skills--doc-coauthoring",
+        "anthropics--skills--brand-guidelines",
+        "anthropics--skills--algorithmic-art",
+        "anthropics--skills--internal-comms",
+        "anthropics--skills--slack-gif-creator",
+        "anthropics--skills--template-skill",
+        "anthropics--skills--claude-api"
+      ]
+    },
+    "microsoft/azure-skills": {
+      "defaultBranch": "main",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "skillIds": [
+        "microsoft--azure-skills--microsoft-foundry",
+        "microsoft--azure-skills--azure-ai",
+        "microsoft--azure-skills--azure-diagnostics",
+        "microsoft--azure-skills--azure-deploy",
+        "microsoft--azure-skills--azure-prepare",
+        "microsoft--azure-skills--azure-storage",
+        "microsoft--azure-skills--azure-validate",
+        "microsoft--azure-skills--entra-app-registration",
+        "microsoft--azure-skills--appinsights-instrumentation",
+        "microsoft--azure-skills--azure-resource-lookup",
+        "microsoft--azure-skills--azure-compliance",
+        "microsoft--azure-skills--azure-aigateway",
+        "microsoft--azure-skills--azure-kusto",
+        "microsoft--azure-skills--azure-resource-visualizer",
+        "microsoft--azure-skills--azure-rbac",
+        "microsoft--azure-skills--azure-messaging",
+        "microsoft--azure-skills--azure-hosted-copilot-sdk",
+        "microsoft--azure-skills--azure-compute",
+        "microsoft--azure-skills--azure-cloud-migrate",
+        "microsoft--azure-skills--azure-quotas",
+        "microsoft--azure-skills--azure-upgrade",
+        "microsoft--azure-skills--azure-enterprise-infra-planner",
+        "microsoft--azure-skills--azure-kubernetes",
+        "microsoft--azure-skills--azure-cost",
+        "microsoft--azure-skills--airunway-aks-setup",
+        "microsoft--azure-skills--azure-cost-optimization",
+        "microsoft--azure-skills--entra-agent-id",
+        "microsoft--azure-skills--azure-reliability",
+        "microsoft--azure-skills--azure-observability",
+        "microsoft--azure-skills--python-appservice-deploy",
+        "microsoft--azure-skills--azure-postgres",
+        "microsoft--azure-skills--azure-app-onboard-prereq",
+        "microsoft--azure-skills--azure-app-onboard",
+        "microsoft--azure-skills--markdown-token-optimizer",
+        "microsoft--azure-skills--sensei",
+        "microsoft--azure-skills--skill-authoring",
+        "microsoft--azure-skills--file-test-bug",
+        "microsoft--azure-skills--analyze-test-run"
+      ]
+    },
+    "vercel-labs/agent-browser": {
+      "defaultBranch": "main",
+      "pushedAt": "2026-07-26T04:42:21Z",
+      "skillIds": [
+        "vercel-labs--agent-browser--agent-browser"
+      ]
+    },
+    "remotion-dev/skills": {
+      "defaultBranch": "main",
+      "pushedAt": "2026-07-24T14:09:58Z",
+      "skillIds": [
+        "remotion-dev--skills--remotion-best-practices",
+        "remotion-dev--skills--remotion-create",
+        "remotion-dev--skills--remotion-render",
+        "remotion-dev--skills--remotion-captions",
+        "remotion-dev--skills--mediabunny",
+        "remotion-dev--skills--remotion-markup",
+        "remotion-dev--skills--remotion-interactivity",
+        "remotion-dev--skills--remotion-saas",
+        "remotion-dev--skills--remotion-docs",
+        "remotion-dev--skills--remotion-upgrade",
+        "remotion-dev--skills--remotion-maps"
+      ]
+    }
+  },
+  "skills": {
+    "mattpocock--skills--grill-me": {
+      "repo": "mattpocock/skills",
+      "skillId": "grill-me",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "000514e9633b1a2df8bef98549e99b6eaf1a8c3fabfad0e3b328440b3b226c90"
+    },
+    "mattpocock--skills--grill-with-docs": {
+      "repo": "mattpocock/skills",
+      "skillId": "grill-with-docs",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "84554e18aac963e26214159bfb522ddbd72dab710f43176727ca14f432033567"
+    },
+    "mattpocock--skills--improve-codebase-architecture": {
+      "repo": "mattpocock/skills",
+      "skillId": "improve-codebase-architecture",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "d3682058df92c259b47c36503baa02345d5811758621b5dc03081d5ba0f7b69b"
+    },
+    "mattpocock--skills--tdd": {
+      "repo": "mattpocock/skills",
+      "skillId": "tdd",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "c7bd017fedd677de169904f610438647a586350f82bd80ce0b12ad9d3cebddf5"
+    },
+    "mattpocock--skills--setup-matt-pocock-skills": {
+      "repo": "mattpocock/skills",
+      "skillId": "setup-matt-pocock-skills",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "63188972753c4b1d382180b2ca1bd4e5a27bfd0fb611ec970f2b1a7aba932707"
+    },
+    "mattpocock--skills--triage": {
+      "repo": "mattpocock/skills",
+      "skillId": "triage",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "9efd474210857312d08c4117e60375ac8daa40a0e5a34a47b122c3733089a531"
+    },
+    "mattpocock--skills--handoff": {
+      "repo": "mattpocock/skills",
+      "skillId": "handoff",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "c97a305f5ca0b6fa21ca82a009ac5a553acd02aab63cf59de939f75ac7797393"
+    },
+    "mattpocock--skills--prototype": {
+      "repo": "mattpocock/skills",
+      "skillId": "prototype",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "9a52396fe98d9fd40299c304ce45655507715e6237c5bf6621a308a4e351e18b"
+    },
+    "mattpocock--skills--teach": {
+      "repo": "mattpocock/skills",
+      "skillId": "teach",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "d646b14188296c5a2658360ac13e7236f1ec564ca4674052ad1c3d3c4fbba058"
+    },
+    "mattpocock--skills--grilling": {
+      "repo": "mattpocock/skills",
+      "skillId": "grilling",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "35963aa4abbdae92eb75d8c2dc69eaa70126315a642aba1e5371bd4a9305fb2a"
+    },
+    "mattpocock--skills--domain-modeling": {
+      "repo": "mattpocock/skills",
+      "skillId": "domain-modeling",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "40afc20cd49261811d7fe377fff53c1804f5e27644b42adb65469c7fc305a3a2"
+    },
+    "mattpocock--skills--codebase-design": {
+      "repo": "mattpocock/skills",
+      "skillId": "codebase-design",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "c46b49303a81c7fc8934d0f4fbc44382cdecb73942d85d8d7db3523407fff8fa"
+    },
+    "mattpocock--skills--writing-great-skills": {
+      "repo": "mattpocock/skills",
+      "skillId": "writing-great-skills",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "35e3074217abf664be81122c6b9e0cd6aebdb577427c82e5846bf3742f70cbf5"
+    },
+    "mattpocock--skills--diagnosing-bugs": {
+      "repo": "mattpocock/skills",
+      "skillId": "diagnosing-bugs",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "73be315b6528e88c48c6f797d5fa7faa284fc468e6ab795c4bfe5161d4440e2f"
+    },
+    "mattpocock--skills--ask-matt": {
+      "repo": "mattpocock/skills",
+      "skillId": "ask-matt",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "d4a8d9f5857d0a4e6c626768355077ea48c2227eb40a05f1e1d2e21f39b0adb2"
+    },
+    "mattpocock--skills--implement": {
+      "repo": "mattpocock/skills",
+      "skillId": "implement",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "1a7a56bca542f46ff8e42fa5ddd293dab21b38b6dad57e1bf3e76d12e41c5fc2"
+    },
+    "mattpocock--skills--code-review": {
+      "repo": "mattpocock/skills",
+      "skillId": "code-review",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "d45f786768d013c1e387aa5b3d067f7a2540c9350b1ef116d0245d9881a61bde"
+    },
+    "mattpocock--skills--design-an-interface": {
+      "repo": "mattpocock/skills",
+      "skillId": "design-an-interface",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "3b3d6b772c043d6f7d687304a4b02f2f46ad1c019e16c578fdaf060fab5dc4cd"
+    },
+    "mattpocock--skills--request-refactor-plan": {
+      "repo": "mattpocock/skills",
+      "skillId": "request-refactor-plan",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "8ee013f00ce0c861ac20151351ac9a37e35fe3b1bdff8dde57568a69f9363c31"
+    },
+    "mattpocock--skills--qa": {
+      "repo": "mattpocock/skills",
+      "skillId": "qa",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "e2fd26e68530beb342a607be3245d46a39bf43d263763ee4c3e87117414d2ca0"
+    },
+    "mattpocock--skills--ubiquitous-language": {
+      "repo": "mattpocock/skills",
+      "skillId": "ubiquitous-language",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "5e063128d360b61ecd41d95acfb80bcc19f371c905f38044ed15919f87c6f1a7"
+    },
+    "mattpocock--skills--obsidian-vault": {
+      "repo": "mattpocock/skills",
+      "skillId": "obsidian-vault",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "424089b19f6b4d3287f99de290bf4341fa611ad87146d72c551be2fa0c8fb49d"
+    },
+    "mattpocock--skills--git-guardrails-claude-code": {
+      "repo": "mattpocock/skills",
+      "skillId": "git-guardrails-claude-code",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "6f9d49e1517d156d90b9ad084470adb946ad5aabddf0f6782d11e5221a3c6b00"
+    },
+    "mattpocock--skills--resolving-merge-conflicts": {
+      "repo": "mattpocock/skills",
+      "skillId": "resolving-merge-conflicts",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "2c01ba50b0c9707fed7c9080add996caa5e14f05c9f910ad19198b426e645986"
+    },
+    "mattpocock--skills--research": {
+      "repo": "mattpocock/skills",
+      "skillId": "research",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "6d02c11a6a7192f3e6058533e1cc310060cfceddd118623ea53e6d1da605d659"
+    },
+    "mattpocock--skills--edit-article": {
+      "repo": "mattpocock/skills",
+      "skillId": "edit-article",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "aa1d91a86d64c080ca508129250c4be04d4b4e9e1a838b83cc6bc16f487efae5"
+    },
+    "mattpocock--skills--setup-pre-commit": {
+      "repo": "mattpocock/skills",
+      "skillId": "setup-pre-commit",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "de068adf75caf27aae0e80f201c5f4f7eda4f279388120ffb8e6b58533acf34a"
+    },
+    "mattpocock--skills--scaffold-exercises": {
+      "repo": "mattpocock/skills",
+      "skillId": "scaffold-exercises",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "30b24d603cdb7e0c82263f264e0a9b52f01188683f7083df88512457b5a9ecb6"
+    },
+    "mattpocock--skills--wayfinder": {
+      "repo": "mattpocock/skills",
+      "skillId": "wayfinder",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "21c81e4a49dac730ada84bf5a23123b549078ad47ce5bb5359f11de489ee9ac8"
+    },
+    "mattpocock--skills--writing-shape": {
+      "repo": "mattpocock/skills",
+      "skillId": "writing-shape",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "d2036087f7b91f97d5b9a01b5d2e71017530030af878b3da6a9c7fc9b0190b15"
+    },
+    "mattpocock--skills--writing-fragments": {
+      "repo": "mattpocock/skills",
+      "skillId": "writing-fragments",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "3be76523ce90b6ea60f884220ea250d898d438e7813f0907d7cc1016aab1e190"
+    },
+    "mattpocock--skills--migrate-to-shoehorn": {
+      "repo": "mattpocock/skills",
+      "skillId": "migrate-to-shoehorn",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "292b384215d803b52e07a7f463586a4a4e9d1ad89ac0019600ec80af258a648d"
+    },
+    "mattpocock--skills--writing-beats": {
+      "repo": "mattpocock/skills",
+      "skillId": "writing-beats",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "9ce8e35b980128cee069da05b7213b1a223bdeed8c5478a4d8dd2fb318a9b6dd"
+    },
+    "mattpocock--skills--to-spec": {
+      "repo": "mattpocock/skills",
+      "skillId": "to-spec",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "0e05c1bea97c787e44e79f4e255a9afd6a377c24f29f0a3a014f0231ebe57d8c"
+    },
+    "mattpocock--skills--to-tickets": {
+      "repo": "mattpocock/skills",
+      "skillId": "to-tickets",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "b9eb31fb1c671feb6ba56dc8afc86f5da9992aa307e9e0e0449aee2d4d55f1f2"
+    },
+    "mattpocock--skills--loop-me": {
+      "repo": "mattpocock/skills",
+      "skillId": "loop-me",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "d7ddf6cf5a7e17dfa274c5a097e03b215a9259c7beea809a1d45ce183ad49bef"
+    },
+    "mattpocock--skills--wizard": {
+      "repo": "mattpocock/skills",
+      "skillId": "wizard",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "a469ab99ba9010c3c91b13cb53d707375e56605295aab1ae71315d84855c622b"
+    },
+    "mattpocock--skills--claude-handoff": {
+      "repo": "mattpocock/skills",
+      "skillId": "claude-handoff",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "f641a1085ea116c423213ffc152e16dfb5f5fbff0119774bd2e2dafb995e3512"
+    },
+    "mattpocock--skills--setup-ts-deep-modules": {
+      "repo": "mattpocock/skills",
+      "skillId": "setup-ts-deep-modules",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "6502306a758ac25596550c7645d0a95b32c3f377959968f68ae43fafd448cf55"
+    },
+    "mattpocock--skills--to-questionnaire": {
+      "repo": "mattpocock/skills",
+      "skillId": "to-questionnaire",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "3d3e99445e02a976bca6107ff081eda1fd05c2d509224f57cdb5ae73de5075ce"
+    },
+    "mattpocock--skills--batch-grill-me": {
+      "repo": "mattpocock/skills",
+      "skillId": "batch-grill-me",
+      "pushedAt": "2026-07-23T14:29:59Z",
+      "contentHash": "7576d7e26d5e89fca78d9d4982a4e42e0345982172fc0d3043ae5cf22dce5cf5"
+    },
+    "vercel-labs--skills--find-skills": {
+      "repo": "vercel-labs/skills",
+      "skillId": "find-skills",
+      "pushedAt": "2026-07-22T21:14:21Z",
+      "contentHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf"
+    },
+    "vercel-labs--agent-skills--vercel-react-best-practices": {
+      "repo": "vercel-labs/agent-skills",
+      "skillId": "vercel-react-best-practices",
+      "pushedAt": "2026-07-24T10:25:29Z",
+      "contentHash": "e3f2294574b469c7c198373a443a86571012769d0bbeed68854bd55642ec0d7b"
+    },
+    "vercel-labs--agent-skills--web-design-guidelines": {
+      "repo": "vercel-labs/agent-skills",
+      "skillId": "web-design-guidelines",
+      "pushedAt": "2026-07-24T10:25:29Z",
+      "contentHash": "f3bc47f890f42a44db1007ab390709ec368e4b8c089baee6b0007182236ac474"
+    },
+    "vercel-labs--agent-skills--vercel-composition-patterns": {
+      "repo": "vercel-labs/agent-skills",
+      "skillId": "vercel-composition-patterns",
+      "pushedAt": "2026-07-24T10:25:29Z",
+      "contentHash": "646f870906914c3787efa7403ec4716dfddf78fc17a12ec1f0556caf2143ac66"
+    },
+    "vercel-labs--agent-skills--vercel-react-native-skills": {
+      "repo": "vercel-labs/agent-skills",
+      "skillId": "vercel-react-native-skills",
+      "pushedAt": "2026-07-24T10:25:29Z",
+      "contentHash": "7a13afc40d6cf74e431d845f5c19a3047caf4fdfe2d1fed1dbd0c77ed2db7b0b"
+    },
+    "vercel-labs--agent-skills--deploy-to-vercel": {
+      "repo": "vercel-labs/agent-skills",
+      "skillId": "deploy-to-vercel",
+      "pushedAt": "2026-07-24T10:25:29Z",
+      "contentHash": "15894f2b4dd7bcc29daf71aa715eb79a188eb193af416d8c58ca0513797a626a"
+    },
+    "vercel-labs--agent-skills--vercel-react-view-transitions": {
+      "repo": "vercel-labs/agent-skills",
+      "skillId": "vercel-react-view-transitions",
+      "pushedAt": "2026-07-24T10:25:29Z",
+      "contentHash": "a9b52d90aca14307ae89c84b24d072832296264c89302cda55878489d7226943"
+    },
+    "vercel-labs--agent-skills--vercel-cli-with-tokens": {
+      "repo": "vercel-labs/agent-skills",
+      "skillId": "vercel-cli-with-tokens",
+      "pushedAt": "2026-07-24T10:25:29Z",
+      "contentHash": "eb16b20dcbe6ce51e0372083d624e0847af1b09487ec99249227d5a8eddebfc0"
+    },
+    "vercel-labs--agent-skills--vercel-optimize": {
+      "repo": "vercel-labs/agent-skills",
+      "skillId": "vercel-optimize",
+      "pushedAt": "2026-07-24T10:25:29Z",
+      "contentHash": "c75179c844eee289c90149cec78c3968b73010565eccbd747f00d338241b890f"
+    },
+    "vercel-labs--agent-skills--writing-guidelines": {
+      "repo": "vercel-labs/agent-skills",
+      "skillId": "writing-guidelines",
+      "pushedAt": "2026-07-24T10:25:29Z",
+      "contentHash": "25aa3a33a97bddbcb1847ce4a6169106ec25e5b19b15b99c66e75ab383866ef2"
+    },
+    "anthropics--skills--frontend-design": {
+      "repo": "anthropics/skills",
+      "skillId": "frontend-design",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "665c585455decbcb02116bc928adf5148b9cd0f67b7eb4908c8c0d647c00f68a"
+    },
+    "anthropics--skills--skill-creator": {
+      "repo": "anthropics/skills",
+      "skillId": "skill-creator",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "4557d54c524c67984e4bab23fa436e90196292ae8df4d2093f0ce0e6951bfc1c"
+    },
+    "anthropics--skills--pptx": {
+      "repo": "anthropics/skills",
+      "skillId": "pptx",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "542c716c50714598b19d12ba977d6c878d650b5798a8588026700d11bcd854bf"
+    },
+    "anthropics--skills--pdf": {
+      "repo": "anthropics/skills",
+      "skillId": "pdf",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "6a01b6dc757b8856d7eba5e9985d8550783f946d7afdf86402ba324b93239fc0"
+    },
+    "anthropics--skills--docx": {
+      "repo": "anthropics/skills",
+      "skillId": "docx",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "7d67716c32e093e685627dca5e7f8622e8865e26ff0db941172406929797d47a"
+    },
+    "anthropics--skills--xlsx": {
+      "repo": "anthropics/skills",
+      "skillId": "xlsx",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "f38e1245e48604aada998d989633de07e4c4fb9a8ddc0872219d2d36e6c538b6"
+    },
+    "anthropics--skills--webapp-testing": {
+      "repo": "anthropics/skills",
+      "skillId": "webapp-testing",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "abfaf4cc6cf572346e22fed42dc0cfaacd2f64c5d9667f44a94b02ea0d3b1342"
+    },
+    "anthropics--skills--mcp-builder": {
+      "repo": "anthropics/skills",
+      "skillId": "mcp-builder",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "5a904ea67e691bc7454cc2a631f24a52f3a95f397d76862cdfc6a9370d79363d"
+    },
+    "anthropics--skills--canvas-design": {
+      "repo": "anthropics/skills",
+      "skillId": "canvas-design",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "b958beb4e89a524215b7a5b5f2aa3e0d8b49ba516b74b5fcd704b1d48addad67"
+    },
+    "anthropics--skills--web-artifacts-builder": {
+      "repo": "anthropics/skills",
+      "skillId": "web-artifacts-builder",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "0f102ba19f13b4deb19f2248a5014952d2af1521129a5a0e4f3d805f74632b75"
+    },
+    "anthropics--skills--theme-factory": {
+      "repo": "anthropics/skills",
+      "skillId": "theme-factory",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "50bc5c8d91691c22c80aa3a77d437243398121a724531737530f4ed30cddf879"
+    },
+    "anthropics--skills--doc-coauthoring": {
+      "repo": "anthropics/skills",
+      "skillId": "doc-coauthoring",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "fd8325cb199c45d53792e9fbc144d72832900c77aa31bc3b781099d5cbe81266"
+    },
+    "anthropics--skills--brand-guidelines": {
+      "repo": "anthropics/skills",
+      "skillId": "brand-guidelines",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "ddf22e788d6aa33e818ec59be85d4fba5aeda23075518dafc412bb90b7cc63ce"
+    },
+    "anthropics--skills--algorithmic-art": {
+      "repo": "anthropics/skills",
+      "skillId": "algorithmic-art",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "8c15717769d76330df4387b85402a3754d858b97749ae259d3365ea9ea394f89"
+    },
+    "anthropics--skills--internal-comms": {
+      "repo": "anthropics/skills",
+      "skillId": "internal-comms",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "9ad903576ebda039209c784708f8a69135aef47ce3532438d0870a00ca30d00d"
+    },
+    "anthropics--skills--slack-gif-creator": {
+      "repo": "anthropics/skills",
+      "skillId": "slack-gif-creator",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "4d8f2d75bc0f0ff84efe56ee3abf91ac9ae14a892b48c32f0222df14c6eb96fb"
+    },
+    "anthropics--skills--template-skill": {
+      "repo": "anthropics/skills",
+      "skillId": "template-skill",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "619080fb158d282e55835131603a5114a03c77a1b4336af992f61e5c064d832f"
+    },
+    "anthropics--skills--claude-api": {
+      "repo": "anthropics/skills",
+      "skillId": "claude-api",
+      "pushedAt": "2026-07-24T20:12:36Z",
+      "contentHash": "d789c96aefba862371c7510a61829c980726d111d92493fc3660718061da4f2a"
+    },
+    "microsoft--azure-skills--microsoft-foundry": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "microsoft-foundry",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "ba91462f8b334d79c187d1f8c7bd369108f7277597a60a5f77affa3392b772fb"
+    },
+    "microsoft--azure-skills--azure-ai": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-ai",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "a27be6cbae252e12c8fece3e4e251e9222614ae592860fb67d2d591121dfb647"
+    },
+    "microsoft--azure-skills--azure-diagnostics": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-diagnostics",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "2c8131578068ed74abce26d6bb2610af8ed819f350fabd7a702165068bf263b7"
+    },
+    "microsoft--azure-skills--azure-deploy": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-deploy",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "b30feff4ac91c27f0f1420fa4a4a4159ca514c254c283020137c49bc57fb1737"
+    },
+    "microsoft--azure-skills--azure-prepare": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-prepare",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "9e3217da3f4cc524410b00a038eed678c07fbe55ca3d827f622c8e8936b64e5e"
+    },
+    "microsoft--azure-skills--azure-storage": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-storage",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "2f6b667b9c942526ae769df06624df476d981010e625606ce432302fb3540d8b"
+    },
+    "microsoft--azure-skills--azure-validate": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-validate",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "4cdd17ec90017686da6bab23165b8d4a4c17fe30c22c7d1d467288a5ad76fa78"
+    },
+    "microsoft--azure-skills--entra-app-registration": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "entra-app-registration",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "051dcefe36028dd4ea4d8580f04c0d2121f9198aa9a20ad42b5a846e0df92cf4"
+    },
+    "microsoft--azure-skills--appinsights-instrumentation": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "appinsights-instrumentation",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "9fc1634016f624a086684a2816ab3be1ea5573e8412f283a708396285efa07d7"
+    },
+    "microsoft--azure-skills--azure-resource-lookup": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-resource-lookup",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "c09dd8fc491bc2ed806d657cdf352cbf0aaeea70230e38c256ad7f5dcd309412"
+    },
+    "microsoft--azure-skills--azure-compliance": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-compliance",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "d786ee99b0c089e93dc992d320a895a21c30747b5afb6aeccb804c370154901b"
+    },
+    "microsoft--azure-skills--azure-aigateway": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-aigateway",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "4acba93a31518473d38fb75ab022819f37a82d9c0ab643c02e7e5bbe0e62e117"
+    },
+    "microsoft--azure-skills--azure-kusto": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-kusto",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "6691a61b1a56f24eb7dc4ef6889182764c2c1c6b8a8394c838fe724bce128181"
+    },
+    "microsoft--azure-skills--azure-resource-visualizer": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-resource-visualizer",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "2fcd0049a9b08cc939612e3253651430e74e207bc0b7a611b812711fe09dcaf6"
+    },
+    "microsoft--azure-skills--azure-messaging": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-messaging",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "22f768b2766bd34971968191751656d7fd30a366d388572202dd6a594e0db4e2"
+    },
+    "microsoft--azure-skills--azure-compute": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-compute",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "cadd7ecc0c9cc5bcc56e2fc5e44d904c4f97ff7a23e65941e5b74992678cf1aa"
+    },
+    "microsoft--azure-skills--azure-cloud-migrate": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-cloud-migrate",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "d74d700d8e495a9e02803928ac96c3a6b37f828e5bab6fa69042f50a6d63929d"
+    },
+    "microsoft--azure-skills--azure-quotas": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-quotas",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "f3162276d48267e0d3b33e713736effd7974cc24dc7e4841d758a0ab55293376"
+    },
+    "microsoft--azure-skills--azure-upgrade": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-upgrade",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "9079d1f7e0bd3f6967de65be901ec641fd45b8a4544f51c27820a3bdfcda8b26"
+    },
+    "microsoft--azure-skills--azure-enterprise-infra-planner": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-enterprise-infra-planner",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "e2e2895217bf0220eb693d188d7d2bb60d23290129aa2c3f1ad7b9ec7967ac5e"
+    },
+    "microsoft--azure-skills--azure-kubernetes": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-kubernetes",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "f65aa1f0e5fe0184b9d5755eae2733c7bfddf44c6d038bbebd9d5af8dfdf8d6c"
+    },
+    "microsoft--azure-skills--azure-cost": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-cost",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "06558ca78c6e0135069b3482b71ac16f57b434da6516f164c26edeacb6a68180"
+    },
+    "microsoft--azure-skills--airunway-aks-setup": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "airunway-aks-setup",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "87cb82901d676c5e587b6d8dbcb48d238d40e7df107cffa02f28bfd9364cd26b"
+    },
+    "microsoft--azure-skills--entra-agent-id": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "entra-agent-id",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "a2ba037f5e60c595bb89ca6b0201bf975838e629f81efad9e3f60eca48f43727"
+    },
+    "microsoft--azure-skills--azure-reliability": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-reliability",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "924697ae6b4d730af63c835381f3b44ac792b5a756227d333e7edd9dbd1e40f6"
+    },
+    "microsoft--azure-skills--python-appservice-deploy": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "python-appservice-deploy",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "0184d80d4ac8c7ef3591c3d8da53b7ede425d8778c5bad21756225b38d3ced7a"
+    },
+    "microsoft--azure-skills--azure-app-onboard-prereq": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-app-onboard-prereq",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "8627a07a1bbac9abce6d98a544dd7641c4101717594ffb12a065eabdc063f982"
+    },
+    "microsoft--azure-skills--azure-app-onboard": {
+      "repo": "microsoft/azure-skills",
+      "skillId": "azure-app-onboard",
+      "pushedAt": "2026-07-26T01:40:03Z",
+      "contentHash": "815eda5bde3a11d469e43fd3bb2ffab5e4d3e03ec84315f8111fcd322dc9eadf"
+    },
+    "vercel-labs--agent-browser--agent-browser": {
+      "repo": "vercel-labs/agent-browser",
+      "skillId": "agent-browser",
+      "pushedAt": "2026-07-26T04:42:21Z",
+      "contentHash": "a674b7d81066e3cc471a7512ddb4ae724418cbfefa75cbb050b0dc430e4d57a0"
+    },
+    "remotion-dev--skills--remotion-best-practices": {
+      "repo": "remotion-dev/skills",
+      "skillId": "remotion-best-practices",
+      "pushedAt": "2026-07-24T14:09:58Z",
+      "contentHash": "726c86b57f13b2dcfe8e3191ea3cba61b87580aac985683f6222811fa9342768"
+    },
+    "remotion-dev--skills--remotion-create": {
+      "repo": "remotion-dev/skills",
+      "skillId": "remotion-create",
+      "pushedAt": "2026-07-24T14:09:58Z",
+      "contentHash": "c82df8c942d02d9cb8714fa409f48d2c7e18be74c0294e6a7c87787a197aee36"
+    },
+    "remotion-dev--skills--remotion-render": {
+      "repo": "remotion-dev/skills",
+      "skillId": "remotion-render",
+      "pushedAt": "2026-07-24T14:09:58Z",
+      "contentHash": "b10232fa2488a1acc0a7bb11504859aad2db31138ff093800b59799558948ffe"
+    },
+    "remotion-dev--skills--remotion-captions": {
+      "repo": "remotion-dev/skills",
+      "skillId": "remotion-captions",
+      "pushedAt": "2026-07-24T14:09:58Z",
+      "contentHash": "83cce3ecb238162100b02a0d0ae2a25d2a34a2deb964f9277f0b64a0b1dde5e8"
+    },
+    "remotion-dev--skills--mediabunny": {
+      "repo": "remotion-dev/skills",
+      "skillId": "mediabunny",
+      "pushedAt": "2026-07-24T14:09:58Z",
+      "contentHash": "3743ae13bf1c8e49aa7b5c61865a8dfb0c8f9d6068f2964bee3fd8929f8ebe94"
+    },
+    "remotion-dev--skills--remotion-markup": {
+      "repo": "remotion-dev/skills",
+      "skillId": "remotion-markup",
+      "pushedAt": "2026-07-24T14:09:58Z",
+      "contentHash": "9bbe8d8a6ab3a937f103cb23203b75c66628ac55782ac1bd0cb1065fa176da3d"
+    },
+    "remotion-dev--skills--remotion-interactivity": {
+      "repo": "remotion-dev/skills",
+      "skillId": "remotion-interactivity",
+      "pushedAt": "2026-07-24T14:09:58Z",
+      "contentHash": "a1ff14b43a5a99ad92e635e8e4a098d33ebc69e74732a82bc9827ceb8750b18e"
+    },
+    "remotion-dev--skills--remotion-saas": {
+      "repo": "remotion-dev/skills",
+      "skillId": "remotion-saas",
+      "pushedAt": "2026-07-24T14:09:58Z",
+      "contentHash": "bd7b9257604a77f2a655573d36de77e08d7caa046c37a013e51df0fc27071942"
+    },
+    "remotion-dev--skills--remotion-docs": {
+      "repo": "remotion-dev/skills",
+      "skillId": "remotion-docs",
+      "pushedAt": "2026-07-24T14:09:58Z",
+      "contentHash": "544ffa54130caa8ff0ecea33806eaa542013d7484a9925599a5a29e231f310f0"
+    },
+    "remotion-dev--skills--remotion-upgrade": {
+      "repo": "remotion-dev/skills",
+      "skillId": "remotion-upgrade",
+      "pushedAt": "2026-07-24T14:09:58Z",
+      "contentHash": "79ccc672cf6de49a1f9a3964beea53007bcf35e22134642e38f344972ac62319"
+    },
+    "remotion-dev--skills--remotion-maps": {
+      "repo": "remotion-dev/skills",
+      "skillId": "remotion-maps",
+      "pushedAt": "2026-07-24T14:09:58Z",
+      "contentHash": "a3c10dcea81fb15c6ed3ce27833bed8bafa98fd42302072c4317f58cd885cd8b"
+    }
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/azure-kusto",
+  "repo": "microsoft/azure-skills",
+  "skillId": "azure-kusto",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "6691a61b1a56f24eb7dc4ef6889182764c2c1c6b8a8394c838fe724bce128181",
+  "fetchedAt": "2026-07-26T17:03:49.719Z"
+}

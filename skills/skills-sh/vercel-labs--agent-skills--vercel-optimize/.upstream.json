@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/vercel-labs/agent-skills/vercel-optimize",
+  "repo": "vercel-labs/agent-skills",
+  "skillId": "vercel-optimize",
+  "branch": "main",
+  "pushedAt": "2026-07-24T10:25:29Z",
+  "contentHash": "c75179c844eee289c90149cec78c3968b73010565eccbd747f00d338241b890f",
+  "fetchedAt": "2026-07-26T17:03:49.204Z"
+}

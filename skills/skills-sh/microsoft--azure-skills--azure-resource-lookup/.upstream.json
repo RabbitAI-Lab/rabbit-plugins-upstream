@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/azure-resource-lookup",
+  "repo": "microsoft/azure-skills",
+  "skillId": "azure-resource-lookup",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "c09dd8fc491bc2ed806d657cdf352cbf0aaeea70230e38c256ad7f5dcd309412",
+  "fetchedAt": "2026-07-26T17:03:49.698Z"
+}
