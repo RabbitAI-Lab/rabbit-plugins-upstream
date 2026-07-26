@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/azure-kubernetes",
+  "repo": "microsoft/azure-skills",
+  "skillId": "azure-kubernetes",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "f65aa1f0e5fe0184b9d5755eae2733c7bfddf44c6d038bbebd9d5af8dfdf8d6c",
+  "fetchedAt": "2026-07-26T17:03:49.798Z"
+}

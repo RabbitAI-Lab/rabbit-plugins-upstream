@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/azure-messaging",
+  "repo": "microsoft/azure-skills",
+  "skillId": "azure-messaging",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "22f768b2766bd34971968191751656d7fd30a366d388572202dd6a594e0db4e2",
+  "fetchedAt": "2026-07-26T17:03:49.741Z"
+}

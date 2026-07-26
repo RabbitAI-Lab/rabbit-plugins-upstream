@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/azure-storage",
+  "repo": "microsoft/azure-skills",
+  "skillId": "azure-storage",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "2f6b667b9c942526ae769df06624df476d981010e625606ce432302fb3540d8b",
+  "fetchedAt": "2026-07-26T17:03:49.668Z"
+}

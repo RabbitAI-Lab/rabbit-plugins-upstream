@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/entra-agent-id",
+  "repo": "microsoft/azure-skills",
+  "skillId": "entra-agent-id",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "a2ba037f5e60c595bb89ca6b0201bf975838e629f81efad9e3f60eca48f43727",
+  "fetchedAt": "2026-07-26T17:03:49.828Z"
+}

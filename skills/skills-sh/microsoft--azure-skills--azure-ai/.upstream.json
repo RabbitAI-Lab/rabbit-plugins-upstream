@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/azure-ai",
+  "repo": "microsoft/azure-skills",
+  "skillId": "azure-ai",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "a27be6cbae252e12c8fece3e4e251e9222614ae592860fb67d2d591121dfb647",
+  "fetchedAt": "2026-07-26T17:03:49.625Z"
+}

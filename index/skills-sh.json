@@ -1,0 +1,879 @@
+{
+  "generatedAt": "2026-07-26T17:03:50.379Z",
+  "source": "skills-sh",
+  "total": 109,
+  "skills": [
+    {
+      "id": "skills-sh/anthropics--skills--algorithmic-art",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/algorithmic-art",
+      "version": null,
+      "contentHash": "8c15717769d76330df4387b85402a3754d858b97749ae259d3365ea9ea394f89",
+      "fetchedAt": "2026-07-26T17:03:49.348Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--brand-guidelines",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/brand-guidelines",
+      "version": null,
+      "contentHash": "ddf22e788d6aa33e818ec59be85d4fba5aeda23075518dafc412bb90b7cc63ce",
+      "fetchedAt": "2026-07-26T17:03:49.347Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--canvas-design",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/canvas-design",
+      "version": null,
+      "contentHash": "b958beb4e89a524215b7a5b5f2aa3e0d8b49ba516b74b5fcd704b1d48addad67",
+      "fetchedAt": "2026-07-26T17:03:49.337Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--claude-api",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/claude-api",
+      "version": null,
+      "contentHash": "d789c96aefba862371c7510a61829c980726d111d92493fc3660718061da4f2a",
+      "fetchedAt": "2026-07-26T17:03:49.360Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--doc-coauthoring",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/doc-coauthoring",
+      "version": null,
+      "contentHash": "fd8325cb199c45d53792e9fbc144d72832900c77aa31bc3b781099d5cbe81266",
+      "fetchedAt": "2026-07-26T17:03:49.345Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--docx",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/docx",
+      "version": null,
+      "contentHash": "7d67716c32e093e685627dca5e7f8622e8865e26ff0db941172406929797d47a",
+      "fetchedAt": "2026-07-26T17:03:49.314Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--frontend-design",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/frontend-design",
+      "version": null,
+      "contentHash": "665c585455decbcb02116bc928adf5148b9cd0f67b7eb4908c8c0d647c00f68a",
+      "fetchedAt": "2026-07-26T17:03:49.297Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--internal-comms",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/internal-comms",
+      "version": null,
+      "contentHash": "9ad903576ebda039209c784708f8a69135aef47ce3532438d0870a00ca30d00d",
+      "fetchedAt": "2026-07-26T17:03:49.350Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--mcp-builder",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/mcp-builder",
+      "version": null,
+      "contentHash": "5a904ea67e691bc7454cc2a631f24a52f3a95f397d76862cdfc6a9370d79363d",
+      "fetchedAt": "2026-07-26T17:03:49.325Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--pdf",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/pdf",
+      "version": null,
+      "contentHash": "6a01b6dc757b8856d7eba5e9985d8550783f946d7afdf86402ba324b93239fc0",
+      "fetchedAt": "2026-07-26T17:03:49.309Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--pptx",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/pptx",
+      "version": null,
+      "contentHash": "542c716c50714598b19d12ba977d6c878d650b5798a8588026700d11bcd854bf",
+      "fetchedAt": "2026-07-26T17:03:49.306Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--skill-creator",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/skill-creator",
+      "version": null,
+      "contentHash": "4557d54c524c67984e4bab23fa436e90196292ae8df4d2093f0ce0e6951bfc1c",
+      "fetchedAt": "2026-07-26T17:03:49.300Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--slack-gif-creator",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/slack-gif-creator",
+      "version": null,
+      "contentHash": "4d8f2d75bc0f0ff84efe56ee3abf91ac9ae14a892b48c32f0222df14c6eb96fb",
+      "fetchedAt": "2026-07-26T17:03:49.352Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--template-skill",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/template-skill",
+      "version": null,
+      "contentHash": "619080fb158d282e55835131603a5114a03c77a1b4336af992f61e5c064d832f",
+      "fetchedAt": "2026-07-26T17:03:49.354Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--theme-factory",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/theme-factory",
+      "version": null,
+      "contentHash": "50bc5c8d91691c22c80aa3a77d437243398121a724531737530f4ed30cddf879",
+      "fetchedAt": "2026-07-26T17:03:49.344Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--web-artifacts-builder",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/web-artifacts-builder",
+      "version": null,
+      "contentHash": "0f102ba19f13b4deb19f2248a5014952d2af1521129a5a0e4f3d805f74632b75",
+      "fetchedAt": "2026-07-26T17:03:49.342Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--webapp-testing",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/webapp-testing",
+      "version": null,
+      "contentHash": "abfaf4cc6cf572346e22fed42dc0cfaacd2f64c5d9667f44a94b02ea0d3b1342",
+      "fetchedAt": "2026-07-26T17:03:49.323Z"
+    },
+    {
+      "id": "skills-sh/anthropics--skills--xlsx",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/anthropics/skills/xlsx",
+      "version": null,
+      "contentHash": "f38e1245e48604aada998d989633de07e4c4fb9a8ddc0872219d2d36e6c538b6",
+      "fetchedAt": "2026-07-26T17:03:49.320Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--ask-matt",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/ask-matt",
+      "version": null,
+      "contentHash": "d4a8d9f5857d0a4e6c626768355077ea48c2227eb40a05f1e1d2e21f39b0adb2",
+      "fetchedAt": "2026-07-26T17:03:48.981Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--batch-grill-me",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/batch-grill-me",
+      "version": null,
+      "contentHash": "7576d7e26d5e89fca78d9d4982a4e42e0345982172fc0d3043ae5cf22dce5cf5",
+      "fetchedAt": "2026-07-26T17:03:49.030Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--claude-handoff",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/claude-handoff",
+      "version": null,
+      "contentHash": "f641a1085ea116c423213ffc152e16dfb5f5fbff0119774bd2e2dafb995e3512",
+      "fetchedAt": "2026-07-26T17:03:49.024Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--code-review",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/code-review",
+      "version": null,
+      "contentHash": "d45f786768d013c1e387aa5b3d067f7a2540c9350b1ef116d0245d9881a61bde",
+      "fetchedAt": "2026-07-26T17:03:48.990Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--codebase-design",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/codebase-design",
+      "version": null,
+      "contentHash": "c46b49303a81c7fc8934d0f4fbc44382cdecb73942d85d8d7db3523407fff8fa",
+      "fetchedAt": "2026-07-26T17:03:48.975Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--design-an-interface",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/design-an-interface",
+      "version": null,
+      "contentHash": "3b3d6b772c043d6f7d687304a4b02f2f46ad1c019e16c578fdaf060fab5dc4cd",
+      "fetchedAt": "2026-07-26T17:03:48.992Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--diagnosing-bugs",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/diagnosing-bugs",
+      "version": null,
+      "contentHash": "73be315b6528e88c48c6f797d5fa7faa284fc468e6ab795c4bfe5161d4440e2f",
+      "fetchedAt": "2026-07-26T17:03:48.978Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--domain-modeling",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/domain-modeling",
+      "version": null,
+      "contentHash": "40afc20cd49261811d7fe377fff53c1804f5e27644b42adb65469c7fc305a3a2",
+      "fetchedAt": "2026-07-26T17:03:48.973Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--edit-article",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/edit-article",
+      "version": null,
+      "contentHash": "aa1d91a86d64c080ca508129250c4be04d4b4e9e1a838b83cc6bc16f487efae5",
+      "fetchedAt": "2026-07-26T17:03:49.003Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--git-guardrails-claude-code",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/git-guardrails-claude-code",
+      "version": null,
+      "contentHash": "6f9d49e1517d156d90b9ad084470adb946ad5aabddf0f6782d11e5221a3c6b00",
+      "fetchedAt": "2026-07-26T17:03:48.999Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--grill-me",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/grill-me",
+      "version": null,
+      "contentHash": "000514e9633b1a2df8bef98549e99b6eaf1a8c3fabfad0e3b328440b3b226c90",
+      "fetchedAt": "2026-07-26T17:03:48.949Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--grill-with-docs",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/grill-with-docs",
+      "version": null,
+      "contentHash": "84554e18aac963e26214159bfb522ddbd72dab710f43176727ca14f432033567",
+      "fetchedAt": "2026-07-26T17:03:48.951Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--grilling",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/grilling",
+      "version": null,
+      "contentHash": "35963aa4abbdae92eb75d8c2dc69eaa70126315a642aba1e5371bd4a9305fb2a",
+      "fetchedAt": "2026-07-26T17:03:48.972Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--handoff",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/handoff",
+      "version": null,
+      "contentHash": "c97a305f5ca0b6fa21ca82a009ac5a553acd02aab63cf59de939f75ac7797393",
+      "fetchedAt": "2026-07-26T17:03:48.963Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--implement",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/implement",
+      "version": null,
+      "contentHash": "1a7a56bca542f46ff8e42fa5ddd293dab21b38b6dad57e1bf3e76d12e41c5fc2",
+      "fetchedAt": "2026-07-26T17:03:48.989Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--improve-codebase-architecture",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/improve-codebase-architecture",
+      "version": null,
+      "contentHash": "d3682058df92c259b47c36503baa02345d5811758621b5dc03081d5ba0f7b69b",
+      "fetchedAt": "2026-07-26T17:03:48.953Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--loop-me",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/loop-me",
+      "version": null,
+      "contentHash": "d7ddf6cf5a7e17dfa274c5a097e03b215a9259c7beea809a1d45ce183ad49bef",
+      "fetchedAt": "2026-07-26T17:03:49.019Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--migrate-to-shoehorn",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/migrate-to-shoehorn",
+      "version": null,
+      "contentHash": "292b384215d803b52e07a7f463586a4a4e9d1ad89ac0019600ec80af258a648d",
+      "fetchedAt": "2026-07-26T17:03:49.013Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--obsidian-vault",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/obsidian-vault",
+      "version": null,
+      "contentHash": "424089b19f6b4d3287f99de290bf4341fa611ad87146d72c551be2fa0c8fb49d",
+      "fetchedAt": "2026-07-26T17:03:48.997Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--prototype",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/prototype",
+      "version": null,
+      "contentHash": "9a52396fe98d9fd40299c304ce45655507715e6237c5bf6621a308a4e351e18b",
+      "fetchedAt": "2026-07-26T17:03:48.964Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--qa",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/qa",
+      "version": null,
+      "contentHash": "e2fd26e68530beb342a607be3245d46a39bf43d263763ee4c3e87117414d2ca0",
+      "fetchedAt": "2026-07-26T17:03:48.994Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--request-refactor-plan",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/request-refactor-plan",
+      "version": null,
+      "contentHash": "8ee013f00ce0c861ac20151351ac9a37e35fe3b1bdff8dde57568a69f9363c31",
+      "fetchedAt": "2026-07-26T17:03:48.993Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--research",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/research",
+      "version": null,
+      "contentHash": "6d02c11a6a7192f3e6058533e1cc310060cfceddd118623ea53e6d1da605d659",
+      "fetchedAt": "2026-07-26T17:03:49.002Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--resolving-merge-conflicts",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/resolving-merge-conflicts",
+      "version": null,
+      "contentHash": "2c01ba50b0c9707fed7c9080add996caa5e14f05c9f910ad19198b426e645986",
+      "fetchedAt": "2026-07-26T17:03:49.000Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--scaffold-exercises",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/scaffold-exercises",
+      "version": null,
+      "contentHash": "30b24d603cdb7e0c82263f264e0a9b52f01188683f7083df88512457b5a9ecb6",
+      "fetchedAt": "2026-07-26T17:03:49.006Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--setup-matt-pocock-skills",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/setup-matt-pocock-skills",
+      "version": null,
+      "contentHash": "63188972753c4b1d382180b2ca1bd4e5a27bfd0fb611ec970f2b1a7aba932707",
+      "fetchedAt": "2026-07-26T17:03:48.959Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--setup-pre-commit",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/setup-pre-commit",
+      "version": null,
+      "contentHash": "de068adf75caf27aae0e80f201c5f4f7eda4f279388120ffb8e6b58533acf34a",
+      "fetchedAt": "2026-07-26T17:03:49.005Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--setup-ts-deep-modules",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/setup-ts-deep-modules",
+      "version": null,
+      "contentHash": "6502306a758ac25596550c7645d0a95b32c3f377959968f68ae43fafd448cf55",
+      "fetchedAt": "2026-07-26T17:03:49.026Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--tdd",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/tdd",
+      "version": null,
+      "contentHash": "c7bd017fedd677de169904f610438647a586350f82bd80ce0b12ad9d3cebddf5",
+      "fetchedAt": "2026-07-26T17:03:48.955Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--teach",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/teach",
+      "version": null,
+      "contentHash": "d646b14188296c5a2658360ac13e7236f1ec564ca4674052ad1c3d3c4fbba058",
+      "fetchedAt": "2026-07-26T17:03:48.970Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--to-questionnaire",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/to-questionnaire",
+      "version": null,
+      "contentHash": "3d3e99445e02a976bca6107ff081eda1fd05c2d509224f57cdb5ae73de5075ce",
+      "fetchedAt": "2026-07-26T17:03:49.029Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--to-spec",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/to-spec",
+      "version": null,
+      "contentHash": "0e05c1bea97c787e44e79f4e255a9afd6a377c24f29f0a3a014f0231ebe57d8c",
+      "fetchedAt": "2026-07-26T17:03:49.016Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--to-tickets",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/to-tickets",
+      "version": null,
+      "contentHash": "b9eb31fb1c671feb6ba56dc8afc86f5da9992aa307e9e0e0449aee2d4d55f1f2",
+      "fetchedAt": "2026-07-26T17:03:49.018Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--triage",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/triage",
+      "version": null,
+      "contentHash": "9efd474210857312d08c4117e60375ac8daa40a0e5a34a47b122c3733089a531",
+      "fetchedAt": "2026-07-26T17:03:48.961Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--ubiquitous-language",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/ubiquitous-language",
+      "version": null,
+      "contentHash": "5e063128d360b61ecd41d95acfb80bcc19f371c905f38044ed15919f87c6f1a7",
+      "fetchedAt": "2026-07-26T17:03:48.996Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--wayfinder",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/wayfinder",
+      "version": null,
+      "contentHash": "21c81e4a49dac730ada84bf5a23123b549078ad47ce5bb5359f11de489ee9ac8",
+      "fetchedAt": "2026-07-26T17:03:49.008Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--wizard",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/wizard",
+      "version": null,
+      "contentHash": "a469ab99ba9010c3c91b13cb53d707375e56605295aab1ae71315d84855c622b",
+      "fetchedAt": "2026-07-26T17:03:49.022Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--writing-beats",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/writing-beats",
+      "version": null,
+      "contentHash": "9ce8e35b980128cee069da05b7213b1a223bdeed8c5478a4d8dd2fb318a9b6dd",
+      "fetchedAt": "2026-07-26T17:03:49.015Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--writing-fragments",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/writing-fragments",
+      "version": null,
+      "contentHash": "3be76523ce90b6ea60f884220ea250d898d438e7813f0907d7cc1016aab1e190",
+      "fetchedAt": "2026-07-26T17:03:49.012Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--writing-great-skills",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/writing-great-skills",
+      "version": null,
+      "contentHash": "35e3074217abf664be81122c6b9e0cd6aebdb577427c82e5846bf3742f70cbf5",
+      "fetchedAt": "2026-07-26T17:03:48.976Z"
+    },
+    {
+      "id": "skills-sh/mattpocock--skills--writing-shape",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/mattpocock/skills/writing-shape",
+      "version": null,
+      "contentHash": "d2036087f7b91f97d5b9a01b5d2e71017530030af878b3da6a9c7fc9b0190b15",
+      "fetchedAt": "2026-07-26T17:03:49.010Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--airunway-aks-setup",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/airunway-aks-setup",
+      "version": null,
+      "contentHash": "87cb82901d676c5e587b6d8dbcb48d238d40e7df107cffa02f28bfd9364cd26b",
+      "fetchedAt": "2026-07-26T17:03:49.813Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--appinsights-instrumentation",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/appinsights-instrumentation",
+      "version": null,
+      "contentHash": "9fc1634016f624a086684a2816ab3be1ea5573e8412f283a708396285efa07d7",
+      "fetchedAt": "2026-07-26T17:03:49.692Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-ai",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-ai",
+      "version": null,
+      "contentHash": "a27be6cbae252e12c8fece3e4e251e9222614ae592860fb67d2d591121dfb647",
+      "fetchedAt": "2026-07-26T17:03:49.625Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-aigateway",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-aigateway",
+      "version": null,
+      "contentHash": "4acba93a31518473d38fb75ab022819f37a82d9c0ab643c02e7e5bbe0e62e117",
+      "fetchedAt": "2026-07-26T17:03:49.713Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-app-onboard",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-app-onboard",
+      "version": null,
+      "contentHash": "815eda5bde3a11d469e43fd3bb2ffab5e4d3e03ec84315f8111fcd322dc9eadf",
+      "fetchedAt": "2026-07-26T17:03:49.876Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-app-onboard-prereq",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-app-onboard-prereq",
+      "version": null,
+      "contentHash": "8627a07a1bbac9abce6d98a544dd7641c4101717594ffb12a065eabdc063f982",
+      "fetchedAt": "2026-07-26T17:03:49.866Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-cloud-migrate",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-cloud-migrate",
+      "version": null,
+      "contentHash": "d74d700d8e495a9e02803928ac96c3a6b37f828e5bab6fa69042f50a6d63929d",
+      "fetchedAt": "2026-07-26T17:03:49.766Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-compliance",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-compliance",
+      "version": null,
+      "contentHash": "d786ee99b0c089e93dc992d320a895a21c30747b5afb6aeccb804c370154901b",
+      "fetchedAt": "2026-07-26T17:03:49.706Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-compute",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-compute",
+      "version": null,
+      "contentHash": "cadd7ecc0c9cc5bcc56e2fc5e44d904c4f97ff7a23e65941e5b74992678cf1aa",
+      "fetchedAt": "2026-07-26T17:03:49.757Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-cost",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-cost",
+      "version": null,
+      "contentHash": "06558ca78c6e0135069b3482b71ac16f57b434da6516f164c26edeacb6a68180",
+      "fetchedAt": "2026-07-26T17:03:49.806Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-deploy",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-deploy",
+      "version": null,
+      "contentHash": "b30feff4ac91c27f0f1420fa4a4a4159ca514c254c283020137c49bc57fb1737",
+      "fetchedAt": "2026-07-26T17:03:49.645Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-diagnostics",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-diagnostics",
+      "version": null,
+      "contentHash": "2c8131578068ed74abce26d6bb2610af8ed819f350fabd7a702165068bf263b7",
+      "fetchedAt": "2026-07-26T17:03:49.634Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-enterprise-infra-planner",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-enterprise-infra-planner",
+      "version": null,
+      "contentHash": "e2e2895217bf0220eb693d188d7d2bb60d23290129aa2c3f1ad7b9ec7967ac5e",
+      "fetchedAt": "2026-07-26T17:03:49.790Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-kubernetes",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-kubernetes",
+      "version": null,
+      "contentHash": "f65aa1f0e5fe0184b9d5755eae2733c7bfddf44c6d038bbebd9d5af8dfdf8d6c",
+      "fetchedAt": "2026-07-26T17:03:49.798Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-kusto",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-kusto",
+      "version": null,
+      "contentHash": "6691a61b1a56f24eb7dc4ef6889182764c2c1c6b8a8394c838fe724bce128181",
+      "fetchedAt": "2026-07-26T17:03:49.719Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-messaging",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-messaging",
+      "version": null,
+      "contentHash": "22f768b2766bd34971968191751656d7fd30a366d388572202dd6a594e0db4e2",
+      "fetchedAt": "2026-07-26T17:03:49.741Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-prepare",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-prepare",
+      "version": null,
+      "contentHash": "9e3217da3f4cc524410b00a038eed678c07fbe55ca3d827f622c8e8936b64e5e",
+      "fetchedAt": "2026-07-26T17:03:49.660Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-quotas",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-quotas",
+      "version": null,
+      "contentHash": "f3162276d48267e0d3b33e713736effd7974cc24dc7e4841d758a0ab55293376",
+      "fetchedAt": "2026-07-26T17:03:49.773Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-reliability",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-reliability",
+      "version": null,
+      "contentHash": "924697ae6b4d730af63c835381f3b44ac792b5a756227d333e7edd9dbd1e40f6",
+      "fetchedAt": "2026-07-26T17:03:49.836Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-resource-lookup",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-resource-lookup",
+      "version": null,
+      "contentHash": "c09dd8fc491bc2ed806d657cdf352cbf0aaeea70230e38c256ad7f5dcd309412",
+      "fetchedAt": "2026-07-26T17:03:49.698Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-resource-visualizer",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-resource-visualizer",
+      "version": null,
+      "contentHash": "2fcd0049a9b08cc939612e3253651430e74e207bc0b7a611b812711fe09dcaf6",
+      "fetchedAt": "2026-07-26T17:03:49.726Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-storage",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-storage",
+      "version": null,
+      "contentHash": "2f6b667b9c942526ae769df06624df476d981010e625606ce432302fb3540d8b",
+      "fetchedAt": "2026-07-26T17:03:49.668Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-upgrade",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-upgrade",
+      "version": null,
+      "contentHash": "9079d1f7e0bd3f6967de65be901ec641fd45b8a4544f51c27820a3bdfcda8b26",
+      "fetchedAt": "2026-07-26T17:03:49.782Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--azure-validate",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/azure-validate",
+      "version": null,
+      "contentHash": "4cdd17ec90017686da6bab23165b8d4a4c17fe30c22c7d1d467288a5ad76fa78",
+      "fetchedAt": "2026-07-26T17:03:49.676Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--entra-agent-id",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/entra-agent-id",
+      "version": null,
+      "contentHash": "a2ba037f5e60c595bb89ca6b0201bf975838e629f81efad9e3f60eca48f43727",
+      "fetchedAt": "2026-07-26T17:03:49.828Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--entra-app-registration",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/entra-app-registration",
+      "version": null,
+      "contentHash": "051dcefe36028dd4ea4d8580f04c0d2121f9198aa9a20ad42b5a846e0df92cf4",
+      "fetchedAt": "2026-07-26T17:03:49.684Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--microsoft-foundry",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/microsoft-foundry",
+      "version": null,
+      "contentHash": "ba91462f8b334d79c187d1f8c7bd369108f7277597a60a5f77affa3392b772fb",
+      "fetchedAt": "2026-07-26T17:03:49.616Z"
+    },
+    {
+      "id": "skills-sh/microsoft--azure-skills--python-appservice-deploy",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/microsoft/azure-skills/python-appservice-deploy",
+      "version": null,
+      "contentHash": "0184d80d4ac8c7ef3591c3d8da53b7ede425d8778c5bad21756225b38d3ced7a",
+      "fetchedAt": "2026-07-26T17:03:49.850Z"
+    },
+    {
+      "id": "skills-sh/remotion-dev--skills--mediabunny",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/remotion-dev/skills/mediabunny",
+      "version": null,
+      "contentHash": "3743ae13bf1c8e49aa7b5c61865a8dfb0c8f9d6068f2964bee3fd8929f8ebe94",
+      "fetchedAt": "2026-07-26T17:03:50.174Z"
+    },
+    {
+      "id": "skills-sh/remotion-dev--skills--remotion-best-practices",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/remotion-dev/skills/remotion-best-practices",
+      "version": null,
+      "contentHash": "726c86b57f13b2dcfe8e3191ea3cba61b87580aac985683f6222811fa9342768",
+      "fetchedAt": "2026-07-26T17:03:50.169Z"
+    },
+    {
+      "id": "skills-sh/remotion-dev--skills--remotion-captions",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/remotion-dev/skills/remotion-captions",
+      "version": null,
+      "contentHash": "83cce3ecb238162100b02a0d0ae2a25d2a34a2deb964f9277f0b64a0b1dde5e8",
+      "fetchedAt": "2026-07-26T17:03:50.173Z"
+    },
+    {
+      "id": "skills-sh/remotion-dev--skills--remotion-create",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/remotion-dev/skills/remotion-create",
+      "version": null,
+      "contentHash": "c82df8c942d02d9cb8714fa409f48d2c7e18be74c0294e6a7c87787a197aee36",
+      "fetchedAt": "2026-07-26T17:03:50.170Z"
+    },
+    {
+      "id": "skills-sh/remotion-dev--skills--remotion-docs",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/remotion-dev/skills/remotion-docs",
+      "version": null,
+      "contentHash": "544ffa54130caa8ff0ecea33806eaa542013d7484a9925599a5a29e231f310f0",
+      "fetchedAt": "2026-07-26T17:03:50.179Z"
+    },
+    {
+      "id": "skills-sh/remotion-dev--skills--remotion-interactivity",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/remotion-dev/skills/remotion-interactivity",
+      "version": null,
+      "contentHash": "a1ff14b43a5a99ad92e635e8e4a098d33ebc69e74732a82bc9827ceb8750b18e",
+      "fetchedAt": "2026-07-26T17:03:50.177Z"
+    },
+    {
+      "id": "skills-sh/remotion-dev--skills--remotion-maps",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/remotion-dev/skills/remotion-maps",
+      "version": null,
+      "contentHash": "a3c10dcea81fb15c6ed3ce27833bed8bafa98fd42302072c4317f58cd885cd8b",
+      "fetchedAt": "2026-07-26T17:03:50.183Z"
+    },
+    {
+      "id": "skills-sh/remotion-dev--skills--remotion-markup",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/remotion-dev/skills/remotion-markup",
+      "version": null,
+      "contentHash": "9bbe8d8a6ab3a937f103cb23203b75c66628ac55782ac1bd0cb1065fa176da3d",
+      "fetchedAt": "2026-07-26T17:03:50.176Z"
+    },
+    {
+      "id": "skills-sh/remotion-dev--skills--remotion-render",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/remotion-dev/skills/remotion-render",
+      "version": null,
+      "contentHash": "b10232fa2488a1acc0a7bb11504859aad2db31138ff093800b59799558948ffe",
+      "fetchedAt": "2026-07-26T17:03:50.171Z"
+    },
+    {
+      "id": "skills-sh/remotion-dev--skills--remotion-saas",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/remotion-dev/skills/remotion-saas",
+      "version": null,
+      "contentHash": "bd7b9257604a77f2a655573d36de77e08d7caa046c37a013e51df0fc27071942",
+      "fetchedAt": "2026-07-26T17:03:50.178Z"
+    },
+    {
+      "id": "skills-sh/remotion-dev--skills--remotion-upgrade",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/remotion-dev/skills/remotion-upgrade",
+      "version": null,
+      "contentHash": "79ccc672cf6de49a1f9a3964beea53007bcf35e22134642e38f344972ac62319",
+      "fetchedAt": "2026-07-26T17:03:50.180Z"
+    },
+    {
+      "id": "skills-sh/vercel-labs--agent-browser--agent-browser",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/vercel-labs/agent-browser/agent-browser",
+      "version": null,
+      "contentHash": "a674b7d81066e3cc471a7512ddb4ae724418cbfefa75cbb050b0dc430e4d57a0",
+      "fetchedAt": "2026-07-26T17:03:50.025Z"
+    },
+    {
+      "id": "skills-sh/vercel-labs--agent-skills--deploy-to-vercel",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/vercel-labs/agent-skills/deploy-to-vercel",
+      "version": null,
+      "contentHash": "15894f2b4dd7bcc29daf71aa715eb79a188eb193af416d8c58ca0513797a626a",
+      "fetchedAt": "2026-07-26T17:03:49.193Z"
+    },
+    {
+      "id": "skills-sh/vercel-labs--agent-skills--vercel-cli-with-tokens",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/vercel-labs/agent-skills/vercel-cli-with-tokens",
+      "version": null,
+      "contentHash": "eb16b20dcbe6ce51e0372083d624e0847af1b09487ec99249227d5a8eddebfc0",
+      "fetchedAt": "2026-07-26T17:03:49.196Z"
+    },
+    {
+      "id": "skills-sh/vercel-labs--agent-skills--vercel-composition-patterns",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/vercel-labs/agent-skills/vercel-composition-patterns",
+      "version": null,
+      "contentHash": "646f870906914c3787efa7403ec4716dfddf78fc17a12ec1f0556caf2143ac66",
+      "fetchedAt": "2026-07-26T17:03:49.189Z"
+    },
+    {
+      "id": "skills-sh/vercel-labs--agent-skills--vercel-optimize",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/vercel-labs/agent-skills/vercel-optimize",
+      "version": null,
+      "contentHash": "c75179c844eee289c90149cec78c3968b73010565eccbd747f00d338241b890f",
+      "fetchedAt": "2026-07-26T17:03:49.204Z"
+    },
+    {
+      "id": "skills-sh/vercel-labs--agent-skills--vercel-react-best-practices",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/vercel-labs/agent-skills/vercel-react-best-practices",
+      "version": null,
+      "contentHash": "e3f2294574b469c7c198373a443a86571012769d0bbeed68854bd55642ec0d7b",
+      "fetchedAt": "2026-07-26T17:03:49.186Z"
+    },
+    {
+      "id": "skills-sh/vercel-labs--agent-skills--vercel-react-native-skills",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/vercel-labs/agent-skills/vercel-react-native-skills",
+      "version": null,
+      "contentHash": "7a13afc40d6cf74e431d845f5c19a3047caf4fdfe2d1fed1dbd0c77ed2db7b0b",
+      "fetchedAt": "2026-07-26T17:03:49.192Z"
+    },
+    {
+      "id": "skills-sh/vercel-labs--agent-skills--vercel-react-view-transitions",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/vercel-labs/agent-skills/vercel-react-view-transitions",
+      "version": null,
+      "contentHash": "a9b52d90aca14307ae89c84b24d072832296264c89302cda55878489d7226943",
+      "fetchedAt": "2026-07-26T17:03:49.195Z"
+    },
+    {
+      "id": "skills-sh/vercel-labs--agent-skills--web-design-guidelines",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/vercel-labs/agent-skills/web-design-guidelines",
+      "version": null,
+      "contentHash": "f3bc47f890f42a44db1007ab390709ec368e4b8c089baee6b0007182236ac474",
+      "fetchedAt": "2026-07-26T17:03:49.187Z"
+    },
+    {
+      "id": "skills-sh/vercel-labs--agent-skills--writing-guidelines",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/vercel-labs/agent-skills/writing-guidelines",
+      "version": null,
+      "contentHash": "25aa3a33a97bddbcb1847ce4a6169106ec25e5b19b15b99c66e75ab383866ef2",
+      "fetchedAt": "2026-07-26T17:03:49.206Z"
+    },
+    {
+      "id": "skills-sh/vercel-labs--skills--find-skills",
+      "source": "skills-sh",
+      "url": "https://www.skills.sh/vercel-labs/skills/find-skills",
+      "version": null,
+      "contentHash": "b146008599c31057cef1c145774cea5d5afb30e8f43fa802e47a4b461419aaaf",
+      "fetchedAt": "2026-07-26T17:03:49.094Z"
+    }
+  ]
+}

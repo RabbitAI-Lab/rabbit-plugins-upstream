@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/vercel-labs/agent-skills/deploy-to-vercel",
+  "repo": "vercel-labs/agent-skills",
+  "skillId": "deploy-to-vercel",
+  "branch": "main",
+  "pushedAt": "2026-07-24T10:25:29Z",
+  "contentHash": "15894f2b4dd7bcc29daf71aa715eb79a188eb193af416d8c58ca0513797a626a",
+  "fetchedAt": "2026-07-26T17:03:49.193Z"
+}

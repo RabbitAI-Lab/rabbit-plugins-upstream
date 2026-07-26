@@ -61,7 +61,9 @@ node scripts/build-index.mjs clawhub   # 重新生成 index/<source>.json 与下
 ### skills.sh
 
 <!-- INDEX:skills-sh:START -->
-（尚未同步，运行 `node scripts/build-index.mjs skills-sh` 后自动生成）
+最后同步：2026-07-26T17:03:50.379Z
+
+已镜像完整内容：**109** 个 skill，明细见 `index/skills-sh.json` 与 `skills/skills-sh/`。
 <!-- INDEX:skills-sh:END -->
 
 ### Hermes 聚合索引

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/entra-app-registration",
+  "repo": "microsoft/azure-skills",
+  "skillId": "entra-app-registration",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "051dcefe36028dd4ea4d8580f04c0d2121f9198aa9a20ad42b5a846e0df92cf4",
+  "fetchedAt": "2026-07-26T17:03:49.684Z"
+}

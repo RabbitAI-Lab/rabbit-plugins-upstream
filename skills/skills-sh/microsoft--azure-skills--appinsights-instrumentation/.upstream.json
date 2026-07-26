@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/microsoft/azure-skills/appinsights-instrumentation",
+  "repo": "microsoft/azure-skills",
+  "skillId": "appinsights-instrumentation",
+  "branch": "main",
+  "pushedAt": "2026-07-26T01:40:03Z",
+  "contentHash": "9fc1634016f624a086684a2816ab3be1ea5573e8412f283a708396285efa07d7",
+  "fetchedAt": "2026-07-26T17:03:49.692Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/skills/mcp-builder",
+  "repo": "anthropics/skills",
+  "skillId": "mcp-builder",
+  "branch": "main",
+  "pushedAt": "2026-07-24T20:12:36Z",
+  "contentHash": "5a904ea67e691bc7454cc2a631f24a52f3a95f397d76862cdfc6a9370d79363d",
+  "fetchedAt": "2026-07-26T17:03:49.325Z"
+}
