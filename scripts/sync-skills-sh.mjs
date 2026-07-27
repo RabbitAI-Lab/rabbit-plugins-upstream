@@ -10,6 +10,7 @@ import { fileURLToPath } from "node:url";
 import { fetchJson, fetchBuffer, fetchText, createLimiter } from "./lib/http.mjs";
 import { loadState, saveState } from "./lib/state.mjs";
 import { writeSkill, removeSkill, collectFiles, contentHash } from "./lib/writer.mjs";
+import { resolveLfsFiles } from "./lib/lfs.mjs";
 import { SyncStats } from "./lib/summary.mjs";
 import { MAX_ITEMS, CONCURRENCY, safeName } from "./lib/config.mjs";
 
@@ -158,6 +159,7 @@ async function main() {
                 continue;
               }
               const files = collectFiles(dir);
+              await resolveLfsFiles(key, files, ghHeaders());
               const result = writeSkill(ROOT, SOURCE, w.id, files, {
                 source: SOURCE,
                 url: `https://www.skills.sh/${key}/${w.skillId}`,

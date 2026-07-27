@@ -8,13 +8,15 @@ function sleep(ms) {
 }
 
 export async function fetchWithRetry(url, opts = {}) {
-  const { headers = {}, timeoutMs = DEFAULT_TIMEOUT_MS, attempts = MAX_ATTEMPTS } = opts;
+  const { headers = {}, timeoutMs = DEFAULT_TIMEOUT_MS, attempts = MAX_ATTEMPTS, method, body } = opts;
   let lastErr;
   for (let attempt = 1; attempt <= attempts; attempt++) {
     const ctrl = new AbortController();
     const timer = setTimeout(() => ctrl.abort(), timeoutMs);
     try {
       const res = await fetch(url, {
+        method: method || (body ? "POST" : "GET"),
+        body,
         headers: { "user-agent": "rabbit-plugins-upstream-sync", ...headers },
         signal: ctrl.signal,
       });
@@ -30,10 +32,10 @@ export async function fetchWithRetry(url, opts = {}) {
           continue;
         }
       }
-      const body = await res.text().catch(() => "");
-      const err = new Error(`HTTP ${res.status} ${url}: ${body.slice(0, 300)}`);
+      const errText = await res.text().catch(() => "");
+      const err = new Error(`HTTP ${res.status} ${url}: ${errText.slice(0, 300)}`);
       err.status = res.status;
-      err.body = body;
+      err.body = errText;
       throw err;
     } catch (e) {
       lastErr = e;

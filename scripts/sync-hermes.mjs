@@ -10,7 +10,8 @@ import { fileURLToPath } from "node:url";
 import { fetchJson, createLimiter } from "./lib/http.mjs";
 import { loadState, saveState } from "./lib/state.mjs";
 import { writeSkill, removeSkill, collectFiles, contentHash } from "./lib/writer.mjs";
-import { getRepoInfo, fetchRepoDir } from "./lib/github.mjs";
+import { getRepoInfo, fetchRepoDir, ghHeaders } from "./lib/github.mjs";
+import { resolveLfsFiles } from "./lib/lfs.mjs";
 import { SyncStats } from "./lib/summary.mjs";
 import { MAX_ITEMS, CONCURRENCY, safeName } from "./lib/config.mjs";
 
@@ -121,6 +122,7 @@ async function syncContent(data, state, stats) {
                 continue;
               }
               const files = collectFiles(subDir);
+              await resolveLfsFiles(key, files, ghHeaders());
               const result = writeSkill(ROOT, SOURCE, e.id, files, {
                 source: SOURCE,
                 url: `https://github.com/${key}/tree/${branch}/${e.path}`,
