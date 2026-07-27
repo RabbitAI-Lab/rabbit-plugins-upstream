@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/parallel-web/parallel-agent-skills/parallel-web-search",
+  "repo": "parallel-web/parallel-agent-skills",
+  "skillId": "parallel-web-search",
+  "branch": "main",
+  "pushedAt": "2026-07-17T20:25:58Z",
+  "contentHash": "5fa1c96887e0e745ddc96e7ff53bfe684c2cba3af85ec7b733413ce29e30445e",
+  "fetchedAt": "2026-07-27T15:31:30.287Z"
+}

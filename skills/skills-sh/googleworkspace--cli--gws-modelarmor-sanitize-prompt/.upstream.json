@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/googleworkspace/cli/gws-modelarmor-sanitize-prompt",
+  "repo": "googleworkspace/cli",
+  "skillId": "gws-modelarmor-sanitize-prompt",
+  "branch": "main",
+  "pushedAt": "2026-07-22T11:35:50Z",
+  "contentHash": "9d32084670c1b8ca2ce128d8b113df041e3a476c97d502b84988c20cb3e34379",
+  "fetchedAt": "2026-07-27T15:29:52.559Z"
+}

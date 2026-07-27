@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/news-monitor",
+  "repo": "claude-office-skills/skills",
+  "skillId": "news-monitor",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "7772268054d208a06931212cb24087eeb2299cfd1bdb63c2305c4671b24e4812",
+  "fetchedAt": "2026-07-27T15:31:28.265Z"
+}

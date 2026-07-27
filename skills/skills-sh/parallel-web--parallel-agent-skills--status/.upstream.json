@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/parallel-web/parallel-agent-skills/status",
+  "repo": "parallel-web/parallel-agent-skills",
+  "skillId": "status",
+  "branch": "main",
+  "pushedAt": "2026-07-17T20:25:58Z",
+  "contentHash": "9a89961b9ec5b847c63a21c3d8b6d4741b2bd79761fe6efe39d8912dae5d8a44",
+  "fetchedAt": "2026-07-27T15:31:30.288Z"
+}

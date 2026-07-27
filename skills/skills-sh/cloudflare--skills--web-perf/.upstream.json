@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cloudflare/skills/web-perf",
+  "repo": "cloudflare/skills",
+  "skillId": "web-perf",
+  "branch": "main",
+  "pushedAt": "2026-07-24T18:42:34Z",
+  "contentHash": "6ae8cb7d20fddbc4e39b16dc611cc4c271b007d8486d4a5bfec26291729db707",
+  "fetchedAt": "2026-07-27T15:29:58.075Z"
+}

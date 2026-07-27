@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/neondatabase/agent-skills/neon-postgres",
+  "repo": "neondatabase/agent-skills",
+  "skillId": "neon-postgres",
+  "branch": "main",
+  "pushedAt": "2026-07-26T16:24:08Z",
+  "contentHash": "6f4b177ea6f19b9125285a23473994ed268fd8f7b046f0848ed950b6d0e58d84",
+  "fetchedAt": "2026-07-27T15:29:54.367Z"
+}

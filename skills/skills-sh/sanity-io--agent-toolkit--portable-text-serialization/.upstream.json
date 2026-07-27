@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/sanity-io/agent-toolkit/portable-text-serialization",
+  "repo": "sanity-io/agent-toolkit",
+  "skillId": "portable-text-serialization",
+  "branch": "main",
+  "pushedAt": "2026-07-22T16:56:02Z",
+  "contentHash": "92a460ec058ee9994d8698c1528680cd929d36961fe04d7b5b5a721b8db79f35",
+  "fetchedAt": "2026-07-27T15:30:20.143Z"
+}

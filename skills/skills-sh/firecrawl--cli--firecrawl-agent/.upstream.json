@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/firecrawl/cli/firecrawl-agent",
+  "repo": "firecrawl/cli",
+  "skillId": "firecrawl-agent",
+  "branch": "main",
+  "pushedAt": "2026-07-27T08:10:32Z",
+  "contentHash": "3f4f17b7917c1337c5237ec3443d7151d73e93d16ed4bd7e041bbaaab3598689",
+  "fetchedAt": "2026-07-27T15:29:51.546Z"
+}

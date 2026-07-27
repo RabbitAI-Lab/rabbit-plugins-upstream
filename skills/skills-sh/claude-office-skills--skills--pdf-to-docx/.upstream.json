@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/pdf-to-docx",
+  "repo": "claude-office-skills/skills",
+  "skillId": "pdf-to-docx",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "d8910f2a9f163338b32bd91b7696ffadff0bf7822097636ceff7b99a5b6af6bb",
+  "fetchedAt": "2026-07-27T15:31:28.216Z"
+}

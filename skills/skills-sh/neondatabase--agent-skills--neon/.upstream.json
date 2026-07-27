@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/neondatabase/agent-skills/neon",
+  "repo": "neondatabase/agent-skills",
+  "skillId": "neon",
+  "branch": "main",
+  "pushedAt": "2026-07-26T16:24:08Z",
+  "contentHash": "4d12d9c9f49450cd76cbc4c1e52a1d9ae7676a9ffc470caa02f1b47cd83bb0e5",
+  "fetchedAt": "2026-07-27T15:29:54.368Z"
+}

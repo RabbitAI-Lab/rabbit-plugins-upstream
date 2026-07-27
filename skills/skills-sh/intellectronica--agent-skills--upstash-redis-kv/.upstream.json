@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/intellectronica/agent-skills/upstash-redis-kv",
+  "repo": "intellectronica/agent-skills",
+  "skillId": "upstash-redis-kv",
+  "branch": "main",
+  "pushedAt": "2026-04-25T15:31:50Z",
+  "contentHash": "2e9406eb0dc7d982b26f3997a01ece946eb24ce10bb07c0171cd14efa476ec3e",
+  "fetchedAt": "2026-07-27T15:29:53.910Z"
+}

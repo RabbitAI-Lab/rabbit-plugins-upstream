@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runcomfy-com/skills/image-inpainting",
+  "repo": "runcomfy-com/skills",
+  "skillId": "image-inpainting",
+  "branch": "main",
+  "pushedAt": "2026-05-18T12:19:41Z",
+  "contentHash": "4e2fffac9f008e0b36af78e9ff23ce1094ac4a04eb33c4d43a0c6a5c29fd3c74",
+  "fetchedAt": "2026-07-27T15:29:43.926Z"
+}

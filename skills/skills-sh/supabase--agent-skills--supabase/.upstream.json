@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/supabase/agent-skills/supabase",
+  "repo": "supabase/agent-skills",
+  "skillId": "supabase",
+  "branch": "main",
+  "pushedAt": "2026-07-21T09:41:00Z",
+  "contentHash": "43efb6ff01bb9b6f56b8b33a6e705e104f440a563f6facde4866ee962ba0cd7a",
+  "fetchedAt": "2026-07-27T15:29:43.022Z"
+}

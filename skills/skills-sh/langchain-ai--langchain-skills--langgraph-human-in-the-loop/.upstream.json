@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/langchain-ai/langchain-skills/langgraph-human-in-the-loop",
+  "repo": "langchain-ai/langchain-skills",
+  "skillId": "langgraph-human-in-the-loop",
+  "branch": "main",
+  "pushedAt": "2026-07-23T11:48:48Z",
+  "contentHash": "bd1b0e6dd15cbb986df10afa2e3928379961f5dc5634ef5a403a8c952ca2a37f",
+  "fetchedAt": "2026-07-27T15:31:28.561Z"
+}

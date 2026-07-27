@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/ai-agent-builder",
+  "repo": "claude-office-skills/skills",
+  "skillId": "ai-agent-builder",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "10cc206e68c7e0e1a16b4448d1422c76f9f46d5a4b7ffaae269224fb6268dc24",
+  "fetchedAt": "2026-07-27T15:31:28.325Z"
+}

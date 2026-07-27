@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/parallel-web/parallel-agent-skills/parallel-data-enrichment",
+  "repo": "parallel-web/parallel-agent-skills",
+  "skillId": "parallel-data-enrichment",
+  "branch": "main",
+  "pushedAt": "2026-07-17T20:25:58Z",
+  "contentHash": "6a59240ddfcf824613f29588abff45313a34ffe565804e65dd84d9cc7d7577b7",
+  "fetchedAt": "2026-07-27T15:31:30.288Z"
+}

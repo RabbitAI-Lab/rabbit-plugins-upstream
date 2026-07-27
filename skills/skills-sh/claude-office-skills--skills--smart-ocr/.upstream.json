@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/smart-ocr",
+  "repo": "claude-office-skills/skills",
+  "skillId": "smart-ocr",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "2cd81fa49194d8fbe64ab899eab472941210e9e461f1455510db6303f8868b3c",
+  "fetchedAt": "2026-07-27T15:31:28.186Z"
+}

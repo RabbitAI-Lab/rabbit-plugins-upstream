@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/larksuite/cli/lark-vc-agent",
+  "repo": "larksuite/cli",
+  "skillId": "lark-vc-agent",
+  "branch": "main",
+  "pushedAt": "2026-07-27T13:33:03Z",
+  "contentHash": "95c42f2ac44abb486c776e868a3e7889c8748f6685d496d415ad232ebc7ba9ce",
+  "fetchedAt": "2026-07-27T15:29:43.538Z"
+}

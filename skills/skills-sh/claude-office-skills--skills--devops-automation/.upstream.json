@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/devops-automation",
+  "repo": "claude-office-skills/skills",
+  "skillId": "devops-automation",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "b946da7aa4d8c3c1007f6b58389f238e3c1ea6526ae17bad85365702678aac87",
+  "fetchedAt": "2026-07-27T15:31:28.339Z"
+}

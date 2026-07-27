@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/avdlee/swift-concurrency-agent-skill/swift-concurrency",
+  "repo": "avdlee/swift-concurrency-agent-skill",
+  "skillId": "swift-concurrency",
+  "branch": "main",
+  "pushedAt": "2026-05-28T12:49:25Z",
+  "contentHash": "79a575dc23c80fa74f193a437dad2c16eb197a4a4aef847fddd20c23c428d2b4",
+  "fetchedAt": "2026-07-27T15:30:21.885Z"
+}

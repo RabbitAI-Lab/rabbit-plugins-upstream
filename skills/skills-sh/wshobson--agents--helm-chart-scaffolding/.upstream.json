@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wshobson/agents/helm-chart-scaffolding",
+  "repo": "wshobson/agents",
+  "skillId": "helm-chart-scaffolding",
+  "branch": "main",
+  "pushedAt": "2026-07-22T15:32:23Z",
+  "contentHash": "2859cf38647a42ed29914d7ae70dd23c59c3039355cda20b603984fd185c6d8c",
+  "fetchedAt": "2026-07-27T15:29:55.522Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/webhook-automation",
+  "repo": "claude-office-skills/skills",
+  "skillId": "webhook-automation",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "073ce6ce17cc8a57d3a7e18c8af74b672eb16facea659826fbeba883badde04c",
+  "fetchedAt": "2026-07-27T15:31:28.366Z"
+}

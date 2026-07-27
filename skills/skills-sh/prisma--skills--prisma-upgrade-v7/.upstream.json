@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/prisma/skills/prisma-upgrade-v7",
+  "repo": "prisma/skills",
+  "skillId": "prisma-upgrade-v7",
+  "branch": "main",
+  "pushedAt": "2026-07-16T11:30:25Z",
+  "contentHash": "c78ab85873ee1a011e9b9d0459a766df5d623e9913a7d53966429359e9532a32",
+  "fetchedAt": "2026-07-27T15:29:53.457Z"
+}

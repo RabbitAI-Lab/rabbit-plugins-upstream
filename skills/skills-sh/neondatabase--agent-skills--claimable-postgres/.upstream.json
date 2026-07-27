@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/neondatabase/agent-skills/claimable-postgres",
+  "repo": "neondatabase/agent-skills",
+  "skillId": "claimable-postgres",
+  "branch": "main",
+  "pushedAt": "2026-07-26T16:24:08Z",
+  "contentHash": "067f182df35203402ff151d6af4740d951ec5213c864712df971344723323ae3",
+  "fetchedAt": "2026-07-27T15:29:54.370Z"
+}

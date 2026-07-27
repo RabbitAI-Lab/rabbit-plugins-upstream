@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cloudflare/skills/wrangler",
+  "repo": "cloudflare/skills",
+  "skillId": "wrangler",
+  "branch": "main",
+  "pushedAt": "2026-07-24T18:42:34Z",
+  "contentHash": "572a54107e930cff92ad894f65e71dc7cd74ac415833b54a7621dcf9f2474a31",
+  "fetchedAt": "2026-07-27T15:29:58.072Z"
+}

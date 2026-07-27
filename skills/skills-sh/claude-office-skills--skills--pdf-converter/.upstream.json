@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/pdf-converter",
+  "repo": "claude-office-skills/skills",
+  "skillId": "pdf-converter",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "89fafa8c300306d2f8c48c0659a72e5190b99896db34ada89c3cfa452aa35ec7",
+  "fetchedAt": "2026-07-27T15:31:28.262Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/get-convex/agent-skills/convex-quickstart",
+  "repo": "get-convex/agent-skills",
+  "skillId": "convex-quickstart",
+  "branch": "main",
+  "pushedAt": "2026-07-13T17:15:26Z",
+  "contentHash": "e1065c487c27e475c58b3585b28c5384505af0806f29efd931894eb5c919a5f0",
+  "fetchedAt": "2026-07-27T15:29:51.483Z"
+}

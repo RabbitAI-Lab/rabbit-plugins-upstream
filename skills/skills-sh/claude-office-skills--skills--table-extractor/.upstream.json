@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/table-extractor",
+  "repo": "claude-office-skills/skills",
+  "skillId": "table-extractor",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "9d715ec46eaefa14977562352a0f8d297504f444f22311537d8bb0a3b05e859a",
+  "fetchedAt": "2026-07-27T15:31:28.308Z"
+}

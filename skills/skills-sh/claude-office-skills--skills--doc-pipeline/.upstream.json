@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/doc-pipeline",
+  "repo": "claude-office-skills/skills",
+  "skillId": "doc-pipeline",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "1eaeac86dcc0623636fd5f0ec3dbee43ab62cd326246968e906a2c7803fe9ccd",
+  "fetchedAt": "2026-07-27T15:31:28.407Z"
+}

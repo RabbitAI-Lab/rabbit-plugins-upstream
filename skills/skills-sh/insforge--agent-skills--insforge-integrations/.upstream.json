@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/insforge/agent-skills/insforge-integrations",
+  "repo": "insforge/agent-skills",
+  "skillId": "insforge-integrations",
+  "branch": "main",
+  "pushedAt": "2026-07-27T12:51:00Z",
+  "contentHash": "0b5acdea7f54995df6223a8cd903d56c2339e7594901a153b8f653757af18183",
+  "fetchedAt": "2026-07-27T15:30:12.269Z"
+}

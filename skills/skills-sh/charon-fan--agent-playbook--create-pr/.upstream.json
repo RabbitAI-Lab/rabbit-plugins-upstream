@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/charon-fan/agent-playbook/create-pr",
+  "repo": "charon-fan/agent-playbook",
+  "skillId": "create-pr",
+  "branch": "main",
+  "pushedAt": "2026-06-21T03:12:02Z",
+  "contentHash": "08b79c098321865fad433304894a22a7d09ff4608742d8d63ad19cd6b637201f",
+  "fetchedAt": "2026-07-27T15:30:08.771Z"
+}

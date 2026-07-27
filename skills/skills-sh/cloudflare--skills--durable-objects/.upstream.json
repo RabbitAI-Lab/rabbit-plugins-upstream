@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cloudflare/skills/durable-objects",
+  "repo": "cloudflare/skills",
+  "skillId": "durable-objects",
+  "branch": "main",
+  "pushedAt": "2026-07-24T18:42:34Z",
+  "contentHash": "b4fa625f1c7a01119ea71d1ef7354f8aab2f9035da5c581891795e296b2b7ce9",
+  "fetchedAt": "2026-07-27T15:29:58.077Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/useai-pro/openclaw-skills-security/credential-scanner",
+  "repo": "useai-pro/openclaw-skills-security",
+  "skillId": "credential-scanner",
+  "branch": "main",
+  "pushedAt": "2026-03-10T03:43:48Z",
+  "contentHash": "2c610a80405fd4131a6febb2c3a1723ea68625c95fa6d6763bfa3ada7b8e7ab3",
+  "fetchedAt": "2026-07-27T15:30:13.806Z"
+}

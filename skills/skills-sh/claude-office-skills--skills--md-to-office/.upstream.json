@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/md-to-office",
+  "repo": "claude-office-skills/skills",
+  "skillId": "md-to-office",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "cd3ac6983e69b4547eeb83f95fc056a6f2373fb0550eb2b409e12c9b90b86a29",
+  "fetchedAt": "2026-07-27T15:31:28.264Z"
+}

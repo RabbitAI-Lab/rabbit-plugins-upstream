@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/tavily-ai/skills/tavily-search",
+  "repo": "tavily-ai/skills",
+  "skillId": "tavily-search",
+  "branch": "main",
+  "pushedAt": "2026-06-04T19:07:08Z",
+  "contentHash": "6248d80a8ba3852c11225b083f6b181f99aae2543742a00e6fe2d7a84a8d094e",
+  "fetchedAt": "2026-07-27T15:30:10.079Z"
+}

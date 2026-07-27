@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/vercel/ai/adr-skill",
+  "repo": "vercel/ai",
+  "skillId": "adr-skill",
+  "branch": "main",
+  "pushedAt": "2026-07-27T13:49:50Z",
+  "contentHash": "708ca55f78b36fb43da8ddbcdfd9a408bd09429a7ecc1dfc96da428301e1b8d8",
+  "fetchedAt": "2026-07-27T15:30:01.240Z"
+}

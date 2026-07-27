@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/stablyai/orca/orca-emulator",
+  "repo": "stablyai/orca",
+  "skillId": "orca-emulator",
+  "branch": "main",
+  "pushedAt": "2026-07-27T13:37:52Z",
+  "contentHash": "0ddfb12a392e30b30f6226cf8e0762e54a44a4f8f207a47af58a468855672dd1",
+  "fetchedAt": "2026-07-27T15:30:02.859Z"
+}

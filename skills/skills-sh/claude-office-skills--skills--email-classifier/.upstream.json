@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/email-classifier",
+  "repo": "claude-office-skills/skills",
+  "skillId": "email-classifier",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "9754ccd9664880c23b9e9fa01132333cdb40cccf449d82a4546475c2ee84d75c",
+  "fetchedAt": "2026-07-27T15:31:28.421Z"
+}

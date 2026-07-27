@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wshobson/agents/go-concurrency-patterns",
+  "repo": "wshobson/agents",
+  "skillId": "go-concurrency-patterns",
+  "branch": "main",
+  "pushedAt": "2026-07-22T15:32:23Z",
+  "contentHash": "2b623f88b7e51ccb55cc6a13dbab3f8cb5449fea3d674ede6cf5214232a6ee37",
+  "fetchedAt": "2026-07-27T15:29:55.590Z"
+}

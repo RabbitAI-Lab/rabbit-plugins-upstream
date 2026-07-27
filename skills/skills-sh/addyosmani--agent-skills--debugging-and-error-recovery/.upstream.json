@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/addyosmani/agent-skills/debugging-and-error-recovery",
+  "repo": "addyosmani/agent-skills",
+  "skillId": "debugging-and-error-recovery",
+  "branch": "main",
+  "pushedAt": "2026-07-26T12:51:12Z",
+  "contentHash": "78cadb32260105d619d7e47da6633cf47ed0d14f2857fcd7adee1ff1b8b3608c",
+  "fetchedAt": "2026-07-27T15:30:14.839Z"
+}

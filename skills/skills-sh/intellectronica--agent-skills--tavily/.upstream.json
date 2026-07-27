@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/intellectronica/agent-skills/tavily",
+  "repo": "intellectronica/agent-skills",
+  "skillId": "tavily",
+  "branch": "main",
+  "pushedAt": "2026-04-25T15:31:50Z",
+  "contentHash": "f11b530a60417ec7cc5ff7f91e1d48ed610701e8f1da4d03478dfcb54f7ed048",
+  "fetchedAt": "2026-07-27T15:29:53.898Z"
+}

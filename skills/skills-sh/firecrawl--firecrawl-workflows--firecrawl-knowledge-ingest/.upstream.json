@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/firecrawl/firecrawl-workflows/firecrawl-knowledge-ingest",
+  "repo": "firecrawl/firecrawl-workflows",
+  "skillId": "firecrawl-knowledge-ingest",
+  "branch": "main",
+  "pushedAt": "2026-06-19T18:56:45Z",
+  "contentHash": "17c93863bdf871c244d70da0b743965d1de324649e125e0524707728455e84f2",
+  "fetchedAt": "2026-07-27T15:30:08.469Z"
+}

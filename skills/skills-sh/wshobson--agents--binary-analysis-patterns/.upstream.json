@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wshobson/agents/binary-analysis-patterns",
+  "repo": "wshobson/agents",
+  "skillId": "binary-analysis-patterns",
+  "branch": "main",
+  "pushedAt": "2026-07-22T15:32:23Z",
+  "contentHash": "2e68c7d33a992895b2cc45d023fc5b38dfb37babbe6515e15cd62f830c408201",
+  "fetchedAt": "2026-07-27T15:29:55.871Z"
+}

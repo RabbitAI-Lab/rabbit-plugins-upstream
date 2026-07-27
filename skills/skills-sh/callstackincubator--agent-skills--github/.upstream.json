@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/callstackincubator/agent-skills/github",
+  "repo": "callstackincubator/agent-skills",
+  "skillId": "github",
+  "branch": "main",
+  "pushedAt": "2026-07-25T08:13:36Z",
+  "contentHash": "b83b44cd27c3e8d858f93711f636d617eed0d09d9650c099b01561320108f71c",
+  "fetchedAt": "2026-07-27T15:30:13.666Z"
+}

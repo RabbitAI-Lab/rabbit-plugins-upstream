@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/replicas-group/skill/replicas-agent",
+  "repo": "replicas-group/skill",
+  "skillId": "replicas-agent",
+  "branch": "main",
+  "pushedAt": "2026-06-06T05:11:10Z",
+  "contentHash": "2efbc960465404289428dfa72fb399fb9fd6ecd66a26aaeb44c9a9e251766310",
+  "fetchedAt": "2026-07-27T15:30:08.321Z"
+}

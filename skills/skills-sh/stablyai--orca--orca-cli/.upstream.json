@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/stablyai/orca/orca-cli",
+  "repo": "stablyai/orca",
+  "skillId": "orca-cli",
+  "branch": "main",
+  "pushedAt": "2026-07-27T13:37:52Z",
+  "contentHash": "a5496db629a87e8d2ff583549c861666d9ca05d91e0f9071b9f5aaf17816de38",
+  "fetchedAt": "2026-07-27T15:30:02.797Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/tencent/wechatreading/weread-skills",
+  "repo": "tencent/wechatreading",
+  "skillId": "weread-skills",
+  "branch": "main",
+  "pushedAt": "2026-07-01T13:28:18Z",
+  "contentHash": "4f787f9636643d83c19b91e3610b0f2ff1ad26aa54d6f74dbd19584232efb7c3",
+  "fetchedAt": "2026-07-27T15:30:08.982Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-code/plugin-settings",
+  "repo": "anthropics/claude-code",
+  "skillId": "plugin-settings",
+  "branch": "main",
+  "pushedAt": "2026-07-25T01:35:55Z",
+  "contentHash": "da9ce9a4787eb85e5c0976ca76b329519407fd4241f589b14cc3e1fd7ec14b3b",
+  "fetchedAt": "2026-07-27T15:29:57.490Z"
+}

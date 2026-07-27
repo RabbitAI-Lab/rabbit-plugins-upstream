@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/agents-cli/google-agents-cli-scaffold",
+  "repo": "google/agents-cli",
+  "skillId": "google-agents-cli-scaffold",
+  "branch": "main",
+  "pushedAt": "2026-07-23T19:53:43Z",
+  "contentHash": "464b042ee490e170ccf52631843d6842c3151da84bb181de9279fb5065a01d32",
+  "fetchedAt": "2026-07-27T15:29:53.158Z"
+}

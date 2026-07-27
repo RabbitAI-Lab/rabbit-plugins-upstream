@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/agents-cli/google-agents-cli-eval",
+  "repo": "google/agents-cli",
+  "skillId": "google-agents-cli-eval",
+  "branch": "main",
+  "pushedAt": "2026-07-23T19:53:43Z",
+  "contentHash": "0d4614a9c1c2fc957353f4b2ab591391e08b31d5130c7e17e4f007373a72a0ed",
+  "fetchedAt": "2026-07-27T15:29:53.155Z"
+}

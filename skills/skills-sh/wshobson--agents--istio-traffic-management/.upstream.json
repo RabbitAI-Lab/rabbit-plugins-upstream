@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wshobson/agents/istio-traffic-management",
+  "repo": "wshobson/agents",
+  "skillId": "istio-traffic-management",
+  "branch": "main",
+  "pushedAt": "2026-07-22T15:32:23Z",
+  "contentHash": "2ace5d0b97ba6052ad0042c973c03b0b6e35824d9ed539cf110e2709a1c9644b",
+  "fetchedAt": "2026-07-27T15:29:56.048Z"
+}

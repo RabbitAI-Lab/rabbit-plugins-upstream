@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/stripe-payments",
+  "repo": "claude-office-skills/skills",
+  "skillId": "stripe-payments",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "7a2d902ef4b3b6238330e59448cbde766ba7473a3ee46cce686f117da1a71b82",
+  "fetchedAt": "2026-07-27T15:31:28.302Z"
+}

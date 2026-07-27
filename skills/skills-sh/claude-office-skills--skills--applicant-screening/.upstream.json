@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/applicant-screening",
+  "repo": "claude-office-skills/skills",
+  "skillId": "applicant-screening",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "deffc30b76417ca308e42c4e7b5d7bde2c496882d47ccf47dd16913b26d8f625",
+  "fetchedAt": "2026-07-27T15:31:28.391Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/googleworkspace/cli/gws-modelarmor-sanitize-response",
+  "repo": "googleworkspace/cli",
+  "skillId": "gws-modelarmor-sanitize-response",
+  "branch": "main",
+  "pushedAt": "2026-07-22T11:35:50Z",
+  "contentHash": "48b8d124be51e5015cc2b1b453e446ae8f6c45e31782426859c6bda4e38cb877",
+  "fetchedAt": "2026-07-27T15:29:52.561Z"
+}

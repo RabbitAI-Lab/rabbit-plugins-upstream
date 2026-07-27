@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/ast-grep/agent-skill/ast-grep-outline",
+  "repo": "ast-grep/agent-skill",
+  "skillId": "ast-grep-outline",
+  "branch": "main",
+  "pushedAt": "2026-07-03T14:10:24Z",
+  "contentHash": "21bad9b0cbad07b5d40571f6b5765b45d520bf1d029b61e60a6400af7bc3acdd",
+  "fetchedAt": "2026-07-27T15:31:29.113Z"
+}

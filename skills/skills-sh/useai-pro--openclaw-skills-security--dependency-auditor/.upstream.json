@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/useai-pro/openclaw-skills-security/dependency-auditor",
+  "repo": "useai-pro/openclaw-skills-security",
+  "skillId": "dependency-auditor",
+  "branch": "main",
+  "pushedAt": "2026-03-10T03:43:48Z",
+  "contentHash": "d4bf99301a8b80de53d6949c85a359e64f6f19851a7a71e200a9438e1efd0251",
+  "fetchedAt": "2026-07-27T15:30:13.806Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/langchain-ai/langchain-skills/managed-deep-agents",
+  "repo": "langchain-ai/langchain-skills",
+  "skillId": "managed-deep-agents",
+  "branch": "main",
+  "pushedAt": "2026-07-23T11:48:48Z",
+  "contentHash": "511b3e436013d5fa5193ea462ad63d86563150aaff949a2a2cf6346eb146c946",
+  "fetchedAt": "2026-07-27T15:31:28.566Z"
+}

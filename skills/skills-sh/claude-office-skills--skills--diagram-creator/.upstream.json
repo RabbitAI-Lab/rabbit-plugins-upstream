@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/diagram-creator",
+  "repo": "claude-office-skills/skills",
+  "skillId": "diagram-creator",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "dd4766e9b5a5222efeb05b9d6aad33891b1c57f15321d8ac7abbc86fc411fce8",
+  "fetchedAt": "2026-07-27T15:31:28.301Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wshobson/agents/memory-forensics",
+  "repo": "wshobson/agents",
+  "skillId": "memory-forensics",
+  "branch": "main",
+  "pushedAt": "2026-07-22T15:32:23Z",
+  "contentHash": "9e81dcf0e13b43d84e4d4072297c9873909f8fc897d07acd0c0ec6981b8659bd",
+  "fetchedAt": "2026-07-27T15:29:55.649Z"
+}

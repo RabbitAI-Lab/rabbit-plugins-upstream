@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nexscope-ai/amazon-skills/amazon-deal-finder",
+  "repo": "nexscope-ai/amazon-skills",
+  "skillId": "amazon-deal-finder",
+  "branch": "main",
+  "pushedAt": "2026-07-23T03:19:29Z",
+  "contentHash": "4043392c8a22cffe7e1c8beb47f1e2e591c87a84fd25e8c5c77bb00bb6ec38f8",
+  "fetchedAt": "2026-07-27T15:29:52.172Z"
+}

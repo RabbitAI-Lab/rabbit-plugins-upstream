@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/googleworkspace/cli/recipe-sync-contacts-to-sheet",
+  "repo": "googleworkspace/cli",
+  "skillId": "recipe-sync-contacts-to-sheet",
+  "branch": "main",
+  "pushedAt": "2026-07-22T11:35:50Z",
+  "contentHash": "971ac7c3765a328d2a8d021332d98eb82e28071ed64c1a8fa3986d16aa393e8e",
+  "fetchedAt": "2026-07-27T15:29:52.492Z"
+}

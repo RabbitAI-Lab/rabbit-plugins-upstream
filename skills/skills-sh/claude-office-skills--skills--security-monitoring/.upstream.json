@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/security-monitoring",
+  "repo": "claude-office-skills/skills",
+  "skillId": "security-monitoring",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "80e12adf87cf3220ed05c67c98165320667697a7d50eb44d5f72034841cf3c42",
+  "fetchedAt": "2026-07-27T15:31:28.388Z"
+}

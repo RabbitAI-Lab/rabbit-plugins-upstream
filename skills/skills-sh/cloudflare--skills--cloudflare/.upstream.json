@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cloudflare/skills/cloudflare",
+  "repo": "cloudflare/skills",
+  "skillId": "cloudflare",
+  "branch": "main",
+  "pushedAt": "2026-07-24T18:42:34Z",
+  "contentHash": "9a990c360f49535d9b3cc014a5e0f1162875863fd221bcf295567431a6207089",
+  "fetchedAt": "2026-07-27T15:29:58.069Z"
+}

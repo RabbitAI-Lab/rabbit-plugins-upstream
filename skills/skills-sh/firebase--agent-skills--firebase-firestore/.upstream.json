@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/firebase/agent-skills/firebase-firestore",
+  "repo": "firebase/agent-skills",
+  "skillId": "firebase-firestore",
+  "branch": "main",
+  "pushedAt": "2026-07-26T14:46:34Z",
+  "contentHash": "cc25598446b0ce3558388eb2db69b580837c8a6925df4dea98c3faba1448e8ab",
+  "fetchedAt": "2026-07-27T15:29:50.755Z"
+}

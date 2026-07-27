@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/firebase/agent-skills/firebase-security-rules-auditor",
+  "repo": "firebase/agent-skills",
+  "skillId": "firebase-security-rules-auditor",
+  "branch": "main",
+  "pushedAt": "2026-07-26T14:46:34Z",
+  "contentHash": "904cab312b2b823c0cd39e56e0efc9354c47a599d964952efdff71809bd15b20",
+  "fetchedAt": "2026-07-27T15:29:50.752Z"
+}

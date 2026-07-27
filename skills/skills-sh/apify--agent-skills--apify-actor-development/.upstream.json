@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/apify/agent-skills/apify-actor-development",
+  "repo": "apify/agent-skills",
+  "skillId": "apify-actor-development",
+  "branch": "main",
+  "pushedAt": "2026-06-25T11:07:14Z",
+  "contentHash": "9fd0e0ddef0d5310a0c6f105e6f3cc7aaec99f71c6d32736b082690f4974b24f",
+  "fetchedAt": "2026-07-27T15:31:29.326Z"
+}

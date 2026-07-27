@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/data-extractor",
+  "repo": "claude-office-skills/skills",
+  "skillId": "data-extractor",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "fbfa7f087aab41e2a726b46de2f95ca090ea72fd5bc110e36d05a90b0964b95c",
+  "fetchedAt": "2026-07-27T15:31:28.336Z"
+}

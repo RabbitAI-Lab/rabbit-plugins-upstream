@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/expense-tracker",
+  "repo": "claude-office-skills/skills",
+  "skillId": "expense-tracker",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "72e0ef8ac7e2450a2643da3e66bcfa9d817ad6a923c5f3e212494680622847e7",
+  "fetchedAt": "2026-07-27T15:31:28.361Z"
+}

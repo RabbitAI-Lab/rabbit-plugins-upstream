@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/agents-cli/google-agents-cli-publish",
+  "repo": "google/agents-cli",
+  "skillId": "google-agents-cli-publish",
+  "branch": "main",
+  "pushedAt": "2026-07-23T19:53:43Z",
+  "contentHash": "0b1b70f774ab336f949f30ba7caf116062af441000af13874bb1e79038667f8f",
+  "fetchedAt": "2026-07-27T15:29:53.164Z"
+}

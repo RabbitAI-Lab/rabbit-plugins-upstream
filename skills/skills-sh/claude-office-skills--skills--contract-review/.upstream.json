@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/contract-review",
+  "repo": "claude-office-skills/skills",
+  "skillId": "contract-review",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "039068d1058cbece7425b2aa25b849eafeaf3f203720d742dd6d1671d97f7593",
+  "fetchedAt": "2026-07-27T15:31:28.245Z"
+}

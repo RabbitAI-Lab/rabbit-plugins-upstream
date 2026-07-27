@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wshobson/agents/shellcheck-configuration",
+  "repo": "wshobson/agents",
+  "skillId": "shellcheck-configuration",
+  "branch": "main",
+  "pushedAt": "2026-07-22T15:32:23Z",
+  "contentHash": "acbff48a14170ca46ebb45c3ee7eae8b2e0e5f161a8b541e502f6d05df91056d",
+  "fetchedAt": "2026-07-27T15:29:55.752Z"
+}

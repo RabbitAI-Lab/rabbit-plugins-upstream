@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/googleworkspace/cli/recipe-create-shared-drive",
+  "repo": "googleworkspace/cli",
+  "skillId": "recipe-create-shared-drive",
+  "branch": "main",
+  "pushedAt": "2026-07-22T11:35:50Z",
+  "contentHash": "5e2fcd2c3eb15fe7cc35295d777486276f08a62b6e327d7080fb9c89e84c238a",
+  "fetchedAt": "2026-07-27T15:29:52.517Z"
+}

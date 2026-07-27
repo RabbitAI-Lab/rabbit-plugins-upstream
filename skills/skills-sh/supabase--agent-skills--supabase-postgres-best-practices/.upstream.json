@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/supabase/agent-skills/supabase-postgres-best-practices",
+  "repo": "supabase/agent-skills",
+  "skillId": "supabase-postgres-best-practices",
+  "branch": "main",
+  "pushedAt": "2026-07-21T09:41:00Z",
+  "contentHash": "230a54446bed3e0211b8ceb3a3430f999ff3d6780dd2109511442343bb5dda35",
+  "fetchedAt": "2026-07-27T15:29:43.021Z"
+}

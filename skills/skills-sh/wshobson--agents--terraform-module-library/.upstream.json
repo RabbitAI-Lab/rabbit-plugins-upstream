@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wshobson/agents/terraform-module-library",
+  "repo": "wshobson/agents",
+  "skillId": "terraform-module-library",
+  "branch": "main",
+  "pushedAt": "2026-07-22T15:32:23Z",
+  "contentHash": "e50de29e347839aa006c6cd7910fde09d863c5cbd8818a642a8ebc65dbe025db",
+  "fetchedAt": "2026-07-27T15:29:55.151Z"
+}

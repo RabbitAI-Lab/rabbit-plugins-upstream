@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/image-generation",
+  "repo": "claude-office-skills/skills",
+  "skillId": "image-generation",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "8338daf315e4a684026cfb16a14b9006f43b3b70792f99412e8ec88590446039",
+  "fetchedAt": "2026-07-27T15:31:28.230Z"
+}
