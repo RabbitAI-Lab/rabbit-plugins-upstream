@@ -18,7 +18,7 @@ const SOURCE = "clawhub";
 const FORMAT = 2;
 
 async function enumerateAll() {
-  const maxPages = Number(process.env.SYNC_ENUM_PAGES || Infinity); // 调试用：限制枚举页数
+  const maxPages = process.env.SYNC_ENUM_PAGES ? Number(process.env.SYNC_ENUM_PAGES) : Infinity; // 限页调试/每日增量模式
   const items = new Map(); // slug -> {version, updatedAt}
   let cursor = null;
   let page = 0;

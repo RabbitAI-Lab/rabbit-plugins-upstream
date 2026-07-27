@@ -14,6 +14,9 @@ on:
       max_items:
         description: "本轮每个来源最多处理的 skill 数"
         default: "3000"
+      enum_pages:
+        description: "ClawHub 枚举页数（all=全量，默认每日40页/周一全量）"
+        default: ""
 
 permissions:
   contents: write
@@ -44,6 +47,19 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
+
+      - name: Configure enumeration depth
+        # ClawHub 枚举按最近活跃排序：每周一全量枚举（覆盖下架删除与深层变更），
+        # 其余日子只看最新 40 页（约 4000 条，覆盖每日 3000 条更新额度）
+        run: |
+          PAGES="${{ inputs.enum_pages }}"
+          if [ -z "$PAGES" ]; then
+            if [ "$(date -u +%u)" = "1" ]; then PAGES=all; else PAGES=40; fi
+          fi
+          echo "clawhub 枚举深度: $PAGES"
+          if [ "$PAGES" != "all" ]; then
+            echo "SYNC_ENUM_PAGES=$PAGES" >> "$GITHUB_ENV"
+          fi
 
       - name: Sync ${{ matrix.source }}
         if: ${{ env.SOURCE_SELECTED == 'true' }}

@@ -31,8 +31,8 @@ scripts/                                 # 同步脚本（Node.js，零第三方
 ## 同步机制
 
 - **定时**：每天通过 `.github/workflows/sync.yml` 运行，三个来源 **matrix 并行**，也可手动 `workflow_dispatch` 触发（可选单一来源）。
-- **首次全量**：ClawHub 全量（约 69k）在本地跑 `npm run sync:clawhub` 后直接提交 main；Actions 不承担首轮全量。
-- **增量**：以 `sync-state/<source>.json` 对比上游版本/哈希，只拉新增与变更；ClawHub 枚举按最近活跃排序，每日 3000 条即可覆盖日常 churn；上游下架的 skill 会被删除（在 PR diff 中可见）。
+- **首次全量**：ClawHub 全量（约 70k）在本地跑 `npm run sync:clawhub` 后直接提交 main；Actions 不承担首轮全量。
+- **增量**：以 `sync-state/<source>.json` 对比上游版本/哈希，只拉新增与变更。ClawHub 枚举按最近活跃排序：**每日只枚举最新 40 页**（约 4000 条，覆盖 3000 条更新额度），**每周一全量枚举**（约 700+ 页，覆盖下架删除与深层变更）；上游下架的 skill 在全量轮删除（在 PR diff 中可见）。
 - **分批**：单次运行处理量受 `SYNC_MAX_ITEMS`（默认 3000/来源）限制，状态随每次提交持久化。
 - **落地**：每个来源独立建分支 `sync/<source>/<date>` 并开独立 PR（文件路径互不重叠，可分别审查合并）；无变更则不开。
 
