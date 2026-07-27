@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-code/claude-opus-4-5-migration",
+  "repo": "anthropics/claude-code",
+  "skillId": "claude-opus-4-5-migration",
+  "branch": "main",
+  "pushedAt": "2026-07-25T01:35:55Z",
+  "contentHash": "08eb0f8c3884223e7359bc5c71d66aee0406d27d1698c211cb1943d053b0edea",
+  "fetchedAt": "2026-07-27T15:29:57.493Z"
+}

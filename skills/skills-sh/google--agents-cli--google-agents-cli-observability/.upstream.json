@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/agents-cli/google-agents-cli-observability",
+  "repo": "google/agents-cli",
+  "skillId": "google-agents-cli-observability",
+  "branch": "main",
+  "pushedAt": "2026-07-23T19:53:43Z",
+  "contentHash": "eb303467356c862b7da7f1e8fa98037dcdead367623b6cf62b295812007bef3e",
+  "fetchedAt": "2026-07-27T15:29:53.162Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wshobson/agents/k8s-manifest-generator",
+  "repo": "wshobson/agents",
+  "skillId": "k8s-manifest-generator",
+  "branch": "main",
+  "pushedAt": "2026-07-22T15:32:23Z",
+  "contentHash": "58270203cc790414c0c2acffb29856815685aa1f1edfb46ce5cb9926a670cb3a",
+  "fetchedAt": "2026-07-27T15:29:55.658Z"
+}

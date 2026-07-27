@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/resend/resend-skills/agent-email-inbox",
+  "repo": "resend/resend-skills",
+  "skillId": "agent-email-inbox",
+  "branch": "main",
+  "pushedAt": "2026-07-23T19:53:19Z",
+  "contentHash": "b0783ce692449e26687abeeb8630b7d152908ef25b29e31a6487d52c6978ac6c",
+  "fetchedAt": "2026-07-27T15:31:29.027Z"
+}

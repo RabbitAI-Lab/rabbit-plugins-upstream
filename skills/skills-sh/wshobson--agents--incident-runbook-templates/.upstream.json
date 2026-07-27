@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wshobson/agents/incident-runbook-templates",
+  "repo": "wshobson/agents",
+  "skillId": "incident-runbook-templates",
+  "branch": "main",
+  "pushedAt": "2026-07-22T15:32:23Z",
+  "contentHash": "1092b093dfdf2c1dc5ab64a9ae5101cc45f2f9d03e9b6fa772545ba6b16cbbcf",
+  "fetchedAt": "2026-07-27T15:29:55.794Z"
+}

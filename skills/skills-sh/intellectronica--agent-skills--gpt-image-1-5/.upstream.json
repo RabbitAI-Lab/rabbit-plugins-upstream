@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/intellectronica/agent-skills/gpt-image-1-5",
+  "repo": "intellectronica/agent-skills",
+  "skillId": "gpt-image-1-5",
+  "branch": "main",
+  "pushedAt": "2026-04-25T15:31:50Z",
+  "contentHash": "741258ce82d8b23e1d7a9b228c08c115fce85af379eb5239c71dfafd5dc51346",
+  "fetchedAt": "2026-07-27T15:29:53.901Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/invoice-template",
+  "repo": "claude-office-skills/skills",
+  "skillId": "invoice-template",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "35921afcdc7ba177b7dc0a49e6e8f4090efa99cbf7ef05205697c1f9be855296",
+  "fetchedAt": "2026-07-27T15:31:28.382Z"
+}

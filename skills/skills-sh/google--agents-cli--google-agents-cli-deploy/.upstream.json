@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/agents-cli/google-agents-cli-deploy",
+  "repo": "google/agents-cli",
+  "skillId": "google-agents-cli-deploy",
+  "branch": "main",
+  "pushedAt": "2026-07-23T19:53:43Z",
+  "contentHash": "8c152fac35f82469d3fa6f563f7083249d4ba6a41d06189941e3b33983308a9b",
+  "fetchedAt": "2026-07-27T15:29:53.160Z"
+}

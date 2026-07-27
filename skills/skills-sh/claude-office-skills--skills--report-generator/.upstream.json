@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/report-generator",
+  "repo": "claude-office-skills/skills",
+  "skillId": "report-generator",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "6827b9e071168a64aee24e782fec6692ca0611f41afebba8dc0016f493090eb5",
+  "fetchedAt": "2026-07-27T15:31:28.271Z"
+}

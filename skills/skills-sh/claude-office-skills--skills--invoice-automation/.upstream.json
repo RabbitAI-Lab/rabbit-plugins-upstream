@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/invoice-automation",
+  "repo": "claude-office-skills/skills",
+  "skillId": "invoice-automation",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "ca1bcee383b7f7f8bedd8bb8cadce76ee7f783352edc43be89e27a1fb9767121",
+  "fetchedAt": "2026-07-27T15:31:28.363Z"
+}

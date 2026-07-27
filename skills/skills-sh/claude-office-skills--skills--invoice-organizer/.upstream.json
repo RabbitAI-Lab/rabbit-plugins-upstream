@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/invoice-organizer",
+  "repo": "claude-office-skills/skills",
+  "skillId": "invoice-organizer",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "095d32a07b7a8cf8fcb00a89c7a2c20c46b5921b886f6ad448b785933154a02a",
+  "fetchedAt": "2026-07-27T15:31:28.408Z"
+}

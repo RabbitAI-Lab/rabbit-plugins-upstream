@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/neondatabase/agent-skills/neon-object-storage",
+  "repo": "neondatabase/agent-skills",
+  "skillId": "neon-object-storage",
+  "branch": "main",
+  "pushedAt": "2026-07-26T16:24:08Z",
+  "contentHash": "4a5260c2b193da5f5c927e48a9b91b198e45fff7410dcf4403a5c1e8ae60cb06",
+  "fetchedAt": "2026-07-27T15:29:54.372Z"
+}

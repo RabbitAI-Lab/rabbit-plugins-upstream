@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/firebase/agent-skills/firebase-crashlytics",
+  "repo": "firebase/agent-skills",
+  "skillId": "firebase-crashlytics",
+  "branch": "main",
+  "pushedAt": "2026-07-26T14:46:34Z",
+  "contentHash": "ef992f28fee7a1cf5c56a1daf89718125b03a580c485d42f29f6bf2c1a96bb84",
+  "fetchedAt": "2026-07-27T15:29:50.756Z"
+}

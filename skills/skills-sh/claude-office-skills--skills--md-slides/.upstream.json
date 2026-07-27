@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/md-slides",
+  "repo": "claude-office-skills/skills",
+  "skillId": "md-slides",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "f600dfb310de659c090fa60ca49e37fdb67cdf249d3ca4492681b8905d0c1e70",
+  "fetchedAt": "2026-07-27T15:31:28.359Z"
+}

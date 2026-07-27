@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/chat-with-pdf",
+  "repo": "claude-office-skills/skills",
+  "skillId": "chat-with-pdf",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "d6b177708b6ff898e2eef6089061237c891925ad2ecf3c86e8896d8494aee402",
+  "fetchedAt": "2026-07-27T15:31:28.332Z"
+}

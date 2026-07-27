@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/callstackincubator/agent-skills/react-native-brownfield-migration",
+  "repo": "callstackincubator/agent-skills",
+  "skillId": "react-native-brownfield-migration",
+  "branch": "main",
+  "pushedAt": "2026-07-25T08:13:36Z",
+  "contentHash": "2052eff108994e4e0e057d980a745a920ac1392d76437baaf5f2888b1590e10a",
+  "fetchedAt": "2026-07-27T15:30:13.670Z"
+}

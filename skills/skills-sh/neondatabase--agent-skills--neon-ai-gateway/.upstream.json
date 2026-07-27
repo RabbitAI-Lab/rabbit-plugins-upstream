@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/neondatabase/agent-skills/neon-ai-gateway",
+  "repo": "neondatabase/agent-skills",
+  "skillId": "neon-ai-gateway",
+  "branch": "main",
+  "pushedAt": "2026-07-26T16:24:08Z",
+  "contentHash": "b59f7482a9eba0cab079173c3f718d2488b4bde6a5e7820d5d2e2ffc1693e2ee",
+  "fetchedAt": "2026-07-27T15:29:54.373Z"
+}

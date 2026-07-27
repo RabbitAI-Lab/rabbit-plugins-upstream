@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/apify/agent-skills/apify-ultimate-scraper",
+  "repo": "apify/agent-skills",
+  "skillId": "apify-ultimate-scraper",
+  "branch": "main",
+  "pushedAt": "2026-06-25T11:07:14Z",
+  "contentHash": "a37da823814c57c0c792d5354f3a49d74c9bceaf239aa65feffc197d702d8494",
+  "fetchedAt": "2026-07-27T15:31:29.325Z"
+}

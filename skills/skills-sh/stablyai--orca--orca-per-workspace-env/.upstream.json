@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/stablyai/orca/orca-per-workspace-env",
+  "repo": "stablyai/orca",
+  "skillId": "orca-per-workspace-env",
+  "branch": "main",
+  "pushedAt": "2026-07-27T13:37:52Z",
+  "contentHash": "ee9a872ee38b9cf161f649afd80a71f48881c318b60f1a3eb3bdb3d6e5d817dd",
+  "fetchedAt": "2026-07-27T15:30:02.844Z"
+}

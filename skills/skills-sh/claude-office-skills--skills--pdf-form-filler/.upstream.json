@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/pdf-form-filler",
+  "repo": "claude-office-skills/skills",
+  "skillId": "pdf-form-filler",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "23968163f955fa000f6df0ed931d6ec1175b9e139f59edf2bc0d1d37a6cdfd41",
+  "fetchedAt": "2026-07-27T15:31:28.365Z"
+}

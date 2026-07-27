@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/apify/agent-skills/apify-generate-output-schema",
+  "repo": "apify/agent-skills",
+  "skillId": "apify-generate-output-schema",
+  "branch": "main",
+  "pushedAt": "2026-06-25T11:07:14Z",
+  "contentHash": "a3134e24e5dd698e497dd3cd85f0bc066ecb649486afb2d50765c66b2e50ef47",
+  "fetchedAt": "2026-07-27T15:31:29.327Z"
+}

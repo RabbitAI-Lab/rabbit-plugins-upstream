@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cloudflare/skills/workers-best-practices",
+  "repo": "cloudflare/skills",
+  "skillId": "workers-best-practices",
+  "branch": "main",
+  "pushedAt": "2026-07-24T18:42:34Z",
+  "contentHash": "68eb3d7762fc723d835a5d383abaf863ba7c7acfe680e925398f5f14f0740a5e",
+  "fetchedAt": "2026-07-27T15:29:58.074Z"
+}

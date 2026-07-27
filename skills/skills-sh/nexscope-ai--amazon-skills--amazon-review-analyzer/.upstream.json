@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nexscope-ai/amazon-skills/amazon-review-analyzer",
+  "repo": "nexscope-ai/amazon-skills",
+  "skillId": "amazon-review-analyzer",
+  "branch": "main",
+  "pushedAt": "2026-07-23T03:19:29Z",
+  "contentHash": "ca04f9449fa4f185ed7fdef4533c56093de59744b7529c736a79c2a573c2c0a8",
+  "fetchedAt": "2026-07-27T15:29:52.160Z"
+}

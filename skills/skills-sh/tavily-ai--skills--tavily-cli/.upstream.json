@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/tavily-ai/skills/tavily-cli",
+  "repo": "tavily-ai/skills",
+  "skillId": "tavily-cli",
+  "branch": "main",
+  "pushedAt": "2026-06-04T19:07:08Z",
+  "contentHash": "7277d6dcd3f0d369c7d1a7752ebb5e058e09104f07fd8ded67d1c5272a9d410e",
+  "fetchedAt": "2026-07-27T15:30:10.081Z"
+}

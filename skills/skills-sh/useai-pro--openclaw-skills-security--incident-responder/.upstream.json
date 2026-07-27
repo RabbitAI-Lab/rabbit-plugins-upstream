@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/useai-pro/openclaw-skills-security/incident-responder",
+  "repo": "useai-pro/openclaw-skills-security",
+  "skillId": "incident-responder",
+  "branch": "main",
+  "pushedAt": "2026-03-10T03:43:48Z",
+  "contentHash": "bb3ce68b1cce93aa8572c36f2282e66e8238a2055818e6608f2239f165906c58",
+  "fetchedAt": "2026-07-27T15:30:13.810Z"
+}

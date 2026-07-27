@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/weather-automation",
+  "repo": "claude-office-skills/skills",
+  "skillId": "weather-automation",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "0203229330bf6f656cb38633dc06c5d6fe59082b67f0b902bc7949653c615a5e",
+  "fetchedAt": "2026-07-27T15:31:28.443Z"
+}

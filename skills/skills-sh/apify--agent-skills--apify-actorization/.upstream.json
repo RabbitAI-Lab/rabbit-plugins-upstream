@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/apify/agent-skills/apify-actorization",
+  "repo": "apify/agent-skills",
+  "skillId": "apify-actorization",
+  "branch": "main",
+  "pushedAt": "2026-06-25T11:07:14Z",
+  "contentHash": "7d36cf5fe238d0d5c314e63bd2738fe2cc70318b130d6ec8ee4ce9d9ef7bbaa8",
+  "fetchedAt": "2026-07-27T15:31:29.327Z"
+}

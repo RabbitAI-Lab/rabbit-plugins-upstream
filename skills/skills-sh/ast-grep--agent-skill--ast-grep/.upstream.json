@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/ast-grep/agent-skill/ast-grep",
+  "repo": "ast-grep/agent-skill",
+  "skillId": "ast-grep",
+  "branch": "main",
+  "pushedAt": "2026-07-03T14:10:24Z",
+  "contentHash": "8996a74d2d5a7154524d3a10787d0581b9a2b7add257765ce58e7134cbe41c05",
+  "fetchedAt": "2026-07-27T15:31:29.113Z"
+}

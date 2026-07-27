@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/pdf-extraction",
+  "repo": "claude-office-skills/skills",
+  "skillId": "pdf-extraction",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "477b07e86d9b9390315e47b4ef7e34a7d645d9f772deb040b691b96c1d9cb136",
+  "fetchedAt": "2026-07-27T15:31:28.184Z"
+}

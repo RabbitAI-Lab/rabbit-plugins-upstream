@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cloudflare/skills/cloudflare-email-service",
+  "repo": "cloudflare/skills",
+  "skillId": "cloudflare-email-service",
+  "branch": "main",
+  "pushedAt": "2026-07-24T18:42:34Z",
+  "contentHash": "2fa7033322f461bda4508aea0a93294241d670d088afef8cbfbfbc1685393532",
+  "fetchedAt": "2026-07-27T15:29:58.082Z"
+}

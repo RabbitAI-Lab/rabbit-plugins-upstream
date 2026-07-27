@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/transcription-automation",
+  "repo": "claude-office-skills/skills",
+  "skillId": "transcription-automation",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "ddac584d7ac32a9c92f2299968656b7ea907a0fbedda1cfbdc4a21d791ec4a1f",
+  "fetchedAt": "2026-07-27T15:31:28.319Z"
+}

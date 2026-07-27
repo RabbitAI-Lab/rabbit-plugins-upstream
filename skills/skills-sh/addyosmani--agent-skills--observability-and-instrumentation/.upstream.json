@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/addyosmani/agent-skills/observability-and-instrumentation",
+  "repo": "addyosmani/agent-skills",
+  "skillId": "observability-and-instrumentation",
+  "branch": "main",
+  "pushedAt": "2026-07-26T12:51:12Z",
+  "contentHash": "ee68531648f0c6d60f8a51c948ed8515bda084a52502f871f22ca1bd31e4b301",
+  "fetchedAt": "2026-07-27T15:30:14.858Z"
+}

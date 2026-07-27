@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/docx-manipulation",
+  "repo": "claude-office-skills/skills",
+  "skillId": "docx-manipulation",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "9894b349e2ed9421a9bf8ceae826e9bc51603a3ab6713f5b7fa5f188d1d30a0a",
+  "fetchedAt": "2026-07-27T15:31:28.212Z"
+}

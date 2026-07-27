@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/addyosmani/agent-skills/security-and-hardening",
+  "repo": "addyosmani/agent-skills",
+  "skillId": "security-and-hardening",
+  "branch": "main",
+  "pushedAt": "2026-07-26T12:51:12Z",
+  "contentHash": "b329d52a33fdc4e84182ca26d06180df3c571f993553ffc084506106b7cfb565",
+  "fetchedAt": "2026-07-27T15:30:14.835Z"
+}

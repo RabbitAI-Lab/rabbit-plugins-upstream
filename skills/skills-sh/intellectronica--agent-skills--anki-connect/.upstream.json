@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/intellectronica/agent-skills/anki-connect",
+  "repo": "intellectronica/agent-skills",
+  "skillId": "anki-connect",
+  "branch": "main",
+  "pushedAt": "2026-04-25T15:31:50Z",
+  "contentHash": "46dd65c8212c194234c811dd41a9f28d6a7957a02dbba0544ae2fe744273c065",
+  "fetchedAt": "2026-07-27T15:29:53.892Z"
+}

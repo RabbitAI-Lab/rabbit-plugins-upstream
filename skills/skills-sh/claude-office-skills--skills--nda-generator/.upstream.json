@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/nda-generator",
+  "repo": "claude-office-skills/skills",
+  "skillId": "nda-generator",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "55bdf5398fdb8f17573b9288a46f0ed351704e46057ec2b4fc7424aa67720f57",
+  "fetchedAt": "2026-07-27T15:31:28.436Z"
+}

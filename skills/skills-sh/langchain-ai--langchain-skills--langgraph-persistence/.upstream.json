@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/langchain-ai/langchain-skills/langgraph-persistence",
+  "repo": "langchain-ai/langchain-skills",
+  "skillId": "langgraph-persistence",
+  "branch": "main",
+  "pushedAt": "2026-07-23T11:48:48Z",
+  "contentHash": "dcc01948f74cb85cf12dab6f36938e791357851c2c1929116022e49c0ea695b3",
+  "fetchedAt": "2026-07-27T15:31:28.559Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/expense-report",
+  "repo": "claude-office-skills/skills",
+  "skillId": "expense-report",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "385d0edcd8bd371dc78787d1062b078bc88dd39c2716af808832b5446aae1574",
+  "fetchedAt": "2026-07-27T15:31:28.337Z"
+}

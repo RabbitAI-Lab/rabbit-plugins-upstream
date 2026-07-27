@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/subscription-management",
+  "repo": "claude-office-skills/skills",
+  "skillId": "subscription-management",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "64a8a84fc2b2d87e69ef3a562b2bee69daac5638952082e2121e4db0ee23d340",
+  "fetchedAt": "2026-07-27T15:31:28.281Z"
+}

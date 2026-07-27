@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cloudflare/skills/cloudflare-one-migrations",
+  "repo": "cloudflare/skills",
+  "skillId": "cloudflare-one-migrations",
+  "branch": "main",
+  "pushedAt": "2026-07-24T18:42:34Z",
+  "contentHash": "a1e47294c3f6b972e87c55e888aa03db40e15e6817c7b5ca19b4aabeea14081c",
+  "fetchedAt": "2026-07-27T15:29:58.087Z"
+}

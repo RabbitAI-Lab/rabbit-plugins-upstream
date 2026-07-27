@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/clerk/skills/clerk-custom-ui",
+  "repo": "clerk/skills",
+  "skillId": "clerk-custom-ui",
+  "branch": "main",
+  "pushedAt": "2026-07-23T15:36:03Z",
+  "contentHash": "68614ecf552abc8f4f55c7edf55515cea64143ff7adb182abcc5a583135c0488",
+  "fetchedAt": "2026-07-27T15:30:09.429Z"
+}

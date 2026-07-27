@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runcomfy-com/skills/controlnet-pose",
+  "repo": "runcomfy-com/skills",
+  "skillId": "controlnet-pose",
+  "branch": "main",
+  "pushedAt": "2026-05-18T12:19:41Z",
+  "contentHash": "9504054d00dc1c0d9c8b7cdb6298bdacbc380ad172213e9a8f819dc551a30a75",
+  "fetchedAt": "2026-07-27T15:29:43.930Z"
+}

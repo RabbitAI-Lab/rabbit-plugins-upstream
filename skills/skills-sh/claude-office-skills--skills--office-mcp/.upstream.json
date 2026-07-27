@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/office-mcp",
+  "repo": "claude-office-skills/skills",
+  "skillId": "office-mcp",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "e6ddda6e0cef74c4651b57bebc8ca17f1ca2d5d492be1c6d1d95bab145c19454",
+  "fetchedAt": "2026-07-27T15:31:28.193Z"
+}

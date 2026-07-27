@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/pdf-compress",
+  "repo": "claude-office-skills/skills",
+  "skillId": "pdf-compress",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "626173f8af8516070a7537951c1669ff2ba1952ac06cfcbab066c17a3635b379",
+  "fetchedAt": "2026-07-27T15:31:28.390Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/prisma/skills/prisma-cli",
+  "repo": "prisma/skills",
+  "skillId": "prisma-cli",
+  "branch": "main",
+  "pushedAt": "2026-07-16T11:30:25Z",
+  "contentHash": "b1feb6422400b5eda37e0f7f87187a6f5bc836f28e13a91bfefba161251f2e6e",
+  "fetchedAt": "2026-07-27T15:29:53.455Z"
+}

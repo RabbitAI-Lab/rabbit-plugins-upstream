@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/pptx-manipulation",
+  "repo": "claude-office-skills/skills",
+  "skillId": "pptx-manipulation",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "9340f8e958f1d993f65923d1bd0322a87ef9f3b383fb0abc2f31ca115af92bbb",
+  "fetchedAt": "2026-07-27T15:31:28.233Z"
+}

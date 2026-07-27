@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/parallel-web/parallel-agent-skills/migrate-to-parallel",
+  "repo": "parallel-web/parallel-agent-skills",
+  "skillId": "migrate-to-parallel",
+  "branch": "main",
+  "pushedAt": "2026-07-17T20:25:58Z",
+  "contentHash": "815e439363ac00e13149ece2ba5a0bf2c623cd88d6a031848a165a1eff353419",
+  "fetchedAt": "2026-07-27T15:31:30.292Z"
+}

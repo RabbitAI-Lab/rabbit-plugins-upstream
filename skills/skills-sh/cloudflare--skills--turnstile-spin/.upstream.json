@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cloudflare/skills/turnstile-spin",
+  "repo": "cloudflare/skills",
+  "skillId": "turnstile-spin",
+  "branch": "main",
+  "pushedAt": "2026-07-24T18:42:34Z",
+  "contentHash": "3fe385121c10dba8d6a4d60c4e5372372641fce1d8bf55fd99907ff93a95a2ed",
+  "fetchedAt": "2026-07-27T15:29:58.084Z"
+}

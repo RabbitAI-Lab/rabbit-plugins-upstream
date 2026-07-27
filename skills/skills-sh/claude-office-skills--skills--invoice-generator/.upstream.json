@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/invoice-generator",
+  "repo": "claude-office-skills/skills",
+  "skillId": "invoice-generator",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "96ca637e65483f84ea2381e1f088eb1b3dd58ad211d3493f00a3555f95912c0f",
+  "fetchedAt": "2026-07-27T15:31:28.283Z"
+}

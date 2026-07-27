@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/pdf-watermark",
+  "repo": "claude-office-skills/skills",
+  "skillId": "pdf-watermark",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "c73eab65405c6751572ceec0aad748c3211750ed7cfe95f8119097509850eb68",
+  "fetchedAt": "2026-07-27T15:31:28.414Z"
+}

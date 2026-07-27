@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/charon-fan/agent-playbook/test-automator",
+  "repo": "charon-fan/agent-playbook",
+  "skillId": "test-automator",
+  "branch": "main",
+  "pushedAt": "2026-06-21T03:12:02Z",
+  "contentHash": "f08ef217861cd2a8fafdbfc6b556dc000f26c17a31e50c5236dffd0224780f29",
+  "fetchedAt": "2026-07-27T15:30:08.751Z"
+}

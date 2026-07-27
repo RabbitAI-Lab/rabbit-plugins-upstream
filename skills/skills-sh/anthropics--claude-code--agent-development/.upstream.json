@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-code/agent-development",
+  "repo": "anthropics/claude-code",
+  "skillId": "agent-development",
+  "branch": "main",
+  "pushedAt": "2026-07-25T01:35:55Z",
+  "contentHash": "853f80a1643763f1f61d292ea9444c8a0c299f0a185a6dbcbed58c2b14f7d2e7",
+  "fetchedAt": "2026-07-27T15:29:57.480Z"
+}

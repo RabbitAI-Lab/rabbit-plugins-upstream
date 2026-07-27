@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/googleworkspace/cli/gws-gmail-reply-all",
+  "repo": "googleworkspace/cli",
+  "skillId": "gws-gmail-reply-all",
+  "branch": "main",
+  "pushedAt": "2026-07-22T11:35:50Z",
+  "contentHash": "d5e4953102c38515ab1ee58a1124fd32fed1436d1c6cc2979d52d9f0051085e2",
+  "fetchedAt": "2026-07-27T15:29:52.465Z"
+}

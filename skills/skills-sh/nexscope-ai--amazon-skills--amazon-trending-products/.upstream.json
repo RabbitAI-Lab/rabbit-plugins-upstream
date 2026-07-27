@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nexscope-ai/amazon-skills/amazon-trending-products",
+  "repo": "nexscope-ai/amazon-skills",
+  "skillId": "amazon-trending-products",
+  "branch": "main",
+  "pushedAt": "2026-07-23T03:19:29Z",
+  "contentHash": "2798645687c49fa7dff31b6dc08e0774d2a81f6f15600d1499df023c4154c157",
+  "fetchedAt": "2026-07-27T15:29:52.166Z"
+}

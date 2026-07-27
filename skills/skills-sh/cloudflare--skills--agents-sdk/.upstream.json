@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cloudflare/skills/agents-sdk",
+  "repo": "cloudflare/skills",
+  "skillId": "agents-sdk",
+  "branch": "main",
+  "pushedAt": "2026-07-24T18:42:34Z",
+  "contentHash": "5a5fabaeca0c1abbbd9c6dcf9bc87116551b33ff02e98e66af127fa453c09b92",
+  "fetchedAt": "2026-07-27T15:29:58.079Z"
+}

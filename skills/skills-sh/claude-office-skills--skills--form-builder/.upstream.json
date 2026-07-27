@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/form-builder",
+  "repo": "claude-office-skills/skills",
+  "skillId": "form-builder",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "fa9eb3afd7b167e9c5e6dca7224b25d5b38a5b1bfaa1f87fdad6d6d81cd6735a",
+  "fetchedAt": "2026-07-27T15:31:28.395Z"
+}

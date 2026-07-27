@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cloudflare/skills/sandbox-sdk",
+  "repo": "cloudflare/skills",
+  "skillId": "sandbox-sdk",
+  "branch": "main",
+  "pushedAt": "2026-07-24T18:42:34Z",
+  "contentHash": "c2bcb135c67c9f0bd757347f0f5b051611e33455d863edc8bbc2500efc1b4361",
+  "fetchedAt": "2026-07-27T15:29:58.080Z"
+}

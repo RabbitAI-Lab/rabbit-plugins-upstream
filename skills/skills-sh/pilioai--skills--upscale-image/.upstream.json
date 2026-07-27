@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/pilioai/skills/upscale-image",
+  "repo": "pilioai/skills",
+  "skillId": "upscale-image",
+  "branch": "main",
+  "pushedAt": "2026-07-26T07:11:56Z",
+  "contentHash": "58ed428a4b4c593bbd9c7aab73389a336cdc7fbbb5547e286672559f25946d12",
+  "fetchedAt": "2026-07-27T15:30:14.090Z"
+}

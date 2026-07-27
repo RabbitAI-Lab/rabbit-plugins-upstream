@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/agentspace-so/runcomfy-agent-skills/runcomfy-cli",
+  "repo": "agentspace-so/runcomfy-agent-skills",
+  "skillId": "runcomfy-cli",
+  "branch": "main",
+  "pushedAt": "2026-05-15T10:59:51Z",
+  "contentHash": "5967646322ffdbb6c72a8da67093556bbb1c6ccf8ccca019cc304c8f81f5f399",
+  "fetchedAt": "2026-07-27T15:29:42.243Z"
+}

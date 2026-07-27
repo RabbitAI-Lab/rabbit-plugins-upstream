@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/parallel-web/parallel-agent-skills/parallel-monitor",
+  "repo": "parallel-web/parallel-agent-skills",
+  "skillId": "parallel-monitor",
+  "branch": "main",
+  "pushedAt": "2026-07-17T20:25:58Z",
+  "contentHash": "eacbad4a1d9991f7be2ac4ec47ea6337531a48e57b98829e43b5aae30f4b5270",
+  "fetchedAt": "2026-07-27T15:31:30.289Z"
+}

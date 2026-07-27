@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/get-convex/agent-skills/convex-migration-helper",
+  "repo": "get-convex/agent-skills",
+  "skillId": "convex-migration-helper",
+  "branch": "main",
+  "pushedAt": "2026-07-13T17:15:26Z",
+  "contentHash": "a08c6b378cfc84b6502eb07031838b5925274ff2b756ef2eff94b0952765140c",
+  "fetchedAt": "2026-07-27T15:29:51.486Z"
+}

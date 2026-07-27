@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/langchain-ai/langchain-skills/langchain-rag",
+  "repo": "langchain-ai/langchain-skills",
+  "skillId": "langchain-rag",
+  "branch": "main",
+  "pushedAt": "2026-07-23T11:48:48Z",
+  "contentHash": "27ab65f1769c627f28a34854d8b3696f5ab649638bbd13880f54fe70b2973dd9",
+  "fetchedAt": "2026-07-27T15:31:28.560Z"
+}

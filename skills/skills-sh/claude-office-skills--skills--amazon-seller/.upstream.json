@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/amazon-seller",
+  "repo": "claude-office-skills/skills",
+  "skillId": "amazon-seller",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "44179b3474ad494c013e222db462ec966293ad8736d2ca5ae6dd81ca31424f5f",
+  "fetchedAt": "2026-07-27T15:31:28.257Z"
+}

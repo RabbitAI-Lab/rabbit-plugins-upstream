@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/neondatabase/agent-skills/neon-postgres-egress-optimizer",
+  "repo": "neondatabase/agent-skills",
+  "skillId": "neon-postgres-egress-optimizer",
+  "branch": "main",
+  "pushedAt": "2026-07-26T16:24:08Z",
+  "contentHash": "f57e97843293f069253e589cb9389ada29823f8b77fb8dfda7cc733e019d8c09",
+  "fetchedAt": "2026-07-27T15:29:54.369Z"
+}

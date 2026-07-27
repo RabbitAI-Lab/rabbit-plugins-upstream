@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/agents-cli/google-agents-cli-workflow",
+  "repo": "google/agents-cli",
+  "skillId": "google-agents-cli-workflow",
+  "branch": "main",
+  "pushedAt": "2026-07-23T19:53:43Z",
+  "contentHash": "b2a464926dd82e6af7338a9daa15a64110ea0c813e6d5e9b3fce4505e9703e79",
+  "fetchedAt": "2026-07-27T15:29:53.153Z"
+}

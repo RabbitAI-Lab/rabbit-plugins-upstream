@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/zendesk-automation",
+  "repo": "claude-office-skills/skills",
+  "skillId": "zendesk-automation",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "c3050c1b5883e0c7c78bbe5e5c567b84d37578282392c3a7f24fe96c3d689f6f",
+  "fetchedAt": "2026-07-27T15:31:28.441Z"
+}

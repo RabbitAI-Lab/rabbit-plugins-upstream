@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/contract-template",
+  "repo": "claude-office-skills/skills",
+  "skillId": "contract-template",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "b4875df7cc3a0af07d612e81ba97da07a1b815915b945cd3a321957f05f3aa92",
+  "fetchedAt": "2026-07-27T15:31:28.267Z"
+}

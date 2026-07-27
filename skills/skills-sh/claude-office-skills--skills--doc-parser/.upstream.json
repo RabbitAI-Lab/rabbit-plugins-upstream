@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/doc-parser",
+  "repo": "claude-office-skills/skills",
+  "skillId": "doc-parser",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "be758e0aae839098ef52a375114ca7bdce968bd269f7ed96abfde06d44160b73",
+  "fetchedAt": "2026-07-27T15:31:28.252Z"
+}

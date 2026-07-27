@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/meeting-notes",
+  "repo": "claude-office-skills/skills",
+  "skillId": "meeting-notes",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "e990d47d4f1c9becb0afab14384b7e94c140b0bb6a15ef32733fdb1878960c45",
+  "fetchedAt": "2026-07-27T15:31:28.242Z"
+}

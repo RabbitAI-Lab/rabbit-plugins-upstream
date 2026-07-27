@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/get-convex/agent-skills/convex-performance-audit",
+  "repo": "get-convex/agent-skills",
+  "skillId": "convex-performance-audit",
+  "branch": "main",
+  "pushedAt": "2026-07-13T17:15:26Z",
+  "contentHash": "7b0592e5e164bc69be32675b46533e314ec8031998a46a00c043a54a8086a88c",
+  "fetchedAt": "2026-07-27T15:29:51.484Z"
+}

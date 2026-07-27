@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wshobson/agents/airflow-dag-patterns",
+  "repo": "wshobson/agents",
+  "skillId": "airflow-dag-patterns",
+  "branch": "main",
+  "pushedAt": "2026-07-22T15:32:23Z",
+  "contentHash": "017585e65c4a8ff304f43760d53be756bd4b5098c0dcf16a27108f6f44d58ba5",
+  "fetchedAt": "2026-07-27T15:29:55.700Z"
+}

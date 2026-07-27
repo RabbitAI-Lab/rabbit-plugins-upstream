@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/insforge/agent-skills/insforge-debug",
+  "repo": "insforge/agent-skills",
+  "skillId": "insforge-debug",
+  "branch": "main",
+  "pushedAt": "2026-07-27T12:51:00Z",
+  "contentHash": "56acbb20711b72183f722d227c80cddb56bd5cd002b5db2a879dc434d08da77e",
+  "fetchedAt": "2026-07-27T15:30:12.267Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/web-search",
+  "repo": "claude-office-skills/skills",
+  "skillId": "web-search",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "121a6263dd91db46e10fc01c51ff3e9cf01f7a132a59faf122770fa663215322",
+  "fetchedAt": "2026-07-27T15:31:28.329Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/claude-office-skills/skills/slack-workflows",
+  "repo": "claude-office-skills/skills",
+  "skillId": "slack-workflows",
+  "branch": "main",
+  "pushedAt": "2026-01-31T14:03:56Z",
+  "contentHash": "db25b82f16899487970544bd30540591bcda6568ea779aca3510b039b814216b",
+  "fetchedAt": "2026-07-27T15:31:28.297Z"
+}

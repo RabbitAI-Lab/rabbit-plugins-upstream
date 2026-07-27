@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/apify/agent-skills/apify-sdk-integration",
+  "repo": "apify/agent-skills",
+  "skillId": "apify-sdk-integration",
+  "branch": "main",
+  "pushedAt": "2026-06-25T11:07:14Z",
+  "contentHash": "0a8ca9048bdb115e147edceae3015251f0b88c9ab56eba2e18e11a7ddb80b309",
+  "fetchedAt": "2026-07-27T15:31:29.330Z"
+}
