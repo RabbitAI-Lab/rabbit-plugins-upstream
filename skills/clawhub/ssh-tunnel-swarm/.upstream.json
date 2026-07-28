@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/ssh-tunnel-swarm",
   "slug": "ssh-tunnel-swarm",
   "ownerHandle": null,
-  "version": "1.4.1-alpha",
-  "updatedAt": 1785024149961,
-  "contentHash": "3b6c2b1145a01a2a669e12aa87079d66f6989339a94b6efbab6b1726125a2d41",
-  "fetchedAt": "2026-07-26T18:03:49.793Z"
+  "version": "1.4.5",
+  "updatedAt": 1785194307930,
+  "contentHash": "c64c10e2466a13573478ba2b8b3d2ba33af14f11bcf7b1b888b1b41d8eaade2d",
+  "fetchedAt": "2026-07-28T10:02:54.701Z"
 }

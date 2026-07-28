@@ -83,7 +83,7 @@ def check_config():
         return True
     else:
         print("未配置 API KEY。")
-        print("请访问 http://8.135.62.13:5000/ 获取 API KEY 后，运行以下命令配置：")
+        print("请访问 https://www.yunqi-zhilian.com/ 获取 API KEY 后，运行以下命令配置：")
         print('  python scripts/config_manager.py set "你的API_KEY"')
         return False
 

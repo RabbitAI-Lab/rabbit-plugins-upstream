@@ -1,5 +1,5 @@
 ## Description: <br>
-Download MODIS and VIIRS active fire hotspot data from NASA FIRMS with date, bounding-box, instrument, and output-format filtering. <br>
+Downloads MODIS and VIIRS active fire hotspot data from NASA FIRMS with date range, bounding box, instrument, and output format options. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,38 +7,41 @@ This skill is ready for commercial/non-commercial use. <br>
 [ruiduobao](https://clawhub.ai/user/ruiduobao) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, analysts, and geospatial workflows use this skill to fetch NASA FIRMS active-fire hotspot records for fire monitoring, air-quality studies, land management, and related spatial analysis. <br>
+External developers, analysts, and geospatial teams use this skill to download NASA FIRMS MODIS and VIIRS active fire hotspot data for monitoring, air quality studies, land management, and geospatial analysis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Place-name lookup can contact third-party geocoding services, which may expose queried locations. <br>
-Mitigation: Use explicit --bbox coordinates for sensitive work and review location inputs before running place-based queries. <br>
-Risk: The skill stores or reads a FIRMS API key and writes generated datasets locally. <br>
-Mitigation: Store the key through an environment secret manager where possible and keep generated datasets out of version control unless intentional. <br>
-Risk: The security verdict is suspicious because documented network behavior does not fully match the place-name feature. <br>
-Mitigation: Review the security summary before installation and constrain dependencies to patched versions. <br>
+Risk: Bundled credential helper includes plaintext Earthdata credential defaults. <br>
+Mitigation: Remove the embedded defaults, rotate the affected credential, and require users to provide secrets through environment variables, netrc, or a local secrets file. <br>
+Risk: API keys can be stored locally and may appear in request URLs or verbose diagnostic output. <br>
+Mitigation: Prefer FIRMS_API_KEY from the environment, avoid verbose mode with real keys, and review shell history and logs after use. <br>
+Risk: Unresolved place names may be sent to third-party geocoding services. <br>
+Mitigation: Use explicit bounding boxes or offline presets for sensitive locations, and document when online geocoding fallback is enabled. <br>
+Risk: Dependencies are not pinned to exact versions. <br>
+Mitigation: Pin dependency versions and review updates before installing in production or shared environments. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/fire-hotspot-download) <br>
 - [NASA FIRMS API documentation](https://firms.modaps.eosdis.nasa.gov/api/) <br>
-- [NASA FIRMS API key registration](https://firms.modaps.eosdis.nasa.gov/api/map_key/) <br>
+- [NASA FIRMS MAP_KEY registration](https://firms.modaps.eosdis.nasa.gov/api/map_key/) <br>
+- [Fire Information for Resource Management System citation](https://doi.org/10.1109/TGRS.2009.2014067) <br>
+- [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/fire-hotspot-download) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands; the invoked script can write CSV or GeoJSON data files.] <br>
+**Output Type(s):** [Shell commands, Files, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with shell commands; generated data files are CSV, GeoJSON, and optional JSON QA summaries.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a NASA FIRMS API key and user-supplied spatial and temporal filters.] <br>
+**Other Properties Related to Output:** [Requires a NASA FIRMS API key and may call NASA FIRMS plus online geocoding services when place-name resolution is used.] <br>
 
 ## Skill Version(s): <br>
-0.3.0 (source: server-resolved release metadata) <br>
+0.3.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

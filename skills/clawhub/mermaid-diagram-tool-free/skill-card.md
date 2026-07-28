@@ -1,5 +1,5 @@
 ## Description: <br>
-Generates Mermaid diagram code from text descriptions for common diagram types, including flowcharts, sequence diagrams, mind maps, state diagrams, ER diagrams, timelines, and user journeys. <br>
+Mermaid图表工具(免费版) helps individual users turn text descriptions into Mermaid diagram code for flowcharts, sequence diagrams, mind maps, state diagrams, ER diagrams, timelines, and user journeys. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External developers, technical writers, and individual users use this skill to turn plain-language descriptions into Mermaid code blocks for documentation, notes, simple business process visualization, and Mermaid syntax learning. <br>
+External users and developers use this skill to choose an appropriate Mermaid diagram type and generate Markdown-ready Mermaid code from plain-language descriptions. It is intended for technical documentation, simple process visualization, and Mermaid syntax learning. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad file and shell command access may affect local files or execute commands beyond direct diagram-code generation. <br>
-Mitigation: Use direct Markdown and Mermaid code generation by default, and require explicit confirmation before file writes, npm installs, Mermaid CLI rendering, conversions, or network diagnostics. <br>
-Risk: Generated diagrams may contain Mermaid syntax or layout issues, especially with long labels or complex business logic. <br>
-Mitigation: Review generated code and render it in a Mermaid-compatible preview before publishing. <br>
+Risk: Optional file saving, Mermaid CLI rendering, npm installation, or network troubleshooting commands may change the local environment or inspect project/network context. <br>
+Mitigation: Review commands before allowing them, run only the steps needed for the diagram task, and avoid optional command execution in projects with sensitive files. <br>
+Risk: Generated Mermaid diagrams may contain syntax or layout issues for complex descriptions. <br>
+Mitigation: Preview the Mermaid output in a supported renderer and keep labels concise before publishing or committing the diagram. <br>
 
 
 ## Reference(s): <br>
@@ -29,12 +29,12 @@ Mitigation: Review generated code and render it in a Mermaid-compatible preview 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with Mermaid code blocks and optional shell commands] <br>
+**Output Format:** [Markdown with Mermaid code blocks and optional inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Mermaid syntax self-check notes; require confirmation before file writes, npm installs, Mermaid CLI rendering, conversions, or network diagnostics.] <br>
+**Other Properties Related to Output:** [Produces a single response; local file saving, Mermaid CLI rendering, npm installation, and network checks are optional and user-directed.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release evidence and target metadata; artifact frontmatter lists 1.0.0) <br>
+1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/dem-terrain-analysis",
   "slug": "dem-terrain-analysis",
   "ownerHandle": null,
-  "version": "0.2.0",
-  "updatedAt": 1784918819036,
-  "contentHash": "e707a4ffb9f42594e809e292b01be90770a25a73334a71de6047207bb37d4003",
-  "fetchedAt": "2026-07-26T18:04:27.462Z"
+  "version": "0.2.1",
+  "updatedAt": 1785155021642,
+  "contentHash": "6df1c55626968ec622384321cbc1cc59c72d2294e614daa0d3381a6f1510a39e",
+  "fetchedAt": "2026-07-28T10:06:01.359Z"
 }

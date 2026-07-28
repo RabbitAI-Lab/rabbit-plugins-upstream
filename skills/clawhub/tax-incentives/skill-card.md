@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps users assess Chinese tax-incentive eligibility, run qualification self-checks, and produce compliance guidance for high-tech enterprise, R&D deduction, western development, specialized-new, and related incentive scenarios. <br>
+税收优惠与资质认定专业助手，覆盖高新技术企业认定、研发费用加计扣除、西部大开发优惠、专精特新、三免三减半、先进制造业增值税加计抵减和税收优惠匹配，并提供资质规划与合规风险预警。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Finance, tax, and compliance teams use this skill to triage Chinese tax-incentive eligibility, identify qualification and documentation risks, and generate self-check guidance before professional or authority review. <br>
+External users, tax professionals, and business operators use this skill to ask China tax incentive questions, run eligibility and compliance self-checks, identify risk points, and prepare practical follow-up checklists for qualified tax incentives. <br>
 
 ### Deployment Geography for Use: <br>
-China <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive tax questions, scenarios, and calculation inputs may be sent to the publisher's remote service. <br>
-Mitigation: Use anonymized or aggregated facts where possible, and do not enter taxpayer identifiers, private account details, or confidential transaction data without approval. <br>
-Risk: Raw prompts and scenarios may be written to local logs. <br>
-Mitigation: Avoid submitting secrets or personal data, and periodically review or purge the local tax-policy client logs when handling sensitive matters. <br>
-Risk: The matrix installer can add related skills and may download additional packages when configured. <br>
-Mitigation: Require explicit user confirmation before installation and inspect the matrix or run a dry-run path before adding related skills. <br>
-Risk: Tax-incentive conclusions are time-sensitive and depend on facts, region, and authority interpretation. <br>
-Mitigation: Confirm material filings, qualification claims, and risk responses with the applicable tax authority or a qualified tax professional. <br>
+Risk: Tax questions, scenarios, and self-check metrics may be sent to the provider's cloud service. <br>
+Mitigation: Review the provider's privacy and retention terms before use, and avoid entering sensitive company, financial, identity, or confidential tax details unless approved. <br>
+Risk: API keys, client identifiers, and operational logs may be stored locally by the Python client or web workflow. <br>
+Mitigation: Use the skill only on trusted devices, protect local user profiles, and clear stored credentials or browser local storage when access should be revoked. <br>
+Risk: The matrix installer can download and install related skills from external package sources. <br>
+Mitigation: In managed environments, require administrator review of downloaded packages and approved sources before running the installer. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/zxj2devs/skills/tax-incentives) <br>
-- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
-- [Tax incentives web self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_incentives.html) <br>
+- [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-incentives) <br>
+- [Interactive tax incentive self-check](https://mcp.aitaxs.top/web/topic_workflow_incentives.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Tax policy knowledge matrix](https://skillhub.cn/skills/tax-policy-knowledge) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, structured self-check summaries, shell command and configuration snippets, and copied prompts for deeper analysis.] <br>
+**Output Format:** [Markdown guidance, JSON-like tool responses, generated reports, configuration snippets, and shell command guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use a remote MCP tax-policy service with local/offline fallback workflows; users should treat generated tax guidance as preliminary.] <br>
+**Other Properties Related to Output:** [May call a remote MCP service and may use local offline workflow scripts when service access is unavailable.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release and SKILL.md frontmatter) <br>
+3.15.3 (source: server release evidence and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

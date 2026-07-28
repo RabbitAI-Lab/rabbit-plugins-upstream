@@ -1,5 +1,5 @@
 ## Description: <br>
-Dawn Code Master is a broad coding-workflow skill that guides agents through code implementation, bug fixing, PR review, spec-driven development, API review, E2E testing, writing review, self-evaluation, and release checks. <br>
+Dawn Code Master is a broad coding-workflow skill that guides agents through specification, implementation, testing, review, security, performance, release, and maintenance practices. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and software-engineering agents use this skill as a consolidated coding process guide for implementation, debugging, reviews, testing, API and database design, CI/CD, observability, and release readiness. <br>
+Developers and engineering agents use this skill to plan, implement, test, review, and ship software changes through structured coding workflows. It is especially suited for coding tasks that benefit from explicit assumptions, specs, gated implementation, code review, and verification. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill covers many coding workflows and may shape a wide range of development tasks. <br>
-Mitigation: Review its workflow preferences and apply only the sections relevant to the current task. <br>
-Risk: The skill encourages workspace edits and running local development tools. <br>
-Mitigation: Review proposed file changes and commands before execution, and run them in an appropriate workspace. <br>
+Risk: The skill can guide broad coding workflows and may suggest code, shell commands, configuration changes, or release steps that affect a workspace. <br>
+Mitigation: Review suggested commands and file changes before execution, keep changes scoped to the intended workspace, and run relevant tests or scans before release. <br>
+Risk: The skill is opinionated and may push specs, tests, reviews, and gated workflows that add process overhead for small tasks. <br>
+Mitigation: Use the workflow depth that matches the change risk while preserving required review, testing, and security checks for higher-impact work. <br>
 
 
 ## Reference(s): <br>
@@ -28,13 +28,13 @@ Mitigation: Review proposed file changes and commands before execution, and run 
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with checklists, tables, and code or shell-command snippets.] <br>
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
+**Output Format:** [Markdown responses with checklists, review findings, code blocks, and command suggestions] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose workspace edits and local development commands; users should review before execution.] <br>
+**Other Properties Related to Output:** [May recommend gated review, tests, scans, and workspace-limited file changes before release.] <br>
 
 ## Skill Version(s): <br>
-2.0.1 (source: server release; artifact metadata reports 5.0.0) <br>
+6.1.0 (source: server release metadata and SKILL.md metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

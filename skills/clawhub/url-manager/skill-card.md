@@ -1,5 +1,5 @@
 ## Description: <br>
-url-manager helps agents save, organize, search, and share web links and notes in hosted URL Manager collections. <br>
+URL Manager helps agents save, organize, search, and share web links and notes through a hosted card-based collection service. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and end users use this skill through an agent to collect URLs or notes, organize them into categories and shared collections, search saved content, and deliver results through a card-based web interface. <br>
+External users and agents use this skill to collect URLs or text notes, organize them into categories and tags, search saved items, and share curated collections through the hosted ai.ocean94.com service. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can create and store account credentials for ai.ocean94.com and keep a bearer token in the skill directory. <br>
-Mitigation: Install only after confirming the user accepts an agent-managed account and local token storage. <br>
-Risk: Saved URLs and notes are stored on the hosted ai.ocean94.com service. <br>
-Mitigation: Inform the user before first use and avoid saving private links or notes unless the user explicitly agrees. <br>
-Risk: Generated magic links or invite links may grant access to account content or shared collections. <br>
-Mitigation: Treat generated links as account-access or sharing links and share them only with intended recipients. <br>
+Risk: The skill can automatically create an account and store saved URLs, notes, categories, tags, and sharing metadata on ai.ocean94.com. <br>
+Mitigation: Inform the user before first save or search, confirm they accept the hosted data flow, and direct them to the service for data management or deletion. <br>
+Risk: The skill stores a bearer token in a local .token file and can generate login or invite links that function like credentials. <br>
+Mitigation: Treat the .token file and generated links as sensitive credentials, avoid sharing them in public channels, and rotate or re-register only when the user understands that it may create a new account. <br>
+Risk: Shared category changes, invite links, and cocreate actions can affect other members' access or shared collections. <br>
+Mitigation: Ask for user confirmation before creating shared categories, generating invite links, modifying cocreate categories, or removing items from shared categories. <br>
+Risk: The fallback instructions clone a repository path when the script is missing, which evidence security guidance flags as needing trust in that source. <br>
+Mitigation: Prefer the bundled script from the installed skill and avoid the fallback clone path unless the user explicitly trusts the repository source. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/piccolo123/skills/url-manager) <br>
-- [URL Manager service](https://ai.ocean94.com/) <br>
+- [Hosted URL Manager service](https://ai.ocean94.com) <br>
 - [User Agreement](https://ai.ocean94.com/terms.html) <br>
 - [Privacy Policy](https://ai.ocean94.com/privacy.html) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with command examples and generated links] <br>
+**Output Format:** [Markdown guidance with Python shell commands and optional JSON command output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May generate hosted magic links, invite links, and JSON output when commands are run with --json.] <br>
+**Other Properties Related to Output:** [Requires Python and network access to ai.ocean94.com; commands may create a local bearer token file and send saved URL, note, category, tag, and sharing data to the hosted service.] <br>
 
 ## Skill Version(s): <br>
-2.6.2 (source: server-resolved release metadata) <br>
+2.6.3 (source: server evidence release version and skill metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

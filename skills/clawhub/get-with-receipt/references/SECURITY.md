@@ -1,9 +1,15 @@
-# OpenClaw security baseline
+# OpenClaw security baseline (v1.0.2)
 
 - Keep Receipt purchase approval at **ask every purchase**.
 - Set the per-call limit to **$1 or less** and the daily limit to **$5 or less**.
 - Add no automatic seller rules during setup.
 - Use MCP OAuth only. Do not configure static Receipt or provider credentials.
+- Keep the callback URL and authorization code out of Agent chat, logs, and files. On macOS, copy
+  the full current callback URL and run the bundled clipboard helper locally.
+- Complete the same OAuth attempt that produced the callback. Never start another bare login
+  between approval and code exchange.
+- Display the complete authorization URL before giving callback-helper instructions. If login
+  produces no URL, stop instead of implying that authorization started.
 - Never enter a crypto seed phrase, mnemonic, private key, or wallet recovery phrase.
 - Run OpenClaw with sandboxing enabled for untrusted work.
 - Allowlist only the WhatsApp or Telegram identities that should reach the agent.

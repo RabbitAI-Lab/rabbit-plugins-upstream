@@ -1,29 +1,6 @@
 {
   "name": "klyc-pmm",
-  "version": "7.0.3",
-  "description": "KLYC-PMM v7.0.3。第0步写日记→蒸馏→压缩→加密→上传。按文件名自动分类容灾/日记/配置域。默认私密。",
-  "author": "昆仑瑶池",
-  "category": "知识管理",
-  "tags": [
-    "memory",
-    "knowledge-management",
-    "backup",
-    "indexing",
-    "ai-agent",
-    "identity-verification",
-    "semantic-search"
-  ],
-  "config": {
-    "api_endpoint": "",
-    "identity_check": true
-  },
-  "keywords": [
-    "KLYC-PMM",
-    "昆仑令",
-    "AI记忆恢复",
-    "memory recovery",
-    "talisman",
-    "klyc-pmm-recover",
-    "ai.syln.cn"
-  ]
+  "version": "8.2.4",
+  "description": "KLYC-PMM v8.2.2。昆仑令一行恢复 · 瑶池锁五层洋葱加密(Brotli→SM4→AES→XChaCha20) · 17环节蒸馏管道(4基础+6质量+3安全+4进化) · 三层检索路由(grep 1ms→混合200ms→BGE-M3 500ms) · 9工具 · 三符产品线(定心符/护魂符/分身符)。五步全自动管道，默认私密。",
+  "author": "昆仑瑶池"
 }

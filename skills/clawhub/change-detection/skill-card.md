@@ -1,5 +1,5 @@
 ## Description: <br>
-Multi-temporal change detection for satellite imagery using NDVI difference, image differencing, and Change Vector Analysis (CVA). <br>
+Detects vegetation, urban, and water changes between time-separated satellite images using NDVI difference, image differencing, and Change Vector Analysis. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,32 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers, GIS analysts, and remote-sensing practitioners use this skill to compare two co-registered satellite GeoTIFF images, detect vegetation or land-cover change, and generate change masks and statistics. <br>
+Developers and geospatial analysts use this skill to compare co-registered satellite imagery from two time periods, generate change magnitude and mask outputs, and produce change statistics for review. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Under-disclosed network behavior may send location search terms, bounding boxes, dates, and scene filters to external geospatial services. <br>
-Mitigation: Use the local detect and report commands for private workflows, avoid fetch and place-resolution features for sensitive locations, and require explicit documentation or opt-in before enabling network-backed features. <br>
-Risk: The privacy text says no data leaves the machine, but the security evidence reports network fetching and geocoding behavior. <br>
-Mitigation: Treat the current privacy claim as incomplete, review the skill before installation, and update public documentation to list network endpoints and stored outputs. <br>
-Risk: The security guidance calls out a dependency issue around tqdm. <br>
-Mitigation: Pin or tighten the tqdm dependency before deployment and review the resolved dependency set in the target environment. <br>
+Risk: Under-disclosed network fetching or place-resolution behavior may send data outside an expected local-only workflow. <br>
+Mitigation: Review and disable network-backed fetch or place features unless they are required, approved, and configured for the deployment environment. <br>
+Risk: Bundled hardcoded Earthdata credentials could expose shared secrets or create unauthorized access patterns. <br>
+Mitigation: Remove bundled credentials before use and require user- or environment-supplied secrets through an approved secret-management path. <br>
+Risk: Change maps can contain false positives when imagery is misregistered, cloud-contaminated, or cross-sensor imagery is not normalized. <br>
+Mitigation: Use co-registered imagery with matching CRS and resolution, apply cloud masking, and review outputs before relying on the results. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/change-detection) <br>
-- [README](README.md) <br>
-- [Skill instructions](SKILL.md) <br>
-- [Developer notes](DEV.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [shell commands, text, code, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands; generated runtime artifacts include GeoTIFF, GeoJSON, CSV, and JSON files.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
+**Output Format:** [Markdown guidance with shell commands; generated artifacts may include GeoTIFF, GeoJSON, Shapefile, and JSON outputs.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on command options and can include change magnitude rasters, binary masks, vector polygons, statistics reports, and QA sidecar files.] <br>
+**Other Properties Related to Output:** [Requires user-provided, co-registered raster inputs and appropriate local geospatial dependencies.] <br>
 
 ## Skill Version(s): <br>
-0.3.0 (source: ClawHub release evidence) <br>
+0.3.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

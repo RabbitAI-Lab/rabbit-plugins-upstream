@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/era5-download",
   "slug": "era5-download",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1785074012899,
-  "contentHash": "da978d8b76314bcffb6f8e107783537979c38a032988bd5722c0d3189110a32b",
-  "fetchedAt": "2026-07-26T18:03:22.442Z"
+  "version": "0.3.1",
+  "updatedAt": 1785175924598,
+  "contentHash": "a2b84aaadadbe5b4c575741006bf06c68a3cf7a1dd3506ee1f2adf153a8173fd",
+  "fetchedAt": "2026-07-28T10:04:08.597Z"
 }

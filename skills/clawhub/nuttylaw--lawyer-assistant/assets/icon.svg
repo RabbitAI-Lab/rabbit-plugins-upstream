@@ -1,0 +1,48 @@
+<svg viewBox="0 0 680 680" width="680" height="680" xmlns="http://www.w3.org/2000/svg">
+  <title>律师全场景助理</title>
+  <desc>天平与法典组成的圆形法律徽章，象征公平正义与法律检索</desc>
+  <defs>
+    <clipPath id="circleClip">
+      <circle cx="340" cy="340" r="300" />
+    </clipPath>
+  </defs>
+  <circle cx="340" cy="340" r="300" fill="#26215C" />
+  <circle cx="340" cy="340" r="300" fill="none" stroke="#534AB7" stroke-width="3" />
+  <circle cx="340" cy="340" r="278" fill="none" stroke="#AFA9EC" stroke-width="1" opacity="0.4" />
+  <g clip-path="url(#circleClip)">
+    <rect x="40" y="40" width="600" height="600" fill="#26215C" />
+  </g>
+  <g transform="translate(340, 340)">
+    <g transform="translate(0, -30)">
+      <line x1="0" y1="-130" x2="0" y2="80" stroke="#AFA9EC" stroke-width="5" stroke-linecap="round" />
+      <circle cx="0" cy="-130" r="10" fill="#AFA9EC" />
+      <circle cx="0" cy="-85" r="6" fill="#7F77DD" />
+      <line x1="-120" y1="-85" x2="120" y2="-85" stroke="#AFA9EC" stroke-width="4" stroke-linecap="round" />
+      <line x1="-120" y1="-85" x2="-120" y2="-50" stroke="#AFA9EC" stroke-width="3" stroke-linecap="round" />
+      <line x1="120" y1="-85" x2="120" y2="-50" stroke="#AFA9EC" stroke-width="3" stroke-linecap="round" />
+      <path d="M-155,-50 Q-120,-15 -85,-50 Q-120,5 -155,-50 Z" fill="#7F77DD" stroke="#AFA9EC" stroke-width="2" stroke-linejoin="round" />
+      <path d="M85,-50 Q120,-15 155,-50 Q120,5 85,-50 Z" fill="#7F77DD" stroke="#AFA9EC" stroke-width="2" stroke-linejoin="round" />
+      <line x1="-118" y1="-55" x2="-90" y2="-40" stroke="#7F77DD" stroke-width="1.5" opacity="0.6" />
+      <line x1="-120" y1="-52" x2="-100" y2="-38" stroke="#7F77DD" stroke-width="1.5" opacity="0.6" />
+      <line x1="118" y1="-55" x2="90" y2="-40" stroke="#7F77DD" stroke-width="1.5" opacity="0.6" />
+      <line x1="120" y1="-52" x2="100" y2="-38" stroke="#7F77DD" stroke-width="1.5" opacity="0.6" />
+    </g>
+    <g transform="translate(0, 70)">
+      <rect x="-75" y="0" width="150" height="105" rx="6" fill="#3C3489" stroke="#AFA9EC" stroke-width="2.5" />
+      <line x1="0" y1="3" x2="0" y2="103" stroke="#534AB7" stroke-width="1.5" />
+      <line x1="-60" y1="22" x2="-15" y2="22" stroke="#AFA9EC" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+      <line x1="-60" y1="38" x2="-20" y2="38" stroke="#AFA9EC" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+      <line x1="-60" y1="54" x2="-15" y2="54" stroke="#AFA9EC" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+      <line x1="-60" y1="70" x2="-25" y2="70" stroke="#AFA9EC" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+      <line x1="-60" y1="86" x2="-18" y2="86" stroke="#AFA9EC" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+      <line x1="15" y1="22" x2="60" y2="22" stroke="#AFA9EC" stroke-width="2" stroke-linecap="round" opacity="0.7" />
+      <line x1="20" y1="38" x2="60" y2="38" stroke="#AFA9EC" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+      <line x1="15" y1="54" x2="60" y2="54" stroke="#AFA9EC" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+      <line x1="25" y1="70" x2="60" y2="70" stroke="#AFA9EC" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+      <line x1="18" y1="86" x2="60" y2="86" stroke="#AFA9EC" stroke-width="2" stroke-linecap="round" opacity="0.5" />
+    </g>
+    <g transform="translate(0, 100)" opacity="0.8">
+      <rect x="-95" y="78" width="190" height="5" rx="2" fill="#7F77DD" />
+    </g>
+  </g>
+</svg>

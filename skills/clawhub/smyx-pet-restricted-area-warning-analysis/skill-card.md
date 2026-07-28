@@ -1,5 +1,5 @@
 ## Description: <br>
-Monitors pet media for restricted-area entry, dining-table climbing, and trash-rummaging behavior, then returns alerts and structured analysis reports for home pet monitoring. <br>
+Monitors restricted area intrusions, climbing on dining tables, and rummaging through trash cans, and issues real-time alerts for home pet monitoring scenarios. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Pet owners and home-monitoring agents use this skill to analyze uploaded or URL-based pet media for restricted-area and nuisance behavior, receive structured warning results, and query cloud-stored historical reports. <br>
+Pet owners and home-monitoring operators use this skill to analyze pet monitoring images or videos for restricted-area entry, dining-table climbing, and trash-rummaging behavior. It returns structured warning results, recommendations, and report links for follow-up review. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Pet-monitoring media or media URLs are sent to external lifeemergence.com/open.lifeemergence.com services for analysis. <br>
-Mitigation: Use only media that is appropriate to share with the service provider, and review the provider's retention, access, and privacy controls before processing private household footage. <br>
-Risk: The skill can silently create or reuse a cloud-linked identity for report association. <br>
-Mitigation: Install and run it only in workspaces where automatic identity creation is acceptable, and review the generated identity before sharing the workspace. <br>
-Risk: Service tokens and user history may be stored in the workspace data directory. <br>
-Mitigation: Protect the workspace data directory, avoid committing it, and remove stored tokens or history when decommissioning the skill. <br>
+Risk: Home pet-monitoring videos or video URLs may be uploaded to the vendor's cloud service for analysis. <br>
+Mitigation: Use only with footage appropriate for vendor cloud processing, and confirm retention, deletion, and access controls before deployment. <br>
+Risk: The skill can create or reuse an identity, retrieve cloud report history, and store account tokens locally. <br>
+Mitigation: Review account handling and local token storage before installation, restrict runtime access, and remove stored credentials or history when no longer needed. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-restricted-area-warning-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-restricted-area-warning-analysis) <br>
+- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [API Interface Document](references/api_doc.md) <br>
+- [SMYX Analysis API Document](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON text with optional report links] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands] <br>
+**Output Format:** [Markdown reports and JSON structured analysis results] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a user-specified file path.] <br>
+**Other Properties Related to Output:** [May include alert status, behavior counts, recommendations, history tables, and report links.] <br>
 
 ## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
+1.0.9 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

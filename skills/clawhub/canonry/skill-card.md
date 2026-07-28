@@ -11,25 +11,26 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, marketers, and AEO operators use this skill to run Canonry projects, inspect AI mention and citation coverage, diagnose visibility regressions, and apply approved fixes through Canonry CLI or MCP workflows. <br>
+Developers, marketers, and SEO/AEO operators use this skill to measure answer-engine mention and citation coverage, diagnose visibility regressions, run technical audits, and operate Canonry CLI workflows for indexing, analytics, WordPress, traffic, Google Business Profile, and ads tasks. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Canonry can operate on connected AEO projects and services, including write-capable integrations when credentials allow it. <br>
-Mitigation: Use the narrowest API key or read-only scope that fits the task and require explicit approval for every mutation or quota-consuming run. <br>
-Risk: Canonry configuration can contain secret-bearing API keys and service credentials. <br>
-Mitigation: Protect ~/.canonry/config.yaml, do not print or paste credentials, and run interactive initialization outside the agent transcript. <br>
-Risk: Client domains, transcripts, and project memory can contain sensitive business material. <br>
-Mitigation: Avoid exposing real client data in public channels and clear Aero transcripts or memory when handling sensitive material. <br>
+Risk: The skill is designed for connected marketing, analytics, website, and ads properties, so a broadly scoped Canonry key can expose high-impact operational access. <br>
+Mitigation: Install it only for intended Canonry operations, prefer read-only or project-scoped keys where possible, and do not work around authorization failures by switching credentials. <br>
+Risk: Canonry initialization can create or reveal sensitive API keys and stores configuration under the user's Canonry config directory. <br>
+Mitigation: Run initialization privately, never paste keys into chat, avoid printing config files, and protect the Canonry config file from backups or dotfile sync. <br>
+Risk: WordPress writes, ads actions, schedules, account switching, and quota-consuming sweeps can change live systems or consume provider quota. <br>
+Mitigation: Require explicit operator approval for those actions and use read-only commands or dry-run previews before committing changes. <br>
 
 
 ## Reference(s): <br>
 - [Canonry](https://canonry.ai) <br>
+- [Canonry GitHub Documentation](https://github.com/Canonry/canonry) <br>
 - [AINYC AEO Methodology](https://ainyc.ai/aeo-methodology) <br>
-- [AEO Analysis](references/aeo-analysis.md) <br>
 - [Canonry CLI Reference](references/canonry-cli.md) <br>
+- [AEO Analysis](references/aeo-analysis.md) <br>
 - [Indexing Workflows for AEO](references/indexing.md) <br>
 - [Server-side traffic](references/server-side-traffic.md) <br>
 - [Google Business Profile Integration](references/google-business-profile.md) <br>
@@ -37,13 +38,13 @@ Mitigation: Avoid exposing real client data in public channels and clear Aero tr
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, code] <br>
-**Output Format:** [Markdown guidance with inline shell commands, configuration snippets, JSON outputs, and implementation instructions] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON-oriented CLI output references] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the Canonry runtime and explicit approval for mutations or quota-consuming sweeps.] <br>
+**Other Properties Related to Output:** [Requires a separately installed canonry CLI and operator approval for mutations, schedules, account switching, and quota-consuming sweeps.] <br>
 
 ## Skill Version(s): <br>
-4.134.0+46e3bd6 (source: ClawHub release metadata) <br>
+4.135.0+c7f0290 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

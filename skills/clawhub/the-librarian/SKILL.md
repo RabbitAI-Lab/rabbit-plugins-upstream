@@ -1,123 +1,16 @@
 ---
 name: the-librarian
-description: Build and search knowledge bases using Supabase (primary) or TurboVec (offline/resource-constrained). Use when you need to search conversations, knowledge entries, or contacts. Triggers on phrases like "search my knowledge", "what do we know about", "remember this", "build a knowledge base", "search my documents".
+description: Build and search lightweight quantized document indexes with TurboVec. Use when you need to create searchable indexes from documents for RAG applications with minimal memory footprint, or when you need semantic search on resource-constrained hardware. Triggers on phrases like "build a document index", "search my documents", "create a RAG system", "quantized vector search", "lightweight RAG", "document search on raspberry pi", "semantic search without FAISS".
 ---
 
 # The Librarian
 
-Knowledge search and curation. Two backends: **Supabase** (primary, for conversations/knowledge) and **TurboVec** (secondary, for offline document RAG).
+Lightweight document search with TurboVec quantization. Build semantic search indexes that run on minimal hardware.
 
 **Author:** [RandTrad Consulting](https://www.randtradconsulting.com) — Document Intelligence for SMEs
 **License:** MIT — Free for personal and commercial use with attribution
-**Version:** 1.1 — Security hardening (pickle removal, API URL safety checks)
+**Version:** 1.2.0
 **Security:** See [Security section](#security) for safe usage guidelines and vulnerability history
-
-## Primary Backend: Supabase (Knowledge & Conversations)
-
-Self-hosted Supabase on RandTradPC with pgvector for vector search.
-
-### Connection
-- **REST API:** http://host.docker.internal:8000
-- **Service role key:** See `/home/endar/docker-stack/supabase/.env`
-- **Dashboard:** http://localhost:8090
-
-### Tables
-- `conversations` — every WhatsApp message in/out, full-text search
-- `conversation_embeddings` — pgvector 768-dim (nomic-embed-text)
-- `knowledge_entries` — curated insights with categories (decision, preference, fact, procedure, contact, deadline, insight)
-- `knowledge_links` — bidirectional relationships
-- `contacts` — auto-populated from conversations
-
-### Search Functions
-```sql
--- Full-text search
-SELECT * FROM search_conversations('GEM Construction', 20);
-
--- Vector similarity search
-SELECT * FROM search_similar(embedding_vector, 0.5, 20);
-
--- Hybrid search
-SELECT * FROM search_knowledge('density conversion tables', 20);
-
--- Graph relationships
-SELECT * FROM get_related(42);  -- entry ID
-SELECT * FROM get_knowledge_graph(100, 1);
-```
-
-### REST API Examples
-```bash
-# Full-text search
-SERVICE_ROLE_KEY=$(grep SERVICE_ROLE_KEY /home/endar/docker-stack/supabase/.env | cut -d= -f2)
-curl "http://host.docker.internal:8000/rest/v1/knowledge_entries?content=ilike.*GEM*&select=id,title,category" \
-  -H "apikey: $SERVICE_ROLE_KEY" \
-  -H "Authorization: Bearer $SERVICE_ROLE_KEY"
-
-# Category filter
-curl "http://host.docker.internal:8000/rest/v1/knowledge_entries?category=eq.decision&select=id,title,content" \
-  -H "apikey: $SERVICE_ROLE_KEY" \
-  -H "Authorization: Bearer $SERVICE_ROLE_KEY"
-```
-
-### Embedding Generation
-- **Model:** nomic-embed-text:v1.5 (768-dim)
-- **Endpoint:** http://host.docker.internal:11434/api/embeddings
-- **Local, free, no API calls**
-
-### Data Stats (updated 2026-07-21)
-- 598 knowledge entries (fact, procedure, contact, insight, deadline, decision, preference)
-- 844 conversations ingested (backfilled from session JSONL files)
-- 3,955 auto-generated relationships
-
-### Ingestion
-- **Script:** `/home/endar/.openclaw/workspace/scripts/librarian-ingest.py`
-- **Daily cron:** Runs at 20:05 Europe/Dublin, ingests last 2 days of WhatsApp conversations
-- **Backfill:** `python3 scripts/librarian-ingest.py --backfill` to reprocess all session files
-- **Dedup:** Checks existing message_ids before inserting
-
-### Weekly Review Cron
-- **Cron ID:** 86c46408-06ae-4845-87a2-f385a8c07211
-- **Schedule:** Every Sunday 9am Europe/Dublin
-- **Model:** ollama/glm-5.2:cloud
-- **Delivery:** WhatsApp summary to Enda (+353876890914)
-- **What:** Reviews knowledge entries, flags junk, merges duplicates, checks ingestion gaps
-- **Commands:** Reply "purge" to remove flagged items, "keep" to retain
-
-## Secondary Backend: TurboVec (Document RAG)
-
-Use Supabase for knowledge and conversations. Use TurboVec only for:
-- Offline document RAG (PDFs, tenders, BoQs)
-- Resource-constrained hardware
-- When you need quantized indexes (8-16x smaller than FAISS)
-
-### When to Use Which
-
-| Use Case | Backend |
-|----------|--------|
-| Search conversations | Supabase |
-| Search knowledge entries | Supabase |
-| "What do we know about X?" | Supabase |
-| "Remember this" | Supabase |
-| Document RAG (PDFs, tenders) | TurboVec |
-| BoQ extraction pipeline | TurboVec |
-| Offline/resource-constrained | TurboVec |
-
-### TurboVec Quick Start
-
-```bash
-# Build index
-cd /home/endar/.openclaw/workspace/skills/the-librarian
-./scripts/librarian build /path/to/documents/ index/my_library
-
-# Search
-./scripts/librarian search "habit formation" index/my_library --hybrid --rerank
-```
-
-## Author
-
-**RandTrad Consulting** — Document Intelligence consultancy for SMEs
-
-- **Website:** https://www.randtradconsulting.com
-- **Services:** AI Training, EU AI Act Compliance, Document RAG Systems
 
 ## What It Does
 
@@ -233,21 +126,24 @@ index/my_library/
 
 ## Security
 
-### Pickle Removal (v1.1 — July 2026)
-
-Following ClawHub security audit, the following vulnerabilities were fixed:
-
-- **Critical:** `pickle.load` on `bm25_index.pkl` removed. Pickle files can execute arbitrary code when loaded. BM25 index now stored as JSON (`bm25_index.json`). Legacy pickle files are detected but refused to load.
-- **High:** Embedding API URL now checked against localhost. If a non-local API endpoint is configured, a privacy warning is displayed before any data is transmitted.
-- **Medium:** SKILL.md now documents that document text and search queries are transmitted to the Ollama HTTP API for embedding generation.
-
 ### Safe Usage Guidelines
 
 - Only load indexes you built yourself or received from a trusted source
-- Always use a local Ollama instance (`localhost` or `host.docker.internal`) for sensitive documents
+- Always use a local Ollama instance (`localhost` or `127.0.0.1`) for sensitive documents — document text is sent to the embedding API over HTTP
 - Never share index directories — they contain full document text in `chunks.json`
 - If you receive an index from someone else, ensure it uses `bm25_index.json` (not `.pkl`)
 - The `--api` flag can point to any HTTP endpoint — verify the host before running
+- If using a remote embedding API, be aware that document text and queries are transmitted over the network
+
+### Vulnerability History
+
+**v1.1.0 (July 2026):**
+- **Critical fix:** `pickle.load` on `bm25_index.pkl` removed. Pickle files can execute arbitrary code when loaded. BM25 index now stored as JSON. Legacy pickle files are detected but refused to load.
+- **High fix:** Embedding API URL now checked against localhost. If a non-local API endpoint is configured, a privacy warning is displayed before any data is transmitted.
+- **Medium fix:** SKILL.md now documents that document text and search queries are transmitted to the Ollama HTTP API for embedding generation.
+
+**v1.2.0 (July 2026):**
+- Removed all private infrastructure details (local file paths, API endpoints, credentials paths, phone numbers, cron job IDs) from published skill. Skill is now generic and safe for public distribution.
 
 ### Reporting Security Issues
 
@@ -278,8 +174,6 @@ Note: Both spend ~120-140ms generating embeddings via Ollama. The search differe
 ## References
 
 - `references/quantization.md` - Technical details on how TurboVec compression works
-
----
 
 ## Author
 

@@ -1,5 +1,5 @@
 ## Description: <br>
-办税合规智能指引 helps enterprise tax staff navigate China electronic tax bureau workflows, filing paths, invoice handling, deregistration, credit repair, tax calendars, forms, and common compliance questions. <br>
+办税合规智能指引 helps users navigate China electronic tax bureau workflows, tax filings, invoice handling, tax deregistration, tax credit repair, filing calendars, forms, and frequent compliance questions. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,39 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and enterprise tax or finance staff use this skill to obtain practical guidance for China tax registration, electronic filing, invoice workflows, tax deregistration, credit repair, forms, deadlines, and related operational questions. It provides guidance and checklists, but users remain responsible for filing, payment, authentication, and professional tax or legal decisions. <br>
+Enterprise tax staff, finance teams, and individual taxpayers use this skill for scenario-based guidance on China tax filing workflows, required materials, electronic tax bureau paths, common filing errors, and compliance reminders. It provides operational guidance and checklists, not taxpayer representation or a guarantee of tax authority outcomes. <br>
 
 ### Deployment Geography for Use: <br>
 China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Tax questions, scenarios, and calculation inputs may be sent to mcp.aitaxs.top, and fallback searches may use Bing or Baidu. <br>
-Mitigation: Avoid entering personal identifiers, credentials, or confidential business details unless the publisher's data handling and retention practices are acceptable. <br>
-Risk: The security evidence reports local storage of an API key, device id, cache, health files, and logs under ~/.tax-policy-client. <br>
-Mitigation: Review local storage on shared or managed systems, protect any API key, and clear local cache or logs when they are no longer needed. <br>
-Risk: The skill can generate or merge MCP client configuration when auto-setup is enabled. <br>
-Mitigation: Keep TAX_ENABLE_AUTOSETUP disabled unless configuration changes are intended, and inspect generated MCP client configuration before use. <br>
-Risk: The authoritative security verdict is suspicious because of under-disclosed remote service, credential, logging, search, and host-configuration behavior. <br>
-Mitigation: Review the skill and scan results before deployment, and limit use to environments where those behaviors are acceptable. <br>
+Risk: Tax questions and scenarios may be processed by the remote mcp.aitaxs.top service. <br>
+Mitigation: Use the skill only if that remote processing is acceptable, and avoid entering taxpayer IDs, bank details, invoice numbers, or confidential business facts unless the service and its retention practices are trusted. <br>
+Risk: The skill stores local credentials, cache, and logs under ~/.tax-policy-client. <br>
+Mitigation: Protect that local directory as sensitive application data and review or remove stored configuration, cache, and logs when the skill is no longer needed. <br>
+Risk: The optional matrix installer can modify the user's skills directory and install additional tax-related skills. <br>
+Mitigation: Review the matrix package list and source integrity controls before using the full installer, and prefer dry-run or targeted installation when broad changes are not needed. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/china-tax-guidance) <br>
-- [Publisher profile: zxj2devs](https://clawhub.ai/user/zxj2devs) <br>
-- [Related tax policy knowledge skill](https://skillhub.cn/skills/tax-policy-knowledge) <br>
-- [China State Taxation Administration](https://www.chinatax.gov.cn) <br>
+- [财税合规自检门户](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Tax policy knowledge MCP service](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
+- [综合财税知识库](https://skillhub.cn/skills/tax-policy-knowledge) <br>
+- [数电票合规](https://skillhub.cn/skills/tax-invoice-compliance) <br>
+- [增值税法落地](https://skillhub.cn/skills/tax-vat-law) <br>
+- [涉税司法案例](https://skillhub.cn/skills/tax-tax-judicial) <br>
+- [社保入税合规](https://skillhub.cn/skills/tax-social-insurance) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, text, markdown, configuration] <br>
-**Output Format:** [Markdown or structured text guidance with optional checklists and configuration snippets] <br>
+**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
+**Output Format:** [Markdown or text guidance with structured checklists and optional installation or configuration actions.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may rely on remote tax-policy MCP tools, local fallback workflows, and user-provided tax scenarios.] <br>
+**Other Properties Related to Output:** [Cloud-backed MCP responses may be used when available; local fallback workflows and an optional matrix installer can produce offline guidance or modify the user's skills directory.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release metadata and skill frontmatter) <br>
+3.15.3 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

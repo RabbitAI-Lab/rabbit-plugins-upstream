@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps AI-agent users and skill authors build or adapt multi-search-engine-style workflows by clarifying requirements, producing practical artifacts, and checking results against success criteria. <br>
+Helps AI-agent users, skill authors, maintainers, and teams turn multi-search-engine workflow needs into practical plans, checklists, analysis, code changes, or decision support. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External AI-agent users, skill authors, maintainers, and teams use this skill to turn multi-search-engine workflow needs into local-friendly plans, checklists, analyses, code changes, or implementation support. <br>
+AI-agent users, skill authors, maintainers, and teams use this skill to adapt popular multi-search workflow patterns into reliable local workflows, templates, checklists, analysis, or implementation support. It is intended for practical productivity tasks such as clarifying requirements, hardening setup and safety, improving reliability, and validating the resulting deliverable. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad activation terms may cause the skill to be selected for ordinary search, engine, integration, or bug-fix requests that are not really about multi-search-engine workflows. <br>
-Mitigation: Prefer explicit invocation or narrow the trigger terms when maintaining the skill. <br>
+Risk: Broad triggers may activate the skill on ordinary search or productivity requests where a specialized multi-search workflow helper is not needed. <br>
+Mitigation: Use explicit invocation or narrow routing criteria, and confirm the user's intended outcome before producing workflow guidance. <br>
+Risk: Workflow or implementation proposals may contain incorrect or misleading guidance if applied without review. <br>
+Mitigation: Review generated plans, code, shell commands, and configuration before use, and validate them against the stated success criteria. <br>
 
 
 ## Reference(s): <br>
 - [Requirement Plan](references/requirement-plan.md) <br>
-- [Work Productivity Multi Search Workflow Helper on ClawHub](https://clawhub.ai/kyro-ma/skills/work-productivity-multi-search-workflow-helper) <br>
-- [Popular Clawhub skill demand: Multi Search Engine](https://clawhub.ai/skills/multi-search-engine) <br>
-- [Popular Clawhub skill demand: Agent Browser](https://clawhub.ai/skills/agent-browser-clawdbot) <br>
-- [Popular Clawhub skill demand: Tavily Search](https://clawhub.ai/skills/openclaw-tavily-search) <br>
-- [Apply startup behavior setting on launch](https://github.com/lolren/stepper-browser/issues/22) <br>
-- [Add ConceptDiffTool for 85% Token Reduction on Web Scrapes](https://github.com/huggingface/smolagents/issues/2571) <br>
+- [ClawHub skill page](https://clawhub.ai/kyro-ma/skills/work-productivity-multi-search-workflow-helper) <br>
+- [Multi Search Engine demand signal](https://clawhub.ai/skills/multi-search-engine) <br>
+- [Ask HN: Should I Combine Global Knowledge, Internet Search, and User RAG](https://news.ycombinator.com/item?id=49059969) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with optional code blocks, command snippets, checklists, and verification notes] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown or plain text with optional code, shell command, checklist, and configuration blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only workflow helper; no executable code or credential handling is included in the artifact.] <br>
+**Other Properties Related to Output:** [Outputs should state assumptions, limits, validation notes, and remaining follow-up work when relevant.] <br>
 
 ## Skill Version(s): <br>
-0.20260726.120312 (source: server release evidence) <br>
+0.20260728.1730 (source: server evidence release.version) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

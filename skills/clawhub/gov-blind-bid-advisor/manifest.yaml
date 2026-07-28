@@ -1,0 +1,18 @@
+name: gov-blind-bid-advisor
+slug: gov-blind-bid-advisor
+display_name: "政府采购盲投参谋"
+emoji: "⚖️"
+version: 1.0.0
+version_stage: "GA"
+author: "一线评标专家&ChesaraM"
+license: "MIT-0"
+agent_created: true
+description: '投标人侧政府采购盲投参谋：基于公开数据做商机发现（采购公告采集+企业画像匹配排序）与投标决策（资格/能力/利润/风险 go-no-go 结构化判断），内置投标人防御视角风险自查（废标雷区+排他性/萝卜坑条款扫描）。纯本地+公开数据采集，零 API Key；可选挂载 IMA 知识库做检索增强。'
+changelog:
+  - version: "1.0.0"
+    date: "2026-07-28"
+    change: "初始发布"
+feedback:
+  channel: "GitHub Issues"
+  account: "项目仓库"
+  note: "使用问题、误报反馈、实务建议，欢迎通过项目仓库提交 Issue 反馈。"

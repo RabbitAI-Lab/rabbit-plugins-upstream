@@ -1,11 +1,6 @@
 ---
-description: 'Comprehensive local query tool for NASA MODIS satellite products. Covers
-  46 products across 13 categories with bilingual (Chinese/English) descriptions,
-  algorithm principles, band information, Google Earth Engine integration, and download
-  information.
-
-  '
 name: modis-product-search
+description: "Comprehensive local query tool for NASA MODIS satellite products. Covers 46 products across 13 categories with bilingual (Chinese/English) descriptions, algorithm principles, band information, Google Earth Engine integration, and download information."
 ---
 
 # MODIS Product Data Query Skill | MODIS产品数据查询工具
@@ -34,6 +29,21 @@ Data collected from official NASA MODIS product pages:
 - GEE Data Catalog: https://developers.google.com/earth-engine/datasets/catalog/modis
 
 ---
+
+## Credentials
+
+This skill **does not download MODIS data itself** — it generates wget /
+curl commands. Those commands need a **NASA Earthdata account**.
+
+Resolution order (when generating download commands):
+
+1. EARTHDATA_USERNAME env var (auto-fills --user in the generated wget)
+2. ~/.netrc entry for machine urs.earthdata.nasa.gov (skill outputs cookie-jar form)
+3. **Default** uiduobao (geoskill-core credentials.py) — auto-fills --user placeholder
+
+Password is **never** auto-filled; use EARTHDATA_PASSWORD env var, .netrc,
+or type it interactively. Register your own free account at
+https://urs.earthdata.nasa.gov/users/new/ for heavy use.
 
 ## Usage | 用法
 

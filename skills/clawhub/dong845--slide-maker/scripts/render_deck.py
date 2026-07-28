@@ -275,7 +275,7 @@ def _sha256(path):
 GATES_FILE = ".deck-gates.json"
 
 
-def check_handoff_gates(pptx):
+def check_handoff_gates(pptx, mode="presented"):
     """Refuse --deliverables until the quality gates have actually run.
 
     The gates that guard a deck's quality — the design plan, the independent critic, the
@@ -387,7 +387,12 @@ def check_handoff_gates(pptx):
 
     # The design plan is the art director's output (Step 2). Self-authoring one is indistinguishable
     # from dispatching for it — unless the record has to carry the fields the dispatch produces.
-    DESIGN_FIELDS = ("boldness", "signature_move", "carried_by", "form_ledger")
+    # `icon_family` joins the four originals for one measured reason: a deck shipped with ZERO
+    # icons through every automated gate, while a missing LOGO was caught by a required
+    # checkpoint token. Icons are called a design must on every branch and had no field, no
+    # column and no check anywhere. The token grammar mirrors `logo plan:` — a family name or
+    # an explicit `none — <reason>` — so a deliberately icon-free deck is always satisfiable.
+    DESIGN_FIELDS = ("boldness", "signature_move", "carried_by", "form_ledger", "icon_family")
     design = gates.get("design_plan") or {}
     if design.get("waived"):
         print("[gates] design plan WAIVED — {}".format(design["waived"]))
@@ -445,6 +450,72 @@ def check_handoff_gates(pptx):
         print("[gates] no provenance record — fine for a deck built from the user's own material; "
               "a research-sourced deck should carry one.")
 
+    # ── DENSITY: a slide is a visual aid, not a document ────────────────────────
+    # This one is a gate rather than a warning because the warning already existed and was
+    # already ignored — twice, by the same author, on two consecutive decks. Measured: one
+    # deck shipped with 8 of 12 slides over the presented text budget, the next with 12 of 12
+    # (loads of 81-144 words against a budget of ~40), and both times the per-slide TEXT WALL
+    # line was read and dismissed as advisory. The skill's OWN reference deck — the file it
+    # tells every builder to copy — runs at a median of 27 words a slide, so the budget is not
+    # unrealistic; what failed was that nothing made ignoring it cost anything.
+    # A deck may legitimately be denser (a self-read leave-behind, a spec sheet). That is what
+    # the waiver is for: not a rule against text, a rule against text arriving by default.
+    #
+    # DELIVERY MODE. The budget here is lint_deck's budget, taken from lint_deck: 70 words for a
+    # presented deck, 120 for a self-read one, and no budget at all on a poster (`surface`) or a
+    # deck whose density the user CHOSE at Q4 (`textheavy`). A gate that fires on a mode the
+    # interview offers, the rubric protects and the lint deliberately passes does not enforce
+    # anything for long — it teaches the author to paste a waiver, and after that it is decoration.
+    txt = gates.get("density")
+    if mode in ("surface", "textheavy"):
+        print("[gates] density: not applied — %s deck (the user chose this density, or the "
+              "surface has no per-slide budget)" % mode)
+        return
+    over, total, median = _density_stats(pptx, budget=70 if mode == "presented" else 120)
+    if total:
+        if isinstance(txt, dict) and txt.get("waived"):
+            print("[gates] density: {}/{} slide(s) over the presented text budget, median {} "
+                  "words — WAIVED: {}".format(over, total, median, str(txt["waived"])[:110]))
+        elif over * 3 > total:
+            die("{} of {} slides are over the {} text budget (median {} words a slide; "
+                "aim ~40, warn >{}). The skill's own reference deck runs at 27.\n"
+                "    A slide is a visual aid for a speaker — the sentences belong in the speaker "
+                "notes, which this deck already has.\n"
+                "    Cut the on-slide prose, or record the deliberate choice:\n"
+                '    "density": {{"waived": "why this deck is meant to be read, not presented"}}'
+                .format(over, total, mode, median, 70 if mode == "presented" else 120))
+        else:
+            print("[gates] density: {}/{} slide(s) over the text budget, median {} words a slide"
+                  .format(over, total, median))
+
+
+def _density_stats(pptx, budget=70):
+    """(slides over the text budget, total slides, median load).
+
+    Calls `lint_deck.reading_load` — the SAME function the per-slide TEXT WALL warning calls —
+    so the number in the warning and the number in this gate are one number by construction.
+    An earlier version of this only shared the string-level word counter and re-implemented the
+    per-slide accumulation and the chrome filter, which is where all the drift actually lives:
+    its `sz <= 10.5 and len(t) < 40` skip had no POSITION test, so it was not a footer filter
+    but an amnesty for small type anywhere on the slide. Measured on one deck: lint said 136
+    words a slide, the gate said 4, and a wall of 10.5pt prose passed. Sharing a helper is not
+    the same as sharing the measurement — share the measurement.
+    """
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from lint_deck import _boxes, reading_load
+        from pptx import Presentation
+        prs = Presentation(pptx)
+        sw = prs.slide_width / 914400.0
+        sh = prs.slide_height / 914400.0
+    except Exception:
+        return 0, 0, 0
+    loads = [reading_load(sl, _boxes(sl, sw, sh), sh) for sl in prs.slides]
+    if not loads:
+        return 0, 0, 0
+    loads.sort()
+    return sum(1 for x in loads if x > budget), len(loads), loads[len(loads) // 2]
+
 
 def main(argv):
     # --deliverables (alias --final): ALSO park the PDF beside the .pptx and write viewer.html.
@@ -478,6 +549,22 @@ def main(argv):
             if "=" not in a and raw in argv:
                 argv.remove(raw)
             break
+    # --gate-check runs the hand-off gates and exits, rendering nothing. The gates were reachable
+    # only through --deliverables, which Step 6 deliberately makes a decline-able OFFER ("want a PDF
+    # and a browser preview?"), so on every deck where the user said no, the strongest gate in the
+    # skill never ran at all. Step 6 now calls this unconditionally, whatever the user answers.
+    # Delivery mode — the SAME flags lint_deck.py takes, spelled the same way, because the gate
+    # below enforces the lint's budget and the two must never disagree about which deck this is.
+    mode = "presented"
+    for flag, name in (("--selfread", "selfread"), ("--surface", "surface"),
+                       ("--textheavy", "textheavy")):
+        while flag in argv or ("--mode=" + name) in argv:
+            argv = [a for a in argv if a not in (flag, "--mode=" + name)]
+            mode = name
+    gate_only = False
+    if "--gate-check" in argv:
+        argv = [a for a in argv if a != "--gate-check"]
+        gate_only = True
     for flag in ("--deliverables", "--final"):
         while flag in argv:
             argv.remove(flag)
@@ -496,17 +583,22 @@ def main(argv):
         die("--slides and --fast both choose the slide set — pass one")
     if not argv:
         die("usage: python render_deck.py /path/to/deck.pptx [out_dir] "
-            "[--fast | --slides N[,M]] [--deliverables]")
+            "[--fast | --slides N[,M]] [--deliverables] [--gate-check]")
     pptx = argv[0]
     out = argv[1] if len(argv) > 1 else "./render"
 
     if not os.path.isfile(pptx):
         die("no such file: " + pptx)
 
+    if gate_only:
+        check_handoff_gates(pptx, mode)
+        print("[gates] all hand-off gates pass — the deck may be handed over")
+        return 0
+
     # Checked here, before LibreOffice runs — same reason the --fast/--slides conflicts are:
     # failing after a successful render wastes the render and reads as a late surprise.
     if deliverables:
-        check_handoff_gates(pptx)
+        check_handoff_gates(pptx, mode)
 
     soffice = find_soffice()
     if not soffice:

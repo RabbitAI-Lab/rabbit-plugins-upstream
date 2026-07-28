@@ -1,5 +1,5 @@
 ## Description: <br>
-宠物连锁行业财税专题助手，面向宠物医疗、动物诊疗、宠物食品、美容寄养、加盟连锁与进口宠物食品税务合规场景提供政策知识、风险指标、案例、报告模板与实操指引。 <br>
+A Chinese tax compliance assistant for pet-chain businesses that provides policy Q&A, risk self-checks, case references, report templates, and practical guidance across pet medical care, food, grooming, boarding, training, franchising, imports, and revenue-compliance scenarios. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External business users and tax or compliance practitioners use this skill to assess pet-chain tax scenarios, review risk indicators, and draft self-check guidance for veterinary, grooming, boarding, retail, franchise, and import operations. <br>
+External pet-chain operators, finance teams, and tax advisors use this skill to check China-focused tax treatment, identify compliance risks, and draft practical remediation or self-check guidance for pet medical, retail, service, franchise, and import workflows. <br>
 
 ### Deployment Geography for Use: <br>
-Global; users should verify local tax treatment because the content focuses on Chinese tax compliance scenarios. <br>
+China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security review reports under-disclosed remote data flows, possible local credential or log storage, client configuration changes, and bulk skill installation authority. <br>
-Mitigation: Review before installing in a business environment; do not enter confidential tax, financial, customer, or company-identifying data unless transmission to mcp.aitaxs.top and possible local logging are acceptable. <br>
-Risk: Matrix installer and auto-setup behavior may change local directories, remote package sources, or client configuration. <br>
-Mitigation: Avoid installer or auto-setup features unless the target directories, package source, and configuration changes have been reviewed. <br>
-Risk: Tax and compliance outputs may be incomplete or unsuitable for a specific filing, audit, or legal dispute. <br>
-Mitigation: Treat outputs as self-check guidance and confirm material conclusions with official sources and qualified tax or legal professionals. <br>
+Risk: The skill can contact external tax-service endpoints and send tax questions or self-check metrics outside the local environment. <br>
+Mitigation: Review the publisher's privacy and retention terms before entering sensitive company identifiers, confidential financial details, or client data. <br>
+Risk: The skill stores API credentials or client identifiers in browser local storage and local user configuration paths. <br>
+Mitigation: Use a dedicated test profile for evaluation, avoid shared machines, and clear stored keys when access is no longer needed. <br>
+Risk: The skill includes optional client configuration changes and a matrix installer that can install or replace related skills. <br>
+Mitigation: Run installer or auto-setup paths only after review, prefer dry-run/source-controlled installs, and confirm target directories before allowing changes. <br>
+Risk: Tax guidance may be incomplete, stale, or unsuitable for a specific filing, audit, or dispute posture. <br>
+Mitigation: Treat outputs as decision support and verify material positions with official tax guidance or qualified tax and legal professionals. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-pet-chain) <br>
-- [Pet-chain compliance self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_pet_chain.html) <br>
+- [ClawHub Skill Page](https://clawhub.ai/zxj2devs/skills/tax-pet-chain) <br>
+- [Pet-Chain Compliance Self-Check](https://mcp.aitaxs.top/web/topic_workflow_pet_chain.html) <br>
+- [Tax Compliance Self-Check Portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown responses with links, checklists, scenario analysis, and report-style guidance] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and text guidance, JSON-like tool results, Python scripts, MCP configuration snippets, and browser self-check output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct users to a web self-check flow and related tax matrix skills.] <br>
+**Other Properties Related to Output:** [Outputs may combine remote MCP tool responses with local offline fallback guidance; tax and legal conclusions should be reviewed before operational use.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: frontmatter and server release evidence) <br>
+3.15.3 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

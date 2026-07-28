@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides structured personal income tax compliance guidance and self-check workflows for offshore trusts, cross-border family wealth, foreign-income reporting, CFC, CRS, and anti-avoidance scenarios. <br>
+Provides offshore-trust personal income tax guidance for cross-border family wealth scenarios, including resident status, overseas income reporting, withholding and filing duties, CFC and anti-avoidance coordination, CRS compliance, and structured risk self-checks. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and tax-focused agents use this skill to reason through offshore trust personal income tax obligations, cross-border family wealth compliance, foreign-income reporting, CFC, CRS, and anti-avoidance checkpoints. It can return structured self-check guidance and point users to an interactive workflow for deeper scenario review. <br>
+External users and tax/compliance practitioners use this skill to ask offshore-trust and cross-border family wealth tax questions, run structured compliance self-checks, and prepare risk-oriented filing or remediation guidance. It is focused on China-related individual income tax, overseas income reporting, CFC, anti-avoidance, and CRS scenarios. <br>
 
 ### Deployment Geography for Use: <br>
-Global <br>
+Global, with tax guidance focused on China-related offshore trust and cross-border wealth scenarios. <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive tax questions, scenarios, and self-check metrics may be sent to mcp.aitaxs.top. <br>
-Mitigation: Use only when that remote data flow is acceptable; avoid real names, account numbers, and detailed family or financial identifiers. <br>
-Risk: The package can store API credentials and logs locally. <br>
-Mitigation: Review the local data directory and credential handling before use on shared or managed machines. <br>
-Risk: Matrix-install phrases can trigger broad installation of related tax skills. <br>
-Mitigation: Use those phrases only when broad installation is intended. <br>
-Risk: Autosetup can modify supported MCP client configuration files when TAX_ENABLE_AUTOSETUP is enabled. <br>
-Mitigation: Leave TAX_ENABLE_AUTOSETUP unset unless configuration changes are desired, and review backups or diffs after enabling it. <br>
+Risk: Tax questions and scenarios may be sent to the mcp.aitaxs.top service. <br>
+Mitigation: Review the service privacy and retention terms before use, and avoid entering highly sensitive client, identity, trust, or asset details unless appropriate controls are in place. <br>
+Risk: Local plaintext API-key or configuration files and JSONL logs may be created. <br>
+Mitigation: Restrict local file access, rotate credentials when needed, and manage logs and backups according to local data-handling policy. <br>
+Risk: Optional matrix installation can change local skill directories or client configuration. <br>
+Mitigation: Review installation prompts, backups, and configuration changes before enabling matrix installation behavior. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-offshore-trust) <br>
-- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
-- [Offshore trust workflow](https://mcp.aitaxs.top/web/topic_workflow_offshore_trust.html) <br>
-- [Tax policy MCP service](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
-- [Related tax policy skill](https://skillhub.cn/skills/tax-policy-knowledge) <br>
-- [Related cross-border tax skill](https://skillhub.cn/skills/tax-crossborder) <br>
+- [Offshore trust interactive self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_offshore_trust.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text, Shell commands, Configuration] <br>
-**Output Format:** [Markdown and plain text with links, checklists, prompts, and optional command or configuration guidance] <br>
+**Output Type(s):** [Text, Markdown, Guidance, Configuration, Shell commands] <br>
+**Output Format:** [Markdown and structured text with optional links, checklists, configuration snippets, and shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use a remote MCP service and local fallback workflows; avoid sending sensitive identifiers unless the user accepts that data flow.] <br>
+**Other Properties Related to Output:** [May produce tax compliance self-checks, risk summaries, filing guidance, remediation plans, and installation or MCP configuration guidance.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release evidence and SKILL.md frontmatter) <br>
+3.15.3 (source: server release metadata and skill frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

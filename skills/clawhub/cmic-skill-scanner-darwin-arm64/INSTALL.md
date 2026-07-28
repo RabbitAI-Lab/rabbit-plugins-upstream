@@ -58,6 +58,26 @@ the external process fails.
 
 The upload payload contains embedded review details for each skill, including the full scan summary and findings.
 
+## Linux glibc Compatibility
+
+There are two x86_64 Linux builds. Pick the right one **before** downloading:
+
+| Package | Target systems | Requirement |
+|---------|---------------|-------------|
+| `linux-amd64` | Ubuntu 20.04+, Debian 11+, RHEL 9+, Fedora 31+ | glibc >= 2.30 |
+| `bclinux21-amd64` | BCLinux 21/8.2, CentOS 7/8, RHEL 7/8, Amazon Linux 2 | none (static musl) |
+
+Check your glibc version first:
+
+```bash
+ldd --version | head -1          # glibc < 2.30  -> use bclinux21-amd64
+cat /etc/os-release | grep -i "bclinux\|bigcloud"   # matches -> use bclinux21-amd64
+```
+
+If you run `linux-amd64` and see `version 'GLIBC_2.30' not found` (or similar),
+your glibc is too old — switch to the `bclinux21-amd64` package, which is
+statically linked with musl and does not depend on the system glibc.
+
 ## Common Commands
 
 ```bash

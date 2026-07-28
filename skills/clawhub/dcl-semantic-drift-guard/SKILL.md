@@ -7,14 +7,15 @@ description: >
   contradicted, or materially distorted any claims. Use whenever you need to validate
   AI output against a contract, policy document, RAG-retrieved context, or any
   authoritative source of truth. Returns a tamper-evident DCL audit record with
-  verdict IN_COMMIT or HALLUCINATION_DRIFT. Part of the Fronesis Labs / Leibniz Layer™
-  verification suite alongside DCL Policy Enforcer and DCL Sentinel Trace.
+  verdict IN_COMMIT or HALLUCINATION_DRIFT. Instruction-only — no external calls, no
+  data leaves the agent. Part of the Fronesis Labs / Leibniz Layer™ verification suite
+  alongside DCL Policy Enforcer and DCL Sentinel Trace.
 ---
 
-# DCL Semantic Drift Guard
+# DCL Semantic Drift Guard — Leibniz Layer™
 
-**Publisher:** @daririnch · Fronesis Labs  
-**Version:** 1.0.0  
+**Publisher:** @daririnch · Fronesis Labs
+**Version:** 1.1.0
 **Part of:** Leibniz Layer™ Verification Suite
 
 ---
@@ -32,7 +33,9 @@ It supports two source modes:
 - **`context` mode** — inline document or contract passed directly in the request
 - **`kb_query` mode** — knowledge base lookup via RAG endpoint
 
-Every verification produces a cryptographic audit record compatible with the DCL Evaluator tamper-evident chain.
+Every verification produces a cryptographic audit record. **This skill is 100%
+instruction-only** — the source-grounding workflow below runs entirely inside the agent's
+context; no document or output text leaves the agent.
 
 ---
 
@@ -60,8 +63,7 @@ Every verification produces a cryptographic audit record compatible with the DCL
 
   // Always required:
   "llm_output": "<the LLM-generated response to verify>",
-  "strictness": "strict" | "balanced" | "lenient",  // default: "balanced"
-  "policy": "eu_ai_act" | "gdpr" | "fstek" | "internal" | "none"  // optional
+  "strictness": "strict" | "balanced" | "lenient"  // default: "balanced"
 }
 ```
 
@@ -80,10 +82,9 @@ Every verification produces a cryptographic audit record compatible with the DCL
   "status": "success" | "error",
   "data": {
     "verdict": "IN_COMMIT" | "HALLUCINATION_DRIFT",
-    "confidence": 0.0–1.0,
+    "confidence": 0.0,
     "source_mode": "context" | "kb_query",
     "strictness": "strict" | "balanced" | "lenient",
-    "policy": "eu_ai_act" | "none" | "...",
     "drift_items": [
       {
         "type": "hallucination" | "contradiction" | "omission" | "fabricated_specific",
@@ -93,8 +94,7 @@ Every verification produces a cryptographic audit record compatible with the DCL
       }
     ],
     "tx_hash": "<SHA-256 of input+output payload>",
-    "timestamp": "ISO-8601",
-    "audit_chain_id": "<Merkle leaf ID for DCL Evaluator chain>"
+    "timestamp": "ISO-8601"
   }
 }
 ```
@@ -109,10 +109,10 @@ When this skill is invoked, follow these steps:
 
 ### Step 1 — Retrieve source of truth
 
-**If `source_mode = "context"`:**  
+**If `source_mode = "context"`:**
 Use `source_document` directly. Chunk it into logical sections for comparison.
 
-**If `source_mode = "kb_query"`:**  
+**If `source_mode = "kb_query"`:**
 Query the `kb_endpoint` with `kb_query`. Retrieve top-k relevant chunks. Treat the union of retrieved chunks as the authoritative source. If the endpoint is unreachable, return `status: "error"` with `reason: "kb_unavailable"`.
 
 ### Step 2 — Decompose LLM output into claims
@@ -148,7 +148,6 @@ For each claim, determine:
 Generate:
 ```
 tx_hash = SHA-256(source_fingerprint + llm_output + verdict + timestamp)
-audit_chain_id = Merkle leaf position in DCL Evaluator chain
 ```
 
 Return the full output schema.
@@ -167,8 +166,7 @@ Return the full output schema.
     "confidence": 0.97,
     "drift_items": [],
     "tx_hash": "0xa3f1...c72e",
-    "timestamp": "2026-04-09T14:22:00Z",
-    "audit_chain_id": "dcl-leaf-0047"
+    "timestamp": "2026-04-09T14:22:00Z"
   }
 }
 ```
@@ -198,8 +196,7 @@ The LLM output is faithfully grounded in the source. Log `tx_hash` to your audit
       }
     ],
     "tx_hash": "0xb8d2...4f91",
-    "timestamp": "2026-04-09T14:22:00Z",
-    "audit_chain_id": "dcl-leaf-0048"
+    "timestamp": "2026-04-09T14:22:00Z"
   }
 }
 ```
@@ -208,17 +205,48 @@ Block the output. Surface `drift_items` to the human reviewer or trigger a re-ge
 
 ---
 
+## Optional faster pre-check via live paid service
+
+If you want a quick heuristic signal *before* running the full source-grounding workflow above
+— or as a cheap secondary check for overconfidence and fabrication-prone language on its own,
+without a source document — Fronesis Labs' live **DCL Trust Oracle** MCP server offers:
+
+| MCP tool | Price | What it runs |
+|---|---|---|
+| `dcl_evaluate_quality` | **$0.03** | Flags overconfident/absolute-claim language patterns and produces an on-chain `tx_hash` |
+
+This is a pattern-based heuristic on the output text alone — it does **not** take a source
+document and does not perform the claim-by-claim grounding check this skill does. It's useful as
+a fast first-pass filter or as an independent, cryptographically-anchored confirmation alongside
+this skill's own `tx_hash`, not as a replacement for the full workflow above.
+
+```json
+{
+  "mcpServers": {
+    "dcl-trust-oracle": {
+      "url": "https://mcp.fronesislabs.com/mcp"
+    }
+  }
+}
+```
+
+No API key or account signup is required — only a wallet capable of paying in USDC on Base.
+Prices are set server-side and may change; the MCP tool description returned by the server at
+call time is the source of truth.
+
+---
+
 ## Integration patterns
 
 ### With DCL Policy Enforcer (recommended pipeline)
 
-Run Policy Enforcer first (jailbreak / compliance check), then Semantic Drift Guard (factual grounding):
+Run Policy Enforcer first (jailbreak / policy check), then Semantic Drift Guard (factual grounding):
 
 ```
 LLM Output
     │
     ▼
-DCL Policy Enforcer ──► REJECT? → Block immediately
+DCL Policy Enforcer ──► NO_COMMIT? → Block immediately
     │ COMMIT
     ▼
 DCL Semantic Drift Guard ──► HALLUCINATION_DRIFT? → Block / re-generate
@@ -227,13 +255,11 @@ DCL Semantic Drift Guard ──► HALLUCINATION_DRIFT? → Block / re-generate
 Safe to deliver
 ```
 
-Both `tx_hash` values are logged to the same DCL Evaluator audit chain, giving end-to-end verifiability.
-
 ### With DCL Sentinel Trace (full Leibniz Layer™ stack)
 
 ```
 Sentinel Trace → strip PII before source reaches LLM
-Policy Enforcer → compliance check on output
+Policy Enforcer → policy check on output
 Semantic Drift Guard → factual grounding check
 ```
 
@@ -246,7 +272,6 @@ result = dcl_semantic_drift_guard(
     kb_query="penalty clauses breach of contract",
     llm_output=agent_response,
     strictness="strict",
-    policy="eu_ai_act"
 )
 
 if result["data"]["verdict"] == "HALLUCINATION_DRIFT":
@@ -262,18 +287,8 @@ if result["data"]["verdict"] == "HALLUCINATION_DRIFT":
 | Legal contract summarization | `context` | `strict` | Fabricated clauses = liability |
 | RAG-based customer support | `kb_query` | `balanced` | Prevent wrong product info |
 | Medical documentation | `context` | `strict` | Patient safety |
-| Financial report generation | `context` | `strict` | Regulatory compliance |
-| EU AI Act compliance auditing | `kb_query` | `strict` | FSTEK / AI Act article mapping |
+| Financial report generation | `context` | `strict` | Accuracy of figures |
 | Internal knowledge assistant | `kb_query` | `lenient` | Lower stakes, exploratory |
-
----
-
-## Compliance notes
-
-- Audit records are compatible with **EU AI Act Article 12** (logging requirements for high-risk AI systems)
-- `tx_hash` chain is admissible as tamper-evident evidence under **GDPR Article 5(2)** accountability principle
-- All source documents processed in `context` mode are never stored — only their fingerprint is hashed
-- Compatible with **FSTEK** audit trail requirements for AI systems in Russian regulated industries
 
 ---
 
@@ -281,13 +296,13 @@ if result["data"]["verdict"] == "HALLUCINATION_DRIFT":
 
 This skill is operated by **Fronesis Labs** under a strict no-retention data policy.
 
-**What is processed:** Only the text submitted for evaluation. No user identity, no API keys, no metadata beyond what is required to run the verification.
+**What is processed:** Only the text submitted for evaluation, entirely within the agent's own
+context window. No user identity, no API keys, no metadata beyond what is required to run the
+verification locally.
 
-**Retention:** Evaluations are processed in-memory only. No text is written to disk, no logs are retained, no data is shared with third parties. The only persistent record is the cryptographic `tx_hash` and `chain_hash` — these contain no personal data.
-
-**Source documents:** Content passed via `source_document` (context mode) is never stored or logged. Only a cryptographic fingerprint is included in the audit hash.
-
-**Infrastructure:** Webhook hosted on a private VPS operated solely by Fronesis Labs. No cloud analytics, no third-party processors.
+**Retention:** Nothing is written to disk, no logs are retained, no data is shared with third
+parties. If you also use the optional live pre-check above, only a hash of the evaluated text
+(`input_hash`) and verdict metadata are written to that service's on-chain audit trail.
 
 Full policy: **https://fronesislabs.com/#privacy** · Questions: support@fronesislabs.com
 
@@ -295,7 +310,9 @@ Full policy: **https://fronesislabs.com/#privacy** · Questions: support@fronesi
 
 ## Related skills
 
-- `dcl-policy-enforcer` — Compliance and jailbreak detection (run before Drift Guard)
+- `dcl-policy-enforcer` — Policy and jailbreak detection (run before Drift Guard)
+- `dcl-prompt-firewall` — Input-layer injection and jailbreak detection
 - `dcl-sentinel-trace` — PII redaction and identity exposure detection (run before source reaches LLM)
+- `dcl-skill-auditor` — Pre-install scanner for ClawHub skills
 
 **Leibniz Layer™ · Fronesis Labs · fronesislabs.com**

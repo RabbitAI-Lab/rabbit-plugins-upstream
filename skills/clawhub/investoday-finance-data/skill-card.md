@@ -1,5 +1,5 @@
 ## Description: <br>
-Fetches Chinese financial-market data and investment research information across A-shares, Hong Kong stocks, funds, indices, financial statements, announcements, research reports, macroeconomic data, and more than 200 related interfaces. <br>
+Fetches Chinese financial-market data and investment research information across A-shares, Hong Kong stocks, funds, indices, financial statements, announcements, research reports, news, macroeconomics, sectors, themes, industry chains, and market statistics. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,40 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, analysts, and research agents use this skill to find InvestToday finance-data endpoints, fetch structured Chinese market datasets, and summarize available quotes, fundamentals, fund, index, announcement, research, sector, industry-chain, and macroeconomic data. It should support research and data retrieval, not direct buy/sell advice, order execution, or conclusions that require inventing missing data. <br>
+External analysts, researchers, and developers use this skill to retrieve, compare, and export structured Chinese market data for financial research workflows. It is intended for data retrieval and research support, not direct trading advice, automated trading, or order execution. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: API keys may be exposed when passed directly in shell commands or retained in shell history. <br>
-Mitigation: Prefer interactive initialization or environment variables for credentials, and avoid command examples that place API keys directly on the command line. <br>
-Risk: The auto-update setup path can later change the CLI or installed skills. <br>
-Mitigation: Enable auto-update only when the operator accepts that update behavior, and review updated tools or skills before relying on them. <br>
-Risk: Returned finance, personnel, contact, watchlist, and trading-signal data may be sensitive or easy to overinterpret. <br>
-Mitigation: Treat returned data as informational, protect sensitive outputs, and avoid presenting results as direct investment advice or trading instructions. <br>
+Risk: API keys can be exposed if copied directly into shell history or logs during non-interactive setup. <br>
+Mitigation: Use an interactive setup flow or a secure secret-management mechanism instead of putting API keys directly on the command line. <br>
+Risk: Skipping verification during setup can bypass checks the user may rely on before using the CLI. <br>
+Mitigation: Avoid `--skip-verify` unless the user understands why it is needed and has reviewed the setup path. <br>
+Risk: Trading-signal and financial-data outputs could be mistaken for investment advice. <br>
+Mitigation: Treat outputs as research data only, confirm source coverage and recency, and avoid presenting the skill as a substitute for professional investment judgment. <br>
+Risk: Free-text recognition endpoints may receive confidential account, portfolio, or personal financial details. <br>
+Mitigation: Do not send confidential financial or personal information unless the provider's privacy controls have been reviewed and accepted. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kenneth-bro/skills/investoday-finance-data) <br>
-- [English skill guide](artifact/SKILL_EN.md) <br>
-- [API reference index](artifact/docs/references-index.en.md) <br>
-- [Source skill definition](artifact/SKILL.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/kenneth-bro/skills/investoday-finance-data) <br>
+- [API Reference Index](docs/references-index.en.md) <br>
+- [Chinese API Reference Index](docs/references-index.md) <br>
+- [Basic Data Reference](references/基础数据.md) <br>
+- [Market Data Reference](references/市场数据.md) <br>
+- [Announcements Reference](references/公告.md) <br>
+- [Large Model Corpus Reference](references/大模型语料.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with CLI commands, parameter guidance, and concise data summaries] <br>
+**Output Format:** [Markdown with inline CLI commands and structured data summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May depend on Node.js 18+, the @investoday/investoday-api package, network access, API credentials, and endpoint-specific permissions.] <br>
+**Other Properties Related to Output:** [May reference CLI endpoints and parameters for retrieving financial datasets; API responses depend on network access, provider permissions, and user-supplied query scope.] <br>
 
 ## Skill Version(s): <br>
-1.8.51 (source: server release evidence and skill frontmatter) <br>
+1.8.52 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

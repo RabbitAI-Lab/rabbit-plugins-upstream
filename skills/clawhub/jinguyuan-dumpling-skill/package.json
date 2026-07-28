@@ -1,9 +1,12 @@
 {
   "name": "jinguyuan-dumpling-skill",
-  "version": "2.3.0",
+  "version": "3.0.0",
   "private": true,
   "engines": {
     "node": ">=18"
   },
-  "description": "金谷园饺子馆 Skill 2.0 — Node 18+ required for local queue actions"
+  "description": "金谷园饺子馆 Skill 2.0 — Node 18+ required for local queue actions",
+  "devDependencies": {
+    "esbuild": "0.25.5"
+  }
 }

@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps students identify and improve recurring Chinese grammar issues by tracking error patterns only after explicit consent. <br>
+帮助学生在同意后持续识别和纠正中文写作中的语病，跟踪顽固模式，并提供写作前提醒和月度进步报告。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,29 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Students and learning assistants use this skill to check Chinese writing, identify repeated grammar-error patterns, practice targeted corrections, and generate progress summaries when the student asks for them. <br>
+Students and Chinese-language learning assistants use this skill to check writing for common grammar-error patterns, guide self-correction through questions, and build consent-based grammar improvement records. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can build a grammar-error history that may reveal learning patterns. <br>
-Mitigation: Enable tracking only after explicit user consent and avoid storing or sharing the history when the user has not opted in. <br>
-Risk: Sharing grammar-history summaries with related learning or reminder skills could expose more information than needed. <br>
-Mitigation: Share only the minimum necessary fields with related skills and only when the user permits that specific use. <br>
-Risk: Grammar correction guidance may be misleading if accepted without review. <br>
-Mitigation: Use the skill's prompt-and-practice flow to help the student verify the correction instead of treating suggestions as final answers. <br>
+Risk: The skill may retain examples of student writing and grammar-error patterns when tracking is approved. <br>
+Mitigation: Use the consent prompts before tracking, avoid storing sensitive personal information in writing samples, and limit any cross-skill sharing to the minimum fields the user approved. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-grammar-tracker) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Grammar error library](references/grammar-error-library.md) <br>
+- [Grammar error reference library](references/grammar-error-library.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and conversational text with structured correction prompts, practice exercises, reminders, and progress reports] <br>
+**Output Format:** [Markdown guidance and Chinese-language tutoring prompts] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Consent-gated tracking of grammar-error history and minimal sharing with related learning skills when the user permits it.] <br>
+**Other Properties Related to Output:** [Consent-gated tracking summaries, targeted practice prompts, writing reminders, and progress reports.] <br>
 
 ## Skill Version(s): <br>
-99999.0.2 (source: server release metadata; artifact frontmatter reports 2.0.1) <br>
+99999.0.3 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

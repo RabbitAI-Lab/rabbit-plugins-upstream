@@ -1,5 +1,5 @@
 ## Description: <br>
-Assists with cross-border e-commerce and trade tax compliance self-checks, risk triage, tax calculation guidance, export refund documentation, foreign exchange compliance, withholding tax, CRS, foreign tax credits, beneficial ownership, Hainan Free Trade Port topics, and VIE or red-chip structure tax risk review. <br>
+Helps users assess cross-border ecommerce and trade tax compliance risks, including import and export tax treatment, export refund documentation, withholding tax, CRS, beneficial ownership, VIE/red-chip structures, and Hainan Free Trade Port issues. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to ask cross-border trade tax questions, run lightweight compliance self-checks, identify tax and customs risk indicators, and prepare practical remediation guidance for Chinese tax and cross-border business scenarios. <br>
+External users, finance teams, tax practitioners, and cross-border ecommerce operators use this skill to ask tax compliance questions, run structured self-checks, and prepare practical remediation checklists or report drafts. It supports risk triage and documentation workflows but does not replace qualified tax, audit, or legal advice. <br>
 
 ### Deployment Geography for Use: <br>
-China and cross-border transactions involving Chinese tax compliance <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Tax scenarios and compliance details may be sent to a remote tax service. <br>
-Mitigation: Use the skill only after accepting remote-processing risk, and redact confidential tax, financial, personal, or corporate-structure details before use. <br>
-Risk: The skill can register and store persistent API credentials. <br>
-Mitigation: Review credential storage before deployment, restrict access to the local configuration directory, and remove stored credentials when the skill is no longer needed. <br>
-Risk: The skill can probe local agent or client setup and install or update related skills. <br>
-Mitigation: Review installation and client-configuration changes before enabling auto-setup or matrix installation, and run installation steps in a controlled environment. <br>
-Risk: Tax calculations, compliance flags, and remediation suggestions may be incomplete or jurisdiction-sensitive. <br>
-Mitigation: Treat outputs as decision support, verify against official tax authority guidance, and consult qualified tax or legal professionals for filings, audits, disputes, or high-impact decisions. <br>
+Risk: Sensitive tax, client, identity, or business details may be processed by the remote mcp.aitaxs.top service. <br>
+Mitigation: Review the provider's data handling terms before use and avoid entering confidential information unless remote processing is acceptable. <br>
+Risk: The skill can persist service credentials or logs locally and includes broad setup or matrix-install behavior. <br>
+Mitigation: Install only in environments where local credential and log persistence is acceptable, and use matrix install or auto-setup only when intentional. <br>
+Risk: Tax calculations and compliance recommendations may be incomplete, outdated, or unsuitable for a specific filing position. <br>
+Mitigation: Treat outputs as preliminary self-check guidance and have qualified tax, audit, or legal professionals verify material decisions. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-crossborder) <br>
+- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
 - [Cross-border compliance self-check page](https://mcp.aitaxs.top/web/topic_workflow_crossborder.html) <br>
-- [Tax policy knowledge hub](https://skillhub.cn/skills/tax-policy-knowledge) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [SkillHub cross-border tax skill page](https://skillhub.cn/skills/tax-crossborder) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and plain text guidance, JSON-like risk results, Python scripts, and configuration snippets] <br>
+**Output Type(s):** [text, markdown, guidance, configuration, shell commands] <br>
+**Output Format:** [Markdown guidance with checklists, risk summaries, report drafts, and optional setup or configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use remote MCP tools, a local stdio proxy, local fallback workflows, and a web self-check page.] <br>
+**Other Properties Related to Output:** [May use remote MCP-backed processing and a local web self-check workflow; users should review generated guidance before relying on it.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release evidence and SKILL.md frontmatter) <br>
+3.15.3 (source: SKILL.md frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -20,8 +20,14 @@ See what flights are currently above you. Identify contrails, planes overhead, a
 
 - **OpenSky Network** — free, no API key, no account needed
 - **Python 3** (standard library only)
-- **User's location** — lat/lng (from USER.md address, device location, or ask)
+- **User's location** — lat/lng (from device location or ask the user)
 - Script: `scripts/flights_overhead.py`
+
+## Privacy & Data Disclosure
+
+- **OpenSky Network**: Your approximate location (lat/lng bounding box) is sent as query parameters to OpenSky's public API to retrieve nearby aircraft. No account or personal data is transmitted beyond coordinates.
+- **Location source**: The agent should confirm or ask for the user's location rather than silently using stored addresses. An approximate location (city-level) is usually sufficient for overhead flight queries.
+- No data is stored externally.
 
 ## Script Usage
 
@@ -88,12 +94,11 @@ python3 scripts/flights_overhead.py --lat 47.68 --lng -122.21 --limit 5 --json
 ### Step 1: Determine User Location
 
 Options (in priority order):
-1. Use device location if available (`nodes` → `location_get`)
-2. Use home address from USER.md and convert to lat/lng
-3. Ask the user
+1. **Device location** (preferred for mobile users) — use `nodes` → `location_get`. Requires user to have granted location permission on their paired device. Best option when the user may be away from home.
+2. **Home address** from USER.md — convert to lat/lng. Use as fallback when device location is unavailable or user is known to be at home.
+3. **Ask the user** — if neither is available.
 
-**Known user location (from USER.md):**
-- Kirkland, WA: lat 47.68, lng -122.21
+**Note:** Device location requires explicit user permission on the paired mobile device. If not granted, the call will fail — fall back to option 2 or 3. For mobile users who are frequently away from home, device location gives accurate results. For stationary/home use, the address from USER.md is sufficient.
 
 ### Step 2: Query Flights
 

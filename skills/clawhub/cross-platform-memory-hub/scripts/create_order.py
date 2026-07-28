@@ -1,5 +1,5 @@
-﻿#!/usr/bin/env python3
-"""cross-platform-memory-hub - Create service order (Phase 1 of clawtip payment flow)"""
+#!/usr/bin/env python3
+"""cross-platform-memory-hub - Create service order via clawtip (Phase 1: sends slug + question text to api.ideaidea.com.cn)"""
 import argparse
 import hashlib
 import json
@@ -30,19 +30,19 @@ def create_order(question: str) -> tuple:
     req = urllib.request.Request(
         CREATE_ORDER_URL,
         data=payload,
-        headers={"Content-Type": "application/json", "User-Agent": "CrossPlatformMemoryHub/1.0"},
+        headers={"Content-Type": "application/json"},
         method="POST",
     )
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             body = json.loads(resp.read().decode("utf-8"))
     except urllib.error.URLError as e:
-        raise RuntimeError(f"网络请求异常，请确认网络链接并稍后重试: {e}") from e
+        raise RuntimeError(f"网络请求异常 / Network error, please check your connection: {e}") from e
     if body.get("responseCode") != "200":
         raise RuntimeError(body.get("responseMessage", "unknown error"))
     order_no = body.get("orderNo")
     if not order_no:
-        raise RuntimeError("Order creation response missing orderNo")
+        raise RuntimeError("服务器返回缺少订单号 / Missing order number from server")
     return (
         order_no,
         body.get("amount"),
@@ -54,14 +54,11 @@ def create_order(question: str) -> tuple:
     )
 
 
-def save_order_info(order_no, amount, question, encrypted_data, pay_to, indicator, description, skill_id, resource_url) -> str:
+def save_order_info(order_no, amount, encrypted_data, pay_to, indicator, description, skill_id, resource_url) -> str:
     order_data = {
         "skill-id": skill_id,
         "order_no": order_no,
         "amount": amount,
-        "question": question,
-        "encrypted_data": encrypted_data,
-        "pay_to": pay_to,
         "description": description,
         "slug": SLUG,
         "resource_url": resource_url,
@@ -70,30 +67,26 @@ def save_order_info(order_no, amount, question, encrypted_data, pay_to, indicato
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Create service order for cross-platform memory hub")
+    parser = argparse.ArgumentParser(description="Create cross-platform-memory-hub order")
     parser.add_argument("question", help="User question / consultation content")
     args = parser.parse_args()
 
     indicator = compute_indicator(SLUG)
+    print("NOTICE: This step sends your question text to")
+    print("        https://api.ideaidea.com.cn for order creation.")
+    print("        No Obsidian vault content or source code")
+    print("        is transmitted.")
 
     try:
         order_no, amount, encrypted_data, pay_to, description, skill_id, resource_url = create_order(args.question)
     except RuntimeError as e:
-        print(f"订单创建失败: {e}")
+        print(f"订单创建失败 / Order creation failed: {e}")
         sys.exit(1)
 
-    save_order_info(order_no, amount, args.question,
+    save_order_info(order_no, amount,
                     encrypted_data, pay_to, indicator, description, skill_id, resource_url)
 
     print(f"ORDER_NO={order_no}")
     print(f"AMOUNT={amount}")
     print(f"QUESTION={args.question}")
     print(f"INDICATOR={indicator}")
-    _jr = json.dumps({
-        "order_no": order_no,
-        "amount": amount,
-        "question": args.question,
-        "indicator": indicator,
-        "slug": "cross-platform-memory-hub",
-    }, ensure_ascii=False)
-    print(f"JSON_RESULT={_jr}")

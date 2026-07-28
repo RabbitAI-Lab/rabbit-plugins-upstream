@@ -1,5 +1,5 @@
 ## Description: <br>
-Manages Feishu (Lark) calendars for listing calendars, searching schedules, checking availability, creating events with attendees, and syncing calendar state. <br>
+飞书日历基础版 helps an agent manage Feishu/Lark calendars by listing calendars, searching events, checking availability, creating events with attendees, and syncing schedule state. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Personal users and lightweight automation agents use this skill to manage Feishu/Lark calendar workflows such as finding calendars, checking availability, creating reminders or events, and syncing local calendar state. <br>
+External users and developers use this skill to let an agent perform light Feishu/Lark calendar operations such as creating reminders, checking schedules, listing calendars, and syncing calendar state. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can create or modify calendar events and shared-calendar settings. <br>
-Mitigation: Use a least-privilege Feishu app and require confirmation before event creation, attendee changes, shared-calendar actions, or synchronization. <br>
-Risk: Calendar and contact data may be sent to Feishu APIs despite artifact claims about local-only storage. <br>
-Mitigation: Treat API communication as expected behavior, limit exposed calendars and contacts, and do not rely on local-only privacy claims. <br>
-Risk: Callback URLs may send results to a remote endpoint. <br>
-Mitigation: Avoid callback URLs unless the endpoint is trusted and necessary. <br>
+Risk: Calendar read/write access, contacts-read access, and app secret access can expose sensitive scheduling and identity data. <br>
+Mitigation: Verify Feishu/Lark app permissions before installation and scope credentials to the minimum needed. <br>
+Risk: Calendar write and sharing actions can create events, add attendees, set shared calendar permissions, or send callback notifications. <br>
+Mitigation: Require explicit user confirmation before write, sharing, attendee, permission, or callback operations. <br>
+Risk: The security summary reports conflicting privacy and capability claims and under-disclosed high-impact calendar sharing/API behavior. <br>
+Mitigation: Treat sharing and API behavior as high impact, review proposed changes before execution, and test in a non-production calendar first. <br>
 
 
 ## Reference(s): <br>
@@ -30,13 +30,13 @@ Mitigation: Avoid callback URLs unless the endpoint is trusted and necessary. <b
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON-formatted structured responses] <br>
+**Output Type(s):** [text, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JSON response examples and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require Feishu app credentials, calendar/contact permissions, and network access to Feishu APIs.] <br>
+**Other Properties Related to Output:** [May require Feishu/Lark app credentials and explicit confirmation for calendar write operations.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,8 +1,8 @@
 {
   "name": "jinguyuan-dumpling-skill",
   "display_name": "金谷园饺子馆 Skill",
-  "description": "查询金谷园饺子馆信息：餐厅名称与简介、营业时间、门店地址、外卖配送、店内Wi-Fi、当前排队状态、单点到店预估、午市/晚市排队事实与策略建议、生饺子打包带走与煮饺子教程、最新动态、到店自取叫号下单、菜品配方。店铺基本信息（餐厅信息、外卖配送、Wi-Fi）由 Agent 通过 get_shop_basics 一次调用获取。真实在线取号、本人排队进度、取消排队由本 Skill 内置的 Node.js CLI 处理。",
-  "version": "2.3.0",
+  "description": "查询金谷园饺子馆信息：餐厅名称与简介、营业时间、门店地址、外卖配送、店内Wi-Fi、当前排队状态、单点到店预估、午市/晚市排队事实与策略建议、生饺子打包带走与煮饺子教程、最新动态、到店自取叫号下单、菜品配方。公开查询由随包 Node.js CLI 调用金谷园官方 REST API 完成；真实在线取号、本人排队进度、取消排队由同一 CLI 的排队命令处理。",
+  "version": "3.0.0",
   "author": "金谷园AI",
   "license": "MIT",
   "repository": "https://github.com/JinGuYuan/jinguyuan-dumpling-skill",
@@ -48,44 +48,5 @@
     "金谷园必点",
     "金谷园新品",
     "店长推荐"
-  ],
-  "mcp_server": {
-    "transport": "streamable-http",
-    "url": "https://mcp.jinguyuan.cloud"
-  },
-  "tools": [
-    {
-      "name": "get_shop_basics"
-    },
-    {
-      "name": "get_raw_dumpling_info"
-    },
-    {
-      "name": "get_latest_news"
-    },
-    {
-      "name": "get_queue_info"
-    },
-    {
-      "name": "get_queue_at_time"
-    },
-    {
-      "name": "ask_queue_visit_time"
-    },
-    {
-      "name": "get_queue_period_facts"
-    },
-    {
-      "name": "get_queue_period_advice"
-    },
-    {
-      "name": "get_recipes"
-    },
-    {
-      "name": "get_recommended_dishes"
-    },
-    {
-      "name": "get_pickup_link"
-    }
   ]
 }

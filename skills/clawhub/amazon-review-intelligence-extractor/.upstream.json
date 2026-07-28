@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/amazon-review-intelligence-extractor",
   "slug": "amazon-review-intelligence-extractor",
   "ownerHandle": null,
-  "version": "1.0.4",
-  "updatedAt": 1784888001985,
-  "contentHash": "dd515cac87e93f5ffbc7532704eb605254005629b540436779ed7a74225ac04a",
-  "fetchedAt": "2026-07-26T18:05:17.859Z"
+  "version": "1.0.5",
+  "updatedAt": 1785224857270,
+  "contentHash": "ebc11975a2bf6601be1f7de0e23b9b7463ccf07bc3a0c7104d42fcd8a24f4adc",
+  "fetchedAt": "2026-07-28T10:01:04.589Z"
 }

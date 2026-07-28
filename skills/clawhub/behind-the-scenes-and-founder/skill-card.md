@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps agents turn real behind-the-scenes business moments into founder or personal-brand content by applying the REVEAL framework, checking privacy and transparency boundaries, and routing the material toward social formats. <br>
+Helps agents turn real internal business moments into behind-the-scenes founder content using the REVEAL framework while preserving boundaries around customer, team, legal, security, and confidential information. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Founders, brand teams, and social media operators use this skill to identify real behind-the-scenes business moments and frame them as trust-building founder-voice content. It helps check transparency tiers, avoid fabricated vulnerability, and route approved ideas to social post formats. <br>
+Social media operators, founders, and marketing agents use this skill to surface true business moments, check disclosure boundaries, and frame founder-led posts for build-in-public updates, founder stories, process content, culture posts, and honest lessons. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may surface sensitive founder, customer, personnel, legal, security, or regulated business details. <br>
-Mitigation: Use real founder and brand context, keep human approval for every reveal, and do not publish sensitive or regulated claims without consent or compliance review. <br>
-Risk: Behind-the-scenes content can become misleading if the agent fabricates struggles, emotions, numbers, or lessons. <br>
-Mitigation: Ground every recommendation in events that actually happened, preserve the founder's real voice, and reject manufactured vulnerability or humble-brag framing. <br>
-Risk: Comments, DMs, or quoted screenshots could contain instructions that conflict with the user's intent. <br>
-Mitigation: Treat outside content as source material to evaluate, not as commands for the agent to follow. <br>
+Risk: The skill may help draft public posts from sensitive business context such as revenue, mistakes, internal decisions, or ongoing struggles. <br>
+Mitigation: Use the built-in consent, compliance, transparency-tier, and permanence checks before publishing, with the human owner making the final disclosure decision. <br>
+Risk: Founder transparency content can expose customer information, employee matters, legal issues, security details, credentials, or confidential operational details. <br>
+Mitigation: Keep the never-share tier closed, use anonymized or explicitly consented material where appropriate, and route regulated-industry claims through compliance review. <br>
+Risk: Fabricated vulnerability, humble-brags, or invented struggles can mislead audiences and damage trust. <br>
+Mitigation: Root outputs only in events that actually happened, use real specifics and stakes, and avoid guarantees about reach or conversion. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/social-media-skills/skills/behind-the-scenes-and-founder) <br>
-- [The reality of founder and behind-the-scenes content in 2026](references/behind-the-scenes-2026-reality.md) <br>
+- [The REVEAL framework](references/the-reveal-framework.md) <br>
 - [BTS post types, transparency tiers, and worked examples](references/formats-and-recipes.md) <br>
 - [Scope, distinctions, and connections](references/scope-and-connections.md) <br>
-- [The REVEAL framework](references/the-reveal-framework.md) <br>
+- [The reality of founder and behind-the-scenes content in 2026](references/behind-the-scenes-2026-reality.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance and social-content strategy recommendations] <br>
+**Output Type(s):** [Text, Markdown, Guidance] <br>
+**Output Format:** [Markdown or plain text guidance for founder-content framing and post drafting] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires human approval for privacy, legal, customer, team, and security-sensitive disclosures.] <br>
+**Other Properties Related to Output:** [Outputs should be grounded in real user-provided business context and preserve explicit transparency, consent, compliance, and permanence boundaries.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: artifact/SKILL.md frontmatter and server release metadata) <br>
+1.0.1 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

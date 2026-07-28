@@ -5,24 +5,20 @@ name: company-search-tool-free
 version: 1.0.0
 displayName: 企业查询助手(免费版)
 summary: "企业查询免费版，支持公司基本信息、股东、法人、对外投资、工商变更查询.。企业查询助手免费版是面向个人用户的轻量企业信息查询工具。通过内置公用API Key开箱即用，支持查公司基本信息、法人、"
-license: Proprietary
+license: MIT
 edition: free
-description: "企业查询助手免费版是面向个人用户的轻量企业信息查询工具。通过内置公用API Key开箱即用，支持查公司基本信息、法人、股东、对外投资、工商变更等核心维度。Use
-  when 需要SEO优化、关键词分析、排名提升、搜索流量优化时使用。不适用于黑帽SEO手段。减少重复劳动，提升工作效率。触发关键词：API设计、自动化、性能优化、监控、搜索、SEO"
-  when 需要SEO优化、关键词分析、排名提升、搜索流量优化时使用。不适用于黑帽SEO手段.
+description: "企业查询助手免费版是面向个人用户的轻量企业信息查询工具。通过内置公用API Key开箱即用，兼容查公司基本信息、法人、股东、对外投资、工商变更等核心维度。Use. 适用于需要company search tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量."
 tags:
   - 企业查询
+  - company
+  - search
+  - automation
+  - productivity
   - 工商查询
   - 法人查询
   - 股东信息
   - 搜索
   - 检索
-  - 工具
-  - lines
-  - append
-  - get
-  - info
-  - 未知
 tools:
   - read
   - exec
@@ -30,8 +26,10 @@ tools:
   - grep
 homepage: ""
 category: "Knowledge"
+pricing_tier: free
 
 ---
+
 > **查公司、查法人、查股东、查投资。开箱即用的企业信息查询工具。**
 
 无需配置API Key，开箱即用。通过内置公用Key（每日1000次额度）即可查询企业基本信息、股东、法人、对外投资等核心维度，满足日常企业查询需求.
@@ -184,9 +182,9 @@ node （请参考skill目录中的脚本文件） discover "企业基本信息"
 node （请参考skill目录中的脚本文件） call biz_fuzzy_search --params '{"key":"腾讯"}'
 # ..
 node （请参考skill目录中的脚本文件） call biz_shareholders --params '{"entid":"AerjZTfkSh0"}'
-```
-
-### 120秒标准搭建
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```bash
 node --version  # 需要 16+
 node （请参考skill目录中的脚本文件） discover "企业"
@@ -197,10 +195,9 @@ echo "企业ID：$ENTID"
 # ..
 node （请参考skill目录中的脚本文件） call biz_basic_info --params "{\"entid\":\"$ENTID\"}"
 node （请参考skill目录中的脚本文件） call biz_shareholders --params "{\"entid\":\"$ENTID\"}"
-```
-
-## 配置示例
-### 基础配置
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```python
 import os
 # ..
@@ -220,9 +217,9 @@ class CompanySearchConfig:
         print(f"超时时间：{cls.TIMEOUT}s")
 # ..
 CompanySearchConfig.show()
-```
-
-### 查询维度速查
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```python
 QUERY_DIMENSIONS = {
     "基本信息": {
@@ -262,10 +259,9 @@ QUERY_DIMENSIONS = {
         "description": "行政处罚记录"
     },
 }
-```
-
-## 最佳实践
-### 1. 主体消歧（重要）
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```python
 def search_with_disambiguation(company_name):
     """带消歧的企业搜索"""
@@ -313,9 +309,9 @@ def safe_query(query_func, *args, max_retries=2):
         except Exception as e:
             print(f"第{attempt+1}次查询异常：{e}")
     return {"error": "重试次数已用完"}
-```
-
-### 3. 复用entid - 处理方式: 按上述步骤操作并确认结果
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```python
 class EntidCache:
     """entid缓存（避免重复搜索）"""
@@ -402,9 +398,9 @@ entid是企业内部查询ID，对用户无意义。结果中不应展示entid�
 用户: 执行核心功能
 Skill: 正在执行核心功能..
 Skill: 执行完成,结果如下: 操作成功
-```
-
-## 输出格式
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```json
 {
   "success": true,

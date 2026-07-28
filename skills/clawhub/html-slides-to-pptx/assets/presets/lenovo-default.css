@@ -1,0 +1,86 @@
+/* ================================================================
+   html-slides 主题样式（可无损转换为 PPTX 的净化版）
+   视觉风格：联想 Lenovo 品牌视觉 · 深蓝中轴 + 联想红强调 + 炭黑深底
+
+   【使用契约 —— 写页面时必须遵守】
+   1. 本文件提供：CSS 变量(色板/字体) + Reset + 少量工具类。
+      CSS 变量在转换时会被解析成具体颜色,安全无损。
+   2. ❌ 不要使用伪元素(::before/::after)做装饰——转换时会被忽略。
+      装饰线/圆点/角标一律用真实 <div data-object="true" data-object-type="shape"> 表达。
+   3. ❌ 不要使用 opacity 做半透明装饰——转换时按不透明处理。
+      半透明色请预先与底色混合,直接写混合后的 hex。
+   4. ❌ 不要使用单边粗边框(border-top:4px)——按顶边宽度统一应用。
+      顶部/侧边强调条用独立的细长 shape 叠加。
+   5. 每个可见元素必须带 data-object="true" + 内联 position:absolute。
+      详见 reference/html-spec.md。
+   ================================================================ */
+
+:root {
+  /* 主色：三色主结构 */
+  --lenovo-red: #E2232A;
+  --lenovo-red-dark: #B81C22;
+  --deep-navy: #0A2E5C;
+  --deep-navy-light: #14477A;
+  --charcoal: #1A1A1A;
+  --charcoal-soft: #2C2C2C;
+
+  /* 白+灰系（承载） */
+  --white: #FFFFFF;
+  --off-white: #F5F7FA;
+  --card-bg: #FAFBFC;
+  --text-primary: #1F1F1F;
+  --text-secondary: #666666;
+  --text-tertiary: #999999;
+  --border-light: #E5E7EB;
+  --border-medium: #D1D5DB;
+
+  /* 深色底上的浅色文字(预算混合色,非 rgba) */
+  --on-navy-text: #FFFFFF;
+  --on-navy-sub: #D9E2F0;    /* ≈ 白 85% 混 deep-navy */
+  --on-navy-dim: #A9BCD6;    /* ≈ 白 70% 混 deep-navy */
+
+  /* 代码块 */
+  --code-bg: #0F1419;
+  --code-text: #E8E8E8;
+  --code-highlight: #FFD966;
+  --code-comment: #7A8B99;
+
+  /* 信号色（类别区分时少量使用） */
+  --signal-green: #00A651;
+  --signal-yellow: #F9A825;
+  --signal-blue: #1976D2;
+  --signal-red: #E2232A;
+  --signal-gray: #757575;
+
+  /* 强调橙（高亮卡/徽章） */
+  --accent-orange: #F39800;
+
+  /* 字体 */
+  --font-cn: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-en: "Inter", -apple-system, "Segoe UI", "Helvetica Neue", sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", "SF Mono", Consolas, monospace;
+}
+
+/* Reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { margin: 0; padding: 0; overflow: hidden; }
+
+body {
+  font-family: var(--font-cn);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 画布：转换器只认 1920x1080 + relative + hidden */
+.slide-container {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: var(--off-white);
+  font-family: var(--font-cn);
+}
+
+/* 数字/西文用 Inter（表格数字、页码等,可加 class="num"） */
+.num { font-family: var(--font-en); font-feature-settings: "tnum"; }

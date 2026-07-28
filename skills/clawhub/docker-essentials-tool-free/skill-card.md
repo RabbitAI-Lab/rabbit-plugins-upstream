@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides Docker container lifecycle, image, Docker Compose, network, and volume management guidance for developer workflows. <br>
+Docker基础工具免费版 helps developers manage Docker containers, images, Compose services, networks, and volumes through agent-guided Docker CLI workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,29 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers use this skill to have an agent propose or run Docker CLI and Docker Compose commands for local containerized development, single-host multi-container applications, and container troubleshooting. <br>
+Developers and engineers use this skill for local Docker development, single-host multi-container Compose setups, and container troubleshooting. It guides or generates Docker CLI commands, Compose snippets, and configuration examples for common container workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent broad Docker CLI authority, including destructive cleanup operations that may remove containers, images, networks, or volumes. <br>
-Mitigation: Before prune, rm -f, rmi, volume rm, or docker compose down -v actions, require the agent to show the exact target resources and obtain explicit confirmation. <br>
-Risk: Docker commands may mount local directories, expose ports, enter containers, or interact with private registry credentials. <br>
-Mitigation: Review generated commands before execution, restrict mounts and ports to the intended development scope, and handle private registry credentials outside shared prompts or logs. <br>
+Risk: The skill can guide an agent to run Docker commands that remove containers, images, or volumes, including prune and down -v operations. <br>
+Mitigation: Require the agent to show exact Docker commands and obtain confirmation before running destructive cleanup, removal, or prune commands. <br>
+Risk: Docker execution authority can affect important local databases or development environments. <br>
+Mitigation: Review planned commands before execution and avoid running them against critical projects unless backups and target names are confirmed. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/docker-essentials-tool-free) <br>
+- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with Docker CLI commands, Docker Compose YAML, Dockerfile snippets, and troubleshooting guidance] <br>
+**Output Type(s):** [Shell commands, Configuration, Code, Markdown, Guidance] <br>
+**Output Format:** [Markdown with bash, YAML, Dockerfile, and JSON code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on local Docker Engine and Docker Compose availability; command execution depends on the host agent's tool permissions.] <br>
+**Other Properties Related to Output:** [May propose Docker CLI commands that affect local containers, images, networks, and volumes.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+1.0.1 (source: server release metadata; SKILL.md frontmatter lists 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

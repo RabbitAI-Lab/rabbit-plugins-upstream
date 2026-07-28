@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/modis-product-search",
   "slug": "modis-product-search",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1785077966064,
-  "contentHash": "f0742dc57d3600c59df7ab9e501c29c1cf1c598d6c9fc33bfefb52f92b3ecd20",
-  "fetchedAt": "2026-07-26T18:03:15.136Z"
+  "version": "1.0.3",
+  "updatedAt": 1785158581372,
+  "contentHash": "64009249353d5475a5172c48a8c879f0d0c844f8f7744eb01f1ccd7cedd267c5",
+  "fetchedAt": "2026-07-28T10:05:53.331Z"
 }

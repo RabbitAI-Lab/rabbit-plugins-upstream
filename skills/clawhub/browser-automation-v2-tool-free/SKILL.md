@@ -1,34 +1,30 @@
 ---
-
 slug: browser-automation-v2-tool-free
 name: browser-automation-v2-tool-free
 version: 1.0.0
 displayName: 浏览器自动化(免费版)
 summary: "浏览器自动化免费版，支持标签页自动清理、超时重试、智能等待与基础表单填写.。浏览器自动化助手免费版是面向个人开发者和轻量任务场景的浏览器自动化工具。聚焦"打开页面-等待加载-提取数据-关闭标"
-license: Proprietary
+license: MIT
 edition: free
-description: "浏览器自动化助手免费版是面向个人开发者和轻量任务场景的浏览器自动化工具。聚焦\"打开页面-等待加载-提取数据-关闭标签\"四步基础流程，让重复的网页操作自动化。Use
-  when 需要提升效率、自动化流程、批量处理、工作流优化时使用。不适用于需要人工创意判断的任务。减少重复劳动，提升工作效率。触发关键词：自动化、搜索、机器学习"
-  when 需要提升效率、自动化流程、批量处理、工作流优化时使用。不适用于需要人工创意判断的任务.
+description: "浏览器自发化助手免费版是面向个人开发者和轻量任务场景的浏览器自发化工具。聚焦\"打开页面-等待加载-提取数据-关闭标签\"四步基础流程，让重复的网页操作自发化。Use. 适用于需要browser automation v2 tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量."
 tags:
   - 浏览器自动化
+  - browser
+  - automation
+  - productivity
+  - developer-tools
   - 网页抓取
   - 表单填写
   - 单页面
   - 自动化
   - 工作流
-  - 效率
-  - url
-  - timeout
-  - result
-  - self
-  - def
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Automation"
+pricing_tier: free
 
 ---
 # 浏览器自动化助手（免费版）
@@ -334,12 +330,12 @@ class Config:
 Config.show()
 ```
 
-## 最佳实践
+## 优秀实践
 
 ## 错误处理
 
 ```python
-def safe_fetch(url):
+def safe_fetch(validated_url):
     """安全的页面获取"""
     try:
         result = fetch_with_retry(url, max_retries=3)
@@ -354,16 +350,16 @@ def safe_fetch(url):
 
 ```python
 # 使用上下文管理器确保资源释放
+# ...
+    # 执行操作
+result = "操作完成"
 class BrowserSession:
     def __enter__(self):
         print("打开浏览器会话")
         return self
     def __exit__(self, *args):
         print("关闭浏览器会话，清理标签页")
-# ...
 with BrowserSession() as session:
-    # 执行操作
-    pass
 ```
 
 ### 3. 调试技巧
@@ -464,9 +460,9 @@ os.environ["DEBUG"] = "1"
 用户: 执行核心功能
 Skill: 正在执行核心功能...
 Skill: 执行完成,结果如下: 操作成功
-```
-
-## 输出格式
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```json
 {
   "success": true,

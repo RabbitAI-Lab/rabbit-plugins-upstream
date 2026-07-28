@@ -14,7 +14,6 @@ Validated demand: Founders and builders need a repeatable way to turn rough prod
 
 ## 来源证据
 
-- hacker-news-ask-hn：[Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49045271)
 - github-issues：[RFC-0002 Slice 14/17: certify Lotus Idea data-product, trust telemetry, and canonical proof in platform gates](https://github.com/sgajbi/lotus-platform/issues/598)
 - segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
 - segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
@@ -23,9 +22,10 @@ Validated demand: Founders and builders need a repeatable way to turn rough prod
 - segmentfault-search：[问： 属性或方法“$v”未使用 Vuelidate 定义](https://segmentfault.com/q/1010000042816440)
 - segmentfault-search：[问： 从JDK 1.8切换到JDK 21时遇到NoProviderFoundException如何解决？](https://segmentfault.com/q/1010000047230462)
 - segmentfault-search：[问： laravel validator验证不通过返回The given data was invalid，而不是返回定义的提示信息](https://segmentfault.com/q/1010000018250396)
+- github-issues：[[cool idea] Emit deterministic SARIF for CI-native lint findings](https://github.com/flyingrobots/colorful-language/issues/188)
 - github-issues：[Follow-up: extend meta validation config across the CMS](https://github.com/novaramedia/novaramedia-com/issues/572)
-- github-issues：[Correct Tool Contract startup-validation claim](https://github.com/Nokia-Bell-Labs/declarative-agents/issues/1006)
 - hacker-news-search：[What I learned selling 2,500 MIDI recorders: Hardware is not so hard](https://news.ycombinator.com/item?id=48974605)
+- hacker-news-search：[Punch yourself in the face with reality](https://news.ycombinator.com/item?id=48912524)
 
 ## 这个技能如何满足需求
 

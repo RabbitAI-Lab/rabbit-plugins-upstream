@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides a static knowledge graph that agents can use as a speculative reasoning lens for paradox analysis, open scientific and philosophical questions, high-complexity forecasting, AI safety discussions, and strategic reasoning. <br>
+Beckmann Knowledge Graph gives agents a structured reasoning lens for paradox resolution, open scientific questions, AI safety, and high-complexity forecasting. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers can use this skill to load graph.json and produce graph-grounded Markdown reasoning for paradoxes, speculative scientific or philosophical questions, complex forecasts, strategic problems, and AI safety architecture discussions. Outputs should be treated as model-guided analysis rather than factual authority or policy advice. <br>
+External users and AI agents use this skill to apply a focused knowledge graph when reasoning about paradoxes, open scientific or philosophical questions, strategic forecasts, institutional dynamics, and AI safety concepts. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The graph can produce prescriptive guidance for indirect persuasion or behavior-change framing without strong consent safeguards. <br>
-Mitigation: Use it only with explicit user consent and independent review; do not use it for covert persuasion, recommendation steering, behavior-change programs, financial decisions, or AI self-improvement workflows. <br>
-Risk: Graph-grounded outputs may present speculative philosophical or scientific reasoning as if it were factual or settled. <br>
-Mitigation: Frame outputs as one perspective, preserve confidence and limits, and require external evidence before using conclusions as facts, safety policy, or operational decisions. <br>
-Risk: The artifact includes sensitive historical and psychological-manipulation topics that can lose safety context when summarized locally or mechanically. <br>
-Mitigation: Keep critical context and condemnation of harmful narratives with any excerpted node, and review summaries before reuse in downstream agent prompts or user-facing material. <br>
+Risk: The skill can provide a strongly opinionated reasoning and forecasting lens for persuasion, behavior-change, financial, or AI-autonomy topics. <br>
+Mitigation: Use human review, explicit user consent, and external fact-checking for those topics; do not rely on this skill alone for decisions that affect people, money, or autonomous AI behavior. <br>
+Risk: The graph includes difficult historical and psychological examples that may be misleading if summarized without local context. <br>
+Mitigation: Preserve critical context when reusing sensitive examples and avoid decontextualized summaries or endorsements of harmful narratives. <br>
+Risk: Some scientific and philosophical claims are speculative or model-based rather than settled empirical facts. <br>
+Mitigation: Label outputs as hypotheses or reasoning frames when appropriate and verify factual claims against independent sources before use. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/matthiasbeckmann987-spec/skills/beckmann-knowledge-graph) <br>
-- [Publisher profile](https://clawhub.ai/user/matthiasbeckmann987-spec) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
-- [Readme.md](artifact/Readme.md) <br>
-- [graph.json](artifact/graph.json) <br>
-- [Explanation for the ClawHub scanner.md](artifact/Explanation for the ClawHub scanner.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown graph-grounded answer with relevant nodes, reasoning path, confidence limits, and follow-up questions] <br>
+**Output Format:** [Markdown graph-grounded answer with reasoning paths, confidence notes, and limits.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a static JSON graph with 681 entities and 1146 relations; outputs should include confidence and limits and avoid presenting graph-derived speculation as fact.] <br>
+**Other Properties Related to Output:** [Outputs may cite graph entity IDs and relation paths; users should treat scientific claims and forecasts as model-based guidance requiring external fact-checking.] <br>
 
 ## Skill Version(s): <br>
-2.3.0 (source: server release, SKILL.md frontmatter, and package.json) <br>
+2.4.0 (source: server release evidence, SKILL.md frontmatter, and package.json) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

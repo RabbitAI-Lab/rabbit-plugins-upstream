@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-bom-runtime",
   "slug": "agent-bom-runtime",
   "ownerHandle": null,
-  "version": "0.98.0",
-  "updatedAt": 1784946266530,
-  "contentHash": "aa341f3566b6ceec5bd9773072c3d1398b539833aa905cbbf07ee72359677280",
-  "fetchedAt": "2026-07-26T18:04:22.763Z"
+  "version": "0.98.2",
+  "updatedAt": 1785146660185,
+  "contentHash": "d86a66ff68f10ee5cab378c24bf39234b79f1969094e2d47f0bc33c2d3dca533",
+  "fetchedAt": "2026-07-28T10:06:48.848Z"
 }

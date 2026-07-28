@@ -1,5 +1,5 @@
 ## Description: <br>
-Api Dev Tool Free helps an agent support API development workflows including API design decisions, OpenAPI specification generation, endpoint scaffolding, testing, documentation, and version-management guidance. <br>
+API开发工具（免费版） helps developers plan API designs, generate OpenAPI specifications, scaffold endpoints, create tests, draft documentation, and manage API versioning guidance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,29 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to plan, generate, review, and document APIs across REST, GraphQL, OpenAPI, testing, security-check, and version-migration tasks. It is aimed at personal daily use and single-task API development assistance. <br>
+Developers and engineers use this skill for API development workflows, including new API design, API refactoring and version migration, and API security checklist review. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requests file-writing and command-execution authority for broad API development tasks. <br>
-Mitigation: Use it in a project-specific workspace, review generated file changes before applying them, and approve local commands only after checking intent and scope. <br>
-Risk: Callback URLs or sensitive API and project data may be sent externally if the user provides them for API workflow tasks. <br>
-Mitigation: Do not provide callback URLs, credentials, private API details, or sensitive project data unless external sharing is intended and authorized. <br>
+Risk: The skill can guide file-writing, project code edits, optional tool installation, and command-line diagnostics. <br>
+Mitigation: Ask the agent for a plan or read-only review before execution when changes are not intended. <br>
+Risk: Generated API specifications, scaffolds, tests, documentation, or security guidance may be incomplete or inaccurate for a specific project. <br>
+Mitigation: Review generated outputs against project requirements, existing code, and security expectations before applying them. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/api-dev-tool-free) <br>
-- [SkillHub](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code blocks and structured JSON-style responses] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with code, YAML, JSON, and shell snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or write project files and run local commands when the host agent grants write and exec tools.] <br>
+**Other Properties Related to Output:** [May propose file-writing, project-code edits, optional tool installation, and command-line diagnostics when the agent has those permissions.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

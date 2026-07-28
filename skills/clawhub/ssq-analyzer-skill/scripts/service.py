@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 #!/usr/bin/env python3
 """
 ssq-analyzer - Service execution script.
@@ -32,7 +31,7 @@ def compute_indicator(slug: str) -> str:
     return hashlib.md5(slug.encode("utf-8")).hexdigest()
 
 
-def verify_payment(order_no: str, credential: str) -> dict:
+def verify_payment(order_no: str, credential: str) -> dict | None:
     """Send credential to service backend for verification."""
     payload = json.dumps({
         "slug": SLUG,
@@ -42,7 +41,7 @@ def verify_payment(order_no: str, credential: str) -> dict:
     req = urllib.request.Request(
         GET_RESULT_URL,
         data=payload,
-        headers={"Content-Type": "application/json", "User-Agent": "SSQAnalyzer/1.0"},
+        headers={"Content-Type": "application/json"},
         method="POST",
     )
     try:
@@ -66,7 +65,7 @@ def run_analysis() -> str:
 
     print("\n[STEP 2/2] Generating analysis report...")
     result = subprocess.run(
-        [sys.executable, ANALYZE_SCRIPT, "--recommend"],
+        [sys.executable, ANALYZE_SCRIPT],
         capture_output=True, text=True, timeout=120
     )
     print(result.stdout.strip())
@@ -74,7 +73,7 @@ def run_analysis() -> str:
         print(result.stderr)
         raise RuntimeError("Analysis generation failed")
 
-    report_path = os.path.join(SKILL_DIR, "鏈€鏂板垎鏋愮粨锟?md")
+    report_path = os.path.join(SKILL_DIR, "\u6700\u65b0\u5206\u6790\u7ed3\u679c.md")
     if os.path.exists(report_path):
         with open(report_path, "r", encoding="utf-8") as f:
             return f.read()
@@ -82,16 +81,11 @@ def run_analysis() -> str:
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Verify encrypted payment credential and execute SSQ analysis after clawtip authorization")
+    parser = argparse.ArgumentParser(description="Execute SSQ analysis service")
     parser.add_argument("order_no", help="Order number")
     args = parser.parse_args()
 
     indicator = compute_indicator(SLUG)
-    print("=" * 60)
-    print("NOTICE: This step sends the encrypted payment credential")
-    print("        to https://api.ideaidea.com.cn for verification.")
-    print("        Communication: HTTPS.")
-    print("=" * 60)
 
     try:
         order_data = load_order(indicator, args.order_no)
@@ -104,7 +98,7 @@ if __name__ == "__main__":
 
         result = verify_payment(args.order_no, credential)
     except Exception as e:
-        print("PAY_STATUS: ERROR")
+        print(f"PAY_STATUS: ERROR")
         print(f"ERROR_INFO: {e}")
         sys.exit(1)
 
@@ -138,11 +132,3 @@ if __name__ == "__main__":
         print("PAY_STATUS: ERROR")
         print(f"ERROR_INFO: Analysis execution failed: {e}")
         sys.exit(1)
-
-    _jr = json.dumps({
-        "pay_status": pay_status,
-        "authorization": "verified",
-        "order_no": args.order_no,
-        "analysis_complete": True,
-    })
-    print(f"JSON_RESULT={_jr}")

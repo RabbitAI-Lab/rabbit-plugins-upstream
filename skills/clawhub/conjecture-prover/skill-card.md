@@ -1,5 +1,5 @@
 ## Description: <br>
-Systematizes mathematical conjecture proof work by decomposing conjectures, identifying proof gaps, generating lemma chains and proof pipelines, applying analytic and numerical checks, and drafting proof-oriented papers. <br>
+Conjecture Prover helps agents structure mathematical conjecture work by decomposing conjectures, proposing proof or reduction routes, checking claims with verification steps, and packaging results as papers, proof summaries, scripts, diagrams, and review notes. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, researchers, and mathematically oriented agents use this skill to structure conjecture-analysis workflows, draft proof attempts, build verification checklists, and produce Markdown proof or paper artifacts. Outputs should be treated as drafts requiring qualified mathematical review. <br>
+Researchers, students, and mathematically capable agents use this skill to organize conjecture analysis, generate proof strategies or reductions, distinguish proven claims from numerical evidence and open gaps, and prepare supporting mathematical deliverables. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may present speculative or unaccepted mathematical claims as completed proofs. <br>
-Mitigation: Treat generated proofs and bundled proof examples as drafts until independently reviewed by qualified mathematicians. <br>
-Risk: Generated papers or proof summaries may contain incorrect, incomplete, or misleading reasoning. <br>
-Mitigation: Require explicit verification of each lemma, bridge step, citation, numerical claim, and stated proof boundary before relying on the output. <br>
-Risk: The bundled Riemann Hypothesis proof materials could be mistaken for established mathematical results. <br>
-Mitigation: Label RH-related outputs as speculative unless they have passed independent scholarly validation. <br>
+Risk: Users may treat generated mathematical outputs as authoritative proofs. <br>
+Mitigation: Treat outputs as research assistance and require expert mathematical review before relying on any proof, reduction, or claim. <br>
+Risk: Generic triggers may route ordinary math questions into this heavier proof workflow. <br>
+Mitigation: Invoke the skill explicitly for serious conjecture or proof work. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/wangjiaocheng/skills/conjecture-prover) <br>
-- [Conjecture prover task catalog](references/conjecture-prover-catalog.md) <br>
-- [Conjecture prover requirements](references/conjecture-prover-requirements.md) <br>
-- [Conjecture prover exemplars](references/exemplars.md) <br>
-- [Riemann Hypothesis proof package overview](assets/RH_README.md) <br>
-- [Riemann Hypothesis auto-review](assets/RH_AUTO_REVIEW.md) <br>
+- [Publisher profile: wangjiaocheng](https://clawhub.ai/user/wangjiaocheng) <br>
+- [Task catalog and dependency topology](artifact/references/conjecture-prover-catalog.md) <br>
+- [Task requirements checklist](artifact/references/conjecture-prover-requirements.md) <br>
+- [Example workflow index](artifact/references/exemplars.md) <br>
+- [RH deliverables overview](artifact/assets/RH_README.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with optional Python verification code and shell commands] <br>
+**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
+**Output Format:** [Markdown guidance with optional code and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May generate conjecture decompositions, lemma chains, proof drafts, review reports, papers, and verification commands.] <br>
+**Other Properties Related to Output:** [May produce proof plans, reductions, verification notes, review checklists, academic-style drafts, diagrams, and local verification scripts.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server-resolved release metadata) <br>
+1.0.11 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
