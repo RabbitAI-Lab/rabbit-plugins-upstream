@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/django-access-review",
+  "repo": "getsentry/skills",
+  "skillId": "django-access-review",
+  "branch": "main",
+  "pushedAt": "2026-07-27T23:23:06Z",
+  "contentHash": "6c68abec89967d6dd32e360d656009aa18ce880d124d8ba2d070f787c0a2cdd8",
+  "fetchedAt": "2026-07-28T09:59:12.903Z"
+}

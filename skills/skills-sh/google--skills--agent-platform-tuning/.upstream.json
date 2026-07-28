@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/agent-platform-tuning",
+  "repo": "google/skills",
+  "skillId": "agent-platform-tuning",
+  "branch": "main",
+  "pushedAt": "2026-07-24T22:43:18Z",
+  "contentHash": "5d8deac778fd29d0ac941a5778a3ace4bbd97c997b13f97deee5e8ed5de408df",
+  "fetchedAt": "2026-07-28T09:59:23.128Z"
+}

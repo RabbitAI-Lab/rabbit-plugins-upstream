@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/database-schema-designer",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "database-schema-designer",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "1e25b108499fd8a98f840b97dabe9bb682efab9ca941637599a0b29c4c5fc561",
+  "fetchedAt": "2026-07-28T10:00:35.454Z"
+}

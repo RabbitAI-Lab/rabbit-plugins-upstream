@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/terraform-search-import",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "terraform-search-import",
+  "branch": "main",
+  "pushedAt": "2026-07-15T22:05:19Z",
+  "contentHash": "4425021388951978cfd5a1b46bfc36930a233b1532903c0aad240c725ce8c8c6",
+  "fetchedAt": "2026-07-28T09:59:54.470Z"
+}

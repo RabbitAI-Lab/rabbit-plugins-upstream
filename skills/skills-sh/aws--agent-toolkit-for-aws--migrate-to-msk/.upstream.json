@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/migrate-to-msk",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "migrate-to-msk",
+  "branch": "main",
+  "pushedAt": "2026-07-27T09:21:57Z",
+  "contentHash": "6290affbbc080dc07e776ec52e2eebb1e8b45f6c5b717d179f4f0164320d63f5",
+  "fetchedAt": "2026-07-28T10:00:54.092Z"
+}

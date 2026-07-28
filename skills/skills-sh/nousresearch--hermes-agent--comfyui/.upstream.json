@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/comfyui",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "comfyui",
+  "branch": "main",
+  "pushedAt": "2026-07-28T09:27:08Z",
+  "contentHash": "4cbb293b95eb922530bb59a7ed6a4c5bda6b6ffa138291ba9cf1e1629efbb3db",
+  "fetchedAt": "2026-07-28T10:00:46.673Z"
+}

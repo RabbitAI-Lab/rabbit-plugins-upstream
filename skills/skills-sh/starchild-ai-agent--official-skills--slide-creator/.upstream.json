@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/slide-creator",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "slide-creator",
+  "branch": "main",
+  "pushedAt": "2026-07-28T06:43:59Z",
+  "contentHash": "69cb018dfa3cc5b2cc60e55739d161107a4d3b0de5e15556ef26d5deff0a3d98",
+  "fetchedAt": "2026-07-28T09:59:34.528Z"
+}

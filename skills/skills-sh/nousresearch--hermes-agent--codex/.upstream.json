@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/codex",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "codex",
+  "branch": "main",
+  "pushedAt": "2026-07-28T09:27:08Z",
+  "contentHash": "548dc9fde44f727e8a012dc8645b714bc3f3f9f1c6aca4d9e7e361398b192c18",
+  "fetchedAt": "2026-07-28T10:00:46.761Z"
+}

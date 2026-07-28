@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/find-bugs",
+  "repo": "getsentry/skills",
+  "skillId": "find-bugs",
+  "branch": "main",
+  "pushedAt": "2026-07-27T23:23:06Z",
+  "contentHash": "56f36a36515224b8807e50963a841959c27b3b605ee41b8bb75190f97cb7fea6",
+  "fetchedAt": "2026-07-28T09:59:12.873Z"
+}

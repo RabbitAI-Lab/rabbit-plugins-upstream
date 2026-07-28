@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/waf",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "waf",
+  "branch": "main",
+  "pushedAt": "2026-07-27T09:21:57Z",
+  "contentHash": "c416f3e8714534c3144c74fe3b42ba06ede7950ba4a68ff4b9d09b4e64d72feb",
+  "fetchedAt": "2026-07-28T10:00:54.254Z"
+}
