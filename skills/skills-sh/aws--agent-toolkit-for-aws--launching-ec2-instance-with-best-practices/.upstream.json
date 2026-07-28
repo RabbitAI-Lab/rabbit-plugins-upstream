@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/launching-ec2-instance-with-best-practices",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "launching-ec2-instance-with-best-practices",
+  "branch": "main",
+  "pushedAt": "2026-07-27T09:21:57Z",
+  "contentHash": "bfbc865b9c66955176484a04c869b0aabdd3b081da9b8271426b195e750ff308",
+  "fetchedAt": "2026-07-28T10:00:53.862Z"
+}

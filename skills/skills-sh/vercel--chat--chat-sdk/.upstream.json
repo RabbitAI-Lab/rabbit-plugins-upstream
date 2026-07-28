@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/vercel/chat/chat-sdk",
+  "repo": "vercel/chat",
+  "skillId": "chat-sdk",
+  "branch": "main",
+  "pushedAt": "2026-07-27T14:41:04Z",
+  "contentHash": "dd2e9e18aa536e4f2625a6830247e4f593ba0c65ba7527365c18375c2cc618bd",
+  "fetchedAt": "2026-07-28T10:00:51.785Z"
+}

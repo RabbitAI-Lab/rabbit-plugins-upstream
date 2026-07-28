@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/podcast-to-content-suite",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "podcast-to-content-suite",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "bdd175c0bb35ed90a4ae07e96615cf51764f3720ec99484cdbc3ad53367cd680",
+  "fetchedAt": "2026-07-28T10:00:35.477Z"
+}

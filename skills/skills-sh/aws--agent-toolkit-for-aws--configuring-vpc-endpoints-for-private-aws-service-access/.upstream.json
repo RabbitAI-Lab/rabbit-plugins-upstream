@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/configuring-vpc-endpoints-for-private-aws-service-access",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "configuring-vpc-endpoints-for-private-aws-service-access",
+  "branch": "main",
+  "pushedAt": "2026-07-27T09:21:57Z",
+  "contentHash": "ab80dc61cc57ec4aedd565d4ce8551efb25b3cdbef2f1eff4376698f95e1b319",
+  "fetchedAt": "2026-07-28T10:00:53.844Z"
+}

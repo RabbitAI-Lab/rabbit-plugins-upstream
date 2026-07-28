@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/troubleshooting-s3-files",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "troubleshooting-s3-files",
+  "branch": "main",
+  "pushedAt": "2026-07-27T09:21:57Z",
+  "contentHash": "1850f2704f02f0c5dd288b27d5fcfaea1fb7de2c4383133b7667bac751f996b8",
+  "fetchedAt": "2026-07-28T10:00:53.832Z"
+}

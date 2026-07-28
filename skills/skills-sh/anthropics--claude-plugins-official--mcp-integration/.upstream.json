@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/mcp-integration",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "mcp-integration",
+  "branch": "main",
+  "pushedAt": "2026-07-28T08:09:41Z",
+  "contentHash": "d079975c25b6850554de75e92a30a1c60ea7e9448010bf795c740552279f04f5",
+  "fetchedAt": "2026-07-28T09:59:16.547Z"
+}

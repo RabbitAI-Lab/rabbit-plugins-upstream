@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/processing-s3-uploads-with-step-functions",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "processing-s3-uploads-with-step-functions",
+  "branch": "main",
+  "pushedAt": "2026-07-27T09:21:57Z",
+  "contentHash": "6e12d368be8e4a5f88e8ac2f91dd56417eb1730fe89df96bbba160c10d3e1120",
+  "fetchedAt": "2026-07-28T10:00:54.041Z"
+}

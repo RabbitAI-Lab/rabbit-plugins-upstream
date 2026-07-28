@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/claude-code",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "claude-code",
+  "branch": "main",
+  "pushedAt": "2026-07-28T09:27:08Z",
+  "contentHash": "dd9b1e1d5786720e4e270fc3dfb9dc0e08089e6260b084a71cec47cf0588992a",
+  "fetchedAt": "2026-07-28T10:00:46.740Z"
+}

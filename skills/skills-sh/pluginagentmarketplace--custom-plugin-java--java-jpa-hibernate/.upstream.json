@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/pluginagentmarketplace/custom-plugin-java/java-jpa-hibernate",
+  "repo": "pluginagentmarketplace/custom-plugin-java",
+  "skillId": "java-jpa-hibernate",
+  "branch": "main",
+  "pushedAt": "2026-01-05T11:55:40Z",
+  "contentHash": "df94333066cdb9da56c63fe1d424a26c4904c045db1416aa7f6447ec01fb8e84",
+  "fetchedAt": "2026-07-28T09:59:16.161Z"
+}

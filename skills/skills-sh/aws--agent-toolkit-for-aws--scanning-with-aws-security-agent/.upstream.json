@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/scanning-with-aws-security-agent",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "scanning-with-aws-security-agent",
+  "branch": "main",
+  "pushedAt": "2026-07-27T09:21:57Z",
+  "contentHash": "cca37f76d53bee2bd6eddbfb7fdbe9857f307e9fdbd09480b69d5a81e1da0bda",
+  "fetchedAt": "2026-07-28T10:00:54.332Z"
+}

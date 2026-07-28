@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/langfuse/skills/langfuse",
+  "repo": "langfuse/skills",
+  "skillId": "langfuse",
+  "branch": "main",
+  "pushedAt": "2026-07-28T08:52:26Z",
+  "contentHash": "6843f4b9812b5e0b076c11c8d42cb6f63554a72983e89dc72db3710dfe9501a1",
+  "fetchedAt": "2026-07-28T09:59:20.501Z"
+}
