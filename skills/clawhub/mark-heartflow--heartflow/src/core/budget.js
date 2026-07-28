@@ -80,6 +80,7 @@ const BUDGET_NAMES = {
  * @example
  * countTokens('hello world')        // ~2-3
  * countTokens('你好世界')            // ~4-6
+
  * countTokens('function foo() {}') // ~4-5
  */
 function countTokens(text) {

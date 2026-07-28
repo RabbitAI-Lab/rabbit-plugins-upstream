@@ -1,5 +1,5 @@
-﻿#!/usr/bin/env python3
-"""database-specialist - Create service order via clawtip (Phase 1: sends slug + question text to api.ideaidea.com.cn)"""
+#!/usr/bin/env python3
+"""database-specialist - Order Creation Script (Phase 1)"""
 import argparse
 import hashlib
 import json
@@ -30,14 +30,14 @@ def create_order(question: str) -> tuple:
     req = urllib.request.Request(
         CREATE_ORDER_URL,
         data=payload,
-        headers={"Content-Type": "application/json", "User-Agent": "DatabaseSpecialist/1.0"},
+        headers={"Content-Type": "application/json"},
         method="POST",
     )
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             body = json.loads(resp.read().decode("utf-8"))
     except urllib.error.URLError as e:
-        raise RuntimeError(f"网络请求异常，请确认网络链接并稍后重试: {e}") from e
+        raise RuntimeError(f"\u7f51\u7edc\u8bf7\u6c42\u5f02\u5e38\uff0c\u8bf7\u786e\u8ba4\u7f51\u7edc\u94fe\u63a5\u5e76\u7a0d\u540e\u91cd\u8bd5: {e}") from e
     if body.get("responseCode") != "200":
         raise RuntimeError(body.get("responseMessage", "unknown error"))
     order_no = body.get("orderNo")
@@ -55,18 +55,11 @@ def create_order(question: str) -> tuple:
 
 
 def save_order_info(order_no, amount, question, encrypted_data, pay_to, indicator, description, skill_id, resource_url) -> str:
-    import re
-    sanitized_question = re.sub(
-        r'(password|passwd|pwd|secret|token|key|apikey|api_key)\s*[:=]\s*\S+',
-        r'\1=[REDACTED]',
-        question,
-        flags=re.IGNORECASE
-    )
     order_data = {
         "skill-id": skill_id,
         "order_no": order_no,
         "amount": amount,
-        "question": sanitized_question,
+        "question": question,
         "encrypted_data": encrypted_data,
         "pay_to": pay_to,
         "description": description,
@@ -77,24 +70,23 @@ def save_order_info(order_no, amount, question, encrypted_data, pay_to, indicato
 
 
 if __name__ == "__main__":
-    print("正在通过 clawtip 第三方服务创建订单...")
-    print(f"将要传输的信息：您的问题描述（用于生成服务内容）")
-    print("以下信息不会被传输：数据库连接信息、密码、生产环境配置")
-    print("通信协议：HTTPS + SM4 国密加密")
-    print("NOTICE: This step sends your question text to")
-    print("        https://api.ideaidea.com.cn for order creation.")
-    print("        No database credentials or connection strings")
-    print("        are transmitted.")
-    parser = argparse.ArgumentParser(description="Create order")
+    parser = argparse.ArgumentParser(description="Create database-specialist order")
     parser.add_argument("question", help="User question / consultation content")
     args = parser.parse_args()
 
     indicator = compute_indicator(SLUG)
+    print("=" * 60)
+    print("NOTICE: This step sends your question text to")
+    print("        https://api.ideaidea.com.cn for order creation.")
+    print("        Your question text is transmitted via HTTPS.")
+    print("        No Database Specialist analysis data or purchase history")
+    print("        is transmitted.")
+    print("=" * 60)
 
     try:
         order_no, amount, encrypted_data, pay_to, description, skill_id, resource_url = create_order(args.question)
     except RuntimeError as e:
-        print(f"订单创建失败: {e}")
+        print(f"\u8ba2\u5355\u521b\u5efa\u5931\u8d25: {e}")
         sys.exit(1)
 
     save_order_info(order_no, amount, args.question,
@@ -104,11 +96,3 @@ if __name__ == "__main__":
     print(f"AMOUNT={amount}")
     print(f"QUESTION={args.question}")
     print(f"INDICATOR={indicator}")
-    _jr = json.dumps({
-        "order_no": order_no,
-        "amount": amount,
-        "question": args.question,
-        "indicator": indicator,
-        "slug": SLUG,
-    }, ensure_ascii=False)
-    print(f"JSON_RESULT={_jr}")

@@ -1,5 +1,5 @@
 ## Description: <br>
-Drafts, edits, and rewrites prose in the user's own voice for emails, posts, essays, memos, proposals, social copy, and similar writing tasks. <br>
+Drafts, edits, and rewrites emails, posts, essays, memos, proposals, and social copy in the user's voice, including structure, clarity, voice matching, second-language support, and format-specific constraints. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Employees, external users, and individual writers use this skill to draft, revise, shorten, restructure, and proof prose while preserving a user's voice, style rules, contact preferences, and project context. <br>
+External users and writing-focused agent operators use this skill to draft, revise, and polish prose across email, posts, essays, social copy, and workplace documents while preserving user voice and stored style preferences. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Persistent writing, contact, and project memory may be created or changed under ~/Clawic/data/. <br>
-Mitigation: Review the skill before installing, use a configuration that requires confirmation before saving or deleting durable data, and inspect the affected Clawic data folders regularly. <br>
-Risk: Stored writing profiles and contact/project records may contain sensitive style preferences, personal context, or third-party details. <br>
-Mitigation: Keep credentials out of ~/Clawic/data/, replace secret values with pointers, and avoid storing third-party personal data beyond what is necessary for the writing task. <br>
+Risk: The skill automatically builds and edits long-lived local writing, contact, and project records without per-write permission. <br>
+Mitigation: Install only when long-term local writing memory is desired; review or disable the configured writing, contacts, and projects stores if retention is not acceptable. <br>
+Risk: Drafts, voice traits, contact preferences, project decisions, and publication history may be retained and reused across sessions. <br>
+Mitigation: Review stored notes periodically and avoid retaining sensitive drafts, private contact details, or project information unless they are needed for future writing. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/writing) <br>
+- [Publisher profile](https://clawhub.ai/user/ivangdavila) <br>
 - [Clawic Writing skill page](https://clawic.com/skills/writing) <br>
-- [Skill definition](artifact/SKILL.md) <br>
-- [Working file templates](artifact/memory-template.md) <br>
+- [Skill source](artifact/SKILL.md) <br>
+- [Voice guidance](artifact/voice.md) <br>
+- [Memory template](artifact/memory-template.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown or plain text drafts, edits, rewrites, and concise editorial guidance; persistent profile files are Markdown or YAML.] <br>
+**Output Type(s):** [Text, Markdown, Guidance, Configuration] <br>
+**Output Format:** [Markdown or plain text drafts, rewritten prose, edits, and concise editorial guidance.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read and update local writing, contact, and project profile files under ~/Clawic/data/.] <br>
+**Other Properties Related to Output:** [May read and update local writing, contacts, and project memory under configured Clawic paths.] <br>
 
 ## Skill Version(s): <br>
-1.1.1 (source: SKILL.md frontmatter and server release evidence) <br>
+1.1.2 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-谷歌搜索(免费版) helps agents run lightweight Google searches through browser automation, parse result titles, URLs, and snippets, filter results, and export structured search outputs. <br>
+Google Search (Free) helps an agent run browser-based Google searches without a Google API key, parse titles, URLs, and snippets, apply basic filtering, and export results. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers can use this skill for lightweight information retrieval, SEO keyword checks, learning references, and research collection when they need Google search results without a Google API key. It is not intended for black-hat SEO workflows. <br>
+External users, developers, and automation agents can use this skill for lightweight Google search, SEO keyword checks, quick information retrieval, research collection, result parsing, basic filtering, and export workflows. It is not intended for black-hat SEO tactics. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Browser automation sends search queries to Google and may expose sensitive terms or trigger search-provider anti-automation controls. <br>
-Mitigation: Use non-sensitive queries, comply with applicable service terms, and run the skill only in environments where browser automation and outbound Google traffic are acceptable. <br>
-Risk: The setup guidance includes a curl-to-bash Bun installer path without verification. <br>
-Mitigation: Prefer an already-installed Node.js runtime or a verified package-manager installation route; only use remote shell installers after independent trust and integrity checks. <br>
+Risk: Setup guidance includes an unsafe remote installer command. <br>
+Mitigation: Review installer commands before use and prefer an already installed Node.js runtime or a verified package-manager installation path. <br>
+Risk: Browser-based Google searches may leave the user's machine and depend on local network, proxy, and regional settings. <br>
+Mitigation: Install only in environments where browser-based Google search is acceptable, and adjust language, country, and proxy settings for the deployment context. <br>
 
 
 ## Reference(s): <br>
+- [Detailed usage and code examples](references/detail.md) <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/free-google-search-tool-free) <br>
-- [Detailed reference](references/detail.md) <br>
+- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+- [Bun installer referenced by setup instructions](https://bun.sh/install) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline Python, shell, and JSON examples; generated search results may be exported as JSON, Markdown, CSV, or text.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON] <br>
+**Output Format:** [Markdown guidance with Python and shell command examples; exported search results may be JSON, CSV, Markdown, or plain text.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include search status, result records with title, URL, snippet, and position, and optional execution logs.] <br>
+**Other Properties Related to Output:** [Single-query free edition; uses browser automation and may require Node.js or Bun, Playwright, Chromium, and network access to Google.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence; artifact frontmatter reports 1.0.0) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

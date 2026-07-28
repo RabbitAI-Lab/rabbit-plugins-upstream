@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps agents operate rented virtual private servers end to end, including provider and plan selection, first boot, access recovery, snapshots, resizing, networking, migration, incidents, and cost review. <br>
+Helps agents operate rented virtual private servers across provider selection, first boot, access recovery, snapshots, resizing, firewalls, incidents, outbound mail, billing, backups, and migrations. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, operators, and technical users use this skill for practical VPS administration decisions and recovery workflows across rented servers. It guides provider selection, provisioning, access recovery, firewalls, backups, resizing, migration, incidents, outbound mail, and cost control. <br>
+Developers, operators, and infrastructure-focused users use this skill to choose, provision, recover, secure, resize, migrate, and document VPS hosts while keeping local runbooks and inventory current. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can update local Clawic VPS, server, domain, and finance records during normal use. <br>
-Mitigation: Ask the agent to show a diff and get confirmation before changing local infrastructure records. <br>
-Risk: VPS operations can include destructive or irreversible actions such as rebuilds, destroys, disk growth, address release, snapshot deletion, or firewall enablement. <br>
-Mitigation: Require the agent to state the blast radius, fallback path, and explicit confirmation before running or recommending those actions. <br>
-Risk: Infrastructure records could accidentally capture secrets if the user asks to save private keys, passwords, or API tokens. <br>
-Mitigation: Store only credential pointers such as file, keychain, password-manager, or environment-variable references, not credential values. <br>
+Risk: Local infrastructure notes can expose hostnames, IP addresses, provider accounts, exposure maps, and spend history if the local data directory is shared or compromised. <br>
+Mitigation: Keep the Clawic data paths private, review generated runbooks before sharing, and store only credential pointers rather than secret values. <br>
+Risk: VPS operations can include irreversible provider actions such as rebuilds, destroys, disk growth, address release, and snapshot deletion. <br>
+Mitigation: Require explicit user confirmation, state blast radius and fallback path before action, and verify backups or recovery access before destructive changes. <br>
+Risk: Pasted terminal logs, runbooks, or environment files may contain private keys, passwords, API tokens, backup passphrases, or recovery codes. <br>
+Mitigation: Strip secret values before writing durable notes and replace them with pointers such as keychain, password-manager, file, environment, or vault references. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub VPS skill page](https://clawhub.ai/ivangdavila/skills/vps) <br>
-- [Clawic VPS skill page](https://clawic.com/skills/vps) <br>
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/vps) <br>
+- [Skill homepage](https://clawic.com/skills/vps) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands, operational checklists, and configuration guidance] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with inline shell commands, structured tables, and local file update guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local infrastructure-record updates under Clawic data paths; should avoid storing credentials and request confirmation for destructive or irreversible operations.] <br>
+**Other Properties Related to Output:** [May maintain local VPS inventory, runbooks, exposure notes, spend records, and provider-account pointers under declared Clawic data paths; credentials are represented only as pointers.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+1.0.2 (source: server release and frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

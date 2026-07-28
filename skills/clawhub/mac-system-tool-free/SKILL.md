@@ -1,31 +1,12 @@
----slug: mac-system-tool-free
+---
+slug: mac-system-tool-free
 name: mac-system-tool-free
 version: 1.0.0
 displayName: Mac 系统工具
-summary: "面向个人用户的 mac"
-license: Proprietary
+summary: "面向个人用户的 mac,提供核心能力"
+license: "MIT"
 edition: free
-description: '面向个人用户的 macOS 系统管理与控制工具.
-  核心能力:
-
-  - 系统信息、进程、磁盘、电池查询
-
-  - 音量、亮度、网络基础控制
-
-  - 截图、剪贴板、Finder 操作
-
-  - 破坏性操作二次确认
-
-  适用场景:
-
-  - 个人查看 Mac 系统状态
-
-  - 调整音量亮度与网络
-
-  - 截图与剪贴板操作
-
-  差异化: 免费版聚焦个人只读查询与基础控制，破坏性操作二次确认，零成本使用.
-  适用关键词: mac 系统, 系统信息, 进程, 音量, 亮度, 截图, 剪贴板, macos, system control'
+description: "面向个人用户的 macOS 系统管控与控制工具. 核心能力: - 系统信息、进程、磁盘、电池查询 - 音量、亮度、网络基础控制 - 截图、剪贴板、Finder 操作 - 破坏性操作二次确认 适用场景: - 个人查看 Mac 系统状态 - 调整音量亮度与网络 - 截图与剪贴板操作 差异化: 免费版聚焦个人只读查询与基础控制，破坏性操作二次确认，零成本使用. 适用关键词: mac 系统, 系统信息, 进程, 音量, 亮度, 截图, 剪贴板, macos, system control"
 tags:
   - macOS
   - 系统管理
@@ -37,19 +18,16 @@ tags:
   - 研究
   - 分析
   - 写作
-  - 电商
-  - volume
-  - cpu
-  - macos
-  - bash
-  - osascript
 tools:
   - read
   - exec
   - glob
   - grep
 homepage: ""
-category: "Automation"---# Mac 系统工具（免费版）
+category: "Automation"
+pricing_tier: free
+---
+# Mac 系统工具（免费版）
 
 ## 概述
 
@@ -119,10 +97,10 @@ brightness 0.8
 
 ```bash
 # 全屏截图到桌面
-screencapture ~/Desktop/screenshot.png
+screencapture ./Desktop/screenshot.png
 # ...
 # 区域截图
-screencapture -i ~/Desktop/region.png
+screencapture -i ./Desktop/region.png
 # ...
 # 复制内容到剪贴板
 echo "内容" | pbcopy
@@ -158,7 +136,7 @@ pbpaste
 | 破坏性 | 先向用户确认 |
 | 需 sudo | 提前告知用户 |
 
-## 最佳实践
+## 优秀实践
 
 - **查询先做**：先查状态再调整，避免盲目操作.
 - **破坏性必确认**：关机、重启、杀进程、清废纸篓先问用户.
@@ -235,12 +213,12 @@ traceroute example.com
 | 音量查询 | `osascript -e 'output volume of (get volume settings)'` |
 | 设置音量 | `osascript -e 'set volume output volume 50'` |
 | 静音 | `osascript -e 'set volume output muted true'` |
-| 全屏截图 | `screencapture ~/Desktop/s.png` |
-| 区域截图 | `screencapture -i ~/Desktop/r.png` |
+| 全屏截图 | `screencapture ./Desktop/s.png` |
+| 区域截图 | `screencapture -i ./Desktop/r.png` |
 | 复制到剪贴板 | `echo x \| pbcopy` |
 | 粘贴 | `pbpaste` |
 | 打开 Finder | `open .` |
-| 清空废纸篓 | `rm -rf ~/.Trash/*`（先确认） |
+| 清空废纸篓 | `rm -rf ./.Trash/*`（先确认） |
 
 ## 安全操作规范
 

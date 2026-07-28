@@ -1,5 +1,5 @@
 ## Description: <br>
-Coordinates multi-agent swarms for parallel reviews, pipeline workflows, and divide-and-conquer subagent work. <br>
+Coordinate multi-agent swarms for parallel and pipeline workflows, including parallel reviews, pipeline workflows, and divide-and-conquer work with subagents. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,50 +11,50 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use this workflow to coordinate multiple coding agents for parallel analysis, code review, research, implementation handoffs, and staged pipelines. It helps define task ownership, dispatch discipline, verification gates, and cleanup steps for agent swarms. <br>
+Developers and engineering teams use this workflow to coordinate multiple agents for code review, research, implementation pipelines, and complex tasks that benefit from bounded parallelism or staged handoffs. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Background or persistent teammates can remain active or leave coordination files after the main work is complete. <br>
-Mitigation: Request shutdown, wait for shutdown approval or idle status, review any needed task history, and run cleanup only after confirming work is complete. <br>
-Risk: Parallel implementation agents can overwrite shared files or race on repository state when they are not isolated. <br>
-Mitigation: Assign exclusive owned files, check for overlapping paths before dispatch, use separate worktrees for parallel implementation, and keep implementation serial when isolation is unavailable. <br>
-Risk: Multi-agent review or judge panels can converge on a wrong answer when agents see each other's conclusions too early. <br>
-Mitigation: Use cold-start isolation for parallel reviewers, collect independent outputs before synthesis, and use fresh instances for later review rounds. <br>
+Risk: The workflow may spawn or coordinate background teammates and leave local team resources active. <br>
+Mitigation: Confirm all work is complete, request teammate shutdown, and run cleanup before ending an orchestrated session. <br>
+Risk: Local team inboxes and task state may contain sensitive project details or partial work products. <br>
+Mitigation: Review inbox and task contents before sharing summaries, and avoid storing secrets, private URLs, customer data, or machine-specific paths. <br>
+Risk: Parallel implementation agents can overwrite one another or race on shared files when they are not isolated. <br>
+Mitigation: Use exclusive file ownership, run a pre-dispatch file-intersection check, and use separate worktrees for parallel implementation. <br>
+Risk: Multi-agent reviews and judge panels can converge on incorrect answers when agents see each other's outputs too early. <br>
+Mitigation: Use cold-start isolation, collect independent outputs before synthesis, and use fresh reviewers for each re-dispatch round. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-orchestrating-swarms) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
-- [SPEC.md](artifact/SPEC.md) <br>
-- [Codex collaboration quick reference](artifact/references/codex-quick-reference.md) <br>
-- [Orchestration Patterns](artifact/references/orchestration-patterns.md) <br>
-- [Preset Team Compositions](artifact/references/team-compositions.md) <br>
-- [Agent Types](artifact/references/agent-types.md) <br>
-- [Handoff Templates](artifact/references/handoff-templates.md) <br>
-- [Dispatch Anti-Patterns](artifact/references/dispatch-anti-patterns.md) <br>
-- [Anti-Sycophancy Patterns](artifact/references/anti-sycophancy.md) <br>
-- [Swarm Resilience Patterns](artifact/references/resilience-patterns.md) <br>
-- [Spawn Backends](artifact/references/spawn-backends.md) <br>
-- [Environment Variables & Team Config](artifact/references/environment-config.md) <br>
-- [Task System Integration](artifact/references/task-system.md) <br>
-- [TeammateTool Operations](artifact/references/teammate-operations.md) <br>
-- [Message Formats](artifact/references/message-formats.md) <br>
-- [Context Carry-Forward Strategies](artifact/references/context-carry-forward.md) <br>
-- [Orchestration Primitives](artifact/references/primitives.md) <br>
-- [Orchestrating Swarms Quick Reference](artifact/references/quick-reference.md) <br>
+- [Agent Types](references/agent-types.md) <br>
+- [Anti-Sycophancy Patterns](references/anti-sycophancy.md) <br>
+- [Codex Collaboration Quick Reference](references/codex-quick-reference.md) <br>
+- [Context Carry-Forward Strategies](references/context-carry-forward.md) <br>
+- [Dispatch Anti-Patterns](references/dispatch-anti-patterns.md) <br>
+- [Environment Variables and Team Config](references/environment-config.md) <br>
+- [Handoff Templates](references/handoff-templates.md) <br>
+- [Message Formats](references/message-formats.md) <br>
+- [Orchestration Patterns](references/orchestration-patterns.md) <br>
+- [Orchestration Primitives](references/primitives.md) <br>
+- [Orchestrating Swarms Quick Reference](references/quick-reference.md) <br>
+- [Swarm Resilience Patterns](references/resilience-patterns.md) <br>
+- [Spawn Backends](references/spawn-backends.md) <br>
+- [Task System Integration](references/task-system.md) <br>
+- [Preset Team Compositions](references/team-compositions.md) <br>
+- [TeammateTool Operations](references/teammate-operations.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline code examples, JSON examples, shell command snippets, and structured handoff templates] <br>
+**Output Format:** [Markdown guidance with inline code, shell command snippets, and structured task or handoff templates.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces coordination plans, task prompts, handoff templates, verification checklists, and cleanup guidance for the active agent harness.] <br>
+**Other Properties Related to Output:** [Produces orchestration plans, task prompts, handoff instructions, verification guidance, and agent coordination commands for the active harness.] <br>
 
 ## Skill Version(s): <br>
-4.3.1 (source: server evidence release.version and target metadata) <br>
+4.3.2 (source: release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

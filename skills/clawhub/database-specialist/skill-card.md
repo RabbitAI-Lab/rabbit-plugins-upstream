@@ -1,5 +1,5 @@
 ## Description: <br>
-Database Specialist provides database schema design, SQL optimization, index strategy, migration planning, and performance-diagnosis guidance, with order creation and payment verification handled through a third-party Clawtip service. <br>
+Database architecture design, SQL optimization, schema review, and migration planning as a paid AI-delivered service. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, database engineers, and application teams use this skill to review schema designs, tune SQL queries, plan indexes, assess migrations, and reason about database performance issues. <br>
+Developers and database operators use this skill to request paid assistance with database architecture, SQL optimization, schema review, and migration planning. The skill creates an order, hands payment to clawtip, verifies payment, and returns service status for the agent to continue the consultation in conversation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The workflow sends full database question text and encrypted payment credential data to a third-party service. <br>
-Mitigation: Install only if this data sharing is acceptable, and avoid including schemas, queries, hostnames, connection strings, secrets, or production details in the question. <br>
-Risk: The skill requests network, credential, filesystem read, and filesystem write permissions that are broader than pure database advice requires. <br>
-Mitigation: Review why credential access is needed before use, run in a constrained environment when possible, and clean up local order files after verification. <br>
-Risk: The service helper script may fail before completing the verification workflow. <br>
-Mitigation: Review and test the helper scripts in an isolated environment before relying on the paid service flow. <br>
+Risk: Question text is transmitted to api.ideaidea.com.cn during order creation. <br>
+Mitigation: Do not include private schemas, credentials, production logs, or other sensitive database details unless the user intends to share them with the service operator. <br>
+Risk: A payment credential written by clawtip is read from local order storage and sent to api.ideaidea.com.cn for verification. <br>
+Mitigation: Use the documented clawtip payment flow and verify the order number before running service verification. <br>
+Risk: Order metadata is stored under the user's OpenClaw order directory. <br>
+Mitigation: Treat local order files as sensitive because they include the question text and payment-related metadata; remove them when they are no longer needed. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/jinyu12166/skills/database-specialist) <br>
-- [Third-party verification service](https://api.ideaidea.com.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/jinyu12166/skills/database-specialist) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/jinyu12166) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Chinese-language Markdown guidance with SQL snippets and helper-script status output] <br>
+**Output Type(s):** [text, shell commands, guidance] <br>
+**Output Format:** [Markdown instructions with bash commands and command-line status output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a paid verification workflow that writes local order JSON files and exchanges order and credential data with a third-party HTTPS service.] <br>
+**Other Properties Related to Output:** [Order creation returns ORDER_NO, AMOUNT, QUESTION, and INDICATOR; service verification returns PAY_STATUS, ALREADY_FULFILLED, AUTHORIZATION_RESULT, and JSON_RESULT.] <br>
 
 ## Skill Version(s): <br>
-1.0.22 (source: server evidence release.version) <br>
+1.0.27 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

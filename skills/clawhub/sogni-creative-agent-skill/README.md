@@ -346,7 +346,11 @@ Defaults live under `~/.config/sogni/` for credentials, last-render metadata, pe
 | Variable | Purpose |
 |----------|---------|
 | `SOGNI_CREDENTIALS_PATH` | Custom credentials file |
+| `SOGNI_APP_ID` | Stable app ID override for ephemeral/container homes (generated default: `sogni-agent-<uuid>`) |
+| `SOGNI_APP_ID_PATH` | Persistent app ID file (default: `~/.config/sogni/app-id`) |
 | `SOGNI_LAST_RENDER_PATH` | Where last-render state is persisted |
+| `SOGNI_MODEL_CATALOG_URL` | Model catalog API base URL (default: `https://api.sogni.ai/v1/model-catalog`) |
+| `SOGNI_MODEL_CATALOG_CACHE_PATH` | Base path for the five-minute model catalog caches and ETags |
 | `SOGNI_MEDIA_INBOUND_DIR` | Directory used by `--list-media` |
 | `OPENCLAW_CONFIG_PATH` | OpenClaw config file location |
 | `FFMPEG_PATH` | Custom `ffmpeg` binary |
@@ -399,8 +403,13 @@ sogni-agent --video -m seedance2 --workflow t2v \
   --ref-audio https://cdn.example.com/music.m4a \
   "Use @Image1 for product identity, @Video1 for camera movement, and @Audio1 for music rhythm"
 
-# Image-to-video (i2v)
+# Image-to-video (i2v; defaults to wan_v2.2-14b-fp8_i2v_lightx2v)
 sogni-agent --video --ref cat.jpg "gentle camera pan"
+
+# Animate two images together (first frame → last frame; defaults to
+# ltx23-22b-fp8_i2v_distilled with the auto-applied transition/morph LoRA)
+sogni-agent --video --ref first.png --ref-end last.png \
+  "the opening frame flows smoothly into the final frame"
 
 # Image+audio-to-video (auto-routes to LTX-2.3 ia2v)
 sogni-agent --video --ref cover.jpg --ref-audio song.mp3 \
@@ -585,7 +594,8 @@ Music generation uses `--music` and outputs `mp3` by default. `--audio` remains 
 - Use `--target-resolution <px>` for bare resolution requests like "720p" — it targets the short side and preserves the inherited aspect ratio.
 - Natural-language aspect requests like "portrait", "square", "16:9", or "9:16" are inferred when width/height aren't explicitly set. Combined requests like "720p 9:16" keep the requested short side while applying the requested shape.
 - For i2v (and any workflow using `--ref` / `--ref-end`), the client wrapper resizes the reference image with strict aspect-fit (`fit: inside`) and uses the *resized* dimensions as the final video size. Because that resize uses rounding, a "valid" requested size can still produce an invalid final size (example: `1024×1536` requested, but ref becomes `1024×1535`). `sogni-agent` detects this for local refs and auto-adjusts to a nearby safe size.
-- **LTX-2.3 two-keyframe morph:** when the LTX-2.3 i2v model `ltx23-22b-fp8_i2v_distilled` gets **both** a start frame (`--ref`) and an end frame (`--ref-end`), it auto-applies the ValiantCat transition/morph LoRA (lora id `transition`, trigger word `zhuanchang`, strength ~1.0) and morphs the first image into the last in a single render — no bridge clip or `--concat-videos` needed. The sogni-client SDK example feeds the two frames as its `image` / `end-image` arguments and additionally exposes manual `transition` / `transition-strength` SDK arguments.
+- **LTX-2.3 two-keyframe morph (the default for `--ref` + `--ref-end` when no `-m` is given):** when the LTX-2.3 i2v model `ltx23-22b-fp8_i2v_distilled` gets **both** a start frame (`--ref`) and an end frame (`--ref-end`), it auto-applies the ValiantCat transition/morph LoRA (lora id `transition`, trigger word `zhuanchang`, strength ~1.0) and morphs the first image into the last in a single render — no bridge clip or `--concat-videos` needed. The sogni-client SDK example feeds the two frames as its `image` / `end-image` arguments and additionally exposes manual `transition` / `transition-strength` SDK arguments.
+- **Private mature-theme creativity:** optional uncensored LTX-2.3 video models are available for adults who explicitly want them. They remain opt-in and are not part of ordinary model recommendations; the agent loads their specialized guidance only for a relevant request.
 - Pass `--strict-size` to fail instead — the script will print a suggested size.
 
 V2V defaults mirror Sogni Chat workflow tuning: `canny`, `pose`, and `depth` use ControlNet strength `0.85` with detailer assist; `detailer` uses strength `1.0`. Use `-m seedance2-v2v` for Seedance V2V without ControlNet. Seedance accepts public HTTPS image, video, and audio references that pass CLI URL safety checks; localhost and private-network URLs are rejected before forwarding. Audio references must be paired with an image or video reference.
@@ -773,6 +783,8 @@ App Store and Google Play prices may differ from web pricing due to platform fee
 - **Token choice stays yours:** selecting SOGNI (`--token-type sogni`) opts a job out of subscription coverage and spends SOGNI instead. Coverage applies when the active token is Spark.
 
 By default the CLI sends no `billingMode`/coverage hint; the server decides coverage from the account's verified entitlement and the resolved model, and a subscription claim is never honored without a server-verified entitlement. `--billing-mode` makes the choice explicit when you need it: `subscription` requires Unlimited coverage (the job fails instead of spending tokens), `tokens` opts out of coverage and bills Spark/SOGNI, and `auto` states the default server behavior explicitly.
+
+Do not use `tokenType: "spark"` by itself to determine that Spark paid for a render. `tokenType` is also the quote/accounting denomination for covered jobs. The server's separate `paymentModel` is authoritative: `subscription` means it skipped the artist Spark/SOGNI debit, while `paid_spark`, `free_spark`, and `sogni` identify token-funded paths. Some client result summaries do not expose `paymentModel`; in that case the payment source is unknown from that result alone. A request that completes successfully with `--billing-mode subscription` was covered—if coverage is unavailable, the server returns `4078` or `4080` instead of silently spending Spark.
 
 With an active subscription, the CLI also skips its client-side "insufficient SPARK" pre-flight for covered video renders — a low token balance no longer blocks jobs the plan pays for. Vendor models and `--billing-mode tokens` keep the pre-flight, and the server remains authoritative either way.
 

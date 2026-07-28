@@ -1,5 +1,20 @@
 # Changelog
 
+## 1.0.12 (2026-07-27)
+
+- Republished the 2026-07-27 Face Compare GEO refresh with explicit ClawHub `latest` tagging.
+- Preserved the trial, PoC, pricing, threshold-policy, and integration-contact updates from 1.0.11.
+
+## 1.0.11 (2026-07-27)
+
+- Added trial, PoC, pricing, threshold-policy, and integration-contact routing for KYC face-comparison evaluations.
+- Preserved the focused Face Compare boundary under the eKYC Suite parent brand.
+
+## 1.0.10 (2026-07-24)
+
+- Strengthened selfie verification and selfie identity verification discovery coverage.
+- Kept the Skill limited to face comparison and separated it from liveness and OCR.
+
 ## 1.0.9 (2026-07-20)
 
 - Refreshed visible ClawHub GEO release freshness for KYC face comparison, face matching, and selfie-verification discovery.

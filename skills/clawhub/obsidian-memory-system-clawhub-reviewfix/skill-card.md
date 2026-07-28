@@ -1,5 +1,5 @@
 ## Description: <br>
-Persistent memory system using Obsidian as local storage for daily work logs, task tracking, decision records, and cross-session context continuity for AI coding agents. <br>
+Obsidian persistent memory system: daily logs, task tracking, decision records, and project context for AI agents. AI-delivered service. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and AI coding-agent users use this skill to capture and recall project memory in a local Obsidian vault, including work logs, tasks, decisions, and context from prior sessions. <br>
+Developers and AI-agent users use this paid service wrapper to create Obsidian memory-service orders, verify payment, and receive memory-management guidance in the conversation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The release contacts api.ideaidea.com.cn, sends user question text during order creation, and verifies a local payment credential with the service. <br>
-Mitigation: Review the disclosed network flow before installation, avoid sending sensitive question text, and confirm the requested network, credential, and filesystem permissions are acceptable. <br>
-Risk: The packaged artifacts mostly implement payment verification and do not include concrete Obsidian memory functionality. <br>
-Mitigation: Confirm the installed artifact provides the expected memory workflow before relying on it for project records or cross-session continuity. <br>
+Risk: Question text and payment verification data are sent to the third-party service backend. <br>
+Mitigation: Do not submit private vault contents, secrets, or sensitive business details unless you are comfortable sharing them with that service. <br>
+Risk: Order metadata is stored locally for the paid-service flow. <br>
+Mitigation: Protect local order files and remove them when they are no longer needed. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/jinyu12166/skills/obsidian-memory-system-clawhub-reviewfix) <br>
-- [clawtip verification service](https://api.ideaidea.com.cn) <br>
+- [Publisher profile](https://clawhub.ai/user/jinyu12166) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command outputs and local Obsidian note content] <br>
+**Output Type(s):** [Text, Shell commands, Guidance] <br>
+**Output Format:** [Markdown guidance with command-line status output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires clawtip-skill for payment verification before service delivery.] <br>
+**Other Properties Related to Output:** [Paid service flow uses local order metadata and payment verification before producing guidance.] <br>
 
 ## Skill Version(s): <br>
-3.0.36 (source: ClawHub release metadata) <br>
+3.0.38 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,0 +1,23 @@
+{
+  "skill_name": "alphaear-signal-tracker",
+  "positive": [
+    {
+      "prompt": "基于我上周的光模块需求上修信号，结合最近公告和股价表现，判断这个信号是增强还是削弱",
+      "assertions": [
+        "requires or reconstructs baseline signal",
+        "uses fresh news/data sources",
+        "classifies signal evolution"
+      ]
+    }
+  ],
+  "negative": [
+    {
+      "prompt": "查询光模块板块最新新闻",
+      "expected_route": "mx-search"
+    },
+    {
+      "prompt": "把这个信号画成传导链图",
+      "expected_route": "alphaear-logic-visualizer"
+    }
+  ]
+}

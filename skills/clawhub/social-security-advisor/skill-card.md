@@ -1,5 +1,5 @@
 ## Description: <br>
-个人社保政策查询与缴费规划助手 helps users ask about retirement timing, pension estimates, flexible employment social-insurance contribution choices, 4050 subsidy applications, social-security transfers, contribution gaps, medical insurance choices, out-of-area medical settlement, and personal pension planning. <br>
+个人社保全攻略智能助手，聚焦延迟退休年龄计算、基本养老金测算、灵活就业人员参保选档、4050社保补贴申领、社保关系转移接续、断缴影响与补救、居民医保与职工医保选择、异地就医直接结算、个人养老金制度等个人社保全场景。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Individuals and advisors working with China personal social-insurance scenarios use this skill to get structured policy guidance, contribution-planning prompts, pension and subsidy planning support, and links to an interactive self-check workflow. It is informational and does not replace official social-insurance agency determinations or licensed professional advice. <br>
+Individuals and advisors use this skill to ask personal social-security planning questions, compare pension and contribution scenarios, and receive structured checklists for retirement timing, flexible employment contributions, medical insurance, transfer continuity, and benefit eligibility. <br>
 
 ### Deployment Geography for Use: <br>
-China-focused policy scope; no deployment geography restriction was stated in the evidence. <br>
+China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: ClawScan marked the release suspicious because a personal social-security advisor includes unrelated tax-policy services, remote routing, and installers that can change local skill or MCP configuration. <br>
-Mitigation: Review the publisher, inspect the files before execution, and only allow related-skill installation or MCP configuration changes after explicit approval. <br>
-Risk: The artifact stores local API credentials and can call remote services for policy, calculation, and risk-check workflows. <br>
-Mitigation: Avoid entering sensitive personal, employment, medical, retirement, or identity details unless the service data flow and privacy terms are acceptable. <br>
-Risk: The skill provides informational social-insurance and pension planning guidance that may be incorrect, incomplete, or out of date for a user's locality. <br>
-Mitigation: Verify retirement age, pension amounts, contribution eligibility, subsidies, and reimbursement rules with official social-insurance or medical-insurance agencies before acting. <br>
+Risk: The package can make remote calls to mcp.aitaxs.top and register API-key based access for web or MCP-backed workflows. <br>
+Mitigation: Install only when remote service use is expected, and avoid entering sensitive personal, pension, medical, employment, or company identifiers unless the publisher provides clear data-handling and consent details. <br>
+Risk: The release includes broader tax-policy matrix clients, installers, routing logic, and possible local client configuration changes beyond a narrow social-security advisor. <br>
+Mitigation: Review the included installer, routing, and configuration behavior before installation, especially in managed or production agent environments. <br>
+Risk: Social-security calculations and benefit guidance can affect user decisions but may not match final agency determinations. <br>
+Mitigation: Use outputs as planning guidance and verify final retirement age, pension amounts, eligibility, payments, and claims with official social-security or medical-insurance channels. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zxj2devs/skills/social-security-advisor) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/zxj2devs) <br>
-- [Personal Social Security Web Workflow](https://mcp.aitaxs.top/web/topic_workflow_personal_social_security.html) <br>
-- [Tax Policy Knowledge Matrix](https://skillhub.cn/skills/tax-policy-knowledge) <br>
-- [Social Insurance Compliance Skill](https://skillhub.cn/skills/tax-social-insurance) <br>
+- [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/social-security-advisor) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/zxj2devs) <br>
+- [Personal social-security workflow](https://mcp.aitaxs.top/web/topic_workflow_personal_social_security.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Tax-policy MCP service endpoint](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown or plain-text guidance with links, prompts, and optional setup or installation commands.] <br>
+**Output Type(s):** [Text, Markdown, Guidance, Configuration instructions, Shell commands] <br>
+**Output Format:** [Markdown responses with structured checklists, links, and occasional shell or configuration instructions] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May route questions to remote MCP-backed services, use a web workflow, or propose related skill installation; users should review publisher trust, data flow, and configuration changes before use.] <br>
+**Other Properties Related to Output:** [May direct users to a web self-check workflow and remote MCP-backed policy tools.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release evidence and SKILL.md frontmatter) <br>
+3.15.3 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Run a two-role worker/reviewer loop that implements, verifies, independently reviews, and reconciles code changes before returning them to the user. <br>
+Implements and tests code while an independent reviewer challenges every change until all findings are reconciled. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers use Hubo for programming tasks where one agent implements changes and an independent reviewer challenges the implementation until findings are fixed, withdrawn, or escalated. <br>
+Developers use Hubo for explicitly invoked programming tasks where one agent implements and tests code while a separate read-only reviewer challenges changes until findings are reconciled. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The designated work agent may edit project files after explicit activation. <br>
-Mitigation: Invoke the skill only for concrete programming tasks and review the reported diff, decisions, and verification before accepting the result. <br>
-Risk: The final transcript can expose task details, command output, or sensitive content supplied during the work. <br>
-Mitigation: Follow the workflow's redaction rule for credentials, secrets, and system-protected data before final handoff. <br>
-Risk: Unsupported or mismatched host adapter capabilities can weaken the intended worker/reviewer separation. <br>
-Mitigation: Select exactly one supported host adapter from the tools actually exposed, and ask the user before falling back when two resumable roles cannot be created. <br>
+Risk: The work agent may edit files and the reviewer may inspect code and verification evidence. <br>
+Mitigation: Invoke Hubo only on repositories where those actions are acceptable, and review the reported diff and checks before accepting the result. <br>
+Risk: The two-role reconciliation workflow may take longer and produce verbose transcripts. <br>
+Mitigation: Use Hubo when the extra review loop is worth the added time and transcript length for the programming task. <br>
 
 
 ## Reference(s): <br>
-- [Complete Hubo workflow](workflow.md) <br>
-- [Supported host adapters](references/hosts.md) <br>
-- [ClawHub skill page](https://clawhub.ai/h0ngcha0/skills/hubo) <br>
+- [Hubo workflow](references/workflow.md) <br>
+- [Host adapters](references/hosts.md) <br>
+- [Karpathy-inspired coding discipline](https://github.com/multica-ai/andrej-karpathy-skills) <br>
+- [Ponytail](https://github.com/DietrichGebert/ponytail) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown conversation reports with code, command results, review findings, and a final chronological transcript] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown conversation transcript with code, shell command, configuration, and verification details when the task requires them] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a worker/reviewer exchange in the conversation; the workflow says not to store the transcript in a file.] <br>
+**Other Properties Related to Output:** [Requires explicit invocation and may produce verbose multi-agent work and review transcripts.] <br>
 
 ## Skill Version(s): <br>
-0.4.2 (source: server release metadata) <br>
+0.4.5 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

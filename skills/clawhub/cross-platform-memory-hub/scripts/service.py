@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-cross-platform-memory-hub - Deliver memory hub service after payment verification
+cross-platform-memory-hub - Service execution script.
+Reads payCredential from order file and verifies payment with clawtip service.
 """
-
 import argparse
 import hashlib
 import json
@@ -15,19 +15,20 @@ from file_utils import load_order
 DEFAULT_SERVER_URL = "https://api.ideaidea.com.cn"
 GET_RESULT_PATH = "/api/skill/getServiceResult"
 
-SKILL_NAME = "cross-platform-memory-hub"
+SLUG = "cross-platform-memory-hub"
 
 SERVER_URL = DEFAULT_SERVER_URL
 GET_RESULT_URL = f"{SERVER_URL}{GET_RESULT_PATH}"
 
 
-def compute_indicator(skill_name: str) -> str:
-    return hashlib.md5(skill_name.encode("utf-8")).hexdigest()
+def compute_indicator(slug: str) -> str:
+    return hashlib.md5(slug.encode("utf-8")).hexdigest()
 
 
-def request_service_authorization(order_no: str, credential: str) -> dict:
+def verify_payment(order_no: str, credential: str) -> dict | None:
+    """Send credential to service backend for verification."""
     payload = json.dumps({
-        "slug": SKILL_NAME,
+        "slug": SLUG,
         "orderNo": order_no,
         "credential": credential,
     }).encode("utf-8")
@@ -44,29 +45,28 @@ def request_service_authorization(order_no: str, credential: str) -> dict:
         raise RuntimeError(f"Authorization request failed: {e}") from e
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Deliver cross-platform memory hub service after payment verification"
-    )
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Verify payment and get authorization for cross-platform-memory-hub")
     parser.add_argument("order_no", help="Order number")
     args = parser.parse_args()
 
+    indicator = compute_indicator(SLUG)
 
     try:
-        order_data = load_order(compute_indicator(SKILL_NAME), args.order_no)
+        order_data = load_order(indicator, args.order_no)
         credential = order_data.get("payCredential")
         if not credential:
             raise RuntimeError("Missing payCredential in local order file")
-        result = request_service_authorization(args.order_no, credential)
+        result = verify_payment(args.order_no, credential)
     except Exception as e:
         print("PAY_STATUS: ERROR")
         print(f"ERROR_INFO: {e}")
-        return 1
+        sys.exit(1)
 
     if result is None:
-                print("PAY_STATUS: ERROR")
+        print("PAY_STATUS: ERROR")
         print("ERROR_INFO: No response from server")
-        return 1
+        sys.exit(1)
 
     response_code = result.get("responseCode")
     pay_status = result.get("payStatus")
@@ -77,8 +77,9 @@ def main() -> int:
 
     if response_code != "200" or pay_status != "SUCCESS":
         error_info = result.get("errorInfo", "Unknown error")
+        print("PAY_STATUS: ERROR")
         print(f"ERROR_INFO: {error_info}")
-        return 1
+        sys.exit(1)
 
     print("AUTHORIZATION_RESULT=verified")
     _jr = json.dumps({
@@ -88,9 +89,3 @@ def main() -> int:
         "already_fulfilled": already_fulfilled,
     })
     print(f"JSON_RESULT={_jr}")
-
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())

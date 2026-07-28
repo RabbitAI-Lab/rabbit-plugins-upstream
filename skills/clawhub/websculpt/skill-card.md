@@ -1,5 +1,5 @@
 ## Description: <br>
-WebSculpt bootstraps browser automation with a reusable command library by installing or repairing the WebSculpt CLI and routing agents to lifecycle skills for exploration, capture, maintenance, and library management. <br>
+WebSculpt bootstraps a CLI-backed browser automation workflow for external information acquisition, page scraping, API calls, and reusable browser command memory. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, researchers, analysts, content operators, and ecommerce teams use this skill to set up WebSculpt when they need browser automation, web data acquisition, API calls, scraping, or reusable commands for repeated web workflows. <br>
+External users, developers, and agents use this skill to install or recover WebSculpt, then route work into lifecycle skills for browser automation, web data acquisition, scraping, API calls, and repeated web operations. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can install persistent global tooling and lifecycle skills across multiple agent skill directories. <br>
-Mitigation: Install only when persistent WebSculpt behavior is desired, and prefer project-local installation when the workflow should stay scoped to one project. <br>
-Risk: The default global setup can modify skill directories under the user's home folder. <br>
-Mitigation: Review the installation scope and installed files before allowing global setup or later updates. <br>
-Risk: Browser automation and scraping workflows may access logged-in or content-gated web data. <br>
-Mitigation: Use WebSculpt only for accounts, sites, and data sources the user is authorized to access, and review generated commands before reuse. <br>
+Risk: The skill may install global npm packages and persistent lifecycle skills under the user's home directory. <br>
+Mitigation: Review the install scope before use and prefer project-local installation when persistent global behavior is not desired. <br>
+Risk: The skill can route agents toward browser automation involving logged-in websites or private account data. <br>
+Mitigation: Use it only with accounts and sessions approved for automation, and review outputs before relying on or sharing collected data. <br>
+Risk: The security verdict is suspicious because the bootstrap workflow can change future agent behavior through installed lifecycle skills. <br>
+Mitigation: Review and scan the installed lifecycle skills before deployment, especially in shared or production agent environments. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/bqw1013/skills/websculpt) <br>
-- [Skill documentation](artifact/SKILL.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and routing instructions.] <br>
+**Output Format:** [Markdown with inline shell commands and routing guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May install persistent global or project-local WebSculpt tooling and lifecycle skill files depending on user intent and environment state.] <br>
+**Other Properties Related to Output:** [May direct the agent to install or verify WebSculpt CLI tooling and lifecycle skills before routing browser automation work.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+1.0.6 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

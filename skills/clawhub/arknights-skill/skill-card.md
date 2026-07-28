@@ -1,5 +1,5 @@
 ## Description: <br>
-Answer Arknights questions about operator roles, skill mechanics, investment planning, story context, terminology, and stage strategy; read and maintain a local structured Doctor profile so advice can adapt to the user's roster and progress; clearly separate fresh version checks from non-current judgment. <br>
+Answer Arknights operator, investment, lore, and stage-strategy questions while maintaining a local Doctor profile. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External players and agent users use this skill to get structured Arknights operator, investment, lore, terminology, comparison, and stage-strategy guidance. The skill can personalize advice from explicitly provided account facts stored in a local Doctor profile. <br>
+Arknights players use this skill to get personalized operator investment, stage strategy, lore, terminology, comparison, and resource-planning guidance. It can tailor advice to a local Doctor profile when shell access and the profile file are available. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may save explicitly stated game account facts, including server, level, UID, goals, resources, and operators, in a local Doctor profile. <br>
-Mitigation: Tell users where the profile is stored and avoid asking them to provide sensitive information beyond what is needed for Arknights guidance. <br>
-Risk: The optional manual install path uses a remote shell script. <br>
-Mitigation: Prefer installation through a skill manager, or inspect and pin the install script before running it. <br>
-Risk: Version-sensitive Arknights guidance can become stale. <br>
-Mitigation: For current events, banners, and strength assessments, perform a fresh lookup when available or clearly state that conclusions are not current. <br>
+Risk: The skill maintains a local Doctor profile that can include account details such as server, level, UID, resources, goals, and operator investment. <br>
+Mitigation: Store only useful account facts, avoid saving UID unless needed, and review or delete ~/.config/arknights-skill/doctor-profile.json when the profile is no longer wanted. <br>
+Risk: The quick start includes a manual curl-to-shell install command. <br>
+Mitigation: Prefer the package-manager install paths, or inspect the installer before running it in a shell. <br>
+Risk: Version-sensitive Arknights guidance can become stale when live lookup is unavailable. <br>
+Mitigation: Use live web lookup for current banners, events, and meta questions; otherwise clearly caveat that conclusions are not based on current version data. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/morandot/arknights-skill) <br>
-- [Project Homepage](https://github.com/morandot/arknights-skill) <br>
-- [Quick Start](references/quickstart.md) <br>
-- [Answer Templates](references/answer-templates.md) <br>
-- [Style Examples](references/examples.md) <br>
-- [Doctor Profile Schema](references/doctor-profile-schema.md) <br>
+- [ClawHub skill page](https://clawhub.ai/morandot/skills/arknights-skill) <br>
+- [Server-resolved GitHub source](https://github.com/morandot/arknights-skill/tree/main/arknights-skill) <br>
+- [Homepage](https://github.com/morandot/arknights-skill) <br>
+- [Quick start guide](references/quickstart.md) <br>
+- [Doctor profile schema](references/doctor-profile-schema.md) <br>
+- [Answer templates](references/answer-templates.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with occasional inline shell commands or JSON snippets for local profile operations] <br>
+**Output Format:** [Natural-language guidance with Markdown structure, optional shell commands, and optional JSON snippets for profile updates.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read and update a local Doctor profile when the client permits local file access.] <br>
+**Other Properties Related to Output:** [May read and update a local Doctor profile JSON when client shell access is available; version-sensitive answers require live lookup or an explicit freshness caveat.] <br>
 
 ## Skill Version(s): <br>
-1.4.0 (source: server release metadata) <br>
+1.4.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

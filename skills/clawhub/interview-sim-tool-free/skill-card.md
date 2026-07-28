@@ -1,5 +1,5 @@
 ## Description: <br>
-This skill guides an agent to conduct role-specific mock interviews for job seekers, adapt question difficulty by experience level, score answers, suggest improvements, and produce a session scorecard. <br>
+面试模拟工具帮助个人求职者进行工程、产品、业务和职能等多岗位模拟面试，并按经验等级调整难度、提供逐题评分和改进建议。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External job seekers use this skill for self-directed mock interview practice across engineering, product, business, and functional roles. It helps them answer one question at a time, receive scoring and improvement feedback, and review a final scorecard for targeted study. <br>
+External individual job seekers use this skill to run single-session mock interviews for selected roles, seniority levels, focus areas, and durations. The agent asks interview questions, gives per-question feedback, and produces a scorecard with strengths, gaps, and suggested study areas. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill declares broad read, exec, and write authority for a mock interview workflow. <br>
-Mitigation: Prefer a version that removes exec and write access, or require explicit user confirmation before any file operation or command execution. <br>
-Risk: The artifact describes create, modify, delete, import, and export behavior without a clear scope for a mock interview skill. <br>
-Mitigation: Limit any save, export, or import actions to user-requested interview notes or scorecards and review generated actions before execution. <br>
-Risk: Interview scoring and advice may be incomplete or misleading for specialized roles or high-stakes hiring decisions. <br>
-Mitigation: Treat the generated scorecard as practice feedback and supplement it with human review or domain-specific preparation. <br>
+Risk: The skill requests exec and write capabilities even though the interview simulator primarily operates through chat. <br>
+Mitigation: Run it in a restricted workspace and approve command execution or file writes only when the user explicitly asks for a specific action. <br>
+Risk: The scanner verdict is suspicious because the requested agent powers are broader than the apparent interview-practice use case. <br>
+Mitigation: Prefer a release that removes exec/write access or clearly limits the skill to conversational interview simulation. <br>
 
 
 ## Reference(s): <br>
@@ -32,12 +30,12 @@ Mitigation: Treat the generated scorecard as practice feedback and supplement it
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured text with optional JSON-style summaries] <br>
+**Output Format:** [Markdown conversation with interview questions, feedback, scores, and a final scorecard] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces interview questions, per-question feedback, scores, ideal-answer guidance, and a final session scorecard.] <br>
+**Other Properties Related to Output:** [May include structured scorecard-style summaries and short command responses such as skip, hint, explain, score, harder, easier, and end.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+1.0.2 (source: evidence.json release.version) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

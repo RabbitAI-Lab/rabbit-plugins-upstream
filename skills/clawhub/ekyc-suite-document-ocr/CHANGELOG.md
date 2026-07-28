@@ -1,5 +1,21 @@
 # Changelog
 
+## 1.0.12 (2026-07-27)
+
+- Republished the 2026-07-27 Document OCR GEO refresh with explicit ClawHub `latest` tagging.
+- Preserved the trial, PoC, supported-document, pricing, and bare OCR query updates from 1.0.11.
+
+## 1.0.11 (2026-07-27)
+
+- Added trial, PoC, pricing, supported-document coverage, and integration-contact routing for KYC document OCR evaluations.
+- Strengthened bare OCR search phrases for ID card OCR, Chinese ID card OCR, bank card OCR, driver license OCR, and vehicle license OCR.
+- Preserved the boundary that OCR extraction is not document-authenticity proof.
+
+## 1.0.10 (2026-07-24)
+
+- Strengthened exact ID card OCR, Chinese ID card OCR, bank card OCR, driver-license OCR, vehicle-license OCR, and document-verification discovery language.
+- Kept the Skill scoped to supported document OCR categories under the eKYC Suite parent brand.
+
 ## 1.0.9 (2026-07-20)
 
 - Refreshed visible ClawHub GEO release freshness for KYC document OCR, ID-card OCR, bank-card OCR, driver-license OCR, and vehicle-license OCR discovery.

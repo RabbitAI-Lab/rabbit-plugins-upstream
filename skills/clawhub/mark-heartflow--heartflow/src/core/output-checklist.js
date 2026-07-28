@@ -5,7 +5,7 @@
 class OutputChecklist {
   constructor() {
     this.name = 'OutputChecklist';
-    this.version = '1.1.0';
+    this.version = '1.3.0';
     this._checkHistory = [];
   }
 
@@ -75,6 +75,14 @@ class OutputChecklist {
     if (!step5.passed) {
       results.passed = false;
       results.warnings.push(...step5.issues);
+    }
+
+    // Step 6: 心虫辨别检查 — 输出前用6维辨别器扫一遍
+    const step6 = this._runDiscriminationCheck(response);
+    results.steps.push({ step: 6, name: 'discrimination', ...step6 });
+    if (!step6.passed) {
+      results.passed = false;
+      results.warnings.push(...step6.issues);
     }
 
     this._record(input, results);
@@ -268,6 +276,212 @@ class OutputChecklist {
       issues,
       advice: issues.length > 0 ? issues.join('；') : '道德边界检查通过'
     };
+  }
+
+  // Step 6: 心虫辨别检查 — 调用 index.js 的 6 维辨别器
+  //         降级回退推荐：根据问题类型给出 rewrite/reject/block 建议
+  _runDiscriminationCheck(response) {
+    if (!response || typeof response !== 'string') {
+      return { passed: true, issues: [], advice: '无输出，跳过辨别' };
+    }
+    try {
+      const idx = require('../index.js');
+      const r = idx.discriminate(response, []);
+
+      const issues = [];
+      const dims = r.dimensions;
+      const triggeredDims = [];  // 追踪触发的维度，用于降级回退判断
+
+      // sycophancy 检测到即有风险
+      if (dims.sycophancy.totalHits > 0) {
+        issues.push(`检测到 sycophancy 信号(${dims.sycophancy.totalHits}处: ${dims.sycophancy.signals.map(s => s.type).join(',')})`);
+        triggeredDims.push('sycophancy');
+      }
+      // 矛盾 → 警告
+      if (dims.contradiction.count > 0) {
+        issues.push(`输出含自相矛盾(${dims.contradiction.count}处)`);
+        triggeredDims.push('contradiction');
+      }
+      // 模糊表述过多
+      if (dims.vagueness.count > 2) {
+        issues.push(`模糊表述过多(${dims.vagueness.count}处: ${dims.vagueness.matches.map(m => m.pattern).join(',')})`);
+        triggeredDims.push('vagueness');
+      }
+      // 逻辑谬误
+      if (dims.fallacies.count > 0) {
+        issues.push(`含逻辑谬误(${dims.fallacies.fallacies.map(f => f.type).join(',')})`);
+        triggeredDims.push('fallacies');
+      }
+      // 信心偏差（情感操纵相关）
+      if (dims.confidence.count > 0) {
+        issues.push(`信心偏差(${dims.confidence.issues.map(i => i.detail).join(';')})`);
+        triggeredDims.push('confidence');
+      }
+      // 输出检查跳过证据维度（输出不是论断，不需要外部证据）
+
+      // ─── [v6.3.7] 新增6维：预设陷阱/情感操纵/双重束缚/信息剥夺/虚假紧迫感/答案包装 ──
+      if (dims.presupposition && dims.presupposition.count > 0) {
+        issues.push(`含预设陷阱(${dims.presupposition.count}处: ${dims.presupposition.presuppositions?.map(p => p.type).join(',') || 'loaded'})`);
+        triggeredDims.push('presupposition');
+      }
+      if (dims.emotional_manipulation && dims.emotional_manipulation.count > 0) {
+        issues.push(`含情感操纵(${dims.emotional_manipulation.count}处: ${dims.emotional_manipulation.manipulations?.map(m => m.type).join(',') || 'manipulation'})`);
+        triggeredDims.push('emotional_manipulation');
+      }
+      if (dims.double_bind && dims.double_bind.count > 0) {
+        issues.push(`含双重束缚(${dims.double_bind.count}处)`);
+        triggeredDims.push('double_bind');
+      }
+      if (dims.info_deprivation && dims.info_deprivation.count > 0) {
+        issues.push(`含信息剥夺(${dims.info_deprivation.count}处)`);
+        triggeredDims.push('info_deprivation');
+      }
+      if (dims.false_urgency && dims.false_urgency.count > 0) {
+        issues.push(`含虚假紧迫感(${dims.false_urgency.count}处: ${dims.false_urgency.urgencies?.map(u => u.pattern).join(',') || 'urgency'})`);
+        triggeredDims.push('false_urgency');
+      }
+      if (dims.empty_answer && dims.empty_answer.count > 0) {
+        issues.push(`含答案包装(${dims.empty_answer.count}处: 空话/回避)`);
+        triggeredDims.push('empty_answer');
+      }
+      if (dims.moral_foundations && dims.moral_foundations.count > 0) {
+        issues.push(`含道德基础框架(${dims.moral_foundations.count}处: ${dims.moral_foundations.foundations?.map(f => f.label).join(',')})`);
+      }
+      if (dims.prompt_injection && dims.prompt_injection.count > 0) {
+        issues.push(`含提示注入(${dims.prompt_injection.count}处: ${dims.prompt_injection.injections?.map(i => i.type).join(',')})`);
+        triggeredDims.push('prompt_injection');
+      }
+      if (dims.code_security && dims.code_security.count > 0) {
+        issues.push(`含代码安全问题(${dims.code_security.count}处: ${dims.code_security.types?.join(',')})`);
+        triggeredDims.push('code_security');
+      }
+      if (dims.dehumanization && dims.dehumanization.count > 0) {
+        issues.push(`含非人化语言(${dims.dehumanization.count}处: ${dims.dehumanization.categories?.join(',')})`);
+        triggeredDims.push('dehumanization');
+      }
+      if (dims.bullshit_recognition && dims.bullshit_recognition.count > 0) {
+        issues.push(`含空洞胡扯(${dims.bullshit_recognition.count}处: ${dims.bullshit_recognition.categories?.join(',')})`);
+        triggeredDims.push('bullshit_recognition');
+      }
+      if (dims.gaslighting && dims.gaslighting.count > 0) {
+        issues.push(`含煤气灯操纵(${dims.gaslighting.count}处: ${dims.gaslighting.patterns?.join(',')})`);
+        triggeredDims.push('gaslighting');
+      }
+      if (dims.victim_blaming && dims.victim_blaming.count > 0) {
+        issues.push(`含受害者归咎(${dims.victim_blaming.count}处)`);
+        triggeredDims.push('victim_blaming');
+      }
+      if (dims.hate_speech && dims.hate_speech.count > 0) {
+        issues.push(`含仇恨言论(${dims.hate_speech.count}处: ${dims.hate_speech.categories?.join(',')})`);
+        triggeredDims.push('hate_speech');
+      }
+      if (dims.dogwhistle && dims.dogwhistle.count > 0) {
+        issues.push(`含狗哨言论(${dims.dogwhistle.count}处: ${dims.dogwhistle.signals?.join(',')})`);
+        triggeredDims.push('dogwhistle');
+      }
+      if (dims.whataboutism && dims.whataboutism.count > 0) {
+        issues.push(`含whataboutism转移(${dims.whataboutism.count}处)`);
+        triggeredDims.push('whataboutism');
+      }
+      if (dims.false_equivalence && dims.false_equivalence.count > 0) {
+        issues.push(`含虚假等同(${dims.false_equivalence.count}处)`);
+        triggeredDims.push('false_equivalence');
+      }
+      if (dims.hasty_generalization && dims.hasty_generalization.count > 0) {
+        issues.push(`含草率概括(${dims.hasty_generalization.count}处)`);
+        triggeredDims.push('hasty_generalization');
+      }
+      if (dims.slippery_slope && dims.slippery_slope.count > 0) {
+        issues.push(`含滑坡谬误(${dims.slippery_slope.count}处)`);
+        triggeredDims.push('slippery_slope');
+      }
+      if (dims.appeal_to_authority_boost && dims.appeal_to_authority_boost.count > 0) {
+        issues.push(`含不当权威引用(${dims.appeal_to_authority_boost.count}处)`);
+        triggeredDims.push('appeal_to_authority_boost');
+      }
+      if (dims.reasoning_coherence && dims.reasoning_coherence.count > 0) {
+        issues.push(`推理连贯性不足(${dims.reasoning_coherence.count}处: ${dims.reasoning_coherence.issues?.join(',')})`);
+        triggeredDims.push('reasoning_coherence');
+      }
+      if (dims.theory_of_mind && dims.theory_of_mind.count > 0) {
+        issues.push(`心理理论缺失(${dims.theory_of_mind.count}处: ${dims.theory_of_mind.misses?.join(',')})`);
+        triggeredDims.push('theory_of_mind');
+      }
+      if (dims.goal_misalignment && dims.goal_misalignment.count > 0) {
+        issues.push(`目标失调(${dims.goal_misalignment.count}处: ${dims.goal_misalignment.misalignments?.join(',')})`);
+        triggeredDims.push('goal_misalignment');
+      }
+      if (dims.counterfactual && dims.counterfactual.count > 0) {
+        issues.push(`反事实推理问题(${dims.counterfactual.count}处)`);
+        triggeredDims.push('counterfactual');
+      }
+      if (dims.social_norm && dims.social_norm.count > 0) {
+        issues.push(`违反社会规范(${dims.social_norm.count}处: ${dims.social_norm.norms?.join(',')})`);
+        triggeredDims.push('social_norm');
+      }
+      if (dims.meta_cognition && dims.meta_cognition.count > 0) {
+        issues.push(`元认知缺失(${dims.meta_cognition.count}处: ${dims.meta_cognition.misses?.join(',')})`);
+        triggeredDims.push('meta_cognition');
+      }
+      if (dims.capability_overclaim && dims.capability_overclaim.count > 0) {
+        issues.push(`能力过度宣称(${dims.capability_overclaim.count}处: ${dims.capability_overclaim.claims?.join(',')})`);
+        triggeredDims.push('capability_overclaim');
+      }
+      if (dims.deceptive_alignment && dims.deceptive_alignment.count > 0) {
+        issues.push(`欺骗性对齐(${dims.deceptive_alignment.count}处: ${dims.deceptive_alignment.patterns?.join(',')})`);
+        triggeredDims.push('deceptive_alignment');
+      }
+      if (dims.instrumental_reasoning && dims.instrumental_reasoning.count > 0) {
+        issues.push(`工具性推理异常(${dims.instrumental_reasoning.count}处: ${dims.instrumental_reasoning.behaviors?.join(',')})`);
+        triggeredDims.push('instrumental_reasoning');
+      }
+
+      // === 降级回退推荐 ===
+      // 根据触发的维度类型和数量，给出调用方应如何处理
+      let recommendation = null;
+      let message = '';
+      if (issues.length > 0) {
+        const uniqueTypes = [...new Set(triggeredDims)];
+        if (uniqueTypes.length > 1) {
+          // 混合情况 → reject
+          recommendation = 'reject';
+          message = '回复多重问题，建议重新生成';
+        } else {
+          const t = uniqueTypes[0];
+          if (t === 'sycophancy') {
+            recommendation = 'rewrite';
+            message = '重写回复去除谄媚表述';
+          } else if (t === 'contradiction') {
+            recommendation = 'reject';
+            message = '回复含矛盾，需重新分析';
+          } else if (t === 'fallacies') {
+            recommendation = 'rewrite';
+            message = '回复含逻辑谬误，需修正论证';
+          } else if (t === 'vagueness') {
+            recommendation = 'rewrite';
+            message = '回复过于模糊，需要具体化';
+          } else if (t === 'confidence') {
+            recommendation = 'block';
+            message = '回复含情感操纵';
+          }
+        }
+      }
+
+      const result = {
+        passed: issues.length === 0,
+        issues,
+        score: r.overallScore,
+        dimensions: r.summary,
+        advice: issues.length > 0 ? issues.join('；') : '心虫辨别检查通过',
+      };
+      if (recommendation) {
+        result.recommendation = recommendation;
+        result.message = message;
+      }
+      return result;
+    } catch (e) {
+      return { passed: true, issues: [], advice: `辨别器不可用: ${e.message}`, _error: e.message };
+    }
   }
 
   // 快捷方法：快速检查（只做 Step 2 安全检查）

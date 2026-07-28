@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/ekyc-suite-face-compare",
   "slug": "ekyc-suite-face-compare",
   "ownerHandle": null,
-  "version": "1.0.10",
-  "updatedAt": 1784863451933,
-  "contentHash": "5ffa2546b7d11d4c026c89c80e0490be44f02f52d6d338e446a522bbe0c64611",
-  "fetchedAt": "2026-07-26T18:06:33.782Z"
+  "version": "1.0.12",
+  "updatedAt": 1785122501372,
+  "contentHash": "c56cab6aff903e654545d7e86e6cdf0cd88ab98c83398cf3156f43c67524484c",
+  "fetchedAt": "2026-07-28T10:08:16.947Z"
 }

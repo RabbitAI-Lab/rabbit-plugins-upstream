@@ -42,6 +42,7 @@ const ErrorCategory = {
  * @param {Error|string} error
  * @returns {{ category: string, message: string, recoverable: boolean }}
  */
+
 function classifyError(error) {
   const msg = (error && (error.message || String(error))) || '未知错误';
   const errorType = error && error.constructor && error.constructor.name;
@@ -81,6 +82,15 @@ const RetryStrategy = {
  * @param {string} category
  * @returns {{ strategy: string, maxRetries: number, backoffMs: number }}
  */
+
+
+
+
+
+
+
+
+
 function selectRetryStrategy(category) {
   switch (category) {
     case ErrorCategory.TIMEOUT_ERROR:

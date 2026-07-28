@@ -40,8 +40,8 @@ try:
 except ImportError:
     _updater = None
 
-API_BASE_URL = "http://8.135.62.13:5000/AIService"
-GET_API_KEY_URL = "http://8.135.62.13:5000/"
+API_BASE_URL = "https://www.yunqi-zhilian.com/AIService"
+GET_API_KEY_URL = "https://www.yunqi-zhilian.com/"
 
 # 体验馆接口地址（游客模式，无需 API Key）
 EXPERIENCE_RUN_URL = f"{API_BASE_URL}/experience/run"
@@ -346,6 +346,9 @@ def _extract_receipt_records(data):
             for item in page["page_data"]:
                 if isinstance(item, dict):
                     record = dict(item)
+                    # 移除不需要展示的字段
+                    for _remove_key in ("billType", "expendBank", "incomeBank"):
+                        record.pop(_remove_key, None)
                     record["_pageIndex"] = page_index
                     if page_company_name and not record.get("companyName"):
                         record["companyName"] = page_company_name
@@ -1115,7 +1118,7 @@ def _generate_voucher_from_result(result, interface_name, business_type="商贸"
         return
 
     print("\n" + "=" * 60)
-    print("记账凭证（基于 OCR 解析结果自动生成，仅供参考，请人工复核）")
+    print("记账凭证（基于云启智联专有技术解析结果自动生成，仅供参考，请人工复核）")
     print("=" * 60)
 
     if isinstance(voucher_result, VoucherBundle):

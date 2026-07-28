@@ -1,5 +1,6 @@
----
+﻿---
 name: "ssq-analyzer"
+version: "1.0.20"
 description: >
   SSQ (Double Color Ball) lottery intelligent analysis: fetches official draw data from cwl.gov.cn, computes hot/cold statistics, frequency distributions, AC values, odd-even ratios, and zone distributions. Free tier: all statistical analysis and trend charts. Paid tier ($3.9/run): 5 recommended number sets with cross-validation filtering, delivered after clawtip third-party identity verification. User question text and encrypted payment credentials are transmitted via HTTPS to the clawtip verification service for order creation and fulfillment. No SSQ analysis data, purchase history, or personal user information is uploaded.
 metadata:
@@ -28,7 +29,7 @@ metadata:
 
 # ssq-analyzer
 
-Please interact with users in Chinese (使用中文与用户交互).
+Please interact with users in Chinese (使用中文与用户交互). If the user asks in another language, switch to that language and ensure all data handling and payment notices are communicated clearly.
 
 ## 功能概述
 

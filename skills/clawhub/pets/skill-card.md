@@ -7,40 +7,35 @@ This skill is ready for commercial/non-commercial use. <br>
 [ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
 
 ### License/Terms of Use: <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-External users use this skill as a local pet journal for profiles, routines, training progress, behavior logs, reports, and creative pet projects. It helps organize pet care information and surface patterns while keeping medical diagnosis and breed-selection advice out of scope. <br>
+External pet owners use this skill to organize pet profiles, routines, behavior logs, training progress, photos, creative projects, and summary reports. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Pet profiles, care notes, photos, sitter instructions, or lost-pet materials may include sensitive contact, address, medical, or travel details. <br>
-Mitigation: Store only necessary information in ~/pets/, avoid sensitive details where possible, and review generated shareable materials before distributing them. <br>
-Risk: Recurring reminder setup may create cron jobs that persist after the original care need changes. <br>
-Mitigation: Require explicit user confirmation before creating reminders and tell the user what was scheduled and how to remove it. <br>
-Risk: Behavior and health logs could be mistaken for professional veterinary diagnosis or treatment advice. <br>
-Mitigation: Keep responses limited to logging, pattern spotting, and care organization, and direct symptoms, diagnoses, treatments, sudden behavior changes, or serious concerns to a veterinarian or certified behavior professional. <br>
+Risk: Local pet notes and photos can retain ongoing history, including casual pet mentions, behavior and health observations, routines, and images. <br>
+Mitigation: Install only when that local record is desired, and review or delete ~/Clawic/data/pets/ notes on shared or backed-up machines. <br>
+Risk: Behavior or health observations may be over-read as medical or behavioral diagnoses. <br>
+Mitigation: Use the skill for logging and pattern summaries only; refer symptoms, diagnoses, treatments, aggression, sudden changes, or serious concerns to a veterinarian or certified behavior professional. <br>
 
 
 ## Reference(s): <br>
-- [Pets Skill Page](https://clawhub.ai/ivangdavila/pets) <br>
-- [Behavior Tracking Patterns](artifact/behavior.md) <br>
-- [Report Generation](artifact/reports.md) <br>
-- [Routines and Reminders](artifact/routines.md) <br>
-- [Training Methods by Species](artifact/training.md) <br>
-- [Creative Projects](artifact/creative.md) <br>
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/pets) <br>
+- [Skill homepage](https://clawic.com/skills/pets) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance, Configuration] <br>
-**Output Format:** [Markdown summaries and reports, JSONL pet log entries, and plain-text care guidance] <br>
+**Output Type(s):** [Text, Markdown, JSON, Files, Guidance] <br>
+**Output Format:** [Conversational text and Markdown reports, with local Markdown notes, JSONL logs, and generated image files when requested.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May refer to local files under ~/pets/ and may propose reminder schedules for user confirmation.] <br>
+**Other Properties Related to Output:** [Stores pet profiles, routines, logs, training notes, reports, and photos locally under ~/Clawic/data/pets/.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+1.0.1 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

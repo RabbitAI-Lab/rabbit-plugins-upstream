@@ -10,6 +10,7 @@ const _assertCounts = { total: 0, passed: 0, failed: 0, warnings: 0 };
 /**
  * 内部：生成断言结果并更新计数器
  */
+
 function _result(ok, error, extras = {}) {
   _assertCounts.total++;
   if (ok) _assertCounts.passed++;
@@ -21,6 +22,16 @@ function _result(ok, error, extras = {}) {
 /**
  * 内部：获取错误类型名称
  */
+
+
+
+
+
+
+
+
+
+
 function _typeName(fn) {
   if (typeof fn === 'string') return fn;
   if (fn && fn.name) return fn.name;

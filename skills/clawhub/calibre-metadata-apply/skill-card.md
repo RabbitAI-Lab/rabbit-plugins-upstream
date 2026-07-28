@@ -1,5 +1,5 @@
 ## Description: <br>
-Primary skill for applying confirmed Calibre metadata edits to an existing Content server while avoiding read-only lookup workflows. <br>
+Edit Calibre title, authors, series, tags, dates, comments, and analysis metadata with dry-run/apply gates. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and library operators use this skill to update existing Calibre book metadata after confirming target IDs, dry-running changes, and approving writes. It supports single-book fixes and library-wide metadata maintenance where low-confidence candidates remain pending for review. <br>
+Developers and library maintainers use this skill to update Calibre book metadata such as titles, authors, series, tags, dates, comments, and analysis fields with confirmation, dry-run, and apply steps. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can modify metadata on a target Calibre Content server. <br>
-Mitigation: Use confirmed IDs, run dry-runs first, require explicit approval before writes, and re-read final values after applying changes. <br>
-Risk: Credentials or book metadata may be exposed if handled carelessly during execution. <br>
-Mitigation: Prefer CALIBRE_PASSWORD over plaintext passwords and skip subagent processing when book metadata should remain local. <br>
-Risk: Generated comments_html or analysis content may introduce incorrect metadata notes. <br>
-Mitigation: Review comments_html and analysis content before approving any write operation. <br>
+Risk: The skill can modify Calibre metadata and requires access to a Calibre library. <br>
+Mitigation: Keep credentials in environment variables, review dry-runs before apply, and apply changes only after explicit user approval. <br>
+Risk: The skill may read document content, use web evidence, or delegate extracted evidence for heavy proposal generation. <br>
+Mitigation: Keep analysis local unless the user explicitly approves sharing book excerpts or evidence with a subagent. <br>
+Risk: Low-confidence or conflicting metadata proposals could overwrite useful existing fields if applied without review. <br>
+Mitigation: Use the documented pending-review flow for unresolved items and apply only approved, high-confidence fields. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/nextaltair/calibre-metadata-apply) <br>
-- [README](artifact/README.md) <br>
-- [Skill Definition](artifact/SKILL.md) <br>
+- [ClawHub skill page](https://clawhub.ai/nextaltair/skills/calibre-metadata-apply) <br>
+- [Publisher profile](https://clawhub.ai/user/nextaltair) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, JSONL] <br>
-**Output Format:** [Markdown guidance with shell commands and JSONL change payloads] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JSONL change plans and shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Default workflow requires confirmed book IDs, dry-run before apply, and explicit approval for writes.] <br>
+**Other Properties Related to Output:** [Requires node, calibredb, CALIBRE_PASSWORD, and explicit user approval before applying metadata writes.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: server release metadata and release changelog) <br>
+1.0.5 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

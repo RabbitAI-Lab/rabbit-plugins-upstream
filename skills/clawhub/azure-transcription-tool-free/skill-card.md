@@ -1,5 +1,5 @@
 ## Description: <br>
-Uses Azure AI to batch transcribe audio to text with basic transcription and timestamps for personal audio workflows. <br>
+Azure语音转写免费版 helps agents guide personal users through Azure AI speech-to-text transcription for Blob-hosted audio, including timestamped transcript and subtitle workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Individual creators and developers use this skill to configure Azure-based batch speech-to-text for podcasts, meeting recordings, and subtitle drafts. It is intended for audio transcription workflows that can use Azure Blob storage and Azure AI credentials. <br>
+External users and personal creators use this skill to prepare Azure speech-to-text transcription jobs for podcasts, meeting recordings, voice notes, and video subtitle generation. It is scoped to Azure transcription workflows and is not intended for certified translation, simultaneous interpretation, or general localization tasks. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive meetings, interviews, or recordings may be uploaded to Blob storage and processed by Azure without the user confirming they are allowed to do so. <br>
-Mitigation: Confirm consent, data handling requirements, and retention rules before uploading audio or running transcription jobs. <br>
-Risk: The skill requires TRANSCRIPTION_KEY and related Azure configuration, which are credentials that could be exposed in commands, files, or logs. <br>
-Mitigation: Store credentials in environment variables or a secret manager, avoid committing them, and rotate keys if exposure is suspected. <br>
-Risk: The trigger text incorrectly points to translation and localization tasks, which could lead users to apply the skill outside its speech-to-text scope. <br>
-Mitigation: Use the skill only for Azure-based audio transcription and timestamped transcript generation, not translation or localization. <br>
+Risk: Audio recordings may contain sensitive personal or business information, and the skill asks users to process cloud-accessible Blob URLs. <br>
+Mitigation: Use tightly scoped, time-limited storage access for private audio, avoid public Blob URLs for sensitive recordings, and confirm retention expectations before processing. <br>
+Risk: The trigger guidance is mismatched with the skill's speech-to-text scope and may be invoked for translation or localization tasks it does not support. <br>
+Mitigation: Use the skill only for Azure speech-to-text transcription tasks and route translation, localization, and certified language work to appropriate tools. <br>
+Risk: The workflow depends on Azure credentials and a cloud transcription service. <br>
+Mitigation: Keep Azure credentials in environment variables or managed secret storage, review credential handling before execution, and avoid committing keys or transcripts to shared repositories. <br>
 
 
 ## Reference(s): <br>
@@ -30,13 +30,13 @@ Mitigation: Use the skill only for Azure-based audio transcription and timestamp
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command snippets; generated transcription text or SRT-style subtitle content when executed.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with shell commands, Python snippets, and JSON-shaped result examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses Azure transcription credentials and Blob-hosted audio inputs when the workflow is executed.] <br>
+**Other Properties Related to Output:** [May include Azure endpoint and subscription-key environment variable setup, Blob URL inputs, locale settings, timestamped transcript handling, and SRT subtitle generation examples.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+1.0.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

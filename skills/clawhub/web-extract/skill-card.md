@@ -1,5 +1,5 @@
 ## Description: <br>
-Extracts structured JSON from web pages, search results, JavaScript-rendered pages, URL maps, and site crawls through the ZooData WebTools API. <br>
+Extracts structured JSON, Markdown, or raw HTML from web pages, search results, URL maps, and recursive crawls through ZooData WebTools endpoints. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use Web Extract when they need structured page data, search-result extraction, JavaScript-rendered scraping, URL discovery, or recursive site crawling without a second parsing pass over raw HTML or prose. <br>
+Developers and agents use this skill to fetch structured page data, search results with optional deep scraping, URL maps, and crawl outputs for downstream analysis or automation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Target URLs, search queries, interaction steps, and scraped page content are sent to ZooData. <br>
-Mitigation: Use the skill only for content appropriate to share with ZooData, and avoid secrets, confidential data, and internal-only URLs. <br>
-Risk: The ZooData API key is required for operation. <br>
-Mitigation: Store the key in ZOODATA_API_KEY or a protected config file, and avoid pasting credentials into prompts or generated output. <br>
-Risk: The credential check command consumes one credit. <br>
-Mitigation: Run the check command intentionally and account for credit usage before repeated verification. <br>
+Risk: Requested URLs, search queries, and crawl parameters are sent to ZooData for processing. <br>
+Mitigation: Use the skill only for data you are comfortable sharing with ZooData and avoid submitting sensitive targets or queries. <br>
+Risk: Large crawls and deep-scraped searches can consume API credits. <br>
+Mitigation: Estimate costs and confirm large crawls before execution; keep crawl limits and polling intervals conservative. <br>
+Risk: The skill requires an API key that may be stored in the environment or local config. <br>
+Mitigation: Prefer ZOODATA_API_KEY in a protected environment or a secured config file, and do not expose keys in prompts, logs, or shared files. <br>
 
 
 ## Reference(s): <br>
-- [Web Extract endpoint reference](references/reference.md) <br>
 - [ClawHub skill page](https://clawhub.ai/apiclaw/skills/web-extract) <br>
-- [Publisher homepage](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
+- [ZooData Skills homepage](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
+- [Web Extract endpoint reference](references/reference.md) <br>
 - [ZooData API keys](https://zoodata.ai/en/api-keys) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [json, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [JSON by default, with optional Markdown or raw HTML and Markdown guidance containing shell commands.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JSON-oriented command examples and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZOODATA_API_KEY; requests may send target URLs, search queries, interaction steps, and scraped page content to ZooData.] <br>
+**Other Properties Related to Output:** [Outputs can include structured extraction fields, endpoint choices, shell commands, and credential setup guidance.] <br>
 
 ## Skill Version(s): <br>
-0.2.1 (source: server release evidence and skill metadata) <br>
+0.2.2 (source: release evidence and frontmatter metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

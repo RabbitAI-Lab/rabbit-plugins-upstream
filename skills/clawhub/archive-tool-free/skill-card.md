@@ -1,5 +1,5 @@
 ## Description: <br>
-Archive Tool Free helps agents create persistent Markdown snapshots of external content with summaries, semantic tags, search, and recall for personal knowledge workflows. <br>
+Archive Tool Free helps an agent save external content as local Markdown snapshots with summaries, semantic tags, indexes, and recall guidance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, researchers, and personal knowledge-management users can use this skill to save full external content, summarize it, tag it semantically, search prior archives, and recall relevant saved material during later work. <br>
+External users and developers use this skill to archive articles, videos, posts, papers, images, and notes as durable local records that can be searched, tagged, and recalled later. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may retain full page contents, metadata, tags, and access history in a local archive. <br>
-Mitigation: Avoid archiving secrets, private documents, or sensitive personal data unless persistent local retention is intentional. <br>
-Risk: Some workflows include shell commands for creating, searching, or backing up the archive. <br>
-Mitigation: Review proposed commands before execution and run them only in an intended archive directory. <br>
+Risk: Archived snapshots can persist confidential, personal, or copyrighted material in the workspace. <br>
+Mitigation: Archive only material you are allowed to store, avoid sensitive content, and review the archive directory periodically for cleanup. <br>
+Risk: The skill may create or update local archive directories, Markdown items, indexes, and history files. <br>
+Mitigation: Review proposed file writes and keep archives under a known workspace directory before committing or sharing them. <br>
+Risk: Archived content and recall history can become stale or misleading over time. <br>
+Mitigation: Mark older entries as possibly outdated and verify archived material before relying on it for decisions. <br>
 
 
 ## Reference(s): <br>
@@ -28,13 +30,13 @@ Mitigation: Review proposed commands before execution and run them only in an in
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown instructions with example shell commands and JSON response examples] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown files, index entries, text guidance, shell commands, and JSON-style status examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or updates local Markdown archive files under the user's archive directory when the agent is allowed to perform file operations.] <br>
+**Other Properties Related to Output:** [Creates and updates local archive files such as archive/items, archive/index.md, archive/memory.md, and archive/history.md.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: release evidence, frontmatter) <br>
+1.0.1 (source: server release evidence; artifact frontmatter lists 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

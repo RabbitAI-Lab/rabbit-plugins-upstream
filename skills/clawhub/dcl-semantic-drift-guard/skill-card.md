@@ -1,5 +1,5 @@
 ## Description: <br>
-Use this skill to detect semantic hallucinations and context drift in LLM outputs by checking whether generated responses are grounded in supplied source documents or retrieved knowledge. <br>
+Detects semantic hallucinations and context drift by comparing LLM output against an authoritative source and returning a structured verdict with drift details. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, AI application teams, and governance reviewers use this skill to compare LLM outputs against authoritative documents or RAG-retrieved context before accepting, logging, or delivering the output. <br>
+Developers and teams responsible for RAG, legal, medical, financial, support, or policy-sensitive AI outputs use this skill to check whether generated text is grounded in a source document or retrieved knowledge base before delivery or commit. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Source documents and knowledge-base queries may contain confidential or regulated content. <br>
-Mitigation: Provide only sources and kb_endpoint URLs that are trusted for the intended workflow, and avoid submitting confidential material unless the deployment environment is approved for it. <br>
-Risk: The artifact describes no-retention, compliance, and audit-chain behavior that is not independently proven by the server security evidence. <br>
-Mitigation: Treat those claims as publisher-provided behavior statements and verify operational controls before relying on them for compliance or retention guarantees. <br>
+Risk: Privacy and locality claims can be misunderstood because the artifact also documents a remote knowledge-base mode and an optional paid MCP pre-check. <br>
+Mitigation: Use local context mode for sensitive documents unless remote processing is explicitly intended and reviewed. <br>
+Risk: Remote knowledge-base or paid MCP use may send text, queries, hashes, or verdict metadata outside the local agent context. <br>
+Mitigation: Document and approve the selected mode before use, and explain what data or hashes leave the agent for that mode. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/daririnch/dcl-semantic-drift-guard) <br>
-- [Publisher profile](https://clawhub.ai/user/daririnch) <br>
+- [ClawHub skill page](https://clawhub.ai/daririnch/skills/dcl-semantic-drift-guard) <br>
+- [DCL Trust Oracle MCP server](https://mcp.fronesislabs.com/mcp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with JSON input and output schemas] <br>
+**Output Type(s):** [text, JSON, guidance] <br>
+**Output Format:** [JSON audit record with verdict, confidence, drift items, transaction hash, and timestamp, with explanatory text or guidance when needed] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a verdict-oriented audit record structure with drift items, confidence, source mode, strictness, policy, hash, timestamp, and audit chain identifier.] <br>
+**Other Properties Related to Output:** [Verdicts are IN_COMMIT or HALLUCINATION_DRIFT; strictness can be strict, balanced, or lenient.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+1.0.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

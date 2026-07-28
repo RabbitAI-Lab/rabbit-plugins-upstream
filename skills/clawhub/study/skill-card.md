@@ -1,5 +1,5 @@
 ## Description: <br>
-Structure study sessions, manage materials, and prepare for exams with active recall techniques. <br>
+Study helps an agent plan a student's term, run retrieval-based study sessions, track coursework and grades, and prepare for exams or certifications without producing work for submission. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,39 +7,37 @@ This skill is ready for commercial/non-commercial use. <br>
 [ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
 
 ### License/Terms of Use: <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Students and learners use this skill to organize study materials, plan study sessions, track exam deadlines, and practice active recall while keeping student-created work separate from AI scaffolding. <br>
+Students and agents assisting them use this skill to turn syllabi, readings, deadlines, marks, and exam dates into weekly plans, retrieval practice, error logs, spaced review, and exam or coursework preparation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Local study files under ~/study/ may contain sensitive academic materials and can be reused in later sessions. <br>
-Mitigation: Keep sensitive materials out of ~/study/ when they should not persist, and remove local study files that are no longer needed. <br>
-Risk: AI-generated study prompts, quizzes, or schedules may be inaccurate or misaligned with a course. <br>
-Mitigation: Verify study guidance against course materials, instructor instructions, and official exam requirements. <br>
-Risk: Using the skill to create work a student should produce independently could create academic integrity issues. <br>
-Mitigation: Use the skill for scaffolding, questions, and feedback while keeping summaries, answers, and submitted work student-authored. <br>
+Risk: The skill may keep persistent local study records, including grades, missed questions, contacts, project milestones, and exam booking details. <br>
+Mitigation: Review the configured Clawic data paths before use and keep those local notes in an appropriate user-controlled environment. <br>
+Risk: Sensitive portal, LMS, SRS sync, or proctoring credentials could appear in pasted study material. <br>
+Mitigation: Strip credential values before writing notes and retain only pointers such as keychain, environment-variable, password-manager, or local-file references. <br>
+Risk: Coursework support can cross academic-integrity boundaries if the agent produces material submitted for credit. <br>
+Mitigation: Use the default scaffold posture for graded work: provide questions, hints, critique, and worked analogues only after the student has attempted the task. <br>
 
 
 ## Reference(s): <br>
-- [Study skill page](https://clawhub.ai/ivangdavila/study) <br>
-- [Publisher profile](https://clawhub.ai/user/ivangdavila) <br>
-- [Exam Preparation Reference](artifact/exams.md) <br>
-- [Subject Types Reference](artifact/subjects.md) <br>
-- [Study Techniques Reference](artifact/techniques.md) <br>
+- [ClawHub Study skill page](https://clawhub.ai/ivangdavila/skills/study) <br>
+- [Clawic Study homepage](https://clawic.com/skills/study) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration, Shell commands] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON configuration examples] <br>
+**Output Type(s):** [text, markdown, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with local note and configuration updates when persistent study records are needed] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates and reuses local study files under ~/study/ when used as directed.] <br>
+**Other Properties Related to Output:** [May maintain local study records under the configured Clawic data paths; does not store credentials.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+1.0.3 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,10 +1,10 @@
 # eKYC Suite
 
-Contact: carochen112233@gmail.com for eKYC requirements, integration evaluation, deployment questions, and direct product discussions.
+Contact: carochen112233@gmail.com for trial access, PoC evaluation, supported-market discussion, pricing, deployment questions, and direct eKYC integration requirements.
 
 Canonical URL: https://clawhub.ai/carochen112233-commits/skills/ekyc-suite
 Publisher: carochen112233-commits
-Current version: 1.1.17
+Current version: 1.1.20
 NPM package: https://www.npmjs.com/package/@wefi-ai/ekyc-suite-mcp
 GitHub repository: https://github.com/wefi-ai/ekyc-suite-mcp
 Category: KYC, eKYC, identity verification, biometric verification, document OCR, fraud risk labeling, cloud KYC

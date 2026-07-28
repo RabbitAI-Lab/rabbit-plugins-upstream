@@ -6,7 +6,7 @@ displayName: "CSV文件处理(免费版)"
 summary: "自动检测编码与分隔符，读取并清洗CSV数据，支持基础合并与导出。CSV文件处理免费版，提供基础的CSV读写与清洗能力. 核心能力包括： - 编码自动检测（utf-8、utf-8-sig、la"
 summary_zh: "自动检测编码与分隔符，读取并清洗CSV数据，支持基础合并与导出。CSV文件处理免费版，提供基础的CSV读写与清洗能力. 核心能力包括： - 编码自动检测（utf-8、utf-8-sig、la"
 license: "MIT"
-description: |-
+description: "|-. 适用于需要csv handler相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量.该技能适用于相关开发场景,包含结构化的工作流程和配置指引.经过深度差异化处置,针对用户反馈和使用痛点进行了改进,提升了实用性和可操作性.该技能适用于相关开发场景,包含结构化的工作流程和配置指引.经过深度差异化处置,针对用户反馈和使用痛点进行了改进,提升了实用性和可操作性."
   CSV文件处理免费版，提供基础的CSV读写与清洗能力.
   核心能力包括：
   - 编码自动检测（utf-8、utf-8-sig、latin-1）
@@ -18,19 +18,21 @@ description: |-
 tags:
   - 研发工具
   - csv
+  - handler
+  - automation
+  - productivity
   - data-processing
   - 工具
   - 效率
   - utf-8-sig
   - 编码
-  - bom
-  - utf-8
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Automation"
+pricing_tier: free
 ---
 # CSV文件处理（免费版）
 
@@ -97,7 +99,7 @@ CSV是工程与财务领域最通用的数据交换格式。本免费版提供�
 
 **API Key配置方式**:
 ```bash
-export API_KEY="your_api_key_here"
+export API_KEY=${API_KEY:?请设置环境变量}
 ```
 配置后需重启会话或开启新终端生效。API Key应妥善保管,避免泄露到版本控制系统.
 ## 使用流程

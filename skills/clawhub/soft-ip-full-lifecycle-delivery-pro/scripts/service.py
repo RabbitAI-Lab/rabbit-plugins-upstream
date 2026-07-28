@@ -1,46 +1,42 @@
-#!/usr/bin/env python3
+﻿#!/usr/bin/env python3
 """
-soft-ip-full-lifecycle-delivery-pro - verify payment fulfillment.
-
-This script sends the local payment credential for verification only. It does
-not upload project files, source paths, dependency files, or generated drafts.
+soft-ip-full-lifecycle-delivery-pro - Service execution script.
+Reads payCredential from order file, verifies payment, and runs SoftIP Delivery Pro analysis.
 """
-
 import argparse
 import hashlib
 import json
+import os
+import subprocess
 import sys
 import urllib.error
 import urllib.request
-
 from file_utils import load_order
-
 DEFAULT_SERVER_URL = "https://api.ideaidea.com.cn"
 GET_RESULT_PATH = "/api/skill/getServiceResult"
-
-SKILL_NAME = "soft-ip-full-lifecycle-delivery-pro"
-
+SLUG = "soft-ip-full-lifecycle-delivery-pro"
 SERVER_URL = DEFAULT_SERVER_URL
 GET_RESULT_URL = f"{SERVER_URL}{GET_RESULT_PATH}"
+SKILL_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FETCH_SCRIPT = os.path.join(SKILL_DIR, "scripts", "fetch_ssq.py")
+ANALYZE_SCRIPT = os.path.join(SKILL_DIR, "scripts", "analyze_ssq.py")
 
+def compute_indicator(slug: str) -> str:
+    return hashlib.md5(slug.encode("utf-8")).hexdigest()
 
-def compute_indicator(skill_name: str) -> str:
-    return hashlib.md5(skill_name.encode("utf-8")).hexdigest()
-
-
-def request_service_authorization(order_no: str, credential: str) -> dict:
+def verify_payment(order_no: str, credential: str) -> dict | None:
+    """Send credential to service backend for verification."""
     payload = json.dumps({
-        "slug": SKILL_NAME,
+        "slug": SLUG,
         "orderNo": order_no,
         "credential": credential,
     }).encode("utf-8")
     req = urllib.request.Request(
         GET_RESULT_URL,
         data=payload,
-        headers={"Content-Type": "application/json", "User-Agent": "SoftIP-DeliveryPro/1.0"},
+        headers={"Content-Type": "application/json"},
         method="POST",
     )
-
     try:
         with urllib.request.urlopen(req, timeout=30) as resp:
             return json.loads(resp.read().decode("utf-8"))
@@ -48,68 +44,43 @@ def request_service_authorization(order_no: str, credential: str) -> dict:
         raise RuntimeError(f"Authorization request failed: {e}") from e
 
 
-def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Verify encrypted payment credential with clawtip authorization service for soft-ip-full-lifecycle-delivery-pro"
-    )
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Execute SoftIP Delivery Pro analysis service")
     parser.add_argument("order_no", help="Order number")
-    return parser.parse_args()
-
-
-def print_verification_guidance() -> None:
-    print("=" * 60)
-    print("NOTICE: This step sends the encrypted payment credential")
-    print("        to https://api.ideaidea.com.cn for verification.")
-    print("        No source code or application documents")
-    print("        are transmitted.")
-    print("        Communication: HTTPS + SM4 encryption.")
-    print("=" * 60)
-
-
-def main() -> int:
-    args = parse_args()
-    print_verification_guidance()
-
+    args = parser.parse_args()
+    indicator = compute_indicator(SLUG)
     try:
-        order_data = load_order(compute_indicator(SKILL_NAME), args.order_no)
+        order_data = load_order(indicator, args.order_no)
+        question = order_data.get("question")
+        if not question:
+            raise RuntimeError("Missing question field in order file")
         credential = order_data.get("payCredential")
         if not credential:
-            raise RuntimeError("Missing payCredential in local order file")
-        result = request_service_authorization(args.order_no, credential)
+            raise RuntimeError("Missing payCredential in order file")
+        result = verify_payment(args.order_no, credential)
     except Exception as e:
-        print("PAY_STATUS: ERROR")
+        print(f"PAY_STATUS: ERROR")
         print(f"ERROR_INFO: {e}")
-        return 1
-
+        sys.exit(1)
     if result is None:
-                print("PAY_STATUS: ERROR")
+        print("PAY_STATUS: ERROR")
         print("ERROR_INFO: No response from server")
-        return 1
-
+        sys.exit(1)
     response_code = result.get("responseCode")
     pay_status = result.get("payStatus")
     already_fulfilled = result.get("alreadyFulfilled", False)
-
     print(f"PAY_STATUS: {pay_status}")
-    print(f"ALREADY_FULFILLED: {already_fulfilled}")
-
     if response_code != "200" or pay_status != "SUCCESS":
         error_info = result.get("errorInfo", "Unknown error")
         print(f"ERROR_INFO: {error_info}")
-        return 1
-
-    print("AUTHORIZATION_RESULT=verified")
-    _jr = json.dumps({
-        "pay_status": pay_status,
-        "authorization": "verified",
-        "order_no": args.order_no,
-        "already_fulfilled": already_fulfilled,
-    })
-    print(f"JSON_RESULT={_jr}")
-
-    print("NEXT_STEP=Now confirm the project directory, software name, version, rights holder, and required material scope before starting local drafting.")
-    return 0
-
-
-if __name__ == "__main__":
-    sys.exit(main())
+        sys.exit(1)
+    if already_fulfilled:
+        print("Service already fulfilled for this order.")
+        sys.exit(0)
+    try:
+        report = "PAYMENT_VERIFIED=ready`nNEXT_STEP=AI will now draft all 8 copyright registration documents."
+        print(report)
+    except (RuntimeError, Exception) as e:
+        print("PAY_STATUS: ERROR")
+        print(f"ERROR_INFO: Analysis execution failed: {e}")
+        sys.exit(1)

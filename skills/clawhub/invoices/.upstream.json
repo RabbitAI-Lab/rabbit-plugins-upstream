@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/invoices",
   "slug": "invoices",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1785082304797,
-  "contentHash": "fc5381fed9e9a778b405a53a51b95b499fa4bbba43dc1e5d988b46090a5320a3",
-  "fetchedAt": "2026-07-26T18:03:12.524Z"
+  "version": "1.0.3",
+  "updatedAt": 1785141918189,
+  "contentHash": "c4167e30def68f2f5dfc8a4ddfd1edce2b544e504f565800ea58f96609a231da",
+  "fetchedAt": "2026-07-28T10:07:12.047Z"
 }

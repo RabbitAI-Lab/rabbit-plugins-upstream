@@ -1,5 +1,5 @@
 ## Description: <br>
-短视频全链路创作工具，覆盖选题策划、爆款脚本、分镜设计、拍摄指导、剪辑建议和发布优化。 <br>
+短视频工坊 is a Chinese-language short-video creation workflow for topic planning, viral-style scripts, shot lists, filming guidance, editing suggestions, and publishing optimization. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,29 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators, marketers, and video teams use this skill to plan and produce short-form videos for platforms such as Douyin, Kuaishou, WeChat Channels, Bilibili, and Xiaohongshu. It guides topic ideation, scriptwriting, storyboard design, filming, editing, publishing optimization, and post-release review. <br>
+External creators, marketers, and content teams use this skill to plan and produce short-form videos for platforms such as Douyin, Kuaishou, WeChat Channels, Bilibili, and Xiaohongshu. It helps turn a user goal into topics, scripts, shot tables, filming notes, editing direction, and publishing advice. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Trend research and publishing recommendations may be inaccurate, outdated, or misaligned with platform rules. <br>
-Mitigation: Review generated recommendations for factual accuracy and platform compliance before publication. <br>
-Risk: Marketing, product-seeding, or publishing guidance could create misleading claims if used without checking the underlying product or audience context. <br>
-Mitigation: Verify product claims, disclosures, audience targeting, and final copy before using the guidance in public content. <br>
+Risk: Generated publishing advice may be inaccurate, outdated, or unsuitable for public use. <br>
+Mitigation: Review titles, hashtags, posting guidance, and content recommendations before publishing. <br>
+Risk: Trend-based or unfamiliar-domain recommendations may rely on incomplete context. <br>
+Mitigation: Verify current platform trends, brand requirements, and domain facts before using the recommendations in a production campaign. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub skill page](https://clawhub.ai/shylamb-token/skills/short-video-factory) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured tables and concise production guidance] <br>
+**Output Format:** [Markdown with structured sections and tables] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language outputs may include video titles, scripts, shot lists, filming guidance, editing notes, posting recommendations, hashtags, and review metrics.] <br>
+**Other Properties Related to Output:** [May include topic options, titles, scripts, shot lists, filming notes, editing guidance, hashtags, posting windows, comment prompts, and review metrics.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+1.0.1 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -11,29 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and design-oriented coding agents use this skill to plan visual direction, interface hierarchy, layout, typography, color, and prototype implementation for web or mini program UIs before writing interface code. <br>
+Developers and design-oriented agents use this skill to plan and produce frontend UI design specifications and prototypes for web or mini program interfaces before implementation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can steer generated UIs toward specific aesthetics, fonts, icon libraries, and external media sources that may not fit a project's brand, licensing, accessibility, or delivery constraints. <br>
-Mitigation: Review generated UI choices against project brand rules, license requirements, accessibility standards, and implementation constraints before accepting code. <br>
+Risk: The skill strongly constrains visual choices, which can conflict with an existing brand, typography system, or approved design system. <br>
+Mitigation: Review generated design specifications against project brand tokens and documented UI constraints before implementation. <br>
+Risk: The skill may cause an agent to consult related remote CloudBase references or media sources during UI work. <br>
+Mitigation: Use approved network and asset policies, and review external references or media before incorporating them into a project. <br>
+Risk: Generated UI guidance or code may include incorrect visual, layout, or platform assumptions if accepted without review. <br>
+Mitigation: Require a visible design specification, platform confirmation, and human review before accepting generated interface code. <br>
 
 
 ## Reference(s): <br>
-- [UI Design Activation Checklist](checklist.md) <br>
 - [ClawHub skill page](https://clawhub.ai/binggg/skills/ui-design-guide) <br>
+- [CloudBase main skill entry](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md) <br>
+- [Current UI design raw source](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/ui-design/SKILL.md) <br>
+- [Web implementation sibling reference](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/web-development/SKILL.md) <br>
+- [Mini program implementation sibling reference](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/miniprogram-development/SKILL.md) <br>
+- [UI Design Activation Checklist](checklist.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands] <br>
-**Output Format:** [Markdown guidance with design specifications, implementation recommendations, code examples, and self-audit shell commands] <br>
+**Output Type(s):** [text, markdown, code, guidance] <br>
+**Output Format:** [Markdown design specifications with optional frontend or mini program code] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Steers generated UI work toward explicit aesthetic choices, professional icon libraries, real media assets, and pre-submission design audits.] <br>
+**Other Properties Related to Output:** [May include design audit guidance for colors, fonts, icons, layout, and platform-specific implementation readiness.] <br>
 
 ## Skill Version(s): <br>
-1.18.14 (source: server release metadata) <br>
+1.18.15 (source: server release metadata; artifact frontmatter reports 2.24.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

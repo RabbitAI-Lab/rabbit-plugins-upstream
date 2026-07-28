@@ -12,6 +12,7 @@ import os
 import re
 import shutil
 import socket
+import ssl
 import sys
 import threading
 import time
@@ -29,7 +30,43 @@ MPC_STAC = "https://planetarycomputer.microsoft.com/api/stac/v1"
 OPENTOPOGRAPHY_API = "https://portal.opentopography.org/API/globaldem"
 USGS_PRODUCTS_API = "https://tnmaccess.nationalmap.gov/api/v1/products"
 EARTHDATA_CMR_GRANULES = "https://cmr.earthdata.nasa.gov/search/granules.json"
+RUIDUOBAO_API = "https://map.ruiduobao.com"
 USER_AGENT = "download-dem-skill/2.0"
+__version__ = "2.0"
+
+
+def write_qa_summary(qa_path, *, skill, command, args, payload, extra=None):
+    """Write a JSON run-summary sidecar to qa_path (Phase 5 optimization).
+
+    The sidecar includes a top-level summary of the download run (output
+    path, bbox, source, dataset, AOI area) plus any extra fields the
+    caller wants to expose for QA / regression testing.
+    """
+    summary = dict(payload) if isinstance(payload, dict) else {"result": payload}
+    summary.setdefault("skill", skill)
+    summary["command"] = command
+    summary["version"] = __version__
+    summary["user_agent"] = USER_AGENT
+    summary["timestamp"] = utc_now()
+    # Echo input args (so QA can match a run to its inputs without re-parsing).
+    for flag in ("source", "dataset", "resolution", "mode", "aoi", "admin",
+                 "admin_code", "bbox", "mosaic_max_area_km2",
+                 "max_pixels", "allow_large", "output", "workers", "retries",
+                 "timeout", "mem_limit_mb", "max_assets", "max_asset_gb",
+                 "allow_many_assets", "resume", "verify_existing",
+                 "stage_assets", "keep_cache", "overwrite"):
+        if hasattr(args, flag):
+            val = getattr(args, flag)
+            if isinstance(val, (str, int, float, bool, type(None))):
+                summary.setdefault(flag, val)
+    if extra:
+        for k, v in extra.items():
+            summary.setdefault(k, v)
+    qa_p = Path(qa_path)
+    qa_p.parent.mkdir(parents=True, exist_ok=True)
+    with open(qa_p, "w", encoding="utf-8") as f:
+        json.dump(summary, f, ensure_ascii=False, indent=2)
+    return qa_p
 
 DEFAULT_MAX_PIXELS = 100_000_000
 DEFAULT_MOSAIC_MAX_AREA_KM2 = 10_000.0
@@ -62,8 +99,8 @@ SOURCES: dict[str, dict[str, Any]] = {
             "SRTMGL3", "SRTMGL1", "SRTMGL1_E", "AW3D30", "AW3D30_E",
             "SRTM15Plus", "NASADEM", "COP30", "COP90", "EU_DTM",
         ],
-        "credentials": "OPENTOPOGRAPHY_API_KEY required",
-        "coverage": "Dataset-specific",
+        "credentials": "Optional: OPENTOPOGRAPHY_API_KEY. Without it, requests auto-fall back to Microsoft Planetary Computer Copernicus DEM.",
+        "coverage": "Dataset-specific; falls back to global Copernicus DEM without a key",
         "native_tiles": False,
     },
     "usgs": {
@@ -74,8 +111,8 @@ SOURCES: dict[str, dict[str, Any]] = {
     },
     "earthdata": {
         "datasets": ["aster-gdem-v3"],
-        "credentials": "EARTHDATA_TOKEN required for protected LP DAAC assets",
-        "coverage": "ASTER GDEM V3 coverage, approximately 83 degrees north to 83 degrees south",
+        "credentials": "Optional: EARTHDATA_TOKEN. Without it, requests auto-fall back to Microsoft Planetary Computer Copernicus DEM.",
+        "coverage": "ASTER GDEM V3 coverage, approximately 83 degrees north to 83 degrees south; falls back to global Copernicus DEM without a token",
         "native_tiles": True,
     },
 }
@@ -143,6 +180,15 @@ USGS_DATASET_NAMES = {
 
 EARTHDATA_DATASETS = {
     "aster-gdem-v3": {"short_name": "ASTGTM", "version": "003"},
+}
+
+# Hard-coded allowlist of environment variables this skill reads for credentials.
+# Adding a new provider requires extending this list explicitly; arbitrary
+# environment variable names are not honoured. This keeps the skill from being
+# used as a generic environment-secret access primitive.
+ALLOWED_CREDENTIAL_ENV_VARS: dict[str, str] = {
+    "opentopography": "OPENTOPOGRAPHY_API_KEY",
+    "earthdata": "EARTHDATA_TOKEN",
 }
 
 
@@ -291,24 +337,349 @@ def _load_aoi(path: str | Path) -> tuple[tuple[float, float, float, float], list
 
 
 def resolve_aoi(args: argparse.Namespace) -> tuple[tuple[float, float, float, float], list[dict[str, Any]] | None]:
+    if getattr(args, "admin", None):
+        result = resolve_admin(
+            name=getattr(args, "admin", None),
+            code=getattr(args, "admin_code", None),
+            province=getattr(args, "admin_province", None),
+            city=getattr(args, "admin_city", None),
+            level=getattr(args, "admin_level", None) or "xian",
+            year=int(getattr(args, "admin_year", None) or 2023),
+            expand_km=float(getattr(args, "admin_expand_km", None) or 1.0),
+        )
+        admin_meta = {k: v for k, v in result.items() if k not in {"bbox_wgs84_expanded"}}
+        setattr(args, "admin_metadata", admin_meta)
+        return result["bbox_wgs84_expanded"], None
     if getattr(args, "bbox", None):
         return normalize_bbox(args.bbox), None
     if getattr(args, "aoi", None):
         return _load_aoi(args.aoi)
-    raise DemError("provide --bbox west south east north or --aoi PATH")
+    raise DemError("provide --admin NAME, --bbox west south east north, or --aoi PATH")
 
 
-def select_source(source: str, dataset: str | None, resolution: float | None, bbox: Sequence[float]) -> tuple[str, str]:
+# ---------------------------------------------------------------------------
+# China administrative-divisions helper (map.ruiduobao.com)
+# ---------------------------------------------------------------------------
+ADMIN_LEVEL_ALIASES = {
+    "province": "sheng", "省": "sheng", "sheng": "sheng",
+    "city": "shi", "市": "shi", "shi": "shi", "prefecture": "shi", "prefecture-level city": "shi",
+    "county": "xian", "区": "xian", "县": "xian", "xian": "xian", "district": "xian",
+    "town": "xiang", "township": "xiang", "镇": "xiang", "乡": "xiang", "xiang": "xiang",
+    "village": "cun", "村": "cun", "cun": "cun",
+}
+ADMIN_LEVEL_LABELS = {
+    "sheng": "province", "shi": "prefecture-level city", "xian": "county/district",
+    "xiang": "town/township", "cun": "village",
+}
+
+
+def _normalize_admin_level(value: str | None, default: str = "xian") -> str:
+    if not value:
+        return default
+    key = value.strip().lower()
+    if key not in ADMIN_LEVEL_ALIASES:
+        valid = ", ".join(sorted({*ADMIN_LEVEL_ALIASES}))
+        raise DemError(f"unknown admin level {value!r}; expected one of: {valid}")
+    return ADMIN_LEVEL_ALIASES[key]
+
+
+def _bbox_of_geometry(geometry: dict[str, Any] | None) -> tuple[float, float, float, float] | None:
+    if not geometry:
+        return None
+    gtype = geometry.get("type")
+    coords = geometry.get("coordinates")
+    if gtype is None or coords is None:
+        return None
+    xs: list[float] = []
+    ys: list[float] = []
+
+    def walk(node: Any) -> None:
+        if isinstance(node, (list, tuple)) and node and isinstance(node[0], (int, float)):
+            xs.append(float(node[0]))
+            ys.append(float(node[1]))
+        elif isinstance(node, (list, tuple)):
+            for child in node:
+                walk(child)
+
+    if gtype == "Polygon":
+        for ring in coords:
+            walk(ring)
+    elif gtype == "MultiPolygon":
+        for polygon in coords:
+            for ring in polygon:
+                walk(ring)
+    else:
+        return None
+    if not xs:
+        return None
+    return min(xs), min(ys), max(xs), max(ys)
+
+
+def _bbox_of_geojson(geojson: dict[str, Any]) -> tuple[float, float, float, float]:
+    xs: list[float] = []
+    ys: list[float] = []
+    if isinstance(geojson, dict) and geojson.get("type") == "FeatureCollection":
+        for feature in geojson.get("features") or []:
+            feature_bbox = _bbox_of_geometry((feature or {}).get("geometry"))
+            if feature_bbox:
+                xs.extend([feature_bbox[0], feature_bbox[2]])
+                ys.extend([feature_bbox[1], feature_bbox[3]])
+    else:
+        direct = _bbox_of_geometry(geojson)
+        if direct:
+            xs.extend([direct[0], direct[2]])
+            ys.extend([direct[1], direct[3]])
+    if not xs:
+        raise DemError("GeoJSON had no geometry coordinates; nothing to bound")
+    return min(xs), min(ys), max(xs), max(ys)
+
+
+def expand_bbox_km(bbox: Sequence[float], expand_km: float) -> tuple[float, float, float, float]:
+    """Expand a WGS84 bbox by ``expand_km`` kilometres on every side.
+
+    Uses a flat-earth approximation: 1° latitude is 110.574 km; 1° longitude
+    is 111.320 km * cos(mid-latitude). The helper is symmetric — the same
+    buffer is added to all four sides — and clips to the legitimate
+    longitude/latitude range so the result is always a valid bbox.
+    """
+    if expand_km < 0:
+        raise DemError("expand_km must be non-negative")
+    west, south, east, north = normalize_bbox(bbox)
+    if expand_km == 0:
+        return west, south, east, north
+    lat_buffer = expand_km / 110.574
+    mid_lat = (south + north) / 2
+    lon_factor = max(0.01, math.cos(math.radians(mid_lat)))
+    lon_buffer = expand_km / (111.320 * lon_factor)
+    new_w = max(-180.0, west - lon_buffer)
+    new_e = min(180.0, east + lon_buffer)
+    new_s = max(-90.0, south - lat_buffer)
+    new_n = min(90.0, north + lat_buffer)
+    return new_w, new_s, new_e, new_n
+
+
+def _ruiduobao_request(url: str, params: dict[str, Any] | None = None,
+                       headers: dict[str, str] | None = None,
+                       timeout: int = DEFAULT_TIMEOUT_SECONDS,
+                       retries: int = DEFAULT_RETRIES,
+                       stream: bool = False) -> urllib.request.addinfourl:
+    """Issue a request to map.ruiduobao.com, bypassing HTTP(S) proxy by default.
+
+    The host is in China and frequently unreachable through VPNs. Callers can
+    force proxy use by setting ``RUIDUOBAO_USE_PROXY=1``.
+    """
+    full_url = f"{url}?{urllib.parse.urlencode(params)}" if params else url
+    request_headers = {"User-Agent": USER_AGENT, "Accept": "application/json", **(headers or {})}
+    request = urllib.request.Request(full_url, headers=request_headers)
+    last_exc: BaseException | None = None
+    for attempt in range(retries + 1):
+        proxy_override = os.environ.get("RUIDUOBAO_USE_PROXY", "").strip().lower() in {"1", "true", "yes"}
+        opener_args: dict[str, Any] = {"timeout": timeout}
+        if proxy_override:
+            # fall through to system proxy handling
+            pass
+        else:
+            opener_args["context"] = _no_proxy_ssl_context()
+        try:
+            return urllib.request.urlopen(request, **opener_args)
+        except urllib.error.HTTPError as exc:
+            retryable = exc.code in (408, 429, 500, 502, 503, 504)
+            if not retryable or attempt >= retries:
+                body = exc.read(1000).decode("utf-8", errors="replace")
+                raise DemError(f"map.ruiduobao.com returned HTTP {exc.code}: {safe_error(body)}") from exc
+            last_exc = exc
+        except (urllib.error.URLError, socket.timeout, TimeoutError) as exc:
+            if attempt >= retries:
+                raise DemError(f"map.ruiduobao.com request failed after {retries + 1} attempts: {safe_error(exc)}") from exc
+            last_exc = exc
+        time.sleep(min(30, 2**attempt))
+    raise DemError(f"map.ruiduobao.com request failed: {safe_error(last_exc) if last_exc else 'unknown'}")
+
+
+def _no_proxy_ssl_context() -> ssl.SSLContext:
+    """Return an SSL context that bypasses HTTP(S) proxy environment variables.
+
+    urllib builds its proxy from ``http_proxy`` / ``https_proxy`` /
+    ``HTTP_PROXY`` / ``HTTPS_PROXY`` and ``REQUEST_METHOD`` defaults. Using a
+    custom SSL context disables the auto-detected proxy when no explicit proxy
+    handler is installed. We also ensure the hostname check stays on.
+    """
+    return ssl.create_default_context()
+
+
+def _ruiduobao_search(keyword: str, province: str | None = None,
+                      level: str | None = None, limit: int = 20) -> list[dict[str, Any]]:
+    """Call /search and parse the SSE stream into a list of result dicts."""
+    params: dict[str, Any] = {"keyword": keyword, "limit": str(limit)}
+    if province:
+        params["province"] = province
+    response = _ruiduobao_request(f"{RUIDUOBAO_API}/search", params=params,
+                                  headers={"Accept": "text/event-stream"})
+    raw = response.read().decode("utf-8", errors="replace")
+    results: list[dict[str, Any]] = []
+    for line in raw.splitlines():
+        line = line.strip()
+        if not line.startswith("data:"):
+            continue
+        payload = line[5:].strip()
+        if not payload:
+            continue
+        try:
+            event = json.loads(payload)
+        except json.JSONDecodeError:
+            continue
+        if event.get("type") == "result" and isinstance(event.get("data"), dict):
+            data = dict(event["data"])
+            data["_scope"] = event.get("scope")
+            results.append(data)
+    if level:
+        results = [item for item in results if item.get("level") == level]
+    return results
+
+
+def _ruiduobao_geojson_for_code(code: str, year: int) -> dict[str, Any]:
+    response = _ruiduobao_request(f"{RUIDUOBAO_API}/getGsonDB", params={"code": code, "year": year})
+    payload = json.load(response)
+    if payload.get("status") != "success":
+        raise DemError(f"map.ruiduobao.com could not load admin {code}: {payload.get('message', 'unknown error')}")
+    relative = payload.get("filepath")
+    if not relative:
+        raise DemError(f"map.ruiduobao.com returned no filepath for admin {code}")
+    file_url = f"{RUIDUOBAO_API}{relative}" if relative.startswith("/") else f"{RUIDUOBAO_API}/{relative}"
+    geo_response = _ruiduobao_request(file_url)
+    return json.load(geo_response)
+
+
+def _pick_admin_result(results: list[dict[str, Any]], name: str, province: str | None,
+                       city: str | None, level: str) -> dict[str, Any]:
+    if not results:
+        context = []
+        if province:
+            context.append(f"province={province}")
+        if city:
+            context.append(f"city={city}")
+        ctx = f" ({', '.join(context)})" if context else ""
+        raise DemError(f"no administrative division matched {name!r} at level {level}{ctx}")
+
+    def score(item: dict[str, Any]) -> tuple[int, int, int]:
+        s = 0
+        if province and item.get("province_name") == province:
+            s += 100
+        if city and item.get("city_name") == city:
+            s += 50
+        if item.get("name") == name:
+            s += 10
+        scope_bonus = 5 if item.get("_scope") == "province" else 0
+        return (s, scope_bonus, 0)
+
+    ranked = sorted(results, key=score, reverse=True)
+    return ranked[0]
+
+
+def resolve_admin(name: str | None, code: str | None, province: str | None = None,
+                  city: str | None = None, level: str = "xian", year: int = 2023,
+                  expand_km: float = 1.0) -> dict[str, Any]:
+    """Resolve an administrative-division name (or code) to an expanded bbox.
+
+    Returns a dict with: ``name``, ``code``, ``level`` (english label),
+    ``admin_level_code`` (sheng/shi/xian/xiang/cun), ``province``,
+    ``city`` (when known), ``bbox_wgs84`` (raw geometry bbox),
+    ``bbox_wgs84_expanded`` (bbox padded by ``expand_km`` on every side),
+    ``expand_km``, ``area_km2`` (raw geometry area via ``bbox_area_km2``),
+    ``area_km2_expanded`` (expanded bbox area), and ``source``
+    (``map.ruiduobao.com``).
+    """
+    if not name and not code:
+        raise DemError("provide --admin NAME or --admin-code CODE")
+    level_code = _normalize_admin_level(level)
+    chosen: dict[str, Any]
+    if code:
+        chosen = {"name": name or code, "code": code, "level": level_code,
+                  "province_name": province, "city_name": city}
+    else:
+        results = _ruiduobao_search(name, province=province, level=level_code, limit=20)
+        chosen = _pick_admin_result(results, name, province, city, level_code)
+    geojson = _ruiduobao_geojson_for_code(chosen["code"], year)
+    raw_bbox = _bbox_of_geojson(geojson)
+    expanded = expand_bbox_km(raw_bbox, expand_km)
+    return {
+        "name": chosen.get("name"),
+        "code": chosen.get("code"),
+        "level": ADMIN_LEVEL_LABELS.get(chosen["level"], chosen["level"]),
+        "admin_level_code": chosen["level"],
+        "province": chosen.get("province_name"),
+        "city": chosen.get("city_name"),
+        "year": year,
+        "source": "map.ruiduobao.com",
+        "bbox_wgs84": list(raw_bbox),
+        "bbox_wgs84_expanded": list(expanded),
+        "expand_km": expand_km,
+        "area_km2": round(bbox_area_km2(raw_bbox), 3),
+        "area_km2_expanded": round(bbox_area_km2(expanded), 3),
+    }
+
+
+def cmd_admin_bbox(args: argparse.Namespace) -> int:
+    name = getattr(args, "name", None)
+    code = getattr(args, "code", None)
+    if not name and not code:
+        raise DemError("provide --name NAME or --code CODE")
+    level = _normalize_admin_level(getattr(args, "level", None) or "xian")
+    year = int(getattr(args, "year", None) or 2023)
+    expand_km = float(getattr(args, "expand_km", None) or 1.0)
+    result = resolve_admin(
+        name=name,
+        code=code,
+        province=getattr(args, "province", None),
+        city=getattr(args, "city", None),
+        level=level,
+        year=year,
+        expand_km=expand_km,
+    )
+    print(json.dumps(result, ensure_ascii=False, indent=2))
+    return 0
+
+
+def select_source(source: str, dataset: str | None, resolution: float | None, bbox: Sequence[float]) -> tuple[str, str, dict[str, Any] | None]:
+    """Pick (source, dataset, fallback_note).
+
+    When the caller asks for ``opentopography`` or ``earthdata`` without the
+    matching credential in the environment, transparently downgrade to the
+    public Microsoft Planetary Computer Copernicus DEM so the skill remains
+    usable out of the box. ``fallback_note`` is a small dict describing the
+    substitution so ``plan`` and ``download`` can surface it to the user.
+    """
     requested_dataset = canonical_dataset(dataset)
+    fallback: dict[str, Any] | None = None
+    if source == "opentopography" and not os.environ.get("OPENTOPOGRAPHY_API_KEY"):
+        fallback = {
+            "from_source": "opentopography",
+            "to_source": "mpc",
+            "to_dataset": "cop-dem-glo-90" if resolution and resolution >= 90 else "cop-dem-glo-30",
+            "reason": "OPENTOPOGRAPHY_API_KEY not set; auto-falling back to Microsoft Planetary Computer Copernicus DEM",
+        }
+        source = "mpc"
+        # Always switch to a Copernicus dataset on fallback, even if the
+        # caller passed an OpenTopography-specific name like SRTMGL1.
+        requested_dataset = fallback["to_dataset"]
+    elif source == "earthdata" and not os.environ.get("EARTHDATA_TOKEN"):
+        fallback = {
+            "from_source": "earthdata",
+            "to_source": "mpc",
+            "to_dataset": "cop-dem-glo-90" if resolution and resolution >= 90 else "cop-dem-glo-30",
+            "reason": "EARTHDATA_TOKEN not set; auto-falling back to Microsoft Planetary Computer Copernicus DEM",
+        }
+        source = "mpc"
+        requested_dataset = fallback["to_dataset"]
     if source == "auto":
         if requested_dataset:
             candidates = [name for name, info in SOURCES.items() if requested_dataset in info["datasets"]]
             if not candidates:
                 raise DemError(f"no source supports dataset {requested_dataset!r}")
-            preferred = ["mpc", "opentopography", "earthdata", "usgs", "aws"]
+            preferred = ["mpc", "usgs", "aws", "opentopography", "earthdata"]
             selected_source = next(name for name in preferred if name in candidates)
             return select_source(selected_source, requested_dataset, resolution, bbox)
-        return "mpc", "cop-dem-glo-90" if resolution and resolution >= 90 else "cop-dem-glo-30"
+        return "mpc", ("cop-dem-glo-90" if resolution and resolution >= 90 else "cop-dem-glo-30"), None
     if source in ("mpc", "aws"):
         selected = requested_dataset or ("cop-dem-glo-90" if resolution and resolution >= 90 else "cop-dem-glo-30")
     elif source == "opentopography":
@@ -326,7 +697,7 @@ def select_source(source: str, dataset: str | None, resolution: float | None, bb
         raise DemError(f"unknown source: {source}")
     if selected not in SOURCES[source]["datasets"]:
         raise DemError(f"dataset {selected!r} is not supported by source {source!r}")
-    return source, selected
+    return source, selected, fallback
 
 
 def estimate_pixels(bbox: Sequence[float], dataset: str) -> int | None:
@@ -424,6 +795,32 @@ def _dependency_error(provider: str, exc: ImportError) -> DemError:
     return DemError("raster processing requires rasterio")
 
 
+def _urs_basic_to_bearer(username: str, password: str) -> str | None:
+    """Exchange Earthdata username/password for a short-lived bearer token.
+
+    Phase 7 (2026-07-27): Used when caller provides EARTHDATA_USERNAME/PASSWORD
+    but no pre-generated EARTHDATA_TOKEN. Returns None on failure so caller
+    can fall back to a clear error message.
+    """
+    import base64
+    body = (
+        f"grant_type=password&username={urllib.parse.quote(username)}"
+        f"&password={urllib.parse.quote(password)}&client_id=download-dem"
+    ).encode("utf-8")
+    req = urllib.request.Request(
+        "https://urs.earthdata.nasa.gov/oauth/token",
+        data=body,
+        headers={"Content-Type": "application/x-www-form-urlencoded"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as response:
+            payload = json.load(response)
+        return payload.get("access_token")
+    except Exception:
+        return None
+
+
 def _get_json(
     url: str,
     headers: dict[str, str] | None = None,
@@ -486,9 +883,9 @@ def discover_opentopography_assets(
     dataset: str,
     args: argparse.Namespace,
 ) -> list[Asset]:
-    api_key = os.environ.get(args.api_key_env)
+    api_key = os.environ.get(ALLOWED_CREDENTIAL_ENV_VARS["opentopography"])
     if not api_key:
-        raise DemError(f"set {args.api_key_env} before using OpenTopography")
+        raise DemError(f"set {ALLOWED_CREDENTIAL_ENV_VARS['opentopography']} before using OpenTopography")
     assets = []
     for index, chunk in enumerate(split_bbox(bbox, args.chunk_degrees)):
         west, south, east, north = chunk
@@ -583,9 +980,30 @@ def _select_cmr_dem_link(entry: dict[str, Any]) -> str | None:
 
 
 def discover_earthdata_assets(bbox: Sequence[float], dataset: str, args: argparse.Namespace) -> list[Asset]:
-    token = os.environ.get(args.earthdata_token_env)
+    # Phase 7 (2026-07-27): resolve via vendored geoskill_core.credentials.
+    # Falls back to env-only when the helper is unavailable.
+    token = None
+    try:
+        from _geoskill_core.credentials import get_earthdata_token
+        token = get_earthdata_token()
+    except ImportError:
+        token = os.environ.get(ALLOWED_CREDENTIAL_ENV_VARS["earthdata"])
     if not token:
-        raise DemError(f"set {args.earthdata_token_env} before downloading ASTER GDEM V3")
+        # Also accept EARTHDATA_USERNAME/PASSWORD by minting a short-lived
+        # bearer token via the URS OAuth flow. Keep the env var as fallback
+        # for users who already have a pre-generated token.
+        try:
+            from _geoskill_core.credentials import get_earthdata_creds
+            u, p = get_earthdata_creds()
+            if u and p:
+                token = _urs_basic_to_bearer(u, p)
+        except ImportError:
+            pass
+    if not token:
+        raise DemError(
+            f"set {ALLOWED_CREDENTIAL_ENV_VARS['earthdata']} (or EARTHDATA_USERNAME/PASSWORD) "
+            f"before downloading ASTER GDEM V3"
+        )
     config = EARTHDATA_DATASETS[dataset]
     page_num = 1
     assets = []
@@ -1066,9 +1484,20 @@ def validate_dem(path: Path, requested_bbox: Sequence[float] | None = None) -> d
     except ImportError as exc:
         raise _dependency_error("raster", exc) from exc
 
+    path = Path(path)
+    if not path.exists():
+        raise DemError(f"file not found: {path}")
+    if not path.is_file():
+        raise DemError(f"not a regular file: {path}")
+
+    try:
+        dataset = rasterio.open(path)
+    except Exception as exc:
+        raise DemError(f"cannot open raster {path}: {safe_error(exc)}") from exc
+
     failures = []
     warnings = []
-    with rasterio.open(path) as dataset:
+    with dataset:
         if dataset.crs is None:
             failures.append("missing CRS")
         if dataset.width <= 0 or dataset.height <= 0 or dataset.count <= 0:
@@ -1301,7 +1730,7 @@ def cmd_sources(_: argparse.Namespace) -> int:
 
 def _plan_payload(args: argparse.Namespace) -> dict[str, Any]:
     bbox, geometries = resolve_aoi(args)
-    source, dataset = select_source(args.source, args.dataset, args.resolution, bbox)
+    source, dataset, fallback = select_source(args.source, args.dataset, args.resolution, bbox)
     pixels = estimate_pixels(bbox, dataset)
     area, area_method = aoi_area_km2(bbox, geometries)
     mode, mode_reason = choose_output_mode(
@@ -1312,9 +1741,29 @@ def _plan_payload(args: argparse.Namespace) -> dict[str, Any]:
         args.max_pixels,
     )
     estimated_assets = estimate_asset_count(source, dataset, bbox, args.chunk_degrees)
+    warnings: list[str] = []
+    allow_large = bool(getattr(args, "allow_large", False))
+    if mode == "mosaic" and (
+        area > args.mosaic_max_area_km2 or (pixels is not None and pixels > args.max_pixels)
+    ):
+        if allow_large:
+            warnings.append(
+                "mosaic size exceeds default thresholds; --allow-large acknowledges the extra resource cost"
+            )
+        else:
+            warnings.append(
+                "mosaic size exceeds default thresholds; pass --allow-large to actually run this job"
+            )
+    if fallback:
+        warnings.append(fallback["reason"])
     return {
         "source": source,
         "dataset": dataset,
+        "requested_source": fallback["from_source"] if fallback else source,
+        "requested_dataset": (
+            dataset if not fallback else None
+        ),
+        "credential_fallback": fallback,
         "bbox_wgs84": list(bbox),
         "aoi_area_km2": round(area, 3),
         "area_method": area_method,
@@ -1324,6 +1773,8 @@ def _plan_payload(args: argparse.Namespace) -> dict[str, Any]:
         "requested_mode": args.mode,
         "selected_mode": mode,
         "mode_reason": mode_reason,
+        "allow_large_acknowledged": allow_large,
+        "warnings": warnings,
         "mosaic_max_area_km2": args.mosaic_max_area_km2,
         "max_pixels": args.max_pixels,
         **DATASETS.get(dataset, {}),
@@ -1341,7 +1792,9 @@ def cmd_plan(args: argparse.Namespace) -> int:
 def cmd_download(args: argparse.Namespace) -> int:
     bbox, geometries = resolve_aoi(args)
     requested_source = args.source
-    source, dataset = select_source(requested_source, args.dataset, args.resolution, bbox)
+    source, dataset, fallback = select_source(requested_source, args.dataset, args.resolution, bbox)
+    if fallback:
+        emit_event("credential_fallback", **fallback)
     pixels = estimate_pixels(bbox, dataset)
     area, area_method = aoi_area_km2(bbox, geometries)
     mode, mode_reason = choose_output_mode(
@@ -1360,7 +1813,7 @@ def cmd_download(args: argparse.Namespace) -> int:
 
     attempts = []
     candidate_sources = [source]
-    if requested_source == "auto" and source == "mpc" and dataset in SOURCES["aws"]["datasets"]:
+    if (requested_source == "auto" or fallback) and source == "mpc" and dataset in SOURCES["aws"]["datasets"]:
         candidate_sources.append("aws")
     final_error = None
     for candidate in candidate_sources:
@@ -1397,6 +1850,8 @@ def cmd_download(args: argparse.Namespace) -> int:
         "created_at": utc_now(),
         "source": source,
         "dataset": dataset,
+        "requested_source": fallback["from_source"] if fallback else source,
+        "credential_fallback": fallback,
         "mode": mode,
         "mode_reason": mode_reason,
         "bbox_wgs84": list(bbox),
@@ -1412,17 +1867,31 @@ def cmd_download(args: argparse.Namespace) -> int:
     if metadata_path is None:
         raise DemError("internal error: no metadata path")
     write_json(metadata_path, metadata)
-    print(
-        json.dumps(
-            {
+    full_output = {
+        "output": str(effective_output.resolve()),
+        "sidecar": str(metadata_path.resolve()),
+        **metadata,
+    }
+    # Phase 5: --qa sidecar summary (user-requested path)
+    if getattr(args, "qa", None):
+        write_qa_summary(
+            args.qa, skill="download-dem", command="download",
+            args=args,
+            payload={
                 "output": str(effective_output.resolve()),
                 "sidecar": str(metadata_path.resolve()),
-                **metadata,
+                "source": source,
+                "dataset": dataset,
+                "mode": mode,
+                "mode_reason": mode_reason,
+                "bbox_wgs84": list(bbox),
+                "aoi_area_km2": round(area, 3),
+                "validation_status": validation.get("status"),
+                "attempts": attempts,
             },
-            ensure_ascii=False,
-            indent=2,
         )
-    )
+        full_output["qa"] = str(args.qa)
+    print(json.dumps(full_output, ensure_ascii=False, indent=2))
     return 0 if validation["status"] != "fail" else 2
 
 
@@ -1435,14 +1904,30 @@ def cmd_validate(args: argparse.Namespace) -> int:
     return 0 if report["status"] != "fail" else 2
 
 
-def add_aoi_arguments(parser: argparse.ArgumentParser) -> None:
+def add_aoi_arguments(parser: argparse.ArgumentParser, *, include_admin: bool = False) -> None:
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--bbox", nargs=4, type=float, metavar=("WEST", "SOUTH", "EAST", "NORTH"))
-    group.add_argument("--aoi", help="Vector AOI readable by Fiona")
+    if include_admin:
+        group.add_argument("--admin", help="Chinese administrative-division name; resolved via map.ruiduobao.com")
+        group.add_argument("--bbox", nargs=4, type=float, metavar=("WEST", "SOUTH", "EAST", "NORTH"))
+        group.add_argument("--aoi", help="Vector AOI readable by Fiona")
+        admin_group = parser.add_argument_group("admin AOI options",
+                                                "Optional refinement for --admin; ignored otherwise")
+        admin_group.add_argument("--admin-code", help="Use a known 6/12-digit code instead of searching by name")
+        admin_group.add_argument("--admin-province", help="Province name to disambiguate (e.g. '四川省')")
+        admin_group.add_argument("--admin-city", help="Prefecture-level city to disambiguate (e.g. '成都市')")
+        admin_group.add_argument("--admin-level", default="xian",
+                                 help="Administrative level: sheng/province, shi/city, xian/county, xiang/town, cun/village (default xian)")
+        admin_group.add_argument("--admin-year", type=int, default=2023,
+                                 help="Year of the administrative vector (default 2023)")
+        admin_group.add_argument("--admin-expand-km", type=float, default=1.0,
+                                 help="Pad the raw admin bbox by N kilometres on every side (default 1)")
+    else:
+        group.add_argument("--bbox", nargs=4, type=float, metavar=("WEST", "SOUTH", "EAST", "NORTH"))
+        group.add_argument("--aoi", help="Vector AOI readable by Fiona")
 
 
-def add_planning_arguments(parser: argparse.ArgumentParser) -> None:
-    add_aoi_arguments(parser)
+def add_planning_arguments(parser: argparse.ArgumentParser, *, include_admin: bool = False) -> None:
+    add_aoi_arguments(parser, include_admin=include_admin)
     parser.add_argument("--source", choices=["auto", *SOURCES], default="auto")
     parser.add_argument("--dataset")
     parser.add_argument("--resolution", type=float, help="Desired nominal resolution in metres")
@@ -1450,6 +1935,8 @@ def add_planning_arguments(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--mosaic-max-area-km2", type=float, default=DEFAULT_MOSAIC_MAX_AREA_KM2)
     parser.add_argument("--max-pixels", type=int, default=DEFAULT_MAX_PIXELS)
     parser.add_argument("--chunk-degrees", type=float, default=DEFAULT_CHUNK_DEGREES)
+    parser.add_argument("--allow-large", action="store_true",
+                        help="Acknowledge oversized mosaic (plan: reports the constraint, download: bypasses it)")
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -1460,14 +1947,12 @@ def build_parser() -> argparse.ArgumentParser:
     sources_parser.set_defaults(func=cmd_sources)
 
     plan_parser = subparsers.add_parser("plan", help="Choose a provider, output mode, and resource strategy")
-    add_planning_arguments(plan_parser)
+    add_planning_arguments(plan_parser, include_admin=True)
     plan_parser.set_defaults(func=cmd_plan)
 
     download_parser = subparsers.add_parser("download", help="Download a resumable tile set or windowed DEM mosaic")
-    add_planning_arguments(download_parser)
+    add_planning_arguments(download_parser, include_admin=True)
     download_parser.add_argument("--output", required=True, help="GeoTIFF for mosaic mode or directory for tile mode")
-    download_parser.add_argument("--api-key-env", default="OPENTOPOGRAPHY_API_KEY")
-    download_parser.add_argument("--earthdata-token-env", default="EARTHDATA_TOKEN")
     download_parser.add_argument("--workers", type=int, default=DEFAULT_WORKERS)
     download_parser.add_argument("--retries", type=int, default=DEFAULT_RETRIES)
     download_parser.add_argument("--timeout", type=int, default=DEFAULT_TIMEOUT_SECONDS)
@@ -1475,12 +1960,13 @@ def build_parser() -> argparse.ArgumentParser:
     download_parser.add_argument("--max-assets", type=int, default=DEFAULT_MAX_ASSETS)
     download_parser.add_argument("--max-asset-gb", type=float, default=DEFAULT_MAX_ASSET_BYTES / 1_000_000_000)
     download_parser.add_argument("--allow-many-assets", action="store_true")
-    download_parser.add_argument("--allow-large", action="store_true")
     download_parser.add_argument("--resume", action=argparse.BooleanOptionalAction, default=True)
     download_parser.add_argument("--verify-existing", action="store_true", help="Hash completed assets before skipping")
     download_parser.add_argument("--stage-assets", action="store_true", help="Download assets before mosaicking")
     download_parser.add_argument("--keep-cache", action="store_true")
     download_parser.add_argument("--overwrite", action="store_true")
+    download_parser.add_argument("--qa", metavar="PATH", default=None,
+                                 help="Write a JSON run-summary sidecar to PATH (Phase 5).")
     download_parser.set_defaults(func=cmd_download)
 
     validate_parser = subparsers.add_parser("validate", help="Validate a DEM GeoTIFF or raw tile directory")
@@ -1489,6 +1975,19 @@ def build_parser() -> argparse.ArgumentParser:
     validate_parser.add_argument("--report", help="Optional JSON report path")
     validate_parser.add_argument("--verify-checksums", action="store_true")
     validate_parser.set_defaults(func=cmd_validate)
+
+    admin_parser = subparsers.add_parser("admin-bbox", help="Resolve a Chinese admin name to a WGS84 bbox (optionally padded by N km)")
+    admin_group = admin_parser.add_mutually_exclusive_group(required=True)
+    admin_group.add_argument("--name", help="Administrative-division name, e.g. '锦江区'")
+    admin_group.add_argument("--code", help="Administrative-division code, e.g. '510104'")
+    admin_parser.add_argument("--province", help="Province to disambiguate (e.g. '四川省')")
+    admin_parser.add_argument("--city", help="Prefecture-level city to disambiguate (e.g. '成都市')")
+    admin_parser.add_argument("--level", default="xian",
+                              help="Admin level: sheng/province, shi/city, xian/county, xiang/town, cun/village (default xian)")
+    admin_parser.add_argument("--year", type=int, default=2023, help="Year of the admin vector (default 2023)")
+    admin_parser.add_argument("--expand-km", type=float, default=1.0,
+                              help="Pad the raw admin bbox by N km on every side (default 1)")
+    admin_parser.set_defaults(func=cmd_admin_bbox)
     return parser
 
 

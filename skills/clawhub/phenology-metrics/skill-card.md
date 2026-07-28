@@ -1,5 +1,5 @@
 ## Description: <br>
-Extract phenological metrics from NDVI/EVI time series data, including SOS, EOS, LOS, peak value and date, amplitude, and integral using threshold, derivative, or double logistic methods. <br>
+Extracts phenological metrics from NDVI/EVI time series data, including start and end of season, season length, peak value and date, amplitude, and integral. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,36 +7,36 @@ This skill is ready for commercial/non-commercial use. <br>
 [ruiduobao](https://clawhub.ai/user/ruiduobao) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, researchers, and analysts use this skill to compute vegetation phenology metrics from NDVI/EVI time series in CSV or multi-band GeoTIFF inputs and to generate fitted curve data for review. <br>
+Developers and analysts use this skill to compute vegetation phenology metrics from local CSV time series or multi-band GeoTIFF stacks. It supports threshold, derivative, and double logistic workflows for exploratory and production geospatial analysis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security scan reports under-disclosed online place lookup and satellite-download behavior in the from-place workflow despite local-processing claims. <br>
-Mitigation: Review before installing for offline-only use; use local CSV/GeoTIFF workflows or remove the from-place workflow unless geocoding requests, downloads, and local cache creation are acceptable. <br>
-Risk: Phenology metrics can be misleading when input time series are noisy, sparse, or have weak seasonality. <br>
-Mitigation: Inspect QA outputs and fitted curve data, compare methods, tune gap and smoothing parameters, and review outputs before scientific or operational use. <br>
+Risk: The skill includes under-disclosed networked place lookup and satellite data download behavior despite local-only wording. <br>
+Mitigation: Review the skill before installing and use it only when networked lookup and download behavior is acceptable for the deployment environment. <br>
+Risk: The bundled credential defaults include a hardcoded Earthdata password. <br>
+Mitigation: Remove or rotate the exposed Earthdata credential and configure personal credentials through environment variables or a secure local store. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/phenology-metrics) <br>
-- [README](README.md) <br>
-- [Developer notes](DEV.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/ruiduobao/skills/phenology-metrics) <br>
+- [README.md](README.md) <br>
+- [SKILL.md](SKILL.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance with command examples; CLI workflows produce CSV, JSON, and optional QA JSON files.] <br>
+**Output Type(s):** [Guidance, Shell commands, Code, Files] <br>
+**Output Format:** [Markdown guidance with shell commands; generated outputs are CSV or JSON files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can generate phenology metric summaries, fitted curve data, and per-run QA summaries when requested.] <br>
+**Other Properties Related to Output:** [May produce fitted-curve plot data and per-pixel phenology result files for batch workflows.] <br>
 
 ## Skill Version(s): <br>
-0.3.0 (source: server release metadata) <br>
+0.3.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,12 +1,6 @@
-﻿---
-description: 'Estimate forest carbon stock from remote sensing data using BEF, allometric
-
-  equations, or IPCC Tier 1/2 methods. Includes Monte Carlo uncertainty
-
-  analysis. Supports raster (GeoTIFF) and tabular (CSV) inputs.
-
-  '
+---
 name: forest-carbon-estimate
+description: 'Estimate forest carbon stock from remote sensing data using BEF, allometric equations, or IPCC Tier 1/2 methods. Includes Monte Carlo uncertainty analysis. Supports raster (GeoTIFF) and tabular (CSV) inputs.'
 ---
 
 # forest-carbon-estimate

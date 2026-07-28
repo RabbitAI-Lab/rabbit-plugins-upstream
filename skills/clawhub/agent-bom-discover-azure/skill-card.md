@@ -11,32 +11,34 @@ Apache-2.0 <br>
 
 
 ## Use Case: <br>
-Developers and cloud security engineers use this skill to inventory Azure OpenAI, Container Apps, AKS, Functions, ML, and related agentic Azure infrastructure as canonical agent-bom inventory. It supports discovery-first workflows that can optionally scan the resulting local inventory when the operator asks for findings. <br>
+Developers and cloud security engineers use this skill to inventory Azure OpenAI, Container Apps, AKS, Functions, Azure ML, and related agentic infrastructure as canonical agent-bom JSON. The workflow supports local discovery and optional scan reporting without handing agent-bom long-lived Azure credentials. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill reads Azure identity configuration and token-cache files when using the operator's existing Azure credential chain. <br>
-Mitigation: Use a read-only Azure account or scoped service principal, avoid environments where Azure token-cache access is not acceptable, and do not paste or print secrets. <br>
-Risk: Inventory output can describe Azure resources and service metadata. <br>
-Mitigation: Write inventory only to an operator-selected path and review the local JSON before sharing or scanning it. <br>
+Risk: Azure discovery can expose subscription and service metadata if the generated inventory is shared without review. <br>
+Mitigation: Use a least-privilege read-only Azure identity, inventory only approved subscriptions, and review generated inventory before sharing it. <br>
+Risk: Pasted client secrets, access tokens, or connection strings could be captured in an agent transcript or local output. <br>
+Mitigation: Use the operator's existing Azure identity chain and do not paste or print credential values. <br>
+Risk: Using credentials with broader permissions than required increases blast radius if the operator environment is compromised. <br>
+Mitigation: Prefer read-only Azure credentials from Azure CLI, workload identity, managed identity, or short-lived service principal flows. <br>
 
 
 ## Reference(s): <br>
-- [agent-bom homepage](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
 - [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-discover-azure) <br>
+- [agent-bom source repository](https://github.com/msaad00/agent-bom) <br>
+- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON inventory guidance] <br>
+**Output Type(s):** [JSON, Markdown, Shell commands, Guidance] <br>
+**Output Format:** [Markdown guidance with bash commands and JSON inventory or findings files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operator-reviewed commands and guidance for writing canonical local inventory JSON and optional agent-bom scan findings.] <br>
+**Other Properties Related to Output:** [Produces operator-selected local inventory JSON and, when requested, local agent-bom scan findings JSON.] <br>
 
 ## Skill Version(s): <br>
-0.98.0 (source: frontmatter and server release metadata) <br>
+0.98.2 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

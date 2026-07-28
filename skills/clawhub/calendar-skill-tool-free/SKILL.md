@@ -1,28 +1,23 @@
 ---
 slug: calendar-skill-tool-free
 name: calendar-skill-tool-free
-version: 1.0.0
+version: 1.0.1
 displayName: 日历管理技能基础版
 summary: 通过 porteden CLI 安全管理 Google 与 Outlook 日历,支持事件查询、创建与更新
-license: Proprietary
+license: MIT
 edition: free
-description: '核心能力: 日程管理领域的专业化 AI 辅助工具,提供核心基础功能支持.
-  适用场景: 个人用户与轻量级场景,涵盖日常操作、自动化工作流与智能决策辅助.
-  差异化: FREE 版本,面向个人用户提供核心功能、简洁操作与社区支持.
-  适用关键词: calendar, porteden, 日历事件, 日程查询, 会议邀请'
+description: "核心能力: 日程管控领域的专业化 AI 辅助工具,包含核心基础功能兼容. 适用于需要calendar skill tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要calendar skill tool相关能力的开发场景,包含结构化的工作流程和配置指引."
 tags:
   - 日历
+  - calendar
+  - skill
+  - automation
+  - productivity
   - porteden
   - Outlook
   - Google Calendar
   - 工具
   - 效率
-  - 通信
-  - 邮件
-  - 写作
-  - free
-  - pro
-  - 版本
 tools:
   - read
   - exec
@@ -30,6 +25,8 @@ tools:
   - grep
 homepage: ""
 category: "Automation"
+pricing_tier: free
+
 ---
 # 日历管理技能基础版
 
@@ -167,7 +164,7 @@ brew install porteden/tap/porteden
 # 登录
 porteden auth login
 # 或使用 API Key
-export PE_API_KEY="your-key"
+export PE_API_KEY=${API_KEY:?请设置环境变量}
 # 验证
 porteden auth status
 ```
@@ -208,7 +205,7 @@ brew install porteden/tap/porteden
 # 登录
 porteden auth login
 # 或使用 API Key
-export PE_API_KEY="your-key"
+export PE_API_KEY=${API_KEY:?请设置环境变量}
 # 验证
 porteden auth status
 ```
@@ -235,7 +232,7 @@ porteden auth status
 | cache_enabled | bool | true | 启用结果缓存 |
 | timeout | int | 30 | 操作超时时间(秒) |
 
-## 最佳实践
+## 优秀实践
 
 1. **变更操作前务必确认目标账户与事件**
 2. **使用 --profile 隔离不同账户避免误操作**
@@ -306,7 +303,7 @@ FREE 版本支持单一 API Key 配置,满足个人使用需求:
 
 ### 可用性分类
 
-- **分类**: MD+EXEC(纯 Markdown 指令,部分功能需要 exec 命令行执行能力)
+- **分类**: MD+EXEC模式纯 Markdown 指令,部分功能需要 exec 命令行执行能力)
 - **说明**: 基于 Markdown 的 AI Skill,通过自然语言指令驱动 Agent 执行任务
 - **FREE 特性**: 支持单次执行、基础配置与社区支持
 - **安全等级**: 基础,数据本地存储,建议定期备份

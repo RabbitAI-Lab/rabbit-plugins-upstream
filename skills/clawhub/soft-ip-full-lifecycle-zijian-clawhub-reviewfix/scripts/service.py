@@ -1,6 +1,13 @@
+#!/usr/bin/env python3
+"""
+soft-ip-full-lifecycle-zijian - Service execution script.
+Reads payCredential from order file, verifies payment, and runs SoftIP Self-Check analysis.
+"""
 import argparse
 import hashlib
 import json
+import os
+import subprocess
 import sys
 import urllib.error
 import urllib.request
@@ -10,26 +17,31 @@ from file_utils import load_order
 DEFAULT_SERVER_URL = "https://api.ideaidea.com.cn"
 GET_RESULT_PATH = "/api/skill/getServiceResult"
 
-SKILL_NAME = "soft-ip-full-lifecycle-zijian"
+SLUG = "soft-ip-full-lifecycle-zijian"
 
 SERVER_URL = DEFAULT_SERVER_URL
 GET_RESULT_URL = f"{SERVER_URL}{GET_RESULT_PATH}"
 
+SKILL_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+FETCH_SCRIPT = os.path.join(SKILL_DIR, "scripts", "fetch_ssq.py")
+ANALYZE_SCRIPT = os.path.join(SKILL_DIR, "scripts", "analyze_ssq.py")
 
-def compute_indicator(skill_name: str) -> str:
-    return hashlib.md5(skill_name.encode("utf-8")).hexdigest()
+
+def compute_indicator(slug: str) -> str:
+    return hashlib.md5(slug.encode("utf-8")).hexdigest()
 
 
-def request_service_authorization(order_no: str, credential: str) -> dict:
+def verify_payment(order_no: str, credential: str) -> dict | None:
+    """Send credential to service backend for verification."""
     payload = json.dumps({
-        "slug": SKILL_NAME,
+        "slug": SLUG,
         "orderNo": order_no,
         "credential": credential,
     }).encode("utf-8")
     req = urllib.request.Request(
         GET_RESULT_URL,
         data=payload,
-        headers={"Content-Type": "application/json", "User-Agent": "SoftIP-Skill/3.1"},
+        headers={"Content-Type": "application/json"},
         method="POST",
     )
     try:
@@ -39,58 +51,84 @@ def request_service_authorization(order_no: str, credential: str) -> dict:
         raise RuntimeError(f"Authorization request failed: {e}") from e
 
 
-def main() -> int:
-    parser = argparse.ArgumentParser(
-        description="Verify encrypted payment credential with clawtip authorization service for soft-ip-full-lifecycle-zijian"
+def run_analysis() -> str:
+    """Execute SoftIP Self-Check data fetch and analysis."""
+    print("\n[STEP 1/2] Fetching latest SoftIP Self-Check data from cwl.gov.cn...")
+    result = subprocess.run(
+        [sys.executable, FETCH_SCRIPT],
+        capture_output=True, text=True, timeout=120
     )
+    print(result.stdout.strip())
+    if result.returncode != 0:
+        print(result.stderr)
+        raise RuntimeError("Data fetch failed")
+
+    print("\n[STEP 2/2] Generating analysis report...")
+    result = subprocess.run(
+        [sys.executable, ANALYZE_SCRIPT],
+        capture_output=True, text=True, timeout=120
+    )
+    print(result.stdout.strip())
+    if result.returncode != 0:
+        print(result.stderr)
+        raise RuntimeError("Analysis generation failed")
+
+    report_path = os.path.join(SKILL_DIR, "\u6700\u65b0\u5206\u6790\u7ed3\u679c.md")
+    if os.path.exists(report_path):
+        with open(report_path, "r", encoding="utf-8") as f:
+            return f.read()
+    return result.stdout
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="Execute SoftIP Self-Check analysis service")
     parser.add_argument("order_no", help="Order number")
     args = parser.parse_args()
-    print(60*"=")
-    print("NOTICE: This step sends the encrypted payment credential")
-    print("        to https://api.ideaidea.com.cn for verification.")
-    print("        No source code or legal documents are transmitted.")
-    print("        Communication: HTTPS + SM4 encryption.")
-    print(60*"=")
+
+    indicator = compute_indicator(SLUG)
 
     try:
-        order_data = load_order(compute_indicator(SKILL_NAME), args.order_no)
+        order_data = load_order(indicator, args.order_no)
+        question = order_data.get("question")
+        if not question:
+            raise RuntimeError("Missing question field in order file")
         credential = order_data.get("payCredential")
         if not credential:
-            raise RuntimeError("Missing payCredential in local order file")
-        result = request_service_authorization(args.order_no, credential)
+            raise RuntimeError("Missing payCredential in order file")
+
+        result = verify_payment(args.order_no, credential)
     except Exception as e:
-        print("PAY_STATUS: ERROR")
+        print(f"PAY_STATUS: ERROR")
         print(f"ERROR_INFO: {e}")
-        return 1
+        sys.exit(1)
 
     if result is None:
         print("PAY_STATUS: ERROR")
         print("ERROR_INFO: No response from server")
-        return 1
+        sys.exit(1)
 
     response_code = result.get("responseCode")
     pay_status = result.get("payStatus")
     already_fulfilled = result.get("alreadyFulfilled", False)
 
     print(f"PAY_STATUS: {pay_status}")
-    print(f"ALREADY_FULFILLED: {already_fulfilled}")
 
     if response_code != "200" or pay_status != "SUCCESS":
         error_info = result.get("errorInfo", "Unknown error")
-        print("PAY_STATUS: ERROR")
         print(f"ERROR_INFO: {error_info}")
-        return 1
+        sys.exit(1)
 
-    print("AUTHORIZATION_RESULT=verified")
-    _jr = json.dumps({
-        "pay_status": pay_status,
-        "authorization": "verified",
-        "order_no": args.order_no,
-        "already_fulfilled": already_fulfilled,
-    })
-    print(f"JSON_RESULT={_jr}")
-    return 0
+    if already_fulfilled:
+        print("Service already fulfilled for this order.")
+        sys.exit(0)
 
-
-if __name__ == "__main__":
-    sys.exit(main())
+    try:
+        report = run_analysis()
+        print("\n" + "=" * 50)
+        print("  SoftIP Self-Check Analyzer - Analysis Complete")
+        print("=" * 50)
+        print(report)
+    except (RuntimeError, subprocess.TimeoutExpired) as e:
+        print("PAY_STATUS: ERROR")
+        print(f"ERROR_INFO: Analysis execution failed: {e}")
+        sys.exit(1)

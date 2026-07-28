@@ -1,8 +1,5 @@
 ---
 name: edge-cpu-gguf-tuner
-version: 1.1.0
-author: orionshaowswmw
-license: MIT
 description: Tune llama.cpp GGUF inference on CPU-only / edge boxes (1-4 cores, low RAM) for maximum tokens/sec. Complements GPU-oriented tuners. Contains measured, counterintuitive CPU-specific findings — flash attention helps even at short contexts, KV-cache quantization HURTS on CPU, batch size is a no-op, newer-arch Q4 beats older smaller Q5. Use when a model runs without a GPU, on a VPS, container, SBC, or sandbox.
 ---
 

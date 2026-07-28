@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 // bin/opphub-knowledge-status.js · v4.0.0
-// status: implemented (v4 P2-6: GET 改 v2 路径 /api/knowledge?opcId=...)
+// status: implemented (v4 P2-6: GET 改 v2 路径 /api/knowledge?userId=...)
 //
 //
 // v4.0.0 P2-6: 路径统一 v2
 //   旧: GET /api/user/knowledge/status
-//   新: GET /api/knowledge?opcId=...&entryType=...
+//   新: GET /api/knowledge?userId=...&entryType=...
 //   POST /api/knowledge/ingest 暂未合并 (server 端保持 /api/user/knowledge/ingest)
 //
 // 用法: bot 调 `opphub knowledge-status --json`
@@ -49,13 +49,13 @@ async function main() {
     process.exit(1);
   }
 
-  // v4.0.0 P2-6: 改 v2 路径 GET /api/knowledge?opcId=...
+  // v4.0.0 P2-6: 改 v2 路径 GET /api/knowledge?userId=...
   // (v3.1 旧路径 /api/user/knowledge/status 已被 v2 替代, server 端实测已支持)
-  // opc_id 缺失 → 用 'me' alias (server 端 /api/knowledge/route.ts:21 支持)
-  const opcIdParam = token.opc_id && token.opc_id.length > 0
-    ? encodeURIComponent(token.opc_id)
+  // user_id 缺失 → 用 'me' alias (server 端 /api/knowledge/route.ts:21 支持)
+  const userIdParam = token.user_id && token.user_id.length > 0
+    ? encodeURIComponent(token.user_id)
     : "me";
-  const url = `${API_BASE}/api/knowledge?opcId=${opcIdParam}`;
+  const url = `${API_BASE}/api/knowledge?userId=${userIdParam}`;
   let resp;
   try {
     resp = await fetch(url, {

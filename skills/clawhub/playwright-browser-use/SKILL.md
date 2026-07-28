@@ -1,19 +1,20 @@
 ---
 name: Playwright-browser-use
-description: 浏览器自动化 CLI（Playwright 版，纯 Node.js 实现）。除常规自动化（打开网页/截图/点击/填表/翻页）外，提供两项代码执行能力：`eval` 在页面上下文执行任意 JavaScript（可读 cookie/存储、发起带凭证请求），`run-code` 在守护进程上下文执行 Playwright/Node 代码（vm 沙箱隔离）；两者经持久化本地守护进程（127.0.0.1:19223，浏览器状态跨命令保持）控制浏览器，全部命令受随机 token 认证保护，并可经 PW_BROWSER_SAFE_MODE=1 彻底禁用代码执行。仅在可信、用户可见的本地环境中授权使用。
+description: 浏览器自动化 CLI（Playwright 版，纯 Node.js 实现）。除常规自动化（打开网页/截图/点击/填表/翻页）外，提供三类能力：(1) 会话凭证读写原语 —— `cookies` / `storage` 命令可**无需代码执行**即列出/导出/导入/清除/设置 cookie 与 localStorage，直接提取或注入登录态与会话令牌（此路径独立于代码执行；自 v1.3.2 起 `PW_BROWSER_SAFE_MODE=1` 会将其与代码执行一并禁用）；(2) `eval` 在页面上下文执行任意 JavaScript（可读 cookie/存储、发起带凭证请求）；(3) `run-code` 在守护进程上下文执行 Playwright/Node 代码（vm 沙箱隔离）。全部经持久化本地守护进程（127.0.0.1:19223，浏览器状态跨命令保持）控制，受随机 token 认证保护；`PW_BROWSER_SAFE_MODE=1` 可彻底禁用代码执行与 cookies/storage 凭证读写（v1.3.2+）。仅在可信、用户可见的本地环境中授权使用；会话凭证落盘须遵循后文安全警告。
 allowed-tools: Bash(node:*), Bash(pw-browser:*), Bash(curl:*)
 capabilities:
   - "code-execution: page-context (eval — arbitrary JS in current page)"
   - "code-execution: daemon-vm (run-code — null-prototype VM sandbox, no host fs/process)"
   - "network: arbitrary via browser/page context (credentialed requests possible)"
   - "browser-state: persistent credentialed session across commands"
-  - "file: write to local disk (run-code can trigger downloads)"
+  - "credential-access: direct read/export/import/clear/set of cookies & localStorage (session tokens) — no code execution needed; gated by daemon token, and fully DISABLED by PW_BROWSER_SAFE_MODE=1 (v1.3.2+)"
+  - "file: write to local disk (run-code can trigger downloads; cookies/storage export writes credential files)"
 disable: false
 ---
 
 # 浏览器自动化 — Playwright 版（`pw-browser`）
 
-> `pw-browser` 是基于 Playwright 的浏览器自动化 CLI，仅依赖 Node.js 和 Playwright。
+> `pw-browser` 是基于 playwright-core（Playwright 核心库）的浏览器自动化 CLI，仅依赖 Node.js 和 playwright-core，无需下载任何浏览器。
 >
 > ⚠️ **完整能力（含代码执行）**：本工具**不只是"点开网页"**——它包含 `eval`（页面上下文**任意 JavaScript** 执行）与 `run-code`（守护进程上下文执行 Playwright/Node 代码）两项代码执行能力，并通过**持久化本地守护进程**控制浏览器状态（状态跨命令保持）。所有代码执行均受 daemon token 认证保护，可用 `PW_BROWSER_SAFE_MODE=1` 彻底禁用。请先阅读下方「⚠️ 安全边界与使用场景」了解完整攻击面与适用边界，再决定是否授权。
 
@@ -31,15 +32,16 @@ disable: false
 
 | 场景 | 风险 | 需要的额外措施 |
 |------|------|-------------|
-| 被不可信 agent 调用 | 🔴 高 | 已内置 daemon token 认证 + 可选 `PW_BROWSER_SAFE_MODE` 禁用代码执行；若来源仍不可信，应进一步沙箱隔离 |
+| 被不可信 agent 调用 | 🔴 高 | 已内置 daemon token 认证 + 可选 `PW_BROWSER_SAFE_MODE` 禁用代码执行与 cookies/storage 凭证原语（v1.3.2+）；若来源仍不可信，应进一步沙箱隔离 |
 | 作为公开 API 服务 | 🔴 极高 | 必须加认证 + 操作白名单 |
 | CI/CD 自动化流水线 | 🟡 中 | 需限定操作范围，禁止生产环境 |
 
 **核心能力声明：**
 - `eval`：在**浏览器上下文**（`page.evaluate`）执行**任意 JavaScript**——即完整的页面级代码执行能力。它无法访问 Node.js API（`require`/`fs`/`process`），作用域仅限于当前页面；但正因如此，它能读取 `document.cookie`/`localStorage`/`sessionStorage`、发起**带页面凭证的 `fetch` 请求**、操控 DOM 并触发页面内动作（点击、提交等）。**这是与 `run-code` 同级的"代码执行"能力，仅场景不同（页面 vs Node）**：同样受 daemon token 认证保护，同样在 `PW_BROWSER_SAFE_MODE=1` 下被禁用；只在用户明确指定、且页面可信时使用，不对高权限/来源不明页面执行
 - `run-code`：在 daemon 进程的**受限沙箱**（`vm` 模块）中执行 Playwright 代码，仅暴露 `page` 和安全 JS 全局；**无法直接调用** `fs`/`child_process`/`process`/`require`。但浏览器上下文可经 `download.saveAs`/`setInputFiles` 在本地磁盘读写文件、能发起任意网络请求（沙箱不阻止）。它仍拥有完整浏览器控制权（导航、读写存储、下载、提交表单、改页面内容），**仅限本地信任环境使用**
+- `cookies` / `storage`：**独立的会话凭证读写原语**，无需任何代码执行即可对 cookie 与 `localStorage` 做 `list` / `export` / `import` / `clear` / `set`。它可直接**提取**当前登录态（含 `HttpOnly` cookie、会话/Bearer 令牌、CSRF token），也可**注入**任意攻击者控制的状态，是凭据盗窃与账户接管的**独立高危面**——**不依赖** `eval` / `run-code`。普通模式下仅由 daemon token 认证保护；自 v1.3.2 起 `PW_BROWSER_SAFE_MODE=1` 会**整体禁用**全部 `cookies` / `storage` 子命令（与 eval/run-code 同级拦截）。落盘会话文件的处置见下方「会话持久化风险（Rogue Agent）」块：务必用完即删、不跨环境/账号复用。`export`/`import` 默认**限制在 `~/.pw-browser/` 目录内**以防凭证散落或加载外部攻击者构造文件；写到/读自该目录之外必须显式 `--unsafe`（不推荐）
 - daemon：监听 `127.0.0.1:19223`，仅本机可访问，不暴露到公网；**所有命令（除 `/health` 存活探针）均要求随机 `token` 认证**，token 在 daemon 启动时生成并写入 `~/.pw-browser/daemon.json`（默认仅当前用户可读），CLI 自动携带，外部进程无法在未读取该文件的情况下调用
-- 安全模式：设置环境变量 `PW_BROWSER_SAFE_MODE=1` 启动 daemon 可**彻底禁用** `run-code` / `eval`，仅保留受限的 snap/click/fill 等白名单命令，适合不需要自定义代码的场景
+- 安全模式：设置环境变量 `PW_BROWSER_SAFE_MODE=1` 启动 daemon 可**彻底禁用** `run-code` / `eval` **以及全部 `cookies` / `storage` 凭证原语**（v1.3.2+），仅保留 snap/click/fill 等白名单命令，适合不需要自定义代码、也不该触碰会话凭证的场景（如接入来源不完全可信的 agent）
 - 非 headless 模式：浏览器窗口始终可见，用户可直接监控所有操作
 - 文件下载：通过 `run-code` 触发页面下载（`download.saveAs`）会写入本地磁盘，注意目标路径
 
@@ -49,10 +51,11 @@ disable: false
 - **界面文本匹配是启发式的**：识别分页 / 按钮类型时，文档列出的中文、英文关键词（如"下一页"/"Next"、"更新"/"保存"/"发布"）只是**识别信号示例，并非穷举**；非中文页面的实际文案会不同。
 - **优先用 DOM 锚点，而非可见文字**：跨语言页面请尽量用 `snap` 得到的 `ref` 或 CSS 选择器（`page.locator('.xxx')`）定位元素，避免依赖本地化后的可见文本，以防因文案不同导致误点 / 误操作。
 - **适用区域**：技能本身不限定网站区域；文档示例与中文 UI 关键词面向中文环境，各"识别信号"表已并列给出英文界面关键词。
+- **英文文档**：面向非中文 agent/用户，提供 [`README.en.md`](./README.en.md)（英文 README）与 [`QUICKSTART.en.md`](./QUICKSTART.en.md)（英文端到端示例）。`SKILL.md` 本身保持中文，但其内的命令、URL、CSS 选择器、`snap` 返回的 `ref` 均为语言无关锚点，非中文 agent 可直接据此执行。
 
 ## 前置条件（首次使用）
 
-本 Skill 所在目录需已执行 `npm install` 安装 playwright。**无需单独下载浏览器** — daemon 启动时自动检测并使用系统的 Chrome 或 Edge。
+本 Skill 所在目录需已执行 `npm install`（将安装 `playwright-core`）。**无需单独下载浏览器** — daemon 启动时自动检测并使用系统的 Chrome 或 Edge。
 
 > 下文所有命令中的 `{SKILL_DIR}` 请替换为实际的 skill 安装目录路径。
 
@@ -280,8 +283,12 @@ sleep 4
 ### 状态感知
 | 命令 | 说明 |
 |------|------|
-| `pw-browser snap` | 获取页面可访问性快照（YAML 格式，含 ref 引用） |
+| `pw-browser snap` | 获取页面快照（含 ref 引用）。**ref 跨多次 snap 保持稳定**（同一逻辑元素同 ref），外部 agent 不必每步重新 snap |
 | `pw-browser wait-for <target> [--timeout ms]` | 等待条件满足 |
+
+> **Shadow DOM / iframe 支持**：快照会递归进入 **open shadow root** 与 **同源 iframe**，这些元素同样出现在 ref 表中并可直接 `click`/`fill`/`upload`/`drag`。`snap` 输出的 ref 信息带 `inShadow: true`（shadow 内）或 `frameChain`（iframe 链）标记；定位由 `css >>>` 穿透 + `frameLocator` 自动完成，外部 agent 无需关心。`--annotate` 截图仅标注主文档元素（shadow/iframe 元素无法用 xpath 定位标注，但文本快照中仍可点）。跨域 iframe 不可访问，自动跳过。
+
+> **超大页面快照保护**：对元素极多的页面（数万节点），`snap` 默认最多收集 **3000** 个可交互元素，超出即停止收集并在输出标记 `⚠ snapshot truncated`，JSON 返回 `truncated: true`。这是为防止超大型 DOM 拖慢/撑爆快照的兜底；可用环境变量 `PW_BROWSER_SNAP_LIMIT=<N>` 调大上限（设为 `0` 关闭上限，但仍会遍历整棵树），或先交互缩小页面范围再 `snap`。
 
 ### 交互
 | 命令 | 说明 |
@@ -294,6 +301,9 @@ sleep 4
 | `pw-browser select <ref> <option>` | 选择下拉选项 |
 | `pw-browser check <ref>` | 勾选复选框 |
 | `pw-browser uncheck <ref>` | 取消勾选 |
+| `pw-browser upload <ref> <file1> [file2 ...]` | 文件上传（`<input type="file">`，支持多文件，逗号或空格分隔） |
+| `pw-browser drag <ref源> <ref目标>` | 拖拽（把源元素拖到目标元素，基于 Playwright `dragTo`） |
+| `pw-browser download <ref> [--path dir] [--timeout ms]` | 文件下载（对称于 `upload`）：可选点击 `<ref>` 触发下载，保存到 `--path`（默认当前目录）；也可作为 `act` 动作 `{"action":"download","ref":"eN","path":"/tmp/x.csv"}` |
 
 ### 页面导航
 | 命令 | 说明 |
@@ -306,7 +316,7 @@ sleep 4
 ### 高级
 | 命令 | 说明 |
 |------|------|
-| `pw-browser screenshot [ref] [--path file]` | 截图 |
+| `pw-browser screenshot [ref] [--path file] [--annotate]` | 截图；`--annotate` 在可交互元素上叠加与 snap ref 对应的编号框，供多模态 agent 直接读编号定位 |
 | `pw-browser mousewheel <dx> <dy>` | 滚动 |
 | `pw-browser eval "<expr>" [ref]` | ⚠️ 执行**任意 JavaScript**（页面上下文，完整页面级代码执行：可读 cookie/存储、发起带凭证请求；受 token 认证保护，safe-mode 下禁用） |
 | `pw-browser run-code "<code>"` | ⚠️ 执行 Playwright 代码（受限沙箱：无直接 Node fs/process 权限，但可经浏览器下载/上传读写本地文件） |
@@ -324,6 +334,63 @@ sleep 4
 | 命令 | 说明 |
 |------|------|
 | `pw-browser sleep <seconds>` | 等待 N 秒 |
+
+### 批量动作与历史（借鉴 browser-use 的 multi-act / 自纠错）
+| 命令 | 说明 |
+|------|------|
+| `pw-browser act '<json>'` | 批量执行动作序列（JSON 数组），如 `[{"action":"fill","ref":"e3","text":"hello"},{"action":"click","ref":"e5"}]`。每步后自动检测 DOM 变化，若页面出现新元素则**中断序列并自动 re-snap** 返回最新快照；失败步附带诊断（元素是否仍存在/相似 ref 建议） |
+| `pw-browser history [--limit N] [--clear]` | 查询 daemon 记录的操作历史（每条命令、参数、耗时、结果），`--clear` 清空 |
+
+`act` 支持的动作：`click` / `fill` / `type` / `press` / `hover` / `select` / `check` / `uncheck` / `upload`（对象带 `files: ["/path"]`）/ `drag`（对象带 `target: "eN"`）/ `goto` / `screenshot`，动作对象形如 `{"action":"...","ref":"eN","text":"...","key":"...","option":"...","url":"...","files":["..."],"target":"eN"}`。
+
+---
+
+## 省 Token 用法（默认即高效，别退回 browser-use 的反模式）
+
+本 skill 是**确定性执行器 + 持久 daemon**，大模型（外部 AI）只负责规划、不内嵌在 skill 里。因此**没有「每步都调 LLM」的 token 黑洞**——token 只在外部 AI 主动调用时产生，且完全可控。请保持以下用法以持续省 token：
+
+- **用文本 `snap` 规划，而不是每步截图喂视觉模型**。`snap` 返回的是紧凑的 ref 文本表（`e1 button 提交`），几十 token；`screenshot` 一张图是数百 KB 的 base64，贵 1~2 个数量级。
+- **复用稳定 ref，不必每步重新 `snap`**。同一逻辑元素的 ref 跨多次 snap 保持不变（见上「状态感知」表），外部 AI 可直接拿上一步的 ref 点 `click e1` / `fill e2`。
+- **把动作攒成 `act` 一次性发**。登录等一连串操作写成 `[{...},{...}]` 一次调用，daemon 内部自纠错，中间不回模型。理想形态：`1 次 snap → 1 次 act → 完事`。
+- **`screenshot --annotate` 是 opt-in**，仅在真有视觉歧义、需要多模态定位时才用；不要默认每步截图。
+
+> ⚠️ 若外部 AI 被 prompt 成「每步都 `screenshot --annotate` 丢给视觉模型」，就会复刻 browser-use 的烧钱循环。token 成本的责任在编排层，不在 skill。
+
+## Cookie 与本地存储（一等命令）
+
+不再需要靠 `eval` 曲线救国，直接用以下命令读写 cookie 与 `localStorage`：
+
+### `cookies`
+| 子命令 | 说明 |
+|--------|------|
+| `pw-browser cookies list` | 列出当前上下文全部 cookie |
+| `pw-browser cookies export [--path file]` | 导出 cookie 到 JSON 文件（默认 `~/.pw-browser/cookies.json`） |
+| `pw-browser cookies import <file>` | 从 JSON 文件导入 cookie |
+| `pw-browser cookies clear` | 清空全部 cookie |
+| `pw-browser cookies set <name> <value> [--domain d] [--path p]` | 设置一个 cookie；`--domain` 省略时取当前页面域名 |
+
+### `storage`（localStorage）
+| 子命令 | 说明 |
+|--------|------|
+| `pw-browser storage get [key]` | 读取某个 key（省略 key 则返回全部，以对象形式返回） |
+| `pw-browser storage set <key> <value>` | 写入 key/value |
+| `pw-browser storage clear` | 清空 localStorage |
+| `pw-browser storage export [--path file]` | 导出 localStorage 到 JSON 文件 |
+| `pw-browser storage import <file>` | 从 JSON 文件导入（逐 key 写入） |
+
+> ⚠️ `cookies` / `storage` 依赖真实页面源（http/https）。`file://` 与 `data:` 页面不支持 cookie，`localStorage` 行为也不可靠——请先 `open` 一个真实 URL 再操作。
+
+> 🔒 **会话持久化风险（Rogue Agent / 中危）**：`cookies` / `storage` 的 `export` / `import` 让登录态可落盘备份、跨运行恢复——对正常用户是免登录便利，但**在失控或恶意 Agent 场景下，这正是"特权访问持久化"的典型手段**：导出的会话文件等同一份可复用的身份凭证，可被用来跳过认证、长期驻留。缓解：① 导出的会话文件**等同密钥**，用完即 `rm`、暂存须 `chmod 600` 放受限目录（如 `~/.pw-browser/`）；② **不要**在自动化流程里默认把凭证持久化到磁盘；③ 不需要时尽快 `cookies clear` / `storage clear` 并 `pw-browser shutdown` 关闭 daemon，利用空闲自动退出（`PW_BROWSER_IDLE_MS`，默认 15min）缩短凭证在内存中的驻留窗口；④ 对来源不可信的调用方，用 `PW_BROWSER_SAFE_MODE=1` 启动 daemon——自 v1.3.2 起它会**整体禁用**全部 `cookies` / `storage` 子命令（凭证原语与代码执行同级拦截），必要时再配合沙箱隔离或限定操作范围；⑤ **代码层兜底**：`export`/`import` 默认被限制在 `~/.pw-browser/` 目录内，写到/读自该目录之外必须显式 `--unsafe`，从路径层面降低凭证被散落或加载外部攻击者构造文件的可能。详见 QUICKSTART 示例 4 安全提醒。
+
+## Daemon 生命周期（为什么任务结束后浏览器还在）
+
+daemon 是**故意持久化**的：它跨命令持有同一个浏览器实例，避免每次交互都重开 Chrome。因此：
+
+- 你看到「任务结束 Chrome 还在」是正常的——daemon 进程还活着、抱着浏览器。
+- **显式停止**：`pw-browser shutdown` 会关掉浏览器并退出 daemon（已加固：即使 `browser.close()` 卡住也会超时兜底退出，不会再退不出/卡客户端）。
+- **空闲自动退出**：daemon 默认 **15 分钟无命令** 就自动关浏览器并退出（环境变量 `PW_BROWSER_IDLE_MS` 可改，设为 `0` 关闭该特性）。所以走开后不用手动 `shutdown`，它自己会清理，Chrome 不会一直挂着。
+- **监听端口可配 + 冲突避让**：默认 `127.0.0.1:19223`，可用环境变量 `PW_BROWSER_PORT` 覆盖。启动时若目标端口已有 daemon 存活（`/health` 返回 200），当前进程会直接退出（避免双开）；若被其它进程占用（`EADDRINUSE`），则自动递增端口直到可用，并把实际端口写回 `~/.pw-browser/daemon.json`。客户端读取该文件里的端口，无需手动指定。
+- **别直接杀进程**：用任务管理器 / `Stop-Process` 强杀 daemon 可能导致浏览器子进程残留（Windows 上 Playwright 的 job object 通常会回收，但不保证）。优先用 `shutdown` 或等空闲自动退出。
 
 ---
 
@@ -535,6 +602,7 @@ $PW close --all
 
 | 场景 | 文件 |
 |------|------|
+| 端到端示例（表单/上传下载/shadow-iframe/cookie/act） | `QUICKSTART.md`（中文）/ `QUICKSTART.en.md`（英文） |
 | 翻页策略详解 | `references/pagination.md` |
 | 富文本编辑器策略 | `references/rich-text-editor.md` |
 | 运行自定义代码 | `references/running-code.md` |

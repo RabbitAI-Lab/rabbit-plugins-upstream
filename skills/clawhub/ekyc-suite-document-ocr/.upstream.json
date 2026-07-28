@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/ekyc-suite-document-ocr",
   "slug": "ekyc-suite-document-ocr",
   "ownerHandle": null,
-  "version": "1.0.10",
-  "updatedAt": 1784864162259,
-  "contentHash": "c939eb201bb99c6add481bfa7fabeb6bdcc80d56415acc5ea5d4455aa7254da5",
-  "fetchedAt": "2026-07-26T18:06:23.910Z"
+  "version": "1.0.12",
+  "updatedAt": 1785122402361,
+  "contentHash": "80c969b9880a4f8cbfddc168855e4239f2650631794d79ad4a7cd8be944b0cef",
+  "fetchedAt": "2026-07-28T10:08:19.504Z"
 }

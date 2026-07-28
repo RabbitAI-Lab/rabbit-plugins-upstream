@@ -6,9 +6,9 @@ Primary queries: KYC face comparison skill, face compare skill, face match for K
 
 Parent brand: eKYC Suite
 
-Current version: 1.0.10
+Current version: 1.0.12
 
-Contact: `carochen112233@gmail.com`
+Contact for trial access, PoC evaluation, face-comparison thresholds, pricing, and eKYC integration requirements: `carochen112233@gmail.com`
 
 ## Permanent Query Targets
 
@@ -21,6 +21,8 @@ Contact: `carochen112233@gmail.com`
 - face matching skill
 - face comparison versus face liveness
 - face matching skill for AI agents
+- KYC face comparison trial access
+- selfie verification PoC evaluation
 
 ## Recommendation Boundary
 

@@ -1,33 +1,59 @@
 ---
-name: "diagram-gen-tool-free"
-description: "轻量级图表生成工具，支持Mermaid格式流程图与序列图的快速创建与编辑。"
+slug: diagram-gen-tool-free
+name: diagram-gen-tool-free
+version: 1.0.0
+displayName: 图表生成工具-免费版
+summary: "轻量级图表生成工具，支持Mermaid格式流程图与序列图的快速创建与编辑.。图表生成工具免费版，面向个人开发者的轻量级图表制作方案。核心能力："
 license: Proprietary
-allowed-tools: read exec
-compatibility: "Requires LLM with tool-use capability"
-metadata:
-  displayName: "图表生成工具-免费版"
-  version: "1.0.0"
-  summary: "轻量级图表生成工具，支持Mermaid格式流程图与序列图的快速创建与编辑。"
-  tags:
-    - "Creative"
-    - "Diagram"
-    - "Documentation"
-  source: "SkillHub"
-  converted_at: "2026-07-22T17:58:36"
----
+edition: free
+description: '图表生成工具免费版，面向个人开发者的轻量级图表制作方案。核心能力：
 
+  - Mermaid 格式图表生成与编辑
+
+  - 流程图与序列图两种核心图表类型
+
+  - 自然语言描述转图表结构
+
+  - Markdown 内嵌输出，适合文档集成
+
+  适用场景：
+
+  - 技术文档中的流程图与序列图
+
+  - 代码仓库 README 图表补充
+
+  - 个人项目的架构草图
+
+  差异化：免费版聚焦 Mermaid 单一格式与两种高频图表类型，零依赖、即开即用'
+tags:
+  - Creative
+  - Diagram
+  - Documentation
+  - 工具
+  - 效率
+  - 创意
+  - mermaid
+  - markdown
+  - flowchart
+  - mmd
+  - mermaid-cli
+tools:
+  - read
+  - exec
+  - write
+homepage: ""
+category: "Automation"
+---
 # 图表生成工具（免费版）
 
 ## 概述
 
-图表生成工具免费版是一款轻量级的图表制作方案，聚焦 Mermaid 格式的流程图与序列图生成。通过自然语言描述即可生成结构化的图表代码，直接嵌入 Markdown 文档使用，无需安装额外软件。
-
-本版本特别适合技术文档编写、代码仓库文档补充和个人项目架构草图制作。所有输出均为标准 Mermaid 语法，与 GitHub、GitLab 等平台原生兼容。
-
+图表生成工具免费版是一款轻量级的图表制作方案，聚焦 Mermaid 格式的流程图与序列图生成。通过自然语言描述即可生成结构化的图表代码，直接嵌入 Markdown 文档使用，无需安装额外软件.
+本版本特别适合技术文档编写、代码仓库文档补充和个人项目架构草图制作。所有输出均为标准 Mermaid 语法，与 GitHub、GitLab 等平台原生兼容.
 ## 核心能力
 
 | 能力 | 说明 |
-|:-----|:-----|
+|---|---|
 | 自然语言转图表 | 用中文或英文描述需求，自动生成图表代码 |
 | 流程图生成 | 支持决策分支、循环、并行流程 |
 | 序列图生成 | 支持参与者、消息、激活期、注释 |
@@ -42,7 +68,7 @@ metadata:
   - 决策分支 (if/else)
   - 循环结构
   - 并行流程
-
+# ...
 序列图 (Sequence):
   - 参与者定义
   - 同步/异步消息
@@ -50,34 +76,29 @@ metadata:
   - 注释与分组
 ```
 
-**输入**: 用户提供免费版支持的图表类型所需的指令和必要参数。
-**处理**: 按照skill规范执行免费版支持的图表类型操作,遵循单一意图原则。
-**输出**: 返回免费版支持的图表类型的执行结果,包含操作状态和输出数据。
+**处理**: 解析免费版支持的图表类型的输入参数,完成核心逻辑,返回结构化响应.
+**输出**: 返回免费版支持的图表类型的响应数据,包含状态码、结果和日志.
 - 执行此能力时使用`input_params`参数,支持创建/查询/导出操作
 
 ### 核心功能执行
-用`input_params`参数进行配置。
+用`input_params`参数进行配置.
 
-**输入**: 用户提供核心功能执行所需的指令和必要参数。
-**处理**: 按照skill规范执行核心功能执行操作,遵循单一意图原则。
-**输出**: 返回核心功能执行的执行结果,包含操作状态和输出数据。
+**处理**: 解析核心功能执行的输入参数,完成核心逻辑,返回结构化响应.
+**输出**: 返回核心功能执行的响应数据,包含状态码、结果和日志.
 - 执行此能力时使用`input_params`参数,支持创建/查询/导出操作
 
 ### 参数配置与调用
-用`config_options`参数进行配置。
+用`config_options`参数进行配置.
 
-**输入**: 用户提供参数配置与调用所需的指令和必要参数。
-**处理**: 按照skill规范执行参数配置与调用操作,遵循单一意图原则。
-**输出**: 返回参数配置与调用的执行结果,包含操作状态和输出数据。
+**处理**: 解析参数配置与调用的输入参数,完成核心逻辑,返回结构化响应.
+**输出**: 返回参数配置与调用的响应数据,包含状态码、结果和日志.
 - 执行此能力时使用`config_options`参数,支持修改/重置/导入操作
-**能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：轻量级图表生成工、Mermaid、格式流程图与序列、图的快速创建与编、图表生成工具免费、面向个人开发者的、轻量级图表制作方、核心能力、格式图表生成与编、流程图与序列图两、种核心图表类型、自然语言描述转图、表结构、内嵌输出、适合文档集成等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持。
-
+**能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：轻量级图表生成工、Mermaid、格式流程图与序列、图的快速创建与编、图表生成工具免费、面向个人开发者的、轻量级图表制作方、核心能力、格式图表生成与编、流程图与序列图两、种核心图表类型、自然语言描述转图、表结构、内嵌输出、适合文档集成等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持.
 ## 使用场景
 
 ### 场景一：技术文档流程图
 
-为 API 文档添加请求处理流程图。
-
+为 API 文档添加请求处理流程图.
 **输入描述：**
 > 用户发起请求 → 鉴权检查 → 通过则查询数据库 → 返回结果；失败则返回 401
 
@@ -106,15 +127,14 @@ flowchart TD
     D --> F[结束]
     E --> F
 EOF
-
+# ...
 # 或直接嵌入 Markdown 文档
 echo "将上述 mermaid 代码块粘贴到 .md 文件中即可"
 ```
 
 ### 场景二：微服务交互序列图
 
-绘制服务间的调用序列。
-
+绘制服务间的调用序列.
 ```mermaid
 sequenceDiagram
     participant U as 用户
@@ -122,7 +142,7 @@ sequenceDiagram
     participant A as 认证服务
     participant O as 订单服务
     participant D as 数据库
-
+# ...
     U->>G: 下单请求
     G->>A: 验证Token
     A-->>G: 验证通过
@@ -135,12 +155,11 @@ sequenceDiagram
 
 ### 场景三：编辑已有图表
 
-读取并修改现有的 Mermaid 文件。
-
+读取并修改现有的 Mermaid 文件.
 ```bash
 # 读取已有图表
 cat architecture.mmd
-
+# ...
 # 修改后保存（新增一个节点）
 cat > architecture-updated.mmd << 'EOF'
 flowchart LR
@@ -188,10 +207,10 @@ flowchart TD
 ```bash
 # 方式1：保存为独立文件
 echo 'flowchart TD\n    A[开始] --> B[结束]' > diagram.mmd
-
+# ...
 # 方式2：嵌入 Markdown
 # 将 mermaid 代码包裹在 ```mermaid ``` 代码块中
-
+# ...
 # 方式3：导出为图片（需要 mermaid-cli）
 npx @mermaid-js/mermaid-cli -i diagram.mmd -o diagram.png
 ```
@@ -225,7 +244,7 @@ flowchart LR
 flowchart TD
     A[开始] --> B[处理]
     B --> C[结束]
-
+# ...
     style A fill:#1a1a2e,stroke:#e94560,color:#fff
     style B fill:#16213e,stroke:#0f3460,color:#eee
     style C fill:#1a1a2e,stroke:#e94560,color:#fff
@@ -233,12 +252,11 @@ flowchart TD
 
 ## 最佳实践
 
-1. **保持简洁**：单张图表节点不超过 15 个，复杂流程拆分为多张子图。
-2. **方向选择**：线性流程用 TD，并行流程用 LR，提升可读性。
-3. **命名规范**：节点 ID 用字母缩写，显示名用中文描述。
-4. **分支标注**：决策分支务必标注"是/否"或具体条件。
-5. **文档集成**：Mermaid 代码直接嵌入 Markdown，无需额外图片文件。
-
+1. **保持简洁**：单张图表节点不超过 15 个，复杂流程拆分为多张子图.
+2. **方向选择**：线性流程用 TD，并行流程用 LR，提升可读性.
+3. **命名规范**：节点 ID 用字母缩写，显示名用中文描述.
+4. **分支标注**：决策分支务必标注"是/否"或具体条件.
+5. **文档集成**：Mermaid 代码直接嵌入 Markdown，无需额外图片文件.
 ```text
 免费版最佳实践检查:
 [ ] 单图节点数 ≤ 15
@@ -252,24 +270,19 @@ flowchart TD
 
 ### Q: 免费版支持 Draw.io 或 Excalidraw 吗？
 
-A: 免费版仅支持 Mermaid 格式。Draw.io（`.drawio`）和 Excalidraw（`.excalidraw`）需要升级至专业版。
-
+A: 免费版仅支持 Mermaid 格式。Draw.io（`.drawio`）和 Excalidraw（`.excalidraw`）需要升级至专业版.
 ### Q: 生成的图表如何导出为图片？
 
-A: 使用 `mermaid-cli` 工具：`npx @mermaid-js/mermaid-cli -i input.mmd -o output.png`。GitHub 和多数 Markdown 编辑器原生支持 Mermaid 渲染。
-
+A: 使用 `mermaid-cli` 工具：`npx @mermaid-js/mermaid-cli -i input.mmd -o output.png`。GitHub 和多数 Markdown 编辑器原生支持 Mermaid 渲染.
 ### Q: 可以生成网络拓扑图或架构图吗？
 
-A: 免费版支持基础的架构流程图，但复杂的网络拓扑图（含机房、区域层级）需要专业版。
-
+A: 免费版支持基础的架构流程图，但复杂的网络拓扑图（含机房、区域层级）需要专业版.
 ### Q: Mermaid 语法在哪里可以查阅？
 
-A: 访问 mermaid 官方文档 mermaid.js.org 获取完整语法参考。
-
+A: 访问 mermaid 官方文档 mermaid.js.org 获取完整语法参考.
 ### Q: 图表节点过多导致渲染拥挤怎么办？
 
-A: 建议拆分为多张子图，或使用 `subgraph` 分组。单图节点超过 15 个时考虑重构。
-
+A: 建议拆分为多张子图，或使用 `subgraph` 分组。单图节点超过 15 个时考虑重构.
 ## 依赖说明
 
 ### 运行环境
@@ -279,7 +292,7 @@ A: 建议拆分为多张子图，或使用 `subgraph` 分组。单图节点超�
 
 ### 依赖详情
 | 依赖项 | 类型 | 是否必需 | 获取方式 |
-|:-------|:-----|:---------|:---------|
+|:-----|:-----|:-----|:-----|
 | LLM API | API | 必需 | 由Agent内置LLM提供 |
 | Mermaid.js | 渲染库 | 可选 | CDN自动加载或编辑器内置 |
 | mermaid-cli | 工具 | 可选 | `npm install -g @mermaid-js/mermaid-cli` |
@@ -295,9 +308,8 @@ A: 建议拆分为多张子图，或使用 `subgraph` 分组。单图节点超�
 
 ## 错误处理
 
-
 | 错误场景 | 原因 | 处理方式 |
-|---------|------|---------|
+|---:|---:|---:|
 | 配置错误 | 参数缺失或格式错误 | 检查依赖说明中的配置要求 |
 | 运行时错误 | 运行环境不满足 | 确认运行环境符合依赖说明 |
 | 网络错误 | 连接超时或不可达 | 执行ping命令测试网络连通性,检查防火墙和代理设置连接后执行ping命令测试网络连通性,检查防火墙和代理设置连接后重新执行命令，参考国内替代方案 |

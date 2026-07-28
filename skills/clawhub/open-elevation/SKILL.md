@@ -1,13 +1,6 @@
 ---
-description: 'Batch query elevation data from the Open-Elevation public API. Supports
-  single-point
-
-  and multi-point queries by latitude/longitude coordinates. Outputs CSV or JSON.
-
-  No API key required.
-
-  '
 name: open-elevation
+description: 'Batch query elevation data from the Open-Elevation public API. Supports description: 'Batch query elevation data from the Open-Elevation public API. Supports single-point  and multi-point queries by latitude/longitude coordinates. Outputs CSV or JSON.  No API key required.  '
 ---
 
 # Open-Elevation

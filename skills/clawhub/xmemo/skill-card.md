@@ -1,5 +1,5 @@
 ## Description: <br>
-XMemo gives agents persistent, user-owned memory with standalone runtime support for recall, search, handoff state, TODOs, expenses, and authentication diagnostics. <br>
+Persistent user-owned memory for agents with standalone runtime execution, including recall, search, handoff state, TODOs, expenses, and XMemo authentication diagnostics. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use XMemo to preserve useful project memory across sessions, retrieve prior decisions, manage handoff state, track TODOs and expenses, and diagnose XMemo authentication or service access. <br>
+Developers and agent users use this skill to give agents durable, user-owned memory across sessions and projects. It supports remembering and recalling context, saving handoff state, managing TODOs, recording expenses, and diagnosing XMemo authentication or service issues. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill sends memory, TODO, expense, and diagnostic requests to the hosted XMemo service. <br>
-Mitigation: Install and use it only when hosted XMemo service use is acceptable for the data being stored or retrieved. <br>
-Risk: Local credential storage is plaintext when --allow-plaintext is used. <br>
-Mitigation: Prefer XMEMO_KEY or a managed secret store; use --allow-plaintext only on a trusted machine within the user's local account boundary. <br>
-Risk: Temporary registration creates a limited sandbox and exposes a bind URL that can connect the sandbox to a user account. <br>
-Mitigation: Use temporary registration only for unattended or explicitly declined formal login flows, show the bind URL only to the intended user, and complete claim confirmation after the user claims it. <br>
-Risk: Stored memory may contain inappropriate secrets or sensitive data if the agent saves too broadly. <br>
-Mitigation: Do not save secrets, tokens, private keys, cookies, session IDs, or sensitive personal/customer data unless the user explicitly asks and the service's privacy posture supports it. <br>
+Risk: Authenticated commands use a hosted memory service and may send credentials to a configured XMemo origin. <br>
+Mitigation: Use the default XMemo service or only trusted HTTPS custom origins; run anonymous diagnostics when credentials are not needed. <br>
+Risk: Plaintext local token storage may be readable by same-user local processes or backups. <br>
+Mitigation: Prefer XMEMO_KEY or a managed secret store; use --allow-plaintext only after accepting the local storage boundary. <br>
+Risk: Agents could store secrets or sensitive personal data in durable memory. <br>
+Mitigation: Do not save tokens, API keys, cookies, private keys, or sensitive personal data unless explicitly authorized and policy-compatible. <br>
 
 
 ## Reference(s): <br>
-- [XMemo Skill Page](https://clawhub.ai/xmemo/skills/xmemo) <br>
-- [XMemo Publisher Profile](https://clawhub.ai/user/xmemo) <br>
-- [XMemo Service](https://xmemo.dev) <br>
-- [Operations Reference](artifact/references/operations.md) <br>
-- [Troubleshooting Reference](artifact/references/troubleshooting.md) <br>
+- [XMemo Skill Operations](references/operations.md) <br>
+- [XMemo Skill Troubleshooting](references/troubleshooting.md) <br>
+- [XMemo service](https://xmemo.dev) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and optional JSON command output] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with inline shell commands and optional JSON command output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Memory recall and search can be compacted for terminal display; commands can emit JSON with --json.] <br>
+**Other Properties Related to Output:** [Commands require Node.js 20 or newer, network access to XMemo, and an authenticated credential for non-anonymous operations.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata and bundled script constant) <br>
+1.0.8 (source: server release metadata, CHANGELOG.md) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

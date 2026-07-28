@@ -1,5 +1,5 @@
 ## Description: <br>
-AI-Shifu Course Creator helps agents create, edit, optimize, deploy, manage, and analyze AI-Shifu courses, Teaching Prompts, Course Prompts, and MarkdownFlow course artifacts. <br>
+AI-Shifu Course Creator helps agents create, edit, optimize, deploy, manage, and analyze AI-Shifu courses using MarkdownFlow Teaching Prompts and Course Prompts. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,43 +11,41 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Course authors, operators, and developers use this skill to turn source material into AI-Shifu course artifacts, update existing platform courses, publish or manage courses, and query live-course analytics. <br>
+External course authors and operators use this skill to turn source material into AI-Shifu course artifacts, deploy or update courses, manage learner-facing course settings, and review live course analytics. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Stored account access may be reused for course mutations, publishing or archive actions, image uploads, and learner or order analytics. <br>
-Mitigation: Install only when that account authority is acceptable, and require explicit user confirmation before existing-course import, publish or archive, bulk deletion, or broad learner analytics queries. <br>
-Risk: Existing-course import can replace course structure and content, which may delete and recreate outlines and change platform state. <br>
-Mitigation: Confirm the intended target course and destructive import scope before execution, then verify the resulting course state after the operation. <br>
-Risk: Learner analytics can expose sensitive course, learner, order, revenue, or progress information. <br>
-Mitigation: Limit analytics queries to the requested course and question, avoid exposing raw learner identifiers, and summarize only the minimum necessary results. <br>
+Risk: The skill stores AI-Shifu login tokens for authenticated platform operations. <br>
+Mitigation: Install only for accounts where this access is acceptable, review saved-token handling, and remove or rotate credentials when access is no longer needed. <br>
+Risk: Account-linked usage telemetry is sent by default. <br>
+Mitigation: Review telemetry behavior before use and set AI_SHIFU_SKILL_TELEMETRY=off when telemetry should be disabled. <br>
+Risk: Course import, publish, archive, delete, and reorder operations can affect learner-facing courses. <br>
+Mitigation: Use the documented pull, status, preview, export, and verification steps before and after mutations, and require explicit confirmation for high-impact changes. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heshaofu2/skills/ai-shifu-course-creator) <br>
-- [Platform Authentication](references/authentication.md) <br>
-- [Course Design Intake](references/course-design-intake.md) <br>
-- [Orchestration Workflow](references/orchestration-workflow.md) <br>
-- [Teaching Prompt](references/teaching-prompt.md) <br>
-- [Course Prompt](references/course-prompt.md) <br>
-- [MarkdownFlow Spec](references/markdownflow.md) <br>
-- [New Course Deployment](references/deployment-workflow.md) <br>
-- [Course Management](references/course-management.md) <br>
-- [Course Analytics](references/analytics/workflow.md) <br>
-- [Privacy & Presentation](references/analytics/privacy-and-presentation.md) <br>
-- [CLI Reference](references/cli/cli-reference.md) <br>
+- [Skill definition](SKILL.md) <br>
+- [Platform authentication](references/authentication.md) <br>
+- [Course design intake](references/course-design-intake.md) <br>
+- [Teaching Prompt authoring](references/teaching-prompt.md) <br>
+- [Course Prompt authoring](references/course-prompt.md) <br>
+- [Deployment workflow](references/deployment-workflow.md) <br>
+- [Existing course sync](references/course-sync.md) <br>
+- [Course management](references/course-management.md) <br>
+- [Analytics overview](references/analytics/overview.md) <br>
+- [CLI reference](references/cli/cli-reference.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, MarkdownFlow prompt content, local course files, and shell command recommendations] <br>
+**Output Format:** [Markdown prose with command snippets, MarkdownFlow course files, JSON analytics queries, and local course artifacts.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or update AI-Shifu course directories, Teaching Prompts, Course Prompts, course descriptions, analytics reports, and CLI command sequences.] <br>
+**Other Properties Related to Output:** [May create or update local course directories and invoke AI-Shifu platform commands when authenticated.] <br>
 
 ## Skill Version(s): <br>
-1.2.1 (source: SKILL.md frontmatter and server release evidence) <br>
+1.2.3 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
