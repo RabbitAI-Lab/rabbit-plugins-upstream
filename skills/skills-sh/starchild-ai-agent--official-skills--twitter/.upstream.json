@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/twitter",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "twitter",
+  "branch": "main",
+  "pushedAt": "2026-07-29T09:58:31Z",
+  "contentHash": "27bfcb855c8f61016eca70f1678318b142c532bed0b85ebaed856c5583151684",
+  "fetchedAt": "2026-07-29T10:01:58.232Z"
+}

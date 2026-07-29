@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/slack-message-formatter",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "slack-message-formatter",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "2cf237691aee6720caede02a51535babd66a364c2e4ee22efcc9b00f66f63285",
+  "fetchedAt": "2026-07-29T10:02:55.659Z"
+}

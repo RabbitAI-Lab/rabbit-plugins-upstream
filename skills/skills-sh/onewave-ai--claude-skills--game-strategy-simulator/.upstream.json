@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/game-strategy-simulator",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "game-strategy-simulator",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "e1d054ac05a32404cb0584ee96353a733b0a26585d1c271a998eeb29d7dcdafe",
+  "fetchedAt": "2026-07-29T10:02:55.609Z"
+}

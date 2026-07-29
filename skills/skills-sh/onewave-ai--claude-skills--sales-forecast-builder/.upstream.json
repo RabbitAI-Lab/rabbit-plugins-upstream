@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/sales-forecast-builder",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "sales-forecast-builder",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "3725511d3f11c908606de9f606e3a77f28adb7f17867c0ce6db72e4732cb0f91",
+  "fetchedAt": "2026-07-29T10:02:55.663Z"
+}

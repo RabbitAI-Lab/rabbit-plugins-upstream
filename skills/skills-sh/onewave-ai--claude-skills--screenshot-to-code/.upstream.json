@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/screenshot-to-code",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "screenshot-to-code",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "2c45cdbc511ae1dc92d2c2ed13a7a300222a7fdeffb3307b64b26755bda20e89",
+  "fetchedAt": "2026-07-29T10:02:55.500Z"
+}

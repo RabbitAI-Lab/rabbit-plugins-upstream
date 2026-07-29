@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/amazon-aurora-postgresql",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "amazon-aurora-postgresql",
+  "branch": "main",
+  "pushedAt": "2026-07-29T04:49:28Z",
+  "contentHash": "616a304fc16c659a95f418b5c7749b9a451b6d19cd9b422f3b6b227a6e90e06f",
+  "fetchedAt": "2026-07-29T10:03:12.802Z"
+}

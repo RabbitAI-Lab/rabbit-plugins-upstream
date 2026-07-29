@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/tdd",
+  "repo": "cursor/plugins",
+  "skillId": "tdd",
+  "branch": "main",
+  "pushedAt": "2026-07-29T05:29:48Z",
+  "contentHash": "7bff9d8ecd0bcc96148dbdbaeb8acbbf06382d7a1e7cb8678bcff544fc4a8bb3",
+  "fetchedAt": "2026-07-29T10:02:17.005Z"
+}

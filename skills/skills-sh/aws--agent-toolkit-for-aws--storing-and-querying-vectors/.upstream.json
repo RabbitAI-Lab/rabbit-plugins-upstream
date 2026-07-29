@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/storing-and-querying-vectors",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "storing-and-querying-vectors",
+  "branch": "main",
+  "pushedAt": "2026-07-29T04:49:28Z",
+  "contentHash": "20ac134e35ae6df62f8908999e0e916384ca6b37f457e6ab0dabfe93b84e088b",
+  "fetchedAt": "2026-07-29T10:03:12.535Z"
+}
