@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/recovery-controller-setup",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "recovery-controller-setup",
+  "branch": "main",
+  "pushedAt": "2026-07-29T04:49:28Z",
+  "contentHash": "4a16da48943798ea9c4c0433bf650f67853c3477661afa4c8df504f54fcb7b22",
+  "fetchedAt": "2026-07-29T10:03:13.194Z"
+}

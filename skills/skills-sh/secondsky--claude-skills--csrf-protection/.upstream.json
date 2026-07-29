@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/csrf-protection",
+  "repo": "secondsky/claude-skills",
+  "skillId": "csrf-protection",
+  "branch": "main",
+  "pushedAt": "2026-07-25T17:35:51Z",
+  "contentHash": "f666fe1902837df0503245808bfe4230dd706206549558f1c96645ca7c4cd35b",
+  "fetchedAt": "2026-07-29T10:02:35.833Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/claude-design",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "claude-design",
+  "branch": "main",
+  "pushedAt": "2026-07-29T10:02:39Z",
+  "contentHash": "773d0f7f9bccb654ee20c625a86ff12a1b914507471f637b52f17e1360f91b13",
+  "fetchedAt": "2026-07-29T10:03:10.377Z"
+}

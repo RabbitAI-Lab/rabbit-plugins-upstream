@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-compute",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-compute",
+  "branch": "main",
+  "pushedAt": "2026-07-29T04:49:28Z",
+  "contentHash": "2b088845dc15b06c52682499764fc5a44e341909fc719c7ad106ba4f8ece86da",
+  "fetchedAt": "2026-07-29T10:03:12.965Z"
+}
