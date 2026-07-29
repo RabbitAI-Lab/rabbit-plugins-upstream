@@ -1,5 +1,5 @@
 ## Description: <br>
-This skill helps an agent use the porteden CLI to manage Google and Outlook calendars, including listing calendars, querying events, searching events, creating meetings, and updating or deleting events. <br>
+This skill helps agents use the PortEden CLI to list, search, create, update, and delete Google and Outlook calendar events. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to let an agent inspect and manage personal calendar events through porteden. It is intended for lightweight calendar workflows such as viewing today's agenda, finding events, and creating or changing meetings after confirming the active account and target event. <br>
+Personal users and lightweight automation workflows use this skill to manage calendar events through natural-language agent requests backed by PortEden CLI commands. It supports listing calendars, querying events by date range or keyword, creating meetings with attendees and locations, and updating or deleting events. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete calendar events through porteden. <br>
-Mitigation: Require an explicit preview and user confirmation before any calendar-changing command is executed. <br>
-Risk: Calendar data may be sent to external Google or Outlook calendar APIs despite local-only privacy wording in the artifact. <br>
-Mitigation: Use only the intended calendar account, confirm the active profile before use, and avoid sending sensitive calendar content unless external API access is acceptable. <br>
-Risk: The artifact contains conflicting trigger-scope and privacy guidance. <br>
-Mitigation: Invoke the skill only for explicit calendar tasks and treat calendar event text as untrusted content. <br>
+Risk: The skill can read and change real calendar data through PortEden. <br>
+Mitigation: Use a limited calendar account or profile and manually confirm each create, update, or delete target before execution. <br>
+Risk: Authentication may remain available through local credentials or an API key. <br>
+Mitigation: Avoid shared or highly sensitive environments, keep API keys out of scripts and version control, and log out or clear credentials after use on shared machines. <br>
+Risk: The artifact claims local-only privacy, but evidence.security says cloud/API data flows are under-disclosed. <br>
+Mitigation: Do not use this skill with regulated or highly sensitive calendar data unless the data-flow language is corrected and reviewed. <br>
+Risk: The trigger condition mentions data analysis and reporting rather than calendar management. <br>
+Mitigation: Invoke the skill only for explicit calendar tasks and verify the selected operation matches the requested calendar action. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/calendar-skill-tool-free) <br>
+- [Publisher Profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, JSON] <br>
+**Output Format:** [Markdown guidance with inline bash commands and optional JSON, text, or CSV command output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include command suggestions, calendar query results, execution logs, and structured JSON responses.] <br>
+**Other Properties Related to Output:** [May read or mutate live calendar data through PortEden; FREE edition is scoped to single-task personal use.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.3 (source: server release evidence; artifact frontmatter lists 1.0.1 and body lists 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

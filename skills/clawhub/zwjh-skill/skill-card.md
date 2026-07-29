@@ -1,5 +1,5 @@
 ## Description: <br>
-Zwjh Skill provides a local long-term memory and knowledge graph layer for agents, with semantic and timeline retrieval, health checks, backups, and a localhost graph viewer. <br>
+zwjh-skill provides a local long-term memory and knowledge-graph layer for agents, including memory deposit, semantic and timeline retrieval, conflict resolution, health checks, backups, scheduled autopilot runs, and graph visualization. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Agent users and developers use this skill to capture conversations or files into local long-term memory, query that memory through semantic search and timelines, inspect entity relationships, and run health, backup, restore, and scheduled maintenance workflows. <br>
+Developers and agent users can use this skill to maintain local persistent memory, extract entities and relationships, query prior work, audit memory health, and back up or restore agent memory data. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can create daily scheduled tasks and index local memory logs, which may process sensitive personal or project data without repeated prompts. <br>
-Mitigation: Review the scheduled task setup before enabling it, limit the memory directory to intended content, and disable or remove the task when automatic processing is not needed. <br>
-Risk: The localhost web UI serves graph data derived from local memory and loads a third-party CDN script. <br>
-Mitigation: Use the web UI only on trusted machines, avoid exposing the localhost service beyond the local host, and accept the CDN dependency risk before launching it. <br>
-Risk: Backup, restore, and maintenance commands can overwrite or transform local memory data. <br>
-Mitigation: Create a backup before restore or maintenance commands, inspect paths and targets, and run destructive or state-changing operations only on data you intend to modify. <br>
+Risk: The skill stores long-term local memory about the user and their work, which may contain sensitive information. <br>
+Mitigation: Review what is deposited, keep backups and snapshots protected, and avoid adding secrets or regulated data unless the local environment is approved for that data. <br>
+Risk: The setup and autopilot features can register persistent scheduled execution through cron or schtasks. <br>
+Mitigation: Review the scheduled entry before enabling it, and use the remove command if ongoing execution is not desired. <br>
+Risk: Backup and snapshot features may create plaintext copies of memory data, and optional Baidu Netdisk backup can upload data through a locally configured bypy account. <br>
+Mitigation: Use local backup by default, restrict backup directory permissions, and enable Baidu Netdisk only after confirming the configured account and upload destination. <br>
+Risk: The graph web UI references an external CDN dependency for ECharts. <br>
+Mitigation: Use the web UI only in environments where that dependency is acceptable, or replace the CDN dependency with an approved local asset before deployment. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/fyniujin/skills/zwjh-skill) <br>
-- [Publisher profile](https://clawhub.ai/user/fyniujin) <br>
-- [Local graph viewer](http://127.0.0.1:8080) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and command-line guidance with Python commands, JSON-style API responses, Mermaid graph output, and local web UI data views.] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, Guidance] <br>
+**Output Format:** [Markdown with inline shell commands and structured local data files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local files under the user's memory directory, can register daily scheduled tasks, can run a localhost web UI, and can perform backup or restore operations when invoked.] <br>
+**Other Properties Related to Output:** [Outputs may include local SQLite-backed memory records, JSON snapshots, Mermaid graph text, CLI status reports, and browser-served graph views.] <br>
 
 ## Skill Version(s): <br>
-2.1.0 (source: evidence.json release.version, artifact SKILL.md frontmatter, and artifact version.json) <br>
+2.2.0 (source: frontmatter, version.json, server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

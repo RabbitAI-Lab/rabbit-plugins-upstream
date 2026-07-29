@@ -1,5 +1,5 @@
 ## Description: <br>
-Access and manage Splitwise expenses, groups, friends, balances, notifications, categories, and currencies through a registered MCP server. <br>
+Access Splitwise expense, group, friend, balance, notification, category, and currency data through an MCP server, with tools to create, update, and delete expenses and manage group membership. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to connect an agent to Splitwise so it can answer questions about shared expenses and perform account-affecting expense or group actions through the Splitwise API. <br>
+External users and developers use this skill to let an agent answer Splitwise questions and perform account actions such as listing balances, creating expenses, editing expenses, deleting expenses, and managing group membership. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can read and modify Splitwise account data, including creating, editing, deleting expenses and changing group membership. <br>
-Mitigation: Use explicit confirmations before account-changing actions, review previews carefully, and verify group, user, and expense identifiers before execution. <br>
-Risk: The Splitwise API key authorizes account access and is attached to requests made by the MCP server. <br>
-Mitigation: Keep SPLITWISE_API_KEY private in the MCP environment or local .env file, avoid exposing it in logs or shared configs, and rotate it if exposed. <br>
-Risk: Custom split updates replace the full users array, and deleted expenses are soft-deleted with restoration handled in the Splitwise web app. <br>
-Mitigation: Review the complete split before updates and confirm delete actions only after checking the target expense. <br>
+Risk: The skill can read sensitive personal and financial Splitwise data. <br>
+Mitigation: Limit friend, group, notification, and expense listings to information needed for the user's current task. <br>
+Risk: Create, edit, delete, and group-membership tools make real account changes. <br>
+Mitigation: Require explicit user confirmation before using tools that change expenses or groups. <br>
+Risk: Use requires a Splitwise API key and trust in the splitwise-mcp package. <br>
+Mitigation: Install only from trusted sources and keep the Splitwise API key scoped and protected in environment configuration. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/chrischall/skills/splitwise-mcp) <br>
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/splitwise-mcp) <br>
 - [splitwise-mcp npm package](https://www.npmjs.com/package/splitwise-mcp) <br>
-- [Splitwise API app registration](https://secure.splitwise.com/apps/register) <br>
+- [Splitwise app registration](https://secure.splitwise.com/apps/register) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, API calls, Configuration, Guidance] <br>
-**Output Format:** [Natural-language guidance with MCP tool calls and JSON configuration examples] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and plain text with inline JSON configuration and shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read and modify Splitwise account data when the configured server executes tool calls.] <br>
+**Other Properties Related to Output:** [May trigger Splitwise MCP tool calls that read or modify account data.] <br>
 
 ## Skill Version(s): <br>
-2.1.3 (source: server release evidence) <br>
+2.1.5 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

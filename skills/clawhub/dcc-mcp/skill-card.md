@@ -1,5 +1,5 @@
 ## Description: <br>
-DCC-MCP helps agents connect to and operate live DCC applications through structured DCC-MCP tools, with CLI-first marketplace discovery and setup guidance. <br>
+DCC-MCP lets agents discover, connect to, and operate live DCC applications such as Maya, Blender, Houdini, Photoshop, 3ds Max, Nuke, Unreal, Godot, RenderDoc, and Substance 3D through structured DCC-MCP tools and CLI workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, technical artists, and agent operators use this skill to route DCC control requests to live Maya, Blender, Houdini, Photoshop, 3ds Max, Nuke, Unreal, Godot, RenderDoc, Substance 3D, and related DCC tooling. It also guides marketplace search, package inspection, consent-gated installs or updates, and gateway troubleshooting. <br>
+External developers, technical artists, and automation engineers use this skill to route DCC-control requests through dcc-mcp-cli or gateway MCP tools, inspect live DCC inventory, call supported capabilities, and search marketplace skills before recommending or installing them. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to control live DCC applications and change active creative sessions. <br>
-Mitigation: Use the skill only when DCC-MCP control is intended, inspect tool schemas before calls, prefer structured tools, and verify results after actions. <br>
-Risk: CLI installs, marketplace installs or updates, adapter setup, remote gateway profiles, and daemon actions can change local tools or installed skills. <br>
-Mitigation: Require explicit user consent before these actions and follow the artifact's consent-gated setup and marketplace inspection steps. <br>
-Risk: A missing CLI may trigger a binary installation path. <br>
-Mitigation: Use only the documented verified installer path, which checks the official release manifest and SHA-256 digest and fails closed on mismatch. <br>
+Risk: The skill can run a high-authority DCC control workflow that changes live DCC scenes. <br>
+Mitigation: Use inventory, search, describe, and explicit user intent before calls; review requested scene changes before execution. <br>
+Risk: Setup, CLI install or update, remote gateway use, adapter install, marketplace install or update, replay, and UI-control fallback can change local state or interact with live applications. <br>
+Mitigation: Require user approval before those actions and follow the documented consent-gated setup, verified manifest, SHA-256, and fallback checks. <br>
+Risk: Gateway telemetry may be absent when local direct calls are used. <br>
+Mitigation: Use --require-gateway with a stable --agent-session-id when gateway stats or skill reflection evidence is required. <br>
+Risk: UI-control fallback and replay can act on the wrong target if scope or coordinates are stale. <br>
+Mitigation: Bind the exact target, snapshot after each action, stop UI control when complete, and require fresh approval before replay. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/loonghao/skills/dcc-mcp) <br>
-- [Clawdis Homepage](https://github.com/dcc-mcp/dcc-mcp-core/blob/main/skills/dcc-mcp/SKILL.md) <br>
-- [CLI Cheatsheet](references/CLI_CHEATSHEET.md) <br>
-- [Zero Instances CLI Setup Guide](references/ZERO_INSTANCES_CLI.md) <br>
+- [Published ClawHub skill page](https://clawhub.ai/loonghao/skills/dcc-mcp) <br>
+- [DCC-MCP homepage](https://github.com/dcc-mcp/dcc-mcp-core/blob/main/skills/dcc-mcp/SKILL.md) <br>
+- [CLI cheatsheet](references/CLI_CHEATSHEET.md) <br>
+- [Zero instances CLI setup guide](references/ZERO_INSTANCES_CLI.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JSON and bash command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include consent-gated setup steps, CLI command sequences, gateway profile guidance, DCC tool-call arguments, and bounded troubleshooting summaries.] <br>
+**Other Properties Related to Output:** [Commands may contact local or configured remote DCC-MCP gateways and can modify live DCC scenes when the user authorizes the requested action.] <br>
 
 ## Skill Version(s): <br>
-0.19.79 (source: frontmatter metadata and server release evidence) <br>
+0.19.86 (source: server release metadata and skill metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,11 +1,33 @@
 ---
 name: music-craft-minimax
-version: 1.5.0
+version: 1.5.1
 description: Advanced music generation for OpenClaw, using the MiniMax Music 2.6 token plan. Use for cover and style transfer, two-song mashup, lyrics generation API, emotion-driven prompt engineering, and fine control via the `mmx` CLI. Extends `music-craft` with MiniMax-specific features.
 metadata: '{"openclaw":{"requires":{"env":["MINIMAX_API_KEY"],"bins":["python3","ffmpeg","mmx"]},"primaryEnv":"MINIMAX_API_KEY","emoji":"\ud83c\udfb6","homepage":"https://github.com/LuisCharro/skills/tree/main/publish/music-craft-minimax","envVars":[{"name":"MINIMAX_API_KEY","required":true,"description":"API key for the MiniMax Music 2.6 token plan. Required for cover, mashup, lyrics generation, and mmx flag control."}]}}'
 ---
 
 # Music Craft — MiniMax
+
+## Licensing and commercial-use gate
+
+ClawHub publishes this skill bundle under MIT-0, so these instructions and
+bundled helper code may be used, modified, and redistributed commercially
+without attribution. MIT-0 does not grant a MiniMax license or transfer
+rights to any input or output. Each operator must use their own MiniMax account/API key, accept the
+current applicable MiniMax terms, and verify that their specific Token Plan,
+API product, and region allow the intended commercial use. Do not share an
+API key through the skill or use the maintainer's account.
+
+The MiniMax Open Platform terms and the consumer MiniMax app/web terms are
+different products and can impose different restrictions. This skill uses the
+API/CLI path; do not infer API commercial rights from a web-app subscription
+or from third-party marketing claims. If the applicable product terms are
+unclear, do not release the generated track commercially until MiniMax
+confirms the rights in writing.
+
+Before cloud generation, the operator must own or have permission to upload
+reference audio, lyrics, samples, and voices. A paid plan does not legalize a
+copyrighted cover, unauthorized voice, or unlicensed lyrics. AI-generated
+audio may also lack copyright protection or exclusivity under local law.
 
 **Cloud duration is approximate.** Verified field run (2026-06-12): 18/18
 cloud jobs saved an MP3, but output length ranged from 57-135% of requested

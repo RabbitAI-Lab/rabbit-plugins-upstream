@@ -1,5 +1,5 @@
 ## Description: <br>
-Emotion Router is a Markdown-first soft router for coding agents when the current prompt shows clear urgency, anger or frustration, or workflow confusion signals. <br>
+Markdown-first soft router for coding agents that activates only for clear urgency, strong anger or frustration, or confusion about the active workflow. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers and agent platform teams use this skill to choose a cautious response route for coding-agent work when visible prompts show urgency, frustration, or workflow confusion. It helps convert pressure signals into bounded execution guidance without modeling hidden user state or long-term personality. <br>
+Developers and coding-agent users use this skill to choose one cautious response route when a current prompt shows urgency, anger or frustration, or workflow confusion. It helps the agent adjust response style without labeling the user or widening the task. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may influence how an agent phrases and prioritizes work when it detects urgency, frustration, or confusion. <br>
-Mitigation: Review the selected route guidance before enabling it in production, especially for teams that do not want tone or workflow routing based on inferred work-state cues. <br>
-Risk: Misrouting an ordinary task as urgency, frustration, or confusion could add unnecessary constraints to the agent response. <br>
-Mitigation: Apply the skill only when the current prompt has clear active signals, and stop at ordinary work when emotion words are merely topics, quotes, field names, or neutral instructions. <br>
+Risk: Automatic invocation may route an agent response when a message sounds urgent, frustrated, or workflow-confused. <br>
+Mitigation: Review the trigger behavior before deployment, especially if explicit skill invocation is preferred. <br>
+Risk: Misrouting could change response style for ordinary tasks or quoted emotional content. <br>
+Mitigation: Keep the skill's cautious trigger gate and single-route priority rules intact during review. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gongyu0918-debug/skills/emotion-skill) <br>
-- [Urgency route reference](artifact/references/urgency-route.md) <br>
-- [Anger or frustration route reference](artifact/references/anger-frustration-route.md) <br>
-- [Confusion route reference](artifact/references/confusion-route.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/gongyu0918-debug/skills/emotion-skill) <br>
+- [Urgency Route](references/urgency-route.md) <br>
+- [Anger Or Frustration Route](references/anger-frustration-route.md) <br>
+- [Confusion Route](references/confusion-route.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown routing guidance with route-specific response patterns and examples] <br>
+**Output Format:** [Markdown guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Markdown-only guidance; it does not access private data, run commands, persist memory, or change files by itself.] <br>
+**Other Properties Related to Output:** [Routes at most one active work-state signal and asks the agent to load exactly one matching reference when active.] <br>
 
 ## Skill Version(s): <br>
-2.0.5 (source: target metadata, release evidence, SKILL.md frontmatter, agents/openai.yaml) <br>
+2.0.6 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

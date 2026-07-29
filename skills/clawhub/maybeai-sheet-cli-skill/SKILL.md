@@ -1,6 +1,6 @@
 ---
 name: maybeai-sheet-cli
-version: 0.16.1
+version: 0.16.2
 description: Use when the user works with MaybeAI spreadsheets through the mbs CLI for workbook inspection, local or remote-URL file import, native cross-workbook import/export, worksheet/range/table writes, full worksheet data refreshes that keep headers, formulas, worksheet styling, chart/image CRUD, dashboard validate/refresh flows, or sharing. Route dashboard design and chart composition to `sheet-dashboard`.
 metadata:
   openclaw:
@@ -147,7 +147,7 @@ Command catalog: [references/cli-commands.md](references/cli-commands.md)
 
 **Images.** Worksheet images are floating objects like charts, not cell values. Before `image insert`, confirm the target worksheet is Excelize-backed with `workbook list-worksheets`; PG-only worksheets do not support `add_picture`. Use `image insert` / `image set` with chart-compatible picture `format` JSON for position and size (`from`, `to`, and pixel offsets), then verify with `image list` and `media check`. Do not treat the returned `cell` as enough to preserve layout after drag/resize. To create a new image canvas in an existing PG workbook, import a small blank `.xlsx` with `--engine excelize` instead of `excel-worksheet create`.
 
-**SQL.** For reusable PG/SheetTable handoff tables, prefer `mbs db-table create-from-query --sql-file ... --verify`; it materializes the SQL result as a named DB table. For live workbook formulas, use `mbs excel-worksheet range set-formula` or `mbs db-table range set-formula`. User-facing silver sheets such as `S_OrderDetailsStructureInput` must expose the generating query as `A1 =SQL(...)` — materialized rows alone are not enough. See [references/formulas-sql.md](references/formulas-sql.md).
+**SQL.** For reusable PG/SheetTable handoff tables, prefer `mbs db-table create-from-query --sql-file ... --verify`; it materializes the SQL result as a named DB table. For live workbook formulas, use `mbs excel-worksheet range set-formula` or `mbs db-table range set-formula`. User-facing silver sheets such as `OrderDetailsStructureInput` must expose the generating query as `A1 =SQL(...)` — materialized rows alone are not enough. See [references/formulas-sql.md](references/formulas-sql.md).
 
 **Pivot tables.** Use first-class `mbs pivot read`, `mbs pivot preview`, `mbs pivot upsert`, and `mbs pivot delete`. Do not call `/api/v1/excel/pivot_table/*`, `/api/v1/excel/read_pivot_table`, legacy `/api/pivot_table/*`, or hand-build `MAYBE_PIVOT` formulas through `raw post` / `formula set` unless the local `mbs pivot --help` proves the command is unavailable. `pivot upsert` requires an explicit target anchor cell; if the user says `A1`, keep `--anchor-cell A1`. Details and spec examples: [references/pivot-tables.md](references/pivot-tables.md).
 
@@ -159,6 +159,8 @@ mbs excel-worksheet chart list --doc-id <DOC_ID> --worksheet-name Dashboard
 ```
 
 Use `dashboard create-config` when the worksheet should be created from the spec in one run.
+
+For dashboard specs with `chart.type: "html"`, the chart object must include non-empty `chart.html`, `chart.sql`, `chart.format.from/to`, and `chart.dimension`. Named sources must be direct SQL strings such as `"data_sources": {"mgmt_summary": "SELECT * FROM \"gid_2\""}`; never emit `"mgmt_summary": {"sql": "..."}`. For large renderer dependencies, reference approved CDN packages with `<script src>` such as jsdelivr/unpkg/cdnjs/d3js; do not inline full ECharts/D3 bundles into `chart.html`.
 
 
 ```bash

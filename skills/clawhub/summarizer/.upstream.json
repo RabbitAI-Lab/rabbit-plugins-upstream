@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/summarizer",
   "slug": "summarizer",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778488085397,
-  "contentHash": "0f5a7ae5b1720eb0397b5b83b58d2b9d0bd5e86c53cc659ed605baa51f578e85",
-  "fetchedAt": "2026-07-26T20:24:58.176Z"
+  "version": "1.0.2",
+  "updatedAt": 1785146513103,
+  "contentHash": "c33938818230f8e3aa11735aea2e7066c714d137505236f2482b71b73a27f6ae",
+  "fetchedAt": "2026-07-29T10:11:42.851Z"
 }

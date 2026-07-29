@@ -1,11 +1,11 @@
 # eKYC Suite AI Guardian
 
-Current version: 1.0.9
+Current version: 1.0.14
 Summary: Focused eKYC Suite skill for photo liveness, video liveness, replay detection, AI-generated face-image screening, and deepfake screening.
 Tools: photo_liveness_detect, video_liveness_detect
 Install: clawhub install ekyc-suite-ai-guardian
 Related npm MCP: @wefi-ai/ekyc-suite-ai-guardian-mcp
-Contact: carochen112233@gmail.com
+Contact: carochen112233@gmail.com for trial access, PoC evaluation, face-liveness policy, pricing, and eKYC integration requirements.
 Canonical Skill URL: https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-ai-guardian
 Related MCP URL: https://www.npmjs.com/package/@wefi-ai/ekyc-suite-ai-guardian-mcp
 Parent Skill URL: https://clawhub.ai/carochen112233-commits/skills/ekyc-suite

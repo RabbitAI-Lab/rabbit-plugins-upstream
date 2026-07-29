@@ -1,5 +1,5 @@
 ## Description: <br>
-Architect is a free local architecture-assistance skill for clarifying system design, identifying architecture risks, comparing options, decomposing modules, and preparing pre-launch checklists. <br>
+SSQ (Double Color Ball) lottery analysis skill that fetches public draw data from cwl.gov.cn, generates statistical reports, and offers paid recommended number sets through clawtip payment verification. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,28 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use Architect to reason through system goals, constraints, risks, architecture alternatives, module boundaries, and launch-readiness checks from user-provided project material and local files. <br>
+External users and agents use this skill to analyze public SSQ lottery draw history, maintain a local SQLite dataset, generate markdown/statistical reports, and optionally request payment-gated number recommendations. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The package includes under-disclosed order-storage utility code that can write JSON files under the user's home directory. <br>
-Mitigation: Review the package before installing and remove or clearly document the order-storage utility if it is not required. <br>
+Risk: Lottery recommendations can be misunderstood as predictive or guaranteed outcomes. <br>
+Mitigation: Treat generated recommendations as statistical analysis only and keep the skill's responsible gambling warning visible to users. <br>
+Risk: The skill fetches public draw data, writes a local database/report, and stores paid-order metadata locally. <br>
+Mitigation: Install only if this local storage and outbound access are acceptable, avoid sensitive details in question text, and remove old order or report files when retention is no longer desired. <br>
+Risk: Paid recommendations depend on clawtip payment verification and payment-related environment variables. <br>
+Mitigation: Use the paid workflow only after configuring clawtip intentionally, and do not expose payment secrets or wallet credentials in prompts or shared logs. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jinyu12166/skills/architect) <br>
+- [ClawHub Skill Page](https://clawhub.ai/jinyu12166/skills/architect) <br>
+- [China Welfare Lottery Draw Notice API](https://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or plain text architecture analysis with risk lists, option comparisons, recommended decomposition, and launch checklist.] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance] <br>
+**Output Format:** [Markdown reports, terminal text, local SQLite/order files, and inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responds in Chinese by default; works from user-provided project material and local files.] <br>
+**Other Properties Related to Output:** [Free analysis writes a local report and database; paid recommendations append number sets after payment verification.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: ClawHub release evidence) <br>
+1.0.9 (source: server release metadata; artifact frontmatter reports 1.1.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

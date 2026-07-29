@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/gitlab-work-stats",
   "slug": "gitlab-work-stats",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1784878112256,
-  "contentHash": "725ab10ab4fc476cb6fb21394fd15dc7c74f59e2b1f312261bac82a7626ac443",
-  "fetchedAt": "2026-07-26T18:05:32.420Z"
+  "version": "1.0.2",
+  "updatedAt": 1785115469086,
+  "contentHash": "e1399f6fa816c387c065ebe082119cb09b38d5ca93c867abeb99c603e63052eb",
+  "fetchedAt": "2026-07-29T10:12:45.702Z"
 }

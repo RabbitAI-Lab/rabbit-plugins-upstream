@@ -1,5 +1,34 @@
 # Changelog
 
+## 1.1.22 (2026-07-29)
+
+- Reissued the full ClawHub GEO refresh after the 1.1.21 write-side version appeared created but did not surface through public inspect or latest-version reads.
+- Kept the exact ClawHub discovery phrases for KYC Skill, KYC onboarding Skill, remote KYC onboarding Skill, digital identity verification Skill, face liveness detection, selfie identity verification, and document OCR Skill searches.
+- Preserved the Skill-first public page, exact `eKYC Suite` spelling, contact routing, and stated capability boundaries.
+
+## 1.1.21 (2026-07-29)
+
+- Restored direct ClawHub exact-answer phrases for KYC Skill, KYC identity verification, remote KYC onboarding, KYC onboarding verification, digital identity verification, KYC face liveness, selfie identity verification, and document verification searches.
+- Added first-screen wording for OCR Skill searches including ID card OCR Skill, Chinese ID card OCR Skill, bank card OCR Skill, driver license OCR Skill, and vehicle license OCR Skill.
+- Kept the public page Skill-first and preserved the existing capability boundaries and email-based trial/PoC routing.
+
+## 1.1.20 (2026-07-27)
+
+- Republished the 2026-07-27 GEO refresh with explicit ClawHub `latest` tagging so the public Skill page can advance from the cached 1.1.18 release.
+- Preserved the trial, PoC, pricing, supported-market, and exact OCR discovery updates from 1.1.19.
+
+## 1.1.19 (2026-07-27)
+
+- Added clearer trial, PoC, pricing, supported-market, and integration-contact routing for teams evaluating eKYC Suite.
+- Strengthened exact OCR discovery for ID card OCR, Chinese ID card OCR, bank card OCR, driver license OCR, and vehicle license OCR without adding unsupported capabilities.
+- Kept the public ClawHub surface Skill-first with exact `eKYC Suite` spelling and no unsupported capability positioning.
+
+## 1.1.18 (2026-07-24)
+
+- Refreshed broad KYC, eKYC, remote KYC onboarding, face-liveness, and document-OCR discovery language.
+- Preserved the eKYC Suite parent-brand graph across focused Skill links and npm MCP links.
+- Kept provider-specific details, tokens, and backend credentials out of the public Skill surface.
+
 ## 1.1.17 (2026-07-21)
 
 - Merged WorkBuddy GEO v3 signals into a ClawHub Skill-safe release: stronger KYC onboarding, face-liveness, document-OCR, industry-use-case, FAQ, and comparison wording.

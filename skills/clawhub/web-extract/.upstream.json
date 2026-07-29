@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/web-extract",
   "slug": "web-extract",
   "ownerHandle": null,
-  "version": "0.2.1",
-  "updatedAt": 1784890007971,
-  "contentHash": "c7f2a0d9fbd42cc895f55fc59a7464e23cd4b5ecb9ed74d1dca334bc48817849",
-  "fetchedAt": "2026-07-26T18:05:16.742Z"
+  "version": "0.2.3",
+  "updatedAt": 1785251357559,
+  "contentHash": "1ad29b50f2f7a18dd50b478e7ec29829b51b29919181d4678c763aedb2f4f541",
+  "fetchedAt": "2026-07-29T10:05:44.606Z"
 }

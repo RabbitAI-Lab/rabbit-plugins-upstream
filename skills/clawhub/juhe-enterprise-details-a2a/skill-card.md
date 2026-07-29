@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides paid enterprise registry lookups through Juhe Data using a company name, registration number, or unified social credit code, returning structured business profile details after Alipay payment. <br>
+Looks up detailed enterprise registration information from Juhe Data by company name, registration number, or unified social credit code after a paid Alipay AI payment flow. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill to verify company registration profiles, shareholders, personnel, branches, change records, and abnormal-operation records before business cooperation, due diligence, or risk review. <br>
+External users and agents use this skill to retrieve paid enterprise registration details for company verification, business due diligence, risk review, and checks of shareholders, officers, changes, and operating anomalies. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Users may incur a paid third-party lookup or send a company query term to Juhe without understanding the transaction. <br>
-Mitigation: Show the price, order details, and privacy notice, then require explicit user confirmation before sending the keyword or invoking payment. <br>
-Risk: Enterprise registry data may be delayed, incomplete, or unsuitable as the sole basis for business or legal decisions. <br>
-Mitigation: Present results as reference information and direct users to verify important decisions against official registration sources. <br>
-Risk: Payment integrity could be affected if order details, price, resource ID, or the 402 payment response are changed. <br>
-Mitigation: Pass the original 402 response to the Alipay payment skill and do not edit the submitted request JSON or payment fields. <br>
+Risk: Each successful lookup may require payment. <br>
+Mitigation: Show the price and payment details before confirmation and continue only after the user accepts the paid lookup. <br>
+Risk: The company name, registration number, or unified social credit code is sent to Juhe's enterprise-information service. <br>
+Mitigation: Send only the query keyword required for the lookup and avoid collecting unrelated personal or device information. <br>
+Risk: Third-party enterprise data may be delayed, incomplete, or unsuitable as the sole basis for commercial or legal decisions. <br>
+Mitigation: Present results as reference information and direct users to verify important facts with official registration sources. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-enterprise-details-a2a) <br>
-- [Juhe enterprise lookup API endpoint](https://apis.juhe.cn/a2a/query) <br>
+- [Output format evidence](artifact/OUT_FORMAT.md) <br>
+- [Juhe enterprise query API endpoint](https://apis.juhe.cn/a2a/query) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, API Calls, Guidance] <br>
-**Output Format:** [Markdown tables and sections generated from the paid lookup response] <br>
+**Output Type(s):** [text, markdown, shell commands, guidance] <br>
+**Output Format:** [Markdown enterprise information report with tables and payment-flow guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs only returned enterprise fields and includes a disclaimer that third-party registry data is for reference.] <br>
+**Other Properties Related to Output:** [Uses only returned API fields, suppresses raw JSON/HTML, and includes a third-party-data disclaimer.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

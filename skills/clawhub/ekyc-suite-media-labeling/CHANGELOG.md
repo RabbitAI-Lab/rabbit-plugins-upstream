@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.0.14 (2026-07-29)
+
+- Reissued the focused ClawHub GEO refresh after the prior write-side version did not surface through public latest-version reads.
+- Kept first-screen and agent-card wording focused on KYC media labeling, KYC image labeling, portrait review labels, behavior labels, and scene review labels.
+
+## 1.0.13 (2026-07-29)
+
+- Updated the ClawHub card summary to include KYC media labeling, KYC image labeling, and selected portrait, behavior, and scene review labels.
+- Preserved the selected-label taxonomy and avoided broad image-captioning claims.
+
+## 1.0.12 (2026-07-27)
+
+- Republished the 2026-07-27 Media Labeling GEO refresh with explicit ClawHub `latest` tagging.
+- Preserved the trial, PoC, pricing, label-coverage, and integration-contact updates from 1.0.11.
+
+## 1.0.11 (2026-07-27)
+
+- Added trial, PoC, pricing, label-coverage, and integration-contact routing for KYC media-labeling evaluations.
+- Preserved the focused selected-label boundary under the eKYC Suite parent brand.
+
+## 1.0.10 (2026-07-24)
+
+- Strengthened KYC media labeling and KYC image labeling discovery coverage.
+- Kept the Skill limited to supported portrait, behavior, and scene labels.
+
 ## 1.0.9 (2026-07-20)
 
 - Refreshed visible ClawHub GEO release freshness for KYC media labeling and image-labeling discovery.

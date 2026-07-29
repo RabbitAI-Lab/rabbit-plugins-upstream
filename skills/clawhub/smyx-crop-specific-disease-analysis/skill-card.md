@@ -1,5 +1,5 @@
 ## Description: <br>
-Expands the disease identification library to cover economic-crop-specific diseases such as corn northern and southern leaf blight, potato late blight, peanut leaf spot, and tomato viral disease for precise leaf-disease recognition. <br>
+Analyzes images, videos, or URLs of economic-crop leaves to identify crop-specific diseases such as corn leaf blights, potato late blight, peanut leaf spot, and tomato viral disease, returning structured visual findings. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agricultural developers use this skill to analyze crop leaf images, videos, or URLs for economic-crop-specific disease identification and structured report retrieval. It focuses on visual recognition and report output, not treatment or prevention recommendations. <br>
+Developers and agent operators use this skill to submit crop leaf images, short videos, local files, or URLs for visual disease screening and to retrieve cloud-hosted history for prior analysis reports. It is intended for crop-disease identification support, not treatment or disease-control recommendations. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Leaf images, videos, URLs, and report requests are sent to a remote Life Emergence service. <br>
-Mitigation: Review the service and data handling expectations before installation, and avoid submitting sensitive or unrelated media. <br>
-Risk: The skill can silently create or reuse a local identity and persist session tokens in a workspace SQLite database. <br>
-Mitigation: Install only in trusted workspaces, review local persistence before use, and remove stored identity or token data when the skill is no longer needed. <br>
+Risk: The skill sends crop images, videos, URLs, and report-history queries to an external service. <br>
+Mitigation: Install only where external processing is acceptable, avoid submitting unrelated or sensitive imagery, and review service and data-handling requirements before use. <br>
+Risk: The skill silently creates or reuses an internal user identity and can store returned service tokens locally. <br>
+Mitigation: Review identity and token storage behavior before installation, isolate the workspace for this skill, and clear local identity or token state when it is no longer needed. <br>
+Risk: Visual crop-disease recognition can be inaccurate or incomplete, and the artifact states that outputs are for initial screening rather than final diagnosis. <br>
+Mitigation: Use the report as decision support only and confirm findings with field observations or an agronomy expert before acting on treatment or disease-control decisions. <br>
 
 
 ## Reference(s): <br>
+- [Crop-Specific Disease API Documentation](artifact/references/api_doc.md) <br>
+- [Shared Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
 - [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-crop-specific-disease-analysis) <br>
 - [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis reports with inline shell commands] <br>
+**Output Type(s):** [Text, Markdown, JSON, Files] <br>
+**Output Format:** [Markdown text with JSON-formatted structured analysis, disease labels, confidence information, symptom descriptions, report links, and optional saved output files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include disease type, confidence, symptom description, report links, and Markdown tables for historical reports.] <br>
+**Other Properties Related to Output:** [History queries return cloud report records for the current internal identity; analysis results are visual screening outputs and may include report export links.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter says 1.0.3) <br>
+1.0.6 (source: server release metadata; artifact frontmatter shows 1.0.4) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

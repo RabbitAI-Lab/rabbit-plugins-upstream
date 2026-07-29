@@ -1,5 +1,5 @@
 ## Description: <br>
-图像处理基础版 helps an agent inspect, convert, crop, resize, compress, and manage metadata for image files in lightweight personal workflows. <br>
+图像处理基础版 helps an agent inspect, crop, resize, convert, compress, and manage metadata for image files, with support for common web formats such as PNG, JPEG, WebP, and AVIF. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to guide common image processing work such as Web image optimization, screenshot cleanup, format conversion, compression, and EXIF or ICC metadata handling. <br>
+Developers and individual users use this skill to guide an agent through lightweight image-processing tasks such as checking image properties, optimizing images for the web, converting formats, and managing EXIF or ICC metadata. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill combines local privacy claims with unclear external API or network behavior. <br>
-Mitigation: Use it on non-sensitive images or local-only workflows until the publisher documents which features contact external services and what data is transmitted. <br>
-Risk: The artifact asks agents to use command execution and file writing for image operations. <br>
-Mitigation: Review proposed commands before execution and run them on copied input files in a controlled working directory. <br>
-Risk: API keys or callback URLs could expose credentials or image-processing results if used without clear data-flow documentation. <br>
-Mitigation: Do not provide API keys or callback URLs unless the publisher documents the receiving service, purpose, and transmitted data. <br>
+Risk: The skill can guide an agent to run local commands and modify image files. <br>
+Mitigation: Review proposed commands and operate on copies or backed-up files before applying destructive edits. <br>
+Risk: The skill includes mixed privacy and network guidance, including optional callbacks and external API access. <br>
+Mitigation: Prefer local-only workflows, avoid callback URLs unless required, and review any network use before execution. <br>
+Risk: Image metadata can contain sensitive information. <br>
+Mitigation: Inspect and strip EXIF or other metadata before sharing processed images outside the local environment. <br>
 
 
 ## Reference(s): <br>
@@ -31,13 +31,13 @@ Mitigation: Do not provide API keys or callback URLs unless the publisher docume
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, JSON examples, and inline shell commands] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce image-processing command suggestions and structured status-style responses for review before execution.] <br>
+**Other Properties Related to Output:** [May propose local image-file operations and optional callback/API-related configuration.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+1.0.2 (source: ClawHub release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -429,6 +429,11 @@ Output from these commands may include **user-generated content from GitLab** (i
     and works well with tools like `jq`. See https://github.com/ndjson/ndjson-spec and
     https://jsonlines.org/ for format specifications.
 
+  NDJSON output preserves JSON-number precision when decoding and re-encoding response values.
+  Request fields that represent empty arrays are encoded as empty arrays rather than `null`.
+  These guarantees matter for automation that consumes large numeric IDs or intentionally clears
+  an array-valued API field; do not add string coercions or placeholder values as workarounds.
+
   USAGE
 
     glab api <endpoint> [--flags]
@@ -674,6 +679,17 @@ glab config get api_host --host gitlab.company.com
 glab config get ssh_host --host gitlab.company.com
 glab config get container_registry_domains --host gitlab.company.com
 ```
+
+Non-interactive login also persists explicitly supplied `--git-protocol` and `--api-protocol` values in the host configuration. This applies to token/stdin and other prompt-free login paths, so automation can configure the protocols in the same login operation instead of requiring a later config edit. Verify the resulting host entry before relying on it:
+
+```bash
+glab auth login --hostname gitlab.company.com --stdin \
+  --git-protocol ssh --api-protocol https < approved-token-file
+glab config get git_protocol --host gitlab.company.com
+glab config get api_protocol --host gitlab.company.com
+```
+
+Keep token files outside version control and do not print their contents.
 
 **CI auto-login:** `GLAB_ENABLE_CI_AUTOLOGIN=true` lets glab use `CI_JOB_TOKEN` in GitLab CI/CD without a stored login. `GITLAB_TOKEN`, `GITLAB_ACCESS_TOKEN`, and `OAUTH_TOKEN` still take precedence, so leave them unset when the intended credential is `CI_JOB_TOKEN`. Use explicit env tokens instead when a command needs a project, group, or personal access token.
 
@@ -1044,6 +1060,8 @@ glab ci lint
 glab ci lint --path .gitlab-ci-custom.yml
 ```
 
+When linting a remote URL, an unsuccessful HTTP response is a command failure; check the exit status rather than parsing an error-looking response as successful lint output. Pipeline-run and schedule variable inputs reject empty keys, so validate generated `KEY=value` data before invoking glab.
+
 ### Pipeline operations
 
 **List recent pipelines:**
@@ -1095,6 +1113,8 @@ glab ci delete <pipeline-id>
 - Check runner availability: View pipeline in web UI
 - Check job logs: `glab ci trace <job-id>`
 - Cancel and retry: `glab ci cancel <id>` then `glab ci run`
+
+`glab ci trace` stops when the traced job reaches `canceled`; automation should not wait for additional log output after cancellation.
 
 **Job failures:**
 - View logs: `glab ci trace <job-id>`
@@ -3755,10 +3775,10 @@ glab mr note 456 -m "/approve
   COMMANDS
     create <tag> [<files>...] [--flags]  Create a new GitLab release, or update an existing one.
     delete <tag> [--flags]               Delete a GitLab release.
-    download <tag> [--flags]             Download asset files from a GitLab release.
+    download [<tag>] [--flags]           Download asset files from a GitLab release.
     list [--flags]                       List releases in a repository.
     upload <tag> [<files>...] [--flags]  Upload release asset files or links to a GitLab release.
-    view <tag> [--flags]                 View information about a GitLab release.
+    view [<tag>] [--flags]               View information about a GitLab release.
   FLAGS
     -h --help                            Show help for this command.
     -R --repo                            Select another repository. Can use either `OWNER/REPO` or `GROUP/NAMESPACE/REPO` format. Also accepts full URL or Git URL.
@@ -3775,6 +3795,8 @@ glab release --help
 `glab release list` and `glab release view` support `--output json` / `-F json` for structured output, which is useful for agent automation.
 
 `--notes` and `--notes-file` are optional for `glab release create` and `glab release update`.
+
+The tag is optional for `glab release view` and `glab release download`; omit it to target the latest release. Pass an explicit tag in release automation when reproducibility matters.
 
 ```bash
 # List releases with JSON output
@@ -4604,6 +4626,10 @@ glab schedule list --output json
 glab schedule list -F json
 ```
 
+## Schedule variables
+
+Schedule variable keys are validated before schedule creation. Empty keys are rejected, so check generated `--variable <key>:<value>` input before creating schedules.
+
 ## Subcommands
 
 See [references/commands.md](references/commands.md) for full `--help` output.
@@ -4652,6 +4678,17 @@ glab securefile --help
 
 `glab securefile get` requires GitLab 18.0 or later. On older GitLab instances, list or download by ID/name instead of expecting the details endpoint to work.
 
+## Downloading secure files
+
+Use `--all` to download every secure file across all API pages; it is not limited to the first 100 results. Keep checksum verification enabled unless the user explicitly accepts the risk of `--no-verify` or `--force-download`.
+
+```bash
+# Download every secure file to a controlled directory
+glab securefile download --all --output-dir ./secure-files -R group/project
+```
+
+Treat the destination as sensitive, keep it outside version control, and verify the target project before downloading.
+
 ## Removing secure files
 
 Secure-file deletion accepts a positional numeric ID, `--id`, or an exact file name via `--name`:
@@ -4667,6 +4704,8 @@ glab securefile remove --name signing-certificate.p12 --yes
 ```
 
 Deletion is permanent. In non-interactive environments, `--yes` / `-y` is required. Resolve and verify the intended project with `-R/--repo` before deleting, and prefer an ID when duplicate or ambiguous naming is possible.
+
+Choose exactly one selector for removal: a positional ID, `--id`, or `--name`. Combining selectors is a hard error, so resolve the intended file first and pass only the one selector you want to use.
 
 ## Updating secure files
 
@@ -4932,13 +4971,13 @@ See [references/commands.md](references/commands.md) for full `--help` output.
   USAGE
     glab ssh-key <command> [command] [--flags]
   COMMANDS
-    add [key-file] [--flags]   Add an SSH key to your GitLab account.
-    delete <key-id> [--flags]  Deletes a single SSH key specified by the ID.
-    get <key-id> [--flags]     Returns a single SSH key specified by the ID.
-    list [--flags]             Get a list of SSH keys for the currently authenticated user.
+    add [key-file] [--flags]     Add an SSH key to your GitLab account.
+    delete [<key-id>] [--flags]  Deletes a single SSH key specified by the ID.
+    get [<key-id>] [--flags]     Returns a single SSH key specified by the ID.
+    list [--flags]               Get a list of SSH keys for the currently authenticated user.
   FLAGS
-    -h --help                  Show help for this command.
-    -R --repo                  Select another repository. Can use either `OWNER/REPO` or `GROUP/NAMESPACE/REPO` format. Also accepts full URL or Git URL.
+    -h --help                    Show help for this command.
+    -R --repo                    Select another repository. Can use either `OWNER/REPO` or `GROUP/NAMESPACE/REPO` format. Also accepts full URL or Git URL.
 ```
 
 ## ⚠️ Security Warning: Public Keys Only

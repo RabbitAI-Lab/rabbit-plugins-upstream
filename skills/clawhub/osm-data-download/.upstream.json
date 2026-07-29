@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/osm-data-download",
   "slug": "osm-data-download",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1785074210800,
-  "contentHash": "6bd50660f2bb4679a4aec6fb08dd756680fb0ccab8426e1ff40c0c3eaab99209",
-  "fetchedAt": "2026-07-26T18:03:19.805Z"
+  "version": "0.3.1",
+  "updatedAt": 1785158613351,
+  "contentHash": "08787a2cca5a4f5b0c862752fa2b792afa65688c2559032ba807f8d5aef5175c",
+  "fetchedAt": "2026-07-29T10:10:53.846Z"
 }

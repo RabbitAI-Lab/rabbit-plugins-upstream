@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cloudbase",
   "slug": "cloudbase",
   "ownerHandle": null,
-  "version": "1.92.27",
-  "updatedAt": 1784906931335,
-  "contentHash": "dc0aac80f2e8284d0b87be5e3b6b9e3f6655d4302ed41f41aa98ee87a5cb3292",
-  "fetchedAt": "2026-07-26T18:05:08.273Z"
+  "version": "1.92.31",
+  "updatedAt": 1785242762796,
+  "contentHash": "db98fd3933931ba6f0973872a7464ec596db469937e4582ecee51fb90960f2ad",
+  "fetchedAt": "2026-07-29T10:06:15.095Z"
 }

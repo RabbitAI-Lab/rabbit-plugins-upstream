@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/tempo-api-mcp",
   "slug": "tempo-api-mcp",
   "ownerHandle": null,
-  "version": "2.1.9",
-  "updatedAt": 1784465498763,
-  "contentHash": "2bd3fa61a22c8c0e648459c5d3a8c46374a8f460281b458548bc6e8067350181",
-  "fetchedAt": "2026-07-26T18:10:34.267Z"
+  "version": "2.3.0",
+  "updatedAt": 1785255819277,
+  "contentHash": "38b73eadd9bbc1cc035fa3890f9a3bda63b5555b36e594727cd7673bdc9e3069",
+  "fetchedAt": "2026-07-29T10:05:23.472Z"
 }

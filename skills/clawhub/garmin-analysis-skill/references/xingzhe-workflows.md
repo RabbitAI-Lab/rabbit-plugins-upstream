@@ -71,9 +71,9 @@ are rejected unless `--overwrite` is supplied; never add that flag without
 explicit approval. Failed or empty downloads are removed. Report route ID,
 absolute path, byte count, and whether the file was saved.
 
-The resulting GPX can be imported through Garmin Connect or the user's normal
-device workflow. Do not claim that `route download` has uploaded or installed
-the course on a Garmin device.
+The resulting GPX can be imported through Garmin CN or the user's normal device
+workflow. Do not claim that `route download` has uploaded or installed the
+course on Garmin CN or a Garmin device.
 
 ## Failure Handling
 

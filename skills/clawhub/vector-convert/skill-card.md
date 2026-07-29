@@ -1,5 +1,5 @@
 ## Description: <br>
-Convert between vector GIS formats using only the Python standard library. <br>
+Convert between vector GIS formats using the Python standard library, including Shapefile, GeoJSON, KML, GPX, GeoPackage, and CSV. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and geospatial engineers use this skill to convert local vector GIS files among Shapefile, GeoJSON, KML, GPX, GeoPackage, and CSV formats, inspect file metadata, and apply basic filters such as CRS selection, precision, field selection, and bounding boxes. <br>
+Developers and GIS practitioners use this skill to inspect and convert local vector GIS files between common formats, optionally applying CRS conversion, precision control, field filtering, or bounding-box clipping. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The package includes geocoding, caching, and generic download helpers beyond the documented offline converter, and those helpers can contact third-party services. <br>
-Mitigation: Use vector-convert.py directly for local conversions and avoid invoking _place.py or _geoskill_core geocoding/download helpers unless external network access is intended. <br>
-Risk: Users expecting a strict offline, zero-dependency converter may deploy extra modules that do not match that expectation. <br>
-Mitigation: Review the package contents before deployment and remove the helper modules if the operating requirement is strictly local, offline conversion only. <br>
+Risk: The release was flagged suspicious because it ships unrelated credential and network utilities alongside the local GIS converter. <br>
+Mitigation: Audit or remove the credential and network helper modules before installing it in sensitive environments, and run the converter in an isolated workspace when possible. <br>
+Risk: Credential helpers may access local secret stores such as ~/.netrc or ~/.geoskill/secrets.json. <br>
+Mitigation: Avoid running it in environments with sensitive local credential files, use a disposable home directory or container, and rotate any exposed account if a credential is real. <br>
+Risk: Conversion commands can overwrite output files. <br>
+Mitigation: Use explicit output paths, keep backups of source data, and review generated files before relying on them. <br>
 
 
 ## Reference(s): <br>
-- [Artifact README](artifact/README.md) <br>
-- [Skill definition](artifact/SKILL.md) <br>
 - [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/vector-convert) <br>
+- [README](artifact/README.md) <br>
+- [Skill definition](artifact/SKILL.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [files, text, JSON] <br>
-**Output Format:** [Converted GIS files, JSON info or QA summaries, and brief CLI status text] <br>
+**Output Type(s):** [files, text, shell commands] <br>
+**Output Format:** [Converted vector GIS files plus CLI status or file-info text] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local conversion, file-info output, field filtering, bounding-box clipping, coordinate precision control, and optional QA JSON.] <br>
+**Other Properties Related to Output:** [Requires Python 3.8+ and local filesystem access; output paths should be chosen carefully because conversions can overwrite files.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: release metadata) <br>
+1.0.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

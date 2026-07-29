@@ -1,5 +1,5 @@
 ## Description: <br>
-Searches and downloads public Landsat 8/9 Collection 2 Level 2 imagery from STAC sources, with filters for date, area, cloud cover, WRS-2 path/row, platform, and bands. <br>
+Searches and downloads Landsat 8 and Landsat 9 Collection 2 Level 2 imagery through STAC, with filters for area, date, cloud cover, WRS-2 path/row, band selection, and safe partial-file downloads. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,39 +7,40 @@ This skill is ready for commercial/non-commercial use. <br>
 [ruiduobao](https://clawhub.ai/user/ruiduobao) <br>
 
 ### License/Terms of Use: <br>
-MIT No Attribution (MIT-0) <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, GIS analysts, and remote-sensing practitioners use this skill to find and download Landsat scenes for geospatial analysis workflows without relying on manual EarthExplorer, cloud-console, or GEE workflows. <br>
+External users, developers, and geospatial analysts use this skill to find Landsat scenes for a bounding box and time window, inspect matching scene metadata, and download selected public Landsat assets for remote-sensing workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive place names may be sent to Open-Meteo or Nominatim and cached under ~/.geoskill_core_cache when --place is used. <br>
-Mitigation: Prefer explicit --bbox for sensitive areas, disable Nominatim where appropriate, and clear or avoid the cache in sensitive environments. <br>
-Risk: The security scan recommends review before installation because optional place-name lookup is broader than the main public data download flow. <br>
-Mitigation: Review the permissions and network destinations before deployment, especially for workflows involving sensitive project locations. <br>
-Risk: Dependency or test execution can introduce operational risk: requests should remain patched and e2e_test.py may reset artifact-local test output. <br>
-Mitigation: Use a constraints file or environment policy to pin a current patched requests version, and run e2e tests only in disposable or clearly scoped workspaces. <br>
+Risk: The release security review marked the package suspicious because it includes an unrelated credential manager with a hardcoded Earthdata password and local secret readers. <br>
+Mitigation: Review before installing, remove or clearly scope the credential module, and avoid running in environments that contain sensitive .netrc or ~/.geoskill/secrets.json entries. <br>
+Risk: The release security guidance notes an open-ended requests dependency range. <br>
+Mitigation: Pin or otherwise tighten the requests dependency range before deployment. <br>
+Risk: The downloader performs network requests and writes downloaded files to a local output directory. <br>
+Mitigation: Run with intended network access only and choose an output directory where partial and final downloaded files are acceptable. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/landsat-download) <br>
 - [Microsoft Planetary Computer Landsat Collection 2 Level 2](https://planetarycomputer.microsoft.com/dataset/landsat-c2-l2) <br>
 - [Microsoft Planetary Computer STAC API](https://planetarycomputer.microsoft.com/api/stac/v1/) <br>
-- [Element84 Earth Search STAC API](https://earth-search.aws.element84.com/v1/) <br>
-- [ClawHub landsat-download release page](https://clawhub.ai/ruiduobao/skills/landsat-download) <br>
+- [Element84 Earth Search API](https://earth-search.aws.element84.com/v1/) <br>
+- [STAC specification](https://stacspec.org/) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Files, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands; CLI text or JSON results; GeoTIFF, metadata, and optional QA JSON files when download options are used.] <br>
+**Output Type(s):** [Text, JSON, Shell commands, Files, Guidance] <br>
+**Output Format:** [CLI text or JSON results, plus downloaded Landsat asset files when download mode is enabled] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Downloads write to the selected output directory using .part temporary files before final replacement; progress output can be suppressed for CI.] <br>
+**Other Properties Related to Output:** [Writes selected assets to the configured output directory and may show progress, speed, and ETA during downloads.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+1.0.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

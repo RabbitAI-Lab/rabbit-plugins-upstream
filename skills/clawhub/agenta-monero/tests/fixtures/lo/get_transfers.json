@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":"0","result":{"out":[{"txid":"a1b2c3","amount":500000000000,"fee":43500000000,"address":"77Vx","address_index":3,"timestamp":1535918500,"unlock_time":0}]}}

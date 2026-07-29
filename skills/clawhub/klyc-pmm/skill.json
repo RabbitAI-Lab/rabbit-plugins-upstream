@@ -1,7 +1,7 @@
 {
   "name": "klyc-pmm",
-  "version": "7.0.3",
-  "description": "KLYC-PMM v7.0.3。第0步写日记→蒸馏→压缩→加密→上传。按文件名自动分类容灾/日记/配置域。默认私密。",
+  "version": "8.3.4",
+  "description": "KLYC-PMM v8.3.4。昆仑令一行恢复 · 五层洋葱加密 · 17环节蒸馏管道 · 三层检索路由 · 三符全自动开通。纯本地脚本，零外部下载。含12错误码、11FAQ、5进阶场景、幂等自检、curl退出码诊断、昆仑令格式校验、oneclick一键安装。",
   "author": "昆仑瑶池",
   "category": "知识管理",
   "tags": [
@@ -24,6 +24,6 @@
     "memory recovery",
     "talisman",
     "klyc-pmm-recover",
-    "ai.syln.cn"
+    "kunlunyaochi.com"
   ]
 }

@@ -5,7 +5,7 @@ license: MIT
 compatibility: Requires Python 3.10+ and network access to https://ai.ocean94.com
 metadata:
   author: Piccolo123
-  version: "2.6.2"
+  version: "2.6.4"
   contact: piccoloyao@ocean94.com
   openclaw:
     emoji: "🔗"
@@ -94,6 +94,7 @@ A category is a named label for organizing footprints — like a folder, but a f
 | `icon` | string (50) | Optional icon identifier |
 | `note` | string (500) | Optional description/notes |
 | `category_set_id` | int \| null | Which set this category belongs to (null = unassigned) |
+| `category_set_name` | string \| null | The name of the category set (e.g., "Shopping", "Work") |
 | `mode` | string \| null | `null` = personal, `"cocreate"` = shared co-edit, `"subscribe"` = shared read-only |
 | `is_default` | bool | System default category |
 | `is_ai_generated` | bool | Created by AI auto-categorization |
@@ -148,7 +149,7 @@ A category's `mode` field tells you what kind it is:
 | Who can add footprints | Only you | Depends on mode |
 | Has members and invite links | No | Yes |
 
-Run `categories` to see ALL your categories — personal and shared together. Each category's `mode` field distinguishes them. Run `category-sets` to see how they're grouped into workspaces.
+Run `categories` to see ALL your categories — grouped by category set, each set header shows its ID (e.g., `ID:44`). Each category's `mode` field distinguishes personal vs shared. Run `category-sets` to see just the set list without their categories.
 
 ### Shared category modes
 
@@ -213,7 +214,7 @@ Understand the user's real intent, then call one or more commands to fulfill it.
 | `python {baseDir}/scripts/footprints.py add <url> --title <title> --description <desc> --content-type <type> --category-ids <ids> --tags <tags>` | Save a link or plain-text entry (url can be empty) |
 | `python {baseDir}/scripts/footprints.py get <id>` | View a footprint's full details |
 | `python {baseDir}/scripts/footprints.py search <query>` | Full-text search across title, description, AI summary |
-| `python {baseDir}/scripts/footprints.py list [--category-id <id>] [--limit <n>]` | List footprints |
+| `python {baseDir}/scripts/footprints.py list [--category-id <id>] [--limit <n>] [--offset <n>]` | List recent footprints (limit max 100). Use `--offset` to page through results. Returns `total` count. |
 
 ### Organize
 
@@ -221,7 +222,7 @@ Understand the user's real intent, then call one or more commands to fulfill it.
 |---------|-------------|
 | `python {baseDir}/scripts/footprints.py update <id> --title <t> --description <d> --content-type <ct> --category-ids <ids> --tags <tags>` | Modify a footprint's title, categories, tags |
 | `python {baseDir}/scripts/footprints.py batch-update <updates>` | Batch reorganize footprints (max 50 per call) |
-| `python {baseDir}/scripts/footprints.py categories` | List all available categories |
+| `python {baseDir}/scripts/footprints.py categories` | List all categories grouped by category set (set ID shown in headers) |
 | `python {baseDir}/scripts/footprints.py create-category <name> [--category-set-id <id>]` | Create a new category |
 | `python {baseDir}/scripts/footprints.py tags` | List all used tags |
 | `python {baseDir}/scripts/footprints.py content-types` | List content types used in your library (e.g. article, video, image) |
@@ -238,6 +239,16 @@ Understand the user's real intent, then call one or more commands to fulfill it.
 | `python {baseDir}/scripts/footprints.py add-to-shared <sc_id> --collection-id <id>` | Add a footprint to a shared category |
 | `python {baseDir}/scripts/footprints.py remove-from-shared <sc_id> --collection-id <id>` | Remove a footprint from a shared category |
 | `python {baseDir}/scripts/footprints.py copy <id> --category-ids <ids>` | Copy a shared footprint to your personal collection |
+
+### Response Structure
+
+`list` and `search` return `{"items": [...], "total": <N>}`. `total` is the full match count (not just this page). Always check `total` to know if there are more results beyond the current page.
+
+`list` supports `--offset` for pagination. If `total > limit + offset`, there are more pages. Example: `total=156, limit=20, offset=0` → 8 pages total.
+
+### Pagination Strategy
+
+For large libraries, **prefer `search` over `list`** — it's faster and returns only what the user asked for. Use `list` for browsing or when the user says "show me everything." When paginating, tell the user: "Found 156 items, showing page 1/8. Want to see more?"
 
 ### Utilities
 

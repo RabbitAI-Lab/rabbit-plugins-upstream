@@ -1,5 +1,5 @@
 ## Description: <br>
-Converts PPTX and PDF files into page-by-page structured DOCX parsing documents with full-page screenshots, editable text organization, and inline image descriptions. <br>
+Parses PPTX and PDF files into page-by-page structured Word documents with full-page screenshots, editable text, and inline image descriptions. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,32 @@ Proprietary <br>
 
 
 ## Use Case: <br>
-Developers, analysts, and document-review agents use this skill to transform complex PPTX or PDF presentations into reviewable Word documents with extracted text, screenshots, and structured descriptions of embedded visuals. <br>
+Developers, analysts, and external users use this skill to convert complex slide decks or PDFs into reviewable DOCX analysis drafts. It is intended for workflows that need page-by-page visual checking, text reordering, image annotation, and final human or agent review before delivery. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The runtime dependency installer can silently modify the Python environment. <br>
-Mitigation: Run the skill in an isolated virtual environment or container, preinstall dependencies, and use the --no-install option. <br>
-Risk: Input decks and PDFs may be retained as screenshots, extracted images, text JSON, and working DOCX files in the workspace. <br>
-Mitigation: Avoid highly sensitive documents unless retention is acceptable, and manually remove ppt-parse-working, retained assets, and intermediate outputs when processing is complete. <br>
-Risk: The generated parsing document can contain missed text, incorrect ordering, or incomplete image transcription if visual review is skipped. <br>
-Mitigation: Complete the documented full-page visual review and main-agent final review before delivering the final DOCX. <br>
+Risk: The skill may run shell commands, create working and output directories, spawn subagents for larger jobs, and install LibreOffice, poppler, or Python packages during normal use. <br>
+Mitigation: Run it in a virtual environment or container, prefer the script's no-install option where possible, and approve any operating system package installation explicitly. <br>
+Risk: PPT and PDF parsing can produce incomplete or misleading output if visual verification or final review is skipped. <br>
+Mitigation: Require page-by-page visual checking and a final review pass before using or delivering the generated DOCX file. <br>
 
 
 ## Reference(s): <br>
-- [Wisely Read PPT ClawHub Skill Page](https://clawhub.ai/sedey999/skills/wisely-read-ppt) <br>
-- [README.md](artifact/README.md) <br>
-- [subagent-workflow.md](artifact/reference/subagent-workflow.md) <br>
+- [ClawHub skill page](https://clawhub.ai/sedey999/skills/wisely-read-ppt) <br>
+- [README](artifact/README.md) <br>
+- [Subagent workflow reference](artifact/reference/subagent-workflow.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Files, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [DOCX document with page screenshots, structured text, inline image markers, and retained PNG/JSON asset files] <br>
+**Output Type(s):** [Files, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [DOCX files with extracted assets and Markdown-style page annotations] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a vision-capable model for page review; PPTX rendering requires LibreOffice, and PDF rendering requires poppler or PyMuPDF.] <br>
+**Other Properties Related to Output:** [Creates working and final output directories; requires an image-capable model for visual verification.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+1.3.0 (source: ClawHub release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

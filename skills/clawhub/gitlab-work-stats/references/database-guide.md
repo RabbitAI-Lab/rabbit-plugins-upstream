@@ -29,17 +29,20 @@ GitLab Omnibus 内置 PostgreSQL，默认不监听 TCP 端口，仅通过 Unix S
 
 ### users 表
 
-| 列名 | 类型 | 说明 |
-|------|------|------|
-| id | integer | 用户ID（主键） |
-| username | varchar | 登录用户��� |
-| name | varchar | 显示名称 |
-| email | varchar | 邮箱 |
-| state | varchar | 状态（active/locked） |
-| admin | boolean | 是否管理员 |
-| created_at | timestamp | 创建时间 |
-| last_sign_in_at | timestamp | 最后登录时间 |
-| current_sign_in_ip | varchar | 当前登录IP |
+| 列名 | 类型 | 说明 | 统计报告是否需要 |
+|------|------|------|------------------|
+| id | integer | 用户ID（主键） | ✅ 是 |
+| username | varchar | 登录用户名 | ✅ 是 |
+| name | varchar | 显示名称 | ✅ 是 |
+| state | varchar | 状态（active/locked） | ✅ 是 |
+| created_at | timestamp | 创建时间 | ✅ 是 |
+| email | varchar | 邮箱 | ❌ **不应收集** |
+| admin | boolean | 是否管理员 | ❌ **不应收集** |
+| last_sign_in_at | timestamp | 最后登录时间 | ❌ **不应收集** |
+| current_sign_in_ip | varchar | 当前登录IP | ❌ **不应收集** |
+
+> **⚠️ 隐私保护**：工作统计报告只需 `id`、`username`、`name`、`state`、`created_at` 字段。
+> **禁止收集** `email`、`admin`、`last_sign_in_at`、`current_sign_in_ip` 等敏感个人信息——这些字段与工作统计无关，收集它们会导致隐私风险。
 
 ### projects 表
 
@@ -213,12 +216,14 @@ GitLab 12+ 默认使用 hashed storage，仓库物理路径不再使用 `namespa
 SELECT disk_path FROM project_repositories WHERE project_id = {id};
 ```
 
-**Git 操作**：
+**Git 操作**（只读，以当前 SSH 用户身份执行，不使用 sudo 提权）：
 ```bash
-sudo -u git /opt/gitlab/embedded/bin/git \
+/opt/gitlab/embedded/bin/git \
   -C /var/opt/gitlab/git-data/repositories/@hashed/XX/YY/XXXX.git \
   log --all --author='{username}' --since='{start}' --format='%h|%ai|%s'
 ```
+
+> **⚠️ 安全说明**：不使用 `sudo -u git` 提权，直接以当前 SSH 用户身份执行只读 `git log`。需要 SSH 用户具有读取目标仓库目录的权限。仅用于提取 commit 元数据（hash/日期/标题），不访问源代码内容。
 
 ---
 

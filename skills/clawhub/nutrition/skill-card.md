@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps agents assess micronutrient gaps, diet quality, lab context, supplements, and food-drug interactions while routing health red flags to clinicians. <br>
+Helps an agent assess micronutrient gaps, diet quality, supplements, food-drug interactions, relevant lab markers, and nutrition safety boundaries. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and assistants use this skill for micronutrient coverage checks, supplement review, label and lab interpretation, food-drug interaction checks, and nutrition guidance for diet patterns, life stages, and relevant health conditions. <br>
+External users and agents use this skill to reason about nutrient sufficiency, diet quality, supplements, interactions, nutrition-relevant labs, and when to route health questions to a clinician. It is suited to food-first nutrition guidance and local tracking, not diagnosis, calorie counting, meal planning, or medication changes. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may read and update sensitive nutrition and health records without a clear confirmation step. <br>
-Mitigation: Require explicit user confirmation before writes to health/profile.md, config.yaml, contacts, due dates, or artifacts, especially for labs, medications, pregnancy or life stage, conditions, allergies, and clinician names. <br>
-Risk: Nutrition, supplement, and lab guidance could affect health decisions if treated as a substitute for clinician care. <br>
-Mitigation: Keep clinician-ordered or prescribed care advise-only, route red flags to a clinician, and require health profile checks before food, dose, or supplement recommendations. <br>
+Risk: The skill can persist sensitive health, nutrition, lab, medication, and contact information in local notes across sessions. <br>
+Mitigation: Install only when this persistence is desired, review the configured Clawic health, nutrition, and contacts folders before and after use, and avoid sharing medical details that should not be stored locally. <br>
+Risk: Nutrition and supplement guidance can be unsafe when allergies, conditions, medications, pregnancy, kidney disease, disordered eating signals, or lab context are missing. <br>
+Mitigation: Review recommendations before acting, keep the shared health profile current, and route red-flag symptoms, medication changes, high-risk supplements, and clinician-directed plans to an appropriate professional. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Nutrition Skill Page](https://clawhub.ai/ivangdavila/skills/nutrition) <br>
-- [Clawic Nutrition Page](https://clawic.com/skills/nutrition) <br>
-- [Nutrition Skill Definition](artifact/SKILL.md) <br>
-- [Safety Guide](artifact/safety.md) <br>
-- [Working File Templates](artifact/memory-template.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/ivangdavila/skills/nutrition) <br>
+- [Clawic Nutrition Skill](https://clawic.com/skills/nutrition) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with structured local record updates] <br>
+**Output Type(s):** [text, markdown, guidance] <br>
+**Output Format:** [Markdown and plain-language guidance, with local note updates when persistent nutrition or health facts are produced] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update local nutrition, health, contacts, due-date, and artifact records when durable user-specific information is produced.] <br>
+**Other Properties Related to Output:** [May maintain local nutrition, health, and contacts notes under configured Clawic data paths.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release and SKILL.md frontmatter) <br>
+1.0.2 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

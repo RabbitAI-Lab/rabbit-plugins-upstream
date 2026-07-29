@@ -11,7 +11,7 @@
 #
 set -euo pipefail
 
-SOURCE_ROOT="${AGENT_SKILLS_SOURCE_DIR:-${HOME}/.gemini/antigravity/skills}"
+SOURCE_ROOT="${AGENT_SKILLS_SOURCE_DIR:-${HOME}/.gemini/config/skills}"
 TEMPLATE_PATH="${SOURCE_ROOT}/agent-skills-setup/assets/public-repo-readme-template.md"
 SKILL_NAME=""
 OUTPUT_DIR=""
@@ -26,7 +26,7 @@ Usage: export-public-skill.sh --skill <skill-name> --output <directory> --repo <
 Exports a skill from Antigravity's global skill store into a standalone public repository layout.
 
 Options:
-  --skill <name>        Skill folder name under ~/.gemini/antigravity/skills
+  --skill <name>        Skill folder name under ~/.gemini/config/skills
   --output <dir>        Destination repository directory to create or update
   --repo <owner/repo>   Public repository name used in generated install docs
   --dry-run             Preview rsync --delete changes without writing
@@ -89,8 +89,13 @@ fi
 
 mkdir -p "$OUTPUT_DIR"
 if [[ -e "$OUTPUT_DIR/$SKILL_NAME" && -n "$(ls -A "$OUTPUT_DIR/$SKILL_NAME" 2>/dev/null)" && $FORCE -ne 1 ]]; then
-    echo "ERROR: $OUTPUT_DIR/$SKILL_NAME 已存在且非空；rsync --delete 会删除其中的额外文件。" >&2
-    echo "        请加 --force 确认，或用 --dry-run 预览将要删除/新增的内容。" >&2
+    echo "ERROR: $OUTPUT_DIR/$SKILL_NAME already exists and is not empty; rsync --delete would remove extra files inside it." >&2
+    echo "        Re-run with --force to confirm, or use --dry-run to preview what would be deleted/added." >&2
+    exit 1
+fi
+# MED-P8: rsync is required for the --delete mirror semantics used here.
+if ! command -v rsync >/dev/null 2>&1; then
+    echo "ERROR: rsync not found. Install rsync (e.g. macOS: xcode-select --install; Debian/Ubuntu: apt install rsync) and retry." >&2
     exit 1
 fi
 if [[ $DRY_RUN -eq 1 ]]; then
@@ -99,9 +104,17 @@ else
     rsync -a --delete "$SOURCE_SKILL_DIR/" "$OUTPUT_DIR/$SKILL_NAME/"
 fi
 
+# MED-P6: escape sed replacement metacharacters (\, &, delimiter) so names
+# containing them cannot corrupt the generated README or inject expressions.
+sed_escape_replacement() {
+    printf '%s' "$1" | sed -e 's/[\\&|]/\\&/g'
+}
+SKILL_NAME_ESC="$(sed_escape_replacement "$SKILL_NAME")"
+REPO_NAME_ESC="$(sed_escape_replacement "$REPO_NAME")"
+
 sed \
-    -e "s/{{SKILL_NAME}}/$SKILL_NAME/g" \
-    -e "s#{{REPO_NAME}}#$REPO_NAME#g" \
+    -e "s|{{SKILL_NAME}}|$SKILL_NAME_ESC|g" \
+    -e "s|{{REPO_NAME}}|$REPO_NAME_ESC|g" \
     "$TEMPLATE_PATH" > "$OUTPUT_DIR/README.md"
 
 echo "Exported $SKILL_NAME to $OUTPUT_DIR"

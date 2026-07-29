@@ -1,5 +1,5 @@
 ## Description: <br>
-Session retrospective and skill audit for reflecting on sessions, reviewing lessons learned, and auditing what went well or wrong. <br>
+Session retrospective and skill audit. Use when asked to reflect, do a retrospective, review lessons learned, audit what went well or wrong, or review session effectiveness. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent users use this skill to review a completed session, identify mistakes, friction, wasted effort, and wins, and decide which lessons should be preserved. It also audits invoked skills and proposes concrete improvements or diffs when skill changes are warranted. <br>
+Developers and agent operators use this tool-class skill to review a session, identify mistakes, friction, wasted effort, wins, and operational learnings, and decide which lessons should be preserved. It also audits invoked skills and proposes measurable changes when skill guidance was missing, inefficient, or mismatched to the session. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Saved memories or skill edits can influence future agent behavior if approved without review. <br>
-Mitigation: Review each proposed memory entry or skill diff before approving persistence. <br>
-Risk: Session retrospectives may quote or summarize sensitive conversation content. <br>
-Mitigation: Do not persist secrets, credentials, private URLs, customer data, unredacted personal information, or machine-specific paths. <br>
+Risk: Conversation-derived lessons, including exact user phrasing, may contain secrets, personal data, customer information, or sensitive project context. <br>
+Mitigation: Review and sanitize every proposed memory entry before approving writes, and avoid approving entries that include sensitive content. <br>
+Risk: Persistent memory entries can become duplicated or contradictory over time. <br>
+Mitigation: Search existing memory for key terms before writing, update near-duplicates, and surface contradictions for an explicit merge, replace, or keep-both decision. <br>
+Risk: Skill-audit diffs may introduce incorrect or overbroad guidance if accepted without review. <br>
+Mitigation: Review proposed diffs before applying them and run the skill's validation or trigger tests when behavior changes. <br>
 
 
 ## Reference(s): <br>
-- [ia-reflect on ClawHub](https://clawhub.ai/iliaal/skills/compound-eng-reflect) <br>
-- [Skill specification](artifact/SPEC.md) <br>
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-reflect) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with findings, prioritized improvements, review prompts, and proposed diffs when skill audits are requested.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with numbered findings, review scans, prioritized improvements, proposed diffs, and approval prompts for memory writes] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose memory entries or skill edits for user approval; review proposed changes before they are persisted.] <br>
+**Other Properties Related to Output:** [Caps improvement recommendations at 10 and asks for user approval before writing selected lessons to persistent memory.] <br>
 
 ## Skill Version(s): <br>
-4.2.1 (source: server release evidence) <br>
+4.3.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

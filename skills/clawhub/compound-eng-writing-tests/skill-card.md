@@ -1,5 +1,5 @@
 ## Description: <br>
-Generic test writing discipline: test quality, real assertions, anti-patterns, and rationalization resistance for writing, improving, or fixing tests across languages and frameworks. <br>
+Generic test writing discipline: test quality, real assertions, anti-patterns, and rationalization resistance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering agents use this skill when writing tests, adding test coverage, improving weak tests, or fixing failing tests. It guides test design toward behavior-focused assertions, realistic dependencies, edge-case coverage, and resistance to common rationalizations for skipping tests. <br>
+Developers and engineering agents use this skill when writing tests, adding coverage, fixing failing tests, or improving test quality across languages and frameworks. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Recommended test-isolation steps may involve real test databases, temporary files, containers, or manual cleanup commands. <br>
-Mitigation: Review proposed commands and configuration changes before applying them, especially in important local environments or shared test infrastructure. <br>
-Risk: Generic testing guidance may conflict with framework-specific conventions. <br>
-Mitigation: Apply framework-specific testing skills or project documentation first when they provide more precise tooling or patterns. <br>
+Risk: Guidance may suggest database resets, truncation, or volume teardown while diagnosing test isolation problems. <br>
+Mitigation: Use those actions only against disposable test infrastructure, never production or shared data. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-writing-tests) <br>
-- [Anti-patterns extended notes](artifact/references/anti-patterns-extended.md) <br>
-- [Rationalization table](artifact/references/rationalization-table.md) <br>
+- [Anti-Patterns: Extended Notes](references/anti-patterns-extended.md) <br>
+- [Rationalization Table](references/rationalization-table.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with examples, checklists, and occasional code or shell command suggestions] <br>
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands] <br>
+**Output Format:** [Text or Markdown with code and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No generated files by default; recommendations may include test cases, assertions, fixture changes, and local test commands.] <br>
+**Other Properties Related to Output:** [No executable components; guidance may include test-writing recommendations and verification commands.] <br>
 
 ## Skill Version(s): <br>
-4.2.0 (source: evidence.json release.version) <br>
+4.3.2 (source: release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

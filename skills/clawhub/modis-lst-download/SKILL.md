@@ -1,13 +1,6 @@
 ---
-description: 'Search and download MODIS Land Surface Temperature (LST) products from
-  NASA LAADS DAAC.
-
-  Supports MOD11A1 (daily 1km), MOD11A2 (8-day 1km), MYD11A1, and MYD11A2 from
-
-  Terra and Aqua satellites. Outputs GeoTIFF format.
-
-  '
 name: modis-lst-download
+description: 'Search and download MODIS Land Surface Temperature (LST) products from description: 'Search and download MODIS Land Surface Temperature (LST) products from NASA LAADS DAAC.  Supports MOD11A1 (daily 1km), MOD11A2 (8-day 1km), MYD11A1, and MYD11A2 from  Terra and Aqua satellites. Outputs GeoTIFF format.  '
 ---
 
 # MODIS Land Surface Temperature Download

@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps individual users publish pixel art to a shared collaborative canvas, view and locate canvas work, manage colors and coordinates, and review personal publish history. <br>
+画板艺术工具 helps users prepare and publish pixel art to a shared canvas, including canvas viewing, coordinate and color planning, and personal publication history. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill to prepare and execute personal pixel-art canvas workflows, including publishing one artwork, viewing or locating canvas positions, managing color and coordinate data, and exporting personal history. <br>
+External users and developers can use this skill to plan, validate, and publish single pixel-art works to a shared canvas. It is intended for canvas viewing, coordinate and color management, and personal artwork history workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad or mismatched instructions could cause the agent to act outside explicit pixel-art canvas tasks. <br>
-Mitigation: Use the skill only when the user explicitly asks for pixel-art canvas work, and review the proposed action before execution. <br>
-Risk: The workflow may publish, delete, import, reset, or export remote canvas content. <br>
-Mitigation: Require user confirmation before any publish, delete, import, reset, or export action. <br>
-Risk: A canvas service token may be required for publishing operations. <br>
-Mitigation: Verify the actual command or endpoint before providing a service token, and keep credentials out of prompts, logs, and artifacts. <br>
+Risk: The security evidence flags broad triggers and broad read, execute, and write powers for a narrow pixel-art canvas task. <br>
+Mitigation: Invoke the skill only for explicit pixel-art canvas workflows, and review generated commands before running them. <br>
+Risk: Canvas tokens or misdirected publish, delete, or export commands could affect the wrong endpoint or artwork region. <br>
+Mitigation: Verify the target endpoint, command, board, coordinates, and affected artwork region before providing tokens or executing commands. <br>
 
 
 ## Reference(s): <br>
@@ -30,13 +28,13 @@ Mitigation: Verify the actual command or endpoint before providing a service tok
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON, Configuration] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON examples] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration, JSON] <br>
+**Output Format:** [Markdown guidance with shell command examples and JSON payload or output examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured status, result data, execution log, and error fields.] <br>
+**Other Properties Related to Output:** [Produces canvas board, coordinate, color, and publication-history instructions; review generated commands before execution.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter says 1.0.0) <br>
+1.0.2 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

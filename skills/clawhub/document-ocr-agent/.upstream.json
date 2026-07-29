@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/document-ocr-agent",
   "slug": "document-ocr-agent",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1782285257611,
-  "contentHash": "1bdcc6a3de9fbc5c9988cbcb9f61fc3baee30f53836d47353db0abce60e40ec3",
-  "fetchedAt": "2026-07-26T18:24:17.447Z"
+  "version": "1.0.1",
+  "updatedAt": 1785161251781,
+  "contentHash": "6dad2a369e3150281de55ac2b4cc968ee5513bf6dce653540191d92755b268aa",
+  "fetchedAt": "2026-07-29T10:10:36.941Z"
 }

@@ -13,7 +13,8 @@
 - safe_download: .part、原子替换、重试、resume
 - manifest: 四个 manifest 数据结构 + JSON Schema
 - errors: 错误类型 + 退出码
+- credentials (Phase 7, 2026-07-27): 统一凭证管理（NASA Earthdata / FIRMS / CMA / LLM / EOG）
 """
 
-__version__ = "0.1.0"
-__phase__ = "Phase 1 (2026-07-26)"
+__version__ = "0.2.0"
+__phase__ = "Phase 7 (2026-07-27) — added credentials"

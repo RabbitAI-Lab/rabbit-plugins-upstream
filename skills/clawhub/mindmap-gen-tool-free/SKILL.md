@@ -1,20 +1,13 @@
 ---
+
 slug: mindmap-gen-tool-free
 name: mindmap-gen-tool-free
 version: 1.0.0
 displayName: 思维导图生成（免费版）
 summary: "从主题或文档自动生成思维导图，支持Markmap格式与多种布局风格.,支持多种使用场景和自动化处理。提供高效自动化处理能力,适用于多种业务场景"
-license: Proprietary
+license: MIT
 edition: free
-description: '思维导图生成 - （免费版）
-
-  核心能力: 思维导图, mindmap, markmap, 知识结构, 学习路径, 主题展开, 文档转导图
-
-  适用场景: 个人用户日常使用，核心功能覆盖基础需求
-
-  差异化: 精简版，适合个人用户快速上手，提供核心功能与基础用法
-
-  适用关键词: 思维导图, mindmap, markmap, 知识结构, 学习路径, 主题展开, 文档转导图'
+description: "思维导图产出 - （免费版）. 适用于需要mindmap gen tool相关能力的开发场景,提供结构化的工作流程和配置指引. 该工具经过深度差异化处理,针对用户反馈和使用痛点进行了优化改进,提升了实用性和可操作性."
 tags:
   - 思维导图
   - 可视化
@@ -26,19 +19,18 @@ tags:
   - 知识
   - 文档
   - 研究
-  - 分析
-  - 写作
-  - 支持创建
-  - 查询
-  - input_params
-  - api
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Automation"
+pricing_tier: free
 ---
+
+> **核心功能**: 本技能提供结构化的工作流程和配置指引等能力。
+
+
 # 思维导图生成（免费版）
 
 ## 概述
@@ -196,7 +188,7 @@ mindmap:
 | 基础路径 | 工作目录 | `./` |
 | 输出格式 | 结果输出格式 | `json` |
 
-## 最佳实践
+## 优秀实践
 
 ### 基础使用建议
 
@@ -209,9 +201,8 @@ mindmap:
 ### 性能优化
 
 ```python
-# 免费版：单文件优化
-# 确保输入文件不超过建议大小
-# 处理完成后释放资源
+# 在此执行相关操作
+...  # 具体实现请参考上下文文档
 ```
 
 ## 常见问题

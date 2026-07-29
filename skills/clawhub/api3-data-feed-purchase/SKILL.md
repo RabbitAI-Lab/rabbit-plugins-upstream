@@ -2,7 +2,7 @@
 name: api3-data-feed-purchase
 description: Purchases Api3 data feed subscriptions from market.api3.org.
 metadata:
-  version: 0.1.0
+  version: 0.4.1
   clawdis:
     requires:
       bins:

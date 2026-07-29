@@ -1,5 +1,5 @@
 ## Description: <br>
-高企认定与研发费用加计扣除全链条财税合规助手，帮助企业测算高企认定指标、归集和分摊研发费用、生成辅助账和多口径报表，并提示资格维持与稽查风险。 <br>
+Helps agents guide high-tech enterprise certification and R&D super-deduction compliance, including eligibility checks, expense categorization, risk self-checks, evidence-chain summaries, and multi-basis R&D reports. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External tax, finance, and R&D compliance teams use this skill to evaluate Chinese high-tech enterprise qualification and R&D super-deduction scenarios, prepare self-checks, and generate working guidance for evidence-chain, allocation, ledger, and reporting workflows. <br>
+External tax, finance, and compliance users use this skill to assess high-tech enterprise qualification, R&D expense super-deduction treatment, supporting records, and related audit readiness. Agents can use it to produce structured guidance, calculations, checklists, reports, configuration snippets, and offline fallback references. <br>
 
 ### Deployment Geography for Use: <br>
-Global <br>
+China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The authoritative security summary flags cloud processing of tax inputs by mcp.aitaxs.top. <br>
-Mitigation: Review before installing when handling confidential tax, payroll, R&D, employee, or financial records, and use only if cloud processing by mcp.aitaxs.top is acceptable. <br>
-Risk: The authoritative security summary flags local credential and log storage under ~/.tax-policy-client and browser localStorage credentials for the web page. <br>
-Mitigation: Limit use on shared machines, protect the local user profile, and review local storage policies before entering sensitive business data. <br>
-Risk: The authoritative security guidance flags possible installation or replacement of additional skills through the matrix installer. <br>
-Mitigation: Avoid the matrix installer unless package provenance is verified and changes under ~/.skills are acceptable. <br>
+Risk: Questions, risk scenarios, web self-check metrics, or sensitive tax and R&D details may be sent to the vendor's remote service. <br>
+Mitigation: Use only approved data in enterprise or advisory environments, avoid confidential payroll, R&D, audit, or tax-return details unless approved, and prefer offline reference workflows for low-sensitivity checks when remote use is not approved. <br>
+Risk: Optional MCP setup can change local client configuration when automatic setup is enabled. <br>
+Mitigation: Check whether TAX_ENABLE_AUTOSETUP is set before running configuration scripts, review proposed MCP configuration changes, and keep backups of affected client config files. <br>
+Risk: Credentials, logs, or web self-check data may persist locally. <br>
+Mitigation: Review and clean ~/.tax-policy-client and browser localStorage according to the user's data-retention policy, especially after handling regulated tax or audit information. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-high-tech-deduction) <br>
-- [Interactive high-tech tax compliance workflow](https://mcp.aitaxs.top/web/topic_workflow_high_tech.html) <br>
-- [Tax policy knowledge service endpoint](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
+- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
+- [High-tech tax workflow page](https://mcp.aitaxs.top/web/topic_workflow_high_tech.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [National Taxation Administration](https://www.chinatax.gov.cn) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text with optional JSON, CSV, shell command, and configuration snippets] <br>
+**Output Format:** [Markdown guidance with optional code snippets, shell commands, configuration snippets, tool-call text, and CSV-exportable web self-check results] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call cloud MCP tools for policy Q&A, risk checks, calculations, and knowledge-base metadata; includes local offline fallback guidance and a browser workflow.] <br>
+**Other Properties Related to Output:** [May provide online MCP-backed answers when remote service use is enabled and offline reference guidance when remote service is unavailable.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: frontmatter and server release metadata) <br>
+3.15.4 (source: evidence release and frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

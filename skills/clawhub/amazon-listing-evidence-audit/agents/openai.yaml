@@ -1,0 +1,4 @@
+interface:
+  display_name: "Amazon Listing Evidence Audit"
+  short_description: "Audit an Amazon listing without inventing product claims."
+  default_prompt: "Use $amazon-listing-evidence-audit to audit this Amazon listing and identify evidence gaps."

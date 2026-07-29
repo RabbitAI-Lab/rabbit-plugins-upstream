@@ -1,7 +1,7 @@
 ## Description: <br>
-Download Chinese administrative-division vector data for provinces, cities, counties, towns, and villages from the public map.ruiduobao.com API. <br>
+Downloads Chinese administrative-division vector data for province, city, county, town, and village levels from the public map.ruiduobao.com API, with search, drill-down, bbox/area calculation, and vector or image exports. <br>
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill is for research and development only. <br>
 
 ## Publisher: <br>
 [ruiduobao](https://clawhub.ai/user/ruiduobao) <br>
@@ -11,33 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, GIS analysts, and mapping workflows use this skill to search Chinese administrative divisions, inspect metadata such as bounding boxes and area estimates, and download boundary files for mapping or data-processing tasks. <br>
+GIS analysts, developers, and mapping workflows use this skill to search Chinese administrative divisions, inspect metadata and bounding boxes, and download boundaries for analysis, visualization, or reporting. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The tool contacts map.ruiduobao.com and writes downloaded vector files to user-selected paths. <br>
-Mitigation: Review commands before execution and choose output paths that are appropriate for the workspace and data handling policy. <br>
-Risk: The release includes unpinned dependencies and unused bundled utility code. <br>
-Mitigation: Pin dependencies in stricter environments and avoid importing bundled helpers unless their network and cache behavior is acceptable. <br>
-Risk: Upstream administrative-boundary data may have separate usage terms from the skill code. <br>
-Mitigation: Confirm the source data terms before using downloaded boundary data in regulated or commercial workflows. <br>
+Risk: The server security review marks the package suspicious because it includes an undisclosed bundled credential helper with hardcoded Earthdata defaults. <br>
+Mitigation: Review the package before installation, remove or strip the bundled credential module, and run only the documented china_admin_divisions CLI entrypoint unless the helper is audited. <br>
+Risk: The server security review notes unpinned dependencies. <br>
+Mitigation: Pin dependencies and install the skill in an isolated environment before using it in repeatable or shared workflows. <br>
 
 
 ## Reference(s): <br>
-- [Ruiduobao Map API Documentation](https://map.ruiduobao.com/others/API%E6%96%87%E6%A1%A3.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/ruiduobao/skills/china-admin-divisions) <br>
+- [Ruiduobao Map API documentation](https://map.ruiduobao.com/others/API%E6%96%87%E6%A1%A3.html) <br>
+- [Ruiduobao Map](https://map.ruiduobao.com) <br>
+- [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/china-admin-divisions) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON, GeoJSON, Shapefile, KML, GeoPackage, SVG, or PNG file outputs from the described CLI.] <br>
+**Output Type(s):** [text, shell commands, files, guidance] <br>
+**Output Format:** [Markdown guidance with shell commands; CLI results may be JSON metadata or GeoJSON, Shapefile ZIP, KML, GeoPackage, SVG, or PNG files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The CLI can print JSON metadata and write downloaded vector or image files to user-selected output paths.] <br>
+**Other Properties Related to Output:** [Downloads write to the requested output path or current directory; info and bbox commands return structured JSON.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+1.0.1 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

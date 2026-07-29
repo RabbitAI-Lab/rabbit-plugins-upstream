@@ -1,14 +1,6 @@
 ---
-description: 'Calculate SPI (Standardized Precipitation Index) and SPEI (Standardized
-
-  Precipitation Evapotranspiration Index) from NASA POWER API data for
-
-  drought monitoring. Supports multiple timescales (1-24 months), drought
-
-  classification, and trend analysis.
-
-  '
 name: drought-monitor
+description: 'Calculate SPI (Standardized Precipitation Index) and SPEI (Standardized description: 'Calculate SPI (Standardized Precipitation Index) and SPEI (Standardized  Precipitation Evapotranspiration Index) from NASA POWER API data for  drought monitoring. Supports multiple timescales (1-24 months), drought  classification, and trend analysis.  '
 ---
 
 # drought-monitor

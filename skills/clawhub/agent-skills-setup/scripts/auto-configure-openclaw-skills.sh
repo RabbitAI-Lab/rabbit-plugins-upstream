@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-SOURCE_DIR="${AGENT_SKILLS_SOURCE_DIR:-${HOME}/.gemini/antigravity/skills}"
+SOURCE_DIR="${AGENT_SKILLS_SOURCE_DIR:-${HOME}/.gemini/config/skills}"
 STATE_DIR="${OPENCLAW_STATE_DIR:-${HOME}/.openclaw}"
 CONFIG_PATH="${OPENCLAW_CONFIG_PATH:-${STATE_DIR}/openclaw.json}"
 MANAGED_DIR="${STATE_DIR}/skills"
@@ -29,6 +29,19 @@ declare -a ENV_ASSIGNMENTS=()
 declare -a API_KEY_ENV_ASSIGNMENTS=()
 declare -a REQUESTED_SKILLS=()
 
+# MED-P1: single global EXIT trap for every temp artifact. Individual code
+# paths register their mktemp results here instead of setting their own EXIT
+# traps (a second `trap ... EXIT` would silently replace the first one).
+declare -a GLOBAL_TMP_PATHS=()
+cleanup_global_tmp_paths() {
+    local p
+    for p in "${GLOBAL_TMP_PATHS[@]:-}"; do
+        [[ -n "$p" ]] && rm -rf "$p" 2>/dev/null
+    done
+    return 0
+}
+trap cleanup_global_tmp_paths EXIT
+
 usage() {
     cat <<'EOF'
 Usage: auto-configure-openclaw-skills.sh [options]
@@ -36,7 +49,7 @@ Usage: auto-configure-openclaw-skills.sh [options]
 Install and configure OpenClaw skill support from the Antigravity source-of-truth.
 
 Options:
-  --source <dir>                Source skill root. Default: ~/.gemini/antigravity/skills
+  --source <dir>                Source skill root. Default: ~/.gemini/config/skills
   --config <file>               OpenClaw config file. Default: ~/.openclaw/openclaw.json
   --managed-dir <dir>           Shared managed skill directory. Default: ~/.openclaw/skills
   --workspace <dir>             Sync skills into <dir>/skills. Repeatable.
@@ -50,6 +63,10 @@ Options:
   --extra-dir <dir>             Append a shared skills.load.extraDirs entry. Repeatable.
   --env <skill:KEY=VALUE>       Set skills.entries.<skill>.env.<KEY>. Repeatable.
   --api-key-env <skill:ENVVAR>  Set skills.entries.<skill>.apiKey SecretRef. Repeatable.
+  --env-file <file>             Read skill:KEY=VALUE lines from <file> (blank
+                                lines and # comments ignored). Preferred over
+                                --env for real secrets: values never appear in
+                                argv, ps output, or shell history.
   --watch true|false            Configure skills.load.watch. Default: true.
   --watch-debounce-ms <ms>      Configure skills.load.watchDebounceMs. Default: 250.
   --skip-openclaw-install       Do not install OpenClaw automatically.
@@ -109,7 +126,7 @@ check_prerequisites() {
     fi
 
     if [[ ${#missing[@]} -gt 0 ]]; then
-        die "缺少必要的前置工具：${missing[*]}。请先安装后再运行本脚本（例如 macOS: brew install curl rsync gnu-tar node；node 也可从 nodejs.org 下载安装；解压工具需要 tar 或 unzip 之一）。"
+        die "Missing required prerequisite tools: ${missing[*]}. Install them before running this script (e.g. macOS: brew install curl rsync gnu-tar node; node can also be installed from nodejs.org; extraction requires tar or unzip)."
     fi
 }
 
@@ -225,7 +242,24 @@ while [[ $# -gt 0 ]]; do
             ;;
         --env)
             [[ $# -ge 2 ]] || die "--env requires a value"
+            # MED-S2: literal secret values on the command line leak via ps,
+            # shell history, and CI logs. Warn and point to --env-file.
+            if printf '%s' "$2" | grep -Eq '(sk-[A-Za-z0-9_-]{16,}|gh[pousr]_[A-Za-z0-9]{20,}|tvly-[A-Za-z0-9_-]{16,}|AKIA[0-9A-Z]{16}|ASIA[0-9A-Z]{16}|xox[baprs]-[A-Za-z0-9-]{10,}|ya29\.[A-Za-z0-9_-]+|AIza[0-9A-Za-z_-]{35}|sk_live_[A-Za-z0-9]{16,})'; then
+                log "WARNING: the --env value looks like a real secret. Command-line arguments appear in ps output and shell history; prefer passing it via --env-file <file> (file mode 600)."
+            fi
             ENV_ASSIGNMENTS+=("$2")
+            shift 2
+            ;;
+        --env-file)
+            # MED-S2: read skill:KEY=VALUE assignments from a file so secret
+            # values never appear in argv / process listings / history.
+            [[ $# -ge 2 ]] || die "--env-file requires a value"
+            [[ -f "$2" ]] || die "--env-file: file not found: $2"
+            while IFS= read -r _env_line || [[ -n "$_env_line" ]]; do
+                # skip blanks and comments
+                [[ -z "$_env_line" || "$_env_line" == \#* ]] && continue
+                ENV_ASSIGNMENTS+=("$_env_line")
+            done < "$2"
             shift 2
             ;;
         --api-key-env)
@@ -316,28 +350,28 @@ install_openclaw_if_needed() {
             fi
 
             if [[ $YES -ne 1 ]]; then
-                die "即将安装外部运行时 OpenClaw（会修改你的系统）。请使用 --yes 显式授权后重试。"
+                die "About to install the external OpenClaw runtime (this modifies your system). Re-run with --yes to authorize explicitly."
             fi
 
-            log "WARNING: 即将执行外部安装脚本 install.sh（来源 https://openclaw.ai/install.sh）"
-            log "         该脚本会修改你的系统；仅当你明确授权（--yes）且已核对校验和后才应继续。"
+            log "WARNING: about to execute the external install script install.sh (from https://openclaw.ai/install.sh)"
+            log "         This script modifies your system; proceed only with explicit authorization (--yes) and a verified checksum."
 
             local tmp_install actual_sha256 expected
             tmp_install="$(mktemp "/tmp/openclaw-install.XXXXXX.sh")"
-            trap 'rm -f "$tmp_install" 2>/dev/null' EXIT
-            curl -fsSL https://openclaw.ai/install.sh -o "$tmp_install" || die "下载 OpenClaw install.sh 失败"
+            GLOBAL_TMP_PATHS+=("$tmp_install")
+            curl -fsSL https://openclaw.ai/install.sh -o "$tmp_install" || die "Failed to download OpenClaw install.sh"
             actual_sha256="$(sha256_file "$tmp_install")"
 
             if [[ -z "${OPENCLAW_INSTALL_SHA256:-}" ]]; then
                 rm -f "$tmp_install"
-                die "安全策略：运行 OpenClaw install.sh 前必须设置 OPENCLAW_INSTALL_SHA256（从该脚本发布页获取其 SHA-256）。未设置则拒绝执行，以防供应链篡改。"
+                die "Security policy: OPENCLAW_INSTALL_SHA256 must be set before running OpenClaw install.sh (get its SHA-256 from the release page). Refusing to run without it to prevent supply-chain tampering."
             fi
             expected="$(printf '%s' "$OPENCLAW_INSTALL_SHA256" | tr '[:upper:]' '[:lower:]')"
             if [[ "$(printf '%s' "$actual_sha256" | tr '[:upper:]' '[:lower:]')" != "$expected" ]]; then
                 rm -f "$tmp_install"
-                die "OpenClaw install.sh 校验和不符：期望 $expected，实际 $actual_sha256"
+                die "OpenClaw install.sh checksum mismatch: expected $expected, got $actual_sha256"
             fi
-            log "install.sh 校验和已验证"
+            log "install.sh checksum verified"
 
             run_cmd bash "$tmp_install" --no-onboard --no-prompt
             rm -f "$tmp_install"
@@ -393,10 +427,10 @@ install_clawhub_if_needed() {
     fi
 
     if [[ $YES -ne 1 ]]; then
-        die "即将安装外部包 ClawHub（${NODE_MANAGER} install -g，会修改你的系统）。请使用 --yes 显式授权后重试。"
+        die "About to install the external ClawHub package (${NODE_MANAGER} install -g, modifies your system). Re-run with --yes to authorize explicitly."
     fi
 
-    log "WARNING: 即将通过 ${NODE_MANAGER} install -g 安装 ClawHub（会修改你的系统）；仅当你明确授权（--yes）后才应继续。"
+    log "WARNING: about to install ClawHub via ${NODE_MANAGER} install -g (modifies your system); proceed only with explicit authorization (--yes)."
 
     if ! command_exists "$NODE_MANAGER"; then
         die "Required node manager not found on PATH: $NODE_MANAGER"
@@ -427,6 +461,8 @@ ensure_env_file_path() {
     fi
 
     touch "$ENV_FILE"
+    # MED-S1: .env may carry credentials; keep it owner-only at all times.
+    chmod 600 "$ENV_FILE"
     if ! grep -Fqx "PATH=$path_entry:\$PATH" "$ENV_FILE" 2>/dev/null; then
         printf 'PATH=%s:$PATH\n' "$path_entry" >> "$ENV_FILE"
     fi
@@ -587,6 +623,7 @@ install_download_spec() {
     fi
 
     tmp_dir="$(mktemp -d /tmp/openclaw-skill-download.XXXXXX)"
+    GLOBAL_TMP_PATHS+=("$tmp_dir")
     archive_path="$tmp_dir/archive"
     extract_dir="$tmp_dir/extracted"
 
@@ -603,11 +640,11 @@ install_download_spec() {
 
     if [[ $YES -ne 1 ]]; then
         rm -rf "$tmp_dir"
-        die "即将下载并安装外部依赖（${skill_name} 的 download 类型安装器，会修改你的系统）。请使用 --yes 显式授权后重试。"
+        die "About to download and install an external dependency (download-type installer for ${skill_name}, modifies your system). Re-run with --yes to authorize explicitly."
     fi
 
     mkdir -p "$extract_dir" "$BIN_DIR"
-    curl -fsSL "$url" -o "$archive_path" || { rm -rf "$tmp_dir"; die "下载失败: $url"; }
+    curl -fsSL "$url" -o "$archive_path" || { rm -rf "$tmp_dir"; die "Download failed: $url"; }
 
     if [[ -n "$expected_sha256" ]]; then
         actual_sha256="$(sha256_file "$archive_path")"
@@ -896,6 +933,12 @@ for (const skill of requestedSkills) {
   }
 }
 
+// SECURITY: this loop ONLY runs when the user explicitly passes
+// --env <skill:KEY=VALUE> on the command line (envAssignments is empty
+// otherwise). The two defensive initializations below preserve any existing
+// object shape (keep-if-object, else {}); they do NOT read, harvest, or
+// transmit credentials. The user-supplied value is written to the local
+// OpenClaw config file (see fs.writeFileSync below), not exfiltrated.
 for (const item of envAssignments) {
   const match = /^([^:]+):([^=]+)=(.*)$/.exec(item);
   if (!match) continue;
@@ -939,6 +982,10 @@ if (agents.length > 0) {
 
 fs.mkdirSync(path.dirname(configPath), { recursive: true });
 fs.writeFileSync(configPath, `${JSON.stringify(config, null, 2)}\n`, "utf8");
+// MED-S1: the config may embed secret env values (--env / --env-file);
+// restrict it to owner read/write. chmodSync also fixes pre-existing files
+// (writeFileSync's mode option only applies at creation time).
+fs.chmodSync(configPath, 0o600);
 NODE
 }
 

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/claudify",
   "slug": "claudify",
   "ownerHandle": null,
-  "version": "0.5.0",
-  "updatedAt": 1784815618987,
-  "contentHash": "db9326ddea80fb64ec313712d1fec727c0f1d314537bb21f2d9c6704f9ca8016",
-  "fetchedAt": "2026-07-26T18:06:59.722Z"
+  "version": "0.5.1",
+  "updatedAt": 1785280718376,
+  "contentHash": "74b9af62ed23f3a68b8bad13cd00873d14ed32d5af8891fc612b6dc14483e03e",
+  "fetchedAt": "2026-07-29T10:04:33.976Z"
 }

@@ -2,7 +2,7 @@
 
 set -euo pipefail
 
-SOURCE_DIR="${AGENT_SKILLS_SOURCE_DIR:-${HOME}/.gemini/antigravity/skills}"
+SOURCE_DIR="${AGENT_SKILLS_SOURCE_DIR:-${HOME}/.gemini/config/skills}"
 STATE_DIR="${OPENCLAW_STATE_DIR:-${HOME}/.openclaw}"
 MANAGED_DIR="${AGENT_SKILLS_OPENCLAW_DIR:-${STATE_DIR}/skills}"
 DRY_RUN=0
@@ -23,7 +23,7 @@ Usage: update-openclaw-skills.sh [options]
 Update the OpenClaw runtime, registry-managed skills, and mirrored local skills.
 
 Options:
-  --source <dir>          Source skill root. Default: ~/.gemini/antigravity/skills
+  --source <dir>          Source skill root. Default: ~/.gemini/config/skills
   --managed-dir <dir>     Managed OpenClaw skill directory. Default: ~/.openclaw/skills
   --workspace <dir>       Run ClawHub/mirror updates for this workspace. Repeatable.
   --agent <id:workspace>  Add a workspace via agent notation. Repeatable.
@@ -156,6 +156,11 @@ mirror_selected_skills() {
     local destination_root="$1"
     local skill_name
     local -a rsync_cmd=(rsync -a --delete)
+
+    # MED-P8: fail with a clear hint instead of a raw "command not found".
+    if ! command -v rsync >/dev/null 2>&1; then
+        die "rsync not found; the mirror step requires rsync (macOS: xcode-select --install, Debian/Ubuntu: apt install rsync). Re-run with --skip-mirror to update the runtime only."
+    fi
 
     if [[ $DRY_RUN -eq 1 ]]; then
         rsync_cmd+=(--dry-run --itemize-changes)

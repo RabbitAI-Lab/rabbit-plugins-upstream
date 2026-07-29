@@ -1,5 +1,5 @@
 ## Description: <br>
-Use when someone wants to edit an existing photo — change outfits or backgrounds, compose from reference images, or apply prompt-driven edits. <br>
+Use when someone wants to edit an existing photo - change outfits or backgrounds, compose from reference images, or apply prompt-driven edits. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and content teams use this skill to guide photo edits with Pruna's p-image-edit model, including reference upload, prompt drafting, aspect-ratio selection, and async prediction calls. <br>
+External users and developers use this skill to guide prompt-driven edits of existing images with Pruna's p-image-edit model, including background changes, outfit changes, multi-reference composition, and faithful surgical edits. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Selected reference images and prompts are sent to Pruna's API for editing. <br>
-Mitigation: Use the skill only when external API processing is acceptable, and avoid submitting images or prompts that should not leave the runtime environment. <br>
-Risk: The skill depends on a PRUNA_API_KEY from the environment. <br>
-Mitigation: Store the key in runtime secrets or environment variables and do not paste the raw key into chat or generated files. <br>
-Risk: The skill suggests installing related Pruna skills with npx, including an optional full-suite install. <br>
-Mitigation: Review the related skill packages and requested install command before allowing installation. <br>
-Risk: The skill exposes disable_safety_checker as an optional request field. <br>
-Mitigation: Require explicit user intent and content-policy review before using safety-checker bypass options. <br>
+Risk: The workflow uploads user-provided images and prompts to Pruna's cloud API. <br>
+Mitigation: Use only images intended for upload and install the skill only if cloud processing by Pruna is acceptable. <br>
+Risk: The skill requires PRUNA_API_KEY for API calls. <br>
+Mitigation: Keep the API key in environment configuration and do not paste or store it in prompts, command history, or generated artifacts. <br>
+Risk: The workflow references optional safety-related fields such as disable_safety_checker. <br>
+Mitigation: Avoid changing safety-related options unless the user understands the policy and account implications. <br>
+Risk: The workflow includes npx commands to install related skills. <br>
+Mitigation: Review related skill installs before running the commands. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/p-image-edit) <br>
-- [Pruna file upload API](https://api.pruna.ai/v1/files) <br>
-- [Pruna predictions API](https://api.pruna.ai/v1/predictions) <br>
+- [Pruna files API endpoint](https://api.pruna.ai/v1/files) <br>
+- [Pruna predictions API endpoint](https://api.pruna.ai/v1/predictions) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash and JSON examples] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with curl command examples and JSON request bodies] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides prompt construction, reference-image upload, and Pruna prediction requests; required inputs are a prompt and one to five image URLs.] <br>
+**Other Properties Related to Output:** [Requires PRUNA_API_KEY; uploads 1-5 user-provided image references; supports optional aspect_ratio, turbo, seed, and disable_safety_checker fields.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: evidence.release.version and SKILL.md metadata.version) <br>
+1.0.8 (source: server release metadata and skill frontmatter metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-claude",
   "slug": "runapi-claude",
   "ownerHandle": null,
-  "version": "0.2.11",
-  "updatedAt": 1784385534123,
-  "contentHash": "34f48db84fc5f365b863e61a9b1a712e3a9d919d189304b923c6753e59b61257",
-  "fetchedAt": "2026-07-26T18:10:56.261Z"
+  "version": "0.2.12",
+  "updatedAt": 1785218192192,
+  "contentHash": "90b033e372e01d24d02b688c49158265839400e326722665d2c914c66d359e8a",
+  "fetchedAt": "2026-07-29T10:07:33.297Z"
 }

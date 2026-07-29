@@ -1,13 +1,6 @@
 ---
-description: 'Extract phenological metrics from NDVI/EVI time series data. Computes
-  SOS, EOS,
-
-  LOS, peak value/date, amplitude, and integral using threshold, derivative,
-
-  or double logistic fitting methods.
-
-  '
 name: phenology-metrics
+description: 'Extract phenological metrics from NDVI/EVI time series data. Computes description: 'Extract phenological metrics from NDVI/EVI time series data. Computes SOS, EOS,  LOS, peak value/date, amplitude, and integral using threshold, derivative,  or double logistic fitting methods.  '
 ---
 
 # Phenology Metrics

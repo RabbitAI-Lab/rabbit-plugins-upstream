@@ -4,7 +4,7 @@ slug: cron-precision-scheduler
 displayName: "Cron 精确调度"
 version: "1.0.0"
 summary: "cron精确调度,心跳会漂移cron不会"
-description: "cron精确调度技能,心跳会漂移cron不会。提供可靠的定时提醒与周期任务调度能力,采用一次性任务自动清理、时区锁定、自唤醒规则,有效规避长延迟漂移问题。支持企业微信、钉钉、飞书等国内平台消息推送,适配Agent平台定时调度场景。触发关键词包含: cron、定时、提醒、调度、周期任务、计划任务、定时执行、自动提醒。"
+description: "cron精确调度技能,心跳会漂移cron不会。提供可靠的定时提醒与周期任务调度能力,采用一次性任务自动清理、时区锁定、自唤醒规则,有效规避长延迟漂移问题。支持企业微信、钉钉、飞书等国内平台消息推送,适配Agent平台定时调度场景。触发关键词包含: cron、定时、提醒、调度、周期任务、计划任务、定时执行、自动提醒。 功能涵盖: precision, scheduler。"
 license: "MIT"
 tools:
   - Read
@@ -231,7 +231,7 @@ A: 见错误码 ERR-007。`everyMs` 字段单位为毫秒,常见错误是将秒�
 | LLM API | API | 必需 | 由 Agent 内置 LLM 提供 |
 
 ### 可用性分类
-- **分类:** MD+EXEC(纯 Markdown 指令,部分功能需要 exec 命令行执行能力)
+- **分类:** MD+execute(纯 Markdown 指令,部分功能需要 exec 命令行执行能力)
 
 ## 核心能力
 

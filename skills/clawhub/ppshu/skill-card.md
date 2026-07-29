@@ -1,5 +1,5 @@
 ## Description: <br>
-Creates self-contained HTML diagrams, visual explanations, charts, state or flow diagrams, and interactive UI prototypes, then saves them in a numbered gallery outside the user's project repository. <br>
+Ppshu Github helps agents create self-contained HTML diagrams, charts, and interactive prototypes, save them into a project-local .ppshu gallery, and present them to users. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,36 +7,34 @@ This skill is ready for commercial/non-commercial use. <br>
 [ppshux](https://clawhub.ai/user/ppshux) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, designers, educators, and other agent users use this skill when they want visual or interactive output instead of prose, such as architecture diagrams, process flows, charts, state machines, or clickable HTML prototypes. <br>
+Developers, designers, and knowledge workers use this skill to turn explanations into visual diagrams, architecture sketches, charts, state flows, or clickable UI prototypes that can be opened offline and reviewed from a generated gallery. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generated diagrams and prototypes are saved persistently under ~/.workbuddy/ppshu by default. <br>
-Mitigation: Use PPSHU_DIR or the save_html.py --dir option to redirect output, and periodically delete old generated HTML files or the gallery if retention is not desired. <br>
-Risk: The skill can create interactive HTML prototypes, so generated files may contain executable browser JavaScript. <br>
-Mitigation: Review generated HTML before sharing or opening it in sensitive contexts, and keep generated diagrams self-contained without external network dependencies. <br>
+Risk: The skill creates local HTML files and an index under the active project's .ppshu directory, which may add files to sensitive or shared repositories. <br>
+Mitigation: Review generated files before sharing, add .ppshu to .gitignore when appropriate, or set PPSHU_DIR or --dir to an approved output location. <br>
 
 
 ## Reference(s): <br>
-- [HTML drawing cookbook](artifact/references/html_cookbook.md) <br>
 - [ClawHub skill page](https://clawhub.ai/ppshux/skills/ppshu) <br>
-- [Publisher profile](https://clawhub.ai/user/ppshux) <br>
+- [README](artifact/README.md) <br>
+- [ppshu HTML drawing guide](artifact/references/html_cookbook.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline HTML, Python, and shell command examples] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
+**Output Format:** [Markdown guidance with inline shell commands and self-contained HTML files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces self-contained HTML files and a local gallery index under ~/.workbuddy/ppshu by default.] <br>
+**Other Properties Related to Output:** [Generated HTML is saved under .ppshu/ by default, with sequential filenames and an index.html gallery; PPSHU_DIR or --dir can redirect the output directory.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and manifest.json) <br>
+1.1.0 (source: server release metadata and manifest.json) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

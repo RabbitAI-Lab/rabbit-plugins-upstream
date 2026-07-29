@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/geocoding-skill",
   "slug": "geocoding-skill",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1785074104050,
-  "contentHash": "f29f382e0237f13dd93f68bd4dbc86de89f8ffbf0dede653f715bab946ab323a",
-  "fetchedAt": "2026-07-26T18:03:20.813Z"
+  "version": "0.3.1",
+  "updatedAt": 1785158409012,
+  "contentHash": "dda51c626161b90ca9487cbda1f48897a2624b67b8c4dcca99de6ae1a8271a34",
+  "fetchedAt": "2026-07-29T10:10:59.464Z"
 }

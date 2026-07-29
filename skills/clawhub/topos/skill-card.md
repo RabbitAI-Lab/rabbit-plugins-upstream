@@ -11,18 +11,20 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and AI coding agents use this skill to assess local repositories, identify structural code quality issues, verify refactors, and optimize toward SILVER or GOLD lattice medals. <br>
+Developers and AI coding agents use Topos to measure structural quality in local repositories, identify refactor targets, and verify whether changes improve SIMPLE, COMPOSABLE, and SECURE scores. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Installation uses an external install script and an npm package dependency. <br>
-Mitigation: Review the install script and npm package source before installation. <br>
-Risk: The tool reads local project code and git state and can write dependency graph artifacts. <br>
-Mitigation: Use it only on repositories that are acceptable for local analysis and review generated artifacts before committing them. <br>
-Risk: Topos scores are advisory structural signals rather than proof of functional correctness or full security assurance. <br>
-Mitigation: Run normal tests, linters, security tooling, and code review before accepting refactors. <br>
+Risk: The installer and global npm package execute code on the local machine. <br>
+Mitigation: Review the remote installer and global package before installation. <br>
+Risk: Refactor guidance can change program behavior because Topos measures structure, not functional correctness. <br>
+Mitigation: Review changes and run the project's tests or linters before accepting refactors. <br>
+Risk: SECURE scores are structural heuristics rather than full security assurance. <br>
+Mitigation: Use dedicated security tooling for high-stakes code and explicitly review remaining SECURE findings. <br>
+Risk: Dependency graph generation may create local .gitnexus artifacts. <br>
+Mitigation: Review generated artifacts and repository status before committing changes. <br>
 
 
 ## Reference(s): <br>
@@ -32,13 +34,13 @@ Mitigation: Run normal tests, linters, security tooling, and code review before 
 
 
 ## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, json, shell commands, guidance] <br>
-**Output Format:** [CLI tables and ranked file lists, markdown reports, and MCP structured payloads with agent_contract fields.] <br>
-**Output Parameters:** [Medal verdict, pillar scores, ranked refactor targets, and assessment status.] <br>
-**Other Properties Related to Output:** [May write .gitnexus dependency graph artifacts when dependency graph generation is used; source edits are performed only if the agent acts on the guidance.] <br>
+**Output Type(s):** [analysis, markdown, JSON, shell commands, guidance] <br>
+**Output Format:** [CLI tables and ranked file lists, Markdown guidance, and MCP structured JSON payloads.] <br>
+**Output Parameters:** [1D] <br>
+**Other Properties Related to Output:** [May write local .gitnexus graph artifacts when dependency graph generation is enabled; does not modify source files unless the agent acts on the guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 0.4.2) <br>
+1.0.7 (source: ClawHub release metadata; artifact frontmatter reports 0.4.3) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

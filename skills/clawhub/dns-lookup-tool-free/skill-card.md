@@ -1,5 +1,5 @@
 ## Description: <br>
-DNS查询免费版帮助运维与开发者使用 dig 查询 A、AAAA、CNAME、MX、TXT、NS、SOA 和 PTR 记录，并将结果整理为可读的 DNS 诊断输出。 <br>
+DNS查询免费版 helps agents run dig-based DNS lookups for common record types, reverse DNS checks, and resolver comparisons, then summarize the results for operators and developers. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-运维人员和开发者可用它排查域名解析、DNS 变更、邮件记录、CDN CNAME 链和 IPv6 支持等问题。涉及内部域名或敏感基础设施时，应使用可信内部解析器。 <br>
+Developers, operators, and support engineers use this skill to investigate DNS resolution issues, validate DNS changes, inspect mail and name-server records, and compare resolver responses with dig commands. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: DNS lookups against public resolvers can expose private internal hostnames, incident indicators, or sensitive infrastructure names. <br>
-Mitigation: Use the skill only for explicit DNS troubleshooting and route sensitive lookups through a trusted internal resolver. <br>
-Risk: The skill runs shell DNS queries and depends on local dig availability and network reachability. <br>
-Mitigation: Review proposed commands before execution and confirm dig, resolver choice, and network access match the troubleshooting task. <br>
+Risk: DNS queries can disclose internal hostnames or investigation targets to public DNS resolvers. <br>
+Mitigation: Use approved internal resolvers for sensitive names and query public resolvers only when that disclosure is acceptable. <br>
+Risk: The free edition's JSON and structured-output claims may not match actual command behavior. <br>
+Mitigation: Treat structured-output examples as illustrative and verify dig output before automating downstream decisions. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/dns-lookup-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured diagnostic output examples] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
+**Output Format:** [Markdown with inline shell commands and DNS result summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the local dig command and network access to DNS resolvers; no API key is required.] <br>
+**Other Properties Related to Output:** [Requires dig and network access to the selected DNS resolver; free edition behavior should be verified before relying on structured-output examples.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

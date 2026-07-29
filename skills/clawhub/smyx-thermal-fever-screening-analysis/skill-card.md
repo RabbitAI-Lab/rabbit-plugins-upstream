@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes multi-person thermal-imaging photos or video to compare each visible person's skin-surface temperature against the group average and report relative temperature anomalies with a recommendation to recheck using a calibrated thermometer. <br>
+Analyzes thermal-camera images or videos of multi-person gatherings to identify relative skin-temperature anomalies and recommend confirmation with a calibrated thermometer. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers can use this skill to submit thermal-imaging footage from gatherings, generate structured relative-temperature screening reports, and retrieve prior cloud reports. It is a screening aid only and should not be used as a medical diagnosis. <br>
+External users and developers can use this skill to screen thermal-camera media from homes, meeting rooms, kindergartens, nursing-home activity areas, or similar gathering spaces for relative body-temperature anomalies. It reports directional screening results and report links, but it is not a medical diagnosis tool. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Thermal or household video may contain sensitive health-adjacent personal data and may be uploaded to the publisher's cloud service. <br>
-Mitigation: Use only with informed participant consent, appropriate authorization, and an acceptable cloud-data handling arrangement. <br>
-Risk: The skill can create or reuse hidden user identities, store tokens locally, and query cloud report history with limited user control. <br>
-Mitigation: Review account-handling, token storage, report-history access, retention, and deletion behavior before routine deployment. <br>
-Risk: Relative temperature anomalies can be affected by camera quality, calibration, occlusion, recent exercise, hot drinks, sunlight, or nearby heating/cooling sources. <br>
-Mitigation: Treat results as screening guidance only and confirm any concern with a calibrated medical thermometer and qualified medical advice. <br>
+Risk: Thermal household or public-area videos may contain sensitive health-related information and are sent to the vendor cloud service. <br>
+Mitigation: Use the skill only with informed consent from recorded people, avoid unnecessary uploads, and handle resulting reports as sensitive health-adjacent data. <br>
+Risk: The skill silently creates or reuses a local identity and associates cloud report history with that identity. <br>
+Mitigation: Deploy only where identity separation, report access, and workspace sharing are understood and reviewed before use. <br>
+Risk: Relative thermal anomalies can be affected by sensor quality, environmental conditions, face coverage, recent activity, hot drinks, or nearby heating and cooling sources. <br>
+Mitigation: Treat alerts as screening guidance only and confirm any concern with a calibrated thermometer or appropriate medical evaluation. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-thermal-fever-screening-analysis) <br>
-- [Skill API documentation](artifact/references/api_doc.md) <br>
-- [Analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-thermal-fever-screening-analysis) <br>
+- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [Thermal Fever Screening API Documentation](references/api_doc.md) <br>
+- [General Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON reports with status text, anomaly details, recommendations, report links, and optional history tables] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown or JSON-formatted structured analysis results with report links and suggested follow-up actions.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload media to a cloud API and retrieve cloud-hosted report history.] <br>
+**Other Properties Related to Output:** [Outputs relative temperature anomaly findings, cloud report history, and export links; results depend on valid thermal-camera input and vendor cloud service availability.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact SKILL.md frontmatter states 1.0.5) <br>
+1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -11,7 +11,7 @@ import { fileURLToPath } from "node:url";
 const DEFAULT_BASE = "https://platform.dknowc.cn/auth/home/userAuto";
 const DEFAULT_CHANNEL = "2787E171-B0E5-4328-9946-47AC52434D1F";
 const DEFAULT_TYPE = "6";
-const FALLBACK_REGISTER_URL = `https://platform.dknowc.cn/auth/#/register?channel=${DEFAULT_CHANNEL}&type=${DEFAULT_TYPE}`;
+const FALLBACK_REGISTER_URL = "https://platform.dknowc.cn/";
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const SKILL_ROOT = path.resolve(__dirname, "..");
 const DEFAULT_CONFIG_PATH = path.join(SKILL_ROOT, "config.ini");

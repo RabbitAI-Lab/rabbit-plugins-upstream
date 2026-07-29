@@ -1,0 +1,116 @@
+<!doctype html>
+<!--
+================================================================
+  html-slides 样板页 · 演示所有"可无损转换"的写法
+  复制本文件 → 改内容 → 保持结构与标记不变 → validate 零 ERROR
+  规范详见 reference/html-spec.md
+================================================================
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>页面标题 · 副标题</title>
+<link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<!-- 画布:必须 1920x1080 + relative + hidden。背景色可在 theme.css 的 .slide-container 统一改 -->
+<div class="slide-container" style="background:var(--off-white);">
+
+  <!-- ── 顶部红色装饰线(shape) ─────────────────────────── -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:100px;top:60px;width:80px;height:4px;background:var(--lenovo-red);z-index:10;"></div>
+
+  <!-- ── Eyebrow 眉题(textbox) ──────────────────────────── -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:100px;top:88px;width:1000px;z-index:10;">
+    <div style="font-size:20px;font-weight:600;letter-spacing:4px;color:var(--lenovo-red);">章节标签 · KICKER</div>
+  </div>
+
+  <!-- ── 页码(textbox,右对齐,数字用 Inter) ──────────────── -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1720px;top:92px;width:100px;text-align:right;z-index:10;">
+    <div class="num" style="font-size:18px;font-weight:600;color:var(--text-tertiary);letter-spacing:2px;">01 / 06</div>
+  </div>
+
+  <!-- ── 主标题(textbox,多行必须显式 line-height) ────────── -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:100px;top:120px;width:1720px;z-index:10;">
+    <div style="font-size:56px;font-weight:700;line-height:1.15;color:var(--charcoal);letter-spacing:-0.5px;">
+      主标题写在这里,<br>需要<span style="color:var(--lenovo-red);">强调的词</span>用 span 变色
+    </div>
+  </div>
+
+  <!-- ── 副标题(textbox) ──────────────────────────────── -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:100px;top:270px;width:1720px;z-index:10;">
+    <div style="font-size:22px;font-weight:400;color:var(--text-secondary);line-height:1.5;">
+      副标题一句话,补充说明这页的核心观点
+    </div>
+  </div>
+
+  <!-- ══ 卡片组:三张并排卡片(每张 = 底 shape + 顶条 shape + 若干 textbox) ══ -->
+  <!-- 卡片 1 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:100px;top:380px;width:540px;height:420px;background:var(--white);border:1px solid var(--border-light);border-radius:10px;z-index:1;"></div>
+  <!-- 顶部强调条:独立细长 shape,不要写 border-top:4px -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:100px;top:380px;width:540px;height:5px;background:var(--deep-navy);z-index:5;"></div>
+
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:130px;top:410px;width:480px;z-index:10;">
+    <div class="num" style="font-size:14px;font-weight:600;letter-spacing:3px;color:var(--text-tertiary);">第一点</div>
+    <div style="font-size:28px;font-weight:700;color:var(--charcoal);line-height:1.25;margin-top:6px;">卡片标题</div>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:130px;top:500px;width:480px;z-index:10;">
+    <div style="font-size:18px;font-weight:400;color:var(--text-primary);line-height:1.55;">
+      正文描述,多行文字务必显式 line-height。需要加粗的关键结论用 <span style="color:var(--lenovo-red);font-weight:700;">红色加粗</span> 强调。
+    </div>
+  </div>
+  <!-- 卡片内分隔线 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:130px;top:640px;width:480px;height:1px;background:var(--border-light);z-index:1;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:130px;top:656px;width:480px;z-index:10;">
+    <div style="font-size:15px;font-weight:400;color:var(--text-tertiary);line-height:1.5;">
+      补充小字注释,一行或两行。
+    </div>
+  </div>
+
+  <!-- 卡片 2(结构同卡片 1,位置 x+560) -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:660px;top:380px;width:540px;height:420px;background:var(--white);border:1px solid var(--border-light);border-radius:10px;z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:660px;top:380px;width:540px;height:5px;background:var(--deep-navy);z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:690px;top:410px;width:480px;z-index:10;">
+    <div class="num" style="font-size:14px;font-weight:600;letter-spacing:3px;color:var(--text-tertiary);">第二点</div>
+    <div style="font-size:28px;font-weight:700;color:var(--charcoal);line-height:1.25;margin-top:6px;">卡片标题</div>
+  </div>
+
+  <!-- 卡片 3:深蓝高亮卡(深底上用预算混合的浅色文字,不用 rgba) -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:1220px;top:380px;width:600px;height:420px;background:var(--deep-navy);border-radius:10px;z-index:1;"></div>
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:1220px;top:380px;width:600px;height:5px;background:var(--accent-orange);z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1250px;top:410px;width:540px;z-index:10;">
+    <div class="num" style="font-size:14px;font-weight:600;letter-spacing:3px;color:var(--accent-orange);">★ 重点 · 我们在这里</div>
+    <div style="font-size:32px;font-weight:800;color:var(--on-navy-text);line-height:1.25;margin-top:6px;">高亮卡片标题</div>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1250px;top:510px;width:540px;z-index:10;">
+    <div style="font-size:18px;font-weight:400;color:var(--on-navy-sub);line-height:1.55;">
+      深底上的次要文字用 --on-navy-sub(预算混合色),<br>强调用 <span style="color:var(--accent-orange);font-weight:700;">橙色加粗</span>。
+    </div>
+  </div>
+  <!-- 卡内徽章:固定高度 + line-height=height → 自动垂直居中 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:1250px;top:700px;width:540px;height:52px;background:var(--accent-orange);border-radius:6px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1250px;top:700px;width:540px;height:52px;text-align:center;z-index:10;">
+    <div style="font-size:20px;font-weight:800;color:var(--deep-navy);line-height:52px;letter-spacing:2px;">徽 章 文 字</div>
+  </div>
+
+  <!-- ── 底部渐变横条(渐变会被截图还原;上面叠文字是安全的) ── -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:100px;top:880px;width:1720px;height:80px;background:linear-gradient(90deg, var(--deep-navy) 0%, var(--deep-navy-light) 100%);border-radius:8px;z-index:5;"></div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:100px;top:880px;width:1720px;height:80px;text-align:center;z-index:11;">
+    <div style="font-size:22px;font-weight:600;color:var(--on-navy-text);line-height:80px;letter-spacing:2px;">
+      横条上的结论文字,<span style="color:var(--accent-orange);font-weight:800;">关键句橙色高亮</span>
+    </div>
+  </div>
+
+  <!-- ── 页脚(textbox) ───────────────────────────────── -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:100px;top:1020px;width:1720px;z-index:10;">
+    <div style="font-size:14px;color:var(--text-tertiary);">品牌名 丨 页脚信息</div>
+  </div>
+
+</div>
+
+<!-- 演讲者备注(可选):写入 PPTX 备注区,不出现在画面 -->
+<template data-slide-notes>
+【核心逻辑】这页要传达的一句话。
+【开场 · 30秒】讲法提示……
+</template>
+</body>
+</html>

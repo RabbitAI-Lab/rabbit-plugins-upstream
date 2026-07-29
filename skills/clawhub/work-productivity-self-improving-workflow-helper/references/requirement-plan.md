@@ -33,18 +33,18 @@ Scoring rationale:
 
 ## Evidence
 
-- clawhub-popular-skill (2026-07-05T13:28:03.853000+00:00): [Popular Clawhub skill demand: self-improving agent has 470,372 downloads](https://clawhub.ai/skills/self-improving-agent)
-- clawhub-popular-skill (2026-05-18T03:54:46.067000+00:00): [Popular Clawhub skill demand: Proactive Agent has 172,649 downloads](https://clawhub.ai/skills/proactive-agent)
-- clawhub-popular-skill (2026-05-11T09:25:56.797000+00:00): [Popular Clawhub skill demand: Self-Improving + Proactive Agent has 205,487 downloads](https://clawhub.ai/skills/self-improving)
-- segmentfault-search (2026-07-25T11:03:37.658022+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search (2026-07-25T11:03:37.658022+00:00): [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search (2026-07-25T11:03:37.658022+00:00): [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search (2026-07-25T11:03:37.658022+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search (2026-07-25T11:03:37.658022+00:00): [OpenClaw 必装的 10 个 Skills，让你少躺 90% 以上的坑！！](https://segmentfault.com/a/1190000047666647)
-- segmentfault-search (2026-07-25T11:03:37.658022+00:00): [Keep_Improving](https://segmentfault.com/blog/keep_improving)
-- segmentfault-search (2026-07-25T11:03:37.658022+00:00): [self 与 Self](https://segmentfault.com/a/1190000044250449)
-- csdn-search (2026-07-25T11:03:36.999878+00:00): [Self - improving Agent](https://blog.csdn.net/qq_42540492/category_13024655.html?ops_request_misc=elastic_search_misc&request_id=3b2929ae5d4341cb9798ddafe895a126&biz_id=&utm_medium=distribute.pc_search_result.none-task-special_column-2~all~ElasticSearch~search_v2-1-13024655-null-null.142^v102^pc_search_result_base1&utm_term=self-improving-proactive-agent%20self%20improving%20proactive)
-- csdn-search (2026-07-25T11:03:36.999878+00:00): [Self - Improving - Agent 在OpenClaw里怎么装？需要配环境还是直接加技能就行？](https://wenku.csdn.net/answer/4wfdiwdc0biy?ops_request_misc=elastic_search_misc&request_id=3b2929ae5d4341cb9798ddafe895a126&biz_id=&utm_medium=distribute.pc_search_result.none-task-chatgpt-2~all~ElasticSearch~search_v2-4-4wfdiwdc0biy-null-null.142^v102^pc_search_result_base1&utm_term=self-improving-proactive-agent%20self%20improving%20proactive)
+- clawhub-popular-skill (2026-07-05T13:28:03.853000+00:00): [Popular Clawhub skill demand: self-improving agent has 471,121 downloads](https://clawhub.ai/skills/self-improving-agent)
+- clawhub-popular-skill (2026-05-18T03:54:46.067000+00:00): [Popular Clawhub skill demand: Proactive Agent has 172,880 downloads](https://clawhub.ai/skills/proactive-agent)
+- clawhub-popular-skill (2026-05-11T09:25:56.797000+00:00): [Popular Clawhub skill demand: Self-Improving + Proactive Agent has 205,770 downloads](https://clawhub.ai/skills/self-improving)
+- segmentfault-search (2026-07-29T00:25:14.412592+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
+- segmentfault-search (2026-07-29T00:25:14.412592+00:00): [javascript](https://segmentfault.com/t/javascript)
+- segmentfault-search (2026-07-29T00:25:14.413140+00:00): [typescript](https://segmentfault.com/t/typescript)
+- segmentfault-search (2026-07-29T00:25:14.413140+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
+- segmentfault-search (2026-07-29T00:25:14.413998+00:00): [OpenClaw 必装的 10 个 Skills，让你少躺 90% 以上的坑！！](https://segmentfault.com/a/1190000047666647)
+- segmentfault-search (2026-07-29T00:25:14.413998+00:00): [Keep_Improving](https://segmentfault.com/blog/keep_improving)
+- segmentfault-search (2026-07-29T00:25:14.413998+00:00): [self 与 Self](https://segmentfault.com/a/1190000044250449)
+- csdn-search (2026-07-29T00:25:13.244683+00:00): [Self - improving Agent](https://blog.csdn.net/qq_42540492/category_13024655.html?ops_request_misc=elastic_search_misc&request_id=4282aeea31db41d793d1a86f7e665ff7&biz_id=&utm_medium=distribute.pc_search_result.none-task-special_column-2~all~ElasticSearch~search_v2-1-13024655-null-null.142^v102^pc_search_result_base4&utm_term=self-improving-proactive-agent%20self%20improving%20proactive)
+- csdn-search (2026-07-29T00:25:13.244683+00:00): [Self - Improving - Agent 在OpenClaw里怎么装？需要配环境还是直接加技能就行？](https://wenku.csdn.net/answer/4wfdiwdc0biy?ops_request_misc=elastic_search_misc&request_id=4282aeea31db41d793d1a86f7e665ff7&biz_id=&utm_medium=distribute.pc_search_result.none-task-chatgpt-2~all~ElasticSearch~search_v2-4-4wfdiwdc0biy-null-null.142^v102^pc_search_result_base4&utm_term=self-improving-proactive-agent%20self%20improving%20proactive)
 
 ## How The Skill Meets The Requirement
 

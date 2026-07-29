@@ -2,11 +2,19 @@ const https = require("https");
 const querystring = require("querystring");
 const constants = require("../config/constants");
 const { withRetry } = require("../utils/retry");
-const { ApiError, NetworkError, TimeoutError, AuthError } = require("./errors");
+const {
+  SkillError,
+  ApiError,
+  NetworkError,
+  TimeoutError,
+  AuthError,
+} = require("./errors");
 const utils = require("../utils/utils");
 
 async function request(options, data = null) {
   return new Promise((resolve, reject) => {
+    let timedOut = false;
+
     const req = https.request(
       { ...options, timeout: constants.REQUEST_TIMEOUT },
       (res) => {
@@ -14,6 +22,7 @@ async function request(options, data = null) {
         let body = "";
         res.on("data", (chunk) => (body += chunk));
         res.on("end", () => {
+          if (timedOut) return;
           if (res.statusCode === 200) {
             try {
               const jsonBody = JSON.parse(body);
@@ -41,6 +50,7 @@ async function request(options, data = null) {
               new ApiError(
                 `HTTP_${res.statusCode}`,
                 `请求失败, 状态码: ${res.statusCode}`,
+                true,
               ),
             );
           }
@@ -49,6 +59,9 @@ async function request(options, data = null) {
     );
 
     req.on("error", (err) => {
+      if (timedOut) {
+        return;
+      }
       if (err.code === "ETIMEDOUT" || err.code === "ECONNRESET") {
         reject(new TimeoutError("请求超时或连接被重置"));
       } else {
@@ -57,6 +70,7 @@ async function request(options, data = null) {
     });
 
     req.on("timeout", () => {
+      timedOut = true;
       req.destroy();
       reject(new TimeoutError(`请求超时 (${constants.REQUEST_TIMEOUT}ms)`));
     });
@@ -70,13 +84,13 @@ async function request(options, data = null) {
 
 async function postJson(path, params, data) {
   if (!path || typeof path !== "string") {
-    throw new Error("path 必须是非空字符串");
+    throw new SkillError("PATH_INVALID", "path 必须是非空字符串");
   }
   if (!params || typeof params !== "object") {
-    throw new Error("params 必须是对象");
+    throw new SkillError("PARAM_INVALID", "params 必须是对象");
   }
   if (!data || typeof data !== "object") {
-    throw new Error("data 必须是对象");
+    throw new SkillError("DATA_INVALID", "data 必须是对象");
   }
 
   const fullPath = `${path}?${querystring.stringify(params)}`;
@@ -88,6 +102,7 @@ async function postJson(path, params, data) {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
+      "Accept-Encoding": "identity",
       "Content-Length": Buffer.byteLength(jsonData),
     },
   };
@@ -97,11 +112,12 @@ async function postJson(path, params, data) {
 
 async function getJson(path, params) {
   if (!path || typeof path !== "string") {
-    throw new Error("path 必须是非空字符串");
+    throw new SkillError("PATH_INVALID", "path 必须是非空字符串");
   }
   if (!params || typeof params !== "object") {
-    throw new Error("params 必须是对象");
+    throw new SkillError("PARAM_INVALID", "params 必须是对象");
   }
+  params._ = Date.now();
 
   const fullPath = `${path}?${querystring.stringify(params)}`;
   const options = {

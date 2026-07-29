@@ -71,6 +71,7 @@ Before posting an issue, work item, or merge request status comment, compare the
 * Manage the workflow status labels according to the current state of the work.
 * If you see an additional commit by a team member, do not simply revert. Analyse the changes and think about if you need to do something in addition.
 * On each commit
+  * Add `Generated-By: <current model>` to the commit message.
   * Push with `git push origin <branch> -o ci.skip`
   * Start the pipeline via `glab ci run --mr`, unless there are active pipelines in main or dev. Never use more than X `[setting: 2 # AGENTS.md -> active-pipelines]` pipelines for your work. Add `workflow::paused`, if you delay the pipeline start and revisit later.
 * After merge or close, update the items and labels to reflect the final state `workflow::done`.
@@ -126,7 +127,13 @@ Rules apply to all GitLab items.
 
 ## Labels
 
-If the labels are missing, make a merge request to add them via the [label](https://ci-tools.xrow.de/Components/label) component and its default settings.
+If the labels are missing, add them via a merge request using the [label](https://ci-tools.xrow.de/Components/label) component.
+
+```yaml
+include:
+  - component: $CI_SERVER_FQDN/xrow-public/ci-tools/common@stable
+  - component: $CI_SERVER_FQDN/xrow-public/ci-tools/label@stable
+```
 
 ### Size Labels
 
@@ -518,7 +525,7 @@ Before enabling it:
     "message": "Read skill gitlab-agent and run.",
     "thinking": "high",
     "timeoutSeconds": 3600,
-    "model": "openai/gpt-5.5"
+    "model": "openai/gpt-5.6-sol"
   },
   "delivery": {
     "mode": "none",

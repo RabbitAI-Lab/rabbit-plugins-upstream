@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps marketing teams assess a trend for brand fit, safety, and timing, then produce an on-brand remix or refusal path for social content. <br>
+Helps social media teams evaluate a specific trend with fit, safety, and timing gates, then draft or route an on-brand trend-jacking response without claiming live trend discovery. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,24 +11,24 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Marketing teams, content strategists, and social media operators use this skill to decide whether a current sound, format, meme, hashtag, news moment, or cultural conversation is appropriate to ride. It applies fit, safety, and timing gates before drafting or routing fast social content. <br>
+Social media marketers, brand teams, and creators use this skill to decide whether a proposed trend is appropriate for their brand and to produce a fast, on-voice remix or refusal. It is intended for public-facing content workflows where human review remains in place before scheduling or publishing. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill could be mistaken for a live trend detector. <br>
-Mitigation: Require a current source or user-provided trend before judging timing; the skill should vet and execute, not claim to know what is trending in real time. <br>
-Risk: Drafted social posts may be published publicly through a scheduling workflow without enough review. <br>
-Mitigation: Review any proposed post before publication and use explicit confirmation before handing off to scheduling. <br>
-Risk: Ambiguous requests that only say "trend" may trigger marketing behavior outside the user's intent. <br>
-Mitigation: Confirm the marketing context and desired platform before applying the trend-jacking workflow. <br>
-Risk: Sensitive events, divisive moments, or tragedies could create reputational harm if treated as promotional opportunities. <br>
-Mitigation: Apply the safety gate before drafting; refuse trend-jacking around tragedies, crises, exploitative angles, and divisive moments pursued only for reach. <br>
+Risk: Broad trend or virality prompts may activate the skill for public-facing brand content. <br>
+Mitigation: Keep human review in place before anything is scheduled or published, especially for news or cultural moments. <br>
+Risk: The skill could be asked to exploit tragedies, crises, deaths, or politically divisive moments for reach. <br>
+Mitigation: Apply the safety gate first and refuse trend-jacking sensitive or divisive moments; offer non-promotional help or safer alternatives where appropriate. <br>
+Risk: Live trend timing can be wrong without current sources. <br>
+Mitigation: Require the user to bring a specific trend or verify current platform, search, or social-listening sources before making timing claims. <br>
+Risk: Trend sounds, memes, likenesses, or formats may carry licensing, IP, or brand-safety concerns. <br>
+Mitigation: Route meme/IP/likeness judgment to the appropriate companion skill or human review, and verify commercial sound or platform usage rights before publication. <br>
 
 
 ## Reference(s): <br>
-- [Trend-Jacking ClawHub Skill Page](https://clawhub.ai/social-media-skills/skills/trend-jacking) <br>
+- [ClawHub skill page](https://clawhub.ai/social-media-skills/skills/trend-jacking) <br>
 - [The Three Gates](references/the-three-gates.md) <br>
 - [Trend Types & Finding Them](references/trend-types-and-finding.md) <br>
 - [The Remix](references/the-remix.md) <br>
@@ -36,13 +36,13 @@ Mitigation: Apply the safety gate before drafting; refuse trend-jacking around t
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown guidance with refusal language and handoff recommendations] <br>
+**Output Type(s):** [text, markdown, guidance] <br>
+**Output Format:** [Markdown guidance with draft content direction, refusal language, and routing recommendations.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May route execution to social-content and scheduling skills after the trend clears fit, safety, and timing checks.] <br>
+**Other Properties Related to Output:** [No live trend feed; expects a user-provided trend or current live-source input before judging timing.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact metadata) <br>
+1.0.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

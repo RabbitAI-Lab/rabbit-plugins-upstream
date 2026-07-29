@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/dcl-provenance-tracker",
   "slug": "dcl-provenance-tracker",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778492505206,
-  "contentHash": "d1241b99236790d0a039c47c333887f15bbbda890f5a1fdce8b70863323c386c",
-  "fetchedAt": "2026-07-26T19:31:07.270Z"
+  "version": "1.0.1",
+  "updatedAt": 1785240243001,
+  "contentHash": "30af469dd1ebeac837a2a0b2c438cd0f5eea574975a989a14711e1a7a1d0623e",
+  "fetchedAt": "2026-07-29T10:06:20.860Z"
 }

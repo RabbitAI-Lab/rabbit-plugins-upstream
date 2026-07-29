@@ -1,5 +1,5 @@
 ## Description: <br>
-Builds, redesigns, and critiques presentation-grade slide decks from user-provided material or researched context, using interview checkpoints, deck-building scripts, and an independent actor-critic review loop. <br>
+Builds, redesigns, and critiques presentation-grade PowerPoint slide decks using an interview, checkpoint, deck-generation, lint, render, and critic-review workflow. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Employees, external users, and developers can use this skill to create, redesign, or review slide decks for research, teaching, meetings, stakeholder readouts, conference talks, and related presentation workflows. It is most useful when the user needs a structured content plan, visual design direction, generated or prepared assets, a .pptx build, and critique before handoff. <br>
+Employees, external users, and developers use this skill to turn source material, existing decks, or open-ended presentation requests into audience-specific slide decks. It is intended for building, improving, reviewing, and handing off .pptx presentations with source fidelity and explicit review gates. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can read local materials, write deck assets, perform web research, and generate images. <br>
-Mitigation: Use it only in approved workspaces with appropriate input data, and disable or avoid web and image-generation paths when sensitive material should not leave the environment. <br>
-Risk: The security guidance flags README execution paths and generated HTML previews as areas requiring care with untrusted inputs. <br>
-Mitigation: Avoid README execution paths for untrusted repositories, and open generated HTML previews only when the direction data and source workspace are trusted. <br>
-Risk: Cross-deck preference history may reveal sensitive presentation or style preferences. <br>
-Mitigation: Review, disable, or clear taste.md persistence when user preference history should not be retained. <br>
+Risk: The security scan flags broad local execution, network, persistence, and profile access. <br>
+Mitigation: Install and run the skill first in trusted workspaces, keep sandboxing enabled where possible, and review generated files plus taste/profile writes before reuse. <br>
+Risk: The skill may download assets, create files under Downloads, and use image-generation paths that can involve paid APIs if approved. <br>
+Mitigation: Require explicit approval before network asset acquisition or paid image API use, and preserve source, license, and credit notes for sourced or generated visuals. <br>
+Risk: Generated decks can be persuasive even when source material is incomplete or untrusted. <br>
+Mitigation: Review source-trace checkpoints, claim ledgers, rendered slides, lint output, and independent critic findings before using decks for external or high-stakes communication. <br>
 
 
 ## Reference(s): <br>
+- [Skill Definition](SKILL.md) <br>
+- [Design Principles](references/design-principles.md) <br>
+- [Content Plan Spec](references/content-plan-spec.md) <br>
+- [Checkpoint Convention](references/checkpoint-convention.md) <br>
+- [Review Rubrics](references/review-rubrics.md) <br>
+- [File Inventory](references/file-inventory.md) <br>
 - [ClawHub Skill Page](https://clawhub.ai/dong845/skills/slide-maker) <br>
-- [Skill Definition](artifact/SKILL.md) <br>
-- [Design Principles](artifact/references/design-principles.md) <br>
-- [Content Plan Specification](artifact/references/content-plan-spec.md) <br>
-- [Review Rubrics](artifact/references/review-rubrics.md) <br>
-- [File Inventory](artifact/references/file-inventory.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance and checkpoint tables, Python and shell commands, generated assets, rendered slide images, and PowerPoint .pptx files.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance, checkpoint tables, Python build scripts, shell commands, generated files, and PowerPoint deck artifacts] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local deck folders, slide renders, image assets, HTML previews, notes exports, and optional final deliverables depending on user approval and available tooling.] <br>
+**Other Properties Related to Output:** [Produces deck plans, review findings, rendered slide images, and .pptx deliverables when the host environment permits local file creation and rendering.] <br>
 
 ## Skill Version(s): <br>
-4.0.0 (source: ClawHub release metadata) <br>
+4.2.0 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

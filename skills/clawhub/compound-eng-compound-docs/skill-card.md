@@ -1,5 +1,5 @@
 ## Description: <br>
-Documents solved problems for team reuse by capturing resolved issues, lessons learned, post-mortems, knowledge-base entries, and searchable debugging knowledge for /ia-compound. <br>
+Document solved problems for team reuse, including resolved issues, lessons learned, post-mortems, knowledge-base entries, and searchable debugging knowledge. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use this skill after non-trivial debugging to create validated solution notes, post-mortems, and reusable knowledge in docs/solutions with YAML frontmatter and cross-references. <br>
+Developers and engineering teams use this skill after resolving non-trivial issues to capture symptoms, investigation attempts, root cause, solution details, prevention guidance, and related references as reusable troubleshooting documentation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generated solution notes can accidentally include secrets, private URLs, customer data, or sensitive incident details. <br>
-Mitigation: Preview the target path and summary before writing, then review and redact generated notes before committing or sharing them. <br>
-Risk: Broad trigger wording may invoke the workflow when a resolved issue does not need durable documentation. <br>
-Mitigation: Use the skill only for non-trivial fixes where future sessions would benefit, and skip simple typos, obvious syntax errors, or immediately corrected issues. <br>
-Risk: Incomplete context can produce misleading documentation or incorrect frontmatter classification. <br>
-Mitigation: Collect module, symptom, investigation attempts, root cause, solution, and prevention before writing; block on missing critical context and validate YAML frontmatter before creating the file. <br>
+Risk: Generated troubleshooting documentation may include secrets, customer data, private URLs, or inaccurate technical claims. <br>
+Mitigation: Review generated docs before committing, remove sensitive information, and verify technical claims against current source files. <br>
+Risk: Optional follow-up actions can modify repository documentation or create/update learning skills. <br>
+Mitigation: Treat menu actions that change skills or documentation as explicit repository changes and proceed only after user confirmation. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/iliaal/compound-eng-compound-docs) <br>
 - [Documentation Capture Process](references/documentation-process.md) <br>
 - [YAML Frontmatter Schema](references/yaml-schema.md) <br>
 - [Quality Guidelines & Error Handling](references/quality-guidelines.md) <br>
 - [Example Scenario](references/example-scenario.md) <br>
 - [Resolution Template](assets/resolution-template.md) <br>
 - [Critical Pattern Template](assets/critical-pattern-template.md) <br>
-- [Frontmatter Validator](scripts/validate-frontmatter.sh) <br>
+- [ClawHub Skill Page](https://clawhub.ai/iliaal/skills/compound-eng-compound-docs) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown files with YAML frontmatter, code examples, and optional shell command blocks] <br>
+**Output Type(s):** [markdown, shell commands, guidance] <br>
+**Output Format:** [Markdown files with YAML frontmatter, inline shell commands, and a text decision menu] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes local docs/solutions files after context gathering, schema validation, and user confirmation where required.] <br>
+**Other Properties Related to Output:** [Writes solution documentation under docs/solutions/ and may propose follow-up documentation or skill updates after user confirmation.] <br>
 
 ## Skill Version(s): <br>
-3.0.5 (source: server release metadata) <br>
+4.3.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
