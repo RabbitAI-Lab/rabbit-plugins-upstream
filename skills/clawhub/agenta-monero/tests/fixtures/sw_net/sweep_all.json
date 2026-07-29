@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":"0","result":{"tx_hash_list":["abcd1234"],"amount_list":[1500000000000],"fee_list":[12500000000],"weight_list":[6414],"multisig_txset":"","unsigned_txset":""}}

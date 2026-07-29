@@ -54,7 +54,7 @@ For SQL-over-sheet work, choose the persistence model deliberately:
   PG/SheetTable handoff table. Current CLI versions still try to keep the
   source `=SQL(...)` formula in the final table cell, defaulting to `A1`, and
   report that attempt in `context.formula_trace`.
-- For user-facing silver handoffs such as `S_OrderDetailsStructureInput`, treat
+- For user-facing silver handoffs such as `OrderDetailsStructureInput`, treat
   `A1 =SQL(...)` as a **pass gate**. If `formula_trace` is not `persisted`, or
   A1 only shows a materialized header (for example `period`), run
   `mbs db-table range set-formula --cell A1 --formula '=SQL("...")'` and
@@ -200,6 +200,8 @@ order by "Revenue" desc
 2. `mbs excel-worksheet calculate` or `mbs workbook calculate`
 3. `mbs excel-worksheet range read`
 4. `mbs excel-worksheet check-error` when downstream formulas are expected to be stable
+
+If JSON output includes `result.source_info.degraded_success=true`, recalculation completed with available dependencies while skipping stale or missing PG-backed worksheet sources. Inspect `result.source_info.warnings` for `pg_sources[n]`, `gid`, worksheet, and skipped cell details before deciding whether source repair is needed.
 
 ### Write formulas into a new report worksheet
 

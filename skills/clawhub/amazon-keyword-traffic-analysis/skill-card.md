@@ -1,5 +1,5 @@
 ## Description: <br>
-Use when user asks for keyword expansion or ad keyword filtering; single keyword analysis or keyword deep dive; whether a keyword is worth bidding on; which keywords drive traffic to an ASIN; ASIN keyword health, keyword traffic changes, or why an ASIN changed under a keyword. <br>
+Supports Amazon keyword expansion, ad-keyword filtering, single-keyword analysis, ASIN keyword health checks, keyword traffic diagnosis, and ASIN traffic-term workflows using ZooData keyword endpoints. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,41 +11,42 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External marketplace operators, analysts, and agent users use this skill to perform ZooData-backed Amazon keyword expansion, single-keyword analysis, reverse-ASIN keyword review, and ASIN keyword-traffic diagnosis. It helps frame directional keyword and traffic decisions while requiring seller-side evidence before final budget, bid, profitability, or conversion conclusions. <br>
+External sellers, marketplace analysts, and agents use this skill to research Amazon keyword demand, expand candidate keywords, inspect ASIN traffic sources, and diagnose keyword traffic movement with ZooData evidence boundaries. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requires a ZooData API key for endpoint access. <br>
-Mitigation: Provide the key through ZOODATA_API_KEY and keep it scoped to trusted agent sessions. <br>
-Risk: The bundled CLI exposes broader ZooData product, market, pricing, and review commands beyond the keyword workflows. <br>
-Mitigation: Use the documented Amazon keyword and ASIN traffic workflows unless the broader CLI behavior is intentionally needed. <br>
-Risk: Keyword and traffic outputs can be mistaken for final conversion, profitability, bid, or budget decisions. <br>
-Mitigation: Treat ZooData-derived conclusions as directional until seller-side ABA Search Query Performance or ads performance evidence is provided. <br>
+Risk: The skill requires a ZooData API key and can make credit-consuming authenticated API calls. <br>
+Mitigation: Install only for trusted use, keep the API key private, and confirm broad or multi-call scans before execution. <br>
+Risk: The bundled ZooData CLI exposes broader authenticated functionality than the documented keyword workflows. <br>
+Mitigation: Restrict use to the documented keyword subcommands and review requested commands before running them. <br>
+Risk: Seller ABA-SQP or Ads data may contain sensitive business information. <br>
+Mitigation: Share only data the user is authorized to provide and include only the fields needed for the requested keyword decision. <br>
 
 
 ## Reference(s): <br>
-- [Skill README](artifact/README.md) <br>
-- [ZooData API Reference](artifact/references/reference.md) <br>
+- [ClawHub skill page](https://clawhub.ai/apiclaw/skills/amazon-keyword-traffic-analysis) <br>
+- [ZooData Skills homepage](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
+- [ZooData API keys](https://zoodata.ai/en/api-keys) <br>
+- [README.md](artifact/README.md) <br>
 - [Execution Guide](artifact/references/execution-guide.md) <br>
-- [Keyword Expansion Scenario](artifact/references/scenarios-expand.md) <br>
-- [Single Keyword Analysis Scenario](artifact/references/scenarios-keyword-analysis.md) <br>
-- [Reverse ASIN Keyword Analysis Scenario](artifact/references/scenarios-reverse-asin.md) <br>
-- [Keyword Traffic Diagnosis Scenario](artifact/references/scenarios-keyword-traffic-diagnosis.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/apiclaw/skills/amazon-keyword-traffic-analysis) <br>
-- [ZooData API Keys](https://zoodata.ai/en/api-keys) <br>
-- [ZooData Pricing](https://zoodata.ai/en/pricing) <br>
+- [ZooData Keyword API Reference](artifact/references/reference.md) <br>
+- [Keyword Expansion](artifact/references/scenarios-expand.md) <br>
+- [Single Keyword Analysis](artifact/references/scenarios-keyword-analysis.md) <br>
+- [Reverse ASIN Keyword Analysis](artifact/references/scenarios-reverse-asin.md) <br>
+- [Keyword Traffic Diagnosis](artifact/references/scenarios-keyword-traffic-diagnosis.md) <br>
+- [Amazon Brand Analytics metric glossary](https://sellercentral.amazon.com/brand-analytics/metric-glossary?linkedFrom=query-performance-brand-report-table-qp-impressions-group) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with concise findings, data notes, API usage notes, and bounded recommendations] <br>
+**Output Type(s):** [Markdown, API Calls, Shell commands, Guidance] <br>
+**Output Format:** [Markdown reports with API usage tables and inline command references] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZOODATA_API_KEY and uses ZooData keyword and ASIN traffic endpoints; conclusions remain bounded by available market, ASIN observation, and seller-provided evidence.] <br>
+**Other Properties Related to Output:** [Requires ZOODATA_API_KEY; API calls may consume ZooData account credits; conclusions are bounded by available keyword, ASIN, and seller-provided evidence.] <br>
 
 ## Skill Version(s): <br>
-0.1.2 (source: release evidence and frontmatter) <br>
+0.1.4 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

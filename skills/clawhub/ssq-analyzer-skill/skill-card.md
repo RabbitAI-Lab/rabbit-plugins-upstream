@@ -1,5 +1,5 @@
 ## Description: <br>
-SSQ (Double Color Ball) lottery intelligent analysis that fetches official draw data from cwl.gov.cn, computes hot/cold statistics, frequency distributions, AC values, odd-even ratios, and zone distributions, with paid access to five recommended number sets after clawtip verification. <br>
+Fetches official SSQ draw data from cwl.gov.cn, produces statistical lottery analysis, and can generate five recommended number sets after clawtip payment verification. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agent operators use this skill to fetch Chinese Welfare Lottery SSQ draw data, generate local statistical analysis, and optionally request paid number recommendations after third-party verification. <br>
+External users and developers use this skill to fetch official SSQ lottery draw data, generate local statistical reports, and optionally request paid recommendation output after payment verification. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Lottery-query text and payment verification data may be sent to api.ideaidea.com.cn during paid order creation and fulfillment. <br>
-Mitigation: Use the skill only when that third-party transfer is acceptable, and avoid entering sensitive personal information in question text. <br>
-Risk: Order metadata, encrypted payment data, and question text may be stored in local order files or printed in command output. <br>
-Mitigation: Run the skill in a workspace with appropriate file permissions and avoid sharing command logs or local order directories. <br>
-Risk: Lottery recommendations are based on historical statistical analysis and cannot predict or guarantee winning outcomes. <br>
-Mitigation: Treat recommendations as informational analysis only and review user-facing output for responsible-gambling context. <br>
+Risk: The paid-order flow stores user question text and payment metadata locally, and the security evidence says cleanup does not match the claimed 24-hour expiry. <br>
+Mitigation: Avoid entering passwords, API keys, identity details, private betting history, or other sensitive text in the paid-order question; manually delete local order files when no longer needed. <br>
+Risk: Lottery recommendations are based on historical statistics for a random independent event and cannot guarantee winnings. <br>
+Mitigation: Treat recommendations as informational analysis only and review output before relying on it. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/jinyu12166/skills/ssq-analyzer-skill) <br>
-- [China Welfare Lottery SSQ draw data API](https://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice) <br>
-- [clawtip verification service endpoint](https://api.ideaidea.com.cn) <br>
+- [cwl.gov.cn SSQ draw API](https://www.cwl.gov.cn/cwl_admin/front/cwlkj/search/kjxx/findDrawNotice) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Chinese Markdown reports, terminal text, and JSON order metadata] <br>
+**Output Format:** [Console text and Markdown reports, with optional JSON_RESULT order metadata] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write a local SQLite database, Markdown analysis report, and local order metadata files.] <br>
+**Other Properties Related to Output:** [Writes a local SQLite draw database, a local Markdown analysis report, and local clawtip order files when paid recommendations are requested.] <br>
 
 ## Skill Version(s): <br>
-1.0.19 (source: server release metadata; artifact frontmatter reports 1.1.0) <br>
+1.0.28 (source: server release evidence; artifact frontmatter is 1.0.27) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

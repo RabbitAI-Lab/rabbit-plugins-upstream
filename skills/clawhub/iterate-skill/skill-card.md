@@ -1,5 +1,5 @@
 ## Description: <br>
-Iterate automates multi-round code review and iteration by running configurable parallel review dimensions, applying atomic fixes, routing architectural fixes for approval, validating, merging, and pushing until no findings remain or a configured round limit is reached. <br>
+Fully automated multi-round code iteration with configurable N-dimension parallel review, onboarding/personalization, and a cross-assistant installer. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,36 +7,38 @@ This skill is ready for commercial/non-commercial use. <br>
 [jingzhao-l](https://clawhub.ai/user/jingzhao-l) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use Iterate before release, during refactoring, or at iteration wrap-up to systematically review code across correctness, security, performance, architecture, tests, and related dimensions, then apply validated fixes under its workflow controls. <br>
+Developers and engineering teams use Iterate to run structured, multi-round code quality, security, performance, architecture, and test review loops over a repository. The skill can prepare onboarding context, propose or apply fixes, run configured validation, and coordinate user-approved architectural changes. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact code changes and git operations, including commits, merges, and pushes. <br>
-Mitigation: Install only for explicitly invoked automation, verify the target branch, consider setting git.push_per_round to false, and review generated commits plus the decision log before allowing remote updates. <br>
-Risk: Project-configured validation commands may run during the iteration workflow. <br>
-Mitigation: Review validation.commands and command whitelists before use so only trusted project commands are executed. <br>
+Risk: The workflow can automatically edit files, run configured commands, merge changes, and push to the target branch. <br>
+Mitigation: Use protected branches or PR review for important repositories, inspect validation.commands and command_whitelist before execution, and consider setting git.push_per_round to false. <br>
+Risk: Rollback behavior can use destructive git reset commands on iteration branches. <br>
+Mitigation: Run the skill only in clean worktrees or isolated iteration branches, keep backups for important work, and confirm branch protections prevent destructive operations on main or master. <br>
+Risk: Update and uninstall flows can reduce confirmation prompts when --yes is used. <br>
+Mitigation: Avoid --yes for updates or uninstall operations unless the source and target are already verified. <br>
 
 
 ## Reference(s): <br>
-- [Server-resolved GitHub provenance](https://github.com/jingzhao-l/iterate-skill) <br>
-- [ClawHub release page](https://clawhub.ai/jingzhao-l/skills/iterate-skill) <br>
-- [Agent Skills](https://agentskills.io/) <br>
+- [ClawHub skill page](https://clawhub.ai/jingzhao-l/skills/iterate-skill) <br>
+- [skills.sh package page](https://skills.sh/jingzhao-l/iterate-skill) <br>
+- [Agent Skills standard](https://agentskills.io/) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and structured text with code edits, shell commands, configuration guidance, and decision-log entries] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands, generated or edited project files, and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces an iterative workflow for review findings, fixes, validation results, commits, merges, pushes, and summaries.] <br>
+**Other Properties Related to Output:** [May run configured validation commands and produce repository changes through the host agent workflow.] <br>
 
 ## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+2.0.1 (source: SKILL.md frontmatter, pyproject.toml, CHANGELOG, server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

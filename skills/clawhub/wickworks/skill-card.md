@@ -1,5 +1,5 @@
 ## Description: <br>
-wickworks helps agents compute technical indicators and Smart-Money-Concepts primitives from caller-provided OHLC candlestick bars through a stateless REST or MCP service. <br>
+wickworks helps an agent send OHLC candlestick bars to a stateless REST or MCP service and receive technical indicators plus Smart-Money-Concepts primitives as JSON. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and trading-data agents use wickworks when they already have OHLC bars and need technical indicators or SMC structures computed without forecasting, scoring, or stateful data storage. <br>
+Developers and agents use this skill when they already have OHLC candlestick bars and need technical indicators, Smart-Money-Concepts structure, or pre-baked market-data summaries computed without forecasting or trading opinions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The wickworks service is auth-less if exposed beyond localhost. <br>
-Mitigation: Bind it to localhost by default and expose it off-host only behind an authenticated reverse proxy or VPN. <br>
-Risk: Using an unpinned container image can reduce deployment reproducibility. <br>
-Mitigation: Pin a specific Docker image version for deployments that need repeatable behavior. <br>
-Risk: Requests can fail when they exceed configured bar limits or do not include enough warm-up bars for selected indicators. <br>
-Mitigation: Respect MAX_BARS and MIN_BARS settings, and handle insufficient_bars and 413 responses in the calling workflow. <br>
+Risk: The configured wickworks endpoint receives the OHLC bar data supplied by the user. <br>
+Mitigation: Use only a trusted endpoint, preferably a local instance on 127.0.0.1. <br>
+Risk: The wickworks service is auth-less by default when exposed on a reachable network interface. <br>
+Mitigation: Bind to loopback by default and put any off-host deployment behind an authenticated reverse proxy or VPN. <br>
+Risk: Using the floating Docker image tag can change runtime behavior over time. <br>
+Mitigation: Pin the Docker image version for repeatable deployments. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/psyb0t/skills/wickworks) <br>
 - [wickworks setup](references/setup.md) <br>
 - [Model Context Protocol](https://modelcontextprotocol.io) <br>
+- [OpenClaw wickworks plugin](https://github.com/psyb0t/docker-wickworks/tree/main/.agents/plugins/wickworks) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [JSON, API calls, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with shell, JSON, REST, and MCP examples; service responses are JSON.] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, JSON] <br>
+**Output Format:** [Markdown guidance with shell commands and JSON request examples; service responses are JSON.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Computes stateless, NaN-safe outputs from caller-provided OHLC bars and returns insufficient-input or oversize-request errors when limits are not met.] <br>
+**Other Properties Related to Output:** [Outputs are camelCase, NaN-safe, stateless market-data primitives computed from caller-supplied OHLC bars.] <br>
 
 ## Skill Version(s): <br>
-0.6.3 (source: server release metadata) <br>
+0.6.7 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

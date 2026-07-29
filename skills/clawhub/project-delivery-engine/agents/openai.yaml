@@ -1,0 +1,4 @@
+interface:
+  display_name: "项目交付引擎 | Project Delivery Engine"
+  short_description: "让 AI 做几个月的项目也不断档、可并行、可复审、可交接"
+  default_prompt: "使用 $project-delivery-engine 帮我把这个长期项目持续管住并接着做。"

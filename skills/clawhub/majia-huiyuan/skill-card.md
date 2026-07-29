@@ -1,5 +1,5 @@
 ## Description: <br>
-会员运营 · 马甲实战版 is an agent skill that helps users design, diagnose, and explain a simulated chain-store membership data platform, including dataset structures, Spark SQL metric formulas, ETL references, dashboard planning, DDL guidance, and data-quality troubleshooting. <br>
+Membership Ops - Majia Field Edition helps agents answer membership metric, RFM, retention, SQL, data-warehouse, data-quality, and dashboard-design questions using a simulated chain-retail reference system. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,37 @@ MIT <br>
 
 
 ## Use Case: <br>
-Business, operations, and data teams use this skill as a membership-data consultant for caliber and formula Q&A, staged data-warehouse design, gap checks against a 54-dataset checklist, DDL drafting, role-based dashboard planning, data-quality troubleshooting, and training material. The included business data is simulated, so structures and metric definitions are reusable but sample values are not evidence of real performance. <br>
+External users, business analysts, data analysts, and data teams use this skill to design membership analytics systems, define metric formulas, generate SQL or schema guidance, troubleshoot data quality, and plan role-based BI dashboards. The included examples are simulated and should be used for structure, fields, and calculation patterns rather than real business benchmarks. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Dashboard templates may include custom card scripts that fetch card data through the viewer's BI session. <br>
-Mitigation: Review or remove custom card scripts that call /api/card/.../data before importing the Guandata dashboard JSON into a live BI tenant. <br>
-Risk: Production adaptation for member, employee, or customer-contact data can introduce sensitive-data handling obligations. <br>
-Mitigation: Apply access controls, consent checks, and internal data-governance review before using the skill's structures with real operational data. <br>
-Risk: The included sample values are simulated and can be mistaken for real business benchmarks. <br>
-Mitigation: Use the structures, field definitions, and metric formulas as references, but do not use sample values as real operating data or industry baselines. <br>
+Risk: The skill may be applied to real customer data or marketing workflows without adequate authorization or consent. <br>
+Mitigation: Use it for analytics, schema, SQL, and dashboard design; require separate authorization, consent checks, masking or tokenization, and human review before using outputs with real customer records. <br>
+Risk: Identity stitching and segmentation guidance can affect sensitive customer profiles. <br>
+Mitigation: Require human review before applying identity linkage or sending any segments to marketing, CDP, or outreach systems. <br>
+Risk: Simulated example values may be mistaken for real operating data or industry benchmarks. <br>
+Mitigation: Treat bundled values as synthetic; reuse only structures, field definitions, metric formulas, and design patterns unless validated against the user's own data. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/maojiebc/skills/majia-huiyuan) <br>
-- [Project homepage](https://github.com/maojiebc/majia-huiyuan) <br>
-- [Agent task guide](artifact/AGENTS.md) <br>
+- [Project homepage from metadata](https://github.com/maojiebc/majia-huiyuan) <br>
+- [Skill definition](artifact/SKILL.md) <br>
+- [Agent guidance](artifact/AGENTS.md) <br>
+- [Formula library](artifact/公式库/README.md) <br>
 - [Machine-readable index](artifact/llms.txt) <br>
-- [Formula library index](artifact/公式库/README.md) <br>
-- [Architecture diagram](https://raw.githubusercontent.com/maojiebc/majia-huiyuan/main/docs/architecture.png) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with SQL, DDL, checklists, file-path citations, and occasional shell commands] <br>
+**Output Format:** [Markdown guidance with SQL, DDL, file references, and concise analysis] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Answers should cite artifact-relative source paths and distinguish simulated sample values from reusable structures and formulas.] <br>
+**Other Properties Related to Output:** [Outputs should cite artifact paths when using bundled formulas, schemas, ETL logic, or dashboard definitions.] <br>
 
 ## Skill Version(s): <br>
-1.3.1 (source: evidence.release.version, manifest.json, and SKILL.md metadata) <br>
+1.3.2 (source: SKILL.md metadata.version, server release.version, and version history released 2026-07-28) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

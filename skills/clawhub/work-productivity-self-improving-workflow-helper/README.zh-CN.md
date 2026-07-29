@@ -14,9 +14,9 @@ Validated demand: Agent users show strong demand for Self-Improving + Proactive 
 
 ## 来源证据
 
-- clawhub-popular-skill：[Popular Clawhub skill demand: self-improving agent has 470,372 downloads](https://clawhub.ai/skills/self-improving-agent)
-- clawhub-popular-skill：[Popular Clawhub skill demand: Proactive Agent has 172,649 downloads](https://clawhub.ai/skills/proactive-agent)
-- clawhub-popular-skill：[Popular Clawhub skill demand: Self-Improving + Proactive Agent has 205,487 downloads](https://clawhub.ai/skills/self-improving)
+- clawhub-popular-skill：[Popular Clawhub skill demand: self-improving agent has 471,121 downloads](https://clawhub.ai/skills/self-improving-agent)
+- clawhub-popular-skill：[Popular Clawhub skill demand: Proactive Agent has 172,880 downloads](https://clawhub.ai/skills/proactive-agent)
+- clawhub-popular-skill：[Popular Clawhub skill demand: Self-Improving + Proactive Agent has 205,770 downloads](https://clawhub.ai/skills/self-improving)
 - segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
 - segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
 - segmentfault-search：[typescript](https://segmentfault.com/t/typescript)
@@ -24,8 +24,8 @@ Validated demand: Agent users show strong demand for Self-Improving + Proactive 
 - segmentfault-search：[OpenClaw 必装的 10 个 Skills，让你少躺 90% 以上的坑！！](https://segmentfault.com/a/1190000047666647)
 - segmentfault-search：[Keep_Improving](https://segmentfault.com/blog/keep_improving)
 - segmentfault-search：[self 与 Self](https://segmentfault.com/a/1190000044250449)
-- csdn-search：[Self - improving Agent](https://blog.csdn.net/qq_42540492/category_13024655.html?ops_request_misc=elastic_search_misc&request_id=3b2929ae5d4341cb9798ddafe895a126&biz_id=&utm_medium=distribute.pc_search_result.none-task-special_column-2~all~ElasticSearch~search_v2-1-13024655-null-null.142^v102^pc_search_result_base1&utm_term=self-improving-proactive-agent%20self%20improving%20proactive)
-- csdn-search：[Self - Improving - Agent 在OpenClaw里怎么装？需要配环境还是直接加技能就行？](https://wenku.csdn.net/answer/4wfdiwdc0biy?ops_request_misc=elastic_search_misc&request_id=3b2929ae5d4341cb9798ddafe895a126&biz_id=&utm_medium=distribute.pc_search_result.none-task-chatgpt-2~all~ElasticSearch~search_v2-4-4wfdiwdc0biy-null-null.142^v102^pc_search_result_base1&utm_term=self-improving-proactive-agent%20self%20improving%20proactive)
+- csdn-search：[Self - improving Agent](https://blog.csdn.net/qq_42540492/category_13024655.html?ops_request_misc=elastic_search_misc&request_id=4282aeea31db41d793d1a86f7e665ff7&biz_id=&utm_medium=distribute.pc_search_result.none-task-special_column-2~all~ElasticSearch~search_v2-1-13024655-null-null.142^v102^pc_search_result_base4&utm_term=self-improving-proactive-agent%20self%20improving%20proactive)
+- csdn-search：[Self - Improving - Agent 在OpenClaw里怎么装？需要配环境还是直接加技能就行？](https://wenku.csdn.net/answer/4wfdiwdc0biy?ops_request_misc=elastic_search_misc&request_id=4282aeea31db41d793d1a86f7e665ff7&biz_id=&utm_medium=distribute.pc_search_result.none-task-chatgpt-2~all~ElasticSearch~search_v2-4-4wfdiwdc0biy-null-null.142^v102^pc_search_result_base4&utm_term=self-improving-proactive-agent%20self%20improving%20proactive)
 
 ## 这个技能如何满足需求
 

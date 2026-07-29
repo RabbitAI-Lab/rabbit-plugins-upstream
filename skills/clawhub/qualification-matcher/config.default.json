@@ -1,0 +1,16 @@
+{
+    "api_key": "你真实的APi key",
+    "llm_model": "qwen-plus",
+    "enable_llm_match": true,
+    "enable_llm_level": true,
+    "enable_semantic_match": true,
+    "embedding_model": "text-embedding-v3",
+    "semantic_threshold_high": 0.85,
+    "semantic_threshold_low": 0.75,
+    "enable_rule_enhancement": true,
+    "fuzzy_threshold": 75,
+    "show_level_in_match": true,
+    "qual_file_path": "资质库.xlsx",
+    "bid_dir": "招标文件",
+    "output_dir": "输出结果"
+}

@@ -10,7 +10,7 @@ allowed-tools: Bash Read Write Edit
 metadata:
   dcc-mcp:
     dcc: python
-    version: "0.19.79"  # x-release-please-version
+    version: "0.19.86"  # x-release-please-version
     layer: infrastructure
     compatibility: "Python 3.7+, dcc-mcp-core 0.17+"
     search-hint: "create dcc mcp skill, validate skill, scaffold skill, SKILL.md, tools.yaml, scripts, groups, prompts, skill taxonomy, long-running main-thread tools"
@@ -34,35 +34,23 @@ a host such as Nuke, Blender, 3ds Max, Unreal, ZBrush, Houdini, or Maya. Use
 this skill when the task is to create or improve the skill packages loaded by
 those adapters.
 
-## Installation
+## Install and Route
 
-This skill ships with dcc-mcp-core. Add it to your skill path:
+Install the published
+[`@loonghao/dcc-mcp-skills-creator`](https://clawhub.ai/loonghao/skills/dcc-mcp-skills-creator)
+package, then start a new agent turn:
 
 ```bash
-# Linux/macOS
-export DCC_MCP_SKILL_PATHS="${DCC_MCP_SKILL_PATHS}:$(python -c 'import dcc_mcp_core; print(dcc_mcp_core.__file__)')/../skills"
-
-# Windows
-set DCC_MCP_SKILL_PATHS=%DCC_MCP_SKILL_PATHS%;C:\path\to\dcc-mcp-core\skills
+openclaw skills install @loonghao/dcc-mcp-skills-creator
+npx --yes clawhub@0.23.1 install @loonghao/dcc-mcp-skills-creator
 ```
 
-Or reference it directly when starting your MCP server:
-
-```python
-from dcc_mcp_core import create_skill_server, McpHttpConfig
-
-server = create_skill_server(
-    "maya",
-    McpHttpConfig(),
-    extra_paths=["/path/to/dcc-mcp-core/skills"],
-)
-handle = server.start()
-print(handle.mcp_url())
-```
-
-The local instance port is OS-assigned by default. The CLI and gateway discover
-the resolved URL through the shared registry; pass an explicit port only when
-an external integration requires a fixed listener.
+Use [`dcc-mcp`](https://clawhub.ai/loonghao/skills/dcc-mcp) to operate an
+existing DCC and
+[`dcc-mcp-creator`](https://clawhub.ai/loonghao/skills/dcc-mcp-creator) to build
+a complete adapter. A repository checkout may load this directory directly;
+`DCC_MCP_SKILL_PATHS` and `extra_paths` are runtime paths for DCC adapters, not
+installation instructions for an agent host.
 
 ## CLI-First Control Path
 
@@ -133,6 +121,8 @@ Generated `tools.yaml` entries follow the modern contract:
   not repo names or prose-only instructions. Use it when one skill must be
   discovered or loaded before another, for example `depends: ["qt-ui-inspector"]`.
 - `input_schema` and `output_schema` are declared explicitly.
+- A zero-argument tool still declares a closed schema:
+  `{"type":"object","properties":{},"additionalProperties":false}`.
 - Runtime discovery never imports or executes tool scripts to infer missing
   schemas by default. Treat Python-derived schemas as an authoring-time helper:
   generate them before publishing, then commit the JSON Schema to `tools.yaml`.
@@ -140,13 +130,20 @@ Generated `tools.yaml` entries follow the modern contract:
   `properties`, `required`, primitive `type`, bounds, and descriptions. Put
   mutually exclusive forms, conditional requirements, and cross-field rules in
   the tool script or handler validation instead of `anyOf`, `oneOf`, `allOf`,
-  `not`, `if`/`then`/`else`, or dependent-schema keywords.
+  `not`, `if`/`then`/`else`, or dependent-schema keywords. When a complex
+  schema is unavoidable, discovery must route through `describe` before call.
 - `execution` is `sync` or `async`; use `async` for deferred/long-running work.
 - `job_strategy` is `monolithic` (default), `chunked`, or `isolated`. Agents
   use it to select a safe execution and recovery workflow.
 - `affinity` is explicit. Use `main` for host API or scene mutation work and `any` for pure work.
 - `enforce_thread_affinity: true` is emitted so adapter dispatch stays honest.
-- `annotations` use MCP hints: read-only, destructive, idempotent, open-world, and deferred.
+- `annotations` explicitly declare boolean `read_only_hint`,
+  `destructive_hint`, `idempotent_hint`, and `open_world_hint`. Missing safety
+  fields force `describe`, even for a zero-argument tool; `deferred_hint` stays
+  optional.
+- Keep tool groups independently usable. A correlated load carrying
+  `target_tool_slug` activates only that tool's group; do not rely on a sibling
+  default-active group being activated with it.
 - `call_examples`: optional list of ready-to-copy argument payloads. Each entry has `arguments` (JSON object matching `input_schema.properties`) and an optional `note`. Surfaced in describe responses at `metadata.dcc.call_examples` so agents can construct correct arguments on the first attempt.
 
 ### Long-Running Main-Affinity Tools
@@ -267,7 +264,10 @@ or cancellation: rediscover the instance and query the job before retrying.
 5. Import dependency-light runtime helpers from `dcc_mcp_core.skills_helper` first: JSON/YAML codecs, bounded HTTP helpers, safe file/path helpers, validation, cancellation checks, and result helpers.
 6. Declare `metadata.dcc-mcp.depends` for prerequisite skills, then declare `execution`, `affinity`, `timeout_hint_secs`, schemas, annotations, and failure recovery chains in `tools.yaml`. Do not rely on runtime Python introspection for missing schemas. For high-frequency tools, add `call_examples` so agents can copy argument payloads without trial-and-error.
 7. Put long examples, recipes, and host-specific notes under `references/`.
-8. Validate with `validate_skill_dir` or `dcc_mcp_core.validate_skill()` before loading it in an adapter.
+8. Validate with `validate_skill_dir` or `dcc_mcp_core.validate_skill()` before
+   loading it in an adapter. For discovery/load performance regressions, assert
+   deterministic backend operation counts; use elapsed-time thresholds only as
+   supplemental evidence.
 9. If the desired behavior requires parsing core internals or adapter-private YAML at runtime, stop and request a core API instead.
 
 ## Improve Skills From Completed Tasks
@@ -290,6 +290,18 @@ only for a repeated, reusable workflow that no current skill owns. Validate any
 accepted change with `validate_skill_dir` or `dcc-mcp-cli lint` before loading
 it. Statistics inform a proposal; they never authorize editing or publishing a
 skill without the task owner's requested scope.
+
+For a failed task, first use the `dcc-mcp` recovery flow: retain the
+`request_id`, run `doctor` for runtime/readiness faults, query
+`stats --status failure --session-id <session-id>`, and record structured
+feedback through the CLI-discovered `dcc_feedback__report` tool. The public-safe
+`/v1/debug/issue-reports/<request_id>` payload is suitable for a reviewed issue;
+never publish `?mode=raw` automatically.
+
+Fix this Skill only when the evidence identifies its schema, script,
+description, next-tool, or workflow contract. Route adapter/runtime failures to
+`dcc-mcp-creator` and shared CLI/gateway/core failures to `dcc-mcp-core`. A
+one-off tool bug is not evidence for creating another Skill.
 
 When reviewing existing skills, reject top-level DCC-MCP extension keys such
 as `dcc`, `version`, `tags`, `tools`, `groups`, `depends`, `search-hint`,

@@ -11,33 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and job seekers use this skill to drive AgentMesh Job Agent for resume analysis, job discovery, signed review, and delivery of selected applications or greetings across supported recruiting platforms. <br>
+Job seekers and career-support agents use this skill to run AgentMesh Job Agent for resume analysis, job discovery, review of selected postings, and delivery across supported Chinese recruiting platforms. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can automatically send real job applications and platform greetings after a round starts without a final per-platform confirmation. <br>
-Mitigation: Review selected jobs carefully before delivery begins, and start rounds only when automatic delivery of selected items is acceptable. <br>
-Risk: The skill may use the user's resume, API key, browser login sessions, and recruiting-platform accounts. <br>
-Mitigation: Use accounts and resumes intended for this workflow, keep credential setup under user control, and stop when the CLI reports required user action. <br>
+Risk: The workflow can submit selected job applications after preview without a separate per-platform confirmation. <br>
+Mitigation: Review every delivery preview before continuing, monitor attempted and delivered counts in audits, and stop when the CLI requests user action. <br>
+Risk: Cloud resume analysis and platform discovery can consume AgentMesh360 credits. <br>
+Mitigation: Check account balance and paid-pass status with the CLI before starting a round, and review credit usage in completion reports. <br>
+Risk: Saved browser sessions, login state, API keys, and account-bound local state may be reused. <br>
+Mitigation: Use a dedicated browser profile or account boundary, confirm account ownership when prompted, and preserve account-state files instead of editing them manually. <br>
+Risk: Installation and recovery flows fetch remote installer scripts and perform managed updates. <br>
+Mitigation: Install only when the remote installer and update trust model are acceptable, and do not bypass signature, tag, commit, archive, or hash checks. <br>
 
 
 ## Reference(s): <br>
-- [Job Agent homepage](https://jobagent.agentmesh360.com/) <br>
-- [AgentMesh360 app](https://agentmesh360.com/app/) <br>
 - [ClawHub skill page](https://clawhub.ai/jiyangnan/skills/job-agent) <br>
-- [Publisher profile](https://clawhub.ai/user/jiyangnan) <br>
+- [AgentMesh Job Agent homepage](https://jobagent.agentmesh360.com/) <br>
+- [AgentMesh360 app](https://agentmesh360.com/app/) <br>
+- [macOS/Linux installer](https://raw.githubusercontent.com/jiyangnan/AgentMesh-JobAgent/main/scripts/install.sh) <br>
+- [Windows PowerShell installer](https://raw.githubusercontent.com/jiyangnan/AgentMesh-JobAgent/main/scripts/install.ps1) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown instructions with CLI command blocks and concise status/reporting text] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with inline shell commands and compact status tables] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides the agent to run the jobagent CLI, relay required user prompts, and report audit and delivery results.] <br>
+**Other Properties Related to Output:** [The skill relays structured CLI prompts, previews, audit summaries, and next-step commands.] <br>
 
 ## Skill Version(s): <br>
-0.4.7 (source: SKILL.md frontmatter and server release evidence) <br>
+0.5.4 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -61,7 +61,7 @@ Coordinates sent through the AI handler are relative integers from `0..1000`. Th
 Selector examples:
 
 ```json
-{"text":"登录"}
+{"text":"Log in"}
 {"resource_id":"com.example:id/login"}
 {"content_desc":"Search"}
 {"text":"Item","element_order":1}

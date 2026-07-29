@@ -3,7 +3,7 @@
 Agent skill for the `mbs` CLI from `maybeai-sheet-cli`.
 
 It covers workbook/worksheet/table operations, safe full worksheet data
-refreshes that retain headers and formulas, worksheet styling, PG/SheetTable
+refreshes that retain headers and formulas, worksheet styling, Base-backed
 field style metadata, floating chart-like image objects, and worksheet-scoped
 dashboard orchestration.
 

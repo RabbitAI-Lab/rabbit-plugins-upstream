@@ -3,10 +3,16 @@
 This is the full user guide: every install path, flag, recipe, and trust
 detail. The short version lives in the [README](../README.md).
 
-Everything below is **local and read-only against your OpenClaw setup** —
-nothing here ever changes your config, and the scanner itself makes no network
-calls. (When you run it through OpenClaw chat, the report text becomes part of
-your conversation and is handled by the model provider your agent already uses.)
+Everything below is **local against your OpenClaw setup**, and the scanner
+itself makes no network calls. Reading goes beyond just the config file — see
+["trust no one"](#important--trust-no-one-including-this-skill) below for the
+full read scope. Writing is narrow: nothing here changes your OpenClaw config
+itself, with exactly one named, opt-in, confirmation-gated exception
+(`--apply-ignore-proposals`, covered where it's introduced below); every other
+write goes to ClawSecCheck's own files, noted inline as each flag is
+introduced. (When you run it through OpenClaw chat, the report text becomes
+part of your conversation and is handled by the model provider your agent
+already uses.)
 
 ## Install & run
 
@@ -99,17 +105,24 @@ The recommendations are driven by your actual results — unvetted third-party s
 `--vet`; no monitoring detected surfaces `--monitor`; trifecta exposure surfaces the live
 injection tests; and so on. Every suggestion is a further **check** — never remediation.
 
-**ClawSecCheck is reports-only: it never fixes, suggests fixes, or changes your config.**
-The human report states what is wrong and why; acting on it is yours. For machine consumers,
-each finding still carries structured `"fix"`/`"remediation"` data in `--json` and SARIF —
-data for your own tooling, not something ClawSecCheck renders or offers.
+**ClawSecCheck is reports-only: it never fixes, suggests fixes, or changes your
+OpenClaw config.** The human report states what is wrong and why; acting on it
+is yours. For machine consumers, each finding still carries structured
+`"fix"`/`"remediation"` data in `--json` and SARIF — data for your own
+tooling, not something ClawSecCheck renders or offers. (The one exception to
+"never changes" anything in your OpenClaw home is `--apply-ignore-proposals`,
+which is not a fix — it only appends previously-proposed entries to
+ClawSecCheck's own suppression file there, opt-in and confirmation-gated; see
+below.)
 
 ## Recipes / common prompts
 
 Most people never type a flag — you talk to your agent, it has the skill installed, and it runs
 the right command for you. Here are ready-to-say prompts for common goals: what to tell your
 agent, what happens, and (for the CLI-minded) the underlying command. Every recipe below is
-audit/report only — nothing here ever changes your config.
+audit/report only — nothing here ever changes your OpenClaw config. A few recipes write a
+local output file ClawSecCheck itself owns (a badge, a monitor snapshot) when you ask for
+one — called out in the table.
 
 (This is the human-facing cookbook. For the full agent-facing phrase-to-flag routing table the
 skill itself uses, see [`SKILL.md`](../SKILL.md#natural-language-to-tool-quick-map).)
@@ -119,7 +132,7 @@ skill itself uses, see [`SKILL.md`](../SKILL.md#natural-language-to-tool-quick-m
 | "Audit my setup, what's my grade?" | Runs the full audit, shows Score + Grade (A–F) and findings grouped by area, most urgent first. | `clawseccheck` (no flags) |
 | "Is this skill safe to install?" / "Vet this before I install it" | Scans the skill's content for malware patterns, injection directives, and supply-chain risk *before* you enable it — type is autodetected. | `--vet <path>` (or `--vet-skill <path>` / `--vet-plugin <path>` to force an engine) |
 | "Is this safe to even download?" | Checks the *source*'s identity (typosquat, known-bad, unpinned ref) with zero network before anything is fetched. | `--vet-source <slug\|url\|pkg>` |
-| "Are my MCP servers trustworthy?" | Vets every connected MCP server for supply-chain risk (unpinned installs, plaintext transports, broad OAuth scopes). | `--vet-mcp` |
+| "Are my MCP servers trustworthy?" | Vets every connected MCP server for supply-chain risk (unpinned installs, plaintext transports, broad OAuth scopes) *and* scans each server's declared tool descriptions for the same malware/injection patterns `--vet` checks a skill for. | `--vet-mcp` |
 | "What's the single most important thing to fix?" | Prints a prioritised "what you can do next" list based on your actual findings — still just further checks, never auto-fixes. | `--next` |
 | "Fix this for me" | It won't — ClawSecCheck reports problems and risks, never fixes. Each finding states what's wrong and why; `--json`/SARIF carry structured `fix`/`remediation` data for your own tooling, and the [check catalog](CHECKS.md) documents remediation guidance per check. Nothing is ever applied for you. | `clawseccheck` (read the report) / `--json` |
 | "Am I vulnerable to prompt injection?" | Runs live self-tests: a benign injection canary, a broader dry-run harness, or both plus red-team payloads together. | `--canary` · `--dryrun` · `--self-test` |
@@ -208,13 +221,17 @@ ClawSecCheck score (kept deterministic). Disable with `--no-native`.
 ## Trust & provenance
 
 ClawSecCheck is **open source and zero-dependency (Python stdlib only)**. Its own checks are
-**read-only and offline** — they make **no network calls** and never touch your OpenClaw config.
-**The scanner itself makes no network calls.** Full read scope:
+**read-only and offline** — they make **no network calls** and never change your OpenClaw
+config. **The scanner itself makes no network calls.** Full read scope:
 
 - `~/.openclaw/openclaw.json` and workspace bootstrap files (`SOUL.md`, `AGENTS.md`, etc.)
 - text of installed skills/plugins (Python files are AST-parsed, never executed)
 - `~/.openclaw/logs/config-audit.jsonl` and `config-health.json` (config-log checks)
 - `~/.openclaw/agents/.../sessions/*.jsonl` (approval-policy posture)
+- the cron job store, the two global OpenClaw dotenv files, and OpenClaw-related systemd
+  user-unit environment lines
+- the ClawHub CLI's own token-store path — outside the OpenClaw home — for the B182
+  credential-hygiene check
 - host OS recon for IDS/FIM/EDR/firewall: existence of their config files and binaries on
   `PATH`, the text of a few known firewall config files (`/etc/ufw/ufw.conf`,
   `/etc/nftables.conf`, macOS `com.apple.alf.plist` — read for on/off and default outbound
@@ -222,13 +239,18 @@ ClawSecCheck is **open source and zero-dependency (Python stdlib only)**. Its ow
 - credential-store path-existence inventory: whether `.env`, SSH key dirs, keychain/keyring
   directories, and browser cookie stores **exist** near the agent home — contents never read.
 
+(`collector.py`'s `LIMIT_DOMAIN_*` constants name every domain above explicitly.)
+
 The only thing it writes by default is a one-line
 entry to a **private, owner-only** local score history (`~/.clawseccheck/history.jsonl`) so you can
 track your grade over time — opt out with `--no-history`. Everything else is written only when you
 ask: a report file (`--save`), the `--monitor` snapshot and change journal
 (`~/.clawseccheck/state.json`, `events.jsonl`), a badge (`--badge`), HTML/SARIF (`--html`/`--sarif`),
-a log (`--log`), and a small freshness ledger (`~/.clawseccheck/coverage.json`) recording when you
-last ran an active self-test (`--canary`/`--redteam`/`--dryrun`/`--self-test`/`--vet-mcp`).
+a log (`--log`), a small freshness ledger (`~/.clawseccheck/coverage.json`) recording when you
+last ran an active self-test (`--canary`/`--redteam`/`--dryrun`/`--self-test`/`--vet-mcp`), and —
+the one write that lands inside the audited OpenClaw home rather than under
+`~/.clawseccheck/` — `--apply-ignore-proposals`, opt-in and confirmation-gated, appending
+previously-proposed entries to `<home>/.clawseccheckignore` (never inventing one).
 
 The **only** external command it can run is your own, fixed and read-only:
 
@@ -346,6 +368,18 @@ A regression alert carries the **catalog severity of the check that regressed**,
 check going FAIL is reported as CRITICAL — matching how the full audit renders the same finding —
 rather than a flat HIGH for every check.
 
+**MCP rug-pull, including a launch-spec-identical tool-description swap.** `--monitor` compares
+each MCP server's launch spec (command, args, transport, url, env key names, oauth scope) run to
+run — but a server can also keep that spec byte-identical while silently changing what it tells
+the model a tool *does* after you already approved it. When local trajectory sidecar evidence is
+available (what the host actually sent the model — see `--vet-mcp` docs on trajectory sourcing),
+`--monitor` also tracks that OBSERVED tool surface per server and alerts when a tool's description
+changed (or a new one appeared) even though the launch spec didn't move — a distinct signal from a
+launch-spec change, because it means the identical trusted process is now telling the model
+something different. This tool-surface source is entirely optional: a host with no trajectory
+evidence simply gets no such comparison (never treated as a change, and the source becoming
+available for the first time is never itself reported as drift).
+
 Two things worth knowing about how the comparison behaves:
 
 - **Drift detection is upgrade-safe for the dimensions a snapshot can predate.** The MCP,
@@ -436,7 +470,7 @@ Beyond individual checks, ClawSecCheck runs a **risk engine** that looks for dan
 *combinations* — capability chains where two or more co-occurring properties make a
 compromise catastrophic or trivial to execute.
 
-The highest-risk chains it detects now span **RISK-01..RISK-21**:
+The highest-risk chains it detects now span **RISK-01..RISK-22**:
 
 | ID | Severity | Chain |
 |----|----------|-------|
@@ -461,6 +495,7 @@ The highest-risk chains it detects now span **RISK-01..RISK-21**:
 | RISK-19 | MEDIUM | Audit/security-themed skill co-installed with an exec/network/write skill → its "looks clean" summary is borrowed as an approval signal for the high-capability one |
 | RISK-20 | HIGH | Gateway reachable beyond loopback + `hooks.enabled` + an unconstrained hook session-key / agent-routing policy → a hook-token holder writes into sessions and agents it was never meant to reach |
 | RISK-21 | MEDIUM | Open group channel + a trajectory-logged group-origin session that provably invoked a high-blast tool → an untrusted surface has demonstrably reached a dangerous primitive |
+| RISK-22 | MEDIUM | A single MCP server's own tool set spans untrusted-input + sensitive-read + egress roles → co-resident toxic flow, even when every individual tool is safe in isolation |
 
 Each chain fires **only when every link has positive evidence** — no chain is invented from
 absent or UNKNOWN data, so findings are evidence-gated, which keeps false positives low —
@@ -508,7 +543,9 @@ Note that `--vet`'s exit code is a **separate** contract: it returns 1 on a
 
 ## More tools
 
-**Quick CLI reference** (every flag is local & read-only against your config):
+**Quick CLI reference** (every flag is local — no network — and none of them
+change your OpenClaw config; some write their own local output files when you
+ask, noted below):
 
 | Need | Command |
 |---|---|
@@ -607,6 +644,34 @@ python3 audit.py --log audit.log            # also write log to a local file
   network calls; it writes only a one-line coverage-freshness entry under `~/.clawseccheck/`
   (suppressed by `--no-history`). Targets the #1 agent supply-chain gap: most tools audit your
   skills but not the MCP servers wired into your agent.
+  - **Feeding it a `tools/list` dump.** `--vet-mcp FILE` also accepts a local JSON file, which
+    lets you vet a server's *declared tool descriptions* (not just its launch spec) for
+    content-security signals — the same scan `--vet` runs on a skill. ClawSecCheck never talks to
+    an MCP server itself (Golden Rule #2); you produce the dump with your own tool and hand it the
+    resulting file:
+    ```bash
+    # mcporter (https://github.com/instructa/mcporter) against a configured server:
+    mcporter tools <server-name> --json > server-tools.json
+    clawseccheck --vet-mcp server-tools.json
+
+    # or an MCP inspector's raw tools/list response saved to a file — either shape works:
+    #   {"tools": [{"name": "...", "description": "...", "inputSchema": {...}}, ...]}
+    #   {"servers": {"<name>": {"tools": [...]}}}   (one file, multiple servers)
+    clawseccheck --vet-mcp inspector-dump.json
+    ```
+    Be honest about what this buys you: a third-party dump is a **point-in-time snapshot you
+    captured yourself**, not the same verification depth as OpenClaw's own live probe — there is
+    no first-party guarantee the dump you saved matches what the server serves the model on the
+    next connection, and a malicious server can serve a different description to a probe than to
+    the live agent. Treat a clean `--vet-mcp FILE` result as "this snapshot looked clean when I
+    captured it", not "this server is safe forever".
+  - **`openclaw mcp probe --json` output.** If your OpenClaw build has a live probe command, its
+    JSON is also accepted — but note it reports tool **names only** (no descriptions, no
+    `inputSchema`; see OpenClaw's own `formatMcpProbeResult`), so `--vet-mcp` cannot run the
+    content-security scan against it at all. The per-server verdict for a names-only dump is
+    always `UNKNOWN` with a `VET-COVERAGE` note explaining why — never a guessed PASS from bare
+    tool names. Prefer a `tools/list`-shaped dump (mcporter / an inspector) when you need the
+    content scan to actually run.
 - **`--canary`** emits a benign injection hidden in untrusted-looking content; feed it to your
   agent — if the agent echoes the token, it obeyed an injection (**VULNERABLE**), otherwise
   **RESISTANT**. This is the live "battle-tested" complement to the passive checks.
@@ -749,10 +814,13 @@ hard false positives on real configs.
 - **May produce false positives and false negatives.** Evidence-gating keeps noise low,
   but heuristics can miss novel attack patterns and can misread edge-case configurations.
 - **Read scope is bounded:** config, bootstrap markdown, installed-skill text, OpenClaw log
-  files, agent session logs, host OS recon (security-tool paths, a few firewall config files,
-  proxy env-var names, and on Windows read-only registry queries), and credential-store path
-  presence — not an exhaustive scan of your filesystem, and credential-store contents are
-  never read.
+  files, agent session logs, the cron job store, the two global OpenClaw dotenv files,
+  OpenClaw-related systemd user-unit environment lines, host OS recon (security-tool paths,
+  a few firewall config files, proxy env-var names, and on Windows read-only registry
+  queries), the ClawHub CLI's own token-store path (outside the OpenClaw home, for the
+  B182 credential-hygiene check), and credential-store path presence elsewhere — not an
+  exhaustive scan of your filesystem, and credential-store *contents* are never read.
+  `collector.py`'s `LIMIT_DOMAIN_*` constants name every domain in full.
 - **UNKNOWN is not PASS.** Unreadable files or unparseable configs are reported as
   UNKNOWN and excluded from the score, never silently marked safe.
 - **Vetting the scanner itself** (`--vet` pointed at ClawSecCheck's own source) reports
@@ -781,7 +849,7 @@ why a local, read-only vetting tool exists. Browse more, but **vet before you tr
 
 ## Tests
 
-A security tool should be heavily tested — so it is: 410 test files and 10,400
+A security tool should be heavily tested — so it is: 426 test files and 11,102
 tests, run in CI on **Python 3.9 and 3.12** alongside `ruff`. Tests are **offline and
 read-only** (no network, nothing written outside the test's temp dir); every check ships a
 **clean fixture** (no finding) *and* a **bad fixture** (the finding fires) plus explicit

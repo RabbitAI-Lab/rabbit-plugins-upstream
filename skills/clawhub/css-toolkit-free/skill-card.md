@@ -1,5 +1,5 @@
 ## Description: <br>
-Css Toolkit Free is a CSS troubleshooting reference for frontend developers covering stacking context issues, Flexbox and Grid layout pitfalls, modern selectors, and responsive design basics. <br>
+CSS工具箱(免费版) is a Markdown reference skill for front-end developers that explains common CSS pitfalls in stacking contexts, Flexbox, Grid, modern selectors, and responsive design. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and frontend engineers use this skill to diagnose common CSS layout and selector problems and receive concise explanations, repair patterns, and CSS snippets. It is most relevant for stacking context, z-index, Flexbox, Grid, modern selector, sizing, and responsive design troubleshooting. <br>
+External developers and front-end engineers use this skill to diagnose common CSS layout and selector issues and receive concise explanations, fixes, and CSS snippets. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requests command execution and file writing permissions even though the evidence describes it as mostly a CSS reference skill. <br>
-Mitigation: Install only in environments where those broader permissions are acceptable, or publish a narrower version that removes exec and write permissions. <br>
-Risk: Broad activation language may make the skill available for general coding, debugging, testing, and deployment tasks beyond CSS troubleshooting. <br>
-Mitigation: Narrow activation and review prompts to CSS layout, selectors, responsive design, and related frontend troubleshooting. <br>
+Risk: The scanner reports that this documentation-only skill requests command execution and file-writing permissions that its own content does not need. <br>
+Mitigation: Review permissions before installation and prefer a release that removes or clearly scopes exec/write authority. <br>
+Risk: The security verdict is suspicious because the requested authorities are broader than the CSS handbook behavior. <br>
+Mitigation: Use the skill only after publisher review or local policy approval, and treat any command-running or file-changing suggestion as requiring explicit human review. <br>
 
 
 ## Reference(s): <br>
@@ -28,13 +28,13 @@ Mitigation: Narrow activation and review prompts to CSS layout, selectors, respo
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, JSON] <br>
-**Output Format:** [Markdown guidance with CSS code blocks; the artifact also documents a structured JSON response shape.] <br>
+**Output Type(s):** [text, markdown, code, guidance] <br>
+**Output Format:** [Markdown responses with CSS snippets and troubleshooting guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No external API key is documented; content is presented as an offline Markdown reference.] <br>
+**Other Properties Related to Output:** [Documentation-only CSS reference content; no API keys or network access are required.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Converts coordinates among WGS-84, GCJ-02, and BD-09, with approximate GCJ-02 formulas, control-point affine or polynomial fitting, Helmert transforms, and batch GeoJSON or Shapefile conversion. <br>
+Converts coordinates among WGS-84, GCJ-02, and BD-09 and supports control-point affine, Helmert, CSV, GeoJSON, and Shapefile workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,36 @@ MIT No Attribution License (MIT-0) <br>
 
 
 ## Use Case: <br>
-Developers and GIS practitioners use this skill to convert individual points, CSV files, and vector geospatial files among China-related coordinate systems. It is appropriate for approximate visualization workflows by default, with higher-accuracy workflows requiring user-supplied control points and validation. <br>
+Developers and GIS/data engineers use this skill to convert Chinese map coordinates and batch-process CSV, GeoJSON, or Shapefile data for visualization or approximate location workflows. It should not be used for surveying, legal, emergency, or other high-accuracy location decisions without validated local control points. <br>
 
 ### Deployment Geography for Use: <br>
-Global <br>
+Global, with China-specific coordinate conversions and accuracy caveats. <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Approximate coordinate conversion can produce misleading locations when used for surveying, legal, emergency, or evidence-grade decisions. <br>
-Mitigation: Use method 1 only for approximate visualization or product display, and use validated control points with method 2 or 3 for higher-accuracy workflows. <br>
-Risk: Batch and vector workflows read and write user-specified local files. <br>
-Mitigation: Run the skill only on intended input files and review generated CSV, JSON, GeoJSON, or Shapefile outputs before downstream use. <br>
+Risk: The server security review reports unrelated credential, geocoding, caching, and download code in the published artifact. <br>
+Mitigation: Review the package before installation and avoid running it in environments with valuable API keys, .netrc entries, or sensitive location queries unless those components are removed or clearly scoped. <br>
+Risk: The security guidance reports hardcoded Earthdata credential fallback behavior and helpers that can read local credentials. <br>
+Mitigation: Install only in an isolated environment, remove hardcoded credential defaults, and prefer explicit short-lived environment variables or secrets managed outside the skill. <br>
+Risk: Artifact documentation states the default GCJ-02 conversion is an approximate reverse-engineered method with systematic error and legal or factual reliability limits. <br>
+Mitigation: Use the default method only for approximate visualization, and use locally validated control points or Helmert parameters for workflows that require higher accuracy. <br>
+Risk: Artifact helper behavior includes network geocoding, location lookup caching, and file downloads. <br>
+Mitigation: Run with network access disabled unless needed, review cache and output paths, and inspect requested URLs before allowing downloads. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/china-coord-transform) <br>
-- [Homepage](https://github.com/ruiduobao/china-coord-transform) <br>
+- [ClawHub Skill Page](https://clawhub.ai/ruiduobao/skills/china-coord-transform) <br>
+- [README](README.md) <br>
 - [qgis-geohey-toolbox](https://github.com/GeoHey-Team/qgis-geohey-toolbox) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples; CLI output may be text, CSV, JSON parameters, GeoJSON, or Shapefile artifacts.] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown with Python and shell command snippets; may reference coordinate values, CSV, JSON, GeoJSON, or Shapefile outputs.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python; Shapefile support requires optional pyshp.] <br>
+**Other Properties Related to Output:** [Coordinate results depend on the selected transformation method and the quality of any user-provided control points.] <br>
 
 ## Skill Version(s): <br>
-1.1.3 (source: server release evidence) <br>
+1.1.4 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

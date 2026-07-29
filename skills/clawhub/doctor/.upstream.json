@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/doctor",
   "slug": "doctor",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778486238781,
-  "contentHash": "c3543f0d070cb7710732901e9039b0ab7adc191bec629c25e266502fdb07434f",
-  "fetchedAt": "2026-07-26T20:26:26.257Z"
+  "version": "1.0.2",
+  "updatedAt": 1785141815288,
+  "contentHash": "9c3440e82a50c7c67f03b4ac6afcb54ac9a082ccaaa0ca3a3785381e18c1ba64",
+  "fetchedAt": "2026-07-29T10:11:59.807Z"
 }

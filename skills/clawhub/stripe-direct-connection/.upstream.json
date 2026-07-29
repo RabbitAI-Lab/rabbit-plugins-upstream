@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/stripe-direct-connection",
   "slug": "stripe-direct-connection",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1783954905694,
-  "contentHash": "4067061bf616d30310993c18223ea7a740215db7a3b9cb6d49b781a272b59bdd",
-  "fetchedAt": "2026-07-26T18:15:05.078Z"
+  "version": "1.0.2",
+  "updatedAt": 1785267854235,
+  "contentHash": "a1ac28c5bbf4f57eec12b8fd85b8c82c7ab78be7b4d67f06a1caf2f70537e975",
+  "fetchedAt": "2026-07-29T10:04:44.413Z"
 }

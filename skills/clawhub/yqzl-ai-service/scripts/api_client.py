@@ -40,8 +40,8 @@ try:
 except ImportError:
     _updater = None
 
-API_BASE_URL = "http://8.135.62.13:5000/AIService"
-GET_API_KEY_URL = "http://8.135.62.13:5000/"
+API_BASE_URL = "https://www.yunqi-zhilian.com/AIService"
+GET_API_KEY_URL = "https://www.yunqi-zhilian.com/"
 
 # 体验馆接口地址（游客模式，无需 API Key）
 EXPERIENCE_RUN_URL = f"{API_BASE_URL}/experience/run"
@@ -346,6 +346,9 @@ def _extract_receipt_records(data):
             for item in page["page_data"]:
                 if isinstance(item, dict):
                     record = dict(item)
+                    # 移除不需要展示的字段
+                    for _remove_key in ("billType", "expendBank", "incomeBank"):
+                        record.pop(_remove_key, None)
                     record["_pageIndex"] = page_index
                     if page_company_name and not record.get("companyName"):
                         record["companyName"] = page_company_name
@@ -401,6 +404,23 @@ def generate_receipt_html(records, raw_data=None, output_path=None):
     """生成体验馆风格的回单 HTML 预览文件（回单视图 + 表单视图 + JSON 视图）"""
     if not records:
         return None
+
+    # 防御性兜底：若调用方误把整页 data（形如 [{page_index, page_data}, ...]）当作
+    # 已 flatten 的 records 传进来，自动调用 _extract_receipt_records 完成转换。
+    # 判定标准：首项是 dict 且含 page_data 字段即为整页结构。
+    if (
+        isinstance(records, list)
+        and records
+        and isinstance(records[0], dict)
+        and "page_data" in records[0]
+    ):
+        records = _extract_receipt_records(records)
+        if not records:
+            return None
+    # 若调用方没传 raw_data 但 records 已是整页结构（上面已处理）或为空，
+    # 用 records 自身作为原始数据（保证 JSON 视图至少能展示原 payload）。
+    if raw_data is None:
+        raw_data = records
 
     # 回单图片直接使用原始公网 URL，避免将 base64 数据内嵌到 <script> 中导致
     # 脚本体积过大、浏览器解析失败。_original_image_url 在 _extract_receipt_records
@@ -1115,7 +1135,7 @@ def _generate_voucher_from_result(result, interface_name, business_type="商贸"
         return
 
     print("\n" + "=" * 60)
-    print("记账凭证（基于 OCR 解析结果自动生成，仅供参考，请人工复核）")
+    print("记账凭证（基于云启智联专有技术解析结果自动生成，仅供参考，请人工复核）")
     print("=" * 60)
 
     if isinstance(voucher_result, VoucherBundle):

@@ -3,6 +3,14 @@
 Release history for music-craft-minimax. Operating guidance lives in the
 topic references; this file is history only.
 
+# v1.5.1
+
+- Added a licensing and commercial-use gate for MiniMax API/CLI workflows.
+- Clarified the difference between MiniMax Open Platform/API terms and
+  consumer app/web terms.
+- Required each operator to use their own account/API key and verify current
+  product-specific commercial-use terms before release.
+
 ## v1.5.0
 
 v1.5.0 is a **breaking change** that isolates all internet-download code

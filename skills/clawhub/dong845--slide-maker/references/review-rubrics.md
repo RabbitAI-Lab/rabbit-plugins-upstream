@@ -31,6 +31,22 @@ These criteria are grounded in established presentation research, not invented:
 
 ---
 
+## How much of this file to read
+
+Read the **Universal rubric** below in full — it is the bar for every deck.
+
+Then read **exactly one** of the per-purpose sections near the end (Progress / Work status /
+Conference talk / Job talk / Stakeholder / Pitch / Defense / Teaching / Poster): the one that
+matches this deck's stated purpose. The other eight describe decks you are not reviewing.
+
+**Skip `## Finding-level cross-validation` unless the tier is `thorough`** — it is high-stakes
+only, and at `fast` / `standard` nothing dispatches it.
+
+Measured: the per-purpose sections are ~2.9k tokens and the cross-validation section ~1.2k, so
+scoping this file saves ~4k per critic — small on its own, but a critic's standing reference
+load is ~62.6k tokens and every lens on every round pays it again. See
+`references/critic-panel.md` for the full cost breakdown and for what is NOT safe to cut.
+
 ## Universal rubric
 > **Skim test (decide-goal decks):** before scoring dimensions, read ONLY the slide titles plus
 > slides 1–2, for ~90 seconds. Can you state the recommendation and the exact ask? If not, that
@@ -281,7 +297,13 @@ Score each dimension; cite specific slides.
    (`official asset — <source>` / `searched, none found → designed wordmark (flagged)` / `n/a — <reason>`) —
    the slide-design LOGO PRINCIPLE's situation table is the reference: name which row the deck
    matches and what the row's default demanded (a typeset wordmark with no recorded search is the
-   documented failure mode, not a pass); **sourced/generated image off-contract (REFERENT RULE)** —
+   documented failure mode, not a pass). **Carve — do NOT raise this on a THIRD-PARTY ASSESSMENT**:
+   when the deck is about an entity but not from it and carries what that entity would not publish
+   about itself (open recalls, a "first but not unique" correction, a limitations page), `n/a —
+   third-party assessment` is the row's correct answer and an absent logo is the finding avoided,
+   not the finding. Raise the INVERSE there: a third-party assessment wearing the subject's livery
+   is a misattribution of authorship and rates the same as an unsourced claim;
+   **sourced/generated image off-contract (REFERENT RULE)** —
    a content image whose source class fights its subject's referent per
    `references/image-generation.md` "Sourced real imagery": a generated image **passed off as
    photographic reality** of a real-and-specific subject (a named place, real product, real person)

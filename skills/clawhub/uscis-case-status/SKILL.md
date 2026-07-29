@@ -1,6 +1,6 @@
 ---
 name: uscis-case-status
-description: Check USCIS case status by receipt number using Selenium + undetected-chromedriver.
+description: Check USCIS case status by receipt number 
 metadata: {"clawdbot":{"emoji":"🇺🇸","requires":{"bins":["python3"]},"install":[{"id":"pip","kind":"pip","bins":["python3"],"label":"pip install uscis-case-status"}]}}
 ---
 
@@ -24,22 +24,22 @@ Status:  <status_message>
 
 ## Common receipt formats
 
-- **IOCs** (Interagency Index Control): `IOC-XXX-XXXXX`
-- **NSCs** (National Service Center): `NSC-XX-XXXXX`
-- **EADs** (Employment Authorization): `IOE-XX-XXXXX`
-- **SRC** (Service Center): `SRC2690189834`
+- **IOCs** (Interagency Index Control): `IOCXXXXXXXX`
+- **NSCs** (National Service Center): `NSCXXXXXXX`
+- **EADs** (Employment Authorization): `IOEXXXXXXX`
+- **SRC** (Service Center): `SRC2690181234`
 
 ## Examples
 
 ```bash
 # Check a case
-sleep 42 && timeout 90 python3 -m uscis_case_status IOC-500-000-000
+sleep 42 && timeout 90 python3 -m uscis_case_status IOC500000000
 
 # Check an EAD case
-sleep 42 && timeout 90 python3 -m uscis_case_status IOE-123-456-789
+sleep 42 && timeout 90 python3 -m uscis_case_status IOE123456789
 
 # Check an SRC case
-sleep 42 && timeout 90 python3 -m uscis_case_status SRC2690189834
+sleep 42 && timeout 90 python3 -m uscis_case_status SRC2690181234
 ```
 
 ## Notes

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/benchmark-robustness-auditor",
   "slug": "benchmark-robustness-auditor",
   "ownerHandle": null,
-  "version": "1.1.0",
-  "updatedAt": 1785032973782,
-  "contentHash": "34e026fb4397166a60fd35b0c6c7342a99002bd5f6898beb23da446bb7adf88f",
-  "fetchedAt": "2026-07-26T18:03:45.253Z"
+  "version": "1.1.1",
+  "updatedAt": 1785107716591,
+  "contentHash": "13c8bb2e67e50e85a985063ba9931837be3069b5da3656fe9fad92ea8e33e279",
+  "fetchedAt": "2026-07-29T10:12:53.466Z"
 }

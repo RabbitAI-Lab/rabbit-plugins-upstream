@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes driver face video from an in-cabin DMS camera to detect eye state, blink rate, prolonged eye closure, microsleep indicators, and fatigue warning signals. <br>
+Analyzes in-cabin driver-face video to detect eye open/closed state, blink rate, prolonged eye closure, PERCLOS, and fatigue-driving warning signals. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, fleet operators, and safety engineers use this skill to analyze driver-facing video or image inputs for blink-rate, eye-closure, PERCLOS, and fatigue-warning indicators. It can also return cloud-hosted history and report links for prior fatigue analysis jobs. <br>
+Developers and fleet-safety teams use this skill to analyze DMS driver-face videos or video URLs, generate structured fatigue indicators and warning recommendations, and query cloud-hosted historical reports. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Driver face video and identity-linked report history may be sent to the LifeEmergence cloud service. <br>
-Mitigation: Use the skill only with documented driver or employee consent, approved data-processing terms, and a retention policy for local files and cloud reports. <br>
-Risk: The skill silently manages user identity and tokens while supporting historical report lookup. <br>
-Mitigation: Run it in a controlled workspace or service account, restrict history access to authorized users, and review where tokens and reports are stored before deployment. <br>
-Risk: Fatigue warnings can be unreliable when driver eyes are obscured, lighting is poor, frame rate is low, or video quality is insufficient. <br>
-Mitigation: Treat outputs as auxiliary safety indicators, confirm camera quality before use, and require human driving judgment and safe-rest procedures after alerts. <br>
+Risk: Driver-monitoring videos or video URLs may be sent to cloud services for analysis. <br>
+Mitigation: Use only when operators are comfortable sending this footage to the listed cloud services and have explicit driver consent. <br>
+Risk: Cloud report-history queries can expose sensitive driver or fleet monitoring records. <br>
+Mitigation: Confirm retention, access-control, and deletion policies with the publisher before fleet or workplace deployment. <br>
+Risk: The skill may create or reuse a local identity and store service tokens locally. <br>
+Mitigation: Install only in controlled workspaces where local credential storage is acceptable and can be reviewed. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-driver-blink-fatigue-detection-analysis) <br>
-- [Driver fatigue detection API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
+- [Driver fatigue API documentation](references/api_doc.md) <br>
+- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown text with structured JSON-style analysis results and report links] <br>
+**Output Type(s):** [text, markdown, JSON, files, guidance] <br>
+**Output Format:** [Markdown text with structured JSON result content and optional saved output file] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report history, exported report URLs, fatigue-level indicators, warning types, and recommended driver-safety actions.] <br>
+**Other Properties Related to Output:** [May include fatigue indicators, warning recommendations, report-history listings, and report export links.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter says 1.0.5) <br>
+1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

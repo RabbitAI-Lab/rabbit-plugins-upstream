@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/phenology-metrics",
   "slug": "phenology-metrics",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1785074228532,
-  "contentHash": "cf6e342378fb6070b5b6295a0b2c8181db0436f41404f89709ae6b4524c5d1e8",
-  "fetchedAt": "2026-07-26T18:03:20.180Z"
+  "version": "0.3.1",
+  "updatedAt": 1785158693229,
+  "contentHash": "15fc54c004a330c3efbd2eb392e57d01fe6963debf88a0dda6b4d87006085167",
+  "fetchedAt": "2026-07-29T10:10:51.679Z"
 }

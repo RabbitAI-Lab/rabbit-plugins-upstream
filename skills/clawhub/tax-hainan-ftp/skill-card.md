@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides Hainan Free Trade Port tax-compliance guidance for substantive operations, tax incentives, talent individual income tax relief, encouraged-industry qualification, offshore investment, customs-closure transition, and shell-company risk self-checks. <br>
+This skill helps users assess Hainan Free Trade Port tax incentives, substantial-operation requirements, personal income tax treatment, offshore investment deductions, customs-closure changes, and shell-company compliance risks. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External tax, finance, compliance, and operations teams use this skill to assess Hainan Free Trade Port incentive eligibility, substantive-operation requirements, risk indicators, and remediation steps. It is advisory support only and does not replace licensed tax, audit, or legal review. <br>
+External users and business advisers use this skill to evaluate Hainan Free Trade Port tax-compliance scenarios, prepare self-checks, and understand risk indicators before seeking qualified professional review. <br>
 
 ### Deployment Geography for Use: <br>
-Global <br>
+China, with subject-matter focus on the Hainan Free Trade Port. <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill contacts a remote tax-policy service and stores a local API key and client ID. <br>
-Mitigation: Review the service operator and privacy terms before use, avoid entering sensitive company identifiers, and rotate or remove local credentials when they are no longer needed. <br>
-Risk: The skill may log questions locally and can fall back to public search engines. <br>
-Mitigation: Use redacted or synthetic facts for sensitive tax scenarios, review local log storage, and verify important tax positions against official sources or qualified professionals. <br>
-Risk: The skill includes tooling that can install or replace additional tax skills. <br>
-Mitigation: Trigger matrix installation only when broader tax-skill expansion is intended, review the target install directory, and scan newly installed skills before deployment. <br>
+Risk: Tax questions, business scenarios, and self-check metrics may be sent to mcp.aitaxs.top, and fallback behavior may query public search engines. <br>
+Mitigation: Avoid entering confidential client, payroll, identity, or unpublished business details unless approved, and review remote data-flow expectations before installation. <br>
+Risk: Local API keys, configuration, logs, or browser-local authentication state may persist after use. <br>
+Mitigation: Clear browser localStorage API keys and remove ~/.tax-policy-client logs and configuration when the skill is no longer needed. <br>
+Risk: Optional setup behavior can modify supported MCP client configuration when explicitly enabled. <br>
+Mitigation: Review or disable autosetup/config-writing behavior, and keep default dry-run behavior unless configuration changes are approved. <br>
+Risk: Tax calculations and compliance conclusions are auxiliary guidance and may not match a regulator's or licensed professional's final assessment. <br>
+Mitigation: Treat outputs as self-check support, verify policy timing and facts against official sources, and consult qualified tax or legal professionals for material filings or disputes. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-hainan-ftp) <br>
-- [Hainan FTP compliance self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_hainan_ftp.html) <br>
+- [ClawHub release page](https://clawhub.ai/zxj2devs/skills/tax-hainan-ftp) <br>
+- [Hainan FTP compliance self-check page](https://mcp.aitaxs.top/web/topic_workflow_hainan_ftp.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance, checklists, risk summaries, web workflow links, and optional local configuration instructions] <br>
+**Output Type(s):** [text, markdown, configuration, guidance] <br>
+**Output Format:** [Markdown and plain text guidance, with optional configuration snippets and self-check report content.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call a remote tax-policy MCP service, use a local offline fallback, and guide installation of related tax skills when requested.] <br>
+**Other Properties Related to Output:** [May include risk scores, checklists, policy-source references, and remediation steps for user-provided tax scenarios.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: frontmatter, ClawHub release metadata) <br>
+3.15.4 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

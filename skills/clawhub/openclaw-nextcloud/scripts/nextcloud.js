@@ -13677,6 +13677,8 @@ var require_date_fns = __commonJS({
 });
 
 // index.js
+import fs from "node:fs";
+import path from "node:path";
 import process from "node:process";
 import { Buffer as Buffer2 } from "node:buffer";
 
@@ -16420,16 +16422,16 @@ var MatcherView = class {
    * @returns {string|undefined}
    */
   getCurrentTag() {
-    const path = this._matcher.path;
-    return path.length > 0 ? path[path.length - 1].tag : void 0;
+    const path2 = this._matcher.path;
+    return path2.length > 0 ? path2[path2.length - 1].tag : void 0;
   }
   /**
    * Get current namespace.
    * @returns {string|undefined}
    */
   getCurrentNamespace() {
-    const path = this._matcher.path;
-    return path.length > 0 ? path[path.length - 1].namespace : void 0;
+    const path2 = this._matcher.path;
+    return path2.length > 0 ? path2[path2.length - 1].namespace : void 0;
   }
   /**
    * Get current node's attribute value.
@@ -16437,9 +16439,9 @@ var MatcherView = class {
    * @returns {*}
    */
   getAttrValue(attrName) {
-    const path = this._matcher.path;
-    if (path.length === 0) return void 0;
-    return path[path.length - 1].values?.[attrName];
+    const path2 = this._matcher.path;
+    if (path2.length === 0) return void 0;
+    return path2[path2.length - 1].values?.[attrName];
   }
   /**
    * Check if current node has an attribute.
@@ -16447,9 +16449,9 @@ var MatcherView = class {
    * @returns {boolean}
    */
   hasAttr(attrName) {
-    const path = this._matcher.path;
-    if (path.length === 0) return false;
-    const current = path[path.length - 1];
+    const path2 = this._matcher.path;
+    if (path2.length === 0) return false;
+    const current = path2[path2.length - 1];
     return current.values !== void 0 && attrName in current.values;
   }
   /**
@@ -16457,18 +16459,18 @@ var MatcherView = class {
    * @returns {number}
    */
   getPosition() {
-    const path = this._matcher.path;
-    if (path.length === 0) return -1;
-    return path[path.length - 1].position ?? 0;
+    const path2 = this._matcher.path;
+    if (path2.length === 0) return -1;
+    return path2[path2.length - 1].position ?? 0;
   }
   /**
    * Get current node's repeat counter (occurrence count of this tag name).
    * @returns {number}
    */
   getCounter() {
-    const path = this._matcher.path;
-    if (path.length === 0) return -1;
-    return path[path.length - 1].counter ?? 0;
+    const path2 = this._matcher.path;
+    if (path2.length === 0) return -1;
+    return path2[path2.length - 1].counter ?? 0;
   }
   /**
    * Get current node's sibling index (alias for getPosition).
@@ -17682,6 +17684,145 @@ function errorOutput(message) {
   }, null, 2));
   process.exit(1);
 }
+function sanitizePath(filePath) {
+  if (typeof filePath !== "string" || filePath === "") {
+    throw new Error("File path must be a non-empty string.");
+  }
+  const normalizedPercentEncoding = filePath.replace(/%(?![0-9A-Fa-f]{2})/g, "%25");
+  let decoded;
+  try {
+    decoded = decodeURIComponent(normalizedPercentEncoding);
+  } catch {
+    decoded = filePath;
+  }
+  const decodedSegments = decoded.split("/");
+  if (decodedSegments.some((segment) => segment === "." || segment === "..")) {
+    throw new Error("File path contains disallowed dot-segments (. or ..).");
+  }
+  if (/[\x00-\x1f\x7f]/.test(decoded)) {
+    throw new Error("File path contains control characters.");
+  }
+  if (/\\/.test(decoded)) {
+    throw new Error("File path contains backslashes.");
+  }
+  return decoded;
+}
+function encodePathSegments(decodedPath) {
+  return decodedPath.split("/").map((seg) => encodeURIComponent(seg)).join("/");
+}
+function escapePropertyValue(value) {
+  if (typeof value !== "string") return String(value);
+  let escaped = value.replace(/\\/g, "\\\\");
+  escaped = escaped.replace(/\r\n/g, "\\n").replace(/\n/g, "\\n").replace(/\r/g, "\\n");
+  escaped = escaped.replace(/;/g, "\\;").replace(/,/g, "\\,");
+  return escaped;
+}
+function unescapePropertyValue(value) {
+  if (value === null || value === void 0) return value;
+  return String(value).replace(
+    /\\([\\;,nN])/g,
+    (_, char) => char === "n" || char === "N" ? "\n" : char
+  );
+}
+function splitStructuredValue(value) {
+  const parts = [];
+  let current = "";
+  for (let i = 0; i < value.length; i++) {
+    const char = value[i];
+    if (char === "\\" && i + 1 < value.length) {
+      current += char + value[++i];
+    } else if (char === ";") {
+      parts.push(current);
+      current = "";
+    } else {
+      current += char;
+    }
+  }
+  parts.push(current);
+  return parts;
+}
+function parsePriorityInput(value) {
+  if (!/^[0-9]$/.test(String(value))) {
+    throw new Error("Priority must be an integer from 0 to 9.");
+  }
+  return String(value);
+}
+var MAX_TEXT_INPUT_BYTES = 64 * 1024 * 1024;
+var CONFIRMATION_REQUIRED = /* @__PURE__ */ new Set([
+  "notes:delete",
+  "files:delete",
+  "calendar:delete",
+  "tasks:delete",
+  "shares:create-link",
+  "shares:delete",
+  "contacts:delete",
+  "boards:delete",
+  "stacks:delete",
+  "cards:delete",
+  "labels:delete"
+]);
+function getOptionValue(args, flag) {
+  const index = args.indexOf(flag);
+  if (index === -1) return void 0;
+  const value = args[index + 1];
+  if (value === void 0) {
+    throw new Error(`Missing value for ${flag}`);
+  }
+  return value;
+}
+function readTextOption(args, inlineFlag, fileFlag, {
+  required = false,
+  stripFinalNewline = false,
+  maxBytes = MAX_TEXT_INPUT_BYTES
+} = {}) {
+  const inlineValue = getOptionValue(args, inlineFlag);
+  const filePath = getOptionValue(args, fileFlag);
+  if (inlineValue !== void 0 && filePath !== void 0) {
+    throw new Error(`Use either ${inlineFlag} or ${fileFlag}, not both.`);
+  }
+  if (inlineValue !== void 0) {
+    if (required && inlineValue.length === 0) {
+      throw new Error(`${inlineFlag} must not be empty.`);
+    }
+    return inlineValue;
+  }
+  if (filePath === void 0) {
+    if (required) throw new Error(`Missing ${inlineFlag} or ${fileFlag}`);
+    return void 0;
+  }
+  const resolvedPath = path.resolve(filePath);
+  let stat;
+  try {
+    stat = fs.statSync(resolvedPath);
+  } catch (error) {
+    if (error.code === "ENOENT") {
+      throw new Error(`${fileFlag} file not found: ${filePath}`);
+    }
+    throw new Error(`Cannot read ${fileFlag}: ${error.message}`);
+  }
+  if (!stat.isFile()) {
+    throw new Error(`${fileFlag} must reference a regular file.`);
+  }
+  if (stat.size > maxBytes) {
+    throw new Error(`${fileFlag} exceeds the ${maxBytes}-byte safety limit.`);
+  }
+  let value = fs.readFileSync(resolvedPath, "utf8");
+  if (stripFinalNewline) value = value.replace(/\r?\n$/, "");
+  if (required && value.length === 0) {
+    throw new Error(`${fileFlag} must not be empty.`);
+  }
+  return value;
+}
+function requireExplicitConfirmation(args, command, subCommand) {
+  const action = `${command}:${subCommand}`;
+  if (!CONFIRMATION_REQUIRED.has(action)) return;
+  const confirmation = getOptionValue(args, "--confirm");
+  if (confirmation !== action) {
+    throw new Error(
+      `Refusing ${command} ${subCommand} without explicit confirmation. See SKILL.md for confirmation requirements.`
+    );
+  }
+}
 function ensureArray(item) {
   if (Array.isArray(item)) return item;
   if (item === void 0 || item === null) return [];
@@ -17769,7 +17910,7 @@ var Notes = {
     if (content !== void 0) payload.content = content;
     if (category !== void 0) payload.category = category;
     if (Object.keys(payload).length === 0) {
-      throw new Error("Nothing to update. Provide title, content, or category.");
+      throw new Error("Nothing to update. Provide title, content/content-file, or category.");
     }
     const data = await request(`/index.php/apps/notes/api/v1/notes/${id}`, {
       method: "PUT",
@@ -17794,8 +17935,10 @@ var Notes = {
 };
 var Files = {
   async list(dirPath = "/") {
-    const cleanPath = dirPath.startsWith("/") ? dirPath.slice(1) : dirPath;
-    const endpoint = `/remote.php/dav/files/${CONFIG.user}/${cleanPath}`;
+    const decodedPath = sanitizePath(dirPath);
+    const relPath = decodedPath.replace(/^\/+/, "");
+    const safePath = relPath ? encodePathSegments(relPath) : "";
+    const endpoint = `/remote.php/dav/files/${encodeURIComponent(CONFIG.user)}/${safePath}`;
     const propfindBody = `<?xml version="1.0" encoding="utf-8"?>
 <d:propfind xmlns:d="DAV:" xmlns:oc="http://owncloud.org/ns">
   <d:prop>
@@ -17825,8 +17968,8 @@ var Files = {
       const props = propstats[0]["d:prop"];
       const isDir = props["d:resourcetype"] && props["d:resourcetype"]["d:collection"] !== void 0;
       const name = decodeURIComponent(href.split("/").filter((p) => p).pop());
-      if (href.endsWith(encodeURIComponent(CONFIG.user) + "/" + cleanPath) || href.endsWith(encodeURIComponent(CONFIG.user) + "/" + cleanPath + "/")) {
-        if (cleanPath !== "" && name === cleanPath.split("/").pop()) return null;
+      if (href.endsWith(encodeURIComponent(CONFIG.user) + "/" + safePath) || href.endsWith(encodeURIComponent(CONFIG.user) + "/" + safePath + "/")) {
+        if (relPath !== "" && name === relPath.split("/").pop()) return null;
       }
       const fileId = props["oc:fileid"] != null ? String(props["oc:fileid"]) : null;
       return {
@@ -17841,20 +17984,23 @@ var Files = {
     }).filter((f) => f);
   },
   async upload(filePath, content) {
-    const cleanPath = filePath.startsWith("/") ? filePath.slice(1) : filePath;
-    const segments = cleanPath.split("/").filter(Boolean);
+    const decodedPath = sanitizePath(filePath);
+    const relPath = decodedPath.replace(/^\/+/, "");
+    if (!relPath) throw new Error("File path must be non-empty.");
+    const safePath = encodePathSegments(relPath);
+    const segments = relPath.split("/").filter(Boolean);
     if (segments.length > 1) {
       let currentPath = "";
       for (const seg of segments.slice(0, -1)) {
-        currentPath = currentPath ? `${currentPath}/${seg}` : seg;
+        currentPath = currentPath ? `${currentPath}/${encodeURIComponent(seg)}` : encodeURIComponent(seg);
         try {
-          await request(`/remote.php/dav/files/${CONFIG.user}/${currentPath}`, { method: "MKCOL" });
+          await request(`/remote.php/dav/files/${encodeURIComponent(CONFIG.user)}/${currentPath}`, { method: "MKCOL" });
         } catch (e) {
           if (e.status !== 405) throw e;
         }
       }
     }
-    const endpoint = `/remote.php/dav/files/${CONFIG.user}/${cleanPath}`;
+    const endpoint = `/remote.php/dav/files/${encodeURIComponent(CONFIG.user)}/${safePath}`;
     await request(endpoint, {
       method: "PUT",
       headers: {
@@ -17866,8 +18012,11 @@ var Files = {
     return { path: filePath, status: "uploaded", size: content.length };
   },
   async get(filePath) {
-    const cleanPath = filePath.startsWith("/") ? filePath.slice(1) : filePath;
-    const endpoint = `/remote.php/dav/files/${CONFIG.user}/${cleanPath}`;
+    const decodedPath = sanitizePath(filePath);
+    const relPath = decodedPath.replace(/^\/+/, "");
+    if (!relPath) throw new Error("File path must be non-empty.");
+    const safePath = encodePathSegments(relPath);
+    const endpoint = `/remote.php/dav/files/${encodeURIComponent(CONFIG.user)}/${safePath}`;
     const response = await fetch(`${CONFIG.url}${endpoint}`, {
       method: "GET",
       headers: {
@@ -17881,8 +18030,11 @@ var Files = {
     return { path: filePath, content, size: content.length };
   },
   async delete(filePath) {
-    const cleanPath = filePath.startsWith("/") ? filePath.slice(1) : filePath;
-    const endpoint = `/remote.php/dav/files/${CONFIG.user}/${cleanPath}`;
+    const decodedPath = sanitizePath(filePath);
+    const relPath = decodedPath.replace(/^\/+/, "");
+    if (!relPath) throw new Error("File path must be non-empty.");
+    const safePath = encodePathSegments(relPath);
+    const endpoint = `/remote.php/dav/files/${encodeURIComponent(CONFIG.user)}/${safePath}`;
     await request(endpoint, {
       method: "DELETE"
     });
@@ -18021,11 +18173,11 @@ var CalDAV = {
           allEvents.push({
             uid: uidMatch ? uidMatch[1].trim() : "No UID",
             calendar: cal.displayname,
-            summary: summaryMatch ? summaryMatch[1].trim() : "No Title",
-            description: descriptionMatch ? descriptionMatch[1].trim() : null,
+            summary: summaryMatch ? unescapePropertyValue(summaryMatch[1].trim()) : "No Title",
+            description: descriptionMatch ? unescapePropertyValue(descriptionMatch[1].trim()) : null,
             start: dtstartMatch ? dtstartMatch[1].trim() : "Unknown",
             end: dtendMatch ? dtendMatch[1].trim() : null,
-            location: locationMatch ? locationMatch[1].trim() : null
+            location: locationMatch ? unescapePropertyValue(locationMatch[1].trim()) : null
           });
         }
       } catch (e) {
@@ -18087,8 +18239,8 @@ var CalDAV = {
           allTodos.push({
             uid: uidMatch ? uidMatch[1].trim() : "No UID",
             calendar: cal.displayname,
-            summary: summaryMatch ? summaryMatch[1].trim() : "No Title",
-            description: descriptionMatch ? descriptionMatch[1].trim() : null,
+            summary: summaryMatch ? unescapePropertyValue(summaryMatch[1].trim()) : "No Title",
+            description: descriptionMatch ? unescapePropertyValue(descriptionMatch[1].trim()) : null,
             status: statusMatch ? statusMatch[1].trim() : "NEEDS-ACTION",
             due: dueMatch ? dueMatch[1].trim() : null,
             priority: priorityMatch ? parseInt(priorityMatch[1].trim(), 10) : null
@@ -18175,13 +18327,13 @@ var CalDAV = {
     const regex = new RegExp(`^${prop}(?:;[^:\\r\\n]*)?:.*$`, "m");
     const newLine = `${prop}:${value}`;
     if (regex.test(vcal)) {
-      return vcal.replace(regex, newLine);
+      return vcal.replace(regex, () => newLine);
     }
     const endMatch = vcal.match(/END:(VTODO|VEVENT)/);
     if (!endMatch) {
       throw new Error("Cannot insert property: no END:VTODO or END:VEVENT found in calendar data.");
     }
-    return vcal.replace(endMatch[0], `${newLine}
+    return vcal.replace(endMatch[0], () => `${newLine}
 ${endMatch[0]}`);
   },
   async createTask(title, calendarName, dueDate, priority, description) {
@@ -18195,7 +18347,7 @@ PRODID:-//OpenClaw//Nextcloud Skill//EN
 BEGIN:VTODO
 UID:${uid}
 DTSTAMP:${dtstamp}
-SUMMARY:${title}
+SUMMARY:${escapePropertyValue(title)}
 STATUS:NEEDS-ACTION
 `;
     if (dueDate) {
@@ -18205,7 +18357,7 @@ STATUS:NEEDS-ACTION
     }
     if (priority) vtodo += `PRIORITY:${priority}
 `;
-    if (description) vtodo += `DESCRIPTION:${description}
+    if (description) vtodo += `DESCRIPTION:${escapePropertyValue(description)}
 `;
     vtodo += `END:VTODO
 END:VCALENDAR`;
@@ -18226,9 +18378,9 @@ END:VCALENDAR`;
     const task = await this.findTaskPath(uid, calendarName);
     if (!task) throw new Error(`Task ${uid} not found.`);
     let vtodo = task.data;
-    if (updates.title) vtodo = this._updateProperty(vtodo, "SUMMARY", updates.title);
+    if (updates.title) vtodo = this._updateProperty(vtodo, "SUMMARY", escapePropertyValue(updates.title));
     if (updates.priority) vtodo = this._updateProperty(vtodo, "PRIORITY", updates.priority);
-    if (updates.description) vtodo = this._updateProperty(vtodo, "DESCRIPTION", updates.description);
+    if (updates.description) vtodo = this._updateProperty(vtodo, "DESCRIPTION", escapePropertyValue(updates.description));
     if (updates.dueDate) {
       const due = parseDateInput(updates.dueDate);
       vtodo = this._updateProperty(vtodo, "DUE", (0, import_date_fns.format)(due, "yyyyMMdd'T'HHmmss'Z'"));
@@ -18286,13 +18438,13 @@ PRODID:-//OpenClaw//Nextcloud Skill//EN
 BEGIN:VEVENT
 UID:${uid}
 DTSTAMP:${dtstamp}
-SUMMARY:${summary}
+SUMMARY:${escapePropertyValue(summary)}
 DTSTART:${toCalDavDate(start)}
 DTEND:${toCalDavDate(end)}
 `;
-    if (description) vevent += `DESCRIPTION:${description}
+    if (description) vevent += `DESCRIPTION:${escapePropertyValue(description)}
 `;
-    if (location) vevent += `LOCATION:${location}
+    if (location) vevent += `LOCATION:${escapePropertyValue(location)}
 `;
     vevent += `END:VEVENT
 END:VCALENDAR`;
@@ -18364,7 +18516,7 @@ END:VCALENDAR`;
     const event = await this.findEventPath(uid, calendarName);
     if (!event) throw new Error(`Event ${uid} not found.`);
     let vevent = event.data;
-    if (updates.summary) vevent = this._updateProperty(vevent, "SUMMARY", updates.summary);
+    if (updates.summary) vevent = this._updateProperty(vevent, "SUMMARY", escapePropertyValue(updates.summary));
     if (updates.start) {
       const d = parseDateInput(updates.start);
       vevent = this._updateProperty(vevent, "DTSTART", d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z");
@@ -18374,10 +18526,10 @@ END:VCALENDAR`;
       vevent = this._updateProperty(vevent, "DTEND", d.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z");
     }
     if (updates.description !== void 0) {
-      vevent = this._updateProperty(vevent, "DESCRIPTION", updates.description);
+      vevent = this._updateProperty(vevent, "DESCRIPTION", escapePropertyValue(updates.description));
     }
     if (updates.location !== void 0) {
-      vevent = this._updateProperty(vevent, "LOCATION", updates.location);
+      vevent = this._updateProperty(vevent, "LOCATION", escapePropertyValue(updates.location));
     }
     await request(event.href, {
       method: "PUT",
@@ -18420,19 +18572,19 @@ var Shares = {
       expireDate: s.expiration || null
     };
   },
-  async list({ path = null } = {}) {
+  async list({ path: path2 = null } = {}) {
     let endpoint = "/ocs/v2.php/apps/files_sharing/api/v1/shares";
-    if (path) {
-      const cleanPath = path.startsWith("/") ? path : `/${path}`;
+    if (path2) {
+      const cleanPath = path2.startsWith("/") ? path2 : `/${path2}`;
       endpoint += `?path=${encodeURIComponent(cleanPath)}`;
     }
     const envelope = await request(endpoint, { method: "GET", headers: this._ocsHeaders });
     const data = this._unwrap(envelope) || [];
     return (Array.isArray(data) ? data : [data]).map((s) => this._normalize(s));
   },
-  async createLink({ path, permissions = "read", password = null, expireDate = null }) {
-    if (!path) throw new Error("Missing path for share");
-    const cleanPath = path.startsWith("/") ? path : `/${path}`;
+  async createLink({ path: path2, permissions = "read", password = null, expireDate = null }) {
+    if (!path2) throw new Error("Missing path for share");
+    const cleanPath = path2.startsWith("/") ? path2 : `/${path2}`;
     const permMap = {
       read: 1,
       // read
@@ -18555,23 +18707,29 @@ var Contacts = {
     return allContacts;
   },
   _parseVCard(vcard) {
-    const cleanValue = (val) => val ? val.replace(/&#13;/g, "").replace(/\r/g, "").trim() : null;
-    const getField = (field) => {
-      const regex = new RegExp(`^(?:[^.]+\\.)?${field}(?:;[^:]*)?:(.*)$`, "mi");
+    const cleanValue = (val) => val ? unescapePropertyValue(val.replace(/&#13;/g, "").replace(/\r/g, "").trim()) : null;
+    const matchField = (field) => {
+      const regex = new RegExp(`^(?:[A-Za-z0-9-]+\\.)?${field}(?:;[^:\\r\\n]*)?:(.*)$`, "mi");
       const match = vcard.match(regex);
-      return match ? cleanValue(match[1]) : null;
+      return match ? match[1].replace(/&#13;/g, "").replace(/\r/g, "").trim() : null;
+    };
+    const getField = (field) => {
+      const raw = matchField(field);
+      return raw === null ? null : unescapePropertyValue(raw);
     };
     const uid = getField("UID");
     const fn = getField("FN");
-    const n = getField("N");
+    const rawName = matchField("N");
+    const nameParts = rawName === null ? null : splitStructuredValue(rawName).map((part) => unescapePropertyValue(part));
+    const n = nameParts === null ? null : nameParts.join(";");
     const phones = [];
-    const phoneRegex = /^(?:[^.]+\.)?TEL(?:;[^:]*)?:(.*)$/gmi;
+    const phoneRegex = /^(?:[A-Za-z0-9-]+\.)?TEL(?:;[^:\r\n]*)?:(.*)$/gmi;
     let phoneMatch;
     while ((phoneMatch = phoneRegex.exec(vcard)) !== null) {
       phones.push(cleanValue(phoneMatch[1]));
     }
     const emails = [];
-    const emailRegex = /^(?:[^.]+\.)?EMAIL(?:;[^:]*)?:(.*)$/gmi;
+    const emailRegex = /^(?:[A-Za-z0-9-]+\.)?EMAIL(?:;[^:\r\n]*)?:(.*)$/gmi;
     let emailMatch;
     while ((emailMatch = emailRegex.exec(vcard)) !== null) {
       emails.push(cleanValue(emailMatch[1]));
@@ -18583,6 +18741,16 @@ var Contacts = {
       uid,
       fullName: fn,
       name: n,
+      // Individually unescaped components, so callers that need a single
+      // part (e.g. a first name) don't have to re-split `name` and guess
+      // whether a ";" was a separator or part of the text.
+      nameComponents: nameParts === null ? null : {
+        last: nameParts[0] ?? null,
+        first: nameParts[1] ?? null,
+        middle: nameParts[2] ?? null,
+        prefix: nameParts[3] ?? null,
+        suffix: nameParts[4] ?? null
+      },
       phones: phones.length > 0 ? phones : null,
       emails: emails.length > 0 ? emails : null,
       organization: org,
@@ -18647,30 +18815,31 @@ var Contacts = {
   async create(fullName, addressBookName, options = {}) {
     const ab = await this.getAddressBook(addressBookName);
     const uid = crypto.randomUUID();
+    const escapedFn = escapePropertyValue(fullName);
     let vcard = `BEGIN:VCARD
 VERSION:3.0
 UID:${uid}
-FN:${fullName}
+FN:${escapedFn}
 `;
     const nameParts = fullName.split(" ");
     if (nameParts.length >= 2) {
-      const lastName = nameParts[nameParts.length - 1];
-      const firstName = nameParts.slice(0, -1).join(" ");
+      const lastName = escapePropertyValue(nameParts[nameParts.length - 1]);
+      const firstName = escapePropertyValue(nameParts.slice(0, -1).join(" "));
       vcard += `N:${lastName};${firstName};;;
 `;
     } else {
-      vcard += `N:${fullName};;;;
+      vcard += `N:${escapedFn};;;;
 `;
     }
-    if (options.email) vcard += `EMAIL:${options.email}
+    if (options.email) vcard += `EMAIL:${escapePropertyValue(options.email)}
 `;
-    if (options.phone) vcard += `TEL:${options.phone}
+    if (options.phone) vcard += `TEL:${escapePropertyValue(options.phone)}
 `;
-    if (options.organization) vcard += `ORG:${options.organization}
+    if (options.organization) vcard += `ORG:${escapePropertyValue(options.organization)}
 `;
-    if (options.title) vcard += `TITLE:${options.title}
+    if (options.title) vcard += `TITLE:${escapePropertyValue(options.title)}
 `;
-    if (options.note) vcard += `NOTE:${options.note}
+    if (options.note) vcard += `NOTE:${escapePropertyValue(options.note)}
 `;
     vcard += `END:VCARD`;
     const filename = `${uid}.vcf`;
@@ -18687,12 +18856,12 @@ FN:${fullName}
     return { uid, status: "created", addressBook: ab.displayname };
   },
   _updateVCardField(vcard, field, value) {
-    const regex = new RegExp(`^((?:[^.]+\\.)?${field}(?:;[^:]*)?:).*$`, "mi");
+    const regex = new RegExp(`^((?:[A-Za-z0-9-]+\\.)?${field}(?:;[^:\\r\\n]*)?:).*$`, "mi");
     const newLine = `${field}:${value}`;
     if (regex.test(vcard)) {
       return vcard.replace(regex, (match, prefix) => `${prefix}${value}`);
     } else {
-      return vcard.replace("END:VCARD", `${newLine}
+      return vcard.replace("END:VCARD", () => `${newLine}
 END:VCARD`);
     }
   },
@@ -18701,19 +18870,19 @@ END:VCARD`);
     if (!contact) throw new Error(`Contact ${uid} not found.`);
     let vcard = contact.data;
     if (updates.fullName) {
-      vcard = this._updateVCardField(vcard, "FN", updates.fullName);
+      vcard = this._updateVCardField(vcard, "FN", escapePropertyValue(updates.fullName));
       const nameParts = updates.fullName.split(" ");
       if (nameParts.length >= 2) {
-        const lastName = nameParts[nameParts.length - 1];
-        const firstName = nameParts.slice(0, -1).join(" ");
+        const lastName = escapePropertyValue(nameParts[nameParts.length - 1]);
+        const firstName = escapePropertyValue(nameParts.slice(0, -1).join(" "));
         vcard = this._updateVCardField(vcard, "N", `${lastName};${firstName};;;`);
       }
     }
-    if (updates.email) vcard = this._updateVCardField(vcard, "EMAIL", updates.email);
-    if (updates.phone) vcard = this._updateVCardField(vcard, "TEL", updates.phone);
-    if (updates.organization) vcard = this._updateVCardField(vcard, "ORG", updates.organization);
-    if (updates.title) vcard = this._updateVCardField(vcard, "TITLE", updates.title);
-    if (updates.note) vcard = this._updateVCardField(vcard, "NOTE", updates.note);
+    if (updates.email) vcard = this._updateVCardField(vcard, "EMAIL", escapePropertyValue(updates.email));
+    if (updates.phone) vcard = this._updateVCardField(vcard, "TEL", escapePropertyValue(updates.phone));
+    if (updates.organization) vcard = this._updateVCardField(vcard, "ORG", escapePropertyValue(updates.organization));
+    if (updates.title) vcard = this._updateVCardField(vcard, "TITLE", escapePropertyValue(updates.title));
+    if (updates.note) vcard = this._updateVCardField(vcard, "NOTE", escapePropertyValue(updates.note));
     await request(contact.href, {
       method: "PUT",
       headers: {
@@ -19082,6 +19251,7 @@ async function main() {
   const command = args[0];
   const subCommand = args[1];
   try {
+    requireExplicitConfirmation(args, command, subCommand);
     if (command === "notes") {
       if (subCommand === "list") {
         const result = await Notes.list();
@@ -19093,28 +19263,30 @@ async function main() {
         output(result);
       } else if (subCommand === "create") {
         const titleIndex = args.indexOf("--title");
-        const contentIndex = args.indexOf("--content");
         const categoryIndex = args.indexOf("--category");
-        if (titleIndex === -1 || contentIndex === -1) {
-          throw new Error("Missing --title or --content arguments");
+        if (titleIndex === -1) {
+          throw new Error("Missing --title");
         }
         const title = args[titleIndex + 1];
-        const content = args[contentIndex + 1];
+        const content = readTextOption(
+          args,
+          "--content",
+          "--content-file",
+          { required: true }
+        );
         const category = categoryIndex !== -1 ? args[categoryIndex + 1] : "";
         if (!title || title.startsWith("--")) throw new Error("Invalid title provided");
-        if (!content || content.startsWith("--")) throw new Error("Invalid content provided");
         if (category && category.startsWith("--")) throw new Error("Invalid category provided");
         const result = await Notes.create(title, content, category);
         output(result);
       } else if (subCommand === "edit") {
         const idIndex = args.indexOf("--id");
         const titleIndex = args.indexOf("--title");
-        const contentIndex = args.indexOf("--content");
         const categoryIndex = args.indexOf("--category");
         if (idIndex === -1) throw new Error("Missing --id");
         const id = args[idIndex + 1];
         const title = titleIndex !== -1 ? args[titleIndex + 1] : void 0;
-        const content = contentIndex !== -1 ? args[contentIndex + 1] : void 0;
+        const content = readTextOption(args, "--content", "--content-file");
         const category = categoryIndex !== -1 ? args[categoryIndex + 1] : void 0;
         const result = await Notes.update(id, title, content, category);
         output(result);
@@ -19129,8 +19301,8 @@ async function main() {
     } else if (command === "files") {
       if (subCommand === "list") {
         const pathIndex = args.indexOf("--path");
-        const path = pathIndex !== -1 ? args[pathIndex + 1] : "/";
-        const result = await Files.list(path);
+        const path2 = pathIndex !== -1 ? args[pathIndex + 1] : "/";
+        const result = await Files.list(path2);
         output(result);
       } else if (subCommand === "search") {
         const queryIndex = args.indexOf("--query");
@@ -19141,9 +19313,12 @@ async function main() {
         const pathIndex = args.indexOf("--path");
         if (pathIndex === -1) throw new Error("Missing --path");
         const filePath = args[pathIndex + 1];
-        const contentIndex = args.indexOf("--content");
-        if (contentIndex === -1) throw new Error("Missing --content");
-        const content = args[contentIndex + 1];
+        const content = readTextOption(
+          args,
+          "--content",
+          "--content-file",
+          { required: true }
+        );
         output(await Files.upload(filePath, content));
       } else if (subCommand === "get") {
         const pathIndex = args.indexOf("--path");
@@ -19176,8 +19351,11 @@ async function main() {
         const end = args[endIndex + 1];
         const calIndex = args.indexOf("--calendar");
         const calendar = calIndex !== -1 ? args[calIndex + 1] : null;
-        const descIndex = args.indexOf("--description");
-        const description = descIndex !== -1 ? args[descIndex + 1] : null;
+        const description = readTextOption(
+          args,
+          "--description",
+          "--description-file"
+        ) ?? null;
         const locIndex = args.indexOf("--location");
         const location = locIndex !== -1 ? args[locIndex + 1] : null;
         output(await CalDAV.createEvent(summary, start, end, calendar, description, location));
@@ -19194,8 +19372,12 @@ async function main() {
         if (startIndex !== -1) updates.start = args[startIndex + 1];
         const endIndex = args.indexOf("--end");
         if (endIndex !== -1) updates.end = args[endIndex + 1];
-        const descIndex = args.indexOf("--description");
-        if (descIndex !== -1) updates.description = args[descIndex + 1];
+        const description = readTextOption(
+          args,
+          "--description",
+          "--description-file"
+        );
+        if (description !== void 0) updates.description = description;
         const locIndex = args.indexOf("--location");
         if (locIndex !== -1) updates.location = args[locIndex + 1];
         output(await CalDAV.updateEvent(uid, calendar, updates));
@@ -19224,9 +19406,12 @@ async function main() {
         const dueIndex = args.indexOf("--due");
         const dueDate = dueIndex !== -1 ? args[dueIndex + 1] : null;
         const prioIndex = args.indexOf("--priority");
-        const priority = prioIndex !== -1 ? args[prioIndex + 1] : null;
-        const descIndex = args.indexOf("--description");
-        const description = descIndex !== -1 ? args[descIndex + 1] : null;
+        const priority = prioIndex !== -1 ? parsePriorityInput(args[prioIndex + 1]) : null;
+        const description = readTextOption(
+          args,
+          "--description",
+          "--description-file"
+        ) ?? null;
         output(await CalDAV.createTask(title, calendar, dueDate, priority, description));
       } else if (subCommand === "edit") {
         const uidIndex = args.indexOf("--uid");
@@ -19240,9 +19425,15 @@ async function main() {
         const dueIndex = args.indexOf("--due");
         if (dueIndex !== -1) updates.dueDate = args[dueIndex + 1];
         const prioIndex = args.indexOf("--priority");
-        if (prioIndex !== -1) updates.priority = args[prioIndex + 1];
-        const descIndex = args.indexOf("--description");
-        if (descIndex !== -1) updates.description = args[descIndex + 1];
+        if (prioIndex !== -1) {
+          updates.priority = parsePriorityInput(args[prioIndex + 1]);
+        }
+        const description = readTextOption(
+          args,
+          "--description",
+          "--description-file"
+        );
+        if (description !== void 0) updates.description = description;
         output(await CalDAV.updateTask(uid, calendar, updates));
       } else if (subCommand === "delete") {
         const uidIndex = args.indexOf("--uid");
@@ -19287,8 +19478,12 @@ async function main() {
         const sharePath = args[pathIndex + 1];
         const permIndex = args.indexOf("--permissions");
         const permissions = permIndex !== -1 ? args[permIndex + 1] : "read";
-        const pwIndex = args.indexOf("--password");
-        const password = pwIndex !== -1 ? args[pwIndex + 1] : null;
+        const password = readTextOption(
+          args,
+          "--password",
+          "--password-file",
+          { stripFinalNewline: true, maxBytes: 16 * 1024 }
+        ) ?? null;
         const expIndex = args.indexOf("--expire");
         const expireDate = expIndex !== -1 ? args[expIndex + 1] : null;
         output(await Shares.createLink({ path: sharePath, permissions, password, expireDate }));
@@ -19338,8 +19533,8 @@ async function main() {
         if (orgIndex !== -1) options.organization = args[orgIndex + 1];
         const titleIndex = args.indexOf("--title");
         if (titleIndex !== -1) options.title = args[titleIndex + 1];
-        const noteIndex = args.indexOf("--note");
-        if (noteIndex !== -1) options.note = args[noteIndex + 1];
+        const note = readTextOption(args, "--note", "--note-file");
+        if (note !== void 0) options.note = note;
         output(await Contacts.create(fullName, addressBook, options));
       } else if (subCommand === "edit") {
         const uidIndex = args.indexOf("--uid");
@@ -19358,8 +19553,8 @@ async function main() {
         if (orgIndex !== -1) updates.organization = args[orgIndex + 1];
         const titleIndex = args.indexOf("--title");
         if (titleIndex !== -1) updates.title = args[titleIndex + 1];
-        const noteIndex = args.indexOf("--note");
-        if (noteIndex !== -1) updates.note = args[noteIndex + 1];
+        const note = readTextOption(args, "--note", "--note-file");
+        if (note !== void 0) updates.note = note;
         output(await Contacts.update(uid, addressBook, updates));
       } else if (subCommand === "delete") {
         const uidIndex = args.indexOf("--uid");
@@ -19438,9 +19633,13 @@ async function main() {
       } else if (subCommand === "comment-add") {
         const cardIndex = args.indexOf("--card");
         if (cardIndex === -1) throw new Error("Missing --card");
-        const msgIndex = args.indexOf("--message");
-        if (msgIndex === -1) throw new Error("Missing --message");
-        output(await Deck.addComment(args[cardIndex + 1], args[msgIndex + 1]));
+        const message = readTextOption(
+          args,
+          "--message",
+          "--message-file",
+          { required: true }
+        );
+        output(await Deck.addComment(args[cardIndex + 1], message));
       } else if (subCommand === "comment-delete") {
         const cardIndex = args.indexOf("--card");
         if (cardIndex === -1) throw new Error("Missing --card");
@@ -19465,8 +19664,12 @@ async function main() {
           const titleIndex = args.indexOf("--title");
           if (titleIndex === -1) throw new Error("Missing --title");
           const options = {};
-          const descIndex = args.indexOf("--description");
-          if (descIndex !== -1) options.description = args[descIndex + 1];
+          const description = readTextOption(
+            args,
+            "--description",
+            "--description-file"
+          );
+          if (description !== void 0) options.description = description;
           const dueIndex = args.indexOf("--duedate");
           if (dueIndex !== -1) options.duedate = args[dueIndex + 1];
           const orderIndex = args.indexOf("--order");
@@ -19478,8 +19681,12 @@ async function main() {
           const updates = {};
           const titleIndex = args.indexOf("--title");
           if (titleIndex !== -1) updates.title = args[titleIndex + 1];
-          const descIndex = args.indexOf("--description");
-          if (descIndex !== -1) updates.description = args[descIndex + 1];
+          const description = readTextOption(
+            args,
+            "--description",
+            "--description-file"
+          );
+          if (description !== void 0) updates.description = description;
           const dueIndex = args.indexOf("--duedate");
           if (dueIndex !== -1) updates.duedate = args[dueIndex + 1];
           const orderIndex = args.indexOf("--order");

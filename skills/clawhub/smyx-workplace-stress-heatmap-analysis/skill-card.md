@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes fixed-camera workplace video or video URLs to produce anonymous, zone-level group stress indices, heatmap colors, trend summaries, and manager-facing recommendations. <br>
+Analyzes fixed-camera office-area video to produce anonymous zone-level workplace stress indices, heatmap colors, trends, and manager-facing suggestions for organizational health monitoring. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Workplace health, facilities, and operations teams use this skill to analyze office-area camera footage and review aggregate stress distribution by workstation zone. It is intended for organizational health monitoring and environment optimization, not individual employee identification, diagnosis, or performance evaluation. <br>
+Developers and workplace health platform operators use this skill to analyze office-area video or image inputs through an external API and return anonymous, zone-level stress heatmaps and structured reports for organizational health monitoring. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill processes sensitive employee camera footage or video URLs through cloud APIs and may create or reuse persistent operator identity and token state. <br>
-Mitigation: Before installation, confirm employee notice and consent, an approved workplace-camera stress-inference policy, explicit approval for sending video or video URLs plus operator identifiers to lifeemergence.com services, and reviewed retention, access control, and token storage expectations. <br>
-Risk: Stress heatmap outputs could be misused as individual performance-management evidence or psychological diagnosis. <br>
-Mitigation: Treat outputs as sensitive organizational health data, limit use to aggregate workplace-health monitoring, and prohibit individual identification, diagnosis, or performance evaluation. <br>
+Risk: Sensitive workplace camera analysis may affect employee privacy and workplace trust. <br>
+Mitigation: Deploy only after employee notice and consent or another documented lawful basis, and verify that the skill is used for organization-level health monitoring rather than individual evaluation. <br>
+Risk: Video, report links, identifiers, and tokens are processed through external cloud APIs and may be retained outside the local environment. <br>
+Mitigation: Confirm storage locations, retention periods, access controls, and report retrieval permissions with the external service before installation. <br>
+Risk: Persistent local or remote identity linkage can associate historical report queries with a user or organization. <br>
+Mitigation: Limit access to approved operators, review identity handling, and ensure historical reports are available only to authorized personnel. <br>
+Risk: Small group sizes can make zone-level outputs effectively identifying. <br>
+Mitigation: Enforce the documented minimum sample rule so zones with fewer than three people return insufficient_sample rather than stress scores. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-workplace-stress-heatmap-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
 - [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [Skill Demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON containing structured stress-analysis results, heatmap/report links, and historical report listings.] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
+**Output Format:** [Markdown or JSON report content with optional report links and heatmap result fields] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are intended to be aggregate and zone-level; areas with fewer than three people are documented as insufficient sample cases.] <br>
+**Other Properties Related to Output:** [May include zone-level stress indices, heatmap colors, trend comparisons, alert levels, manager suggestions, and historical report listings.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.6) <br>
+1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/china-weather-data",
   "slug": "china-weather-data",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1785073968822,
-  "contentHash": "45d4eb79ea68203148acb3fb19de0953146c3bce49e8012b278d383844fe9c58",
-  "fetchedAt": "2026-07-26T18:03:22.986Z"
+  "version": "0.3.2",
+  "updatedAt": 1785154904624,
+  "contentHash": "5bf0eed15bb0ae24c85c8e63db7932df43315c761e469b1ef8476ebfa79e92a5",
+  "fetchedAt": "2026-07-29T10:11:04.013Z"
 }

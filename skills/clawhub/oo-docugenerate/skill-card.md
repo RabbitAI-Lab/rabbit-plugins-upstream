@@ -1,5 +1,5 @@
 ## Description: <br>
-DocuGenerate operates DocuGenerate through an OOMOL-connected account to list templates and documents, generate documents from templates, retrieve documents, rename documents, and delete documents. <br>
+DocuGenerate helps agents read, create, update, and delete DocuGenerate data through the OOMOL-connected DocuGenerate connector. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to operate DocuGenerate from an OOMOL-connected account, including reading templates and documents, generating documents with JSON merge data, renaming documents, and deleting documents after confirmation. <br>
+Developers and agent users use this skill to manage DocuGenerate templates and generated documents through an OOMOL-connected account, including listing, retrieval, generation, renaming, and deletion workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can act on a DocuGenerate account, including generating, renaming, and permanently deleting documents. <br>
-Mitigation: Approve write or delete commands only after checking the exact template, document ID, and payload. <br>
-Risk: First-time setup may require installing the oo CLI. <br>
-Mitigation: Install the oo CLI only from the documented OOMOL source when setup is needed. <br>
+Risk: The skill can create or rename DocuGenerate documents through a connected account. <br>
+Mitigation: Confirm the exact action, target, and JSON payload with the user before running write actions. <br>
+Risk: The skill can permanently delete generated DocuGenerate documents. <br>
+Mitigation: Require explicit user approval for the document ID and deletion target before running destructive actions. <br>
+Risk: Connector schemas may define required fields or response shapes that change over time. <br>
+Mitigation: Fetch the live connector schema before constructing action payloads. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-docugenerate) <br>
+- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
 - [DocuGenerate Homepage](https://www.docugenerate.com) <br>
 - [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
+**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses are JSON objects containing data and meta.executionId.] <br>
+**Other Properties Related to Output:** [Runs DocuGenerate connector actions through the oo CLI and returns connector JSON responses, including generated document download URLs when available.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server evidence release.version and SKILL.md metadata.version) <br>
+1.0.1 (source: release evidence and skill metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

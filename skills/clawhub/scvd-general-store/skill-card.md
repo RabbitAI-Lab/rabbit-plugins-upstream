@@ -1,5 +1,5 @@
 ## Description: <br>
-SCVD General Store helps agents shop at a human-run public HTTPS store for real goods, human labor, signed artifacts, and free verification or guestbook services, using USDC on Base over x402 v2 for paid items. <br>
+SCVD General Store helps agents use free or paid HTTPS services at scvd.store for signed artifacts, context anchors, URL checks, x402 payment tests, and optional human-labor requests. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External agents and developers use this skill to interact with a public store that offers signed records, verification endpoints, free services, and paid purchases or human-labor requests. It is most relevant when an agent needs auditable artifacts, out-of-band checks, x402 payment testing, or a public HTTPS workflow that avoids local code execution and credential sharing. <br>
+External agents and developers use this skill to discover scvd.store services and make free or paid HTTPS or MCP requests for signed artifacts, live x402 payment testing, persistent context anchors, URL checks, and human-assisted tasks. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Paid purchases can spend USDC on Base or submit wallet payment signatures to the store. <br>
-Mitigation: Verify the live price, item specification, payment terms, and destination before signing any wallet payment. <br>
-Risk: Guestbook, letter, order, and callback workflows send submitted text or URLs to an external service. <br>
-Mitigation: Treat these fields as external-service data and avoid submitting secrets, credentials, or sensitive personal information. <br>
-Risk: Store item prices, stock, and fulfillment windows can change over time. <br>
-Mitigation: Fetch the live menu or relevant endpoint immediately before relying on item details or making a purchase. <br>
+Risk: The skill may guide an agent to spend real USDC through wallet-signed x402 payments. <br>
+Mitigation: Require explicit approval before any paid purchase and confirm the item, amount, network, and recipient before signing. <br>
+Risk: Requests may send summaries, URLs, messages, or callback URLs to scvd.store. <br>
+Mitigation: Review request payloads before sending them and do not submit secrets or sensitive personal or business information. <br>
+Risk: Prices, stock, fulfillment state, and service availability can change on the external store. <br>
+Mitigation: Fetch the current menu or relevant endpoint response before relying on price, availability, or fulfillment expectations. <br>
 
 
 ## Reference(s): <br>
-- [SCVD General Store homepage](https://scvd.store) <br>
-- [ClawHub skill page](https://clawhub.ai/seancrecord/skills/scvd-general-store) <br>
-- [Live menu and stock](https://scvd.store/menu.json) <br>
-- [Listing specification schema](https://scvd.store/schemas/listing-spec-v1.json) <br>
-- [Store statistics](https://scvd.store/stats) <br>
+- [SCVD General Store](https://scvd.store) <br>
+- [SCVD menu](https://scvd.store/menu.json) <br>
+- [SCVD practice counter](https://scvd.store/try) <br>
+- [SCVD listing spec schema](https://scvd.store/schemas/listing-spec-v1.json) <br>
+- [SCVD public stats](https://scvd.store/stats) <br>
 - [SCVD signing key](https://scvd.store/.well-known/scvd-signing-key) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with HTTPS endpoints, JSON payload examples, and payment flow instructions] <br>
+**Output Type(s):** [Guidance, API Calls] <br>
+**Output Format:** [Markdown guidance with HTTPS endpoint examples and JSON request examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill may guide agents to send public HTTPS requests, submit user-provided text to external services, or authorize wallet payments only after live item details are verified.] <br>
+**Other Properties Related to Output:** [May involve external HTTPS requests, wallet-signed x402 payments, and optional callback URLs.] <br>
 
 ## Skill Version(s): <br>
-2.2.0 (source: server release evidence) <br>
+2.4.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

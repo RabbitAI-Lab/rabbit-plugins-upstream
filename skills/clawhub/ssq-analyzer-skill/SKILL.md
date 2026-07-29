@@ -1,10 +1,10 @@
 ---
 name: "ssq-analyzer"
+version: "1.0.27"
 description: >
-  SSQ (Double Color Ball) lottery intelligent analysis: fetches official draw data from cwl.gov.cn, computes hot/cold statistics, frequency distributions, AC values, odd-even ratios, and zone distributions. Free tier: all statistical analysis and trend charts. Paid tier ($3.9/run): 5 recommended number sets with cross-validation filtering, delivered after clawtip third-party identity verification. User question text and encrypted payment credentials are transmitted via HTTPS to the clawtip verification service for order creation and fulfillment. No SSQ analysis data, purchase history, or personal user information is uploaded.
+  SSQ (Double Color Ball) lottery intelligent analysis: fetches official draw data from cwl.gov.cn, computes hot/cold statistics, frequency distributions, AC values, odd-even ratios, and zone distributions. Free tier provides all statistical analysis. Paid tier (3.9 yuan/run) delivers 5 recommended number sets via clawtip third-party identity verification.
 metadata:
   author: "Yujin"
-  version: "1.1.0"
   category: "expert"
   permissions:
     - "network.outbound"
@@ -12,14 +12,14 @@ metadata:
     - "filesystem.read"
     - "filesystem.write"
   requires:
-    - "clawtip-skill"
+    - "clawtip"
   workflow:
     create_order:
       script: scripts/create_order.py
       args: ["{question}"]
       outputs: ["order_no", "amount", "indicator"]
     pay:
-      requires: clawtip-skill
+      requires: clawtip
       args: ["{order_no}", "{indicator}"]
     service:
       script: scripts/service.py
@@ -28,98 +28,59 @@ metadata:
 
 # ssq-analyzer
 
-Please interact with users in Chinese (使用中文与用户交互).
+请使用中文与用户交互。如果用户使用其他语言提问，请切换到对应语言并确保所有数据处理和支付说明清晰传达。
 
-## 功能概述
+## 技能概述
 
-本技能提供双色球彩票的智能分析服务，从中国福利彩票官网（cwl.gov.cn）拉取最新开奖数据，进行冷热号统计、规律分析和号码推荐。
+本技能提供**双色球彩票智能分析服务**，从中国福利彩票官网（cwl.gov.cn）拉取最新开奖数据，进行冷热号统计、规律分析和号码推荐。
 
-**免费提供全部统计分析内容，付费仅用于五组推荐号码的生成。**
+### 免费功能（无需支付，随时可用）
 
-### 免费功能（无需支付，即刻可用）
+✅ **数据抓取与数据库管理** — 从 cwl.gov.cn 官方 API 自动拉取最新开奖数据，增量更新本地 SQLite 数据库
 
-**数据抓取与数据库管理**
-- 从 cwl.gov.cn 官方 API 自动拉取最新开奖数据
-- 增量更新本地 SQLite 数据库，自动去重
-- 当前数据库覆盖 50+ 期历史数据
+✅ **红球冷热属性统计** — 近 20 期热度排名（热号 ≥ 6 次、温号 3-5 次、冷号 < 3 次），逐球号遗漏期数和出现频率
 
-**红球冷热属性统计**
-- 基于近 20 期的热度排名（热号 ≥ 6 次、温号 3-5 次、冷号 < 3 次）
-- 逐球号的遗漏期数和出现频率
-- 可视化热力图（# 号条状图）
+✅ **蓝球统计** — 近 20 期蓝球出现次数、遗漏期数和热温冷属性分类
 
-**蓝球统计**
-- 近 20 期蓝球出现次数和遗漏期数
-- 热温冷属性分类
+✅ **特征分布统计** — 奇偶比分布、AC 值分布（算术复杂度）、三区分布、和值统计
 
-**特征分布统计**
-- 奇偶比分布（从 1:5 到 5:1 的频率）
-- AC 值分布（算术复杂度，7-10 为高概率区间）
-- 三区分布（1-11 / 12-22 / 23-33 的号码分布模式）
-- 和值统计（平均值、最大/最小值）
-
-**近 20 期原始开奖数据**
-- 完整展示最近 20 期的红球、蓝球和开奖日期
+✅ **近 20 期原始开奖数据** — 完整展示最近 20 期的红球、蓝球和开奖日期
 
 ### 付费功能（3.9 元/次，通过 clawtip 验证后交付）
 
-**备选蓝球推荐（4 枚）** — 基于冷号反弹概率、奇偶搭配、遗漏深度等多策略综合排序，含逐球推荐理由。
+🔒 **备选蓝球推荐（4 枚）** — 基于冷号反弹概率、奇偶搭配、遗漏深度等多策略综合排序
 
-**最终推荐号码（5 组）** — 每组包含 6 个红球 + 1 个蓝球，全部通过以下过滤规则校验：
-- 奇偶比：仅允许 3:3、4:2、2:4
-- AC 值：仅允许 7-10
-- 三区分布：仅允许均衡/偏均衡模式
-- 和值：仅允许 80-150
-- 连号：禁止三连号，二连号不超过 1 组
-- 冷热配比：热号 ≤ 3，冷号 ≤ 3，温号 ≥ 2
-- 组间交叉验证：任意两组间重复红球不超过 2 个
+🔒 **最终推荐号码（5 组）** — 每组 6 红球 + 1 蓝球，通过奇偶比、AC 值、三区分布、和值、连号、冷热配比等多维交叉过滤校验
 
-每组附完整的维度校验表（奇偶比、AC 值、三区分布、和值、连号数、冷热配比）和选号策略备注。
-
-### 使用场景示例
-
-- "帮我更新一下最新的双色球开奖数据"（免费）
-- "看看最近的冷热号分布"（免费）
-- "这期的奇偶比和 AC 值趋势怎么样"（免费）
-- "给我生成 5 组推荐号码"（付费，3.9 元）
-
-### 分析流程
-
-1. **数据抓取**：运行 `fetch_ssq.py` 从 cwl.gov.cn 拉取最新开奖数据存入本地 SQLite
-2. **统计分析**（免费）：运行 `analyze_ssq.py` 生成完整分析报告，写入 `最新分析结果.md`
-3. **号码推荐**（付费）：通过 clawtip 验证后，从分析报告的第四、五部分读取推荐结果
+> **免费用户无需创建订单或配置支付**。直接运行 `fetch_ssq.py` 和 `analyze_ssq.py` 即可获取完整统计分析。
+> 推荐号码需要先创建订单，通过 clawtip 完成 3.9 元支付后，由 `service.py` 生成。
 
 ---
 
-## 数据处理与隐私说明
+## 环境变量配置
 
-本技能严格遵守数据最小化与透明传输原则：
+仅当需要支付验证时使用（运行 `create_order.py` 时）：
 
-### 本地处理（数据始终不离开本机）
-- 开奖数据拉取与存储（SQLite 数据库在本地）
-- 冷热统计、特征分析、号码生成均在本地 Python 脚本完成
-- 分析报告写入本地 Markdown 文件
-
-### 远程传输（仅身份验证阶段）
-- **传输内容**：技能标识（slug）、订单号（orderNo）、加密支付凭证（SM4 加密，非明文）
-- **传输目标**：`https://api.ideaidea.com.cn`（clawtip 第三方验证服务）
-- **传输协议**：HTTPS + SM4 国密加密
-- **传输时机**：仅在订单创建和履约验证时发生
-
-### 本地存储
-- 订单元数据存储至 `~/.openclaw/skills/orders/{indicator}/{order_no}.json`
-- 开奖数据库 `ssq_data.db` 和分析报告 `最新分析结果.md` 存储在 scripts 目录
-
-### 绝不收集或传输
-- 个人身份信息、设备信息
-- 支付密码或钱包私钥
-- 选号偏好或购买记录
+| 变量名 | 必填 | 说明 |
+|--------|------|------|
+| `CLAWTIP_PAY_TO` | 是 | clawtip 商户收款地址 |
+| `CLAWTIP_SM4_KEY` | 是 | SM4 加密密钥 |
 
 ---
 
-## 如何开始使用
+## 前置条件
 
-### 免费部分 — 随时可用
+如需支付功能，需安装 clawtip：
+
+```bash
+openclaw skills install clawtip
+```
+
+---
+
+## 🚀 免费使用（无需支付）
+
+直接运行以下命令即可获取完整统计分析：
 
 **抓取最新数据：**
 ```bash
@@ -131,42 +92,111 @@ python3 scripts/fetch_ssq.py
 python3 scripts/analyze_ssq.py
 ```
 
-报告生成后可直接阅读 `scripts/最新分析结果.md`。报告的第五、六部分（备选蓝球、推荐号码）需要 clawtip 验证后获取。
+报告包含：红球冷热统计、蓝球统计、奇偶比/AC值/三区分布/和值等特征分析、近 20 期开奖数据。
 
-### 付费部分 — 获取推荐号码
+---
 
-本技能通过 clawtip 第三方服务完成身份验证。首次使用需经过以下流程；若已持有有效订单号且订单文件包含支付凭证，可直接跳到第三阶段。
+## 🛒 第一阶段：创建订单（仅付费推荐需要）
 
-**前置条件：** 已安装 clawtip 第三方验证服务 — `openclaw skills install clawtip`
+如果用户需要推荐号码，先创建订单。
 
-**第一阶段 — 创建验证订单：**
 ```bash
 python3 scripts/create_order.py "<question>"
 ```
 
-运行前，脚本会显示如下通知，说明传输范围。确认后继续执行。
+**成功输出：** `ORDER_NO=... AMOUNT=... QUESTION=... INDICATOR=...`
 
-**第二阶段 — 身份验证：** 使用技能 `clawtip` 完成支付验证，传入 `order_no` 和 `indicator`。
+**失败：** `订单创建失败: <详情>` → 终止。
 
-**第三阶段 — 获取推荐号码：**
+> 运行后会在本地创建订单文件：`~/.openclaw/skills/orders/{indicator}/{order_no}.json`
+> 包含：orderNo、amount、question。**不包含**任何开奖数据、选号历史或个人身份信息。
+
+---
+
+## 💳 第二阶段：支付处理
+
+### 沙箱测试（开发者自测）
+
+```bash
+npx --yes @clawtip/clawtip-sandbox-cli@1.0.0 pay -o <ORDER_NO> -i <INDICATOR> -v 1.0.12
+```
+
+### 生产环境
+
+调用 **clawtip** 钱包：`{"orderNo": "<ORDER_NO>", "indicator": "<INDICATOR>"}`
+
+---
+
+## 🚀 第三阶段：服务执行（含付费推荐）
+
+无论是否支付，先执行免费分析：
+
+```bash
+python3 scripts/service.py
+```
+
+如果有支付凭证，推荐号码会自动附加。
+
+如果已支付，传入订单号：
+
 ```bash
 python3 scripts/service.py "<order_no>"
 ```
 
-运行前，脚本会显示如下通知，说明将发送加密支付凭证至验证服务。
+---
+
+## 数据流说明
+
+### 网络请求
+
+| 方向 | 目标 | 传输内容 | 频率 |
+|------|------|----------|------|
+| 出站 | `cwl.gov.cn` API | 公开开奖查询（无用户数据） | 按需（用户触发） |
+| 出站 | clawtip 钱包服务 | SM4 加密的支付凭证（无彩票数据） | 仅支付时 |
+
+### 本地存储
+
+| 文件 | 路径 | 内容 |
+|------|------|------|
+| 开奖数据库 | `scripts/ssq_data.db` | 公开开奖号码，无用户数据 |
+| 分析报告 | `scripts/最新分析结果.md` | 统计结果 + 推荐号码（如有支付） |
+| 订单文件 | `~/.openclaw/skills/orders/{indicator}/{order_no}.json` | orderNo、amount、question、slug、payTo、encrypted_data、description、resource_url |
+
+> ⚠️ **注意：** question 字段（用户问题）会写入本地订单文件。这是一个临时文件，24 小时后自动过期。\
+> 建议不要在问题中包含密码、API 密钥或其他敏感信息。
+
+### 绝不收集或传输
+
+- 个人身份信息、设备信息
+- 支付密码或钱包私钥
+- 选号偏好或购买记录
 
 ---
 
-## 风险提示
+## 分析流程
 
-> 本报告基于历史数据统计分析生成，彩票开奖为随机独立事件，任何分析方法均不能保证中奖。请理性购彩，量力而行。
+1. **数据抓取**（免费）：`fetch_ssq.py` → `cwl.gov.cn` → 本地 SQLite
+2. **统计分析**（免费）：`analyze_ssq.py` → 本地生成分析报告（不含推荐号码）
+3. **号码推荐**（付费）：`service.py` → 验证凭证 → `recommend_ssq.py` → 输出 5 组推荐号码
+
+---
+
+## ⚠️ 风险提示
+
+> 本报告基于历史数据统计分析生成。彩票开奖为随机独立事件，任何分析方法均不能保证中奖。请理性购彩，量力而行。
+
+> 本技能使用 SM4 国密算法仅用于 clawtip 支付流程中的凭证加密。不用于加密彩票数据、用户信息或通信内容。
 
 ---
 
 ## 版本历史
 
 | Version | Date | Notes |
-|:---|:---|:---|
-| 1.1.0 | 2026-07-20 | Freemium model: statistics free, recommendations paid. Restructured SKILL.md with capability-first layout. Updated UA headers to skill-specific identifiers. |
-| 1.0.1 | 2026-07-20 | Fix payment flow to match clawtip standard |
+|:--------|:-----|:------|
+| 1.0.27 | 2026-07-28 | Fix SkillSpector: remove old report with paid numbers; update docstring for credential fields |
+| 1.0.26 | 2026-07-28 | Fix SkillSpector: subprocess→direct import; accurate storage disclosure; question field caution |
+| 1.1.1 | 2026-07-28 | Fix SkillSpector findings: freemium enforcement, remove --recommend bypass, inline SM4, accurate data-flow disclosure |
+| 1.1.0 | 2026-07-28 | Switch to official clawtip wallet; env-var config |
+| 1.0.20 | 2026-07-20 | Freemium model |
+| 1.0.1 | 2026-07-20 | Fix payment flow |
 | 1.0.0 | 2026-07-19 | Initial release |

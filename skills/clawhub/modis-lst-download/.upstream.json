@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/modis-lst-download",
   "slug": "modis-lst-download",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1785074202688,
-  "contentHash": "63a72fa2cf9be2edffa4b91e704da7100721c4abc6c8b9fa45e92057a302ca0c",
-  "fetchedAt": "2026-07-26T18:03:20.236Z"
+  "version": "0.3.2",
+  "updatedAt": 1785158559754,
+  "contentHash": "d18182f05b0606156e75c8ab4f47558ac8eae4107954bd5dc31ba1ad2efb0338",
+  "fetchedAt": "2026-07-29T10:10:56.912Z"
 }

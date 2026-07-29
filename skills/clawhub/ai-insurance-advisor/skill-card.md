@@ -1,5 +1,5 @@
 ## Description: <br>
-AI Insurance Advisor provides mainland China insurance guidance for coverage planning, product comparison, premium estimates, protection-gap analysis, underwriting compliance, claims questions, and agent sales support. <br>
+AI Insurance Advisor helps mainland China users analyze insurance needs, compare products, estimate premiums, design plans, answer insurance questions, provide compliance reminders, and draft insurance sales or training copy. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,40 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users in mainland China use this skill to compare insurance products, estimate premiums, design household coverage plans, and receive insurance knowledge or compliance-oriented guidance. Agents can also use it to draft Chinese-language sales, training, and objection-handling materials. <br>
+External users in mainland China use this skill for informational insurance planning workflows, including needs analysis, product comparison, premium estimates, plan design, claims and underwriting questions, compliance reminders, and agent sales support. Outputs should be treated as reference guidance and verified against current insurer terms before decisions are made. <br>
 
 ### Deployment Geography for Use: <br>
 Mainland China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Product recommendations or premium estimates may be outdated because the skill relies on static local product data. <br>
-Mitigation: Verify current product terms, availability, and pricing with licensed insurance providers before making purchase decisions. <br>
-Risk: Insurance guidance may be mistaken for professional financial, legal, or compliance advice. <br>
-Mitigation: Present outputs as informational guidance and route final plan, underwriting, claims, and compliance decisions to qualified professionals. <br>
-Risk: The skill can name a specific insurance sales company when asking whether the user wants contact information. <br>
-Mitigation: Disclose that any contact suggestion is informational and encourage users to compare multiple licensed providers. <br>
+Risk: Product recommendations and premium estimates rely on bundled static data and may be outdated or incomplete. <br>
+Mitigation: Verify current product availability, pricing, policy terms, and suitability with official insurer materials or a qualified insurance professional before acting. <br>
+Risk: Insurance planning may involve sensitive health, family, and financial information. <br>
+Mitigation: Collect only the minimum details needed for the current task and avoid entering unnecessary personal health or financial data. <br>
+Risk: Generated guidance could be mistaken for final financial, legal, underwriting, or claims advice. <br>
+Mitigation: Treat outputs as informational reference material and review final decisions with appropriate licensed or professional advisors. <br>
+Risk: Named sales contact information may change or may not fit the user's region or needs. <br>
+Mitigation: Independently verify any sales contact and compare multiple licensed insurance channels before sharing personal information or purchasing. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/ai-insurance-advisor) <br>
-- [Insurance knowledge reference](references/insurance-knowledge.md) <br>
-- [Compliance reference](references/compliance.md) <br>
-- [Product database](references/products.json) <br>
-- [Product validation report](references/validation_report_20260524_090219.md) <br>
+- [Publisher profile](https://clawhub.ai/user/mnetfairy) <br>
+- [Skill definition](artifact/SKILL.md) <br>
+- [Compliance reference](artifact/references/compliance.md) <br>
+- [Insurance knowledge reference](artifact/references/insurance-knowledge.md) <br>
+- [Product database](artifact/references/products.json) <br>
+- [Product data validation report](artifact/references/validation_report_20260524_090219.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, JSON, Shell commands] <br>
-**Output Format:** [Chinese-language Markdown responses with structured JSON from local helper scripts when analysis, plan design, or premium calculation is requested] <br>
+**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
+**Output Format:** [Chinese Markdown responses with structured JSON from local helper scripts when invoked.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses static local product data and local Python scripts; recommendations and premiums should be verified with licensed providers before purchase decisions.] <br>
+**Other Properties Related to Output:** [Uses bundled static product, insurance knowledge, and compliance references; product availability, pricing, terms, and sales contacts require current independent verification.] <br>
 
 ## Skill Version(s): <br>
-1.8.402 (source: server release metadata) <br>
+1.8.410 (source: release evidence; artifact frontmatter lists 1.8.351) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

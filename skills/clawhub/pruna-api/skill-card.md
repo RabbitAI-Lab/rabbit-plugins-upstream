@@ -1,5 +1,5 @@
 ## Description: <br>
-Use before any Pruna or Replicate HTTP call -- credentials, upload/poll/download, parallel batches, and agent safety. <br>
+Use before any Pruna or Replicate HTTP call: credentials, upload/poll/download, parallel batches, and agent safety. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,42 +11,40 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to prepare Pruna and Replicate API work, including credential checks, upload and polling flows, output downloads, parallel batch guidance, and safety review before paid calls. <br>
+Developers and agents use this skill before Pruna or Replicate generation work to handle API credentials, uploads, polling, downloads, parallel batch patterns, and safety checks for paid media calls. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Using the skill can send selected images, audio, portraits, scripts, or other media to Pruna or Replicate. <br>
-Mitigation: Confirm user acknowledgement before uploads or paid predictions, and use only files the user intends to send to remote providers. <br>
-Risk: API calls can incur paid usage. <br>
-Mitigation: Check required environment variables and confirm intent before paid POST calls or generation runners. <br>
-Risk: API keys could be exposed through prompts, logs, manifests, or subagent task text. <br>
-Mitigation: Keep keys in host environment variables, never embed full keys in chat or files, and avoid distributing credentials to parallel subagents unless isolated secret injection is documented. <br>
-Risk: Downloads or generated outputs can overwrite local files. <br>
-Mitigation: Confirm output paths before writing or downloading files and avoid clobbering unrelated paths. <br>
+Risk: Local media, prompts, portraits, voices, and generated content may be sent to Pruna or Replicate services. <br>
+Mitigation: Use the skill only when remote Pruna or Replicate generation is intended, and obtain explicit user acknowledgment before uploads or paid predictions. <br>
+Risk: API credentials can be exposed if copied into chat, prompts, manifests, logs, or committed files. <br>
+Mitigation: Keep PRUNA_API_KEY and REPLICATE_API_TOKEN in environment variables or a private .env file, and never include full keys in generated text or repository files. <br>
+Risk: Paid calls and downloads can incur cost or overwrite local files. <br>
+Mitigation: Confirm required credentials, upload content, paid-call intent, and output paths before making requests or writing downloaded files. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/pruna-api) <br>
+- [Pruna API reference](references/pruna-api.md) <br>
 - [API credentials](references/api-credentials.md) <br>
 - [Agent safety](references/agent-safety.md) <br>
-- [Pruna P-API shared reference](references/pruna-api.md) <br>
+- [Replicate API reference](references/replicate-api.md) <br>
 - [Pruna models index](references/pruna-models.md) <br>
-- [Replicate API minimal reference](references/replicate-api.md) <br>
 - [Pruna Developer Portal](https://docs.api.pruna.ai/) <br>
 - [Pruna Quickstart](https://docs.api.pruna.ai/guides/quickstart) <br>
-- [Pruna available models](https://docs.api.pruna.ai/guides/models) <br>
+- [Pruna models](https://docs.api.pruna.ai/guides/models) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
 **Output Format:** [Markdown guidance with inline shell commands and API request examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include curl examples, environment variable names, polling guidance, and safety checks before paid API calls.] <br>
+**Other Properties Related to Output:** [Includes credential checks, upload/poll/download patterns, and remote API safety prompts.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill metadata) <br>
+1.0.8 (source: server evidence and frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

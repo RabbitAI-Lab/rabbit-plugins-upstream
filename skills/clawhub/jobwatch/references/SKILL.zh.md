@@ -1,23 +1,8 @@
----
-name: jobwatch
-description: "Autonomous job-market watcher for OpenClaw. On a cron schedule it monitors the career pages of companies the user has EXPLICITLY configured, judges each posting against the user's own job profile (visa / seniority / red lines) with an LLM, pushes strong matches, digests the rest daily, and archives postings into a knowledge base; it also tracks the user's application status and answers questions about their own watched jobs. PRIVACY & CAPABILITIES (see the「隐私与数据流」section): this skill collects and stores a personal job-seeking profile (resume text, visa needs, seniority, red lines); sends watched URLs and job-description text to third-party services (Firecrawl / Jina scrapers, an OpenAI-compatible LLM endpoint, and a 2brain knowledge base); reads host OpenClaw / Telegram credentials only when the user opts in (JOBWATCH_ALLOW_HOST_CREDS=1); and registers a recurring cron job — every autonomous action happens only after an explicit onboarding consent step. Use ONLY when the user clearly wants automated job monitoring for their own search — not on casual mention of jobs. Trigger when the user asks to set up or run job monitoring, to watch specific companies' careers pages, reports their own application update ('我投了 X'), or asks about their own watched/matched jobs. Triggers (require explicit job-monitoring intent): '设置求职监控', '求职监控', '盯岗位', 'monitor careers page', 'set up job watch', '我投了', 'jobwatch 本周岗位'."
-license: MIT
-metadata:
-  requires:
-    bins: ["python3", "git"]
-  env:
-    - FIRECRAWL_API_KEY
-    - JINA_API_KEY
-    - OPENROUTER_API_KEY
-    - LLM_API_KEY
-    - LLM_BASE_URL
-    - TWOBRAIN_UPLOAD_KEY
-    - TWOBRAIN_GRAPH_KEY
-    - TWOBRAIN_CHAT_KEY
-    - TELEGRAM_BOT_TOKEN
-    - TELEGRAM_CHAT_ID
-    - JOBWATCH_ALLOW_HOST_CREDS
----
+> **这是 `SKILL.md` 的中文版参考文档，不是第二份 skill manifest。**
+> 唯一权威的声明（name / version / metadata.openclaw / 触发词 / 环境变量）在仓库根目录的
+> `SKILL.md` frontmatter 里；本文件只提供中文说明，刻意不带 frontmatter，以免出现两份
+> 互相矛盾的声明。若本文与 `SKILL.md` 有出入，以 `SKILL.md` 为准。
+
 
 # JobWatch — 求职监控 Agent 引擎
 
@@ -52,32 +37,72 @@ openclaw skills install jobwatch
 
 这个 skill 会**采集个人隐私、调用外部服务、注册定时任务**。以下是完整清单——每一项都在 onboarding 里征得你同意后才发生，你可以拒绝任一项或全部走默认最小配置。
 
-**① 采集并本地保存的个人数据**（存在 `<workspace>/jobwatch/profile/JOB_PROFILE.md` 与 `state/`，不出本机除非你开了云知识库）：
+**代码强制，不只是文档承诺（v1.2.0 起）**：每一条携带用户数据的出网调用都先过
+`scripts/common.py` 的 `require_egress_consent()`，**没授权直接抛错**，不发。授权按目的地
+分开给——`llm` / `firecrawl` / `jina` / `twobrain` / `telegram`——来源是
+`JOBWATCH_EGRESS_ALLOW`（逗号分隔或 `all`）或入职写的 `state/egress_consent.json`。
+每个目的地在一次运行里首次使用时，会往 stderr 打一行，说明**发了什么、发去哪**，
+所以没有任何一次传输是悄悄发生的。发往公开 ATS 板（Greenhouse / Ashby / Lever）的请求
+只带公司 slug（公开信息），不走这道门，但同样会在 stderr 报出目的地。
+
+**① 采集并本地保存的个人数据**（存在 `<workspace>/jobwatch/profile/JOB_PROFILE.md` 与 `state/`）：
 - 你的简历要点、目标级别、IC/管理线意向、地域/远程要求；
 - **visa / sponsorship 需求、红线**等敏感就业信息；
 - 投递状态记录（投了/面试/offer/拒）。
-> 这些只用于判级,默认只落本地文件。想清除:删 `<workspace>/jobwatch/` 目录。
+
+> **文件在本机，内容不一定全留在本机。** 画像文件本身不作为文件上传，但**它的正文**
+> 会在两种情况下发给你配置的 LLM 端点：`judge.mode=api` 把 **`JOB_PROFILE.md` 全文**
+> （简历要点、visa 需求、级别、红线）放进 system prompt 随每条 JD 发出，开了 stage-1 筛
+> （`screen.enabled=true`）则发送同一份文件的前 ~1200 字。两条都受 `llm` 出网
+> 许可管，且在默认配置下都不发生（`judge.mode=agent` + `screen.enabled=false`，判级在
+> 宿主 agent 里做，没有任何画像内容经本 skill 出网）。另外开云知识库
+> （`kb.backend=twobrain`）会上传归档 JD 和你的提问。想全清除：删 `<workspace>/jobwatch/` 目录。
 
 **② 发往第三方的数据**（仅针对你显式配置的目标公司/信源）：
 | 外部服务 | 收到什么 | 何时 | 可否关掉 |
 |---|---|---|---|
 | Greenhouse / Ashby / Lever 官方 API | 你选的公司 slug（公开信息） | 每轮 cron | 是（换信源） |
+| 同上三个 ATS，仅入职时 | 从你报的公司名**猜**出来的 slug（`discover_board.py`） | 每加一家公司跑一次，不上定时 | 是（跳过探测，自己贴 board slug） |
 | Firecrawl `api.firecrawl.dev` / Jina `r.jina.ai` | 你监控的 JD 页 **URL** | 抓取 JD 时 | 是（不配 key 走降级/不抓） |
-| 你配置的 LLM 端点（OpenAI 兼容） | **JD 全文 + 你画像派生的判级标准** | 判级时 | 是（可指定自建/本地端点） |
+| 你配置的 LLM 端点（OpenAI 兼容） | **JD 全文 + `JOB_PROFILE.md` 全文**（stage-1 筛发前 ~1200 字） | 判级时 | 是（默认 agent 模式不发；或指自建/本地端点） |
 | 2brain 知识库 `test/portal.2brain.ai` | 归档的 JD 文档、你的提问 | 入库/问答时 | 是（默认本地知识库，不发云） |
 | Telegram `api.telegram.org` | 推送消息内容 | 通知时 | 是（默认发当前对话渠道，不用 TG） |
 
-**③ 凭证读取（默认最小权限）**：脚本**默认只读** `HOME/.env` 里**你自己填的** key。
-为省事复用 OpenClaw 已存的 OpenRouter key、或复用 openclaw.json 里的 Telegram 配置，
-**默认关闭**；只有你显式设 `JOBWATCH_ALLOW_HOST_CREDS=1` 时才会去读宿主的 auth store。
-不开这个开关，skill 绝不碰 skill 目录之外的密钥。
+**③ 凭证读取（默认最小权限）**：脚本**默认只读** `HOME/.env` 里**你自己填的** key，
+且只读 SKILL.md `metadata.openclaw.envVars` 声明过的那些变量名。key 值不会被打印、
+写盘或转发，只作为对应服务的 `Authorization` 头发出去。
+
+为省事复用宿主凭证**默认关闭**，而且**按单把凭证授权**：在
+`JOBWATCH_ALLOW_HOST_CREDS` 里点名你真正要的那一把——`openrouter`（OpenClaw 存的
+OpenRouter key，auth store 只读打开，不读其它 profile）、`telegram_token`
+（`openclaw.json` 里的 bot token）、`telegram_chat`（allowFrom 名单），逗号分隔；
+给了一把不等于给了另外两把（旧写法 `1` 仍等于全给，向后兼容）。可读的**就这三样**，
+没有别的。不点名对应函数直接返回 None 或抛错，skill 绝不碰自己目录之外的密钥。
+**开了也不是静默的**：每读一样都会往 stderr 打一行指名读了哪一把。
+
+建议：给这个 skill 单独申请权限最小、可单独吊销的 key，别把主账号总 key 丢进来；
+不需要宿主凭证就别设 `JOBWATCH_ALLOW_HOST_CREDS`。
+
+**凭证与端点绑定（v1.2.1 起代码强制，`common.py:credential_for_endpoint`）**：判级和
+stage-1 筛都能指向任意 OpenAI 兼容端点，所以「给 A 家用的 key 绝不能发给 B 家」这条
+写进了代码：
+- `LLM_API_KEY` 是你为 `LLM_BASE_URL` / `judge.base_url` 配的，发给那个端点。
+- `OPENROUTER_API_KEY` 和宿主 OpenClaw 的 OpenRouter key **只发给 `openrouter.ai`**。
+  把 `LLM_BASE_URL` 指到别处又没配 `LLM_API_KEY`，就**不带任何凭证**发出去，并在
+  stderr 说明——不会拿你的 OpenRouter key 顶上。
+- `screen.base_url` 覆盖后就是**另一个端点**，不继承 judge 的 key：要凭证配
+  `SCREEN_LLM_API_KEY`，指向本地模型则不需要。screen 和 judge 解析到同一个 host 时
+  才会复用同一把 key。
+- 回环地址 / `.local` 端点永远不会收到云端凭证。
 
 **④ 自主行为（cron）**：注册定时任务(周期抓取+判级+通知)是**写操作**,
 只有你在 onboarding 里明确同意后才跑 `setup_cron.py`;上岗后每天会抓取信源、
 持续发通知——这个"持续足迹"你要知情。随时可停:关掉对应 cron job。
 
-**⑤ 只读边界**:skill 目录本身只读;不代替你投递;除入库/摘要/告警外不主动发消息;
-不修改 openclaw.json / cron 之外的任何基础设施配置。
+**⑤ 只读边界**：skill 目录本身只读；不代替你投递；除入库/摘要/告警外不主动发消息。
+数据目录之外**只写一个文件**：`~/.openclaw/cron/jobs.json`（且仅在你同意注册定时任务时，
+先备份再追加三条 `jobwatch-*`，不动你已有的 job）。**`openclaw.json` 不改**，
+其它基础设施配置一律不碰。
 
 ---
 
@@ -114,6 +139,15 @@ runs/、kb_local/）。skill 目录本身保持只读。以下所有命令都从
      没有则用免 key 降级通道
    主人选了非默认项 → 写 config.json 对应字段，并告诉 TA 在 HOME/.env 里要填哪几行
    （参考 skill 目录 env.example），等 TA 填完再继续。
+
+   **凭证与出网，按最小权限办（代码强制，不是文档约定；完整说明见上面的隐私与数据流）：**
+   - 只让主人填**当前选项真正需要的那几个** key，别让 TA 把 env.example 一次填满；
+     每把建议单独申请、可单独吊销，不要复用主账号总 key。
+   - **默认不碰宿主凭证**，要用得在 `JOBWATCH_ALLOW_HOST_CREDS` 里点名，且**只点当前
+     功能需要的那一把**，别用 `1` 一次全给。别替主人设这个变量，也别写进 .env。
+   - **出网要单独授权**：`JOBWATCH_EGRESS_ALLOW`，或把主人同意的目的地写进
+     `HOME/state/egress_consent.json` 的 `granted`。写之前先把「哪个目的地会收到什么」
+     念给主人听并拿到明确同意。没授权就抛错是设计如此，**不要用 try/except 绕过去**。
 
 然后动手（主人不写任何文件）：
 
@@ -178,9 +212,14 @@ digest 唤醒（jobwatch-digest）：跑 `python3 scripts/daily_digest.py` 再�
 - `sources[]`: kind ∈ greenhouse|ashby|lever|gcareers|rss
 - `judge.mode`: `agent`（默认）| `api`（OpenAI 兼容端点，.env 配 LLM_API_KEY /
   LLM_BASE_URL，更快更稳）
-- `notify.mode`: `agent`（默认，outbox 播报）| `telegram`（直连，低延迟，自动复用
-  OpenClaw 的 bot 配置）
+- `notify.mode`: `agent`（默认，outbox 播报）| `telegram`（直连，低延迟；.env 配
+  `TELEGRAM_BOT_TOKEN` / `TELEGRAM_CHAT_ID`）
 - `kb.backend`: `local`（默认）| `twobrain`（.env 配 TWOBRAIN_*）
+
+> 以上每个非默认项都会打开一条出网通道，因而都要拿到对应的出网许可。各自**发什么、
+> 发给谁、用哪把凭证**，上面的**隐私与数据流**一节已经完整写过一次，这里刻意不重复——
+> 只留一处描述，才只有一处需要维护为真。
+
 - `prefilter`: 标题关键词硬过滤（stage-0，免费确定性），改完下轮生效
 - `screen`: **stage-1 标题筛（默认关闭）**。开 `enabled:true` 后，抓 JD 前先用 LLM
   对 title 批量打分(0-10)，低于 `threshold`(默认4) 直接淘汰——省 Firecrawl 抓取 +

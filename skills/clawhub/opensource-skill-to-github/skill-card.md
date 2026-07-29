@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps developers open-source local agent skills to GitHub and optionally ClawHub by guiding copy creation, stripping checks, metadata normalization, licensing, git setup, push, and publishing steps. <br>
+Quickly open-source a local skill to GitHub and optionally ClawHub by guiding slug checks, copy-based cleanup, metadata normalization, license and README generation, git setup, push, and optional publishing. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to prepare a local agent skill for public release, including creating a separate open-source copy, checking for internal or sensitive content, generating public-facing files, initializing git, and publishing to GitHub or supported skill hubs. <br>
+Developers and skill maintainers use this agent skill to prepare a local skill for public release through a guided, copy-based workflow. It helps coordinate cleanup, documentation, license selection, git initialization, GitHub push, and optional ClawHub publication. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Credential handling is part of the publishing workflow and may be broader than expected. <br>
-Mitigation: Use short-lived or least-privilege tokens, prefer gh auth token or a keychain over plaintext OSG_GITHUB_TOKEN, and revoke temporary tokens after use. <br>
-Risk: Automatic cleanup and exclusion behavior may remove or omit files before publishing. <br>
-Mitigation: Review the generated fork, inspect any .osg-exclude file, and check the commit before pushing or publishing. <br>
-Risk: Suggested memory notes could accidentally capture sensitive internal details. <br>
-Mitigation: Avoid writing secrets, internal hosts, private paths, or sensitive organizational context into memory notes. <br>
+Risk: The workflow handles GitHub and hub publishing credentials and can read tokens from environment variables, a profile file, a shell command, or the GitHub CLI. <br>
+Mitigation: Prefer a trusted keychain command or GitHub CLI token source, avoid storing personal access tokens in profile files, and revoke any temporary token after use. <br>
+Risk: The skill writes persistent local profile data for author and credential-source configuration. <br>
+Mitigation: Review the profile path and contents before use, keep profile permissions restricted, and avoid placing secrets directly in the profile. <br>
+Risk: Cleanup and exclude behavior can remove files from the copied fork before publication. <br>
+Mitigation: Run the workflow only on copied forks, inspect any .osg-exclude file and scan report, and review generated changes before pushing or publishing. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/songhonglei/skills/opensource-skill-to-github) <br>
-- [Open-Sourcing a Skill - Full Playbook](references/opensource_playbook.md) <br>
-- [11-rule stripping checklist](references/strip_checklist.md) <br>
+- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/opensource-skill-to-github) <br>
+- [Open-source playbook](references/opensource_playbook.md) <br>
+- [Strip checklist](references/strip_checklist.md) <br>
 - [UGLIC quick reference](references/uglic_quickref.md) <br>
 - [README template](references/readme_template.md) <br>
+- [Precedents](references/precedents.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Code] <br>
-**Output Format:** [Markdown with inline bash code blocks and script-driven file changes] <br>
+**Output Type(s):** [guidance, shell commands, configuration, markdown, code] <br>
+**Output Format:** [Markdown guidance with inline shell commands and generated or modified project files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes decision checkpoints for license choice, slug conflicts, sensitive-content findings, and token handling.] <br>
+**Other Properties Related to Output:** [Requires user confirmation at publishing, license, cleanup, credential, and slug decision points.] <br>
 
 ## Skill Version(s): <br>
-1.0.13 (source: server release metadata and SKILL.md, released 2026-07-22 in CHANGELOG.md) <br>
+1.0.14 (source: server release evidence and artifact SKILL.md) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

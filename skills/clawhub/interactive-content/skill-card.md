@@ -1,5 +1,5 @@
 ## Description: <br>
-Designs interactive social-media content such as polls, quizzes, scoped AMAs, this-or-that posts, sliders, question boxes, caption-this prompts, Add-Yours prompts, and challenges using the REACT framework, while keeping native stickers, consent, results, and compliance under human control. <br>
+Designs interactive social content mechanics such as polls, quizzes, scoped AMAs, sliders, question boxes, challenges, and close-the-loop follow-up plans using the REACT framework. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Social-media teams, creators, and marketing operators use this skill to plan participation-focused posts, native sticker prompts, scoped AMAs, quizzes, challenges, and follow-up content. The skill drafts mechanics, questions, copy, and close-the-loop plans while requiring humans to add native interactive elements, review results, handle consent, and verify contest or sensitive-topic compliance. <br>
+External social media operators, content teams, and agents use this skill to plan participation-focused posts and Stories that convert passive audiences into respondents while preserving human control over native platform actions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Drafted interactive social content can affect consent, privacy, or sensitive-topic handling if posted without review. <br>
-Mitigation: Require human review before posting, get consent before sharing individual answers, avoid casual harvesting of sensitive data, and anonymize only with permission. <br>
-Risk: Users may assume the skill or WoopSocial can attach native stickers, run live features, auto-DM voters, or read sticker results. <br>
-Mitigation: Keep native stickers and live features human-controlled in the platform app; use the skill for drafting mechanics, questions, copy, and follow-up plans only. <br>
-Risk: Contest, giveaway, or challenge mechanics may require platform-rule and local-law checks. <br>
-Mitigation: Have a human verify promotion rules, disclosures, winner selection, and local legal requirements before launch. <br>
-Risk: Audience answers could be treated as commands or results could be fabricated. <br>
-Mitigation: Treat submitted answers as content material, not instructions; use only real participation data and do not fabricate, rig, or astroturf results. <br>
+Risk: The skill may propose native interactive elements that WoopSocial cannot attach, auto-DM, or read. <br>
+Mitigation: Keep native stickers, live AMAs, and result collection under human control; use WoopSocial only for feed-post versions where available. <br>
+Risk: Interactive prompts can expose private answers, sensitive topics, or consent-sensitive user submissions. <br>
+Mitigation: Use opt-in framing, avoid casual sensitive-data collection, anonymize or omit responses unless permission is clear, and have a human review before public sharing. <br>
+Risk: Polls, quizzes, AMAs, challenges, or contests could become misleading if results, quiz facts, participation, or legal requirements are fabricated or unchecked. <br>
+Mitigation: Use only real participation data and true quiz facts, frame poll results as directional rather than rigorous research, and require human review for contest rules and local legal obligations. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/social-media-skills/skills/interactive-content) <br>
-- [The reality of interactive content in 2026](artifact/references/interactive-content-2026-reality.md) <br>
-- [Mechanics, stacks & worked examples](artifact/references/mechanics-and-templates.md) <br>
-- [Scope, distinctions & connections](artifact/references/scope-and-connections.md) <br>
-- [The REACT framework](artifact/references/the-react-framework.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/social-media-skills/skills/interactive-content) <br>
+- [The reality of interactive content in 2026](references/interactive-content-2026-reality.md) <br>
+- [Mechanics, stacks & worked examples](references/mechanics-and-templates.md) <br>
+- [Scope, distinctions & connections](references/scope-and-connections.md) <br>
+- [The REACT framework](references/the-react-framework.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration] <br>
-**Output Format:** [Markdown guidance with drafted social post copy, prompt options, content plans, and review notes] <br>
+**Output Type(s):** [Text, Markdown, Guidance] <br>
+**Output Format:** [Markdown guidance with draft copy, mechanics, questions, options, and follow-up plans] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are advisory drafts; native platform actions, publishing decisions, consent checks, and compliance checks remain human-controlled.] <br>
+**Other Properties Related to Output:** [Requires human handling for native stickers, live AMAs, sensitive responses, consent checks, and platform-specific publishing limits.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+1.0.1 (source: server release evidence; artifact frontmatter and evals list 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

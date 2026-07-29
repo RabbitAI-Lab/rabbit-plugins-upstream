@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps users assess Chinese tax-incentive eligibility, run qualification self-checks, and produce compliance guidance for high-tech enterprise, R&D deduction, western development, specialized-new, and related incentive scenarios. <br>
+tax-incentives is a third-party tax incentive and qualification assistant for Chinese tax policy questions, eligibility self-checks, incentive matching, and compliance risk guidance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Finance, tax, and compliance teams use this skill to triage Chinese tax-incentive eligibility, identify qualification and documentation risks, and generate self-check guidance before professional or authority review. <br>
+Use this skill to ask about high-tech enterprise qualification, R&D expense super-deduction, Western Development incentives, Specialized and Sophisticated enterprise support, VAT add-on deductions, and related tax incentive documentation or self-check workflows. It can return policy-oriented guidance, checklist-style analysis, risk warnings, calculation support, and links to a structured self-check page. <br>
 
 ### Deployment Geography for Use: <br>
-China <br>
+Intended for Chinese tax-policy and incentive scenarios. Users outside that context, or handling region-specific or time-sensitive matters, should confirm the current rules with the relevant tax authority or a qualified tax professional. <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive tax questions, scenarios, and calculation inputs may be sent to the publisher's remote service. <br>
-Mitigation: Use anonymized or aggregated facts where possible, and do not enter taxpayer identifiers, private account details, or confidential transaction data without approval. <br>
-Risk: Raw prompts and scenarios may be written to local logs. <br>
-Mitigation: Avoid submitting secrets or personal data, and periodically review or purge the local tax-policy client logs when handling sensitive matters. <br>
-Risk: The matrix installer can add related skills and may download additional packages when configured. <br>
-Mitigation: Require explicit user confirmation before installation and inspect the matrix or run a dry-run path before adding related skills. <br>
-Risk: Tax-incentive conclusions are time-sensitive and depend on facts, region, and authority interpretation. <br>
-Mitigation: Confirm material filings, qualification claims, and risk responses with the applicable tax authority or a qualified tax professional. <br>
+Risk: ClawScan marked this release suspicious because it under-discloses sensitive remote data flow to mcp.aitaxs.top, persistent credentials and logs, public-search fallback, and optional MCP client configuration changes. <br>
+Mitigation: Review the skill before installing it in environments with confidential tax, finance, or compliance data; permit the remote service, local storage, fallback search, and MCP configuration behavior only when they are acceptable and controlled. <br>
+Risk: The skill can provide tax and compliance guidance for time-sensitive or jurisdiction-specific situations. <br>
+Mitigation: Treat outputs as decision support, verify current rules against official sources, and use a qualified tax professional or tax authority for filing positions and material decisions. <br>
+Risk: Optional setup paths can modify MCP client configuration files and create local backups, credentials, cache, and logs. <br>
+Mitigation: Run setup in dry-run mode first, inspect proposed configuration changes, and control local credential and log storage on shared or regulated systems. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/zxj2devs/skills/tax-incentives) <br>
+- [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-incentives) <br>
 - [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
-- [Tax incentives web self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_incentives.html) <br>
+- [Tax incentive self-check page](https://mcp.aitaxs.top/web/topic_workflow_incentives.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, structured self-check summaries, shell command and configuration snippets, and copied prompts for deeper analysis.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use a remote MCP tax-policy service with local/offline fallback workflows; users should treat generated tax guidance as preliminary.] <br>
+**Output Type(s):** [text, markdown, guidance, configuration, shell commands] <br>
+**Output Format:** [Natural-language answers, markdown checklists and reports, structured risk or calculation results, web self-check links, and optional MCP client configuration snippets.] <br>
+**Output Parameters:** [User tax scenario, incentive category, qualification facts, R&D and enterprise indicators, requested calculation inputs, or self-check responses.] <br>
+**Other Properties Related to Output:** [Outputs are informational and should be reviewed for current policy accuracy before tax filing, qualification claims, or compliance decisions.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release and SKILL.md frontmatter) <br>
+3.15.4 <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

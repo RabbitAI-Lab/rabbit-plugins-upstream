@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/alibabacloud-workbench-cli",
   "slug": "alibabacloud-workbench-cli",
   "ownerHandle": null,
-  "version": "0.0.1-beta.1",
-  "updatedAt": 1783464888513,
-  "contentHash": "b824cbb6f37ea1bd2bebbf4c7b93e7a19a4f3ce270de6ca42ca85e6776afa9bc",
-  "fetchedAt": "2026-07-26T18:18:29.356Z"
+  "version": "0.0.1",
+  "updatedAt": 1785137030165,
+  "contentHash": "5cd0e4ceff1e5d89fd623036f6427b1fc650583e3f3dc4e7e988111be9a70172",
+  "fetchedAt": "2026-07-29T10:12:08.568Z"
 }

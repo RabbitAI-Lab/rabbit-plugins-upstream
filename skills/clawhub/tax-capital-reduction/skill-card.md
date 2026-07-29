@@ -1,5 +1,5 @@
 ## Description: <br>
-减资撤资（未实缴减资）个人所得税专项助手，聚焦公司减资、股东撤资退股、未实缴减资免除出资义务、定向减资（公司回购股权）、减资弥补亏损、新公司法下减资程序与税务衔接，提供不征税论证、个税测算、核定风险预警、合规方案与报告模板。 <br>
+减资撤资（未实缴减资）个人所得税专项助手，帮助 users analyze capital reduction and shareholder withdrawal tax scenarios, run self-checks, estimate personal income tax exposure, and draft compliance guidance or report templates. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,40 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and tax/compliance practitioners use this skill to assess capital reduction and shareholder withdrawal scenarios, including unpaid subscribed capital reductions, individual income tax calculations, procedural checks, risk warnings, and draft compliance reports. It also offers a structured self-check workflow and can route related tax questions to adjacent matrix skills. <br>
+Developers, tax professionals, and business users use this skill to evaluate Chinese company capital reduction, unpaid subscribed-capital reductions, shareholder withdrawals, company share repurchases, and related personal income tax risks. It provides structured compliance self-checks, policy-oriented guidance, calculations, evidence checklists, and report-style outputs for review. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Tax questions, scenarios, and self-check data may be sent to mcp.aitaxs.top. <br>
-Mitigation: Install and use the skill only when that data transfer is acceptable, and avoid entering sensitive taxpayer or company details unless the user has approved the remote service use. <br>
-Risk: The skill can create local API credentials, cache, and logs. <br>
-Mitigation: Review local credential and log handling before use, and remove generated local data if the skill is uninstalled or no longer trusted. <br>
-Risk: Client configuration may be modified if config/init_agent.py is run with setup enabled or TAX_ENABLE_AUTOSETUP is set. <br>
-Mitigation: Do not run setup-enabled configuration paths unless MCP client changes are intended; inspect the generated MCP entry before enabling it. <br>
-Risk: The full matrix installation workflow can add many related tax skills. <br>
-Mitigation: Treat matrix installation as a separate approval step and review the target skill list before installing additional packages. <br>
-Risk: Capital reduction tax guidance can be jurisdiction-specific, time-sensitive, and dependent on facts. <br>
-Mitigation: Use the skill output as decision support and confirm material filing, tax, and legal positions with current official sources or qualified professionals. <br>
+Risk: The security scan says the skill may send tax questions and self-check indicators to remote services. <br>
+Mitigation: Do not enter confidential taxpayer, company, or transaction details unless the service operator's privacy and retention terms have been reviewed and accepted. <br>
+Risk: The security scan says the skill stores API credentials and logs locally. <br>
+Mitigation: Review local storage behavior before deployment, restrict file permissions where possible, and avoid sharing logs or configuration files that may contain sensitive scenario details or credentials. <br>
+Risk: The security scan says setup behavior can alter MCP client configuration. <br>
+Mitigation: Run setup only in a controlled environment, inspect proposed configuration changes, and keep backups of existing MCP client configuration. <br>
+Risk: The security scan summary says the main skill description does not clearly disclose remote services, local key storage, local logging, and MCP configuration changes. <br>
+Mitigation: Review the full artifact and security guidance before installing, and disclose these behaviors to users who will rely on the skill. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-capital-reduction) <br>
 - [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
 - [Capital reduction self-check page](https://mcp.aitaxs.top/web/topic_workflow_capital_reduction.html) <br>
-- [Tax policy MCP service endpoint](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
-- [Related tax policy knowledge skill](https://skillhub.cn/skills/tax-policy-knowledge) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with structured self-check results, calculation summaries, report templates, and optional configuration or installation commands.] <br>
+**Output Type(s):** [text, markdown, guidance, code, shell commands, configuration] <br>
+**Output Format:** [Markdown and plain text responses with optional Python tools, MCP configuration snippets, and web self-check links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call a remote MCP service and may produce local client configuration or matrix installation steps when the user requests those workflows.] <br>
+**Other Properties Related to Output:** [Outputs may include tax-risk summaries, calculation guidance, evidence checklists, report templates, MCP setup guidance, and fallback offline workflow text.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release metadata and SKILL.md frontmatter) <br>
+3.15.4 (source: evidence.release.version and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

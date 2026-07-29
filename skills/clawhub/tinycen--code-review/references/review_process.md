@@ -4,15 +4,63 @@
 
 ---
 
+## 跳过废弃 / 旧文件与文件夹（前置过滤规则）
+
+> **原则**：代码审查应聚焦于当前活跃、维护中的代码。对于用户已明确标记为废弃、归档或遗留的文件/文件夹，应在扫描阶段直接排除，不进入后续审查流程。
+
+### 自动跳过的目录（固定命名）
+
+以下名称的目录（不区分大小写）及其内部所有内容，**自动跳过**：
+
+| 类别 | 目录名（示例） |
+|------|---------------|
+| 废弃/弃用 | `deprecated`, `deprecated_files`, `deprecated_code`, `obsolete`, `obsolete_files`, `废弃`, `废弃代码`, `弃用`, `弃用代码` |
+| 旧文件 | `old_file`, `old_files`, `old`, `old_code`, `旧文件`, `旧代码`, `旧版` |
+| 遗留代码 | `legacy`, `legacy_code`, `遗留`, `遗留代码` |
+| 归档/备份 | `archive`, `archives`, `archived`, `bak`, `backup`, `backups`, `归档`, `备份`, `备份文件` |
+
+### 用户自定义跳过标记
+
+用户可在仓库根目录或任意子目录下放置以下标记文件，以声明该目录内需要跳过的文件或子目录：
+
+- **标记文件名**：`.code_review_ignore` 或 `.cr_skip`
+- **格式**：每行一个条目（相对于标记文件所在目录的路径），支持 `*` 通配符。以 `#` 开头的行为注释。
+- **示例**（`.code_review_ignore`）：
+  ```
+  # 以下文件/目录不参与代码审查
+  old_impl.py
+  temp/
+  *.draft.js
+  deprecated_modules/
+  ```
+
+### 自动跳过的文件（固定命名前缀）
+
+文件名以以下前缀开头（不区分大小写）的文件，**自动跳过**：
+- `deprecated_`
+- `old_`
+- `legacy_`
+- `obsolete_`
+- `archive_`
+- `bak_`
+
+### 过滤执行规则
+
+- 过滤操作在**代码扫描阶段之前**执行，被过滤掉的文件/目录不进入统计、不进入问题检测、不写入报告。
+- 若因过滤导致某检查维度无文件可审（如所有 Python 文件均在废弃目录中），直接跳过该维度，不报错。
+- 审查报告头部统计信息中，**不体现**被过滤文件的数量（仅统计实际参与审查的文件）。
+
+---
+
 ## 审查流程
 
 ### 整体流程
 
 ```
 1. 代码扫描
-   ├── 文件结构分析
-   ├── 依赖关系分析
-   └── 代码统计
+   ├── 文件结构分析（过滤后）
+   ├── 依赖关系分析（过滤后）
+   └── 代码统计（过滤后）
 
 2. 问题检测
    ├── 命名规范检查
@@ -157,7 +205,7 @@
 
 ### 5. 依赖管理检查（PyPI 项目）
 
-> 详见 [language_checks/python_dependency.md](language_checks/python_dependency.md)
+> 详见 [language_checks/python_pypi_packaging.md](language_checks/python_pypi_packaging.md)
 
 ### 6. 类型与弃用检查（Python 项目）
 
@@ -278,29 +326,55 @@
 
 ## 审查执行步骤
 
+### 步骤 0：废弃/旧文件过滤（前置）
+
+在执行代码扫描前，先识别并排除用户标注的废弃/旧文件与文件夹。
+
+```bash
+# 生成排除参数（废弃目录固定命名 + 用户标记文件）
+SKIP_DIRS=(deprecated deprecated_files deprecated_code obsolete obsolete_files old_file old_files old old_code legacy legacy_code archive archives archived bak backup backups 废弃 废弃代码 弃用 弃用代码 旧文件 旧代码 旧版 遗留 遗留代码 归档 备份 备份文件)
+SKIP_ARGS=""
+for d in "${SKIP_DIRS[@]}"; do
+  SKIP_ARGS="$SKIP_ARGS -not -path '*/$d/*'"
+done
+
+# 读取用户标记文件并追加排除（.code_review_ignore / .cr_skip）
+# 标记文件格式：每行一个相对路径，支持 * 通配符，# 开头为注释
+while IFS= read -r line; do
+  [[ "$line" =~ ^#.*$ ]] && continue
+  [[ -z "$line" ]] && continue
+  SKIP_ARGS="$SKIP_ARGS -not -path '*/$line'"
+done < <(find <仓库路径> -maxdepth 2 \( -name ".code_review_ignore" -o -name ".cr_skip" \) -type f -exec cat {} + 2>/dev/null)
+
+# 标记文件本身也不参与审查
+SKIP_ARGS="$SKIP_ARGS -not -name '.code_review_ignore' -not -name '.cr_skip'"
+```
+
+> **说明**：`SKIP_ARGS` 变量需在后续所有 `find` 命令中原样展开使用，以统一排除废弃内容。若仓库无废弃目录/标记文件，该变量为空，不影响正常扫描。
+
 ### 步骤 1：代码扫描
 
 ```bash
 # 统计代码行数（支持多种语言）
-find <仓库路径> \( -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.java" -o -name "*.go" -o -name "*.rs" \) -type f | xargs wc -l
+find <仓库路径> $SKIP_ARGS \( -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.java" -o -name "*.go" -o -name "*.rs" \) -type f | xargs wc -l
 
 # 查找配置文件
-find <仓库路径> \( -name "requirements*.txt" -o -name "setup.py" -o -name "pyproject.toml" -o -name "setup.cfg" -o -name "Pipfile" \) -type f
+find <仓库路径> $SKIP_ARGS \( -name "requirements*.txt" -o -name "setup.py" -o -name "pyproject.toml" -o -name "setup.cfg" -o -name "Pipfile" \) -type f
 
 # 查找 YAML/YML 配置文件
-find <仓库路径> \( -name "*.yaml" -o -name "*.yml" \) -type f
+find <仓库路径> $SKIP_ARGS \( -name "*.yaml" -o -name "*.yml" \) -type f
 
 # 查找 JSON 配置文件
-find <仓库路径> -name "*.json" -type f | grep -v node_modules | grep -v __pycache__ | grep -v .git
+find <仓库路径> $SKIP_ARGS -name "*.json" -type f | grep -v node_modules | grep -v __pycache__ | grep -v .git
 
 # 查找 TOML 配置文件
-find <仓库路径> -name "*.toml" -type f
+find <仓库路径> $SKIP_ARGS -name "*.toml" -type f
 
 # 查找环境配置文件
-find <仓库路径> -name ".env*" -type f
+find <仓库路径> $SKIP_ARGS -name ".env*" -type f
 
 # 查找 Dockerfile 和 docker-compose
-find <仓库路径> \( -name "Dockerfile*" -o -name "docker-compose*" \) -type f
+find <仓库路径> $SKIP_ARGS \( -name "Dockerfile*" -o -name "docker-compose*" \) -type f
 ```
 
 ### 步骤 2：问题检测

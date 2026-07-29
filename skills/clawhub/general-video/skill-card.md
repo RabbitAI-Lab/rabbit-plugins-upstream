@@ -1,5 +1,5 @@
 ## Description: <br>
-Author or edit custom HyperFrames video compositions for longer or multi-scene pieces, brand and sizzle reels, montages, static loops, static title cards, footage remixes, and freeform builds when no specialized workflow fits. <br>
+General Video guides an agent through creating or editing custom HyperFrames video compositions when no specialized workflow fits. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and creative operators use this skill to plan, build, verify, and optionally render HyperFrames video projects from a brief or existing project state. It is suited to custom video compositions that need staged assets, design adherence, motion planning, review gates, and project-scoped file generation. <br>
+Developers and creative operators use this skill to plan, build, validate, preview, and optionally render custom HyperFrames video projects, including multi-scene compositions, brand reels, sizzle reels, montages, title cards, footage remixes, and companion-guided edits. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The workflow can run disclosed HyperFrames CLI commands and create or modify project files. <br>
-Mitigation: Review the planned commands and generated files before execution, and keep work scoped to the intended HyperFrames project directory. <br>
-Risk: Provider sign-in, billing, or render approval may be required for some media and rendering steps. <br>
-Mitigation: Confirm authentication status, billing impact, and render approval before provider actions or final rendering. <br>
-Risk: Larger videos may delegate scene work to scoped workers that generate composition HTML and motion sidecars. <br>
-Mitigation: Use the generated frame packets as bounded inputs and verify all scene files, motion JSON, and final HyperFrames checks before rendering. <br>
+Risk: Authenticated media providers or render actions can trigger paid or external operations. <br>
+Mitigation: Run the documented authentication status check, review provider sign-in output, and require render approval before paid or external actions. <br>
+Risk: Generated video compositions can diverge from project scope, brand truth, or user-approved assets. <br>
+Mitigation: Follow the skill's brief, storyboard, design-truth, validation, and final preview gates before rendering. <br>
+Risk: Large multi-scene builds can introduce scene-boundary or motion-ledger errors. <br>
+Mitigation: Use the frame-packet workflow only when justified by scale, collect composition and motion sidecar outputs, run HyperFrames checks, and inspect multi-scene previews or animation maps. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/general-video) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/heygen-com) <br>
+- [General Video on ClawHub](https://clawhub.ai/heygen-com/skills/general-video) <br>
+- [Publisher profile: heygen-com](https://clawhub.ai/user/heygen-com) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and project files such as BRIEF.md, STORYBOARD.md, HTML compositions, and motion JSON sidecars] <br>
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with shell commands and generated HyperFrames project files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create project-scoped HyperFrames files and bounded frame-packet files for delegated scene work.] <br>
+**Other Properties Related to Output:** [Produces project artifacts such as BRIEF.md, STORYBOARD.md, composition HTML, motion sidecars, validation output, preview handoff, and render guidance when approved.] <br>
 
 ## Skill Version(s): <br>
-1.0.11 (source: server release metadata) <br>
+1.0.12 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

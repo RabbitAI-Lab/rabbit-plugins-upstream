@@ -1,7 +1,7 @@
 ---
 name: inkos
-description: Story Creation and Translation AI Agent with Studio Chat, CLI, and TUI - use for long-form novels, short fiction, scripts, storyboards, interactive-film projects, open-world / branching play, fan fiction, spinoffs, style imitation, continuations, covers, and multilingual EPUB/PDF/TXT/Markdown translation. Includes runtime skills, traceable research, governed context, persistent story state, multi-model routing, image services, and InkOS Studio.
-version: 2.7.0
+description: Story Creation and Translation AI Agent with Studio Chat, CLI, and TUI - use for long-form novels, short fiction, scripts, storyboards, interactive-film projects, open-world / branching play, fan fiction, spinoffs, style imitation, continuations, covers, and multilingual EPUB/PDF/TXT/Markdown translation. Includes Agent Skills, traceable research, governed context, persistent story state, multi-model routing, image services, and InkOS Studio.
+version: 2.8.3
 metadata: { "openclaw": { "emoji": "📖", "requires": { "bins": ["inkos", "node"], "env": ["OPENAI_API_KEY"] }, "primaryEnv": "OPENAI_API_KEY", "homepage": "https://github.com/Narcooo/inkos", "install": [{ "id": "npm", "kind": "node", "package": "@actalk/inkos", "label": "Install InkOS (npm)" }] } }
 ---
 
@@ -15,10 +15,11 @@ Long-form writing still uses the chapter pipeline internally:
 - **Settlement and review**: Observer / Reflector update runtime state; Auditor checks continuity and quality; Reviser handles critical issues. The default write cycle keeps automatic repair conservative and leaves unresolved issues visible for human or agent follow-up.
 
 Truth files are persisted as schema-validated JSON (`story/state/*.json`) with markdown projections for human readability. SQLite temporal memory database (`story/memory.db`) enables relevance-based retrieval on Node 22+.
+Persisted story memory is isolated to its project and book, excludes credentials and unrelated files, and is never reused across projects unless the user explicitly imports material. Users can inspect or delete the owning book/project through Studio or CLI.
 
-## v1.7.1 Mental Model
+## v1.7.2 Mental Model
 
-Treat InkOS as a confirmable action system, not a bag of prompt shortcuts. v1.7.1 adds non-canonical narrative forecasting, background production tasks that do not block discussion, retryable task state, whole-book backup / restore, and rollback-safe latest-chapter deletion.
+Treat InkOS as a confirmable action system, not a bag of prompt shortcuts. v1.7.2 replaces the former InkOS-private Skill protocol with standard AgentSkills / OpenClaw `SKILL.md` packages. Skills provide professional guidance and static references only: they can be selected explicitly or activated by the Chat Agent through `use_skill`, but they never grant execution permissions.
 
 - Natural-language requests should go through Studio Chat / TUI / `inkos interact` whenever possible.
 - Do not infer success from assistant prose. A book, short, cover, or play step is complete only when the corresponding tool result and files exist.
@@ -31,14 +32,14 @@ Treat InkOS as a confirmable action system, not a bag of prompt shortcuts. v1.7.
 - Use long-form chapter tools only for existing long-form books.
 - Use narrative forecasts when the author wants to compare possible long-form directions before writing. A forecast is non-canonical planning material: selecting a branch may write `selected-branch-plan.md`, but it must not be described as changing prose, outlines, or canonical state.
 - A running production task does not prevent ordinary discussion, but do not start another conflicting book mutation until that task reaches a terminal state.
-- Runtime skills provide professional rules, prompt packs, and context requirements. They do not grant new file, network, image, or writing permissions by themselves.
+- Agent Skills provide professional guidance and static references. They do not grant new file, network, image, or writing permissions by themselves.
 - Context is governed: protected facts and current intent should not be silently compressed away; compressible history may be summarized when the context budget is tight.
 - Studio Chat can receive user-uploaded text / Markdown / image attachments. Text attachments are injected into the LLM context; image attachments require a vision-capable model.
 - External materials can be archived and retrieved later with evidence traces instead of relying on ad hoc pasted context.
 - Prompt packs are user-tunable in Studio Project Settings. Project overrides are saved under `prompt/<pack>/<prompt>.md`; do not edit generated artifacts just to change system behavior.
 - Long-form chapter revision from Chat passes the current user instruction into the reviser as a one-off brief. If the revision is not applied, inspect the returned gate metrics and remaining audit issues before claiming it was fixed.
 
-v1.7.0 keeps the v1.6 interactive-film and runtime-skill model, then adds complete multilingual translation/localization, English-native short/script/storyboard/interactive-film paths, existing-novel import from Chat, configurable review and revision gates, abortable long tasks, recoverable write locks, material archive/retrieval, and Studio-editable prompt packs. Still surface unresolved review or execution issues plainly instead of claiming they were fixed.
+v1.7.0 added complete multilingual translation/localization, English-native short/script/storyboard/interactive-film paths, existing-novel import from Chat, configurable review and revision gates, abortable long tasks, recoverable write locks, material archive/retrieval, and Studio-editable prompt packs. v1.7.1 added non-canonical narrative forecasting, background production tasks, retryable task state, whole-book backup / restore, and rollback-safe latest-chapter deletion. Still surface unresolved review or execution issues plainly instead of claiming they were fixed.
 
 ## When to Use InkOS
 
@@ -55,7 +56,7 @@ v1.7.0 keeps the v1.6 interactive-film and runtime-skill model, then adds comple
 - **Interactive-film projects**: Create playable branch graphs, variables/flags, relationship state, endings, node images, and exportable interactive project packages
 - **Scripts and storyboards**: Convert ideas, outlines, or prose into script/storyboard deliverables while preserving user format choices
 - **Long-document translation**: Translate EPUB, text-based PDF, TXT, or Markdown by chapter and semantic segment, maintain terminology, review source and target side by side, and export TXT/Markdown/EPUB
-- **Runtime skills**: Load built-in or project-local skills, allow Chat to auto-select them, or force a skill with `@skill-id`
+- **Agent Skills**: Load standard AgentSkills/OpenClaw or project-local `SKILL.md` packages; let the Chat Agent invoke them from user intent, or force one with `@skill-id`
 - **Traceable web research**: Create sourced Markdown reports for facts, era/profession details, markets, and worldbuilding references
 - **Quality auditing**: Detect AI-generated content and perform 33-dimension quality checks
 - **Genre exploration**: Explore trends and create custom genre rules
@@ -304,7 +305,7 @@ If you need separate control over each pipeline stage:
    ```bash
    inkos revise book-id chapter-1 --mode polish --json
    ```
-   - Modes: `polish` (minor), `spot-fix` (targeted), `rewrite` (major), `rework` (structure), `anti-detect` (reduce AI traces)
+   - Modes documented for agent use: `polish` (minor), `spot-fix` (targeted), `rewrite` (major), and `rework` (structure)
 
 ### Workflow 7: Monitor Platform Trends
 
@@ -456,15 +457,17 @@ For tool-using agents:
 - If the user changes world rules, persona, visual contract, or character behavior, treat it as a world-state edit or a new instruction for the next step, not as long-form chapter writing.
 - If image generation is configured, let Play generate scene / character / item / evidence images through the Play image path. Do not call the short-fiction cover tool for Play scene images.
 
-### Workflow 18: Runtime Skills
+### Workflow 18: Agent Skills
 
 Use this when the user wants reusable professional rules, a domain-specific writing mode, or a forced capability for the current Chat turn.
 
 Project-local skills live at:
 
 ```text
-.inkos/skills/<skill-id>/SKILL.md
+.agents/skills/<skill-id>/SKILL.md
 ```
+
+InkOS also discovers standard AgentSkills / OpenClaw locations (`skills/`, `.agents/skills/`, `~/.agents/skills/`, and `~/.openclaw/skills/`). Studio can import a complete skill folder with its static reference files.
 
 External skill directories can be loaded with:
 
@@ -473,9 +476,10 @@ export INKOS_SKILL_DIRS=/abs/path/to/skills
 ```
 
 Guidelines for agent orchestration:
-- Let InkOS auto-select skills when the user gives a natural request such as "make this a detective evidence-chain open world".
+- Let the Chat Agent inspect the available skill catalog and call `use_skill` when the current user intent needs that expertise. Do not emulate this with session-kind routing, keyword lists, or substring matching.
 - Force a skill by including `@skill-id` in the user message when the user explicitly chooses one.
-- Treat skills as expertise packets: they can add rules, prompt packs, context needs, and retrieval guidance.
+- Treat skills as standard expertise packets containing instructions and static references. Prompt packs and governed context recipes are separate InkOS systems.
+- Skill folders may contain static references. Read them only when needed, and never auto-execute bundled scripts.
 - Do not treat skills as permissions. File edits, book creation, chapter writing, image generation, and exports still require the normal InkOS tools and confirmation gates.
 
 ### Workflow 19: Traceable Web Research
@@ -531,9 +535,9 @@ inkos translate export <project-id> --format epub
 - **Interactive-film workbench** — create and inspect branch nodes, variables/flags, endings, node images, and export packages
 - **Script / storyboard tools** — generate production-oriented script and storyboard files from ideas, prose, or reference notes
 - **Translation workbench** — import EPUB, text-based PDF, TXT, or Markdown; choose source and target languages; translate, compare, review, and export complete projects
-- **Runtime Skill management** — list built-in skills, add project-local skills, edit `.inkos/skills/<id>/SKILL.md`, and force skills from Chat
+- **Agent Skills management** — list standard skills, import AgentSkills/OpenClaw folders with static references into `.agents/skills/`, let Chat invoke skills from intent, and force skills from Chat
 - **Research search provider** — configure external web search API credentials for `research_web`
-- **Chapter review & editing** — approve/reject drafts, edit content inline, multi-mode revision (polish/spot-fix/rewrite/anti-detect)
+- **Chapter review & editing** — approve/reject drafts, edit content inline, and revise with polish/spot-fix/rewrite/rework modes
 - **Real-time writing progress** — SSE-based live updates during chapter generation
 - **Market radar** — AI-powered trend analysis with platform/genre recommendations
 - **Analytics** — word count, audit pass rate, chapter ranking, token usage
@@ -698,7 +702,7 @@ inkos genre copy xuanhuan
 | `inkos write next` | Full pipeline (draft→audit→revise) | Primary workflow command |
 | `inkos draft` | Generate draft only | No auditing/revision |
 | `inkos audit` | 33-dimension quality check | Standalone evaluation |
-| `inkos revise` | Revise chapter | Modes: polish/spot-fix/rewrite/rework/anti-detect |
+| `inkos revise` | Revise chapter | Modes documented for agent use: polish/spot-fix/rewrite/rework |
 | `inkos agent` | Natural language interface | Flexible requests |
 | `inkos style analyze` | Analyze reference text | Extracts style profile |
 | `inkos style import` | Apply style to book | Makes style permanent |
@@ -713,7 +717,6 @@ inkos genre copy xuanhuan
 | `inkos config set-model <agent> <model>` | Set model override for a specific agent | `--provider`, `--base-url`, `--api-key-env` for multi-provider routing |
 | `inkos config show-models` | Show current model routing | View per-agent model assignments |
 | `inkos doctor` | Diagnose issues | Check installation |
-| `inkos update` | Update to latest version | Self-update |
 | `inkos up/down` | Daemon mode | Background processing. Logs to `inkos.log` (JSON Lines). `-q` for quiet mode |
 | `inkos review list/approve-all` | Manage chapter approvals | Quality gate |
 | `inkos fanfic init` | Create fanfic from source material | `--from <file>`, `--mode canon/au/ooc/cp` |
@@ -788,11 +791,12 @@ inkos down
 
 - **License**: the ClawHub skill descriptor is MIT-0 per platform policy, but the underlying `@actalk/inkos`, `@actalk/inkos-core`, and `@actalk/inkos-studio` npm packages are **AGPL-3.0-only**. Running InkOS and distributing modified versions are governed by AGPL. Full source on GitHub for auditability.
 - **No install hooks**: npm package has no `preinstall`/`postinstall`/`install` scripts. Install is inert.
-- **Local-only file I/O**: all read/write stays inside the project directory (`books/*`, `inkos.json`, `inkos.log`). No writes outside the working directory.
-- **No telemetry**: InkOS does not phone home, collect usage stats, or ship any data to InkOS-controlled servers. The only outbound traffic is to the LLM provider endpoint you explicitly configure.
-- **Credential handling**: prefer Studio service settings or `--api-key-env <VAR_NAME>` over literal keys. Studio stores service secrets in project-local `.inkos/secrets.json`; CLI env settings live in `~/.inkos/.env` or project `.env`. Treat all of these as secrets and keep them out of commits.
+- **Documented file locations**: manuscripts, story state, logs, imported Skills, and project secrets stay under the selected project directory. Optional global CLI configuration may be stored under `~/.inkos/`; user-level Skills may be read from `~/.agents/skills/` and `~/.openclaw/skills/`.
+- **Project-isolated retention**: each project's manuscripts, state, and memory remain in that project until the user deletes the book or project. Do not reuse one project's persisted memory in another project unless the user explicitly imports that material.
+- **No InkOS telemetry**: InkOS does not send usage analytics to an InkOS-controlled service. Content can leave the machine when the user invokes a configured LLM, image, web-search, aggregator, or custom provider; review each provider's endpoint and data policy before enabling it.
+- **Credential handling**: prefer Studio secret settings or environment-backed API keys over literal values. Agents and imported Skills must never read, print, summarize, or transmit credentials; secret stores must stay outside prompts, exports, archives, and commits.
 - **Custom provider base-URL**: `--provider custom` forwards your API key to whatever URL you specify. Only point it at endpoints you trust (your own proxy or an audited reverse-proxy). Never paste an untrusted `--base-url`.
-- **No elevated privileges**: InkOS requires no sudo, no global state mutation, no network listening port (Studio binds `localhost:4567` only).
+- **Local services**: InkOS requires no sudo. Studio opens a localhost listener on port `4567` by default (or the port selected by the user), and daemon mode runs only when explicitly started.
 
 ## Support & Resources
 

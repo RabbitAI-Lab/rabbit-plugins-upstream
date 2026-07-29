@@ -1,5 +1,5 @@
 ## Description: <br>
-Download JRC Global Surface Water data layers including occurrence, change, seasonality, recurrence, transition, and extent from Landsat-derived 30m surface-water data. <br>
+Downloads JRC Global Surface Water raster layers such as occurrence, change, seasonality, recurrence, transition, and extent for a supplied bounding box or resolved place. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,35 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers, GIS analysts, and geospatial workflows use this skill to download JRC Global Surface Water GeoTIFF layers for a bounding box or resolved place and inspect available layers or dataset metadata. <br>
+Developers, analysts, and GIS practitioners use this skill to download public JRC Global Surface Water GeoTIFF layers for an area of interest and prepare them for local geospatial analysis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Using the optional place-name lookup can send sensitive place names or areas of interest to geocoding services and cache them locally. <br>
-Mitigation: Prefer explicit --bbox coordinates for sensitive work, avoid --place for confidential locations, and clear ~/.geoskill_core_cache after use. <br>
-Risk: Dependency or installation choices can affect the security posture of a local download workflow. <br>
-Mitigation: Install with reviewed and pinned dependency versions before using the skill in managed environments. <br>
+Risk: The security review flags bundled credential defaults that need attention before installation. <br>
+Mitigation: Remove or neutralize bundled credential defaults and rely on user-provided environment variables, .netrc, or a local secrets file. <br>
+Risk: Place-name lookup can send sensitive location queries to third-party geocoding services and keep local cache data. <br>
+Mitigation: Use explicit --bbox for sensitive areas, use --no-nominatim when appropriate, and clear ~/.geoskill_core_cache when place queries should not persist. <br>
+Risk: Dependencies are not pinned, which can make installs less reproducible. <br>
+Mitigation: Pin dependency versions before production use and review updates during maintenance. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/global-surface-water) <br>
 - [JRC Global Surface Water Explorer](https://global-surface-water.appspot.com/) <br>
-- [Google Earth Engine Dataset: JRC/GSW1_4/GlobalSurfaceWater](https://developers.google.com/earth-engine/datasets/catalog/JRC_GSW1_4_GlobalSurfaceWater) <br>
-- [Pekel et al. 2016, Nature](https://doi.org/10.1038/nature20584) <br>
+- [Google Earth Engine dataset catalog: JRC/GSW1_4/GlobalSurfaceWater](https://developers.google.com/earth-engine/datasets/catalog/JRC_GSW1_4_GlobalSurfaceWater) <br>
+- [Pekel et al. 2016 Nature article](https://doi.org/10.1038/nature20584) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; downloaded GeoTIFF files and optional JSON QA summaries] <br>
+**Output Type(s):** [shell commands, code, configuration, guidance] <br>
+**Output Format:** [Markdown instructions with command-line examples and generated GeoTIFF or JSON QA files when the bundled script is run] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on the requested layer, bbox or place, dataset version, and tile coverage.] <br>
+**Other Properties Related to Output:** [Supports layer selection, bounding boxes, place lookup, output paths, dataset version, and optional QA summary output.] <br>
 
 ## Skill Version(s): <br>
-0.3.0 (source: server release evidence) <br>
+0.3.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Use when crafting still-image prompts for any generative model — composition, identity sheets, edits, try-on, and photoreal personas. <br>
+Use when crafting still-image prompts for any generative model - composition, identity sheets, edits, try-on, and photoreal personas. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, creators, and agents use this skill to craft and validate prompts for still-image generation, edits, character identity sheets, virtual try-on, upscaling, and photoreal or stylized persona plates. <br>
+External users and developers use this skill to craft text-to-image, image-editing, virtual try-on, upscaling, character sheet, and photoreal persona prompts for still-image generation workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompt examples and related Pruna or Replicate workflows may send prompts, image URLs, uploaded media, or scripts to third-party services. <br>
-Mitigation: Review the provider's media and script handling before use, and avoid sending confidential assets, internal URLs, or unapproved real-person images. <br>
-Risk: Example API calls use credential-bearing workflows. <br>
-Mitigation: Keep API keys in environment variables or a secrets manager, and do not paste secrets into prompts, shared logs, or generated artifacts. <br>
-Risk: Persona, avatar, and try-on examples can involve realistic depictions of people. <br>
-Mitigation: Use only images and voices with appropriate permission, and visually review generated outputs before publication or downstream reuse. <br>
+Risk: Copied install or API examples may run package installation commands or send prompts, images, or generated media references to Pruna or related services. <br>
+Mitigation: Review npx and API commands before execution, confirm the intended service interaction, and use only an API key the user has authorized for that workflow. <br>
+Risk: Image editing, try-on, and persona workflows can involve user-provided likenesses, garments, or media references. <br>
+Mitigation: Avoid sensitive or unauthorized media, confirm consent and rights for source images, and review generated outputs before downstream use. <br>
 
 
 ## Reference(s): <br>
@@ -37,16 +35,17 @@ Mitigation: Use only images and voices with appropriate permission, and visually
 - [p-image-upscale quality checklist](references/p-image-upscale-quality-checklist.md) <br>
 - [Dynamic persona and scenario showcase](references/realistic-persona-showcase.md) <br>
 - [Dynamic persona example prompts](references/realistic-persona-example-prompt.md) <br>
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/image-prompting) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with prompt templates, checklists, and example shell commands] <br>
+**Output Format:** [Markdown guidance with prompt templates, checklists, and inline shell or API examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include model-specific prompt structure, API input guidance, and visual quality review checklists.] <br>
+**Other Properties Related to Output:** [May include review steps for generated images, prompt parameters to keep outside prompt text, and API examples that require a user-provided Pruna API key.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release evidence and skill frontmatter metadata) <br>
+1.0.8 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

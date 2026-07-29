@@ -7,15 +7,15 @@
 需要 Node.js 18 或更高版本，无需安装依赖。每次以实际帮助输出为准：
 
 ```bash
-node <skill_dir>/scripts/queue.js --help
-node <skill_dir>/scripts/queue.js index <shopId>
-node <skill_dir>/scripts/queue.js take-number <shopId> --people-count <N> --table-type-id <ID> --confirm
-node <skill_dir>/scripts/queue.js order-detail <shopId>
-node <skill_dir>/scripts/queue.js order-cancel <shopId> --confirm
-node <skill_dir>/scripts/queue.js auth-start
-node <skill_dir>/scripts/queue.js auth-status
-node <skill_dir>/scripts/queue.js auth-poll --background [--qr-image-path <path>]
-node <skill_dir>/scripts/queue.js logout
+node <skill_dir>/scripts/jgy.cjs queue --help
+node <skill_dir>/scripts/jgy.cjs queue index <shopId>
+node <skill_dir>/scripts/jgy.cjs queue take-number <shopId> --people-count <N> --table-type-id <ID> --confirm
+node <skill_dir>/scripts/jgy.cjs queue order-detail <shopId>
+node <skill_dir>/scripts/jgy.cjs queue order-cancel <shopId> --confirm
+node <skill_dir>/scripts/jgy.cjs queue auth-start
+node <skill_dir>/scripts/jgy.cjs queue auth-status
+node <skill_dir>/scripts/jgy.cjs queue auth-poll --background [--qr-image-path <path>]
+node <skill_dir>/scripts/jgy.cjs queue logout
 ```
 
 **发起授权用 `auth-start`**：一条命令拿到授权链接 + 二维码 + 后台轮询，与业务命令触发的授权流程完全一致。**不要**单独跑 `auth-poll --background` 来发起授权——它只启动后台监听，不生成链接和二维码。
