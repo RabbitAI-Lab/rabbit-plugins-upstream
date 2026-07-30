@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/chatgpt-codex-onboarding",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "chatgpt-codex-onboarding",
+  "branch": "main",
+  "pushedAt": "2026-07-29T10:06:26Z",
+  "contentHash": "c7e627b438c94b2f523bff945889bff5331594a17100933d55117aaf7657bb41",
+  "fetchedAt": "2026-07-30T09:47:15.526Z"
+}

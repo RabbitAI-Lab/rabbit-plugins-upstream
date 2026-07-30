@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-abilities-audit",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-abilities-audit",
+  "branch": "trunk",
+  "pushedAt": "2026-07-27T14:44:09Z",
+  "contentHash": "cc77f33344c4b42f94b3873a81a31562370e449addcf73a8b94e100ac1111d6c",
+  "fetchedAt": "2026-07-30T09:48:30.561Z"
+}

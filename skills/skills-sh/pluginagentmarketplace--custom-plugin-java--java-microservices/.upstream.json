@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/pluginagentmarketplace/custom-plugin-java/java-microservices",
+  "repo": "pluginagentmarketplace/custom-plugin-java",
+  "skillId": "java-microservices",
+  "branch": "main",
+  "pushedAt": "2026-01-05T11:55:40Z",
+  "contentHash": "d6dc24d5249c312f3ae584301f094c5445586874bd1d75ec54bc6d47a5a472fc",
+  "fetchedAt": "2026-07-30T09:46:57.848Z"
+}

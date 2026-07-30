@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/cloud-monitoring-metric-selection",
+  "repo": "google/skills",
+  "skillId": "cloud-monitoring-metric-selection",
+  "branch": "main",
+  "pushedAt": "2026-07-29T22:17:13Z",
+  "contentHash": "ee5567785f5766f7cd115a56b55518be232ab5a42366d1999846fde005afbdd5",
+  "fetchedAt": "2026-07-30T09:47:04.618Z"
+}

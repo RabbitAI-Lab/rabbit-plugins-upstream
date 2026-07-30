@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/google-workspace",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "google-workspace",
+  "branch": "main",
+  "pushedAt": "2026-07-30T09:47:50Z",
+  "contentHash": "f1f5fd70a17f79a499511f5a6639b37ffefd23c802795829a247213b67831458",
+  "fetchedAt": "2026-07-30T09:48:33.031Z"
+}

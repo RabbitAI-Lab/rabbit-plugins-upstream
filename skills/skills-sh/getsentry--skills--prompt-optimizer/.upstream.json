@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/prompt-optimizer",
+  "repo": "getsentry/skills",
+  "skillId": "prompt-optimizer",
+  "branch": "main",
+  "pushedAt": "2026-07-27T23:23:06Z",
+  "contentHash": "e44bd344643c2fd82402b67021ad1361b0c351dff1ef13f3c350ca251d2db013",
+  "fetchedAt": "2026-07-30T09:46:54.074Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/stock-photo-finder",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "stock-photo-finder",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "248e590e87cae3f0d7f02ea4301f5f3798c6d671dd05d81ea7b79b46fae806e8",
+  "fetchedAt": "2026-07-30T09:48:18.411Z"
+}
