@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google-gemini/gemini-cli/pr-creator",
+  "repo": "google-gemini/gemini-cli",
+  "skillId": "pr-creator",
+  "branch": "main",
+  "pushedAt": "2026-07-30T01:48:05Z",
+  "contentHash": "b7490438d0caefaced40f5157bf063c35b52aeb78ebeba42a92ef53c89555c5c",
+  "fetchedAt": "2026-07-30T09:47:36.019Z"
+}

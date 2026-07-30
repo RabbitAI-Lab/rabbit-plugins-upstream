@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/connecting-to-data-source",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "connecting-to-data-source",
+  "branch": "main",
+  "pushedAt": "2026-07-30T05:05:25Z",
+  "contentHash": "d3fc3fc22712a039ef987d0815e83683edd63328dc24b07cf11e250e5e7abe89",
+  "fetchedAt": "2026-07-30T09:48:34.099Z"
+}

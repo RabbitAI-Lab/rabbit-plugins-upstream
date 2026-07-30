@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/creating-secrets-using-best-practices",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "creating-secrets-using-best-practices",
+  "branch": "main",
+  "pushedAt": "2026-07-30T05:05:25Z",
+  "contentHash": "bb34a7c99ca5f0d7776441ec1df849bf047f9fd5bf0fc1e4713595e39cc7645f",
+  "fetchedAt": "2026-07-30T09:48:34.159Z"
+}

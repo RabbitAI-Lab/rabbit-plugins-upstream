@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/agents-optimize",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "agents-optimize",
+  "branch": "main",
+  "pushedAt": "2026-07-30T05:05:25Z",
+  "contentHash": "94a99b2e8f97d512572021f72fdb5c01fa9dd9d4d01f8082366ed679eaafce0e",
+  "fetchedAt": "2026-07-30T09:48:34.565Z"
+}

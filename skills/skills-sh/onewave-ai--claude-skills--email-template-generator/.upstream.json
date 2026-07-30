@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/email-template-generator",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "email-template-generator",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "6a00ff5599dbdc1e6dd015e3ab1d05a547e4819c6f52d9b081843e04b6698332",
+  "fetchedAt": "2026-07-30T09:48:18.469Z"
+}

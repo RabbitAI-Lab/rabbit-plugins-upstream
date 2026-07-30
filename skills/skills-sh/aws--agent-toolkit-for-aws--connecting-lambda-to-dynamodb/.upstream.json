@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/connecting-lambda-to-dynamodb",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "connecting-lambda-to-dynamodb",
+  "branch": "main",
+  "pushedAt": "2026-07-30T05:05:25Z",
+  "contentHash": "a04bb0f900b8500eed42a63d2c5f133e5a199618f4d3f366a038c47c319d67b1",
+  "fetchedAt": "2026-07-30T09:48:34.183Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/claude-automation-recommender",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "claude-automation-recommender",
+  "branch": "main",
+  "pushedAt": "2026-07-30T08:08:54Z",
+  "contentHash": "945d1b7420ebb9113a25b1c2b3bf51a0822b64763a4cb116e8f19ca0b548b6c1",
+  "fetchedAt": "2026-07-30T09:46:55.946Z"
+}

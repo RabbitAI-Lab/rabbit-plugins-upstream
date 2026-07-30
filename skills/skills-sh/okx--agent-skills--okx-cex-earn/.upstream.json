@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/okx/agent-skills/okx-cex-earn",
+  "repo": "okx/agent-skills",
+  "skillId": "okx-cex-earn",
+  "branch": "github-main",
+  "pushedAt": "2026-07-22T02:35:21Z",
+  "contentHash": "5448f49a91530a1a91b1ce6ac47e5d25364577f8d7419a2efca5521f021ae84d",
+  "fetchedAt": "2026-07-30T09:47:32.024Z"
+}

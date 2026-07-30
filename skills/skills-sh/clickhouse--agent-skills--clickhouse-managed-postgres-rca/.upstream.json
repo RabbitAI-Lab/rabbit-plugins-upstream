@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/clickhouse/agent-skills/clickhouse-managed-postgres-rca",
+  "repo": "clickhouse/agent-skills",
+  "skillId": "clickhouse-managed-postgres-rca",
+  "branch": "main",
+  "pushedAt": "2026-07-27T10:55:08Z",
+  "contentHash": "dc537174f1800755e12bb6751baa5ac72e63bd0f967a4cfcee39c904195ac6b6",
+  "fetchedAt": "2026-07-30T09:47:37.967Z"
+}

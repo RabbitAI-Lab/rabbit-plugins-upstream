@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/sequential-thinking",
+  "repo": "secondsky/claude-skills",
+  "skillId": "sequential-thinking",
+  "branch": "main",
+  "pushedAt": "2026-07-25T17:35:51Z",
+  "contentHash": "24abea8c415d99969508a55317b93b8db50aadd08fce4e10e252a117f563b11a",
+  "fetchedAt": "2026-07-30T09:48:00.111Z"
+}

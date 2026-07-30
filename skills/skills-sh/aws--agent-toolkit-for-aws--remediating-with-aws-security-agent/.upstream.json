@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/remediating-with-aws-security-agent",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "remediating-with-aws-security-agent",
+  "branch": "main",
+  "pushedAt": "2026-07-30T05:05:25Z",
+  "contentHash": "2a48b10568e2aaa11c22ce57a132e0441b856159dc549dd23def060d96ff61be",
+  "fetchedAt": "2026-07-30T09:48:34.700Z"
+}
