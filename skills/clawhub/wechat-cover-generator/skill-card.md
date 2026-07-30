@@ -1,5 +1,5 @@
 ## Description: <br>
-A WeChat cover-design skill that uses RedFox trend data to analyze high-performing article covers, produce a local HTML analysis report, and generate cover design proposals with image-generation prompts. <br>
+公众号封面图制作 helps WeChat creators and content teams analyze high-performing cover patterns from RedFox data and generate cover reports, design proposals, and image-generation prompts. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-WeChat Official Account creators, content operators, media editors, and design teams use this skill to compare recent high-performing cover patterns, prepare a visual analysis report, and choose among cover design proposals before generating a 2.35:1 cover image. <br>
+External WeChat Official Account creators, content operators, MCN teams, and new media editors use this skill to research recent high-performing cover styles by keyword, produce a visual analysis report, and select one of several cover concepts for image generation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requires a RedFox API key and may expose unpublished article or reference details in debug output or generated reports. <br>
-Mitigation: Keep REDFOX_API_KEY private, avoid sharing debug output or generated reports containing sensitive details, and review generated HTML before public distribution. <br>
-Risk: Generated cover recommendations may depend on incomplete or time-limited trend data. <br>
-Mitigation: Review the report and source examples before relying on the proposals for publication or campaign decisions. <br>
+Risk: The skill sends cover-topic keywords to RedFox. <br>
+Mitigation: Avoid sensitive unpublished topics as keywords and use only a RedFox API key whose source, scope, validity, and revocation path are understood. <br>
+Risk: The skill creates a local HTML report and may open it automatically. <br>
+Mitigation: Ask the agent not to auto-open reports when path inspection is needed, and review generated report files before sharing them. <br>
+Risk: The skill depends on a RedFox API key. <br>
+Mitigation: Provide the key through environment configuration, do not hard-code or expose it in prompts, logs, code, or output files, and rotate it if exposure is suspected. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yuanyi-github/wechat-cover-generator) <br>
-- [RedFox API key settings](https://redfox.hk/settings/api-keys?source=clawhub) <br>
-- [WeChat explosive cover data format](references/gzh_trend_data_format.md) <br>
-- [Cover analysis report template](references/report_template.md) <br>
+- [ClawHub skill page](https://clawhub.ai/yuanyi-github/skills/wechat-cover-generator) <br>
+- [RedFox API key setup](https://redfox.hk/settings/api-keys?source=clawhub) <br>
+- [WeChat hot article data format](references/gzh_trend_data_format.md) <br>
+- [HTML report template data format](references/report_template.md) <br>
+- [HTML report template](references/report_template.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, HTML, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON-derived analysis, a generated local HTML report, image-generation prompts, and a final cover image after user selection.] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
+**Output Format:** [Markdown guidance with shell commands, JSON report data, local HTML report files, and image-generation prompts] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a REDFOX_API_KEY environment variable and uses RedFox trend data limited to roughly yesterday through the previous 30 days.] <br>
+**Other Properties Related to Output:** [Requires REDFOX_API_KEY; sends cover-topic keywords to redfox.hk; creates local HTML reports and may open them in a browser; asks the user to choose a proposal before image generation.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+1.0.5 (source: ClawHub release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

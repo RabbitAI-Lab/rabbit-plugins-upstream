@@ -12,6 +12,7 @@
 seedance/
 ├── SKILL.md            # 技能定义 + Agent 指引
 ├── scripts/
+│   ├── seedance        # venv 入口封装（自动创建 .venv 并运行 seedance.py）
 │   ├── seedance.py     # 同步封装脚本（仅依赖 Python 标准库）
 │   └── test_seedance.py
 ├── reference.md        # 火山方舟官方视频生成文档
@@ -24,8 +25,9 @@ seedance/
 
 ## 依赖
 
-- **Python 3.11+**。若使用 OpenAI 风格代理且其 TLS 证书链被 Python 3.14 拒绝（更严格的 CA keyUsage 校验），请用 `python3.11`；走火山方舟 Ark 原生 API 用 `python3` 即可。
-- `alibabacloud_oss_v2` —— 仅在传入**本地图片文件**（`-i`/`-f`/`-l`）时需要（会上传到阿里云 OSS 换取短时签名 URL）。安装：`pip install -r requirements.txt`。文生视频或使用在线图片 URL 不需要任何第三方依赖。
+- **Python 3.11+**。无需手动选择解释器：`scripts/seedance` 封装脚本会自动优先使用 `python3.11`/`python3.12`（部分 OpenAI 风格代理的 TLS 证书链会被 Python 3.14 以更严格的 CA keyUsage 校验拒绝），仅在这些不可用时回退到 `python3`。
+- 该封装脚本会在首次运行时于 `.venv/`（与 `SKILL.md` 同级）创建隔离虚拟环境，并自动安装 `requirements.txt`——无需手动 `pip install`。唯一的第三方依赖 `alibabacloud_oss_v2` 仅在传入**本地图片文件**（`-i`/`-f`/`-l`，上传到阿里云 OSS 换取短时签名 URL）时需要。文生视频或使用在线图片 URL 不需要任何第三方依赖。
+- 可用 `SKILL_VENV_DIR=<path>` 覆盖 venv 位置。生成的 `.venv/` 是构建产物——请加入 gitignore，切勿提交。
 
 ## 环境变量
 
@@ -58,26 +60,26 @@ seedance/
 
 ## 命令行参考
 
-也可直接运行脚本：
+也可通过 `scripts/seedance` 封装脚本直接运行，它会自建隔离 venv（解释器自动选择，见 TLS 注意事项）：
 
 ```bash
 # 文生视频（Ark，默认）
-python3 scripts/seedance.py -t "蓝天下的雏菊花田，镜头逐渐拉近"
+scripts/seedance -t "蓝天下的雏菊花田，镜头逐渐拉近"
 
 # 图生视频（本地图片 → 上传 OSS）
-python3 scripts/seedance.py -t "镜头缓缓拉出" -i ./fox.png --ratio adaptive
+scripts/seedance -t "镜头缓缓拉出" -i ./fox.png --ratio adaptive
 
 # 首尾帧
-python3 scripts/seedance.py -t "360 度环绕运镜" -f ./first.jpeg -l ./last.jpeg --ratio adaptive
+scripts/seedance -t "360 度环绕运镜" -f ./first.jpeg -l ./last.jpeg --ratio adaptive
 
 # 在线图片 URL
-python3 scripts/seedance.py -t "镜头缓缓拉出" --image-url https://example.com/fox.png
+scripts/seedance -t "镜头缓缓拉出" --image-url https://example.com/fox.png
 
-# openai-video（mini，建议 python3.11，见 TLS 注意事项）
-python3.11 scripts/seedance.py --api-type openai-video -t "蓝天下的雏菊花田，镜头逐渐拉近"
+# openai-video（mini）——同一封装，传 --api-type 即可
+scripts/seedance --api-type openai-video -t "蓝天下的雏菊花田，镜头逐渐拉近"
 
-# openai（full，Ark 风格请求体，建议 python3.11）
-python3.11 scripts/seedance.py --api-type openai -t "蓝天下的雏菊花田，镜头逐渐拉近"
+# openai（full，Ark 风格请求体）
+scripts/seedance --api-type openai -t "蓝天下的雏菊花田，镜头逐渐拉近"
 ```
 
 ### 参数
@@ -133,14 +135,14 @@ python3.11 scripts/seedance.py --api-type openai -t "蓝天下的雏菊花田，
 
 ## TLS 注意事项（环境相关）
 
-部分 OpenAI 风格代理通过负载均衡分发到多个后端节点，其中部分节点会返回中间 CA 证书缺少 `keyUsage` 扩展的证书链。CPython 3.14 会拒绝这些节点；3.11 则能接受全部。封装脚本内置重试逻辑以在 3.14 下尽量撑过去，但 `openai-video` / `openai` 路径**推荐用 `python3.11`**。走 `ark` 路径时 `python3` 即可。`--insecure`/`ARK_INSECURE` 可跳过校验，但许多代理的 WAF 会对未校验 TLS 的握手返回 403，因此通常无济于事。
+部分 OpenAI 风格代理通过负载均衡分发到多个后端节点，其中部分节点会返回中间 CA 证书缺少 `keyUsage` 扩展的证书链。CPython 3.14 会拒绝这些节点；3.11 则能接受全部。封装脚本内置重试逻辑以在 3.14 下尽量撑过去，但 `openai-video` / `openai` 路径**推荐用 `python3.11`**。走 `ark` 路径时 `python3` 即可。`scripts/seedance` 封装脚本会自动优先使用 `python3.11`/`python3.12`，无需手动处理。`--insecure`/`ARK_INSECURE` 可跳过校验，但许多代理的 WAF 会对未校验 TLS 的握手返回 403，因此通常无济于事。
 
 ## 测试
 
 ```bash
-python3 scripts/test_seedance.py                                          # 离线全套（无需 Key/网络）
-cd scripts && python3 -m unittest test_seedance.OpenaiTransportTests      # 单个类
-cd scripts && python3 -m unittest test_seedance.GenerateVideoSyncTests.test_text_to_video_polls_until_succeeded  # 单个用例
+scripts/seedance test_seedance.py                                                   # 离线全套（无需 Key/网络）
+cd scripts && ../.venv/bin/python -m unittest test_seedance.OpenaiTransportTests   # 单个类
+cd scripts && ../.venv/bin/python -m unittest test_seedance.GenerateVideoSyncTests.test_text_to_video_polls_until_succeeded  # 单个用例
 ```
 
-离线套件 mock 了 HTTP 层并注入假的 OSS 客户端与假的 `alibabacloud_oss_v2` 模块，无需网络、Key 或 OSS SDK。真实联调测试（消耗配额）在未设置 `ARK_API_KEY` 时自动跳过。
+`scripts/seedance test_seedance.py` 在封装脚本的 venv 中跑完整离线套件（首次运行会创建 `.venv/`）；单个类/用例则直接驱动该 venv 的解释器用 `python -m unittest` 运行。离线套件 mock 了 HTTP 层并注入假的 OSS 客户端与假的 `alibabacloud_oss_v2` 模块，无需网络、Key 或 OSS SDK。真实联调测试（消耗配额）在未设置 `ARK_API_KEY` 时自动跳过。

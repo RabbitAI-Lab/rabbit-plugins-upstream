@@ -121,20 +121,20 @@ and dimensions. Do not model worksheet images as cell values.
 Engine preflight:
 
 - Check `workbook list-worksheets --output json` before inserting images.
-- The target worksheet should be Excelize-backed, usually
-  `data_engine=excelize` and `style_engine=excelize`.
-- PG-only worksheets do not support `add_picture`. In a PG workbook,
-  `excel-worksheet create` can create a PG-only empty worksheet, which image
+- The target worksheet should be Sheet-backed, usually
+  `data_engine=sheet` and `style_engine=sheet`.
+- Base-only worksheets do not support `add_picture`. In a Base Mode workbook,
+  `excel-worksheet create` can create a Base-only empty worksheet, which image
   insert may later report as `sheet <name> does not exist`.
-- If the user wants a new image canvas in an existing PG workbook, create a
+- If the user wants a new image canvas in an existing Base Mode workbook, create a
   small local blank `.xlsx` with the desired sheet name and import it:
 
 ```bash
-mbs worksheet import --strategy create ./blank.xlsx --doc-id <DOC_ID> --engine excelize --source-worksheet-name <SHEET> --target-worksheet-name <SHEET> --verify
+mbs worksheet import --strategy create ./blank.xlsx --doc-id <DOC_ID> --engine sheet --source-worksheet-name <SHEET> --target-worksheet-name <SHEET> --verify
 ```
 
-- If a PG-only placeholder was created only for the image task and cannot be
-  used, delete that placeholder before importing the Excelize worksheet.
+- If a Base-only placeholder was created only for the image task and cannot be
+  used, delete that placeholder before importing the Excel worksheet.
 
 Dashboard worksheet orchestration:
 
@@ -144,11 +144,13 @@ mbs excel-worksheet dashboard refresh --doc-id <DOC_ID> --spec dashboard.json --
 mbs excel-worksheet dashboard manifest --doc-id <DOC_ID> --worksheet-name <SHEET>
 mbs excel-worksheet dashboard create-config --doc-id <DOC_ID> --spec dashboard.json --create-worksheet
 mbs excel-worksheet dashboard refresh --doc-id <DOC_ID> --spec dashboard.json
+mbs excel-worksheet dashboard export-template --doc-id <DOC_ID> --worksheet-name <SHEET> --template-id <template-id> --out-dir <analysis-style-system-skill-dir>/dashboard-templates/<template-id> --force
 ```
 
 Guidance:
 
 - when a dashboard is being designed from scratch, let `sheet-dashboard` generate `dashboard.json` first, then use the commands above to validate and write it
+- when an existing HTML dashboard should become a reusable template, use `dashboard export-template`; the source worksheet must be a `sheet` worksheet, and the output package belongs under `analysis-style-system/dashboard-templates/<template-id>`
 - if a dashboard spec uses `dashboard_style_pack`, keep `industry_style` and `dashboard_story` alongside it so `dashboard validate` can prove the style contract is complete
 - `dashboard refresh --dry-run` is a hard step before mutation; inspect that each operation has `charts: [{cell, chart}]`, not `chart.chart`.
 - Use `chart list` or `image list` first to inspect current worksheet inventory.
@@ -160,9 +162,9 @@ Guidance:
 - Dashboard chart specs should include `chart.format.from` and `chart.format.to`, and the outer `cell` should match `chart.format.from`.
 - For vertically stacked dashboard charts that share horizontal space, leave at least 1 empty worksheet row between them.
 - Images are floating objects like charts. For insert, move, resize, or replace workflows, include `--format picture-format.json` so x/y position, anchors, and size survive readback and frontend drag/resize.
-- Images require an Excelize worksheet. Do not insert pictures into PG-only
-  worksheets; use an existing Excelize sheet or import a blank `.xlsx` with
-  `--engine excelize` to create one.
+- Images require an Sheet-backed worksheet. Do not insert pictures into Base-only
+  worksheets; use an existing Excel sheet or import a blank `.xlsx` with
+  `--engine sheet` to create one.
 - `image list` should return enough metadata for frontend display and later updates: URL/media reference when available, anchor cell, picture id, extension, alt text, size, and chart-compatible position/format fields.
 - `image set` updates an existing picture's anchor, position, size, alt text, scale, hyperlink, or format. Use it after a frontend drag/resize operation instead of reinserting the image.
 - `image replace` inherits prior `alt_text` when `--alt-text` is omitted.
@@ -172,6 +174,7 @@ Guidance:
   `mbs excel-worksheet chart create-config --doc-id <DOC_ID> --worksheet-name Dashboard --cell <CELL> --spec <single_chart.json>`.
 - `dashboard manifest`, `chart list`, `image list`, `media check`, and returned ids prove metadata persistence only. They do not prove the web canvas rendered successfully.
 - For delivery, also verify source data reads for every chart SQL source. If logged-in browser access to the MaybeSheet canvas is available, use a screenshot/vision check for true render validation. Public unauthenticated viewer access may show a login wall instead of charts.
+- After `dashboard export-template`, switch to `analysis-style-system` and run `node scripts/validate_dashboard_html_template.mjs --template-dir dashboard-templates/<template-id>` before reusing or publishing the template.
 - For KPI or chart handlers that consume formatted numeric strings, coerce defensively:
   `Number(String(value || '').replace(/,/g, '')) || 0`.
 
@@ -193,20 +196,20 @@ mbs excel-worksheet style worksheet plan --doc-id <DOC_ID> --worksheet-name <SHE
 mbs excel-worksheet style worksheet apply --doc-id <DOC_ID> --worksheet-name <SHEET> --mode auto_detect --spec worksheet_style.json
 mbs style beautify --doc-id <DOC_ID> --worksheet-name <SHEET> --dry-run --output json
 mbs style beautify --doc-id <DOC_ID> --worksheet-name <SHEET> --output json
-mbs db-table field batch-update --doc-id <DOC_ID> --name <PG_TABLE_NAME> --updates field-updates.json --verify
+mbs db-table field batch-update --doc-id <DOC_ID> --name <TABLE_NAME> --updates field-updates.json --verify
 ```
 
 Important rules:
 
 - Use `mbs style beautify` for the default agent-friendly polish workflow. It
-  inspects metadata first, applies Excelize worksheet styling where appropriate,
-  and applies PG/SheetTable field formatter/style/header metadata through the
+  inspects metadata first, applies Excel worksheet styling where appropriate,
+  and applies Base-backed field formatter/style/header metadata through the
   batch field update path when possible.
-- For explicit PG/SheetTable field styles, use `db-table field batch-update`
+- For explicit Base-backed field styles, use `db-table field batch-update`
   with a JSON array. Verify with `excel-worksheet read --output json` and look
   for `formatting.frozen_rows`, `formatting.auto_filter`, and
   `db_table.fields[*].property`.
-- PG/db-table default freeze/filter/header config should be returned by the
+- Base-backed db-table default freeze/filter/header config should be returned by the
   backend. Do not instruct the frontend to synthesize auto-filter or dark
   header backgrounds.
 - `filter-values --column` takes a zero-based absolute column index. In `--range A1:G100`, `--column 2` targets column C.

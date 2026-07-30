@@ -31,6 +31,10 @@ This CLI keeps the heavy, deterministic work OUT of the model's context:
   * `notes`    reads a PO's prior chatter (log notes) so a partial-shipment
                match can see which lines earlier shipments already checked.
   * `apply`    corrects PO line prices (and optional freight/fees) in one call.
+  * `bill`     creates the DRAFT vendor bill from a reconciled PO (never posts).
+  * `post`     posts a DRAFT vendor bill once it MATCHES — gated on the bill's
+               total reconciling to the vendor invoice's `expected_total`
+               within tolerance (a mismatch is refused, never posted blind).
   * `matched`  posts the "checked" LOG NOTE on the PO and files the document
                into the `Matched` subfolder — the clean-result tail in one call.
   * `questions` raises a reviewer activity on the document and files it into
@@ -52,6 +56,8 @@ Usage
     python3 scripts/paymatch.py po-lines  '{"po": "P13189"}'
     python3 scripts/paymatch.py notes     '{"po": "P13137"}'
     python3 scripts/paymatch.py apply     '{"po_id": 13145, "lines": [{"line_id": 40941, "price_unit": 11.94}]}'
+    python3 scripts/paymatch.py bill      '{"po_id": 13145, "vendor_bill_number": "INV-98765", "invoice_date": "2026-07-22", "expected_total": 1041.90, "tolerance": 0.02}'
+    python3 scripts/paymatch.py post      '{"bill_id": 8842, "expected_total": 1041.90, "tolerance": 0.02, "note": "Matched INV-98765; totals reconcile."}'
     python3 scripts/paymatch.py matched   '{"po_id": 13145, "body": "Pricing checked ...", "document_id": 481}'
     python3 scripts/paymatch.py questions '{"document_id": 485, "question": "Can't reconcile total ...", "reviewer": "Zach Tucker"}'
     python3 scripts/paymatch.py move      '{"document_id": 481, "to": "Matched"}'
@@ -498,10 +504,11 @@ async def _apply(session: Any, args: dict[str, Any]) -> dict[str, Any]:
 
 
 async def _bill(session: Any, args: dict[str, Any]) -> dict[str, Any]:
-    """Create a DRAFT vendor bill from a reconciled PO. Never posts — a human
-    posts it via the scheduled review activity. `expected_total` (the invoice
-    docTotal) is verified within `tolerance`; a mismatch returns success:false
-    and no bill is created (so the caller escalates instead of billing blind).
+    """Create a DRAFT vendor bill from a reconciled PO. This command never posts
+    — posting is the separate `post` command (or a human via the scheduled
+    review activity). `expected_total` (the invoice docTotal) is recorded for
+    the total check; keep the same value for the `post` step, which is what
+    actually gates posting on the bill matching within `tolerance`.
     """
     if "po_id" not in args:
         raise ValueError("`po_id` is required.")
@@ -518,6 +525,38 @@ async def _bill(session: Any, args: dict[str, Any]) -> dict[str, Any]:
     if args.get("line_ids"):
         payload["line_ids"] = [int(x) for x in args["line_ids"]]
     return await _call(session, "ap_create_vendor_bill", payload)
+
+
+async def _post(session: Any, args: dict[str, Any]) -> dict[str, Any]:
+    """Post a DRAFT vendor bill once it MATCHES — the 'match & post' tail.
+
+    Only reach here for a bill whose total reconciles to the vendor invoice.
+    `expected_total` (the vendor invoice total) is REQUIRED and passed to the
+    guarded `ap_post_vendor_bill` tool, which REFUSES to post a bill whose total
+    misses it beyond `tolerance` (an absolute currency amount) — a mismatch
+    comes back success:false/error, so you escalate rather than post blind.
+    Pass `post: false` for a dry-run that reports `would_post` + `total_check`
+    without posting; the default is to post. `vendor_bill_number` / `invoice_date`
+    set the bill's ref/date first if unset; `note` is logged as an internal note.
+    """
+    if "bill_id" not in args:
+        raise ValueError("`bill_id` is required.")
+    if args.get("expected_total") is None:
+        raise ValueError(
+            "`expected_total` (the vendor invoice total) is required — posting is "
+            "gated on the bill matching it within tolerance."
+        )
+    payload: dict[str, Any] = {
+        "bill_id": int(args["bill_id"]),
+        "post": bool(args.get("post", True)),
+        "expected_total": float(args["expected_total"]),
+    }
+    if args.get("tolerance") is not None:
+        payload["tolerance"] = float(args["tolerance"])
+    for key in ("vendor_bill_number", "invoice_date", "note"):
+        if args.get(key):
+            payload[key] = str(args[key])
+    return await _call(session, "ap_post_vendor_bill", payload)
 
 
 async def _matched(session: Any, args: dict[str, Any]) -> dict[str, Any]:
@@ -706,6 +745,7 @@ ACTIONS = {
     "notes": _notes,
     "apply": _apply,
     "bill": _bill,
+    "post": _post,
     "matched": _matched,
     "questions": _questions,
     "move": _move,

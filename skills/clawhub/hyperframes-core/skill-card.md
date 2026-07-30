@@ -1,5 +1,5 @@
 ## Description: <br>
-HyperFrames Core provides the composition contract for building one renderable HyperFrames project, covering DOM timing attributes, clips, tracks, sub-compositions, variables, media playback, deterministic rendering, validation, Tailwind projects, and plan formats. <br>
+The HyperFrames composition contract: build one renderable project using composition structure, data-* timing attributes, clips, tracks, sub-compositions, variables, framework-owned media playback, deterministic-render rules, validation, Tailwind projects, and STORYBOARD.md / SCRIPT.md plan formats. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to author, edit, and validate HyperFrames video compositions and related planning files. It helps agents produce renderable HTML/CSS/JavaScript compositions, storyboard and script documents, validation commands, and project-scoped guidance. <br>
+Developers and agent operators use this skill to build and edit HyperFrames HTML video compositions with deterministic timing, media handling, validation gates, storyboard planning, and production workflow conventions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to edit composition, storyboard, brief, and script files and run local HyperFrames commands. <br>
-Mitigation: Use it only in intended HyperFrames projects, review project-scoped changes, and run the documented HyperFrames validation commands before rendering or delivery. <br>
-Risk: Non-Latin or multilingual visible text can render incorrectly if the project lacks matching shipped fonts. <br>
-Mitigation: Provide project-shipped fonts with the needed script coverage before rendering non-Latin text. <br>
-Risk: Incorrect timing, media ownership, duplicate IDs, or non-deterministic animation behavior can produce blank, inconsistent, or misleading video frames. <br>
-Mitigation: Follow the deterministic-rendering, media, and ID rules in the references and verify output with snapshots, preview, and HyperFrames checks. <br>
+Risk: The skill can guide agents to run HyperFrames tooling, start previews, create project files, dispatch frame workers, and use remembered preferences. <br>
+Mitigation: Review proposed commands and generated project changes before execution or deployment, and run HyperFrames validation gates before rendering. <br>
+Risk: Multilingual video projects may lose fidelity if text is romanized or transliterated because a font lacks coverage. <br>
+Mitigation: Explicitly require preserving original text and provide appropriate fonts for the target language before frame work begins. <br>
+Risk: Non-deterministic composition behavior can produce preview/render mismatches or unstable output. <br>
+Mitigation: Follow the deterministic-render rules, avoid render-time clocks, unseeded randomness, network-dependent assets, input-state dependencies, and infinite animation loops. <br>
 
 
 ## Reference(s): <br>
@@ -46,13 +46,13 @@ Mitigation: Follow the deterministic-rendering, media, and ID rules in the refer
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with HTML, CSS, JavaScript, JSON, and shell command examples] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with HTML, CSS, JavaScript, storyboard, script, and shell-command examples.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce project-scoped HyperFrames composition files, planning documents, frame-worker packets, and validation commands.] <br>
+**Other Properties Related to Output:** [Can guide creation of project files and frame-packet files for HyperFrames workflows.] <br>
 
 ## Skill Version(s): <br>
-1.0.14 (source: server release evidence) <br>
+1.0.15 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

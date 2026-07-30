@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/netcdf-toolkit",
   "slug": "netcdf-toolkit",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1785074210021,
-  "contentHash": "0ec303ec72139f0d16ded70de2e0726fcd11c0694ea87bc304caf8a021245f7a",
-  "fetchedAt": "2026-07-26T18:03:19.931Z"
+  "version": "0.3.1",
+  "updatedAt": 1785158622192,
+  "contentHash": "22734848fa94de398ff54a1589ea6f1421741ed8e7f2ede6e655aacba71a1b9b",
+  "fetchedAt": "2026-07-30T09:59:43.687Z"
 }

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cmic-skill-scanner-darwin-arm64",
   "slug": "cmic-skill-scanner-darwin-arm64",
   "ownerHandle": null,
-  "version": "0.11.0",
-  "updatedAt": 1784018540673,
-  "contentHash": "55e47bcee60580e98e175bd8af1d925fb86e858558cdbef0f540bed6f8c50f8f",
-  "fetchedAt": "2026-07-26T18:14:47.758Z"
+  "version": "0.11.1",
+  "updatedAt": 1785136890881,
+  "contentHash": "5c0dcd53ae05ecba15022470cb0a8e6bd5a6221b704919d6eb5e280f199c19ef",
+  "fetchedAt": "2026-07-30T10:01:14.281Z"
 }

@@ -1,8 +1,8 @@
 ---
 name: skill-usefulness-audit
 slug: skill-usefulness-audit
-description: Audit or inventory installed agent-skill packages for cleanup using usage, overlap, burden, risk, and optional ablation/community evidence. Trigger only on explicit requests to review installed agent skills, analyze installed skill usage, or run a structure-only skill inventory; not for ordinary repository code review, general security audit, or human skills.
-version: 0.3.17
+description: Review your installed agent skills to see what you actually use, what overlaps, and what may no longer be worth keeping.
+version: 0.3.19
 tags: ["audit","skills","ablation","openclaw"]
 user-invocable: true
 disable-model-invocation: true
@@ -11,29 +11,6 @@ homepage: https://github.com/gongyu0918-debug/skill-usefulness-audit
 metadata: {"openclaw":{"skillKey":"skill-usefulness-audit","requires":{"bins":["python"]},"homepage":"https://github.com/gongyu0918-debug/skill-usefulness-audit"}}
 ---
 # Skill Usefulness Audit
-
-## ClawHub / OpenClaw Edition
-
-This ClawHub bundle is packaged for OpenClaw. Install it from an OpenClaw workspace with:
-
-```bash
-openclaw skills install @gongyu0918-debug/skill-usefulness-audit
-```
-
-OpenClaw picks up installed workspace skills in the next session. For other agent hosts, use the GitHub repository instead: https://github.com/gongyu0918-debug/skill-usefulness-audit
-
-Because model invocation is disabled, invoke the installed skill explicitly from chat:
-
-```text
-/skill skill-usefulness-audit --skills-root ./skills
-```
-
-本 ClawHub 包是 OpenClaw 专用发布包。其他 agent 版本请访问 GitHub 仓库：https://github.com/gongyu0918-debug/skill-usefulness-audit
-
-
-## Overview
-
-Judge whether installed agent skills still deserve to stay installed using usage, overlap, outcome impact, burden, confidence, optional community evidence, and static risk hints.
 
 ## Manual Trigger Only
 
@@ -96,13 +73,12 @@ Add evidence only when available:
 - `--ablation-file`: normalized JSON or JSONL skill-on/skill-off results.
 - `--community-file`: offline JSON, JSONL, CSV, or TSV registry metrics.
 - `--ablation-plan-out`: a cost estimate and focused replay plan; its case counts can be overridden with the four `--ablation-*-cases` options documented by `--help`.
-- `--json-out`: machine-readable evidence only when requested or needed by another tool. Do not paste raw JSON into chat unless requested.
+- `--json-out`: machine-readable evidence only when requested or needed by another tool.
 
 Pass `--report-language zh-CN` for a Chinese invocation and `--report-language en` for an English invocation. `auto` reads `SKILL_AUDIT_REPORT_LANGUAGE` or the process locale, then falls back to English.
 
 Run without extra files only when you need a structure-only audit.
 Usage, community, and ablation evidence become lower-confidence in that mode.
-Do not delete skills based only on a structure-only report.
 History and usage files may contain sensitive conversations, local paths, project names, and customer data.
 Missing env means not configured in the current audit process, not proof that the skill is broken in every host.
 
@@ -125,4 +101,4 @@ Keep deletion advice conservative for system or host-core skills, and prefer nar
 - `{baseDir}/scripts/skill_usefulness_audit_lib/`: collect metadata, score skills, scan static risk hints, and render Markdown reports plus optional JSON artifacts.
 - `{baseDir}/references/report-narration-prompt.md`: concise prompt for turning the report into a user-facing conversational summary.
 - `{baseDir}/references/scoring-rubric.md`: 10-point scoring rules, confidence logic, community prior, and action thresholds.
-- `{baseDir}/references/ablation-protocol.md`: normalized replay method for historical conversation tests.
+- `{baseDir}/references/ablation-protocol.md`: normalized replay method for historical conversations.

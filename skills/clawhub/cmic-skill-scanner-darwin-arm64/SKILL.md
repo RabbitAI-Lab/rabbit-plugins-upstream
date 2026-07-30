@@ -18,9 +18,9 @@ This tool scans locally by default and requires user trust in the binary you run
 | Property | Value |
 |----------|-------|
 | Location | `assets/bin/skillscan` |
-| Version | `v0.11.0` |
+| Version | `v0.11.1` |
 | Platform | `macOS ARM64` |
-| SHA-256 | `11be523bd133bdc97adc405f6ee8ce6009f183d2067a0597652e0a38641104f2` |
+| SHA-256 | `d2a61ad62a168f468205319bfd065d06f8aea34ff5fec37faab9d41435a56f73` |
 
 **Verify locally before running:**
 ```bash

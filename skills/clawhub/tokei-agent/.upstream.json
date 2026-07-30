@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/tokei-agent",
   "slug": "tokei-agent",
   "ownerHandle": null,
-  "version": "0.2.2",
-  "updatedAt": 1784988752068,
-  "contentHash": "1d94f347163427e9566cfb99690465bcd4dff5f5c48e80125c21eda1c49d00a5",
-  "fetchedAt": "2026-07-26T18:04:01.539Z"
+  "version": "0.3.0",
+  "updatedAt": 1785104704644,
+  "contentHash": "1ae92080e41e904b8a0a0b0c1d5100cce5d17dfca1d95b16fea19454fb6842ed",
+  "fetchedAt": "2026-07-30T10:02:07.985Z"
 }

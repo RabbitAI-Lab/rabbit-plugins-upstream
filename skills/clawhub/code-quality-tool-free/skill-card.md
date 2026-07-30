@@ -1,5 +1,5 @@
 ## Description: <br>
-Code Quality Tool Free helps developers review code style, basic security issues, accessibility checkpoints, and small-project quality guidance through Markdown instructions and command examples. <br>
+Helps independent developers and small teams review code style, basic security risks, and accessibility checks through agent-guided Markdown instructions. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, independent maintainers, and small teams use this skill to run quick code-quality checks, review common style conventions, look for simple secret and unsafe-pattern indicators, and produce lightweight remediation guidance before commits or reviews. <br>
+Developers and small teams use this skill to run quick local code-quality reviews before commits or during lightweight code review. It focuses on naming and formatting conventions, basic secret and unsafe-pattern checks, and accessibility checklist guidance. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may inspect proprietary source code, credentials, or secret-like findings while running quality and security checks. <br>
-Mitigation: Run checks on a limited path first, confirm your agent environment keeps code and command output local, and avoid exposing sensitive repositories unless that data handling posture is acceptable. <br>
-Risk: The skill can propose shell commands, generated fixes, and git-hook changes that may affect repository behavior. <br>
-Mitigation: Review commands and generated changes before execution or installation, and apply fixes deliberately after confirming they match the project context. <br>
-Risk: The scanner identified inconsistent privacy and data-flow documentation. <br>
-Mitigation: Treat local-only claims as unverified unless the runtime environment and agent configuration explicitly support them. <br>
+Risk: The skill may inspect local project files and run simple shell checks. <br>
+Mitigation: Limit scans to the intended project directory and review commands before execution. <br>
+Risk: The skill may propose fixes, configuration files, or git hook changes. <br>
+Mitigation: Review proposed writes and hook changes before allowing an agent to modify files. <br>
+Risk: Basic grep-style checks and checklist guidance can miss issues or produce false positives. <br>
+Mitigation: Treat findings as review aids and confirm important results with language-specific tooling or human review. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/code-quality-tool-free) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash, Python, and YAML examples] <br>
+**Output Format:** [Markdown with inline bash, Python, YAML, and checklist examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured report fields such as status, message, data, issue categories, severity, logs, and fix suggestions.] <br>
+**Other Properties Related to Output:** [May propose local command checks, configuration files, review checklists, and fix guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+1.0.2 (source: ClawHub release evidence; artifact frontmatter says 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

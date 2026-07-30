@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and creative operators use this skill to draft speech, music, and background-bed prompts, choose the right audio generation path, and plan narration-plus-music layering for video or audio production. <br>
+Developers, creators, and agent operators use this skill to draft structured prompts for TTS narration, songs, instrumental beds, and audio/video layering decisions across generative audio workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may lead an agent to install related Pruna skills or use paid audio and video APIs. <br>
-Mitigation: Review suggested related-skill installs before accepting them and confirm before paid generation, uploads, or API calls. <br>
-Risk: Audio and video workflows may require credentials such as PRUNA_API_KEY or REPLICATE_API_TOKEN. <br>
-Mitigation: Keep API keys in the intended environment variables and avoid placing secrets in prompts, generated files, or shared logs. <br>
-Risk: Narration can be truncated when audio is longer than the target video model's clip limit. <br>
-Mitigation: Probe generated audio duration, keep per-scene lines within the documented limit, and split long narration into multiple scene rows. <br>
+Risk: Suggested related skills or commands may lead to paid API calls or uploads of generated or user audio. <br>
+Mitigation: Review related skill installs, credentials, upload targets, and costs before making Pruna or Replicate-backed calls. <br>
+Risk: Audio-led video workflows can truncate narration when clips exceed model duration limits. <br>
+Mitigation: Probe TTS length, keep per-scene audio within documented limits, and split longer narration into separate scene rows. <br>
 
 
 ## Reference(s): <br>
 - [TTS style prompting](references/tts-style-prompting.md) <br>
 - [Music and bed prompting](references/music-and-bed-prompting.md) <br>
 - [Audio post-production](references/audio-post-production.md) <br>
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/audio-prompting) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with prompt examples, workflow steps, command snippets, and configuration notes] <br>
+**Output Type(s):** [text, markdown, guidance, shell commands, configuration] <br>
+**Output Format:** [Markdown guidance with prompt examples, checklists, and optional install or workflow commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May suggest related skill installs, API-key environment variables, audio duration checks, and ffmpeg-based assembly steps when the task requires them.] <br>
+**Other Properties Related to Output:** [Produces prompt-writing and workflow guidance; it does not execute audio generation directly.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server evidence release and skill metadata) <br>
+1.0.8 (source: server release metadata and skill frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

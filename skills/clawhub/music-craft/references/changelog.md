@@ -3,6 +3,16 @@
 Release history for music-craft. Operating guidance lives in the topic
 references; this file is history only.
 
+# v1.5.1
+
+- Added a licensing and commercial-use gate for local models and provider
+  backends.
+- Marked MusicGen as non-commercial because its model weights are CC-BY-NC
+  4.0, while keeping ACE-Step's current MIT/commercial-ready status subject
+  to checkpoint verification.
+- Clarified that each operator must accept backend terms and use their own
+  provider credentials.
+
 ## v1.5.0
 
 v1.5.0 is a **breaking change** that aligns the base skill with

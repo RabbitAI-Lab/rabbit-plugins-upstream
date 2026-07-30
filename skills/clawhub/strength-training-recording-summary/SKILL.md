@@ -1,6 +1,6 @@
 ---
-name: "strength-training-recording-summary"
-description: "Summarize strength-training recordings/transcripts into WorkoutSummary notes with durations, sets/reps, and coach cues."
+name: strength-training-recording-summary
+description: "Create WorkoutSummary notes from strength-training recordings or transcripts. Accepts audio (.m4a, .mp3, .wav, .caf) and transcript files (.md, .txt, .srt, .vtt, .json); outputs total time, exercises completed, sets/reps, durations, and concise coach notes."
 license: "MIT"
 ---
 
@@ -8,7 +8,11 @@ license: "MIT"
 
 Use this skill when the user wants a strength-training session recording or transcript converted into a compact summary note for future reference.
 
-Load `references/summary-workflow.md` when you need transcription backend details, Trainwell-style local artifact handling, audio cleanup commands, dataset matching rules, or helper-script behavior.
+Process the timestamped transcript directly into the final `WorkoutSummary`. Do not insert a separate evidence-distillation and synthesis pipeline.
+
+Load `references/summary-workflow.md` only when you need implementation details, transcription backend guidance, audio cleanup commands, dataset matching rules, or helper-script behavior.
+
+For long transcripts processed in multiple windows, preserve the direct workflow but reconcile each boundary before writing the final note. Compare only the final exercise before and first exercise after the boundary. If they are one continuing exercise, keep each distinct completed set once and replace an earlier partial count with the later supported completed total. If they are different or continuity is unclear, keep both.
 
 ## Accepted Inputs
 
@@ -40,26 +44,6 @@ Exercises completed: 14
 - Slow the descent and keep pressure through the mid-foot.
 ```
 
-## Transcription Notes
-
-Prefer an input transcript when one already exists. For audio, choose the first ready backend that fits the user's privacy and language needs:
-
-- local Whisper CLI when installed; this is the default for local or Chinese/English trainer recordings
-- Groq Whisper when `GROQ_API_KEY` is configured and the user accepts cloud transcription
-- OpenAI or another compatible API when the user has credentials ready or explicitly chooses it
-
-For Trainwell-style Chinese-dominant sessions, prefer:
-
-```bash
-whisper "$SOURCE_AUDIO" --model turbo --language Chinese --task transcribe --output_format all --output_dir "$OUTDIR"
-```
-
-Use `--output_format all` or another segment-preserving format so timestamps survive into the summary. If English exercise names are badly mangled, retry auto-detect or compare transcript snippets before summarizing.
-
-Keep raw transcript artifacts only when useful or requested. For recurring Trainwell-style local workflows, save transcript Markdown under a source-adjacent `sources-markdown` folder and summaries under `summary-markdown`. For generic one-off use, print the result or save only to an explicit output path.
-
-Do not embed API keys in the skill or output. If no transcription backend is ready, explain the options and ask which one the user wants to set up.
-
 ## Summary Rules
 
 - Start with `WorkoutSummary <date>`.
@@ -71,6 +55,7 @@ Do not embed API keys in the skill or output. If no transcription backend is rea
 - Put useful coach notes directly under the exercise without labels like `trainer-specific cue`.
 - Preserve the user's requested output language when known.
 - Never invent weights, reps, sets, pain details, diagnoses, or medical conclusions.
+- Never add overlapping partial and completed counts from adjacent transcript windows as separate sets.
 
 ## Helper Scripts
 
@@ -81,13 +66,12 @@ python scripts/calc_duration.py '03:50-05:17 07:51-10:00'
 python scripts/match_exercises.py --lang zh --top-k 3 "哑铃侧平举"
 ```
 
-## Validation
+## Transcription Notes
 
-Before finalizing, check that:
+Prefer an input transcript when one already exists. For audio, use the best available transcription backend:
 
-- the transcript source and any generated artifacts are in the expected local location
-- timestamps or duration calculations support each exercise duration
-- the exercise order matches the trainer's sequence
-- sets/reps/duration are marked approximate when uncertain
-- cloud transcription was used only when configured or explicitly accepted
-- the final note contains coach-specific cues rather than generic exercise instructions
+- local Whisper CLI when installed
+- Groq Whisper when `GROQ_API_KEY` is configured
+- OpenAI or another compatible API when the user has credentials ready
+
+Do not embed API keys in the skill or output. If no transcription backend is ready, explain the options and ask which one the user wants to set up.

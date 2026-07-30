@@ -1,5 +1,5 @@
 ## Description: <br>
-Download NASA POWER meteorological and solar energy data, including solar radiation, temperature, precipitation, wind speed, humidity, and other parameters for point or regional queries. <br>
+Downloads NASA POWER meteorological and solar energy data, including solar radiation, temperature, precipitation, wind, humidity, and other parameters, for point or regional queries. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers, analysts, and researchers use this skill to generate commands and guidance for downloading NASA POWER weather and solar resource datasets for energy, agriculture, hydrology, and climate workflows. <br>
+Developers, data analysts, and energy or environmental teams use this skill to fetch NASA POWER weather and solar resource datasets for a point location or bounded region and save the results for analysis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Place-name searches can disclose the searched location to third-party geocoding services. <br>
-Mitigation: Use explicit latitude/longitude or bounding boxes instead of --place when locations are sensitive. <br>
-Risk: The skill downloads requested NASA data to local output files. <br>
-Mitigation: Choose output paths intentionally, review generated files before sharing, and remove sensitive derived datasets when no longer needed. <br>
-Risk: Runtime behavior depends on external Python packages such as requests and tqdm. <br>
-Mitigation: Pin and update dependencies in controlled environments before operational use. <br>
+Risk: The server security summary flags under-disclosed credential-management code and a hardcoded Earthdata account fallback in bundled helper code. <br>
+Mitigation: Review the credential helper before installation, remove or disable fallback credentials, avoid running with unnecessary secret-bearing environment variables, and install in an isolated environment. <br>
+Risk: Place-name resolution can send user-provided place names to external geocoding services. <br>
+Mitigation: Use exact latitude and longitude or an explicit bounding box when location query privacy matters. <br>
+Risk: The server security guidance calls out dependency risks. <br>
+Mitigation: Review and pin dependency versions before deployment, and run the skill in an environment isolated from sensitive files and credentials. <br>
 
 
 ## Reference(s): <br>
 - [NASA POWER API](https://power.larc.nasa.gov/api/) <br>
 - [NASA POWER Documentation](https://power.larc.nasa.gov/docs/) <br>
-- [NASA POWER Parameters](https://power.larc.nasa.gov/docs/v1/parameters/) <br>
+- [NASA POWER Project](https://power.larc.nasa.gov/) <br>
 - [ClawHub Skill Page](https://clawhub.ai/ruiduobao/skills/nasa-power-download) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [shell commands, guidance, configuration, code] <br>
-**Output Format:** [Markdown guidance with shell commands; commands can write CSV, JSON, and QA JSON data files.] <br>
+**Output Type(s):** [Shell commands, Files, Guidance] <br>
+**Output Format:** [Markdown guidance with bash commands; generated data files are CSV or JSON.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The generated workflow can call NASA POWER and, when --place is used, a geocoding service; downloaded data is written to local output paths.] <br>
+**Other Properties Related to Output:** [The downloader accepts NASA POWER parameter names, date ranges, point coordinates, bounding boxes, temporal resolution, and output format options.] <br>
 
 ## Skill Version(s): <br>
-0.3.0 (source: server release metadata) <br>
+0.3.1 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

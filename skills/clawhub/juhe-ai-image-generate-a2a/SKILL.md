@@ -11,28 +11,16 @@ description: |
 本 Skill 提供AI图像生成能力。当用户说"帮我生成一张猫咪在草地上玩耍的图片"、"画一幅水墨风格的山水画"、"生成一张16:9的科技感壁纸"、"创作一张新年祝福海报"、"用AI画一张小狗钓鱼的图"等,需要根据描述生成对应的图像的时候，使用此技能。
 该服务是基于 A2M 智能收协议（HTTP 402）的付费资源。买家（消费者 Agent）通过本 Skill 向卖家服务端发起资源请求，服务端将返回 402 Payment-Needed 响应报文，买家需将该报文传递给支付宝的 alipay-payment-skill 技能以完成付款。
 
-## 系统要求
+## 依赖安全管控
 
-### 操作系统
+1. 前置强制依赖
+   - `alipay-authenticate-wallet`：支付宝钱包身份鉴权技能
+   - `alipay-payment-skill`：A2M 402支付收单核心技能
+2. 依赖校验规则：技能启动时自动检测上述两个技能安装状态、开关状态；
+   - 如检测未安装，提示：通过 npx -y @alipay/alipay-aipay@latest install 安装支付宝 AI 付 Skill，加载 alipay-aipay 技能并开启支付宝支付能力
+   - 未开启支付功能时，提示用户”开启支付宝支付能力“
+3. 第三方接口依赖：聚合数据AI图像创作接口，仅允许文档指定域名 `apis.juhe.cn`，禁止转发请求至其他第三方域名。
 
-由于该技能基于 A2M 协议，需要在支持 A2M 协议的系统上运行，支付宝支付 CLI 工具（alipay-bot）在 Windows 环境下暂不支持。
-
-macOS / Linux，版本要求如下：
-系统|版本要求
--|-
-macOS| 12 Monterey 或更高版本<br>推荐 macOS 14 Sonoma 或 macOS 15 Sequoia
-Linux| Ubuntu：>= 21.04 <br>Debian：>= 12 <br>CentOS：>= 9
-
-### 环境要求
-
-| 环境    | 版本要求 |
-| ------- | -------- |
-| Node.js | > 22     |
-| npm     | > 10     |
-
-## 必要依赖
-
-本技能依赖于支付宝AI付技能，需要从clawhub上安装这两个技能：alipay-authenticate-wallet 和 alipay-payment-skill，安装后检查是否已开启支付宝支付功能，如未开启，需要提示用户开启支付宝支付功能。
 
 ## 触发条件
 
@@ -66,7 +54,7 @@ Linux| Ubuntu：>= 21.04 <br>Debian：>= 12 <br>CentOS：>= 9
 > 如您同意以上条款，请回复 **“确认”** 或继续描述您要生成的图像内容。
 > 如您不需要付费服务，请回复 **“取消”**，我将停止本次操作。
 
-**只有用户明确表示同意（如回复“确认”“好的”“可以”“继续”“继续”“下一步”等肯定词）后，才能进入第一步收集参数。**
+**只有用户明确表示同意（如回复“确认”“好的”“可以”“同意”“继续”“下一步”等肯定词）后，才能进入第一步收集参数。**
 
 ### 第二步：收集用户参数
 
@@ -92,8 +80,8 @@ Linux| Ubuntu：>= 21.04 <br>Debian：>= 12 <br>CentOS：>= 9
 向用户展示待生成图像的参数，严格遵守请求约束，向以下 URL 发起请求：
 
 ```bash
-curl https://apis.juhe.cn/a2a/query
-    -d '{"resourceId":"824","data":{"prompt":"<用户描述的图像内容>","size":<用户描述的尺寸>}}'
+curl https://apis.juhe.cn/a2a/query \
+    -d '{"resourceId":"824","data":{"prompt":"<用户描述的图像内容>","size":<用户描述的尺寸>}}' \
     -H "Content-Type: application/json"
 ```
 

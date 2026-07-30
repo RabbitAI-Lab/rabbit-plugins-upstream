@@ -1,7 +1,5 @@
 # Scoring Rubric
 
-Score each skill with one local 10-point score, one final score, and side signals.
-
 ## Contents
 
 - Core Outputs
@@ -22,15 +20,9 @@ Score each skill with one local 10-point score, one final score, and side signal
 - `quality_penalty_uncapped`: raw quality burden before the cap
 - `static_quality_penalty`: `0.0-1.4`
 - `final_score = clamp(local_score - quality_penalty, 0.0, 10.0)`
-- `usage_score`: `0.0-3.0`
-- `uniqueness_score`: `0.0-3.0`
-- `impact_score`: `0.0-4.0`
-- `confidence_score`: `0.0-1.0`
-- `community_prior_score`: `0.0-1.0`
 - `risk_level` / `static_risk_level`: `none / low / medium / high`
 
-Keep `community_prior_score` and static risk fields separate from `local_score`.
-Use quality burden, community prior, and static risk hints to shape review priority and final action.
+Keep community prior and risk separate from `local_score`; use them with quality burden to shape review and action.
 
 ## 1. Usage Score (`0.0-3.0`)
 
@@ -39,25 +31,9 @@ Use transcript mentions only as weaker fallback evidence.
 
 ### Input Fields
 
-- `calls`
-- `recent_30d_calls`
-- `recent_90d_calls`
-- `last_used_at`
-- `active_days`
-
-History fallback fields:
-
-- `history_mentions`
-- `suspected_invocations`
-
-Transcript mentions are weak evidence only. They may influence the usage score through the history evidence weight, but they must not be reported as direct `calls`.
-- `usage_source`
-- `evidence_weight`
-- `executions`
-- `script_failures`
-- `repair_turns`
-- `reference_loads`
-- `false_triggers`
+- Direct usage: `calls`, `recent_30d_calls`, `recent_90d_calls`, `last_used_at`, and `active_days`.
+- History fallback: `history_mentions` and `suspected_invocations`. These are weak evidence weighted through history and must not be reported as direct `calls`.
+- Evidence and runtime burden: `usage_source`, `evidence_weight`, `executions`, `script_failures`, `repair_turns`, `reference_loads`, and `false_triggers`.
 
 ### Base Usage Strength
 
@@ -95,8 +71,7 @@ Clamp the final usage score to `0.0-3.0`.
 
 ## 2. Uniqueness Score (`0.0-3.0`)
 
-Measure the highest functional-overlap similarity against any other installed skill.
-Use description, headings, and resource names as the comparison surface.
+Measure the highest functional-overlap similarity against any other installed skill using descriptions, headings, and resource names.
 
 Buckets:
 
@@ -167,8 +142,7 @@ Clamp the final confidence score to `0.0-1.0`.
 
 ## 5. Quality Penalty (`0.0-2.5`)
 
-Quality penalty captures the cost of keeping a skill even when it has some utility.
-It is a deduction from `local_score`, not a risk flag.
+Quality penalty captures the cost of keeping a skill and is deducted from `local_score`; it is not a risk flag.
 
 ### Runtime burden
 
@@ -239,9 +213,7 @@ Weighted components:
 - `0.05`: comments
 - `0.10`: maintenance freshness from `last_updated`
 
-Use it to rank review priority and benchmark replacements.
-
-Emit `community_breakdown` in JSON so users can see which registry signals contributed.
+Use it to rank review priority and benchmark replacements. Emit `community_breakdown` in JSON so users can see which registry signals contributed.
 
 ## 7. Static Risk Level
 
@@ -250,16 +222,7 @@ Only fenced code blocks in `SKILL.md` and directly linked Markdown references ar
 Credential-like content checks still cover `SKILL.md`, scripts, assets, references, and root text files without echoing matched values.
 This is lint-style evidence only. It cannot prove a skill is safe, because indirection, dynamic imports, encoded payloads, aliases, or external downloads can evade simple pattern matching.
 
-Typical flags:
-
-- `curl-pipe-shell`
-- `dynamic-exec`
-- `protected-path-access`
-- `persistence-hook`
-- `external-post`
-- `shell-exec`
-- `network-download`
-- `base64-payload`
+Typical flags: `curl-pipe-shell`, `dynamic-exec`, `protected-path-access`, `persistence-hook`, `external-post`, `shell-exec`, `network-download`, and `base64-payload`.
 
 Static risk levels:
 
@@ -284,29 +247,29 @@ Some quality findings cap the final score even when usage or protected-capabilit
 Use `final_score` for verdict bands.
 
 - confidence `< 0.55` and `final_score < 4.5`: `insufficient-evidence`
-- `8.0-10.0`: keep
-- `6.0-7.9`: keep, narrow when overlap stays high
-- `4.5-5.9`: review
-- `3.0-4.4`: merge or delete candidate
-- `0.0-2.9`: strong delete candidate
-
-Emitted verdict values: `insufficient-evidence`, `keep`, `keep-narrow`, `review`, `merge-delete`, and `delete`.
+- `8.0-10.0`: `keep`
+- `6.0-7.9`: `keep-narrow`
+- `4.5-5.9`: `review`
+- `3.0-4.4`: `merge-delete`
+- `0.0-2.9`: `delete`
 
 ## Action Rules
 
-- `high static risk`: `quarantine-review`
-- `medium static risk + strong final score`: `keep-review-risk`
-- `high quality burden + strong final score`: `keep-review-burden`
-- `high quality burden + mid final score`: `review-burden`
-- `low confidence + weak final score`: `observe-30d`
-- `low final score + high overlap`: `merge-delete`
-- `very low final score`: `delete`
-- `low final score + strong community prior`: `review-vs-community`
+Evaluate top to bottom; the first matching rule wins.
 
-Emitted action values: `keep-system`, `review-system`, `quarantine-review`, `keep-review-risk`, `keep-review-burden`, `review-burden`, `keep`, `keep-narrow`, `review-risk`, `observe-30d`, `merge-or-review`, `review-vs-community`, `review`, `merge-delete`, and `delete`.
-
-Community data shapes review order.
-Static risk level shapes manual review priority.
-Quality burden turns "useful but expensive" skills into review items.
+| Condition | Action |
+| --- | --- |
+| system source, high risk / otherwise | `review-system` / `keep-system` |
+| high risk | `quarantine-review` |
+| medium risk and score `>= 6.0` | `keep-review-risk` |
+| quality penalty `>= 1.2` and score `>= 6.0` / `>= 4.5` | `keep-review-burden` / `review-burden` |
+| score `>= 8.0` / `>= 6.0` | `keep` / `keep-narrow` |
+| remaining medium risk | `review-risk` |
+| confidence `< 0.55` | `observe-30d` |
+| score `>= 4.5`: overlap `>= 0.65` / community prior `>= 0.6` / otherwise | `merge-or-review` / `review-vs-community` / `review` |
+| API/tool skill: zero calls and overlap `>= 0.75` / community prior `>= 0.6` / otherwise | `merge-delete` / `review-vs-community` / `merge-or-review` |
+| community prior `>= 0.6` | `review-vs-community` |
+| score `< 3.0` | `delete` |
+| otherwise, including overlap `>= 0.65` with calls `<= 1` | `merge-delete` |
 
 `delete`, `merge-delete`, and `quarantine-review` are report recommendations only. They are never permission for automatic deletion, isolation, or disabling without human review.

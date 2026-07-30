@@ -1,5 +1,5 @@
 ## Description: <br>
-Terraform and OpenTofu configuration, modules, testing, state management, and HCL review. <br>
+Terraform and OpenTofu configuration, modules, testing, state management, and HCL review. Use when working with Terraform, OpenTofu, HCL, tfvars, tftest, state migration, or IaC patterns. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,29 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and infrastructure engineers use this skill to write, review, test, troubleshoot, and maintain Terraform or OpenTofu modules, HCL, tfvars, tftest files, and state-management workflows. <br>
+Developers and infrastructure engineers use this skill for Terraform and OpenTofu module design, HCL review, testing guidance, state management, and infrastructure-as-code troubleshooting. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Terraform or OpenTofu recommendations can affect infrastructure, state, access controls, or cloud costs when applied by an agent or operator. <br>
-Mitigation: Review generated configuration and plans before apply, use least-privilege credentials, keep remote state encrypted and locked, and run validation and scanning commands such as terraform fmt, terraform validate, tflint, trivy, or checkov. <br>
-Risk: The release security guidance notes that use of operational workflows may involve configured API tokens, admin CLIs, or local notes. <br>
-Mitigation: Install only when the publisher is trusted for the intended workflows and use least-privilege tokens for any connected services. <br>
+Risk: Suggested Terraform or OpenTofu commands can affect real infrastructure when deliberately run. <br>
+Mitigation: Review generated plans and avoid apply, state, import, refresh-only, force-unlock, or replacement operations unless the operator intends those infrastructure changes. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-terraform) <br>
+- [SKILL.md](artifact/SKILL.md) <br>
+- [SPEC.md](artifact/SPEC.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with HCL and shell command examples] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with inline HCL and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces agent guidance for Terraform and OpenTofu workflows; does not include executable automation in the artifact.] <br>
+**Other Properties Related to Output:** [Guidance is documentation-only; users decide whether to run any suggested Terraform or OpenTofu commands.] <br>
 
 ## Skill Version(s): <br>
-4.2.0 (source: release evidence) <br>
+4.3.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

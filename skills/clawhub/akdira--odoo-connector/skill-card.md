@@ -1,5 +1,5 @@
 ## Description: <br>
-AI Agent skill for Odoo 17/18/19 XML-RPC API integration, including authentication, CRUD operations, and search operations. <br>
+AI Agent skill for Odoo 17/18/19 XML-RPC API integration for authentication, CRUD, and search operations. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,43 +7,39 @@ This skill is ready for commercial/non-commercial use. <br>
 [akdira](https://clawhub.ai/user/akdira) <br>
 
 ### License/Terms of Use: <br>
-MIT No Attribution (MIT-0) <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, engineers, and operations teams use this skill to help agents connect to authorized Odoo 17, 18, or 19 systems through XML-RPC, generate API usage patterns, and perform ERP data operations such as authentication, search, read, create, update, and delete. <br>
+Developers and business automation teams use this skill to guide agents that connect to authorized Odoo ERP instances, verify XML-RPC credentials, and perform read, search, create, update, delete, bulk import, and workflow operations. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill recommends bypassing CAPTCHA or Cloudflare protections during Odoo web UI login. <br>
-Mitigation: Use API keys, service accounts, allowlisted network paths, or administrator-approved security configuration instead of following bypass advice. <br>
-Risk: Generated examples can perform live write, delete, order confirmation, replenishment, and external synchronization operations in Odoo. <br>
-Mitigation: Test in staging first, use least-privilege credentials, keep backups, and require human review before production execution. <br>
-Risk: Odoo API credentials can expose ERP data and business workflows if mishandled. <br>
-Mitigation: Store credentials in environment variables or a secrets manager, prefer API keys over passwords, rotate keys, and avoid logging or committing secrets. <br>
+Risk: Write-capable Odoo credentials can modify live ERP records and trigger business workflows. <br>
+Mitigation: Use a dedicated least-privilege API user, test in staging first, and require explicit confirmation before create, write, unlink, action_confirm, replenishment, bulk import, or third-party sync operations. <br>
+Risk: Credentials or API keys can expose an Odoo instance if stored or logged unsafely. <br>
+Mitigation: Store Odoo credentials in environment variables or a secrets manager, rotate keys, avoid admin accounts, and do not commit or log secrets. <br>
+Risk: Unauthorized automation or CAPTCHA-related access can violate system owner permissions or service terms. <br>
+Mitigation: Use the skill only with explicit authorization for the target Odoo instance and verify hosting provider terms before automated access. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/akdira/skills/odoo-connector) <br>
-- [Publisher profile](https://clawhub.ai/user/akdira) <br>
-- [Authentication Guide](docs/authentication.md) <br>
-- [Quick Start Guide](docs/quickstart.md) <br>
-- [API Reference](docs/api-reference.md) <br>
-- [Troubleshooting Guide](docs/troubleshooting.md) <br>
-- [Odoo External API documentation](https://www.odoo.com/documentation/17.0/developer/reference/external_api.html) <br>
-- [Odoo ORM API documentation](https://www.odoo.com/documentation/17.0/developer/reference/backend/orm.html) <br>
+- [ClawHub Skill Page](https://clawhub.ai/akdira/skills/odoo-connector) <br>
+- [Odoo External API Documentation](https://www.odoo.com/documentation/17.0/developer/reference/external_api.html) <br>
+- [Odoo ORM API Reference](https://www.odoo.com/documentation/17.0/developer/reference/backend/orm.html) <br>
+- [Python xmlrpc.client Documentation](https://docs.python.org/3/library/xmlrpc.client.html) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python XML-RPC code examples, shell commands, and configuration snippets.] <br>
+**Output Format:** [Markdown guidance with Python code examples, shell commands, and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may propose live Odoo read, write, delete, order, replenishment, and synchronization operations that require authorized credentials and review before execution.] <br>
+**Other Properties Related to Output:** [No external Python dependencies are required by the bundled scripts; generated guidance depends on the target Odoo instance, credentials, permissions, and selected model operations.] <br>
 
 ## Skill Version(s): <br>
-1.2.0 (source: frontmatter, changelog, and server release metadata) <br>
+1.2.1 (source: server release evidence, _meta.json, and CHANGELOG) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

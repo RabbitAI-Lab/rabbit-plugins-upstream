@@ -1,5 +1,5 @@
 ## Description: <br>
-Guides an agent through planning, generating, reviewing, and assembling a montage with transitions between composed video clips. <br>
+Use when someone wants a montage with transitions between shots - action-sequence reel or multi-scene piece where narration is optional. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators and developers use this skill to build visual transition reels such as action-sequence montages or multi-scene pieces where narration is optional. The skill structures intake, approval gates, still generation, video transition prompts, and final ffmpeg assembly. <br>
+Creators and developers use this skill to plan and generate multi-scene transition reels, moving from an approved scene plan to still images, short transition clips, optional background music, and final assembly. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Source images may be uploaded to provider APIs during still, video, or audio generation phases. <br>
-Mitigation: Confirm input rights and sensitivity before generation, and use the skill's approval gates before proceeding with uploads or generated assets. <br>
-Risk: Video and audio generation phases may spend provider credits. <br>
-Mitigation: Require explicit approve plan, approve stills, and approve clips gates before moving into paid generation or assembly steps. <br>
+Risk: Uploaded reference images may be sent to media generation providers through companion skills. <br>
+Mitigation: Confirm user consent and suitability before upload, and avoid sending sensitive images. <br>
+Risk: Video generation and related media steps can consume credits or incur cost. <br>
+Mitigation: Keep the approve plan, approve stills, and approve clips gates before credit-consuming generation or assembly steps. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/visual-transition-reel) <br>
-- [Example prompt](artifact/example-prompt.md) <br>
-- [Transition plan template](artifact/templates/transition-plan.template.json) <br>
+- [Example prompt](example-prompt.md) <br>
+- [Transition plan template](templates/transition-plan.template.json) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON plan templates and shell command snippets] <br>
+**Output Type(s):** [Guidance, Markdown, JSON configuration, Shell commands] <br>
+**Output Format:** [Markdown instructions with JSON plan templates and shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces phased scene plans, transition prompts, generation steps, review gates, and assembly commands; generated media is produced through dependent skills and provider APIs.] <br>
+**Other Properties Related to Output:** [Uses approval gates before still generation, video generation, and clip assembly.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: SKILL.md frontmatter and server release evidence) <br>
+1.0.8 (source: server release metadata and skill frontmatter metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

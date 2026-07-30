@@ -1,5 +1,5 @@
 ## Description: <br>
-A China VAT Law implementation and compliance assistant that helps users review taxable transaction classification, input VAT deduction, retained-credit refund risk, mixed sales, e-invoice handling, taxpayer registration, and structured VAT compliance self-checks. <br>
+A VAT law compliance assistant for China-focused VAT implementation questions, input deduction checks, deemed taxable transaction handling, mixed sales accounting, refund risk review, and structured self-check reports. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,42 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Employees, tax and compliance teams, and external agents use this skill to ask VAT implementation questions, run structured compliance self-checks, identify risk areas, and receive practical guidance for contracts, tax item selection, input deduction, retained-credit refunds, e-invoices, mixed sales, and registration issues. <br>
+Tax, finance, and compliance teams use this skill to ask VAT implementation questions, run lightweight self-checks, identify common VAT risk areas, and produce draft compliance guidance or reports for review. <br>
 
 ### Deployment Geography for Use: <br>
 Global; content is focused on China VAT compliance. <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security evidence says the skill can send tax questions or scenarios to mcp.aitaxs.top and may fall back to public search. <br>
-Mitigation: Review network behavior before installation and avoid submitting sensitive taxpayer data unless remote processing and any search fallback are acceptable. <br>
-Risk: The security evidence says the skill can store local or browser API credentials. <br>
-Mitigation: Use scoped credentials where possible, inspect local credential storage, and remove credentials when the skill is no longer needed. <br>
-Risk: The security evidence says the matrix installer and auto-setup paths can install or replace other tax skills and modify user skill configuration. <br>
-Mitigation: Treat matrix installation and auto-setup as administrative actions; review planned changes and backups before allowing writes. <br>
+Risk: Tax queries and self-check data may be sent to the mcp.aitaxs.top service. <br>
+Mitigation: Avoid entering sensitive business details until the remote-service trust, retention, and access model has been reviewed. <br>
+Risk: The client can store credentials locally. <br>
+Mitigation: Review local credential storage before use and rotate or remove credentials when the skill is no longer needed. <br>
+Risk: Optional setup code can modify agent MCP configuration files. <br>
+Mitigation: Run configuration setup only when MCP registration is intended; keep dry-run behavior for review before enabling write mode. <br>
+Risk: The security scan verdict is suspicious because remote-service use, credential storage, and configuration changes are not clearly disclosed. <br>
+Mitigation: Perform a security review before deployment and restrict use to environments where these behaviors are acceptable. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zxj2devs/skills/tax-vat-law) <br>
-- [VAT Law Web Workflow](https://mcp.aitaxs.top/web/topic_workflow_vat_law.html) <br>
-- [Tax Policy Knowledge MCP Service](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
-- [Tax Policy Knowledge Matrix](https://skillhub.cn/skills/tax-policy-knowledge) <br>
-- [Tax Invoice Compliance Topic](https://skillhub.cn/skills/tax-invoice-compliance) <br>
-- [Tax Judicial Cases Topic](https://skillhub.cn/skills/tax-tax-judicial) <br>
-- [Tax Restructuring Topic](https://skillhub.cn/skills/tax-restructuring) <br>
+- [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-vat-law) <br>
+- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
+- [VAT law self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_vat_law.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Tax policy MCP endpoint](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
+- [Tax policy knowledge skill](https://skillhub.cn/skills/tax-policy-knowledge) <br>
+- [Invoice compliance skill](https://skillhub.cn/skills/tax-invoice-compliance) <br>
+- [Tax judicial cases skill](https://skillhub.cn/skills/tax-tax-judicial) <br>
+- [Tax restructuring skill](https://skillhub.cn/skills/tax-restructuring) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with links, checklists, and optional API-backed tool results] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance, JSON tool results, shell/configuration snippets, copied report text, and web self-check prompts.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May provide web workflow links, local configuration guidance, matrix installation steps, and offline fallback checklists.] <br>
+**Other Properties Related to Output:** [May call a remote MCP service, store local client credentials, register MCP configuration when explicitly enabled, and fall back to local reference workflows when offline.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: SKILL.md frontmatter and server release metadata) <br>
+3.15.4 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

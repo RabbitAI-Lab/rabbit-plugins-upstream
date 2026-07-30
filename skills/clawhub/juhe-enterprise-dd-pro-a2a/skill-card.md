@@ -1,5 +1,5 @@
 ## Description: <br>
-Generates a paid enterprise due diligence report from a company name, registration number, or unified social credit code, combining business registration details with public risk signals from Juhe Data. <br>
+Generates a paid standard enterprise due-diligence report that combines Chinese business registration details with public risk signals such as abnormal operations, enforcement records, dishonesty records, and consumption restrictions. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,40 +11,39 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and business teams use this skill for paid pre-cooperation due diligence or supplier/customer risk checks when they have a specific Chinese company name, registration number, or unified social credit code. <br>
+External users and agents use this skill for paid pre-cooperation due diligence, supplier or customer risk checks, and checks for public enforcement, dishonesty, consumption restriction, or abnormal-operation records for a specific Chinese enterprise. The skill requires a full registered company name, registration number, or unified social credit code and returns a structured report for reference rather than legal or credit advice. <br>
 
 ### Deployment Geography for Use: <br>
-Global, for Chinese enterprise public-record lookups <br>
+China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The queried company name, registration number, or unified social credit code is sent to Juhe and payment is completed through Alipay. <br>
-Mitigation: Confirm user consent before payment, send only the required company keyword, and avoid unnecessary sharing of generated reports. <br>
-Risk: Risk modules show partial recent public records and may omit complete history or the latest official status. <br>
-Mitigation: State that the report is a quick-reference public-record compilation and direct users to official channels for complete or current verification. <br>
-Risk: Brand names, short names, or incomplete company names can trigger a paid lookup for the wrong entity. <br>
-Mitigation: Require the full registered company name, registration number, or unified social credit code before initiating payment. <br>
+Risk: The skill can return public legal and business records that may include identifiers and sensitive context. <br>
+Mitigation: Avoid unnecessary logging, redistribution, or broad display of returned identifiers and legal details. <br>
+Risk: A paid query sends the enterprise name, registration number, or unified social credit code to Juhe and uses Alipay for payment. <br>
+Mitigation: Present the fee, payment flow, and data-transfer notice before requesting payment or sending the query. <br>
+Risk: Risk modules return only the first page and the report caps displayed rows, so the report is not a complete historical record. <br>
+Mitigation: State that the report shows partial recent records and advise verification against official registries for important decisions. <br>
+Risk: A due-diligence summary could be mistaken for legal, credit, or cooperation advice. <br>
+Mitigation: Keep conclusions factual, use the red/yellow/green signal as a reference aid only, and avoid advice such as whether to cooperate. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-enterprise-dd-pro-a2a) <br>
-- [Artifact README](artifact/README.md) <br>
-- [Product definition](artifact/PRODUCT.md) <br>
-- [Output format](artifact/OUT_FORMAT.md) <br>
-- [Business registration fields](artifact/docs/工商主体信息.md) <br>
-- [Business abnormality fields](artifact/docs/企业经营异常信息.md) <br>
-- [Enforcement record fields](artifact/docs/企业被执行人信息.md) <br>
-- [Dishonest judgment debtor fields](artifact/docs/企业失信被执行人信息.md) <br>
-- [High-consumption restriction fields](artifact/docs/企业限制高消费.md) <br>
+- [Juhe A2A query endpoint](https://apis.juhe.cn/a2a/query) <br>
+- [Skill execution policy](artifact/SKILL.md) <br>
+- [Report output format](artifact/OUT_FORMAT.md) <br>
+- [Product scope](artifact/PRODUCT.md) <br>
+- [Returned data reference](artifact/README.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown report with structured tables, summary indicators, and concise risk notes] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
+**Output Format:** [Markdown report with structured tables, risk-light summary, concise factual findings, and payment/request guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a specific company keyword and successful payment; risk modules are partial recent records, not a complete legal or credit report.] <br>
+**Other Properties Related to Output:** [Reports are limited to returned public data, show only the first page of risk modules, cap displayed rows for readability, and must avoid legal or cooperation recommendations.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+1.0.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

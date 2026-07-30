@@ -5,7 +5,18 @@
       python3 scripts/discover_board.py "Google DeepMind" deepmind google-deepmind
 
 对每个候选 slug 依次探测 Greenhouse / Ashby / Lever 的公开 API，
-输出可直接粘进 config.json sources 的 JSON 片段。BOOTSTRAP 入职时由 agent 调用。
+输出可直接粘进 config.json sources 的 JSON 片段。
+
+SCOPE / OUTBOUND (accurate as of v1.2.0): this script is **not** an autonomous
+crawler. It runs once per company that the user named out loud during the
+onboarding interview, and never on its own schedule — the cron pipeline reads
+`config.json` sources only and never calls this file. What leaves the machine is
+one HTTP GET per (candidate slug × ATS), carrying only the guessed slug — a
+lowercase squashing of the company name the user just typed. No profile data, no
+credentials, and no user identifier are sent. Because the payload is a public
+company slug rather than user data, these probes are not routed through
+`require_egress_consent()`; instead every destination is printed to stderr before
+it is contacted, so the probe is never silent. See SKILL.md "Privacy & Data Flow".
 """
 import json
 import re
@@ -27,8 +38,25 @@ def slugify(name):
     return re.sub(r"[^a-z0-9]+", "", name.lower())
 
 
+def _announce(candidates):
+    """Print every outbound destination before any of them is contacted.
+
+    Discovery is the one place where the skill contacts a host that the user did
+    not name in config.json, so the full probe list is disclosed up front rather
+    than after the fact.
+    """
+    hosts = sorted({url_tpl.split("/")[2] for _, url_tpl, _ in PROBES})
+    print(
+        f"[jobwatch] source discovery: about to send {len(candidates)} guessed "
+        f"company slug(s) {candidates} to the public ATS APIs at "
+        f"{', '.join(hosts)}. Only the slug is sent — no profile data, no keys.",
+        file=sys.stderr,
+    )
+
+
 def discover(candidates):
     hits = []
+    _announce(candidates)
     for slug in candidates:
         for kind, url_tpl, count_fn in PROBES:
             try:

@@ -1,5 +1,5 @@
 ## Description: <br>
-Apple Health Tool Free helps agents answer personal Apple Health questions by calling the Transition API for workout, heart-rate, activity-ring, VO2 Max, and coaching queries. <br>
+Helps personal users query and discuss Apple Health-derived workout, heart-rate, activity-ring, and performance data through natural-language prompts backed by the Transition API. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Personal users use this skill with an agent to query and summarize Apple Health data synced through Transition. It is intended for fitness tracking, routine health self-checks, trend review, and basic AI coaching conversations. <br>
+External personal users and agent developers use this skill to configure an agent for Apple Health-related queries, workout lookups, activity-ring checks, heart-rate trend review, and training suggestions through Transition API calls. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive Apple Health data through an external Transition API. <br>
-Mitigation: Use it only when the user intends to query Transition-backed Apple Health data, limit health-data permissions where possible, and avoid sharing sensitive outputs beyond the intended agent session. <br>
-Risk: The artifact shows API key setup in shell profiles, env files, and optional local configuration. <br>
-Mitigation: Treat the Transition API key like a password, keep it out of repositories and transcripts, prefer environment variables or a secret store, and review any file writes before accepting them. <br>
-Risk: Security evidence notes broad activation wording and inconsistent free-tier capability instructions. <br>
-Mitigation: Invoke the skill only for Apple Health and Transition tasks, verify current free-tier limits before relying on results, and avoid using it for generic data analysis. <br>
+Risk: Sensitive Apple Health-derived questions and results may be sent to Transition's API. <br>
+Mitigation: Use the skill only for explicit Apple Health tasks and avoid routing unrelated data-analysis requests through it. <br>
+Risk: The skill requires a Transition API key and includes examples that configure it in shell environments. <br>
+Mitigation: Store the API key in a secret manager or locked-down environment variable and do not commit it to repositories or shared configuration files. <br>
+Risk: Artifact examples suggest local caching of health results, which can expose personal health data if the cache file is not protected. <br>
+Mitigation: Avoid local caching unless the storage path, access controls, retention period, and deletion process are understood. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/apple-health-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+- [Transition API base URL](https://api.transition.fun) <br>
+- [Transition coach chat endpoint](https://api.transition.fun/api/v1/coach/chat) <br>
+- [Transition workout-of-the-day endpoint](https://api.transition.fun/api/v1/wod?sport=run&duration=45) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples, shell commands, and optional Python snippets] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown with inline bash, YAML, Python, and JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured API responses, execution logs, local configuration examples, and cache-file examples.] <br>
+**Other Properties Related to Output:** [May produce structured JSON-style health query results, execution logs, configuration snippets, and curl commands that call Transition API endpoints.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: ClawHub release evidence) <br>
+1.0.2 (source: server release evidence; artifact frontmatter says 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

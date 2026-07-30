@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/flights-overhead",
   "slug": "flights-overhead",
   "ownerHandle": null,
-  "version": "1.2.0",
-  "updatedAt": 1785085326544,
-  "contentHash": "7c8ee2b42811f11edcc67923cbcc06c4ac2ab53372e42b5bf4786219749117b4",
-  "fetchedAt": "2026-07-26T18:03:04.980Z"
+  "version": "1.4.0",
+  "updatedAt": 1785110305647,
+  "contentHash": "d0e33c4a9d99b341864276b920047e031afea0ac7e6b24c26d14048037705052",
+  "fetchedAt": "2026-07-30T10:01:59.433Z"
 }

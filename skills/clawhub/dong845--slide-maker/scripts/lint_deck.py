@@ -45,6 +45,7 @@ Checks (tuned for low false-positives):
   warns in the 1.5-3.0:1 band; only its hopeless <1.5:1 case (TEXT ON IMAGE) is a HARD finding.
 """
 import json
+import math
 import re
 import sys
 from pptx import Presentation
@@ -296,6 +297,227 @@ def _px_lum(p):
     return 0.2126 * _SRGB[p[0]] + 0.7152 * _SRGB[p[1]] + 0.0722 * _SRGB[p[2]]
 
 
+def _glyph_bands(im, s, sw, sh):
+    """Per-LINE variation the render actually shows inside a text shape's ink rect, 0..1 each.
+
+    Per-BLOCK is not enough: a plate covering the first line of a two-line caption leaves the
+    second line to supply plenty of variation, and the block averages out to "fine". Measured
+    on exactly that case — a picture over line 1 — the block scored 0.257, indistinguishable
+    from healthy text. Split by line and the bands read 0.00 and 0.51.
+
+    Every XML-side occlusion rule is a taxonomy of causes — this shape type, painted then,
+    covering that much — and a taxonomy of causes is unbounded. Pictures are skipped because
+    alpha is unknowable from the file; groups, gradients and rotated shapes for their own
+    reasons; and anything assembled from many small parts slipped through a per-shape
+    threshold. Each exclusion is a hole, and three real decks shipped through them.
+
+    So this asks the opposite question, which has a bounded answer: is the text VISIBLE?
+    Rendered glyphs are high-frequency — 5-30% of the pixels in their own rect differ from the
+    field around them. A rect that is a flat wash contains no glyphs, whatever put it there.
+    Returns None when the crop is too small to judge.
+    """
+    rl, rt, rr, rb = _rbox(s)
+    W, H = im.size
+    x0 = max(0, min(W - 1, int(rl / sw * W))); x1 = max(x0 + 1, min(W, int(rr / sw * W)))
+    y0 = max(0, min(H - 1, int(rt / sh * H))); y1 = max(y0 + 1, min(H, int(rb / sh * H)))
+    if (x1 - x0) < 24 or (y1 - y0) < 8:
+        return None                                      # too few pixels to be evidence
+    line_h = max(s.get("size", 12), 1) / 72.0 * 1.2
+    n = max(1, min(12, int(round((rb - rt) / line_h))))
+    px = im.load()
+    out = []
+    for i in range(n):
+        by0 = y0 + int((y1 - y0) * i / float(n))
+        by1 = y0 + int((y1 - y0) * (i + 1) / float(n))
+        if by1 - by0 < 4:
+            return None                                  # bands too thin to judge
+        step = max(1, (x1 - x0) // 220)                   # cap the walk; glyph edges survive it
+        lums = [_px_lum(px[x, y]) for y in range(by0, by1) for x in range(x0, x1, step)]
+        if len(lums) < 60:
+            return None
+        buckets = {}                                     # modal luminance at 1/32 resolution
+        for v in lums:
+            k = int(v * 32)
+            buckets[k] = buckets.get(k, 0) + 1
+        modal = max(buckets, key=buckets.get) / 32.0
+        out.append(sum(1 for v in lums if abs(v - modal) > 0.10) / float(len(lums)))
+    return out
+
+
+def _page_ground(im):
+    """Modal luminance of the render — the page ground, whatever colour the deck's paper is."""
+    px = im.load(); W, H = im.size
+    sx, sy = max(1, W // 160), max(1, H // 120)
+    b = {}
+    for y in range(0, H, sy):
+        for x in range(0, W, sx):
+            k = int(_px_lum(px[x, y]) * 32)
+            b[k] = b.get(k, 0) + 1
+    return max(b, key=b.get) / 32.0
+
+
+def _crop_ground(im, x0, x1, y0, y1, fallback):
+    """The backdrop of THIS crop, read from its own outer ring — not the page's.
+
+    A figure very often sits on paper of its own: a matplotlib `facecolor`, a white figure on a
+    tinted page, a figure inside a card. Judged against the PAGE modal, that whole figure reads
+    as one continuous block of ink, the panel count comes back as 1, and the alignment check
+    disqualifies itself in silence. A 4% luminance step was enough to do it — measured, 13 of 22
+    realistic multi-panel compositions carrying the identical defect went unreported that way.
+
+    Falls back to the page ground when the ring is not one flat colour (the crop bleeds image
+    content to its edge), because then the ring is not a backdrop and guessing from it is worse
+    than the page's answer.
+    """
+    px = im.load()
+    sx, sy = max(1, (x1 - x0) // 90), max(1, (y1 - y0) // 90)
+    ring = []
+    for d in range(3):
+        ring += [_px_lum(px[x, min(y1 - 1, y0 + d)]) for x in range(x0, x1, sx)]
+        ring += [_px_lum(px[x, max(y0, y1 - 1 - d)]) for x in range(x0, x1, sx)]
+        ring += [_px_lum(px[min(x1 - 1, x0 + d), y]) for y in range(y0, y1, sy)]
+        ring += [_px_lum(px[max(x0, x1 - 1 - d), y]) for y in range(y0, y1, sy)]
+    if len(ring) < 40:
+        return fallback
+    b = {}
+    for v in ring:
+        k = int(v * 32)
+        b[k] = b.get(k, 0) + 1
+    top = max(b, key=b.get)
+    if b[top] < 0.5 * len(ring):                         # ring is image content, not a backdrop
+        return fallback
+    return top / 32.0
+
+
+def _ink_cols(im, x0, x1, y0, y1, ground, min_w, max_gap):
+    """Vertical ink RUNS in a crop of the render: [(x0,x1), ...] in pixels, left to right.
+
+    A column counts as ink if it VARIES down its height or if its own value differs from the
+    page ground. Both tests are needed and neither alone works: a flat black panel varies not
+    at all (only the second test sees it), and a light chart on light paper barely differs from
+    the ground (only the first sees it). Deliberately NOT "differs from the crop's modal" — in
+    a four-panel figure the panels are 80% of the crop, so the crop's modal IS panel-black and
+    that test segments the GUTTERS instead, exactly inverted.
+    """
+    px = im.load()
+    sy = max(1, (y1 - y0) // 48)
+    rows = list(range(y0, y1, sy))
+    if len(rows) < 3:
+        return []
+    flags = []
+    for x in range(x0, x1):
+        col = [_px_lum(px[x, y]) for y in rows]
+        m = sorted(col)[len(col) // 2]
+        var = sum(1 for v in col if abs(v - m) > 0.10) / float(len(col))
+        flags.append(var > 0.04 or abs(m - ground) > 0.08)
+    runs = []
+    i = 0
+    while i < len(flags):
+        if flags[i]:
+            j = i
+            while j + 1 < len(flags) and flags[j + 1]:
+                j += 1
+            runs.append([x0 + i, x0 + j + 1])
+            i = j + 1
+        else:
+            i += 1
+    merged = []
+    for r in runs:                                       # bridge word gaps / thin seams
+        if merged and r[0] - merged[-1][1] <= max_gap:
+            merged[-1][1] = r[1]
+        else:
+            merged.append(r)
+    return [tuple(r) for r in merged if r[1] - r[0] >= min_w]
+
+
+def _caption_align(im, bx, sw, sh):
+    """Is each caption aligned to the PANEL it names? (render-based, geometry-agnostic)
+
+    The defect this exists for: a multi-panel figure is one picture, so its panels have no
+    shape geometry to align to. Captions then get laid out on the deck's text grid — column
+    width over four — while the panels sit wherever the plotting library put them, at widths
+    that differ whenever the panels have different aspect ratios. Every caption is then a
+    little bit wrong, the build gate is silent (nothing overlaps, nothing overflows), and the
+    error is obvious to any human looking at the slide. Shipped exactly that way once.
+
+    Reading the panels out of the PIXELS is what makes the ONE-picture case checkable at all.
+    Two figure shapes are covered: a single wide picture (panels found in its pixels), and a ROW
+    of 2..6 same-top, same-height pictures (which do have shape geometry — their declared rects
+    ARE the panel set, and no pixels are needed). A row of separate pictures used to fall through
+    both: each one is narrower than the 2.0in floor, and a lone picture always segments to one
+    run. Native CHARTS are still out of scope — they are GraphicFrames, not pictures, and their
+    interior is not read here.
+
+    Scoped narrowly on purpose — it runs only when the caption band under a figure segments into
+    the SAME number of runs as the figure has panels (2..6). That is the one configuration whose
+    intent is unambiguous: N labels for N panels, each belonging to the one above it. One caption
+    spanning a four-panel figure, or three captions under four panels, are legible compositions
+    with no single right answer, and guessing at them would cost false positives.
+    """
+    out = []
+    W, H = im.size
+    px = im.load()
+    pxin = W / float(sw)
+    ground = _page_ground(im)
+    pics = [p for p in bx if p["pic"] and p["w"] >= 0.6 and p["h"] >= 0.6]
+    targets = []                                         # (x0,x1,y0,y1, declared_panels|None)
+    for p in pics:                                       # one wide picture: panels live in pixels
+        if p["w"] >= 2.0:
+            targets.append((p["l"], p["r"], p["t"], p["b"], None))
+    # a ROW of pictures: same top, same height, left-to-right — their own rects are the panels
+    rows = {}
+    for p in pics:
+        rows.setdefault((round(p["t"], 2), round(p["h"], 2)), []).append(p)
+    for grp in rows.values():
+        if 2 <= len(grp) <= 6:
+            grp = sorted(grp, key=lambda q: q["l"])
+            targets.append((grp[0]["l"], grp[-1]["r"], grp[0]["t"], grp[0]["b"],
+                            [(int(q["l"] * pxin), int(q["r"] * pxin)) for q in grp]))
+    for pl, pr, pt, pb, declared in targets:
+        x0, x1 = max(0, int(pl * pxin)), min(W, int(pr * pxin))
+        y0, y1 = max(0, int(pt / sh * H)), min(H, int(pb / sh * H))
+        if x1 - x0 < 200 or y1 - y0 < 50:
+            continue
+        # Panels are judged against the FIGURE's own backdrop; captions, which sit on the page
+        # below it, against the page's. Using one ground for both was the check's biggest hole.
+        fg = _crop_ground(im, x0, x1, y0, y1, ground)
+        panels = declared or _ink_cols(im, x0, x1, y0, y1, fg,
+                                       int(0.35 * pxin), int(0.02 * pxin))
+        if not 2 <= len(panels) <= 6:
+            continue
+        sx = max(1, (x1 - x0) // 120)
+        cols = list(range(x0, x1, sx))
+
+        def rowink(y):
+            return sum(1 for x in cols if abs(_px_lum(px[x, y]) - ground) > 0.08) / float(len(cols))
+
+        ib = y1                                          # the picture's INK bottom, not its box
+        while ib > y0 + 1 and rowink(ib - 1) < 0.02:
+            ib -= 1
+        cy = None                                        # first ink row under it = the caption line
+        for y in range(min(H - 1, ib + 2), min(H, ib + int(0.62 * pxin))):
+            if rowink(y) > 0.006:
+                cy = y
+                break
+        if cy is None:
+            continue
+        caps = _ink_cols(im, x0, x1, cy, min(H, cy + int(0.30 * pxin)), ground,
+                         int(0.12 * pxin), int(0.14 * pxin))
+        if len(caps) != len(panels):
+            continue
+        for i, ((a0, a1), (c0, c1)) in enumerate(zip(panels, caps)):
+            pw = a1 - a0
+            tol = max(0.10 * pxin, 0.06 * pw)
+            d = min(abs(c0 - a0), abs(c1 - a1), abs((c0 + c1) / 2.0 - (a0 + a1) / 2.0))
+            if d > tol:
+                out.append("CAPTION NOT ALIGNED: panel %d of %d — its caption is %.2fin off the "
+                           "panel it names (neither left, centre nor right edge lines up). A "
+                           "caption's x must be DERIVED from where the panel actually landed, "
+                           "not from the text column divided by %d" % (i + 1, len(panels),
+                                                                       d / pxin, len(panels)))
+    return out
+
+
 def _region_bg_lum(im, s, sw, sh, ink_lum):
     """ADVERSARIAL background-luminance estimate behind a text shape, sampled from the slide
     render. Region = the text's RENDERED extent (alignment/anchor-aware) padded ~0.08in and
@@ -538,7 +760,17 @@ def _cjk_typography(slide):
 
 
 
-def _slide_stats(slide, bx, sw, sh):
+def reading_load(slide, bx, sh):
+    """One slide's reading load, in words. THE one definition — the TEXT WALL warning and the
+    hand-off DENSITY gate both call this, so the number in the warning and the number in the gate
+    can never be two different numbers.
+
+    Chrome is excluded by POSITION, not by length: a footer is small type in the footer band. An
+    earlier copy of this in render_deck.py skipped any paragraph `sz <= 10.5 and len(t) < 40`
+    anywhere on the slide, which is not a footer filter but a blanket amnesty for small type —
+    the same deck read 136 words to the lint and 4 to the gate, and a wall of 10.5pt prose sailed
+    through. A gate calibrated differently from the warning it enforces is worse than no gate.
+    """
     footer_y = sh - 0.6
     load = 0
     for s in bx:
@@ -546,6 +778,12 @@ def _slide_stats(slide, bx, sw, sh):
             load += _text_load(s["full"])
     if load == 0:                                        # grouped-content decks: fall back to run-walk
         load = sum(_text_load(r.text) for r in _walk_runs(slide.shapes) if r.text.strip())
+    return load
+
+
+def _slide_stats(slide, bx, sw, sh):
+    footer_y = sh - 0.6                                  # used by the half-occupancy checks below
+    load = reading_load(slide, bx, sh)
     sizes = []                                                             # (pt, chars) for every explicit-size run
     for r in _walk_runs(slide.shapes):
         if r.text.strip() and r.font.size:
@@ -702,6 +940,21 @@ def _render_col_void(im):
     return best / 96.0
 
 
+# Which pixel-backed checks did NOT run, and why. A gate that disables itself in silence turns
+# "0 hard findings" into a sentence that means two different things, and the reader cannot tell
+# which one they got — the exact shape of the failure this skill exists to prevent.
+_SKIP = {}
+_STATS_ERR = []            # (slide, "ExcType: msg") — per-slide statistics that DIED, never hidden
+_PIXEL_CHECKS = ("TEXT NOT VISIBLE", "CAPTION NOT ALIGNED", "TEXT-ON-IMAGE CONTRAST",
+                 "colour/value pacing", "FLAT RHYTHM")
+
+
+def _report_pixel_skip():
+    if _SKIP.get("reason"):
+        print("  [skipped] %s — NOT checked: %s" % (_SKIP["reason"], ", ".join(_PIXEL_CHECKS)))
+    return dict(_SKIP)
+
+
 def _render_png_paths(path, renders_dir, n):
     """Sorted per-slide render PNGs, or None — the ONE discovery shared by the stats lum pass and
     the text-on-image contrast check. Silent no-op when Pillow is missing, the dir is absent, or
@@ -710,18 +963,22 @@ def _render_png_paths(path, renders_dir, n):
     try:
         from PIL import Image                            # noqa: F401 — every consumer needs Pillow
     except ImportError:
+        _SKIP["reason"] = "Pillow not installed"
         return None
     auto = renders_dir is None
     if renders_dir is None:
         cand = os.path.join(os.path.dirname(os.path.abspath(str(path))), "render")
         renders_dir = cand if os.path.isdir(cand) else None
     if not renders_dir or not os.path.isdir(renders_dir):
+        _SKIP["reason"] = "no render directory (pass --renders <dir>, or render beside the deck)"
         return None
     import glob
     # numeric sort: lexical sorting breaks at >=100 slides (slide100 between slide10 and slide11)
     pngs = sorted(glob.glob(os.path.join(renders_dir, "slide*.png")),
                   key=lambda p: int(re.sub(r"\D", "", os.path.basename(p)) or 0))
     if not pngs or len(pngs) != n:      # `not pngs` also guards the 0-slide deck: max() below
+        _SKIP["reason"] = ("no slide PNGs in %s" % renders_dir if not pngs
+                           else "%d PNGs for %d slides — re-render" % (len(pngs), n))
         return None                     # would raise on an empty iterable
     # stale-render guard (auto-discovered dir only — an explicit --renders is the user's contract):
     # a matching PNG COUNT from an older build of a different deck would silently feed wrong
@@ -729,8 +986,7 @@ def _render_png_paths(path, renders_dir, n):
     if auto:
         try:
             if max(os.path.getmtime(p) for p in pngs) < os.path.getmtime(str(path)) - 1:
-                print(f"  [stats] note: ignoring {renders_dir} — renders predate the deck "
-                      f"(re-render before linting to enable pixel checks)")
+                _SKIP["reason"] = "renders predate the deck — re-render"
                 return None
         except OSError:
             pass
@@ -795,7 +1051,13 @@ def _print_stats(rows, mode, sw, sh, lums=None, static_ok=False):
             a, b = rows[i - 1]["skel"], r["skel"]
             j = len(a & b) / max(1, len(a | b))
             sim = f"{j:.2f}"
-            sames = sames + 1 if j >= 0.75 else 0
+            # A DECLARED rhyme is the opposite of sameness: small multiples at deck scale, where
+            # the identical frame is what makes the one changing variable visible. deckkit's
+            # design_intent(rhyme=<group id>) documented this waiver long before anything read it.
+            rh_a = (rows[i - 1].get("intent") or {}).get("rhyme")
+            rh_b = (r.get("intent") or {}).get("rhyme")
+            rhymed = rh_a is not None and rh_a == rh_b
+            sames = 0 if rhymed else (sames + 1 if j >= 0.75 else 0)
             if sames >= 2:
                 warns.append(f"LAYOUT SAMENESS: slides {i-1}-{i+1} share ≥75% of their skeleton — "
                              f"vary the page structure, not just the words (rhythm / canvas-skeleton rule)")
@@ -856,10 +1118,12 @@ def _print_stats(rows, mode, sw, sh, lums=None, static_ok=False):
         # thin neighbours into one full slide), not stretching boxes. Cover/closing/dividers and
         # deliberately quiet registers are exempt — record the exception instead.
         if (mode != "surface" and 0 < i < len(rows) - 1 and r["load"] >= 15
-                and r["ink_cov"] < 0.25 and not r.get("big_pic_fg", r["n_pic"] > 0)):
+                and r["ink_cov"] < 0.25 and not r.get("big_pic_fg", r["n_pic"] > 0)
+                and not (r.get("intent") or {}).get("envelope")):
             warns.append(f"UNDERFILLED: slide {i+1} ink covers only {r['ink_cov']*100:.0f}% of the canvas "
-                         f"for a ~{r['load']}-word content slide — enrich the point, merge it with a thin "
-                         f"neighbour, or record the quiet-register exception (frame-fill rule)")
+                         f"for a ~{r['load']}-word content slide — strengthen the hero, or declare the "
+                         f"quiet register with design_intent(envelope=...) if the air is the point; "
+                         f"only then consider enriching or merging with a thin neighbour")
         # DEAD BOTTOM: an interior content slide whose content stops well above the footer — the
         # lower third reads as an accidental void even when overall ink% passes (a wide-but-shallow
         # layout). Charts and big fg imagery earn their own whitespace; text/panel slides don't.
@@ -1101,6 +1365,7 @@ def lint(path, mode="presented", json_out=None, renders_dir=None, static_ok=Fals
     j_findings, j_warns = [], []
     # discover the per-slide render PNGs ONCE — shared by the text-on-image contrast check
     # (per-slide, inside the loop) and the stats lum pass (after it)
+    _SKIP.clear()          # one owner for the skip reason: cleared here, only ever set below
     pngs = _render_png_paths(path, renders_dir, len(prs.slides))
     titles = []                                          # (slide#, normalized title, display snip)
     intent_map = {}                                      # si -> declared design intent (see design_intent)
@@ -1116,8 +1381,14 @@ def lint(path, mode="presented", json_out=None, renders_dir=None, static_ok=Fals
         bx = _boxes(slide, sw, sh)
         try:
             stats_rows.append(_slide_stats(slide, bx, sw, sh))
-        except Exception:
-            pass
+        except Exception as exc:
+            # NEVER silently. This used to be `except Exception: pass`, and one refactor that
+            # deleted a local variable took TEXT WALL, LAYOUT SAMENESS, UNDERFILLED, FLAT RHYTHM
+            # and the density number off this deck while the report still printed "✓ clean".
+            # A check that can die without saying so is worse than a check that was never added:
+            # the first one lies. Same principle as _report_pixel_skip — "0 findings" and
+            # "0 findings, and here is what did not run" are different sentences.
+            _STATS_ERR.append((si + 1, "%s: %s" % (type(exc).__name__, exc)))
         finds = []
         warns = []
         # 1) overflow
@@ -1145,9 +1416,89 @@ def lint(path, mode="presented", json_out=None, renders_dir=None, static_ok=Fals
         for ti, s in enumerate(bx):
             if not s["text"] or not s["runs"]:
                 continue
+            # OCCLUSION / RULE THROUGH TEXT — the two faults that live in PAINT ORDER, which the
+            # build-time model does not represent at all: a shape added AFTER a text box is drawn
+            # ON TOP of it. The XML is well-formed and every geometry check passes, so both gates
+            # report clean while a sentence is partly or wholly invisible in the render. Measured:
+            # a footer hairline painting over a sources line passed lint_deck with 0 findings and
+            # was found only by sampling the PNG.
+            _rl, _rt, _rr, _rb = _rbox(s)
+            tb = {"l": _rl, "t": _rt, "r": _rr, "b": _rb}
+            ta_ = max((_rr - _rl) * (_rb - _rt), 1e-6)
+            # Coverage is a UNION over every shape painted after the text, never one shape at a
+            # time. A per-shape ">=60% of the text" threshold is blind BY CONSTRUCTION to anything
+            # assembled from many small parts, and real decks shipped straight through that hole
+            # with the gate reporting clean: a 150-tile field erasing a caption (no single tile
+            # covers 1% of it) and a dashed rule of 40 boxes struck through a footnote. Rasterise
+            # the text's ink rect, accumulate, then ask what the UNION looks like — not what any
+            # one shape was. Enumerating occluder shapes is unbounded; measuring coverage is not.
+            # TWO grids, because "a thin SHAPE lying across the glyphs" and "a big shape whose
+            # INTERSECTION happens to be thin" are different faults and only the first is a rule.
+            # Conflating them regressed the skill's own reference deck: a card's bottom edge
+            # grazing the footer read as a strike-through. `cov` answers "how much is hidden",
+            # `rules` answers "is a line drawn across it" and only ever accepts shapes that are
+            # themselves thin — which is exactly what a dashed rule's 40 boxes each are.
+            GW, GH = 192, 32
+            cov = [bytearray(GW) for _ in range(GH)]
+            rules = [bytearray(GW) for _ in range(GH)]
+            rw_ = max(_rr - _rl, 1e-6)
+            rh_ = max(_rb - _rt, 1e-6)
+            for k in range(ti + 1, len(bx)):             # shapes AFTER ti are painted above it
+                o = bx[k]
+                # Pictures stay out of this pass: it reads the FILE, not the pixels, and nothing
+                # here knows a picture's ALPHA — deckkit.pic_alpha() places faint plates on
+                # purpose and a transparent PNG covers nothing. Text over imagery is owned by the
+                # render-time checks, which sample actual pixels.
+                if o["text"] or o.get("bg") or o.get("unk") or o["pic"] or not o["fill"]:
+                    continue
+                ix, iy = _inter(o, tb)
+                if ix <= 0 or iy <= 0:
+                    continue
+                c0 = max(0, int((o["l"] - _rl) / rw_ * GW))
+                c1 = min(GW, int(math.ceil((o["r"] - _rl) / rw_ * GW)))
+                r0 = max(0, int((o["t"] - _rt) / rh_ * GH))
+                r1 = min(GH, int(math.ceil((o["b"] - _rt) / rh_ * GH)))
+                thin_shape = min(o["w"], o["h"]) <= 0.06
+                for rr in range(r0, max(r1, r0 + 1)):
+                    row, rrow = cov[rr], rules[rr]
+                    for cc in range(c0, max(c1, c0 + 1)):
+                        row[cc] = 1
+                        if thin_shape:
+                            rrow[cc] = 1
+            row_frac = [sum(r) / float(GW) for r in cov]
+            rule_frac = [sum(r) / float(GW) for r in rules]
+            total_frac = sum(row_frac) / float(GH)
+
+            if total_frac >= 0.60:
+                finds.append(f"OCCLUSION: '{s['txt'][:28]}' is {100*total_frac:.0f}% covered by "
+                             f"shape(s) painted after it — the text renders hidden; move them "
+                             f"earlier in the build or out of the way")
+            else:
+                # A thin BAND of union coverage across the glyphs is a rule through the text,
+                # however many shapes drew it. Legal BELOW the baseline (an underline), illegal
+                # THROUGH the x-height; the old symmetric pad spared both, which is backwards.
+                line_h = max(s.get("size", 12), 1) / 72.0 * 1.25
+                b0 = None
+                for i in range(GH + 1):
+                    hit = i < GH and rule_frac[i] >= 0.50
+                    if hit and b0 is None:
+                        b0 = i
+                    elif not hit and b0 is not None:
+                        band_t = _rt + (b0 / float(GH)) * rh_
+                        band_h = ((i - b0) / float(GH)) * rh_
+                        span = max(rule_frac[b0:i]) * rw_
+                        if (band_h <= min(0.06, 0.34 * rh_)
+                                and band_t < _rb - min(0.045, 0.30 * line_h)):
+                            finds.append(
+                                f"RULE THROUGH TEXT: a {span:.2f}x{band_h:.3f}in rule is painted "
+                                f"OVER '{s['txt'][:28]}' — derive the rule's y from the measured "
+                                f"end of the block above it, or draw it before the text")
+                            break
+                        b0 = None
             back = _backing_fill(bx, ti)
             if back == "UNKNOWN":
                 continue                                 # picture/gradient backing → unknowable, skip
+            _resolved_back = bool(back)
             if not back:
                 if dark_plate or unk_plate:
                     continue                             # unresolved / plate canvas → skip (no false positive)
@@ -1162,12 +1513,22 @@ def lint(path, mode="presented", json_out=None, renders_dir=None, static_ok=Fals
                                  + (" (no explicit colour, defaults to black)" if rc is None else "")
                                  + f" on fill #{back} — contrast {ratio:.2f}:1, unreadable")
                 elif ratio < 3.0:
-                    warns.append(f"LOW CONTRAST: '{snip}' ink #{ink} on fill #{back} — {ratio:.2f}:1 (< 3:1)")
+                    # 3:1 is WCAG's floor for text at ANY size — large-text and bold carve-outs
+                    # only relax the bar to 3.0, never below it. So a RESOLVED backing under 3.0 is
+                    # unreadable on every reading of the spec and is a hard finding; the promotion
+                    # needs no knowledge of size or weight, which is why it is safe to make here.
+                    msg = (f"LOW CONTRAST: '{snip}' ink #{ink} on fill #{back} — {ratio:.2f}:1 "
+                           f"(under 3:1, the floor for text at ANY size)")
+                    (finds if _resolved_back else warns).append(msg)
                 elif ratio < 4.5 and s["size"] >= 12:
-                    # body-size text is held to the full WCAG bar; small chrome (footers, tick
-                    # labels) may sit in the 3.0-4.5 band without a warn
+                    # The 3.0-4.5 band stays a WARN on purpose. WCAG relaxes the bar to 3:1 for
+                    # large text (>=18pt, or >=14pt BOLD) and this pass does not collect weight, so
+                    # a hard failure here would rest on a guess about whether a 12pt label is bold.
+                    # Measured: promoting this band hard-failed the skill's OWN reference deck four
+                    # times, on accent labels at 4.27:1 — a 0.23 shortfall on a kicker is a judgement
+                    # call, not a defect, and a gate that blocks on it teaches people to bypass it.
                     warns.append(f"BODY CONTRAST: '{snip}' ink #{ink} on fill #{back} — {ratio:.2f}:1 "
-                                 f"(body-size text targets ≥4.5:1)")
+                                 f"(body-size text targets >=4.5:1; large/bold text may sit here)")
         # 1c) TEXT-ON-IMAGE contrast (render-based): text whose backing resolves to a picture /
         #     gradient ("UNKNOWN") is exactly what 1b must skip — when renders exist, sample the
         #     pixels behind the text instead (_region_bg_lum's adversarial percentile; a scrim or
@@ -1212,6 +1573,66 @@ def lint(path, mode="presented", json_out=None, renders_dir=None, static_ok=Fals
                     elif est < 3.0:
                         warns.append(f"TEXT-ON-IMAGE CONTRAST: '{snip}' est. {est:.2f}:1 (<3:1) over "
                                      f"an image — verify legibility; a scrim/panel usually fixes it")
+
+        # 1d) TEXT NOT VISIBLE (render-based, CAUSE-AGNOSTIC). Every XML-side occlusion rule is a
+        #     taxonomy of causes, and a taxonomy of causes is unbounded: pictures are skipped
+        #     because alpha is unknowable from the file, groups and gradients for their own
+        #     reasons, and anything built from many small parts slipped a per-shape threshold.
+        #     Each exclusion is a hole; real decks shipped through them with the gate clean.
+        #     This asks the one question with a bounded answer — is the text VISIBLE? — and it
+        #     does not care what covered it. A LINE whose pixels are a flat wash contains no
+        #     glyphs. Only flagged when a LIVE line follows a dead one (or every line is dead):
+        #     a dead band at the BOTTOM is ordinary slack between the ink rect and the box, and
+        #     treating that as a defect false-flags healthy decks.
+        if pngs:
+            im_v = None
+            for s in bx:
+                if not s["text"] or not s["runs"] or s["size"] < 8:
+                    continue
+                if not any(len(t) >= 4 for t, _c in s["runs"]):
+                    continue
+                if im_v is None:
+                    try:
+                        from PIL import Image
+                        im_v = Image.open(pngs[si]).convert("RGB")
+                    except Exception:
+                        im_v = False
+                if im_v is False:
+                    break
+                bands = _glyph_bands(im_v, s, sw, sh)
+                if not bands:
+                    continue
+                # Thresholds are RELATIVE to the block's own liveliest line, because a short
+                # line is legitimately quiet: a five-word last line across a wide rect scores
+                # ~0.04 while a full line scores ~0.3. An absolute floor either misses the
+                # short-line case or false-flags it. A HIDDEN line is not merely quiet — it is
+                # essentially zero, both absolutely and against its siblings.
+                mx = max(bands)
+                dead = [i for i, e in enumerate(bands)
+                        if e <= 0.02 and (mx <= 0.02 or e <= 0.12 * mx)]
+                live = [i for i, e in enumerate(bands) if e >= max(0.03, 0.25 * mx)]
+                hole = any(d < max(live) for d in dead) if live else len(dead) == len(bands)
+                if hole:
+                    where = ("every line" if not live
+                             else "line %d of %d" % (dead[0] + 1, len(bands)))
+                    finds.append(f"TEXT NOT VISIBLE: '{s['txt'][:28]}' — {where} renders as a flat "
+                                 f"field with no glyphs in it. Something is painted over the text, "
+                                 f"or it is the same colour as its ground; check the render")
+
+        # 1e) CAPTION NOT ALIGNED (render-based). A label must sit on the thing it labels. The
+        #     panels of a composite figure have no shape geometry, so captions get laid out on
+        #     the text grid instead and land wherever that grid happens to fall — a defect no
+        #     overlap/overflow rule can see, and one every viewer sees instantly.
+        if pngs and any(s["pic"] for s in bx):
+            if im_v is None:
+                try:
+                    from PIL import Image
+                    im_v = Image.open(pngs[si]).convert("RGB")
+                except Exception:
+                    im_v = False
+            if im_v is not False:
+                finds.extend(_caption_align(im_v, bx, sw, sh))
+
         # 2) solid vs solid partial overlap (neither contained)
         sol = [s for s in bx if s["solid"] and not s["bg"]]
         for i in range(len(sol)):
@@ -1487,6 +1908,12 @@ def lint(path, mode="presented", json_out=None, renders_dir=None, static_ok=Fals
     deck_stats = _print_stats(stats_rows, mode, sw, sh, lums=lums, static_ok=static_ok)
     tail = ("" if total else "  ✓ clean (no hard findings)") + (f"  ·  {warn_total} warning(s)" if warn_total else "")
     print(f"\n{path}: {total} layout finding(s){tail}")
+    _report_pixel_skip()   # "clean" must never mean "clean, but three checks never ran"
+    if _STATS_ERR:
+        print("  [BROKEN] per-slide statistics crashed on %d slide(s) — NOT checked on them: "
+              "TEXT WALL, LAYOUT SAMENESS, UNDERFILLED, FLAT RHYTHM, body-size floor. This is a "
+              "bug in the lint, not in the deck — first: slide %d %s"
+              % (len(_STATS_ERR), _STATS_ERR[0][0], _STATS_ERR[0][1]))
     if total:
         print("  fix guide (symptom → cause → fix, plain language): references/troubleshooting-faq.md §6")
     if deck_stats.get("warns"):
@@ -1510,7 +1937,11 @@ def lint(path, mode="presented", json_out=None, renders_dir=None, static_ok=Fals
                        "warnings": j_warns, "stats_warnings": deck_stats.get("warns", []),
                        "deck": {k: v for k, v in deck_stats.items() if k != "warns"},
                        "per_slide": per_slide,
-                       "counts": {"findings": total, "warnings": warn_total}}, f,
+                       "counts": {"findings": total, "warnings": warn_total},
+                       "pixel_checks": {"ran": not _SKIP.get("reason"),
+                                        "reason": _SKIP.get("reason"),
+                                        "not_checked": [] if not _SKIP.get("reason")
+                                                       else list(_PIXEL_CHECKS)}}, f,
                       ensure_ascii=False, indent=1)
         print(f"  [json] wrote {json_out}")
     return total

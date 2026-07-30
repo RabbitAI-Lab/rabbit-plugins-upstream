@@ -1,5 +1,5 @@
 ## Description: <br>
-Iaiops Process helps agents inspect process-industry plant telemetry across HART-IP, OPC-UA, Modbus, and optional Sparkplug/MQTT contexts for instrumentation health, downtime root cause, data quality, OEE, alarm, asset, and loop-health analysis. <br>
+iaiops-process guides agents through process-industry diagnostics across HART-IP, OPC-UA, Modbus, optional MQTT/Sparkplug B UNS, and cross-protocol analysis for root cause, data quality, and OEE. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,30 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, reliability engineers, and process-plant operators use this skill to guide read-first diagnostics and analysis for plant telemetry, instrumentation health, downtime root cause, OEE, alarms, and data quality across HART-IP, OPC-UA, and Modbus environments. <br>
+Developers, plant engineers, and operations teams use this skill to guide read-first diagnostics for process plants using HART-IP instruments, OPC-UA gateways, Modbus devices, and cross-protocol health, root-cause, data-quality, compliance, and OEE workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Industrial-control use may involve unclear write, export, or stream-publish authority despite read-first guidance. <br>
-Mitigation: Require documented read-only enforcement, operator approval, dry runs, and management-of-change controls before use in production or safety-relevant systems. <br>
-Risk: Historian, export, and stream-publish workflows may move sensitive plant telemetry outside expected boundaries. <br>
-Mitigation: Review destinations, credentials, and data scope before enabling export or publish workflows, and restrict access to approved operators and systems. <br>
+Risk: The skill is intended for high-consequence plant contexts and mixes read-only diagnostics with write, publishing, and data-export capabilities. <br>
+Mitigation: Review before installing in production or plant-connected environments, and confirm historian push, export_data, stream publishing, and Sparkplug/MQTT publishing are disabled, dry-run, or explicitly approval-gated unless those actions are intended. <br>
+Risk: Plant data export or stream publishing could move operational data beyond the intended boundary. <br>
+Mitigation: Allow export and publishing only after confirming the destination, approval path, and operational need for the specific deployment. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/iaiops-process) <br>
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-process) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Analysis, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with tool names, environment variables, and inline shell commands.] <br>
+**Output Type(s):** [guidance, shell commands, configuration, text] <br>
+**Output Format:** [Markdown with inline shell commands and tool names] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-first guidance for industrial telemetry; may include approval-gated write precautions when Sparkplug/MQTT publishing is in scope.] <br>
+**Other Properties Related to Output:** [Guidance is framed for read-first process diagnostics, with optional publishing or data movement requiring explicit review and gating.] <br>
 
 ## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+0.20.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

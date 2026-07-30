@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/meetings",
   "slug": "meetings",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778487820503,
-  "contentHash": "966ea7ed3c3c19bbf4aad0d33e21cd37d0b2a36024c019a45498b63f5482382d",
-  "fetchedAt": "2026-07-26T20:25:25.333Z"
+  "version": "1.0.2",
+  "updatedAt": 1785146156542,
+  "contentHash": "fb2fbdfc08444fae8b9c4fc77ee54480dd165096b348d134ecc335e7d55fcb9c",
+  "fetchedAt": "2026-07-30T10:00:47.528Z"
 }

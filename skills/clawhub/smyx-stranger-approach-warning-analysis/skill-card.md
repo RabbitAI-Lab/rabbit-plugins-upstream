@@ -1,5 +1,5 @@
 ## Description: <br>
-Detects the appearance of strangers near minors and actively issues safety reminder alerts to protect minor safety, suitable for homes, schools, childcare centers, and other scenarios. <br>
+Detects strangers near minors in images or video, returns structured safety analysis, and can query cloud-hosted historical alert reports. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and operators use this skill to analyze monitoring images, videos, local files, or URLs for stranger proximity near minors, receive structured safety reports, and query cloud-hosted historical alert reports. <br>
+External users, developers, and safety operations teams use this skill to analyze monitoring images or videos for stranger proximity risks around minors, produce structured reports, and retrieve historical alert reports from the configured cloud service. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Monitoring images or videos and identifiers are sent to cloud services for processing. <br>
-Mitigation: Use only where cloud processing is approved, consent and retention requirements are understood, and the documented service endpoints are acceptable. <br>
-Risk: The skill can silently create or reuse an account-linked identity and store identity or auth material locally. <br>
-Mitigation: Review identity handling before installation and prefer a version that asks for explicit consent before uploads, account creation, or credential storage. <br>
-Risk: Safety-analysis outputs are advisory and may be incomplete or incorrect. <br>
-Mitigation: Treat reports as safety reference material, keep human review in the workflow, and do not replace professional security or emergency procedures. <br>
+Risk: Sensitive images or video of minors and bystanders may be sent to configured LifeEmergence cloud services for analysis. <br>
+Mitigation: Deploy only with consent, legal basis, approved retention expectations, and clear controls for who can access submitted media and generated reports. <br>
+Risk: The skill silently creates or reuses an account identity and stores or reuses tokens locally. <br>
+Mitigation: Run it in an isolated workspace, review local credential storage before deployment, and rotate or remove tokens when access is no longer needed. <br>
+Risk: Historical report lookup can expose cloud-stored safety reports linked to the resolved account identity. <br>
+Mitigation: Limit use of report lookup to authorized operators and confirm retention, access, and audit expectations before enabling it. <br>
+Risk: The analysis is a safety aid and may be incomplete or incorrect. <br>
+Mitigation: Treat alerts as decision support and keep human review and professional safety procedures in place for urgent situations. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-stranger-approach-warning-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-stranger-approach-warning-analysis) <br>
+- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API documentation](artifact/references/api_doc.md) <br>
+- [Analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports, JSON details, and shell command invocations.] <br>
+**Output Type(s):** [text, markdown, json, files, shell commands, guidance] <br>
+**Output Format:** [Markdown or JSON analysis reports, Markdown tables for historical reports, and optional saved result files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save results to a local output file and can list cloud-hosted historical reports.] <br>
+**Other Properties Related to Output:** [Supports local file or URL inputs; documented media limit is 10 MB.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata; SKILL.md frontmatter says 1.0.10) <br>
+1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.11) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

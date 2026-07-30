@@ -13,7 +13,7 @@ metadata:
     dcc: python
     layer: infrastructure
     compatibility: "dcc-mcp-core 0.17+, Python 3.7+"
-    version: "0.19.79"  # x-release-please-version
+    version: "0.19.87"  # x-release-please-version
     search-hint: >-
       create DCC MCP adapter, Nuke MCP, DccServerBase, HostExecutionBridge,
       dispatcher, readiness, resources, gateway, Blender, 3ds Max, Unreal,
@@ -34,6 +34,22 @@ install lifecycle, or cross-DCC verification.
 
 For individual skill packages (`SKILL.md`, `tools.yaml`, scripts, groups, and
 skill taxonomy), load `dcc-mcp-skills-creator` instead.
+
+## Install and Route
+
+Install the published
+[`@loonghao/dcc-mcp-creator`](https://clawhub.ai/loonghao/skills/dcc-mcp-creator)
+package, then start a new agent turn:
+
+```bash
+openclaw skills install @loonghao/dcc-mcp-creator
+npx --yes clawhub@0.23.1 install @loonghao/dcc-mcp-creator
+```
+
+Use [`dcc-mcp`](https://clawhub.ai/loonghao/skills/dcc-mcp) to operate an
+existing DCC. Use
+[`dcc-mcp-skills-creator`](https://clawhub.ai/loonghao/skills/dcc-mcp-skills-creator)
+when only a DCC-specific Skill package is needed.
 
 ## CLI-First Control Path
 
@@ -140,6 +156,10 @@ does not replace a running server binary.
      idempotent, confirmation-gated, and free of credentials. Do not treat
      `elevation_required` as permission to automate UAC or another shell path.
 8. Use CLI profiles (`dcc-mcp-cli gateway ...`, `list/search/describe/call`) as the user UX; treat `dcc-mcp-server` modes as runtime plumbing. Read `docs/guide/gateway.md` before changing daemon, guardian, sentinel, registry, or idle-timeout behavior.
+   Gateway discovery reuses a recent capability snapshot across adjacent
+   queries. Route adapter catalog changes through the existing
+   load/reload/unload contracts that force a refresh; never depend on every
+   search polling the full backend catalog.
    `gateway://instances` is agent-safe by default and returns only live,
    routable rows. Use `?include_stale=true`, `?include_dead=true`, or
    `?view=all` only for explicit diagnosis; never route a call from those
@@ -147,6 +167,10 @@ does not replace a running server binary.
    Once an instance is selected, reuse `gateway://instances/{instance_id}` or
    `GET /v1/instances/{instance_id}/context` for live process/machine
    performance, scene/documents, loaded skills, and canonical follow-up routes.
+   For agent observability, read `gateway://experiments/{experiment_id}` for
+   runs, Session DAG links, metrics, and Judge evidence; read
+   `gateway://governance` for the effective policy boundary. Keep Admin memory
+   deletion controls out of agent-readable resources.
 9. Use `dcc_mcp_core.install_lifecycle.build_sidecar_command(...)` / `launch_sidecar(...)` for sidecar startup and readiness. Read `docs/guide/adapter-install-lifecycle.md` before changing host RPC, dispatch readiness, launch stdio, `watch_pid`, or `instance_id` handling.
    - The sidecar MCP listener is dispatch-only. A py37-lite factory can expose local skill metadata, but it cannot advertise or activate declarative skills through the gateway. Require a native py37 wheel for that path, or provide a separate discovery MCP URL; never report lite `load_skill` success without an executable catalog.
 10. Pass `instance_id` to sidecar launch helpers only when it is a real UUID for the DCC service. During early startup, omit it or pass `None`; `build_sidecar_command()` rejects cosmetic values such as `"unknown"` with `success=false` and `reason="invalid_instance_id"` so adapters do not spawn a child that can only fail with a CLI argument error.
@@ -172,6 +196,11 @@ does not replace a running server binary.
     database, or a replay authority flag. Generated workflows re-resolve
     current tools and schemas; semantic UI replay resolves fresh control ids;
     raw/visual fallback requires exact-window calibration and drift guards.
+22. Record reproducible experiment definitions, run states, Session DAG links,
+    metrics, and judge evidence through the gateway `/v1/experiments` APIs.
+    Reuse `session_events`, workflow/recording identifiers, and artifact
+    references; do not add adapter-local experiment storage or treat judge
+    output as approval authority.
 
 ## Chunked Main-Thread Jobs
 
@@ -229,6 +258,22 @@ would be unsafe.
   `interrupted` and remain queryable through the replacement instance's
   `jobs_get_status`; adapter-owned isolated jobs need their own durable status
   tool when they outlive the request transport.
+
+## Failure Analysis and Bug Routing
+
+Reproduce through `dcc-mcp` and keep one gateway session id. Run
+`dcc-mcp-cli doctor`, then `dcc-mcp-cli stats --status failure --session-id
+<session-id>`; preserve the failed call's `request_id`, trace/job ids, adapter
+version, DCC version, readiness fields, and the smallest safe reproduction.
+Use `/v1/debug/issue-reports/<request_id>` for the public-safe issue body and
+review any `?mode=raw` export locally before sharing it.
+
+Report adapter-owned dispatch, host-thread, readiness, packaging, or install
+bugs in the adapter repository. Escalate shared CLI, gateway, protocol, or core
+contract failures to `dcc-mcp-core`. Tool schema/script/workflow defects belong
+to the owning Skill and `dcc-mcp-skills-creator`. Record runtime feedback with
+the CLI-discovered `dcc_feedback__report` tool; open an external issue only
+with user authorization.
 
 ## Example: New Nuke Adapter
 

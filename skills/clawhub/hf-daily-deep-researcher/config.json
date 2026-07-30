@@ -1,24 +1,14 @@
 {
   "user_profile": {
-    "name": "Tom",
+    "name": "User",
     "institution": "",
-    "research_focus": [
-      "agentic RL",
-      "credit assignment",
-      "multi-scale RL",
-      "hierarchical RL",
-      "process reward model",
-      "multi-agent RL"
-    ],
+    "research_focus": [],
     "current_projects": []
   },
   "tracking": {
     "base_frequency": "weekly",
     "adaptive": true,
-    "sources": [
-      "arxiv",
-      "hf_papers"
-    ],
+    "sources": ["arxiv", "hf_papers"],
     "max_papers_per_scan": 50,
     "last_scan_date": null,
     "next_scan_date": null
@@ -36,7 +26,7 @@
     "max_deep_papers_per_scan": 3
   },
   "output": {
-    "local_save_dir": "~/.openclaw/workspace/skills/hf-daily-deep-researcher/reports",
+    "local_save_dir": "./reports",
     "report_naming_pattern": "{source}_{period}_{focus}_Report_{date}.md",
     "version_management": {
       "enabled": true,
@@ -46,11 +36,11 @@
     "cloud_upload": {
       "enabled": false,
       "on_demand": true,
-      "folder_token": "Pt0LfFfDJlQil6d8zFycZZm4nkg"
+      "folder_token": ""
     },
     "report_format": "markdown",
     "save_history": true,
-    "history_dir": "~/.openclaw/workspace/skills/hf-daily-deep-researcher/history"
+    "history_dir": "./history"
   },
   "notifications": {
     "p0_alert": true,
@@ -58,6 +48,6 @@
     "trend_change_alert": true,
     "author_alert": false
   },
-  "version": "4.1.2",
-  "created_date": "2026-06-28T13:43:25.965233"
+  "version": "5.2.0",
+  "created_date": "2026-07-29T00:00:00.000000"
 }

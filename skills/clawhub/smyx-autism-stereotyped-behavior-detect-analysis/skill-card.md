@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes fixed-camera child behavior videos to report repetitive stereotyped behaviors such as spinning, hand flapping, and body rocking; it does not provide autism diagnosis, scale scoring, or rehabilitation prescriptions. <br>
+Analyzes fixed-camera child behavior videos to identify repetitive stereotyped behaviors such as spinning, hand flapping, and body rocking, then returns structured behavior statistics and report links. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Therapists, caregivers, special-education teams, and developers use this skill to submit child behavior videos or URLs to a cloud analysis service and receive objective behavior-event counts, durations, trend summaries, and report links for professional review. <br>
+Therapists, parents, rehabilitation teams, and developers use this skill to submit clear fixed-camera child behavior videos or video URLs and receive objective event-level statistics, summaries, and report links for professional review. It is descriptive support for behavior tracking, not a diagnostic tool or rehabilitation prescription. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Child behavior videos, report queries, and account-linked identifiers may be sent to the configured cloud service. <br>
-Mitigation: Use only where guardian consent, data-retention expectations, and access controls are already established before uploading footage. <br>
-Risk: The skill may create a local shared SQLite database and store service tokens in the workspace data directory. <br>
-Mitigation: Run it in a controlled workspace, restrict access to local data, and remove or protect generated identity and token files after use. <br>
-Risk: Computer-vision results may misclassify ordinary movements or be degraded by occlusion, multiple children, poor framing, low frame rate, or unstable lighting. <br>
-Mitigation: Treat outputs as descriptive behavior statistics for review by qualified therapists or caregivers, not as diagnosis, scale scoring, or treatment prescription. <br>
+Risk: Sensitive child-behavior videos and reports may be uploaded to or retrieved from a remote service. <br>
+Mitigation: Use only with explicit guardian consent, a trusted backend, defined retention policies, and account isolation; avoid unnecessary uploads and prefer privacy-preserving inputs where available. <br>
+Risk: The skill can silently create or reuse an internal identity and query cloud history for reports tied to that identity. <br>
+Mitigation: Run it in an isolated workspace and account context, restrict access to history-list workflows, and review or clear local identity files before sharing the workspace. <br>
+Risk: Service tokens may be stored in a local workspace database. <br>
+Mitigation: Protect the workspace data directory, do not publish workspace archives containing runtime data, and rotate or revoke tokens after testing or transfer. <br>
+Risk: Visual behavior classification can misidentify everyday activity as stereotyped behavior and is not a diagnosis. <br>
+Mitigation: Require professional review of sampled outputs and do not use reports as the sole basis for diagnosis, treatment, or rehabilitation planning. <br>
 
 
 ## Reference(s): <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [API documentation](references/api_doc.md) <br>
+- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [Skill usage introduction](https://lifeemergence.com/sample.html) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-autism-stereotyped-behavior-detect-analysis) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON or Markdown analysis reports from the API] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
+**Output Format:** [Markdown and JSON-formatted structured report text] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write report output files when --output is supplied; historical report listings are rendered as Markdown tables.] <br>
+**Other Properties Related to Output:** [May include behavior event statistics, summary metrics, history-list output, report export links, and optional saved output files.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter says 1.0.4) <br>
+1.0.6 (source: SKILL.md frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

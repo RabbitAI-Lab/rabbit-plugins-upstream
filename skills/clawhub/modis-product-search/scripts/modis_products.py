@@ -328,7 +328,24 @@ def format_download_info(product_id: str, data: Dict) -> str:
         lines.append(f"DOI: {product['doi']}")
     lines.append("")
     lines.append("Command Line Download (wget):")
-    lines.append(f'  wget --user YOUR_USER --password YOUR_PASS "{product.get("download_url", "URL")}"')
+    # Phase 7 (2026-07-27): auto-fill username from vendored credentials helper
+    # (if available). Password is never auto-filled for safety — user must
+    # either set EARTHDATA_PASSWORD env var, configure .netrc, or type it.
+    try:
+        from _geoskill_core.credentials import get_earthdata_creds
+        u, _p = get_earthdata_creds()
+    except ImportError:
+        u = os.environ.get("EARTHDATA_USERNAME", "")
+    if u:
+        cookie_jar = os.path.expanduser("~/.urs_cookies")
+        lines.append(f"  # If ~/.netrc is configured for urs.earthdata.nasa.gov:")
+        lines.append(f"  wget --load-cookies {cookie_jar} --save-cookies {cookie_jar} --keep-session-cookies \\")
+        lines.append(f'    "{product.get("download_url", "URL")}"')
+        lines.append("")
+        lines.append(f"  # Or with explicit credentials (set EARTHDATA_PASSWORD first):")
+        lines.append(f'  wget --user {u} --password "$EARTHDATA_PASSWORD" "{product.get("download_url", "URL")}"')
+    else:
+        lines.append(f'  wget --user YOUR_USER --password YOUR_PASS "{product.get("download_url", "URL")}"')
     lines.append("")
     lines.append("Note: NASA Earthdata account required.")
     lines.append("Register at: https://urs.earthdata.nasa.gov/")

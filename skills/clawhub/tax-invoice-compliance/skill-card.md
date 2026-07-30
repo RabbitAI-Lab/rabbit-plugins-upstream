@@ -1,5 +1,5 @@
 ## Description: <br>
-A digital tax-invoice compliance assistant for identifying shell-company false-invoice risk, checking four-flow consistency, and guiding abnormal voucher response and good-faith defense preparation. <br>
+Tax Invoice Compliance helps agents provide Chinese digital invoice compliance self-checks, false-invoice risk screening, four-flow consistency checks, abnormal voucher response guidance, and remediation checklists. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Finance, tax, and compliance users use this skill to self-check digital invoice workflows, screen supplier and shell-company invoice risk, verify contract-invoice-fund-logistics consistency, and prepare evidence-oriented next steps for abnormal vouchers. It provides compliance guidance and structured self-checks; final tax positions should be confirmed against current authority guidance and qualified professional advice. <br>
+External users, tax compliance staff, and agent operators use this skill to triage Chinese digital invoice compliance questions, screen supplier and invoice risk, prepare self-check workflows, and draft compliance reports or remediation guidance. It is a support tool for review and documentation, not a substitute for tax authority determinations or licensed professional advice. <br>
 
 ### Deployment Geography for Use: <br>
 China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Remote processing by mcp.aitaxs.top may handle invoice, supplier, contract, or tax-investigation details. <br>
-Mitigation: Avoid submitting confidential records unless approved for remote processing; use non-sensitive summaries or the offline reference workflows for preliminary review. <br>
-Risk: The client can persist API keys, client identifiers, and logs locally, including browser localStorage and the ~/.tax-policy-client directory. <br>
-Mitigation: Protect local profiles and clear stored keys or logs when no longer needed, especially on shared or regulated machines. <br>
-Risk: Optional matrix installation and auto-setup can modify local skills or MCP/client configuration directories. <br>
-Mitigation: Do not run the installer or enable TAX_ENABLE_AUTOSETUP unless those local configuration changes are intended; review dry-run output and target paths first. <br>
-Risk: Tax compliance guidance can become outdated or differ by facts and authority interpretation. <br>
-Mitigation: Confirm material conclusions against current tax-authority guidance and qualified professional advice before filing, responding to an audit, or taking a legal position. <br>
+Risk: Cloud MCP and web self-check flows may process sensitive tax, invoice, supplier, or dispute information through mcp.aitaxs.top. <br>
+Mitigation: Review the provider and data-handling terms before use, avoid entering sensitive identifiers unless necessary, and use offline workflows for reduced local guidance when cloud processing is not acceptable. <br>
+Risk: The client can store service credentials, cache state, and diagnostic logs locally, including tax question text or risk scenarios. <br>
+Mitigation: Run in a controlled user profile, inspect or clear local client data after sensitive work, and avoid shared machines for confidential client or dispute matters. <br>
+Risk: Optional auto-setup can modify MCP client configuration when explicitly enabled. <br>
+Mitigation: Keep auto-setup in dry-run mode unless configuration changes are intended, review generated MCP entries and backups, and restrict configuration writes in managed environments. <br>
+Risk: Tax compliance guidance can be incomplete, time-sensitive, or unsuitable for a final filing, audit, or legal position. <br>
+Mitigation: Treat outputs as screening and drafting assistance, verify cited policy positions against official tax authority sources, and involve qualified tax or legal professionals for material decisions. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-invoice-compliance) <br>
-- [Interactive invoice compliance self-check](https://mcp.aitaxs.top/web/topic_workflow_invoice_compliance.html) <br>
-- [SkillHub tax invoice compliance page](https://skillhub.cn/skills/tax-invoice-compliance) <br>
-- [Tax policy knowledge matrix download entry](https://api.skillhub.cn/api/v1/download?slug=tax-invoice-compliance) <br>
+- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
+- [Interactive invoice compliance workflow](https://mcp.aitaxs.top/web/topic_workflow_invoice_compliance.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Remote MCP service endpoint](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with structured checklists, links, and optional web self-check results.] <br>
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown-style answers, structured JSON tool results, plain-text compliance reports, and optional shell command output from offline workflows.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use remote MCP/API calls for current tax-policy answers and risk checks; includes limited offline reference workflows.] <br>
+**Other Properties Related to Output:** [May use remote MCP or web services for policy answers, risk checks, calculations, and self-check workflows; offline workflows provide reduced local guidance when remote services are unavailable.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release metadata and skill frontmatter) <br>
+3.15.5 (source: evidence.release.version and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

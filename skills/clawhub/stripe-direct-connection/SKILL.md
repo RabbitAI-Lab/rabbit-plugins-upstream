@@ -1,7 +1,7 @@
 ---
 name: stripe-direct-connection
 description: "Stripe payments, subscriptions, invoicing, refunds, disputes, and balance — full read/write for customers. Use when an agent needs stripe, stripe direct connection, launch saas subscription billing with recurring prices and hosted payment links, automate customer onboarding and crm to stripe sync, generate stripe checkout payment links for e commerce orders, run customer support refund workflows with reason tracking, cancel subscription, subscription through AgentPMT-hosted remote tool calls."
-version: 1.0.1
+version: 1.0.2
 homepage: https://www.agentpmt.com/marketplace/stripe-direct-connection
 compatibility: "Agent instructions for AgentPMT-hosted remote tool calls. Follow this skill body for supported account, wallet, and setup routes. No local command runtime is declared."
 metadata: {"author":"agentpmt","openclaw":{"homepage":"https://www.agentpmt.com/marketplace/stripe-direct-connection"}}
@@ -9,7 +9,7 @@ metadata: {"author":"agentpmt","openclaw":{"homepage":"https://www.agentpmt.com/
 # Stripe
 
 ## Freshness
-Last updated: `2026-07-13`.
+Last updated: `2026-07-28`.
 
 If the current date is more than 7 days after the last updated date, reinstall this skill from skills.sh or ClawHub before relying on endpoints, schemas, setup steps, or examples.
 
@@ -22,7 +22,7 @@ Use it to launch SaaS subscription billing with recurring monthly or annual pric
 - Use this skill for `Stripe` on AgentPMT.
 - Use it when an agent needs this specific tool's behavior, schema, inputs, outputs, and invocation shape.
 - Search and activation keywords: stripe, stripe direct connection, launch saas subscription billing with recurring prices and hosted payment links, automate customer onboarding and crm to stripe sync, generate stripe checkout payment links for e commerce orders, run customer support refund workflows with reason tracking, cancel subscription, subscription.
-- Supported action names: `cancel_subscription`, `create_coupon`, `create_customer`, `create_invoice`, `create_invoice_item`, `create_payment_link`, `create_price`, `create_product`, `create_refund`, `fetch_stripe_resources`, `finalize_invoice`, `get_stripe_account_info`, `list_coupons`, `list_customers`, `list_disputes`, `list_invoices`, `list_payment_intents`, `list_prices`, `list_products`, `list_subscriptions`, `retrieve_balance`, `search_stripe_documentation`, `search_stripe_resources`, `send_stripe_mcp_feedback`, `stripe_integration_recommender`, `update_dispute`, `update_subscription`.
+- Supported action names: `cancel_subscription`, `create_coupon`, `create_customer`, `create_invoice`, `create_invoice_item`, `create_payment_link`, `create_price`, `create_product`, `create_refund`, `fetch_stripe_resources`, `finalize_invoice`, `get_instructions`, `get_stripe_account_info`, `list_coupons`, `list_customers`, `list_disputes`, `list_invoices`, `list_payment_intents`, `list_prices`, `list_products`, `list_subscriptions`, `retrieve_balance`, `search_stripe_documentation`, `search_stripe_resources`, `send_stripe_mcp_feedback`, `stripe_integration_recommender`, `update_dispute`, `update_subscription`.
 
 ## Use Cases
 - Launch SaaS subscription billing with recurring prices and hosted payment links
@@ -46,7 +46,7 @@ No categories or industry tags are published for this tool.
 
 ## Actions And Schema
 Complete generated action schema: `./schema.md`.
-Supported action count: `27`.
+Supported action count: `28`.
 x402 action routes are enabled and listed in `./schema.md`.
 
 - `cancel_subscription` (action slug: `cancel-subscription`): This tool will cancel a subscription in Stripe. It takes the following arguments: - subscription (str, required): The ID of the subscription to cancel. Price: `5` credits. Parameters: `subscription`.
@@ -60,6 +60,7 @@ x402 action routes are enabled and listed in `./schema.md`.
 - `create_refund` (action slug: `create-refund`): This tool will refund a payment intent in Stripe. It takes three arguments: - payment_intent (str): The ID of the payment intent to refund. - amount (int, optional): The amount to refund in currency minor units, e.g. cents for USD and yen for JPY. - reason (str, optional): The reason for the refund. Options: "duplicate", "fraudulent", "requested_by_customer". Price: `5` credits. Parameters: `amount`, `payment_intent`, `reason`.
 - `fetch_stripe_resources` (action slug: `fetch-stripe-resources`): Retrieve Stripe object details by ID. IMPORTANT: Only call this tool after search_stripe_resources is called to get specific object IDs. Do not use this tool to discover or search for objects. This tool fetches the object information from Stripe including all available fields. It is only able to fetch the following resources (prefixes): - Payment Intents (pi_) - Charges (ch_) - Invoices (in_) - Prices (price_) - Products (prod_) - Subscriptions (sub_) - Customers (cus_) It takes one argument: - id (str): The unique identifier for the Stripe object (e.g. cus_123, pi_123). Note that any amount returned is in currency minor units, e.g. cents for USD and yen for JPY. Price: `5` credits. Parameters: `id`.
 - `finalize_invoice` (action slug: `finalize-invoice`): This tool will finalize an invoice in Stripe. It takes one argument: - invoice (str): The ID of the invoice to finalize. Price: `5` credits. Parameters: `invoice`.
+- `get_instructions` (action slug: `get-instructions`): Get tool instructions and available actions. Price: `5` credits. Parameters: none.
 - `get_stripe_account_info` (action slug: `get-stripe-account-info`): This will get the account info for the logged in Stripe account. Price: `5` credits. Parameters: none.
 - `list_coupons` (action slug: `list-coupons`): This tool will fetch a list of Coupons from Stripe. It takes one optional argument: - limit (int, optional): The number of coupons to return. Price: `5` credits. Parameters: `limit`.
 - `list_customers` (action slug: `list-customers`): This tool will fetch a list of Customers from Stripe. It takes two arguments: - limit (int, optional): The number of customers to return. - email (str, optional): A case-sensitive filter on the list based on the customer's email field. Price: `5` credits. Parameters: `email`, `limit`.

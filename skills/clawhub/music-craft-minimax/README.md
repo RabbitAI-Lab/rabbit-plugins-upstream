@@ -2,7 +2,7 @@
 
 Advanced music generation for OpenClaw, using the MiniMax Music 2.6 token plan.
 
-Current release: v1.5.0.
+Current release: v1.5.1.
 
 This is the **power-user upgrade** of [`music-craft`](../music-craft/). It does everything that skill does, plus the features that require MiniMax:
 
@@ -21,6 +21,19 @@ ACE-Step when exact duration matters.
 ## Data and consent
 
 This skill may send prompts, lyrics, reference audio, and cover/mashup inputs to MiniMax when the user chooses cloud generation. Audio input must be a **local file path** — URLs are not accepted in v1.5.0+. Use the private `music-source-fetch` skill to fetch audio by title first. There is no image, face, OCR, or VLM pipeline.
+
+## Licensing and commercial use
+
+ClawHub publishes this skill bundle under MIT-0, so the skill instructions and
+bundled helper code may be used, modified, and redistributed commercially
+without attribution. That does not grant MiniMax rights or rights to the
+inputs or outputs. Each operator must use their own MiniMax account/API key
+and accept the current terms for the exact API/Token Plan product. The API/Open Platform and
+consumer web/app terms are separate; a subscription or third-party claim of
+“commercial use” is not enough to establish the rights for this CLI/API
+workflow. Verify the applicable terms before commercial release. Inputs must
+be owned or properly licensed, and generated audio is not guaranteed to have
+exclusive copyright protection in every jurisdiction.
 
 ## When to use
 

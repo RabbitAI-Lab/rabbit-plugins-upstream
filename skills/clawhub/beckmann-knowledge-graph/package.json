@@ -1,6 +1,6 @@
 {
   "name": "beckmann-knowledge-graph",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "A structured knowledge graph that acts as a cognitive lens for AI agents  enabling paradox resolution, reasoning about open scientific questions, and high-complexity future forecasting.",
   "main": "graph.json",
   "skill": "SKILL.md",
@@ -37,7 +37,7 @@
   "clawhub": {
     "skill": "SKILL.md",
     "graph": "graph.json",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "compatibility": [
       "claude-sonnet-4-20250514",
       "claude-opus-4-20250514",

@@ -9,7 +9,7 @@
   <a href="https://pypi.org/project/kiln3d/"><img src="https://img.shields.io/pypi/pyversions/kiln3d" alt="Python"></a>
   <a href="https://github.com/codeofaxel/Kiln/blob/main/LICENSE"><img src="https://img.shields.io/github/license/codeofaxel/Kiln" alt="License"></a>
   <a href="https://github.com/codeofaxel/Kiln/blob/main/policies/SIGNING.md"><img src="https://img.shields.io/badge/verified%20by-sigstore%20%2B%20SLSA-0f6fdc?logo=sigstore&logoColor=white" alt="Verified by Sigstore + SLSA"></a>
-  <a href="https://glama.ai/mcp/servers/codeofaxel/kiln"><img src="https://glama.ai/mcp/servers/codeofaxel/kiln/badge" alt="Kiln MCP server" width="120"></a>
+  <a href="https://glama.ai/mcp/servers/codeofaxel/kiln"><img src="https://glama.ai/mcp/servers/codeofaxel/kiln/badge?v=2" alt="Kiln MCP server" width="120"></a>
 </p>
 
 ---
@@ -29,7 +29,7 @@ pip install kiln3d
 </p>
 
 <p align="center">
-  <img src="docs/site/public/demo/ash-coaster.jpg" alt="A 3D-printed coaster with a relief portrait of a French bulldog and the name ASH along the bottom edge, held in a hand" width="640">
+  <img src="docs/assets/ash-coaster.jpg" alt="A 3D-printed coaster with a relief portrait of a French bulldog and the name ASH along the bottom edge, held in a hand" width="640">
 </p>
 
 <p align="center">
@@ -73,6 +73,8 @@ Restart your AI app and it can run your printer. (Claude Code and Codex can even
   }
 }
 ```
+
+**No install needed?** Swap the command for a zero-install runner — `"command": "uvx"`, `"args": ["kiln3d", "serve"]` (Python), or `"command": "npx"`, `"args": ["kiln3d"]` (Node). Same server, nothing to `pip install`.
 
 Drop this into Claude Desktop, Claude Code, Codex, Cursor, or any MCP-capable agent. Runs on the free tier until you sign in.
 </details>
@@ -119,7 +121,14 @@ Global option: `--printer <name>` targets a specific printer per command. The fu
 <details>
 <summary><strong>Connect a specific agent (Claude Code, Claude Desktop, env vars)</strong></summary>
 
-**Claude Code** — add to `.claude/settings.json` (project) or `~/.claude/settings.json` (global):
+**Claude Code** — install the plugin (one-time: install [uv](https://astral.sh/uv) first if you don't have it — it's free and takes one line):
+
+```bash
+claude plugin marketplace add codeofaxel/Kiln
+claude plugin install kiln@kiln
+```
+
+Or wire it by hand — add to `.claude/settings.json` (project) or `~/.claude/settings.json` (global):
 
 ```json
 {
@@ -149,7 +158,7 @@ Claude Code uses your `~/.kiln/config.yaml` for printer credentials (set via `ki
 }
 ```
 
-Set `KILN_PRINTER_TYPE` to your backend: `octoprint`, `moonraker`, `bambu`, `prusalink`, `elegoo`, or `serial` — or skip env vars entirely if you've run `kiln setup`.
+Set `KILN_PRINTER_TYPE` to your backend: `octoprint`, `moonraker`, `bambu`, `prusalink`, `elegoo`, `duet`, or `serial` — or skip env vars entirely if you've run `kiln setup`.
 
 **Any other LLM (OpenRouter)** — Kiln works with any model that supports OpenAI-compatible function calling, not just Claude:
 
@@ -159,7 +168,7 @@ kiln agent --model openai/gpt-4o
 kiln agent --model meta-llama/llama-3.1-70b-instruct --tier essential
 ```
 
-Tool tiers auto-match model capability: **essential** (16 tools) for smaller models, **standard** (61 tools) for mid-range, **full** (133 tools) for stronger models. All <!-- KILN_MCP_TOOL_COUNT:OLD --> 860 tools are available over MCP via `kiln serve`.
+Tool tiers auto-match model capability: **essential** (16 tools) for smaller models, **standard** (61 tools) for mid-range, **full** (133 tools) for stronger models. All <!-- KILN_MCP_TOOL_COUNT:OLD --> 880 tools are available over MCP via `kiln serve`.
 </details>
 
 <details>
@@ -175,6 +184,7 @@ Tool tiers auto-match model capability: **essential** (16 tools) for smaller mod
 | **Creality K1/K2/Hi/Ender V4/V3 KE** | `creality` | IP + `printer_model` (e.g. `creality_k1_max`); probes local Moonraker ports |
 | **Bambu Lab** | `bambu` | IP + LAN access code + serial number (all on the LCD) |
 | **Elegoo** (SDCP) | `elegoo` | IP only — no auth. Neptune 4 / OrangeStorm Giga use `moonraker`. |
+| **Duet / RepRapFirmware** | `duet` | IP only, plus the machine password if one is set (`M551` in `config.g`). |
 | **Direct USB** (Marlin) | `serial` | USB cable only — no network. Ender 3, Prusa MK3, CR-10, any Marlin/RepRap printer. |
 
 Kiln only needs IP reachability on your LAN. Ethernet-only printers are fully supported.
@@ -234,7 +244,7 @@ Paid tiers ([kiln3d.com/pricing](https://kiln3d.com/pricing)) add Git-for-3D ver
 
 - **One control plane, any printer** — OctoPrint, Moonraker, Creality, Bambu Lab, Prusa Link, Elegoo, Serial. Manage a mixed fleet from one place.
 - **No printer? No problem** — Outsource jobs to Craftcloud's 150+ manufacturing services through the hosted proxy, or use direct mode with your own provider credentials.
-- **AI-native** — <!-- KILN_MCP_CAPABILITY_COUNT:OLD --> 867 MCP capabilities and <!-- KILN_CLI_COUNT:OLD --> 233 CLI commands built for AI agents. Not a web UI with an API bolted on.
+- **AI-native** — <!-- KILN_MCP_CAPABILITY_COUNT:OLD --> 887 MCP capabilities and <!-- KILN_CLI_COUNT:OLD --> 234 CLI commands built for AI agents. Not a web UI with an API bolted on.
 - **Describe it, print it** — Natural-language to physical object pipeline: text or sketch → AI generation → validation → slice → print.
 - **Decorate anything** — QR codes, photos, logos, text, SVGs, and procedural textures (tiger stripe, marble, camo, wood grain, honeycomb) embossed or debossed onto any model with one command.
 - **Manuals included** — Multi-part prints can generate printable PDF assembly manuals with Bill of Materials, isometric step renders, mating arrows, and pause-and-check verification gates. (Business)
@@ -256,10 +266,11 @@ Paid tiers ([kiln3d.com/pricing](https://kiln3d.com/pricing)) add Git-for-3D ver
 | **Bambu** | Stable | Bambu Lab X1C, X1E, P1S, P1P, P2S, A1, A1 Mini, A2L, H2S (via LAN MQTT) |
 | **Prusa Link** | Stable | Prusa MK4, XL, Mini+ (local REST API — type: `prusalink`) |
 | **Elegoo** | Stable | Centauri Carbon, Saturn, Mars series (via LAN WebSocket/SDCP). Neptune 4 / OrangeStorm Giga use Moonraker. |
+| **Duet / RepRapFirmware** | Beta — not yet verified against physical hardware | Duet 2 and Duet 3 controller boards, over the same HTTP interface Duet Web Control uses. Both RepRapFirmware 2 and 3 are supported. Vision Miner 22 IDEX v4 is the first catalogued machine. Type: `duet`. |
 | **Direct USB** | Stable | Any Marlin-based printer over USB (Ender 3, Prusa MK3, CR-10, etc.). No OctoPrint or Klipper needed — just a USB cable. Type: `serial`. |
 
 <!-- BEGIN SUPPORTED PRINTERS (auto-generated by scripts/generate_supported_printers.py) -->
-Kiln ships **tuned profiles for 49 models across 12 brands** — Creality, Bambu Lab, Elegoo, Prusa Research, Sovol, Voron, AnkerMake, Artillery, FlashForge, QIDI, RatRig, SparkX. [See the full searchable list →](https://kiln3d.com/printers)
+Kiln ships **tuned profiles for 59 models across 15 brands** — Creality, Bambu Lab, QIDI, Elegoo, Prusa Research, Sovol, AON3D, Voron, AnkerMake, Artillery, FlashForge, INTAMSYS, RatRig, SparkX, Vision Miner. [See the full searchable list →](https://kiln3d.com/printers)
 <!-- END SUPPORTED PRINTERS -->
 
 ## Architecture
@@ -362,7 +373,7 @@ Patent pending across semantic mesh merge, outcome-correlated branching, and sig
 
 ## What Agents Can Do
 
-The Kiln MCP server (`kiln serve`) exposes **<!-- KILN_MCP_TOOL_COUNT:OLD --> 860 tools** to agents, plus prompts and resources for **<!-- KILN_MCP_CAPABILITY_COUNT:OLD --> 867 total MCP capabilities**. Rather than list them all here, agents browse the live catalog with `get_skill_manifest` and ToolSearch-style discovery. A representative slice:
+The Kiln MCP server (`kiln serve`) exposes **<!-- KILN_MCP_TOOL_COUNT:OLD --> 880 tools** to agents, plus prompts and resources for **<!-- KILN_MCP_CAPABILITY_COUNT:OLD --> 887 total MCP capabilities**. Rather than list them all here, agents browse the live catalog with `get_skill_manifest` and ToolSearch-style discovery. A representative slice:
 
 | Theme | Example tools |
 |-------|---------------|
@@ -534,7 +545,7 @@ Entry-point plugins are **default-deny** in production (`KILN_PLUGIN_POLICY=stri
 | `wallets.py` | Crypto wallet configuration (Solana/Ethereum for donations and fees) |
 | `pro_tool_manifest.json` | Public manifest for kiln-pro tool discovery and REST proxy stubs |
 | `decoration_quota.py` | Free-tier decoration quota tracking and tier resolution hooks |
-| `cli/` | Click CLI with <!-- KILN_CLI_COUNT:OLD --> 233 commands and JSON output |
+| `cli/` | Click CLI with <!-- KILN_CLI_COUNT:OLD --> 234 commands and JSON output |
 
 kiln-pro ([kiln3d.com](https://kiln3d.com)) extends public Kiln with paid-tier REST serving, billing, licensing, SSO, RBAC, G-code encryption, uptime reporting, team administration, and project-cost workflows. Public Kiln exposes only the interface/proxy surface for those capabilities; the private implementation stays in kiln-pro.
 </details>
@@ -583,3 +594,7 @@ Kiln is a project of **Hadron Labs Inc.**
 [AGPL-3.0 License](LICENSE) — open source with copyleft. [Commercial licensing](policies/COMMERCIAL_LICENSE.md) available for companies that need proprietary use.
 
 By contributing, you agree to the [Contributor License Agreement](policies/CONTRIBUTOR_LICENSE_AGREEMENT.md).
+
+---
+
+Also listed on [Smithery](https://smithery.ai/servers/codeofaxel/kiln).

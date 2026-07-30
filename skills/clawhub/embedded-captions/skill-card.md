@@ -1,5 +1,5 @@
 ## Description: <br>
-Adds captions or subtitles to an existing single-subject talking-head video, including readable lower-third captions, cinematic embedded captions, VFX-style captions, and catalog-driven visual identities. <br>
+Adds captions or subtitles to existing single-subject talking-head videos without editing the footage, supporting verbatim caption rails, scene-embedded cinematic captions, VFX captions, and catalog-based visual identities. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,42 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators, developers, and video production agents use this skill to add readable or art-directed captions to single-speaker talking-head clips while preserving the source footage except for caption overlays and documented theme reactions. <br>
+Developers and creative operators use this skill to add readable and stylized captions to trusted single-subject talking-head videos while preserving the source footage except for documented themed effects. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Silent update instructions can change shared tooling before the user reviews the release. <br>
-Mitigation: Require explicit confirmation before running skill-update commands and pin the reviewed release in controlled environments. <br>
-Risk: The workflow may perform network fetches or run package tools through npx or uvx. <br>
-Mitigation: Run it only in environments where those fetches and package executions are permitted, or preinstall and pin the required tools. <br>
-Risk: The artifact can load GSAP from a CDN. <br>
-Mitigation: Prefer a bundled, reviewed local GSAP asset when network-loaded browser scripts are not acceptable. <br>
-Risk: Generated files can overwrite project outputs. <br>
-Mitigation: Use an isolated project directory for each render and review generated files before preserving or publishing them. <br>
+Risk: The security review marks the release suspicious because the skill may update installed skills and use remote or runtime code paths broader than users may expect. <br>
+Mitigation: Install only in trusted workspaces, review the skill before use, and run it on non-sensitive media unless local transcript logs and caches are acceptable. <br>
+Risk: Theme mode can alter the whole output frame rather than only adding captions. <br>
+Mitigation: Review Theme mode choices and preview frames before rendering or publishing output. <br>
+Risk: The workflow may fetch packages or models, open local project HTML in Chromium, and contact a CDN during rendering. <br>
+Mitigation: Run it in an environment where those network and local execution behaviors are acceptable and review generated project files before publishing outputs. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/embedded-captions) <br>
-- [Catalog](CATALOG.md) <br>
-- [Rail Reference](references/rail.md) <br>
-- [Composition Craft](references/composition-craft.md) <br>
-- [DNA Registry](dna/README.md) <br>
-- [Themes Guide](themes/README.md) <br>
-- [Reference Bar](references/reference-bar.md) <br>
-- [Aesthetic Principles](references/aesthetic-principles.md) <br>
-- [GSAP CDN Script](https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js) <br>
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/embedded-captions) <br>
+- [Catalog](artifact/CATALOG.md) <br>
+- [Rail reference](artifact/references/rail.md) <br>
+- [Composition craft](artifact/references/composition-craft.md) <br>
+- [Failure modes](artifact/references/failure-modes.md) <br>
+- [Theme authoring](artifact/themes/README.md) <br>
+- [DNA authoring](artifact/dna/README.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, files] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON configuration, and generated project files] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands, JSON configuration snippets, and generated project files when the local workflow is executed.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create caption planning JSON, preview assets, rendered caption layers, and final video files inside the selected project directory.] <br>
+**Other Properties Related to Output:** [The workflow can produce local media project artifacts and rendered captioned video outputs.] <br>
 
 ## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+1.0.7 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

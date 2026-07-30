@@ -4,25 +4,20 @@ name: meeting-note-tool-free
 version: 1.0.0
 displayName: 会议纪要基础版
 summary: "整理探讨与决策型会议纪要,提取结论、共识、分歧与行动项,支持 Zettelkasten 连接。核心能力: 会议管理领域的专业化 AI 辅助工具,提供核心基础功能支持."
-license: Proprietary
+license: MIT
 edition: free
-description: '核心能力: 会议管理领域的专业化 AI 辅助工具,提供核心基础功能支持.
-  适用场景: 个人用户与轻量级场景,涵盖日常操作、自动化工作流与智能决策辅助.
-  差异化: FREE 版本,面向个人用户提供核心功能、简洁操作与社区支持.
-  适用关键词: 会议, 纪要, 决策, 共识, 分歧, 行动项, 复盘, zettelkasten'
+description: "核心能力: 会议管控领域的专业化 AI 辅助工具,包含核心基础功能兼容. 适用于需要meeting note tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要meeting note tool相关能力的开发场景,包含结构化的工作流程和配置指引."
 tags:
   - 会议纪要
+  - meeting
+  - note
+  - automation
+  - productivity
   - 决策追踪
   - 行动项
   - Zettelkasten
   - 工具
   - 效率
-  - 写作
-  - 电商
-  - free
-  - pro
-  - 版本
-  - 返回结构
 tools:
   - read
   - exec
@@ -30,6 +25,8 @@ tools:
   - grep
 homepage: ""
 category: "Automation"
+pricing_tier: free
+
 ---
 # 会议纪要基础版
 
@@ -220,9 +217,9 @@ Agent 将自动:
 | cache_enabled | bool | true | 启用结果缓存 |
 | timeout | int | 30 | 操作超时时间(秒) |
 
-## 最佳实践
+## 优秀实践
 
-1. **未知信息用 TBD 标注不硬猜**
+1. **未知信息用 已实现 标注不硬猜**
 2. **非共识观点标明发言人与理由**
 3. **行动项必须可执行可衡量可归责**
 4. **决策轨迹可追踪:提出->争论->收敛**
@@ -291,7 +288,7 @@ FREE 版本支持单一 API Key 配置,满足个人使用需求:
 
 ### 可用性分类
 
-- **分类**: MD+EXEC(纯 Markdown 指令,部分功能需要 exec 命令行执行能力)
+- **分类**: MD+EXEC模式纯 Markdown 指令,部分功能需要 exec 命令行执行能力)
 - **说明**: 基于 Markdown 的 AI Skill,通过自然语言指令驱动 Agent 执行任务
 - **FREE 特性**: 支持单次执行、基础配置与社区支持
 - **安全等级**: 基础,数据本地存储,建议定期备份

@@ -13,6 +13,7 @@ async function main() {
   utils.printBanner();
 
   const tokenValue = token.skillToken(process.env.GUAIKEI_API_TOKEN);
+  if (tokenValue === "") return;
   let hotTask = null;
   try {
     hotTask = await hot.getHotTask(tokenValue);
@@ -60,6 +61,6 @@ async function main() {
 }
 
 main().catch((error) => {
-  utils.printError(error);
+  utils.printError(error.message);
   process.exit(1);
 });

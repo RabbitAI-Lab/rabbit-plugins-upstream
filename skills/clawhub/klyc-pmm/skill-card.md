@@ -1,5 +1,5 @@
 ## Description: <br>
-KLYC-PMM gives agents a shell-based workflow for writing, classifying, encrypting, uploading, searching, and recovering persistent memory. <br>
+KLYC-PMM provides scripts for AI-agent memory initialization, cloud-backed push, search, recovery, local file watching, distillation, and systemd-based persistence using curl and jq. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use this skill to let an AI agent preserve useful decisions and identity files across restarts, workspace resets, and recovery events while using local shell commands and cloud-backed memory storage. <br>
+Developers and agent operators use this skill to give an AI agent persistent text memory across sessions, including memory push, search, disaster recovery, watched-file synchronization, and local readiness checks. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can retain and upload broad local and cloud memory, including watched files selected by the operator. <br>
-Mitigation: Review the watched and backed-up file list before enabling it, exclude secrets or regulated data, and limit use to intended workspaces. <br>
-Risk: Remote hooks, daemon behavior, and update flows may change local prompts or scripts after installation. <br>
-Mitigation: Disable those flows unless the operator trusts the service, and review fetched hooks or updates before allowing them to run. <br>
-Risk: The scanner guidance says not to rely on stated encryption guarantees for every upload path. <br>
-Mitigation: Treat cloud upload paths as requiring review, validate the configured endpoint and encryption behavior, and avoid sensitive data until that review is complete. <br>
+Risk: The skill can upload memory and identity-related workspace files to kunlunyaochi.com. <br>
+Mitigation: Use it only in workspaces approved for that cloud memory service, review watched files before syncing, and keep secrets out of MEMORY.md, SOUL.md, IDENTITY.md, AGENTS.md, USER.md, and TOOLS.md. <br>
+Risk: The one-click and daemon installers may install dependencies, write local configuration, and set up a persistent watcher that can require root or systemd access. <br>
+Mitigation: Run read-only checks such as quickstart.sh and self-test first, review the scripts, and require explicit approval before running oneclick.sh or install-daemon.sh in sensitive environments. <br>
+Risk: Persistent watch mode can continue syncing file changes after initial setup. <br>
+Mitigation: Limit the watched file list to intended files, verify the configured API endpoint, and stop or disable the service when continuous synchronization is not required. <br>
+Risk: Recovery tokens can restore cloud-backed memory and may expose sensitive history if shared. <br>
+Mitigation: Store recovery tokens in an approved secret store, avoid placing them in public logs or shared documents, and rotate or reinitialize access if a token is exposed. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/sylncn/skills/klyc-pmm) <br>
-- [README](artifact/README.md) <br>
-- [Skill usage guide](artifact/klyc-pmm/SKILL.md) <br>
-- [Security policy](artifact/SECURITY.md) <br>
-- [Changelog](artifact/klyc-pmm/CHANGELOG.md) <br>
+- [PMM full architecture](references/pmm-full-architecture.md) <br>
+- [Examples README](examples/README.md) <br>
+- [KLYC-PMM service documentation](https://kunlunyaochi.com/?route=klyc-pmm) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and shell command guidance with local files and JSON configuration] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown and shell-oriented terminal output with local configuration files and JSON recovery data] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires jq and curl; memory and recovery flows may create or update local files and send selected content to the configured service.] <br>
+**Other Properties Related to Output:** [The scripts may create or update local memory, identity, token, index, service, and recovery files.] <br>
 
 ## Skill Version(s): <br>
-7.0.3 (source: server release metadata, SKILL.md frontmatter, skill.json, and _meta.json) <br>
+8.3.8 (source: frontmatter, skill.json, CHANGELOG) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/stac-search",
   "slug": "stac-search",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1785074364808,
-  "contentHash": "7e459a8465adb69b69db789d16b9731c76b881d4b1215862b10b5267d3c924c2",
-  "fetchedAt": "2026-07-26T18:03:18.466Z"
+  "version": "1.0.1",
+  "updatedAt": 1785158869777,
+  "contentHash": "f41d76e6a3a21d4f661115df99efda87b2f0b12af3a896f938c06c73b081a1e1",
+  "fetchedAt": "2026-07-30T09:59:39.090Z"
 }
