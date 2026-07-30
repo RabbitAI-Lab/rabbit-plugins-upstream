@@ -18,7 +18,7 @@
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="docs/assets/stats-dark.svg">
-    <img src="docs/assets/stats-light.svg" alt="163 security checks · 21 attack-chain detectors · 10,400 automated tests · 0 dependencies · 0 network calls" width="900">
+    <img src="docs/assets/stats-light.svg" alt="167 security checks · 22 attack-chain detectors · 11,102 automated tests · 0 dependencies · 0 network calls" width="900">
   </picture>
 </p>
 
@@ -31,9 +31,11 @@ agent against you.**
 
 ClawSecCheck is a **security check-up for your agent**. It examines your setup,
 grades it **A–F**, and explains — in plain language, right in your chat — what
-is risky and why. It only reports: it never changes anything, needs no API key,
-and the scanner itself makes **no network calls** — no telemetry, no uploads,
-ever.
+is risky and why. It reports, it doesn't remediate: it never touches your OpenClaw
+config, needs no API key, and the scanner itself makes **no network calls** — no
+telemetry, no uploads, ever. (One narrow, opt-in exception: `--apply-ignore-proposals`
+can append entries to its own suppression file — see
+[Safe to run](#-safe-to-run) below.)
 
 ## 🚀 Start in one minute — no terminal needed
 
@@ -89,7 +91,7 @@ No flags, no commands. Everything works as a conversation:
 | 🔐 **Secrets & data at rest** | Are your tokens, keys, and conversations lying around readable? |
 | 📡 **Monitoring & readiness** | Would you even notice a compromise — and could you investigate it? |
 
-On top of the 163 individual checks, a **risk engine** hunts for deadly
+On top of the 167 individual checks, a **risk engine** hunts for deadly
 *combinations* — chains like "untrusted input → reachable secrets → outbound
 tool" that make an attack trivial. Full list: **[check catalog](docs/CHECKS.md)**.
 
@@ -110,7 +112,7 @@ tool" that make an attack trivial. Full list: **[check catalog](docs/CHECKS.md)*
 - **Honest by design.** What it can't determine is reported as `UNKNOWN` —
   never quietly counted as safe. An open CRITICAL finding hard-caps your score:
   you can never get a pretty "A" with a real hole in it.
-- **Built like it matters.** 10,400 automated tests run on every change, a
+- **Built like it matters.** 11,102 automated tests run on every change, a
   false alarm is treated as a release-blocking bug, and every release is
   cryptographically signed.
 - **Free and readable.** MIT-licensed, pure Python standard library, zero
@@ -119,10 +121,17 @@ tool" that make an attack trivial. Full list: **[check catalog](docs/CHECKS.md)*
 ## 🔒 Safe to run
 
 The tool that audits your agent survives an audit itself: it is **read-only**
-with respect to your OpenClaw setup (it never touches your config, skills, or
-bootstrap files), its engine is **offline by design**, and it writes only its
-own local history under `~/.clawseccheck/` — removable any time by asking your
-agent to *"purge the clawseccheck data"*.
+with respect to your OpenClaw setup, its engine is **offline by design**, and
+by default it writes only its own local history under `~/.clawseccheck/` —
+removable any time by asking your agent to *"purge the clawseccheck data"*.
+A few flags write local files only when you explicitly ask for them
+(`--save`, `--badge`, `--html`, `--sarif`, `--monitor`, `--log`) — see the
+[User guide](docs/USAGE.md) for the full list. The one exception that touches
+the audited home itself is also opt-in and confirmation-gated:
+`--apply-ignore-proposals` can append entries — never invent them — to its
+own `.clawseccheckignore` suppression file there. See the
+[security model](SECURITY_MODEL.md) for the complete, itemized capability
+surface.
 
 One honest nuance: when you use it through OpenClaw chat, the report text
 becomes part of your conversation and is handled by whatever model provider
@@ -188,7 +197,7 @@ complete flag list.
 | Document | What it covers |
 |---|---|
 | [User guide](docs/USAGE.md) | Recipes, monitoring modes, and trust details |
-| [Check catalog](docs/CHECKS.md) | All 163 checks: what they verify and how to remediate |
+| [Check catalog](docs/CHECKS.md) | All 167 checks: what they verify and how to remediate |
 | [Threat coverage](docs/THREAT_COVERAGE.md) | OWASP LLM Top 10 / Agentic threat mapping |
 | [Output schema](docs/OUTPUT_SCHEMA.md) | The frozen `--json` / SARIF contract |
 | [FAQ](docs/FAQ.md) | Common questions, incl. the compromised-host protocol |

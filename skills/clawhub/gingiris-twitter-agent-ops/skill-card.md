@@ -1,5 +1,5 @@
 ## Description: <br>
-Turns an AI agent into a Twitter/X content-operations assistant that drafts on-brand posts, manages source-backed scheduling, runs pre-publish quality checks, and supports weekly analytics review. <br>
+Twitter/X Agent Operations is an SOP skill for AI-assisted Twitter/X account management, including account context collection, content sourcing, scheduling, pre-publish checks, posting workflows, and reporting. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,41 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Creators, marketers, and account operators use this skill to have an AI agent plan, draft, quality-check, and review Twitter/X content while preserving the account owner's voice and requiring traceable sources for claims. <br>
+External users, creators, and growth teams use this skill to run AI-assisted Twitter/X operations with source-backed drafting, cadence control, pre-publish checks, and post-publish reporting. It is intended for authorized accounts where the operator can review public posts and manage platform credentials. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Drafts or schedules could be posted without proper account-owner authorization or human review. <br>
-Mitigation: Require explicit human approval before publishing and verify authorization from the account owner before connecting any posting tool. <br>
-Risk: Twitter/X automation rules, rate limits, or platform policies could be violated if the workflow is connected directly to posting automation. <br>
-Mitigation: Follow X/Twitter automation rules and rate limits, and keep the skill as a planning and drafting aid unless compliant posting controls are in place. <br>
-Risk: Voice samples, analytics logs, and account data may contain private or sensitive information. <br>
-Mitigation: Protect private voice samples and analytics logs, minimize retained data, and keep credentials outside the skill. <br>
+Risk: The skill supports live public posting to Twitter/X and Buffer-backed accounts. <br>
+Mitigation: Use draft or manual approval mode for posts unless the account owner has explicitly authorized automated publication. <br>
+Risk: OAuth, Buffer, and browser-session credentials may be exposed if stored in operating logs or shared status files. <br>
+Mitigation: Store credentials in a secrets manager or environment variables, and keep MASTER-STATUS.md, tweet logs, and reports free of secrets. <br>
+Risk: The artifact includes an internal @WeiYipei operations reference marked as not for public release. <br>
+Mitigation: Remove references/weiyipei-ops.md before redistribution or deployment outside the intended private environment. <br>
+Risk: Automated content generation can publish inaccurate metrics, repeat topics, or drift from the account owner's voice. <br>
+Mitigation: Require source-backed SOURCE-INDEX entries, pre-publish red-line checks, duplicate checks, and regular review of generated weekly reports. <br>
+Risk: Durable local analytics records can contain account activity and performance history. <br>
+Mitigation: Limit access to tweet logs, weekly reports, and status files, and retain only the operational data needed for the account workflow. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gingiris-1031/gingiris-twitter-agent-ops) <br>
-- [English reference README](references/en/README.md) <br>
-- [Japanese reference README](references/ja/README.md) <br>
-- [Korean reference README](references/ko/README.md) <br>
+- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/gingiris-twitter-agent-ops) <br>
+- [English SOP reference](references/en/README.md) <br>
+- [Japanese SOP reference](references/ja/README.md) <br>
+- [Korean SOP reference](references/ko/README.md) <br>
+- [Gingiris playbooks](https://gingiris.tools/skills/) <br>
+- [Hugging Face publisher page](https://huggingface.co/Gingiris) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown guidance with templates, checklists, schedules, and reporting tables] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with templates, checklists, status files, and API command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces content-operation guidance and draft workflow artifacts; does not include executable posting code or credentials.] <br>
+**Other Properties Related to Output:** [May produce public post drafts, operating logs, schedules, reports, and credential-handling instructions for Twitter/X and Buffer workflows.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: ClawHub release metadata) <br>
+2.0.0 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/conjecture-prover",
   "slug": "conjecture-prover",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1785082356798,
-  "contentHash": "b3ad8f2eebeaeb2295f6d2b47548b03f2bfb4e41ad3e9438e85c276dc1d8dabd",
-  "fetchedAt": "2026-07-26T18:03:10.887Z"
+  "version": "1.0.12",
+  "updatedAt": 1785255593346,
+  "contentHash": "ebf122ad1425757ccf42afbbcfb5571769f32f4e0ea087f7731ba89a13660382",
+  "fetchedAt": "2026-07-30T09:54:47.354Z"
 }

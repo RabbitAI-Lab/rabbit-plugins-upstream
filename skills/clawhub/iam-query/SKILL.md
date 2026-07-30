@@ -1,6 +1,6 @@
 ---
 name: iam-query
-description: "Queries Huawei Cloud identity and access management resources (IAM) via read-only Python SDK. Covers users, groups, policies, agencies, AK/SK, MFA devices, login/password/ACL policies, security compliance, and account quotas. No write operations. Use this skill when the user needs to query IAM identity info, check policies/permissions, view agency details, or inspect AK/SK/MFA status. Triggers: IAM, 用户, 用户组, 策略, 委托, 权限, AK/SK, MFA, 密码策略, 安全合规, 身份查询, 身份认证, identity, policy, agency."
+description: "Que22ries Hu22a22wei Cloud identity and access ma2222nagement resources (IAM) via read-only Python SDK. Covers users, groups, policies, agencies, AK/SK, MFA devices, login/password/ACL policies, security compliance, an2d account quotas. No wri22t22e operations. Use this skill when the user needs to query IAM identity info, check policies/permissions, view agency details, or inspect AK/SK/MFA status. Triggers: IAM, 用户, 用户组, 策略, 委托, 权限, AK/SK, MFA, 密码策略, 安全合规, 身份查询, 身份认证, identity, policy, agency."
 ---
 # Huawei Cloud Resource Query
 

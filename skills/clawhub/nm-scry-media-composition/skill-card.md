@@ -11,31 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and technical writers use this skill to combine existing GIFs, videos, and images into tutorial or documentation media using manifest-driven FFmpeg composition. <br>
+Developers and technical authors use this skill to combine local GIF, video, and image outputs into tutorial or documentation media. It guides agents through manifest review, input validation, ffmpeg composition, and output verification. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill guides an agent to run local media-processing commands that write combined output files. <br>
-Mitigation: Confirm FFmpeg execution is intended, review output paths before running commands, and verify the combined file exists with expected size and dimensions. <br>
-Risk: Manifest-provided prerequisite commands can affect the local environment if they are untrusted. <br>
-Mitigation: Use trusted manifests and review any `requires` commands before allowing an agent to execute them. <br>
+Risk: Manifest-controlled component paths and output paths may cause agents to process unintended local files or overwrite outputs. <br>
+Mitigation: Review the manifest's component paths, output path, and layout options before running ffmpeg commands. <br>
+Risk: Manifest requires entries may ask the agent to run prerequisite commands before composition. <br>
+Mitigation: Review and approve any requires commands separately before execution. <br>
+Risk: The metadata references a separate Claude Code plugin that may have independent behavior and permissions. <br>
+Mitigation: Review the separate plugin independently before relying on it for agent workflows. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scry-media-composition) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scry) <br>
+- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scry) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with YAML manifests and inline bash code blocks] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown] <br>
+**Output Format:** [Markdown guidance with YAML examples and inline bash commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides an agent to validate media component outputs, run FFmpeg composition commands, and report output file metrics.] <br>
+**Other Properties Related to Output:** [Produces ffmpeg composition instructions and verification steps for local media assets.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter says 1.9.8) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

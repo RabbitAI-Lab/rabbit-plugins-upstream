@@ -13,7 +13,7 @@
 // 用法:
 //   import { formatError, formatOk, ERR_STAGES, ERR_CODES, isRetryable } from "../lib/error-format.js";
 //   out(formatError({ stage: "token", code: "no_token", retryable: false, hint: "先偶合登录" }));
-//   out(formatOk({ opcId: "opc_xxx" }));
+//   out(formatOk({ userId: "user_xxx" }));
 
 import { randomUUID } from "node:crypto";
 

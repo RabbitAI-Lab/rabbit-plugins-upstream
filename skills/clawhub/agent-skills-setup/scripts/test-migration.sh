@@ -1,13 +1,12 @@
 #!/usr/bin/env bash
 #
-# test-migration.sh — isolated tests for the migration + sync engines.
+# test-migration.sh — isolated tests for the migration engine.
 #
-# Exercises BOTH smart-ide-migration.sh and sync-global-skills.sh using FAKE
-# data and a TEMP HOME. The real user home is never touched: HOME is pointed at
-# a mktemp tree for the entire run, and the sync engine's target dirs are routed
-# to temp dirs via the AGENT_SKILLS_*_DIR env overrides.
+# Exercises smart-ide-migration.sh using fake data and a temporary HOME. The
+# real user home is never touched: HOME is pointed at a mktemp tree for the
+# entire run.
 #
-# Mirrors the isolation style of test-openclaw-support.sh:
+# Isolation guarantees:
 #   - temp HOME (mktemp)
 #   - cleanup trap
 #   - clear per-check PASS/FAIL
@@ -139,14 +138,16 @@ assert_contains "$OUT_FILE" "config"  "A1: plan mentions config"
 
 # MCP: dry-run must print a PLAN, never a (false) success. The fixed logic sets
 # status "skipped" for mcp in dry-run; the success wording only appears on a real
-# conversion. Same for config.
-assert_contains "$OUT_FILE" "DRY-RUN: 转换MCP配置"      "A1: mcp plan printed in dry-run"
-assert_not_contains "$OUT_FILE" "MCP配置已转换"          "A1: mcp NOT marked success in dry-run (C1)"
-assert_contains "$OUT_FILE" "DRY-RUN: 复制配置文件"      "A1: config plan printed in dry-run"
-assert_not_contains "$OUT_FILE" "配置文件已复制"         "A1: config NOT marked success in dry-run (C2)"
+# conversion. Kimi's whole config is intentionally manual because its target
+# schema is TOML, so the config object must report the manual boundary instead
+# of pretending to be a copy plan.
+assert_contains "$OUT_FILE" "DRY-RUN: converting MCP config" "A1: mcp plan printed in dry-run"
+assert_not_contains "$OUT_FILE" "MCP config converted"     "A1: mcp NOT marked success in dry-run (C1)"
+assert_contains "$OUT_FILE" "Kimi Code config.toml"       "A1: config manual boundary printed"
+assert_not_contains "$OUT_FILE" "config file copied"       "A1: config NOT marked success in dry-run (C2)"
 
-# --- A2. Real execution lands in correct locations (4 targets) --------------
-for target in kimiai copilot codex workbuddy; do
+# --- A2. Real execution lands in correct locations (3 targets) --------------
+for target in kimiai copilot codex; do
     run bash "$SCRIPT_DIR/smart-ide-migration.sh" \
         --source claude --target "$target" \
         --workspace "$WS" \
@@ -157,7 +158,6 @@ done
 assert_file "$HOME/.kimi-code/skills/demo-skill/SKILL.md"   "A2: kimiai  -> ~/.kimi-code/skills/demo-skill/"
 assert_file "$HOME/.copilot/skills/demo-skill/SKILL.md"     "A2: copilot -> ~/.copilot/skills/demo-skill/"
 assert_file "$HOME/.agents/skills/demo-skill/SKILL.md"      "A2: codex   -> ~/.agents/skills/demo-skill/"
-assert_file "$HOME/.workbuddy/skills/demo-skill/SKILL.md"   "A2: workbuddy -> ~/.workbuddy/skills/demo-skill/"
 
 # --- A3. Copilot preserves subdirs (H4) ------------------------------------
 assert_dir "$HOME/.copilot/skills/demo-skill/scripts"    "A3: copilot preserves scripts/ subdir (H4)"
@@ -180,86 +180,6 @@ assert_not_contains "$OUT_FILE" "[✗] mcp" "A4: mcp not failed"
 assert_contains "$OUT_FILE" "mcp" "A4: mcp reported in output"
 
 # ===========================================================================
-# B. sync-global-skills.sh — all 7 targets
-# ===========================================================================
-
-echo ""
-echo "== B. sync-global-skills.sh =="
-
-SYNC_SRC="$TMP_ROOT/sync-src"
-mkdir -p "$SYNC_SRC/demo-a" "$SYNC_SRC/demo-b/scripts" "$SYNC_SRC/demo-b/references"
-cat > "$SYNC_SRC/demo-a/SKILL.md" <<'EOF'
----
-name: demo-a
-description: Sync source skill A.
----
-# Demo A
-EOF
-cat > "$SYNC_SRC/demo-b/SKILL.md" <<'EOF'
----
-name: demo-b
-description: Sync source skill B with subdirs.
----
-# Demo B
-EOF
-cat > "$SYNC_SRC/demo-b/scripts/build.sh" <<'EOF'
-#!/usr/bin/env bash
-echo build
-EOF
-cat > "$SYNC_SRC/demo-b/references/doc.md" <<'EOF'
-Doc.
-EOF
-
-# Route every target to a temp dir via the documented env overrides.
-T_CLAUDE="$TMP_ROOT/t/claude"
-T_CODEX="$TMP_ROOT/t/codex"
-T_COPILOT="$TMP_ROOT/t/copilot"
-T_OPENCLAW="$TMP_ROOT/t/openclaw"
-T_TRAE="$TMP_ROOT/t/trae"
-T_TRAE_CN="$TMP_ROOT/t/trae-cn"
-T_WORKBUDDY="$TMP_ROOT/t/workbuddy"
-mkdir -p "$T_CLAUDE" "$T_CODEX" "$T_COPILOT" "$T_OPENCLAW" "$T_TRAE" "$T_TRAE_CN" "$T_WORKBUDDY"
-
-run env \
-    AGENT_SKILLS_SOURCE_DIR="$SYNC_SRC" \
-    AGENT_SKILLS_CLAUDE_DIR="$T_CLAUDE" \
-    AGENT_SKILLS_CODEX_DIR="$T_CODEX" \
-    AGENT_SKILLS_COPILOT_DIR="$T_COPILOT" \
-    AGENT_SKILLS_OPENCLAW_DIR="$T_OPENCLAW" \
-    AGENT_SKILLS_TRAE_DIR="$T_TRAE" \
-    AGENT_SKILLS_TRAE_CN_DIR="$T_TRAE_CN" \
-    AGENT_SKILLS_WORKBUDDY_DIR="$T_WORKBUDDY" \
-    bash "$SCRIPT_DIR/sync-global-skills.sh" \
-    --targets claude,codex,copilot,openclaw,trae,trae-cn,workbuddy --yes
-assert_eq "$LAST_RC" "0" "B5: sync of all 7 targets exits 0 (verify passed)"
-
-# Each target should have received the synced skills (full-dir targets keep subdirs).
-for tv in claude codex openclaw trae trae-cn workbuddy; do
-    case "$tv" in
-        claude)     d="$T_CLAUDE" ;;
-        codex)      d="$T_CODEX" ;;
-        openclaw)   d="$T_OPENCLAW" ;;
-        trae)       d="$T_TRAE" ;;
-        trae-cn)    d="$T_TRAE_CN" ;;
-        workbuddy)  d="$T_WORKBUDDY" ;;
-    esac
-    assert_file "$d/demo-a/SKILL.md"          "B5: $tv received demo-a"
-    assert_file "$d/demo-b/SKILL.md"          "B5: $tv received demo-b"
-    assert_dir  "$d/demo-b/scripts"           "B5: $tv preserved demo-b/scripts"
-    assert_dir  "$d/demo-b/references"        "B5: $tv preserved demo-b/references"
-done
-
-# Copilot mirrors full skill directories (consistent with smart-ide-migration.sh H4).
-assert_dir  "$T_COPILOT/demo-a"          "B5: copilot received demo-a/ (dir mirror)"
-assert_dir  "$T_COPILOT/demo-b"          "B5: copilot received demo-b/ (dir mirror)"
-assert_dir  "$T_COPILOT/demo-b/scripts"    "B5: copilot preserved demo-b/scripts"
-assert_dir  "$T_COPILOT/demo-b/references" "B5: copilot preserved demo-b/references"
-
-# No sync may land on a wrong/stale path.
-assert_not_exists "$HOME/.copilot-skills" "B5: never syncs to stale ~/.copilot-skills"
-assert_not_exists "$HOME/.codex/skills"  "B5: never syncs to stale ~/.codex/skills"
-
-# ===========================================================================
 # C. Confirmation gate (--yes) — script must never write without approval
 # ===========================================================================
 
@@ -267,7 +187,7 @@ echo ""
 echo "== C. confirmation gate (--yes) =="
 
 # --- C1. Non-interactive without --yes: abort (rc=2) and ZERO writes --------
-GATE_TGT="$HOME/.windsurf"
+GATE_TGT="$HOME/.codeium/windsurf"
 rm -rf "$GATE_TGT"
 run bash "$SCRIPT_DIR/smart-ide-migration.sh" \
     --source claude --target windsurf \
@@ -297,7 +217,7 @@ assert_not_exists "$GATE_TGT" "C3: dry-run performs zero writes (no target dir c
 # D. project object — backup + fail-closed secret redaction (C3/L5 fix)
 # ===========================================================================
 # Source project lives under WORKSPACE_ROOT ($WS): source=claude -> .claude
-# Target project (codex) -> .codex, also under $WS.
+# Target project (codex) -> .agents (codex project config lives under .agents; .codex is its own credential-bearing CLI dir).
 
 echo ""
 echo "== D. project object (backup + secret redaction) =="
@@ -305,14 +225,16 @@ echo "== D. project object (backup + secret redaction) =="
 SRC_PROJ="$WS/.claude"
 rm -rf "$SRC_PROJ"
 mkdir -p "$SRC_PROJ"
-# A secret-bearing env file and a secret-bearing json file.
+# A secret-bearing env file and a secret-bearing json file. Environment files
+# are source-local secret stores and must be excluded from the copied tree;
+# structured config is copied only after redaction.
 printf 'API_KEY=EXAMPLE_SECRET_VALUE_1234567890\nPASSWORD=example-password-xyz\n' > "$SRC_PROJ/.env"
 printf '{ "token": "example-token-value-1234567890", "name": "ok" }\n' > "$SRC_PROJ/svc.json"
 # A harmless, non-secret file that must survive the copy untouched.
 printf 'name: demo\n' > "$SRC_PROJ/notes.yaml"
 
-D_TGT="$WS/.codex"
-rm -rf "$D_TGT" "$WS"/.codex.bak.*
+D_TGT="$WS/.agents"
+rm -rf "$D_TGT" "$WS"/.agents.bak.*
 
 # --- D1. dry-run: zero writes, plan printed -------------------------------
 run bash "$SCRIPT_DIR/smart-ide-migration.sh" \
@@ -329,12 +251,8 @@ run bash "$SCRIPT_DIR/smart-ide-migration.sh" \
     --objects project --yes
 assert_eq "$LAST_RC" "0" "D2: project migration exits 0"
 assert_dir "$D_TGT" "D2: project target dir created"
-assert_file "$D_TGT/.env" "D2: secret file copied to target"
-# SECURITY: the copy's secret VALUES must be blanked, KEYS preserved.
-assert_not_contains "$D_TGT/.env" "EXAMPLE_SECRET_VALUE_1234567890" "D2: env secret VALUE redacted from copy"
-assert_not_contains "$D_TGT/.env" "example-password-xyz" "D2: password secret redacted from copy"
-assert_contains "$D_TGT/.env" "PASSWORD" "D2: password secret KEY preserved (value blanked)"
-assert_contains "$D_TGT/.env" "API_KEY" "D2: env secret KEY preserved (value blanked)"
+# SECURITY: do not copy .env files even temporarily into the final target.
+assert_not_exists "$D_TGT/.env" "D2: source .env excluded from target copy"
 assert_not_contains "$D_TGT/svc.json" "example-token-value-1234567890" "D2: json secret redacted from copy"
 assert_contains "$OUT_FILE" "[SECURITY]" "D2: redaction count reported to user"
 # Non-secret content is preserved.
@@ -349,23 +267,23 @@ run bash "$SCRIPT_DIR/smart-ide-migration.sh" \
     --workspace "$WS" \
     --objects project --yes
 assert_eq "$LAST_RC" "0" "D3: second migration exits 0"
-if ls -d "$WS"/.codex.bak.* >/dev/null 2>&1; then check_pass "D3: existing project target backed up before overwrite"; else check_fail "D3: existing project target backed up before overwrite"; fi
+if ls -d "$WS"/.agents.bak.* >/dev/null 2>&1; then check_pass "D3: existing project target backed up before overwrite"; else check_fail "D3: existing project target backed up before overwrite"; fi
 # The backup itself must NOT contain live secrets (it is the previously-redacted copy).
-BK=$(ls -d "$WS"/.codex.bak.* 2>/dev/null | head -1)
+BK=$(ls -d "$WS"/.agents.bak.* 2>/dev/null | head -1)
 if [[ -n "$BK" ]]; then
-    assert_not_contains "$BK/.env" "EXAMPLE_SECRET_VALUE_1234567890" "D3: backup holds no live secret"
+    assert_not_exists "$BK/.env" "D3: backup contains no copied .env file"
 fi
 
 # --- D4. --strategy skip on existing target: no write, no new backup ----
-bk_before=$(ls -d "$WS"/.codex.bak.* 2>/dev/null | wc -l | tr -d ' ')
+bk_before=$(ls -d "$WS"/.agents.bak.* 2>/dev/null | wc -l | tr -d ' ')
 run bash "$SCRIPT_DIR/smart-ide-migration.sh" \
     --source claude --target codex \
     --workspace "$WS" \
     --objects project --yes --strategy skip
 assert_eq "$LAST_RC" "0" "D4: skip strategy exits 0"
-bk_after=$(ls -d "$WS"/.codex.bak.* 2>/dev/null | wc -l | tr -d ' ')
+bk_after=$(ls -d "$WS"/.agents.bak.* 2>/dev/null | wc -l | tr -d ' ')
 assert_eq "$bk_after" "$bk_before" "D4: skip created no new backup"
-assert_not_contains "$D_TGT/.env" "EXAMPLE_SECRET_VALUE_1234567890" "D4: skipped target still has no live secret"
+assert_not_exists "$D_TGT/.env" "D4: skipped target still has no copied .env file"
 
 # --- D5. --strategy overwrite: removes target and re-copies + redacts ---
 run bash "$SCRIPT_DIR/smart-ide-migration.sh" \
@@ -373,8 +291,22 @@ run bash "$SCRIPT_DIR/smart-ide-migration.sh" \
     --workspace "$WS" \
     --objects project --yes --strategy overwrite
 assert_eq "$LAST_RC" "0" "D5: overwrite strategy exits 0"
-assert_not_contains "$D_TGT/.env" "EXAMPLE_SECRET_VALUE_1234567890" "D5: overwrite re-copied + redacted"
+assert_not_exists "$D_TGT/.env" "D5: overwrite still excludes source .env"
 assert_contains "$D_TGT/notes.yaml" "name: demo" "D5: overwrite preserved non-secret file"
+
+# Skill cleanup after redaction failure must use the same guarded deletion
+# helper as overwrite handling. Direct recursive deletion of computed paths is
+# the TM1 pattern reported by SkillSpector.
+if grep -Eq 'rm -rf "\$\{target_(global|path):\?\}/\$\{skill_name:\?\}"' "$SCRIPT_DIR/smart-ide-migration.sh"; then
+    check_fail "D6: redaction failure cleanup bypasses safe_remove_skill_dir"
+else
+    check_pass "D6: redaction failure cleanup uses guarded deletion"
+fi
+if grep -Fq 'rm -rf "$target_path"' "$SCRIPT_DIR/smart-ide-migration.sh"; then
+    check_fail "D7: project overwrite or failure cleanup bypasses containment guard"
+else
+    check_pass "D7: project tree deletion uses containment guard"
+fi
 
 # ===========================================================================
 # Summary

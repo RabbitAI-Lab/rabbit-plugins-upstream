@@ -1,5 +1,5 @@
 ## Description: <br>
-Water-treatment edition of iaiops for waterworks, wastewater plants, and pump stations, covering Modbus-TCP/RTU, OPC-UA, HART-IP instrumentation, downtime root-cause analysis, data quality checks, and OEE guidance. <br>
+Water-treatment edition of iaiops for read-first support across waterworks, wastewater plants, pump stations, Modbus-TCP/RTU devices, OPC-UA SCADA/PLC reads, HART-IP process instrumentation, and cross-protocol operations analysis. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,14 +11,14 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, engineers, and operators use this skill to inspect water-treatment telemetry, diagnose dataflow and equipment issues, and produce compliance-oriented analysis for waterworks, wastewater plants, and pump stations. <br>
+Developers, plant engineers, and operations teams use this skill to guide read-first water-treatment inspection, diagnostics, water-quality checks, data-quality review, and downtime root-cause analysis across industrial protocol sources. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security scan says the skill is mostly documentation-only but claims a read-only posture while listing push, export, and publish tools that could move operational data or change external state. <br>
-Mitigation: Install only when the actual MCP runtime is verified to expose read-only tools for this water edition, or when the environment has explicit allowlists and approvals for historian push, export, and stream publishing. <br>
+Risk: The documented tool surface includes export, publish, and push capabilities that conflict with the skill's read-only safety boundary. <br>
+Mitigation: Review before installing in real water, wastewater, SCADA, PLC, or production-adjacent environments; require clear gating or removal of push/export/publish tools and documented runtime controls, approvals, and data destinations. <br>
 
 
 ## Reference(s): <br>
@@ -26,13 +26,13 @@ Mitigation: Install only when the actual MCP runtime is verified to expose read-
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline command examples and named tool references] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with tool names, workflows, and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+**Other Properties Related to Output:** [Read-first operational guidance for water-treatment protocol tooling and analysis workflows.] <br>
 
 ## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+0.20.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

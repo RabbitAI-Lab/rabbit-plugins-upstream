@@ -1,5 +1,5 @@
 ## Description: <br>
-Query China meteorological station data from data.cma.cn or Open-Meteo, including temperature, precipitation, wind, pressure, humidity, and sunshine data, with CSV or JSON output. <br>
+Query China meteorological station data from data.cma.cn or Open-Meteo, supporting temperature, precipitation, wind, pressure, humidity, and sunshine output as CSV or JSON. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,40 +7,43 @@ This skill is ready for commercial/non-commercial use. <br>
 [ruiduobao](https://clawhub.ai/user/ruiduobao) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-Developers, data analysts, and agents use this skill to query or download China weather records by city, station ID, coordinates, or province and save the results for analysis. <br>
+Developers, analysts, and agents use this skill to query, list, and download China weather records by city, station, or coordinates for analysis and reporting workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Location queries, date ranges, and geocoding requests may be sent to external weather or geocoding services, and generated output, QA, or cache files can retain location history. <br>
-Mitigation: Use only necessary locations and date ranges, run in a project-specific environment, and inspect or remove generated output, QA, and cache files when location history is sensitive. <br>
-Risk: The CMA API key is stored locally in plaintext under the user's home directory. <br>
-Mitigation: Avoid configuring a CMA API key unless needed, restrict local file access, use a dedicated key where possible, and rotate or remove the key after use. <br>
-Risk: Security evidence says the skill sends some place names to external services more broadly than its privacy text describes. <br>
-Mitigation: Review commands before execution, prefer direct coordinates when appropriate, and confirm external-service acceptability for the intended workflow. <br>
+Risk: Bundled credential-handling code includes a hardcoded Earthdata password and unrelated credential helpers. <br>
+Mitigation: Remove the hardcoded credential, rotate any exposed secret, and remove or clearly scope credential helpers that are not needed for China weather queries. <br>
+Risk: Location queries may be sent to external geocoding or weather services without full disclosure. <br>
+Mitigation: Disclose external location-sharing behavior and avoid sensitive locations unless the operator accepts that data flow. <br>
+Risk: Local API key files may expose credentials if stored with permissive filesystem access. <br>
+Mitigation: Store API keys with restrictive file permissions and avoid sharing local configuration files. <br>
+Risk: Dependency ranges may install vulnerable or incompatible package versions. <br>
+Mitigation: Use patched, pinned dependency versions and rescan before deployment. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/china-weather-data) <br>
 - [China Meteorological Data Service](http://data.cma.cn/) <br>
-- [China Meteorological Data Service API Documentation](http://data.cma.cn/docDetail/listDoc.html) <br>
+- [data.cma.cn API documentation](http://data.cma.cn/docDetail/listDoc.html) <br>
 - [Open-Meteo](https://open-meteo.com/) <br>
-- [Open-Meteo Archive API](https://archive-api.open-meteo.com/v1/archive) <br>
+- [Open-Meteo Historical Weather API](https://archive-api.open-meteo.com/v1/archive) <br>
 - [Open-Meteo Forecast API](https://api.open-meteo.com/v1/forecast) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, files] <br>
-**Output Format:** [Markdown guidance with shell commands; CLI output as CSV, JSON, or terminal text.] <br>
+**Output Type(s):** [Shell commands, Configuration instructions, Files, Data] <br>
+**Output Format:** [Markdown guidance with shell commands; command outputs may be CSV or JSON.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local configuration, weather output files, QA JSON sidecars, and geocoding cache files.] <br>
+**Other Properties Related to Output:** [Requires a data.cma.cn API key for the CMA source and can fall back to Open-Meteo when no key is configured.] <br>
 
 ## Skill Version(s): <br>
-0.3.0 (source: ClawHub release evidence) <br>
+0.3.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

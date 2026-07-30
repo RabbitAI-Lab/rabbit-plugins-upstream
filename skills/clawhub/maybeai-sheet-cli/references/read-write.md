@@ -54,7 +54,7 @@ mbs excel-worksheet check-error --doc-id <DOC_ID> --worksheet-name <SHEET>
 # Worksheet-backed table
 mbs excel-table sample --doc-id <DOC_ID> --worksheet-name Orders --table-id 1 --limit 50
 
-# PG/SheetTable-backed table
+# Base-backed table
 mbs db-table sample --doc-id <DOC_ID> --name orders_large --limit 50
 
 # Workbook worksheet list
@@ -176,7 +176,7 @@ full-refresh command.
 
 Best when:
 
-- appending row objects to a known worksheet-backed table or PG table
+- appending row objects to a known worksheet-backed table or Base-backed table
 - the target table metadata is already known
 - you can verify with `excel-table sample` or `db-table sample`
 
@@ -184,7 +184,7 @@ Best when:
 
 Best when:
 
-- creating a new PG/SheetTable-backed logical table inside an existing workbook
+- creating a new Base-backed logical table inside an existing workbook
 - you have row-object JSON data and want the backend to materialize it as a DB table
 - the table should be addressed later by `mbs db-table ... --name <TABLE_NAME>`
 
@@ -208,15 +208,15 @@ names and simple logical types (`text`, `number`, `boolean`) from the rows.
 Pass `--columns columns.json` to provide an explicit schema, especially when
 `rows.json` is empty or when the column order and logical types must be stable.
 Use `--if-exists adopt` or `--adopt-existing` only for idempotent setup flows
-where a matching PG table may already exist; pair it with `--verify` so the CLI
-confirms the registry adopted a PG-backed worksheet. Use `db-table create` only
+where a matching Base-backed table may already exist; pair it with `--verify` so the CLI
+confirms the registry adopted a Base-backed worksheet. Use `db-table create` only
 for table-shaped data; use `excel-worksheet create` or `excel-worksheet range
 write` for workbook-layout reports. `db-table update` and `db-table delete` are
 currently planned stubs, not supported mutation commands.
 
 ### `db-table field metadata` / `field batch-update`
 
-Use these commands when the user wants PG/SheetTable column display metadata,
+Use these commands when the user wants Base-backed column display metadata,
 not row data mutation:
 
 - formatter such as `$#,##0.00`, `0.00%`, `yyyy-mm-dd`
@@ -239,7 +239,7 @@ single-column calls. After updating, confirm persisted state from
 
 Best when:
 
-- a source worksheet lives in one document and the target PG/SheetTable raw
+- a source worksheet lives in one document and the target Base-backed raw
   surface must land in another document
 - you need a raw `R_*` surface from a bounded worksheet range without writing
   per-run Python import drivers
@@ -266,7 +266,7 @@ mbs db-table sample --doc-id <TARGET_DOC_ID> --name R_OrderLines_Store1 --limit 
 
 The command is CLI-composed: it reads the source range through
 `/api/v1/excel/read_sheet`, reshapes the values matrix, then creates the named
-PG table on the target workbook through `/api/v1/excel/db_table/create`.
+Base-backed table on the target workbook through `/api/v1/excel/db_table/create`.
 `--header-row` is a 0-based index inside the returned `values` matrix, not an
 Excel row number. For Shein-style merged titles, start `--range` at the
 semantic header row (`A2:...`) and keep `--header-row 0`. Use
@@ -279,7 +279,7 @@ counts in `context`.
 
 Best when:
 
-- a SQL template should materialize a reusable PG/SheetTable handoff table
+- a SQL template should materialize a reusable Base-backed handoff table
 - the source tables already exist in MaybeSheet
 - the output should be addressed later by `mbs db-table ... --name <TABLE_NAME>`
 - an ETL skill needs an auditable `--sql-file` command instead of Python-side planning
@@ -302,7 +302,7 @@ mbs db-table read --doc-id <DOC_ID> --name S1_RevenueStructureInput --limit 100 
 
 The command is CLI-composed. It sends the SQL as a `=SQL(...)` calculation to
 `/api/v1/excel/calc-formula`, reads the table-shaped result from `values` or
-`range_values`, then creates the named PG table through
+`range_values`, then creates the named Base-backed table through
 `/api/v1/excel/db_table/create`. After create, current CLI versions try to
 write the same `=SQL(...)` formula into the final table cell, defaulting to
 `A1`, and return `context.formula_trace` in JSON output. Treat
@@ -327,7 +327,7 @@ mbs db-table range set-formula --doc-id <DOC_ID> --name Orders --cell G2 --formu
 ```
 
 Use `excel-worksheet range set-formula` for worksheet formula writes and
-`db-table range set-formula` for PG/SheetTable-backed formula writes. Use
+`db-table range set-formula` for Base-backed formula writes. Use
 `formula read`, `formula batch-set`, and `formula lineage` when working from the
 formula-focused playbook.
 
@@ -414,7 +414,7 @@ Guidance:
   For cross-document native copy, use `mbs worksheet import --strategy create --transfer-mode native --doc-id <TARGET_DOC_ID> --source-doc-id <SOURCE_DOC_ID> --source-worksheet-name <SHEET>`;
   it routes the cross-document `/api/v1/excel/copy_worksheet` contract and
   preserves the source worksheet engine. Use the default values mode or
-  `db-table create-from-range` when the target should instead be a raw PG
+  `db-table create-from-range` when the target should instead be a raw Base-backed
   `R_*` surface.
 
 ## 7. Post-write verification

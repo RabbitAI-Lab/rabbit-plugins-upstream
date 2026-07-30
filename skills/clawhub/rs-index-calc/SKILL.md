@@ -1,12 +1,6 @@
 ---
-description: 'Calculate spectral indices from GeoTIFF imagery using pure Python.
-
-  No external dependencies required. Supports 10 indices including
-
-  NDVI, NDBI, NDWI, EVI, SAVI, MNDWI, AWEI, NBR, BSI, UI.
-
-  '
 name: rs-index-calc
+description: 'Calculate spectral indices from GeoTIFF imagery using pure Python. description: 'Calculate spectral indices from GeoTIFF imagery using pure Python.  No external dependencies required. Supports 10 indices including  NDVI, NDBI, NDWI, EVI, SAVI, MNDWI, AWEI, NBR, BSI, UI.  '
 ---
 
 # Remote Sensing Index Calculator

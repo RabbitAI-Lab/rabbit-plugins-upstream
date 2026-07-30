@@ -1,11 +1,38 @@
 ﻿---
 name: music-craft
-version: 1.5.0
+version: 1.5.1
 description: Generate music through a disciplined OpenClaw-native workflow. Use when producing songs, instrumentals, or lyrics-driven tracks with structure, anti-sparse prompt engineering, and quality verification. Provider-agnostic — works with any music backend the OpenClaw runtime exposes.
 metadata: {"openclaw":{"requires":{"anyBins":["python3","python"]},"emoji":"\ud83c\udfb5","homepage":"https://github.com/LuisCharro/skills/tree/main/publish/music-craft","envVars":[{"name":"MUSIC_PROVIDER_API_KEY","required":false,"description":"Generic API key for any music provider."},{"name":"STABILITY_API_KEY","required":false,"description":"Stability AI API key. Only needed if using Stable Audio as backend."}]}}
 ---
 
 # Music Craft
+
+## Licensing and commercial-use gate
+
+The published skill bundle is MIT-0 under ClawHub's publishing rules: it may
+be used, modified, and redistributed commercially without attribution. That
+license applies to these skill instructions and bundled helper code; it does
+not grant a license to any third-party model, software package, input audio,
+lyrics, voice, or generated output. Every operator must install the selected
+backend under its own applicable terms and keep the required notices. Terms
+and model cards can change, so check them before commercial release.
+
+- **ACE-Step 1.5 local:** the project and published model card currently state
+  an MIT license and commercial-ready use. Verify the exact model checkpoint
+  and its current license before shipping a commercial track.
+- **MusicGen local:** the code is MIT, but the MusicGen model weights are
+  CC-BY-NC 4.0. Do not use MusicGen-generated audio for commercial work,
+  monetized channels, client deliverables, paid products, or advertising.
+- **Provider-agnostic/runtime backends:** do not assume commercial rights.
+  Identify the actual provider, model, account/product tier, and output terms
+  before generating for commercial use. If these are unknown, stop and ask.
+- **Inputs:** the user must own or have permission for uploaded/reference
+  audio, lyrics, samples, and voices. A model license does not legalize a
+  copyrighted cover, lyric transcription, or unauthorized voice.
+
+Generated audio may also lack copyright protection or exclusivity under the
+law of the user's jurisdiction. Commercial permission from a provider is not
+the same as a guarantee of exclusive copyright or zero similarity risk.
 
 Treat music generation as a small, controlled iteration loop, not a single "press button, get song" call.
 
@@ -161,7 +188,7 @@ Select the backend from the need, then load only that backend's reference:
 | Need | Backend | Reference |
 |---|---|---|
 | Vocals + lyrics, local, best local quality | ACE-Step 1.5 | [`references/acestep-generation.md`](references/acestep-generation.md) |
-| Instrumental, local, no API key | MusicGen | [`references/other-backends.md`](references/other-backends.md) |
+| Instrumental, local, no API key, non-commercial | MusicGen | [`references/other-backends.md`](references/other-backends.md) |
 | Simple cloud generation (API key, no local model) | mmx CLI | [`references/other-backends.md`](references/other-backends.md) |
 | Local source-audio cover/repaint, experimental | ACE-Step 1.5 | [`references/acestep-generation.md`](references/acestep-generation.md) |
 | Fast cloud cover, style transfer, mashup, fine flag control | `music-craft-minimax` skill | switch skills — see **When to redirect to music-craft-minimax** above |

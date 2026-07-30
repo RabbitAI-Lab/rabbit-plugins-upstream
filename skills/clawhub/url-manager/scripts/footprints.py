@@ -5,7 +5,7 @@ AI 足迹 Agent API 工具脚本 — 零配置，装完即用
 用法：
   python footprints.py me [--json]
   python footprints.py search <query> [--limit <n>] [--json]
-  python footprints.py list [--category-id <id>] [--limit <n>] [--json]
+  python footprints.py list [--category-id <id>] [--limit <n>] [--offset <n>] [--json]
   python footprints.py get <id> [--json]
   python footprints.py add <url> --title <title> [--description <desc>] [--category-ids <ids>] [--tags <tags>] [--json]
   python footprints.py update <id> [--title <t>] [--description <d>] [--category-ids <ids>] [--tags <tags>] [--json]
@@ -182,13 +182,22 @@ def categories():
     if "error" in result:
         _echo(f"❌ {result['error']}")
         return result
+    # 按分类集分组
+    from collections import defaultdict
+    grouped = defaultdict(list)
     for cat in result:
-        mode_tag = ""
-        if cat.get("mode") == "cocreate":
-            mode_tag = " [共创]"
-        elif cat.get("mode") == "subscribe":
-            mode_tag = " [订阅]"
-        _echo(f"  [{cat['id']}] {cat['name']}{mode_tag}")
+        cs_name = cat.get("category_set_name") or "其他"
+        grouped[cs_name].append(cat)
+    for cs_name, cats in grouped.items():
+        n = len(cats)
+        _echo(f"\n📁 分类集「{cs_name}」ID:{cats[0].get('category_set_id') or '?'} ({n}个分类)")
+        for cat in cats:
+            mode_tag = ""
+            if cat.get("mode") == "cocreate":
+                mode_tag = " [共创]"
+            elif cat.get("mode") == "subscribe":
+                mode_tag = " [订阅]"
+            _echo(f"  [{cat['id']}] {cat['name']}{mode_tag}")
     return result
 
 
@@ -245,8 +254,8 @@ def search(query, limit=20):
     return result
 
 
-def list_collections(category_id=None, limit=20):
-    path = f"/collections?limit={limit}"
+def list_collections(category_id=None, limit=20, offset=0):
+    path = f"/collections?limit={limit}&offset={offset}"
     if category_id:
         path += f"&category_id={category_id}"
     result = api(path)
@@ -254,9 +263,11 @@ def list_collections(category_id=None, limit=20):
         _echo(f"❌ {result['error']}")
         return result
     items = result.get("items", [])
+    total = result.get("total", len(items))
     if not items:
         _echo("暂无足迹")
         return result
+    _echo(f"共 {total} 条" + (f"，显示第 {offset+1}-{offset+len(items)} 条" if total > limit else ""))
     for i, item in enumerate(items):
         _echo(f"{i+1}. {item['title']}")
         _echo(f"   {item['url']}")
@@ -544,8 +555,9 @@ if __name__ == "__main__":
         parser = argparse.ArgumentParser()
         parser.add_argument("--category-id", type=int, default=None)
         parser.add_argument("--limit", type=int, default=20)
+        parser.add_argument("--offset", type=int, default=0)
         args, _ = parser.parse_known_args(sys.argv[2:])
-        result = list_collections(category_id=args.category_id, limit=args.limit)
+        result = list_collections(category_id=args.category_id, limit=args.limit, offset=args.offset)
         _output(result)
     elif cmd == "get":
         if len(sys.argv) < 3:

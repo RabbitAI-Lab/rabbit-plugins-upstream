@@ -1,5 +1,5 @@
 ## Description: <br>
-Dawn Memory Architecture v7 guides agents through a local long-term memory architecture built around a central memory index, structured fact files, semantic retrieval, write-ahead logging, a working buffer, and short-term to long-term promotion. <br>
+Three-layer storage, four memory mechanisms, and a P0-P3 truth hierarchy for long-term agent memory using a MEMORY.md central index, structured local files, SQLite, and LanceDB semantic search. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,37 +7,35 @@ This skill is ready for commercial/non-commercial use. <br>
 [chen6896qqwee](https://clawhub.ai/user/chen6896qqwee) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-Developers and agent builders use this skill to add durable local memory patterns to an agent workspace, including memory file structure, local vector retrieval, update discipline, and maintenance checklists. <br>
+Developers and agent operators use this skill to define a local long-term memory architecture with a central MEMORY.md index, structured memory files, session logs, local vector search, and write-ahead logging discipline. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can lead an agent to store durable local memory from conversations, including details that may affect future behavior. <br>
-Mitigation: Set explicit rules for what may be saved, require confirmation before writing conversation-derived memories, and periodically review or delete created memory files. <br>
-Risk: Conversation memory may capture sensitive data or identifiers if boundaries are not configured before use. <br>
-Mitigation: Exclude sensitive data, credentials, tokens, and unnecessary identifiers from memory files. <br>
-Risk: Automatic updates to future-behavior files can preserve incorrect or stale guidance. <br>
-Mitigation: Review memory changes before deployment and keep cleanup routines for outdated, incorrect, or low-value memories. <br>
+Risk: The skill is designed to persist profile, preference, session, vector-search, and trading or account-related data across sessions. <br>
+Mitigation: Require explicit consent, redaction, review, deletion, and retention controls before using it with sensitive information. <br>
+Risk: Long-term memory may carry sensitive or stale details into future agent work. <br>
+Mitigation: Review stored memory regularly and keep high-impact decisions grounded in authoritative current data sources. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/chen6896qqwee/skills/dawn-memory-arch) <br>
-- [memory-architecture-v7-guide.md](artifact/memory-architecture-v7-guide.md) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/chen6896qqwee) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Configuration, Guidance, Shell commands] <br>
-**Output Format:** [Markdown guidance with directory structures, JSON examples, and setup checklists] <br>
+**Output Type(s):** [Markdown, Configuration, Shell commands, Guidance] <br>
+**Output Format:** [Markdown guidance with directory layouts, tables, and a deployment checklist] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local-memory architecture guidance; it does not call external APIs.] <br>
+**Other Properties Related to Output:** [Describes a local filesystem, SQLite, and LanceDB memory architecture; the artifact claims no external API dependency.] <br>
 
 ## Skill Version(s): <br>
-7.1.0 (source: server release evidence; artifact text states v7.1) <br>
+9.0.0 (source: ClawHub release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

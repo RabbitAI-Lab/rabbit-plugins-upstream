@@ -20,7 +20,7 @@ metadata:
     dcc: python
     layer: infrastructure
     compatibility: Cross-platform Windows/macOS/Linux. Prefers dcc-mcp-cli on PATH; its consent-gated bootstrap accepts only the official release manifest and verifies SHA-256 before replacement. Local profile needs no gateway env. Use --require-gateway plus --agent-session-id when gateway stats are required evidence. DCC_MCP_BASE_URL is optional for remote/legacy gateway REST fallback.
-    version: "0.19.79"  # x-release-please-version
+    version: "0.19.87"  # x-release-please-version
     search-hint: "dcc control operate UI control menu dialog window button click keyboard Maya Blender Houdini Photoshop 3ds Max Nuke Unreal Godot RenderDoc Substance connect create edit render automate cli gateway stats marketplace skill catalog recommend install update 商城 技能 操作 控制 界面 菜单 弹窗 窗口 按钮 点击 键盘"
     tags: "dcc, dcc-ui-control, ui-control, maya, blender, houdini, photoshop, nuke, unreal, godot, renderdoc, cli, gateway, marketplace, skill-catalog, clawhub, openclaw"
   openclaw:
@@ -104,8 +104,9 @@ For these requests:
 3. Inventory live instances before choosing a host. If more than one matching
    instance exists, use task context or ask the user which scene/session owns
    the change.
-4. Search by the user's intent and target DCC, copy the returned tool slug,
-   inspect its schema and annotations, then call it.
+4. Search once by the user's intent and target DCC, then follow the returned
+   `next_step`. Describe only when requested; otherwise call directly or pass
+   correlated load arguments unchanged.
 5. Use raw scripting only when no typed tool covers the operation and the
    adapter exposes an explicit, policy-compliant automation tool. A repeated
    scripting pattern is a candidate for a reusable DCC skill.
@@ -115,8 +116,6 @@ For these requests:
 If the requested DCC is installed but no live adapter instance is registered,
 follow the zero-instance flow. Do not silently switch to GUI automation or a
 different DCC application.
-
----
 
 ## Agent Path vs IDE Path
 
@@ -128,7 +127,7 @@ or when the user explicitly chooses that integration.
 |-----------|----------------------------|---------------------------|
 | **Who** | OpenClaw, Hermes, Codex CLI, CI bots, custom agent runtimes, and any other host with shell access | MCP-only Cursor, Claude Desktop, VS Code MCP, or another client without shell access |
 | **Transport** | `dcc-mcp-cli` → local MCP or remote gateway REST | MCP Streamable HTTP → gateway `/mcp` |
-| **Discovery surface** | `search` → `describe` → `call` via CLI or bundled Python helper | Gateway MCP tools: `search`, `describe`, `load_skill`, `call` |
+| **Discovery surface** | `search` → returned `next_step` via CLI or bundled Python helper | Gateway MCP tools: `search`, `describe`, `load_skill`, `call` |
 | **Setup** | Install this skill and keep the official `dcc-mcp-cli` on `PATH`; installation/download requires user consent | Add gateway URL to IDE MCP settings (see repo `docs/guide/*`) |
 | **When to choose** | Default whenever the agent can run shell commands | The client cannot run shell commands or the user explicitly requests native MCP |
 | **Resources / prompts** | Not covered here; use REST `/v1/context` or IDE MCP if needed | `resources/read`, `prompts/get`, SSE subscribe via MCP |
@@ -138,10 +137,10 @@ or when the user explicitly chooses that integration.
 1. **Use this routing policy first** for every DCC-control request, whether the
    host is MCP-native or shell-only.
 2. **Shell-capable host** — use `dcc-mcp-cli`
-   (`inventory` → `search` → `describe` or `load-skill` → `call`), even when a
+   (`inventory` → one narrow `search` → returned `next_step`), even when a
    native MCP connector is also available.
 3. **MCP-only host** — call the gateway/DCC structured tools directly
-   (`inventory` → `search` → `describe` or `load_skill` → `call`). Do not ask the
+   (`inventory` → one narrow `search` → returned `next_step`). Do not ask the
    user to switch clients or manually repeat the operation.
 4. **Do not mix paths in one turn** — pick CLI+REST or MCP for the whole task,
    not both.
@@ -186,8 +185,6 @@ the complete target-binding, system-operation, capture, and artifact contract.
 
 Internal studios can fork this skill once and reuse the same CLI+REST workflow across
 agents without maintaining per-host MCP server lists.
-
----
 
 ## Gateway Profiles And Local-First Inventory
 
@@ -246,23 +243,20 @@ Detailed daemon lifecycle, profile commands, release assets, and fallback
 behavior live in [CLI cheatsheet](references/CLI_CHEATSHEET.md). Read it only
 when setup, lifecycle, or transport troubleshooting is needed.
 
----
+## Install This Agent Skill
 
-## Connection Order
+Use this package to operate an existing DCC. For a new adapter use [`dcc-mcp-creator`](https://clawhub.ai/loonghao/skills/dcc-mcp-creator); for a DCC-specific Skill use [`dcc-mcp-skills-creator`](https://clawhub.ai/loonghao/skills/dcc-mcp-skills-creator).
 
-1. Use `dcc-mcp-cli list` for local inventory, or `dcc-mcp-cli list --gateway <name>` for a remote profile.
-2. Use `dcc-mcp-cli` for all subsequent commands when it is on `PATH`.
-3. If missing, ask user permission, then use the bundled verified installer for the official GitHub release.
-4. If manifest or SHA-256 verification fails, preserve any existing CLI and use the bundled Python stdlib REST fallback where supported.
+```bash
+openclaw skills install @loonghao/dcc-mcp
+npx --yes clawhub@0.23.1 install @loonghao/dcc-mcp
+```
 
-Install via OpenClaw/ClawHub, or point your agent at this `SKILL.md` after cloning
-[`dcc-mcp-core/skills/dcc-mcp/`](https://github.com/dcc-mcp/dcc-mcp-core/tree/main/skills/dcc-mcp).
+The published package is [`@loonghao/dcc-mcp`](https://clawhub.ai/loonghao/skills/dcc-mcp). Install it with the command for the current agent host, start a new agent turn, and invoke `$dcc-mcp` explicitly if automatic routing is uncertain. A checkout may load this directory directly.
 
-`dcc-mcp` supersedes the former `dcc-cli-gateway` skill slug. Do not install or
-load both names in one agent: install `dcc-mcp`, verify it is discoverable, then
-remove the old package to avoid duplicate intent routing.
+Then run `dcc-mcp-cli list`. If the CLI is missing, ask permission before the bundled verified installer downloads the official release. Preserve the existing CLI and use the Python REST fallback if manifest or SHA-256 verification fails.
 
----
+`dcc-mcp` supersedes `dcc-cli-gateway`; do not load both names in one agent.
 
 ## Critical Rules
 
@@ -281,53 +275,26 @@ remove the old package to avoid duplicate intent routing.
 | User approved setup | Follow [`references/ZERO_INSTANCES_CLI.md`](references/ZERO_INSTANCES_CLI.md) |
 | Timeout, temporary `unreachable`, or DCC restart | Preserve operation IDs and follow the recovery contract in [`references/CLI_CHEATSHEET.md`](references/CLI_CHEATSHEET.md); never blindly replay a mutation or reuse stale slugs |
 
----
-
-## Configuration
-
-Use the local profile unless the user selected a remote gateway. For measured tasks,
-add `--require-gateway` and a stable `--agent-session-id`. See the [CLI
-cheatsheet](references/CLI_CHEATSHEET.md); never install or write configuration without consent.
-
----
-
 ## Step 0 — Local Inventory First
 
-Run this as the **very first step** every time you begin local work or after a
-DCC adapter restarts:
+Run this first when local work begins or a DCC adapter restarts:
 
 ```bash
-# Supported adapter identifiers, only when support is unclear
 dcc-mcp-cli dcc-types
-
-# Local FileRegistry inventory
 dcc-mcp-cli list
-
-# No-launch startup diagnostics when state is unclear
 dcc-mcp-cli doctor
-
-# Optional gateway health check
-dcc-mcp-cli health
 ```
 
 Interpret the result:
 
 - `list.total > 0` -> inspect status/dispatch metadata. Local `search`, `describe`, `load-skill`, `call`, and `reload-skills` only route to rows ready for local CLI control; use `wait-ready` or `doctor` for live-but-booting rows, including sidecars that have not reached `dispatch_status=ready`.
 - `doctor.profile.selected.mode` / `doctor.local.registry_dir` -> confirms which local/remote mode and registry path the CLI is using before adapter setup.
-- `health.status == "ok"` -> gateway is up when you need gateway endpoint/admin/update workflows.
 - Error / timeout -> stop; explain the failure to the user. For remote
   profiles, the CLI cannot auto-start the gateway.
 
----
-
 ## Step 1 — Select a Live Instance
 
-Run `dcc-mcp-cli list` whenever a DCC starts or stops. Report `total`, counts by
-`dcc_type`, stale rows, and the chosen `instance_id` or `instance_short`. If
-`total == 0`, stop and ask whether the user wants setup guidance. Continue only
-after explicit approval.
-
----
+Run `dcc-mcp-cli list` whenever a DCC starts or stops. Report `total`, counts by `dcc_type`, stale rows, and the chosen instance. If `total == 0`, stop and ask whether the user wants setup guidance; continue only after approval.
 
 ## Step 2 — Search Tools
 
@@ -341,7 +308,9 @@ dcc-mcp-cli search --query "create sphere" --dcc-type maya --limit 20
 python scripts/dcc_gateway.py search --query sphere --dcc-type maya --limit 20
 ```
 
-Copy the returned slug exactly. Local and gateway slugs use the same
+Copy the returned slug exactly and follow that hit's `next_step`; do not run
+separate broad searches for selection, geometry, and scripting unless the
+first result proves they are needed. Local and gateway slugs use the same
 agent-facing shape:
 
 ```text
@@ -350,21 +319,24 @@ maya.a1b2c3d4.maya_primitives__create_sphere
 
 Never hand-build slugs.
 
----
+## Step 3 — Follow `next_step`
 
-## Step 3 — Describe Schema
+- `action=call` — call directly; no-schema tools receive this only when compact safety hints are already present.
+- `action=describe` — inspect the schema and safety annotations, then call.
+- `action=load_skill` — pass the returned arguments unchanged. If the load
+  response includes `compact_schema` and `next_step.action=call`, call directly;
+  otherwise describe the selected target once.
 
 ```bash
-# CLI (primary)
+# Only when next_step.action=describe
 dcc-mcp-cli describe maya.a1b2c3d4.maya_primitives__create_sphere
 
 # Python fallback
 python scripts/dcc_gateway.py describe maya.a1b2c3d4.maya_primitives__create_sphere
 ```
 
-Read `tool.inputSchema` and safety annotations before calling.
-
----
+When describe or `compact_schema` is returned, use those exact parameter names
+and safety annotations before calling.
 
 ## Step 4 — Call a Tool
 
@@ -422,30 +394,34 @@ off the process command line, which is especially important on Windows.
 See [`references/CLI_CHEATSHEET.md`](references/CLI_CHEATSHEET.md) for command
 patterns and common errors.
 
----
+## Step 5 — Analyze Failures and Report Bugs
 
-## Step 5 — Review Reusable Friction
+Do not guess a root cause or blindly replay a mutation. Preserve `request_id`, `trace_id`, `job_id`, tool slug, instance id, sanitized arguments, error code, and validation result.
 
-Only after task acceptance, query narrowly scoped gateway evidence:
+```bash
+dcc-mcp-cli doctor
+dcc-mcp-cli stats --range 24h --status failure --session-id task-42
+dcc-mcp-cli search --query "report feedback" --dcc-type maya
+dcc-mcp-cli describe <returned-feedback-tool-slug>
+dcc-mcp-cli call <returned-feedback-tool-slug> --json \
+  '{"tool_name":"maya_geometry__create_sphere","intent":"Create a sphere","attempt":"radius=2.0","blocker":"Radius was ignored","severity":"blocked"}'
+```
+
+Use `doctor` for profile, registry, daemon, binary, and readiness failures. For a tool failure, refresh `describe`, compare the schema/annotations with the attempt, inspect failure-only stats, and call `dcc_feedback__report`. Its severity is `blocked`, `workaround_found`, or `suggestion`; it records feedback but does not create an external issue.
+
+For a gateway-routed failure, use the CLI-returned `request_id` to read `/v1/debug/agent-traces/<request_id>` and public-safe `/v1/debug/issue-reports/<request_id>`. The latter supplies a bounded summary and suggested GitHub title/body. Never publish `?mode=raw` without human review; create an external issue only with user authorization.
+
+Route schema/script/Skill defects to the owning package and `dcc-mcp-skills-creator`; dispatch/readiness/install/wiring defects to the adapter and `dcc-mcp-creator`; shared gateway/CLI/protocol defects to `dcc-mcp-core`. Include the smallest reproduction and safe report, not hidden reasoning.
+
+### Review Reusable Friction
 
 ```bash
 dcc-mcp-cli stats --range 24h --dcc-type maya --session-id task-42
 ```
 
-Check `stats_coverage` before the count. Gateway SQLite excludes
-`local_mcp_direct`; `configured_route_recorded=false` means that route cannot
-support reflection. Re-run through `--require-gateway`; never manufacture
-telemetry or treat `total_calls == 0` as proof that no calls occurred.
+Only after acceptance, inspect `stats_coverage`. Gateway SQLite excludes `local_mcp_direct`; `configured_route_recorded=false` cannot support reflection. Re-run through `--require-gateway`; zero calls means missing evidence.
 
-Then load `dcc-mcp-skills-creator` and request its
-`review_skill_improvement` prompt. Pass only bounded task, stats, validation,
-and existing-skill summaries. Treat `total_calls == 0` as no telemetry
-evidence, not success. Stats show aggregates, not root cause; prefer
-`no_change`, then `update_existing`, and create a skill only for a repeated,
-stable workflow. This review does not authorize editing or publishing outside
-the task scope.
-
----
+Load `dcc-mcp-skills-creator` and request `review_skill_improvement` with bounded task, stats, validation, and existing-skill summaries. Stats are not root-cause proof; prefer `no_change`, then `update_existing`, and create only for a repeated stable workflow. The review never authorizes out-of-scope changes.
 
 ## Updates and Marketplace Maintenance
 
@@ -484,8 +460,6 @@ dcc-mcp-cli install --dcc-type maya --version 2026
 Ask before `--execute`, follow the returned `next_steps`, and do not treat
 package installation as live registration. If auto-install is disabled, show
 the returned policy prompt and hand off to the named deployment owner.
-
----
 
 ## What This Skill Does Not Use
 

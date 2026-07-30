@@ -1,5 +1,5 @@
 ## Description: <br>
-Coin launch memory and verification workflow for Clawnch (4claw, Moltx, and Moltbook) that helps agents record canonical receipts, update local dashboards, and save monitoring links. <br>
+Clawnch coin-launch receipts + local verify: pull launches from clawn.ch, write receipt JSON/MD, optional Blockscout/Dexscreener checks, local bookmark ref files. No git push, no GitHub token load, no repo create. Not for remote wallet control. Read references/SECURITY.md first. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,41 +7,43 @@ This skill is ready for commercial/non-commercial use. <br>
 [deepseekoracle](https://clawhub.ai/user/deepseekoracle) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+LYGO Sovereign License v2.0 <br>
 
 
 ## Use Case: <br>
-External developers and agent operators use this skill to manage Clawnch token launches, preserve contract receipts, and run best-effort monitoring for STARCORE-family or similarly configured symbols. <br>
+Developers and operators use this skill to pull public Clawnch launch receipts, normalize STARCORE-family launch records, and verify public indexer data without handling credentials or remote wallet control. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Bundled GitHub publishing utilities can use local GitHub credentials to create or update a public repository and push files. <br>
-Mitigation: Do not run push_github_auto.py or create_github_repo.ps1 unless public repository creation and GitHub credential use are explicitly intended; review repository contents before any push. <br>
-Risk: The secret-scanning utility can install or modify a local git pre-commit hook. <br>
-Mitigation: Run scan_for_secrets.py only in review mode unless hook installation is intended, and inspect hook changes before relying on them. <br>
-Risk: Indexer checks can lag behind Clawnch and may temporarily report missing contracts or pairs. <br>
-Mitigation: Treat Clawnch receipts as authoritative and use Blockscout and Dexscreener checks as best-effort monitoring signals. <br>
+Risk: Wallet secrets or mnemonics could be exposed if users paste them into the workspace. <br>
+Mitigation: Use only public wallet or address information with this skill and keep private keys, seed phrases, and wallet files outside the skill workspace. <br>
+Risk: Receipt and verification commands write local JSON or Markdown files and could clutter or overwrite expected state paths. <br>
+Mitigation: Run the skill in a dedicated workspace and review output paths such as state/ and reference/ before scheduling or repeating commands. <br>
+Risk: Optional monitor or cron usage performs recurring network checks and local report writes. <br>
+Mitigation: Treat monitoring as manual setup, keep polling frequency low, and review generated reports before acting on them. <br>
+Risk: Public indexers such as Blockscout or Dexscreener can lag behind Clawnch launch data. <br>
+Mitigation: Treat Clawnch receipts as authoritative for launch records and human-review indexer verification results before relying on them. <br>
 
 
 ## Reference(s): <br>
-- [Clawnch launches API](https://clawn.ch/api/launches) <br>
-- [Clanker contract pages](https://clanker.world/clanker/<contract>) <br>
-- [Base Blockscout address lookup](https://base.blockscout.com/address/<contract>) <br>
-- [Dexscreener contract search](https://api.dexscreener.com/latest/dex/search/?q=<contract>) <br>
-- [Cron Template - STARCORE family monitor](references/cron_template_starcore_family.md) <br>
-- [Cryptocurrency tools separation policy](CRYPTO_LATTICE_SEPARATION.md) <br>
+- [LYRA Coin Launch Manager on ClawHub](https://clawhub.ai/deepseekoracle/skills/lyra-coin-launch-manager) <br>
+- [Project homepage](https://github.com/DeepSeekOracle/lyra-crypto-operator) <br>
+- [Security](references/SECURITY.md) <br>
+- [SkillSpector Audit](references/SKILLSPECTOR_AUDIT.md) <br>
+- [Crypto Lattice Separation](CRYPTO_LATTICE_SEPARATION.md) <br>
+- [Cron Template](references/cron_template_starcore_family.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, markdown, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands plus JSON and Markdown receipt artifacts from bundled scripts] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with command examples; executed helper scripts write local JSON and Markdown receipt or verification files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides or invokes scripts that write local receipt JSON, human-readable launch summaries, bookmark entries, verification reports, and optional monitoring logs.] <br>
+**Other Properties Related to Output:** [Network use is limited to HTTPS GET requests for public launch and indexer data; local writes are intended for state and reference paths under the chosen workspace.] <br>
 
 ## Skill Version(s): <br>
-1.1.3 (source: ClawHub release evidence) <br>
+1.2.0 (source: frontmatter, claw.json, server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

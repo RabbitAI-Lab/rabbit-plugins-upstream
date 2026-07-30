@@ -1,6 +1,6 @@
 ---
 name: clawvet
-version: 0.8.2
+version: 0.9.0
 description: Code quality and safety linter for OpenClaw skills. Runs 6 analysis passes before you install.
 author: MohibShaikh
 license: MIT
@@ -51,7 +51,7 @@ Watch mode — auto-block risky installs:
 npx clawvet watch --threshold 50
 ```
 
-Submit feedback or get alerts:
+Report a bug or send feedback (opens a prefilled GitHub issue):
 
 ```bash
 npx clawvet feedback
@@ -60,11 +60,19 @@ npx clawvet feedback
 ## Analysis Passes
 
 1. **Skill Parser** — Extracts YAML frontmatter, code blocks, URLs, and domains
-2. **Static Analysis** — 54 pattern rules across multiple categories
+2. **Static Analysis** — 57 pattern rules across multiple categories
 3. **Metadata Validator** — Checks for undeclared binaries, env vars, missing descriptions
 4. **Dependency Checker** — Flags auto-install and global package installs
 5. **Typosquat Detector** — Levenshtein distance against popular skill names
-6. **Semantic Analysis** — AI-powered contextual analysis (Pro)
+6. **Semantic Analysis** — AI-powered contextual analysis (optional; bring your own Anthropic, OpenAI, Zhipu, or local Ollama key)
+
+## What's New in v0.9
+
+- **Prompt-injection hardening** — a scanned skill can no longer talk its way past
+  the AI analysis pass; an override attempt is now reported as a finding.
+- **Signed releases** — the npm package ships with provenance, so you can verify
+  it was built from this repo (`npm audit signatures`).
+- **57 detection patterns** across 13 categories.
 
 ## What's New in v0.7–v0.8
 
@@ -88,7 +96,7 @@ npx clawvet feedback
 - **Content-hash caching** — Repeat scans of unchanged files are near-instant.
 - **Trust badges** — Run `npx clawvet badge ./skill/` to generate a shields.io trust badge for your README.
 - **Ban list** — Create a `.clawvetban` file to block skills by name, author, or slug.
-- **Feedback form** — Run `npx clawvet feedback` to share what you think.
+- **Feedback** — Run `npx clawvet feedback` to open a prefilled GitHub issue.
 
 ## Note on Monorepo
 

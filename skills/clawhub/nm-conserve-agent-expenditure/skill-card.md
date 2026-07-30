@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill after multi-agent runs to review per-agent token expenditure, identify duplicated work, and decide whether future dispatches should use fewer or more focused agents. <br>
+Developers and agent operators use this skill after multi-agent dispatches to review token expenditure, duplicated work, and coordination overhead so future agent counts and scopes can be adjusted. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may lead users to inspect agent activity or file-access logs after parallel work. <br>
-Mitigation: Use it only in environments where those logs are appropriate for review. <br>
-Risk: The skill provides advisory judgments about token waste and duplicated work. <br>
-Mitigation: Treat findings as review guidance and confirm them against the actual agent outputs before changing dispatch practices. <br>
+Risk: Users may assume the separately mentioned Claude Code plugin was inspected with this release artifact. <br>
+Mitigation: Review the separate plugin before installing it; this artifact only contains documentation guidance. <br>
+Risk: Post-dispatch waste guidance may be applied without reviewing whether agent outputs were actually useful. <br>
+Mitigation: Use the skill's checklist after execution and review findings before changing agent counts or scopes. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-agent-expenditure) <br>
-- [Conserve plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Analysis, Guidance, Markdown] <br>
-**Output Format:** [Markdown guidance and review checklists] <br>
+**Output Format:** [Markdown guidance and review checklist] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No code execution, credentials, MCP tools, or privileged access are included in the skill artifact.] <br>
+**Other Properties Related to Output:** [Documentation-only skill with no executable behavior in the inspected artifact.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+1.9.17 (source: server release evidence; artifact frontmatter lists 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

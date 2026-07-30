@@ -25,7 +25,7 @@ Evidence coverage: 12 signals across 3 source families.
 Scoring rationale:
 
 - Evidence count: 12; required minimum: 3.
-- Distinct source families: 3; sources: clawhub, github, segmentfault.
+- Distinct source families: 3; sources: clawhub, csdn, segmentfault.
 - Demand score: 70/70 based on corroboration, source diversity, and professional/community signal.
 - Local feasibility score: 30/30.
 - Implementation is a documentation, workflow, code, or analysis skill that can run on ordinary CPU hardware.
@@ -33,18 +33,18 @@ Scoring rationale:
 
 ## Evidence
 
-- clawhub-popular-skill (2026-05-11T09:25:56.797000+00:00): [Popular Clawhub skill demand: Self-Improving + Proactive Agent has 205,564 downloads](https://clawhub.ai/skills/self-improving)
-- clawhub-popular-skill (2026-05-11T07:50:52.489000+00:00): [Popular Clawhub skill demand: ontology has 194,568 downloads](https://clawhub.ai/skills/ontology)
-- clawhub-popular-skill (2026-05-11T07:53:37.068000+00:00): [Popular Clawhub skill demand: Multi Search Engine has 157,954 downloads](https://clawhub.ai/skills/multi-search-engine)
-- clawhub-popular-skill (2026-06-19T07:09:19.124000+00:00): [Popular Clawhub skill demand: AdMapix has 132,642 downloads](https://clawhub.ai/skills/admapix)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [第十章：OntologyOps 完整方案](https://segmentfault.com/a/1190000047947726)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [Comp 3710 人工智能](https://segmentfault.com/a/1190000041581431)
-- segmentfault-search (2026-07-26T07:04:44.032202+00:00): [4种通过LLM进行文本知识图谱的构建方法对比介绍](https://segmentfault.com/a/1190000044569069)
-- github-issues (2026-07-24T12:47:07+00:00): [[Architecture][Enterprise Context] 회사 온톨로지·Knowledge Graph·권한 기반 Context Resolver 설계](https://github.com/nodease/mbased/issues/643)
+- clawhub-popular-skill (2026-05-11T09:25:56.797000+00:00): [Popular Clawhub skill demand: Self-Improving + Proactive Agent has 205,770 downloads](https://clawhub.ai/skills/self-improving)
+- clawhub-popular-skill (2026-05-11T07:50:52.489000+00:00): [Popular Clawhub skill demand: ontology has 194,862 downloads](https://clawhub.ai/skills/ontology)
+- clawhub-popular-skill (2026-05-11T07:53:37.068000+00:00): [Popular Clawhub skill demand: Multi Search Engine has 158,167 downloads](https://clawhub.ai/skills/multi-search-engine)
+- clawhub-popular-skill (2026-06-19T07:09:19.124000+00:00): [Popular Clawhub skill demand: AdMapix has 132,693 downloads](https://clawhub.ai/skills/admapix)
+- segmentfault-search (2026-07-29T00:25:17.192642+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
+- segmentfault-search (2026-07-29T00:25:17.192642+00:00): [javascript](https://segmentfault.com/t/javascript)
+- segmentfault-search (2026-07-29T00:25:17.192642+00:00): [typescript](https://segmentfault.com/t/typescript)
+- segmentfault-search (2026-07-29T00:25:17.192642+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
+- segmentfault-search (2026-07-29T00:25:17.193145+00:00): [第十章：OntologyOps 完整方案](https://segmentfault.com/a/1190000047947726)
+- segmentfault-search (2026-07-29T00:25:17.193145+00:00): [Comp 3710 人工智能](https://segmentfault.com/a/1190000041581431)
+- segmentfault-search (2026-07-29T00:25:17.193145+00:00): [4种通过LLM进行文本知识图谱的构建方法对比介绍](https://segmentfault.com/a/1190000044569069)
+- csdn-search (2026-07-29T00:25:16.170990+00:00): [google knowledge graph api使用](https://wenku.csdn.net/answer/37rs5v4tec?ops_request_misc=elastic_search_misc&request_id=df89e99639c641e6a6227add88eb413f&biz_id=&utm_medium=distribute.pc_search_result.none-task-chatgpt-2~all~ElasticCommercialInsert~search_v2-3-37rs5v4tec-null-null.142^v102^pc_search_result_base7&utm_term=ontology%20typed%20knowledge%20graph)
 
 ## How The Skill Meets The Requirement
 

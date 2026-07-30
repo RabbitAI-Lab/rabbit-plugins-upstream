@@ -1,6 +1,6 @@
 {
   "matrix_name": "财税政策知识矩阵",
-  "version": "3.14.38",
+  "version": "3.15.3",
   "service_url": "https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp",
   "download_source": "skillhub-official",
   "download_url_note": "本清单随技能包分发时 download_url 初始为空：安装器本地优先（--source），缺失且无 url 时优雅跳过，绝不触网。各技能发布到 SkillHub / ClawHub 后获得官方 zip 下载地址，运行 update_download_urls.py --channel <skillhub|clawhub> 回填。安装器 runtime 自动识别渠道（环境存在 ClawHub 凭据/CLI 则走 clawhub，否则 skillhub），调用对应渠道下载 API 获取 zip，download_urls 同时记录两渠道地址，确保无论从哪个市场安装都走对应渠道。",
@@ -13,7 +13,7 @@
       "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-advisory-practice",
       "is_core": false,
       "board": "B",
-      "version": "3.14.38",
+      "version": "3.15.3",
       "topics": [
         "税务师合规咨询",
         "涉税专业服务",
@@ -102,8 +102,12 @@
         "2011年41号公告减资",
         "财税2003 158号"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-listed-advisory",
+        "tax-policy-knowledge"
+      ]
     },
     {
       "slug": "tax-compliance-dispute",
@@ -189,10 +193,14 @@
         "以数治税合规",
         "私户收款风险"
       ],
-      "version": "3.14.38",
+      "version": "3.15.3",
       "board": "Shared",
       "associations": [
-        "tax-offshore-trust"
+        "tax-offshore-trust",
+        "tax-listed-advisory",
+        "tax-invoice-compliance",
+        "tax-legal-tax-review",
+        "tax-tax-judicial"
       ]
     },
     {
@@ -268,8 +276,14 @@
         "投标合规",
         "建筑市场不良信用记录"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-tax-audit",
+        "tax-steel",
+        "tax-soe-audit",
+        "tax-listed-advisory"
+      ]
     },
     {
       "slug": "tax-contract-generation-review",
@@ -442,12 +456,17 @@
         "政府服务采购合同",
         "PPP项目合同"
       ],
-      "version": "3.14.38",
+      "version": "3.15.3",
       "download_urls": {
         "skillhub": "https://api.skillhub.cn/api/v1/download?slug=tax-contract-generation-review",
         "clawhub": "https://clawhub.ai/api/v1/download?slug=tax-contract-generation-review"
       },
-      "board": "Shared"
+      "board": "Shared",
+      "associations": [
+        "tax-social-insurance",
+        "social-security-advisor",
+        "tax-listed-advisory"
+      ]
     },
     {
       "slug": "tax-crossborder",
@@ -479,10 +498,14 @@
         "付单配票",
         "外汇收汇"
       ],
-      "version": "3.14.38",
+      "version": "3.15.3",
       "board": "A",
       "associations": [
-        "tax-offshore-trust"
+        "tax-offshore-trust",
+        "tax-global-compliance",
+        "tax-listed-advisory",
+        "tax-individual-overseas",
+        "tax-ecommerce"
       ]
     },
     {
@@ -518,8 +541,13 @@
         "个体工商户",
         "私户收款"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-policy-knowledge",
+        "tax-listed-advisory",
+        "tax-crossborder"
+      ]
     },
     {
       "slug": "tax-education",
@@ -570,8 +598,12 @@
         "私户收款",
         "留抵退税"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-listed-advisory",
+        "tax-policy-knowledge"
+      ]
     },
     {
       "slug": "tax-equity-governance",
@@ -601,8 +633,12 @@
         "进场交易",
         "股权划转"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-ipo-governance",
+        "tax-listed-advisory"
+      ]
     },
     {
       "slug": "tax-hainan-ftp",
@@ -646,8 +682,12 @@
         "财税合规",
         "风险自查"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-policy-knowledge",
+        "tax-listed-advisory"
+      ]
     },
     {
       "slug": "tax-incentives",
@@ -686,8 +726,12 @@
         "优质中小企业",
         "梯度培育"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-listed-advisory",
+        "tax-policy-knowledge"
+      ]
     },
     {
       "slug": "tax-life-services",
@@ -716,8 +760,12 @@
         "生活服务业",
         "私户收款"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-listed-advisory",
+        "tax-policy-knowledge"
+      ]
     },
     {
       "slug": "tax-pet-chain",
@@ -759,8 +807,12 @@
         "连锁",
         "兼营分别核算"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-policy-knowledge",
+        "tax-listed-advisory"
+      ]
     },
     {
       "slug": "tax-policy-knowledge",
@@ -912,10 +964,25 @@
         "增值税法实施",
         "税收征管法修订"
       ],
-      "version": "3.14.38",
+      "version": "3.15.3",
       "board": "Shared",
       "associations": [
-        "tax-offshore-trust"
+        "tax-offshore-trust",
+        "tax-listed-advisory",
+        "tax-tcm-clinic",
+        "tax-hainan-ftp",
+        "tax-ecommerce",
+        "tax-mfg-lifecycle-risk",
+        "tax-industry-tax-risk",
+        "tax-education",
+        "tax-capital-reduction",
+        "tax-pet-chain",
+        "tax-consumption-tax",
+        "tax-renewable",
+        "tax-incentives",
+        "china-tax-guidance",
+        "tax-high-tech-deduction",
+        "tax-life-services"
       ]
     },
     {
@@ -952,8 +1019,12 @@
         "票货分离",
         "虚开反向开票"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-listed-advisory",
+        "tax-policy-knowledge"
+      ]
     },
     {
       "slug": "tax-restructuring",
@@ -988,8 +1059,11 @@
         "分立",
         "合并"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-listed-advisory"
+      ]
     },
     {
       "slug": "tax-steel",
@@ -1052,8 +1126,14 @@
         "国企贸易合规",
         "隐性借贷"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-listed-advisory",
+        "tax-construction",
+        "tax-soe-audit",
+        "tax-tax-audit"
+      ]
     },
     {
       "slug": "tax-tcm-clinic",
@@ -1101,8 +1181,12 @@
         "医保骗保",
         "分别核算"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-policy-knowledge",
+        "tax-listed-advisory"
+      ]
     },
     {
       "slug": "tax-esop-platform",
@@ -1193,8 +1277,11 @@
         "有限公司转合伙企业",
         "持股平台转制"
       ],
-      "version": "3.14.38",
-      "board": "A"
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-listed-advisory"
+      ]
     },
     {
       "slug": "tax-high-tech-deduction",
@@ -1207,7 +1294,7 @@
       },
       "is_core": false,
       "board": "A",
-      "version": "3.14.38",
+      "version": "3.15.3",
       "topics": [
         "高企认定与加计扣除",
         "高企认定",
@@ -1312,6 +1399,11 @@
         "报表自动生成",
         "研发费规范提升",
         "多政策口径研发费"
+      ],
+      "associations": [
+        "tax-listed-advisory",
+        "tax-policy-knowledge",
+        "tax-tax-audit"
       ]
     },
     {
@@ -1325,7 +1417,7 @@
       },
       "is_core": false,
       "board": "A",
-      "version": "3.14.38",
+      "version": "3.15.3",
       "topics": [
         "数据资源入表",
         "数据资产",
@@ -1369,6 +1461,9 @@
         "数据资源摊销减值",
         "数据安全",
         "个人信息保护"
+      ],
+      "associations": [
+        "tax-listed-advisory"
       ]
     },
     {
@@ -1378,7 +1473,7 @@
       "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-vat-law",
       "is_core": false,
       "board": "A",
-      "version": "3.14.38",
+      "version": "3.15.3",
       "topics": [
         "增值税法",
         "应税交易",
@@ -1404,11 +1499,12 @@
         "增值税法合规自检"
       ],
       "associations": [
-        "tax-policy-knowledge",
         "tax-invoice-compliance",
-        "tax-tax-judicial",
+        "tax-listed-advisory",
+        "tax-policy-knowledge",
         "tax-restructuring",
-        "tax-social-insurance"
+        "tax-social-insurance",
+        "tax-tax-judicial"
       ]
     },
     {
@@ -1418,7 +1514,7 @@
       "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-tax-judicial",
       "is_core": false,
       "board": "A",
-      "version": "3.14.38",
+      "version": "3.15.3",
       "topics": [
         "涉税司法",
         "虚开专票罪",
@@ -1446,7 +1542,9 @@
         "tax-policy-knowledge",
         "tax-invoice-compliance",
         "tax-compliance-dispute",
-        "tax-vat-law"
+        "tax-vat-law",
+        "tax-legal-tax-review",
+        "tax-listed-advisory"
       ]
     },
     {
@@ -1456,7 +1554,7 @@
       "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-invoice-compliance",
       "is_core": false,
       "board": "A",
-      "version": "3.14.38",
+      "version": "3.15.3",
       "topics": [
         "数电票",
         "发票合规",
@@ -1481,7 +1579,9 @@
         "tax-policy-knowledge",
         "tax-vat-law",
         "tax-tax-judicial",
-        "tax-compliance-dispute"
+        "tax-compliance-dispute",
+        "tax-listed-advisory",
+        "tax-legal-tax-review"
       ]
     },
     {
@@ -1491,7 +1591,7 @@
       "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-ipo-tax",
       "is_core": false,
       "board": "A",
-      "version": "3.14.38",
+      "version": "3.15.3",
       "topics": [
         "上市审核税务",
         "IPO税务",
@@ -1516,7 +1616,147 @@
         "tax-policy-knowledge",
         "tax-incentives",
         "tax-restructuring",
-        "tax-data-asset"
+        "tax-data-asset",
+        "tax-listed-advisory"
+      ]
+    },
+    {
+      "slug": "tax-ipo-governance",
+      "name": "上市前财税规范与内控建设框架",
+      "package": "tax-ipo-governance.zip",
+      "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-ipo-governance",
+      "is_core": false,
+      "board": "A",
+      "version": "3.15.3",
+      "topics": [
+        "上市前财税规范",
+        "IPO内控建设",
+        "股改涉税",
+        "内部控制框架",
+        "内控鉴证",
+        "关联交易清理",
+        "收入跨期"
+      ],
+      "keywords": [
+        "上市前财税规范",
+        "IPO内控建设",
+        "股改个税",
+        "净资产折股",
+        "股票溢价转增免个税",
+        "留存收益转增20%",
+        "企业内部控制基本规范",
+        "财务报告内控",
+        "非财务报告内控",
+        "内控鉴证报告",
+        "第三方回款",
+        "个人卡收款",
+        "资金占用",
+        "票据融资",
+        "收入跨期",
+        "新收入准则五步法",
+        "关联交易清理"
+      ],
+      "associations": [
+        "tax-equity-governance",
+        "tax-esop-platform",
+        "tax-industry-tax-risk",
+        "tax-ipo-tax",
+        "tax-listed-advisory",
+        "tax-policy-knowledge",
+        "tax-restructuring",
+        "tax-soe-audit",
+        "tax-tax-audit"
+      ]
+    },
+    {
+      "slug": "tax-listed-advisory",
+      "name": "上市公司全生命周期财税顾问与内控框架",
+      "package": "tax-listed-advisory.zip",
+      "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-listed-advisory",
+      "is_core": false,
+      "board": "A",
+      "version": "3.15.3",
+      "topics": [
+        "上市公司全生命周期",
+        "上市路径论证",
+        "上市前财税规范",
+        "内部控制框架设计",
+        "股改涉税",
+        "上市审核税务",
+        "境外上市架构",
+        "再融资税务",
+        "并购重组",
+        "分拆上市",
+        "转板",
+        "上市公司收购",
+        "持续督导合规",
+        "股权激励持股平台"
+      ],
+      "keywords": [
+        "上市公司全生命周期",
+        "上市路径论证",
+        "板块定位",
+        "新三板转板",
+        "北交所上市",
+        "境外上市红筹",
+        "上市前财税规范",
+        "历史补税清理",
+        "内部控制框架设计",
+        "协助设计内控",
+        "股改个税",
+        "上市审核税务问询",
+        "再融资税务",
+        "增发可转债配股",
+        "并购重组特殊性税务处理",
+        "企业分立税务",
+        "分拆上市税务",
+        "转板税务衔接",
+        "上市公司收购",
+        "控制权变更",
+        "一致行动人",
+        "持续督导合规",
+        "关联交易资金占用",
+        "股权激励持股平台",
+        "股份支付"
+      ],
+      "associations": [
+        "china-tax-guidance",
+        "social-security-advisor",
+        "tax-capital-reduction",
+        "tax-compliance-dispute",
+        "tax-construction",
+        "tax-consumption-tax",
+        "tax-contract-generation-review",
+        "tax-crossborder",
+        "tax-data-asset",
+        "tax-ecommerce",
+        "tax-education",
+        "tax-equity-governance",
+        "tax-esop-platform",
+        "tax-global-compliance",
+        "tax-hainan-ftp",
+        "tax-high-tech-deduction",
+        "tax-incentives",
+        "tax-individual-overseas",
+        "tax-industry-tax-risk",
+        "tax-invoice-compliance",
+        "tax-ipo-governance",
+        "tax-ipo-tax",
+        "tax-legal-tax-review",
+        "tax-life-services",
+        "tax-mfg-lifecycle-risk",
+        "tax-offshore-trust",
+        "tax-pet-chain",
+        "tax-policy-knowledge",
+        "tax-renewable",
+        "tax-restructuring",
+        "tax-social-insurance",
+        "tax-soe-audit",
+        "tax-steel",
+        "tax-tax-audit",
+        "tax-tax-judicial",
+        "tax-tcm-clinic",
+        "tax-vat-law"
       ]
     },
     {
@@ -1526,7 +1766,7 @@
       "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-social-insurance",
       "is_core": false,
       "board": "A",
-      "version": "3.14.38",
+      "version": "3.15.3",
       "topics": [
         "社保入税",
         "社保合规",
@@ -1545,7 +1785,21 @@
         "社保补缴",
         "社保稽核",
         "五险一金合规",
-        "社保合规自检"
+        "社保合规自检",
+        "社保基数自查",
+        "社保合规自查",
+        "社保缴费基数自查",
+        "社保基数合规",
+        "社保合规方案",
+        "社保差异测算",
+        "社保合规预警",
+        "社保合规整改",
+        "个税社保不一致风险",
+        "社保风险分级",
+        "社保稽查方法",
+        "四川社保2026",
+        "CPA社保账务调整",
+        "社保整改台账"
       ],
       "associations": [
         "tax-policy-knowledge",
@@ -1553,7 +1807,10 @@
         "tax-cleaning",
         "tax-vat-law",
         "social-security-advisor",
-        "tax-offshore-trust"
+        "tax-offshore-trust",
+        "tax-listed-advisory",
+        "tax-contract-generation-review",
+        "tax-legal-tax-review"
       ]
     },
     {
@@ -1563,7 +1820,7 @@
       "download_url": "",
       "is_core": false,
       "board": "A",
-      "version": "3.14.38",
+      "version": "3.15.3",
       "topics": [
         "个人社保",
         "延迟退休",
@@ -1635,7 +1892,10 @@
         "tax-policy-knowledge",
         "tax-social-insurance",
         "tax-life-services",
-        "tax-vat-law"
+        "tax-vat-law",
+        "tax-listed-advisory",
+        "tax-legal-tax-review",
+        "tax-contract-generation-review"
       ],
       "displayName": "个人社保政策查询与缴费规划助手"
     },
@@ -1646,7 +1906,7 @@
       "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-offshore-trust",
       "is_core": false,
       "board": "A",
-      "version": "3.14.38",
+      "version": "3.15.3",
       "topics": [
         "离岸信托",
         "离岸信托个税",
@@ -1682,7 +1942,10 @@
         "tax-policy-knowledge",
         "tax-crossborder",
         "tax-social-insurance",
-        "tax-compliance-dispute"
+        "tax-compliance-dispute",
+        "tax-global-compliance",
+        "tax-listed-advisory",
+        "tax-individual-overseas"
       ]
     },
     {
@@ -1692,7 +1955,7 @@
       "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-soe-audit",
       "is_core": false,
       "board": "A",
-      "version": "3.14.38",
+      "version": "3.15.3",
       "topics": [
         "国有企业经济责任审计",
         "经济责任审计涉税",
@@ -1719,13 +1982,497 @@
         "国企混改涉税",
         "国企关联交易转让定价",
         "审计署",
-        "国资监管"
+        "国资监管",
+        "三公经费审计",
+        "三公消费审计",
+        "公务接待费",
+        "公务接待费转移隐匿",
+        "跨科目转移隐匿接待费",
+        "四单合一",
+        "公务卡结算",
+        "资金转移路径",
+        "三公经费审计指标"
       ],
       "associations": [
         "tax-policy-knowledge",
         "tax-compliance-dispute",
         "tax-equity-governance",
+        "tax-restructuring",
+        "tax-ipo-governance",
+        "tax-tax-audit",
+        "tax-steel",
+        "tax-listed-advisory",
+        "tax-construction"
+      ]
+    },
+    {
+      "slug": "china-tax-guidance",
+      "name": "办税合规智能指引",
+      "package": "china-tax-guidance.zip",
+      "download_url": "https://api.skillhub.cn/api/v1/download?slug=china-tax-guidance",
+      "is_core": false,
+      "topics": [
+        "办税指南",
+        "电子税务局",
+        "纳税申报",
+        "发票业务",
+        "表证单书",
+        "税务注销",
+        "清税申报",
+        "纳税信用",
+        "退税申请",
+        "优惠备案",
+        "延期申报",
+        "办税日历"
+      ],
+      "keywords": [
+        "办税指南",
+        "电子税务局",
+        "办税操作",
+        "纳税申报",
+        "增值税申报",
+        "企业所得税申报",
+        "个人所得税申报",
+        "附加税费申报",
+        "印花税申报",
+        "房产税申报",
+        "税务登记",
+        "新办纳税人套餐",
+        "信息确认",
+        "发票票种核定",
+        "发票领用",
+        "发票验旧",
+        "发票缴销",
+        "红字发票",
+        "代开发票",
+        "出口退税备案",
+        "出口退税申报",
+        "税务注销",
+        "清税申报",
+        "一照一码清税",
+        "税收优惠备案",
+        "减免税申请",
+        "延期申报",
+        "延期缴纳税款",
+        "退税申请",
+        "误收多缴退抵税",
+        "汇算清缴退税",
+        "纳税信用评价",
+        "纳税信用修复",
+        "首违不罚",
+        "表证单书",
+        "增值税申报表",
+        "企业所得税申报表",
+        "税收完税证明",
+        "办税日历",
+        "12366",
+        "办税服务厅",
+        "新办企业办税",
+        "跨区域涉税事项",
+        "非正常户解除",
+        "办税路径",
+        "申报期限",
+        "新办企业",
+        "办税流程",
+        "首次办税"
+      ],
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-policy-knowledge",
+        "tax-invoice-compliance",
+        "tax-vat-law",
+        "tax-tax-judicial",
+        "tax-social-insurance",
+        "tax-listed-advisory"
+      ]
+    },
+    {
+      "slug": "tax-global-compliance",
+      "name": "企业出海全球合规指引",
+      "package": "tax-global-compliance.zip",
+      "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-global-compliance",
+      "is_core": false,
+      "topics": [
+        "出海合规",
+        "实体出海",
+        "人力雇佣",
+        "海外用工",
+        "全球薪酬",
+        "数据跨境",
+        "转让定价",
+        "跨境税务",
+        "国别指南",
+        "外资安全审查",
+        "反洗钱",
+        "反腐败",
+        "知识产权"
+      ],
+      "keywords": [
+        "出海合规",
+        "实体出海",
+        "海外用工",
+        "全球薪酬",
+        "跨国雇佣",
+        "美国用工",
+        "沙特用工",
+        "印尼用工",
+        "墨西哥用工",
+        "文莱用工",
+        "劳动合规",
+        "劳动合同",
+        "数据跨境",
+        "数据出境",
+        "个人信息出境",
+        "转让定价",
+        "跨境税务",
+        "国别指南",
+        "外资安全审查",
+        "反洗钱",
+        "反腐败",
+        "知识产权",
+        "海外投资",
+        "常设机构",
+        "预提所得税"
+      ],
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-policy-knowledge",
+        "tax-crossborder",
+        "tax-vat-law",
+        "tax-social-insurance",
+        "tax-tax-judicial",
+        "tax-offshore-trust",
+        "tax-listed-advisory",
+        "tax-individual-overseas"
+      ]
+    },
+    {
+      "slug": "tax-sme-specialized",
+      "name": "专精特新小巨人企业财税合规指引",
+      "package": "tax-sme-specialized.zip",
+      "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-sme-specialized",
+      "is_core": false,
+      "topics": [
+        "专精特新",
+        "小巨人",
+        "专精特新小巨人",
+        "制造业单项冠军",
+        "创新型中小企业",
+        "小巨人认定",
+        "专精特新奖补",
+        "小巨人补贴",
+        "研发费用加计扣除",
+        "北交所上市",
+        "中小企业合规"
+      ],
+      "keywords": [
+        "专精特新",
+        "小巨人",
+        "专精特新小巨人",
+        "制造业单项冠军",
+        "创新型中小企业",
+        "小巨人企业",
+        "专精特新认定",
+        "专精特新申报",
+        "小巨人奖补",
+        "小巨人补贴",
+        "专精特新财政奖励",
+        "研发费用加计扣除",
+        "北交所上市",
+        "北交所IPO",
+        "中小企业财税",
+        "中小企业合规",
+        "小巨人税务"
+      ],
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-policy-knowledge",
+        "tax-high-tech-deduction",
+        "tax-incentives",
+        "tax-ipo-tax",
+        "tax-social-insurance",
         "tax-restructuring"
+      ]
+    },
+    {
+      "slug": "tax-mfg-lifecycle-risk",
+      "name": "制造业全生命周期涉税风险管理指引",
+      "package": "tax-mfg-lifecycle-risk.zip",
+      "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-mfg-lifecycle-risk",
+      "is_core": false,
+      "topics": [
+        "制造业全生命周期",
+        "制造业涉税风险",
+        "生产型企业税务",
+        "股改",
+        "折股",
+        "重组特殊性税务处理",
+        "制造业重组",
+        "出口退税",
+        "北交所上市",
+        "废旧物资回收",
+        "资源综合利用",
+        "进项分类",
+        "出口单证"
+      ],
+      "keywords": [
+        "制造业全生命周期",
+        "制造业涉税风险",
+        "制造业税务",
+        "生产型企业",
+        "制造型企业",
+        "股改",
+        "折股",
+        "净资产折股",
+        "重组特殊性税务处理",
+        "特殊性税务处理",
+        "制造业重组",
+        "企业重组",
+        "出口退税",
+        "出口退免税",
+        "北交所上市",
+        "废旧物资回收",
+        "资源综合利用",
+        "再生资源",
+        "进项税分类",
+        "出口单证",
+        "出口报关"
+      ],
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-policy-knowledge",
+        "tax-restructuring",
+        "tax-vat-law",
+        "tax-ipo-tax",
+        "tax-renewable",
+        "tax-high-tech-deduction",
+        "tax-listed-advisory"
+      ]
+    },
+    {
+      "slug": "tax-legal-tax-review",
+      "name": "财税法务审查与法税同审指引",
+      "package": "tax-legal-tax-review.zip",
+      "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-legal-tax-review",
+      "is_core": false,
+      "topics": [
+        "法税同审",
+        "合同涉税审查",
+        "法务税务一体化",
+        "税务合规法律尽职调查",
+        "涉税法律文书",
+        "司法会计鉴定",
+        "审计准则第1142号",
+        "财务报表审计法律法规考虑"
+      ],
+      "keywords": [
+        "法税同审",
+        "法务税务一体化",
+        "合同涉税审查",
+        "税务合规法律尽职调查",
+        "涉税法律文书",
+        "税务尽调",
+        "司法会计鉴定",
+        "审计准则第1142号",
+        "财务报表审计法律法规考虑",
+        "涉税合规审查",
+        "法务税务同审"
+      ],
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-policy-knowledge",
+        "tax-contract-generation-review",
+        "tax-tax-audit",
+        "tax-tax-judicial",
+        "china-tax-guidance",
+        "social-security-advisor",
+        "tax-invoice-compliance",
+        "tax-compliance-dispute",
+        "tax-social-insurance",
+        "tax-listed-advisory"
+      ]
+    },
+    {
+      "slug": "tax-tax-audit",
+      "name": "企业财税合规审计与税务审计指引",
+      "package": "tax-tax-audit.zip",
+      "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-tax-audit",
+      "is_core": false,
+      "topics": [
+        "税务审计",
+        "财税合规审计",
+        "内控审计",
+        "涉税舞弊识别",
+        "审计法律法规考虑",
+        "关键审计事项税务风险"
+      ],
+      "keywords": [
+        "税务审计",
+        "财税合规审计",
+        "内控审计",
+        "税务合规内控",
+        "涉税舞弊",
+        "舞弊识别",
+        "关键审计事项",
+        "审计准则第1142号",
+        "会计监管风险提示",
+        "税务审计程序"
+      ],
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-construction",
+        "tax-high-tech-deduction",
+        "tax-ipo-governance",
+        "tax-legal-tax-review",
+        "tax-listed-advisory",
+        "tax-policy-knowledge",
+        "tax-restructuring",
+        "tax-soe-audit",
+        "tax-steel",
+        "tax-tax-judicial"
+      ]
+    },
+    {
+      "slug": "tax-industry-tax-risk",
+      "name": "行业涉税风险图谱（加油站/网络货运/物流/大宗/洼地）",
+      "package": "tax-industry-tax-risk.zip",
+      "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-industry-tax-risk",
+      "is_core": false,
+      "topics": [
+        "行业涉税风险",
+        "加油站变票",
+        "网络货运虚开",
+        "物流企业风险",
+        "大宗商品贸易",
+        "税收洼地",
+        "行业风险图谱"
+      ],
+      "keywords": [
+        "行业涉税风险",
+        "加油站变票",
+        "变票",
+        "网络货运平台虚开",
+        "物流涉税风险",
+        "大宗商品贸易涉税",
+        "税收洼地",
+        "园区洼地",
+        "行业风险自查",
+        "行业风险图谱"
+      ],
+      "version": "3.15.3",
+      "board": "A",
+      "associations": [
+        "tax-crossborder",
+        "tax-incentives",
+        "tax-invoice-compliance",
+        "tax-ipo-governance",
+        "tax-listed-advisory",
+        "tax-policy-knowledge",
+        "tax-renewable",
+        "tax-restructuring"
+      ]
+    },
+    {
+      "slug": "tax-consumption-tax",
+      "name": "电池消费税合规与政策指引",
+      "package": "tax-consumption-tax.zip",
+      "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-consumption-tax",
+      "is_core": false,
+      "board": "A",
+      "version": "3.15.3",
+      "topics": [
+        "电池消费税",
+        "消费税",
+        "梯次税率",
+        "免征清单",
+        "CMA检测报告",
+        "委托加工扣除",
+        "自产自用"
+      ],
+      "keywords": [
+        "电池消费税",
+        "消费税",
+        "梯次税率",
+        "2%消费税",
+        "4%消费税",
+        "免征消费税",
+        "钠离子电池消费税",
+        "固态电池消费税",
+        "燃料电池消费税",
+        "光伏电池消费税",
+        "钙钛矿电池",
+        "CMA检测报告",
+        "委托加工收回扣除",
+        "自产自用消费税",
+        "财税2026第20号",
+        "电池行业税务",
+        "消费税合规自检"
+      ],
+      "associations": [
+        "tax-policy-knowledge",
+        "tax-mfg-lifecycle-risk",
+        "tax-industry-tax-risk",
+        "tax-vat-law",
+        "tax-listed-advisory"
+      ]
+    },
+    {
+      "slug": "tax-individual-overseas",
+      "name": "个人境外投资合规筹划",
+      "package": "tax-individual-overseas.zip",
+      "download_url": "https://api.skillhub.cn/api/v1/download?slug=tax-individual-overseas",
+      "is_core": false,
+      "board": "A",
+      "version": "3.15.3",
+      "topics": [
+        "个人境外投资",
+        "居民个人境外所得",
+        "境外所得申报",
+        "税收抵免",
+        "港股通",
+        "QDII",
+        "跨境理财通",
+        "37号文",
+        "6年规则",
+        "CRS一致性",
+        "837号令",
+        "境外购房限制"
+      ],
+      "keywords": [
+        "个人境外投资",
+        "居民个人境外所得",
+        "境外所得申报",
+        "分国分项抵免",
+        "税收抵免",
+        "837号令",
+        "港股通免税",
+        "港股通转让差价",
+        "QDII基金",
+        "QDII分红个税暂免",
+        "跨境理财通",
+        "37号文",
+        "返程投资外汇登记",
+        "6年规则",
+        "无住所个人",
+        "税务居民身份",
+        "境外购房限制",
+        "便利化购汇5万美元",
+        "CRS一致性",
+        "个人出海合规"
+      ],
+      "associations": [
+        "tax-policy-knowledge",
+        "tax-global-compliance",
+        "tax-offshore-trust",
+        "tax-vat-law",
+        "tax-listed-advisory",
+        "tax-crossborder"
       ]
     }
   ],
@@ -1756,7 +2503,16 @@
       "tax-ipo-tax",
       "tax-social-insurance",
       "social-security-advisor",
-      "tax-soe-audit"
+      "tax-soe-audit",
+      "china-tax-guidance",
+      "tax-advisory-practice",
+      "tax-offshore-trust",
+      "tax-global-compliance",
+      "tax-individual-overseas",
+      "tax-listed-advisory",
+      "tax-mfg-lifecycle-risk",
+      "tax-industry-tax-risk",
+      "tax-consumption-tax"
     ],
     "tax-compliance-dispute": [
       "tax-policy-knowledge",
@@ -1780,7 +2536,11 @@
       "tax-data-asset",
       "tax-tax-judicial",
       "tax-invoice-compliance",
-      "tax-soe-audit"
+      "tax-soe-audit",
+      "tax-advisory-practice",
+      "tax-offshore-trust",
+      "tax-listed-advisory",
+      "tax-legal-tax-review"
     ],
     "tax-restructuring": [
       "tax-equity-governance",
@@ -1795,7 +2555,8 @@
       "tax-data-asset",
       "tax-vat-law",
       "tax-ipo-tax",
-      "tax-soe-audit"
+      "tax-soe-audit",
+      "tax-listed-advisory"
     ],
     "tax-equity-governance": [
       "tax-restructuring",
@@ -1807,7 +2568,8 @@
       "tax-contract-generation-review",
       "tax-esop-platform",
       "tax-high-tech-deduction",
-      "tax-soe-audit"
+      "tax-soe-audit",
+      "tax-listed-advisory"
     ],
     "tax-incentives": [
       "tax-restructuring",
@@ -1820,7 +2582,8 @@
       "tax-crossborder",
       "tax-high-tech-deduction",
       "tax-data-asset",
-      "tax-ipo-tax"
+      "tax-ipo-tax",
+      "tax-listed-advisory"
     ],
     "tax-pet-chain": [
       "tax-life-services",
@@ -1832,7 +2595,8 @@
       "tax-tcm-clinic",
       "tax-hainan-ftp",
       "tax-construction",
-      "tax-contract-generation-review"
+      "tax-contract-generation-review",
+      "tax-listed-advisory"
     ],
     "tax-life-services": [
       "tax-pet-chain",
@@ -1845,7 +2609,9 @@
       "tax-hainan-ftp",
       "tax-construction",
       "tax-contract-generation-review",
-      "tax-social-insurance"
+      "tax-social-insurance",
+      "social-security-advisor",
+      "tax-listed-advisory"
     ],
     "tax-contract-generation-review": [
       "tax-policy-knowledge",
@@ -1864,7 +2630,11 @@
       "tax-education",
       "tax-tcm-clinic",
       "tax-hainan-ftp",
-      "tax-esop-platform"
+      "tax-esop-platform",
+      "tax-advisory-practice",
+      "tax-social-insurance",
+      "social-security-advisor",
+      "tax-listed-advisory"
     ],
     "tax-ecommerce": [
       "tax-pet-chain",
@@ -1876,7 +2646,8 @@
       "tax-tcm-clinic",
       "tax-hainan-ftp",
       "tax-construction",
-      "tax-contract-generation-review"
+      "tax-contract-generation-review",
+      "tax-listed-advisory"
     ],
     "tax-crossborder": [
       "tax-pet-chain",
@@ -1891,21 +2662,29 @@
       "tax-equity-governance",
       "tax-restructuring",
       "tax-contract-generation-review",
-      "tax-incentives"
+      "tax-incentives",
+      "tax-offshore-trust",
+      "tax-global-compliance",
+      "tax-listed-advisory",
+      "tax-individual-overseas"
     ],
     "tax-renewable": [
       "tax-steel",
       "tax-compliance-dispute",
       "tax-policy-knowledge",
       "tax-construction",
-      "tax-contract-generation-review"
+      "tax-contract-generation-review",
+      "tax-listed-advisory"
     ],
     "tax-steel": [
       "tax-renewable",
       "tax-compliance-dispute",
       "tax-policy-knowledge",
       "tax-construction",
-      "tax-contract-generation-review"
+      "tax-contract-generation-review",
+      "tax-listed-advisory",
+      "tax-soe-audit",
+      "tax-tax-audit"
     ],
     "tax-education": [
       "tax-tcm-clinic",
@@ -1917,7 +2696,8 @@
       "tax-compliance-dispute",
       "tax-hainan-ftp",
       "tax-construction",
-      "tax-contract-generation-review"
+      "tax-contract-generation-review",
+      "tax-listed-advisory"
     ],
     "tax-tcm-clinic": [
       "tax-education",
@@ -1929,7 +2709,8 @@
       "tax-compliance-dispute",
       "tax-hainan-ftp",
       "tax-construction",
-      "tax-contract-generation-review"
+      "tax-contract-generation-review",
+      "tax-listed-advisory"
     ],
     "tax-hainan-ftp": [
       "tax-policy-knowledge",
@@ -1942,7 +2723,8 @@
       "tax-ecommerce",
       "tax-crossborder",
       "tax-construction",
-      "tax-contract-generation-review"
+      "tax-contract-generation-review",
+      "tax-listed-advisory"
     ],
     "tax-construction": [
       "tax-policy-knowledge",
@@ -1957,14 +2739,18 @@
       "tax-ecommerce",
       "tax-crossborder",
       "tax-hainan-ftp",
-      "tax-contract-generation-review"
+      "tax-contract-generation-review",
+      "tax-tax-audit",
+      "tax-soe-audit",
+      "tax-listed-advisory"
     ],
     "tax-capital-reduction": [
       "tax-equity-governance",
       "tax-restructuring",
       "tax-compliance-dispute",
       "tax-policy-knowledge",
-      "tax-contract-generation-review"
+      "tax-contract-generation-review",
+      "tax-listed-advisory"
     ],
     "tax-esop-platform": [
       "tax-policy-knowledge",
@@ -1973,7 +2759,8 @@
       "tax-compliance-dispute",
       "tax-contract-generation-review",
       "tax-high-tech-deduction",
-      "tax-data-asset"
+      "tax-data-asset",
+      "tax-listed-advisory"
     ],
     "tax-high-tech-deduction": [
       "tax-compliance-dispute",
@@ -1982,7 +2769,8 @@
       "tax-incentives",
       "tax-policy-knowledge",
       "tax-restructuring",
-      "tax-data-asset"
+      "tax-data-asset",
+      "tax-listed-advisory"
     ],
     "tax-data-asset": [
       "tax-policy-knowledge",
@@ -1991,45 +2779,196 @@
       "tax-esop-platform",
       "tax-compliance-dispute",
       "tax-incentives",
-      "tax-ipo-tax"
+      "tax-ipo-tax",
+      "tax-listed-advisory"
     ],
     "tax-vat-law": [
       "tax-policy-knowledge",
       "tax-invoice-compliance",
       "tax-tax-judicial",
       "tax-restructuring",
-      "tax-social-insurance"
+      "tax-social-insurance",
+      "china-tax-guidance",
+      "social-security-advisor",
+      "tax-global-compliance"
     ],
     "tax-tax-judicial": [
       "tax-policy-knowledge",
       "tax-invoice-compliance",
       "tax-compliance-dispute",
-      "tax-vat-law"
+      "tax-vat-law",
+      "china-tax-guidance",
+      "tax-global-compliance",
+      "tax-legal-tax-review",
+      "tax-listed-advisory"
     ],
     "tax-invoice-compliance": [
       "tax-policy-knowledge",
       "tax-vat-law",
       "tax-tax-judicial",
-      "tax-compliance-dispute"
+      "tax-compliance-dispute",
+      "china-tax-guidance",
+      "tax-listed-advisory",
+      "tax-legal-tax-review"
     ],
     "tax-ipo-tax": [
       "tax-policy-knowledge",
       "tax-incentives",
       "tax-restructuring",
-      "tax-data-asset"
+      "tax-data-asset",
+      "tax-ipo-governance",
+      "tax-listed-advisory"
     ],
     "tax-social-insurance": [
       "tax-policy-knowledge",
       "tax-life-services",
       "tax-cleaning",
       "tax-vat-law",
-      "social-security-advisor"
+      "social-security-advisor",
+      "china-tax-guidance",
+      "tax-offshore-trust",
+      "tax-global-compliance",
+      "tax-listed-advisory",
+      "tax-contract-generation-review",
+      "tax-legal-tax-review"
     ],
     "social-security-advisor": [
       "tax-policy-knowledge",
       "tax-social-insurance",
       "tax-life-services",
-      "tax-vat-law"
+      "tax-vat-law",
+      "tax-listed-advisory",
+      "tax-legal-tax-review",
+      "tax-contract-generation-review"
+    ],
+    "tax-advisory-practice": [
+      "tax-policy-knowledge",
+      "tax-compliance-dispute",
+      "tax-contract-generation-review"
+    ],
+    "tax-offshore-trust": [
+      "tax-policy-knowledge",
+      "tax-crossborder",
+      "tax-social-insurance",
+      "tax-compliance-dispute",
+      "tax-individual-overseas",
+      "tax-global-compliance",
+      "tax-listed-advisory"
+    ],
+    "tax-soe-audit": [
+      "tax-policy-knowledge",
+      "tax-compliance-dispute",
+      "tax-equity-governance",
+      "tax-restructuring",
+      "tax-ipo-governance",
+      "tax-tax-audit",
+      "tax-steel",
+      "tax-listed-advisory",
+      "tax-construction"
+    ],
+    "china-tax-guidance": [
+      "tax-policy-knowledge",
+      "tax-invoice-compliance",
+      "tax-vat-law",
+      "tax-tax-judicial",
+      "tax-social-insurance",
+      "tax-listed-advisory"
+    ],
+    "tax-global-compliance": [
+      "tax-policy-knowledge",
+      "tax-crossborder",
+      "tax-vat-law",
+      "tax-social-insurance",
+      "tax-tax-judicial",
+      "tax-individual-overseas",
+      "tax-offshore-trust",
+      "tax-listed-advisory"
+    ],
+    "tax-consumption-tax": [
+      "tax-policy-knowledge",
+      "tax-mfg-lifecycle-risk",
+      "tax-industry-tax-risk",
+      "tax-vat-law",
+      "tax-listed-advisory"
+    ],
+    "tax-individual-overseas": [
+      "tax-policy-knowledge",
+      "tax-global-compliance",
+      "tax-offshore-trust",
+      "tax-vat-law",
+      "tax-listed-advisory",
+      "tax-crossborder"
+    ],
+    "tax-ipo-governance": [
+      "tax-policy-knowledge",
+      "tax-ipo-tax",
+      "tax-esop-platform",
+      "tax-equity-governance",
+      "tax-restructuring",
+      "tax-soe-audit",
+      "tax-listed-advisory",
+      "tax-tax-audit"
+    ],
+    "tax-listed-advisory": [
+      "tax-data-asset",
+      "tax-policy-knowledge",
+      "tax-capital-reduction",
+      "tax-education",
+      "social-security-advisor",
+      "tax-consumption-tax",
+      "tax-tax-audit",
+      "tax-renewable",
+      "tax-incentives",
+      "tax-steel",
+      "tax-ipo-tax",
+      "tax-offshore-trust",
+      "tax-ipo-governance",
+      "china-tax-guidance",
+      "tax-high-tech-deduction",
+      "tax-soe-audit",
+      "tax-life-services",
+      "tax-invoice-compliance",
+      "tax-mfg-lifecycle-risk",
+      "tax-esop-platform",
+      "tax-global-compliance",
+      "tax-social-insurance",
+      "tax-crossborder",
+      "tax-restructuring",
+      "tax-equity-governance",
+      "tax-pet-chain",
+      "tax-compliance-dispute",
+      "tax-hainan-ftp",
+      "tax-construction",
+      "tax-tcm-clinic",
+      "tax-ecommerce",
+      "tax-individual-overseas",
+      "tax-contract-generation-review",
+      "tax-industry-tax-risk",
+      "tax-tax-judicial",
+      "tax-legal-tax-review"
+    ],
+    "tax-tax-audit": [
+      "tax-listed-advisory",
+      "tax-construction",
+      "tax-soe-audit",
+      "tax-steel",
+      "tax-ipo-governance"
+    ],
+    "tax-legal-tax-review": [
+      "tax-tax-judicial",
+      "social-security-advisor",
+      "tax-invoice-compliance",
+      "tax-compliance-dispute",
+      "tax-social-insurance",
+      "tax-listed-advisory"
+    ],
+    "tax-mfg-lifecycle-risk": [
+      "tax-policy-knowledge",
+      "tax-listed-advisory"
+    ],
+    "tax-industry-tax-risk": [
+      "tax-policy-knowledge",
+      "tax-listed-advisory"
     ]
   }
 }

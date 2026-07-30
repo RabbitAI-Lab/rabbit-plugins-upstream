@@ -65,7 +65,7 @@ _FALLBACK_PROBE_INTERVAL = 30
 # 客户端身份（注入 X-Client-Id，供服务端按客户端归因与限流）
 # ============================================================
 _CLIENT_ID = "tax-renewable"
-_CLIENT_VERSION = "3.14.19"
+_CLIENT_VERSION = "3.15.3"
 
 # 429 退避：最多重试次数 + 单次退避上限（秒），防止被长窗口拖死
 _MAX_429_RETRIES = 2

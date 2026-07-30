@@ -1,5 +1,5 @@
 ## Description: <br>
-Automates code review by retrieving repositories, running code quality checks, and generating structured Markdown review reports. <br>
+Automates code review workflows by cloning or using repositories, running multi-dimensional quality checks, and producing structured review reports for single-repository and front-end/back-end integration scenarios. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use this skill to review local or remote codebases, run language-specific quality checks, and produce Markdown issue reports with severity levels and remediation guidance. <br>
+Developers and engineering teams use this skill to review local or remote repositories, identify code quality and correctness issues, track ignored findings across review cycles, and produce Markdown reports. It also supports explicit front-end/back-end integration reviews when the user provides the repository relationship. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can modify repositories, write review reports, and commit or push report files in remote workflows. <br>
-Mitigation: Use a disposable workspace or read-only repository access unless publishing behavior is explicitly desired; review git changes before any commit or push. <br>
-Risk: The skill can install analysis tools and interact with SSH key setup while preparing checks. <br>
-Mitigation: Review commands before execution and use scoped credentials that grant only the repository access needed for the review. <br>
-Risk: Scheduled workflows can clean local repository state before reviewing updates. <br>
-Mitigation: Avoid scheduled runs unless destructive cleanup behavior is understood and limited to disposable clones or controlled workspaces. <br>
+Risk: The skill may write review artifacts and push reports to remote repositories. <br>
+Mitigation: Run it only in repositories where report writes are intended, review generated files before commit or push, and require explicit approval for remote delivery. <br>
+Risk: Scheduled review behavior can reset and clean local workspace changes. <br>
+Mitigation: Use disposable clones or isolated CI workspaces for scheduled runs, and avoid running scheduled mode in a working tree with uncommitted changes. <br>
+Risk: Dependency and tool installation steps may alter the execution environment or project workspace. <br>
+Mitigation: Prefer isolated environments, pin project dependencies where possible, and inspect installed tools or lockfile changes before preserving them. <br>
+Risk: SSH key setup and repository access workflows can affect credentials and remote access. <br>
+Mitigation: Do not allow automatic SSH key creation unless explicitly intended; use scoped credentials and verify remote access changes manually. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tinycen/skills/code-review) <br>
-- [Review Process](references/review_process.md) <br>
-- [Report Template](references/report_template.md) <br>
-- [Repository Access](references/repository_access.md) <br>
-- [Installation](references/installation.md) <br>
-- [Python Type Checks](references/language_checks/python_type_check.md) <br>
-- [Python Dependency Checks](references/language_checks/python_dependency.md) <br>
-- [TypeScript and JavaScript Checks](references/language_checks/typescript_javascript_check.md) <br>
+- [ClawHub skill page](https://clawhub.ai/tinycen/skills/code-review) <br>
+- [Review process](references/review_process.md) <br>
+- [Report delivery](references/report_delivery.md) <br>
+- [Repository access](references/repository_access.md) <br>
+- [Cross-repository integration checks](references/cross_repo_integration_checks.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown review report with issue details, severity levels, remediation guidance, and optional inline shell commands.] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown reports with inline shell commands and structured issue tables] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may be saved under docs/code_reviews/ and, in remote workflows, may be committed and pushed when configured.] <br>
+**Other Properties Related to Output:** [May create or update docs/code_reviews reports and ignored-issue tracking files in the reviewed workspace.] <br>
 
 ## Skill Version(s): <br>
-1.1.1 (source: frontmatter and server release metadata) <br>
+1.3.1 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

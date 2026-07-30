@@ -1,5 +1,5 @@
 ## Description: <br>
-Ctxly Chat Tool Free helps AI agents create or join anonymous chat rooms, send and read messages, and poll for unread messages through the ctxly.app HTTP API. <br>
+A lightweight anonymous chat skill that guides an AI agent to create or join ctxly.app rooms, send and read messages, and poll for unread updates without account registration or identity verification. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent builders use this skill to coordinate lightweight, non-critical communication between agents or between an agent and a person through anonymous chat rooms. It is suited for task handoffs, status updates, unread polling, and simple asynchronous collaboration. <br>
+Developers and AI-agent operators can use this skill to coordinate lightweight Agent-to-Agent or Agent-to-human chat through anonymous ctxly.app rooms. It is best suited for non-sensitive coordination messages where token-based room access and polling are acceptable. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Remote anonymous chat could route unrelated or sensitive agent work through a third-party messaging service. <br>
-Mitigation: Use only for explicit ctxly chat-room tasks, and do not send secrets, personal data, credentials, private business content, or high-integrity instructions. <br>
-Risk: Tokens and invite codes function as bearer access for reading or sending room messages. <br>
-Mitigation: Treat tokens and invites as secrets, keep them out of logs and hardcoded scripts, and create a new room or rejoin when a value may have been exposed. <br>
-Risk: Messages received through the room may contain untrusted instructions or misleading coordination data. <br>
-Mitigation: Review chat content before acting on it, and do not rely on this skill for deterministic or critical decisions. <br>
+Risk: Messages and room tokens are handled by an external anonymous service, and the free edition states that encryption and trusted Agent authentication are not supported. <br>
+Mitigation: Use the skill only for non-sensitive chat content and avoid sharing credentials, personal data, proprietary data, or durable secrets through rooms. <br>
+Risk: The skill requests read, exec, and write capabilities for a workflow that performs networked chat operations. <br>
+Mitigation: Install or run it only where exec and write access are acceptable, and restrict use to explicit ctxly room creation, joining, message sending, reading, and polling tasks. <br>
+Risk: Anonymous token-based access can allow unintended room access if tokens or invite codes are exposed. <br>
+Mitigation: Treat tokens and invite codes as sensitive session material, do not commit them to version control, and rotate to a new room if they are exposed. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/ctxly-chat-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [ctxly chat API service](https://chat.ctxly.app) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP API examples and JSON response shapes] <br>
+**Output Type(s):** [guidance, shell commands, configuration, markdown] <br>
+**Output Format:** [Markdown instructions with HTTP API endpoints and shell-command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce bearer tokens, invite codes, message content, status codes, unread counts, and operational logs.] <br>
+**Other Properties Related to Output:** [May produce room tokens, invite codes, chat message content, status codes, result data, and logs.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Power-user guide for using Arena.ai modes, model routing, leaderboards, and reset tactics to improve access to frontier model responses. <br>
+Power-user guide for choosing Arena.ai Direct, Agent, Code, and Max routing modes, handling weak responses, and falling back to local tools when Arena is slow or unavailable. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to choose Arena.ai chat modes, model-selection paths, and conversation reset tactics for general, coding, agentic, and multimodal tasks. <br>
+External users and developers use this skill to select Arena.ai interaction modes, troubleshoot weak or stalled responses, and choose fallback workflows when hosted routing is unavailable. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The guide includes time-sensitive claims about model availability, leaderboard rankings, and pricing. <br>
-Mitigation: Verify current Arena.ai leaderboards, mode availability, and pricing before relying on the guidance for important decisions. <br>
-Risk: The artifact is a usage guide rather than executable automation, so incorrect guidance could still affect user choices. <br>
-Mitigation: Review the Markdown content and linked Arena.ai references before deployment or recommendation to users. <br>
+Risk: Optional shell snippets reference external scripts, cache files, and local tools that are not included in the submitted artifact. <br>
+Mitigation: Inspect those external tools before running them, and execute any fallback workflow only in a trusted or sandboxed environment. <br>
 
 
 ## Reference(s): <br>
-- [Arena.ai Direct Chat](https://arena.ai/) <br>
-- [Arena.ai Agent Mode](https://arena.ai/agent) <br>
-- [Arena.ai Agent Leaderboard](https://arena.ai/leaderboard/agent) <br>
-- [Arena.ai Max Router](https://arena.ai/max) <br>
-- [Arena.ai Agent Mode Blog](https://arena.ai/blog/agent-mode/) <br>
-- [Arena.ai Agent Mode Help Center](https://help.arena.ai/articles/5432423882-how-to-use-agent-mode) <br>
-- [ClawHub Skill Page](https://clawhub.ai/orionshaowswmw/skills/arena-power-user-playbook) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/orionshaowswmw) <br>
+- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/arena-power-user-playbook) <br>
+- [Arena.ai](https://arena.ai/) <br>
+- [Arena Agent Mode](https://arena.ai/agent) <br>
+- [Arena Agent Leaderboard](https://arena.ai/leaderboard/agent) <br>
+- [Arena Max](https://arena.ai/max) <br>
+- [Arena Agent Mode blog](https://arena.ai/blog/agent-mode/) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Text, Markdown] <br>
-**Output Format:** [Markdown guidance with links and decision steps] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell command examples and configuration notes] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include time-sensitive model availability, ranking, and pricing claims that should be independently verified before operational use.] <br>
+**Other Properties Related to Output:** [No bundled executable code; optional command snippets depend on separate local tools.] <br>
 
 ## Skill Version(s): <br>
-1.2.0 (source: server release metadata; artifact frontmatter lists 1.1.0) <br>
+1.2.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

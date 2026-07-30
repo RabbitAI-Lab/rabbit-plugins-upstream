@@ -39,7 +39,7 @@
 | `--no-logo` | 去除水印（Hailuo/Kling/Vidu 支持）|
 | `--enable-bgm` | 启用背景音乐（部分模型版本支持）|
 | `--enable-audio` | 是否为视频生成音频（GV/OS 支持，可选值: `true`/`false`）|
-| `--ref-video-url` | 参考视频 URL（仅 Kling 模型支持）|
+| `--ref-video-url` | 参考视频 URL（仅 Kling O1 / Kling 3.0-Omni / Vidu q2-pro / H2 1.0 支持）|
 | `--ref-video-type` | 参考视频类型：`feature`（特征参考）/ `base`（待编辑视频，默认）|
 | `--keep-original-sound` | 保留原声：`yes` / `no` |
 | `--ref-video-cos-bucket` | 参考视频所在 COS Bucket（可多次指定）|
@@ -62,7 +62,11 @@
 
 ## ⚠️ 强制规则（违反将导致命令执行失败）
 
-- **🚫 参考视频仅 Kling 模型支持**：当用户请求使用参考视频（`--ref-video-url` 或 `--ref-video-cos-key`）时，**必须使用 `--model Kling`**，其他模型不支持参考视频。如果用户指定了其他模型 + 参考视频，**必须拒绝并提示**用户参考视频仅 Kling 模型支持，建议改用 Kling 模型。
+- **🚫 参考视频仅部分模型支持**：当用户请求使用参考视频（`--ref-video-url` 或 `--ref-video-cos-key`）时，**必须使用支持该能力的模型 + 版本组合**：
+  - `--model Kling --model-version O1` 或 `--model Kling --model-version 3.0-Omni`（可作为特征参考视频或待编辑视频，支持保留原声）
+  - `--model Vidu --model-version q2-pro`（支持视频参考；最多 1 个 8s 视频 或 2 个 5s 视频）
+  - `--model H2 --model-version 1.0`
+  其他模型或不匹配的版本（如 Kling 3.0、Vidu q2、PixVerse、Hunyuan、Hailuo 等）**不支持**参考视频；如果用户指定了不支持的组合，**必须拒绝并提示**用户改用上述支持组合之一。
 - **🚫 SceneType 严格对应模型**：`--scene-type` 参数**必须**与模型严格对应，**禁止混用**：
   - `motion_control`（动作控制）→ ⚠️ **仅 Kling 模型**
   - `land2port`（横转竖）→ ⚠️ **仅 Mingmou 模型**
@@ -76,7 +80,7 @@
   - `--duration` 必须是 1~15 秒之间的整数
   - `--quality` 必须是 `360p` / `540p` / `720p` / `1080p` 之一（走 `ExtraParameters.Quality`，仅 PixVerse 支持）
   - `--generate-audio` 必须是 `true` / `false`（走 `ExtraParameters.EnableAudio`，MPS 后端会映射到 PixVerse 的 `generate_audio_switch`，仅 PixVerse 支持，开启后自动生成与画面匹配的音效）
-  如果用户要求 PixVerse 做分镜（`--multi-shot`）或参考视频（`--ref-video-url`），**必须拒绝**，该能力仅 Kling 支持。
+  如果用户要求 PixVerse 做分镜（`--multi-shot`）或参考视频（`--ref-video-url`），**必须拒绝**：分镜功能仅 Kling 支持，参考视频仅 Kling O1 / 3.0-Omni / Vidu q2-pro / H2 1.0 支持。
 - **AIGC 生视频 API 的图片参数只支持 URL**（`ImageUrl`/`LastImageUrl`），不支持 CosInputInfo。使用 `--image-cos-key` / `--last-image-cos-key` / `--ref-image-cos-key` 时，脚本会自动生成预签名 URL 后传入 API（需配置 `TENCENTCLOUD_SECRET_ID/KEY`）。
 - 用户提供 bucket/region/key 时，必须完整传入这三个参数，不得省略。
 
@@ -143,10 +147,14 @@ python3 scripts/mps_aigc_video.py --prompt "将视频风格化" --model Kling --
 # Mingmou 横转竖（land2port 场景不需要输入视频文件，只需 prompt 描述即可生成竖屏视频）
 python3 scripts/mps_aigc_video.py --prompt "横屏转竖屏" --model Mingmou --scene-type land2port
 
-# COS 参考视频（自动生成预签名 URL）
-python3 scripts/mps_aigc_video.py --prompt "将视频风格化" --model Kling \
+# COS 参考视频（自动生成预签名 URL，Kling O1）
+python3 scripts/mps_aigc_video.py --prompt "将视频风格化" --model Kling --model-version O1 \
     --ref-video-cos-bucket mybucket-125xxx --ref-video-cos-region ap-guangzhou \
     --ref-video-cos-key /input/video.mp4 --ref-video-type base --keep-original-sound yes
+
+# Vidu q2-pro 参考视频（视频编辑 / 视频替换场景）
+python3 scripts/mps_aigc_video.py --prompt "把画面变成赛博朋克风格" --model Vidu --model-version q2-pro \
+    --ref-video-url https://example.com/video.mp4 --ref-video-type base
 
 # Vidu 错峰模式
 python3 scripts/mps_aigc_video.py --prompt "自然风景" --model Vidu --off-peak

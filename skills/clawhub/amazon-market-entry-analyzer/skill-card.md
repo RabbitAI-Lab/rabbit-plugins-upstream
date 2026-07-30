@@ -1,5 +1,5 @@
 ## Description: <br>
-Evaluates Amazon product categories with ZooData market, competitor, price, brand, review, and trend data to produce a GO/CAUTION/AVOID market-entry recommendation. <br>
+Evaluates Amazon product categories for market size, competition intensity, brand landscape, pricing structure, and consumer pain points, then returns a GO, CAUTION, or AVOID market-entry recommendation. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,40 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Amazon sellers, ecommerce operators, and market researchers use this skill to evaluate a named product niche or category before entering the market. It produces a viability score, GO/CAUTION/AVOID verdict, competitor and price analysis, consumer insight summary, and data provenance based on ZooData API results. <br>
+External Amazon sellers and ecommerce operators use this skill to evaluate a named product niche or category before deciding whether to enter it. It supports market-entry diligence with ZooData-backed demand, competition, pricing, brand concentration, competitor, review, and trend analysis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The package exposes a broad ZooData command-line tool beyond the market-entry workflow. <br>
-Mitigation: Use the documented market-entry workflow for this skill and review proposed commands before execution. <br>
-Risk: The skill requires a ZooData API key and can redirect API traffic if ZOODATA_BASE_URL is set. <br>
-Mitigation: Provide only the intended ZooData key, avoid setting ZOODATA_BASE_URL unless redirection is intentional, and remove credentials from the environment after use. <br>
-Risk: The workflow can consume API credits across many endpoints. <br>
-Mitigation: Monitor the API usage table, stop on credit-exhaustion responses, and avoid repeated deep dives without user confirmation. <br>
-Risk: Market-entry recommendations are based on sampled API data and should not be treated as the sole basis for business decisions. <br>
-Mitigation: Validate recommendations with additional sources, supplier economics, compliance review, and seller-specific constraints before acting. <br>
-Risk: Fallback review analysis may create temporary work directories containing review data. <br>
-Mitigation: Delete temporary review work directories after fallback analysis is complete. <br>
+Risk: The skill sends Amazon market keywords, category paths, ASINs, marketplace/date values, and numeric filters to ZooData using the user's API key. <br>
+Mitigation: Use the skill only with inputs appropriate for ZooData and avoid adding sensitive business-profile text beyond the required market research inputs. <br>
+Risk: ZooData API calls consume account credits, and the composite market-entry workflow can require about 15 to 25 credits. <br>
+Mitigation: Estimate credit cost and confirm before broad or ambiguous multi-call scans; use granular commands when operating under a credit cap. <br>
+Risk: The review-analysis fallback can create temporary working files under /tmp. <br>
+Mitigation: Remove temporary review-analysis files after the workflow completes, especially on shared systems. <br>
+Risk: Legacy or unexpected credential sources can affect which ZooData key is used. <br>
+Mitigation: Check the environment for ZOODATA_API_KEY and legacy APICLAW_API_KEY before use, and keep only the intended credential configured. <br>
 
 
 ## Reference(s): <br>
 - [Market Entry Analyzer API Field Reference](references/reference.md) <br>
-- [ZooData Skills GitHub Repository](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
 - [ZooData API Documentation](https://api.zoodata.ai/api-docs) <br>
-- [ZooData API Key Setup](https://zoodata.ai/en/api-keys) <br>
-- [ClawHub Skill Listing](https://clawhub.ai/apiclaw/skills/amazon-market-entry-analyzer) <br>
+- [ZooData](https://zoodata.ai) <br>
+- [ZooData-Skills homepage from metadata](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown report with tables, confidence labels, and inline shell commands] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
+**Output Format:** [Markdown report with tables, confidence labels, data provenance, API usage, and optional inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZOODATA_API_KEY; API-backed findings include data provenance and API usage tables.] <br>
+**Other Properties Related to Output:** [Uses GO, CAUTION, and AVOID verdicts; output language follows the user's input language.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: server release metadata and skill metadata) <br>
+1.0.7 (source: server release evidence and skill metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

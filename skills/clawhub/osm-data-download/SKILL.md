@@ -1,6 +1,6 @@
-﻿---
-description: 'Download OpenStreetMap features via Overpass API. Query by bbox, tag filter, or administrative place name (e.g. 北京市朝阳区). Output GeoJSON and/or Shapefile (UTF-8 with .cpg). Supports roads, buildings, POIs, landuse, natural features, semantic presets (water/road/building/green), multi-format export, and an automatic QA summary.'
+---
 name: osm-data-download
+description: 'Download OpenStreetMap features via Overpass API. Query by bbox, tag filter, or administrative place name (e.g. 北京市朝阳区). Output GeoJSON and/or Shapefile (UTF-8 with .cpg). Supports roads, buildings, POIs, landuse, natural features, semantic presets (water/road/building/green), multi-format export, and an automatic QA summary.'
 ---
 
 # OSM Data Download

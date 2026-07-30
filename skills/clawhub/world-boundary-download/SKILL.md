@@ -1,17 +1,6 @@
-﻿---
-description: 'Download global administrative boundary vector data (Shapefile / GeoJSON
-  /
-
-  GeoPackage / TopoJSON) for any country or multi-country region. Backed by
-
-  geoBoundaries (CC BY 4.0, default) with GADM 4.1 and Natural Earth as
-
-  fallbacks. Supports bbox clipping, multi-country merge, and a rich
-
-  metadata API (year, source, license, area, vertex count).
-
-  '
+---
 name: world-boundary-download
+description: 'Download global administrative boundary vector data (Shapefile / GeoJSON / GeoPackage / TopoJSON) for any country or multi-country region. Backed by geoBoundaries (CC BY 4.0, default) with GADM 4.1 and Natural Earth as fallbacks. Supports bbox clipping, multi-country merge, and a rich metadata API (year, source, license, area, vertex count).'
 ---
 
 # 全球行政区划下载（world-boundary-download）

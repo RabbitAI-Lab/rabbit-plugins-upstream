@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cmic-skill-scanner",
   "slug": "cmic-skill-scanner",
   "ownerHandle": null,
-  "version": "0.11.0",
-  "updatedAt": 1784018518684,
-  "contentHash": "e129e367b4fe8e526c122d7a50a1199654198164cfc3c5896fe5a73474298c18",
-  "fetchedAt": "2026-07-26T18:14:48.204Z"
+  "version": "0.11.1",
+  "updatedAt": 1785136840905,
+  "contentHash": "427fcdc9399c3f1d1f4ffbfcd7e76fb459cf83993051b0fe54ef5f1805d53a8d",
+  "fetchedAt": "2026-07-30T10:01:15.040Z"
 }

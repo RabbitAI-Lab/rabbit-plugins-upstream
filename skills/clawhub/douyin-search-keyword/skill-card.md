@@ -11,43 +11,40 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Content, marketing, and analysis teams use this skill to retrieve public Douyin search results, creator posts, comments, and hot-list data for content planning, competitor analysis, public-opinion analysis, and trend monitoring. <br>
+External users and content-analysis teams use this skill to search public Douyin videos, inspect creator posts, retrieve comments, and monitor hot lists for marketing, competitor analysis, sentiment review, and trend tracking. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Douyin search terms, profile or video URLs, request limits, and GUAIKEI_API_TOKEN are sent to the guaikei.com API. <br>
-Mitigation: Use the skill only for workflows where sending those values to the third-party API is acceptable, and store the token in an environment variable rather than in prompts or files. <br>
-Risk: Collected public comments, account data, and search results are saved as local JSON logs. <br>
-Mitigation: Review, restrict, or delete generated log files when the collected data is sensitive for the workflow. <br>
-Risk: The skill is limited to public Douyin data and does not support private or hidden content. <br>
-Mitigation: Use it only for public-data retrieval tasks and avoid relying on it for private-account monitoring or complete coverage claims. <br>
+Risk: The skill can collect public Douyin user, video, and comment data at scale. <br>
+Mitigation: Use it only for lawful, platform-compliant analysis and avoid collecting more data than needed for the task. <br>
+Risk: Search, post, and comment outputs are saved locally by default and may contain user comments, identifiers, or sensitive topics. <br>
+Mitigation: Store logs in protected locations, delete them when no longer needed, and avoid running the skill in synced, shared, CI, or regulated-data workspaces without review. <br>
+Risk: The configured GUAIKEI_API_TOKEN is sent to guaikei.com for API requests. <br>
+Mitigation: Keep the token out of shared environments, rotate it if exposed, and review installation before use on shared machines. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/douyin-search-keyword) <br>
-- [Publisher profile](https://clawhub.ai/user/um-why) <br>
+- [ClawHub skill page](https://clawhub.ai/um-why/skills/douyin-search-keyword) <br>
+- [Guaikei token and support site](https://www.guaikei.com) <br>
 - [Options reference](references/options.md) <br>
 - [Changelog](references/changelog.md) <br>
-- [Search input schema](assets/search_cli_req.schema.json) <br>
-- [Search output schema](assets/search_cli_resp.schema.json) <br>
-- [Post input schema](assets/post_cli_req.schema.json) <br>
-- [Post output schema](assets/post_cli_resp.schema.json) <br>
-- [Comment input schema](assets/comment_cli_req.schema.json) <br>
-- [Comment output schema](assets/comment_cli_resp.schema.json) <br>
-- [Hot-list output schema](assets/hot_cli_resp.schema.json) <br>
-- [Token and support site](https://www.guaikei.com) <br>
+- [Search request schema](assets/search_cli_req.schema.json) <br>
+- [Search response schema](assets/search_cli_resp.schema.json) <br>
+- [Post response schema](assets/post_cli_resp.schema.json) <br>
+- [Comment response schema](assets/comment_cli_resp.schema.json) <br>
+- [Hot list response schema](assets/hot_cli_resp.schema.json) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with command examples; runtime output is structured JSON saved to local log files.] <br>
+**Output Type(s):** [shell commands, JSON, files, configuration, guidance] <br>
+**Output Format:** [CLI commands with JSON stdout and JSON log files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js 16.14.0+ and GUAIKEI_API_TOKEN; command outputs are constrained by the documented request and response schemas.] <br>
+**Other Properties Related to Output:** [Requires Node.js 16.14.0+ and GUAIKEI_API_TOKEN; search, post, and comment commands save JSON logs locally by default.] <br>
 
 ## Skill Version(s): <br>
-1.1.5 (source: server release metadata, SKILL.md frontmatter, package.json, changelog released 2026-06-18) <br>
+1.1.6 (source: server release evidence, SKILL.md frontmatter, package.json) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

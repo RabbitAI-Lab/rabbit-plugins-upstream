@@ -15,18 +15,25 @@ import argparse
 import base64
 import json
 import os
+import socket
 import sys
 import time
 import urllib.request
 from pathlib import Path
 from datetime import datetime
+from urllib.parse import urlparse
 
 # ── 配置 ──────────────────────────────────────────────────
-API_BASE = "https://apihub.agnes-ai.com/v1"
+# 主端点 + 国内容灾端点：主端点访问不了时自动切换到国内网关
+API_ENDPOINTS = [
+    "https://apihub.agnes-ai.com/v1",   # 主端点（国际）
+    "https://apihub.agnes-ai.cn/v1",    # 国内容灾端点（apihub.agnes-ai.com 访问不了时自动切换）
+]
 DEFAULT_MODEL_TEXT2IMG = "agnes-image-2.0-flash"
 DEFAULT_MODEL_IMG2IMG = "agnes-image-2.0-flash"
 MAX_RETRIES = 3
 RETRY_BACKOFF = 2  # 指数退避基数（秒）
+ENDPOINT_PROBE_TIMEOUT = 8  # 端点连通性探测超时（秒）
 
 # 内置默认 Key（兜底）
 DEFAULT_API_KEY = "sk-8Rzd2yCbFzOi1vxojseH8C5D8w3u4aMdNWsPNzxk0G7339Cz"
@@ -151,8 +158,23 @@ def encode_image(path_or_url):
     return f"data:{mime};base64,{b64}"
 
 
-# ── API 请求（含重试） ────────────────────────────────────
-def api_call(url, payload, api_key):
+# ── 端点连通性探测 ───────────────────────────────────────
+def host_reachable(url, timeout=ENDPOINT_PROBE_TIMEOUT):
+    """快速探测端点主机是否可连接（TCP 层），避免主端点不可达时长时间空等。"""
+    try:
+        p = urlparse(url)
+        host = p.hostname
+        port = p.port or (443 if p.scheme == "https" else 80)
+        with socket.create_connection((host, port), timeout=timeout):
+            return True
+    except Exception:
+        return False
+    return False
+
+
+# ── 单端点请求（含重试） ───────────────────────────────────
+def _api_call_one(url, payload, api_key):
+    """对单个端点做重试，返回 (body, tech_err, friendly_err)。"""
     last_error = None
     for attempt in range(1, MAX_RETRIES + 1):
         try:
@@ -196,7 +218,7 @@ def api_call(url, payload, api_key):
                 continue
             return None, tech, friendly
 
-        except (urllib.error.URLError, ConnectionError, TimeoutError) as e:
+        except (urllib.error.URLError, ConnectionError, TimeoutError, socket.timeout) as e:
             tech, friendly = friendly_error(
                 {"error": {"message": str(e), "type": "network_error"}}
             )
@@ -210,6 +232,35 @@ def api_call(url, payload, api_key):
 
     return None, last_error[0] if last_error else "未知错误", \
                  last_error[1] if last_error else "未知错误"
+
+
+# ── 多端点容灾请求 ───────────────────────────────────────
+def api_call(endpoints, payload, api_key):
+    """
+    依次尝试多个端点：主端点（.com）→ 国内容灾端点（.cn）。
+    若某端点 TCP 层不可达，立即跳过尝试下一个，避免空等；
+    若端点可达但请求失败（限速/5xx），在该端点内重试，耗尽后跳到下一端点。
+    返回 (body, tech_err, friendly_err, used_endpoint)。
+    """
+    last_error = None
+    for ep_idx, base in enumerate(endpoints, 1):
+        url = f"{base}/images/generations"
+        if not host_reachable(url):
+            print(f"[容灾] 端点不可达，跳过: {url}")
+            if ep_idx < len(endpoints):
+                print(f"        → 切换到下一端点重试...")
+            continue
+        print(f"[端点] 尝试: {url}  ({ep_idx}/{len(endpoints)})")
+        body, tech_err, friendly_err = _api_call_one(url, payload, api_key)
+        if body is not None:
+            return body, None, None, base
+        last_error = (tech_err, friendly_err)
+        if ep_idx < len(endpoints):
+            print(f"[容灾] 该端点请求失败，切换到下一端点重试...")
+
+    if last_error:
+        return None, last_error[0], last_error[1], None
+    return None, "未知错误", "所有端点均不可达", None
 
 
 # ── 图片下载 ──────────────────────────────────────────────
@@ -251,8 +302,8 @@ def text2img(args):
     else:
         print(f"   Key:  环境变量 AGNES_API_KEY")
 
-    body, tech_err, friendly_err = api_call(
-        f"{API_BASE}/images/generations",
+    body, tech_err, friendly_err, used_base = api_call(
+        API_ENDPOINTS,
         {
             "model": DEFAULT_MODEL_TEXT2IMG,
             "prompt": args.prompt,
@@ -271,6 +322,8 @@ def text2img(args):
         print(f"──────────────────────────────")
         print(f"[提示] {friendly_err}")
         sys.exit(1)
+
+    print(f"[端点] 本次使用: {used_base}")
 
     # 提取 URL 并立即下载
     urls = [item["url"] for item in body.get("data", [])]
@@ -301,8 +354,8 @@ def img2img(args):
 
     img_data = encode_image(args.image)
 
-    body, tech_err, friendly_err = api_call(
-        f"{API_BASE}/images/generations",
+    body, tech_err, friendly_err, used_base = api_call(
+        API_ENDPOINTS,
         {
             "model": DEFAULT_MODEL_IMG2IMG,
             "prompt": args.prompt,
@@ -322,6 +375,8 @@ def img2img(args):
         print(f"──────────────────────────────")
         print(f"[提示] {friendly_err}")
         sys.exit(1)
+
+    print(f"[端点] 本次使用: {used_base}")
 
     urls = [item["url"] for item in body.get("data", [])]
     print(f"\n[成功] 生成成功！")

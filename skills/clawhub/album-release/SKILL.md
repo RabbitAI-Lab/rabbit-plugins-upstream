@@ -1,117 +1,92 @@
 ---
 name: "Album Release Pipeline"
-description: "Ship a complete AI album in one run: cache your own lyrics, render tracks via the Suno direct API, generate one cover per song in the OpenBotCity Pixel Atelier, build a 1080p album film with karaoke subtitles, upload to YouTube, deploy to an internet radio server, and premiere it on air. Use when releasing an album end-to-end, re-running a failed phase, or timing an on-air album premiere."
+description: "Ship a complete album in one run: write or reuse lyrics, render tracks, generate one cover per song, build a 1080p album film with karaoke subtitles, publish the video, deploy the audio to a radio host, and premiere it on air. Use when releasing a new album, re-running a failed phase, or timing an on-air premiere."
 ---
 
 # Album Release Pipeline
 
-One config JSON in, a released album out: audio, art, film, YouTube,
-radio deploy, on-air premiere, social announce. Every phase is
-idempotent — re-run `scripts/release-album.sh` after any failure and it
-resumes where it stopped.
+One config file in, a released album out: audio, art, film, video
+publish, radio deploy, on-air premiere, social announce.
 
-Proven end-to-end: a 7-song album went from blank page to on-air premiere
-in ~2.5 hours (music ~25 min, art ~9 min, film + upload ~15 min).
+The pipeline is phase-based and every phase is idempotent — re-run after
+any failure and it resumes where it stopped. Proven end-to-end: a
+seven-song album went from blank page to on-air premiere in about two
+and a half hours.
 
-## What This Skill Does
+> The release runner itself is operator-specific: it is wired to a
+> particular radio host, credential layout, and set of provider accounts.
+> This skill documents the shape of the pipeline and the failure modes
+> worth knowing. Supply your own runner and provider credentials.
 
-1. **Music** — `scripts/suno_album_builder.sh` renders each track via
-   Suno V4_5PLUS custom mode (two variants per track), resumable via a
-   per-track ledger.
-2. **Art** — enters the OpenBotCity Pixel Atelier and generates one cover
-   per track from its `art_prompt` (75 s spacing to dodge the
-   creative-loop detector), then downloads the PNGs from the gallery.
-3. **Film** — fetches Suno timestamped lyrics → per-track ASS karaoke
-   subtitles → ffmpeg-assembles a 1920×1080 album slideshow (one cover
-   per song, lyrics burned in).
-4. **Publish** — uploads the film to YouTube (public), deploys MP3s to
-   your radio host over SSH, restarts the service, and announces.
+## Phases
 
-Phases: `preflight → music → art → copy-music → fetch-art → transcribe →
-build-video → youtube → deploy → announce`. Skip any subset with
-`RELEASE_SKIP="deploy,announce"`.
+1. **Music** — render each track through your music provider in custom
+   mode, two variants per track, resumable via a per-track ledger so a
+   mid-album failure never re-renders what already succeeded.
+2. **Art** — generate one cover per track from a per-track art prompt,
+   then collect the images.
+3. **Film** — fetch timestamped lyrics, emit per-track ASS karaoke
+   subtitles, and assemble a 1920×1080 slideshow (one cover per song,
+   lyrics burned in) with ffmpeg.
+4. **Publish** — upload the film, deploy the audio to the radio host,
+   restart the service, and fan out the announce post.
 
-## Prerequisites
+## Config shape
 
-- ffmpeg + ffprobe, Python 3, Node 18+, bash
-- **Suno API key** in `~/.suno_api_key` (or `SUNO_API_KEY` /
-  `SUNO_API_KEY_FILE` env) — sunoapi.org-style direct API
-- **OpenBotCity JWT** at `~/.openbotcity/credentials.json`
-  (`{"jwt": "..."}`; override with `OBC_CREDENTIALS_FILE`) — only for the
-  art phase
-- **YouTube OAuth** at your radio repo root `.youtube.json` — only for the
-  upload phase
-- A kannaka-radio-style server for the deploy/premiere/announce phases
-  (skip them otherwise). The album must be registered in its
-  `server/dj-engine.js` ALBUMS with exact track titles, or preflight
-  aborts. Point `RADIO_ROOT` at the checkout if these scripts do not live
-  in its `scripts/` directory.
+A single JSON file drives the run:
 
-## Quick Start
+- `name`, `out_dir`, `ledger`, `theme`, `default_style`
+- `tracks[]` — each with `title`, `style`, `art_prompt`
+- `release{}` — lead track, video metadata, and the deploy target
 
-```bash
-# 1. Write the config (full schema in release-album.sh header):
-#    name, out_dir, ledger, theme, default_style,
-#    tracks[{title, style, art_prompt}], release{lead_track, youtube_*,
-#    tracker_url, oracle_host, oracle_music_dir, ssh_key}
+Register the album with the radio's programming layer before deploying,
+since the deploy phase pulls the album definition on the host. A preflight
+check should abort when the album is not registered — that one mistake
+otherwise surfaces as a silent no-op an hour later.
 
-# 2. RECOMMENDED — write the lyrics yourself:
-#    pre-create <out_dir>/lyrics_<safe_title>.txt per track
-#    (safe_title = spaces→_, /→-, apostrophes deleted). A cache file
-#    >100 chars is used verbatim. Without a cache the builder calls an
-#    optional HRM lyrics generator (HRM_LYRICS_SRC) and skips the track
-#    if unavailable — so pre-caching is the portable path.
+**Lyrics**: pre-write them. Drop a lyrics file per track in `out_dir`
+before running, and the pipeline uses it verbatim; otherwise it generates
+them. Hand-written lyrics are almost always the better album.
 
-# 3. Run it (Windows: config path MUST be C:/Users/... style)
-bash scripts/release-album.sh "/abs/path/my-album.json"
+## Phase gating
 
-# Control publish timing by skipping phases, then re-running:
-RELEASE_SKIP="deploy,announce" bash scripts/release-album.sh "<config>"
-```
+Skip phases you want to control by hand — this is how you time a premiere:
 
-## Timing an on-air premiere
+1. Run with the deploy and announce phases skipped.
+2. Deploy the audio early by hand. Deploy normally runs *after* the art
+   phase (~9 minutes), so if you are racing a clock, move the files
+   yourself, renamed to the exact track titles.
+3. Fire the showcase ceremony against the radio's album-showcase endpoint
+   with the album name, a duration, and the real making-of story — the
+   narration is built from that story, so a vague one produces vague
+   narration.
 
-1. Run with `RELEASE_SKIP="deploy,announce"`.
-2. Deploy early by hand if racing a clock — `copy-music`/`deploy` run
-   AFTER the ~9-minute art phase. scp `<out_dir>/<safe_title>_v1.mp3` to
-   the host's music dir renamed to exact `"<Title>.mp3"`, pull, restart.
-3. Fire the ceremony on the radio host:
-   ```bash
-   curl -G -X POST "http://localhost:8888/api/album/showcase" \
-     --data-urlencode "album=<ALBUM NAME>" \
-     --data-urlencode "duration=45" \
-     --data-urlencode "struggles=<the real making-of story — feeds the narration>"
-   ```
-   Returns 202; composes an intro + per-track bridges + closing (~90 s),
-   then locks the album override. To premiere after a scheduled speech
-   segment, watch the radio journal for its start marker and fire ~90 s
-   later — or wait for its completion marker if strict ordering matters.
+To sync with a scheduled segment, watch the radio journal for the segment
+marker and fire after it. If strict ordering matters, wait for the
+segment's *completion* marker rather than its start — a slow segment can
+otherwise be stepped on by the showcase intro.
 
 ## Gotchas (each one caused a real fire)
 
-- **Windows paths**: pass the config as `C:/Users/...` — the embedded
-  Python rejects MSYS `/c/Users/...` and the builder silently no-ops.
-- **Apostrophes**: album-level `theme` and `default_style` are
+- **Windows paths**: pass the config as a `C:/...` style path. Embedded
+  Python rejects MSYS `/c/...` form and the builder silently no-ops.
+- **Apostrophes**: album-level `theme` and `default_style` get
   interpolated into single-quoted inline Python — keep them
   apostrophe-free. Per-track fields and lyrics are safe.
-- **Suno content filter**: no real artist names in style briefs — genre,
-  BPM, instrument, and mood vocabulary only.
-- **Art prompts**: diversify medium/palette/subject across the batch or
-  OBC's creative-loop detector 429s. One medium per song works well.
-- **OBC endpoints**: raw curl must hit `/artifacts/generate-image` and
-  `/buildings/enter` — the `/actions/*` forms are MCP-only and 404.
-- **YouTube**: verify the upload exists afterwards
-  (`https://www.youtube.com/oembed?url=...`) — uploads can vanish after
-  a 200.
-- **SSH deploys**: batch remote work into few sessions if the host runs
-  fail2ban; ControlMaster does not work from Windows OpenSSH.
+- **Art prompts**: diversify medium, palette, and subject across the
+  batch or the image provider's repetition detector will start rejecting
+  requests. One distinct medium per song works well — linocut,
+  screenprint, gouache, oil, travel poster, ink, digital.
+- **Video uploads**: verify the upload actually exists afterwards rather
+  than trusting the response. Uploads can vanish after a 200.
+- **One-shot narration**: if a scheduled segment's TTS fails, it may post
+  its text and mark itself complete with no retry. The album premiere is
+  unaffected, but that segment goes silent for the slot.
+- **Remote work**: batch it into few sessions. Connection churn trips
+  fail2ban-style protections on most hosts, and SSH connection multiplexing
+  does not work from Windows OpenSSH.
 
-## Files
+## Related
 
-| File | Purpose |
-|------|---------|
-| `scripts/release-album.sh` | The pipeline (phase gate, config schema in header) |
-| `scripts/suno_album_builder.sh` | Suno direct-API track renderer (ledger-resumable) |
-| `scripts/release-album-transcribe.py` | Timestamped lyrics → ASS karaoke subtitles |
-| `scripts/release-album-upload-youtube.js` | Resumable YouTube upload |
-| `scripts/post-track-announce.js` | Social fan-out announce (runs where creds live) |
+- Sibling skill: `podcast-video-publisher` — episode videos and playlist
+  management.

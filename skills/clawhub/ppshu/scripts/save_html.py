@@ -11,7 +11,7 @@ ppshu — 把一张 HTML 图存入集中管理的「画册」，并按 001-* 序
     # 从文件读取 HTML
     python save_html.py "<一句话描述>" --file diagram.html
 
-    # 指定集中目录（默认 ~/.workbuddy/ppshu）
+    # 指定集中目录（默认当前工作目录下的 .ppshu/，可整目录删除）
     python save_html.py "<描述>" --dir "D:/my/ppshu"
 
 行为
@@ -34,7 +34,8 @@ import sys
 import html as _html
 import datetime
 
-DEFAULT_DIR = os.path.expanduser("~/.workbuddy/ppshu")
+# 默认存到「当前工作目录」下的 .ppshu/ —— 作品落在用户正在做的项目里，好找、可整目录删除。
+DEFAULT_DIR = os.path.join(os.getcwd(), ".ppshu")
 
 
 def kebab(text: str) -> str:

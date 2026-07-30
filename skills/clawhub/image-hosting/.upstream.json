@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/image-hosting",
   "slug": "image-hosting",
   "ownerHandle": null,
-  "version": "1.1.2",
-  "updatedAt": 1781021826705,
-  "contentHash": "5242e10d0c2b56441bf21be3586056a80c1e53efb4cb09938ad92609c5171229",
-  "fetchedAt": "2026-07-26T18:30:18.382Z"
+  "version": "1.2.0",
+  "updatedAt": 1785098916544,
+  "contentHash": "72ff5cea542f07b6a0e796d1bab3b266d0319994fc7969cd9d885d878dde6faa",
+  "fetchedAt": "2026-07-30T10:02:11.865Z"
 }

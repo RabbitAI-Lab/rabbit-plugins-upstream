@@ -9,7 +9,7 @@ description: |
 
 ## 技能概述
 
-本 Skill 提供**星座档案 & 星座运势**综合查询服务。当用户询问某个星座的档案或运势时，使用此技能。
+本 Skill 提供 **星座档案 & 星座运势** 综合查询服务。当用户询问某个星座的档案或运势时，使用此技能。
 
 该服务是基于 A2M（HTTP 402）收单协议的付费资源。买家（消费者 Agent）通过本 Skill 向卖家服务端发起资源请求，服务端将返回 402 Payment-Needed 响应报文，买家需将该报文传递给支付宝的 alipay-payment-skill 技能以完成付款。
 
@@ -28,33 +28,14 @@ description: |
 2. 用户查询单个星座基础档案、性格特质、专属幸运属性
 3. 用户查询星座事业、感情、财运、健康单维度专项解读
 
-## 一、系统运行安全要求
+## 依赖安全管控
 
-### 1.1 操作系统准入限制
-
-本技能依赖A2M 402支付协议与支付宝支付CLI工具 `alipay-bot`，Windows环境支付组件不兼容，禁止Windows系统运行本技能。
-
-macOS / Linux，版本要求如下：
-系统|版本要求
--|-
-macOS| 12 Monterey 或更高版本<br>推荐 macOS 14 Sonoma 或 macOS 15 Sequoia
-Linux| Ubuntu：>= 21.04 <br>Debian：>= 12 <br>CentOS：>= 9
-
-### 1.2 运行环境安全基线
-
-禁止低于基线版本环境启动技能，启动前自动校验环境版本，不满足直接抛出阻断异常。
-
-| 环境    | 版本要求 |
-| ------- | -------- |
-| Node.js | > 22     |
-| npm     | > 10     |
-
-### 1.3 依赖安全管控
-
-1. 前置强制依赖（必须在ClawHub完成安装并启用，缺失则技能禁用）
+1. 前置强制依赖
    - `alipay-authenticate-wallet`：支付宝钱包身份鉴权技能
    - `alipay-payment-skill`：A2M 402支付收单核心技能
-2. 依赖校验规则：技能启动时自动检测上述两个技能安装状态、开关状态；未安装/未开启支付功能时，主动提示用户完成前置部署，拒绝处理任何用户查询请求。
+2. 依赖校验规则：技能启动时自动检测上述两个技能安装状态、开关状态；
+   - 如检测未安装，提示：通过 npx -y @alipay/alipay-aipay@latest install 安装支付宝 AI 付 Skill，加载 alipay-aipay 技能并开启支付宝支付能力
+   - 未开启支付功能时，提示用户”开启支付宝支付能力“
 3. 第三方接口依赖：聚合数据星座接口，仅允许文档指定域名 `apis.juhe.cn`，禁止转发请求至其他第三方域名。
 
 ## 二、用户意图安全触发规则
@@ -106,7 +87,7 @@ Linux| Ubuntu：>= 21.04 <br>Debian：>= 12 <br>CentOS：>= 9
 
 ### 3.2 数据传输安全规则
 
-1. 传输协议：本地测试环境使用 HTTP 请求聚合接口；生产环境使用 HTTPS 加密传输
+1. 传输协议：使用 HTTPS 加密传输
 2. 数据最小化：仅把 `keyword` + `type` 两个业务参数上传至聚合服务端，不附加用户会话、设备、身份附加字段
 3. 单次临时传输：参数仅本次接口请求使用，请求结束后内存立即销毁，无本地磁盘持久化存储、无日志落地完整查询关键词、无缓存留存
 4. 禁止数据共享：查询参数不得转发至支付宝支付技能以外任何第三方服务
@@ -149,7 +130,7 @@ Linux| Ubuntu：>= 21.04 <br>Debian：>= 12 <br>CentOS：>= 9
 
 请求仅允许 POST 接口，固定请求约束不可篡改：
 
-- 请求地址：`https://apis.juhe.cn/a2a/query.php`
+- 请求地址：`https://apis.juhe.cn/a2a/query`
 - 请求头固定：`Content-Type: application/json`，禁止自定义头附加用户信息
 - 固定resourceId不可修改：`612_58`
 - 标准安全请求体模板（自动转义引号、特殊字符，防止JSON注入漏洞）
@@ -167,7 +148,7 @@ Linux| Ubuntu：>= 21.04 <br>Debian：>= 12 <br>CentOS：>= 9
 向用户展示待查询的参数，严格遵守请求约束，向以下 URL 发起请求：
 
 ```
-curl https://apis.juhe.cn/a2a/query.php \
+curl https://apis.juhe.cn/a2a/query \
   -d '{"resourceId":"612_58","data":{"keyword":"<用户输入的查询星座名>","type":"<用户输入的查询运势周期>"}}' \
   -H "Content-Type: application/json"
 ```

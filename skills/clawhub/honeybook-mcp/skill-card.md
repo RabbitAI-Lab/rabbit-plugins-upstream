@@ -1,5 +1,5 @@
 ## Description: <br>
-Honeybook helps an agent use a HoneyBook client-portal MCP server to review vendor contracts, invoices, workspace files, payment methods, and portal deep links for signing or paying. <br>
+Helps agents work with HoneyBook client-portal data for wedding-vendor contracts, invoices, brochures, proposals, payments, and vendor workspaces. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and their agents use this skill to inspect HoneyBook client-portal data across wedding vendors, including contracts, invoices, brochures, proposals, payment methods, and workspace status. It can return portal deep links for signing contracts or paying invoices after explicit confirmation. <br>
+External users and agents use this skill to inspect HoneyBook portal workspaces, contracts, invoices, payment methods, and vendor file status, and to produce deep links for signing or payment when explicitly confirmed. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: HoneyBook magic links and cached sessions can provide access to client-portal data. <br>
-Mitigation: Paste magic links only when intentionally authenticating, treat cached sessions like credentials, and clear ~/.honeybook-mcp/sessions.json when access is no longer needed or the device is shared. <br>
-Risk: Signing and payment flows can affect vendor contracts or invoices if a user follows returned portal links. <br>
-Mitigation: Require explicit confirmation before returning signing or payment deep links, then review the HoneyBook portal page before completing the action. <br>
+Risk: Broad trigger wording may activate the skill for unrelated contract or invoice requests. <br>
+Mitigation: Use it only when the request is clearly about HoneyBook portal contracts, invoices, vendors, or workspaces. <br>
+Risk: Pasted HoneyBook magic links may create locally cached portal sessions. <br>
+Mitigation: Treat magic links and cached sessions as sensitive and avoid using them outside the intended HoneyBook workflow. <br>
+Risk: Payment-method metadata and signing or payment links may be exposed to the agent. <br>
+Mitigation: Require clear user intent and explicit confirmation before returning signing or payment deep links. <br>
 
 
 ## Reference(s): <br>
@@ -28,13 +30,13 @@ Mitigation: Require explicit confirmation before returning signing or payment de
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or plain text summaries with HoneyBook portal links and file, workspace, invoice, contract, or payment-method details] <br>
+**Output Type(s):** [text, markdown, guidance] <br>
+**Output Format:** [Markdown or plain text guidance with portal status summaries and deep-link references] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Signing and payment links require explicit confirmation; cached HoneyBook sessions should be treated as login credentials.] <br>
+**Other Properties Related to Output:** [May reference locally cached HoneyBook portal sessions and requires explicit confirmation for signing or payment links.] <br>
 
 ## Skill Version(s): <br>
-0.4.1 (source: server release metadata) <br>
+0.4.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

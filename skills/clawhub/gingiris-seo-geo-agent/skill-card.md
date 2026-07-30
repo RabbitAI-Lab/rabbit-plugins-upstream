@@ -1,5 +1,5 @@
 ## Description: <br>
-A multilingual SOP for running an autonomous SEO/GEO agent that manages keyword mapping, landing-page planning, daily reporting, IndexNow, AI-crawler access, and conversion-oriented content workflows. <br>
+SEO/GEO Agent SOP for running agent-assisted search operations with context collection, daily GSC-first reporting, cross-source data checks, backlink tracking, and new-site versus established-site keyword strategy. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, founders, growth marketers, technical SEOs, and content teams use this skill to operate an SEO/GEO agent for search optimization workflows, including keyword-to-landing-page tracking, daily reports, CTA blocks, and AI-search-friendly publishing practices. <br>
+External founders, growth marketers, technical SEOs, and agent developers use this skill to structure daily SEO/GEO operations for websites. It guides keyword research, landing-page planning, GSC and GA4 monitoring, IndexNow workflows, daily reports, and AI search citation preparation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent toward using third-party SEO accounts, API keys, publishing tokens, and site-changing workflows. <br>
-Mitigation: Use project-scoped, least-privilege credentials stored in a secret manager, avoid personal or root tokens, and set API budget limits. <br>
-Risk: SEO publishing, robots.txt edits, IndexNow pushes, and other public-facing or paid actions can affect real sites and accounts. <br>
-Mitigation: Require human approval before publishing, deployment, robots.txt changes, IndexNow pushes, or any paid or public-facing action. <br>
-Risk: SEO automation guidance may produce incorrect, misleading, or unsuitable changes for a specific site. <br>
-Mitigation: Review recommendations and scan the skill before deployment, especially when connecting it to real sites or accounts. <br>
+Risk: Connected analytics, SEO, syndication, or search accounts may expose sensitive data or allow unwanted changes if broad permissions are granted. <br>
+Mitigation: Use the smallest useful account scopes, keep keys in a secrets manager or environment variables, and avoid placing real credentials in shared files. <br>
+Risk: Generated SEO actions or content may be inaccurate, misleading, or inappropriate for a specific domain or business goal. <br>
+Mitigation: Review generated content, daily actions, and data claims before publishing, syndicating, or changing live site strategy. <br>
 
 
 ## Reference(s): <br>
-- [Full SEO/GEO Agent SOP](references/full-sop.md) <br>
+- [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/gingiris-seo-geo-agent) <br>
+- [Full SEO/GEO SOP](references/full-sop.md) <br>
+- [Gingiris skills collection](https://gingiris.tools/skills/) <br>
 - [Hugging Face dataset](https://huggingface.co/datasets/Gingiris/gingiris-seo-geo-agent) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with tables, templates, checklists, and inline configuration examples] <br>
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with checklists, tables, report templates, and inline shell/API examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill output intended for human review before site, account, publishing, or paid actions.] <br>
+**Other Properties Related to Output:** [Produces operational SEO/GEO plans and reports that require human review before publishing or account-level changes.] <br>
 
 ## Skill Version(s): <br>
-1.0.9 (source: server release evidence) <br>
+2.0.0 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

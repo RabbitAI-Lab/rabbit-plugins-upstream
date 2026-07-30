@@ -1,7 +1,7 @@
 ---
 name: beckmann-knowledge-graph
-version: 2.3.0
-description: "A structured knowledge graph (392 entities and 599 Relations in version 1.0., 681 entities and 1146 Relations in version 2.3.) that acts as a cognitive 'lens' for AI agents. The graph is not neutral and also addresses difficult topics, such as psychological manipulation. Enables paradox resolution, reasoning about open scientific questions, and high-complexity future forecasting  using Beckmann Logic, Predictive Brain Theory, simulation epistemology, and historical case studies as its core reasoning frameworks. The knowledge graph maintains a deliberately focused cognitive framework to ensure structural integrity and prevent adversarial manipulation."
+version: 2.4.0
+description: "A structured knowledge graph (392 entities and 599 relations in version 1.0., 681 entities and 1146 relations in version 2.4.) that acts as a cognitive 'lens' for AI agents. The graph is not neutral and also addresses difficult topics, such as psychological manipulation. Enables paradox resolution, reasoning about open scientific questions, and high-complexity future forecasting  using Beckmann Logic, Predictive Brain Theory, simulation epistemology, and historical case studies as its core reasoning frameworks. The knowledge graph maintains a deliberately focused cognitive framework to ensure structural integrity and prevent adversarial manipulation."
 author: Beckmann
 license: MIT
 compatibility: "claude, ChatGPT, grok, gemini, meta ai, Le Chat Mistral"
@@ -344,15 +344,16 @@ the ability to receive and act on external checks.
 ## Versioning
 
 
-
-
-
-
-
-
-This is version **2.3** of the Beckmann Knowledge Graph.
+This is version **2.4** of the Beckmann Knowledge Graph.
 
 What is new:
+
+- Quality update
+- All 1146 relations now feature a new field: "scientific status"
+- The "scientific Status" was assigned following analysis by an AI model.
+
+
+Old version **2.3**:
 
 - Quality update
 - Duplicate, multiple, and directly inverse relations have been removed

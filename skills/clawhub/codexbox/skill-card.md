@@ -1,5 +1,5 @@
 ## Description: <br>
-codexbox runs OpenAI Codex CLI inside an aicodebox container and exposes shell, REST, OpenAI-compatible, MCP, Telegram, and cron interfaces for programmatic Codex use. <br>
+OpenAI Codex CLI running inside an aicodebox container, put on the network for shell, HTTP REST, OpenAI-compatible chat, MCP, Telegram, and cron access. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and automation engineers use codexbox to run Codex through scripts, CI jobs, OpenAI-compatible clients, MCP-aware agents, Telegram, or scheduled cron jobs instead of only through a local terminal. It is useful when a workflow needs prompt execution, workspace file operations, or schema-constrained Codex responses over networked interfaces. <br>
+Developers and engineers use codexbox to run Codex programmatically over HTTP, MCP, Telegram, cron, or an OpenAI-compatible endpoint instead of only through a local terminal. It also supports workspace file operations and scripted or scheduled agent runs when the service is configured with appropriate authentication. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Networked REST and MCP surfaces can provide run execution and full workspace file access when their bearer tokens are unset. <br>
-Mitigation: Set CODEXBOX_API_MODE_TOKEN and CODEXBOX_MCP_MODE_TOKEN before exposing ports, bind to loopback where possible, or place the service behind an authenticating proxy. <br>
-Risk: Workspace file deletion and prompt-running tools can remove or alter user data. <br>
-Mitigation: Review requested file operations, delete only task-owned files, avoid unauthenticated shared workspaces, and keep mounted workspaces scoped to the intended task. <br>
-Risk: The installer can execute remote shell code when piped directly into bash. <br>
-Mitigation: Download the installer, inspect it, and then run it only after trusting the source and channel. <br>
-Risk: Mounted Codex auth, session, and configuration directories can contain sensitive credentials or account state. <br>
-Mitigation: Treat mounted Codex directories as sensitive, restrict host and container access, and avoid sharing them across untrusted users or workloads. <br>
+Risk: Exposed API or MCP surfaces can allow remote prompt execution and workspace file access if mode tokens are unset or ports are reachable by untrusted callers. <br>
+Mitigation: Set separate strong bearer tokens for each enabled API and MCP surface, bind services to localhost, or place them behind an authenticating proxy before exposing ports. <br>
+Risk: Workspace file deletion and automation through cron or Telegram can remove data or perform high-impact operations without interactive review. <br>
+Mitigation: Avoid shared workspaces for multiple callers, limit deletion to files created for the current task, and review scheduled or remote-control workflows before enabling them. <br>
+Risk: The quick installer can execute a remote shell script directly. <br>
+Mitigation: Download and inspect the installer before running it unless the source and delivery channel are already trusted. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub codexbox page](https://clawhub.ai/psyb0t/skills/codexbox) <br>
-- [codexbox setup](references/setup.md) <br>
+- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/codexbox) <br>
+- [codexbox homepage](https://github.com/psyb0t/docker-codexbox) <br>
 - [OpenAI Codex CLI](https://github.com/openai/codex) <br>
 - [aicodebox](https://github.com/psyb0t/docker-aicodebox) <br>
+- [setup.md](references/setup.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Docker, curl, Python, YAML, and shell examples.] <br>
+**Output Format:** [Markdown guidance with inline code blocks, shell commands, configuration examples, and API request examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Describes bearer-token setup, workspace file operations, OpenAI-compatible requests, MCP tool access, Telegram operation, cron jobs, and destructive-operation cautions.] <br>
+**Other Properties Related to Output:** [May include HTTP, OpenAI-compatible chat, MCP, Telegram, cron, Docker, and workspace file-operation instructions.] <br>
 
 ## Skill Version(s): <br>
-0.4.4 (source: server release metadata) <br>
+0.5.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

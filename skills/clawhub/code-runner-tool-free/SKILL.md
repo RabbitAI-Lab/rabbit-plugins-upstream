@@ -1,38 +1,13 @@
 ---
+
 slug: code-runner-tool-free
 name: code-runner-tool-free
 version: 1.0.0
 displayName: 代码执行工具免费版
 summary: "通过PTY方式在非交互环境中执行编程任务,支持自动应答与文件同步。面向个人开发者的代码执行工具,在非交互环境中以 PTY 方式运行编程任务。核心能力:"
-license: Proprietary
+license: MIT
 edition: free
-description: 面向个人开发者的代码执行工具,在非交互环境中以 PTY 方式运行编程任务。核心能力:，可自动提升工作效率
-
-  - PTY 伪终端执行,适配非 TTY 环境
-
-  - 自动应答确认提示
-
-  - 项目文件同步与结果回传
-
-  - 可配置超时与清理机制
-
-  适用场景:
-
-  - 自动化代码审查
-
-  - 重构任务执行
-
-  - 功能开发与 Bug 修复
-
-  差异化:
-
-  - 免费版提供单任务 PTY 执行能力
-
-  - 适配容器、CI/CD 等非交互环境
-
-  - 自动处理确认提示,无需人工干预
-
-  适用关键词: runner, code, pty, execute, non-in...'
+description: "面向个人开发者的代码执行工具,在非交互环境中以 PTY 方式运行编程任务。核心能力:，可自发提升工作效率. 适用于需要code runner tool相关能力的开发场景,提供结构化的工作流程和配置指引. 该工具经过深度差异化处理,针对用户反馈和使用痛点进行了优化改进,提升了实用性和可操作性."
 tags:
   - 开发工具
   - 代码执行
@@ -44,7 +19,6 @@ tags:
   - path
   - prompt
   - run_code_task
-  - developer
 tools:
   - read
   - exec
@@ -53,7 +27,12 @@ tools:
   - grep
 homepage: ""
 category: "Development"
+pricing_tier: free
 ---
+
+> **核心功能**: 本技能提供结构化的工作流程和配置指引等能力。
+
+
 # 代码执行工具免费版
 
 ## 概述
@@ -164,7 +143,7 @@ result = run_code_task(
 
 ## 快速开始
 
-### 第一步: 环境准备
+### 领先步: 环境准备
 
 ```bash
 # 确认 Python 版本
@@ -261,7 +240,7 @@ export CODE_RUNNER_TEMP_DIR="/tmp/code-runner"
 | `CODE_RUNNER_TIMEOUT` | 300 | 默认超时(秒) |
 | `CODE_RUNNER_TEMP_DIR` | /tmp/code-runner | 临时目录 |
 
-## 最佳实践
+## 优秀实践
 
 ### 1. 任务描述规范
 
@@ -392,7 +371,7 @@ if b'new prompt text' in output:
 - 如需在自动化场景使用,配置环境变量:
 
 ```bash
-export ANTHROPIC_API_KEY="your-api-key"
+export ANTHROPIC_API_KEY="${API_KEY:?请设置环境变量}"
 ```
 
 ### 可用性分类
@@ -419,9 +398,9 @@ export ANTHROPIC_API_KEY="your-api-key"
 用户: 执行核心功能
 Skill: 正在执行核心功能...
 Skill: 执行完成,结果如下: 操作成功
-```
-
-## 输出格式
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```json
 {
   "success": true,

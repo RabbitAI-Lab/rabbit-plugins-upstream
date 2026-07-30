@@ -1,5 +1,5 @@
 ## Description: <br>
-Turns a product or marketing URL, pasted script, or brief into a product launch or promotional video. <br>
+Creates product launch and promo videos from a product URL, pasted script, or brief, including SaaS promos, feature reveals, product demos, app launches, and site tours. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, marketers, and creative operators use this skill to capture product context, plan a launch story, build HyperFrames HTML compositions, and render a promotional MP4 for product reveals, SaaS promos, demos, site showcases, and company launches. <br>
+External users, developers, and marketing teams use this skill to turn a product site, launch brief, or script into a HyperFrames product launch video with captured assets, storyboarded scenes, narration or music, animated HTML frames, and a final MP4 render. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The workflow can run a networked self-update that changes installed skills or shared HyperFrames dependencies before user approval. <br>
-Mitigation: Review the release before installation and use an explicit update policy so dependency or skill updates are deliberate and auditable. <br>
-Risk: The workflow uses network services for product capture and media retrieval, including voice, music, and sound-effect paths when credentials or providers are available. <br>
-Mitigation: Use offline or signed-out paths when appropriate, provide only scoped credentials, and avoid sending sensitive product URLs, assets, or briefs to network services unless approved. <br>
-Risk: Generated HTML may load GSAP from jsDelivr unless changed. <br>
-Mitigation: Review generated HTML before deployment and vendor, pin, or allowlist external browser dependencies according to the target environment's policy. <br>
+Risk: The skill can silently update globally installed HyperFrames skills before use. <br>
+Mitigation: Review the update step before installation and disable it or require confirmation if silent global updates are not acceptable. <br>
+Risk: The workflow performs network and media actions, including crawling target websites and using configured credentials or API keys for narration and music. <br>
+Mitigation: Verify the target URL before capture and provide only credentials or API keys that are intended for this workflow. <br>
+Risk: Previously recorded project preferences may influence a new video workflow. <br>
+Mitigation: Reset old project preferences or review BRIEF.md before generation when prior context should not be reused. <br>
 
 
 ## Reference(s): <br>
-- [Product Launch Video ClawHub listing](https://clawhub.ai/heygen-com/skills/product-launch-video) <br>
+- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/product-launch-video) <br>
 - [Story design](references/story-design.md) <br>
 - [Visual design](references/visual-design.md) <br>
 - [Motion language](references/motion-language.md) <br>
 - [Cut catalog](references/cut-catalog.md) <br>
-- [Frame worker](sub-agents/frame-worker.md) <br>
+- [Frame worker delta](sub-agents/frame-worker.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown plans and scripts, JSON metadata, shell commands, HTML frame compositions, caption/audio artifacts, and rendered video files.] <br>
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration, Files] <br>
+**Output Format:** [Markdown workflow guidance with inline shell commands and generated project files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are project-scoped under videos/<project>; the workflow may create hyperframes.json, BRIEF.md, STORYBOARD.md, SCRIPT.md, frame.md, audio_meta.json, caption_groups.json, compositions/frames/*.html, index.html, snapshots, and renders/video.mp4.] <br>
+**Other Properties Related to Output:** [Produces HyperFrames project assets such as BRIEF.md, STORYBOARD.md, SCRIPT.md, HTML frame compositions, captions, audio metadata, an assembled index, snapshots, and renders/video.mp4 when the workflow completes.] <br>
 
 ## Skill Version(s): <br>
-1.0.18 (source: server release metadata) <br>
+1.0.22 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

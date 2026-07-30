@@ -1,5 +1,5 @@
 ## Description: <br>
-aigate helps agents guide setup and use of a self-hosted OpenAI-compatible AI gateway that aggregates model providers, local inference, MCP tools, browser automation, media services, storage, search, messaging, and a web UI behind one endpoint. <br>
+Self-hosted Docker Compose AI gateway that exposes one OpenAI-compatible endpoint for model routing, MCP tools, browser automation, media generation, code execution, storage, search, messaging, and a web UI. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill when they want an agent to explain, configure, run, or call a Docker Compose based self-hosted AI gateway with OpenAI-compatible routing and optional tool services. It is suited to trusted local or private deployments where the operator wants one endpoint instead of wiring each provider and service independently. <br>
+Developers and operators use aigate to stand up a self-hosted AI gateway that aggregates model providers and optional tools behind one endpoint instead of wiring each service individually. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The gateway can expose broad capabilities through one bearer token, including code execution, browser automation, messaging, storage, and provider credentials when enabled. <br>
-Mitigation: Use aigate only as a trusted private gateway, keep AIGATE_TOKEN strong and secret, and provide it only to agents that are fully trusted for the requested task. <br>
-Risk: A single master token may grant more access than a task needs if per-service tokens are not separated. <br>
-Mitigation: Split high-risk services into separate per-service tokens before giving an agent access, and enable only the services required for the workflow. <br>
-Risk: Exposing the gateway directly can widen the impact of credential misuse. <br>
-Mitigation: Keep the service private, avoid publishing port 4000 directly, and use a protected tunnel or authenticating reverse proxy for remote access. <br>
+Risk: AIGATE_TOKEN can grant broad access to enabled services, including code execution, browser automation, messaging, storage, and provider credentials. <br>
+Mitigation: Use strong unique tokens, split per-service tokens where possible, give tokens only to trusted agents for explicit tasks, and never commit populated .env or credential files. <br>
+Risk: Exposing the gateway directly can make a high-power local AI stack reachable through a bearer token alone. <br>
+Mitigation: Keep port 4000 off the public internet unless protected by a real access gateway, VPN, Cloudflare Tunnel, Tailscale, or authenticated reverse proxy. <br>
+Risk: Optional email, Telegram, browser, and storage integrations can act on the user's behalf and may hold plaintext secrets. <br>
+Mitigation: Enable only the services needed for the task and guard .env, mailbox, Telethon, and other credential configuration files. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub aigate page](https://clawhub.ai/psyb0t/skills/aigate) <br>
+- [aigate on ClawHub](https://clawhub.ai/psyb0t/skills/aigate) <br>
 - [aigate setup](references/setup.md) <br>
-- [Project homepage](https://github.com/psyb0t/aigate) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown with inline bash and JSON request examples] <br>
+**Output Type(s):** [guidance, shell commands, configuration] <br>
+**Output Format:** [Markdown with shell commands and configuration guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Docker Compose commands, curl examples, environment variable names, endpoint paths, and operational cautions.] <br>
+**Other Properties Related to Output:** [Requires docker, curl, and an operator-provided AIGATE_TOKEN; optional services are enabled through environment flags.] <br>
 
 ## Skill Version(s): <br>
-3.15.3 (source: server release metadata) <br>
+3.15.8 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

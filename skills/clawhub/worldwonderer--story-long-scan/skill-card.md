@@ -1,5 +1,5 @@
 ## Description: <br>
-Story Long Scan helps agents collect and analyze long-form Chinese web-novel rankings from platforms such as Qidian, Fanqie, JJWXC, Qimao, and Ciweimao to identify genre trends, topic candidates, and validation actions. <br>
+Analyzes ranking data from long-form Chinese web fiction platforms such as Qidian, Fanqie, and JJWXC to surface market trends, popular genres, and topic candidates. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External writers, publishing analysts, and agents use this skill to gather ranking samples and turn them into market scans, reader profiles, and topic decisions for long-form Chinese web novels. <br>
+Writers, editors, and web fiction market analysts use this skill to gather ranking samples, compare platform signals, identify genre patterns, and turn scan results into actionable long-form story topic decisions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill runs local Node.js scraper scripts and may use a browser-CDP session to visit ranking pages. <br>
-Mitigation: Review commands before execution and use a dedicated browser profile when existing login state should not be involved. <br>
-Risk: The skill writes generated reports to a local output directory. <br>
-Mitigation: Choose the output directory intentionally and review generated Markdown files before relying on them. <br>
+Risk: The skill may run Node scraper scripts, open browser or CDP sessions, and visit public novel-platform pages. <br>
+Mitigation: Install only when that behavior is expected, use an explicit output directory, and review target-site rules before scraping. <br>
+Risk: Browser-based scraping can involve an existing logged-in session if a sensitive browser profile is used. <br>
+Mitigation: Use a dedicated or non-sensitive browser profile when site sessions should not be exposed to the workflow. <br>
+Risk: Ranking-derived topic recommendations can be misleading if based on sparse, stale, or malformed samples. <br>
+Mitigation: Review the generated data-quality headers and treat low-sample findings as hypotheses that need further validation. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-long-scan) <br>
 - [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [genre-trends.md](artifact/references/genre-trends.md) <br>
-- [publishing-guide.md](artifact/references/publishing-guide.md) <br>
-- [reader-profiling.md](artifact/references/reader-profiling.md) <br>
-- [scan-output-format.md](artifact/references/scan-output-format.md) <br>
-- [topic-decision.md](artifact/references/topic-decision.md) <br>
+- [Scan output format](references/scan-output-format.md) <br>
+- [Topic decision guide](references/topic-decision.md) <br>
+- [Reader profiling system](references/reader-profiling.md) <br>
+- [Genre trends reference](references/genre-trends.md) <br>
+- [Publishing guide](references/publishing-guide.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown reports, concise text guidance, and shell command suggestions for scraper execution.] <br>
+**Output Format:** [Markdown reports and concise guidance, with optional inline shell commands for Node scraper scripts.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write local Markdown reports and topic-decision files to a user-selected output directory.] <br>
+**Other Properties Related to Output:** [May write local Markdown reports and topic-decision files to an explicit output directory.] <br>
 
 ## Skill Version(s): <br>
-1.1.9 (source: server release evidence; artifact frontmatter says 1.0.0) <br>
+1.1.10 (source: server release evidence; artifact frontmatter lists 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

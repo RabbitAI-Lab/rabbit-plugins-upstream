@@ -1,6 +1,6 @@
-# Excelize Worksheets With Multiple Tables
+# Sheet Worksheets With Multiple Tables
 
-Use this reference when one Excelize worksheet contains two or more separate
+Use this reference when one Sheet worksheet contains two or more separate
 content-backed tables. A worksheet name identifies the sheet, not an individual
 table block. Table identity comes from the table metadata and `table_id`.
 
@@ -22,7 +22,7 @@ The response provides one entry per table, including:
 - `header_row`: the worksheet row containing that table's header
 - `row_count` and `column_count`: coarse shape evidence
 - `gid`, `worksheet_name`, and `source`: source lineage
-- `engine`: confirm that the table is backed by `excelize`
+- `engine`: confirm that the table is Sheet-backed
 
 Do not infer table boundaries from blank rows, visual spacing, or a worksheet-
 wide sample when table metadata is available. The metadata range is the
