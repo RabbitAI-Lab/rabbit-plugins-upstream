@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/translate",
   "slug": "translate",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778486238781,
-  "contentHash": "3e4007fa9fda971614ca574f2bc2d7c1fcce28d0558fecfc1487322ee575f736",
-  "fetchedAt": "2026-07-26T20:26:31.768Z"
+  "version": "1.0.2",
+  "updatedAt": 1785146577520,
+  "contentHash": "37cc7390a803f0834a66e75132f260b073048c0c0b4f6299555cb37d8b45c254",
+  "fetchedAt": "2026-07-31T10:18:47.131Z"
 }

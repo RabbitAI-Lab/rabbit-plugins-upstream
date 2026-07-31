@@ -7,7 +7,7 @@ tags: [odoo, erp, xmlrpc, api, integration, automation]
 related_skills:
   - name: camofox-default-browser
     owner: akdira
-    purpose: Anti-detection browser for bypassing CAPTCHA/Cloudflare during Odoo web UI login
+    purpose: Browser automation tool for handling CAPTCHA challenges during authenticated Odoo web UI login (requires proper authorization)
     install: openclaw skills install @akdira/camofox-default-browser
 ---
 
@@ -55,11 +55,15 @@ Do you have Odoo API credentials (API key)?
    - Production: use the credentials provided by your Odoo administrator
 3. If you don't have credentials at all, contact the Odoo administrator
 
-**⚠️ Getting blocked by CAPTCHA or Cloudflare?**
-Many production Odoo instances sit behind Cloudflare/WAF protection that triggers CAPTCHAs on login. If you get blocked:
-- **Recommended:** Install and use the [camofox-default-browser](https://clawhub.ai/akdira/skills/camofox-default-browser) skill — anti-detection browser that bypasses Cloudflare, CAPTCHA challenges, and common bot-detection systems.
-- **Alternative:** Switch to a different network/IP, disable VPN, or use a browser extension like uBlock Origin to block the CAPTCHA challenge temporarily.
+**⚠️ Encountering CAPTCHA or Cloudflare challenges?**
+Many production Odoo instances use Cloudflare/WAF protection that may present CAPTCHA challenges during login. **Important: Only proceed if you have explicit authorization to access this Odoo instance.**
+
+If you encounter CAPTCHA challenges during legitimate access:
+- **Recommended:** Install and use the [camofox-default-browser](https://clawhub.ai/akdira/skills/camofox-default-browser) skill — browser automation tool that can handle CAPTCHA challenges during authenticated sessions.
+- **Alternative:** Switch to a different network/IP, disable VPN, or use a browser extension like uBlock Origin to reduce CAPTCHA frequency.
 - **Self-hosted/local Odoo:** No CAPTCHA — proceed normally.
+
+> **⚠️ Legal & ToS Notice:** Bypassing security measures without authorization may violate the service's Terms of Service and applicable laws. Only use automation tools on systems you own or have explicit written permission to access. Repeated failed login attempts may result in account lockout.
 
 ### Step 2: Generate API Key (REQUIRED for XML-RPC)
 
@@ -367,6 +371,12 @@ This is more efficient than separate search + read calls (one round-trip instead
 
 ### Create Records
 
+> **⚠️ WARNING: Write Operations Affect Live Systems**
+> Create/update/delete operations immediately modify the connected Odoo database. If connected to a production instance, these changes are real and may trigger downstream business workflows (notifications, invoices, inventory updates, etc.).
+> - **Always test in a staging/development environment first**
+> - **Verify you have proper authorization before writing to production**
+> - **Consider using `search_read` first to check if records already exist**
+
 Create new records:
 
 ```python
@@ -523,6 +533,8 @@ for order in orders:
 
 ### Example 4: Create a Customer with Address
 
+> **⚠️ This creates a real record in the connected Odoo instance.** Ensure you're connected to the correct environment (staging vs production).
+
 ```python
 new_customer = models.execute_kw(
     database, uid, password,
@@ -543,10 +555,21 @@ new_customer = models.execute_kw(
 
 ### Example 5: Execute Model-Specific Method
 
+> **⚠️ CRITICAL: State-Changing Actions Trigger Downstream Workflows**
+> Methods like `action_confirm`, `action_cancel`, or `action_post` are real business operations that may trigger:
+> - Order fulfillment and shipping workflows
+> - Invoice generation and payment processing
+> - Inventory reservations and stock moves
+> - Email notifications to customers
+> - Accounting journal entries
+> 
+> **Always verify the order state and get explicit approval before executing state-changing actions on production systems.**
+
 Some models have custom methods you can call:
 
 ```python
 # Confirm a quotation (change state to 'sale')
+# WARNING: This is a real business action - it may trigger fulfillment, invoicing, and notifications
 models.execute_kw(
     database, uid, password,
     'sale.order', 'action_confirm',
@@ -554,6 +577,7 @@ models.execute_kw(
 )
 
 # Generate invoice from sales order
+# WARNING: This creates actual invoices that affect accounting
 models.execute_kw(
     database, uid, password,
     'sale.order', 'action_view_invoice',

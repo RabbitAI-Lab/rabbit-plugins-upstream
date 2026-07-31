@@ -69,7 +69,7 @@ Typical shape:
       {
         "gid": 0,
         "sheet_name": "订单",
-        "data_engine": "pg",
+        "data_engine": "base",
         "sample_rows": [
           ["日期", "订单号"],
           ["2026-06-01", "SO-1"]

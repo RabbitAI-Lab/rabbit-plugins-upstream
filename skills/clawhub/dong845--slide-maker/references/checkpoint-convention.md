@@ -81,6 +81,26 @@ terminal and answers in one click. Do **NOT** write `content-plan.md` / `design-
 into the deliverable folder (they clutter it; the conversation is the record) — unless the user
 explicitly asks for plan files.
 
+**The design checkpoint carries a `density:` line, and it is a NUMBER, not an adjective.**
+Write it in the SAME two quantities the gate measures, so plan and gate can be compared at all:
+the planned **median** load, and how many slides you expect to be **over 70** — plus the count of
+slides whose protagonist is NOT text.
+`density: median ~35 words/slide · 0-2 of 11 over 70 · 4 of 11 content slides carry a figure or chart`.
+A planned *median* against a gate that counts a *tail* is two different questions: a deck sitting at
+69 words on every single slide — 2x this example, 1.7x the budget — has a perfect tail count and
+passes cleanly, and the plan line would never have caught it either. Name both numbers or the plan
+teaches a value nothing can check. It exists because
+the density warning already existed, was already correct, and was already ignored: two
+consecutive decks shipped with 8/12 and then 12/12 slides over the presented budget (loads of
+81-144 words against ~40) while the per-slide `TEXT WALL` line was read and dismissed as
+advisory both times. The skill's own reference deck runs at a median of **27 words a slide**, so
+the budget is not the problem. A number on the checkpoint makes density a decision at plan time
+instead of a discovery at lint time — and `scripts/render_deck.py --deliverables` now refuses the
+hand-off when more than a third of slides are over, unless `.deck-gates.json` carries
+`"density": {"waived": "<why this deck is meant to be read, not presented>"}`.
+**Slides are a visual aid for a speaker; the sentences belong in the speaker notes, which a
+pipeline-built deck already has.**
+
 **The delegated picks MUST include the `review:` effort tier**, written as the word plus its
 derivation — `review: standard (derived from purpose)` — and, when the pick sits BELOW the
 derived default, the reason. 🔴 **Under the auto waiver the coordinator records the DERIVED tier and

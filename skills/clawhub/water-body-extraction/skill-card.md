@@ -1,5 +1,5 @@
 ## Description: <br>
-Automatic water body extraction from multi-band satellite imagery using NDWI and MNDWI indices, with support for Landsat 8/9 and Sentinel-2, Otsu threshold optimization, and vector output. <br>
+Automatic water body extraction from multi-band satellite imagery using NDWI and MNDWI indices, with support for Landsat 8/9 and Sentinel-2 inputs, threshold optimization, and vector output. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,36 +7,38 @@ This skill is ready for commercial/non-commercial use. <br>
 [ruiduobao](https://clawhub.ai/user/ruiduobao) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, GIS analysts, and remote-sensing users use this skill to extract raster water masks, optional vector boundaries, and statistics from Landsat 8/9 or Sentinel-2 imagery. It can process local GeoTIFFs and also offers place-based scene lookup when enabled. <br>
+Developers, GIS analysts, and remote-sensing practitioners use this skill to extract water masks, boundaries, and statistics from Landsat 8/9 or Sentinel-2 GeoTIFF imagery. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill includes online place lookup and scene-fetch behavior even though some documentation describes local-only processing. <br>
-Mitigation: Use local GeoTIFF inputs with --no-auto-fetch when offline-only or controlled processing is required. <br>
-Risk: Place names or sensitive areas of interest may be sent to external geocoding or scene services when --place is used. <br>
-Mitigation: Avoid --place for sensitive locations; provide explicit local inputs and review network behavior before deployment. <br>
-Risk: Geospatial dependencies and downloaded imagery sources can affect reproducibility and production reliability. <br>
-Mitigation: Pin or update dependencies deliberately, keep source imagery under review, and validate outputs against trusted reference data before production use. <br>
+Risk: The skill claims local-only behavior, but security evidence identifies networked place lookup and download behavior. <br>
+Mitigation: Use local --input workflows or --no-auto-fetch when offline or privacy-sensitive operation is required, and avoid --place unless external network access is approved. <br>
+Risk: Security evidence identifies embedded fallback Earthdata credentials. <br>
+Mitigation: Remove or rotate embedded credentials before use and provide approved credentials through managed environment variables or a secrets manager. <br>
+Risk: The security verdict is suspicious for restricted or privacy-sensitive environments. <br>
+Mitigation: Review and scan the skill before deployment, document any permitted external services, and restrict execution to environments where network downloads are acceptable. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/water-body-extraction) <br>
+- [README](README.md) <br>
+- [Skill documentation](SKILL.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Shell commands, Code, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and generated geospatial files such as GeoTIFF masks, vector boundaries, JSON statistics, and QA summaries.] <br>
+**Output Format:** [Markdown guidance with bash commands; generated outputs may include GeoTIFF raster masks, GeoJSON or Shapefile vectors, QA JSON, and text or JSON statistics.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on user-provided imagery or optional online scene lookup; users should review geospatial results before relying on them.] <br>
+**Other Properties Related to Output:** [Supports single-image extraction, batch processing, threshold calculation, optional vector export, and optional JSON statistics.] <br>
 
 ## Skill Version(s): <br>
-0.3.0 (source: server release metadata) <br>
+0.3.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

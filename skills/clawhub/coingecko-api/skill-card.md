@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides agent guidance for using CoinGecko and GeckoTerminal APIs to retrieve live cryptocurrency market, exchange, NFT, DeFi, and on-chain data. <br>
+Use this skill for requests involving cryptocurrency market data, coin prices, trading volume, market cap, OHLC charts, historical data, exchanges, derivatives, NFTs, DeFi, on-chain token data, liquidity pools, DEX data, or anything powered by CoinGecko or GeckoTerminal APIs. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,47 +7,56 @@ This skill is ready for commercial/non-commercial use. <br>
 [coingecko](https://clawhub.ai/user/coingecko) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-Developers, analysts, and agent users use this skill to construct live CoinGecko and GeckoTerminal API requests for crypto prices, market charts, exchanges, NFTs, DeFi metrics, liquidity pools, and related troubleshooting. It helps agents choose the right reference material, check credential and tier constraints, and avoid answering time-sensitive market questions from stale model knowledge. <br>
+External users, developers, and agent operators use this skill to help agents query CoinGecko and GeckoTerminal APIs for live cryptocurrency market, exchange, NFT, DeFi, and on-chain data. It supports API setup, endpoint selection, request construction, error handling, and generation of code or shell commands for data workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may cause an agent to send requests to CoinGecko domains using a user-provided API key. <br>
-Mitigation: Use only a CoinGecko API key the user is comfortable sharing with the agent, and expect outbound requests to CoinGecko and GeckoTerminal API domains. <br>
-Risk: Wallet-level analytics, token links, and on-chain token data can be privacy-sensitive or unverified. <br>
-Mitigation: Treat on-chain token links and wallet-level analytics as unverified or privacy-sensitive when sharing results. <br>
-Risk: Market figures are time-sensitive and stale model knowledge can be misleading. <br>
-Mitigation: Rely on successful live API responses for crypto prices, volumes, supply, TVL, exchange rates, and other current market figures. <br>
+Risk: The skill may ask an agent to use a CoinGecko API key, call CoinGecko or GeckoTerminal APIs, or remember the user's plan tier. <br>
+Mitigation: Use a dedicated CoinGecko API key, avoid sharing wallet private keys or seed phrases, and choose non-global installation when the skill should not be available to all agents. <br>
+Risk: Keyless or lower-tier API access can fail because of rate limits, endpoint restrictions, domain allowlist settings, or unavailable live data. <br>
+Mitigation: Confirm the API tier before multi-step work, handle API errors explicitly, and avoid answering time-sensitive market questions unless live data is successfully fetched. <br>
 
 
 ## Reference(s): <br>
 - [CoinGecko API documentation](https://www.coingecko.com/en/api) <br>
-- [CoinGecko Skill documentation](https://docs.coingecko.com/docs/skills) <br>
-- [ClawHub CoinGecko API skill page](https://clawhub.ai/coingecko/coingecko-api) <br>
-- [README](README.md) <br>
-- [Core API reference](references/core.md) <br>
-- [Common use cases](references/common-use-cases.md) <br>
-- [Coins reference](references/coins.md) <br>
-- [Coin history reference](references/coin-history.md) <br>
-- [Exchanges reference](references/exchanges.md) <br>
-- [NFTs reference](references/nfts.md) <br>
-- [On-chain pools reference](references/onchain-pools.md) <br>
-- [On-chain tokens reference](references/onchain-tokens.md) <br>
+- [CoinGecko Skills documentation](https://docs.coingecko.com/docs/skills) <br>
+- [CoinGecko API pricing](https://www.coingecko.com/en/api/pricing) <br>
+- [CoinGecko API - Core Reference](references/core.md) <br>
+- [Common Use Cases](references/common-use-cases.md) <br>
+- [CoinGecko API - Coins Reference](references/coins.md) <br>
+- [CoinGecko API - Coin Historical Data Reference](references/coin-history.md) <br>
+- [CoinGecko API - Contract Address Reference](references/contract.md) <br>
+- [CoinGecko API - Exchanges Reference](references/exchanges.md) <br>
+- [CoinGecko API - Derivatives Reference](references/derivatives.md) <br>
+- [CoinGecko API - NFTs Reference](references/nfts.md) <br>
+- [CoinGecko API - Global Market Data Reference](references/global.md) <br>
+- [CoinGecko API - Public Treasury Reference](references/treasury.md) <br>
+- [CoinGecko API - Utilities Reference](references/utils.md) <br>
+- [CoinGecko API - Asset Platforms Reference](references/asset-platforms.md) <br>
+- [CoinGecko API - Coins Categories Reference](references/categories.md) <br>
+- [CoinGecko API - Coin Supply Reference](references/coin-supply.md) <br>
+- [CoinGecko API - Onchain Networks and DEXes Reference](references/onchain-networks.md) <br>
+- [CoinGecko API - Onchain Pools Reference](references/onchain-pools.md) <br>
+- [CoinGecko API - Onchain Tokens Reference](references/onchain-tokens.md) <br>
+- [CoinGecko API - Onchain OHLCV and Trades Reference](references/onchain-ohlcv-trades.md) <br>
+- [CoinGecko API - Onchain Categories Reference](references/onchain-categories.md) <br>
+- [Claude Environment Reference](references/claude-env.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, API calls, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with inline JSON, URL, and bash examples] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with inline code blocks, API request examples, JSON response guidance, and configuration instructions] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill directs agents to use live API responses for time-sensitive market data and to surface credential, rate-limit, and API tier constraints before proceeding.] <br>
+**Other Properties Related to Output:** [May include live API call instructions and generated code for dashboards, visualizations, or data workflows.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+1.0.1 (source: ClawHub server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

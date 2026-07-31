@@ -1,5 +1,5 @@
 ## Description: <br>
-Guides an agent through using Pruna's p-video-animate API to animate a reference image with motion from a source video. <br>
+Use when someone wants a photo to move like another video - motion transfer, dance remixes, or performance variations from a template clip. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and creative operators use this skill to prepare prompts, upload source media, and call Pruna's API for motion-transfer video generation from one image and one motion-template video. <br>
+External users, creators, and developers use this skill to animate a still image with motion from a reference video through Pruna's p-video-animate model. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Using the skill sends selected images and videos to Pruna's API with the user's PRUNA_API_KEY. <br>
-Mitigation: Use only media the user is allowed to upload and confirm credentials before making API calls. <br>
-Risk: Generated prompts or optional fields can change outputs or trigger paid API calls. <br>
-Mitigation: Review generated prompts and key parameters before submission, especially when the instruction prompt is not already locked. <br>
-Risk: The artifact exposes an optional disable_safety_checker field. <br>
-Mitigation: Be cautious with safety-check settings and keep default protections enabled unless the user has a justified need. <br>
+Risk: The skill uploads selected images, videos, and possibly audio to Pruna for generation. <br>
+Mitigation: Use only media the user is comfortable sending to Pruna and disclose the upload before making API calls. <br>
+Risk: Generated motion-transfer videos can involve likenesses, copyrighted source media, or audio the user may not have rights to use. <br>
+Mitigation: Confirm the user has rights to the provided media and likenesses before generation. <br>
+Risk: The workflow uses a paid Pruna API key and supports async or quick-test prediction calls. <br>
+Mitigation: Confirm PRUNA_API_KEY availability and required inputs before the first POST, and prefer the async path for normal use. <br>
+Risk: The optional disable_safety_checker field can alter safety behavior. <br>
+Mitigation: Use disable_safety_checker only when deliberately requested and appropriate for the user's content policy context. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/p-video-animate) <br>
+- [Pruna file upload API endpoint](https://api.pruna.ai/v1/files) <br>
+- [Pruna predictions API endpoint](https://api.pruna.ai/v1/predictions) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline curl examples and parameter notes] <br>
+**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration] <br>
+**Output Format:** [Markdown guidance with curl examples and JSON request bodies] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a PRUNA_API_KEY and user-provided image and video URLs or uploaded Pruna file URLs.] <br>
+**Other Properties Related to Output:** [Produces instructions for uploading media, creating a Pruna prediction, polling, and downloading generated video.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata and artifact metadata) <br>
+1.0.8 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

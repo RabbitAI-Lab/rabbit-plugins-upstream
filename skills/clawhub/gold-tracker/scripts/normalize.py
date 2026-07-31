@@ -13,26 +13,35 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parent.parent
 TZ_BEIJING = timezone(timedelta(hours=8))
 
+# 仅允许 6 个标准值，所有非标准值都收敛到最近的标准值
+# 标准值列表与 config.yaml output.constraints.allowed_impacts 一致
 IMPACT_MAP = {
+    # 中文 -> 标准
     "看涨": "bullish", "看跌": "bearish",
     "利多": "bullish", "利空": "bearish",
     "中性": "neutral", "双向": "mixed",
     "中性偏多": "slightly_bullish", "中性偏空": "slightly_bearish",
-    "中性偏谨慎": "neutral_cautious",
-    "技术利多": "technical_bullish", "强力利多": "strong_bullish",
-    "看涨（已定价）": "bullish_priced_in",
-    "看涨（中期）": "bullish_medium",
-    "边际利多": "marginally_bullish",
+    "中性偏谨慎": "neutral",
+    # 历史变体（强制收敛到 6 个标准值之一）
+    "技术利多": "slightly_bullish", "强力利多": "bullish",
+    "看涨（已定价）": "slightly_bullish",
+    "看涨（中期）": "bullish",
+    "边际利多": "slightly_bullish",
+    # emoji 变体
     "🟢利多": "bullish", "🔴利空": "bearish", "🟡双向": "mixed",
     "🟡中性": "neutral", "🟡短期因素": "neutral",
     "🟡中性偏空": "slightly_bearish",
     "🟢结构性利多": "bullish",
     "🟢中长期结构性利多": "bullish",
+    # 已标准（幂等）
     "bullish": "bullish", "bearish": "bearish",
     "neutral": "neutral", "mixed": "mixed",
     "slightly_bullish": "slightly_bullish",
     "slightly_bearish": "slightly_bearish",
 }
+
+ALLOWED_IMPACTS = {"bullish", "bearish", "mixed", "neutral",
+                   "slightly_bullish", "slightly_bearish"}
 
 
 def normalize_ts(ts_str: str) -> str:
@@ -60,7 +69,14 @@ def normalize_ts(ts_str: str) -> str:
 
 def normalize_impact(imp: str) -> str:
     imp = imp.strip().strip('"')
-    return IMPACT_MAP.get(imp, imp)
+    mapped = IMPACT_MAP.get(imp)
+    if mapped is not None:
+        return mapped
+    # 未在映射表内的值：如果已是标准值则原样返回，否则强制收敛为 neutral 并警告
+    if imp in ALLOWED_IMPACTS:
+        return imp
+    print(f"[警告] 未知 impact 值 '{imp}'，已收敛为 'neutral'", file=__import__('sys').stderr)
+    return "neutral"
 
 
 def normalize_content(text: str) -> str:

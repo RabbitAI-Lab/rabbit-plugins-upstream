@@ -18,6 +18,7 @@ REQUIRED_DIRS = ["scripts", "logs", "archive", "alerts", ".cache"]
 REQUIRED_SCRIPTS = [
     "fetch.py", "validate.py", "normalize.py",
     "summary.py", "alert_manager.py", "archive_manager.py",
+    "log_fetch.py", "check_analysis.py",
 ]
 REQUIRED_FILES = ["config.yaml", "SKILL.md", "skill.yaml"]
 

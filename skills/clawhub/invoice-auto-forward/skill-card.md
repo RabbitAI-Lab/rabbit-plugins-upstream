@@ -1,5 +1,5 @@
 ## Description: <br>
-Automates scanning configured mailboxes for invoice emails, parsing PDF, OFD, or XML invoices, and forwarding standardized invoice summaries and attachments to designated finance or admin recipients. <br>
+Automatically scans supported mailboxes for invoice messages, parses PDF, OFD, or XML invoices, and helps forward matching invoices to configured finance, administrative, or archive recipients. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,37 @@ MIT <br>
 
 
 ## Use Case: <br>
-Employees, finance teams, administrators, and developers use this skill to configure mailbox invoice forwarding workflows, preview candidate invoices, and run or schedule forwarding after recipient and rule review. <br>
+Employees, finance teams, administrators, and workflow operators use this skill to configure and run mailbox-based invoice forwarding for reimbursement, archiving, and finance handoff workflows. It guides setup, dry-run scanning, confirmation before sending, and unattended scheduled runs. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill needs sensitive mailbox read and send access for invoice forwarding. <br>
-Mitigation: Install it only for mailboxes approved for this workflow, prefer interactive secret entry or environment/secret-manager injection, and keep authorization codes out of shared chat, logs, and configuration files. <br>
-Risk: Incorrect forwarding rules or recipients could send invoice data to the wrong destination. <br>
-Mitigation: Review recipients and run a dry-run scan before enabling run mode or scheduled execution. <br>
-Risk: Downloading invoice links can broaden the set of external URLs contacted during scans. <br>
-Mitigation: Set trusted link_domains for expected invoice providers and rely on the skill's invoice-format gate before forwarding downloaded content. <br>
-Risk: Dependency installation can modify the active Python environment. <br>
-Mitigation: Use check --install-deps only in environments where pip changes are acceptable, or install optional PDF dependencies manually in a controlled environment. <br>
+Risk: The skill accesses user mailboxes and forwards invoice content to configured recipients. <br>
+Mitigation: Use it only on mailboxes and invoices the user is authorized to process, verify forwarding and CC recipients, and dry-run with scan before run. <br>
+Risk: Invoice download links may point outside the mailbox provider and could broaden network access. <br>
+Mitigation: Prefer configuring link_domains, keep link size and timeout limits, and rely on the skill's invoice-format gate before forwarding downloaded content. <br>
+Risk: Skipping connection verification can save incorrect or untested mailbox settings. <br>
+Mitigation: Avoid --no-verify for normal setup and run check before unattended execution. <br>
+Risk: Installing optional PDF dependencies into a shared Python environment can affect other projects. <br>
+Mitigation: Install pdfplumber and pymupdf in a virtual environment when possible. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/songhonglei/skills/invoice-auto-forward) <br>
-- [Skill Instructions](SKILL.md) <br>
-- [Configuration Example](references/config.example.json) <br>
-- [Troubleshooting Guide](references/troubleshooting.md) <br>
-- [Changelog](CHANGELOG.md) <br>
+- [Configuration example](references/config.example.json) <br>
+- [Troubleshooting and mailbox setup](references/troubleshooting.md) <br>
+- [ClawHub skill page](https://clawhub.ai/songhonglei/skills/invoice-auto-forward) <br>
+- [Publisher profile](https://clawhub.ai/user/songhonglei) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON configuration snippets] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with shell commands, JSON configuration examples, and execution summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce mailbox scan previews, setup/check/run command output summaries, and configuration guidance for local secret and schedule files.] <br>
+**Other Properties Related to Output:** [May create local configuration, secrets, state, and report files when the user runs the bundled script.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.8 (source: server release, CHANGELOG, script __version__; SKILL.md frontmatter lists 1.0.7) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

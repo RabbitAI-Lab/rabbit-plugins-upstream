@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/jobwatch",
   "slug": "jobwatch",
   "ownerHandle": null,
-  "version": "1.1.0",
-  "updatedAt": 1784350507229,
-  "contentHash": "2dd0940d8b2e54855ac08713803bd76bff27f487ceb87880ec93a55129fd64fc",
-  "fetchedAt": "2026-07-26T18:11:03.388Z"
+  "version": "1.2.3",
+  "updatedAt": 1785317855746,
+  "contentHash": "ca84140ab19e0b95eeeabd6e580d5d6b262a44779493e314224648159f5a59d8",
+  "fetchedAt": "2026-07-31T10:10:34.574Z"
 }

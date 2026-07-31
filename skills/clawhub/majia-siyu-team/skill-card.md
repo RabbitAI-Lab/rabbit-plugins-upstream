@@ -1,5 +1,5 @@
 ## Description: <br>
-Routes Chinese private-domain operations requests to onboarding, copywriting, group messaging, conversation, diagnosis, customer-record workflows, or owner-facing setup guidance. <br>
+Chinese-language customer community operations toolbox that routes users to content writing, group messaging, conversation scripts, diagnosis, local archiving, reporting, and expert review workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,39 +7,43 @@ This skill is ready for commercial/non-commercial use. <br>
 [maojiebc](https://clawhub.ai/user/maojiebc) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-Chinese-speaking private-domain operators, store owners, and small business users use this skill as a single entry point for deciding the next operational step and getting routed guidance or deliverables. It supports onboarding, pre-task routing, post-task navigation, and a zero-dependency restaurant-owner setup guide. <br>
+External users and operators use this skill as a Chinese-language entry point for private-domain customer operations: drafting social posts, group broadcasts, welcome and Q&A scripts, diagnosing funnel issues, saving client notes, and generating markdown reports. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill reads the current conversation to choose another skill, so incomplete context or ambiguous requests can route work to the wrong next step. <br>
-Mitigation: Use explicit commands or provide the current goal clearly when possible, and review the selected next step before relying on the output. <br>
-Risk: Companion skills such as save, restore, report, and update can affect customer-record workflows or update behavior. <br>
-Mitigation: Review companion skills before installation or use when customer-record storage, retention, reporting, or update behavior matters. <br>
-Risk: Generated operational guidance, marketing copy, SVG, HTML, or shell commands may need business, brand, compliance, or execution review. <br>
-Mitigation: Review outputs before publishing content, sharing customer-facing assets, or running commands. <br>
+Risk: Local customer archives and reports may contain sensitive customer or business details in plaintext markdown. <br>
+Mitigation: Review or redact sensitive details before saving or exporting; treat ~/.siyu/ archives and generated reports as local sensitive files. <br>
+Risk: The update helper performs user-directed installation or repository synchronization steps. <br>
+Mitigation: Use the update workflow only when explicitly requested and verify the repository target before running update commands. <br>
+Risk: Generated marketing, group-message, and customer-response content may create compliance risk if used without review. <br>
+Mitigation: Use the bundled compliance scans and review outputs for prohibited terms, overclaims, and unauthorized personal-information collection before sending or delivering content. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/maojiebc/skills/majia-siyu-team) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/maojiebc) <br>
-- [New user tutorial](references/新手教程.md) <br>
-- [Owner-facing private-domain setup guide](references/整盘怎么搭-老板版.md) <br>
+- [Project homepage](https://github.com/maojiebc/majia-siyu-team) <br>
+- [GitHub releases](https://github.com/maojiebc/majia-siyu-team/releases) <br>
+- [新手教程](references/新手教程.md) <br>
+- [整盘怎么搭-老板版](references/整盘怎么搭-老板版.md) <br>
+- [合规前置扫描](modules/siyu-pyq/references/合规前置扫描.md) <br>
+- [合规前置扫描](modules/siyu-qunfa/references/合规前置扫描.md) <br>
+- [合规前置扫描](modules/siyu-huashu/references/合规前置扫描.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Chinese Markdown guidance with routed task instructions, optional SVG/HTML snippets, and inline shell commands.] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown, structured text, local markdown files, and shell commands when update or scan workflows are requested] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Routes to companion siyu skills when available and can produce bundled zero-dependency owner guidance from reference material.] <br>
+**Other Properties Related to Output:** [Chinese-language outputs; local archive and report workflows may write plaintext markdown files under user-directed paths.] <br>
 
 ## Skill Version(s): <br>
-0.7.0 (source: server release metadata and skill metadata) <br>
+0.8.0 (source: frontmatter, README, release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

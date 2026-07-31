@@ -1,5 +1,5 @@
 ## Description: <br>
-金谷园饺子馆 Skill helps an agent retrieve restaurant information, queue status, visit guidance, recommendations, pickup details, and explicit Meituan queue actions for the named restaurant. <br>
+金谷园饺子馆信息查询、匿名实体抽奖卡与在线排队取号。通过金谷园官方 API 查询店铺、排队和菜品信息；可揭晓抽奖卡并当场匿名交付兑奖码（一次性发放，无需登录）、凭本地凭证查询已领奖品；内置真实排队动作仅用于在线取号、本人排队进度查询、取消排队。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,35 @@ MIT <br>
 
 
 ## Use Case: <br>
-External users and their agents use this skill to answer questions about JinGuYuan Dumpling Restaurant and, after explicit confirmation, take, check, or cancel Meituan queue numbers for supported store locations. <br>
+External users and agents use this skill to answer questions about 金谷园饺子馆, check queue status, retrieve anonymous prize-card results, and manage online queue numbers with explicit user confirmation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Meituan account authorization and persistent local token storage are required for real queue actions. <br>
-Mitigation: Use authorization only for explicit queue tasks and run logout after use to clear the local Meituan token. <br>
-Risk: The bundled Meituan login/signing component is security-sensitive and includes under-disclosed device profiling and signing telemetry. <br>
-Mitigation: Review the skill before installation and avoid installing it if that behavior is unacceptable for the environment. <br>
-Risk: Taking or canceling a queue number can affect a user's real restaurant queue state. <br>
-Mitigation: Confirm the store, party size, table type, and action in the current conversation before executing commands with --confirm. <br>
+Risk: Online queue actions can use account-linked Meituan authorization and store local auth, claim, QR, or polling state. <br>
+Mitigation: Use queue actions only after explicit user confirmation, review the local persistence behavior before deployment, and clear local authorization when it is no longer needed. <br>
+Risk: The bundled Meituan signing dependency is reported by the security evidence as including under-disclosed device fingerprinting. <br>
+Mitigation: Install or enable online queueing only in environments where that account-linked behavior is acceptable; otherwise restrict use to public restaurant queries. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/jinguyuan/skills/jinguyuan-dumpling-skill) <br>
-- [Publisher Profile](https://clawhub.ai/user/jinguyuan) <br>
-- [Official Restaurant Website](https://jinguyuan.cloud) <br>
-- [JinGuYuan MCP Endpoint](https://mcp.jinguyuan.cloud) <br>
-- [MCP Access](references/mcp-access.md) <br>
-- [MCP Reply Contract](references/mcp-reply-contract.md) <br>
-- [Queue Actions](references/queue-actions.md) <br>
+- [Public Query API Reference](references/api-reference.md) <br>
+- [Queue Actions Reference](references/queue-actions.md) <br>
+- [Queue Reply Contract](references/queue-reply-contract.md) <br>
+- [金谷园饺子馆 Skill on ClawHub](https://clawhub.ai/jinguyuan/skills/jinguyuan-dumpling-skill) <br>
+- [金谷园官网](https://jinguyuan.cloud) <br>
+- [金谷园 MCP Endpoint](https://mcp.jinguyuan.cloud) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown responses with inline shell commands and structured JSON command outputs] <br>
+**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
+**Output Format:** [Markdown responses with inline shell commands and JSON CLI results] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js 18+ for local queue actions; real queue actions require current-turn user confirmation.] <br>
+**Other Properties Related to Output:** [Public restaurant queries use official API snapshots; online queue actions require explicit user confirmation and local authorization.] <br>
 
 ## Skill Version(s): <br>
-2.3.0 (source: SKILL.md frontmatter, skill.json, package.json, server release metadata) <br>
+3.1.0 (source: SKILL.md frontmatter, skill.json, server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

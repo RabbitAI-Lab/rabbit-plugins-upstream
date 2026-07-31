@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides a structured coding workflow for individual developers, including planning, step-by-step implementation, validation, checkpoint tracking, and explicit preference memory. <br>
+A structured coding workflow skill for personal developers that guides planning, implementation, verification, testing, checkpoint tracking, and explicit preference memory. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External developers use this skill to structure personal coding work from request through planning, execution, verification, and delivery. It helps split tasks, track checkpoints, remember explicitly stated preferences, and prepare quality checks before handoff. <br>
+Developers and coding agents use this skill to structure personal software work into request, planning, execution, verification, and delivery steps with checkpoints and optional local preference memory. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to read, write, test, and run commands in a project, which may affect local files. <br>
-Mitigation: Keep use scoped to the active project and review proposed file changes and commands before relying on them. <br>
-Risk: Preference memory and checkpoint files may capture sensitive details if the user stores them there. <br>
-Mitigation: Do not place secrets in memory.md or checkpoint files, and store only preferences the user explicitly wants remembered. <br>
-Risk: The optional callback_url field can send completion information outside the local environment. <br>
-Mitigation: Use callback_url only when remote notification behavior is intentional and the transmitted information is understood. <br>
+Risk: The skill operates through normal coding-assistant permissions, so proposed commands or file changes can affect the local project or workspace. <br>
+Mitigation: Install only in an agent environment where those permissions are acceptable, keep work scoped to the intended project or ~/code workspace, and review commands before execution. <br>
+Risk: Markdown boundary statements do not provide a technical sandbox. <br>
+Mitigation: Rely on the agent platform and workspace permissions for enforcement rather than on the skill text alone. <br>
+Risk: Generated development plans, checkpoints, and quality reports may be incomplete or misleading. <br>
+Mitigation: Review generated guidance and verify code with the relevant tests, linting, type checks, and human review before relying on it. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/thcjp/skills/code-dev-v1-tool-free) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/code-dev-v1-tool-free) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline code, shell commands, checklists, and optional JSON status output] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with inline text, bash commands, tables, and JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose file edits, tests, checkpoint records, and local preference or checkpoint files for user review.] <br>
+**Other Properties Related to Output:** [May create local preference and checkpoint files when the user asks the agent to do so.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+1.0.2 (source: server release evidence; artifact frontmatter lists 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

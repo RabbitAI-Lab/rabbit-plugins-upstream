@@ -1,0 +1,17 @@
+{
+  "status": "complete",
+  "checks": {
+    "buildings_loaded": true,
+    "roof_planes_extracted": true,
+    "candidates_identified": true,
+    "rankings_computed": true,
+    "dsm_used": false
+  },
+  "warnings": [
+    "No DSM available - assuming flat roofs with low confidence"
+  ],
+  "n_buildings": 5,
+  "n_roof_planes": 5,
+  "n_candidates": 5,
+  "total_capacity_kw": 269.46
+}

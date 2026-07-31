@@ -7,22 +7,20 @@ This skill is ready for commercial/non-commercial use. <br>
 [msaad00](https://clawhub.ai/user/msaad00) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+Apache-2.0 <br>
 
 
 ## Use Case: <br>
-Developers and platform engineers use this skill to inventory Snowflake AI and Cortex infrastructure into schema-valid agent-bom JSON, then optionally scan that inventory for findings when requested. <br>
+Developers, data platform engineers, and security reviewers use this skill to inventory Snowflake AI and Cortex infrastructure as canonical agent-bom JSON. It supports discover-only local collection and optional scan findings while keeping Snowflake credentials in the operator environment. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The agent may use the operator's existing Snowflake authentication context to query inventory. <br>
-Mitigation: Use a least-privilege, read-only Snowflake role and only operator-approved accounts, warehouses, databases, and schemas. <br>
-Risk: Snowflake passwords, private keys, passphrases, or OAuth tokens could be exposed if pasted into chat. <br>
-Mitigation: Use SSO, OAuth, or key-pair authentication from the local environment and do not paste credential material into chat. <br>
-Risk: Generated inventory files may contain sensitive infrastructure details. <br>
-Mitigation: Write inventory only to an operator-selected path and review the local JSON before sharing or scanning it. <br>
+Risk: Snowflake discovery can expose sensitive account, workload, and AI asset metadata if run with overbroad access or shared carelessly. <br>
+Mitigation: Use a least-privilege read-only Snowflake role and review the generated inventory JSON before sharing or pushing it anywhere. <br>
+Risk: Long-lived or pasted Snowflake credentials could be mishandled during setup. <br>
+Mitigation: Prefer SSO, OAuth, or key-pair authentication and keep credentials in the operator environment rather than pasting secrets into chat. <br>
 
 
 ## Reference(s): <br>
@@ -32,13 +30,13 @@ Mitigation: Write inventory only to an operator-selected path and review the loc
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
+**Output Type(s):** [guidance, shell commands, configuration, JSON] <br>
 **Output Format:** [Markdown guidance with bash commands and JSON file outputs] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operator-selected local inventory JSON and optional agent-bom findings JSON; credential-like values are redacted before persistence or export.] <br>
+**Other Properties Related to Output:** [Writes operator-selected inventory JSON and, when requested, optional scan findings JSON with credential-like values redacted.] <br>
 
 ## Skill Version(s): <br>
-0.98.0 (source: release metadata and skill frontmatter) <br>
+0.98.2 (source: SKILL.md frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

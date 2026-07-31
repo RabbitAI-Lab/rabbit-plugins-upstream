@@ -1,7 +1,7 @@
 ---
 name: book-video-generator
 slug: book-video-generator
-version: 2.6.0
+version: 2.8.0
 displayName: 三分钟精读一本书视频生成器
 description: 三分钟精读一本书视频生成器。输入书名+作者，一键生成3分钟读书解说视频（书评文案→AI插图→TTS配音→字幕→最终合成MP4）。触发词：三分钟精读书、生成读书视频、精读一本书、book video、做读书视频、书评视频。跨平台兼容 WorkBuddy / OpenClaw / Codex CLI / TRAE Work。
 ---
@@ -14,7 +14,7 @@ description: 三分钟精读一本书视频生成器。输入书名+作者，一
 
 源于扣子工作流 "Pipadushu_video_1"，本 Skill 遵循 [Agent Skills 开放标准](https://agentskills.io)，跨平台兼容 WorkBuddy、OpenClaw、Codex CLI、TRAE Work。
 
-使用本地开源工具替代扣子插件：剪映小助手 → ffmpeg，扣子图像生成 → 平台图像生成工具，扣子 TTS → 火山引擎 TTS（默认）/ edge-tts（备选）。
+使用本地开源工具替代扣子插件：剪映小助手 → ffmpeg，扣子图像生成 → 多模型图像生成（默认 ImageGen + 备选火山即梦/Gemini/Agnes），扣子 TTS → 火山引擎 TTS（默认，1.2x 语速）/ edge-tts（备选）。v2.8.0 新增火山即梦/Gemini/Agnes 三种图像生成备选方案，用户可通过环境变量 IMAGE_API 切换。v2.7.0 新增背景音乐、转场音效、字幕入场/出场动画，移除画面缩放。
 
 ## 平台工具映射
 
@@ -31,12 +31,26 @@ description: 三分钟精读一本书视频生成器。输入书名+作者，一
 
 ### 图像生成（阶段 4a 用于生成分镜插图）
 
-| 平台 | 工具 | 说明 |
-|------|------|------|
-| WorkBuddy | `ImageGen` | 内置延迟工具，调用 DeferExecuteTool |
-| OpenClaw | `tools` 声明 或 插件 | 在 frontmatter 中声明图像生成 tool，或安装图像插件 |
-| Codex CLI | 外部脚本调用 API | 用 Python 脚本调用 DALL-E / Stability AI / 火山引擎等 API |
-| TRAE Work | MCP 图像生成服务 | 通过 MCP 接入火山引擎、通义万相等 |
+提供了 **1 个默认 + 3 个备选** 图像生成方案，用户可通过环境变量 `IMAGE_API` 切换：
+
+| 方案 | 工具 | 模型 | 环境变量 | 说明 |
+|------|------|------|----------|------|
+| 🏠 **默认** | `ImageGen` | 腾讯混元（WorkBuddy 内置） | 无需配置 | 在 WorkBuddy 中直接调用 DeferExecuteTool |
+| 🏔️ 备选 | `volcengine` | 火山引擎即梦 Seedream 5.0 lite（字节跳动） | `ARK_API_KEY`（推荐）或 `VOLCENGINE_AK` + `VOLCENGINE_SK` | 原扣子工作流用的字节生图，中文扁平风最优，支持去水印。使用前需在[火山方舟控制台](https://console.volcengine.com/ark/region:ark+cn-beijing/openManagement)开通模型。已开通: 5.0 Pro / 5.0 lite / 4.5 / 4.0，默认 5.0 lite（`doubao-seedream-5-0-260128`） |
+| 🤖 备选 | `gemini` | Google Gemini 3 Pro Image | `GEMINI_API_KEY` | 细节丰富，语义理解强 |
+| ✨ 备选 | `agnes` | Agnes AI（完全免费） | `AGNES_API_KEY` | 免费注册获取，OpenAI 兼容接口 |
+
+**切换方式**：
+
+- **WorkBuddy**：默认使用 `ImageGen`。如需切换，设置 `IMAGE_API=volcengine|gemini|agnes` 后，脚本自动调用 `scripts/generate_image.py` 而非 ImageGen
+- **CLI 平台**（Codex CLI / OpenClaw）：直接运行 `scripts/generate_image.py --api <方案>`
+  ```bash
+  # 单张生成
+  python3 scripts/generate_image.py --prompt "<desc_promopt>" --output "scene_000.png" --api volcengine
+
+  # 批量生成（从 storyboard.json）
+  python3 scripts/generate_image.py --batch storyboard.json --output-dir images/ --api gemini
+  ```
 
 > 无论使用哪个平台，图像生成的 prompt 统一使用分镜中的 `desc_promopt` 字段。
 
@@ -68,7 +82,7 @@ ffmpeg 由 `imageio-ffmpeg` 包自动提供二进制，无需单独安装系统�
 
 | 引擎 | 凭证 | 时间戳 | 说明 |
 |------|------|--------|------|
-| 火山引擎 TTS（默认） | `VOLC_TTS_API_KEY` | 基于音频时长估算 | 豆包语音合成 2.0，中文自然度最高，可商用，需在[火山引擎控制台](https://console.volcengine.com/speech/new)获取 API Key |
+| 火山引擎 TTS（默认） | `VOLC_TTS_API_KEY` | 基于音频时长估算 | 豆包语音合成 2.0，中文自然度最高，1.2x 语速（匹配扣子工作流），可商用，需在[火山引擎控制台](https://console.volcengine.com/speech/new)获取 API Key |
 | edge-tts（备选） | 无需配置 | WordBoundary 原生精确 | 微软免费 TTS，pip 安装即用，无凭证时自动回退 |
 
 设置火山引擎凭证：
@@ -151,7 +165,7 @@ list.insert(0, {
 
 #### 4a. AI 插图生成
 
-对每个分镜的 `desc_promopt`，调用当前平台的**图像生成工具**生成插图。
+对每个分镜的 `desc_promopt`，调用图像生成工具生成插图。**默认使用 WorkBuddy 内置的 `ImageGen`（腾讯混元模型），可通过环境变量 `IMAGE_API` 切换到备选方案。**
 
 **统一风格参数**（原工作流图像生成节点配置）：
 - 尺寸：1024x768
@@ -160,12 +174,19 @@ list.insert(0, {
 - 30% 透明玻璃效果背景
 - 负向提示词：无
 
-**各平台调用方式**：
+**方案选择与调用方式**：
 
-- **WorkBuddy**：调用 `ImageGen` 工具（通过 DeferExecuteTool），参数 `prompt` = desc_promopt，`size` = "1024x768"
-- **OpenClaw**：调用 frontmatter 中声明的图像生成 tool
-- **Codex CLI**：运行 `python3 scripts/generate_image.py --prompt "<desc_promopt>" --output "scene_001.png"`（需自备 API Key）
-- **TRAE Work**：通过 MCP 调用已接入的图像生成服务
+| 方案 | `IMAGE_API` 值 | 调用方式 | 需要配置 |
+|------|----------------|----------|---------|
+| 🏠 腾讯混元（默认） | 不设置或 `imagegen` | WorkBuddy 内置 `ImageGen` 工具 | 无 |
+| 🏔️ 火山即梦 | `volcengine` | `python3 scripts/generate_image.py --api volcengine` | `ARK_API_KEY`（推荐）或 `VOLCENGINE_AK` + `VOLCENGINE_SK`。默认用 Seedream 5.0 lite（`doubao-seedream-5-0-260128`），可通过 `VOLCENGINE_MODEL` 切换。5.0 lite 最小 2K 分辨率，代码自动升级 |
+| 🤖 Google Gemini | `gemini` | `python3 scripts/generate_image.py --api gemini` | `GEMINI_API_KEY` |
+| ✨ Agnes AI | `agnes` | `python3 scripts/generate_image.py --api agnes` | `AGNES_API_KEY` |
+
+**执行逻辑**：
+1. 如果运行在 **WorkBuddy** 且未设置 `IMAGE_API`：直接调用 `ImageGen` 工具（DeferExecuteTool），参数 `prompt` = desc_promopt，`size` = "1024x768"
+2. 如果设置了 `IMAGE_API=volcengine|gemini|agnes`：调用 `scripts/generate_image.py` 脚本，自动安装依赖并通过 API 生成
+3. 如果运行在 **CLI 平台**（Codex CLI 等）：默认调用 `scripts/generate_image.py --api gemini`
 
 > 生成的图片统一命名为 `scene_000.png` ~ `scene_NNN.png`，存放到 `output/{book_name}/images/` 目录。
 
@@ -231,7 +252,7 @@ python3 scripts/generate_cover.py \
 
 **字体**：自动检测系统中文字体（Windows: 微软雅黑 / macOS: PingFang SC / Linux: Noto Sans CJK），无需手动修改。
 
-> 封面图在阶段 5 合成时，通过 segments.json 中的 `cover` 字段指定，会替换第一分镜的图片（保持开场音频不变）。
+> 封面图在阶段 5 合成时，通过 segments.json 中的 `cover` 字段指定，会在第一分镜前 `cover_duration` 秒（默认5秒）显示封面图，之后切换回原始分镜图（旁白全程不中断）。
 >
 > ```json
 > {
@@ -240,30 +261,41 @@ python3 scripts/generate_cover.py \
 >   "chapter_titles": ["开篇引言", "核心方法", "实践技巧", "总结"],
 >   "segment_chapters": [0, 0, 0, 0, 1, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3],
 >   "keywords": ["原子习惯", "微小改变", "复利效应"],
+>   "bgm": "assets/bgm_reading.mp3",
+>   "bgm_volume": 0.15,
+>   "transition_sound": "assets/transition_page_flip.mp3",
+>   "transition_interval": 3,
+>   "transition_volume": 0.3,
 >   "segments": [
 >     {"image": "images/scene_000.png", "audio": "audio/audio_000.mp3", "caption": "字幕文本"},
 >     ...
 >   ]
 > }
 > ```
-> - `cover`：可选，封面图路径，替换第一分镜图片
+> - `cover`：可选，封面图路径，在第一分镜前 `cover_duration` 秒显示，之后切回原始分镜图
+> - `cover_duration`：可选，封面显示时长（秒），默认 5.0，仅作用于第一分镜前半段
 > - `chapter_titles`：可选，板块标题列表，用于顶部进度条显示
 > - `segment_chapters`：可选，每个分镜所属板块索引（0-based），未提供时自动均匀分配
 > - `keywords`：可选，关键词列表，字幕中匹配到的关键词显示为橙色高亮
+> - `bgm`：可选，背景音乐路径，未提供时自动查找 `assets/bgm_reading.mp3`，传空字符串禁用
+> - `bgm_volume`：可选，BGM 音量 (0.0-1.0)，默认 0.15
+> - `transition_sound`：可选，转场音效路径，未提供时自动查找 `assets/transition_page_flip.mp3`，传空字符串禁用
+> - `transition_interval`：可选，每 N 个分镜添加一次转场音效，默认 3
+> - `transition_volume`：可选，转场音效音量 (0.0-1.0)，默认 0.3
 
 ### 阶段 5：视频合成
 
 **目标**：将所有素材合成为最终 MP4 视频。
 
 **操作**：运行 `python3 scripts/compose_video.py`，该脚本执行：
-1. 计算每个分镜时长（基于 TTS 音频时长 + 0.3s 间隔）
+1. 计算每个分镜时长（基于 TTS 音频时长 + gap 间隔）
 2. 图片缩放/裁剪为 1920x1080（16:9）
-3. 为每个分镜添加 **Ken Burns 缓慢缩放**效果（偶数分镜放大 1.0→1.1，奇数分镜缩小 1.1→1.0）
-4. 为每个分镜添加 **0.3s 淡入淡出转场**（dip-to-black）
-5. 使用 ffmpeg 将图片+音频合成为视频片段
-6. **进度条 overlay**：顶部显示板块标题（当前板块橙色高亮+实心圆点，其余灰色+空心圆点），底部进度线显示总体播放进度
-7. 生成**逐句单行 ASS 字幕**（基于 TTS 词级时间戳精确同步语音，按标点+字数拆分为单行短句，白色加粗文字+黑色描边，**关键词橙色高亮**）
-8. 拼接所有片段为完整视频
+3. 为每个分镜添加 **0.3s 淡入淡出转场**（dip-to-black）
+4. 使用 ffmpeg 将图片+音频合成为视频片段
+5. **进度条 overlay**：顶部显示板块标题（当前板块橙色高亮+实心圆点，其余灰色+空心圆点），底部进度线显示总体播放进度
+6. 生成**逐句单行 ASS 字幕**（基于 TTS 词级时间戳精确同步语音，按标点+字数拆分为单行短句，白色加粗文字+黑色描边，**关键词橙色高亮**，**入场淡入+上滑/出场淡出动画**）
+7. 拼接所有片段为完整视频
+8. **混音**：将背景音乐（BGM）以低音量全程混合 + 每 3 个分镜在边界处叠加转场翻页音效
 
 **字幕参数**（对应原工作流 add_captions_1 节点）：
 - 字体颜色：白色 (#FFFFFF)
@@ -272,8 +304,10 @@ python3 scripts/generate_cover.py \
 - 字号：64pt（加粗）
 - 位置：底部居中（MarginV=30）
 - 字体：**自动检测**系统可用中文字体（Windows: 微软雅黑 / macOS: PingFang SC / Linux: Noto Sans CJK SC），无需手动修改
-- 字幕格式：**ASS**（Advanced SubStation Alpha），支持行内颜色标签，关键词高亮显示
+- 字幕格式：**ASS**（Advanced SubStation Alpha），支持行内颜色标签+动画标签
 - **逐句单行显示**：利用 TTS 词级时间戳（火山引擎基于音频时长估算 / edge-tts WordBoundary 原生精确），将长字幕按标点拆分为单行短句，每句时间与语音同步
+- **入场动画**：淡入 200ms + 从下方 20px 上滑（ASS `\fad` + `\move` 标签）
+- **出场动画**：淡出 150ms（ASS `\fad` 标签）
 
 **进度条参数**：
 - 位置：画面顶部（80px 高度）
@@ -284,9 +318,14 @@ python3 scripts/generate_cover.py \
 - 字体：自动检测系统中文字体，44pt
 
 **动态效果参数**：
-- Ken Burns 缩放速率：每帧 +0.0008（约 3 秒内从 1.0 到 1.024）
-- 缩放上限：1.1x
 - 转场淡入淡出时长：0.3s（短于 0.6s 的分镜自动减半）
+
+**音频混音参数**：
+- 背景音乐：`assets/bgm_reading.mp3`（3分56秒读书背景音乐，自动循环），音量 0.15
+- 转场音效：`assets/transition_page_flip.mp3`（0.71s 翻页声效），每 3 个分镜在结尾前 0.5s 触发，音量 0.3
+- 混音方式：ffmpeg `amix` 滤镜，BGM 循环播放 + 转场音效按时间点 `adelay` 叠加
+
+> **📌 音频素材为可选**：由于 SkillHub 不支持上传 .mp3 文件，音频素材未随技能打包。如果 `assets/` 目录下没有这些文件，视频仍可正常生成（仅不含 BGM 和转场音效）。如需添加，请参考 `assets/README.md` 中的获取方式。
 
 ### 输出
 
@@ -364,6 +403,6 @@ TRAE Work 通过 MCP 接入图像生成服务。在 TRAE 的 MCP 配置中添加
 
 - `references/prompts.md` — 所有 LLM 提示词原文（平台无关，可直接复用）
 - `references/workflow-original.yaml` — 原始扣子工作流（完整 YAML 备份）
-- `scripts/compose_video.py` — 视频合成脚本（纯 Python + ffmpeg，跨平台，含 Ken Burns 缩放 + 淡入淡出转场 + 字体自动检测 + 封面图支持 + 逐句单行 ASS 字幕精确语音同步 + 关键词高亮 + 顶部进度条）
-- `scripts/generate_audio.py` — TTS 语音生成脚本（纯 Python，双引擎：火山引擎 TTS V1 API + X-Api-Key 默认 / edge-tts 备选，含词级时间戳输出，自动检测凭证切换引擎）
+- `scripts/compose_video.py` — 视频合成脚本（纯 Python + ffmpeg，跨平台，含淡入淡出转场 + 字体自动检测 + 封面图支持 + 逐句单行 ASS 字幕精确语音同步 + 关键词高亮 + 入场/出场动画 + 顶部进度条 + BGM 背景音乐混音 + 转场音效）
+- `scripts/generate_audio.py` — TTS 语音生成脚本（纯 Python，双引擎：火山引擎 TTS V1 API + X-Api-Key 默认 1.2x 语速 / edge-tts 备选 +20% 语速，含词级时间戳输出，自动检测凭证切换引擎）
 - `scripts/generate_cover.py` — 封面图生成脚本（纯 Python + Pillow，自动换行 + 模糊背景 + 字体自动检测）

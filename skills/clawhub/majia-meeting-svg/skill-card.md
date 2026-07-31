@@ -1,5 +1,5 @@
 ## Description: <br>
-Turns meeting transcripts into phone-friendly SVG meeting-summary cards and PNG images for sharing in workplace chat tools. <br>
+将会议逐字稿或录音转写文本转化为手机端可直接转发的 SVG 会议纪要卡片，并自动转为 PNG 方便分享。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,34 @@ MIT <br>
 
 
 ## Use Case: <br>
-Employees, external collaborators, and operations teams use this skill to convert meeting transcripts into a shared visual summary that captures decisions, open questions, action owners, and timelines. <br>
+Employees, external collaborators, and operations teams use this skill to convert multi-party meeting transcripts into shareable visual meeting minutes with decisions, owners, timelines, and action items. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The PNG conversion helper may automatically install cairosvg into the active Python environment with --break-system-packages. <br>
-Mitigation: Review the helper before use, install dependencies explicitly where possible, and run the conversion in an isolated or disposable environment. <br>
-Risk: Meeting transcripts may contain confidential business discussions, and generated SVG or PNG files are written to disk for manual sharing. <br>
-Mitigation: Use approved local workspaces for sensitive transcripts, review generated files before sharing, and delete outputs when retention is not needed. <br>
-Risk: The converter relies on local Node/Puppeteer or cairosvg behavior, which may be unsuitable in shared, locked-down, or production environments. <br>
-Mitigation: Confirm dependency and execution policies before installation or conversion, especially on managed systems. <br>
+Risk: The PNG converter may automatically install a Python rendering package into the host environment when a dependency is missing. <br>
+Mitigation: Run the skill in a virtual environment or container, or preinstall reviewed and pinned rendering dependencies before using PNG conversion. <br>
+Risk: Meeting transcripts can contain sensitive business information even when processing is local. <br>
+Mitigation: Use approved local workspaces, review transcript handling requirements, and share generated SVG/PNG files only with intended recipients. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/maojiebc/skills/majia-meeting-svg) <br>
-- [Project homepage](https://github.com/maojiebc/majia-meeting-svg) <br>
-- [Example meeting cards](references/examples/) <br>
+- [ClawHub Skill Page](https://clawhub.ai/maojiebc/skills/majia-meeting-svg) <br>
+- [Project Homepage](https://github.com/maojiebc/majia-meeting-svg) <br>
+- [Example Meeting Cards](https://github.com/maojiebc/majia-meeting-svg/tree/main/references/examples) <br>
+- [README.en.md](README.en.md) <br>
+- [llms.txt](llms.txt) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, files] <br>
-**Output Format:** [SVG markup, PNG image files, and a short Markdown or text summary.] <br>
+**Output Type(s):** [Text, Code, Shell commands, Files] <br>
+**Output Format:** [SVG and PNG files with a concise text summary] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [PNG conversion targets 2x scale for phone-friendly sharing when local conversion dependencies are available.] <br>
+**Other Properties Related to Output:** [PNG conversion defaults to 2x scale; generated content should preserve exact meeting facts, dates, numbers, owners, and unresolved items.] <br>
 
 ## Skill Version(s): <br>
-1.1.12 (source: server release evidence and frontmatter) <br>
+1.1.13 (source: SKILL.md metadata.version and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

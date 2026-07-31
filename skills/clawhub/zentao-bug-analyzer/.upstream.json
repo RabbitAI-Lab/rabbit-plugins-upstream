@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/zentao-bug-analyzer",
   "slug": "zentao-bug-analyzer",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1784708968662,
-  "contentHash": "119395bccb67e43e0dbedd2cfd96ac8f08aa2b430c799b5d7c47ceaec3e337e3",
-  "fetchedAt": "2026-07-26T18:08:15.366Z"
+  "version": "1.1.0",
+  "updatedAt": 1785469980731,
+  "contentHash": "12f0a90550505345a664eb71808f2a1b90495fe80e8c4c6f2f85705df1ec79a8",
+  "fetchedAt": "2026-07-31T10:04:04.576Z"
 }

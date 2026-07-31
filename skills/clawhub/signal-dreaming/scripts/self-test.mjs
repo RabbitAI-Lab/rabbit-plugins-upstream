@@ -1,8 +1,11 @@
 #!/usr/bin/env node
 import assert from "node:assert/strict";
+import { execFile } from "node:child_process";
 import fs from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { promisify } from "node:util";
 import {
   LOCK_REL,
   STATE_REL,
@@ -26,6 +29,7 @@ import {
   acknowledgeIncomplete,
   beginRun,
   createRunId,
+  failRun,
   finalizeRun,
   validateWritePath,
   verifyBeforeWrite,
@@ -33,6 +37,22 @@ import {
 
 const results = [];
 const roots = [];
+const execFileAsync = promisify(execFile);
+const transactionListScript = fileURLToPath(new URL("./transaction-list.mjs", import.meta.url));
+
+async function listTransactions(root) {
+  const { stdout } = await execFileAsync(process.execPath, [transactionListScript, root]);
+  return JSON.parse(stdout);
+}
+
+async function listTransactionsFailure(root) {
+  try {
+    await execFileAsync(process.execPath, [transactionListScript, root]);
+  } catch (error) {
+    return JSON.parse(error.stdout);
+  }
+  throw new Error("transaction-list unexpectedly succeeded");
+}
 
 async function test(name, fn) {
   try {
@@ -87,6 +107,10 @@ async function addLog(root, name = "2026-07-23.md", content = "new memory\n") {
 
 async function planFor(root) {
   return buildDeltaPlan(root, { now: "2026-07-23T10:00:00Z" });
+}
+
+function candidateFile(root, runId, relative) {
+  return path.join(root, ".backup/memory-dreams", runId, "candidate", relative);
 }
 
 await test("preflight accepts one writer and native Dreaming off", async () => {
@@ -429,7 +453,7 @@ await test("crash after backup remains visible and blocks silent overwrite", asy
   await writeJsonAtomic(lockFile, lock);
   await expectCode("STALE_LOCK", () => beginRun(root, createRunId(), plan, ["memory/dream-log.md"]));
   const manifest = JSON.parse(await fs.readFile(path.join(root, ".backup/memory-dreams", runId, "manifest.json"), "utf8"));
-  assert.equal(manifest.status, "backed_up");
+  assert.equal(manifest.status, "staged");
 });
 
 await test("unplanned Markdown change is caught", async () => {
@@ -510,7 +534,7 @@ await test("successful guarded run commits manifest and state", async () => {
   const runId = createRunId();
   await beginRun(root, runId, plan, ["MEMORY.md", "memory/dream-log.md"]);
   await verifyBeforeWrite(root, runId);
-  await write(path.join(root, "MEMORY.md"), "# Memory\n\nCurrent state.\n");
+  await write(candidateFile(root, runId, "MEMORY.md"), "# Memory\n\nCurrent state.\n");
   const result = await finalizeRun(root, runId, {
     number: 104,
     timestamp: "2026-07-23 10:00",
@@ -523,6 +547,7 @@ await test("successful guarded run commits manifest and state", async () => {
   assert.equal(result.ok, true);
   assert.equal(result.manifest.status, "committed");
   assert.equal(result.state.lastDreamNumber, 104);
+  assert.equal(result.state.index.size, Buffer.byteLength("# Memory\n\nCurrent state.\n"));
   assert.equal(await fs.stat(path.join(root, LOCK_REL)).then(() => true, () => false), false);
 });
 
@@ -540,6 +565,213 @@ await test("run id includes second precision and collision suffix", async () => 
   assert.notEqual(first, second);
 });
 
+
+await test("healthy index without daily deltas remains noop", async () => {
+  const root = await workspace("index-healthy-noop");
+  await write(path.join(root, "MEMORY.md"), "x".repeat(8_000));
+  const plan = await planFor(root);
+  assert.equal(plan.noop, true);
+  assert.equal(plan.index.band, "healthy");
+});
+
+await test("soft index without prior review triggers compact-first", async () => {
+  const root = await workspace("index-soft-trigger");
+  await write(path.join(root, "MEMORY.md"), "x".repeat(9_000));
+  const plan = await planFor(root);
+  assert.equal(plan.noop, false);
+  assert.equal(plan.runMode, "compact-first");
+  assert(plan.index.reasons.includes("index_review_missing"));
+});
+
+await test("unchanged recently reviewed soft index does not loop nightly", async () => {
+  const root = await workspace("index-soft-no-loop");
+  await write(path.join(root, "MEMORY.md"), "x".repeat(9_000));
+  const first = await planFor(root);
+  await writeJsonAtomic(path.join(root, STATE_REL), nextState(first, "2026-07-23T09:00:00Z", 104));
+  const second = await planFor(root);
+  assert.equal(second.noop, true);
+  assert.equal(second.index.maintenanceRequired, false);
+});
+
+await test("hard index triggers without daily deltas", async () => {
+  const root = await workspace("index-hard-trigger");
+  await write(path.join(root, "MEMORY.md"), "x".repeat(11_000));
+  const plan = await planFor(root);
+  assert.equal(plan.noop, false);
+  assert.equal(plan.index.band, "hard");
+  assert(plan.index.reasons.includes("memory_hard_limit"));
+});
+
+await test("oversize candidate is rejected with live index untouched", async () => {
+  const root = await workspace("candidate-hard-reject");
+  const original = "x".repeat(11_000);
+  await write(path.join(root, "MEMORY.md"), original);
+  const plan = await planFor(root);
+  const runId = createRunId();
+  await beginRun(root, runId, plan, ["MEMORY.md", "memory/dream-log.md"]);
+  await verifyBeforeWrite(root, runId);
+  await write(candidateFile(root, runId, "MEMORY.md"), "y".repeat(10_500));
+  const result = await finalizeRun(root, runId, {
+    number: 104,
+    timestamp: "2026-07-23 10:00",
+    trigger: "auto",
+    durationMinutes: 1,
+    newLogCount: 0,
+    changes: ["Attempted index compaction"],
+    note: "Candidate should be rejected.",
+  });
+  assert.equal(result.candidateRejected, true);
+  assert.equal(await fs.readFile(path.join(root, "MEMORY.md"), "utf8"), original);
+});
+
+await test("maintenance-only no-progress candidate is rejected", async () => {
+  const root = await workspace("candidate-no-progress");
+  const original = "x".repeat(9_000);
+  await write(path.join(root, "MEMORY.md"), original);
+  const plan = await planFor(root);
+  const runId = createRunId();
+  await beginRun(root, runId, plan, ["MEMORY.md", "memory/dream-log.md"]);
+  await verifyBeforeWrite(root, runId);
+  await write(candidateFile(root, runId, "MEMORY.md"), original.slice(0, -1) + "y");
+  const result = await finalizeRun(root, runId, {
+    number: 104,
+    timestamp: "2026-07-23 10:00",
+    trigger: "auto",
+    durationMinutes: 1,
+    newLogCount: 0,
+    changes: ["Attempted index review"],
+    note: "No size progress should reject.",
+  });
+  assert.equal(result.candidateRejected, true);
+  assert(result.audit.errors.some((item) => item.code === "NO_COMPACTION_PROGRESS"));
+});
+
+await test("hard index can compact through staging and commit in soft band", async () => {
+  const root = await workspace("candidate-hard-success");
+  await write(path.join(root, "MEMORY.md"), "x".repeat(11_000));
+  const plan = await planFor(root);
+  const runId = createRunId();
+  await beginRun(root, runId, plan, ["MEMORY.md", "memory/dream-log.md"]);
+  await verifyBeforeWrite(root, runId);
+  await write(candidateFile(root, runId, "MEMORY.md"), "x".repeat(9_000));
+  const result = await finalizeRun(root, runId, {
+    number: 104,
+    timestamp: "2026-07-23 10:00",
+    trigger: "auto",
+    durationMinutes: 1,
+    newLogCount: 0,
+    changes: ["MEMORY.md: 11000 to 9000 bytes"],
+    note: "Staged compaction committed.",
+  });
+  assert.equal(result.ok, true);
+  assert.equal((await fs.stat(path.join(root, "MEMORY.md"))).size, 9_000);
+  assert(result.audit.warnings.some((item) => item.code === "MEMORY_SOFT_LIMIT"));
+});
+
+
+await test("unchanged soft index becomes due after seven days", async () => {
+  const root = await workspace("index-soft-review-due");
+  await write(path.join(root, "MEMORY.md"), "x".repeat(9_000));
+  const first = await planFor(root);
+  await writeJsonAtomic(path.join(root, STATE_REL), nextState(first, "2026-07-15T09:00:00Z", 104));
+  const second = await planFor(root);
+  assert.equal(second.noop, false);
+  assert(second.index.reasons.includes("soft_review_due"));
+});
+
+await test("human live edit during candidate work is preserved and rejected run does not block", async () => {
+  const root = await workspace("candidate-human-race");
+  await addLog(root);
+  const plan = await planFor(root);
+  const runId = createRunId();
+  await beginRun(root, runId, plan, ["MEMORY.md", "memory/dream-log.md"]);
+  await verifyBeforeWrite(root, runId);
+  await write(candidateFile(root, runId, "MEMORY.md"), "# Memory\n\nCandidate state.\n");
+  await fs.appendFile(path.join(root, "MEMORY.md"), "human edit\n");
+  const result = await finalizeRun(root, runId, {
+    number: 104,
+    timestamp: "2026-07-23 10:00",
+    trigger: "auto",
+    durationMinutes: 1,
+    newLogCount: 1,
+    changes: ["Candidate update"],
+    note: "Human edit must win.",
+  });
+  assert.equal(result.candidateRejected, true);
+  assert.match(await fs.readFile(path.join(root, "MEMORY.md"), "utf8"), /human edit/);
+
+  const nextPlan = await planFor(root);
+  const nextRun = createRunId();
+  await beginRun(root, nextRun, nextPlan, ["MEMORY.md", "memory/dream-log.md"]);
+  await failRun(root, nextRun, "test cleanup");
+});
+
+await test("transaction list reads V3 root/plannedFiles manifests and file locks", async () => {
+  const root = await workspace("transaction-list-v3");
+  await addLog(root);
+  const plan = await planFor(root);
+  const runId = createRunId();
+  await beginRun(root, runId, plan, ["MEMORY.md", "memory/dream-log.md"]);
+  const active = await listTransactions(root);
+  const current = active.transactions.find((item) => item.runId === runId);
+  assert.equal(active.ok, true);
+  assert.equal(active.activeLock.format, "v3");
+  assert.equal(current.format, "v3");
+  assert.equal(current.unfinished, true);
+  assert.equal(current.recovery, "manual-inspection");
+  assert.equal(current.command, null);
+  assert.deepEqual(current.targets, ["MEMORY.md", "memory/dream-log.md"]);
+  await failRun(root, runId, "test cleanup");
+  const terminal = await listTransactions(root);
+  const rejected = terminal.transactions.find((item) => item.runId === runId);
+  assert.equal(terminal.activeLock, null);
+  assert.equal(rejected.status, "candidate_rejected");
+  assert.equal(rejected.unfinished, false);
+  assert.equal(rejected.command, null);
+});
+
+await test("transaction list preserves V2 workspace/entries recovery inventory", async () => {
+  const root = await workspace("transaction-list-v2");
+  const runId = "legacy-v2";
+  const base = path.join(root, ".backup/memory-dreams");
+  await writeJsonAtomic(path.join(base, runId, "manifest.json"), {
+    version: 2,
+    runId,
+    workspace: root,
+    status: "planned",
+    createdAt: "2026-07-23T10:00:00Z",
+    entries: [{ path: "MEMORY.md" }],
+  });
+  await writeJsonAtomic(path.join(base, ".curation-lock", "owner.json"), {
+    runId,
+    acquiredAt: "2026-07-23T10:00:00Z",
+  });
+  const inventory = await listTransactions(root);
+  const legacy = inventory.transactions.find((item) => item.runId === runId);
+  assert.equal(inventory.activeLock.format, "v2");
+  assert.equal(legacy.format, "v2");
+  assert.equal(legacy.unfinished, true);
+  assert.equal(legacy.recovery, "abort");
+  assert.match(legacy.command, /memory-transaction\.mjs abort/);
+});
+
+await test("transaction list rejects mixed manifest identities", async () => {
+  const root = await workspace("transaction-list-conflict");
+  const runId = "conflicting-v3";
+  await writeJsonAtomic(path.join(root, ".backup/memory-dreams", runId, "manifest.json"), {
+    schema: "signal-dreaming.run-manifest.v3",
+    runId,
+    root,
+    workspace: root + "-other",
+    status: "committed",
+    startedAt: "2026-07-23T10:00:00Z",
+    plannedFiles: [{ path: "MEMORY.md" }, { path: "memory/dream-log.md" }],
+  });
+  const result = await listTransactionsFailure(root);
+  assert.equal(result.ok, false);
+  assert.match(result.error, /manifest identity mismatch/);
+});
+
 for (const root of roots) {
   await fs.rm(root, { recursive: true, force: true });
 }
@@ -547,7 +779,7 @@ for (const root of roots) {
 const failures = results.filter((item) => !item.ok);
 const report = {
   schema: "signal-dreaming.self-test.v3",
-  version: "3.0.0-rc.1",
+  version: "3.0.0-rc.3",
   platform: process.platform,
   arch: process.arch,
   node: process.versions.node,

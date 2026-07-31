@@ -1,5 +1,5 @@
 ## Description: <br>
-Shapes agent behavior via instruction framing and style transfer <br>
+Shapes agent behavior via instruction framing and style transfer. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, skill authors, and agent operators use this skill to frame prompts, transfer style from examples, and structure multi-agent reviews with clearer behavioral guidance. <br>
+Developers and agent authors use this skill to frame instructions, dispatch review agents, and transfer style from exemplars when writing prompts, skills, code, or documentation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Style-transfer examples may place sensitive or unsuitable exemplar text into an agent context. <br>
-Mitigation: Use non-sensitive exemplars and review generated output before adopting it. <br>
-Risk: The artifact references a separate external plugin for a fuller experience that is outside this markdown-only release. <br>
-Mitigation: Review and scan any separate external plugin before installing or enabling it. <br>
+Risk: The skill may activate for some general instruction-writing or review-prompt tasks. <br>
+Mitigation: Use it when instruction framing, style transfer, or multi-agent review framing is relevant, and ignore it for simple factual context-packing tasks. <br>
+Risk: Style-transfer prompts may place exemplar code or prose into the agent context. <br>
+Mitigation: Only include exemplar material that is appropriate to share in the agent context. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill release](https://clawhub.ai/athola/skills/nm-imbue-latent-space-engineering) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-latent-space-engineering) <br>
+- [Claude Night Market imbue plugin](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
+- [Publisher profile](https://clawhub.ai/user/athola) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with prompt snippets and checklists] <br>
+**Output Type(s):** [Guidance, Markdown, Text] <br>
+**Output Format:** [Markdown guidance with prompt patterns and examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Markdown-only guidance; no executable behavior or credential handling is identified in the server security evidence.] <br>
+**Other Properties Related to Output:** [Markdown-only prompt-writing aid; no executable commands, credential access, persistence, or data-moving behavior found.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

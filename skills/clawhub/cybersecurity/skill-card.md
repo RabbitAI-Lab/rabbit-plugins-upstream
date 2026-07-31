@@ -1,5 +1,5 @@
 ## Description: <br>
-Handle cybersecurity triage, threat modeling, secure reviews, and incident reporting with strict authorization and evidence discipline. <br>
+Provides defensive cybersecurity guidance for alert triage, compromise investigation, attack-path analysis, vulnerability prioritization, detection, compliance evidence, and risk reporting. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, security practitioners, and leaders use this skill for authorized incident triage, threat modeling, secure design review, vulnerability prioritization, tabletop preparation, and risk reporting. <br>
+Security practitioners, engineers, and operational leaders use this skill to scope suspected compromises, prioritize remediation, harden identity, endpoints, networks, cloud tenants and supply chains, write detections, and prepare defensible findings or audit evidence. It advises by default and requires written authorization before proposing live-system action. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive security context could be stored in local notes. <br>
-Mitigation: Keep ~/cybersecurity/ private, avoid storing secrets, tokens, private keys, or raw sensitive logs, and periodically clear stale incident notes. <br>
-Risk: Cybersecurity requests can drift into unauthorized or harmful activity. <br>
-Mitigation: Require clear authorization and scope before offensive or high-risk work, and use safe alternatives such as local labs, tabletop analysis, detection logic, or remediation planning when scope is unclear. <br>
-Risk: Incident response recommendations can disrupt systems or destroy useful evidence. <br>
-Mitigation: Preserve logs, timestamps, affected hosts, and symptoms before disruptive containment, and flag actions that are irreversible, noisy, or likely to hinder investigation. <br>
+Risk: Durable local notes may contain sensitive security context such as incident summaries, findings, assets, vendors, contacts, and due dates. <br>
+Mitigation: Protect the declared Clawic data folders and follow the skill guidance to keep credentials, raw evidence, and personal records out of those notes. <br>
+Risk: Security guidance can become disruptive or legally sensitive when it touches live systems. <br>
+Mitigation: Use the written authorization gate before live-system action; without scope, keep work to analysis, read-only review, tabletop exercises, detection logic, or remediation design. <br>
+Risk: Reports and recommendations can be incomplete if local configuration, memory, logs, or evidence are missing. <br>
+Mitigation: Keep observed, inferred, and recommended statements separate, label confidence, and verify important conclusions against authoritative evidence before operational decisions. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ivangdavila/cybersecurity) <br>
-- [Skill homepage](https://clawic.com/skills/cybersecurity) <br>
-- [Setup guide](setup.md) <br>
-- [Threat modeling workflow](threat-modeling.md) <br>
-- [Incident triage flow](triage.md) <br>
-- [Reporting structure](reporting.md) <br>
-- [Safety boundaries](safety-boundaries.md) <br>
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/cybersecurity) <br>
+- [Clawic Cybersecurity skill page](https://clawic.com/skills/cybersecurity) <br>
+- [Skill definition](artifact/SKILL.md) <br>
+- [Working file templates](artifact/memory-template.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with structured analysis, recommendations, and occasional shell command blocks] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with structured findings, tables, checklists, detection logic, reports, and local note updates.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May initialize or update local context files under ~/cybersecurity/ when setup or memory support is used.] <br>
+**Other Properties Related to Output:** [May write scoped local notes under declared Clawic data folders; evidence and secrets are represented by pointers, not stored.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+1.0.2 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

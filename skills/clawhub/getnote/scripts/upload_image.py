@@ -174,10 +174,11 @@ def main():
         print(f"访问 URL: {image_url}")
         print()
         print("💡 创建图片笔记:")
-        print(f'   curl -X POST "https://openapi.biji.com/open/api/v1/resource/note/save?task_id=..."')
+        print(f'   curl -X POST "{BASE_URL}/note/save"')
         print(f'     -H "Authorization: $GETNOTE_API_KEY"')
+        print(f'     -H "X-Client-ID: $GETNOTE_CLIENT_ID"')
         print(f'     -H "Content-Type: application/json"')
-        print(f'     -d \'{{"type":"img_text","image_urls":["{image_url}"]}}\'')
+        print(f'     -d \'{{"note_type":"img_text","image_urls":["{image_url}"],"client_request_id":"replace-with-stable-request-id"}}\'')
         
     except Exception as e:
         print(f"错误: {e}")

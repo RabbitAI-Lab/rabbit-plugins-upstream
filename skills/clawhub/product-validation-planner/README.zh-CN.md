@@ -14,18 +14,18 @@ Validated demand: Founders and builders need a repeatable way to turn rough prod
 
 ## 来源证据
 
-- hacker-news-ask-hn：[Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49045271)
+- github-issues：[RFC-0002 Slice 18: synchronize documentation, wiki, support truth, and agent context](https://github.com/sgajbi/lotus-idea/issues/681)
 - github-issues：[RFC-0002 Slice 14/17: certify Lotus Idea data-product, trust telemetry, and canonical proof in platform gates](https://github.com/sgajbi/lotus-platform/issues/598)
-- segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search：[typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search：[ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search：[问： 属性或方法“$v”未使用 Vuelidate 定义](https://segmentfault.com/q/1010000042816440)
-- segmentfault-search：[问： 从JDK 1.8切换到JDK 21时遇到NoProviderFoundException如何解决？](https://segmentfault.com/q/1010000047230462)
-- segmentfault-search：[问： laravel validator验证不通过返回The given data was invalid，而不是返回定义的提示信息](https://segmentfault.com/q/1010000018250396)
+- hacker-news-ask-hn：[Ventora Expands Its AI Business Builder to Help Solo Founders](https://news.ycombinator.com/item?id=49107855)
+- github-issues：[[cool idea] Emit deterministic SARIF for CI-native lint findings](https://github.com/flyingrobots/colorful-language/issues/188)
 - github-issues：[Follow-up: extend meta validation config across the CMS](https://github.com/novaramedia/novaramedia-com/issues/572)
-- github-issues：[Correct Tool Contract startup-validation claim](https://github.com/Nokia-Bell-Labs/declarative-agents/issues/1006)
 - hacker-news-search：[What I learned selling 2,500 MIDI recorders: Hardware is not so hard](https://news.ycombinator.com/item?id=48974605)
+- hacker-news-search：[Harness Engineering](https://news.ycombinator.com/item?id=48964576)
+- hacker-news-search：[LearnVector – Andrew Ng's AI company building one‑to‑one learning experiences](https://news.ycombinator.com/item?id=49096068)
+- hacker-news-search：[Kuna: Decompiler Development in the Age of Coding Agents](https://news.ycombinator.com/item?id=49116636)
+- github-issues：[Feature request: make /pet a first-class companion command drawer](https://github.com/openai/codex/issues/35343)
+- github-issues：[Explore incremental refresh via unfiltered recent search](https://github.com/HanClinto/tcgjson/issues/4)
+- csdn-search：[24 Idea Validation - Save Yourself Time and Money](https://wenku.csdn.net/doc/7fnjuwdtp5?ops_request_misc=elastic_search_misc&request_id=1c3a1775028d479882c982d5058a12cc&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-1-7fnjuwdtp5-null-null.142^v102^pc_search_result_base9&utm_term=product%20idea%20validation)
 
 ## 这个技能如何满足需求
 

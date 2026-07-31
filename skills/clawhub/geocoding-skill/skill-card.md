@@ -1,5 +1,5 @@
 ## Description: <br>
-Forward and reverse geocoding using Nominatim and Open-Meteo, with support for address lookup, coordinate lookup, and batch CSV geocoding. <br>
+Forward and reverse geocoding using Nominatim and Open-Meteo, including address-to-coordinate, coordinate-to-address, and batch CSV workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and geospatial analysts use this skill to convert addresses to coordinates, coordinates to addresses, and batches of CSV address data into geocoded outputs. <br>
+Developers and data practitioners use this skill to convert addresses and coordinate pairs for mapping, analysis, and batch data enrichment with Nominatim/OpenStreetMap and Open-Meteo. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Addresses, coordinates, and batch CSV values may be sent to Nominatim/OpenStreetMap or Open-Meteo over HTTPS. <br>
-Mitigation: Avoid public providers for sensitive customer, employee, facility, or regulated location data unless that sharing is approved; use a self-hosted geocoder for sensitive workloads. <br>
-Risk: Some documented advanced flags may not work in the current script. <br>
-Mitigation: Test required commands with non-sensitive sample data before using the skill in a production workflow. <br>
+Risk: Sensitive home, customer, or business address data may be sent to external geocoding providers. <br>
+Mitigation: Avoid sensitive location data unless the external data flow is acceptable; document provider use and prefer approved or self-hosted endpoints for sensitive workloads. <br>
+Risk: The release bundles unrelated credential-handling code with a hardcoded Earthdata password. <br>
+Mitigation: Remove the bundled password and unrelated credential helpers, then rotate any exposed credential before relying on the skill. <br>
+Risk: Dependency and runtime behavior may drift because dependencies are not tightly pinned. <br>
+Mitigation: Pin dependencies to reviewed versions and scan the environment before installation or execution. <br>
 
 
 ## Reference(s): <br>
-- [geocoding-skill ClawHub page](https://clawhub.ai/ruiduobao/skills/geocoding-skill) <br>
+- [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/geocoding-skill) <br>
 - [Nominatim](https://nominatim.org/) <br>
 - [Open-Meteo Geocoding API](https://open-meteo.com/en/docs/geocoding-api) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell commands, Python examples, and CSV/JSON output descriptions] <br>
+**Output Type(s):** [Shell commands, Code, Files, Guidance] <br>
+**Output Format:** [Markdown guidance with shell commands; runtime outputs can be CSV or JSON files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local CSV, JSON, state, and map files when the documented commands are run.] <br>
+**Other Properties Related to Output:** [May call Nominatim or Open-Meteo and write local geocoding result files.] <br>
 
 ## Skill Version(s): <br>
-0.3.0 (source: server release evidence) <br>
+0.3.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

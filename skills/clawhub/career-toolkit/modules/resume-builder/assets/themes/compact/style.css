@@ -1,0 +1,146 @@
+/* Compact Resume Theme — Maximum info density in one page */
+
+@page {
+  size: A4;
+  margin: 12mm 14mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10pt;
+  color: #222;
+  line-height: 1.55;
+  background: #fff;
+}
+
+.resume {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 24px 14px 10px;
+}
+
+/* ===== Header ===== */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border-bottom: 1.5px solid #222;
+  padding-bottom: 8px;
+  margin-bottom: 12px;
+}
+
+.header-main { flex: 1; }
+
+.name {
+  font-size: 18pt;
+  font-weight: 700;
+  margin: 0;
+  color: #111;
+}
+
+.english-name { font-size: 10.5pt; color: #666; margin-left: 6px; }
+.label { font-size: 9.5pt; color: #444; margin: 3px 0; }
+
+.contact {
+  font-size: 9pt;
+  color: #444;
+  margin-top: 3px;
+}
+
+.contact span { margin-right: 12px; white-space: nowrap; }
+.contact.meta { color: #777; font-size: 8.5pt; }
+
+.avatar {
+  width: 110px;
+  height: 110px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+}
+
+/* ===== Sections ===== */
+.section {
+  margin-top: 10px;
+}
+
+.section-title {
+  font-size: 10pt;
+  font-weight: 700;
+  color: #fff;
+  background: #2c3e50;
+  padding: 3px 8px;
+  margin: 6px 0 6px 0;
+  letter-spacing: 0.5px;
+}
+
+.summary { margin: 3px 0; color: #333; font-size: 9.5pt; }
+
+/* ===== Entries ===== */
+.entry {
+  margin-bottom: 8px;
+  page-break-inside: avoid;
+}
+
+.entry-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.entry-title { font-size: 10pt; }
+.entry-title strong { font-weight: 700; }
+.entry-meta { font-size: 9pt; color: #666; white-space: nowrap; }
+
+.entry-sub {
+  font-size: 9pt;
+  color: #444;
+  margin: 2px 0;
+}
+.entry-sub.tech { color: #555; font-size: 8.5pt; }
+
+.sep { color: #999; margin: 0 4px; }
+.date { color: #666; }
+.tag {
+  display: inline-block;
+  font-size: 8pt;
+  padding: 1px 5px;
+  margin-left: 4px;
+  background: #ecf0f1;
+  color: #2c3e50;
+  border-radius: 2px;
+}
+
+/* ===== Lists ===== */
+.highlights, .skill-list {
+  margin: 3px 0;
+  padding-left: 16px;
+}
+
+.highlights li, .skill-list li {
+  margin: 2px 0;
+  font-size: 9.5pt;
+  line-height: 1.5;
+}
+
+/* ===== Two-column skills ===== */
+.skills-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 20px;
+  margin: 3px 0;
+}
+
+.skills-grid .skill-item {
+  font-size: 9.5pt;
+  width: 48%;
+}
+
+/* ===== Links ===== */
+a { color: #2c3e50; text-decoration: none; }
+a:hover { text-decoration: underline; }

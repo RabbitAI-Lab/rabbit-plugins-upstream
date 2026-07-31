@@ -56,9 +56,9 @@ LEVEL_ALIASES = {
     "全部": "all",
 }
 STRENGTH_LEVEL_VISITS = {
-    "beginner": 100,
-    "intermediate": 250,
-    "advanced": 400,
+    "beginner": 400,
+    "intermediate": 600,
+    "advanced": 800,
 }
 DEFAULT_VISITS = STRENGTH_LEVEL_VISITS["advanced"]
 OVERLAY_SOURCE_ALIASES = {

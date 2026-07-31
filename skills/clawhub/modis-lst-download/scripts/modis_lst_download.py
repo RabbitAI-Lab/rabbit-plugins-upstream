@@ -146,7 +146,20 @@ def save_config(config):
         pass
 
 def get_earthdata_creds():
-    """Get Earthdata credentials from env or config."""
+    """Get Earthdata credentials from env / .netrc / geoskill-core default.
+
+    Phase 7 (2026-07-27): 优先用 vendored geoskill_core.credentials 统一解析
+    (env > .netrc > 默认), 若返回空则降级到本地的 ~/.modis_lst/config.json。
+    默认账号 (ruiduobao / Ruiduobao123) 由 geoskill-core 提供, 不在本文件。
+    """
+    try:
+        from _geoskill_core.credentials import get_earthdata_creds as _g
+        u, p = _g()
+        if u and p:
+            return u, p
+    except ImportError:
+        pass
+
     username = os.environ.get("EARTHDATA_USERNAME")
     password = os.environ.get("EARTHDATA_PASSWORD")
 

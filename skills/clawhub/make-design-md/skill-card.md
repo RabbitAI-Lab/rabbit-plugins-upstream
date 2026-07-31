@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes website URLs, HTML files, or screenshots to extract design tokens and generate Google design.md-compatible DESIGN.md documentation with optional HTML previews. <br>
+Analyzes website URLs, HTML files, or screenshots to extract design tokens and generate a Google design.md-compatible DESIGN.md document. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,22 +7,18 @@ This skill is ready for commercial/non-commercial use. <br>
 [zhouchang1988](https://clawhub.ai/user/zhouchang1988) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-Developers and designers use this skill to turn an existing web page, local HTML file, or screenshot into a structured DESIGN.md design specification. The generated document captures colors, typography, spacing, shapes, component guidance, and preview HTML for review or export. <br>
+Developers and designers use this skill to document a site's visual style as structured design tokens and human-readable design guidance. It supports analysis from public URLs, local HTML files, and screenshots. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Inputs can include web pages, local files, or screenshots that may contain private or sensitive information. <br>
-Mitigation: Analyze only content the user is authorized to share and review generated DESIGN.md and preview files before publishing or reusing them. <br>
-Risk: Generated preview HTML may reference third-party font CDN domains such as fonts.loli.net and gstatic.loli.net. <br>
-Mitigation: Review preview HTML and replace, self-host, or remove external font links when they are not appropriate for the deployment environment. <br>
-Risk: Optional validation and export examples use npx, which can execute external packages. <br>
-Mitigation: Run validation or export commands only in a trusted environment and confirm the package source before execution. <br>
+Risk: Generated preview HTML may load Google Fonts through the third-party loli.net mirror. <br>
+Mitigation: Review generated preview HTML before opening or sharing it, and replace or block external font loading when that mirror is not acceptable for the environment. <br>
 
 
 ## Reference(s): <br>
@@ -31,13 +27,13 @@ Mitigation: Run validation or export commands only in a trusted environment and 
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown DESIGN.md with YAML front matter, optional HTML preview files, and inline validation/export commands] <br>
+**Output Type(s):** [Markdown, Code, Shell commands, Guidance] <br>
+**Output Format:** [DESIGN.md with YAML front matter and Markdown body, plus optional HTML preview files and CLI command snippets.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include light and dark preview HTML; generated preview font links should be reviewed before publishing.] <br>
+**Other Properties Related to Output:** [Generated design documents follow the Google design.md section order and can be checked with the Google design.md CLI.] <br>
 
 ## Skill Version(s): <br>
-1.1.0 (source: server release metadata) <br>
+1.2.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

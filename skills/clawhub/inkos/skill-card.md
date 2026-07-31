@@ -1,5 +1,5 @@
 ## Description: <br>
-InkOS is a story creation and translation AI agent with Studio Chat, CLI, and TUI support for long-form fiction, short fiction, scripts, storyboards, interactive projects, fan works, covers, research-assisted writing, and multilingual EPUB/PDF/TXT/Markdown translation. <br>
+Story creation and translation AI agent with Studio Chat, CLI, and TUI support for long-form novels, short fiction, scripts, storyboards, interactive-film projects, open-world or branching play, fan fiction, spinoffs, style imitation, continuations, covers, and multilingual EPUB/PDF/TXT/Markdown translation. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Writers, translators, and creative-tooling agents use InkOS to plan, generate, revise, audit, translate, and export narrative projects while preserving persistent story state and review artifacts. <br>
+Developers, writers, and creative teams use InkOS to guide agents through writing, translation, research, cover generation, interactive fiction, and project workflow tasks. It is intended for local creative project work where generated files, story state, and provider configuration remain under user control. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security review flags anti-detect rewriting as a misuse concern. <br>
-Mitigation: Use InkOS for legitimate drafting, editing, translation, and review workflows; do not use anti-detect mode to bypass AI-content detection or integrity checks. <br>
-Risk: InkOS can store manuscripts, project settings, logs, memory, and service secrets on disk. <br>
-Mitigation: Keep project directories private, prefer environment-variable based secrets, and treat Studio service settings and local secret files as sensitive. <br>
-Risk: Custom or aggregator provider URLs can receive API keys and project content. <br>
-Mitigation: Configure only trusted provider endpoints and avoid untrusted proxy base URLs. <br>
-Risk: Studio provides a local web interface with project access. <br>
-Mitigation: Keep Studio bound to localhost and do not expose its port through a proxy. <br>
+Risk: Creative content and project memory can persist locally after generation. <br>
+Mitigation: Review the selected project directory before sharing or committing files, and delete the book or project when its manuscripts, logs, state, and memory are no longer needed. <br>
+Risk: Content and API keys can be exposed to configured LLM, image, web-search, aggregator, or custom provider endpoints. <br>
+Mitigation: Use environment-backed or Studio-managed secrets, review provider data policies, and only configure custom base URLs that the user trusts. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/narcooo/skills/inkos) <br>
-- [InkOS homepage](https://github.com/Narcooo/inkos) <br>
+- [ClawHub Skill Listing](https://clawhub.ai/narcooo/skills/inkos) <br>
+- [InkOS Homepage](https://github.com/Narcooo/inkos) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and structured CLI guidance with shell command examples, JSON-capable command results, and generated project files.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with inline shell commands, configuration guidance, and generated project files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include manuscripts, translations, review reports, prompts, images when providers are configured, exports, state files, logs, and local Studio/TUI interactions.] <br>
+**Other Properties Related to Output:** [Requires the inkos and node binaries plus a user-supplied OPENAI_API_KEY. Generated manuscripts, translations, research reports, cover prompts, logs, story state, and memory can persist in the selected project until the user deletes the project or book.] <br>
 
 ## Skill Version(s): <br>
-2.7.0 (source: frontmatter and server release metadata) <br>
+2.8.3 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -11,36 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use this skill to evaluate proposed features before and during implementation. It helps agents score business value against complexity, compare work against backlog priorities, and keep branches within documented scope limits. <br>
+Developers and agent users use scope-guard during brainstorming, planning, and execution to score proposed features, compare them with backlog items, and keep branches within size budgets before implementing or deferring work. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can steer an agent to create GitHub issues and publish detailed Discussion context for deferred work, which may expose private project reasoning. <br>
-Mitigation: Require explicit approval before GitHub issue or Discussion creation, preview the exact content, and default to local backlog notes for sensitive repositories. <br>
-Risk: The security scan marked the release suspicious because the workflow encourages external writes even though the skill is mostly planning and scope-control guidance. <br>
-Mitigation: Install only when scope discipline is desired, and review generated commands and publication steps before execution. <br>
+Risk: Default GitHub issue and Discussion publication can expose planning context or change repositories without enough user control. <br>
+Mitigation: Make GitHub publication opt-in, confirm repository visibility, redact sensitive planning details, and review or disable the issue and Discussion steps before use. <br>
+Risk: Broad automatic triggers could apply scope enforcement or publication workflows in situations where the user did not intend them. <br>
+Mitigation: Avoid broad automatic triggers and require explicit user confirmation before repository-changing actions. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-scope-guard) <br>
-- [OpenClaw metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
+- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
 - [Decision framework](modules/decision-framework.md) <br>
+- [GitHub integration](modules/github-integration.md) <br>
 - [Anti-overengineering rules](modules/anti-overengineering.md) <br>
 - [Branch threshold management](modules/branch-management.md) <br>
-- [GitHub issue integration](modules/github-integration.md) <br>
 - [Baseline testing scenarios](modules/baseline-scenarios.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with scoring tables, checklists, and inline shell commands] <br>
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
+**Output Format:** [Markdown guidance with scoring tables, checklists, and shell command blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose backlog entries, GitHub issue content, and GitHub Discussion content for deferred work.] <br>
+**Other Properties Related to Output:** [May generate GitHub issue and Discussion content for deferred work when enabled.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter says 1.9.8) <br>
+1.9.17 (source: server release metadata; artifact frontmatter says 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

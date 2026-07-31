@@ -312,8 +312,8 @@ README.md（技能列表 + 目录树）
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
-| `SKILLS_DIR` | `~/.workbuddy/skills`（Python 中为 `Path.home() / "WorkBuddy" / "skills"`） | 技能源目录（本地 skill 所在位置） |
-| `WORK_REPO` | `~/.workbuddy/workbuddy-skills`（Python `_paths.py` 中为 `Path.home() / "WorkBuddy" / "workbuddy-skills"`） | Git 工作仓库（推送目标）。注意：Windows 上 `~` 与 `Path.home()` 可能解析为不同的物理目录 |
+| `SKILLS_DIR` | `~/.workbuddy/skills`（`scripts/_paths.py` 中为 `SKILLS_ROOT`，`Path.home() / ".workbuddy" / "skills"`） | 技能源目录（本地 skill 所在位置） |
+| `WORK_REPO` | `~/.workbuddy/workbuddy-skills`（`scripts/_paths.py` 中统一为 `WORK_REPO = Path.home() / ".workbuddy" / "workbuddy-skills"`，所有脚本 `from _paths import WORK_REPO`） | Git 工作仓库（推送目标） |
 | `MANIFEST_FILE` | `skills/.standardization/git-sync/data/manifest.json`（绝对路径 `~/.workbuddy/skills/.standardization/git-sync/data/manifest.json`） | 维护清单文件路径 |
 | `DIST_DIR` | `~/.workbuddy/skills/.dist` | ZIP 统一输出目录 |
 
@@ -378,12 +378,12 @@ LLM 接收扫描发现列表后，按以下原则自动判断：
 
 | 敏感类型 | LLM 决策倾向 | 示例 |
 |----------|-------------|------|
-| 邮箱地址 | 公开文档中的署名邮箱 → 保留；代码中的测试邮箱 → 保留；疑似个人邮箱 → 脱敏 | `[email-redacted]` 在 LICENSE 中 → 保留 |
+| 邮箱地址 | 公开文档中的署名邮箱 → 保留；代码中的测试邮箱 → 保留；疑似个人邮箱 → 脱敏 | `wuwofc@yeah.net` 在 LICENSE 中 → 保留 |
 | Token / API Key | 一律脱敏 | `api_key=sk-xxx` → 替换为 `<REDACTED>` |
 | 私钥内容 | 一律脱敏 | PEM 格式密钥 → 替换 |
-| 内网 IP | 脱敏 | `[internal-ip-redacted]` → `<REDACTED_IP>` |
+| 内网 IP | 脱敏 | `192.168.1.1` → `<REDACTED_IP>` |
 | 本地绝对路径 | public_docs 中的路径 → 保留；代码中硬编码 → 脱敏 | `C:\Users\sm001` 在文档中 → 保留 |
-| 配置用户名 | 保留（来自 config.json 的 author/gitee.user） | `[username-redacted]` → 保留 |
+| 配置用户名 | 保留（来自 config.json 的 author/gitee.user） | `wUwproject` → 保留 |
 
 ### 打包时行为
 

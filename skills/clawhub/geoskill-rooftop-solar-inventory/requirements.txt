@@ -1,0 +1,10 @@
+# Requirements for rooftop-solar-inventory
+# Shared data-download library (Planetary Computer / NASA POWER / OSM)
+geoskill-data-fetcher>=0.2.0
+
+# Third-party dependencies used by this skill
+geopandas
+numpy
+rasterio
+scipy
+shapely

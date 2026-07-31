@@ -31,4 +31,3 @@ def make_result(
 
 def render_result(payload: dict[str, Any]) -> str:
     return json.dumps(payload, ensure_ascii=False, indent=2, sort_keys=True)
-

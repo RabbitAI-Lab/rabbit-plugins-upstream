@@ -1,5 +1,5 @@
 ## Description: <br>
-MCP server security registry and trust assessment - look up servers in the 1013-entry server security metadata registry, run pre-install marketplace checks, batch fleet risk scoring, assess skill file trust, and run SAST code scans. <br>
+MCP server security registry and trust assessment for looking up servers in a 1013-entry metadata registry, running pre-install marketplace checks, scoring fleet risk, assessing skill file trust, and running SAST code scans. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,37 +7,37 @@ This skill is ready for commercial/non-commercial use. <br>
 [msaad00](https://clawhub.ai/user/msaad00) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+Apache-2.0 <br>
 
 
 ## Use Case: <br>
-Developers and security reviewers use this skill to evaluate MCP server trust, run pre-install marketplace checks, assess skill files, and perform SAST-oriented code scans before adopting agent tooling. <br>
+Developers and security reviewers use this skill to assess MCP server packages, inspect skill files, and run registry-backed trust checks before installation or fleet use. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can run security lookups and scans over MCP servers, skill files, or code, so results may depend on the exact targets selected for analysis. <br>
-Mitigation: Keep scans pointed at directories, skill files, and server inventories that the operator intends to analyze, and review findings before using them for deployment decisions. <br>
-Risk: Optional Snyk enrichment may contact a third-party vulnerability service when SNYK_TOKEN is provided. <br>
-Mitigation: Provide SNYK_TOKEN only when third-party enrichment is desired, and keep the token in the operator environment rather than embedding it in skill output. <br>
+Risk: Optional vulnerability enrichment can contact Snyk and requires a token when enabled. <br>
+Mitigation: Use optional Snyk enrichment only when needed, keep SNYK_TOKEN in the operator environment, and do not include secrets in prompts or outputs. <br>
+Risk: Registry lookups, SAST findings, and trust assessments can be incomplete or produce false positives. <br>
+Mitigation: Review findings before acting on them, verify the PyPI or GitHub package source, and combine the results with normal security review before installation or deployment. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-registry) <br>
-- [Project homepage](https://github.com/msaad00/agent-bom) <br>
-- [PyPI project](https://pypi.org/project/agent-bom/) <br>
+- [agent-bom source](https://github.com/msaad00/agent-bom) <br>
+- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
 - [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and plain text with inline shell commands and structured security findings] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
+**Output Format:** [Markdown and text guidance with tool-call examples and shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May report local registry lookup results, skill trust findings, fleet risk scores, and optional Semgrep or Snyk-enriched scan guidance.] <br>
+**Other Properties Related to Output:** [May include local registry results and optional Snyk enrichment when configured.] <br>
 
 ## Skill Version(s): <br>
-0.98.0 (source: server release metadata and SKILL.md frontmatter) <br>
+0.98.2 (source: SKILL.md frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

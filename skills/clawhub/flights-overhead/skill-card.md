@@ -11,14 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill to identify aircraft, contrails, and nearby air traffic from an observer location using OpenSky Network data. <br>
+External users and agents use this skill to identify nearby aircraft, contrails, and overhead flights from an approximate latitude/longitude. The skill helps present nearby flight details such as callsign, airline, altitude, heading, distance, and optional route context. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can direct an agent to use device location or a stored home address before asking the user. <br>
-Mitigation: Ask for permission or accept a manually provided location before querying nearby flights. <br>
+Risk: Approximate user coordinates may be sent to OpenSky before the user understands or confirms the location source. <br>
+Mitigation: Confirm or ask for the user's location source before querying flights, and use an approximate city or area when that is sufficient. <br>
+Risk: Optional route enrichment may read stored user location context or perform extra web searches beyond the core nearby-flight lookup. <br>
+Mitigation: Use explicitly provided or permitted location data, and perform route web searches only when the user wants extra flight detail. <br>
 
 
 ## Reference(s): <br>
@@ -26,13 +28,13 @@ Mitigation: Ask for permission or accept a manually provided location before que
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with inline bash examples and optional JSON flight data] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, JSON, Guidance] <br>
+**Output Format:** [Markdown response with optional shell commands and JSON flight data] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses observer latitude, longitude, radius, result limit, and optional JSON output flags.] <br>
+**Other Properties Related to Output:** [May include nearby aircraft callsigns, airline names, flight numbers, altitude, heading, distance, and location-use guidance.] <br>
 
 ## Skill Version(s): <br>
-1.2.0 (source: server release metadata) <br>
+1.4.0 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

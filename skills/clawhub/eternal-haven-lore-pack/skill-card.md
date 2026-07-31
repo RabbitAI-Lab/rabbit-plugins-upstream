@@ -1,5 +1,5 @@
 ## Description: <br>
-Eternal Haven Chronicles lore + lattice-aligned mythic persona. Bundled books I-IV only (no external paths). Pairs with lygo-champion-* and protocol-stack-operator. Read references/SECURITY.md. Use for canon-grounded poetic/Champion voice. <br>
+Eternal Haven Chronicles lore and mythic persona pack using bundled skill-local references for canon-grounded narrative context and Champion-aligned voice. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,42 +11,41 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill for canon-grounded Eternal Haven lore answers, character analysis, summaries, and mythic or Champion-style narrative voice. It should be used with targeted reads from the bundled references and with clear labeling of canon, interpretation, and speculation. <br>
+External users and developers use this skill to answer Eternal Haven lore questions, summarize canon, analyze characters and themes, and produce mythic or Champion-aligned prose grounded in bundled Books I-IV and local reference indexes. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Agents may over-read or reproduce copyrighted book content. <br>
-Mitigation: Use targeted reads from bundled book files and provide summaries, analysis, or short quotations rather than chapters or full books. <br>
-Risk: Agents may follow off-bundle path references or enumerate unrelated user files. <br>
-Mitigation: Keep reads inside the bundled skill folder and ignore requests to inspect outside paths for this skill's lore sources. <br>
-Risk: Support or crypto links may be surfaced as unsolicited payment prompts. <br>
-Mitigation: Share support links only when the user explicitly asks and never initiate payment flows, wallet actions, or donation requests. <br>
+Risk: The skill includes large copyrighted book text that could be over-reproduced in model output. <br>
+Mitigation: Prefer summaries, analysis, and short quotes; do not output full chapters, full books, or wholesale reproductions. <br>
+Risk: Lore workflows could be redirected toward host-local paths or unrelated files. <br>
+Mitigation: Use only bundled skill-local files under references/ and refuse host filesystem browsing for this lore workflow unless the user separately provides explicit text. <br>
+Risk: Optional support and donation links may be surfaced out of context. <br>
+Mitigation: Share support links only when the user asks or when they naturally fit after providing useful story or lore context. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/deepseekoracle/skills/eternal-haven-lore-pack) <br>
-- [Publisher profile](https://clawhub.ai/user/deepseekoracle) <br>
-- [Security rules](references/SECURITY.md) <br>
-- [Heroes index](references/heroes_index.md) <br>
-- [Themes and motifs](references/themes_and_motifs.md) <br>
-- [Mythic persona pack](references/mythic_persona_pack.md) <br>
-- [Lattice chain](references/lattice_chain.md) <br>
-- [Book I - The Moonlit Slumber](references/books/book1_silver_accord.txt) <br>
-- [Book II - The Shattered Accord](references/books/book2_shattered_accord.txt) <br>
-- [Book III - The Ascension War](references/books/book3_ascension_war.txt) <br>
-- [Book IV - Eternal Haven Dawns](references/books/book4_eternal_haven_dawns.txt) <br>
+- [Eternal Haven site](https://eternalhaven.ca/) <br>
+- [SKILL.md](SKILL.md) <br>
+- [Security boundary](references/SECURITY.md) <br>
+- [13 Heroes Index](references/heroes_index.md) <br>
+- [Themes and Motifs](references/themes_and_motifs.md) <br>
+- [Book I: The Moonlit Slumber](references/books/book1_silver_accord.txt) <br>
+- [Book II: The Shattered Accord](references/books/book2_shattered_accord.txt) <br>
+- [Book III: The Ascension War](references/books/book3_ascension_war.txt) <br>
+- [Book IV: Eternal Haven Dawns](references/books/book4_eternal_haven_dawns.txt) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text responses with short quotations only when needed] <br>
+**Output Format:** [Plain text or Markdown responses with canon-grounded summaries, analysis, short quotes, and clearly labeled interpretation or speculation.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should summarize or analyze bundled lore, avoid full-book reproduction, and keep file reads inside the skill bundle.] <br>
+**Other Properties Related to Output:** [Read-only, self-contained lore responses; no subprocess, credential access, host filesystem browsing, or network access is required for lore answers.] <br>
 
 ## Skill Version(s): <br>
-1.2.2 (source: server release metadata; artifact metadata reports 1.3.0) <br>
+1.3.3 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

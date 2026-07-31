@@ -2,8 +2,8 @@
 name: synomega
 description: >-
   Retrosynthesis with the synomega Python package (pip install synomega) —
-  single-step reactant prediction, multi-step route planning, and a continuous
-  synthesizability score (bb-coverage) for a target molecule given as SMILES. Use
+  single-step reactant prediction, multi-step route planning, and a
+  synthesizability score (SynScore) for a target molecule given as SMILES. Use
   this for legitimate retrosynthesis and cheminformatics tasks — when the user
   gives a specific molecule (as SMILES or a resolvable name) and asks for
   candidate disconnections/reactants, a full synthesis route down to purchasable
@@ -116,7 +116,7 @@ print(result.best_route.describe())
 # 3) Synthesizability score — "can X be made / how hard?"
 from synomega import SynthesizabilityScorer
 r = SynthesizabilityScorer(planner).score("CC(=O)Nc1ccccc1O", max_steps=5)
-print(r.bb_coverage, r.min_steps, r.solved)
+print(r.score, r.bb_coverage, r.min_steps, r.solved)
 ```
 
 To use your own checkpoint/stock instead of the defaults, set `SYNOMEGA_MODEL`
@@ -130,11 +130,14 @@ and `SYNOMEGA_STOCK` (the helper reads them), or build the objects directly with
 - **plan** → a route tree. Read it top-down: the target decomposes into the
   reactants that make it, recursively, until every leaf is a purchasable building
   block. `result.best_route.describe()` prints it as numbered steps.
-- **score** → the headline is **`bb_coverage`** (0–1): the fraction of the best
-  route's leaves that are purchasable. It is *continuous*, so 0.8 (a near-miss)
-  is meaningfully better than 0.0 — use it to rank candidates, not just to split
-  solved/unsolved. Also report `solved` (a fully-purchasable route exists) and
-  `min_steps` (reactions in the shortest solved route).
+- **score** → the headline is **`score`** = `1/(U+1)**U` (0–1), where `U` is the
+  number of the best route's starting materials that are *not* purchasable. A
+  solved target (U=0) scores 1.0; the score falls off sharply as more building
+  blocks are missing (U=1 → 0.5, U=2 → 0.11; no route → 0), cleanly separating a
+  solved target, one missing a few materials, and one missing many. Use it to rank
+  candidates. Also reported: `bb_coverage` (fraction of leaves purchasable),
+  `solved` (a fully-purchasable route exists), and `min_steps` (reactions in the
+  shortest solved route). Requires `synomega >= 0.6.0`.
 
 ## Rules for the agent
 

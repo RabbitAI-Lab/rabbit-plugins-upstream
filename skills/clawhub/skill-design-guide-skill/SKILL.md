@@ -5,9 +5,9 @@ description: >
   Design better AI skills with proven architecture patterns. Helps you decide
   Workflow vs Agent, pick the right pattern (Prompt Chaining, Routing,
   Parallelization, Orchestrator-Workers, Evaluator-Optimizer), write clean
-  SKILL.md files, and catch common mistakes with a 25-point quality checklist.
+  SKILL.md files, and catch common mistakes with a governance-aware quality checklist.
   Based on design principles from Anthropic, OpenAI, and LangChain.
-version: "1.4.3"
+version: "1.4.4"
 agent_created: true
 category: "Architecture / Design Patterns"
 license: "MIT"
@@ -180,7 +180,7 @@ Overview paragraph.
 
 ## Step 4: Quality Checklist
 
-After completing a skill, run the full 25-point checklist. Load `references/quality-checklist.md` for details.
+After completing a skill, run the full governance-aware checklist. Load `references/quality-checklist.md` for details.
 
 Structure ✓ | Principles ✓ | Tools ✓ | Guardrails ✓ | Observability ✓
 
@@ -230,9 +230,10 @@ When the skill is ready to share on ClawHub/GitHub, use **`skill-publish`** to a
 
 ---
 
-*v1.4.3 | Based on Anthropic/OpenAI/LangChain design principles | 2026-06-23*
+*v1.4.4 | Based on Anthropic/OpenAI/LangChain design principles | 2026-07-28*
 
 **Changelog:**
+- v1.4.4: Added governance checks for single source of truth, private-data separation, secret scanning, retry/re-run, external-action gates, and persistent task continuity
 - v1.4.3: Restored display name "Skill Design Guide"
 - v1.4.2: Consolidated `reference/` + `references/` into a single `references/` dir; fixed all reference paths
 - v1.4.1: Fixed display name

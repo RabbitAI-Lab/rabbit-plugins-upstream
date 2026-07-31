@@ -1,5 +1,5 @@
 ## Description: <br>
-企业重组资本运作涉税专业助手，覆盖破产重整、上市公司重组、企业分立、企业合并、债务重组、跨境重组等场景，并提供税务设计与风险预警。 <br>
+A tax restructuring assistant that helps users analyze China-focused enterprise restructuring and capital transaction tax issues, including bankruptcy restructuring, listed-company restructuring, mergers, divisions, debt restructuring, cross-border restructuring, tax deferral, and risk warnings. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External tax, finance, restructuring, and compliance users can use this skill to ask restructuring tax questions, run lightweight compliance self-checks, and receive practical risk guidance. It is intended as decision support and does not replace licensed tax, legal, filing, or government-facing work. <br>
+External users, tax professionals, and compliance teams use this skill to obtain structured guidance, risk checks, tax calculations, and self-check report material for enterprise restructuring and capital transaction scenarios. The subject matter is centered on China tax policy and restructuring compliance. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive tax, restructuring, debt, or company identity information may be sent to cloud-backed services. <br>
-Mitigation: Use sanitized or non-confidential inputs unless the service and data-handling terms have been approved for the environment. <br>
-Risk: The skill may store local credentials or logs. <br>
-Mitigation: Review local storage paths and retention behavior before use, and avoid installation on shared or unmanaged machines. <br>
-Risk: Matrix installation and automatic MCP setup may add related packages or modify agent configuration. <br>
-Mitigation: Disable or avoid automatic setup unless an administrator has approved the remote endpoints, package provenance, and configuration changes. <br>
-Risk: Tax guidance may be incomplete or stale for a specific transaction, jurisdiction, or filing date. <br>
-Mitigation: Treat outputs as decision support and verify material restructuring positions with qualified tax professionals or the relevant tax authority. <br>
+Risk: The skill can send restructuring, tax, or transaction questions to a cloud-backed MCP service, and fallback behavior may use public search. <br>
+Mitigation: Avoid entering confidential transaction facts unless the deployment has approved the remote service and fallback behavior; use offline guidance for preliminary review when sensitive details cannot leave the environment. <br>
+Risk: The skill can store API keys, identifiers, health state, and query or scenario logs locally. <br>
+Mitigation: Run it only on trusted workstations, restrict access to the local client data directory, and periodically review or clear stored configuration and logs under the tax policy client data location. <br>
+Risk: Optional setup can modify MCP client configuration. <br>
+Mitigation: Keep automatic setup disabled unless intended, review any proposed MCP configuration change before enabling it, and use backups or change control for managed client environments. <br>
+Risk: Tax restructuring guidance may be incomplete or time-sensitive for a specific transaction. <br>
+Mitigation: Verify conclusions against current official tax guidance and qualified tax or legal professionals before filing, restructuring, or relying on a material tax position. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zxj2devs/skills/tax-restructuring) <br>
-- [Tax Restructuring Self-Check Workflow](https://mcp.aitaxs.top/web/topic_workflow_restructuring.html) <br>
+- [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-restructuring) <br>
+- [Tax restructuring self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_restructuring.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown responses with tax guidance, risk checks, workflow links, and occasional setup instructions] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown text, structured tool results, Python helper code, shell commands, and MCP configuration snippets.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May route questions to external services and may suggest optional related skill installation.] <br>
+**Other Properties Related to Output:** [May use cloud-backed MCP tools for policy questions, risk checks, calculations, and knowledge-base listings, with local fallback guidance when the remote service is unavailable.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: frontmatter and server release evidence) <br>
+3.15.4 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

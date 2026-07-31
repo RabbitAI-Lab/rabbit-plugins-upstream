@@ -109,6 +109,10 @@ import {
   dedupeByProvider,
 } from './llm/llm-profile-reader.js';
 import { LSHHasher } from './embedding/lsh.js';
+import {
+  encodeEmbeddingPayload,
+  decodeEmbeddingFromHex,
+} from './embedding/embedding-codec.js';
 import { rerank, cosineSimilarity, detectQueryIntent, INTENT_WEIGHTS, type RerankerCandidate } from './embedding/reranker.js';
 import { deduplicateBatch } from './extraction/semantic-dedup.js';
 import { startTrajectoryPoller, type ExtractedFactLike } from './subgraph/trajectory-poller.js';
@@ -158,6 +162,7 @@ import {
   type NonInteractiveOnboardResult,
 } from './pairing/onboarding-cli.js';
 import { PluginHotCache, type HotFact } from './memory/hot-cache-wrapper.js';
+import { buildNativeStore } from './memory/native-store.js';
 import { CONFIG, setRecoveryPhraseOverride } from './config.js';
 import { buildRelayHeaders } from './billing/relay-headers.js';
 import {
@@ -962,8 +967,10 @@ async function generateEmbeddingAndLSH(
     const hasher = getLSHHasher(logger);
     const lshBuckets = hasher ? hasher.hash(embedding) : [];
 
-    // Encrypt the embedding (JSON array of numbers) for server-blind storage
-    const encryptedEmbedding = encryptToHex(JSON.stringify(embedding), encryptionKey!);
+    // Encrypt the embedding for server-blind storage. The pre-encryption
+    // payload is canonical f16 when @totalreclaw/core exposes the codec, else
+    // the legacy JSON array (see embedding/embedding-codec.ts, #479 Part B).
+    const encryptedEmbedding = encryptToHex(encodeEmbeddingPayload(embedding), encryptionKey!);
 
     return { embedding, lshBuckets, encryptedEmbedding };
   } catch (err) {
@@ -1015,7 +1022,7 @@ async function searchForNearDuplicates(
           let embedding: number[] | null = null;
           if (result.encryptedEmbedding) {
             try {
-              embedding = JSON.parse(decryptFromHex(result.encryptedEmbedding, encryptionKey));
+              embedding = decodeEmbeddingFromHex(result.encryptedEmbedding, encryptionKey);
             } catch { /* skip */ }
           }
 
@@ -1046,7 +1053,7 @@ async function searchForNearDuplicates(
           let embedding: number[] | null = null;
           if (candidate.encrypted_embedding) {
             try {
-              embedding = JSON.parse(decryptFromHex(candidate.encrypted_embedding, encryptionKey));
+              embedding = decodeEmbeddingFromHex(candidate.encrypted_embedding, encryptionKey);
             } catch { /* skip */ }
           }
 
@@ -1854,38 +1861,45 @@ async function storeExtractedFacts(
     }
   }
 
-  // Submit subgraph payloads one fact at a time (sequential single-call UserOps).
-  // Batch executeBatch UserOps have persistent gas estimation issues on Base Sepolia
-  // that cause on-chain reverts. Single-fact UserOps use the simpler submitFactOnChain
-  // path which works reliably (same path the `tr remember` CLI uses). Each submission
-  // polls for receipt (120s) before proceeding, so nonce is consumed before the next.
+  // Submit subgraph payloads through the byte-capped adaptive batch path
+  // (internal#449, revives executeBatch per #457): ONE call groups the
+  // payloads by the installed core's count cap AND the 32KB byte cap,
+  // submits one executeBatch UserOp per group through the AA10/AA25-hardened
+  // locked path, and halves any group that sim-reverts. The previous
+  // one-fact-per-UserOp loop was a Base Sepolia gas-estimation workaround —
+  // moot since single-chain Gnosis (ops-1) — and cost one sponsored UserOp
+  // per fact. `stored` counts submitFactBatchOnChain's ACTUAL per-group
+  // stored total (never the input length), so a partially failed batch
+  // reports only what landed on-chain.
   let batchError: string | undefined;
   if (pendingPayloads.length > 0 && isSubgraphMode()) {
     const batchConfig = { ...getSubgraphConfig(), authKeyHex: authKeyHex!, walletAddress: subgraphOwner ?? undefined };
-    for (let i = 0; i < pendingPayloads.length; i++) {
-      const slice = [pendingPayloads[i]]; // Single fact per UserOp
-      try {
-        const submitResult = await submitFactBatchOnChain(slice, batchConfig);
-        if (submitResult.success) {
-          stored += slice.length;
-          logger.info(`Fact ${i + 1}/${pendingPayloads.length}: submitted on-chain (tx=${submitResult.txHash.slice(0, 10)}…)`);
-        } else {
-          batchError = `On-chain batch submission failed (tx=${submitResult.txHash.slice(0, 10)}…)`;
-          logger.warn(batchError);
-          break; // Stop submitting remaining batches
-        }
-      } catch (err: unknown) {
-        const errMsg = err instanceof Error ? err.message : String(err);
-        if (errMsg.includes('403') || errMsg.toLowerCase().includes('quota')) {
+    try {
+      const submitResult = await submitFactBatchOnChain(pendingPayloads, batchConfig);
+      stored += submitResult.batchSize;
+      for (const g of submitResult.groupResults) {
+        logger.info(`Batch group of ${g.batchSize}: submitted on-chain (tx=${g.txHash.slice(0, 10)}…)`);
+      }
+      if (!submitResult.success) {
+        batchError = `On-chain batch submission partially failed (${submitResult.batchSize}/${pendingPayloads.length} stored): ${submitResult.errors.join('; ')}`;
+        logger.warn(batchError);
+        // A mid-batch 403/quota (earlier groups landed, a later one hit the
+        // cap) surfaces via `errors`, not a throw — invalidate the billing
+        // cache here too so the next session re-fetches and warns, matching
+        // the old per-fact loop's behavior (#531 review follow-up).
+        if (submitResult.errors.some((e) => e.includes('403') || e.toLowerCase().includes('quota'))) {
           deleteFileIfExists(BILLING_CACHE_PATH);
-          batchError = `Quota exceeded — billing cache invalidated. ${errMsg}`;
-          logger.warn(batchError);
-          break;
-        } else {
-          batchError = `Batch submission failed: ${errMsg}`;
-          logger.warn(batchError);
-          break;
         }
+      }
+    } catch (err: unknown) {
+      const errMsg = err instanceof Error ? err.message : String(err);
+      if (errMsg.includes('403') || errMsg.toLowerCase().includes('quota')) {
+        deleteFileIfExists(BILLING_CACHE_PATH);
+        batchError = `Quota exceeded — billing cache invalidated. ${errMsg}`;
+        logger.warn(batchError);
+      } else {
+        batchError = `Batch submission failed: ${errMsg}`;
+        logger.warn(batchError);
       }
     }
   }
@@ -2057,8 +2071,9 @@ function buildRecallDeps(logger: OpenClawPluginApi['logger']): TrNativeMemoryDep
           let decryptedEmbedding: number[] | undefined;
           if (result.encryptedEmbedding) {
             try {
-              decryptedEmbedding = JSON.parse(
-                decryptFromHex(result.encryptedEmbedding, encryptionKey),
+              decryptedEmbedding = decodeEmbeddingFromHex(
+                result.encryptedEmbedding,
+                encryptionKey,
               );
             } catch {
               // embedding decryption failed -- proceed without it
@@ -2111,8 +2126,9 @@ function buildRecallDeps(logger: OpenClawPluginApi['logger']): TrNativeMemoryDep
           let decryptedEmbedding: number[] | undefined;
           if (candidate.encrypted_embedding) {
             try {
-              decryptedEmbedding = JSON.parse(
-                decryptFromHex(candidate.encrypted_embedding, encryptionKey),
+              decryptedEmbedding = decodeEmbeddingFromHex(
+                candidate.encrypted_embedding,
+                encryptionKey,
               );
             } catch {
               // embedding decryption failed
@@ -2246,7 +2262,36 @@ function buildRecallDeps(logger: OpenClawPluginApi['logger']): TrNativeMemoryDep
   const quota: TrQuotaState | undefined = undefined;
   const pinned: TrPinnedFact[] | undefined = undefined;
 
-  return { recall, getById, quota, pinned };
+  // -------------------------------------------------------------------
+  // store(): the WRITE closure (internal#499). Routes ONE explicitly
+  // remembered fact through storeExtractedFacts — the SAME pipeline
+  // auto-extraction + smart-import use — so memory_save does NOT become a
+  // parallel write path. When #498 fixes executeBatch INSIDE
+  // storeExtractedFacts, this tool gets batching for free (one store entry
+  // point, shared by extraction + import + the write tool).
+  //
+  // Returns a truthful ok/stored the agent reports verbatim:
+  //   - ok:false  -> not paired / store threw (agent relays the error)
+  //   - ok:true, stored:0 -> dedup/skip (agent says "duplicate", NOT "Saved")
+  //   - ok:true, stored>=1 -> persisted (agent says "Saved")
+  // This truthfulness is the fix: the agent can no longer report "Saved" on a
+  // no-op the way it did when it shelled out to `tr remember` (GNU coreutils
+  // tr) and saw no output.
+  // -------------------------------------------------------------------
+  // The truthful store closure lives in `memory/native-store.ts` (extracted
+  // for direct unit coverage of the not-paired / init-throws / store-throws
+  // branches — #499 review Finding 2). We inject the three deps that close
+  // over this module's live singletons; `isPaired` is read AFTER ensureInit
+  // (inside buildNativeStore) so a hot-reload-completed pairing is honored,
+  // and mirrors storeExtractedFacts' own precondition (index.ts l.1506).
+  const store: TrNativeMemoryDeps['store'] = buildNativeStore({
+    ensureInit: () => ensureInitialized(logger),
+    isPaired: () =>
+      !(needsSetup || !encryptionKey || !dedupKey || !authKeyHex || !userId || !apiClient),
+    storeFacts: (facts) => storeExtractedFacts(facts, logger, 'explicit'),
+  });
+
+  return { recall, getById, store, quota, pinned };
 }
 
 // ---------------------------------------------------------------------------
@@ -3709,8 +3754,9 @@ const plugin = {
                 let decryptedEmbedding: number[] | undefined;
                 if (result.encryptedEmbedding) {
                   try {
-                    decryptedEmbedding = JSON.parse(
-                      decryptFromHex(result.encryptedEmbedding, encryptionKey!),
+                    decryptedEmbedding = decodeEmbeddingFromHex(
+                      result.encryptedEmbedding,
+                      encryptionKey!,
                     );
                   } catch {
                     // Embedding decryption failed -- proceed without it.
@@ -3836,8 +3882,9 @@ const plugin = {
               let decryptedEmbedding: number[] | undefined;
               if (candidate.encrypted_embedding) {
                 try {
-                  decryptedEmbedding = JSON.parse(
-                    decryptFromHex(candidate.encrypted_embedding, encryptionKey!),
+                  decryptedEmbedding = decodeEmbeddingFromHex(
+                    candidate.encrypted_embedding,
+                    encryptionKey!,
                   );
                 } catch {
                   // Embedding decryption failed -- proceed without it.
@@ -4206,17 +4253,17 @@ const plugin = {
     // serve as the capture fallback were RETIRED in Task 3.2. If this
     // registration fails, the agent has NO memory surface until the cause
     // is fixed and the gateway restarted. The before_tool_call gate stays
-    // armed (memory_search/memory_get are simply never registered), and
+    // armed (memory_search/memory_get/memory_save are simply never registered), and
     // auto-extraction hooks still fire on the message_received / agent_end
     // cadence — they write to the subgraph directly, so memories keep
     // getting captured even if the agent can't read them mid-session.
     try {
       registerNativeMemory(api, buildRecallDeps(api.logger));
-      api.logger.info('TotalReclaw: registered native MemoryPluginCapability + memory_search/memory_get tools');
+      api.logger.info('TotalReclaw: registered native MemoryPluginCapability + memory_search/memory_get/memory_save tools');
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err);
       api.logger.warn(
-        `TotalReclaw: native memory capability registration failed — agent memory_search/memory_get UNAVAILABLE until fixed: ${msg}`,
+        `TotalReclaw: native memory capability registration failed — agent memory_search/memory_get/memory_save UNAVAILABLE until fixed: ${msg}`,
       );
     }
 

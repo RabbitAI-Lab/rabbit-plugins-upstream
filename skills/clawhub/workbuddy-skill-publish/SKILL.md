@@ -5,7 +5,7 @@ description: >
   validates frontmatter, enforces bilingual docs, removes internal-only content,
   and pushes clean distributions. Trigger keywords: publish skill, audit skill,
   发布skill, 检查发布, skill发布, push to clawhub.
-version: 1.0.2
+version: 1.0.3
 read_when:
   - publish skill
   - audit skill
@@ -15,7 +15,7 @@ read_when:
   - push to clawhub
   - sync to clawhub
   - clean publish
-disable: true
+disable: false
 ---
 
 # Skill Publish
@@ -175,6 +175,18 @@ clawhub publish <clean-dir> --slug <slug> --name "<Display Name>" --version <ver
 - If network error: report and stop
 - On success: capture new version and publish ID
 
+> **⚠️ Windows / managed-node environments (this machine):** the `clawhub` shim forwards a POSIX
+> path (`/c/Users/...`) to Windows node, which mangles it into `C:\c\Users\...` (`MODULE_NOT_FOUND`).
+> **Workaround** — invoke the bin directly with **Windows-style absolute paths** to both node and the
+> clawhub entry script:
+> ```bash
+> "C:/Users/<you>/.workbuddy/binaries/node/versions/22.22.2/node.exe" \
+>   "C:/Users/<you>/AppData/Roaming/npm/node_modules/clawhub/bin/clawdhub.js" \
+>   publish <clean-dir> --slug <slug> --name "<Display Name>" --version <version> --changelog "<summary>"
+> ```
+> Verified working binary on this machine:
+> `C:/Users/haiyangchen/AppData/Roaming/npm/node_modules/clawhub/bin/clawdhub.js`.
+
 ### Step 11: [Deterministic] Push to GitHub
 
 For each whitelisted file:
@@ -208,7 +220,10 @@ enable the GitHub connector — never prompt for or hardcode a raw token.
 3. **Personal data is a blocking error.** Any finding of account values, share counts, cost basis → must be resolved before publish.
 4. **No version in name.** `name` field and H1 title must never contain version numbers.
 5. **English body is the platform default, not a mandate.** ClawHub favors an English SKILL.md body for discoverability; recommend it and flag deviations, but respect the user's intended language and never rewrite or reject valid content on language grounds alone.
-6. **Temp dir must be deleted** after successful publish.
+6. **Temp dir should be deleted** after successful publish — *except* on environments where the
+   safe-delete backend is broken (this machine: genie-trash fails with "系统不支持该功能", blocking
+   all deletions). There, leave the temp dir (harmless, no leaks) and flag it for manual cleanup;
+   never loop-retry deletion.
 
 ## Failure Handling
 
@@ -225,6 +240,8 @@ enable the GitHub connector — never prompt for or hardcode a raw token.
 | GitHub write fails (403) | Report: "Token lacks write permission on this repo" |
 | Network timeout | Retry once; if still fails, report and stop |
 | User cancels mid-publish | Clean up temp dir, report: "Publish aborted, local files untouched" |
+| ClawHub `MODULE_NOT_FOUND` / path `C:\c\Users\...` | Shown path was mangled by the `clawhub` shim under Windows node. Invoke `clawdhub.js` directly with Windows-style absolute paths to node + the bin (see Step 10 note). |
+| Temp dir can't be deleted ("系统不支持该功能" / safe-delete fail-closed) | Known environment defect (genie-trash backend broken) blocks ALL deletions. Do NOT loop-retry. Leave the temp dir (holds only published copies, no leaks, harmless) and flag for manual cleanup. |
 
 ## Output Format
 

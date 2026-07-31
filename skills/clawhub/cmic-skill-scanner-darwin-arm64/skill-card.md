@@ -1,5 +1,5 @@
 ## Description: <br>
-Audits local skill packages or archives with auto, native, or external scanner engines, with optional LLM semantic review. <br>
+CMIC Skill Scanner helps agents audit local skill packages or archives with auto, native, or external scanner engines and optional LLM semantic review. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and security reviewers use this skill to inspect local skill packages, release bundles, or archives before installation and review scanner findings, engine status, and risk summaries. <br>
+Developers and operators use this skill before installing or reviewing local skill packages, archives, or release bundles to inspect scanner findings, engine status, and installation risk. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Private package text or scan details may be sent to remote services when upload or LLM-review options are enabled. <br>
-Mitigation: Leave remote upload and native LLM review disabled for private or proprietary skills unless the configured endpoint is trusted, retention is understood, and transmission of selected package text or scan details is acceptable. <br>
-Risk: The scanner is a local executable, and auto mode may invoke a locally resolved external scanner with the current user's permissions. <br>
-Mitigation: Verify the bundled binary checksum before use, build from source when stronger assurance is needed, and use the native engine when external scanner execution is not desired. <br>
+Risk: The reviewed package is missing the executable and checksum that its documentation tells users to run and verify. <br>
+Mitigation: Resolve the package mismatch before installation by confirming the actual skillscan executable source and independently verifying its checksum. <br>
+Risk: Auto mode may invoke a locally resolved external scanner with separate trust and data-handling behavior. <br>
+Mitigation: Use --engine native when external scanner execution is not desired, and trust external scanners only after reviewing their configuration and policies. <br>
+Risk: Optional upload and LLM review modes can share reports or bounded target-package text with configured endpoints. <br>
+Mitigation: Enable --upload-url and --use-llm only with trusted endpoints and confirm the data-handling policy before sending review data. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/cyzlmh/skills/cmic-skill-scanner-darwin-arm64) <br>
-- [Publisher profile](https://clawhub.ai/user/cyzlmh) <br>
-- [Installation guide](INSTALL.md) <br>
-- [Build metadata](assets/build/build-info.json) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries with inline shell commands and optional local report files] <br>
+**Output Type(s):** [markdown, shell commands, guidance] <br>
+**Output Format:** [Markdown with inline shell commands and scan summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save scan reports to an output directory; remote upload and LLM review are optional and require explicit configuration.] <br>
+**Other Properties Related to Output:** [May describe engine findings, risk level, installation conclusions, optional upload behavior, and LLM review configuration.] <br>
 
 ## Skill Version(s): <br>
-0.11.0 (source: server release metadata; build-info.json reports v0.11.0) <br>
+0.11.1 (source: server release evidence and bundled build metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

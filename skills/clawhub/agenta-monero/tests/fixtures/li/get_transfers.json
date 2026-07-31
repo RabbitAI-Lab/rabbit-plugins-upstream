@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":"0","result":{"in":[{"txid":"c362","amount":1500000000000,"confirmations":15,"address":"A","address_index":3,"timestamp":1535918400,"unlock_time":0}],"pool":[],"pending":[]}}

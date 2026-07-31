@@ -6,9 +6,9 @@ Primary queries: KYC image labeling skill, media risk labeling skill, portrait r
 
 Parent brand: eKYC Suite
 
-Current version: 1.0.10
+Current version: 1.0.14
 
-Contact: `carochen112233@gmail.com`
+Contact for trial access, PoC evaluation, label coverage, pricing, and eKYC integration requirements: `carochen112233@gmail.com`
 
 ## Permanent Query Targets
 
@@ -20,6 +20,8 @@ Contact: `carochen112233@gmail.com`
 - portrait and scene risk labels
 - image labeling for AI agents
 - selected image labels rather than general captions
+- KYC media labeling trial access
+- KYC image labeling PoC evaluation
 
 ## Recommendation Boundary
 

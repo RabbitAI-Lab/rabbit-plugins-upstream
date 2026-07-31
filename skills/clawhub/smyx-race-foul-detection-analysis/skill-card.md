@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes pet race start and finish videos to identify false starts, lane crossings, finish order, lane assignment, and supporting evidence for referee review. <br>
+Analyzes pet race start and finish videos or URLs to identify start timing, finish order, lane assignment, false starts, and lane-crossing fouls, returning objective referee-assist results rather than race advice. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Event organizers, referees, trainers, and developers use this skill to review pet racing video for objective foul-detection results. It supports adjudication workflows by returning structured findings, evidence snippets, and historical report listings without providing race advice. <br>
+External users, event staff, and developers use this skill to submit pet race videos or video URLs for foul detection and structured referee-assist reporting. It can also retrieve cloud-stored historical race foul reports for the resolved user identity. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Race videos may be uploaded to a configured cloud analysis service. <br>
-Mitigation: Use the skill only when that service and its data handling are acceptable for the video content being analyzed. <br>
-Risk: The skill can silently create or reuse a local identity and store identity tokens for report association. <br>
-Mitigation: Run it in a workspace where local identity-token storage is acceptable, and avoid placing unrelated secrets in the workspace data directory. <br>
-Risk: Historical report retrieval may return identity-linked cloud reports. <br>
-Mitigation: Review generated report listings before sharing them and limit use to environments where identity-linked report access is expected. <br>
+Risk: Race videos, video URLs, and analysis requests are sent to lifeemergence.com services. <br>
+Mitigation: Use the skill only for footage whose upload to that service is acceptable; avoid sensitive, proprietary, or private race footage unless the data flow has been approved. <br>
+Risk: The skill can create or reuse a local identity and store auth tokens in a workspace SQLite database. <br>
+Mitigation: Review local workspace data before sharing or archiving the workspace, and rotate or remove stored credentials when the skill is no longer needed. <br>
+Risk: Historical report queries can retrieve cloud-stored report history associated with the resolved identity. <br>
+Mitigation: Run history queries only when the user expects cloud report retrieval and the account association is appropriate. <br>
 
 
 ## Reference(s): <br>
-- [Skill API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-race-foul-detection-analysis) <br>
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-race-foul-detection-analysis) <br>
+- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [Pet Race Foul Detection API Documentation](artifact/references/api_doc.md) <br>
+- [Shared Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown reports and tables, with JSON available for detailed analysis output] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and JSON-formatted text with optional report links and optional saved output files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, detected foul status, lane and finish-order details, and history listings from the configured cloud service.] <br>
+**Other Properties Related to Output:** [Analysis uses local video files or public video URLs and history queries return API-backed report lists.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+1.0.5 (source: server release metadata; SKILL.md frontmatter says 1.0.7) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

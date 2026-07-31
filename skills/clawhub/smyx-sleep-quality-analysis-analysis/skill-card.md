@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes fixed-camera pet sleep videos through cloud APIs to report sleep and awake states, total sleep duration, roll-over or position-change counts, startle-awakening events, a 0-100 sleep-quality score, recommendations, and report links. <br>
+AI-powered pet sleep quality analysis from a fixed bed/rest-area camera that distinguishes sleep and wake states, totals sleep duration, counts roll-overs and startle awakenings, and returns a 0-100 sleep-quality score. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External pet owners, animal hospital staff, boarding centers, and developers operating the skill use it to analyze pet bed or rest-area videos for sleep quality indicators and retrieve cloud-hosted historical analysis reports. The output is a sleep-health reference, not a medical diagnosis. <br>
+External users, pet owners, animal hospitals, and pet boarding operators use this skill to analyze pet rest-area video for sleep duration, roll-over count, startle awakenings, and sleep-quality scoring. The output is for sleep-health reference and is not a medical diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Pet monitoring videos or video URLs are sent to lifeemergence.com cloud APIs for processing. <br>
-Mitigation: Use only footage appropriate for third-party cloud processing, avoid sensitive home, hospital, boarding, or third-party footage unless retention and access controls are understood, and prefer non-sensitive test media during evaluation. <br>
-Risk: The skill performs silent identity setup and stores an internal user identity plus service tokens in a local workspace database. <br>
-Mitigation: Run the skill in a controlled workspace, review local data storage before production use, and remove or rotate stored credentials when the workspace is shared or decommissioned. <br>
-Risk: The server security verdict is suspicious because cloud processing, local token storage, and history retrieval may not be obvious to users. <br>
-Mitigation: Disclose these behaviors to operators, restrict use to trusted environments, and review the configured endpoints before allowing access to real monitoring footage. <br>
+Risk: Pet or home video may be processed by a remote service. <br>
+Mitigation: Use only footage that the user is willing and authorized to upload, and avoid videos that reveal sensitive people, rooms, or locations. <br>
+Risk: The skill can automatically associate work with a cloud-linked identity and store service tokens locally. <br>
+Mitigation: Run it only under the intended account context, isolate the execution environment when reviewing it, and remove local credential or database artifacts after use if retention is not desired. <br>
+Risk: Cloud history lookup may return reports associated with the current account context. <br>
+Mitigation: Confirm the account context before listing reports and share history output only with users authorized to see those reports. <br>
 
 
 ## Reference(s): <br>
-- [Pet Sleep Quality Analysis API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
 - [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-sleep-quality-analysis-analysis) <br>
+- [Publisher Profile](https://clawhub.ai/user/18072937735) <br>
+- [Pet Sleep Quality Analysis API Documentation](artifact/references/api_doc.md) <br>
+- [Shared Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
 - [Skill Demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, files, guidance] <br>
-**Output Format:** [Markdown text with structured JSON-style analysis results, recommendations, historical report lists, and report export links; optionally saved to an output file.] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, files] <br>
+**Output Format:** [Markdown or JSON analysis report with optional saved result file and report export link.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local mp4, avi, or mov video files up to 10 MB, or public video URLs processed by the API service; pet type can be cat, dog, or other.] <br>
+**Other Properties Related to Output:** [May include cloud-backed history-list results and report image/export URLs.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter says 1.0.6) <br>
+1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.9) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

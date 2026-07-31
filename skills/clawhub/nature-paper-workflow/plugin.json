@@ -1,0 +1,29 @@
+{
+  "name": "nature-paper-workflow",
+  "display_name": "Nature Paper Workflow 论文生产链",
+  "version": "1.0.0",
+  "description": "端到端论文工作流顶层路由 skill，覆盖从读论文到返修回复的全链路。",
+  "author": "TRAE SOLO CN",
+  "license": "MIT",
+  "homepage": "https://github.com/Yuan1z0825/nature-skills",
+  "tags": ["paper", "workflow", "router", "nature", "academic", "research", "writing", "submission"],
+  "categories": ["research", "writing"],
+  "language": ["zh", "en"],
+  "entry": "SKILL.md",
+  "dependencies": [
+    "nature-reader",
+    "nature-writing",
+    "nature-polishing",
+    "nature-figure",
+    "nature-reviewer",
+    "nature-response",
+    "nature-citation",
+    "nature-ref-verifier",
+    "paper-bootstrap",
+    "manuscript-optimizer",
+    "submission-audit",
+    "stats-reporting-audit",
+    "figure-planner",
+    "nature-portfolio-playbook"
+  ]
+}

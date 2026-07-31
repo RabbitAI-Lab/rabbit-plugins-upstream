@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use this skill when starting a project whose architecture is undecided. It gathers project context, supports current-pattern research, selects an architecture paradigm, adapts scaffolding guidance, and records the decision in an ADR. <br>
+Developers and engineers use this skill when starting a project whose architecture is undecided and needs research-backed selection, scaffold customization, and an architecture decision record. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Architecture recommendations can be a poor fit if the project context or research synthesis is incomplete. <br>
-Mitigation: Review the selected paradigm, rationale, trade-offs, and ADR before relying on the recommendation. <br>
-Risk: Following scaffolding or script examples can create files in an unintended location. <br>
-Mitigation: Use a fresh or intended output directory and inspect generated changes before keeping them. <br>
+Risk: Optional automation examples can create or modify project scaffold files. <br>
+Mitigation: Review the target directory and generated file plan before running scaffold customization or non-interactive initialization. <br>
+Risk: Architecture recommendations can be mismatched if project context is incomplete. <br>
+Mitigation: Collect project type, domain complexity, team context, non-functional requirements, timeline, and constraints before selecting a paradigm. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-architecture-aware-init) <br>
-- [Attune homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
+- [architecture-aware-init ClawHub listing](https://clawhub.ai/athola/skills/nm-attune-architecture-aware-init) <br>
+- [OpenClaw homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with code blocks, shell command examples, and project scaffolding or ADR content.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with code and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use online research and the declared night-market.archetypes:architecture-paradigms configuration for guided paradigm selection.] <br>
+**Other Properties Related to Output:** [May create or modify project scaffold files when optional automation examples are followed.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

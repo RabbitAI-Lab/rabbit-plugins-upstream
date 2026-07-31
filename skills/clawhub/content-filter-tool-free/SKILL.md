@@ -1,32 +1,13 @@
 ---
+
 slug: content-filter-tool-free
 name: content-filter-tool-free
 version: 1.0.0
 displayName: 内容过滤工具
 summary: "面向个人的信息流内容过滤工具，关键词与作者过滤. - 提供专业AI自动化处理能力,支持多种使用场景。提供高效自动化处理能力,适用于多种业务场景"
-license: Proprietary
+license: MIT
 edition: free
-description: 面向个人用户的信息流内容过滤工具，可处理提升工作效率
-  核心能力:
-
-  - 关键词过滤与正则匹配
-
-  - 作者屏蔽与白名单
-
-  - 单用户过滤规则管理
-
-  - 过滤后内容查看
-
-  适用场景:
-
-  - 个人过滤信息流噪音
-
-  - 屏蔽特定作者或关键词
-
-  - 单用户过滤规则管理
-
-  差异化: 免费版聚焦个人单用户过滤，提供关键词与作者规则，零成本降噪.
-  适用关键词: 内容过滤, 关键词过滤, 作者屏蔽, 白名单, 信息流降噪, content filter, spam filter'
+description: "面向个人用户的信息流内容过滤工具，可处置提升工作效率. 适用于需要content filter tool相关能力的开发场景,提供结构化的工作流程和配置指引. 该工具经过深度差异化处理,针对用户反馈和使用痛点进行了优化改进,提升了实用性和可操作性."
 tags:
   - 内容过滤
   - 信息流
@@ -38,16 +19,18 @@ tags:
   - 写作
   - 电商
   - 研究
-  - 分析
-  - basedir
-  - bash
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Automation"
+pricing_tier: free
 ---
+
+> **核心功能**: 本技能提供结构化的工作流程和配置指引等能力。
+
+
 # 内容过滤工具（免费版）
 
 ## 概述
@@ -148,7 +131,7 @@ category: "Automation"
 }
 ```
 
-## 最佳实践
+## 优秀实践
 
 - **白名单优先**：白名单优先于屏蔽，避免误伤关注作者.
 - **正则控范围**：正则别写太宽，避免误杀正常内容.

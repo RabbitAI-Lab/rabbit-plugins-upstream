@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/ssq-analyzer-skill",
   "slug": "ssq-analyzer-skill",
   "ownerHandle": null,
-  "version": "1.0.19",
-  "updatedAt": 1785075840721,
-  "contentHash": "6a96934d9df84b4318c10c07897d9c4bcb0427c79a79f36d92a57b67b9bab26f",
-  "fetchedAt": "2026-07-26T18:03:15.308Z"
+  "version": "1.0.29",
+  "updatedAt": 1785326974549,
+  "contentHash": "61190f42ffab1f794f848387bee4d32e7e11dddf1271fa784b3fcfc14550a158",
+  "fetchedAt": "2026-07-31T10:09:54.351Z"
 }

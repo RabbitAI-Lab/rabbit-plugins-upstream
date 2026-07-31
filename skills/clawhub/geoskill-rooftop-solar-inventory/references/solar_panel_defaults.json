@@ -1,0 +1,65 @@
+{
+  "panel_types": {
+    "mono_perc_540w": {
+      "name": "单晶PERC 540W",
+      "peak_power_wp": 540,
+      "length_m": 2.278,
+      "width_m": 1.134,
+      "area_m2": 2.583,
+      "efficiency": 0.209,
+      "degradation_rate": 0.0055,
+      "temp_coeff_pmax": -0.0035,
+      "cost_per_wp_cny": 0.85
+    },
+    "mono_perc_600w": {
+      "name": "单晶PERC 600W",
+      "peak_power_wp": 600,
+      "length_m": 2.278,
+      "width_m": 1.303,
+      "area_m2": 2.968,
+      "efficiency": 0.202,
+      "degradation_rate": 0.0055,
+      "temp_coeff_pmax": -0.0035,
+      "cost_per_wp_cny": 0.80
+    },
+    "hjt_700w": {
+      "name": "异质结HJT 700W",
+      "peak_power_wp": 700,
+      "length_m": 2.384,
+      "width_m": 1.303,
+      "area_m2": 3.106,
+      "efficiency": 0.225,
+      "degradation_rate": 0.004,
+      "temp_coeff_pmax": -0.0026,
+      "cost_per_wp_cny": 1.10
+    }
+  },
+  "default_system": {
+    "panel_type": "mono_perc_540w",
+    "spacing_ratio": 0.5,
+    "performance_ratio": 0.82,
+    "inverter_efficiency": 0.98,
+    "cable_loss": 0.02,
+    "soiling_loss": 0.03,
+    "availability": 0.99,
+    "system_lifetime_years": 25,
+    "om_cost_annual_pct": 0.01,
+    "discount_rate": 0.06,
+    "electricity_price_cny_per_kwh": 0.55,
+    "feed_in_tariff_cny_per_kwh": 0.42,
+    "self_consumption_ratio": 0.7
+  },
+  "roof_constraints": {
+    "max_slope_flat_deg": 5.0,
+    "max_slope_steep_deg": 45.0,
+    "min_contiguous_area_m2": 10.0,
+    "default_setback_m": 1.0,
+    "obstacle_buffer_m": 0.5,
+    "min_roof_area_m2": 20.0
+  },
+  "irradiance_defaults": {
+    "annual_ghi_kwh_per_m2": 1400,
+    "peak_sun_hours": 4.0,
+    "diffuse_fraction": 0.25
+  }
+}

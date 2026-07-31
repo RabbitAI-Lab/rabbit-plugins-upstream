@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/sentinel1-download",
   "slug": "sentinel1-download",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1785074353370,
-  "contentHash": "14c5d8712740b38e6233c510e73bc6900e90af6738a3c01a7f0e54a0fe03f275",
-  "fetchedAt": "2026-07-26T18:03:18.623Z"
+  "version": "0.3.1",
+  "updatedAt": 1785158741527,
+  "contentHash": "0ac3969eb0eac510b27a7bb94c5f4c324778622777adf6fc38bb99a7e277ea26",
+  "fetchedAt": "2026-07-31T10:17:59.116Z"
 }

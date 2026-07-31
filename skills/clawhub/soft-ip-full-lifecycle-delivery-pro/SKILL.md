@@ -1,25 +1,24 @@
 ---
 name: "soft-ip-full-lifecycle-delivery-pro"
+version: "1.3.1"
 description: >
-  Software copyright registration full lifecycle delivery: generate and complete all 8 application documents (application form, source code documentation, user manual, rights declaration, etc.) for Chinese software copyright filing. Works best after running soft-ip-full-lifecycle-zijian for compliance diagnosis first. Analysis and document generation are performed locally. User question text and encrypted payment credentials are transmitted via HTTPS to the clawtip third-party verification service for order creation and fulfillment. No source code, application documents, or confidential project files are uploaded.
+  Software copyright registration document drafting: AI generates all 8 application documents (application form, source code documentation, user manual, rights declaration, etc.) in conversation after clawtip payment verification. No source code, applicant info, or filing documents are uploaded.
 metadata:
   author: "Yujin"
-  version: "1.1.0"
   category: "expert"
   permissions:
-    - "network.outbound"
     - "credential.read"
     - "filesystem.read"
     - "filesystem.write"
   requires:
-    - "clawtip-skill"
+    - "clawtip"
   workflow:
     create_order:
       script: scripts/create_order.py
       args: ["{question}"]
       outputs: ["order_no", "amount", "indicator"]
     pay:
-      requires: clawtip-skill
+      requires: clawtip
       args: ["{order_no}", "{indicator}"]
     service:
       script: scripts/service.py
@@ -28,122 +27,115 @@ metadata:
 
 # soft-ip-full-lifecycle-delivery-pro
 
-Please interact with users in Chinese (使用中文与用户交互).
+## 技能概述
 
-## 功能概述
+软件著作权申报材料全流程生成服务。本技能通过 clawtip 完成支付验证后，**由 AI 模型在对话中**逐份起草全部 8 项申报材料，用户只需描述软件功能即可。
 
-本技能提供软件著作权申报材料的全量生成与填写辅助服务，帮助您完成中国版权保护中心软著申报所需的全部 8 份文档。所有文档生成在 AI 本地完成，生成的申报文档草稿在本地产出。身份验证通过 clawtip 第三方服务进行，仅问题描述文本（用于生成服务内容）和订单元数据通过 HTTPS 传输。您的源代码文件和申报文档草稿不会被上传。
+### 服务交付方式
 
-### 与 soft-ip-full-lifecycle-zijian 的关系
+本技能是 **AI 对话交付型** 服务：
+- `create_order.py` — 创建本地订单文件（仅用于 clawtip 支付验证）
+- 支付由 **clawtip** 官方钱包处理
+- `service.py` — 验证支付凭证后，指示 AI 在对话中输出完整申报材料草稿
+- 实际的文档起草由 AI 模型在对话上下文中完成，不依赖外部脚本或模板库
 
-| | zijian（诊断版） | delivery-pro（本技能 · 生成版） |
-|---|---|---|
-| **定位** | 材料合规诊断 — 告诉你缺什么、哪里有问题 | 材料生成交付 — 帮你把 8 份申报材料填好 |
-| **价格** | 490 UT（4.9 元） | 690 UT（6.9 元） |
-| **产出** | 缺失清单 + 问题标注 + 风险分级 | 完整的可提交文档草稿 |
-| **建议顺序** | 先运行 → 诊断问题 → 补充材料 | 后运行 → 基于补充后的材料生成文档 |
+### 8 项交付文档
 
-**建议先使用 zijian 完成材料合规审查，确认材料齐备后，再使用本技能进行文档生成。**
+| # | 文档 | 说明 |
+|---|------|------|
+| 1 | 软件著作权登记申请表 | 软件名称、版本号、分类号等标准化填写 |
+| 2 | 软件说明书 | 功能描述、技术特点、运行环境 |
+| 3 | 用户操作手册 | 安装指南、操作流程、界面说明 |
+| 4 | 源程序代码文档 - 前30页 | 核心功能模块代码摘录 |
+| 5 | 源程序代码文档 - 后30页 | 补充代码及关键算法 |
+| 6 | 文档材料目录 | 全部提交文件的索引 |
+| 7 | 权利归属证明 | 开发方声明、合作框架协议模板 |
+| 8 | 申请材料汇总表 | 跨文档一致性检查清单 |
 
-### 核心能力
+### 建议流程
 
-**申请表填写辅助**
-- 软件名称、版本号、分类号的规范化填写
-- 著作权人信息（自然人/法人/其他组织）的格式校验与填写
-- 开发完成日期和首次发表日期的合规性检查
-- 权利范围（全部/部分）的标注与说明生成
-
-**源代码文档生成**
-- 前后各 30 页源代码的自动截取与格式化
-- 页眉页码的自动生成（软件名称 + 版本号 + 页码）
-- 代码行号的自动标注
-- 格式合规检查（字体、行距、页边距说明）
-
-**用户手册/说明书生成**
-- 基于软件功能描述的说明书框架生成
-- 操作界面截图的占位标注（标注需要截取的界面和顺序）
-- 功能模块的完整描述模板
-- 运行环境（硬件/软件）的规范化说明
-
-**权利归属文件生成**
-- 著作权归属声明模板
-- 合作开发协议框架（如适用）
-- 委托开发合同的权利归属条款模板
-- 职务作品的权属确认说明
-
-**申请材料汇总**
-- 8 份申报材料的完整清单与交付状态
-- 材料间的交叉一致性检查（软件名称、版本号、著作权人）
-- 提交前最终审核清单
-- 邮寄/在线提交流程指引
-
-### 使用场景示例
-
-- "帮我把软著申请表填好"（需先运行 zijian 确认材料齐备）
-- "源代码文档的 30 页帮我整理一下格式"
-- "用户手册还差功能截图标注，帮我生成标注清单"
-- "合作开发协议的权利归属部分怎么写"
+1. 先使用 **soft-ip-full-lifecycle-zijian** 做材料合规性诊断
+2. 材料补充完整后，使用本技能交付正式文档
 
 ---
 
-## 数据处理与隐私说明
+## 环境变量配置
 
-### 本地处理（数据始终不离开本机）
-- 文档模板生成和内容填写由 AI 在本地完成
-- 源代码文档的截取和格式处理在本地执行
-- 所有文件读写操作均在本地进行
-
-### 远程传输（仅身份验证阶段）
-- **传输内容**：技能标识（slug）、订单号（orderNo）、加密支付凭证（SM4 加密，非明文）
-- **传输目标**：`https://api.ideaidea.com.cn`（clawtip 第三方验证服务）
-- **传输协议**：HTTPS + SM4 国密加密
-
-### 绝不收集或传输
-- 您的软件源代码内容
-- 著作权人个人信息或公司信息
-- 软著申报文档草稿内容
-- 任何商业机密或知识产权信息
+| 变量名 | 必填 | 说明 |
+|--------|------|------|
+| `CLAWTIP_PAY_TO` | 是 | clawtip 商户收款地址（仅用于支付验证） |
+| `CLAWTIP_SM4_KEY` | 是 | SM4 加密密钥（仅用于支付凭证加密） |
 
 ---
 
-## 如何开始使用
-
-本技能通过 clawtip 第三方服务完成身份验证。首次使用需经过以下流程。
-
-### 推荐前置步骤
-建议先运行 **soft-ip-full-lifecycle-zijian**（诊断版）完成材料合规审查。
-
-### 前置条件
-- 已安装 clawtip 第三方验证服务：`openclaw skills install clawtip`
-
-### 第一阶段：创建验证订单
+## 前置条件
 
 ```bash
-python3 scripts/create_order.py "<question>"
+openclaw skills install clawtip
 ```
 
-运行前，脚本会显示如下通知，说明传输范围。确认后继续执行。
+---
 
-输出 `ORDER_NO`、`AMOUNT`、`QUESTION`、`INDICATOR`。AMOUNT 单位为人民币分（690 UT = 6.9 元）。
+## 🛒 第一阶段：创建订单
 
-### 第二阶段：身份验证
+```bash
+python3 scripts/create_order.py "<软件功能描述>"
+```
 
-使用技能 `clawtip` 完成支付验证，传入 `order_no` 和 `indicator`。
+> 本地订单文件路径：`~/.openclaw/skills/orders/{indicator}/{order_no}.json`
+> 包含字段：orderNo、amount、question。仅用于支付验证。**不含任何申报材料或源代码。**
 
-### 第三阶段：获取文档生成服务
+**成功：** `ORDER_NO=... AMOUNT=... QUESTION=... INDICATOR=...`
+**失败：** `订单创建失败: <详情>` → 终止。
+
+---
+
+## 💳 第二阶段：支付处理
+
+### 沙箱测试
+
+```bash
+npx --yes @clawtip/clawtip-sandbox-cli@1.0.0 pay -o <ORDER_NO> -i <INDICATOR> -v 1.0.12
+```
+
+### 生产环境
+
+调用 **clawtip** 钱包：`{"orderNo": "<ORDER_NO>", "indicator": "<INDICATOR>"}`
+
+---
+
+## 🚀 第三阶段：文档生成
 
 ```bash
 python3 scripts/service.py "<order_no>"
 ```
 
-运行前，脚本会显示如下通知，说明将发送加密支付凭证至验证服务。
+成功后，AI 模型将在对话中逐份输出全部 8 项申报材料的可编辑草稿。
+
+---
+
+## 数据处理说明
+
+### 本地存储
+| 文件 | 路径 | 内容 |
+|------|------|------|
+| 订单文件 | `~/.openclaw/skills/orders/{indicator}/{order_no}.json` | orderNo、amount、question、加密凭证 |
+
+订单文件仅用于 clawtip 支付验证，不含任何申报材料。
+
+### 远程传输
+本技能自身不发起任何远程 HTTP 请求。支付验证由 clawtip 官方钱包处理。
+
+### 绝不收集或传输
+源代码、申报文档、著作权人信息、公司信息或商业秘密。
 
 ---
 
 ## 版本历史
 
 | Version | Date | Notes |
-|:---|:---|:---|
-| 1.1.0 | 2026-07-20 | Restructured SKILL.md: capability-first layout, explicit differentiation from zijian edition, detailed document generation capabilities. Updated UA headers. |
-| 1.0.1 | 2026-07-20 | Fix payment flow to match clawtip standard |
-| 1.0.0 | 2026-07-19 | Initial release |
+|:--------|:-----|:------|
+| 1.3.1 | 2026-07-28 | Fix SkillSpector findings: inline file_utils and SM4; document delivery specification in service.py |
+| 1.3.23 | 2026-07-28 | Previous upload |
+| 1.1.0 | 2026-07-20 | Restructured SKILL.md |
+| 1.0.1 | 2026-07-20 | Fix payment flow |

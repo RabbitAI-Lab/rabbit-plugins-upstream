@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/linux",
   "slug": "linux",
   "ownerHandle": null,
-  "version": "1.0.5",
-  "updatedAt": 1785081244952,
-  "contentHash": "cd1e85b195c3d754464cbbb8a5be17cfc1246e339fc9ab54654c600a2ba05dc6",
-  "fetchedAt": "2026-07-26T18:03:13.419Z"
+  "version": "1.0.6",
+  "updatedAt": 1785146166741,
+  "contentHash": "e971dbdd44dd126cc96b624635ce9e92bca769a0f9af66c1aa4ef866b3fff6d0",
+  "fetchedAt": "2026-07-31T10:18:59.174Z"
 }

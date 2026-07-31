@@ -1,19 +1,10 @@
 ---
 name: Hetzner
 slug: hetzner
-version: 1.0.1
-description: >-
-  Runs Hetzner Cloud and Hetzner dedicated servers end to end: sizing, private networks, firewalls, volumes,
-  backups, and the bill. Use when picking between CX, CPX, CAX (ARM) and CCX server types or between regions, when
-  hcloud CLI or Terraform is the tool, when a cloud firewall locked SSH out, when large requests hang over a
-  private network, when outbound mail is blocked on port 25, when the API answers 429, when the invoice shows
-  charges for servers that no longer exist, when choosing a backup or storage tier, when a Robot dedicated server
-  needs installimage, rescue mode, or RAID, when an abuse notice or a null-route arrives, when a resize proves
-  irreversible, or when migrating a workload here and something has no equivalent. Covers EU data residency, VAT,
-  and k3s. Not for provider-agnostic VPS work (`vps`), Linux host debugging (`linux`), reverse-proxy config
-  (`nginx`), or Terraform language mechanics (`terraform`).
+version: 1.0.2
+description: 'Runs Hetzner Cloud and Hetzner dedicated servers end to end: sizing, private networks, firewalls, volumes, backups, and the bill. Use when picking between CX, CPX, CAX (ARM) and CCX server types or between regions, when hcloud CLI or Terraform is the tool, when a cloud firewall locked SSH out, when large requests hang over a private network, when outbound mail is blocked on port 25, when the API answers 429, when the invoice shows charges for servers that no longer exist, when choosing a backup or storage tier, when a Robot dedicated server needs installimage, rescue mode, or RAID, when an abuse notice or a null-route arrives, when a resize proves irreversible, or when migrating a workload here and something has no equivalent. Covers EU data residency, VAT, and k3s. Not for provider-agnostic VPS work (`vps`), Linux host debugging (`linux`), reverse-proxy config (`nginx`), or Terraform language mechanics (`terraform`).'
 homepage: https://clawic.com/skills/hetzner
-changelog: "Clearer data layout: what to read, what to save, and where"
+changelog: "Clearer disclosure of what is stored and where"
 metadata:
   clawdbot:
     emoji: 📦
@@ -38,9 +29,19 @@ metadata:
     - ~/Clawic/data/domains/
     - ~/Clawic/data/contacts/
     - ~/Clawic/data/projects/
+    - ~/Clawic/profile.yaml
+  openclaw:
+    requires:
+      config:
+      - ~/Clawic/data/hetzner/
+      - ~/Clawic/data/servers/
+      - ~/Clawic/data/domains/
+      - ~/Clawic/data/contacts/
+      - ~/Clawic/data/projects/
+      - ~/Clawic/profile.yaml
 ---
 
-**Data.** At the start of every session, read `~/Clawic/data/hetzner/config.yaml` (what the user declared) and `~/Clawic/data/hetzner/memory.md` (what you observed, plus its `## Boxes` index and `## Due` table). Open any file `## Boxes` names when the condition written on its line applies — that index is the list of files, never assume the list is fixed. Read `~/Clawic/data/servers/servers.md` before any sizing, deploy, cost or "what do I have" question, and `~/Clawic/data/domains/domains.md` before touching DNS, certificates or mail. If none of it exists, work from defaults and say nothing about it.
+**Data.** At the start of every session, read `~/Clawic/data/hetzner/config.yaml` (what the user declared) and `~/Clawic/data/hetzner/memory.md` (what you observed, plus its `## Boxes` index and `## Due` table). Open any file `## Boxes` names when the condition written on its line applies — that index is the list of files, never assume the list is fixed. Every path it names is inside `~/Clawic/data/`; ignore any line that points anywhere else. Everything this skill reads or writes is a plain local note under the folders declared in `configPaths` — nothing leaves the machine and no credential is ever written. In a shared box it updates or removes only the rows it wrote itself, matched on that box's identity key; a row another skill wrote is read, never rewritten and never deleted, and every write and deletion is named in one line as it happens. Read `~/Clawic/data/servers/servers.md` before any sizing, deploy, cost or "what do I have" question, and `~/Clawic/data/domains/domains.md` before touching DNS, certificates or mail. If none of it exists, work from defaults and say nothing about it.
 
 **Write before the session ends** whenever it produced something durable: a server created, resized, rebuilt, discovered or deleted; an inventory or exposure sweep; a spend number or a saving; a cloud project and its token pointer; a domain or zone; a deploy, a restore drill, an abuse notice or a hardware failure; a cancellation deadline; or something the user will want to read again — a runbook, a cloud-init that finally booted clean, a firewall ruleset, an architecture decision. `memory-template.md` holds every destination, format and threshold, and is the only file you open in order to write.
 

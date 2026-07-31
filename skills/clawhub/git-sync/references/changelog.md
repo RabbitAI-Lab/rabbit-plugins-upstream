@@ -1,3 +1,31 @@
+## [2.34.0] - 2026-07-31
+
+### 修复
+- **LLM 交互步骤被 QUIET_MODE 吞掉导致后台死锁** — `main()` 中的 `step_llm_file_filter`（文件筛除）和 `step_sensitive_scan`（敏感脱敏）在静默模式下 stdout 被重定向到 `/dev/null`，WorkBuddy 看不到输出也就无法写入决策文件，死循环挂起。修复：LLM 交互步骤临时恢复 `sys.stdout` 到 `sys.__stdout__`，确保 WorkBuddy 在前台能看到引导提示
+- **`step_sensitive_scan` 假 LLM 决策** — 声称"自动生成 LLM 决策"但实际上是一组硬编码的 if/else 规则（`public_docs` × `public_labels` 匹配），既不调用模型也不按用户指引推理。修复：改为真正的 LLM 交互模式，打印发现详情 + 脱敏引导 → 等待 WorkBuddy 写决策文件 → 超时 120s 后全部脱敏保安全
+- **`step_llm_file_filter` 无限等待** — 无超时回退，决策文件不来就永远挂起。修复：加 120s 超时 → 超时后全量保留所有文件
+
+### 变更
+- **SKILL.md 约束更新** — 明确标注"仅前台运行"，禁止在后台/Bash 任务中运行 git-sync，因为 LLM 交互步骤需要 WorkBuddy 在前台读取输出并写决策文件
+
+## [2.33.0] - 2026-07-27
+
+### 新增
+- **路径统一管理**：所有临时文件迁移到 `_paths.py` 的 `TEMP_DIR`（`~/.workbuddy/skills/.standardization/git-sync/temp/`），`_paths.py` 新增 `temp_scan_path()` / `temp_filter_scan_path()` 等统一路径函数
+- **Agent 类型自动检测**：不再硬编码 `rag_assistant/__init__.py`，改为 `rglob("__init__.py")` 扫描含 `__version__` 的文件，兼容 `structured_writer/__init__.py` 等任意命名
+- **文件筛除决策助手脚本**：`step_llm_file_filter` 生成 `write_filter_decision_{name}.py` 脚本，LLM 通过 Bash 执行写入决策文件，不再依赖 Write tool
+- **`WORK_REPO` 路径归一化**：`git-sync.sh` 使用 `.as_posix()` 统一为正斜杠，避免反斜杠在 Python 字符串中被转义
+
+### 变更
+- **`manifest.json` 路径同步 `_paths.py`**：`repos.workbuddy-skills.path` 改为 `.workbuddy/workbuddy-skills`，`manifest.py` `get_repo_path()` 回退到 `from _paths import WORK_REPO`
+- **`git-sync.py` 版本对比**：agent 仓库版本来用 `rglob` 而非硬编码路径
+- **参考文档修正**：`reference.md` 路径描述同步为 `.workbuddy`，移除错误的 `WorkBuddy` 引用
+
+### 修复
+- agent 版本号读取失败（硬编码 `rag_assistant/__init__.py`） → 改为 `rglob` 查找
+- `git-sync.sh` 版本号读取中反斜杠导致 Python 字符串转义错误
+- `clean_zip_source.py` / `sync_with_exclude.py` 未排除 `.standardization/git-sync/temp/` 目录
+
 ## [2.32.0] - 2026-07-21
 
 ### 变更

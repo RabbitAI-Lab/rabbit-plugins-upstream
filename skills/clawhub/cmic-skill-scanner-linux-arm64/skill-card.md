@@ -1,5 +1,5 @@
 ## Description: <br>
-Audits local skill packages or archives with auto, native, or external scanner engines and optional LLM semantic review. <br>
+Audits local skill packages or archives with auto, native, or external scanning engines and can optionally add LLM semantic review. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill before installing local skills, archives, or release bundles to run a quick security review and receive engine findings, risk levels, and an installation conclusion. <br>
+Developers and security reviewers use this skill to inspect local skill packages before installation, review engine findings, and produce short installation risk conclusions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The visible package may not include the binary paths described in the install text. <br>
-Mitigation: Verify the delivered files and checksum before running the scanner. <br>
-Risk: Optional LLM review or report upload can send scan data to configured endpoints. <br>
-Mitigation: Use only trusted endpoints and avoid scanning directories containing secrets unless that data exposure is acceptable. <br>
-Risk: The default auto engine may execute a locally resolved external scanner with the current user's permissions. <br>
-Mitigation: Use --engine native when you want the most contained built-in scanner behavior. <br>
+Risk: The artifact documentation references a bundled scanner binary and checksum file that were not present in the inspected artifact. <br>
+Mitigation: Verify the binary checksum against trusted release metadata or build the scanner from source before running it. <br>
+Risk: The default auto engine can execute a locally resolved external scanner with the current user's permissions. <br>
+Mitigation: Run with --engine native when external scanner execution is not intended, and review any configured external scanner separately. <br>
+Risk: Optional upload and LLM review settings can disclose report findings or selected package text to configured endpoints. <br>
+Mitigation: Keep --upload-url and --use-llm disabled unless needed, and use only endpoints with an acceptable data-handling policy. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/cyzlmh/skills/cmic-skill-scanner-linux-arm64) <br>
-- [Publisher profile](https://clawhub.ai/user/cyzlmh) <br>
-- [Source repository link from skill documentation](https://gitee.com/random_player/cmic-skill-scanner.git) <br>
+- [CMIC Skill Scanner source link from artifact documentation](https://gitee.com/random_player/cmic-skill-scanner.git) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and scanner findings.] <br>
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
+**Output Format:** [Markdown or JSON scanner reports with engine status, findings, and concise installation guidance.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can write local scan reports when an output directory is configured; optional upload and LLM review modes require explicit user configuration.] <br>
+**Other Properties Related to Output:** [Reports are local by default; --output-dir writes report files, --upload-url optionally sends report data, and --use-llm optionally sends a bounded text packet to a configured endpoint.] <br>
 
 ## Skill Version(s): <br>
-0.11.0 (source: server release metadata; bundled build metadata reports v0.11.0) <br>
+0.11.1 (source: server release metadata; build-info.json reports v0.11.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

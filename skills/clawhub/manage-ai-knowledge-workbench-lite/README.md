@@ -1,61 +1,81 @@
 # AI 自动知识工作台 Lite
 
-把一个用户授权的本地 Markdown 文件夹或 Obsidian Vault，交给 AI 自动构建为可检索的派生知识层和离线 HTML 驾驶舱。首次构建、状态检查、按需增量更新和安全卸载均由 AI 调用随包脚本推进；普通步骤不需要用户逐条复制命令。
+让具备本地文件与终端能力的 AI 智能体，把一个用户明确授权的 Markdown 文件夹或 Obsidian Vault 自动构建为 Metadata-only 派生知识索引与离线 HTML 驾驶舱，并在用户再次提出更新要求时执行确定性的按需增量刷新。
 
-> 当前版本：`1.0.1`  
-> 许可：MIT-0  
-> 默认隐私模式：Metadata-only  
+> 当前版本：`1.0.2`
+>
+> 许可：MIT-0
+>
+> 默认隐私模式：Metadata-only
+>
 > Obsidian：可选，不是硬依赖
 
-## 适合谁
+## 能做什么
 
-- 已经在使用 OpenClaw、Codex 或其他能执行终端命令的 AI 智能体，希望快速建立本地知识工作台；
-- 有 Markdown 或 Obsidian 笔记，但不想自己编写扫描、索引、HTML 和更新脚本；
-- 希望默认保持事实源只读，并明确区分原始资料、派生知识层和展示层；
-- 接受 Lite 版“按需自动更新”，暂时不需要后台常驻、语义摘要或云端正文分析。
+- 为一个本地 Markdown/Obsidian 工作区生成结构化知识索引；
+- 生成可离线打开的 `AI-Dashboard/index.html`；
+- 在后续请求中执行确定性增量更新；
+- 检查当前状态和输出完整性；
+- 默认安全卸载运行状态，同时保留事实源和派生输出。
 
-## 从零开始
+运行时只使用 Python 标准库，不要求数据库、Docker、Node、Obsidian CLI 或社区插件。
 
-### 1. 先准备一个 AI 宿主
+## 从 GitHub 获取
 
-Skill 只有在 AI 宿主已经运行后才能被调用。宿主至少需要：
+支持 GitHub 导入的 Skills 平台或 AI 宿主，应导入本仓库根目录；根目录已经包含 `SKILL.md`。正式分发建议固定到已发布标签，不要依赖浮动分支：
 
-- 已配置一个可正常回复并可持续调用工具的模型；
-- 能读取和写入用户明确授权的本地目录；
-- 能执行终端命令并取得 stdout、stderr 和退出码；
-- 能在权限、安装、删除和外部传输等门禁前询问用户。
-
-OpenClaw 用户可从 [官方 Getting Started](https://docs.openclaw.ai/start/getting-started) 开始。模型、API Key、账号和 Gateway 配置均由宿主管理，本 Skill 不读取、保存或代管这些凭证。
-
-其他智能体如果满足上述能力契约，可以作为候选宿主；未列入实测矩阵的产品或版本不应理解为已经验证兼容。
-
-### 2. 准备 Python 3.10+
-
-运行时只使用 Python 标准库，不要求 Node、数据库、Docker 或 Obsidian 插件。系统需要至少存在 `python3`、`python` 或 Windows `py` 之一，且实际版本为 Python 3.10 或更高。
-
-如果没有 Python，请从 [Python 官方下载页](https://www.python.org/downloads/) 安装。Skill 会先真实探测版本；不会静默调用包管理器、提权或修改 PATH。
-
-### 3. Obsidian 可装可不装
-
-- 没有 Obsidian：直接使用普通 Markdown 文件夹；
-- 已有一个 Vault：可把 Vault 同时作为工作区和事实源；
-- 有多个候选 Vault：AI 会展示脱敏候选并请求一次选择，不会自动合并。
-
-如需 Obsidian，可从 [官方下载页](https://obsidian.md/download) 安装。Obsidian CLI 和社区插件都不是本 Skill 的必需项。
-
-### 4. 从 ClawHub 安装
-
-在 OpenClaw 的目标工作区中使用 ClawHub 官方安装入口：
-
-```bash
-openclaw skills install @alexfengrui/manage-ai-knowledge-workbench-lite
+```text
+https://github.com/alexfengrui/manage-ai-knowledge-workbench-lite
 ```
 
-安装后开启一个新会话，让宿主重新发现 Skill。其他宿主应使用其官方支持的 Skill 导入方式，不要根据网络帖子猜测隐藏目录。
+待 `v1.0.2` 标签创建并推送后，可直接检出固定版本：
+
+```bash
+git clone --branch v1.0.2 --depth 1 \
+  https://github.com/alexfengrui/manage-ai-knowledge-workbench-lite.git
+```
+
+不同平台的导入、审核和安装命令可能不同，请以平台详情页最终显示的仓库引用、开发者命名空间和技能标识为准。
+
+## 在 ModelScope 中安装
+
+在 ModelScope Skills Center 创建或更新技能时，选择 GitHub 仓库导入，并填写：
+
+```text
+https://github.com/alexfengrui/manage-ai-knowledge-workbench-lite
+```
+
+待 `v1.0.2` 标签创建并推送后，正式发布建议固定选择该标签。审核通过后，也可以使用详情页实际生成的 `modelscope skills add`、`npx skills add` 或安装脚本命令；不要手工猜测开发者命名空间或安装地址。
+
+## 从 360 安全技能中心安装
+
+在 360 安全技能中心选择平台当前提供的 GitHub 导入入口；如果该入口尚未对账号开放，则待 `v1.0.2` 标签创建并推送后，下载该标签对应的源码包上传。审核发布后，以详情页给出的 `secure-skills` 安装命令和最终技能 slug 为准。
+
+## 运行前提
+
+- 一个已经能够调用模型、访问授权目录并执行终端命令的 AI 宿主；
+- Python 3.10 或更高版本，可通过 `python3`、`python` 或 Windows `py` 中至少一个真实版本探针确认；
+- 对目标工作区的本地读写授权；
+- 用户明确指定的 Markdown 文件夹或 Obsidian Vault。
+
+Skill 不读取、保存或代管模型 API Key、GitHub 凭据、Cookie 或其他账号凭证。
+
+## 行为与权限声明
+
+| 行为 | 是否需要 | 精确范围 |
+|---|---:|---|
+| 执行本地代码 | 是 | 仅运行随包 Python 标准库脚本 |
+| 读取本地文件 | 是 | 仅限用户明确授权的 Markdown/Obsidian 事实源和受管状态 |
+| 写入本地文件 | 是 | 仅限选定工作区内 `.ai-workbench`、`AI-Knowledge`、`AI-Dashboard` |
+| 修改事实源 | 否 | 默认不移动、删除、重命名或覆盖原始笔记 |
+| 外部 API | 否 | 工作台核心构建、更新、状态和卸载不依赖第三方 API |
+| 本地网络监听 | 临时 | 只为页面验证绑定 loopback，验证后停止 |
+| 安装依赖或提权 | 否 | 缺少 Python 时停止并请求用户自行处理 |
+| 后台常驻 | 否 | 不含 watcher、计划任务或持久 Web 服务 |
 
 ## 一句话开始
 
-普通 Markdown 文件夹或空目录：
+普通 Markdown 文件夹：
 
 ```text
 请使用 AI 自动知识工作台，把这个目录自动构建成知识工作台并打开驾驶舱：<目录>
@@ -67,32 +87,30 @@ openclaw skills install @alexfengrui/manage-ai-knowledge-workbench-lite
 请使用 AI 自动知识工作台接入这个 Vault，把它同时作为工作区和事实源，不修改原笔记，完成后打开驾驶舱：<Vault 目录>
 ```
 
-以后更新：
+后续更新：
 
 ```text
-请更新这个知识工作台并告诉我实际变化和校验结果。
+请更新这个知识工作台，并告诉我实际变化和校验结果。
 ```
 
-AI 应自行完成工具调用。除非遇到真实门禁，用户不需要手工执行工作台内部命令。
+AI 应自行完成工具调用。除非遇到真实权限或安全门禁，用户不需要逐条执行工作台内部命令。
 
 ## AI 会自动完成什么
 
-一次首次构建按以下顺序推进：
-
-1. 探测 Python 和当前智能体宿主的真实版本；
+1. 探测 Python 和当前智能体宿主的实际版本；
 2. 确认一个用户授权的工作区和事实源；
 3. 诊断权限、路径、输出冲突和可用模式；
 4. 安全初始化内部状态；
 5. 扫描允许的元数据和显式 Markdown 结构；
-6. 生成派生知识索引；
+6. 生成派生知识索引与导航；
 7. 校验计数、链接、敏感边界和输出结构；
 8. 生成离线 HTML 驾驶舱；
-9. 启动临时 loopback 校验并在验证后停止；
+9. 启动临时 loopback 校验，并在验证后停止；
 10. 返回实际产物路径和机器可读状态。
 
-成功状态为 `AUTO_RUN_READY`。资料变化后，AI 可按用户请求执行确定性增量更新：没有变化时不重写知识层或 HTML，也不调用模型处理正文。
+首次构建成功状态为 `AUTO_RUN_READY`。资料变化后，按需更新只处理真实差异；没有变化时不重写知识层或 HTML。
 
-## 生成内容
+## 输出目录
 
 默认只在选定工作区内创建三个保留目录：
 
@@ -110,15 +128,22 @@ Lite 固定为 Metadata-only：
 
 - 本地确定性解析器可能读取授权 Markdown，以提取允许的 frontmatter、标题、标签和显式链接；
 - 不把笔记正文发送给模型；
-- 不把正文、密钥或绝对源路径嵌入 HTML；
+- 不把正文、密钥或事实源绝对路径嵌入 HTML；
 - 敏感或未知敏感级别的记录默认不进入可见视图；
-- 事实源保持只读，写入仅限三个保留目录；
+- 默认不移动、删除、重命名或覆盖事实源；
 - 本地页面不使用远程 CDN、统计脚本或源文件写入接口；
-- 临时预览只绑定 loopback，并在自动验证后停止。
+- 临时预览只绑定 loopback，并在自动验证后停止；
+- 默认不安装依赖、不提权、不创建后台常驻项。
 
 准确边界是“正文不发送给模型”，不是“程序从不读取 Markdown 文件”。AI 宿主本身可能把用户提示、Skill 指令和结构化工具结果发送给其已配置模型；模型服务的数据政策由宿主和模型提供商决定。
 
-以下动作必须暂停并请求用户确认：访问新的目录、安装软件、提权、解决未知输出冲突、修改或删除事实源、删除派生产物、登录、付款、上传、发布或任何外部数据传输。
+以下动作必须暂停并请求用户确认：访问新的目录、安装软件、提权、处理未知输出冲突、修改或删除事实源、删除派生产物、登录、上传、付款、发布或其他外部数据传输。
+
+详细约束见：
+
+- [`references/PRIVACY.md`](references/PRIVACY.md)
+- [`references/AUTONOMY_GATES.md`](references/AUTONOMY_GATES.md)
+- [`references/RUNTIME_CONTRACT.md`](references/RUNTIME_CONTRACT.md)
 
 ## Lite 版边界
 
@@ -137,69 +162,40 @@ Lite 不包含：
 - filesystem watch、session watch 或后台计划任务；
 - 持久 Web 服务；
 - 多工作区聚合；
+- 付费授权、支付、订单、回调或退款模块；
 - 自动安装宿主、Python、Obsidian、模型或系统服务。
 
 因此，“自动更新”在 Lite 中表示：用户提出更新目标后，AI 自动完成整次增量更新；它不表示宿主退出后仍永久在后台监听。
 
-## 已验证兼容性
+## 仓库结构
 
-| 环境 | 已验证范围 | 边界 |
-|---|---|---|
-| OpenClaw `2026.6.11` / macOS | Metadata-only 首次构建、状态、安全卸载、卸载后状态，以及按需增量链路 | 不外推到所有 OpenClaw 版本、模型或后台模式 |
-| Codex CLI `0.145.0-alpha.18` / macOS | 一次目标到自动构建与本地验证 | 不外推到所有 Codex 版本或 Windows |
-| Windows 11 | 运行时设计支持 `python` / `py` 和 Windows 路径 | 尚无真实 Windows 11 端到端回执，暂不标记 verified |
-| 其他终端型智能体 | 满足本页宿主能力契约时属于候选兼容 | 必须分别进行版本化测试 |
+```text
+.
+├── SKILL.md
+├── README.md
+├── LICENSE
+├── agents/
+├── references/
+└── scripts/
+```
 
-## 状态、更新与卸载
+本仓库是公开 Lite 分发源。付费 Pro、SkillPay、支付服务和私有开发材料不属于本仓库。
 
-- 构建完成：以结构化状态 `AUTO_RUN_READY` 为准；
-- 查看状态：让 AI 检查当前工作台状态；
-- 更新：让 AI 更新工作台；AI 只处理真实差异；
-- 默认卸载：移除 Skill 拥有的运行状态，保留事实源、`AI-Knowledge` 和 `AI-Dashboard`；
-- 完全删除派生产物：必须另外确认精确路径，不能与默认卸载合并推断。
+## 版本 1.0.2
 
-默认卸载成功后，再查状态应为 `NOT_INITIALIZED`；这表示运行配置已移除，不表示事实源或保留的派生产物被删除。再次使用时应发起一次新的自动构建。
-
-## 常见问题
-
-### 为什么没有自动帮我安装 Python？
-
-安装软件、提权和修改 PATH 属于系统变更。Skill 会给出明确门禁和官方入口，但不会在未授权时静默执行。
-
-### 没有 Obsidian 能用吗？
-
-可以。普通 Markdown 模式具备 Lite 的完整基础闭环；Obsidian 只是可选的编辑和浏览界面。
-
-### 会改我的原笔记吗？
-
-默认不会。原始资料是只读事实源；知识层、状态和 HTML 写入保留目录。若遇到未知既有输出，Skill 会停止并请求处理决定。
-
-### 为什么没有 AI 摘要？
-
-Lite 固定为 Metadata-only，不把正文交给模型。它适合先验证结构化索引、HTML 驾驶舱和更新闭环。
-
-### 为什么关闭 OpenClaw 后不会继续更新？
-
-Lite 不包含 watch 或后台调度代码。需要更新时向 AI 提出一次更新目标即可。
-
-### 排障时可以发什么？
-
-通常只需操作系统、宿主版本、Python 版本、结构化 `code`、退出码和脱敏后的 `next_actions`。不要发送 API Key、Token、Cookie、模型配置、客户正文或整份 Vault。
-
-## 版本 1.0.1
-
-- 新增完整买家 README；
-- 统一平台、包内和运行时版本口径；
-- 将 Python 依赖门禁从固定 `python3` 改为 `python3` / `python` / `py` 三选一，再由运行时验证 Python 3.10+；
-- 强化 AI 自主构建、按需增量更新、宿主前置条件、隐私、安全卸载和 Lite 能力边界说明。
+- 将 GitHub 分发源的包内、运行时和对外版本口径统一为 `1.0.2`；
+- 强化 AI 自主构建与按需增量更新；
+- 将 Python 探针扩展为 `python3` / `python` / Windows `py`；
+- 完善宿主前置条件、Metadata-only 隐私说明和安全卸载边界；
+- 提供适合 GitHub 固定标签导入的根目录结构。
 
 ## 许可
 
-本 ClawHub Lite 版本使用 MIT-0。任何人均可使用、修改和再分发，且不要求署名。ClawHub 不支持本 Skill 的平台内付费或付费墙；不要把该免费 Lite 版本理解为完整商业版。
+本 Lite 版本使用 MIT-0。任何人均可使用、修改和再分发，且不要求署名。
 
 ## English quick start
 
-AI Knowledge Workbench Lite lets an AI agent autonomously turn one user-authorized Markdown folder or Obsidian vault into a derived knowledge index and an offline HTML dashboard.
+AI Knowledge Workbench Lite lets an AI agent turn one user-authorized Markdown folder or Obsidian Vault into a derived Metadata-only knowledge index and an offline HTML dashboard.
 
 Requirements:
 
@@ -208,12 +204,10 @@ Requirements:
 - one authorized workspace/source directory;
 - Obsidian is optional.
 
-Install from ClawHub:
+After tag `v1.0.2` has been created and pushed, import this repository from a supported Skills platform pinned to that tag. Then ask your agent:
 
-```bash
-openclaw skills install @alexfengrui/manage-ai-knowledge-workbench-lite
+```text
+Use AI Knowledge Workbench Lite to build this folder into a local knowledge workbench and open the dashboard: <folder>
 ```
 
-Then ask your agent: “Use AI Knowledge Workbench Lite to build this folder into a local knowledge workbench and open the dashboard: `<folder>`.”
-
-Lite is fixed to Metadata-only. Its deterministic local parser may read authorized Markdown to extract allowed frontmatter, headings, tags, and links, but it does not send note bodies to a model or embed them in the dashboard. On-demand refresh is automatic after a user request; background watching and semantic/model-based content processing are not included.
+The deterministic local parser may read authorized Markdown to extract allowed metadata, but it does not send note bodies to a model or embed them in the dashboard. Background watching, semantic content processing, paid licensing and payment modules are not included.

@@ -11,34 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and technical writers use this skill to update README files, plans, wikis, ADRs, and docstrings after code changes. It helps identify documentation targets, apply grounded edits, run style and accuracy checks, and preview the resulting changes. <br>
+Developers and documentation maintainers use this skill after code changes to update READMEs, plans, wikis, docstrings, ADRs, and capability documentation while checking style, consistency, and accuracy. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Documentation edits or consolidation steps may remove or change useful content. <br>
-Mitigation: Review proposed deletions, merges, staged changes, and previews before accepting the workflow output. <br>
-Risk: Broad activation triggers such as writing may invoke the workflow outside focused documentation tasks. <br>
-Mitigation: Invoke the skill explicitly or narrow activation to documentation update work when broad triggers are inconvenient. <br>
+Risk: Broad trigger words may activate the skill during general documentation or writing tasks. <br>
+Mitigation: Confirm the intended documentation-update scope before allowing the workflow to edit files. <br>
+Risk: Consolidation steps can propose deletion, merging, splitting, or staging of documentation files. <br>
+Mitigation: Review consolidation tables, use selective or dry-run mode for cleanup, and approve destructive actions explicitly. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-doc-updates) <br>
-- [Declared homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
-- [Accuracy scanning module](modules/accuracy-scanning.md) <br>
-- [Capabilities sync module](modules/capabilities-sync.md) <br>
-- [Directory style rules module](modules/directory-style-rules.md) <br>
+- [Claude Night Market sanctum plugin](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and file-edit guidance] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with command snippets, review tables, and documentation edits] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose documentation edits, validation warnings, consolidation actions, and change previews.] <br>
+**Other Properties Related to Output:** [May propose consolidation, deletion, or staging actions that require user review or approval.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

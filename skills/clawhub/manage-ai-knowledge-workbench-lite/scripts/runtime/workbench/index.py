@@ -92,4 +92,3 @@ def diff_records(old: list[dict[str, Any]], new: list[dict[str, Any]]) -> dict[s
         "unchanged": len(common - modified_keys),
         "changed_total": len(added_keys) + len(modified_keys) + len(moved) + len(deleted_keys),
     }
-

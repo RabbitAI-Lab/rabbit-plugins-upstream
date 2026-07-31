@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/drought-monitor",
   "slug": "drought-monitor",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1785073993825,
-  "contentHash": "79c0bf99319f0a52e05d57a6aba2cceb8bfb250a9e834eeb96e5da5f36240f48",
-  "fetchedAt": "2026-07-26T18:03:22.944Z"
+  "version": "0.3.1",
+  "updatedAt": 1785155022986,
+  "contentHash": "49205d3a7ef8b3f39d4d9648ec0b7087cd38191546659dd376b49f3836a2302e",
+  "fetchedAt": "2026-07-31T10:18:09.610Z"
 }

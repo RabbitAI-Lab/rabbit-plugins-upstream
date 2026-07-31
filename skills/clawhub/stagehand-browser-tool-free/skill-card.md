@@ -1,5 +1,5 @@
 ## Description: <br>
-Enables agents to drive a local Chrome browser with natural-language commands for navigation, element interaction, screenshots, and page data extraction. <br>
+Stagehand Browser Tool Free helps an agent use natural-language browser commands to navigate local Chrome, interact with page elements, capture screenshots, and extract webpage data. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, students, freelancers, and individual automation users use this skill to simplify local Chrome browser tasks such as information collection, form interaction, page observation, screenshots, and structured extraction. <br>
+Developers, students, freelancers, and other external users can use this skill to automate local browser tasks such as navigation, page interaction, form filling, screenshots, and structured data extraction. Users should supervise actions that affect accounts, submissions, purchases, or sensitive pages. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can combine browser control with command-execution assistance on the user's machine. <br>
-Mitigation: Install only when local browser automation and command execution are acceptable; review commands before execution and prefer a dedicated browser profile. <br>
-Risk: Privacy and data-flow disclosures are inconsistent for callbacks, screenshots, extracted page text, and LLM processing. <br>
-Mitigation: Avoid confidential pages or sensitive accounts until data flows are confirmed; avoid callback URLs and screenshots unless they are necessary for the task. <br>
+Risk: The skill can control a local Chrome session and perform real website actions. <br>
+Mitigation: Use it on non-sensitive pages first and require human confirmation for login, purchase, posting, or form submission actions. <br>
+Risk: Page extraction or callback_url use could disclose sensitive page content outside the intended local workflow. <br>
+Mitigation: Avoid callback_url and sensitive page extraction unless the user understands where the data will go. <br>
+Risk: Privacy and external-callback behavior are under-explained in the release evidence. <br>
+Mitigation: Review the skill before deployment and limit use to data and sessions appropriate for browser automation. <br>
 
 
 ## Reference(s): <br>
@@ -28,13 +30,13 @@ Mitigation: Avoid confidential pages or sensitive accounts until data flows are 
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration instructions, JSON] <br>
-**Output Format:** [Markdown guidance with bash examples and JSON result objects] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with shell command examples and JSON configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include browser screenshots, extracted page text, command status, result data, execution logs, and error details when automation commands are run.] <br>
+**Other Properties Related to Output:** [May return browser action status, extracted page data, screenshots, logs, and error details.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: release metadata and artifact frontmatter) <br>
+1.0.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

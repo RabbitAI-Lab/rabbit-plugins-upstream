@@ -11,35 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and AI agents use this skill to convert public webpages, uploaded documents, images, and text into compact Markdown, JSON, or prompt-transformed outputs through REST, MCP, ACP, A2A, and OpenAI-compatible interfaces. <br>
+Developers and agents use this skill to route documents, images, webpages, or raw text through mdapi.io and receive compact Markdown or structured results for downstream LLM workflows. It also guides protocol selection for REST, MCP, ACP, A2A, and OpenAI-compatible access. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: User content is sent to the third-party mdapi.io service for conversion. <br>
-Mitigation: Use only content approved for external processing; avoid secrets, credentials, regulated data, private source code, and internal URLs unless explicitly authorized. <br>
-Risk: Paid-token and autonomous-payment flows can spend funds or expose reusable tokens if handled carelessly. <br>
-Mitigation: Require clear user approval for payment, treat service payment responses as authoritative, and avoid storing paid tokens in shared or persistent tool configuration. <br>
-Risk: Large inputs, inaccessible URLs, invalid tokens, rate limits, or payment failures can produce partial or failed conversions. <br>
-Mitigation: Respect documented size and rate limits, handle HTTP 400/401/402/404/413/429/500 responses explicitly, and retry only when the service guidance supports it. <br>
+Risk: The skill sends selected documents, text, prompts, and URLs to the third-party mdapi.io service. <br>
+Mitigation: Do not use it with secrets, private or internal URLs, regulated data, or proprietary files unless the use has been explicitly approved. <br>
+Risk: The skill can guide agents through cryptocurrency payment and token activation flows. <br>
+Mitigation: Independently verify the amount, token, network, wallet address, memo, and service identity before payment, and use connected-wallet autonomous payments only with strict spending controls. <br>
+Risk: The security scan verdict is suspicious because payment and data-transfer behaviors require user trust. <br>
+Mitigation: Review the skill, scanner summary, and service terms before installation or deployment. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/mdapiio/skills/mdapi-conversion) <br>
-- [mdapi.io service documentation](https://mdapi.io/) <br>
+- [mdapi.io service](https://mdapi.io/) <br>
 - [mdapi.io MCP endpoint](https://mdapi.io/mcp) <br>
-- [mdapi.io health endpoint](https://mdapi.io/health) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown or JSON responses with curl examples, API request shapes, protocol configuration snippets, and optional streaming SSE chunks.] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline JSON and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include converted markdown, prompt_result, resource metadata, token status, rate-limit headers, payment headers, or streaming progress markers.] <br>
+**Other Properties Related to Output:** [Outputs may include converted Markdown, prompt results, token status, metadata, streaming chunks, or protocol configuration snippets.] <br>
 
 ## Skill Version(s): <br>
-0.1.1 (source: server release evidence; artifact frontmatter states 1.0.0) <br>
+0.1.2 (source: ClawHub release metadata; artifact frontmatter says 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

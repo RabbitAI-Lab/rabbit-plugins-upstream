@@ -1,52 +1,31 @@
 ---
 slug: browser-automation-tool-free
 name: browser-automation-tool-free
-version: 1.0.0
+version: 1.0.2
 displayName: 浏览器自动化工具-免费版
 summary: "通过自然语言驱动浏览器交互的CLI工具,支持本地Chrome,适合个人开发者快速自动化。通过自然语言指令驱动浏览器交互的命令行工具,用户可用自然语言描述动作,"
-license: Proprietary
+license: MIT
 edition: free
-description: 通过自然语言指令驱动浏览器交互的命令行工具,用户可用自然语言描述动作,，可自动提升工作效率
-
-  工具自动转化为浏览器操作,降低自动化脚本编写门槛。核心能力:
-
-  - 自然语言驱动的浏览器操作(act)
-
-  - 结构化数据提取(extract)
-
-  - 元素发现与观察(observe)
-
-  - 本地Chrome浏览器支持
-
-  - 截图与页面导航
-
-  适用场景:
-
-  - 个人开发者的快速网页自动化
-
-  - 数据提取与信息采集
-
-  - 独立开发者的原型验证
-
-  差异化:免费版提供本地Chrome浏览器环境下的自然语言自动化能力,操作直观,适合个人轻量场景'
+description: "通过自然语言指令驱动浏览器交互的命令行工具,用户可用自然语言描述动作,，可自发提升工作效率. 适用于需要browser automation tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要browser automation tool相关能力的开发场景,包含结构化的工作流程和配置指引."
 tags:
   - 研究工具
+  - browser
+  - automation
+  - productivity
+  - developer-tools
   - 浏览器自动化
   - 自然语言
   - 自动化
   - 工作流
   - 效率
-  - browser
-  - act
-  - chrome
-  - observe
-  - extract
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Automation"
+pricing_tier: free
+
 ---
 # 浏览器自动化工具(免费版)
 
@@ -136,7 +115,7 @@ browser close
 browser observe "页面上有哪些按钮"
 # ...
 # 根据观察结果执行动作
-browser act "点击第一个蓝色的按钮"
+browser act "点击领先个蓝色的按钮"
 # ...
 # 提取观察到的内容
 browser extract "获取页面所有标题文本"
@@ -202,7 +181,7 @@ browser close
 # 点击类动作
 browser act "点击登录按钮"
 browser act "点击右上角的购物车图标"
-browser act "点击第一个搜索结果"
+browser act "点击领先个搜索结果"
 # ...
 # 输入类动作
 browser act "在搜索框输入 AI agents"
@@ -248,7 +227,7 @@ browser observe "导航栏有哪些链接"
 | 代理/CAPTCHA | 不支持 | 支持 |
 | 适用场景 | 开发调试 | 生产/大规模采集 |
 
-## 最佳实践
+## 优秀实践
 
 1. **先导航再操作**:所有交互前必须先 `navigate` 到目标页面.
 2. **动作描述要具体**:例如"点击蓝色的提交按钮"优于"点击按钮".
@@ -310,7 +289,7 @@ browser observe "页面上有哪些可交互元素"
 - 远程浏览器模式(可选):需配置 `BROWSERBASE_API_KEY` 与 `BROWSERBASE_PROJECT_ID`
 
 ### 可用性分类
-- **分类**: MD+EXEC(纯Markdown指令,部分功能需exec命令行执行)
+- **分类**: MD+EXEC模式纯Markdown指令,部分功能需exec命令行执行)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent完成操作
 
 ## 错误处理
