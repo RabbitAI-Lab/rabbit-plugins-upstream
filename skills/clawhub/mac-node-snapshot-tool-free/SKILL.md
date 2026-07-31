@@ -4,30 +4,27 @@ name: mac-node-snapshot-tool-free
 version: 1.0.0
 displayName: macOS截图工具免费版
 summary: "macOS屏幕截图与录屏工具,支持全屏截图、区域截图与基础录屏,适合个人开发者快速捕获屏幕内容.。macOS截图工具免费版,为个人用户提供屏幕截图与基础录屏能力."
-license: Proprietary
+license: MIT
 edition: free
-description: 'macOS截图工具免费版,为个人用户提供屏幕截图与基础录屏能力.
-  核心能力:全屏截图、区域截图、窗口截图、基础屏幕录制.
-  适用场景:Bug报告截图、操作步骤录制、屏幕内容存档.
-  差异化:免费版聚焦核心截图功能,使用macOS原生工具,适合个人用户快速上手.
-  适用关键词: macOS, 截图, 录屏, screencapture, screenrecord, screenshot, screen recording'
+description: "macOS截图工具免费版,为个人用户包含屏幕截图与基础录屏能力. 适用于需要mac node snapshot tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要mac node snapshot tool相关能力的开发场景,包含结构化的工作流程和配置指引."
 tags:
   - macOS
+  - mac
+  - node
+  - snapshot
+  - automation
   - 截图
   - 录屏
   - 免费版
   - 安全
   - 加密
-  - 工具
-  - output_dir
-  - filename
-  - timestamp
-  - bash
 tools:
   - read
   - exec
 homepage: ""
 category: "Security"
+pricing_tier: free
+
 ---
 # macOS截图工具免费版
 
@@ -275,7 +272,7 @@ echo "定时截图完成,共 ${COUNT} 张"
 需要代码生成、编程辅助、调试测试、开发部署时使用。不适用于非本工具能力范围的需求.
 ## 快速开始
 
-### 第一步:确认环境
+### 领先步:确认环境
 
 ```bash
 # 确认macOS版本
@@ -289,7 +286,7 @@ which screencapture
 
 ```bash
 # 全屏截图到桌面
-screencapture ~/Desktop/screenshot.png
+screencapture ./Desktop/screenshot.png
 ```
 
 ### 第三步:复制到剪贴板
@@ -325,7 +322,7 @@ screencapture -c
 | Bug | bug_ID_YYYYMMDD_HHMMSS.png | bug_1234_20260718_143022.png |
 | 定时 | timed_N_YYYYMMDD_HHMMSS.png | timed_3_20260718_143022.png |
 
-## 最佳实践
+## 优秀实践
 
 1. **统一目录**:设置固定的截图输出目录,便于管理.
 2. **规范命名**:使用时间戳命名,避免文件冲突,便于排序查找.
@@ -333,7 +330,7 @@ screencapture -c
 4. **剪贴板模式**:临时截图使用 `-c` 复制到剪贴板,不产生文件.
 5. **区域选择**:优先使用区域截图,只截取需要的内容.
 ```bash
-# 最佳实践:截图管理函数
+# 优秀实践:截图管理函数
 screenshot() {
     local mode=$1
     local name=$2
@@ -392,7 +389,7 @@ PNG格式文件较大,可使用 `-t jpg` 参数切换为JPG格式,或使用sips�
 - 需要在系统设置中授予终端"屏幕录制"权限
 
 ### 可用性分类
-- **分类**: MD+EXEC(纯Markdown指令,核心功能需要exec命令行执行能力)
+- **分类**: MD+EXEC模式纯Markdown指令,核心功能需要exec命令行执行能力)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent执行macOS屏幕截图与录屏任务
 
 ## 错误处理

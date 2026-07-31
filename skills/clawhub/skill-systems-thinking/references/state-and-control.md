@@ -57,6 +57,30 @@ behaves the same at n=10 and n=10^7.
   only indirectly. Build the estimator (instrumentation) before concluding the bug is
   untraceable.
 
+## When control fails, suspect a missing information channel (Book 2 §2.4)
+
+Book 2 anchor: §2.4 (信息与控制的依存关系). See `references/information-and-control.md` for the
+full treatment.
+
+The shallow form of the observability law says "add a test before you fix". The deep form,
+from Book 2, says: **control and information are mutually dependent. You cannot control what
+you cannot observe, and adding force to an actuator that lacks feedback is open-loop
+control — it diverges.**
+
+The book's example: trying to control the position of your own intestines by thought alone
+fails — not because the actuator (breathing, relaxation) is weak, but because there is no
+information channel from the intestines to consciousness. Biofeedback works *only* by first
+building a new channel (a screen showing heart rate), at which point the existing actuator
+becomes effective.
+
+Practical rule: if a fix didn't converge after several attempts, the missing piece is usually
+a **sensor**, not a bigger lever. Default to adding an information channel before adding more
+actuator. Symptoms:
+- You've tried several fixes, none converged, and you can't tell which was closest.
+- The bug "goes away" when you add logging, then "comes back" when you remove it (the logging
+  *was* the fix — it gave you the channel).
+- Reproduction is intermittent and you can't correlate occurrences with any input.
+
 ## Worked example: unregulated target → open-loop patch
 
 **Before (no x, no u, no observability):**

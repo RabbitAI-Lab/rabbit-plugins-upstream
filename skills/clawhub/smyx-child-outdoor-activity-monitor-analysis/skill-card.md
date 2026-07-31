@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes fixed-camera doorway or balcony video to detect child exit and return events, estimate daily outdoor activity duration, and produce activity alerts and reports. <br>
+Monitors fixed-camera footage at a home entrance or balcony door to count a child's exits and returns, estimate daily outdoor duration, and produce insufficient-activity reminders. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Families, schools, kindergartens, and child-health application developers can use this skill to analyze doorway or balcony camera footage for child outdoor activity sessions, daily duration totals, and parent-facing reminders. It is intended for visual activity statistics and friendly reminders, not medical diagnosis. <br>
+Families, schools, kindergartens, and developers building child health monitoring workflows use this skill to analyze entrance or balcony camera video and generate daily outdoor-duration reports and reminders. The output is based on visual door-transition events and should not be treated as medical advice or diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill sends sensitive child and home camera footage to cloud services and keeps account-linked report history. <br>
-Mitigation: Use only with guardian consent, avoid private or internal URLs, and confirm that cloud processing and report retention match the deployment's privacy requirements. <br>
-Risk: The security assessment notes local storage of identity and authentication tokens. <br>
-Mitigation: Limit installation to trusted environments and remove local workspace databases and tokens when the skill is no longer used. <br>
-Risk: Outdoor time estimates are based on doorway or balcony movement events and may not represent actual exercise or medical status. <br>
-Mitigation: Treat outputs as visual activity statistics and reminders, and route health concerns to qualified professionals. <br>
+Risk: The skill handles child and home entrance or balcony video and may send it to the configured cloud service. <br>
+Mitigation: Use only with explicit guardian consent, a clear retention and deletion plan, and privacy-preserving camera views where practical. <br>
+Risk: The skill can create or reuse persistent local identity state and stores authentication-related data locally. <br>
+Mitigation: Review the local workspace data directory before deployment and treat the SQLite database and related local state as credentials. <br>
+Risk: Outdoor duration is estimated from door-transition events and does not prove actual exercise or health status. <br>
+Mitigation: Review results as activity estimates only and avoid using the output for medical decisions or diagnosis. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-outdoor-activity-monitor-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Child outdoor activity monitoring API documentation](artifact/references/api_doc.md) <br>
+- [API documentation](artifact/references/api_doc.md) <br>
 - [SMYX analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-outdoor-activity-monitor-analysis) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis reports, with optional shell commands for running analysis or listing historical reports.] <br>
+**Output Type(s):** [text, markdown, shell commands, guidance] <br>
+**Output Format:** [Markdown and JSON-like structured text with report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include detected events, daily duration totals, alert levels, recommendations, report links, and saved result files when requested.] <br>
+**Other Properties Related to Output:** [May include daily duration metrics, event counts, alert type, recommended action, historical report tables, and export links.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release metadata) <br>
+1.0.6 (source: server release metadata; artifact frontmatter and release changelog state 1.0.7) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

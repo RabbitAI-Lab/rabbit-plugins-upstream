@@ -1,5 +1,5 @@
 ## Description: <br>
-Download global administrative boundary vector data in Shapefile, GeoJSON, GeoPackage, or TopoJSON formats for countries and multi-country regions, with metadata and source/license details. <br>
+Download global administrative boundary vector data (Shapefile / GeoJSON / GeoPackage / TopoJSON) for any country or multi-country region. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,43 +7,41 @@ This skill is ready for commercial/non-commercial use. <br>
 [ruiduobao](https://clawhub.ai/user/ruiduobao) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-Developers and GIS/data engineers use this skill to locate, download, merge, clip, and inspect administrative boundary datasets for mapping and geospatial workflows. It is useful when an agent needs repeatable CLI commands and metadata-aware guidance for boundary data acquisition. <br>
+Developers, analysts, and mapping teams use this skill to download country and regional administrative boundary files, inspect metadata, clip by bounding box, merge multi-country regions, and choose among Shapefile, GeoJSON, GeoPackage, and TopoJSON outputs. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Dependency and supply-chain review is needed before installation, especially for the unexplained core package identified in security guidance. <br>
-Mitigation: Install in a locked, isolated environment with vetted package versions and review requirements.txt before deployment. <br>
-Risk: Normal use downloads boundary data from third-party services and stores a local cache. <br>
-Mitigation: Use approved network egress, review source licenses for the selected dataset, and clear or relocate the cache when local retention is not desired. <br>
-Risk: Included helper code for place-name geocoding may send location queries to third-party services and maintain a separate local cache. <br>
-Mitigation: Avoid helper geocoding for sensitive locations, prefer explicit ISO/bbox inputs, and disable or clear the helper cache where privacy requirements apply. <br>
+Risk: Bundled credential-management code can read local secret stores and includes a hardcoded Earthdata password fallback. <br>
+Mitigation: Review or remove the credential helper before installation, and run the skill in an environment where it cannot access sensitive local credentials. <br>
+Risk: The skill downloads boundary data from external network sources and writes output files plus cache entries. <br>
+Mitigation: Restrict execution to approved network destinations and output directories, and clear or isolate the cache when processing sensitive workflows. <br>
+Risk: Downloaded data may carry separate source-specific license obligations, including attribution for geoBoundaries and non-commercial limits for GADM. <br>
+Mitigation: Prefer the default geoBoundaries source for commercial use, preserve attribution metadata, and use GADM only when its non-commercial terms fit the use case. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/ruiduobao/skills/world-boundary-download) <br>
-- [README](README.md) <br>
-- [Skill instructions](SKILL.md) <br>
-- [Data sources](docs/DATA_SOURCES.md) <br>
-- [Design document](docs/DESIGN.md) <br>
+- [Data Sources](docs/DATA_SOURCES.md) <br>
+- [Design Document](docs/DESIGN.md) <br>
 - [geoBoundaries](https://www.geoboundaries.org/) <br>
 - [GADM](https://gadm.org/) <br>
 - [Natural Earth](https://www.naturalearthdata.com/) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON output examples; generated CLI runs may write Shapefile ZIP, GeoJSON, GeoPackage, TopoJSON, and metadata files.] <br>
+**Output Type(s):** [Shell commands, Files, JSON metadata, Guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands plus generated vector data files and JSON status or metadata] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on selected country, administrative level, data source, format, bbox, and cache settings.] <br>
+**Other Properties Related to Output:** [Outputs may include Shapefile zip, GeoJSON, GeoPackage, TopoJSON, cache state, and source/license metadata for downloaded boundary data.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+1.0.1 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

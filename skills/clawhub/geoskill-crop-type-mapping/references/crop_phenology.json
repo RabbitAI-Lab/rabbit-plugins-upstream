@@ -1,0 +1,113 @@
+{
+  "description": "作物物候参数参考表 — 用于 crop-type-mapping skill 的默认作物物候 schema",
+  "source": "基于中国主要作物物候期文献综合（河南、山东、安徽等冬小麦-夏玉米轮作区）",
+  "version": "1.0.0",
+  "parameters": {
+    "peak_doy": "NDVI 峰值对应的日序（day of year, 1-365）",
+    "peak_ndvi": "NDVI 峰值理论最大值",
+    "width": "高斯曲线标准差（天），控制物候期宽度",
+    "base_ndvi": "背景 NDVI（裸土/休耕期）",
+    "amplitude": "NDVI 振幅 = peak_ndvi - base_ndvi"
+  },
+  "crops": {
+    "rice": {
+      "code": 1,
+      "name_zh": "水稻",
+      "name_en": "Rice",
+      "type": "single-season late rice",
+      "peak_doy": 220,
+      "peak_ndvi": 0.80,
+      "width": 30,
+      "base_ndvi": 0.15,
+      "amplitude": 0.65,
+      "typical_planting": "5月下旬-6月上旬移栽",
+      "typical_harvest": "9月下旬-10月",
+      "key_phenological_features": "移栽期 NDVI 快速上升，分蘖-抽穗期达峰值（8月），成熟期下降"
+    },
+    "wheat": {
+      "code": 2,
+      "name_zh": "小麦",
+      "name_en": "Wheat",
+      "type": "winter wheat",
+      "peak_doy": 120,
+      "peak_ndvi": 0.75,
+      "width": 25,
+      "base_ndvi": 0.18,
+      "amplitude": 0.57,
+      "typical_planting": "10月上中旬播种",
+      "typical_harvest": "5月下旬-6月初",
+      "key_phenological_features": "秋播越冬，返青后 NDVI 快速上升，抽穗期达峰值（4-5月），早于玉米和水稻"
+    },
+    "corn": {
+      "code": 3,
+      "name_zh": "玉米",
+      "name_en": "Corn (Maize)",
+      "type": "summer corn",
+      "peak_doy": 200,
+      "peak_ndvi": 0.82,
+      "width": 28,
+      "base_ndvi": 0.16,
+      "amplitude": 0.66,
+      "typical_planting": "6月上中旬播种（小麦收后）",
+      "typical_harvest": "9月下旬-10月",
+      "key_phenological_features": "夏播，拔节-抽穗期 NDVI 达峰值（7-8月），介于小麦和晚稻之间"
+    }
+  },
+  "discrimination_logic": {
+    "principle": "三种作物的 NDVI 峰值日序（peak_doy）差异显著：小麦(120) < 玉米(200) < 水稻(220)",
+    "key_feature": "peak_doy（峰值日序）是最具区分力的物候特征",
+    "secondary_feature": "amplitude（振幅）辅助区分 — 玉米和水稻振幅相近但小麦略低",
+    "confounding_factors": [
+      "双季稻区早稻 peak_doy ~160，可能与玉米混淆",
+      "不同年份播种期偏移可达 ±15 天",
+      "云污染导致峰值观测缺失"
+    ]
+  },
+  "sensor_registry": {
+    "sentinel-2": {
+      "bands": {
+        "B02": {"name": "blue", "wavelength_nm": 490, "resolution_m": 10},
+        "B03": {"name": "green", "wavelength_nm": 560, "resolution_m": 10},
+        "B04": {"name": "red", "wavelength_nm": 665, "resolution_m": 10},
+        "B08": {"name": "nir", "wavelength_nm": 842, "resolution_m": 10},
+        "B11": {"name": "swir1", "wavelength_nm": 1610, "resolution_m": 20},
+        "B12": {"name": "swir2", "wavelength_nm": 2190, "resolution_m": 20}
+      },
+      "scale_factor": 0.0001,
+      "qa_band": "SCL (Scene Classification Layer)",
+      "temporal_resolution_days": 5
+    },
+    "landsat-8-9": {
+      "bands": {
+        "B2": {"name": "blue", "wavelength_nm": 480, "resolution_m": 30},
+        "B3": {"name": "green", "wavelength_nm": 560, "resolution_m": 30},
+        "B4": {"name": "red", "wavelength_nm": 654, "resolution_m": 30},
+        "B5": {"name": "nir", "wavelength_nm": 865, "resolution_m": 30},
+        "B6": {"name": "swir1", "wavelength_nm": 1610, "resolution_m": 30}
+      },
+      "scale_factor": 2.75e-05,
+      "offset": -0.2,
+      "qa_band": "QA_PIXEL",
+      "temporal_resolution_days": 16
+    },
+    "sentinel-1": {
+      "bands": {
+        "VV": {"name": "vertical-vertical", "polarization": "VV"},
+        "VH": {"name": "vertical-horizontal", "polarization": "VH"}
+      },
+      "purpose": "云层穿透、作物结构信息、土壤湿度辅助",
+      "temporal_resolution_days": 6
+    }
+  },
+  "area_calculation": {
+    "method": "EPSG:4326 像元面积 = cos(lat) * 111320 * dx * 111320 * dy",
+    "note": "面积统计优先在等面积投影（如 EPSG:6933）下计算；EPSG:4326 下使用球面近似",
+    "correction": "分类面积偏差校正需结合验证样本的漏分/错分比例"
+  },
+  "references": [
+    "国家统计局. 中国统计年鉴 (农作物播种面积)",
+    "农业农村部. 全国农作物遥感监测报告",
+    "Zhang et al. (2003) — Monitoring vegetation phenology using MODIS",
+    "Wu et al. (2014) — 基于 NDVI 时序的中国主要作物识别"
+  ]
+}

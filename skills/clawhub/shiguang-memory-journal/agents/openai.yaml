@@ -1,4 +1,4 @@
 interface:
   display_name: "拾光册记忆手帐"
-  short_description: "从关键帧、版式参考到可整理记忆手帐的完整 Agent 工作流"
-  default_prompt: "使用 $shiguang-memory-journal，将关键帧和来源整理为可安全借鉴版式、可继续编辑、可归档检索并回到原内容的故事手帐。"
+  short_description: "从关键帧、故事与参考图到可交互审核的编辑手帐工作流"
+  default_prompt: "使用 $shiguang-memory-journal，将关键帧、用户故事和参考图组织为可逐阶段审核、局部修复、继续编辑和语义找回的记忆手帐。"

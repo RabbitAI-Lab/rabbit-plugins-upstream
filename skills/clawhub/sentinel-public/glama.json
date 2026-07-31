@@ -1,0 +1,61 @@
+{
+  "name": "sentinel",
+  "version": "1.0.0",
+  "title": "SENTINEL — Agent-Level Transaction Safety Oracle",
+  "description": "Pre-execution safety verdict for autonomous AI agents. Analyzes a pending on-chain transaction (contract security, simulation, MEV/sandwich exposure) and returns SAFE / UNSAFE / UNKNOWN with a signed receipt and a standardized SENTINEL Score (AAA-D). Pay-per-call $0.005 USDC via x402 on Base mainnet. Pure M2M — no human in the loop.",
+  "category": "security",
+  "tags": [
+    "transaction-safety",
+    "security",
+    "x402",
+    "base",
+    "ai-agents",
+    "a2a",
+    "mcp",
+    "web3",
+    "pre-execution"
+  ],
+  "endpoint": "https://sentinel-agent.dev",
+  "mcp_endpoint": "https://sentinel-agent.dev/mcp",
+  "agent_card": "https://sentinel-agent.dev/.well-known/agent.json",
+  "llms_txt": "https://sentinel-agent.dev/llms.txt",
+  "openapi": "https://sentinel-agent.dev/openapi.json",
+  "health": "https://sentinel-agent.dev/health",
+  "payment": {
+    "protocol": "x402",
+    "networks": ["base-mainnet"],
+    "asset": "USDC",
+    "price_per_call": "0.005",
+    "wallets": {
+      "base": "0xCf1d31020A7915421f6d66B9835Dcb6f422337E7"
+    }
+  },
+  "capabilities": {
+    "pre_execution_check": true,
+    "sentinel_score": true,
+    "contract_security": true,
+    "simulation": true,
+    "mev_exposure": true,
+    "approval_check": true,
+    "signed_receipt": true,
+    "mcp_server": true,
+    "a2a_protocol": true
+  },
+  "tools": [
+    {
+      "name": "sentinel_guard",
+      "description": "Evaluate a transaction before signing. Returns SAFE/UNSAFE/UNKNOWN verdict, SENTINEL Score (0-100) + grade (AAA-D), risk flags and signed receipt.",
+      "price_usdc": "0.005"
+    }
+  ],
+  "stack": {
+    "runtime": "FastAPI + Python 3.11",
+    "persistence": "Supabase",
+    "deploy": "Render (AWS us-east)",
+    "facilitator": "CDP Bazaar / PayAI"
+  },
+  "open_source": true,
+  "license": "MIT",
+  "repository": "https://github.com/teodorofodocrispin-cmyk/sentinel-public",
+  "author": "teodorofodocrispin-cmyk"
+}

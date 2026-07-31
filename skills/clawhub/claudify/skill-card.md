@@ -1,5 +1,5 @@
 ## Description: <br>
-Claudify helps agents convert requested functionality into Claude Code automations and maintain them through improvement, persistence, and background polling workflows. <br>
+Claudify helps Claude Code users create, improve, persist, and monitor agent automation such as skills, agents, rules, commands, hooks, and plugins. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,39 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use Claudify to decide whether requested functionality should become an agent, skill, rule, command, hook, or plugin, then produce the corresponding automation guidance and artifacts. It also supports follow-up maintenance workflows for self-improvement, knowledge persistence, and long-running background work discipline. <br>
+Developers and engineers use Claudify to turn repeated workflows into Claude Code automation and to review, persist, or monitor automation behavior across sessions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can create persistent agent automations, including hooks that may run commands automatically. <br>
-Mitigation: Review proposed hooks and automation files before installation, require confirmation before writes, and prefer project-local scope. <br>
-Risk: The skill can inspect global Claude plugin metadata and write memory or failed-attempt records from session context. <br>
-Mitigation: Limit persistence to non-sensitive information, avoid global scope unless needed, and review memory or documentation changes before saving. <br>
-Risk: Example automations may stage git changes, install extensions, or log broad tool use if enabled without review. <br>
-Mitigation: Enable only examples that are needed for the project and remove or narrow commands that change repositories, install software, or collect excessive logs. <br>
+Risk: The skill can introduce persistent Claude Code behavior changes through automation files, settings, hooks, memory, failed-attempt records, or Ralph-mode files. <br>
+Mitigation: Require previews before writes to ~/.claude, .claude, settings.json, memory, failed-attempts.md, or .ralph files, and prefer project-local scope unless a global change is explicitly intended. <br>
+Risk: Hook examples and automation templates may include shell commands or configuration that change future agent behavior. <br>
+Mitigation: Review hook commands and generated configuration before copying or installing them, then scan the resulting automation before deployment. <br>
+Risk: The security summary flags insufficient user-facing confirmation and scoping for persistent changes. <br>
+Mitigation: Confirm the target automation type, target scope, and persistence location before applying generated changes. <br>
 
 
 ## Reference(s): <br>
-- [Claudify on ClawHub](https://clawhub.ai/drumrobot/skills/claudify) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
-- [Background Polling](artifact/background-polling.md) <br>
-- [Improve](artifact/improve.md) <br>
-- [Persist](artifact/persist.md) <br>
-- [Automation Decision Guide](artifact/resources/automation-decision-guide.md) <br>
-- [Hook Examples](artifact/resources/hook-examples.md) <br>
-- [Plugin Creation](artifact/resources/plugin-creation.md) <br>
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/claudify) <br>
+- [CHANGELOG.md](CHANGELOG.md) <br>
+- [Background Polling](background-polling.md) <br>
+- [Improve](improve.md) <br>
+- [Persist](persist.md) <br>
+- [Automation Decision Guide](resources/automation-decision-guide.md) <br>
+- [Hook Examples](resources/hook-examples.md) <br>
+- [Plugin Creation Guide](resources/plugin-creation.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with code, JSON, and shell command snippets] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with file templates and inline shell or JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose file writes, hook configuration, persistent memory records, and automation artifacts that should be reviewed before installation or execution.] <br>
+**Other Properties Related to Output:** [May propose or create persistent Claude Code automation files, hook configuration, and memory records when used for those workflows.] <br>
 
 ## Skill Version(s): <br>
-0.5.0 (source: server release metadata and CHANGELOG, released 2026-07-23; SKILL.md frontmatter lists 0.1.2) <br>
+0.5.1 (source: ClawHub release metadata and CHANGELOG.md, released 2026-07-28) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

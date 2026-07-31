@@ -1,5 +1,5 @@
 ## Description: <br>
-This skill analyzes pet oral snapshot images or videos through the publisher's cloud API to estimate gum color, gum redness level, and tartar coverage, then returns oral-health observations and report links without providing a disease diagnosis. <br>
+Analyzes pet oral snapshot images or videos through cloud APIs to report gum color, redness level, tartar coverage, and non-diagnostic oral-health observations. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill in pet cameras, smart pet products, and pet health management workflows to analyze oral snapshots for visible gum redness and tartar indicators. It supports single-image, video, URL-based, and history-query workflows for structured pet oral-health observations. <br>
+Developers and external users can use this skill in pet cameras, smart pet products, and pet health management workflows to analyze uploaded or URL-based pet oral media and return structured oral-health observations. It is for visual monitoring and care guidance, not disease diagnosis or treatment planning. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Pet images, videos, or media URLs may be sent to the publisher's cloud service for analysis. <br>
-Mitigation: Use only media approved for cloud processing, avoid sensitive content, and confirm the publisher's retention and deletion practices before deployment. <br>
-Risk: Cloud report history is tied to an automatically selected or created identity. <br>
-Mitigation: Review the identity behavior before installation and provide clear user consent, disclosure, and opt-out paths in production workflows. <br>
-Risk: Local token or account records may be stored in the workspace data directory. <br>
-Mitigation: Restrict workspace access, rotate or delete stored credentials when no longer needed, and prefer a release that documents local storage controls explicitly. <br>
+Risk: Pet media files, media URLs, and analysis requests are sent to the publisher's cloud APIs. <br>
+Mitigation: Install and run the skill only in workspaces where cloud processing by the publisher is acceptable; avoid submitting sensitive or unnecessary media. <br>
+Risk: The skill silently reuses or creates an account identity and can fetch historical reports from that cloud account context. <br>
+Mitigation: Use a dedicated workspace identity for this skill and review historical-report access expectations before enabling list queries. <br>
+Risk: Reusable identity and authentication tokens may be persisted in the local workspace database. <br>
+Mitigation: Keep the workspace data directory access-controlled and rotate or remove the local identity data when the workspace is shared or decommissioned. <br>
+Risk: Oral-health outputs are observations and care guidance, not veterinary diagnosis. <br>
+Mitigation: Treat results as screening support and consult a veterinarian for diagnosis, treatment, severe symptoms, or persistent oral-health concerns. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-oral-snapshot-gum-redness-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-oral-snapshot-gum-redness-analysis) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API interface documentation](references/api_doc.md) <br>
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown text with optional JSON details and report links] <br>
+**Output Type(s):** [text, markdown, json, shell commands] <br>
+**Output Format:** [Markdown text with structured JSON-style analysis results, history-report lists, and report links; optional file output is supported.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write a requested output file; cloud history queries are presented as a Markdown table.] <br>
+**Other Properties Related to Output:** [Accepts local media paths or public media URLs, supports cat/dog/other pet type selection, and can query cloud-stored historical reports.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter lists 1.0.5) <br>
+1.0.8 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

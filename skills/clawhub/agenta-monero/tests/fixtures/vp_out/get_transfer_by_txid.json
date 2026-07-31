@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":"0","result":{"transfer":{"txid":"1122334455667788112233445566778811223344556677881122334455667788","amount":5000000000000,"confirmations":50,"address":"X","address_index":0,"type":"out","timestamp":1535918400,"unlock_time":0}}}

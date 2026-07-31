@@ -1,5 +1,5 @@
 ## Description: <br>
-Searches, compares, books, and fixes flights, including fares and fare rules, connections, baggage, seats, miles, delays, passenger rights, travel documents, special passenger needs, corporate travel, and flight data APIs. <br>
+Searches, compares, books, and fixes flights, including fares, fare rules, connections, baggage, seats, miles, delays, passenger rights, and trip-critical travel documents. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,49 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and travel-focused agents use this skill to find, compare, monitor, book, change, and recover value from flights. It is also useful after ticketing for baggage, seats, disruptions, refunds, loyalty points, passenger rights, document checks, and travel recordkeeping. <br>
+External users and travel-assistance agents use this skill to find and compare flights, evaluate fare and loyalty choices, manage post-ticket issues, and draft or track claims. It advises by default and does not complete payments on the user's behalf. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can automatically update local travel, booking, contact, finance, and project notes with sensitive travel details. <br>
-Mitigation: Use it only where automatic local recordkeeping is wanted, and periodically review the affected Clawic files for accuracy and appropriate contents. <br>
-Risk: Travel records may involve sensitive personal, loyalty, claim, and deadline information. <br>
-Mitigation: Store credential pointers rather than secrets, and avoid saving passwords, card numbers, passport numbers, boarding-pass barcodes, programme PINs, or API secrets. <br>
-Risk: Flight prices, fare rules, entry requirements, passenger-rights thresholds, and API pricing can change. <br>
-Mitigation: Verify current airline, regulator, government, or provider sources before purchase decisions, compensation promises, entry guidance, or API design commitments. <br>
-Risk: An agent could overstep by completing payment or committing to a risky booking channel. <br>
-Mitigation: Keep the skill in advice-and-draft mode unless the user explicitly asks for action, and do not complete payment on the user's behalf. <br>
+Risk: The skill can maintain local travel memory containing bookings, watched routes, traveler constraints, loyalty balances, claims, deadlines, and related shared rows. <br>
+Mitigation: Install only when local travel memory is desired, review the configured data paths, and use it for another person's travel details only with permission. <br>
+Risk: Travel workflows can involve sensitive credentials, identity documents, programme PINs, card numbers, and boarding-pass data. <br>
+Mitigation: Store only pointers to credentials and secrets, and do not persist passport numbers, ID numbers, boarding-pass barcodes or images, loyalty PINs, or card numbers in local notes. <br>
+Risk: Flight prices, fare rules, API pricing, regulatory compensation thresholds, and travel-document requirements can change quickly. <br>
+Mitigation: Verify current provider prices, fare terms, official travel rules, and compensation thresholds before purchase, ticket changes, claims, or implementation decisions. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Flight Skill](https://clawhub.ai/ivangdavila/skills/flight) <br>
-- [Clawic Flight Skill](https://clawic.com/skills/flight) <br>
-- [Flight Data APIs](apis.md) <br>
-- [Award Tickets](awards.md) <br>
-- [Baggage](baggage.md) <br>
-- [Buying The Ticket](booking.md) <br>
-- [Connections, Layovers, and Two-Ticket Itineraries](connections.md) <br>
-- [When It Breaks](disruptions.md) <br>
-- [Passports, Visas, and Being Allowed To Board](documents.md) <br>
-- [Fares, Fare Families, and Fare Rules](fares.md) <br>
-- [Working File Templates](memory-template.md) <br>
-- [Points, Miles, and Elite Status](points.md) <br>
-- [Getting Money Back](refunds.md) <br>
-- [Finding the Flight](search.md) <br>
-- [Seats, Upgrades, and Sitting Together](seats.md) <br>
-- [Prices Over Time, And Flights In The Air](tracking.md) <br>
+- [ClawHub Flight Skill Page](https://clawhub.ai/ivangdavila/skills/flight) <br>
+- [Clawic Flight Skill Page](https://clawic.com/skills/flight) <br>
+- [Flight Skill Definition](artifact/SKILL.md) <br>
+- [Flight Memory Template](artifact/memory-template.md) <br>
+- [Flight Data APIs](artifact/apis.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration, shell commands] <br>
-**Output Format:** [Markdown or plain text with optional tables, checklists, drafts, local-file updates, and command snippets] <br>
+**Output Type(s):** [text, markdown, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with comparison tables, checklists, claim drafts, and local-note update instructions] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update local Clawic travel, booking, contact, finance, and project notes when the session produces durable travel information.] <br>
+**Other Properties Related to Output:** [May maintain local travel memory under configured Clawic data paths; no payments are completed by the skill.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+1.0.3 (source: SKILL.md frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

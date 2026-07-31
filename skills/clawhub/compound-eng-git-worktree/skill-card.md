@@ -11,14 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to manage isolated Git worktrees for parallel implementation, branch review, and cleanup workflows without switching the main working tree in place. <br>
+Developers and engineers use this skill to manage isolated Git worktrees for parallel development, code review, branch switching, and cleanup workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The helper can duplicate local .env files containing secrets into newly created worktrees. <br>
-Mitigation: Review or edit the helper before use on repositories with real credentials, require opt-in or an allowlist for env copying, prefer .env.example, and verify copied env files stay ignored and are cleaned up with discarded worktrees. <br>
+Risk: The skill may copy .env files containing API keys, production credentials, customer data, or other secrets into additional local worktree directories. <br>
+Mitigation: Review before installing in sensitive repositories and prefer an opt-in secret-copy step or per-worktree secret provisioning. <br>
+Risk: The skill may mutate repository state during normal use, including updating .gitignore and creating or removing local worktree directories. <br>
+Mitigation: Review the repository changes after worktree operations and confirm cleanup actions before removing worktrees. <br>
 
 
 ## Reference(s): <br>
@@ -30,13 +32,13 @@ Mitigation: Review or edit the helper before use on repositories with real crede
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and command output summaries] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with inline bash code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or run Git worktree helper commands and may summarize branch, worktree, and cleanup status.] <br>
+**Other Properties Related to Output:** [May direct the agent to run the bundled worktree manager script and summarize worktree status or next actions.] <br>
 
 ## Skill Version(s): <br>
-4.2.0 (source: server release metadata) <br>
+4.3.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

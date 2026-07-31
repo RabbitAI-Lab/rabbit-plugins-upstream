@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/onepilot-skill",
   "slug": "onepilot-skill",
   "ownerHandle": null,
-  "version": "0.1.19",
-  "updatedAt": 1784938427641,
-  "contentHash": "aaae70d8cdbedb9f49443b1d65ca9a39a37883865d0bfd6c40f3de7c6145d571",
-  "fetchedAt": "2026-07-26T18:04:24.286Z"
+  "version": "0.1.23",
+  "updatedAt": 1785438932300,
+  "contentHash": "1b52f2afa229387766543f78b9b4ea13125e5d038ac5fe72e7425b50a223c802",
+  "fetchedAt": "2026-07-31T10:04:37.026Z"
 }

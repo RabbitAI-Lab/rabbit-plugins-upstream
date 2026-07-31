@@ -17,8 +17,9 @@ Use this skill only when the user selects a local video file. Reject direct user
 7. Use the selected initial translation path: qwen-mt-plus with context-bound cache by default, or hash-bound Agent-native section translation when the user explicitly chooses the current Codex/orchestrator model.
 8. Require the orchestrator to compare every draft translation against source/context, correct mistranslations, and re-segment by meaning.
 9. Validate coverage, repair terms, align timestamps, and run deterministic QA.
-10. Require final whole-document QC, then export SRT/ASS only when every check passes.
-11. After successful export, delete only downloader-created audio and source subtitles under `.work/input/`.
+10. Bind the run to a clean Chinese title derived from the selected media filename or media-project directory; strip any leading date, trailing platform ID, extension, release suffix, and generic placeholder, and domain-translate a foreign title.
+11. Require final whole-document QC, then export SRT/ASS only when every check and the bound output name pass.
+12. After successful export, delete only downloader-created audio and source subtitles under `.work/input/`.
 
 Do not switch ASR providers, use local Whisper, or add backup paths unless the user explicitly asks.
 
@@ -44,6 +45,13 @@ User-side accounts and secrets:
 - Alibaba Cloud / Model Studio account: get a DashScope API key at `https://help.aliyun.com/zh/model-studio/get-api-key`, copy the workspace ID from the Model Studio console, and add a small balance before batch use.
 - Required values: `DASHSCOPE_API_KEY`, `ALIYUN_WORKSPACE_ID`, and `OKFILE_TOKEN`.
 - Required media: the user-selected video file must exist locally and use a supported video extension. Audio under `.work/input/` is an internal workflow optimization, not a supported user input.
+
+Before starting external processing, derive the real visible title:
+
+- Prefer a meaningful Chinese title already present in the media filename or media-project directory.
+- Otherwise remove a leading upload date, trailing `[platform-id]`, and extension from the foreign title, translate it to Chinese with the video's domain terminology and the relevant glossary, and pass only that title through `--localized-title`.
+- Never use a generic basename such as `原版视频`, `原视频`, `视频`, or `source video`. Ask the user only when multiple plausible source videos or titles remain.
+- A run records the resolved title, source, media path, subtitle tag, and output basename in `work/output_naming.json`. Resume and re-export must match that record.
 
 Create a local `.env` file in the skill/project working folder. Do not package a standalone environment-template file; SkillHub rejects packages containing standalone environment template files.
 
@@ -126,6 +134,7 @@ When a run fails, identify the failure category, quote the code if present, and 
 - `VTZ-E003` OkFile: check `OKFILE_TOKEN`, network access, quota, and cached URL age; rerun the same command.
 - `VTZ-E004` Alibaba/Fun-ASR: check `DASHSCOPE_API_KEY`, `ALIYUN_WORKSPACE_ID`, `ALIYUN_REGION`, account balance, and service status; rerun the same command.
 - `VTZ-E005` AI segment contract or QA blocker: the AI runner must first repair `segments.txt` with `final_qa_prompt.txt` / `final_qa_report.md`, then rerun. Ask the user only if the same blocker remains after two AI repair attempts or the fix needs domain judgment.
+- `VTZ-E006` output-title localization: derive the real title from the selected media or project directory, remove the date/platform ID/extension, translate it with the domain glossary, and rerun with the same clean Chinese `--localized-title`. Never substitute a generic basename.
 
 Use the same `--run-id` when retrying so completed stages can be reused.
 
@@ -154,7 +163,10 @@ User-facing trigger is natural language: the user can paste a local video path a
 Run:
 
 ```bash
-python scripts/video_to_subtitles.py "/absolute/path/to/video.mp4" --language en --confirm-external-processing
+python scripts/video_to_subtitles.py "/absolute/path/to/video.mp4" \
+  --localized-title "<按领域术语翻译的中文净标题>" \
+  --language en \
+  --confirm-external-processing
 ```
 
 If the user confirmed a custom subtitle export directory, add:
@@ -168,13 +180,13 @@ Optional screen context: if the user confirms important visible text, read `refe
 Normal run lifecycle:
 
 1. The wrapper checks environment, transcribes with Fun-ASR, extracts word stream, and writes `prompt.txt` for audit/repair context.
-2. If a source-language SRT/VTT exists, the wrapper maps cues to ASR segments by overlap. Similar reference text corrects `SRC_DISPLAY` and translation input while ASR `SRC_RAW` remains unchanged for timestamp alignment and coverage validation.
+2. If a source-language SRT/VTT exists, the wrapper first requires sufficient temporal overlap, then crops reference text to the lexical span of each Fun-ASR segment. Only similar in-span text may correct `SRC_DISPLAY` and translation input. Whole cues never define boundaries or spill leading/trailing words into a smaller ASR segment. If most mapped text fails the scope checks, disable the entire reference source and use Fun-ASR text.
 3. Exit `3`: generate `work/global_review/source-analysis/`. The orchestrator reads every source section and creates the validated translation context.
-4. Default qwen path calls qwen-mt-plus with that context and rejects stale cache when its SHA-256 changes. Agent mode exits `4`, translates every section under `work/global_review/agent-translation/`, records output hashes, and reruns with `--translation-provider agent`.
-5. Exit `5`: generate `work/global_review/semantic/`. The orchestrator compares source and draft, corrects mistranslations, re-segments by meaning, writes reviewed sections, and reruns.
+4. Default qwen path calls qwen-mt-plus with that context and rejects stale cache when its SHA-256 changes. Agent mode exits `4`, translates every section under `work/global_review/agent-translation/`, records output hashes and a same-SEG alignment check for every target, and reruns with `--translation-provider agent`. Initial translation never moves meaning between SEG blocks.
+5. Exit `5`: generate `work/global_review/semantic/`. The orchestrator compares every `ZH_i` with its own source and at least the ±2 neighboring sources, blocks better-neighbor matches or consecutive offsets, corrects mistranslations, re-segments by meaning, writes reviewed sections, and reruns. An entirely unchanged review requires an explicit reasoned confirmation.
 6. Validate coverage, repair terms, align timestamps, and run deterministic QA.
-7. Exit `6`: generate `work/global_review/final-qc/`. The orchestrator reviews every final section and records all required checks.
-8. Export only after all applicable gates pass, then delete `.work/input/` inputs and return the summary.
+7. Exit `6`: generate `work/global_review/final-qc/`. The orchestrator reviews every final section, repeats the cross-segment alignment audit, completes the fixed spot checks, and records all required checks.
+8. Export only after all applicable gates pass and every validation artifact matches the current file hashes, then delete `.work/input/` inputs and return the summary. Exit codes `3`-`6`, `waiting`, and `running` are never deliverable states.
 
 ## `segments.txt` Format
 
@@ -194,6 +206,7 @@ Hard rules:
 - Copy `SRC_RAW` exactly from the normalized word stream: no punctuation, no inserted words, no deleted words.
 - The full set of `SRC_RAW` spans must cover the entire word stream exactly once and in order.
 - `SRC_DISPLAY` and `ZH` must describe only the current `SRC_RAW` span. Do not borrow words or meaning from adjacent segments just to complete a sentence.
+- Initial translation keeps one-to-one SEG semantics. Do not split one complete Chinese sentence across multiple SEG blocks or advance/delay a neighboring meaning. If the source span is incomplete, keep the Chinese equally incomplete until semantic review re-segments the source words.
 - Repair ASR split words and obvious ASR mishearings only in `SRC_DISPLAY` and `ZH`. Keep `SRC_RAW` unchanged. Example: if ASR says `from tony` but the numeric/year context says `from twenty, starting from 2015`, display and translate the intended numeric phrase, not a person named Tony.
 - For non-English videos, `SRC_DISPLAY` is the readable source-language line.
 - Merge tiny oral fillers with adjacent context when they are not meaningful alone. Isolated oral fillers such as `m`, `um`, and `uh` must be merged into neighboring `SRC_RAW` spans and should not export as standalone subtitles.
@@ -234,6 +247,7 @@ For another domain, use the same workflow but provide a new glossary and repair 
 
 ```bash
 python scripts/video_to_subtitles.py "/path/to/video.mp4" \
+  --localized-title "<按该领域术语翻译的中文净标题>" \
   --language en \
   --confirm-external-processing \
   --domain-name "film subtitles" \
@@ -272,6 +286,7 @@ The QA checks and required review items:
 - bad timing and overlaps
 - display/translation scope drift, where `SRC_DISPLAY` or `ZH` appears to borrow content outside the current `SRC_RAW` span
 - undertranslated scope drift, where `SRC_RAW` is substantial but `ZH` is only a tiny fragment
+- cross-segment semantic drift, where `ZH_i` matches `SRC_(i-1)`, `SRC_(i-2)`, `SRC_(i+1)`, or `SRC_(i+2)` better than its own source; a consecutive shared offset is always a blocker
 - dense long subtitles: over 8s and over 24 source-language words; Chinese visual overflow is checked separately with the 3-line rule
 - flash subtitles: under 0.8s with weak information value
 - Chinese visual overflow using the same manual wrapping logic as export
@@ -283,11 +298,34 @@ The QA checks and required review items:
 
 Warnings and info do not block export mechanically, but production delivery should include one focused polish pass on warnings that may affect meaning, untranslated fragments, ASR mishearing, term quality, awkward rhythm, or visible subtitle quality. Remaining warnings are acceptable only when they are false positives, low-value reading-speed hints, or repeated repair would cost disproportionate time.
 
+The final-QC receipt must record fixed spot checks for:
+
+- the first 30 cues, or the whole video when shorter
+- one middle passage and important numeric claims
+- core domain/strategy terminology
+- directional logic such as long/short, entry, adding, and covering
+- names, tickers, and amounts
+- sponsorship content
+- every timestamp specifically flagged by the user
+
+Use `not_applicable` only with a concrete note. The opening check always applies.
+
+`scripts/export_subtitles.py` is an internal gated renderer, not a manual bypass. It requires the current run `work` directory and verifies all of the following before creating or overwriting ASS/SRT:
+
+- `source-analysis.validated.json`
+- `agent-translation.validated.json` in Agent mode
+- `semantic-review.validated.json`
+- `final_qa.validated.json` and `final_qa_report.md` with `Blockers: 0`
+- `final-qc.validated.json`
+- current segments, aligned output, QA report, review context, manifests, and hashes
+- no recorded gate left in `waiting` or `running`
+- a valid `output_naming.json` whose clean Chinese title and exact basename match the requested export
+
 Final outputs are copied to:
 
 ```text
-outputs/<original-video-name>.zh-<source-language>.srt
-outputs/<original-video-name>.zh-<source-language>.ass
+outputs/<clean-Chinese-title>.中<source-language-label>双语字幕.srt
+outputs/<clean-Chinese-title>.中<source-language-label>双语字幕.ass
 ```
 
 ## Completion Response Contract
@@ -301,6 +339,7 @@ After a run successfully exports subtitles, do not finish with only file paths o
 - ASR provider/model
 - orchestrating model
 - segment translation provider and model (`qwen-mt-plus` by default, current Agent model when selected)
+- source-subtitle reference status (`applied_with_asr_boundaries`, `disabled_as_anomalous`, or `not_applied`)
 - QA blocker count
 - QA warning count and the main warning types, if available
 - whether any focused human spot-check is recommended
@@ -355,7 +394,9 @@ python scripts/generate_segments_with_dashscope.py \
   --cache runs/<run-id>/work/dashscope_translation_cache.json \
   --model auto \
   --source-language-name Italian \
-  --domain-name "finance/trading training videos"
+  --domain-name "finance/trading training videos" \
+  --translation-context runs/<run-id>/work/global_review/source-analysis/translation-context.json \
+  --confirm-external-processing
 ```
 
 Always run validation and final QA afterward.
@@ -366,11 +407,12 @@ If ASR and `segments.txt` already exist and the task is only to apply updated QA
 
 ```bash
 python scripts/finalize_run.py runs/<run-id> \
-  --output-base "<original-video-name>.zh-en" \
+  --media "/absolute/path/to/original-video.mp4" \
+  --localized-title "<按领域术语翻译的中文净标题>" \
   --language en
 ```
 
-This does not call OkFile or Fun-ASR. It runs term repair, validation, alignment, final QA, SRT/ASS export, and prints the final summary to the console/chat.
+This does not call OkFile or Fun-ASR. It revalidates source analysis, semantic review, deterministic QA, final whole-document QC, and the complete delivery evidence before SRT/ASS export. An old run without current validated artifacts must resume its missing gate or start a fresh run; never hand-export its intermediate `segments.txt`.
 
 ## Cleanup Completed Runs
 

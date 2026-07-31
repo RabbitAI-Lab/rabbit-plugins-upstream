@@ -11,33 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and technical researchers use this skill to run an agent-assisted research session, dispatch channel-specific research agents, synthesize findings, and save a formatted report in the workspace. <br>
+Developers and technical researchers use this skill to classify a research topic, coordinate parallel code, discourse, academic, and TRIZ research agents, synthesize their findings, and produce a research report. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generic research prompts may invoke an agent-assisted workflow that dispatches multiple research agents. <br>
-Mitigation: Confirm the research scope and expected sources before dispatching agents. <br>
-Risk: The skill can save research reports and session state into the workspace under docs/research/. <br>
-Mitigation: Review generated files before committing, sharing, or relying on the saved report. <br>
-Risk: Synthesized multi-source findings may include incomplete, stale, or misleading information. <br>
-Mitigation: Review source evidence and top findings before using the report for decisions. <br>
+Risk: The skill may query external sources and run parallel research agents, which can expose sensitive topics or context outside the local workspace. <br>
+Mitigation: Use it on sensitive topics only when external-source research is acceptable, and review the research prompts before agent dispatch. <br>
+Risk: The skill may leave saved reports or session data in docs/research/ or related session storage. <br>
+Mitigation: Review generated files before sharing and remove sensitive session data from the workspace when it is no longer needed. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-tome-research) <br>
-- [Tome Plugin Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/tome) <br>
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-tome-research) <br>
+- [Claude Night Market tome plugin](https://github.com/athola/claude-night-market/tree/master/plugins/tome) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown report with summaries, findings, saved workspace path, and optional code or command snippets] <br>
+**Output Type(s):** [text, markdown, guidance, files] <br>
+**Output Format:** [Markdown reports, briefs, transcripts, and JSON agent findings] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save research output and session state under docs/research/.] <br>
+**Other Properties Related to Output:** [May save reports and session state under docs/research/ or related session storage.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

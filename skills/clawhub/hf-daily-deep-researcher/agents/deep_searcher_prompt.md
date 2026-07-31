@@ -12,9 +12,30 @@
 | 去重标准 | 只看新发表 | 识别里程碑工作 vs 跟进工作 |
 | 输出目标 | 发现了什么新东西 | 这个领域有哪些重要工作、怎么演进 |
 
-## 搜索工具适配
+## 搜索工具适配（v5.2.0 更新）
 
-与轻量扫描相同，优先 `kimi_search` → `web_fetch` → `browser` 三级降级。
+**不要假设 `kimi_search` 一定存在**。执行搜索前必须先检测可用工具：
+
+1. **尝试 `kimi_search`** — 调用一次测试查询，看是否成功
+   - 成功 → ✅ 用策略 A（kimi_search 主力）
+   - 失败 → ❌ 进入步骤 2
+
+2. **尝试 `web_fetch`** — 调用 arXiv API 测试
+   - 成功 → ✅ 用策略 B（web_fetch + arXiv API 主力）
+   - 失败 → ❌ 尝试 browser 兜底
+
+3. **策略选择**：
+   - **A. kimi_search 可用**：用 kimi_search 执行语义搜索，web_fetch 做补充
+   - **B. 只有 web_fetch**：完全依赖 web_fetch + arXiv API，执行至少15组查询
+   - **C. browser 兜底**：搜索能力受限，结果可能不完整
+
+### web_fetch 深度调研方案（跨平台标准方案）
+
+当只有 web_fetch 可用时：
+- 用 arXiv API 搜索核心关键词（all:TOPIC，max_results=200，深度调研需要更多结果）
+- 按年份分组搜索（2024, 2025, 2026）
+- 手动解析 XML，按引用次数/作者影响力初步排序
+- 同时抓取 HuggingFace Daily Papers 补充
 
 ## ⚠️ 致命约束（同Searcher）
 

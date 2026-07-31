@@ -7,7 +7,7 @@ const { spawnSync } = require("node:child_process")
 function existingDir(value) {
   if (typeof value !== "string" || !value.trim()) return null
   try {
-    const resolved = path.resolve(value)
+    const resolved = fs.realpathSync(path.resolve(value))
     return fs.statSync(resolved).isDirectory() ? resolved : null
   } catch {
     return null
@@ -23,9 +23,9 @@ function safeRelative(root, target) {
   }
 }
 
-function resolveTarget(root, target) {
+function resolveTarget(root, target, base = root) {
   const normalized = String(target || "").replace(/\\/g, "/")
-  return path.isAbsolute(normalized) ? path.resolve(normalized) : path.resolve(root, normalized)
+  return path.isAbsolute(normalized) ? path.resolve(normalized) : path.resolve(base || root, normalized)
 }
 
 function firstLine(file) {
@@ -138,31 +138,68 @@ function continuityFindings(root) {
 
 function extractProseTargets(command) {
   const targets = []
-  const token = `["']?([^\\s"'<>|;&()]*正文[^\\s"'<>|;&()]*)["']?`
-  for (const source of [`>>?\\s*${token}`, `(?:^|[\\s;&|(){}<>])(?:tee(?:\\s+-a)?|touch)\\s+${token}`]) {
+  // 目标 token 三形态（引号段优先）：双引号段 / 单引号段 / 裸词。此前只有一个把引号排除在字符类外
+  // 的裸词式，带空格的引号目标（> "my book/正文/第1章.md"）整条命令抽不到目标就静默放行。
+  // 裸词类只排 ASCII 空白（空格/Tab/CR/LF，shell 真正的分词符）：\s 在 js 与 python 都含 U+3000，
+  // 而全角空格不分词，用 \s 会把「第003章　开局.md」截成「第003章」而漏拦（本项目章名分隔符
+  // [_\- 　] 自带全角空格）。反斜杠转义空格（my\ book）仍不认——resolveTarget 把 \ 归一成路径
+  // 分隔符（Windows 路径），在此解转义会反过来毁掉 book\正文\第1章.md。
+  const bare = `[^ \\t\\r\\n"'<>|;&()]`
+  const token = `"([^"]*正文[^"]*)"|'([^']*正文[^']*)'|["']?(${bare}*正文${bare}*)["']?`
+  for (const source of [`>>?\\s*(?:${token})`, `(?:^|[\\s;&|(){}<>])(?:tee(?:\\s+-a)?|touch)\\s+(?:${token})`]) {
     const regex = new RegExp(source, "gm")
     let match
     while ((match = regex.exec(command)) !== null) {
-      if (match[1]) targets.push(match[1])
+      const target = match[1] || match[2] || match[3]
+      if (target) targets.push(target)
     }
   }
-  for (const raw of command.split(/[;&|\n]/)) {
-    const segment = raw.split(/\d*[<>]/)[0]
-    const words = segment.trim().split(/\s+/).filter(Boolean)
+  for (const raw of shellSegments(command)) {
+    const segment = beforeShellRedirection(raw)
+    // 引号感知分词（同 shellWords）：/\s+/ 会把 cp draft.md "my book/正文/第1章.md" 的目标切碎，
+    // 末位取到 book/正文/第1章.md —— 判到另一本书上（那本有细纲就直接放行）。
+    const words = shellWords(segment)
     if (words.length >= 2 && (words[0] === "cp" || words[0] === "mv")) {
       const positional = words.slice(1).filter((word) => !word.startsWith("-"))
       const destination = positional[positional.length - 1]
-      if (destination && destination.includes("正文")) targets.push(destination.replace(/^["']|["']$/g, ""))
+      if (destination && destination.includes("正文")) targets.push(destination)
     }
   }
   return targets
 }
 
+// apply_patch 目标抽取。只认 Add/Update 会漏掉 `*** Move to:`——它是 Update File 段的子指令
+// （apply_patch 的改名/搬家形态），落盘路径是**目的地**，源路径搬完就不存在了。此前
+// `*** Update File: draft.md` + `*** Move to: 书/正文/第9章.md` 只抽到 draft.md：细纲门放行
+// （draft.md 不是正文），写后兜底网也扫的是已经不存在的源 —— 一份没细纲的草稿能直接搬进 正文/。
+// 故 Move 用目的地**顶替**同段的源目标（不是追加：源已不在，拿它去查会误伤/空扫）。
+// Delete File 一律不入表（两端一致）：删除不是写入，proseBlockReason 对已存在的正文本就放行、
+// 删完文件也不在了没东西可扫，认它只会给「删稿」误报；但 Delete 段也能带 Move to（搬走后删源），
+// 那条 Move 的目的地照样要进表，故 Delete 只清掉待顶替的源槽位。
 function extractPatchTargets(patchText) {
   const targets = []
+  let sourceIndex = -1
   for (const line of String(patchText).split(/\r?\n/)) {
-    const match = line.trim().match(/^\*\*\* (?:Add|Update) File: (.+)$/)
-    if (match) targets.push(match[1].trim())
+    // apply_patch grammar 的控制行必须从第 0 列开始；diff 上下文行固定以空格开头。
+    // 先 trim 会把正文里的 ` *** Move to: notes.md` 伪装成搬家指令，顶掉真实扫描目标。
+    const file = line.match(/^\*\*\* (Add|Update|Delete) File: (.+)$/)
+    if (file) {
+      if (file[1] === "Delete") {
+        sourceIndex = -1
+        continue
+      }
+      targets.push(file[2].trim())
+      sourceIndex = targets.length - 1
+      continue
+    }
+    const move = line.match(/^\*\*\* Move to: (.+)$/)
+    if (move) {
+      const destination = move[1].trim()
+      if (!destination) continue
+      if (sourceIndex >= 0) targets[sourceIndex] = destination
+      else targets.push(destination)
+      sourceIndex = -1
+    }
   }
   return targets
 }
@@ -185,6 +222,9 @@ function proseBlockReason(root, absolute) {
   if (!match) return null
   const chapter = match[1]
   const book = path.dirname(path.dirname(absolute))
+  // 这是守卫的 canonical case：agent 可能在任何脚手架存在前就首建 {书}/正文/第N章.md。
+  // 是否“像一本书”不能作为放行条件；相对路径误判应在宿主 adapter 按 cwd 正确解析，而不是
+  // 让核心守卫 fail open。
   if (fs.existsSync(path.join(root, "拆文库", path.basename(book)))) return null
   const outlineDir = path.join(book, "大纲")
   let found = false
@@ -230,10 +270,15 @@ function proseBlockReason(root, absolute) {
   return null
 }
 
-const TERMINAL = new Set(Array.from("。！？…”』」）)!?.~—"))
+// 收尾标点集与深扫 oracle check-degeneration.js 的 findTruncation 对齐（[。！？!?…”"』」）)】]）：
+// 】 是章尾系统播报模板的收束符（agent-references/hooks-chapter.md 章尾实战模板一/四），ASCII "
+// 是 normalize-punctuation.js --quote-mode ascii 的合法收引号，两者都不该被判「疑似截断」。
+const TERMINAL = new Set(Array.from("。！？…”』」）)!?.~—】\""))
 const QUOTE_OPENERS = new Set(["「", "“", "‘", "『", '"'])
 const SOFT_PATTERNS = [
-  [/作为(一个)?(AI|人工智能|大?语言模型|智能助手|聊天助手)(?=，|,|。|、|；|;|：|:|！|!|？|\?|\s|）|\)|」|』|"|】|我|无法|不能|没法|$)/, "AI 自指"],
+  // 型号后缀（AI语言模型/AI助手/人工智能语言模型/AI模型/AI大模型）必须可选吃掉：否则前视断言
+  // 紧跟在「AI」后面看到的是「语」/「助」/「模」，最典型的退化开场整类漏检。
+  [/作为(一个)?(AI|人工智能|大?语言模型|智能助手|聊天助手)(?:语言模型|大?模型|助手|机器人)?(?=，|,|。|、|；|;|：|:|！|!|？|\?|\s|）|\)|」|』|"|】|我|无法|不能|没法|$)/, "AI 自指"],
   [/^(Sure|Certainly|Here'?s|As an AI|I (?:cannot|can't|am unable|apologize))/, "英文 AI 腔"],
   [/我(无法|不能)(继续(写|创作|生成|下去|输出)?|生成(内容|文本|正文)?|创作|续写|写作|完成(这个|本)?(章|篇|创作|请求)?)/, "生成拒绝语"],
 ]
@@ -252,9 +297,9 @@ function skippableLine(line) {
 // 与 check-ai-patterns.js 的同名新规则统一规格：只收确定性、低误报的句式；密度型/
 // advisory 检测归 check-ai-patterns.js 深扫，不进这张每次写正文都跑的网。全部正则
 // 线性扫描、量词有界，无回溯灾难。台词/弹幕/系统播报不算：逐行把成对引号段等长
-// 句号占位（同 check-ai-patterns.js 的 maskQuoted：占位天然截断各规则的字符类，
-// 规则不会跨引号拼出假命中），占位后仍残留引号字符（跨行对话/未闭合）的行整行
-// 跳过。js↔py 同构实现（codex
+// 问号占位（占位天然截断各规则的字符类，规则不会跨引号拼出假命中；见
+// maskQuotedSpans 为何用问号而不是句号），占位后仍残留引号字符（跨行对话/未闭合）
+// 的行整行跳过。js↔py 同构实现（codex
 // story_codex_hook.py）由 scripts/check-hook-regex-sync.sh（规范串逐字锁）与
 // scripts/test-prose-net-parity.sh（fixture 逐字 diff）锁 parity，文案以本核为准。
 const TOXIC_QUOTE_SPANS = [/「[^」]*」/g, /『[^』]*』/g, /【[^】]*】/g, /“[^”]*”/g, /‘[^’]*’/g, /"[^"]*"/g, /'[^']*'/g]
@@ -274,12 +319,20 @@ const TOXIC_SENTENCE_PATTERNS = [
 ]
 // 「正式拉开序幕/帷幕」是场内事件的报幕式陈述，不是叙述者预告，lookbehind 排除（同 check-ai-patterns.js）。
 const TOXIC_TRAILER_PATTERN = /没人知道|谁也不知道|谁也没想到|殊不知|(?:这)?才刚刚开(?:始|头)|正(?:朝着|向着)[^。！？!?\n]{0,24}(?:压|涌|袭|逼)(?:了?过去|了?过来|来)|(?<!正式)拉开(?:序幕|帷幕)|即将(?:开始|来临|降临)/
+// 章尾状态总结体：与 trailer-ending 共用文末窗口，盖章过去而非预告将来（同 check-ai-patterns.js）。
+// 收的都是 banned-words 已按名禁掉的形态；不收「(这|那)一刻…终于明白」——真人叙述里那是正常认知
+// 节拍，短篇第一人称审判句还是卖点。各分支要求落在句末断言位，避免吃进条件从句/动补/成语/及物用法/否定认知。
+const TOXIC_TRAILER_SUMMARY_PATTERN = /这一(?:夜|天|刻|战|年|局|役)[，,]?[^。！？!?，,\n]{0,6}(?<!命中)(?<!是)注定[^。！？!?\n]{0,8}[。！]|就这样[，,][^。！？!?，,\n]{0,8}(?:一切|全部)[^。！？!?，,\n]{0,4}(?:结束了|落幕|收场)[。！]|这一切[，,]?[^。！？!?，,\n]{0,6}(?:都)?(?:说明|意味着|结束了)(?!的)(?:(?!什么)[^。！？!?\n]){0,6}[。！]|(?:新的篇章|新的旅程|崭新的篇章|新的人生)[^。！？!?\n]{0,6}(?:开始|拉开|展开)|命运[^。！？!?\n]{0,6}齿轮/
 // 「是A，不是B」的反问尾巴（…，不是吗/么/吧）不算对比句；取匹配段最后一个「不是」后的首字判断。
 const TOXIC_REVERSE_TAIL = /.*[，,]\s*(?:而)?不是([^。！？!?\n]*)$/
 
+// 占位字符用「？」而不是「。」：占位既要截断各规则的 [^。！？!?…] 否定类（？与句号在每条规则的
+// 否定类里等效），又不能落在任何规则的接受位。句号占位会替 trailer-summary 的句末 [。！] 伪造出
+// 终止符，让「这一战注定是「血屠」的开端，…」这类引号里放代号/绰号的叙述行被误报，且报出的
+// 『这一战注定是。』在原文里 grep 不到。占位长度不变，故 trailer 窗口切点不漂移。
 function maskQuotedSpans(line) {
   let out = line
-  for (const spans of TOXIC_QUOTE_SPANS) out = out.replace(spans, (m) => "。".repeat(m.length))
+  for (const spans of TOXIC_QUOTE_SPANS) out = out.replace(spans, (m) => "？".repeat(m.length))
   return out
 }
 
@@ -351,6 +404,8 @@ function toxicPhraseFindings(text) {
     const [lineNo, masked] = content[i]
     const match = masked.match(TOXIC_TRAILER_PATTERN)
     if (match) findings.push(`第${lineNo}行 毒句式[trailer-ending]：『${match[0].slice(0, 20)}』——删章尾预告腔，用正在发生的动作或画面收章。`)
+    const summary = masked.match(TOXIC_TRAILER_SUMMARY_PATTERN)
+    if (summary) findings.push(`第${lineNo}行 毒句式[trailer-summary]：『${summary[0].slice(0, 20)}』——删章尾状态总结句，收束状态是细纲的规划口径，正文落到具体动作、画面或台词上。`)
   }
   if (findings.length) findings.push("毒句式是确定性 AI 指纹：本章须清零后再继续。完整扫描：node <skill>/scripts/check-ai-patterns.js --check <正文文件>")
   return findings
@@ -474,8 +529,87 @@ function proseAfterWrite(root, absolute) {
   return `=== 正文兜底检测（${safeRelative(root, absolute)}）===\n轻量确定性网自动复扫（模型无关，防主会话漏跑收尾）。按类型处理后复扫到净：\n${findings.join("\n")}`
 }
 
+// 线性手写分词，不用带歧义交替的正则：旧式 /"(?:\\.|[^"])*"|'[^']*'|[^\s]+/ 里 \\. 与 [^"] 都能吃
+// 反斜杠，而调用方先按 [;&|\n] 拆段会拆开引号内的分隔符、留下一个不闭合的 "，此时每个反斜杠让
+// 搜索空间翻倍——`git commit -m "fix: 转义覆盖 \\n \\r … | see README"` 这种 130 字命令实测烧掉
+// 27s CPU，超过宿主 hook 的 timeoutMs（zcode 15000ms）被杀。逐字符扫描：引号内原样取字（成对
+// 引号剥掉，不闭合就取到段尾），ASCII 空白（空格/Tab/CR/LF）分词——U+3000 不是 shell 分词符，
+// 故不切。不解 \ 转义：resolveTarget 把 \ 当路径分隔符（Windows 路径）。
 function shellWords(segment) {
-  return (segment.match(/"(?:\\.|[^"])*"|'[^']*'|[^\s]+/g) || []).map((word) => word.replace(/^["']|["']$/g, ""))
+  const words = []
+  let current = ""
+  let started = false
+  let quote = ""
+  for (const ch of String(segment)) {
+    if (quote) {
+      if (ch === quote) quote = ""
+      else current += ch
+      continue
+    }
+    if (ch === '"' || ch === "'") {
+      quote = ch
+      started = true
+      continue
+    }
+    if (ch === " " || ch === "\t" || ch === "\r" || ch === "\n") {
+      if (started) words.push(current)
+      current = ""
+      started = false
+      continue
+    }
+    started = true
+    current += ch
+  }
+  if (started) words.push(current)
+  return words
+}
+
+function shellSegments(command) {
+  const segments = []
+  let current = ""
+  let quote = ""
+  for (const ch of String(command)) {
+    if (quote) {
+      current += ch
+      if (ch === quote) quote = ""
+      continue
+    }
+    if (ch === '"' || ch === "'") {
+      quote = ch
+      current += ch
+      continue
+    }
+    if (ch === ";" || ch === "&" || ch === "|" || ch === "\n") {
+      if (current) segments.push(current)
+      current = ""
+      continue
+    }
+    current += ch
+  }
+  if (current) segments.push(current)
+  return segments
+}
+
+function beforeShellRedirection(segment) {
+  let current = ""
+  let quote = ""
+  for (const ch of String(segment)) {
+    if (quote) {
+      current += ch
+      if (ch === quote) quote = ""
+      continue
+    }
+    if (ch === '"' || ch === "'") {
+      quote = ch
+      current += ch
+      continue
+    }
+    if (ch === "<" || ch === ">") {
+      return current.replace(/\d+$/, "")
+    }
+    current += ch
+  }
+  return current
 }
 
 function isGitCommitCommand(command) {
@@ -506,6 +640,34 @@ function isGitCommitCommand(command) {
   return false
 }
 
+// 设定/ 直属的项目级设定件：artifact-protocols.md 规定的 关系.md（正文是「# 角色关系图」）、
+// 题材定位.md，以及 文风.md、题材正文提示卡.md 等，它们本来就没有 名字/姓名 字段。
+const SETTING_NON_CHARACTER_FILES = new Set(["关系.md", "题材定位.md", "题材正文提示卡.md", "文风.md", "世界规则.md", "世界观.md", "金手指.md", "背景设定.md"])
+
+// 只查角色卡：整棵 设定/ 一刀切会让每次碰设定的提交都刷一屏假警告，把同框的
+// 「正文硬编码角色属性」真警告埋掉。判定口径与 validate-story-commit.sh / opencode
+// pre-commit.sh 的 case 分支一一对齐（bash↔js↔py 四端同口径，别单边改回一刀切）：
+// ① 设定/角色|人物 子目录内的文件 → 角色卡；
+// ② 其余 设定/<子目录>/ → 整目录跳过（世界观/势力/报告/原理/人物关系 等）；
+// ③ 设定/ 直属的扁平文件 → 除已知项目级设定件外都算角色卡（主角.md/配角.md/反派.md 等自定义命名）。
+// bash 的 `*` 跨 `/` 匹配，`设定/角色/*|*/设定/角色/*` 等价于「路径里存在某个 设定 目录段满足该
+// 分支」，所以两趟扫描（先全路径找分支①，再全路径找分支②）而不是只看第一个 设定 段就定分支——
+// 后者在 设定/其他/设定/角色/x.md 这类嵌套路径上会与 bash 判定分叉。
+function isCharacterSheetPath(relative) {
+  const segments = relative.split("/")
+  const last = segments.length - 1
+  // 分支①：某个 设定 段紧跟 角色/人物，且其下还有文件段
+  for (let i = 0; i + 1 < last; i++) {
+    if (segments[i] === "设定" && (segments[i + 1] === "角色" || segments[i + 1] === "人物")) return true
+  }
+  // 分支②：某个 设定 段后还有 ≥2 段，即落在非角色子目录里
+  for (let i = 0; i + 1 < last; i++) {
+    if (segments[i] === "设定") return false
+  }
+  // 分支③：设定 直属扁平文件（分支②已排掉更深的路径，设定 段只能是倒数第二段）
+  return last >= 1 && segments[last - 1] === "设定" && !SETTING_NON_CHARACTER_FILES.has(segments[last])
+}
+
 function stagedMarkdownWarnings(root) {
   let output
   try {
@@ -530,7 +692,7 @@ function stagedMarkdownWarnings(root) {
       })
       if (hits.length) warnings.push(`⚠ ${relative}: 正文硬编码角色属性，应引用设定文件：\n${hits.join("\n")}`)
     }
-    if ((relative.startsWith("设定/") || relative.includes("/设定/")) && !/^[\s　]*(名字|姓名|名称|name)[\s　]*(：|:)/im.test(text)) {
+    if (isCharacterSheetPath(relative) && !/^[\s　]*(名字|姓名|名称|name)[\s　]*(：|:)/im.test(text)) {
       warnings.push(`⚠ ${relative}: 设定文件缺少 name/名字 必填字段。`)
     }
   }

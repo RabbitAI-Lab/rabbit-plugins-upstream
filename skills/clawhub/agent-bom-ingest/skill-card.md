@@ -1,5 +1,5 @@
 ## Description: <br>
-Validate and ingest operator-pushed agent-bom inventory JSON to produce local findings, graph, policy, provenance, and auditor-ready exports without direct cloud credentials. <br>
+Validate and ingest operator-pushed agent-bom inventory JSON from AWS, Azure, GCP, Snowflake, CMDB, or endpoint collectors for local findings, graph, policy, provenance, and auditor-ready exports without giving agent-bom direct cloud credentials. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, security engineers, and operators use this skill when they already have canonical inventory JSON from cloud, CMDB, endpoint, or AI-agent collection workflows and need local validation, scanning, graphing, policy checks, provenance review, or exports. <br>
+Developers, security engineers, and auditors use this skill to validate canonical inventory JSON, run local agent-bom scans, and export findings for automation, review, or compliance workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Inventory-derived security data may leave the local machine when optional push or vulnerability enrichment is enabled. <br>
-Mitigation: Verify the operator-provided push URL and enrichment endpoints before enabling those optional actions. <br>
-Risk: Untrusted or unintended inventory files could produce misleading local findings. <br>
-Mitigation: Run schema validation first and analyze only inventory files the operator intended to provide. <br>
-Risk: Inventory and configuration may contain sensitive tokens, URL credentials, private keys, or environment values. <br>
-Mitigation: Rely on the skill's redaction guidance and do not display or export raw secrets. <br>
+Risk: Inventory files or export destinations chosen by the operator may be untrusted or malformed. <br>
+Mitigation: Confirm trust in the agent-bom CLI, validate inventory against the packaged schema, and only scan inventory files and write exports selected by the operator. <br>
+Risk: Optional control-plane push can expose API tokens or send inventory data to an unintended endpoint. <br>
+Mitigation: Use an operator-provided destination URL and API token through environment variables, and avoid exposing secrets in chat or outputs. <br>
+Risk: Optional vulnerability enrichment contacts external advisory services during local scans. <br>
+Mitigation: Treat OSV and GitHub Advisory lookups as operator-directed optional network use and run them only when appropriate for the inventory workflow. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/msaad00/skills/agent-bom-ingest) <br>
+- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-ingest) <br>
 - [agent-bom repository](https://github.com/msaad00/agent-bom) <br>
 - [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [OSV vulnerability API](https://api.osv.dev/v1) <br>
-- [GitHub Advisory API](https://api.github.com/advisories) <br>
+- [OSV API](https://api.osv.dev/v1) <br>
+- [GitHub Advisory Database API](https://api.github.com/advisories) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and operational guidance] <br>
+**Output Type(s):** [Shell commands, Configuration, Guidance, Markdown, JSON, Code] <br>
+**Output Format:** [Markdown guidance with shell commands and export format choices] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent-bom CLI to create operator-selected JSON, SARIF, HTML, Markdown, CycloneDX, or SPDX export files.] <br>
+**Other Properties Related to Output:** [Produces local scan and export guidance for JSON, SARIF, HTML, Markdown, CycloneDX, or SPDX outputs.] <br>
 
 ## Skill Version(s): <br>
-0.98.0 (source: server release metadata and artifact frontmatter) <br>
+0.98.2 (source: server release evidence and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

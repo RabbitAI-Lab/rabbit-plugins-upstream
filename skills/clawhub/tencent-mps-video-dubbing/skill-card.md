@@ -1,5 +1,5 @@
 ## Description: <br>
-Generates commands for Tencent Cloud MPS to create an end-to-end translated and dubbed version of a video, including OCR or ASR extraction, translation, subtitle burn-in, and AI voice dubbing. <br>
+Generates commands for Tencent Cloud MPS end-to-end video dubbing workflows that translate video language, optionally burn translated subtitles, create AI-cloned dubbing audio, and query task status. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,39 @@ Apache 2.0 <br>
 
 
 ## Use Case: <br>
-Developers and media localization operators use this skill to generate command lines and configuration checks for submitting, querying, and downloading Tencent Cloud MPS end-to-end video translation and dubbing jobs. <br>
+Developers and operators use this skill to prepare correct Tencent Cloud MPS video dubbing commands for full-language-localization jobs, including local file upload, COS input handling, task polling, result download, and status queries. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can auto-install or upgrade Python packages before running its Tencent Cloud helper scripts. <br>
-Mitigation: Review the dependency list first, run in a dedicated virtual environment, and manually control upgrades when operating in sensitive environments. <br>
-Risk: The helper scripts read local environment and dotenv-style files that may contain Tencent Cloud credentials. <br>
-Mitigation: Use least-privilege Tencent credentials, keep credential files outside untrusted directories, and avoid running from directories that may contain stray .env files. <br>
-Risk: The skill handles video uploads, cloud storage objects, task outputs, and presigned download URLs. <br>
-Mitigation: Limit COS bucket permissions, avoid sharing presigned URLs, and confirm storage locations before submitting jobs. <br>
+Risk: Local-file handling can upload input media even in dry-run or missing-confirmation paths. <br>
+Mitigation: Use only non-sensitive test media for dry runs, inspect generated commands before execution, and rely on narrowly scoped Tencent Cloud CAM credentials and dedicated COS prefixes. <br>
+Risk: The skill can automatically install or upgrade Python dependencies. <br>
+Mitigation: Install dependencies manually in an isolated virtual environment before use, and review dependency versions as part of deployment approval. <br>
+Risk: Presigned URLs and COS output links can grant temporary access to generated media. <br>
+Mitigation: Treat generated links as sensitive, avoid posting them in public channels, and rotate or expire access according to the storage policy. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tencent-mpaas-skills/skills/tencent-mps-video-dubbing) <br>
 - [Video dubbing parameters and examples](references/mps_video_dubbing.md) <br>
 - [ProcessMedia request examples](references/example.md) <br>
-- [Tencent Cloud one-stop video dubbing documentation](https://cloud.tencent.com/document/product/862/124504) <br>
-- [Tencent Cloud ProcessMedia API](https://cloud.tencent.com/document/product/862/37578) <br>
-- [Tencent Cloud DescribeTaskDetail API](https://cloud.tencent.com/document/api/862/37614) <br>
+- [Tencent Cloud MPS one-stop dubbing guide](https://cloud.tencent.com/document/product/862/124504) <br>
+- [Tencent Cloud ProcessMedia AiAnalysisTask](https://cloud.tencent.com/document/product/862/37578) <br>
+- [Tencent Cloud DescribeTaskDetail](https://cloud.tencent.com/document/api/862/37614) <br>
 - [Tencent Cloud MPS pricing](https://cloud.tencent.com/document/product/862/36180) <br>
+- [Tencent Cloud MPS regions](https://cloud.tencent.com/document/product/862/37572) <br>
+- [Tencent Cloud COS regions](https://cloud.tencent.com/document/product/436/6224) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Markdown, Configuration, Guidance] <br>
-**Output Format:** [Markdown text with command lines, task identifiers, and links] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown text containing shell commands, task identifiers, and Markdown links for generated download URLs] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands may include dry-run, query, polling, upload, download, and charge-confirmation options.] <br>
+**Other Properties Related to Output:** [For processing jobs, the skill is expected to surface cost confirmation requirements and the Tencent MPS TaskId; dry-run and query paths avoid new processing charges.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release metadata) <br>
+1.0.6 (source: evidence.json metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

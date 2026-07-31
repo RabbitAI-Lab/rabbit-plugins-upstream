@@ -11,31 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and architects use this skill to decide when a space-based, in-memory data-grid architecture fits high-traffic stateful workloads and to outline adoption steps, deliverables, and operational risks. <br>
+Developers and architects use this skill to evaluate when a space-based, data-grid architecture fits high-traffic stateful workloads and to plan partitioning, persistence, failover, scalability testing, and operational monitoring. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Architecture recommendations may be unsuitable for low-traffic systems or systems that require strong consistency over availability. <br>
-Mitigation: Use the guidance as design input and validate workload, consistency, latency, and cost requirements before implementation. <br>
-Risk: Operational use in agent workspaces can become sensitive if paired with broader write, deploy, send, delete, credential, or shared-memory capabilities. <br>
-Mitigation: Install only in expected workspaces and review configured credentials and confirmation prompts before allowing consequential actions. <br>
+Risk: Broad triggers may activate the skill during general architecture or scalability conversations. <br>
+Mitigation: Review trigger scope before installation and prefer narrower activation when tighter context control is needed. <br>
+Risk: Space-based architectures can create eventual consistency concerns. <br>
+Mitigation: Document data-freshness expectations and use compensation logic where immediate consistency is not available. <br>
+Risk: In-memory data grids add operational complexity and cost. <br>
+Mitigation: Plan production-grade automation, monitoring, utilization controls, and scaling runbooks before adoption. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-space-based) <br>
-- [OpenClaw metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown architecture guidance with lists of adoption steps, deliverables, risks, mitigations, and component vocabulary.] <br>
+**Output Type(s):** [guidance, markdown] <br>
+**Output Format:** [Markdown guidance and structured recommendations] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No tools, shell commands, credentials, or API calls are required by the artifact.] <br>
+**Other Properties Related to Output:** [Documentation-only advisory output; no tools, credentials, network access, or automatic actions are declared in the evidence.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

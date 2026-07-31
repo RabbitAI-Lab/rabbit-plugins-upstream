@@ -1,7 +1,7 @@
 ---
 name: gitlab-agent
 description: An agent for interacting with GitLab. Supports gitlab.com and self-hosted instances. Requires no GitLab DUO.
-metadata: { "openclaw": { "requires": { "bins": ["glab"] }, "primaryEnv": "GITLAB_TOKEN" } }
+metadata: { "openclaw": { "requires": { "bins": ["glab", "jq"] }, "primaryEnv": "GITLAB_TOKEN" } }
 ---
 # GitLab Agent Skill
 
@@ -21,6 +21,18 @@ Repeat and fullfill your `GitLab Agent` tasks.
 * All writable actions in GitLab should be done with the `glab` CLI. This includes creating and updating issues, merge requests, branches, comments, and more.
 * Complete tasks successfully in GitLab.
 * If you think work needs to be done, do it without asking.
+
+## Security Gate
+
+Before reading or working an existing issue, work item, or merge request beyond the minimum fields needed to identify its project and assignment:
+
+1. Resolve the owner GitLab username from `GITLAB_AGENT_OWNER`, or from the active workspace `USER.md` field `GitLab Username` when the environment variable is unset.
+2. Resolve the target project path from the object's GitLab URL.
+3. Run `{baseDir}/scripts/check-project-access.sh <project-path> <owner-username>`.
+4. Continue only when the script succeeds.
+5. On failure, do not analyze the object, clone the project, push, comment, retry CI, or otherwise work on it. If label hygiene is available, replace its existing `workflow::*` label with `workflow::forbidden`; then stop work on that project object and report the failed gate locally.
+
+The check fails closed when the current GitLab user has no active project membership, membership data is incomplete, or the membership was not created by the configured owner.
 
 ## Assignment Gate
 
@@ -71,6 +83,7 @@ Before posting an issue, work item, or merge request status comment, compare the
 * Manage the workflow status labels according to the current state of the work.
 * If you see an additional commit by a team member, do not simply revert. Analyse the changes and think about if you need to do something in addition.
 * On each commit
+  * Add `Generated-By: <current model>` to the commit message.
   * Push with `git push origin <branch> -o ci.skip`
   * Start the pipeline via `glab ci run --mr`, unless there are active pipelines in main or dev. Never use more than X `[setting: 2 # AGENTS.md -> active-pipelines]` pipelines for your work. Add `workflow::paused`, if you delay the pipeline start and revisit later.
 * After merge or close, update the items and labels to reflect the final state `workflow::done`.
@@ -126,7 +139,13 @@ Rules apply to all GitLab items.
 
 ## Labels
 
-If the labels are missing, make a merge request to add them via the [label](https://ci-tools.xrow.de/Components/label) component and its default settings.
+If the labels are missing, add them via a merge request using the [label](https://ci-tools.xrow.de/Components/label) component.
+
+```yaml
+include:
+  - component: $CI_SERVER_FQDN/xrow-public/ci-tools/common@stable
+  - component: $CI_SERVER_FQDN/xrow-public/ci-tools/label@stable
+```
 
 ### Size Labels
 
@@ -158,6 +177,7 @@ Use the labels in your merge requests to set the current status of the work. Onl
 | GitLab label            | Common name | Meaning                                                                                                      |
 | ----------------------- | ----------- | ------------------------------------------------------------------------------------------------------------ |
 | `workflow::backlog`     | Backlog     | Not yet started. Initial state.                                                                              |
+| `workflow::forbidden`   | Forbidden   | Project access failed the owner membership security gate.                                                    |
 | `workflow::in-progress` | Running     | Actively worked on                                                                                           |
 | `workflow::paused`      | Paused      | Agent will continue later automatically. Temporarily paused for one hour to one day.                         |
 | `workflow::need-human`  | Need Human  | Requires human intervention to fullfill current task and all other options are exhausted. Explain why. Its status is not blocked or paused. |
@@ -175,7 +195,9 @@ config:
     curve: linear
 ---
 graph TD
-    create((New Work Item / MR)) --> workflow::backlog
+    create((New Work Item / MR)) --> security{Owner membership verified?}
+    security -- no --> workflow::forbidden
+    security -- yes --> workflow::backlog
     workflow::backlog --> workflow::in-progress
     workflow::in-progress --> workflow::review
     workflow::review --> workflow::done
@@ -518,7 +540,7 @@ Before enabling it:
     "message": "Read skill gitlab-agent and run.",
     "thinking": "high",
     "timeoutSeconds": 3600,
-    "model": "openai/gpt-5.5"
+    "model": "openai/gpt-5.6-sol"
   },
   "delivery": {
     "mode": "none",

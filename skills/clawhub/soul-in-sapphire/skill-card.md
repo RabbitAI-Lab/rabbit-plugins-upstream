@@ -1,5 +1,5 @@
 ## Description: <br>
-Long-term memory, state tracking, continuity review, and identity-change support for OpenClaw, including durable memory writes and search in Notion, emotion and state ticks, journal writes, continuity checks, identity diffs, inner-conflict tracking, and preserving a stable sense of self across sessions. <br>
+Continuity, durable memory, state, journal, and identity maintenance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and OpenClaw users use this skill to store and recall durable Notion-backed memory, update emotion and state snapshots, write journal entries, and inspect continuity or identity changes across sessions. <br>
+Developers and OpenClaw operators use this skill to give an agent Notion-backed durable memory, state snapshots, daily journals, and continuity checks for long-running assistant workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can persist sensitive emotional, conversation, and user-profile data to Notion. <br>
-Mitigation: Use a least-privilege Notion integration, review what is written, and avoid storing secrets or intimate details. <br>
-Risk: Cron or heartbeat automation can create unattended journal or state records. <br>
-Mitigation: Enable automation only when unattended journaling is desired and periodically review generated records. <br>
-Risk: An overridden NOTIONCTL_PATH can direct execution to an unexpected local script. <br>
-Mitigation: Keep NOTIONCTL_PATH unset unless the target script is trusted. <br>
+Risk: Long-term memory, journal, and state records may persist sensitive conversational or workflow context in Notion. <br>
+Mitigation: Use a narrowly scoped Notion integration and avoid storing secrets, regulated personal data, or private facts that do not improve future assistance. <br>
+Risk: Cron-driven recall and journal workflows can repeatedly read or write external memory without direct user prompting. <br>
+Mitigation: Review cron configuration, database IDs, and profile-promotion behavior before enabling automated operation. <br>
+Risk: Untrusted executable paths or write targets could redirect helper behavior outside the intended workspace. <br>
+Mitigation: Set NOTIONCTL_PATH and any --write paths only to trusted locations controlled by the operator. <br>
 
 
 ## Reference(s): <br>
-- [Soul In Sapphire ClawHub release](https://clawhub.ai/nextaltair/soul-in-sapphire) <br>
-- [Publisher profile: nextaltair](https://clawhub.ai/user/nextaltair) <br>
+- [ClawHub skill page](https://clawhub.ai/nextaltair/skills/soul-in-sapphire) <br>
+- [Publisher profile](https://clawhub.ai/user/nextaltair) <br>
 - [Notion integrations setup](https://www.notion.so/my-integrations) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON payload examples and shell command snippets] <br>
+**Output Type(s):** [Guidance, Shell commands, JSON, Configuration] <br>
+**Output Format:** [Markdown guidance with shell commands and JSON payloads] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write or search Notion-backed memory, state, and journal records when configured with the required Notion credentials and database identifiers.] <br>
+**Other Properties Related to Output:** [May create or update Notion records and local JSON memory mirror files when invoked with configured credentials and database IDs.] <br>
 
 ## Skill Version(s): <br>
-1.0.13 (source: server release evidence) <br>
+1.0.15 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

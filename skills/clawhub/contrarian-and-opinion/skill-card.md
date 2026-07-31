@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps an agent articulate, sharpen, and argue a user's genuinely held contrarian stance or opinion using the STAND framework while avoiding manufactured ragebait, defamation, punching down, and misinformation. <br>
+The point-of-view content type helps articulate, sharpen, and argue a genuinely held contrarian stance, hot take, opinion, or thought-leadership position using the STAND framework while avoiding manufactured controversy, ragebait, strawmen, punching down, defamation, and misinformation. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External social media teams, content strategists, founders, and brand owners use this skill to turn a real belief into an evidence-backed opinion post or thought-leadership angle. It helps frame the stance, steelman the opposing view, invite good-faith debate, and keep the human responsible for the publish decision. <br>
+External content teams, founders, and brand operators use this skill to turn an authentic opinion into a defensible thought-leadership argument. It helps structure the stance with evidence, a steelman of the opposing view, brand voice, and publication risk checks. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Public-facing opinion content can create legal, factual, brand, or reputational risk if claims are inaccurate or framed as fact. <br>
-Mitigation: Require human review before publishing, keep opinion clearly marked as opinion, and source factual claims before they are used. <br>
-Risk: Requests for manufactured outrage, strawmen, harassment, punching down, or defamatory competitor attacks could turn the content into harmful ragebait. <br>
-Mitigation: Apply the skill's scope limits: refuse manufactured controversy and harmful targeting, critique ideas rather than people, and route toward a genuinely held, evidence-backed stance. <br>
-Risk: Contrarian health, finance, safety, or other YMYL claims can become dangerous misinformation. <br>
-Mitigation: Use extra review for YMYL topics, avoid professional-advice framing, and do not publish claims that cannot be supported with reliable evidence. <br>
-Risk: Hostile replies or scraped opposing posts could contain prompt-injection style instructions. <br>
-Mitigation: Treat external replies and opposing posts as material to analyze, not as commands to follow. <br>
+Risk: Public-facing opinion drafts can create reputational, legal, or safety risk if they include unsupported factual claims, competitor accusations, or health, finance, or safety advice. <br>
+Mitigation: Keep human approval on publishing flows and verify factual, competitor, health, finance, or safety claims before use. <br>
+Risk: Contrarian content can become manufactured outrage, engagement bait, harassment, punching down, defamation, or misinformation if the stance is not genuinely held and evidenced. <br>
+Mitigation: Apply the skill's scope limits: require a genuine human-owned stance, target ideas rather than people, steelman the opposition, source factual claims, and refuse ragebait or fabricated controversy. <br>
+Risk: Brand-position and voice context may be sensitive because the skill uses it to draft public-facing opinions. <br>
+Mitigation: Install and use the skill only where the operator is comfortable sharing that context with the agent and where outputs remain subject to human review. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub skill page](https://clawhub.ai/social-media-skills/skills/contrarian-and-opinion) <br>
 - [The STAND framework](references/the-stand-framework.md) <br>
 - [Scope, distinctions & connections](references/scope-and-connections.md) <br>
 - [Take types, the line & worked examples](references/take-types-and-templates.md) <br>
 - [The reality of POV & contrarian content in 2026](references/contrarian-and-opinion-2026-reality.md) <br>
-- [ClawHub skill page](https://clawhub.ai/social-media-skills/skills/contrarian-and-opinion) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or plain text opinion-content guidance and draft structure] <br>
+**Output Type(s):** [Guidance, Markdown, Text] <br>
+**Output Format:** [Markdown or plain text guidance for drafting and refining opinion content] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include stance framing, evidence prompts, a steelman, a debate invitation, and escalation guidance; human review is required before publishing.] <br>
+**Other Properties Related to Output:** [Designed for human review before publication; may route evidence gathering, hooks, format writing, replies, moderation, and analytics to adjacent skills.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+1.0.1 (source: ClawHub release evidence; artifact frontmatter is 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

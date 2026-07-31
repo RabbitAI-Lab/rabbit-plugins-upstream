@@ -3,7 +3,6 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SKILL_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPO_ROOT="$(cd "$SKILL_DIR/../.." && pwd)"
 REMOTE_DEFAULT_ENDPOINT="https://notes.fangyuanxiaozhan.com/api/export"
 LOCAL_DEFAULT_BASE_URLS=(
   "http://127.0.0.1:18080"
@@ -16,6 +15,8 @@ MARKDOWN_FILE=""
 OUTPUT=""
 FILENAME=""
 THEME="default"
+FOOTER_BRAND=""
+FOOTER_VIA=""
 ENV_FILE_FOUND="false"
 TEMP_FILES=()
 
@@ -111,9 +112,7 @@ resolve_default_endpoint() {
   echo "$REMOTE_DEFAULT_ENDPOINT"
 }
 
-for env_file in "$REPO_ROOT/.env" "$SKILL_DIR/.env"; do
-  load_env_file "$env_file" || true
-done
+load_env_file "$SKILL_DIR/.env" || true
 
 DEFAULT_ENDPOINT="$(resolve_default_endpoint)"
 ENDPOINT="$DEFAULT_ENDPOINT"
@@ -131,6 +130,8 @@ Options:
   --output PATH           Output PNG path
   --filename NAME         Filename sent to API (defaults to output basename)
   --theme NAME            Optional theme: default or smartisan-dark (defaults to default)
+  --footer-brand TEXT     Optional footer brand text, e.g. 由方圆小站发送
+  --footer-via TEXT       Optional footer via text, e.g. via Notes API
   --endpoint URL          Override API endpoint or base URL
 
 .env:
@@ -338,6 +339,14 @@ while [[ $# -gt 0 ]]; do
       THEME="${2:-}"
       shift 2
       ;;
+    --footer-brand)
+      FOOTER_BRAND="${2:-}"
+      shift 2
+      ;;
+    --footer-via)
+      FOOTER_VIA="${2:-}"
+      shift 2
+      ;;
     --endpoint)
       ENDPOINT="${2:-}"
       shift 2
@@ -404,14 +413,24 @@ fi
 JSON_PAYLOAD="$(mktemp)"
 TEMP_FILES+=("$JSON_PAYLOAD")
 
-python3 - "$MARKDOWN" "$FILENAME" "$THEME" > "$JSON_PAYLOAD" <<'PY'
+python3 - "$MARKDOWN" "$FILENAME" "$THEME" "$FOOTER_BRAND" "$FOOTER_VIA" > "$JSON_PAYLOAD" <<'PY'
 import json
 import sys
 
 markdown = sys.argv[1]
 filename = sys.argv[2]
 theme = sys.argv[3]
-json.dump({"markdown": markdown, "filename": filename, "theme": theme}, sys.stdout, ensure_ascii=False)
+footer_brand = sys.argv[4]
+footer_via = sys.argv[5]
+payload = {"markdown": markdown, "filename": filename, "theme": theme}
+
+if footer_brand:
+    payload["footerBrand"] = footer_brand
+
+if footer_via:
+    payload["footerVia"] = footer_via
+
+json.dump(payload, sys.stdout, ensure_ascii=False)
 PY
 
 curl -sS \

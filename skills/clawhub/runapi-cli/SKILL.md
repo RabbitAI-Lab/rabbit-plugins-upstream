@@ -97,6 +97,20 @@ runapi account info
 runapi account balance
 ```
 
+## Live pricing
+
+Pricing commands return current estimates for paid tasks. `pricing list` and
+ordinary `pricing quote` calls do not require an API key. A quote with an
+Account-owned `source_task_id` follows the normal API-key authentication rules.
+
+```shell
+runapi pricing list --service suno
+runapi pricing quote --service suno --action text_to_music --model suno-v4 \
+  --params '{"vocal_mode":"auto_lyrics","prompt":"A chill lo-fi beat"}'
+runapi pricing quote --service suno --action text_to_music --model suno-v4 \
+  --params-file pricing-inputs.json
+```
+
 ## Local callback listeners
 
 Listener access requires the credential issued by `runapi login`; an ordinary imported API key cannot list callback candidates, read a Listen Signing Secret, or open a listener. This restriction applies only to listener operations: ordinary API keys can still create and query tasks.

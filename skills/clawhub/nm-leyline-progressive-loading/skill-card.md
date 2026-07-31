@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and skill authors use this skill to design modular, multi-workflow agent skills that load only the relevant guidance for the current task and token budget. <br>
+Developers and skill authors use this skill to design modular, lazily loaded agent skills that select workflow-specific guidance only when context and token budget call for it. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill provides developer guidance for composing modular skills, so incorrect adoption could lead to missing or misleading module guidance in downstream skills. <br>
-Mitigation: Review the generated or modified skill structure and scan it before deployment. <br>
-Risk: Installing the full companion plugin experience may add agents, hooks, commands, or extra configuration beyond this documentation-only artifact. <br>
-Mitigation: Review downstream modules and companion Night Market plugin components separately before enabling them. <br>
+Risk: Broad activation terms may cause the skill to appear in conversations where progressive-loading guidance is not needed. <br>
+Mitigation: Prefer explicit invocation or tighten triggers in environments that auto-select skills aggressively. <br>
+Risk: The skill provides documentation and examples that could be applied incorrectly to a consuming skill architecture. <br>
+Mitigation: Review selected module boundaries, token budgets, and loading paths before adopting the guidance in a production skill. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-progressive-loading) <br>
-- [Leyline plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-leyline-progressive-loading) <br>
+- [metadata.clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline code, shell examples, and configuration snippets] <br>
+**Output Format:** [Markdown guidance with examples, checklists, shell commands, code snippets, and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance for progressive module selection and token-budgeted loading.] <br>
+**Other Properties Related to Output:** [Produces advisory patterns for progressive-loading skill design; it does not execute commands or handle credentials.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

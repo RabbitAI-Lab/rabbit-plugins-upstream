@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/notes-export-api",
   "slug": "notes-export-api",
   "ownerHandle": null,
-  "version": "0.1.2",
-  "updatedAt": 1779000592532,
-  "contentHash": "80e8ea1d91df3e2402dd81f668ac74bb9d50dc464f7840d849fbbdc9553da187",
-  "fetchedAt": "2026-07-26T19:03:48.615Z"
+  "version": "0.2.0",
+  "updatedAt": 1785377283932,
+  "contentHash": "3df10703acc26ff4b036fd76624fd92f0ad7e55c242fcdac25df496f381c9d7c",
+  "fetchedAt": "2026-07-31T10:08:38.779Z"
 }

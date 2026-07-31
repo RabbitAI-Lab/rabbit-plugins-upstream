@@ -1,5 +1,5 @@
 ## Description: <br>
-AI-era-career-planner helps agents guide Chinese-language career planning conversations with staged intake, interest and values assessment, AI job-impact analysis, salary and demand references, and personalized action plans. <br>
+AI Era Career Planner helps users plan education choices, career transitions, and future job paths by collecting career context, applying career-interest and values assessments, evaluating AI-related role risk, and producing a personalized career plan. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,41 +11,45 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and career guidance agents use this skill to plan education choices, career entry, or career transitions in the AI era. The skill supports structured intake, assessment, career recommendations, AI-resilience guidance, and concrete next-step planning. <br>
+External users use this skill for Chinese-language career planning, education-path selection, and AI-era career transition guidance. The skill produces assessment-informed recommendations, AI impact ratings, salary and demand context, learning paths, and next-step action plans. <br>
 
 ### Deployment Geography for Use: <br>
-Global, with China-focused salary and insurance company reference data. <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may ask for personal career-context information. <br>
-Mitigation: Collect only information the user chooses to provide and avoid saving profiles unless the user explicitly requests a saved record. <br>
-Risk: Salary references and insurance company recommendations may be stale, incomplete, or mistaken for endorsement. <br>
-Mitigation: Treat salary and company data as reference material, keep insurance recommendations disclosed as informational, and ask users to verify details before acting. <br>
-Risk: Optional email, subscription, live-search, or saved-record actions can affect user data outside the conversation. <br>
-Mitigation: Only use optional integrations when the current environment permits them and the user has clearly approved the specific action. <br>
+Risk: The skill may collect personal career details such as age or stage, education background, interests, city, goals, and current career concerns. <br>
+Mitigation: Share only the career details needed for the plan, avoid unnecessary sensitive information, and do not enable memory or tracking unless the user explicitly wants a saved record. <br>
+Risk: Optional integrations can send email, create subscriptions, save memory, use realtime web data, or export report files. <br>
+Mitigation: Keep these actions disabled by default and require explicit user intent and confirmation before any external send, subscription, persistence, web-data access, or file export. <br>
+Risk: Insurance-career scenarios may display insurance company contact information that could influence user decisions. <br>
+Mitigation: Present company information as reference material only, preserve the artifact's disclosure language, and advise users to compare options and verify company credentials before contact. <br>
+Risk: Career recommendations, salary ranges, demand trends, and AI impact ratings are planning aids rather than guarantees. <br>
+Mitigation: Frame recommendations as probabilistic guidance, note uncertainty, and encourage users to validate choices against current local market data and personal constraints. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/ai-era-career-planner) <br>
-- [AI career impact reference](references/ai_career_impact.md) <br>
-- [Career assessment framework](references/assessment.md) <br>
-- [Career anchor reference](references/career_anchor.md) <br>
-- [Education paths](references/education_paths.md) <br>
-- [Job demand trends](references/job_demand.md) <br>
-- [Industry trends](references/industry_trends.md) <br>
-- [Salary data](references/salary_data.md) <br>
-- [Insurance broker company reference](references/insurance_broker_companies.json) <br>
-- [Optional integrations reference](references/integrations.md) <br>
+- [AI career impact reference](artifact/references/ai_career_impact.md) <br>
+- [Career assessment framework](artifact/references/assessment.md) <br>
+- [Career anchor reference](artifact/references/career_anchor.md) <br>
+- [Conversation flow engine](artifact/references/flow_engine.md) <br>
+- [Education paths](artifact/references/education_paths.md) <br>
+- [Job demand trends](artifact/references/job_demand.md) <br>
+- [Industry trends](artifact/references/industry_trends.md) <br>
+- [Salary data summary](artifact/references/salary_data.md) <br>
+- [Salary database](artifact/references/salary_database.json) <br>
+- [Optional integrations](artifact/references/integrations.md) <br>
+- [Tracking system](artifact/references/tracker_system.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Files] <br>
-**Output Format:** [Markdown career planning report and conversational guidance] <br>
+**Output Type(s):** [text, markdown, guidance, code, shell commands, configuration] <br>
+**Output Format:** [Markdown career-planning report with structured sections and optional generated Markdown files when explicitly requested] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May optionally generate a Markdown report file when the host environment allows it and the user explicitly requests export.] <br>
+**Other Properties Related to Output:** [May include assessment labels, AI impact ratings, salary ranges, learning paths, company contact information for insurance-career scenarios, and immediate action items.] <br>
 
 ## Skill Version(s): <br>
-2.2.240 (source: server release metadata) <br>
+2.2.254 (source: evidence.release.version) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

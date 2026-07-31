@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps agents convert local Markdown files into DOCX, PDF, HTML, XLSX, CSV, JSON, XML, and related formats through a command-line Markdown export workflow. <br>
+文档导出工具免费版 helps content creators and developers convert local Markdown files into DOCX, PDF, HTML, spreadsheet, structured data, and related document formats through a command-line workflow. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, content creators, and technical writers use this skill to convert Markdown documents and tables into shareable document, web, data, presentation, and code-extraction outputs while keeping processing local. <br>
+External users, content creators, and developers use this skill to install and run a local Markdown export CLI for converting Markdown documents, tables, and code blocks into deliverable document, web, spreadsheet, data, and extracted-code files. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Local conversion writes may overwrite existing files or affect sensitive directories if paths are chosen carelessly. <br>
-Mitigation: Provide explicit input and output paths, avoid sensitive directories, and confirm before writing to an existing path. <br>
-Risk: Code-block extraction can create many files from a Markdown source. <br>
-Mitigation: Confirm the destination directory and extraction scope before running bulk extraction. <br>
-Risk: The workflow depends on the third-party md-exporter package and optional system dependencies. <br>
-Mitigation: Install dependencies only from trusted sources and review them with the same care as any other local execution dependency. <br>
+Risk: The skill can write converted output files and may overwrite important files if an output path is chosen carelessly. <br>
+Mitigation: Use explicit input and output paths, and avoid pointing outputs at important existing files unless replacement is intended. <br>
+Risk: The artifact contains broad CRUD and network troubleshooting language that is not central to Markdown conversion. <br>
+Mitigation: Treat that language as documentation noise and limit agent actions to local Markdown export tasks. <br>
+Risk: The workflow depends on local command execution and an installed Markdown export CLI. <br>
+Mitigation: Install only in environments where local command execution is acceptable, then verify commands and generated files before relying on them. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/md-export-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and local file outputs] <br>
+**Output Type(s):** [guidance, shell commands, configuration, text] <br>
+**Output Format:** [Markdown guidance with bash command examples and JSON-style status output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read local Markdown files and write converted output files to user-selected paths.] <br>
+**Other Properties Related to Output:** [Uses explicit local input and output file paths; converted output files are written by the local export CLI.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+1.0.3 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

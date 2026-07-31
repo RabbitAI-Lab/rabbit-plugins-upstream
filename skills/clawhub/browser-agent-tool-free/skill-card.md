@@ -1,5 +1,5 @@
 ## Description: <br>
-Browser Agent Tool Free guides an agent through headless browser automation using accessibility-tree snapshots, ref-based element selection, session isolation, screenshots, PDF export, and network-aware waits. <br>
+Guides agents in using a headless browser automation CLI with accessibility-tree snapshots and ref-based element selection for repeatable web navigation, interaction, extraction, screenshots, PDF export, and session state workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent builders use this skill to automate multi-step browser workflows such as navigation, form filling, search result extraction, screenshots, PDF generation, and isolated session testing. <br>
+Developers, engineers, and agent users use this skill to automate browser tasks through CLI commands, including page navigation, deterministic element interaction, content extraction, screenshots, PDF export, and isolated session state handling. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can control a browser, reuse login state, and perform account-affecting web actions. <br>
-Mitigation: Install only when browser control is intended, and require explicit user approval before loading auth state, submitting forms, clicking account-affecting controls, or using logged-in accounts. <br>
-Risk: Saved state files, cookies, screenshots, PDFs, and HAR-like outputs may contain sensitive information. <br>
-Mitigation: Treat those artifacts as sensitive and limit storage, sharing, and retention to the current task need. <br>
-Risk: The workflow depends on an external npm package and browser runtime. <br>
-Mitigation: Verify the npm package and runtime requirements before installing globally. <br>
+Risk: Saved browser state files can contain sensitive cookies, storage, or login material. <br>
+Mitigation: Keep state JSON files private, out of repositories and logs, and rotate or delete them when no longer needed. <br>
+Risk: The workflow depends on a global npm CLI and a Chromium runtime. <br>
+Mitigation: Install only in trusted environments, keep the CLI and browser runtime updated, and review generated commands before execution. <br>
+Risk: Authenticated browser automation can perform actions with the privileges of the loaded session. <br>
+Mitigation: Use separate least-privilege sessions for admin and normal-user testing, and avoid reusing production credentials for exploratory automation. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/thcjp/skills/browser-agent-tool-free) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/browser-agent-tool-free) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with bash command examples and JSON response examples] <br>
+**Output Type(s):** [guidance, shell commands, configuration, JSON] <br>
+**Output Format:** [Markdown guidance with shell command examples and JSON output examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce screenshots, PDFs, saved browser state files, extracted page content, execution logs, and structured JSON responses.] <br>
+**Other Properties Related to Output:** [May produce browser automation commands and references to local state files; commands require the agent-browser CLI, Node.js, and Chromium runtime.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: evidence release and skill frontmatter) <br>
+1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.2) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

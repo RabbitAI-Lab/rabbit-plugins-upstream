@@ -4,6 +4,8 @@
 
 新建文本、链接、图片三种类型的笔记。文本笔记同步完成；链接和图片笔记是异步任务，需轮询进度。
 
+> 🔐 **隐私说明**：仅处理用户明确要求保存到得到大脑的内容。文字、链接和图片会发送到 `https://openapi.biji.com` 处理和存储；普通链接会由得到大脑云服务抓取原文。含登录态、临时签名、内网地址或敏感查询参数的链接必须先提醒风险并获得确认。图片可能包含个人或机密信息，用户未明确要求保存时不得上传。
+
 > 🔗 **笔记内链**：Get笔记正文支持内链到其他笔记，格式为 `https://biji.com/note/{note_id}`。**默认使用内链格式**，除非用户明确要求「生成分享链接」或「分享给别人」，才调用分享接口（`POST /open/api/v1/resource/note/sharing`）获取公开分享链接。
 
 ---
@@ -24,18 +26,25 @@ Content-Type: application/json
   "content": "Markdown 内容",
   "note_type": "plain_text",
   "tags": ["标签1", "标签2"],
-  "parent_id": 0,
+  "topic_id": "QYADXzWn",
+  "parent_id": "1916020531058082912",
+  "client_request_id": "agent-session-42-save-1",
   "link_url": "https://...",
   "image_urls": ["https://..."]
 }
 ```
+
+- `topic_id`：可选，直接把新笔记加入目标知识库；先调用知识库列表并按 `name` / `scope` 选择
+- `parent_id`：可选，必须优先传十进制字符串；用于创建子笔记，同一父笔记可以创建多篇子笔记
+- `client_request_id`：可选幂等键（1-128 个 ASCII 字符）；网络重试时复用同一个值，不得重新生成
+- 也可用 `Idempotency-Key` 请求头传幂等键。若 Header 与 Body 同时传，二者必须完全相同
 
 详细字段说明见 [api-details.md](api-details.md#新建笔记字段说明)。
 
 - `plain_text`：同步返回，立即完成，响应中包含 `note_id`（字符串）
 - `link`（**分享链接**）：若 `link_url` 为 `biji.com/note/share_note/*` 或 `d.biji.com/*` 短链，**同步返回**，响应中直接包含 `note_id`、`title`、`created_at`、`updated_at`，**无需轮询**
 - `link`（**普通链接**）：返回 `task_id`，**必须轮询** `/task/progress`
-- `img_text`：返回 `task_id`，**必须轮询** `/task/progress`
+- `img_text`：返回 `data.tasks[0].task_id`，**必须轮询** `/task/progress`
 
 ---
 
@@ -54,7 +63,7 @@ Content-Type: application/json
 返回：
 - `status`: `pending` | `processing` | `success` | `failed`
 - `note_id`: 成功时返回笔记 ID（**字符串**）；任务进行中时值为 `"0"`，需过滤
-- `error_msg`: 失败时返回错误信息
+- `error_msg`: 仅 `failed` 时返回错误信息；`pending` / `processing` / `success` 不应据此判断失败
 
 **建议 10-30 秒间隔轮询，直到 success 或 failed**。
 
@@ -156,7 +165,7 @@ GET https://openapi.biji.com/open/api/v1/resource/image/upload_token?mime_type=j
 ```
 POST https://openapi.biji.com/open/api/v1/resource/note/save {note_type:"img_text", image_urls:[access_url]}
 ```
-拿到 task_id 后，**立即发消息给用户**：
+从 `data.tasks[0].task_id` 取任务 ID，**立即发消息给用户**：
 > ✅ 图片已保存，正在识别内容，稍后告诉你结果...
 
 **步骤 4**：后台轮询

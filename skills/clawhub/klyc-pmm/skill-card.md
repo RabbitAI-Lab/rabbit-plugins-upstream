@@ -1,5 +1,5 @@
 ## Description: <br>
-KLYC-PMM gives agents a shell-based workflow for writing, classifying, encrypting, uploading, searching, and recovering persistent memory. <br>
+KLYC-PMM is a bash-based agent memory client for registering an identity, syncing text memories with kunlunyaochi.com, recovering from a token URL, running file watchers, and using X402 WeChat payment upgrades. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use this skill to let an AI agent preserve useful decisions and identity files across restarts, workspace resets, and recovery events while using local shell commands and cloud-backed memory storage. <br>
+External developers and agent operators use this skill to configure persistent text memory workflows for OpenClaw, LightClaw, or Claude Code agents, including push, search, recovery, watch-daemon, and paid upgrade flows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can retain and upload broad local and cloud memory, including watched files selected by the operator. <br>
-Mitigation: Review the watched and backed-up file list before enabling it, exclude secrets or regulated data, and limit use to intended workspaces. <br>
-Risk: Remote hooks, daemon behavior, and update flows may change local prompts or scripts after installation. <br>
-Mitigation: Disable those flows unless the operator trusts the service, and review fetched hooks or updates before allowing them to run. <br>
-Risk: The scanner guidance says not to rely on stated encryption guarantees for every upload path. <br>
-Mitigation: Treat cloud upload paths as requiring review, validate the configured endpoint and encryption behavior, and avoid sensitive data until that review is complete. <br>
+Risk: The skill operates as a networked memory-sync client and may upload identity or memory files to kunlunyaochi.com. <br>
+Mitigation: Review watched files and pushed content before use, avoid storing secrets in synced memory files, confirm the configured endpoint, and use explicit workspace paths. <br>
+Risk: Installer and upgrade flows can create background persistence and write to broad system paths. <br>
+Mitigation: Prefer manual commands and self-test first; avoid running installers as root unless system-wide systemd persistence and updater writes are intended. <br>
+Risk: Paid upgrade flows use X402 and WeChat payment handling. <br>
+Mitigation: Confirm the payment plugin, amount, service tier, and order ID before retrying paid upgrade commands. <br>
+Risk: Watch, recover, and distillation workflows can change local memory files. <br>
+Mitigation: Back up MEMORY.md, SOUL.md, and IDENTITY.md before automated recovery or watcher use, and use dry-run mode for distillation previews where supported. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/sylncn/skills/klyc-pmm) <br>
-- [README](artifact/README.md) <br>
-- [Skill usage guide](artifact/klyc-pmm/SKILL.md) <br>
-- [Security policy](artifact/SECURITY.md) <br>
-- [Changelog](artifact/klyc-pmm/CHANGELOG.md) <br>
+- [PMM full architecture](artifact/references/pmm-full-architecture.md) <br>
+- [Pay Skill packaging standard](artifact/references/pay-skill-spec.md) <br>
+- [Examples and quickstart](artifact/examples/README.md) <br>
+- [KLYC-PMM service page](https://kunlunyaochi.com/?route=services) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and shell command guidance with local files and JSON configuration] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with shell commands and JSON or HTTP examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires jq and curl; memory and recovery flows may create or update local files and send selected content to the configured service.] <br>
+**Other Properties Related to Output:** [May generate commands that install dependencies, register an identity, upload memory content, configure systemd persistence, update local scripts, or call payment endpoints.] <br>
 
 ## Skill Version(s): <br>
-7.0.3 (source: server release metadata, SKILL.md frontmatter, skill.json, and _meta.json) <br>
+9.0.1 (source: frontmatter, skill.json, changelog, release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

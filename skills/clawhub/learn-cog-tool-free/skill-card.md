@@ -1,5 +1,5 @@
 ## Description: <br>
-A free cognitive learning assistant that helps individual learners use spaced repetition, active recall, flashcards, and knowledge-graph style study workflows. <br>
+A free cognitive learning skill that helps agents plan spaced repetition, active recall, knowledge graph building, cognitive load analysis, and structured learning outputs. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External individual learners use this skill to plan reviews, generate active-recall prompts or flashcards, analyze cognitive load, and receive structured study outputs for daily learning tasks. <br>
+External users and developers use this skill to structure personal learning workflows, generate review plans or flashcards, analyze cognitive load, and return structured learning results. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requests broad read, write, and command execution capability without clear operational limits. <br>
-Mitigation: Run it with explicit boundaries for readable and writable paths, require confirmation before file modification or deletion, and review commands before execution. <br>
-Risk: The security evidence marks the release as suspicious because the requested capabilities exceed the safeguards described by the artifact. <br>
-Mitigation: Review the skill before installing, keep file export and command execution disabled unless required for a specific task, and prefer least-privilege agent settings. <br>
+Risk: The skill requests broad local command and file capabilities for a loosely scoped learning workflow. <br>
+Mitigation: Run it in a controlled workspace and approve command execution and file changes case by case. <br>
+Risk: The optional callback URL can send results to a network endpoint. <br>
+Mitigation: Use callback URLs only for trusted endpoints and avoid sending sensitive learning content or local paths. <br>
+Risk: The security verdict is suspicious because the requested authority is broader than the documented workflow needs. <br>
+Mitigation: Review the generated plan and any proposed commands before deployment or repeated use. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/thcjp/skills/learn-cog-tool-free) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/learn-cog-tool-free) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON, YAML, Python, and shell command examples] <br>
+**Output Format:** [Markdown guidance with JSON, YAML, Python, and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return structured status, result data, execution logs, and error fields.] <br>
+**Other Properties Related to Output:** [May propose local read, command execution, and file-writing actions; users should approve actions case by case.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+1.0.1 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

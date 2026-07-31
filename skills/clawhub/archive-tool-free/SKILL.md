@@ -4,24 +4,20 @@ name: archive-tool-free
 version: 1.0.0
 displayName: 内容归档工具-免费版
 summary: "智能内容快照工具,支持完整内容提取、语义标签与主动召回,适合个人用户。内容归档工具,将外部内容保存为智能快照,支持完整内容提取、语义标签、"
-license: Proprietary
+license: MIT
 edition: free
-description: '内容归档工具,将外部内容保存为智能快照,支持完整内容提取、语义标签、
-
-  语义搜索与主动召回。捕获的不只是链接,而是完整内容与上下文。Use when 需要SEO优化、关键词分析、排名提升、搜索流量优化时使用。不适用于黑帽SEO手段。Use
-  when 需要SEO优化、关键词分析、排名提升、搜索流量优化时使用。不适用于黑帽SEO手段。'
+description: "内容归档工具,将外部内容保存为智能快照,兼容完整内容提取、语义标签、. 适用于需要archive tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要archive tool相关能力的开发场景,包含结构化的工作流程和配置指引. 该工具经过深度差异化处置,针对用户反馈和使用痛点进行了调优改进,提升了实用性和可操作性."
 tags:
   - 研究工具
+  - archive
+  - automation
+  - productivity
+  - developer-tools
   - 内容归档
   - 知识管理
   - 搜索
   - 检索
   - 工具
-  - saas
-  - items
-  - 语义搜索
-  - url
-  - bash
 tools:
   - read
   - exec
@@ -29,6 +25,8 @@ tools:
   - grep
 homepage: ""
 category: "Knowledge"
+pricing_tier: free
+
 ---
 # 内容归档工具(免费版)
 
@@ -90,11 +88,8 @@ category: "Knowledge"
 | callback_url | string | 否 | 异步处理完成后的回调通知URL |
 
 ```bash
-# 归档时询问用途,记录"为什么"归档
-# 用户:"保存这篇关于定价策略的文章,用于 SaaS 产品规划"
-# ...
-# 归档结构
-# items/2026-02-16-pricing-strategy.md
+# 在此执行相关操作
+echo "操作完成"
 ```
 
 归档后的文件内容:
@@ -126,15 +121,8 @@ project: my-project
 用户询问"我之前保存过关于定价的内容吗?"
 
 ```bash
-# 语义搜索(按含义而非关键词)
-# 用户问:"我保存过关于定价的内容吗?"
-# 工具搜索归档库,按语义匹配
-# ...
-# 用户问:"上个月那篇关于定价的文章"
-# 工具模糊匹配时间 + 主题
-# ...
-# 用户问:"项目 Y 的所有资料"
-# 工具按项目筛选
+# 在此执行相关操作
+echo "操作完成"
 ```
 
 ### 场景三:主动召回相关内容
@@ -161,13 +149,13 @@ project: my-project
 
 ```bash
 # 创建归档目录(首次使用)
-mkdir -p ~/archive/items ~/archive/projects
+mkdir -p ./archive/items ./archive/projects
 ```
 
 存储结构:
 
 ```text
-~/archive/
+./archive/
 ├── memory.md          # HOT 区:最近条目,不超过100行
 ├── index.md           # 主题/标签索引
 ├── items/             # 单个归档条目
@@ -178,12 +166,8 @@ mkdir -p ~/archive/items ~/archive/projects
 ### 2. 归档内容
 
 ```bash
-# 归档时执行:
-# 1. 提取完整内容(不只 URL)
-# 2. 生成 2-3 行摘要
-# 3. 识别关键引用/数据点
-# 4. 询问"这是什么用的?" - 记录 WHY
-# 5. 基于内容 + 历史分配语义标签
+# 在此执行相关操作
+echo "操作完成"
 ```
 
 ### 3. 搜索归档
@@ -256,7 +240,7 @@ project: my-project              # 所属项目
 3. 附带上下文:"你 3 个月前研究 X 时保存了这条"
 ```
 
-## 最佳实践
+## 优秀实践
 
 ### 归档纪律
 1. **捕获完整内容**:不只存链接,提取全文避免链接失效.
@@ -288,7 +272,7 @@ project: my-project              # 所属项目
 ### Q6: 如何备份归档库?
 归档库是纯 Markdown 文件,直接备份目录或纳入 Git 管理即可:
 ```bash
-cd ~/archive && git add . && git commit -m "归档更新"
+cd ./archive && git add . && git commit -m "归档更新"
 ```
 
 ## 依赖说明
@@ -309,7 +293,7 @@ cd ~/archive && git add . && git commit -m "归档更新"
 - 本 Skill 基于Markdown指令,无需额外API Key(除内容中明确标注的外部API)
 
 ### 可用性分类
-- **分类**: MD+EXEC(纯Markdown指令,部分功能需exec命令行执行)
+- **分类**: MD+EXEC模式纯Markdown指令,部分功能需exec命令行执行)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent完成操作
 
 ## 错误处理

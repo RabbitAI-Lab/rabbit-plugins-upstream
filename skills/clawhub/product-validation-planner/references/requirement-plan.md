@@ -25,25 +25,25 @@ Evidence coverage: 12 signals across 3 source families.
 Scoring rationale:
 
 - Evidence count: 12; required minimum: 3.
-- Distinct source families: 3; sources: github, hacker-news, segmentfault.
+- Distinct source families: 3; sources: csdn, github, hacker-news.
 - Demand score: 70/70 based on corroboration, source diversity, and professional/community signal.
 - Local feasibility score: 30/30.
 - Implementation is a documentation, workflow, code, or analysis skill that can run on ordinary CPU hardware.
 
 ## Evidence
 
-- hacker-news-ask-hn (2026-07-25T07:19:48+00:00): [Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49045271)
+- github-issues (2026-07-19T07:01:45+00:00): [RFC-0002 Slice 18: synchronize documentation, wiki, support truth, and agent context](https://github.com/sgajbi/lotus-idea/issues/681)
 - github-issues (2026-07-19T07:13:07+00:00): [RFC-0002 Slice 14/17: certify Lotus Idea data-product, trust telemetry, and canonical proof in platform gates](https://github.com/sgajbi/lotus-platform/issues/598)
-- segmentfault-search (2026-07-26T12:06:25.434289+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search (2026-07-26T12:06:25.434289+00:00): [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search (2026-07-26T12:06:25.434289+00:00): [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search (2026-07-26T12:06:25.434289+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search (2026-07-26T12:06:25.434914+00:00): [问： 属性或方法“$v”未使用 Vuelidate 定义](https://segmentfault.com/q/1010000042816440)
-- segmentfault-search (2026-07-26T12:06:25.435423+00:00): [问： 从JDK 1.8切换到JDK 21时遇到NoProviderFoundException如何解决？](https://segmentfault.com/q/1010000047230462)
-- segmentfault-search (2026-07-26T12:06:25.435423+00:00): [问： laravel validator验证不通过返回The given data was invalid，而不是返回定义的提示信息](https://segmentfault.com/q/1010000018250396)
+- hacker-news-ask-hn (2026-07-30T09:54:05+00:00): [Ventora Expands Its AI Business Builder to Help Solo Founders](https://news.ycombinator.com/item?id=49107855)
+- github-issues (2026-07-27T19:31:58+00:00): [[cool idea] Emit deterministic SARIF for CI-native lint findings](https://github.com/flyingrobots/colorful-language/issues/188)
 - github-issues (2026-07-17T18:34:14+00:00): [Follow-up: extend meta validation config across the CMS](https://github.com/novaramedia/novaramedia-com/issues/572)
-- github-issues (2026-07-26T12:01:45+00:00): [Correct Tool Contract startup-validation claim](https://github.com/Nokia-Bell-Labs/declarative-agents/issues/1006)
 - hacker-news-search (2026-07-20T05:18:14+00:00): [What I learned selling 2,500 MIDI recorders: Hardware is not so hard](https://news.ycombinator.com/item?id=48974605)
+- hacker-news-search (2026-07-19T02:52:50+00:00): [Harness Engineering](https://news.ycombinator.com/item?id=48964576)
+- hacker-news-search (2026-07-29T11:30:58+00:00): [LearnVector – Andrew Ng's AI company building one‑to‑one learning experiences](https://news.ycombinator.com/item?id=49096068)
+- hacker-news-search (2026-07-30T22:22:49+00:00): [Kuna: Decompiler Development in the Age of Coding Agents](https://news.ycombinator.com/item?id=49116636)
+- github-issues (2026-07-25T12:15:43+00:00): [Feature request: make /pet a first-class companion command drawer](https://github.com/openai/codex/issues/35343)
+- github-issues (2026-07-17T02:10:52+00:00): [Explore incremental refresh via unfiltered recent search](https://github.com/HanClinto/tcgjson/issues/4)
+- csdn-search (2026-07-30T23:47:22.799382+00:00): [24 Idea Validation - Save Yourself Time and Money](https://wenku.csdn.net/doc/7fnjuwdtp5?ops_request_misc=elastic_search_misc&request_id=1c3a1775028d479882c982d5058a12cc&biz_id=&utm_medium=distribute.pc_search_result.none-task-c_download-2~all~ElasticSearch~search_v2-1-7fnjuwdtp5-null-null.142^v102^pc_search_result_base9&utm_term=product%20idea%20validation)
 
 ## How The Skill Meets The Requirement
 

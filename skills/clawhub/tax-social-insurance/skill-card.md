@@ -1,5 +1,5 @@
 ## Description: <br>
-社保入税与社保合规专项助手，面向社保费征管划转、缴费基数合规、个税与社保基数匹配、用工分类、历史补缴和社保稽核场景提供结构化自检与实操指引。 <br>
+Provides social-insurance tax-compliance guidance for contribution-base checks, personal-income-tax and social-insurance matching, employment classification, remediation planning, risk grading, and self-check reports. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, HR and payroll teams, tax practitioners, and business compliance staff use this skill to ask China-focused social-insurance compliance questions, run guided self-checks, and identify records or remediation steps for wage base, individual income tax, labor relationship, flexible work, and audit scenarios. <br>
+Business, tax, payroll, HR, and compliance users can ask social-insurance compliance questions, run self-check workflows, compare payroll and social-insurance bases, classify employment scenarios, estimate remediation exposure, and generate risk-focused action guidance. The skill is most relevant to China-oriented social-insurance and tax-compliance workflows. <br>
 
 ### Deployment Geography for Use: <br>
-China-focused <br>
+China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security evidence rates this release as suspicious because it includes broader tax-service networking, persistent credentials, client configuration hooks, and a bulk skill installer beyond ordinary skill behavior. <br>
-Mitigation: Review the skill before installation, confirm that the broader tax-policy cloud service and skill matrix are intended, and install only in an environment where persistent local or browser credentials and remote service calls are acceptable. <br>
-Risk: The security guidance warns against use with sensitive payroll, identity, or business compliance data unless data flow and retention terms are clear. <br>
-Mitigation: Use anonymized or low-sensitivity inputs until the service endpoint, credential storage, and retention practices have been reviewed and approved. <br>
-Risk: Artifact behavior includes configuration hooks and possible skill-directory changes. <br>
-Mitigation: Run setup paths in dry-run or a disposable environment first, inspect generated client configuration changes, and keep backups before enabling automatic setup or matrix installation. <br>
+Risk: The security review flags under-disclosed remote service enrollment and calls to mcp.aitaxs.top. <br>
+Mitigation: Review the publisher's data-handling terms before use, and avoid entering payroll, employee identity, or confidential business details unless those terms are acceptable. <br>
+Risk: The package can persist a local API key and client identifier for MCP service access. <br>
+Mitigation: Install only in trusted workspaces, inspect local credential files before sharing machines or backups, and rotate or remove credentials if the skill is no longer used. <br>
+Risk: Optional setup code can modify local MCP client configuration. <br>
+Mitigation: Keep auto-setup disabled unless intentional, review proposed MCP configuration changes, and prefer dry-run setup in managed or regulated environments. <br>
+Risk: Social-insurance and tax guidance can become outdated or may not match a specific authority's interpretation. <br>
+Mitigation: Treat generated answers and self-check reports as review aids, verify material conclusions against current official rules, and consult qualified professionals for filings, disputes, or remediation decisions. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-social-insurance) <br>
-- [Social insurance workflow page](https://mcp.aitaxs.top/web/topic_workflow_social_insurance.html) <br>
-- [Tax policy knowledge matrix](https://skillhub.cn/skills/tax-policy-knowledge) <br>
+- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
+- [Social-insurance compliance self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_social_insurance.html) <br>
+- [Tax-compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Tax policy knowledge MCP service](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with Chinese prose, structured compliance checklists, links, and optional setup commands] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance, JSON-like tool responses, generated report text, Python helper code, shell commands, and MCP configuration snippets.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct users to a web self-check workflow and remote tax-policy service; users should avoid entering sensitive payroll or identity data unless service terms and data handling are clear.] <br>
+**Other Properties Related to Output:** [May call a remote MCP service, open or reference a hosted web workflow, and use local offline fallback scripts when the service is unavailable.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: SKILL.md frontmatter and server release) <br>
+3.15.4 (source: evidence.release.version and artifact/SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

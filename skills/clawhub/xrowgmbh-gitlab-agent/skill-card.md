@@ -11,34 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use this skill to let an agent triage assigned GitLab issues and merge requests, create branches and merge requests, manage labels and status comments, inspect pipelines, and coordinate review through the glab CLI. <br>
+Developers and engineering teams use this skill to operate GitLab issues, merge requests, branches, pipelines, labels, variables, and releases through the glab CLI. It is intended for agents that need to perform assigned GitLab work with project access and assignment checks. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill is designed to act on a GitLab account and may perform recurring write actions with broad authority. <br>
-Mitigation: Install only when that automation is intended, use a least-privilege GitLab token limited to the target projects, and review a manual run before enabling the recurring job. <br>
-Risk: The skill can push commits, create comments and labels, manage merge requests, trigger pipelines, set variables, create releases, and merge changes with limited confirmation. <br>
-Mitigation: Require explicit approval for high-impact actions such as pushes, comments, labels, merge requests, merges, variable changes, releases, and pipeline actions unless the operating environment already provides equivalent review controls. <br>
+Risk: Broad unattended GitLab authority can change repositories and project state. <br>
+Mitigation: Use a dedicated GitLab bot account with least-privilege, project-scoped access and remove unneeded variable, release, merge, and approval permissions. <br>
+Risk: Recurring execution can repeatedly mutate repositories without direct operator review. <br>
+Mitigation: Keep the 15-minute cron disabled unless unattended repository mutation is intended and operationally reviewed. <br>
+Risk: The project access gate is only reliable if its helper script executes correctly. <br>
+Mitigation: Fix and test the helper script execution issue before relying on the security gate for access control. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub GitLab Agent](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-agent) <br>
-- [GitLab default roles and permissions](https://docs.gitlab.com/user/permissions/#default-roles) <br>
-- [CI Tools Components Catalog for GitLab](https://ci-tools.xrow.de/) <br>
-- [OpenClaw creating skills guidance](https://docs.openclaw.ai/tools/creating-skills) <br>
-- [xrow public skills project](https://gitlab.com/xrow-public/skills) <br>
+- [GitLab Default Roles](https://docs.gitlab.com/user/permissions/#default-roles) <br>
+- [CI Tools Components Catalog](https://ci-tools.xrow.de/) <br>
+- [CI Tools Label Component](https://ci-tools.xrow.de/Components/label) <br>
+- [OpenClaw Creating Skills](https://docs.openclaw.ai/tools/creating-skills) <br>
+- [xrow Public Skills Project](https://gitlab.com/xrow-public/skills) <br>
+- [ClawHub Skill Page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-agent) <br>
+- [Publisher Profile](https://clawhub.ai/user/xrowgmbh) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, GitLab API examples, JSON cron configuration, and code snippets.] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with inline shell commands, GitLab CLI commands, GraphQL and REST API examples, and JSON configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires glab and GITLAB_TOKEN; may perform GitLab write actions when deliberately enabled by the user.] <br>
+**Other Properties Related to Output:** [Requires glab and jq, and uses GITLAB_TOKEN for GitLab authentication.] <br>
 
 ## Skill Version(s): <br>
-1.75.3 (source: server release evidence) <br>
+1.78.0 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

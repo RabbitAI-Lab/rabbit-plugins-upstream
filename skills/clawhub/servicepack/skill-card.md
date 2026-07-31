@@ -1,5 +1,5 @@
 ## Description: <br>
-servicepack helps developers build Go service or daemon projects from a clone-and-own template with concurrent service management, dependency-ordered startup, readiness gating, retries, CLI commands, logging, and graceful shutdown. <br>
+servicepack helps developers build Go services on the psyb0t/servicepack clone-and-own template, with guidance for concurrent services, dependency-ordered startup, retries, readiness gating, CLI commands, lifecycle hooks, logging, configuration, scaffolding, builds, and graceful shutdown. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill when starting or extending a Go service project that needs long-running workers, dependency-aware startup, retry behavior, readiness signaling, service-specific commands, and graceful shutdown. <br>
+Developers and engineers use this skill when starting or extending a Go service or daemon that needs concurrent long-running workers, service scaffolding, dependency and readiness coordination, retries, lifecycle hooks, CLI commands, and build/test workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Running make own rewrites the module, removes the existing git history for that clone, and initializes a new repository. <br>
-Mitigation: Run make own only once, at the start, in a fresh clone that does not contain work you need to preserve. <br>
-Risk: The template owns framework files and update commands can overwrite framework-managed paths. <br>
-Mitigation: Keep custom service logic in user-owned service and command files, and avoid hand-editing framework-owned paths described by the skill. <br>
-Risk: Generated or custom services may introduce their own network surfaces, credentials, or environment variables. <br>
-Mitigation: Review generated services, configuration variables, and deployment-specific behavior before building or deploying the resulting service. <br>
+Risk: The setup workflow includes ownership commands that intentionally rewrite the module and reset git metadata. <br>
+Mitigation: Run ownership and setup commands only in a fresh clone and review the command effects before using them in a valuable repository. <br>
+Risk: The skill may direct users to execute Makefile targets from the service template. <br>
+Mitigation: Review upstream Makefile behavior before execution, then run build, test, lint, and scaffolding commands in a controlled development environment. <br>
+Risk: Generated or edited services can introduce application-specific runtime surfaces such as HTTP, gRPC, or database connections. <br>
+Mitigation: Review the resulting service code, configuration, and exposed interfaces according to the target application's security requirements. <br>
 
 
 ## Reference(s): <br>
-- [Setup Guide](references/setup.md) <br>
-- [ClawHub servicepack skill page](https://clawhub.ai/psyb0t/skills/servicepack) <br>
-- [servicepack repository](https://github.com/psyb0t/servicepack) <br>
+- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/servicepack) <br>
+- [Setup reference](references/setup.md) <br>
+- [servicepack homepage](https://github.com/psyb0t/servicepack) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code examples and shell command blocks] <br>
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions] <br>
+**Output Format:** [Markdown with Go code blocks and shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a Go toolchain and is intended to guide changes in a user-owned servicepack clone.] <br>
+**Other Properties Related to Output:** [Produces implementation guidance for Go service projects; users remain responsible for reviewing generated code and command effects before execution.] <br>
 
 ## Skill Version(s): <br>
-1.2.8 (source: server release metadata) <br>
+1.2.14 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

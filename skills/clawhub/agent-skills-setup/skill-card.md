@@ -1,5 +1,5 @@
 ## Description: <br>
-Migrates AI assistant context between IDEs, including MCP servers, rules, skills, commands, agents, hooks, and memory, with dry-run previews, format conversion, backup-first merging, secret redaction, and verification. <br>
+Helps agents plan, preview, apply, and verify scoped migrations of AI-assistant context such as skills, rules, prompts, MCP servers, commands, and project configuration between supported IDEs or agent tools. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,42 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill when they explicitly need to migrate, copy, convert, or synchronize AI assistant context between supported IDEs and agent runtimes. It helps inventory source settings, preview conversion plans, redact credentials, apply approved changes, and verify destination configuration. <br>
+Developers and engineers use this skill to migrate selected AI-assistant context between IDEs or agent tools while reviewing path, schema, credential, and conflict-handling differences before writing changes. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can modify IDE and agent configuration files during migration. <br>
-Mitigation: Run dry-runs first, review target directories and planned changes, and only use --yes when the destination changes are understood. <br>
-Risk: Using overwrite or replacement sync modes can rewrite or delete destination skill and configuration files. <br>
-Mitigation: Prefer the default backup strategy, keep timestamped backups, and avoid overwrite modes unless the target contents are disposable. <br>
-Risk: MCP, config, and project migrations may contain credentials or connection strings. <br>
-Mitigation: Treat these migrations as opt-in, expect secrets to be blanked, and re-enter credentials through the target IDE or a secret manager after migration. <br>
-Risk: OpenClaw installation downloads and runs an external installer. <br>
-Mitigation: Set and verify OPENCLAW_INSTALL_SHA256 before allowing the installer to run, and do not proceed when the checksum is missing or mismatched. <br>
+Risk: A migration scope that is too broad can move unrelated or product-specific configuration. <br>
+Mitigation: Use the named source, target, workspace, and object list; start with a dry run and avoid whole IDE config or project-tree copies unless manually reviewed. <br>
+Risk: MCP entries can include secrets, OAuth or session state, runtime protocol metadata, or inherited execution permissions that should not be portable. <br>
+Mitigation: Redact credentials, preserve only reviewed endpoint metadata, do not transfer OAuth/session state or tool grants, and re-authorize or review tools in the target client. <br>
+Risk: Unsupported formats or ambiguous transport mappings can produce incorrect target configuration. <br>
+Mitigation: Use manual reconstruction when a schema, file format, or transport is unsupported or ambiguous, then validate with the target tool's native discovery method. <br>
 
 
 ## Reference(s): <br>
-- [Agent Skills Setup on ClawHub](https://clawhub.ai/luckycat133/skills/agent-skills-setup) <br>
-- [IDE Registry](artifact/references/ide-registry.md) <br>
-- [IDE Paths](artifact/references/ide-paths.json) <br>
-- [OpenClaw Reference](artifact/references/openclaw.md) <br>
-- [Publishing Reference](artifact/references/publishing.md) <br>
+- [ClawHub skill page](https://clawhub.ai/luckycat133/skills/agent-skills-setup) <br>
+- [IDE Reference Index](references/ide-registry.md) <br>
+- [IDE Path Mapping](references/ide-paths.json) <br>
+- [Migration Safety and Conflicts](references/migration-safety.md) <br>
+- [MCP Migration](references/mcp-migration.md) <br>
+- [Object Migration](references/object-migration.md) <br>
+- [Verification](references/verification.md) <br>
+- [OpenClaw Migration Notes](references/openclaw.md) <br>
+- [MCP 2026-07-28 Key Changes](https://modelcontextprotocol.io/specification/2026-07-28/changelog) <br>
+- [MCP Streamable HTTP Transport](https://modelcontextprotocol.io/specification/2026-07-28/basic/transports/streamable-http) <br>
+- [MCP Authorization Requirements](https://modelcontextprotocol.io/specification/2026-07-28/basic/authorization) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, configuration snippets, migration plans, and verification summaries] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with shell commands, JSON evidence, and configuration edits or previews.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local file changes and installer commands; write operations require explicit confirmation and should be previewed first.] <br>
+**Other Properties Related to Output:** [Uses dry-run previews, explicit consent for writes, credential redaction, and target-native verification where supported.] <br>
 
 ## Skill Version(s): <br>
-0.5.7 (source: server release metadata and SKILL.md frontmatter) <br>
+0.6.11 (source: SKILL.md frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

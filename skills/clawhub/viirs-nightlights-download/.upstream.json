@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/viirs-nightlights-download",
   "slug": "viirs-nightlights-download",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1785074467360,
-  "contentHash": "31cbef95f497dc40ee3c596b4d0c4f240f33dd01ca84d7b8db4a932dd8c00860",
-  "fetchedAt": "2026-07-26T18:03:17.441Z"
+  "version": "1.0.2",
+  "updatedAt": 1785159001329,
+  "contentHash": "69856fd8199db8485bf3a384a0db37f1ebbd9dd93c8368c5076a844ba459f3fd",
+  "fetchedAt": "2026-07-31T10:17:53.801Z"
 }

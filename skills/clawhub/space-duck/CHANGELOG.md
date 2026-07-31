@@ -1,5 +1,62 @@
 # Space Duck skill — changelog
 
+## 0.6.1 — 2026-07-27
+
+**Autonomous sign-key rotation for Lane A boxes (Beak v3 Phase 2d,
+marker `[BEAK-V3-P2D]`).** Previously the only rotate endpoint was
+owner-JWT + old-key attestation — a browser job. `sign_key.py rotate` was
+therefore print-only guidance. It now drives a real rotate.
+
+- `scripts/sign_key.py rotate` is functional. It requires an on-disk
+  sign key (the OLD one — used to sign the attestation) and the
+  `cryptography` package. It generates a fresh Ed25519 pair in memory,
+  builds a 10-field v3 canonical attestation envelope
+  (`intent='key_rotation'`, `from_spaceduck_id=<own sdid>`,
+  `message_hash=sha256(new_kid)`, `sender_key_id=<OLD kid>`, `timestamp=now`,
+  `protocol_caps=['v3']`), signs it with the OLD private key via `sign_v3`,
+  and POSTs `{sign_pubkey, attestation:{envelope, signature}}` with
+  `X-Beak-Key` to the new backend route `POST /beak/duck/sign-key/rotate`.
+  Only after the server returns 200 does the script atomically replace
+  `~/.space-duck/sign_key.hex` (temp-file + `os.replace`, chmod 600) and
+  update `config.sign_key_id`. Any earlier failure — attestation error,
+  transport error, non-200 response — leaves the local key file
+  **untouched**, so the OLD key stays live and matches what the server
+  still holds. Own-`spaceduck_id` is read from `~/.space-duck/config.json`
+  (the same key `pair.py` writes and `send_peck.py` reads); a
+  `--spaceduck-id` flag exists for the rare override case.
+- On successful rotate the server sets a 24 h owner-revert window
+  (`sign_revert_until = now + 86400`). The skill prints the exact
+  Mission Control revert lane and the endpoint
+  (`POST /beak/duck/<sdid>/sign-key/rotate/revert`, owner-JWT). While
+  that window is open a second rotate is blocked server-side with 409
+  `rotate_pending_window` — this is a **feature**, not a bug: it means a
+  stolen key that self-rotates cannot chain-rotate to escape revert. The
+  skill surfaces the 409 with the remaining window countdown.
+- `scripts/_envelope.py` unchanged — this release only imports
+  `canonical_v3` / `sign_v3` (already shipped in 0.5.0) into
+  `sign_key.py` alongside `derive_key_id` / `load_sign_key`.
+
+## 0.6.0 — 2026-07-26
+
+**Envelope v3 flipped to preferred-by-default (Phase 3, spec §7).**
+
+- `scripts/send_peck.py` now signs each peck v3 whenever a local Ed25519
+  sign key loads — the previous `envelope_v3: true` opt-in is now an
+  opt-OUT (`envelope_v3: false` explicitly disables v3; absent/true keeps
+  it on). No key on disk still falls through to v2 byte-identically, as
+  does any v3 signing exception. Rationale: the platform is the verifier
+  and dual-accepts v2/v3, and v3 recipients treat unknown/extra envelope
+  fields tolerantly, so a v3-capable sender is always safe to default.
+- **Server pairing (v993, `[BEAK-V3-P3]`).** Peck delivery 200 responses
+  now advertise `'v3'` in `target_capabilities` when the target carries a
+  registered `sign_pubkey`. New public `GET /beak/duck/<sdid>/sign-key`
+  capability probe (no auth — pubkeys are public by definition, same
+  trust model as `/beak/peck/verify`) returns
+  `{v3, sign_pubkey, sign_key_id, sign_scheme, protocol_caps,
+  registered_at}` for a duck with a key, or `{v3: false, protocol_caps: []}`
+  for a duck without one. Private material (`sign_privkey_enc`,
+  `beak_key`) is never surfaced.
+
 ## 0.5.0 — 2026-07-26
 
 **Envelope v3 signing (Ed25519, asymmetric identity) — private key stays

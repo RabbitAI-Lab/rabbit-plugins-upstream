@@ -1,12 +1,6 @@
 ---
-description: 'Multi-temporal change detection for satellite imagery using NDVI difference,
-
-  image differencing, and Change Vector Analysis (CVA). Detects vegetation,
-
-  urban, and water changes.
-
-  '
 name: change-detection
+description: 'Multi-temporal change detection for satellite imagery using NDVI difference, description: 'Multi-temporal change detection for satellite imagery using NDVI difference,  image differencing, and Change Vector Analysis (CVA). Detects vegetation,  urban, and water changes.  '
 ---
 
 # Change Detection

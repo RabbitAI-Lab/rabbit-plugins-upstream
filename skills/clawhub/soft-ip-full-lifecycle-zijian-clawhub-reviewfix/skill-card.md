@@ -1,5 +1,5 @@
 ## Description: <br>
-Software intellectual property full lifecycle self-assessment for Chinese software copyright applications, covering material completeness review, compliance verification, and registration readiness audit while using a third-party clawtip flow for order creation and payment verification. <br>
+Software IP self-assessment skill that provides an AI-delivered compliance review for Chinese software copyright applications, covering material completeness, source-code documentation, user manuals, rights attribution, registration readiness, and clawtip payment verification. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to assess whether Chinese software copyright application materials are complete, consistent, and ready for registration review. It provides local review guidance and uses a paid verification workflow before service fulfillment. <br>
+External users preparing Chinese software copyright applications use this skill after clawtip payment to receive an AI-delivered diagnostic review of application materials, source-code documentation, user manuals, rights attribution, and registration readiness. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The consultation question, order number, and encrypted payment credential are sent to api.ideaidea.com.cn for paid verification and fulfillment. <br>
-Mitigation: Use the skill only when that third-party verification flow is acceptable, and avoid entering confidential source code, contract text, or sensitive company details in the question field. <br>
-Risk: Order metadata is cached in a local order JSON file after the payment flow. <br>
-Mitigation: Delete the local order JSON after payment and service completion when continued local retention is not needed. <br>
+Risk: The skill stores a local order file that includes the user's initial question. <br>
+Mitigation: Keep the initial question brief and omit source code, trade secrets, applicant details, and confidential legal facts unless local storage is acceptable. <br>
+Risk: The service is gated by clawtip payment verification before the assessment is authorized. <br>
+Mitigation: Confirm clawtip is installed and complete payment verification before relying on the service output. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/jinyu12166/skills/soft-ip-full-lifecycle-zijian-clawhub-reviewfix) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/jinyu12166) <br>
-- [Third-party verification service](https://api.ideaidea.com.cn) <br>
+- [Publisher profile](https://clawhub.ai/user/jinyu12166) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command snippets and JSON-like status output] <br>
+**Output Type(s):** [text, markdown, guidance, shell commands, configuration] <br>
+**Output Format:** [Markdown assessment report plus shell command output with JSON_RESULT status lines] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language interaction; service access depends on clawtip payment verification.] <br>
+**Other Properties Related to Output:** [Requires clawtip payment verification and creates a local order file containing payment fields and the initial question.] <br>
 
 ## Skill Version(s): <br>
-3.1.33 (source: evidence release, SKILL.md frontmatter, and version history) <br>
+3.1.38 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

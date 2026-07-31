@@ -4,22 +4,93 @@
 
 ---
 
+## 跳过废弃 / 旧文件与文件夹（前置过滤规则）
+
+> **原则**：代码审查应聚焦于当前活跃、维护中的代码。对于用户已明确标记为废弃、归档或遗留的文件/文件夹，应在扫描阶段直接排除，不进入后续审查流程。
+
+### 自动跳过的目录（固定命名）
+
+以下名称的目录（不区分大小写）及其内部所有内容，**自动跳过**：
+
+| 类别 | 目录名（示例） |
+|------|---------------|
+| 废弃/弃用 | `deprecated`, `deprecated_files`, `deprecated_code`, `obsolete`, `obsolete_files`, `废弃`, `废弃代码`, `弃用`, `弃用代码` |
+| 旧文件 | `old_file`, `old_files`, `old`, `old_code`, `旧文件`, `旧代码`, `旧版` |
+| 遗留代码 | `legacy`, `legacy_code`, `遗留`, `遗留代码` |
+| 归档/备份 | `archive`, `archives`, `archived`, `bak`, `backup`, `backups`, `归档`, `备份`, `备份文件` |
+
+### 用户自定义跳过标记
+
+用户可在仓库根目录或任意子目录下放置以下标记文件，以声明该目录内需要跳过的文件或子目录：
+
+- **标记文件名**：`.code_review_ignore` 或 `.cr_skip`
+- **格式**：每行一个条目（相对于标记文件所在目录的路径），支持 `*` 通配符。以 `#` 开头的行为注释。
+- **示例**（`.code_review_ignore`）：
+  ```
+  # 以下文件/目录不参与代码审查
+  old_impl.py
+  temp/
+  *.draft.js
+  deprecated_modules/
+  ```
+
+### 自动跳过的文件（固定命名前缀）
+
+文件名以以下前缀开头（不区分大小写）的文件，**自动跳过**：
+- `deprecated_`
+- `old_`
+- `legacy_`
+- `obsolete_`
+- `archive_`
+- `bak_`
+
+### 过滤执行规则
+
+- 过滤操作在**代码扫描阶段之前**执行，被过滤掉的文件/目录不进入统计、不进入问题检测、不写入报告。
+- 若因过滤导致某检查维度无文件可审（如所有 Python 文件均在废弃目录中），直接跳过该维度，不报错。
+- 审查报告头部统计信息中，**不体现**被过滤文件的数量（仅统计实际参与审查的文件）。
+
+---
+
+## 已忽略问题去重与报告归档
+
+### 已忽略问题去重（防重复报告）
+
+每次审查前，先从 `docs/code_reviews/fixed/` 目录扫描用户已整理的报告，提取其中标记为「忽略」的问题，更新到 `ignored_issues.md`。
+
+- **扫描范围**：仅扫描 `docs/code_reviews/fixed/` 目录下的报告文件，不扫描根目录下的新生成报告（避免未处理报告中的标记被误读）。
+- **加载清单**：然后加载 `ignored_issues.md`，提取已忽略问题列表供审查过滤使用。
+- **匹配规则**：审查过程中发现的问题若与已忽略问题清单中的条目在「文件路径 + 问题标题」上匹配（标题相似度 ≥ 80% 或完全一致，且文件路径相同），则跳过该问题，不纳入统计、不写入报告。
+- **忽略标记识别规则**：问题标题中包含 `（忽略）` / `(ignore)` / `(IGNORE)` / `【忽略】` / `[忽略]` / `[IGNORE]` / `[ignore]` 等；或问题描述/修复建议中明确包含「忽略此问题」「忽略」「不修复」「已知问题，暂不处理」「ignore this issue」「won't fix」等显式声明。
+- **追加时去重**：按「文件路径 + 问题标题」检查是否已存在于清单，已存在则跳过，避免重复写入。
+- **恢复跟踪**：如用户需恢复跟踪某已忽略问题，可手动从 `ignored_issues.md` 中删除对应条目，下次审查将重新报告。
+
+### 报告归档机制（`fixed/` → `archived/`）
+
+- 用户查看报告后，将已确认处理（标记了忽略或修复了问题）的报告移至 `fixed/` 目录（`fixed/` 视为「待扫描收件箱」）。
+- 工具在审查前扫描 `fixed/` 提取忽略标记后，**自动把 `fixed/` 下全部报告移动到 `archived/` 目录**，使 `fixed/` 保持为空。
+- 下次审查仅扫描用户新放入 `fixed/` 的报告，避免对历史报告重复扫描。
+- `ignored_issues.md` 中「原报告」字段只记录文件名，对应文件已归档于 `docs/code_reviews/archived/` 子目录。
+
+---
+
 ## 审查流程
 
 ### 整体流程
 
 ```
 1. 代码扫描
-   ├── 文件结构分析
-   ├── 依赖关系分析
-   └── 代码统计
+   ├── 文件结构分析（过滤后）
+   ├── 依赖关系分析（过滤后）
+   └── 代码统计（过滤后）
 
 2. 问题检测
    ├── 命名规范检查
    ├── 命名合理性检查
    ├── 方法逻辑检查
    ├── 代码质量检查
-   └── 依赖管理检查
+   ├── 依赖管理检查
+   └── 项目结构与目录划分检查
 
 3. 问题分类
    ├── 🔴 严重bug (CRITICAL)
@@ -65,6 +136,13 @@
 - **检查项**：同一概念是否使用相同命名
 - **检查项**：缩写是否保持一致
 - **检查项**：中英文是否混用
+
+#### 英文拼写检查
+- **检查项**：标识符（变量、方法、类、文件名等）中的英文单词拼写是否正确
+- **检查项**：注释、文档字符串、日志文本中的英文拼写是否正确
+- **检查项**：是否统一使用英式或美式拼写（如 colour/color、initialize/initialise）
+- **检查项**：缩写是否为项目或行业内通用，避免自创或生僻缩写
+- **检查项**：同一概念是否使用相同缩写，避免混用（如 `user` 与 `usr`）
 
 ---
 
@@ -157,7 +235,7 @@
 
 ### 5. 依赖管理检查（PyPI 项目）
 
-> 详见 [language_checks/python_dependency.md](language_checks/python_dependency.md)
+> 详见 [language_checks/python_pypi_packaging.md](language_checks/python_pypi_packaging.md)
 
 ### 6. 类型与弃用检查（Python 项目）
 
@@ -198,6 +276,32 @@
 
 ---
 
+### 9. 项目结构与目录划分检查
+
+> 本维度关注项目整体目录布局是否清晰、是否符合所在框架/生态的常规实践，以及不同功能的文件是否被划分到了合理的目录中。
+> 适用于 FastAPI、Django、Next.js、React 等具有明确目录约定或推荐结构的项目。
+> 详见 [language_checks/project_structure_check.md](language_checks/project_structure_check.md)
+
+#### 目录职责
+
+- **检查项**：同一目录内的文件是否围绕同一职责，避免「万能目录」变成垃圾桶
+- **检查项**：业务模块、工具函数、配置、测试、静态资源等是否各归其位
+- **检查项**：目录层级是否过深（建议不超过 3-4 层）
+
+#### 框架结构合规性
+
+- **检查项**：FastAPI 项目是否按 `routers/`、`models/`、`schemas/`、`services/` 等常规方式组织
+- **检查项**：Django 项目是否遵循 project/app/templates/static/migrations 的默认结构
+- **检查项**：Next.js / React 项目是否区分路由页面、可复用组件、公共工具、钩子、类型定义等目录
+- **检查项**：API 路由与页面路由是否清晰分离
+
+#### 入口与可理解性
+
+- **检查项**：项目入口文件是否明确且位置合理
+- **检查项**：对于新接触代码的开发者，目录结构是否易于理解
+
+---
+
 ## 问题分级标准
 
 ### 🔴 严重bug (CRITICAL)
@@ -212,6 +316,7 @@
 - 敏感信息泄露
 - 资源未释放（内存泄漏、文件句柄泄漏）
 - 并发竞态条件
+- 项目结构错误导致运行失败（如 Next.js 页面放错目录、Django app 未注册）
 
 **处理方式**：
 - 立即修复
@@ -231,6 +336,7 @@
 - 过长的方法或类
 - 缺少必要的输入验证
 - 不安全的类型转换
+- 业务逻辑泄漏到通用目录（如 `utils/` 混入大量业务代码）
 
 **处理方式**：
 - 尽快修复
@@ -250,6 +356,7 @@
 - 未使用的变量或导入
 - 方法参数过多
 - 复杂的条件表达式
+- 目录层级过深或测试文件位置不一致
 
 **处理方式**：
 - 建议优化
@@ -268,6 +375,7 @@
 - 注释格式不统一
 - 代码对齐问题
 - 尾随空格
+- 空目录残留或个别文件命名与所在目录风格不一致
 
 **处理方式**：
 - 建议改进
@@ -278,35 +386,62 @@
 
 ## 审查执行步骤
 
+### 步骤 0：废弃/旧文件过滤（前置）
+
+在执行代码扫描前，先识别并排除用户标注的废弃/旧文件与文件夹。
+
+```bash
+# 生成排除参数（废弃目录固定命名 + 用户标记文件）
+SKIP_DIRS=(deprecated deprecated_files deprecated_code obsolete obsolete_files old_file old_files old old_code legacy legacy_code archive archives archived bak backup backups 废弃 废弃代码 弃用 弃用代码 旧文件 旧代码 旧版 遗留 遗留代码 归档 备份 备份文件)
+SKIP_ARGS=""
+for d in "${SKIP_DIRS[@]}"; do
+  SKIP_ARGS="$SKIP_ARGS -not -path '*/$d/*'"
+done
+
+# 读取用户标记文件并追加排除（.code_review_ignore / .cr_skip）
+# 标记文件格式：每行一个相对路径，支持 * 通配符，# 开头为注释
+while IFS= read -r line; do
+  [[ "$line" =~ ^#.*$ ]] && continue
+  [[ -z "$line" ]] && continue
+  SKIP_ARGS="$SKIP_ARGS -not -path '*/$line'"
+done < <(find <仓库路径> -maxdepth 2 \( -name ".code_review_ignore" -o -name ".cr_skip" \) -type f -exec cat {} + 2>/dev/null)
+
+# 标记文件本身也不参与审查
+SKIP_ARGS="$SKIP_ARGS -not -name '.code_review_ignore' -not -name '.cr_skip'"
+```
+
+> **说明**：`SKIP_ARGS` 变量需在后续所有 `find` 命令中原样展开使用，以统一排除废弃内容。若仓库无废弃目录/标记文件，该变量为空，不影响正常扫描。
+
 ### 步骤 1：代码扫描
 
 ```bash
 # 统计代码行数（支持多种语言）
-find <仓库路径> \( -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.java" -o -name "*.go" -o -name "*.rs" \) -type f | xargs wc -l
+find <仓库路径> $SKIP_ARGS \( -name "*.py" -o -name "*.js" -o -name "*.ts" -o -name "*.java" -o -name "*.go" -o -name "*.rs" \) -type f | xargs wc -l
 
 # 查找配置文件
-find <仓库路径> \( -name "requirements*.txt" -o -name "setup.py" -o -name "pyproject.toml" -o -name "setup.cfg" -o -name "Pipfile" \) -type f
+find <仓库路径> $SKIP_ARGS \( -name "requirements*.txt" -o -name "setup.py" -o -name "pyproject.toml" -o -name "setup.cfg" -o -name "Pipfile" \) -type f
 
 # 查找 YAML/YML 配置文件
-find <仓库路径> \( -name "*.yaml" -o -name "*.yml" \) -type f
+find <仓库路径> $SKIP_ARGS \( -name "*.yaml" -o -name "*.yml" \) -type f
 
 # 查找 JSON 配置文件
-find <仓库路径> -name "*.json" -type f | grep -v node_modules | grep -v __pycache__ | grep -v .git
+find <仓库路径> $SKIP_ARGS -name "*.json" -type f | grep -v node_modules | grep -v __pycache__ | grep -v .git
 
 # 查找 TOML 配置文件
-find <仓库路径> -name "*.toml" -type f
+find <仓库路径> $SKIP_ARGS -name "*.toml" -type f
 
 # 查找环境配置文件
-find <仓库路径> -name ".env*" -type f
+find <仓库路径> $SKIP_ARGS -name ".env*" -type f
 
 # 查找 Dockerfile 和 docker-compose
-find <仓库路径> \( -name "Dockerfile*" -o -name "docker-compose*" \) -type f
+find <仓库路径> $SKIP_ARGS \( -name "Dockerfile*" -o -name "docker-compose*" \) -type f
 ```
 
 ### 步骤 2：问题检测
 
 按检查维度逐项检查，记录问题位置和描述。
 - 若仓库中不存在某类文件（如无 YAML 配置文件），则跳过对应维度的检查。
+- 若项目为无明确框架结构的纯脚本或辅助代码集合，可跳过「项目结构与目录划分检查」。
 
 ### 步骤 3：问题分类
 
@@ -318,7 +453,7 @@ find <仓库路径> \( -name "Dockerfile*" -o -name "docker-compose*" \) -type f
 
 ### 步骤 4：生成报告
 
-按照 `report_template.md` 模板生成审查报告。
+按照 `templates/report.md` 模板生成审查报告。
 
 **报告生成规则**：
 - 必须包含**截止提交**信息（最新 commit hash 与 commit message）

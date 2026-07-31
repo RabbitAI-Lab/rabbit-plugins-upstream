@@ -1,5 +1,5 @@
 ## Description: <br>
-Tax Renewable Resources helps agents answer renewable-resource and waste-material tax compliance questions, run self-check workflows, and draft practical guidance for reverse invoicing, VAT refund, simplified tax, invoice-flow, and audit-risk scenarios. <br>
+再生资源/资源回收/废旧物资企业财税政策、反向开票、资源综合利用即征即退、简易计税、风险指标、案例、报告模板与实操指引专题助手。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Tax, finance, and compliance users use this skill to explore China-focused renewable-resource tax policy, reverse invoicing, resource-utilization VAT refund, simplified tax, risk indicators, cases, templates, and self-check reports. The outputs are advisory support for review by qualified tax or legal professionals, not a substitute for filing, audit, or legal representation. <br>
+Tax, finance, and compliance users use this skill to ask renewable-resource industry tax questions, check reverse invoicing and resource-recycling VAT treatment, identify compliance risks, and draft self-check or remediation reports. It is focused on Chinese renewable-resource and waste-material recovery tax scenarios and should not be treated as legal, audit, or tax filing advice. <br>
 
 ### Deployment Geography for Use: <br>
-China-focused <br>
+China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Tax questions and self-check metrics may be sent to mcp.aitaxs.top. <br>
-Mitigation: Use the skill only when remote processing is acceptable, avoid unnecessary sensitive business data, and review the service endpoint before deployment. <br>
-Risk: The skill can store service credentials and logs locally. <br>
-Mitigation: Protect local configuration files, remove stored credentials when uninstalling, and rotate keys if the local environment may be exposed. <br>
-Risk: Client MCP configuration files can be modified when TAX_ENABLE_AUTOSETUP is enabled. <br>
-Mitigation: Leave auto-setup disabled unless the user intends configuration changes, and inspect any proposed MCP client changes before use. <br>
-Risk: The one-click matrix installer may download and install related tax skills. <br>
-Mitigation: Avoid the matrix installer until each package source and download URL has been verified. <br>
+Risk: The skill may send tax questions or self-check metrics to mcp.aitaxs.top. <br>
+Mitigation: Avoid entering sensitive client, taxpayer, or confidential business details unless those remote-service data flows are acceptable. <br>
+Risk: The skill can create and store service credentials and logs locally. <br>
+Mitigation: Review and protect the local client data directory, and remove stored credentials or logs when they are no longer needed. <br>
+Risk: The skill may alter MCP client configuration when setup is explicitly run or enabled. <br>
+Mitigation: Run setup in dry-run mode first where available, inspect proposed MCP configuration changes, and keep backups before enabling automatic setup. <br>
+Risk: Tax calculations, risk scores, and policy guidance may be incomplete, outdated, or unsuitable for a specific taxpayer. <br>
+Mitigation: Confirm material conclusions with official tax authority guidance or a qualified tax professional before filing, remediating, or relying on the output. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-renewable) <br>
-- [Renewable-resource self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_renewable.html) <br>
-- [Tax policy MCP service endpoint](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
+- [Renewable-resource compliance self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_renewable.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [State Taxation Administration](https://www.chinatax.gov.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, shell commands, guidance] <br>
-**Output Format:** [Markdown and structured text with optional configuration or command snippets] <br>
+**Output Type(s):** [text, markdown, configuration, guidance] <br>
+**Output Format:** [Markdown and structured text, with optional configuration guidance and report-style outputs] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call a remote MCP service, launch a web self-check workflow, store local service credentials, or propose related skill installation; review outputs before operational tax use.] <br>
+**Other Properties Related to Output:** [May provide links to an interactive self-check page, policy Q&A prompts, risk findings, remediation steps, and report templates.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release evidence and SKILL.md frontmatter) <br>
+3.15.4 (source: server release and skill frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

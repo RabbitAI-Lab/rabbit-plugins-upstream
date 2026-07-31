@@ -1,10 +1,11 @@
-# Sports Inc payables — end-to-end (SportsLink → match → draft bill)
+# Sports Inc payables — end-to-end (SportsLink → match → bill → post-on-match)
 
 Sports Inc is a buying group that doesn't send individual vendor invoices; the
 invoices live in the SportsLink API. This is the automated payables loop for
 them: pull the invoices, reconcile each to its Odoo PO, correct price variances,
-create the **draft** bill, and mark the SI document consumed — with a human
-posting the bill and handling anything flagged.
+create the bill, **post it when its total matches the invoice** (else leave it
+in draft), and mark the SI document consumed — with a human handling anything
+flagged.
 
 Three skills cooperate (this is the ports-and-adapters split in practice):
 
@@ -13,13 +14,16 @@ Three skills cooperate (this is the ports-and-adapters split in practice):
 - **Workflow** — this skill: reconcile invoice ↔ PO, correct/escalate, create the
   draft bill. Source- and ERP-agnostic.
 - **ERP adapter** — `drivethru-odoo` / `drivethru_mcp` (`paymatch.py`,
-  `ap_create_vendor_bill`): the Odoo writes.
+  `ap_create_vendor_bill` / `ap_post_vendor_bill`): the Odoo writes.
 
 ## Configured policy (BaconCo)
 
-- **Posting: draft + notify only.** Always create the bill in **draft** and
-  schedule a review activity for a human to post — never auto-post. `paymatch.py
-  bill` wraps Odoo's draft-only create; there is no post step in this loop.
+- **Posting: post on match, draft on mismatch.** Create the bill, then **post it
+  when the bill total matches the invoice `expected_total` within tolerance**
+  (`paymatch.py post`, backed by the guarded `ap_post_vendor_bill`). A bill that
+  doesn't match is **left in draft** and escalated to the reviewer — never post a
+  mismatch. When a run should stay hands-off (a human reviews before posting),
+  skip the `post` step and leave every bill in draft.
 - **On variance: auto-fix price, escalate qty/line.** A unit-price difference is
   treated as the SI invoice being authoritative — correct the PO line (like the
   pricing review), then bill. A **quantity / missing-line / total-structure**
@@ -27,7 +31,9 @@ Three skills cooperate (this is the ports-and-adapters split in practice):
   activity to the reviewer, create no bill).
 - **Reviewer:** Zach Tucker (`reviewer_user_id: 6` in BaconCo's Odoo). Keep this
   in tenant config, not hard-coded in prose.
-- **Tolerance:** a small fraction (e.g. `0.02`) for the `expected_total` check.
+- **Tolerance:** a small **absolute** amount (a few cents, e.g. `0.02`) for the
+  `expected_total` match check on both create and post — once prices are
+  reconciled the SI docTotal should equal the computed bill to within rounding.
 - **Chatter: internal log notes only.** Every PO note or escalation this loop
   posts (via `po_post_message`) is an internal Odoo **log note**, never a "Send
   message" — nothing here is emailed to the vendor.
@@ -95,6 +101,20 @@ For each normalised invoice from the adapter:
    the discrepancy and leave the doc active.
 7. **Mark consumed.** On a successful draft, `sportslink.py mark-historical
    '{"siDocNumbers": [<si_doc_number>]}'`.
+8. **Post it if it matches.** Post the draft (created bill `id` from step 6) so
+   it hits the ledger — unless this is a draft-only run:
+   ```
+   paymatch.py post '{
+     "bill_id": <created bill id>,
+     "expected_total": <invoice total>,
+     "tolerance": 0.02,
+     "note": "SI SportsLink doc <si_doc_number>; matched PO <po_number>; posted on match."
+   }'
+   ```
+   `post` re-checks the total and **refuses** (leaving the bill in draft) if it
+   no longer matches within tolerance — treat a refusal as an escalation to the
+   reviewer, exactly like a create mismatch. Posting an already-posted bill is a
+   safe no-op (`already_posted: true`), so a re-run never double-posts.
 
 ## Scheduling & resilience
 
@@ -103,9 +123,10 @@ For each normalised invoice from the adapter:
 - The loop is self-healing: transient API failures retry (the adapter backs off);
   anything unresolved stays active and is retried next run; a run can be killed
   and restarted safely because nothing is marked consumed until its bill exists.
-- **Notify on exceptions.** Summarise per run: created N draft bills (list PO /
-  amounts), corrected P prices, escalated Q (with reasons), and any hard
-  failures. Draft bills + escalations are the human's queue.
+- **Notify on exceptions.** Summarise per run: posted N bills and left M in
+  draft (list PO / amounts, posted vs draft), corrected P prices, escalated Q
+  (with reasons), and any hard failures. Draft bills + escalations are the
+  human's queue.
 
 ## Why an agent, not a custom Odoo module
 

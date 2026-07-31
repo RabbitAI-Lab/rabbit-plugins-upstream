@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/calibre-catalog-read",
   "slug": "calibre-catalog-read",
   "ownerHandle": null,
-  "version": "1.0.10",
-  "updatedAt": 1779076971803,
-  "contentHash": "65659fd46362acaa57f49ebab94b95804c7a0ed7b73dee92fa12cb7cfe01af16",
-  "fetchedAt": "2026-07-26T18:54:33.150Z"
+  "version": "1.0.13",
+  "updatedAt": 1785381818125,
+  "contentHash": "493f8e868f36894c94a867ef87cd81012d8664b3a688f2f20b2c447a03d45ed4",
+  "fetchedAt": "2026-07-31T10:08:32.805Z"
 }

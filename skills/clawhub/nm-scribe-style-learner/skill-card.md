@@ -11,36 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, writers, and content teams use this skill to analyze exemplar writing and create reusable style profiles. The profiles combine quantitative metrics, selected passages, anti-patterns, and validation notes for consistent generation or editing. <br>
+Developers and writing-focused agents use this skill to analyze exemplar text, extract quantitative style features, select representative passages, and produce a reusable style profile for later generation or editing. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad triggers such as style, voice, and tone may activate the skill more often than intended. <br>
-Mitigation: Confirm that style learning is intended before collecting exemplars or generating a profile. <br>
-Risk: User-provided exemplar text may contain sensitive, proprietary, or personal writing. <br>
-Mitigation: Use only exemplar material that is approved for style reference and remove unnecessary secrets or confidential details. <br>
-Risk: A generated profile may overfit limited exemplars or misrepresent the target voice. <br>
-Mitigation: Validate the profile against new content, compare metrics to the exemplars, and revise before relying on it for production writing. <br>
+Risk: The skill may activate on broad writing-style requests. <br>
+Mitigation: Confirm that the current task is intended to analyze or apply a style profile before collecting exemplars or generating profile content. <br>
+Risk: Generated profiles may retain representative excerpts from exemplar text. <br>
+Mitigation: Use only exemplar text that is appropriate to analyze and retain, and review generated profiles before sharing or storing them. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-style-learner) <br>
-- [Scribe plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
-- [Feature Extraction Module](modules/feature-extraction.md) <br>
-- [Exemplar Reference Module](modules/exemplar-reference.md) <br>
-- [Style Application Module](modules/style-application.md) <br>
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown with YAML-style profile sections and exemplar passages] <br>
+**Output Type(s):** [text, markdown, configuration, guidance, shell commands] <br>
+**Output Format:** [Markdown and YAML-style style profiles with metrics, exemplars, validation checklists, and optional shell command snippets.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include quantitative style metrics, selected exemplars, anti-patterns, and validation notes.] <br>
+**Other Properties Related to Output:** [Profiles may include representative excerpts from user-provided exemplars.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

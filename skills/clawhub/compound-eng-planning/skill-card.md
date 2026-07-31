@@ -1,5 +1,5 @@
 ## Description: <br>
-Software implementation planning with file-based persistence (.plan/) for code changes that touch multiple files, have ambiguous scope, or require architectural decisions. <br>
+Software implementation planning with file-based persistence (.plan/) for code changes touching three or more files or with ambiguous scope. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering agents use this workflow to turn implementation requests into concrete, verifiable plans before coding. It is aimed at multi-file changes, ambiguous scopes, and work that benefits from persistent session notes in `.plan/`. <br>
+Developers and engineering agents use this skill to turn ambiguous or multi-file software implementation work into concrete, file-backed plans with scoped phases, verification steps, and execution handoff choices. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Starting a new plan can overwrite existing `.plan` files in the current workspace. <br>
-Mitigation: Review or preserve existing `.plan` files before initializing a new plan when those files contain work that must be kept. <br>
+Risk: Generated plans may steer later implementation work in the wrong direction if the goal, scope, or verification criteria are weak. <br>
+Mitigation: Review the generated plan before execution and confirm the goal, scope boundaries, success thresholds, and handoff choice. <br>
+Risk: The planning scaffold writes local .plan/ files and may update .gitignore in the active project. <br>
+Mitigation: Use the skill only in projects where local planning files are expected, and inspect generated file changes before committing or handing off execution. <br>
 
 
 ## Reference(s): <br>
-- [ia-planning Specification](SPEC.md) <br>
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-planning) <br>
 - [Execution & Decomposition Patterns](references/execution-and-methodology.md) <br>
 - [Operational Patterns](references/operational-patterns.md) <br>
 - [Plan Deepening](references/plan-deepening.md) <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-planning) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown planning files and inline shell commands] <br>
+**Output Type(s):** [markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown plans, checklists, and inline bash commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local `.plan/` files and add `.plan/` to `.gitignore` when the initialization script is used.] <br>
+**Other Properties Related to Output:** [May create .plan/ working files and update .gitignore when the planning scaffold is used.] <br>
 
 ## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+4.3.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

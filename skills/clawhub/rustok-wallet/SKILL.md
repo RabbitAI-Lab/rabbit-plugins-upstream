@@ -1,7 +1,7 @@
 ---
 name: rustok-wallet
-description: Self-custody Ethereum agent wallet. Runs entirely on the user's machine as one Docker image (MCP over stdio); private keys never leave it. Read wallet context, balances and DeFi positions (Aave v3, ERC-4626); preview transactions and sign messages. The user assumes all risk for funds on the agent wallet — there are no hard-coded spending limits.
-version: 0.4.4
+description: Self-custody Ethereum agent wallet. Runs entirely on the user's machine as one Docker image (MCP over stdio); private keys never leave it. Read wallet context, balances and DeFi positions (Aave v3, ERC-4626); preview, execute and sign. The user assumes all risk for funds on the agent wallet — there are no hard-coded spending limits.
+version: 0.4.5
 metadata:
   openclaw:
     emoji: "🦀"
@@ -11,7 +11,7 @@ metadata:
     homepage: https://github.com/rustok-org/mcp
 ---
 
-# rustok-wallet
+# Rustok Ethereum Wallet
 
 > **License note:** this OpenClaw skill package (`skills/rustok-wallet/`) is MIT-0
 > per ClawHub requirements. The Rustok wallet core itself is proprietary; only the
@@ -24,13 +24,16 @@ private keys live only in the user's local Docker volume and never leave it.
 
 > ⚠️ **Self-custody, real funds, your risk.** This wallet has **no hard-coded
 > spending limits or budgets** — the user consciously accepts that funds sent to
-> the agent wallet are at risk. txguard still flags risky transactions, but it
-> does not block them. All supported chains the user enables are live (incl.
+> the agent wallet are at risk. txguard flags risky transactions and hard-blocks
+> sends to known-scam addresses (a bundled denylist); everything else goes
+> through. All supported chains the user enables are live (incl.
 > Ethereum mainnet). Always preview before executing and show the user the details.
 
 ## Prerequisites
 
-- **Docker** installed and running.
+- **Docker** installed and running. No `docker` on your machine (e.g. Fedora)?
+  **Podman is a drop-in replacement** — use `podman` in place of `docker` in
+  every command below; nothing else changes.
 - An Ethereum RPC URL (an Alchemy key URL is best; a public RPC works for testing).
 
 ## One-time onboarding (the user does this in a terminal, once)
@@ -62,7 +65,7 @@ keyring password in the MCP config or shell history** — keep it in a private,
 `0600` env-file that only you can read:
 
 ```bash
-# One-time: write the keyring password into a private env-file (chmod 600).
+# One-time: write the keyring password into a private env-file (umask 077 → 0600).
 umask 077
 read -r -s -p "Keyring password: " pw \
   && printf 'RUSTOK_KEYRING_PASSWORD=%s\n' "$pw" > ~/.rustok-wallet.env \
@@ -83,7 +86,10 @@ docker run -i --rm --init \
 
 For **Claude Desktop / Cursor** (stdio MCP), add to the MCP config. The keyring
 password stays in the `0600` env-file above (`--env-file`), **never in this
-config file** — only the non-secret RPC URL lives here:
+config file** — only the non-secret RPC URL lives here. **Replace
+`/home/you/.rustok-wallet.env` with your real absolute path** (the file you
+just created, e.g. `/home/alice/.rustok-wallet.env` — `~` is not expanded
+inside JSON):
 
 ```json
 {
@@ -129,13 +135,27 @@ To run a restricted agent, set `RUSTOK_MCP_CAPABILITIES` to a subset
 | `get_wallet_context` | read_wallet | Active wallet address, per-chain balances, allowed chains |
 | `get_balances` | read_wallet | Token balances for the active wallet, or `{address, chain_id}` |
 | `get_positions` | read_wallet | DeFi positions — Aave v3 (collateral/debt/health factor/LTV) + ERC-4626 vaults; optional `{address}` |
-| `preview_transaction` | preview_tx | Preview any transaction `{to, value, chain_id, data?}` → decoded call (who/what is authorized), pre-sign simulation (revert check), gas, risk level |
-| `sign_message` | execute_tx | Sign a message (EIP-191) |
+| `preview_send` | preview_tx | Preview an ETH send `{to, amount_eth, chain_id}` → `preview_id`, gas, risk level |
+| `execute_send` | execute_tx | Broadcast a previewed send `{preview_id}` → `tx_hash` |
+| `sign_message` | execute_tx | Sign a short human-readable message (EIP-191) |
+
+**Units.** `preview_send` takes **`amount_eth`** — a plain decimal-ETH string
+(`"0.05"`, max 18 decimal places; no exponents). Responses spell units out:
+`amount_wei` + `amount_eth` in previews, and `balance` (wei) + `balance_eth`
+in balances. In ≤0.3.2 the old `amount` field was silently interpreted as
+**wei**; it is now rejected with a rename hint — never re-scaled.
+
+**Signing guard.** `sign_message` rejects hex blobs (≥16 hex chars, with or
+without `0x`), empty, oversized (>4 KiB) and control-character payloads
+server-side — a hex-blob signature could authorize an approval/permit drain.
+For integrations: the image's loopback gateway also exposes
+`POST /api/v1/wallet/sign_typed_data` (EIP-712 over a pre-computed
+`domain_separator`/`struct_hash`) for glue layers such as UniswapX signing.
 
 ## Behavioral guidelines
 
-1. **Always `preview_transaction` first** and show its decoded call + simulation (revert check) + risk level so the user gives informed approval.
-2. **Surface what the preview decoded** (who/what is authorized, amount, revert check, estimated cost, risk level) before the user acts on it.
+1. **Always `preview_send` before `execute_send`** — never execute without a fresh preview.
+2. **Show the preview** (amount, destination, estimated cost, risk level) before executing.
 3. **Use `get_wallet_context` first** so you don't hallucinate balances or chains.
 4. If a tool needs a capability the session lacks, it returns an authorization
    error — explain that to the user rather than retrying.

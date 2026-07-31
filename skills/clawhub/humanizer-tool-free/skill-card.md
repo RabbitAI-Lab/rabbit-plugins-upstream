@@ -1,5 +1,5 @@
 ## Description: <br>
-Humanizer Tool Free helps an agent identify and rewrite AI-like writing patterns, add a more personal voice, and polish single paragraphs or full texts while preserving the original meaning and target tone. <br>
+Humanizer Tool Free helps agents identify common AI-writing traces and rewrite single paragraphs or articles in a more natural voice while preserving the original meaning and target tone. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill to make AI-generated or overly polished text read more naturally for personal blogs, email, social media copy, and single-document polishing. It is intended for rewriting and tone adjustment, not for guaranteeing that text will bypass AI detectors. <br>
+External users and writing-focused agents use this skill to rewrite user-provided Chinese or English text, flag AI-like phrasing, and produce more natural prose for blogs, emails, articles, and social posts. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill is mainly a text-rewriting workflow, but server security evidence flags broad read, command execution, and write capabilities. <br>
-Mitigation: Review before installing, run only in a scoped workspace, and require explicit confirmation before any command execution or file write. <br>
-Risk: The artifact describes vague save, modify, delete, import, and export operations that could affect files beyond the provided text. <br>
-Mitigation: Limit use to user-provided text and approve any save, export, modification, or deletion request before it is performed. <br>
+Risk: The security review flags shell and write authority plus broad save, delete, export, and network diagnostic wording that exceeds the text-humanization purpose. <br>
+Mitigation: Use the skill only for user-provided text and require explicit approval before any file save, export, modification, deletion, shell command, or network diagnostic. <br>
+Risk: Text rewriting can change meaning, tone, or factual nuance even when the stated goal is to preserve the original intent. <br>
+Mitigation: Review the rewritten output against the source text before publishing or sending it. <br>
 
 
 ## Reference(s): <br>
-- [Humanizer Tool Free ClawHub page](https://clawhub.ai/thcjp/skills/humanizer-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Artifact skill instructions](artifact/SKILL.md) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/humanizer-tool-free) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown or plain text with optional JSON-shaped response examples] <br>
+**Output Type(s):** [text, markdown, guidance] <br>
+**Output Format:** [Markdown or plain text rewrites with optional trace notes] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include rewritten text, detected writing-pattern notes, status fields, result metadata, and execution logs.] <br>
+**Other Properties Related to Output:** [May include trace labels, rewritten text, and brief revision notes.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

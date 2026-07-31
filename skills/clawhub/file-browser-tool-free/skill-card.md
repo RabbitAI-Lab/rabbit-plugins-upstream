@@ -1,5 +1,5 @@
 ## Description: <br>
-文件浏览器(免费版) helps an agent browse directories, preview text files, search filenames and file contents, and perform basic local file operations. <br>
+文件浏览器(免费版) helps an agent browse directories, inspect text files, run basic searches, and perform simple local file operations. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Personal users and developers use this skill to inspect local directories, preview text files, search files, and perform basic copy, move, delete, rename, and directory-creation tasks through an agent. <br>
+External users and developers use this skill to let an agent list directories, preview text files, search file names or contents, and manage individual files in a local workspace. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide broad local file actions, including delete, move, copy, overwrite, and cross-filesystem operations. <br>
-Mitigation: Use explicit paths, keep backups, avoid sensitive directories, and require manual confirmation before destructive or recursive operations. <br>
-Risk: Shell commands or file-management guidance may modify files reachable by the agent's local permissions. <br>
-Mitigation: Review commands before execution and run the agent in the least-privileged workspace that still supports the task. <br>
-Risk: Directory browsing, text preview, and search can expose sensitive local content. <br>
-Mitigation: Limit searches to intended folders and avoid using the skill on directories containing secrets, credentials, or private data. <br>
+Risk: The skill can delete, move, overwrite, or create local files when paired with agent execution tools. <br>
+Mitigation: Require explicit target paths and explicit confirmation before delete, move, overwrite, or cross-filesystem operations. <br>
+Risk: The skill may operate outside the intended project or workspace if paths are not constrained. <br>
+Mitigation: Limit use to an intended workspace and reject broad or ambiguous paths before running file operations. <br>
 
 
 ## Reference(s): <br>
@@ -31,13 +29,13 @@ Mitigation: Limit searches to intended folders and avoid using the skill on dire
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with shell commands, Python snippets, and JSON result examples] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with command examples, Python snippets, and structured JSON-style operation results] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include file paths, status messages, execution logs, and local filesystem operation results.] <br>
+**Other Properties Related to Output:** [Outputs may include file paths, command output, operation status, execution logs, and error messages.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: ClawHub release metadata) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

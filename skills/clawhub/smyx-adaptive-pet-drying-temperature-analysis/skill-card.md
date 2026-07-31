@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes pet full-body images or videos through server-side APIs to identify breed/body type and fur density, then returns a non-medical drying temperature and duration recommendation for pet dryers, grooming salons, and smart pet care devices. <br>
+Analyzes full-body pet image or video inputs to estimate breed or body type and fur density, then returns a non-medical drying temperature and time curve for pet-care equipment or grooming workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External pet-care users and developers use this skill to submit pet images, videos, or media URLs for breed/body-type and fur-density analysis and receive a temperature/time curve for drying equipment or grooming workflows. The results are care references only and are not medical recommendations. <br>
+External users, grooming teams, and smart pet-care device developers use this skill to analyze pet media and produce non-medical drying temperature guidance, structured reports, and report links. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Pet images, videos, URLs, and an internally resolved identity may be sent to lifeemergence.com cloud services. <br>
-Mitigation: Use the skill only with appropriate consent and approved data handling, avoid sensitive media when unnecessary, and review the service relationship before commercial deployment. <br>
-Risk: The skill can create local workspace data that stores account tokens or identity values for reuse across sessions. <br>
-Mitigation: Restrict access to the workspace data directory, review or clear local data files when reuse is not desired, and rotate credentials if the workspace is shared. <br>
-Risk: Temperature recommendations are non-medical care guidance and incorrect use could create drying safety risk. <br>
-Mitigation: Keep operator review in the workflow, respect documented temperature caps and special-care adjustments, and do not substitute the output for veterinary advice. <br>
+Risk: The skill sends pet images, videos, URLs, and report-history requests to remote services, and server evidence reports local identity and authentication token persistence. <br>
+Mitigation: Review the publisher and remote-processing model before installation; use only media and URLs appropriate for cloud processing, and clear local identity or token state when no longer needed. <br>
+Risk: Drying-temperature recommendations may be inaccurate or unsuitable for an individual animal. <br>
+Mitigation: Treat outputs as non-medical care guidance, keep temperatures within device and animal safety limits, and have a human review the recommendation before applying it to equipment. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-adaptive-pet-drying-temperature-analysis) <br>
+- [Pet drying recommendation API documentation](artifact/references/api_doc.md) <br>
+- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON text returned by the CLI, with optional saved result files and report links.] <br>
+**Output Format:** [Markdown or JSON analysis output with recommended drying temperatures, durations, warnings, and report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs can include structured analysis results, drying temperature/time recommendations, history-list results, and cloud report export links.] <br>
+**Other Properties Related to Output:** [Can analyze a local pet media file or network URL, select pet type, list cloud report history, and optionally save output to a file.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: SKILL.md frontmatter and ClawHub release evidence) <br>
+1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

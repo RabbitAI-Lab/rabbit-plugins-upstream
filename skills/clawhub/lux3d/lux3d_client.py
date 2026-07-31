@@ -44,6 +44,7 @@ SUPPORTED_VERSIONS = {
     "v1.0-pro",
     "v2.0-preview",
     "v3.0-standard",
+    "G1",
 }
 
 SUPPORTED_FORMATS = {
@@ -52,12 +53,13 @@ SUPPORTED_FORMATS = {
     "usdz",
     "obj_zip",
     "fbx_zip",
+    "ply",
 }
 
-# v2.0-preview / v3.0-standard custom face count range
+# v2.0-preview / v3.0-standard custom face count range; G1 uses the same
+# public faceCount field with a higher default.
 FACE_COUNT_MIN = 10000
 FACE_COUNT_MAX = 500000
-DEFAULT_FACE_COUNT = 60000
 
 
 def get_api_key():
@@ -71,7 +73,7 @@ def validate_api_key():
     if not api_key or api_key in {"your_lux3d_api_key", "your_invitation_code_here"}:
         raise ValueError(
             "[ERROR] API key not configured.\n"
-            "Please set LUX3D_API_KEY to the base64 invitation code."
+            "Please set LUX3D_API_KEY to your Lux3D API key."
         )
     return api_key
 
@@ -133,65 +135,100 @@ def validate_version(version):
     return version
 
 
-def validate_face_count(face_count):
+def validate_face_count(faceCount):
     """Validate the target face count.
 
-    Takes effect for v2.0-preview / v3.0-standard. For v1.0-pro the server
-    ignores this parameter and uses its own default. Valid range is
-    [FACE_COUNT_MIN, FACE_COUNT_MAX]; defaults to DEFAULT_FACE_COUNT when not provided.
+    Takes effect for Mesh only, not 3DGS, in v2.0-preview / v3.0-standard and G1. For v1.0-pro the
+    server ignores this parameter and uses its own default. Valid range is
+    [FACE_COUNT_MIN, FACE_COUNT_MAX]. When omitted, the server applies the
+    version-specific default: 60000 for v2.0-preview / v3.0-standard and
+    200000 for G1.
     """
-    if face_count is None:
+    if faceCount is None:
         return None
-    if not isinstance(face_count, int) or isinstance(face_count, bool):
-        raise ValueError(f"faceCount must be an integer, got {type(face_count).__name__}")
-    if face_count < FACE_COUNT_MIN or face_count > FACE_COUNT_MAX:
+    if not isinstance(faceCount, int) or isinstance(faceCount, bool):
+        raise ValueError(f"faceCount must be an integer, got {type(faceCount).__name__}")
+    if faceCount < FACE_COUNT_MIN or faceCount > FACE_COUNT_MAX:
         raise ValueError(
-            f"faceCount {face_count} is out of range [{FACE_COUNT_MIN}, {FACE_COUNT_MAX}]"
+            f"faceCount {faceCount} is out of range [{FACE_COUNT_MIN}, {FACE_COUNT_MAX}]"
         )
-    return face_count
+    return faceCount
 
 
-def validate_format(output_format):
+def normalize_output_formats(outputFormat):
+    """Normalize a legacy string or the new list-form outputFormat."""
+    if outputFormat is None:
+        return None
+    if isinstance(outputFormat, str):
+        formats = [outputFormat]
+    elif isinstance(outputFormat, (list, tuple, set)):
+        formats = list(outputFormat)
+    else:
+        raise ValueError("outputFormat must be a string or a list of strings")
+    normalized = []
+    for requested_format in formats:
+        validated_format = validate_format(requested_format)
+        if validated_format not in normalized:
+            normalized.append(validated_format)
+    return normalized
+
+
+def validate_format(outputFormat):
     """Validate the output format parameter."""
-    if output_format not in SUPPORTED_FORMATS:
+    if outputFormat not in SUPPORTED_FORMATS:
         supported = ", ".join(sorted(SUPPORTED_FORMATS))
-        raise ValueError(f"Unsupported format '{output_format}'. Supported formats: {supported}")
-    return output_format
+        raise ValueError(f"Unsupported format '{outputFormat}'. Supported formats: {supported}")
+    return outputFormat
 
 
-def validate_version_format(version, output_format):
+def validate_version_format(version, outputFormat):
     """Validate that the requested output format is supported by the version."""
-    if version == "v1.0-pro" and output_format is not None:
-        raise ValueError("v1.0-pro returns a single ZIP result and does not support --format")
+    formats = normalize_output_formats(outputFormat)
+    if not formats:
+        return
+    effective_version = version or "v3.0-standard"
+    if effective_version == "v1.0-pro" and any(item != "zip" for item in formats):
+        raise ValueError("v1.0-pro supports only outputFormat=['zip']")
+    if effective_version == "G1" and any(item not in {"zip", "glb", "ply"} for item in formats):
+        raise ValueError("G1 supports only outputFormat values: zip, glb, ply")
+    if effective_version != "G1" and "ply" in formats:
+        raise ValueError("ply output is supported only by G1")
 
 
-def output_extension(output_format):
+def output_extension(outputFormat):
     """Return the filesystem extension for a requested output format."""
-    if output_format is None:
+    formats = normalize_output_formats(outputFormat)
+    if not formats or len(formats) != 1:
         return "zip"
-    output_format = validate_format(output_format)
-    if output_format in {"obj_zip", "fbx_zip"}:
+    outputFormat = formats[0]
+    if outputFormat in {"obj_zip", "fbx_zip"}:
         return "zip"
-    return output_format
+    return outputFormat
 
 
-def get_export_flags(output_format):
-    """Map CLI output format to optional v2.0/v3.0 export flags."""
-    if output_format is None:
-        return {}
-    output_format = validate_format(output_format)
-    return {
-        "needUsdz": output_format == "usdz",
-        "needObj": output_format == "obj_zip",
-        "needFbx": output_format == "fbx_zip",
-    }
+def get_export_flags(outputFormat):
+    """Build the unified list-form outputFormat request field."""
+    formats = normalize_output_formats(outputFormat)
+    return {"outputFormat": formats} if formats else {}
 
 
-def validate_mesh_url(mesh_url):
+def default_download_format(outputFormat):
+    """Select the format downloaded from a single or multi-format result."""
+    formats = normalize_output_formats(outputFormat)
+    return formats[0] if formats and len(formats) == 1 else "zip"
+
+
+def validate_mesh_url(meshUrl):
     """Validate the mesh URL for material transfer."""
-    if not mesh_url or not mesh_url.strip():
+    if not meshUrl or not meshUrl.strip():
         raise ValueError("Mesh URL cannot be empty")
-    return mesh_url.strip()
+    normalized_url = meshUrl.strip()
+    parsed_url = urllib.parse.urlparse(normalized_url)
+    if parsed_url.scheme.lower() not in {"http", "https"} or not parsed_url.netloc:
+        raise ValueError("Mesh URL must be an absolute HTTP or HTTPS URL")
+    if not urllib.parse.unquote(parsed_url.path).lower().endswith(".glb"):
+        raise ValueError("Mesh URL path must point to a .glb file")
+    return normalized_url
 
 
 def get_base_url(region=None):
@@ -337,27 +374,53 @@ def create_task(
     image_path,
     base_url=None,
     region=None,
-    lux3d_biz_type=None,
+    lux3dBizType=None,
     version=None,
-    face_count=None,
-    output_format=None,
+    faceCount=None,
+    outputFormat=None,
+    imagePaths=None,
+    enablePbr=None,
+    textureSize=None,
 ):
     """Submit an image-to-3D task.
 
     Args:
-        face_count: Optional target face count. Takes effect for
-            v2.0-preview / v3.0-standard; v1.0-pro ignores this parameter.
-            Valid range: [10000, 500000]. Defaults to 60000 when not provided.
+        imagePaths: Optional additional local image paths for G1 multi-view.
+        faceCount: Optional Mesh face count. Does not affect 3DGS. Takes effect for
+            v2.0-preview / v3.0-standard / G1; v1.0-pro ignores this parameter.
+        enablePbr: G1 texture/PBR switch. Defaults to true for G1.
+        textureSize: G1 texture size. Defaults to 1000 for G1.
     """
-    payload = {"img": image_to_data_url(image_path)}
-    if lux3d_biz_type is not None:
-        payload["lux3dBizType"] = lux3d_biz_type
+    version = validate_version(version) if version is not None else None
+    additional_paths = [imagePaths] if isinstance(imagePaths, str) else list(imagePaths or [])
+    paths = [image_path] + additional_paths
+    paths = list(dict.fromkeys(path for path in paths if path))
+    if not paths:
+        raise ValueError("At least one image path is required")
+    if len(paths) > 1 and version != "G1":
+        raise ValueError("Multiple image paths are supported only by G1")
+    if len(paths) > 32:
+        raise ValueError("G1 supports at most 32 image paths")
+    encoded_images = [image_to_data_url(path) for path in paths]
+    payload = {"imgs": encoded_images} if len(encoded_images) > 1 else {"img": encoded_images[0]}
+    if lux3dBizType is not None:
+        payload["lux3dBizType"] = lux3dBizType
     if version is not None:
-        payload["version"] = validate_version(version)
-    validate_version_format(version, output_format)
-    if face_count is not None:
-        payload["faceCount"] = validate_face_count(face_count)
-    payload.update(get_export_flags(output_format))
+        payload["version"] = version
+    validate_version_format(version, outputFormat)
+    if faceCount is not None:
+        payload["faceCount"] = validate_face_count(faceCount)
+    payload.update(get_export_flags(outputFormat))
+    if enablePbr is not None:
+        if version != "G1":
+            raise ValueError("enablePbr is supported only by G1")
+        payload["enablePbr"] = bool(enablePbr)
+    if textureSize is not None:
+        if version != "G1":
+            raise ValueError("textureSize is supported only by G1")
+        if not isinstance(textureSize, int) or isinstance(textureSize, bool) or textureSize <= 0:
+            raise ValueError("textureSize must be a positive integer")
+        payload["textureSize"] = textureSize
     return submit_task("/lux3d/v1/generate/img-to-3d/task/create", payload, base_url=base_url, region=region)
 
 
@@ -367,17 +430,20 @@ def create_text_to_3d_task(
     image_path=None,
     base_url=None,
     region=None,
-    lux3d_biz_type=None,
+    lux3dBizType=None,
     version=None,
-    face_count=None,
-    output_format=None,
+    faceCount=None,
+    outputFormat=None,
+    enablePbr=None,
+    textureSize=None,
 ):
     """Submit a text-to-3D task with an optional reference image.
 
     Args:
-        face_count: Optional target face count. Takes effect for
-            v2.0-preview / v3.0-standard; v1.0-pro ignores this parameter.
-            Valid range: [10000, 500000]. Defaults to 60000 when not provided.
+        faceCount: Optional Mesh face count. Does not affect 3DGS. Takes effect for
+            v2.0-preview / v3.0-standard / G1; v1.0-pro ignores this parameter.
+        enablePbr: G1 texture/PBR switch. Defaults to true for G1.
+        textureSize: G1 texture size. Defaults to 1000 for G1.
     """
     payload = {
         "prompt": validate_prompt(prompt),
@@ -386,34 +452,46 @@ def create_text_to_3d_task(
         payload["style"] = validate_style(style)
     if image_path:
         payload["img"] = image_to_data_url(image_path)
-    if lux3d_biz_type is not None:
-        payload["lux3dBizType"] = lux3d_biz_type
+    if lux3dBizType is not None:
+        payload["lux3dBizType"] = lux3dBizType
     if version is not None:
         payload["version"] = validate_version(version)
-    validate_version_format(version, output_format)
-    if face_count is not None:
-        payload["faceCount"] = validate_face_count(face_count)
-    payload.update(get_export_flags(output_format))
+    validate_version_format(version, outputFormat)
+    if faceCount is not None:
+        payload["faceCount"] = validate_face_count(faceCount)
+    payload.update(get_export_flags(outputFormat))
+    if enablePbr is not None:
+        if version != "G1":
+            raise ValueError("enablePbr is supported only by G1")
+        payload["enablePbr"] = bool(enablePbr)
+    if textureSize is not None:
+        if version != "G1":
+            raise ValueError("textureSize is supported only by G1")
+        if not isinstance(textureSize, int) or isinstance(textureSize, bool) or textureSize <= 0:
+            raise ValueError("textureSize must be a positive integer")
+        payload["textureSize"] = textureSize
     return submit_task("/lux3d/v1/generate/text-to-3d/task/create", payload, base_url=base_url, region=region)
 
 
 def create_material_transfer_task(
     image_path,
-    mesh_url,
+    meshUrl,
     base_url=None,
     region=None,
     version=None,
-    output_format=None,
+    outputFormat=None,
 ):
     """Submit a material transfer task to regenerate materials for an existing model."""
     payload = {
         "img": image_to_data_url(image_path),
-        "meshUrl": validate_mesh_url(mesh_url),
+        "meshUrl": validate_mesh_url(meshUrl),
     }
     if version is not None:
         payload["version"] = validate_version(version)
-    validate_version_format(version, output_format)
-    payload.update(get_export_flags(output_format))
+        if version == "G1":
+            raise ValueError("Material transfer is not supported by G1")
+    validate_version_format(version, outputFormat)
+    payload.update(get_export_flags(outputFormat))
     return submit_task("/lux3d/v1/generate/material-transfer/task/create", payload, base_url=base_url, region=region)
 
 
@@ -422,7 +500,7 @@ def query_task_status(task_id, base_url=None, region=None, max_attempts=DEFAULT_
     
     Returns:
         A dictionary mapping format names to download URLs, e.g.
-        {'zip': '...', 'glb': '...', 'usdz': '...', 'obj_zip': '...', 'fbx_zip': '...'}
+        {'zip': '...', 'glb': '...', 'usdz': '...', 'obj_zip': '...', 'fbx_zip': '...', 'ply': '...'}
         Or a single URL string for backward compatibility with older API versions.
     """
     for _ in range(max_attempts):
@@ -459,6 +537,8 @@ def query_task_status(task_id, base_url=None, region=None, max_attempts=DEFAULT_
                     format_urls["glb"] = content
                 elif ".usdz" in content_lower:
                     format_urls["usdz"] = content
+                elif ".ply" in content_lower:
+                    format_urls["ply"] = content
                 elif ".zip" in content_lower:
                     format_urls["zip"] = content
             
@@ -481,7 +561,7 @@ def query_task_status(task_id, base_url=None, region=None, max_attempts=DEFAULT_
     raise Exception("Task timeout")
 
 
-def download_model(model_url, output_path, output_format=None):
+def download_model(model_url, output_path, outputFormat=None):
     """
     Download the generated model file to the target path.
     
@@ -490,8 +570,8 @@ def download_model(model_url, output_path, output_format=None):
                    - A string URL (backward compatibility with single format API)
                    - A dictionary mapping format names to URLs (new multi-format API)
         output_path: The path to save the downloaded file.
-        output_format: Optional output format ('zip', 'glb', 'usdz', 'obj_zip', 'fbx_zip').
-                       Defaults to 'zip' when model_url is a dictionary.
+        outputFormat: Optional single output format. Defaults to 'zip' when
+                       model_url is a dictionary.
     
     Returns:
         The size of the downloaded file in bytes.
@@ -500,24 +580,20 @@ def download_model(model_url, output_path, output_format=None):
     
     # Handle multi-format API response (dict)
     if isinstance(model_url, dict):
-        if output_format is None:
-            output_format = "zip"
+        outputFormat = default_download_format(outputFormat)
 
-        output_format = validate_format(output_format)
-        if output_format not in model_url:
+        outputFormat = validate_format(outputFormat)
+        if outputFormat not in model_url:
             available_formats = ", ".join(sorted(model_url.keys()))
-            raise ValueError(f"Format '{output_format}' not available. Available formats: {available_formats}")
+            raise ValueError(f"Format '{outputFormat}' not available. Available formats: {available_formats}")
         
-        url_to_download = model_url[output_format]
+        url_to_download = model_url[outputFormat]
     
     # Handle single format API response (string)
     else:
         url_to_download = model_url
-        # For backward compatibility, still support URL parameter approach
-        if output_format is not None:
-            output_format = validate_format(output_format)
-            separator = "?" if "?" not in url_to_download else "&"
-            url_to_download = f"{url_to_download}{separator}format={output_format}"
+        if outputFormat is not None:
+            validate_format(default_download_format(outputFormat))
     
     response = secure_request("GET", url_to_download, headers={}, stream=True)
     total_size = 0
@@ -530,17 +606,40 @@ def download_model(model_url, output_path, output_format=None):
     return total_size
 
 
+def download_requested_models(model_url, output_path, outputFormat=None):
+    """Download every requested format and return ``[(path, size), ...]``."""
+    formats = normalize_output_formats(outputFormat)
+    if not formats or len(formats) == 1:
+        selected_format = formats[0] if formats else None
+        size = download_model(model_url, output_path, outputFormat=selected_format)
+        return [(output_path, size)]
+    if not isinstance(model_url, dict):
+        raise ValueError("Multiple output formats require multiple artifact URLs")
+
+    output_base, _ = os.path.splitext(output_path)
+    downloads = []
+    for selected_format in formats:
+        extension = output_extension(selected_format)
+        selected_path = f"{output_base}_{selected_format}.{extension}"
+        size = download_model(model_url, selected_path, outputFormat=selected_format)
+        downloads.append((selected_path, size))
+    return downloads
+
+
 def generate_3d_model(
     image_path,
     output_path=None,
     base_url=None,
     region=None,
-    lux3d_biz_type=None,
+    lux3dBizType=None,
     version=None,
-    face_count=None,
-    output_format=None,
+    faceCount=None,
+    outputFormat=None,
     max_attempts=DEFAULT_POLL_ATTEMPTS,
     interval=DEFAULT_POLL_INTERVAL,
+    imagePaths=None,
+    enablePbr=None,
+    textureSize=None,
 ):
     """Run the full image-to-3D workflow."""
     validate_api_key()
@@ -550,10 +649,13 @@ def generate_3d_model(
         image_path,
         base_url=base_url,
         region=region,
-        lux3d_biz_type=lux3d_biz_type,
+        lux3dBizType=lux3dBizType,
         version=version,
-        face_count=face_count,
-        output_format=output_format,
+        faceCount=faceCount,
+        outputFormat=outputFormat,
+        imagePaths=imagePaths,
+        enablePbr=enablePbr,
+        textureSize=textureSize,
     )
     print(f"Task ID: {task_id}")
 
@@ -571,13 +673,14 @@ def generate_3d_model(
     if output_path:
         output_name = output_path
     else:
-        ext = output_extension(output_format)
+        ext = output_extension(outputFormat)
         output_name = image_path.rsplit(".", 1)[0] + f"_3d.{ext}"
     
     print("\n=== Downloading model ===")
-    size = download_model(model_url, output_name, output_format=output_format)
-    print(f"Downloaded: {output_name} ({size} bytes)")
-    return output_name
+    downloads = download_requested_models(model_url, output_name, outputFormat=outputFormat)
+    for downloaded_path, size in downloads:
+        print(f"Downloaded: {downloaded_path} ({size} bytes)")
+    return downloads[0][0] if len(downloads) == 1 else [item[0] for item in downloads]
 
 
 def generate_text_to_3d(
@@ -587,12 +690,14 @@ def generate_text_to_3d(
     image_path=None,
     base_url=None,
     region=None,
-    lux3d_biz_type=None,
+    lux3dBizType=None,
     version=None,
-    face_count=None,
-    output_format=None,
+    faceCount=None,
+    outputFormat=None,
     max_attempts=DEFAULT_POLL_ATTEMPTS,
     interval=DEFAULT_POLL_INTERVAL,
+    enablePbr=None,
+    textureSize=None,
 ):
     """Run the full text-to-3D workflow."""
     validate_api_key()
@@ -604,10 +709,12 @@ def generate_text_to_3d(
         image_path=image_path,
         base_url=base_url,
         region=region,
-        lux3d_biz_type=lux3d_biz_type,
+        lux3dBizType=lux3dBizType,
         version=version,
-        face_count=face_count,
-        output_format=output_format,
+        faceCount=faceCount,
+        outputFormat=outputFormat,
+        enablePbr=enablePbr,
+        textureSize=textureSize,
     )
     print(f"Task ID: {task_id}")
 
@@ -625,23 +732,24 @@ def generate_text_to_3d(
     if output_path:
         output_name = output_path
     else:
-        ext = output_extension(output_format)
+        ext = output_extension(outputFormat)
         output_name = f"lux3d_text_to_3d.{ext}"
     
     print("\n=== Downloading model ===")
-    size = download_model(model_url, output_name, output_format=output_format)
-    print(f"Downloaded: {output_name} ({size} bytes)")
-    return output_name
+    downloads = download_requested_models(model_url, output_name, outputFormat=outputFormat)
+    for downloaded_path, size in downloads:
+        print(f"Downloaded: {downloaded_path} ({size} bytes)")
+    return downloads[0][0] if len(downloads) == 1 else [item[0] for item in downloads]
 
 
 def generate_material_transfer(
     image_path,
-    mesh_url,
+    meshUrl,
     output_path=None,
     base_url=None,
     region=None,
     version=None,
-    output_format=None,
+    outputFormat=None,
     max_attempts=DEFAULT_POLL_ATTEMPTS,
     interval=DEFAULT_POLL_INTERVAL,
 ):
@@ -651,11 +759,11 @@ def generate_material_transfer(
     print("=== Submitting material transfer task ===")
     task_id = create_material_transfer_task(
         image_path,
-        mesh_url,
+        meshUrl,
         base_url=base_url,
         region=region,
         version=version,
-        output_format=output_format,
+        outputFormat=outputFormat,
     )
     print(f"Task ID: {task_id}")
 
@@ -673,13 +781,14 @@ def generate_material_transfer(
     if output_path:
         output_name = output_path
     else:
-        ext = output_extension(output_format)
+        ext = output_extension(outputFormat)
         output_name = f"lux3d_material_transfer.{ext}"
     
     print("\n=== Downloading model ===")
-    size = download_model(model_url, output_name, output_format=output_format)
-    print(f"Downloaded: {output_name} ({size} bytes)")
-    return output_name
+    downloads = download_requested_models(model_url, output_name, outputFormat=outputFormat)
+    for downloaded_path, size in downloads:
+        print(f"Downloaded: {downloaded_path} ({size} bytes)")
+    return downloads[0][0] if len(downloads) == 1 else [item[0] for item in downloads]
 
 
 def build_parser():
@@ -705,12 +814,20 @@ def build_parser():
     image_parser = subparsers.add_parser("image", help="Generate a 3D model from an image.")
     image_parser.add_argument("image_path", help="Input image path")
     image_parser.add_argument("output_path", nargs="?", help="Output file path")
-    image_parser.add_argument("--biz-type", dest="lux3d_biz_type", help="Optional business type")
-    image_parser.add_argument("--version", default=None, help="Lux3D version: v3.0-standard (default), v2.0-preview or v1.0-pro")
-    image_parser.add_argument("--face-count", dest="face_count", type=int, default=None,
-                              help=f"Target face count, effective for v2.0-preview / v3.0-standard. Range: [{FACE_COUNT_MIN}, {FACE_COUNT_MAX}], default: {DEFAULT_FACE_COUNT}")
-    image_parser.add_argument("--format", dest="output_format", choices=["zip", "glb", "usdz", "obj_zip", "fbx_zip"], default=None,
-                              help="Output format: zip (default), glb, usdz, obj_zip, fbx_zip. The obj_zip and fbx_zip options are only applicable for v3.0-standard.")
+    image_parser.add_argument("--biz-type", dest="lux3dBizType", help="Optional business type")
+    image_parser.add_argument("--version", default=None, help="Lux3D version: v3.0-standard (default), v2.0-preview, v1.0-pro or G1")
+    image_parser.add_argument("--face-count", dest="faceCount", type=int, default=None,
+                              help=f"Mesh face count only (not 3DGS), effective for v2.0-preview / v3.0-standard / G1. Range: [{FACE_COUNT_MIN}, {FACE_COUNT_MAX}]")
+    image_parser.add_argument("--format", dest="outputFormat", action="append", choices=["zip", "glb", "usdz", "obj_zip", "fbx_zip", "ply"], default=None,
+                              help="Output format; repeat for a list. G1 supports zip, glb and ply.")
+    image_parser.add_argument("--image-view", dest="imageViews", action="append", default=None,
+                              help="Additional local image path for G1 multi-view input; repeat up to 31 times.")
+    image_parser.add_argument("--enable-pbr", dest="enablePbr", action="store_true", default=None,
+                              help="Enable G1 textured/PBR mesh output.")
+    image_parser.add_argument("--no-pbr", dest="enablePbr", action="store_false",
+                              help="Disable G1 textured/PBR mesh output and return a white mesh.")
+    image_parser.add_argument("--texture-size", dest="textureSize", type=int, default=None,
+                              help="G1 texture size; defaults to 1000.")
     image_parser.add_argument("--max-attempts", type=int, default=DEFAULT_POLL_ATTEMPTS)
     image_parser.add_argument("--interval", type=int, default=DEFAULT_POLL_INTERVAL)
 
@@ -719,22 +836,29 @@ def build_parser():
     text_parser.add_argument("output_path", nargs="?", help="Output file path")
     text_parser.add_argument("--style", default=None, help="Generation style (default: photorealistic)")
     text_parser.add_argument("--image", dest="image_path", help="Optional reference image path")
-    text_parser.add_argument("--biz-type", dest="lux3d_biz_type", help="Optional business type")
-    text_parser.add_argument("--version", default=None, help="Lux3D version: v3.0-standard (default), v2.0-preview or v1.0-pro")
-    text_parser.add_argument("--face-count", dest="face_count", type=int, default=None,
-                              help=f"Target face count, effective for v2.0-preview / v3.0-standard. Range: [{FACE_COUNT_MIN}, {FACE_COUNT_MAX}], default: {DEFAULT_FACE_COUNT}")
-    text_parser.add_argument("--format", dest="output_format", choices=["zip", "glb", "usdz", "obj_zip", "fbx_zip"], default=None,
-                              help="Output format: zip (default), glb, usdz, obj_zip, fbx_zip. The obj_zip and fbx_zip options are only applicable for v3.0-standard.")
+    text_parser.add_argument("--biz-type", dest="lux3dBizType", help="Optional business type")
+    text_parser.add_argument("--version", default=None, help="Lux3D version: v3.0-standard (default), v2.0-preview, v1.0-pro or G1")
+    text_parser.add_argument("--face-count", dest="faceCount", type=int, default=None,
+                              help=f"Mesh face count only (not 3DGS), effective for v2.0-preview / v3.0-standard / G1. Range: [{FACE_COUNT_MIN}, {FACE_COUNT_MAX}]")
+    text_parser.add_argument("--format", dest="outputFormat", action="append", choices=["zip", "glb", "usdz", "obj_zip", "fbx_zip", "ply"], default=None,
+                              help="Output format; repeat for a list. G1 supports zip, glb and ply.")
+    text_parser.add_argument("--enable-pbr", dest="enablePbr", action="store_true", default=None,
+                              help="Enable G1 textured/PBR mesh output.")
+    text_parser.add_argument("--no-pbr", dest="enablePbr", action="store_false",
+                              help="Disable G1 textured/PBR mesh output and return a white mesh.")
+    text_parser.add_argument("--texture-size", dest="textureSize", type=int, default=None,
+                              help="G1 texture size; defaults to 1000.")
     text_parser.add_argument("--max-attempts", type=int, default=DEFAULT_POLL_ATTEMPTS)
     text_parser.add_argument("--interval", type=int, default=DEFAULT_POLL_INTERVAL)
 
     material_parser = subparsers.add_parser("material", help="Regenerate materials for an existing 3D model.")
     material_parser.add_argument("image_path", help="Reference image path for material")
     material_parser.add_argument("output_path", nargs="?", help="Output file path")
-    material_parser.add_argument("--mesh-url", required=True, help="URL of the GLB model file")
+    material_parser.add_argument("--mesh-url", dest="meshUrl", required=True,
+                                 help="URL of the GLB model file")
     material_parser.add_argument("--version", default=None, help="Lux3D version: v3.0-standard (default), v2.0-preview or v1.0-pro")
-    material_parser.add_argument("--format", dest="output_format", choices=["zip", "glb", "usdz", "obj_zip", "fbx_zip"], default=None,
-                              help="Output format: zip (default), glb, usdz, obj_zip, fbx_zip. The obj_zip and fbx_zip options are only applicable for v3.0-standard.")
+    material_parser.add_argument("--format", dest="outputFormat", action="append", choices=["zip", "glb", "usdz", "obj_zip", "fbx_zip"], default=None,
+                               help="Output format; repeat for a list.")
     material_parser.add_argument("--max-attempts", type=int, default=DEFAULT_POLL_ATTEMPTS)
     material_parser.add_argument("--interval", type=int, default=DEFAULT_POLL_INTERVAL)
 
@@ -744,23 +868,28 @@ def build_parser():
 def main():
     """CLI entrypoint."""
     parser = build_parser()
-    args = parser.parse_args()
+    commands = ("image", "text", "material")
+    has_legacy_input = (len(sys.argv) >= 2
+                        and not sys.argv[1].startswith("-")
+                        and sys.argv[1] not in commands)
+    is_legacy_call = has_legacy_input and (len(sys.argv) == 2 or (
+            len(sys.argv) >= 3 and sys.argv[2] not in commands))
+    if is_legacy_call:
+        # Historical form: python lux3d_client.py input.jpg [output.zip]
+        default_args = parser.parse_args([])
+        image_path = sys.argv[1]
+        output_path = sys.argv[2] if len(sys.argv) >= 3 else None
+        result = generate_3d_model(
+            image_path,
+            output_path=output_path,
+            region=default_args.region,
+            base_url=default_args.base_url,
+        )
+        print(f"\n[SUCCESS] Model saved to: {result}")
+        return
 
-    # Keep the historical one-argument form for image-to-3D.
+    args = parser.parse_args()
     if not args.command:
-        if len(sys.argv) >= 2 and not sys.argv[1].startswith("-"):
-            # Check if it's the legacy form: python lux3d_client.py input.jpg [output.zip]
-            if len(sys.argv) <= 3 or sys.argv[2] not in ("image", "text"):
-                image_path = sys.argv[1]
-                output_path = sys.argv[2] if len(sys.argv) >= 3 else None
-                result = generate_3d_model(
-                    image_path,
-                    output_path=output_path,
-                    region=args.region,
-                    base_url=args.base_url,
-                )
-                print(f"\n[SUCCESS] Model saved to: {result}")
-                return
         parser.print_help()
         raise SystemExit(1)
 
@@ -770,10 +899,13 @@ def main():
             output_path=args.output_path,
             base_url=args.base_url,
             region=args.region,
-            lux3d_biz_type=args.lux3d_biz_type,
+            lux3dBizType=args.lux3dBizType,
             version=args.version,
-            face_count=args.face_count,
-            output_format=args.output_format,
+            faceCount=args.faceCount,
+            outputFormat=args.outputFormat,
+            imagePaths=args.imageViews,
+            enablePbr=args.enablePbr,
+            textureSize=args.textureSize,
             max_attempts=args.max_attempts,
             interval=args.interval,
         )
@@ -788,10 +920,12 @@ def main():
             image_path=args.image_path,
             base_url=args.base_url,
             region=args.region,
-            lux3d_biz_type=args.lux3d_biz_type,
+            lux3dBizType=args.lux3dBizType,
             version=args.version,
-            face_count=args.face_count,
-            output_format=args.output_format,
+            faceCount=args.faceCount,
+            outputFormat=args.outputFormat,
+            enablePbr=args.enablePbr,
+            textureSize=args.textureSize,
             max_attempts=args.max_attempts,
             interval=args.interval,
         )
@@ -801,12 +935,12 @@ def main():
     if args.command == "material":
         result = generate_material_transfer(
             args.image_path,
-            mesh_url=args.mesh_url,
+            meshUrl=args.meshUrl,
             output_path=args.output_path,
             base_url=args.base_url,
             region=args.region,
             version=args.version,
-            output_format=args.output_format,
+            outputFormat=args.outputFormat,
             max_attempts=args.max_attempts,
             interval=args.interval,
         )

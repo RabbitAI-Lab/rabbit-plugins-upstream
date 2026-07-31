@@ -120,4 +120,4 @@ siluzan-tso google-analysis -a <id> --start <s> --end <e> --json-out ./snap-goog
 | 直接展示 `row.campaignStatusDisplay`                                              | 读 `campaignStatus` 后自行 `MAP[s] \|\| '已移除'`（`Enabled` 未命中键时会全变「已移除」） |
 | 需要英文枚举时读 `campaignStatus` 或 `campaignStatusV2`，展示前 `.upper()` 再映射 | 用 `stats` / `list-accounts` 的账户 `status` 充当系列状态                                 |
 
-原始枚举为 PascalCase（`Enabled`），与 `ad campaigns` 的 `statusDisplay`（有效/未投放/已结束使用）口径不同；周期报告「状态」列统一用 **`campaignStatusDisplay`**。
+原始枚举为 PascalCase（`Enabled`），与 `ad campaigns` 的 `statusDisplay`（如 `Enabled·有效` / `Enabled·投放期已结束`）口径不同；周期报告「状态」列统一用 **`campaignStatusDisplay`**。

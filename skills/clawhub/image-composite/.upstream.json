@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/image-composite",
   "slug": "image-composite",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1785074103066,
-  "contentHash": "60726cd4fa35740d7ba3077154b7bac1cf822bbe4ead1cb639fd8e358e5a97ee",
-  "fetchedAt": "2026-07-26T18:03:22.004Z"
+  "version": "0.3.1",
+  "updatedAt": 1785158472556,
+  "contentHash": "49a149f526de551f1b193ce4e132a8ed66e7a91e45d405631f0e94abe8de794f",
+  "fetchedAt": "2026-07-31T10:18:05.231Z"
 }

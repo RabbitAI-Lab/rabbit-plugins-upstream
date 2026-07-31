@@ -11,31 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and coding agents use this skill as a pre-implementation and review gate for non-trivial coding tasks. It prompts assumption checks, scope control, surgical diffs, and verifiable success criteria before and after implementation. <br>
+Developers and coding agents use this skill as a pre-flight and self-review gate for non-trivial coding work, especially when a task needs assumptions surfaced, scope constrained, changes kept surgical, and success criteria made verifiable. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may slow or over-constrain trivial coding tasks because some triggers are broad. <br>
-Mitigation: Apply the tradeoff guidance and keep the gate lightweight for obvious typo fixes, throwaway spikes, documentation-only edits, time-boxed prototypes, and urgent production fixes. <br>
-Risk: Companion Night Market or Claude Code plugin components may introduce behavior outside this skill's markdown guidance. <br>
-Mitigation: Review and scan any companion plugin agents, hooks, or commands before enabling them. <br>
+Risk: The skill can slow down trivial fixes, exploratory spikes, documentation-only changes, time-boxed prototypes, or production-fire response. <br>
+Mitigation: Apply the documented tradeoff guidance and skip or lighten the gate when the cost of extra deliberation is higher than the risk of a wrong-shaped change. <br>
+Risk: Generic triggers may invoke the skill more often than intended. <br>
+Mitigation: Review the trigger set during installation and narrow triggers if the gate interrupts normal workflow. <br>
+Risk: The skill's recommendations can shape code changes even though they are guidance rather than guarantees. <br>
+Mitigation: Review proposed assumptions, scope choices, diffs, and verification steps before relying on them for production work. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-imbue-karpathy-principles) <br>
-- [Claude Night Market imbue plugin](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-karpathy-principles) <br>
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code] <br>
-**Output Format:** [Markdown guidance with checklists, scope rationale, and verification criteria] <br>
+**Output Type(s):** [guidance, text, markdown] <br>
+**Output Format:** [Markdown guidance with checklists, review questions, and worked examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include assumptions, tradeoff notes, diff-trace checks, and test or command suggestions for verification.] <br>
+**Other Properties Related to Output:** [Documentation-only skill; no hidden execution, data access, or persistence was identified in the server security evidence.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter says 1.9.8) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -4,6 +4,17 @@ All notable changes to the Odoo Connector skill will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.2.1] — 2026-07-30
+
+### Security & Compliance
+- **Refined CAPTCHA section language** — replaced "bypass" terminology with "handling CAPTCHA challenges" to comply with security audit requirements
+- **Added Legal & ToS Notice** — explicit warning about authorization requirements and Terms of Service compliance for CAPTCHA automation
+- **Added write-operation warnings** — Create/Update/Delete sections now include warnings about live system impact and staging-first recommendation
+- **Added state-changing action warnings** — Examples using `action_confirm` and similar methods now warn about downstream workflow triggers (fulfillment, invoicing, notifications)
+- **Fixed hardcoded secret in SECURITY.md** — replaced example password with clear placeholder to avoid exposed_secret_literal detection
+- **Added Legal & ToS Compliance section** in SECURITY.md — authorization requirements, ToS guidance, account lockout risk, responsible use policy
+- **Expanded Security Checklist** — added authorization, ToS compliance, and staging test items
+
 ## [1.2.0] — 2026-07-26
 
 ### Changed

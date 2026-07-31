@@ -95,3 +95,45 @@ def fetch(url, max_retries=3):
 - Adding gain to "fix" a lagging or oscillating system often *destabilizes* it (§11): reduce
   loop gain or add damping instead.
 - Keep stability margins explicit: how much worse can the input/get worse before it diverges?
+
+## Stability is a structure property, not just a trajectory property
+
+Book 2 anchor: §3.3 (稳态结构), §3.7 (超稳定系统). See `references/system-evolution.md` for
+the full treatment.
+
+A system sitting in a stable-state structure will return to it after small kicks. If the
+behavior you're seeing is the system *sitting in an attractor*, no amount of input tweaking
+will move it — the structure holds it there. To change the behavior, change the structure
+(the interaction rules, the coupling, the feedback signs), not just the inputs.
+
+Before trying to damp an oscillation, ask: is this an unstable trajectory (case 2 in
+`references/system-evolution.md`), or is the system *in* a stable-state structure that I don't
+want? The fixes differ — damping fixes the former, structural change fixes the latter.
+
+## Feedback overcompensation produces oscillation (§5.6, Book 2)
+
+Book 2 anchor: §5.6 (反馈过度). Negative feedback with too-aggressive correction oscillates
+around the target instead of converging — the book calls this 目的性震颤 (intention tremor):
+the hand reaches for the cup, overshoots left, overcorrects right, overshoots left, never
+lands.
+
+LLM equivalent: a test fails because of a missing timeout → LLM adds a 30-second timeout →
+test now hangs on a different case → LLM removes all timeouts → original bug returns. Each
+correction *reverses* the model instead of *reducing* its error.
+
+> If corrections are reversing direction each iteration, you are overshooting. Reduce the gain
+> (smaller, more targeted changes), do not flip the strategy. Reversal is not convergence — it
+> is oscillation.
+
+The fix is *gain reduction*: make smaller, more targeted changes. If the bug is "missing
+timeout", the fix is "add a 2-second timeout with a clear error" (small change in the right
+direction), not "add a 30-second timeout" (overshoot) and not "remove all timeouts"
+(reversal).
+
+## Ultra-stability: some instability is a repair mechanism (§3.7, Book 2)
+
+Before patching an instability, ask whether it is a failure or a repair mechanism trying to
+run. Cache evictions, GC pauses, circuit-breaker trips, autoscaler scale events — each looks
+like instability on a graph, but is the system *returning to its setpoint*. Patching over
+these converts a self-healing system into a brittle one. See `references/system-evolution.md`
+for the full decision rule.

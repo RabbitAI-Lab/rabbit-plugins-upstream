@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>mu-skill-creator — AI Agent Skill Quality Gatekeeper</title>
+<meta name="description" content="53-item 10-layer audit model for AI agent skills. 3-layer architecture, 8-stage gated workflow, 34 anti-pattern catalog. Free & Open Source.">
+<meta property="og:title" content="mu-skill-creator — AI Agent Skill Quality Gatekeeper">
+<meta property="og:description" content="The quality gatekeeper for AI agent skills — 53-item, 10-layer audit model baked into an 8-stage gated creation workflow.">
+<meta property="og:url" content="https://muippt.github.io/mu-skill-creator/">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦐</text></svg>">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#faf9f7;--bg-warm:#f5f0eb;--bg-card:#fff;--bg-code:#f7f5f2;
+  --border:#e8e2db;--border-light:#f0ebe5;
+  --text:#2d2a26;--text-secondary:#6b6560;--text-muted:#9e9690;
+  --accent:#c96442;--accent-light:#e8a07a;--accent-bg:rgba(201,100,66,0.06);
+  --green:#5a8a6a;--blue:#5a7a9a;--purple:#7a6a9a;--gold:#d4a857;
+  --radius:12px;--radius-sm:8px;
+  --font:-apple-system,BlinkMacSystemFont,'Segoe UI','Noto Sans SC','PingFang SC',sans-serif;
+  --font-serif:'Georgia','Noto Serif SC',serif;
+  --font-mono:'SF Mono','Fira Code',monospace;
+}
+html{scroll-behavior:smooth;font-size:16px}
+body{font-family:var(--font);background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+a{color:var(--accent);text-decoration:none;transition:color .25s}a:hover{color:var(--accent-light)}
+.container{max-width:1100px;margin:0 auto;padding:0 24px}
+
+/* Nav */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(250,249,247,0.9);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);border-bottom:1px solid var(--border-light);transition:background .25s}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.nav-logo{font-size:1.25rem;font-weight:700;letter-spacing:-.02em;color:var(--text)}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:32px;list-style:none}
+.nav-links a{color:var(--text-secondary);font-size:.875rem;font-weight:500;transition:color .25s}.nav-links a:hover{color:var(--accent)}
+.nav-right{display:flex;align-items:center;gap:12px}
+.lang-switch{display:inline-flex;align-items:center;gap:0;border:1px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;font-size:.8rem;cursor:pointer;user-select:none}
+.lang-switch span{padding:6px 12px;transition:all .25s;color:var(--text-muted)}
+.lang-switch span.active{background:var(--accent);color:#fff}
+.lang-switch span:hover:not(.active){color:var(--text);background:var(--bg-warm)}
+.theme-btn{padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius-sm);font-size:.85rem;cursor:pointer;background:var(--bg-card);color:var(--text-secondary);transition:all .25s}
+.theme-btn:hover{border-color:var(--accent);color:var(--accent)}
+.nav-cta{padding:8px 20px;border-radius:var(--radius-sm);font-size:.875rem;font-weight:600;background:var(--accent);color:#fff;transition:all .25s}
+.nav-cta:hover{background:var(--accent-light);color:#fff;transform:translateY(-1px)}
+
+/* Hero */
+.hero{position:relative;padding:160px 0 120px;text-align:center}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;padding:6px 16px;border-radius:24px;background:var(--accent-bg);border:1px solid var(--border);font-size:.8rem;color:var(--accent);font-weight:500;margin-bottom:32px}
+.hero-badge .dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:var(--font-serif);font-size:clamp(2.5rem,6vw,4rem);font-weight:800;line-height:1.1;letter-spacing:-.03em;margin-bottom:24px;color:var(--text)}
+.hero h1 .accent-text{color:var(--accent)}
+.hero-emoji{font-size:3.5rem;display:block;margin-bottom:16px;filter:drop-shadow(0 4px 12px rgba(201,100,66,0.15))}
+.hero-sub{font-size:clamp(1rem,2vw,1.2rem);color:var(--text-secondary);max-width:620px;margin:0 auto 40px;line-height:1.7}
+.hero-actions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:var(--radius);font-size:1rem;font-weight:600;transition:all .25s;cursor:pointer;border:none}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:var(--accent-light);transform:translateY(-2px);color:#fff;box-shadow:0 4px 16px rgba(201,100,66,0.15)}
+.btn-secondary{background:var(--bg-card);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{border-color:var(--accent);transform:translateY(-2px);color:var(--accent);box-shadow:0 2px 12px rgba(0,0,0,0.06)}
+
+/* Stats */
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border-radius:var(--radius);overflow:hidden;margin:80px auto 0;max-width:900px;border:1px solid var(--border)}
+.stat{background:var(--bg-card);padding:32px 16px;text-align:center;transition:background .25s}.stat:hover{background:var(--bg-warm)}
+.stat-num{font-size:clamp(1.5rem,3vw,2.25rem);font-weight:800;color:var(--accent);line-height:1.2;font-family:var(--font-mono)}
+.stat-label{font-size:.75rem;color:var(--text-muted);margin-top:6px;letter-spacing:.08em}
+
+/* Sections */
+section{padding:100px 0}
+.section-label{display:inline-block;font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;color:var(--accent);margin-bottom:16px}
+.section-title{font-family:var(--font-serif);font-size:clamp(1.75rem,4vw,2.75rem);font-weight:700;line-height:1.2;letter-spacing:-.02em;margin-bottom:16px;color:var(--text)}
+.section-desc{font-size:1.1rem;color:var(--text-secondary);max-width:600px;line-height:1.7}
+.section-header{margin-bottom:64px}.section-header.center{text-align:center}.section-header.center .section-desc{margin:0 auto}
+
+/* Feature Cards */
+.features-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.feature-card{padding:36px 28px;border-radius:var(--radius);background:var(--bg-card);border:1px solid var(--border);transition:all .25s}
+.feature-card:hover{transform:translateY(-3px);box-shadow:0 4px 16px rgba(0,0,0,0.06)}
+.feature-icon{width:48px;height:48px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:20px;background:var(--bg-warm)}
+.feature-card h3{font-size:1.1rem;font-weight:700;margin-bottom:8px;color:var(--text)}
+.feature-card p{font-size:.88rem;color:var(--text-secondary);line-height:1.6}
+
+/* Architecture */
+.arch-diagram{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:32px;font-family:var(--font-mono);font-size:.85rem;line-height:1.8;overflow-x:auto;box-shadow:0 2px 12px rgba(0,0,0,0.04)}
+.arch-layer{border:1px solid var(--border);border-radius:var(--radius-sm);padding:20px 24px;margin-bottom:8px;background:var(--bg-code);transition:border-color .25s}
+.arch-layer:hover{border-color:var(--accent)}
+.arch-layer:last-child{margin-bottom:0}
+.arch-layer-tag{font-weight:700;color:var(--accent);font-size:1rem}
+.arch-layer-name{font-weight:600;color:var(--text)}
+.arch-layer-desc{color:var(--text-secondary);font-size:.8rem;display:block;margin-top:4px}
+
+/* Workflow Cards */
+.workflows-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:20px}
+.workflow-card{padding:32px;border-radius:var(--radius);background:var(--bg-card);border:1px solid var(--border);transition:all .25s}
+.workflow-card:hover{transform:translateY(-3px);box-shadow:0 4px 16px rgba(0,0,0,0.06)}
+.workflow-id{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:10px;color:#fff;font-size:.9rem;font-weight:700;margin-bottom:16px;font-family:var(--font-mono)}
+.workflow-card h3{font-size:1.05rem;font-weight:700;margin-bottom:8px;color:var(--text)}
+.workflow-card p{font-size:.88rem;color:var(--text-secondary);line-height:1.6}
+.workflow-trigger{margin-top:16px;display:flex;flex-wrap:wrap;gap:6px}
+.trigger-tag{padding:3px 10px;border-radius:4px;font-size:.7rem;background:var(--bg-warm);color:var(--text-muted);border:1px solid var(--border-light)}
+
+/* Specs Table */
+.specs-wrapper{overflow-x:auto}
+.specs-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.specs-table th,.specs-table td{padding:14px 16px;text-align:left;font-size:.85rem;border-bottom:1px solid var(--border-light)}
+.specs-table thead th{background:var(--bg-card);font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-secondary)}
+.specs-table tbody tr{background:var(--bg-card);transition:background .25s}.specs-table tbody tr:hover{background:var(--bg-warm)}
+.specs-table tbody tr:last-child td{border-bottom:none}
+.specs-table td:first-child{font-weight:600;color:var(--text)}
+.specs-table .mono{font-family:var(--font-mono);font-size:.8rem}
+.specs-table .total-row td{font-weight:700;background:var(--bg-code)}
+
+/* Comparison Table */
+.comparison-table{width:100%;border-collapse:separate;border-spacing:0;border-radius:var(--radius);overflow:hidden;border:1px solid var(--border)}
+.comparison-table th,.comparison-table td{padding:14px 16px;text-align:left;font-size:.85rem;border-bottom:1px solid var(--border-light)}
+.comparison-table thead th{background:var(--bg-card);font-weight:700;font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--text-secondary)}
+.comparison-table thead th:nth-child(2){color:var(--accent)}
+.comparison-table tbody tr{background:var(--bg-card);transition:background .25s}.comparison-table tbody tr:hover{background:var(--bg-warm)}
+.comparison-table tbody tr:last-child td{border-bottom:none}
+.comparison-table td:first-child{font-weight:600;color:var(--text)}.comparison-table td:nth-child(2){color:var(--accent);font-weight:600}
+.check{color:var(--green);font-weight:700}.cross{color:var(--text-muted)}
+.comparison-wrapper{overflow-x:auto}
+
+/* Quick Start */
+.quickstart-block{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.qs-tab-bar{display:flex;border-bottom:1px solid var(--border);background:var(--bg-code)}
+.qs-tab{padding:10px 20px;font-size:.8rem;font-weight:600;color:var(--text-secondary);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;transition:all .2s;font-family:var(--font)}
+.qs-tab.active{color:var(--accent);border-bottom-color:var(--accent)}
+.qs-panel{display:none;padding:24px}
+.qs-panel.active{display:block}
+.qs-panel pre{background:var(--bg-code);border:1px solid var(--border-light);border-radius:var(--radius-sm);padding:16px 20px;font-family:var(--font-mono);font-size:.82rem;line-height:1.7;overflow-x:auto;margin-bottom:12px;color:var(--text)}
+.qs-panel pre:last-child{margin-bottom:0}
+.qs-label{font-size:.82rem;font-weight:600;color:var(--text-secondary);margin-bottom:8px}
+
+/* CTA */
+.cta-section{text-align:center;padding:120px 0}
+.cta-section h2{font-family:var(--font-serif);font-size:clamp(2rem,4vw,3rem);font-weight:800;margin-bottom:16px;letter-spacing:-.02em;color:var(--text);line-height:1.3}
+.cta-section h2 .accent-text{color:var(--accent)}
+.cta-section h2 em{font-style:italic;color:var(--text-muted)}
+.cta-section p{color:var(--text-secondary);font-size:1.1rem;margin-bottom:40px}
+.cta-section .hero-actions{justify-content:center}
+
+/* Footer */
+footer{border-top:1px solid var(--border);padding:48px 0;text-align:center;background:var(--bg-warm)}
+.footer-links{display:flex;justify-content:center;gap:32px;margin-bottom:20px;flex-wrap:wrap}
+.footer-links a{color:var(--text-muted);font-size:.85rem}.footer-links a:hover{color:var(--accent)}
+.footer-author{font-size:1.1rem;font-weight:700;margin-bottom:6px}
+.footer-desc{font-size:.85rem;color:var(--text-secondary);margin-bottom:20px}
+.footer-badges{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+.footer-badges a img{height:20px;transition:opacity .2s}.footer-badges a:hover img{opacity:.8}
+.footer-copy{font-size:.78rem;color:var(--text-muted);line-height:1.8}
+.footer-copy a{color:var(--text-secondary)}.footer-copy a:hover{color:var(--accent)}
+
+/* Responsive */
+@media(max-width:900px){.stats{grid-template-columns:repeat(3,1fr)}.features-grid{grid-template-columns:repeat(2,1fr)}.workflows-grid{grid-template-columns:1fr}.nav-links{display:none}}
+@media(max-width:600px){.stats{grid-template-columns:repeat(2,1fr)}.features-grid{grid-template-columns:1fr}.hero{padding:120px 0 80px}section{padding:64px 0}}
+@media(max-width:640px){.container{padding:0 16px}}
+
+/* Scroll Animation */
+.fade-up{opacity:0;transform:translateY(30px);transition:opacity .6s ease,transform .6s ease}.fade-up.visible{opacity:1;transform:translateY(0)}
+
+/* Dark Mode */
+@media(prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#1a1815;--bg-warm:#242118;--bg-card:#242118;--bg-code:#2a2620;
+    --border:#3a342a;--border-light:#302a22;
+    --text:#e8e0d4;--text-secondary:#a89a88;--text-muted:#7a7060;
+    --accent:#e07a5f;--accent-light:#f09070;--accent-bg:rgba(224,122,95,0.08);
+  }
+}
+[data-theme="dark"]{
+  --bg:#1a1815;--bg-warm:#242118;--bg-card:#242118;--bg-code:#2a2620;
+  --border:#3a342a;--border-light:#302a22;
+  --text:#e8e0d4;--text-secondary:#a89a88;--text-muted:#7a7060;
+  --accent:#e07a5f;--accent-light:#f09070;--accent-bg:rgba(224,122,95,0.08);
+}
+nav{background:rgba(26,24,21,0.9)}
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<nav>
+  <div class="nav-inner">
+    <div class="nav-logo">🦐 <span>mu-skill-creator</span></div>
+    <ul class="nav-links">
+      <li><a href="#features" data-en="Features" data-zh="核心能力">Features</a></li>
+      <li><a href="#workflows" data-en="Workflows" data-zh="工作流">Workflows</a></li>
+      <li><a href="#specs" data-en="Audit Model" data-zh="审计模型">Audit Model</a></li>
+      <li><a href="#comparison" data-en="Compare" data-zh="竞品对比">Compare</a></li>
+    </ul>
+    <div class="nav-right">
+      <div class="lang-switch" id="langSwitch">
+        <span data-lang="en" class="active">EN</span>
+        <span data-lang="zh">中文</span>
+      </div>
+      <button class="theme-btn" id="themeToggle" onclick="toggleTheme()" aria-label="Toggle theme">◑</button>
+      <a href="https://github.com/muippt/mu-skill-creator" class="nav-cta" target="_blank" rel="noopener">GitHub →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge"><span class="dot"></span> <span data-en="✨ Open Source · MIT License · Free Forever" data-zh="✨ 开源 · MIT 协议 · 永久免费">✨ Open Source · MIT License · Free Forever</span></div>
+    <span class="hero-emoji" aria-hidden="true">🦐</span>
+    <h1 data-en="The <span class='accent-text'>Quality Gatekeeper</span><br>for AI Agent Skills 🛡️" data-zh="AI Agent 技能的<span class='accent-text'>质量守门员</span> 🛡️">The <span class="accent-text">Quality Gatekeeper</span><br>for AI Agent Skills 🛡️</h1>
+    <p class="hero-sub" data-en="53-item, 10-layer audit model baked into an 8-stage gated creation workflow. Not abstract advice — battle-tested rules traced to real incidents. Local execution, zero subscription." data-zh="53 项 10 层审计模型，内嵌于 8 阶段门控创建工作流。不是抽象建议——是追溯到真实事故的实战规则。本地运行，零订阅。">53-item, 10-layer audit model baked into an 8-stage gated creation workflow. Not abstract advice — battle-tested rules traced to real incidents. Local execution, zero subscription.</p>
+    <div class="hero-actions">
+      <a href="https://github.com/muippt/mu-skill-creator/archive/refs/heads/main.zip" class="btn btn-primary"><span data-en="↓ Download Skill" data-zh="↓ 下载 Skill">↓ Download Skill</span></a>
+      <a href="https://github.com/muippt/mu-skill-creator" class="btn btn-secondary" target="_blank" rel="noopener"><span data-en="View on GitHub" data-zh="在 GitHub 查看">View on GitHub</span></a>
+    </div>
+    <div class="stats fade-up">
+      <div class="stat"><div class="stat-num">53</div><div class="stat-label" data-en="🔍 Audit Items" data-zh="🔍 审计项">🔍 Audit Items</div></div>
+      <div class="stat"><div class="stat-num">10</div><div class="stat-label" data-en="📋 Audit Layers" data-zh="📋 审计层级">📋 Audit Layers</div></div>
+      <div class="stat"><div class="stat-num">34</div><div class="stat-label" data-en="🚫 Anti-Patterns" data-zh="🚫 反模式">🚫 Anti-Patterns</div></div>
+      <div class="stat"><div class="stat-num">8</div><div class="stat-label" data-en="🔀 Workflow Stages" data-zh="🔀 工作流阶段">🔀 Workflow Stages</div></div>
+      <div class="stat"><div class="stat-num">3</div><div class="stat-label" data-en="🏗️ Architecture Layers" data-zh="🏗️ 架构层级">🏗️ Architecture Layers</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Features -->
+<section id="features">
+  <div class="container">
+    <div class="section-header center fade-up">
+      <span class="section-label" data-en="⚡ Core Features" data-zh="⚡ 核心能力">⚡ Core Features</span>
+      <h2 class="section-title" data-en="Everything You Need 💪" data-zh="一切你需要的 💪">Everything You Need 💪</h2>
+      <p class="section-desc" data-en="Professional-grade skill quality assurance, zero subscription, fully open source." data-zh="专业级技能质量保障，零订阅，完全开源。">Professional-grade skill quality assurance, zero subscription, fully open source.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🔍</div>
+        <h3 data-en="53-Item Audit Model" data-zh="53 项审计模型">53-Item Audit Model</h3>
+        <p data-en="10 layers covering document structure, architecture consistency, code quality, cross-file alignment, security compliance, robustness, and content quality. 27 items auto-scannable." data-zh="10 层覆盖文档结构、架构一致性、代码质量、跨文件对齐、安全合规、健壮性和内容质量。27 项可自动扫描。">10 layers covering document structure, architecture consistency, code quality, cross-file alignment, security compliance, robustness, and content quality. 27 items auto-scannable.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🏗️</div>
+        <h3 data-en="3-Layer Architecture" data-zh="三层架构">3-Layer Architecture</h3>
+        <p data-en="L1 trigger layer always loaded (~100 words). L2 workflow loaded on activation (≤300 lines). L3 references loaded on demand. Controls context window bloat by design." data-zh="L1 触发层始终加载（约100词）；L2 工作流层激活时加载（≤300行）；L3 参考层按需加载。从架构层面控制上下文窗口膨胀。">L1 trigger layer always loaded (~100 words). L2 workflow loaded on activation (≤300 lines). L3 references loaded on demand. Controls context window bloat by design.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🚫</div>
+        <h3 data-en="AP-1~34 Anti-Patterns" data-zh="AP-1~34 反模式目录">AP-1~34 Anti-Patterns</h3>
+        <p data-en="34 anti-patterns, each traced to a real incident, linked to a design principle, and paired with a concrete fix. Battle-tested corrections, not abstract advice." data-zh="34 条反模式，每条追溯到真实事故，关联设计原则，配有具体修复方案。是实战验证的纠正措施，不是抽象建议。">34 anti-patterns, each traced to a real incident, linked to a design principle, and paired with a concrete fix. Battle-tested corrections, not abstract advice.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">⚡</div>
+        <h3 data-en="Automated Scanning" data-zh="自动化扫描">Automated Scanning</h3>
+        <p data-en="skill-audit.sh performs batch scanning with a single command. Checks structure, security risks, line count, code quality, and more — before every publish." data-zh="skill-audit.sh 一条命令批量扫描，检查结构、安全风险、行数、代码质量等 —— 在每次发布前拦截问题。">skill-audit.sh performs batch scanning with a single command. Checks structure, security risks, line count, code quality, and more — before every publish.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🚦</div>
+        <h3 data-en="Stall Detection" data-zh="停滞检测">Stall Detection</h3>
+        <p data-en="Built-in quantitative signals (stale_count, time limits, failure thresholds) prevent infinite loops and silent failures in iterative or scheduled skills." data-zh="内置量化信号（stale_count、时间限制、失败阈值），防止迭代或定时任务中的无限循环和静默失败。">Built-in quantitative signals (stale_count, time limits, failure thresholds) prevent infinite loops and silent failures in iterative or scheduled skills.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon">🔒</div>
+        <h3 data-en="Security Compliance" data-zh="安全合规">Security Compliance</h3>
+        <p data-en="Hard rules against credential leakage, personal data exposure, and restricted system access. Automated scanning catches violations before they ship." data-zh="硬性规则杜绝凭据泄露、个人数据暴露和受限系统访问。自动扫描在发布前拦截违规。">Hard rules against credential leakage, personal data exposure, and restricted system access. Automated scanning catches violations before they ship.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Architecture -->
+<section id="architecture" style="background:var(--bg-warm);">
+  <div class="container">
+    <div class="section-header fade-up">
+      <span class="section-label" data-en="🏗️ Architecture" data-zh="🏗️ 架构模型">🏗️ Architecture</span>
+      <h2 class="section-title" data-en="3-Layer Context Model 🧠" data-zh="三层上下文模型 🧠">3-Layer Context Model 🧠</h2>
+      <p class="section-desc" data-en="Context-aware loading: only what's needed, when it's needed. Controls context window bloat by design." data-zh="上下文感知加载：只在需要时加载需要的内容。从架构层面控制上下文窗口膨胀。">Context-aware loading: only what's needed, when it's needed. Controls context window bloat by design.</p>
+    </div>
+    <div class="arch-diagram fade-up">
+      <div class="arch-layer">
+        <span class="arch-layer-tag">L1</span> —
+        <span class="arch-layer-name" data-en="Trigger Layer" data-zh="触发层"></span>
+        <span class="arch-layer-desc" data-en="Always loaded. ~100 words. Trigger words + use/skip conditions in description." data-zh="始终加载，约 100 词。description 中的触发词 + 使用/跳过条件。"></span>
+      </div>
+      <div class="arch-layer">
+        <span class="arch-layer-tag">L2</span> —
+        <span class="arch-layer-name" data-en="Workflow Layer" data-zh="工作流层"></span>
+        <span class="arch-layer-desc" data-en="Loaded on activation. ≤ 300 lines. Stages, principles, checklists, IRON LAW." data-zh="激活时加载，≤ 300 行。阶段、原则、检查清单、IRON LAW。"></span>
+      </div>
+      <div class="arch-layer">
+        <span class="arch-layer-tag">L3</span> —
+        <span class="arch-layer-name" data-en="Reference Layer" data-zh="参考层"></span>
+        <span class="arch-layer-desc" data-en="Loaded on demand. No line limit. Detailed docs, schemas, examples." data-zh="按需加载，无行数限制。详细文档、schema、示例。"></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Workflows -->
+<section id="workflows">
+  <div class="container">
+    <div class="section-header fade-up">
+      <span class="section-label" data-en="🔀 Workflows" data-zh="🔀 工作流">🔀 Workflows</span>
+      <h2 class="section-title" data-en="Seven Paths to Quality 🛤️" data-zh="七条质量路径 🛤️">Seven Paths to Quality 🛤️</h2>
+      <p class="section-desc" data-en="Every workflow has explicit entry/exit criteria. No skipping — quality is structural, not optional." data-zh="每个工作流有明确入口/出口条件。不可跳过——质量是结构性的，不是可选的。">Every workflow has explicit entry/exit criteria. No skipping — quality is structural, not optional.</p>
+    </div>
+    <div class="workflows-grid">
+      <div class="workflow-card fade-up">
+        <div class="workflow-id" style="background:#c96442;">1</div>
+        <h3 data-en="🆕 Create New Skill" data-zh="🆕 创建新技能">🆕 Create New Skill</h3>
+        <p data-en="Full 8-stage gated workflow: requirements → planning → L1/L2/L3 authoring → audit → publish." data-zh="完整 8 阶段门控流程：需求 → 规划 → L1/L2/L3 编写 → 审计 → 发布。">Full 8-stage gated workflow: requirements → planning → L1/L2/L3 authoring → audit → publish.</p>
+        <div class="workflow-trigger"><span class="trigger-tag" data-en="create a skill" data-zh="创建技能">create a skill</span><span class="trigger-tag" data-en="new skill" data-zh="新技能">new skill</span></div>
+      </div>
+      <div class="workflow-card fade-up">
+        <div class="workflow-id" style="background:#5a8a6a;">2</div>
+        <h3 data-en="🔍 Audit Existing Skill" data-zh="🔍 审计已有技能">🔍 Audit Existing Skill</h3>
+        <p data-en="53-item checklist across 10 layers. Automated shell scan + human-judgment items. Every rule traces to a real incident." data-zh="10 层 53 项逐项检查。自动脚本扫描 + 人工判断项。每条规则追溯至真实事故。">53-item checklist across 10 layers. Automated shell scan + human-judgment items. Every rule traces to a real incident.</p>
+        <div class="workflow-trigger"><span class="trigger-tag" data-en="audit my skill" data-zh="审计技能">audit my skill</span><span class="trigger-tag" data-en="quality check" data-zh="质量检查">quality check</span></div>
+      </div>
+      <div class="workflow-card fade-up">
+        <div class="workflow-id" style="background:#d4923a;">3</div>
+        <h3 data-en="🚫 Fix Anti-Patterns" data-zh="🚫 修复反模式">🚫 Fix Anti-Patterns</h3>
+        <p data-en="AP-1 through AP-34 catalog scanned automatically. Each flagged with root cause and concrete fix." data-zh="AP-1 至 AP-34 反模式目录自动扫描。逐条标注根因与修复方案。">AP-1 through AP-34 catalog scanned automatically. Each flagged with root cause and concrete fix.</p>
+        <div class="workflow-trigger"><span class="trigger-tag" data-en="check anti-patterns" data-zh="检查反模式">check anti-patterns</span></div>
+      </div>
+      <div class="workflow-card fade-up">
+        <div class="workflow-id" style="background:#7a6a9a;">4</div>
+        <h3 data-en="🎯 Optimize Triggers" data-zh="🎯 优化触发词">🎯 Optimize Triggers</h3>
+        <p data-en="Trigger word analysis: banned-word scan, coverage test, pushy-principle check. 10+10 trigger accuracy test." data-zh="触发词分析：禁用词扫描、覆盖率测试、Pushy 原则检查。10+10 触发准确率测试。">Trigger word analysis: banned-word scan, coverage test, pushy-principle check. 10+10 trigger accuracy test.</p>
+        <div class="workflow-trigger"><span class="trigger-tag" data-en="not triggering" data-zh="不触发">not triggering</span><span class="trigger-tag" data-en="fix trigger" data-zh="修触发词">fix trigger</span></div>
+      </div>
+      <div class="workflow-card fade-up">
+        <div class="workflow-id" style="background:#5a7a9a;">5</div>
+        <h3 data-en="✂️ Refactor Bloated Skill" data-zh="✂️ 重构臃肿技能">✂️ Refactor Bloated Skill</h3>
+        <p data-en="3-layer model applied: keep L2 ≤ 300 lines, move reference material to L3. Effect-first — no splitting for aesthetics." data-zh="应用三层模型：L2 控制在 ≤ 300 行，参考资料下沉到 L3。效果优先——不为数字好看而拆。">3-layer model applied: keep L2 ≤ 300 lines, move reference material to L3. Effect-first — no splitting for aesthetics.</p>
+        <div class="workflow-trigger"><span class="trigger-tag" data-en="slim down" data-zh="瘦身">slim down</span><span class="trigger-tag" data-en="too long" data-zh="太长">too long</span></div>
+      </div>
+      <div class="workflow-card fade-up">
+        <div class="workflow-id" style="background:#d4756b;">6</div>
+        <h3 data-en="📊 Batch Scan" data-zh="📊 批量扫描">📊 Batch Scan</h3>
+        <p data-en="Automated structural health check across all skills with a single command. Catches issues before they ship." data-zh="一条命令完成多技能结构健康检查。在发布前拦截问题。">Automated structural health check across all skills with a single command. Catches issues before they ship.</p>
+        <div class="workflow-trigger"><span class="trigger-tag" data-en="batch scan" data-zh="批量扫描">batch scan</span><span class="trigger-tag" data-en="skill-audit.sh" data-zh="skill-audit.sh">skill-audit.sh</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Audit Specs Table -->
+<section id="specs" style="background:var(--bg-warm);">
+  <div class="container">
+    <div class="section-header center fade-up">
+      <span class="section-label" data-en="📋 Audit Model" data-zh="📋 审计模型">📋 Audit Model</span>
+      <h2 class="section-title" data-en="53 Items, 10 Layers 📊" data-zh="53 项，10 层 📊">53 Items, 10 Layers 📊</h2>
+      <p class="section-desc" data-en="27 auto-scannable, 26 require human judgment. Every rule traces to a real incident." data-zh="27 项可自动扫描，26 项需人工判断。每条规则追溯至真实事故。">27 auto-scannable, 26 require human judgment. Every rule traces to a real incident.</p>
+    </div>
+    <div class="specs-wrapper fade-up">
+      <table class="specs-table">
+        <thead>
+          <tr>
+            <th data-en="Layer" data-zh="层级">Layer</th>
+            <th data-en="Audit Target" data-zh="审计目标">Audit Target</th>
+            <th data-en="Items" data-zh="项数">Items</th>
+            <th data-en="Auto" data-zh="自动">Auto</th>
+            <th data-en="Coverage" data-zh="覆盖范围">Coverage</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="mono">L1</td><td data-en="Document Structure" data-zh="文档结构">Document Structure</td><td class="mono">8</td><td class="mono">5</td><td data-en="Frontmatter, description, name, line count, refs index, Gotchas bloat" data-zh="Frontmatter、描述、名称、行数、引用索引、Gotchas 膨胀"></td></tr>
+          <tr><td class="mono">L2</td><td data-en="Architecture Consistency" data-zh="架构一致性">Architecture Consistency</td><td class="mono">5</td><td class="mono">2</td><td data-en="Logic closure, stage numbering, cross-section" data-zh="逻辑闭环、阶段编号、跨章节一致"></td></tr>
+          <tr><td class="mono">L3</td><td data-en="Code Quality" data-zh="代码质量">Code Quality</td><td class="mono">8</td><td class="mono">6</td><td data-en="API contracts, eval/exec, exceptions, debug residue" data-zh="API 契约、eval/exec、异常、调试残留"></td></tr>
+          <tr><td class="mono">L4</td><td data-en="Cross-File Consistency" data-zh="跨文件一致性">Cross-File Consistency</td><td class="mono">4</td><td class="mono">1</td><td data-en="Template duplication, info redundancy, shared patterns" data-zh="模板重复、信息冗余、共享模式"></td></tr>
+          <tr><td class="mono">L5</td><td data-en="Doc-Code Alignment" data-zh="文档↔代码对齐">Doc-Code Alignment</td><td class="mono">3</td><td class="mono">2</td><td data-en="Parameter tables, feature routing, reference correctness" data-zh="参数表一致、功能路由完整、参考实现正确性"></td></tr>
+          <tr><td class="mono">L6</td><td data-en="Dependency Integrity" data-zh="依赖完整性">Dependency Integrity</td><td class="mono">3</td><td class="mono">2</td><td data-en="Import matching, tech stack, optional fallbacks" data-zh="import 匹配、技术栈、可选依赖 fallback"></td></tr>
+          <tr><td class="mono">L7</td><td data-en="File Hygiene" data-zh="文件卫生">File Hygiene</td><td class="mono">6</td><td class="mono">5</td><td data-en="Zombie files, broken links, orphan paths, .gitignore" data-zh="僵尸文件、断链、孤儿路径、.gitignore"></td></tr>
+          <tr><td class="mono">L8</td><td data-en="Security & Compliance" data-zh="安全合规">Security & Compliance</td><td class="mono">3</td><td class="mono">2</td><td data-en="Credential scan, PII in frontmatter, meta exclusion" data-zh="凭据扫描、frontmatter PII、meta 排除"></td></tr>
+          <tr><td class="mono">L9</td><td data-en="Robustness & Degradation" data-zh="健壮性与降级">Robustness & Degradation</td><td class="mono">7</td><td class="mono">1</td><td data-en="Fallback chains, confirmation gates, sub-agent specs" data-zh="降级链、确认门控、子 Agent 规范"></td></tr>
+          <tr><td class="mono">L10</td><td data-en="Content Quality" data-zh="内容质量">Content Quality</td><td class="mono">6</td><td class="mono">1</td><td data-en="Verifiability, AP clearance, stall detection" data-zh="可验证性、AP 清零、停滞检测"></td></tr>
+          <tr class="total-row"><td></td><td data-en="Total" data-zh="合计">Total</td><td class="mono">53</td><td class="mono">27</td><td></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Comparison -->
+<section id="comparison">
+  <div class="container">
+    <div class="section-header center fade-up">
+      <span class="section-label" data-en="📊 Comparison" data-zh="📊 竞品对比">📊 Comparison</span>
+      <h2 class="section-title" data-en="Why mu-skill-creator? 🏆" data-zh="为什么选 mu-skill-creator？🏆">Why mu-skill-creator? 🏆</h2>
+      <p class="section-desc" data-en="See how mu-skill-creator compares to alternatives." data-zh="看看 mu-skill-creator 与其他方案的对比。">See how mu-skill-creator compares to alternatives.</p>
+    </div>
+    <div class="comparison-wrapper fade-up">
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th data-en="Dimension" data-zh="维度">Dimension</th>
+            <th>mu-skill-creator</th>
+            <th data-en="Manual Authoring" data-zh="手工编写">Manual</th>
+            <th data-en="Prompt Templates" data-zh="提示模板">Templates</th>
+            <th data-en="AI Frameworks" data-zh="AI 框架">AI Frameworks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td data-en="Audit model" data-zh="审计模型">Audit model</td><td><span class="check" data-en="✓ 53 items, 10 layers" data-zh="✓ 53 项 10 层">✓ 53 items, 10 layers</span></td><td><span class="cross" data-en="✗ None" data-zh="✗ 无">✗ None</span></td><td><span class="cross" data-en="✗ None" data-zh="✗ 无">✗ None</span></td><td data-en="Varies" data-zh="不定">Varies</td></tr>
+          <tr><td data-en="Automated scanning" data-zh="自动化扫描">Automated scanning</td><td><span class="check">✓ Shell script</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td data-en="Rare" data-zh="少见">Rare</td></tr>
+          <tr><td data-en="Anti-pattern catalog" data-zh="反模式目录">Anti-pattern catalog</td><td><span class="check" data-en="✓ 34 items" data-zh="✓ 34 条">✓ 34 items</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td data-en="Few" data-zh="较少">Few</td></tr>
+          <tr><td data-en="Context-aware loading" data-zh="上下文感知加载">Context-aware loading</td><td><span class="check" data-en="✓ 3-layer" data-zh="✓ 三层">✓ 3-layer</span></td><td><span class="cross" data-en="✗ Single file" data-zh="✗ 单文件">✗ Single file</span></td><td><span class="cross">✗</span></td><td data-en="Varies" data-zh="不定">Varies</td></tr>
+          <tr><td data-en="Gated workflow" data-zh="门控工作流">Gated workflow</td><td><span class="check" data-en="✓ 8 stages" data-zh="✓ 8 阶段">✓ 8 stages</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td data-en="Rare" data-zh="少见">Rare</td></tr>
+          <tr><td data-en="Stall detection" data-zh="停滞检测">Stall detection</td><td><span class="check" data-en="✓ Quantitative" data-zh="✓ 量化信号">✓ Quantitative</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td data-en="Security scanning" data-zh="安全扫描">Security scanning</td><td><span class="check" data-en="✓ Pre-publish" data-zh="✓ 发布前">✓ Pre-publish</span></td><td data-en="Manual only" data-zh="仅人工">Manual only</td><td><span class="cross">✗</span></td><td data-en="Varies" data-zh="不定">Varies</td></tr>
+          <tr><td data-en="Trigger optimization" data-zh="触发词优化">Trigger optimization</td><td><span class="check" data-en="✓ 10+10 test" data-zh="✓ 10+10 测试">✓ 10+10 test</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td><td><span class="cross">✗</span></td></tr>
+          <tr><td data-en="Open Source" data-zh="开源">Open Source</td><td><span class="check">✓ MIT</span></td><td>—</td><td>—</td><td data-en="Varies" data-zh="不定">Varies</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Quick Start -->
+<section id="quickstart" style="background:var(--bg-warm);">
+  <div class="container">
+    <div class="section-header center fade-up">
+      <span class="section-label" data-en="🛠️ Quick Start" data-zh="🛠️ 快速开始">🛠️ Quick Start</span>
+      <h2 class="section-title" data-en="Up and Running in Under a Minute ⚡" data-zh="一分钟内上手 ⚡">Up and Running in Under a Minute ⚡</h2>
+    </div>
+    <div class="quickstart-block fade-up">
+      <div class="qs-tab-bar">
+        <button class="qs-tab active" onclick="switchTab(this,'qs-install')" data-en="Install" data-zh="安装">Install</button>
+        <button class="qs-tab" onclick="switchTab(this,'qs-create')" data-en="Create" data-zh="创建">Create</button>
+        <button class="qs-tab" onclick="switchTab(this,'qs-audit')" data-en="Audit" data-zh="审计">Audit</button>
+      </div>
+      <div class="qs-panel active" id="qs-install">
+        <p class="qs-label" data-en="1. Clone the repository" data-zh="1. 克隆仓库">1. Clone the repository</p>
+        <pre>git clone https://github.com/muippt/mu-skill-creator.git</pre>
+        <p class="qs-label" data-en="2. Copy to your AI agent's skills directory" data-zh="2. 复制到你的 AI Agent 技能目录">2. Copy to your AI agent's skills directory</p>
+        <pre>cp -r mu-skill-creator /path/to/your/agent/skills/</pre>
+      </div>
+      <div class="qs-panel" id="qs-create">
+        <p class="qs-label" data-en="Tell your AI agent:" data-zh="告诉你的 AI Agent：">Tell your AI agent:</p>
+        <pre>&quot;Create a skill that does X&quot;           → full 8-stage creation workflow
+&quot;Audit my-skill for quality issues&quot;    → 53-item 10-layer audit</pre>
+      </div>
+      <div class="qs-panel" id="qs-audit">
+        <p class="qs-label" data-en="Run the automated scanner:" data-zh="运行自动化扫描：">Run the automated scanner:</p>
+        <pre>bash scripts/skill-audit.sh &lt;skill-name&gt;    # <span data-en="scan one skill" data-zh="扫描单个技能">scan one skill</span>
+bash scripts/skill-audit.sh                  # <span data-en="scan all skills" data-zh="扫描全部技能">scan all skills</span>
+bash scripts/skill-audit.sh --verbose         # <span data-en="detailed output" data-zh="详细输出">detailed output</span></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <div class="container">
+    <h2 data-en="Not <em>&quot;just write a skill&quot;</em><br><span class='accent-text'>Engineer it with quality gates.</span>" data-zh="不是<em>「随便写个技能」</em><br><span class='accent-text'>而是用质量门控工程化构建。</span>">Not <em>"just write a skill"</em><br><span class="accent-text">Engineer it with quality gates.</span></h2>
+    <p data-en="Free, open source, and yours forever." data-zh="免费、开源，永远属于你。">Free, open source, and yours forever.</p>
+    <div class="hero-actions">
+      <a href="https://github.com/muippt/mu-skill-creator" class="btn btn-primary" target="_blank" rel="noopener"><svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg> <span data-en="Star on GitHub" data-zh="去 GitHub 点星">Star on GitHub</span></a>
+      <a href="https://github.com/muippt/mu-skill-creator/archive/refs/heads/main.zip" class="btn btn-secondary"><span data-en="↓ Download" data-zh="↓ 下载">↓ Download</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer>
+  <div class="container">
+    <div class="footer-links">
+      <a href="https://github.com/muippt/mu-skill-creator" target="_blank" rel="noopener">GitHub</a>
+      <a href="https://github.com/muippt/mu-skill-creator/issues" target="_blank" rel="noopener" data-en="Issues" data-zh="问题反馈">Issues</a>
+      <a href="https://github.com/muippt/mu-skill-creator/releases" target="_blank" rel="noopener" data-en="Releases" data-zh="发布历史">Releases</a>
+      <a href="mailto:muippt@agent.qq.com" data-en="Contact" data-zh="联系我们">Contact</a>
+    </div>
+    <div class="footer-author">木先生iPPT</div>
+    <p class="footer-desc" data-en="AI agent skills, productivity tools, and team management." data-zh="AI Agent 技能、效率工具与团队管理。">AI agent skills, productivity tools, and team management.</p>
+    <div class="footer-badges">
+      <a href="https://mp.weixin.qq.com/s/v1JSZvlN5fvbOOHvkvXEtA" target="_blank" rel="noopener"><img data-en-src="https://img.shields.io/badge/muippt-07C160?logo=wechat&logoColor=white" data-zh-src="https://img.shields.io/badge/木先生iPPT-07C160?logo=wechat&logoColor=white" alt="WeChat" height="20"></a>
+      <a href="https://xhslink.com/m/ESxtgUNMdl" target="_blank" rel="noopener"><img data-en-src="https://img.shields.io/badge/muippt-FF2442?logo=xiaohongshu&logoColor=white" data-zh-src="https://img.shields.io/badge/木先生iPPT-FF2442?logo=xiaohongshu&logoColor=white" alt="Xiaohongshu" height="20"></a>
+      <a href="https://item.m.jd.com/product/14547345.html" target="_blank" rel="noopener"><img data-en-src="https://img.shields.io/badge/Book-Visual%20Team%20Management-BBDDE5?logo=bookstack&logoColor=white" data-zh-src="https://img.shields.io/badge/著作-《图解团队管理》-BBDDE5?logo=bookstack&logoColor=white" alt="Book" height="20"></a>
+      <a href="https://github.com/muippt" target="_blank" rel="noopener"><img src="https://img.shields.io/badge/muippt-181717?logo=github&logoColor=white" alt="GitHub" height="20"></a>
+    </div>
+    <p class="footer-copy">MIT License · <a href="https://github.com/muippt/mu-skill-creator" target="_blank" rel="noopener">muippt/mu-skill-creator</a> · v3.7</p>
+  </div>
+</footer>
+
+<script>
+/* ===== i18n ===== */
+(function(){
+  var lang=(navigator.language||'').startsWith('zh')?'zh':'en';
+  try{var s=localStorage.getItem('mu-sc-lang');if(s==='en'||s==='zh')lang=s;}catch(e){}
+  window._lang=lang;
+  function apply(l){
+    window._lang=l;try{localStorage.setItem('mu-sc-lang',l);}catch(e){}
+    document.documentElement.lang=l==='zh'?'zh-CN':'en';
+    document.querySelectorAll('[data-'+l+']').forEach(function(e){
+      var v=e.getAttribute('data-'+l);if(v!==null)e.innerHTML=v;
+    });
+    document.querySelectorAll('img[data-'+l+'-src]').forEach(function(img){
+      var s=img.getAttribute('data-'+l+'-src');if(s)img.src=s;
+    });
+    document.querySelectorAll('.lang-switch span').forEach(function(s){
+      s.classList.toggle('active',s.getAttribute('data-lang')===l);
+    });
+  }
+  window.applyLang=apply;
+  apply(lang);
+  document.getElementById('langSwitch').addEventListener('click',function(e){
+    var t=e.target.closest('[data-lang]');if(!t)return;
+    var l=t.getAttribute('data-lang');if(l!==window._lang)apply(l);
+  });
+})();
+
+/* ===== Theme Toggle ===== */
+(function(){
+  var theme=null;
+  try{theme=localStorage.getItem('mu-sc-theme');}catch(e){}
+  function applyTheme(t){
+    if(t){document.documentElement.setAttribute('data-theme',t);}
+    else{document.documentElement.removeAttribute('data-theme');}
+    try{if(t)localStorage.setItem('mu-sc-theme',t);else localStorage.removeItem('mu-sc-theme');}catch(e){}
+    var btn=document.getElementById('themeToggle');
+    if(btn)btn.textContent=t==='dark'?'☀':'◑';
+  }
+  window.toggleTheme=function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    if(!cur){var isDark=window.matchMedia('(prefers-color-scheme: dark)').matches;applyTheme(isDark?'light':'dark');}
+    else if(cur==='dark'){applyTheme('light');}
+    else{applyTheme(null);}
+  };
+  if(theme)applyTheme(theme);
+})();
+
+/* ===== Quick Start Tabs ===== */
+window.switchTab=function(btn,panelId){
+  var tabs=btn.parentNode.querySelectorAll('.qs-tab');
+  for(var i=0;i<tabs.length;i++)tabs[i].classList.remove('active');
+  btn.classList.add('active');
+  var panels=btn.parentNode.parentNode.querySelectorAll('.qs-panel');
+  for(var j=0;j<panels.length;j++)panels[j].classList.remove('active');
+  document.getElementById(panelId).classList.add('active');
+};
+
+/* ===== Scroll Animation ===== */
+var obs=new IntersectionObserver(function(es){
+  es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});
+},{threshold:0.1,rootMargin:'0px 0px -40px 0px'});
+document.querySelectorAll('.fade-up').forEach(function(e){obs.observe(e);});
+</script>
+</body>
+</html>

@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":"0","result":{"in":[{"txid":"x","amount":1000000000000,"confirmations":3,"address":"A","address_index":0,"timestamp":1,"unlock_time":0}]}}
