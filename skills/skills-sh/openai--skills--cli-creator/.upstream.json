@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/cli-creator",
+  "repo": "openai/skills",
+  "skillId": "cli-creator",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "d5aadc749e871b0edf63d60727674585109fa7d500116ecd42125538e4d9f62c",
+  "fetchedAt": "2026-07-31T10:02:57.434Z"
+}

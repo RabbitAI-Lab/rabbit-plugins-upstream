@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/bobmatnyc/claude-mpm-skills/golang-observability-opentelemetry",
+  "repo": "bobmatnyc/claude-mpm-skills",
+  "skillId": "golang-observability-opentelemetry",
+  "branch": "main",
+  "pushedAt": "2026-07-18T19:16:57Z",
+  "contentHash": "b53b587e6cf9ff60773b4e50b862eec3703485bc7d69cd03ba3809b82677665f",
+  "fetchedAt": "2026-07-31T10:04:30.624Z"
+}

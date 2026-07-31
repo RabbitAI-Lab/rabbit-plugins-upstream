@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/cloudfront",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "cloudfront",
+  "branch": "main",
+  "pushedAt": "2026-07-30T19:49:45Z",
+  "contentHash": "f0d2caffe6a6509a156b54fb072d82dd9649432c20d110f5c87e20554f5b137c",
+  "fetchedAt": "2026-07-31T10:04:17.627Z"
+}

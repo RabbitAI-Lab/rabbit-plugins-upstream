@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/provider-docs",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "provider-docs",
+  "branch": "main",
+  "pushedAt": "2026-07-29T19:48:56Z",
+  "contentHash": "1b58c1f0661a7c932473b95954e25e401020248f173f3369ba44a17f2276a76a",
+  "fetchedAt": "2026-07-31T10:03:28.328Z"
+}

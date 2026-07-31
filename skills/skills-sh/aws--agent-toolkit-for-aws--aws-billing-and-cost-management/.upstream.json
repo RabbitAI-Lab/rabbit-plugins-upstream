@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-billing-and-cost-management",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-billing-and-cost-management",
+  "branch": "main",
+  "pushedAt": "2026-07-30T19:49:45Z",
+  "contentHash": "eac260d3b5e000dc84de3c1aa0d2a15e0a147221a54c9acb95af36369ae62bf8",
+  "fetchedAt": "2026-07-31T10:04:17.272Z"
+}

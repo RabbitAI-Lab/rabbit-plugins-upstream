@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/openai-docs",
+  "repo": "openai/skills",
+  "skillId": "openai-docs",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "9b37ccead1a6a3f609acac03f9d4429422ef21626ea9f12ee8ce235712a0c693",
+  "fetchedAt": "2026-07-31T10:02:57.336Z"
+}

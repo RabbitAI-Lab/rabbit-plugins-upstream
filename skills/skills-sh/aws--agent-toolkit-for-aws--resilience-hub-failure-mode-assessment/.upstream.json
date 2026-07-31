@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/resilience-hub-failure-mode-assessment",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "resilience-hub-failure-mode-assessment",
+  "branch": "main",
+  "pushedAt": "2026-07-30T19:49:45Z",
+  "contentHash": "dfa15c07e72a8ec8b99101d24872057fc96d63b087d7562b1f2852e1435e82ae",
+  "fetchedAt": "2026-07-31T10:04:17.878Z"
+}
