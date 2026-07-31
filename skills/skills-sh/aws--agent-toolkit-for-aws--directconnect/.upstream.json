@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/directconnect",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "directconnect",
+  "branch": "main",
+  "pushedAt": "2026-07-30T19:49:45Z",
+  "contentHash": "8cf61e69573237a17d234f0759817caa4170ae4e1aa6af59ec24c5954f1443cd",
+  "fetchedAt": "2026-07-31T10:04:17.774Z"
+}

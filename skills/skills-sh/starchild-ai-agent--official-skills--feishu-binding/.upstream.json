@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/feishu-binding",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "feishu-binding",
+  "branch": "main",
+  "pushedAt": "2026-07-31T09:02:38Z",
+  "contentHash": "0dda3fb1da74b7691dcf9a2f4de13c15e1a62ed25a1c7e95f661ec67104ed1d0",
+  "fetchedAt": "2026-07-31T10:03:12.537Z"
+}

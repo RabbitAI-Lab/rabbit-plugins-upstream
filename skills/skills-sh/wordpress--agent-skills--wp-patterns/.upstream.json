@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-patterns",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-patterns",
+  "branch": "trunk",
+  "pushedAt": "2026-07-27T14:44:09Z",
+  "contentHash": "d052bfb977c2afa89886dff4ecd3993ba6a5ff0f347c58b40433b2df305caba0",
+  "fetchedAt": "2026-07-31T10:04:13.606Z"
+}

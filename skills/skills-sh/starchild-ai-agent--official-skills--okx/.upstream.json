@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/okx",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "okx",
+  "branch": "main",
+  "pushedAt": "2026-07-31T09:02:38Z",
+  "contentHash": "c9b26a649069b9f9afc9c4ad0b637c03e7b011e5b9a6d93aa86a6c765b45db5a",
+  "fetchedAt": "2026-07-31T10:03:12.524Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/vercel/chat/add-adapter",
+  "repo": "vercel/chat",
+  "skillId": "add-adapter",
+  "branch": "main",
+  "pushedAt": "2026-07-31T08:20:48Z",
+  "contentHash": "776a945a5c8ea5a5700d4180499a44d8fafe1847c84ba325ee6c4ac9a0ba41c0",
+  "fetchedAt": "2026-07-31T10:04:27.111Z"
+}

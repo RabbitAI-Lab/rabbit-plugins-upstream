@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-block-themes",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-block-themes",
+  "branch": "trunk",
+  "pushedAt": "2026-07-27T14:44:09Z",
+  "contentHash": "96361d4b8d5ae7b3ecba973d11ee7e0da7a75c159bd34dc42208e2ba372e3788",
+  "fetchedAt": "2026-07-31T10:04:13.589Z"
+}

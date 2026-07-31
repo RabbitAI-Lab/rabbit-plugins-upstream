@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/setup-devops-agent",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "setup-devops-agent",
+  "branch": "main",
+  "pushedAt": "2026-07-30T19:49:45Z",
+  "contentHash": "1e78efafa6d780bdbb3271c3cd78d930507ff02cd795151135caf101979251e3",
+  "fetchedAt": "2026-07-31T10:04:17.785Z"
+}

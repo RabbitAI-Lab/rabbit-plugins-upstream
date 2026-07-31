@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/push-to-registry",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "push-to-registry",
+  "branch": "main",
+  "pushedAt": "2026-07-29T19:48:56Z",
+  "contentHash": "5dab81704e401b8ce97b23b1d4fcb2bfab2ec4d5c97b766460544e2e21dd7ca0",
+  "fetchedAt": "2026-07-31T10:03:28.329Z"
+}

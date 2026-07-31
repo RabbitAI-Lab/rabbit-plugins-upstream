@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/build-mcpb",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "build-mcpb",
+  "branch": "main",
+  "pushedAt": "2026-07-31T08:21:49Z",
+  "contentHash": "fc2a5a2ef1902d932f578f5bf6c5e578e1c06f27d07cfb5cdbe929059bea138a",
+  "fetchedAt": "2026-07-31T10:02:52.996Z"
+}
