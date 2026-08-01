@@ -1,0 +1,22 @@
+# pw-browser minimal publish package
+# Generated: 2026-07-30T14:06:03Z
+# Source: /d/workbuddy/skills/playwright-browser-use
+#
+# Included files/dirs:
+SKILL.md
+pw-browser.js
+pw-browser
+package.json
+package-lock.json
+LICENSE
+README.md
+README.en.md
+QUICKSTART.md
+QUICKSTART.en.md
+CHANGELOG.md
+.clawhubignore
+.gitignore
+references/
+#
+# Intentionally excluded: sync.sh, tests/
+# node_modules/ is excluded by .clawhubignore at publish time (run: npm install).

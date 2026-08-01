@@ -11,36 +11,40 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering agents use this skill to fetch GitHub or GitLab issues, break them into tasks, execute independent work in parallel, review batches, and consolidate completed issue work into one pull request. <br>
+Developers and engineering agents use this skill to fetch GitHub or GitLab issues, break them into implementation tasks, run independent work in parallel where appropriate, review batches, and consolidate the result into one pull request. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can use authenticated GitHub or GitLab CLI access to read issues, change code, commit work, comment on issues, close issues, or create a pull request. <br>
-Mitigation: Run it only in repositories where that level of agent access is acceptable, and review proposed issue comments, closures, commits, and pull requests before they are published. <br>
-Risk: The workflow includes an external public feedback step for tooling observations that could expose project details without clear confirmation. <br>
-Mitigation: Disable that step or require explicit manual approval before posting any tooling feedback outside the current repository. <br>
-Risk: Parallel subagent execution can create merge conflicts, incomplete work, or hard-to-recover hangs in remote-control or headless sessions. <br>
-Mitigation: Use the documented review gates, keep high-risk or dependent tasks sequential, limit parallelism, and prefer local sessions when subagents are required. <br>
+Risk: The workflow can make persistent remote changes through authenticated GitHub or GitLab access, including comments, issue closure, commits, and pull request preparation. <br>
+Mitigation: Confirm the target repository and issues before use, review generated comments or closure actions before posting, and keep automatic closure disabled unless explicitly approved. <br>
+Risk: The workflow can ask the agent to post tooling feedback to an unrelated public Night Market repository. <br>
+Mitigation: Skip that feedback step unless the user explicitly approves it and the content has been reviewed and sanitized. <br>
+Risk: Parallel subagent execution can create coordination failures, merge conflicts, or hard-to-monitor changes. <br>
+Mitigation: Use the documented planning threshold for larger dispatches, review each batch before proceeding, and fall back to sequential execution when tasks share files or high-risk changes. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-do-issue) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
-- [Claude Code issue #28482](https://github.com/anthropics/claude-code/issues/28482) <br>
-- [Claude Code issue #33232](https://github.com/anthropics/claude-code/issues/33232) <br>
-- [Claude Code issue #13240](https://github.com/anthropics/claude-code/issues/13240) <br>
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-sanctum-do-issue) <br>
+- [ClawHub Publisher Profile](https://clawhub.ai/user/athola) <br>
+- [OpenClaw Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
+- [Issue Discovery](modules/issue-discovery.md) <br>
+- [Task Planning](modules/task-planning.md) <br>
+- [Parallel Execution](modules/parallel-execution.md) <br>
+- [Quality Gates](modules/quality-gates.md) <br>
+- [Completion](modules/completion.md) <br>
+- [Troubleshooting](modules/troubleshooting.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands, issue workflow steps, task prompts, and configuration examples] <br>
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
+**Output Format:** [Markdown guidance with inline shell commands and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent to read and comment on issues, modify code, run tests, commit changes, and prepare one consolidated pull request.] <br>
+**Other Properties Related to Output:** [May coordinate issue comments, issue closure, commits, and pull request preparation through authenticated forge CLIs.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+1.9.17 (source: server release evidence; artifact frontmatter: 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

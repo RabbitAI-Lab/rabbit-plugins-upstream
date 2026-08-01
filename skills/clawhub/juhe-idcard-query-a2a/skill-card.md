@@ -1,5 +1,5 @@
 ## Description: <br>
-根据用户提供的居民身份证号码调用聚合数据付费接口，解析性别、出生日期、户口所在地等编码自带基础信息，并明确不提供证件真伪或公安实名核验。 <br>
+Parses a user-provided Chinese resident ID number through Juhe Data's paid API to return encoded sex, birth date, household-registration area, and format-check hints after Alipay payment. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,29 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and their agents use this skill to perform a paid, consent-based lookup of basic coding-derived information from a Chinese resident ID number. It supports single-query parsing of sex, birth date, and registered-region information, not identity verification. <br>
+External users use this skill to submit a Chinese resident ID number, pay through Alipay, and receive encoded sex, birth date, and household-registration area. It is not for identity verification, document authenticity checks, or bulk lookup. <br>
 
 ### Deployment Geography for Use: <br>
-Global, subject to local laws and availability of Alipay payment and Juhe API services. <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+Risk: The skill sends a user-provided ID number to Juhe's API. <br>
+Mitigation: Use only after explicit user consent and payment confirmation; send only the ID number needed for the one-off lookup. <br>
+Risk: Results could be misused as proof of identity or document authenticity. <br>
+Mitigation: Present results as encoding-derived reference data only, and state that the skill cannot verify identity, document validity, or perform public-security checks. <br>
+Risk: Full ID numbers are sensitive and could be exposed in output or logs. <br>
+Mitigation: Mask the ID number in user-facing output and avoid storing or logging the complete number. <br>
+
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-idcard-query-a2a) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/juhemcp) <br>
 - [Juhe A2A query endpoint](https://apis.juhe.cn/a2a/query) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown result summary and tables, with a curl-style API request example for the agent workflow.] <br>
+**Output Type(s):** [markdown, guidance] <br>
+**Output Format:** [Markdown tables with a masked ID number and a capability disclaimer] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Masks the queried ID number, uses only Juhe API return fields, and appends a disclaimer that results cannot prove document authenticity.] <br>
+**Other Properties Related to Output:** [Uses only returned API fields; full ID numbers must not be displayed.] <br>
 
 ## Skill Version(s): <br>
-1.1.0 (source: server evidence) <br>
+1.1.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

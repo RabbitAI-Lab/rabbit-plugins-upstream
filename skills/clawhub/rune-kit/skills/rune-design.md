@@ -1,6 +1,6 @@
 # rune-design
 
-> Rune L2 Skill | creation | model: tier:mid
+> Rune L2 Skill | creation | model: tier:heavy
 
 
 # design

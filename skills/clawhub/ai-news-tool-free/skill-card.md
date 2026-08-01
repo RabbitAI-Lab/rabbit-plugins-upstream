@@ -1,5 +1,5 @@
 ## Description: <br>
-A free news-fetching agent skill that uses a public news API to retrieve daily news lists, hot-topic rankings, article details, and category-filtered results. <br>
+每日新闻获取工具,通过 API 获取每日新闻摘要与详情,兼容按日期查询、热点排行、分类筛选与详情阅读。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,30 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users use this skill to ask an agent for daily news summaries, historical daily news by date, hot news rankings, and article details from a news API. It is intended for personal news browsing and quick information retrieval. <br>
+External users and developers use this skill to fetch daily news lists, inspect ranked hot news, filter by category, and read individual article details through an agent-assisted workflow. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad activation and unrelated data-analysis or reporting language could cause the skill to run outside explicit news-fetching requests. <br>
-Mitigation: Enable the skill only for clear news-list, news-detail, date-based news, hot-news, or category-filtering requests. <br>
-Risk: The skill asks the agent to use shell commands for API calls and includes examples that write summaries or cache files to the user's home directory. <br>
-Mitigation: Review commands before execution, use trusted news API endpoints, and limit file writes to expected summary or cache paths. <br>
+Risk: The skill asks an agent to use shell commands and network requests to fetch news. <br>
+Mitigation: Install only if that execution model is acceptable, and review commands before running them in sensitive environments. <br>
+Risk: The skill includes file-saving, caching, and unrelated analytics or report-generation guidance. <br>
+Mitigation: Treat local file writes and caching as opt-in actions, and avoid analytics or report-generation use until the publisher narrows those instructions. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-news-tool-free) <br>
+- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON examples] <br>
+**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call an external news API and may write optional news summaries or cache files under the user's home directory when the agent follows the provided examples.] <br>
+**Other Properties Related to Output:** [May include fetched news summaries, article details, command examples, local cache guidance, and API response handling notes.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and frontmatter) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

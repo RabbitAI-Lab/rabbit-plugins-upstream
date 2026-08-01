@@ -19,13 +19,17 @@ Collect only what changes the result:
 | Input | Rule |
 | --- | --- |
 | Key frame or images | Required for visual execution; otherwise produce an implementation template |
-| Source link | Preserve HTTP(S) links; mark unavailable rather than inventing one |
-| Element count | User-controlled integer 1–5; default 3 only when omitted |
+| Source link | Optional; preserve supplied HTTP(S) links, otherwise mark unavailable and continue |
+| Extraction style | `handdrawn`, `comic`, `collage`, or `realistic`; the style changes rendering, never identity, count, pose, provenance, or the chosen background mode |
+| Element count | User-controlled integer 1–5; default 1 when omitted |
+| Background strategy | `subject-only` isolates every subject; `preserve-context` keeps every subject with meaningful environment; `mixed` assigns an explicit range to each element from the user's intent |
 | Journal type | `portrait`, `pet`, `travel`, `game`, `life`, `fashion`, or `food` |
 | Intention | A short thematic spine such as “诗与远方” |
 | Factual notes | Optional verified places, dates, prices, steps, names, or feelings |
+| User story | Optional first-priority factual and narrative source; always score, refine, and select before layout |
 | Composition materials | 1–12 user-approved images or reusable elements |
 | Layout reference | Optional; structural inspiration only, never an implicit content asset |
+| Review mode | `one-shot` or `interactive`; interactive pauses after reference, story, layout, and rendered review |
 | Collection action | Optional search, filter, quick edit, reopen, single delete, or bulk delete |
 | Output | Editable canvas, image, document, web page, JSON plan, or agent handoff |
 
@@ -46,13 +50,13 @@ Create the source record first. Assign stable IDs before generating derived item
 For each transformation, keep:
 
 - parent source ID;
-- original source URL;
+- original source URL when supplied, otherwise an explicit unavailable value;
 - operation (`inspect`, `redraw`, `crop`, `reference-analyze`, `compose`, `edit`, `delete`, `archive`, or `recall`);
 - prompt or decision summary;
 - tool/model when known;
 - warnings and missing facts.
 
-Never replace the source link with the generated image URL. The first supports “return to original”; the second only locates a derivative.
+Never replace the source link with the generated image URL. The first supports “return to original”; the second only locates a derivative. A missing source link is valid input and must not block element planning, redraw, composition, or archive creation.
 
 ## 3. Element planning and redraw
 
@@ -66,20 +70,36 @@ Rank visible candidates by:
 4. difference from already selected subjects;
 5. contribution to hero, support, transition, detail, or ending.
 
-Select exactly the requested count. Do not pad the set with platform UI, subtitles, watermarks, generic background, or duplicate views of the same subject.
+Select exactly the requested count. In fixed subject modes, do not pad the set with platform UI, subtitles, watermarks, generic background, or duplicate views of the same subject. In `mixed`, a background region is valid only when it is visually meaningful and intentionally assigned `background-only`.
+
+### Choose the background mode
+
+Choose one task-level strategy:
+
+- `subject-only`: keep the complete subject and remove unrelated scenery. Prefer transparency when supported, otherwise a removable flat background.
+- `preserve-context`: keep one clear primary subject together with the visible background needed to understand where it is, what it touches, or how it relates to the scene. Preserve spatial, action, and narrative connections such as a person with the counter they are serving across, a vehicle with the road it is traveling on, or a building with the surrounding riverbank. Remove platform UI and unrelated scenery, but do not flatten the result into an isolated sticker.
+- `mixed`: requires at least two elements. Give every element its own mode: `subject-only`, `preserve-context`, or `background-only`. Parse numbered or itemized user intent first; when the user names a mode, the matching output must use it. If no per-element intent exists, distribute at least two useful modes based on the visible story.
+
+`background-only` is an element-level mode inside `mixed`, not a standalone task option. It keeps a meaningful environment or architecture region and removes foreground people or objects that the user excluded. Do not infer `preserve-context` merely because a source contains a rich background. Use the user's choice; default to `subject-only` when no choice is supplied.
 
 ### Redraw
 
-Use one visual generation/editing call per subject when possible. This preserves independent assets and makes later layout editing reliable.
+Use one visual generation/editing call per planned element when possible. This preserves independent assets and makes later layout editing reliable.
 
-Keep:
+Keep in every mode:
 
-- identity-defining contour and colors;
-- complete subject rather than arbitrary circular crops;
+- identity-defining contour and colors for subject-bearing elements;
+- a complete subject or coherent environment region rather than arbitrary circular crops;
 - coherent style across the set;
-- transparent background when supported, otherwise a removable flat background.
+- the selected background mode on every derived element and archive record.
 
-Reject outputs that introduce extra subjects, readable fake text, platform logos, frames, mockups, or unrelated scenery. If only cropping is possible, record `generationMode: crop`.
+For `realistic`, preserve photographic light direction, skin, fabric, surface texture, lens perspective, identity, people count, pose, and spatial relationships. Limit beautification to restrained composition, exposure, tonal balance, and material clarity. Reject plastic skin, face substitution, body reshaping, aggressive HDR, synthetic 3D surfaces, invented people, or any output whose aesthetic improvement changes visible facts.
+
+For `subject-only`, use a transparent background when supported, otherwise a removable flat background. For `preserve-context`, keep the necessary environment as a complete element image and reject results that isolate the subject or lose its visible relationship to the scene. For `background-only`, reject results that keep the excluded foreground subject or replace the requested place with generic scenery.
+
+Keep the natural canvas orientation of a valid redraw. Portrait, landscape, and square are all acceptable; only crop, pad, or force an aspect ratio when the user explicitly asked for one or the chosen output medium has a declared hard requirement.
+
+Reject outputs that introduce competing subjects, readable fake text, platform logos, frames, mockups, or unrelated scenery. Contextual people or objects may remain only when they visibly participate in the selected subject's relationship. If only cropping is possible, record `generationMode: crop`.
 
 ## 4. Content materials and optional layout reference
 
@@ -121,6 +141,15 @@ Before coordinates, assign:
 
 With fewer elements, combine roles. With five elements, use all roles only when the content supports them. Define a top-to-bottom, diagonal, S-shaped, timeline, or grid reading path according to the journal type. When a layout reference exists, adapt its abstract reading logic to the current story rather than cloning positions.
 
+If the user supplied a story, read it completely before using filenames, inferred scene labels, generic type templates, custom visual instructions, or reference analysis as narrative input. Return:
+
+- a source marker (`user-story` or `visual-inference`);
+- factual-fidelity, narrative-structure, and sentence-selection scores;
+- editing notes that explain removal, reordering, and compression;
+- retained facts that the final copy may not lose.
+
+Low scores require editing, not replacement. Preserve key events, people relationships, turns, concrete actions, and the user's closing meaning. Let visual imagination affect rhythm and phrasing without changing facts.
+
 ### Copy pass
 
 For rich life records, aim for 6–10 blocks:
@@ -132,6 +161,10 @@ For rich life records, aim for 6–10 blocks:
 - one or two short marginal notes.
 
 Use fewer blocks for portrait pages and more structured labels for guides. Copy may interpret visible mood and user-provided intention, but must not fabricate personal experience. Use explicit uncertainty such as “画面让人想到” when the meaning is inferred.
+
+For each block, optionally select 0–2 highlight phrases that appear verbatim in its text. Prefer real numbers, distances, people counts, achievements, turns, or distinctive original wording. Do not highlight every paragraph.
+
+Design typography with the copy rather than after it. Specify font family, size, weight, tracking, leading, alignment, container treatment, and contrast. Use at least three sizes and two font voices on a rich editorial page; reserve display or handwritten emphasis for titles, labels, marginalia, and the closing line rather than rendering all copy as one small caption style.
 
 ### Paper pass
 
@@ -148,17 +181,37 @@ The center should support content rather than compete with it. When “诗与远
 
 ### Layout pass
 
-Use a mobile-first 3:4 portrait canvas unless the user requests another format. Establish:
+Use the user's requested ratio or the supplied target/reference render's natural ratio when either is explicit. Otherwise use a mobile-first 3:4 portrait canvas. Never crop a valid target into the default ratio merely for implementation convenience, and never lengthen the page merely because the material count increased. Establish:
 
 - one large hero;
+- 3–4 narrative groups rather than an even card stream;
 - two medium supports when assets allow;
 - smaller details;
+- a lower-page emotional anchor that is visibly larger than nearby details;
 - at least 20% breathing room for a life record;
 - text attached to the images it explains;
 - safe title and footer zones;
+- paper or Polaroid frames for most contextual images and roughly 1–3 tape accents;
 - purposeful overlap without hiding subjects.
 
+When transparent people are available, enlarge them enough to contribute visual impact and let them bridge adjacent contextual images with roughly 4%–16% coverage. A cutout may connect more than one image only when each lower image remains readable. Never cover a person, essential scenery, or text in a lower image. Keep cutouts unframed and prefer moving a contextual image before moving the main people group during local repair.
+
 Never place all items at nearly equal size or distribute them evenly into four corners. Never replace an approved content material with an object seen only in the reference.
+
+### Target reconstruction and layer recovery
+
+When the user asks to open a specific finished effect as an editable journal:
+
+1. treat the finished image as the initial-render target, not as a recoverable source of hidden pixels;
+2. inventory the base, photo cards, cutout people, text/decorations, and expected people count;
+3. keep the original source images beside the derived layer assets;
+4. create a clean base by removing every independently editable region with the same masks used for the layer assets;
+5. assign shared or overlapping pixels to the top visible layer so lower layers do not contain a duplicate person or neighboring card;
+6. reconstruct the target from the saved layers and compare it with the finished target before import;
+7. store explicit canvas width and height and verify the real editor at desktop and mobile widths;
+8. export both a flattened preview and a versioned structured project whose embedded or resolvable assets complete a round trip.
+
+If hidden portions cannot be recovered from the finished target, keep the original full source image and mark the placed layer as a visible-region reconstruction. Do not invent hidden faces or people.
 
 ## 6. Multi-pass review
 
@@ -176,6 +229,7 @@ Score each dimension from 1–10:
 
 - story coherence;
 - richness and relevance of copy;
+- typography: font family, size, weight, tracking, leading, alignment, containers, and contrast;
 - visual hierarchy;
 - paper-theme fit;
 - legibility and whitespace;
@@ -183,8 +237,23 @@ Score each dimension from 1–10:
 - factual integrity;
 - provenance completeness.
 - reference safety and content/reference separation.
+- people-count integrity and overlap ownership when people or reconstructed layers are present.
+- realistic-material integrity when any element uses `realistic`: natural light and materials survive without identity, anatomy, count, or relationship drift.
 
 Revise any dimension below 7. Prefer one focused revision and at most two critique cycles unless the user requests deeper exploration. Preserve the latest valid result if a later call fails.
+
+Reject a rendered page that still behaves like a photo wall: a detached title and hero, evenly distributed cards, no cross-layer connection, or no lower-page anchor. When the critique returns a structurally strong revision but deterministic checks find only a small excess overlap or text collision, apply the smallest local movement, run text avoidance, and validate again. Do not discard the entire AI composition for a one-point threshold miss. Use full safe-layout fallback only for missing assets, identity or people-count errors, collapsed hierarchy, unsafe reference transfer, or unresolved structural failure.
+
+In `interactive` mode, expose a durable checkpoint after:
+
+1. reference analysis;
+2. story assessment and selected copy;
+3. editable layout draft;
+4. rendered visual critique.
+
+Each checkpoint must show the current result, stage summary, warnings, and a stable continuation token or session ID. `approve` advances; `revise` reruns only the current stage with the user's feedback. Preserve completed stages and the latest valid render across timeout or retry.
+
+Set timeout budgets per expensive structured stage rather than for the whole product flow. Keep visible progress or heartbeats, preserve checkpoints, and distinguish a still-running model from a failed process. A longer limit can solve valid slow inference; it cannot repair authentication failure, unreadable assets, schema-invalid output, or a hung process.
 
 ## 7. Journal and collection management
 
@@ -196,7 +265,12 @@ Keep the rendered preview and editable journal record together. Support:
 4. sorting by recent/oldest update, title, or content count;
 5. quick edit of title, subtitle, place, date, tags, and journal type;
 6. reopen for full image, text, layout, and source-link editing;
-7. explicit single and bulk deletion.
+7. import a portable structured journal as a new stable record without overwriting the current collection item;
+8. export editable structure with embedded or resolvable assets so it can complete a round trip;
+9. import a flattened image only as one editable visual or a background, with a visible explanation that its original layers cannot be recovered;
+10. explicit single and bulk deletion.
+
+Before accepting a structured import, validate schema version, field bounds, image protocols, source-link protocols, element counts, explicit canvas width/height, canvas bounds, and per-asset size limits. Persist embedded assets before saving the journal record; do not store temporary `blob:` URLs. Generate a new journal ID on user-initiated import, retain original provenance separately, and leave source links empty when they were not supplied.
 
 For deletion:
 
@@ -230,8 +304,8 @@ The final result should show:
 1. remembered item and preview;
 2. why it matched;
 3. related journal or elements;
-4. unique original source links;
-5. a clear return action.
+4. unique original source links when available, otherwise a visible unavailable state;
+5. a clear return action or next real-world action.
 
 ## 9. Degraded modes
 
@@ -243,6 +317,6 @@ The final result should show:
 | Durable storage | Return a portable manifest and recommended folder structure |
 | Semantic engine | Use weighted keyword/fuzzy matching and disclose the fallback |
 | Collection manager | Return stable-ID edit/delete commands or a dry-run mutation plan; do not claim persistence |
-| Link navigation | Print validated source links without opening them |
+| Link navigation | Print validated source links without opening them; when none were supplied, report unavailable and continue |
 
 Always distinguish a completed artifact from a handoff specification.

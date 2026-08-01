@@ -1,5 +1,5 @@
 ## Description: <br>
-Creates and edits banner illustrations with an image-generation API, supporting 1K, 2K, and 4K outputs and a draft-to-final workflow for personal creators. <br>
+Helps creators generate or edit banner illustrations with an image-generation API, resolution choices for draft-to-final iteration, and file naming guidance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators use this skill to generate blog and social banners, quick concept images, and style edits from prompts or input images while choosing draft or final resolutions. <br>
+External creators and developers use this skill to guide single-image banner generation or editing, including prompt iteration, resolution selection, API key configuration, and output file naming. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompts and input images may be sent to the configured image-generation provider. <br>
-Mitigation: Do not use confidential, personal, or proprietary prompts or images unless the provider's data handling terms are acceptable. <br>
-Risk: API keys can be exposed if passed directly in commands or shared transcripts. <br>
-Mitigation: Set GEMINI_API_KEY through a protected environment variable or secret manager instead of placing keys in prompts or command text. <br>
+Risk: The security review flags broad command execution without a scoped script. <br>
+Mitigation: Review proposed commands before running them and use the skill only in workspaces where broad command execution is acceptable. <br>
+Risk: Prompts, source images, and credentials may be sent to the configured image-generation provider. <br>
+Mitigation: Use environment variables for API keys and avoid submitting sensitive images, proprietary prompts, or secrets. <br>
+Risk: The artifact includes placeholder command references, which may lead an agent to improvise execution details. <br>
+Mitigation: Confirm the actual script, dependencies, and provider configuration before executing generation or editing commands. <br>
 
 
 ## Reference(s): <br>
@@ -28,13 +30,13 @@ Mitigation: Set GEMINI_API_KEY through a protected environment variable or secre
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, files] <br>
-**Output Format:** [Markdown guidance with shell command examples; generated or edited images are saved as PNG files.] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration, Files] <br>
+**Output Format:** [Markdown guidance with shell command examples and JSON-style result descriptions] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a configured image-generation API key, preferably via GEMINI_API_KEY; supports 1K, 2K, and 4K resolution choices.] <br>
+**Other Properties Related to Output:** [May create PNG image files through a configured image-generation API; supports draft, standard, and final resolution guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

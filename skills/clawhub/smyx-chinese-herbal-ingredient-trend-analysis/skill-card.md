@@ -1,5 +1,5 @@
 ## Description: <br>
-AI-powered active-ingredient accumulation trend assessment for medicinal herbs using high-resolution leaf images to estimate visual indicators, compare them with cultivar reference features, and report an accumulation trend level for harvest-window decisions. <br>
+Assesses medicinal-herb leaf images or videos for active-ingredient accumulation trends and harvest timing by comparing visual traits with cultivar reference features. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users in medicinal herb cultivation bases, GAP planting bases, herb cooperatives, and pharmaceutical raw-material operations use this skill to analyze leaf images or video and receive active-ingredient accumulation trend levels and harvest timing guidance. Agents can also query prior cloud-hosted analysis reports for the same skill workflow. <br>
+External agricultural, TCM cultivation, herb cooperative, and pharmaceutical raw-material teams use this skill to analyze plant imagery and decide whether active-ingredient accumulation appears low, medium, high, or near peak. Agents can also use it to run the packaged command-line workflow, retrieve history, and present structured reports. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill sends media and report-history requests to external services. <br>
-Mitigation: Review destination services, network policy, and data handling requirements before installation or use. <br>
-Risk: The skill can silently create or reuse a service identity and associate reports with that identity. <br>
-Mitigation: Run only in environments where this account linkage is approved, and avoid using sensitive media unless the linked cloud account is acceptable. <br>
-Risk: The skill stores authentication tokens in a local workspace database. <br>
-Mitigation: Limit workspace access, rotate or remove tokens when decommissioning the skill, and avoid shared workspaces unless token persistence is acceptable. <br>
-Risk: The skill includes unrelated pet-health or generic analysis components alongside the herb-analysis workflow. <br>
-Mitigation: Review the packaged components and exposed commands before deployment to confirm only the intended workflow is enabled. <br>
-Risk: The analysis estimates herb quality trends from visual features and does not provide chemical testing data. <br>
-Mitigation: Use results as harvest-decision support and confirm formal quality claims with appropriate chemical or regulatory testing. <br>
+Risk: Uploaded files, supplied URLs, and report history can be sent to lifeemergence/Open API services and may be associated with account-linked state. <br>
+Mitigation: Use only data authorized for that service, avoid sensitive or regulated imagery unless retention and access terms are acceptable, and review provider trust before installation. <br>
+Risk: The skill can create or reuse a local identity and store authentication tokens in a workspace SQLite database. <br>
+Mitigation: Run it in a dedicated workspace, avoid sharing the workspace data directory, and clear local identity or token files when the skill is no longer needed. <br>
+Risk: Security evidence notes mismatched pet/video API code in a herb-analysis package, which can make behavior harder to audit. <br>
+Mitigation: Review generated outputs and API destinations before relying on recommendations, and treat the trend assessment as advisory rather than formal quality testing. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-chinese-herbal-ingredient-trend-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-chinese-herbal-ingredient-trend-analysis) <br>
+- [Skill Usage Demo](https://lifeemergence.com/sample.html) <br>
+- [API Interface Documentation](references/api_doc.md) <br>
+- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis text with report links and optional saved output files] <br>
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
+**Output Format:** [Markdown text with JSON-formatted analysis results, report links, and optional file output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call external analysis and report-history services; local inputs are limited to supported image/video formats and documented file-size constraints.] <br>
+**Other Properties Related to Output:** [Can analyze a local file path or URL, query account-linked history, and save output to a requested file.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter reports 1.0.6) <br>
+1.0.6 (source: server release evidence; artifact frontmatter states 1.0.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

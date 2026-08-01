@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes long-duration bedroom and dining-area camera video to produce behavior-change reports about prolonged immobility, reduced eating activity, baseline comparison, alert level, and recommended follow-up, without presenting a medical diagnosis. <br>
+Analyzes authorized long-duration home camera video from bedroom and dining areas to report behavioral markers such as extended immobility, appetite-related activity changes, baseline comparisons, and caregiver-facing alerts without making a medical diagnosis. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and care-platform operators use this skill to route consenting home-camera video or URLs to cloud analysis and return structured behavioral observation reports for family members or community doctors. It is intended as monitoring support for older adults or people living alone, not as a clinical diagnosis. <br>
+External caregivers, community elder-care teams, and health-management platform operators can use this skill to analyze authorized 24-hour-or-longer home video for behavior-change reports covering bed time, eating activity, baseline deviation, and recommended follow-up. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive home-camera footage and identity-linked monitoring data may be sent to external services and associated with locally stored tokens. <br>
-Mitigation: Use only with knowing consent from users and monitored individuals; require clear upload and history-query confirmation, documented retention and deletion controls, and transparent account setup. <br>
-Risk: Behavioral observations about immobility or appetite change may be mistaken for a depression diagnosis or treatment recommendation. <br>
-Mitigation: Present outputs as visual behavior statistics and follow-up prompts only; require family, community doctor, or clinician review for medical interpretation. <br>
-Risk: Cloud report-history lookup can expose prior sensitive health-monitoring records. <br>
-Mitigation: Restrict history access to the intended account, protect local credentials, and make report-history retrieval an explicit user-visible action. <br>
+Risk: Highly sensitive home video and identity-linked report data may be sent to external services. <br>
+Mitigation: Use only with explicit consent from the monitored person and only for videos or URLs the user is authorized to submit. <br>
+Risk: Local or backend identities may be created or reused automatically with limited user control. <br>
+Mitigation: Review account handling before installation and avoid history or report-export functions unless the active account and data scope are understood. <br>
+Risk: Behavioral changes may be mistaken for a clinical depression diagnosis. <br>
+Mitigation: Present outputs as behavioral observations and caregiver prompts, and require qualified medical evaluation for diagnosis or treatment decisions. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-depression-behavioral-markers-analysis) <br>
-- [API interface reference](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API interface documentation](references/api_doc.md) <br>
+- [Skill usage demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown text with structured JSON report content and report links] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown or JSON-like structured report text with optional saved output file] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write results to a user-specified output file; history queries return cloud report records.] <br>
+**Other Properties Related to Output:** [Reports may include behavioral statistics, baseline comparisons, risk signal labels, caregiver guidance, report links, and historical report tables.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+1.0.8 (source: server release evidence; artifact frontmatter lists 1.0.7) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Detects and recognizes cats and dogs from smart feeder or IPC camera images and videos, supports pet identity matching and enrollment, and returns structured analysis reports for smart feeding workflows. <br>
+Based on computer vision, this skill detects and recognizes cats and dogs from smart feeder or IPC camera media, supports pet identity recognition and enrollment, and returns structured pet recognition reports. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to analyze smart feeder or IPC camera media, enroll pet identities, and query historical pet detection reports for smart feeding scenarios. <br>
+External users and developers use this skill to analyze smart feeder or IPC camera images, videos, or media URLs for cat and dog detection, pet identity recognition, pet enrollment, and cloud report history lookup. The results support smart feeding workflows and should be treated as advisory rather than a substitute for human confirmation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill sends pet-camera images, videos, URLs, report queries, and internal user identifiers to lifeemergence.com and open.lifeemergence.com services. <br>
-Mitigation: Use only when that remote processing is acceptable, and review the publisher's account, retention, deletion, and data handling documentation before installation. <br>
-Risk: The skill silently creates or logs into a remote account and stores authentication tokens locally without clear user control. <br>
-Mitigation: Run in an isolated workspace where appropriate, and verify how to clear the local SQLite database, data/smyx-api-key.txt identity state, and any retained tokens. <br>
+Risk: Private pet-camera images, videos, media URLs, and identity-linked report history may be processed by the Life Emergence cloud service. <br>
+Mitigation: Use only media appropriate for that service, avoid private or internal URLs and token-bearing links, and obtain user consent before analysis or history lookup. <br>
+Risk: The skill may retain locally resolved account tokens or default identity data in the workspace. <br>
+Mitigation: Review or delete the workspace data database and stored API key file when local token retention is not desired. <br>
+Risk: Pet detection and identity recognition results may be incorrect or incomplete for feeding decisions. <br>
+Mitigation: Treat results as smart-feeding guidance and confirm important outcomes manually before acting on them. <br>
 
 
 ## Reference(s): <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [API Documentation](references/api_doc.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-detection-feeder-analysis) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration] <br>
-**Output Format:** [Markdown reports, JSON detail output, and optional saved text or JSON files.] <br>
+**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
+**Output Format:** [Markdown reports and JSON structured results] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local media paths or public media URLs; supports mp4, avi, mov, jpg, png, and jpeg inputs up to 10 MB.] <br>
+**Other Properties Related to Output:** [May include detection results, enrollment results, report-history tables, suggestions, report links, and optional file output.] <br>
 
 ## Skill Version(s): <br>
-1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.8) <br>
+1.0.7 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

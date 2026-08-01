@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides technology trend analysis, competitive landscape research, feasibility assessment, and emerging technology evaluation with a paid third-party order and verification flow. <br>
+Technology innovation research: AI-delivered technology stack analysis, patent landscape review, competitive comparison, and emerging technology evaluation. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,14 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External developers, product teams, and technical decision-makers use this skill to evaluate technology choices, competitive technical landscapes, patent exposure, feasibility, and technical roadmaps. <br>
+Developers, product teams, and business researchers use this skill to request AI-delivered technology research after payment verification, including stack analysis, patent landscape review, competitive comparison, and emerging technology evaluation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill sends the full user question to a remote paid order service and stores it locally in an order file while providing privacy assurances that may be misleading. <br>
-Mitigation: Do not enter confidential business plans, source code, proprietary research, secrets, or regulated data unless you are comfortable sending that exact text to the remote service and storing it locally. <br>
-Risk: The server security verdict is suspicious for this release. <br>
-Mitigation: Review the remote order flow, data handling notices, and generated local order files before installing or using the skill. <br>
+Risk: Consultation questions are retained locally in the OpenClaw orders folder for payment verification. <br>
+Mitigation: Avoid entering trade secrets, unpublished patent details, personal data, or sensitive company information unless local retention is acceptable; delete local order files when no longer needed. <br>
 
 
 ## Reference(s): <br>
@@ -28,13 +26,13 @@ Mitigation: Review the remote order flow, data handling notices, and generated l
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown report content with command-line order and verification status output] <br>
+**Output Type(s):** [text, markdown, guidance, shell commands] <br>
+**Output Format:** [Markdown research report with payment verification command output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires clawtip-skill payment verification; the full user question is sent to a remote service for order creation and stored locally in an order file.] <br>
+**Other Properties Related to Output:** [The skill stores the consultation question locally in the OpenClaw orders folder for payment verification.] <br>
 
 ## Skill Version(s): <br>
-1.0.20 (source: server release metadata; artifact frontmatter reports 1.1.0) <br>
+1.0.24 (source: ClawHub server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

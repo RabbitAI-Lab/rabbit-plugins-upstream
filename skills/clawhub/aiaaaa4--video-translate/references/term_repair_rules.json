@@ -3,7 +3,7 @@
   "qa_bad_zh_terms": [
     {
       "term": "黄牛",
-      "note": "scalper should be 剥头皮交易员 / 超短线交易员"
+      "note": "scalper should be 剥头皮交易者"
     },
     {
       "term": "公允价值缺口",
@@ -229,12 +229,12 @@
     },
     {
       "pattern": "黄牛",
-      "replacement": "剥头皮交易员",
+      "replacement": "剥头皮交易者",
       "note": "Trading translation"
     },
     {
       "pattern": "剥头皮交易员党",
-      "replacement": "剥头皮交易员",
+      "replacement": "剥头皮交易者",
       "note": "Repair qwen-mt hallucinated suffix in scalper translations"
     },
     {

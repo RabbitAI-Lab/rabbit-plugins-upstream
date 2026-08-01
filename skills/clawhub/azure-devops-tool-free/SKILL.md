@@ -4,29 +4,28 @@ name: azure-devops-tool-free
 version: 1.0.0
 displayName: Azure DevOps 基础版
 summary: 管理 Azure DevOps 项目、仓库与分支,支持创建拉取请求和查看工作项,适合个人开发者日常使用
-license: Proprietary
+license: MIT
 edition: free
-description: '核心能力: DevOps 工具链领域的专业化 AI 辅助工具,提供核心基础功能支持.
-  适用场景: 个人用户与轻量级场景,涵盖日常操作、自动化工作流与智能决策辅助.
-  差异化: FREE 版本,面向个人用户提供核心功能、简洁操作与社区支持.
-  适用关键词: azure, devops, 拉取请求, 分支管理, 工作项, 项目列表'
+description: "核心能力: DevOps 工具链领域的专业化 AI 辅助工具,包含核心基础功能兼容. 适用于需要azure devops tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要azure devops tool相关能力的开发场景,包含结构化的工作流程和配置指引."
 tags:
   - DevOps
+  - azure
+  - devops
+  - automation
+  - productivity
   - 项目管理
   - 代码协作
   - Azure
   - 云计算
-  - azure
   - free
-  - agent
-  - devops
-  - git
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Operations"
+pricing_tier: free
+
 ---
 # Azure DevOps 基础版
 
@@ -221,7 +220,7 @@ azure.api-version=7.1" | jq ".count"
 | cache_enabled | bool | true | 启用结果缓存 |
 | timeout | int | 30 | 操作超时时间(秒) |
 
-## 最佳实践
+## 优秀实践
 
 1. **PAT 权限仅授予所需范围,避免全权限令牌**
 2. **API 版本统一使用 7.1 确保接口行为一致**
@@ -292,7 +291,7 @@ FREE 版本支持单一 API Key 配置,满足个人使用需求:
 
 ### 可用性分类
 
-- **分类**: MD+EXEC(纯 Markdown 指令,部分功能需要 exec 命令行执行能力)
+- **分类**: MD+EXEC模式纯 Markdown 指令,部分功能需要 exec 命令行执行能力)
 - **说明**: 基于 Markdown 的 AI Skill,通过自然语言指令驱动 Agent 执行任务
 - **FREE 特性**: 支持单次执行、基础配置与社区支持
 - **安全等级**: 基础,数据本地存储,建议定期备份

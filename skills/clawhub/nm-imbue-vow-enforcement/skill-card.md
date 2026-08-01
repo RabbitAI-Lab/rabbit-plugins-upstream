@@ -11,33 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use this skill to classify project rules, audit enforcement gaps, and decide whether constraints belong in skill guidance, hooks, or external validation gates. <br>
+Developers and engineering teams use this skill to classify project rules by enforcement strength, decide when to promote guidance into hooks or validator gates, and audit enforcement gaps. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad trigger words may make the skill appear in more governance or compliance conversations than intended. <br>
-Mitigation: Treat its recommendations as advisory unless the user intentionally implements separate hooks or validators. <br>
-Risk: Guidance about enforcement layers could be mistaken for active enforcement. <br>
-Mitigation: Confirm that any required hooks, permissions, or validator agents are implemented and tested outside this documentation-only skill. <br>
-Risk: Soft rules can fail when model goals conflict with project constraints. <br>
-Mitigation: Promote high-risk binary constraints to hard hooks and route judgment-heavy checks through external validation gates. <br>
+Risk: The skill may be invoked during broad compliance, governance, hooks, or constraints discussions where strict enforcement design is not intended. <br>
+Mitigation: Use the skill deliberately for projects where enforcement classification is in scope, and confirm that blocking behavior or audit logging is wanted before adopting its recommendations. <br>
+Risk: Hard vows and validator gates can block legitimate work if a rule is too broad or produces false positives. <br>
+Mitigation: Test enforcement mechanisms in isolation or shadow mode, review false-positive rates, and preserve explicit human override paths for inconclusive or disputed findings. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-imbue-vow-enforcement) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-imbue-vow-enforcement) <br>
+- [Clawdis Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/imbue) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with tables, examples, and command snippets] <br>
+**Output Type(s):** [Guidance, Analysis, Markdown, Shell commands, Configuration] <br>
+**Output Format:** [Markdown guidance with tables, protocols, and example shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only release artifact with no executable code included.] <br>
+**Other Properties Related to Output:** [No executable skill code is included in this release.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

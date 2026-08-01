@@ -26,6 +26,25 @@ VIDEO_SUFFIXES = (
     ".mp4", ".mkv", ".mov", ".webm", ".avi", ".m4v", ".mpeg",
     ".mpg", ".ts", ".mts", ".m2ts", ".flv", ".wmv", ".3gp",
 )
+GENERIC_VIDEO_TITLES = {
+    "video",
+    "originalvideo",
+    "sourcevideo",
+    "rawvideo",
+    "原版视频",
+    "原视频",
+    "源视频",
+}
+GENERIC_PARENT_TITLES = GENERIC_VIDEO_TITLES | {
+    "desktop",
+    "downloads",
+    "movies",
+    "videos",
+    "桌面",
+    "下载",
+    "影片",
+    "视频",
+}
 
 
 def parse_args() -> argparse.Namespace:
@@ -47,6 +66,15 @@ def parse_args() -> argparse.Namespace:
     )
     parser.add_argument("--outputs-dir", type=Path, default=None)
     parser.add_argument(
+        "--localized-title",
+        default=None,
+        help=(
+            "Clean Chinese video title used as the visible ASS/SRT basename. "
+            "Do not include a leading date, trailing platform ID, extension, or subtitle tag. "
+            "Required when no usable Chinese title can be inferred from the media/project folder."
+        ),
+    )
+    parser.add_argument(
         "--source-subtitle",
         type=Path,
         default=None,
@@ -61,7 +89,7 @@ def parse_args() -> argparse.Namespace:
         "--subtitle-tag",
         dest="subtitle_tag",
         default=None,
-        help="Suffix appended to the original video filename. Defaults to zh-<source-language>.",
+        help="Suffix appended to the localized clean video title. Defaults to 中<source-language>双语字幕.",
     )
     parser.add_argument("--bilingual-tag", dest="subtitle_tag", help=argparse.SUPPRESS)
     parser.add_argument(
@@ -111,6 +139,136 @@ def slugify(value: str) -> str:
     return value[:80] or "video"
 
 
+def truncate_filename_bytes(value: str, max_bytes: int = 180) -> str:
+    result: list[str] = []
+    size = 0
+    for character in value:
+        character_size = len(character.encode("utf-8"))
+        if size + character_size > max_bytes:
+            break
+        result.append(character)
+        size += character_size
+    return "".join(result).rstrip()
+
+
+def clean_video_title(value: str) -> str:
+    title = value.strip()
+    for suffix in VIDEO_SUFFIXES:
+        if title.lower().endswith(suffix):
+            title = title[: -len(suffix)].rstrip()
+            break
+    title = re.sub(r"[\x00-\x1f\x7f]", " ", title)
+    title = re.sub(r"[\\/]", " ", title)
+    title = title.replace(":", "：")
+    title = re.sub(r'[*?"<>|]', " ", title)
+    title = re.sub(
+        r"^\s*(?:\d{4}[-./_]\d{1,2}[-./_]\d{1,2}|\d{4}年\d{1,2}月\d{1,2}日|\d{8})"
+        r"\s*(?:[-–—_]\s*)?",
+        "",
+        title,
+    )
+    title = re.sub(r"\s*[\[【]\s*[-_A-Za-z0-9]{6,}\s*[\]】]\s*$", "", title)
+    title = re.sub(r"(?:[\s._\-–—]*(?:发布版|字幕版))+$", "", title, flags=re.IGNORECASE)
+    title = re.sub(r"\s*[\[【]\s*[-_A-Za-z0-9]{6,}\s*[\]】]\s*$", "", title)
+    title = re.sub(r"\s+", " ", title).strip(" ._-–—")
+    title = re.sub(r"\s+([，。！？：；、）】])", r"\1", title)
+    title = re.sub(r"([（【])\s+", r"\1", title)
+    return truncate_filename_bytes(title)
+
+
+def normalized_title_key(value: str) -> str:
+    return re.sub(r"[\s._\-–—]+", "", value).casefold()
+
+
+def is_generic_video_title(value: str) -> bool:
+    key = normalized_title_key(value)
+    if key in GENERIC_VIDEO_TITLES:
+        return True
+    return any(
+        key == f"{generic}{suffix}"
+        for generic in GENERIC_VIDEO_TITLES
+        for suffix in ("发布版", "字幕版", "final", "copy", "translated")
+    )
+
+
+def contains_chinese(value: str) -> bool:
+    return bool(re.search(r"[\u3400-\u9fff]", value))
+
+
+def source_title_candidate(media: Path) -> tuple[str, str]:
+    media_title = clean_video_title(media.stem)
+    parent_title = clean_video_title(media.parent.name)
+    if media_title and contains_chinese(media_title) and not is_generic_video_title(media_title):
+        return media_title, "media_filename"
+    if (
+        parent_title
+        and contains_chinese(parent_title)
+        and normalized_title_key(parent_title) not in GENERIC_PARENT_TITLES
+        and not is_generic_video_title(parent_title)
+    ):
+        return parent_title, "project_directory"
+    if media_title and not is_generic_video_title(media_title):
+        return media_title, "media_filename"
+    if parent_title and normalized_title_key(parent_title) not in GENERIC_PARENT_TITLES:
+        return parent_title, "project_directory"
+    raise RuntimeError(
+        "No meaningful source title could be inferred from the selected video or its project directory. "
+        "Provide --localized-title with a clean Chinese title."
+    )
+
+
+def resolve_localized_output_title(media: Path, explicit_title: str | None) -> tuple[str, str]:
+    if explicit_title is not None:
+        localized = clean_video_title(explicit_title)
+        title_source = "explicit_localized_title"
+    else:
+        candidate, candidate_source = source_title_candidate(media)
+        localized = candidate
+        title_source = candidate_source
+    if not localized or is_generic_video_title(localized):
+        raise RuntimeError(
+            "The output title cannot be empty or a generic label such as 原版视频. "
+            "Provide --localized-title with the real clean Chinese title."
+        )
+    if not contains_chinese(localized):
+        candidate = localized
+        raise RuntimeError(
+            "The source title still needs Chinese localization before processing: "
+            f"`{candidate}`. Translate it using the video's domain glossary, then pass "
+            "--localized-title with only the Chinese title; omit dates, platform IDs, extensions, "
+            "and subtitle tags."
+        )
+    return localized, title_source
+
+
+def bind_output_naming(
+    work_dir: Path,
+    media: Path,
+    localized_title: str,
+    title_source: str,
+    output_tag: str,
+    output_base: str,
+) -> None:
+    path = work_dir / "output_naming.json"
+    expected = {
+        "schema_version": 1,
+        "media": str(media),
+        "localized_title": localized_title,
+        "title_source": title_source,
+        "output_tag": output_tag,
+        "output_base": output_base,
+    }
+    if path.exists():
+        existing = read_json(path)
+        if existing != expected:
+            raise RuntimeError(
+                "This run is already bound to different output naming. "
+                "Resume with the same --localized-title and --subtitle-tag, or start a new --run-id."
+            )
+        return
+    write_json(path, expected)
+
+
 def language_slug(value: str) -> str:
     value = value.lower()
     value = re.sub(r"[^a-z0-9]+", "-", value)
@@ -135,6 +293,16 @@ def default_subtitle_tag(language: str) -> str:
         "italian": "意",
     }
     return f"中{source_labels.get(language.lower().strip(), language_slug(language))}双语字幕"
+
+
+def validate_subtitle_tag(value: str) -> str:
+    if not value or value != value.strip():
+        raise RuntimeError("The subtitle tag must be a non-empty filename suffix without surrounding whitespace.")
+    if re.search(r"[\x00-\x1f\x7f/\\:*?\"<>|]", value) or ".." in value:
+        raise RuntimeError("The subtitle tag contains unsafe filename characters.")
+    if len(value.encode("utf-8")) > 48:
+        raise RuntimeError("The subtitle tag is too long; keep it within 48 UTF-8 bytes.")
+    return value
 
 
 def resolve_asr_media(media: Path) -> Path:
@@ -591,6 +759,20 @@ def record_step_status(work_dir: Path, step: str, status: str, detail: str = "")
 
 def classify_failure(message: str) -> tuple[str, str, list[str]]:
     lower = message.lower()
+    if (
+        "localized-title" in lower
+        or "output title" in lower
+        or "output naming" in lower
+        or "subtitle tag" in lower
+    ):
+        return (
+            "VTZ-E006",
+            "Output title localization failure",
+            [
+                "Derive the real video title from the selected filename or media project folder.",
+                "Remove any leading date and trailing platform ID, translate the title to Chinese with the domain glossary, and pass only that title through --localized-title.",
+            ],
+        )
     if "okfile" in lower:
         return (
             "VTZ-E003",
@@ -723,6 +905,9 @@ def write_run_summary(
     source_validation = read_optional_json(
         work_dir / "global_review" / "source-analysis" / "source-analysis.validated.json"
     )
+    source_manifest = read_optional_json(
+        work_dir / "global_review" / "source-analysis" / "manifest.json"
+    )
     semantic_validation = read_optional_json(
         work_dir / "global_review" / "semantic" / "semantic-review.validated.json"
     )
@@ -765,18 +950,29 @@ def write_run_summary(
             f"terms={helper_meta.get('term_count', 0)}; tm={helper_meta.get('translation_memory_count', 0)}"
         )
         source_reference = str(helper_meta.get("source_subtitle") or "none")
+        source_reference_status = str(helper_meta.get("source_reference_status") or "not_applied")
         reference_corrected_chunks = str(helper_meta.get("reference_corrected_chunks") or 0)
     elif isinstance(helper_meta, dict) and helper_meta.get("translation_provider") == "agent":
         translation_path = "agent_native"
         effective_translation_model = str(helper_meta.get("model") or translation_model or orchestrator_model)
         helper_detail = f"validated_segments={helper_meta.get('segments', 'unknown')}; receipt_bound=true"
         source_reference = "inherited from source-analysis"
-        reference_corrected_chunks = "recorded in source-analysis"
+        source_reference_status = (
+            str(source_manifest.get("source_reference_status") or "not_applied")
+            if isinstance(source_manifest, dict)
+            else "unknown"
+        )
+        reference_corrected_chunks = (
+            str(source_manifest.get("source_reference_corrected_segments") or 0)
+            if isinstance(source_manifest, dict)
+            else "unknown"
+        )
     else:
         translation_path = "unknown_legacy"
         effective_translation_model = translation_model or orchestrator_model
         helper_detail = "generation metadata unavailable"
         source_reference = "none"
+        source_reference_status = "unknown"
         reference_corrected_chunks = "0"
 
     timings = read_optional_json(timings_path)
@@ -828,6 +1024,7 @@ def write_run_summary(
         f"- Segment translation model: {effective_translation_model}",
         f"- Helper detail: {helper_detail}",
         f"- Source subtitle reference: {source_reference}",
+        f"- Source subtitle reference status: {source_reference_status}",
         f"- Reference-corrected chunks: {reference_corrected_chunks}",
         "",
         "## Step Timings",
@@ -955,6 +1152,8 @@ def export_subtitle_files(
         sys.executable,
         "scripts/export_subtitles.py",
         str(aligned),
+        "--work-dir",
+        str(work_dir),
         "--out-dir",
         str(subtitles_dir),
         "--basename",
@@ -1148,6 +1347,7 @@ def main() -> int:
         )
         return 2
 
+    localized_title, title_source = resolve_localized_output_title(media, args.localized_title)
     run_id = args.run_id or slugify(media.stem)
     outputs_dir = args.outputs_dir or default_outputs_dir()
     if not outputs_dir.is_absolute():
@@ -1162,6 +1362,16 @@ def main() -> int:
     work_dir = run_dir / "work"
     subtitles_dir = run_dir / "subtitles"
     work_dir.mkdir(parents=True, exist_ok=True)
+    output_tag = validate_subtitle_tag(args.subtitle_tag or default_subtitle_tag(args.language))
+    output_base = f"{localized_title}.{output_tag}"
+    bind_output_naming(
+        work_dir,
+        media,
+        localized_title,
+        title_source,
+        output_tag,
+        output_base,
+    )
     bind_translation_provider(work_dir, args.translation_provider)
     asr_media = resolve_asr_media(media)
     source_subtitle = resolve_source_subtitle(media, args.source_subtitle)
@@ -1169,15 +1379,15 @@ def main() -> int:
         work_dir,
         "start",
         "running",
-        f"media={media}; asr_media={asr_media}; source_subtitle={source_subtitle}; language={args.language}",
+        (
+            f"media={media}; asr_media={asr_media}; source_subtitle={source_subtitle}; "
+            f"language={args.language}; localized_title={localized_title}; output_base={output_base}"
+        ),
     )
-    output_tag = args.subtitle_tag or default_subtitle_tag(args.language)
-    # Strip stray whitespace from the video name so outputs never contain
-    # names like "Example .zh-en.ass".
-    output_base = f"{media.stem.strip()}.{output_tag}"
 
     print(f"Run: {run_id}", flush=True)
     print(f"Media: {media}", flush=True)
+    print(f"Localized output title ({title_source}): {localized_title}", flush=True)
     if asr_media != media:
         print(f"Reusing downloader-provided audio for ASR: {asr_media}", flush=True)
     if source_subtitle:

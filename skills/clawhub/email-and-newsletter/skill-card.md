@@ -1,5 +1,5 @@
 ## Description: <br>
-Email and newsletter strategy for creators and brands: the agent helps plan owned-audience newsletter strategy, draft editions and related social posts, and keep email sending, metrics, consent, and unsubscribe handling in external human-run systems. <br>
+Email & Newsletter helps creators and brands plan, draft, and repurpose newsletters as an owned-audience channel while keeping email sending, list management, consent, and metrics in human-controlled external systems. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Creators, brands, and marketing operators use this skill to build and grow an opt-in newsletter as an owned audience channel. It supports newsletter positioning, edition drafting, welcome-sequence planning, platform choice, social-to-email repurposing, and metric review from ESP or GA4 sources. <br>
+External creators, brands, and social media operators use this skill to define a newsletter niche, plan editions and welcome flows, draft newsletter and social-promo content, choose platform posture, and connect ESP or GA4 metrics back into content decisions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Newsletter plans or drafts may be mistaken for direct email sending or list management capability. <br>
-Mitigation: Keep all sends, subscriber capture, list operations, and ESP setup in external human-run systems; use the skill for strategy and drafting only. <br>
-Risk: Using bought lists, non-opt-in contacts, missing unsubscribe links, or misleading subjects can create compliance and deliverability risk. <br>
-Mitigation: Use only opt-in subscriber data, include clear unsubscribe and sender identity, avoid misleading subjects and spam practices, and follow applicable CAN-SPAM or GDPR requirements. <br>
-Risk: Newsletter performance can be distorted if the agent invents or pads metrics. <br>
-Mitigation: Verify clicks, replies, signups, and other performance data from the ESP or GA4 before using metrics in decisions or reports. <br>
-Risk: Credentials or subscriber data could be exposed if placed inside the skill or prompt context unnecessarily. <br>
-Mitigation: Keep ESP credentials outside the skill and provide only the minimum consented data needed for drafting or analysis. <br>
+Risk: Draft newsletter guidance or social promotion could be used with non-consensual lists, missing unsubscribe flows, or misleading subject lines. <br>
+Mitigation: Keep final review, list management, consent, sender identity, unsubscribe compliance, and email sending under human control. <br>
+Risk: Newsletter performance claims can become misleading if opens, clicks, signups, or revenue are guessed. <br>
+Mitigation: Use only metrics supplied from the ESP and GA4, and do not fabricate or pad performance data. <br>
+Risk: Users may expect the skill or WoopSocial to send email or operate an ESP. <br>
+Mitigation: Treat the skill as strategy and drafting support only; configure and run ESP sends outside the skill. <br>
 
 
 ## Reference(s): <br>
-- [The INBOX Framework](artifact/references/the-inbox-framework.md) <br>
-- [Scope, Distinctions and Connections](artifact/references/scope-and-connections.md) <br>
-- [Email and Newsletter 2026 Reality](artifact/references/newsletter-2026-reality.md) <br>
-- [Editions, Repurposing and Worked Examples](artifact/references/editions-and-repurposing.md) <br>
 - [ClawHub Skill Page](https://clawhub.ai/social-media-skills/skills/email-and-newsletter) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/social-media-skills) <br>
+- [The INBOX Framework](references/the-inbox-framework.md) <br>
+- [Email & Newsletter 2026 Reality](references/newsletter-2026-reality.md) <br>
+- [Editions, Repurposing, and Worked Examples](references/editions-and-repurposing.md) <br>
+- [Scope, Distinctions, and Connections](references/scope-and-connections.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance, newsletter drafts, briefs, outlines, checklists, and social post drafts] <br>
+**Output Type(s):** [Text, Markdown, Guidance] <br>
+**Output Format:** [Markdown or structured prose with newsletter briefs, draft editions, social post drafts, platform guidance, and measurement guidance.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Does not send email, manage lists, store ESP credentials, or fabricate analytics; sending and metrics remain in external human-run ESP and GA4 systems.] <br>
+**Other Properties Related to Output:** [Does not send email, manage lists, track opens, or fabricate metrics; ESP and GA4 data must be user-provided.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+1.0.1 (source: server release metadata; artifact frontmatter and evals report 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

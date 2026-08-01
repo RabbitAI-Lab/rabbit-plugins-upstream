@@ -1,0 +1,76 @@
+/* ================================================================
+   html-slides 色板预设:暖橙(warm-orange)
+   风格:活力、亲和 —— 适用产品发布/市场活动/消费文创
+   强调色为互补青 #0F766E(橙青互补,避免整页暖色发腻)
+   用法:复制本文件覆盖项目 assets/theme.css(变量名与默认完全一致)
+   ================================================================ */
+
+:root {
+  /* 主色:三色主结构 */
+  --lenovo-red: #E8632B;
+  --lenovo-red-dark: #C24E1D;
+  --deep-navy: #2E2119;
+  --deep-navy-light: #4A3527;
+  --charcoal: #1A1A1A;
+  --charcoal-soft: #2C2C2C;
+
+  /* 白+灰系(承载) */
+  --white: #FFFFFF;
+  --off-white: #FBF7F3;
+  --card-bg: #FAFBFC;
+  --text-primary: #241D18;
+  --text-secondary: #6B5F55;
+  --text-tertiary: #A3948A;
+  --border-light: #E5E7EB;
+  --border-medium: #D1D5DB;
+
+  /* 深色底上的浅色文字(预算混合色,非 rgba) */
+  --on-navy-text: #FFFFFF;
+  --on-navy-sub: #EADFD6;
+  --on-navy-dim: #C4B3A4;
+
+  /* 代码块 */
+  --code-bg: #0F1419;
+  --code-text: #E8E8E8;
+  --code-highlight: #FFD966;
+  --code-comment: #7A8B99;
+
+  /* 信号色(类别区分时少量使用,跨预设一致) */
+  --signal-green: #00A651;
+  --signal-yellow: #F9A825;
+  --signal-blue: #1976D2;
+  --signal-red: #E2232A;
+  --signal-gray: #757575;
+
+  /* 强调(互补青) */
+  --accent-orange: #0F766E;
+
+  /* 字体 */
+  --font-cn: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-en: "Inter", -apple-system, "Segoe UI", "Helvetica Neue", sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", "SF Mono", Consolas, monospace;
+}
+
+/* Reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { margin: 0; padding: 0; overflow: hidden; }
+
+body {
+  font-family: var(--font-cn);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 画布:转换器只认 1920x1080 + relative + hidden */
+.slide-container {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: var(--off-white);
+  font-family: var(--font-cn);
+}
+
+/* 数字/西文用 Inter(表格数字、页码等,可加 class="num") */
+.num { font-family: var(--font-en); font-feature-settings: "tnum"; }

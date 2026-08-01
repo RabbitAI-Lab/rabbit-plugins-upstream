@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/uscis-case-status",
   "slug": "uscis-case-status",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1784878447274,
-  "contentHash": "aec092bd8b5eb6e3cdff9b34b2963b6b09950fb00da6ef70e5970288e267ee71",
-  "fetchedAt": "2026-07-26T18:05:30.421Z"
+  "version": "1.0.1",
+  "updatedAt": 1785264214416,
+  "contentHash": "d1f84cf8eba93e5c5e0be00f9378010169ad60a1d183d03d6bb26de95df8aa7d",
+  "fetchedAt": "2026-08-01T09:40:45.804Z"
 }

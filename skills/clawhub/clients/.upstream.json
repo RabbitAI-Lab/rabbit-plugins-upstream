@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/clients",
   "slug": "clients",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1785082314210,
-  "contentHash": "d0eb47efcfa39f9f05fffe01ec91a67df73e9daf65e17257dd34e3ba8b139fc1",
-  "fetchedAt": "2026-07-26T18:03:12.261Z"
+  "version": "1.0.2",
+  "updatedAt": 1785141607088,
+  "contentHash": "ddc41ac83ec7cf6c2ecbe962ff9ce8d1292ad1b1113c866acf08d5468cb51843",
+  "fetchedAt": "2026-08-01T09:48:02.595Z"
 }

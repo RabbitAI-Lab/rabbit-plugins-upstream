@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides a Chinese-language fortune-telling persona for Bazi and Ziwei life readings and Liuyao event readings, using structured local charting and validation materials while keeping the user-facing response conversational. <br>
+A Chinese-language fortune-telling consultation skill that role-plays an experienced practitioner, handles birth-chart and event-divination inputs, runs bundled charting and validation scripts, and returns unified conversational readings with standard hexagram tables when applicable. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,51 +7,53 @@ This skill is ready for commercial/non-commercial use. <br>
 [william22820785-cmyk](https://clawhub.ai/user/william22820785-cmyk) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT No Attribution <br>
 
 
 ## Use Case: <br>
-External users can use this skill for Chinese-style reflective fortune-telling conversations about long-term life themes or one concrete event question. Agents use it to gather calendar, birth, location, or event details, generate a calibrated reading, and return concise Chinese guidance without exposing internal reasoning traces. <br>
+External users use this skill for Chinese fortune-telling style consultations about personal fate, relationships, career, wealth, timing, and concrete decisions. Agents use it to gather birth or divination inputs, run local charting and validation workflows, and produce concise Chinese guidance without exposing internal reasoning. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can ask users for birth details, location, and time zone for charting. <br>
-Mitigation: Collect only details needed for the current reading and avoid retaining or reusing sensitive personal data outside the conversation. <br>
-Risk: Fortune-telling output may be mistaken for medical, legal, financial, safety, or other professional advice. <br>
-Mitigation: Frame results as reflective or entertainment content and route high-stakes decisions to qualified professionals. <br>
-Risk: Implicit invocation is enabled for related topics, which can trigger the persona in broad fortune-telling contexts. <br>
-Mitigation: Confirm the user's intent before gathering sensitive details or producing a reading. <br>
+Risk: The skill uses an immersive fortune-teller persona that may not identify itself as AI. <br>
+Mitigation: Deploy with clear surrounding disclosure and review the user experience for appropriate identity and expectation setting. <br>
+Risk: The skill may give confident statements about sensitive medical, legal, financial, or relationship topics. <br>
+Mitigation: Frame outputs as reflective or entertainment guidance and direct high-stakes decisions to qualified professionals. <br>
+Risk: The workflow may persist birth details and generated local files during charting and validation. <br>
+Mitigation: Collect only necessary personal details, avoid unnecessary retention, and clear generated local files after use. <br>
+Risk: The skill depends on hard-coded external local skill paths. <br>
+Mitigation: Review the referenced dependencies and paths before running the skill in a new environment. <br>
 
 
 ## Reference(s): <br>
-- [Skill source](artifact/SKILL.md) <br>
-- [命理会谈方法](artifact/references/consultation-method.md) <br>
-- [内部会谈计划](artifact/references/consultation-plan-schema.md) <br>
-- [内部推断方法](artifact/references/interpretation-method.md) <br>
-- [六爻问事方法](artifact/references/liuyao-method.md) <br>
-- [六爻会谈计划](artifact/references/liuyao-plan-schema.md) <br>
-- [算命老师傅的核心身份](artifact/references/master-identity.md) <br>
-- [人味与深沉表达](artifact/references/voice-and-dialogue.md) <br>
-- [紫微解释来源](artifact/references/ziwei-sources.md) <br>
-- [APA Barnum effect](https://dictionary.apa.org/barnum-effect) <br>
-- [GenAI fortune-telling trust and feedback study](https://arxiv.org/abs/2603.27784) <br>
-- [ziwei.my public Ziwei learning material](https://www.ziwei.my/) <br>
-- [blader/humanizer](https://github.com/blader/humanizer) <br>
-- [Yiqi-BaZi-ZiWei upstream](https://github.com/fdxuyq/Yiqi-BaZi-ZiWei) <br>
-- [mingyu-core upstream](https://github.com/Brhiza/mingyu) <br>
-- [tyme4ts upstream](https://github.com/6tail/tyme4ts) <br>
+- [consultation-method.md](references/consultation-method.md) <br>
+- [consultation-plan-schema.md](references/consultation-plan-schema.md) <br>
+- [interpretation-method.md](references/interpretation-method.md) <br>
+- [liuyao-method.md](references/liuyao-method.md) <br>
+- [liuyao-plan-schema.md](references/liuyao-plan-schema.md) <br>
+- [master-identity.md](references/master-identity.md) <br>
+- [voice-and-dialogue.md](references/voice-and-dialogue.md) <br>
+- [ziwei.my charting and interpretation notes](https://www.ziwei.my/zi-wei-dou-shu-portfolio/zwds-guide-zi-wei-dou-shu-basics-9/) <br>
+- [ziwei.my focus questions and interpretive structure](https://www.ziwei.my/zi-wei-dou-shu-portfolio/zwds-guide-zi-wei-dou-shu-basics-8/) <br>
+- [Ling et al., CSCW 2026 GenAI fortune-telling study](https://arxiv.org/abs/2603.27784) <br>
+- [Reading the Heart](https://doi.org/10.1177/10892680241269290) <br>
+- [The Art of Fate Calculation review](https://www.cefc.com.hk/article/homola-stephanie-2023-the-art-of-fate-calculation-practicing-divination-in-taipei-beijing-and-kaifeng-new-york-berghahn-books/) <br>
+- [NIDA OARS communication techniques](https://nida.nih.gov/sites/default/files/oarsessentialcommunicationtechniques.pdf) <br>
+- [SPIKES protocol](https://academic.oup.com/oncolo/article/5/4/302/6386019) <br>
+- [Dulwich Centre externalising conversations](https://dulwichcentre.com.au/courses/externalising-conversations/) <br>
+- [APA Dictionary: Barnum effect](https://dictionary.apa.org/barnum-effect) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Chinese conversational text with optional Markdown Liuyao tables and JSON chart or validation artifacts for agent use.] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Chinese conversational text with optional Markdown hexagram tables and local JSON validation artifacts] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires birth details for life readings or a concrete event question for Liuyao; outputs should be treated as reflective or entertainment content.] <br>
+**Other Properties Related to Output:** [May generate local chart, fusion, plan, and response files during validation; user-facing output should hide internal reasoning and algorithmic details.] <br>
 
 ## Skill Version(s): <br>
-1.3.0 (source: server release metadata) <br>
+3.0.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides GitHub read, write, search, issue, pull request, release, workflow, branch, commit, file, and repository operations through the OOMOL-connected GitHub connector. <br>
+Lets agents operate GitHub through an OOMOL-connected account using the oo CLI for reading, creating, updating, and deleting GitHub data. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to inspect, search, create, update, and delete GitHub resources through an OOMOL-connected account while following explicit confirmation rules for state-changing operations. <br>
+Developers and agents use this skill to inspect and manage GitHub repositories, issues, pull requests, releases, workflows, files, collaborators, stars, and related account resources through an OOMOL-connected GitHub account. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The connected OOMOL account can access GitHub data available to that account. <br>
-Mitigation: Install only when that access is acceptable, and verify the repository, target, and payload before approving any operation. <br>
-Risk: Write and destructive actions can create, overwrite, remove, or otherwise change GitHub resources. <br>
-Mitigation: Require explicit confirmation for actions tagged write or destructive, especially file changes, branch operations, workflow reruns, label clearing, and repository deletion. <br>
+Risk: The skill can perform write and destructive actions on GitHub resources connected to the user's account. <br>
+Mitigation: Require explicit confirmation before repository deletion, file changes, workflow changes, collaborator changes, releases, public comments, or other state-changing actions. <br>
+Risk: The skill operates through an OOMOL-connected GitHub account. <br>
+Mitigation: Install only when OOMOL is intended to act on the user's GitHub account and review the GitHub connection scopes before use. <br>
 
 
 ## Reference(s): <br>
 - [GitHub](https://github.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
 - [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-github) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
+**Output Type(s):** [shell commands, JSON, guidance, configuration] <br>
+**Output Format:** [Markdown with inline bash commands and JSON payload examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands run through the OOMOL GitHub connector; write and destructive actions require explicit user confirmation.] <br>
+**Other Properties Related to Output:** [Connector responses are JSON objects with data and meta.executionId fields.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.4 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

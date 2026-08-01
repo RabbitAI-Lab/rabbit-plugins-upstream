@@ -1,5 +1,5 @@
 ## Description: <br>
-Orchestrates multi-domain review across code, architecture, tests, security, and related quality areas in a single pass. <br>
+Orchestrates multi-domain review (code, arch, tests, security) in a single pass. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use this skill to coordinate comprehensive repository reviews, select relevant review domains, synthesize findings, and produce an integrated action plan before merges or releases. <br>
+Developers and engineering teams use this skill to coordinate broad code, architecture, test, security, and release-readiness reviews and consolidate findings into a single action plan. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad review-related requests. <br>
-Mitigation: Invoke it only for explicit comprehensive review work or use a narrower review skill when the desired review domain is already known. <br>
-Risk: The skill may run a local backlog-capture write command without asking. <br>
-Mitigation: Require user confirmation before executing write commands and review generated backlog entries before keeping them. <br>
+Risk: Broad triggers can cause the review orchestration flow to activate for general review requests where a narrower review was intended. <br>
+Mitigation: Install only when broad review orchestration is desired, or remove generic triggers before deployment. <br>
+Risk: The skill can run a project-local deferred capture script automatically after action-plan synthesis. <br>
+Mitigation: Change deferred capture to a confirm-before-run or dry-run step before using the skill in sensitive repositories. <br>
 
 
 ## Reference(s): <br>
@@ -30,12 +30,12 @@ Mitigation: Require user confirmation before executing write commands and review
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown review report with findings, evidence, recommendations, and action items] <br>
+**Output Format:** [Markdown review reports with action items, evidence appendices, and inline shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include prioritized severity levels, evidence appendices, and suggested local commands.] <br>
+**Other Properties Related to Output:** [Produces consolidated review findings and prioritized remediation guidance from selected review domains.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,6 +1,6 @@
 ---
 name: coret-mindmap
-description: Create, inspect, update, illustrate, export, and share live mind maps in coret.id through its MCP tools. Use when a user asks to turn notes, meetings, research, plans, or outlines into a Coret mind map, or to work with an existing Coret map, node, sketch, image, export, or share link.
+description: Create, inspect, update, illustrate, export, and share live mind maps in coret.id through its MCP tools. Use when a user asks to turn notes, meetings, research, plans, or outlines into a Coret mind map, or to work with an existing Coret map, node, Spidol drawing, sketch, image, export, or share link.
 ---
 
 # Coret Mind Map
@@ -36,10 +36,11 @@ Use the Coret MCP tools as the execution surface. Do not reimplement the REST AP
 2. Use `update_map`, `add_node`, `update_node`, or `batch_nodes` without rebuilding unaffected branches.
 3. Read the changed map again and verify the requested state.
 
-### Images, Sketches, Exports, and Sharing
+### Images, Drawings, Sketches, Exports, and Sharing
 
 - For map images, call `upload_image`, then use the returned URL in the node image metadata described by `get_skill_doc`.
-- Use `put_sketch` only when a free-form explanation adds value beyond the mind-map hierarchy.
+- Use `get_drawings` and `put_drawings` for freehand Spidol marks directly over the mind-map canvas, such as circling or underlining existing ideas. Read first and preserve unrelated strokes; an empty array clears every stroke.
+- Use `put_sketch` only for a separate free-form whiteboard with boxes, sticky notes, text, arrows, or strokes. Do not use sketch when the user asks to mark the mind map itself.
 - Use `export_map` for JSON, Markdown, or text output.
 - Create a public share link only when the user asks to share or needs a browser link. State the permission and expiry.
 

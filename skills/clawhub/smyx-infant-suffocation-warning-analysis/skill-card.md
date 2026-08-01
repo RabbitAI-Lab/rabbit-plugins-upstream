@@ -11,35 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and caregivers use this skill to analyze infant sleep monitoring videos or URLs for prone sleeping, head covering, and mouth or nose occlusion risks, then receive structured safety alerts and report links. It can also query cloud-stored historical warning reports associated with the internally resolved user identity. <br>
+Caregivers, monitoring integrators, and agents use this skill to analyze infant sleep videos or video URLs for prone sleeping, head covering, and mouth or nose occlusion risk. It returns structured findings, safety guidance, report links, and optional history listings for prior cloud reports. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security evidence says the skill sends infant sleep videos or video URLs to the LifeEmergence backend. <br>
-Mitigation: Use it only with consent and privacy review for infant video data, and avoid submitting sensitive media unless remote processing is acceptable. <br>
-Risk: The security evidence says the skill creates or reuses an internal identity, stores local account tokens, and queries cloud-stored historical reports. <br>
-Mitigation: Treat report history and identity association as privacy-sensitive state; review token storage, account separation, and report access controls before deployment. <br>
-Risk: The security evidence reports mismatched backend documentation, and the artifact describes the skill as an auxiliary monitoring tool. <br>
-Mitigation: Confirm the configured backend endpoints and API behavior before use, and present alerts as assistive safety information that does not replace adult supervision or professional care. <br>
+Risk: Infant sleep videos or video URLs are sent to a configured cloud service for analysis. <br>
+Mitigation: Use only with explicit consent for cloud processing and confirm the service endpoint, retention policy, and access controls before deployment. <br>
+Risk: The skill can silently create or reuse a local identity and link reports to it. <br>
+Mitigation: Require an explicit account or consent flow and document how report identity association works. <br>
+Risk: Account tokens and identity data may be persisted locally. <br>
+Mitigation: Provide a way to disable or clear local token and history persistence, and restrict local file access to trusted users. <br>
+Risk: History and report access are available without clear user control. <br>
+Mitigation: Gate history queries behind user intent, authorization checks, and clear controls for viewing or deleting past reports. <br>
 
 
 ## Reference(s): <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
 - [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-infant-suffocation-warning-analysis) <br>
+- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [API Documentation](artifact/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON analysis reports with risk findings, safety suggestions, historical report tables, and report links.] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [JSON or Markdown reports with risk findings, safety suggestions, report links, and command-line status text] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local video files, video URLs, sensitivity levels 1-5, basic/standard/json detail modes, and optional output files.] <br>
+**Other Properties Related to Output:** [Supports local video files or video URLs, sensitivity levels 1-5, basic/standard/json detail modes, optional file output, and history listing.] <br>
 
 ## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
+1.0.9 (source: server release and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

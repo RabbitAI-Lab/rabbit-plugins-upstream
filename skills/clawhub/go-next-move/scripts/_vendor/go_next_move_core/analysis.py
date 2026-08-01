@@ -56,9 +56,9 @@ LEVEL_ALIASES = {
     "全部": "all",
 }
 STRENGTH_LEVEL_VISITS = {
-    "beginner": 100,
-    "intermediate": 250,
-    "advanced": 400,
+    "beginner": 400,
+    "intermediate": 600,
+    "advanced": 800,
 }
 DEFAULT_VISITS = STRENGTH_LEVEL_VISITS["advanced"]
 OVERLAY_SOURCE_ALIASES = {
@@ -123,6 +123,7 @@ class AnalysisRequest:
     model: str = DEFAULT_MODEL
     analysis_config: str = DEFAULT_ANALYSIS_CONFIG
     engine_config: Path = DEFAULT_SKILL_CONFIG
+    board_override: tuple[str, ...] | None = None
 
 
 def normalize_player(raw: str) -> str:
@@ -651,13 +652,29 @@ def load_board_source(request: AnalysisRequest) -> tuple[list[str], dict[str, An
             )
             write_image(request.source_overlay, source_overlay)
             recognition["source_overlay"] = str(request.source_overlay)
+        detected_rows = list(recognition["board_ascii"])
+        selected_rows = detected_rows
+        if request.board_override is not None:
+            try:
+                selected_rows = parse_board_ascii("\n".join(request.board_override))
+            except SystemExit as exc:
+                raise SystemExit(f"Invalid board override: {exc}") from exc
+            if len(selected_rows) != request.board_size:
+                raise SystemExit(
+                    f"Invalid board override: expected {request.board_size} rows, got {len(selected_rows)}"
+                )
+            translation = str.maketrans({"x": "X", "b": "X", "B": "X", "o": "O", "w": "O", "W": "O"})
+            selected_rows = [row.translate(translation) for row in selected_rows]
+            recognition["detector_board_ascii"] = detected_rows
+            recognition["board_ascii"] = selected_rows
+            recognition["recognition_source"] = "board_override"
         image_context = {
             "source": source,
             "board": board,
             "xfit": xfit,
             "yfit": yfit,
         }
-        return list(recognition["board_ascii"]), recognition, image_context
+        return selected_rows, recognition, image_context
 
     if source:
         text = source.read_text(encoding="utf-8")

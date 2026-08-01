@@ -1,5 +1,5 @@
 ## Description: <br>
-This Chinese-language tax advisory practice skill helps tax intermediary organizations structure compliant AI-assisted service delivery, including practice standards, three-level review, consulting SOPs, tax service contracts, data security, risk grading, and staff training. <br>
+财税中介机构AI合规咨询服务转型专题（供给侧·B视角）。覆盖涉税专业服务执业规范、三级复核与质量控制、咨询项目承接/交付SOP、税务服务合同与收费、数据安全与执业风险分级、AI数智化执业落地、IMA对标人才培养，配套机构专属模板与工具，与「企业合规指引」（需求侧·A视角）配套。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Tax advisory firms, accounting practices, bookkeeping agencies, and tax-service teams use this skill for Chinese-language guidance, templates, self-check workflows, and risk-control checklists for compliant tax advisory service delivery. It is intended to support human review rather than replace licensed tax professionals or firm quality-control processes. <br>
+Tax advisory firms, tax agent practices, bookkeeping agencies, and accounting-firm tax teams use this skill to ask institution-side compliance questions, generate tax service templates, run practice risk self-checks, and structure AI-assisted tax consulting delivery with review and quality-control steps. <br>
 
 ### Deployment Geography for Use: <br>
-China-focused; no broader deployment restriction stated. <br>
+China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may send tax questions or self-check metrics to the remote mcp.aitaxs.top service. <br>
-Mitigation: Avoid entering sensitive taxpayer, client, credential, or confidential financial details unless the remote-service and retention posture has been reviewed. <br>
-Risk: The skill stores local API credentials and logs. <br>
-Mitigation: Review the local credential and log locations before use, restrict file access, and remove or rotate credentials when the skill is no longer needed. <br>
-Risk: Setup behavior can register MCP server configuration or install related skills when enabled. <br>
-Mitigation: Use dry-run or explicit setup only, review generated configuration before trusting it, and install related skills only from expected publisher channels. <br>
-Risk: AI-assisted tax guidance and templates can be incorrect, stale, or unsuitable for a specific engagement. <br>
-Mitigation: Verify outputs against official policy sources and require qualified professional review, including the skill's stated three-level review process, before relying on advice or deliverables. <br>
+Risk: Tax and compliance inputs may be sent to mcp.aitaxs.top, and fallback paths may use search engines. <br>
+Mitigation: Avoid entering confidential client data, taxpayer identifiers, privileged business details, or other sensitive information unless the service's data-handling terms have been reviewed and accepted. <br>
+Risk: The package includes client configuration behavior and remote MCP setup paths that may affect local agent configuration. <br>
+Mitigation: Review or disable auto-setup behavior before running configuration scripts, and inspect any generated client configuration before using the service. <br>
+Risk: Local API keys, cache files, and logs are treated as sensitive because they may relate to service access and user activity. <br>
+Mitigation: Protect the local data directory, avoid sharing logs, rotate or remove stored credentials when no longer needed, and follow the publisher's guidance for credential handling. <br>
+Risk: Generated tax guidance, templates, and risk checks may be incomplete or stale for a specific client matter. <br>
+Mitigation: Have qualified tax professionals verify policy currency, client facts, calculations, and required review or signing steps before relying on outputs. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-advisory-practice) <br>
-- [Structured compliance self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_advisory.html) <br>
-- [Related tax policy knowledge skill](https://skillhub.cn/skills/tax-policy-knowledge) <br>
+- [Interactive advisory self-check page](https://mcp.aitaxs.top/web/topic_workflow_advisory.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Remote MCP service endpoint](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text, Configuration] <br>
-**Output Format:** [Markdown responses with structured checklists, templates, risk notes, and workflow links] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and structured text responses, with optional JSON tool results, configuration snippets, generated templates, reports, and local shell commands.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use a remote MCP service, local fallback workflows, local API credentials, logs, and optional client configuration when enabled.] <br>
+**Other Properties Related to Output:** [Outputs may include tax policy answers, risk assessments, tax calculations, compliance self-check reports, service-contract templates, checklist guidance, MCP configuration, and offline fallback summaries.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: release evidence and SKILL.md frontmatter) <br>
+3.15.6 (source: frontmatter and server-resolved release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

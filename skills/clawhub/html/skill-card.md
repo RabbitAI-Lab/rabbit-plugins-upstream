@@ -1,5 +1,5 @@
 ## Description: <br>
-Writes, reviews, and fixes HTML markup for semantic structure, forms, accessibility, document head metadata, media, embeds, HTML email, parsing issues, internationalization, performance-sensitive markup, and untrusted HTML handling. <br>
+HTML helps agents write, review, and fix semantic HTML markup, forms, accessibility, document head metadata, media embeds, parsing issues, and safe handling of untrusted HTML. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to author, review, and debug HTML markup across pages, forms, accessibility patterns, metadata, media embeds, email templates, and user-generated content. It is also used to maintain durable local notes about HTML decisions, audits, quirks, and reusable artifacts. <br>
+Use this skill when an agent needs HTML-specific guidance for creating or repairing markup, diagnosing form and accessibility behavior, building metadata and media embeds, validating parsed DOM behavior, or producing safer patterns for user-supplied HTML. <br>
 
 ### Deployment Geography for Use: <br>
-Global <br>
+Global; runs locally in supported Linux, macOS, and Windows agent environments. <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill automatically reads and modifies persistent local memory under ~/Clawic/data/, including HTML notes, project records, domain records, audits, and artifacts. <br>
-Mitigation: Install only when this long-lived local memory behavior is acceptable, and review the files it plans to update before relying on or sharing the stored notes. <br>
-Risk: Pasted markup can contain API keys, verification tokens, signed URLs, session identifiers, or email service credentials. <br>
-Mitigation: Strip secret values before writing memory and keep only pointers such as env:, keychain:, or password-manager locators. <br>
-Risk: Guidance for untrusted HTML can affect XSS exposure if sanitization, escaping, or iframe sandboxing is applied incorrectly. <br>
-Mitigation: Use maintained allowlist sanitizers, validate URL schemes, escape by output context, and document sanitizer allowlists when agreed. <br>
+Risk: The skill may create or update local Clawic notes about HTML decisions, audits, templates, hostnames, and project context. <br>
+Mitigation: Install only when local note storage under ~/Clawic/data/ is acceptable, and avoid storing secrets or sensitive values in those notes. <br>
+Risk: Generated markup or guidance can still be incorrect for a specific application, browser target, accessibility requirement, or security posture. <br>
+Mitigation: Review proposed changes before use, validate the resulting HTML, and apply project-specific accessibility and security checks before deployment. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub HTML skill page](https://clawhub.ai/ivangdavila/skills/html) <br>
-- [Clawic HTML skill page](https://clawic.com/skills/html) <br>
-- [Clawic skill library](https://clawic.com) <br>
-- [Artifact: security guidance](artifact/security.md) <br>
-- [Artifact: memory template](artifact/memory-template.md) <br>
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/html) <br>
+- [Publisher profile](https://clawhub.ai/user/ivangdavila) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown prose with HTML snippets and occasional configuration or file-update instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update local Clawic memory files when work produces durable findings; secrets are stripped before any memory write.] <br>
+**Output Format:** [Concise explanations, HTML snippets, checklists, review findings, and local configuration or memory-note guidance.] <br>
+**Output Parameters:** [HTML context, target surface, accessibility target, browser support, markup flavor, security posture, and relevant project or domain notes when available.] <br>
+**Other Properties Related to Output:** [Documentation-only helper with disclosed local note storage under ~/Clawic/data/ and no evidence of network transmission in the ClawHub security summary.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+1.0.2 <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

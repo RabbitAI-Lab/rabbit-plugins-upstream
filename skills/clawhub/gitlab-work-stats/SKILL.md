@@ -90,16 +90,17 @@ ssh.connect(HOST, port=22, username=USER, password=PASSWORD, timeout=15)
 
 GitLab Omnibus 默认使用内置 PostgreSQL，通过 Unix Socket 连接（不监听 TCP 端口），使用 peer 认证（无需密码）。
 
-**连接命令**（通过 socket + peer 认证，以 gitlab-psql 用户身份）：
+**连接方式**（通过 socket + peer 认证，以当前 SSH 用户身份直接执行，**不使用 sudo 提权**）：
 ```bash
-sudo -u gitlab-psql /opt/gitlab/embedded/bin/psql \
-  -h /var/opt/gitlab/postgresql -d gitlabhq_production -c "SQL语句"
+/opt/gitlab/embedded/bin/psql   -h /var/opt/gitlab/postgresql -d gitlabhq_production -c "SQL语句"
 ```
 
 **⚠️ 权限说明**：
-- 需要 SSH 用户具有 sudo 权限（执行 `sudo -u gitlab-psql` 命令）
-- 建议使用受限的 SSH 账户，而非 root 用户
+- 需要 SSH 用户本身具有执行 psql 的权限（属组包含 gitlab-psql 或配置了 peer 认证白名单）
+- **不使用 `sudo -u gitlab-psql`**，避免 sudo 提权带来的安全风险
+- 建议使用受限的专用 SSH 账户，遵循最小权限原则
 - 所有 SQL 查询必须为只读（SELECT），禁止执行 INSERT/UPDATE/DELETE
+- 如果当前用户无法直接连接，应由管理员配置 peer 认证规则，而非使用 sudo
 
 > 注意：如果 GitLab 版本不同或使用了外部数据库，需要根据 `database.yml` 的 `host`、`port`、`username`、`password` 字段调整连接方式。详见 [references/database-guide.md](references/database-guide.md)。
 
@@ -423,3 +424,4 @@ REPO="/var/opt/gitlab/git-data/repositories/{disk_path}.git"
 | 版本 | 日期 | 作者 | 变更 |
 |------|------|------|------|
 | 1.0.0 | 2026-07-23 | — | 初始版本，支持用户工作统计分析报告生成 |
+| 1.1.0 | 2026-07-24 | — | 安全修复：移除 sudo 链式执行、users 表隐私字段标注、git 命令移除提权 |

@@ -31,7 +31,6 @@ import time
 import json
 import urllib.request
 import urllib.error
-
 API_URL = "https://openapi.biji.com/open/api/v1/oauth/token"
 DEFAULT_CLIENT_ID = "cli_a1b2c3d4e5f6789012345678abcdef90"
 INTERVAL = 5       # 轮询间隔（秒）

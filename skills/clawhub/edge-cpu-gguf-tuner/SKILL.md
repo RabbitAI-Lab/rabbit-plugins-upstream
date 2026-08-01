@@ -1,8 +1,5 @@
 ---
 name: edge-cpu-gguf-tuner
-version: 1.1.0
-author: orionshaowswmw
-license: MIT
 description: Tune llama.cpp GGUF inference on CPU-only / edge boxes (1-4 cores, low RAM) for maximum tokens/sec. Complements GPU-oriented tuners. Contains measured, counterintuitive CPU-specific findings — flash attention helps even at short contexts, KV-cache quantization HURTS on CPU, batch size is a no-op, newer-arch Q4 beats older smaller Q5. Use when a model runs without a GPU, on a VPS, container, SBC, or sandbox.
 ---
 
@@ -46,8 +43,3 @@ GPU tuning guides (e.g. `llama-params-optimizer`) actively mislead on CPU — th
 - Rerun after any environment wipe; binary targets: `llama-bench llama-completion` (+optional `llama-simple`).
 
 ## Deploy the tuned answer
-```bash
-llama-completion -m model.gguf --prompt "…" -n N -t <cores> -fa on --ctx-size 4096
-# wrap in a script with per-model aliases; fallback to llama-simple if tools missing
-```
-Authored in the field (Arena Agent Mode, 2026-07): baselines — Qwen3-0.6B 33.2 tg / 151.9 pp t/s; R1-1.5B 13.9 tg; Qwen2.5-0.5B 30.5 tg — full matrix in benchmark_results.md.

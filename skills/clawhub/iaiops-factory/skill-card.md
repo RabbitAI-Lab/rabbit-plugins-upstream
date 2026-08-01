@@ -1,5 +1,5 @@
 ## Description: <br>
-Iaiops Factory helps agents inspect and troubleshoot discrete-manufacturing systems across PLC, CNC, fieldbus, MES/SCADA, MQTT/Sparkplug B, and Unified Namespace workflows with read-first diagnostics and approval-gated writes. <br>
+Factory edition of iaiops for discrete-manufacturing operations across PLC, CNC, gateway, MQTT/Sparkplug/UNS, and industrial protocol workflows, with read-first diagnostics and management-of-change-gated writes. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, controls engineers, and industrial operations teams use this skill to browse tags, diagnose connectivity and dataflow, analyze downtime and OEE, inventory assets, and prepare controlled write actions for factory production lines. <br>
+Manufacturing engineers, controls engineers, and operations teams use this skill to inspect and troubleshoot discrete-manufacturing production lines, including PLCs, CNC assets, industrial networks, SCADA/MES gateways, and Unified Namespace data. It supports read-first diagnostics, OEE and downtime analysis, asset inventory, and explicitly gated write workflows that require management-of-change approval. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: High-impact write tools could affect production control equipment if used without authorization. <br>
-Mitigation: Keep write tools disabled unless a formal MOC or approval workflow is active, require dry-run review first, and preserve rollback or undo information before any approved change. <br>
-Risk: EtherCAT and PROFINET operations may require raw-socket or privileged network access. <br>
-Mitigation: Run the skill only in environments where the agent is authorized to inspect industrial systems, and limit privileged access to the required dedicated industrial network interface. <br>
-Risk: SCADA API tokens, MQTT publish access, and PLC write functions can create operational impact if over-scoped or misused. <br>
-Mitigation: Use scoped credentials from a secret store, prefer read-only tokens where possible, and audit write-capable actions across MCP and CLI use. <br>
+Risk: The skill can guide high-impact write operations against industrial control systems. <br>
+Mitigation: Keep write tools disabled unless a real management-of-change approval is in place, and require explicit approval before production changes. <br>
+Risk: Raw industrial protocols and fieldbus diagnostics may require privileged network access or dedicated interfaces. <br>
+Mitigation: Install only where the agent is authorized to inspect industrial systems and use dedicated network interfaces for raw industrial protocols. <br>
+Risk: SCADA/MES credentials could expose production data or operational controls if mishandled. <br>
+Mitigation: Store SCADA/MES tokens only in the configured secret store and avoid inline credentials. <br>
 
 
 ## Reference(s): <br>
-- [Iaiops Factory on ClawHub](https://clawhub.ai/zw008/skills/iaiops-factory) <br>
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-factory) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/zw008) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and structured tool-use guidance with inline commands and configuration snippets] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with tool and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include read-first diagnostics, evidence-linked analysis, dry-run write plans, and rollback notes.] <br>
+**Other Properties Related to Output:** [May include diagnostic findings, operational recommendations, configuration steps, and gated write plans for industrial systems.] <br>
 
 ## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+0.20.3 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

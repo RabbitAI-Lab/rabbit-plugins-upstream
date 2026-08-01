@@ -18,7 +18,7 @@ Use this document when you want to showcase live SQL capability in MaybeAI Sheet
 This document assumes the current routed online runtime model:
 
 - new examples no longer assume SQLite-only behavior
-- examples are written as PG-backed worksheet SQL
+- examples are written as Base-backed worksheet SQL
 - validate non-trivial SQL by calculating the corresponding `=SQL(...)` formula on a disposable target when needed
 
 This is appropriate when you want to:
@@ -168,5 +168,5 @@ or `mbs workbook calculate` afterwards.
 - Static SQL result writes are not currently documented as a supported CLI workflow unless a first-class command appears in `mbs --help`
 - The spill result will overwrite the anchor cell area and adjacent cells, so do not anchor it where existing content must be preserved
 - For non-trivial SQL, validate with a disposable formula calculation before writing into the final report location
-- The examples assume PG-backed worksheet SQL, but a conservative SQL subset is still the safest default
+- The examples assume Base-backed worksheet SQL, but a conservative SQL subset is still the safest default
 - If a worksheet name contains spaces, continue to use double quotes, for example `"Sales Data"`

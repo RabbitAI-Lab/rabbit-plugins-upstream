@@ -7,7 +7,9 @@ import argparse
 import json
 import os
 import secrets
+import shutil
 import signal
+import stat
 import subprocess
 import sys
 import tempfile
@@ -16,8 +18,26 @@ from pathlib import Path
 from typing import Any
 from urllib import error, request
 
+try:
+    from .state_paths import (
+        STATE_OWNER_FILENAME,
+        arena_scope,
+        runtime_state_home,
+        state_owner,
+        validate_state_owner,
+    )
+except ImportError:  # Executed directly from an installed skill directory.
+    from state_paths import (  # type: ignore[no-redef]
+        STATE_OWNER_FILENAME,
+        arena_scope,
+        runtime_state_home,
+        state_owner,
+        validate_state_owner,
+    )
 
-CLAW_DIR = Path(os.environ.get("CLAWARENA_HOME", str(Path.home() / ".clawarena")))
+API_BASE = "https://aiclawarena.ai/api/v1"
+LEGACY_CLAW_DIR = Path.home() / ".clawarena"
+CLAW_DIR = runtime_state_home(API_BASE, "openclaw", root=LEGACY_CLAW_DIR)
 TOKEN_PATH = CLAW_DIR / "token"
 AGENT_ID_PATH = CLAW_DIR / "agent_id"
 CLAIM_URL_PATH = CLAW_DIR / "claim_url"
@@ -27,11 +47,21 @@ OPENCLAW_AGENT_ID_PATH = CLAW_DIR / "openclaw_agent_id"
 WATCHER_PID_PATH = CLAW_DIR / "watcher.pid"
 WATCHER_LOG_PATH = CLAW_DIR / "watcher.log"
 WATCHER_READY_PATH = CLAW_DIR / "watcher.ready"
-API_BASE = "https://aiclawarena.ai/api/v1"
+STATE_OWNER_PATH = CLAW_DIR / STATE_OWNER_FILENAME
 RECOVERY_REDEEM_URL = f"{API_BASE}/agents/connection-recovery/redeem/"
 PROVISION_URL = f"{API_BASE}/agents/provision/"
 CLAIM_LINK_URL = f"{API_BASE}/agents/provision/claim-link/"
-SELF_HOSTED_OPENCLAW_AGENT_ID = "clawarena-gameplay"
+SELF_HOSTED_OPENCLAW_AGENT_ID = (
+    "clawarena-gameplay"
+    if API_BASE.rstrip("/") == "https://aiclawarena" + ".ai/api/v1"
+    else f"clawarena-gameplay-{arena_scope(API_BASE).rsplit('-', 1)[-1]}"
+)
+
+
+class ClawArenaAPIError(SystemExit):
+    def __init__(self, status_code: int, detail: str):
+        self.status_code = status_code
+        super().__init__(f"ClawArena API request failed ({status_code}): {detail}")
 
 
 def stable_subprocess_cwd() -> str:
@@ -39,6 +69,30 @@ def stable_subprocess_cwd() -> str:
         if candidate.exists() and candidate.is_dir():
             return str(candidate)
     return "/"
+
+
+def trusted_openclaw_binary() -> str:
+    """Resolve OpenClaw once so setup cannot be redirected by a later PATH change."""
+    candidate = shutil.which("openclaw")
+    if not candidate:
+        raise RuntimeError("openclaw CLI was not found on PATH")
+    resolved = Path(candidate).resolve(strict=True)
+    if not resolved.is_file() or not os.access(resolved, os.X_OK):
+        raise RuntimeError(f"openclaw CLI is not an executable file: {resolved}")
+    return str(resolved)
+
+
+def owned_regular_config_path(raw_path: str) -> Path:
+    """Accept only the current user's regular OpenClaw config file."""
+    path = Path(raw_path.strip()).expanduser()
+    if not path.is_absolute():
+        raise RuntimeError("OpenClaw returned a non-absolute config path")
+    metadata = path.lstat()
+    if stat.S_ISLNK(metadata.st_mode) or not stat.S_ISREG(metadata.st_mode):
+        raise RuntimeError("OpenClaw config path is not a regular file")
+    if metadata.st_uid != os.geteuid():
+        raise RuntimeError("OpenClaw config file is not owned by the current user")
+    return path
 
 
 def atomic_write(path: Path, content: str, mode: int | None = None) -> None:
@@ -127,7 +181,7 @@ def post_json(url: str, payload: dict[str, Any] | None = None, token: str = "") 
             detail = json.loads(body).get("detail") or body
         except json.JSONDecodeError:
             detail = body
-        raise SystemExit(f"ClawArena API request failed ({exc.code}): {detail}") from exc
+        raise ClawArenaAPIError(exc.code, str(detail)) from exc
     except error.URLError as exc:
         raise SystemExit(f"ClawArena API request failed: {exc}") from exc
     except json.JSONDecodeError as exc:
@@ -152,7 +206,7 @@ def require_runtime_credentials() -> dict[str, str]:
     if missing:
         raise SystemExit(
             "ClawArena watcher setup requires a provisioned agent first. "
-            "Save ~/.clawarena/token and ~/.clawarena/agent_id before running setup. "
+            "Run setup with --provision or --recovery-key before starting the watcher. "
             f"Missing or empty: {', '.join(missing)}"
         )
     return values
@@ -210,6 +264,57 @@ def write_runtime_credentials(credentials: dict[str, str]) -> None:
     atomic_write(AGENT_ID_PATH, credentials["agent_id"].strip() + "\n", 0o600)
 
 
+def write_state_owner() -> None:
+    validate_state_owner(CLAW_DIR, API_BASE, "openclaw")
+    atomic_write(
+        STATE_OWNER_PATH,
+        json.dumps(state_owner(API_BASE, "openclaw"), sort_keys=True) + "\n",
+        0o600,
+    )
+
+
+def legacy_openclaw_home() -> Path | None:
+    if CLAW_DIR.resolve() == LEGACY_CLAW_DIR.resolve() or TOKEN_PATH.exists():
+        return None
+    if not (LEGACY_CLAW_DIR / "token").is_file():
+        return None
+    signatures = (
+        "openclaw_agent_id",
+        "openclaw_delivery.json",
+        "watcher.pid",
+        "watcher.log",
+        "watcher_state.json",
+        "openclaw-workspace",
+    )
+    if not any((LEGACY_CLAW_DIR / name).exists() for name in signatures):
+        return None
+    return LEGACY_CLAW_DIR
+
+
+def copy_legacy_openclaw_state(source: Path) -> None:
+    CLAW_DIR.mkdir(parents=True, exist_ok=True, mode=0o700)
+    file_names = (
+        "token",
+        "agent_id",
+        "claim_url",
+        "claim_expires_at",
+        "openclaw_delivery.json",
+        "openclaw_agent_id",
+        "watcher.pid",
+        "watcher.log",
+        "watcher_state.json",
+    )
+    for name in file_names:
+        source_path = source / name
+        target_path = CLAW_DIR / name
+        if source_path.is_file() and not target_path.exists():
+            shutil.copy2(source_path, target_path)
+    source_workspace = source / "openclaw-workspace"
+    target_workspace = CLAW_DIR / "openclaw-workspace"
+    if source_workspace.is_dir() and not target_workspace.exists():
+        shutil.copytree(source_workspace, target_workspace)
+
+
 def save_claim_state(payload: dict[str, Any]) -> dict[str, Any]:
     claim_url = str(payload.get("claim_url") or "").strip()
     expires_at = str(payload.get("expires_at") or "").strip()
@@ -232,13 +337,32 @@ def save_claim_state(payload: dict[str, Any]) -> dict[str, Any]:
 def provision_or_refresh() -> tuple[dict[str, str], dict[str, Any]]:
     token = TOKEN_PATH.read_text().strip() if TOKEN_PATH.exists() else ""
     reused = bool(token)
+    migrated_from: str | None = None
+    legacy_payload: dict[str, Any] | None = None
+    if not token:
+        legacy_home = legacy_openclaw_home()
+        if legacy_home is not None:
+            legacy_token = (legacy_home / "token").read_text().strip()
+            try:
+                legacy_payload = post_json(CLAIM_LINK_URL, token=legacy_token)
+            except ClawArenaAPIError as exc:
+                if exc.status_code not in {401, 403, 404}:
+                    raise
+            else:
+                copy_legacy_openclaw_state(legacy_home)
+                token = legacy_token
+                reused = True
+                migrated_from = str(legacy_home)
     if token:
-        payload = post_json(CLAIM_LINK_URL, token=token)
+        payload = legacy_payload or post_json(CLAIM_LINK_URL, token=token)
         agent_id = str(payload.get("agent_id") or decode_connection_token_agent_id(token))
         credentials = {"token": token, "agent_id": agent_id}
     else:
         name = f"openclaw-{os.uname().nodename[:12]}-{secrets.token_hex(2)}"
-        payload = post_json(PROVISION_URL, {"name": name})
+        payload = post_json(PROVISION_URL, {
+            "name": name,
+            "runtime_kind": "openclaw",
+        })
         connection_token = str(payload.get("connection_token") or "").strip()
         if not connection_token:
             raise SystemExit("Provisioning response did not include a connection_token.")
@@ -248,7 +372,11 @@ def provision_or_refresh() -> tuple[dict[str, str], dict[str, Any]]:
         }
     write_runtime_credentials(credentials)
     claim_state = save_claim_state(payload)
-    claim_state.update(agent_reused=reused, agent_provisioned=not reused)
+    claim_state.update(
+        agent_reused=reused,
+        agent_provisioned=not reused,
+        state_migrated_from=migrated_from,
+    )
     return credentials, claim_state
 
 
@@ -318,6 +446,7 @@ def configure_restricted_openclaw_agent(skill_root: Path) -> dict[str, Any]:
     workspace = (CLAW_DIR / "openclaw-workspace").resolve()
     agent_id = SELF_HOSTED_OPENCLAW_AGENT_ID
     created = False
+    openclaw_bin = ""
 
     def run(command: list[str], *, timeout: int = 30) -> subprocess.CompletedProcess:
         return subprocess.run(  # noqa: S603
@@ -330,8 +459,9 @@ def configure_restricted_openclaw_agent(skill_root: Path) -> dict[str, Any]:
         )
 
     try:
+        openclaw_bin = trusted_openclaw_binary()
         arena_api_path.chmod(0o700)
-        listed = run(["openclaw", "agents", "list", "--json"])
+        listed = run([openclaw_bin, "agents", "list", "--json"])
         if listed.returncode != 0:
             raise RuntimeError((listed.stderr or listed.stdout or "agents list failed").strip())
         agents = json.loads(listed.stdout or "[]")
@@ -339,7 +469,7 @@ def configure_restricted_openclaw_agent(skill_root: Path) -> dict[str, Any]:
             raise RuntimeError("OpenClaw agents list returned an unexpected payload")
         if not any(str(entry.get("id") or "") == agent_id for entry in agents if isinstance(entry, dict)):
             added = run([
-                "openclaw", "agents", "add", agent_id,
+                openclaw_bin, "agents", "add", agent_id,
                 "--workspace", str(workspace),
                 "--non-interactive", "--json",
             ])
@@ -347,51 +477,70 @@ def configure_restricted_openclaw_agent(skill_root: Path) -> dict[str, Any]:
                 raise RuntimeError((added.stderr or added.stdout or "agents add failed").strip())
             created = True
 
-        config_file = run(["openclaw", "config", "file"])
+        config_file = run([openclaw_bin, "config", "file"])
         if config_file.returncode != 0:
             raise RuntimeError((config_file.stderr or config_file.stdout or "config file failed").strip())
-        config_path = Path((config_file.stdout or "").strip()).expanduser()
+        config_path = owned_regular_config_path(config_file.stdout or "")
         config = json.loads(config_path.read_text())
-        entries = ((config.get("agents") or {}).get("list") or [])
-        index = next(
-            (i for i, entry in enumerate(entries) if str(entry.get("id") or "") == agent_id),
-            None,
-        )
-        if index is None:
-            raise RuntimeError("OpenClaw created the agent but did not persist its config entry")
-        entry = dict(entries[index])
+        agents_config = config.get("agents") or {}
+        mapped_entries = agents_config.get("entries")
+        listed_entries = agents_config.get("list")
+        if isinstance(mapped_entries, dict):
+            persisted = mapped_entries.get(agent_id)
+            if not isinstance(persisted, dict):
+                raise RuntimeError("OpenClaw created the agent but did not persist its config entry")
+            entry = dict(persisted)
+            config_key = f"agents.entries.{agent_id}"
+        elif isinstance(listed_entries, list):
+            index = next(
+                (
+                    i
+                    for i, candidate in enumerate(listed_entries)
+                    if isinstance(candidate, dict)
+                    and str(candidate.get("id") or "") == agent_id
+                ),
+                None,
+            )
+            if index is None:
+                raise RuntimeError("OpenClaw created the agent but did not persist its config entry")
+            entry = dict(listed_entries[index])
+            config_key = f"agents.list[{index}]"
+        else:
+            raise RuntimeError("OpenClaw returned an unsupported agents config schema")
         configured_workspace = Path(str(entry.get("workspace") or "")).expanduser().resolve()
         if not created and configured_workspace != workspace:
-            raise RuntimeError(
-                f'OpenClaw agent id "{agent_id}" already belongs to another workspace'
-            )
+            legacy_workspace = (LEGACY_CLAW_DIR / "openclaw-workspace").resolve()
+            if configured_workspace != legacy_workspace or not TOKEN_PATH.exists():
+                raise RuntimeError(
+                    f'OpenClaw agent id "{agent_id}" already belongs to another workspace'
+                )
+            entry["workspace"] = str(workspace)
         entry.update({
             "name": "ClawArena Gameplay",
             "skills": [],
             "tools": {
-                "allow": ["exec"],
+                "allow": ["exec", "process"],
                 "exec": {
                     "host": "gateway",
                     "security": "allowlist",
                     "ask": "off",
                     "strictInlineEval": True,
-                    "timeoutSec": 45,
                 },
             },
         })
         updated = run([
-            "openclaw", "config", "set", f"agents.list[{index}]",
+            openclaw_bin, "config", "set", config_key,
             json.dumps(entry, separators=(",", ":")), "--strict-json",
         ])
         if updated.returncode != 0:
             raise RuntimeError((updated.stderr or updated.stdout or "config update failed").strip())
         approved = run([
-            "openclaw", "approvals", "allowlist", "add",
+            openclaw_bin, "approvals", "allowlist", "add",
             "--agent", agent_id, str(arena_api_path),
         ])
         if approved.returncode != 0:
             raise RuntimeError((approved.stderr or approved.stdout or "allowlist update failed").strip())
-        validated = run(["openclaw", "config", "validate"])
+        validated = run([openclaw_bin, "config", "validate"])
         if validated.returncode != 0:
             raise RuntimeError((validated.stderr or validated.stdout or "config validation failed").strip())
         workspace.mkdir(parents=True, exist_ok=True)
@@ -422,7 +571,7 @@ def verify_delivery(
     openclaw_agent_id: str | None = None,
 ) -> dict[str, Any]:
     cmd = [
-        "openclaw",
+        trusted_openclaw_binary(),
         "agent",
     ]
     if openclaw_agent_id is None:
@@ -496,6 +645,7 @@ def preflight_watcher(
         env.update(
             CLAWARENA_HOME=str(temp_home),
             CLAWARENA_READY_FILE=str(ready_path),
+            CLAWARENA_OPENCLAW_BIN=trusted_openclaw_binary(),
         )
         if openclaw_agent_id:
             env["CLAWARENA_OPENCLAW_AGENT_ID"] = openclaw_agent_id
@@ -526,6 +676,7 @@ def start_watcher(skill_root: Path, *, openclaw_agent_id: str = "") -> subproces
     env.update(
         CLAWARENA_HOME=str(CLAW_DIR),
         CLAWARENA_READY_FILE=str(WATCHER_READY_PATH),
+        CLAWARENA_OPENCLAW_BIN=trusted_openclaw_binary(),
     )
     if openclaw_agent_id:
         env["CLAWARENA_OPENCLAW_AGENT_ID"] = openclaw_agent_id
@@ -576,6 +727,14 @@ def parse_args() -> argparse.Namespace:
         help="Provision once, or reuse the saved token and refresh its pending claim link.",
     )
     parser.add_argument(
+        "--accept-persistent-setup",
+        action="store_true",
+        help=(
+            "Confirm first-time setup may store a scoped token, create a restricted "
+            "OpenClaw agent approval, and start a background watcher."
+        ),
+    )
+    parser.add_argument(
         "--recovery-key",
         help="One-use recovery key from Command Center. Redeems it, saves fresh credentials, and restarts the watcher.",
     )
@@ -598,12 +757,28 @@ def parse_args() -> argparse.Namespace:
         action="store_true",
         help="Managed-runtime mode. Save credentials and start the watcher without delivery config.",
     )
+    parser.add_argument(
+        "--stop",
+        action="store_true",
+        help="Stop this arena's local watcher without changing credentials.",
+    )
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
     skill_root = Path(__file__).resolve().parent
+    validate_state_owner(CLAW_DIR, API_BASE, "openclaw")
+    if args.stop:
+        stop_existing_watcher(skill_root)
+        print(json.dumps({"watcher_stopped": True, "home": str(CLAW_DIR)}))
+        return 0
+    if args.provision and not TOKEN_PATH.exists() and not args.accept_persistent_setup:
+        raise SystemExit(
+            "First-time ClawArena setup requires --accept-persistent-setup after the "
+            "user reviews its scoped credential storage, restricted exec approval, "
+            "and background watcher."
+        )
     recovery_applied = False
     claim_state: dict[str, Any] = {
         "claim_url": None,
@@ -631,6 +806,7 @@ def main() -> int:
     if recovery_applied:
         claim_state = refresh_claim_state(credentials)
         claim_state.update(agent_reused=True, agent_provisioned=False)
+    write_state_owner()
     explicit_openclaw_agent_id = str(os.environ.get("CLAWARENA_OPENCLAW_AGENT_ID", "")).strip()
     saved_openclaw_agent_id = ""
     if not explicit_openclaw_agent_id:

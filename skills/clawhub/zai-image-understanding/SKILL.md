@@ -1,166 +1,222 @@
 ---
 name: zai-image-understanding
-description: 图片理解技能，使用 Z.ai (智谱 AI) GLM-4V Vision API 进行图片分析。
-metadata:
-  short-description: Z.ai 图片理解
+description: 使用 Z.ai GLM-4.1V-thinking-flash 模型进行图片理解和分析。当用户需要分析图片内容、提取图片信息、描述图片细节、回答关于图片的问题，或进行任何形式的视觉理解任务时，必须使用此 skill。支持图片 URL 直接调用，返回结构化分析结果供主模型进一步处理。
 ---
 
-# zai-image-understanding Skill
+# Z.ai 图片理解 Skill
 
-Linux 环境下的图片理解技能，专门使用 **Z.ai (智谱 AI) GLM-4V Vision API** 进行图片分析。
+使用 Z.ai 的 GLM-4.1V-thinking-flash 模型进行图片理解和视觉分析任务。
 
-## 功能
+## 核心功能
 
-- ✅ **Z.ai GLM-4V Vision API 支持**：使用智谱 AI 的 GLM-4.1V-thinking-flash 模型
-- ✅ **多种输入方式**：本地文件路径、HTTP/HTTPS URL、Base64 Data URI
-- ✅ **自动图片预处理**：尺寸调整、格式转换以适应模型限制
-- ✅ **可配置提示词和模型**：通过 JSON 配置文件自定义行为
-- ✅ **Markdown 输出保存**：自动保存分析结果为可读的 Markdown 文件
-- ✅ **批处理能力**：可通过 Python API 进行大规模图片处理
-- ✅ **标准库仅依赖**：核心逻辑仅依赖 Python 标准库，仅 requests 和 Pillow 为外部依赖
+- **图片内容分析**：识别图片中的物体、场景、文字、人物等
+- **视觉问答**：回答用户关于图片的具体问题
+- **信息提取**：从图片中提取结构化信息（表格、图表、文档文字等）
+- **场景描述**：生成详细的图片内容描述
+- **多轮对话支持**：支持基于图片的连续对话分析
+- **性能优化**：连接复用、可调节的 thinking 预算、进度指示器、详细时间统计
 
-## 安装
+## 触发条件
 
-```bash
-# 克隆或复制技能到技能目录
-mkdir -p ~/.openclaw/workspace/skills/zai-image-understanding
-cp -r /path/to/skill/* ~/.openclaw/workspace/skills/zai-image-understanding/
+**必须使用此 skill 的场景：**
+- 用户发送图片并询问"这张图片是什么"、"分析这张图片"、"图片里有什么"
+- 用户询问图片中的具体细节："图片里的文字是什么"、"这个图表显示什么数据"、"识别图片中的物体"
+- 用户需要从图片提取信息："帮我读取这张发票/表格/文档"、"提取图片中的代码/公式"
+- 用户进行视觉推理："这张图片暗示了什么"、"根据图片内容判断..."
+- 任何涉及图片理解、视觉分析、图像识别的任务
 
-# 安装依赖
-pip install -r ~/.openclaw/workspace/skills/zai-image-understanding/requirements.txt
+**不触发场景：**
+- 纯文本任务，无图片输入
+- 简单的图片格式转换、压缩、下载等非理解类操作
+- 用户明确要求使用其他特定视觉模型
+
+## API 规范
+
+### 端点
+```
+POST https://open.bigmodel.cn/api/paas/v4/chat/completions
 ```
 
-## 配置
-
-### 1. 获取 Z.ai API Key
-
-前往 [智谱 AI 开放平台](https://open.bigmodel.cn/) 获取 API Key。
-
-### 2. 设置环境变量（推荐）
-
-在您的 shell 配置文件中添加（如 `~/.bashrc`、`~/.zshrc` 或 `~/.profile`）：
-
-```bash
-# 智谱 AI API Key
-export ZAI_API_KEY="your-zai-api-key-here"
-```
-
-然后重新加载配置：
-
-```bash
-source ~/.bashrc  # 或 source ~/.zshrc
-```
-
-### 3. 临时设置（仅当前终端有效）
-
-```bash
-export ZAI_API_KEY="your-zai-api-key-here"
-```
-
-### 4. 配置文件（可选）
-
-首次运行时会自动创建默认配置文件：
-`~/.config/zai-image-understanding/config.json`
-
+### 请求参数（固定，不可修改）
 ```json
 {
-  "mode": "cloud",
-  "cloud": {
-    "provider": "zai",
-    "model": "glm-4.1v-thinking-flash",
-    "api_key_env": "ZAI_API_KEY",
-    "base_url": "https://open.bigmodel.cn/api/paas/v4",
-    "timeout_seconds": 60
-  },
-  "default_prompt": "请详细描述这张图片的内容，包括主要物体、场景、文字、颜色、构图等信息。"
-}
-```
-
-## 使用方法
-
-### 命令行界面
-
-```bash
-# 基本使用
-python -m zai_image_understanding.analyze -i /path/to/image.jpg
-
-# 指定提示词
-python -m zai_image_understanding.analyze -i image.jpg -p "提取图片中的所有文字内容"
-
-# 指定配置文件
-python -m zai_image_understanding.analyze -i image.jpg -c /path/to/custom/config.json
-
-# 保存结果为 Markdown
-python -m zai_image_understanding.analyze -i image.jpg --save-markdown
-
-# 创建默认配置
-python -m zai_image_understanding.analyze --init-config
-
-# 查看当前配置
-python -m zai_image_understanding.analyze --show-config
-```
-
-### Python API
-
-```python
-from zai_image_understanding import analyze_image, load_config
-
-# 简单调用
-result = analyze_image("/path/to/image.jpg")
-
-if result["status"] == "success":
-    print(result["result"])
-    print(f"使用模型: {result['model']}")
-    print(f"Token 使用: {result['tokens']}")
-else:
-    print(f"错误: {result['error']}")
-
-# 高级用法
-config = load_config("/custom/path/config.json")
-result = analyze_image(
-    image_path="https://example.com/image.png",
-    prompt="描述这张图片的主要情感和氛围",
-    config_path="/custom/path/config.json"
-)
-```
-
-## 输出格式
-
-命令行默认输出 JSON：
-```json
-{
-  "status": "success",
-  "result": "图片中显示的是一只橘色的猫坐在阳光明媚的窗台上，背景是模糊的绿色植物...",
   "model": "glm-4.1v-thinking-flash",
-  "tokens": {
-    "prompt": 150,
-    "completion": 85,
-    "total": 235
-  }
+  "messages": [
+    {
+      "role": "user",
+      "content": [
+        {
+          "type": "image_url",
+          "image_url": { "url": "<图片URL>" }
+        },
+        {
+          "type": "text",
+          "text": "<分析提示词>"
+        }
+      ]
+    }
+  ],
+  "stream": false,
+  "do_sample": true,
+  "temperature": 0.8,
+  "top_p": 0.6,
+  "max_tokens": 4096,
+  "tool_choice": "auto"
 }
 ```
 
-当使用 `--save-markdown` 时，会在 `~/.local/share/zai-image-understanding/outputs/` 目录下生成类似：
+### 请求头
 ```
-vlm_abc123_1721400000.md
+Authorization: Bearer <API_KEY>
+Content-Type: application/json
 ```
 
-## 依赖
+### 图片限制
+- 大小：≤ 5MB
+- 分辨率：≤ 6000×6000 像素
+- 格式：jpg、png、jpeg、webp、bmp、gif
+- 数量：单次请求限 1 张图片
+- **输入方式**：支持两种方式：
+  1. **公网 HTTP/HTTPS URL**（官方推荐）
+  2. **本地文件路径 / Base64 Data URL**（本 skill 扩展支持，自动转为 Data URL）
+
+## 使用流程
+
+### 1. 准备阶段
+- 获取用户提供的图片（支持两种方式）：
+  - 公网可访问的 HTTP/HTTPS URL
+  - 本地图片文件路径（自动转换为 Base64 Data URL）
+- 理解用户的分析需求，构建合适的提示词
+- 检查环境变量 `ZAI_API_KEY` 是否配置
+
+### 2. 调用 API
+- 使用 `scripts/analyze_image.py` 脚本发送请求
+- 处理网络错误、超时、API 错误码
+- 解析返回的 JSON 响应
+
+### 3. 结果处理
+- 提取 `choices[0].message.content` 作为模型分析结果
+- 将结果传递给主模型进行进一步分析、总结或格式化
+- 结合用户原始问题，生成最终回复
+
+## 提示词工程指南
+
+### 通用分析提示词模板
+```
+请详细分析这张图片的内容，包括但不限于：
+1. 画面主要包含什么物体、场景、人物
+2. 文字内容（如有，请完整提取）
+3. 图表/数据信息（如有，请结构化描述）
+4. 画面细节和值得注意的元素
+5. 整体氛围/主题/用途判断
+```
+
+### 专用任务提示词示例
+- **OCR/文字提取**："请完整提取图片中的所有文字内容，保持原有格式和排版"
+- **图表分析**："请分析这张图表，提取坐标轴、数据点、趋势、图例等信息，并用结构化格式输出"
+- **代码/公式识别**："请识别图片中的代码或数学公式，还原为可编辑的文本格式"
+- **文档理解**："请理解这张文档图片的结构和内容，提取关键字段和信息"
+- **对比/差异**："请对比图片中的前后/左右差异，指出变化的具体内容"
+
+## 脚本接口
+
+### `scripts/analyze_image.py`
+```bash
+python scripts/analyze_image.py --image-url <URL> --prompt <提示词> [--api-key <KEY>]
+python scripts/analyze_image.py --image-path <本地文件路径> --prompt <提示词> [--api-key <KEY>]
+```
+
+**参数：**
+- `--image-url` / `-u` (二选一): 图片的公网访问 URL
+- `--image-path` / `-i` (二选一): 本地图片文件路径（自动转为 Base64）
+- `--prompt` / `-p` (必需): 发送给模型的分析提示词
+- `--api-key` / `-k` (可选): API Key，默认读取环境变量 `ZAI_API_KEY`
+- `--timeout` / `-t` (可选): 请求超时秒数，默认 120 秒
+- `--output` / `-o` (可选): 输出文件路径，默认 stdout 输出 JSON
+- `--pretty` (可选): 美化 JSON 输出
+- `--verbose` / `-v` (可选): 显示详细进度和时间统计
+- `--fast` (可选): 快速模式，降低 max_tokens 和 thinking 预算，适合简单任务
+
+**返回格式：**
+```json
+{
+  "success": true,
+  "content": "模型返回的分析文本",
+  "reasoning_content": "模型的思考过程内容",
+  "raw_response": {...},
+  "usage": {...},
+  "timing": {
+    "request_time": 25.3,
+    "parse_time": 0.001,
+    "total_time": 25.3,
+    "total_elapsed": 25.5
+  },
+  "error": null
+}
+```
+
+## 环境配置
+
+### 必需环境变量
+```bash
+export ZAI_API_KEY="your-api-key-here"
+```
+
+### 可选环境变量
+```bash
+export ZAI_API_BASE="https://open.bigmodel.cn/api/paas/v4"
+export ZAI_DEFAULT_TIMEOUT="120"
+```
+
+## 错误处理
+
+| 错误类型 | 处理方式 |
+|---------|---------|
+| 网络超时 | 重试 2 次，指数退避 (1s, 2s)，仍失败则返回错误 |
+| API 认证失败 (401) | 提示检查 API Key 配置 |
+| 图片下载失败/格式不支持 | 提示用户检查图片 URL 和格式 |
+| 请求参数错误 (400) | 记录详细错误信息，返回给用户 |
+| 速率限制 (429) | 等待 Retry-After 时间后重试 1 次 |
+| 服务器错误 (5xx) | 重试 2 次，指数退避 (1s, 2s) |
+| 模型返回空内容 | 返回特定错误标记，提示用户重试或调整提示词 |
+| 连接失败 | 重试 2 次，指数退避，检查网络连通性 |
+
+## 依赖要求
 
 - Python 3.8+
-- requests>=2.31.0
-- Pillow>=10.0.0
-- python-dotenv>=1.0.0 (可选，用于加载 .env 文件)
+- `requests` 库
+- 网络可访问 `open.bigmodel.cn`
 
-## 故障排除
+## 使用示例
 
-| 问题 | 解决方案 |
-|------|----------|
-| API key not set | 设置环境变量 `ZAI_API_KEY` |
-| Connection timeout | 增加配置中的 `timeout_seconds` 值 |
-| Image too large | 系统会自动调整大小，也可手动预处理图片 |
-| Model not found | 确认模型名称正确，默认为 `glm-4.1v-thinking-flash` |
+### 示例 1：基础图片描述
+用户："这张图片是什么？" + 图片 URL
+→ 构建通用分析提示词 → 调用 API → 主模型整理生成自然语言描述
 
-## 许可证
+### 示例 2：发票信息提取
+用户："帮我提取这张发票的金额、日期、购买方信息" + 发票图片 URL
+→ 构建结构化提取提示词 → 调用 API → 主模型格式化为 JSON/表格
 
-MIT License
+### 示例 3：图表数据分析
+用户："分析这个柱状图的趋势" + 图表图片 URL
+→ 构建图表分析提示词 → 调用 API → 主模型生成趋势分析报告
+
+## 目录结构
+
+```
+zai-image-understanding/
+├── SKILL.md
+├── scripts/
+│   ├── __init__.py
+│   ├── analyze_image.py
+│   └── utils.py
+├── references/
+│   ├── api-spec.md
+│   ├── prompt-guide.md
+│   └── error-codes.md
+├── evals/
+│   ├── evals.json
+│   └── test-images/
+└── assets/
+    └── .env.example
+```

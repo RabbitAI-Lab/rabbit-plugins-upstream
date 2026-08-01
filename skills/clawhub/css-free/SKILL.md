@@ -6,7 +6,7 @@ displayName: "CSS样式引擎(免费版)"
 summary: "现代CSS布局、动画、响应式设计与组件样式生成，支持Flexbox/Grid/Tailwind。免费版"
 summary_zh: "现代CSS布局、动画、响应式设计与组件样式生成，支持Flexbox/Grid/Tailwind。免费版"
 license: "MIT"
-description: |-
+description: "|-. 适用于需要css相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量.该技能适用于相关开发场景,包含结构化的工作流程和配置指引.经过深度差异化处置,针对用户反馈和使用痛点进行了改进,提升了实用性和可操作性.该技能适用于相关开发场景,包含结构化的工作流程和配置指引.经过深度差异化处置,针对用户反馈和使用痛点进行了改进,提升了实用性和可操作性."
   CSS样式与布局辅助引擎（免费版），覆盖现代CSS布局、动画效果、响应式设计与
   组件样式生成。核心能力：
   - 现代CSS布局（Flexbox/Grid/Container Queries）
@@ -20,16 +20,17 @@ tools:
 homepage: ""
 tags:
   - 通用办公
+  - css
+  - automation
+  - productivity
+  - developer-tools
   - 工具
   - 效率
   - 创意
   - 图像
-  - css
   - grid
-  - flexbox
-  - rem
-  - 布局
 category: "Automation"
+pricing_tier: free
 ---
 # CSS样式引擎(免费版)
 
@@ -61,7 +62,7 @@ CSS样式与布局辅助引擎，覆盖现代CSS布局、动画效果、响应�
 
 **API Key配置方式**:
 ```bash
-export API_KEY="your_api_key_here"
+export API_KEY=${API_KEY:?请设置环境变量}
 ```
 配置后需重启会话或开启新终端生效。API Key应妥善保管,避免泄露到版本控制系统.
 ## 核心能力
@@ -228,7 +229,7 @@ h1 { font-size: clamp(1.5rem, 4vw, 3rem); }
 ### Q1: Flexbox和Grid什么时候用哪个？
 Flexbox用于一维布局（行或列），适合导航栏、工具栏、按钮组、卡片内容排列。Grid用于二维布局（行和列同时控制），适合页面整体布局、画廊网格、仪表盘面板。经验法则：如果需要在两个方向上对齐和控制间距用Grid，如果只是沿一个方向排列用Flexbox。两者可以嵌套使用——Grid控制页面布局，Flexbox控制组件内部排列.
 ### Q2: 如何实现真正的垂直居中？
-现代CSS推荐三种方式：1) Flexbox：`display: flex; align-items: center; justify-content: center;`（最常用）；2) Grid：`display: grid; place-items: center;`（最简洁）；3) 绝对定位+transform：`position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);`（兼容性最好但需定位上下文）。避免使用`line-height`或`vertical-align`，它们只适用于行内元素.
+现代CSS推荐三种方式：1) Flexbox：`display: flex; align-items: center; justify-content: center;`（最常用）；2) Grid：`display: grid; place-items: center;`（最简洁）；3) 绝对定位+transform：`position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);`（兼容性优秀但需定位上下文）。避免使用`line-height`或`vertical-align`，它们只适用于行内元素.
 ### Q3: Tailwind和手写CSS如何选择？
 Tailwind适合快速原型开发和团队协作（工具类即标准），减少命名负担。手写CSS适合需要高度定制动画、复杂选择器、CSS变量主题系统的场景。混合策略：用Tailwind处理布局和间距（`flex gap-4 p-6`），用`@layer components`或CSS文件处理复杂组件样式和动画。如果项目已有设计系统token，Tailwind配置映射token值可两者兼得.
 ## 已知限制

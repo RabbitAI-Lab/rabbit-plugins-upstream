@@ -1,5 +1,5 @@
 ## Description: <br>
-A China-focused state-owned enterprise economic responsibility audit assistant for tax risk identification, structured compliance self-checks, evidence planning, remediation tracking, and related tax guidance. <br>
+国有企业经济责任审计涉税风险与合规专项助手，聚焦虚开发票、偷逃税款、账外账小金库、国有资本收益上交、财政专项资金挤占挪用、重大经济决策涉税、境外国有资产税务监管、审计整改闭环，以及三公经费审计隐形违规识别。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,41 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Audit, tax, and compliance teams use this skill to explore tax risks in state-owned enterprise economic responsibility audits, including invoice fraud, state capital returns, fiscal funds, related-party pricing, overseas assets, and remediation closure. It can provide conversational guidance, structured self-check prompts, web workflow links, and offline process guidance. <br>
+External users, audit teams, tax compliance staff, and SOE governance reviewers use this skill to structure SOE economic-responsibility audit tax-risk checks, policy questions, evidence preparation, risk self-assessment, and整改闭环 guidance. <br>
 
 ### Deployment Geography for Use: <br>
-Global access with China tax and state-owned enterprise audit focus <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Tax and audit prompts may be sent to the vendor's cloud service. <br>
-Mitigation: Use only with organizational approval, avoid sensitive identifiers unless approved, and prefer non-confidential scenarios when policy is unclear. <br>
-Risk: The local client stores credentials and diagnostic logs under ~/.tax-policy-client. <br>
-Mitigation: Review local configuration and logs before use in confidential environments, protect stored API keys, and clear logs when retention is not approved. <br>
-Risk: The matrix installer can install many related tax skills and may have broader effects than expected. <br>
-Mitigation: Run or approve matrix installation only intentionally, review the target directory and package list, and use narrow installation options when only one related skill is needed. <br>
-Risk: Tax and audit guidance can become outdated or may not resolve disputed legal or audit conclusions. <br>
-Mitigation: Validate conclusions against current official sources, competent tax or audit authorities, and qualified professional review before relying on them. <br>
+Risk: Sensitive SOE audit, tax, supplier, investigation, or personal data may be shared with cloud services or fallback search when the skill is used. <br>
+Mitigation: Do not enter confidential details unless the deployment owner has approved those cloud and search data flows; redact or summarize sensitive facts before use. <br>
+Risk: The skill can persist API credentials for the tax-policy MCP client. <br>
+Mitigation: Review local credential storage expectations before installation and rotate or remove credentials when the skill is no longer needed. <br>
+Risk: Setup code can modify local MCP client configuration when explicitly invoked or when TAX_ENABLE_AUTOSETUP is enabled. <br>
+Mitigation: Run setup in dry-run or review mode first, keep backups, and enable TAX_ENABLE_AUTOSETUP only when configuration changes are intended. <br>
+Risk: Tax, audit, and regulatory guidance can become outdated or may not fit a specific jurisdiction or fact pattern. <br>
+Mitigation: Verify conclusions against current official tax and audit authority guidance before relying on them for filings, audit conclusions, or enforcement responses. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-soe-audit) <br>
-- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
 - [SOE audit tax self-check web workflow](https://mcp.aitaxs.top/web/topic_workflow_soe_audit.html) <br>
-- [State Taxation Administration of China](https://www.chinatax.gov.cn) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Tax policy knowledge MCP endpoint](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
+- [Tax policy knowledge skill](https://skillhub.cn/skills/tax-policy-knowledge) <br>
+- [Tax compliance dispute skill](https://skillhub.cn/skills/tax-compliance-dispute) <br>
+- [Tax equity governance skill](https://skillhub.cn/skills/tax-equity-governance) <br>
+- [Tax restructuring skill](https://skillhub.cn/skills/tax-restructuring) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Conversational Markdown with links, structured checklists, code-backed workflow guidance, and optional shell/configuration instructions] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and JSON-style structured responses with optional inline shell commands and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May route requests through a vendor cloud MCP service, create local client configuration/log files, and offer matrix installation of related tax skills.] <br>
+**Other Properties Related to Output:** [May call cloud MCP tools for policy Q&A, risk checks, tax calculation, and knowledge-base listing; offline scripts provide local process guidance and keyword reference.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release evidence and skill frontmatter) <br>
+3.15.6 (source: server release evidence and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

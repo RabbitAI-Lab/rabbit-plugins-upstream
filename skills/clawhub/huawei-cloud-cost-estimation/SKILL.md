@@ -4,7 +4,7 @@ description: Generate Huawei Cloud pre-order price estimates, safely provision a
 compatibility: hcloud KooCLI 7.2+, IAM permissions matching requested read/write operations, outbound network; no agent auto-install
 metadata:
   author: ontology-of-everything
-  version: "3.1.0"
+  version: "3.2.0"
   openclaw:
     requires:
       bins: [hcloud]
@@ -28,11 +28,21 @@ metadata:
 - **退订 / 停止使用资源** → Unsubscribe Guidance（仅控制台指引，不调用 CLI/API）。
 - 历史账单/余额/对账 → 费用中心或 BSS 账单只读 API；非华为云 → 拒绝；白名单外写操作 → 给控制台指引。
 
+## Call Budget
+
+先画到下一用户输入或安全门禁的最短 `hcloud` 链（重试另计）：
+
+- **直达 · ≤3** — 一次跑到门禁。
+- **分段 · ≥4** — 每段 2–3 条；多 1 条能闭环则跑完。
+- **回执** — 报 `已得 / 可用 / 待做（预计命令数 + 产出）`，再问是否续跑；优先用户首项或最能减少选择的只读查询。
+- **降调用** — 复用去重；独立只读并发；同计费模式合并 `product_infos.N.*` 询价。
+- **续跑** — 用户说“一次完成”或“继续”则取消进度停点；澄清、未知费用、`--dryrun`、写入确认仍是硬门禁。
+
 ## Pricing
 
 1. **Parse** — 抽取四元组 `cloud_service_type / resource_type / region / resource_spec` + 周期或使用量；读 `references/pricing/semantic/catalog.yml` 路由到 period / on-demand 模型。
 2. **Clarify** — 缺 region/数量/周期或用量/线性 size，或产品类目模糊、多变种未定 → 停下一轮问完（带 2–4 候选）。仅 safe-default 缺失（OS=linux、AZ=空、`fee_installment_mode=NA`）→ 披露后继续。确认话术用口语四元组，不暴露内部名。
-3. **Query** — 按 `references/pricing/commands.md`：先 `BSS/ListResourceSpecs` 实查规格，再询价（period → `ListRateOnPeriodDetail`；on-demand → `ListOnDemandResourceRatings`）；多产品一次放进 `product_infos.N.*`。
+3. **Query** — 按 Call Budget；依 `references/pricing/commands.md` 先 `ListResourceSpecs` 实查，再询价（period → `ListRateOnPeriodDetail`；on-demand → `ListOnDemandResourceRatings`）。
 4. **Verify & Present** — 分项加和 = 总价；币种/周期/数量对齐用户口径。分项 `[服务] [规格] [region] [数量×周期] = ¥<金额>` + 加总 + 「非最终账单」；默认官网价，响应有折扣才附折后。
 
 ## Lifecycle Create
@@ -41,7 +51,7 @@ metadata:
 
 1. **Allowlist** — 意图映射到 `references/lifecycle/commands.md` 命令主体；未命中即拒绝。
 2. **Help** — `hcloud <Service> <Operation> --help` 取必填/条件必填；`[APIE_ERROR]` 或无 schema 即停止，不猜参数。
-3. **Resolve** — 自动跑必要只读依赖查询（VPC/子网/AZ/镜像/规格等）；多候选让用户选，缺失项一轮问完。
+3. **Resolve** — 跑必要只读依赖（VPC/子网/AZ/镜像/规格等）；多候选让用户选，缺失项一轮问完；长链在依赖收敛后分段交付。
 4. **Cost** — 能询价先走 Pricing 回表；不能询价则声明「价格未知且可能收费」并取得额外确认。
 5. **Dry** — 完整命令强制加全局 `--dryrun`（本地构造请求，非接口级 `dry_run`）；失败则修正重跑，不得转正式。
 6. **Confirm** — 回显资源/region/规格/数量/计费/金额或未知费用/批次顺序，等用户明确确认。

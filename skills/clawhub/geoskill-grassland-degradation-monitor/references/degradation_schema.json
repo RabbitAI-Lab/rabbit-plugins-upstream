@@ -1,0 +1,77 @@
+{
+  "description": "Grassland degradation status classification schema. Positive codes indicate degradation, negative codes indicate recovery, 0 is stable.",
+  "version": "1.0.0",
+  "classes": {
+    "severe_degradation": {
+      "code": 3,
+      "trend_threshold": -0.02,
+      "min_years": 3,
+      "color": "#d73027",
+      "description": "Severe degradation: NDVI declining >0.02/yr for 3+ years",
+      "recommendation": "Immediate restoration: grazing exclusion, reseeding, soil conservation"
+    },
+    "moderate_degradation": {
+      "code": 2,
+      "trend_threshold": -0.01,
+      "min_years": 3,
+      "color": "#fc8d59",
+      "description": "Moderate degradation: NDVI declining 0.01-0.02/yr for 3+ years",
+      "recommendation": "Priority restoration: reduced grazing pressure, rotational grazing"
+    },
+    "light_degradation": {
+      "code": 1,
+      "trend_threshold": -0.005,
+      "min_years": 3,
+      "color": "#fee08b",
+      "description": "Light degradation: NDVI declining 0.005-0.01/yr for 3+ years",
+      "recommendation": "Preventive management: monitor, adjust stocking rate"
+    },
+    "stable": {
+      "code": 0,
+      "trend_threshold": 0.0,
+      "min_years": 0,
+      "color": "#91cf60",
+      "description": "Stable: No significant trend detected",
+      "recommendation": "Sustainable use: maintain current management"
+    },
+    "light_recovery": {
+      "code": -1,
+      "trend_threshold": 0.005,
+      "min_years": 2,
+      "color": "#1a9850",
+      "description": "Light recovery: NDVI increasing 0.005-0.01/yr for 2+ years",
+      "recommendation": "Monitor and maintain: continue current practices"
+    },
+    "moderate_recovery": {
+      "code": -2,
+      "trend_threshold": 0.01,
+      "min_years": 2,
+      "color": "#006837",
+      "description": "Moderate recovery: NDVI increasing 0.01-0.02/yr for 2+ years",
+      "recommendation": "Positive trajectory: document and replicate management"
+    },
+    "significant_recovery": {
+      "code": -3,
+      "trend_threshold": 0.02,
+      "min_years": 2,
+      "color": "#004529",
+      "description": "Significant recovery: NDVI increasing >0.02/yr for 2+ years",
+      "recommendation": "Success case: use as reference for other areas"
+    }
+  },
+  "trend_methods": {
+    "theil-sen": "Robust non-parametric slope (median of pairwise slopes). Recommended for noisy remote sensing data.",
+    "ols": "Ordinary Least Squares. Sensitive to outliers but efficient for clean data.",
+    "mann-kendall": "Normalized Kendall tau. Non-parametric trend strength indicator."
+  },
+  "climate_normalization": {
+    "description": "Separates climate-driven vegetation variation from management-driven change using residual trend analysis.",
+    "method": "OLS regression of NDVI against precipitation and temperature anomalies, then trend of residuals.",
+    "reference": "Fensholt & Proud 2012, Remote Sensing of Environment"
+  },
+  "baci_design": {
+    "description": "Before-After-Control-Impact analysis for management effectiveness evaluation.",
+    "requirement": "Requires treatment area, control area, and intervention start year.",
+    "metric": "BACI = (treatment_after - treatment_before) - (control_after - control_before)"
+  }
+}

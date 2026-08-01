@@ -11,31 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and software architects use this skill to plan extensible platforms where a stable core is separated from customer, marketplace, or third-party plugins. <br>
+Developers and architects use this skill for guidance on deciding when to apply a microkernel architecture and how to structure a stable core with plugin-based extensions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The artifact refers readers to a separate Claude Code plugin that is outside this release artifact. <br>
-Mitigation: Review and scan the separate plugin before installing or running it. <br>
-Risk: Architecture guidance for plugin loaders, sandboxes, and validation pipelines can affect runtime trust boundaries if implemented incorrectly. <br>
-Mitigation: Review proposed plugin contracts, permission models, sandboxing, and validation steps before deploying a system based on the guidance. <br>
+Risk: Broad trigger terms such as "architecture" and "plugin" may cause the skill to activate in more conversations than necessary. <br>
+Mitigation: Enable or invoke the skill only when microkernel or plugin architecture guidance is relevant. <br>
+Risk: Architecture guidance can be misapplied to systems that do not need plugin extensibility. <br>
+Mitigation: Review the skill's When To Use and When NOT To Use criteria before applying its recommendations. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-microkernel) <br>
-- [Metadata Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+- [Publisher Profile](https://clawhub.ai/user/athola) <br>
+- [clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown] <br>
+**Output Type(s):** [text, markdown, guidance, configuration] <br>
+**Output Format:** [Markdown guidance with architecture recommendations and adoption steps] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only architecture guidance; no shell commands, code execution, or credential access are included in the artifact.] <br>
+**Other Properties Related to Output:** [Documentation-only guidance; no executable behavior.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

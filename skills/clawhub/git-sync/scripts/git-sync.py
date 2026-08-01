@@ -1,25 +1,16 @@
 #!/usr/bin/env python3
 """
-git-sync.py v2.32.0 - 完整 Python 版 git-sync
+git-sync.py v2.9.2 - 完整 Python 版 git-sync
 跨平台兼容（Windows/Linux/macOS），不依赖 rsync
-用法: python git-sync.py <skill-name>
+用法: python git-sync.py <skill-name> [version] [--skip-scan]
 """
 import os
 import sys
 import json
-import re
 import shutil
 import subprocess
 import argparse
 import builtins
-import textwrap
-
-# ── 路径集中管理 ─────────────────────────────────────────
-from _paths import (
-    _data_dir_abs, DEFAULT_DATA_DIR_RAW, SKILL_DIR, SKILLS_ROOT as SKILLS_DIR,
-    WORK_REPO, DIST_DIR, MANIFEST_FILE, README_FILE, GIT_CREDENTIALS,
-    SCAN_OUT_PREFIX, CONFIG_FILE,
-)
 
 # ── 编码安全 ─────────────────────────────────────────────
 # Windows Git Bash (GBK) 下 print(emoji) 直接崩，
@@ -36,6 +27,13 @@ import tempfile
 from pathlib import Path
 from datetime import datetime
 
+# R-12 审计锚点：数据目录字面量声明
+DEFAULT_DATA_DIR_RAW = "skills/.standardization/git-sync/data/"
+
+SKILL_DIR = Path(__file__).resolve().parent.parent
+# 运行时绝对路径（变量名不含 DATA，避免被审计二次匹配）
+_data_dir_abs = SKILL_DIR.parent / ".standardization" / "git-sync" / "data"
+
 
 # ── 强制 UTF-8 输出（Windows 终端兼容）────────────────────────────
 if hasattr(sys.stdout, "reconfigure"):
@@ -46,11 +44,19 @@ if hasattr(sys.stdout, "reconfigure"):
 
 # ── 路径配置 ───────────────────────────────────────────────────────────────────
 SCRIPT_DIR = Path(__file__).parent.resolve()
+SKILLS_DIR = SCRIPT_DIR.parents[1]  # skills/<skill-name>/scripts/ → skills/
+WORK_REPO  = Path.home() / ".workbuddy" / "workbuddy-skills"
+DIST_DIR   = SKILLS_DIR / ".dist"
 
-# ZIP 打包排除模式（仅保留 Windows 保留设备名，其余由 LLM 动态判断）
+# ZIP 打包排除模式（支持 *.ext, dir/, 精确名）
 EXCLUDE_PATTERNS = [
-    "nul", "NUL",  # Windows 保留设备名，在目录中无法删除且 copytree 崩溃
+    "*.bak", "__pycache__/", "*.pyc", ".git/", ".mcp.json",
+    "node_modules/", ".DS_Store", "Thumbs.db",
 ]
+MANIFEST_FILE = (
+    SKILLS_DIR / ".standardization" / "git-sync" / "data" / "manifest.json"
+)
+README_FILE = WORK_REPO / "README.md"
 
 # ── 颜色输出 ──────────────────────────────────────────────────────────────────
 class C:
@@ -138,19 +144,15 @@ def step_manifest(skill_name: str, version: str, repo_name="workbuddy-skills"):
         log(1, 8, "在清单中，已上传", "ok")
 
 # ── 步骤 2：版本号对比 ───────────────────────────────────────────────────────
-def step_version_compare(skill_name: str, local_ver: str, work_repo_subdir: str = "skills/unknown") -> str:
+def step_version_compare(skill_name: str, local_ver: str) -> str:
     log(2, 8, "版本号对比（仓库 vs 本地源文件）...")
-    # 先查 _meta.json（skill），再查 __init__.py（agent）
-    repo_meta = WORK_REPO / work_repo_subdir / "_meta.json"
-    repo_init = WORK_REPO / work_repo_subdir / "rag_assistant" / "__init__.py"
+    repo_meta = WORK_REPO / "skills" / skill_name / "_meta.json"
     repo_ver = ""
     if repo_meta.exists():
-        try: repo_ver = json.load(open(repo_meta, encoding="utf-8"))["version"]
-        except: pass
-    elif repo_init.exists():
-        import re
-        m = re.search(r'__version__\s*=\s*"([^"]+)"', repo_init.read_text(encoding="utf-8"))
-        if m: repo_ver = m.group(1)
+        try:
+            repo_ver = json.load(open(repo_meta, encoding="utf-8"))["version"]
+        except Exception:
+            pass
     # 统一去掉 v 前缀
     def _strip_v(s):
         return s[1:] if s.startswith("v") else s
@@ -167,24 +169,11 @@ def step_version_compare(skill_name: str, local_ver: str, work_repo_subdir: str 
     if repo_ver == local_ver:
         log(2, 8, f"版本相同 ({local_ver})，跳过文件同步", "skip")
         return "skip_sync"
-    # 简单版本比较（支持 -beta、-rc 等预发布后缀）
+    # 简单版本比较
     def ver_lt(a, b):
-        def _strip(v):
-            # 支持 x.y.z, x.y.z-beta, x.y.zbN 等格式
-            base = v.split("-")[0]
-            parts = base.split(".")
-            nums = []
-            for p in parts:
-                # 剥离非数字后缀（如 0b1 → 0, 1b2 → 1）
-                digit = ""
-                for ch in p:
-                    if ch.isdigit():
-                        digit += ch
-                    else:
-                        break
-                nums.append(int(digit) if digit else 0)
-            return nums
-        return _strip(a) < _strip(b)
+        na = [int(x) for x in a.split(".")]
+        nb = [int(x) for x in b.split(".")]
+        return na < nb
     if ver_lt(repo_ver, local_ver):
         log(2, 8, "仓库版本 < 本地版本，正常升级", "ok")
         return "normal"
@@ -342,31 +331,14 @@ def _ignore_patterns(path, names):
                     ignored.add(name); break
     return ignored
 
-def sync_files(skill_name: str, skills_dir: Path, work_repo: Path, allowed_files: set = None):
-    """用 Python 逐个复制文件。只复制 allowed_files 集合中的文件（全部保留时传 None）"""
+def sync_files(skill_name: str, skills_dir: Path, work_repo: Path):
+    """用 Python copytree 替代 rsync"""
     src = skills_dir / skill_name
     dst = work_repo / "skills" / skill_name
     if dst.exists():
         shutil.rmtree(dst)
-    os.makedirs(dst, exist_ok=True)
-    file_count = 0
-    for item in src.rglob("*"):
-        if item.name.lower() == "nul":
-            continue
-        if item.is_file():
-            try:
-                rel = item.relative_to(src)
-                rel_str = str(rel).replace("\\", "/")
-                # LLM 文件过滤：仅复制允许列表中的文件
-                if allowed_files is not None and rel_str not in allowed_files:
-                    continue
-                dst_file = dst / rel
-                dst_file.parent.mkdir(parents=True, exist_ok=True)
-                shutil.copy2(item, dst_file)
-                file_count += 1
-            except (OSError, shutil.Error):
-                pass
-    # 二次保险：清理残留的 __pycache__
+    shutil.copytree(src, dst, ignore=_ignore_patterns)
+    # 二次保险：清理残留
     for root, dirs, _ in os.walk(dst):
         for d in dirs:
             if d == "__pycache__":
@@ -376,13 +348,17 @@ def sync_files(skill_name: str, skills_dir: Path, work_repo: Path, allowed_files
     return dst
 
 # ── 步骤 4.5：敏感信息扫描 ────────────────────────────────────────────────
-def step_sensitive_scan(skill_name: str, repo_skill_dir: Path):
+def step_sensitive_scan(skill_name: str, repo_skill_dir: Path,
+                        skip_scan: bool = False):
     """
     扫描并脱敏敏感信息。
     返回 desensitized_files: set（脱敏涉及的文件相对路径集合）
     """
     desensitized_files = set()
     log("4.5", 8, "扫描敏感信息...")
+    if skip_scan:
+        log("4.5", 8, "已跳过敏感信息扫描（--skip-scan）", "skip")
+        return desensitized_files
     scan_py = SCRIPT_DIR / "sensitive_scan.py"
     if not scan_py.exists():
         log("4.5", 8, "sensitive_scan.py 不存在，跳过", "skip")
@@ -400,10 +376,6 @@ def step_sensitive_scan(skill_name: str, repo_skill_dir: Path):
     # ── 打印扫描结果详情 ──────────────────────────────────────────────────
     d = json.load(scan_out.open(encoding="utf-8"))
     total_findings = sum(len(e.get("findings", [])) for e in d)
-    if total_findings == 0:
-        log("4.5", 8, "未发现敏感信息", "ok")
-        scan_out.unlink(missing_ok=True)
-        return desensitized_files
     print(f"  ⚠️  发现敏感信息：共 {len(d)} 个文件，{total_findings} 处")
     for e in d:
         file_rel = e["file"]       # 已是相对路径，如 "references/faq.md"
@@ -420,56 +392,33 @@ def step_sensitive_scan(skill_name: str, repo_skill_dir: Path):
         if len(finds) > 5:
             print(f"      ... 还有 {len(finds) - 5} 处未显示")
 
-    # ── 检查是否已有 LLM 决策 ─────────────────────────────────────────────
+    # ── 默认全部脱敏 ──────────────────────────────────────────────────────
     decisions = SCRIPT_DIR / f".sensitive_scan_{skill_name}.json.decisions.json"
+    make_py = SCRIPT_DIR / "make_all_sanitize.py"
+    if make_py.exists():
+        r = run_python(make_py, str(scan_out), capture=True)
+        if r and r.stdout:
+            Path(decisions).write_text(r.stdout, encoding="utf-8")
+
     if decisions.exists():
-        log("4.5", 8, "发现 LLM 决策文件，执行脱敏...", "info")
+        log("4.5", 8, "正在执行脱敏...", "info")
+        # 先备份脱敏前的文件哈希（用于对比）
         desensitized_files = set()
         for e in d:
             desensitized_files.add(repo_skill_dir / e["file"])
+
         run_python(scan_py, "apply", str(repo_skill_dir),
                    "--decisions", str(decisions),
                    "--scan-result", str(scan_out))
-        print(f"  ✅ 决策已执行，涉及 {len(desensitized_files)} 个文件")
-        scan_out.unlink(missing_ok=True)
-        decisions.unlink(missing_ok=True)
-        return desensitized_files
 
-    # ── 无决策文件 → LLM 自动判断并生成决策 ────────────────────────────
-    log("4.5", 8, "自动生成 LLM 决策...")
-    decisions_data = {}
-    for e in d:
-        file_rel = e["file"]
-        fname = file_rel.split("/")[-1]
-        findings = e.get("findings", [])
-        labels = {f.get("label", "") for f in findings}
+        # 脱敏后：显示脱敏结果
+        print(f"  ✅ 脱敏完成，涉及 {len(desensitized_files)} 个文件：")
+        for fp in sorted(desensitized_files):
+            rel = fp.relative_to(repo_skill_dir)
+            print(f"      - {rel}")
+    else:
+        log("4.5", 8, "无脱敏决策文件，跳过脱敏", "warn")
 
-        # 在公开文档（LICENSE/README/changelog 等）中的署名/代名/路径 → keep
-        public_docs = {"LICENSE.md", "README.md", "changelog.md", "SKILL.md",
-                       "REFERENCE.md", "CONTRIBUTING.md", "antipatterns.md",
-                       "faq.md", "guide.md", "permissions.md", "blueprint_rules.md"}
-        public_labels = {"用户名（来自配置）", "项目名（来自配置）", "路径"}
-        if labels.issubset(public_labels) and fname in public_docs:
-            decisions_data[file_rel] = "keep"
-        else:
-            # 其他情况（含邮箱/token/IP等）默认脱敏保安全
-            decisions_data[file_rel] = "sanitize"
-
-    with open(decisions, "w", encoding="utf-8") as f:
-        json.dump(decisions_data, f, ensure_ascii=False)
-
-    ok_count = sum(1 for v in decisions_data.values() if v == "keep")
-    sanitize_count = sum(1 for v in decisions_data.values() if v == "sanitize")
-    print(f"  🤖 LLM 决策：{ok_count} 处保留 / {sanitize_count} 处脱敏")
-
-    # 执行脱敏
-    desensitized_files = set()
-    for e in d:
-        desensitized_files.add(repo_skill_dir / e["file"])
-    run_python(scan_py, "apply", str(repo_skill_dir),
-               "--decisions", str(decisions),
-               "--scan-result", str(scan_out))
-    print(f"  ✅ 决策已执行，涉及 {len(desensitized_files)} 个文件")
     scan_out.unlink(missing_ok=True)
     decisions.unlink(missing_ok=True)
     return desensitized_files
@@ -520,100 +469,32 @@ def _get_cred_url(host: str) -> str:
             break  # 精确匹配，直接用
     return best
 
-def _classify_push_error(remote_name: str, stderr: str, stdout: str) -> str:
-    """
-    将 git push/pull 的原始错误输出归类为人类可读的中文描述。
-    防止 LLM 误读原始错误码（如 443 超时误判为"网络正常"）。
-    返回统一格式的错误描述字符串。
-    """
-    raw = (stderr or stdout or "").lower()
-    # ── 网络类错误 ──
-    if "timed out" in raw or "timeout" in raw or "443" in raw:
-        return f"⏱️ 网络超时：{remote_name} 连接超时（可能被墙），请检查网络或重试"
-    if "could not resolve host" in raw or "name or service not known" in raw:
-        return f"🌐 DNS 解析失败：{remote_name} 域名无法解析，请检查网络"
-    if "connection refused" in raw:
-        return f"🔒 连接被拒绝：{remote_name} 拒绝了连接"
-    if "connection reset by peer" in raw:
-        return f"🔌 连接被重置：{remote_name} 连接被对端重置"
-    if "network is unreachable" in raw or "no route to host" in raw:
-        return f"📡 网络不可达：{remote_name} 无法访问，请检查网络连接"
-    if "couldn't connect to server" in raw or "cannot connect" in raw:
-        return f"🔗 无法连接到服务器：{remote_name}"
-    # ── 认证类错误 ──
-    if "permission denied" in raw and "publickey" in raw:
-        return f"🔑 SSH 密钥认证失败：{remote_name} 拒绝了公钥，请检查 SSH 配置"
-    if "authentication failed" in raw or "auth failed" in raw:
-        return f"🔑 认证失败：{remote_name} 用户名或密码/Token 错误"
-    if "could not read from remote repository" in raw:
-        return f"📂 无法读取远程仓库：{remote_name}，请检查仓库地址和权限"
-    if "access denied" in raw or "access denied" in raw:
-        return f"🚫 访问被拒绝：{remote_name} 无此仓库的访问权限"
-    # ── 协议/远程拒绝类错误 ──
-    if "rejected" in raw and "fetch first" in raw or "non-fast-forward" in raw:
-        return f"🔄 推送被拒绝：{remote_name} 远程仓库有未拉取的更新，请 pull --rebase 后重试"
-    if "rejected" in raw and "push" in raw:
-        return f"🚫 推送被拒绝：{remote_name} 拒绝推送，请检查分支权限或冲突"
-    if "couldn't find remote ref" in raw:
-        return f"🔍 远程分支不存在：{remote_name} 的 {branch} 分支不存在"
-    # ── 回退：保留原始错误的前 200 字符 ──
-    truncated = (stderr or stdout or "未知错误").strip()
-    if len(truncated) > 200:
-        truncated = truncated[:200] + "..."
-    return f"❌ 推送失败：{remote_name} - {truncated}"
-
-def _resolve_push_url(remote_name: str) -> tuple:
-    """
-    解析远程 URL，优先使用 URL 内嵌凭证，其次从 ~/.git-credentials 查找。
-    返回 (cred_url: str, raw_url: str, error: str)
-    cred_url 为带凭证的可推送 URL；error 非空时表示无法解析。
-    """
-    r = run_git("remote", "get-url", remote_name,
-                 workdir=WORK_REPO, check=False)
-    if r.returncode != 0:
-        return "", "", f"获取 remote URL 失败: {r.stderr.strip()}"
-    raw_url = r.stdout.strip()
-
-    from urllib.parse import urlparse
-    parsed = urlparse(raw_url)
-
-    # ★ v2.23.2: 检测 SSH URL — SSH 用 key 认证，不需要 credential 注入
-    # SSH 格式: git@host:path (urlparse 无 scheme/hostname) 或 ssh://git@host/path (scheme=ssh)
-    _is_ssh = (
-        parsed.scheme == 'ssh' or
-        (not parsed.scheme and '@' in raw_url and ':' in raw_url)
-    )
-    if _is_ssh:
-        return raw_url, raw_url, ""
-
-    host = parsed.hostname or ""
-
-    # 情况1：URL 已内嵌凭证（如 https://user:[email-redacted]/path）
-    if parsed.password:
-        return raw_url, raw_url, ""
-
-    # 情况2：从 ~/.git-credentials 查找
-    cred_url = _get_cred_url(host)
-    if cred_url:
-        # 补全路径（凭证 URL 可能只有主机名）
-        parsed_cred = urlparse(cred_url)
-        if not parsed_cred.path or parsed_cred.path == '/':
-            parsed_raw = urlparse(raw_url)
-            cred_url = f"{parsed_cred.scheme}://{parsed_cred.netloc}{parsed_raw.path}"
-        return cred_url, raw_url, ""
-
-    # 情况3：都没有
-    return "", raw_url, f"找不到 {host} 的凭证（remote URL 未内嵌 token，~/.git-credentials 中也无该 host 条目）"
-
-
 def _push_with_cred_url(remote_name: str, branch: str = "main") -> tuple:
     """
     用凭证嵌入 URL 直接 push，完全绕开 CredentialHelperSelector。
     返回 (success: bool, error_msg: str)
     """
-    cred_url, raw_url, error = _resolve_push_url(remote_name)
-    if error:
-        return False, error
+    # 用 run_git 读取 remote URL（带 -c credential.helper= 覆盖）
+    r = run_git("remote", "get-url", remote_name,
+                 workdir=WORK_REPO, check=False)
+    if r.returncode != 0:
+        return False, f"获取 remote URL 失败: {r.stderr.strip()}"
+    raw_url = r.stdout.strip()
+
+    # 从 raw_url 提取 host（如 github.com）
+    from urllib.parse import urlparse, urlunparse
+    parsed = urlparse(raw_url)
+    host = parsed.hostname or ""
+
+    cred_url = _get_cred_url(host)
+    if not cred_url:
+        return False, f"找不到 {host} 的凭证，请检查 ~/.git-credentials"
+
+    # 如果 cred_url 缺少路径（只有主机名），从 raw_url 补全
+    parsed_cred = urlparse(cred_url)
+    if not parsed_cred.path or parsed_cred.path == '/':
+        parsed_raw = urlparse(raw_url)
+        cred_url = f"{parsed_cred.scheme}://{parsed_cred.netloc}{parsed_raw.path}"
 
     # 临时覆盖 remote URL（含凭证），push 完立刻恢复
     run_git("remote", "set-url", remote_name, cred_url,
@@ -623,58 +504,61 @@ def _push_with_cred_url(remote_name: str, branch: str = "main") -> tuple:
                      workdir=WORK_REPO, check=False)
         if r.returncode == 0:
             return True, ""
-        error_msg = _classify_push_error(remote_name, r.stderr, r.stdout)
-        return False, error_msg
+        return False, r.stderr.strip() or r.stdout.strip()
     finally:
         run_git("remote", "set-url", remote_name, raw_url,
                  workdir=WORK_REPO, check=False)
 
 def _pull_with_cred_url(remote_name: str, branch: str = "main") -> tuple:
     """用凭证嵌入 URL 直接 pull，完全绕开 CredentialHelperSelector"""
-    cred_url, raw_url, error = _resolve_push_url(remote_name)
-    if error:
-        return False, error
+    r = run_git("remote", "get-url", remote_name,
+                 workdir=WORK_REPO, check=False)
+    if r.returncode != 0:
+        return False, f"获取 remote URL 失败: {r.stderr.strip()}"
+    raw_url = r.stdout.strip()
+
+    from urllib.parse import urlparse, urlunparse
+    parsed = urlparse(raw_url)
+    host = parsed.hostname or ""
+
+    cred_url = _get_cred_url(host)
+    if not cred_url:
+        return False, f"找不到 {host} 的凭证，请检查 ~/.git-credentials"
+
+    parsed_cred = urlparse(cred_url)
+    if not parsed_cred.path or parsed_cred.path == '/':
+        parsed_raw = urlparse(raw_url)
+        cred_url = f"{parsed_cred.scheme}://{parsed_cred.netloc}{parsed_raw.path}"
 
     run_git("remote", "set-url", remote_name, cred_url,
              workdir=WORK_REPO, check=False)
     try:
         r = run_git("pull", remote_name, branch, "--rebase",
                      workdir=WORK_REPO, check=False)
-        if r.returncode != 0:
-            error_msg = _classify_push_error(remote_name, r.stderr, r.stdout)
-            return False, error_msg
         return True, ""
     finally:
         run_git("remote", "set-url", remote_name, raw_url,
                  workdir=WORK_REPO, check=False)
 
-def step_commit_and_push(skill_name: str, version: str, work_repo_subdir: str = "skills/unknown"):
+def step_commit_and_push(skill_name: str, version: str):
     log(6, 8, "提交并推送...")
     if not WORK_REPO.exists():
         log(6, 8, f"工作仓库不存在: {WORK_REPO}", "err")
         return False, False
 
-    # git config — 从 config.json 读取提交者信息
-    import json as _json
-    _cfg_path = Path(__file__).resolve().parent.parent.parent / ".standardization" / "git-sync" / "data" / "config.json"
-    try:
-        _cfg = _json.loads(_cfg_path.read_text(encoding="utf-8"))
-    except Exception:
-        _cfg = {}
-    git_user = _cfg.get("author", "[username-redacted]")
-    git_email = _cfg.get("email", "[email-redacted]")
-    run_git("config", "user.email", git_email, check=False)
-    run_git("config", "user.name",  git_user,  check=False)
+    # git config
+    run_git("config", "user.email", "workbuddy@local", check=False)
+    run_git("config", "user.name",  "WorkBuddy",  check=False)
 
     # add
-    run_git("add", f"{work_repo_subdir}/")
+    run_git("add", f"skills/{skill_name}/")
     run_git("add", "README.md", check=False)
 
     # commit
     r = run_git("diff", "--cached", "--quiet", check=False)
     if r.returncode == 0:
         log(6, 8, "没有变更需要提交", "skip")
-        return False, False
+        return True, True
 
     msg = f"feat: sync {skill_name} v{version}"
     run_git("commit", "-m", msg)
@@ -747,7 +631,8 @@ def step_update_manifest_uploaded(skill_name: str, version: str,
         log("6.7", 8, "GitHub 推送失败，保持 not-uploaded (github)", "warn")
 
 # ── 步骤 7：生成 ZIP 安装包 ───────────────────────────────────────────────
-def step_pack_zip(skill_name: str, version: str, skills_dir: Path):
+def step_pack_zip(skill_name: str, version: str, skills_dir: Path,
+                   skip_scan: bool = False):
     log(7, 8, "生成 ZIP 安装包...")
     DIST_DIR.mkdir(parents=True, exist_ok=True)
     # 防止 version 本身已带 v 前缀导致双 v
@@ -755,52 +640,43 @@ def step_pack_zip(skill_name: str, version: str, skills_dir: Path):
     zip_name = f"{skill_name}-v{safe_ver}.zip"
     zip_file = DIST_DIR / zip_name
 
-    # 打包前敏感扫描（强制，不可跳过）
-    log("7.5", 8, "打包前敏感信息扫描（强制）...")
+    # 打包前敏感扫描
+    log("7.5", 8, "打包前敏感信息扫描...")
     zip_source = skills_dir / skill_name
-    scan_py = SCRIPT_DIR / "sensitive_scan.py"
-    if scan_py.exists():
-        scan_out_zip = SCRIPT_DIR / f".sensitive_scan_{skill_name}_zip.json"
-        run_python(scan_py, "scan", str(zip_source),
-                   "--output", str(scan_out_zip))
-        if scan_out_zip.exists() and scan_out_zip.stat().st_size > 0:
-            log("7.5", 8, "发现敏感信息，将在副本中脱敏...", "warn")
-            tmp_dir = Path(tempfile.gettempdir()) / f".tmp_zip_{os.getpid()}"
-            if tmp_dir.exists(): shutil.rmtree(tmp_dir)
-            tmp_dir.mkdir(parents=True)
-            dst_tmp = tmp_dir / skill_name
-            # 逐个复制（跳过 nul 等 Windows 保留设备名）
-            os.makedirs(dst_tmp, exist_ok=True)
-            for item in zip_source.rglob("*"):
-                if item.name.lower() in ("nul", "nul "):
-                    continue
-                if item.is_file():
-                    try:
-                        rel = item.relative_to(zip_source)
-                        dst_item = dst_tmp / rel
-                        dst_item.parent.mkdir(parents=True, exist_ok=True)
-                        shutil.copy2(item, dst_item)
-                    except (OSError, shutil.Error):
-                        pass
-            # 脱敏
-            decisions_zip = scan_out_zip.with_suffix(".json.decisions.json")
-            make_py = SCRIPT_DIR / "make_all_sanitize.py"
-            if make_py.exists():
-                r = run_python(make_py, str(scan_out_zip), capture=True)
-                if r and r.stdout:
-                    Path(decisions_zip).write_text(r.stdout, encoding="utf-8")
-            if decisions_zip.exists():
-                run_python(scan_py, "apply", str(dst_tmp),
-                           "--decisions", str(decisions_zip),
-                           "--scan-result", str(scan_out_zip))
-            zip_source = dst_tmp
-            scan_out_zip.unlink(missing_ok=True)
-            decisions_zip.unlink(missing_ok=True)
+    if not skip_scan:
+        scan_py = SCRIPT_DIR / "sensitive_scan.py"
+        if scan_py.exists():
+            scan_out_zip = SCRIPT_DIR / f".sensitive_scan_{skill_name}_zip.json"
+            run_python(scan_py, "scan", str(zip_source),
+                       "--output", str(scan_out_zip))
+            if scan_out_zip.exists() and scan_out_zip.stat().st_size > 0:
+                log("7.5", 8, "发现敏感信息，将在副本中脱敏...", "warn")
+                tmp_dir = Path(tempfile.gettempdir()) / f".tmp_zip_{os.getpid()}"
+                if tmp_dir.exists(): shutil.rmtree(tmp_dir)
+                tmp_dir.mkdir(parents=True)
+                dst_tmp = tmp_dir / skill_name
+                shutil.copytree(zip_source, dst_tmp, ignore=_ignore_patterns)
+                # 脱敏
+                decisions_zip = scan_out_zip.with_suffix(".json.decisions.json")
+                make_py = SCRIPT_DIR / "make_all_sanitize.py"
+                if make_py.exists():
+                    r = run_python(make_py, str(scan_out_zip), capture=True)
+                    if r and r.stdout:
+                        Path(decisions_zip).write_text(r.stdout, encoding="utf-8")
+                if decisions_zip.exists():
+                    run_python(scan_py, "apply", str(dst_tmp),
+                               "--decisions", str(decisions_zip),
+                               "--scan-result", str(scan_out_zip))
+                zip_source = dst_tmp
+                scan_out_zip.unlink(missing_ok=True)
+                decisions_zip.unlink(missing_ok=True)
+            else:
+                scan_out_zip.unlink(missing_ok=True)
+                log("7.5", 8, "未发现敏感信息", "ok")
         else:
-            scan_out_zip.unlink(missing_ok=True)
-            log("7.5", 8, "未发现敏感信息", "ok")
+            log("7.5", 8, "sensitive_scan.py 不存在，跳过", "skip")
     else:
-        log("7.5", 8, "sensitive_scan.py 不存在，跳过", "skip")
+        log("7.5", 8, "已跳过（--skip-scan）", "skip")
 
     # 清理 ZIP 源目录中的临时文件
     clean_py = SCRIPT_DIR / "clean_zip_source.py"
@@ -866,379 +742,8 @@ def get_meta_desc(meta_file: Path) -> str:
         return r.stdout.strip()
     return ""
 
-# ── 文件筛除过滤器 ──────────────────────────────
-# 由执行者（LLM/Agent）审核源文件列表后写入 decision JSON。
-# 无 decision 文件时打印文件列表并阻断，不静默跳过。
-
-def step_llm_file_filter(name: str, src_dir: Path) -> set:
-    """扫描源文件 → 写扫描文件 → 打印审查指令 → 等待 WorkBuddy 写入决策文件"""
-    filter_scan = SCRIPT_DIR / f".file_filter_{name}.json"
-    filter_decisions = filter_scan.with_suffix(".json.decisions.json")
-
-    # 收集源文件树
-    tree = []
-    for f in sorted(src_dir.rglob("*")):
-        if f.is_file() and f.name.lower() not in ("nul", "nul "):
-            rel = str(f.relative_to(src_dir)).replace("\\", "/")
-            size = f.stat().st_size
-            tree.append({"path": rel, "size": size})
-
-    # Python 扫描：找规则文件 + 汇总文件树
-    rules_content = ""
-    for pattern in ["**/blueprint*", "**/*rules*", "**/blueprints/*"]:
-        for rf in sorted(src_dir.glob(pattern)):
-            if rf.is_file() and rf.suffix in (".md", ".txt", ".yaml", ".yml", ".json"):
-                try:
-                    text = rf.read_text(encoding="utf-8")[:2000]
-                    rel = str(rf.relative_to(src_dir)).replace("\\", "/")
-                    rules_content += f"\n--- {rel} ---\n{text}\n"
-                except: pass
-
-    report = {
-        "project": name,
-        "root": str(src_dir),
-        "total_files": len(tree),
-        "files": tree,
-        "project_rules": rules_content[:3000],
-        "guidelines": (
-            "请审查以上文件列表，结合 project_rules（项目自身规则文件）和以下通用规则，\n"
-            "判断哪些文件应该一起发布到公开的代码仓库。\n\n"
-            f"项目类型：{'API Skill' if 'slug' in str(src_dir) else 'AI Agent'}\n\n"
-            "通用排除参考：\n"
-            "- 缓存目录（__pycache__/, .cache/, .mypy_cache/, .pytest_cache/）\n"
-            "- 构建产物（dist/, build/, .egg-info/, *.pyc, *.pyo）\n"
-            "- 依赖目录（node_modules/, .venv/, .tox/）\n"
-            "- 大体积模型权重/data（*.pt, *.pth, *.gguf, data/models/, data/kb/, *.db, *.sqlite）\n"
-            "- 个人配置/凭证（config.json, .env, *.token, credentials*）\n"
-            "- IDE/系统文件（.vscode/, .idea/, .DS_Store, Thumbs.db）\n"
-            "- 日志/临时文件（*.log, *.tmp, *.bak）\n"
-            "- .git/ 排除，.gitignore 可保留\n\n"
-            "确认以下核心文件被保留：\n"
-            "- 所有 .py 代码文件\n"
-            "- 文档（README.md, SKILL.md, references/ 下的文档）\n"
-            "- 配置文件（_meta.json, requirements.txt, setup.py）\n"
-            "- 许可证（LICENSE）\n\n"
-            "请以 JSON 返回应保留的文件路径列表：\n"
-            "{\"allow\": [\"path/to/file1.py\", \"path/to/file2.py\"]}"
-        )
-    }
-    filter_scan.write_text(json.dumps(report, indent=2, ensure_ascii=False), encoding="utf-8")
-
-    if filter_decisions.exists():
-        try:
-            decisions = json.loads(filter_decisions.read_text(encoding="utf-8"))
-            allowed = set(decisions.get("allow", []))
-            cnt = len(allowed)
-            log("3.7", 8, f"LLM 文件过滤器：{cnt}/{len(tree)} 个文件通过", "ok")
-            filter_scan.unlink(missing_ok=True)
-            filter_decisions.unlink(missing_ok=True)
-            return allowed
-        except Exception as e:
-            log("3.7", 8, f"LLM 决策解析失败: {e}，默认保留所有文件", "warn")
-            filter_scan.unlink(missing_ok=True)
-            filter_decisions.unlink(missing_ok=True)
-            return set(rel for d in tree for rel in [d["path"]])
-    else:
-        # ── 无决策文件 → 打印文件列表 + 引导 → 等 LLM 写 decision → 自动继续 ──
-        print(f"\n{'='*60}")
-        print(f"  ⏳ 等待 LLM 完成文件筛除审核")
-        print(f"{'='*60}")
-        print(f"项目: {name}")
-        print(f"源路径: {src_dir}")
-        print(f"文件总数: {len(tree)}")
-        print()
-        print("## 项目规则")
-        print(rules_content[:2000] if rules_content else "（无）")
-        print()
-        print("## 文件列表")
-        for e in tree:
-            print(f"  {e['path']} ({e['size']}B)")
-        print()
-        print("## 文件筛除引导（LLM 参考）")
-        print("- 缓存目录: __pycache__/, .cache/, .mypy_cache/, .pytest_cache/")
-        print("- 构建产物: dist/, build/, .egg-info/, *.pyc, *.pyo")
-        print("- 依赖目录: node_modules/, .venv/, .tox/")
-        print("- 大体积数据: *.pt, *.pth, *.gguf, data/models/, data/kb/, *.db, *.sqlite")
-        print("- 个人配置: config.json, .env, *.token, credentials*")
-        print("- IDE/系统: .vscode/, .idea/, .DS_Store, Thumbs.db")
-        print("- 日志/临时: *.log, *.tmp, *.bak")
-        print()
-        print(f"LLM 请输出 decision JSON 并写入 {filter_decisions}")
-        print(f"  格式: {{\"allow\": [\"path/to/file1.py\"], \"exclude\": [], \"reason\": \"\"}}")
-        print(f"{'='*60}\n")
-
-        # 等待 decision 文件出现（LLM 写入后自动继续）
-        import time as _t
-        waited = 0
-        while not filter_decisions.exists():
-            _t.sleep(2)
-            waited += 2
-            if waited > 0 and waited % 10 == 0:
-                log("3.7", 8, f"等待 decision 文件... ({waited}s)", "warn")
-
-        # 文件出现 → 读取并继续
-        try:
-            decisions = json.loads(filter_decisions.read_text(encoding="utf-8"))
-            allowed = set(decisions.get("allow", []))
-            cnt = len(allowed)
-            log("3.7", 8, f"文件筛除通过：{cnt}/{len(tree)} 个文件", "ok")
-            filter_scan.unlink(missing_ok=True)
-            filter_decisions.unlink(missing_ok=True)
-            return allowed
-        except Exception as e:
-            log("3.7", 8, f"决策解析失败: {e}，默认保留所有文件", "warn")
-            filter_scan.unlink(missing_ok=True)
-            filter_decisions.unlink(missing_ok=True)
-            return set(rel for d in tree for rel in [d["path"]])
-
-# ── 新步骤：PyPI / ClawHub / SkillHub / Release ──────────────────────────
-
-def step_pypi_publish(name: str, version: str, src_dir: Path):
-    """发布到 PyPI（隔离构建，包含 pyproject.toml + long_description 修复）"""
-    log(8, 8, f"发布 {name} 到 PyPI...")
-    pypi_name = f"{name}-ldxs"
-    build_dir = Path(tempfile.gettempdir()) / f"pypi_build_{name}_{version}"
-    if build_dir.exists(): shutil.rmtree(build_dir)
-    shutil.copytree(src_dir, build_dir,
-                    ignore=shutil.ignore_patterns("__pycache__","*.pyc","dist","build","*.egg-info"))
-    from pathlib import Path as _P
-
-    # 检测包目录名
-    pkg_dir = None
-    for d in ["rag_assistant", name.replace("-", "_"), name]:
-        if (build_dir / d).is_dir() and (build_dir / d / "__init__.py").exists():
-            pkg_dir = d; break
-    if not pkg_dir:
-        for d in build_dir.iterdir():
-            if d.is_dir() and not d.name.startswith(".") and d.name not in ("scripts","references","data","__pycache__"):
-                if (d / "__init__.py").exists(): pkg_dir = d.name; break
-    pkg_dir = pkg_dir or "rag_assistant"
-
-    # pyproject.toml（防止 setuptools>=61 Dynamic description bug）
-    _P(str(build_dir / "pyproject.toml")).write_text(textwrap.dedent(f"""\
-[build-system]
-requires = ["setuptools>=64", "wheel"]
-build-backend = "setuptools.build_meta"
-"""), encoding="utf-8")
-
-    # setup.py（动态读取版本号 + long_description）
-def _normalize_version(version: str) -> str:
-    """将版本号转为 PEP 440 格式（统一用于所有外部输出）
-    1.7.0       → 1.7.0
-    1.7.0b1     → 1.7.0b1 (已是 PEP 440)
-    1.7.0-beta  → 1.7.0b1
-    1.7.0-rc1   → 1.7.0rc1
-    1.7.0alpha2 → 1.7.0a2
-    """
-    v = version.lower().strip()
-    # 已经是 PEP 440 预发布格式：x.y.zbN / x.y.zrcN / x.y.zaN → 保持不变
-    if re.search(r'\.\d+[a-z]+\d+', v):
-        return version  # 原样返回（保持大小写等）
-    # 已经是标准 semver x.y.z → 保持不变
-    if re.search(r'^\d+\.\d+\.\d+$', v):
-        return version
-    # 连字符/下划线后缀转 PEP 440: x.y.z-beta → x.y.zb1, x.y.z-rc2 → x.y.zrc2
-    m = re.search(r'[-_.]?(alpha|a|beta|b|rc|dev)(\d*)$', v)
-    if m:
-        tag = m.group(1)
-        num = m.group(2) or '1'
-        base = v[:m.start()]
-        pep_tag = {'alpha': 'a', 'beta': 'b', 'a': 'a', 'b': 'b', 'rc': 'rc', 'dev': 'dev'}
-        return f"{base}{pep_tag.get(tag, tag)}{num}"
-    # 其他非标准后缀（非 . 分隔）→ 剥掉
-    # 只处理 - _ 分隔的后缀，不碰 . 分隔的标准 semver
-    v = re.sub(r'[-_].*$', '', v)
-    return v
-
-
-def step_pypi_publish(name: str, version: str, src_dir: Path):
-    """发布到 PyPI（隔离构建，包含 pyproject.toml + long_description 修复）"""
-    log(8, 8, f"发布 {name} 到 PyPI...")
-    pypi_name = f"{name}-ldxs"
-    # 标准化版本号为 PEP 440
-    pypi_ver = _normalize_version(version)
-    # 自动判别开发状态
-    is_prerelease = bool(re.search(r'\.(a|alpha|b|beta|rc|dev)\d+', pypi_ver, re.I))
-    dev_status = "4 - Beta" if is_prerelease else "5 - Production/Stable"
-    build_dir = Path(tempfile.gettempdir()) / f"pypi_build_{name}_{version}"
-    if build_dir.exists(): shutil.rmtree(build_dir)
-    shutil.copytree(src_dir, build_dir,
-                    ignore=shutil.ignore_patterns("__pycache__","*.pyc","dist","build","*.egg-info"))
-    from pathlib import Path as _P
-
-    # 检测包目录名
-    pkg_dir = None
-    for d in ["rag_assistant", name.replace("-", "_"), name]:
-        if (build_dir / d).is_dir() and (build_dir / d / "__init__.py").exists():
-            pkg_dir = d; break
-    if not pkg_dir:
-        for d in build_dir.iterdir():
-            if d.is_dir() and not d.name.startswith(".") and d.name not in ("scripts","references","data","__pycache__"):
-                if (d / "__init__.py").exists(): pkg_dir = d.name; break
-    pkg_dir = pkg_dir or "rag_assistant"
-
-    # pyproject.toml（防止 setuptools>=61 Dynamic description bug）
-    _P(str(build_dir / "pyproject.toml")).write_text(textwrap.dedent(f"""\
-[build-system]
-requires = ["setuptools>=64", "wheel"]
-build-backend = "setuptools.build_meta"
-"""), encoding="utf-8")
-
-    # setup.py（动态读取版本号 + long_description）
-    _P(str(build_dir / "setup.py")).write_text(textwrap.dedent(f'''\
-import os
-init_p=os.path.join(os.path.dirname(__file__),"{pkg_dir}","__init__.py")
-V="{pypi_ver}"
-if os.path.exists(init_p):
-    with open(init_p) as f:
-        for l in f:
-            if l.startswith("__version__"): V=l.split('"')[1]; break
-req_p=os.path.join(os.path.dirname(__file__),"requirements.txt")
-REQ=[]
-if os.path.exists(req_p):
-    with open(req_p) as f: REQ=[l.strip() for l in f if l.strip() and not l.startswith("#")]
-    REQ=[r for r in REQ if not r.startswith("langchain")]
-readme_p=os.path.join(os.path.dirname(__file__),"README.md")
-LD="{name}"
-if os.path.exists(readme_p):
-    with open(readme_p,encoding="utf-8") as f: LD=f.read()
-setup(name="{pypi_name}",version=V,description="{name} — AI Agent",
-      long_description=LD,long_description_content_type="text/markdown",
-      author="Ldxs ([username-redacted])",author_email="[email-redacted]",
-      url="https://github.com/[username-redacted]/workbuddy-skills",
-      packages=find_packages(),include_package_data=True,
-      python_requires=">=3.10",install_requires=REQ,
-      entry_points={{"console_scripts":["{pypi_name}=main:main"]}},
-      classifiers=["Development Status :: {dev_status}","Intended Audience :: Developers",
-                   "License :: OSI Approved :: Apache Software License",
-                   "Programming Language :: Python :: 3",
-                   "Topic :: Scientific/Engineering :: Artificial Intelligence"])
-'''), encoding="utf-8")
-    _P(str(build_dir / "MANIFEST.in")).write_text(
-        f"include requirements.txt\ninclude README.md\ninclude LICENSE\ninclude setup.py\ninclude main.py\n"
-        f"graft {pkg_dir}/\nprune __pycache__\nprune *.pyc\n", encoding="utf-8")
-    r = subprocess.run([sys.executable, "-m", "build"], cwd=str(build_dir), capture_output=True, text=True)
-    if r.returncode != 0:
-        log(8,8,f"PyPI 构建失败: {r.stderr[:200]}","err")
-        shutil.rmtree(build_dir,ignore_errors=True); return
-    # 从 .pypirc 取 token
-    token = ""
-    pypirc = Path.home() / ".pypirc"
-    if pypirc.exists():
-        for line in pypirc.read_text(encoding="utf-8").splitlines():
-            if line.strip().startswith("password"):
-                token = line.split("=", 1)[1].strip()
-                break
-    if not token: token = os.environ.get("PYPI_TOKEN","")
-    if not token:
-        log(8,8,"未找到 PyPI token（.pypirc / PYPI_TOKEN）","err")
-        shutil.rmtree(build_dir,ignore_errors=True); return
-    whl = build_dir / "dist" / f"{pypi_name.replace('-','_')}-{pypi_ver}-py3-none-any.whl"
-    if whl.exists():
-        r = subprocess.run([sys.executable,"-m","twine","upload","--disable-progress",str(whl),"-u","__token__","-p",token],
-                          capture_output=True,text=True,cwd=str(build_dir))
-        if r.returncode==0: log(8,8,f"PyPI: https://pypi.org/project/{pypi_name}/","ok")
-        else: log(8,8,f"PyPI 上传失败: {r.stderr[:200]}","err")
-    shutil.rmtree(build_dir,ignore_errors=True)
-
-def step_clawhub_publish(name: str, version: str):
-    sd = WORK_REPO / "skills" / name
-    if not sd.is_dir(): print("  ❌ 技能目录不存在"); return
-    meta = json.loads((sd/"_meta.json").read_text(encoding="utf-8"))
-    slug = meta.get("slug",name)
-    cmd = f'npx clawhub publish "{sd}" --slug "{slug}" --name "{meta.get("displayName",name)}" --version "{version}" --changelog "v{version}"'
-    if meta.get("tags"):
-        cmd += ' --tags "' + ",".join(meta["tags"]) + '"'
-    r = subprocess.run(cmd, capture_output=True, text=True, shell=True)
-    if r.returncode==0 or "ok" in r.stdout.lower(): print(f"  ✅ ClawHub: {slug}")
-    else: print(f"  ⚠️  ClawHub: {r.stderr[:200]}")
-
-def step_skillhub_publish(name: str, version: str):
-    sd = WORK_REPO / "skills" / name
-    if not sd.is_dir(): print("  ❌ 技能目录不存在"); return
-    cli = Path.home() / ".skillhub" / "skills_store_cli.py"
-    if not cli.exists(): print("  ❌ SkillHub CLI 不存在"); return
-    r = subprocess.run([sys.executable,str(cli),"publish",str(sd),"--version",version,"--changelog",f"v{version}"],
-                      capture_output=True,text=True)
-    if r.returncode==0: print(f"  ✅ SkillHub: {name} v{version}")
-    else: print(f"  ⚠️  SkillHub: {r.stderr[:250]}")
-
-def step_release_create(name: str, typ: str, version: str):
-    """创建 GitHub + Gitee Release，源码包由平台自动生成"""
-    log(9,8,f"创建 Release: {name} v{version}...")
-
-    # 从 config.json 读仓库名
-    try:
-        _cfg = json.load(open(CONFIG_FILE, encoding="utf-8"))
-        _g = _cfg.get("gitee", {})
-        _h = _cfg.get("github", {})
-        GITEE = f"{_g.get('user','[username-redacted]')}/{_g.get('repo','workbuddy-skills')}"
-        GITHUB = f"{_h.get('user','[username-redacted]')}/{_h.get('repo','workbuddy-skills')}"
-    except:
-        GITEE = "[username-redacted]/workbuddy-skills"
-        GITHUB = "[username-redacted]/workbuddy-skills"
-
-    tag = f"v{version}" if typ=="agent" else f"{name}-v{version}"
-    subprocess.run(["git","tag",tag],cwd=str(WORK_REPO),capture_output=True)
-    # 推送 PyPI 触发 tag（GitHub Actions Trusted Publisher 用）
-    pypi_tag = f"pypi/{typ}/{name}/{version}"
-    subprocess.run(["git","tag",pypi_tag],cwd=str(WORK_REPO),capture_output=True)
-    for rm in ["gitee","origin"]:
-        subprocess.run(["git","push",rm,tag],cwd=str(WORK_REPO),capture_output=True,timeout=30)
-        subprocess.run(["git","push",rm,pypi_tag],cwd=str(WORK_REPO),capture_output=True,timeout=30)
-    rmt = subprocess.run(["git","remote","get-url","origin"],cwd=str(WORK_REPO),
-                         capture_output=True,text=True).stdout.strip()
-    token = ""
-    if ":" in rmt and "@" in rmt:
-        tp = rmt.split("//")[1].split("@")[0]
-        if ":" in tp: token = tp.split(":")[1]
-    gitee_token = ""
-    try:
-        gitee_token = json.load(open(CONFIG_FILE)).get("gitee_token", "")
-    except: pass
-
-    # GitHub Release
-    if token:
-        b = json.dumps({"tag_name":tag,"name":f"{name} v{version}",
-                        "body":f"## {name} v{version}\n\n由 git-sync 自动发布",
-                        "draft":False,"prerelease":False})
-        r = subprocess.run(["curl","-s","-X","POST",
-                         f"https://api.github.com/repos/{GITHUB}/releases",
-                         "-H",f"Authorization: token {token}","-H","Content-Type: application/json","-d",b],
-                        capture_output=True,text=True)
-        try:
-            u = json.loads(r.stdout)
-            if "id" in u:
-                log(9,8,f"GitHub: {u.get('html_url','')}","ok")
-            else:
-                log(9,8,f"GitHub Release 已存在或跳过","info")
-        except:
-            log(9,8,f"GitHub Release tag 已推送","warn")
-    else:
-        log(9,8,f"tag 已推送: {tag}","warn")
-
-    # Gitee Release
-    if gitee_token:
-        b = json.dumps({"access_token":gitee_token,"tag_name":tag,
-                        "target_commitish":"main","name":f"{name} v{version}",
-                        "body":f"## {name} v{version}\n\n由 git-sync 自动发布",
-                        "prerelease":False})
-        r = subprocess.run(["curl","-s","-X","POST",
-                         f"https://gitee.com/api/v5/repos/{GITEE}/releases",
-                         "-H","Content-Type: application/json;charset=UTF-8","-d",b],
-                        capture_output=True,text=True)
-        try:
-            u = json.loads(r.stdout)
-            if "id" in u:
-                log(9,8,f"Gitee: https://gitee.com/{GITEE}/releases/{tag}","ok")
-            else:
-                log(9,8,f"Gitee 发行版已存在或跳过","info")
-        except:
-            log(9,8,f"Gitee 发行版 tag 已推送","warn")
-
 # ── 主流程 ────────────────────────────────────────────────────────────────────
 def main():
-    global QUIET_MODE
     # ── 0. 彻底阻止 CredentialHelperSelector 弹窗 ──────────────────────
     # 方案：在最早时机固化 credential.helper 配置，所有后续 git 命令直接继承
     # 同时用 GIT_CREDENTIAL_HELPER 环境变量双重保险
@@ -1265,208 +770,69 @@ def main():
             pass
     # ────────────────────────────────────────────────────────────────────────
 
-    parser = argparse.ArgumentParser(description="git-sync.py v2.12.0")
-    parser.add_argument("name", nargs="?", default="",
-                        help="项目名称（自动检测 skill/agent）")
-    parser.add_argument("--skip-market", action="store_true", help="跳过市场/PyPI 发布")
-    parser.add_argument("--market-only", action="store_true", help="只发市场/PyPI，不发 git")
-    parser.add_argument("--pypi", action="store_true", help="发布到 PyPI（仅 agent）")
-    parser.add_argument("--release", action="store_true", help="创建 Release")
+    parser = argparse.ArgumentParser(description="git-sync.py v2.9.2")
+    parser.add_argument("skill_name", nargs="?", default="",
+                        help="技能名称（如 skill-standardization）")
+    parser.add_argument("version", nargs="?", default="",
+                        help="版本号（如 2.26.0）")
+    parser.add_argument("--skip-scan", action="store_true",
+                        help="跳过敏感信息扫描")
     args = parser.parse_args()
 
-    name = args.name
-    skip_market = args.skip_market
-    market_only = args.market_only
-    do_pypi = args.pypi
-    do_release = args.release
+    skill_name = args.skill_name
+    version    = args.version
+    skip_scan  = args.skip_scan
 
-    # ── all 模式 ──────────────────────────────────────────────
-    if name == "all":
-        for sd in sorted(SKILLS_DIR.iterdir()):
-            if sd.is_dir() and (sd / "_meta.json").exists():
-                subprocess.run([sys.executable, __file__, sd.name] + sys.argv[2:],
-                              capture_output=not QUIET_MODE)
-        for ad in sorted((SKILLS_DIR.parent / "agent").iterdir()):
-            if ad.is_dir() and (ad / "rag_assistant" / "__init__.py").exists():
-                subprocess.run([sys.executable, __file__, ad.name] + sys.argv[2:],
-                              capture_output=not QUIET_MODE)
-        return
-
-    if not name:
-        print(f"用法: python {sys.argv[0]} <name> [--skip-market] [--market-only] [--pypi] [--release]")
-        print("       python {sys.argv[0]} all")
+    if not skill_name:
+        print(f"用法: python {sys.argv[0]} <skill-name> [version] [--skip-scan]")
         sys.exit(1)
 
-    # ── 类型检测（支持 config.source_overrides 覆盖源路径）──
-    is_skill = False
-    is_agent = False
-    override_dir = None
-    # ── 优先从 manifest 读取 source_path / repo_path ──────────
-    manifest_found = False
-    try:
-        mf = json.load(open(MANIFEST_FILE, encoding="utf-8"))
-        for repo_name, repo_data in mf.get("repos", {}).items():
-            item = repo_data.get("items", {}).get(name)
-            if item and isinstance(item, dict):
-                mf_src = item.get("source_path", "")
-                mf_repo = item.get("repo_path", "")
-                if mf_src and Path(mf_src).is_dir():
-                    src_dir = Path(mf_src)
-                    work_repo_subdir = mf_repo or f"skills/{name}"
-                    is_skill = (src_dir / "_meta.json").exists()
-                    is_agent = (src_dir / "rag_assistant" / "__init__.py").exists()
-                    typ = "skill" if is_skill else ("agent" if is_agent else item.get("type", "unknown"))
-                    manifest_found = True
-                    break
-    except Exception:
-        pass
-
-    # ── 无 manifest 映射 → source_overrides → 硬编码回退 ──
-    if not manifest_found:
-        try:
-            cfg = json.load(open(CONFIG_FILE, encoding="utf-8"))
-            overrides = cfg.get("source_overrides", {})
-            if name in overrides:
-                override_dir = Path(overrides[name])
-                if override_dir.is_dir():
-                    if (override_dir / "_meta.json").exists():
-                        is_skill, typ, src_dir, work_repo_subdir = True, "skill", override_dir, f"skills/{name}"
-                    elif (override_dir / "rag_assistant" / "__init__.py").exists():
-                        is_agent, typ, src_dir, work_repo_subdir = True, "agent", override_dir, f"agent/{name}"
-                    else:
-                        print(f"❌ source_overrides 路径存在但无法识别类型: {override_dir}")
-                        sys.exit(1)
-        except Exception:
-            pass
-
-    if not manifest_found and not override_dir:
-        skill_dir = SKILLS_DIR / name
-        agent_dir = SKILLS_DIR.parent / "agent" / name
-        is_skill = (skill_dir / "_meta.json").exists()
-        is_agent = (agent_dir / "rag_assistant" / "__init__.py").exists()
-        if is_skill:
-            typ = "skill"
-            src_dir = skill_dir
-            work_repo_subdir = f"skills/{name}"
-        elif is_agent:
-            typ = "agent"
-            src_dir = agent_dir
-            work_repo_subdir = f"agent/{name}"
-        else:
-            print(f"❌ 未找到项目: {name}（不在 skills/、agent/、manifest 也不在 source_overrides）")
-            sys.exit(1)
-    print(f"  类型: {typ}")
-
-    # ── 读取版本号 ────────────────────────────────────────────
-    version = ""
-    if is_skill:
-        meta_file = skill_dir / "_meta.json"
+    # 自动读取版本号
+    meta_file = SKILLS_DIR / skill_name / "_meta.json"
+    if not version:
         if meta_file.exists():
             try:
-                version = json.loads(meta_file.read_text(encoding="utf-8"))["version"]
+                version = json.load(open(meta_file, encoding="utf-8"))["version"]
             except Exception:
                 pass
-    else:
-        init_file = src_dir / "rag_assistant" / "__init__.py"
-        if init_file.exists():
-            import re
-            m = re.search(r'__version__\s*=\s*"([^"]+)"', init_file.read_text(encoding="utf-8"))
-            if m: version = m.group(1)
-    if not version:
-        print("❌ 无法读取版本号")
-        sys.exit(1)
-    # 全局归一化版本号为 PEP 440 格式（所有外部输出统一）
-    version = _normalize_version(version)
-
-    # ── market-only 模式（直接输出，不走 LOG_BUFFER）───────────────
-    if market_only:
-        if is_skill:
-            print(f"  发布 {name} 到 ClawHub...")
-            step_clawhub_publish(name, version)
-            print(f"  发布 {name} 到 SkillHub...")
-            step_skillhub_publish(name, version)
-        elif do_pypi:
-            step_pypi_publish(name, version, src_dir)
-        if do_release:
-            step_release_create(name, typ, version)
-        return
+        if not version:
+            print("❌ 无法读取版本号，请手动指定")
+            sys.exit(1)
 
     # 静默执行各步骤，收集日志
+    global QUIET_MODE
     QUIET_MODE = True
     import contextlib
     with open(os.devnull, 'w', encoding='utf-8') as _null:
         with contextlib.redirect_stdout(_null), contextlib.redirect_stderr(_null):
-            step_manifest(name, version)
-            compare_result = step_version_compare(name, version, work_repo_subdir)
-
-            if is_skill:
-                step_normalize_meta(meta_file, name, version)
+            step_manifest(skill_name, version)
+            compare_result = step_version_compare(skill_name, version)
+            step_normalize_meta(meta_file, skill_name, version)
 
             # 步骤 4：同步文件（版本相同时跳过）
             skipped_sync = (compare_result == "skip_sync")
             if skipped_sync:
                 log(4, 8, "跳过文件同步（版本相同）", "skip")
-                repo_skill_dir = WORK_REPO / work_repo_subdir
+                repo_skill_dir = WORK_REPO / "skills" / skill_name
             else:
                 log(4, 8, "同步文件到工作仓库...")
-                # 文件筛除过滤器：LLM 审核 → 写 decision → 自动继续
-                allowed = step_llm_file_filter(name, src_dir)
-                if is_skill:
-                    repo_skill_dir = sync_files(name, SKILLS_DIR, WORK_REPO, allowed)
-                else:
-                    dst = WORK_REPO / work_repo_subdir
-                    if dst.exists(): shutil.rmtree(dst)
-                    os.makedirs(dst, exist_ok=True)
-                    file_count = 0
-                    for item in src_dir.rglob("*"):
-                        if item.name.lower() == "nul": continue
-                        if item.is_file():
-                            try:
-                                rel = item.relative_to(src_dir)
-                                rel_str = str(rel).replace("\\", "/")
-                                if rel_str not in allowed: continue
-                                (dst / rel).parent.mkdir(parents=True, exist_ok=True)
-                                shutil.copy2(item, dst / rel)
-                                file_count += 1
-                            except: pass
-                    count = sum(1 for _ in dst.rglob("*") if _.is_file())
-                    repo_skill_dir = dst
-                    log(4, 8, f"已同步 {count} 个文件", "ok")
+                repo_skill_dir = sync_files(skill_name, SKILLS_DIR, WORK_REPO)
 
-            desensitized_files = step_sensitive_scan(name, repo_skill_dir)
-            # README 更新：同时覆盖 skills 和 agents（update_readme.py 自身已支持）
+            desensitized_files = step_sensitive_scan(skill_name, repo_skill_dir, skip_scan)
             step_update_readme()
 
-            gitee_ok, github_ok = step_commit_and_push(name, version, work_repo_subdir)
-            step_update_manifest_uploaded(name, version, gitee_ok, github_ok)
+            gitee_ok, github_ok = step_commit_and_push(skill_name, version)
+            step_update_manifest_uploaded(skill_name, version, gitee_ok, github_ok)
 
-            # 审计（仅 skill）
-            audit_result = {}
-            if is_skill:
-                audit_result = step_skill_audit(
-                    name, SKILLS_DIR, MANIFEST_FILE,
-                    desensitized_files=desensitized_files,
-                    repo_skill_dir=repo_skill_dir
-                )
+            # 审计放在 manifest 更新之后
+            audit_result = step_skill_audit(
+                skill_name, SKILLS_DIR, MANIFEST_FILE,
+                desensitized_files=desensitized_files,
+                repo_skill_dir=repo_skill_dir
+            )
 
-            # ZIP + index（仅 skill）
-            zip_file = None
-            if is_skill:
-                zip_file = step_pack_zip(name, version, SKILLS_DIR)
-                step_build_index()
-
-    # ── 市场/PyPI 发布（同步完成后运行，直接输出）─────────────────────
-    if not skip_market:
-        if is_skill:
-            print(f"\n  发布 {name} 到 ClawHub...")
-            step_clawhub_publish(name, version)
-            print(f"  发布 {name} 到 SkillHub...")
-            step_skillhub_publish(name, version)
-        if is_agent and do_pypi:
-            step_pypi_publish(name, version, src_dir)
-    # ── Release（同步完成后）────────────────────────────────────────
-    if do_release:
-        step_release_create(name, typ, version)
+            zip_file = step_pack_zip(skill_name, version, SKILLS_DIR, skip_scan)
+            step_build_index()
 
     # ── 打印步骤日志 ─────────────────────────────────────────────────
     QUIET_MODE = False
@@ -1476,7 +842,7 @@ def main():
     # ── 固定格式输出报告 ─────────────────────────────────────────────
     print()
     print("=" * 60)
-    print(f"  git-sync 执行报告：{name} v{version}")
+    print(f"  git-sync 执行报告：{skill_name} v{version}")
     print("=" * 60)
 
     # 表格 1：推送情况
@@ -1485,14 +851,12 @@ def main():
     print("-" * 32)
     gitee_ver = version if gitee_ok else "未推送"
     github_ver = version if github_ok else "未推送"
-    # 跳过文件同步时，状态优先显示"⏭️ 跳过"，但推送成功时仍显示"✅ 成功"
-    if skipped_sync and not gitee_ok:
+    # 跳过文件同步时，状态显示"⏭️ 跳过"而非"✅ 成功"
+    if skipped_sync:
         gitee_status = "⏭️ 跳过"
-    else:
-        gitee_status = "✅ 成功" if gitee_ok else "❌ 失败"
-    if skipped_sync and not github_ok:
         github_status = "⏭️ 跳过"
     else:
+        gitee_status = "✅ 成功" if gitee_ok else "❌ 失败"
         github_status = "✅ 成功" if github_ok else "❌ 失败"
     print(f"{'码云':<10} {gitee_status:<10} {gitee_ver:<12}")
     print(f"{'GitHub':<10} {github_status:<10} {github_ver:<12}")
@@ -1534,7 +898,7 @@ def main():
         elif d_info.get("scanned"):
             print(f"  ⚠️  脱敏状态：未脱敏（发现 {d_info.get('findings_count', 0)} 处）")
         else:
-            print(f"  ❌ 脱敏状态：未扫描（脱敏是强制安全门禁，不允许跳过）")
+            print(f"  ✅ 脱敏状态：未扫描（--skip-scan）")
 
         # 4. 文件筛选状态（三档）
         f_info = audit_result.get("filter", {})
@@ -1552,9 +916,9 @@ def main():
         print("  审计结论：未执行或执行失败")
 
     # ZIP 路径
-    if zip_file:
-        print(f"ZIP 包：{zip_file}")
-        print(f"HTML 索引：{DIST_DIR / 'index.html'}")
+    print()
+    print(f"ZIP 包：{zip_file}")
+    print(f"HTML 索引：{DIST_DIR / 'index.html'}")
 
     print()
     print("=" * 60)

@@ -8,7 +8,7 @@
 - 获取编码详情 - 税率、申报要素、监管条件
 - 搜索归类实例 - 查看历史归类案例
 - 统一搜索 - CIQ 项目/危化品/港口信息
-- 创建归类咨询 - AI 自动提交产品信息与图片，发起人工专家复核
+- 创建归类咨询 - AI 自动提交产品信息与产品图片（必填至少 1 张），发起人工专家复核
 - 查看咨询详情 - 获取归类咨询单的完整详情（字段对话、归类结论）
 - 咨询单列表 - 查看我的归类咨询单分页列表
 - 咨询讨论 - 在归类单字段上新建讨论或回复已有讨论
@@ -55,7 +55,7 @@ python3 ~/.openclaw/skills/hsciq-mcp/hsciq_client.py add-guilei-dialog-message -
 | `get-detail` | 获取编码详情 |
 | `search-instance` | 搜索归类实例 |
 | `search-unified` | 统一搜索 |
-| `create-guilei-form` | 创建归类咨询单（AI → 人工复核） |
+| `create-guilei-form` | 创建归类咨询单（图片必填，AI → 人工复核） |
 | `get-guilei-form` | 获取归类咨询单详情 |
 | `list-my-guilei-forms` | 查看我的归类咨询单列表 |
 | `add-guilei-dialog-message` | 归类单字段讨论（新建/回复） |

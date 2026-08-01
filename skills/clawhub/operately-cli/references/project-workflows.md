@@ -272,6 +272,28 @@ operately projects update_key_resource \
 operately projects delete_key_resource --id kr1
 ```
 
+## Project Docs & Files
+
+Every project has its own Docs & Files hub. Use `--project-id` to scope commands:
+
+```bash
+# List project hub contents
+operately documents list_contents --project-id p1
+
+# Create a spec document
+operately documents create_document \
+  --project-id p1 \
+  --name "Technical Spec" \
+  --content "# Spec\n\nArchitecture overview..."
+
+# Upload a PDF
+operately documents create_file \
+  --project-id p1 \
+  --file ./spec.pdf
+```
+
+See [Docs & Files Reference](docs-and-files.md) for full command coverage.
+
 ## Project Discussions
 
 ### Creating Discussions
@@ -366,6 +388,13 @@ operately projects update_retrospective \
 
 ```bash
 operately projects get_retrospective --project-id p1
+```
+
+### Acknowledging Retrospective
+
+```bash
+# Reviewer only — authors cannot acknowledge their own. From list_assignments, use origin.id.
+operately projects acknowledge_retrospective --project-id p1
 ```
 
 ## Project Permissions

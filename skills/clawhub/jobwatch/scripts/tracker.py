@@ -2,6 +2,12 @@
 """投递状态跟踪：applied → interview → offer/rejected 的 pipeline 管理。
 
 数据：HOME/state/applications.json  {doc_id: {status, note, title, company, url, history[]}}
+
+敏感性说明：这个文件记录你投了哪些公司、面到哪一轮、被拒没有，note 里还可能有你自己
+写的私人备注——属于敏感求职信息。它**只写在本机** `HOME/state/` 下，不加密、不上传，
+也不参与任何出网调用（本模块不 import 任何网络函数）。保护它靠的是文件系统权限：
+它继承你 HOME 目录的权限，请别把 `<workspace>/jobwatch/` 放进会同步到云端或共享的目录。
+想彻底清除：删掉该文件或整个 `<workspace>/jobwatch/` 目录。
 用法（agent 在用户说「我投了 X」「X 进面试了」时调用）：
   tracker.py find <关键词>                 # 从已见岗位里模糊找 doc_id
   tracker.py set <doc_id> <status> [note]  # applied|interview|offer|rejected|archived

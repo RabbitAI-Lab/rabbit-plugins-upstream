@@ -1,5 +1,5 @@
 ## Description: <br>
-Verifies ClawHub skill updates by comparing a trusted baseline with a candidate version to detect supply-chain drift and produce a deterministic provenance proof. <br>
+DCL Provenance Tracker compares trusted baseline and candidate ClawHub skill versions to identify version drift, permission creep, and supply chain attack patterns, then returns a deterministic DCL provenance proof. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, security reviewers, and compliance teams use this skill to review ClawHub skill updates for behavioral drift, permission creep, and supply-chain attack patterns before deployment. <br>
+Developers and security reviewers use this skill after ClawHub skill updates or in CI/CD gates to compare two supplied skill versions locally and decide whether an update should pass, warn, or block. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Candidate skill text may be untrusted evidence and could contain malicious or misleading instructions. <br>
-Mitigation: Paste only the versions intended for comparison and treat the resulting PASS, WARN, or BLOCK verdict as advisory until reviewed. <br>
-Risk: Optional audit-chain publication can expose hashes and verdict metadata externally. <br>
-Mitigation: Do not enable any separate audit-chain commit unless publishing those hashes and verdict metadata is acceptable. <br>
+Risk: The workflow asks users to paste both skill versions into the agent context for local comparison. <br>
+Mitigation: Run the comparison in an approved agent environment and avoid pasting sensitive or proprietary skill content into unapproved contexts. <br>
+Risk: The optional DCL Trust Oracle MCP lookup is separate from local diffing and may involve paid tx_hash verification. <br>
+Mitigation: Configure or use the MCP server only when the separate record verification step is intended. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/daririnch/dcl-provenance-tracker) <br>
-- [Publisher profile](https://clawhub.ai/user/daririnch) <br>
+- [ClawHub skill page](https://clawhub.ai/daririnch/skills/dcl-provenance-tracker) <br>
+- [DCL Trust Oracle MCP server](https://mcp.fronesislabs.com/mcp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Analysis, JSON, Guidance] <br>
-**Output Format:** [Structured JSON with a verdict, risk score, hashes, findings, recommendation, and DCL fingerprint] <br>
+**Output Type(s):** [text, markdown, code, guidance] <br>
+**Output Format:** [Markdown with JSON code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces advisory PASS, WARN, or BLOCK results from local comparison of user-provided skill versions.] <br>
+**Other Properties Related to Output:** [Includes verdict, risk score, version hashes, DCL fingerprint, findings, categories checked, recommendation, and timestamp.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact body) <br>
+1.0.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Generates Markdown daily report drafts from user-supplied dates, highlights, and blockers and writes them to a reports directory for personal work tracking. <br>
+Generates structured daily report Markdown drafts from user-provided dates, highlights, and blockers, then writes them to a local reports directory for personal work records. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Individual users use this skill to turn daily work inputs into a consistent Markdown report with highlights, blockers, status, and next-action information. It is intended for lightweight personal work tracking rather than team reporting or advanced analytics. <br>
+Employees and individual contributors use this skill to turn daily work inputs into a consistent Markdown report that records highlights, blockers, and a next action. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requests broad local command and search tools for a simple report-writing task. <br>
-Mitigation: Review proposed commands before execution and limit file inspection to the intended report workspace. <br>
-Risk: The skill includes credential and environment-check guidance that could expose unrelated local secrets. <br>
-Mitigation: Do not allow scans of unrelated environment variables or secret stores; provide only the inputs needed for the report. <br>
-Risk: Callback URLs or external APIs could receive report content if enabled by the user. <br>
-Mitigation: Use local report generation by default and enable callbacks or external API delivery only after confirming the destination and content. <br>
+Risk: The skill writes Markdown files locally, so report generation can create or overwrite local artifacts if paths or permissions are not reviewed. <br>
+Mitigation: Run it in a workspace where writing to reports/ is expected, review generated files before sharing, and keep backups for important reports. <br>
+Risk: Privacy and network behavior are not clearly bounded in the release evidence, and reports may contain confidential work details or blockers. <br>
+Mitigation: Avoid entering sensitive business details, credentials, or confidential blockers unless the active agent, model provider, callbacks, and external API behavior are understood and acceptable. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/daily-report-tool-free) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown report draft plus structured JSON status] <br>
+**Output Type(s):** [text, markdown, files, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown report file with structured JSON-style status output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes a dated report under reports/ when the agent has file-system permission.] <br>
+**Other Properties Related to Output:** [Writes daily report drafts under reports/ and may include execution status, logs, and nextAction fields.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+1.0.2 (source: server-resolved release metadata; artifact frontmatter reports 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

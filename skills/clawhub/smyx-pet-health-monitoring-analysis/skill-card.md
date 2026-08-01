@@ -1,5 +1,5 @@
 ## Description: <br>
-Based on computer vision, this skill analyzes pet camera or feeder media for feeding, drinking, excretion, mental state, vomiting, and limping indicators, then outputs health monitoring reports. <br>
+Based on computer vision, analyzes pet health indicators such as feeding frequency, drinking frequency, excretion status, mental state, vomiting behavior, and limping abnormalities through camera/feeder monitoring videos, promptly detects abnormal pet health conditions, and outputs health monitoring reports. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External pet-care users and developers use this skill to submit pet monitoring media or media URLs to the publisher's cloud service, receive structured pet health reports, and query historical monitoring reports. <br>
+External users and pet-care operators use this skill to analyze pet monitoring images or videos for feeding, drinking, excretion, mental state, vomiting, limping, and health anomaly reporting. It can also return prior cloud report lists when the user asks for report history. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Pet media or supplied URLs are sent to the publisher's cloud service for analysis and may reveal household context or routines. <br>
-Mitigation: Use only media suitable for the provider to process; avoid footage containing people, interiors, or sensitive routines unless the provider's retention and access practices are acceptable. <br>
-Risk: The skill creates or reuses a local identity and stores service tokens locally for API access. <br>
-Mitigation: Review local identity and token storage before installing, restrict workspace access, and clear stored identity or token data when the skill is no longer needed. <br>
-Risk: Health analysis reports are informational and can be incomplete or wrong. <br>
-Mitigation: Treat outputs as pet health reference material and consult a veterinarian for diagnosis, treatment, or urgent symptoms. <br>
+Risk: Pet monitoring media and identity-linked metadata may be sent to cloud services. <br>
+Mitigation: Use the skill only when cloud processing is acceptable for the media and user context involved. <br>
+Risk: The skill may silently create or reuse an identity and store authentication tokens locally. <br>
+Mitigation: Review or remove any workspace data/smyx-api-key.txt value before use and account for the local SQLite user/token database that may be created in the workspace data directory. <br>
+Risk: Automatic history-report triggers may query cloud report history without enough user control or disclosure. <br>
+Mitigation: Prefer explicit analysis and report-history requests before invoking the cloud-backed history query behavior. <br>
+Risk: Health analysis output is advisory and may be incomplete or incorrect. <br>
+Mitigation: Treat reports as pet-health reference information and seek professional veterinary care for abnormal or concerning findings. <br>
 
 
 ## Reference(s): <br>
-- [Pet health analysis API documentation](artifact/references/api_doc.md) <br>
-- [smyx analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
 - [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-health-monitoring-analysis) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API documentation](references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Plain text or Markdown report with optional JSON detail and optional saved output file.] <br>
+**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
+**Output Format:** [JSON or Markdown health monitoring reports, with Markdown tables for historical report lists.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may include cloud report export links; local video files are limited to mp4, avi, or mov up to 10 MB.] <br>
+**Other Properties Related to Output:** [May include health indicators, warnings, care suggestions, report links, and saved result files when an output path is provided.] <br>
 
 ## Skill Version(s): <br>
-1.0.8 (source: frontmatter and server release evidence) <br>
+1.0.9 (source: server release metadata; artifact frontmatter lists 1.0.10) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

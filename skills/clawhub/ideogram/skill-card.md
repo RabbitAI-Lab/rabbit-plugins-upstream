@@ -1,5 +1,5 @@
 ## Description: <br>
-Writes Ideogram image-generation prompts for social media assets where accurate in-image text, deliberate layout, brand colors, and app-editor workflows matter. <br>
+Use to write strong Ideogram 4.0 prompts for design-grade social media images where text, layout, brand color, transparency, and app-editor workflows matter. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,22 +7,22 @@ This skill is ready for commercial/non-commercial use. <br>
 [social-media-skills](https://clawhub.ai/user/social-media-skills) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-Social media operators, designers, and agents use this skill to craft Ideogram prompts for quote cards, carousel covers, posters, logo or wordmark concepts, signage, and ads that need exact text, layout, color, and aspect-ratio direction. <br>
+External users and social media teams use this skill to craft brand-grounded Ideogram prompts for quote cards, carousel covers, posters, ads, signage, logo or wordmark concepts, and other visual assets that need readable in-image text and deliberate layout. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generated images can contain incorrect embedded text or composition details. <br>
-Mitigation: Review rendered images, especially text, before publishing or attaching them to social posts. <br>
-Risk: Prompts may use local brand profile details and may feed a separate image-generation workflow. <br>
-Mitigation: Review the prompt and brand context before sending it to an image tool or publication workflow. <br>
-Risk: Published AI images may create disclosure, rights, or impersonation issues. <br>
-Mitigation: Disclose AI-generated imagery, perform rights and IP checks, avoid real identifiable people or copyrighted characters and logos, and use C2PA signing where appropriate. <br>
+Risk: Generated image text or composition may be incorrect or misleading. <br>
+Mitigation: Review rendered text, layout, and claims before publishing. <br>
+Risk: Generated imagery may create rights, disclosure, or impersonation issues. <br>
+Mitigation: Use owned or licensed brand assets, avoid real identifiable people and copyrighted IP, disclose AI-generated images, and use C2PA signing when appropriate. <br>
+Risk: The skill may point an agent toward separate Ideogram or WoopSocial integrations. <br>
+Mitigation: Review those integrations, access, pricing, and publishing behavior before using them in a workflow. <br>
 
 
 ## Reference(s): <br>
@@ -31,17 +31,17 @@ Mitigation: Disclose AI-generated imagery, perform rights and IP checks, avoid r
 - [JSON Prompting & Layout](references/json-prompting-and-layout.md) <br>
 - [Text rendering, transparency & social recipes](references/text-rendering-and-recipes.md) <br>
 - [Canvas Editing & Recipes](references/app-editor-and-canvas.md) <br>
-- [Examples](references/examples.md) <br>
+- [Examples - prompts in practice](references/examples.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, JSON] <br>
-**Output Format:** [Markdown guidance with plain-text and structured JSON prompt examples] <br>
+**Output Type(s):** [Text, Markdown, JSON, Guidance, Configuration instructions] <br>
+**Output Format:** [Markdown guidance with optional structured JSON prompt examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include prompt layouts with text elements, bounding boxes, hex palettes, aspect ratios, and review or disclosure reminders.] <br>
+**Other Properties Related to Output:** [Produces prompt-writing guidance and draft Ideogram prompts; it does not generate or publish images by itself.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: release evidence, skill frontmatter, and evals) <br>
+1.0.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

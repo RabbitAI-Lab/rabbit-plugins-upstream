@@ -21,12 +21,15 @@ Do **not** trigger for image-only generation, audio, or general chat.
 
 ## Prerequisites (check before running)
 
-- **Python 3.11+** (use `python3.11` for the `openai-video` / `openai` paths —
-  some proxies' TLS cert chain is rejected by Python 3.14; `python3` is fine for
-  the raw Ark API).
-- Optional Python dependency: `alibabacloud_oss_v2` — only needed when the user
-  supplies **local image files** (uploaded to Alibaba OSS as a signed URL).
-  Install with `pip install -r requirements.txt`.
+- **Python 3.11+**. The entrypoint wrapper (`scripts/seedance`) auto-selects
+  `python3.11`/`python3.12` when available (some proxies' TLS cert chain is
+  rejected by Python 3.14; `python3` is fine for the raw Ark API), so you do not
+  pick the interpreter by hand.
+- The same wrapper creates an isolated virtualenv at `<skill_dir>/.venv` on
+  first run and installs `requirements.txt` there automatically. The only Python
+  dependency is `alibabacloud_oss_v2` — pulled in only when the user supplies
+  **local image files** (uploaded to Alibaba OSS as a signed URL), but harmless
+  to install regardless. No manual `pip install` is needed.
 - **`ARK_API_KEY`** is required. It may be a real env var or stored in a `.env`
   file (in the skill dir or the user's cwd). If absent, ask the user for it and
   offer to write it to `<skill_dir>/.env` (never print the value back).
@@ -80,35 +83,40 @@ Rules (enforced by the script; surface them to the user when relevant):
 ## Invocation
 
 Resolve `<skill_dir>` (this directory). Load secrets from `<skill_dir>/.env` if
-present via `--env-file`. Pick the interpreter by api-type:
+present via `--env-file`. Run the skill through the **`scripts/seedance`** wrapper
+— it provisions an isolated venv (with `requirements.txt` installed) and forwards
+every argument to `scripts/seedance.py`, picking `python3.11`/`python3.12` for the
+proxy-TLS-safe interpreter automatically. The same wrapper serves all three
+`--api-type` values; no interpreter switch is needed between them.
 
 ```bash
-# Ark (default) — python3 is fine
-python3 <skill_dir>/scripts/seedance.py --env-file <skill_dir>/.env \
+# Ark (default) — also covers openai-video / openai; just pass --api-type
+<skill_dir>/scripts/seedance --env-file <skill_dir>/.env \
   -t "<prompt>" [-i ./local.png | --image-url <url>] [-f ./first.png -l ./last.png] \
   [--duration 5] [--ratio 16:9] [--resolution 720p] [-m <model>] [--save out.mp4]
 
-# openai-video (mini) or openai (full) — prefer python3.11 (proxy TLS)
-python3.11 <skill_dir>/scripts/seedance.py --api-type openai-video --env-file <skill_dir>/.env -t "<prompt>" ...
-python3.11 <skill_dir>/scripts/seedance.py --api-type openai      --env-file <skill_dir>/.env -t "<prompt>" ...
+<skill_dir>/scripts/seedance --api-type openai-video --env-file <skill_dir>/.env -t "<prompt>" ...
+<skill_dir>/scripts/seedance --api-type openai      --env-file <skill_dir>/.env -t "<prompt>" ...
 ```
 
 The script prints the full task result as JSON on stdout and the `video_url` on
 stderr. On success, report the video URL to the user; if `--save` was given,
 confirm the saved path.
 
-To run the test suite (offline, no key needed): `python3 <skill_dir>/scripts/test_seedance.py`.
+To run the test suite (offline, no key needed): `<skill_dir>/scripts/seedance test_seedance.py`.
+The wrapper reuses the same venv for any script in `scripts/` — pass its filename
+as the first argument.
 
 ## Examples
 
 - "Generate a 5s video of a daisy field under a blue sky, camera pushing in"
-  → `python3 scripts/seedance.py -t "a daisy field under a blue sky, camera pushing in" --duration 5`
+  → `scripts/seedance -t "a daisy field under a blue sky, camera pushing in" --duration 5`
 - "Make a video from this image ./fox.png — the camera slowly pulls out, hair blowing in the wind"
-  → `python3 scripts/seedance.py -t "camera slowly pulls out, hair blowing in the wind" -i ./fox.png --ratio adaptive`
+  → `scripts/seedance -t "camera slowly pulls out, hair blowing in the wind" -i ./fox.png --ratio adaptive`
 - "Animate between these two frames: ./first.jpeg and ./last.jpeg, 360° orbit"
-  → `python3 scripts/seedance.py -t "360 degree orbit" -f ./first.jpeg -l ./last.jpeg --ratio adaptive`
+  → `scripts/seedance -t "360 degree orbit" -f ./first.jpeg -l ./last.jpeg --ratio adaptive`
 - "Generate a vertical 1080p 10s clip of waves at sunset"
-  → `python3 scripts/seedance.py -t "waves at sunset" --ratio 9:16 --resolution 1080p --duration 10`
+  → `scripts/seedance -t "waves at sunset" --ratio 9:16 --resolution 1080p --duration 10`
 
 ## Notes
 

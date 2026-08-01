@@ -100,6 +100,6 @@ def classify_intersections(
 
 
 def suspicious_white_count_warning(black_stones: int, white_stones: int) -> list[str]:
-    if white_stones > 80 or (white_stones > max(45, black_stones * 3 + 20)):
+    if white_stones > max(70, black_stones * 2 + 20):
         return ["Suspicious white-stone count; verify recognition before using the position for analysis."]
     return []

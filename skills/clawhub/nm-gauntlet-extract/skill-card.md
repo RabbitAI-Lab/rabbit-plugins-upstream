@@ -1,5 +1,5 @@
 ## Description: <br>
-Builds a Gauntlet knowledge base from AST extraction and AI enrichment. <br>
+Builds the gauntlet knowledge base from AST extraction and AI enrichment. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to initialize or refresh codebase knowledge for Gauntlet challenges by extracting structure, enriching entries, and saving a local .gauntlet/knowledge.json file. <br>
+Developers and agents use this skill to build or refresh a local `.gauntlet/knowledge.json` knowledge base for a codebase, combining AST extraction with AI-enriched explanations and cross-references. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill indexes the target repository and writes local codebase knowledge, which could include unrelated private files if pointed at the wrong directory. <br>
-Mitigation: Run it only against intended codebases and avoid directories that contain unrelated private files or secrets. <br>
-Risk: The generated knowledge base may contain incomplete or inaccurate AI-enriched explanations. <br>
-Mitigation: Review .gauntlet/knowledge.json and coverage gaps before relying on the extracted knowledge for challenge work. <br>
+Risk: The skill writes or updates `.gauntlet/knowledge.json` in the target repository. <br>
+Mitigation: Review changes to `.gauntlet/knowledge.json` before committing or using them as codebase knowledge. <br>
+Risk: The artifact invokes an external gauntlet extractor script from the plugin environment. <br>
+Mitigation: Verify the extractor script before use in environments where plugin code is treated as sensitive. <br>
 
 
 ## Reference(s): <br>
@@ -29,13 +29,13 @@ Mitigation: Review .gauntlet/knowledge.json and coverage gaps before relying on 
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and a local JSON knowledge-base file] <br>
+**Output Type(s):** [text, markdown, shell commands, code, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with shell commands and a generated JSON knowledge file] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces or refreshes .gauntlet/knowledge.json and reports category coverage, gaps, and difficulty distribution.] <br>
+**Other Properties Related to Output:** [Writes `.gauntlet/knowledge.json` and reports category summaries, coverage gaps, and difficulty distribution.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

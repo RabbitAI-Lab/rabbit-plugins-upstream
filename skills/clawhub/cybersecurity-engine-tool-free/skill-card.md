@@ -1,5 +1,5 @@
 ## Description: <br>
-Cybersecurity Engine Tool Free helps individual developers perform lightweight security self-checks, basic OWASP Top 10 review, threat registration, and vulnerability tracking. <br>
+轻量级安全评估与威胁建模工具,提供安全态势检查、OWASP基础审计与漏洞管理,适合个人开发者快速安全自查. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to inspect project files, run local command-line audit checks, document threats, and prioritize basic security fixes before release. <br>
+Developers and individual maintainers use this skill to run lightweight project security self-checks, review OWASP Top 10 signals, and maintain a basic STRIDE threat register before release. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Local project review can surface secrets or sensitive source details in agent context or generated reports. <br>
-Mitigation: Run the skill only in repositories approved for agent review, exclude files that should not be inspected, and review outputs before sharing them. <br>
-Risk: Dependency audit commands such as npm audit or pip-audit may contact external services or disclose package metadata. <br>
-Mitigation: Approve networked audit commands only when appropriate for the project, and use local or restricted alternatives where policy requires them. <br>
-Risk: Pattern-based security checks can produce false positives or miss issues that require expert review. <br>
-Mitigation: Treat findings as triage input, manually validate each result, and use professional security review for high-risk or production systems. <br>
+Risk: Local security checks may inspect files outside the intended project if run from the wrong directory or with broad paths. <br>
+Mitigation: Run scans only from the intended repository and review generated command snippets before execution. <br>
+Risk: Audit output may include file paths or secret-like matches, and callback delivery can expose reports to an external endpoint. <br>
+Mitigation: Review scan output before sharing it and use callback URLs only when they are trusted and controlled by the user. <br>
 
 
 ## Reference(s): <br>
@@ -31,12 +29,12 @@ Mitigation: Treat findings as triage input, manually validate each result, and u
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with bash and YAML examples plus JSON-style result summaries] <br>
+**Output Format:** [Markdown guidance with inline bash, YAML, text, and JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include local audit command output, threat-register entries, vulnerability-priority guidance, and security self-check summaries.] <br>
+**Other Properties Related to Output:** [May produce local scan command snippets, threat-register templates, security check summaries, logs, and remediation guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+1.0.2 (source: ClawHub release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

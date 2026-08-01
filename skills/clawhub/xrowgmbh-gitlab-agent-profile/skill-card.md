@@ -11,32 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use this skill to keep a GitLab profile repository updated with monthly contribution charts and proof records for owner and agent activity. <br>
+Developers and maintainers use this skill to update a GitLab profile repository with monthly contribution performance charts and proof records for owner and agent activity. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill uses GitLab credentials that may read configured projects. <br>
-Mitigation: Use a least-privilege GitLab token and limit configured projects to repositories needed for the profile update. <br>
-Risk: The skill can run unattended and commit or push generated profile assets. <br>
-Mitigation: Run it in a dedicated profile repository and review the cron configuration before enabling scheduled execution. <br>
-Risk: Output paths and image conversion tooling can affect local files or invoke optional external converters. <br>
-Mitigation: Keep output paths relative to the intended workspace and avoid the npm or ImageMagick conversion fallback unless the tooling is pinned or sandboxed. <br>
+Risk: The skill uses GitLab credentials while collecting contribution data and updating repository assets. <br>
+Mitigation: Install it only in a dedicated profile repository with a least-privilege GitLab token. <br>
+Risk: Scheduled execution can repeatedly write generated files and support repository pushes with limited safeguards. <br>
+Mitigation: Keep the cron disabled until schedule, output path containment, manual review, and branch protection are configured. <br>
+Risk: Chart conversion depends on local converter tooling that may vary by environment. <br>
+Mitigation: Approve the converter dependencies before enabling automated runs. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-agent-profile) <br>
+- [ClawHub release page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-agent-profile) <br>
+- [Publisher profile](https://clawhub.ai/user/xrowgmbh) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Files] <br>
-**Output Format:** [Markdown guidance plus generated SVG, WebP, and JSON asset files] <br>
+**Output Type(s):** [Guidance, Shell commands, Files, Configuration instructions] <br>
+**Output Format:** [Markdown guidance with generated SVG, WebP, and JSON assets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses GitLab CLI authentication and configurable environment variables for project selection, output paths, owner, agent, and month count.] <br>
+**Other Properties Related to Output:** [Requires glab and python3, uses GITLAB_TOKEN, and writes profile assets plus JSON proof records.] <br>
 
 ## Skill Version(s): <br>
-1.75.3 (source: release evidence) <br>
+1.78.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

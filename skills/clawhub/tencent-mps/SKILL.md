@@ -1,8 +1,8 @@
 ---
 name: tencent-mps
-description: "腾讯云 MPS 媒体处理服务，凡涉及以下任一场景必须触发：【视频转码】转码/压缩/格式转换/H.264/H.265/AV1/MP4/编码/码率/分辨率/帧率。【画质增强】画质增强/老片修复/超分/视频超分/真人增强/漫剧增强/防抖/720P/1080P/2K/4K。【音频处理】音频分离/人声提取/伴奏提取/去人声/BGM分离。【字幕语音】字幕提取/字幕翻译/语音识别/ASR/OCR识别字幕/SRT字幕/视频翻译。【擦除遮挡】去字幕/去水印/人脸模糊/车牌模糊/马赛克。【语音合成与音色复刻】语音合成/TTS/声音克隆/文字转语音/语音转语音。【图片处理】图片超分/图片美颜/图片降噪/AI抠图/AI扩图/outpaint/AI图片修复/老照片修复/AI前景提取/AI看图/图片理解/AI文字水印擦除/精准抠图/透明PNG/多视角生图/目标检测/物体识别/局部重绘/inpainting/分镜拆图/宫格拆图/换模特/换体型。【图片换装】AI试衣/服装替换/模特换装/虚拟试穿。【图片背景】AI换背景/背景生成/电商背景/抠图换背景。【套图生成】套图生成/海报套图/商品套图/批量海报生成/AiPosterSuite/多平台套图。【AIGC生成】AI生图/文生图/图生图/AI生视频/文生视频/图生视频/分镜生成/Kling/明眸/Mingmou/PixVerse/横屏转竖屏/动作控制/参考视频/AI绘画。【文档生视频】文档生成视频/PDF生成视频/PPT转视频/Word转视频/文档转讲解视频/文档做成视频。【内容理解】音视频理解/视频摘要/场景识别/对比分析两段视频/音频理解/AI看视频。【视频二创】换脸/换人/视频交错。【视频去重】视频去重/画中画/视频扩展。【精彩集锦】精彩集锦/高光提取/足球集锦/篮球集锦/短剧高光。【AI解说】AI解说/短剧解说/短剧混剪/解说二创。【媒体质检】媒体质检/画质检测/模糊检测/花屏检测/卡顿检测/音频质检/视频诊断。【用量统计】mps用量查询。【COS与任务】上传COS/下载COS/列出COS/查询MPS任务/环境变量检查。【效果对比】生成对比页面。用户仅询问工具推荐而不需要实际处理时不触发。"
+description: "腾讯云 MPS 音视频与图片处理、AI 生成、内容理解。涉及以下场景必须触发：【转码】转码/压缩/格式转换/转封装/H.264/H.265/AV1/码率/分辨率。【画质增强】画质增强/画质修复/老片修复/超分/真人增强/漫剧增强/防抖/人脸保真/1080P/2K/4K。【音频】音频分离/人声提取/伴奏提取/去人声/降噪/音量均衡。【字幕】字幕提取/字幕翻译/语音识别/语音转文字/ASR/OCR字幕/SRT/视频翻译。【擦除】去字幕/去水印/人脸模糊/车牌模糊/马赛克。【配音】语音合成/TTS/文字转语音/AI配音/配音/声音克隆/音色复刻。【图增强】图片超分/美颜/降噪/色彩增强/低光照增强。【抠扩图】AI抠图/去背景/透明PNG/AI扩图/outpaint/图片修复。【图片编辑】局部重绘/inpainting/目标检测/分镜拆图/多视角生图/换角度/水印擦除。【图片理解】图片理解/图片OCR/图片问答/AI看图。【电商图】AI试衣/图片换装/服装替换/模特换装/换模特/换体型/换背景/背景融合/套图生成/商品套图。【AIGC】AI生图/文生图/图生图/AI绘画/全景图/AI生视频/文生视频/图生视频/参考视频/分镜生成/Kling/可灵/Vidu/Mingmou/PixVerse/Hunyuan。【横竖转换】转横屏/转竖屏/转横屏/9:16转换/16:9转换/ROI智能裁剪/AIGC补全画面/短视频比例转换。【文档生视频】文档生成视频/PDF转视频/PPT转视频/Word转视频。【内容理解】音视频理解/视频摘要/场景识别/内容分析/对比分析两段视频/音频理解。【二创】换脸/换人/视频交错。【去重】视频去重/画中画/视频扩展。【集锦】精彩集锦/高光提取/自动剪辑/足球集锦/篮球集锦/短剧高光/VLOG集锦。【AI解说】AI解说/短剧解说/短剧混剪。【质检】媒体质检/画质检测/模糊检测/花屏检测/卡顿检测/音频质检。【COS】上传COS/下载COS/列出COS/列出Bucket文件/查看COS目录/查看存储桶（须用本 Skill 的 COS 脚本，禁用 coscli、tccli、aws s3）。【任务】查询MPS任务/查询TaskId/环境变量检查。【用量】MPS用量查询。【对比】生成对比页面。仅咨询能力不需处理时不触发。"
 metadata:
-  version: "1.2.8"
+  version: "1.2.9"
 ---
 
 # 腾讯云媒体处理服务（MPS）
@@ -19,10 +19,11 @@ metadata:
 4. 输入源判断：URL 用 `--url`，COS 路径用 `--cos-input-key`，未说明来源一律用 `--local-file`（详见强制规则第4条）
 5. **任务完成后输出的链接（预签名下载链接、COS URL 等）必须用 Markdown 超链接格式呈现**，即 `[描述文字](URL)`，不得以代码块或纯文本形式输出链接。
 6. **【强制】每次执行处理类任务后，无论是否等待完成、无论成功失败，必须在回复中明确展示 TaskId**。脚本 stdout 中会输出 `## TaskId: <id>` 格式的行，从中提取并以如下格式告知用户：`🆔 任务 ID：<TaskId>`（方便用户后续手动查询）。
+7. **【强制】生成任何 `mps_*.py` 命令之前，必须先用 Read 工具读取该脚本对应的 `references/<script>.md` 文档**。禁止仅凭 SKILL.md 主表拼命令，禁止使用 `coscli`、`cos-python-sdk-v5`、`ffmpeg`、`tccli` 等外部工具替代 skill 内的 `mps_*.py` 脚本。参数名、参数取值、模板号 / SceneId / ScheduleId、必填项与互斥项均以 references 为准；SKILL.md 主表与 references 冲突时以 references 为准。
 
-> 💰 **费用提示**：本 Skill 调用腾讯云 MPS 服务会产生相应费用，包括转码费、AI 处理费、存储费等，当一个任务没有拿到结果时，不要手动重复发起请求，也不要自作主张重复发起请求，否则会重复计费。具体计费标准请参考 [腾讯云 MPS 定价](https://cloud.tencent.com/document/product/862/36180)。每次调用**处理类脚本**（转码/增强/擦除/字幕/图片处理/AIGC/质检/音视频理解/去重/解说/集锦等）时，必须给出费用提示；查询类（get_task/usage/cos_list）和上传下载类（cos_upload/cos_download）无需提示。**调用处理类脚本前必须先向用户复述将执行的命令并取得明确确认（"是否执行？"）后再提交；参数不确定或属于高成本操作（如 AIGC 视频生成、长视频转码、批量图片处理）时优先用 `--dry-run` 预演**；并建议用户在 [腾讯云费用中心](https://console.cloud.tencent.com/expense/overview) 设置费用预警与月度上限，避免意外超支。
+> 💰 **费用提示**：本 Skill 调用腾讯云 MPS 服务会产生相应费用，包括转码费、AI 处理费、存储费等，当一个任务没有拿到结果时，不要手动重复发起请求，也不要自作主张重复发起请求，否则会重复计费。具体计费标准请参考 [腾讯云 MPS 定价](https://cloud.tencent.com/document/product/862/36180)。每次调用**处理类脚本**（转码/增强/擦除/字幕/图片处理/AIGC/质检/音视频理解/去重/解说/集锦/横竖互转等）时，必须给出费用提示；查询类（get_task/usage/cos_list）和上传下载类（cos_upload/cos_download）无需提示。**调用处理类脚本前必须先向用户复述将执行的命令并取得明确确认（"是否执行？"）后再提交；参数不确定或属于高成本操作（如 AIGC 视频生成、长视频转码、批量图片处理）时优先用 `--dry-run` 预演**；并建议用户在 [腾讯云费用中心](https://console.cloud.tencent.com/expense/overview) 设置费用预警与月度上限，避免意外超支。
 
-通过腾讯云官方 Python SDK 调用 MPS API，所有脚本位于 `scripts/` 目录，均支持 `--help` 和 `--dry-run`。各脚本详细参数与示例见 `references/<script>.md`。
+通过腾讯云官方 Python SDK 调用 MPS API，所有脚本位于 `scripts/` 目录，均支持 `--help` 和 `--dry-run`。**各脚本详细参数与示例见 `references/<script>.md`，生成命令前必须先 Read 对应文档；未读 references 直接给命令视为违规**。
 
 ## 环境配置
 
@@ -121,7 +122,7 @@ python3 -m pip install -r scripts/requirements.txt --upgrade
 | 音频分离 / 人声提取 / 人声分离 / 提取伴奏 / 提取背景声 / 提取音轨 | `mps_enhance.py` | [mps_enhance.md](references/mps_enhance.md) | 详见 references 中的追问规则与参数说明 |
 | 转码、压缩、格式转换、视频/音频编码调整 | `mps_transcode.py` | [mps_transcode.md](references/mps_transcode.md) | 视频/音频编码格式处理 |
 | 字幕提取、字幕翻译、**语音识别 / 语音转文字** | `mps_subtitle.py` | [mps_subtitle.md](references/mps_subtitle.md) | 字幕与语音识别，输出 SRT 字幕或文字内容 |
-| 图片处理（超分/高级超分/美颜/降噪/色彩增强/细节增强/人脸增强/低光照增强/综合增强/格式转换/缩放裁剪/滤镜/**图片擦除文字水印图标**/**盲水印**/**AI抠图**/**AI扩图**/**AI图片修复**/**AI前景提取**/**AI图片理解**/**AI文字水印擦除**） | `mps_imageprocess.py` | [mps_imageprocess.md](references/mps_imageprocess.md) | 图片综合处理；**图片**中的文字/水印/图标擦除用此脚本，**视频**擦除用 `mps_erase.py`；AI 编排场景通过 `--schedule-id` 触发：**AI文字水印擦除=30000 / AI扩图(outpaint)=30010 / AI抠图(智能抠图)=30030 / AI前景提取=30031 / AI图片修复(老照片修复/划痕修复)=30040 / AI图片理解(看图/描述图片内容)=30200**|
+| 图片处理（超分/高级超分/美颜/降噪/色彩增强/细节增强/人脸增强/低光照增强/综合增强/格式转换/缩放裁剪/滤镜/**图片擦除文字水印图标**/**盲水印**/**AI图片修复**/**AI前景提取**/**AI文字水印擦除**） | `mps_imageprocess.py` | [mps_imageprocess.md](references/mps_imageprocess.md) | 图片综合处理；**图片**中的文字/水印/图标擦除用此脚本，**视频**擦除用 `mps_erase.py`；AI 编排场景通过 `--schedule-id` 触发，**仅支持 AI文字水印擦除=30000 / AI前景提取=30031 / AI图片修复(老照片修复/划痕修复)=30040**；**抠图→`mps_image_cutout.py`、图片理解→`mps_image_comprehend.py`、扩图→`mps_image_padding.py`、背景融合→`mps_image_bg_fusion.py`、换装→`mps_image_tryon.py`，本脚本均不支持**|
 | 精准抠图 / 透明背景抠图 / 去背景 PNG | `mps_image_cutout.py` | [mps_image_cutout.md](references/mps_image_cutout.md) | 精准抠图输出透明 PNG，支持透明度阈值/边缘步长调节（ScheduleId=30030） |
 | 图片扩图 / 画布扩展 / outpaint / 扩展画面 | `mps_image_padding.py` | [mps_image_padding.md](references/mps_image_padding.md) | 智能扩展画布/画面，支持目标宽高比或像素尺寸（ScheduleId=30010）；**至少指定 `--aspect-ratio`/`--image-width`/`--image-height` 之一** |
 | 图片理解 / 看图说话 / 图片OCR / 图片问答 / 描述图片内容 / 图片分析 | `mps_image_comprehend.py` | [mps_image_comprehend.md](references/mps_image_comprehend.md) | Gemini 系列模型看图问答，**必须提供 `--prompt`**；输出为文本内容而非文件（ScheduleId=30200） |
@@ -134,13 +135,14 @@ python3 -m pip install -r scripts/requirements.txt --upgrade
 | 图片背景融合 / 背景替换 / 商品图换背景 / AI 背景生成 / 根据文字描述自动生成背景 / 电商背景生成 | `mps_image_bg_fusion.py` | [mps_image_bg_fusion.md](references/mps_image_bg_fusion.md) | 传入主图+背景图合成，或只传主图+`--prompt` 自动生成背景；详见 references |
 | 海报套图 / 批量海报生成 / 商品套图 / 多平台套图 / AiPosterSuite | `mps_image_poster_suite.py` | [mps_image_poster_suite.md](references/mps_image_poster_suite.md) | **批量**生成多张广告海报 panel（必须同时有商品图 + 平台 + 主题列表）；**`--definition` 必填**，平台映射：`50`=淘宝/天猫、`51`=亚马逊Amazon、`52`=京东、`53`=拼多多、`54`=Temu、`55`=TikTok；**`--recipe` 必填**（Theme:Num，总数 4-12）；**边界**：单张 AI 海报 → `mps_aigc_image.py`；商品换背景 → `mps_image_bg_fusion.py`；海报超分/降噪 → `mps_imageprocess.py`；**与其它图片脚本参数名不同**：商品图用 `--product-url` / `--product-cos-key`（非 `--url` / `--cos-input-key`）；**支持 `--dry-run` 预演和 `--no-wait` 异步**；modify 模式必须回填所有 9 个标准变量；**modify 迭代时务必用 `--output-dir` 指定与 auto 不同的输出目录**（默认 `/output/poster_suite/`，相同会覆盖 auto 结果）；详见 references |
 | AI 生图（文生图/图生图/全景图）| `mps_aigc_image.py` | [mps_aigc_image.md](references/mps_aigc_image.md) | AIGC 图片生成；支持模型：`Hunyuan`（默认，`--scene-type 3d_panorama` 生成全景图）/ `GEM`（版本 `2.5`/`3.0`/`3.1`，支持多图参考）/ `Qwen` / `Vidu`（版本 `q2`）/ `Kling`（版本 `2.1`/`O1`/`3.0`/`3.0-Omni`）/ `OG`（版本 `image2_low`/`image2_medium`/`image2_high`）|
-| AI 生视频（文生视频/图生视频/分镜生成） | `mps_aigc_video.py` | [mps_aigc_video.md](references/mps_aigc_video.md) | AIGC 视频生成，**Kling 模型支持分镜功能**；**参考视频仅 Kling 模型支持**；**SceneType 严格对应模型**：`motion_control`→Kling / `land2port`→Mingmou / `template_effect`→Vidu / `3d_scene`→Hunyuan；**PixVerse 模型**（版本 `v5.6`/`v6`/`c1`，时长 1~15s，宽高比支持 `16:9`/`4:3`/`1:1`/`3:4`/`9:16`/`2:3`/`3:2`/`21:9`，画质 `--quality` 支持 `360p`/`540p`/`720p`/`1080p`）；**Hailuo 模型**（版本 `02`/`2.3`/`2.3-fast`）；**GV 模型**（版本 `3.1`/`3.1-fast`）；**OS 模型**（版本 `2.0`，时长 `4`/`8`/`12`s，默认 8s，支持 `--enable-audio`）|
+| AI 生视频（文生视频/图生视频/分镜生成） | `mps_aigc_video.py` | [mps_aigc_video.md](references/mps_aigc_video.md) | AIGC 视频生成，**Kling 模型支持分镜功能**；**参考视频支持模型**：`Kling`（仅 O1 / 3.0-Omni）/ `Vidu`（仅 q2-pro）/ `H2`（仅 1.0），其他模型（Hunyuan / Hailuo / PixVerse / GV / OS / Mingmou 等）不支持参考视频；**SceneType 严格对应模型**：`motion_control`→Kling / `land2port`→Mingmou / `template_effect`→Vidu / `3d_scene`→Hunyuan；**PixVerse 模型**（版本 `v5.6`/`v6`/`c1`，时长 1~15s，宽高比支持 `16:9`/`4:3`/`1:1`/`3:4`/`9:16`/`2:3`/`3:2`/`21:9`，画质 `--quality` 支持 `360p`/`540p`/`720p`/`1080p`）；**Hailuo 模型**（版本 `02`/`2.3`/`2.3-fast`）；**GV 模型**（版本 `3.1`/`3.1-fast`）；**OS 模型**（版本 `2.0`，时长 `4`/`8`/`12`s，默认 8s，支持 `--enable-audio`）|
 | 文档生成视频 / PDF转视频 / PPT转讲解视频 / Word转视频 / 文档做成视频 | `mps_doc_to_video.py` | [mps_doc_to_video.md](references/mps_doc_to_video.md) | 将 PDF/PPTX/DOCX/PNG/JPG 文档自动生成讲解视频；**最多3个文档，单个≤10MB≤100页**；**`--prompt` 必填**；支持 `--aspect-ratio`/`--language`/`--reference-duration`/AI配音（`--enable-tts`+`--voice-id`）；**查询任务复用 `--task-id`（脚本内置 DescribeAigcTaskStatus，非独立的DocToVideo专属查询接口，已通过真实任务验证）**，不能用 `mps_get_video_task.py` 查询 |
 | 音视频内容理解（场景/摘要/内容分析）/ **对比分析两段音视频** / **对比分析两段音频** / 音频内容理解 | `mps_av_understand.py` | [mps_av_understand.md](references/mps_av_understand.md) | 大模型理解，**必须提供 `--mode` 和 `--prompt`**；对比两段视频/音频时需传第二段，详见 references |
 | 视频去重 / 视频防重（画中画/视频扩展/垂直填充/水平填充）| `mps_dedupe.py` | [mps_dedupe.md](references/mps_dedupe.md) | `--mode` 可省略，默认 `PicInPic`；详见 references |
 | 视频二次创作（换脸/换人/视频交错 AB）| `mps_vremake.py` | [mps_vremake.md](references/mps_vremake.md) | **必须提供 `--mode`**；详见 references |
 | AI解说二创 / 短剧解说 / 自动生成短剧解说视频 / 短剧解说混剪 | `mps_narrate.py` | [mps_narrate.md](references/mps_narrate.md) | 必须从预设场景中选择；不支持自定义脚本；多集视频详见 references |
 | 精彩集锦 / 高光提取 / 自动剪辑精彩片段 / 足球进球集锦 / 篮球集锦 / 短剧高光 | `mps_highlight.py` | [mps_highlight.md](references/mps_highlight.md) | 必须从预设场景中选择；不支持直播流 |
+| 横竖屏方向转换（横屏转竖屏 / 竖屏转横屏 / 横转竖 / 竖转横 / 转成 9:16 / 转成 16:9 / 短视频比例转换） | `mps_orientation_convert.py` | [mps_orientation_convert.md](references/mps_orientation_convert.md) | **双向转换**：横→竖用算法 `2`多模型/`3`人脸检测/`5`缩放毛玻璃/`6`AIGC补全，竖→横用算法 `7`AIGC补全；**`--algorithm-type` 必填**，需先确认转换方向；固定 `AiAnalysisTask.Definition=28`；`SmoothWeight` 默认 `0.75`，`Ratio` 默认 `9:16`（**算法 7 须显式指定 `--ratio 16:9`**）；`--blur-weight` 仅算法5、人脸参数仅算法3；算法`6`/`7`为高级版计费；不支持直播流与 AWS S3；⚠️ **转换已有视频**用本脚本，凭 prompt 生成竖屏视频用 `mps_aigc_video.py --model Mingmou --scene-type land2port`，仅加填充边做去重用 `mps_dedupe.py --mode VerticalExtend` |
 | 用量统计查询 | `mps_usage.py` | [mps_usage.md](references/mps_usage.md) | 调用次数/时长查询 |
 | 查询音视频处理任务状态 | `mps_get_video_task.py` | [mps_query_task.md](references/mps_query_task.md) | ProcessMedia 任务查询（含 VideoRemake 等所有任务类型） |
 | 查询图片处理任务状态 | `mps_get_image_task.py` | [mps_query_task.md](references/mps_query_task.md) | ProcessImage 任务查询 |
@@ -201,6 +203,7 @@ python3 -m pip install -r scripts/requirements.txt --upgrade
 | `mps_vremake.py` | [VideoRemake AiAnalysisTask](https://cloud.tencent.com/document/product/862/124394) |
 | `mps_narrate.py` | [ProcessMedia AiAnalysisTask](https://cloud.tencent.com/document/product/862/37578) |
 | `mps_highlight.py` | [ProcessMedia AiAnalysisTask](https://cloud.tencent.com/document/product/862/37578) |
+| `mps_orientation_convert.py` | [ProcessMedia AiAnalysisTask Definition=28](https://cloud.tencent.com/document/product/862/112112) |
 | `mps_aigc_image.py` | [CreateAigcImageTask](https://cloud.tencent.com/document/api/862/114562) |
 | `mps_aigc_video.py` | [CreateAigcVideoTask](https://cloud.tencent.com/document/api/862/126965) |
 | `mps_doc_to_video.py` | [CreateDocToVideoTask](https://cloud.tencent.com/document/api/862) / DescribeAigcTaskStatus（官方文档未公开，SDK≥3.1.139已建模，已通过真实调用验证） |

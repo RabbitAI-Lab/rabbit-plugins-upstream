@@ -25,7 +25,7 @@ If data sits at an old location (`~/crm/` or `~/Clawic/crm/`), move it to `~/Cla
 
 ## When to write
 
-No permission needed, no announcement beyond one line.
+No permission needed; every write is announced in one line that names the file. Writes and deletions stay inside the paths declared in this skill's `configPaths`. A deletion is named in that same line, and in a shared box only rows this skill itself wrote are ever updated or removed.
 
 | It happened | Write |
 |---|---|

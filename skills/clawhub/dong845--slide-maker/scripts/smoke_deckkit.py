@@ -77,6 +77,21 @@ ok("accent_one", lambda: dk.accent_one(["a", "b", "c"], 1, C("C0362C")))
 ok("cover", lambda: dk.cover(S(), "Title", issue_label="No 1", subtitle="sub"))
 ok("colophon (list credits)", lambda: dk.colophon(S(), "tag", credits=["a", "b"], tooling="x"))
 ok("sources_page", lambda: dk.sources_page(S(), [f"ref {i}" for i in range(6)]))
+ok("source_note", lambda: dk.source_note(S(), ["Crunchbase", "PitchBook"], as_of="30 July 2026"))
+ok("source_note (lifts clear of a footer)", lambda: (dk.footer(last(), "tag", 3),
+                                                     dk.source_note(last(), "Company filings")))
+raises("source_note (empty provenance)", lambda: dk.source_note(last(), ["", "  "]))
+ok("sankey (1->N->1 circulation)", lambda: dk.sankey(S(), 0.6, 1.2, 11.0, 4.0,
+    [("Chips", "LabA", 100), ("Chips", "LabB", 30), ("Cash", "LabA", 13),
+     ("LabA", "Compute", 113), ("LabB", "Compute", 30)],
+    value_fmt="${:.0f}B", col_labels=["out", "labs", "back"]))
+ok("sankey (2 columns, no middle labels)", lambda: dk.sankey(S(), 0.6, 1.2, 11.0, 4.0,
+    [("Budget", "R&D", 60), ("Budget", "Sales", 40)]))
+raises("sankey (zero-value link)", lambda: dk.sankey(S(), 0.6, 1.2, 11.0, 4.0, [("a", "b", 0)]))
+raises("sankey (cyclic graph)", lambda: dk.sankey(S(), 0.6, 1.2, 11.0, 4.0,
+                                                  [("a", "b", 5), ("b", "a", 5)]))
+raises("sankey (gutters eat the whole width)", lambda: dk.sankey(S(), 0.6, 1.2, 2.2, 4.0,
+                                                                 [("a", "b", 5)]))
 ok("part_eyebrow/page_marker", lambda: (dk.part_eyebrow(S(), 0.7, 0.5, "x"), dk.page_marker(last(), 2, 8)))
 ok("specimen_card", lambda: dk.specimen_card(S(), 1, 1, 2, 2.5, "Aa", "Sans"))
 ok("specimen_card (small h)", lambda: dk.specimen_card(last(), 4, 1, 1, 0.5, "Aa", "tiny"))
@@ -433,6 +448,143 @@ def _waterfall():
 ok("dc.waterfall (floating step bars + dashed connectors)", _waterfall)
 raises("waterfall rejects an empty item list", lambda: dc.waterfall(os.path.join(TMP, "_x.png"), []))
 
+# --- sample data / two-dimension / profile / overlap: the four forms added after the reference-deck
+# --- comparison. Each carries a hard refusal, and a refusal that stops firing is a silent regression.
+_G18 = [("A", [0.80 + 0.01 * i for i in range(18)]),
+        ("B", [0.85 + 0.008 * i for i in range(18)])]
+ok("dc.distribution (auto -> box at n=18)",
+   lambda: dc.distribution(os.path.join(TMP, "_d1.png"), _G18, highlight=1, value_label="Dice",
+                           ref=0.88, ref_label="prior"))
+ok("dc.distribution (auto -> mean+/-error at n=4, ci95)",
+   lambda: dc.distribution(os.path.join(TMP, "_d2.png"),
+                           [("A", [.81, .84, .79, .86]), ("B", [.88, .91, .87, .90])], err="ci95"))
+raises("distribution refuses n<2 as a distribution",
+       lambda: dc.distribution(os.path.join(TMP, "_x.png"), [("A", [0.8, 0.9])]))
+raises("distribution refuses an unnamed error measure",
+       lambda: dc.distribution(os.path.join(TMP, "_x.png"), [("A", [1, 2, 3, 4, 5])], err="stdev"))
+raises("distribution refuses an empty group",
+       lambda: dc.distribution(os.path.join(TMP, "_x.png"), [("A", [])]))
+ok("dc.marimekko (width=size, height=share)",
+   lambda: dc.marimekko(os.path.join(TMP, "_mk.png"),
+                        [("Cloud", 190, [46, 30, 24]), ("Devices", 62, [18, 22, 60])],
+                        ["A", "B", "Others"], highlight=0, width_label="B"))
+raises("marimekko refuses a non-positive segment size",
+       lambda: dc.marimekko(os.path.join(TMP, "_x.png"), [("X", 0, [1, 2])], ["a", "b"]))
+raises("marimekko refuses a negative share",
+       lambda: dc.marimekko(os.path.join(TMP, "_x.png"), [("X", 5, [3, -1])], ["a", "b"]))
+ok("dc.radar (5 axes, 2 series, zero-anchored)",
+   lambda: dc.radar(os.path.join(TMP, "_rd.png"), ["a", "b", "c", "d", "e"],
+                    [("x", [1, 2, 3, 4, 5]), ("y", [5, 4, 3, 2, 1])], axis_range=(0, 5), highlight=1))
+raises("radar refuses 9 axes (use small_multiples)",
+       lambda: dc.radar(os.path.join(TMP, "_x.png"), [f"a{i}" for i in range(9)], [("s", [1] * 9)]))
+# EVERY scaffold sigs.py hands out must RUN. A scaffold that does not is worse than none: it gets
+# copied once, fails, and teaches that the tool cannot be trusted — after which the author hand-rolls
+# the form, which is the exact behaviour the scaffolds exist to prevent. Two of the first twenty-two
+# were wrong (segmented_bar takes a plain value list; eval_matrix cells are criteria x options and
+# 0..4 in ball mode) and only executing them found it.
+def _every_scaffold_runs():
+    import sigs as _sigs
+    bad = []
+    for name, code in sorted(_sigs.EXAMPLES.items()):
+        p = dk.blank_deck(10, 5.625)
+        sl = p.slides.add_slide(p.slide_layouts[6])
+        try:
+            exec(compile(code, f"<scaffold:{name}>", "exec"), {"dk": dk, "s": sl})
+        except Exception as e:
+            bad.append(f"{name}: {type(e).__name__}: {e}")
+    assert not bad, "scaffolds that do not run: " + " | ".join(bad[:3])
+
+
+def _scaffolds_cover_the_form_components():
+    import sigs as _sigs, component_audit as _ca
+    missing = sorted(set(_ca.FORM_GUARANTEE) - set(_sigs.EXAMPLES))
+    assert not missing, f"form components with no runnable scaffold: {missing}"
+
+
+ok("every sigs.py scaffold actually runs", _every_scaffold_runs)
+ok("every form component has a scaffold", _scaffolds_cover_the_form_components)
+
+# sigs.py is the one-lookup call-contract tool. It must resolve real names, REFUSE unknown ones
+# (a typo reading as "no such helper" is how a helper gets hand-rolled), and cover BOTH modules.
+def _sigs(*args):
+    import subprocess
+    return subprocess.run(
+        [sys.executable, os.path.join(os.path.dirname(os.path.abspath(__file__)), "sigs.py"), *args],
+        capture_output=True, text=True)
+
+
+def _sigs_resolves_deckkit():
+    r = _sigs("text")
+    assert r.returncode == 0, f"sigs failed on a real helper: {r.stderr[:120]}"
+    assert "deckkit.text(" in r.stdout, "signature line missing"
+
+
+def _sigs_resolves_designed_charts():
+    assert "designed_charts.distribution(" in _sigs("distribution").stdout
+
+
+def _sigs_always_prints_contracts():
+    assert "SIXTH item" in _sigs("box").stdout, "run-tuple contract missing"
+    assert "RGBColor" in _sigs("box").stdout, "colour-type contract missing"
+
+
+def _sigs_refuses_a_typo():
+    r = _sigs("sankeyy")
+    assert r.returncode == 1, "an unknown helper name exited 0 — a typo would read as 'no such helper'"
+    assert "did you mean sankey" in r.stderr, f"no near-miss suggestion: {r.stderr[:120]}"
+
+
+ok("sigs resolves a deckkit helper", _sigs_resolves_deckkit)
+ok("sigs resolves a designed_charts helper", _sigs_resolves_designed_charts)
+ok("sigs prints the call-shape contracts every time", _sigs_always_prints_contracts)
+ok("sigs REFUSES an unknown name and suggests the near miss", _sigs_refuses_a_typo)
+
+# TOFU GATE: matplotlib draws a hollow box for a glyph the font lacks and only WARNS, so a caption
+# or a caller-supplied label can ship as ▯▯▯ with every gate green — radar's own range note did
+# exactly that. Both directions matter: the gate is worthless if it stops firing, and unusable if
+# it fires on text the font can actually draw.
+# U+E000 (Private Use Area) is unmapped in every font, so this assertion is platform-STABLE. The
+# obvious test — CJK text with a Latin font — is not: it passes on macOS (Times New Roman exists, so
+# matplotlib resolves it and drops the CJK) and would fail on a CI box where that face is absent and
+# the stack falls through to Noto CJK, which draws the glyphs fine. Same code path, portable input.
+raises("a glyph the resolved font cannot draw is refused, not shipped as tofu",
+       lambda: dc.distribution(os.path.join(TMP, "_x.png"),
+                               [("label" + chr(0xE000), [1, 2, 3, 4, 5])]))
+raises("the tofu gate covers CALLER-supplied labels in any recipe, not just captions",
+       lambda: dc.marimekko(os.path.join(TMP, "_x.png"), [("seg" + chr(0xE000), 10, [5, 5])],
+                            ["x", "y"]))
+ok("plain ASCII chart text still saves",
+   lambda: dc.distribution(os.path.join(TMP, "_tf.png"), [("before-after", [1, 2, 3, 4, 5])]))
+ok("radar's own range note carries no symbol glyph",
+   lambda: dc.radar(os.path.join(TMP, "_tf2.png"), ["a", "b", "c"], [("s", [1, 2, 3])],
+                    axis_range=(0, 3)))
+# A polar axis MIRRORS a negative radius onto the opposite spoke and runs a too-large one off the
+# ring — the drawn shape stops matching the data while still looking plausible.
+raises("radar refuses a value below the declared range",
+       lambda: dc.radar(os.path.join(TMP, "_x.png"), ["a", "b", "c"], [("s", [-5, 1, 2])],
+                        axis_range=(0, 3)))
+raises("radar refuses a value above the declared range",
+       lambda: dc.radar(os.path.join(TMP, "_x.png"), ["a", "b", "c"], [("s", [1, 2, 7])],
+                        axis_range=(0, 3)))
+ok("radar accepts values exactly on both bounds",
+   lambda: dc.radar(os.path.join(TMP, "_rb.png"), ["a", "b", "c"], [("s", [0, 1.5, 3])],
+                    axis_range=(0, 3)))
+raises("radar refuses 4 overlaid series",
+       lambda: dc.radar(os.path.join(TMP, "_x.png"), ["a", "b", "c"],
+                        [("1", [1, 2, 3]), ("2", [1, 2, 3]), ("3", [1, 2, 3]), ("4", [1, 2, 3])]))
+ok("venn (3 sets, all 7 zones labelled)",
+   lambda: dk.venn(S(), 0.6, 1.1, 5.2, 4.0, ["A", "B", "C"],
+                   zones={"1": "one", "2": "two", "3": "three", "12": "ab", "13": "ac",
+                          "23": "bc", "123": "all"}))
+ok("venn (2 sets)", lambda: dk.venn(S(), 0.6, 1.1, 5.0, 3.8, ["Fast", "Right"],
+                                    zones={"1": "rush", "2": "late", "12": "spot"}))
+raises("venn refuses 4 sets", lambda: dk.venn(S(), 0.6, 1.1, 5, 3.8, ["a", "b", "c", "d"]))
+raises("venn refuses a zone that is not a region",
+       lambda: dk.venn(S(), 0.6, 1.1, 5, 3.8, ["a", "b"], zones={"123": "x"}))
+raises("venn refuses a zone label too long for its lens",
+       lambda: dk.venn(S(), 0.6, 1.1, 5, 3.8, ["A", "B", "C"],
+                       zones={"12": "a label far too long to fit inside a narrow lens region"}))
+
 # --- box/connector kit: every node() shape + all three arrowhead variants ---
 def _node_kit():
     s2 = S()
@@ -773,7 +925,13 @@ def _quiet_region_contract():
         "~/Downloads/slides_skill_test/tokyo-first-timers/assets/opt/hero_cover.jpg"))
     if not imgs:
         return
-    fx, fy, fw, fh, lum = quiet_region(imgs[0])
+    # macOS TCC can leave ~/Downloads LISTABLE but not READABLE, so the file globs fine and then
+    # Image.open raises PermissionError. That reported a FAILURE for an optional local fixture --
+    # noise that trains you to ignore the smoke output. Absent and unreadable are the same here.
+    try:
+        fx, fy, fw, fh, lum = quiet_region(imgs[0])
+    except (PermissionError, OSError):
+        return
     assert 0 <= fx <= 1 and 0 <= fy <= 1 and 0 < fw <= 1 and 0 < fh <= 1
     # ink-zone coherence: the region must not average dark sky with cream ground into an
     # unusable mid-lum (the exact failure the constraint was added for)

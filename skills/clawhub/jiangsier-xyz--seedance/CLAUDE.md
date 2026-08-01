@@ -4,27 +4,28 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-An agent **skill** (standard `SKILL.md`; runs on Claude Code, OpenClaw, and compatible runtimes) that generates videos with the **doubao-seedance-2.0** model. `SKILL.md` defines the skill (triggers on "generate video"/"seedance"); `README.md`/`README.zh-CN.md` document it. The wrapper lives at `scripts/seedance.py` (stdlib-only Python); the only third-party dep is the Alibaba OSS SDK, and only when local image files are used. Video generation is async on every backend this targets (POST a task → poll GET until terminal), so the wrapper hides that behind one blocking call returning the final result (with the video URL).
+An agent **skill** (standard `SKILL.md`; runs on Claude Code, OpenClaw, and compatible runtimes) that generates videos with the **doubao-seedance-2.0** model. `SKILL.md` defines the skill (triggers on "generate video"/"seedance"); `README.md`/`README.zh-CN.md` document it. The synchronous video wrapper is `scripts/seedance.py` (stdlib-only Python); the entrypoint `scripts/seedance` is a venv wrapper that provisions an isolated `.venv/` (installing `requirements.txt`), auto-picks `python3.11`/`python3.12` for proxy-TLS safety, and forwards all args to `scripts/seedance.py`. The only third-party dep is the Alibaba OSS SDK, and only when local image files are used. Video generation is async on every backend this targets (POST a task → poll GET until terminal), so the wrapper hides that behind one blocking call returning the final result (with the video URL).
 
 ## Commands
 
 ```bash
 # offline unit tests (no network, no key needed) — the main feedback loop
-python3 scripts/test_seedance.py
-cd scripts && python3 -m unittest test_seedance.OpenaiTransportTests -v   # one class
-cd scripts && python3 -m unittest test_seedance.GenerateVideoSyncTests.test_text_to_video_polls_until_succeeded  # one test
+scripts/seedance test_seedance.py
+cd scripts && ../.venv/bin/python -m unittest test_seedance.OpenaiTransportTests -v   # one class
+cd scripts && ../.venv/bin/python -m unittest test_seedance.GenerateVideoSyncTests.test_text_to_video_polls_until_succeeded  # one test
 
-# run the CLI against the Ark API (default api-type; python3 is fine)
-python3 scripts/seedance.py -t "prompt"                                  # text-to-video
-python3 scripts/seedance.py -t "prompt" -i ./fox.png                     # image-to-video (local → OSS)
-python3 scripts/seedance.py -t "prompt" -f ./first.png -l ./last.png     # first+last frame
-python3 scripts/seedance.py -t "prompt" --image-url https://.../x.png    # online image URL
-python3.11 scripts/seedance.py --api-type openai-video -t "prompt"          # openai-video (mini); see interpreter note
-python3.11 scripts/seedance.py --api-type openai -t "prompt"              # openai (full, Ark-shaped body)
+# run the CLI against the Ark API (default api-type; interpreter chosen for you)
+scripts/seedance -t "prompt"                                  # text-to-video
+scripts/seedance -t "prompt" -i ./fox.png                     # image-to-video (local → OSS)
+scripts/seedance -t "prompt" -f ./first.png -l ./last.png     # first+last frame
+scripts/seedance -t "prompt" --image-url https://.../x.png    # online image URL
+scripts/seedance --api-type openai-video -t "prompt"          # openai-video (mini); see interpreter note
+scripts/seedance --api-type openai      -t "prompt"            # openai (full, Ark-shaped body)
 
 # live integration tests (real API calls — costs quota; skips unless ARK_API_KEY set)
-python3.11 -c "import sys; sys.path.insert(0,'scripts'); import seedance, unittest; seedance.load_dotenv('.env'); unittest.TextTestRunner(verbosity=2).run(unittest.TestLoader().loadTestsFromName('test_seedance.LiveTests'))"          # openai-video (mini)
-python3.11 -c "import sys; sys.path.insert(0,'scripts'); import seedance, unittest; seedance.load_dotenv('.env'); unittest.TextTestRunner(verbosity=2).run(unittest.TestLoader().loadTestsFromName('test_seedance.OpenaiLiveTests.test_text_to_video'))"  # openai (full)
+# (the one-off runs below drive the venv interpreter created by the first `scripts/seedance` run)
+.venv/bin/python -c "import sys; sys.path.insert(0,'scripts'); import seedance, unittest; seedance.load_dotenv('.env'); unittest.TextTestRunner(verbosity=2).run(unittest.TestLoader().loadTestsFromName('test_seedance.LiveTests'))"          # openai-video (mini)
+.venv/bin/python -c "import sys; sys.path.insert(0,'scripts'); import seedance, unittest; seedance.load_dotenv('.env'); unittest.TextTestRunner(verbosity=2).run(unittest.TestLoader().loadTestsFromName('test_seedance.OpenaiLiveTests.test_text_to_video'))"  # openai (full)
 ```
 
 Tests do **not** auto-load `.env` (so offline runs never accidentally hit the network). Live tests need `ARK_API_KEY` either in the real env or loaded via the one-liner above.

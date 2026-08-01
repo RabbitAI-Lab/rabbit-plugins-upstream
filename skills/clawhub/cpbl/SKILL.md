@@ -101,16 +101,23 @@ Look for the latest "延賽公告" entry. The live script now auto-detects postp
 
 ### Scrapling 查詢維基館
 
-使用 `skills/cpbl/.venv` 裡的 scrapling，**不要用 `web_fetch` 或 Playwright**。
+CPBL 腳本皆為 PEP 723 inline script，`uv run` 會自動處理依賴，**不需手動建 venv 或 pip install**。
+**不要用 `web_fetch` 或 Playwright**。
 
 **安裝（首次使用前）：**
 ```bash
-# 1. 建立 venv 並安裝依賴（如果 .venv 不存在）
-cd skills/cpbl && uv venv && uv pip install -e .
-# 2. 安裝 stealth browser（Scrapling StealthyFetcher 需要）
-.venv/bin/scrapling install --force
+# 唯一需要手動裝的：patchright browser（StealthyFetcher 底層依賴）
+# 利用 cpbl_games.py 等腳本已有的 scrapling[ai] 依賴
+cd skills/cpbl && uv run --with "scrapling[ai]" --with curl_cffi patchright install
 ```
 
+**使用 cpbl_twbsball.py（推薦）：**
+```bash
+uv run skills/cpbl/scripts/cpbl_twbsball.py "中華職棒年度最有價值球員"
+uv run skills/cpbl/scripts/cpbl_twbsball.py "陳鏞基" --output json
+```
+
+**或直接在 Python 中使用：**
 ```python
 from scrapling.fetchers import StealthyFetcher
 
@@ -121,13 +128,6 @@ page = StealthyFetcher.fetch(
 )
 text = page.css("#mw-content-text")[0].get_all_text()
 print(text)
-```
-
-CLI 替代方案（適合一次性查詢，需先執行安裝步驟 2）：
-```bash
-skills/cpbl/.venv/bin/scrapling extract stealthy-fetch \
-  "https://twbsball.dils.tku.edu.tw/wiki/index.php?title=中華職棒年度最有價值球員" \
-  result.md --ai-targeted --wait 10000
 ```
 
 注意事項：

@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes pet-alone video to identify separation-anxiety behaviors, estimate anxiety level, and return behavior observations with comfort recommendations. <br>
+Analyzes pet home-camera videos or URLs for separation-anxiety behaviors, returns structured monitoring results, and recommends comfort actions such as voice playback, treat dispensing, or interactive toys without providing a medical diagnosis. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, pet owners, boarding centers, and developers use this skill to analyze pet camera footage from owner-away periods, detect likely separation-anxiety behaviors, and produce structured monitoring results and intervention guidance. The output is for behavior observation only, not medical diagnosis. <br>
+Pet owners, boarding centers, and agents supporting pet-care workflows use this skill to review owner-away video evidence, identify likely separation-anxiety behaviors, quantify severity, query prior reports, and provide behavior-observation guidance. It is intended for monitoring and recommendations, not veterinary diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Pet and home media may be sent to the publisher's cloud service. <br>
-Mitigation: Use only pet-focused media that avoids people, sensitive rooms, private camera URLs, and audio unless the publisher's service and retention practices are acceptable. <br>
-Risk: The skill may create or reuse a persistent local identity and store tokens locally. <br>
-Mitigation: Review identity and token storage before deployment, avoid shared machines for sensitive use, and remove or rotate stored credentials when access should end. <br>
-Risk: Behavior analysis can be mistaken for professional veterinary or behavioral diagnosis. <br>
-Mitigation: Treat outputs as observation and triage guidance, and refer severe or persistent anxiety cases to a veterinarian or qualified behavior professional. <br>
+Risk: Pet or home-camera videos and video URLs may be sent to external cloud analysis services. <br>
+Mitigation: Use only media the user is authorized to share, avoid sensitive scenes where possible, and review the provider's handling and retention expectations before installation. <br>
+Risk: The skill can silently create or reuse a local account identity and store authentication tokens in a workspace SQLite database. <br>
+Mitigation: Run it in an isolated workspace, restrict access to the workspace data directory, and clear local tokens or generated identities when the workflow is no longer needed. <br>
+Risk: Behavior analysis may be mistaken for professional medical or veterinary advice. <br>
+Mitigation: Present results as behavior observations and recommendations only, and direct severe or persistent cases to a veterinarian or qualified behavior specialist. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-separation-anxiety-relief-analysis) <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-separation-anxiety-relief-analysis) <br>
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [Pet separation anxiety API documentation](references/api_doc.md) <br>
+- [Common AI analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown report with optional JSON detail and report links] <br>
+**Output Type(s):** [text, markdown, JSON, API calls, files] <br>
+**Output Format:** [Markdown or JSON structured analysis report with report links; optional file output when requested] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save analysis output to a file and can query cloud-hosted historical reports for the current identity.] <br>
+**Other Properties Related to Output:** [May include severity labels, behavior observations, intervention suggestions, history-list results, and exported report URLs.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter says 1.0.5) <br>
+1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

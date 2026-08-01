@@ -1,5 +1,5 @@
 ## Description: <br>
-Migrates AI assistant context between IDEs, including MCP servers, rules, skills, commands, agents, hooks, and memory, with dry-run previews, format conversion, backup-first merging, secret redaction, and verification. <br>
+Helps agents preview and perform scoped AI-assistant context migrations between IDEs or agent tools, including skills, rules, prompts, commands, and MCP configuration, with writes gated by approval. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,39 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill when they explicitly need to migrate, copy, convert, or synchronize AI assistant context between supported IDEs and agent runtimes. It helps inventory source settings, preview conversion plans, redact credentials, apply approved changes, and verify destination configuration. <br>
+Developers and engineers use this skill to plan, preview, and apply controlled migrations of AI-assistant context between supported IDEs and agent clients. It is intended for user-approved migration work, not general explanation, debugging, validation, installation, or same-tool copies. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can modify IDE and agent configuration files during migration. <br>
-Mitigation: Run dry-runs first, review target directories and planned changes, and only use --yes when the destination changes are understood. <br>
-Risk: Using overwrite or replacement sync modes can rewrite or delete destination skill and configuration files. <br>
-Mitigation: Prefer the default backup strategy, keep timestamped backups, and avoid overwrite modes unless the target contents are disposable. <br>
-Risk: MCP, config, and project migrations may contain credentials or connection strings. <br>
-Mitigation: Treat these migrations as opt-in, expect secrets to be blanked, and re-enter credentials through the target IDE or a secret manager after migration. <br>
-Risk: OpenClaw installation downloads and runs an external installer. <br>
-Mitigation: Set and verify OPENCLAW_INSTALL_SHA256 before allowing the installer to run, and do not proceed when the checksum is missing or mismatched. <br>
+Risk: A migration can target the wrong IDE path, workspace, or object type if scope is unclear. <br>
+Mitigation: Resolve source, target, workspace, objects, and strategy first; run a dry-run and review the exact paths before any approved write. <br>
+Risk: MCP credentials, OAuth state, sessions, or literal secrets can be exposed or copied incorrectly. <br>
+Mitigation: Do not copy secrets or OAuth/session state; blank literal credentials when converting and manually re-authorize credentials in the target IDE. <br>
+Risk: Whole config files or opaque project trees can overwrite unrelated user settings. <br>
+Mitigation: Avoid whole config/project migration, preserve unrelated settings, and use backup or manual reconstruction when formats are unsupported. <br>
 
 
 ## Reference(s): <br>
-- [Agent Skills Setup on ClawHub](https://clawhub.ai/luckycat133/skills/agent-skills-setup) <br>
-- [IDE Registry](artifact/references/ide-registry.md) <br>
-- [IDE Paths](artifact/references/ide-paths.json) <br>
-- [OpenClaw Reference](artifact/references/openclaw.md) <br>
-- [Publishing Reference](artifact/references/publishing.md) <br>
+- [ClawHub release page](https://clawhub.ai/luckycat133/skills/agent-skills-setup) <br>
+- [Migration safety](references/migration-safety.md) <br>
+- [MCP migration](references/mcp-migration.md) <br>
+- [Object migration](references/object-migration.md) <br>
+- [Verification](references/verification.md) <br>
+- [IDE registry](references/ide-registry.md) <br>
+- [IDE paths](references/ide-paths.json) <br>
+- [Script usage](scripts/README.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, configuration snippets, migration plans, and verification summaries] <br>
+**Output Format:** [Markdown guidance with shell commands, configuration snippets, and JSON evidence when commands are run with JSON output.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local file changes and installer commands; write operations require explicit confirmation and should be previewed first.] <br>
+**Other Properties Related to Output:** [Outputs should preserve source files, preview with dry-run before approved writes, redact or avoid secrets, and report migration evidence after apply.] <br>
 
 ## Skill Version(s): <br>
-0.5.7 (source: server release metadata and SKILL.md frontmatter) <br>
+0.6.12 (source: server release metadata and skill frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
