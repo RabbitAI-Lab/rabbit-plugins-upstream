@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/better-auth",
+  "repo": "secondsky/claude-skills",
+  "skillId": "better-auth",
+  "branch": "main",
+  "pushedAt": "2026-07-25T17:35:51Z",
+  "contentHash": "f3c61695c962b8581f85a6fb66729f194993f2178763a92647fe27df7d00f5ab",
+  "fetchedAt": "2026-08-01T09:26:45.163Z"
+}

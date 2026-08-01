@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/hatch-pet",
+  "repo": "openai/skills",
+  "skillId": "hatch-pet",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "f61841ec0faf90a34f41fb9d62251616c4d9bbdecd2017f804f1a1df93504b7a",
+  "fetchedAt": "2026-08-01T09:25:52.046Z"
+}

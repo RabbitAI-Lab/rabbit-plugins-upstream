@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/control-ui",
+  "repo": "cursor/plugins",
+  "skillId": "control-ui",
+  "branch": "main",
+  "pushedAt": "2026-07-31T23:56:07Z",
+  "contentHash": "7f26f17516af8ca3485cefb0771f4f9ed314d19494b57f268dc06279234a248f",
+  "fetchedAt": "2026-08-01T09:26:21.158Z"
+}

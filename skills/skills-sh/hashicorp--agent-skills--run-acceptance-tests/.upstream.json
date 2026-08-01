@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/run-acceptance-tests",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "run-acceptance-tests",
+  "branch": "main",
+  "pushedAt": "2026-07-29T19:48:56Z",
+  "contentHash": "0ef74eed5651932cdc6c4fc1691dbf05f4362117c6b3b0e9e63db3416d8abc08",
+  "fetchedAt": "2026-08-01T09:26:22.028Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/clickhouse/agent-skills/clickhouse-best-practices",
+  "repo": "clickhouse/agent-skills",
+  "skillId": "clickhouse-best-practices",
+  "branch": "main",
+  "pushedAt": "2026-07-27T10:55:08Z",
+  "contentHash": "4b156baa6a611e15e38a44a068e56d5499893933684541f02ac125edad621a39",
+  "fetchedAt": "2026-08-01T09:26:23.138Z"
+}

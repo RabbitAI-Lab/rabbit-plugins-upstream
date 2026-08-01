@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/softaworks/agent-toolkit/dependency-updater",
+  "repo": "softaworks/agent-toolkit",
+  "skillId": "dependency-updater",
+  "branch": "main",
+  "pushedAt": "2026-03-05T16:46:24Z",
+  "contentHash": "10093b10942e620664d65361b3b44cef69dc98467ea4efa016b0086d8f735429",
+  "fetchedAt": "2026-08-01T09:27:22.463Z"
+}

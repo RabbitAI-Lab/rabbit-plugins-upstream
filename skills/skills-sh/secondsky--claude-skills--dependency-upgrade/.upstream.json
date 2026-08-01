@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/dependency-upgrade",
+  "repo": "secondsky/claude-skills",
+  "skillId": "dependency-upgrade",
+  "branch": "main",
+  "pushedAt": "2026-07-25T17:35:51Z",
+  "contentHash": "c99d4c4260cd6461cddff3930f8e2c59776cb13f83e25e54cebdd6e69d7e1a96",
+  "fetchedAt": "2026-08-01T09:26:46.041Z"
+}

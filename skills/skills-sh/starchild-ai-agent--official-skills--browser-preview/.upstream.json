@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/browser-preview",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "browser-preview",
+  "branch": "main",
+  "pushedAt": "2026-07-31T12:27:18Z",
+  "contentHash": "08e9e2e3bad669b63731b9b7c4d082b995e79afe32e8867a1da223cda86465a8",
+  "fetchedAt": "2026-08-01T09:25:51.254Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/video-analysis",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "video-analysis",
+  "branch": "main",
+  "pushedAt": "2026-07-31T12:27:18Z",
+  "contentHash": "da6805c8710251bc3166bacdfe7d4f347abade1a27fe713e6b136aa2a738c22b",
+  "fetchedAt": "2026-08-01T09:25:51.436Z"
+}
