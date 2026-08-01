@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/assistant-ui/skills/observability",
+  "repo": "assistant-ui/skills",
+  "skillId": "observability",
+  "branch": "main",
+  "pushedAt": "2026-06-01T05:53:05Z",
+  "contentHash": "100617482251267c40e02ba3249cb50f9528738c738c6c3f5dd8e6136ea88c9b",
+  "fetchedAt": "2026-08-01T09:27:23.522Z"
+}

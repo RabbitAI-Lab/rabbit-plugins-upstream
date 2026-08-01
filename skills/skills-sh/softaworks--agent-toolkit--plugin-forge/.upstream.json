@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/softaworks/agent-toolkit/plugin-forge",
+  "repo": "softaworks/agent-toolkit",
+  "skillId": "plugin-forge",
+  "branch": "main",
+  "pushedAt": "2026-03-05T16:46:24Z",
+  "contentHash": "910bccf6747af593a23083ba5076fb422a42652a1db54a4af197efcbf9ae0b19",
+  "fetchedAt": "2026-08-01T09:27:22.508Z"
+}

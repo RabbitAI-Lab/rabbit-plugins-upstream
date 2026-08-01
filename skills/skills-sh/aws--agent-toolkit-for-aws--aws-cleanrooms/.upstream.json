@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-cleanrooms",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-cleanrooms",
+  "branch": "main",
+  "pushedAt": "2026-07-31T14:31:29Z",
+  "contentHash": "2aedcc0e333f21384248ce729012e9945cf10fb7af5e03c6fc7209812bc4a001",
+  "fetchedAt": "2026-08-01T09:27:12.599Z"
+}

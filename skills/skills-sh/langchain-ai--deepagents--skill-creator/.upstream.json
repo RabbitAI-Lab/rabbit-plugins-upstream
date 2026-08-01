@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/langchain-ai/deepagents/skill-creator",
+  "repo": "langchain-ai/deepagents",
+  "skillId": "skill-creator",
+  "branch": "main",
+  "pushedAt": "2026-08-01T05:00:01Z",
+  "contentHash": "f42acd33ac8af557f10bbc961b4a5bc3bd697d2798b87565b8bc9ec2e5ff3c91",
+  "fetchedAt": "2026-08-01T09:27:33.796Z"
+}

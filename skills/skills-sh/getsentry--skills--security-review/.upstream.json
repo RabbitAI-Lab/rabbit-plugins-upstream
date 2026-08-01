@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/security-review",
+  "repo": "getsentry/skills",
+  "skillId": "security-review",
+  "branch": "main",
+  "pushedAt": "2026-07-27T23:23:06Z",
+  "contentHash": "4a30f5d561c1d89d3841baf3216ee0bbff682d3496525176bf688bbf85634767",
+  "fetchedAt": "2026-08-01T09:25:43.509Z"
+}

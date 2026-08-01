@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/arxiv",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "arxiv",
+  "branch": "main",
+  "pushedAt": "2026-08-01T08:57:13Z",
+  "contentHash": "e96411bf1a846d7d769aca34143e45b1bf88f3d32c16f8279c380420227c991e",
+  "fetchedAt": "2026-08-01T09:27:16.694Z"
+}

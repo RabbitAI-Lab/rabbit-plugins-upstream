@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/llm-wiki",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "llm-wiki",
+  "branch": "main",
+  "pushedAt": "2026-08-01T08:57:13Z",
+  "contentHash": "1cb89979e37fbee0fbec6faf30c8c25c89e0921b29b8e96a9a16e900ecc75162",
+  "fetchedAt": "2026-08-01T09:27:16.798Z"
+}

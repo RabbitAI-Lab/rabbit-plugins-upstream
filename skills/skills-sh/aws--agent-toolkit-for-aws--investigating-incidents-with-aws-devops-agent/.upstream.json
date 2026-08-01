@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/investigating-incidents-with-aws-devops-agent",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "investigating-incidents-with-aws-devops-agent",
+  "branch": "main",
+  "pushedAt": "2026-07-31T14:31:29Z",
+  "contentHash": "e3d7022a87c95485c88eb3c153b861e888ab0810eb2f184e7d12f22d085af121",
+  "fetchedAt": "2026-08-01T09:27:13.026Z"
+}

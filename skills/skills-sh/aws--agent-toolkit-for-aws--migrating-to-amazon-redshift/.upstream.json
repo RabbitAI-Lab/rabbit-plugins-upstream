@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/migrating-to-amazon-redshift",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "migrating-to-amazon-redshift",
+  "branch": "main",
+  "pushedAt": "2026-07-31T14:31:29Z",
+  "contentHash": "26cd683ca230dc5402ad72ea7db98a43fdb1fa73114e6d957816e1082230805f",
+  "fetchedAt": "2026-08-01T09:27:13.067Z"
+}

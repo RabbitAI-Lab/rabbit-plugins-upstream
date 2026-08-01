@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/figma-generate-design",
+  "repo": "openai/skills",
+  "skillId": "figma-generate-design",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "386146dd42255ef009c6f33400d396a1ca764f3802131e7967985b1afb24184a",
+  "fetchedAt": "2026-08-01T09:25:52.067Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/conversation-archaeologist",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "conversation-archaeologist",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "57f0049a74f64b4d7c6d6c57d655b018ed2de9626c3d7f27841e07c21798133b",
+  "fetchedAt": "2026-08-01T09:27:02.049Z"
+}
