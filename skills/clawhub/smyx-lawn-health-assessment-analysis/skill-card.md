@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes top-down lawn images, videos, or URLs to estimate yellowing, weed coverage, bare soil, and an overall lawn health score with maintenance-oriented guidance. <br>
+AI-powered lawn health assessment from drone or fixed-camera top-down images that estimates yellowing or wilting area, weed coverage, bare-soil coverage, and an overall lawn health score. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Support lawn managers, homeowners, golf course operators, park teams, and sports-field maintainers by turning supported lawn media into structured health assessment results, report links, and care direction. <br>
+External users, site managers, and developers use this skill to analyze top-down lawn images or videos for turf condition monitoring, including wilting ratio, weed density, health scoring, and maintenance guidance for courtyards, golf courses, parks, and sports fields. <br>
 
 ### Deployment Geography for Use: <br>
-No deployment geography restriction is stated in the evidence; use only where ClawHub, the publisher service, and local data-handling requirements permit this workflow. <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security evidence says the skill uses a cloud workflow for lawn images or videos, submitted URLs, account identifiers, report history, and locally stored service tokens. <br>
-Mitigation: Install only when that data can be handled by the publisher's external services, and review identity and data-retention behavior before use. <br>
-Risk: The security evidence says the skill silently creates or reuses an identity and exposes historical reports. <br>
-Mitigation: Use a dedicated workspace for sensitive projects, avoid shared machines for report retrieval, and clear local identity or token state when access should not persist. <br>
-Risk: The server security verdict is suspicious. <br>
-Mitigation: Review the ClawHub security summary before installation and run the skill in a constrained environment until the external-service and token-storage behavior is acceptable. <br>
+Risk: The skill sends lawn images, videos, or URLs to configured cloud services for analysis. <br>
+Mitigation: Use it only with media and URLs that are approved for the configured external service, and avoid submitting sensitive or private imagery. <br>
+Risk: The skill may silently create or reuse an identity and retrieve historical report links from the cloud. <br>
+Mitigation: Confirm the workspace identity and account scope before using history retrieval, especially in shared workspaces. <br>
+Risk: The security review notes local token storage and possible workspace identity-file access. <br>
+Mitigation: Review the workspace for intended credential bindings before installation and avoid workspaces containing unintended smyx-api-key.txt values. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-lawn-health-assessment-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-lawn-health-assessment-analysis) <br>
+- [API Documentation](references/api_doc.md) <br>
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [Skill Demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Structured lawn assessment report with yellowing ratio, weed coverage, bare-soil signals, health score, care guidance, report links, and optional historical report listings.] <br>
-**Output Parameters:** [Accepts a local media path or network URL, optional detail level, optional output path, and a list mode for cloud report history.] <br>
-**Other Properties Related to Output:** [Uses a publisher cloud workflow for analysis and history retrieval; outputs may include report export links and service-returned structured data.] <br>
+**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance] <br>
+**Output Format:** [Markdown or JSON text with report links] <br>
+**Output Parameters:** [1D] <br>
+**Other Properties Related to Output:** [May include structured lawn-health metrics, maintenance guidance, analysis status, and links to cloud-hosted historical reports.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 <br>
+1.0.5 (source: server release metadata; artifact frontmatter declares 1.0.7) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

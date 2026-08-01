@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes fixed-camera classroom images or video to estimate aggregate student engagement, anonymous low-engagement seat coordinates, heatmaps, alerts, teacher suggestions, and history reports. <br>
+Analyzes fixed classroom camera images or video to estimate class-level engagement, emotion distribution, low-engagement seat coordinates, heatmaps, alerts, teacher suggestions, and historical report links. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Teachers, smart-classroom operators, and education-technology developers use this skill to analyze classroom video or images for group engagement trends, low-engagement seat locations, confusion hotspots, and teaching suggestions. It can also query previously generated classroom engagement reports from the remote service. <br>
+Teachers, school operators, and education platform teams use this skill to analyze classroom video or images for aggregate engagement signals and anonymous seat-level prompts. It is intended for real-time teaching support and historical report review, not student identity recognition or individual performance ranking. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill sends classroom video or image inputs to a remote service for analysis, which can involve minors and sensitive classroom context. <br>
-Mitigation: Use only with explicit school and parent consent, documented data-retention terms, and verified service-operator controls for storage, access, and deletion. <br>
-Risk: Server evidence states that the skill creates and stores a reusable internal user identity and report history despite strong anonymity claims. <br>
-Mitigation: Confirm where user identifiers, report history, videos, heatmaps, and tokens are stored, who can access them, and how local and cloud records can be deleted before deployment. <br>
-Risk: Engagement and emotion analysis can be inaccurate or misleading if used as an assessment of individual students. <br>
-Mitigation: Use outputs only as real-time teaching support, keep reminders anonymous at the seat-coordinate or group level, and prohibit use for student performance evaluation, parent communication, or public ranking. <br>
+Risk: The skill processes sensitive classroom video involving students and may create historical behavioral records. <br>
+Mitigation: Use only with school or organizational approval, required consent, defined retention rules, and a documented account model before processing classroom media. <br>
+Risk: The artifact creates or reuses hidden account state and stores authentication tokens. <br>
+Mitigation: Review the local data directory and token storage behavior before deployment, restrict filesystem access, and rotate or remove stored credentials when no longer needed. <br>
+Risk: Engagement and emotion estimates can be misleading if used as individual student assessment or ranking. <br>
+Mitigation: Treat results as aggregate teaching-support signals only, preserve the documented no-identity constraint, and require teacher review before acting on low-engagement prompts. <br>
 
 
 ## Reference(s): <br>
-- [API Reference](references/api_doc.md) <br>
-- [Additional API Error Reference](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-classroom-engagement-analysis-analysis) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-classroom-engagement-analysis-analysis) <br>
+- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
+- [API interface documentation](artifact/references/api_doc.md) <br>
+- [SMYX analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured text with report links] <br>
+**Output Type(s):** [Analysis, Markdown, JSON, Files, Shell commands, Guidance] <br>
+**Output Format:** [Markdown and JSON with structured classroom engagement results, anonymous seat coordinates, heatmap/report links, and optional saved output files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include engagement scores, emotion distributions, anonymous seat coordinates, heatmap image URLs, alerts, teacher suggestions, and historical report records.] <br>
+**Other Properties Related to Output:** [Outputs can include engagement scores, emotion distributions, alert levels, teacher suggestions, historical report records, and export URLs.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+1.0.6 (source: server release metadata; artifact frontmatter says 1.0.7) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

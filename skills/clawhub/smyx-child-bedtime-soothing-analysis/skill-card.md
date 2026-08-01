@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes authorized child bedroom night audio/video for crying, fear-of-dark behavior, nightmare wakeups, and out-of-bed events, then returns structured soothing actions and report links. <br>
+Through a fixed camera with infrared night vision and microphone in a child's bedroom, this skill analyzes night-time audio/video to detect pre-sleep crying, fear-of-dark behaviors, and post-nightmare awakenings, then returns structured soothing actions such as soft night-light settings, recorded parent audio, lullabies, parent alerts, and report links. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users or developers use this skill to analyze authorized child bedroom or nursery night recordings and review detected unrest events, suggested soothing actions, and report history. It is intended for behavior detection and caregiver support, not medical diagnosis. <br>
+External users and developers use this skill to analyze authorized child bedroom or nursery audio/video during sleep windows, detect bedtime distress patterns, and produce structured reports and escalation guidance for soothing workflows. It is intended for behavioral detection and caregiver notification, not medical diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Highly sensitive child bedroom audio/video may be uploaded to or referenced by remote services. <br>
-Mitigation: Use only with trusted publisher and backend services, confirmed caregiver authorization, and an understood retention and report-access model. <br>
-Risk: The skill may create or reuse local and remote identities and link cloud report history automatically. <br>
-Mitigation: Review identity and token storage before deployment, run in a controlled environment, and clear local identity state between users or households. <br>
-Risk: Behavior detection and soothing recommendations could be mistaken for medical or psychological diagnosis. <br>
-Mitigation: Treat outputs as caregiver support only; repeated or severe sleep events should be referred to appropriate pediatric sleep or child psychology professionals. <br>
+Risk: Children's bedroom audio/video or media URLs may be sent to a configured cloud service for analysis. <br>
+Mitigation: Use only with explicit parental authorization, confirm who operates the backend, and verify retention, access control, and report-link sharing before deployment. <br>
+Risk: The skill may create or reuse a persistent local identity and store account tokens locally. <br>
+Mitigation: Run it in a controlled environment, limit local file access, rotate or revoke tokens as needed, and document how identity state can be cleared. <br>
+Risk: Historical cloud reports may expose sensitive child sleep and bedroom activity data. <br>
+Mitigation: Restrict report access to authorized caregivers, review cloud report history permissions, and avoid sharing exported links beyond approved recipients. <br>
+Risk: The skill is positioned around child sleep behavior and could be mistaken for medical assessment. <br>
+Mitigation: Present outputs as behavioral observations and caregiver guidance only, and direct repeated or severe sleep issues to qualified pediatric or child psychology professionals. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-child-bedtime-soothing-analysis) <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [Child bedtime soothing API documentation](artifact/references/api_doc.md) <br>
+- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-bedtime-soothing-analysis) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown text with structured analysis results, soothing recommendations, and report links; JSON output is available for detailed results.] <br>
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
+**Output Format:** [Markdown or JSON analysis report with optional saved output file] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save results to a file with --output; history queries are retrieved from the remote report service.] <br>
+**Other Properties Related to Output:** [May include structured distress classifications, soothing action recommendations, historical report tables, and report links.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: SKILL.md frontmatter and server release metadata) <br>
+1.0.6 (source: server release metadata; artifact frontmatter says 1.0.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

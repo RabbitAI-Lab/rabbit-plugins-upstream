@@ -1,6 +1,6 @@
 ---
 name: shiguang-memory-journal
-description: "A tool-agnostic workflow and experience pack for turning key frames and source links into 1–5 redrawn keepsake elements, safely learning layout from an optional reference, composing an editable story-led journal, organizing journal/library/memory collections, preserving provenance, supporting semantic recall, and returning to the original content or next real-world action. Use when an agent needs to plan, build, or operate a reusable visual-memory workflow; analyze source images; distinguish content materials from layout references; create or critique scrapbook and guide compositions; write factual artistic copy; search, edit, or delete saved journals and memory assets; design archive/search contracts; or adapt the complete 来源画面 → 元素重绘 → 参考分析 → 可编辑手帐 → 独立整理 → 记忆归档 → 语义找回 → 回到来源/行动 process with its own tools. This skill requires no specific API, local service, token, or bundled runtime."
+description: "A tool-agnostic workflow for turning key frames and optional source links into 1–5 keepsake elements with subject-only, preserve-context, background-only, or mixed modes. It safely learns layout from references or target renders; scores and refines user stories; composes editable editorial journals with reference-driven ratios, narrative groups, controlled people cutouts, material framing, designed typography, staged review, and local repair before fallback; preserves layers and provenance; manages journal/library/memory collections; and supports semantic recall. Use when an agent must analyze source images, build a visual-memory workflow, reconstruct an editable scrapbook, separate content from layout references, compose or interactively critique journals, write factual artistic copy, manage saved assets, design archive/search contracts, or adapt the 来源画面 → 元素重绘 → 可编辑手帐 → 记忆归档 → 语义找回 lifecycle with its own tools. Requires no specific API, local service, token, or bundled runtime."
 ---
 
 # Shiguang Memory Journal
@@ -9,7 +9,7 @@ Apply this playbook with the current agent's own tools. Do not require a Shiguan
 
 Preserve the product promise:
 
-`关键帧与来源链接 → 1–5 枚元素重绘 → 可选版式参考 → 故事化手帐 → 独立整理 → 记忆归档 → 语义找回 → 回到原内容或行动`
+`关键帧与可选来源链接 → 默认 1 枚（可调至 1–5 枚）元素重绘 → 逐元素画面范围 → 可选版式参考 → 故事化手帐 → 独立整理 → 记忆归档 → 语义找回 → 回到原内容或行动`
 
 ## Load the right knowledge
 
@@ -35,31 +35,39 @@ Use available tools rather than assuming product-specific names. If a role is un
 
 ## Run the lifecycle
 
-1. Collect the key frame, original HTTP(S) source link when available, journal type, user intention, output format, and an exact extraction count from 1 to 5. Default to 3 only when the user gives no count.
+1. Collect the key frame, optional original HTTP(S) source link, extraction style (`handdrawn`, `comic`, `collage`, or `realistic`), journal type, user intention, output format, task-level background strategy (`subject-only`, `preserve-context`, or `mixed`), and an exact extraction count from 1 to 5. Default to 1 when the user gives no count. A missing source link must never block extraction. `mixed` requires at least two elements and should use the user's element-by-element intent when supplied.
 2. Create a provenance ledger before transformation. Give the source and every derived item stable IDs; copy the source link forward without silently changing it.
-3. Inspect the frame and select exactly the requested number of distinct, visible subjects. Favor theme relevance, recognizable silhouettes, visual variety, and complementary story roles.
-4. Redraw one subject per generation or editing call. Preserve identity-defining shape and color while removing platform UI, subtitles, watermarks, and unrelated background. Label direct crops honestly; never call them redraws.
+3. Inspect the frame and select exactly the requested number of distinct, visible subjects or meaningful environment regions. Favor intention relevance, recognizable silhouettes, visual variety, and complementary story roles.
+4. Redraw one planned element per generation or editing call and record its own element-level mode. In `subject-only`, preserve identity-defining shape and color while removing unrelated background. In `preserve-context`, keep the subject together with the visible environment that directly explains its spatial, action, or narrative relationship. In `background-only`, keep a meaningful environment region and remove foreground people or objects the user excluded. For a `mixed` task, assign at least two different element-level modes from the user's detailed intent, falling back to a balanced AI plan only when that intent is absent. Label direct crops honestly; never call them redraws.
+   Treat `realistic` as a photographic rendering profile, not an illustration preset: preserve natural light, skin, fabric, surfaces, lens perspective, identity, count, pose, and scene relationships; allow only restrained composition, exposure, and color refinement. Reject plastic skin, face replacement, body reshaping, aggressive HDR, 3D-rendered surfaces, invented people, or stylization that erases material truth.
+   Preserve a valid generated image's natural portrait, landscape, or square canvas unless the user explicitly requested an aspect ratio. Do not reject or pad an otherwise valid element merely because it is not 1:1.
 5. For composition, let the user approve 1–12 content materials from the current work and reusable library. Keep an optional reference journal in a separate field: it guides layout and must never silently become content.
 6. If a reference is present, analyze only transferable structure—reading path, hero strategy, relative scale, text zones, whitespace, overlap rhythm, and optionally abstract paper/palette relationships. Do not copy its photos, people, objects, places, brands, readable text, or factual claims.
-7. Plan the story before placing anything. Assign one hero and supporting, transition, detail, or ending roles; define a readable visual path and choose a paper direction that expresses the current intention.
-8. Write artful but factual copy. Use multiple text responsibilities—opening, image-linked notes, reflection, marginalia, and closing—rather than a generic title plus one subtitle.
-9. Compose with hierarchy and breathing room. Use approved content assets exactly once unless the user requests repetition. Do not scatter equally sized elements into unrelated corners or mechanically clone reference coordinates.
-10. Review the rendered whole page, not only its JSON or coordinates. Score story, copy, hierarchy, paper-theme fit, legibility, provenance, factual integrity, and reference safety; revise weak dimensions with focused calls.
-11. Save editable structure and expose a journal collection where users can search, filter, sort, preview, quick-edit metadata, reopen for full editing, and explicitly select single or bulk deletion.
+7. Plan the story before placing anything. When the user supplies a story, treat it as the first-priority factual and narrative axis: score factual fidelity, narrative structure, and sentence selection, then remove repetition, refine, and compress without replacing it with generic template copy. Assign one hero and supporting, transition, detail, or ending roles; define a readable visual path and choose a paper direction that expresses the current intention.
+8. Write artful but factual copy. Use multiple text responsibilities—opening, image-linked notes, reflection, marginalia, and closing—rather than a generic title plus one subtitle. Select at most two verbatim highlight phrases per block when real numbers, distances, people counts, achievements, turns, or distinctive original wording deserve emphasis. Design font family, size, weight, tracking, leading, alignment, container, and contrast as one typography system.
+9. Compose with hierarchy and breathing room. Use approved content assets exactly once unless the user requests repetition. Do not scatter equally sized elements into unrelated corners or mechanically clone reference coordinates. Derive the canvas ratio from an explicit target or reference before considering material count; more assets do not justify an unsupported long page. Build 3–4 narrative groups with one dominant hero and a lower-page emotional anchor. Use paper or Polaroid frames on contextual images and reserve tape for roughly 1–3 accents. Let transparent people overlap contextual images by about 4%–16% to connect groups, but never cover people, essential scenery, or text.
+   When the user supplies a specific finished journal as the target effect, switch from loose reference adaptation to target reconstruction: derive the canvas ratio from that target, inventory every independent content layer, keep original sources, remove those layers from a clean base, and place them back at measured coordinates. Assign overlapping pixels to the visible top layer so one element does not carry a duplicate person or neighboring card. Preserve titles or doodles as base decoration only when they do not need independent editing.
+10. Review the rendered whole page, not only its JSON or coordinates. Score story, copy, typography, hierarchy, whitespace, paper-theme fit, provenance, factual integrity, and reference safety; reject pages that still read as uniform photo walls. If the structure is already strong and only a small overlap or text collision fails, apply the smallest local movement and revalidate instead of discarding the entire AI composition. Fall back to a full safe layout only for missing content, identity errors, collapsed hierarchy, or unresolved structural failure. When the user requests interactive creation, pause after reference analysis, story, layout, and rendered review so they can approve or revise the current stage.
+11. Save editable structure and expose a journal collection where users can search, filter, sort, preview, quick-edit metadata, reopen for full editing, import a portable editable journal as a new record, export that structure again, and explicitly select single or bulk deletion.
 12. Archive the source, derived elements, journal, prompts, descriptions, relationships, warnings, and source links in the best durable format available. On confirmed deletion, unlink stale archive records and remove only files no longer referenced.
-13. Support natural-language recall by meaning, atmosphere, objects, colors, and vague memory. Return ranked reasons and always surface the original source link or next real-world action.
+13. Support natural-language recall by meaning, atmosphere, objects, colors, and vague memory. Return ranked reasons and surface the original source link when available; otherwise state that the link is unavailable and provide the next real-world action.
 
 ## Protect quality and trust
 
 - Treat the user's intention as the thematic spine, not permission to invent events, places, prices, dates, relationships, game facts, recipes, health claims, or feelings.
 - Let AI organize; do not make the user maintain technical tags or prompts.
 - Keep one clear hero, purposeful relationships, legible text, and intentional whitespace.
+- Protect a strong AI composition from all-or-nothing fallback: repair isolated geometry and text collisions locally, then rerun the deterministic quality gate.
+- Treat user-provided story text as the first-priority factual source. Always score, refine, and select it before placing copy; never let template prose replace its key facts, turns, relationships, actions, or closing meaning.
 - Keep content materials and layout references visibly and structurally separate.
 - Regenerate the paper direction when the intention changes. Never inherit an unrelated food, travel, or decorative theme.
 - Preserve editable structure when the output medium allows it.
+- Preserve every visible person unless the user explicitly requests removal. Before delivery, audit the expected people count on both the independent person assets and the composed page; a person hidden by overlap still counts as missing.
+- Do not force a square or default journal ratio onto a valid target. Store explicit canvas width and height when the target or user specifies another format, and verify editor, thumbnail, mobile fit, PNG export, and portable project export against that size.
+- Never imply that a flattened PNG, JPG, WebP, PDF, or screenshot can recover its original layers. Import it honestly as one editable visual or a background. Use a portable structured journal package with embedded or resolvable assets when independent images, text, positions, rotations, layers, and source links must survive a round trip.
 - Require explicit selection and confirmation before destructive single or bulk deletion. Preserve source records and unrelated shared assets.
 - Distinguish executed results, fallbacks, and proposed artifacts in the final response.
-- End every successful recall flow with unique, clickable source links.
+- End every successful recall flow with unique, clickable source links when available; never fabricate a link to satisfy the format.
 
 ## Deliver a reusable result
 
@@ -71,10 +79,12 @@ Return or save these artifacts even when the implementation stack differs:
 - `story and copy plan`;
 - `background art direction`;
 - `layout specification` and rendered journal when possible;
-- editable `journal record` plus collection search/edit/delete behavior or a handoff specification;
+- editable `journal record`, a portable import/export package when supported, plus collection search/edit/delete behavior or a handoff specification;
 - `memory manifest`;
 - `recall index or retrieval plan`;
 - `quality report`;
-- unique `source links`.
+- interactive checkpoint summaries and revision feedback when staged review is enabled;
+- target-reconstruction process data when used: clean base, independent elements, extraction manifest, production/layout manifest, story, reference analysis, reconstructed preview, browser regression result, and people audit;
+- unique `source links` when available, otherwise an explicit unavailable status and next action.
 
 Use the field shapes in [references/data-contracts.md](references/data-contracts.md) so another agent can continue the work without reverse-engineering hidden state.

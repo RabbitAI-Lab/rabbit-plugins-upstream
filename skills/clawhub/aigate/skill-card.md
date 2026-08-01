@@ -1,5 +1,5 @@
 ## Description: <br>
-aigate helps agents guide setup and use of a self-hosted OpenAI-compatible AI gateway that aggregates model providers, local inference, MCP tools, browser automation, media services, storage, search, messaging, and a web UI behind one endpoint. <br>
+Self-hosted AI platform that helps an agent guide setup and use of a Docker Compose OpenAI-compatible gateway with inference routing, MCP tool use, browser automation, media generation, transcription, storage, code execution, search, messaging, forecasting, an async queue, and a web UI behind one bearer token. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill when they want an agent to explain, configure, run, or call a Docker Compose based self-hosted AI gateway with OpenAI-compatible routing and optional tool services. It is suited to trusted local or private deployments where the operator wants one endpoint instead of wiring each provider and service independently. <br>
+Developers and operators use this skill when they want an agent to help deploy, configure, and call a self-hosted OpenAI-compatible AI gateway that aggregates model providers, local models, tools, media services, storage, search, messaging, and a web UI. It is most relevant when the user wants one endpoint and routing layer instead of wiring each service separately. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The gateway can expose broad capabilities through one bearer token, including code execution, browser automation, messaging, storage, and provider credentials when enabled. <br>
-Mitigation: Use aigate only as a trusted private gateway, keep AIGATE_TOKEN strong and secret, and provide it only to agents that are fully trusted for the requested task. <br>
-Risk: A single master token may grant more access than a task needs if per-service tokens are not separated. <br>
-Mitigation: Split high-risk services into separate per-service tokens before giving an agent access, and enable only the services required for the workflow. <br>
-Risk: Exposing the gateway directly can widen the impact of credential misuse. <br>
-Mitigation: Keep the service private, avoid publishing port 4000 directly, and use a protected tunnel or authenticating reverse proxy for remote access. <br>
+Risk: A single bearer token can unlock code execution, browser control, messaging, storage, and credentials when many services are enabled. <br>
+Mitigation: Set separate per-service tokens before giving any token to an agent, provide tokens only for explicitly requested work, and avoid treating AIGATE_TOKEN as chat-only access. <br>
+Risk: Public exposure of the gateway can create a high-blast-radius entry point. <br>
+Mitigation: Keep port 4000 off the public internet and use Cloudflare Tunnel, Tailscale, or a real authenticating gateway when remote access is required. <br>
+Risk: Configuration files can contain plaintext provider, mailbox, Telethon, database, and service credentials. <br>
+Mitigation: Protect .env, mailbox, and Telethon configuration files as sensitive secrets and do not commit tokens or credentials to repositories. <br>
+Risk: Enabling unnecessary optional services expands the actions available through the gateway. <br>
+Mitigation: Enable only the services needed for the current deployment and leave unused providers, browser automation, messaging, storage, and code execution routes disabled. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub aigate page](https://clawhub.ai/psyb0t/skills/aigate) <br>
-- [aigate setup](references/setup.md) <br>
-- [Project homepage](https://github.com/psyb0t/aigate) <br>
+- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/aigate) <br>
+- [aigate setup reference](references/setup.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown with inline bash and JSON request examples] <br>
+**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
+**Output Format:** [Markdown with inline shell commands, HTTP examples, and configuration guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Docker Compose commands, curl examples, environment variable names, endpoint paths, and operational cautions.] <br>
+**Other Properties Related to Output:** [May include Docker Compose setup steps, environment variable guidance, curl examples, service route summaries, and safety warnings.] <br>
 
 ## Skill Version(s): <br>
-3.15.3 (source: server release metadata) <br>
+3.17.0 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

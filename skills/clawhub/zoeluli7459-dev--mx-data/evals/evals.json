@@ -1,0 +1,31 @@
+{
+  "skill_name": "mx-data",
+  "positive": [
+    {
+      "prompt": "查一下贵州茅台近三年营业收入和净利润",
+      "assertions": [
+        "uses mx-data rather than model memory",
+        "query includes entity, metrics, and period",
+        "reports generated Excel or JSON path"
+      ]
+    },
+    {
+      "prompt": "比亚迪最近一年每个交易日的收盘价和成交量",
+      "assertions": [
+        "warns if output may be large",
+        "uses the mx_data.py script",
+        "preserves date granularity"
+      ]
+    }
+  ],
+  "negative": [
+    {
+      "prompt": "今天新能源板块上涨的原因是什么",
+      "expected_route": "mx-search"
+    },
+    {
+      "prompt": "筛选市盈率低于20且ROE大于15%的股票",
+      "expected_route": "mx-xuangu"
+    }
+  ]
+}

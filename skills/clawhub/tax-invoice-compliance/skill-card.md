@@ -1,5 +1,5 @@
 ## Description: <br>
-A digital tax-invoice compliance assistant for identifying shell-company false-invoice risk, checking four-flow consistency, and guiding abnormal voucher response and good-faith defense preparation. <br>
+数电票合规与空壳虚开防范专项助手，帮助用户进行发票生命周期管理、空壳虚开特征识别、受票方防范、四流一致校验、异常凭证应对与善意取得抗辩准备。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Finance, tax, and compliance users use this skill to self-check digital invoice workflows, screen supplier and shell-company invoice risk, verify contract-invoice-fund-logistics consistency, and prepare evidence-oriented next steps for abnormal vouchers. It provides compliance guidance and structured self-checks; final tax positions should be confirmed against current authority guidance and qualified professional advice. <br>
+External business, finance, and tax-compliance users use this skill to review digital invoice scenarios, screen supplier and shell-company risks, check four-flow consistency, respond to abnormal invoice credentials, and prepare practical compliance checklists or reports. <br>
 
 ### Deployment Geography for Use: <br>
 China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Remote processing by mcp.aitaxs.top may handle invoice, supplier, contract, or tax-investigation details. <br>
-Mitigation: Avoid submitting confidential records unless approved for remote processing; use non-sensitive summaries or the offline reference workflows for preliminary review. <br>
-Risk: The client can persist API keys, client identifiers, and logs locally, including browser localStorage and the ~/.tax-policy-client directory. <br>
-Mitigation: Protect local profiles and clear stored keys or logs when no longer needed, especially on shared or regulated machines. <br>
-Risk: Optional matrix installation and auto-setup can modify local skills or MCP/client configuration directories. <br>
-Mitigation: Do not run the installer or enable TAX_ENABLE_AUTOSETUP unless those local configuration changes are intended; review dry-run output and target paths first. <br>
-Risk: Tax compliance guidance can become outdated or differ by facts and authority interpretation. <br>
-Mitigation: Confirm material conclusions against current tax-authority guidance and qualified professional advice before filing, responding to an audit, or taking a legal position. <br>
+Risk: Sensitive invoice, supplier, taxpayer, or transaction details may be sent to cloud or search services. <br>
+Mitigation: Install only when the mcp.aitaxs.top service is trusted, and redact confidential or identifying details before requesting analysis. <br>
+Risk: The skill may persist local state, credentials, raw query logs, or MCP client configuration changes. <br>
+Mitigation: Review or disable TAX_ENABLE_AUTOSETUP before use, inspect local MCP configuration changes, and clear ~/.tax-policy-client logs or config when needed. <br>
+Risk: Web self-check and exported prompts may contain company-identifying data. <br>
+Mitigation: Treat generated prompts and reports as sensitive business material and remove identifiers before sharing outside trusted systems. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-invoice-compliance) <br>
-- [Interactive invoice compliance self-check](https://mcp.aitaxs.top/web/topic_workflow_invoice_compliance.html) <br>
-- [SkillHub tax invoice compliance page](https://skillhub.cn/skills/tax-invoice-compliance) <br>
-- [Tax policy knowledge matrix download entry](https://api.skillhub.cn/api/v1/download?slug=tax-invoice-compliance) <br>
+- [Invoice compliance self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_invoice_compliance.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with structured checklists, links, and optional web self-check results.] <br>
+**Output Format:** [Markdown guidance with structured checklists, risk summaries, practical steps, and links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use remote MCP/API calls for current tax-policy answers and risk checks; includes limited offline reference workflows.] <br>
+**Other Properties Related to Output:** [May include cloud-backed tax analysis, offline fallback guidance, and links to web self-check workflows.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release metadata and skill frontmatter) <br>
+3.15.6 (source: server release and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Audits local skill packages or archives with auto, native, or external scan engines and can optionally use LLM semantic analysis. <br>
+Audits local skill packages or archives with auto, native, or external scan engines and optional LLM semantic review. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and security reviewers use this skill to inspect local skill packages, archives, or release bundles before installation and review engine findings, risk level, and installation guidance. <br>
+Developers and security reviewers use this skill before installation to inspect local skill packages, archives, or release bundles and produce a concise risk-focused review. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The bundled or downloaded scanner binary must be trusted before execution. <br>
-Mitigation: Verify the published SHA-256 checksum before running the binary, or build from source when stronger supply-chain assurance is required. <br>
-Risk: Optional LLM review can send bounded target-package text to a user-configured endpoint, and basic redaction may not remove all sensitive text. <br>
-Mitigation: Enable LLM review only with trusted endpoints and review the target package for sensitive data before opting in. <br>
-Risk: Auto or external engine modes may execute a locally resolved external scanner with the current user's permissions. <br>
-Mitigation: Use the native engine for isolated local scanning, or separately trust and configure any external scanner before enabling it. <br>
-Risk: Optional report upload sends structured scan reports to the configured upload URL. <br>
-Mitigation: Leave upload disabled unless the destination is approved and the instance identifier and report contents are appropriate to share. <br>
+Risk: Optional upload and LLM review can expose scan findings, summaries, and bounded text packets from the scanned package. <br>
+Mitigation: Keep --upload-url and --use-llm disabled unless needed, and enable them only with trusted endpoints and a clear data-handling policy. <br>
+Risk: The default auto engine can invoke a locally resolved external scanner with the current user's process permissions. <br>
+Mitigation: Use --engine native when you want to avoid external scanner execution and review any external scanner configuration before use. <br>
+Risk: The release includes a precompiled Linux x64 binary that requires local execution trust. <br>
+Mitigation: Verify the documented SHA-256 checksum before running the binary, or build from source when a higher assurance path is required. <br>
 
 
 ## Reference(s): <br>
-- [CMIC Skill Scanner (Linux x64) on ClawHub](https://clawhub.ai/cyzlmh/skills/cmic-skill-scanner-linux-amd64) <br>
+- [ClawHub skill page](https://clawhub.ai/cyzlmh/skills/cmic-skill-scanner-linux-amd64) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and command-line scanner reports] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown reports with findings, risk levels, command examples, and installation conclusions] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may include engine status, findings, risk levels, and optional local output files when an output directory is configured.] <br>
+**Other Properties Related to Output:** [May write local report files when --output-dir is used; optional upload and LLM review require explicit configuration.] <br>
 
 ## Skill Version(s): <br>
-0.11.0 (source: server release metadata and build-info.json) <br>
+0.11.1 (source: server release metadata and assets/build/build-info.json) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

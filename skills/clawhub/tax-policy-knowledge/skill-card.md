@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides Chinese tax policy Q&A, tax calculations, invoice and contract compliance review, risk self-checks, and remediation/report guidance for enterprises and tax advisors. <br>
+Provides China-focused tax policy Q&A, tax calculations, invoice and contract compliance checks, risk self-assessments, and compliance report guidance using a publisher-operated cloud knowledge service with limited offline reference fallbacks. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External business users, finance teams, CFOs, internal audit teams, tax advisors, and consulting firms use this skill to ask Chinese tax policy questions, calculate common taxes, identify invoice, contract, and operating-compliance risks, and produce self-check reports, remediation checklists, and contract templates. <br>
+External users, businesses, finance teams, and tax advisers use this skill to ask China tax-policy questions, calculate common taxes, assess invoice, contract, and operating-compliance risks, and draft self-check or remediation reports. It is best used as an assisted research and workflow tool, with important tax positions reviewed against official sources or by qualified professionals. <br>
 
 ### Deployment Geography for Use: <br>
-China <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Tax questions, risk scenarios, and calculation inputs may be sent to the provider cloud endpoint and possibly to public search engines during fallback. <br>
-Mitigation: Redact or anonymize client, payroll, invoice, bank, investigation, and other confidential details, and review the provider's privacy and retention practices before use. <br>
-Risk: Credentials and raw prompts may be stored locally. <br>
-Mitigation: Treat local configuration and log locations as sensitive, avoid shared machines for confidential work, and rotate or revoke API keys if exposure is suspected. <br>
-Risk: The matrix installer and auto-setup features can modify local MCP or client configuration. <br>
-Mitigation: Run setup in dry-run mode first, verify download sources, and enable TAX_ENABLE_AUTOSETUP only when local configuration changes are intended. <br>
+Risk: Tax questions, risk scenarios, and calculation inputs may be sent to the publisher's cloud service. <br>
+Mitigation: Avoid entering personal identifiers, bank details, employee data, invoice numbers, or confidential business facts; use sanitized scenarios where possible. <br>
+Risk: Optional auto-setup can modify MCP client configuration files when TAX_ENABLE_AUTOSETUP is enabled. <br>
+Mitigation: Keep TAX_ENABLE_AUTOSETUP disabled unless configuration changes are intended, and review any MCP client config changes after installation. <br>
+Risk: The client may register and store credentials, logs, cache, or configuration under ~/.tax-policy-client. <br>
+Mitigation: Inspect ~/.tax-policy-client after use, protect stored credentials, and remove credentials or logs when they are no longer needed. <br>
+Risk: Fallback search and generated tax guidance may be incomplete or stale. <br>
+Mitigation: Verify material tax positions against official sources or qualified professionals before filing, reporting, or making high-impact business decisions. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-policy-knowledge) <br>
 - [ClawHub publisher profile](https://clawhub.ai/user/zxj2devs) <br>
-- [Tax compliance web portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
-- [Tax Policy Knowledge MCP endpoint](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
+- [Compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [National Taxation Administration official site](https://www.chinatax.gov.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration, shell commands] <br>
-**Output Format:** [Markdown or plain text responses with optional structured lists, tables, calculations, reports, contract templates, configuration guidance, and shell commands for setup workflows.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown/text responses, JSON-like structured tool results, Python helper code, and MCP configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call a provider cloud MCP endpoint and may fall back to local web search when the remote service or API key is unavailable.] <br>
+**Other Properties Related to Output:** [May use a publisher-operated cloud MCP service; offline helpers provide limited reference guidance when the remote service is unavailable.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release metadata and SKILL.md frontmatter) <br>
+3.15.6 (source: server release and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

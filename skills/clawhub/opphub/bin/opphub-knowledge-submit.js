@@ -30,7 +30,7 @@
 // 输出 results JSON:
 //   {
 //     ok: true,
-//     opcId: "opc_xxx",
+//     userId: "user_xxx",
 //     summary: { submitted: 7, deduplicated: 3, conflicts: 1 },
 //     submitted: [{ cardIndex, entryId, action, previousEntryId }],
 //     deduplicated: [{ cardIndex, entryId }],
@@ -44,10 +44,10 @@ import { getAccessToken as pluginGetAccessToken } from "../lib/opphub-plugin-cli
 
 // E2E / mock 模式 (env):
 //   OPPHUB_MOCK_TOKEN  E2E 测试占位符 (不是真 token, 只用于 mock server 协议测试)
-//   OPPHUB_MOCK_OPC_ID  mock 对应的 opcId (从测试 JWT 解不出来时 fallback)
+//   OPPHUB_MOCK_USER_ID  mock 对应的 userId (从测试 JWT 解不出来时 fallback)
 // ClawHub audit flagged env_credential_access - 这俩仅用于 E2E, 不含真 token
 const MOCK_TOKEN = process.env.OPPHUB_MOCK_TOKEN || null;
-const MOCK_OPC_ID = process.env.OPPHUB_MOCK_OPC_ID || null;
+const MOCK_USER_ID = process.env.OPPHUB_MOCK_USER_ID || null;
 
 const API_BASE = process.env.OPPHUB_API_BASE || "https://api.opphub.ruiplus.cn";
 
@@ -60,6 +60,7 @@ function parseArgs(argv) {
     else if (a === "--cards") args.cards = argv[++i];
     else if (a === "--cards-out") args.cardsOut = argv[++i];
     else if (a === "--force-override-conflict") args.forceOverrideConflict = true;
+    else if (a === "--confirm") args.confirm = true;
     else if (!a.startsWith("--")) args._.push(a);
   }
   return args;
@@ -73,7 +74,7 @@ function sha256(s) {
   return createHash("sha256").update(s, "utf8").digest("hex");
 }
 
-// 简单 base64url 解码, 拿 JWT payload 里的 opcId
+// 简单 base64url 解码, 拿 JWT payload 里的 userId
 function decodeJwtPayload(token) {
   try {
     const part = token.split(".")[1];
@@ -109,7 +110,7 @@ async function main() {
 输出 results JSON:
   {
     ok: true,
-    opcId: "opc_xxx",
+    userId: "user_xxx",
     summary: { submitted, deduplicated, conflicts },
     submitted: [{ cardIndex, entryId, action }],
     deduplicated: [{ cardIndex, entryId }],
@@ -152,6 +153,17 @@ server 端 4 种响应 (POST /api/knowledge/ingest v2):
     if (wantJson) out({ ok: false, error: "no_cards", message: "cards 数组为空" });
     process.exit(1);
   }
+  const parsedFields = cardsDoc.parsedFields ?? null;
+
+  // v4.0.9: confirmation state machine - 默认拒绝, 收到 --confirm 才入库
+  if (!args.confirm) {
+    if (wantJson) out({
+      ok: false,
+      error: "needs_confirmation",
+      message: "未确认 — 需先跑 knowledge-card 看 confirmation 清单, 用户回复'确认'后再加 --confirm 入库",
+    });
+    process.exit(1);
+  }
 
   let accessToken;
   try {
@@ -168,9 +180,9 @@ server 端 4 种响应 (POST /api/knowledge/ingest v2):
     if (wantJson) out({ ok: false, error: "no_token", message: "access_token 为空, 请先偶合登录" });
     process.exit(1);
   }
-  const opcId = MOCK_OPC_ID || decodeJwtPayload(accessToken).opcId;
-  if (!opcId) {
-    if (wantJson) out({ ok: false, error: "invalid_token", message: "JWT 里没有 opcId" });
+  const userId = MOCK_USER_ID || decodeJwtPayload(accessToken).userId;
+  if (!userId) {
+    if (wantJson) out({ ok: false, error: "invalid_token", message: "JWT 里没有 userId" });
     process.exit(1);
   }
 
@@ -188,25 +200,31 @@ server 端 4 种响应 (POST /api/knowledge/ingest v2):
       // 缺字段, 跳过 (skill 不做判断, 但本 bin 至少保证 rawText 完整)
       continue;
     }
-    const idempotencyKey = sha256(`${opcId}|${type}|${dimension}`);
-    const contentHash = sha256(text);
+    // v4.0.9: 兜底 - 老的 card.text 没版本头时, 补上 (旧 skill 数据兼容)
+    const textWithHeader = text.startsWith("<!-- opphub-raw-text-v1 -->")
+      ? text
+      : `<!-- opphub-raw-text-v1 -->\n${text}`;
+    const idempotencyKey = sha256(`${userId}|${type}|${dimension}`);
+    const contentHash = sha256(textWithHeader);
 
     let respData;
     let httpStatus = 0;
     try {
-      const resp = await fetch(`${API_BASE}/api/knowledge/ingest`, {
+      const resp = await fetch(`${API_BASE}/api/user/knowledge/ingest`, {
         method: "POST",
         headers: {
           "Authorization": `Bearer ${accessToken}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          opcId,
-          rawText: text,
+          userId,
+          rawText: textWithHeader,
+          sourceType: "auto",
           entryType: type,
           entryDimension: dimension,
           idempotencyKey,
           contentHash,
+          parsedFields: parsedFields ?? undefined,
           forceOverride: args.forceOverrideConflict,
         }),
       });
@@ -284,7 +302,8 @@ server 端 4 种响应 (POST /api/knowledge/ingest v2):
     ok: results.errors.length === 0,
     okDetail: results.errors.length === 0
       ? null
-    opcId,
+      : "部分卡片提交失败",
+    userId,
     summary: {
       submitted: results.submitted.length,
       deduplicated: results.deduplicated.length,
@@ -300,9 +319,11 @@ server 端 4 种响应 (POST /api/knowledge/ingest v2):
     errors: results.errors,
     nextStep:
       results.errors.length > 0
+        ? "有错误, fix and retry"
         : results.conflicts.length > 0
         ? "用 bot.skillApi.askInteractive 让用户拍冲突项 (保留旧的/用新的/跳过)"
         : results.submitted.length > 0
+        ? "知识已入库, 跑 knowledge-match 做上下游关联"
         : "全部 idempotent 命中, 无新 entry, 跑 knowledge-match 时用 deduplicated 里的 entryIds",
   };
 

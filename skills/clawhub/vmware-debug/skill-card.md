@@ -1,5 +1,5 @@
 ## Description: <br>
-Diagnoses VMware/vSphere/ESXi/NSX incidents by correlating supplied event data into timelines, ranked root-cause hypotheses, and next checks while staying read-only. <br>
+VMware Debug helps agents troubleshoot VMware/vSphere incidents by correlating supplied events into timelines, spikes, ranked root-cause hypotheses, and next checks without making changes. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,43 +7,43 @@ This skill is ready for commercial/non-commercial use. <br>
 [zw008](https://clawhub.ai/user/zw008) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, operators, and support engineers use this skill to investigate VMware/vSphere incidents from collected events, logs, alarms, and symptoms. It helps build an incident timeline, rank likely causes, and identify the next checks without executing fixes. <br>
+Developers and operators use this skill to investigate explicit VMware/vSphere/ESXi/NSX incidents by normalizing collected events, correlating them, and deciding which checks or remediation handoff should come next. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Ranked hypotheses may be mistaken for a confirmed root cause. <br>
-Mitigation: Treat the output as diagnostic guidance; confirm the evidence and run the recommended next checks before any remediation. <br>
-Risk: Auth-related investigations may involve local configuration or .env checks. <br>
-Mitigation: Limit inspection to the required local configuration and keep any remediation in separate approval-gated tools. <br>
-Risk: The skill only correlates events supplied by the calling agent. <br>
-Mitigation: Gather real events from the relevant read-only data-source skills and preserve timestamps, sources, and severity values. <br>
+Risk: The package or source could be mistaken for a different publisher because server-resolved GitHub import provenance is unavailable. <br>
+Mitigation: Before installing, confirm the vmware-debug package and source are the expected release from publisher handle zw008 and the linked project homepage. <br>
+Risk: A ranked hypothesis can be mistaken for a confirmed root cause when the supplied event set is incomplete. <br>
+Mitigation: Gather real events from the relevant companion read tools, preserve original timestamps and severity, and present hypotheses as ranked leads until confirmed. <br>
+Risk: Full VMware troubleshooting may involve companion skills that access logs, metrics, credentials, or remediation workflows under their own permissions. <br>
+Mitigation: Review companion skill permissions separately and route any remediation only through the appropriate confirmation, approval, and audit gates. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-debug) <br>
-- [Project homepage](https://github.com/zw008/VMware-Debug) <br>
-- [Setup Guide](references/setup-guide.md) <br>
+- [Project homepage](https://github.com/vmware-skills/VMware-Debug) <br>
 - [Capabilities](references/capabilities.md) <br>
 - [CLI Reference](references/cli-reference.md) <br>
 - [Unified Event Envelope](references/event-envelope.md) <br>
 - [Symptom Routing](references/routing.md) <br>
+- [Setup Guide](references/setup-guide.md) <br>
 - [Agent Guardrails](references/agent-guardrails.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [analysis, guidance, shell commands, configuration, json] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON-compatible diagnostic results] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON-compatible MCP or CLI outputs] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only diagnostic recommendations; CLI output can include JSON event timelines, spikes, hypotheses, and next checks.] <br>
+**Other Properties Related to Output:** [Read-only diagnostic outputs; MCP responses include timelines, spikes, ranked hypotheses, and next checks.] <br>
 
 ## Skill Version(s): <br>
-1.8.7 (source: ClawHub server release metadata) <br>
+1.8.8 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

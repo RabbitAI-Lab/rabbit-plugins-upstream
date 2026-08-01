@@ -1,13 +1,13 @@
 ---
+
 slug: md-export-tool-free
 name: md-export-tool-free
 version: 1.0.0
 displayName: 文档导出工具免费版
-summary: Markdown多格式导出工具，支持DOCX/PDF/HTML/XLSX/CSV/JSON等核心格式，命令行一键转换.
-license: Proprietary
+summary: Markdown多格式导出工具，支持DOCX/PDF/HTML/XLSX/CSV/JSON等核心格式，命令行快速转换.
+license: MIT
 edition: free
-description: 面向内容创作者与开发者的Markdown多格式导出工具。通过命令行将Markdown文本一键转换为DOCX、PDF、HTML、XLSX、CSV、JSON、XML等主流格式，免去手动排版与格式调整的繁琐工作，特别适合技术文档、报告、数据表导出场景。Use
-  when 需要文件处理、文档转换、格式互转、内容提取时使用。不适用于加密文件破解.
+description: "面向内容创作者与开发者的Markdown多格式导出工具。通过命令行将Markdown文本快速变换为DOCX、PDF、HTML、XLSX、CSV、JSON、XML等主流格式，免去手动排版与格式调整的繁琐工作，特别适合技术文档、报告、数据表导出场景。Use. 适用于需要md export tool相关能力的开发场景,提供结构化的工作流程和配置指引."
 tags:
   - 集成工具
   - 文档转换
@@ -19,22 +19,24 @@ tags:
   - 文档
   - path
   - markdown
-  - markdown-exporter
-  - input
-  - pdf
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Automation"
+pricing_tier: free
 ---
+
+> **核心功能**: 该技能提供结构化的工作流程和配置指引等能力。
+
+
 # 文档导出工具（免费版）
 
-本工具为内容创作者与开发者提供Markdown多格式导出能力。免费版覆盖核心场景：DOCX、PDF、HTML、XLSX、CSV、JSON等主流格式转换，可满足绝大多数文档导出需求.
+该工具为内容创作者与开发者提供Markdown多格式导出能力。免费版覆盖核心场景：DOCX、PDF、HTML、XLSX、CSV、JSON等主流格式转换，可满足绝大多数文档导出需求.
 ## 概述
 
-Markdown作为轻量级标记语言已成为技术写作的事实标准，但实际工作中往往需要将内容交付为Word、PDF、Excel等格式。本工具通过统一的命令行接口，将Markdown一键转换为目标格式，免去手动复制粘贴与排版调整的繁琐工作.
+Markdown作为轻量级标记语言已成为技术写作的事实标准，但实际工作中往往需要将内容交付为Word、PDF、Excel等格式。该工具通过统一的命令行接口，将Markdown快速转换为目标格式，免去手动复制粘贴与排版调整的繁琐工作.
 工具基于Python实现，所有命令仅支持文件路径作为输入，参数规范统一，上手成本低.
 ## 核心能力
 
@@ -67,7 +69,7 @@ Markdown作为轻量级标记语言已成为技术写作的事实标准，但实
 **处理**: 解析结果处理与输出的输入参数,完成核心逻辑,返回结构化响应.
 **输出**: 返回结果处理与输出的响应数据,包含状态码、结果和日志.
 - 执行此能力时使用`output_format`参数,支持导出/保存/转换操作
-**能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：多格式导出工具、等核心格式、命令行一键转换、面向内容创作者与、开发者的、通过命令行将、文本一键转换为、等主流格式、免去手动排版与格、式调整的繁琐工作、特别适合技术文档、数据表导出场景、Use、when、需要文件处理、文档转换、格式互转、内容提取时使用、不适用于加密文件等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持.
+**能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：多格式导出工具、等核心格式、命令行快速转换、面向内容创作者与、开发者的、通过命令行将、文本快速转换为、等主流格式、免去手动排版与格、式调整的繁琐工作、特别适合技术文档、数据表导出场景、Use、when、需要文件处理、文档转换、格式互转、内容提取时使用、不适用于加密文件等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持.
 ## 使用场景
 
 ### 场景一：技术文档分发
@@ -75,7 +77,7 @@ Markdown作为轻量级标记语言已成为技术写作的事实标准，但实
 团队内部用Markdown写作，对外交付时导出为Word或PDF，保留格式与样式.
 ### 场景二：数据报告导出
 
-将Markdown表格一键导出为Excel，每个表格自动成为独立Sheet，便于后续数据分析.
+将Markdown表格快速导出为Excel，每个表格自动成为独立Sheet，便于后续数据分析.
 ### 示例
 
 从技术博客Markdown中提取所有代码块为独立文件，便于读者直接运行测试.
@@ -132,6 +134,8 @@ md /path/output.docx \
 ### Markdown转PDF
 
 ```bash
+# 在此执行相关操作
+echo "操作完成"
 ```
 
 ### Markdown表格转Excel
@@ -189,7 +193,7 @@ markdown-exporter md_to_pptx /path/input.md /path/output.pptx
 md /path/output.pptx --template /path/template.pptx
 ```
 
-## 最佳实践
+## 优秀实践
 
 ### 1. 使用`--strip-wrapper`处理被代码块包裹的Markdown
 
@@ -213,7 +217,7 @@ markdown-exporter md_to_pdf input.md output.pdf --strip-wrapper
 ## 快速开始
 
 1. 确认运行环境满足依赖说明中的要求
-2. 在AI Agent对话中调用本技能,提供必要的输入参数
+2. 在AI Agent对话中调用该技能,提供必要的输入参数
 3. 检查输出结果,根据需要进行后续处理
 
 > 详细的输入输出格式请参考下方章节说明。
@@ -263,7 +267,7 @@ A：不支持。所有命令仅接受文件路径作为输入，需先将内容�
 A：(1) 检查Markdown语法是否规范，特别是表格分隔符；(2) 使用`--strip-wrapper`移除代码块包裹；(3) 复杂格式建议先转HTML再转目标格式.
 ### Q3：PDF中文显示为方块如何解决？
 
-A：安装中文字体包（如Noto Sans CJK），详见最佳实践第5条。工具默认调用系统字体渲染PDF.
+A：安装中文字体包（如Noto Sans CJK），详见优秀实践第5条。工具默认调用系统字体渲染PDF.
 ### Q4：Excel中多个表格如何处理？
 
 A：每个Markdown表格自动成为独立Sheet，Sheet名按"Sheet1、Sheet2..."顺序命名。若需自定义Sheet名，建议拆分为多个Markdown文件分别导出.

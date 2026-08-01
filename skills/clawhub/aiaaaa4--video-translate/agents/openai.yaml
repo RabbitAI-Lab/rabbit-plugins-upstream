@@ -3,6 +3,6 @@
 interface:
   display_name: "人工级视频字幕翻译"
   short_description: "经确认把视频音频交给 OkFile/Fun-ASR，并用 Qwen 或当前 Agent 生成和全文审校双语字幕。"
-  default_prompt: "仅在用户明确请求本地视频字幕翻译时使用 $video-translate；用户直接提供音频必须拒绝。原样发送 scripts/preflight.py 的固定问卷：OkFile + Fun-ASR 固定，初译默认 qwen-mt-plus，也可由用户明确选择当前 Agent 编排模型。译前必须通读完整源文建立上下文；初译后再次通读原文与译文完成重译审校、语义重分段和最终全文 QC。长任务必须前台轮询，禁止结束轮次等待通知。"
+  default_prompt: "仅在用户明确请求本地视频字幕翻译时使用 $video-translate；用户直接提供音频必须拒绝。原样发送 scripts/preflight.py 的固定问卷；本地 Flow 路由不询问下载质量。自动从原文件或项目目录提取真实标题，去掉日期、平台 ID 和扩展名，按领域术语翻译为中文并用 --localized-title 绑定，禁止“原版视频”等占位名。OkFile + Fun-ASR 固定，原语言字幕只能校正当前 Fun-ASR 词跨度；初译默认 qwen-mt-plus，也可由用户明确选择当前 Agent 编排模型。每个 ZH 只翻译同一 SEG；译后逐段与前后至少 2 段对照，完成重译审校、语义重分段、确定性 QA 和最终全文 QC。只有全部 validated 证据、当前文件哈希和输出命名一致且 blockers=0 才可导出。长任务必须前台轮询，禁止结束轮次等待通知。"
 policy:
   allow_implicit_invocation: false

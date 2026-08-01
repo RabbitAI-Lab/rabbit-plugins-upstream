@@ -86,12 +86,12 @@ With API key:
 
 ### Bulk
 - `bulk_tld` -- Keyword popularity across TLDs
-- `bulk_available` -- Batch availability check (up to 10 domains)
+- `bulk_available` -- Batch availability check (up to 50 domains)
 
 ### Stateful (require memory)
 - `preferences` -- Manage memory and saved preferences (action: get/set/delete)
 - `monitor` -- Domain monitoring with WHOIS/DNS/page change checks (action: get/set/update/delete)
-- `strategy` -- Save and execute domain strategies (action: get/set/update/delete)
+- `strategy` -- Store user-authored strategy text, run timestamps and the most recent result (action: get/set/update/delete)
 - `usage` -- Current tier, per-group usage, and remaining quota
 
 ## Skills

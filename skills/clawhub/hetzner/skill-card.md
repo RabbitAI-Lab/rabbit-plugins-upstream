@@ -1,5 +1,5 @@
 ## Description: <br>
-Guides agents through Hetzner Cloud and dedicated-server operations, including sizing, networking, firewalls, storage, backups, costs, migration, and incident handling. <br>
+Hetzner helps agents plan, operate, debug, and document Hetzner Cloud and dedicated-server infrastructure, including sizing, networking, firewalls, storage, backups, costs, automation, Kubernetes, migration, and incident workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and infrastructure operators use this skill to plan, provision, troubleshoot, secure, and cost-manage Hetzner Cloud and Robot dedicated-server environments. It is especially useful when working with hcloud, Terraform-oriented workflows, private networking, backup design, migration, and cost review. <br>
+Use this skill when an agent is helping with Hetzner-specific infrastructure decisions or operations: choosing server types and regions, writing hcloud or Terraform-oriented steps, handling private networks and firewalls, planning backups and storage, reviewing costs, responding to outages or abuse notices, and recording durable local infrastructure notes. <br>
 
 ### Deployment Geography for Use: <br>
-Global <br>
+The skill can be used from any supported agent environment. Its guidance is specific to Hetzner Cloud and Robot locations and includes EU, US, and Singapore region considerations, with EU data-residency defaults when configured by the user. <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may guide cloud operations that delete, rebuild, resize, detach, cancel, or otherwise change Hetzner resources. <br>
-Mitigation: Review and explicitly approve any destructive or irreversible action before it is executed. <br>
-Risk: The skill maintains local inventory and memory files under ~/Clawic/data/. <br>
-Mitigation: Use it only where local infrastructure notes are expected, and keep tokens, passwords, keys, and rescue credentials in a secret manager rather than in those files. <br>
-Risk: Command-oriented workflows may rely on the user's existing hcloud CLI or API context. <br>
-Mitigation: Use scoped Hetzner projects and tokens, prefer read-only credentials for reporting, and verify the active context before approving changes. <br>
+Risk: The skill maintains local notes about infrastructure, projects, domains, mail, costs, incidents, and runbooks. <br>
+Mitigation: Keep the configured ~/Clawic/data paths access-controlled and out of casual sync or commits; store credentials only as pointers to a keychain, password manager, CI secret store, or similar secret system. <br>
+Risk: Generated plans, commands, and configuration can affect live infrastructure, billing, or destructive operations. <br>
+Mitigation: Review commands before execution, verify current Hetzner prices and limits before spending money, and use the skill's snapshot, protection, and deletion checks before irreversible changes. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Hetzner skill page](https://clawhub.ai/ivangdavila/skills/hetzner) <br>
-- [Clawic Hetzner skill page](https://clawic.com/skills/hetzner) <br>
-- [Hetzner skill source](artifact/SKILL.md) <br>
-- [Security operations guidance](artifact/security.md) <br>
-- [Automation guidance](artifact/automation.md) <br>
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/hetzner) <br>
+- [Publisher profile](https://clawhub.ai/user/ivangdavila) <br>
+- [Skill homepage](https://clawic.com/skills/hetzner) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline commands, code snippets, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local inventory updates under ~/Clawic/data/ and uses the hcloud CLI when command-oriented workflows apply.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Natural-language operational guidance with tables, checklists, commands, Terraform or cloud-init examples, runbook notes, and local memory updates when appropriate.] <br>
+**Output Parameters:** [User requests, Hetzner context, local Clawic configuration and inventory notes, and hcloud CLI availability when command generation or inspection is needed.] <br>
+**Other Properties Related to Output:** [Outputs are Hetzner-specific, cost-aware, and safety-gated; the skill is designed to avoid writing credentials and to replace secrets with secret-store pointers in durable notes.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: evidence release and SKILL.md frontmatter) <br>
+1.0.2 <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

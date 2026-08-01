@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-context-manager",
   "slug": "agent-context-manager",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1783704415232,
-  "contentHash": "2fa6094d1af3586ada7605eff9bc8ba0e8a9a432d180b69fb78b1b3c24c0e7fe",
-  "fetchedAt": "2026-07-26T18:17:00.854Z"
+  "version": "1.0.1",
+  "updatedAt": 1785313737348,
+  "contentHash": "5db820ee1c2fd7ef0fcb5f655f9f33a7303d0427a22c2ed47a603f2b9aabd789",
+  "fetchedAt": "2026-08-01T09:38:38.038Z"
 }

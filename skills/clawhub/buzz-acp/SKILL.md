@@ -1,5 +1,6 @@
 ---
 name: buzz-acp
+version: 0.2.0
 description: "Deploy and manage AI agents (OpenClaw, Claude Code) as first-class participants in a self-hosted Buzz workspace via ACP."
 homepage: https://github.com/darrenjrobinson/buzz-acp
 license: Apache-2.0
@@ -11,7 +12,7 @@ author: darrenjrobinson
 Wire OpenClaw agents and Claude Code agents into a self-hosted [Buzz](https://github.com/block/buzz) workspace as first-class Nostr participants — with presence, typing indicators, @mentions, DMs, and thread context.
 
 Each agent gets its own secp256k1 Nostr keypair and independent inference path:
-- **OpenClaw agents** → `buzz-acp.py` shim → OpenClaw `/v1/chat/completions` → your configured model stack
+- **OpenClaw agents** → `buzz-acp.py` shim → OpenClaw `/v1/chat/completions` → reply posted via `buzz messages send`
 - **Claude Code agents** → `claude` CLI natively via ACP — no shim needed
 - **Multiple agents supported** — run as many as you like, each with a different name, persona, and session key
 
@@ -24,6 +25,16 @@ Each agent gets its own secp256k1 Nostr keypair and independent inference path:
 - Python 3.10+ (for the shim)
 - Claude Code CLI (`~/.local/bin/claude`) for Claude-backed agents
 - Docker + Docker Compose for relay infrastructure
+
+## Permissions & Capabilities
+
+This skill requires the following access to function — scope it accordingly:
+
+- **Shell execution**: the `buzz-acp.py` shim posts replies directly via `buzz messages send` (subprocess, no shell interpolation) — no OpenClaw tool-calling loop involved. The reference Claude Code agent (`examples/ccagent`) exposes a single scoped `send_buzz_message` MCP tool that does the same via `execFile`.
+- **`BUZZ_PRIVATE_KEY` in env**: required for `buzz-cli` auth in both agent types.
+- **Network**: outbound WebSocket from each agent to the Buzz relay; outbound HTTPS to the configured model API (Anthropic for Claude Code agents, your OpenClaw endpoint for OpenClaw agents).
+- **Credentials**: one secp256k1 Nostr private key per agent identity plus a model API key, loaded via systemd `EnvironmentFile=` — never passed on the command line or committed to source.
+- **Persistence**: agents run continuously under systemd (`Restart=always`) as a dedicated non-root service user; no elevated privileges are required.
 
 ## Repo layout
 
@@ -114,7 +125,7 @@ sudo systemctl enable --now buzz-marvin
 ### 7. Windows/macOS/Linux desktop client
 
 Download from [latest Buzz release](https://github.com/block/buzz/releases/latest).
-- Windows: SmartScreen warning → **More info → Run anyway** (unsigned alpha)
+- Windows: the installer is **not code-signed.** Only download it from the official releases page above over HTTPS — checksum/signature verification isn't published yet for this alpha, so treat this as an explicit trust decision. If you accept that, SmartScreen warning → **More info → Run anyway**.
 - Relay URL on first launch: `ws://YOUR_LAN_IP:3000`
 
 ## buzz-acp.py — how it works
@@ -124,8 +135,8 @@ Download from [latest Buzz release](https://github.com/block/buzz/releases/lates
 | Method | What it does |
 |--------|-------------|
 | `initialize` | Handshake — returns `{protocolVersion, serverInfo, capabilities}` |
-| `session/new` | Start a session — returns `{sessionId}` (camelCase, required) |
-| `session/prompt` | Message delivery — params `{sessionId, prompt: [{type,text}]}` → OpenClaw → returns `{stopReason: "end_turn"}` |
+| `session/new` | Start a session — returns `{sessionId}` (camelCase, required); captures `systemPrompt` (protocol v2) or falls back to parsing `[Base]` from prompt text (legacy) |
+| `session/prompt` | Message delivery — parses `[Context]` block for channel UUID + reply-to, calls OpenClaw, posts reply via `buzz messages send`, returns `{stopReason: "end_turn"}` |
 | `session/end` | Session cleanup — clears conversation history |
 | `session/cancel` | Notification (no id, no response) — cancels in-flight request |
 | `session/set_config_option` | No-op — acknowledged and ignored |
@@ -215,4 +226,4 @@ The `buzz-acp` harness threads replies to the triggering message automatically. 
 Run `docker compose up -d minio-init` before starting the relay.
 
 **Relay shows "Using hardcoded dev relay keypair"**
-`BUZZ_RELAY_PRIVATE_KEY` not being read. Use systemd `EnvironmentFile=` or `export $(grep -v '^#' .env | xargs)` before running manually.
+`BUZZ_RELAY_PRIVATE_KEY` not being read. Prefer systemd `EnvironmentFile=`, which handles this correctly. If you must run manually, use `set -a; source .env; set +a` rather than `export $(grep ...)` — it handles quoting/spaces correctly. Either way, remember this puts secrets into the shell's environment, visible to child processes.

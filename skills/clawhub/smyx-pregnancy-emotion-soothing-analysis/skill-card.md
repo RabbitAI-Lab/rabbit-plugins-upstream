@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes authorized fixed-camera video, with optional audio, from pregnancy home or prenatal waiting-room settings to identify emotion-related signals and return structured reports and soothing-action guidance. <br>
+Analyzes fixed-camera and optional microphone inputs for pregnancy-related emotion fluctuation signals, then returns structured reports and soothing-action guidance such as music, mindfulness audio, caregiver alerts, or escalation suggestions. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and care teams use this skill to submit authorized local files or URLs for pregnancy emotion-signal analysis, historical report lookup, and structured recommendations without producing a medical diagnosis. <br>
+External developers and operators use this skill to analyze pregnancy activity-area audio/video or query cloud history for emotion fluctuation events, soothing actions, recommendations, and report links. It is intended for consented monitoring workflows in homes, prenatal waiting rooms, or prenatal classes, not for medical diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive pregnancy-related camera/audio inputs and remote processing may expose intimate health and household data. <br>
-Mitigation: Use only with explicit consent from the pregnant person and anyone recorded, confirm the listed LifeEmergence remote services are acceptable, and avoid deployments without notice and opt-out controls. <br>
-Risk: Local identity or token persistence may create account-linkage exposure. <br>
-Mitigation: Run the skill only in controlled workspaces where local credential persistence is allowed, and review token storage, rotation, and revocation before installation. <br>
-Risk: Claimed smart-speaker and contact-alert interventions are not established by the security evidence. <br>
-Mitigation: Treat intervention outputs as advisory until the publisher separately proves opt-in controls, retention limits, and audit logs. <br>
-Risk: Pregnancy emotion inference can be mistaken for medical diagnosis or emergency assessment. <br>
-Mitigation: Keep outputs limited to observed behavior and soothing guidance, and route recurring or severe concerns to qualified clinicians or appropriate hotlines. <br>
+Risk: The skill handles sensitive pregnancy-related audio/video, cloud reports, and persistent identity linkage. <br>
+Mitigation: Install and run it only after explicit consent from the monitored pregnant person, with notice to anyone likely to be recorded and clear controls for disabling uploads. <br>
+Risk: Audio/video and identifiers may be sent to the LifeEmergence cloud for analysis and report storage. <br>
+Mitigation: Require operators to provide deletion controls for cloud reports and local identity records before deployment. <br>
+Risk: Spouse or emergency-contact notifications can disclose sensitive emotional state information or trigger without current consent. <br>
+Mitigation: Configure alert recipients and escalation behavior with the pregnant person's consent, and provide a way to pause or disable alerts. <br>
+Risk: Emotion analysis could be mistaken for clinical diagnosis. <br>
+Mitigation: Present outputs as behavioral observations and support suggestions only, and route recurring or urgent concerns to qualified prenatal mental-health or medical resources. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pregnancy-emotion-soothing-analysis) <br>
-- [Pregnancy emotion soothing API documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API documentation](artifact/references/api_doc.md) <br>
+- [Analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Plain text or Markdown with JSON-formatted report content and report links] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown and JSON-oriented structured reports with inline shell commands and report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can write the generated result to a caller-provided output file.] <br>
+**Other Properties Related to Output:** [May include analysis progress, emotion-event summaries, soothing-action recommendations, history tables, and cloud report URLs.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: ClawHub release metadata; artifact frontmatter lists 1.0.0) <br>
+1.0.6 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

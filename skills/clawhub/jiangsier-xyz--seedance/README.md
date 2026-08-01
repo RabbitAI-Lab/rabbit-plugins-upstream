@@ -12,6 +12,7 @@ Video generation on the backend is asynchronous (submit a task → poll status u
 seedance/
 ├── SKILL.md            # skill definition + agent instructions
 ├── scripts/
+│   ├── seedance        # venv entrypoint wrapper (provisions .venv, runs seedance.py)
 │   ├── seedance.py     # the synchronous wrapper (stdlib-only Python)
 │   └── test_seedance.py
 ├── reference.md        # upstream Volcengine Ark video-generation doc
@@ -24,8 +25,9 @@ All script paths in the skill are relative to the skill directory (the folder co
 
 ## Dependencies
 
-- **Python 3.11+**. Use `python3.11` when targeting an OpenAI-style proxy whose TLS certificate chain Python 3.14 rejects (stricter CA key-usage check); `python3` is fine for the raw Volcengine Ark API.
-- `alibabacloud_oss_v2` — only required when you pass **local image files** (`-i`/`-f`/`-l`), which are uploaded to Alibaba OSS as a short-lived signed URL. Install with `pip install -r requirements.txt`. No third-party dependency is needed for text-to-video or online image URLs.
+- **Python 3.11+**. You don't pick the interpreter yourself: the `scripts/seedance` wrapper auto-selects `python3.11`/`python3.12` when available (some OpenAI-style proxies serve a TLS chain that Python 3.14 rejects via a stricter CA key-usage check) and only falls back to `python3` if those are missing.
+- The wrapper provisions an isolated virtualenv at `.venv/` (next to `SKILL.md`) on first run and installs `requirements.txt` into it automatically — no manual `pip install` is needed. `alibabacloud_oss_v2` is the only third-party dependency, required solely when you pass **local image files** (`-i`/`-f`/`-l`, uploaded to Alibaba OSS as a short-lived signed URL). Text-to-video and online image URLs need no third-party package.
+- Override the venv location with `SKILL_VENV_DIR=<path>`. The generated `.venv/` is a build artifact — gitignore it, don't commit it.
 
 ## Environment variables
 
@@ -58,26 +60,26 @@ The skill extracts the options, asks for anything missing or ambiguous, and conf
 
 ## CLI reference
 
-You can also run the script directly:
+You can also run it directly through the `scripts/seedance` wrapper, which provisions its own isolated venv (interpreter chosen for you — see TLS note):
 
 ```bash
 # text-to-video (Ark, default)
-python3 scripts/seedance.py -t "a daisy field, camera pushing in"
+scripts/seedance -t "a daisy field, camera pushing in"
 
 # image-to-video (local image → uploaded to OSS)
-python3 scripts/seedance.py -t "camera pulls out" -i ./fox.png --ratio adaptive
+scripts/seedance -t "camera pulls out" -i ./fox.png --ratio adaptive
 
 # first + last frame
-python3 scripts/seedance.py -t "360 orbit" -f ./first.jpeg -l ./last.jpeg --ratio adaptive
+scripts/seedance -t "360 orbit" -f ./first.jpeg -l ./last.jpeg --ratio adaptive
 
 # online image URL
-python3 scripts/seedance.py -t "camera pulls out" --image-url https://example.com/fox.png
+scripts/seedance -t "camera pulls out" --image-url https://example.com/fox.png
 
-# openai-video (mini) — prefer python3.11 (see TLS note)
-python3.11 scripts/seedance.py --api-type openai-video -t "a daisy field, camera pushing in"
+# openai-video (mini) — same wrapper, just pass --api-type
+scripts/seedance --api-type openai-video -t "a daisy field, camera pushing in"
 
-# openai (full, Ark-shaped body) — prefer python3.11
-python3.11 scripts/seedance.py --api-type openai -t "a daisy field, camera pushing in"
+# openai (full, Ark-shaped body)
+scripts/seedance --api-type openai -t "a daisy field, camera pushing in"
 ```
 
 ### Options
@@ -133,14 +135,14 @@ Fixed per spec (ark + openai paths): `generate_audio=true`, `watermark=false`. T
 
 ## TLS note (environment-specific)
 
-Some OpenAI-style proxies are load-balanced across backend nodes that intermittently serve a certificate chain whose intermediate CA lacks the `keyUsage` extension. CPython 3.14 rejects those nodes; 3.11 accepts them all. The wrapper has retry logic to ride through it under 3.14, but `python3.11` is the reliable choice for the `openai-video` / `openai` paths. For the `ark` path, `python3` is fine. `--insecure`/`ARK_INSECURE` disables verification but many proxies' WAFs 403 unverified-TLS handshakes, so it does not help there.
+Some OpenAI-style proxies are load-balanced across backend nodes that intermittently serve a certificate chain whose intermediate CA lacks the `keyUsage` extension. CPython 3.14 rejects those nodes; 3.11 accepts them all. The wrapper has retry logic to ride through it under 3.14, but `python3.11` is the reliable choice for the `openai-video` / `openai` paths. For the `ark` path, `python3` is fine. The `scripts/seedance` wrapper prefers `python3.11`/`python3.12` automatically, so you don't manage this by hand. `--insecure`/`ARK_INSECURE` disables verification but many proxies' WAFs 403 unverified-TLS handshakes, so it does not help there.
 
 ## Tests
 
 ```bash
-python3 scripts/test_seedance.py                                 # offline suite (no key/network)
-cd scripts && python3 -m unittest test_seedance.OpenaiTransportTests   # one class
-cd scripts && python3 -m unittest test_seedance.GenerateVideoSyncTests.test_text_to_video_polls_until_succeeded  # one test
+scripts/seedance test_seedance.py                                                  # offline suite (no key/network)
+cd scripts && ../.venv/bin/python -m unittest test_seedance.OpenaiTransportTests   # one class
+cd scripts && ../.venv/bin/python -m unittest test_seedance.GenerateVideoSyncTests.test_text_to_video_polls_until_succeeded  # one test
 ```
 
-The offline suite mocks the HTTP layer and injects a fake OSS client + fake `alibabacloud_oss_v2` module, so it needs no network, API key, or OSS SDK. Live tests (real calls, cost quota) are skipped unless `ARK_API_KEY` is set.
+`scripts/seedance test_seedance.py` runs the full offline suite inside the wrapper's venv (the first run creates `.venv/`); the single-class/test forms drive that venv's interpreter directly with `python -m unittest`. The offline suite mocks the HTTP layer and injects a fake OSS client + fake `alibabacloud_oss_v2` module, so it needs no network, API key, or OSS SDK. Live tests (real calls, cost quota) are skipped unless `ARK_API_KEY` is set.

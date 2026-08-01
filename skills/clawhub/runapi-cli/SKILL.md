@@ -97,6 +97,20 @@ runapi account info
 runapi account balance
 ```
 
+## Live pricing
+
+Pricing commands return current estimates for paid tasks. `pricing list` and
+ordinary `pricing quote` calls do not require an API key. A quote with an
+Account-owned `source_task_id` follows the normal API-key authentication rules.
+
+```shell
+runapi pricing list --service suno
+runapi pricing quote --service suno --action text_to_music --model suno-v4 \
+  --params '{"vocal_mode":"auto_lyrics","prompt":"A chill lo-fi beat"}'
+runapi pricing quote --service suno --action text_to_music --model suno-v4 \
+  --params-file pricing-inputs.json
+```
+
 ## Local callback listeners
 
 Listener access requires the credential issued by `runapi login`; an ordinary imported API key cannot list callback candidates, read a Listen Signing Secret, or open a listener. This restriction applies only to listener operations: ordinary API keys can still create and query tasks.
@@ -133,6 +147,8 @@ Pass the selected ID explicitly from an agent. The listener receives only tasks 
 ```shell
 runapi listen localhost:3000/webhooks/runapi --callback-api-key-id token_abc123
 ```
+
+The CLI acknowledges each valid listener event before attempting the local HTTP request. It forwards each event locally once and reports non-2xx responses or connection errors without requesting a listener replay. This local debugging behavior does not change delivery retries for a Task's `callback_url`.
 
 Startup output identifies the selected key by name, ID, and mask, prints the absolute project config path, and prints that key's stable Listen Signing Secret. To inject the secret without starting a listener, keep it out of logs and project config:
 

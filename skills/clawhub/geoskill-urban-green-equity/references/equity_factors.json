@@ -1,0 +1,57 @@
+{
+  "description": "Reference equity factors and thresholds for urban green space analysis",
+  "who_standards": {
+    "green_space_per_capita_min_m2": 9,
+    "green_space_access_distance_m": 300,
+    "note": "WHO recommends minimum 9 m² green space per capita and access within 300m"
+  },
+  "eu_standards": {
+    "green_space_per_capita_min_m2": 10,
+    "max_walk_distance_m": 500,
+    "note": "EU common target: 10 m² per capita, 500m max walking distance"
+  },
+  "china_standards": {
+    "park_per_capita_min_m2": 12,
+    "community_park_walk_min": 5,
+    "district_park_walk_min": 10,
+    "note": "China urban planning standards: 12 m² park per capita, 5-10 min walk"
+  },
+  "gini_interpretation": {
+    "low_inequality": {"max": 0.2, "label": "Low inequality"},
+    "moderate": {"min": 0.2, "max": 0.35, "label": "Moderate inequality"},
+    "high_inequality": {"min": 0.35, "max": 0.5, "label": "High inequality"},
+    "very_high": {"min": 0.5, "label": "Very high inequality"}
+  },
+  "coverage_rate_thresholds": {
+    "excellent": 0.9,
+    "good": 0.7,
+    "adequate": 0.5,
+    "poor": 0.3
+  },
+  "green_quality_weights": {
+    "park": 1.0,
+    "garden": 0.9,
+    "nature_reserve": 1.0,
+    "recreation_ground": 0.85,
+    "wood": 0.8,
+    "forest": 0.8,
+    "grass": 0.6,
+    "heath": 0.5,
+    "meadow": 0.6,
+    "village_green": 0.7,
+    "common": 0.7,
+    "playground": 0.75,
+    "dog_park": 0.7
+  },
+  "walk_speeds_kmh": {
+    "footway": 5.0,
+    "path": 4.0,
+    "pedestrian": 5.0,
+    "residential": 5.0,
+    "steps": 3.0,
+    "cycleway": 4.0,
+    "default": 5.0
+  },
+  "min_green_area_m2": 100,
+  "entrance_search_radius_km": 0.05
+}

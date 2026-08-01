@@ -1,5 +1,5 @@
 ## Description: <br>
-Kiln lets AI agents design, slice, print, monitor, and recover physical 3D printing jobs through MCP and CLI control. <br>
+Kiln lets AI agents design, slice, print, monitor, and recover physical objects through an MCP server for 3D printers. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,22 +7,22 @@ This skill is ready for commercial/non-commercial use. <br>
 [codeofaxel](https://clawhub.ai/user/codeofaxel) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+AGPL-3.0 <br>
 
 
 ## Use Case: <br>
-Developers, makers, and print-farm operators use Kiln to let AI agents generate or find 3D models, slice them, control printer queues, and monitor physical prints with human supervision for high-risk actions. <br>
+Developers, makers, and operators use Kiln to connect AI agents to real 3D printers for model generation, marketplace search, slicing, print queueing, monitoring, and multi-printer management. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Agent control of real 3D printers can heat hardware, move motors, start or cancel prints, or send G-code without adequate supervision. <br>
-Mitigation: Keep printers supervised, require explicit approval before physical actions, and limit printer/API credentials to the minimum access needed. <br>
-Risk: Camera, webhook, cloud sync, plugin, or self-update features can expand the exposure of printer access or workspace data. <br>
-Mitigation: Disable camera, webhooks, cloud sync, plugins, and self-update paths unless they are intentionally required and reviewed. <br>
-Risk: Model generation, marketplace search, slicing, and fulfillment can produce unsafe, incorrect, infringing, or costly physical outcomes. <br>
-Mitigation: Review models, slicer settings, material choices, costs, and fulfillment orders before execution. <br>
+Risk: AI-connected agents can control real 3D printers and affect physical equipment. <br>
+Mitigation: Keep printer access scoped, supervise print jobs, verify emergency stop access, and confirm temperature limits before use. <br>
+Risk: Unattended first runs can allow unsafe or failed prints to continue without operator intervention. <br>
+Mitigation: Avoid unattended first runs and monitor early jobs with camera snapshots or direct observation. <br>
+Risk: Printer API credentials and live printer configuration can expose operational control. <br>
+Mitigation: Use least-privilege printer credentials, keep API keys secret, and review updates before reconnecting live printers. <br>
 
 
 ## Reference(s): <br>
@@ -30,16 +30,18 @@ Mitigation: Review models, slicer settings, material choices, costs, and fulfill
 - [Kiln website](https://kiln3d.com) <br>
 - [Kiln documentation](https://kiln3d.com/docs) <br>
 - [PyPI package](https://pypi.org/project/kiln3d/) <br>
+- [Project repository](https://github.com/codeofaxel/Kiln) <br>
+- [Release notes v1.3.1](https://github.com/codeofaxel/Kiln/releases/tag/v1.3.1) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and plain text with shell commands and JSON configuration snippets] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON configuration examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May trigger physical printer actions through configured credentials; require operator approval for heating, printing, canceling, sending G-code, and fulfillment.] <br>
+**Other Properties Related to Output:** [May include MCP server setup, printer-control commands, model search and generation steps, slicing guidance, and print-monitoring guidance.] <br>
 
 ## Skill Version(s): <br>
-1.2.0 (source: server evidence release and target metadata) <br>
+1.3.1 (source: server.json and release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

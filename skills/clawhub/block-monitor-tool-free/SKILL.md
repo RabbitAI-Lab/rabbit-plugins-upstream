@@ -4,31 +4,27 @@ name: block-monitor-tool-free
 version: 1.0.0
 displayName: 内容验证网关免费版
 summary: "AI生成内容验证与策略检查工具,支持黑白名单管理、内容分类与基础策略执行,适合个人开发者内容审核.。内容验证网关免费版,为个人开发者提供AI生成内容的验证与策略管理能力."
-license: Proprietary
+license: MIT
 edition: free
-description: '内容验证网关免费版,为个人开发者提供AI生成内容的验证与策略管理能力.
-  核心能力:内容策略检查、黑白名单管理、内容分类标记、验证结果记录.
-  适用场景:AI输出内容审核、敏感内容过滤、内容发布前验证.
-  差异化:免费版聚焦基础策略检查,支持单规则管理,适合个人项目快速集成.
-  适用关键词: 内容验证, 策略检查, 黑白名单, 内容审核, verification, policy, blocklist, allowlist'
+description: "内容验证网关免费版,为个人开发者包含AI产出内容的验证与策略管控能力. 适用于需要block monitor tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要block monitor tool相关能力的开发场景,包含结构化的工作流程和配置指引."
 tags:
   - 安全
+  - block
+  - monitor
+  - automation
+  - productivity
   - 内容验证
   - 策略管理
   - 免费版
   - 监控
   - 运维
-  - 工具
-  - term
-  - rules_dir
-  - txt
-  - self
-  - result
 tools:
   - read
   - exec
 homepage: ""
 category: "Operations"
+pricing_tier: free
+
 ---
 本工具为AI应用开发者提供内容验证与策略管理能力,在AI生成内容输出前执行策略检查,通过黑白名单机制过滤不当内容。免费版支持基础策略检查、内容分类标记与验证结果记录,适合个人开发者对AI输出进行基础内容审核.
 ### 免费版与专业版对比
@@ -53,35 +49,42 @@ category: "Operations"
 
 ```python
 #!/usr/bin/env python3
-"""免费版内容策略检查引擎"""
 # ...
+# ...
+# ...
+# ...
+# ...
+# ...
+# ...
+# ...
+# ...
+# ...
+# ...
+# ...
+# ...
+# ...
+result = "操作完成"
+"""免费版内容策略检查引擎"""
 import re
 import json
 from datetime import datetime
-# ...
 class ContentPolicyChecker:
     """内容策略检查器"""
-# ...
     def __init__(self):
         self.blocklist = set()
         self.allowlist = set()
         self.patterns = []
         self.load_rules()
-# ...
     def load_rules(self):
         """加载规则文件"""
         try:
             with open("blocklist.txt", "r", encoding="utf-8") as f:
                 self.blocklist = set(line.strip().lower() for line in f if line.strip())
         except FileNotFoundError:
-            pass
-# ...
         try:
             with open("allowlist.txt", "r", encoding="utf-8") as f:
 allowlist = set(line.strip().strip())
         except FileNotFoundError:
-            pass
-# ...
     def check_content(self, content):
         """检查内容是否合规"""
         result = {
@@ -90,9 +93,7 @@ allowlist = set(line.strip().strip())
             "passed": True,
             "violations": []
         }
-# ...
         content_lower = content.lower()
-# ...
         for term in self.blocklist:
             if term in content_lower:
                 result["violations"].append({
@@ -101,21 +102,18 @@ allowlist = set(line.strip().strip())
                     "severity": "HIGH"
                 })
                 result["passed"] = False
-# ...
         if not result["passed"]:
                 if term in content_lower:
                     result["violations"] = [
                         v for v in result["violations"]
                         if v["term"] not in content_lower or term == v["term"]
                     ]
-# ...
         sensitive_patterns = [
             (r'\b\d{3}-\d{2}-\d{4}\b', "SSN格式", "CRITICAL"),
             (r'\b\d{16}\b', "信用卡号格式", "CRITICAL"),
             (r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', "邮箱地址", "MEDIUM"),
             (r'\b\d{3}\.\d{3}\.\d{3}\.\d{3}\b', "IP地址", "MEDIUM"),
         ]
-# ...
         for pattern, desc, severity in sensitive_patterns:
             matches = re.findall(pattern, content)
             if matches:
@@ -126,12 +124,9 @@ allowlist = set(line.strip().strip())
                 })
                 if severity in ["CRITICAL", "HIGH"]:
                     result["passed"] = False
-# ...
         return result
-# ...
 if __name__ == "__main__":
     checker = ContentPolicyChecker()
-# ...
     test_content = "这是一段测试内容,包含敏感词和 user@example.com 邮箱地址"
     result = checker.check_content(test_content)
     print(json.dumps(result, indent=2, ensure_ascii=False))
@@ -295,7 +290,7 @@ view_today_log() {
 stats_log() {
     echo "=== 验证统计 ==="
     TOTAL=$(wc -l < "$LOG_FILE" 2>/dev/null || echo "0")
-    PASSED=$(grep -c "PASS" "$LOG_FILE" 2>/dev/null || echo "0")
+    PASSED=$(grep -c "step_done" "$LOG_FILE" 2>/dev/null || echo "0")
     FAILED=$(grep -c "FAIL" "$LOG_FILE" 2>/dev/null || echo "0")
     echo "  总验证次数: ${TOTAL}"
     echo "  通过: ${PASSED}"
@@ -349,9 +344,9 @@ checker = ContentPolicyChecker()
 ai_output = "AI生成的内容..."
 decision = audit_ai_output(ai_output, checker)
 print(json.dumps(decision, indent=2, ensure_ascii=False))
-```
-
-### 场景二:敏感信息过滤
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```bash
 #!/bin/bash
 INPUT_FILE=$1
@@ -375,9 +370,9 @@ echo "$FILTERED" > "$OUTPUT_FILE"
 # ...
 REPLACEMENTS=$(diff "$INPUT_FILE" "$OUTPUT_FILE" | grep -c "REDACTED" || echo "0")
 echo "过滤完成: 替换了 ${REPLACEMENTS} 处敏感内容"
-```
-
-### 场景三:发布前内容检查
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```bash
 #!/bin/bash
 CONTENT_FILE=$1
@@ -410,26 +405,25 @@ grep -in "password\|secret\|key.*=\|token" "$CONTENT_FILE" | head -5 || echo "  
 # ...
 echo ""
 echo "=== 检查完成 ==="
-```
-
-## 快速开始
-### 第一步:创建规则文件
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```bash
 mkdir -p rules
 echo "敏感词1" > rules/blocklist.txt
 echo "敏感词2" >> rules/blocklist.txt
-```
-
-### 第二步:运行内容检查
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```python
 from content_policy import ContentPolicyChecker
 # ...
 checker = ContentPolicyChecker()
 result = checker.check_content("要检查的内容")
 print("通过" if result["passed"] else "拒绝")
-```
-
-### 第三步:查看日志
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```bash
 cat logs/verification_$(date '+%Y%m%d').log
 ```
@@ -452,23 +446,12 @@ cat logs/verification_$(date '+%Y%m%d').log
 | IP地址 | `\d{3}\.\d{3}\.\d{3}\.\d{3}` | MEDIUM |
 | 密码 | `password\s*[:=]\s*\S+` | HIGH |
 
-## 最佳实践
+## 优秀实践
 1. **最小黑名单**:仅添加必要的黑名单词条,避免过度过滤.
 2. **白名单豁免**:对合法包含敏感词的内容使用白名单豁免.
 3. **分级处理**:CRITICAL直接拒绝,HIGH人工审核,MEDIUM记录日志.
 4. **定期更新**:根据业务需求定期更新黑白名单规则.
 5. **日志留痕**:所有验证结果记录日志,便于追溯审计.
-## 常见问题
-### Q1: 免费版最多支持多少条规则?
-免费版最多支持50条黑/白名单规则。如需更多规则,请使用专业版.
-### Q2: 内容检查是实时的吗?
-免费版为同步检查模式,在内容输出前执行检查。实时拦截与告警需要专业版支持.
-### Q3: 如何处理误报?
-将误报的合法内容添加到白名单(allowlist.txt),即可豁免黑名单检查.
-### Q4: 支持哪些语言的内容检查?
-免费版支持中文和英文内容检查。多语言支持需要专业版.
-### Q5: 检查结果如何集成到应用?
-通过Python模块导入ContentPolicyChecker类,调用check_content方法获取JSON格式结果.
 ## 依赖说明
 ### 运行环境
 - **Agent平台**: 支持SKILL.md的任意AI Agent(Claude Code / Cursor / Codex / Gemini CLI等)
@@ -488,7 +471,7 @@ cat logs/verification_$(date '+%Y%m%d').log
 - 规则文件存储在本地,不发送内容到外部
 
 ### 可用性分类
-- **分类**: MD+EXEC(纯Markdown指令,核心功能需要exec命令行执行能力)
+- **分类**: MD+EXEC模式纯Markdown指令,核心功能需要exec命令行执行能力)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent执行内容验证与策略管理任务
 
 ## 错误处理
@@ -504,32 +487,3 @@ cat logs/verification_$(date '+%Y%m%d').log
 - 复杂业务场景建议结合人工经验判断
 - 执行效率受模型能力与网络环境影响
 - 当前为免费版本,如需完整功能请升级到付费版获取全部能力
-
-## 示例
-
-### 基本用法
-
-**输出**：返回执行结果,包含操作状态和输出数据
-
-```text
-用户: 执行核心功能
-Skill: 正在执行核心功能...
-Skill: 执行完成,结果如下: 操作成功
-```
-
-## 输出格式
-```json
-{
-  "success": true,
-  "data": {
-    "result": "内容验证网关免费版处理结果",
-    "execution_time": "0.5s",
-    "metadata": {
-      "version": "1.0",
-      "processor": "block monitor"
-    }
-  },
-  "execution_log": ["解析输入参数", "执行核心处理", "格式化输出结果"],
-  "error": null
-}
-```

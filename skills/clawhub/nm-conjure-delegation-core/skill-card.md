@@ -11,33 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use this skill to decide when external LLM delegation is appropriate, plan handoffs, estimate costs, and validate delegated results before integration. <br>
+Developers and agent operators use this skill to decide when to delegate low-complexity, large-context work to external LLM services and how to plan, validate, and integrate those results. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Delegation may expose secrets or sensitive data to external LLM services. <br>
-Mitigation: Review each delegation plan before execution, redact sensitive inputs, and avoid sending secrets or sensitive data. <br>
-Risk: Delegated outputs may be incorrect, incomplete, or misleading. <br>
-Mitigation: Validate output format and correctness before integration, and keep high-reasoning or security-sensitive work local. <br>
-Risk: OAuth client secrets and service credentials may be mishandled during setup. <br>
-Mitigation: Handle OAuth and client secrets carefully, verify authentication prerequisites, and prefer redacted audit logs. <br>
+Risk: Delegating prompts or files to external providers can expose secrets, private customer data, authentication code, or sensitive files. <br>
+Mitigation: Review the data being delegated and use approved transfer and retention paths before sending sensitive material to external services. <br>
+Risk: Delegated output can be incorrect, misleading, or unsuitable for tasks that require high-level reasoning. <br>
+Mitigation: Keep architecture, strategy, design, nuanced review, and other high-complexity decisions local, and validate delegated results before integration. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conjure-delegation-core) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure) <br>
+- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure) <br>
+- [Task assessment module](modules/task-assessment.md) <br>
+- [Handoff patterns module](modules/handoff-patterns.md) <br>
+- [Cost estimation module](modules/cost-estimation.md) <br>
+- [Troubleshooting module](modules/troubleshooting.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with checklists, decision matrices, templates, and command examples] <br>
+**Output Format:** [Markdown guidance with decision matrices, checklists, templates, and command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces delegation plans, suitability assessments, cost estimates, troubleshooting steps, and validation guidance.] <br>
+**Other Properties Related to Output:** [Delegation outputs are expected to be validated before integration.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: server release; artifact frontmatter is 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

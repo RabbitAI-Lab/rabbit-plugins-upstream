@@ -1,9 +1,20 @@
-# OpenClaw security baseline
+# OpenClaw security baseline (v1.0.5)
 
-- Keep Receipt purchase approval at **ask every purchase**.
+- Typed conversational approval is not Receipt authority. Use only the Receipt-hosted approval
+  flow returned by `receipt_purchase`; the owner may grant a connection allowance or approve once.
+- The only onboarding purchase exception is the owner-selected Receipt launch credit: one
+  web-search purchase, at most $0.10, expiring after seven days, with no owner-wallet charge.
+- If launch credit is declined, unavailable, exhausted, expired, or already used, show the quote
+  and stop before purchase.
 - Set the per-call limit to **$1 or less** and the daily limit to **$5 or less**.
 - Add no automatic seller rules during setup.
 - Use MCP OAuth only. Do not configure static Receipt or provider credentials.
+- Keep the callback URL and authorization code out of Agent chat, logs, and files. On macOS, copy
+  the full current callback URL and run the bundled clipboard helper locally.
+- Complete the same OAuth attempt that produced the callback. Never start another bare login
+  between approval and code exchange.
+- Display the complete authorization URL before giving callback-helper instructions. If login
+  produces no URL, stop instead of implying that authorization started.
 - Never enter a crypto seed phrase, mnemonic, private key, or wallet recovery phrase.
 - Run OpenClaw with sandboxing enabled for untrusted work.
 - Allowlist only the WhatsApp or Telegram identities that should reach the agent.

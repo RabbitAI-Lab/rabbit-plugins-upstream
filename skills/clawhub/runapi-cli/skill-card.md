@@ -11,37 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to install, authenticate, inspect, and automate RunAPI CLI workflows from terminals, servers, and CI jobs. It supports running RunAPI model tasks, passing JSON requests, polling async jobs, managing local callback listeners, and handling temporary media file uploads. <br>
+Developers, engineers, and agent operators use this skill to install, authenticate, inspect, and automate RunAPI CLI workflows from terminals, servers, CI jobs, and agent runtimes. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill includes a remote installer script piped directly into a shell, including for server and CI use. <br>
-Mitigation: Prefer the documented Homebrew formula or use a download-and-verify workflow before executing installer content in automation. <br>
-Risk: RunAPI authentication can persist in local configuration. <br>
-Mitigation: Prefer environment credentials or stdin token import for headless use, keep config file permissions restricted, and avoid placing API keys directly in command arguments. <br>
-Risk: Listener operations can expose Listen Signing Secrets. <br>
-Mitigation: Keep listener secrets out of logs and project config, rotate exposed secrets for the selected key, update local verifiers, and restart affected listeners. <br>
-Risk: Local files passed as model media inputs may be uploaded to RunAPI. <br>
-Mitigation: Review file paths before submission and avoid sending sensitive local media unless the upload is intended. <br>
+Risk: Installer scripts and binary installation flows can affect the local system if sourced from the wrong place or tampered with. <br>
+Mitigation: Prefer the Homebrew install path or a verified installer flow, and rely on the documented checksum verification before using the installed runapi binary. <br>
+Risk: RunAPI API keys, saved credentials, and listener signing secrets could be exposed through shared environments, process arguments, logs, or committed config files. <br>
+Mitigation: Use RUNAPI_API_KEY or stdin token import instead of command-line token arguments, keep credentials out of project config and repositories, and rotate listener signing secrets if exposed. <br>
+Risk: Local files passed to RunAPI upload fields may contain sensitive or unintended content. <br>
+Mitigation: Review local files before passing paths to upload fields and treat returned temporary URLs as short-lived transfer artifacts rather than durable storage. <br>
+Risk: Local callback listener failures can be missed because each valid event is acknowledged before the local HTTP forward attempt and forwarded locally once. <br>
+Mitigation: Monitor non-2xx responses or connection errors, check CLI exit status, and debug local webhook handling without assuming a listener replay will occur. <br>
 
 
 ## Reference(s): <br>
-- [RunAPI model and CLI catalog](https://runapi.ai/models.md) <br>
-- [RunAPI models homepage](https://runapi.ai/models) <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-cli) <br>
-- [RunAPI publisher profile](https://clawhub.ai/user/runapi-ai) <br>
+- [RunAPI model and CLI service catalog](https://runapi.ai/models.md) <br>
+- [RunAPI model browser](https://runapi.ai/models) <br>
+- [ClawHub runapi-cli skill page](https://clawhub.ai/runapi-ai/skills/runapi-cli) <br>
+- [ClawHub runapi-ai publisher profile](https://clawhub.ai/user/runapi-ai) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code] <br>
-**Output Format:** [Markdown with inline shell commands, JSON examples, and TOML configuration snippets] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration, Code, JSON] <br>
+**Output Format:** [Markdown guidance with shell commands, JSON examples, and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may reference RUNAPI_API_KEY, local RunAPI config, task JSON, callback key IDs, listener secrets, and temporary file URLs.] <br>
+**Other Properties Related to Output:** [Guidance covers RunAPI CLI installation, authentication, model execution, pricing, callback listeners, temporary file uploads, and agent-runtime skill installation.] <br>
 
 ## Skill Version(s): <br>
-0.2.11 (source: server release evidence) <br>
+0.2.13 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

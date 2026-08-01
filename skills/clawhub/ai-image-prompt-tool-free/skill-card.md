@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps personal creators draft, optimize, translate, and style AI image-generation prompts using common templates and prompt-writing guidance. <br>
+AI图像提示词-免费版 helps personal creators build, translate, and refine structured prompts for AI image generation. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,14 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators, AI image-generation beginners, and social media operators use this skill to turn Chinese or English image ideas into more specific prompts with subject, style, tone, composition, and atmosphere details. <br>
+Personal creators, AI image-generation beginners, and social media operators use this skill to turn image ideas into clearer prompts with subject, style, tone, composition, and atmosphere guidance. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill declares command execution even though the security summary says command execution is unnecessary for prompt drafting. <br>
-Mitigation: Install only when comfortable with that permission, prefer a version with exec removed, and use the skill for prompt drafting or optimization only. <br>
-Risk: Broad trigger wording may route unrelated marketing, writing, title optimization, or content-creation requests to a skill intended for AI image prompts. <br>
-Mitigation: Invoke it only for image-generation prompt tasks and avoid using it for technical, academic, legal, or unrelated writing work. <br>
-Risk: English-converted prompts may not preserve the user's intended meaning or may introduce unsuitable details. <br>
-Mitigation: Review converted prompts before sending them to an image model. <br>
+Risk: The security evidence flags the release as suspicious because it requests broader read, write, and command execution authority than a Markdown-only image-prompt guide appears to need. <br>
+Mitigation: Review before installing and prefer a version with tool permissions limited to explicit image-prompt tasks and no unnecessary file-write or command-execution authority. <br>
 
 
 ## Reference(s): <br>
@@ -31,12 +27,12 @@ Mitigation: Review converted prompts before sending them to an image model. <br>
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text image-generation prompts and prompt-writing recommendations] <br>
+**Output Format:** [Markdown guidance with generated image-prompt text examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include English prompt rewrites, style keywords, composition guidance, and limited prompt-history guidance; does not generate images directly.] <br>
+**Other Properties Related to Output:** [Prompts may include Chinese-to-English expansion, style keywords, composition guidance, and concise optimization suggestions.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

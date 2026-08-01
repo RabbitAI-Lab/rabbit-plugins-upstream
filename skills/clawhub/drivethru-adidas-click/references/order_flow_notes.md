@@ -145,6 +145,23 @@ alternative to search),
   so there is **no color picker** — landing on the URL is landing on the color.
   `_open_product` uses this and waits for `#CartModule-SizeTable`.
 
+### Step 2a — Availability date gate (✅ wired)
+
+Above the size table sits a draggable date-tab strip
+(`#DateTabs-DraggableTable`); the active tab is `#DateTabButton` and its inner
+text is a formatted date (e.g. `"Jul 31, 2026"`). This is the **earliest date
+the product can ship**, and the size-tile inventory numbers refer to _that_
+date. If it isn't today, the size table is describing future stock —
+**nothing is orderable now** regardless of what the tiles show.
+
+`_product_available_today()` reads `#DateTabButton`, parses `%b %d, %Y`, and
+compares to today's date. Both the order flow (`_prepare_lines`) and the
+inventory read (`read_inventory`) call it right after `_open_product` and
+before touching any tile; when it returns False, every requested line for that
+style is classified `unavailable` with a `"not available until {date}"` note
+and the size-tile read is skipped. Fail-open on a missing/unparseable date
+(logs a warning) so a portal shape change doesn't silently block every order.
+
 ### Step 2b — Size table (✅ mapping + inventory wired)
 
 Container `#CartModule-SizeTable`. ⚠️ **The grid sits below the fold and

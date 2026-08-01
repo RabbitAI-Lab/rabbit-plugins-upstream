@@ -1,0 +1,86 @@
+#!/usr/bin/env bash
+# =============================================================================
+# camsnap — Local CLI wrapper for dev convenience
+# =============================================================================
+# Place this in your PATH or symlink it:
+#   ln -sf /path/to/camsnap/scripts/camsnap /usr/local/bin/camsnap
+#
+# Usage:
+#   camsnap release [--bump patch|minor|major] [--changelog "..."] [--dry-run]
+#   camsnap publish [--bump ...]     # alias for release
+#   camsnap quick [--bump ...]       # dev quick publish
+#   camsnap dev                      # alias for quick
+#   camsnap autopublish              # CI/auto mode
+#   camsnap version                  # show versions
+#   camsnap check                    # validate skill
+#   camsnap help                     # show help
+# =============================================================================
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "$(readlink -f "${BASH_SOURCE[0]}")")" && pwd)"
+
+usage() {
+  cat <<EOF
+camsnap — Camera skill dev & release CLI
+
+Usage:
+  camsnap <command> [options]
+
+Commands:
+  release       Full release (bump, docs, publish)
+  publish       Alias for release
+  quick         Quick dev publish (auto dev version)
+  dev           Alias for quick
+  autopublish   Auto-detect changes, publish if needed (CI mode)
+  version       Show current version info
+  check         Validate skill structure
+  dry-run       Preview release without publishing
+  help          Show this help
+
+Options (for release/quick):
+  --bump <type>       patch|minor|major (default: patch)
+  --changelog <text>  Changelog entry
+  --dry-run           Preview only
+  --force             Skip change detection
+EOF
+}
+
+CMD="${1:-help}"
+shift || true
+
+case "$CMD" in
+  release|publish)
+    exec "$SCRIPT_DIR/camsnap-release.sh" "$@" ;;
+  quick|dev)
+    exec "$SCRIPT_DIR/camsnap-quick-publish.sh" "$@" ;;
+  autopublish)
+    exec "$SCRIPT_DIR/camsnap-autopublish.sh" "$@" ;;
+  dry-run)
+    exec "$SCRIPT_DIR/camsnap-release.sh" --dry-run "$@" ;;
+  version)
+    SKILL_MD="$(dirname "$SCRIPT_DIR")/SKILL.md"
+    META_JSON="$(dirname "$SCRIPT_DIR")/_meta.json"
+    ORIGIN_JSON="$(dirname "$SCRIPT_DIR")/.clawhub/origin.json"
+    echo "SKILL.md:     $(grep '^version:' "$SKILL_MD" | head -1 | sed 's/version: *//')"
+    echo "_meta.json:   $(grep '"version"' "$META_JSON" | head -1)"
+    if [[ -f "$ORIGIN_JSON" ]]; then
+      echo "Last publish: $(grep '"installedVersion"' "$ORIGIN_JSON")"
+    fi ;;
+  check)
+    SKILL_DIR="$(dirname "$SCRIPT_DIR")"
+    ok=true
+    for f in SKILL.md _meta.json skill-card.md; do
+      if [[ ! -f "$SKILL_DIR/$f" ]]; then echo "MISSING: $f"; ok=false; fi
+    done
+    if $ok; then echo "✓ All required files present"; fi
+    V1=$(grep '^version:' "$SKILL_DIR/SKILL.md" | sed 's/version: *//' | tr -d ' "')
+    V2=$(grep '"version"' "$SKILL_DIR/_meta.json" | head -1 | sed 's/.*"version": *"\([^"]*\)".*/\1/')
+    if [[ "$V1" == "$V2" ]]; then echo "✓ Version in sync: $V1"; else echo "✗ Mismatch: $V1 vs $V2"; exit 1; fi ;;
+  help|--help|-h)
+    usage ;;
+  *)
+    echo "Unknown command: $CMD"
+    usage
+    exit 1 ;;
+esac

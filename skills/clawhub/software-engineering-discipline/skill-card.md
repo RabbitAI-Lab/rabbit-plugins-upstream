@@ -1,5 +1,5 @@
 ## Description: <br>
-Engineering discipline for AI coding agents. Apply when writing, refactoring, or reviewing code that will be maintained. Not a tutorial on SOLID/DRY (you already know those) - it calibrates the trade-off calls and hard limits where agents predictably go wrong, and forces you to verify instead of guess. <br>
+Engineering discipline for AI coding agents working on maintained code, covering scope, abstraction, contracts, risk-based testing, safety limits, verified APIs, and executed checks. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,27 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering agents use this skill to keep maintainable code changes disciplined: verify APIs before use, preserve published contracts, scope changes tightly, and attach test evidence before reporting completion. <br>
+Developers and AI coding agents use this skill to keep feature work, bug fixes, refactors, code review, and testing decisions aligned with maintained-code engineering discipline. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can influence code changes in operational workflows where incorrect proposals could affect contracts, migrations, releases, secrets, or production behavior. <br>
-Mitigation: Review proposed changes before execution, require explicit confirmation for migrations, deployments, deletes, email, and shared-memory sync commands, use least-privilege tokens, and require attached test output before completion. <br>
+Risk: The skill can make an agent more strict about reading code, verifying APIs, and running checks, which may add process overhead to low-risk coding work. <br>
+Mitigation: Apply the skill's own proportionality guidance: relax ceremony for genuine throwaway work while preserving the stated safety limits. <br>
+Risk: Guidance about code changes, tests, and shell commands can affect maintained repositories if followed without review. <br>
+Mitigation: Review proposed changes and run repository-verified checks before reporting completion or merging work. <br>
 
 
 ## Reference(s): <br>
+- [Server-resolved GitHub provenance](https://github.com/wujiaming88/skills/tree/main/software-engineering-discipline) <br>
+- [ClawHub skill page](https://clawhub.ai/wujiaming88/skills/software-engineering-discipline) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown] <br>
-**Output Format:** [Markdown guidance and checklists] <br>
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands] <br>
+**Output Format:** [Markdown guidance with possible code and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No tool calls, API calls, or generated files are required by the skill itself.] <br>
+**Other Properties Related to Output:** [Agent-facing process guidance; no autonomous code execution by the skill itself.] <br>
 
 ## Skill Version(s): <br>
-2.0.0 (source: server release metadata) <br>
+2.0.1 (source: release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

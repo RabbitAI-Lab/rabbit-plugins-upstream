@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/amazon-analysis",
   "slug": "amazon-analysis",
   "ownerHandle": null,
-  "version": "1.1.8",
-  "updatedAt": 1784887866485,
-  "contentHash": "a054880fc3eeb94d44808625c31cad7d10453794e2f3480647a5f2d23561db5a",
-  "fetchedAt": "2026-07-26T18:05:19.107Z"
+  "version": "1.1.11",
+  "updatedAt": 1785320956113,
+  "contentHash": "a81de885d91062dc498b06f22430f1c514c7c32b665d6d10c651a1257169740d",
+  "fetchedAt": "2026-08-01T09:38:11.224Z"
 }

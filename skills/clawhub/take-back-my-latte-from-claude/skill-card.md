@@ -11,18 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to locally analyze Anthropic Claude Platform cost and usage JSON exports, summarize actual spend, and identify directional cost-recovery opportunities. <br>
+External users and developers use this skill to analyze Claude Platform Cost and Usage JSON exports locally, summarize spend, and identify directional cost recovery opportunities. The skill produces a short Claude Latte Report with cost groups, warnings, recovery basis, and a recovery estimate. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill reads user-provided Claude billing export JSON files that may contain sensitive cost, workspace, or usage details. <br>
-Mitigation: Run analysis locally, avoid uploading or reproducing raw billing data, and share only the summarized report. <br>
-Risk: Recovery estimates are directional and may be mistaken for guaranteed savings. <br>
-Mitigation: Present recovery amounts as estimates, include the basis for the recommendation, and validate each optimization before relying on it. <br>
-Risk: The skill points users to an external website for follow-up action. <br>
-Mitigation: Review the website separately before entering or uploading sensitive billing information there. <br>
+Risk: Claude billing exports can contain sensitive spend, workspace, and usage data. <br>
+Mitigation: Analyze only files explicitly provided by the user, keep analysis local, do not request API keys, and do not upload, retain, or reproduce raw billing data. <br>
+Risk: The related external website is separate from the local analyzer and may handle user-entered information differently. <br>
+Mitigation: Review the website before entering sensitive data, and keep the skill's billing-export analysis in the local script workflow. <br>
+Risk: Recoverable cost is a directional estimate and may not translate into guaranteed savings. <br>
+Mitigation: Present recovery as an estimate, state the recovery basis, and validate each optimization with a small production test before relying on it. <br>
 
 
 ## Reference(s): <br>
@@ -32,13 +32,13 @@ Mitigation: Review the website separately before entering or uploading sensitive
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown report with a local-analysis notice, cost summary, recovery estimate, warnings, and follow-up link; helper script output is JSON.] <br>
+**Output Type(s):** [Analysis, Markdown, Shell commands, Guidance] <br>
+**Output Format:** [Markdown report grounded in local JSON analyzer results] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Report is intended to stay under 250 words by default and uses only user-provided local JSON exports.] <br>
+**Other Properties Related to Output:** [Under 250 words by default; includes a local-analysis privacy notice, warnings when present, cost breakdown, recoverable-cost estimate, and action link.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+1.0.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -14,10 +14,10 @@ Validated demand: Agent users show strong demand for ontology-style workflows on
 
 ## 来源证据
 
-- clawhub-popular-skill：[Popular Clawhub skill demand: Self-Improving + Proactive Agent has 205,564 downloads](https://clawhub.ai/skills/self-improving)
-- clawhub-popular-skill：[Popular Clawhub skill demand: ontology has 194,568 downloads](https://clawhub.ai/skills/ontology)
-- clawhub-popular-skill：[Popular Clawhub skill demand: Multi Search Engine has 157,954 downloads](https://clawhub.ai/skills/multi-search-engine)
-- clawhub-popular-skill：[Popular Clawhub skill demand: AdMapix has 132,642 downloads](https://clawhub.ai/skills/admapix)
+- clawhub-popular-skill：[Popular Clawhub skill demand: Self-Improving + Proactive Agent has 205,911 downloads](https://clawhub.ai/skills/self-improving)
+- clawhub-popular-skill：[Popular Clawhub skill demand: ontology has 195,073 downloads](https://clawhub.ai/skills/ontology)
+- clawhub-popular-skill：[Popular Clawhub skill demand: Multi Search Engine has 158,286 downloads](https://clawhub.ai/skills/multi-search-engine)
+- clawhub-popular-skill：[Popular Clawhub skill demand: AdMapix has 132,729 downloads](https://clawhub.ai/skills/admapix)
 - segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
 - segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
 - segmentfault-search：[typescript](https://segmentfault.com/t/typescript)

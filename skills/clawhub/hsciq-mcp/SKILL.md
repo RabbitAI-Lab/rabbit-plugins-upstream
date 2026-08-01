@@ -51,7 +51,7 @@ credentials:
 - **get_code_detail** - 获取海关编码详情（税率、申报要素、监管条件等）
 - **search_instance** - 按商品名称检索归类实例（输入具体商品名如"自行车"、"手机壳"，非描述性短语）
 - **search_unified** - 统一搜索（CIQ 项目/危化品/港口信息）
-- **create_guilei_form** - 创建 HS 归类咨询单（支持产品信息与图片上传，提交给平台专业归类师人工审核）
+- **create_guilei_form** - 创建 HS 归类咨询单（需上传至少 1 张产品图片，提交给平台专业归类师人工审核）
 - **get_guilei_form** - 获取归类咨询单详情（含字段对话、归类结论、修改历史）
 - **list_my_guilei_forms** - 获取当前用户的归类咨询单分页列表
 - **add_guilei_dialog_message** - 在归类单字段上创建新讨论或回复已有讨论
@@ -200,7 +200,7 @@ node ~/.openclaw/skills/hsciq-mcp/hsciq-client.js add-guilei-dialog-message \
 }
 ```
 
-**图片限制**：最多 3 张，每张 ≤ 1MB，支持 JPG/PNG/GIF/WebP。每人每天最多创建 5 次（可配置）。
+**图片要求**：**必填，至少 1 张**，最多 3 张，每张 ≤ 1MB，支持 JPG/PNG/GIF/WebP；未上传图片将创建失败。每人每天最多创建 5 次（可配置）。
 
 ### get_guilei_form 调用示例
 ```json

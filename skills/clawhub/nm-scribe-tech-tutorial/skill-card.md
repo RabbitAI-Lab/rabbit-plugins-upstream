@@ -11,36 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and technical writers use this skill to plan, draft, and verify hands-on tutorials for libraries, CLI tools, APIs, and developer workflows. It emphasizes scoped outcomes, tested code examples, progressive complexity, expected outputs, troubleshooting, and quality checks. <br>
+Developers and technical writers use this skill to plan, draft, and quality-check hands-on tutorials, getting-started guides, CLI walkthroughs, and API learning paths backed by working code. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generated tutorials may include code or shell commands that are unsuitable for the user's environment. <br>
-Mitigation: Review generated commands and test runnable examples in an environment where execution is acceptable before publishing or sharing the tutorial. <br>
-Risk: The skill can activate on broad documentation requests even when a hands-on tutorial is not the right format. <br>
-Mitigation: Confirm the intended output is a step-by-step technical tutorial before applying the workflow. <br>
-Risk: The artifact expects a companion slop-detector review for its quality gate. <br>
-Mitigation: Run the referenced companion review when available, or apply an equivalent prose-quality review before final approval. <br>
+Risk: Generated tutorial commands or code examples could be incorrect, unsafe for the user's environment, or presented with unverified output. <br>
+Mitigation: Review generated commands and test code snippets in a real or isolated environment before publishing or running them. <br>
+Risk: The skill text mentions a separate Claude Code plugin that may include agents, hooks, or commands outside this artifact. <br>
+Mitigation: Evaluate and install that plugin separately instead of treating this skill card as coverage for the plugin's behavior. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-tech-tutorial) <br>
-- [Project homepage from skill metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
-- [Tutorial outline and structure module](artifact/modules/outline-structure.md) <br>
-- [Code examples module](artifact/modules/code-examples.md) <br>
-- [Progressive complexity module](artifact/modules/progressive-complexity.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-scribe-tech-tutorial) <br>
+- [Publisher Profile](https://clawhub.ai/user/athola) <br>
+- [Clawdis Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
+- [Tutorial Outline and Structure](modules/outline-structure.md) <br>
+- [Writing Effective Code Examples](modules/code-examples.md) <br>
+- [Building Complexity Gradually](modules/progressive-complexity.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with fenced code blocks, expected output blocks, checklists, and troubleshooting sections] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown tutorial drafts, outlines, code blocks, command examples, checklists, and review guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include tutorial outlines, tested code snippets, TODO items, quality gates, and review guidance.] <br>
+**Other Properties Related to Output:** [Generated tutorial commands and code examples should be reviewed and tested before use.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence; artifact frontmatter reports 1.9.8) <br>
+1.9.17 (source: server release metadata; artifact frontmatter says 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

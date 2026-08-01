@@ -1,8 +1,8 @@
+# Agent Subtitle Translator Skill
+
 <p align="center">
   <img src="assets/icon-large.svg" alt="Agent Subtitle Translator Logo" width="180">
 </p>
-
-# Agent Subtitle Translator Skill
 
 [English](README.md)
 

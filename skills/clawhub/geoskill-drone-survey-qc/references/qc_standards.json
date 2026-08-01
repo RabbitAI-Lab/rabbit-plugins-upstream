@@ -1,0 +1,50 @@
+{
+  "version": "1.0.0",
+  "standard": "CH/T 9024-2014 / DJI Pilot spec",
+  "description": "无人机航测成果质量检查验收阈值",
+  "overlap": {
+    "forward_min": 0.70,
+    "forward_preferred": 0.80,
+    "side_min": 0.60,
+    "side_preferred": 0.70,
+    "unit": "ratio"
+  },
+  "gsd": {
+    "max_cm": 5.0,
+    "warning_cm": 3.0,
+    "unit": "cm/pixel"
+  },
+  "blur": {
+    "laplacian_variance_min": 50.0,
+    "warning_variance": 100.0,
+    "unit": "laplacian_variance"
+  },
+  "exposure": {
+    "overexposed_threshold": 250,
+    "underexposed_threshold": 10,
+    "overexposed_fraction_max": 0.05,
+    "underexposed_fraction_max": 0.05,
+    "unit": "pixel_value_0-255"
+  },
+  "orthomosaic": {
+    "nodata_fraction_max": 0.02,
+    "seam_max_pixels": 3.0,
+    "min_bands": 3,
+    "unit": "various"
+  },
+  "control_points": {
+    "rmse_max_m": 0.05,
+    "rmse_warning_m": 0.03,
+    "max_residual_m": 0.15,
+    "max_residual_warning_m": 0.10,
+    "min_gcp_count": 5,
+    "min_check_points": 3,
+    "outlier_threshold_sigma": 3.0,
+    "unit": "meters"
+  },
+  "dsm": {
+    "nodata_fraction_max": 0.05,
+    "vertical_accuracy_m": 0.10,
+    "unit": "meters"
+  }
+}

@@ -205,7 +205,7 @@ async function directRefreshAndWrite(client, t) {
     expires_at: Date.now() + (j.expires_in ?? 3600) * 1000,
     refresh_expires_at: Date.now() + (j.refresh_expires_in ?? 30 * 24 * 3600) * 1000,
     scope: j.scope ?? t.scope,
-    opc_id: t.opc_id,
+    user_id: t.user_id,
     obtained_at: new Date().toISOString(),
   };
   await client.writeToken(newToken);
@@ -214,7 +214,7 @@ async function directRefreshAndWrite(client, t) {
 }
 
 /**
- * 解 JWT payload (从 access_token 拿 opcId)
+ * 解 JWT payload (从 access_token 拿 userId)
  */
 export async function getOpcIdFromToken(t) {
   const client = await loadPluginClient();
@@ -222,7 +222,7 @@ export async function getOpcIdFromToken(t) {
   // plugin 不暴露此函数, 走 decodeJwtPayload
   if (typeof client.decodeJwtPayload === "function") {
     const p = client.decodeJwtPayload(t?.access_token);
-    return p?.opcId ?? p?.sub ?? null;
+    return p?.userId ?? p?.sub ?? null;
   }
   return null;
 }

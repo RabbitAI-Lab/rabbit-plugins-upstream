@@ -321,7 +321,7 @@ claude --version
 
 ### 可用性分类
 
-- **分类**: MD+EXEC(Markdown 指令 + 命令行执行)
+- **分类**: MD+execute(Markdown 指令 + 命令行执行)
 - **说明**: 通过自然语言指令驱动 Agent 委派编程任务到代码 CLI
 - **离线可用**: 否,代码 CLI 需要连接 LLM API
 

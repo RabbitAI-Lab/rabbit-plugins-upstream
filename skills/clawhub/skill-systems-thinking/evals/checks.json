@@ -1,15 +1,20 @@
 {
   "skill": "systems-thinking",
-  "purpose": "Self-audit checks an LLM applies to its own reasoning and output to confirm the control-theoretic thinking mode was active. The LLM must pass all MUST items before declaring success. These are not process audits; they probe whether the LLM *thought* in control terms: identified state, demanded observability, checked stability, respected bounds, etc.",
+  "purpose": "Self-audit checks an LLM applies to its own reasoning and output to confirm the control-theoretic and systems-theoretic thinking mode was active. The LLM must pass all MUST items before declaring success. These are not process audits; they probe whether the LLM *thought* in control terms: identified state and possibility space, treated the model as a black-box hypothesis, demanded observability and information channels, checked stability and convergence, respected bounds, etc.",
   "cognitive_laws": [
     "Name x before u. Unnamed targets are unregulated.",
+    "Name the possibility space. A change that does not narrow uncertainty is not control.",
     "Observe before you guess. Measure current behavior before synthesizing the fix.",
+    "When control fails, suspect a missing information channel before a missing actuator.",
     "Stabilize before you optimize. Divergence under perturbation is failure.",
-    "Close the loop. Observe the actual result; correct until deviation is bounded.",
+    "Close the loop. Observe the actual result; correct until deviation is bounded. Feedback amplifies a weak controller.",
     "Feedforward measurable disturbances; feedback the rest. Never crank gain on delay.",
     "Decouple harmful coupling. Coordinate beneficial coupling. Regulate relations, not just absolutes.",
     "Minimal control. The smallest u that moves x to target. No speculative extras.",
-    "Convergence: corrections must shrink. If they grow, you are unstable — stop and re-identify."
+    "Convergence: corrections must shrink. If they grow or reverse direction, you are unstable or overshooting — reduce gain.",
+    "Treat the system as a black box. Your model is a hypothesis, not the internals. Open one layer at a time.",
+    "Make your model falsifiable. State what observation would prove your hypothesis wrong, before acting.",
+    "Recognize ultra-stability and bifurcations. Some instability is a repair mechanism; at bifurcations, small choices lock in large differences."
   ],
   "items": [
     {
@@ -19,10 +24,22 @@
       "pass_if": "The reasoning names x and u concretely, with targets or bounds, before any code or architecture proposal."
     },
     {
+      "id": "possibility-space-named",
+      "severity": "MUST",
+      "question": "Before choosing u, did the LLM name the set of outcomes it is choosing among (the possibility space) and how its action narrows that set?",
+      "pass_if": "The reasoning enumerates at least 2 candidate states/hypotheses and states which ones the proposed u rules out."
+    },
+    {
       "id": "observability-demanded",
       "severity": "MUST",
       "question": "If the LLM considered a failure mode that would be invisible without extra instrumentation, did it insist on adding a sensor (test, log, metric) before changing the code?",
       "pass_if": "Observability gaps are resolved by adding instrumentation, not ignored or hand-waved."
+    },
+    {
+      "id": "missing-channel-suspected",
+      "severity": "SHOULD",
+      "question": "When a fix did not converge after attempts, did the LLM consider that the missing piece might be a sensor / information channel rather than a bigger actuator?",
+      "pass_if": "After non-convergence, the LLM proposes adding observability before proposing more force."
     },
     {
       "id": "stability-first",
@@ -31,10 +48,16 @@
       "pass_if": "Perturbation reasoning or tests appear before any perf/feature work. Unstable trajectories are rejected."
     },
     {
-      "id": "model-stated",
+      "id": "model-stated-as-hypothesis",
       "severity": "MUST",
-      "question": "Did the LLM state a brief mental model of the plant and where that model breaks, before synthesizing the fix?",
-      "pass_if": "Model/validity-range is stated explicitly, not assumed implicitly."
+      "question": "Did the LLM state a brief mental model of the plant, explicitly treated as a black-box hypothesis (not as the system itself), with a validity range and where it breaks, before synthesizing the fix?",
+      "pass_if": "Model is stated as a hypothesis with validity range. The reasoning distinguishes the model from the plant and acknowledges the gap where bugs hide."
+    },
+    {
+      "id": "model-falsifiable",
+      "severity": "MUST",
+      "question": "Before applying the fix, did the LLM state a falsifiable prediction — the specific observation that would prove its hypothesis wrong?",
+      "pass_if": "A concrete observation (log line, metric value, test outcome) is stated that would refute the hypothesis. Vague predictions like 'this should fix it' fail this check."
     },
     {
       "id": "minimal-control",
@@ -57,8 +80,8 @@
     {
       "id": "convergence-checked",
       "severity": "MUST",
-      "question": "If multiple iterations or corrections were made, did corrections shrink over time? If corrections grew, did the LLM treat this as instability and restart from re-identification?",
-      "pass_if": "A trajectory with growing deviation is identified as unstable and re-analyzed, not papered over."
+      "question": "If multiple iterations or corrections were made, did corrections shrink over time? If corrections grew or reversed direction, did the LLM treat this as instability/overshoot and reduce gain rather than flip strategy?",
+      "pass_if": "A trajectory with growing deviation or direction reversal is identified as unstable/overshooting and re-analyzed with smaller changes, not papered over."
     },
     {
       "id": "disturbance-handled",
@@ -73,10 +96,28 @@
       "pass_if": "Coupling decisions are justified by the relation between the coupled parts, not defaulted to 'isolate everything'."
     },
     {
+      "id": "ultra-stability-recognized",
+      "severity": "SHOULD",
+      "question": "Before patching an instability, did the LLM consider whether the instability is a repair mechanism (e.g. cache eviction, GC pause, circuit breaker) rather than a failure?",
+      "pass_if": "The reasoning distinguishes failures from repair cycles; repair mechanisms are not suppressed."
+    },
+    {
+      "id": "bifurcation-identified",
+      "severity": "SHOULD",
+      "question": "At architecture decisions with discrete long-term consequences (sync vs async, shared state vs messages, schema vs schema-less), did the LLM name the bifurcation and candidate attractors rather than treat it as a continuous tradeoff?",
+      "pass_if": "Bifurcation points are named explicitly; initial conditions that decide between attractors are examined."
+    },
+    {
+      "id": "threshold-tested",
+      "severity": "SHOULD",
+      "question": "For positive-feedback loops (retries, cache misses, auto-scaling, queue depth), did the LLM reason about or test near the critical threshold, not just at typical load?",
+      "pass_if": "Threshold behavior is examined; the system is tested at or above the realistic worst-case load."
+    },
+    {
       "id": "anti-pattern-avoided",
       "severity": "SHOULD",
-      "question": "Did the LLM avoid classic control-theoretic anti-patterns? Add retries without bounds → retry storm. Add loop without damping → oscillation. Add feature before stability → divergence.",
-      "pass_if": "No unbounded retry/recursion/allocation; no optimization before stabilization; no feature creep on an unstable base."
+      "question": "Did the LLM avoid classic control-theoretic anti-patterns? Add retries without bounds → retry storm. Add loop without damping → oscillation. Add feature before stability → divergence. Patch over a repair cycle → brittle system. Reverse direction each iteration → overshoot oscillation.",
+      "pass_if": "No unbounded retry/recursion/allocation; no optimization before stabilization; no feature creep on an unstable base; no suppression of repair mechanisms; no direction reversal under non-convergence."
     },
     {
       "id": "model-validity-stated",

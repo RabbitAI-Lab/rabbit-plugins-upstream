@@ -1,5 +1,5 @@
 ## Description: <br>
-股权与公司治理涉税专业助手，支持股权转让、家族股权架构、国企混改、VIE/红筹架构和股权架构税负优化场景的问答、测算、风险预警与自查报告生成。 <br>
+Provides tax and governance guidance for equity transfers, family holding structures, state-owned enterprise mixed-ownership reform, VIE/red-chip structures, tax-burden comparison, risk self-checks, calculations, and response planning. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Tax, finance, legal, and governance practitioners use this skill to triage equity-transfer and company-governance tax questions, run structured self-checks, compare common ownership structures, and produce practical compliance guidance for review by qualified professionals. <br>
+External users, tax professionals, and business teams use this skill to assess equity transaction and governance tax risks, compare structures, calculate indicative tax exposure, and produce self-check or remediation guidance. It is intended as decision support and should be verified against current official policy and qualified professional advice for material transactions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Tax questions, self-check inputs, or metrics may be sent to the cloud service at mcp.aitaxs.top. <br>
-Mitigation: Avoid submitting confidential taxpayer, transaction, or identity data unless the service is approved for that data; redact sensitive facts before use. <br>
-Risk: The skill can register and store local service credentials for cloud-backed MCP calls. <br>
-Mitigation: Review the local client configuration before use, protect the credential file, and rotate or remove credentials if the environment is shared or no longer trusted. <br>
-Risk: Client setup and matrix installation paths can modify local agent configuration or install related skills. <br>
-Mitigation: Use dry-run or review mode first, confirm target directories and package checksums, and install only the related skills needed for the workflow. <br>
-Risk: Tax guidance may depend on current law, local tax authority practice, and case-specific facts. <br>
-Mitigation: Treat outputs as decision support and confirm material conclusions with the relevant tax authority or a qualified tax professional before filing or transacting. <br>
+Risk: Tax questions, self-check data, and fallback searches may be processed by cloud or public search services. <br>
+Mitigation: Avoid confidential deal details, personal identifiers, and non-public restructuring facts unless the provider and data terms have been reviewed. <br>
+Risk: API keys, identifiers, logs, and cached data may be stored locally. <br>
+Mitigation: Review and manage ~/.tax-policy-client and browser localStorage before and after use, especially on shared systems. <br>
+Risk: Optional auto-setup can change local MCP client configuration. <br>
+Mitigation: Leave TAX_ENABLE_AUTOSETUP disabled unless configuration changes are intended, and review any generated MCP client entries and backups. <br>
+Risk: Tax conclusions can vary by jurisdiction, time, facts, and local tax authority practice. <br>
+Mitigation: Verify material guidance against official tax authority sources or a qualified tax professional before filing, restructuring, or executing a transaction. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-equity-governance) <br>
 - [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
-- [Equity governance self-check web workflow](https://mcp.aitaxs.top/web/topic_workflow_equity_governance.html) <br>
-- [Matrix package entry](artifact/matrix.json) <br>
-- [Skill source manifest](artifact/SKILL.md) <br>
+- [Equity governance self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_equity_governance.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured responses, with optional shell commands and configuration snippets for local MCP setup or matrix installation.] <br>
+**Output Type(s):** [Text, Markdown, Guidance, Configuration] <br>
+**Output Format:** [Markdown or structured text with calculations, checklists, policy references, and configuration guidance when MCP setup is relevant] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call cloud MCP tools for tax policy Q&A, risk checks, tax calculation, and knowledge-base metadata; includes offline fallback guidance and a browser self-check workflow.] <br>
+**Other Properties Related to Output:** [May use remote MCP services or local fallback workflows; outputs are advisory and require review for current jurisdiction, facts, and official policy.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release metadata and SKILL.md frontmatter) <br>
+3.15.6 (source: server release evidence and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

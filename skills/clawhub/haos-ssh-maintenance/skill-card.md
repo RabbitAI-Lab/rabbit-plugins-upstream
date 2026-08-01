@@ -1,5 +1,5 @@
 ## Description: <br>
-Use when Home Assistant OS needs SSH-based maintenance that cannot be completed cleanly through the Home Assistant API alone. <br>
+Home Assistant OS SSH maintenance for config files, YAML, custom components, shell troubleshooting, or interactive ha CLI. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and operators use this skill to guide Home Assistant OS maintenance when API-first inspection is insufficient and SSH access is needed for direct file access, YAML edits, custom component inspection, HAOS shell troubleshooting, or interactive ha CLI work. <br>
+External Home Assistant operators and maintainers use this skill to decide when SSH access is appropriate for Home Assistant OS maintenance and how to inspect or minimally edit configuration files, YAML, custom components, logs, and ha CLI workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: SSH access can read or modify Home Assistant configuration and internal storage. <br>
-Mitigation: Verify TOOLS.md points to the intended Home Assistant host, start read-only, review proposed YAML or .storage edits before they happen, and keep backups. <br>
-Risk: Automation or registry edits can affect locks, alarms, access control, or physical devices. <br>
-Mitigation: Require explicit review before behavior changes that affect safety-sensitive entities, make the smallest targeted change, and report rollback paths. <br>
-Risk: Home Assistant ha CLI commands may behave differently in one-shot SSH and interactive SSH sessions. <br>
-Mitigation: Use interactive PTY-backed SSH for ha CLI log access or commands that fail in one-shot mode, then verify reload or restart needs after the change. <br>
+Risk: SSH maintenance and direct edits to Home Assistant YAML or .storage files can affect automations, locks, alarms, access control, or physical devices. <br>
+Mitigation: Review proposed edits before applying them, start with read-only inspection, back up exact .storage files before direct edits, and ask before changes that affect safety-sensitive or physical-device behavior. <br>
+Risk: One-shot SSH sessions may fail for interactive ha CLI log workflows and can lead to incomplete troubleshooting. <br>
+Mitigation: Use an interactive PTY-backed SSH session for ha CLI logs or other commands that fail in one-shot mode. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nextaltair/haos-ssh-maintenance) <br>
-- [Publisher profile](https://clawhub.ai/user/nextaltair) <br>
+- [ClawHub skill page](https://clawhub.ai/nextaltair/skills/haos-ssh-maintenance) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and configuration guidance] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions] <br>
+**Output Format:** [Markdown guidance with inline shell command examples and file paths] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports inspected paths, findings, changes, and whether reload or restart is needed.] <br>
+**Other Properties Related to Output:** [Focuses on read-first investigation, minimal edits, reload-or-restart guidance, and concise reporting of inspected paths and changes.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server-resolved release metadata) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

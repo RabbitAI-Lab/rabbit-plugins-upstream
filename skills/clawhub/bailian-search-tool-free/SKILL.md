@@ -4,39 +4,20 @@ name: bailian-search-tool-free
 version: 1.0.0
 displayName: 百炼搜索工具-免费版
 summary: "基于百炼API的AI优化网页搜索,返回多源简洁结果,适合个人开发者。基于百炼(阿里云模型工作室)WebSearch API 的 AI 优化网页搜索工具,"
-license: Proprietary
+license: MIT
 edition: free
-description: '基于百炼(阿里云模型工作室)WebSearch API 的 AI 优化网页搜索工具,
-
-  为 AI 代理设计,返回干净、相关的内容.
-  核心能力:
-
-  - AI 优化的网页搜索
-
-  - 多源结果聚合
-
-  - 简洁干净的内容返回
-
-  - 可配置结果数量
-
-  适用场景:
-
-  - 个人开发者的信息检索
-
-  - AI 代理的实时知识获取
-
-  - 快速事实查询
-
-  差异化:免费版提供核心搜索能力,适合个人用户与轻量场景.
-  适用关键词: 网页搜索, 百炼, 模型工作室, WebSearch, bailian, 实时信息'
+description: "基于百炼(阿里云模型工作室)WebSearch API 的 AI 调优网页搜索工具,. 适用于需要bailian search tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要bailian search tool相关能力的开发场景,包含结构化的工作流程和配置指引."
 tags:
   - 研究工具
+  - bailian
+  - search
+  - automation
+  - productivity
   - 网页搜索
   - 信息检索
   - 搜索
   - 检索
   - 工具
-  - bash
 tools:
   - read
   - exec
@@ -44,6 +25,8 @@ tools:
   - grep
 homepage: ""
 category: "Knowledge"
+pricing_tier: free
+
 ---
 # 百炼搜索工具(免费版)
 
@@ -192,7 +175,7 @@ echo "调研完成"
 
 ```bash
 # 百炼 API 配置(在 .env 或环境变量中)
-export DASHSCOPE_API_KEY="your-bailian-api-key"
+export DASHSCOPE_API_KEY=${API_KEY:?请设置环境变量}
 # ...
 # 可选:默认结果数量
 export BAILIAN_SEARCH_DEFAULT_COUNT=5
@@ -243,20 +226,20 @@ echo "$RESULTS"
 TOPIC="$1"
 DATE=$(date +%Y%m%d)
 # ...
-# 第一轮:广泛搜索
-echo "=== 第一轮:广泛搜索 ==="
+# 领先轮:广泛搜索
+echo "=== 领先轮:广泛搜索 ==="
 （请参考skill目录中的脚本文件） "$TOPIC" 10 > "round1-${DATE}.txt"
 # ...
-# 第二轮:聚焦搜索(基于第一轮结果细化)
+# 第二轮:聚焦搜索(基于领先轮结果细化)
 echo "=== 第二轮:聚焦搜索 ==="
-（请参考skill目录中的脚本文件） "${TOPIC} 最佳实践" 5 > "round2-${DATE}.txt"
+（请参考skill目录中的脚本文件） "${TOPIC} 优秀实践" 5 > "round2-${DATE}.txt"
 # ...
 # 合并结果
 cat "round1-${DATE}.txt" "round2-${DATE}.txt" > "research-${TOPIC}-${DATE}.md"
 echo "调研结果已归档到 research-${TOPIC}-${DATE}.md"
 ```
 
-## 最佳实践
+## 优秀实践
 
 1. **查询词要具体**:"Python asyncio 基本用法" 优于 "Python".
 2. **合理设置结果数**:事实查询用 3-5 条,深度调研用 10-20 条.
@@ -321,7 +304,7 @@ fi
 - 本 Skill 基于Markdown指令,除百炼 API Key 外无需额外配置
 
 ### 可用性分类
-- **分类**: MD+EXEC(纯Markdown指令,部分功能需exec命令行执行)
+- **分类**: MD+EXEC模式纯Markdown指令,部分功能需exec命令行执行)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent完成操作
 
 ## 错误处理

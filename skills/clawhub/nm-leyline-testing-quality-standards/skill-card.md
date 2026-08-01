@@ -11,32 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to establish testing quality gates, coverage targets, and review criteria for validating test suites. It provides coverage thresholds, testing checklists, anti-pattern examples, and content assertion guidance for agent-interpreted markdown. <br>
+Developers and QA engineers use this skill to establish test quality gates, validate coverage targets, and identify testing anti-patterns for plugin and agent projects. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad trigger terms may activate the skill in more situations than intended and present general testing thresholds as policy guidance. <br>
-Mitigation: Review the guidance before use and adapt coverage thresholds or quality gates to the project's existing policy and risk level. <br>
+Risk: The skill may activate for broad conversations about quality or metrics. <br>
+Mitigation: Confirm the testing-standards guidance is relevant before applying its quality gates or recommendations. <br>
+Risk: The artifact includes suggested commands such as pytest and editable installs. <br>
+Mitigation: Review commands against the local project and environment before running them. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-testing-quality-standards) <br>
 - [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
-- [Testing anti-patterns](artifact/modules/anti-patterns.md) <br>
-- [Testing best practices](artifact/modules/best-practices.md) <br>
-- [Content assertion levels](artifact/modules/content-assertion-levels.md) <br>
+- [Testing Anti-Patterns](artifact/modules/anti-patterns.md) <br>
+- [Testing Best Practices](artifact/modules/best-practices.md) <br>
+- [Content Assertion Levels](artifact/modules/content-assertion-levels.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [guidance, markdown, code, shell commands] <br>
-**Output Format:** [Markdown with checklists, tables, inline code, and Python or shell examples] <br>
+**Output Format:** [Markdown guidance with checklists, tables, examples, and inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No hidden execution; markdown-only guidance.] <br>
+**Other Properties Related to Output:** [Advisory testing standards; no hidden execution or data movement reported by security evidence.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+1.9.17 (source: server release evidence; artifact frontmatter lists 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

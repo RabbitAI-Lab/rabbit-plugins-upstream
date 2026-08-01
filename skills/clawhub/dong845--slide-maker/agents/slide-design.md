@@ -539,6 +539,7 @@ fall and stage each built slide FULLY (think SMART, not by quota):
   | **Multi-entity survey / landscape / comparison** | Entities named inline as text; a logo *wall* only when a slide's chosen form IS an ecosystem map — never per-mention chrome |
   | **User's OWN / new / fictional product with no official mark** | DESIGN a clean typographic wordmark / monogram — flagged as a designer's stand-in |
   | **Provided / registered template already carries the mark** | Don't double it |
+  | **THIRD-PARTY ASSESSMENT of an entity** — the deck is *about* a company/product but is not *from* it, and carries material that entity would not publish about itself (open recalls, a "first but not unique" correction, competitor counter-evidence, a limitations page) | **No official livery, on any page.** Set the entity's name in the deck's OWN type. The test is authorship, not sentiment: a reader seeing the mark concludes the entity produced or endorsed this, and for an independent assessment that is a misattribution — the same class of error as an unsourced number, committed in the chrome. Record `n/a — third-party assessment` + the finding that makes it so |
 
   - **FLOW (evidence required — this is the gate):** (1) ALWAYS web-search for the entity's REAL logo
     (+ brand colours/fonts) — part of the always-on web research; official press/brand pages and
@@ -548,7 +549,12 @@ fall and stage each built slide FULLY (think SMART, not by quota):
     wordmark-only logotype is a full pass. (3) **Not found →** design a wordmark (recipe:
     `references/image-generation.md`), flagged. (4) The DESIGN checkpoint's **`logo plan:` line MUST
     carry the evidence**: `official asset — <source>` · or `searched, none found → designed wordmark
-    (flagged)` · or `n/a — <multi-entity | template carries it | user opted out>`. A bare "wordmark"
+    (flagged)` · or `n/a — <multi-entity | template carries it | third-party assessment | user opted
+    out>`. **The third-party arm is decided BEFORE the search, not after it** — it is a question about
+    who wrote the deck, so a found logo does not overturn it and "not found" is not its reason; say
+    which finding makes the deck independent (a real one: a briefing carrying two open Class I recalls
+    and a "first, but not alone" correction went to build in the subject's brand colours until this was
+    caught by hand, and the row now exists so it is a default instead of a save). A bare "wordmark"
     or "text only" **without a recorded search**, or an omitted line on a single-entity deck, is an
     INVALID plan — the checkpoint is incomplete (this exact miss shipped: a stakeholder deck went to
     build with a typeset wordmark and no search; the user had asked for the rule before).
@@ -789,6 +795,14 @@ NOT a blanket per-slide quota):
   register — <reason>)` — so the critic's Lens-B `register_interiors` check (`agents/critic.md`,
   `references/review-rubrics.md`) can read it; a bare style whose register stops at the cover, with no
   named `none`-carve, is an interiors-bookends-only finding.
+- **(r) the `density:` line is on the checkpoint, as two NUMBERS the gate can be compared against** —
+  planned **median** words/slide, planned count **over 70**, and how many content slides have a
+  protagonist that is not text (`references/checkpoint-convention.md` owns the wording). Text-heavy
+  is the greedy default of every first draft, and it is the one design failure the user has raised
+  twice: on the second occasion 12 of 12 slides were over budget. The per-slide `TEXT WALL` warning
+  was correct both times and dismissed both times, so density is now hard-gated at hand-off
+  (`render_deck.py --gate-check`). This item is where the number gets DECIDED rather than discovered:
+  a design plan that never states its density has already chosen text by default.
 Fix any failing check before the DESIGN checkpoint.
 
 ### Design-critic checklist

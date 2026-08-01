@@ -5,37 +5,23 @@ name: board-art-tool-free
 version: 1.0.0
 displayName: 画板艺术工具
 summary: "面向个人的协作画布艺术发布工具，支持像素画作. - 提供专业AI自动化处理能力,支持多种使用场景。提供高效自动化处理能力,适用于多种业务场景"
-license: Proprietary
+license: MIT
 edition: free
-description: 面向个人用户的协作画布艺术发布工具，可处理提升工作效率
-  核心能力:
-
-  - 像素画作发布到共享画布
-
-  - 单作品查看与定位
-
-  - 颜色与坐标管理
-
-  - 个人发布历史
-
-  适用场景:
-
-  - 个人在共享画布发布像素艺术
-
-  - 查看画布与定位作品
-
-  - 个人发布历史管理
-
-  差异化: 免费版聚焦个人单作品发布与查看，提供坐标与颜色管理，零成本创作.
-  适用关键词: 画板, 像素艺术, 协作画布, 发布画作, 画布定位, pixel art, canvas, board art'
-tags: 像素艺术,工具,效率,json,basedir,请参考
+description: "面向个人用户的协作画布艺术发布工具，可处置提升工作效率. 适用于需要board art tool相关能力的开发场景,提供结构化的工作流程和配置指引. 该工具经过深度差异化处理,针对用户反馈和使用痛点进行了优化改进,提升了实用性和可操作性."
+tags:
+  - 像素艺术
+  - 工具
+  - 效率
+  - json
+  - basedir
+  - 请参考
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Automation"
-
+pricing_tier: free
 ---
 
 # 画板艺术工具（免费版）
@@ -142,7 +128,7 @@ category: "Automation"
 | pixels | 坐标与颜色数组 |
 | color | 十六进制颜色 |
 
-## 最佳实践
+## 优秀实践
 
 - **坐标别重叠**：发布前查画布占用，避免覆盖他人作品.
 - **颜色用十六进制**：统一 `#RRGGBB` 格式，避免解析歧义.

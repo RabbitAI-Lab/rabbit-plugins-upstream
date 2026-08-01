@@ -1,5 +1,5 @@
 ## Description: <br>
-Audit and publish agent skills to ClawHub and GitHub. <br>
+Audits, cleans, and publishes agent skills to ClawHub and GitHub while checking for personal data, public documentation, and release readiness. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and skill maintainers use this agent skill to audit local skill directories, prepare cleaned publish copies, and publish confirmed releases to ClawHub and GitHub. <br>
+Developers and skill maintainers use this skill to audit SKILL.md-based skill directories before release and, after explicit confirmation, publish cleaned distributions to public ClawHub and GitHub targets. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Publish mode transmits selected skill files to public ClawHub and GitHub locations. <br>
-Mitigation: Review the audit report, exact file list, target repositories, version, and cleaned temporary copy before confirming publication. <br>
-Risk: Publish mode may modify or delete files in the remote GitHub repository. <br>
-Mitigation: Use a GitHub connector token scoped only to the intended repository permissions and require explicit confirmation before remote changes. <br>
+Risk: Publish mode transmits cleaned skill contents to public ClawHub and GitHub destinations. <br>
+Mitigation: Run audit mode first, review the exact file list and target destinations, and require explicit confirmation before publishing. <br>
+Risk: Publish mode may delete files from a remote GitHub repository. <br>
+Mitigation: Confirm the remote deletion list before publish and verify the GitHub repository contents after completion. <br>
+Risk: Credentials may be needed for GitHub publishing. <br>
+Mitigation: Use the configured connector credential only for the confirmed repository operation and never print, copy, or persist the token value. <br>
 
 
 ## Reference(s): <br>
+- [Publish Rules for ClawHub & GitHub](artifact/references/publish-rules.md) <br>
 - [ClawHub Skill Page](https://clawhub.ai/haiyangchenbj/skills/workbuddy-skill-publish) <br>
-- [README](README.md) <br>
-- [Chinese README](README_zh.md) <br>
-- [Publish Rules for ClawHub & GitHub](references/publish-rules.md) <br>
+- [Publisher Profile](https://clawhub.ai/user/haiyangchenbj) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with inline shell commands, file lists, checklists, and publication guidance] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown audit reports with tables, file lists, command snippets, and verification summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Audit mode is read-only; publish mode can transmit cleaned files to public services and modify remote GitHub contents after explicit confirmation.] <br>
+**Other Properties Related to Output:** [Publish mode may include target destinations, version and changelog details, remote file-operation guidance, and post-publish verification results.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: SKILL.md frontmatter and server release evidence) <br>
+1.0.3 (source: server evidence release and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

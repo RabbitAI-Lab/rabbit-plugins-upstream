@@ -11,16 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to map module import relationships, identify circular dependencies and coupling, and plan refactors with Mermaid dependency graphs. <br>
+Developers and engineers use this skill to inspect import relationships, identify circular dependencies, analyze coupling, and plan refactors. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can expose module names and import relationships to a Mermaid rendering MCP. <br>
-Mitigation: Use it only on codebases where that structural information may be shared with the rendering tool, and provide a clear project or module scope. <br>
-Risk: Generated dependency graphs or analysis notes may be incomplete or misleading if code exploration misses imports or dynamic dependencies. <br>
-Mitigation: Review the Mermaid graph and dependency notes against the relevant source files before using them to make refactoring decisions. <br>
+Risk: Rendering through the Mermaid MCP may share dependency graph content such as module names and relationships with that tool. <br>
+Mitigation: Use this skill only on repositories where sharing dependency graph content with the rendering tool is acceptable. <br>
+Risk: Broad activation around dependency analysis or refactoring discussions may cause codebase exploration when a narrower task was intended. <br>
+Mitigation: Confirm the repository scope and requested graph depth before exploring imports or rendering a diagram. <br>
 
 
 ## Reference(s): <br>
@@ -29,13 +29,13 @@ Mitigation: Review the Mermaid graph and dependency notes against the relevant s
 
 
 ## Skill Output: <br>
-**Output Type(s):** [markdown, code, guidance] <br>
-**Output Format:** [Markdown with Mermaid code blocks, rendered diagram references, and analysis notes] <br>
+**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
+**Output Format:** [Markdown with Mermaid code blocks and dependency analysis notes] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dependency counts, fan-in and fan-out observations, and circular dependency notes.] <br>
+**Other Properties Related to Output:** [May include a rendered Mermaid diagram, module and dependency counts, fan-in and fan-out notes, and circular dependency findings.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: ClawHub release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

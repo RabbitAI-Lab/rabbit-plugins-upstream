@@ -1,5 +1,5 @@
 ## Description: <br>
-PLCnext and virtualized-PLC edition of iaiops that guides agents through read-first OPC-UA and Modbus diagnostics, cross-protocol analysis, and industrial data workflows for Phoenix Contact PLCnext environments. <br>
+iaiops-plcnext helps agents work with PLCnext Control and virtual PLC data through existing OPC-UA and Modbus tooling for diagnostics, asset modeling, alarms, predictive maintenance, OEE, and data-quality workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,30 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and industrial automation engineers use this skill to route agents toward read-first PLCnext Control and vPLC diagnostics over built-in OPC-UA and Modbus-TCP services. It is suited for connection diagnosis, dataflow triage, downtime root cause analysis, predictive maintenance, OEE, alarm, baseline, and compliance workflows using existing iaiops tools. <br>
+Developers, industrial engineers, and operations teams use this skill to guide read-first PLCnext and virtual PLC inspection over OPC-UA and Modbus, then apply cross-protocol diagnostics, downtime analysis, predictive maintenance, OEE, alarm, baseline, and compliance workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Unintended access to PLCnext endpoints or operational data destinations. <br>
-Mitigation: Before installation or use, confirm the iaiops MCP tools are configured only for intended PLCnext endpoints and that export, historian, streaming, baseline, and alias-map destinations are approved for the operational data involved. <br>
-Risk: Write-capable profiles could enable controlled changes outside this read-first edition. <br>
-Mitigation: Keep write-capable profiles disabled unless controlled changes are explicitly required; when enabled, apply the documented approval, dry-run, undo, and change-management controls. <br>
+Risk: The release is described as read-only while the security evidence notes export, push, and stream-publish tools for industrial data. <br>
+Mitigation: Before installation, verify that historian_push, export_data, stream_publish, and stream_publish_event are disabled or protected by documented approval controls. <br>
+Risk: PLCnext and virtual PLC workflows may expose industrial operational data through OPC-UA, Modbus, or historian-related paths. <br>
+Mitigation: Use the profile in a review posture until the publisher documents a clear read, write, publish, and outbound-data capability matrix. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-plcnext) <br>
+- [iaiops-plcnext ClawHub release](https://clawhub.ai/zw008/skills/iaiops-plcnext) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with tool names and command snippets] <br>
+**Output Type(s):** [guidance, shell commands, configuration, text, markdown] <br>
+**Output Format:** [Markdown guidance with inline commands and tool names] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-first PLCnext OPC-UA and Modbus workflow guidance; no new connector or PLCnext vendor SDK is introduced by the skill text.] <br>
+**Other Properties Related to Output:** [Read-first industrial protocol workflow guidance; no generated files are required by the skill itself.] <br>
 
 ## Skill Version(s): <br>
-0.19.0 (source: server release metadata) <br>
+0.20.3 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

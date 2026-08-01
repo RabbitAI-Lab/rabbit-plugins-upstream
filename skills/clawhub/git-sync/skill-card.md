@@ -1,5 +1,5 @@
 ## Description: <br>
-Automates synchronization, packaging, release creation, and marketplace publishing for skills and agents across Gitee, GitHub, ClawHub, SkillHub, and PyPI, with file filtering and sensitive-data sanitization. <br>
+git-sync normalizes and publishes skill code to Gitee and GitHub, creates ZIP install packages, and updates related release indexes and manifests. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and release maintainers use git-sync to package, sanitize, version-check, and publish skills or agents across supported repositories and marketplaces. <br>
+Developers and skill maintainers use git-sync to package a ClawHub skill, compare version metadata, scan and redact sensitive content, update manifests and README output, and push releases to configured Gitee and GitHub remotes. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Automated publishing can push code or packages to remote repositories and marketplaces. <br>
-Mitigation: Review the target repository and release intent before execution, and use --skip-market unless marketplace publishing is explicitly intended. <br>
-Risk: Git credential handling can persistently weaken credential settings or expose overly broad tokens. <br>
-Mitigation: Use scoped tokens, avoid embedded tokens in git remotes, and check global Git credential settings after running the skill. <br>
-Risk: The skill handles files that may contain sensitive information before publishing. <br>
-Mitigation: Keep the mandatory sensitive-data scan enabled and review sanitization results before publishing public artifacts. <br>
+Risk: The skill may perform automated Git commits and pushes to configured Gitee and GitHub remotes. <br>
+Mitigation: Review the target skill, configured remotes, generated report, and package outputs before sharing or retrying pushes. <br>
+Risk: The skill may change global Git credential storage to plaintext store and use stored credentials. <br>
+Mitigation: Use it only in an environment where that credential behavior is acceptable; prefer SSH keys or a secure credential manager. <br>
+Risk: Skipping the sensitive information scan can allow secrets to be packaged or pushed. <br>
+Mitigation: Do not use --skip-scan unless the skill has been independently checked for secrets. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/ldxs001/skills/git-sync) <br>
-- [Guide](references/guide.md) <br>
-- [Command reference](references/reference.md) <br>
-- [Permissions and tests](references/permissions.md) <br>
-- [Changelog](references/changelog.md) <br>
+- [git-sync complete usage guide](artifact/references/guide.md) <br>
+- [git-sync complete reference manual](artifact/references/reference.md) <br>
+- [git-sync permissions guide](artifact/references/permissions.md) <br>
+- [git-sync FAQ](artifact/references/faq.md) <br>
+- [git-sync changelog](artifact/references/changelog.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and terminal text with shell commands, JSON snippets, and generated files] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, files] <br>
+**Output Format:** [Markdown or terminal text reports with shell commands, plus generated ZIP and HTML files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create package archives, release tags, repository updates, and marketplace publication commands depending on selected options.] <br>
+**Other Properties Related to Output:** [May produce Git commits and pushes, sanitized package artifacts, manifests, README updates, and an HTML package index.] <br>
 
 ## Skill Version(s): <br>
-2.32.0 (source: frontmatter, _meta.json, changelog, server release metadata) <br>
+2.36.0 (source: server release metadata; artifact frontmatter and changelog show 2.9.2) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

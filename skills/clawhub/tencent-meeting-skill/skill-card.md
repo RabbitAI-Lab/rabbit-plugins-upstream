@@ -1,5 +1,5 @@
 ## Description: <br>
-Tencent Meeting helps agents schedule, update, cancel, inspect, and troubleshoot Tencent Meeting sessions, participants, recordings, transcripts, smart minutes, and recording permission requests. <br>
+Tencent Meeting provides meeting management and audio/video collaboration assistance for creating, updating, cancelling, searching, and inspecting meetings, participants, recordings, transcripts, smart minutes, invitees, and approved contact lookup workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,43 +11,42 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Employees and external collaborators use this skill to manage Tencent Meeting workflows, including creating or changing meetings, reviewing attendees, retrieving recordings or transcripts, and applying for recording access when permission is missing. <br>
+Employees and external users with a Tencent Meeting token use this skill to schedule and manage Tencent meetings, inspect meeting details, handle invitees and in-meeting member actions, retrieve recordings and transcripts, request recording access, and report tool issues with confirmation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The Tencent Meeting token enables meeting management and access to recordings or transcripts through Tencent's MCP service. <br>
-Mitigation: Use a token appropriate for the intended account and install the skill only where that level of meeting and recording access is acceptable. <br>
-Risk: Meeting changes, cancellations, feedback reports, and recording permission requests can affect real meetings or expose sensitive meeting context. <br>
-Mitigation: Review the skill's confirmation prompts before these actions, and require explicit user approval for sensitive operations. <br>
-Risk: Feedback or troubleshooting flows may involve privacy-sensitive meeting details. <br>
-Mitigation: Redact personal identifiers, meeting topics, links, participant details, and other private content before reporting or sharing feedback. <br>
-Risk: Tool calls may include client OS, agent, and model metadata. <br>
-Mitigation: Deploy only in environments where sending this client metadata with Tencent Meeting MCP calls is acceptable. <br>
-Risk: Local update preferences can change when or whether users see version update prompts. <br>
-Mitigation: Follow the documented update preference flow and respect confirmation prompts before optional updates unless the user has preauthorized automatic updates. <br>
+Risk: The skill uses a Tencent Meeting token and can access or manage meetings, invitees, recordings, transcripts, contact lookup results, and in-meeting controls. <br>
+Mitigation: Install only after confirming that the token permissions and meeting-management scope are acceptable for the intended account and workspace. <br>
+Risk: Meeting changes, recording permission requests, invitee changes, feedback submission, call actions, and kick actions can affect other users or expose sensitive meeting context. <br>
+Mitigation: Follow the artifact's confirmation flows before sensitive operations and display only the information needed for user approval. <br>
+Risk: Contact lookup inputs and meeting content can include personal or confidential information. <br>
+Mitigation: Use contact lookup only for invitation or call workflows, avoid pure personnel lookup, and apply the artifact's masking rules before user-facing feedback or reporting. <br>
+Risk: Automatic update preferences can allow later skill updates without another prompt. <br>
+Mitigation: Review update preferences before enabling automatic updates and use the local update preference tools to disable optional checks or snooze versions when needed. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wemeeting/tencent-meeting-skill) <br>
 - [Tencent Meeting homepage](https://meeting.tencent.com/) <br>
-- [Tencent Meeting MCP token endpoint](https://mcp.meeting.tencent.com/mcp/wemeet-open/v1) <br>
-- [API references](references/api_references.md) <br>
-- [Error dictionary](references/error_dictionary.md) <br>
-- [Feedback rules](references/feedback_rules.md) <br>
-- [Privacy policy](references/privacy_policy.md) <br>
-- [Version management](references/version_management.md) <br>
+- [Tencent Meeting AI skill token setup](https://meeting.tencent.com/ai-skill) <br>
+- [Tencent Meeting MCP endpoint](https://mcp.meeting.tencent.com/mcp/wemeet-open/v1) <br>
+- [ClawHub skill page](https://clawhub.ai/wemeeting/skills/tencent-meeting-skill) <br>
+- [API references](artifact/references/api_references.md) <br>
+- [Error dictionary](artifact/references/error_dictionary.md) <br>
+- [Feedback rules](artifact/references/feedback_rules.md) <br>
+- [Privacy policy](artifact/references/privacy_policy.md) <br>
+- [Version management](artifact/references/version_management.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured tool-call guidance with shell command examples] <br>
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown and text guidance with JSON tool-call inputs and responses] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses Tencent Meeting token configuration and may include trace identifiers returned by Tencent Meeting MCP calls.] <br>
+**Other Properties Related to Output:** [Requires python3 and TENCENT_MEETING_TOKEN; remote calls use the Tencent Meeting MCP endpoint.] <br>
 
 ## Skill Version(s): <br>
-1.0.11 (source: release evidence) <br>
+1.0.13 (source: server release metadata and artifact/config.json v1.0.13) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
