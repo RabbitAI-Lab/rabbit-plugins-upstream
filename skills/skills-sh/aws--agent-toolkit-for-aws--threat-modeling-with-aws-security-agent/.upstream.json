@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/threat-modeling-with-aws-security-agent",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "threat-modeling-with-aws-security-agent",
+  "branch": "main",
+  "pushedAt": "2026-08-01T22:52:40Z",
+  "contentHash": "0d4891ca156621b92c2539233d8fc8cf95b7de5355c9ec74ad8e8351c7dd2108",
+  "fetchedAt": "2026-08-02T09:27:17.032Z"
+}

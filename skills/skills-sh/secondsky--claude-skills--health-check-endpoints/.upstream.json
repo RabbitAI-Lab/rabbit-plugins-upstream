@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/health-check-endpoints",
+  "repo": "secondsky/claude-skills",
+  "skillId": "health-check-endpoints",
+  "branch": "main",
+  "pushedAt": "2026-07-25T17:35:51Z",
+  "contentHash": "0faf1f6f18874cbff952cfac422105dbbe4ce09e7ce4c94fec2a8e77cce65e9e",
+  "fetchedAt": "2026-08-02T09:26:58.458Z"
+}

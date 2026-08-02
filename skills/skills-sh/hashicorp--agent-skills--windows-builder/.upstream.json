@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/windows-builder",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "windows-builder",
+  "branch": "main",
+  "pushedAt": "2026-07-29T19:48:56Z",
+  "contentHash": "0e680cf81d024ac476eac88f1a4661110ff3dc3750ea0cb643e0eef5fc97a68b",
+  "fetchedAt": "2026-08-02T09:26:40.944Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/troubleshooting-application-failures",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "troubleshooting-application-failures",
+  "branch": "main",
+  "pushedAt": "2026-08-01T22:52:40Z",
+  "contentHash": "2cb9bcf7fcd8954e0ccddced76af060bf28206f25840b83294618f8fc41b0b72",
+  "fetchedAt": "2026-08-02T09:27:16.758Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/contract-analyzer",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "contract-analyzer",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "b4c32faeeac70372b0d740976ee5c9581817f04c6065e3cbf36532261575e1ce",
+  "fetchedAt": "2026-08-02T09:27:07.943Z"
+}

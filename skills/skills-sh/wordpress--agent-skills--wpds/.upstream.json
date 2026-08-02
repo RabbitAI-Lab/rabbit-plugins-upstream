@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wpds",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wpds",
+  "branch": "trunk",
+  "pushedAt": "2026-07-27T14:44:09Z",
+  "contentHash": "53204a6f16726e8c6491193edfe3eec5ddaae111583e826f9d7b705c65bfa10f",
+  "fetchedAt": "2026-08-02T09:27:17.481Z"
+}

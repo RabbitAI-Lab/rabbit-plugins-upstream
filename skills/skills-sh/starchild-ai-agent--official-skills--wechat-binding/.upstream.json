@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/wechat-binding",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "wechat-binding",
+  "branch": "main",
+  "pushedAt": "2026-08-02T08:18:21Z",
+  "contentHash": "dd51c6b2f87e795fdc1c805319675747950bbb2af7ed5d6bdc6adeca21792b01",
+  "fetchedAt": "2026-08-02T09:26:20.163Z"
+}
