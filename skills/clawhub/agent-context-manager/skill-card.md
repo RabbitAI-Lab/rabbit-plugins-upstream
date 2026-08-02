@@ -1,5 +1,5 @@
 ## Description: <br>
-Agent Context Manager helps agents create, organize, fetch, update, archive, clone, and version reusable AgentPMT context documents for shared knowledge such as brand guidance, SOPs, product facts, pricing rules, and policies. <br>
+Agent Context Manager helps agents create, organize, version, and reuse AgentPMT context documents such as brand guidelines, SOPs, product facts, pricing rules, and policy documents. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External developers and operators use this skill to let agents manage shared AgentPMT context documents that are reused across workflows. It is suited for maintaining brand voice, SOPs, product facts, pricing rules, policy documents, public templates, and version history from one controlled source. <br>
+Developers and agents use this skill to manage persistent AgentPMT context documents that workflows can fetch, update, archive, clone from templates, and restore from version history. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Create, update, archive, and request_unlock actions can persist changes to context documents that downstream agents and workflows may reuse. <br>
-Mitigation: Confirm the target document and intended change before allowing mutating actions, and review retained versions before or after large edits. <br>
-Risk: The skill depends on authenticated AgentPMT MCP or REST access for remote tool calls. <br>
-Mitigation: Use the referenced AgentPMT setup skill for credential handling and keep account secrets, wallet keys, signatures, and payment headers out of prompts and logs. <br>
+Risk: Agents can change shared operational guidance through document updates, restores, archives, or unlock workflows. <br>
+Mitigation: Check the document ID and expected revision, review content before applying edits, and use account permissions carefully. <br>
+Risk: Agents may rely on stale endpoint details, schemas, setup steps, or examples. <br>
+Mitigation: Refresh the skill when it is more than seven days past the documented last-updated date, and fetch live schema or instructions before production integrations. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/agentpmt/skills/agent-context-manager) <br>
-- [AgentPMT Marketplace Page](https://www.agentpmt.com/marketplace/agent-context-manager) <br>
-- [Agent Context Manager Schema](schema.md) <br>
-- [What AgentPMT Is](https://clawhub.ai/agentpmt/what-is-agentpmt) <br>
-- [AgentPMT Account MCP/REST Setup](https://clawhub.ai/agentpmt/agentpmt-account-mcp-rest-api-setup) <br>
+- [Agent Context Manager action schema](artifact/schema.md) <br>
+- [AgentPMT marketplace product](https://www.agentpmt.com/marketplace/agent-context-manager) <br>
+- [ClawHub skill page](https://clawhub.ai/agentpmt/skills/agent-context-manager) <br>
+- [agentpmt publisher profile](https://clawhub.ai/user/agentpmt) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance, API calls] <br>
+**Output Type(s):** [guidance, configuration, API calls, JSON, markdown] <br>
 **Output Format:** [Markdown guidance with JSON request examples and action schemas] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [AgentPMT tool and API calls return JSON responses; the skill itself declares no local command runtime.] <br>
+**Other Properties Related to Output:** [No local command runtime is declared; calls rely on AgentPMT-hosted remote tools.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release and frontmatter) <br>
+1.0.1 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

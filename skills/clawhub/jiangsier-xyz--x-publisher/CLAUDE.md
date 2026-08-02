@@ -6,27 +6,27 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is not an application — it is a **Claude Code skill package** published to the clawhub.ai registry (slug: `x-publisher`, see `_meta.json` and `.clawhub/origin.json`). It publishes tweets to X (Twitter) using the Tweepy library. The skill manifest and user-facing docs live in `SKILL.md`; the implementation lives in `scripts/`.
 
-Because this is a skill, the consumer's experience is `SKILL.md` → running `scripts/x_publisher.py`. When changing behavior, keep `SKILL.md` (usage, examples, limits tables) in sync with the script.
+Because this is a skill, the consumer's experience is `SKILL.md` → running `scripts/x_publisher`. When changing behavior, keep `SKILL.md` (usage, examples, limits tables) in sync with the script.
 
 ## Commands
 
-Dependency: `pip3 install tweepy --user`
+Dependency: `tweepy` (installed automatically into `.venv/` by the `scripts/x_publisher` / `scripts/post_thread` wrappers — no manual `pip install`).
 
 ```bash
 # Verify credentials + show account info (run this first in a new environment)
-python3 scripts/x_publisher.py verify
+scripts/x_publisher verify
 
 # Text-only tweet
-python3 scripts/x_publisher.py tweet "Hello, X!"
+scripts/x_publisher tweet "Hello, X!"
 
 # Tweet with media (repeat --media up to 4×; images or a single video)
-python3 scripts/x_publisher.py tweet "caption" --media /path/to/file.jpg
+scripts/x_publisher tweet "caption" --media /path/to/file.jpg
 
 # Reply / thread (links tweet to an existing tweet ID)
-python3 scripts/x_publisher.py tweet "reply text" --reply-to <tweet_id>
+scripts/x_publisher tweet "reply text" --reply-to <tweet_id>
 
 # Post a multi-tweet thread in one command (chains replies)
-python3 scripts/post_thread.py "First tweet." "Second tweet." "Third tweet."
+scripts/post_thread "First tweet." "Second tweet." "Third tweet."
 ```
 
 There is no test suite, linter, or build step. To validate a change, run `verify` and publish a test tweet.
@@ -49,7 +49,7 @@ Both surfaces must be authenticated with the same OAuth 1.0a credentials. `tweep
 `validate_credentials` runs `get_me` before every publish (auth guard + prints account info). Media is uploaded one file at a time, collecting `media_id_string`s, then passed as `media_ids` to `create_tweet`. On success the script prints a human-readable block followed by a JSON object on stdout (the JSON block is the contract for programmatic callers — see the integration example in `SKILL.md`). On failure, `publish_tweet` catches `Forbidden` / `Unauthorized` / `TooManyRequests` and returns a structured error dict instead of raising.
 
 ### Threading (`scripts/post_thread.py`)
-A reusable CLI that posts a multi-tweet thread by chaining replies — each tweet is `create_tweet(text, in_reply_to_tweet_id=<previous_id>)`. Tweet texts come from positional args (one per tweet) or, if none are given, one per line from stdin. It imports `get_client_data`, `get_user_info`, and `validate_credentials` from `x_publisher.py`, so both scripts share one auth path. For a single reply to an existing tweet, `x_publisher.py tweet ... --reply-to <id>` is enough; `post_thread.py` is for posting a fresh thread in one command.
+A reusable CLI that posts a multi-tweet thread by chaining replies — each tweet is `create_tweet(text, in_reply_to_tweet_id=<previous_id>)`. Tweet texts come from positional args (one per tweet) or, if none are given, one per line from stdin. It imports `get_client_data`, `get_user_info`, and `validate_credentials` from `x_publisher.py`, so both scripts share one auth path. For a single reply to an existing tweet, `scripts/x_publisher tweet ... --reply-to <id>` is enough; `post_thread.py` is for posting a fresh thread in one command.
 
 ## Skill-specific notes
 

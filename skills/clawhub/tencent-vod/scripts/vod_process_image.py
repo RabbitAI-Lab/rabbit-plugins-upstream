@@ -593,7 +593,7 @@ def main():
     understand_parser.add_argument('--session-context', help='来源上下文，透传用户请求信息')
     understand_parser.add_argument('--tasks-priority', type=int, help='任务优先级，范围 -10 到 10')
     understand_parser.add_argument('--ext-info', help='扩展信息（JSON 字符串，如指定模型名称）')
-    understand_parser.add_argument('--region', default='ap-guangzhou', help='地域，默认 ap-guangzhou')
+    understand_parser.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'), help='地域，默认 ap-guangzhou')
     understand_parser.add_argument('--no-wait', action='store_true',
                                    help='仅提交任务，不等待结果（默认自动等待）')
     understand_parser.add_argument('--max-wait', type=int, default=120, help='最大等待时间(秒)，默认 120')
@@ -663,7 +663,7 @@ def main():
                            help='子应用 ID（必填）')
     sr_parser.add_argument('--session-id', help='去重识别码，三天内相同 ID 的请求会返回错误')
     sr_parser.add_argument('--tasks-priority', type=int, help='任务优先级，范围 -10 到 10')
-    sr_parser.add_argument('--region', default='ap-guangzhou', help='地域，默认 ap-guangzhou')
+    sr_parser.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'), help='地域，默认 ap-guangzhou')
     sr_parser.add_argument('--no-wait', action='store_true',
                            help='仅提交任务，不等待结果（默认自动等待）')
     sr_parser.add_argument('--max-wait', type=int, default=300,

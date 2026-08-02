@@ -1,5 +1,5 @@
 ## Description: <br>
-Sogni Creative Agent Skill gives agents a CLI and skill surface for image, video, and music generation through Sogni AI's decentralized GPU network. <br>
+Sogni Creative Agent Skill gives agents a CLI and hosted workflow surface for generating and editing images, videos, and music on Sogni AI's decentralized GPU network. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,42 +11,46 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers and agent users use this skill to plan and execute Sogni-powered creative workflows, including prompt-to-image, image editing, video generation, music generation, loop reels, personas, and durable multi-step media workflows. <br>
+Developers and agent users use this skill to connect agent runtimes to Sogni media generation, editing, hosted workflows, model discovery, personas, memories, and reusable creative session state. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill uses a networked Sogni media-generation CLI with a Sogni API key and may spend account credits or use subscription entitlement. <br>
-Mitigation: Install only for users who intend to use Sogni services, keep credentials in the documented credentials file or environment, and review balance or billing-mode guidance before paid generation. <br>
-Risk: Hosted modes can upload selected local media to Sogni services for generation, editing, or multi-step workflows. <br>
-Mitigation: Use direct CLI modes for private media that must stay local, and upload only media the user has approved for Sogni processing. <br>
-Risk: Saved personas, memories, personality settings, face photos, and voice clips can persist locally and may represent sensitive people or preferences. <br>
-Mitigation: Store persona and voice assets only with consent, remove saved personas or memories when no longer needed, and avoid using voice clips or likenesses without permission. <br>
-Risk: The skill can update its installed code through self-update behavior. <br>
-Mitigation: Run self-update only after explicit approval and review the version change or changelog before relying on the upgraded package. <br>
+Risk: The skill can upload prompts and selected local media to Sogni API-backed services. <br>
+Mitigation: Use hosted workflow or chat modes only when the user explicitly accepts the privacy tradeoff, and prefer direct CLI mode for media that should stay local. <br>
+Risk: Persona photos, voice clips, memories, and last-render state may persist under ~/.config/sogni. <br>
+Mitigation: Review stored Sogni configuration and avoid saving biometric references unless persistent identity or voice reuse is intentional. <br>
+Risk: Mature or no-filter workflows and broad hosted modes can increase safety, privacy, and cost exposure. <br>
+Mitigation: Require explicit user intent before mature --no-filter workflows or broad hosted workflow/chat modes, and review cost-relevant settings before execution. <br>
+Risk: The skill includes self-update and reminder controls that can modify installed code or update state. <br>
+Mitigation: Run self-update or --snooze-update only after an explicit user request and post-update verification. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/krunkosaurus/skills/sogni-creative-agent-skill) <br>
-- [Sogni AI homepage](https://sogni.ai) <br>
-- [Hosted API guide](artifact/references/hosted-api.md) <br>
-- [Model reference](artifact/references/models.md) <br>
-- [Personas and memory guide](artifact/references/personas-memory.md) <br>
-- [Video editing guide](artifact/references/video-editing.md) <br>
-- [Video prompting guide](artifact/references/video-prompting.md) <br>
-- [Loop maker guide](artifact/references/loop-maker.md) <br>
-- [OpenClaw configuration guide](artifact/references/openclaw-config.md) <br>
+- [ClawHub skill page](https://clawhub.ai/krunkosaurus/skills/sogni-creative-agent-skill) <br>
+- [Publisher profile](https://clawhub.ai/user/krunkosaurus) <br>
+- [Sogni homepage](https://sogni.ai) <br>
+- [Sogni model catalog API](https://api.sogni.ai/v1/model-catalog) <br>
+- [Hosted API reference](references/hosted-api.md) <br>
+- [Loop maker reference](references/loop-maker.md) <br>
+- [Models reference](references/models.md) <br>
+- [OpenClaw configuration reference](references/openclaw-config.md) <br>
+- [Personas and memory reference](references/personas-memory.md) <br>
+- [Private mature video reference](references/private-mature-video.md) <br>
+- [Seamless tiling reference](references/seamless-tiling.md) <br>
+- [Video editing reference](references/video-editing.md) <br>
+- [Video prompting reference](references/video-prompting.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and configuration instructions] <br>
+**Output Format:** [Markdown guidance with shell commands, JSON-capable command output, configuration snippets, and generated media file paths or URLs] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct an agent to create local media files, inspect JSON command output, or call Sogni-hosted generation workflows.] <br>
+**Other Properties Related to Output:** [The skill can produce local image, video, and audio files through the Sogni CLI and can use hosted workflow APIs when explicitly requested.] <br>
 
 ## Skill Version(s): <br>
-3.16.1 (source: frontmatter metadata, CHANGELOG, and server release evidence) <br>
+3.21.0 (source: server release metadata and artifact/version.mjs) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -152,9 +152,8 @@ siluzan-tso accounts-digest -m Google --start 2026-07-20 --end 2026-07-20 \
 ## stats — 查询投放消耗数据
 
 > **数据时效性**：
-> - **Google**：走 `account-spend-overview`（2026-05 起），后端按日期窗口分流——
->   - 窗口完全在历史 → `database` 模式：含余额、状态、币种、账户名、当期展点消等完整字段；
->   - 窗口包含今天 → `googleCombined` 模式：只返回实时聚合的展点消（**没有**余额/状态/币种/账户名）。
+> - **Google**：走 `account-spend-overview`；`--start` / `--end` 日历日按 **UTC+8** 转为 `YYYY-MM-DDTHH:mm:ss+08:00` 再请求（起 00:00:00、止 23:59:59，含今天时 end 截到当前时刻）。勿传裸 `YYYY-MM-DD`（易被当成 UTC 切窗）。
+>   - 窗口完全在历史 → `database` 模式；窗口含今天 → `googleCombined` 模式（仅实时消耗，无余额/状态/币种/账户名）。
 > - **TikTok / Yandex / BingV2 / Kwai**：走旧版 `accountsoverview`，每日凌晨同步昨天数据，**不能查今天**。判断这几家的「今天/当天/今日消耗」仍需走 `google-analysis(-batch) --sections overview`（仅 Google）。
 > - 完整时效性表见 `references/analytics/account-analytics.md` 顶部。
 

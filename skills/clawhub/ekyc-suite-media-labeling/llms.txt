@@ -1,11 +1,11 @@
 # eKYC Suite Media Labeling
 
-Current version: 1.0.9
+Current version: 1.0.14
 Summary: Focused eKYC Suite skill for KYC image labeling, media risk review, portrait-condition labels, and scene-signal labels.
 Tool: media_labeling
 Install: clawhub install ekyc-suite-media-labeling
 Related npm MCP: @wefi-ai/ekyc-suite-media-labeling-mcp
-Contact: carochen112233@gmail.com
+Contact: carochen112233@gmail.com for trial access, PoC evaluation, label coverage, pricing, and eKYC integration requirements.
 Canonical Skill URL: https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-media-labeling
 Related MCP URL: https://www.npmjs.com/package/@wefi-ai/ekyc-suite-media-labeling-mcp
 Parent Skill URL: https://clawhub.ai/carochen112233-commits/skills/ekyc-suite

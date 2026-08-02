@@ -1,5 +1,5 @@
 ## Description: <br>
-企业出海全球合规指引专项助手，帮助中国企业梳理主要海外投资目的地的用工、薪酬、税务、转让定价、数据跨境、反洗钱、反腐败、知识产权和外资安全审查等合规事项。 <br>
+Provides conversational guidance for Chinese companies assessing overseas employment, payroll, tax, transfer pricing, data-transfer, and related compliance risks across major investment destinations using public authoritative sources. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,41 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External business, tax, legal, HR, and compliance teams use this skill to ask scenario-based questions about overseas expansion and to draft practical checklists for country labor rules, payroll and tax, transfer pricing, data export, investment entry, anti-corruption, anti-money-laundering, and IP risk. It is a guidance aid and should be reviewed against current official sources and qualified local professional advice before action. <br>
+External users, business teams, and compliance practitioners use this skill to triage cross-border operating questions, identify likely employment, tax, data-transfer, and overseas risk issues, and assemble next-step checklists before seeking qualified local professional advice. <br>
 
 ### Deployment Geography for Use: <br>
-Global, with source material focused on China outbound investment and examples for the United States, Saudi Arabia, Indonesia, Mexico, and Brunei. <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can send compliance, tax, payroll, and business-risk questions to a third-party backend at mcp.aitaxs.top. <br>
-Mitigation: Use it only when that data handling is acceptable for the organization; avoid entering sensitive company identifiers or confidential facts unless approved. <br>
-Risk: The skill stores API credentials locally under the tax policy client configuration area. <br>
-Mitigation: Review local credential storage before installation, restrict access to the user profile, and remove stored credentials when the skill is no longer used. <br>
-Risk: The init_agent.py helper can modify MCP client configuration when run intentionally or when TAX_ENABLE_AUTOSETUP is enabled. <br>
-Mitigation: Do not run config/init_agent.py or set TAX_ENABLE_AUTOSETUP=1 unless client configuration changes are intended; review backups and resulting MCP server entries. <br>
-Risk: Cross-border compliance guidance may be incomplete or outdated for a specific jurisdiction or transaction. <br>
-Mitigation: Verify outputs against current official sources and qualified local legal, tax, HR, or compliance advisers before operational use. <br>
+Risk: Sensitive compliance questions and risk scenarios may be sent to mcp.aitaxs.top and, during fallback behavior, public search engines. <br>
+Mitigation: Do not submit confidential, personal, or regulated data unless the destination services are approved for that data; use sanitized scenarios where possible. <br>
+Risk: Local API keys, anonymous identifiers, cache entries, and raw query logs may be written on the host. <br>
+Mitigation: Restrict filesystem access, review and clear local client data as needed, and manage API keys according to the deploying organization's secrets policy. <br>
+Risk: Auto-setup behavior can modify MCP client configuration files when explicitly enabled. <br>
+Mitigation: Leave TAX_ENABLE_AUTOSETUP disabled unless automatic client configuration is intended; review generated configuration changes and backups before use. <br>
+Risk: The packaged backend and offline tools may not fully match the advertised global-compliance scope. <br>
+Mitigation: Treat responses as triage rather than legal or tax advice, verify source citations, and route material decisions to qualified local professionals. <br>
+Risk: Server evidence marks the release verdict as suspicious because of under-disclosed cloud forwarding, local persistence, host-client probing, and mismatched tax-policy tooling. <br>
+Mitigation: Perform an installation review focused on data flows, local persistence, client probing, and whether the available tools meet the intended compliance use case. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-global-compliance) <br>
 - [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
-- [SkillHub topic workflow](https://skillhub.cn/skills/tax-global-compliance) <br>
-- [Tax policy knowledge matrix](https://skillhub.cn/skills/tax-policy-knowledge) <br>
+- [Global compliance self-check page](https://mcp.aitaxs.top/web/topic_workflow_global_compliance.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Tax policy knowledge skill](https://skillhub.cn/skills/tax-policy-knowledge) <br>
+- [Cross-border tax architecture skill](https://skillhub.cn/skills/tax-crossborder) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration, Shell commands] <br>
-**Output Format:** [Conversational text and Markdown checklists, with optional local configuration snippets or shell commands for MCP setup.] <br>
+**Output Type(s):** [text, markdown, guidance, shell commands, configuration] <br>
+**Output Format:** [Markdown or plain-text guidance, JSON-like tool results, and local HTML workflow output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use a third-party MCP service for policy Q&A, risk checks, tax calculations, and knowledge-base metadata; includes offline reference scripts for limited fallback guidance.] <br>
+**Other Properties Related to Output:** [Outputs are compliance triage and workflow guidance; tax and legal conclusions should be verified against authoritative sources and qualified local professional advice.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: frontmatter and server-resolved release metadata) <br>
+3.15.7 (source: server release and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

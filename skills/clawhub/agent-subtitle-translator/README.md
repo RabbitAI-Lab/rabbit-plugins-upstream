@@ -1,8 +1,8 @@
-<p align="center">
-  <img src="assets/icon-large.svg" alt="Agent Subtitle Translator logo" width="180">
-</p>
-
 # Agent Subtitle Translator Skill
+
+<p align="center">
+  <img src="assets/icon-large.png" alt="Agent Subtitle Translator logo" width="180">
+</p>
 
 [简体中文](README.zh-CN.md)
 

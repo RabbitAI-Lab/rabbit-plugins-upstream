@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/clawtip-skill",
   "slug": "clawtip-skill",
   "ownerHandle": null,
-  "version": "1.0.10",
-  "updatedAt": 1784667484893,
-  "contentHash": "d9a38bf50caff790a504e8aae3d0db32ab208c8941188eaef1231fbaf8af786a",
-  "fetchedAt": "2026-07-26T18:08:56.305Z"
+  "version": "1.0.11",
+  "updatedAt": 1785252899527,
+  "contentHash": "016d0bc66bfdbc2b3ffb33b7954437faca74c07fc2a781b874ee6e12461ee972",
+  "fetchedAt": "2026-08-02T09:43:50.492Z"
 }

@@ -35,7 +35,7 @@ except ImportError:
 
 
 def get_credential():
-    """Get Tencent Cloud credentials"""
+    """Get Tencent Cloud credentials. Falls back to loading from dotenv files when environment variables are missing."""
     secret_id = os.environ.get("TENCENTCLOUD_SECRET_ID")
     secret_key = os.environ.get("TENCENTCLOUD_SECRET_KEY")
 
@@ -73,14 +73,14 @@ def get_client(region="ap-guangzhou"):
 # Model version mapping
 MODEL_VERSIONS = {
     "GV": ["3.1", "3.1-fast", "3.1-lite"],
-    "Hailuo": ["02", "2.3", "2.3-fast"],
+    "Hailuo": ["02", "2.3", "2.3-fast", "H3"],
     "Kling": ["1.6", "2.0", "2.1", "2.5", "O1", "2.6", "3.0", "3.0-Omni", "3.0-turbo"],
     "Jimeng": ["3.0pro"],
     "Vidu": ["q2", "q2-turbo", "q2-pro", "q3", "q3-pro", "q3-turbo", "q3-mix", "q3-drama"],
     "Hunyuan": ["1.5", "3d_2.0"],
     "Mingmou": ["1.0"],
     "OS": ["2.0"],
-    "Seedance": ["1.0-pro", "1.0-lite-i2v", "1.0-pro-fast", "1.5-pro"],
+    "Seedance": ["1.0-pro-fast", "1.5-pro"],
     "PixVerse": ["v5.6", "v6", "c1"],
 }
 
@@ -98,10 +98,116 @@ MODEL_DEFAULT_VERSION = {
 }
 
 
+# ── Hailuo H3 multimodal input constraints (released 2026-07-31) ──────
+# The API validates these too; checking here surfaces a clear message
+# instead of failing only after submission.
+#
+# The documented limits are three independent caps, not one shared total:
+#     images: first ≤ 1, last ≤ 1, reference ≤ 9
+#     videos: ≤ 3        audio: ≤ 3
+# Counting must therefore be per *usage*, not per Category — otherwise a
+# legal combination such as "9 reference images + 1 last frame" would be
+# wrongly rejected as exceeding the image cap.
+H3_LIMITS = {
+    "Image": {"formats": "JPG/JPEG/PNG/WEBP/HEIC/HEIF", "size_mb": 30},
+    "Video": {"max": 3, "formats": "MP4/MOV", "size_mb": 50},
+    "Audio": {"max": 3, "formats": "WAV/MP3", "size_mb": 15},
+}
+H3_USAGE_LIMITS = {"FirstFrame": 1, "LastFrame": 1}
+H3_REFERENCE_IMAGE_MAX = 9
+
+
+def _iter_h3_file_entries(args):
+    """Yield (Category, Usage) pairs; None means malformed JSON (reported later).
+
+    Note that --file-id/--file-url and --file-infos are mutually exclusive at
+    request-assembly time (the single-file form wins and --file-infos is
+    silently dropped). The same precedence is applied here so validation sees
+    exactly what will be submitted.
+    """
+    entries = []
+    if args.file_id or args.file_url:
+        entries.append((args.file_category or "Image", args.file_usage or "FirstFrame"))
+    elif args.file_infos:
+        try:
+            for fi in json.loads(args.file_infos):
+                entries.append((fi.get("Category", "Image"), fi.get("Usage", "FirstFrame")))
+        except (json.JSONDecodeError, TypeError):
+            return None
+
+    # The last frame uses the dedicated LastFrameFileId/LastFrameUrl fields,
+    # so it coexists with FileInfos rather than competing with it.
+    if args.last_frame_file_id or args.last_frame_url:
+        entries.append(("Image", "LastFrame"))
+
+    return entries
+
+
+def validate_hailuo_h3_inputs(args):
+    """Validate the Hailuo H3 input combination; exit on violation."""
+    if args.model != "Hailuo" or args.model_version != "H3":
+        return
+
+    # Passing both forms silently discards --file-infos; fail fast instead
+    if (args.file_id or args.file_url) and args.file_infos:
+        print("Error: --file-id/--file-url cannot be combined with --file-infos")
+        print("       The single-file form takes precedence and --file-infos would be "
+              "silently ignored; use only one of them")
+        sys.exit(1)
+
+    entries = _iter_h3_file_entries(args)
+    if entries is None:
+        return
+
+    unknown = sorted({c for c, _ in entries if c not in H3_LIMITS})
+    if unknown:
+        print(f"Error: unsupported input category for Hailuo H3: {', '.join(unknown)}")
+        print(f"       Available categories: {', '.join(H3_LIMITS)}")
+        sys.exit(1)
+
+    # Independent per-usage caps (first / last frame ≤ 1 each, reference ≤ 9)
+    for usage, cap in H3_USAGE_LIMITS.items():
+        n = sum(1 for c, u in entries if c == "Image" and u == usage)
+        if n > cap:
+            label = "first frame" if usage == "FirstFrame" else "last frame"
+            print(f"Error: Hailuo H3 accepts at most {cap} {label}, got {n}")
+            sys.exit(1)
+
+    ref_images = sum(1 for c, u in entries if c == "Image" and u == "Reference")
+    if ref_images > H3_REFERENCE_IMAGE_MAX:
+        print(f"Error: Hailuo H3 accepts at most {H3_REFERENCE_IMAGE_MAX} reference "
+              f"images, got {ref_images}")
+        print(f"       Image limits: formats {H3_LIMITS['Image']['formats']}, "
+              f"max {H3_LIMITS['Image']['size_mb']} MB per file")
+        sys.exit(1)
+
+    # Videos / audio: at most 3 each
+    for cat in ("Video", "Audio"):
+        n = sum(1 for c, _ in entries if c == cat)
+        cap = H3_LIMITS[cat]["max"]
+        if n > cap:
+            print(f"Error: Hailuo H3 accepts at most {cap} {cat} input(s), got {n}")
+            print(f"       {cat} limits: formats {H3_LIMITS[cat]['formats']}, "
+                  f"max {H3_LIMITS[cat]['size_mb']} MB per file")
+            sys.exit(1)
+
+    # i2va (first/last frame) and r2va (reference video/audio) are exclusive
+    usages = {u for _, u in entries}
+    has_i2va = bool({"FirstFrame", "LastFrame"} & usages)
+    has_r2va = any(c in ("Video", "Audio") and u == "Reference" for c, u in entries)
+    if has_i2va and has_r2va:
+        print("Error: Hailuo H3 image-to-video (i2va, first/last frame) and multimodal "
+              "reference generation (r2va, reference video/audio) are mutually exclusive")
+        print("       Choose one: either first/last frame images, or reference video/audio")
+        sys.exit(1)
+
+
 # NOCA:CCN(complex function with multiple execution paths, splitting would reduce readability)
 def create_video_task(args):
     """Create an AIGC video generation task"""
     client = get_client(args.region)
+
+    validate_hailuo_h3_inputs(args)
 
     req = models.CreateAigcVideoTaskRequest()
 
@@ -484,10 +590,10 @@ Examples:
     create_parser.add_argument('--file-url', help='URL of the reference image / first frame')
     create_parser.add_argument('--file-infos',
                                help='JSON array of multiple reference images, format: [{"Type":"Url","Url":"...","Category":"Image","Usage":"Reference","Text":"pic1","ReferenceType":"subject"}]; supports all SDK fields: Type/FileId/Url/Base64/Category/Usage/Text/ReferenceType/ObjectId/VoiceId/KeepOriginalSound')
-    create_parser.add_argument('--file-category', choices=['Image', 'Video'],
-                               help='Category of the single reference file (Image/Video); used by Kling motion_control/avatar_i2v scenes to distinguish image vs video')
-    create_parser.add_argument('--file-usage', choices=['FirstFrame', 'Reference'],
-                               help='Usage of the single reference file: FirstFrame / Reference; used by PixVerse, Vidu, Kling multi-mode disambiguation')
+    create_parser.add_argument('--file-category', choices=['Image', 'Video', 'Audio'],
+                               help='Category of the single reference file (Image/Video/Audio); used by Kling motion_control/avatar_i2v scenes to distinguish image vs video; Audio is for Hailuo H3 multimodal reference generation')
+    create_parser.add_argument('--file-usage', choices=['FirstFrame', 'LastFrame', 'Reference'],
+                               help='Usage of the single reference file: FirstFrame / LastFrame / Reference; used by PixVerse, Vidu, Kling multi-mode disambiguation; Hailuo H3 reference video/audio uses Reference')
     create_parser.add_argument('--file-text', help='Name/description of the single reference file (PixVerse multi-image subject reference only; used as @name in the Prompt)')
     create_parser.add_argument('--reference-type', choices=['subject', 'background', 'mask'],
                                help='Reference type of the single file: subject (PixVerse video edit) / background (PixVerse video edit) / mask; GV/Kling also applicable')

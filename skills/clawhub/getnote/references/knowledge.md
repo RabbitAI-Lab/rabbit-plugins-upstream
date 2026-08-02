@@ -15,7 +15,15 @@ GET https://openapi.biji.com/open/api/v1/resource/knowledge/list?page=1
 参数：
 - `page`: 页码，从 1 开始，默认 1（固定每页 20 条）
 
-返回：`topics[]`、`has_more`、`total`
+返回：`topics[]`、`has_more`、`total`。该列表包含用户拥有的三类知识库：
+
+| scope | 含义 | 保存笔记时是否可作为 topic_id |
+|---|---|---|
+| `DEFAULT` | 普通知识库 | 是 |
+| `BOOKSPACE` | 书籍知识库 | 是 |
+| `CUSTOMER` | 客户档案 | 是 |
+
+当用户说“存到某个知识库”时，先拉取完整列表并按 `name` 与 `scope` 确认目标，再把对应 `topic_id` 放入 `/note/save`；不要只过滤 `DEFAULT`。
 
 每个 topic 包含：
 - `topic_id`：知识库 ID（字符串，后续所有操作接口的 `topic_id` 参数均传此值）
@@ -123,6 +131,8 @@ Content-Type: application/json
 ---
 
 ## 从知识库移除笔记
+
+> ⚠️ **必须确认**：调用接口前展示知识库名称和要移除的笔记标题，说明只会解除知识库归属、不会删除笔记；只有用户明确确认后才能执行。
 
 ```
 POST https://openapi.biji.com/open/api/v1/resource/knowledge/note/remove

@@ -4,45 +4,20 @@ name: ai-news-tool-free
 version: 1.0.0
 displayName: AI新闻工具-免费版
 summary: "每日新闻获取工具,支持按日期查询、热点排行与详情阅读,适合个人用户。每日新闻获取工具,通过 API 获取每日新闻摘要与详情,支持按日期查询、"
-license: Proprietary
+license: MIT
 edition: free
-description: '每日新闻获取工具,通过 API 获取每日新闻摘要与详情,支持按日期查询、
-
-  热点新闻排行、新闻详情阅读与分类筛选.
-  核心能力:
-
-  - 获取每日新闻列表与摘要
-
-  - 按日期查询历史新闻
-
-  - 热点新闻排行
-
-  - 新闻详情阅读(含正文与影响分析)
-
-  - 按分类筛选新闻
-
-  适用场景:
-
-  - 个人用户每日新闻浏览
-
-  - 热点话题追踪
-
-  - 信息快速获取
-
-  差异化:免费版提供核心新闻获取与浏览能力,适合个人用户日常使用.
-  适用关键词: 新闻, 每日新闻, 日报, 热点新闻, 新闻摘要, 新闻详情'
+description: "每日新闻获取工具,通过 API 获取每日新闻摘要与详情,兼容按日期查询、. 适用于需要ai news tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要ai news tool相关能力的开发场景,包含结构化的工作流程和配置指引. 该工具经过深度差异化处置,针对用户反馈和使用痛点进行了调优改进,提升了实用性和可操作性."
 tags:
   - 研究工具
+  - news
+  - automation
+  - productivity
+  - developer-tools
   - 新闻资讯
   - 信息收集
   - 搜索
   - 检索
   - 工具
-  - api
-  - https
-  - date
-  - curl
-  - news-api
 tools:
   - read
   - exec
@@ -50,6 +25,8 @@ tools:
   - grep
 homepage: ""
 category: "Knowledge"
+pricing_tier: free
+
 ---
 # AI新闻工具(免费版)
 
@@ -148,7 +125,7 @@ example.com/api/v1/daily?date=${DATE}"
 
 ### 场景三:查看新闻详情
 
-用户输入:"看新闻 1"、"读一下第 3 条"、"第一条新闻详情"
+用户输入:"看新闻 1"、"读一下第 3 条"、"领先条新闻详情"
 
 ```bash
 # 从上下文获取当前新闻列表
@@ -295,13 +272,13 @@ data.articles | sort_by(-.heat) | .[] | {title, heat}'
 TODAY=$(date +%Y-%m-%d)
 example.com/api/v1/daily?date=${TODAY}" | \
   jq -r '.data.heat) | .[0:5] | .[] | "[\(.heat)] \(.title)"' \
-  > ~/news-summary-${TODAY}.txt
+  > ./news-summary-${TODAY}.txt
 # ...
-echo "新闻摘要已保存到 ~/news-summary-${TODAY}.txt"
-cat ~/news-summary-${TODAY}.txt
+echo "新闻摘要已保存到 ./news-summary-${TODAY}.txt"
+cat ./news-summary-${TODAY}.txt
 ```
 
-## 最佳实践
+## 优秀实践
 
 1. **日期格式统一**:始终使用 YYYY-MM-DD 格式(如 2026-03-10).
 2. **控制调用频率**:避免频繁请求 API,建议缓存结果.
@@ -339,9 +316,9 @@ python -c "import re; print(re.sub(r'<[^>]+>', '', '<p>正文</p>'))"
 ```bash
 # 缓存当日新闻到本地
 TODAY=$(date +%Y-%m-%d)
-example.com/api/v1/daily?date=${TODAY}" > ~/news-cache-${TODAY}.json
+example.com/api/v1/daily?date=${TODAY}" > ./news-cache-${TODAY}.json
 # 后续从缓存读取
-jq '.data.articles' ~/news-cache-${TODAY}.json
+jq '.data.articles' ./news-cache-${TODAY}.json
 ```
 
 ## 依赖说明
@@ -366,7 +343,7 @@ jq '.data.articles' ~/news-cache-${TODAY}.json
 - 新闻 API:免费版使用公共接口,无需 API Key
 
 ### 可用性分类
-- **分类**: MD+EXEC(纯Markdown指令,部分功能需exec命令行执行)
+- **分类**: MD+EXEC模式纯Markdown指令,部分功能需exec命令行执行)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent完成操作
 
 ## 错误处理

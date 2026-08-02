@@ -1,5 +1,5 @@
 ## Description: <br>
-Ai Assistant analyzes long commercial and legal documents to extract structure, assumptions, risks, version differences, and decision-focused improvement suggestions. <br>
+Ai Assistant helps agents analyze long business, legal, proposal, and negotiation documents by extracting document purpose, core logic, assumptions, risks, version differences, and structure improvements. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, developers, and business reviewers use this skill to prepare structured reviews of contracts, legal memoranda, proposals, policies, negotiation drafts, and multi-version document changes. It supports risk spotting and decision preparation but does not replace licensed legal advice. <br>
+External users and developers use this skill to prepare review material for long commercial or legal documents, including risk lists, assumption checks, summaries, structure improvements, and version comparisons. It supports review preparation and decision support, but it does not replace professional legal or tax advice. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requests broad command execution for document handling. <br>
-Mitigation: Use it only in an agent environment where command execution is disabled or requires explicit approval. <br>
-Risk: The skill accepts callback URLs that could receive sensitive document-derived information. <br>
-Mitigation: Use callback URLs only when you control the destination and understand what data will be sent. <br>
-Risk: The skill analyzes sensitive legal and business documents and may produce incorrect or overconfident conclusions. <br>
-Mitigation: Treat outputs as review preparation, require human review, and escalate legal, tax, compliance, or signing decisions to qualified counsel. <br>
+Risk: The skill requests broad read, write, command-execution, API, and credential-related capabilities for a document-analysis workflow. <br>
+Mitigation: Install it only in an environment where file writes, API calls, credential access, and shell commands require explicit user approval or are sandboxed to non-sensitive files. <br>
+Risk: The skill is intended for high-risk business and legal documents and may produce incorrect, incomplete, or overly confident analysis. <br>
+Mitigation: Use outputs as review preparation only; require human review and professional counsel confirmation before relying on legal, tax, compliance, or signing decisions. <br>
+Risk: Sensitive contracts, credentials, or private business documents could be exposed if the host agent grants unnecessary access. <br>
+Mitigation: Avoid providing sensitive material unless the runtime enforces least-privilege file access, command restrictions, and approval gates for external API calls. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-assistant) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, shell commands] <br>
-**Output Format:** [Markdown with structured analysis sections] <br>
+**Output Type(s):** [Text, Markdown, Guidance, Shell commands, Configuration] <br>
+**Output Format:** [Structured Markdown analysis with sections, tables, checklists, and recommended next steps] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include document assessments, core-logic summaries, risk lists, structure-improvement suggestions, version comparisons, uncertainty notes, and recommended next steps.] <br>
+**Other Properties Related to Output:** [May include file-oriented guidance or shell-command proposals when the host agent grants those tools.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+1.0.3 (source: ClawHub server release metadata); artifact frontmatter lists 1.0.0 <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

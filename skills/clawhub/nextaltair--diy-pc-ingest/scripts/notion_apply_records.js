@@ -7,7 +7,7 @@
  * - upserts by configured keys
  * - patches only missing fields unless overwrite=true
  *
- * All Notion IDs are passed as CLI arguments (see TOOLS.md for values):
+ * All Notion IDs are passed as CLI arguments (see the workspace AGENTS.md ## Tools section for values):
  *   --pcconfig-dsid / --pcconfig-dbid
  *   --pcinput-dsid  / --pcinput-dbid
  *   --storage-dsid  / --storage-dbid
@@ -22,7 +22,8 @@ const path = require('path');
 const { execFileSync } = require('node:child_process');
 
 const DEFAULT_NOTION_VERSION = '2025-09-03';
-const NOTIONCTL_PATH = path.resolve(__dirname, '..', '..', 'notion-api-automation', 'scripts', 'notionctl.mjs');
+const DEFAULT_NOTIONCTL_PATH = path.resolve(__dirname, '..', '..', 'notion-api-automation', 'scripts', 'notionctl.mjs');
+const NOTION_AUTH_ENV_KEYS = ['NOTION_API_KEY', 'NOTION_TOKEN', 'NOTION_API_TOKEN', 'NOTION_API_KEY_FILE'];
 
 function die(msg) {
   process.stderr.write(String(msg) + '\n');
@@ -67,6 +68,28 @@ function notionVersion() {
   return (process.env.NOTION_VERSION || DEFAULT_NOTION_VERSION).trim();
 }
 
+function notionctlPath() {
+  return process.env.NOTIONCTL_PATH || DEFAULT_NOTIONCTL_PATH;
+}
+
+function redactKnownSecrets(text) {
+  let out = String(text || '');
+  for (const k of NOTION_AUTH_ENV_KEYS) {
+    const value = process.env[k];
+    if (!value || k.endsWith('_FILE')) continue;
+    out = out.split(String(value)).join(`[redacted:${k}]`);
+  }
+  return out;
+}
+
+function authSetupHint() {
+  return [
+    'Configure Notion auth with NOTION_API_KEY/NOTION_TOKEN,',
+    'or set skills.entries["diy-pc-ingest"].apiKey to an OpenClaw SecretRef.',
+    'The SecretRef provider can be env, file, exec, or another OpenClaw-supported secure provider.',
+  ].join(' ');
+}
+
 function safeEnv(extra = {}) {
   const env = {
     PATH: process.env.PATH || '',
@@ -77,16 +100,17 @@ function safeEnv(extra = {}) {
     SYSTEMROOT: process.env.SYSTEMROOT || '',
     WINDIR: process.env.WINDIR || '',
   };
-  for (const k of ['NOTION_API_KEY', 'NOTION_TOKEN', 'NOTION_API_KEY_FILE']) {
+  for (const k of NOTION_AUTH_ENV_KEYS) {
     if (process.env[k]) env[k] = process.env[k];
   }
+  if (process.env.NOTIONCTL_PATH) env.NOTIONCTL_PATH = process.env.NOTIONCTL_PATH;
   return { ...env, ...extra };
 }
 
 async function notionReq(method, apiPath, body) {
   const p = String(apiPath).startsWith('/v1/') ? String(apiPath) : `/v1${String(apiPath).startsWith('/') ? '' : '/'}${String(apiPath)}`;
   const args = [
-    NOTIONCTL_PATH,
+    notionctlPath(),
     'api',
     '--compact',
     '--method', String(method).toUpperCase(),
@@ -96,9 +120,18 @@ async function notionReq(method, apiPath, body) {
 
   const env = safeEnv({ NOTION_VERSION: notionVersion() });
 
-  const out = execFileSync('node', args, { encoding: 'utf-8', env }).trim();
+  let out = '';
+  try {
+    out = execFileSync('node', args, { encoding: 'utf-8', env }).trim();
+  } catch (err) {
+    const stdout = err?.stdout ? String(err.stdout).trim() : '';
+    const stderr = err?.stderr ? String(err.stderr).trim() : '';
+    const message = err?.message ? String(err.message) : String(err);
+    const detail = redactKnownSecrets([stdout, stderr, message].filter(Boolean).join('\n'));
+    throw new Error(`notionctl api execution failed. ${authSetupHint()}${detail ? `\n${detail}` : ''}`);
+  }
   const obj = out ? JSON.parse(out) : {};
-  if (!obj.ok) throw new Error(`notionctl api not ok: ${out}`);
+  if (!obj.ok) throw new Error(`notionctl api not ok. ${authSetupHint()}\n${redactKnownSecrets(out)}`);
   return obj.result || {};
 }
 
@@ -351,7 +384,7 @@ function requireIds(ids, target) {
   if (!t.data_source_id) missing.push(`--${target}-dsid`);
   if (!t.database_id) missing.push(`--${target}-dbid`);
   if (missing.length) {
-    die(`Missing Notion IDs: ${missing.join(', ')}. Check TOOLS.md for the values.`);
+    die(`Missing Notion IDs: ${missing.join(', ')}. Check the workspace AGENTS.md ## Tools section for the values.`);
   }
 }
 

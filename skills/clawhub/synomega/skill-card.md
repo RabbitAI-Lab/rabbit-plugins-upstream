@@ -1,5 +1,5 @@
 ## Description: <br>
-Retrosynthesis helper for legitimate cheminformatics tasks using the synomega Python package, including single-step reactant prediction, multi-step route planning, and synthesizability scoring for target molecules provided as SMILES. <br>
+Synomega Skill helps agents use the local synomega Python package to predict single-step reactants, plan multi-step retrosynthesis routes, and compute SynScore for target molecules provided as SMILES. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,32 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers, chemistry researchers, and cheminformatics users can use this skill to ask an agent for candidate disconnections, synthesis route plans, or makeability scores for specific target molecules. The host safety policy remains responsible for deciding whether requests involving hazardous, controlled, or dual-use compounds are allowed. <br>
+Developers, cheminformatics practitioners, and chemistry users use this skill to ask an agent for legitimate retrosynthesis support: candidate reactants, route planning to purchasable building blocks, or makeability scoring for a molecule. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: First use may download a few hundred MB of model and stock data into a local cache. <br>
-Mitigation: Prefetch the data, set a controlled cache location, or use local model and stock files in bandwidth-limited, air-gapped, privacy-sensitive, or reproducibility-critical environments. <br>
-Risk: Retrosynthesis can provide operational route assistance for hazardous, controlled, or otherwise dual-use compounds. <br>
-Mitigation: Apply the host safety policy before planning routes or providing actionable assistance for high-risk targets, and decline or escalate requests that appear unsafe. <br>
+Risk: First use downloads model and stock files, which may be unsuitable for controlled, offline, privacy-sensitive, or reproducibility-critical environments. <br>
+Mitigation: Prefetch or provide local model and stock files, pin trusted sources, configure cache and mirror settings, and treat network downloads as explicit opt-in. <br>
+Risk: Retrosynthesis route planning can provide operational assistance for hazardous, controlled, or otherwise regulated compounds. <br>
+Mitigation: Apply the host safety policy and require additional review before producing synthesis routes for high-risk targets. <br>
 
 
 ## Reference(s): <br>
-- [Synomega package on PyPI](https://pypi.org/project/synomega/) <br>
-- [SynOmega Skill on ClawHub](https://clawhub.ai/zbc0315/skills/synomega) <br>
+- [SynOmega package on PyPI](https://pypi.org/project/synomega/) <br>
+- [SynOmega toolkit source](https://github.com/zbc0315/synomega) <br>
+- [ClawHub skill page](https://clawhub.ai/zbc0315/skills/synomega) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON-producing helper commands] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration, JSON] <br>
+**Output Format:** [Markdown guidance with shell and Python examples; the helper script prints JSON for score, plan, and single-step operations.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Helper commands can output JSON for single-step predictions, route plans, and synthesizability scores.] <br>
+**Other Properties Related to Output:** [First use may download model and stock files unless local paths are configured.] <br>
 
 ## Skill Version(s): <br>
-1.4.3 (source: server release metadata) <br>
+1.4.4 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

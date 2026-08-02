@@ -219,7 +219,7 @@ mbs db-table create --doc-id <DOC_ID> --name Orders --columns columns.json --row
 mbs db-table create-from-range --doc-id <TARGET_DOC_ID> --name R_OrderLines_Store1 --source-doc-id <SOURCE_DOC_ID> --worksheet-name "1店" --range A2:AR423 --header-row 0 --use-header-names --if-exists adopt --verify
 mbs db-table create-from-query --doc-id <DOC_ID> --worksheet-name Orders --name OrderSummary --sql-file order_summary.sql --if-exists adopt --verify
 mbs db-table create-from-query --doc-id <DOC_ID> --worksheet-name B_FxSettlement --name S1_RevenueStructureInput --sql-file s1_revenue_structure_input.sql --if-exists adopt --verify
-mbs db-table create-from-query --doc-id <DOC_ID> --name S_OrderDetailsStructureInput --sql-file order_details_structure.sql --no-preserve-formula
+mbs db-table create-from-query --doc-id <DOC_ID> --name OrderDetailsStructureInput --sql-file order_details_structure.sql --no-preserve-formula
 mbs db-table range set-formula --doc-id <DOC_ID> --name orders_large --cell G2 --formula '=SQL("select * from orders_large limit 10")'
 mbs db-table field metadata --doc-id <DOC_ID> --name orders_large --output json
 mbs db-table field update --doc-id <DOC_ID> --name orders_large --field revenue --logical-type number --formatter "$#,##0.00" --width 144 --verify

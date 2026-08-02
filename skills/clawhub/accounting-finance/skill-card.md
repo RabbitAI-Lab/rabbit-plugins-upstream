@@ -1,5 +1,5 @@
 ## Description: <br>
-Accounting Finance helps finance analysts, institutional investors, and corporate finance teams perform valuation modeling, financial analysis, risk assessment, batch processing, and automated report generation. <br>
+Accounting Finance helps financial analysts, institutional investors, and finance teams run valuation modeling, financial analysis, risk assessment, batch processing, and automated report generation. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and finance professionals use this skill to automate financial modeling, valuation analysis, risk checks, and report drafting for securities, companies, and portfolios. It is intended for analytical workflow support, with human review of financial conclusions before use. <br>
+External analysts, institutional investors, corporate finance teams, and developers use this skill to automate financial statement analysis, DCF and comparable valuation, fraud and quality checks, batch monitoring, and finance report generation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Local execution and file writes can affect the user's workspace. <br>
-Mitigation: Review generated scripts and shell commands before running them, and execute the skill in a controlled workspace. <br>
-Risk: API keys and private financial data may be handled during analysis workflows. <br>
-Mitigation: Keep credentials and private financial data in controlled local configuration and avoid sharing generated artifacts outside approved channels. <br>
-Risk: Financial analysis outputs may be incomplete, stale, or unsuitable for direct decision-making. <br>
-Mitigation: Validate assumptions, data sources, and conclusions with qualified human review before using reports for business or investment decisions. <br>
+Risk: The skill can read financial files, execute commands, call data APIs, and write reports. <br>
+Mitigation: Use it in a dedicated workspace, keep only the needed financial files there, review config.yaml API keys and output paths, and confirm before allowing command execution, package installation, paid API calls, or report writes. <br>
+Risk: Financial analyses and generated reports may be used for business or investment decisions. <br>
+Mitigation: Have qualified reviewers validate source data, assumptions, model settings, and conclusions before relying on generated outputs. <br>
 
 
 ## Reference(s): <br>
@@ -30,13 +28,13 @@ Mitigation: Validate assumptions, data sources, and conclusions with qualified h
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, JSON-style result objects, Python execution steps, configuration notes, and generated report files such as Excel, PDF, DOCX, or HTML.] <br>
+**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Configuration, Files] <br>
+**Output Format:** [Markdown with JSON examples, YAML configuration, Python code, and generated report files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run local Python and write report or configuration files; review generated commands, scripts, and outputs before relying on them.] <br>
+**Other Properties Related to Output:** [May produce financial summaries, scores, valuation outputs, Excel matrices, and PDF, DOCX, or HTML reports.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter lists 1.0.1) <br>
+1.0.4 (source: server release metadata and artifact frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

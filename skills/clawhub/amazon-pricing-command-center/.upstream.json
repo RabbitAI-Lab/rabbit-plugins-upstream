@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/amazon-pricing-command-center",
   "slug": "amazon-pricing-command-center",
   "ownerHandle": null,
-  "version": "1.1.3",
-  "updatedAt": 1784888034095,
-  "contentHash": "2d87cb11c9fd6b6162e43d3907898a8eda3fb761315385e6281f61b7b9864419",
-  "fetchedAt": "2026-07-26T18:05:17.745Z"
+  "version": "1.1.6",
+  "updatedAt": 1785321145034,
+  "contentHash": "485f36ef3c880c97d1f740d13b93666d37dcff25f73da79dcc9b03b5263ebf32",
+  "fetchedAt": "2026-08-02T09:41:14.806Z"
 }

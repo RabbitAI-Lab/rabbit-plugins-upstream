@@ -1,5 +1,5 @@
 ## Description: <br>
-Jobwatch turns an OpenClaw agent into a scheduled job-market watcher that monitors configured company career pages, evaluates postings against the user's profile with an LLM, sends alerts and digests, archives jobs, and tracks applications. <br>
+Jobwatch monitors user-selected company career pages, evaluates postings against the user's job-search profile, sends match alerts and digests, archives postings, tracks application status, and answers questions about watched jobs after explicit onboarding consent. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Individual job seekers and their agents use Jobwatch to monitor explicitly configured career pages, compare openings to the user's resume, seniority, visa, location, and role constraints, receive strong-match alerts and daily digests, archive postings, and track application status. <br>
+External OpenClaw users use this skill to run a personal job-search watcher for companies they explicitly configure, including profile-based job matching, alerts, daily summaries, archival, application tracking, and follow-up queries. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Job URLs, job descriptions, notification text, and profile-derived criteria can be processed by configured third-party services. <br>
-Mitigation: Review the Privacy & Data Flow section, keep the local knowledge-base and chat-channel defaults when possible, use self-hosted or dedicated service credentials, and enable optional integrations only when their data exposure is acceptable. <br>
-Risk: The skill can register recurring job-monitoring tasks that continue scraping sources and sending notifications. <br>
-Mitigation: Register cron only after explicit onboarding consent, review the configured sources and notification channel, and disable the jobwatch cron entries when monitoring is no longer needed. <br>
-Risk: Host OpenClaw or Telegram credential reuse expands credential access beyond the skill's own configuration. <br>
-Mitigation: Leave JOBWATCH_ALLOW_HOST_CREDS unset unless host credential reuse is necessary, and prefer dedicated API keys in the skill's own .env file. <br>
+Risk: The skill can process sensitive job-search profile data and send watched URLs, job descriptions, archived postings, questions, or notifications to optional external services. <br>
+Mitigation: Use the default local or agent modes where appropriate, grant egress only to specific destinations through JOBWATCH_EGRESS_ALLOW or onboarding consent, and review the destination list before enabling optional services. <br>
+Risk: Host credential reuse can increase blast radius if broadly enabled. <br>
+Mitigation: Prefer dedicated per-skill API keys and, when host reuse is needed, grant only the specific JOBWATCH_ALLOW_HOST_CREDS scope required for that integration. <br>
+Risk: Cron registration creates ongoing automated monitoring and notifications. <br>
+Mitigation: Enable cron only after explicit consent and disable the jobwatch cron entries when the watcher should stop running. <br>
+Risk: Application tracking records sensitive local status and notes about the user's job search. <br>
+Mitigation: Keep the jobwatch data directory out of shared or synced folders and delete the local jobwatch state when the user wants to erase these records. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/ywc668/skills/jobwatch) <br>
-- [README](README.md) <br>
-- [Chinese Skill Documentation](references/SKILL.zh.md) <br>
+- [ClawHub skill page](https://clawhub.ai/ywc668/skills/jobwatch) <br>
+- [Project homepage](https://github.com/ywc668/jobwatcher) <br>
+- [Chinese skill reference](references/SKILL.zh.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown, Text] <br>
-**Output Format:** [Markdown instructions with shell commands, configuration updates, JSONL judgment records, and plain-text notifications.] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and structured text with occasional shell commands and JSON configuration updates] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local jobwatch profile, state, queue, run log, knowledge-base files, and optional cron entries after user consent.] <br>
+**Other Properties Related to Output:** [Outputs include onboarding prompts, job-match judgments, alerts, digests, application-status updates, and job-search query answers.] <br>
 
 ## Skill Version(s): <br>
-1.1.0 (source: server release metadata) <br>
+1.2.3 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Publishes, schedules, and checks social posts and small media through a user's InstallMyClaw workspace for connected Instagram, TikTok, Facebook, YouTube, LinkedIn, Threads, Google Business, and Telegram accounts. <br>
+IMC Publish helps agents publish, schedule, and check social media posts through a user's InstallMyClaw workspace. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators, operators, and agents use this skill to draft, preview, publish, schedule, and check status for social media content through connected accounts in an InstallMyClaw workspace. <br>
+External users, developers, and operator agents use this skill to prepare, schedule, confirm, and monitor posts to social channels connected to the user's InstallMyClaw workspace. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The built-in update command can replace installed skill files from a moving GitHub branch without signature verification. <br>
-Mitigation: Prefer ClawHub/OpenClaw-managed updates, and do not run the update subcommand unless the source it will install has been reviewed. <br>
-Risk: The skill can publish or schedule content to connected social accounts after confirmation. <br>
-Mitigation: Create a draft, show the returned preview, wait for explicit confirmation for that draft, and report only API-confirmed post IDs and statuses. <br>
-Risk: The publishing API key authorizes access to the user's workspace publishing service. <br>
-Mitigation: Store the key in an environment variable or secrets manager, never paste it into chat, and never write it into repository files. <br>
+Risk: The built-in updater can replace installed skill files from an unsigned moving branch. <br>
+Mitigation: Use the platform-managed updater when installed from ClawHub, or review the source before running the helper script's update command. <br>
+Risk: A social post could be sent to the wrong platform, account, caption, media set, or schedule if the preview is not checked. <br>
+Mitigation: Review the draft preview and confirm only intentionally requested posts with the expected targets, caption, media count, and timing. <br>
+Risk: Publishing requires a workspace API key with access to connected social accounts. <br>
+Mitigation: Store the key in an environment variable or secrets manager and never paste it into chat or write it into repository files. <br>
 
 
 ## Reference(s): <br>
-- [IMC Publish on ClawHub](https://clawhub.ai/junwei1213/skills/imc-publish) <br>
-- [Platform Notes](references/platforms.md) <br>
-- [InstallMyClaw Dashboard](https://dashboard.installmyclaw.com) <br>
+- [Platform notes](references/platforms.md) <br>
+- [IMC Publish ClawHub listing](https://clawhub.ai/junwei1213/skills/imc-publish) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with shell command examples and JSON responses from the helper script] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an IMC_PUBLISH_API_KEY and explicit human confirmation before publishing a draft.] <br>
+**Other Properties Related to Output:** [Requires Python 3 and an InstallMyClaw publishing key; publishing is confirmation-gated.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: server release metadata and artifact frontmatter) <br>
+1.0.5 (source: frontmatter and release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

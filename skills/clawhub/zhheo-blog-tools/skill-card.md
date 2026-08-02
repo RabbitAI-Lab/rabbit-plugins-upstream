@@ -1,5 +1,5 @@
 ## Description: <br>
-Chats with Zhang Hong Heo's Hongmo AI assistant and searches the Zhang Hong Heo blog for articles, popular posts, tags, categories, equipment, and project pages. <br>
+通过 HTTP API 访问张洪Heo博客，支持全文搜索、热门文章、归档浏览、标签分类、页面发现、友链查询和读文摘要。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,41 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill to chat with the blog's Hongmo AI assistant, search Zhang Hong Heo blog articles, discover popular posts, browse tags and categories, and retrieve equipment or project information from the public blog. <br>
+External users and agents use this skill to answer questions about 张洪Heo's blog by searching posts, browsing archives, listing popular posts, resolving tags and categories, checking friend links, and fetching article content through public HTTP endpoints. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Chat and fallback search send the user's prompt to a third-party public blog chatbot. <br>
-Mitigation: Use the skill only when sharing the prompt with blog.zhheo.com is acceptable, and avoid entering private, sensitive, or confidential information. <br>
-Risk: Returned chatbot text and reference links come from third-party blog content and may be incomplete, outdated, or misleading. <br>
-Mitigation: Review returned links and claims before relying on them, and treat chatbot output as unverified third-party content. <br>
-Risk: The skill depends on public blog pages and JSON endpoints that can change or become unavailable. <br>
-Mitigation: When results are missing or stale, retry against the current blog pages or clearly state that the requested blog data could not be retrieved. <br>
+Risk: Generic trigger words may activate the skill in unrelated blog conversations. <br>
+Mitigation: Use narrower trigger matching or confirm the user is asking about 张洪Heo's blog before calling its APIs. <br>
+Risk: The hot-post endpoint returns 403 when the required Referer header is missing. <br>
+Mitigation: Send Referer: https://blog.zhheo.com/ for /api/umami/hot.php requests and report access failures clearly. <br>
+Risk: Article links can be wrong if an agent invents slugs instead of using API results. <br>
+Mitigation: Use the original path or url returned by the blog APIs rather than constructing article URLs manually. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhheo/skills/zhheo-blog-tools) <br>
-- [Zhang Hong Heo Blog](https://blog.zhheo.com/) <br>
-- [Article Index JSON](https://blog.zhheo.com/zhheo/post_info.json) <br>
-- [RSS Feed](https://blog.zhheo.com/rss.xml) <br>
-- [Tags Page](https://blog.zhheo.com/tags/) <br>
-- [Equipment Page](https://blog.zhheo.com/equipment/) <br>
-- [Projects Category](https://blog.zhheo.com/categories/我的项目/) <br>
-- [Tags API](https://blog.zhheo.com/api/tags.json) <br>
-- [Categories API](https://blog.zhheo.com/api/categories.json) <br>
-- [Daily Popular Posts API](https://api.zhheo.com/HeoBlogAPI/umami/hot.php) <br>
+- [张洪Heo Blog](https://blog.zhheo.com) <br>
+- [ClawHub skill page](https://clawhub.ai/zhheo/skills/zhheo-blog-tools) <br>
+- [Search API example](https://blog.zhheo.com/api/search/search.php?q=OpenClaw&limit=5) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown with article links, chatbot responses, reference links, and JSON-backed result summaries] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, API calls, Guidance] <br>
+**Output Format:** [Markdown guidance with HTTP endpoint examples, JSON response examples, and curl commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May open blog.zhheo.com, call public JSON endpoints, send the user's chat or search prompt to the blog chatbot, and return AI-generated text and links from that site.] <br>
+**Other Properties Related to Output:** [No credentials or local file access; hot-post requests require a Referer header; long article extracts should be truncated with a note.] <br>
 
 ## Skill Version(s): <br>
-1.1.0 (source: server release metadata) <br>
+1.2.0 (source: server evidence release.version) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

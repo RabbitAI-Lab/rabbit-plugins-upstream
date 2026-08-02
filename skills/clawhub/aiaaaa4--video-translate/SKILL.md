@@ -37,9 +37,9 @@ metadata:
 
 作者 / 工作流设计：`AI落地第四声`。本作者信息用于展示和来源识别，不添加额外授权限制。
 
-这是一套面向本地录制视频的高质量字幕翻译工作流。OkFile + Fun-ASR 固定负责云端转写和词级时间戳；原语言字幕只校正识别内容，不替代时间轴。翻译前，当前 Agent 必须先通读完整源文，生成本视频专属的领域提示、术语、专名、歧义判断和翻译记忆。公开默认由 `qwen-mt-plus` 稳定初译；用户也可选择当前 Agent 编排模型直接翻译。随后 Agent 再次通读原文和译文，重新翻译歧义或错译内容并按语义重分段；确定性 QA 后再完成最终全文 QC，全部通过才导出双语 ASS/SRT。
+这是一套面向本地录制视频的高质量字幕翻译工作流。OkFile + Fun-ASR 固定负责云端转写和词级时间戳；原语言字幕只能在当前 Fun-ASR 词跨度内校正识别内容，不能借用相邻段或替代边界，异常时整份参考源自动关闭。翻译前，当前 Agent 必须先通读完整源文，生成本视频专属的领域提示、术语、专名、歧义判断和翻译记忆。公开默认由 `qwen-mt-plus` 稳定初译；用户也可选择当前 Agent 编排模型直接翻译。随后 Agent 再次通读原文和译文，重新翻译歧义或错译内容并按语义重分段；确定性 QA 后再完成最终全文 QC，全部通过才导出双语 ASS/SRT。
 
-快速开始：准备 [OkFile API Key](https://www.okfile.com/en/account/api-keys)、[阿里百炼 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)、阿里工作空间 ID，并提供本地视频路径。用户直接提供音频时必须拒绝；组合工作流仍可在内部复用 `video-download` 写入 `.work/input/` 的音频。AI 仅在你明确确认视频路径、翻译模式、输出位置和外发处理同意后，才会读取本机 `.env`、上传处理音频并运行固定生产流程。
+快速开始：准备 [OkFile API Key](https://www.okfile.com/en/account/api-keys)、[阿里百炼 API Key](https://help.aliyun.com/zh/model-studio/get-api-key)、阿里工作空间 ID，并提供本地视频路径。用户直接提供音频时必须拒绝；组合工作流仍可在内部复用 `video-download` 写入 `.work/input/` 的音频。AI 会从原文件名或媒体项目目录提取真实标题，去掉开头日期、结尾平台编码和扩展名，再按视频领域术语翻译为中文；最终 ASS/SRT 使用该中文净标题，不会使用“原版视频”等占位名。AI 仅在你明确确认视频路径、翻译模式、输出位置和外发处理同意后，才会读取本机 `.env`、上传处理音频并运行固定生产流程。
 
 ## Security and privacy
 
@@ -73,13 +73,14 @@ Keep this production stack fixed unless the user explicitly requests an engineer
 
 1. Reuse only downloader-created audio from the selected video's `.work/input/` directory or a same-basename audio-only download beside that video; otherwise extract compact audio locally with `ffmpeg`. Never accept a user-selected audio file as the workflow input.
 2. Upload through OkFile and submit the resulting URL to Alibaba Fun-ASR in every production path, including when an original-language subtitle exists.
-3. Use Fun-ASR words and word timestamps as the alignment source of truth. If `.work/input/` contains one original-language SRT/VTT, map it to ASR segments by time overlap and use it only to correct `SRC_DISPLAY` and translation source text; never replace `SRC_RAW` or invent word timestamps from subtitle cues.
+3. Use Fun-ASR words and word timestamps as the only boundary truth. If `.work/input/` contains one original-language SRT/VTT, require sufficient time overlap and lexical similarity, crop the reference to the current ASR word span, and use it only to correct `SRC_DISPLAY` and translation source text. Never copy an entire cross-boundary cue into a smaller ASR segment, replace `SRC_RAW`, or invent word timestamps. Disable an anomalous reference source and regenerate display text from Fun-ASR.
 4. Before translation, require the orchestrator to read every source-analysis section and produce a validated whole-video context.
-5. Generate initial translations using the user-selected provider. Public default: pass `domains`, `terms`, and `tm_list` to qwen-mt-plus and bind its cache to the context hash. Agent mode: current Agent translates every hash-bound section using the same context and writes validated receipts; no translation API Key is required.
-6. Require the orchestrator to read every translated section, compare `ZH` against source/context, correct mistranslations, and re-segment by meaning. Length and duration are only display guardrails.
-7. Validate `SRC_RAW`, run deterministic QA, then require final whole-document QC.
-8. Export exactly one bilingual ASS and one bilingual SRT only after all applicable Agent gates pass.
-9. After successful export, remove only downloader-created audio and source subtitles under `.work/input/`.
+5. Generate initial translations using the user-selected provider. Public default: pass `domains`, `terms`, and `tm_list` to qwen-mt-plus and bind its cache to the context hash. Agent mode: translate every hash-bound section using the same context and write validated receipts. In either mode, each `ZH_i` translates only its own SEG; never advance, delay, split, or distribute meaning across neighboring SEG blocks. Keep an incomplete source fragment equally incomplete until semantic review.
+6. Require the orchestrator to read every translated section, compare every `ZH_i` with its own source and at least the ±2 neighboring sources, and treat a better neighbor match or consecutive offset pattern as a blocker. Correct mistranslations and re-segment only in semantic review. If all reviewed content is unchanged, require an explicit no-change confirmation rather than trusting a bare `passed` receipt.
+7. Validate `SRC_RAW`, run deterministic QA, then require final whole-document QC with the same cross-segment alignment check and fixed spot checks.
+8. Before processing, bind the run to a clean Chinese title derived from the selected video or its media project directory: remove any leading date, trailing platform ID, extension, and generic placeholder; domain-translate a foreign title and pass it with `--localized-title`.
+9. Export exactly one bilingual ASS and one bilingual SRT only through the gated wrapper after all validation evidence and the bound output name match the current files.
+10. After successful export, remove only downloader-created audio and source subtitles under `.work/input/`.
 
 Do not silently switch ASR providers, use local Whisper, add fallback model paths, install system tools, or reveal secrets.
 
@@ -92,7 +93,7 @@ Do not silently switch ASR providers, use local Whisper, add fallback model path
 
 ## Before Running
 
-For standalone use, run `python scripts/preflight.py` and send stdout verbatim. Do not paraphrase, reorder, add options, or ask whether the user wants Simplified Chinese, Traditional Chinese, or bilingual subtitles. Simplified Chinese is the default target; bilingual ASS/SRT is the fixed output structure. In a combined workflow, reuse answers from `video-download/scripts/preflight.py --mode combined` and do not ask again.
+For standalone use, run `python scripts/preflight.py` and send stdout verbatim. Do not paraphrase, reorder, add options, or ask whether the user wants Simplified Chinese, Traditional Chinese, or bilingual subtitles. Simplified Chinese is the default target; bilingual ASS/SRT is the fixed output structure. In `video-flow`, reuse `video-download/scripts/preflight.py --mode combined` only for a remote-URL route. A local video or local media-project route skips `video-download`, runs this Skill's questionnaire, and never asks about download quality.
 
 Run commands from this skill folder. On a new device or unverified environment, run the local-only check:
 
@@ -111,6 +112,13 @@ Confirm only these user-facing inputs unless already clear:
 
 Do not ask ordinary users to choose ASR, segment-generation, or orchestration models.
 
+Output naming is automatic unless more than one plausible source video/title remains:
+
+- Inspect the selected media filename and its containing media-project directory. Prefer a meaningful existing Chinese title; otherwise translate the real foreign title using the video's domain terminology and this Skill's glossary.
+- Strip a leading upload date, trailing `[platform-id]`, extension, and subtitle/release suffix. Never use `原版视频`, `原视频`, `视频`, `source video`, or another generic placeholder.
+- Pass only the Chinese clean title through `--localized-title`. Do not ask the user to translate an unambiguous title or choose a filename.
+- The wrapper binds that title in `output_naming.json`; resumed and final export commands must match it exactly.
+
 ## Long-Running Execution
 
 - Run the wrapper in the foreground. If the host yields a session ID, poll that exact session at least once per minute until it exits.
@@ -124,7 +132,10 @@ Do not ask ordinary users to choose ASR, segment-generation, or orchestration mo
 Start a normal run with:
 
 ```bash
-python scripts/video_to_subtitles.py "/absolute/path/to/video.mp4" --language en --confirm-external-processing
+python scripts/video_to_subtitles.py "/absolute/path/to/video.mp4" \
+  --localized-title "<按领域术语翻译的中文净标题>" \
+  --language en \
+  --confirm-external-processing
 ```
 
 The public default above uses qwen-mt-plus. When the user explicitly selects current Codex / Agent translation, add:
@@ -143,6 +154,8 @@ For other failures, use `workflow_status.json`, `final_qa_report.md`, `final_qa_
 
 ## Delivery Rules
 
-Do not export unless source analysis, semantic translation review, deterministic QA, and final whole-document QC all pass. In every SRT cue, place Chinese and source text on separate physical lines; never write literal `/n`, `\\n`, `\\N`, `<br>`, or ASS tags into SRT text. Keep the existing output basename and deliver only the matching `.ass` and `.srt` files. After success, report the ASS path, SRT path, elapsed time, models used, QA blocker/warning counts, and any focused spot-check recommendation.
+Do not call `export_subtitles.py` as a shortcut or export while any workflow step is `waiting`/`running`. Delivery requires current, hash-matching `source-analysis.validated.json`, Agent-translation validation when applicable, `semantic-review.validated.json`, `final_qa.validated.json`, `final_qa_report.md` with `Blockers: 0`, and `final-qc.validated.json`. Final QC must spot-check the opening 30 cues, a middle/numeric passage, core domain terms, direction/entry/add/cover logic, names/tickers/amounts, sponsorship, and user-flagged timestamps, using a reasoned `not_applicable` only when appropriate.
+
+In every SRT cue, place Chinese and source text on separate physical lines; never write literal `/n`, `\\n`, `\\N`, `<br>`, or ASS tags into SRT text. Deliver only `<中文净标题>.<中X双语字幕>.ass` and the matching `.srt`; the title must contain the real localized source title with no leading date, trailing platform ID, extension, release suffix, or generic placeholder. BCC is not an output of this public Skill. After success, report the ASS path, SRT path, elapsed time, models used, QA blocker/warning counts, and any focused spot-check recommendation.
 
 The repository-level product guide is outside the installable skill package. Do not treat product documentation as the execution contract.

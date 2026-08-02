@@ -1,0 +1,15 @@
+{
+  "name": "@receiptprotocol/get-with-receipt",
+  "version": "1.0.6",
+  "private": true,
+  "description": "Connect Receipt once, then discover and buy paid tools with spending limits, purchase approval, delivery checks, and signed proof.",
+  "license": "MIT-0",
+  "clawhub": {
+    "publisher": "@receiptprotocol",
+    "category": "Finance",
+    "categories": [
+      "finance"
+    ],
+    "slug": "get-with-receipt"
+  }
+}

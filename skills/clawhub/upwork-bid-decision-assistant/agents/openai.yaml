@@ -1,0 +1,6 @@
+interface:
+  display_name: "Upwork 投标判断助手"
+  short_description: "分析工作、客户与竞争态势，给出投标和 Boost 建议"
+  default_prompt: "请使用 Upwork 投标判断助手。先检查是否已有用户画像；若没有，优先请我提供 Upwork Freelancer 主页，也接受复制、截图、文字或口述，并用少量问答补齐。再读取工作、客户历史和竞争数据，告诉我是否值得投标、是否需要 Boost、风险和关键缺失信息。"
+policy:
+  allow_implicit_invocation: true

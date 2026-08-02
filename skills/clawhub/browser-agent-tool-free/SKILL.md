@@ -1,43 +1,23 @@
 ---
 slug: browser-agent-tool-free
 name: browser-agent-tool-free
-version: 1.0.0
+version: 1.0.2
 displayName: 浏览器智能代理工具-免费版
 summary: "无头浏览器自动化CLI,支持可访问性树快照与确定性元素选择,适合个人开发者。无头浏览器自动化命令行工具,通过可访问性树快照(ref引用)实现确定性元素选择,"
-license: Proprietary
+license: MIT
 edition: free
-description: '无头浏览器自动化命令行工具,通过可访问性树快照(ref引用)实现确定性元素选择,
-
-  专为AI代理优化的浏览器操作工作流。核心能力:
-
-  - 无头浏览器自动化与可访问性树快照
-
-  - 基于ref引用的确定性元素选择
-
-  - 多会话隔离与状态持久化
-
-  - 截图、PDF生成与网络控制
-
-  适用场景:
-
-  - 个人开发者的自动化签到、填表任务
-
-  - 数据抓取与信息收集
-
-  - 独立开发者效率提升工作流
-
-  差异化:免费版提供核心浏览器自动化能力,适合个人用户与轻量场景,无企业级特性'
+description: "无头浏览器自发化命令行工具,通过可访问性树快照(ref引用)达成确定性元素选择,. 适用于需要browser agent tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要browser agent tool相关能力的开发场景,包含结构化的工作流程和配置指引."
 tags:
   - 研究工具
+  - browser
+  - agent
+  - automation
+  - productivity
   - 浏览器自动化
   - 自动化
   - AI代理
   - 智能
   - agent-browser
-  - json
-  - get
-  - wait
-  - bash
 tools:
   - read
   - exec
@@ -46,6 +26,8 @@ tools:
   - grep
 homepage: ""
 category: "Agents"
+pricing_tier: free
+
 ---
 # 浏览器智能代理工具(免费版)
 
@@ -277,7 +259,7 @@ agent-browser frame @e5                     # 进入 iframe
 agent-browser frame main                    # 回到主框架
 ```
 
-## 最佳实践
+## 优秀实践
 
 1. **始终使用 `-i` 参数**:聚焦可交互元素,减少快照噪声.
 2. **始终使用 `--json` 参数**:便于程序化解析输出.
@@ -335,7 +317,7 @@ agent-browser screenshot debug.png
 - 如使用远程浏览器服务(如 Browserbase),需配置对应服务的 API Key
 
 ### 可用性分类
-- **分类**: MD+EXEC(纯Markdown指令,部分功能需exec命令行执行)
+- **分类**: MD+EXEC模式纯Markdown指令,部分功能需exec命令行执行)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent完成操作
 
 ## 错误处理

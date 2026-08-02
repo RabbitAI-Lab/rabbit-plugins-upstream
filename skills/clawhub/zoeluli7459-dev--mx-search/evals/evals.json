@@ -1,0 +1,31 @@
+{
+  "skill_name": "mx-search",
+  "positive": [
+    {
+      "prompt": "宁德时代最近有什么重大公告？",
+      "assertions": [
+        "uses mx-search",
+        "returns source names and dates",
+        "does not rely on memory for latest information"
+      ]
+    },
+    {
+      "prompt": "今天A股大盘异动原因是什么，给我基于资讯的解释",
+      "assertions": [
+        "searches finance news first",
+        "separates retrieved facts from inference",
+        "mentions uncertainty"
+      ]
+    }
+  ],
+  "negative": [
+    {
+      "prompt": "贵州茅台今天收盘价是多少",
+      "expected_route": "mx-data"
+    },
+    {
+      "prompt": "选出半导体里市盈率小于30的股票",
+      "expected_route": "mx-xuangu"
+    }
+  ]
+}

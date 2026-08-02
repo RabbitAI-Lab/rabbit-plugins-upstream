@@ -1,5 +1,5 @@
 ## Description: <br>
-Searches Douyin for viral content by keyword and optional date range, then presents engagement data in structured result tables. <br>
+Searches Douyin viral works by keyword and optional date range, then returns structured engagement data and links for content research. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Content creators, MCN and brand operators, growth teams, and marketing teams use this skill to find high-engagement Douyin works, compare content performance, and monitor keyword trends. <br>
+External content creators, MCN and brand operators, growth teams, and marketers use this skill to research Douyin content trends, compare engagement for keyword-based categories, and optionally set up daily keyword tracking. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill sends a RedFox API key and Douyin search terms to redfox.hk. <br>
-Mitigation: Confirm the key scope, retention policy, and reset or revocation process before use; keep the key in environment configuration rather than prompts, logs, or source files. <br>
-Risk: The subscription feature can create persistent daily scheduled tasks. <br>
-Mitigation: Before enabling daily pushes, confirm where the task will be created, how to pause or delete it, and what keyword and date data will be retained. <br>
+Risk: Search keywords and date filters are sent to redfox.hk when the skill runs. <br>
+Mitigation: Use the skill only when that data sharing is acceptable for the user's task and organization. <br>
+Risk: The skill requires REDFOX_API_KEY, which could grant access to a RedFox account or service quota. <br>
+Mitigation: Store the key in the environment or approved local configuration, treat it as sensitive, and avoid committing or logging it. <br>
+Risk: Daily subscription tasks may continue running after the initial search. <br>
+Mitigation: Review the proposed schedule before creation and remove the task when ongoing monitoring is no longer needed. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/redfox-data/skills/douyin-search-redfox) <br>
-- [RedFoxHub API key settings](https://redfox.hk/settings/api-keys?source=clawhub) <br>
-- [RedFoxHub](https://redfox.hk) <br>
-- [RedFoxHub enterprise service](https://redfox.hk/dashboard/enterprise) <br>
+- [RedFox API key settings](https://redfox.hk/settings/api-keys?source=clawhub) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown tables and text, with helper-script JSON used as the source data.] <br>
+**Output Type(s):** [markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown tables with inline links and optional shell commands; script output is JSON] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search output includes clickable Douyin work links, engagement counts, publication time, hot recommendations, and optional subscription guidance.] <br>
+**Other Properties Related to Output:** [Search results include title, author, engagement counts, work URL, publish time, pagination fields, and optional daily subscription guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: release evidence) <br>
+1.0.5 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -12,9 +12,11 @@ Base: https://test.2brain.ai/api （课程环境；官方文档写 portal.2brain
 import json
 import os
 import sys
+from pathlib import Path
 
-sys.path.insert(0, str(__import__("pathlib").Path(__file__).resolve().parent.parent))
-from common import CONFIG, http_json, multipart_post  # noqa: E402
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from common import (CONFIG, http_json, multipart_post,  # noqa: E402
+                    require_egress_consent)
 
 BASE = CONFIG["twobrain"]["base_url"].rstrip("/")
 
@@ -34,6 +36,7 @@ def upload_doc(filename, content_md):
     """
     if not filename.endswith(".txt"):
         filename = filename.rsplit(".", 1)[0] + ".txt"
+    require_egress_consent("twobrain", f"an archived job-description document ({filename})")
     key = _key("TWOBRAIN_UPLOAD_KEY")
     status = body = None
     for auth in (f"Bearer {key}", key):
@@ -58,6 +61,7 @@ def upload_doc(filename, content_md):
 
 def ask(question):
     """Ask the conversational bot bound to the KB (带溯源问答)."""
+    require_egress_consent("twobrain", "the question you asked, sent to the 2brain bot")
     resp = http_json(
         f"{BASE}/bot/chat/v1/chat/completions",
         method="POST",
@@ -70,6 +74,7 @@ def ask(question):
 
 def keyword_graph():
     """Pull the keyword graph of the KB. Needs TWOBRAIN_BASE_ID (integer)."""
+    require_egress_consent("twobrain", "a keyword-graph query for your knowledge base id")
     return http_json(
         f"{BASE}/kbase/keywords/keyword_api",
         method="POST",

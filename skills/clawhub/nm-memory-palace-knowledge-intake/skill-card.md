@@ -11,36 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and knowledge-maintenance agents use this skill to evaluate linked articles, documents, papers, and session findings, then decide whether and where to store them in a persistent knowledge corpus. It also guides routing to local codebase updates, meta-infrastructure updates, queue processing, pruning review, and optional GitHub Discussion promotion for evergreen entries. <br>
+Developers and knowledge workers use this skill to evaluate linked articles, papers, documents, and local files, then route useful material into a persistent knowledge corpus with validation, promotion, application, and pruning guidance. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can publish or update knowledge entries in GitHub Discussions. <br>
-Mitigation: Use Discussion promotion only when the target repository and content are intended to be public, and require explicit review before any public Discussion update. <br>
-Risk: The skill can mutate local or agent knowledge stores, including corpus entries, developer drafts, queue records, and curation logs. <br>
-Mitigation: Avoid --auto-accept on real corpora, use sandbox output paths for tests, and require explicit approval before skill, module, agent, or knowledge-store changes. <br>
-Risk: External resources may be converted into durable knowledge with incorrect attribution or low-quality prose. <br>
-Mitigation: Apply the skill's content-boundary, scribe validation, document verification, and human review steps before finalizing stored entries. <br>
+Risk: The skill can guide an agent to store, publish, or apply externally sourced content in persistent knowledge bases. <br>
+Mitigation: Review each write, publication, code or skill change, and queue-processing action before execution. <br>
+Risk: Private or sensitive content may be captured in a corpus, queue, drafts, logs, or GitHub Discussions. <br>
+Mitigation: Avoid sensitive inputs unless storage destinations and publication targets have been checked and approved. <br>
+Risk: Automation such as auto-accept can apply intake decisions without enough review. <br>
+Mitigation: Require explicit approval before enabling auto-accept or similar automation. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-memory-palace-knowledge-intake) <br>
-- [ClawHub metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
-- [KonMari Method](https://konmari.com/about-the-konmari-method/) <br>
-- [Spark Joy Philosophy](https://konmari.com/marie-kondo-rules-of-tidying-sparks-joy/) <br>
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-memory-palace-knowledge-intake) <br>
+- [OpenClaw Memory Palace Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
+- [About the KonMari Method](https://konmari.com/about-the-konmari-method/) <br>
+- [Rule 6: Ask Yourself If It Sparks Joy](https://konmari.com/marie-kondo-rules-of-tidying-sparks-joy/) <br>
 - [Why the KonMari Method Works](https://konmari.com/what-is-konmari-method/) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with YAML examples and inline shell and Python code blocks] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with structured templates and inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local knowledge entries, developer drafts, curation logs, queue records, and GitHub Discussion summaries when approved.] <br>
+**Other Properties Related to Output:** [May propose corpus entries, GitHub Discussion summaries, storage templates, and pruning actions that require human review.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

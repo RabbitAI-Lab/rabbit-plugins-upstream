@@ -1,5 +1,5 @@
 ## Description: <br>
-A 15-minute pre-rush tactical check for restaurant managers covering staffing positions, bottleneck identification, contingency plans, and post-rush reflection. <br>
+A 15-minute pre-rush tactical check for restaurant managers that creates a 60-second strategic pause for staffing positions, bottleneck identification, and contingency plans. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,34 +7,33 @@ This skill is ready for commercial/non-commercial use. <br>
 [mcphersonai](https://clawhub.ai/user/mcphersonai) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) <br>
 
 
 ## Use Case: <br>
-External restaurant and franchise operators use this skill to run a short pre-rush planning conversation, identify staffing gaps and likely bottlenecks, choose tactical adjustments, and capture post-rush notes for future pattern tracking. <br>
+External restaurant managers, shift leads, and franchise operators use this skill to run a short pre-rush planning check, identify staffing gaps or bottlenecks, and capture post-rush notes for recurring operational patterns. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Staffing, call-out, and post-rush memory may contain sensitive workplace data. <br>
-Mitigation: Decide storage location, access controls, and retention before use; prefer role-level notes over employee names where possible. <br>
-Risk: Call-out pattern summaries could be misused as the sole basis for discipline or HR decisions. <br>
-Mitigation: Use pattern summaries only as operational signals and require manager or HR review before employment decisions. <br>
+Risk: Pre-rush and post-rush notes may capture sensitive staff information if users record names, medical reasons, disciplinary details, or other personal data. <br>
+Mitigation: Use counts or role names where possible, and avoid employee names, medical reasons, disciplinary details, and other sensitive staff information. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/mcphersonai/qsr-pre-rush-coach) <br>
+- [ClawHub skill page](https://clawhub.ai/mcphersonai/skills/qsr-pre-rush-coach) <br>
+- [README](artifact/README.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational Markdown guidance and structured memory notes] <br>
+**Output Type(s):** [text, guidance] <br>
+**Output Format:** [Conversational text with short operational notes] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces time-sensitive pre-rush prompts, tactical recommendations, and post-rush notes; no executable code is included.] <br>
+**Other Properties Related to Output:** [Requires location-specific setup for rush windows, key positions, minimum staffing, common bottlenecks, and the existing shorthand playbook.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.1 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

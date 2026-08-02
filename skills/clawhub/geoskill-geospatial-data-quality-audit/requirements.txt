@@ -1,0 +1,10 @@
+# Requirements for geospatial-data-quality-audit
+# Shared data-download library (Planetary Computer / NASA POWER / OSM)
+geoskill-data-fetcher>=0.2.0
+
+# Third-party dependencies used by this skill
+fiona
+netCDF4
+numpy
+rasterio
+shapely

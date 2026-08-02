@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes newborn face images or short videos with AI visual screening to estimate sclera and facial-skin yellowness and return a low, medium, high, or inconclusive jaundice-risk hint. <br>
+Analyzes newborn face images or short videos through a cloud service to return a visual jaundice risk hint based on sclera color and facial skin yellowness. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External caregivers, newborn-family product teams, and medical-support staff use this skill to submit newborn face media for a cloud-based visual jaundice pre-screen and history-report lookup. Results are preliminary risk hints and should be confirmed by professional bilirubin measurement and clinical review. <br>
+Caregivers, clinicians, and developers use this skill to submit newborn face images or short videos for cloud-based visual jaundice pre-screening and to retrieve historical screening reports. The results are risk hints and report links, not a substitute for clinician evaluation or bilirubin measurement. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can send sensitive newborn face images, videos, and health-report queries to the publisher's cloud service. <br>
-Mitigation: Use only with guardian consent in a controlled workspace, avoid unnecessary identifying media, and do not use the result as a diagnosis or for urgent medical decisions. <br>
-Risk: Visual jaundice screening can be affected by lighting, filters, obstruction, skin products, or camera quality. <br>
-Mitigation: Capture media in natural white light without filters or obstructions, treat inconclusive or medium/high results as prompts for professional bilirubin testing, and seek clinical care for concerning symptoms. <br>
-Risk: The security review notes automatic local identity management and workspace token persistence. <br>
-Mitigation: Install only in an isolated workspace, review stored credentials before and after use, and clear local state or rotate tokens when the skill is no longer needed. <br>
+Risk: Newborn images, video URLs, report queries, and report links may contain sensitive infant health data and are sent to the LifeEmergence cloud service. <br>
+Mitigation: Use only with guardian consent; confirm the publisher's retention, authorization, deletion, and access-control practices before using real infant health data. <br>
+Risk: The skill can create or reuse a local identity and cached tokens in the workspace. <br>
+Mitigation: Run it in a controlled workspace, protect or remove local identity and token files after use, and avoid shared machines for real health data. <br>
+Risk: Visual jaundice screening can be misleading under poor lighting, filters, face occlusion, or warm yellow light and is not a medical diagnosis. <br>
+Mitigation: Capture clear newborn face media in natural white light and route medium, high, inconclusive, or persistent abnormal results to a clinician for bilirubin measurement. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/18072937735/skills/smyx-neonatal-jaundice-screening-analysis) <br>
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-neonatal-jaundice-screening-analysis) <br>
+- [Publisher Profile](https://clawhub.ai/user/18072937735) <br>
 - [Skill Demo](https://lifeemergence.com/sample.html) <br>
 - [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis text with report links] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
+**Output Format:** [Structured JSON or Markdown report text with risk level, confidence, recommended action, and report links.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include visual jaundice-risk hints, confidence or recommended action fields when returned by the service, history-report records, and links to exported reports; outputs are not medical diagnoses.] <br>
+**Other Properties Related to Output:** [May save report output to a file when an output path is supplied; history queries return cloud report records.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter lists 1.0.4) <br>
+1.0.6 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

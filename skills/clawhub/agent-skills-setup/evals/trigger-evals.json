@@ -1,0 +1,22 @@
+[
+  {"query": "Preview moving Cursor skills and rules to Claude Code for this repository.", "should_trigger": true},
+  {"query": "Migrate Windsurf user MCP servers to Codex without literal secrets.", "should_trigger": true},
+  {"query": "Convert Cursor mcp.json to OpenCode V2 and show the dry run.", "should_trigger": true},
+  {"query": "Move workspace skills from Claude Code to Gemini CLI.", "should_trigger": true},
+  {"query": "Move this repository's Cursor instructions to VS Code.", "should_trigger": true},
+  {"query": "Preview Cline project prompts to GitHub Copilot; keep source unchanged.", "should_trigger": true},
+  {"query": "Preview project MCP from Claude Code to Zed, then give a separate apply command.", "should_trigger": true},
+  {"query": "Consolidate duplicated Cursor and Codex skills in the named workspace.", "should_trigger": true},
+  {"query": "Move Roo Code rules to Continue.dev and state manual boundaries.", "should_trigger": true},
+  {"query": "Migrate OpenCode project agent assets to Cursor with backups.", "should_trigger": true},
+  {"query": "What root key does Cursor mcp.json use?", "should_trigger": false},
+  {"query": "Debug a Cursor MCP timeout.", "should_trigger": false},
+  {"query": "Install the Playwright MCP server in Claude Code.", "should_trigger": false},
+  {"query": "Compare Cursor and Windsurf pricing.", "should_trigger": false},
+  {"query": "Create a Codex skill that reviews SQL migrations.", "should_trigger": false},
+  {"query": "Where is the active VS Code Profile MCP config?", "should_trigger": false},
+  {"query": "Validate opencode.json syntax.", "should_trigger": false},
+  {"query": "Update a README sentence about an earlier IDE migration.", "should_trigger": false},
+  {"query": "Explain prompts, rules, and skills in AI coding tools.", "should_trigger": false},
+  {"query": "Back up Cursor settings exactly as-is.", "should_trigger": false}
+]

@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import math
 import re
@@ -121,6 +122,10 @@ def issue(segment: dict, severity: str, kind: str, message: str) -> dict:
         "src_display": segment.get("source_display", ""),
         "src_raw": segment.get("source_raw", ""),
     }
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
 def collect_issues(
@@ -506,7 +511,7 @@ def prompt_text(segments_txt: str, report: str, domain_name: str, glossary: str)
 任务：
 1. 阅读 Final QA Report 和完整 segments.txt。
 2. 修复报告指出的问题。
-3. 再主动检查一遍：词流是否完整覆盖、SRC_DISPLAY/ZH 是否只表达当前 SRC_RAW 覆盖的内容、是否存在孤立语气词字幕、时间轴观看体验、字幕是否占屏过多、ASR 拆词、专名、领域术语、中文自然度、是否漏掉关键逻辑。
+3. 再主动检查一遍：词流是否完整覆盖；逐条比较 `ZH_i` 与本段及前后至少 2 段源文，确认它最匹配自己的 SEG，且没有连续同方向错位；检查 SRC_DISPLAY/ZH 是否只表达当前 SRC_RAW 覆盖的内容、是否存在孤立语气词字幕、时间轴观看体验、字幕是否占屏过多、ASR 拆词、专名、领域术语、中文自然度、是否漏掉关键逻辑。
 4. 只在必要时调整 `SRC_DISPLAY` 和 `ZH`。
 5. `SRC_RAW` 是时间轴匹配契约，默认不得改。只有当报告指出匹配失败、词流覆盖缺口、字幕过长、字幕过短、视觉溢出、重叠或明显影响观看体验时，才可以拆分/合并分段；拆分/合并后的 `SRC_RAW` 仍必须逐词照抄原始词流，不能加词、漏词、改词。
 6. 中文要像当前领域里中文观众熟悉的视频字幕，不要教材腔，不要逐词硬翻。
@@ -562,8 +567,26 @@ def main() -> int:
 
     blockers = sum(1 for item in issues if item["severity"] == "blocker")
     warnings = sum(1 for item in issues if item["severity"] == "warning")
+    info = sum(1 for item in issues if item["severity"] == "info")
+    evidence = {
+        "schema_version": 1,
+        "stage": "deterministic-final-qa",
+        "status": "passed" if blockers == 0 else "changes_required",
+        "aligned_segments": str(args.aligned_segments.resolve()),
+        "aligned_segments_sha256": sha256_file(args.aligned_segments.resolve()),
+        "segments": str(args.segments_txt.resolve()),
+        "segments_sha256": sha256_file(args.segments_txt.resolve()),
+        "report": str(report_path.resolve()),
+        "report_sha256": sha256_file(report_path.resolve()),
+        "blockers": blockers,
+        "warnings": warnings,
+        "info": info,
+    }
+    evidence_path = report_path.resolve().parent / "final_qa.validated.json"
+    evidence_path.write_text(json.dumps(evidence, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     print(f"Wrote {report_path}")
     print(f"Wrote {prompt_path}")
+    print(f"Wrote {evidence_path}")
     print(f"Final QA issues: blockers={blockers}, warnings={warnings}, total={len(issues)}")
     return 1 if blockers else 0
 

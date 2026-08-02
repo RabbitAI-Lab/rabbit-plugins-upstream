@@ -1,0 +1,6 @@
+node_modules/
+.env
+.remember/
+tmp/
+result
+result-*

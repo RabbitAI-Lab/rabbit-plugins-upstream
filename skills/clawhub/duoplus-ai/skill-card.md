@@ -11,45 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and operators use this skill to manage DuoPlus cloud-phone lifecycle state, configure proxy access, inspect device status, and automate Android UI tasks on a selected cloud phone. <br>
+Developers, operators, and support teams use this skill to discover DuoPlus cloud phones, manage lifecycle and proxy setup, and automate requested Android UI workflows on supported devices. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can operate DuoPlus cloud phones with a user-provided API key, including power, proxy, account, payment, or destructive actions. <br>
-Mitigation: Provide an API key only for the task at hand and explicitly confirm device power, proxy, account, payment, or destructive actions before execution. <br>
-Risk: Screenshots and UI state may reveal private app data from the controlled Android device. <br>
-Mitigation: Review screen observations carefully, avoid exposing screenshots unnecessarily, and treat captured UI state as sensitive task data. <br>
-Risk: Powering on temporary cloud-phone compute can start billing. <br>
-Mitigation: Track phones powered on by the workflow and restore the initial stopped state with power-off unless the user asked to leave the phone running. <br>
-Risk: Unsupported or not-ready phones can cause failed automation or unintended lifecycle changes. <br>
-Mitigation: Use list/status/ready checks first, require http_status=1 for Gateway automation, and verify UI state after each action rather than relying on HTTP 200 alone. <br>
+Risk: The skill can operate DuoPlus cloud phones using a user-provided API key. <br>
+Mitigation: Provide the API key only for intended tasks, avoid echoing the full key, and review each requested phone, screenshot, proxy, and UI action before execution. <br>
+Risk: Power, restart, and proxy operations can change billable devices or device configuration. <br>
+Mitigation: Perform state-changing operations only when requested or when restoring the initial state; track phones powered on by the client and power them off after the task unless the user asks to leave them running. <br>
+Risk: Gateway UI actions may affect accounts and data visible inside the cloud phone. <br>
+Mitigation: Observe the UI before and after each action, require visible completion rather than HTTP success alone, and pause for ambiguous targets, CAPTCHA, payment, account recovery, or destructive confirmations. <br>
 
 
 ## Reference(s): <br>
-- [DuoPlus AI Skill](https://clawhub.ai/duoplusofficial/skills/duoplus-ai) <br>
+- [DuoPlus AI skill page](https://clawhub.ai/duoplusofficial/skills/duoplus-ai) <br>
+- [Publisher profile](https://clawhub.ai/user/duoplusofficial) <br>
 - [DuoPlus control API and routing reference](references/control-api.md) <br>
 - [HTTP Gateway automation actions](references/automation-actions.md) <br>
 - [DuoPlus interface introduction](https://help.duoplus.cn/docs/introduction) <br>
-- [DuoPlus cloud phone list](https://help.duoplus.cn/docs/cloud-phone-list) <br>
-- [DuoPlus cloud phone status](https://help.duoplus.cn/docs/cloud-phone-status) <br>
-- [DuoPlus cloud phone detail](https://help.duoplus.cn/docs/huo-qu-yun-ji-xiang-qing) <br>
-- [DuoPlus batch power on](https://help.duoplus.cn/docs/batch-power-on) <br>
-- [DuoPlus batch power off](https://help.duoplus.cn/docs/pi-liang-guan-ji) <br>
-- [DuoPlus batch restart](https://help.duoplus.cn/docs/pi-liang-chong-qi) <br>
-- [DuoPlus proxy list](https://help.duoplus.cn/docs/proxy-list) <br>
-- [DuoPlus proxy initialization](https://help.duoplus.cn/docs/proxy-init) <br>
+- [DuoPlus cloud phone list API](https://help.duoplus.cn/docs/cloud-phone-list) <br>
+- [DuoPlus cloud phone status API](https://help.duoplus.cn/docs/cloud-phone-status) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Code, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON command output] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with bash commands, JSON parameters, and optional screenshot files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write screenshot image files when ui-state or action commands include screenshot output paths.] <br>
+**Other Properties Related to Output:** [Uses a user-provided DuoPlus API key for the current task and may write screenshots when requested with --screenshot-out.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+1.0.4 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

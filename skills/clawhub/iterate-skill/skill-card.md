@@ -1,5 +1,5 @@
 ## Description: <br>
-Iterate automates multi-round code review and iteration by running configurable parallel review dimensions, applying atomic fixes, routing architectural fixes for approval, validating, merging, and pushing until no findings remain or a configured round limit is reached. <br>
+Fully automated multi-round code iteration with configurable N-dimension parallel review, onboarding/personalization, and a cross-assistant installer/update system with mandatory SHA256 checksum verification. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,36 +7,39 @@ This skill is ready for commercial/non-commercial use. <br>
 [jingzhao-l](https://clawhub.ai/user/jingzhao-l) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use Iterate before release, during refactoring, or at iteration wrap-up to systematically review code across correctness, security, performance, architecture, tests, and related dimensions, then apply validated fixes under its workflow controls. <br>
+Developers and engineering teams use Iterate to run configurable multi-round code review and repair passes across a codebase, with automatic handling for small fixes and approval gates for architectural changes. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact code changes and git operations, including commits, merges, and pushes. <br>
-Mitigation: Install only for explicitly invoked automation, verify the target branch, consider setting git.push_per_round to false, and review generated commits plus the decision log before allowing remote updates. <br>
-Risk: Project-configured validation commands may run during the iteration workflow. <br>
-Mitigation: Review validation.commands and command whitelists before use so only trusted project commands are executed. <br>
+Risk: High-autonomy repository actions can edit files, run validation commands, commit, merge, and potentially push changes. <br>
+Mitigation: Use only in repositories where that autonomy is intended; keep git.auto_merge and git.push_per_round disabled unless explicitly required. <br>
+Risk: Security evidence notes conflicting documentation about automatic merge and push behavior. <br>
+Mitigation: Review iterate.config.yaml before use and prefer pull requests or manual merges for protected branches. <br>
+Risk: GitHub tokens passed on the command line can be exposed through shell history or process inspection. <br>
+Mitigation: Avoid command-line tokens where possible and use safer credential handling for update flows. <br>
 
 
 ## Reference(s): <br>
-- [Server-resolved GitHub provenance](https://github.com/jingzhao-l/iterate-skill) <br>
-- [ClawHub release page](https://clawhub.ai/jingzhao-l/skills/iterate-skill) <br>
-- [Agent Skills](https://agentskills.io/) <br>
+- [ClawHub skill page](https://clawhub.ai/jingzhao-l/skills/iterate-skill) <br>
+- [skills.sh listing](https://skills.sh/jingzhao-l/iterate-skill) <br>
+- [Agent Skills standard](https://agentskills.io/) <br>
+- [README](README.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and structured text with code edits, shell commands, configuration guidance, and decision-log entries] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JSON review output, shell commands, and generated configuration/files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces an iterative workflow for review findings, fixes, validation results, commits, merges, pushes, and summaries.] <br>
+**Other Properties Related to Output:** [May edit files, run validation commands, and perform git operations under user-configured safeguards.] <br>
 
 ## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+2.0.2 (source: frontmatter, pyproject.toml, ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

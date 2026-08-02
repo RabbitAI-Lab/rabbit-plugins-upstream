@@ -84,8 +84,17 @@ don't waste calls discovering them).
 - `ap_update_po_lines {po_id, lines:[{line_id, price_unit}], freight_cost?,
   fees_cost?}` → `{po_name, lines_updated:[{line_id, old_price, new_price}],
   new_amount_total}`. The PO must be `state: "purchase"` (confirmed).
-- `ap_create_vendor_bill {...}` → draft `account.move`. Out of this skill's
-  default scope; see the AP operator doc / `drivethru-odoo`.
+- `ap_create_vendor_bill {po_id, vendor_bill_number?, invoice_date?, line_ids?,
+  expected_total?, tolerance?, reviewer_user_id?, review_note?}` → **draft**
+  `account.move`. The payables tail (`paymatch.py bill`).
+- `ap_post_vendor_bill {bill_id, post?, expected_total, tolerance?,
+  vendor_bill_number?, invoice_date?, note?}` → **posts** a draft vendor bill,
+  the **match & post** step (`paymatch.py post`). Guarded: `in_invoice` + draft
+  only, previews unless `post:true`, and **refuses to post** when the bill total
+  misses `expected_total` beyond `tolerance` (an absolute currency amount) —
+  returns `{posted, total_check{expected,actual,difference,within_tolerance},
+  already_posted?}`. A refused/mismatched bill stays in draft → escalate to
+  Questions, never post it.
 
 ### PO chatter
 

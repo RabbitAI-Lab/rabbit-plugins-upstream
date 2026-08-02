@@ -11,37 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent users use ShieldCortex to add persistent local memory, semantic recall, knowledge graph features, and security scanning or enforcement around memory writes and tool output. <br>
+Developers and agent operators use ShieldCortex to add persistent local memory, recall, knowledge-graph support, and memory-boundary security checks to AI agent workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can persist conversation-derived data in local memory. <br>
-Mitigation: Review auto-memory and proactive recall settings before enabling; disable auto-memory for sensitive projects and regularly inspect or purge ~/.shieldcortex. <br>
-Risk: The hook can automatically change or delete hook files during bootstrap. <br>
-Mitigation: Review self-heal behavior before use; set SHIELDCORTEX_SKIP_SELF_HEAL=1 or disable self-heal in config when automatic file changes are not acceptable. <br>
-Risk: Optional cloud sync can transmit selected memory content when explicitly enabled. <br>
-Mitigation: Keep cloud sync disabled unless needed; if enabling it, review API key, memory classification, and content-mode settings first. <br>
+Risk: The skill can automatically modify agent hook installations and integration files. <br>
+Mitigation: Review setup and self-heal behavior before use, keep changes user-initiated where possible, and disable self-heal with SHIELDCORTEX_SKIP_SELF_HEAL=1 or the ShieldCortex selfHeal configuration when automatic hook repair is not desired. <br>
+Risk: The skill can persist sensitive conversation-derived data in local memory and audit stores. <br>
+Mitigation: Review or disable auto-memory and lifecycle handlers for sensitive projects, audit stored memories regularly, and remove unwanted entries with the provided forget or purge workflows. <br>
+Risk: Cloud sync can transmit selected data when explicitly enabled. <br>
+Mitigation: Keep cloud sync disabled unless needed, provide an API key only after review, and use metadata-only or restricted sync settings where full memory content should not leave the local machine. <br>
+Risk: Security evidence marks the release as requiring review because it reads transcripts and selected configuration files. <br>
+Mitigation: Install only in trusted workspaces after confirming the declared read/write paths, lifecycle hooks, cloud settings, and memory retention behavior match the user's risk tolerance. <br>
 
 
 ## Reference(s): <br>
-- [ShieldCortex ClawHub page](https://clawhub.ai/jarvis-drakon/skills/shieldcortex) <br>
-- [Publisher profile](https://clawhub.ai/user/jarvis-drakon) <br>
-- [ShieldCortex homepage](https://shieldcortex.ai) <br>
-- [ShieldCortex documentation](https://shieldcortex.ai/docs) <br>
-- [ShieldCortex source link from metadata](https://github.com/Drakon-Systems-Ltd/ShieldCortex) <br>
-- [ShieldCortex npm package](https://www.npmjs.com/package/shieldcortex) <br>
+- [ClawHub Skill Page](https://clawhub.ai/jarvis-drakon/skills/shieldcortex) <br>
+- [ShieldCortex Homepage](https://shieldcortex.ai) <br>
+- [ShieldCortex Documentation](https://shieldcortex.ai/docs) <br>
+- [ShieldCortex npm Package](https://www.npmjs.com/package/shieldcortex) <br>
+- [Metadata Source URL](https://github.com/Drakon-Systems-Ltd/ShieldCortex) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with command examples and configuration snippets] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and plain text with inline shell commands and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local CLI commands, MCP configuration, and security guidance for the user's agent environment.] <br>
+**Other Properties Related to Output:** [May persist local memories, audit records, and integration configuration under the user's ShieldCortex and agent configuration directories.] <br>
 
 ## Skill Version(s): <br>
-4.47.16 (source: server release metadata and skill frontmatter) <br>
+4.47.27 (source: server release metadata and skill frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

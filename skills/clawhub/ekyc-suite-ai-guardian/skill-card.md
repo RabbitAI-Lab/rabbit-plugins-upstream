@@ -1,5 +1,5 @@
 ## Description: <br>
-eKYC Suite AI Guardian helps an agent check consented face photos or short face videos for face liveness, replay, forged-media, AI-generated-image, and deepfake risk in remote KYC onboarding. <br>
+eKYC Suite AI Guardian checks consented face photos and short face videos for liveness, replay, forged-media, AI-generated face, and deepfake risk signals in remote KYC workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and identity operations teams use this skill to add photo and video liveness, replay-risk, and deepfake-risk checks to consent-based, human-reviewed KYC workflows. Results should be treated as review signals, not identity proof or an automated final decision. <br>
+External identity operations teams, fraud reviewers, and developers use this skill to request face-media liveness and synthetic-media risk checks during consent-based KYC onboarding. Results should be treated as review signals and routed to authorized human review for ambiguous or high-risk cases. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Face photos and videos are sensitive biometric media. <br>
-Mitigation: Use the skill only with authorization to process the media, a clear retention policy, and appropriate access controls. <br>
-Risk: The skill sends media to an operator-configured eKYC cloud endpoint. <br>
-Mitigation: Configure only a trusted HTTPS endpoint and protect EKYC_CLOUD_API_KEY as a credential. <br>
-Risk: Liveness and deepfake results can be misused as final identity proof. <br>
-Mitigation: Treat results as risk-review signals and route ambiguous or high-risk cases to an authorized human reviewer. <br>
+Risk: The skill sends selected biometric face media to a configured eKYC cloud backend. <br>
+Mitigation: Install and run it only with authorization to process the media, and confirm endpoint ownership, API-key handling, retention policy, and access controls before use. <br>
+Risk: Liveness, replay, and deepfake outputs can be misused as final identity proof. <br>
+Mitigation: Treat results as risk-review signals, route ambiguous or high-risk cases to authorized human review, and do not use the skill for final high-impact decisions by itself. <br>
+Risk: Poor lighting, glare, face coverage, cropping, compression, or oversized media can make checks unreliable. <br>
+Mitigation: Request a retry when input quality is inadequate and enforce the documented short-video and 20 MB media boundary. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-ai-guardian) <br>
+- [ClawHub Skill page](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-ai-guardian) <br>
 - [Related npm MCP package](https://www.npmjs.com/package/@wefi-ai/ekyc-suite-ai-guardian-mcp) <br>
 - [Parent eKYC Suite skill](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite) <br>
-- [eKYC Suite Face Compare](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-face-compare) <br>
-- [eKYC Suite Document OCR](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-document-ocr) <br>
-- [eKYC Suite Media Labeling](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-media-labeling) <br>
+- [eKYC Suite Face Compare skill](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-face-compare) <br>
+- [eKYC Suite Document OCR skill](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-document-ocr) <br>
+- [eKYC Suite Media Labeling skill](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-media-labeling) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [JSON, Shell commands, Guidance] <br>
-**Output Format:** [JSON responses from CLI commands, with Markdown usage guidance] <br>
+**Output Type(s):** [API Calls, Shell commands, Configuration, Guidance, JSON] <br>
+**Output Format:** [JSON responses from CLI commands with concise operational guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EKYC_CLOUD_ENDPOINT and EKYC_CLOUD_API_KEY; reads only the explicitly supplied face photo or video and sends it to the configured HTTPS endpoint.] <br>
+**Other Properties Related to Output:** [Requires EKYC_CLOUD_ENDPOINT and EKYC_CLOUD_API_KEY; reads only the user-supplied media path and sends it to the configured HTTPS backend.] <br>
 
 ## Skill Version(s): <br>
-1.0.10 (source: server release, frontmatter, GEO.md) <br>
+1.0.14 (source: frontmatter, changelog, server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

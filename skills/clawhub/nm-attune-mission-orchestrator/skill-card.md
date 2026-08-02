@@ -1,5 +1,5 @@
 ## Description: <br>
-Orchestrates the full project lifecycle by auto-detecting state and routing to the correct phase. <br>
+Orchestrates full project lifecycle by auto-detecting state and routing to the correct phase. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to start or resume project workflows, select the appropriate mission type, route through brainstorm, specification, planning, and execution phases, review plans, and persist mission state for recovery. <br>
+Developers and engineering teams use this skill to start or resume project missions across brainstorming, specification, planning, and execution. It detects existing project artifacts, selects the mission type, routes phases to related Attune skills, and records mission state. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can reduce routine oversight when users give casual autonomy directives. <br>
-Mitigation: Use supervised or checkpoint-heavy settings for sensitive work and avoid casual autonomy phrases when review gates should remain active. <br>
-Risk: The skill can create GitHub issues from project artifacts through delegated workflow behavior. <br>
-Mitigation: Keep automatic issue creation disabled or review proposed issue text before allowing external-facing actions. <br>
-Risk: The skill persists mission state and plan history under .attune, which can retain project details across sessions. <br>
-Mitigation: Periodically inspect, redact, or clean the .attune directory, especially before sharing a workspace. <br>
+Risk: The skill can reduce routine checkpoints based on casual wording or auto mode. <br>
+Mitigation: Use explicit constraint flags when oversight matters, and review any reduced-checkpoint configuration before starting a mission. <br>
+Risk: The skill can create GitHub issues from project documents. <br>
+Mitigation: Disable automatic issue creation where available and review generated issue content before allowing external-facing actions. <br>
+Risk: Mission state files may contain sensitive project details. <br>
+Mitigation: Clear or redact .attune state and history files before sharing the workspace or publishing artifacts. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-mission-orchestrator) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
+- [Publisher profile](https://clawhub.ai/user/athola) <br>
+- [OpenClaw homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with structured workflow artifacts and JSON state files] <br>
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
+**Output Format:** [Markdown and structured project artifacts with optional shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update project documents, .attune state/history files, code, tests, and GitHub issues through delegated development skills.] <br>
+**Other Properties Related to Output:** [May create or update project planning documents, .attune state files, and GitHub issues through delegated phase workflows.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+1.9.17 (source: release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -335,7 +335,7 @@ You: "ACE-Step is ready but needs audio models before generating. This will
        ③ Skip local → use a cloud backend instead
           - MiniMax (if API key set) — fast, paid
           - Stable Audio (if STABILITY_API_KEY set) — paid
-          - MusicGen (local fallback) — free, instrumental only
+          - MusicGen (local fallback) — non-commercial weights, instrumental only
        
        You currently have {X} GB free disk space.
        

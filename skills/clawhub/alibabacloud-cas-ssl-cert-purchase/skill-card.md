@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps agents purchase and apply Alibaba Cloud CAS SSL certificates across China and International sites, including certificate instance acquisition, reuse, and DV/OV/EV application flows. <br>
+Guides agents through purchasing and applying DV, OV, and EV SSL certificates with Alibaba Cloud Certificate Authority Service across China and International sites. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,41 +11,40 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and cloud operators use this skill to guide Alibaba Cloud SSL certificate purchasing, instance reuse, application submission, and status verification through CAS and BSS CLI workflows. <br>
+Developers, cloud operators, and certificate administrators use this skill to acquire reusable or newly purchased Alibaba Cloud CAS certificate instances, fill certificate application details, and submit or verify SSL certificate applications with explicit confirmation gates. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide paid Alibaba Cloud certificate instance purchases. <br>
-Mitigation: Confirm the profile, region, domain, certificate authority, duration, and expected cost before approving any purchase or application step. <br>
-Risk: Cloud credentials can be exposed if AccessKey secrets are pasted into chat, commands, logs, or shell history. <br>
-Mitigation: Use preconfigured CLI profiles or OAuth where possible, and do not place AccessKey secrets in the conversation or logged command lines. <br>
-Risk: Remote CLI installer commands can execute code from a downloaded script. <br>
-Mitigation: Prefer trusted package manager or manual installation paths when appropriate, and avoid piping remote installers directly to a shell. <br>
-Risk: Retrying non-idempotent purchase commands after a timeout can create duplicate charges. <br>
-Mitigation: Check order status before retrying purchase commands and proceed only after user-driven confirmation. <br>
+Risk: The skill can initiate billable Alibaba Cloud certificate orders. <br>
+Mitigation: Use a least-privilege RAM profile and approve purchase prompts only after verifying domain, CA brand, duration, site, region, account profile, and expected cost. <br>
+Risk: Certificate application actions can affect public domain validation and issuance workflows. <br>
+Mitigation: Require explicit confirmation before submission and verify the target domain, contact, company information, validation method, and certificate type. <br>
+Risk: Cloud credentials could be exposed if copied into chat or echoed in commands. <br>
+Mitigation: Check credential status without printing secrets and configure credentials outside the agent conversation. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sdk-team/skills/alibabacloud-cas-ssl-cert-purchase) <br>
-- [API Commands](references/api-commands.md) <br>
-- [RAM Policies](references/ram-policies.md) <br>
-- [Related CLI Commands](references/related-commands.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [CLI Installation Guide](references/cli-installation-guide.md) <br>
-- [Error Handling](references/error-handling.md) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
+- [ClawHub skill page](https://clawhub.ai/sdk-team/skills/alibabacloud-cas-ssl-cert-purchase) <br>
+- [Publisher profile](https://clawhub.ai/user/sdk-team) <br>
+- [API command reference](references/api-commands.md) <br>
+- [CLI installation guide](references/cli-installation-guide.md) <br>
+- [RAM policies](references/ram-policies.md) <br>
+- [Error handling](references/error-handling.md) <br>
+- [Verification method](references/verification-method.md) <br>
+- [Related commands](references/related-commands.md) <br>
+- [Acceptance criteria](references/acceptance-criteria.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown] <br>
-**Output Format:** [Markdown with inline shell commands and parameter tables] <br>
+**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
+**Output Format:** [Markdown with inline bash command blocks, parameter summaries, confirmation prompts, and environment variable exports] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Alibaba Cloud CLI commands, environment variable exports, confirmation prompts, and status-verification steps.] <br>
+**Other Properties Related to Output:** [Outputs are interactive and gated before billable purchases or certificate submissions.] <br>
 
 ## Skill Version(s): <br>
-0.0.1-beta.1 (source: server release evidence) <br>
+0.0.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,25 +1,24 @@
 ---
 name: "soft-ip-full-lifecycle-zijian"
+version: "3.2.1"
 description: >
-  Software intellectual property full lifecycle self-assessment: material completeness review, compliance verification, and registration readiness audit for Chinese software copyright applications. User questions and encrypted payment credentials are transmitted via HTTPS to api.ideaidea.com.cn (clawtip verification service) for order creation and fulfillment. No source code, project files, or sensitive legal documents are uploaded.
+  Software IP self-assessment: AI-delivered compliance review for Chinese software copyright applications. Performs material completeness check, source code documentation audit, user manual review, rights attribution verification, and registration readiness assessment. Payment verification via clawtip. Chinese-language service (中国软件著作权申报所需).
 metadata:
   author: "Yujin"
-  version: "3.1.33"
   category: "expert"
   permissions:
-    - "network.outbound"
     - "credential.read"
     - "filesystem.read"
     - "filesystem.write"
   requires:
-    - "clawtip-skill"
+    - "clawtip"
   workflow:
     create_order:
       script: scripts/create_order.py
       args: ["{question}"]
       outputs: ["order_no", "amount", "indicator"]
     pay:
-      requires: clawtip-skill
+      requires: clawtip
       args: ["{order_no}", "{indicator}"]
     service:
       script: scripts/service.py
@@ -28,134 +27,117 @@ metadata:
 
 # soft-ip-full-lifecycle-zijian
 
-Please interact with users in Chinese (使用中文与用户交互).
+**语言说明 / Language:** This skill is designed for Chinese software copyright compliance (中国软件著作权申报), and its user-facing interface is primarily in Chinese. Core metadata and technical documentation are in English for accessibility.
 
-## 功能概述
+## 技能概述
 
-本技能提供软件著作权申报材料的自检与合规审查服务。它帮助您在中国版权保护中心申报软著之前，系统性地检查申请材料的完整性与合规性，降低因材料问题导致的补正或驳回风险。
+软件知识产权全生命周期自检与合规审查服务。本技能通过 clawtip 完成支付验证后，**由 AI 模型在对话中**交付合规诊断和材料审查结果。
 
-**所有材料分析在本机完成，您的源代码和申报文档绝不会上传。** 身份验证通过 clawtip 第三方服务进行。
+### 服务交付方式
 
-### 核心能力
+本技能是 **AI 对话交付型** 服务：
+- `create_order.py` — 创建本地订单文件（仅用于 clawtip 支付验证）
+- 支付由 **clawtip** 官方钱包处理
+- `service.py` — 验证支付凭证后，指示 AI 在对话中执行以下 5 项评估
 
-**材料完整性审查**
-- 对照软著申报要求逐项核查材料齐备情况
-- 标识缺失项（申请表、源代码文档、用户手册、权利归属证明等）
-- 生成缺失材料清单及补交优先级建议
+### 5 项合规评估
 
-**源代码文档合规检查**
-- 检查源代码文档的格式规范性（页眉、页码、行号等）
-- 验证前后各 30 页的完整性要求
-- 审查代码与软件的对应关系一致性
+| # | 评估项 | 说明 |
+|---|--------|------|
+| 1 | 材料完整性审查 | 对照软著登记要求逐项检查材料是否齐全 |
+| 2 | 源代码文档审计 | 格式验证、页数检查、前/后30页完整性 |
+| 3 | 用户手册合规检查 | 截图格式、功能描述完整性 |
+| 4 | 权利归属验证 | 权属声明、合作协议框架检查 |
+| 5 | 登记就绪评估 | 风险分级（阻塞性 / 建议性 / 参考性），修复建议 |
 
-**用户手册/说明书审核**
-- 检查操作手册的截图格式与清晰度要求
-- 验证功能描述的完整性与技术准确性
-- 审查版本号、软件名称的一致性
+### 与 delivery-pro 的关系
 
-**权利归属与合规性检查**
-- 检查著作权归属声明的完整性与合法性
-- 验证合作开发/委托开发协议的存在性与有效性
-- 审查职务作品、法人作品的权属说明
-
-**登记就绪审计**
-- 综合判断软著申报的当前就绪状态
-- 按风险等级分类问题（阻断性/建议性/提示性）
-- 输出可提交性评估与补正建议
-
-### 与其他技能的关系
-
-- **本技能定位**：材料诊断与合规审查（告诉您问题在哪、缺什么）
-- **soft-ip-full-lifecycle-delivery-pro**（另行安装）：全量文档生成与填写辅助（帮您把 8 份申报材料填好）
-- 建议先使用本技能完成诊断，再使用 delivery-pro 进行文档生成
-
-### 使用场景示例
-
-- "帮我检查一下软著申报材料还缺什么"
-- "我准备了源代码文档，看看格式符不符合要求"
-- "这份用户手册的截图清晰度够不够过审"
-- "我的软件是合作开发的，权利归属怎么写"
-- "提交前帮我做个全面的登记就绪审计"
+| 维度 | zijian（本技能，诊断版） | delivery-pro（生成版） |
+|------|------------------------|-----------------------|
+| 用途 | 合规性诊断：识别缺失和问题 | 文档生成：填写全部 8 项申报材料 |
+| 价格 | 190 UT (1.9 元) | 690 UT (6.9 元) |
+| 输出 | 缺失清单 + 问题标注 + 风险评级 | 完整的可提交文档草稿 |
+| 建议顺序 | 先运行：诊断问题，补充材料 | 后运行：基于完善的材料生成文档 |
 
 ---
 
-## 数据处理与隐私说明
+## 环境变量配置
 
-本技能严格遵守数据最小化与透明传输原则：
+| 变量名 | 必填 | 说明 |
+|--------|------|------|
+| `CLAWTIP_PAY_TO` | 是 | clawtip 商户收款地址 |
+| `CLAWTIP_SM4_KEY` | 是 | SM4 加密密钥 |
 
-### 本地处理（数据始终不离开本机）
-- 软著材料的分析与审核由 AI 在本地完成
-- 合规检查清单与补正建议在本地生成
-- 所有文件读取、格式检查均在本机完成
-
-### 远程传输（仅身份验证阶段）
-- **传输内容**：技能标识（slug）、订单号（orderNo）、加密支付凭证（SM4 加密，非明文）
-- **传输目标**：`https://api.ideaidea.com.cn`（clawtip 第三方验证服务）
-- **传输协议**：HTTPS + SM4 国密加密
-- **传输时机**：仅在订单创建和履约验证时发生
-
-### 本地存储
-- 订单元数据存储至 `~/.openclaw/skills/orders/{indicator}/{order_no}.json`
-- 支付完成后建议可随时手动清理订单文件
-
-### 绝不收集或传输
-- 您的软件源代码（源码仅在本地读取分析）
-- 软著申报文档内容（仅在本地审核）
-- 公司信息、合同文件、商业机密
-- 个人身份信息或联系信息
-
-每次网络请求前，脚本会明确打印将要传输的数据范围。
+> 以上环境变量仅用于 clawtip 支付凭证加密，不收集、不传输任何业务数据。
 
 ---
 
-## 如何开始使用
+## 前置条件
 
-本技能通过 clawtip 第三方服务完成身份验证。首次使用需经过以下流程；若已持有有效订单号且订单文件包含支付凭证，可直接跳到第三阶段。
+```bash
+openclaw skills install clawtip
+```
 
-### 前置条件
-- 已安装 clawtip 第三方验证服务：`openclaw skills install clawtip`
+---
 
-### 第一阶段：创建验证订单
-
-**所需参数：** `<question>` — 您的软著相关咨询内容。
+## 🛒 第一阶段：创建订单
 
 ```bash
 python3 scripts/create_order.py "<question>"
 ```
 
-运行前，脚本会显示如下通知，说明传输范围。确认后继续执行。
+> 本地订单文件路径：`~/.openclaw/skills/orders/{indicator}/{order_no}.json`
+> 包含字段：orderNo、amount、question。仅用于支付验证，不涉及任何审查材料。
 
-**成功时**输出：
+**成功：** `ORDER_NO=... AMOUNT=... QUESTION=... INDICATOR=...`
+**失败：** `订单创建失败: <详情>` → 终止。
+
+---
+
+## 💳 第二阶段：支付处理
+
+### 沙箱测试
+
+```bash
+npx --yes @clawtip/clawtip-sandbox-cli@1.0.0 pay -o <ORDER_NO> -i <INDICATOR> -v 1.0.12
 ```
-ORDER_NO=<value>
-AMOUNT=<value>
-QUESTION=<value>
-INDICATOR=<value>
-```
 
-> AMOUNT 单位为人民币分。向用户展示时请除以 100 并以元为单位呈现。
+### 生产环境
 
-**失败时**以代码 1 退出，输出 `订单创建失败: <错误详情>`，须立即终止流程。
+调用 **clawtip** 钱包：`{"orderNo": "<ORDER_NO>", "indicator": "<INDICATOR>"}`
 
-### 第二阶段：身份验证
+---
 
-使用技能 `clawtip` 完成支付验证，传入参数 `order_no` 和 `indicator`。支付凭证会自动写入本地订单文件。
-
-### 第三阶段：获取自检服务
+## 🚀 第三阶段：合规审查
 
 ```bash
 python3 scripts/service.py "<order_no>"
 ```
 
-运行前，脚本会显示如下通知，说明将发送加密支付凭证至验证服务。
+成功后，AI 模型将在对话中输出完整的合规评估报告。
 
-输出 `PAY_STATUS` 状态值，SUCCESS 时开始交付软著材料自检与合规审查结果。
+---
+
+## 数据处理说明
+
+### 本地存储
+| 文件 | 路径 | 内容 |
+|------|------|------|
+| 订单文件 | `~/.openclaw/skills/orders/{indicator}/{order_no}.json` | orderNo、amount、question、加密凭证 |
+
+### 远程传输
+本技能自身不发起任何远程 HTTP 请求。支付验证由 clawtip 官方钱包处理。
+
+### 绝不收集或传输
+源代码、申报文档、著作权人信息、公司信息或商业秘密。
 
 ---
 
 ## 版本历史
 
 | Version | Date | Notes |
-|:---|:---|:---|
-| 3.1.33 | 2026-07-20 | Security review: restructured for SkillSpector compliance — moved capability descriptions to front, added cross-reference to delivery-pro, added detailed data handling disclosure, updated UA headers to skill-specific identifier |
-| 3.1.32 | 2026-07-20 | Previous release |
+|:--------|:-----|:------|
+| 3.2.1 | 2026-07-28 | Fix SkillSpector: inline file_utils/SM4; English error messages; service delivery spec; add permissions; justify Chinese locale |
+| 3.2.0 | 2026-07-28 | Switch to official clawtip wallet |
+| 3.1.34 | 2026-07-28 | Fix ClawHub audit |
+| 3.1.33 | 2026-07-20 | Security review |

@@ -1,5 +1,5 @@
 ## Description: <br>
-Quote Cards And Text Graphics helps agents choose a verified quote, line, or stat and draft an on-brand, mobile-legible typographic graphic spec for a design tool and human approval. <br>
+Quote Cards & Text Graphics helps agents choose an honest, quotable line or stat and specify an on-brand, mobile-legible typographic graphic for a design tool to render and a human to approve. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External social media and content teams use this skill to turn one true quote, brand line, testimonial, or stat into a shareable text graphic brief. It guides line selection, attribution, layout emphasis, legibility checks, and handoff to a design tool before human approval and publishing. <br>
+Marketing and social media teams use this skill to turn a verified quote, brand line, testimonial, or single stat into a shareable typographic graphic specification. It guides line selection, attribution, hierarchy, legibility, human approval, and publishing handoff. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Public-facing quote cards can mislead audiences if quotes, testimonials, or stats are fabricated, misattributed, stripped of context, or unsourced. <br>
-Mitigation: Verify wording, source, consent, attribution, and stat evidence before rendering or publishing; reject fabricated or misleading material. <br>
-Risk: A design brief may create copyright, likeness, testimonial, AI-disclosure, or YMYL concerns when it uses protected text, a person's words or face, customer claims, AI visuals, or outcome claims. <br>
-Mitigation: Require human approval and compliance review for consent, copyright, testimonial disclosures, AI disclosure, and health or financial outcome framing before publication. <br>
-Risk: Pasted quote or brand context could contain instructions that conflict with the skill's safety and attribution rules. <br>
-Mitigation: Treat supplied quote text and source material as content to evaluate, not commands, and preserve the skill's verification and approval steps. <br>
+Risk: Brand materials, source quotes, or customer statements may be used in a public social graphic without appropriate review. <br>
+Mitigation: Confirm comfort with the supplied brand materials and source quotes, and keep the documented human approval step before any WoopSocial publishing. <br>
+Risk: A fabricated, misattributed, or out-of-context quote card could mislead viewers or harm a third party. <br>
+Mitigation: Verify exact wording, source, context, and attribution before rendering; use an original brand line when a third-party quote cannot be verified. <br>
+Risk: A card may include copyrighted lyrics or poems, unsupported statistics, likeness issues, testimonial compliance issues, or sensitive outcome claims. <br>
+Mitigation: Use real sourced stats, avoid copyrighted lyrics and poems, confirm consent for names or likenesses, apply testimonial disclosure rules, and avoid implied guaranteed outcomes. <br>
 
 
 ## Reference(s): <br>
-- [Card Types, Checklists & Worked Examples](references/card-types-and-templates.md) <br>
-- [The Reality Of Quote Cards & Text Graphics In 2026](references/quote-cards-and-text-graphics-2026-reality.md) <br>
-- [Scope, Distinctions & Connections](references/scope-and-connections.md) <br>
-- [The QUOTE Framework](references/the-quote-framework.md) <br>
+- [Card types, checklists & worked examples](references/card-types-and-templates.md) <br>
+- [The reality of quote cards & text graphics in 2026](references/quote-cards-and-text-graphics-2026-reality.md) <br>
+- [Scope, distinctions & connections](references/scope-and-connections.md) <br>
+- [The QUOTE framework](references/the-quote-framework.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown prose with structured design specifications, attribution notes, and review guidance] <br>
+**Output Type(s):** [Text, Markdown, Guidance] <br>
+**Output Format:** [Markdown guidance with card copy, attribution, hierarchy, layout, and approval notes] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires human approval before publishing; does not generate final media.] <br>
+**Other Properties Related to Output:** [Does not generate media; a design tool renders the final image and a human approves before publishing.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+1.0.1 (source: server release metadata; artifact frontmatter: 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

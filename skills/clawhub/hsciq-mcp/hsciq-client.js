@@ -91,6 +91,9 @@ async function searchUnified(keywords, unifiedType = 'ciq', pageIndex = 1, pageS
 }
 
 async function createGuileiForm(fields = {}, imagePaths = []) {
+  if (!imagePaths || imagePaths.length === 0) {
+    throw new Error('At least 1 product image is required (use --images <path...>, 1-3 images, ≤1MB each, jpg/png/gif/webp)');
+  }
   const args = { ...fields };
   if (imagePaths.length > 0) {
     args.images = [];
@@ -190,7 +193,7 @@ async function main() {
         console.log('  get-detail          --code <hs> [--country CN|US|JP]');
         console.log('  search-instance     --keywords <product> [--country CN|US|JP]');
         console.log('  search-unified      --keywords <kw> --type ciq|hazardous|port');
-        console.log('  create-guilei-form  --productNameCn <name> --uses <usage> --images <path...>');
+        console.log('  create-guilei-form  --productNameCn <name> --images <path...> (images required, 1-3) [--uses <usage>]');
         console.log('  get-guilei-form     --formId <guid>');
         console.log('  list-my-guilei-forms [--pageIndex 1] [--pageSize 20]');
         console.log('  add-guilei-dialog-message --formId <guid> --fieldKey <key> --content <text> [--dialogId <guid>]');

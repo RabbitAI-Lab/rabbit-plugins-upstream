@@ -11,36 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and documentation engineers use this skill to refresh user-facing tutorials by discovering tutorial manifests and tapes, validating commands, recording terminal or browser demos, and generating docs and book markdown. <br>
+Developers and documentation maintainers use this skill to refresh user-facing tutorials, validate VHS and Playwright tutorial assets, record GIF demos, and generate concise project docs plus deeper book-style markdown. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can run project-defined shell commands from tapes and manifest prerequisites. <br>
-Mitigation: Use it only in trusted repositories, review tape and manifest commands before execution, and keep validation enabled for untrusted content. <br>
-Risk: The skill can rebuild or install CLI binaries and launch background services while preparing recordings. <br>
-Mitigation: Confirm build targets and service prerequisites before recording, and run in a controlled workspace where background processes can be stopped cleanly. <br>
-Risk: The skill can edit README, docs, book, and tutorial asset paths. <br>
-Mitigation: Review generated file changes before committing and verify that demos and markdown match the intended release. <br>
+Risk: The skill can run project-supplied commands from tape files and manifest prerequisites. <br>
+Mitigation: Use it only on repositories you trust, review tape files and manifest requires commands before execution, and avoid skip-validation options on unfamiliar content. <br>
+Risk: The skill can rebuild or install binaries such as cargo or make targets before recording tutorials. <br>
+Mitigation: Confirm build and install commands before allowing the agent to run them, especially when dependencies or generated binaries changed. <br>
+Risk: The skill can edit top-level documentation such as README.md and book/src/SUMMARY.md. <br>
+Mitigation: Review documentation diffs before accepting changes so generated tutorials do not introduce misleading or stale guidance. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-tutorial-updates) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
-- [Manifest Parsing Module](modules/manifest-parsing.md) <br>
-- [Markdown Generation Module](modules/markdown-generation.md) <br>
-- [Tape Validation Module](modules/tape-validation.md) <br>
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
+- [Manifest Parsing Module](artifact/modules/manifest-parsing.md) <br>
+- [Markdown Generation Module](artifact/modules/markdown-generation.md) <br>
+- [Tape Validation Module](artifact/modules/tape-validation.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands, file paths, manifest snippets, and tutorial asset instructions] <br>
+**Output Type(s):** [Markdown, Files, Shell commands, Configuration instructions, Guidance] <br>
+**Output Format:** [Markdown with inline shell commands and generated tutorial asset paths] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose updates to README, docs, book, tape, manifest, and GIF asset paths.] <br>
+**Other Properties Related to Output:** [May produce or update tutorial markdown, README demo sections, mdBook summaries, and GIF recording assets.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+1.9.17 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

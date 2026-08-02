@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides metallurgy-sector tax compliance guidance for ferrous, non-ferrous, rare-earth, and precious-metal businesses, including resource tax, VAT refund, gold VAT, transfer pricing, risk self-checks, and remediation pointers. <br>
+tax-steel provides metallurgy-focused tax compliance guidance, risk self-checks, policy-oriented Q&A, report templates, and practical checklists for steel, nonferrous metals, rare earth, and precious metals businesses. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External tax, finance, and compliance teams use this skill to ask China-focused metallurgy tax questions, run lightweight risk self-checks, and draft practical compliance checklists or report templates. It is also useful for agents that need domain-specific guidance on resource tax, recycling VAT refund, precious-metal VAT, and related-party transfer pricing scenarios. <br>
+External users and business teams use this skill to ask metallurgy tax-compliance questions, run lightweight self-checks, identify risk indicators, and draft compliance-oriented reports or remediation checklists. It is not a substitute for licensed tax, audit, or legal advice. <br>
 
 ### Deployment Geography for Use: <br>
-China <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Business tax questions, risk scenarios, and self-check data may be processed by a remote service and may create local logs or configuration files. <br>
-Mitigation: Use anonymized or minimized inputs, avoid privileged or confidential tax/legal details unless the publisher's data handling terms are acceptable, and review local logs/configuration after use. <br>
-Risk: Matrix installation behavior can install multiple related tax skills rather than only this metallurgy-tax skill. <br>
-Mitigation: Review installation prompts and manifests before proceeding, and use dry-run or manual installation review where available. <br>
-Risk: Tax calculations, risk scores, and compliance suggestions may be incomplete or stale for a specific company, region, or filing period. <br>
-Mitigation: Treat outputs as drafting and self-check support, verify against current official tax authority materials, and consult qualified tax or legal professionals for filings, disputes, or material decisions. <br>
+Risk: Tax questions, scenarios, and self-check metrics may be sent to the cloud service or fallback search providers. <br>
+Mitigation: Use only organization-approved data, avoid highly sensitive business details, and review the configured service endpoints before use. <br>
+Risk: The skill may persist local credentials, browser credentials, and logs. <br>
+Mitigation: Clear ~/.tax-policy-client and browser localStorage when credentials or logs should not remain on the machine. <br>
+Risk: Optional agent auto-setup can change local agent configuration. <br>
+Mitigation: Keep TAX_ENABLE_AUTOSETUP disabled unless configuration changes have been reviewed and approved. <br>
+Risk: Tax-compliance guidance can be incomplete, outdated, or unsuitable for a specific business situation. <br>
+Mitigation: Treat outputs as preliminary guidance and confirm material tax, audit, or legal decisions with qualified professionals or the relevant authority. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-steel) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/zxj2devs) <br>
-- [Metallurgy tax self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_steel.html) <br>
+- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
+- [Metallurgy compliance self-check page](https://mcp.aitaxs.top/web/topic_workflow_steel.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Cloud MCP service endpoint](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and plain-text guidance, with code or shell snippets when setup or installation is requested] <br>
+**Output Format:** [Markdown guidance with optional code, shell-command, configuration, checklist, and report-template content.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include tax compliance checklists, risk ratings, calculation steps, remediation suggestions, and report templates.] <br>
+**Other Properties Related to Output:** [May use cloud-backed MCP calls, local fallback workflows, and browser-based self-check interactions.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release evidence and SKILL.md frontmatter) <br>
+3.15.7 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

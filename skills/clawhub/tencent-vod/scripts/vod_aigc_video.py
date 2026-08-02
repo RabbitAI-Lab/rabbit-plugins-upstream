@@ -76,14 +76,14 @@ def get_client(region="ap-guangzhou"):
 # 模型版本映射
 MODEL_VERSIONS = {
     "GV": ["3.1", "3.1-fast", "3.1-lite"],
-    "Hailuo": ["02", "2.3", "2.3-fast"],
+    "Hailuo": ["02", "2.3", "2.3-fast", "H3"],
     "Kling": ["1.6", "2.0", "2.1", "2.5", "O1", "2.6", "3.0", "3.0-Omni", "3.0-turbo"],
     "Jimeng": ["3.0pro"],
     "Vidu": ["q2", "q2-turbo", "q2-pro", "q3", "q3-pro", "q3-turbo", "q3-mix", "q3-drama"],
     "Hunyuan": ["1.5", "3d_2.0"],
     "Mingmou": ["1.0"],
     "OS": ["2.0"],
-    "Seedance": ["1.0-pro", "1.0-lite-i2v", "1.0-pro-fast", "1.5-pro"],
+    "Seedance": ["1.0-pro-fast", "1.5-pro"],
     "PixVerse": ["v5.6", "v6", "c1"],
 }
 
@@ -101,10 +101,110 @@ MODEL_DEFAULT_VERSION = {
 }
 
 
+# ── Hailuo H3 多模态输入约束（2026-07-31 发布）─────────────────
+# 接口侧同样会校验，这里提前拦截以便给出明确提示，避免提交后才失败。
+#
+# 文档给的是三条彼此独立的数量限制，不是一个总额：
+#     图片：首帧 ≤ 1，尾帧 ≤ 1，参考图 ≤ 9
+#     视频：≤ 3      音频：≤ 3
+# 因此必须按「用途」而非按「Category」汇总计数，否则
+# 「9 张参考图 + 1 尾帧」这类合法组合会被误判为 Image 超限。
+H3_LIMITS = {
+    "Image": {"formats": "JPG/JPEG/PNG/WEBP/HEIC/HEIF", "size_mb": 30},
+    "Video": {"max": 3, "formats": "MP4/MOV", "size_mb": 50},
+    "Audio": {"max": 3, "formats": "WAV/MP3", "size_mb": 15},
+}
+H3_USAGE_LIMITS = {"FirstFrame": 1, "LastFrame": 1}
+H3_REFERENCE_IMAGE_MAX = 9
+
+
+def _iter_h3_file_entries(args):
+    """产出 (Category, Usage) 序列；返回 None 表示 JSON 有误，交由原逻辑报错。
+
+    注意 --file-id/--file-url 与 --file-infos 在请求装配处是 elif 互斥的
+    （单文件方式优先，--file-infos 会被静默忽略），这里保持同一优先级，
+    以免校验看到的输入与真正提交的请求不一致。
+    """
+    entries = []
+    if args.file_id or args.file_url:
+        entries.append((args.file_category or "Image", args.file_usage or "FirstFrame"))
+    elif args.file_infos:
+        try:
+            for fi in json.loads(args.file_infos):
+                entries.append((fi.get("Category", "Image"), fi.get("Usage", "FirstFrame")))
+        except (json.JSONDecodeError, TypeError):
+            return None
+
+    # 尾帧走独立字段 LastFrameFileId/LastFrameUrl，与 FileInfos 并存不冲突
+    if args.last_frame_file_id or args.last_frame_url:
+        entries.append(("Image", "LastFrame"))
+
+    return entries
+
+
+def validate_hailuo_h3_inputs(args):
+    """校验 Hailuo H3 的输入组合，不合规则直接退出。"""
+    if args.model != "Hailuo" or args.model_version != "H3":
+        return
+
+    # 单文件方式与 --file-infos 同传时后者会被丢弃，提前提醒避免静默失效
+    if (args.file_id or args.file_url) and args.file_infos:
+        print("错误：--file-id/--file-url 与 --file-infos 不能同时使用")
+        print("      单文件参数优先，--file-infos 会被静默忽略，请只用其中一种方式")
+        sys.exit(1)
+
+    entries = _iter_h3_file_entries(args)
+    if entries is None:
+        return
+
+    unknown = sorted({c for c, _ in entries if c not in H3_LIMITS})
+    if unknown:
+        print(f"错误：Hailuo H3 不支持的输入类别：{', '.join(unknown)}")
+        print(f"      可用类别：{', '.join(H3_LIMITS)}")
+        sys.exit(1)
+
+    # 按用途独立计数（首帧 / 尾帧各 ≤ 1，参考图 ≤ 9）
+    for usage, cap in H3_USAGE_LIMITS.items():
+        n = sum(1 for c, u in entries if c == "Image" and u == usage)
+        if n > cap:
+            print(f"错误：Hailuo H3 的{'首帧' if usage == 'FirstFrame' else '尾帧'}"
+                  f"最多 {cap} 个，当前 {n} 个")
+            sys.exit(1)
+
+    ref_images = sum(1 for c, u in entries if c == "Image" and u == "Reference")
+    if ref_images > H3_REFERENCE_IMAGE_MAX:
+        print(f"错误：Hailuo H3 的参考图最多 {H3_REFERENCE_IMAGE_MAX} 张，当前 {ref_images} 张")
+        print(f"      图片限制：格式 {H3_LIMITS['Image']['formats']}，"
+              f"单文件 ≤ {H3_LIMITS['Image']['size_mb']} MB")
+        sys.exit(1)
+
+    # 视频 / 音频各自 ≤ 3
+    for cat in ("Video", "Audio"):
+        n = sum(1 for c, _ in entries if c == cat)
+        cap = H3_LIMITS[cat]["max"]
+        if n > cap:
+            print(f"错误：Hailuo H3 的{cat}输入最多 {cap} 个，当前 {n} 个")
+            print(f"      {cat} 限制：格式 {H3_LIMITS[cat]['formats']}，"
+                  f"单文件 ≤ {H3_LIMITS[cat]['size_mb']} MB")
+            sys.exit(1)
+
+    # i2va（首帧/尾帧）与 r2va（参考视频/音频）互斥
+    usages = {u for _, u in entries}
+    has_i2va = bool({"FirstFrame", "LastFrame"} & usages)
+    has_r2va = any(c in ("Video", "Audio") and u == "Reference" for c, u in entries)
+    if has_i2va and has_r2va:
+        print("错误：Hailuo H3 的图生视频（i2va，首帧/尾帧）与多模态参考生成"
+              "（r2va，参考视频/音频）互斥，不可混用")
+        print("      请二者择一：使用首帧/尾帧图，或使用参考视频/音频")
+        sys.exit(1)
+
+
 # NOCA:CCN(complex function with multiple execution paths, splitting would reduce readability)
 def create_video_task(args):
     """创建 AIGC 生视频任务"""
     client = get_client(args.region)
+
+    validate_hailuo_h3_inputs(args)
 
     req = models.CreateAigcVideoTaskRequest()
 
@@ -493,10 +593,10 @@ def main():
     create_parser.add_argument('--file-url', help='参考图/首帧的 URL')
     create_parser.add_argument('--file-infos',
                                help='多个参考图的 JSON 数组，格式：[{"Type":"Url","Url":"...","Category":"Image","Usage":"Reference","Text":"pic1","ReferenceType":"subject"}]；支持 SDK 全字段：Type/FileId/Url/Base64/Category/Usage/Text/ReferenceType/ObjectId/VoiceId/KeepOriginalSound')
-    create_parser.add_argument('--file-category', choices=['Image', 'Video'],
-                               help='单参考文件的分类（Image/Video）；用于 Kling motion_control/avatar_i2v 等场景区分图片/视频')
-    create_parser.add_argument('--file-usage', choices=['FirstFrame', 'Reference'],
-                               help='单参考文件的用途：FirstFrame（首帧）/Reference（参考帧）；PixVerse、Vidu、Kling 多模式区分用')
+    create_parser.add_argument('--file-category', choices=['Image', 'Video', 'Audio'],
+                               help='单参考文件的分类（Image/Video/Audio）；用于 Kling motion_control/avatar_i2v 等场景区分，Audio 供 Hailuo H3 多模态参考生成使用')
+    create_parser.add_argument('--file-usage', choices=['FirstFrame', 'LastFrame', 'Reference'],
+                               help='单参考文件的用途：FirstFrame（首帧）/LastFrame（尾帧）/Reference（参考帧）；PixVerse、Vidu、Kling 需显式指定；Hailuo H3 参考视频/音频用 Reference')
     create_parser.add_argument('--file-text', help='单参考文件的命名/描述（仅 PixVerse 多图主体参考生效，用于 Prompt 中 @name 引用）')
     create_parser.add_argument('--reference-type', choices=['subject', 'background', 'mask'],
                                help='单参考文件的参考类型：PixVerse 支持 subject（主体）/background（背景）；GV/Kling 也适用')
@@ -557,7 +657,7 @@ def main():
     create_parser.add_argument('--sub-app-id', type=int,
                                default=int(os.environ.get("TENCENTCLOUD_VOD_SUB_APP_ID", 0)) or None,
                                help='子应用 ID，2023-12-25 后开通点播的客户必填')
-    create_parser.add_argument('--region', default='ap-guangzhou', help='地域，默认 ap-guangzhou')
+    create_parser.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'), help='地域，默认 ap-guangzhou')
     create_parser.add_argument('--no-wait', action='store_true', help='仅提交任务，不等待结果')
     create_parser.add_argument('--max-wait', type=int, default=1800, help='最大等待时间(秒)，默认 1800')
     create_parser.add_argument('--json', action='store_true', help='JSON 格式输出完整响应')

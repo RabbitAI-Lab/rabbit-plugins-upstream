@@ -1,5 +1,5 @@
 ## Description: <br>
-Ace Music helps agents use the ACE Music API to generate vocal or instrumental MP3 music from prompts, lyrics, and optional source audio. <br>
+ACE Music helps agents generate AI music from prompts and lyrics through ACE Music's hosted ACE-Step 1.5 API. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators and developers use Ace Music to generate complete songs, instrumentals, covers, repainted audio segments, and batch variants through the ACE Music API with controls for duration, BPM, key, language, lyrics, and seed. <br>
+External developers, creators, and automation teams use this skill to ask an agent for generated music, vocals, lyrics-driven songs, instrumentals, covers, or repainted audio. The source states it is not suitable for processing copyright-protected media content. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompts, lyrics, and optional source audio are sent to ACE Music's API. <br>
-Mitigation: Do not submit private, proprietary, or copyrighted material unless the user has the right to process it with ACE Music. <br>
-Risk: ACE_MUSIC_API_KEY can grant access to the user's ACE Music account. <br>
-Mitigation: Keep the API key out of logs, chat transcripts, generated files, and version control. <br>
-Risk: Generated music may not be suitable for every commercial distribution or copyright workflow. <br>
-Mitigation: Confirm usage rights, distribution rights, and any licensing requirements before publishing generated or transformed audio. <br>
+Risk: Music prompts, lyrics, or proprietary creative material may be sent to ACE Music's API. <br>
+Mitigation: Use the skill only for content appropriate to share with that external API, and avoid enabling full request-body logs for private lyrics or proprietary work. <br>
+Risk: The ACE Music API key could be exposed if stored in shared instructions or logs. <br>
+Mitigation: Store ACE_MUSIC_API_KEY in a private environment variable or secrets manager rather than TOOLS.md. <br>
+Risk: The artifact states it is not suitable for copyright-protected media content. <br>
+Mitigation: Use only prompts, lyrics, and audio inputs that the user has rights to provide and transform. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/ace-music) <br>
-- [Skill Homepage](https://skillhub.cn) <br>
 - [ACE Music API Key Page](https://acemusic.ai/playground/api-key) <br>
-- [ACE Music API Generate Endpoint](https://api.acemusic.ai/v1/generate) <br>
+- [ACE Music API Base URL](https://api.acemusic.ai) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with inline shell commands and generated MP3 file paths] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration guidance, Files] <br>
+**Output Format:** [Markdown guidance with shell commands, API request examples, and generated MP3 file paths] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ACE_MUSIC_API_KEY; generated audio is returned by the API as base64 MP3 and decoded to local MP3 files.] <br>
+**Other Properties Related to Output:** [May send user prompts, lyrics, and music-generation parameters to ACE Music's external API; generated audio is described as base64 MP3 decoded to files.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence and skill frontmatter) <br>
+1.0.3 (source: server release evidence and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

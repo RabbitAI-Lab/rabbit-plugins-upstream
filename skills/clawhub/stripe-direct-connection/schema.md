@@ -20,7 +20,7 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `subscription` | `string` | no | The ID of the subscription to cancel. |
+| `subscription` | `string` | yes | The ID of the subscription to cancel. |
 
 Sample parameters:
 
@@ -36,7 +36,6 @@ Generated JSON parameter schema:
 {
   "subscription": {
     "description": "The ID of the subscription to cancel.",
-    "required": false,
     "type": "string"
   }
 }
@@ -60,7 +59,7 @@ Parameters:
 | `currency` | `string` | no | Three-letter ISO code for the currency of the amount_off parameter (required if amount_off is passed). Infer based on the amount_off. For example, if a coupon is $2 off, set currency to be USD. |
 | `duration` | `string` | no | How long the discount will last. Defaults to "once" |
 | `duration_in_months` | `number` | no | The number of months the discount will last if duration is repeating |
-| `name` | `string` | no | Name of the coupon displayed to customers on invoices or receipts |
+| `name` | `string` | yes | Name of the coupon displayed to customers on invoices or receipts |
 | `percent_off` | `number` | no | A positive float larger than 0, and smaller or equal to 100, that represents the discount the coupon will apply (required if amount_off is not passed) |
 
 Sample parameters:
@@ -82,13 +81,11 @@ Generated JSON parameter schema:
 {
   "amount_off": {
     "description": "A positive integer representing the amount to subtract from an invoice total (required if percent_off is not passed)",
-    "required": false,
     "type": "number"
   },
   "currency": {
     "default": "USD",
     "description": "Three-letter ISO code for the currency of the amount_off parameter (required if amount_off is passed). Infer based on the amount_off. For example, if a coupon is $2 off, set currency to be USD.",
-    "required": false,
     "type": "string"
   },
   "duration": {
@@ -99,22 +96,18 @@ Generated JSON parameter schema:
       "once",
       "repeating"
     ],
-    "required": false,
     "type": "string"
   },
   "duration_in_months": {
     "description": "The number of months the discount will last if duration is repeating",
-    "required": false,
     "type": "number"
   },
   "name": {
     "description": "Name of the coupon displayed to customers on invoices or receipts",
-    "required": false,
     "type": "string"
   },
   "percent_off": {
     "description": "A positive float larger than 0, and smaller or equal to 100, that represents the discount the coupon will apply (required if amount_off is not passed)",
-    "required": false,
     "type": "number"
   }
 }
@@ -135,7 +128,7 @@ Parameters:
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `email` | `string` | no | The email of the customer |
-| `name` | `string` | no | The name of the customer |
+| `name` | `string` | yes | The name of the customer |
 
 Sample parameters:
 
@@ -153,12 +146,10 @@ Generated JSON parameter schema:
   "email": {
     "description": "The email of the customer",
     "format": "email",
-    "required": false,
     "type": "string"
   },
   "name": {
     "description": "The name of the customer",
-    "required": false,
     "type": "string"
   }
 }
@@ -178,7 +169,7 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `customer` | `string` | no | The ID of the customer to create the invoice for. |
+| `customer` | `string` | yes | The ID of the customer to create the invoice for. |
 | `days_until_due` | `number` | no | The number of days until the invoice is due. |
 
 Sample parameters:
@@ -196,12 +187,10 @@ Generated JSON parameter schema:
 {
   "customer": {
     "description": "The ID of the customer to create the invoice for.",
-    "required": false,
     "type": "string"
   },
   "days_until_due": {
     "description": "The number of days until the invoice is due.",
-    "required": false,
     "type": "number"
   }
 }
@@ -221,9 +210,9 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `customer` | `string` | no | The ID of the customer to create the invoice item for. |
-| `invoice` | `string` | no | The ID of the invoice to create the item for. |
-| `price` | `string` | no | The ID of the price for the item. |
+| `customer` | `string` | yes | The ID of the customer to create the invoice item for. |
+| `invoice` | `string` | yes | The ID of the invoice to create the item for. |
+| `price` | `string` | yes | The ID of the price for the item. |
 
 Sample parameters:
 
@@ -241,17 +230,14 @@ Generated JSON parameter schema:
 {
   "customer": {
     "description": "The ID of the customer to create the invoice item for.",
-    "required": false,
     "type": "string"
   },
   "invoice": {
     "description": "The ID of the invoice to create the item for.",
-    "required": false,
     "type": "string"
   },
   "price": {
     "description": "The ID of the price for the item.",
-    "required": false,
     "type": "string"
   }
 }
@@ -271,8 +257,8 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `price` | `string` | no | The ID of the price to create the payment link for. |
-| `quantity` | `number` | no | The quantity of the product to include. |
+| `price` | `string` | yes | The ID of the price to create the payment link for. |
+| `quantity` | `number` | yes | The quantity of the product to include. |
 
 Sample parameters:
 
@@ -289,12 +275,10 @@ Generated JSON parameter schema:
 {
   "price": {
     "description": "The ID of the price to create the payment link for.",
-    "required": false,
     "type": "string"
   },
   "quantity": {
     "description": "The quantity of the product to include.",
-    "required": false,
     "type": "number"
   }
 }
@@ -314,10 +298,10 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `currency` | `string` | no | The currency of the price. |
-| `product` | `string` | no | The ID of the product to create the price for. |
-| `recurring` | `object` | yes | The recurring components of a price such as its interval. |
-| `unit_amount` | `number` | no | The unit amount of the price in cents. |
+| `currency` | `string` | yes | The currency of the price. |
+| `product` | `string` | yes | The ID of the product to create the price for. |
+| `recurring` | `object` | no | The recurring components of a price such as its interval. |
+| `unit_amount` | `number` | yes | The unit amount of the price in cents. |
 
 Sample parameters:
 
@@ -339,12 +323,10 @@ Generated JSON parameter schema:
 {
   "currency": {
     "description": "The currency of the price.",
-    "required": false,
     "type": "string"
   },
   "product": {
     "description": "The ID of the product to create the price for.",
-    "required": false,
     "type": "string"
   },
   "recurring": {
@@ -359,21 +341,20 @@ Generated JSON parameter schema:
           "week",
           "year"
         ],
-        "required": false,
         "type": "string"
       },
       "interval_count": {
         "description": "The number of intervals between subscription billings. For example, interval=month and interval_count=3 bills every 3 months. Maximum of three years interval allowed (3 years, 36 months, or 156 weeks).",
-        "required": false,
         "type": "integer"
       }
     },
-    "required": true,
+    "required": [
+      "interval"
+    ],
     "type": "object"
   },
   "unit_amount": {
     "description": "The unit amount of the price in cents.",
-    "required": false,
     "type": "number"
   }
 }
@@ -394,7 +375,7 @@ Parameters:
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `description` | `string` | no | The description of the product. |
-| `name` | `string` | no | The name of the product. |
+| `name` | `string` | yes | The name of the product. |
 
 Sample parameters:
 
@@ -411,12 +392,10 @@ Generated JSON parameter schema:
 {
   "description": {
     "description": "The description of the product.",
-    "required": false,
     "type": "string"
   },
   "name": {
     "description": "The name of the product.",
-    "required": false,
     "type": "string"
   }
 }
@@ -437,7 +416,7 @@ Parameters:
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `amount` | `integer` | no | The amount to refund in cents. |
-| `payment_intent` | `string` | no | The ID of the PaymentIntent to refund. |
+| `payment_intent` | `string` | yes | The ID of the PaymentIntent to refund. |
 | `reason` | `string` | no | The reason for the refund. |
 
 Sample parameters:
@@ -456,12 +435,10 @@ Generated JSON parameter schema:
 {
   "amount": {
     "description": "The amount to refund in cents.",
-    "required": false,
     "type": "integer"
   },
   "payment_intent": {
     "description": "The ID of the PaymentIntent to refund.",
-    "required": false,
     "type": "string"
   },
   "reason": {
@@ -471,7 +448,6 @@ Generated JSON parameter schema:
       "fraudulent",
       "requested_by_customer"
     ],
-    "required": false,
     "type": "string"
   }
 }
@@ -491,7 +467,7 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `id` | `string` | no | The unique identifier for the Stripe object (e.g. cus_123, pi_123). |
+| `id` | `string` | yes | The unique identifier for the Stripe object (e.g. cus_123, pi_123). |
 
 Sample parameters:
 
@@ -507,7 +483,6 @@ Generated JSON parameter schema:
 {
   "id": {
     "description": "The unique identifier for the Stripe object (e.g. cus_123, pi_123).",
-    "required": false,
     "type": "string"
   }
 }
@@ -527,7 +502,7 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `invoice` | `string` | no | The ID of the invoice to finalize. |
+| `invoice` | `string` | yes | The ID of the invoice to finalize. |
 
 Sample parameters:
 
@@ -543,10 +518,35 @@ Generated JSON parameter schema:
 {
   "invoice": {
     "description": "The ID of the invoice to finalize.",
-    "required": false,
     "type": "string"
   }
 }
+```
+
+## `get_instructions`
+
+Action slug: `get-instructions`
+
+x402 action URL: `POST https://www.agentpmt.com/api/external/tools/stripe-direct-connection/actions/get-instructions/invoke`
+
+Price: `5` credits
+
+Get tool instructions and available actions.
+
+Parameters:
+
+This action does not require parameters.
+
+Sample parameters:
+
+```json
+{}
+```
+
+Generated JSON parameter schema:
+
+```json
+{}
 ```
 
 ## `get_stripe_account_info`
@@ -607,7 +607,6 @@ Generated JSON parameter schema:
     "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100.",
     "maximum": 100,
     "minimum": 1,
-    "required": false,
     "type": "integer"
   }
 }
@@ -645,14 +644,12 @@ Generated JSON parameter schema:
 {
   "email": {
     "description": "A case-sensitive filter on the list based on the customer's email field. The value must be a string.",
-    "required": false,
     "type": "string"
   },
   "limit": {
     "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100.",
     "maximum": 100,
     "minimum": 1,
-    "required": false,
     "type": "integer"
   }
 }
@@ -692,7 +689,6 @@ Generated JSON parameter schema:
 {
   "charge": {
     "description": "Only return disputes associated to the charge specified by this charge ID.",
-    "required": false,
     "type": "string"
   },
   "limit": {
@@ -700,12 +696,10 @@ Generated JSON parameter schema:
     "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.",
     "maximum": 100,
     "minimum": 1,
-    "required": false,
     "type": "integer"
   },
   "payment_intent": {
     "description": "Only return disputes associated to the PaymentIntent specified by this PaymentIntent ID.",
-    "required": false,
     "type": "string"
   }
 }
@@ -743,14 +737,12 @@ Generated JSON parameter schema:
 {
   "customer": {
     "description": "The ID of the customer to list invoices for.",
-    "required": false,
     "type": "string"
   },
   "limit": {
     "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.",
     "maximum": 100,
     "minimum": 1,
-    "required": false,
     "type": "integer"
   }
 }
@@ -788,14 +780,12 @@ Generated JSON parameter schema:
 {
   "customer": {
     "description": "The ID of the customer to list payment intents for.",
-    "required": false,
     "type": "string"
   },
   "limit": {
     "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100.",
     "maximum": 100,
     "minimum": 1,
-    "required": false,
     "type": "integer"
   }
 }
@@ -835,12 +825,10 @@ Generated JSON parameter schema:
     "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.",
     "maximum": 100,
     "minimum": 1,
-    "required": false,
     "type": "integer"
   },
   "product": {
     "description": "The ID of the product to list prices for.",
-    "required": false,
     "type": "string"
   }
 }
@@ -878,7 +866,6 @@ Generated JSON parameter schema:
     "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100, and the default is 10.",
     "maximum": 100,
     "minimum": 1,
-    "required": false,
     "type": "integer"
   }
 }
@@ -920,19 +907,16 @@ Generated JSON parameter schema:
 {
   "customer": {
     "description": "The ID of the customer to list subscriptions for.",
-    "required": false,
     "type": "string"
   },
   "limit": {
     "description": "A limit on the number of objects to be returned. Limit can range between 1 and 100.",
     "maximum": 100,
     "minimum": 1,
-    "required": false,
     "type": "integer"
   },
   "price": {
     "description": "The ID of the price to list subscriptions for.",
-    "required": false,
     "type": "string"
   },
   "status": {
@@ -947,7 +931,6 @@ Generated JSON parameter schema:
       "trialing",
       "unpaid"
     ],
-    "required": false,
     "type": "string"
   }
 }
@@ -994,7 +977,7 @@ Parameters:
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `language` | `string` | no | The programming language to search for in the the documentation. |
-| `question` | `string` | no | The user question about integrating with Stripe will be used to search the documentation. |
+| `question` | `string` | yes | The user question about integrating with Stripe will be used to search the documentation. |
 | `search_only_api_ref` | `boolean` | no | When set to true, search only in the Stripe API reference documentation instead of the full documentation set. Use true when users need specific API implementation details, code examples, or parameter references. Use false (default) for conceptual explanations, best practices, integration guides, or troubleshooting help. |
 
 Sample parameters:
@@ -1023,17 +1006,14 @@ Generated JSON parameter schema:
       "python",
       "curl"
     ],
-    "required": false,
     "type": "string"
   },
   "question": {
     "description": "The user question about integrating with Stripe will be used to search the documentation.",
-    "required": false,
     "type": "string"
   },
   "search_only_api_ref": {
     "description": "When set to true, search only in the Stripe API reference documentation instead of the full documentation set. Use true when users need specific API implementation details, code examples, or parameter references. Use false (default) for conceptual explanations, best practices, integration guides, or troubleshooting help.",
-    "required": false,
     "type": "boolean"
   }
 }
@@ -1053,7 +1033,7 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `query` | `string` | no | This query string should be formatted as 'resource:query_clause', where 'resource' is one of (customers, payment_intents, charges, invoices, prices, products, subscriptions), and 'query_clause' is the actual query in Stripe's custom query syntax to query metadata for that resource. For example, for the query: customers:email:"jenny.rosen@example.com" resource: `customers` query_clause: `email:"jenny.rosen@example.com"` A query clause consists of a field, operator, and value. ## Query Fields for customers * created * email * metadata * name * phone ## Query Fields for payment_intents * amount * created * currency * customer * metadata * status ## Query Fields for charges * amount * billing_details.address.postal_code * created * currency * customer * disputed * metadata * payment_method_details.{{SOURCE}}.last4 * payment_method_details.{{SOURCE}}.exp_month * payment_method_details.{{SOURCE}}.exp_year * payment_method_details.{{SOURCE}}.brand * payment_method_details.{{SOURCE}}.fingerprint * refunded * status ## Query Fields for invoices * created * currency * customer * last_finalization_error_code * last_finalization_error_type * metadata * number * receipt_number * status * subscription * total ## Query Fields for prices * active * currency * lookup_key * metadata * product * type ## Query Fields for products * active * description * metadata * name * shippable * url ## Query Fields for subscriptions * created * metadata * status * canceled_at ## Search Operators The following table lists the syntax that you can use to construct a query: \| Syntax \| Usage \| Description \| When to Use \| Examples \| \|--------\|-------\|-------------\|-------------\|----------\| \| `:` \| `field:value` \| Exact match operator (case insensitive) \| **ONLY when you know the exact complete value** \| `currency:"eur"` returns records where the currency is exactly "EUR" \| \| `~` \| `field~value` \| Substring match operator (minimum 3 characters) \| **ALWAYS use for domain searches, partial names, email parts** \| `email~"foo.com"` returns emails containing "foo.com" \| \| `AND`, `and` \| `field:value1 AND field:value2` \| Returns records that match both clauses \| Combining multiple conditions \| `status:"active" AND amount:500` \| \| `OR`, `or` \| `field:value1 OR field:value2` \| Returns records that match either clause \| Alternative conditions \| `currency:"usd" OR currency:"eur"` \| \| `-` \| `-field:value` \| Returns records that don't match the clause \| Excluding specific values \| `-currency:"jpy"` returns records not in JPY \| \| `NULL`, `null` \| `field:null` \| Checks for field presence (empty/null values) \| Finding empty fields \| `url:null` returns records where URL field is empty \| \| `>`, `<`, `>=`, `<=`, `=` \| `field>value`, `field<value`, etc. \| Numeric comparison operators \| Amount ranges, dates \| `amount>="10"` returns records with amount >= 10 \| \| `` \| `" """` \| Escape quotes within quotes \| When quotes are in the search value \| `description:"the story called "The Sky and the Sea.""` \| ## Query Rules * You can combine up to 10 query clauses in a search by separating them with a space or using AND/OR keywords (case insensitive) * You cannot combine AND and OR in the same query * No parentheses are supported for operator precedence * By default, the API combines clauses with AND logic * You must use quotation marks around string values (optional for numeric values) * You can escape quotes inside quotes with a backslash (\) ## Examples Input: Look up charges matching a custom metadata value. Output: charges:metadata['order_id']:'1234567890' Input: Look up charges matching the last 4 digits of the card used for the payment. Output: charges:payment_method_details.card.last4:4242 Input: Look up customers matching an email. Output: customers:email:'jenny.rosen@example.com' Input: Look up PaymentIntents not in the USD currency. Output: payment_intents:-currency:'usd' Input: Filter invoice objects with a total greater than 1000. Output: invoices:total>1000 Input: Filter payments with a amount over $100. Reasoning: Stripe "amount" field is in cents, so we use 1000 instead of 100 Output: payment_intents:amount>1000 Input: Look up charges matching a combination of metadata and currency. Output: charges:metadata['key']:'value' AND currency:'usd' Input: Search for customers with email containing "john". Output: customers:email~"john" Input: Find products where the description field is empty. Output: products:description:null Input: Search for payments with amounts greater than or equal to 5000. Output: payment_intents:amount>=5000 Input: Search for products with description with escaped quotes. Output: products:description:"The story called "The Sky and the Sea"." |
+| `query` | `string` | yes | This query string should be formatted as 'resource:query_clause', where 'resource' is one of (customers, payment_intents, charges, invoices, prices, products, subscriptions), and 'query_clause' is the actual query in Stripe's custom query syntax to query metadata for that resource. For example, for the query: customers:email:"jenny.rosen@example.com" resource: `customers` query_clause: `email:"jenny.rosen@example.com"` A query clause consists of a field, operator, and value. ## Query Fields for customers * created * email * metadata * name * phone ## Query Fields for payment_intents * amount * created * currency * customer * metadata * status ## Query Fields for charges * amount * billing_details.address.postal_code * created * currency * customer * disputed * metadata * payment_method_details.{{SOURCE}}.last4 * payment_method_details.{{SOURCE}}.exp_month * payment_method_details.{{SOURCE}}.exp_year * payment_method_details.{{SOURCE}}.brand * payment_method_details.{{SOURCE}}.fingerprint * refunded * status ## Query Fields for invoices * created * currency * customer * last_finalization_error_code * last_finalization_error_type * metadata * number * receipt_number * status * subscription * total ## Query Fields for prices * active * currency * lookup_key * metadata * product * type ## Query Fields for products * active * description * metadata * name * shippable * url ## Query Fields for subscriptions * created * metadata * status * canceled_at ## Search Operators The following table lists the syntax that you can use to construct a query: \| Syntax \| Usage \| Description \| When to Use \| Examples \| \|--------\|-------\|-------------\|-------------\|----------\| \| `:` \| `field:value` \| Exact match operator (case insensitive) \| **ONLY when you know the exact complete value** \| `currency:"eur"` returns records where the currency is exactly "EUR" \| \| `~` \| `field~value` \| Substring match operator (minimum 3 characters) \| **ALWAYS use for domain searches, partial names, email parts** \| `email~"foo.com"` returns emails containing "foo.com" \| \| `AND`, `and` \| `field:value1 AND field:value2` \| Returns records that match both clauses \| Combining multiple conditions \| `status:"active" AND amount:500` \| \| `OR`, `or` \| `field:value1 OR field:value2` \| Returns records that match either clause \| Alternative conditions \| `currency:"usd" OR currency:"eur"` \| \| `-` \| `-field:value` \| Returns records that don't match the clause \| Excluding specific values \| `-currency:"jpy"` returns records not in JPY \| \| `NULL`, `null` \| `field:null` \| Checks for field presence (empty/null values) \| Finding empty fields \| `url:null` returns records where URL field is empty \| \| `>`, `<`, `>=`, `<=`, `=` \| `field>value`, `field<value`, etc. \| Numeric comparison operators \| Amount ranges, dates \| `amount>="10"` returns records with amount >= 10 \| \| `` \| `" """` \| Escape quotes within quotes \| When quotes are in the search value \| `description:"the story called "The Sky and the Sea.""` \| ## Query Rules * You can combine up to 10 query clauses in a search by separating them with a space or using AND/OR keywords (case insensitive) * You cannot combine AND and OR in the same query * No parentheses are supported for operator precedence * By default, the API combines clauses with AND logic * You must use quotation marks around string values (optional for numeric values) * You can escape quotes inside quotes with a backslash (\) ## Examples Input: Look up charges matching a custom metadata value. Output: charges:metadata['order_id']:'1234567890' Input: Look up charges matching the last 4 digits of the card used for the payment. Output: charges:payment_method_details.card.last4:4242 Input: Look up customers matching an email. Output: customers:email:'jenny.rosen@example.com' Input: Look up PaymentIntents not in the USD currency. Output: payment_intents:-currency:'usd' Input: Filter invoice objects with a total greater than 1000. Output: invoices:total>1000 Input: Filter payments with a amount over $100. Reasoning: Stripe "amount" field is in cents, so we use 1000 instead of 100 Output: payment_intents:amount>1000 Input: Look up charges matching a combination of metadata and currency. Output: charges:metadata['key']:'value' AND currency:'usd' Input: Search for customers with email containing "john". Output: customers:email~"john" Input: Find products where the description field is empty. Output: products:description:null Input: Search for payments with amounts greater than or equal to 5000. Output: payment_intents:amount>=5000 Input: Search for products with description with escaped quotes. Output: products:description:"The story called "The Sky and the Sea"." |
 
 Sample parameters:
 
@@ -1069,7 +1049,6 @@ Generated JSON parameter schema:
 {
   "query": {
     "description": "This query string should be formatted as 'resource:query_clause', where 'resource' is one of (customers, payment_intents, charges, invoices, prices, products, subscriptions), and 'query_clause' is the actual query in Stripe's custom query syntax to query metadata for that resource.\n\nFor example, for the query: customers:email:\"jenny.rosen@example.com\"\nresource: `customers`\nquery_clause: `email:\"jenny.rosen@example.com\"`\n\nA query clause consists of a field, operator, and value.\n\n## Query Fields for customers\n* created\n* email\n* metadata\n* name\n* phone\n\n## Query Fields for payment_intents\n* amount\n* created\n* currency\n* customer\n* metadata\n* status\n\n## Query Fields for charges\n* amount\n* billing_details.address.postal_code\n* created\n* currency\n* customer\n* disputed\n* metadata\n* payment_method_details.{{SOURCE}}.last4\n* payment_method_details.{{SOURCE}}.exp_month\n* payment_method_details.{{SOURCE}}.exp_year\n* payment_method_details.{{SOURCE}}.brand\n* payment_method_details.{{SOURCE}}.fingerprint\n* refunded\n* status\n\n## Query Fields for invoices\n* created\n* currency\n* customer\n* last_finalization_error_code\n* last_finalization_error_type\n* metadata\n* number\n* receipt_number\n* status\n* subscription\n* total\n\n## Query Fields for prices\n* active\n* currency\n* lookup_key\n* metadata\n* product\n* type\n\n## Query Fields for products\n* active\n* description\n* metadata\n* name\n* shippable\n* url\n\n## Query Fields for subscriptions\n* created\n* metadata\n* status\n* canceled_at\n\n## Search Operators\nThe following table lists the syntax that you can use to construct a query:\n\n| Syntax | Usage | Description | When to Use | Examples |\n|--------|-------|-------------|-------------|----------|\n| `:` | `field:value` | Exact match operator (case insensitive) | **ONLY when you know the exact complete value** | `currency:\"eur\"` returns records where the currency is exactly \"EUR\" |\n| `~` | `field~value` | Substring match operator (minimum 3 characters) | **ALWAYS use for domain searches, partial names, email parts** | `email~\"foo.com\"` returns emails containing \"foo.com\" |\n| `AND`, `and` | `field:value1 AND field:value2` | Returns records that match both clauses | Combining multiple conditions | `status:\"active\" AND amount:500` |\n| `OR`, `or` | `field:value1 OR field:value2` | Returns records that match either clause | Alternative conditions | `currency:\"usd\" OR currency:\"eur\"` |\n| `-` | `-field:value` | Returns records that don't match the clause | Excluding specific values | `-currency:\"jpy\"` returns records not in JPY |\n| `NULL`, `null` | `field:null` | Checks for field presence (empty/null values) | Finding empty fields | `url:null` returns records where URL field is empty |\n| `>`, `<`, `>=`, `<=`, `=` | `field>value`, `field<value`, etc. | Numeric comparison operators | Amount ranges, dates | `amount>=\"10\"` returns records with amount >= 10 |\n| `` | `\" \"\"\"` | Escape quotes within quotes | When quotes are in the search value | `description:\"the story called \"The Sky and the Sea.\"\"` |\n\n## Query Rules\n* You can combine up to 10 query clauses in a search by separating them with a space or using AND/OR keywords (case insensitive)\n* You cannot combine AND and OR in the same query\n* No parentheses are supported for operator precedence\n* By default, the API combines clauses with AND logic\n* You must use quotation marks around string values (optional for numeric values)\n* You can escape quotes inside quotes with a backslash (\\)\n\n## Examples\n\nInput: Look up charges matching a custom metadata value.\nOutput: charges:metadata['order_id']:'1234567890'\n\nInput: Look up charges matching the last 4 digits of the card used for the payment.\nOutput: charges:payment_method_details.card.last4:4242\n\nInput: Look up customers matching an email.\nOutput: customers:email:'jenny.rosen@example.com'\n\nInput: Look up PaymentIntents not in the USD currency.\nOutput: payment_intents:-currency:'usd'\n\nInput: Filter invoice objects with a total greater than 1000.\nOutput: invoices:total>1000\n\nInput: Filter payments with a amount over $100.\nReasoning: Stripe \"amount\" field is in cents, so we use 1000 instead of 100\nOutput: payment_intents:amount>1000\n\nInput: Look up charges matching a combination of metadata and currency.\nOutput: charges:metadata['key']:'value' AND currency:'usd'\n\nInput: Search for customers with email containing \"john\".\nOutput: customers:email~\"john\"\n\nInput: Find products where the description field is empty.\nOutput: products:description:null\n\nInput: Search for payments with amounts greater than or equal to 5000.\nOutput: payment_intents:amount>=5000\n\nInput: Search for products with description with escaped quotes.\nOutput: products:description:\"The story called \"The Sky and the Sea\".\"\n",
-    "required": false,
     "type": "string"
   }
 }
@@ -1089,10 +1068,10 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `context` | `string` | no | What the user was trying to accomplish. |
-| `quote` | `string` | no | User's exact message containing feedback. Max 1000 chars. |
-| `sentiment` | `string` | no | positive, negative, or neutral |
-| `source` | `string` | no | user or agent |
+| `context` | `string` | yes | What the user was trying to accomplish. |
+| `quote` | `string` | yes | User's exact message containing feedback. Max 1000 chars. |
+| `sentiment` | `string` | yes | positive, negative, or neutral |
+| `source` | `string` | yes | user or agent |
 | `tool_name` | `string` | no | The name of the tool the user is giving feedback about. Include if confident that feedback is about a specific tool. |
 
 Sample parameters:
@@ -1113,12 +1092,10 @@ Generated JSON parameter schema:
 {
   "context": {
     "description": "What the user was trying to accomplish.",
-    "required": false,
     "type": "string"
   },
   "quote": {
     "description": "User's exact message containing feedback. Max 1000 chars.",
-    "required": false,
     "type": "string"
   },
   "sentiment": {
@@ -1128,7 +1105,6 @@ Generated JSON parameter schema:
       "negative",
       "neutral"
     ],
-    "required": false,
     "type": "string"
   },
   "source": {
@@ -1137,12 +1113,10 @@ Generated JSON parameter schema:
       "user",
       "agent"
     ],
-    "required": false,
     "type": "string"
   },
   "tool_name": {
     "description": "The name of the tool the user is giving feedback about. Include if confident that feedback is about a specific tool.",
-    "required": false,
     "type": "string"
   }
 }
@@ -1162,7 +1136,7 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `answer` | `string` | no | For new plans (no plan_id): 2-3 sentence summary including (1) business name and payment model, (2) tech stack with frontend AND backend (use 'UNKNOWN' for unknown components), (3) payment requirements (use 'UNKNOWN' if not specified). For existing plans: User's verbatim response. Accepts option selections ('Option 1'), natural language, clarifying questions, or 'UNKNOWN'. |
+| `answer` | `string` | yes | For new plans (no plan_id): 2-3 sentence summary including (1) business name and payment model, (2) tech stack with frontend AND backend (use 'UNKNOWN' for unknown components), (3) payment requirements (use 'UNKNOWN' if not specified). For existing plans: User's verbatim response. Accepts option selections ('Option 1'), natural language, clarifying questions, or 'UNKNOWN'. |
 | `notes` | `string` | no | Optional agent-discovered context from codebase analysis (e.g., 'Found Stripe SDK v12.0.0', 'Existing webhook at /api/stripe'). Helps backend provide accurate recommendations. |
 | `plan_id` | `string` | no | Plan identifier in format lplan_[alphanumeric] from previous response. Required for continuing existing plan. Omit when starting new plan. |
 
@@ -1182,18 +1156,15 @@ Generated JSON parameter schema:
 {
   "answer": {
     "description": "For new plans (no plan_id): 2-3 sentence summary including (1) business name and payment model, (2) tech stack with frontend AND backend (use 'UNKNOWN' for unknown components), (3) payment requirements (use 'UNKNOWN' if not specified). For existing plans: User's verbatim response. Accepts option selections ('Option 1'), natural language, clarifying questions, or 'UNKNOWN'.",
-    "required": false,
     "type": "string"
   },
   "notes": {
     "description": "Optional agent-discovered context from codebase analysis (e.g., 'Found Stripe SDK v12.0.0', 'Existing webhook at /api/stripe'). Helps backend provide accurate recommendations.",
-    "required": false,
     "type": "string"
   },
   "plan_id": {
     "description": "Plan identifier in format lplan_[alphanumeric] from previous response. Required for continuing existing plan. Omit when starting new plan.",
     "pattern": "^lplan_[a-zA-Z0-9]+$",
-    "required": false,
     "type": "string"
   }
 }
@@ -1213,7 +1184,7 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `dispute` | `string` | no | The ID of the dispute to update |
+| `dispute` | `string` | yes | The ID of the dispute to update |
 | `evidence` | `object` | no | Evidence to upload, to respond to a dispute. Updating any field in the hash will submit all fields in the hash for review. |
 | `submit` | `boolean` | no | Whether to immediately submit evidence to the bank. If false, evidence is staged on the dispute. |
 
@@ -1237,7 +1208,6 @@ Generated JSON parameter schema:
 {
   "dispute": {
     "description": "The ID of the dispute to update",
-    "required": false,
     "type": "string"
   },
   "evidence": {
@@ -1246,26 +1216,21 @@ Generated JSON parameter schema:
     "properties": {
       "cancellation_policy_disclosure": {
         "description": "An explanation of how and when the customer was shown your refund policy prior to purchase.",
-        "required": false,
         "type": "string"
       },
       "duplicate_charge_explanation": {
         "description": "An explanation of the difference between the disputed charge versus the prior charge that appears to be a duplicate.",
-        "required": false,
         "type": "string"
       },
       "uncategorized_text": {
         "description": "Any additional evidence or statements.",
-        "required": false,
         "type": "string"
       }
     },
-    "required": false,
     "type": "object"
   },
   "submit": {
     "description": "Whether to immediately submit evidence to the bank. If false, evidence is staged on the dispute.",
-    "required": false,
     "type": "boolean"
   }
 }
@@ -1287,7 +1252,7 @@ Parameters:
 |---|---|---|---|
 | `items` | `array` | no | A list of subscription items to update, add, or remove. |
 | `proration_behavior` | `string` | no | Determines how to handle prorations when the subscription items change. |
-| `subscription` | `string` | no | The ID of the subscription to update. |
+| `subscription` | `string` | yes | The ID of the subscription to update. |
 
 Sample parameters:
 
@@ -1334,7 +1299,6 @@ Generated JSON parameter schema:
       },
       "type": "object"
     },
-    "required": false,
     "type": "array"
   },
   "proration_behavior": {
@@ -1345,12 +1309,10 @@ Generated JSON parameter schema:
       "none",
       "none_implicit"
     ],
-    "required": false,
     "type": "string"
   },
   "subscription": {
     "description": "The ID of the subscription to update.",
-    "required": false,
     "type": "string"
   }
 }

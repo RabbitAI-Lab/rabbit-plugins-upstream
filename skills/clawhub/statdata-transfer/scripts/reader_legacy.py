@@ -525,3 +525,8 @@ _read_limdep = _make_unsupported(
 _read_ncss = _make_unsupported(
     "NCSS", ".csv", ".csv"
 )
+_read_sas_ssp = _make_unsupported(
+    "SAS 6 数据集 (.ssp)",
+    ".sas7bdat (SAS 7+) 或 .xpt (SAS XPORT)",
+    ".sas7bdat (SAS 7+) or .xpt (SAS XPORT)",
+)

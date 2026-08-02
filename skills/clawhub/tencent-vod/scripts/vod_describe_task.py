@@ -1001,7 +1001,7 @@ def main():
         default=int(os.environ.get("TENCENTCLOUD_VOD_SUB_APP_ID", 0)) or None,
         help="子应用 ID（也可通过环境变量 TENCENTCLOUD_VOD_SUB_APP_ID 设置）",
     )
-    parser.add_argument("--region", default="ap-guangzhou", help="地域（默认: ap-guangzhou）")
+    parser.add_argument("--region", default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'), help="地域（默认: ap-guangzhou）")
     parser.add_argument("--no-wait", action="store_true", help="仅查询当前状态，不等待完成")
     parser.add_argument("--max-wait", type=int, default=600, help="最大等待时间，单位秒（默认: 600）")
     parser.add_argument("--interval", type=int, default=5, help="轮询间隔，单位秒（默认: 5）")

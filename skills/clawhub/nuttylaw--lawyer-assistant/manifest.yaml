@@ -1,0 +1,39 @@
+name: lawyer-assistant
+display_name: 律师全场景助理
+display_name_en: Lawyer Full-Scene Assistant
+version: 1.0.0
+author: 刘浩然律师
+description: >-
+  民事和刑事法律全场景律师助手。覆盖法律检索（法条溯源）、案例检索（裁判文书溯源）、
+  证据分析（含OCR识别）、法律思维分析、文书起草、非诉业务（合同审查/法律尽调/公司治理）、
+  强制执行、劳动争议等律师全场景工作。强制执行防虚构协议——所有法条引用和案例引用必须
+  通过网络检索溯源验证，禁止凭记忆引用，确保法律服务的真实性和可靠性。
+description_en: >-
+  Full-scene legal assistant for civil and criminal practice in China. Provides
+  legal research with source tracing, case law retrieval, evidence analysis
+  (with OCR), legal reasoning, document drafting, non-litigation services,
+  enforcement, and labor dispute workflows. Enforces an anti-fabrication protocol
+  requiring all legal citations to be verified via web retrieval.
+category: legal
+tags:
+  - 法律
+  - 律师
+  - 法律检索
+  - 证据分析
+  - 刑事辩护
+  - 民事代理
+  - 工伤赔偿
+  - 合同审查
+icon: assets/icon.svg
+license: MIT
+homepage: https://clawhub.ai/
+triggers:
+  - 帮我查一下民法典关于
+  - 找几个工伤认定的类似案例
+  - 帮我分析这份合同证据
+  - 当事人被打了轻微伤怎么处理
+  - 帮我审查这份房屋买卖合同
+  - 判决下来了对方不给钱怎么执行
+  - 当事人没签劳动合同被辞退了怎么办
+  - 帮我写一份法律意见书
+  - 刑事辩护策略
