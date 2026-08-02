@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/cloudflare-agents",
+  "repo": "secondsky/claude-skills",
+  "skillId": "cloudflare-agents",
+  "branch": "main",
+  "pushedAt": "2026-07-25T17:35:51Z",
+  "contentHash": "d30b5f3a4c4ee4af8ae3b5cc1d454edf8f61a130245d83ce23ede7e1fc1dc8ac",
+  "fetchedAt": "2026-08-02T09:26:58.672Z"
+}

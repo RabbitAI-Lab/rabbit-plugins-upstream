@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/sentry-for-ai/sentry-sdk-upgrade",
+  "repo": "getsentry/sentry-for-ai",
+  "skillId": "sentry-sdk-upgrade",
+  "branch": "main",
+  "pushedAt": "2026-07-31T20:26:56Z",
+  "contentHash": "f4d881c84fc5d1fa75183aa3fd02909fe504b2b47230b4f84b1bf19ad80db697",
+  "fetchedAt": "2026-08-02T09:27:03.443Z"
+}

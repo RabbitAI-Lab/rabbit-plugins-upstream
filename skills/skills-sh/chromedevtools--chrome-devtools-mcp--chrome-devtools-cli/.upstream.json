@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/chromedevtools/chrome-devtools-mcp/chrome-devtools-cli",
+  "repo": "chromedevtools/chrome-devtools-mcp",
+  "skillId": "chrome-devtools-cli",
+  "branch": "main",
+  "pushedAt": "2026-08-02T00:04:41Z",
+  "contentHash": "a25cc1795eb5d3afc93328bd46ef04b38dd43e93e353f36c5748160d7aee7914",
+  "fetchedAt": "2026-08-02T09:27:07.142Z"
+}

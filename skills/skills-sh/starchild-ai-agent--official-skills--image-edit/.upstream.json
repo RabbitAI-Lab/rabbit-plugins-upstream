@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/image-edit",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "image-edit",
+  "branch": "main",
+  "pushedAt": "2026-08-02T08:18:21Z",
+  "contentHash": "a53a96a539bebf91c4b9a6eed949eba0f1a5f0dcc246ab9569d204ad053650c7",
+  "fetchedAt": "2026-08-02T09:26:20.154Z"
+}

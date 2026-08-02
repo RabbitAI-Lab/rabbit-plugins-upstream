@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/render-deploy",
+  "repo": "openai/skills",
+  "skillId": "render-deploy",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "39d995f977cc59d2fe60b814a06788c8577a00c376d6937b5c1f4273c526f860",
+  "fetchedAt": "2026-08-02T09:26:18.491Z"
+}

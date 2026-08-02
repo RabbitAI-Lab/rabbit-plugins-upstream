@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/ingesting-into-data-lake",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "ingesting-into-data-lake",
+  "branch": "main",
+  "pushedAt": "2026-08-01T22:52:40Z",
+  "contentHash": "aede975751f00b7b61a70a82673d8458e8ae11532651e39c01a1a0415ca6fb42",
+  "fetchedAt": "2026-08-02T09:27:16.734Z"
+}

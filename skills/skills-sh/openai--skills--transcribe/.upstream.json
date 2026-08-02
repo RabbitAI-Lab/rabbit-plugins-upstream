@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/transcribe",
+  "repo": "openai/skills",
+  "skillId": "transcribe",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "79b2e228221ce7f95dbdac179e7845f0152b4695d4ac74292b4eea58a83bf9de",
+  "fetchedAt": "2026-08-02T09:26:18.462Z"
+}
