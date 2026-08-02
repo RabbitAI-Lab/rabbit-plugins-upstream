@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyze staged and committed Git changes and recommend split, squash, amend, staging, secret-scan, and commit-message strategies. <br>
+Analyze staged and committed Git changes and recommend split, squash, staging, security-scan, or commit-message strategy. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,39 +7,42 @@ This skill is ready for commercial/non-commercial use. <br>
 [drumrobot](https://clawhub.ai/user/drumrobot) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering agents use this skill to keep Git commit history atomic, reviewable, and aligned with repository-specific commit rules. It helps plan split or squash strategies, draft structured commit messages, audit staged files, and apply safer history-rewrite workflows when needed. <br>
+Developers and engineering agents use this skill to inspect Git changes, decide whether to split or squash commits, draft reviewable commit messages, and apply commit hygiene checks before publishing repository history. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: History-rewrite or force-push guidance can disrupt shared or protected branches if applied without coordination. <br>
-Mitigation: Use rewrite steps only on branches you own or after coordinating with collaborators, verify CI state, and prefer force-with-lease when a force push is required. <br>
-Risk: Optional hook installation changes local commit behavior. <br>
-Mitigation: Review any hook before enabling it and install it only when the pre-commit blocking behavior matches the repository workflow. <br>
+Risk: The bundled commit review trigger can prompt a separate review agent after commits for the current repository path and commit SHA. <br>
+Mitigation: Do not register the bundled post-commit hook unless that behavior is desired; inspect the hook and scope it to repositories where automated commit review prompts are acceptable. <br>
+Risk: The skill can recommend history-rewriting workflows such as amend, rebase, soft reset, and force-push preparation. <br>
+Mitigation: Review the proposed Git commands before execution, confirm the target branch and commit range, and follow local CI or force-push approval rules. <br>
 
 
 ## Reference(s): <br>
-- [Commit Tidy on ClawHub](https://clawhub.ai/drumrobot/skills/commit-tidy) <br>
-- [interactive-amend.md](artifact/interactive-amend.md) <br>
-- [message-discipline.md](artifact/message-discipline.md) <br>
-- [security-scan.md](artifact/security-scan.md) <br>
-- [soft-reset-amend.md](artifact/soft-reset-amend.md) <br>
-- [staging-discipline.md](artifact/staging-discipline.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/commit-tidy) <br>
+- [Publisher Profile](https://clawhub.ai/user/drumrobot) <br>
+- [CHANGELOG.md](artifact/CHANGELOG.md) <br>
+- [Hunk Split](artifact/hunk-split.md) <br>
+- [Interactive Amend](artifact/interactive-amend.md) <br>
+- [Message Discipline](artifact/message-discipline.md) <br>
+- [Security Scan](artifact/security-scan.md) <br>
+- [Soft Reset Amend](artifact/soft-reset-amend.md) <br>
+- [Staging Discipline](artifact/staging-discipline.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and commit-message drafts] <br>
+**Output Format:** [Markdown with inline shell commands and commit message drafts] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include split or squash recommendations, staged-file audits, rewrite procedures, and pre-commit security checks.] <br>
+**Other Properties Related to Output:** [May include Git commands, staged-file groupings, split or squash recommendations, and commit subject/body drafts.] <br>
 
 ## Skill Version(s): <br>
-0.4.3 (source: server release metadata and changelog, released 2026-07-16) <br>
+0.5.0 (source: server release metadata and changelog, released 2026-07-28) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

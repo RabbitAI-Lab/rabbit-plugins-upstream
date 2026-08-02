@@ -1,6 +1,6 @@
 ---
 name: talkies
-description: Self-hosted OpenAI-compatible speech service. /v1/audio/transcriptions fronts seven open ASR models (Whisper, Parakeet, Nemotron-3.5-ASR, Canary); /v1/audio/speech fronts 2 TTS engines / 3 backends — Kokoro-82M (41 baked voices, PyTorch + ONNX runtimes) and the CUDA-only Qwen3-TTS family (voice cloning, preset speakers, voice design). Same wire format as OpenAI — change the base URL + slug. Stereo diarization, URL fetching, MCP endpoint, bearer auth.
+description: Self-hosted OpenAI-compatible speech service. /v1/audio/transcriptions fronts 12 open ASR models (Whisper, Parakeet, Nemotron-3.5-ASR, Canary, Sherpa-ONNX, Vosk); /v1/audio/transcriptions/stream accepts live PCM over WebSocket. /v1/audio/speech fronts 2 TTS engines / 3 backends — Kokoro-82M (41 baked voices, PyTorch + ONNX runtimes) and the CUDA-only Qwen3-TTS family (voice cloning, preset speakers, voice design). Stereo diarization, URL fetching, MCP endpoint, bearer auth.
 homepage: https://github.com/psyb0t/docker-talkies
 user-invocable: true
 permissions:
@@ -15,11 +15,11 @@ metadata:
 
 Self-hosted speech service — ASR and TTS, one container. OpenAI-compatible wire shape on both endpoints; point an OpenAI client at it, change the model slug, done.
 
-ASR (`POST /v1/audio/transcriptions`): seven backends — `whisper-large-v3`, `whisper-large-v3-turbo`, `parakeet-tdt-0.6b-v3`, `nemotron-3.5-asr-0.6b`, `canary-180m-flash`, `canary-1b-flash`, `canary-qwen-2.5b`.
+ASR (`POST /v1/audio/transcriptions`): twelve bundled slugs — `whisper-large-v3`, `whisper-large-v3-turbo`, `parakeet-tdt-0.6b-v3`, `nemotron-3.5-asr-0.6b`, `canary-180m-flash`, `canary-1b-flash`, `canary-qwen-2.5b`, four selectable English Sherpa Zipformer variants, and `vosk-small-en-us-0.15`.
 
 TTS (`POST /v1/audio/speech`): 2 engines / 3 backends across 7 slugs — `kokoro-82m` (PyTorch) and `kokoro-82m-nvidia` (ONNX/ORT) with 41 baked voices across en/es/fr/hi/it/pt, plus the CUDA-only Qwen3-TTS family: `qwen3-tts-0.6b` / `qwen3-tts-1.7b` (voice cloning from reference clips), `qwen3-tts-0.6b-custom` / `qwen3-tts-1.7b-custom` (9 preset speakers), `qwen3-tts-1.7b-design` (voice from an NL description). Discover voices via `GET /v1/audio/voices`.
 
-Extras: stereo diarization on transcription, URL `file_path` fetching, server-side file staging, MCP endpoint with 6 ASR-side tools, optional bearer-token auth.
+Extras: live PCM ASR over WebSocket, stereo diarization on transcription, URL `file_path` fetching, server-side file staging, MCP endpoint with 6 ASR-side tools, optional bearer-token auth.
 
 For installation, configuration, and container setup, see [references/setup.md](references/setup.md).
 
@@ -40,6 +40,7 @@ This skill is **not** low-risk to orchestrate blindly — it issues local shell 
 - Transcribe audio files (any format ffmpeg decodes — WAV, MP3, M4A, FLAC, OGG, WebM, Opus, MP4 audio).
 - Generate SRT/VTT subtitles for video.
 - Transcribe podcasts, lectures, interviews, voicemails, calls.
+- Stream 16 kHz mono PCM from a microphone or decoded live-audio source through `WS /v1/audio/transcriptions/stream`.
 - Stereo two-mic recordings → per-speaker diarized output (`L:` / `R:` channel tagging).
 - German/French/Spanish ↔ English speech-to-text translation via Canary-1B-Flash.
 - Synthesize speech from text via Kokoro-82M — English (American + British), Spanish, French, Hindi, Italian, Portuguese.
@@ -48,7 +49,7 @@ This skill is **not** low-risk to orchestrate blindly — it issues local shell 
 
 ## When NOT To Use
 
-- Real-time / streaming ASR — `/v1/audio/transcriptions` is request/response only. (TTS has one streaming exception: `qwen3-tts-*` + `response_format=pcm` streams chunked PCM — see [Streaming PCM (Qwen3-TTS)](#streaming-pcm-qwen3-tts).)
+- OpenAI-compatible live ASR — `/v1/audio/transcriptions` remains request/response only. Use talkies-specific `WS /v1/audio/transcriptions/stream` for raw PCM. (TTS has one streaming exception: `qwen3-tts-*` + `response_format=pcm` streams chunked PCM — see [Streaming PCM (Qwen3-TTS)](#streaming-pcm-qwen3-tts).)
 - Speaker identification from voice (only stereo-channel diarization is supported, not voice clustering).
 - Per-request `prompt` / `temperature` on `/v1/audio/transcriptions` — accepted for OpenAI compat, **ignored**. (`instructions` on `/v1/audio/speech` is different: Kokoro ignores it, but Qwen3-TTS honors it in most modes — see [Request Body](#request-body).)
 - Japanese / Chinese TTS — Kokoro upstream supports them but talkies filters those voices out (they need the `misaki[ja]` / `misaki[zh]` extras).
@@ -120,6 +121,21 @@ curl -s $TALKIES_URL/v1/audio/speech \
   --output hello.mp3
 ```
 
+## Live streaming ASR
+
+`WS /v1/audio/transcriptions/stream` is talkies-specific rather than an OpenAI
+endpoint. It accepts headerless 16 kHz, mono, signed 16-bit little-endian PCM.
+Send one JSON `start` message, wait for `ready`, stream binary PCM frames, then
+send `{"type":"end"}` for `final` and `stats` (or `{"type":"cancel"}` to
+discard the stream). Use a configured ASR slug with streaming support; native
+sessions are available through parakeet.cpp, Sherpa-ONNX, and Vosk, while
+faster-whisper uses a bounded rolling window. When authentication is enabled,
+send the bearer token in the WebSocket upgrade header, never in the URL.
+
+See the repository's [`docs/streaming.md`](https://github.com/psyb0t/docker-talkies/blob/main/docs/streaming.md)
+for the exact start/event shapes, a Python client, limits, and custom Sherpa or
+Vosk model-registry entries.
+
 ## Supported Models
 
 ### ASR
@@ -133,11 +149,17 @@ curl -s $TALKIES_URL/v1/audio/speech \
 | `canary-180m-flash` | NeMo Canary | yes | yes | English only (small) | smallest, runs anywhere |
 | `canary-1b-flash` | NeMo Canary | no | yes | en/de/fr/es + translation | multilingual, translation |
 | `canary-qwen-2.5b` | NeMo SALM | no | yes | English only | best English accuracy (no timestamps) |
+| `sherpa-zipformer-en-left-64` | Sherpa-ONNX Zipformer | yes | yes | English only | native live ASR, lower left context |
+| `sherpa-zipformer-en-left-128` | Sherpa-ONNX Zipformer | yes | yes | English only | native live ASR, higher left context |
+| `sherpa-zipformer-en-int8-left-64` | Sherpa-ONNX Zipformer INT8 | yes | yes | English only | smaller native live ASR variant |
+| `sherpa-zipformer-en-int8-left-128` | Sherpa-ONNX Zipformer INT8 | yes | yes | English only | smaller native live ASR variant |
+| `vosk-small-en-us-0.15` | Vosk | yes | yes | English only | native live ASR; CPU decoder |
 
 Pick by use case:
 - **General-purpose:** `whisper-large-v3-turbo`.
 - **English-only, max accuracy on GPU:** `canary-qwen-2.5b` (but no per-segment timestamps).
 - **Translation EN↔DE/FR/ES:** `canary-1b-flash` (requires custom model registry — see [Translation](#translation)).
+- **Low-overhead live English ASR:** one of the Sherpa Zipformer variants or `vosk-small-en-us-0.15`; Sherpa uses CUDA in the CUDA image, while Vosk remains CPU-decoded.
 
 ### TTS
 
@@ -209,6 +231,8 @@ Exactly one of `file` or `file_path` must be set — passing both or neither ret
 ```
 
 Whisper-only confidence fields (`avg_logprob`, `compression_ratio`, `no_speech_prob`) are emitted as `null` regardless of backend so clients reading them don't crash. `tokens` is always `[]`.
+
+The `sherpa` and `vosk` executors add a per-word `confidence` in the 0–1 range to each entry in `words` — Vosk reports the decoder's own score, Sherpa derives one from the model's per-token acoustic log-probabilities. No other backend emits it, so treat the field as optional.
 
 ### Stereo Diarization
 
@@ -679,16 +703,8 @@ done
 ```
 
 The first hit on each URL downloads + caches; re-running the loop is free.
-
-For a fuller bulk-transcribe driver (mix of local paths + URLs, per-input output files, error reporting, optional diarization) see [`scripts/bulk_transcribe.sh`](scripts/bulk_transcribe.sh):
-
-```bash
-TALKIES_URL=http://localhost:8000 \
-TALKIES_MODEL=whisper-large-v3-turbo \
-TALKIES_FORMAT=srt \
-TALKIES_OUTDIR=./subs \
-  bash scripts/bulk_transcribe.sh inputs.txt
-```
+For local files, replace the `file_path` form field with `file=@path/to/audio`
+in the same request shape.
 
 ## Tips
 
@@ -696,7 +712,7 @@ TALKIES_OUTDIR=./subs \
 2. **URL `file_path` over multipart upload** — if the audio is already at a URL, send the URL. Saves bandwidth (the file isn't going up and then back down), gets cached server-side, no upload size cap.
 3. **Stage repeated files** via `PUT /v1/files/{path}` and call with `file_path=` to avoid re-uploading on every retry/iteration.
 4. **`response_format=text`** for the "just give me the string" case — no `jq -r .text` needed, content-type is `text/plain`.
-5. **One model at a time** — every transcribe request evicts other loaded models. Don't try to fan out two calls against two different models on the same container; the second one evicts the first and reloads. Use two containers if you actually need concurrency on different models.
+5. **One active model family at a time** — every transcribe request evicts other loaded models. Multiple live streams may share one pinned model up to `TALKIES_STREAM_MAX_CONNECTIONS`; a request or stream for a different model receives a conflict until the streams end. Use two containers if you need concurrent models.
 6. **`POST /unload` after a job** — explicit eviction frees VRAM/RAM faster than waiting for the 10-min idle sweeper. Useful in CI / batch scripts.
 7. **`canary-qwen-2.5b` has no timestamps** — `verbose_json.segments` / `.words` come back empty, `srt`/`vtt` collapse to one cue. Use a Whisper or Canary multitask slug if you need timing data.
 8. **Diarization requires true stereo** — if your "stereo" file is the same mono signal copied to both channels, diarization won't separate speakers. The technique is exact for two-mic setups, useless otherwise.

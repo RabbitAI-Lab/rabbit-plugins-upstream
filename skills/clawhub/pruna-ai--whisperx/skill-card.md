@@ -1,5 +1,5 @@
 ## Description: <br>
-Use when an agent needs word-level timestamps from audio for lyric alignment, caption timing, or video-edit cut boundaries. <br>
+Use when someone needs word-level timestamps from audio for lyric alignment, cut-safe line boundaries, or caption source timing before burn-in with video-editing. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, media creators, and agents use this skill to transcribe audio with word-level timing for lyric-synced edits, captions, and cut alignment. <br>
+Developers and media workflow agents use this skill to collect required audio inputs, configure Replicate access, and run WhisperX workflows that produce word-level transcript timing for lyric alignment, captioning, and video-editing cuts. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Audio is sent to Replicate for transcription and may involve paid API usage. <br>
-Mitigation: Confirm external processing is acceptable, verify REPLICATE_API_TOKEN is configured, and avoid sensitive audio unless that processing is approved. <br>
-Risk: Optional prerequisite skills and full-suite installation can expand the agent workflow beyond transcription. <br>
-Mitigation: Review prerequisite skills before installation and load only the skills needed for the task. <br>
+Risk: Audio may be sent to Replicate/Pruna-backed workflows. <br>
+Mitigation: Confirm the provider terms fit the use case and avoid submitting sensitive audio unless that handling is approved. <br>
+Risk: REPLICATE_API_TOKEN could be exposed through logs, shared files, or copied commands. <br>
+Mitigation: Keep the token private and provide it through environment variables or a secrets manager. <br>
+Risk: Recommended companion skills can change the workflow's risk profile. <br>
+Mitigation: Install and inspect companion skills only when they are trusted for the task. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/whisperx) <br>
-- [Replicate model page: victor-upmeet/whisperx](https://replicate.com/victor-upmeet/whisperx) <br>
+- [Replicate model: victor-upmeet/whisperx](https://replicate.com/victor-upmeet/whisperx) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and references to JSON and SRT transcript outputs] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with bash snippets and structured input guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REPLICATE_API_TOKEN and an HTTPS audio_file; align_output enables word-level timing.] <br>
+**Other Properties Related to Output:** [Guides Replicate token setup and audio input collection; expected workflow artifacts include transcript JSON and SRT timing files.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata and artifact metadata) <br>
+1.0.8 (source: server evidence release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

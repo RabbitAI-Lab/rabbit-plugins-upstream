@@ -1,5 +1,5 @@
 ## Description: <br>
-This skill analyzes hydroponic root and leaf images or videos to qualitatively assess nutrient concentration status and provide adjustment guidance without producing EC or ppm values. <br>
+Assesses hydroponic plant root and leaf images or video to identify visual stress indicators, qualitatively judge nutrient solution concentration, and provide adjustment guidance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Hydroponic growers, plant-factory operators, and developers integrating plant monitoring workflows use this skill to analyze root and leaf media, identify visual stress indicators, and receive qualitative nutrient adjustment advice. It can also query cloud-hosted historical assessment records associated with the local user identity. <br>
+External hydroponic growers, plant factory operators, and developers use this skill to review root and leaf media for qualitative nutrient concentration status and directionally adjust dilution or nutrient supplementation. It is intended as visual support for cultivation decisions, not as a replacement for direct EC or ppm measurement. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Cloud analysis sends selected plant media and account-linked metadata to lifeemergence.com services. <br>
-Mitigation: Use only intended hydroponic media, avoid unrelated private files, and confirm that sharing the media with the external service is acceptable before running analysis. <br>
-Risk: The skill can create or reuse a local identity and store service tokens in the workspace data directory. <br>
-Mitigation: Review or clear data/smyx-api-key.txt and smyx-common-claw.db before use, and restrict access to workspaces where those files may be created. <br>
+Risk: Plant images, videos, and report-history requests may be sent to external cloud APIs for processing. <br>
+Mitigation: Deploy only where cloud processing is acceptable, disclose upload behavior to users, and avoid submitting sensitive media. <br>
+Risk: The skill may silently create or reuse an identity and store credentials or tokens locally. <br>
+Mitigation: Review token storage and account-association behavior before deployment, restrict local file access, and rotate credentials if exposure is suspected. <br>
+Risk: Visual assessment can provide misleading nutrient guidance because it does not measure EC or ppm directly. <br>
+Mitigation: Treat outputs as cultivation guidance, confirm serious findings with direct measurements or expert review, and monitor plants after adjustments. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-hydroponic-nutrient-assessment-analysis) <br>
+- [API Documentation](references/api_doc.md) <br>
+- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
 - [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Interface Documentation](artifact/references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis text with optional saved output files] <br>
+**Output Format:** [Markdown and JSON-style structured analysis with report links when available] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include qualitative nutrient status, root and leaf observations, adjustment advice, historical report records, and report links when returned by the service.] <br>
+**Other Properties Related to Output:** [Outputs qualitative visual findings, nutrient concentration status, adjustment advice, and optional cloud history-report listings.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server-resolved release metadata; artifact frontmatter reports 1.0.7) <br>
+1.0.4 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

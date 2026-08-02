@@ -67,12 +67,13 @@ LOCK_FILE = None  # set in run_once
 def acquire_lock():
     """防止 cron 与手动/超时运行重叠。锁超过 45 分钟视为陈旧可抢占。"""
     import os
+    import time
     from common import ROOT
     lock = ROOT / "state" / "pipeline.lock"
     if lock.exists():
         try:
             busy = lock.read_text().strip() != ""  # 空文件 = 已释放
-            age = __import__("time").time() - lock.stat().st_mtime
+            age = time.time() - lock.stat().st_mtime
             if busy and age < 45 * 60:
                 return None
         except OSError:

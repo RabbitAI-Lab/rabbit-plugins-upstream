@@ -29,6 +29,8 @@ class GridFit:
 
 WOOD_BOARD_PROFILE = board_profiles.WOOD_BOARD_PROFILE
 WHITE_BOARD_PROFILE = board_profiles.WHITE_BOARD_PROFILE
+DENSE_BOARD_MIN_STONES = 100
+DENSE_BOARD_MIN_CIRCLES = 40
 
 
 def read_image(path: Path) -> np.ndarray:
@@ -339,7 +341,127 @@ def detect_grid(warped: np.ndarray, board_size: int) -> tuple[GridFit, GridFit]:
     )
 
 
-def choose_board(image: np.ndarray, corners: np.ndarray | None, board_size: int, warp_size: int) -> tuple[np.ndarray, np.ndarray, GridFit, GridFit]:
+def detect_stone_circles(warped: np.ndarray, board_size: int) -> np.ndarray:
+    """Return circle candidates used to stabilize dense-board grid fitting."""
+    size = warped.shape[0]
+    nominal_spacing = size / float(board_size - 1)
+    gray = cv2.cvtColor(warped, cv2.COLOR_BGR2GRAY)
+    blur_size = max(5, int(round(size / 240.0)))
+    if blur_size % 2 == 0:
+        blur_size += 1
+    gray = cv2.GaussianBlur(gray, (blur_size, blur_size), 1.2)
+    circles = cv2.HoughCircles(
+        gray,
+        cv2.HOUGH_GRADIENT,
+        dp=1.25,
+        minDist=max(12.0, nominal_spacing * 0.51),
+        param1=100,
+        param2=max(18.0, nominal_spacing * 0.39),
+        minRadius=max(5, int(round(nominal_spacing * 0.285))),
+        maxRadius=max(8, int(round(nominal_spacing * 0.555))),
+    )
+    if circles is None:
+        return np.empty((0, 3), dtype=np.float32)
+    return circles[0].astype(np.float32)
+
+
+def fit_stone_center_grid(
+    warped: np.ndarray,
+    board_size: int,
+) -> tuple[GridFit, GridFit, int]:
+    circles = detect_stone_circles(warped, board_size)
+    size = warped.shape[0]
+    xfit = fit_regular_grid([(float(x), 2.5) for x, _, _ in circles], board_size, size)
+    yfit = fit_regular_grid([(float(y), 2.5) for _, y, _ in circles], board_size, size)
+    return xfit, yfit, len(circles)
+
+
+def align_grid_phase(
+    fit: GridFit,
+    reference: GridFit,
+    board_size: int,
+    image_size: int,
+) -> GridFit:
+    """Resolve whole-cell phase ambiguity using the line-based grid as a reference."""
+    valid_offsets = []
+    for phase in range(-board_size, board_size + 1):
+        offset = fit.offset + phase * fit.spacing
+        if offset < 0:
+            continue
+        if offset + (board_size - 1) * fit.spacing > image_size - 1:
+            continue
+        valid_offsets.append(offset)
+    if not valid_offsets:
+        return fit
+    offset = min(valid_offsets, key=lambda value: abs(value - reference.offset))
+    return GridFit(offset, fit.spacing, fit.score, fit.coverage, fit.candidates)
+
+
+def board_candidate_grid_score(
+    xfit: GridFit,
+    yfit: GridFit,
+    board_size: int,
+    image_size: int,
+    *,
+    balance_margins: bool = True,
+) -> float:
+    evidence_score = (
+        xfit.score
+        + yfit.score
+        + (xfit.coverage + yfit.coverage) * 2.0
+    )
+    # A board contour should map the playable grid to almost the full square.
+    # Image-edge or partial-board contours can still contain many regularly
+    # spaced lines, but one axis then covers much less of the warped candidate.
+    # The playable grid should also leave comparable physical-board margins on
+    # opposite sides.  A contour pulled into the background by a hand, rope, or
+    # shadow can make the grid reach one warped edge while retaining convincing
+    # line evidence; penalizing that asymmetry keeps the actual board frame.
+    score = evidence_score * board_grid_extent(xfit, yfit, board_size, image_size)
+    if balance_margins:
+        score *= board_grid_margin_balance(xfit, yfit, board_size, image_size)
+    return score
+
+
+def board_grid_extent(
+    xfit: GridFit,
+    yfit: GridFit,
+    board_size: int,
+    image_size: int,
+) -> float:
+    image_span = max(float(image_size - 1), 1.0)
+    x_extent = min((board_size - 1) * xfit.spacing / image_span, 1.0)
+    y_extent = min((board_size - 1) * yfit.spacing / image_span, 1.0)
+    return min(x_extent, y_extent)
+
+
+def board_grid_margin_balance(
+    xfit: GridFit,
+    yfit: GridFit,
+    board_size: int,
+    image_size: int,
+) -> float:
+    image_span = max(float(image_size - 1), 1.0)
+
+    def axis_balance(fit: GridFit) -> float:
+        leading = max(fit.offset, 0.0)
+        trailing = max(
+            image_span - (fit.offset + (board_size - 1) * fit.spacing),
+            0.0,
+        )
+        larger = max(leading, trailing, 1.0)
+        return min(leading, trailing) / larger
+
+    combined = math.sqrt(axis_balance(xfit) * axis_balance(yfit))
+    return 0.5 + 0.5 * combined
+
+
+def choose_board(
+    image: np.ndarray,
+    corners: np.ndarray | None,
+    board_size: int,
+    warp_size: int,
+) -> tuple[np.ndarray, np.ndarray, GridFit, GridFit]:
     if corners is not None:
         ordered = order_points(corners)
         warped = warp_board(image, ordered, warp_size)
@@ -352,17 +474,140 @@ def choose_board(image: np.ndarray, corners: np.ndarray | None, board_size: int,
         side = min(h, w)
         x0 = (w - side) / 2.0
         y0 = (h - side) / 2.0
-        candidates = [np.array([[x0, y0], [x0 + side - 1, y0], [x0 + side - 1, y0 + side - 1], [x0, y0 + side - 1]], dtype=np.float32)]
+        candidates = [
+            np.array(
+                [
+                    [x0, y0],
+                    [x0 + side - 1, y0],
+                    [x0 + side - 1, y0 + side - 1],
+                    [x0, y0 + side - 1],
+                ],
+                dtype=np.float32,
+            )
+        ]
 
-    best = None
+    evaluated = []
     for candidate in candidates:
         warped = warp_board(image, candidate, warp_size)
         xfit, yfit = detect_grid(warped, board_size)
-        score = xfit.score + yfit.score + (xfit.coverage + yfit.coverage) * 2.0
-        if best is None or score > best[0]:
-            best = (score, candidate, warped, xfit, yfit)
-    assert best is not None
-    _, chosen, warped, xfit, yfit = best
+        score = board_candidate_grid_score(xfit, yfit, board_size, warp_size)
+        board_profile = estimate_board_profile(warped)
+        board = classify_intersections(warped, xfit, yfit, board_size, board_profile)
+        occupied = sum(row.count("B") + row.count("W") for row in board)
+        evaluated.append((score, occupied, candidate, warped, xfit, yfit))
+
+    raw_best = max(
+        evaluated,
+        key=lambda item: item[0]
+        / board_grid_margin_balance(item[4], item[5], board_size, warp_size),
+    )
+    raw_margin_balance = board_grid_margin_balance(
+        raw_best[4],
+        raw_best[5],
+        board_size,
+        warp_size,
+    )
+    # Board/background segmentation can occasionally get one corner wrong
+    # while the other three remain precise (a hand beside the board is a
+    # common cause).  On wood boards, only when that raw winner has strongly
+    # asymmetric grid margins, retry it with each corresponding corner from
+    # the other detected quadrilaterals.  This keeps the search tightly scoped
+    # and lets the grid evidence select a consensus repair.
+    if (
+        estimate_board_profile(raw_best[3]) == WOOD_BOARD_PROFILE
+        and raw_margin_balance < 0.75
+    ):
+        raw_candidate = order_points(raw_best[2])
+        repaired_evaluated = []
+        for corner_index in range(4):
+            for donor in candidates:
+                repaired = raw_candidate.copy()
+                repaired[corner_index] = np.round(
+                    order_points(donor)[corner_index]
+                )
+                contour = np.round(repaired).astype(np.int32)
+                if not cv2.isContourConvex(contour):
+                    continue
+                warped = warp_board(image, repaired, warp_size)
+                xfit, yfit = detect_grid(warped, board_size)
+                score = board_candidate_grid_score(
+                    xfit,
+                    yfit,
+                    board_size,
+                    warp_size,
+                )
+                board_profile = estimate_board_profile(warped)
+                board = classify_intersections(
+                    warped,
+                    xfit,
+                    yfit,
+                    board_size,
+                    board_profile,
+                )
+                occupied = sum(
+                    row.count("B") + row.count("W")
+                    for row in board
+                )
+                lengths = side_lengths(repaired)
+                width = (lengths[0] + lengths[2]) / 2.0
+                height = (lengths[1] + lengths[3]) / 2.0
+                square_score = math.exp(
+                    -abs(math.log(width / height)) * 2.2
+                )
+                repaired_evaluated.append(
+                    (
+                        score * square_score,
+                        (score, occupied, repaired, warped, xfit, yfit),
+                    )
+                )
+        if repaired_evaluated:
+            _, repaired_best = max(
+                repaired_evaluated,
+                key=lambda item: item[0],
+            )
+            if repaired_best[0] > max(item[0] for item in evaluated):
+                evaluated.append(repaired_best)
+
+    best = max(evaluated, key=lambda item: item[0])
+    # A sparse board can still have an unreliable line fit when stones or the
+    # board frame obscure one of the outer grid lines.  In that case, use the
+    # circle centers to select the board candidate as well; they distinguish
+    # the playable 19-line grid from the physical wood frame.
+    line_grid_incomplete = (
+        estimate_board_profile(best[3]) == WOOD_BOARD_PROFILE
+        and min(best[4].coverage, best[5].coverage) < board_size - 1
+        and board_grid_extent(best[4], best[5], board_size, warp_size) < 0.88
+    )
+    if max(item[1] for item in evaluated) >= DENSE_BOARD_MIN_STONES or line_grid_incomplete:
+        dense_evaluated = []
+        for _, occupied, candidate, warped, line_xfit, line_yfit in evaluated:
+            circle_xfit, circle_yfit, circle_count = fit_stone_center_grid(warped, board_size)
+            if (
+                circle_count < DENSE_BOARD_MIN_CIRCLES
+                or circle_xfit.coverage < 6
+                or circle_yfit.coverage < 6
+            ):
+                continue
+            circle_score = board_candidate_grid_score(
+                circle_xfit,
+                circle_yfit,
+                board_size,
+                warp_size,
+                balance_margins=False,
+            )
+            xfit = align_grid_phase(circle_xfit, line_xfit, board_size, warp_size)
+            yfit = align_grid_phase(circle_yfit, line_yfit, board_size, warp_size)
+            dense_evaluated.append(
+                (circle_score, circle_count, occupied, candidate, warped, xfit, yfit)
+            )
+        if dense_evaluated:
+            _, _, _, candidate, warped, xfit, yfit = max(
+                dense_evaluated,
+                key=lambda item: (item[0], item[1]),
+            )
+            return order_points(candidate), warped, xfit, yfit
+
+    _, _, chosen, warped, xfit, yfit = best
     return order_points(chosen), warped, xfit, yfit
 
 

@@ -5,7 +5,7 @@ license: MIT-0
 compatibility: Requires Node.js 18+ and npx. PDF/image export requires Chrome or Browserless API. Google Docs requires OAuth setup.
 metadata:
   author: RenderMark
-  version: 0.1.8
+  version: 0.1.10
   mcp-server: rendermark
   category: document-creation
   tags: [markdown, pdf, docx, html, export, publishing, mermaid, slides, github-sync, google-docs]

@@ -1,5 +1,5 @@
 ## Description: <br>
-Openclaw Skill Videotranslate translates video subtitles and can generate dubbed audio, producing translated subtitle files and multi-track MKV videos. <br>
+Multi-language video subtitle translation and automatic dubbing skill (supports English, Chinese, Japanese, Spanish, French, German, Korean, etc.). <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,35 +7,33 @@ This skill is ready for commercial/non-commercial use. <br>
 [zbjincheng](https://clawhub.ai/user/zbjincheng) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+Apache-2.0 <br>
 
 
 ## Use Case: <br>
-Developers and video localization teams use this skill to translate subtitles and optionally synthesize dubbed audio for input videos when configured with trusted translation and TTS providers. <br>
+Developers and agents use this skill to translate video subtitles across languages and optionally synthesize target-language dubbing. It produces a translated subtitle file and a muxed video with target-language subtitles and, when enabled, target-language audio. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Video subtitle text and generated audio requests may be sent to configured translation and TTS endpoints. <br>
-Mitigation: Use trusted provider URLs, scoped API keys, and provider terms that match the sensitivity of the media being processed. <br>
-Risk: The skill reads user-provided video or subtitle paths and writes translated subtitle and MKV output files. <br>
-Mitigation: Run it in a controlled workspace and review input paths, output locations, and generated media before sharing or relying on the results. <br>
+Risk: Subtitle text, transcript-derived content, and provider credentials can be sent to the translation or TTS endpoints configured by the user. <br>
+Mitigation: Use only trusted endpoints, avoid sensitive or restricted media unless approved, and review temporary and output files after runs. <br>
 
 
 ## Reference(s): <br>
+- [Project homepage](https://github.com/zbjincheng/openclaw-skill-videotranslate) <br>
 - [ClawHub skill page](https://clawhub.ai/zbjincheng/skills/video-subtitle-translation-dubbing) <br>
-- [Server-resolved source repository](https://github.com/zbjincheng/openclaw-skill-videotranslate) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Files, Text, Configuration] <br>
-**Output Format:** [Translated subtitle files, multi-track MKV video files, and progress/status text] <br>
+**Output Type(s):** [Files, Text, Media] <br>
+**Output Format:** [JSON-like result containing output_video_path and output_subtitle_path for generated MKV and UTF-8 SRT/VTT files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include an output video path and an output subtitle path; dubbing output depends on processing mode and configured providers.] <br>
+**Other Properties Related to Output:** [Requires configured translation and, for dubbing mode, TTS providers; reports progress through parsing, translating, optional TTS, muxing, and done stages.] <br>
 
 ## Skill Version(s): <br>
-0.1.0 (source: ClawHub release metadata) <br>
+0.1.3 (source: frontmatter and pyproject.toml) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

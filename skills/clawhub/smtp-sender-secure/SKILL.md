@@ -1,14 +1,18 @@
 ---
 spec: usk/3.0
 id: zero_exposure_smtp_sender
-version: 2.0.0
+version: 2.1.0
 name: Zero-Exposure SMTP Mail Sender (Script-Based)
-description: Send emails securely without exposing SMTP passwords. Users store email scripts in MGC, AI executes scripts via mgc_get without ever seeing credentials. This is a documentation skill.
+description: Send emails securely without exposing SMTP credentials. Users store email scripts in MGC, AI executes scripts via mgc_run without ever seeing credentials. Requires MGC 1.4.7+. This is a documentation skill.
 author: MirginCipher Team
 license: MIT
 tags: security, email, smtp, mgc, zero-exposure, sandbox
 platform_compatibility: windows, macos, linux
 changelog:
+  - version: 2.1.0
+    changes:
+      - Requires MGC 1.4.7+ for mgc_run support
+      - Use mgc_run instead of mgc_get action="run"
   - version: 2.0.0
     changes:
       - Redesigned: script-based approach, AI never sees credentials
@@ -27,7 +31,7 @@ This skill uses **MGC Blackbox** to achieve true zero-exposure:
 - Users store SMTP credentials via MGC WebUI
 - Users store email scripts in MGC (AI can assist writing)
 - (Optional) Users can store email content separately for privacy
-- AI executes scripts via `mgc_get action="run"`
+- AI executes scripts via `mgc_run`
 - AI **never sees** credentials or email content
 
 ---
@@ -68,7 +72,7 @@ AI → receives credentials → sends email
 ```
 User → stores credentials (WebUI) → stores email script (mgc_save)
                                                   ↓
-AI → executes script (mgc_get action="run") → script reads credentials locally
+AI → executes script (mgc_run) → script reads credentials locally
                                                   ↓
                                     AI only sees execution result
 ```

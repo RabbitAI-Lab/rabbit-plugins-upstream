@@ -1,5 +1,5 @@
 ## Description: <br>
-Translates research-paper PDFs into readable, searchable PDFs in another language while rebuilding layout, tables, diagrams, captions, notes, and figure text needed for comprehension. <br>
+Translates research-paper PDFs into readable, searchable target-language PDFs while preserving academic structure, complex page content, and reviewable delivery artifacts. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,41 +11,41 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers, researchers, and knowledge workers use this skill to convert academic PDFs into readable, searchable translated PDFs. It supports full-text translation workflows with automated checks, source-output review, consolidated repair, and optional Zotero finalization. <br>
+Researchers, students, translators, and agents use this skill to translate PDF papers into searchable target-language PDFs, rebuild tables and figures when needed, and run quality checks before delivery. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The broad Pillow dependency range can accept vulnerable image-processing versions. <br>
-Mitigation: Pin Pillow to a patched current version and run dependency scanning before installation. <br>
-Risk: Workspace/.work keeps source PDFs and intermediate processing files. <br>
-Mitigation: Use a protected workspace for sensitive papers and remove intermediate files when retention is not needed. <br>
-Risk: Zotero finalization changes Zotero attachments. <br>
-Mitigation: Confirm Zotero finalization is desired and back up or review the target Zotero library before running that step. <br>
+Risk: Source PDFs and intermediate review files can remain in the skill Workspace after processing. <br>
+Mitigation: Use a dedicated workspace and remove or prune retained source and review files when they are no longer needed. <br>
+Risk: PDF parsing and image processing dependencies may need security updates. <br>
+Mitigation: Install the skill in a dedicated virtual environment and keep Pillow and PyMuPDF patched. <br>
+Risk: Zotero finalization can touch a local Zotero library. <br>
+Mitigation: Use the no-Zotero path when the workflow should not modify Zotero. <br>
 
 
 ## Reference(s): <br>
 - [README_EN.md](README_EN.md) <br>
-- [Workspace and Output Specification](references/workspace.md) <br>
-- [Document Routing](references/routing.md) <br>
-- [Translation Scope](references/translation-scope.md) <br>
 - [Quality Contract](references/quality-contract.md) <br>
+- [Document Routing](references/routing.md) <br>
 - [Layout and Readability](references/layout-readability.md) <br>
+- [Translation Scope](references/translation-scope.md) <br>
 - [Semantic Review](references/semantic-review.md) <br>
 - [QA and Acceptance](references/qa-acceptance.md) <br>
-- [Language Profiles](references/language-profiles.md) <br>
-- [Zotero Finalization](references/zotero-finalization.md) <br>
+- [Validation Scope](references/validation.md) <br>
+- [Workspace and Output Specification](references/workspace.md) <br>
+- [JGLUE Source Example](https://www.jstage.jst.go.jp/article/jnlp/30/1/30_63/_article/-char/en) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON configuration, workspace files, and translated searchable PDF outputs] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files] <br>
+**Output Format:** [Markdown guidance with shell commands, workspace files, review reports, and searchable translated PDF outputs] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates batch workspaces with source PDFs in input/, hidden intermediate files in .work/, and accepted translated PDFs in output/.] <br>
+**Other Properties Related to Output:** [Creates per-batch Workspace input, output, and hidden work directories; formal delivery is accepted translated PDFs with paths and hashes.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+1.1.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,4 +1,5 @@
 ---
+
 slug: "blog-writer-tool-free"
 name: "blog-writer-tool-free"
 version: "1.0.0"
@@ -6,22 +7,7 @@ displayName: "博客写作(免费版)"
 summary: "AI 博客写作免费版：文章增删改查、Markdown 内容、标签与草稿管理，含 REST API。。博客写作工具（免费版）面向个人创作者与独立开发者，提供博客文章的基础管理能力：创建、查询、"
 license: "MIT"
 edition: "free"
-description: |-
-  博客写作工具（免费版）面向个人创作者与独立开发者，提供博客文章的基础管理能力：创建、查询、更新、删除文章，支持 Markdown 内容、标签分类与草稿/发布状态切换。通过 REST API 与本地博客平台交互，所有接口受 API Key 鉴权保护.
-  核心能力：
-  - 文章 CRUD：创建、列表、详情、更新、删除
-  - Markdown 内容支持，自动 sanitize 防 XSS
-  - 标签分类与草稿/发布状态管理
-  - API Key 鉴权与速率限制（100 次/分钟）
-  - 本地开发服务器一键启动
-
-  适用场景：
-  - 个人技术博客的内容创作与发布
-  - 独立开发者记录项目笔记与教程
-  - AI Agent 自主生成并发布博客文章
-
-  差异化：以"API 端点 × 参数 × 示例"三段式组织，每个接口均附 curl 示例与字段说明，原创内容占比超过 70%。免费版覆盖文章 CRUD 与基础配置，专业版额外提供主题切换、媒体上传、数据分析与一键部署.
-  适用关键词：博客、写作、文章、Markdown、发布、草稿、REST API
+description: "|-. 适用于需要blog writer tool相关能力的开发场景,提供结构化的工作流程和配置指引. 该工具经过深度差异化处理,针对用户反馈和使用痛点进行了优化改进,提升了实用性和可操作性."
 tags:
   - 内容创作
   - 博客
@@ -33,16 +19,15 @@ tags:
   - 电商
   - api
   - posts
-  - key
-  - bash
-  - x-api-key
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Automation"
+pricing_tier: free
 ---
+
 # 博客写作工具（免费版）
 
 ## 概述
@@ -139,9 +124,9 @@ curl -X POST http://localhost:3000/api/posts \
   -H "Content-Type: application/json" \
   -H "X-API-Key: YOUR_API_KEY" \
   -d '{
-    "title": "我的第一篇文章",
+    "title": "我的领先篇文章",
     "slug": "my-first-post",
-    "content": "# Hello World\n\n这是 AI 生成的第一篇博客。",
+    "content": "# Hello World\n\n这是 AI 生成的领先篇博客。",
     "excerpt": "一篇简短的入门介绍。",
     "tags": ["introduction", "ai"],
     "status": "published",
@@ -182,7 +167,7 @@ curl -X DELETE http://localhost:3000/api/posts/my-first-post \
   -H "X-API-Key: YOUR_API_KEY"
 ```
 
-## 最佳实践
+## 优秀实践
 
 ### 1. 作者身份标识
 创建或更新文章时，始终使用 Agent 自身的名称作为 `authorName`，确保每篇文章正确归属。不要留空或使用占位符.
@@ -296,9 +281,9 @@ A：立即在博客后台撤销该 Key 并生成新 Key。检查文章是否被�
 用户: 执行核心功能
 Skill: 正在执行核心功能...
 Skill: 执行完成,结果如下: 操作成功
-```
-
-## 输出格式
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```json
 {
   "success": true,

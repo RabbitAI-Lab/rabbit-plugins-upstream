@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/k8s",
   "slug": "k8s",
   "ownerHandle": null,
-  "version": "1.0.4",
-  "updatedAt": 1785081013798,
-  "contentHash": "a469c5ff0b3d00b175fa954c9dc3f3e1af38046dcca8bf141df004b82b434fb1",
-  "fetchedAt": "2026-07-26T18:03:13.670Z"
+  "version": "1.0.5",
+  "updatedAt": 1785142017136,
+  "contentHash": "86dc7047bb633da1475d2090d1e257523aefa3dfdc363b7140d683c2b0d6a85b",
+  "fetchedAt": "2026-08-02T09:49:28.574Z"
 }

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/esp32-voice-assistant",
   "slug": "esp32-voice-assistant",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1784446660367,
-  "contentHash": "ecf34288784cb2efe489dfe78c5c0c0d86c1bc6e7f421ae8c929f8bb4b20ba2e",
-  "fetchedAt": "2026-07-26T18:10:40.214Z"
+  "version": "1.1.0",
+  "updatedAt": 1785461495029,
+  "contentHash": "8b3c03e0e87b6c5bd26f2179a506d526129e0e4b8aa19e0bade09376ed967d1c",
+  "fetchedAt": "2026-08-02T09:35:37.032Z"
 }

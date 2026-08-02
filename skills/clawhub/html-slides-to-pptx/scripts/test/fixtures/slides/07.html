@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Part 2 - 关键技术</title>
+<link rel="stylesheet" href="../assets/theme.css">
+<style>
+  html,body{margin:0;padding:0;overflow:hidden;}
+  .slide-container{font-family:"Noto Sans SC","Inter",sans-serif;}
+</style>
+</head>
+<body>
+<div class="slide-container" style="position:relative;width:1920px;height:1080px;overflow:hidden;background:#0A0A0A;">
+
+  <!-- 画面上半部分：大面积纯黑留白 -->
+
+  <!-- 编号 — 超大、半透明，作为背景纹理 -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:-30px;top:120px;width:800px;z-index:2;">
+    <div style="font-size:400px;font-weight:900;color:#141414;line-height:1;letter-spacing:-15px;">02</div>
+  </div>
+
+  <!-- 唯一装饰：一个红色小方块 -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:120px;top:620px;width:32px;height:32px;background:#E2232A;z-index:5;"></div>
+
+  <!-- 章节标题 — 放在画面偏下 1/3 位置 -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:180px;top:610px;width:1000px;z-index:10;">
+    <div style="font-size:72px;font-weight:900;color:#FFFFFF;line-height:1.2;">关键技术</div>
+  </div>
+
+  <!-- 英文副标题 — 极小，大尺度反差 -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:180px;top:710px;width:800px;z-index:10;">
+    <div style="font-size:14px;font-weight:400;color:#555555;line-height:1.8;letter-spacing:3px;">THE ENGINE BEHIND THE REVOLUTION</div>
+  </div>
+
+  <!-- 底部一根细线暗示"翻页" -->
+  <div data-object="true" data-object-type="shape" style="position:absolute;left:120px;top:1040px;width:60px;height:1px;background:#333333;z-index:2;"></div>
+
+</div>
+<template data-slide-notes>
+【章节过渡页 · Part 2 关键技术】
+极简仪式感：90%的画面是纯黑留白。编号"02"以接近背景色的超大字体作为底层纹理。一个32px的红色方块是唯一的色彩装饰——克制才有力量。标题放在下1/3区域，制造"空间落差"的呼吸感。
+</template>
+</body>
+</html>

@@ -1,5 +1,5 @@
 ## Description: <br>
-KLYC-PMM gives agents a shell-based workflow for writing, classifying, encrypting, uploading, searching, and recovering persistent memory. <br>
+KLYC-PMM provides persistent AI-agent memory workflows for initialization, memory capture, recovery, local and remote search, file watching, paid upgrades, and HTTPS API communication using curl and jq. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use this skill to let an AI agent preserve useful decisions and identity files across restarts, workspace resets, and recovery events while using local shell commands and cloud-backed memory storage. <br>
+External users, developers, and agent operators use this skill to persist text memories, recover an agent memory state from a recovery token, search local or hosted memory, and configure watcher or daemon workflows for ongoing synchronization. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can retain and upload broad local and cloud memory, including watched files selected by the operator. <br>
-Mitigation: Review the watched and backed-up file list before enabling it, exclude secrets or regulated data, and limit use to intended workspaces. <br>
-Risk: Remote hooks, daemon behavior, and update flows may change local prompts or scripts after installation. <br>
-Mitigation: Disable those flows unless the operator trusts the service, and review fetched hooks or updates before allowing them to run. <br>
-Risk: The scanner guidance says not to rely on stated encryption guarantees for every upload path. <br>
-Mitigation: Treat cloud upload paths as requiring review, validate the configured endpoint and encryption behavior, and avoid sensitive data until that review is complete. <br>
+Risk: The skill can transmit memory, identity, and workspace file content to a remote service. <br>
+Mitigation: Review the watched file list and API endpoint before use, and keep secrets out of watched memory or identity files. <br>
+Risk: The skill can install or run a long-running watcher or systemd service. <br>
+Mitigation: Inspect daemon installation commands, run without root where possible, and confirm the uninstall or disable path before enabling persistence. <br>
+Risk: Paid upgrade flows depend on external payment behavior. <br>
+Mitigation: Confirm the payment endpoint, order retry behavior, and expected user confirmation flow before running upgrade commands. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sylncn/skills/klyc-pmm) <br>
-- [README](artifact/README.md) <br>
-- [Skill usage guide](artifact/klyc-pmm/SKILL.md) <br>
-- [Security policy](artifact/SECURITY.md) <br>
-- [Changelog](artifact/klyc-pmm/CHANGELOG.md) <br>
+- [ClawHub release page](https://clawhub.ai/sylncn/skills/klyc-pmm) <br>
+- [PMM full architecture](artifact/klyc-pmm/references/pmm-full-architecture.md) <br>
+- [Pay Skill packaging standard](artifact/klyc-pmm/references/pay-skill-spec.md) <br>
+- [Skill manifest](artifact/klyc-pmm/skill.json) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and shell command guidance with local files and JSON configuration] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and shell-oriented text with JSON configuration and command output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires jq and curl; memory and recovery flows may create or update local files and send selected content to the configured service.] <br>
+**Other Properties Related to Output:** [May create or update local memory/configuration files, watcher state, and systemd service definitions when users run the provided scripts.] <br>
 
 ## Skill Version(s): <br>
-7.0.3 (source: server release metadata, SKILL.md frontmatter, skill.json, and _meta.json) <br>
+9.1.9 (source: frontmatter, skill.json, CHANGELOG, and ClawHub release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -275,7 +275,7 @@ def _sha256(path):
 GATES_FILE = ".deck-gates.json"
 
 
-def check_handoff_gates(pptx):
+def check_handoff_gates(pptx, mode="presented"):
     """Refuse --deliverables until the quality gates have actually run.
 
     The gates that guard a deck's quality — the design plan, the independent critic, the
@@ -318,7 +318,11 @@ def check_handoff_gates(pptx):
             "  re-reads it). Then add the two blocks only you can supply. Full shape:\n\n"
             '    {{"critic": {{"verdict": "consent", "rounds": 2}},\n'
             '     "design_plan": {{"boldness": "balanced+", "signature_move": "<the one risk>",\n'
-            '                     "carried_by": [4, 6, 8], "form_ledger": "<family tally>"}},\n'
+            '                     "carried_by": [4, 6, 8], "form_ledger": "<family tally>",\n'
+            '                     "icon_family": "<family | none - reason>",\n'
+            '                     "palette": "<FILL vs TEXT-safe split, per palette_audit.py>",\n'
+            '                     "type_scale": {{"display": 34, "title": 24, "body": 14}},\n'
+            '                     "signature_proof": {{"slide": 6, "png": "render/slide06.png"}}}},\n'
             '     "provenance": {{"claims": [{{"claim": "<the claim>", "verdict": "CONFIRMED",\n'
             '                                "url": "https://<primary source>"}}]}}}}\n\n'
             "  (A summary tally like {{\"checked\": 87}} is REJECTED on purpose — a tally is "
@@ -334,7 +338,46 @@ def check_handoff_gates(pptx):
 
     critic = gates.get("critic") or {}
     if critic.get("waived"):
-        print("[gates] critic WAIVED — {}".format(critic["waived"]))
+        # A waiver is legitimate — quick decks and hosts without subagent dispatch are real —
+        # but an UNCLASSIFIED one is just a sentence, and the model that skipped the loop writes
+        # the same sentence as the model that ran it. The Codex delivery gate has required a
+        # distinct schema-valid review artifact per lens for a while; this path accepted any
+        # string. Measured: a hand-typed waiver carried a whole deck through `all hand-off gates
+        # pass` without an independent critic ever seeing it. So: name the category, and say
+        # whether the lenses ran at all.
+        WAIVER_KINDS = {
+            "no-dispatch-on-host":
+                "the runtime cannot dispatch a subagent (record it in the capability ledger too)",
+            "already-reviewed-minor-edit":
+                "a 1-2 slide edit to a deck that already passed its loop",
+            "user-waived":
+                "the user was asked and chose to ship over it",
+            "external-deck":
+                "a deck this skill did not author (redesign diagnosis / critique-only run)",
+        }
+        reason = critic["waived"]
+        kind = critic.get("waived_category")
+        if not isinstance(reason, str) or len(reason.strip()) < 24:
+            die("`critic.waived` must be a written reason that travels with the deck, not a "
+                "placeholder. Say what was skipped and why, in a sentence someone can disagree "
+                "with later.")
+        if kind not in WAIVER_KINDS:
+            die("`critic.waived_category` must name WHICH kind of skip this is — an unclassified "
+                "waiver is indistinguishable from never having run the loop. One of:\n"
+                + "\n".join("    {:28s} {}".format(k, v) for k, v in sorted(WAIVER_KINDS.items()))
+                + "\n\n  If none of these fit, the honest move is to run the critic.")
+        if kind == "no-dispatch-on-host" and "inline_ran" not in critic:
+            die("`waived_category: no-dispatch-on-host` must also record `\"inline_ran\": true|false` "
+                "— whether the content and design lenses were at least run inline. 'Ran inline in "
+                "the author's own context' and 'was never reviewed' are different claims, and the "
+                "hand-off note reads identically for both unless this file separates them.")
+        print("[gates] critic WAIVED [{}] — NOT INDEPENDENTLY REVIEWED".format(kind))
+        print("        {}".format(reason))
+        if kind == "no-dispatch-on-host":
+            print("        lenses run inline: {} — inline review is the author grading "
+                  "themselves.".format("yes" if critic.get("inline_ran") else "NO"))
+        print("        Say this in the hand-off note too; a waiver the user never sees is a "
+              "silence.")
     elif critic.get("verdict") == "consent":
         # A record the model TYPED at hand-off is self-certification: the model that skipped the
         # loop writes the same JSON as the model that ran it. So when the record points at the
@@ -387,16 +430,82 @@ def check_handoff_gates(pptx):
 
     # The design plan is the art director's output (Step 2). Self-authoring one is indistinguishable
     # from dispatching for it — unless the record has to carry the fields the dispatch produces.
-    DESIGN_FIELDS = ("boldness", "signature_move", "carried_by", "form_ledger")
+    # `icon_family` joins the four originals for one measured reason: a deck shipped with ZERO
+    # icons through every automated gate, while a missing LOGO was caught by a required
+    # checkpoint token. Icons are called a design must on every branch and had no field, no
+    # column and no check anywhere. The token grammar mirrors `logo plan:` — a family name or
+    # an explicit `none — <reason>` — so a deliberately icon-free deck is always satisfiable.
+    # `palette` joins them for the same measured reason as `icon_family`. SKILL.md already
+    # states the two-token rule -- a hue used as TEXT must itself clear 4.5:1, so keep a bright
+    # FILL token and a darker TEXT twin. The rule is correct and still easy to break, because
+    # the check is per-PAIR and a build touches dozens of them. Measured on one deck: the author
+    # declared the rule in the design plan and then broke it FOUR times -- a vivid ochre set as a
+    # label on its own pale slab (2.34:1), coral emphasis text on a coral tint (4.19:1), a table
+    # highlight (4.19:1), a muted grey carrying real content on cream (4.26:1). None were
+    # reckless; each was a pair nobody was thinking about while computing contrast for a
+    # different pair, and each surfaced at render time or in review, a round later.
+    # `scripts/palette_audit.py` resolves the whole matrix in one call, so the field is cheap to
+    # fill honestly and cannot be filled at all without having run something.
+    # type_scale and signature_proof were gated on the CODEX delivery path only, so on the shared
+    # path typography was the one pillar of the visual language nobody had to resolve (palette,
+    # icons and forms all had required fields), and the signature move was accepted as a SENTENCE
+    # with nothing showing it survived into the render. That asymmetry is the exact shape of a bug
+    # this repo already fixed once: the critic waiver was schema-checked for Codex and a hand-typed
+    # string everywhere else, and it carried a real deck through "all gates pass".
+    DESIGN_FIELDS = ("boldness", "signature_move", "carried_by", "form_ledger", "icon_family",
+                     "palette", "type_scale", "signature_proof")
     design = gates.get("design_plan") or {}
     if design.get("waived"):
         print("[gates] design plan WAIVED — {}".format(design["waived"]))
     elif design:
         missing = [f for f in DESIGN_FIELDS if not design.get(f)]
         if missing:
+            hint = ("\n    palette: the resolved FILL-only vs TEXT-safe split — run\n"
+                    "      python3 scripts/palette_audit.py --from-style <deck>/style.py\n"
+                    "    and paste what it hands back. A hue that works as a fill can read at\n"
+                    "    2-4:1 as text on the same tint; the matrix is what stops that being\n"
+                    "    found a render later." if "palette" in missing else "")
             die("`design_plan` is missing {}. These are the art director's outputs "
                 "(agents/slide-design.md, Step 2) — a plan without them was not designed, it was "
-                "defaulted. Fill them, or waive with a reason.".format(", ".join(missing)))
+                "defaulted. Fill them, or waive with a reason.{}".format(", ".join(missing), hint))
+        scale = design["type_scale"]
+        if not isinstance(scale, dict) or not all(
+                isinstance(scale.get(k), (int, float)) for k in ("display", "title", "body")):
+            die('`type_scale` must resolve the three tiers as numbers, e.g. '
+                '{"display": 34, "title": 24, "body": 14}. SIZE SPRAWL tells authors to draw sizes '
+                '"from the deck\'s declared type-scale tokens" — this is where they get declared. '
+                'A deck with no scale does not have restrained typography, it has whatever each '
+                'slide happened to pick.')
+        # same floors the Codex delivery gate uses, so the two paths cannot disagree about what
+        # counts as legible body type
+        BODY_FLOORS = {"presented": 13.5, "textheavy": 13.5, "selfread": 12.0}
+        delivery = str(gates.get("delivery", "presented"))
+        floor = BODY_FLOORS.get(delivery, BODY_FLOORS["presented"])
+        if scale["body"] < floor:
+            die(f'`type_scale.body` is {scale["body"]}pt, under the {floor}pt floor for a '
+                f'{delivery} deck — that is a legibility floor, not a style choice.')
+        if not (scale["display"] > scale["title"] > scale["body"]):
+            die(f'`type_scale` is not a scale: display {scale["display"]} > title {scale["title"]} '
+                f'> body {scale["body"]} must hold, or the tiers do not rank and the hierarchy is '
+                f'decorative rather than structural.')
+        proof = design["signature_proof"]
+        # `png` or `path`: the Codex delivery gate spells this key `path` in its own evidence file,
+        # and a Codex run keeps BOTH records (references/codex-runtime.md). Demanding one spelling
+        # here would reject the field an OpenAI-bridged run naturally writes — the same evidence,
+        # rejected for its key name.
+        proof_file = (proof or {}).get("png") or (proof or {}).get("path")
+        if not isinstance(proof, dict) or not proof_file or not proof.get("slide"):
+            die('`signature_proof` must be {"slide": <n>, "png": "<rendered png>"} (the key may also '
+                'be spelled "path", as the Codex delivery gate does) — the rendered evidence that '
+                'the signature move actually SURVIVED into the deck. A move that exists only as a '
+                'sentence in the plan is the documented failure: it gets sanded back to the safe '
+                'catalogue during the build and nobody notices, because the plan still reads bravely.')
+        png = Path(proof_file)
+        if not png.is_absolute():
+            png = Path(pptx).parent / png
+        if not png.exists() or png.stat().st_size < 512:
+            die(f'`signature_proof` file ({proof_file}) does not exist or is empty — render '
+                f'the slide first (render_deck.py <deck> <dir>) and point at the real PNG.')
         cb = design["carried_by"]
         if not isinstance(cb, list) or len(cb) < 2:
             die("`carried_by` must name at least 2 slides where the signature move does structural "
@@ -407,7 +516,8 @@ def check_handoff_gates(pptx):
         die("no `design_plan` record. Step 2 dispatches agents/slide-design.md as the deck's art "
             "director; nothing else decides deck rhythm or the signature move.\n"
             '    {"design_plan": {"boldness": "balanced+", "signature_move": "...",\n'
-            '                     "carried_by": [4, 6, 8], "form_ledger": "..."}}\n'
+            '                     "carried_by": [4, 6, 8], "form_ledger": "...",\n'
+            '                     "icon_family": "...", "palette": "..."}}\n'
             '    or {"design_plan": {"waived": "<reason>"}}')
 
     # Provenance: a self-filled tally proves nothing — the refutation pass is what the gate is FOR.
@@ -445,6 +555,72 @@ def check_handoff_gates(pptx):
         print("[gates] no provenance record — fine for a deck built from the user's own material; "
               "a research-sourced deck should carry one.")
 
+    # ── DENSITY: a slide is a visual aid, not a document ────────────────────────
+    # This one is a gate rather than a warning because the warning already existed and was
+    # already ignored — twice, by the same author, on two consecutive decks. Measured: one
+    # deck shipped with 8 of 12 slides over the presented text budget, the next with 12 of 12
+    # (loads of 81-144 words against a budget of ~40), and both times the per-slide TEXT WALL
+    # line was read and dismissed as advisory. The skill's OWN reference deck — the file it
+    # tells every builder to copy — runs at a median of 27 words a slide, so the budget is not
+    # unrealistic; what failed was that nothing made ignoring it cost anything.
+    # A deck may legitimately be denser (a self-read leave-behind, a spec sheet). That is what
+    # the waiver is for: not a rule against text, a rule against text arriving by default.
+    #
+    # DELIVERY MODE. The budget here is lint_deck's budget, taken from lint_deck: 70 words for a
+    # presented deck, 120 for a self-read one, and no budget at all on a poster (`surface`) or a
+    # deck whose density the user CHOSE at Q4 (`textheavy`). A gate that fires on a mode the
+    # interview offers, the rubric protects and the lint deliberately passes does not enforce
+    # anything for long — it teaches the author to paste a waiver, and after that it is decoration.
+    txt = gates.get("density")
+    if mode in ("surface", "textheavy"):
+        print("[gates] density: not applied — %s deck (the user chose this density, or the "
+              "surface has no per-slide budget)" % mode)
+        return
+    over, total, median = _density_stats(pptx, budget=70 if mode == "presented" else 120)
+    if total:
+        if isinstance(txt, dict) and txt.get("waived"):
+            print("[gates] density: {}/{} slide(s) over the presented text budget, median {} "
+                  "words — WAIVED: {}".format(over, total, median, str(txt["waived"])[:110]))
+        elif over * 3 > total:
+            die("{} of {} slides are over the {} text budget (median {} words a slide; "
+                "aim ~40, warn >{}). The skill's own reference deck runs at 27.\n"
+                "    A slide is a visual aid for a speaker — the sentences belong in the speaker "
+                "notes, which this deck already has.\n"
+                "    Cut the on-slide prose, or record the deliberate choice:\n"
+                '    "density": {{"waived": "why this deck is meant to be read, not presented"}}'
+                .format(over, total, mode, median, 70 if mode == "presented" else 120))
+        else:
+            print("[gates] density: {}/{} slide(s) over the text budget, median {} words a slide"
+                  .format(over, total, median))
+
+
+def _density_stats(pptx, budget=70):
+    """(slides over the text budget, total slides, median load).
+
+    Calls `lint_deck.reading_load` — the SAME function the per-slide TEXT WALL warning calls —
+    so the number in the warning and the number in this gate are one number by construction.
+    An earlier version of this only shared the string-level word counter and re-implemented the
+    per-slide accumulation and the chrome filter, which is where all the drift actually lives:
+    its `sz <= 10.5 and len(t) < 40` skip had no POSITION test, so it was not a footer filter
+    but an amnesty for small type anywhere on the slide. Measured on one deck: lint said 136
+    words a slide, the gate said 4, and a wall of 10.5pt prose passed. Sharing a helper is not
+    the same as sharing the measurement — share the measurement.
+    """
+    try:
+        sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+        from lint_deck import _boxes, reading_load
+        from pptx import Presentation
+        prs = Presentation(pptx)
+        sw = prs.slide_width / 914400.0
+        sh = prs.slide_height / 914400.0
+    except Exception:
+        return 0, 0, 0
+    loads = [reading_load(sl, _boxes(sl, sw, sh), sh) for sl in prs.slides]
+    if not loads:
+        return 0, 0, 0
+    loads.sort()
+    return sum(1 for x in loads if x > budget), len(loads), loads[len(loads) // 2]
+
 
 def main(argv):
     # --deliverables (alias --final): ALSO park the PDF beside the .pptx and write viewer.html.
@@ -478,6 +654,22 @@ def main(argv):
             if "=" not in a and raw in argv:
                 argv.remove(raw)
             break
+    # --gate-check runs the hand-off gates and exits, rendering nothing. The gates were reachable
+    # only through --deliverables, which Step 6 deliberately makes a decline-able OFFER ("want a PDF
+    # and a browser preview?"), so on every deck where the user said no, the strongest gate in the
+    # skill never ran at all. Step 6 now calls this unconditionally, whatever the user answers.
+    # Delivery mode — the SAME flags lint_deck.py takes, spelled the same way, because the gate
+    # below enforces the lint's budget and the two must never disagree about which deck this is.
+    mode = "presented"
+    for flag, name in (("--selfread", "selfread"), ("--surface", "surface"),
+                       ("--textheavy", "textheavy")):
+        while flag in argv or ("--mode=" + name) in argv:
+            argv = [a for a in argv if a not in (flag, "--mode=" + name)]
+            mode = name
+    gate_only = False
+    if "--gate-check" in argv:
+        argv = [a for a in argv if a != "--gate-check"]
+        gate_only = True
     for flag in ("--deliverables", "--final"):
         while flag in argv:
             argv.remove(flag)
@@ -496,17 +688,22 @@ def main(argv):
         die("--slides and --fast both choose the slide set — pass one")
     if not argv:
         die("usage: python render_deck.py /path/to/deck.pptx [out_dir] "
-            "[--fast | --slides N[,M]] [--deliverables]")
+            "[--fast | --slides N[,M]] [--deliverables] [--gate-check]")
     pptx = argv[0]
     out = argv[1] if len(argv) > 1 else "./render"
 
     if not os.path.isfile(pptx):
         die("no such file: " + pptx)
 
+    if gate_only:
+        check_handoff_gates(pptx, mode)
+        print("[gates] all hand-off gates pass — the deck may be handed over")
+        return 0
+
     # Checked here, before LibreOffice runs — same reason the --fast/--slides conflicts are:
     # failing after a successful render wastes the render and reads as a late surprise.
     if deliverables:
-        check_handoff_gates(pptx)
+        check_handoff_gates(pptx, mode)
 
     soffice = find_soffice()
     if not soffice:

@@ -1,5 +1,30 @@
 # Changelog
 
+## 1.0.14 (2026-07-29)
+
+- Reissued the focused ClawHub GEO refresh after the prior write-side version did not surface through public latest-version reads.
+- Kept first-screen and agent-card wording focused on KYC face liveness, face liveness detection, KYC liveness detection, replay detection, and deepfake screening.
+
+## 1.0.13 (2026-07-29)
+
+- Updated the ClawHub card summary to include KYC face liveness, face liveness detection, KYC liveness detection, replay detection, and deepfake screening.
+- Preserved the media-risk review boundary and did not broaden into identity matching or OCR.
+
+## 1.0.12 (2026-07-27)
+
+- Republished the 2026-07-27 AI Guardian GEO refresh with explicit ClawHub `latest` tagging.
+- Preserved the trial, PoC, pricing, face-liveness policy, and integration-contact updates from 1.0.11.
+
+## 1.0.11 (2026-07-27)
+
+- Added trial, PoC, pricing, face-liveness policy, and integration-contact routing for KYC liveness evaluations.
+- Preserved the focused AI Guardian boundary as a review signal for face liveness, replay risk, and deepfake screening.
+
+## 1.0.10 (2026-07-24)
+
+- Strengthened KYC liveness detection, face liveness, replay detection, and deepfake screening discovery coverage.
+- Kept liveness and synthetic-media risk separate from identity matching and document OCR.
+
 ## 1.0.9 (2026-07-20)
 
 - Refreshed visible ClawHub GEO release freshness for face liveness, replay detection, and deepfake-detection discovery.

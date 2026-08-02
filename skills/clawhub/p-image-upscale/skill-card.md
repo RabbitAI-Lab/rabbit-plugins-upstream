@@ -11,31 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and creative operators use this skill to upscale an existing image through Pruna's p-image-upscale model, choosing target megapixels and enhancement options for print, large crops, or higher-quality delivery. <br>
+Developers and content teams use this skill to upscale a provided image through Pruna's hosted API for print-ready, large-crop, or higher-quality delivery. It guides agents to confirm credentials, the source image, target megapixels, enhancement settings, output format, and the relevant API calls. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill uses a Pruna API key and sends user-provided images to Pruna's external API. <br>
-Mitigation: Use an API key appropriate for the agent session and upload only images the user is willing to send to Pruna. <br>
-Risk: Optional realism enhancement can change the appearance of synthetic or edited images. <br>
-Mitigation: Confirm enhancement settings with the user and reserve realism enhancement for already photoreal sources. <br>
+Risk: Using this skill uploads the selected image and processing settings to Pruna's hosted API. <br>
+Mitigation: Avoid uploading sensitive personal, confidential, or proprietary images unless the user accepts Pruna's handling of that data. <br>
+Risk: The skill recommends companion skill installs before use. <br>
+Mitigation: Review the companion skills and allow only the installs needed for the current workflow. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/p-image-upscale) <br>
-- [p-image-upscale model docs](https://docs.api.pruna.ai/guides/models/p-image-upscale) <br>
+- [Pruna p-image-upscale model documentation](https://docs.api.pruna.ai/guides/models/p-image-upscale) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with curl commands and JSON request examples] <br>
+**Output Format:** [Markdown guidance with curl command examples and JSON request bodies] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires PRUNA_API_KEY and a user-provided source image; typical options include target megapixels, output format, detail enhancement, and realism enhancement.] <br>
+**Other Properties Related to Output:** [Requires PRUNA_API_KEY and sends the selected image plus processing settings to Pruna's hosted API.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release evidence and skill metadata) <br>
+1.0.8 (source: server release metadata and skill frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

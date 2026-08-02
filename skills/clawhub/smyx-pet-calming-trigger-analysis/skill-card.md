@@ -1,5 +1,5 @@
 ## Description: <br>
-Automatically triggers soothing mechanisms when pet anxiety, howling, or prolonged loneliness is detected, and produces structured pet behavior analysis reports from video or URL inputs. <br>
+The skill sends pet camera images or videos to a remote cloud API to analyze anxiety, howling, or prolonged loneliness and returns structured results, recommendations, and report links for pet soothing workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to analyze pet monitoring videos or media URLs for anxiety-related behavior, generate structured reports, and query prior cloud-hosted analysis reports. It is intended as an intelligent pet-care trigger and reporting assistant, not as a guaranteed animal-care or smart-device control system. <br>
+External ClawHub users and pet-care automation builders use this skill to analyze pet monitoring media, review detected anxiety-related behaviors, and retrieve cloud-hosted report history before deciding whether to trigger soothing actions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Pet camera media and submitted URLs are processed by the LifeEmergence cloud service. <br>
-Mitigation: Use only media that is appropriate for cloud processing, avoid sensitive household footage, and review service handling before installation. <br>
-Risk: Report history is associated with a hidden local identity and backend tokens may be stored in the workspace. <br>
-Mitigation: Review local workspace storage before and after use, protect generated identity and token files, and clear them when the skill is no longer needed. <br>
-Risk: The release is packaged as an automatic soothing trigger, but evidence does not show reviewed code that directly controls speakers, toys, or smart-home devices. <br>
-Mitigation: Treat device activation as requiring separate reviewed integration code and human validation before connecting any physical pet-care devices. <br>
+Risk: Pet camera images or videos and account-linked identifiers are sent to remote services for analysis and report retrieval. <br>
+Mitigation: Use the skill only with media and account data that users have consented to send to the provider cloud, and document expected remote processing before deployment. <br>
+Risk: The skill can silently create or reuse an internal identity and stores tokens for remote API access. <br>
+Mitigation: Review identity creation, token storage, retention, and revocation behavior before installation in shared or sensitive environments. <br>
+Risk: Historical report triggers can retrieve cloud-hosted report history and export links. <br>
+Mitigation: Limit report-history use to explicit user requests and verify that returned reports belong to the intended account context. <br>
+Risk: The artifact claims soothing-device triggering behavior, while the reviewed scripts primarily perform cloud analysis and report retrieval. <br>
+Mitigation: Confirm the intended device-control path before relying on automatic soothing actions, or describe the skill as analysis-only until that behavior is implemented. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-calming-trigger-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [Pet Calming Trigger API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-calming-trigger-analysis) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [Pet calming trigger API documentation](references/api_doc.md) <br>
+- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis text with optional report links and shell command examples] <br>
+**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
+**Output Format:** [Markdown or JSON text from command-line execution, including structured analysis results and report/export links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local video files or media URLs, historical report listing, optional detail level, and optional output file path.] <br>
+**Other Properties Related to Output:** [Supports local media paths, remote media URLs, historical report listing, optional detail level, and optional output file writing.] <br>
 
 ## Skill Version(s): <br>
-1.0.10 (source: server release metadata; artifact frontmatter reports 1.0.9) <br>
+1.0.11 (source: server release metadata; artifact frontmatter says 1.0.10) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

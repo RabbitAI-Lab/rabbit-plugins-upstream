@@ -1,5 +1,5 @@
 ## Description: <br>
-Configure, deploy, and troubleshoot web servers, application servers, and containerized services. <br>
+Helps agents diagnose, configure, deploy, tune, and maintain web and application services on a host, including process supervision, reverse proxies, ports, workers, releases, static assets, TLS reloads, logs, capacity, and self-hosted apps. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,38 +7,47 @@ This skill is ready for commercial/non-commercial use. <br>
 [ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
 
 ### License/Terms of Use: <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to configure web servers, reverse proxies, process managers, TLS certificates, Docker Compose services, and common self-hosted application patterns. <br>
+Developers, operators, and infrastructure maintainers use this skill to keep web and application services running on hosts, debug request-path failures, size workers, manage releases and rollbacks, and maintain service records without storing credentials. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Server administration commands and configuration examples can affect live services if copied without review. <br>
-Mitigation: Review every command before running it on a production host and adapt examples to the target environment. <br>
-Risk: Example credentials and environment values can expose secrets if reused directly. <br>
-Mitigation: Replace example passwords and protect secrets with an ignored .env file, Docker secrets, or a secret manager. <br>
-Risk: The Traefik example includes an insecure dashboard/API flag that is unsuitable for production as written. <br>
-Mitigation: Remove or secure the insecure dashboard/API flag before deploying Traefik publicly. <br>
-Risk: Persistent services and Docker volume deletion can cause data loss or prolonged service changes. <br>
-Mitigation: Confirm persistence, backups, and the impact of destructive Docker commands before deleting volumes or changing long-running services. <br>
+Risk: Server-operations guidance can affect live infrastructure when it includes restarts, stops, pruning, firewall changes, or volume deletion. <br>
+Mitigation: Keep confirmation required for service-affecting actions and prefer validation plus reload paths where the skill provides them. <br>
+Risk: Local service notes may contain hostnames, ports, topology decisions, incidents, and runbooks. <br>
+Mitigation: Review the configured local note paths before installation and store credentials only as pointers such as environment variables, keychain entries, or secret-manager references. <br>
+Risk: Incorrect server changes can cause outages, dropped requests, or failed rollbacks. <br>
+Mitigation: Apply changes one request-path hop at a time, validate configuration before reload, and keep named rollback artifacts for deployments. <br>
 
 
 ## Reference(s): <br>
-- [Server Configuration Examples](configs.md) <br>
-- [Docker and Docker Compose Patterns](docker.md) <br>
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/server) <br>
+- [Clawic skill page](https://clawic.com/skills/server) <br>
+- [Server skill definition](artifact/SKILL.md) <br>
+- [Capacity](artifact/capacity.md) <br>
+- [Containers](artifact/containers.md) <br>
+- [Debugging](artifact/debug.md) <br>
+- [Deployment](artifact/deployment.md) <br>
+- [Processes](artifact/processes.md) <br>
+- [Proxy](artifact/proxy.md) <br>
+- [Security](artifact/security.md) <br>
+- [TLS](artifact/tls.md) <br>
+- [Workers](artifact/workers.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline code blocks] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline code, shell commands, configuration snippets, checklists, and file paths] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+**Other Properties Related to Output:** [Outputs should identify the affected request-path hop, name exact files and reload commands when applicable, and require confirmation before service-affecting actions.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server-resolved release metadata) <br>
+1.0.2 (source: artifact/SKILL.md frontmatter and evidence.release.version) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

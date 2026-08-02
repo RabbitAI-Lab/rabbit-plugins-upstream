@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":"0","result":{"tx_hash_list":["h1","h2"],"amount_list":[4503599627370496,4503599627370497],"fee_list":[0,0],"weight_list":[0,0],"multisig_txset":"","unsigned_txset":""}}

@@ -11,35 +11,29 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to set up or audit pytest configuration, reusable test fixtures, and CI workflows for Python plugin test infrastructure. <br>
+Developers and engineers use this skill to set up or audit pytest configuration, shared fixtures, coverage settings, test markers, and CI integration for Python projects. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad trigger words may activate the skill during general testing or configuration conversations. <br>
-Mitigation: Confirm the project needs pytest or CI setup guidance before applying suggested changes. <br>
-Risk: Suggested pytest configuration, fixtures, or CI workflows may not match a project's layout or quality thresholds. <br>
-Mitigation: Review generated configuration and run collection, marker, and coverage checks before committing changes. <br>
+Risk: CI snippets can affect a repository's build environment through dependency installation and coverage upload steps. <br>
+Mitigation: Review GitHub Actions, Codecov upload, and dependency installation snippets before copying them into a project. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-leyline-pytest-config) <br>
-- [Leyline Plugin Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
-- [Conftest Patterns](modules/conftest-patterns.md) <br>
-- [Git Testing Fixtures](modules/git-testing-fixtures.md) <br>
-- [Mock Fixtures](modules/mock-fixtures.md) <br>
-- [CI Integration](modules/ci-integration.md) <br>
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-pytest-config) <br>
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
 **Output Format:** [Markdown guidance with TOML, Python, YAML, Makefile, and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include pytest configuration, reusable fixtures, CI workflow examples, and verification commands.] <br>
+**Other Properties Related to Output:** [Documentation-only guidance for pytest configuration, reusable fixtures, and CI patterns.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

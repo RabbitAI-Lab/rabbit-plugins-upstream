@@ -1,6 +1,6 @@
 ---
 name: xerg
-description: Audit and reduce AI agent spend in dollars. Use when the user asks about AI costs, agent spend, token waste, retry loops, model downgrades, per-agent spend, or wants to measure whether a workflow or model change saved money. Works with OpenClaw, Hermes, Claude Code, Cursor, and any framework via event ingest.
+description: Audit and reduce AI agent spend in dollars, or audit provider-generated FOCUS 1.4 billing data. Use for AI costs, agent spend, token waste, billing reconciliation, commitments, or FinOps. Works with OpenClaw, Hermes, Claude Code, Cursor, generic event ingest, and FOCUS CSV/Parquet.
 homepage: https://xerg.ai
 metadata:
   xerg:
@@ -9,7 +9,6 @@ metadata:
       skill: https://xerg.ai/skill.md
       documentation: https://xerg.ai/docs
       status: https://status.xerg.ai
-    primaryEnv: XERG_API_KEY
     requires:
       anyBins:
         - xerg
@@ -26,7 +25,7 @@ metadata:
     envVars:
       - name: XERG_API_KEY
         required: false
-        description: Optional Xerg Cloud workspace API key for explicit push, connect, and hosted MCP setup.
+        description: Advanced CI-only credential for non-interactive hosted push and MCP setup.
       - name: XERG_API_URL
         required: false
         description: Optional override for the Xerg API endpoint; defaults to https://api.xerg.ai.
@@ -47,7 +46,7 @@ metadata:
 
 # Xerg
 
-Xerg is a local-first CLI for finding wasted AI spend in OpenClaw, Hermes, Claude Code, and Cursor — plus any other framework that can export a JSON event payload. It audits dollars instead of raw token counts, separates confirmed waste from savings opportunities, attributes spend per agent (including delegated sub-agent spend where the source supports it), and uses `--compare` to measure whether a workflow or model change actually helped.
+Xerg is a local-first CLI for finding wasted AI runtime spend and auditing provider-generated FOCUS 1.4 billing. Runtime audits separate identified waste from savings opportunities, report detector coverage, and use `--compare` to measure compatible changes. FOCUS audits use a separate billing pipeline for effective cost, commitments, invoice reconciliation, and billing-period coverage.
 
 ## Cold-fetch setup
 
@@ -59,7 +58,13 @@ When this file was fetched from `https://xerg.ai/skill.md` rather than loaded fr
 4. If persistent installation is unavailable or declined, use these fetched instructions for the current session. Do not invent an install location.
 5. Run `npx @xerg/cli@latest doctor`, use its output to choose the non-interactive audit command below, and offer to run the first audit locally.
 
-Always ask before uploading. A local audit needs no account and must not be pushed automatically. After a successful local result, offer to create a free workspace at [xerg.ai/signup](https://xerg.ai/signup), run `npx @xerg/cli@latest login --replace` so an existing workspace credential cannot short-circuit verification, and repeat the chosen command with `--push`.
+Always ask before uploading. A local audit needs no account and must not be pushed automatically. After a successful local result, offer to connect and push it with:
+
+```bash
+npx @xerg/cli@latest activate --push-latest
+```
+
+`activate` opens Xerg in the browser. The signed-in user explicitly approves the currently active workspace, which the approval page names before any credential is issued. The workspace key is encrypted to the initiating CLI and stored with owner-only permissions; never ask the user to paste a key into chat or expose one in a command.
 
 Codex is an execution host, not a native Xerg audit source. A Codex user audits whatever `doctor` finds: OpenClaw, Hermes, Claude Code, a Cursor export, or a generic ingest payload.
 
@@ -74,7 +79,7 @@ npx @xerg/cli@latest audit --json
 
 1. Run `doctor` first. It reports which local sources exist (OpenClaw, Hermes, Claude Code) and which default paths were checked.
 2. Run `audit --json`. If more than one runtime is detected, add `--runtime openclaw`, `--runtime hermes`, or `--runtime claude-code`.
-3. Summarize the result for the user in dollars: total spend, confirmed waste (`wasteSpendUsd`), the top findings, and the per-agent spend breakdown (`spendByAgent`) when present. Confirmed waste and savings opportunities are different claims — do not present opportunities as proven waste.
+3. Summarize the result for the user in dollars: total spend, identified waste (`wasteSpendUsd`), assessed spend from `detectionCoverage`, the top findings, and the per-agent spend breakdown (`spendByAgent`) when present. Identified waste and savings opportunities are different claims — do not present opportunities as proven waste. Never describe `$0` as no waste when request-sequence coverage is none, partial, or unknown.
 4. If the user applies a fix, re-run the same audit with `--compare` to report the before/after delta:
 
 ```bash
@@ -103,6 +108,19 @@ If `xerg` is installed globally, use `xerg` in place of `npx @xerg/cli@latest`.
 - Claude Code session transcripts via `xerg audit --runtime claude-code`
 - Cursor usage CSV exports via `xerg audit --cursor-usage-csv ./cursor-usage.csv`
 - Any framework's exported event payload via `xerg ingest --file payload.json`
+- FOCUS 1.4 Cost and Usage, Contract Commitment, Invoice Detail, and Billing Period datasets in local CSV or Parquet
+
+## FOCUS billing execution path
+
+Use this path when the user supplies a directory of provider-generated FOCUS data:
+
+```bash
+npx @xerg/cli@latest focus init --input ./provider-focus-export
+npx @xerg/cli@latest focus doctor --bundle ./provider-focus-export/xerg-focus.json
+npx @xerg/cli@latest focus audit --bundle ./provider-focus-export/xerg-focus.json --json
+```
+
+For CI, add `--strict --no-db`. Strict validation errors exit `4`. FOCUS source data remains local. Never push automatically; if the user explicitly asks to push, first show the exact USD-only bounded aggregate with `--push --dry-run`. The push omits rows, paths, customer/invoice/contract identifiers, descriptions, tags, metadata URLs, SKU/model labels, and custom values. Runtime and FOCUS audits are separate and must never be added together or compared across audit kinds.
 
 ## What It Finds
 
@@ -119,15 +137,29 @@ If `xerg` is installed globally, use `xerg` in place of `npx @xerg/cli@latest`.
 
 Costs are priced across input, output, cache read, and cache write tokens using a catalog covering hundreds of current models. Run `xerg doctor --verbose` to see per-file extraction coverage (which economic signals the parser found).
 
-For current Hermes, use `xerg audit --runtime hermes`; Xerg prefers `~/.hermes/state.db`. Use `--state-db` for another profile. `--state-db` is mutually exclusive with legacy `--log-file` and `--sessions-dir`. The optional `xergai/hermes-observer` plugin writes content-free local events under `~/.hermes/xerg/events/`; it never adds economics or sends data to Xerg Cloud. Complete observer evidence can split an aggregate only after exact request/token reconciliation.
+For current Hermes, use `xerg audit --runtime hermes`; Xerg prefers `~/.hermes/state.db`. Use `--state-db` for another profile. `--state-db` is mutually exclusive with legacy `--log-file` and `--sessions-dir`. State-only audits retain aggregate spend, request/token/cache, workflow/model/tool, and delegated-workload totals, but first-request cost, initial context, request growth, retry sequences, and identical-input loops are unavailable. The optional `xergai/hermes-observer` plugin writes content-free local events under `~/.hermes/xerg/events/`; it never adds economics or sends content to Xerg Cloud. Complete observer evidence can split an aggregate only after exact request/token reconciliation.
+
+After installing the observer, restart Hermes, start a new session, and run `xerg doctor --runtime hermes`. Report doctor status and assessed spend. Do not imply that historical aggregate sessions can be reconstructed. Use `--require-detection-coverage full|partial` for CI; unmet coverage exits `5`.
 
 For OpenClaw traces, `xerg collect openclaw` binds only to `127.0.0.1`, accepts OTLP/HTTP protobuf traces, persists a bounded sanitized capture, and audits after shutdown. It does not modify OpenClaw configuration or push automatically. Without explicit `--runtime hermes`, `--otlp-file` is independent OpenClaw evidence and cannot be combined with transcript, log, other-runtime, or remote sources.
 
-For certified Hermes traces, `xerg collect hermes` uses the same loopback traces-only protocol but HMACs identifiers with a persistent local key and requires `state.db`. Use only the exact certified `briancaffey/hermes-otel` commit printed in Xerg's docs. Xerg never installs or edits that plugin. The first-party observer stays primary; cache-inclusive plugin prompt totals are normalized into Xerg's separate input/cache buckets, optional enrichment preserves audit identity, and conflicting evidence restores the original aggregate. For non-default `HERMES_HOME` profiles, use the equivalent environment-variable block printed by the command because the pinned plugin resolves YAML under `~/.hermes`.
+For certified Hermes traces, `xerg collect hermes` uses the same loopback traces-only protocol but HMACs identifiers with a persistent local key and requires `state.db`. Use only the exact certified `briancaffey/hermes-otel` commit printed in Xerg's docs. Xerg never installs or edits that plugin. The first-party observer stays primary; cache-inclusive plugin prompt totals are normalized into Xerg's separate input/cache buckets, optional enrichment preserves `economicAuditId` while analysis identity reflects changed coverage, and conflicting evidence restores the original aggregate. For non-default `HERMES_HOME` profiles, use the equivalent environment-variable block printed by the command because the pinned plugin resolves YAML under `~/.hermes`.
 
 ## Optional Cloud
 
-Local audits need no account. Hosted sync and hosted MCP are optional workspace features and only run when you explicitly use `xerg connect`, `xerg audit --push`, `xerg push`, or `xerg mcp-setup`.
+Local audits need no account. To connect a workspace and push the latest local result, ask permission and run:
+
+```bash
+npx @xerg/cli@latest activate --push-latest
+```
+
+For a website-first user with no cached audit, `npx @xerg/cli@latest activate` securely connects, detects a supported local source, runs the audit, and pushes it. Hosted sync and hosted MCP remain optional and never run without explicit user action.
+
+## Advanced authentication
+
+Use `xerg login --replace` only as a manual recovery path when browser pairing is unavailable. It opens Workspace Settings and masks the key pasted into the terminal. Never ask for or paste a workspace key in agent chat.
+
+Use `XERG_API_KEY` only for non-interactive CI or deployment automation. Store it in the CI provider's secret manager; never place it inline in a shell command, source file, log, URL, or conversation.
 
 ## Links
 

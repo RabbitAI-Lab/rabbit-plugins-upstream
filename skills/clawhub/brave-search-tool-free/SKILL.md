@@ -1,44 +1,23 @@
 ---
 slug: brave-search-tool-free
 name: brave-search-tool-free
-version: 1.0.0
+version: 1.0.2
 displayName: Brave搜索工具-免费版
-summary: "基于Brave Search API的网页搜索与内容提取工具,无需浏览器,适合个人用户。基于 Brave Search API 的无头网页搜索与内容提取工具,无需启动浏览器,"
-license: Proprietary
+summary: "基于Brave Search API的网页搜索与内容提取工具,无需浏览器,适合个人用户。基于 Brave Search API 的无头网页搜索与内容提取工具,无需启动浏览器,,提供核心能力"
+license: MIT
 edition: free
-description: 基于 Brave Search API 的无头网页搜索与内容提取工具,无需启动浏览器,，可自动提升工作效率
-
-  支持基础搜索、内容提取与结果数量配置。核心能力:
-
-  - 无头网页搜索(无需浏览器)
-
-  - 页面内容提取(转为 Markdown)
-
-  - 结果数量配置
-
-  - 干净的输出格式
-
-  适用场景:
-
-  - 个人开发者的文档与API查询
-
-  - 事实查询与信息检索
-
-  - 特定URL内容提取
-
-  差异化:免费版提供核心搜索与内容提取能力,适合个人用户轻量场景'
+description: "基于 Brave Search API 的无头网页搜索与内容提取工具,无需启动浏览器,，可自发提升工作效率. 适用于需要brave search tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要brave search tool相关能力的开发场景,包含结构化的工作流程和配置指引."
 tags:
   - 研究工具
+  - brave
+  - search
+  - automation
+  - productivity
   - 网页搜索
   - 信息检索
   - 搜索
   - 检索
   - 工具
-  - search
-  - content
-  - api
-  - url
-  - python
 tools:
   - read
   - exec
@@ -46,6 +25,8 @@ tools:
   - grep
 homepage: ""
 category: "Knowledge"
+pricing_tier: free
+
 ---
 # Brave搜索工具(免费版)
 
@@ -153,7 +134,7 @@ cd /path/to/brave-search-tool
 npm ci
 # ...
 # 配置 API Key
-export BRAVE_API_KEY="your-brave-api-key"
+export BRAVE_API_KEY=${API_KEY:?请设置环境变量}
 ```
 
 ### 2. 基础搜索
@@ -219,7 +200,7 @@ export BRAVE_API_KEY="your-brave-api-key"
 
 ```bash
 # Brave API Key(必需)
-export BRAVE_API_KEY="your-brave-api-key"
+export BRAVE_API_KEY=${API_KEY:?请设置环境变量}
 # ...
 # 可选:默认结果数量
 export BRAVE_SEARCH_DEFAULT_COUNT=5
@@ -232,7 +213,7 @@ export BRAVE_SEARCH_DEFAULT_COUNT=5
 # advanced-search.sh - 进阶搜索工作流示例
 # ...
 # 1. 先用 search.js 找到相关 URL
-echo "=== 第一步:关键词搜索 ==="
+echo "=== 领先步:关键词搜索 ==="
 ./search.js "Python 异步编程教程" -n 5
 # ...
 # 2. 从结果中选取重要 URL,用 content.js 提取全文
@@ -266,7 +247,7 @@ for url in $(./search.js "Python 教程" -n 5 | grep "链接:" | awk '{print $2}
 done
 ```
 
-## 最佳实践
+## 优秀实践
 
 1. **查询词要具体**:"Python asyncio gather 用法" 优于 "Python".
 2. **按需使用 `--content`**:仅需摘要时不带 `--content`,需全文时才带.
@@ -326,7 +307,7 @@ done
 - 本 Skill 基于Markdown指令,除 Brave API Key 外无需额外配置
 
 ### 可用性分类
-- **分类**: MD+EXEC(纯Markdown指令,部分功能需exec命令行执行)
+- **分类**: MD+EXEC模式纯Markdown指令,部分功能需exec命令行执行)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent完成操作
 
 ## 错误处理

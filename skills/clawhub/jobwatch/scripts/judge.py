@@ -9,26 +9,23 @@ LLM 判断失败 → 降级 P2 进日摘要（宁多看一眼，不漏 Kill Shot
 import json
 import sys
 
-from common import CONFIG, ROOT, http_json, openrouter_key
+from common import (CONFIG, ROOT, credential_for_endpoint, http_json,
+                    require_egress_consent)
 
 
 def llm_endpoint():
     """api 模式的 LLM 端点：任意 OpenAI 兼容服务（OpenRouter/OpenAI/vLLM/Ollama…）。
 
     base url: env LLM_BASE_URL > config judge.base_url > OpenRouter
-    api key : env LLM_API_KEY > env OPENROUTER_API_KEY > openclaw 的 openrouter profile
+    api key : 由 common.credential_for_endpoint() 按端点决定——LLM_API_KEY 是你为这个
+              端点配的，会发过去；OPENROUTER_API_KEY / 宿主 OpenClaw 的 OpenRouter key
+              只发给 OpenRouter，绝不跟着自定义 base_url 走。本地端点无 key 照常工作。
     """
     import os
     base = (os.environ.get("LLM_BASE_URL")
             or CONFIG["judge"].get("base_url")
             or "https://openrouter.ai/api/v1").rstrip("/")
-    key = os.environ.get("LLM_API_KEY")
-    if not key:
-        try:
-            key = openrouter_key()
-        except RuntimeError:
-            key = ""  # 本地端点（如 ollama）可以无 key
-    return base, key
+    return base, credential_for_endpoint(base, purpose="judge")
 from enrich_jd import fetch_jd
 
 def _load_profile():
@@ -97,6 +94,11 @@ def llm_judge(item, jd_text):
             f"Location: {item['location']}\nURL: {item['detail_url']}\n\n"
             f"Job description (may be truncated):\n{jd_text or '(JD unavailable — judge from title/location only)'}")
     base, key = llm_endpoint()
+    require_egress_consent(
+        "llm",
+        f"the full job-description text and the full text of your JOB_PROFILE.md "
+        f"(resume highlights, visa needs, seniority, red lines), to {base}",
+    )
     headers = {"Authorization": f"Bearer {key}"} if key else {}
     resp = http_json(
         f"{base}/chat/completions",

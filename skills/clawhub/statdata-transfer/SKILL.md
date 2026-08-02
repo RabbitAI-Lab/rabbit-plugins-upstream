@@ -1,6 +1,11 @@
 ---
+slug: statdata-transfer
 name: statdata-transfer
+displayName: 统计数据格式转换器 / Statistical Data Format Converter
 cn_name: 统计数据格式转换器
+version: 2.2.0
+summary: 读入/转存 50+ 统计软件格式，对统计二进制格式完整保留变量标签/值标签/特殊缺失值等元数据。副作用声明：运行环境检查（scripts/check_env.py）；可应要求 pip 安装缺失包；处理 .rda/.rds/.RData/.mtw/.rec 文件时可调用本地 R 解释器，但该回退默认禁用，需 allow_r_exec=True 显式开启。
+license: MIT
 description: "读入/转存 50+ 统计软件格式，对统计二进制格式完整保留变量标签/值标签/特殊缺失值等元数据。副作用声明：运行环境检查（scripts/check_env.py）；可应要求 pip 安装缺失包；处理 .rda/.rds/.RData/.mtw/.rec 文件时可调用本地 R 解释器，但该回退默认禁用，需 allow_r_exec=True 显式开启。 / Read/convert 50+ statistical software formats, preserving variable/value labels and missing-value metadata for binary stats formats. Side effects (declared): runs environment checks (scripts/check_env.py); may optionally pip-install missing packages on request; can invoke the local R interpreter for .rda/.rds/.RData/.mtw/.rec files via a fallback that is DISABLED by default and must be opted in with allow_r_exec=True."
 triggers:
   - "statdata-transfer"
@@ -10,50 +15,60 @@ triggers:
   - "sav转dta 格式转换"
   - "variable labels 变量标签"
   - "metadata-preserved conversion"
+required_commands: [python]
+invocable: true
 metadata:
-  {
-    "openclaw": { "emoji": "🛠️", "icon": "assets/icon.svg" },
-    "authors": ["medstatstar", "phoe-zip"],
-    "version": "2.1.0",
-    "license": "MIT",
-    "tags": ["data-conversion", "statistics", "spss", "stata", "sas", "clinical-trials", "metadata", "pandas", "bidirectional"],
-    "homepage": "https://github.com/medstatstar/statdata-transfer",
-  }
+  openclaw: { emoji: "🛠️", icon: "assets/logo.svg" }
+  authors: ["medstatstar", "phoe-zip"]
+  license: "MIT"
+  tags: ["data-conversion", "statistics", "spss", "stata", "sas", "clinical-trials", "metadata", "pandas", "bidirectional"]
+  homepage: "https://github.com/medstatstar/statdata-transfer"
+permissions:
+  scope: "user-space-only"
+  network: "off"
+  network_note: "Offline by default; the only network touchpoint is the optional `python scripts/check_env.py --install`, which pip-installs missing packages and runs ONLY on explicit user request."
+  filesystem: "read-only to its own files; reads the input data file you specify; writes the converted output file to a path you specify"
+  data: "no external data transmission"
 ---
 
-# statdata-transfer / Statistical Data Format Converter
+# Statistical Data Format Converter
 
-> 致敬 Stat/Transfer — 业界格式转换标杆 / Honoring Stat/Transfer — the industry standard
+> **Safe by default — preview, not execute**: the skill shows what it will read/convert and only writes a file when you explicitly ask. Every R-invoking path is opt-in and disabled by default.
 
-## Language Policy / 语言策略
+## Language
 
- - 默认英文；检测到中文环境时切换为中文提示。
- - 常用模块备英文 + 中文两套；文档标题（不区分语言者）采用「英 / 中」顺序双语。
- - 复杂 / 少用模块可暂只英文。
+- **English guide** → [README.md](https://github.com/medstatstar/statdata-transfer/blob/main/README.md)
+- **中文指南** → [README_zh-CN.md](https://github.com/medstatstar/statdata-transfer/blob/main/README_zh-CN.md)
 
-## Core Capabilities / 核心能力
+This skill responds in the user's input language and auto-switches; runtime prompts switch by locale. SKILL.md body is English-only (agent-facing); bilingual walkthroughs live in the two READMEs.
 
-| Ability / 能力 | Description / 说明 |
-|---------|-------------|
-| Read / 读入 | SPSS/Stata/SAS/R … full metadata; text/JSON/detect-only keep subset / 统计二进制格式完整保留元数据；文本/JSON 保留子集；12 种专有格式探测降级 |
-| Convert / 转存 | Inter-convert most stats formats: SPSS↔Stata↔R↔SAS XPT↔… / 多数统计格式可互转（部分受限于规范） |
-| Embed / 元数据嵌入 | Labels embed in Parquet/Feather/HDF5/JSON via schema.metadata / 标签嵌入 Arrow schema.metadata |
-| Warn / 丢失警告 | Auto-detect metadata loss per conversion path / 自动检测并报告元数据损失 |
+## Purpose
 
-## Supported Formats / 支持格式
+Read 50+ statistical-software and clinical-trial data formats into a pandas DataFrame, and inter-convert between most formats (SPSS ↔ Stata ↔ R ↔ SAS XPT ↔ Excel ↔ Parquet ↔ HDF5 ↔ JSON …). For statistical binary formats it preserves full variable/value labels and special-missing-value metadata; text/JSON formats preserve only a retainable subset.
 
-*50+ formats, sorted alphabetically. 按字母排序。*
+## Features
 
-| Format 格式 | Extension 扩展名 | Meta Preserve 元数据保留 |
-|------------|-----------------|------------------------|
+| Capability | Description | Typical Scenario |
+|:---|:---|:---|
+| **Read** | Extract data + all metadata from 50+ formats into a pandas DataFrame; clearly report what is preserved vs lost | `read data.sav and show metadata` |
+| **Convert** | Inter-convert most stats formats; export to universal formats (Parquet/Feather/HDF5/JSON/CSV/Excel) with labels embedded | `convert data.sav to .dta keeping variable labels` |
+| **Embed metadata** | Labels embedded in Arrow `schema.metadata` / sidecar JSON for lossless round-trips | `save to parquet but keep value labels` |
+| **Warn** | Auto-detect and report metadata loss per conversion path | audit before exporting to CSV |
+
+## Supported Formats
+
+*50+ formats, sorted alphabetically.*
+
+| Format | Extension | Meta Preserve |
+|--------|-----------|---------------|
 | CDISC ODM | `.odm` | ⚠️ Clinical data only |
 | dBASE / FoxPro | `.dbf` | ⚠️ Read+Write, uppercase names |
-| EpiData | `.rec` | ⚠️ Via R |
+| EpiData | `.rec` | ⚠️ Via R (opt-in) |
 | EpiInfo | `.prj` `.xml` | ✅ XML structure |
 | Excel | `.xlsx` `.xls` `.xlsm` | ⚠️ Extra sheet for labels; merged-cell fill |
 | EViews | `.wf1` `.wf2` | ⚠️ JSON structure |
 | Feather | `.feather` `.arrow` | ✅ Via schema |
-| FST | `.fst` | ✗ Detect-only (proprietary format) |
+| FST | `.fst` | ✗ Detect-only (proprietary) |
 | GraphPad Prism | `.pzfx` `.pz` | ⚠️ Multi-table |
 | Gretl | `.gdt` `.gdtb` | ✅ String-tables |
 | HDF5 | `.h5` `.hdf5` | ⚠️ Hierarchy + attribute labels |
@@ -63,13 +78,13 @@ metadata:
 | JSON | `.json` | ✅ stat-full-meta |
 | MATLAB | `.mat` | ⚠️ v7.3+ via h5py fallback |
 | Mathematica | `.wdx` | ⚠️ Best-effort XML |
-| Minitab | `.mtw` `.mpj` | ⚠️ Via R |
+| Minitab | `.mtw` `.mpj` | ⚠️ Via R (opt-in) |
 | MS Access | `.mdb` `.accdb` | ⚠️ Multi-table; needs system driver |
 | ODS | `.ods` | ⚠️ Data only |
 | ORC | `.orc` | ✅ Via schema |
 | Origin | `.opju` `.oggu` | ⚠️ Best-effort |
 | Parquet | `.parquet` | ✅ Via schema; partitioned datasets |
-| R | `.rda` `.rds` `.rdata` | ✅ pyreadr; R-interpreter fallback opt-in (allow_r_exec) |
+| R | `.rda` `.rds` `.rdata` | ✅ pyreadr; R fallback opt-in (allow_r_exec) |
 | SAS | `.sas7bdat` `.xpt` `.sas7bcat` | ✅ |
 | SPSS | `.sav` `.zsav` `.por` | ✅ |
 | Stata | `.dta` | ✅ |
@@ -77,10 +92,10 @@ metadata:
 | XML | `.xml` | ⚠️ Structure preserved |
 
 > ✅=Full · ⚠️=Partial/conditional · ✗=Not preserved
-> 
-> 12 detect-only formats (SAS CPORT `.cpt`, Statistica `.sta`, OxMetrics `.in7`, SYSTAT `.sys`/`.syd`, Paradox `.db`/`.px`, LIMDEP `.lpw`, NCSS `.ncss`) give clear export guidance — see README.
+>
+> 12 detect-only formats (SAS CPORT `.cpt`, Statistica `.sta`, OxMetrics `.in7`, SYSTAT `.sys`/`.syd`, Paradox `.db`/`.px`, LIMDEP `.lpw`, NCSS `.ncss`, FST) give clear export guidance — see README.
 
-## Return Structure / 返回结构
+## Return Structure
 
 ```python
 {
@@ -90,29 +105,31 @@ metadata:
         "row_count": 100, "column_count": 10,
         "variable_labels": {"q1": "Question 1"},
         "value_labels": {"q1": {1: "Yes", 2: "No"}},
-        # ... 全部元数据 / all metadata fields
+        "special_missing": {...},
     },
     "warnings": [],
     "column_report": {"q1": {"source_type": "int", "pandas_dtype": "int64"}},
 }
 ```
 
-## Quick Start / 快速开始
+## Quick Start
 
 ```bash
-# Check environment / 检查环境
+# Check environment (optional install on request)
 python scripts/check_env.py --install
+```
 
-# Run via WorkBuddy (bilingual, auto-detects your language)
+In WorkBuddy (bilingual, auto-detects your language):
+
+```
 > convert data.sav to .dta
 > read data.sav and show metadata
 > 把 data.sav 转成 .dta 并保留变量标签
 ```
 
 > For complete code examples, see `references/usage_examples.py`.
-> 完整代码示例见 `references/usage_examples.py`。
 
-## Dependencies / 依赖
+## Dependencies
 
 ```yaml
 requires:
@@ -122,25 +139,29 @@ requires:
     extended: [openpyxl, xlrd, scipy, h5py, pyarrow, lxml, odfpy, tableauhyperapi, dbfread, dbf, pyodbc]
 ```
 
-> Full list: `requirements.txt` / 完整列表见 `requirements.txt`
+> Full list: `requirements.txt`
 
-## Detailed Docs / 详细文档
+## ⚠️ Safety
 
-- **English**: [`README.md`](./README.md) — format limits, strategies, encoding, extension guide
-- **中文**: [`README_ZH.md`](./README_ZH.md) — 格式限制、读入策略、编码注意事项、扩展指南
+- All R-invoking paths are **opt-in and disabled by default**; they only run when you pass `allow_r_exec=True` on a trusted file.
+- Pure-Python parsers (`pyreadr`, `mtbpy`) are tried first and never execute code.
+- No silent R fallback — if the pure-Python parser fails and `allow_r_exec` is not set, the skill raises a clear error.
+- Writing an existing `.hyper` backs up to `.bak` before overwrite; on failure the original is untouched.
+- Output for reference only; validate before regulatory submissions.
 
-## Security / 安全
+### Security model (transparent disclosure)
 
-- **All R-invoking paths are opt-in & sandboxed by default / 所有调用 R 的路径默认隔离、需显式开启**: reading `.rda/.rds/.RData` (`readRDS()/load()`), reading Minitab `.mtw/.mpj` and EpiData `.rec` (`foreign::read.mtb()/read.epiinfo()`), and writing R formats (`.rda/.rds`) are **disabled by default**. They only run when you explicitly pass `allow_r_exec=True` on a TRUSTED file. Pure-Python parsers (`pyreadr`, `mtbpy`) are tried first and never execute code.
-- **No silent R fallback / 无静默 R 回退**: If the pure-Python parser fails and `allow_r_exec` is not set, the skill raises a clear error instead of silently launching R — eliminating the risk of executing embedded code from untrusted files.
-- **R scripts are static templates / R 脚本为静态模板**: When the opt-in R path is used, all R scripts are fully static templates; user inputs are passed only as CLI args (`commandArgs(trailingOnly=TRUE)` via `jsonlite`) — **never concatenated into executable R code**. Random temp filenames; no fixed paths.
-- **R bridge writes a temp CSV / R 桥接写临时 CSV**: When R is used (opt-in), converted data is materialized to a temporary CSV on disk before being read back; the temp file is deleted immediately after use, but on crash or via backup/indexing tools it could briefly persist — avoid processing highly sensitive data through R-backed formats.
-- **No destructive writes / 无破坏性写入**: Writing an existing `.hyper` first writes to a temp file; only after success is the existing file rotated to `<file>.bak` (prior `.bak` demoted to `.bak.1`, never silently deleted), then atomically swapped in. On write failure the original is untouched.
-- **Pinned dependencies / 依赖已固定版本**: Core deps carry upper-bound pins (`pandas`, `pyreadstat`, `pyreadr`) — see `requirements.txt`.
-- **Optional install / 可选安装**: `python scripts/check_env.py --install` only runs on explicit request.
-- **Permissions required / 所需权限**: Read the input file; write the output file to a path you specify. No network access unless you explicitly request package installation. No destructive writes — existing `.hyper` outputs are backed up to `.bak` before overwrite.
-- **Scope / 范围**: Statistical data formats only. Text/JSON formats preserve metadata subset only — see «Format Limits» in README.
+| Behavior | Description |
+|:---|:---|
+| **R invocation (opt-in)** | Reading `.rda/.rds/.RData` (`readRDS()/load()`), Minitab `.mtw/.mpj`, EpiData `.rec`, and writing R formats run **only** with `allow_r_exec=True` on a trusted file. Pure-Python parsers tried first. |
+| **No silent fallback** | On pure-Python parser failure without `allow_r_exec`, raises a clear error instead of launching R — avoids executing embedded code from untrusted files. |
+| **Static R templates** | When the opt-in R path runs, all R scripts are static templates; user input passes only as CLI args (`commandArgs(trailingOnly=TRUE)` via `jsonlite`) — never concatenated into executable R code. |
+| **Temp CSV bridge** | Opt-in R writes data to a temp CSV then reads back; deleted after use, but on crash could briefly persist — avoid highly sensitive data through R-backed formats. |
+| **No destructive writes** | `.hyper` write → temp file → rotate existing to `.bak` (prior `.bak` → `.bak.1`, never silently deleted) → atomic swap. Original untouched on failure. |
+| **Pinned dependencies** | Core deps carry upper-bound pins (`pandas`, `pyreadstat`, `pyreadr`) — see `requirements.txt`. |
+| **Optional install** | `python scripts/check_env.py --install` only on explicit request. |
+| **Permissions** | Read the input file; write the output file to a path you specify. No network unless you explicitly request package install. |
 
-## License / 许可证
+## License
 
-MIT. See [`LICENSE`](./LICENSE). / 详见 [`LICENSE`](./LICENSE)。
+MIT. See [LICENSE](./LICENSE).

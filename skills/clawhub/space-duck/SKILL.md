@@ -193,20 +193,34 @@ auto-approved on the intra-owner fast path (just re-run the peck), **7** =
 Grant scope for `send_peck` is `to:<recipient_sdid>` and the server matches it
 exactly. Full runbook: `references/grants.md`.
 
-**Envelope v3 signing (Ed25519, asymmetric).** By default, `send_peck.py`
-signs each peck with the symmetric v2 HMAC (Beak Key). Opt in to v3 by
-running `python3 scripts/sign_key.py setup` — this generates an Ed25519
-keypair, writes the private key to `~/.space-duck/sign_key.hex` (chmod 600,
-never leaves the box), and TOFU-registers the public key with the backend
-(`POST /beak/duck/sign-key/bootstrap`, X-Beak-Key authed). Once
-`~/.space-duck/config.json` carries `envelope_v3: true` + `sign_key_id`,
-`send_peck.py` signs each peck v3 first and only falls back to v2 if the
-key file is missing or the `cryptography` package is unavailable — the v2
-path stays byte-identical. Rotation is owner-driven (Mission Control):
-the Phase 1 `POST /beak/duck/<sdid>/sign-key/rotate` endpoint requires
-both a Cognito JWT AND an attestation signed by the old key, so
-`sign_key.py rotate` prints the exact Mission Control lane rather than
-pretending the box can drive it. Full doctrine: `docs/spec/BEAK-V3-ASYMMETRIC-IDENTITY.md`.
+**Envelope v3 signing (Ed25519, asymmetric) — preferred by default (0.6.0).**
+`send_peck.py` signs each peck v3 whenever a local sign key loads.
+Provision the key once with `python3 scripts/sign_key.py setup` — this
+generates an Ed25519 keypair, writes the private key to
+`~/.space-duck/sign_key.hex` (chmod 600, never leaves the box), and
+TOFU-registers the public key with the backend (`POST
+/beak/duck/sign-key/bootstrap`, X-Beak-Key authed). If no key is on disk
+the sender falls through byte-identically to the v2 HMAC path — no
+breakage, no config change required. Opt-OUT: set `envelope_v3: false`
+in `~/.space-duck/config.json` (absent or truthy = v3 on). A recipient's
+v3 capability can be discovered via public
+`GET /beak/duck/<sdid>/sign-key` (returns `v3: true|false` +
+`protocol_caps`). **Autonomous rotation** (0.6.1, marker
+`[BEAK-V3-P2D]`): `python3 scripts/sign_key.py rotate` now drives a real
+rotate — it generates a fresh Ed25519 keypair in memory, signs an
+attestation envelope (`intent='key_rotation'`,
+`message_hash=sha256(new_kid)`) with the OLD private key, POSTs
+`POST /beak/duck/sign-key/rotate` (X-Beak-Key auth + attestation), and
+only after HTTP 200 atomically replaces `~/.space-duck/sign_key.hex` +
+updates `config.sign_key_id`. Any failure leaves the local key file
+untouched so the OLD key stays live. **The owner has 24 h to revert**
+from Mission Control (`POST /beak/duck/<sdid>/sign-key/rotate/revert`,
+owner-JWT) if the rotate was theft-driven — while the window is open a
+second rotate is blocked (409 `rotate_pending_window`), guaranteeing a
+stolen key cannot chain-rotate past the revert. Owner-JWT rotates from
+Mission Control (the Phase 1 handler) still exist and are unchanged —
+they do NOT set the revert window (owner action is presumed
+intentional). Full doctrine: `docs/spec/BEAK-V3-ASYMMETRIC-IDENTITY.md`.
 
 **Bounded chains (auto).** An initial peck (anything but `--reply-to`)
 auto-opens a bounded v2 session with `max_rounds=6` so an auto-responder

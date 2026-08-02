@@ -1,0 +1,15 @@
+{
+  "// note": "Per-tenant provisioning for the zetrix-agentic-wallet skill. One process per tenant. Secrets come from the tenant secret store, never from the published skill artifact. Confirm the pinned npm version before publishing (remediation runbook targeted a clean 0.3.0).",
+  "mcpServers": {
+    "agentic-wallet": {
+      "command": "npx",
+      "args": ["-y", "agentic-wallet-mcp@0.3.0"],
+      "env": {
+        "ZETRIX_NETWORK": "zetrix:mainnet",
+        "HSM_PASSWORD": "${secret:tenant.hsm_password}",
+        "ZETRIX_ADDRESS": "${secret:tenant.zetrix_address}",
+        "MAX_PAYMENT_AMOUNT": "{\"*\":\"0\"}"
+      }
+    }
+  }
+}

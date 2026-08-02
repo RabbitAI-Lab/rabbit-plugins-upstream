@@ -1,5 +1,5 @@
 ## Description: <br>
-Comprehensive R-based meta-analysis skill covering RevMan 5.x equivalents, Stata-style meta-analysis workflows, effect-size conversion, robust variance estimation, Bayesian and network meta-analysis, survival meta-analysis, trial sequential analysis, diagnostic meta-analysis, systematic-review workflow support, and reproducible R outputs. <br>
+Meta Analysis Strip V180 is a bilingual, R-based agent skill that helps clinical researchers and analysts plan meta-analyses and systematic-review workflows while producing reproducible R code, figures, tables, and Markdown summaries. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,47 +7,47 @@ This skill is ready for commercial/non-commercial use. <br>
 [medstatstar](https://clawhub.ai/user/medstatstar) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Clinical researchers, evidence reviewers, and analysts use this skill to turn natural-language meta-analysis requests into reproducible local R workflows, including model selection, effect-size handling, visualization, and structured result summaries. It is intended to assist statistical analysis and reporting, not to replace clinical or statistical judgment. <br>
+External users, clinical researchers, and statistical analysts use this skill in chat to select appropriate meta-analysis workflows, preview or run local R analyses after confirmation, and generate reproducible outputs for review. It is intended to support evidence synthesis work, not to replace clinical or regulatory judgment. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill runs local R analysis code and may generate R files and output artifacts in the workspace. <br>
-Mitigation: Review the generated scripts and run the skill only in the intended working directory before executing analyses. <br>
-Risk: Manual R package installation can use external package repositories and write to the user's R library. <br>
-Mitigation: Install packages from trusted sources in a controlled R environment and review package installation prompts. <br>
-Risk: PDF batch download uses external services when explicitly requested and may retrieve copyrighted full text. <br>
-Mitigation: Use PDF retrieval only for DOI or PMID lists the user is authorized to access. <br>
-Risk: The skill may read local R configuration from ~/.workbuddy/MEMORY.md. <br>
-Mitigation: Keep that memory file free of unrelated sensitive information before using the skill. <br>
-Risk: Statistical outputs can be misleading if interpreted without study context or domain expertise. <br>
-Mitigation: Have qualified statistical or clinical reviewers interpret model assumptions, heterogeneity, bias, and conclusions. <br>
+Risk: The skill can propose or run local R code and create analysis files in the current project. <br>
+Mitigation: Review generated R code and expected output paths before confirming execution. <br>
+Risk: The security review notes conflicting treatment of patient-level or regulated clinical data. <br>
+Mitigation: Do not provide regulated clinical data unless data-handling controls, generated code, and output locations have been reviewed. <br>
+Risk: The skill asks to read ~/.workbuddy/MEMORY.md, which may contain unrelated sensitive information. <br>
+Mitigation: Inspect or restrict that memory file before allowing the skill to read it. <br>
+Risk: Package installation and PDF downloads may use the network. <br>
+Mitigation: Keep package installs and PDF downloads manual and explicit, using trusted sources and only user-approved DOI or PMID lists. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/medstatstar/skills/meta-analysis) <br>
-- [Project Homepage](https://github.com/medstatstar/meta-analysis) <br>
-- [Interactive Menu](references/interactive_menu.md) <br>
-- [Advanced API](references/advanced_api.md) <br>
-- [RevMan Complete](references/revman_complete.md) <br>
-- [Stata to R Mapping](references/stata_to_r_mapping.md) <br>
-- [R Packages](references/r_packages.md) <br>
-- [Citations](references/citations.md) <br>
+- [ClawHub skill page](https://clawhub.ai/medstatstar/skills/meta-analysis) <br>
+- [Publisher profile](https://clawhub.ai/user/medstatstar) <br>
+- [Project homepage](https://github.com/medstatstar/meta-analysis) <br>
+- [Interactive menu reference](references/interactive_menu.md) <br>
+- [Reusable API reference](references/advanced_api.md) <br>
+- [R package reference](references/r_packages.md) <br>
+- [Data templates](references/data_templates.md) <br>
+- [Systematic review workflow](references/review_workflow.md) <br>
+- [Citation reference](references/citations.md) <br>
+- [Language policy](references/language_policy.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance with inline shell and R code; generated workspace artifacts may include R scripts, SVG/PNG plots, CSV tables, Markdown summaries, and optional reports.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown responses with R code blocks and generated local analysis artifacts such as scripts, figures, CSV tables, and summaries.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs locally in the user's R environment and writes analysis artifacts to workspace directories.] <br>
+**Other Properties Related to Output:** [Safe preview is the default posture; local execution occurs only after user confirmation and may create project-local analysis files.] <br>
 
 ## Skill Version(s): <br>
-1.7.0 (source: server release metadata; skill frontmatter reports 1.7) <br>
+1.8.0 (source: server release metadata and skill frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

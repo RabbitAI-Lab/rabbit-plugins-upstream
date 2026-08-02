@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Employees, analysts, and developers use this skill to generate formal Chinese government and state-owned-enterprise Word documents with prescribed page layout, fonts, heading levels, tables, images, page numbers, and signature blocks. <br>
+Employees, external users, and developers use this skill to create Word .docx files that follow Chinese government and central state-owned enterprise document conventions, including prescribed page margins, fonts, headings, tables, attachments, signatures, and page numbers. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The CLI writes a .docx file to the output path supplied by the user. <br>
-Mitigation: Choose a non-sensitive destination and avoid filenames that would overwrite important local documents. <br>
-Risk: Marketplace capability tags mention wallet or sensitive credential use even though the reviewed artifacts do not support that behavior. <br>
-Mitigation: Treat the skill as a local Word document formatting helper and do not provide wallet details, credentials, or other secrets. <br>
+Risk: The skill can write .docx files to paths supplied by the user or agent. <br>
+Mitigation: Review output paths before execution and run the skill in a workspace where file writes are expected. <br>
+Risk: The docx dependency is declared with a version range, which can reduce reproducibility across installs. <br>
+Mitigation: Use the committed package-lock.json during install or pin the docx dependency exactly for stricter reproducibility. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/a-lhliang/gov-doc-writing) <br>
+- [ClawHub skill page](https://clawhub.ai/a-lhliang/skills/gov-doc-writing) <br>
 - [Publisher profile](https://clawhub.ai/user/a-lhliang) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with JavaScript examples and local .docx file generation] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JavaScript examples, CLI commands, and generated .docx file output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces user-requested Word .docx files at caller-specified local output paths.] <br>
+**Other Properties Related to Output:** [Creates local .docx files at user- or agent-provided output paths.] <br>
 
 ## Skill Version(s): <br>
-1.10.0 (source: server release evidence) <br>
+1.12.2 (source: server release metadata and CHANGELOG.md, released 2026-07-28) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

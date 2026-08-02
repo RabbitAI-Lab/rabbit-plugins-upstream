@@ -1,5 +1,5 @@
 ## Description: <br>
-Plan, focus, and complete work with energy management, time blocking, goals, projects, tasks, habits, reviews, priorities, and context-specific productivity systems. <br>
+Diagnoses and repairs personal productivity failures such as overwhelm, procrastination, scattered priorities, collapsed habits, broken reviews, and overload by guiding an agent through capacity math, prioritization, planning, and local memory maintenance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Employees, external users, and agents use this skill to create or improve a local productivity operating system for goals, projects, tasks, habits, planning, reviews, commitments, focus, and routines. It is useful when a user needs help prioritizing work, planning a week, triaging overwhelm, converting goals into next actions, or maintaining a reusable productivity structure. <br>
+External users and employees use this skill when they want an agent to diagnose productivity bottlenecks, plan work against realistic capacity, and maintain a persistent local productivity memory. It is intended for personal productivity coaching and local note maintenance, not calendar API automation or live task-list operation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may store personal productivity notes, work preferences, constraints, priorities, and planning artifacts as plain text under ~/productivity/. <br>
-Mitigation: Create or update local productivity files only after explicit user approval, and avoid saving sensitive personal or work details unless the user intentionally wants them persisted. <br>
-Risk: Suggested AGENTS.md or SOUL.md routing changes can affect how future agent work is steered. <br>
-Mitigation: Review proposed routing changes before accepting them, and keep the routing focused on productivity planning, prioritization, reviews, and overload recovery. <br>
+Risk: The skill is designed to write durable local productivity, work, contact, and health-related notes automatically. <br>
+Mitigation: Install it only when persistent local productivity memory is desired, and review or back up ~/Clawic/data/ before use. <br>
+Risk: Stored notes may include sensitive personal behavior patterns, health facts, medication timing, client details, or commitments. <br>
+Mitigation: Avoid saving unnecessary sensitive details and inspect the local notes periodically, especially shared project, contact, and health files. <br>
+Risk: The scanner notes no evidence of network exfiltration or credential storage, but local records can still expose private information on the machine. <br>
+Mitigation: Keep the local data directory access-controlled and do not place credentials in saved notes. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ivangdavila/productivity) <br>
-- [Skill homepage](https://clawic.com/skills/productivity) <br>
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/productivity) <br>
+- [Publisher profile](https://clawhub.ai/user/ivangdavila) <br>
+- [Clawic productivity skill page](https://clawic.com/skills/productivity) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with optional shell commands and local file templates] <br>
+**Output Type(s):** [Guidance, Markdown, Text, Configuration] <br>
+**Output Format:** [Markdown guidance and local plain-text note updates] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or create local plain-text productivity files under ~/productivity/ only after explicit user approval.] <br>
+**Other Properties Related to Output:** [May write durable local notes under configured ~/Clawic/data paths when a session produces commitments, plans, reviews, or related artifacts.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release metadata) <br>
+1.0.6 (source: frontmatter, server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

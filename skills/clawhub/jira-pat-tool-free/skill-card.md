@@ -1,5 +1,5 @@
 ## Description: <br>
-Jira PAT 管理基础版 helps an agent use a Jira personal access token to inspect, search, update, comment on, and create issues on self-hosted Jira instances. <br>
+Helps agents manage self-hosted Jira issues with a Personal Access Token, including issue lookup, JQL search, transitions, comments, field updates, and issue creation. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, project managers, and individual Jira users can use this skill to query Jira issues, run JQL searches, inspect workflow transitions, and prepare issue updates in SSO/SAML environments that rely on a personal access token. <br>
+Developers and individual Jira users use this skill to guide an agent through self-hosted Jira issue operations in SSO/SAML environments using a PAT. It is intended for single-task Jira work such as reading issues, searching with JQL, changing status, commenting, updating fields, and creating issues. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can change Jira records through a personal access token, including status transitions, comments, field updates, and new issues. <br>
-Mitigation: Use a least-privilege Jira PAT and review every proposed Jira mutation before allowing execution. <br>
-Risk: Jira personal access tokens and callback URLs can expose sensitive access if stored or sent carelessly. <br>
-Mitigation: Keep tokens out of plain config files and only use callback URLs whose destinations are trusted. <br>
-Risk: The security scan found under-scoped trigger and privacy guidance for a tool that can access Jira work items. <br>
-Mitigation: Use the skill only for explicitly requested Jira work and avoid sharing unnecessary issue content or credentials. <br>
+Risk: The skill can change real Jira data through PAT-authenticated commands, including transitions, comments, field updates, and issue creation. <br>
+Mitigation: Use a least-privilege PAT, scope it to non-critical projects where possible, and require the agent to show the exact Jira write action for approval before execution. <br>
+Risk: Jira PATs and callback URLs may expose sensitive access if broadly scoped, logged, or reused carelessly. <br>
+Mitigation: Avoid broad callback URLs, keep tokens out of committed files and logs, rotate PATs regularly, and review command output before sharing it. <br>
 
 
 ## Reference(s): <br>
@@ -30,13 +28,13 @@ Mitigation: Use the skill only for explicitly requested Jira work and avoid shar
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, shell commands, and structured JSON-like responses] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and structured Jira operation results] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Jira REST API commands, environment variable setup, result summaries, status codes, and execution logs.] <br>
+**Other Properties Related to Output:** [May use JIRA_PAT and JIRA_URL environment variables to call Jira REST APIs; write actions should be shown for approval before execution.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+1.0.2 (source: server release metadata; artifact frontmatter says 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

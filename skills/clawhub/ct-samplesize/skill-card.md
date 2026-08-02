@@ -1,5 +1,5 @@
 ## Description: <br>
-Ct Samplesize helps clinical trial practitioners calculate sample size and statistical power across 37 test types using natural-language prompts backed by R packages, with safe-preview generated R code available for review. <br>
+Easy-to-use sample size and power calculation tool for clinical trial practitioners, backed by R and Python workflows and supporting 49 test types. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,41 +11,43 @@ MIT <br>
 
 
 ## Use Case: <br>
-Clinical trial researchers, statisticians, and developers use this skill to estimate sample size, statistical power, and sensitivity curves for clinical trial designs. It can also produce reproducible R code for review, execution, or protocol documentation. <br>
+Clinical trial researchers, statisticians, and developers use this skill to choose trial-design calculations, estimate sample size or power across supported scenarios, preview reproducible R/Python code, and optionally execute local computations. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generated local R code may be executed when the user opts in with --yes. <br>
-Mitigation: Review the generated code in safe-preview mode before execution and run it only in a trusted local environment. <br>
-Risk: Optional CRAN package installation can download and install third-party R packages when --run-install is used. <br>
-Mitigation: Review package-install commands first and use trusted repositories and environment controls. <br>
-Risk: Clinical trial calculations can influence protocol or regulatory decisions if accepted without review. <br>
-Mitigation: Independently validate outputs and assumptions before using results for regulatory, clinical, or commercial decisions. <br>
-Risk: Curve and report generation can write files to user-selected output paths. <br>
-Mitigation: Use trusted output paths and review generated files before sharing or relying on them. <br>
+Risk: The skill can run generated R/Python code locally when execution is explicitly requested. <br>
+Mitigation: Keep the default preview workflow, review generated code, and use execution flags only when local computation is intended. <br>
+Risk: The optional package-install workflow can download and install CRAN packages. <br>
+Mitigation: Use --run-install only in a trusted environment after reviewing the printed install commands. <br>
+Risk: Clinical-trial sample-size and power results may affect protocol or regulatory decisions. <br>
+Mitigation: Independently validate calculations, assumptions, and outputs before relying on them for protocol or regulatory use. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/medstatstar/skills/ct-samplesize) <br>
-- [Project Homepage](https://github.com/medstatstar/ct-samplesize) <br>
-- [README](artifact/README.md) <br>
-- [CLI Examples](artifact/references/cli_examples.md) <br>
-- [Data Format Guide](artifact/references/data_format_guide.md) <br>
-- [Adaptive Simulator](artifact/references/adaptive_simulator.md) <br>
-- [Report Template](artifact/references/report_template.md) <br>
-- [Language Policy](artifact/references/language_policy.md) <br>
+- [ClawHub skill page](https://clawhub.ai/medstatstar/skills/ct-samplesize) <br>
+- [Project homepage](https://github.com/medstatstar/ct-samplesize) <br>
+- [README](README.md) <br>
+- [Advanced Reference](ADVANCED.md) <br>
+- [CLI Examples](references/cli_examples.md) <br>
+- [Menu](references/menu.md) <br>
+- [Formulas](references/formulas.md) <br>
+- [Data Format Guide](references/data_format_guide.md) <br>
+- [Adaptive Simulator](references/adaptive_simulator.md) <br>
+- [R Packages](references/r_packages.md) <br>
+- [Operation SOP](references/operation_sop.md) <br>
+- [Language Policy](references/language_policy.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Configuration guidance, Files] <br>
-**Output Format:** [Markdown with numeric results, CLI commands, generated R or Python code snippets, and optional PNG or JSON artifacts] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, files, guidance] <br>
+**Output Format:** [Markdown responses with tables, reproducible R/Python code blocks, optional shell commands, and optional PNG/data-table outputs for curve reports.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated R code is previewed by default; execution and CRAN package installation require explicit user opt-in.] <br>
+**Other Properties Related to Output:** [Default workflow previews generated code without executing it; local execution requires explicit opt-in such as --yes, and optional package installation requires --run-install.] <br>
 
 ## Skill Version(s): <br>
-3.4.5 (source: ClawHub release metadata) <br>
+3.8.0 (source: frontmatter, release evidence, CHANGELOG) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

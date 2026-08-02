@@ -1,5 +1,5 @@
 ## Description: <br>
-Building edition of iaiops for facility, HVAC, BMS, and building automation work over BACnet/IP, Modbus-TCP/RTU, IO-Link, MQTT, and supervisory BAS controller REST layers with read-first workflows and MOC-gated writes. <br>
+iaiops-building helps agents inspect building automation systems over BACnet/IP, Modbus, IO-Link, BAS REST, and optional MQTT using read-first workflows with MOC-gated writes. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, facility engineers, and building automation operators use this skill to discover, inspect, diagnose, and plan controlled actions across HVAC, BMS, meter, sensor, alarm, trend, and cross-protocol facility data. Write-capable actions are framed as dry-run and MOC-gated operator workflows. <br>
+Facilities engineers, building automation specialists, and operations teams use this skill to discover devices, read points and trends, analyze HVAC and facility conditions, and prepare tightly controlled building-system commands. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Unauthorized or poorly controlled write actions could affect active building automation equipment. <br>
-Mitigation: Install only when authorized for the target systems, keep write tools in dry-run unless a real MOC approval process is in place, and require explicit operator approval before writes. <br>
-Risk: Life-safety, fire, smoke, egress, or pressurization points could be harmed if treated as ordinary control points. <br>
-Mitigation: Keep those point classes out of scope and verify they remain excluded before connecting to live systems. <br>
-Risk: Live HVAC write, COV, trend, physical RS-485, live IO-Link master, and some BAS controller behaviors may not be fully verified in every environment. <br>
-Mitigation: Use read-first discovery and snapshots, validate behavior on non-production or mock systems where possible, and treat unverified live operations as requiring human review. <br>
+Risk: Building automation commands can affect operating facility equipment. <br>
+Mitigation: Keep write tools in dry-run mode unless an authorized MOC approval has explicitly confirmed the change. <br>
+Risk: Use outside an authorized facility environment could expose or affect building systems. <br>
+Mitigation: Install and run the skill only where the operator is authorized to inspect and potentially command those systems. <br>
+Risk: BAS and MQTT credentials could be exposed if handled as plain parameters. <br>
+Mitigation: Store credentials in the protected secret store and avoid passing secrets directly in prompts or command arguments. <br>
+Risk: The external iaiops[building] package is part of the operational dependency chain. <br>
+Mitigation: Verify the package provenance and release source before deployment. <br>
 
 
 ## Reference(s): <br>
-- [Iaiops Building ClawHub release](https://clawhub.ai/zw008/skills/iaiops-building) <br>
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-building) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration instructions] <br>
-**Output Format:** [Markdown with tool names, command examples, structured findings, and operational guidance] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown text with inline commands, configuration values, and tool-use guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-first building automation workflows with explicit dry-run and approval gating for high-impact write operations.] <br>
+**Other Properties Related to Output:** [Read-first guidance with dry-run defaults for high-impact write operations] <br>
 
 ## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+0.21.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

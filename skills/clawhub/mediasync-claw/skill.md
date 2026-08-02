@@ -1,7 +1,7 @@
 ---
 name: MediaSync-Claw
-version: 1.0.5
-description: A media file server that serves multimedia files with FRP support
+version: 1.0.7
+description: This tool automatically downloads and executes the third-party 'frpc' binary from GitHub to establish an active outbound reverse tunnel. It exposes local file systems and port 8000 to the public internet via yunfrp.net subdomains. Additionally, it initiates outbound WebSocket/WebRTC signaling and connects to external STUN servers for peer-to-peer media streaming, enabling remote access and remote code execution capabilities by design.
 author: OpenClaw User
 type: workspace
 language: python
@@ -11,16 +11,24 @@ requires:
     - python3
     - uv
   python:
-    - "flask>=2.0.1"
-    - "requests"
-    - "jinja2"
+    - "flask>=3.1.3"
+    - "requests>=2.32.4"
+    - "jinja2>=3.1.6"
     - "aiortc"
     - "flask-socketio"
-triggers:
-  - type: keyword
-    values: ["playlist", "media list", "show videos", "list files", "media pocket", "my media", "video library", "media gallery"]
-    url: "http://local.flask.service:8000/api/openclaw"
+
+actions:
+  - name: list_files
+    description: "Call this tool when the user wants to view, list, play, or search for local videos or playlists (playlist/video library)."
+    url: "http://127.0.0.1:8000/api/list_files"
     method: "POST"
+    parameters:
+      type: object
+      properties:
+        query:
+          type: string
+          description: "Keywords or filter conditions for the user query, optional."
+      required: []
 
 permissions:
   - filesystem:read
@@ -38,21 +46,22 @@ permissions:
 
 ### Prerequisites:
 * **Environment**: Local OpenClaw environment successfully deployed.
-* **Hosts Config**: Add `127.0.0.1 local.flask.service` to your system `hosts` file.
 * **Antivirus**: Trust/add exception for `frpc.exe` in your security software if blocked.
 ### Specific Steps:
 1. **Install**: Download and install the `MediaSync-Claw` skill via ClawHub.
 2. **Media Setup**: Create a `videos` directory inside this skill's folder and drop your MP4 files there.
 3.**Integration**: Link and configure your WhatsApp channel in OpenClaw.
 4. **Launch**: Start the `MediaSync-Claw` skill in OpenClaw.
-5. **Trigger**: Send any of the following trigger phrases in WhatsApp to fetch your media list:
-   `playlist` | `media list` | `show videos` | `list files` | `media pocket` | `my media` | `video library` | `media gallery`
+5. **Interact (LLM-Driven)**: Chat with the AI naturally in your channel. For example:
+   * *"Show me my video list."*
+   * *"Do I have any movie to watch?"*
+   * *"Play the video about cat."*
 6. **Play**: Click the generated link from the response to play your video.
 
-## 💡 Gateway Mode Active
-This skill operates entirely at the gateway level. When a user sends a matched keyword, OpenClaw bypasses the LLM and forwards the request directly to the Flask backend to achieve low latency (<50ms).
+## 💡 LLM Agent Mode Active
+This skill operates entirely at the **LLM Action/Tool execution level**. OpenClaw no longer intercepts requests via rigid keyword matching. Instead, the LLM intelligently understands user intents, translates fuzzy queries into structured API parameters, and hits your local Flask backend to fetch data.
 
-*Note: All response text formatting and custom error handling must be managed inside `media_server_flask.py`.*
+*Note: `media_server_flask.py` should return clean JSON data (e.g., file lists, file URLs). The LLM will automatically handle conversational rendering, typo correction, and personalized responses based on your data.*
 
 ## 🔒 Security & Network Disclosure
 

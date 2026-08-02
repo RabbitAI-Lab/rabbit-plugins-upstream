@@ -1,5 +1,5 @@
 ## Description: <br>
-talkies helps agents use a self-hosted OpenAI-compatible speech service for audio transcription, subtitle generation, text-to-speech, voice cloning workflows, stereo diarization, and server-side file handling. <br>
+Self-hosted OpenAI-compatible speech service for ASR and TTS with transcription, live PCM streaming, speech synthesis, stereo diarization, URL fetching, MCP access, and optional bearer authentication. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and operators use talkies to point an agent at a trusted self-hosted speech server for transcribing audio, generating subtitles, and producing speech from text. It is suited for OpenAI-compatible audio workflows where the operator controls the endpoint, authentication, model choice, and handling of media files. <br>
+Developers and operators use this skill to run a trusted Talkies server for speech-to-text, subtitles, live ASR, and text-to-speech workflows through OpenAI-compatible HTTP APIs and documented shell examples. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Audio, text, and voice reference samples are sent to the configured talkies server, so private data can leave the local host. <br>
-Mitigation: Use only a server you run or explicitly trust, prefer localhost or HTTPS, and avoid sending secrets or private media to untrusted endpoints. <br>
-Risk: Shared or remote deployments can expose the API and staged files when bearer authentication is not configured. <br>
-Mitigation: Set TALKIES_AUTH_TOKEN for shared or remote use, restrict network exposure, and treat staged file management as an administrative operation. <br>
-Risk: Voice cloning or synthesized speech can impersonate a real person without authorization. <br>
-Mitigation: Clone or synthesize a voice only with explicit authorization or consent from the speaker. <br>
-Risk: Server-side staged files and cached URL downloads can persist after a workflow finishes. <br>
-Mitigation: Clean up staged files and cached downloads created for the task once they are no longer needed. <br>
+Risk: Audio, text, and voice samples are sent to the configured Talkies server. <br>
+Mitigation: Use only a server you run or explicitly trust; prefer localhost or HTTPS and avoid sending sensitive content to untrusted hosts. <br>
+Risk: Shared or exposed Talkies servers can receive unauthenticated requests when bearer authentication is not configured. <br>
+Mitigation: Enable TALKIES_AUTH_TOKEN for shared or exposed deployments and limit network exposure to trusted clients. <br>
+Risk: Staged uploads and URL-download artifacts can persist server-side. <br>
+Mitigation: Clean up staged files after each workflow and treat file management as administrative on shared instances. <br>
+Risk: Voice cloning or generated speech can be misused for impersonation. <br>
+Mitigation: Clone or synthesize a person's voice only with explicit authorization and consent. <br>
 
 
 ## Reference(s): <br>
-- [talkies ClawHub listing](https://clawhub.ai/psyb0t/skills/talkies) <br>
-- [Setup reference](references/setup.md) <br>
-- [Project homepage](https://github.com/psyb0t/docker-talkies) <br>
+- [Talkies setup reference](references/setup.md) <br>
+- [Talkies ClawHub listing](https://clawhub.ai/psyb0t/skills/talkies) <br>
+- [Talkies project homepage](https://github.com/psyb0t/docker-talkies) <br>
+- [Talkies streaming protocol documentation](https://github.com/psyb0t/docker-talkies/blob/main/docs/streaming.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and API request examples; generated service outputs include JSON, plain text, SRT/VTT subtitle files, and audio files.] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and API request examples; transcription outputs may be text, JSON, SRT, VTT, or generated audio files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a configured TALKIES_URL; setup workflows use Docker and curl, with an optional TALKIES_AUTH_TOKEN for authenticated deployments.] <br>
+**Other Properties Related to Output:** [Requires a trusted TALKIES_URL endpoint; optional TALKIES_AUTH_TOKEN is used when the server is configured for bearer authentication.] <br>
 
 ## Skill Version(s): <br>
-1.3.6 (source: server release metadata) <br>
+1.3.11 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

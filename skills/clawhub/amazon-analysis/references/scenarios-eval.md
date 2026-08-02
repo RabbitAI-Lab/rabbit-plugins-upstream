@@ -94,7 +94,7 @@ python3 scripts/zoodata.py product --asin B09XXXXX
 
 ## 4.4 Risk Assessment
 
-> Trigger: "What are the risks" / "can I do this" / "risk assessment"
+> Trigger: "risks of selling this product on Amazon" / "Amazon product risk assessment" / "FBA risk analysis" / "is this ASIN/niche worth entering" (requires a specific product, ASIN, or keyword/niche — do not activate on bare, unqualified questions like "can I do this")
 
 ```bash
 # Step 1: Competitive landscape (primary data: sales, margins, seller count)
@@ -177,7 +177,7 @@ python3 scripts/zoodata.py competitors --asin B09XXXXX
 > Trigger: "category pain points" / "what do users want" / "consumer portrait" / "category user analysis" / "who is buying"
 
 ```bash
-python3 scripts/zoodata.py analyze --category "Pet Supplies,Dogs,Toys" --period 90d
+python3 scripts/zoodata.py analyze --category "Pet Supplies > Dogs > Toys" --period 90d
 ```
 
 **Use case:** Understand the consumer landscape of a category **before** product selection. Not about specific ASINs, but about what users in this category care about, complain about, and value.

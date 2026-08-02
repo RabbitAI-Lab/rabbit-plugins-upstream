@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/odoo-connector",
   "slug": "odoo-connector",
   "ownerHandle": "akdira",
-  "version": "1.1.2",
-  "updatedAt": 1779077130446,
-  "contentHash": "4c149f707e865dacff0e87ea170b40d901d54eb35c72894c46fa97dba2223a6d",
-  "fetchedAt": "2026-07-26T18:03:42.883Z"
+  "version": "1.2.1",
+  "updatedAt": 1785393039287,
+  "contentHash": "d5e608f102b86a5bffe5f40f6004d60474f9f3fe78feead2f41976e843ae75c5",
+  "fetchedAt": "2026-08-02T09:38:15.498Z"
 }

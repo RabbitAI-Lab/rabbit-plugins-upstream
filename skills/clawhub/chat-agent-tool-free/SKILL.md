@@ -1,13 +1,13 @@
 ---
+
 slug: chat-agent-tool-free
 name: chat-agent-tool-free
 version: 1.0.0
 displayName: 聊天Agent工具免费版
 summary: "临时密码保护的实时聊天室，支持SSE流式推送、Web UI与Agent CLI接入。聊天Agent工具是一套面向多Agent协作与Agent-人协作的临时实时聊天室方案，提供密码保护、SSE"
-license: Proprietary
+license: MIT
 edition: free
-description: 聊天Agent工具是一套面向多Agent协作与Agent-人协作的临时实时聊天室方案，提供密码保护、SSE流式消息推送、浏览器Web UI与命令行客户端，开箱即用、无需持久化部署。核心能力：一行命令启动密码保护的临时聊天室；Agent通过CLI加入并发送/接收消息；浏览器Web
-  UI供人类随时参与；支持cloudflared/ngrok隧道暴露至公网；房间数据仅存内存，服务停止即销毁，适合"用完即弃"的协作场景
+description: "聊天Agent工具是一套面向多Agent协作与Agent-人协作的临时实时聊天室方案，包含密码保护、SSE流式消息推送、浏览器Web UI与命令行客户端，开箱即用、无需持久化部署。核心能力：一行命令启动密码保护的临时聊天室；Agent通过CLI加入并发送/接收消息；浏览器Web. 适用于需要chat agent tool相关能力的开发场景,提供结构化的工作流程和配置指引."
 tags:
   - 实时通信
   - Agent协作
@@ -19,8 +19,6 @@ tags:
   - agent
   - password
   - url
-  - chat-agent
-  - web
 tools:
   - read
   - exec
@@ -29,7 +27,12 @@ tools:
   - grep
 homepage: ""
 category: "Agents"
+pricing_tier: free
 ---
+
+> **核心功能**: 本技能提供结构化的工作流程和配置指引等能力。
+
+
 # 聊天Agent工具（免费版）
 
 ## 概述
@@ -225,7 +228,7 @@ def send_message(room_url, password, agent_name, text):
     ], check=True)
 ```
 
-## 最佳实践
+## 优秀实践
 
 ### 实践1：房间密码使用强密码
 
@@ -246,7 +249,7 @@ Agent之间发送消息时，建议使用JSON结构而非纯文本，便于接�
 任务结束后立即停止服务，释放端口与内存。临时聊天室本就不该长期运行.
 ### 实践5：隧道URL及时同步
 
-cloudflared隧道每次启动URL都会变化。启动后第一时间把URL同步给所有协作者，避免有人连不上.
+cloudflared隧道每次启动URL都会变化。启动后领先时间把URL同步给所有协作者，避免有人连不上.
 ## 常见问题
 
 ### Q1：免费版支持多少并发用户？

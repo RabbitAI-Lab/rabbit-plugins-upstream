@@ -244,4 +244,3 @@ def diagnose(
         next_actions=[{"action": "initialize", "command": "init"}],
         data=data,
     ), 0
-

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/api-generator",
   "slug": "api-generator",
   "ownerHandle": "thcjp",
-  "version": "2.0.0",
-  "updatedAt": 1778491820342,
-  "contentHash": "cc2775ed295e897de6edcd0d177f3a193718fa1ef88d84393a9dd339a035aa09",
-  "fetchedAt": "2026-07-26T18:06:21.636Z"
+  "version": "1.0.3",
+  "updatedAt": 1785662785640,
+  "contentHash": "b77b980925fddd38daaea7871a894304b2bd40843c547d06e313aec0584fc259",
+  "fetchedAt": "2026-08-02T09:27:55.034Z"
 }

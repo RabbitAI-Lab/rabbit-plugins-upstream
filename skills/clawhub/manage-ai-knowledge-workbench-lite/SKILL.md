@@ -1,16 +1,9 @@
 ---
 name: manage-ai-knowledge-workbench-lite
-description: Autonomously build and refresh on demand a metadata-only local Markdown or Obsidian knowledge index with an offline HTML dashboard.
-version: 1.0.1
-metadata:
-  openclaw:
-    emoji: "🧭"
-    homepage: "https://clawhub.ai/alexfengrui/skills/manage-ai-knowledge-workbench-lite"
-    requires:
-      anyBins:
-        - python3
-        - python
-        - py
+description: Autonomously build and refresh on demand a metadata-only Markdown or Obsidian knowledge index with an offline HTML dashboard. Use for one authorized local workspace without changing source notes or sending bodies to a model. Before any terminal tool call, always read this SKILL.md, actually probe Python and the agent host CLI versions, and never use an OS, kernel, device, user, or account identity as validated_host.
+version: 1.0.2
+license: MIT-0
+compatibility: "Requires Python 3.10+ and an agent host with local file and terminal tools."
 ---
 # Manage AI Knowledge Workbench Lite
 

@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes child nighttime audio/video to report rollover frequency, crying, sleep talk, sleep quality, and possible restless-sleep or nightmare alerts. <br>
+Analyzes child nighttime sleep video or audio from a fixed bedroom camera to report rollover frequency, crying, sleep talk, sleep quality, and possible nightmare or restless-sleep alerts. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Parents, caregivers, and developers integrating child sleep monitoring workflows can use this skill to analyze consented nighttime audio/video and produce behavior statistics, alerts, and report links. It is an assistive monitoring tool, not a medical diagnosis. <br>
+External caregivers and developers use this skill to submit child nighttime sleep media or URLs for cloud analysis, receive behavior statistics and sleep-quality reports, and retrieve previous reports. The output is an assistive sleep-behavior report, not a medical diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Children's bedroom audio/video may be sent to or fetched by a third-party cloud service. <br>
-Mitigation: Use only recordings with guardian consent after verifying endpoint trust, retention and deletion terms, and data handling controls. <br>
-Risk: Results may be linked to a persistent identity and local tokens. <br>
-Mitigation: Review local token storage and account-linking behavior before deployment, and rotate or delete stored credentials when no longer needed. <br>
-Risk: Sleep-quality and nightmare alerts could be mistaken for a medical diagnosis. <br>
-Mitigation: Present results as assistive behavior statistics and advise professional pediatric or sleep-medicine consultation for persistent concerns. <br>
+Risk: Child bedroom audio/video or URLs may be processed by vendor cloud APIs. <br>
+Mitigation: Use only with clear guardian consent and submit media only when the vendor's retention, deletion, and encryption practices are acceptable. <br>
+Risk: Analysis history may be tied to local or remote identity state, and account tokens may be stored in a workspace SQLite database. <br>
+Mitigation: Avoid shared workspaces unless account separation, retention, deletion, and token-storage practices have been reviewed. <br>
+Risk: The security verdict is suspicious because the skill handles highly sensitive child sleep media and identity-linked reports. <br>
+Mitigation: Review carefully before installing and require organizational security review before production or shared-environment use. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-child-nightmare-rollover-detection-analysis) <br>
 - [API documentation](references/api_doc.md) <br>
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown text with optional JSON details, report links, and shell command examples] <br>
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
+**Output Format:** [Markdown and JSON analysis output from command-line execution] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a caller-specified file; historical report listings are presented as Markdown tables.] <br>
+**Other Properties Related to Output:** [May include structured sleep-analysis fields, report links, and historical report tables returned by cloud APIs.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter states 1.0.6) <br>
+1.0.4 (source: server release evidence; artifact frontmatter reports 1.0.9) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

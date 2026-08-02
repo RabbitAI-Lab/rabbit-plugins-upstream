@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/genai-security-gateway",
   "slug": "genai-security-gateway",
   "ownerHandle": null,
-  "version": "0.1.2",
-  "updatedAt": 1783844258634,
-  "contentHash": "5e006b9af22662dca68848cf15a8ac69c51daac38e8b1b9aa3b554d58e9698d9",
-  "fetchedAt": "2026-07-26T18:16:28.159Z"
+  "version": "0.1.3",
+  "updatedAt": 1785519165529,
+  "contentHash": "10eaefa7b618ad0f716e81e353f06e4a1510fb20ae6f13939fd36d48bb66f43d",
+  "fetchedAt": "2026-08-02T09:34:08.640Z"
 }

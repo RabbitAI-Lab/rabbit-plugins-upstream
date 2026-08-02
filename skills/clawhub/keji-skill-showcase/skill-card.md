@@ -1,5 +1,5 @@
 ## Description: <br>
-Keji Skill Showcase routes research and academic-writing requests to a curated set of 10 related skills for literature search, citation checking, knowledge bases, research methods, defense preparation, group meeting planning, novelty checks, and skill building. <br>
+科研技能鉴赏 is a lightweight research-skill directory that helps users and agents route academic research requests to the appropriate specialist skill. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,28 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Researchers, students, and academic writers use this skill as a discovery and routing entry point for finding the right specialty research skill for literature search, citation verification, knowledge management, research design, presentation preparation, group discussion, novelty validation, or skill creation. <br>
+External users and agent operators use this skill as a research-skill menu when they are unsure which academic tool should handle a literature, citation, integrity, meeting, defense, methodology, or skill-building request. It routes the user to a specialist skill and does not perform retrieval, verification, conversion, or meeting workflows itself. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Users may follow links to specialty skills that involve paid quotas, literature downloads, personal knowledge bases, or citation-checking workflows with their own risks. <br>
-Mitigation: Review each linked specialty skill separately before use, especially where costs, downloads, personal research data, or citation decisions are involved. <br>
+Risk: Broad research triggers may route ordinary academic requests to this menu when a specialist skill would be more direct. <br>
+Mitigation: Use the routing table to confirm the intended task category, then review the recommended specialist skill before installing or using it. <br>
+Risk: Recommended specialist skills may use quotas, uploaded documents, meeting services, or knowledge-base workflows. <br>
+Mitigation: Check each specialist skill's permissions, quota model, and data handling before installation, especially for SmartLib-backed, document-upload, meeting, or knowledge-base skills. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/j-levee/skills/keji-skill-showcase) <br>
+- [Tencent SkillHub listing](https://skillhub.cloud.tencent.com/skills/keji-skill-showcase) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Markdown guidance] <br>
+**Output Type(s):** [Guidance, Markdown, Configuration instructions] <br>
+**Output Format:** [Markdown guidance with skill names, routing tables, and installation prompts] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Informational routing skill; it does not itself run code or request sensitive access.] <br>
+**Other Properties Related to Output:** [Produces routing recommendations only; specialist skills handle task execution.] <br>
 
 ## Skill Version(s): <br>
-1.1.2 (source: frontmatter and server release metadata) <br>
+1.2.0 (source: frontmatter and release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

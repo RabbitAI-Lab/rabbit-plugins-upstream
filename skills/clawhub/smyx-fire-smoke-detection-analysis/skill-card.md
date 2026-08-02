@@ -1,5 +1,5 @@
 ## Description: <br>
-Detects fire and smoke in video scenes, supporting video stream and image analysis for fire early warning scenarios such as security surveillance, forest fire prevention, and industrial parks. <br>
+Detects fire and smoke in images and video streams for fire early warning scenarios such as security surveillance, forest fire prevention, and industrial parks. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, developers, and operations teams use this skill to analyze video streams, images, local files, or media URLs for fire and smoke indicators and receive structured detection reports, alerts, recommendations, and report links. <br>
+Developers and safety-monitoring operators use this skill to analyze uploaded images, local media files, or media URLs for flame and smoke indicators, then receive a structured fire-smoke detection report. It can also query cloud-hosted historical reports for the publisher-managed account context. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Surveillance or facility media may be uploaded to the lifeemergence.com cloud service for analysis. <br>
-Mitigation: Use only media that is approved for that provider, and confirm retention, access, and data handling expectations before processing sensitive footage. <br>
-Risk: The skill silently creates or reuses cloud-linked identity state and stores local user or token data. <br>
-Mitigation: Review local identity and token storage, use scoped accounts, and clear stored state on shared or decommissioned environments. <br>
-Risk: Cloud history retrieval and exported report links may expose operational detection history. <br>
-Mitigation: Verify account separation and access controls before querying history, and avoid sharing exported report links outside approved channels. <br>
+Risk: Uploaded media, supplied URLs, report history, and identity data may be processed by the publisher's cloud service. <br>
+Mitigation: Use the skill only with media appropriate for that service, and confirm the publisher's retention, authorization, and account-handling practices before using sensitive facility or security footage. <br>
+Risk: The skill may create or reuse a user identity and store returned tokens locally. <br>
+Mitigation: Run it in an isolated workspace or account, restrict access to local state files, and rotate or revoke credentials when they are no longer needed. <br>
+Risk: Fire and smoke detection output is advisory and may miss events or produce false alarms. <br>
+Mitigation: Treat detections as prompts for human confirmation and follow established emergency response procedures for any suspected fire. <br>
 
 
 ## Reference(s): <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
 - [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fire-smoke-detection-analysis) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API doc](references/api_doc.md) <br>
+- [Smyx analysis API doc](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, files] <br>
-**Output Format:** [Markdown or JSON analysis report with optional saved output file and cloud report link] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration] <br>
+**Output Format:** [Markdown summaries and tables, JSON analysis output, shell command examples, and optional saved result files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may include fire and smoke detection status, risk level, sensitivity, region details, alert messages, history tables, and exported report links.] <br>
+**Other Properties Related to Output:** [Includes detected fire/smoke indicators, risk notes, recommendations, cloud history tables, and report links when returned by the API.] <br>
 
 ## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter states 1.0.9) <br>
+1.0.9 (source: server release metadata; artifact frontmatter declares 1.0.11) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

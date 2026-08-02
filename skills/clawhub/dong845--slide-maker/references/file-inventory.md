@@ -2,6 +2,14 @@
 
 ## Files — scripts · agents · references · registry
 
+**Tests** (`tests/`, script-style — `main()` + explicit exit, so `pytest` collects NOTHING from
+them; CI invokes each directly and asserts it RAN rather than merely exited 0):
+`test_lint_regressions.py` (two-sided: lint catches real defects AND leaves declared craft alone) ·
+`test_codex_delivery_gate.py` · `test_codex_visual_contract.py` (Codex gate behaviour) ·
+`test_critic_waiver_gate.py` (the shared-path critic waiver must be CLASSIFIED — a free-text
+waiver once carried a whole deck through `all hand-off gates pass` with no independent critic) ·
+`lint_fixture.py` (shared fixture, not a suite).
+
 **Scripts** (`scripts/`):
 - `deckkit.py` — the build helpers (template & blank decks), **incl. the editable native charts**
   (`native_chart`/`native_dual_axis`/`native_donut`/`native_pareto`/`native_bubble` — click-to-edit,
@@ -19,10 +27,29 @@
   hand-kept list, and a primitive in it would silence the tool forever. Exits 1 and prints
   `NOT CHECKED` rather than reporting clean when the deck could not be opened. ~50ms. Run it at
   PRE-FLIGHT 12.
+- `check_reference_code.py` — resolves every `deckkit.*` call TAUGHT IN THE SKILL'S PROSE against
+  the real module: unknown helper, bad keyword, dead `references/*.md` pointer, and the silent
+  `.fore_color.alpha = ...` no-op (python-pptx solid fills cannot carry alpha, so that assignment
+  raises nothing and renders a 100% OPAQUE shape). Exists because four wrong API facts shipped at
+  once in the shared references and nothing reported any of them — the build crashes at the
+  reader's desk, not in CI. Exit 0 clean / 1 findings / 2 could not run. Runs in CI.
+- `codex_delivery_gate.py` — **Codex-only** post-lint evidence gate. It verifies a v2 evidence chain:
+  final PPTX/build hashes, source and claim ledger, direction/signature artifacts, per-slide component
+  and icon provenance, plus two schema-valid focused critic reviews. It does **not** alter Claude Code's
+  pipeline or `component_audit.py`'s advisory classification.
+- `codex_visual_contract.py` — **Codex-only** per-slide visual contract: local overlap and
+  icon-semantic drift, checked against the evidence record. Paired with `codex_delivery_gate.py`;
+  neither runs on the shared (Claude Code / Kimi) path.
 - `directions_diversity.py` — mechanical divergence check for direction-gate candidates
   (mode · palette distance · type pairing · composition), flagging any pair that matches on ≥3 of 4
   axes. Exit 0 all diverge / 2 flagged / 1 unreadable. Never auto-kills: a flag means REDIVERGE **or**
   record a named justification on the `direction gate:` line. Run it before posting the preview link.
+- `preflight_check.py` — decides the MECHANICAL half of PRE-FLIGHT (items 1, 2, 3b, 4, 7, 8, 10)
+  and prints 5/6/6b/9/11 as still-yours rather than implying it covered them. Items 2, 7 and 10
+  are advisory, not failures: they depend on facts the file does not carry. Catches the defect
+  class nothing else does: `placeholder`/`TODO`/`(editable native chart)`/unfilled `<slot>` text
+  shipped on a slide. `--build <script>` adds the `build:`-docstring vs `Build.step` diff.
+  Exit 0 clean / 1 findings / 2 `NOT CHECKED`. Run it at the top of PRE-FLIGHT.
 - `render_deck.py` — pptx → one PNG per slide (verify + critic loop). **`--slides N[,M]` renders ONLY
   the named 1-indexed pages** — the Step-4 SIGNATURE PROOF and any "re-render just the page I edited"
   loop; byte-identical to those pages from a full render, and it deliberately leaves NO cache (a cache
@@ -37,6 +64,7 @@
   run it at hand-off once the user confirms the deck is final (PNGs always stay in `render/`); finds LibreOffice cross-platform
   or set `SOFFICE` (`.sh` is a shim). `check_env.py` — preflight if a render fails. `inspect_template.py`
   — a template's layouts/placeholders/logos. `requirements.txt` / `install_skill.py` — deps / installer.
+- **`sigs.py`** — one lookup, many helpers: exact signature + docstring head for every named deckkit/designed_charts helper, plus the run-tuple and RGBColor call-shape contracts. `--search TERM` to find one, `--list` for all, `--full` for whole docstrings. Use it BEFORE writing a build script; reading deckkit.py one function at a time costs a round-trip per question.
 - `lint_deck.py` — deterministic **render-time** layout lint and complement to deckkit's build-time
   `lint_layout`: re-checks geometry on the final file (off-slide overflow · block/image collision
   [containment excluded] · footer-zone intrusion · text-past-card · uneven rows) AND adds the
@@ -77,7 +105,18 @@
   `icon_card`. See `references/icons.md` ("Treatments").
 - `image_fx.py` — `duotone(img, ink_a, ink_b)` / `grayscale(img)` — preprocess a colour photo to the
   deck's ink so it doesn't fight the accent (riso/brutalist/ink/luxury/museum). See `design-gallery.md`.
-- `extract_pdf.py` (crop a figure from a PDF — `figures`/`figure`/`autofig` auto-detect, `page`/`crop`
+- `palette_audit.py` — resolve a palette into FILL-only vs TEXT-safe tokens ONCE, before the build,
+  with the darkened twin per ground (`--inks`/`--grounds`, or `--from-style <deck>/style.py`). The
+  two-token rule already exists in SKILL.md and is still easy to break because the check is
+  per-PAIR and a build touches dozens; `render_deck.py --gate-check` therefore requires the
+  resolved split as `design_plan.palette`.
+- `trace_composed.py` — split a built deck's shipped lines into SOURCE-QUOTED vs AUTHOR-COMPOSED
+  against the source files (`--source a.md,b.md`), so a content review aims at the composed set
+  instead of re-reading every page. Deliberately NOT a fabrication detector (that version was
+  measured at ~8% precision and dropped); Latin identifiers and numbers get an exact test instead,
+  which is precise. Run it before dispatching the content critic and hand it the composed list.
+- `extract_pdf.py` (crop a figure from a PDF — `figures`/`figure`/`autofig` auto-detect, `tables`
+  for structured table data with an explicit shortfall report, `page`/`crop`
   manual; **plus the long-source trio `map` (TOC + CJK-aware word-density skeleton), `text` (page-range
   dump for chunked reading), and `headings` (reconstruct a skeleton for a no-TOC book)** — the tooling
   for the content-planner's long-source mode) · `crop_helper.py`
@@ -86,6 +125,9 @@
   `frames` for a video's visual track, `probe` to route — with the vision/audio fidelity floor).
 **Agents** (`agents/`): `content-planner.md` (Step-1 CONTENT deep-understand + claim ledger + per-slide message; the content checkpoint) · `slide-design.md` (the art director — Step-2 design language + per-slide form/layout/rhythm + icons + appear-animation + the Form ledger; the design checkpoint) · `critic.md` (independent critic brief — the two review lenses + JSON schema) · `arbiter.md` (high-stakes finding cross-validation + fix-verification; no-op low-stakes) · `asset-prep.md` (execution-only asset materializer — crops/equations/plates/icons after the design plan is approved; zero design decisions) · `openai.yaml` (Codex display metadata).
 
-**References** (`references/`, loaded on demand): `canvas-formats.md` (per-surface layout DNA for the non-16:9 formats — square/rednote/story/A4 — + the repurpose/batch pattern; pairs `scripts/formats.py`) · `design-principles.md` (the craft / the "why"; incl. the **C.R.A.P. framework** — Contrast · Repetition · Alignment · Proximity) · `design-gallery.md` (style+component catalogue mined from 21 pro decks — pick a preset, reach for the right component) · `semantic-color-contract.md` (bind a hue to a concept deck-wide) · `review-rubrics.md` (universal + per-purpose review criteria) · `design-by-purpose.md` (per-purpose look for "design a clean one") · `form-selection.md` (**content-shape → candidate FORMS** — the single design-decision map; generate a set, pick deliberately) · `schematic-diagrams.md` (**HOW to draw a labelled SCIENCE schematic** — force/ray/circuit/apparatus/vector/wave; matplotlib/domain-lib recipes for precise/label-critical ones, OR the image tool for complex/stylized/template-matched ones with labels overlaid native; + the domain-accuracy fidelity gate) · `data-viz.md` (pick the chart type; editable-native vs raster) · `image-generation.md` (when/how; topical, text-free, consistently placed) · `icons.md` (one coherent open-licensed icon family, recolored, restrained) · `generated-template.md` (Q1's image-tool template branch) · `style-analysis.md` (mimic a style example, Q4) · `font-guidance.md` (portable fonts, tofu recovery) · `multilingual.md` (non-Latin / CJK / RTL) · `east-asian-aesthetic.md` (Chinese ink / traditional looks — paper · seal · CJK numerals · `ink_wash`/`eastern_traditional`) · `animation.md` (when/why + `anim.py`) · `large-deck-orchestration.md` (section fan-out; default is single-author) · `collaborative-mode.md` (direction→outline→draft gates) · `redesign-existing-deck.md` (diagnose-then-rebuild) · `handoff-and-iteration.md` (delivery + iterate without clobbering edits) · `design-intelligence-addendum.md` (the deck-level design gates Step 2 measures against — rhythm map · block-dependency audit · Concept→Visualization table · semantic-colour ledger · variation floors) · `troubleshooting-faq.md` (**symptom → cause → fix for every error surface** — env · build exceptions · both lints · render · images · CJK — plus the FAQ; consult on any failure, and report findings to the user in its plain-language form) · `user-taste.md` (the registry-root `taste.md` — schema · read protocol · dial-ledger promotion + consented-look write-back) · `examples/` (`build_example_generic.py`, `style_example.py`, `section_example.py`).
+**References** (`references/`, loaded on demand): `auto-delegation-quality-gates.md` (**auto mode rigor enforcement** — "decide yourself" means "you choose", not "skip steps"; checkpoint protocol, image legibility floors, component discipline, critic requirement) · `canvas-formats.md` (per-surface layout DNA for the non-16:9 formats — square/rednote/story/A4 — + the repurpose/batch pattern; pairs `scripts/formats.py`) · `design-principles.md` (the craft / the "why"; incl. the **C.R.A.P. framework** — Contrast · Repetition · Alignment · Proximity) · `design-gallery.md` (style+component catalogue mined from 21 pro decks — pick a preset, reach for the right component) · `semantic-color-contract.md` (bind a hue to a concept deck-wide) · `review-rubrics.md` (universal + per-purpose review criteria) · `design-by-purpose.md` (per-purpose look for "design a clean one") · `form-selection.md` (**content-shape → candidate FORMS** — the single design-decision map; generate a set, pick deliberately) · `schematic-diagrams.md` (**HOW to draw a labelled SCIENCE schematic** — force/ray/circuit/apparatus/vector/wave; matplotlib/domain-lib recipes for precise/label-critical ones, OR the image tool for complex/stylized/template-matched ones with labels overlaid native; + the domain-accuracy fidelity gate) · `data-viz.md` (pick the chart type; editable-native vs raster) · `image-generation.md` (when/how; topical, text-free, consistently placed; **TEXT LEGIBILITY floor — scrim required for all text-over-image**) · `icons.md` (one coherent open-licensed icon family, recolored, restrained) · `generated-template.md` (Q1's image-tool template branch) · `style-analysis.md` (mimic a style example, Q4) · `font-guidance.md` (portable fonts, tofu recovery) · `multilingual.md` (non-Latin / CJK / RTL) · `east-asian-aesthetic.md` (Chinese ink / traditional looks — paper · seal · CJK numerals · `ink_wash`/`eastern_traditional`) · `animation.md` (when/why + `anim.py`) · `large-deck-orchestration.md` (section fan-out; default is single-author) · `collaborative-mode.md` (direction→outline→draft gates) · `redesign-existing-deck.md` (diagnose-then-rebuild) · `handoff-and-iteration.md` (delivery + iterate without clobbering edits) · `design-intelligence-addendum.md` (the deck-level design gates Step 2 measures against — rhythm map · block-dependency audit · Concept→Visualization table · semantic-colour ledger · variation floors) · `troubleshooting-faq.md` (**symptom → cause → fix for every error surface** — env · build exceptions · both lints · render · images · CJK — plus the FAQ; consult on any failure, and report findings to the user in its plain-language form) · `user-taste.md` (the registry-root `taste.md` — schema · read protocol · dial-ledger promotion + consented-look write-back) · `examples/` (`build_example_generic.py`, `style_example.py`, `section_example.py`).
+
+`codex-runtime.md` is the **Codex-only** execution adapter: visible design proof, typography/icon/component evidence, and a focused critic-pair gate. It never changes Claude Code's workflow.
 
 **Registry** (NOT part of the skill): `~/.codex/slide-templates/` (Codex) · `~/.claude/slide-templates/` (Claude Code) — the user's saved templates, **plus `taste.md` at the root** (the portable taste profile — schema + read/write protocol in `references/user-taste.md`); read for choices, write new `profile.md`s to the active host — a freshly-designed look saved at hand-off carries the vetted critic `strengths` distilled into its profile's Notes. Empty for a new user (no templates, no `taste.md` — silently skipped; no write until the first durable signal).
+| `scripts/contact_sheet.py` | Montage every `slideNN.png` onto ONE image so a critic can survey a whole deck in a single look, then open individual slides at full size only where needed. Narrows the COST of a review round, never its scope. |

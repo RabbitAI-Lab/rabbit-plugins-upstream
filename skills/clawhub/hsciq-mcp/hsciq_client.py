@@ -125,13 +125,15 @@ class HSCIQClient:
             qq: QQ 联系方式
             weixin: 微信联系方式
             isPaid: 是否付费咨询
-            images: 图片文件路径列表（最多3张，每张≤1MB，支持jpg/png/gif/webp）
+            images: 图片文件路径列表（必填，至少1张，最多3张，每张≤1MB，支持jpg/png/gif/webp）
 
         Returns:
             {"formId": "...", "status": "已创建", "imageCount": N, "imageUrls": [...]}
         """
         if not productNameCn:
             raise ValueError("productNameCn is required")
+        if not images:
+            raise ValueError("images is required: at least 1 product image (1-3 images, ≤1MB each, jpg/png/gif/webp)")
 
         arguments: Dict[str, Any] = {"productNameCn": productNameCn}
         if productNameEn:
@@ -318,7 +320,7 @@ Usage examples:
     guilei_parser.add_argument('--qq', help='QQ contact')
     guilei_parser.add_argument('--weixin', help='WeChat contact')
     guilei_parser.add_argument('--isPaid', action='store_true', help='Paid consultation')
-    guilei_parser.add_argument('--images', nargs='+', help='Image file paths (max 3, ≤1MB each, jpg/png/gif/webp)')
+    guilei_parser.add_argument('--images', nargs='+', required=True, help='Image file paths (required, 1-3 images, ≤1MB each, jpg/png/gif/webp)')
 
     # get-guilei-form
     get_form_parser = subparsers.add_parser('get-guilei-form', help='Get classification consultation form detail')

@@ -1,5 +1,5 @@
 ## Description: <br>
-办税合规智能指引 helps enterprise tax staff navigate China electronic tax bureau workflows, filing paths, invoice handling, deregistration, credit repair, tax calendars, forms, and common compliance questions. <br>
+China Tax Guidance helps users obtain practical China tax filing workflows, required materials, filing reminders, invoice guidance, tax risk checks, and compliance report guidance for electronic tax bureau scenarios. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,43 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and enterprise tax or finance staff use this skill to obtain practical guidance for China tax registration, electronic filing, invoice workflows, tax deregistration, credit repair, forms, deadlines, and related operational questions. It provides guidance and checklists, but users remain responsible for filing, payment, authentication, and professional tax or legal decisions. <br>
+External business tax staff, finance teams, and individual taxpayers use this skill to ask China tax process questions, prepare filing checklists, understand invoice and declaration paths, and perform preliminary compliance self-checks. It supports guidance and triage, but users remain responsible for confirming final filing actions with the relevant tax authority or a qualified professional. <br>
 
 ### Deployment Geography for Use: <br>
 China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Tax questions, scenarios, and calculation inputs may be sent to mcp.aitaxs.top, and fallback searches may use Bing or Baidu. <br>
-Mitigation: Avoid entering personal identifiers, credentials, or confidential business details unless the publisher's data handling and retention practices are acceptable. <br>
-Risk: The security evidence reports local storage of an API key, device id, cache, health files, and logs under ~/.tax-policy-client. <br>
-Mitigation: Review local storage on shared or managed systems, protect any API key, and clear local cache or logs when they are no longer needed. <br>
-Risk: The skill can generate or merge MCP client configuration when auto-setup is enabled. <br>
-Mitigation: Keep TAX_ENABLE_AUTOSETUP disabled unless configuration changes are intended, and inspect generated MCP client configuration before use. <br>
-Risk: The authoritative security verdict is suspicious because of under-disclosed remote service, credential, logging, search, and host-configuration behavior. <br>
-Mitigation: Review the skill and scan results before deployment, and limit use to environments where those behaviors are acceptable. <br>
+Risk: Tax questions and scenarios may be sent to the remote mcp.aitaxs.top service. <br>
+Mitigation: Do not enter taxpayer IDs, bank details, confidential filings, or other sensitive tax data unless the service provider and privacy terms are acceptable. <br>
+Risk: Fallback queries may be sent to public search services such as Bing or Baidu when the remote service is unavailable. <br>
+Mitigation: Treat fallback results as preliminary guidance and verify important conclusions against official tax authority sources or qualified professional advice. <br>
+Risk: The skill may store local credentials, cache, health data, or logs under ~/.tax-policy-client. <br>
+Mitigation: Review local storage policies before deployment and clear that directory when removing the skill or rotating credentials. <br>
+Risk: Optional automatic setup can modify MCP client configuration. <br>
+Mitigation: Keep TAX_ENABLE_AUTOSETUP unset unless you intentionally want client configuration changes and have reviewed the target MCP configuration. <br>
+Risk: Security evidence marks the release for Review due to under-disclosed remote sharing, storage, fallback search, and configuration behavior. <br>
+Mitigation: Complete human review before broad deployment and make those behaviors visible to users who may submit tax or filing information. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/china-tax-guidance) <br>
-- [Publisher profile: zxj2devs](https://clawhub.ai/user/zxj2devs) <br>
-- [Related tax policy knowledge skill](https://skillhub.cn/skills/tax-policy-knowledge) <br>
-- [China State Taxation Administration](https://www.chinatax.gov.cn) <br>
+- [Tax compliance path self-check page](https://mcp.aitaxs.top/web/topic_workflow_china_tax_guidance.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Tax policy knowledge skill](https://skillhub.cn/skills/tax-policy-knowledge) <br>
+- [Tax invoice compliance skill](https://skillhub.cn/skills/tax-invoice-compliance) <br>
+- [VAT law implementation skill](https://skillhub.cn/skills/tax-vat-law) <br>
+- [Tax judicial cases skill](https://skillhub.cn/skills/tax-tax-judicial) <br>
+- [Social insurance tax compliance skill](https://skillhub.cn/skills/tax-social-insurance) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, text, markdown, configuration] <br>
-**Output Format:** [Markdown or structured text guidance with optional checklists and configuration snippets] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and structured JSON-like tool responses] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may rely on remote tax-policy MCP tools, local fallback workflows, and user-provided tax scenarios.] <br>
+**Other Properties Related to Output:** [May include filing paths, required-material checklists, risk summaries, calculation results, compliance report guidance, and offline fallback guidance.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release metadata and skill frontmatter) <br>
+3.15.7 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

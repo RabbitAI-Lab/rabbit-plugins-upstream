@@ -1,5 +1,5 @@
 ## Description: <br>
-CSV Analyzer Free guides agents through lightweight CSV inspection with basic statistics, simple filtering, and optional CSV export using Python standard-library workflows. <br>
+CSV数据分析-免费版 helps agents analyze small local CSV files with Python standard-library commands for quick statistics and basic filtering. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, analysts, and other external agent users use this skill for lightweight CSV exploration when they need row counts, type detection, numeric summaries, unique counts, and single-condition filtering without pandas. <br>
+Developers, analysts, and agent users can use this skill for lightweight CSV exploration, including row and column statistics, basic type detection, simple filtering, and CSV export for small local files. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill reads local CSV files and can write filtered CSV outputs. <br>
-Mitigation: Use it only on files the agent is allowed to read and choose explicit output filenames to avoid overwriting important files. <br>
-Risk: The inspected package does not include the referenced analyzer script. <br>
-Mitigation: Confirm the required script exists or implement the missing command behavior before relying on the skill in production workflows. <br>
-Risk: Large CSV files can exceed the skill's intended lightweight operating range. <br>
-Mitigation: Keep inputs near the documented 100 MB limit, split larger files, or use a streaming tool for high-volume analysis. <br>
+Risk: Exporting filtered results to an existing path could overwrite or replace useful local data. <br>
+Mitigation: Choose output paths deliberately and review the destination before running export commands. <br>
+Risk: Large CSV files may exhaust memory or run slowly because the artifact describes an approximately 100 MB practical limit. <br>
+Mitigation: Use the skill for small local CSV files, split larger datasets, or switch to a streaming or pandas-based workflow when needed. <br>
 
 
 ## Reference(s): <br>
@@ -31,12 +29,12 @@ Mitigation: Keep inputs near the documented 100 MB limit, split larger files, or
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and CSV output descriptions] <br>
+**Output Format:** [Markdown guidance with inline shell commands and CSV output paths] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read local CSV files and write explicitly named CSV output files when filtering.] <br>
+**Other Properties Related to Output:** [Intended for local CSV files under about 100 MB; filtered results may be exported to user-selected CSV paths.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

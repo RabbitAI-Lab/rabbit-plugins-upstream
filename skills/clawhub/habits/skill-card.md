@@ -1,5 +1,5 @@
 ## Description: <br>
-Build a personal habit tracking system with streaks, reviews, and progression. <br>
+Designs, tracks, and repairs personal habits, including streaks, completion rates, routines, restarts, and quitting unwanted habits. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,31 +7,33 @@ This skill is ready for commercial/non-commercial use. <br>
 [ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
 
 ### License/Terms of Use: <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-People who want lightweight, local habit tracking use this skill to define habits, log completions or misses, review streaks, and surface patterns over time. <br>
+External users and agent operators use this skill to create, log, review, troubleshoot, and restart recurring personal habits using local habit notes. It also supports routines, accountability arrangements, quitting plans, and capacity-aware adjustments. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Habit records may include personal routines, health-adjacent notes, or other sensitive details stored in local files under ~/habits/. <br>
-Mitigation: Before first use, confirm that local habit files are acceptable, keep entries minimal, and ask the assistant to show or delete the folder when records need to be reviewed or removed. <br>
+Risk: The skill can maintain durable local habit records and update related contacts, health metrics, finance notes, and capacity information. <br>
+Mitigation: Install only if this local recordkeeping is acceptable; for sensitive habits, require the agent to preview file changes and ask before writing shared contacts, health, finance, or capacity information. <br>
 
 
 ## Reference(s): <br>
-- [Habits on ClawHub](https://clawhub.ai/ivangdavila/habits) <br>
+- [ClawHub Skill Page](https://clawhub.ai/ivangdavila/skills/habits) <br>
+- [Clawic Habits](https://clawic.com/skills/habits) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and concise natural-language guidance, with optional shell commands for local habit files.] <br>
+**Output Type(s):** [text, markdown, configuration, guidance] <br>
+**Output Format:** [Markdown and plain local note updates] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local Markdown habit files under ~/habits/ when the user asks to track habits.] <br>
+**Other Properties Related to Output:** [May read and write local habit, contact, health, and finance notes under configured Clawic data paths.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+1.0.2 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

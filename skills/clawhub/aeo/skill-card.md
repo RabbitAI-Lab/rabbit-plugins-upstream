@@ -11,33 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, site owners, and marketing teams use Aeo to audit public, staging, local, or static websites for answer-engine optimization, schema quality, AI access files, and regressions, then generate prioritized fixes and related files. <br>
+Developers, site owners, and marketing teams use AEO to audit websites, preview branches, local builds, and sitemaps for AI-search readiness, then produce reports, fixes, schema checks, llms.txt files, and regression comparisons. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can run a networked npm audit tool against public, staging, localhost, private, or static site targets. <br>
-Mitigation: Audit local or private targets only for systems the user controls, and require explicit opt-in before using local/private access. <br>
-Risk: The skill can propose or apply AEO-related file and code changes. <br>
-Mitigation: Review proposed fixes before allowing writes, preserve existing site behavior, and rerun the audit when practical. <br>
-Risk: Untrusted target URLs, paths, or flags could make shell execution unsafe if passed through directly. <br>
-Mitigation: Validate URLs or local paths, quote each argument, pass flags as literal tokens, and reject shell metacharacters or newlines. <br>
+Risk: The skill runs a third-party npm audit package against websites or local builds, which may access public, staging, or private content. <br>
+Mitigation: Install only if you trust @ainyc/aeo-audit and audit only sites or builds you are authorized to inspect; use --allow-local only for intended local or private targets. <br>
+Risk: Fix workflows can modify project files or generated AI-access files. <br>
+Mitigation: Require explicit user confirmation, review diffs, and rerun the audit before relying on changes. <br>
 
 
 ## Reference(s): <br>
-- [Aeo homepage](https://ainyc.ai) <br>
+- [AEO homepage](https://ainyc.ai) <br>
 - [ClawHub skill page](https://clawhub.ai/arberx/skills/aeo) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown summaries with JSON or agent-format audit results, shell commands, code/configuration changes, and generated llms.txt or robots.txt files.] <br>
+**Output Type(s):** [Shell commands, Analysis, Markdown, Code, Configuration] <br>
+**Output Format:** [Markdown guidance with shell commands, plus JSON or agent-format audit reports when requested] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call a networked npm audit tool and may write llms.txt, llms-full.txt, or robots.txt when the user requests generation or fixes.] <br>
+**Other Properties Related to Output:** [May generate or update llms.txt, llms-full.txt, robots.txt, schema snippets, and site files during explicit fix workflows.] <br>
 
 ## Skill Version(s): <br>
-4.3.0 (source: server release metadata) <br>
+4.4.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

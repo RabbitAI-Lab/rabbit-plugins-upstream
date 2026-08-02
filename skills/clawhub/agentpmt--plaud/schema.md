@@ -42,7 +42,7 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `file_id` | `string` | no | The file ID to retrieve |
+| `file_id` | `string` | yes | The file ID to retrieve |
 
 Sample parameters:
 
@@ -58,10 +58,33 @@ Generated JSON parameter schema:
 {
   "file_id": {
     "description": "The file ID to retrieve",
-    "required": false,
     "type": "string"
   }
 }
+```
+
+## `get_instructions`
+
+Action slug: `get-instructions`
+
+Price: `5` credits
+
+Get tool instructions and available actions.
+
+Parameters:
+
+This action does not require parameters.
+
+Sample parameters:
+
+```json
+{}
+```
+
+Generated JSON parameter schema:
+
+```json
+{}
 ```
 
 ## `get_note`
@@ -76,7 +99,7 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `file_id` | `string` | no | The file ID to retrieve notes for |
+| `file_id` | `string` | yes | The file ID to retrieve notes for |
 
 Sample parameters:
 
@@ -92,7 +115,6 @@ Generated JSON parameter schema:
 {
   "file_id": {
     "description": "The file ID to retrieve notes for",
-    "required": false,
     "type": "string"
   }
 }
@@ -110,7 +132,7 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `file_id` | `string` | no | The file ID to retrieve transcript for |
+| `file_id` | `string` | yes | The file ID to retrieve transcript for |
 
 Sample parameters:
 
@@ -126,7 +148,6 @@ Generated JSON parameter schema:
 {
   "file_id": {
     "description": "The file ID to retrieve transcript for",
-    "required": false,
     "type": "string"
   }
 }
@@ -168,29 +189,24 @@ Generated JSON parameter schema:
 {
   "date_from": {
     "description": "Start date inclusive, YYYY-MM-DD",
-    "required": false,
     "type": "string"
   },
   "date_to": {
     "description": "End date inclusive, YYYY-MM-DD",
-    "required": false,
     "type": "string"
   },
   "page": {
     "default": 1,
     "description": "Page number (ignored when filters are set)",
-    "required": false,
     "type": "number"
   },
   "page_size": {
     "default": 20,
     "description": "Items per page (ignored when filters are set)",
-    "required": false,
     "type": "number"
   },
   "query": {
     "description": "Case-insensitive substring match on recording name",
-    "required": false,
     "type": "string"
   }
 }

@@ -38,4 +38,31 @@ commands:
   alert: python3 scripts/alert_manager.py [detect|list|status|auto_resolve|cleanup|threshold]
   archive: python3 scripts/archive_manager.py [archive|find|history|cleanup|rebuild|summary]
   summary: python3 scripts/summary.py [brief|full]
+  log_fetch: python3 scripts/log_fetch.py <url> [title] | list | clear
+  check_analysis: python3 scripts/check_analysis.py [target.yaml] [--strict]
   maintain: python3 scripts/validate.py && python3 scripts/normalize.py && python3 scripts/archive_manager.py archive && python3 scripts/alert_manager.py auto_resolve && python3 scripts/alert_manager.py cleanup
+
+# 硬约束（runner 与 agent 均需感知）。违反任意一条 check_analysis.py 都会拒绝本次分析
+constraints:
+  # 每次分析至少 2 个、至多 6 个 key_factor
+  min_factors: 2
+  max_factors: 6
+  # impact 字段必须是以下值之一（大小写敏感）
+  allowed_impacts: [bullish, bearish, mixed, neutral, slightly_bullish, slightly_bearish]
+  # 每个 key_factor 必须含 factor / impact / reasoning / sources
+  required_factor_fields: [factor, impact, reasoning, sources]
+  # 每个 source URL 必须是 http(s) 合法 URL
+  # 且必须出现在 .cache/fetch_log.json 中（即 agent 真的 web_fetch 过，禁止凭空编造）
+  sources_must_be_in_fetch_log: true
+  # 整篇 sources 至少覆盖 2 个独立域名，避免单源依赖
+  min_unique_domains: 2
+  # 每个 factor 至少引用 1 条 source
+  min_sources_per_factor: 1
+  # 禁用措辞（命中即报错）
+  forbidden_phrases: [根据经验, 众所周知, 一般来说, 通常情况下, 据了解, 据业内人士, 显而易见]
+  # 没有数据时必须使用该占位值（不能空字符串、不能编造）
+  no_data_marker: "no_data"
+  # 门槛：宣布"分析完成"前必须通过
+  gates:
+    - python3 scripts/validate.py
+    - python3 scripts/check_analysis.py

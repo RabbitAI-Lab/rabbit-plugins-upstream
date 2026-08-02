@@ -59,10 +59,11 @@ def prepare(args: argparse.Namespace) -> int:
     if not isinstance(transcript, dict):
         raise RuntimeError("Transcript must be a JSON object.")
     references: dict[int, str] = {}
+    reference_stats: dict[str, object] = {}
     source_subtitle = args.source_subtitle.resolve() if args.source_subtitle else None
     if source_subtitle:
         references = references_by_asr_segment(transcript, load_source_subtitle(source_subtitle))
-    chunks = build_chunks(transcript, args.max_display_tokens, references)
+    chunks = build_chunks(transcript, args.max_display_tokens, references, reference_stats)
     if not chunks:
         raise RuntimeError("Source analysis cannot start because the transcript contains no chunks.")
 
@@ -115,6 +116,9 @@ def prepare(args: argparse.Namespace) -> int:
         "transcript_sha256": sha256_file(transcript_path),
         "source_subtitle": str(source_subtitle) if source_subtitle else "",
         "source_subtitle_sha256": sha256_file(source_subtitle) if source_subtitle else "",
+        "source_reference_status": reference_stats.get("status", "not_applied"),
+        "source_reference_candidate_segments": reference_stats.get("candidate_segments", 0),
+        "source_reference_corrected_segments": reference_stats.get("corrected_segments", 0),
         "screen_context": str(screen_context) if screen_context else "",
         "screen_context_sha256": sha256_file(screen_context) if screen_context else "",
         "total_chunks": total,
