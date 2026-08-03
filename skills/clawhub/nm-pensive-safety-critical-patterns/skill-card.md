@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and code reviewers use this skill to apply higher-rigor safety-critical coding review patterns to financial, medical, data-integrity, and other high-reliability software. <br>
+Developers and engineers use this skill to review safety-critical, financial, medical, data-integrity, or high-reliability code against practical adaptations of NASA Power of 10 coding rules. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may be used to guide changes in safety-critical or high-reliability code where incorrect advice could have meaningful impact. <br>
-Mitigation: Require human review, tests, and domain-specific verification before applying suggested patterns to production code. <br>
-Risk: The referenced external pensive plugin may add agents, hooks, or commands that are not present in this markdown-only skill. <br>
-Mitigation: Review and scan the external plugin separately before installing or enabling it. <br>
+Risk: Broad safety and verification triggers may invoke the skill in contexts where lightweight review is sufficient. <br>
+Mitigation: Apply the skill's own posture of matching rigor to consequence, and use full rigor only for safety-critical, financial, medical, data-integrity, or high-reliability code. <br>
+Risk: Guidance-only recommendations could still lead to overly strict or misplaced coding requirements if applied without review. <br>
+Mitigation: Have developers review recommendations before adoption and adapt the NASA Power of 10 rules to the language, system risk, and operational context. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-safety-critical-patterns) <br>
-- [Pensive plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+- [Metadata homepage for pensive plugin](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands] <br>
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands] <br>
 **Output Format:** [Markdown guidance with inline code and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; no commands are run by the skill itself.] <br>
+**Other Properties Related to Output:** [Guidance-only checklist; no executable behavior, persistence, credentials, or data access.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: server release metadata; artifact frontmatter lists 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

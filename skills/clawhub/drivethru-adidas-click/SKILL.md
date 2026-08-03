@@ -1,7 +1,7 @@
 ---
 name: drivethru-adidas-click
 description: Browser-driven adidas Click B2B toolkit — places purchase orders and runs live inventory / wholesale-pricing checks on the adidas Click portal with Playwright, since adidas exposes no public ordering API. Ordering accepts style number, color, size, quantity, a purchase-order number, and a ship-to address, drives the cart/checkout, and (on confirm) submits the order. Checks reuse the same flow but never buy — inventory reads product pages (no cart), pricing fills a throwaway "DO NOT BUY" cart, reads the priced checkout, and deletes it. Use whenever the user needs to place/draft a PO on adidas Click, or check live stock levels or wholesale pricing.
-version: 0.5.1
+version: 0.6.0
 emoji: 👟
 homepage: https://b2bportal.adidas-group.com
 metadata:

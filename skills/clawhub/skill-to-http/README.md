@@ -4,6 +4,16 @@
 
 `skill-to-http` runs a long-lived FastAPI server that scans your skill directories and auto-generates a REST endpoint for every Skill:
 
+## ⚠️ Security Notice — read before deploying
+
+This skill starts a persistent service that **exposes your locally installed agent Skills as remotely callable HTTP endpoints**. Those Skills may have file, shell, network, and credential access on the host. Treat this like exposing an internal service, not a zero-risk convenience wrapper:
+
+- **Exposure widens your attack surface.** Anyone who can reach the port can trigger the exposed Skills. `expose_skills: ["*"]` / `--expose-skill "*"` opens **every** installed Skill at once — only use it in a fully controlled, isolated environment. In production/shared environments use an explicit whitelist and add side-effecting Skills to `deny_skills`.
+- **HTTP is the default and is unencrypted.** By default the `X-API-Key`, request prompts, and Skill outputs travel in **cleartext**. Acceptable only on `localhost` or a trusted network; enable HTTPS for cross-host / production use.
+- **Set auth and bind carefully.** Require an API Key for non-local access and be deliberate about `0.0.0.0` binding. The management console can start/stop the service, edit config, and renew certs — a leaked API Key means full control of the service.
+- **Execution is immediate, no second confirmation.** The executor defaults to "execute now, don't ask". For high-risk Skills (send email, delete data), set `requires_confirmation: true` in their frontmatter.
+- **Optional LLM fallback sends SKILL.md off-host.** The multi-engine executor's last-resort `llm` engine (and the optional param-extraction step) transmit the target Skill's `SKILL.md` to an external chat-completions endpoint. This path is **off by default** — it only activates when you configure `llm.base_url` + `llm.api_key` in `config.json`. If you enable it, make sure the exposed SKILL.md files contain no internal addresses, credentials, or sensitive content, and point `base_url` only at an endpoint you trust.
+
 ```
 POST /skills/{name}/run        →  executes the Skill via a sub-agent engine
 POST /skills/{name}/run/async  →  job id + webhook callback (HMAC-signed)

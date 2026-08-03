@@ -1,0 +1,149 @@
+{
+  "version": "1.0.0",
+  "description": "藻华监测模型参数 — 指数、传感器、阈值与风险等级",
+  "sensors": {
+    "modis": {
+      "name": "MODIS Aqua/Terra",
+      "spatial_resolution_m": 1000,
+      "revisiting_days": 1,
+      "bands": {
+        "red": {"wavelength_nm": 645, "band_name": "Rrs_645"},
+        "red2": {"wavelength_nm": 667, "band_name": "Rrs_667"},
+        "red3": {"wavelength_nm": 678, "band_name": "Rrs_678"},
+        "nir": {"wavelength_nm": 859, "band_name": "Rrs_859"},
+        "green": {"wavelength_nm": 555, "band_name": "Rrs_555"}
+      }
+    },
+    "sentinel2": {
+      "name": "Sentinel-2 MSI",
+      "spatial_resolution_m": 20,
+      "revisiting_days": 5,
+      "bands": {
+        "red": {"wavelength_nm": 665, "band_name": "B04"},
+        "red_edge": {"wavelength_nm": 705, "band_name": "B05"},
+        "nir": {"wavelength_nm": 842, "band_name": "B08"},
+        "blue": {"wavelength_nm": 490, "band_name": "B02"},
+        "green": {"wavelength_nm": 560, "band_name": "B03"}
+      }
+    },
+    "sentinel3_olci": {
+      "name": "Sentinel-3 OLCI",
+      "spatial_resolution_m": 300,
+      "revisiting_days": 2,
+      "bands": {
+        "red": {"wavelength_nm": 665, "band_name": "Oa08"},
+        "red_edge": {"wavelength_nm": 709, "band_name": "Oa11"},
+        "nir": {"wavelength_nm": 865, "band_name": "Oa18"},
+        "blue": {"wavelength_nm": 490, "band_name": "Oa05"},
+        "green": {"wavelength_nm": 560, "band_name": "Oa06"}
+      }
+    }
+  },
+  "indices": {
+    "ndci": {
+      "name": "Normalized Difference Chlorophyll Index",
+      "formula": "(Red_edge - Red) / (Red_edge + Red)",
+      "bands_required": ["red", "red_edge"],
+      "applicable_sensors": ["sentinel2", "sentinel3_olci"],
+      "valid_range": [-1.0, 1.0],
+      "typical_bloom_threshold": 0.05,
+      "waterbody_types": ["lake", "reservoir", "coastal"],
+      "notes": "适用于中叶绿素浓度水体，浑浊水体偏高"
+    },
+    "flh": {
+      "name": "Fluorescence Line Height",
+      "formula": "R_red3 - R_red2 - (R_nir - R_red2) * (lambda_red3 - lambda_red2) / (lambda_nir - lambda_red2)",
+      "bands_required": ["red2", "red3", "nir"],
+      "applicable_sensors": ["modis"],
+      "valid_range": [-0.1, 0.5],
+      "typical_bloom_threshold": 0.02,
+      "waterbody_types": ["ocean", "coastal", "large_lake"],
+      "notes": "基于叶绿素荧光峰，受大气影响较大"
+    },
+    "bgi": {
+      "name": "Blue-Green Index",
+      "formula": "(Green - Blue) / (Green + Blue)",
+      "bands_required": ["blue", "green"],
+      "applicable_sensors": ["modis", "sentinel2", "sentinel3_olci"],
+      "valid_range": [-1.0, 1.0],
+      "typical_bloom_threshold": 0.03,
+      "waterbody_types": ["lake", "reservoir"],
+      "notes": "简单区分，易受悬浮物干扰"
+    },
+    "ari": {
+      "name": "Anthocyanin Reflectance Index",
+      "formula": "(1 / Green) - (1 / Red_edge)",
+      "bands_required": ["green", "red_edge"],
+      "applicable_sensors": ["sentinel2", "sentinel3_olci"],
+      "valid_range": [-10.0, 10.0],
+      "typical_bloom_threshold": 0.01,
+      "waterbody_types": ["lake", "reservoir"],
+      "notes": "辅助识别蓝藻花青素特征"
+    }
+  },
+  "quality_control": {
+    "cloud": {
+      "method": "高反射率阈值",
+      "blue_threshold": 0.15,
+      "description": "蓝光波段反射率超过阈值判定为云"
+    },
+    "glint": {
+      "method": "太阳耀斑",
+      "mean_visible_threshold": 0.12,
+      "description": "可见光均值过高判定为太阳耀斑"
+    },
+    "turbid_water": {
+      "method": "浑浊水体",
+      "red_nir_ratio_threshold": 2.0,
+      "description": "红/近红外比值过高判定为浑浊水体/悬浮物"
+    },
+    "shallow_water": {
+      "method": "浅水/底质",
+      "total_reflectance_threshold": 0.2,
+      "description": "总反射率过高判定为浅水或底质影响"
+    }
+  },
+  "risk_levels": {
+    "low": {
+      "name": "低风险",
+      "probability_range": [0.0, 0.3],
+      "color": "#28a745",
+      "description": "无明显藻华迹象"
+    },
+    "moderate": {
+      "name": "中风险",
+      "probability_range": [0.3, 0.6],
+      "color": "#ffc107",
+      "description": "存在藻华可能，建议关注"
+    },
+    "high": {
+      "name": "高风险",
+      "probability_range": [0.6, 0.8],
+      "color": "#fd7e14",
+      "description": "藻华可能性高，建议预警"
+    },
+    "severe": {
+      "name": "严重",
+      "probability_range": [0.8, 1.0],
+      "color": "#dc3545",
+      "description": "藻华极可能发生，建议立即预警"
+    }
+  },
+  "alert_thresholds": {
+    "default": {
+      "probability": 0.5,
+      "min_consecutive_days": 3,
+      "min_area_km2": 1.0
+    },
+    "strict": {
+      "probability": 0.6,
+      "min_consecutive_days": 5,
+      "min_area_km2": 2.0
+    },
+    "relaxed": {
+      "probability": 0.4,
+      "min_consecutive_days": 2,
+      "min_area_km2": 0.5
+    }
+  }
+}

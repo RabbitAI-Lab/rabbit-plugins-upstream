@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides IPO tax-compliance guidance for tax-incentive dependency, disclosure requirements, red-chip structure tax-payment checks, exchange-review readiness, and structured compliance self-check workflows. <br>
+tax-ipo-tax helps agents provide IPO tax-compliance guidance, including tax incentive dependency review, disclosure planning, red-chip structure tax checks, self-check workflows, and risk remediation guidance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, tax professionals, and compliance teams use this skill to triage IPO tax-compliance questions, identify disclosure and tax-incentive risks, and prepare structured self-check or remediation guidance before formal professional review. <br>
+External users and agents use this skill to triage IPO-related tax compliance questions, run structured tax self-checks, identify disclosure and historical-tax risks, and produce practical remediation guidance. It is not a substitute for licensed tax, legal, audit, or filing services. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill is cloud-backed and may send tax questions, risk-check scenarios, or self-check metrics to external services. <br>
-Mitigation: Avoid entering confidential IPO, financial, client, or personally identifying details unless the publisher provides acceptable data-handling terms for the intended use. <br>
-Risk: The security evidence flags remote registration, local credential storage, and optional client-configuration behavior. <br>
-Mitigation: Review credential handling and any requested client configuration changes before installation or execution, and use isolated test credentials where possible. <br>
-Risk: The skill can install additional related tax skills or fetch packages from release-channel URLs. <br>
-Mitigation: Install related skills only from trusted marketplace channels and review package provenance, hashes, and security findings before enabling them. <br>
-Risk: Tax and IPO-review guidance can become outdated or may not fit a specific filing, transaction, or jurisdiction. <br>
-Mitigation: Treat outputs as triage and preparation material, then verify against current official rules and qualified professional advice before relying on them. <br>
+Risk: Sensitive IPO, tax, or enterprise details may be sent to mcp.aitaxs.top for policy answers, risk checks, tax calculations, or web self-checks. <br>
+Mitigation: Minimize or anonymize inputs, avoid confidential company identifiers, and use the skill only when cloud processing and the publisher's retention claims are acceptable. <br>
+Risk: The skill stores API credentials, client identifiers, cached health state, and local logs of questions or scenarios on the user's device or in browser localStorage. <br>
+Mitigation: Review and clear local skill data after use, run in a dedicated profile or sandbox for sensitive work, and avoid sharing local profiles that may contain credentials or logs. <br>
+Risk: Optional MCP client setup can modify local agent configuration files when explicitly enabled. <br>
+Mitigation: Review configuration changes before enabling automatic setup, keep backups, and disable automatic setup in managed or confidential environments unless approved. <br>
+Risk: Tax-compliance guidance can be incomplete, outdated, or unsuitable for a specific IPO fact pattern. <br>
+Mitigation: Treat outputs as triage and drafting support, verify against current official rules, and involve qualified tax, legal, audit, or filing professionals before taking action. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub listing for tax-ipo-tax](https://clawhub.ai/zxj2devs/skills/tax-ipo-tax) <br>
-- [IPO tax compliance interactive workflow](https://mcp.aitaxs.top/web/topic_workflow_ipo_tax.html) <br>
-- [Tax policy knowledge matrix](https://skillhub.cn/skills/tax-policy-knowledge) <br>
-- [Tax incentives related skill](https://skillhub.cn/skills/tax-incentives) <br>
-- [Tax restructuring related skill](https://skillhub.cn/skills/tax-restructuring) <br>
-- [Tax data asset related skill](https://skillhub.cn/skills/tax-data-asset) <br>
+- [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-ipo-tax) <br>
+- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
+- [IPO tax compliance web workflow](https://mcp.aitaxs.top/web/topic_workflow_ipo_tax.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text, Shell commands, Configuration] <br>
-**Output Format:** [Markdown or structured text, with optional local shell commands and configuration snippets for MCP or related skill installation] <br>
+**Output Type(s):** [text, markdown, guidance, configuration, shell commands] <br>
+**Output Format:** [Markdown or plain-text guidance, with optional structured self-check results and configuration examples.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return tax-compliance checklists, risk triage, policy-oriented guidance, self-check prompts, links to an interactive workflow, and local setup instructions.] <br>
+**Other Properties Related to Output:** [May call cloud MCP services for policy answers, risk checks, tax calculations, and knowledge-base metadata; offline workflows provide limited local reference guidance.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: frontmatter and server release metadata) <br>
+3.15.8 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

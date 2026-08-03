@@ -1,6 +1,6 @@
 ---
 name: tencent-meeting-mcp
-description: "腾讯会议：会议管理与音视频协作助手。预约/创建/修改/取消会议、查询会议详情与会议号转换、查看参会成员/受邀人/等候室成员、查询用户会议列表（即将开始/进行中/已结束）、查询录制列表与下载地址、获取转写全文/段落/搜索、获取AI智能纪要（支持多语言翻译）、录制权限申请（预览+提交两步流程）、时间转换与版本检查、Agent意见箱反馈上报。当用户需要预约或管理腾讯会议、查看参会人员、查询会议录制或转写内容、获取智能纪要时使用；当用户访问录制相关内容（下载地址/转写/智能纪要）出现无权限错误时，自动发起录制权限申请流程；当Agent遇到以下任何情况时必须立即触发submit_feedback：工具缺失（功能不存在）、工具报错（返回错误码）、能力不足（参数/功能限制）、结果不符预期（数据异常）、改进建议（功能优化）；如果用户提供的是9位会议号而非meeting_id，优先使用get_meeting_by_code转换后再操作。不要在以下场景触发：日程管理（非腾讯会议日程）、即时通讯/聊天、腾讯文档操作、企业微信审批流程、电话/PSTN拨号、视频剪辑或视频编辑、其他视频会议平台（Zoom/Teams/飞书/钉钉）。"
+description: "腾讯会议：会议管理与音视频协作助手。预约/创建/修改/取消会议、查询会议详情与会议号转换、查看参会成员/受邀人/等候室成员、查询用户会议列表（即将开始/进行中/已结束）、搜索会议列表、查询录制列表与下载地址、搜索录制文件、获取转写全文/段落/搜索、获取AI智能纪要（支持多语言翻译）、录制权限申请（预览+提交两步流程）、企业通讯录搜索/按手机号或邮箱批量查询用户（获取open_id）、向会议添加/移除/替换受邀人（创建或修改会议时可一并指定）、会中批量呼叫成员入会、会中踢出成员（支持普通成员/SIP/PSTN，可选是否允许重新加入）、时间转换与版本检查、Agent意见箱反馈上报。当用户需要预约或管理腾讯会议、查看参会人员、查询会议录制或转写内容、获取智能纪要、通过姓名/手机号/邮箱定位企业成员、管理会议受邀人、会中呼叫或踢人时使用；当用户访问录制相关内容（下载地址/转写/智能纪要）出现无权限错误时，自动发起录制权限申请流程；当用户仅提供姓名/手机号/邮箱、且已明确要邀请或呼叫该成员入会时，才先调用contact_*工具获取open_id后再执行邀请/呼叫；用户只是想查询某人是谁/部门/职位等纯人员查询场景，禁止调用contact_*工具；当Agent遇到以下任何情况时必须立即触发submit_feedback：工具缺失（功能不存在）、工具报错（返回错误码）、能力不足（参数/功能限制）、结果不符预期（数据异常）、改进建议（功能优化）；如果用户提供的是9位会议号而非meeting_id，优先使用get_meeting_by_code转换后再操作。不要在以下场景触发：日程管理（非腾讯会议日程）、即时通讯/聊天、腾讯文档操作、企业微信审批流程、电话/PSTN拨号、视频剪辑或视频编辑、其他视频会议平台（Zoom/Teams/飞书/钉钉）。"
 homepage: https://meeting.tencent.com/
 metadata:
   {
@@ -55,6 +55,16 @@ metadata:
 - 修改或取消会议前，**必须向用户展示会议信息并确认**后再执行
 - 录制权限申请提交前（`apply_record_permission_commit`），**必须先调用 `apply_record_permission_prepare` 获取预览信息并向用户完整展示**（会议主题、录制所有者、申请人、申请类型等），获得用户明确同意后再调用 commit 工具；详见场景8
 - 提交反馈（`submit_feedback`）前，**必须按场景7的二次确认流程获得用户明文同意**后再调用；反馈内容**严禁包含未脱敏的隐私信息**，详见 `references/privacy_policy.md`
+- 受邀人变更（`meeting_invitees_remove` / `meeting_invitees_replace`）前，**必须先调用 `get_meeting_invitees` 展示当前受邀人列表**，明确告知用户将被移除/替换的成员，获得明确同意后再执行；`replace` 传空数组会清空所有受邀人，**必须二次强调**；详见场景10
+- 会中踢人（`meeting_control_kick`）前，**必须向用户完整展示被踢成员名单与 `allow_rejoin` 值**（true=允许重新加入 / false=禁止重新加入），获得明确同意后再执行；详见场景11
+- 会中呼叫（`meeting_control_call`）涉及对成员发起电话/客户端呼叫，**必须向用户展示被呼叫成员名单并确认**后再执行；详见场景11
+- 调用这些通讯录工具前，**必须先完成意图判定**： `contact_search` / `contact_lookup_by_phone` / `contact_lookup_by_email` 这些通讯录工具前，必须先在内部完成意图判定并满足以下全部条件，否则一律禁止调用：
+  1. 本轮请求**显式包含**邀请入会 / 添加受邀人 / 呼叫入会动作；
+  2. 解析出的 open_id 将**在同一轮内立即**喂给 schedule_meeting / update_meeting / meeting_invitees_* / meeting_control_call等工具。
+  只要用户说的是"查找 / 搜索 / 查一下 / 看看 / 是谁 / 哪个部门 / 联系方式"等
+  **纯查询表述且不伴随上述动作**，立即停止，使用固定拒绝话术（见场景9反例），
+  **严禁调用任何 contact_* 工具**。
+- 通讯录工具入参中的手机号、邮箱属于强敏感信息，**禁止在对话或日志中复述明文**；返回的成员姓名向用户展示时优先使用昵称，必要时按 `references/privacy_policy.md` 脱敏
 - 无法查询到会议时，先确认会议号正确性或是否为本人创建
 
 ### 追踪信息
@@ -86,10 +96,15 @@ metadata:
 ## 通用规则
 
 1. **Meeting Code 转换**：用户提供的会议号需通过 `get_meeting_by_code` 转换为 meeting_id 后才能调用其他工具
-2. **年份默认值**：未指定年份时使用当前年份，禁止使用过去年份
-3. **参数格式错误**：提示用户修改，**禁止主动修改用户输入的参数值**
-4. **分页查询**：统一使用 `page_token`/`page_size` 分页，根据 `has_more` 判断是否继续，为 `true` 时用 `next_page_token` 翻页
-5. **返回昵称优先**：返回主持人、参会者、受邀人时，若无特殊要求只返回用户昵称，不返回用户 ID
+2. **用户标识前置（仅限邀请/呼叫场景）**：**当且仅当**用户已表达明确的「会议邀请 / 添加受邀人 / 会中呼叫入会」意图、却只提供了姓名/手机号/邮箱（未提供 open_id）时，才调用 `contact_search` / `contact_lookup_by_phone` / `contact_lookup_by_email` 解析出 open_id，并**立即**用于 `schedule_meeting` / `update_meeting` / `meeting_invitees_*` / `meeting_control_call`。
+   ⛔ 前置判定：若本轮无"邀请/添加受邀人/呼叫入会"动作，直接禁止调用 contact_*，
+   - ⛔ **纯人员查询不适用本规则**：用户只是想"搜一下/查一下某人是谁、看其部门/职位/联系方式"而无任何后续会议动作时，**禁止调用任何 `contact_*` 工具**，应直接告知"查询通讯录人员信息不在本服务范围内"。
+   - ⛔ **踢人不适用本规则**：踢人所需的 `open_id` / `ms_open_id` 一律取自 `get_meeting_participants`，**严禁**用 `contact_*` 反查（详见场景11）。
+3. **年份默认值**：未指定年份时使用当前年份，禁止使用过去年份
+4. **参数格式错误**：提示用户修改，**禁止主动修改用户输入的参数值**
+5. **分页查询**：统一使用 `page_token`/`page_size` 分页，根据 `has_more` 判断是否继续，为 `true` 时用 `next_page_token` 翻页
+6. **返回昵称优先**：返回主持人、参会者、受邀人时，若无特殊要求只返回用户昵称，不返回用户 ID
+7. **批量上限**：`invitees` ≤ 100；`meeting_control_call.users` ≤ 20；`meeting_control_kick.users + sip_users + pstn_users` 三者总数 ≤ 20；`contact_lookup_by_phone.phones` / `contact_lookup_by_email.emails` ≤ 50。超限时必须告知用户分批处理，**禁止自行截断**
 
 ---
 
@@ -103,35 +118,41 @@ metadata:
 **处理流程**
 1. 调用 `convert_timestamp` 获取当前时间（涉及相对时间时）
 2. 确认必填信息：会议主题、开始时间、结束时间
-3. 调用 `schedule_meeting` 创建会议
+3. 若用户提到邀请成员（仅有姓名/手机号/邮箱），先调用 `contact_search` / `contact_lookup_by_phone` / `contact_lookup_by_email` 获取 open_id 列表
+4. 调用 `schedule_meeting` 创建会议，可选传入 `invitees`（open_id 数组，最多 100）
 
 **注意事项**
-- 不支持邀请人，创建成功后不返回邀请人信息
 - 未提及结束时间默认 1 小时，提示用户可修改
 - 周期性会议重复次数默认 50 次，提示用户可修改
 - 缺少会议主题时工具直接报错，必须提示用户输入
+- 创建时若传入 `invitees`，必须先向用户确认邀请名单（昵称展示）后再执行
+- 创建后如需追加/修改受邀人，使用 `meeting_invitees_add` / `meeting_invitees_remove` / `meeting_invitees_replace`
 
 **输出规范**
-展示创建成功的会议主题、时间、会议号及追踪信息
+展示创建成功的会议主题、时间、会议号、受邀人数（若有）及追踪信息
 
 ---
 
 ### 场景2：修改会议
 
 **触发条件**
-用户要求修改、更新已有会议信息
+用户要求修改、更新已有会议信息（含受邀人增删替换）
 
 **处理流程**
 1. 若用户提供会议号，先调用 `get_meeting_by_code` 获取 meeting_id
-2. 调用 `get_meeting` 查询当前会议信息
-3. 向用户展示待修改信息，确认后调用 `update_meeting` 执行修改
+2. 调用 `get_meeting` 查询当前会议信息；如需修改受邀人，加调 `get_meeting_invitees` 查看当前列表
+3. 若用户提到邀请成员（仅有姓名/手机号/邮箱），先调用 `contact_search` / `contact_lookup_by_phone` / `contact_lookup_by_email` 获取 open_id 列表
+4. 向用户展示**完整变更摘要**（含基础信息变更 + 受邀人变更），确认后调用 `update_meeting` 执行修改
 
 **注意事项**
 - 修改前必须二次确认（见核心规范"敏感操作"）
-- 可修改：主题、时间、密码、时区、会议类型、入会限制、等候室、周期性规则等
+- 可修改：主题、时间、密码、时区、会议类型、入会限制、等候室、周期性规则、受邀人等
+- 若同时修改会议信息和受邀人，需在 `update_meeting` 中传入 `invitees` + `invitees_operate_type`（字符串枚举：`"add"`=增量添加 / `"remove"`=批量移除 / `"replace"`=整体替换），并在确认摘要中**一次性展示所有变更**
+- `invitees` 与 `invitees_operate_type` **必须成对出现**，缺一报参数错误
+- 仅做受邀人变更（无其他字段修改）时，**推荐使用** `meeting_invitees_add` / `_remove` / `_replace` 专用工具，语义更清晰
 
 **输出规范**
-展示修改后的会议信息及追踪信息，提示用户确认变更
+展示修改后的会议信息（含受邀人变化）及追踪信息，提示用户确认变更
 
 ---
 
@@ -176,12 +197,18 @@ metadata:
 用户要求查看自己的会议列表、近期会议、我的会议
 
 **处理流程**
-1. 进行中/未开始：调用 `get_user_meetings`
-2. 已结束：调用 `get_user_ended_meetings`（建议指定时间范围）
-3. 查询今天的全部会议：**同时调用两者，结果聚合去重**
+1. **参数判断逻辑**：
+   - 当提供的参数**只有时间**（如start_time/end_time）：**列表优先**
+     - 进行中/未开始：调用 `get_user_meetings`
+     - 已结束：调用 `get_user_ended_meetings`
+   - 有其他参数（会议主题、会议号、创建人、参与者等）：**搜索优先**
+     - 调用 `search_meetings` 进行精确过滤
+2. 查询今天的全部会议：**同时调用两者，结果聚合去重**
 
 **注意事项**
 - `get_user_meetings` 仅包含未开始/进行中的会议，`get_user_ended_meetings` 仅包含已结束会议
+- `search_meetings` 支持按关键词(q)、搜索字段(q_fields)、会议号、日期窗口等过滤，数据按分页返回
+- `search_meetings` 的 `from`/`to` 参数使用 ISO 8601 格式（如 `2026-03-20T00:00:00+08:00`），按用户输入原值透传
 
 **输出规范**
 按时间排列展示会议列表，标注状态（未开始/进行中/已结束）
@@ -194,10 +221,15 @@ metadata:
 用户要求查看录制、转写内容、搜索关键词或获取智能纪要
 
 **处理流程**
-1. 获取录制信息（调用 `get_records_list`）：
-   - 有 meeting_id → 直接查询
-   - 有会议号 → `get_meeting_by_code` → `get_records_list`
-   - 按时间查 → `get_records_list`（须传 start_time/end_time）
+1. 获取录制信息：
+   - **参数判断逻辑**：
+     - 当提供的参数**只有时间**（如start_time/end_time）：**列表优先**
+       - 调用 `get_records_list`
+     - 有其他参数（关键词q、搜索字段q_fields、会议ID、会议号、文件类型等）：**搜索优先**
+       - 调用 `search_records` 进行精确过滤
+   - 特殊情况：
+     - 有 meeting_id → 直接调用 `get_records_list`
+     - 有会议号 → `get_meeting_by_code` → `get_records_list`
 2. 根据需求选择后续操作：
    - 下载录制 → `get_record_addresses`
    - 转写全文 → `get_transcripts_paragraphs` 获取段落 ID → `get_transcripts_details` 获取文本
@@ -208,6 +240,8 @@ metadata:
 - 获取会议内容时的推荐优先级：`get_smart_minutes` > `get_transcripts_details` > `get_record_addresses`
 - `get_records_list` 未传 meeting_id/meeting_code 时，`start_time` 和 `end_time` 必须同时传入
 - `get_records_list` 按时间查询：范围不超过 31 天，起始不早于 1 年前
+- `search_records` 支持按关键词(q)、搜索字段(q_fields)、会议ID/会议号、日期窗口、文件类型等过滤，数据按分页返回
+- `search_records` 的 `from`/`to` 参数使用 ISO 8601 格式（如 `2026-03-20T00:00:00+08:00`），按用户输入原值透传
 - `search_transcripts` 中文关键词需 urlencode
 
 **输出规范**
@@ -261,22 +295,159 @@ Agent 在执行腾讯会议相关任务过程中遇到以下任何情况时，**
 
 ---
 
+### 场景9：通讯录解析用户（仅服务于邀请/呼叫，非通用搜索）
+
+**触发条件（强约束）**
+用户已表达明确的「会议邀请 / 添加受邀人 / 会中呼叫入会」意图，**且**仅提供姓名/手机号/邮箱（未提供 open_id），需要将其解析为 open_id 以便立即用于会议动作。
+
+> ⛔ **调用前必过自检清单（任一为「否」即禁止调用 `contact_*` 工具）**：
+> 1. 当前对话是否已锁定一个具体的会议动作（邀请 / 添加受邀人 / 呼叫入会）？
+> 2. 拿到 open_id 后，是否会**立即**喂给 `schedule_meeting` / `update_meeting` / `meeting_invitees_*` / `meeting_control_call` 的入参？
+> 3. 用户是否只是想"查人/看某人信息/搜一下是谁"？（若是 → **立即停止**，回复"查询通讯录人员信息不在本服务范围内，如需邀请或呼叫该成员入会我可以帮您操作"）
+> 4. 本轮的邀请/呼叫意图，是否来自**用户当前这句话本身**，而非"上一轮刚做过邀请"的惯性延续？（若是惯性 → 判定为纯查询，禁止调用）
+>
+> 📌 **反面触发词**：当用户指令出现"搜索 / 查找 / 查一下 / 看看 / 是谁 / 什么部门 / 什么职位 / 联系方式"等词，**且不伴随**邀请或呼叫动作时，一律判定为纯查询场景，禁止调用任何 `contact_*` 工具。
+
+**处理流程**
+1. 按用户提供的信息选择工具：
+   - 仅有**姓名**（可附职位/部门）→ `contact_search`（必填 `username`，可选 `job_title` / `department_name` 缩小范围）
+   - 有**手机号**（1~50 个）→ `contact_lookup_by_phone`
+   - 有**邮箱**（1~50 个）→ `contact_lookup_by_email`
+2. 拿到 `open_id` 后，再用于后续工具（`schedule_meeting` / `update_meeting` / `meeting_invitees_*` / `meeting_control_*`）
+
+**注意事项**
+- **`contact_*` 工具调用场景白名单（强约束）**：`contact_*` 工具 **仅可用于以下两类场景**，用于将姓名解析为 `open_id`：
+  1. **会议邀请**：`schedule_meeting` / `update_meeting` / `meeting_invitees_add` / `meeting_invitees_replace` 的受邀人入参解析
+  2. **呼叫成员入会**：`meeting_control_call` 的 `users` 入参解析
+  
+- **严禁在其他场景下调用 `contact_*` 工具**，包括但不限于：仅为查看某人部门/职位/联系方式、好奇某人信息、为通用人员搜索目的、为踢人提供 open_id（应用 `get_meeting_participants`，详见场景11），**不得将通讯录工具作为通用人员信息查询接口使用**。
+- **`username` 为必填（强约束）**：`contact_search` 的 `username` 参数为**必填**，缺失时工具会直接报错。**严禁模型自行猜测、编造或截取一个名字调用工具**；必须先与用户确认要查找的用户名后再执行。
+- **结果较多时建议追加过滤**：当仅按 `username` 查询返回的成员较多（如同名情况）时，**应建议用户补充 `job_title` 或 `department_name`** 进一步过滤后再次调用 `contact_search`，提升匹配精准度，减少候选项；不得在用户未确认的情况下自行选择某一条。
+- **唯一命中的返回特性**：当 `contact_search` 搜索结果**只有一条**时，工具仅返回该成员的 `open_id` 字段，**不会返回 `user_name` / `job_title` / `department` 等其他成员信息**。此时模型可直接将该 `open_id` 用于后续工具（如 `meeting_invitees_add` / `meeting_control_call`），**无需也无法**基于该响应向用户展示部门/职位等字段；如确需展示成员名称用于二次确认，应使用用户原始口径中的姓名，**严禁伪造**职位/部门信息。
+- **多结果必须由用户确认（强约束）**：当 `contact_search` 返回**多条候选结果**（典型如同名/同部门成员）时，**严禁**模型基于职位、部门、入职时间、匹配度等任何维度**自行选择**某一条继续后续操作（如 `meeting_invitees_add` / `meeting_control_call` / `meeting_control_kick` 等）。必须将候选项的关键信息以**清晰列表**形式展示给用户（仅展示昵称 + 职位 / 部门），并明确询问"请确认要选择哪一项"，待用户**明确指定**后再继续执行。**即便其中某条结果看起来"明显更匹配"，也必须等待用户确认，不得跳过该步骤**。
+- **隐私展示白名单（强约束）**：通讯录返回的数据可能包含工号、手机号、邮箱等敏感字段。**向用户展示时仅允许出现「姓名（昵称）/ 部门 / 职位」三类字段**，**严禁擅自展示工号、手机号、邮箱、`open_id`、`userid`、`ms_open_id` 等任何其他敏感字段**，即便用户的初始输入中包含某项敏感字段也不得在搜索响应中回显原文（如需回显须按 `references/privacy_policy.md` 脱敏）。
+- 手机号、邮箱属于强敏感信息，调用前**禁止在对话中复述明文**，必要时按 `references/privacy_policy.md` 脱敏展示
+- 单次最多 50 个手机号/邮箱，超限时分批查询，**严禁自行截断**
+- 查询不到用户时，可能是跨企业、用户未加入通讯录、企业关闭了通讯录搜索权限等原因，原样告知用户，禁止猜测
+
+**输出规范**
+- 展示命中成员时**仅允许**「昵称 / 职位 / 部门」三个字段，禁止展示工号、手机号、邮箱、open_id 等敏感字段
+- `open_id` 作为内部参数使用，向用户展示时优先昵称
+- 唯一命中时由于工具仅返回 `open_id`，应直接进入后续操作流程（按需向用户用其原始口径中的姓名做二次确认），**严禁伪造部门/职位信息**
+
+---
+
+### 场景10：管理会议受邀人
+
+**触发条件**
+用户要求查看、添加、移除、替换已有会议的受邀成员
+
+**处理流程**
+1. 若用户提供会议号，先调用 `get_meeting_by_code` 获取 meeting_id
+2. 调用 `get_meeting_invitees` 查询当前受邀人列表
+3. 若用户仅提供姓名/手机号/邮箱，按场景9获取 open_id
+4. 根据需求选择工具：
+   - **添加** → `meeting_invitees_add`（增量添加，不影响已有）
+   - **移除** → `meeting_invitees_remove`（按 open_id 精确移除）
+   - **整体替换** → `meeting_invitees_replace`（用新列表完全覆盖；传空数组表示**清空所有受邀人**）
+5. 向用户展示变更摘要（**新增 / 移除 / 替换前 → 替换后**，均用昵称展示），获得明确同意后再执行
+
+**注意事项**
+- 仅**会议主持人**可操作受邀人变更，非主持人会返回权限错误
+- `remove` / `replace` 属于不可逆操作，二次确认是强制要求（见核心规范"敏感操作"）
+- `replace` 传空数组将**清空全部受邀人**，必须向用户强调影响并获得明确同意
+- 单次最多 100 个 open_id，超限时分批 `add`，**严禁自行截断**
+- 若用户希望"用 X 替换 Y"这类局部替换，**推荐组合使用** `remove` + `add` 两步操作，避免误用 `replace` 清空其他成员
+
+**输出规范（强约束 - 受邀人变更专用回复模板）**
+
+执行 `meeting_invitees_add` / `meeting_invitees_remove` / `meeting_invitees_replace` 成功后，回复**必须**严格按以下模板组织字段，且**仅展示这些字段**：
+
+- **会议主题**
+- **会议时间**（开始时间 ~ 结束时间，含时区）
+- **会议号**（`meeting_code`，**严禁**展示 `meeting_id`）
+- **入会链接**（`join_url`）
+- **已邀请成员**（操作完成后**当前完整**的受邀成员列表）
+
+附带 `X-Tc-Trace` / `rpcUuid` 追踪信息。
+
+「已邀请成员」展示规则（严格遵守）：
+1. **必须展示通讯录中的姓名**（如 `张三`），**严禁**直接展示 `open_id` / `userid` / `ms_open_id` / 花名 / 邮箱前缀等任何内部标识
+2. 姓名来源**仅限以下两种**，按优先级回退：
+   - 优先使用 `get_meeting_invitees` 响应中的 `user_name` 字段（变更操作后**应再次调用** `get_meeting_invitees` 获取最新完整列表，从中读取 `user_name`）
+   - 次选使用本轮对话中用户原始口径里的姓名（如用户输入"加上张三"，则该 `open_id` 对应"张三"）
+   - **严禁**调用 `contact_search` 反查 `open_id` 取姓名（该工具仅支持姓名→open_id 正查，不支持反查）
+3. 若以上两种来源均无法获得姓名，标注为 `未知成员`，**禁止回退到打印 `open_id`**
+4. 当且仅当用户**明确**要求"展示 ID / 原始字段"时，才可附带展示 `open_id`
+5. 会议主题、会议号、入会链接等基础字段若变更接口响应未直接返回，**应通过 `get_meeting --meeting-id` 补齐**，不得遗漏字段或用 `-` / `N/A` 占位
+
+---
+
+### 场景11：会中控制（呼叫 / 踢人）
+
+**触发条件**
+用户要求在进行中的会议中：呼叫某成员加入、踢出某成员
+
+**处理流程（呼叫）**
+1. 确认会议正在进行（用户口径或先调 `get_meeting` 校验状态）
+2. 若用户仅提供姓名/手机号/邮箱，按场景9获取 open_id
+3. 向用户展示**被呼叫成员名单**（昵称），获得明确同意
+4. 调用 `meeting_control_call`（`users` 最多 20 个 open_id）
+
+**处理流程（踢人）**
+1. 确认会议正在进行
+2. **必须先调用 `get_meeting_participants`** 查询当前参会成员，从其返回结果中定位待踢成员；**严禁使用 `contact_search` / `contact_lookup_by_phone` / `contact_lookup_by_email` 的返回值作为踢人入参**
+3. **【字段路由表 — 强制，按 `get_meeting_participants` 返回的 `instanceid` 判定，禁止凭印象分类】**
+
+   | `instanceid` | 入参字段 | 使用的 id 字段 |
+      |---|---|---|
+   | `PSTN`（电话入会） | `pstn_users` | **`ms_open_id`** |
+   | `SIP`（SIP 设备） | `sip_users` | **`ms_open_id`** |
+   | 其他（`Mac` / `Windows` / `iOS` / `Android` / `Web` 等） | `users` | **`open_id`** |
+
+   **硬规则（必须遵守，跨多轮会话同样适用）**：
+    - ⛔ 凡 `instanceid ∈ {PSTN, SIP}` 的成员，**严禁放入 `users`**；必须走 `pstn_users` / `sip_users` 并使用 `ms_open_id`。
+    - ⛔ 凡某成员 **`open_id` 为空字符串**（PSTN/SIP 入会成员的典型特征），**必属** PSTN/SIP，**严禁放入 `users`**，必须按 `instanceid` 走对应字段。
+    - ⛔ **禁止默认把所有人塞进 `users`**：每个待踢成员都必须逐一查 `instanceid` 后再分桶，尤其在多轮会话上下文较长时，**不得凭记忆或惯性归类**。
+4. **数据清洗（建索引/分桶前必做）**：
+    - **只认在会成员**：`get_meeting_participants` 会返回带 `left_time`（非 null）的历史离会记录，**必须过滤掉 `left_time != null` 的条目**，避免误匹配/误踢已离会成员。
+    - **跳过空 id**：建立 id→成员 索引时，`open_id` / `ms_open_id` 为空字符串的键一律跳过，避免空串互相覆盖。
+    - **去重**：同一成员可能出现多条记录，按 id 去重。
+5. **`users` / `sip_users` / `pstn_users` 至少一个非空，三者总数 ≤ 20**
+6. 询问用户 `allow_rejoin`（是否允许被踢成员重新加入，默认 `true`=允许）
+7. 向用户**完整展示**被踢名单 + `allow_rejoin` 取值，获得明确同意后调用 `meeting_control_kick`
+
+**注意事项**
+- 踢人是会中破坏性操作，二次确认是强制要求（见核心规范"敏感操作"）
+- **不允许踢自己**；非主持人 / 联席主持人无权限
+- 已离开的成员、被叫方占线/拒接等场景，按 `references/error_dictionary.md` 指引向用户告知
+- 单次最多 20 个，超限分批，**严禁自行截断**
+- 若 `get_meeting_participants` 中查不到用户口径所指的成员，应原样告知用户"该成员当前不在会议中"，**严禁回退到 `contact_search` 反查 open_id 后强行踢人**
+
+**输出规范**
+- 呼叫：展示成功呼叫的成员清单（昵称）+ 失败成员及原因 + 追踪信息
+- 踢人：展示成功踢出的成员清单（昵称）+ `allow_rejoin` 结果 + 失败成员及原因 + 追踪信息
+
+---
+
 ## 工具索引
 
 | 工具 | 说明 | 所属场景 |
 |------|------|---------|
 | `convert_timestamp` | 时间转换，获取当前/相对时间，UTC 时间戳转换 | 场景1（前置）、核心规范-时间处理 |
-| `schedule_meeting` | 创建会议，支持普通/周期性会议 | 场景1 |
-| `update_meeting` | 修改会议信息 | 场景2 |
+| `schedule_meeting` | 创建会议，支持普通/周期性会议，可选 `invitees` 一并指定受邀人 | 场景1 |
+| `update_meeting` | 修改会议信息，可选 `invitees` + `invitees_operate_type` 同步增删替换受邀人 | 场景2、场景10 |
 | `cancel_meeting` | 取消会议，支持子会议/整场周期性会议 | 场景3 |
 | `get_meeting` | 通过 meeting_id 查询会议详情 | 场景2/3/4 |
 | `get_meeting_by_code` | 通过会议号转换为 meeting_id | 通用规则-Code转换 |
 | `get_meeting_participants` | 获取参会成员明细 | 场景4 |
-| `get_meeting_invitees` | 获取受邀成员列表 | 场景4 |
+| `get_meeting_invitees` | 获取受邀成员列表 | 场景4、场景10（变更前展示） |
 | `get_waiting_room` | 查询等候室成员 | 场景4 |
 | `get_user_meetings` | 查询未开始/进行中的会议列表 | 场景5 |
 | `get_user_ended_meetings` | 查询已结束的历史会议列表 | 场景5 |
+| `search_meetings` | 搜索会议列表，支持关键词、搜索字段、会议号、时间窗口等过滤 | 场景5 |
 | `get_records_list` | 查询录制文件列表 | 场景6 |
+| `search_records` | 搜索录制文件，支持关键词、搜索字段、时间窗口、会议、文件类型等过滤 | 场景6 |
 | `get_record_addresses` | 获取录制下载地址 | 场景6 |
 | `get_transcripts_paragraphs` | 获取转写段落 ID 列表 | 场景6 |
 | `get_transcripts_details` | 通过 pid 获取转写文本 | 场景6 |
@@ -284,6 +455,14 @@ Agent 在执行腾讯会议相关任务过程中遇到以下任何情况时，**
 | `get_smart_minutes` | 获取 AI 智能纪要 | 场景6 |
 | `apply_record_permission_prepare` | 录制权限申请-预览，展示申请的会议标题/所有者/申请人等信息供用户确认 | 场景8 |
 | `apply_record_permission_commit` | 录制权限申请-提交，用户确认后正式发起申请，返回审批链接 | 场景8 |
+| `contact_search` | 按姓名/职位/部门搜索企业通讯录成员（仅限会议邀请、呼叫入会场景），返回 open_id | 场景9 |
+| `contact_lookup_by_phone` | 按手机号批量查找企业用户（仅限会议邀请、呼叫入会场景）（最多 50），返回 open_id | 场景9 |
+| `contact_lookup_by_email` | 按邮箱批量查找企业用户（仅限会议邀请、呼叫入会场景）（最多 50），返回 open_id | 场景9 |
+| `meeting_invitees_add` | 向已创建会议增量添加受邀人（最多 100，仅主持人可操作） | 场景10 |
+| `meeting_invitees_remove` | 从会议中移除指定受邀人（仅主持人可操作） | 场景10 |
+| `meeting_invitees_replace` | 用新列表整体替换会议受邀人（传空数组=清空，仅主持人可操作） | 场景10 |
+| `meeting_control_call` | 会中批量呼叫成员入会（最多 20） | 场景11 |
+| `meeting_control_kick` | 会中踢出成员，支持普通/SIP/PSTN，可选 `allow_rejoin` | 场景11 |
 | `submit_feedback` | Agent 意见箱，主动上报工具缺失/错误/能力不足/结果异常/建议（强制触发场景） | 场景7 |
 | `check_skill_version` | 检查技能版本更新 | 核心规范-版本管理 |
 | `get_skill_update_preference` | 查询本地更新偏好与 snooze 决策（是否需要弹出更新提示） | 核心规范-版本管理 |

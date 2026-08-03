@@ -1,5 +1,5 @@
 ## Description: <br>
-API Gateway is a local Node.js API proxy that helps agents make external API calls with retry, metadata-only caching, rate-limit tracking, circuit breaking, fallback providers, and API key management. <br>
+api-gateway is a local smart proxy for external API calls with retry, caching, rate limiting, fallback providers, and API key management. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to route API calls through a reusable gateway with retries, caching, circuit breaking, fallback providers, and API key handling. It is intended for workflows that need controlled outbound provider calls and local visibility into request, cache, rate-limit, and key state. <br>
+Developers and agent operators use this skill to route outbound HTTPS API calls through a local gateway that centralizes retries, rate-limit handling, caching, circuit breaking, fallback providers, and API key handling. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Environment-sourced PROVIDER_API_KEY credentials can be attached to any supplied endpoint despite the documented provider allowlist boundary. <br>
-Mitigation: Avoid exposing provider API key environment variables to this skill until environment-sourced keys enforce the same allowlist and HTTPS-only checks; use dry-run and narrow disk-key allowlists for sensitive providers. <br>
-Risk: API keys saved through the skill are persisted as plaintext in keys.json, even though file permissions are set to 0600 where supported. <br>
-Mitigation: Use least-privileged keys, limit workspace access, remove stored keys when no longer needed, and prefer an external secrets manager for production use. <br>
-Risk: Outbound requests, cache entries, and request logs may expose sensitive workflow context if arbitrary endpoints or regulated data are used. <br>
-Mitigation: Keep provider allowlists narrow, avoid routing secrets or regulated data through arbitrary endpoints, keep full-body caching disabled unless required, and clear cache and logs after sensitive work. <br>
+Risk: Local key and cache files can persist sensitive data, including plaintext API keys and cache keys derived from endpoint paths and request bodies; full-body caching can also persist complete provider responses. <br>
+Mitigation: Prefer provider API keys from environment variables or a secrets manager, avoid routing regulated or proprietary prompts through the gateway, avoid full-body caching for sensitive providers, and clear cache and log files after sensitive work. <br>
+Risk: Outbound calls transmit prompts, request bodies, headers, and responses to third-party API providers. <br>
+Mitigation: Use allowlisted provider domains, run dry runs before important calls, and only send data that is approved for the target provider. <br>
+Risk: The ClawHub security verdict is suspicious because the default cache behavior may retain more sensitive request metadata than the documentation suggests. <br>
+Mitigation: Treat local cache files as sensitive, review cache contents and retention before deployment, and disable or regularly clear caching where request bodies or endpoint paths may contain secrets. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/jlacroix82/skills/api-proxy) <br>
-- [Artifact README](artifact/README.md) <br>
-- [Skill source instructions](artifact/SKILL.md) <br>
+- [README.md](artifact/README.md) <br>
+- [SKILL.md](artifact/SKILL.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with bash examples; CLI calls return text or JSON-like API responses.] <br>
+**Output Type(s):** [Shell commands, API Calls, JSON, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with shell commands and JSON-like API responses or status output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses outbound HTTP(S), local state files, metadata-only response caching by default, and opt-in full-body caching per provider.] <br>
+**Other Properties Related to Output:** [Writes local API key, cache, request log, rate-limit, circuit-breaker, and fallback state files under memory/api-gateway/ unless configured otherwise.] <br>
 
 ## Skill Version(s): <br>
-1.1.3 (source: server release evidence and artifact metadata) <br>
+1.1.6 (source: server release metadata and artifact/clawhub.yaml) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

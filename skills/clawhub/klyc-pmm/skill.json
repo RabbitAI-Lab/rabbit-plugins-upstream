@@ -1,29 +1,53 @@
 {
-  "name": "klyc-pmm",
-  "version": "7.0.3",
-  "description": "KLYC-PMM v7.0.3。第0步写日记→蒸馏→压缩→加密→上传。按文件名自动分类容灾/日记/配置域。默认私密。",
-  "author": "昆仑瑶池",
-  "category": "知识管理",
-  "tags": [
-    "memory",
-    "knowledge-management",
-    "backup",
-    "indexing",
-    "ai-agent",
-    "identity-verification",
-    "semantic-search"
-  ],
-  "config": {
-    "api_endpoint": "",
-    "identity_check": true
-  },
-  "keywords": [
-    "KLYC-PMM",
-    "昆仑令",
-    "AI记忆恢复",
-    "memory recovery",
-    "talisman",
-    "klyc-pmm-recover",
-    "ai.syln.cn"
-  ]
+    "name": "klyc-pmm",
+    "version": "9.1.9",
+    "description": "KLYC-PMM v9.1.9。昆仑令一行恢复 · 五层洋葱加密 · 14层蒸馏管道 · 三层检索路由 · 三项服务全自动开通 · X402微信支付。HTTPS API通信，依赖curl+jq。含12错误码、12FAQ、5进阶场景、幂等自检、curl退出码诊断、昆仑令格式校验、oneclick一键安装。",
+    "author": "昆仑瑶池",
+    "category": "知识管理",
+    "tags": [
+        "memory",
+        "knowledge-management",
+        "backup",
+        "indexing",
+        "ai-agent",
+        "identity-verification",
+        "semantic-search",
+        "wechat-pay",
+        "x402"
+    ],
+    "config": {
+        "api_endpoint": "https://kunlunyaochi.com/api/klyc-pmm-pay/resource.php",
+        "identity_check": true,
+        "payment_required": true
+    },
+    "keywords": [
+        "KLYC-PMM",
+        "昆仑令",
+        "AI记忆恢复",
+        "memory recovery",
+        "talisman",
+        "klyc-pmm-recover",
+        "kunlunyaochi.com"
+    ],
+    "pricing": {
+        "type": "paid",
+        "huhunfu": {
+            "amount": 500,
+            "currency": "CNY",
+            "unit": "month",
+            "label": "守护记忆(护魂符)"
+        },
+        "fenshenfu": {
+            "amount": 800,
+            "currency": "CNY",
+            "unit": "month",
+            "label": "记忆分身(分身符)"
+        }
+    },
+    "x402": {
+        "protocol": "SKILLHUB-SHA256-RSA2048",
+        "developer_id": "sh-dHKWC9Jj",
+        "pub_key_id": "PUB_KEY_5E960C75F668C0C1D71D6E00F93172F3",
+        "preorder_url": "https://payapp.weixin.qq.com/palmpayminiapp/clawagentpay/preorder"
+    }
 }

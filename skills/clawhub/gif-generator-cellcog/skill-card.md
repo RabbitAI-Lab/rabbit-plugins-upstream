@@ -1,44 +1,42 @@
 ## Description: <br>
-Gif Generator Cellcog helps agents request CellCog-generated GIFs such as reaction GIFs, product loops, cinemagraphs, and social media animations optimized for platforms like Discord, Twitter/X, Slack, and WhatsApp. <br>
+AI GIF generator powered by CellCog. Reaction GIFs, product loops, cinemagraphs, social media animations. Seamless looping, platform-optimized for Discord, Twitter, Slack, WhatsApp. Created from scratch, not converted. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
 ## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+[cellcog](https://clawhub.ai/user/cellcog) <br>
 
 ### License/Terms of Use: <br>
 MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to direct CellCog to create new GIFs for reactions, product showcases, cinemagraphs, social media content, animated art, and UI demos. The skill guides prompt structure, platform targeting, output constraints, and CellCog SDK usage. <br>
+Developers, creators, and external users use this skill to request CellCog-generated GIFs for reactions, product showcases, cinemagraphs, social posts, animated art, and UI demos. The skill helps specify platform, loop, duration, aspect ratio, and optimization requirements. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompts, requested media, or local context may be sent to CellCog as an external paid AI service. <br>
-Mitigation: Review requests before submission and avoid including sensitive files, private content, or confidential prompts unless they are intended for CellCog. <br>
-Risk: The skill requires a CellCog API key. <br>
-Mitigation: Store CELLCOG_API_KEY only in trusted environments and avoid exposing it in prompts, logs, examples, or shared configuration. <br>
-Risk: Fire-and-forget mode can continue work asynchronously. <br>
-Mitigation: Review the notification session key and task label before use, then monitor returned status and outputs before relying on generated GIFs. <br>
+Risk: Prompts and uploaded source material may be sent to CellCog as an external media-generation provider. <br>
+Mitigation: Confirm the user or organization trusts CellCog and avoid submitting confidential, regulated, or sensitive material unless approved for that service. <br>
+Risk: The skill requires CELLCOG_API_KEY for CellCog access. <br>
+Mitigation: Store the API key in the agent environment or an approved secret manager and avoid pasting it into prompts, logs, or generated files. <br>
 
 
 ## Reference(s): <br>
-- [CellCog homepage](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/gif-generator-cellcog) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/nitishgargiitd) <br>
+- [GIF Generator on ClawHub](https://clawhub.ai/cellcog/skills/gif-generator-cellcog) <br>
+- [CellCog Publisher Profile](https://clawhub.ai/user/cellcog) <br>
+- [CellCog Homepage](https://cellcog.ai) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, API Calls, Files] <br>
-**Output Format:** [Markdown guidance with Python code snippets and generated GIF or MP4 outputs from CellCog.] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with Python examples, setup commands, and request specifications for GIF generation.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; prompts and requested media are handled by the external CellCog service.] <br>
+**Other Properties Related to Output:** [Guides requests that produce GIF primary outputs and MP4 source outputs through CellCog; platform size, loop type, duration, aspect ratio, frame rate, and color-depth constraints can be specified.] <br>
 
 ## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+1.0.8 (source: release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

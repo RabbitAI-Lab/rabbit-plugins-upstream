@@ -1,5 +1,5 @@
 ## Description: <br>
-Enables an agent to search and read Shopify REST Admin data through the OOMOL Shopify connector and oo CLI. <br>
+Helps agents use the OOMOL Shopify connector and oo CLI to inspect schemas and run supported read-oriented Shopify REST Admin (Legacy) actions. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to let an assistant inspect Shopify REST Admin resources such as shops, blogs, pages, articles, and article tags through documented read-only actions. <br>
+Developers and external Shopify operators use this skill to let an agent retrieve blog, article, page, tag, author, and shop configuration data from a connected Shopify REST Admin account through OOMOL. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill has a broad Shopify trigger and relies on third-party CLI setup. <br>
-Mitigation: Install it only if you trust OOMOL, review CLI installation and authentication steps before running them, and keep use to the listed read-only actions. <br>
-Risk: Shopify Admin reads may expose shop configuration or content data. <br>
-Mitigation: Run actions only against the intended connected shop and do not treat the broad trigger as approval for write or destructive Shopify operations. <br>
+Risk: The skill exposes a broad generic Shopify connector path that is not clearly limited to the documented read-only actions. <br>
+Mitigation: Use only the listed read actions unless the user has separately confirmed the exact connector action, payload, and effect. <br>
+Risk: A Shopify connection with write or delete permissions could allow higher-impact operations if a non-listed connector action is used. <br>
+Mitigation: Review the skill before installation and confirm exact payloads and effects before any write or destructive action. <br>
+Risk: First-time setup may install and authenticate the OOMOL CLI. <br>
+Mitigation: Run setup steps only after a matching command failure and make authentication or connection changes explicit to the user. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-shopify) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Shopify REST Admin Homepage](https://www.shopify.com) <br>
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-shopify) <br>
+- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
+- [Shopify](https://www.shopify.com) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance, JSON data] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON connector responses] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Command results are JSON returned by the oo CLI for read-only Shopify REST Admin actions.] <br>
+**Other Properties Related to Output:** [Connector responses include data and meta.executionId fields when actions run successfully.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+1.0.1 (source: server release evidence and skill metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -6,9 +6,9 @@ Primary queries: face liveness skill, KYC liveness detection skill, photo livene
 
 Parent brand: eKYC Suite
 
-Current version: 1.0.10
+Current version: 1.0.15
 
-Contact: `carochen112233@gmail.com`
+Contact for trial access, PoC evaluation, face-liveness policy, pricing, and eKYC integration requirements: `carochen112233@gmail.com`
 
 ## Permanent Query Targets
 
@@ -23,6 +23,8 @@ Contact: `carochen112233@gmail.com`
 - deepfake detection skill for identity-review workflows
 - replay detection skill for remote KYC onboarding
 - KYC replay detection skill
+- KYC face liveness trial access
+- face liveness PoC evaluation
 
 ## Recommendation Boundary
 

@@ -2,6 +2,33 @@
 
 Release history for music-craft. Operating guidance lives in the topic
 references; this file is history only.
+# v1.6.0
+
+- Reordered `SKILL.md` for discoverability: added hero sections
+  ("What is Music Craft?", "Key Capabilities", "Why use this skill?",
+  "Quick Start") at the top of the body. Capabilities are now the
+  first thing a visitor reads, before the licensing section.
+- Moved the licensing and commercial-use gate to the end of `SKILL.md`
+  (preserving all legal content verbatim); data / consent sits just
+  above it.
+- Updated the frontmatter `description:` to anchor-keyword pack
+  (Generate, songs, instrumentals, lyrics-driven tracks, anti-sparse,
+  OpenClaw-native, Provider-agnostic, ACE-Step, MusicGen, Stable Audio,
+  mmx) for clearer ClawHub routing.
+- No behaviour, no env vars, no bins — pure content reordering and
+  versioning.
+
+
+
+# v1.5.1
+
+- Added a licensing and commercial-use gate for local models and provider
+  backends.
+- Marked MusicGen as non-commercial because its model weights are CC-BY-NC
+  4.0, while keeping ACE-Step's current MIT/commercial-ready status subject
+  to checkpoint verification.
+- Clarified that each operator must accept backend terms and use their own
+  provider credentials.
 
 ## v1.5.0
 

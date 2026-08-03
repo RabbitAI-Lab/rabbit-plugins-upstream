@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to review Rust changes for ownership, error handling, concurrency, unsafe code, dependency risk, performance, idioms, and test quality before merge or release. <br>
+Developers and engineers use Rust Review to audit Rust code changes before merge, with focused checks for ownership, error handling, concurrency, unsafe blocks, dependency security, performance, tests, and idiomatic Rust patterns. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can suggest local Cargo analysis commands, including commands that may install tools or perform dependency and network checks. <br>
-Mitigation: Review proposed commands before running them, especially installation, audit, outdated, deny, or other dependency-check commands. <br>
-Risk: Broad Rust-related triggers may activate the skill in contexts where its opinionated audit workflow is not needed. <br>
-Mitigation: Use it for Rust code-review tasks and disregard or disable it for unrelated review work. <br>
+Risk: Broad Rust-related triggers may activate the skill during ordinary Rust discussions. <br>
+Mitigation: Use the skill when structured Rust audit guidance is desired and review whether its checklist is relevant to the current task. <br>
+Risk: The skill may suggest cargo commands, including package-installing tools such as cargo-mutants. <br>
+Mitigation: Review suggested commands before execution and apply local project policy for installing or running Cargo tooling. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-pensive-rust-review) <br>
-- [Project Homepage from ClawHub Metadata](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-rust-review) <br>
+- [Skill homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown review report with optional inline shell commands] <br>
+**Output Type(s):** [text, markdown, shell commands, guidance] <br>
+**Output Format:** [Markdown with structured review sections and inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes categorized findings, recommendations, evidence logging, and an approve / approve with actions / block recommendation.] <br>
+**Other Properties Related to Output:** [Includes review recommendations such as Approve, Approve with actions, or Block.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+1.9.17 (source: release evidence; artifact frontmatter says 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,44 +1,47 @@
 ## Description: <br>
-Real-time operations dashboard for OpenClaw that helps install and run the dashboard while monitoring sessions, costs, cron jobs, gateway health, watchdog uptime, and dashboard API or UI changes. <br>
+OpenClaw operations dashboard for sessions, usage and cost, cron runs, gateway health, DGX Spark work, Local API Hub, and opt-in meeting Copilot. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
 ## Publisher: <br>
-[JonathanJing](https://clawhub.ai/user/JonathanJing) <br>
+[jonathanjing](https://clawhub.ai/user/jonathanjing) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and OpenClaw operators use this skill to install, run, and maintain a local administrative dashboard for monitoring sessions, costs, cron jobs, watchdog status, provider health, and gateway operations. <br>
+Developers and operators use this skill to install, operate, audit, and extend a local OpenClaw dashboard for sessions, usage analytics, cron visibility, gateway health, Spark work, Local API Hub status, and opt-in meeting Copilot. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The dashboard is an OpenClaw administrative control plane that can execute agent tasks and modify, reset, or update the workspace when sensitive features are enabled. <br>
-Mitigation: Use a strong OPENCLAW_AUTH_TOKEN, keep the service bound to localhost unless a tunnel or proxy is tightly controlled, and enable mutating, config, provider-audit, key-loading, and restart flags only when needed. <br>
-Risk: Dashboard credentials and task-spawning context can enter agent context or logs. <br>
-Mitigation: Treat task spawning as sensitive, avoid placing secrets in task text, and review agent-visible payloads before using administrative actions. <br>
+Risk: Sensitive local OpenClaw, session, workspace, or admin data can be exposed if the dashboard is started without authentication or exposed beyond loopback. <br>
+Mitigation: Set OPENCLAW_AUTH_TOKEN before starting the dashboard, keep the bind address on loopback by default, and require auth and TLS before any reverse proxy exposure. <br>
+Risk: Config inspection can reveal operational details if enabled unnecessarily. <br>
+Mitigation: Leave OPENCLAW_ENABLE_CONFIG_ENDPOINT disabled unless config review is required, and review redaction behavior before sharing output. <br>
+Risk: Meeting Copilot can process meeting audio through the configured realtime provider. <br>
+Mitigation: Enable OPENCLAW_ENABLE_COPILOT only with participant acceptance, a configured provider key, and authenticated WebSocket access. <br>
+Risk: Compatibility query-token handoff URLs can appear in browser history or upstream access logs. <br>
+Mitigation: Prefer the login form and avoid query-token handoff through untrusted proxies. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/JonathanJing/openclaw-dashboard) <br>
-- [Publisher profile](https://clawhub.ai/user/JonathanJing) <br>
-- [OpenClaw project](https://github.com/openclaw/openclaw) <br>
+- [ClawHub release page](https://clawhub.ai/jonathanjing/skills/openclaw-dashboard) <br>
 - [README](artifact/README.md) <br>
 - [Security model](artifact/SECURITY.md) <br>
+- [Changelog](artifact/CHANGELOG.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline code, shell commands, and configuration examples] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with code, shell-command, and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update dashboard source files, server routes, documentation, and environment configuration for an OpenClaw deployment.] <br>
+**Other Properties Related to Output:** [May include implementation steps, release checks, security review guidance, and dashboard configuration recommendations.] <br>
 
 ## Skill Version(s): <br>
-1.7.3 (source: server release metadata and frontmatter) <br>
+2.0.0 (source: package.json, changelog, server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

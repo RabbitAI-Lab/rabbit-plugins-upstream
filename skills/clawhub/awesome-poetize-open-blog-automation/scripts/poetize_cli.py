@@ -20,6 +20,7 @@ import argparse
 import json
 import os
 import sys
+import urllib.parse
 from pathlib import Path
 from typing import Any
 
@@ -33,6 +34,7 @@ from manage_blog import (
     post_async_update,
     read_json_file as manage_read_json_file,
     resolve_article_id,
+    validate_time_ranges,
 )
 from manage_blog import apply_ops_strategy
 from publish_post import (
@@ -390,6 +392,24 @@ def add_manage_subparsers(parser: argparse.ArgumentParser) -> None:
     p.add_argument("--label-id", type=int, help="Filter by tag ID.")
     p.add_argument("--label-name", help="Filter by tag name (resolved to ID).")
     p.add_argument("--exact-title", help="Filter to a single exact title match.")
+    p.add_argument("--recommend-only", action="store_true",
+                   help="Only articles featured in recommendations.")
+    p.add_argument("--article-search",
+                   help="Full-text search over title + content; wrap in /.../ for case-insensitive regex (e.g. \"/^Vue 3/\").")
+    p.add_argument("--created-between", action="append", metavar="START~END",
+                   help="Filter by create time, format START~END (either side omittable; "
+                        "yyyy-MM-dd or yyyy-MM-dd HH:mm:ss). Repeat to OR-combine multiple ranges. Backend v5.2.0+.")
+    p.add_argument("--updated-between", action="append", metavar="START~END",
+                   help="Filter by last-update time; same format as --created-between. Backend v5.2.0+.")
+    p.add_argument("--published-between", action="append", metavar="START~END",
+                   help="Filter by first-public-publish time (RSS pubDate semantics; drafts never published are excluded); "
+                        "same format as --created-between. Backend v5.2.0+.")
+    p.add_argument("--order", choices=["create-time", "update-time", "publish-time"],
+                   help="Sort field (default: create-time). Backend v5.2.0+ for non-default values.")
+    p.add_argument("--asc", action="store_true",
+                   help="Sort ascending (default: descending). Backend v5.2.0+.")
+    p.add_argument("--orphan-only", action="store_true",
+                   help="Only list broken articles whose category/tag is missing or was deleted (data-repair aid).")
 
     # get-article
     p = sub.add_parser("get-article", help="Get article content by ID, slug, or exact title.")
@@ -421,7 +441,7 @@ def add_manage_subparsers(parser: argparse.ArgumentParser) -> None:
     add_article_target_args(p)
 
     # site-visits
-    p = sub.add_parser("site-visits", help="Get site visit trends.")
+    p = sub.add_parser("site-visits", help="Get site visit trends with bot/human breakdown (daily, summary, ua_type_breakdown, top_uas, referrer_breakdown, region_breakdown).")
     add_global_args(p)
     p.add_argument("--days", type=int, choices=[7, 30], default=7, help="Number of days for trend data (7 or 30, default: 7).")
 
@@ -524,6 +544,57 @@ def add_manage_subparsers(parser: argparse.ArgumentParser) -> None:
     p.add_argument("--dry-run", action="store_true", help="Preview the change without persisting; returns original/updated content for review.")
     p.add_argument("--brief-file", help="JSON brief file for strategy validation.")
     p.add_argument("--stdin-brief", action="store_true", help="Read brief JSON from stdin.")
+
+    # list-sorts
+    p = sub.add_parser("list-sorts", help="List all categories.")
+    add_global_args(p)
+
+    # list-labels
+    p = sub.add_parser("list-labels", help="List all tags, optionally filtered by category.")
+    add_global_args(p)
+    p.add_argument("--sort-id", type=int, help="Filter tags by category ID.")
+
+    # create-sort
+    p = sub.add_parser("create-sort", help="Create a new category.")
+    add_global_args(p)
+    p.add_argument("--name", required=True, help="Category name.")
+    p.add_argument("--description", required=True, help="Category description.")
+    p.add_argument("--sort-type", type=int, choices=[0, 1], default=1, help="0=navbar, 1=normal (default: 1).")
+    p.add_argument("--priority", type=int, default=99, help="Priority (lower=earlier, default: 99).")
+
+    # update-sort
+    p = sub.add_parser("update-sort", help="Update an existing category.")
+    add_global_args(p)
+    p.add_argument("--id", type=int, required=True, help="Category ID.")
+    p.add_argument("--name", help="New category name.")
+    p.add_argument("--description", help="New category description.")
+    p.add_argument("--sort-type", type=int, choices=[0, 1], help="0=navbar, 1=normal.")
+    p.add_argument("--priority", type=int, help="Priority.")
+
+    # delete-sort
+    p = sub.add_parser("delete-sort", help="Delete a category.")
+    add_global_args(p)
+    p.add_argument("--id", type=int, required=True, help="Category ID.")
+
+    # create-label
+    p = sub.add_parser("create-label", help="Create a new tag.")
+    add_global_args(p)
+    p.add_argument("--name", required=True, help="Tag name.")
+    p.add_argument("--description", required=True, help="Tag description.")
+    p.add_argument("--sort-id", type=int, required=True, help="Category ID this tag belongs to.")
+
+    # update-label
+    p = sub.add_parser("update-label", help="Update an existing tag.")
+    add_global_args(p)
+    p.add_argument("--id", type=int, required=True, help="Tag ID.")
+    p.add_argument("--name", help="New tag name.")
+    p.add_argument("--description", help="New tag description.")
+    p.add_argument("--sort-id", type=int, help="Move tag to a different category.")
+
+    # delete-label
+    p = sub.add_parser("delete-label", help="Delete a tag.")
+    add_global_args(p)
+    p.add_argument("--id", type=int, required=True, help="Tag ID.")
 
 
 def format_comment_tree(records: list[dict[str, Any]]) -> str:
@@ -648,7 +719,24 @@ def cmd_manage(args: argparse.Namespace) -> None:
 
     try:
         if mc == "list-articles":
-            response = list_articles(args)
+            response = list_articles(
+                args,
+                search_key=args.search_key,
+                current=args.current,
+                size=args.size,
+                sort_id=args.sort_id,
+                sort_name=args.sort_name,
+                label_id=args.label_id,
+                label_name=args.label_name,
+                orphan_only=args.orphan_only,
+                recommend_only=args.recommend_only,
+                article_search=args.article_search,
+                create_time_ranges=validate_time_ranges(args.created_between, "--created-between"),
+                update_time_ranges=validate_time_ranges(args.updated_between, "--updated-between"),
+                publish_time_ranges=validate_time_ranges(args.published_between, "--published-between"),
+                order=args.order.replace("-", "_") if args.order else None,
+                asc=args.asc,
+            )
             if args.exact_title:
                 records = [
                     item for item in extract_records(response)
@@ -664,8 +752,16 @@ def cmd_manage(args: argparse.Namespace) -> None:
                     if first_id:
                         next_steps.append(f"Fetch article details (content/metadata): python poetize_cli.py manage get-article --article-id {first_id}")
                 next_steps.append("Fetch details of any article: python poetize_cli.py manage get-article --article-id <id>")
+                if args.orphan_only:
+                    if records:
+                        next_steps.append("Repair a broken article: python poetize_cli.py manage update-article --article-id <id> --payload-file payload.json with valid sortId/labelId (see manage list-sorts / list-labels).")
+                        message = f"Found {len(records)} orphan article(s) with missing or deleted category/tag. These are invisible to visitors and normal category/tag navigation."
+                    else:
+                        message = "No orphan articles found. All articles reference a valid category and tag."
+                else:
+                    message = "Articles listed successfully."
                 response["agent_guide"] = {
-                    "message": "Articles listed successfully.",
+                    "message": message,
                     "next_steps": next_steps
                 }
             print(json.dumps(response, ensure_ascii=False, indent=2))
@@ -691,6 +787,13 @@ def cmd_manage(args: argparse.Namespace) -> None:
                     "message": "Article details fetched successfully.",
                     "next_steps": next_steps
                 }
+                # 隐藏文章返回密码供 Agent 查看
+                if isinstance(data, dict) and data.get("viewStatus") is False:
+                    pwd = data.get("password")
+                    if pwd:
+                        response["agent_guide"]["password"] = pwd
+                        response["agent_guide"]["tips"] = data.get("tips", "")
+                        response["agent_guide"]["message"] = f"Article details fetched. This is a HIDDEN article — password: {pwd}"
             print(json.dumps(response, ensure_ascii=False, indent=2))
             return
 
@@ -1180,6 +1283,133 @@ def cmd_manage(args: argparse.Namespace) -> None:
                 }
                 if warning:
                     print(f"⚠ WARNING: {warning}", file=sys.stderr)
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "list-sorts":
+            response = request_json("GET", f"{args.base_url.rstrip('/')}/api/api/categories", args.api_key)
+            if response.get("code") == 200:
+                data = response.get("data", [])
+                next_steps = []
+                if isinstance(data, list) and data:
+                    first_id = data[0].get("id")
+                    if first_id:
+                        next_steps.append(f"View tags in this category: python poetize_cli.py manage list-labels --sort-id {first_id}")
+                next_steps.append("Create a new category: python poetize_cli.py manage create-sort --name \"<name>\" --description \"<desc>\"")
+                response["agent_guide"] = {"message": f"Found {len(data) if isinstance(data, list) else 0} categories.", "next_steps": next_steps}
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "list-labels":
+            response = request_json("GET", f"{args.base_url.rstrip('/')}/api/api/tags", args.api_key)
+            if response.get("code") == 200:
+                data = response.get("data", [])
+                if args.sort_id is not None and isinstance(data, list):
+                    data = [item for item in data if item.get("sortId") == args.sort_id]
+                    response["data"] = data
+                next_steps = []
+                if isinstance(data, list) and data:
+                    first_id = data[0].get("id")
+                    if first_id:
+                        next_steps.append(f"Update this tag: python poetize_cli.py manage update-label --id {first_id} --name \"<new name>\" --description \"<new desc>\"")
+                next_steps.append("Create a new tag: python poetize_cli.py manage create-label --name \"<name>\" --description \"<desc>\" --sort-id <id>")
+                response["agent_guide"] = {"message": f"Found {len(data) if isinstance(data, list) else 0} tags.", "next_steps": next_steps}
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "create-sort":
+            payload = {
+                "sortName": args.name,
+                "sortDescription": args.description,
+                "sortType": args.sort_type,
+                "priority": args.priority,
+            }
+            response = request_json("POST", f"{args.base_url.rstrip('/')}/api/api/sort/create", args.api_key, payload)
+            if response.get("code") == 200:
+                data = response.get("data")
+                sort_id = data.get("id") if isinstance(data, dict) else None
+                next_steps = [
+                    f"Create a tag in this category: python poetize_cli.py manage create-label --name \"<name>\" --description \"<desc>\" --sort-id {sort_id}" if sort_id else "Create a tag: python poetize_cli.py manage create-label --name \"<name>\" --description \"<desc>\" --sort-id <id>",
+                    "Publish an article to this category: python poetize_cli.py publish --markdown-file <file> --sort \"<name>\" --label \"<tag>\" --allow-create-label --draft --wait",
+                ]
+                response["agent_guide"] = {"message": f"Category '{args.name}' created successfully.", "next_steps": next_steps}
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "update-sort":
+            payload: dict[str, Any] = {"id": args.id}
+            if args.name is not None:
+                payload["sortName"] = args.name
+            if args.description is not None:
+                payload["sortDescription"] = args.description
+            if args.sort_type is not None:
+                payload["sortType"] = args.sort_type
+            if args.priority is not None:
+                payload["priority"] = args.priority
+            response = request_json("POST", f"{args.base_url.rstrip('/')}/api/api/sort/update", args.api_key, payload)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": f"Category {args.id} updated successfully. All article caches and prerendered pages have been refreshed.",
+                    "next_steps": [f"Verify: python poetize_cli.py manage list-sorts"],
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "delete-sort":
+            response = request_json("POST", build_url(args.base_url, "/api/api/sort/delete"), 
+                                   args.api_key, {"id": args.id})
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": f"Category {args.id} deleted successfully. Affected article pages have been re-rendered.",
+                    "next_steps": ["List remaining categories: python poetize_cli.py manage list-sorts"],
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "create-label":
+            payload = {
+                "labelName": args.name,
+                "labelDescription": args.description,
+                "sortId": args.sort_id,
+            }
+            response = request_json("POST", f"{args.base_url.rstrip('/')}/api/api/label/create", args.api_key, payload)
+            if response.get("code") == 200:
+                data = response.get("data")
+                label_id = data.get("id") if isinstance(data, dict) else None
+                response["agent_guide"] = {
+                    "message": f"Tag '{args.name}' created successfully.",
+                    "next_steps": [
+                        f"Publish an article with this tag: python poetize_cli.py publish --markdown-file <file> --sort-id {args.sort_id} --label-id {label_id} --draft --wait" if label_id else "Publish an article: python poetize_cli.py publish --markdown-file <file> --draft --wait",
+                    ],
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "update-label":
+            payload = {"id": args.id}
+            if args.name is not None:
+                payload["labelName"] = args.name
+            if args.description is not None:
+                payload["labelDescription"] = args.description
+            if args.sort_id is not None:
+                payload["sortId"] = args.sort_id
+            response = request_json("POST", f"{args.base_url.rstrip('/')}/api/api/label/update", args.api_key, payload)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": f"Tag {args.id} updated successfully. All article caches and prerendered pages have been refreshed.",
+                    "next_steps": ["Verify: python poetize_cli.py manage list-labels"],
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "delete-label":
+            response = request_json("POST", build_url(args.base_url, "/api/api/label/delete"), 
+                                   args.api_key, {"id": args.id})
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": f"Tag {args.id} deleted successfully. Affected article pages have been re-rendered.",
+                    "next_steps": ["List remaining tags: python poetize_cli.py manage list-labels"],
+                }
             print(json.dumps(response, ensure_ascii=False, indent=2))
             return
 

@@ -11,35 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and AI agents use this skill to convert public webpages, uploaded documents, images, and text into compact Markdown, JSON, or prompt-transformed outputs through REST, MCP, ACP, A2A, and OpenAI-compatible interfaces. <br>
+Developers and agents use this skill to convert public URLs, files, images, webpages, or raw text into Markdown, JSON, or prompt-shaped structured output for LLM workflows. It is also used to choose REST, MCP, ACP, A2A, or OpenAI-compatible access paths and to handle paid token activation when required. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: User content is sent to the third-party mdapi.io service for conversion. <br>
-Mitigation: Use only content approved for external processing; avoid secrets, credentials, regulated data, private source code, and internal URLs unless explicitly authorized. <br>
-Risk: Paid-token and autonomous-payment flows can spend funds or expose reusable tokens if handled carelessly. <br>
-Mitigation: Require clear user approval for payment, treat service payment responses as authoritative, and avoid storing paid tokens in shared or persistent tool configuration. <br>
-Risk: Large inputs, inaccessible URLs, invalid tokens, rate limits, or payment failures can produce partial or failed conversions. <br>
-Mitigation: Respect documented size and rate limits, handle HTTP 400/401/402/404/413/429/500 responses explicitly, and retry only when the service guidance supports it. <br>
+Risk: Autonomous crypto payments can be irreversible and the security evidence notes no clear per-payment confirmation or spending cap. <br>
+Mitigation: Require explicit user confirmation and a spending limit before wallet payment, avoid placing tokens or memos in URLs, and use local or trusted QR rendering for payment payloads. <br>
+Risk: Selected content is sent to mdapi.io for conversion. <br>
+Mitigation: Only send content the user is authorized to process, and avoid credentials, regulated data, proprietary material, or internal URLs unless the user has explicitly approved that use. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/mdapiio/skills/mdapi-conversion) <br>
 - [mdapi.io service documentation](https://mdapi.io/) <br>
 - [mdapi.io MCP endpoint](https://mdapi.io/mcp) <br>
-- [mdapi.io health endpoint](https://mdapi.io/health) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown or JSON responses with curl examples, API request shapes, protocol configuration snippets, and optional streaming SSE chunks.] <br>
+**Output Type(s):** [text, markdown, JSON, API calls, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown, JSON, REST or protocol-specific request guidance, and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include converted markdown, prompt_result, resource metadata, token status, rate-limit headers, payment headers, or streaming progress markers.] <br>
+**Other Properties Related to Output:** [May stream long conversions and may include token or payment status metadata.] <br>
 
 ## Skill Version(s): <br>
-0.1.1 (source: server release evidence; artifact frontmatter states 1.0.0) <br>
+0.1.3 (source: ClawHub release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

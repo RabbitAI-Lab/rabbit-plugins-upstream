@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 from pathlib import Path
 
 from .analysis import (
@@ -12,6 +13,11 @@ from .analysis import (
     DEFAULT_SKILL_CONFIG,
     AnalysisRequest,
     analyze,
+)
+from .recognition_labels import (
+    RecognitionLabelStore,
+    changed_board_points,
+    normalize_board_ascii,
 )
 
 
@@ -56,6 +62,22 @@ def parser() -> argparse.ArgumentParser:
     result.add_argument("--result-image", type=Path, help="Write a clean board image with the recommended move marked")
     result.add_argument("--source-result-image", type=Path, help="Write the recommended move overlay on the original source image")
     result.add_argument("--result-size", type=int, default=1200, help="Pixel size for --result-image, default: 1200")
+    result.add_argument(
+        "--board-override-file",
+        type=Path,
+        help=(
+            "Use a caller-supplied board_ascii file instead of the image detector result while "
+            "retaining the source photo for rendering"
+        ),
+    )
+    result.add_argument(
+        "--recognition-label-dir",
+        type=Path,
+        help=(
+            "Store an image/detector/override candidate-label bundle here; only valid with "
+            "--board-override-file"
+        ),
+    )
     result.add_argument("--katago", default="katago", help="Path to katago executable")
     result.add_argument("--model", default=DEFAULT_MODEL, help="KataGo model path")
     result.add_argument("--analysis-config", default=DEFAULT_ANALYSIS_CONFIG, help="KataGo analysis config path")
@@ -65,6 +87,21 @@ def parser() -> argparse.ArgumentParser:
 
 def main(argv: list[str] | None = None) -> int:
     args = parser().parse_args(argv)
+    board_override: list[str] | None = None
+    if args.board_override_file is not None:
+        if args.input == "ascii" or not args.source:
+            raise SystemExit("--board-override-file requires image input")
+        try:
+            board_override = normalize_board_ascii(
+                args.board_override_file.read_text(encoding="utf-8").splitlines(),
+                board_size=args.board_size,
+            )
+        except OSError as exc:
+            raise SystemExit(f"Unable to read board override: {exc}") from exc
+        except ValueError as exc:
+            raise SystemExit(f"Invalid board override: {exc}") from exc
+    elif args.recognition_label_dir is not None:
+        raise SystemExit("--recognition-label-dir requires --board-override-file")
     request = AnalysisRequest(
         source=args.source,
         input_kind=args.input,
@@ -81,10 +118,13 @@ def main(argv: list[str] | None = None) -> int:
         grid_corners=args.grid_corners,
         recognition_overlay=args.overlay,
         source_overlay=args.source_overlay,
-        reject_low_confidence_recognition=args.reject_low_confidence_recognition,
+        reject_low_confidence_recognition=(
+            args.reject_low_confidence_recognition and board_override is None
+        ),
         result_image=args.result_image,
         source_result_image=args.source_result_image,
         result_size=args.result_size,
+        board_override=tuple(board_override) if board_override is not None else None,
         katago=args.katago,
         model=args.model,
         analysis_config=args.analysis_config,
@@ -94,5 +134,48 @@ def main(argv: list[str] | None = None) -> int:
         result = analyze(request)
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
+    if board_override is not None:
+        recognition = result.get("recognition") or {}
+        try:
+            detector_rows = normalize_board_ascii(
+                recognition.get("detector_board_ascii"),
+                board_size=args.board_size,
+            )
+        except ValueError as exc:
+            raise SystemExit(f"Unable to label recognition retry: {exc}") from exc
+        label_dir = args.recognition_label_dir or Path(
+            os.getenv(
+                "GO_NEXT_MOVE_RECOGNITION_LABEL_DIR",
+                str(Path.home() / ".go-next-move" / "recognition-labels"),
+            )
+        )
+        corrected_output_value = result.get("source_result_image") or result.get("result_image")
+        corrected_output = Path(corrected_output_value) if corrected_output_value else None
+        detector_output = args.source_overlay if args.source_overlay and args.source_overlay.is_file() else None
+        retry_metadata = {
+            "entry_point": "skill",
+            "source": "agent_llm",
+            "status": "llm_proposed",
+            "detector_board_ascii": detector_rows,
+            "board_ascii": board_override,
+            "changed_points": changed_board_points(
+                detector_rows,
+                board_override,
+                coordinate_style=args.coordinate_style,
+            ),
+            "model": "host-agent-llm",
+        }
+        try:
+            label_id, label_path = RecognitionLabelStore(label_dir).create(
+                image_path=Path(args.source),
+                detector_output_path=detector_output,
+                corrected_output_path=corrected_output,
+                metadata=retry_metadata,
+            )
+        except OSError as exc:
+            raise SystemExit(f"Unable to store recognition label: {exc}") from exc
+        retry_metadata["label_id"] = label_id
+        retry_metadata["label_path"] = str(label_path)
+        result["recognition_retry"] = retry_metadata
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return 0

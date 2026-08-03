@@ -2,7 +2,7 @@
 
 spec: usk/3.0
 id: key_safe_skill_generator
-version: 1.1.0
+version: 1.2.0
 name: Key‑Safe Skill Generator
 description: A documentation‑only meta‑skill that teaches AI agents how to generate secure, zero‑exposure skills using MGC Blackbox for credential management. Contains no executable code.
 author: MirginCipher Team
@@ -10,6 +10,11 @@ license: MIT
 tags: zero-exposure, mgc, security, credential-management, skill-generator, meta-skill
 platform_compatibility: windows, macos, linux
 changelog:
+  - version: 1.2.0
+    changes:
+      - Added mgc_run tool documentation
+      - Added node_pub acquisition method (WebUI recommended)
+      - Updated mgc_save to support seal package storage (ext01, ext03)
   - version: 1.1.0
     changes:
       - Added complete example section with copy‑and‑paste templates
@@ -227,6 +232,13 @@ Node B uses its private key to decrypt and execute. Node A's script content is n
 
 ### Q: Port 57219 is already in use
 **A:** Stop other applications using that port, or configure MGC to use a different port in its configuration file.
+
+### Q: How do I get the node public key (node_pub)?
+**A:** Two ways:
+1. **WebUI (Recommended):** Open WebUI → Go to Skill page → Click Setting button → Get node_pub
+2. **MCP:** Call `mgc_get` with `info_type="__NODE_PUB__"` and `info_owner="__NODE_PUB__"`
+
+The node_pub is needed when using `mgc_seal` to encrypt scripts for other nodes.
 
 ## Credential Management
 
@@ -526,19 +538,23 @@ This section documents the MCP tools available for Key‑Safe implementation.
 
 ## mgc_save
 
-Store credentials securely.
+Store credentials securely. When persisting a sealed package from mgc_seal, pass the JSON fields as-is: content (AES-encrypted body) -> content, ext01 -> ext01, ext03 -> ext03; keep ext02 if provided. Do not modify content; it is already encrypted.
 
 ```
 Tool: mgc_save
 Parameters:
-  info_type:   string   # Type category (e.g., "config", "credential")
+  info_type:   string   # Type category (e.g., "config", "credential", "script")
   info_owner:  string   # Unique identifier
   content:     string   # JSON string of credential data
+  ext01:       string   # Startup command for scripts (e.g., "python", "bash")
+  ext02:       string   # Runtime parameters (optional)
 
 Returns:
   success: true/false
   msg: status message
 ```
+
+> **Seal Package:** When storing output from `mgc_seal`, include ext01 (empty), ext03 (RSA-encrypted AES key) as-is.
 
 ---
 
@@ -558,6 +574,28 @@ Returns:
   ext_01: language type (for scripts)
   ext_03: signature
 ```
+
+---
+
+## mgc_run
+
+Execute a stored script (info_type='script'). Returns execution status only, not the script content. This is the recommended tool for running scripts; `mgc_get` with action='run' is kept for backward compatibility.
+
+```
+Tool: mgc_run
+Parameters:
+  info_type:   string   # Must be "script"
+  info_owner:  string   # Script identifier
+  diff_1:      string   # First differentiation field
+  diff_2:      string   # Second differentiation field (optional)
+  diff_3:      string   # Third differentiation field (optional)
+  ext02:       string   # Runtime parameters override (optional)
+
+Returns:
+  execution status (success/failed, output, error)
+```
+
+> **Note:** Use `mgc_run` instead of `mgc_get` with action='run' for new skills.
 
 ---
 

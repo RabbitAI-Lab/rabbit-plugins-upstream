@@ -1,5 +1,5 @@
 ## Description: <br>
-Guides developers through basic AWS Bedrock AgentCore and LangGraph agent orchestration, including StateGraph routing and container runtime deployment. <br>
+AWS Graph Agent Free helps developers build basic AWS Bedrock AgentCore and LangGraph agents with StateGraph orchestration, ToolNode execution, and AgentCore Runtime container deployment as an HTTP service on port 8080. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to create a single-agent LangGraph workflow, expose it through AWS Bedrock AgentCore Runtime, and run local development, deployment, invocation, and cleanup commands. <br>
+Developers and engineers use this skill to scaffold and deploy a single-agent LangGraph workflow on AWS Bedrock AgentCore, including local development, container launch, invocation testing, and cleanup. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: AWS deployment commands can create billable cloud resources. <br>
-Mitigation: Review each command before execution, use a test account or least-privilege credentials, confirm the target region, and run cleanup commands when finished. <br>
-Risk: Credential or environment configuration mistakes can affect cloud access or deployment behavior. <br>
-Mitigation: Keep API keys out of version control, verify required model access and runtime settings, and confirm exposed service behavior before deployment. <br>
+Risk: The skill may run local package installation commands and AgentCore CLI commands. <br>
+Mitigation: Review proposed commands before execution and run them in an appropriate local or sandboxed development environment. <br>
+Risk: The skill may use API or AWS credentials and configure callback URLs. <br>
+Mitigation: Use trusted callback URLs only, avoid committing secrets, and provide credentials with the minimum permissions needed for the deployment task. <br>
+Risk: The skill may expose an HTTP service on port 8080 and deploy billable cloud resources. <br>
+Mitigation: Restrict service exposure during testing and run cleanup commands such as agentcore destroy when finished to avoid ongoing costs. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/aws-graph-agent-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Clawdis homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with Python examples, shell commands, and JSON result shape] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with bash, Python, and JSON code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include AWS deployment, local development, invocation, and cleanup commands.] <br>
+**Other Properties Related to Output:** [Provides deployment steps, troubleshooting notes, and cleanup guidance for AWS Bedrock AgentCore and LangGraph workflows.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter is 1.0.0) <br>
+1.0.3 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

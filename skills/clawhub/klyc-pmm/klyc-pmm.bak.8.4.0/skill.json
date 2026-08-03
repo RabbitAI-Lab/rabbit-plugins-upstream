@@ -1,0 +1,29 @@
+{
+  "name": "klyc-pmm",
+  "version": "8.4.0",
+  "description": "KLYC-PMM v8.4.0。昆仑令一行恢复 · 五层洋葱加密 · 17环节蒸馏管道 · 三层检索路由 · 三项服务全自动开通。纯本地脚本，零外部下载。含12错误码、11FAQ、5进阶场景、幂等自检、curl退出码诊断、昆仑令格式校验、oneclick一键安装。",
+  "author": "昆仑瑶池",
+  "category": "知识管理",
+  "tags": [
+    "memory",
+    "knowledge-management",
+    "backup",
+    "indexing",
+    "ai-agent",
+    "identity-verification",
+    "semantic-search"
+  ],
+  "config": {
+    "api_endpoint": "",
+    "identity_check": true
+  },
+  "keywords": [
+    "KLYC-PMM",
+    "昆仑令",
+    "AI记忆恢复",
+    "memory recovery",
+    "talisman",
+    "klyc-pmm-recover",
+    "kunlunyaochi.com"
+  ]
+}

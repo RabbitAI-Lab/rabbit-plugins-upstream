@@ -1,5 +1,5 @@
 ## Description: <br>
-Recognizes standing, sitting, lying down, bending, raised hands, running, falling, and other human poses, with abnormal posture recognition and fall-warning support for monitoring and elder-care scenarios. <br>
+Recognizes standing, sitting, lying down, bending, raised hands, running, falling, and other human postures, with abnormal posture detection and fall warnings for monitoring and care scenarios. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, operators, and care-monitoring teams can use this skill to analyze video files or video URLs for human posture recognition, fall detection, abnormal posture alerts, and structured report retrieval. It is intended for security monitoring and elder-care workflows where reviewers still need to confirm urgent situations directly. <br>
+Developers and external users use this skill to analyze local or URL-based monitoring media through a vendor cloud service and receive structured posture-recognition reports, fall-alert results, report links, and report-history listings. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may upload sensitive video or video URLs to the publisher's cloud service for analysis. <br>
-Mitigation: Use only with footage approved for that external cloud processing, and avoid private home, workplace, health, elder-care, or security footage unless the data handling is acceptable. <br>
-Risk: The skill can create or reuse a local identity and associate report history with that identity. <br>
-Mitigation: Review identity and report-history behavior before deployment, and run in an environment where persistent account linkage is expected. <br>
-Risk: The skill can persist service tokens locally. <br>
-Mitigation: Limit installation to trusted runtimes, protect local skill storage, and rotate or remove tokens if the environment is shared or decommissioned. <br>
-Risk: Fall detection and abnormal posture outputs may be incomplete or inaccurate. <br>
-Mitigation: Treat results as monitoring support only and require human confirmation and emergency procedures for urgent care or safety decisions. <br>
+Risk: Posture or monitoring videos are sent to vendor cloud services for analysis. <br>
+Mitigation: Use only with media approved for vendor processing, and confirm retention and deletion expectations before using sensitive home, care, or security footage. <br>
+Risk: The skill silently creates or reuses a local identity and can fetch cloud report history. <br>
+Mitigation: Run it only in workspaces where local identity reuse and cloud-linked report history are acceptable, and review account-control expectations before deployment. <br>
+Risk: Account tokens are stored locally in the workspace data area. <br>
+Mitigation: Restrict workspace access, avoid shared workspaces for sensitive use, and clear stored identity data when the skill is no longer needed. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-human-posture-recognition-analysis) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API interface documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [API documentation](references/api_doc.md) <br>
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, json, files, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON text with optional saved report files and report links] <br>
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown or JSON text, with optional saved output file and report link.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports basic, standard, and JSON detail levels; history queries return cloud report records.] <br>
+**Other Properties Related to Output:** [Accepts local video files or video URLs; supports basic, standard, and json detail levels plus cloud report-history listing.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release evidence; artifact frontmatter reports 1.0.8) <br>
+1.0.9 (source: server release metadata; artifact frontmatter reports 1.0.11) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

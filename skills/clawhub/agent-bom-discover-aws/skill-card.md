@@ -1,5 +1,5 @@
 ## Description: <br>
-Discovers AWS-hosted AI agent and MCP-relevant assets, emits canonical agent-bom inventory JSON, and optionally scans or exports that inventory under operator control. <br>
+Discovers AWS-hosted AI agent and MCP-relevant assets with operator-approved AWS credentials, writes canonical agent-bom inventory JSON, and can optionally scan or export that inventory locally. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,34 @@ Apache-2.0 <br>
 
 
 ## Use Case: <br>
-Developers, security engineers, and cloud operators use this skill to inventory AWS Bedrock, ECS, SageMaker, Lambda, EKS, Step Functions, EC2, and related agentic infrastructure as canonical agent-bom inventory without handing over long-lived cloud credentials. <br>
+Developers, security engineers, and platform operators use this skill to inventory AWS-hosted agentic infrastructure across services such as Bedrock, ECS, SageMaker, Lambda, EKS, Step Functions, and EC2. It is designed for discovery-first workflows where inventory is written locally and any scan, export, or handoff is operator-approved. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: AWS discovery can expose sensitive account, resource, and workload metadata in generated inventory files. <br>
-Mitigation: Use read-only AWS profiles or short-lived roles, choose the narrowest required regions and services, and review generated inventory before sharing or exporting it. <br>
-Risk: Using broad or long-lived AWS credentials could expand the impact of accidental disclosure or misuse. <br>
-Mitigation: Prefer AWS SSO, WebIdentity, or STS assumed-role credentials and do not paste or print access key values. <br>
+Risk: AWS credentials and generated inventory may expose account access patterns or sensitive infrastructure metadata if the scope is too broad. <br>
+Mitigation: Use short-lived read-only AWS credentials and narrow the account, region, service set, and output path to the audit need. <br>
+Risk: Credential values could be accidentally shared if pasted into prompts or printed during troubleshooting. <br>
+Mitigation: Use the existing AWS SDK credential chain and do not request, paste, or display raw AWS access keys, session tokens, or bearer tokens. <br>
+Risk: Optional scan, export, or push steps can move inventory beyond the discovery-only boundary. <br>
+Mitigation: Run only discovery by default and require explicit operator approval for scans, exports, destination URLs, authentication methods, and retained evidence classes. <br>
 
 
 ## Reference(s): <br>
-- [agent-bom GitHub repository](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
+- [ClawHub Skill Page](https://clawhub.ai/msaad00/skills/agent-bom-discover-aws) <br>
+- [agent-bom GitHub Homepage](https://github.com/msaad00/agent-bom) <br>
+- [agent-bom PyPI Package](https://pypi.org/project/agent-bom/) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON] <br>
-**Output Format:** [Markdown guidance with bash commands and generated JSON inventory files] <br>
+**Output Type(s):** [guidance, markdown, shell commands, configuration, code] <br>
+**Output Format:** [Markdown guidance with bash command examples and JSON inventory outputs] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes inventory or scan/export files only to operator-selected paths.] <br>
+**Other Properties Related to Output:** [Produces local, operator-selected inventory and scan output paths; no hidden persistence or telemetry was found in the provided security evidence.] <br>
 
 ## Skill Version(s): <br>
-0.98.0 (source: frontmatter and server release metadata) <br>
+0.98.3 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

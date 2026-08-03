@@ -1,5 +1,5 @@
 ## Description: <br>
-Fix Plan helps agents maintain fix_plan.md and checklist.md trackers, including item schema, priority triage, deferred plan stubs, GitHub state sync, completed-item archiving, and issue draft lifecycle cleanup. <br>
+Manages fix_plan.md and checklist.md schemas, lifecycle transitions, priority triage, sync checks, issue drafts, model-triage sections, completion criteria, and flowchart drift checks. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,44 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers and engineering agents use this skill to keep project tracker files compact, structured, and synchronized with GitHub issue and pull request state. It is intended for task-list housekeeping, deferred plan capture, completed-work archiving, and issue draft cleanup. <br>
+Developers and project maintainers use this skill to keep work trackers structured, synchronize GitHub-backed work states, triage blocked items, preserve completion history, and record deferred plan or issue-draft work. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Cleanup flows can rewrite fix_plan.md or checklist.md and archive or delete tracker entries. <br>
-Mitigation: Use explicit tracker paths, run cleanup with --dry-run first, and review the backup and resulting diff before accepting archive or delete flows. <br>
-Risk: Archive and RAG receiver flows can store detailed work history, operational metadata, or sensitive tracker content outside the active file. <br>
-Mitigation: Enable only trusted --archive or --rag receivers, and redact secrets, private logs, and sensitive incident details before dispatch. <br>
-Risk: GitHub sync can change tracker item state based on gh CLI results. <br>
-Mitigation: Run sync against the intended repository with an authenticated gh session and review the sync report before committing tracker updates. <br>
+Risk: The skill can edit and archive fix_plan.md or checklist.md content, which can change tracker state and move completion history. <br>
+Mitigation: Use it only in workspaces where tracker maintenance is intended, review diffs after runs, and prefer dry-run or preview modes when using bundled cleanup helpers. <br>
+Risk: Bundled Plane helpers and workspace profile resolution can access configured Plane credentials; workspace_profile.py --json may expose token values in command output. <br>
+Mitigation: Avoid running workspace_profile.py --json with real credentials until output is redacted, and use least-privilege Plane API keys in controlled environments. <br>
+Risk: Qdrant pre-lookup and post-ingest helpers can query or index markdown artifacts and local wiki content into configured collections. <br>
+Mitigation: Disable or remove the Qdrant helpers unless semantic indexing is explicitly desired, and verify workspace-specific collections before indexing sensitive documents. <br>
+Risk: GitHub synchronization relies on gh CLI state polling; failed or stale API checks can leave tracker items unresolved. <br>
+Mitigation: Treat sync reports as reviewable status, leave uncertain API results unchanged, and re-run sync after credentials, repository access, or network issues are fixed. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/fix-plan) <br>
-- [Skill overview](artifact/SKILL.md) <br>
-- [Format guide](artifact/format.md) <br>
-- [Priority guide](artifact/priority.md) <br>
-- [Move and archive guide](artifact/move.md) <br>
-- [GitHub sync guide](artifact/sync.md) <br>
-- [Issue drafts lifecycle](artifact/issue-drafts.md) <br>
-- [Changelog](artifact/CHANGELOG.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/fix-plan) <br>
+- [Fix Plan Skill Definition](SKILL.md) <br>
+- [Format Guide](format.md) <br>
+- [Priority Guide](priority.md) <br>
+- [Sync Guide](sync.md) <br>
+- [Move Guide](move.md) <br>
+- [Completion Criteria Guide](completion-criteria.md) <br>
+- [Model Triage Guide](model-triage.md) <br>
+- [Flowchart Guide](flowchart.md) <br>
+- [Issue Drafts Guide](issue-drafts.md) <br>
+- [Release Changelog](CHANGELOG.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with tracker edits and inline shell commands] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown tracker edits, concise run reports, shell commands, and configuration guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update local tracker files and archive completed or draft entries when invoked with the documented cleanup flows.] <br>
+**Other Properties Related to Output:** [May edit tracker files, create archive files under .bak, run gh commands, and use optional helper scripts for Plane connectivity and Qdrant lookup or indexing.] <br>
 
 ## Skill Version(s): <br>
-0.3.3 (source: server release metadata and CHANGELOG.md, released 2026-07-23) <br>
+0.4.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,6 +1,6 @@
 ---
 name: clawseccheck
-version: 3.57.0
+version: 3.58.0
 description: Free, local security self-audit for your own OpenClaw agent. Reads your OpenClaw config, bootstrap files, log files, agent session logs, and installed skills — read-only against your OpenClaw setup, plus a bounded host-security scan; writes only its own local report/history (removable with --purge). Scores your setup (A–F) and reports the most urgent holes — it never changes your OpenClaw setup. No API key; the scanner itself makes no network calls. Use it when you want to check or audit your OpenClaw agent's security, find prompt-injection or misconfiguration risks, or see your A–F security score.
 license: MIT
 metadata: {"openclaw":{"emoji":"🦞","os":["darwin","linux","win32"],"user-invocable":true},"display_name":{"en":"ClawSecCheck — OpenClaw Security Self-Audit"},"display_description":{"en":"Free, local security self-audit for your own OpenClaw agent. Reads your OpenClaw config, bootstrap files, log files, agent session logs, and installed skills — read-only against your OpenClaw setup, plus a bounded host-security scan; writes only its own local report/history (removable with --purge). Scores your setup (A–F) and reports the most urgent holes — it never changes your OpenClaw setup. No API key; the scanner itself makes no network calls. Use it when you want to check or audit your OpenClaw agent's security, find prompt-injection or misconfiguration risks, or see your A–F security score."},"tags":{"en":["security","openclaw","ai-agent","audit","prompt-injection","llm-security","self-audit","sarif"]}}
@@ -43,6 +43,8 @@ It runs a **read-only** local script that inspects the user's own agent. **Full 
 - text of **installed skills/plugins** (including Python AST-scan, parse-only — never executed)
 - `~/.openclaw/logs/config-audit.jsonl` and `config-health.json` — config-write provenance & integrity
 - `~/.openclaw/agents/.../sessions/*.jsonl` — Codex session logs for approval-policy posture
+- the cron job store, the two global OpenClaw dotenv files, and OpenClaw-related systemd
+  user-unit `Environment=`/`EnvironmentFile=` lines
 - **host recon (beyond OpenClaw's own scope, skip with `--no-host`):** existence of IDS, FIM, EDR
   and firewall config files, of their binaries on `PATH`, and of systemd enable-symlinks; the
   *contents* of a few known firewall config files, to read whether the firewall is on and whether
@@ -59,13 +61,17 @@ It runs a **read-only** local script that inspects the user's own agent. **Full 
 - permissions of memory/log paths
 
 It makes **no network calls of its own**
-and **never modifies your OpenClaw setup** — *read-only* means it never touches `openclaw.json`, your
-skills, or your bootstrap files. What it *does* write stays **on your own machine and is never
-uploaded** — none of it touches your OpenClaw setup, only ClawSecCheck's own state: a private local
-audit history under `~/.clawseccheck/` (owner-only — opt out with `--no-history`), any report files
-you explicitly request via a flag (`--save`, `--badge`, `--html`, `--sarif`, `--monitor`, `--trend`,
-`--log`), and a small freshness ledger (`~/.clawseccheck/coverage.json`) recording when you last ran
-an opt-in active self-test (`--canary`/`--redteam`/`--dryrun`/`--self-test`/`--vet-mcp`). `--purge`
+and **never modifies `openclaw.json`, your skills, or your bootstrap files** — with exactly one
+named, opt-in, confirmation-gated exception, covered below. What it *does* write stays **on your
+own machine and is never uploaded**: almost all of it lands in ClawSecCheck's own state, not your
+OpenClaw setup — a private local audit history under `~/.clawseccheck/` (owner-only — opt out with
+`--no-history`), any report files you explicitly request via a flag (`--save`, `--badge`, `--html`,
+`--sarif`, `--monitor`, `--trend`, `--log`), and a small freshness ledger
+(`~/.clawseccheck/coverage.json`) recording when you last ran an opt-in active self-test
+(`--canary`/`--redteam`/`--dryrun`/`--self-test`/`--vet-mcp`). The one write that lands inside the
+audited OpenClaw home is `--apply-ignore-proposals` (opt-in, confirmation-gated): it appends
+entries a prior `--propose-ignore` run already proposed to `<home>/.clawseccheckignore`, never
+inventing one — see "Judge-panel fan-out" below. `--purge`
 deletes its four known store files (history/events/state/coverage) plus their lock siblings in one
 step; a crash-artifact `.tmp` sibling, if one is ever left behind, is not touched by `--purge` and
 needs a manual `rm`. Scoping flags at a glance: `--no-history` (skip

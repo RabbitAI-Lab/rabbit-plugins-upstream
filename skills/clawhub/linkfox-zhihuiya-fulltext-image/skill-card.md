@@ -1,5 +1,5 @@
 ## Description: <br>
-Retrieves full-text patent images, including drawings, figures, diagrams, and charts, from the Zhihuiya patent data service by patent ID or publication number. <br>
+Retrieves full-text patent images, drawings, diagrams, and related metadata from Zhihuiya by patent ID or publication number. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Patent analysts, IP teams, and agent users use this skill to retrieve and present visual content from a specific patent document. It is intended for patent-image lookup by patent ID or publication number, not broader patent search or legal-status analysis. <br>
+Patent analysts, IP researchers, and agents use this skill to retrieve and review full-text patent drawings and figure metadata for a known patent publication number or patent ID. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Patent identifiers and session or app metadata are sent to LinkFox's gateway. <br>
-Mitigation: Review confidentiality before use and avoid running the skill on sensitive patent searches unless the user accepts that data transfer. <br>
-Risk: Requests consume paid LinkFox credits, with the artifact documenting an 81-credit cost. <br>
-Mitigation: Tell the user about cost before repeated or follow-up retrievals and avoid automatic retries or pagination without confirmation. <br>
-Risk: Full API responses and cache files are stored locally under a LinkFox output directory. <br>
-Mitigation: Treat saved response files as potentially sensitive and remove or protect them according to the user's data-handling needs. <br>
-Risk: The skill directs agents to submit feedback text to a separate LinkFox endpoint. <br>
-Mitigation: Do not include confidential user content in feedback and seek explicit user permission when feedback could reveal sensitive context. <br>
+Risk: LinkFox API calls consume credits for patent-image lookups. <br>
+Mitigation: Confirm cost expectations before repeated queries, use pagination deliberately, and avoid automatic retries or exploratory parameter changes. <br>
+Risk: Full API responses are saved locally by default and may retain patent response data and session metadata. <br>
+Mitigation: Use the skill only in workspaces where local response storage is acceptable, and review or remove saved response files before sharing a project. <br>
+Risk: Authentication or quota handling may prompt installation of a remote onboarding skill. <br>
+Mitigation: Review the remote onboarding source and obtain explicit user approval before downloading or installing it. <br>
+Risk: Feedback may be reported to LinkFox automatically based on the user interaction. <br>
+Mitigation: Avoid including sensitive user content in feedback and review this behavior before use in restricted environments. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-fulltext-image) <br>
-- [智慧芽-全文附图 API 参考](references/api.md) <br>
-- [LinkFox publisher profile](https://clawhub.ai/user/linkfox-ai) <br>
+- [Zhihuiya Fulltext Image API Reference](artifact/references/api.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-fulltext-image) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, files] <br>
-**Output Format:** [Markdown summaries and tables, JSON API responses, and saved JSON files] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Files, Guidance] <br>
+**Output Format:** [Markdown summaries and tables, JSON API responses, and saved local response files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a patent ID or publication number; each request returns up to 100 images and may consume paid credits.] <br>
+**Other Properties Related to Output:** [Requires either patentId or patentNumber; each request returns at most 100 images and may consume LinkFox credits.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+1.0.6 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

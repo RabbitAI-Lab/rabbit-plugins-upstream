@@ -1,5 +1,5 @@
 ## Description: <br>
-Network Aiops helps agents inspect and operate NAPALM-supported network devices, run read-only diagnostics, back up and diff configurations, and perform governed configuration changes across Cisco, Arista, Juniper, and optional NetBox environments. <br>
+network-aiops helps agents inspect, diagnose, back up, diff, and change NAPALM-supported network devices, with optional NetBox lookups and governance controls for audit, undo, and risk-tiered operations. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,22 +11,23 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Network operators, SREs, and infrastructure engineers use this skill to query live network state, diagnose interface and BGP problems, compare proposed configuration changes, and execute audited device configuration workflows. <br>
+Network engineers and operations teams use this skill to collect live device state, diagnose interface or BGP issues, compare candidate configs, back up configs, and perform reviewed merge, replace, rollback, or undo workflows on supported Cisco, Arista, and Juniper devices. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can perform production-impacting network configuration writes and does not provide an internal read-only mode or approval gate. <br>
-Mitigation: Use read-only device and NetBox credentials for routine work, grant write-capable credentials only when intended, and require an external approval process before MCP write tools are used. <br>
-Risk: Configuration backups or diffs may contain sensitive network secrets, especially if raw output is requested. <br>
-Mitigation: Avoid include_secrets=True in agent transcripts, prefer writing raw configs to operator-controlled files when needed, and keep ~/.network-aiops protected with chmod 700. <br>
-Risk: Some device drivers may be unable to arm commit-confirm revert timers, leaving configuration changes permanent on commit. <br>
-Mitigation: Check the returned commit warning and safetyNet fields, arrange out-of-band access for lockout-capable changes, and verify reachability from a new session before confirming changes. <br>
+Risk: The skill can perform high-impact network device write actions, including merge, replace, rollback, confirm, and undo workflows. <br>
+Mitigation: Install in a controlled network-operations environment, begin with read-only device and NetBox credentials, and require human review of diffs before any write or confirmation action. <br>
+Risk: Network configurations and backups can contain sensitive values even when masking is applied. <br>
+Mitigation: Protect ~/.network-aiops with strict permissions, avoid include_secrets=True in agent transcripts, and write raw backups only to operator-chosen files. <br>
+Risk: Driver support and rollback safety vary by network platform, and some devices may not support a commit-confirm timer. <br>
+Mitigation: Check tool warnings and unsupported-driver errors, verify reachability from a new session before confirming changes, and arrange out-of-band access before lockout-capable changes. <br>
 
 
 ## Reference(s): <br>
-- [Network-AIops homepage](https://github.com/AIops-tools/Network-AIops) <br>
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/network-aiops) <br>
+- [Project homepage](https://github.com/AIops-tools/Network-AIops) <br>
 - [network-aiops Capabilities](references/capabilities.md) <br>
 - [network-aiops Setup Guide](references/setup-guide.md) <br>
 - [network-aiops CLI Reference](references/cli-reference.md) <br>
@@ -34,13 +35,13 @@ Mitigation: Check the returned commit warning and safetyNet fields, arrange out-
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, configuration snippets, and structured tool-use recommendations] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown with inline shell commands, configuration snippets, diffs, and structured tool-result summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide agents to invoke CLI or MCP operations that return live device data, diffs, backups, audit records, and configuration-change results.] <br>
+**Other Properties Related to Output:** [May include masked network configuration excerpts, diffs, diagnostics, and risk or undo notes; raw secrets should be kept out of agent transcripts.] <br>
 
 ## Skill Version(s): <br>
-0.8.0 (source: server release metadata) <br>
+0.10.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

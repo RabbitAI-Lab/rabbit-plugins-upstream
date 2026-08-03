@@ -4,29 +4,27 @@ name: bom-vuln-intel-tool-free
 version: 1.0.0
 displayName: 物料清单漏洞情报免费版
 summary: 软件物料清单(SBOM)生成与依赖漏洞检查工具,支持基础包扫描与OSV/GHSA查询,适合个人开发者日常使用.
-license: Proprietary
+license: MIT
 edition: free
-description: '物料清单漏洞情报免费版,为个人开发者提供软件物料清单生成与依赖漏洞检测能力.
-  核心能力:包信息查询、基础SBOM生成、OSV/GHSA漏洞匹配、依赖树可视化.
-  适用场景:依赖更新前漏洞检查、项目安全自查、基础物料清单生成.
-  差异化:免费版聚焦单项目检查,支持npm/pip两种生态,适合个人开发者快速上手.
-  适用关键词: SBOM, 物料清单, 依赖漏洞, CVE, OSV, GHSA, vulnerability, dependency'
+description: "物料清单漏洞情报免费版,为个人开发者包含软件物料清单产出与依赖漏洞查验能力. 适用于需要bom vuln intel tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要bom vuln intel tool相关能力的开发场景,包含结构化的工作流程和配置指引."
 tags:
   - 安全
+  - bom
+  - vuln
+  - intel
+  - automation
   - SBOM
   - 依赖管理
   - 免费版
   - 加密
   - 工具
-  - npm
-  - pip
-  - osv
-  - pkg
 tools:
   - read
   - exec
 homepage: ""
 category: "Security"
+pricing_tier: free
+
 ---
 # 物料清单漏洞情报免费版
 
@@ -357,7 +355,7 @@ npm audit --package-name="$PACKAGE" 2>/dev/null || echo "(需要安装后审计)
 需要数据库操作、SQL查询、数据存储管理时使用。不适用于非本工具能力范围的需求.
 ## 快速开始
 
-### 第一步:确认项目类型
+### 领先步:确认项目类型
 
 ```bash
 # 检查项目使用的包管理器
@@ -419,14 +417,14 @@ npx sbom-tool generate -p . -o sbom.json 2>/dev/null || \
 | Cargo | Cargo.toml | 不支持 | 不支持 |
 | Maven | pom.xml | 不支持 | 不支持 |
 
-## 最佳实践
+## 优秀实践
 
 1. **定期检查**:至少每月执行一次依赖漏洞扫描.
 2. **更新前检查**:在更新依赖版本前,先检查目标版本是否存在漏洞.
 3. **锁定版本**:使用lock文件锁定依赖版本,避免意外引入漏洞版本.
 4. **最小依赖**:定期审查依赖,移除不再使用的包.
 ```bash
-# 最佳实践:安全更新流程
+# 优秀实践:安全更新流程
 safe_update() {
     local pkg=$1
     echo "安全更新: ${pkg}"
@@ -447,23 +445,6 @@ safe_update() {
 }
 ```
 
-## 常见问题
-
-### Q1: 免费版支持哪些包管理器?
-
-免费版支持npm和pip两种生态。Go、Cargo、Maven等需要专业版支持.
-### Q2: OSV查询返回的漏洞一定准确吗?
-
-OSV匹配基于包名和版本号,可能存在误报。建议结合npm audit或pip-audit交叉验证.
-### Q3: 如何检查devDependencies?
-
-免费版默认检查dependencies。手动修改SBOM生成脚本可包含devDependencies.
-### Q4: 没有lock文件怎么办?
-
-建议先生成lock文件(npm install或pip freeze),再执行漏洞检查,结果更准确.
-### Q5: 免费版能监控漏洞吗?
-
-免费版为手动检查模式,不支持持续监控与告警。如需自动监控新漏洞,请使用专业版.
 ## 依赖说明
 
 ### 运行环境
@@ -486,7 +467,7 @@ OSV匹配基于包名和版本号,可能存在误报。建议结合npm audit或p
 - npm registry和PyPI均为公开接口
 
 ### 可用性分类
-- **分类**: MD+EXEC(纯Markdown指令,核心功能需要exec命令行执行能力)
+- **分类**: MD+EXEC模式纯Markdown指令,核心功能需要exec命令行执行能力)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent执行SBOM生成与依赖漏洞检查任务
 
 ## 错误处理
@@ -503,32 +484,3 @@ OSV匹配基于包名和版本号,可能存在误报。建议结合npm audit或p
 - 复杂业务场景建议结合人工经验判断
 - 执行效率受模型能力与网络环境影响
 - 当前为免费版本,如需完整功能请升级到付费版获取全部能力
-
-## 示例
-
-### 基本用法
-
-**输出**：返回执行结果,包含操作状态和输出数据
-
-```text
-用户: 执行核心功能
-Skill: 正在执行核心功能...
-Skill: 执行完成,结果如下: 操作成功
-```
-
-## 输出格式
-```json
-{
-  "success": true,
-  "data": {
-    "result": "物料清单漏洞情报免费版处理结果",
-    "execution_time": "0.5s",
-    "metadata": {
-      "version": "1.0",
-      "processor": "bom vuln intel"
-    }
-  },
-  "execution_log": ["解析输入参数", "执行核心处理", "格式化输出结果"],
-  "error": null
-}
-```

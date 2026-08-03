@@ -2,6 +2,35 @@
 
 Release history for music-craft-minimax. Operating guidance lives in the
 topic references; this file is history only.
+# v1.6.0
+
+- Reordered `SKILL.md` for discoverability: added hero sections
+  ("What is Music Craft — MiniMax?", "MiniMax-specific features",
+  "Why use this instead of music-craft?", "Quick Start") at the top
+  of the body. MiniMax-only features (cover, mashup, lyrics API,
+  emotion-driven prompting, `mmx` flag control, quota-aware batches)
+  are now the first thing a visitor reads.
+- Moved the licensing and commercial-use gate to the end of `SKILL.md`
+  (preserving all legal content verbatim, including the "Cloud duration
+  is approximate" routing warning); data / consent sits just above it.
+- Updated the frontmatter `description:` to anchor-keyword pack
+  (cover and style transfer, two-song mashup, lyrics generation API,
+  emotion-driven prompt engineering, mmx CLI, Extends music-craft)
+  for clearer ClawHub routing.
+- Removed the old "Quick Start with the Orchestrator" section; the
+  new hero "Quick Start" supersedes it.
+- No behaviour, no env vars, no bins — pure content reordering and
+  versioning.
+
+
+
+# v1.5.1
+
+- Added a licensing and commercial-use gate for MiniMax API/CLI workflows.
+- Clarified the difference between MiniMax Open Platform/API terms and
+  consumer app/web terms.
+- Required each operator to use their own account/API key and verify current
+  product-specific commercial-use terms before release.
 
 ## v1.5.0
 

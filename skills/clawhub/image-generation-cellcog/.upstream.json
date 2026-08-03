@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/image-generation-cellcog",
   "slug": "image-generation-cellcog",
   "ownerHandle": null,
-  "version": "1.0.13",
-  "updatedAt": 1784278705738,
-  "contentHash": "e08eb410affeb80f9f3b5c3a110b1dfc53f1e560e0ce33f9b05c0412503a03c1",
-  "fetchedAt": "2026-07-26T18:11:57.856Z"
+  "version": "1.0.15",
+  "updatedAt": 1785737221818,
+  "contentHash": "d3ef98fcd6134766291f7c03d48bb6b8b4aadbfb4483ed824396d5188676c3e8",
+  "fetchedAt": "2026-08-03T11:22:26.582Z"
 }

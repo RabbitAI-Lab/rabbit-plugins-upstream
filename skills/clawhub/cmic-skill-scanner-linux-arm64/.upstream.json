@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cmic-skill-scanner-linux-arm64",
   "slug": "cmic-skill-scanner-linux-arm64",
   "ownerHandle": null,
-  "version": "0.11.0",
-  "updatedAt": 1784018560464,
-  "contentHash": "37cb4d76944ef503957d0d4fcfffed29c8154deff21a83d191971e0c6f5bf355",
-  "fetchedAt": "2026-07-26T18:14:47.519Z"
+  "version": "0.11.1",
+  "updatedAt": 1785136903510,
+  "contentHash": "6a3177b1b8d5df0ab2c03e909125730f148aa9e5b62516a4712ce76bf1ba1ad8",
+  "fetchedAt": "2026-08-03T11:40:24.338Z"
 }

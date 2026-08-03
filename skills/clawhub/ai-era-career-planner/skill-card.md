@@ -1,5 +1,5 @@
 ## Description: <br>
-AI-era-career-planner helps agents guide Chinese-language career planning conversations with staged intake, interest and values assessment, AI job-impact analysis, salary and demand references, and personalized action plans. <br>
+AI Era Career Planner helps users explore career planning, major selection, job transitions, AI-driven career impact, and personalized career roadmap reports. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,41 +11,42 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and career guidance agents use this skill to plan education choices, career entry, or career transitions in the AI era. The skill supports structured intake, assessment, career recommendations, AI-resilience guidance, and concrete next-step planning. <br>
+External users and career-planning assistants use this skill to collect career background, assess interests and work values, evaluate AI-era job risk, and produce personalized career planning guidance. It is intended for advisory planning conversations, not guaranteed employment, compensation, education, or financial outcomes. <br>
 
 ### Deployment Geography for Use: <br>
-Global, with China-focused salary and insurance company reference data. <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may ask for personal career-context information. <br>
-Mitigation: Collect only information the user chooses to provide and avoid saving profiles unless the user explicitly requests a saved record. <br>
-Risk: Salary references and insurance company recommendations may be stale, incomplete, or mistaken for endorsement. <br>
-Mitigation: Treat salary and company data as reference material, keep insurance recommendations disclosed as informational, and ask users to verify details before acting. <br>
-Risk: Optional email, subscription, live-search, or saved-record actions can affect user data outside the conversation. <br>
-Mitigation: Only use optional integrations when the current environment permits them and the user has clearly approved the specific action. <br>
+Risk: Users may share personal education, employment, salary, or career background during planning. <br>
+Mitigation: Ask only for information needed for the planning task, avoid unnecessary persistence, and require explicit user approval before exports, memory writes, email, subscriptions, or live-data lookups. <br>
+Risk: Salary, job demand, and company data may be incomplete or outdated. <br>
+Mitigation: Present market and company information as advisory, and tell users to verify current compensation, company credentials, and local conditions before acting. <br>
+Risk: Insurance company recommendations may be mistaken for endorsement or sales advice. <br>
+Mitigation: Use insurance-company listings only when relevant to the user's stated career interest, disclose that listings are informational, and encourage comparison across providers. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/ai-era-career-planner) <br>
 - [AI career impact reference](references/ai_career_impact.md) <br>
 - [Career assessment framework](references/assessment.md) <br>
 - [Career anchor reference](references/career_anchor.md) <br>
-- [Education paths](references/education_paths.md) <br>
+- [Conversation flow engine](references/flow_engine.md) <br>
+- [Salary data reference](references/salary_data.md) <br>
+- [Salary database](references/salary_database.json) <br>
 - [Job demand trends](references/job_demand.md) <br>
 - [Industry trends](references/industry_trends.md) <br>
-- [Salary data](references/salary_data.md) <br>
-- [Insurance broker company reference](references/insurance_broker_companies.json) <br>
-- [Optional integrations reference](references/integrations.md) <br>
+- [Education paths](references/education_paths.md) <br>
+- [Insurance broker company data](references/insurance_broker_companies.json) <br>
+- [Optional integrations](references/integrations.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Files] <br>
-**Output Format:** [Markdown career planning report and conversational guidance] <br>
+**Output Type(s):** [text, markdown, guidance] <br>
+**Output Format:** [Markdown career-planning report and conversational guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May optionally generate a Markdown report file when the host environment allows it and the user explicitly requests export.] <br>
+**Other Properties Related to Output:** [May include structured career recommendations, AI impact ratings, salary ranges, learning paths, and next-step action lists.] <br>
 
 ## Skill Version(s): <br>
-2.2.240 (source: server release metadata) <br>
+2.2.268 (source: evidence.json release.version; artifact frontmatter reports 2.2.250) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

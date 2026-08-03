@@ -1,5 +1,5 @@
 ---
-name: "dknowc-official-doc-writer"
+name: 深知公文写作
 description: |
   当用户需要撰写、改写、润色、审查或生成 Word 格式的公文、正式文书、政务材料、企事业单位事务文书时使用本技能。支持通知、请示、报告、函、复函、批复、会议纪要、通报、通告、公告、意见、方案、总结、管理办法、汇报材料、发言稿等。正式写作需求优先尝试调用公文范文大纲接口生成结构参考和搜索建议；涉及政策依据、数据支撑、标准规范或案例参考时，使用深知搜索并按素材类型整理；需要正式交付时，生成普通 docx 或红头文件。不用于普通创意写作、营销文案、闲聊回复或非正式文本，除非用户明确要求转换为正式公文/事务文书。
 ---
@@ -20,12 +20,24 @@ description: |
 
 ## ClawHub Public 初始化
 
-ClawHub Public 版不内置深知搜索 API Key。简单起草、改写、润色、审查、普通 Word 生成、红头 Word 生成等不需要搜索或范文大纲接口的任务，不得要求用户注册、提供手机号、提供验证码或生成 `config.ini`，直接按无搜索路径完成。
+ClawHub Public 版不内置深知搜索 API Key。只要本 Skill 被调用，第一步必须运行：
 
-只有当前任务确实需要调用公文范文大纲接口或深知搜索，且本 Skill 根目录下没有可用 `config.ini`，或脚本明确提示 API Key 缺失时，才可启动注册配置流程。启动前必须先暂停原任务并向用户明确说明：
+```bash
+python3 scripts/initialize.py
+```
+
+这是硬性启动门禁，与用户当前任务是否需要搜索无关；即使用户只是要求生成简单通知、改写、润色、写一段文字或只生成 Word，也必须先完成初始化检查。
+
+只有初始化结果同时满足 `ready=true`、`config_ini=true`、`config_api_key=true` 时，才可以进入任何写作、改写、润色、审查、范文大纲、深知搜索、Word 生成或红头生成流程。
+
+如果初始化结果中 `config_api_key=false`、`config_ini=false`，或 `blocking_issues` 包含 `api_key_missing`、`config.ini_missing`、`config.ini_invalid`，必须立即暂停原任务，只允许引导用户完成 API Key 配置；不得输出正文、草稿、大纲、示例通知、Word 文件或任何可替代正式写作结果。
+
+如果 `config.ini` 不存在或脚本提示 API Key 缺失，先暂停原任务并向用户说明：
 
 ```text
-当前任务需要使用深知接口获取范文大纲、政策、数据或案例材料。ClawHub Public 版不内置 API Key；如你同意，我可以通过深知 MaaS 注册接口协助完成手机号验证码注册，获取 API Key，并写入本 Skill 本地 config.ini。该文件会保存在当前 Skill 目录，仅供本地脚本使用，不会打包发布。你也可以选择手动注册后自行配置，或暂时不用深知接口。
+深知公文写作还没有配置 API Key。ClawHub Public 版不内置 API Key；如你同意，我可以通过深知 MaaS 注册接口协助完成手机号验证码注册，获取 API Key，并写入本 Skill 本地 config.ini。该文件会保存在当前 Skill 目录，仅供本地脚本使用，不会打包发布。
+
+MaaS 管理平台地址是：https://platform.dknowc.cn/ 。新用户注册后会有 300 次体验额度；体验额度用完后，可到 MaaS 管理平台充值。完成实名认证后，平台也可能提供 100 元赠金，具体以 MaaS 平台页面展示为准。
 ```
 
 只有用户明确同意由 Agent 协助注册后，才执行：
@@ -42,18 +54,22 @@ node scripts/register.mjs send --phone <手机号>
 node scripts/register.mjs register --phone <手机号> --vcode <验证码> --organ 个人 --name 用户
 ```
 
-脚本默认固定 `type=6`（深知可信搜索），并自动使用 ClawHub 渠道码 `2787E171-B0E5-4328-9946-47AC52434D1F`。注册成功后，脚本会自动将 API Key 写入本 Skill 根目录下的 `config.ini`，标准输出不返回完整 Key。不得向用户索要、展示或要求用户手动复制 API Key。
+脚本默认固定 `type=6`（深知可信搜索），并自动使用 ClawHub 渠道码 `2787E171-B0E5-4328-9946-47AC52434D1F`。注册成功后，脚本会自动将 API Key 写入本 Skill 根目录下的 `config.ini`，标准输出不返回完整 Key。不得向用户索要、展示或要求用户手动复制 API Key。配置写入成功后，重新运行 `python3 scripts/initialize.py`，确认 `ready=true` 后再继续处理用户原任务。
 
-如用户不同意 Agent 协助注册，或接口失败、短信发送受限、验证码错误、手机号已注册，应停止注册流程，并给出 ClawHub 渠道注册链接作为手动方案：
+如用户不同意 Agent 协助注册，或接口失败、短信发送受限、验证码错误、手机号已注册，应停止注册流程，并给出 MaaS 管理平台地址作为手动方案：
 
 ```text
-https://platform.dknowc.cn/auth/#/register?channel=2787E171-B0E5-4328-9946-47AC52434D1F&type=6
+https://platform.dknowc.cn/
 ```
 
 ## 工作原则
 
-- 首次使用时先运行 `python3 scripts/initialize.py` 检查 Python、依赖、搜索配置和字体。初始化不要求用户提供单位或个人信息，也不上传检测结果。
-- 初始化结果如显示缺少公文标准字体，Word 仍可继续生成，但交付时必须提醒用户：当前环境缺少标准字体，`.docx` 在打开端可能发生字体替换和分页变化，需在安装标准字体的 Word/WPS 环境复核。
+- 首次使用时先运行 `python3 scripts/initialize.py` 检查 Python、依赖和搜索配置。初始化不要求用户提供单位或个人信息，也不上传检测结果。
+- Python、必备依赖和 API Key 属于前置条件：如无法运行 `python3`，或初始化结果显示 `python_docx=false`、`requests=false`、`config_api_key=false`、`ready=false`，必须暂停执行 Skill，不得继续搜索、写作、生成 Word、生成红头或生成素材来源 HTML。
+- 发现 `python-docx` 或 `requests` 缺失且 `dependency_install_prompt_needed=true` 时，可以先向用户说明影响，并征得用户同意后执行 `python3 -m pip install python-docx requests`；未经用户同意不得自行安装依赖。安装后必须重新运行 `python3 scripts/initialize.py` 确认 `ready=true` 后再继续。如用户不同意安装依赖，执行 `python3 scripts/initialize.py --decline-dependency-install` 记录拒绝状态，后续不再反复询问，但仍因缺少必备依赖而暂停相关能力。
+- 如缺少 Python 或当前环境无权限安装依赖，应提示用户切换到具备 Python 的 Agent/运行环境，或由用户/平台管理员先完成 Python 与依赖安装。
+- `config_api_key=false` 时必须暂停本 Skill 全部能力，并提示用户先通过 ClawHub 初始化流程或 MaaS 管理平台在本地 `config.ini` 的 `[dkag] api_key` 中配置有效 Key；如缺失，不得退化为纯 Word 写作。
+- 字体不作为 Skill 初始化阻断项，也不主动检测、安装或引导用户安装字体。Word 文档会写入公文常用字体名称；交付时简单提醒用户：如打开端缺少对应字体，Word/WPS 可能自动替换，需以本机打开后的显示为准。
 - 仅在用户明确同意保存常用设置时，使用 `--save` 写入本机 `config/user_profile.json`；不得主动索取与当前公文无关的信息。
 - 用户未配置发文机关、文号前缀或地域时，仍可生成文档：分别使用 `XX单位`、`XX〔年份〕XX号` 等醒目占位符，地域则根据当前任务询问或保持未指定。交付时提醒用户核对占位符。
 - 不得根据示例、历史文档或搜索地域猜测用户所属单位，不得把任何具体客户名称作为默认值。
@@ -306,6 +322,18 @@ python3 scripts/merge_search_results.py result1.json result2.json --output merge
 ```bash
 python3 scripts/initialize.py
 ```
+
+如果 `python3` 不可运行，或初始化结果显示 `ready=false`、`python_docx=false`、`requests=false`、`config_api_key=false`，必须先暂停，不得继续执行本 Skill 的搜索、写作、Word、红头和素材来源 HTML 生成。缺失 `python-docx` 或 `requests` 时，先请用户确认是否允许安装；用户同意后再执行：
+
+```bash
+python3 -m pip install python-docx requests
+```
+
+安装完成后重新运行初始化检查，确认通过后继续。
+
+如果初始化结果显示 `config_api_key=false` 或 `search_ready=false`，必须暂停并提示用户配置本地 `config.ini`，不得继续执行纯 Word 或仅基于用户材料的写作。
+
+字体不作为初始化阻断项，不主动检测、安装或引导用户安装字体。Word 文档会按配置写入公文常用字体名称；交付时只需提醒：如打开端缺少对应字体，Word/WPS 可能自动替换，需以本机打开后的显示为准。
 
 用户明确授权保存常用设置时，才执行：
 

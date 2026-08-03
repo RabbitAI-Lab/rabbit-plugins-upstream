@@ -6,7 +6,7 @@ displayName: "CSV数据分析-免费版"
 summary: "CSV数据分析免费版，提供快速统计与基础筛选，零外部依赖，适合轻量数据探索。。CSV数据分析器免费版提供快速统计与基础筛选能力. 仅依赖Python标准库（csv模块），无需pandas或重"
 summary_zh: "CSV数据分析免费版，提供快速统计与基础筛选，零外部依赖，适合轻量数据探索。。CSV数据分析器免费版提供快速统计与基础筛选能力. 仅依赖Python标准库（csv模块），无需pandas或重"
 license: "MIT"
-description: |-
+description: "|-. 适用于需要csv analyzer相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量.该技能适用于相关开发场景,包含结构化的工作流程和配置指引.经过深度差异化处置,针对用户反馈和使用痛点进行了改进,提升了实用性和可操作性.该技能适用于相关开发场景,包含结构化的工作流程和配置指引.经过深度差异化处置,针对用户反馈和使用痛点进行了改进,提升了实用性和可操作性."
   CSV数据分析器免费版提供快速统计与基础筛选能力.
   仅依赖Python标准库（csv模块），无需pandas或重型依赖.
   核心能力：
@@ -18,21 +18,22 @@ description: |-
   不适用于：超过100MB的大文件、加密文件破解.
 tags:
   - 信息检索
+  - csv
+  - analyzer
+  - automation
+  - productivity
   - 数据分析
-  - CSV
   - 工具
   - 效率
-  - csv
   - pandas
   - stats
-  - filter
-  - python3
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Automation"
+pricing_tier: free
 ---
 # Csv Analyzer — CSV数据分析器（免费版）
 
@@ -118,6 +119,7 @@ pandas很强大，但仅导入就占100MB+内存，对快速分析任务过于�
 # ...
 ### 2. 基础筛选（filter）(补充)
 # ...
+echo "操作完成"
 ```bash
 python3 {baseDir}/（请参考skill目录中的脚本文件） filter data.csv --where "amount>1000" --output big_orders.csv
 ```
@@ -153,6 +155,7 @@ python3 {baseDir}/（请参考skill目录中的脚本文件） stats orders.csv
 # ...
 ### 示例2：筛选大额订单并导出
 # ...
+echo "操作完成"
 ```bash
 python3 {baseDir}/（请参考skill目录中的脚本文件） filter orders.csv
 # 输出：筛选出87行，已导出到 big_orders.csv
@@ -160,6 +163,7 @@ python3 {baseDir}/（请参考skill目录中的脚本文件） filter orders.csv
 # ...
 ### 示例3：按条件筛选
 # ...
+echo "操作完成"
 ```bash
 csv --where "category==electronics"
 # 输出：筛选出category为electronics的行

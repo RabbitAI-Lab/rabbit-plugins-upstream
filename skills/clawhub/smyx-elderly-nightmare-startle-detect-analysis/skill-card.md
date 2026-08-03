@@ -1,5 +1,5 @@
 ## Description: <br>
-Using a fixed bedroom camera with infrared night vision and microphone input, this skill analyzes elderly nighttime sleep media to detect sudden sitting-up, short screams, arm-thrashing, and related abnormal sleep events, then records event timing, frequency, and duration. <br>
+Analyzes fixed-camera infrared bedroom sleep audio/video to identify sudden sitting up, screams, arm thrashing, and related nighttime abnormal events, then reports event timing, frequency, duration, and caregiver-oriented recommendations. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, caregivers, and care-platform developers use this skill to turn bedroom sleep video or video URLs into structured abnormal-event reports for elderly nighttime monitoring. The output is intended as behavioral reference material for care review and medical consultation, not as a medical diagnosis. <br>
+External caregivers, family members, and elder-care operators use this skill to review nighttime sleep audio/video for behavioral event summaries, trends, and non-diagnostic follow-up guidance. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive bedroom video, audio, or media URLs may be sent to external Life Emergence/Open API services. <br>
-Mitigation: Use only with explicit consent from the recorded person and confirm the provider's data handling, retention, and deletion practices before deployment. <br>
-Risk: The skill may silently create or reuse an internal user identity, associate reports with that identity, and store access tokens in a local SQLite database. <br>
-Mitigation: Review identity handling and local credential storage before installation; restrict filesystem access and rotate or remove tokens when access is no longer needed. <br>
-Risk: Sleep event labels and risk signals could be mistaken for medical diagnosis or treatment guidance. <br>
-Mitigation: Present outputs as behavioral observations only and route frequent or concerning patterns to qualified neurology or sleep-medicine professionals for clinical evaluation. <br>
+Risk: The skill handles highly sensitive bedroom sleep audio/video, identifiers, report links, and report history through cloud APIs. <br>
+Mitigation: Use only with the elderly person's informed consent, review the configured cloud services before installation, and treat report links and history as sensitive records. <br>
+Risk: Local token storage and cloud retention implications may be unclear to deployers. <br>
+Mitigation: Review local token handling and cloud retention practices before using private footage. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-elderly-nightmare-startle-detect-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [ClawHub skill release page](https://clawhub.ai/18072937735/skills/smyx-elderly-nightmare-startle-detect-analysis) <br>
+- [API documentation](references/api_doc.md) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-formatted analysis reports, with optional saved output files.] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and JSON analysis reports with event timelines, risk signals, recommendations, and report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may include event timelines, frequency summaries, sleep-continuity scores, risk signal labels, family-facing summaries, recommendations, and report links.] <br>
+**Other Properties Related to Output:** [May include cloud report links and historical report tables; does not provide medical diagnosis.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+1.0.6 (source: server release metadata; artifact frontmatter states 1.0.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,37 +1,40 @@
 ## Description: <br>
-小河狸财报助手 lets an agent query companies, reporting periods, statements, metrics, trends, and local financial Q&A from the Xiaoheli Financial Statement Assistant running on the same computer. <br>
+Reads and analyzes financial data already imported into a locally running LittleBeaver Financial Assistant, including statements, metrics, trends, comparisons, payment collections, and local financial Q&A through read-only localhost access. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
 ## Publisher: <br>
-[littlebeaverstudio](https://clawhub.ai/user/littlebeaverstudio) <br>
+[yk-niu](https://clawhub.ai/user/yk-niu) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-Use this skill when an agent needs read-only access to financial statement data already imported into the user's local 小河狸财报助手 app, including company lists, periods, statements, metrics, trends, and local financial questions. <br>
+External users and local agents use this skill to answer questions about company financial statements, financial metrics, and period-over-period trends from data the user has already imported into LittleBeaver Financial Assistant. It is intended for local financial lookup and analysis, with explicit company, period, reporting dimension, and unit context in responses. <br>
 
 ### Deployment Geography for Use: <br>
-Runs on the user's local computer with 小河狸财报助手 v1.7.4 or later available on localhost. <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+Risk: The skill can return private financial report data from the user's local LittleBeaver Financial Assistant instance. <br>
+Mitigation: Treat returned financial data as private and avoid sending it to external services unless the user explicitly requests that. <br>
+Risk: Implicit invocation may cause the skill to be used for relevant financial questions without a separate confirmation prompt. <br>
+Mitigation: Confirm company, period, and reporting dimension when ambiguous, and use only localhost read-only endpoints for retrieval. <br>
+
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/littlebeaverstudio/skills/financial-assistant) <br>
+- [ClawHub Skill Page](https://clawhub.ai/yk-niu/skills/financial-assistant) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Chinese or user-requested prose, JSON command output summaries, and optional tables or charts derived from local financial data.] <br>
-**Output Parameters:** [Company name, period type, period ID, statement type, metric key, and natural-language financial question.] <br>
-**Other Properties Related to Output:** [The skill uses read-only localhost APIs and should treat returned financial data as private unless the user explicitly asks to share it elsewhere.] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
+**Output Format:** [Chinese Markdown answers with optional JSON data returned from local read-only API calls.] <br>
+**Output Parameters:** [1D] <br>
+**Other Properties Related to Output:** [Responses should preserve returned units, distinguish missing values from zero, and avoid unsupported trend or causality claims.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 <br>
+1.0.3 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

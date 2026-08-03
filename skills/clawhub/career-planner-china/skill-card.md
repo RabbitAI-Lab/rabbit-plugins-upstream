@@ -1,5 +1,5 @@
 ## Description: <br>
-AI时代职业规划师技能。专为AI时代职场变化而设计，帮助用户应对AI带来的职业冲击与机遇。当用户询问职业规划、职业建议、选专业、职场转型、未来就业方向时触发。功能包括：收集用户基本信息、霍兰德职业兴趣测评、职业价值观分析、AI时代职业影响评估（高危/中危/低危分级），并输出完整的个性化职业规划报告。关键词：职业规划、选专业、工作建议、做什么工作好、职业转型、AI时代职业、AI替代、哪些工作会被AI取代。 <br>
+Career Planner China is a Chinese-language career planning skill that collects user context, applies Holland, MBTI, career-anchor, and values signals, assesses AI-era career impact, and produces personalized career planning reports. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,50 +11,39 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Students, job seekers, and career changers use this agent to explore China-focused career options, assess interests and work values, evaluate AI impact on occupations, and receive personalized action plans. <br>
+External users, students, and career changers use this skill for AI-era career planning in China, including major selection, role transitions, industry fit, salary context, and action plans. The skill is intended to provide structured career guidance, not guaranteed employment, recruiting, legal, financial, or mental-health advice. <br>
 
 ### Deployment Geography for Use: <br>
 China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may ask users for personal career history, preferences, and location context. <br>
-Mitigation: Collect only information the user chooses to provide, avoid unnecessary sensitive details, and do not persist profiles unless the user explicitly requests it. <br>
-Risk: Optional report export, memory tracking, email or subscription workflows, and real-time data integrations can expose user information or trigger external actions. <br>
-Mitigation: Use those capabilities only after explicit user authorization and only when the current host environment permits them. <br>
-Risk: Built-in insurance-company recommendations and phone numbers may be outdated or unsuitable for a user's circumstances. <br>
-Mitigation: Present insurance-company information as reference material and advise users to independently verify companies, phone numbers, and suitability before acting. <br>
-Risk: Career, salary, job-demand, and AI-impact guidance may be incomplete or become outdated. <br>
-Mitigation: Frame recommendations as planning guidance rather than guarantees, disclose uncertainty, and use current external data only when requested and authorized. <br>
+Risk: Career recommendations may be misunderstood as deterministic predictions or professional guarantees. <br>
+Mitigation: Present recommendations as planning guidance, include uncertainty and disclaimers, and encourage users to compare options against their own circumstances and current market evidence. <br>
+Risk: Optional email, subscription, live lookup, export, or recruiting-data actions can expose personal career information outside the local conversation. <br>
+Mitigation: Use the skill's default offline posture and perform these actions only when the user explicitly requests them and the host grants permission. <br>
+Risk: Optional memory or tracking features can persist user profile and career-plan details. <br>
+Mitigation: Do not create profiles, write memory files, or schedule follow-up contact unless the user explicitly asks for persistence and the host environment supports it. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/career-planner-china) <br>
-- [Career planning workflow](references/flow_engine.md) <br>
-- [Career assessment framework](references/assessment.md) <br>
-- [MBTI reference](references/mbti.md) <br>
-- [Career anchor reference](references/career_anchor.md) <br>
-- [AI career impact reference](references/ai_career_impact.md) <br>
-- [Salary data reference](references/salary_data.md) <br>
-- [Salary database](references/salary_database.json) <br>
-- [Job demand reference](references/job_demand.md) <br>
-- [Industry trends reference](references/industry_trends.md) <br>
-- [Education paths reference](references/education_paths.md) <br>
-- [Insurance broker company list](references/insurance_broker_companies.json) <br>
-- [Optional integrations reference](references/integrations.md) <br>
-- [Zhaopin salary and job data source](https://www.zhaopin.com/) <br>
-- [Liepin salary and job data source](https://www.liepin.com/) <br>
-- [Boss Zhipin salary and job data source](https://www.zhipin.com/) <br>
-- [Indeed Beijing backend developer salary source](https://cn.indeed.com/career/%E5%90%8E%E7%AB%AF%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88/salaries/%E5%8C%97%E4%BA%AC%E5%B8%82) <br>
+- [AI career impact reference](artifact/references/ai_career_impact.md) <br>
+- [Assessment reference](artifact/references/assessment.md) <br>
+- [Career anchor reference](artifact/references/career_anchor.md) <br>
+- [Salary data reference](artifact/references/salary_data.md) <br>
+- [Emerging industries 2026 reference](artifact/references/emerging_industries/2026_careers.md) <br>
+- [Integration controls reference](artifact/references/integrations.md) <br>
+- [Tracking controls reference](artifact/references/tracker_system.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Chinese conversational guidance and structured Markdown career-planning reports] <br>
+**Output Type(s):** [text, markdown, guidance, configuration] <br>
+**Output Format:** [Conversational Chinese text and structured Markdown career-planning reports] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Holland code, MBTI type, career anchor, salary ranges, AI impact ratings, recommended career paths, and action lists.] <br>
+**Other Properties Related to Output:** [May include user profile summaries, career fit ratings, AI impact labels, salary ranges, action plans, and optional Markdown report files when explicitly requested.] <br>
 
 ## Skill Version(s): <br>
-2.2.245 (source: ClawHub release evidence) <br>
+2.2.273 (source: server release metadata; artifact frontmatter reports 2.2.255) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

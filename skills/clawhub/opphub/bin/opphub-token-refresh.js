@@ -12,7 +12,7 @@
 //
 // 跟 mtty-ai/opphub-plugin v0.7.4+ 完全同源:
 //   - 同一 Keychain entry: service=openclaw-opphub-uat account=opphub:default
-//   - 同一 refreshLocks Map() per-opcId (plugin 内部)
+//   - 同一 refreshLocks Map() per-userId (plugin 内部)
 //   - 同一 REFRESH_AHEAD_MS = 5min buffer
 //
 // v4.0.0 P0-3: refreshToken 返完整 token 对象 (跟 readToken 一致)
@@ -51,7 +51,7 @@ async function main() {
         mode: "status",
         plugin_client: health,
         token_status: s,
-        opc_id: t?.opc_id ?? null,
+        user_id: t?.user_id ?? null,
         obtained_at: t?.obtained_at ?? null,
         expires_at: t ? new Date(t.expires_at).toISOString() : null,
         refresh_expires_at: t?.refresh_expires_at ? new Date(t.refresh_expires_at).toISOString() : null,
@@ -77,7 +77,7 @@ async function main() {
         mode: "refresh",
         before: s1,
         after: s2,
-        opc_id: t2?.opc_id ?? null,
+        user_id: t2?.user_id ?? null,
         new_expires_at: t2?.expires_at ? new Date(t2.expires_at).toISOString() : null,
         new_refresh_expires_at: t2?.refresh_expires_at ? new Date(t2.refresh_expires_at).toISOString() : null,
       }));

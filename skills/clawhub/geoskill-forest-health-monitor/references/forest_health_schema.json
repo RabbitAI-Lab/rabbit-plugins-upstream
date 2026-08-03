@@ -1,0 +1,114 @@
+{
+  "severity_levels": {
+    "healthy": {
+      "code": 0,
+      "color": "00FF00",
+      "description": "正常",
+      "description_en": "Healthy",
+      "criteria": "All indices within 1 std of baseline"
+    },
+    "mild_stress": {
+      "code": 1,
+      "color": "FFFF00",
+      "description": "轻度胁迫",
+      "description_en": "Mild Stress",
+      "criteria": "1+ indices below 1.5 std, or alert state"
+    },
+    "moderate_decline": {
+      "code": 2,
+      "color": "FF9900",
+      "description": "中度衰退",
+      "description_en": "Moderate Decline",
+      "criteria": "2+ indices below 1.5 std, decline state"
+    },
+    "severe_decline": {
+      "code": 3,
+      "color": "FF0000",
+      "description": "严重衰退",
+      "description_en": "Severe Decline",
+      "criteria": "2+ indices below 2.0 std, persistent decline"
+    },
+    "mortality": {
+      "code": 4,
+      "color": "990000",
+      "description": "死亡/风倒",
+      "description_en": "Mortality / Wind Throw",
+      "criteria": "Extreme decline, absorbing state"
+    }
+  },
+  "forest_types": {
+    "evergreen": {
+      "name": "常绿林",
+      "ndvi_baseline": 0.65,
+      "ndvi_amplitude": 0.10,
+      "ndmi_baseline": 0.30,
+      "nbr_baseline": 0.50,
+      "phenology_phase": "minimal"
+    },
+    "deciduous": {
+      "name": "落叶林",
+      "ndvi_baseline": 0.55,
+      "ndvi_amplitude": 0.35,
+      "ndmi_baseline": 0.25,
+      "nbr_baseline": 0.40,
+      "phenology_phase": "strong"
+    },
+    "mixed": {
+      "name": "混交林",
+      "ndvi_baseline": 0.60,
+      "ndvi_amplitude": 0.20,
+      "ndmi_baseline": 0.28,
+      "nbr_baseline": 0.45,
+      "phenology_phase": "moderate"
+    }
+  },
+  "indices": {
+    "ndvi": {
+      "name": "Normalized Difference Vegetation Index",
+      "formula": "(NIR - Red) / (NIR + Red)",
+      "weight": 0.30,
+      "range": [-1, 1]
+    },
+    "evi": {
+      "name": "Enhanced Vegetation Index",
+      "formula": "2.5 * (NIR - Red) / (NIR + 6*Red - 7.5*Blue + 1)",
+      "weight": 0.20,
+      "range": [-1, 1]
+    },
+    "ndmi": {
+      "name": "Normalized Difference Moisture Index",
+      "formula": "(NIR - SWIR1) / (NIR + SWIR1)",
+      "weight": 0.25,
+      "range": [-1, 1]
+    },
+    "nbr": {
+      "name": "Normalized Burn Ratio",
+      "formula": "(NIR - SWIR2) / (NIR + SWIR2)",
+      "weight": 0.25,
+      "range": [-1, 1]
+    }
+  },
+  "state_machine": {
+    "states": ["stable", "alert", "decline", "recovery", "mortality"],
+    "transitions": {
+      "stable_to_alert": "1 anomalous observation",
+      "alert_to_decline": "persistent anomaly (threshold months)",
+      "decline_to_recovery": "improving trend for threshold months",
+      "recovery_to_stable": "sustained recovery",
+      "decline_to_mortality": "extreme persistent decline"
+    }
+  },
+  "climate_attribution": {
+    "spi": "Standardized Precipitation Index",
+    "spei": "Standardized Precipitation Evapotranspiration Index",
+    "temperature": "Mean temperature anomaly",
+    "precipitation": "Cumulative precipitation anomaly"
+  },
+  "thresholds": {
+    "anomaly_z_score": -1.5,
+    "high_confidence_z_score": -2.0,
+    "min_indices_agree": 2,
+    "correlation_aligned": 0.5,
+    "breakpoint_magnitude": 0.1
+  }
+}

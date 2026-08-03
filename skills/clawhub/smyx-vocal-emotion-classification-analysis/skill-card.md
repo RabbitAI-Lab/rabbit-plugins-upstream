@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes pet vocalization audio or video from a file or URL, extracts acoustic features, classifies the call into emotion categories with confidence scores, and returns audio-based emotion results without medical or behavior-modification advice. <br>
+Classifies pet vocalization audio or video into emotion categories with acoustic features, confidence scores, structured reports, and report links while avoiding medical or behavior-modification advice. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to classify dog, cat, or other pet vocalizations into emotion labels and confidence distributions for companionship, boarding-center monitoring, veterinary calming assessment, or behavior-training support. The skill can also retrieve prior cloud reports associated with the local identity used by the service. <br>
+External users and agents use this skill to analyze dog or cat vocalization media for emotion categories, confidence scores, and historical report lookup. It is intended for companionship, boarding, veterinary calming assessment, and behavior-training support, not for medical diagnosis or behavior-modification advice. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Pet audio, video, or media URLs are sent to the Life Emergence cloud service for analysis. <br>
-Mitigation: Use the skill only with media the user is permitted to share with that service, and avoid sending sensitive or private recordings unless the service terms and data handling are acceptable. <br>
-Risk: The skill can create or reuse a local identity, store service tokens in a workspace SQLite database, and retrieve cloud reports tied to that identity. <br>
-Mitigation: Review the local identity and token storage behavior before installation, restrict workspace access, and clear stored identity data when the skill should no longer be associated with prior cloud reports. <br>
-Risk: Historical report queries may reveal previously generated cloud reports for the local identity. <br>
-Mitigation: Run history queries only in contexts where showing prior reports is expected and authorized. <br>
+Risk: Pet media files or media URLs are sent to the LifeEmergence cloud service for analysis. <br>
+Mitigation: Use only media that is appropriate to share with that service, and avoid sensitive recordings unless the publisher documents authorization, retention, and handling terms. <br>
+Risk: The skill can silently create or reuse a local account identity and store authentication tokens in a workspace SQLite database. <br>
+Mitigation: Review workspace data storage and token handling before installation, and run the skill in a workspace where that local identity behavior is acceptable. <br>
+Risk: Historical report lookup retrieves account-scoped cloud records. <br>
+Mitigation: Confirm that cloud history access is expected for the workspace identity before using report-list features. <br>
+Risk: Emotion classifications can be low-confidence or affected by noisy, mixed, too-short, or too-long vocalizations. <br>
+Mitigation: Treat results as informational emotion classification only, and do not use them as medical, training, or behavior-correction advice. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-vocal-emotion-classification-analysis) <br>
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Pet vocal emotion API documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [API 接口文档](references/api_doc.md) <br>
+- [smyx_analysis API接口文档](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown, JSON-like structured reports, shell command examples, and optional saved result files] <br>
+**Output Type(s):** [text, markdown, json, files] <br>
+**Output Format:** [Structured text or JSON with optional Markdown tables and report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Analysis output may include confidence scores, report links, progress or error messages, and Markdown history tables.] <br>
+**Other Properties Related to Output:** [May write the analysis result to a user-specified output file.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server-resolved release metadata; artifact frontmatter states 1.0.6) <br>
+1.0.4 (source: server release metadata; artifact frontmatter states 1.0.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

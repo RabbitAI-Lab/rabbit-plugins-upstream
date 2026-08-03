@@ -1,5 +1,5 @@
 ## Description: <br>
-Migrates AI assistant context between IDEs, including MCP servers, rules, skills, commands, agents, hooks, and memory, with dry-run previews, format conversion, backup-first merging, secret redaction, and verification. <br>
+Helps migrate AI-assistant context, such as skills, rules, prompts, commands, and MCP configuration, between supported IDEs or agent tools with preview-first safety gates. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill when they explicitly need to migrate, copy, convert, or synchronize AI assistant context between supported IDEs and agent runtimes. It helps inventory source settings, preview conversion plans, redact credentials, apply approved changes, and verify destination configuration. <br>
+Developers and engineers use this skill to preview and apply scoped migrations of agent context between supported IDEs and agent tools. It emphasizes dry-run review, named-path inspection, secret redaction, conflict handling, and manual boundaries for unsupported or UI-managed settings. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can modify IDE and agent configuration files during migration. <br>
-Mitigation: Run dry-runs first, review target directories and planned changes, and only use --yes when the destination changes are understood. <br>
-Risk: Using overwrite or replacement sync modes can rewrite or delete destination skill and configuration files. <br>
-Mitigation: Prefer the default backup strategy, keep timestamped backups, and avoid overwrite modes unless the target contents are disposable. <br>
-Risk: MCP, config, and project migrations may contain credentials or connection strings. <br>
-Mitigation: Treat these migrations as opt-in, expect secrets to be blanked, and re-enter credentials through the target IDE or a secret manager after migration. <br>
-Risk: OpenClaw installation downloads and runs an external installer. <br>
-Mitigation: Set and verify OPENCLAW_INSTALL_SHA256 before allowing the installer to run, and do not proceed when the checksum is missing or mismatched. <br>
+Risk: MCP migration can change tool or server configuration and may expose credential-handling mistakes if the dry-run is not reviewed. <br>
+Mitigation: Review the dry-run output before any approved apply, verify credential redaction, and re-authorize target IDE tools manually. <br>
+Risk: Unsupported formats, opaque project trees, and UI-managed settings can be misrepresented if treated as direct file migrations. <br>
+Mitigation: Use only named source and target paths, respect documented manual boundaries, and reconstruct unclear or unsupported settings manually. <br>
 
 
 ## Reference(s): <br>
-- [Agent Skills Setup on ClawHub](https://clawhub.ai/luckycat133/skills/agent-skills-setup) <br>
-- [IDE Registry](artifact/references/ide-registry.md) <br>
-- [IDE Paths](artifact/references/ide-paths.json) <br>
-- [OpenClaw Reference](artifact/references/openclaw.md) <br>
-- [Publishing Reference](artifact/references/publishing.md) <br>
+- [IDE Reference Index](references/ide-registry.md) <br>
+- [Migration safety and conflicts](references/migration-safety.md) <br>
+- [MCP migration](references/mcp-migration.md) <br>
+- [MCP transport](references/mcp-transport.md) <br>
+- [Object migration](references/object-migration.md) <br>
+- [Verification](references/verification.md) <br>
+- [Script usage](scripts/README.md) <br>
+- [ClawHub skill page](https://clawhub.ai/luckycat133/skills/agent-skills-setup) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, configuration snippets, migration plans, and verification summaries] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with inline shell commands and optional JSON evidence summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local file changes and installer commands; write operations require explicit confirmation and should be previewed first.] <br>
+**Other Properties Related to Output:** [Preview-first workflow; approved applies may produce target configuration files and backup paths.] <br>
 
 ## Skill Version(s): <br>
-0.5.7 (source: server release metadata and SKILL.md frontmatter) <br>
+0.7.0 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

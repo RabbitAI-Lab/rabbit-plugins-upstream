@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides reliable scheduled reminders and recurring task guidance using cron-style scheduling, timezone locking, wake rules, cleanup, and optional WeCom, DingTalk, or Feishu message delivery. <br>
+Guides agents to create precise cron-based reminders and recurring tasks, with timezone confirmation, cleanup, and chat-platform delivery guidance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use this skill to create precise reminders and recurring agent tasks, choose cron scheduling instead of heartbeat waits for delays longer than one minute, and troubleshoot scheduler failures. <br>
+Developers and agent operators use this skill to turn reminder, scheduling, and periodic-task requests into reliable cron-style agent jobs. It is especially useful when a user needs a reminder delivered at a specific time or through a supported chat platform. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may guide agents to write persistent timezone memory or alter scheduler state. <br>
-Mitigation: Confirm the intended timezone and task details before writing memory or changing scheduler records. <br>
-Risk: Repair steps can involve deleting jobs.json or restarting the Agent platform, which may remove scheduled tasks. <br>
-Mitigation: Back up scheduler state and record task recreation details before deleting state files or restarting the platform. <br>
-Risk: External message delivery can fail if WeCom, DingTalk, or Feishu channel and recipient settings are wrong or expired. <br>
-Mitigation: Verify channel, recipient, and webhook settings before relying on reminders, and keep a fallback delivery channel for important tasks. <br>
+Risk: The skill may create persistent scheduled tasks that continue after the immediate conversation. <br>
+Mitigation: Confirm each schedule, recurrence, delivery target, and cleanup behavior before creating or retaining a task. <br>
+Risk: Reminder content may be sent to external chat platforms. <br>
+Mitigation: Review the destination channel, recipient, and message content, and avoid placing secrets or sensitive data in reminders. <br>
+Risk: The skill may store timezone preferences in MEMORY.md. <br>
+Mitigation: Ask the user before persisting timezone information and skip the write when they do not want that preference stored. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/cron-precision-scheduler) <br>
 - [ISO 8601 Date and Time Format](https://www.iso.org/iso-8601-date-and-time-format.html) <br>
-- [Crontab Guru](https://crontab.guru/) <br>
+- [Cron Expression Syntax](https://crontab.guru/) <br>
 - [WeCom Webhook Documentation](https://developer.work.weixin.qq.com/document/path/91770) <br>
 - [DingTalk Custom Robot Access](https://open.dingtalk.com/document/robots/custom-robot-access) <br>
 - [Feishu Card JSON Structure](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/feishu-cards/card-json-structure) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Configuration, Shell commands, Text] <br>
-**Output Format:** [Markdown guidance with JSON cron task examples and command-style scheduler steps] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JSON task examples and inline shell or tool commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes timezone, wake, cleanup, and troubleshooting instructions for agent scheduler state.] <br>
+**Other Properties Related to Output:** [May propose persistent scheduled tasks, timezone memory updates, and external chat delivery settings.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+1.0.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

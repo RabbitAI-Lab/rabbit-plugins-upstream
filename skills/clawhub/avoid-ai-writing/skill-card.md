@@ -1,5 +1,5 @@
 ## Description: <br>
-Audits drafts for AI-sounding writing patterns and rewrites them into cleaner, more natural prose. <br>
+Audit and rewrite content to remove AI writing patterns ("AI-isms"). <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Writers, editors, marketers, and developers use this skill to audit pasted text or files they explicitly provide for AI writing patterns, rewrite the content, summarize the changes, and run a second-pass check. <br>
+Writers, editors, and developers use this skill to audit prose for AI-writing patterns, rewrite flagged passages, or make targeted edits to user-named files. It is best suited for writing-quality review, not for proving whether a person or model authored text. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive or unpublished drafts may be processed by the assistant environment if the user pastes them or points the skill at them. <br>
-Mitigation: Use only text and files that are appropriate for the active assistant environment, and avoid submitting confidential drafts unless that environment is approved for them. <br>
-Risk: Rewrites can remove nuance, alter voice, or change meaning while making prose sound less AI-generated. <br>
-Mitigation: Review the rewritten version and second-pass audit before publishing or sending the edited content. <br>
-Risk: Manual installation from an unverified source can expose users to a modified skill package. <br>
-Mitigation: Use the ClawHub install path when possible, or verify the source and files before cloning or copying the skill manually. <br>
+Risk: AI-writing signals can produce false positives and should not be treated as proof of authorship. <br>
+Mitigation: Use detect mode for third-party, published, academic, hiring, or other consequential writing, and pair findings with context before acting on them. <br>
+Risk: Edit mode can change a user-named file in place. <br>
+Mitigation: Review edit reports and file diffs before accepting changes, especially for published, quoted, code, or attributed material. <br>
+Risk: Rewrites can over-smooth prose or introduce voice, facts, or emphasis not present in the source. <br>
+Mitigation: Preserve original intent and specifics, avoid adding unsupported details, and use the skill's verification pass after rewriting. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/conorbronsdon/avoid-ai-writing) <br>
-- [Wikipedia Signs of AI-generated text](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) <br>
+- [ClawHub skill page](https://clawhub.ai/conorbronsdon/skills/avoid-ai-writing) <br>
+- [Publisher profile](https://clawhub.ai/user/conorbronsdon) <br>
+- [Wikipedia: Signs of AI-generated text](https://en.wikipedia.org/wiki/Wikipedia:Signs_of_AI_writing) <br>
 - [brandonwise/humanizer](https://github.com/brandonwise/humanizer) <br>
-- [OpenClaw](https://github.com/openclaw/openclaw) <br>
+- [blader/humanizer](https://github.com/blader/humanizer) <br>
+- [Pangram Labs](https://www.pangram.com/) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with four sections: issues found, rewritten version, what changed, and second-pass audit.] <br>
+**Output Type(s):** [text, markdown, files, guidance] <br>
+**Output Format:** [Markdown sections with quoted findings, rewritten text, change summaries, second-pass audits, or edit reports.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Transforms user-provided text or files explicitly pointed to by the user; no external tools or APIs required.] <br>
+**Other Properties Related to Output:** [Edit mode may modify a user-named file and should report the locations changed plus verification results.] <br>
 
 ## Skill Version(s): <br>
-3.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+3.22.1 (source: evidence release, SKILL.md frontmatter, CHANGELOG top entry dated 2026-07-31) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

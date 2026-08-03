@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/tencent-meeting-skill",
   "slug": "tencent-meeting-skill",
   "ownerHandle": null,
-  "version": "1.0.11",
-  "updatedAt": 1781836337896,
-  "contentHash": "9ebf56c71ef5086878fe1c78b7198fd006be56f3a3c9ad98551a5a7bb8b72fac",
-  "fetchedAt": "2026-07-26T18:26:53.862Z"
+  "version": "1.0.13",
+  "updatedAt": 1785473765741,
+  "contentHash": "19767486289a656ff24df7a4780a7bdd2b8c48510e230750ffe18ecba23f3ba7",
+  "fetchedAt": "2026-08-03T11:28:51.564Z"
 }

@@ -11,37 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to implement, debug, build, deploy, and validate web frontends, especially React, Vue, Vite, routing, browser validation, and CloudBase Web integration work. <br>
+Developers and engineers use this skill to implement, integrate, debug, build, deploy, and validate web frontends or static sites, especially React, Vue, Vite, browser validation, and CloudBase Web integrations after product direction is clear. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Authentication examples may lead an agent toward weak access control if copied into production without review. <br>
-Mitigation: Review authentication snippets before production use, require real server-side token validation, and avoid client-readable access-token cookies where possible. <br>
-Risk: CloudBase deployment guidance can be applied with an implicit or incorrect region. <br>
-Mitigation: Select an explicit CloudBase region that matches deployment and compliance needs before using the skill for production work. <br>
-Risk: Frontend changes may be declared complete without browser-level verification. <br>
-Mitigation: Run the skill's static checks and browser-validation workflow for changes affecting routing, rendering, forms, authentication, or async UI. <br>
+Risk: Authentication examples may encourage unsafe token handling or authorization bypass if copied into protected routes without review. <br>
+Mitigation: Review and correct generated authentication code before use; require server-side token validation and safer session handling for protected routes. <br>
+Risk: The skill can propose code, shell commands, and configuration changes that affect builds, routing, deployment, or authentication. <br>
+Mitigation: Run the skill's static checks, build checks, and browser validation workflow before accepting or deploying changes. <br>
 
 
 ## Reference(s): <br>
-- [CloudBase main skill entry](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md) <br>
-- [Web Development raw source](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/web-development/SKILL.md) <br>
-- [Browser validation playbook](browser-testing.md) <br>
-- [Framework guidance](frameworks.md) <br>
-- [CloudBase integration documentation](https://docs.cloudbase.net/integration/introduce/index.md) <br>
-- [CloudBase Web SDK CDN](https://static.cloudbase.net/cloudbase-js-sdk/latest/cloudbase.full.js) <br>
+- [ClawHub Skill Page](https://clawhub.ai/binggg/skills/web-development) <br>
+- [Web Development Source](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/web-development/SKILL.md) <br>
+- [CloudBase Main Entry](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md) <br>
+- [Framework Guidance](frameworks.md) <br>
+- [Browser Validation](browser-testing.md) <br>
+- [CloudBase Integration Docs](https://docs.cloudbase.net/integration/introduce/index.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code snippets, shell commands, configuration examples, and validation notes] <br>
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with inline code and shell command blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent to run build, lint, test, deployment, and browser-validation checks when applicable.] <br>
+**Other Properties Related to Output:** [May include implementation steps, verification steps, and code or configuration snippets.] <br>
 
 ## Skill Version(s): <br>
-1.27.17 (source: ClawHub release metadata; artifact frontmatter declares 2.24.1) <br>
+1.27.23 (source: ClawHub release metadata; source skill frontmatter reports 2.25.4) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

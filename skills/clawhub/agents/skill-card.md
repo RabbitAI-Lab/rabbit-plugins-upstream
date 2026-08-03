@@ -1,5 +1,5 @@
 ## Description: <br>
-A collection of OpenClaw and third-party agent skills for code review, ClawHub operations, Convex development, observability, documentation, design, and release workflows. <br>
+Designs, debugs, evaluates, and hardens framework-agnostic AI agents across loop structure, tools, memory, context budget, cost, security, escalation, and production rollout. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,41 +7,36 @@ This skill is ready for commercial/non-commercial use. <br>
 [ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and operators use these skills to guide agent work across review, release, ClawHub maintenance, Convex application development, observability workflows, documentation, and interface design. <br>
+Developers and agent builders use this skill to design, debug, evaluate, harden, and operate AI agents. It helps with tool schemas, memory design, cost controls, human approvals, security boundaries, releases, and regression tests. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Skills may propose shell commands, configuration changes, code edits, or API operations that affect local files or connected services. <br>
-Mitigation: Review proposed actions before execution, run in a constrained workspace, and require explicit approval for sensitive service changes. <br>
-Risk: Some workflows reference credentials or service tokens for tools such as OpenAI, Axiom, Sentry, Slack, or Grafana. <br>
-Mitigation: Use least-privilege credentials, keep secret values out of prompts and logs, and rotate tokens if exposure is suspected. <br>
-Risk: The release includes third-party imported skills with separate provenance and license signals. <br>
-Mitigation: Review the included provenance snapshots and original publisher materials before deploying those skills in sensitive environments. <br>
+Risk: The skill preserves operational memory in local Clawic notes, which can accumulate agent design, evaluation, cost, release, server, contact, and subscription details over time. <br>
+Mitigation: Install only when this local continuity behavior is wanted, keep the configured note paths scoped, and review those files periodically. <br>
+Risk: Agent design work may involve prompts, traces, tool configs, or environment examples that contain credential values. <br>
+Mitigation: Store only credential pointers such as environment variable names or secret-manager locations, and strip pasted secret values before writing local notes. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub repository](https://github.com/openclaw/clawhub) <br>
-- [ClawHub README](README.md) <br>
-- [ClawHub skill format](docs/skill-format.md) <br>
-- [ClawHub security audits](docs/security-audits.md) <br>
-- [Axiom skills provenance](.agents/skills/axiomhq-skills.provenance.json) <br>
-- [Sentry for AI skill provenance](.agents/skills/getsentry-sentry-for-ai.provenance.json) <br>
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/agents) <br>
+- [Clawic skill page](https://clawic.com/skills/agents) <br>
+- [Clawic](https://clawic.com) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline code, shell commands, configuration snippets, and file-change instructions] <br>
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
+**Output Format:** [Markdown guidance with examples, tables, and inline code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Some skills can call local scripts, CLIs, or external service APIs when the agent and environment permit those actions.] <br>
+**Other Properties Related to Output:** [May produce or update local Clawic notes under configured paths while avoiding credential values.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: target metadata) <br>
+1.0.2 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/hello-greeter",
   "slug": "hello-greeter",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1779819092532,
-  "contentHash": "abe58ae0df563a112487d1fbea77d1404724ff0955cf857a9d57f9461d267ab1",
-  "fetchedAt": "2026-07-26T18:39:38.175Z"
+  "version": "1.0.1",
+  "updatedAt": 1785320860729,
+  "contentHash": "3192f209ff7438c379e3ac902995efec2649583a9393f9839f02cb6d2742fddf",
+  "fetchedAt": "2026-08-03T11:33:38.440Z"
 }

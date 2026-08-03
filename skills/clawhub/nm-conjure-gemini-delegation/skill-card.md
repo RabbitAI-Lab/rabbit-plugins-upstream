@@ -11,30 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to delegate large-context analysis, summarization, pattern extraction, and batch processing tasks to Gemini CLI when delegation-core selects Gemini or when Gemini's large context window is useful. <br>
+Developers and agents use this skill to delegate batch processing, summarization, pattern extraction, and large-context file analysis tasks to the Gemini CLI after delegation-core selects Gemini as suitable. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompts that use @path or recursive globs can include secrets or private data in Gemini CLI context. <br>
-Mitigation: Review selected files first, use narrow file patterns, and avoid sending private or secret material to Gemini. <br>
+Risk: Gemini CLI examples can send local file contents to Google Gemini, including files matched by @path or recursive glob patterns. <br>
+Mitigation: Review included paths before execution and avoid sending secrets, credentials, private customer data, or proprietary code unless policy allows it. <br>
+Risk: Large recursive file inclusions can unintentionally include more data than needed for the delegation task. <br>
+Mitigation: Use selective file paths or narrow glob patterns and inspect the target file set before running the Gemini CLI command. <br>
 
 
 ## Reference(s): <br>
-- [Gemini-Specific Configuration](artifact/modules/gemini-specifics.md) <br>
-- [Conjure plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure) <br>
-- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conjure-gemini-delegation) <br>
+- [Gemini-Specific Configuration](modules/gemini-specifics.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-conjure-gemini-delegation) <br>
+- [OpenClaw Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with inline bash code blocks and CLI examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide Gemini CLI prompts that include local files through @path or recursive glob patterns.] <br>
+**Other Properties Related to Output:** [May include Gemini CLI commands, model-selection guidance, authentication steps, and file inclusion patterns.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: server release evidence; artifact frontmatter lists 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

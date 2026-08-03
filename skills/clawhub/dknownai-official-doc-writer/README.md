@@ -1,6 +1,6 @@
-# 深知写作助手（Clawhub Public 版）
+# 深知公文写作（Clawhub Public 版）
 
-这是深知写作助手的 Clawhub 分发版本。功能逻辑与主干完整版保持一致，但不内置深知搜索 API Key；ClawHub 渠道只处理搜索 Key 获取方式和渠道注册链接差异。
+这是深知写作助手的 Clawhub 分发版本，显示名称为“深知公文写作”。功能逻辑与主干完整版保持一致，但不内置深知搜索 API Key；ClawHub 渠道只处理搜索 Key 获取方式和渠道注册链接差异。
 
 ## 能力范围
 
@@ -21,6 +21,10 @@
 pip3 install python-docx requests
 ```
 
+`Python`、`python-docx` 和 `requests` 是运行本 Skill 的必备前置条件。初始化检查如显示 `ready=false`，应先征得用户同意后安装缺失依赖，并重新检查通过后再继续执行搜索、Word、红头或素材来源 HTML 生成。
+
+标准公文字体不随 Skill 分发，字体也不作为初始化阻断项。Word 文档会写入公文常用字体名称；如打开端缺少对应字体，Word/WPS 可能自动替换，需以本机打开后的显示为准。
+
 如需要由 Agent 协助完成深知搜索账号注册，还需要 Node.js 18+：
 
 ```bash
@@ -29,15 +33,24 @@ node --version
 
 当前版本不内置 PDF 生成或转换依赖。正式公文主交付物为 `.docx`；如用户需要 PDF，应使用 Word/WPS 打开 `.docx` 后另存或导出。
 
-## 搜索与大纲 API Key 配置
+## API Key 配置
 
-ClawHub Public 版默认不要求首次使用即注册。简单起草、改写、润色、审查、普通 Word 生成、红头 Word 生成等不需要搜索的任务，可直接使用，不需要手机号、验证码或 `config.ini`。
+ClawHub Public 版不内置 API Key。当前版本将 `config.ini` 和有效 API Key 作为启动门禁：首次调用后必须先完成初始化检查，只有本地存在有效 `config.ini` 且配置了 API Key，才可以继续写作、改写、润色、审查、范文大纲、深知搜索、Word 生成或红头生成。
 
-只有任务确实需要公文范文大纲接口或深知可信搜索，且本地没有可用 `config.ini` 时，用户可选择以下任一方式配置：
+如果本地没有可用 `config.ini`，用户可选择以下任一方式配置：
 
 1. 由 Agent 协助注册：用户明确同意后，Agent 调用 `scripts/register.mjs` 发送短信验证码、完成注册，并把返回的 API Key 写入本 Skill 根目录下的 `config.ini`。
-2. 手动注册配置：用户通过 ClawHub 渠道注册链接注册后，自行按本地环境配置搜索 API Key。
-3. 暂不使用深知搜索：改用用户提供材料继续写作，或在用户明确授权时另行选择外部检索方式。
+2. 手动注册配置：用户通过 MaaS 管理平台获取 API Key 后，自行按本地环境配置。
+
+未配置有效 API Key 前，不输出正文、草稿、大纲、示例通知、Word 文件或任何可替代正式写作结果。
+
+MaaS 管理平台地址：
+
+```text
+https://platform.dknowc.cn/
+```
+
+新用户注册后会有 300 次体验额度；体验额度用完后，可到 MaaS 管理平台充值。完成实名认证后，平台也可能提供 100 元赠金，具体以 MaaS 平台页面展示为准。
 
 ClawHub 版默认使用：
 
@@ -61,15 +74,15 @@ node scripts/register.mjs register --phone 13812345678 --vcode 123456 --organ �
 
 成功后，脚本会把 API Key 自动写入本 Skill 根目录下的 `config.ini`，不会在标准输出中返回完整 Key。`config.ini` 是敏感凭据文件，只存在于用户本地安装后的 Skill 目录中，不得上传、打包或公开分享。
 
-手动注册链接：
+手动配置入口：
 
 ```text
-https://platform.dknowc.cn/auth/#/register?channel=2787E171-B0E5-4328-9946-47AC52434D1F&type=6
+https://platform.dknowc.cn/
 ```
 
 ## 版本说明
 
-当前 Clawhub Public 版为 `3.2.1`。
+当前 Clawhub Public 版为 `3.2.5`。
 
 ## 常用测试
 
@@ -119,7 +132,7 @@ python3 scripts/source_note_html.py official-docs/input/source-note.json --outpu
 ## Public 版说明
 
 - 本版本不内置 API Key。
-- 不需要搜索的文书写作和 Word 生成任务可直接使用。
-- 只有用户任务需要深知搜索时，才需要配置搜索 API Key。
-- 用户可选择 Agent 协助注册，也可选择手动注册或暂不使用深知搜索。
+- 显示名称为“深知公文写作”，原“深知写作助手”作为项目/历史名称继续保留。
+- API Key 是启动门禁；未配置有效 Key 前，不输出正文、草稿、大纲、示例通知、Word 或红头文件。
+- 用户可选择 Agent 协助注册，也可选择到 MaaS 管理平台手动获取并配置。
 - 公文范文大纲、深知搜索、素材分类、素材来源 HTML、Word 生成、红头文件、异常处理等功能逻辑与主干完整版一致。

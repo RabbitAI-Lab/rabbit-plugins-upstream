@@ -1,0 +1,55 @@
+{
+  "version": "1.0.0",
+  "description": "滑坡易发性评价因子配置",
+  "factor_names": [
+    "slope",
+    "aspect",
+    "curvature",
+    "flow_acc",
+    "lithology",
+    "dist_fault",
+    "rainfall",
+    "dist_road"
+  ],
+  "factor_descriptions": {
+    "slope": "坡度 (度)",
+    "aspect": "坡向 (度)",
+    "curvature": "曲率",
+    "flow_acc": "汇流累积量",
+    "lithology": "岩性 (分类)",
+    "dist_fault": "距断裂距离 (米)",
+    "rainfall": "年降雨量 (毫米)",
+    "dist_road": "距道路距离 (米)"
+  },
+  "vif_threshold": 5.0,
+  "correlation_threshold": 0.8,
+  "class_schemas": {
+    "five_class": {
+      "description": "五级分类",
+      "thresholds": [0.2, 0.4, 0.6, 0.8],
+      "labels": ["very_low", "low", "moderate", "high", "very_high"],
+      "labels_zh": ["极低", "低", "中等", "高", "极高"]
+    },
+    "four_class": {
+      "description": "四级分类",
+      "thresholds": [0.25, 0.5, 0.75],
+      "labels": ["low", "moderate", "high", "very_high"],
+      "labels_zh": ["低", "中等", "高", "极高"]
+    }
+  },
+  "negative_sampling_strategies": {
+    "random": "随机采样",
+    "buffer": "缓冲区采样 (远离滑坡点)",
+    "spatial_block": "空间分层采样"
+  },
+  "model_types": {
+    "logistic_regression": "逻辑回归",
+    "random_forest": "随机森林",
+    "slope_baseline": "坡度基线 (对照)"
+  },
+  "references": [
+    "Fell, R., et al. (2008). Guidelines for landslide susceptibility, hazard and risk zoning for land-use planning. Engineering Geology, 102(3-4), 99-111.",
+    "Reichenbach, P., et al. (2018). A review of statistically-based landslide susceptibility models. Earth-Science Reviews, 180, 60-91.",
+    "Budimir, M.E.A., et al. (2015). A systematic review of landslide probability zonation. Landslides, 12(4), 729-746."
+  ]
+}

@@ -1,5 +1,5 @@
 ## Description: <br>
-MCP server security registry and trust assessment - look up servers in the 1013-entry server security metadata registry, run pre-install marketplace checks, batch fleet risk scoring, assess skill file trust, and run SAST code scans. <br>
+MCP server security registry and trust assessment that looks up servers in a 1034-entry metadata registry, runs pre-install marketplace checks, batch fleet risk scoring, skill-file trust assessment, and SAST code scans. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,37 +7,39 @@ This skill is ready for commercial/non-commercial use. <br>
 [msaad00](https://clawhub.ai/user/msaad00) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+Apache-2.0 <br>
 
 
 ## Use Case: <br>
-Developers and security reviewers use this skill to evaluate MCP server trust, run pre-install marketplace checks, assess skill files, and perform SAST-oriented code scans before adopting agent tooling. <br>
+Developers and security engineers use this skill to check MCP server trust, review marketplace packages before installation, score server inventories, assess skill instructions, and run static security scans. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can run security lookups and scans over MCP servers, skill files, or code, so results may depend on the exact targets selected for analysis. <br>
-Mitigation: Keep scans pointed at directories, skill files, and server inventories that the operator intends to analyze, and review findings before using them for deployment decisions. <br>
-Risk: Optional Snyk enrichment may contact a third-party vulnerability service when SNYK_TOKEN is provided. <br>
-Mitigation: Provide SNYK_TOKEN only when third-party enrichment is desired, and keep the token in the operator environment rather than embedding it in skill output. <br>
+Risk: The installed package may not be the intended PyPI or GitHub package. <br>
+Mitigation: Verify the package identity and source before installing or trusting scan results. <br>
+Risk: Optional vulnerability enrichment requires SNYK_TOKEN and may involve third-party processing. <br>
+Mitigation: Provide SNYK_TOKEN only when Snyk enrichment is intended, and keep the token in the operator environment. <br>
+Risk: Skill or code contents submitted for optional enrichment may contain sensitive information. <br>
+Mitigation: Treat scanned content as sensitive and avoid optional third-party enrichment for material that should remain local. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-registry) <br>
-- [Project homepage](https://github.com/msaad00/agent-bom) <br>
-- [PyPI project](https://pypi.org/project/agent-bom/) <br>
+- [agent-bom GitHub repository](https://github.com/msaad00/agent-bom) <br>
+- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
 - [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and plain text with inline shell commands and structured security findings] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
+**Output Format:** [Markdown and structured text with command examples and security findings] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May report local registry lookup results, skill trust findings, fleet risk scores, and optional Semgrep or Snyk-enriched scan guidance.] <br>
+**Other Properties Related to Output:** [May include registry matches, trust assessments, risk scores, SAST findings, and recommended next actions.] <br>
 
 ## Skill Version(s): <br>
-0.98.0 (source: server release metadata and SKILL.md frontmatter) <br>
+0.98.3 (source: frontmatter and release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

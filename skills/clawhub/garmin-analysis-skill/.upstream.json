@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/garmin-analysis-skill",
   "slug": "garmin-analysis-skill",
   "ownerHandle": null,
-  "version": "0.2.2",
-  "updatedAt": 1785085174512,
-  "contentHash": "2de7c73f6bdb7eb323ed67503e1e4daee9bfd8ba665c6f6069b2ed87380a8942",
-  "fetchedAt": "2026-07-26T18:03:06.047Z"
+  "version": "0.2.3",
+  "updatedAt": 1785259785142,
+  "contentHash": "9d77a60605e4197a7bf299bae6cd504fd2cc6bd536b6365ae902c2b63339bc3e",
+  "fetchedAt": "2026-08-03T11:35:43.225Z"
 }

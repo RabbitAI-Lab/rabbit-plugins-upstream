@@ -44,27 +44,91 @@ workbench upgrade --version 0.2.0        # Upgrade to specific version
 
 ### 2. Configure credentials
 
-Credentials are stored in `~/.workbench/config.json` with `0600` permissions. The CLI rejects config files with lax permissions (group/other readable).
+Credentials are stored in `~/.workbench/config.json` with `0600` permissions. As an Agent, write this file directly instead of using the interactive `workbench config` command.
 
 ```bash
-workbench config                          # Interactive setup (auto-detects mode)
-workbench config --mode AK                # Specify mode directly
+# Create config directory
+mkdir -p ~/.workbench
+
+# Write config file (example: AK mode)
+cat > ~/.workbench/config.json << 'EOF'
+{
+  "current": "default",
+  "profiles": {
+    "default": {
+      "mode": "AK",
+      "access_key_id": "<AccessKeyID>",
+      "access_key_secret": "<AccessKeySecret>"
+    }
+  }
+}
+EOF
+
+# Set secure permissions
+chmod 600 ~/.workbench/config.json
+```
+
+**Config file schema by mode:**
+
+AK mode:
+```json
+{
+  "current": "default",
+  "profiles": {
+    "default": {
+      "mode": "AK",
+      "access_key_id": "LTAI...",
+      "access_key_secret": "..."
+    }
+  }
+}
+```
+
+RamRoleArn mode (auto-refreshes STS tokens):
+```json
+{
+  "current": "default",
+  "profiles": {
+    "default": {
+      "mode": "RamRoleArn",
+      "access_key_id": "LTAI...",
+      "access_key_secret": "...",
+      "ram_role_arn": "acs:ram::123456789:role/WorkbenchRole",
+      "role_session_name": "workbench-session"
+    }
+  }
+}
+```
+
+CredentialsURI mode (HTTP endpoint returns credentials):
+```json
+{
+  "current": "default",
+  "profiles": {
+    "default": {
+      "mode": "CredentialsURI",
+      "credentials_uri": "http://localhost:8080/credentials"
+    }
+  }
+}
 ```
 
 | Mode | When to use |
 | --- | --- |
 | **AK** (default) | Development, long-lived credentials |
+| **StsToken** | Temporary security credentials (AccessKey + STS Token) |
 | **RamRoleArn** | Production, cross-account, least-privilege via STS role assumption (auto-refreshes tokens) |
 | **CredentialsCmd** | Zero-trust / Vault integration — external command outputs credential JSON |
 | **CredentialsURI** | Metadata service / sidecar — HTTP endpoint returns credential JSON |
 
-**CredentialsCmd** output format (to stdout):
-```json
-{"mode":"AK","access_key_id":"...","access_key_secret":"..."}
-```
-or with STS:
-```json
-{"mode":"StsToken","access_key_id":"...","access_key_secret":"...","sts_token":"..."}
+**Profile management (non-interactive):**
+
+```bash
+workbench config list                     # List all profiles (* marks active)
+workbench config switch --profile prod    # Switch active profile
+workbench config get                      # Show current profile details (JSON)
+workbench config get --profile prod       # Show specific profile details
+workbench config delete --profile old     # Delete a profile (cannot delete active)
 ```
 
 ### 3. Command reference
@@ -74,11 +138,15 @@ workbench
 ├── exec             # Execute remote command (non-interactive, millisecond-level)
 ├── upload           # Upload local file to instance (up to 1GB, via OSS relay)
 ├── download         # Download file from instance (up to 1GB, via OSS relay)
-├── forward          # Port forwarding (start / list / stop)
 ├── list             # List ECS instances
 ├── session          # Session management (list / close)
 ├── daemon           # Daemon lifecycle (start / status / stop)
-├── config           # Credential configuration
+├── config           # Credential configuration & profile management
+│   ├── set          # Set a single config field
+│   ├── list         # List all profiles
+│   ├── switch       # Switch active profile
+│   ├── get          # Show profile details
+│   └── delete       # Delete a profile
 ├── upgrade          # Self-update
 └── version          # Print version info
 ```
@@ -89,17 +157,21 @@ workbench
 | --- | --- | --- |
 | `--output` / `-o` | Output format: `text|json` | `text` |
 | `--region` / `-r` | Alibaba Cloud region (e.g., `cn-hangzhou`) | auto-inferred from instance ID prefix |
+| `--profile` / `-P` | Use a specific profile (overrides active profile) | current active profile |
 
 ### 4. List instances
 
 ```bash
-workbench list --region cn-hangzhou
-workbench list --region cn-hangzhou --status Running
-workbench list --region cn-hangzhou --tag env=prod --tag team=infra
-workbench list --region cn-hangzhou --output json
+workbench list ecs --region cn-hangzhou
+workbench list ecs --region cn-hangzhou --status Running
+workbench list ecs --region cn-hangzhou --tag env=prod --tag team=infra
+workbench list ecs --region cn-hangzhou --instance-type ecs.g7.large
+workbench list ecs --region cn-hangzhou --instance-name my-instance
+workbench list ecs --region cn-hangzhou --image-id ubuntu_22_04_x64_20G_alibase_20230907.vhd
+workbench list ecs --region cn-hangzhou --output json
 ```
 
-`--region` is **required** for `list`. Flags: `--status` (Running|Stopped|Starting|Stopping), `--tag` (key=value or key, repeatable, AND logic).
+`--region` is **required** for `list ecs`. Filters: `--status` (Running|Stopped|Starting|Stopping), `--tag` (key=value or key, repeatable, AND logic), `--instance-type` (e.g. ecs.g7.large), `--instance-name` (supports wildcards `*`), `--image-id`, `--vpc-id`, `--zone-id`, `--vswitch-id`, `--private-ip` (comma-separated), `--limit` (1-100, default 50), `--next-token` (pagination).
 
 JSON output schema:
 
@@ -107,16 +179,22 @@ JSON output schema:
 [{
   "instance_id": "i-bp1xxxxx",
   "instance_name": "web-prod-01",
+  "instance_type": "ecs.g7.large",
   "region_id": "cn-hangzhou",
   "status": "Running",
   "private_ip": "172.16.0.10",
   "public_ip": "",
   "os_type": "linux",
+  "image_id": "ubuntu_22_04_x64_20G_alibase_20230907.vhd",
   "tags": {"env": "prod"}
 }]
 ```
 
 ### 5. Remote command execution
+
+**Built-in safety**: The CLI is a non-interactive executor — it does NOT provide a persistent shell. Each invocation is isolated and stateless, which prevents accidental cascading damage from lingering shell sessions.
+
+**Agent pre-check requirement**: Before executing destructive commands (e.g., `rm -rf`, `shutdown`, `reboot`, `mkfs`, `dd`, service stop/restart, or any command that deletes data or halts the system), the Agent MUST confirm with the user by describing the intended action, the target instance, and the potential impact. Do NOT execute destructive commands without explicit user approval.
 
 ```bash
 workbench exec --instance-id i-bp1xxxxx --command "df -h"
@@ -144,6 +222,16 @@ JSON output schema:
 
 ### 6. File transfer
 
+**Built-in safety**: The `upload` command has a built-in overwrite protection. When the remote destination file already exists, the CLI prompts for confirmation before overwriting:
+
+```
+Remote file "/root/id.txt" already exists (728 B, modified Jul 27 10:42). Overwrite? [y/N]
+```
+
+The default answer is **No** — if the user does not explicitly confirm, the upload is aborted. This prevents accidental overwriting of existing remote files.
+
+**Agent pre-check requirement**: When using `upload` in automated/Agent workflows where interactive confirmation is not possible, the Agent MUST first check whether the target file exists on the remote instance (e.g., via `workbench exec --command "ls -la <path>"`) and inform the user if a file will be overwritten.
+
 ```bash
 workbench upload ./app.jar /opt/app/app.jar --instance-id i-bp1xxxxx
 workbench download /var/log/app.log ./ --instance-id i-bp1xxxxx
@@ -152,23 +240,7 @@ workbench download /var/log/app.log /tmp/local-copy.log --instance-id i-bp1xxxxx
 
 Transfer goes through OSS as intermediary — transparent to the user, no OSS configuration needed. `download` second arg (local-path) is optional, defaults to current directory.
 
-### 7. Port forwarding
-
-```bash
-workbench forward start --instance-id i-bp1xxxxx --remote-port 3306 --local-port 13306
-workbench forward list
-workbench forward stop <forward-id>
-```
-
-| Flag (start) | Required | Description | Default |
-| --- | --- | --- | --- |
-| `--instance-id` / `-i` | Yes | ECS instance ID | — |
-| `--remote-port` | Yes | Remote port on instance (1-65535) | — |
-| `--local-port` | No | Local listening port | `0` (auto-assign) |
-
-Port forwards are maintained by the daemon — they **survive CLI exit**. Alive until explicitly stopped or daemon exits.
-
-### 8. Session management
+### 7. Session management
 
 ```bash
 workbench session list
@@ -179,12 +251,12 @@ workbench session close --all
 
 **Session lifecycle**: OPEN → RECONNECTING → BROKEN → CLOSED. Idle timeout 30min → auto CLOSED. Multiple operations on same instance share one session (transparent multiplexing).
 
-### 9. Daemon management
+### 8. Daemon management
 
 ```bash
 workbench daemon start      # Manual start (usually not needed)
 workbench daemon status
-workbench daemon stop       # Closes all sessions and forwards
+workbench daemon stop       # Closes all sessions
 ```
 
 - **Auto-start**: Spawned on first CLI invocation.
@@ -192,7 +264,7 @@ workbench daemon stop       # Closes all sessions and forwards
 - **Singleton**: One per OS user (PID file lock).
 - **IPC**: JSON-RPC over Unix socket (`~/.workbench/run/daemon.sock`).
 
-### 10. Region inference
+### 9. Region inference
 
 The CLI auto-infers region from the instance ID 3-character prefix (covers 290+ regions). If inference fails, `--region` is required. For `list` command, `--region` is always required.
 
@@ -230,12 +302,17 @@ Minimum RAM policy required:
     {
       "Effect": "Allow",
       "Action": [
+        "ecs-workbench:LoginECSInstance",
+        "ecs-workbench:ChatMessages"
+      ],
+      "Resource": "*"
+    },
+    {
+      "Effect": "Allow",
+      "Action": [
         "ecs:DescribeInstances",
         "ecs:DescribeCloudAssistantStatus",
-        "ecs:StartTerminalSession",
-        "ecs-workbench:LoginECSInstance",
-        "ecs-workbench:ChatMessages",
-        "ims:GetUser"
+        "ecs:StartTerminalSession"
       ],
       "Resource": "*"
     },
@@ -253,13 +330,16 @@ Minimum RAM policy required:
 }
 ```
 
-Restrict to specific instances: replace `"Resource": "*"` with `acs:ecs:<region>:<account-id>:instance/<instance-id>`.
+Restrict to specific instances: replace `"Resource": "*"` in each statement with the corresponding format:
+- ecs-workbench:LoginECSInstance : `acs:ecs:<region>:<account-id>:ecs/<instance-id>`
+- ecs actions: `acs:ecs:<region>:<account-id>:instance/<instance-id>`
 
 ## Troubleshooting
 
 | Error message pattern | Exit Code | First Action |
 | --- | --- | --- |
 | `InvalidAccessKeyId` / authentication errors | 4 | Verify AK/SK in `~/.workbench/config.json`. Re-run `workbench config`. |
+| `profile not found` | 1 | Check profile name with `workbench config list`. |
 | `not found in <region>` / instance not found | 1 | Verify instance ID and region. Use `workbench list --region <region>` to confirm. |
 | Network timeout / WebSocket errors | 5 | Check network connectivity to `*.aliyuncs.com`. Verify security group rules. |
 | Session busy / attach errors | 7 | Another terminal is attached. Close it first, or use `workbench session close <id>`. |

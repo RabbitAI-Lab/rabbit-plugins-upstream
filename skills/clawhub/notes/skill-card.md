@@ -1,5 +1,5 @@
 ## Description: <br>
-Captures, structures, and retrieves notes in local markdown, Apple Notes, Bear, Obsidian, Notion, or Evernote. <br>
+Captures, structures, retrieves, and safely routes notes across local markdown, Apple Notes, Bear, Obsidian, Notion, and Evernote. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,41 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Employees, external users, and developers use this skill to capture, organize, retrieve, and maintain durable notes, action items, decisions, project records, journals, and research notes across local markdown and supported note platforms. <br>
+Employees, external users, and agents use this skill to turn conversations, transcripts, decisions, projects, journal entries, and research into durable notes with owners, dates, routing, and retrieval structure. It is also used to maintain a searchable note corpus across local files and configured note platforms. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can persist and mutate durable notes, action trackers, contacts, projects, indexes, and review files with too little user confirmation. <br>
-Mitigation: Require explicit confirmation before shared contacts or projects, network platforms, indexes, archive or deletion flows, and any multi-file update are created or changed. <br>
-Risk: Network note platforms can receive note titles, content, searches, and filters when a note type is routed to them. <br>
-Mitigation: Use network platforms only after the user routes the note type there, and prefer local markdown for sensitive or long-lived records. <br>
-Risk: Credentials or sensitive personal details may be present in pasted source material intended for notes. <br>
-Mitigation: Redact before writing, store only credential pointers such as environment variables or keychain locations, and state what was removed. <br>
-Risk: Bulk archive, migration, sync repair, deletion, or merge work can alter many files or lose note content. <br>
-Mitigation: Name the affected files or counts before running, keep rollback copies where applicable, verify counts or restore results, and confirm destructive changes first. <br>
+Risk: The skill can update or delete durable note, action, contact, and project records. <br>
+Mitigation: Require previews or explicit approval for deletions, migrations, bulk edits, contact or project updates, and action sweeps. <br>
+Risk: Routing notes to Notion or Evernote can send note content to external services. <br>
+Mitigation: Keep routing local by default and use Notion or Evernote only after the user explicitly configures that destination. <br>
+Risk: Pasted meeting or capture text may contain credentials, PINs, recovery codes, or other secrets. <br>
+Mitigation: Do not store secret values; replace them with pointer-only references such as environment variables, keychain items, password-manager entries, or local config paths. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/notes) <br>
-- [Publisher profile](https://clawhub.ai/user/ivangdavila) <br>
-- [Skill homepage](https://clawic.com/skills/notes) <br>
-- [Skill definition](artifact/SKILL.md) <br>
-- [Sensitive notes guidance](artifact/sensitive.md) <br>
-- [Sync and backups guidance](artifact/sync.md) <br>
-- [Migration guidance](artifact/migration.md) <br>
-- [Notion platform guidance](artifact/notion.md) <br>
+- [Clawic skill homepage](https://clawic.com/skills/notes) <br>
+- [Skill instructions](artifact/SKILL.md) <br>
+- [Sensitive note handling](artifact/sensitive.md) <br>
+- [Memory and storage template](artifact/memory-template.md) <br>
+- [Notion platform behavior](artifact/notion.md) <br>
+- [Evernote platform behavior](artifact/evernote.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown notes, structured text, configuration snippets, and shell commands] <br>
+**Output Type(s):** [Text, Markdown, Files, Shell commands, Configuration, API Calls, Guidance] <br>
+**Output Format:** [Markdown notes, local files, and platform-specific commands or API payloads] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local note files, indexes, action trackers, contact pointers, project pointers, and platform records when the user has routed a note type to a supported platform.] <br>
+**Other Properties Related to Output:** [Produces durable notes, action records, and routing guidance; network platform output depends on explicit user configuration.] <br>
 
 ## Skill Version(s): <br>
-1.1.4 (source: server release evidence and skill frontmatter) <br>
+1.1.5 (source: SKILL.md frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -13,9 +13,9 @@
 
 This repo gives you the bridge layer to connect AI agents to Buzz:
 
-1. **`buzz-acp.py`** — A lightweight Python bridge for [OpenClaw](https://openclaw.ai)-powered agents. Speaks ACP (Agent Client Protocol, JSON-RPC 2.0 over stdio) on one end and calls OpenClaw's `/v1/chat/completions` on the other.
+1. **`buzz-acp.py`** — A Python bridge for [OpenClaw](https://openclaw.ai)-powered agents. Speaks ACP (Agent Client Protocol, JSON-RPC 2.0 over stdio) on one end, calls OpenClaw's `/v1/chat/completions` on the other, and posts replies directly to the Buzz channel via `buzz messages send`.
 
-2. **`agent.ts` / ccagent pattern** — A reference Claude Code agent implementation using `@anthropic-ai/claude-agent-sdk` with proper Buzz integration. No shim needed — the agent talks native ACP and calls `buzz messages send` directly.
+2. **`agent.ts` / ccagent pattern** — A reference Claude Code agent implementation using `@anthropic-ai/claude-agent-sdk` with proper Buzz integration. No shim needed — the agent talks native ACP and posts replies through a scoped `send_buzz_message` tool (not general shell access).
 
 3. **Complete setup guide** — How to deploy a self-hosted Buzz relay on Linux, wire in one or more AI agents — OpenClaw agents, native Claude Code agents, or any ACP-compatible agent — each with a separate Nostr identity, separate inference, and proper presence/typing indicators in the UI.
 
@@ -26,7 +26,7 @@ This repo gives you the bridge layer to connect AI agents to Buzz:
 - A proper team workspace — channels, threads, DMs, canvases, search, reactions
 - **Multiple AI agents** with separate Nostr identities and independent inference paths:
   - **OpenClaw agents** → `buzz-acp.py` shim → OpenClaw `/v1/chat/completions` → your configured model stack
-  - **Native Claude Code agents** → `@anthropic-ai/claude-agent-sdk` via ACP — Anthropic API directly, no shim, real Bash access
+  - **Native Claude Code agents** → `@anthropic-ai/claude-agent-sdk` via ACP — Anthropic API directly, no shim, replies via a scoped `send_buzz_message` tool (no general shell access)
   - Any number of agents, each with their own keypair and persona
 - Full Nostr audit trail — every interaction cryptographically signed
 - Self-hosted on your own iron — you own the relay, the data, the keys
@@ -44,15 +44,20 @@ Buzz-acp **never auto-posts a reply** on behalf of any agent. This is by design 
 >
 > *"If your turn produced anything worth knowing, you MUST publish it. Use `buzz messages send ...`. Ending that kind of turn without a message is a silent failure."*
 
-The reply mechanism is: **the model itself calls `buzz messages send` as a shell command.** Buzz-acp delivers the prompt, the agent runs, and it's the agent's responsibility to post its reply using the Buzz CLI.
+The reply mechanism differs by agent type:
+
+- **OpenClaw agents (`buzz-acp.py` shim):** The shim calls OpenClaw `/v1/chat/completions`, parses the `[Context]` block from the prompt text to extract the channel UUID and reply-to event ID, then posts the reply directly using `buzz messages send`. No shell access required from OpenClaw.
+- **Native Claude Code agents (ccagent):** Claude itself calls the scoped `send_buzz_message` MCP tool, which shells out to `buzz messages send` via `execFile`.
+
+Buzz-acp delivers the prompt and handles presence/typing indicators. The actual reply is posted by the agent (or shim) calling the Buzz CLI.
 
 This means every agent that replies in Buzz needs:
 
-1. **Bash tool access** — to run `buzz messages send`
-2. **The system prompt** — buzz-acp delivers `base_prompt.md` via `systemPrompt` in `session/new`; the agent must use it
-3. **`bypassPermissions` mode** — so tool calls aren't blocked waiting for human approval in an unattended systemd context
+1. **A way to call `buzz messages send`** — the `buzz-acp.py` shim does this itself after getting the OpenClaw reply; the ccagent exposes a single narrowly-scoped `send_buzz_message` MCP tool
+2. **The system prompt** — buzz-acp delivers `base_prompt.md` via `systemPrompt` in `session/new` (protocol v2) or as `[Base]` in the prompt text (legacy); the shim captures both
+3. **`BUZZ_PRIVATE_KEY` in env** — required for `buzz-cli` auth
 
-The typing indicator (💬👀) and presence come from buzz-acp. The actual reply comes from the agent calling the CLI.
+The typing indicator (💬👀) and presence come from buzz-acp. The actual reply is posted by `buzz messages send`.
 
 ---
 
@@ -84,11 +89,11 @@ The typing indicator (💬👀) and presence come from buzz-acp. The actual repl
 │  │ OpenClaw API           │  │          │                   │   │
 │  │ → model stack          │  │ Anthropic API                │   │
 │  │          │             │  │          │                   │   │
-│  │ OpenClaw runs tools    │  │ Claude runs bash:            │   │
-│  │ incl. buzz CLI         │  │ buzz messages send ...       │   │
+│  │ OpenClaw runs tools    │  │ Claude calls the scoped      │   │
+│  │ incl. buzz CLI         │  │ send_buzz_message tool       │   │
 │  └────────────────────────┘  └──────────────────────────────┘   │
 │                                                                 │
-│  Both agents call `buzz messages send` to post replies.         │
+│  Both paths post replies via `buzz messages send`.              │
 │  buzz-acp handles presence, typing indicators, and routing.     │
 └─────────────────────────────────────────────────────────────────┘
 ```
@@ -118,7 +123,7 @@ No cross-contamination. Each agent has its own Nostr keypair, env file, and syst
 
 ### Client
 - [Buzz desktop client](https://github.com/block/buzz/releases/latest)
-  - Windows: `Buzz_x.x.xx_x64-setup_alpha-unsigned.exe` (SmartScreen warning — unsigned alpha)
+  - Windows: `Buzz_x.x.xx_x64-setup_alpha-unsigned.exe` — **not code-signed.** Only download it from the [official releases page](https://github.com/block/buzz/releases/latest) over HTTPS; checksum/signature verification isn't published yet for this alpha, so treat the SmartScreen warning as a real trust decision, not a routine step to click through.
   - macOS: `.dmg` / Linux: `.AppImage` or `.deb`
 
 ---
@@ -174,9 +179,13 @@ DATABASE_URL=postgres://buzz:YOUR_PG_PASSWORD@localhost:5432/buzz \
 
 ```bash
 cd /path/to/buzz-repo
-export $(grep -v '^#' .env | xargs)
+set -a
+source .env
+set +a
 ~/.local/bin/buzz-relay
 ```
+
+> This loads secrets (including `BUZZ_RELAY_PRIVATE_KEY`) into the current shell's environment, visible to any child process it spawns. Prefer `systemd/buzz-relay.service` (`EnvironmentFile=`) for anything beyond a one-off manual run.
 
 Or use `systemd/buzz-relay.service`.
 
@@ -195,7 +204,7 @@ export BUZZ_RELAY_PRIVATE_KEY=<relay signing key>
 
 ## Option A: OpenClaw Agent (buzz-acp.py shim)
 
-The shim bridges buzz-acp's ACP protocol to OpenClaw's chat completions API. OpenClaw handles tool execution (including `buzz messages send`) via its own tool-calling loop.
+The shim bridges buzz-acp's ACP protocol to OpenClaw's chat completions API. After getting a reply from OpenClaw, the shim parses the `[Context]` block in the prompt text to extract the channel UUID and reply-to event ID, then posts the reply directly via `buzz messages send`. No OpenClaw tool-calling loop involved.
 
 ### Configure
 
@@ -220,9 +229,9 @@ Key variables:
 
 ```bash
 source /path/to/buzz-marvin.env
-echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"clientInfo":{"name":"test"},"protocolVersion":1}}' \
+echo '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"clientInfo":{"name":"test"},"protocolVersion":2}}' \
   | python3 buzz-acp.py
-# Should return: {"jsonrpc":"2.0","id":1,"result":{"protocolVersion":1,...}}
+# Should return: {"jsonrpc":"2.0","id":1,"result":{"protocolVersion":"2.0.0","serverInfo":{"name":"buzz-acp (Marvin)","version":"1.1.0"},...}}
 ```
 
 ### Run (or use systemd unit)
@@ -241,43 +250,58 @@ See `systemd/buzz-marvin.service` for the full unit file.
 
 ## Option B: Native Claude Code Agent (ccagent pattern)
 
-This is a native ACP agent built with `@anthropic-ai/claude-agent-sdk`. No shim — it talks ACP directly to buzz-acp, and Claude itself calls `buzz messages send` to post replies, using the guidance delivered in `systemPrompt`.
+This is a native ACP agent built with `@anthropic-ai/claude-agent-sdk`. No shim — it talks ACP directly to buzz-acp, and Claude itself posts replies through a scoped `send_buzz_message` tool, using the guidance delivered in `systemPrompt`.
 
-### Why three things are required
+### Why two things are required
 
 | Requirement | Why |
 |-------------|-----|
-| **Bash tool** | The only way to call `buzz messages send` — without it the agent can never post a reply |
-| **`systemPrompt` forwarding** | buzz-acp delivers operating instructions via `params.systemPrompt` in `session/new`; if the agent discards it, Claude never learns it must call the CLI |
-| **`bypassPermissions`** | Unattended systemd service — no human to approve tool calls |
+| **The `send_buzz_message` tool** | A narrowly-scoped in-process MCP tool, registered via the Claude Agent SDK's `tool()`/`createSdkMcpServer()` — the only way to call `buzz messages send`. No general Bash access is granted, so a prompt-injected instruction can't reach arbitrary shell commands |
+| **`systemPrompt` forwarding** | buzz-acp delivers operating instructions via `params.systemPrompt` in `session/new`; if the agent discards it, Claude never learns it must call the tool |
 
-Miss any one of these and the agent will process every message successfully (typing indicator shows, Claude replies) but nothing will ever appear in the channel.
+Miss either of these and the agent will process every message successfully (typing indicator shows, Claude replies) but nothing will ever appear in the channel. There's no `bypassPermissions` mode to worry about either — with no built-in tools granted (`tools: []`), `allowedTools` simply pre-approves the one MCP tool and `permissionMode: "default"` never blocks.
 
 ### Reference implementation
 
 See [`examples/ccagent/`](examples/ccagent/) for the complete working agent. Key parts of `agent.ts`:
 
 ```typescript
+// Scoped tool: the only action the agent can take is posting a Buzz message,
+// via execFile (discrete argv, no shell interpolation) rather than a shell string
+const sendBuzzMessage = tool(
+  "send_buzz_message",
+  "Post a reply to a Buzz channel. This is the ONLY way to publish a reply.",
+  {
+    channel: z.string().min(1).max(200).regex(/^[A-Za-z0-9._-]+$/),
+    text: z.string().min(1).max(10000),
+  },
+  async ({ channel, text }) => {
+    const { stdout } = await execFileAsync("buzz", ["messages", "send", channel, text], { timeout: 15_000 });
+    return { content: [{ type: "text", text: stdout || "Message sent." }] };
+  },
+);
+const buzzMcpServer = createSdkMcpServer({ name: "buzz", version: "1.0.0", tools: [sendBuzzMessage] });
+
 // In newSession() — capture systemPrompt from buzz-acp's session/new params
 async newSession(params: NewSessionRequest): Promise<NewSessionResponse> {
   const sessionId = randomUUID();
   const harnessPrompt = (params as { systemPrompt?: string }).systemPrompt;
   const systemPrompt = harnessPrompt
-    ? `${AGENT_SYSTEM_PROMPT}\n\n${harnessPrompt}`
-    : AGENT_SYSTEM_PROMPT;
+    ? `${SYSTEM_PROMPT}\n\n${harnessPrompt}`
+    : SYSTEM_PROMPT;
   this.sessions.set(sessionId, { cwd: params.cwd, systemPrompt });
   return { sessionId };
 }
 
-// In prompt() — Bash enabled, bypassPermissions, systemPrompt forwarded
+// In prompt() — no built-in tools, only the scoped MCP tool, systemPrompt forwarded
 const stream = query({
   prompt: text,
   options: {
     cwd: session.cwd,
-    tools: ["Bash"],
-    allowedTools: ["Bash"],
-    permissionMode: "bypassPermissions",
-    allowDangerouslySkipPermissions: true,
+    tools: [],
+    mcpServers: { buzz: buzzMcpServer },
+    allowedTools: ["mcp__buzz__send_buzz_message"],
+    permissionMode: "default",
     systemPrompt: session.systemPrompt,   // includes buzz-acp's base_prompt.md instructions
     resume: session.claudeSessionId,
     abortController,
@@ -285,7 +309,7 @@ const stream = query({
 });
 ```
 
-Claude will then follow the instructions in `base_prompt.md` and call `buzz messages send` itself to post replies.
+Claude will then follow the instructions in `base_prompt.md` and call `send_buzz_message` itself to post replies.
 
 ### Build and configure
 
@@ -366,8 +390,8 @@ See [`docs/troubleshooting.md`](docs/troubleshooting.md) for the full list. Comm
 |---------|-------|-----|
 | Relay won't start | MinIO bucket doesn't exist | `docker compose up -d minio-init` before relay |
 | `add-member` fails | Wrong signing key | Export `BUZZ_RELAY_PRIVATE_KEY` from `.env`, not agent key |
-| Agent shows online but never replies | Missing Bash tool, missing `systemPrompt` forwarding, or missing `bypassPermissions` | See Option B requirements above |
-| Typing indicator shows, no message | Agent lacks `buzz-cli` in PATH, or `buzz messages send` fails | Check `PATH` in systemd unit includes `~/.local/bin` |
+| Agent shows online but never replies | Missing `send_buzz_message` tool registration, or missing `systemPrompt` forwarding | See Option B requirements above |
+| Typing indicator shows, no message | `buzz-cli` not in PATH, `BUZZ_PRIVATE_KEY` missing, or channel UUID not parsed from `[Context]` block | Check `PATH` in systemd unit includes `~/.local/bin`; verify `BUZZ_PRIVATE_KEY` is set; check shim logs for `context: channel=` line |
 | Windows client can't connect | Relay URL uses IP but client sends hostname in `Host:` header | Use `ws://agenthost.local:3000` (mDNS hostname) in community setup |
 | `session/new` `systemPrompt` not received | Old ACP SDK version or field name mismatch | Cast params to access `systemPrompt`; it's not in the official ACP schema but buzz-acp sends it |
 

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/api-connect-hub",
   "slug": "api-connect-hub",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1784867924860,
-  "contentHash": "87c03dfc3eddb7b03a751740dd07e1b5c43e01a647ffc50780fb77cae91893c0",
-  "fetchedAt": "2026-07-26T18:06:15.619Z"
+  "version": "1.0.2",
+  "updatedAt": 1785662458178,
+  "contentHash": "dc3e85f20b3fb3daf1852f247423aed20dacf6741af76e03c7ec653392b4c173",
+  "fetchedAt": "2026-08-03T11:24:44.306Z"
 }

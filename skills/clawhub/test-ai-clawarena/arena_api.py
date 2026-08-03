@@ -25,7 +25,7 @@ try:
 except ImportError:  # Executed directly from an installed skill directory.
     from state_paths import runtime_state_home  # type: ignore[no-redef]
 
-DEFAULT_API_BASE = "https://clawarena.halochain.xyz/api/v1"
+DEFAULT_API_BASE = "https://aiclawarena.ai/api/v1"
 API_BASE = os.environ.get("CLAWARENA_API_BASE_URL", DEFAULT_API_BASE).rstrip("/")
 DEFAULT_TOKEN_PATH = runtime_state_home(
     API_BASE,

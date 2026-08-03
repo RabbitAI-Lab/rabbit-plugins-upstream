@@ -1,5 +1,5 @@
 ## Description: <br>
-Performs video-based analysis of autism-related child behavior characteristics, identifies core symptom features, and returns structured reports with intervention recommendations. <br>
+Performs special video analysis on behavioral characteristics of children with autism, identifies core symptom features, provides structured analysis reports and intervention recommendations. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, caregivers, educators, and professionals can use this skill to submit child video files or URLs for preliminary autism spectrum behavior analysis, structured screening-style reports, and intervention guidance. The output is for early screening support and does not replace professional medical diagnosis or clinical evaluation. <br>
+Parents, educators, professionals, and agent users can use this skill to analyze child video or image inputs for preliminary ASD-related behavioral characteristics, generate structured reports, and retrieve prior analysis reports. It is a screening and reporting aid, not a substitute for professional medical diagnosis or clinical evaluation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may send child videos or video URLs to the publisher's remote service for analysis. <br>
-Mitigation: Use only with proper guardian consent and only when the publisher's privacy, retention, deletion, and access-control terms are acceptable. <br>
-Risk: The skill can create or reuse an internal identity, query cloud-stored report history, and persist local authentication tokens. <br>
-Mitigation: Run in a controlled environment, review local token storage before deployment, and clear local credentials and report access when no longer needed. <br>
-Risk: The analysis is autism-related screening support and may be mistaken for a clinical diagnosis. <br>
-Mitigation: Present outputs as preliminary screening information and direct users to qualified medical professionals for diagnosis or clinical evaluation. <br>
+Risk: Sensitive child-related videos, images, autism reports, and report history may be processed by remote lifeemergence.com services. <br>
+Mitigation: Use only media that the user is authorized to submit, start with non-sensitive test media, and review data handling expectations before installation or execution. <br>
+Risk: The skill can create and persist local account state, including account identifiers and tokens, in the workspace data directory. <br>
+Mitigation: Avoid manually passing hidden identity parameters, review local workspace data after use, and delete retained state when persistent account linkage is not desired. <br>
+Risk: ASD analysis reports can be mistaken for medical diagnosis or clinical evaluation. <br>
+Mitigation: Present outputs as preliminary screening information and direct users to qualified medical professionals for diagnosis or clinical decisions. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-autism-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API interface documentation](references/api_doc.md) <br>
+- [smyx_analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with recommendations and report links] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration] <br>
+**Output Format:** [Markdown and JSON-formatted structured analysis reports with optional report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save analysis output to a local file when an output path is provided.] <br>
+**Other Properties Related to Output:** [Supports mp4, avi, and mov inputs up to 10 MB; can save results to a file and list historical reports.] <br>
 
 ## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
+1.0.9 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

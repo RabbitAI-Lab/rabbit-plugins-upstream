@@ -1,39 +1,40 @@
 ## Description: <br>
-AI Excel spreadsheet generation powered by CellCog for financial models, budget templates, trackers, projections, formulas, charts, and professional workbook formatting. <br>
+AI Excel spreadsheet generation powered by CellCog for financial models, budget templates, data trackers, projections, pivot tables, complex formulas, XLSX output, data manipulation, analysis, charts, and professional formatting. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
 ## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+[cellcog](https://clawhub.ai/user/cellcog) <br>
 
 ### License/Terms of Use: <br>
 MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and spreadsheet users use this skill to direct agents in creating Excel workbooks such as financial models, budgets, trackers, analysis templates, charts, and formatted multi-sheet spreadsheets with CellCog. <br>
+External users and developers use this skill to ask CellCog to generate Excel spreadsheets, including financial models, budget templates, trackers, analysis workbooks, formulas, charts, and formatted XLSX files. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompts and provided data may be sent to CellCog as an external service. <br>
-Mitigation: Use only organization-approved data and avoid secrets, regulated data, or confidential financial, employee, or customer details unless that use is approved. <br>
+Risk: Prompts and spreadsheet data may be sent to CellCog as an external spreadsheet-generation service. <br>
+Mitigation: Avoid sending confidential, regulated, employee, customer, or financial data unless your organization has approved CellCog's privacy, retention, and security terms. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/excel-spreadsheet-cellcog) <br>
 - [CellCog homepage](https://cellcog.ai) <br>
+- [ClawHub skill page](https://clawhub.ai/cellcog/skills/excel-spreadsheet-cellcog) <br>
+- [CellCog publisher profile](https://clawhub.ai/user/cellcog) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Files] <br>
-**Output Format:** [Markdown guidance with Python and shell code blocks; generated spreadsheet outputs may be XLSX or interactive HTML.] <br>
+**Output Type(s):** [guidance, code, configuration] <br>
+**Output Format:** [Markdown instructions with Python code snippets and spreadsheet output guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python 3, the CellCog package, and CELLCOG_API_KEY for authenticated use.] <br>
+**Other Properties Related to Output:** [Requires python3, the cellcog package, and CELLCOG_API_KEY; generated spreadsheets may be XLSX or interactive HTML.] <br>
 
 ## Skill Version(s): <br>
-1.0.14 (source: server release metadata) <br>
+1.0.16 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

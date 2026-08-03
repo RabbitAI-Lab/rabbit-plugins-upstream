@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes pet video or image inputs through server-side APIs to produce a Pet Safety Guardian health report and, when requested, retrieve cloud report history. <br>
+Analyzes pet image or video inputs for cats, dogs, and birds through a remote health analysis service and returns a structured Pet Safety Guardian health report. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill to submit cat, dog, bird, or other pet media for health-oriented analysis, receive structured findings and care suggestions, and list prior cloud reports. Results are health references and are not a substitute for professional veterinary diagnosis. <br>
+External users and agents use this skill to submit pet media or media URLs for health screening, feature-based issue detection, care suggestions, report links, and historical report retrieval. Results are health references and should not replace a veterinarian's diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Pet videos, images, or media URLs are sent to lifeemergence.com services for analysis. <br>
-Mitigation: Use only when the user is comfortable sharing the media with that service, and avoid submitting sensitive or unrelated files. <br>
-Risk: The skill automatically creates or reuses local identity records and stores service tokens in the workspace data directory. <br>
-Mitigation: Use a private workspace for sensitive reports, review local workspace data handling, and clear stored state before sharing the workspace. <br>
-Risk: Cloud report history retrieval may expose prior pet health reports associated with the local identity. <br>
-Mitigation: Confirm the user intends to view report history and avoid running history queries in shared or untrusted sessions. <br>
+Risk: Pet media is sent to lifeemergence.com services for analysis. <br>
+Mitigation: Use only with media the user is permitted to share with that service, and avoid submitting sensitive or unnecessary background content. <br>
+Risk: The skill silently creates or reuses a local identity and stores service tokens in a workspace SQLite database. <br>
+Mitigation: Install only in workspaces where local identity and token storage are acceptable; avoid shared workspaces unless user identity, token files, and database access are isolated. <br>
+Risk: Historical report retrieval may expose reports associated with the reused local identity. <br>
+Mitigation: Before enabling history queries, confirm that the workspace identity maps to the intended user and that report access boundaries are clear. <br>
+Risk: Pet health analysis output may be incomplete or misleading if treated as a medical diagnosis. <br>
+Mitigation: Present results as health reference material and direct users to professional veterinary care for diagnosis or urgent concerns. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-analysis) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
 - [API interface documentation](references/api_doc.md) <br>
-- [Skill usage demo](https://lifeemergence.com/sample.html) <br>
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown or JSON health analysis report, with optional saved output file] <br>
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and JSON-formatted analysis reports, report links, historical report tables, and shell command examples.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, status messages, care suggestions, and cloud history tables.] <br>
+**Other Properties Related to Output:** [May write analysis output to a user-selected file path when the --output option is used.] <br>
 
 ## Skill Version(s): <br>
-999.999.1001 (source: server release evidence) <br>
+999.999.1002 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

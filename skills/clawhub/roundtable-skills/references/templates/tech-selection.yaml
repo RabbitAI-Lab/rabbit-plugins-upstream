@@ -1,0 +1,46 @@
+name: 技术选型圆桌
+description: 对比技术方案（框架/数据库/架构模式/云服务），评估取舍并给出选型建议
+mode: standard
+
+domain_keywords:
+  - 选型
+  - 用 A 还是 B
+  - vs
+  - 对比
+  - 框架
+  - 数据库
+  - 架构
+  - 微服务
+  - 开源
+  - 自研
+
+required_roles:
+  - roles/devil-advocate        # 暴露各方案失败模式
+  - roles/resource-constraint   # 成本与团队能力匹配
+
+suggested_experts:
+  - experts/engineering/distributed-systems   # 架构与运维视角
+
+conditional_experts:
+  - when: "LLM|AI|Agent|LangChain|模型"
+    add: experts/ai-llm/llm-architect
+  - when: "向量|检索|RAG|Milvus|Qdrant"
+    add: experts/ai-llm/rag-specialist
+
+optional_roles:
+  - roles/systems-thinker       # 长期演进与锁定风险
+  - roles/data-evidence         # benchmark 与证据
+  - roles/optimist              # 机会视角
+
+protocol: protocols/debate-protocol
+
+# 选型讨论的特殊要求
+special_instructions: |
+  每个方案必须回答五个问题：
+  1. 解决什么问题（匹配我们的真实需求吗）
+  2. 失败模式（什么情况下会坑我们）
+  3. 全成本（学习+接入+运维+迁移+锁定）
+  4. 团队匹配（现有能力 hold 得住吗）
+  5. 退出成本（未来换掉它有多难）
+
+output_protocol: protocols/synthesis-protocol

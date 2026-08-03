@@ -1,0 +1,71 @@
+<!doctype html>
+<!--
+================================================================
+  html-slides 样板页 · 方式 C(data-layout 声明式)· 原型 17「大数字带」
+  与方式 B 的视觉等价,但子级不写任何几何:
+  坐标由转换器内置解析器统一计算(data-layout-h/w → 绝对定位)。
+  columns:容器须显式 width+height,子级 data-layout-w 写份数;
+  grid:容器须显式 width + data-layout-cols,子级 data-layout-h 写高度。
+  转换契约:reference/html-spec.md 第 2C 章;设计契约:design-principles.md
+================================================================
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>页面标题 · 大数字带</title>
+<link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<div class="slide-container" style="background:var(--off-white);">
+
+  <!-- ── 页面骨架:绝对定位 ─────────────────────────────── -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1720px;top:92px;width:100px;text-align:right;z-index:10;">
+    <div class="num" style="font-size:16px;font-weight:600;color:var(--text-tertiary);letter-spacing:2px;">04 / 12</div>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:100px;top:120px;width:1720px;z-index:10;">
+    <div style="font-size:60px;font-weight:700;line-height:1.2;color:var(--charcoal);">
+      标题说数字的结论(如:效率提升四成)
+    </div>
+  </div>
+
+  <!-- ══ 大数字带:columns 策略;细线分隔,无卡片无渐变 ══
+       3 列 88px / 4 列 72px;强调列至多 1 列用主色,其余 --charcoal。 -->
+  <div data-layout="columns" data-layout-gap="40" style="position:absolute;left:100px;top:380px;width:1720px;height:400px;">
+    <div data-object="true" data-layout-w="1fr" style="padding-left:0;">
+      <div class="num" style="font-size:88px;font-weight:800;line-height:1;color:var(--lenovo-red);">87<span style="font-size:40px;">%</span></div>
+      <div style="font-size:22px;line-height:1.4;color:var(--text-secondary);margin-top:20px;">指标说明,一两行</div>
+      <div style="font-size:18px;line-height:1.4;color:var(--signal-green);margin-top:12px;">↑ 同比 +12pp</div>
+    </div>
+    <div data-object="true" data-layout-w="1fr" style="border-left:1px solid var(--border-light);padding-left:40px;">
+      <div class="num" style="font-size:88px;font-weight:800;line-height:1;color:var(--charcoal);">3.2<span style="font-size:40px;">倍</span></div>
+      <div style="font-size:22px;line-height:1.4;color:var(--text-secondary);margin-top:20px;">指标说明,一两行</div>
+      <div style="font-size:18px;line-height:1.4;color:var(--text-secondary);margin-top:12px;">对比基线:去年同期的 1.0 倍</div>
+    </div>
+    <div data-object="true" data-layout-w="1fr" style="border-left:1px solid var(--border-light);padding-left:40px;">
+      <div class="num" style="font-size:88px;font-weight:800;line-height:1;color:var(--charcoal);">12<span style="font-size:40px;">项</span></div>
+      <div style="font-size:22px;line-height:1.4;color:var(--text-secondary);margin-top:20px;">指标说明,一两行</div>
+      <div style="font-size:18px;line-height:1.4;color:var(--text-secondary);margin-top:12px;">统计口径与时间范围</div>
+    </div>
+  </div>
+
+  <!-- ══ 数据口径注:grid 策略演示;16px 注释字号(下限 14px 之上) ══ -->
+  <div data-layout="grid" data-layout-cols="3" data-layout-gap="40" style="position:absolute;left:100px;top:860px;width:1720px;">
+    <div data-object="true" data-layout-h="60" style="border-top:1px solid var(--border-light);padding-top:16px;">
+      <div style="font-size:16px;line-height:1.5;color:var(--text-tertiary);">口径注一:样本量与统计区间</div>
+    </div>
+    <div data-object="true" data-layout-h="60" style="border-top:1px solid var(--border-light);padding-top:16px;">
+      <div style="font-size:16px;line-height:1.5;color:var(--text-tertiary);">口径注二:数据来源</div>
+    </div>
+    <div data-object="true" data-layout-h="60" style="border-top:1px solid var(--border-light);padding-top:16px;">
+      <div style="font-size:16px;line-height:1.5;color:var(--text-tertiary);">口径注三:四舍五入规则</div>
+    </div>
+  </div>
+
+</div>
+
+<template data-slide-notes>
+【核心逻辑】这页演示方式 C + 原型 17:columns 大数字带 + grid 口径注;子级只声明份数/高度,坐标全自动。
+【版式自检】数字 88px;内容带 380→920;信号色仅增减行;全页高亮 1 处(首列主色)。
+</template>
+</body>
+</html>

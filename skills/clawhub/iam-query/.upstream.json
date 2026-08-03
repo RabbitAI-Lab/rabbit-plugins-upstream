@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/iam-query",
   "slug": "iam-query",
   "ownerHandle": null,
-  "version": "1.1.1",
-  "updatedAt": 1784626471678,
-  "contentHash": "460c5506f5b6c123f8048684fbe1a4bba500bef787f63413892ee38793962304",
-  "fetchedAt": "2026-07-26T18:09:11.086Z"
+  "version": "1.1.100",
+  "updatedAt": 1785165933737,
+  "contentHash": "b6b82ae9a80026c64e348acc1fbee0c666187b7dcc9a955fbfd20b29ac14014e",
+  "fetchedAt": "2026-08-03T11:38:49.827Z"
 }

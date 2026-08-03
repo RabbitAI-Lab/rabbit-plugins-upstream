@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to reason about client-server, peer-to-peer, and offline-first application architecture, including trust boundaries, API contracts, version negotiation, and rollout deliverables. <br>
+Developers and software architects use this skill to reason about client-server, peer-to-peer, and offline-first application designs, including trust boundaries, API contracts, version skew, connectivity, and rollout coordination. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad architecture triggers may cause the skill to influence conversations where client-server guidance is not desired. <br>
-Mitigation: Narrow or disable triggers when installing the skill in environments where architecture guidance should be opt-in. <br>
-Risk: Architecture recommendations can be incomplete or misleading if adopted without project-specific review. <br>
-Mitigation: Review generated guidance against the actual system requirements, security model, and operational constraints before using it for implementation decisions. <br>
+Risk: Broad architecture triggers may activate the skill in general design conversations. <br>
+Mitigation: Use the guidance when client-server, peer-to-peer, offline-first sync, trust boundary, or API evolution concerns are relevant. <br>
+Risk: Architecture proposals may be incomplete or unsuitable for a specific system. <br>
+Mitigation: Review the generated recommendations against project requirements, security constraints, and operational rollout plans before adoption. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-client-server) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Guidance, Markdown, Configuration] <br>
-**Output Format:** [Markdown guidance with architecture steps, deliverables, and risk mitigations] <br>
+**Output Format:** [Markdown guidance with architecture deliverables and mitigation recommendations] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces advisory architecture content only; no tools, scripts, credentials, or external services are invoked by the artifact.] <br>
+**Other Properties Related to Output:** [No executable behavior; produces architecture guidance for agent responses.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence; artifact frontmatter says 1.9.8) <br>
+1.9.17 (source: server release evidence; artifact frontmatter lists 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
