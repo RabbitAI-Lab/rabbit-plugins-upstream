@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/clickhouse/agent-skills/chdb-sql",
+  "repo": "clickhouse/agent-skills",
+  "skillId": "chdb-sql",
+  "branch": "main",
+  "pushedAt": "2026-08-02T03:11:54Z",
+  "contentHash": "52b75c1b5125c27c8a89d3442baa6f9727e52fe56a27d883579c0f2068183d46",
+  "fetchedAt": "2026-08-03T10:54:54.240Z"
+}

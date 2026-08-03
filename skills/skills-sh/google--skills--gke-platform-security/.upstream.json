@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-platform-security",
+  "repo": "google/skills",
+  "skillId": "gke-platform-security",
+  "branch": "main",
+  "pushedAt": "2026-08-01T03:59:29Z",
+  "contentHash": "d2a9fcc67602a60384d0f867f36b5ab775ee5c248d65bd7238d6358489d28ec3",
+  "fetchedAt": "2026-08-03T10:54:29.507Z"
+}

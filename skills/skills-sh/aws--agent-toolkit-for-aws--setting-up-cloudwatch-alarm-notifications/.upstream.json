@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/setting-up-cloudwatch-alarm-notifications",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "setting-up-cloudwatch-alarm-notifications",
+  "branch": "main",
+  "pushedAt": "2026-08-01T22:52:40Z",
+  "contentHash": "87dd80b04f34b0e5912ae0284c07fff5d6c24eac172167b6e9c5cf25ad4882f4",
+  "fetchedAt": "2026-08-03T10:55:50.000Z"
+}

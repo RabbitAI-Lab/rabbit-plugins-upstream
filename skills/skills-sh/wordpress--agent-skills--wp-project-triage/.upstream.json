@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-project-triage",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-project-triage",
+  "branch": "trunk",
+  "pushedAt": "2026-08-03T05:26:29Z",
+  "contentHash": "73956d8e5cd0369dbf63663f58d5beb1603c5bba1d450b7acfa71b3e783b781b",
+  "fetchedAt": "2026-08-03T10:55:49.582Z"
+}

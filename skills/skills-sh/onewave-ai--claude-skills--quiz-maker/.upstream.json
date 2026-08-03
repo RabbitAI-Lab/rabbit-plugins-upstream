@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/quiz-maker",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "quiz-maker",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "563e0338d7e2096e121ff4dbcbfa1e2004d33fbb0da9ffdcbc7545f26e20bf15",
+  "fetchedAt": "2026-08-03T10:55:32.863Z"
+}

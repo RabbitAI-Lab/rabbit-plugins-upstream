@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/payloadcms/skills/cms-migration",
+  "repo": "payloadcms/skills",
+  "skillId": "cms-migration",
+  "branch": "main",
+  "pushedAt": "2026-07-22T19:03:19Z",
+  "contentHash": "d79a73d2ff52f5f31154881206a4b74b0a760bf5028f0bb99298804a159f8390",
+  "fetchedAt": "2026-08-03T10:55:35.961Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-lambda-managed-instances",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-lambda-managed-instances",
+  "branch": "main",
+  "pushedAt": "2026-08-01T22:52:40Z",
+  "contentHash": "a710041d354b1c2f9302175521189c32c67e141e105ac440f4fbec9b47273e5d",
+  "fetchedAt": "2026-08-03T10:55:50.067Z"
+}

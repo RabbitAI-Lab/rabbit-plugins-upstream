@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/chromedevtools/chrome-devtools-mcp/a11y-debugging",
+  "repo": "chromedevtools/chrome-devtools-mcp",
+  "skillId": "a11y-debugging",
+  "branch": "main",
+  "pushedAt": "2026-08-03T09:21:45Z",
+  "contentHash": "a96f496d3153c4dc0e444e4f93ef110f839ea430f4ef7ab469862acb64e792e1",
+  "fetchedAt": "2026-08-03T10:55:31.941Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/route53",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "route53",
+  "branch": "main",
+  "pushedAt": "2026-08-01T22:52:40Z",
+  "contentHash": "c564df7d4ad7822af4cc9e6970d8557a80c0c632312d070a97420f21a134167e",
+  "fetchedAt": "2026-08-03T10:55:50.269Z"
+}
