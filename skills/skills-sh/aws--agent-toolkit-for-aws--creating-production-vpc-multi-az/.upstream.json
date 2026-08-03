@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/creating-production-vpc-multi-az",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "creating-production-vpc-multi-az",
+  "branch": "main",
+  "pushedAt": "2026-08-01T22:52:40Z",
+  "contentHash": "6686fff62ec5e0718e4d4e6ddb99452eea56fc1374239bc0d3b63557d8b89e09",
+  "fetchedAt": "2026-08-03T10:55:50.014Z"
+}

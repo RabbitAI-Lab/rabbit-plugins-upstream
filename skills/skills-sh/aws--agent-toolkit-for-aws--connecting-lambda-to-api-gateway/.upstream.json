@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/connecting-lambda-to-api-gateway",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "connecting-lambda-to-api-gateway",
+  "branch": "main",
+  "pushedAt": "2026-08-01T22:52:40Z",
+  "contentHash": "5ad16deef86fde2871a93b9b6fc3f0fe2d1b7bc6dafef45917c92790a8db1df8",
+  "fetchedAt": "2026-08-03T10:55:49.960Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/softaworks/agent-toolkit/gemini",
+  "repo": "softaworks/agent-toolkit",
+  "skillId": "gemini",
+  "branch": "main",
+  "pushedAt": "2026-03-05T16:46:24Z",
+  "contentHash": "b652216e8eb2b51c94c78c1341ce466951b857e48f73a1c39e82a039d713e5ca",
+  "fetchedAt": "2026-08-03T10:55:51.521Z"
+}

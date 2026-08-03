@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/planetscale/database-skills/vitess",
+  "repo": "planetscale/database-skills",
+  "skillId": "vitess",
+  "branch": "main",
+  "pushedAt": "2026-07-26T07:53:40Z",
+  "contentHash": "3cf4580edb874e4841030bd14a8d3d083e9dbd731195b222d60656dc18cb2ee9",
+  "fetchedAt": "2026-08-03T10:55:16.788Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/financial-document-parser",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "financial-document-parser",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "7870b3c2ecedf44a8479a921f739b3eac889bb4b84528225162e154a4588cd5f",
+  "fetchedAt": "2026-08-03T10:55:32.871Z"
+}
