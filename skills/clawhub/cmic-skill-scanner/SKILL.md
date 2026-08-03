@@ -21,7 +21,7 @@ This package contains only documentation. Pre-built binaries are hosted on **Git
 https://gitee.com/random_player/cmic-skill-scanner/releases
 
 **Verify checksums before running:**
-See https://gitee.com/random_player/cmic-skill-scanner/raw/main/releases/v0.11.0/SHA256SUMS
+See https://gitee.com/random_player/cmic-skill-scanner/raw/main/releases/v0.11.1/SHA256SUMS
 
 **Build from source (recommended for maximum security):**
 ```bash

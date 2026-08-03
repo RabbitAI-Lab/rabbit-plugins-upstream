@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/ibkr-httpapi",
   "slug": "ibkr-httpapi",
   "ownerHandle": null,
-  "version": "0.5.0",
-  "updatedAt": 1785075792789,
-  "contentHash": "a205ebeeec1f793e92f0d35ee2e60cc0c3f12a788dadd1ac4c950a5a4f6c524f",
-  "fetchedAt": "2026-07-26T18:03:15.377Z"
+  "version": "0.5.5",
+  "updatedAt": 1785614694732,
+  "contentHash": "589ea2725856e54aa30024ab27576c8e3823eed304abe15ae5a15c1c9856e319",
+  "fetchedAt": "2026-08-03T11:25:40.808Z"
 }

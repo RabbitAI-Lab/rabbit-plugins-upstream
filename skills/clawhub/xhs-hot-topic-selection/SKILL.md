@@ -72,6 +72,8 @@ For XHS, call `xhs_search_notes` with `keyword`, optional `page_token`, `sort_ty
 Do not pass `page` to `xhs_search_notes`; omit `page_token` on the first request.
 Continue pagination only when `next_page_token` is not empty, and pass the complete returned `next_page_token` back unchanged as `page_token` for the same keyword, sort, note type, publish-time range, and caller chain.
 
+XHS search parameter naming reminder: direct CLI uses `--sort-type`, `--publish-time-range`, and `--note-type`; the `xhs_search_notes` MCP tool uses `sort_type`, `publish_time_range`, and `note_type`. Do not pass `sortType`, `publishTimeRange`, or `noteType`.
+
 ## Output Guidance
 
 输出为热榜选题分析：热榜信号、选题候选池、热门笔记样本、标题钩子和内容角度、不建议追的热点、下一步建议。

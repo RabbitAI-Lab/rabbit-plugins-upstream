@@ -1,5 +1,5 @@
 ## Description: <br>
-Discover and filter 15,500+ The Graph subgraphs by domain, network, protocol type, or natural language goal, with x402 query URLs for $0.01 USDC on Base per call and no API key required. <br>
+Discover and filter 15,252 The Graph subgraphs by domain, network, protocol type, or natural language goal; each result includes an x402 query URL for $0.01 USDC on Base with no API key required. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,36 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers and agents use this MCP server to discover, rank, and inspect The Graph subgraphs before querying them. It returns structured subgraph metadata, schema details, reliability signals, query instructions, and x402 or legacy gateway URLs. <br>
+Developers and agent builders use this MCP server to choose reliable The Graph subgraphs, inspect schema and classification details, and receive x402 or legacy query endpoints before issuing GraphQL requests. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill returns x402 query links that can lead to paid wallet transactions if an agent follows them with signing authority. <br>
-Mitigation: Require explicit approval before signing x402 payments or using wallet credentials, and limit autonomous use of query_url_x402 links. <br>
-Risk: The runtime may download verified registry or model assets. <br>
-Mitigation: Pin the npm package version, allow network access only to approved sources, and keep registry hash verification enabled. <br>
-Risk: Optional HTTP/SSE mode exposes local endpoints when enabled. <br>
-Mitigation: Use stdio by default, and enable HTTP/SSE only in trusted or firewalled environments. <br>
+Risk: The skill can recommend paid x402 query paths that spend $0.01 USDC on Base per query. <br>
+Mitigation: Require explicit approval before an agent uses a wallet or x402 client to authorize payment. <br>
+Risk: Registry or model data may be downloaded if bundled files are missing. <br>
+Mitigation: For offline or locked-down runtimes, pre-bundle the registry and model data and block fallback downloads. <br>
+Risk: HTTP/SSE mode exposes local server endpoints when explicitly enabled. <br>
+Mitigation: Keep the default stdio transport unless HTTP is required, and bind HTTP/SSE only in trusted local or firewalled environments. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/paulieb14/skills/subgraph-registry) <br>
 - [Project homepage](https://github.com/PaulieB14/subgraph-registry) <br>
+- [Glama MCP server page](https://glama.ai/mcp/servers/PaulieB14/subgraph-registry) <br>
 - [The Graph](https://thegraph.com) <br>
-- [x402 client package](https://www.npmjs.com/package/@graphprotocol/client-x402) <br>
+- [Graph Protocol x402 client](https://www.npmjs.com/package/@graphprotocol/client-x402) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, JSON, API calls, configuration, guidance] <br>
-**Output Format:** [MCP tool responses and optional HTTP JSON responses] <br>
+**Output Type(s):** [text, json, guidance, configuration] <br>
+**Output Format:** [MCP tool responses as JSON with text guidance, query URLs, and optional pricing manifests] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns subgraph classifications, reliability scores, schema details, query URLs, pricing manifests, and query guidance.] <br>
+**Other Properties Related to Output:** [May include x402 pricing manifests, legacy The Graph gateway URLs, reliability scores, schema details, and local transport configuration guidance.] <br>
 
 ## Skill Version(s): <br>
-0.8.19 (source: package.json, server.json, ClawHub release evidence) <br>
+0.8.25 (source: package.json and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Live sports odds and player props via propzapi.com, with tools for moneyline, spreads, totals, upcoming player props, fixtures, live scores, and covered sportsbooks. <br>
+Generate images from HTML/CSS templates and capture webpage screenshots via propzapi.com. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill when they need an agent to fetch current sportsbook odds, player props, fixtures, live scores, or covered sportsbook lists from PropzAPI. It is for returning sourced sports-odds data, not betting advice or picks. <br>
+Developers and content teams use this skill to render deterministic HTML/CSS assets such as Open Graph images, social cards, certificates, invoices, charts, and screenshots. It is suited for workflows that need template-based rendering or webpage capture rather than prompt-based image generation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requires a PropzAPI API key and sends sports-odds queries to PropzAPI. <br>
-Mitigation: Use a scoped PropzAPI key where possible, store it in PROPZAPI_KEY, and avoid sending sensitive user information in league, sport, market, or status queries. <br>
-Risk: Tool calls may spend metered PropzAPI credits. <br>
-Mitigation: Call the tools only for explicit live odds, props, fixtures, scores, or sportsbook coverage requests, and confirm ambiguous league or market requests before use. <br>
-Risk: Sports odds are informational and may be delayed or unsuitable for wagering decisions. <br>
-Mitigation: Return the sourced numbers without presenting betting advice, picks, or guarantees, and remind users to comply with applicable laws and sportsbook terms when relevant. <br>
+Risk: Template contents, render variables, created templates, and screenshot target URLs are sent to PropzAPI. <br>
+Mitigation: Avoid sending secrets, personal data, private dashboard URLs, or tokenized links unless that data sharing is approved for the use case. <br>
+Risk: Screenshot capture can involve third-party or access-controlled pages. <br>
+Mitigation: Confirm rights, site terms, and authorization before capturing pages, especially pages that are private or user-specific. <br>
+Risk: Rendered image and screenshot calls consume PropzAPI credits. <br>
+Mitigation: Confirm render intent before paid operations and use free operations such as listing templates, creating templates, or signing embed URLs when those meet the task. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub release page](https://clawhub.ai/paperandbeyond23-gif/skills/propzapi-full) <br>
 - [PropzAPI homepage](https://propzapi.com) <br>
 - [PropzAPI documentation](https://propzapi.com/docs) <br>
 - [PropzAPI OpenAPI specification](https://api.propzapi.com/openapi.json) <br>
+- [PropzAPI MCP server](https://api.propzapi.com/mcp) <br>
 - [PropzAPI pricing](https://propzapi.com/pricing) <br>
-- [ClawHub skill page](https://clawhub.ai/paperandbeyond23-gif/skills/propzapi-full) <br>
-- [Publisher profile](https://clawhub.ai/user/paperandbeyond23-gif) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Guidance] <br>
-**Output Format:** [JSON objects returned to the agent, with structured error objects on failure] <br>
+**Output Type(s):** [text, JSON, image URLs, configuration, guidance] <br>
+**Output Format:** [JSON responses with rendered asset URLs and metadata, plus Markdown or plain-text guidance for setup and errors] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires PROPZAPI_KEY and may spend metered PropzAPI credits when tools are called.] <br>
+**Other Properties Related to Output:** [Rendered outputs may be PNG, JPEG, WEBP, or PDF; image generation and screenshot calls consume PropzAPI credits.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release and SKILL.md frontmatter) <br>
+1.0.1 (source: ClawHub release metadata; artifact frontmatter lists 0.2.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

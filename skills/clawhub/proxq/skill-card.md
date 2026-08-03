@@ -1,5 +1,5 @@
 ## Description: <br>
-proxq helps agents operate a Go, Redis-backed async HTTP proxy queue by submitting HTTP requests as jobs, polling status, fetching replayed upstream responses, and canceling named jobs. <br>
+proxq helps an agent use a Go, Redis-backed async HTTP proxy queue by submitting HTTP requests, returning job IDs, polling replayed upstream responses, and cancelling jobs against a trusted running instance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and operators use this skill to interact with a proxq instance they control: submit async HTTP proxy jobs, poll job status, retrieve completed upstream responses, and cancel jobs the user identified. <br>
+Developers and operators use this skill to submit, poll, inspect, and cancel proxq jobs for slow backends, webhook relays, large uploads, or long-running processing behind short-timeout reverse proxies. It assumes the proxq service is already deployed and trusted. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: proxq can make outbound requests from its own network position and has no built-in authentication. <br>
-Mitigation: Operate only a proxq instance you control, keep it behind authentication or loopback/internal networking, and configure upstreams only to trusted services. <br>
-Risk: Headers and bodies submitted through proxq may be forwarded to configured upstreams. <br>
-Mitigation: Avoid sending secrets to untrusted destinations and verify the upstream target before submitting a job. <br>
-Risk: Job cancellation is best-effort, has no undo, and has no built-in ownership check. <br>
-Mitigation: Cancel only jobs you submitted or jobs the user explicitly named. <br>
+Risk: proxq can proxy requests from its own network position, creating SSRF exposure if untrusted callers or upstreams are allowed. <br>
+Mitigation: Use only trusted upstreams, keep the service behind loopback, an internal network, or an authenticated reverse proxy, and do not let untrusted callers choose upstream URLs or prefixes. <br>
+Risk: The proxq service has no built-in authentication or per-job ownership checks. <br>
+Mitigation: Protect the service with external authentication or network isolation, and only poll or cancel job IDs supplied by the user or returned from the current workflow. <br>
+Risk: Requests may forward sensitive headers or bodies to configured upstreams. <br>
+Mitigation: Send credentials and payloads only when the configured upstream is intended to receive them, and avoid exposing bare proxq endpoints to untrusted clients. <br>
 
 
 ## Reference(s): <br>
 - [proxq setup](references/setup.md) <br>
-- [proxq ClawHub page](https://clawhub.ai/psyb0t/skills/proxq) <br>
+- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/proxq) <br>
 - [asynq](https://github.com/hibiken/asynq) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, HTTP examples, and YAML configuration] <br>
+**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
+**Output Format:** [Markdown with curl, Docker, Docker Compose, YAML, HTTP, and JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires PROXQ_URL for job operations; setup examples also use curl, Docker, and Docker Compose.] <br>
+**Other Properties Related to Output:** [Uses PROXQ_URL and requires curl and Docker for the documented workflows.] <br>
 
 ## Skill Version(s): <br>
-0.10.3 (source: ClawHub release evidence) <br>
+0.10.10 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -32,7 +32,7 @@ Use only the `state`, `status`, `legal_actions`, and optional one-time `game_rul
 Use the bundled Python helper instead of raw `curl` for gameplay API calls:
 
 ```bash
-python3 /home/node/.openclaw/workspace/skills/test-ai-clawarena/arena_api.py poll --wait 0 --consume-history 1
+python3 /home/node/.openclaw/workspace/skills/ai-clawarena/arena_api.py poll --wait 0 --consume-history 1
 ```
 
 Do not write your own Python wrapper, generic parser, retry script, or alternate API client around ClawArena calls. The only Python file you should execute for gameplay API communication is the bundled `arena_api.py` helper, called directly as shown in this document.
@@ -48,7 +48,7 @@ The helper already:
 ## Poll
 
 ```bash
-python3 /home/node/.openclaw/workspace/skills/test-ai-clawarena/arena_api.py poll --wait 0 --consume-history 1
+python3 /home/node/.openclaw/workspace/skills/ai-clawarena/arena_api.py poll --wait 0 --consume-history 1
 ```
 
 Every watcher wake starts with a fresh poll, while the whole match stays in one
@@ -109,7 +109,7 @@ Read `status` from the response:
 
 Read `legal_actions` from the response. Pick the best action based on the game state and hints provided. Then submit without putting JSON in a shell command:
 
-1. Call `exec` with `command` set to `/home/node/.openclaw/workspace/skills/test-ai-clawarena/arena_api.py action --stdin-line`, `background` set to `true`, and `pty` set to `true`.
+1. Call `exec` with `command` set to `/home/node/.openclaw/workspace/skills/ai-clawarena/arena_api.py action --stdin-line`, `background` set to `true`, and `pty` set to `true`.
 2. Copy the returned `sessionId`.
 3. Call `process` with `action=send-keys`, that `sessionId`, and `literal` set to one compact JSON line followed by `\n`: `{"action":"<chosen>","params":{...chosen_params},"idempotency_key":"<match_id>-<seq>"}\n`.
 4. Poll that process session once with `timeout=30000` to read the API result.
@@ -137,7 +137,7 @@ When reasoning from the poll response:
 
 If the helper returns `http_error` with `http_status` 400 or 409 because the choice was invalid or stale:
 
-1. refresh the game state once with `python3 /home/node/.openclaw/workspace/skills/test-ai-clawarena/arena_api.py poll --wait 0 --consume-history 1`
+1. refresh the game state once with `python3 /home/node/.openclaw/workspace/skills/ai-clawarena/arena_api.py poll --wait 0 --consume-history 1`
 2. choose another legal action if one exists
 3. retry at most one more time
 

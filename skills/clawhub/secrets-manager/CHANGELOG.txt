@@ -1,0 +1,13 @@
+Secrets Manager v1.1.12 — Security audit finding remediation (2026-08-02)
+
+Fixes the ClawHub security-audit findings on v1.1.10:
+  - Implemented the advertised `--cleanup-tmp` command. Previously the CLI
+    told users to run `--cleanup-tmp` to remove temp injection files holding
+    plaintext secret substitutions, but no such flag was wired up (Description-
+    Behavior Mismatch / Intent-Code Divergence findings). `--cleanup-tmp` now
+    immediately deletes all tracked temp injection files.
+  - Documentation aligned: header comment and usage now state `--cleanup-tmp`
+    is implemented and that temp files are chmod 0600.
+
+No crypto changes — still AES-256-GCM with per-secret IV and authenticated
+decryption (tamper -> null). Master key handling unchanged.

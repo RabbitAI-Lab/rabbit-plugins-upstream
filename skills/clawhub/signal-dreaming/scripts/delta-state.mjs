@@ -7,6 +7,7 @@ import {
   canonicalRoot,
   exists,
   fail,
+  fileSnapshot,
   listDailyLogs,
   parseDreamLog,
   readJson,
@@ -20,6 +21,15 @@ export const STATE_SCHEMA_VERSION = 3;
 export const DEFAULT_BOOTSTRAP_DAYS = 7;
 export const MAX_LOGS_PER_RUN = 32;
 export const MAX_INPUT_BYTES = 512 * 1024;
+export const MEMORY_HEALTHY_BYTES = 8_192;
+export const MEMORY_HARD_BYTES = 10_240;
+export const SOFT_REVIEW_INTERVAL_MS = 7 * 24 * 60 * 60 * 1000;
+
+export function memoryBand(bytes) {
+  if (bytes > MEMORY_HARD_BYTES) return "hard";
+  if (bytes > MEMORY_HEALTHY_BYTES) return "soft";
+  return "healthy";
+}
 
 function dateOf(relative) {
   return relative.slice("memory/".length, "memory/".length + 10);
@@ -98,6 +108,24 @@ export async function buildDeltaPlan(workspaceInput, options = {}) {
 
   candidates = candidates.toSorted((a, b) => a.path.localeCompare(b.path));
   const batch = bounded(candidates, limits);
+  const indexFile = await fileSnapshot(root, "MEMORY.md");
+  const previousIndex = state?.index ?? null;
+  const indexChanged = !previousIndex || previousIndex.sha256 !== indexFile.sha256;
+  const previousReviewMs = Date.parse(previousIndex?.reviewedAt ?? "");
+  const nowMs = Date.parse(now);
+  const reviewDue = Number.isFinite(previousReviewMs) && Number.isFinite(nowMs)
+    && nowMs - previousReviewMs >= SOFT_REVIEW_INTERVAL_MS;
+  const band = memoryBand(indexFile.size);
+  const maintenanceReasons = [];
+  if (band === "hard") maintenanceReasons.push("memory_hard_limit");
+  else if (band === "soft" && !previousIndex) maintenanceReasons.push("index_review_missing");
+  else if (band === "soft" && indexChanged) maintenanceReasons.push("index_changed_in_soft_band");
+  else if (band === "soft" && reviewDue) maintenanceReasons.push("soft_review_due");
+  const maintenanceRequired = maintenanceReasons.length > 0;
+  const dailyRequired = batch.selected.length > 0;
+  const runMode = dailyRequired && maintenanceRequired ? "consolidate+compact"
+    : maintenanceRequired ? "compact-first"
+      : dailyRequired ? "consolidate" : "noop";
   return {
     schema: PLAN_SCHEMA,
     createdAt: now,
@@ -111,7 +139,21 @@ export async function buildDeltaPlan(workspaceInput, options = {}) {
     deferredLogs: batch.deferred.map((file) => file.path),
     selectedBytes: batch.bytes,
     batchCapped: batch.deferred.length > 0,
-    noop: batch.selected.length === 0,
+    index: {
+      ...indexFile,
+      band,
+      previous: previousIndex,
+      changedSinceReview: indexChanged,
+      reviewDue,
+      maintenanceRequired,
+      reasons: maintenanceReasons,
+    },
+    triggers: {
+      dailyLogs: dailyRequired,
+      indexMaintenance: maintenanceRequired,
+    },
+    runMode,
+    noop: !dailyRequired && !maintenanceRequired,
     stateBefore: state,
     diary: {
       entryCount: parsedDiary.entries.length,
@@ -122,7 +164,7 @@ export async function buildDeltaPlan(workspaceInput, options = {}) {
   };
 }
 
-export function nextState(plan, successfulAt, dreamNumber) {
+export function nextState(plan, successfulAt, dreamNumber, finalIndex = plan.index) {
   if (plan.schema !== PLAN_SCHEMA) throw fail("PLAN_SCHEMA", "unsupported delta plan");
   if (dreamNumber !== plan.diary.nextDreamNumber) throw fail("DIARY_NUMBER", "dream number does not match the plan");
   const previous = plan.stateBefore?.dailyLogs ?? {};
@@ -134,12 +176,20 @@ export function nextState(plan, successfulAt, dreamNumber) {
       mtimeMs: file.mtimeMs,
     };
   }
+  if (!finalIndex || typeof finalIndex.sha256 !== "string" || !Number.isSafeInteger(finalIndex.size)) {
+    throw fail("INDEX_STATE", "successful state requires the committed MEMORY.md hash and size");
+  }
   return {
     schemaVersion: STATE_SCHEMA_VERSION,
     lastSuccessfulRun: successfulAt,
     lastDreamNumber: dreamNumber,
     bootstrapCutoff: plan.stateBefore?.bootstrapCutoff ?? plan.bootstrapCutoff,
     dailyLogs: Object.fromEntries(Object.entries(dailyLogs).toSorted(([a], [b]) => a.localeCompare(b))),
+    index: {
+      sha256: finalIndex.sha256,
+      size: finalIndex.size,
+      reviewedAt: successfulAt,
+    },
   };
 }
 

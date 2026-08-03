@@ -1,5 +1,5 @@
 ## Description: <br>
-LYGO Ops Detector analyzes text, described actions, and association patterns with deterministic heuristics to surface evasion, coordination, and institutional-signaling indicators. <br>
+LYGO Ops Detector analyzes text, logs, and association descriptions with deterministic local heuristics to surface evasion, association, and institutional-signaling patterns, with evaluation artifacts for reproducible precision, recall, and AUC reporting. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Agents, analysts, and developers use this skill to evaluate supplied statements, logs, or behavior descriptions for measurable evasion and coordination signals. Its output is advisory and should support human review, not identity-based judgments or public accusations. <br>
+External users, developers, and analysts use this skill to run local, action-focused heuristic checks on statements, logs, threads, emails, or association descriptions. The skill produces score breakdowns and verdict language that should support, not replace, independent human review. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Detector scores can be mistaken for proof of wrongdoing or identity-based conclusions. <br>
-Mitigation: Use scores only as advisory pattern signals, review the cited evidence manually, and avoid public accusations, employment decisions, legal claims, or identity-based judgments without independent evidence and human review. <br>
-Risk: Sensitive or untrusted text may contain misleading, poisoned, or incomplete context. <br>
-Mitigation: Run analysis locally, verify primary sources, separate observed signals from inference, and quarantine suspicious inputs before relying on results. <br>
+Risk: The detector can be used for sensitive reputation or association analysis. <br>
+Mitigation: Use it only with clear authority over the input data, avoid private communications or association data without consent, and keep findings action-focused rather than identity-focused. <br>
+Risk: Heuristic scores and bundled calibration artifacts may be misleading if treated as proof. <br>
+Mitigation: Treat outputs as investigative leads, require independent human review, and verify claims against primary sources before taking action. <br>
+Risk: Detector output could be misused for public accusations, doxing, or escalation. <br>
+Mitigation: Do not publish or escalate reports without explicit consent, raw supporting signals, and human review. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/deepseekoracle/skills/lygo-ops-detector) <br>
+- [ClawHub skill page](https://clawhub.ai/deepseekoracle/skills/lygo-ops-detector) <br>
+- [Publisher profile](https://clawhub.ai/user/deepseekoracle) <br>
 - [AETHON D9 Blueprint](references/AETHON_D9_BLUEPRINT.md) <br>
-- [Security and Ethics](references/SECURITY.md) <br>
+- [Security and ethics notes](references/SECURITY.md) <br>
+- [Public labeled discourse suite](tests/labeled_discourse_suite.json) <br>
+- [Last evaluation report](tests/last_eval_report.json) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown analysis with optional JSON or CLI output] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
+**Output Format:** [Markdown-style analysis with score breakdowns; optional JSON from the CLI] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes score breakdowns, observed signals, verdicts, and action-focused disclaimers.] <br>
+**Other Properties Related to Output:** [Includes evasion index, association index, combined risk, verdict, and an action-focused disclaimer.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+1.1.0 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

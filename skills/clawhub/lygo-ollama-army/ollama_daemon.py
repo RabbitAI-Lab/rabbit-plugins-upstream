@@ -21,6 +21,8 @@ import argparse
 from datetime import datetime
 from pathlib import Path
 
+from _safe_invoke import run_python
+
 HERE = Path(__file__).resolve().parent
 CC = HERE / "ollama_command_center"
 ARMY_CFG = CC / "config" / "army_config.json"
@@ -107,11 +109,55 @@ def get_champion_system(champion: str) -> str:
     }
     return champions.get(champion.upper(), f"You are {champion}, a specialized LYGO champion agent.")
 
+SOCIAL_ROLES = frozenset({
+    "moltx-lattice-pulse",
+    "moltbook-lyra-pulse",
+    "moltbook-lightfather-pulse",
+    "discord-triage",
+})
+HEAVY_STACK_ROLES = frozenset({
+    "audit-suite",
+    "stack-integrity",
+    "mesh-cartographer",
+    "anchor-health",
+    "champion-egg-boot",
+})
+
+
+def _army_cfg() -> dict:
+    try:
+        if ARMY_CFG.is_file():
+            return json.loads(ARMY_CFG.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        pass
+    return {}
+
+
 def process_task(task: dict, model: str, champion: str = None) -> dict:
     role = task.get("role", "general")
     payload = task.get("payload", {})
     out = {"task_id": task.get("id", "unknown"), "role": role, "ts": datetime.now().isoformat(), "model": model}
-    
+    cfg = _army_cfg()
+    access = cfg.get("access") or {}
+    planting = cfg.get("planting") or {}
+    sent = cfg.get("sentinel") or {}
+
+    # v0.8.0 role gates (config-enforced; queue injection cannot bypass)
+    if role in SOCIAL_ROLES and not access.get("social_publish"):
+        out["result"] = {"skipped": "access.social_publish=false"}
+        return out
+    if role == "public-pages-check" and not sent.get("probe_public_pages"):
+        out["result"] = {"skipped": "sentinel.probe_public_pages=false"}
+        return out
+    if role in ("egg-planter", "registry-planter") and not (
+        planting.get("enabled") and planting.get("consent")
+    ):
+        out["result"] = {"skipped": "planting.enabled+consent required"}
+        return out
+    if role in HEAVY_STACK_ROLES and not access.get("allow_privileged_roles", False):
+        out["result"] = {"skipped": "access.allow_privileged_roles=false"}
+        return out
+
     system = get_champion_system(champion) if champion else "You are a helpful generic LYGO local assistant. Be concise and useful."
 
     if role == "discord-triage":
@@ -129,7 +175,6 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
     elif role in ["draft", "draft-simple"]:
         out["result"] = {"draft": simple_draft_reply(model, payload.get("query", ""), style="lygo")}
     elif role == "lattice-check":
-        import subprocess
 
         root, serr = _safe_stack_root()
         if serr:
@@ -139,13 +184,7 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
         if not script.is_file():
             out["result"] = {"aligned": False, "error": f"missing {script}"}
         else:
-            cp = subprocess.run(
-                [sys.executable, str(script)],
-                cwd=str(root),
-                capture_output=True,
-                text=True,
-                timeout=180,
-            )
+            cp = run_python(script, cwd=root, timeout=180, stack_root=root if str(root) != str(HERE) else None)
             out["result"] = {
                 "aligned": cp.returncode == 0,
                 "exit_code": cp.returncode,
@@ -153,20 +192,13 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
                 "stderr": cp.stderr[-2000:] if cp.stderr else "",
             }
     elif role == "stack-integrity":
-        import subprocess
 
         root = _stack_root()
         script = root / "tools" / "run_sovereign_integrity_test.py"
         if not script.is_file():
             out["result"] = {"pass": False, "error": f"missing {script}"}
         else:
-            cp = subprocess.run(
-                [sys.executable, str(script)],
-                cwd=str(root),
-                capture_output=True,
-                text=True,
-                timeout=300,
-            )
+            cp = run_python(script, cwd=root, timeout=300, stack_root=root if str(root) != str(HERE) else None)
             out["result"] = {
                 "pass": cp.returncode == 0,
                 "exit_code": cp.returncode,
@@ -206,20 +238,13 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
             "catalog_consistent": catalog_ok and not missing,
         }
     elif role == "mesh-cartographer":
-        import subprocess
 
         root = _stack_root()
         script = root / "tools" / "lygo_network_builder_verify.py"
         if not script.is_file():
             out["result"] = {"all_pass": False, "error": f"missing {script}"}
         else:
-            cp = subprocess.run(
-                [sys.executable, str(script)],
-                cwd=str(root),
-                capture_output=True,
-                text=True,
-                timeout=180,
-            )
+            cp = run_python(script, cwd=root, timeout=180, stack_root=root if str(root) != str(HERE) else None)
             try:
                 blob = json.loads(cp.stdout or "{}")
             except json.JSONDecodeError:
@@ -231,14 +256,13 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
                 "exit_code": cp.returncode,
             }
     elif role == "public-pages-check":
-        import subprocess
 
         root = _stack_root()
         script = root / "tools" / "verify_public_pages.py"
         if not script.is_file():
             out["result"] = {"ok": False, "error": "missing verify_public_pages.py"}
         else:
-            cp = subprocess.run([sys.executable, str(script)], cwd=str(root), capture_output=True, text=True, timeout=120)
+            cp = run_python(script, cwd=root, timeout=120, stack_root=root if root is not HERE else None)
             try:
                 data = json.loads(cp.stdout or "{}")
             except json.JSONDecodeError:
@@ -250,7 +274,6 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
                 "excavationpro_mirrors_live": data.get("excavationpro_mirrors_live"),
             }
     elif role == "audit-suite":
-        import subprocess
 
         root = _stack_root()
         scripts = [
@@ -264,7 +287,7 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
             if not p.is_file():
                 results[name] = {"all_pass": False, "error": "missing"}
                 continue
-            cp = subprocess.run([sys.executable, str(p)], cwd=str(root), capture_output=True, text=True, timeout=300)
+            cp = run_python(p, cwd=root, timeout=300, stack_root=root if root is not HERE else None)
             try:
                 blob = json.loads(cp.stdout or "{}")
                 results[name] = {"all_pass": blob.get("all_pass"), "exit_code": cp.returncode}
@@ -299,77 +322,80 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
             out["result"] = {"ok": True, "path": str(cc)}
         else:
             out["result"] = {"ok": False, "error": "missing AGENT_MEMORY_SNAPSHOT.json"}
+    elif role == "kernel-verify-only":
+
+        root, serr = _safe_stack_root()
+        if serr:
+            out["result"] = {"ok": False, "error": serr}
+            return out
+        results = {}
+        for tool in ("verify_kernel_eggs.py", "verify_champion_eggs.py"):
+            script = root / "tools" / tool
+            if not script.is_file():
+                results[tool] = {"ok": False, "error": "missing"}
+                continue
+            cp = run_python(script, cwd=root, timeout=180, stack_root=root if str(root) != str(HERE) else None)
+            results[tool] = {"ok": cp.returncode == 0, "exit_code": cp.returncode, "stdout": (cp.stdout or "")[-1500:]}
+        out["result"] = {"ok": all(r.get("ok") for r in results.values()), "verify": results}
+    elif role == "idle-housekeep":
+
+        script = HERE / "ollama_command_center" / "scripts" / "army_idle_housekeeping.py"
+        ops = payload.get("ops")
+        if ops:
+            ok = True
+            for op in ops:
+                cp = run_python(script, ['--op', str(op)], cwd=HERE, timeout=600)
+                ok = ok and cp.returncode == 0
+            out["result"] = {"ok": ok, "ops": ops}
+        else:
+            cp = run_python(script, ['--tick'], cwd=HERE, timeout=900)
+            out["result"] = {"ok": cp.returncode == 0, "stdout": (cp.stdout or "")[-2000:]}
     elif role == "egg-planter":
-        import subprocess
 
         script = HERE / "ollama_command_center" / "scripts" / "run_army_planting.py"
-        cp = subprocess.run(
-            [sys.executable, str(script), "egg"],
-            cwd=str(HERE),
-            capture_output=True,
-            text=True,
-            timeout=1200,
-            env={**os.environ, "LYGO_STACK_ROOT": str(_stack_root())},
-        )
+        cp = run_python(script, ['egg'], cwd=HERE, timeout=1200, stack_root=HERE, env_extra={'LYGO_STACK_ROOT': str(HERE)})
         try:
             blob = json.loads(cp.stdout or "{}")
         except json.JSONDecodeError:
             blob = {"raw": (cp.stdout or "")[-3000:]}
         out["result"] = {"exit_code": cp.returncode, "report": blob}
     elif role == "registry-planter":
-        import subprocess
 
         script = HERE / "ollama_command_center" / "scripts" / "run_army_planting.py"
-        cp = subprocess.run(
-            [sys.executable, str(script), "registry"],
-            cwd=str(HERE),
-            capture_output=True,
-            text=True,
-            timeout=1200,
-            env={**os.environ, "LYGO_STACK_ROOT": str(_stack_root())},
-        )
+        cp = run_python(script, ['registry'], cwd=HERE, timeout=1200, stack_root=HERE, env_extra={'LYGO_STACK_ROOT': str(HERE)})
         try:
             blob = json.loads(cp.stdout or "{}")
         except json.JSONDecodeError:
             blob = {"raw": (cp.stdout or "")[-3000:]}
         out["result"] = {"exit_code": cp.returncode, "report": blob}
     elif role == "self-tune":
-        import subprocess
 
         script = HERE / "ollama_command_center" / "scripts" / "army_self_tune.py"
-        cp = subprocess.run([sys.executable, str(script)], cwd=str(HERE), capture_output=True, text=True, timeout=180)
+        cp = run_python(script, cwd=HERE, timeout=180, stack_root=HERE if HERE is not HERE else None)
         try:
             blob = json.loads(cp.stdout or "{}")
         except json.JSONDecodeError:
             blob = {"raw": (cp.stdout or "")[-2000:]}
         out["result"] = {"exit_code": cp.returncode, "report": blob}
     elif role == "anchor-health":
-        import subprocess
 
         root = _stack_root()
         script = root / "tools" / "run_anchor_audit.py"
         worker = root / "tools" / "anchor_autonomy_worker.py"
         if script.is_file():
-            cp = subprocess.run([sys.executable, str(script)], cwd=str(root), capture_output=True, text=True, timeout=120)
+            cp = run_python(script, cwd=root, timeout=120, stack_root=root if root is not HERE else None)
             try:
                 blob = json.loads(cp.stdout or "{}")
             except json.JSONDecodeError:
                 blob = {"all_pass": cp.returncode == 0}
             if worker.is_file():
-                subprocess.run(
-                    [sys.executable, str(worker)],
-                    cwd=str(root),
-                    capture_output=True,
-                    text=True,
-                    timeout=180,
-                )
+                run_python(worker, cwd=root, timeout=180, stack_root=root)
             out["result"] = {"all_pass": blob.get("all_pass"), "exit_code": cp.returncode, "checks": len(blob.get("checks", []))}
         else:
             out["result"] = {"all_pass": False, "error": "missing run_anchor_audit.py"}
     elif role == "champion-egg-boot":
         out["result"] = execute_champion_egg_boot(payload, model, task.get("champion"))
     elif role == "moltx-lattice-pulse":
-        import subprocess
 
         root, serr = _safe_stack_root()
         if serr:
@@ -379,13 +405,12 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
         if not script.is_file():
             out["result"] = {"ok": False, "error": f"missing {script}"}
         else:
-            cp = subprocess.run(
-                [sys.executable, str(script)],
-                cwd=str(root),
-                capture_output=True,
-                text=True,
+            cp = run_python(
+                script,
+                cwd=root,
                 timeout=600,
-                env={**os.environ, "LYGO_STACK_ROOT": str(root)},
+                stack_root=root,
+                env_extra={"LYGO_STACK_ROOT": str(root)},
             )
             try:
                 parsed = json.loads(cp.stdout) if cp.stdout.strip() else {}
@@ -398,7 +423,6 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
                 "stderr": (cp.stderr or "")[-1500:],
             }
     elif role in ("moltbook-lyra-pulse", "moltbook-lightfather-pulse"):
-        import subprocess
 
         root, serr = _safe_stack_root()
         if serr:
@@ -409,14 +433,7 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
         if not script.is_file():
             out["result"] = {"ok": False, "error": f"missing {script}"}
         else:
-            cp = subprocess.run(
-                [sys.executable, str(script), "--account", acct],
-                cwd=str(root),
-                capture_output=True,
-                text=True,
-                timeout=600,
-                env={**os.environ, "LYGO_STACK_ROOT": str(root), "MOLTBOOK_ACCOUNT": acct},
-            )
+            cp = run_python(script, ['--account', acct], cwd=root, timeout=600, stack_root=root, env_extra={'LYGO_STACK_ROOT': str(root), 'MOLTBOOK_ACCOUNT': acct})
             try:
                 parsed = json.loads(cp.stdout) if cp.stdout.strip() else {}
             except json.JSONDecodeError:
@@ -429,17 +446,16 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
                 "stderr": (cp.stderr or "")[-1500:],
             }
     elif role == "joy-loop-pulse":
-        import subprocess
 
         root, serr = _safe_stack_root()
         if serr:
             out["result"] = {"status": "QUARANTINE", "error": serr}
             return out
         script = root / "tools" / "joy_loop_protocol.py"
-        cmd = [sys.executable, str(script), "--tick"]
+        jargs = ["--tick"]
         if payload.get("inject"):
-            cmd += ["--inject", str(payload["inject"])]
-        cp = subprocess.run(cmd, cwd=str(root), capture_output=True, text=True, timeout=120)
+            jargs += ["--inject", str(payload["inject"])]
+        cp = run_python(script, jargs, cwd=root, timeout=120, stack_root=root)
         try:
             blob = json.loads(cp.stdout.strip().split("\n")[-1] if cp.stdout else "{}")
         except json.JSONDecodeError:
@@ -454,7 +470,6 @@ def process_task(task: dict, model: str, champion: str = None) -> dict:
 
 def execute_champion_egg_boot(payload: dict, model: str, champion_hint: str | None) -> dict:
     """Zero-trust vault boot: champion_bootloader.py → P6 handshake → Ollama RAM load."""
-    import subprocess
 
     root, serr = _safe_stack_root()
     if serr:
@@ -468,13 +483,7 @@ def execute_champion_egg_boot(payload: dict, model: str, champion_hint: str | No
     if not bootloader.is_file():
         return {"status": "QUARANTINE", "error": f"missing {bootloader}"}
 
-    cp = subprocess.run(
-        [sys.executable, str(bootloader), "--egg", egg_id],
-        cwd=str(root),
-        capture_output=True,
-        text=True,
-        timeout=120,
-    )
+    cp = run_python(bootloader, ['--egg', egg_id], cwd=root, timeout=120, stack_root=root)
     if cp.returncode != 0:
         return {
             "status": "QUARANTINE",
@@ -556,6 +565,8 @@ DETERMINISTIC_ROLES = frozenset({
     "moltx-lattice-pulse",
     "moltbook-lyra-pulse",
     "moltbook-lightfather-pulse",
+    "kernel-verify-only",
+    "idle-housekeep",
 })
 
 HB_LIGHT_ROLES = frozenset({
@@ -573,6 +584,8 @@ HB_LIGHT_ROLES = frozenset({
 def task_for_daemon(task_role: str, daemon_role: str) -> bool:
     if task_role == "champion-egg-boot":
         return daemon_role == "champion-egg-boot"
+    if daemon_role == "stack-worker":
+        return task_role in DETERMINISTIC_ROLES
     if daemon_role == "hb-light":
         if task_role == "champion-egg-boot":
             return False
@@ -580,8 +593,41 @@ def task_for_daemon(task_role: str, daemon_role: str) -> bool:
     return task_role == daemon_role
 
 
+def _pending_for_daemon(role: str) -> int:
+    n = 0
+    by_name: dict[str, Path] = {}
+    for qd in queue_dirs():
+        for tf in qd.glob("*.task.json"):
+            by_name.setdefault(tf.name, tf)
+    for tf in by_name.values():
+        try:
+            task = json.loads(tf.read_text(encoding="utf-8"))
+            if task_for_daemon(task.get("role", "general"), role):
+                n += 1
+        except (OSError, json.JSONDecodeError):
+            continue
+    return n
+
+
+def _load_poll_tiers(poll: float) -> tuple[float, float, int]:
+    idle = poll
+    busy = min(1.5, poll / 3.0)
+    batch = 8
+    if ARMY_CFG.is_file():
+        try:
+            perf = json.loads(ARMY_CFG.read_text(encoding="utf-8")).get("performance") or {}
+            idle = float(perf.get("poll_idle_seconds", idle))
+            busy = float(perf.get("poll_busy_seconds", busy))
+            batch = int(perf.get("batch_max", batch))
+        except (json.JSONDecodeError, OSError, ValueError):
+            pass
+    return idle, busy, batch
+
+
 def run_daemon(role: str, model: str, poll: float = 5.0, champion: str = None):
+    poll_idle, poll_busy, batch_max = _load_poll_tiers(poll)
     print(f"🚀 LYGO OLLAMA DAEMON | role={role} model={model} champion={champion or 'none'}")
+    print(f"Adaptive poll idle={poll_idle}s busy={poll_busy}s batch={batch_max}")
     print("Generic public edition. Self-building capable. Queue-driven.")
     ensure_dirs()
     
@@ -596,7 +642,7 @@ def run_daemon(role: str, model: str, poll: float = 5.0, champion: str = None):
                     by_name.setdefault(tf.name, tf)
             processed = 0
             for tf in sorted(by_name.values(), key=lambda p: p.name):
-                if processed >= 8:
+                if processed >= batch_max:
                     break
                 try:
                     if not tf.is_file():
@@ -626,7 +672,10 @@ def run_daemon(role: str, model: str, poll: float = 5.0, champion: str = None):
                 except Exception as e:
                     print(f"[TASK ERR] {e}")
 
-            time.sleep(poll)
+            if processed > 0 or _pending_for_daemon(role) > 0:
+                time.sleep(poll_busy)
+            else:
+                time.sleep(poll_idle)
         except KeyboardInterrupt:
             print("Daemon stopped.")
             break

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/rustok-wallet",
   "slug": "rustok-wallet",
   "ownerHandle": null,
-  "version": "0.4.4",
-  "updatedAt": 1783362135366,
-  "contentHash": "ac8bcb8872c1f6650e7ecc6eb1327067cc09a09c40437c86a18a956138265153",
-  "fetchedAt": "2026-07-26T18:19:30.929Z"
+  "version": "0.4.9",
+  "updatedAt": 1785699295446,
+  "contentHash": "232b1f9881412b29cc6d1c00606b6f7f26e7b7e76af95467c71b0d48457d8161",
+  "fetchedAt": "2026-08-03T11:23:21.608Z"
 }

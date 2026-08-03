@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/book-video-generator",
   "slug": "book-video-generator",
   "ownerHandle": null,
-  "version": "0.1.0",
-  "updatedAt": 1784533374083,
-  "contentHash": "a23b2e2e77366c83182747f54a723b87315b73478d52861a03579fa182554a88",
-  "fetchedAt": "2026-07-26T18:10:15.059Z"
+  "version": "2.8.0",
+  "updatedAt": 1785381694947,
+  "contentHash": "6dda89e5132d7d2f49157c0368e1049e9eefb1004b53dec43f23ffb547dfc260",
+  "fetchedAt": "2026-08-03T11:32:11.924Z"
 }

@@ -1,5 +1,5 @@
 ## Description: <br>
-Operates self-hosted Prometheus, Alertmanager, Grafana, and Grafana Loki observability stacks for queries, alert triage, dashboard and datasource inspection, bounded log reads, root-cause analyses, and guarded operational writes. <br>
+Observability AIops helps agents operate self-hosted Prometheus, Alertmanager, Grafana, and Loki stacks with PromQL and LogQL reads, RCA workflows, and governed operational writes. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-SREs, platform engineers, and developers use this skill to inspect and troubleshoot self-hosted observability stacks, including PromQL and LogQL reads, alert root-cause analysis, scrape health checks, dashboard operations, and time-boxed operational changes. <br>
+Developers, SREs, and operations teams use this skill to inspect and troubleshoot self-hosted Prometheus, Alertmanager, Grafana, and Loki deployments, then perform audited changes such as time-boxed silences, dashboard updates, annotations, and Prometheus reloads when needed. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill exposes high-impact write actions without a required approval or policy gate. <br>
-Mitigation: Install with least-privilege service accounts, start with read-only Grafana and Prometheus permissions, use dry-run before writes, and avoid unattended dashboard deletion or Prometheus config reload unless an external approval process controls those actions. <br>
-Risk: Operational RCA and remediation guidance can be misleading if an agent acts on partial or unverified observability data. <br>
-Mitigation: Confirm current stack state with tool results, treat RCA output as advisory, check truncation indicators on bounded reads, and verify risky changes against the target system before execution. <br>
+Risk: The skill can make real operational changes to monitoring systems, including dashboard deletion, silence changes, undo application, and Prometheus reloads. <br>
+Mitigation: Use least-privilege credentials, prefer viewer or read-only tokens for observation-only use, and require dry-run plus operator review before sensitive writes. <br>
+Risk: The skill does not enforce read-only mode or approval gates on its own. <br>
+Mitigation: Enforce permissions on the connected Prometheus, Alertmanager, Grafana, and Loki accounts, and use audit annotations to record who approved a change and why. <br>
+Risk: Operational writes can have broad impact if matchers, dashboard identifiers, or reload targets are wrong. <br>
+Mitigation: Use scoped matchers, confirm target identifiers from read tools first, review local audit records, and rely on undo records for reversible writes. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/observability-aiops) <br>
 - [Project homepage](https://github.com/AIops-tools/Observability-AIops) <br>
-- [Capability matrix](references/capabilities.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
+- [observability-aiops capability matrix](references/capabilities.md) <br>
+- [observability-aiops CLI reference](references/cli-reference.md) <br>
+- [observability-aiops setup & security guide](references/setup-guide.md) <br>
 - [Agent guardrails](references/agent-guardrails.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with operational summaries, tool-result interpretation, and inline shell commands or configuration snippets] <br>
+**Output Format:** [Markdown and text responses with CLI examples and structured observability results] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include bounded observability query results, RCA findings, dry-run guidance, and remediation steps; Loki reads are selector-, lookback-, and line-limited.] <br>
+**Other Properties Related to Output:** [May include bounded query results, RCA findings, risk-tier labels, audit references, and undo guidance.] <br>
 
 ## Skill Version(s): <br>
-0.6.0 (source: server release evidence) <br>
+0.8.0 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

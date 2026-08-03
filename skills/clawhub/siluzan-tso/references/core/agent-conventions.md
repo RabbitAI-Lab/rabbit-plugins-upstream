@@ -147,8 +147,8 @@
 - **「根据官网生成 Google 搜索广告 / 表格格式」**：仍属新建搜索系列 → **W3 + 本文件上条**；用户要的「表格」是 `google-ads-launch-plan-template.md` 对 JSON 的投影，**不是**可跳过 JSON 的独立交付物。**仅出方案**时可先交付 JSON+表格（跳过 validate）；**创建前**必须 `campaign-validate`。**禁止**与 P8 网站诊断、P9 市场分析、W5 仅拓词混用；**禁止**因缺账户 ID 拒出方案。
 - **Excel/表格投放方案 → 创建广告**：必读 `references/google-ads/rules/google-ads-plan-source-fidelity.md`。Agent **写代码**直接转成 campaign-create JSON；地域用 **`ad geo resolve`**；**禁止**对话手填完整 JSON、**禁止**编造 geo id；有方案匹配类型时勿压成一律 BROAD。**方案不合规时必须询问**：「您自己改还是我帮您改？」——**禁止**未问就静默改用户方案内容后 create。用户选「我帮您改」时：代改同步落盘变更账本；**创建完成后必出报告**（创建了哪些 + 从 xxx→xxx + 原因）。
 - **「行业分析 / 行业分析报告 / 生成 XX 行业报告」**（例：「帮我生成一份电商行业的行业分析报告」）→ **P9 战略市场分析**。**必须**先 `siluzan-tso market-analysis collect … --json-out`，再 WebSearch 补数据、写 `market-report.json`，最后 `market-analysis render` 出 HTML。**禁止**不调用 CLI、仅在对话里用 WebSearch 写 Markdown 充当终稿。**不是** `google-analysis`、**不是** P8 网站诊断。
-- **开户首次响应**：对话内首次进入开户话题时，**必须先**按 `references/accounts/open-account-by-media.md` §「首次响应硬规范」输出**完整必填清单**（未指明媒体则列全平台六表），再收集资料；**禁止**未列清单就执行 `open-account` 或零散追问。
-- **Google 开户**：`open-account google-wizard` 仅限真实 TTY；Agent/自动化用非交互 `open-account google ...`，审核进度用 `account-history`。
+- **开户首次响应**：对话内首次进入开户话题时，**必须先**按 `references/accounts/open-account-by-media.md` §「首次响应硬规范」输出**完整必填业务清单**（未指明媒体则列全平台六媒体业务项），再收集资料；**禁止**未列清单就执行 `open-account` 或零散追问。清单**只写业务项与说明**；**禁止**向用户展示 `--flag` / CLI 选项名 / 命令行参数列（参数仅 Agent 内部组命令用）。
+- **Google 开户**：`open-account google-wizard` 仅限真实 TTY；Agent/自动化用非交互 `open-account google ...`，审核进度用 `account-history`；对用户话术仍只用业务语言。
 - **主动更新**：详见 `references/core/setup.md`。
 
 ---
@@ -225,7 +225,8 @@
 | 单户按日 Excel              | `stats … --by-day --json-out`（P4-DAILY）                                              | 默认 `stats` 当按日              |
 | 多账户 × 多维度 Google 数据 | 全量：`google-analysis-batch run`（省略 `-a`）；2~10：`google-analysis -a id1,id2,...` | 外层 for-loop；先 list 再拼 `-a` |
 | 多系列诊断                  | `ad campaigns --json-out` + node 读文件过滤                                            | 逐系列 `ad campaign-get`         |
-| 单日预算熔断 / 当日花费比日预算 | `ad campaigns --start <当日> --end <当日>`（**start=end**）后再比 `spend` 与 `budget` | 用默认近 7 天窗口的 `spend` 对比日预算 |
+| 单日预算熔断 / 空耗熔断（全户 Google） | `guard budget-circuit` / `guard zero-conv -m Google --json-out`（见 `operations/guard.md`） | 六媒体 `list-accounts` + 逐户 `ad campaigns`/`ad groups` for-loop；`ad campaigns -m`（非法） |
+| 单户当日花费比日预算 | `ad campaigns -a <id> --start <当日> --end <当日>`（**start=end**）后再比 `spend` 与 `budget` | 用默认近 7 天窗口的 `spend` 对比日预算 |
 
 **消耗口径（自动化必读）**：凡 `--start`/`--end` 读命令的 `spend` = **闭区间合计**，默认近 7 天 ≠ 一天。日均用 `balance-scan.dailySpend` 或 `合计÷天数`；详见 `references/operations/hosted-automation-self-control.md`「检查项常用 JSON 字段」。
 
@@ -333,6 +334,7 @@
 ### 14.5 禁止事项（机械感）
 
 - 禁止把 playbook 编号、CLI 命令名、JSON 字段名当对用户主回复。
+- **禁止向用户展示任何 CLI 选项 / 命令行参数名**（如 `--company`、`--promotion-link`、`--json-out`）及完整 ``siluzan-tso …`` 命令块；开户/查数清单只用业务项与说明。CLI 参数仅 Agent 内部组命令时使用。
 - 禁止无结论的数据堆砌；禁止空泛「建议优化」而无数字/对象名。
 - 禁止冷冰冰系统提示语气而不给下一步。
 - 禁止用户未要求时输出冗长「执行计划」清单；尽快进入执行。

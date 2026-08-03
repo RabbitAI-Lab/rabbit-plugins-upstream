@@ -1,5 +1,5 @@
 ## Description: <br>
-Checks Solana wallets and x402 sellers before payment by returning readiness, trust, merchant, and receipt-verification guidance from TWZRD's observed payment corpus. <br>
+TWZRD Trust helps agents discover x402 callables, evaluate Solana seller wallets before payment, apply preflight and gate checks, and verify TWZRD receipts. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use this skill to preflight Solana wallet and x402 seller payments, check merchant and wallet trust signals, decide whether to proceed, and verify TWZRD receipts. <br>
+External developers and agent operators use this skill before x402 payments to discover callable services, check seller wallet risk, enforce payment gates where they control signing, and verify receipts. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can influence whether an agent signs or sends Solana/x402 payments. <br>
-Mitigation: Require explicit workflow approval before acting on payment decisions or changing payment routing. <br>
-Risk: Paid x402 trust and merchant calls can spend USDC on Solana. <br>
-Mitigation: Run the free preflight and merchant-card checks first, then require operator approval before paid endpoints are called. <br>
-Risk: The skill may involve network calls, optional package installs, MCP setup, facilitator routing changes, and canonical skill refreshes. <br>
-Mitigation: Approve endpoint changes, package installs, MCP additions, routing changes, and refreshes before execution. <br>
+Risk: The skill is payment-adjacent and can guide agents toward paid trust calls or wallet-funded workflows. <br>
+Mitigation: Review seller decisions, payment amounts, and wallet funding state before approving any payment or AgentCash command. <br>
+Risk: TWZRD responses may include next_action.command values for use inside a payment workflow. <br>
+Mitigation: Inspect each returned command before execution and run only commands the operator understands and intends to authorize. <br>
+Risk: Optional MCP setup and remote service calls route trust checks through TWZRD infrastructure. <br>
+Mitigation: Install only when TWZRD participation in x402 seller checks is acceptable for the deployment. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/twzrd-sol/skills/twzrd-trust) <br>
-- [Canonical Skill Source](https://intel.twzrd.xyz/skill.md) <br>
-- [TWZRD Service Homepage](https://intel.twzrd.xyz) <br>
-- [TWZRD MCP Endpoint](https://intel.twzrd.xyz/mcp) <br>
-- [TWZRD OpenAPI 3.1 Descriptor](https://intel.twzrd.xyz/openapi.json) <br>
-- [TWZRD x402 Descriptor](https://intel.twzrd.xyz/.well-known/x402) <br>
-- [TWZRD Facilitator Support](https://intel.twzrd.xyz/supported) <br>
+- [ClawHub skill page](https://clawhub.ai/twzrd-sol/skills/twzrd-trust) <br>
+- [Canonical skill file](https://intel.twzrd.xyz/skill.md) <br>
+- [TWZRD Trust homepage](https://intel.twzrd.xyz) <br>
+- [TWZRD MCP endpoint](https://intel.twzrd.xyz/mcp) <br>
+- [Machine-readable x402 descriptor](https://intel.twzrd.xyz/.well-known/x402) <br>
+- [OpenAPI specification](https://intel.twzrd.xyz/openapi.json) <br>
+- [Facilitator support endpoint](https://intel.twzrd.xyz/supported) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, text, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with curl and npx shell commands] <br>
+**Output Type(s):** [Guidance, Shell commands, API Calls, Configuration, Code] <br>
+**Output Format:** [Markdown with inline shell commands, HTTP examples, JSON-oriented response interpretation, and TypeScript snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses TWZRD HTTP and optional MCP endpoints; no API key is required; paid x402 calls may spend USDC on Solana.] <br>
+**Other Properties Related to Output:** [Includes payment-adjacent decision guidance, optional MCP setup, and receipt verification steps.] <br>
 
 ## Skill Version(s): <br>
-1.8.0 (source: server release evidence; artifact metadata version 1.8) <br>
+1.13.4 (source: server release metadata and skill frontmatter metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -18,9 +18,9 @@ This tool scans locally by default and requires user trust in the binary you run
 | Property | Value |
 |----------|-------|
 | Location | `assets/bin/skillscan` |
-| Version | `v0.11.0` |
+| Version | `v0.11.1` |
 | Platform | `Linux ARM64` |
-| SHA-256 | `8a4b9c55bb35c84f09f3699a46ceb96234ef409bf495e616cd4d2a97b412a838` |
+| SHA-256 | `27f301c8f1a2ff32f3ee541b756658f1375c944bc3bf50df7778fc638a814220` |
 
 **Verify locally before running:**
 ```bash

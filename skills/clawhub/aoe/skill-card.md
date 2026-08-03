@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use this skill to launch, organize, monitor, and inspect AI coding-agent sessions running through Agent of Empires and tmux. <br>
+Developers and coding-agent operators use this skill to launch, organize, monitor, capture, and clean up Agent of Empires sessions for coding work. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Reduced-oversight launch options can skip normal agent approval prompts. <br>
-Mitigation: Review the skill before installation if agents should operate only with explicit approvals, and use reduced-oversight examples only in disposable or tightly sandboxed workspaces. <br>
-Risk: Forceful worktree deletion can remove local work. <br>
-Mitigation: Check git state and confirm the worktree contains nothing needed before using forceful worktree deletion. <br>
+Risk: High-impact agent launch examples can skip permission prompts or run unattended. <br>
+Mitigation: Use YOLO mode only in tightly controlled environments and review proposed agent actions before relying on session output. <br>
+Risk: Forced cleanup and delete-worktree commands can remove worktree state or uncommitted changes. <br>
+Mitigation: Verify session IDs, worktree paths, and uncommitted changes before running force cleanup or delete-worktree commands. <br>
 
 
 ## Reference(s): <br>
-- [Agent of Empires project homepage](https://github.com/agent-of-empires/agent-of-empires) <br>
+- [Agent of Empires homepage](https://github.com/agent-of-empires/agent-of-empires) <br>
 - [ClawHub skill page](https://clawhub.ai/njbrake/skills/aoe) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with bash and JSON examples] <br>
+**Output Type(s):** [guidance, shell commands, configuration, text, markdown] <br>
+**Output Format:** [Markdown with inline bash commands and JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the aoe and tmux binaries.] <br>
+**Other Properties Related to Output:** [Provides command-oriented guidance for aoe and tmux-based agent session workflows.] <br>
 
 ## Skill Version(s): <br>
-1.13.1 (source: server release evidence) <br>
+1.13.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

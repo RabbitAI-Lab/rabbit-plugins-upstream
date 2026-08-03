@@ -1,8 +1,8 @@
-<p align="center">
-  <img src="assets/icon-large.svg" alt="Agent Subtitle Translator Logo" width="180">
-</p>
-
 # Agent Subtitle Translator Skill
+
+<p align="center">
+  <img src="assets/icon-large.png" alt="Agent Subtitle Translator Logo" width="180">
+</p>
 
 [English](README.md)
 
@@ -100,7 +100,19 @@ What date is {\b1\c&H00FFFF&}today{\r}?
 
 含 `\k`、`\K`、`\kf` 或 `\ko` 卡拉 OK 计时的条目会按条明确降级。输出保留事件时间轴、基础 Style、其他字段和安全的整行位置，但移除逐音节计时和不再适用的字符动画。该情况会作为降级报告，而不是翻译失败。同一文件中的其他普通 ASS 条目仍保留受支持的样式。
 
-## 典型 Agent 工作流
+## Agent 执行顺序
+
+Agent 使用本 Skill 时，必须先完成以下门禁，再开始字幕任务：
+
+1. 在 Skill 目录检查环境：安装或确认 `requirements.txt` 中的 Python 依赖，确认 Python 能运行 `scripts/subtitle_tool.py --help`，确认 Node.js 为 20 或更高版本；需要时运行 `npm install`，并确认 `npm run build` 成功。
+2. 检查 `http://127.0.0.1:4317/api/health`。只有健康状态正确、服务标识为 `subtitle-visualizer` 且 Skill 版本兼容时才复用；否则先处理端口占用，再启动服务。
+3. 打开服务 URL：优先使用 Agent 内置浏览器；没有内置浏览器时，使用用户默认浏览器。用户明确指定浏览器时先尝试指定浏览器，失败后按回退规则处理。`npm run visualizer:open` 仅用于启动新服务，已有健康实例时不要再次执行。
+4. 等待浏览器页面成功加载，向用户报告 URL 和浏览器打开结果，然后运行 `visualizer:bridge -- identify`。
+5. 浏览器门禁通过后，才创建任务、翻译批次、校验响应，并通过 bridge compose。
+
+下面的 CLI 代码块是确定性核心能力参考。visualizer 流程不能跳过上述门禁直接从 `prepare` 开始；同一任务和输出路径也不要混用 CLI compose 与 bridge compose。
+
+## 确定性 CLI 参考
 
 Agent 通常在已安装的 Skill 目录运行以下命令：
 
@@ -116,7 +128,56 @@ python3 scripts/subtitle_tool.py compose \
   --manifest /path/.movie.zh-Hans.subtitle-work/manifest.json
 ```
 
-运行 `python3 scripts/subtitle_tool.py --help` 及各子命令的 `--help` 可查看碰撞与重试参数。生成的批次 Prompt 只包含正文和稳定 ID，不包含时间轴或原始 ASS override 标签。
+运行 `python3 scripts/subtitle_tool.py --help` 及各子命令的 `--help` 可查看碰撞与重试参数。生成的批次 Prompt 只包含正文和稳定 ID，不包含时间轴或原始 ASS override 标签。最终报告与字幕位于同一目录，路径为 `<output-path>.report.json`；例如 `SPS.ja.srt` 对应 `SPS.ja.srt.report.json`。如果输出已存在，请选择新路径；只有明确要替换原结果时才使用显式覆盖参数。
+
+## 本地翻译过程可视化
+
+本 Skill 在使用时会启动一个只负责展示的本地 Web 工作台，适合普通用户同时观察多个由 Agent 创建的字幕翻译任务。左侧显示任务队列，点击任务后，右侧会展示批次进度、校验、重试、降级、翻译耗时、字幕明细和实时事件流。字幕文件、目标语言和翻译控制全部在 Agent 中完成，Web 页面不接受任务输入。原有 Python CLI 继续负责确定性的字幕处理核心。
+
+Agent 使用 visualizer 时，bridge 是唯一的任务执行入口。上面的 CLI 命令仍可用于纯 CLI 调用；同一任务和输出路径不要先后通过两套入口重复 compose。
+
+在 Skill 目录启动或复用本地服务：
+
+```bash
+npm install
+curl -fsS http://127.0.0.1:4317/api/health
+```
+
+当健康接口返回 HTTP 200，且 JSON 中 `status` 为 `"ok"`、`service` 为 `"subtitle-visualizer"`，版本与当前 Skill 兼容（本版为 `1.1.0`）时，复用现有实例并打开其 URL，跳过第二次启动。请求失败或版本不兼容时，先处理占用端口，再启动当前版本。如果端口被其他服务占用，应报告冲突并选择其他端口或有意处理，不要自动终止未知进程。服务默认只监听 `127.0.0.1`，任务历史保存在仓库外的 `~/.agent-subtitle-translator/visualizer`。Agent 必须在 Skill 使用期间打开展示页面：用户没有指定浏览器时，优先使用内置浏览器；没有内置浏览器时，使用用户默认浏览器。用户指定浏览器且成功打开后，继续使用该浏览器，不再自动打开其他浏览器。Agent 端同时继续输出任务创建、字幕准备、批次处理、校验、重试、降级和最终生成状态。服务不会调用翻译服务，也不要求配置 API Key；Agent 通过桥接命令上报真实执行过程：
+
+```bash
+npm run visualizer:bridge -- identify \
+  --agent "Agent 名称" \
+  --model "模型名称" \
+  --model-version "5.6" \
+  --model-series "Sol" \
+  --reasoning-strength "high"
+
+npm run visualizer:bridge -- create \
+  --input ~/Movies/movie.en.srt \
+  --target-language zh-Hans
+
+npm run visualizer:bridge -- batch-start --task TASK_ID --batch 1
+# 将 batches/batch-0001.txt 完整发送给当前可用的翻译模型。
+npm run visualizer:bridge -- submit-response \
+  --task TASK_ID \
+  --batch 1 \
+  --response /tmp/batch-0001.txt
+
+npm run visualizer:bridge -- compose --task TASK_ID
+```
+
+bridge 默认拒绝覆盖已有字幕或报告。需要生成另一份结果时，请传入新的 `--output`；明确替换同一结果时，才追加 `--overwrite`：
+
+```bash
+npm run visualizer:bridge -- compose --task TASK_ID --overwrite
+```
+
+报告位于输出字幕旁边，路径为 `<output-path>.report.json`。
+
+如果校验失败，先在 Web 任务中记录失败，再使用原始 Prompt 和校验错误重试；发送重试前运行 `retry-batch --task TASK_ID --batch 1`。只有完成规定重试且剩余问题为 ASS `S` 样式标记不匹配时，才可以使用 `--allow-style-fallback`。
+
+运行 identify 后，Web 页面会在会话行显示 Agent，并在每个任务卡片内显示该任务记录的翻译模型；下方程序元数据显示共用的程序与 Skill 版本，该版本统一从 package.json 读取。Agent 知道完整模型标识时，应将它作为 `--model` 传入，例如 `GPT-5.6 Luna Hight`；也可以通过 `--model-version`、`--model-series` 和 `--reasoning-strength` 传入 `GPT`、`5.6`、`Sol`、`high` 这类结构化信息。旧模型或其他模型缺少可选字段时，Web 页面会自动省略对应字段；Agent 无法确认的值不应自行补全。建议在每次可视化会话开始时先执行一次 identify。Web 页面只展示 Agent 创建和控制的任务。纯 CLI 流程可以不启动 Web 服务；visualizer 启用后，任务创建、校验和 compose 都应保持在 bridge 入口。
 
 ## 自动发布到 ClawHub
 
@@ -137,4 +198,6 @@ python3 -m pip install -r requirements.txt
 python3 -m unittest discover -s tests -v
 python3 -m py_compile scripts/subtitle_tool.py tests/test_subtitle_tool.py
 python3 /path/to/skill-creator/scripts/quick_validate.py .
+npm install
+npm test
 ```

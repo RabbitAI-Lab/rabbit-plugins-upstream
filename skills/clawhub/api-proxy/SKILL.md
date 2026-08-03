@@ -192,13 +192,12 @@ When making API calls:
 
 1. **Use the gateway** — `--call <provider> <endpoint> [body]` instead of direct fetch
 2. **Add keys with allowlist** — `--keys add <provider> <key> --allow-domain <domain>` before first use
-3. **Prefer env vars in CI** — `PROVIDER_API_KEY` env vars bypass disk storage entirely
+- **Prefer env vars in CI** — `PROVIDER_API_KEY` env vars bypass disk storage entirely. API Gateway auto-detects any `PROVIDER_API_KEY` environment variable (e.g. `OPENAI_API_KEY`, `ANTHROPIC_API_KEY`) and uses it without disk storage. It does NOT read arbitrary environment variables — only the documented `PROVIDER_API_KEY` pattern — so unrelated secrets are never exposed to requests or local processing.
 4. **Set fallbacks** — `--fallback primary secondary` for critical providers
 5. **Check cache/log** — `--cache` / `--log` during heartbeats to monitor usage
 6. **Dry run** — `--call --dry-run` before executing important calls
 
 ## Security Notes
-
 - Keys stored as plain text in JSON with chmod 0600 (POSIX)
 - For higher assurance, use environment variables (`PROVIDER_API_KEY`)
 - For production, integrate with a secrets manager
@@ -206,6 +205,8 @@ When making API calls:
 - Request log stores only provider + status class + timestamp (no endpoints)
 - Allowlist is a strict domain match, not a string contains
 - Code has zero external dependencies (no npm install)
+- ⚠️ **SENSITIVE DATA IN LOGS/CACHE:** request bodies, response headers, and endpoints you pass may themselves contain API keys, tokens, or prompts. The request log, `cache.json` (especially with `--cache-full`), and `request-log.json` persist this data to disk. Clear them after sensitive work (`--log --clear`, `--cache --clear`) and never call `--cache-full` for sensitive providers.
+- ⚠️ **HTTPS ONLY:** API Gateway refuses to send any request over plain HTTP (it would expose bearer credentials on the wire). Set `API_GATEWAY_ALLOW_HTTP=1` only for non-credential plaintext endpoints.
 
 ## What This Skill Does NOT Do
 

@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill for quota and cost tracking patterns when integrating agents or plugins with rate-limited APIs. It helps them check capacity, estimate resource use, record usage, and degrade gracefully near service limits. <br>
+Developers and engineers use this skill to design quota-aware integrations for rate-limited APIs, including usage tracking, threshold handling, cost estimation, and graceful degradation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Implemented quota tracking could retain sensitive request contents if examples are extended without care. <br>
-Mitigation: Keep quota state scoped to service metadata and avoid storing sensitive request contents. <br>
-Risk: Caching or queued execution patterns can obscure delayed work or stale results. <br>
-Mitigation: Make caching and queued execution visible and user-controlled when implementing these patterns. <br>
-Risk: Token, cost, or quota estimates may be inaccurate for a specific service or model. <br>
-Mitigation: Validate estimates against actual usage and enforce threshold checks before and after operations. <br>
+Risk: The skill may activate during broad quota, threshold, rate-limit, or cost-tracking discussions. <br>
+Mitigation: Confirm that quota-management guidance is relevant before applying it to a task. <br>
+Risk: Implementations based on the examples may omit operational details for storage, queuing, or service fallback behavior. <br>
+Mitigation: Make persistence, queue handling, reset timing, and fallback-service behavior explicit before using a real quota tracker in production. <br>
 
 
 ## Reference(s): <br>
-- [Leyline plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
-- [Threshold Strategies](modules/threshold-strategies.md) <br>
-- [Estimation Patterns](modules/estimation-patterns.md) <br>
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-quota-management) <br>
+- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
+- [Threshold strategies](modules/threshold-strategies.md) <br>
+- [Estimation patterns](modules/estimation-patterns.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Configuration] <br>
-**Output Format:** [Markdown guidance with Python and YAML examples] <br>
+**Output Type(s):** [guidance, markdown, code, configuration] <br>
+**Output Format:** [Markdown with Python and YAML examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; examples require review before implementation.] <br>
+**Other Properties Related to Output:** [Documentation-only guidance; no hidden execution, credential access, or install-time behavior was reported by the authoritative security evidence.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
+1.9.17 (source: release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Ai Kujiale Design Free guides an agent through a Kujiale-based interior design workflow for floorplan search, style selection, layout generation, and static rendering. <br>
+Guides an agent through a Kujiale-based basic interior design workflow for text-based floor plan search, style selection, automated layout, and static rendering. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Homeowners, interior design users, and agents use this skill to search Kujiale floorplans, choose a style, generate a room layout, and produce static render images for lightweight renovation previews. <br>
+External users and design-oriented agent operators use this skill to preview home decoration concepts by searching Kujiale floor plans, selecting styles, generating layouts, and producing static render images. It is intended for lightweight inspiration and pre-renovation previews, not advanced floor plan reconstruction or panoramic output. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Kujiale access tokens could be exposed if copied into shared files or version control. <br>
-Mitigation: Store the token only in local configuration or environment variables, keep it out of version control, and rotate it if exposure is suspected. <br>
-Risk: Layout generation may consume Kujiale account quota or he dou. <br>
-Mitigation: Confirm the selected floorplan, style, and layout action with the user before approving any quota-consuming step. <br>
-Risk: The workflow relies on shell commands that interact with Kujiale services. <br>
-Mitigation: Review each proposed command and token-bearing invocation before execution, especially when running in a shared workspace. <br>
+Risk: Kujiale access tokens may be exposed through configuration files, logs, or version control. <br>
+Mitigation: Keep the access token out of version control and logs, restrict the config file permissions, and rotate the token if it is exposed. <br>
+Risk: The skill uses command execution as part of the Kujiale workflow. <br>
+Mitigation: Keep command use narrowly scoped to the documented Kujiale design generation commands and avoid unrelated shell commands or unrelated local files. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-kujiale-design-free) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+- [Kujiale skills page](https://www.kujiale.com/skills) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and static render result instructions] <br>
+**Output Format:** [Markdown guidance with inline shell commands and links to generated static render images] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a user-provided Kujiale access token and requires confirmation before quota-consuming layout work.] <br>
+**Other Properties Related to Output:** [Final output is expected in ./outputs/result.md with render images and design highlights.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

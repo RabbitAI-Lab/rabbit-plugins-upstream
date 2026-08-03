@@ -1,5 +1,5 @@
 ## Description: <br>
-Identifies abnormal behaviors such as getting out of bed at night, prolonged wandering, and remaining motionless for extended periods, for night-time safety monitoring in nursing homes and for elderly people living alone. <br>
+Identifies abnormal behaviors such as getting out of bed at night, prolonged wandering, and remaining motionless for extended periods. It is suitable for night-time safety monitoring in nursing homes and for elderly people living alone. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Care teams, family caregivers, and developers use this skill to analyze night-time elderly monitoring video for bed-exit, wandering, prolonged immobility, risk indicators, recommendations, and cloud report history. <br>
+Care teams, family caregivers, and agent workflows use this skill to analyze night-time elder-care images or videos for bed-exit, wandering, and extended immobility events. It can also query cloud-hosted historical monitoring reports for the associated user identity. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill sends elderly monitoring videos, URLs, identity-linked requests, and report history to an external cloud service. <br>
-Mitigation: Use only with appropriate consent and data handling approval, avoid unnecessary identifying content, and review the configured service endpoints before deployment. <br>
-Risk: The skill can silently create local user records and store authentication tokens in the workspace data area. <br>
-Mitigation: Run it in an isolated workspace, restrict access to the workspace data directory, and remove local identity or token state when it is no longer needed. <br>
-Risk: Monitoring results are safety-support information and may be incorrect or incomplete. <br>
-Mitigation: Require caregiver review and on-site confirmation before acting on abnormal-behavior alerts or health-related conclusions. <br>
+Risk: Sensitive elder-care images, videos, report queries, and identity values may be sent to external Life Emergence cloud services. <br>
+Mitigation: Use only with approved footage, documented consent, and an organizational review of privacy, retention, and deletion requirements. <br>
+Risk: The skill may silently create or reuse identities and store tokens locally. <br>
+Mitigation: Run it only in managed environments where local token storage and generated or reused identities are acceptable and can be audited. <br>
+Risk: Monitoring results are safety-care references and may be incomplete or incorrect. <br>
+Mitigation: Require caregiver or operator review before treating alarms or reports as confirmed incidents. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-elderly-bed-exit-wandering-monitoring-analysis) <br>
+- [API documentation](references/api_doc.md) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Elderly monitoring API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown text with structured JSON report content, analysis status, report links, and optional saved output files] <br>
+**Output Type(s):** [Text, Markdown, JSON] <br>
+**Output Format:** [Structured analysis report text or JSON, with Markdown tables for historical report listings] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local mp4, avi, or mov files up to 10 MB, or public video URLs that are processed by the cloud analysis service.] <br>
+**Other Properties Related to Output:** [May include monitoring results, risk notes, recommendations, and report links.] <br>
 
 ## Skill Version(s): <br>
-1.0.11 (source: server release metadata; artifact frontmatter lists 1.0.7) <br>
+1.0.12 (source: server release metadata; SKILL.md frontmatter states 1.0.10) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

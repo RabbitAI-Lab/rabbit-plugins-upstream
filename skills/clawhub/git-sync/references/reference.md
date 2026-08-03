@@ -90,35 +90,6 @@ r = subprocess.run(["git", "push", "origin", "main"], ...)  # 会触发 Credenti
 | per-url 配置 `credential.https://gitee.com.provider=generic` | 优先级高于 global，也会触发弹窗 |
 | Python 脚本内调 `subprocess.run(["git", ...])` | 没继承 `-c credential.helper=` 参数 |
 
----
-
-## 错误码与错误消息说明（AI 必读）
-
-### 为什么需要错误消息标准化
-
-`_push_with_cred_url()` 和 `_pull_with_cred_url()` 返回的错误消息已通过 `_classify_push_error()` 标准化为**中文描述**，不再直接暴露原始 stderr（如 443 超时）。
-
-### 错误消息速查表
-
-| 类别 | 错误消息前缀 | 含义 | AI 建议 |
-|------|-------------|------|---------|
-| 网络超时 | `⏱️ 网络超时` | 连接超时（443），常见于 GitHub 被墙 | 询问用户是否重试，或建议使用代理 |
-| DNS 失败 | `🌐 DNS 解析失败` | 域名无法解析 | 检查网络，稍后重试 |
-| 连接被拒 | `🔒 连接被拒绝` | 服务器端口不可达 | 检查网络/防火墙 |
-| 连接重置 | `🔌 连接被重置` | 中间设备中断连接 | 稍后重试 |
-| 网络不可达 | `📡 网络不可达` | 无网络连接 | 检查网络 |
-| SSH 失败 | `🔑 SSH 密钥认证失败` | 公钥被拒绝 | 检查 SSH 配置 |
-| 认证失败 | `🔑 认证失败` | 用户名/密码/Token 错误 | 检查凭证 |
-| 推送被拒绝 | `🔄 推送被拒绝` | 远程有未拉取的更新 | 已自动执行 pull --rebase 重试 |
-| 未知错误 | `❌ 推送失败` | 未匹配到已知模式 | 查看具体错误文本 |
-
-### AI 处理错误的原则
-
-1. **443 超时 ≠ 不可恢复**：应询问用户"GitHub 推送失败（超时），是否重试？"
-2. **认证失败 ≠ 代码问题**：应提示用户检查 `~/.git-credentials`
-3. **推送被拒绝 ≠ 数据丢失**：已自动执行 pull --rebase 重试逻辑
-4. **不要在日志中记录原始错误码**：使用 `log()` 函数的 `err` 级别记录标准化消息
-
 ### 彻底解决方案（三管齐下）
 
 1. **`run_git()` 加 `-c credential.helper=`** — 命令行参数优先级最高，覆盖所有配置层
@@ -177,41 +148,26 @@ def _push_with_cred_url(remote_name: str, branch: str = "main") -> tuple:
 
 ---
 
-## git-sync.py CLI 参数
-
-```bash
-python git-sync.py <name> [--skip-market] [--market-only] [--pypi] [--release]
-```
-
-| 参数 | 说明 |
-|------|------|
-| `--skip-market` | 跳过 ClawHub / SkillHub 市场发布 |
-| `--market-only` | 仅发布到市场，不执行同步 |
-| `--pypi` | 发布到 PyPI（仅 agent 有效） |
-| `--release` | 创建 Release：打 tag + 推双平台 + 建 GitHub/Gitee 发行版 |
-
 ## manifest.py 子命令速查
 
 `manifest.py` 是独立 CLI，管理维护清单（manifest.json），不污染 git-sync 主流程。
 
-### 清单条目结构（v2.29.0 更新）
+### 清单条目结构（v1.7 更新）
 
 ```json
 {
   "repos": {
     "workbuddy-skills": {
       "items": {
-        "rag-assistant": {
-          "type": "agent",
-          "source_path": "C:/Users/sm001/WorkBuddy/rag-assistant",
-          "repo_path": "agent/rag-assistant",
-          "added_at": "2026-07-21",
+        "git-sync": {
+          "type": "skill",
+          "added_at": "2026-05-22",
           "uploaded": true,
           "gitee_ok": true,
           "github_ok": true,
-          "version": "1.7.0",
-          "gitee_version": "1.7.0",
-          "github_version": "1.7.0",
+          "version": "1.8.0",
+          "gitee_version": "1.8.0",
+          "github_version": "1.8.0",
           "note": ""
         }
       }
@@ -219,15 +175,6 @@ python git-sync.py <name> [--skip-market] [--market-only] [--pypi] [--release]
   }
 }
 ```
-
-| 字段 | 说明 | 自动填充 |
-|------|------|---------|
-| `type` | `skill` 或 `agent` | 必需 |
-| `source_path` | 源绝对路径（开发目录） | skill → `~/.workbuddy/skills/<name>/`，agent → `~/.workbuddy/agent/<name>/`，可用 `--source-path` 覆盖 |
-| `repo_path` | 仓库内相对路径 | skill → `skills/<name>/`，agent → `agent/<name>/`，可用 `--repo-path` 覆盖 |
-| `added_at` | 添加日期 | 自动 |
-| `uploaded` / `gitee_ok` / `github_ok` | 推送状态 | 自动更新 |
-| `version` / `gitee_version` / `github_version` | 版本号 | 自动更新 |
 
 ### 命令参考
 
@@ -239,20 +186,17 @@ python manifest.py check workbuddy-skills my-skill    # 是否在清单内（退
 python manifest.py version workbuddy-skills my-skill  # 查询版本号
 
 # ── 更新类 ──
-python manifest.py add workbuddy-skills my-skill --type skill                 # 加入（默认路径自动填充）
-python manifest.py add workbuddy-skills my-skill --type agent                 # agent 类型
-python manifest.py add workbuddy-skills my-agent --type agent --source-path "C:/path/to/dev"  # 自定义源路径
-python manifest.py add workbuddy-skills my-agent --type agent --repo-path "agent/custom"      # 自定义仓库路径
-python manifest.py add workbuddy-skills my-skill --type skill --uploaded      # 加入并标记已上传
-python manifest.py remove workbuddy-skills my-skill                           # 从清单删除
-python manifest.py version workbuddy-skills my-skill 1.9.0                    # 更新版本号（双平台）
-python manifest.py version workbuddy-skills my-skill 1.9.0 --platform gitee   # 仅更新码云
-python manifest.py set-uploaded workbuddy-skills my-skill --platform gitee    # 标记平台已上传
-python manifest.py set-uploaded workbuddy-skills my-skill --platform both     # 标记双平台已上传
+python manifest.py add workbuddy-skills my-skill --type skill              # 加入（默认 uploaded=false）
+python manifest.py add workbuddy-skills my-skill --type skill --uploaded   # 加入并标记已上传
+python manifest.py remove workbuddy-skills my-skill                       # 从清单删除
+python manifest.py version workbuddy-skills my-skill 1.9.0                # 更新版本号（双平台）
+python manifest.py version workbuddy-skills my-skill 1.9.0 --platform gitee  # 仅更新码云
+python manifest.py set-uploaded workbuddy-skills my-skill --platform gitee   # 标记平台已上传
+python manifest.py set-uploaded workbuddy-skills my-skill --platform both    # 标记双平台已上传
 
 # ── 同步类 ──
-python manifest.py diff workbuddy-skills              # 对比清单(uploaded=true) vs 仓库实际文件
-python manifest.py sync-readme workbuddy-skills        # 根据仓库实际文件全量重新生成 README.md
+python manifest.py diff workbuddy-skills            # 对比清单(uploaded=true) vs 仓库实际文件
+python manifest.py sync-readme workbuddy-skills      # 根据仓库实际文件全量重新生成 README.md
 ```
 
 ### 三单一致模型
@@ -312,18 +256,25 @@ README.md（技能列表 + 目录树）
 
 | 变量 | 默认值 | 说明 |
 |------|--------|------|
-| `SKILLS_DIR` | `~/.workbuddy/skills`（Python 中为 `Path.home() / "WorkBuddy" / "skills"`） | 技能源目录（本地 skill 所在位置） |
-| `WORK_REPO` | `~/.workbuddy/workbuddy-skills`（Python `_paths.py` 中为 `Path.home() / "WorkBuddy" / "workbuddy-skills"`） | Git 工作仓库（推送目标）。注意：Windows 上 `~` 与 `Path.home()` 可能解析为不同的物理目录 |
-| `MANIFEST_FILE` | `skills/.standardization/git-sync/data/manifest.json`（绝对路径 `~/.workbuddy/skills/.standardization/git-sync/data/manifest.json`） | 维护清单文件路径 |
-| `DIST_DIR` | `~/.workbuddy/skills/.dist` | ZIP 统一输出目录 |
+| `SKILLS_DIR` | `~/.workbuddy/skills` | 技能源目录（本地 skill 所在位置） |
+| `WORK_REPO` | `~/.workbuddy/workbuddy-skills` | Git 工作仓库（推送目标） |
+| `MANIFEST_FILE` | `scripts/manifest.json` | 维护清单文件路径 |
+| `DIST_DIR` | `SKILLS_DIR/.dist/` | ZIP 统一输出目录（v1.5 新增） |
 
-## ZIP 打包：LLM 动态过滤（v2.26+）
+## ZIP 打包排除列表
 
-自 v2.26.0 起，ZIP 包的排除列表由 **LLM 文件过滤器**（`step_llm_file_filter()`）动态生成，不再使用硬编码的排除模式列表。仅保留 Windows 保留名 `nul` 的硬排除。
+以下文件/目录**不会**被包含在生成的 ZIP 包中：
 
-LLM 会在文件同步步骤前审核文件清单，保留核心代码文件（`.py`、`.md`、配置、许可等），排除运行时缓存（`__pycache__`、`*.pyc`）、日志、操作系统元文件（`.DS_Store`、`Thumbs.db`）等非必要文件。
-
-如果需要手动干预排除逻辑，请修改 `step_llm_file_filter()` 的 LLM prompt 模板（`git-sync.py`）。
+| 类别 | 排除项 |
+|------|--------|
+| 缓存 | `__pycache__/`, `*.pyc`, `.DS_Store`, `Thumbs.db` |
+| 版本控制 | `.git/` |
+| 打包产物 | `*.zip` |
+| 本地预览 | `*.html` |
+| 日志 | `*.log` |
+| 脚本自身 | `git-sync.sh`, `update_manifest_version.py`, `preview_server.py`, `build_index_now.py` |
+| 运行时数据 | `.decisions.json`, `.sensitive_scan_*.json` |
+| 杂项 | `._*`, `ZIP_OUT`, `*.gitignore` |
 
 ## Skill 标准目录结构
 
@@ -363,27 +314,25 @@ LLM 会在文件同步步骤前审核文件清单，保留核心代码文件（`
 
 > **注意**：`_meta.json` 的 `author` 字段是署名，默认不脱敏。
 
-### 运行模式（v2.24.2+ — 全自动 LLM 决策）
+### 三种运行模式
 
-自 v2.24.2 起，敏感扫描已完全自动化，由 LLM 决策每条敏感信息是否脱敏，无需人工交互。
+通过环境变量 `GIT_SYNC_SENSITIVE_MODE` 或 `--skip-scan` 参数控制：
 
 | 模式 | 配置方式 | 行为 |
 |------|---------|------|
-| **自动 LLM 决策**（默认） | 不配置或 `prompt` | 扫描后 LLM 自动分类每项发现：public_docs 中的署名/path 保留；Token/私钥 自动脱敏；邮箱/路径 按 context 判断 |
-| **总是脱敏** | `GIT_SYNC_SENSITIVE_MODE=always-sanitize` | 自动全部脱敏（非交互，用于 ZIP 包） |
+| **交互提示**（默认） | 不配置或 `prompt` | 扫描后按文件粒度交互确认 |
+| **总是脱敏** | `GIT_SYNC_SENSITIVE_MODE=always-sanitize` | 自动全部脱敏（非交互） |
+| **保持不变** | `GIT_SYNC_SENSITIVE_MODE=keep-as-is` 或 `--skip-scan` | 跳过扫描，源文件不动 |
 
-### LLM 自动决策规则
+### 交互式确认选项
 
-LLM 接收扫描发现列表后，按以下原则自动判断：
+扫描完成后用户可选：
 
-| 敏感类型 | LLM 决策倾向 | 示例 |
-|----------|-------------|------|
-| 邮箱地址 | 公开文档中的署名邮箱 → 保留；代码中的测试邮箱 → 保留；疑似个人邮箱 → 脱敏 | `[email-redacted]` 在 LICENSE 中 → 保留 |
-| Token / API Key | 一律脱敏 | `api_key=sk-xxx` → 替换为 `<REDACTED>` |
-| 私钥内容 | 一律脱敏 | PEM 格式密钥 → 替换 |
-| 内网 IP | 脱敏 | `[internal-ip-redacted]` → `<REDACTED_IP>` |
-| 本地绝对路径 | public_docs 中的路径 → 保留；代码中硬编码 → 脱敏 | `C:\Users\sm001` 在文档中 → 保留 |
-| 配置用户名 | 保留（来自 config.json 的 author/gitee.user） | `[username-redacted]` → 保留 |
+1. **全部脱敏** — 公开上架场景推荐
+2. **全部保留** — 私有仓库场景
+3. **逐个文件选择** — 对每个文件单独决定
+4. **逐项细选** — 对单文件的每个敏感条目逐一确认
+5. **中止同步/打包**
 
 ### 打包时行为
 

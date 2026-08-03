@@ -11,19 +11,22 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and contributors use this skill to plan fair GitLab hackathon participation, verify event requirements, select qualifying issues and merge requests, and keep contributions reviewable and rule-compliant. <br>
+Developers and GitLab contributors use this skill to plan fair hackathon participation, select reviewable issues and merge requests, verify live rules and scoring, and avoid rule-abuse patterns while working toward qualifying submissions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generated GitLab commands or recommendations may affect public issues, merge requests, labels, closures, or comments. <br>
-Mitigation: Use a GitLab token with the minimum required scope and review every glab command before execution. <br>
-Risk: Hackathon rules, dates, scoring, and prize requirements may change between runs. <br>
-Mitigation: Verify the current GitLab hackathon pages and API before optimizing work or submitting entries. <br>
+Risk: GitLab token and API access could allow broader repository actions than the user intends. <br>
+Mitigation: Use a least-privilege GitLab token where possible and review proposed glab or API commands before execution. <br>
+Risk: Hackathon rules, dates, scoring, or prize requirements may change after the skill text was authored. <br>
+Mitigation: Verify the live GitLab hackathon pages and current API before selecting work or optimizing for scoring. <br>
+Risk: Score-focused activity could drift into spam comments, padded commits, incorrect labels, invalid closures, or other unfair behavior. <br>
+Mitigation: Follow the skill's fair-use guidance: prioritize real reviewable contributions, link only relevant issues, avoid exploit-like behavior, and ask maintainers for clarification when needed. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub Skill Page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-hackathon) <br>
 - [GitLab Quarterly Hackathon](https://contributors.gitlab.com/hackathon) <br>
 - [Current GitLab Hackathon API](https://contributors.gitlab.com/api/v1/hackathons/current) <br>
 - [GitLab Transcend Hackathon](https://contributors.gitlab.com/transcend-hackathon) <br>
@@ -31,13 +34,13 @@ Mitigation: Verify the current GitLab hackathon pages and API before optimizing 
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands] <br>
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
+**Output Format:** [Markdown guidance with inline bash commands and checklist items] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference glab, jq, curl, and a GitLab token configured with the minimum required scope.] <br>
+**Other Properties Related to Output:** [May propose GitLab CLI and API commands that require glab, jq, curl, and GITLAB_TOKEN.] <br>
 
 ## Skill Version(s): <br>
-1.75.3 (source: server release evidence) <br>
+1.78.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

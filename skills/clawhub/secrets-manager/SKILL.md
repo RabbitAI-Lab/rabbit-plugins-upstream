@@ -1,6 +1,21 @@
 ---
 name: secrets-manager
-description: Encrypted local secret store for OpenClaw agents. AES-256-GCM authenticated encryption with per-secret random IVs, master key in chmod 0600 .master-key file. Store, retrieve, rotate, and audit secrets. Safe command injection (writes to temp file by default; --inject-stdout requires --confirm-expose). Master key is recoverable from .master-key file; losing it makes stored secrets unrecoverable.
+description: >-
+  Encrypted local secret store for OpenClaw agents. AES-256-GCM authenticated
+  encryption with per-secret random IVs, master key in chmod 0600 .master-key
+  file. Modes: --store (encrypt+write), --get (masked; --raw prints plaintext
+  to stdout), --list (names+metadata only), --delete (irreversible), --rotate
+  and --rotate --all (generate new random values, archive old as retired),
+  --audit / --audit --expired / --audit --stale (exposure/rotation checks),
+  --inject (substitute {{secrets}} into a command, writes to a chmod 0600 temp
+  file by default; --inject-stdout requires --confirm-expose), --cleanup-tmp
+  (delete tracked temp injection files), --status. Supports SECRETS_DIR and
+  SECRETS_MASTER_KEY env overrides. Master key is recoverable from .master-key
+  file; losing it makes stored secrets unrecoverable.
+permissions:
+  - filesystem.read-write
+  - environment.read
+  - crypto.aes-256-gcm
 ---
 
 # Secrets Manager 🔐

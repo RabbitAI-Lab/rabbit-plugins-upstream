@@ -1,5 +1,5 @@
 ## Description: <br>
-Cloudflare Worker (workers.cloudflare.com). Use this skill for any Cloudflare Worker request, including reading, creating, updating, and deleting Cloudflare Worker resources through an OOMOL-connected account. <br>
+Cloudflare Worker (workers.cloudflare.com). Use this skill for reading, creating, updating, and deleting Cloudflare Workers through an OOMOL-connected account. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and operators use this skill to manage Cloudflare Workers, scripts, settings, and secrets through the OOMOL oo CLI after inspecting the live connector schema for each action. <br>
+Developers and operators use this skill to inspect and manage Cloudflare Workers, scripts, builds, triggers, logs, settings, and secrets from an agent workflow. It supports read workflows directly and requires confirmation before write or destructive actions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Cloudflare Worker source, settings, account data, and secret-related reads may expose sensitive information. <br>
-Mitigation: Check Cloudflare account scopes before use and treat source and secret-related reads as sensitive. <br>
-Risk: Write, upload, secret change, and delete actions can alter or remove live Cloudflare Worker resources. <br>
-Mitigation: Require exact target and payload confirmation before uploads, writes, secret changes, or deletes. <br>
+Risk: Write actions can change Cloudflare Worker state. <br>
+Mitigation: Confirm the target account, Worker, action, and exact payload before approving write commands. <br>
+Risk: Destructive actions can remove Workers, scripts, or script secrets. <br>
+Mitigation: Require explicit user approval for delete operations and verify the selected resource before execution. <br>
+Risk: Incorrect payloads can produce unintended Cloudflare changes. <br>
+Mitigation: Fetch the live connector schema for the selected action before building or running a payload. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/oomol/skills/oo-cloudflare-worker) <br>
-- [OOMOL Publisher Profile](https://clawhub.ai/user/oomol) <br>
-- [Cloudflare Workers](https://workers.cloudflare.com) <br>
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-cloudflare-worker) <br>
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
 - [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI Install Guide](https://cli.oomol.com/install-guide.md) <br>
+- [Cloudflare Workers](https://workers.cloudflare.com) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads; connector responses are JSON.] <br>
+**Output Type(s):** [text, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with inline bash commands and JSON payload examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires live action schema inspection before execution; write, upload, secret, and destructive actions require exact user confirmation.] <br>
+**Other Properties Related to Output:** [Uses live connector schemas before constructing action payloads.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release metadata and skill frontmatter) <br>
+1.0.4 (source: evidence release version and skill metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

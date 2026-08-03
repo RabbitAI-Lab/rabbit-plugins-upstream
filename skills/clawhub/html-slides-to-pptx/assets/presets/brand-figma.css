@@ -1,0 +1,96 @@
+/* ================================================================
+   html-slides 品牌预设:Figma 风(brand-figma)
+   黑白界面 + 多彩点缀 —— 设计/创意/教育(浅态原生)
+   色值来源:VoltAgent/awesome-design-md, MIT(品牌名仅描述风格灵感,与品牌方无关)
+   用法:复制本文件覆盖项目 assets/theme.css(变量名与默认完全一致)
+   注:signal 组为本品牌官方产品色(全预设系列中唯一覆盖 signal 组的品牌)
+   ================================================================ */
+
+:root {
+  /* 主色:纯黑界面 */
+  --lenovo-red: #000000;         /* Pure Black(界面唯一"色") */
+  --lenovo-red-dark: #1A1A1A;
+  --deep-navy: #000000;
+  --deep-navy-light: #1E1E1E;
+  --charcoal: #1A1A1A;
+  --charcoal-soft: #2C2C2C;
+
+  /* 白+灰系(承载) */
+  --white: #FFFFFF;
+  --off-white: #FAFAFA;          /* 推导:近白的承载(官方背景即纯白) */
+  --card-bg: #FFFFFF;
+  --text-primary: #000000;
+  --text-secondary: #4A4A4A;     /* 推导(官方未列灰阶) */
+  --text-tertiary: #8C8C8C;      /* 推导 */
+  --border-light: #EBEBEB;
+  --border-medium: #D4D4D4;
+
+  /* 深色底上的浅色文字 */
+  --on-navy-text: #FFFFFF;
+  --on-navy-sub: #D9D9D9;
+  --on-navy-dim: #B3B3B3;
+
+  /* 代码块 */
+  --code-bg: #0F1419;
+  --code-text: #E8E8E8;
+  --code-highlight: #FFD966;
+  --code-comment: #7A8B99;
+
+  /* 信号色 = Figma 官方产品五色(多彩品牌的唯一例外) */
+  --signal-green: #14AE5C;
+  --signal-yellow: #FFCD29;
+  --signal-blue: #00B3FF;
+  --signal-red: #FF7237;
+  --signal-gray: #9747FF;        /* gray 位借给品牌紫 */
+
+  /* 强调:Hot Pink(官方英雄渐变成员) */
+  --accent-orange: #EB367F;
+
+  /* 字体 */
+  --font-cn: "Noto Sans SC", "Microsoft YaHei", "PingFang SC", sans-serif;
+  --font-en: "Inter", -apple-system, "Segoe UI", "Helvetica Neue", sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Code", "SF Mono", Consolas, monospace;
+
+  /* ── 版面分区与间距(2026-08-02 设计总纲;与默认 theme.css 保持一致) ── */
+  --zone-header-top: 60px;
+  --zone-content-top: 320px;
+  --zone-content-bottom: 940px;
+  --zone-footer-top: 980px;
+  --page-margin: 100px;
+  --content-width: 1720px;
+  --space-block: 60px;
+  --space-item: 40px;
+  --space-item-tight: 24px;
+
+  /* ── 字号阶(演讲档基准;混合/阅读档按 design-principles.md 字号阶等比) ── */
+  --text-cover: 104px;
+  --text-title-page: 60px;
+  --text-title-block: 32px;
+  --text-body: 24px;
+  --text-note: 16px;
+  --text-floor: 14px;
+}
+
+/* Reset */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body { margin: 0; padding: 0; overflow: hidden; }
+
+body {
+  font-family: var(--font-cn);
+  color: var(--text-primary);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 画布:转换器只认 1920x1080 + relative + hidden */
+.slide-container {
+  position: relative;
+  width: 1920px;
+  height: 1080px;
+  overflow: hidden;
+  background: var(--off-white);
+  font-family: var(--font-cn);
+}
+
+/* 数字/西文用 Inter(表格数字、页码等,可加 class="num") */
+.num { font-family: var(--font-en); font-feature-settings: "tnum"; }

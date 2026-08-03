@@ -54,26 +54,30 @@ callCloudApi({
 
 ### Preferred path
 
-Use Domain/Route via `manageGateway(action="createRoute")`. Omit `domain` to attach the route on the environment default HTTP domain (`IsDefault`).
+Use Domain/Route via `manageGateway(action="createRoute")`. Omit `domain` to attach the route on the HTTP gateway IsDefault domain (`DomainType=HTTPSERVICE`, typically `*.{region}.app.tcloudbase.com`).
 
 ```javascript
 manageGateway({
   action: "createRoute",
-  targetType: "function",
   targetName: "functionName",
-  type: "Event", // Event -> SCF; HTTP functions must pass type="HTTP" -> WEB_SCF
+  upstreamResourceType: "SCF", // Event function -> SCF; HTTP function -> WEB_SCF
   path: "/api/users",
   auth: false
 });
 ```
 
-Type mapping:
+**IsDefault vs static hosting CDN:** many environments also list an IsDefault `STATIC_STORE` domain (`*.tcloudbaseapp.com`). Omitting `domain` does **not** attach to that static-hosting CDN hostname, and it is **not** a `STATIC_STORE` upstream binding. Confirm with `queryGateway(action="listRoutes")` — inspect `Domain`, `DomainType`, `Path`, and `UpstreamResourceType` on the created route.
 
-- `type="Event"` -> `UpstreamResourceType=SCF`
-- `type="HTTP"` -> `UpstreamResourceType=WEB_SCF`
+Upstream type:
+
+- HTTP cloud function -> `upstreamResourceType="WEB_SCF"`
+- Event cloud function -> `upstreamResourceType="SCF"`
+- CloudRun -> `upstreamResourceType="CBR"`
+- Static hosting -> `upstreamResourceType="STATIC_STORE"` (serviceName often `staticstore`)
 
 Do **not** use deprecated GWAPI / `CreateCloudBaseGWAPI` via `callCloudApi` (blocked in evaluate mode and removed from MCP).
-
+Do **not** pass `manageFunctions` `type="HTTP"|"Event"` into `manageGateway`; gateway uses `upstreamResourceType` only.
+When a deploy/create tool returns `accessUrl` or `accessUrls`, prefer those values directly; they already rank gateway custom domains before default domains when routes exist.
 ## Environment variable updates
 
 Do not overwrite function environment variables blindly.
@@ -116,13 +120,15 @@ Examples:
 - `0 0 2 1 * * *` -> 2:00 AM on the first day of every month
 - `0 30 9 * * * *` -> 9:30 AM every day
 
-### VPC access
+### VPC field shape (example only)
+
+When a function already needs VPC egress (exception path: existing TCP DB clients), `vpc` IDs must be real (never placeholders). This is a field-shape example — not a recommendation to introduce TCP DB access. Prefer native SDK / MCP SQL for new CRUD. Full exception policy: `./vpc-and-tcp-database.md`.
 
 ```javascript
 {
   vpc: {
-    vpcId: "vpc-xxxxx",
-    subnetId: "subnet-xxxxx"
+    vpcId: "<real-vpc-id>",
+    subnetId: "<real-subnet-id>"
   }
 }
 ```
@@ -142,7 +148,7 @@ Prefer the converged entrances below, but translate historical names when they a
 | `manageFunctionTriggers` | `manageFunctions(action="createFunctionTrigger"|"deleteFunctionTrigger")` |
 | `readFunctionLayers` | `queryFunctions(action="listLayers"|"listLayerVersions"|"getLayerVersionDetail"|"listFunctionLayers")` |
 | `writeFunctionLayers` | `manageFunctions(action="createLayerVersion"|"deleteLayerVersion"|"attachLayer"|"detachLayer"|"updateFunctionLayers")` |
-| `createFunctionHTTPAccess` | `manageGateway(action="createRoute")` with `type="HTTP"` |
+| `createFunctionHTTPAccess` | `manageGateway(action="createRoute")` with `upstreamResourceType="WEB_SCF"` |
 
 ## CLI fallback
 

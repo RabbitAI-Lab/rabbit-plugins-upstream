@@ -1,0 +1,88 @@
+{
+  "version": 2,
+  "workspace": "/home/user",
+  "_comment": "Annotated example. Tiers restore low->high; `needs` expresses real edges. NOTE: min_files should be a TIGHT bound (~5% churn), not half the file count — a loose bound lets a tree lose most of its contents and still pass. `swr add` computes this for you; prefer --merkle when silent drift is unacceptable.",
+
+  "_tier_legend": {
+    "0": "credentials, PATH shims - everything else depends on these",
+    "1": "scripts - usually just a lost exec bit, cheapest fix",
+    "2": "source trees, package/skill installs",
+    "3": "large downloads (models, datasets)",
+    "4": "build artifacts - require tier 2 source to be healthy first"
+  },
+
+  "entries": [
+    {
+      "_kind_note": "file = sha256 + exec-bit check. Add `escrow` for small files you cannot rebuild from a recipe: the content travels inside the manifest and survives a total wipe.",
+      "id": "run_swarm.sh",
+      "path": "run_swarm.sh",
+      "kind": "file",
+      "sha256": "b4e8d0f364494a99641ad266d826c0503eb6bc565f93e60c3e1796b6d56ec6b1",
+      "mode": "0755",
+      "tier": 1,
+      "escrow": "<zlib+base64 of the file, set by `swr escrow`>",
+      "escrow_bytes": 1987,
+      "restore": "chmod +x ~/run_swarm.sh"
+    },
+    {
+      "_kind_note": "tier 0 secret. The restore recipe re-authenticates, it does not just rewrite the file.",
+      "id": "clawhub-token",
+      "path": ".clawhub/TOKEN",
+      "kind": "file",
+      "mode": "0600",
+      "tier": 0,
+      "restore": "mkdir -p ~/.clawhub && printf '%s\\n' \"$CLAWHUB_TOKEN\" > ~/.clawhub/TOKEN && chmod 600 ~/.clawhub/TOKEN && export PATH=$HOME/.shim:$PATH && npx clawhub@latest login --token \"$(cat ~/.clawhub/TOKEN)\""
+    },
+    {
+      "_kind_note": "blob = exact byte count + head/tail hash. Avoids hashing gigabytes every turn, but still catches same-size corruption. `upstream` lets `swr add` fetch the authoritative size instead of trusting the local file.",
+      "id": "Qwen3-0.6B-Q4_K_M.gguf",
+      "path": "Qwen3-0.6B-Q4_K_M.gguf",
+      "kind": "blob",
+      "bytes": 484220320,
+      "headtail": "<sha256 of first 1MB + last 1MB + size>",
+      "upstream": "https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/main/Qwen_Qwen3-0.6B-Q4_K_M.gguf",
+      "tier": 3,
+      "fragile": "large blob (484 MB) - likely exceeds snapshot size cap",
+      "restore": "cd ~ && rm -f Qwen3-0.6B-Q4_K_M.gguf && curl -sSL --retry 3 --retry-all-errors -C - -o Qwen3-0.6B-Q4_K_M.gguf 'https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF/resolve/main/Qwen_Qwen3-0.6B-Q4_K_M.gguf'"
+    },
+    {
+      "_kind_note": "tree + sentinels = THE important one. Catches a directory that survives while its contents are emptied. Sentinels are only a SAMPLE, so pin files from risky subdirs (note ggml/src below) and set a tight min_files, or use `merkle` for exact detection.",
+      "id": "llama-src",
+      "path": "llama.cpp",
+      "kind": "tree",
+      "sentinels": [
+        "ggml/src/ggml.c",
+        "ggml/cmake/ggml-config.cmake.in",
+        "CMakeLists.txt"
+      ],
+      "merkle": "<sha256 over (relpath,size,mode) — set by `swr add --merkle`>",
+      "files_at_capture": 5248,
+      "min_files": 4986,
+      "tier": 2,
+      "fragile": "subdir 'src' can be swept by exclusion rules, leaving an empty shell",
+      "restore": "rm -rf ~/llama.cpp && git clone --depth 1 -q https://github.com/ggerganov/llama.cpp.git ~/llama.cpp"
+    },
+    {
+      "_kind_note": "tier 4 build output; 'build' is on every exclusion list. `needs` means a failed llama-src SKIPS this instead of running a doomed 6-min build.",
+      "id": "llama-bins",
+      "path": "llama.cpp/build/bin",
+      "kind": "tree",
+      "sentinels": ["llama-completion", "llama-simple", "llama-bench"],
+      "needs": ["llama-src"],
+      "tier": 4,
+      "fragile": "lives under excluded dir 'build/'",
+      "restore": "cd ~/llama.cpp && cmake -B build -DLLAMA_BUILD_SERVER=OFF -DLLAMA_SERVER=OFF >/dev/null && for t in llama-simple llama-simple-chat llama-bench llama-completion; do cmake --build build --config Release --target $t -j 2 >/dev/null 2>&1; done"
+    },
+    {
+      "_kind_note": "Package installs. Count with `find -name SKILL.md`, never `ls | wc -l` — scoped names nest as skills/@scope/name/. Sentinels should include at least one SCOPED path, since those install differently.",
+      "id": "skills",
+      "path": "skills",
+      "kind": "tree",
+      "sentinels": ["clawarena/SKILL.md", "@steipete/slack/SKILL.md"],
+      "files_at_capture": 1203,
+      "min_files": 1143,
+      "tier": 2,
+      "restore": "cd ~ && export PATH=$HOME/.shim:$PATH && while read s; do npx clawhub@latest install \"$s\" --no-input >/dev/null 2>&1 || echo \"FAIL $s\"; done < ~/all_skills_restore.txt"
+    }
+  ]
+}

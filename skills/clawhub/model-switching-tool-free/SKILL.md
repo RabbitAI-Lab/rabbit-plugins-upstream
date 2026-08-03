@@ -1,34 +1,13 @@
 ---
+
 slug: model-switching-tool-free
 name: model-switching-tool-free
 version: 1.0.0
 displayName: 模型切换工具(免费版)
 summary: "个人开发者的三层Claude模型切换指南,Haiku→Sonnet→Opus节省50-90%成本.。模型切换工具(免费版)为个人开发者提供三层Claude模型切换指南,从最便宜的Haiku起"
-license: Proprietary
+license: MIT
 edition: free
-description: '模型切换工具(免费版)为个人开发者提供三层Claude模型切换指南,从最便宜的Haiku起步,仅在必要时升级,帮助节省50-90%的API成本。核心能力:
-
-  - 三层切换:Haiku → Sonnet → Opus
-
-  - 黄金规则:30秒人类思考阈值
-
-  - 成本对比:Haiku 1x → Sonnet 12x → Opus 60x
-
-  - 快速决策树与参考卡
-
-  - 基础子Agent与定时任务切换
-
-  适用场景:
-
-  - 个人项目API成本优化
-
-  - 子Agent任务分发
-
-  - 定时任务模型选择
-
-  差异化:
-
-  - 免费版聚焦三层切...'
+description: "模型切换工具(免费版)为个人开发者包含三层Claude模型切换指南,从最便宜的Haiku起步,仅在必要时升级,帮助节省50-90%的API成本。核心能力:. 适用于需要model switching tool相关能力的开发场景,提供结构化的工作流程和配置指引. 该工具经过深度差异化处理,针对用户反馈和使用痛点进行了优化改进,提升了实用性和可操作性."
 tags:
   - Development
   - AI
@@ -40,15 +19,18 @@ tags:
   - 写作
   - 电商
   - haiku
-  - sonnet
-  - opus
 tools:
   - read
   - exec
   - write
 homepage: ""
 category: "Automation"
+pricing_tier: free
 ---
+
+> **核心功能**: 本技能提供结构化的工作流程和配置指引等能力。
+
+
 # 模型切换工具(免费版)
 
 ## 概述
@@ -247,7 +229,7 @@ Haiku禁止做的事:
 - 细微判断:伦理、模糊性、竞争价值
 - 深度研究:多源综合分析
 
-## 最佳实践
+## 优秀实践
 
 ### 1. 从便宜开始,按需升级
 
@@ -355,7 +337,7 @@ sessions_spawn(task="设计微服务拆分方案", model="opus")
 - 建议为不同层级模型配置独立Key或使用同一Key,便于成本追踪.
 ### 可用性分类
 
-- **分类**: MD+EXEC(纯Markdown指令,部分功能需exec命令行执行)
+- **分类**: MD+EXEC模式纯Markdown指令,部分功能需exec命令行执行)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent完成操作。免费版聚焦个人开发者的三层Claude模型切换决策.
 ## 错误处理
 

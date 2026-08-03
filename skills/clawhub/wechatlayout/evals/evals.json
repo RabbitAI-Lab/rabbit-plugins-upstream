@@ -1,0 +1,114 @@
+{
+  "skill_name": "wechat-layout",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我排一下这篇 Markdown 文章到公众号，主题用翡翠绿。文章讲的是如何用 Python 做数据分析的教程。",
+      "expected_output": "路由到 Mode A 排版，读 theme-emerald.md + common-components.md，把 Markdown 转为内联样式 HTML，所有文字用 <span leaf=\"\"> 包裹，跑 validate_output.py 严重问题=0",
+      "files": [],
+      "expectations": [
+        "路由到 Mode A 排版，不路由到 Mode B",
+        "读取 references/theme-emerald.md 和 references/common-components.md",
+        "所有样式内联 style=\"\"，无 <style>/<script>/<div>/class/id",
+        "所有中文文字节点用 <span leaf=\"\"> 包裹",
+        "章节标题自动编号 01/02/03 + 英文标签",
+        "每段正文有 1-3 个关键词下划线",
+        "validate_output.py 严重问题=0"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "公众号排版，直接排，不用问我，石墨灰风格。下面是我的文章内容...",
+      "expected_output": "全自动模式，跳过提问，用 graphite 主题自动排版，交付时附决策说明",
+      "files": [],
+      "expectations": [
+        "识别为全自动模式（'直接排'/'不用问'），不向用户提问",
+        "选择 graphite（石墨灰）主题",
+        "读取 references/theme-graphite.md 和 references/common-components.md",
+        "交付时附决策说明（为什么选这个主题、做了哪些智能处理）",
+        "validate_output.py 严重问题=0"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "我有一个 PDF 文件想排成公众号文章，怎么弄？",
+      "expected_output": "路由到 Mode A，先读 format-normalize.md 把 PDF 转成 Markdown 草稿，展示推断结构让用户确认，再选主题排版",
+      "files": [],
+      "expectations": [
+        "识别为非 Markdown 输入，先读 references/format-normalize.md",
+        "将 PDF 内容转为 Markdown 草稿",
+        "向用户展示推断的标题层级和章节结构，等待确认",
+        "确认后进入正常排版流程",
+        "不是直接拒绝或说不能处理 PDF"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "帮我从这篇公众号文章提取风格 https://mp.weixin.qq.com/s/abc123def456",
+      "expected_output": "路由到 Mode B 风格提取，用 style_extractor.py 从 URL 抓取 HTML，提取颜色/排版/间距，生成主题组件库",
+      "files": [],
+      "expectations": [
+        "路由到 Mode B 风格提取",
+        "调用 scripts/style_extractor.py 抓取 URL",
+        "URL 通过 mp.weixin.qq.com 白名单校验",
+        "提取颜色调色板（主色、背景色、文字色）",
+        "提取排版规则（字号、行高、字重）",
+        "生成 references/theme-{name}.md 标准组件库格式",
+        "提示用户在 theme-index.md 中登记"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "我想自定义一套公众号主题，主色是暖橙色 #EA580C，适合美食生活类文章",
+      "expected_output": "路由到主题生成器，收集偏好后生成区块库预览页面，用户确认后转为标准主题库格式",
+      "files": [],
+      "expectations": [
+        "识别为自定义主题生成需求",
+        "读取 references/theme-generator.md 工作流",
+        "用 AskUserQuestion 一次问全偏好（不逐条追问）",
+        "生成预览页面让用户确认风格",
+        "确认后转为标准 theme-{name}.md 格式",
+        "在 theme-index.md 登记新主题",
+        "跑 component_lint.py 确认 0 严重问题"
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "排版的时候帮我注意全角标点，之前排出来都是半角的",
+      "expected_output": "Vibe test — 检查输出 HTML 的正文是否使用中文全角标点（，。！？：；），代码块内保持半角原样",
+      "files": [],
+      "eval_type": "vibe-test",
+      "vibe_dimensions": [
+        "punctuation:full-width-chinese",
+        "punctuation:code-block-preserved",
+        "compliance:span-leaf-wrapping"
+      ]
+    },
+    {
+      "id": 7,
+      "prompt": "帮我模仿这个公众号的排版风格，然后把我自己的文章排成一样的风格",
+      "expected_output": "先路由到 Mode B 提取风格，生成主题组件库，再路由到 Mode A 用提取的主题排版文章",
+      "files": [],
+      "expectations": [
+        "识别为复合需求（先提取风格再用提取的主题排版）",
+        "先执行 Mode B 风格提取流程",
+        "生成主题组件库并登记",
+        "然后执行 Mode A 排版流程，使用刚提取的主题",
+        "两步之间有明确的衔接说明"
+      ]
+    },
+    {
+      "id": 8,
+      "prompt": "这篇文章有代码块和表格，排成公众号",
+      "expected_output": "Vibe test — 检查代码块用通用库组件（每行一个 <p style=\"margin:0\">，不用 white-space:pre），表格用 flex 布局模拟",
+      "files": [],
+      "eval_type": "vibe-test",
+      "vibe_dimensions": [
+        "component:code-block-no-pre",
+        "component:table-flex-layout",
+        "component:image-max-width",
+        "compliance:no-div-no-class"
+      ]
+    }
+  ]
+}

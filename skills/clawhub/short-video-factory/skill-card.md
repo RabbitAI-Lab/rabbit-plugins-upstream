@@ -11,29 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators, marketers, and video teams use this skill to plan and produce short-form videos for platforms such as Douyin, Kuaishou, WeChat Channels, Bilibili, and Xiaohongshu. It guides topic ideation, scriptwriting, storyboard design, filming, editing, publishing optimization, and post-release review. <br>
+Creators, editors, marketers, and social media operators use this skill to plan short-video topics, write platform-adapted scripts, create shot lists, guide filming and editing, and optimize publication details. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Trend research and publishing recommendations may be inaccurate, outdated, or misaligned with platform rules. <br>
-Mitigation: Review generated recommendations for factual accuracy and platform compliance before publication. <br>
-Risk: Marketing, product-seeding, or publishing guidance could create misleading claims if used without checking the underlying product or audience context. <br>
-Mitigation: Verify product claims, disclosures, audience targeting, and final copy before using the guidance in public content. <br>
+Risk: Trend, publishing, product promotion, music, or platform-specific recommendations may be inaccurate or non-compliant if used publicly without review. <br>
+Mitigation: Review generated advice against current platform rules, rights, and brand or compliance requirements before publishing. <br>
+Risk: Short-video scripts and product seeding guidance can shape public-facing claims. <br>
+Mitigation: Fact-check claims, disclosures, and promotional language before filming or posting. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub skill page](https://clawhub.ai/shylamb-token/skills/short-video-factory) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured tables and concise production guidance] <br>
+**Output Format:** [Markdown with structured lists and tables] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language outputs may include video titles, scripts, shot lists, filming guidance, editing notes, posting recommendations, hashtags, and review metrics.] <br>
+**Other Properties Related to Output:** [Produces creator-facing planning guidance, scripts, storyboard tables, filming notes, editing suggestions, titles, tags, publishing windows, and review dimensions.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+1.0.1 (source: release evidence and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

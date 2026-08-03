@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides Chinese-language tax compliance guidance, self-check workflows, risk screening, and practical response guidance for TCM clinics and medical institutions covering VAT exemption, separate accounting, enterprise income tax, physician personal tax, herbal medicine sales, medical insurance settlement, invoicing, and high-revenue cash-income risk scenarios. <br>
+Tax TCM Clinic helps users assess Chinese tax and compliance questions for traditional Chinese medicine clinics and other medical institutions, including VAT exemptions, physician income tax treatment, invoice controls, medical insurance settlement, private-account collection risks, and self-check reports. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,39 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, clinic operators, and tax/compliance advisors use this skill to assess China-focused tax and medical-insurance compliance risks for TCM clinics and related medical institutions, generate structured self-check guidance, and identify practical remediation steps. Outputs are advisory and should be reviewed by qualified tax or legal professionals before filing, dispute, or audit use. <br>
+External clinic operators, finance staff, compliance reviewers, and tax professionals use this skill to triage Chinese tax-compliance questions for TCM clinics, private hospitals, community medical providers, and related medical-service scenarios. It can provide policy-oriented guidance, risk self-checks, remediation checklists, and report-style outputs, but users should confirm significant tax or legal decisions with qualified professionals. <br>
 
 ### Deployment Geography for Use: <br>
 China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Cloud data transmission is under-disclosed for a skill that may process patient, employee, taxpayer, bank account, invoice, or clinic-identifying details. <br>
-Mitigation: Avoid entering real sensitive details unless cloud processing by the listed service is acceptable; use anonymized or minimized facts for preliminary review. <br>
-Risk: Some query text may be written to local logs or cached locally. <br>
-Mitigation: Review local storage and logs before and after use, and avoid submitting identifiable or confidential details when a generalized scenario is sufficient. <br>
-Risk: Matrix installation phrases can trigger installation of related skills rather than only switching knowledge topics. <br>
-Mitigation: Confirm the exact skills, source, and target directory before running matrix installation workflows. <br>
-Risk: Tax and medical-insurance guidance can be time-sensitive and jurisdiction-specific. <br>
-Mitigation: Validate material conclusions against current official rules and qualified professionals before filings, audits, disputes, or remediation actions. <br>
+Risk: Clinic tax questions and scenarios may be processed by a remote MCP service. <br>
+Mitigation: Use the skill only when remote processing is acceptable, and avoid entering patient, employee, private-account, or highly confidential financial details unless those data flows are approved for the environment. <br>
+Risk: The skill can store credentials and client configuration locally. <br>
+Mitigation: Review local credential and configuration storage before installation, restrict file access where appropriate, and remove stored keys or configuration when the skill is no longer needed. <br>
+Risk: Plaintext local logs may be created during registration and tool use. <br>
+Mitigation: Avoid sensitive question text in prompts, review log retention expectations, and clear local logs when required by policy. <br>
+Risk: Optional setup code can modify AI-client MCP configuration. <br>
+Mitigation: Keep setup in dry-run mode unless configuration changes are intended, review the proposed MCP entry before enabling writes, and inspect any backed-up or changed client configuration files. <br>
+Risk: The server security verdict is suspicious because disclosures do not clearly explain remote processing, credential storage, local logs, and optional configuration changes. <br>
+Mitigation: Review the skill and its data flows before installation, and deploy only in environments where those behaviors are acceptable. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/zxj2devs/skills/tax-tcm-clinic) <br>
-- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
-- [Interactive TCM clinic compliance self-check page](https://mcp.aitaxs.top/web/topic_workflow_tcm_clinic.html) <br>
-- [SkillHub tax TCM clinic page](https://skillhub.cn/skills/tax-tcm-clinic) <br>
+- [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-tcm-clinic) <br>
+- [TCM clinic self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_tcm_clinic.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Tax policy knowledge skill](https://skillhub.cn/skills/tax-policy-knowledge) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, text answers, JSON-like tool results, shell commands, configuration snippets, and generated compliance report content.] <br>
+**Output Type(s):** [Text, Markdown, JSON, Guidance, Configuration] <br>
+**Output Format:** [Markdown guidance, JSON tool results, and browser-based self-check or report text] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use a cloud MCP service, a web self-check flow, or local offline fallback workflows; review results before acting on tax, medical-insurance, or legal obligations.] <br>
+**Other Properties Related to Output:** [May rely on remote MCP processing, local fallback guidance, and optional client configuration setup.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: frontmatter and server release evidence) <br>
+3.15.8 (source: SKILL.md frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

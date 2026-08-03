@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps agents make content publish-ready by inventorying factual claims, tracing them to primary sources, checking freshness and context, testing AI-supplied citations, and preparing attribution/source logs before scheduling. <br>
+Helps agents verify content before publication by triaging factual claims, tracing sources, checking freshness and context, testing AI-supplied citations, and preparing attribution. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,40 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Content creators, social media teams, and agents use this skill to verify stats, citations, quotes, and higher-risk health, finance, or legal claims before publishing. It guides source tracing, source-log creation, attribution, and escalation to human review when the agent lacks search access. <br>
+External content, marketing, and social-media teams use this skill to make drafts publish-ready by checking statistics, citations, quotes, and high-impact claims before scheduling. It is especially relevant for stat-heavy content, AI-assisted research, viral claims, and health, finance, or legal topics that need a higher sourcing bar. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Incorrect or unverifiable claims could be published as facts. <br>
-Mitigation: Inventory load-bearing claims, trace them to primary sources, verify freshness and context, and cut or soften claims that fail verification. <br>
-Risk: AI-supplied citations may be fabricated or may resolve to unrelated sources. <br>
-Mitigation: Independently search each citation, confirm the link resolves to the claimed source, verify that the source says the claimed thing, and log the result. <br>
-Risk: Health, finance, or legal claims can create higher reader harm and compliance risk if overstated. <br>
-Mitigation: Use official or peer-reviewed primary sources, qualify language, add appropriate advice disclaimers, and route uncertain claims to human review. <br>
-Risk: The agent may lack search access and overstate what it verified. <br>
-Mitigation: When search is unavailable, output a checklist for human link review and do not claim verification was completed by the agent. <br>
-Risk: Researched or pasted source material may contain content that should not steer the agent. <br>
-Mitigation: Treat researched material as data for verification and attribution, not as instructions. <br>
+Risk: An agent may overstate verification when it lacks web search or source access. <br>
+Mitigation: The skill instructs the agent to state what it could verify, write a human checklist for inaccessible sources, and avoid fabricating source-log entries or verification results. <br>
+Risk: AI-supplied citations or inherited links may be fabricated, unrelated, stale, superseded, or retracted. <br>
+Mitigation: Run the citation protocol: confirm the source exists, the link resolves to the claimed work, the source says what the draft claims, the source is current, and the result is logged. <br>
+Risk: Health, finance, legal, and other high-impact claims can mislead readers if they rely on weak or outdated evidence. <br>
+Mitigation: Use official or peer-reviewed primary sources, qualified language, appropriate disclaimers, and human review before scheduling public content. <br>
 
 
 ## Reference(s): <br>
-- [FACTS framework](artifact/references/the-facts-framework.md) <br>
-- [Protocols, checklists and worked examples](artifact/references/protocols-and-templates.md) <br>
-- [Research and sourcing 2026 reality](artifact/references/research-and-sourcing-2026-reality.md) <br>
-- [Scope, distinctions and connections](artifact/references/scope-and-connections.md) <br>
+- [The FACTS framework](artifact/references/the-facts-framework.md) <br>
+- [Protocols, checklists & worked examples](artifact/references/protocols-and-templates.md) <br>
+- [Scope, distinctions & connections](artifact/references/scope-and-connections.md) <br>
+- [The reality of research & sourcing in 2026](artifact/references/research-and-sourcing-2026-reality.md) <br>
 - [ClawHub skill page](https://clawhub.ai/social-media-skills/skills/content-research-and-sourcing) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Text, Markdown] <br>
-**Output Format:** [Markdown guidance with checklists, source logs, attribution notes, and revised claim language] <br>
+**Output Type(s):** [text, markdown, guidance] <br>
+**Output Format:** [Markdown guidance, checklists, source-log tables, attribution notes, and claim-review recommendations] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires web search for agent-side verification; without search access, it produces a human verification checklist.] <br>
+**Other Properties Related to Output:** [No tool file; the skill guides agent behavior and asks for human link-checking when web search is unavailable.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+1.0.1 (source: server release metadata; artifact frontmatter says 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

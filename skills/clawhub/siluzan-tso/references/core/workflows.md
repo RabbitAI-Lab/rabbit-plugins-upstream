@@ -36,9 +36,9 @@
 ## W2 · 开户申请（Google / TikTok / Yandex / BingV2 / Kwai / MetaAd）
 
 - **触发**：申请开户、新开广告账户、查开户进度。
-- **必读**：`references/accounts/open-account-by-media.md`（各媒体必填项与参数，**含 §「首次响应硬规范」：首次进入开户话题必须先列全必填清单**）；Google 字段加 `references/accounts/open-account-google-ui.md`。所有媒体均**无需**手动查 magKey，CLI 按公司名自动创建/关联广告主组。
+- **必读**：`references/accounts/open-account-by-media.md`（各媒体必填业务项，**含 §「首次响应硬规范」：首次进入开户话题必须先列全必填清单；对用户禁止展示 CLI 参数名**）；Google 字段加 `references/accounts/open-account-google-ui.md`。所有媒体均**无需**手动查 magKey，CLI 按公司名自动创建/关联广告主组。
 - **步骤**：
-  1. 列出必填项 → 收集资料（TikTok/Bing/Kwai 需营业执照图片本地路径；CLI 无 OCR）。
+  1. 用业务语言列出必填项（勿贴 `--flag`）→ 收集资料（TikTok/Bing/Kwai 需营业执照图片本地路径；CLI 无 OCR）。
   2. 前置查询（按需）：TikTok `open-account tiktok-areas/-industries/-timezones`；Bing `open-account bing-industries`；Google `open-account google-timezones`。
   3. 提交非交互命令 `open-account <media> …`（**禁用** `google-wizard`，需真实 TTY）。MetaAd 无表单，用 `open-account meta` 拉官方 OE 链接引导网页。
   4. 轮询审核：`account-history -m <媒体>`。
@@ -204,10 +204,11 @@
 ## W12 · 日 / 周巡检
 
 - **触发**：日常/每周快速了解各媒体余额、消耗、预警与报告/智投状态。
-- **必读**：`references/accounts/accounts-balance-stats.md`；首页看板口径见 `references/misc/tso-home.md`。
+- **必读**：`references/accounts/accounts-balance-stats.md`；首页看板口径见 `references/misc/tso-home.md`。超预算/空耗熔断另读 `references/operations/guard.md`。
 - **步骤**：
   1. 余额：`list-accounts -m <媒体> --json-out ./snap` → `balance -m <媒体> -a <mediaCustomerId,...>`（多户续航预警走 **P2**）。
   2. 消耗：`stats -m <媒体> -a <id> --start <昨天/上周一> --end <昨天/上周日>`（多户汇总走 **P3**）。
-  3. 预警触发：`forewarning records -m <媒体> --start <S>`（见 **W10**）。
-  4. 智投/线索（按需）：`ad batch list --state Failed/HasFailed`（**W4**）、`clue …`（**W11**）、`optimize list/records`（**W6**）。
-- **产物**：要与网页首页看板数字完全一致（聚合口径）时引导打开首页（`tso-home.md`）；CLI 给的是单账户粒度的近似巡检。
+  3. Google 当日超预算/空耗熔断（若用户要求）：`guard budget-circuit` / `guard zero-conv -m Google --json-out`（**禁止**逐户 for-loop）。
+  4. 预警触发：`forewarning records -m <媒体> --start <S>`（见 **W10**）。
+  5. 智投/线索（按需）：`ad batch list --state Failed/HasFailed`（**W4**）、`clue …`（**W11**）、`optimize list/records`（**W6**）。
+- **产物**：要与网页首页看板数字完全一致（聚合口径）时引导打开首页（`tso-home.md`）；CLI 给的是单账户粒度的近似巡检；熔断任务须交付命中表或显式「无命中」。

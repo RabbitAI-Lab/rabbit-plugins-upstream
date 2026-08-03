@@ -1,42 +1,43 @@
 ## Description: <br>
-AI cinematic video production powered by CellCog for short films, music videos, brand films, and widescreen cinematics from a prompt. <br>
+AI cinematic video production powered by CellCog. Short films, music videos, brand films, widescreen cinematics. Consistent characters, cinematic lighting, visual storytelling — grand compositions from a single prompt. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
 ## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+[cellcog](https://clawhub.ai/user/cellcog) <br>
 
 ### License/Terms of Use: <br>
 MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators, marketers, developers, and agents use this skill to ask CellCog to create cinematic videos such as short films, brand films, music videos, and narrative scenes from structured prompts. <br>
+Developers, creators, and brand teams use this skill to ask an agent to create cinematic videos, short films, music videos, product films, and multi-scene visual stories through CellCog. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompts and creative inputs are sent to CellCog using CELLCOG_API_KEY. <br>
-Mitigation: Install only when the user intends to use CellCog, protect the API key, and avoid submitting sensitive inputs without approval. <br>
-Risk: Cinematic video generation can consume credits and produce variable or unsatisfactory results. <br>
-Mitigation: Set expectations before running requests, start with smaller prompts, and review generated outputs before using them in production. <br>
+Risk: Prompts and assets may be sent to CellCog for processing. <br>
+Mitigation: Use approved content only and avoid sensitive or confidential material unless the deployment is authorized under applicable CellCog terms and organizational policy. <br>
+Risk: A valid CELLCOG_API_KEY is required. <br>
+Mitigation: Store the API key in the environment or an approved secret store, and do not paste it into prompts, generated files, or shared logs. <br>
+Risk: Video generation may consume paid credits without producing a usable result. <br>
+Mitigation: Start with short test generations, review outputs before longer productions, and set budget expectations for iterative prompting. <br>
 
 
 ## Reference(s): <br>
-- [CellCog Homepage](https://cellcog.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/nitishgargiitd/skills/cinematic-video-cellcog) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/nitishgargiitd) <br>
+- [Cinematic Video on ClawHub](https://clawhub.ai/cellcog/skills/cinematic-video-cellcog) <br>
+- [CellCog](https://cellcog.ai) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with Python code snippets and shell setup commands] <br>
+**Output Type(s):** [guidance, code, shell commands] <br>
+**Output Format:** [Markdown with Python code examples and installation commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog package, and CELLCOG_API_KEY; opens a connection to the CellCog service and may consume credits.] <br>
+**Other Properties Related to Output:** [Requires python3, the cellcog dependency, and CELLCOG_API_KEY; prompts and assets may be sent to CellCog.] <br>
 
 ## Skill Version(s): <br>
-1.0.12 (source: evidence.release.version) <br>
+1.0.14 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

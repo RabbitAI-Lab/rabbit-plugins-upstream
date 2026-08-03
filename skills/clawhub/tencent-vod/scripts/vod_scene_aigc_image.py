@@ -544,7 +544,7 @@ def main():
                            help='保留字段，特殊用途时使用')
 
     # 通用参数
-    gen_parser.add_argument('--region', default='ap-guangzhou',
+    gen_parser.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'),
                            help='地域 (默认: ap-guangzhou)')
     gen_parser.add_argument('--no-wait', action='store_true',
                            help='仅提交任务，不等待结果')
@@ -562,7 +562,7 @@ def main():
     query_parser.add_argument('--sub-app-id', type=int,
                              default=int(os.environ.get('TENCENTCLOUD_VOD_SUB_APP_ID', 0)) or None,
                              help='子应用 ID（也可通过环境变量 TENCENTCLOUD_VOD_SUB_APP_ID 设置）')
-    query_parser.add_argument('--region', default='ap-guangzhou',
+    query_parser.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'),
                              help='地域')
     query_parser.add_argument('--json', action='store_true',
                              help='JSON 格式输出')

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/openclaw-dashboard",
   "slug": "openclaw-dashboard",
   "ownerHandle": null,
-  "version": "1.7.3",
-  "updatedAt": 1779077299606,
-  "contentHash": "f25c7d49edd73362c85364da4a4a3e7eb6c70a4d7603647b4bd2109856ffe75f",
-  "fetchedAt": "2026-07-26T18:53:06.875Z"
+  "version": "2.0.0",
+  "updatedAt": 1785746085203,
+  "contentHash": "183c8a96ff23c00f3a11917dc77e1b34668aebf11ca25aa2d4be555664b5832b",
+  "fetchedAt": "2026-08-03T11:21:49.739Z"
 }

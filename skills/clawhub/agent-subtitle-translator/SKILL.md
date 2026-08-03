@@ -22,6 +22,18 @@ Do not request or configure an external LLM API key for the script. Use the tran
 
 ## Workflow
 
+### Mandatory Agent visualizer gate
+
+When an Agent uses this Skill, it must complete these gates in order before the first subtitle task begins:
+
+1. **Check the environment.** Run from the Skill directory. Install or verify the Python dependency from `requirements.txt`, confirm Python can run `scripts/subtitle_tool.py --help`, confirm Node.js satisfies the package requirement (Node 20 or newer), install Node dependencies once with `npm install`, and run `npm run build` successfully.
+2. **Check the Web service.** Request `http://127.0.0.1:4317/api/health`. Reuse the service only when the response is healthy, identifies `subtitle-visualizer`, and reports a compatible Skill version. Otherwise start the service after resolving any occupied-port conflict, then record the printed URL.
+3. **Open the Web page.** If an Agent in-app browser is available, navigate it to the service URL and wait for a successful page load. If no in-app browser is available, open the same URL in the user's default browser; `npm run visualizer:open` is a fallback only when starting a new service, never when reusing an existing one. If the user named a browser, use it first and apply the fallback rules if it fails.
+4. **Confirm the browser gate.** Do not run `identify`, create a task, or send a translation batch until the selected browser has successfully opened the visualizer page. Report the URL and the browser result in the Agent response.
+5. **Run the visualizer workflow.** Run `identify`, then create the task, start batches, submit and validate responses, and compose through `visualizer:bridge`. Keep reporting each meaningful operation in the Agent response.
+
+The commands in the sections below describe the direct deterministic CLI workflow and the safety rules implemented by the bridge. During an Agent visualizer run, treat them as implementation reference and use the equivalent bridge commands only after the mandatory gate. Do not compose the same task and output path through both workflows.
+
 ### 1. Prepare one file
 
 Require a target BCP 47 tag. Accept an optional source tag; omit it to let the translation model detect the source language.
@@ -79,13 +91,93 @@ Use `--overwrite` only to replace the prior validated JSON for that batch.
 python3 scripts/subtitle_tool.py compose --manifest /path/work/manifest.json
 ```
 
-The script merges validated data by stable subtitle ID, independent of completion order. It refuses missing, duplicate, or extra IDs and refuses to overwrite output by default.
+The script merges validated data by stable subtitle ID, independent of completion order. It refuses missing, duplicate, or extra IDs and refuses to overwrite output by default. If the output already exists, choose a new `--output` path or pass `--overwrite` only when replacing that exact output is intentional.
 
-Read the final `.report.json` and tell the user:
+The final report is written next to the subtitle as `<output-path>.report.json`, not at the work directory root. For example, `SPS.ja.srt` has the report `SPS.ja.srt.report.json`.
+
+Read the final report and tell the user:
 
 - output path, format, encoding, entry count, and time range;
 - count and IDs of karaoke degradations;
 - count and IDs of inline-style fallbacks.
+
+## Local visualizer workflow
+
+When an Agent uses this Skill, it must start or reuse the local visualizer and open its display page. Direct CLI-only use remains available when an Agent is invoking the deterministic tool outside a visualizer session. The Web interface is display-only: it never accepts subtitle files, target languages, or translation controls. The Agent remains the only task input and execution surface.
+
+The visualizer listens on `127.0.0.1` by default and stores task history outside the repository under `~/.agent-subtitle-translator/visualizer`.
+
+### Browser opening rules
+
+After the environment and Web-service gates have succeeded and a service URL is known, apply these rules in order:
+
+1. If the user names a browser and the Agent successfully opens that browser, use the opened browser and do not open another one automatically.
+2. If the user does not name a browser and the Agent has an in-app browser, navigate that browser to the visualizer URL.
+3. If the user does not name a browser and no in-app browser is available, open the visualizer URL with the user's default system browser. On macOS this can use `open URL`; `npm run visualizer:open` is also available as the local fallback.
+4. If a user-selected browser fails to open, report the failure and then apply the no-browser-specified fallback sequence.
+
+Start the service without relying on `--open` when an in-app browser is available, then navigate the selected browser to the URL printed by the service. Keep the service running while the Agent translates.
+
+Install the service once, then check for a reusable instance before starting it:
+
+```bash
+npm install
+curl -fsS http://127.0.0.1:4317/api/health
+# Run this only when the health check fails:
+# npm run visualizer:start
+```
+
+Reuse the existing instance when `/api/health` returns HTTP 200 with `status: "ok"`, `service: "subtitle-visualizer"`, and a version compatible with this Skill (`1.1.0` for this release); open its URL and skip `npm run visualizer:start`. If the health request fails or reports an incompatible version, start the service only after addressing the occupied port. If the port responds with another service, report the conflict and use a different port or resolve it deliberately; do not terminate an unknown process automatically.
+
+The visualizer does not call a translation model and keeps the deterministic safety contract; all task inputs and real translation stages come from the Agent through the bridge:
+
+```bash
+npm run visualizer:bridge -- identify \
+  --agent "Agent name" \
+  --model "Model name" \
+  --model-version "5.6" \
+  --model-series "Sol" \
+  --reasoning-strength "high"
+
+npm run visualizer:bridge -- create \
+  --input /path/movie.ass \
+  --target-language zh-Hans \
+  --source-language en
+
+npm run visualizer:bridge -- batch-start --task TASK_ID --batch 1
+# Send the complete batches/batch-0001.txt prompt to the available translation model.
+npm run visualizer:bridge -- submit-response \
+  --task TASK_ID \
+  --batch 1 \
+  --response /path/responses/batch-0001.txt
+
+npm run visualizer:bridge -- compose --task TASK_ID
+```
+
+Bridge composition refuses to overwrite an existing subtitle or report by default. Use a new `--output` path for a separate result, or pass `--overwrite` only when intentionally replacing the exact existing pair:
+
+```bash
+npm run visualizer:bridge -- compose --task TASK_ID --overwrite
+```
+
+The report path returned by bridge composition is `<output-path>.report.json`, alongside the generated subtitle.
+
+If validation fails, report the failure in the Web task, retry with the original prompt and the validator error, then submit the retried response. Use `retry-batch --task TASK_ID --batch 1` before sending the retry. Use `--allow-style-fallback` only after the required retry and only when the remaining problem is an ASS `S` marker mismatch.
+
+Run identify at the beginning of the visualizer session. The session line shows the reported Agent, each task card shows the model recorded for that task, and the program metadata line separately shows the shared program and Skill version read from package.json. Pass the complete model identifier in `--model` whenever the Agent knows it, such as `GPT-5.6 Luna Hight`; pass `--model-version`, `--model-series`, and `--reasoning-strength` when those fields exist, such as `GPT` + `5.6` + `Sol` + `high`. Older or other models may omit any optional field, and the Web page omits missing fields. Never invent a version, series, or reasoning value that the Agent cannot verify. Keep reporting the same progress in the Agent response after every meaningful bridge operation.
+
+The Web interface supports multiple Agent-created tasks at once. The left queue shows each task and its overall status; the selected task shows batch progress, per-task and per-batch duration, visible subtitle text, validation/retry/degradation warnings, and the live event stream. The interface never displays the manifest, accepts task input, or sends timestamps and raw ASS override tags to the model.
+
+### Agent-side progress output
+
+The Agent must continue reporting progress in its own response while the Web page is open. Web events do not replace Agent output. At minimum, report:
+
+- the visualizer URL and whether it was opened in the selected browser;
+- task creation and subtitle preparation, including entry and batch counts;
+- each batch start, validation result, retry, and degradation;
+- final composition, output path, format, duration, and any warnings.
+
+Keep these updates concise and synchronized with the bridge calls so the user can follow the same run in the Agent and in the Web page.
 
 ## Format behavior
 

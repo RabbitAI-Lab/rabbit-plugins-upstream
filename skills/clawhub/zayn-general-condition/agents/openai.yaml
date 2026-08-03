@@ -1,0 +1,4 @@
+interface:
+  display_name: "通用状态与质量判断"
+  short_description: "跨行业依据检验和验收证据判断对象状态、缺陷与适用限制"
+  default_prompt: "Use $zayn-general-condition to classify the item condition using the available evidence."

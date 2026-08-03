@@ -1,5 +1,5 @@
 ## Description: <br>
-vaDeepresearch guides agents through quick or deep multi-source research, evidence validation, structured analysis, and Markdown report delivery for market, competitor, industry, technical, academic, and project research. <br>
+Systematic deep-research skill for web-backed market analysis, competitive analysis, industry research, technical research, paper and open-source project review, and pre-writing research for reports, presentations, documents, and plans. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, developers, analysts, and researchers use this skill when they need an agent to plan and perform current multi-source research, compare evidence, surface uncertainty, and produce a decision-oriented Markdown report. <br>
+Employees, external users, and developers use this skill to turn broad analysis or research requests into structured Markdown reports with research scope, source assessment, evidence extraction, cross-source validation, synthesis, risks, and action-oriented recommendations. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad research triggers and external retrieval can expose sensitive private topics or produce generated artifacts that users may over-trust. <br>
-Mitigation: Use explicit prompts, review the intended sources and generated files, and avoid sensitive private research unless external retrieval and artifact creation are acceptable. <br>
-Risk: Research reports may contain incorrect, incomplete, stale, or conflicting source interpretations. <br>
-Mitigation: Review key claims against cited sources, keep uncertainty and source limitations visible, and require human review before using outputs for decisions. <br>
+Risk: The skill may activate on broad analyze or compare prompts when the user only wants a short answer. <br>
+Mitigation: Specify when a brief response is preferred or when browsing and file generation are not desired. <br>
+Risk: Research reports can contain incorrect or misleading conclusions if available sources are weak, outdated, inaccessible, or contradictory. <br>
+Mitigation: Review cited sources, uncertainty notes, and conflict handling before using the report for decisions. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/va-ais/vadeepresearch) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/va-ais) <br>
+- [vaDeepresearch ClawHub listing](https://clawhub.ai/va-ais/skills/vadeepresearch) <br>
+- [va-ais publisher profile](https://clawhub.ai/user/va-ais) <br>
+- [AI open vs. closed models deep analysis reference](reference/ai_open_vs_closed_models_deep_analysis_2026.md) <br>
+- [Memory market deep analysis reference](reference/memory_market_deep_analysis_2026.md) <br>
+- [Pet wearable market deep analysis reference](reference/pet_wearable_market_deep_analysis.md) <br>
+- [Shenzhen coffee shop location deep analysis reference](reference/shenzhen_coffee_shop_location_deep_analysis.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown research reports with structured evidence tables, citations, risk notes, and optional conversion guidance] <br>
+**Output Type(s):** [guidance, text, markdown, configuration] <br>
+**Output Format:** [Markdown report files with structured sections, tables, citations or source references, and concise progress updates in chat] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the user to choose or confirm quick-analysis or deep-analysis mode before execution; final research output is expected as a Markdown file.] <br>
+**Other Properties Related to Output:** [Requires a Markdown file deliverable and may provide an openable file path, download link, or equivalent document entry.] <br>
 
 ## Skill Version(s): <br>
-1.1.1 (source: server release metadata and SKILL.md frontmatter) <br>
+1.2.0 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -11,33 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to review mathematical, scientific, numerical, statistical, and ML code for correctness, stability, test coverage, and evidence-backed approval recommendations. <br>
+Developers and engineers use this skill to review mathematical, scientific, statistical, numerical, and ML code for correct formulas, documented invariants, numerical stability, reproducibility, and sufficient test evidence. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad math or algorithm topics and produce review guidance outside the user's intended scope. <br>
-Mitigation: Confirm the target files and review scope before following its recommendations. <br>
-Risk: Suggested tests, benchmarks, or notebook execution commands may run repository code. <br>
-Mitigation: Run proposed commands only in repositories and execution environments the user trusts. <br>
-Risk: Review findings or mathematical recommendations may be incorrect or incomplete. <br>
-Mitigation: Have a qualified reviewer check findings, derivations, and cited evidence before relying on the result for high-stakes decisions. <br>
+Risk: The skill may ask an agent to run local tests, benchmarks, or notebooks in the target repository. <br>
+Mitigation: Review proposed test commands and notebook contents before execution, especially in untrusted projects. <br>
+Risk: Mathematical review output can be incomplete or misleading if requirements, standards, or test evidence are missing. <br>
+Mitigation: Require citations, reproducible evidence, and human review before relying on approve or block recommendations. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-pensive-math-review) <br>
-- [OpenClaw Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-math-review) <br>
+- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+- [Derivation Verification](artifact/modules/derivation-verification.md) <br>
+- [Numerical Stability Analysis](artifact/modules/numerical-stability.md) <br>
+- [Requirements Mapping](artifact/modules/requirements-mapping.md) <br>
+- [Testing Strategies for Mathematical Code](artifact/modules/testing-strategies.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Analysis, Shell commands, Code, Guidance] <br>
-**Output Format:** [Markdown review report with issue lists, tables, recommendations, and inline shell or code blocks] <br>
+**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
+**Output Format:** [Markdown review report with tables, issue entries, recommendations, and inline code or shell command blocks.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose tests, benchmarks, notebook execution, derivation checks, and approval or blocking recommendations.] <br>
+**Other Properties Related to Output:** [May include risk classifications, mathematical invariants, derivation notes, stability findings, test evidence, and an approve or block recommendation.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: server release metadata; artifact frontmatter says 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

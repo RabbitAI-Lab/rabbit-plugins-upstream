@@ -56,7 +56,19 @@
 
 **业务目标**：当**当日**系列花费相对**日预算**达到设定比例（如 **≥ 110%**，建议 **110%–120%** 缓冲 API 延迟）时，**将系列状态置为 Paused**；恢复由人工加预算后在网页或 CLI 再启用。
 
-### 检查项（宿主每轮执行）
+### 首选（全户 / 多户 Google）
+
+一条命令扫描名下 Google 户并交付命中表（默认 dry-run）：
+
+```bash
+siluzan-tso guard budget-circuit -m Google --date <当日YYYY-MM-DD> --ratio 1.1 --json-out ./snap-guard
+# 确认后：
+siluzan-tso guard budget-circuit -m Google --date <当日> --ratio 1.1 --apply --json-out ./snap-guard --commit "budget-circuit"
+```
+
+参数与落盘字段见 **`references/operations/guard.md`**。**禁止** `list-accounts` 六媒体循环 + 逐户 `ad campaigns`。
+
+### 单户排障（可选细粒度）
 
 1. 解析 `mediaCustomerId`（见上文前置）。
 2. 拉系列列表（**必须** `--start` = `--end` = **当日**统计日；**禁止**用默认近 7 天窗口做本场景）：
@@ -71,7 +83,7 @@ siluzan-tso ad campaigns -a <mediaCustomerId> --start <当日YYYY-MM-DD> --end <
    - **IF** `spend >= threshold` **且**宿主策略允许对该系列熔断（如排除白名单），则进入写操作。
    - **禁止**：`--start`≠`--end` 时仍用 `spend` 对比 `budget`（会把多日合计误判成单日超预算）。
 
-### 最终操作
+### 最终操作（单户手写时）
 
 ```bash
 siluzan-tso ad campaign-status -a <mediaCustomerId> --id <campaignId> --status Paused
@@ -93,9 +105,10 @@ siluzan-tso ad campaign-status -a <mediaCustomerId> --id <campaignId> --status E
 
 ### CLI 能力摘要
 
-| 状态 | 说明                                                                                                          |
-| ---- | ------------------------------------------------------------------------------------------------------------- |
-| 有   | 读：`ad campaigns --json-out ./snap`；写：`ad campaign-status`；复核：再次 `ad campaigns --json-out ./snap`。 |
+| 状态 | 说明 |
+| ---- | ---- |
+| 首选 | `guard budget-circuit -m Google`（全户扫描 + 可选 `--apply`） |
+| 单户 | 读：`ad campaigns --json-out`；写：`ad campaign-status`；复核：再次 `ad campaigns` |
 
 ---
 
@@ -164,7 +177,16 @@ siluzan-tso ad adgroup-edit -a <mediaCustomerId> --id <adGroupId> --max-cpc <主
 
 **业务目标**：**今日**（或约定日）累计 **`cost`（费用）≥ 目标 CPA × N`** 且 **`conversions = 0`** 时，**暂停**广告组或广告；**P1 告警 + 文案「空耗熔断」** 由宿主通知 skill 发送（本 CLI 不发送 P1）。
 
-### 检查项（宿主每轮执行）
+### 首选（全户 / 多户 Google）
+
+```bash
+siluzan-tso guard zero-conv -m Google --date <当日> --cpa-multiple 3 --level adgroup --json-out ./snap-guard
+# 确认后 --apply --commit …；创意维加 --level ad|both --fallback-target-cpa <元>
+```
+
+见 **`references/operations/guard.md`**。`summary.label` =「空耗熔断」。
+
+### 单户排障（可选）
 
 1. 确定「今日」`--start` / `--end`（同场景 1 时区约定）。
 2. **广告组**：
@@ -173,9 +195,9 @@ siluzan-tso ad adgroup-edit -a <mediaCustomerId> --id <adGroupId> --max-cpc <主
 siluzan-tso ad groups -a <mediaCustomerId> --start <当日> --end <当日> --json-out ./snap
 ```
 
-对 `items[]`：读取 **`spend`**（费用）、**`conversions`**；目标 CPA 来自 **`targetCpaAmount`** 与 **`toDisplayMoney` 逆运算** 或宿主配置的「目标 CPA（主币种）」；计算 `limit = target_cpa_main_currency * N`（**N** 为配置）。
+对 `items[]`：读取 **`spend`**（费用）、**`conversions`**；目标 CPA 来自 **`targetCpaAmountYuan`**（元）或宿主配置；计算 `limit = target_cpa * N`。
 
-- **IF** `conversions === 0` **且** `spend >= limit`（注意 **`spend` 与 limit 单位一致**），则对该 `id` 执行组暂停。
+- **IF** `conversions === 0` **且** `spend >= limit`，则对该 `id` 执行组暂停。
 
 3. **广告（创意）**级：若策略在创意维熔断：
 
@@ -185,15 +207,13 @@ siluzan-tso ad list -a <mediaCustomerId> --start <当日> --end <当日> --json-
 
 同样判断费用与转化；命中则 **`ad ad-status`**。
 
-### 最终操作
+### 最终操作（单户手写时）
 
 ```bash
 siluzan-tso ad adgroup-status -a <mediaCustomerId> --id <adGroupId> --status Paused
 # 或
 siluzan-tso ad ad-status -a <mediaCustomerId> --id <adId> --status Paused
 ```
-
-（`ad-status` 若需 `--start`/`--end` 见 `references/google-ads/google-ads.md`。）
 
 ### 通知（宿主）
 
@@ -203,16 +223,16 @@ siluzan-tso ad ad-status -a <mediaCustomerId> --id <adId> --status Paused
 
 ```bash
 siluzan-tso ad groups -a <mediaCustomerId> --start <当日> --end <当日> --json-out ./snap
-# 或 ad list …
 ```
 
 确认对应 **`statusV2`** 为 **`Paused`**。
 
 ### CLI 能力摘要
 
-| 状态 | 说明                                                                                           |
-| ---- | ---------------------------------------------------------------------------------------------- |
-| 有   | 读：`ad groups` / `ad list`；写：`adgroup-status` / `ad-status`；通知：宿主；复核：再次 list。 |
+| 状态 | 说明 |
+| ---- | ---- |
+| 首选 | `guard zero-conv -m Google` |
+| 单户 | 读：`ad groups` / `ad list`；写：`adgroup-status` / `ad-status`；通知：宿主 |
 
 ---
 

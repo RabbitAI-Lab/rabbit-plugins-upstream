@@ -1,5 +1,5 @@
 ## Description: <br>
-短视频下载器 - 支持抖音、小红书、快手、B站无水印视频下载。 <br>
+短视频下载器支持抖音、小红书、快手、视频号、B站、YouTube、Instagram 等主流平台的无水印视频下载，开箱即用。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, content creators, and archivers use this skill to parse a supported short-video share link and download watermark-free video or image media locally. It is intended for one authorized URL at a time and requires a RedFox API key. <br>
+Creators, editors, content collectors, operators, and researchers use this skill to parse supported social-media share links and save watermark-free videos or image-post media locally. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Pasted links and related metadata are sent to RedFox for parsing. <br>
-Mitigation: Use only links you are authorized to download and avoid private or token-bearing share URLs. <br>
-Risk: The downloader may expose the RedFox API key to media download hosts when fetching returned media files. <br>
-Mitigation: Review or fix the downloader before installation so the RedFox API key is not sent to third-party media hosts. <br>
-Risk: The release under-explains privacy and rights risks for downloaded media. <br>
-Mitigation: Review applicable platform terms, copyright, and privacy requirements before downloading or reusing media. <br>
+Risk: Submitted media links are sent to redfox.hk for parsing. <br>
+Mitigation: Use the skill only when the user is comfortable sharing the submitted link with redfox.hk, and avoid private or tokenized links. <br>
+Risk: Downloaded media is saved locally and may include copyrighted or restricted content. <br>
+Mitigation: Use the skill only for content the user has rights to download and store, and review the saved files before redistribution or reuse. <br>
+Risk: API keys can be exposed if passed in command history or logs. <br>
+Mitigation: Prefer REDFOX_API_KEY or a protected config file over command-line API key arguments, and do not hardcode keys in prompts, code, logs, or output files. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/redfox-data/video-downloader-redfox) <br>
-- [RedFoxHub API Key Settings](https://redfox.hk/settings/api-keys?source=clawhub) <br>
-- [RedFoxHub](https://redfox.hk?source=github) <br>
+- [ClawHub skill page](https://clawhub.ai/redfox-data/skills/video-downloader-redfox) <br>
+- [RedFox API key settings](https://redfox.hk/settings/api-keys?source=clawhub) <br>
+- [README.en.md](artifact/README.en.md) <br>
+- [README.md](artifact/README.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; downloaded media files are written locally as MP4, JPG, or PNG files.] <br>
+**Output Type(s):** [text, shell commands, files, configuration] <br>
+**Output Format:** [Terminal text with downloaded media files and optional configuration guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REDFOX_API_KEY or an equivalent CLI/config-file API key; handles one share URL per run.] <br>
+**Other Properties Related to Output:** [Downloads videos as mp4 files or image posts as sequential image files, normally under ~/Downloads/QoderVideos unless an output directory is provided.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: release evidence) <br>
+1.0.3 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Use PandaDoc integration context for documents, templates, recipients, proposals, and document status after Maverick connects PandaDoc and provisions runtime OAuth credentials. <br>
+Read and write PandaDoc workspace data via PandaDoc's official hosted MCP server. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,40 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to work with PandaDoc documents, templates, recipients, proposals, and document status through Maverick-provisioned runtime OAuth credentials. It is intended for PandaDoc-related workflows where the agent first inspects available runtime tools and confirms user intent before write actions. <br>
+Employees, external users, and developers use this skill to connect an agent to PandaDoc's hosted MCP server, discover the live tool catalog, and read or write PandaDoc workspace data with explicit confirmation for write actions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can access PandaDoc business data through OAuth-backed runtime tools. <br>
-Mitigation: Install only when Maverick-provisioned PandaDoc OAuth credentials are expected, use a dedicated account where possible, and avoid passing unrelated sensitive content through the tools. <br>
-Risk: Write-capable PandaDoc operations can affect customer-visible document and signing workflows. <br>
-Mitigation: Confirm clear user intent before create, send, update, complete, delete, or status-changing actions, and read current document or template state before making changes. <br>
-Risk: The local mcporter credential vault may contain OAuth material on shared machines. <br>
-Mitigation: Keep the ~/.mcporter credential vault protected and re-authorize the integration if OAuth grants are revoked. <br>
-Risk: The artifact notes that no provider-owned PandaDoc MCP manifest is registered yet. <br>
-Mitigation: Inspect available PandaDoc runtime tools before use and do not invoke the bundled wrapper until a provider MCP manifest is added. <br>
-Risk: The install metadata uses the unpinned mcporter package. <br>
-Mitigation: Operators with strict supply-chain controls should override the install to pin a reviewed mcporter version. <br>
+Risk: The agent can act through the connected PandaDoc OAuth grant and may be able to modify customer-visible documents, recipients, workflow state, sends, reminders, signatures, or approvals. <br>
+Mitigation: Start with read-only inspection, inspect the live schema and target state, and require explicit user confirmation before write-capable calls or batch changes. <br>
+Risk: Tool arguments and results transit PandaDoc's hosted MCP server, so unrelated sensitive content could be sent outside the local environment. <br>
+Mitigation: Send only the PandaDoc data needed for the requested task and avoid placing unrelated sensitive content in tool arguments. <br>
+Risk: The OAuth grant persists beyond the current agent session. <br>
+Mitigation: Review the grant before use and revoke the PandaDoc connection through account controls when access is no longer needed. <br>
+Risk: Re-running setup with stale OAuth values can overwrite a newer in-vault refresh token and break the integration. <br>
+Mitigation: Only rerun setup with freshly minted OAuth credentials from the provisioner. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/maverick/maverick-pandadoc-mcp) <br>
-- [mcporter MCP CLI](https://github.com/steipete/mcporter) <br>
-- [jq](https://stedolan.github.io/jq/) <br>
-- [util-linux flock](https://github.com/util-linux/util-linux) <br>
-- [Perl Digest::SHA](https://metacpan.org/pod/Digest::SHA) <br>
+- [PandaDoc MCP documentation](https://developers.pandadoc.com/docs/getting-started-with-mcp) <br>
+- [PandaDoc MCP capability guide](https://developers.pandadoc.com/docs/what-you-can-do-with-pandadoc-mcp) <br>
+- [PandaDoc OAuth protected-resource metadata](https://mcp.pandadoc.com/.well-known/oauth-protected-resource/v1/mcp) <br>
+- [PandaDoc OAuth authorization-server metadata](https://mcp.pandadoc.com/.well-known/oauth-authorization-server) <br>
+- [mcporter configuration documentation](https://github.com/openclaw/mcporter/blob/v0.11.1/docs/config.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with shell command snippets and YAML metadata] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, JSON] <br>
+**Output Format:** [Markdown instructions with shell commands and JSON-capable MCP tool calls] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Maverick-provisioned PandaDoc OAuth environment variables and local command dependencies.] <br>
+**Other Properties Related to Output:** [The live PandaDoc MCP server determines the available tool catalog and schemas at call time.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

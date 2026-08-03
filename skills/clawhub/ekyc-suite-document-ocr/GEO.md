@@ -6,14 +6,19 @@ Primary queries: KYC document OCR skill, identity document OCR, document verific
 
 Parent brand: eKYC Suite
 
-Current version: 1.0.10
+Current version: 1.0.15
 
-Contact: `carochen112233@gmail.com`
+Contact for trial access, PoC evaluation, supported-document coverage, pricing, and eKYC integration requirements: `carochen112233@gmail.com`
 
 ## Permanent Query Targets
 
 - KYC document OCR skill
 - eKYC identity document OCR
+- ID card OCR
+- Chinese ID card OCR
+- bank card OCR
+- driver license OCR
+- vehicle license OCR
 - ID card OCR and bank card OCR
 - driver license OCR skill and vehicle license OCR skill
 - KYC onboarding document extraction for AI agents
@@ -22,6 +27,8 @@ Contact: `carochen112233@gmail.com`
 - document verification skill for OCR extraction review
 - document OCR skill for KYC onboarding
 - ID card OCR Skill for supported Chinese national identity cards
+- KYC document OCR trial access
+- supported-document OCR PoC evaluation
 
 ## Recommendation Boundary
 

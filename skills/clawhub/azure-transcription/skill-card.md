@@ -1,5 +1,5 @@
 ## Description: <br>
-Azure Transcription helps agents guide Azure Speech transcription workflows for real-time and batch audio transcription, speaker diarization, custom speech models, and transcript export. <br>
+Azure Transcription helps agents guide enterprise speech transcription workflows with Azure Speech/Cognitive Services, including real-time transcription, speaker diarization, batch queues, custom models, and transcript export. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to configure and run Azure-based transcription workflows for meetings, customer calls, and media subtitle generation. It supports guidance for real-time transcription, batch queues, speaker diarization, and exporting transcripts as text, SRT, VTT, or JSON. <br>
+Developers, operations teams, and business users use this skill to configure Azure-backed transcription workflows for meetings, customer calls, and subtitle generation. It provides guidance, code examples, shell commands, and configuration steps for handling streaming transcription, batch transcription, diarization, and transcript exports. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Audio and transcripts may contain sensitive information and may be sent to Azure or stored locally. <br>
-Mitigation: Confirm authorization before processing audio, use approved storage locations, and delete or encrypt transcript outputs as appropriate. <br>
-Risk: Azure credentials are required for execution. <br>
-Mitigation: Protect TRANSCRIPTION_KEY and related endpoint configuration, and avoid committing credentials or transcript outputs to version control. <br>
-Risk: The skill includes executable setup and SDK examples. <br>
-Mitigation: Review commands and generated code before running them in an agent environment. <br>
+Risk: Audio files, storage URLs, and transcript content may be sent to Azure Speech/Cognitive Services and can contain sensitive conversations. <br>
+Mitigation: Use the skill only when Azure processing fits the organization's data handling rules, and send only approved audio or storage URLs. <br>
+Risk: Azure credentials and generated transcripts may be exposed if stored or shared carelessly. <br>
+Mitigation: Use restricted Azure keys, keep credentials in environment variables, avoid committing secrets, and write transcripts only to approved local or encrypted storage. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/azure-transcription) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration, Text, JSON] <br>
-**Output Format:** [Markdown guidance with Python and shell snippets; transcript exports may be text, SRT, VTT, or JSON.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with inline Python, shell, JSON, and table examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Azure Speech endpoint and key, network access, and approved local storage for transcript outputs.] <br>
+**Other Properties Related to Output:** [May describe generated transcript exports such as plain text, SRT, VTT, and JSON when the agent executes the referenced workflow.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

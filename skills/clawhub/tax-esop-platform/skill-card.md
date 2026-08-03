@@ -1,5 +1,5 @@
 ## Description: <br>
-员工持股平台（有限合伙/公司型/资管型）财税合规专项助手，面向股权激励递延纳税、持股平台税负、股份支付、股权代持、上市审核、减持退出和合规报告等场景提供政策依据、风险指标、测算和实操模板。 <br>
+Provides tax and compliance guidance for employee stock ownership platforms, including deferred taxation, partnership and company platform tax treatment, dividends, share-based payment, nominee shareholding, listing-review issues, risk checks, calculations, and report drafting. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External tax, finance, legal, and company operations teams use this skill to analyze PRC employee shareholding platform structures, compare company-form and partnership-form tax outcomes, identify compliance risks, and draft guidance or reports for planning, self-check, listing-review, and exit scenarios. <br>
+External tax, finance, legal, and listing-advisory users use this skill to assess employee stock ownership platform structures, calculate tax outcomes, run compliance self-checks, and draft risk or compliance reports. It should not be treated as a substitute for qualified tax, legal, securities, or filing advice. <br>
 
 ### Deployment Geography for Use: <br>
-China-focused; deployment may be global where users need PRC employee shareholding platform tax and compliance guidance. <br>
+Global, with PRC tax-law subject matter <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Tax questions and scenarios may be sent to mcp.aitaxs.top for online policy answers, risk checks, calculations, and web workflows. <br>
-Mitigation: Avoid entering sensitive company, payroll, cap-table, listing-preparation, or personal details unless that cloud data flow is acceptable; use offline workflows for local reference where suitable. <br>
-Risk: The skill includes MCP client helpers and optional setup code that can write client configuration when explicitly enabled. <br>
-Mitigation: Do not enable TAX_ENABLE_AUTOSETUP or run setup helpers unless MCP configuration changes are intended; review configuration changes before use. <br>
-Risk: The related-skill matrix installer can add packages under the user's skills directory. <br>
-Mitigation: Review install_matrix.py and use the matrix install trigger only when bulk installation of related tax skills is desired. <br>
-Risk: Tax, legal, accounting, and listing-review conclusions may vary by facts, timing, jurisdictional practice, and regulator or court interpretation. <br>
-Mitigation: Verify material advice against current official policy and qualified professional review before filing, restructuring, listing, litigation, or transaction execution. <br>
+Risk: Sensitive tax, company, compensation, ownership, or filing details may be sent to remote services or fallback public search engines. <br>
+Mitigation: Use anonymized scenarios unless the user accepts that data sharing, and review the service endpoints before installation. <br>
+Risk: The skill can persist API keys, health data, and logs under ~/.tax-policy-client. <br>
+Mitigation: Inspect and manage ~/.tax-policy-client after use, and remove stored credentials or logs when they are no longer needed. <br>
+Risk: Automatic MCP client setup may edit local client configuration when TAX_ENABLE_AUTOSETUP is enabled. <br>
+Mitigation: Leave TAX_ENABLE_AUTOSETUP unset for dry-run behavior, or review configuration changes and backups before enabling it. <br>
+Risk: Tax and listing guidance may be incomplete or outdated for a specific transaction or filing. <br>
+Mitigation: Verify conclusions against current official rules and qualified tax, legal, or securities advisers before filing or transaction decisions. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-esop-platform) <br>
-- [Web tax-burden and compliance self-check page](https://mcp.aitaxs.top/web/topic_workflow_esop.html) <br>
-- [Cloud MCP service endpoint](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
+- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
+- [ESOP compliance self-check page](https://mcp.aitaxs.top/web/topic_workflow_esop.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, structured reports, tax calculations, local workflow output, and configuration or shell-command suggestions when installation or MCP setup is requested.] <br>
+**Output Format:** [Natural-language guidance, Markdown reports, structured calculation results, optional HTML report files, and setup snippets.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call a cloud MCP service for policy answers, risk checks, calculations, and knowledge-base metadata; offline workflows provide local reference and report generation.] <br>
+**Other Properties Related to Output:** [May call remote MCP services for policy, risk, and calculation workflows; offline workflows can generate local reports from user-supplied metrics.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: SKILL.md frontmatter and server release evidence) <br>
+3.15.8 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

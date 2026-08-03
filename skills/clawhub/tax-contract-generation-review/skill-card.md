@@ -1,5 +1,5 @@
 ## Description: <br>
-Supports contract template selection, draft generation, clause review, tax compliance checks, risk prevention guidance, and review report generation for enterprise contract workflows. <br>
+企业全业务生命周期合同模板库与全生命周期合规评审指引，支持合同类型模板查看、合同生成、条款审核、涉税风险防控和评审报告生成。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Enterprise legal, compliance, finance, and tax teams use this skill to draft contract templates, review contract clauses, identify tax compliance risks, and produce structured contract review reports. It is most relevant to Chinese tax and contract compliance scenarios. <br>
+External business, legal, compliance, finance, and tax users can use this skill to find contract templates, draft contract language, review clauses for tax and compliance risks, and produce structured review reports. It is especially oriented toward Chinese-language contract lifecycle workflows and tax-risk screening. <br>
 
 ### Deployment Geography for Use: <br>
-China <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Contract and tax questions, self-check data, or related usage signals may be sent to mcp.aitaxs.top. <br>
-Mitigation: Use the skill only after approving remote processing for the data involved; avoid confidential contracts unless that data handling is acceptable. <br>
-Risk: API credentials and logs may be stored locally. <br>
-Mitigation: Protect local configuration and log directories, rotate or delete credentials when no longer needed, and avoid shared machines for sensitive use. <br>
-Risk: Optional setup or install behavior may change MCP client configuration or add related skills. <br>
-Mitigation: Review setup actions before enabling them and run with dry-run behavior where available. <br>
-Risk: Generated tax and contract guidance may be incomplete or jurisdiction-sensitive. <br>
-Mitigation: Treat outputs as review support, verify against current official sources, and consult qualified tax or legal professionals for material decisions. <br>
+Risk: The security evidence reports cloud processing by mcp.aitaxs.top, local API-key storage, plaintext local logs, and possible MCP client configuration changes when setup is explicitly enabled. <br>
+Mitigation: Review the skill before deployment, avoid submitting confidential contracts or regulated business facts unless external processing and local logging are acceptable, and enable setup only after reviewing the MCP configuration changes. <br>
+Risk: The skill provides legal, tax, and compliance guidance that may be incomplete, outdated, or unsuitable for a specific jurisdiction or transaction. <br>
+Mitigation: Treat generated templates, risk findings, and reports as drafting and review aids, then have qualified legal or tax professionals validate conclusions before operational use. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zxj2devs/skills/tax-contract-generation-review) <br>
-- [Publisher Profile](https://clawhub.ai/user/zxj2devs) <br>
-- [Contract Compliance Self-Check Web Workflow](https://mcp.aitaxs.top/web/topic_workflow_contract.html) <br>
-- [Tax Policy Knowledge Matrix Hub](https://skillhub.cn/skills/tax-policy-knowledge) <br>
+- [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-contract-generation-review) <br>
+- [Contract compliance self-check page](https://mcp.aitaxs.top/web/topic_workflow_contract.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text reports with checklists, risk findings, clause recommendations, and configuration guidance.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Chinese-language Markdown, structured text, JSON-like review data, Python workflow code, and MCP client configuration guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include links to a web self-check workflow and locally routed MCP service configuration.] <br>
+**Other Properties Related to Output:** [May produce contract templates, tax-risk findings, review checklists, remediation guidance, and review reports; cloud-backed MCP behavior can supplement local fallback workflows.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: frontmatter and server release evidence) <br>
+3.15.8 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

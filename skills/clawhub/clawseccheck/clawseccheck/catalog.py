@@ -315,6 +315,73 @@ CATALOG: list[CheckMeta] = [
         surface="bootstrap",
     ),
     CheckMeta("B24", "MCP server hardening", HIGH, "hardening", "MCP Trust", surface="mcp"),
+    # B333 (F-143/W2.1, grounded against dist openclaw@2026.7.1-2, 2026-07-25): when
+    # OpenClaw registers an MCP tool it stores exactly {serverName, safeServerName,
+    # toolName, title, description, inputSchema, fallbackDescription} — `annotations`
+    # is NEVER stored (0 occurrences). readOnlyHint/destructiveHint/openWorldHint/
+    # idempotentHint exist only in the @modelcontextprotocol/sdk vendor .d.ts types
+    # (compile-time only); OpenClaw's runtime never reads them, so a server declaring
+    # destructiveHint:true gets zero behavioral effect — no confirmation prompt,
+    # nothing. This is a HOST LIMITATION, not server wrongdoing, hence WARN-only
+    # (never FAIL) and worded as a fact about what OpenClaw does, never "the server
+    # lied". MEDIUM/scored=True: an operator relying on these hints for a safety
+    # policy has a real, silent enforcement gap. Fires only when a raw manifest dump
+    # (source == "manifest") shows the server DID declare a hint — OpenClaw's own
+    # retained/compiled form (trajectory / probe-names) never carries annotations at
+    # all, so absence there proves nothing about what was originally declared and
+    # reports UNKNOWN rather than guessing a clean PASS (B-092).
+    CheckMeta(
+        "B333",
+        "MCP tool safety-hint annotations declared but not enforced by OpenClaw",
+        MEDIUM,
+        "hardening",
+        "MCP Trust",
+        scored=True,
+        confidence="HIGH",
+        surface="mcp",
+    ),
+    # B332 (F-145/W2.3): cross-server MCP tool-NAME collision/homoglyph/near-miss
+    # (shadowing). Names-only by design -- see checks/_mcp.py's section docstring above
+    # _B332_GENERIC_TOOL_NAMES for the full FP-trap reasoning. FAIL on an exact
+    # collision of a rare/specific name, or a homoglyph substitution (always
+    # suspicious, unconditional on genericness); WARN on an edit-distance-1 near-miss
+    # of a long, specific name; UNKNOWN with fewer than two servers or no tool names
+    # available. HIGH/scored=True: the model cannot reliably tell two same-named
+    # tools on different servers apart, so a collision is a real, silent
+    # tool-shadowing exposure, not just a hygiene nit.
+    CheckMeta(
+        "B332",
+        "Cross-server MCP tool-name collision / homoglyph / near-miss (shadowing)",
+        HIGH,
+        "hardening",
+        "MCP Trust",
+        scored=True,
+        confidence="HIGH",
+        surface="mcp",
+    ),
+    # B331 (F-144/W2.2, blocked on C-294 grounding, now resolved — see
+    # docs/research/openclaw-schema-recon.md #38, workspace-root, not shipped): OpenClaw's
+    # own MCP tool-metadata sanitizer (`sanitizeMcpMetadataText`,
+    # agent-bundle-mcp-runtime--G82BMQs.js:959-964, dist openclaw@2026.7.1-2) redacts
+    # exactly two literal phrase families ("ignore ... instructions" / "disregard ...
+    # instructions") and truncates at 1200 chars — and it runs on only ONE of three
+    # model-facing runtime paths that consume mcp.servers (recon #38.3: the embedded
+    # `openclaw` harness; the CLI-backend and Codex harness paths never sanitize at all).
+    # `inputSchema` descriptions are never sanitized on ANY path (recon #38.5). A flat PASS
+    # would be a false PASS on the two non-sanitizing paths; a flat FAIL would over-claim on
+    # a payload the sanitizer genuinely neutralizes. HIGH/scored=True because the dominant
+    # real-world outcome (2 of 3 paths, plus anything the narrow 2-pattern regex misses on
+    # the third) is unmitigated tool-description injection reaching the model raw.
+    CheckMeta(
+        "B331",
+        "MCP tool-description injection surviving OpenClaw's host sanitizer",
+        HIGH,
+        "hardening",
+        "MCP Trust",
+        scored=True,
+        confidence="MEDIUM",
+        surface="mcp",
+    ),
     CheckMeta(
         "B25", "Update / pinning hygiene", MEDIUM, "hardening", "Supply Chain", surface="skills"
     ),
@@ -366,6 +433,25 @@ CATALOG: list[CheckMeta] = [
         HIGH,
         "hardening",
         "Browser / SSRF",
+        surface="sessions",
+    ),
+    # B330 (C-298): the Chrome DevTools Protocol control port OpenClaw opens on every
+    # managed browser launch carries no authentication. The port itself is NOT graded --
+    # it is vendor design an operator cannot switch off, so the ordinary loopback-confined
+    # case is a genuine PASS that states the fact instead of docking a grade for it
+    # (B-331's rule: grade the state a config CHOOSES, never one OpenClaw created). What
+    # IS graded is the operator's own two levers: an off-host cdpUrl (WARN -- the
+    # corroborated cdpUrl rung stays with B322/B196 rather than being triple-counted), and
+    # a wildcard --remote-allow-origins (FAIL), which was MEASURED on Chrome 150 to turn a
+    # refused cross-origin CDP handshake into a live one. HIGH because that FAIL means any
+    # page the browser has open can drive it.
+    CheckMeta(
+        "B330",
+        "browser CDP control port — unauthenticated, and how far it reaches",
+        HIGH,
+        "hardening",
+        "Browser / SSRF",
+        confidence="HIGH",
         surface="sessions",
     ),
     # E-060 parallel-workflow batch (2026-07-25): B321/B322/B323/B325/B327/B328 grounded,
@@ -2529,6 +2615,7 @@ AST_MAP = {
     "B38": ("AST06",),  # headless browser without OS sandbox = Weak Isolation (cf. B4)
     "B195": ("AST06",),  # extraArgs disables same-origin/loads extensions = Weak Isolation
     "B196": ("AST06",),  # arbitrary-JS eval sink reachable from page content = Weak Isolation
+    "B330": ("AST06",),  # unauthenticated CDP control channel reachable off-host/cross-origin
     "B73": ("AST06",),  # mDNS full advertise on non-loopback exposes the agent (cf. B70)
     "B74": ("AST05",),  # forged role/provenance = untrusted external instructions (cf. B64)
     "B76": ("AST03",),  # MCP tool-inheritance bypass = over-privileged reach (cf. B75)
@@ -2807,8 +2894,18 @@ REMEDIATION = {
             {
                 "path": "browser.extraArgs",
                 "set": None,
-                "note": "remove --disable-web-security / --load-extension / a "
-                "non-loopback --remote-debugging-address / unreviewed --proxy-server",
+                "note": "remove --disable-web-security / --load-extension / "
+                "unreviewed --proxy-server",
+            }
+        ]
+    },
+    "B330": {
+        "config": [
+            {
+                "path": "browser.extraArgs",
+                "set": None,
+                "note": "remove --remote-allow-origins; keep browser.cdpUrl and every "
+                "profile cdpUrl on loopback",
             }
         ]
     },

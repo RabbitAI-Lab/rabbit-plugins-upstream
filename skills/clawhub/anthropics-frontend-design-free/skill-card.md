@@ -1,5 +1,5 @@
 ## Description: <br>
-Generates basic HTML/CSS/JS frontend interfaces with guidance on typography, color themes, layout composition, and four simple aesthetic directions. <br>
+Generates simple HTML, CSS, and JavaScript frontend pages using four basic aesthetic directions while avoiding generic AI-style typography, colors, and layouts. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and individual builders use this skill to prototype simple landing pages, personal homepages, and product showcase pages as single-file HTML/CSS/JS. It helps choose a basic aesthetic direction and avoid generic AI-looking typography, colors, and card-heavy layouts. <br>
+Developers, designers, and independent builders use this skill to turn frontend design prompts into basic single-page HTML/CSS/JS interfaces such as landing pages, portfolio pages, and product introduction pages. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requests command execution even though the stated purpose is frontend design guidance. <br>
-Mitigation: Use explicit approval for commands, inspect proposed commands before execution, and avoid granting command execution in sensitive workspaces unless needed. <br>
-Risk: API keys or sensitive project files could be exposed during design or setup workflows. <br>
-Mitigation: Provide only the files and credentials required for the task, keep API keys out of version control, and avoid sharing sensitive project content unless the workflow genuinely requires it. <br>
+Risk: The skill requests broad file-write and shell-command capabilities beyond what simple frontend generation clearly requires. <br>
+Mitigation: Review the skill before installing and run it only in a sandbox or project workspace where broad writes and command execution are acceptable. <br>
+Risk: Sensitive files or API keys could be exposed if the skill is run with access to secrets or private project data. <br>
+Mitigation: Avoid providing API keys or sensitive project files unless the publisher clarifies the exact services, commands, and file paths the skill needs. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/anthropics-frontend-design-free) <br>
-- [Skill homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with HTML/CSS/JS code blocks and optional JSON execution summaries] <br>
+**Output Format:** [Markdown with HTML, CSS, JavaScript, and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Limited to HTML/CSS/JS; React/Vue components, complex dashboards, advanced motion, brand pages, and 3D modeling are out of scope.] <br>
+**Other Properties Related to Output:** [May include generated single-file frontend code, design choices, validation notes, and setup guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+1.0.3 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

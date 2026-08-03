@@ -1,5 +1,5 @@
 ## Description: <br>
-Amber gives an agent real phone capabilities through a Twilio or compatible voice bridge, OpenAI Realtime calling, MCP tools, inbound screening, confirmed outbound calls, call logs, transcripts, optional CRM/contact memory, calendar booking, contacts lookup, and a loopback-only dashboard. <br>
+Real phone assistant runtime with Twilio/OpenAI Realtime calling, inbound screening, confirmed outbound calls, local call logs/transcripts, optional local CRM/contact memory, calendar booking, contacts lookup, MCP tools, and a loopback-only dashboard. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,39 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and operators use Amber to connect an agent to real telephone workflows, including inbound screening, explicitly confirmed outbound calls, call-history review, contact lookup, and calendar-assisted scheduling. The skill is intended for configured deployments where the operator manages telephony, AI-provider credentials, caller notice, access control, and retention practices. <br>
+Developers and operators use Amber to add real phone answering, screening, confirmed outbound calling, calendar booking, call logging, contacts lookup, and optional local CRM memory to an OpenClaw or MCP-capable agent deployment. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Amber handles sensitive phone, contact, calendar, transcript, and optional CRM data. <br>
-Mitigation: Operate it as a sensitive communications system: keep logs, transcripts, contact caches, and CRM files private; define retention and deletion practices; and enable CRM enrichment or extended contacts only when needed. <br>
-Risk: Telephony, AI-provider, and optional OpenClaw credentials can expose real calling and data access if over-scoped or leaked. <br>
-Mitigation: Use dedicated least-privilege Twilio, OpenAI, and OpenClaw credentials, keep secrets out of logs, rotate them when needed, and review dependency and configuration changes before deployment. <br>
-Risk: A locally served bridge or dashboard may expose call controls or communications records if made reachable without protection. <br>
-Mitigation: Keep the bridge and dashboard loopback-only or place them behind authentication and network controls before using real callers. <br>
-Risk: Real calls may involve people who did not configure the system and may be recorded or transcribed. <br>
-Mitigation: Configure caller notice and consent appropriate to the deployment, and require explicit confirmation before outbound calls, calendar writes, payments, commitments, or escalation-sensitive actions. <br>
+Risk: Amber handles real calls, transcripts, local call logs, and optional persistent caller memory. <br>
+Mitigation: Use it only with caller notice and consent, access controls, retention and deletion practices, and periodic review or deletion of CRM records. <br>
+Risk: Provider and gateway credentials can expose sensitive phone, AI, or OpenClaw access if reused or leaked. <br>
+Mitigation: Use dedicated least-privilege Twilio, OpenAI, and OpenClaw credentials; keep secrets out of logs; rotate tokens regularly. <br>
+Risk: The security evidence reports that one dashboard path stores a bridge token despite saying it stays in memory. <br>
+Mitigation: Keep the dashboard loopback-only and avoid entering a bridge token until the mismatch is fixed, or rotate the token after use. <br>
+Risk: Phone calls, calendar writes, and payment-related conversations can create real-world impact. <br>
+Mitigation: Require explicit confirmation for outbound calls and calendar writes, disable outbound calling when not needed, and escalate payment or deposit requests to the human operator. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/batthis/skills/amber-phone-agent) <br>
-- [Amber repository](https://github.com/batthis/amber-openclaw-voice-agent) <br>
-- [Architecture](references/architecture.md) <br>
-- [Release checklist](references/release-checklist.md) <br>
-- [Runtime README](runtime/README.md) <br>
-- [Hermes package README](packaging/hermes/README.md) <br>
+- [Architecture notes](artifact/references/architecture.md) <br>
+- [Runtime documentation](artifact/runtime/README.md) <br>
+- [Dashboard documentation](artifact/dashboard/README.md) <br>
+- [Demo wizard documentation](artifact/demo/README.md) <br>
+- [Interactive setup demo](https://asciinema.org/a/l1nOHktunybwAheQ) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with code blocks and configuration snippets] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands, configuration steps, and source code references] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are operator-facing setup, verification, and usage guidance for connecting Amber runtime and MCP tools to an agent.] <br>
+**Other Properties Related to Output:** [Produces agent-facing setup, runtime, MCP, CRM, calendar, dashboard, and phone workflow guidance; runtime behavior also creates local logs, transcripts, and optional CRM records when configured.] <br>
 
 ## Skill Version(s): <br>
-5.5.45 (source: server release metadata and runtime/package.json) <br>
+5.5.49 (source: evidence.json release.version and runtime/package.json) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

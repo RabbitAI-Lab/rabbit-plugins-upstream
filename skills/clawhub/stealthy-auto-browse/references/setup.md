@@ -14,7 +14,7 @@ This skill is intended for authorized QA, compatibility testing, and defensive s
 Before running anything beyond a throwaway local smoke test:
 
 1. **Bind to loopback.** Map ports as `-p 127.0.0.1:8080:8080` (and `127.0.0.1:5900:5900` if you need the viewer) so the API is not reachable from other machines on the network.
-2. **Set `AUTH_TOKEN` to a strong random value.** `-e AUTH_TOKEN=$(openssl rand -hex 32)`. Required as soon as the service is reachable beyond localhost. Pass it via `Authorization: Bearer <key>` headers; the query-string fallback exists only for MCP clients and leaks into logs.
+2. **Set `AUTH_TOKEN` to a strong random value.** `-e AUTH_TOKEN=$(openssl rand -hex 32)`. Required as soon as the service is reachable beyond localhost. Pass it via `Authorization: Bearer <key>` headers.
 3. **Pin the image by digest.** Tags are mutable — pin the digest you've reviewed:
    ```bash
    docker pull psyb0t/stealthy-auto-browse:v1.0.0
@@ -66,6 +66,7 @@ Notes on the hardening flags:
 - `SYS_ADMIN` is needed by the embedded Firefox sandbox; everything else is dropped.
 - Adjust `--read-only` if you need `/userdata` mounted (you'll have to mount that path writable).
 - Same applies to `/recordings` if you use screen recording — mount it writable, which means dropping or adjusting `--read-only` for that path too.
+- Dynamic virtual-media uploads also need a writable `VIRTUAL_MEDIA_DIR`; static virtual media may remain read-only.
 
 ## Environment Variables
 
@@ -79,7 +80,12 @@ Notes on the hardening flags:
 | `USE_VIEWPORT` | `false` | Playwright viewport control. Required for width < ~450px. Makes automation easier to fingerprint. |
 | `HTTP_LISTEN_HOST` | `0.0.0.0` | HTTP API bind address inside the container. Combine with a `127.0.0.1:8080:8080` port mapping to confine to localhost on the host. |
 | `HTTP_LISTEN_PORT` | `8080` | HTTP API port. |
-| `AUTH_TOKEN` | — | **Set this for any non-trivial deployment.** Without it, anyone who can reach the port can control the browser. With it, requests need `Authorization: Bearer <key>` (preferred) or `?auth_token=<key>` (query string, leaks into logs — avoid). |
+| `AUTH_TOKEN` | — | **Set this for any non-trivial deployment.** Without it, anyone who can reach the port can control the browser. With it, requests need an `Authorization: Bearer <key>` header. |
+| `VIRTUAL_MEDIA_DIR` | `/media` | Directory containing virtual camera/microphone media. Configured and dynamic source paths must resolve within it. Mount it read-only for static sources; dynamic uploads require it to be writable. |
+| `VIRTUAL_CAMERA_FILE` | — | Video file returned as the video track from page `getUserMedia()`. Relative to `VIRTUAL_MEDIA_DIR` or an absolute path inside it. A request for video without this source fails with `NotFoundError`. |
+| `VIRTUAL_MICROPHONE_FILE` | — | Audio file returned as the audio track from page `getUserMedia()`. Relative to `VIRTUAL_MEDIA_DIR` or an absolute path inside it. A request for audio without this source fails with `NotFoundError`. |
+| `VIRTUAL_MEDIA_DYNAMIC` | `false` | Enables runtime file-backed source selection and upload for virtual camera/microphone tests. |
+| `VIRTUAL_MEDIA_UPLOAD_MAX_BYTES` | `50 MiB` | Maximum decoded upload size accepted by `upload_virtual_media` in dynamic mode. |
 | `VNC_LISTEN_HOST` | `0.0.0.0` | VNC bind address inside the container. As above, prefer a `127.0.0.1:5900:5900` host port mapping. |
 | `VNC_LISTEN_PORT` | `5900` | noVNC web viewer port. **The viewer has no authentication of its own** — only publish to localhost. |
 | `PUID` | `1000` | Run the container as this UID. Ownership of `/userdata`, `/loaders`, `/recordings` is fixed up to match at startup. |
@@ -139,7 +145,40 @@ docker run -d -p 127.0.0.1:8080:8080 \
   -v ./recordings:/recordings \
   --env-file .env.browser \
   psyb0t/stealthy-auto-browse@$DIGEST
+
+# File-backed virtual camera and microphone for an authorized WebRTC test
+mkdir -p ./media
+docker run -d -p 127.0.0.1:8080:8080 \
+  -v ./media:/media:ro \
+  -e VIRTUAL_CAMERA_FILE=camera.webm \
+  -e VIRTUAL_MICROPHONE_FILE=microphone.wav \
+  --env-file .env.browser \
+  psyb0t/stealthy-auto-browse@$DIGEST
+
+# Dynamic file-backed media for an authorized compatibility test.
+# The media mount must be writable only when uploads are needed.
+docker run -d -p 127.0.0.1:8080:8080 \
+  -v ./media:/media:rw \
+  -e VIRTUAL_MEDIA_DYNAMIC=true \
+  --env-file .env.browser \
+  psyb0t/stealthy-auto-browse@$DIGEST
 ```
+
+With `VIRTUAL_MEDIA_DYNAMIC=true`, use authenticated `set_virtual_media_source`
+requests to choose an existing relative source name under `VIRTUAL_MEDIA_DIR`, or
+authenticated `upload_virtual_media` requests to store bounded base64 content and
+optionally activate it. `kind` is `"camera"` or `"microphone"`; an upload filename
+must be a safe basename with a declared media type matching that kind. It supplies
+only the extension: the service generates and returns a collision-safe stored basename
+and never overwrites a named source. Decoded uploads are checked with `ffprobe` for
+the requested video or audio stream before storage or activation. Uploads are capped
+by `VIRTUAL_MEDIA_UPLOAD_MAX_BYTES` (50 MiB by default). A source switch preserves
+the tracks that a page already received from `getUserMedia()`.
+
+Only regular files contained by `VIRTUAL_MEDIA_DIR` are accepted. Dynamic mode does
+not accept arbitrary host paths, remote URLs, WebSocket streams, or other live
+ingress. When `AUTH_TOKEN` is set, send the same `Authorization: Bearer <key>` header
+used for every other action.
 
 ## OpenClaw / ClawHub Config
 

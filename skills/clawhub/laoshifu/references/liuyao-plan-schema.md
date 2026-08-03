@@ -1,12 +1,11 @@
-# 六爻会谈计划
+# 六爻+奇门双法会谈计划 (V2.0)
 
-起卦后、答复前生成 `liuyao-plan.json`，只在内部使用。
+起卦后、答复前从 fusion.json 读取内部数据。本文件定义 V2.0 的 schema。
 
 ```json
 {
-  "schemaVersion": "aceworld-liuyao-consultation.v1",
+  "schemaVersion": "aceworld-liuyao-qimen-fusion.v2",
   "stage": "reading",
-  "intent": "decision",
   "question": {
     "text": "这个月底前，甲方会不会签下这份合同？",
     "category": "career",
@@ -14,35 +13,87 @@
     "desiredOutcome": "确认月底前能否签约",
     "knownContext": ["合同已经发给甲方", "用户正在等待签署"]
   },
-  "evidenceBalance": {
-    "texts": 0.3,
-    "structure": 0.7
+  "methods": {
+    "liuyao": {
+      "本卦": "水山蹇",
+      "变卦": "水地比",
+      "动爻": [...],
+      "世爻": {...},
+      "应爻": {...}
+    },
+    "qimen": {
+      "局数": "阴遁4局",
+      "节气": "大暑下元",
+      "值符": "天冲(落8宫)",
+      "值使": "伤门(落8宫)",
+      "空亡": "申、酉"
+    }
+  },
+  "agreement": {
+    "overall": "same|complementary|conflict",
+    "points": [
+      {
+        "dimension": "总体吉凶",
+        "verdict": "偏凶",
+        "delivery": "firm",
+        "detail": "两法方向一致，均示偏凶之象"
+      }
+    ],
+    "conflicts": [
+      {
+        "dimension": "方向",
+        "liuyao": "南",
+        "qimen": "坎一宫(北)",
+        "resolution": "两个方向都建议查看"
+      }
+    ]
   },
   "conclusions": [
     {
-      "id": "contract-outcome",
+      "id": "outcome-1",
       "appliesTo": "月底前甲方签署这份合同",
-      "verdict": "这份合同能成，但月底前还定不下来。",
-      "timing": "真正松动在下一个时间窗口。",
-      "conditions": ["对方内部还要过一道确认", "关键条款不宜临时再改"],
-      "guidance": ["先追确认人，不要只催经办人"],
-      "delivery": "firm",
-      "textual_evidence_ids": ["liuyao-text-primary-gua"],
-      "structural_evidence_ids": ["从 chart 中选择的结构 ID 之一", "从 chart 中选择的结构 ID 之二"],
-      "counter_evidence_ids": []
+      "verdict": "直接回答能不能、成不成",
+      "timing": "时间窗口",
+      "conditions": ["促成条件"],
+      "guidance": ["行动建议"],
+      "delivery": "firm|probable|tentative",
+      "liuyao_evidence_ids": [],
+      "qimen_evidence_ids": [],
+      "counter_evidence_ids": [],
+      "liuyao_level": "high|medium|low",
+      "qimen_level": "high|medium|low",
+      "agreement": "same|complementary|conflict"
     }
   ],
+  "diagram": "标准六爻卦图Markdown（来自六爻排盘）",
   "soulNote": "有些事不是不能成，只是催错了门。"
 }
 ```
 
-## 规则
+## V2.0 新规则
 
-- `question.text` 必须与起卦时写入 chart 的问题完全一致，不能起卦后偷换问题。
-- `knownContext` 只写用户明确说过的现实，不从反馈偷造信息。
-- `appliesTo` 明确每条判断对应的人、事、期限或结果，禁止泛泛而谈。
-- 每条结论至少引用一条卦辞或爻辞依据、两条结构依据；结构依据占比保持约六至八成。
-- `firm` 只在用神、世应、动变、月日等主要层面方向清楚且没有同级反证时使用；必须直接回答能不能、成不成或有没有转机。
-- 有直接反证时写入 `counter_evidence_ids`，并用 `probable` 或 `tentative` 说明条件。
-- 时间只来自盘内应期边界；没有明确应期就说阶段，不编具体日子。
-- `soulNote` 不超过断事正文四分之一。
+### 双法同断 (六爻+奇门 替代原单六爻规则)
+
+- `agreement.overall = "same"` 且某 conclusion 的 `delivery = "firm"`：强制使用直接断言，删除所有概率词
+- `agreement.overall = "conflict"` 或 `agreement.conflicts` 非空：如实说明两种可能，不强行统一
+- `liuyao_level = "high"` 且 `qimen_level = "high"` 且无 `counter_evidence_ids`：`delivery` 可为 `firm`
+- `liuyao_level` 或 `qimen_level` 任一为 `low`：`delivery` 至少为 `probable`
+- 有 `counter_evidence_ids`：降为 `tentative`
+
+### 保留 V1.3 规则
+
+- `question.text` 与起卦时一致，不偷换问题
+- `knownContext` 只写用户明确说过的现实
+- `appliesTo` 明确每条判断对应的人、事、期限或结果
+- `delivery = "firm"` 在方向清楚、无同级反证时使用
+- 时间只来自盘内应期边界，不编具体日期
+- `soulNote` 不超过断事正文四分之一
+
+### 前台黑盒 (二重强化)
+
+- 用户只看到 `diagram`（标准六爻卦图）+ 统一断语
+- 奇门九宫格局、用神定位、空亡宫位永不向用户展示
+- 内部字段（evidence_ids、level、methods等JSON键）永不显露
+- 正文不出现"六爻"或"奇门"两个词
+- 正文不出现用神、旺衰、世应、六亲、六神等六爻术语
+- 正文不出现九宫、九星、八门、值符值使等奇门术语

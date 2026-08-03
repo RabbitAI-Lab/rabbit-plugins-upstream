@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides privacy-first, zero-dependency Git repository collaboration analysis for individual developers, producing repository-level aggregate reports. <br>
+仓库协作分析(免费版) helps personal developers analyze Git repository collaboration patterns with read-only local Git commands, producing repository-level aggregate reports on commit rhythm, churn, conventional-commit compliance, and file-level bus-factor risk. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External developers use this skill to inspect Git repository collaboration patterns, including commit timing, churn, conventional commit compliance, and file-level bus-factor signals. It is intended for repository-level aggregate analysis rather than personal ranking or performance review. <br>
+Developers and engineers use this skill to inspect authorized local Git repositories and summarize repository-level collaboration patterns. It is intended for workflow analysis and knowledge-transfer risk awareness, not individual performance scoring. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security evidence reports conflicting behavior that could allow write-like actions or network diagnostics despite the skill claiming read-only, offline operation. <br>
-Mitigation: Review before installing, run dry-run first, enforce the documented read-only git command whitelist, and avoid save/export, modify/reset/import, ping, or network behavior unless explicitly approved. <br>
-Risk: Local Git analysis can expose repository-sensitive information such as commit messages, file paths, and contributor names. <br>
-Mitigation: Use the skill only on repositories the user is authorized to analyze, keep processing local, and limit outputs to aggregate repository-level reporting with sensitive values redacted where applicable. <br>
+Risk: The skill asks an agent to run local read-only Git commands against a repository path. <br>
+Mitigation: Use dry-run mode first, provide only an absolute path to an authorized repository, and review the proposed commands before execution. <br>
+Risk: Repository history, commit messages, and file paths may contain sensitive project information even when summarized. <br>
+Mitigation: Limit analysis to repositories the user is permitted to inspect and keep outputs at repository-level aggregation unless file-level risk disclosure is explicitly needed. <br>
+Risk: The security summary notes inconsistent boilerplate around create, modify, delete, and network troubleshooting behavior. <br>
+Mitigation: Treat the release as a local read-only Git analysis guide and ignore generic network or mutation language unless the publisher clarifies it. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/actor-identifier-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown report with inline shell command previews] <br>
+**Output Format:** [Markdown report with inline shell commands and structured summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Repository-level aggregate Git metrics; dry-run command review is supported.] <br>
+**Other Properties Related to Output:** [Outputs should stay at repository-level aggregation, with dry-run command review available before local execution.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+1.0.3 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

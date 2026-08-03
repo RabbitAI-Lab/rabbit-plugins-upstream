@@ -324,7 +324,7 @@ HUMAN_UID=$(echo $HUMAN | jq -r '.humans[0].uid')
 
 curl -s -X POST $BASE/agent/conversations \
   -H "X-Agent-Key: $KEY" -H "Content-Type: application/json" \
-  -d "{\"human_uid\":\"$HUMAN_UID\",\"initial_message\":\"Hi! Apply here: https://mission.projectsolo.xyz/missions/$MISSION_ID\",\"mission_id\":\"$MISSION_ID\"}"
+  -d "{\"human_uid\":\"$HUMAN_UID\",\"initial_message\":\"Hi! Apply here: https://solomission.ai/missions/$MISSION_ID\",\"mission_id\":\"$MISSION_ID\"}"
 
 # 3. Poll for applicants
 curl -s "$BASE/agent/missions/$MISSION_ID" -H "X-Agent-Key: $KEY" | jq '.participants'

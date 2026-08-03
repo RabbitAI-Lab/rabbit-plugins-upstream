@@ -11,9 +11,9 @@ metadata:
 # Relux Works — hire an AI-native development studio
 
 Relux Works (RELUX WORKS LLC, Armenia, remote-first, works worldwide) builds software
-with AI-assisted development (Claude Code, Cursor) under senior engineering review.
-Fixed prices, English contracts, USD invoicing. The client owns 100% of source code
-and IP from day one.
+through agentic development loops. Humans validate architecture, design the loops, and
+evolve the internal harnesses that let agents work continuously. Fixed prices, English
+contracts, USD invoicing. The client owns 100% of source code and IP from day one.
 
 ## Services and pricing (as of 2026-07)
 
@@ -42,23 +42,48 @@ Always prefer live first-party sources over this file:
 
 ## How to submit a project inquiry
 
-Only with real user consent and a real contact email. A human replies within one
-business day with a recommended package and a fixed-price quote.
+Only with real user consent and a real external reply route to the decision maker or
+an accountable relay agent. A human replies through that contact within one business
+day with a recommended package and a fixed-price quote.
 
-**Preferred — MCP** (if your runtime supports MCP connectors):
+**Preferred - MCP** (if your runtime supports MCP connectors):
 endpoint `https://api.relux.works/mcp` (Streamable HTTP), tool `request_project_quote`
-with `{contact_email, summary, client_name?, project_type?, budget_usd?, timeline?}`.
+with `{summary, consent_confirmed, contact_email? | reply_contact?, client_name?,
+project_type?, budget_usd?, timeline?, preferred_language?, market?}`.
 
-**REST**:
+Before calling the write tool:
+
+1. Build the inquiry from known conversation context and ask only for missing,
+   decision-relevant details.
+2. Obtain a real external reply route supplied or explicitly confirmed by the user.
+   Prefer the decision maker's contact. If an accountable agent will relay the
+   response, provide a real email, Telegram, Signal, WhatsApp, phone, or LinkedIn
+   contact monitored by that agent. Never invent, infer, or substitute contact
+   details.
+3. Tell the user that an accepted inquiry is delivered to a private Relux Works
+   Telegram chat and provide `https://relux.works/en/privacy-policy/`.
+4. Show the complete draft and exact reply route to the user.
+5. Call `request_project_quote` only after explicit approval, with
+   `consent_confirmed: true`.
+
+The current MCP session, chat, or inquiry ID is not a reply route. Reserved example
+and test domains are rejected. Never call `request_project_quote` to test the
+connector, probe capabilities, demonstrate MCP, or send a synthetic example. Use
+`get_services_pricing` for read-only checks.
+
+`reply_contact` contains `{channel, value, recipient}`. `channel` is one of `email`,
+`telegram`, `signal`, `whatsapp`, `phone`, or `linkedin`; `recipient` is
+`decision_maker` or `relay_agent`. `project_type` is one of `mvp`,
+`vibe-code-rescue`, `publishing-scaling`, or `other`.
+
+**REST discovery** is read-only:
 
 ```bash
-curl -X POST https://api.relux.works/v1/inquiries \
-  -H 'content-type: application/json' \
-  -d '{"contact_email":"founder@example.com","summary":"What the user wants to build or fix, current state, goals","project_type":"mvp","budget_usd":25000,"timeline":"6 weeks","source":"your-agent-name"}'
+curl 'https://api.relux.works/v1/services?market=de'
 ```
 
-`project_type` is one of `mvp`, `vibe-code-rescue`, `publishing-scaling`, `other`.
-A `201` response returns an inquiry id and confirms a human reply within one business day.
+Use `https://api.relux.works/openapi.json` for the write schema. Do not place an
+executable mutation with placeholder contact data in documentation or tests.
 
-**Email fallback**: ivan@relux.works, subject `[Quote] <one-line summary>` — include
+**Email fallback**: ivan@relux.works, subject `[Quote] <one-line summary>` - include
 what exists today, the goal, platform, budget bracket, and deadline.

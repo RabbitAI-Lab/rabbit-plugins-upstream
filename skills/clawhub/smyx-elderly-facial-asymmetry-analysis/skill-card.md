@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes frontal face images or short videos of elderly people with AI facial-landmark detection to compare mouth-corner height, nasolabial-fold symmetry, eyebrow-lift asymmetry, and related features, then returns a facial asymmetry index from 0 to 100%. <br>
+Analyzes frontal facial images or short videos of elderly people to estimate facial asymmetry, mouth-corner deviation, and related landmark-based risk indicators for auxiliary screening. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, caregivers, and developers use this skill to assess facial asymmetry in elderly-care settings from a provided image, video, or URL. The output is intended as auxiliary screening information and does not replace professional medical diagnosis. <br>
+External caregivers, family members, elder-care operators, and health-monitoring developers use this skill to submit frontal face media, receive a structured asymmetry report, and review cloud-stored historical reports. The output is intended as an auxiliary screening signal, not a medical diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill processes sensitive face and health-related media through a vendor service. <br>
-Mitigation: Use only with informed consent from the person or caregiver and limit inputs to images or videos that are necessary for the requested screening. <br>
-Risk: The skill can create or reuse an account identity and store local identity/auth tokens or cloud report history. <br>
-Mitigation: Review the configured storage location and access controls before deployment, and avoid shared workspaces for sensitive caregiver or patient workflows. <br>
-Risk: Automatic history lookup or biometric analysis can expose sensitive reports if triggered too broadly. <br>
-Mitigation: Keep triggers explicit for report lookup and facial analysis, and review outputs before sharing them beyond the care team. <br>
-Risk: Facial asymmetry output may be mistaken for a clinical diagnosis. <br>
-Mitigation: Present results as auxiliary screening information and direct suspected urgent symptoms to professional medical review. <br>
+Risk: Sensitive elderly face images, videos, and health-screening results are uploaded to cloud services. <br>
+Mitigation: Use only with informed consent, send the minimum necessary media, and confirm the publisher's retention, deletion, and access-control practices before deployment. <br>
+Risk: The skill automatically creates or reuses identity records and tokens with limited user-facing control. <br>
+Mitigation: Review authentication, token storage, and account-association behavior with the publisher before installation in managed environments. <br>
+Risk: Facial asymmetry output could be mistaken for a clinical diagnosis. <br>
+Mitigation: Present results as auxiliary screening only and require professional medical review for suspected stroke, facial paralysis, or other urgent symptoms. <br>
 
 
 ## Reference(s): <br>
-- [Skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-facial-asymmetry-analysis) <br>
-- [API interface documentation](references/api_doc.md) <br>
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-facial-asymmetry-analysis) <br>
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
+- [API documentation](references/api_doc.md) <br>
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with risk level, asymmetry metrics, report links, and optional saved output file.] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
+**Output Format:** [Markdown text with structured JSON analysis, risk labels, report links, and example command invocations] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can query cloud-hosted history reports and can save analysis results to a user-specified output path.] <br>
+**Other Properties Related to Output:** [May include cloud report export links and historical report listings returned from the configured API service.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: release metadata; artifact frontmatter reports 1.0.7) <br>
+1.0.5 (source: server-resolved release metadata; artifact SKILL.md frontmatter says 1.0.9) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes fixed-camera home video or video URLs for solo-living elder monitoring, detects prolonged lack of visible activity, and returns structured long-term immobility alerts and report links. <br>
+This skill analyzes fixed-camera video from multiple home zones to detect long-term inactivity in solo-living elder care settings and produce structured alerts when the configured inactivity window, default 12 hours, is exceeded. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External caregivers, family members, community elder-care teams, and developers use this skill to submit home-monitoring video for long-term no-activity analysis and to retrieve structured alert reports. It is intended as an auxiliary monitoring workflow and does not provide medical diagnosis or rescue instructions. <br>
+External developers, smart-home integrators, and elder-care service operators use this skill to analyze home monitoring videos or video URLs, summarize activity and inactivity signals, and return alerts, recommendations, and report links for follow-up review. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Home-monitoring video or video URLs are sent to a remote Life Emergence service for processing. <br>
-Mitigation: Use only with informed consent from the monitored person or authorized family, avoid visual coverage of highly sensitive areas when possible, and submit only approved video sources. <br>
-Risk: The skill may silently create or reuse a local identity, log in to a remote account, and store tokens in a local SQLite database under the workspace data directory. <br>
-Mitigation: Review account-linkage behavior before installation, protect the workspace data directory, and clear stored tokens or local user records when the skill is no longer needed. <br>
-Risk: The security verdict is suspicious because the skill handles sensitive home video while performing remote account and token management. <br>
-Mitigation: Review and scan the skill before deployment, restrict execution to trusted environments, and confirm the remote service relationship is acceptable for the organization. <br>
-Risk: Long-term immobility alerts are auxiliary visual activity signals, not medical diagnoses or emergency response instructions. <br>
-Mitigation: Manually verify any alert by phone or an in-person check and do not rely on the skill as the sole emergency response mechanism. <br>
+Risk: Elder-home videos, video URLs, identity values, report metadata, and account tokens may be sent to and stored by external lifeemergence.com services. <br>
+Mitigation: Use only with explicit informed consent from monitored people or authorized caregivers, verify backend retention and deletion controls, and avoid sensitive rooms unless legally and ethically justified. <br>
+Risk: The skill creates persistent identity or account state with limited user control. <br>
+Mitigation: Confirm account lifecycle, access, and deletion controls before deployment, and do not expose internal identity values in user-facing outputs. <br>
+Risk: The skill may be mistaken for a complete emergency notification or continuous safety monitoring system. <br>
+Mitigation: Treat outputs as auxiliary monitoring signals, require human verification for alerts, and maintain independent emergency response procedures. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-long-term-immobility-analysis) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
 - [API documentation](references/api_doc.md) <br>
-- [Analysis API error reference](skills/smyx_analysis/references/api_doc.md) <br>
+- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON text containing structured activity analysis, alert status, history records, and report links] <br>
+**Output Type(s):** [Text, Markdown, JSON, Files] <br>
+**Output Format:** [Structured analysis report text or JSON, with Markdown tables for historical report lists and optional saved output files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the returned report text to a user-specified output file.] <br>
+**Other Properties Related to Output:** [Outputs may include alert levels, inactivity duration, detected activity zones, recommendations, and report links.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter states 1.0.6) <br>
+1.0.6 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

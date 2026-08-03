@@ -321,6 +321,42 @@ Advisory checks are recorded for coverage but are not scored.
 - Remediation:
   - none
 
+### B333 - MCP tool safety-hint annotations declared but not enforced by OpenClaw
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: MCP Trust
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: MCP tool safety-hint annotations declared but not enforced by OpenClaw
+- Remediation:
+  - none
+
+### B332 - Cross-server MCP tool-name collision / homoglyph / near-miss (shadowing)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: MCP Trust
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Cross-server MCP tool-name collision / homoglyph / near-miss (shadowing)
+- Remediation:
+  - none
+
+### B331 - MCP tool-description injection surviving OpenClaw's host sanitizer
+
+- Severity: HIGH
+- Block: hardening
+- Framework: MCP Trust
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: MCP tool-description injection surviving OpenClaw's host sanitizer
+- Remediation:
+  - none
+
 ### B25 - Update / pinning hygiene
 
 - Severity: MEDIUM
@@ -391,7 +427,7 @@ Advisory checks are recorded for coverage but are not scored.
 - OWASP: none
 - What it checks: browser.extraArgs dangerous Chrome launch flags
 - Remediation:
-  - config: `browser.extraArgs` - remove --disable-web-security / --load-extension / a non-loopback --remote-debugging-address / unreviewed --proxy-server
+  - config: `browser.extraArgs` - remove --disable-web-security / --load-extension / unreviewed --proxy-server
 
 ### B196 - browser.evaluateEnabled arbitrary-JS sink
 
@@ -404,6 +440,18 @@ Advisory checks are recorded for coverage but are not scored.
 - What it checks: browser.evaluateEnabled arbitrary-JS sink
 - Remediation:
   - config: `browser.evaluateEnabled` = `false` - disable the browser's arbitrary-JS evaluate sink unless a workflow genuinely requires it
+
+### B330 - browser CDP control port — unauthenticated, and how far it reaches
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Browser / SSRF
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: browser CDP control port — unauthenticated, and how far it reaches
+- Remediation:
+  - config: `browser.extraArgs` - remove --remote-allow-origins; keep browser.cdpUrl and every profile cdpUrl on loopback
 
 ### B321 - browser.executablePath / profiles.*.executablePath / mcpCommand
 
@@ -2450,3 +2498,22 @@ These paths are computed from multiple checks. They fire only when every leg is 
   the groups entry so it is not '*'). If open group access is intentional — a community
   bot, say — put the high-blast tools behind a human approval step (tools.exec.mode='ask')
   so an untrusted message cannot reach them unattended.
+
+### RISK-22 - MCP server's own tool set spans a toxic flow (input -> sensitive -> egress)
+
+- Severity: MEDIUM
+- Pattern: MEDIUM (RISK-22, F-146/W2.4): a single MCP server's own tool set holds all
+- Chain: {server}.{input_tool} (untrusted input) -> {server}.{sensitive_tool} (sensitive read) -> {server}.{egress_tool} (egress)
+- Why:
+  The MCP server '{server}' declares tools spanning all three roles of a confused-deputy
+  chain in its own tool set: an untrusted-input tool ('{input_tool}'), a sensitive-read
+  tool ('{sensitive_tool}'), and an egress tool ('{egress_tool}'). None of these tools is
+  individually dangerous, and no exploit is proven here — this is a PRECONDITION, not an
+  incident. But because all three are co-resident on one server, content read by the input
+  tool could steer the model into misusing the other two for exfiltration, without leaving
+  this server's own tool boundary.
+- Fix:
+  Review whether '{server}' genuinely needs all three roles. If not, split the server so
+  untrusted-input, sensitive-read, and egress tools are never declared by the same server,
+  or gate the sensitive-read/egress tools behind human approval (tools.exec.mode='ask') so
+  an injected instruction from the input tool cannot reach them unattended.

@@ -16,20 +16,24 @@ import sys
 from datetime import date
 from pathlib import Path
 
-# ── 路径集中管理 ─────────────────────────────────────────
-from _paths import (
-    _data_dir_abs, DEFAULT_DATA_DIR_RAW, SKILL_DIR, SKILLS_ROOT as SKILLS_DIR,
-    CONFIG_FILE, MANIFEST_FILE as MANIFEST_PATH,
-)
+# R-12 审计锚点：数据目录字面量声明
+DEFAULT_DATA_DIR_RAW = "skills/.standardization/git-sync/data/"
+
+SKILL_DIR = Path(__file__).resolve().parent.parent
+# 运行时绝对路径
+_data_dir_abs = SKILL_DIR.parent / ".standardization" / "git-sync" / "data"
 
 
 
 
-
+def _find_skills_dir():
+    """从 scripts/ 往上 2 级确定 skills 目录: skills/<name>/scripts/ → skills/"""
+    return str(Path(__file__).resolve().parent.parent.parent)
 
 def load_config():
     """读取 skills/.standardization/git-sync/data/config.json"""
-    config_path = str(CONFIG_FILE)
+    skills_dir = _find_skills_dir()
+    config_path = os.path.join(skills_dir, ".standardization", "git-sync", "data", "config.json")
     if os.path.exists(config_path):
         with open(config_path, 'r', encoding='utf-8') as f:
             return json.load(f)
@@ -109,38 +113,6 @@ def generate_readme(repo_path, readme_path):
         table_lines.append(f"| `{name}` | {desc} |")
     table = "\n".join(table_lines)
 
-    # 扫描智能体目录
-    agent_dir = os.path.join(repo_path, "agent")
-    actual_agents = []
-    if os.path.isdir(agent_dir):
-        for entry in sorted(os.listdir(agent_dir)):
-            full = os.path.join(agent_dir, entry)
-            if os.path.isdir(full):
-                # 从 __init__.py 读取描述
-                init_py = os.path.join(full, "rag_assistant", "__init__.py")
-                desc = "智能体"
-                if os.path.exists(init_py):
-                    try:
-                        with open(init_py, "r", encoding="utf-8") as f:
-                            content = f.read()
-                        # 从文档字符串取第一行作为描述
-                        m = re.search(r'"""(.*?)"""', content, re.DOTALL)
-                        if m:
-                            desc = m.group(1).strip().split("\n")[0][:120]
-                    except Exception:
-                        pass
-                actual_agents.append((entry, desc))
-        if actual_agents:
-            _safe_print(f"扫描到 {len(actual_agents)} 个智能体目录:")
-            for name, desc in actual_agents:
-                _safe_print(f"  - {name}: {desc[:60]}")
-
-    # 生成智能体列表表格
-    agent_table_lines = []
-    for name, desc in actual_agents:
-        agent_table_lines.append(f"| `{name}` | {desc} |")
-    agent_table = "\n".join(agent_table_lines)
-
     # 生成目录树（从仓库根目录实际扫描）
     SKIP_ROOT = {".git", "__pycache__", ".gitignore", "README.md.bak"}
     root_entries = []
@@ -150,24 +122,11 @@ def generate_readme(repo_path, readme_path):
         full = os.path.join(repo_path, entry)
         suffix = "/" if os.path.isdir(full) else ""
         root_entries.append((entry, suffix))
-    # 许可证标注映射
-    LICENSE_ANNOTATIONS = {
-        "Cogito_Scribit": "   （CC BY-SA 4.0）",
-        "LICENSE": "           （MIT License）",
-        "LICENSE-APACHE": "    （Apache License 2.0）",
-        "agent": "            （Apache License 2.0）",
-        "architecture": "     （CC BY-SA 4.0）",
-        "skills": "           （MIT License）",
-    }
     tree_lines = []
     for entry, suffix in root_entries[:-1]:
-        annotation = LICENSE_ANNOTATIONS.get(entry, "")
-        tree_lines.append(f"├── {entry}{suffix}{annotation}")
+        tree_lines.append(f"├── {entry}{suffix}")
     if root_entries:
-        last_entry = root_entries[-1][0]
-        last_suffix = root_entries[-1][1]
-        annotation = LICENSE_ANNOTATIONS.get(last_entry, "")
-        tree_lines.append(f"└── {last_entry}{last_suffix}{annotation}")
+        tree_lines.append(f"└── {root_entries[-1][0]}{root_entries[-1][1]}")
     tree = "\n".join(tree_lines)
 
     # 读取配置中的 clone URL 和 README 文案
@@ -183,7 +142,7 @@ def generate_readme(repo_path, readme_path):
     # 构建新的 README.md
     new_readme = f"""# {readme_title}
 
-> **用户技能仓库与智能体仓库** — 由 git-sync 自动同步维护。
+> **用户技能仓库** — 由 git-sync 自动同步维护。
 > 最后更新：{today}
 
 {readme_desc}
@@ -197,20 +156,7 @@ def generate_readme(repo_path, readme_path):
 | 技能名 | 描述 |
 |--------|------|
 {table}
-"""
 
-    if actual_agents:
-        new_readme += f"""
-## 智能体列表
-
-以下为仓库中实际存在的智能体项目：
-
-| 智能体名 | 描述 |
-|----------|------|
-{agent_table}
-"""
-
-    new_readme += f"""
 ---
 
 ## 目录结构
@@ -256,9 +202,7 @@ rm -rf temp-skills
 
 ## 许可证
 
-    - MIT License（适用于 `skills/` 目录下的所有技能）
-    - Apache License 2.0（适用于 `agent/` 目录下的智能体）
-    - CC BY-SA 4.0（适用于 `Cogito_Scribit/` 和 `architecture/` 目录下的方法论与架构文档）
+MIT License
 """
 
     # 写回文件
@@ -290,7 +234,8 @@ if __name__ == "__main__":
     readme_path = sys.argv[2]
 
     # 从 skills/.standardization/git-sync/data/manifest.json 获取仓库路径
-    manifest_path = str(MANIFEST_PATH)
+    skills_dir = _find_skills_dir()
+    manifest_path = os.path.join(skills_dir, ".standardization", "git-sync", "data", "manifest.json")
 
     if not os.path.exists(manifest_path):
         print(f"❌ manifest.json 不存在: {manifest_path}")

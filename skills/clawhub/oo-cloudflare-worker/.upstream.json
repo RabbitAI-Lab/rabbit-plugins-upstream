@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/oo-cloudflare-worker",
   "slug": "oo-cloudflare-worker",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1782206187428,
-  "contentHash": "794f7b0a5309e5834aa4ef41e94b5b9c520ef93cd850c68d6f487abc3c68ca7a",
-  "fetchedAt": "2026-07-26T18:24:49.889Z"
+  "version": "1.0.4",
+  "updatedAt": 1785200518529,
+  "contentHash": "d02d0d3f43981ccf6ae3726ef14df3003f1965796eece00c147f10b4a132f893",
+  "fetchedAt": "2026-08-03T11:37:21.931Z"
 }

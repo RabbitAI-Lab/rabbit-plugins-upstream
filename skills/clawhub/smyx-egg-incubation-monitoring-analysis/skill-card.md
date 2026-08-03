@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes turtle or snake egg images or videos to identify shell, vascular, embryo, and quality signals and produce incubation monitoring reports. <br>
+Analyzes turtle or snake egg images and videos to detect visual development signals, classify incubation stage, and generate incubation progress reports. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External reptile breeders, farm operators, and hobbyist keepers use this skill to review turtle or snake egg media, monitor fertilization and development signals, and retrieve incubation progress reports. The skill can support smart incubator or breeding-management workflows where users still make final husbandry decisions. <br>
+External reptile breeders, hatchery operators, and smart-incubator workflows use this skill to analyze egg images or videos for fertilization, vascular development, embryo signals, mold, and unreliable-input conditions. It returns structured monitoring results, suggested handling posture, history lookups, and report links. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Egg photos, videos, URLs, and history queries are sent to cloud services for analysis and report lookup. <br>
-Mitigation: Use only media intended for this service, avoid unrelated sensitive content, and confirm users understand that analysis and history retrieval rely on external services. <br>
-Risk: The skill creates or reuses a local identity and stores account tokens locally. <br>
-Mitigation: Review local token storage and account handling before deployment, and prefer a release that clearly documents identity creation, token retention, and user consent. <br>
-Risk: Incorrect incubation classifications could affect husbandry decisions. <br>
-Mitigation: Treat visual classifications as decision support and require users to combine reports with species guidance, temperature and humidity logs, and professional reptile breeding judgment. <br>
+Risk: Egg images, videos, URLs, and report-history requests are sent to remote lifeemergence.com services. <br>
+Mitigation: Use the skill only when users consent to remote processing and understand what media or URLs will be transmitted. <br>
+Risk: The skill may create or reuse a local identity and store returned session tokens in a workspace SQLite database. <br>
+Mitigation: Run it in a controlled workspace, review token storage behavior before deployment, and clear local credentials when they are no longer needed. <br>
+Risk: Incubation-stage classifications and handling suggestions can affect breeding decisions if the input image is poor or the remote analysis is wrong. <br>
+Mitigation: Treat results as decision support, verify important cases against species-specific incubation records and image quality checks, and consult a qualified reptile breeding professional for high-risk outcomes. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-egg-incubation-monitoring-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
 - [API documentation](references/api_doc.md) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON-like structured report text with optional report links and Markdown tables for history queries] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
+**Output Format:** [Markdown or plain-text reports with JSON detail output and report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include incubation stage classifications, alert levels, recommended actions, disclaimers, and report export links.] <br>
+**Other Properties Related to Output:** [May write results to a file when an output path is provided; uses remote lifeemergence.com services for analysis and report history.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
+1.0.8 (source: server release metadata; artifact frontmatter says 1.0.6) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

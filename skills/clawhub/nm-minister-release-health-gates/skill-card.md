@@ -1,5 +1,5 @@
 ## Description: <br>
-Standardizes release approvals with GitHub-aware checklists and deployment gates for production release readiness. <br>
+Standardizes release approvals with GitHub-aware checklists and deployment gates. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, release managers, and operations teams use this skill before production deployment to evaluate release gates, document waiver approvals, and prepare PR or tracker-facing readiness summaries. <br>
+Developers, release managers, and operations teams use this skill before production releases to evaluate release gates, record waivers, and prepare PR or issue-ready rollout summaries. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may guide an agent to update PR comments, tracker tasks, and release artifacts in a repository. <br>
-Mitigation: Use it only in repositories and trackers where those changes are intended, and review suggested updates before applying them. <br>
-Risk: Release gate summaries can be incomplete or misleading if source issue, check, deployment, or tracker data is stale. <br>
-Mitigation: Verify GitHub checks, deployment status, blocker lists, waiver approvals, and rollout scorecards before using the output for a production release decision. <br>
+Risk: The skill may activate during broad release- or GitHub-related conversations. <br>
+Mitigation: Confirm the skill is appropriate for the workspace before installation and use it intentionally for release-readiness workflows. <br>
+Risk: Release gates may affect PR comments, approvals, tracker fields, or other release records when paired with external tooling. <br>
+Mitigation: Keep state-changing actions explicit, review generated release text before posting, and review any separate Claude Code plugin before installing it. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-minister-release-health-gates) <br>
-- [OpenClaw homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/minister) <br>
+- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/minister) <br>
+- [Deployment Readiness Gate](modules/deployment-readiness.md) <br>
+- [Quality Signals Gate](modules/quality-signals.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Configuration] <br>
-**Output Format:** [Markdown checklists and release-readiness summaries] <br>
+**Output Type(s):** [text, markdown, guidance] <br>
+**Output Format:** [Markdown checklists, summaries, and rollout scorecards] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces release gate snippets, QA handshake summaries, and rollout scorecards for review before use in PRs, issues, or trackers.] <br>
+**Other Properties Related to Output:** [No executable code is included in the artifact.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: release evidence; artifact frontmatter lists 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
