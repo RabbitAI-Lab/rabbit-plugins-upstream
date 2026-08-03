@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-27T10:53:35.712Z",
+  "generatedAt": "2026-08-03T10:54:22.358Z",
   "source": "hermes",
   "skillCount": 90605,
   "upstreamGeneratedAt": "2026-07-20T18:55:15.264264+00:00",
@@ -907,24 +907,24 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/cupynumeric-install",
       "version": null,
-      "contentHash": "1642a8ddfab09838349f14f956fc3e749f165e21e46e88aecff9d04784966e18",
-      "fetchedAt": "2026-07-26T17:03:52.246Z"
+      "contentHash": "e1dacb295c87942fe11f6ac158c7ab552d64b64835160fa98da971ce683d4b21",
+      "fetchedAt": "2026-08-03T10:54:17.466Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--cupynumeric-migration-readiness",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/cupynumeric-migration-readiness",
       "version": null,
-      "contentHash": "ef2d0f2c86e7f4e8a0c99c90f369441c053071ac32ad103f03b328f564393cd1",
-      "fetchedAt": "2026-07-26T17:03:52.248Z"
+      "contentHash": "ffef2c56fd3dd2d19a7f9b6e8e09da0b2fdacab67f80ba0fc2c58dc2ca071386",
+      "fetchedAt": "2026-08-03T10:54:17.473Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--cupynumeric-parallel-data-load",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/cupynumeric-parallel-data-load",
       "version": null,
-      "contentHash": "5fcdeb0a4dcafadc9b27fe93390918e9ef83a060c6b4f135d733c07363e41a7a",
-      "fetchedAt": "2026-07-26T17:03:52.249Z"
+      "contentHash": "41fc57db57e34a0f415e65589b4f78428c2d0c4111d1e304ab1bfb4b7e4d6d97",
+      "fetchedAt": "2026-08-03T10:54:17.475Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--dali-dynamic-mode",
@@ -1043,64 +1043,64 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-aes-gcm",
       "version": null,
-      "contentHash": "8d105bbc2db5df7eb412a574247d5d47c72f4ae16655cae25c21f670ab086b8e",
-      "fetchedAt": "2026-07-26T17:03:52.264Z"
+      "contentHash": "f1d691d48c87d07887a9ad2ca9a1ee21eb3cba048cc8d5a582502add887a28fe",
+      "fetchedAt": "2026-08-03T10:54:17.487Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-argp",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-argp",
       "version": null,
-      "contentHash": "439b0b8ba25861899d69bc87549357234b73ff8090fc5c49981011eb643d64d5",
-      "fetchedAt": "2026-07-26T17:03:52.264Z"
+      "contentHash": "7eb9b4e605aea212f6785f852ae4ecf833c4859ae53853eb5c03f66d8364df66",
+      "fetchedAt": "2026-08-03T10:54:17.488Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-argus",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-argus",
       "version": null,
-      "contentHash": "da515a44bcc1429bb1a8b1f99aab05b60221369736c7a71953dd9a61542874a1",
-      "fetchedAt": "2026-07-26T17:03:52.265Z"
+      "contentHash": "25348d77665e0e34ee6e839d3219782955341d60e58d40b8e0d2c034bca8c1b6",
+      "fetchedAt": "2026-08-03T10:54:17.490Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-bare-metal-deployment",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-bare-metal-deployment",
       "version": null,
-      "contentHash": "be32321c27df251324f8a3f36939de482318c6bb848114d8da31967e6e852017",
-      "fetchedAt": "2026-07-26T17:03:52.265Z"
+      "contentHash": "7af6dbe763f9b84e5aa44fe5a94af2d86d26c2189a343475f3f8741131c54896",
+      "fetchedAt": "2026-08-03T10:54:17.491Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-bench",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-bench",
       "version": null,
-      "contentHash": "a19c8986b98b91ad7853524268f38d8bcea9583a218b62df752c52fd08c4506a",
-      "fetchedAt": "2026-07-26T17:03:52.266Z"
+      "contentHash": "84461656073832bb5de4e13911a6a95865fdff3f44a3e7415d8d65e257785fa8",
+      "fetchedAt": "2026-08-03T10:54:17.492Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-bench-extension",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-bench-extension",
       "version": null,
-      "contentHash": "40e838fd0dc44007e3c1a915fe187cb4c3bc1b8cdd1b29cdebbdd52e0c362990",
-      "fetchedAt": "2026-07-26T17:03:52.267Z"
+      "contentHash": "798e7bdd2ab3042d589c2badfd20fb26d9b7346fa45de705b19c96c1e835142d",
+      "fetchedAt": "2026-08-03T10:54:17.494Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-bf3-deployment",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-bf3-deployment",
       "version": null,
-      "contentHash": "741236415688513b8fc325ff0738e6c07eff617e6c2745e6630951fa872274a3",
-      "fetchedAt": "2026-07-26T17:03:52.267Z"
+      "contentHash": "3645443ac2ed84d85972684a7975fc14a23c569ad9b7033d5f31f366478d6e95",
+      "fetchedAt": "2026-08-03T10:54:17.495Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-bf4-deployment",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-bf4-deployment",
       "version": null,
-      "contentHash": "fe9b122e2e9e547f7be776b4ef9ea11aa5eb0ceb48b56cad175e0c135b90c84d",
-      "fetchedAt": "2026-07-26T17:03:52.268Z"
+      "contentHash": "45dee33aaa9176b7f249f8b8eb069bb545b4ac18788033c09225f4bc09350014",
+      "fetchedAt": "2026-08-03T10:54:17.496Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-caps",
@@ -1115,80 +1115,80 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-collectx-deployment",
       "version": null,
-      "contentHash": "aa0a0b366dcde1d4f4054a5741e713e7606eb9991df426837dfe6f5e4926b9bf",
-      "fetchedAt": "2026-07-26T17:03:52.269Z"
+      "contentHash": "180fd00088b1b67217f331c381b27e856338ce2d93723f035f9a059af8355ddf",
+      "fetchedAt": "2026-08-03T10:54:17.498Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-comch",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-comch",
       "version": null,
-      "contentHash": "3f90a80ef20febfba66f1a77b4fe046749ab5bd1b125b5dcf12d7ce246e10fdb",
-      "fetchedAt": "2026-07-26T17:03:52.269Z"
+      "contentHash": "425c84500300873debfe5268945969f735021a6432ae220c516829e7b18d20dc",
+      "fetchedAt": "2026-08-03T10:54:17.499Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-comm-channel-admin",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-comm-channel-admin",
       "version": null,
-      "contentHash": "304a8311974514636be9752281cc3875d79cdf29ee813217670d5d35ed2b16cd",
-      "fetchedAt": "2026-07-26T17:03:52.270Z"
+      "contentHash": "aa8a6ea8351d252f92468fd84b621e08074cf42b222a8d224b729afb9645ca32",
+      "fetchedAt": "2026-08-03T10:54:17.500Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-common",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-common",
       "version": null,
-      "contentHash": "f11e8c58c1af0a0752747f936921488e2a79881777ca5517f2a3118897c0be64",
-      "fetchedAt": "2026-07-26T17:03:52.270Z"
+      "contentHash": "f5e4cb94863649a9b4f4bdda7a6f2427f8db47308a5a1a830288f271a7e06cc7",
+      "fetchedAt": "2026-08-03T10:54:17.501Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-compress",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-compress",
       "version": null,
-      "contentHash": "4215e412debdb3d4b535fb8b25698e0057317c001334da84879ba327e3714e31",
-      "fetchedAt": "2026-07-26T17:03:52.271Z"
+      "contentHash": "a94b69f1201dd4865631ab6fd633da8b1a9bcbda4d1c7815978f3bc00535e3ad",
+      "fetchedAt": "2026-08-03T10:54:17.503Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-container-deployment",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-container-deployment",
       "version": null,
-      "contentHash": "3257975bc10ae742a73b8fdd7f760b5966fce84145e3e950a39484a7dc2390be",
-      "fetchedAt": "2026-07-26T17:03:52.272Z"
+      "contentHash": "150c120c662f9b7e7007f65a3ab9c86fff5467d431e6529e8de86e29e0e43f5f",
+      "fetchedAt": "2026-08-03T10:54:17.504Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-debug",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-debug",
       "version": null,
-      "contentHash": "0191f8a6427ee884bc22c83162af598231a05da706dfda6b0f01028f7df89c9f",
-      "fetchedAt": "2026-07-26T17:03:52.272Z"
+      "contentHash": "e6417cb116e5f3adf578f0a32dca7d2a075a96b1020144df49ed21f36d85b06c",
+      "fetchedAt": "2026-08-03T10:54:17.505Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-devemu",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-devemu",
       "version": null,
-      "contentHash": "3c3fd281b3d2e3b055193ec22d4e03c7308ec1a7142e242066e91a1695f378f3",
-      "fetchedAt": "2026-07-26T17:03:52.273Z"
+      "contentHash": "091070479dc2b2f6480b9c9d71682bd5afc0d0c2ae004e0693866ba0c5ec9e97",
+      "fetchedAt": "2026-08-03T10:54:17.507Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-dma",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-dma",
       "version": null,
-      "contentHash": "95e5524678ad86c83638947b02bd6a816b90501c1e8743a42678cf5e491d7732",
-      "fetchedAt": "2026-07-26T17:03:52.273Z"
+      "contentHash": "5183e754c3cb25160a3ff983d08edee194c4a0d92ff16713677de1b1975a1372",
+      "fetchedAt": "2026-08-03T10:54:17.509Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-dms",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-dms",
       "version": null,
-      "contentHash": "6e20c3da926766bf8db037c1d5d60e6ffbd37697175a5bfa1b9270bb1fddc7a9",
-      "fetchedAt": "2026-07-26T17:03:52.274Z"
+      "contentHash": "ed9cc08101b670b297da4b6006d54ec789679b8ee33f1a712224fbe0f08b2eab",
+      "fetchedAt": "2026-08-03T10:54:17.510Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-dpa",
@@ -1203,8 +1203,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-dpa-hl-tracer",
       "version": null,
-      "contentHash": "def8a72eb92211e9a3f59a1ce454c2b95db70ae71dc5456069f627869d1b28fc",
-      "fetchedAt": "2026-07-26T17:03:52.275Z"
+      "contentHash": "ce3cdc6f9ec7f2b19d56c9699b96a5fee98a2f105e52911a1e4b51f695eeec0d",
+      "fetchedAt": "2026-08-03T10:54:17.514Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-dpdk-bridge",
@@ -1235,24 +1235,24 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-firefly",
       "version": null,
-      "contentHash": "f2c140e25c2ed0628908a7ce4a9639b54f9f75e200ad6ab90cca3c2a04b00656",
-      "fetchedAt": "2026-07-26T17:03:52.277Z"
+      "contentHash": "d2cb3933ed607d99659b0dce11842f5350ed7d26f355439bafd63b5eab2436e8",
+      "fetchedAt": "2026-08-03T10:54:17.517Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-flow",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-flow",
       "version": null,
-      "contentHash": "90eca2a2debf6175f6a82596178943ba55b9439fa668018398ab92f8c6b8bf02",
-      "fetchedAt": "2026-07-26T17:03:52.278Z"
+      "contentHash": "1061386a1af2a5fd504274dc31ce7ee3ecc4e80676f21bcf0a46782fcd14608b",
+      "fetchedAt": "2026-08-03T10:54:17.518Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-flow-dpa-perf",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-flow-dpa-perf",
       "version": null,
-      "contentHash": "fe3e34001ff72507a910832c19f02eef08e8e9424fd1cfd9f90b64760007bf9c",
-      "fetchedAt": "2026-07-26T17:03:52.278Z"
+      "contentHash": "ef74eb5dd73b57cd0261f3eeb89d5959f50db862af50518304dcb38f73dabfdb",
+      "fetchedAt": "2026-08-03T10:54:17.520Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-flow-dpa-provider",
@@ -1267,256 +1267,256 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-flow-grpc-server",
       "version": null,
-      "contentHash": "0b32cfbeadf3112c898668ae8accb6ec2e46fe3d8fdb2de7fb5fdb6a80ead65a",
-      "fetchedAt": "2026-07-26T17:03:52.280Z"
+      "contentHash": "5edceb98d8ecfbb865de289777c33549ce5c7bf03d21ca8ea4ca1c839750578f",
+      "fetchedAt": "2026-08-03T10:54:17.521Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-flow-perf",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-flow-perf",
       "version": null,
-      "contentHash": "d356839c278fb3cc7e8b3d5fc00441dde5f93642dc218944ecee2c8fe7233343",
-      "fetchedAt": "2026-07-26T17:03:52.280Z"
+      "contentHash": "7b597551d933e086afacfda4c5fb51068d39d121003223a9d5ee9e4033978beb",
+      "fetchedAt": "2026-08-03T10:54:17.522Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-flow-tune",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-flow-tune",
       "version": null,
-      "contentHash": "c03c74b048768d4825f4b695473c1aab0936a43d30abf207906a7d4577ec88a5",
-      "fetchedAt": "2026-07-26T17:03:52.281Z"
+      "contentHash": "c80a9239695452fdc5e87aa490c4d919dbecf19827dd021bf498615b8dfed457",
+      "fetchedAt": "2026-08-03T10:54:17.524Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-gpi",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-gpi",
       "version": null,
-      "contentHash": "519d68e8ebfe2c6ab7308642c7f85f835df044467265b51bb24b7fb520cc19d9",
-      "fetchedAt": "2026-07-26T17:03:52.281Z"
+      "contentHash": "9be085600d6aef6ba65716115a201d6def0ca8eb0eb8021dd247b991d3739c03",
+      "fetchedAt": "2026-08-03T10:54:17.525Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-gpunetio",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-gpunetio",
       "version": null,
-      "contentHash": "87bf2db16fc76b615ff1ff78616f1bce20c72191c140954cb5a5cefa8131593c",
-      "fetchedAt": "2026-07-26T17:03:52.282Z"
+      "contentHash": "d39ae35fa0e73932d4399ec004e7d6aa2cb91fe475f80a370b239ce2be6b43cb",
+      "fetchedAt": "2026-08-03T10:54:17.526Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-gpunetio-ib-write-bw",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-gpunetio-ib-write-bw",
       "version": null,
-      "contentHash": "81af12f3a106104e4adf6cb64e4d468ce062c6c2c4bbe6ec271d5fccaee201e9",
-      "fetchedAt": "2026-07-26T17:03:52.282Z"
+      "contentHash": "a2ceb40af41653ce21257a4956ec9c53543005e34e3b09af19e9c20ef14cc756",
+      "fetchedAt": "2026-08-03T10:54:17.527Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-gpunetio-ib-write-lat",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-gpunetio-ib-write-lat",
       "version": null,
-      "contentHash": "1562f6eafbddfcc5af4fa6476d929d6cc7911e562c8dedf060b4ce294fff487e",
-      "fetchedAt": "2026-07-26T17:03:52.283Z"
+      "contentHash": "b700a8b026707d24a3e3323a28f0586075938ceb162a46d85f9e1c740444296b",
+      "fetchedAt": "2026-08-03T10:54:17.528Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-hardware-safety",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-hardware-safety",
       "version": null,
-      "contentHash": "c62ba4a3043a54f395575f2f62af2d7bdd18afc8c17c905922e53cafde28d119",
-      "fetchedAt": "2026-07-26T17:03:52.283Z"
+      "contentHash": "26913af72d863b6aba4b66f8bf4a5bdb0a9b0bb8cbacc4f8ac33283946a7c0e1",
+      "fetchedAt": "2026-08-03T10:54:17.529Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-mgmt",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-mgmt",
       "version": null,
-      "contentHash": "28e44219b6eea443927a016f199e790b70f39e27713f8d3c48b9a4e9e39ca533",
-      "fetchedAt": "2026-07-26T17:03:52.284Z"
+      "contentHash": "424c819104caf4f1f8cb96f301e7c83781734ea44bbe5bf0e72f8872c593fd7c",
+      "fetchedAt": "2026-08-03T10:54:17.531Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-pcc",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-pcc",
       "version": null,
-      "contentHash": "434459c8f42b0ba357751cb5943ec3f1a6fff5b143b20d7b11f592dfff2f7768",
-      "fetchedAt": "2026-07-26T17:03:52.285Z"
+      "contentHash": "72f4a9f017963a43ecb2c88c2d793a048aa9ee30781dd02f4cd0389ccd136761",
+      "fetchedAt": "2026-08-03T10:54:17.532Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-pcc-counters",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-pcc-counters",
       "version": null,
-      "contentHash": "0a8797462a846d7a9d54ab034702b3e3208b078d3a623fe7490822fba784b994",
-      "fetchedAt": "2026-07-26T17:03:52.285Z"
+      "contentHash": "7f1c5ae6106268109ecb338de29a1655001ea6971403d9f0b1af193b80609adb",
+      "fetchedAt": "2026-08-03T10:54:17.533Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-pcc-ztr-rttcc-algo",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-pcc-ztr-rttcc-algo",
       "version": null,
-      "contentHash": "42c95853954f7ba0dcd0c1cb9519fb49b170b81d55c25dcc37218d299bf1df0e",
-      "fetchedAt": "2026-07-26T17:03:52.286Z"
+      "contentHash": "d6ab84a0dff0537b83e7788975e022bcfe84df2fdd55a0236aa8757516e220c6",
+      "fetchedAt": "2026-08-03T10:54:17.534Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-programming-guide",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-programming-guide",
       "version": null,
-      "contentHash": "cc1b9b93c6b9386dc853b53b4d54730e3c79b2f9b8a0b2f36cff1c6155b75cca",
-      "fetchedAt": "2026-07-26T17:03:52.286Z"
+      "contentHash": "0380aacc1d3a9b3a888eb1685ab1e70dc71c56316ffd6f6af4b28e7de6f3680f",
+      "fetchedAt": "2026-08-03T10:54:17.535Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-public-knowledge-map",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-public-knowledge-map",
       "version": null,
-      "contentHash": "46828e0e551d3654753e33ce96a1745223b3d16f32ccdefcbdf89c009beeb204",
-      "fetchedAt": "2026-07-26T17:03:52.287Z"
+      "contentHash": "10b6f646e32ef5432854f602dd4a83d70d415247b2579820b919b09f1a6ace0f",
+      "fetchedAt": "2026-08-03T10:54:17.536Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-rdma",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-rdma",
       "version": null,
-      "contentHash": "8776b5cfef10d65f109b302717050ec94bc76f831fe8e9bdc1b634bcdc1859cb",
-      "fetchedAt": "2026-07-26T17:03:52.287Z"
+      "contentHash": "63963b3e5146f301468f20b31d2e54ee3eacf816487e18f6d364f5c9eedb8400",
+      "fetchedAt": "2026-08-03T10:54:17.537Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-rdmi",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-rdmi",
       "version": null,
-      "contentHash": "114213b1a95994d5bdae100852ec0d9a1956887eac07fdeee24638c8e776a518",
-      "fetchedAt": "2026-07-26T17:03:52.288Z"
+      "contentHash": "9916009e296e24f0ce5edcad6b4ffa6fc677538a1e8c69d27afa9d0c1fab2be9",
+      "fetchedAt": "2026-08-03T10:54:17.538Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-rmax",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-rmax",
       "version": null,
-      "contentHash": "b6fe77c18b742ee32623970449cf87150a96dbcfa812602ffadc04b2120015fa",
-      "fetchedAt": "2026-07-26T17:03:52.288Z"
+      "contentHash": "64058c444cf8ae01af43e56a2dfd945b595e4408fdd3fa448980ce0cd78965d9",
+      "fetchedAt": "2026-08-03T10:54:17.540Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-setup",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-setup",
       "version": null,
-      "contentHash": "747d510b652ff7af300586d8d15f0b56c741fe960040472622315fbb6485476b",
-      "fetchedAt": "2026-07-26T17:03:52.289Z"
+      "contentHash": "377c9902c4a09e9c289fd43234ee1b2b384d4b7d4bde23ea832effe14d508817",
+      "fetchedAt": "2026-08-03T10:54:17.541Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-sha",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-sha",
       "version": null,
-      "contentHash": "9076fcf925c0e941c338d5cb62951229a7ae27e90ff4bfc4fba14deb8c673c4c",
-      "fetchedAt": "2026-07-26T17:03:52.290Z"
+      "contentHash": "ab78b1d648f373b9447593e0769f7487f218d2eca48ba83365dd24275290b0f1",
+      "fetchedAt": "2026-08-03T10:54:17.542Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-sha-offload-engine",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-sha-offload-engine",
       "version": null,
-      "contentHash": "a73b9574a32636bddfeaa7f00bde127c6c304d20133eaf10217319819e8096ef",
-      "fetchedAt": "2026-07-26T17:03:52.290Z"
+      "contentHash": "a10c5793bc568b2d13d918271ba3fc86ac505c7f88ae0f6b5b4e06c3f2128564",
+      "fetchedAt": "2026-08-03T10:54:17.543Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-socket-relay",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-socket-relay",
       "version": null,
-      "contentHash": "71fe3f511c91920e6314b6d9f4229551de467d78b2a8546c3a1d11da5bba5e34",
-      "fetchedAt": "2026-07-26T17:03:52.291Z"
+      "contentHash": "572a091ae312cc937748f527d893e7b7eb33825d331c44bbb1a662e4ba423fd1",
+      "fetchedAt": "2026-08-03T10:54:17.544Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-spcx-cc",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-spcx-cc",
       "version": null,
-      "contentHash": "d8ca20f75e0f9bf923405fa4ae61119e714635655799db1c1a5dacfa363143a6",
-      "fetchedAt": "2026-07-26T17:03:52.291Z"
+      "contentHash": "75d4316cbdb8a0be606aa6886b60efeb06a131be539330f6ef3c00320b0c57d5",
+      "fetchedAt": "2026-08-03T10:54:17.545Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-sta",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-sta",
       "version": null,
-      "contentHash": "ad92209650e4f46d68fc0f67e03eafa22eb8ee756def6d085d4a399a6c79d866",
-      "fetchedAt": "2026-07-26T17:03:52.292Z"
+      "contentHash": "dfb2ed2b03e9e85b47fb962b659728372e5e4165e8e278a549f5454f89ed49cb",
+      "fetchedAt": "2026-08-03T10:54:17.547Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-structured-tools-contract",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-structured-tools-contract",
       "version": null,
-      "contentHash": "1e60c12436b41a6eb6d222fc3fd9d27d60ed81f871bec724247354071562ba32",
-      "fetchedAt": "2026-07-26T17:03:52.292Z"
+      "contentHash": "cbbd25a05cc1768aaaf7e86e4be98c2c309e30b5144b1c551d102998e5d4f1cc",
+      "fetchedAt": "2026-08-03T10:54:17.548Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-telemetry",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-telemetry",
       "version": null,
-      "contentHash": "0d4b7454136cadee12678e70fdd54abf4bdd22d7d65ed4dfc174862c9769be53",
-      "fetchedAt": "2026-07-26T17:03:52.293Z"
+      "contentHash": "f6cc5c40ddd946ad093b5b8ff19be19bfb56ca46a526dd33239db8826de9a1d5",
+      "fetchedAt": "2026-08-03T10:54:17.549Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-telemetry-exporter",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-telemetry-exporter",
       "version": null,
-      "contentHash": "970002ee123dee9606bb09f7d51ebfc9f2aac2b52bdd1dab916618975b1f92bd",
-      "fetchedAt": "2026-07-26T17:03:52.294Z"
+      "contentHash": "58cdf9c2aa6ffb6fada7449ff1e70a92cff0315abd0228fd4a326cb9d513c19f",
+      "fetchedAt": "2026-08-03T10:54:17.550Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-telemetry-utils",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-telemetry-utils",
       "version": null,
-      "contentHash": "c767dffd84457b55afe1da3aeb4473d86f7403980dc2e205ca47e191c2232e4c",
-      "fetchedAt": "2026-07-26T17:03:52.294Z"
+      "contentHash": "23c23ed3852a638341e2e099709e8ed3dfa43ed6b4273b1b7d0f0b6f736e5547",
+      "fetchedAt": "2026-08-03T10:54:17.551Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-upgrade",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-upgrade",
       "version": null,
-      "contentHash": "5d6d606013b51abd204de00a6cda5ea6d11bf469651e2590cbdefccd87eebf34",
-      "fetchedAt": "2026-07-26T17:03:52.295Z"
+      "contentHash": "d918b1ab4bb7c6773794245901aa60e2c645a0e37dfe3a6f9e3a9b7b8e77b2c2",
+      "fetchedAt": "2026-08-03T10:54:17.552Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-urom",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-urom",
       "version": null,
-      "contentHash": "5450e4aeae209cbcc8b5be5b640e87e05ea5c53d4351ad9bf999edc39fb31741",
-      "fetchedAt": "2026-07-26T17:03:52.295Z"
+      "contentHash": "6241bc6c998e0f8d48810560e005a605c487a58b536e2624ada4dba4fd5ad031",
+      "fetchedAt": "2026-08-03T10:54:17.553Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-urom-svc",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-urom-svc",
       "version": null,
-      "contentHash": "9b9668146ef0464fff9abce0571935ee14144cb60af638f8e0259e2b8422a6dd",
-      "fetchedAt": "2026-07-26T17:03:52.296Z"
+      "contentHash": "fbf898a1e4a13f33947dd274b0bf4b178989d26595225747428fcf254eb83b48",
+      "fetchedAt": "2026-08-03T10:54:17.555Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-verbs",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-verbs",
       "version": null,
-      "contentHash": "4f75732f4d17413c16c063ebbc30ed75a6d62b635ba3a191abbf964da296c416",
-      "fetchedAt": "2026-07-26T17:03:52.296Z"
+      "contentHash": "68a14d5ed9c4992134c8b1ae245f835f8b227fb369d26b5f15a68fad6f3ef5eb",
+      "fetchedAt": "2026-08-03T10:54:17.556Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--doca-version",
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-version",
       "version": null,
-      "contentHash": "fa9b93701e5b4132038bd2713a6b56c5ccd9bb57ecb755f7d5f3fe66bc10361a",
-      "fetchedAt": "2026-07-26T17:03:52.297Z"
+      "contentHash": "0be2f621e47a40c16b024ac790625375d6bb6007daa37e1ee8eb07ed3eb44d46",
+      "fetchedAt": "2026-08-03T10:54:17.557Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--dynamo-interconnect-check",
@@ -2003,8 +2003,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-automodel-distributed-training",
       "version": null,
-      "contentHash": "0dff14df2a60134f4cb7dc889ae4634e61e89ce64883b2058ac554eb0a44bb19",
-      "fetchedAt": "2026-07-26T17:03:52.328Z"
+      "contentHash": "6b168e606848e6d28daca9a9ec6a13d86127b98face5ac2ef825edc1f60fc491",
+      "fetchedAt": "2026-08-03T10:54:17.574Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-automodel-launcher-config",
@@ -2019,8 +2019,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-automodel-model-onboarding",
       "version": null,
-      "contentHash": "782922d06f7a6d973bc1e3356aafcf12c2cd0ba7932eea21d86774dc201e33de",
-      "fetchedAt": "2026-07-26T17:03:52.329Z"
+      "contentHash": "1366afb949944d728b64633af2e41af2b111a0bbd04e615a8370a3f06ae5a851",
+      "fetchedAt": "2026-08-03T10:54:17.576Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-automodel-recipe-development",
@@ -2211,8 +2211,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-relay-debug-runtime-integration",
       "version": null,
-      "contentHash": "98041c4f65489a265f8f20401f9dbb12e0280a5d308bca79524f0acfeaf3e119",
-      "fetchedAt": "2026-07-26T17:03:52.340Z"
+      "contentHash": "9f30ead00c9ad9203bb70527607d87d3d7dfd60c90b565d85b5dbac01cd80a0a",
+      "fetchedAt": "2026-08-03T10:54:17.582Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--nemo-relay-install",
@@ -2459,8 +2459,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/omniverse-usd-performance-tuning",
       "version": null,
-      "contentHash": "e980eab39efbc0707a91c2f4b5e9839db0c8d03139e630d0f6660952bfbb70c3",
-      "fetchedAt": "2026-07-26T17:03:52.377Z"
+      "contentHash": "880b2e6da750e9b8124f7af2063dfb5a9f1c603ff9c032ad8d9885aaf8e31778",
+      "fetchedAt": "2026-08-03T10:54:17.620Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--physical-ai-defect-image-generation",
@@ -3035,8 +3035,8 @@
       "source": "hermes",
       "url": "https://github.com/NVIDIA/skills/tree/main/skills/tilegym-improve-cutile-kernel-perf",
       "version": null,
-      "contentHash": "5f33cf6b48bde28468b9187ec28e0013c58a535aa63848cfa2a3a17ce3fb4ffe",
-      "fetchedAt": "2026-07-26T17:03:52.467Z"
+      "contentHash": "c9d40f15a66b05473491c636c9484b672d0c91b236eefb3fb3ee08929ddb26d8",
+      "fetchedAt": "2026-08-03T10:54:17.695Z"
     },
     {
       "id": "hermes/NVIDIA--skills--skills--tilegym-monkey-patch-kernels-to-transformers",
@@ -3339,8 +3339,8 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/devops/hermes-s6-container-supervision",
       "version": null,
-      "contentHash": "d95bd275847d734a9d330661a3685cd7d0eaf13afe360c99a09dedd9783ce737",
-      "fetchedAt": "2026-07-26T17:03:56.985Z"
+      "contentHash": "233aa8bcdad84605e00f0ba28cfafbc9097c4ffc97ddb050e3bd9931eb84eb94",
+      "fetchedAt": "2026-08-03T10:54:21.975Z"
     },
     {
       "id": "hermes/official--devops--pinggy-tunnel",
@@ -3499,8 +3499,8 @@
       "source": "hermes",
       "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/migration/openclaw-migration",
       "version": null,
-      "contentHash": "31826c5ae27d22fc6d23e86dc67f59e4d13fca3dc37995273e720d0119531779",
-      "fetchedAt": "2026-07-26T17:03:57.001Z"
+      "contentHash": "ef9ab8382eec63dc093bd2c71b32ba06fba95aedc8fe98fc9c5c8fa11982f6ac",
+      "fetchedAt": "2026-08-03T10:54:21.983Z"
     },
     {
       "id": "hermes/official--mlops--accelerate",
