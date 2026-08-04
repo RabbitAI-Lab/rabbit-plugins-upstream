@@ -3,18 +3,18 @@
  * zentao-post-comment.js — 在禅道 Bug 下发布评论
  *
  * 用法:
- *   node zentao-post-comment.js --ws=<wsEndpoint> --bug-id=<id> --comment="原始HTML内容"
- *     [--zentao-url=http://zentao.gxatek.com:20080]
- *
  *   node zentao-post-comment.js --ws=<wsEndpoint> --bug-id=<id> --comment-file=<path>
  *     [--zentao-url=http://zentao.gxatek.com:20080]
  *
- * comment 参数传入原始 HTML，脚本自动做 URL 编码。
+ *   node zentao-post-comment.js --ws=<wsEndpoint> --bug-id=<id> --comment="纯文本内容"
+ *     ⚠️ --comment 仅限极简手动测试，生产环境禁用（shell 转义会导致 HTML 截断/损坏）
+ *     [--zentao-url=http://zentao.gxatek.com:20080]
+ *
  * comment-file 参数从文件读取 HTML（推荐，避免 shell 转义问题）。
+ * comment 参数传入纯文本（仅限测试），脚本自动做 URL 编码。
  * 两者互斥，comment-file 优先。
  *
- * 例如: --comment="<p>这是一条评论</p>"
- *      --comment-file=bugs/1433003/comment.html
+ * 例如: --comment-file=bugs/1433003/comment.html
  *
  * 输出 (stdout):
  *   OK 或 FAIL
@@ -22,21 +22,8 @@
  * 需要先启动 zentao-login.js 获取 WS endpoint。
  */
 
-const { chromium } = require('playwright');
+const { parseArgs, connectAndGetPage } = require('./zentao-utils');
 const fs = require('fs');
-
-function parseArgs() {
-  const args = process.argv.slice(2);
-  const config = { wsEndpoint: '', bugId: 0, comment: '', commentFile: '', zentaoUrl: 'http://zentao.gxatek.com:20080' };
-  for (const arg of args) {
-    if (arg.startsWith('--ws=')) config.wsEndpoint = arg.slice(5);
-    if (arg.startsWith('--bug-id=')) config.bugId = parseInt(arg.slice(9), 10);
-    if (arg.startsWith('--comment-file=')) config.commentFile = arg.slice(15);
-    else if (arg.startsWith('--comment=')) config.comment = arg.slice(10);
-    if (arg.startsWith('--zentao-url=')) config.zentaoUrl = arg.split('=')[1];
-  }
-  return config;
-}
 
 async function main() {
   const config = parseArgs();
@@ -70,11 +57,7 @@ async function main() {
 
   console.error(`[INFO] 连接到浏览器: ${config.wsEndpoint}`);
 
-  const browser = await chromium.connectOverCDP(config.wsEndpoint);
-  const contexts = browser.contexts();
-  const context = contexts.length > 0 ? contexts[0] : await browser.newContext();
-  const pages = context.pages();
-  const page = pages.length > 0 ? pages[0] : await context.newPage();
+  const { page } = await connectAndGetPage(config.wsEndpoint);
 
   console.error(`[INFO] 发布 Bug #${config.bugId} 评论...`);
 

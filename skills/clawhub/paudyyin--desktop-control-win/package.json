@@ -1,0 +1,5 @@
+{
+    "name":  "desktop-control",
+    "version":  "1.0.0",
+    "description":  "Control desktop applications on Windows — launch, close, focus, resize, move windows, simulate keyboard/mouse input, manage processes, control VSCode, read clipboard, and capture screen info. Use when the user wants to interact with any running program, switch windows, type text, press shortcuts, open files in VSCode, manage running processes, or get system display information."
+}

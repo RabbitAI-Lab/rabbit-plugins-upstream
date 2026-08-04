@@ -1,5 +1,5 @@
 ## Description: <br>
-Ai Kujiale Design guides an agent through Kujiale-based interior design, including floorplan search or upload, style selection, automatic layout, and render or panorama output. <br>
+Ai Kujiale Design guides agents through Kujiale-based interior design workflows, including floorplan search or upload, style selection, automated layout, and rendered image or panorama output. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, interior designers, real-estate professionals, and renovation teams use this skill to turn a selected or uploaded floorplan into Kujiale layout proposals, render images, panorama links, and concise design highlights. <br>
+External users, designers, and automation operators use this skill to create interior-design previews from a known community or uploaded floorplan, choose a style, generate a layout, and collect rendered images, panorama links, and design notes. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The workflow relies on a persistent Kujiale account token stored in .kjlconfig.json. <br>
-Mitigation: Use a dedicated Kujiale token where possible, keep .kjlconfig.json out of version control, and restrict local file permissions. <br>
-Risk: Layout and rendering actions may consume paid or quota-limited Kujiale resources. <br>
-Mitigation: Require explicit user confirmation before actions that spend layout or rendering quota, and stop when quota is unavailable. <br>
-Risk: The skill can upload floorplan images and monitor a local inbound media folder. <br>
-Mitigation: Use a dedicated workspace, verify the intended image before upload, and avoid shared or synced folders for sensitive floorplans. <br>
+Risk: Floorplan or home-layout data may be uploaded to Kujiale during search, copy, layout, or rendering flows. <br>
+Mitigation: Use the skill only when the user intends to send that data to Kujiale, and obtain explicit confirmation before uploads. <br>
+Risk: The workflow depends on a Kujiale access token stored in local configuration. <br>
+Mitigation: Keep the token in a local config controlled by the user, avoid committing it to version control, and rotate it if exposure is suspected. <br>
+Risk: The skill proposes command execution and layout steps that may consume account quota. <br>
+Mitigation: Require explicit user confirmation before command execution and before any quota-consuming layout operation. <br>
+Risk: The artifact describes monitoring an inbound media directory for uploaded images. <br>
+Mitigation: Remove unrelated images from the monitored directory before use so only the intended floorplan is processed. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-kujiale-design) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
-- [Kujiale skills portal](https://www.kujiale.com/skills) <br>
+- [Kujiale skills token page](https://www.kujiale.com/skills) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell command snippets, image links, panorama links, and design highlights] <br>
+**Output Format:** [Markdown result file with progress text, design highlights, rendered image links, panorama links, and Kujiale design-detail links.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Final output is expected to include ordered render images, panorama links, design highlights, and a Kujiale design detail link.] <br>
+**Other Properties Related to Output:** [May require a local Kujiale access token and user confirmation before upload, command execution, or quota-consuming layout steps.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server-resolved release metadata) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Identifies likely plant leaf diseases from leaf images or videos by analyzing visible lesion features and returning a structured result with confidence, general care guidance, and report links. <br>
+Identifies likely plant leaf diseases from leaf images or videos by analyzing lesion features and returning structured diagnosis results with confidence scores and general care guidance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External gardeners, growers, greenhouse operators, and farm inspectors use this skill to analyze plant leaf images or videos for likely disease type, confidence, and general non-chemical care direction. Agents can also query account-linked historical plant disease reports from the configured cloud service. <br>
+External users and developers can use this skill to analyze plant leaf media for likely disease type, symptom features, confidence scoring, structured reports, and report-history lookup. It is aimed at plant factories, greenhouses, home gardening, horticulture, and farm inspection workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Plant images or videos are processed by the configured lifeemergence.com cloud service. <br>
-Mitigation: Install and use the skill only where external cloud processing of plant media is approved, and avoid submitting confidential or regulated images unless data handling terms are understood. <br>
-Risk: The skill can silently create or reuse an internal account identity, store related tokens locally, and query account-linked report history. <br>
-Mitigation: Run the skill in an isolated workspace, review token and identity state before deployment, and prefer a release that documents how to clear or disable saved identity state. <br>
-Risk: Leaf disease symptoms can be visually similar or mixed, so the generated identification may be uncertain. <br>
-Mitigation: Treat results as diagnostic support only, review confidence and image quality, and consult a qualified plant health expert before taking high-impact treatment action. <br>
+Risk: Uploaded plant images or videos are sent to the publisher's cloud service. <br>
+Mitigation: Do not submit sensitive media or private/internal URLs unless the publisher and retention model are trusted. <br>
+Risk: Report history is associated with an automatically managed identity, and auth tokens may be stored in a workspace SQLite database. <br>
+Mitigation: Review identity handling and token storage before installation; isolate the workspace when using untrusted or sensitive data. <br>
+Risk: AI plant-disease outputs can be uncertain and are not a substitute for expert diagnosis or regulated treatment advice. <br>
+Mitigation: Use results as preliminary guidance and consult a plant pathology or local agricultural expert before acting on severe cases or applying treatments. <br>
 
 
 ## Reference(s): <br>
-- [Plant Leaf Disease Identification API documentation](references/api_doc.md) <br>
-- [Common analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [API documentation](references/api_doc.md) <br>
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-plant-leaf-disease-identification-analysis) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON analysis output, with optional shell commands for invocation and optional saved result files.] <br>
+**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
+**Output Format:** [Structured JSON or Markdown text with report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns likely disease identification, confidence, visible lesion features, general care direction, and report links; history queries are returned as Markdown tables.] <br>
+**Other Properties Related to Output:** [May include disease labels, symptom features, confidence scores, general care guidance, and cloud report export links.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter declares 1.0.6) <br>
+1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

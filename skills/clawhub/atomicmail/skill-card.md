@@ -1,5 +1,5 @@
 ## Description: <br>
-Atomic Mail lets an AI agent read and write email over JMAP, including inbox registration, mailbox listing, message fetching, and sending mail. <br>
+Atomic Mail lets an AI agent read and write email through a programmable JMAP inbox with proof-of-work authentication. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and external users use this skill to connect an AI agent to Atomic Mail so it can register an inbox, fetch and triage mailbox data, send replies, and upload attachments through JMAP. <br>
+Developers and external users use Atomic Mail to register or connect an inbox, list and triage messages, and send email, replies, or attachments through JMAP from an agent runtime. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill stores Atomic Mail credentials and JWT bearer tokens locally. <br>
-Mitigation: Keep the credentials directory private, exclude it from logs and backups where possible, and never commit credential or JWT files. <br>
-Risk: The skill can send email and upload attachments when invoked. <br>
-Mitigation: Require explicit user approval before sending mail, replying, forwarding, or uploading attachments through presets or custom JMAP requests. <br>
-Risk: Scheduled inbox polling can expose mailbox contents during recurring agent turns. <br>
-Mitigation: Use the documented agent-scheduled workflow only in trusted runtimes and avoid raw CLI cron jobs that fetch mail without an agent review step. <br>
+Risk: The skill can access sensitive email contents and credential material. <br>
+Mitigation: Install it only for intended Atomic Mail inbox access, keep the credential directory secret, and avoid syncing or committing generated credentials or JWT files. <br>
+Risk: Agent-initiated sending, replying, forwarding, or attaching files can disclose information or send unintended messages. <br>
+Mitigation: Require explicit human review before outbound email actions or attachment use. <br>
+Risk: Hourly inbox polling can deliver inbox previews and summaries to the configured destination. <br>
+Mitigation: Enable polling only when the destination is acceptable for receiving message summaries. <br>
 
 
 ## Reference(s): <br>
-- [Atomic Mail homepage](https://atomicmail.ai) <br>
-- [ClawHub Atomic Mail skill page](https://clawhub.ai/atomicmail/skills/atomicmail) <br>
-- [Atomic Mail overview help topic](lib/shared/help/topics/overview.md) <br>
-- [Atomic Mail JMAP cheatsheet help topic](lib/shared/help/topics/jmap_cheatsheet.md) <br>
-- [OpenClaw cron documentation](https://docs.openclaw.ai/automation/cron-jobs) <br>
-- [Hermes cron documentation](https://hermes-agent.nousresearch.com/docs/user-guide/features/cron) <br>
+- [Atomic Mail ClawHub Listing](https://clawhub.ai/atomicmail/skills/atomicmail) <br>
+- [Atomic Mail Homepage](https://atomicmail.ai) <br>
+- [OpenClaw Cron Jobs](https://docs.openclaw.ai/automation/cron-jobs) <br>
+- [Hermes Cron](https://hermes-agent.nousresearch.com/docs/user-guide/features/cron) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON and shell command examples] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON/JMAP request examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute CLI calls that return JSON JMAP results and write local credential and JWT files during registration.] <br>
+**Other Properties Related to Output:** [May create credential files and JWT files in the configured Atomic Mail credentials directory; JMAP calls can return JSON email data.] <br>
 
 ## Skill Version(s): <br>
-0.3.24 (source: evidence.release.version and SKILL.md frontmatter) <br>
+0.3.25 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

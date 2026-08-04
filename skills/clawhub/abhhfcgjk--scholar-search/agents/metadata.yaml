@@ -1,0 +1,7 @@
+interface:
+  display_name: "Scholar Search"
+  short_description: "Search papers and export citations"
+  default_prompt: "Use $scholar-search to find relevant academic papers and export BibTeX citations."
+
+policy:
+  allow_implicit_invocation: true

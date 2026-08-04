@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides JF Tech indoor-security API guidance and scripts for checking service state, configuring abnormal-alarm reminders, querying alarms and statistics, and managing household members. <br>
+JFTech indoor security skill for monitoring home scenes, querying alarms and statistics, managing member profiles, and controlling indoor security service state through the JFTech Open Platform. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External developers and JF Tech indoor-security operators use this skill to operate device security features through JF Tech Open Platform APIs. It supports status checks, service changes, alarm review, household member management, and occupancy statistics after required credentials, device binding, and service subscription are configured. <br>
+Developers and operators with JFTech Open Platform credentials use this skill to inspect household indoor security state, review abnormal alarms and occupancy statistics, and manage member face profiles for bound online devices with an active indoor security package. <br>
 
 ### Deployment Geography for Use: <br>
 China, Asia, Europe, and North America <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill handles home-security credentials, household telemetry, and biometric member records. <br>
-Mitigation: Use dedicated least-privilege credentials where possible, avoid exposing secrets in shell history or process-visible command lines, and restrict access to authorized operators. <br>
-Risk: The skill can add, update, or delete members, upload face images, and change indoor-security service state. <br>
-Mitigation: Require explicit human confirmation before member mutations, face-image uploads, or service state changes. <br>
-Risk: Alarm media, occupancy statistics, and member records can reveal sensitive household activity. <br>
-Mitigation: Minimize retention and sharing of returned data, and review outputs before storing or forwarding them. <br>
+Risk: The skill can use a JFTech account token to inspect household security data and operate on indoor security settings. <br>
+Mitigation: Install only for trusted publishers and keep JFTech credentials scoped, private, and supplied explicitly by the user. <br>
+Risk: The skill can disable monitoring or add, update, and delete member face profiles. <br>
+Mitigation: Require explicit user confirmation before changing service state or modifying member biometric profiles. <br>
+Risk: Several helpers reference the move-card signing parameter inconsistently, which may affect operational reliability. <br>
+Mitigation: Verify scripts and signing parameters before relying on the skill for production security workflows. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/jftech/jf-open-pro-ai-indoor-security) <br>
-- [JF Tech Open Platform](https://developer.jftech.com) <br>
-- [JF Tech Signature Algorithm](https://docs.jftech.com/docs?menusId=2531aba7e2d84e13ad8ce977007922f3&siderId=609261d9bb5049c3a2fc7222adf465fb&lang=zh) <br>
-- [JF Tech Timestamp Algorithm](https://docs.jftech.com/docs?menusId=2531aba7e2d84e13ad8ce977007922f3&siderId=8da7ad6119fd41159e2026c71ddb3555&lang=zh) <br>
-- [JF Tech Package Card Usage](https://docs.jftech.com/docs?menusId=54582398fd8d4248962354e92ac2e47a&siderId=d2c0d9105d9c4b78bc0d2ee3851d2557&lang=zh) <br>
+- [JFTech Open Platform](https://developer.jftech.com) <br>
+- [Signature Algorithm Documentation](https://docs.jftech.com/docs?menusId=2531aba7e2d84e13ad8ce977007922f3&siderId=609261d9bb5049c3a2fc7222adf465fb&lang=zh) <br>
+- [Timestamp Algorithm Documentation](https://docs.jftech.com/docs?menusId=2531aba7e2d84e13ad8ce977007922f3&siderId=8da7ad6119fd41159e2026c71ddb3555&lang=zh) <br>
+- [Package Card Usage Documentation](https://docs.jftech.com/docs?menusId=54582398fd8d4248962354e92ac2e47a&siderId=d2c0d9105d9c4b78bc0d2ee3851d2557&lang=zh) <br>
+- [ClawHub Skill Page](https://clawhub.ai/jftech/skills/jf-open-pro-ai-indoor-security) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, API Calls] <br>
-**Output Format:** [Markdown guidance with shell commands; scripts return text or JSON.] <br>
+**Output Type(s):** [text, json, shell commands, configuration, guidance] <br>
+**Output Format:** [Human-readable command output or JSON API responses, with setup guidance and shell command examples in Markdown.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires JF Tech credentials, device serial number, authorization token, and configured indoor-security service.] <br>
+**Other Properties Related to Output:** [Requires JFTech credentials, device identifiers, an authorization token, and network access to JFTech API endpoints.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+1.0.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

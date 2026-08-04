@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and video-production agents use this skill to build a shared evidence layer before downstream editing skills run. It initializes a video project, extracts media metadata and transcripts, produces objective speech analysis, and records factual semantic understanding in source time. <br>
+Developers and video workflow agents use this skill to build a reusable evidence layer for source media, including media facts, word-level transcript data, objective speech metrics, semantic understanding, and review artifacts before downstream editing skills run. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security review flags under-disclosed rendering and export capability beyond the stated analysis workflow. <br>
-Mitigation: Review any invocation of bundled render scripts before execution, especially when they can create final videos or change project status. <br>
-Risk: The skill reads and writes local video project files and creates cache or model files during media processing. <br>
-Mitigation: Run it in a dedicated project workspace and inspect generated evidence, transcript, review, and final-output files before relying on them. <br>
+Risk: The package can run local media-processing commands and write within a project directory. <br>
+Mitigation: Use it in a dedicated project folder and review commands before execution. <br>
+Risk: Included rendering code can create final media and modify project state. <br>
+Mitigation: Do not let an agent run render_project.py or generated render plans unless you intend to create or overwrite final delivery files. <br>
+Risk: The security verdict is suspicious because the main understanding workflow is local and coherent, but rendering behavior is under-documented. <br>
+Mitigation: Limit normal use to the documented video-understanding workflow and review the included rendering path separately before deployment. <br>
 
 
 ## Reference(s): <br>
-- [Project Schema V1](artifact/reference/project-schema.md) <br>
-- [Timeline Schema V1](artifact/reference/timeline-schema.md) <br>
-- [Understanding Schema V1](artifact/reference/understanding-schema.md) <br>
-- [Understanding Example](artifact/examples/understanding.example.json) <br>
-- [ClawHub Skill Page](https://clawhub.ai/whitetowerai/skills/video-understand) <br>
+- [Project Schema V1](reference/project-schema.md) <br>
+- [Timeline Schema V1](reference/timeline-schema.md) <br>
+- [Understanding Schema V1](reference/understanding-schema.md) <br>
+- [Understanding Example](examples/understanding.example.json) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON project artifacts] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, JSON, Media review artifacts] <br>
+**Output Format:** [Markdown guidance with shell commands plus JSON, SRT, JPEG, and project files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local video-project evidence files, review artifacts, transcripts, analysis JSON, and validation guidance.] <br>
+**Other Properties Related to Output:** [Creates project-local work, review, input, final, and cache directories; durable machine outputs are kept under work/understand.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+1.0.4 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

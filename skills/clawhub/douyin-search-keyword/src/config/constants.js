@@ -21,7 +21,7 @@ module.exports = {
   /**
    * 查询任务最大重试次数
    */
-  QUERY_MAX_ATTEMPTS: 60,
+  QUERY_MAX_ATTEMPTS: 20,
 
   /**
    * 重试间隔时间 (毫秒)
@@ -31,5 +31,5 @@ module.exports = {
   /**
    * 技能版本号
    */
-  VERSION: "1.1.5",
+  VERSION: "1.1.6",
 };

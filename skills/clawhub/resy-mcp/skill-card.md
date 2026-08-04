@@ -1,5 +1,5 @@
 ## Description: <br>
-Manage Resy restaurant reservations via MCP by searching venues, booking tables, listing and canceling reservations, managing favorites, and subscribing to Priority Notify. <br>
+Manage Resy restaurant reservations via MCP: search venues, book tables, list and cancel reservations, manage favorites, and subscribe to Priority Notify. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to let an agent interact with a Resy account for restaurant discovery, booking, cancellation, favorites, payment-method lookup, and Priority Notify management. <br>
+External users and developers use this skill to let an agent manage Resy restaurant reservations through an MCP server, including availability search, booking, cancellation, favorites, and Priority Notify subscriptions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can make live Resy account changes, including booking, cancellation, favorites, and Priority Notify updates. <br>
-Mitigation: Confirm the restaurant, date, time, party size, payment or fee details, and intended account action before allowing changes. <br>
-Risk: The skill requires Resy credentials for account access. <br>
-Mitigation: Keep RESY_EMAIL and RESY_PASSWORD out of shared project files and use local environment or secret storage. <br>
-Risk: The skill relies on Resy's private web-app API behavior. <br>
-Mitigation: Expect endpoint changes or failures and verify actions in Resy before relying on the result. <br>
+Risk: The skill can book or cancel real restaurant reservations using Resy account credentials. <br>
+Mitigation: Require explicit user confirmation before any booking, cancellation, or account-state change, especially when fees or policy consequences may apply. <br>
+Risk: The skill requires Resy email and password credentials in the MCP configuration. <br>
+Mitigation: Use only a Resy account the agent is intended to manage and keep credentials scoped to this MCP server configuration. <br>
+Risk: The artifact states that Resy does not publish an official API and that some endpoint paths are reverse-engineered. <br>
+Mitigation: Review carefully before installation and verify behavior against the user's account before relying on booking, cancellation, favorites, or Priority Notify actions. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/resy-mcp) <br>
-- [resy-mcp npm package](https://www.npmjs.com/package/resy-mcp) <br>
-- [resy-mcp repository link declared by the artifact](https://github.com/chrischall/resy-mcp) <br>
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/resy-mcp) <br>
+- [npm package](https://www.npmjs.com/package/resy-mcp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, configuration, shell commands] <br>
-**Output Format:** [Markdown with JSON and shell command snippets] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with JSON configuration examples and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes MCP setup guidance and examples for live Resy reservation workflows.] <br>
+**Other Properties Related to Output:** [May guide an agent to call MCP tools that search, book, cancel, or modify Resy account state.] <br>
 
 ## Skill Version(s): <br>
-0.6.1 (source: server release evidence) <br>
+0.6.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

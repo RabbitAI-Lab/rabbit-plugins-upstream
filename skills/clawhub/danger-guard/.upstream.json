@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/danger-guard",
   "slug": "danger-guard",
   "ownerHandle": null,
-  "version": null,
-  "updatedAt": 1783364047871,
-  "contentHash": "80e033ae0aaee3624d38c431e625d05ccc19444732a6de8bbcd7215a08062928",
-  "fetchedAt": "2026-07-26T18:19:31.091Z"
+  "version": "1.2.0",
+  "updatedAt": 1785521395537,
+  "contentHash": "578eaa5bba3b6dbd2f67bc81a095d25b2b7f4f01b3a92edbfb4783681976dd07",
+  "fetchedAt": "2026-08-04T10:26:03.544Z"
 }

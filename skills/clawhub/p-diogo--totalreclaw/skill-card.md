@@ -1,5 +1,5 @@
 ## Description: <br>
-End-to-end encrypted, decentralized memory for OpenClaw with native memory_search and memory_get recall plus background fact capture. <br>
+End-to-end encrypted, decentralized memory for OpenClaw. A native kind:memory provider - recall is automatic via memory_search/memory_get, and facts are captured in the background. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and OpenClaw users install this skill to give agents persistent encrypted memory, automatic background fact capture, explicit memory writes, recall, import, export, curation, and account pairing. <br>
+OpenClaw users and agent operators use TotalReclaw to add persistent encrypted long-term memory, automatic recall, background fact capture, explicit memory saving, curation, import, and export to an agent. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The plugin can read local OpenClaw conversation history and extract facts in the background. <br>
-Mitigation: Install it only when cross-session automatic memory is desired, and disable or configure extraction when background capture is not acceptable. <br>
-Risk: The plugin may use configured LLM provider keys while extracting or processing memories. <br>
-Mitigation: Review provider configuration before installation and limit credentials to the intended account or environment. <br>
-Risk: Recovery phrases and credential files are sensitive key material. <br>
-Mitigation: Use the browser-based pairing flow and do not paste recovery phrases into chat or inspect credential files through an agent. <br>
-Risk: The plugin contacts TotalReclaw, GitHub, and configured provider endpoints and persists encrypted memories. <br>
-Mitigation: Confirm endpoint and data-retention expectations before deployment, especially in managed or shared OpenClaw environments. <br>
+Risk: The skill handles sensitive local OpenClaw and LLM credential context and writes local state files. <br>
+Mitigation: Review local state paths and credential handling before installation, especially on shared agents or systems that may process sensitive memories. <br>
+Risk: The skill sends requests to TotalReclaw and configured model providers. <br>
+Mitigation: Confirm the configured providers, relay URL, and data-flow expectations before using it for private or regulated memory content. <br>
+Risk: The skill can export decrypted memories and may autonomously restart the OpenClaw gateway. <br>
+Mitigation: Restrict export access, review operational impact of gateway restarts, and test the setup in a non-sensitive environment before broader deployment. <br>
+Risk: Server security evidence flags scanner-evasion comments and plaintext local logs for review. <br>
+Mitigation: Inspect those behaviors directly and resolve acceptability before trusting the release in sensitive or shared-agent deployments. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/p-diogo/skills/totalreclaw) <br>
-- [TotalReclaw Homepage](https://totalreclaw.xyz) <br>
-- [TotalReclaw OpenClaw Setup Guide](https://github.com/p-diogo/totalreclaw/blob/main/docs/guides/openclaw-setup.md) <br>
-- [TotalReclaw 3.3.13 Release](https://github.com/p-diogo/totalreclaw/releases/tag/v3.3.13) <br>
-- [OpenClaw](https://github.com/openclaw/openclaw) <br>
+- [ClawHub listing](https://clawhub.ai/p-diogo/skills/totalreclaw) <br>
+- [Publisher profile](https://clawhub.ai/user/p-diogo) <br>
+- [Release 3.4.1 changelog](https://github.com/p-diogo/totalreclaw/releases/tag/v3.4.1) <br>
+- [TotalReclaw homepage](https://totalreclaw.xyz) <br>
+- [OpenClaw project](https://github.com/openclaw/openclaw) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON snippets, setup URLs, PINs, and memory recall text.] <br>
+**Output Type(s):** [guidance, shell commands, configuration, text, markdown] <br>
+**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill can guide pairing, installation, explicit memory writes, memory recall, import/export, status checks, and configuration.] <br>
+**Other Properties Related to Output:** [Guides OpenClaw memory tool use, setup, pairing, curation, import, export, and recovery flows; it does not produce a standalone generated artifact.] <br>
 
 ## Skill Version(s): <br>
-3.3.13 (source: server release evidence, SKILL.md frontmatter, package.json, skill.json) <br>
+3.4.1 (source: server release evidence, SKILL.md frontmatter, package.json) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

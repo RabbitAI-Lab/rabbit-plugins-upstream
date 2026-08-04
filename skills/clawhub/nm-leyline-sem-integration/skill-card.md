@@ -11,32 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers building or modifying skills that consume git diff output use this skill to add semantic-diff detection, optional sem installation, and normalized git-diff fallback behavior. <br>
+Developers and engineers use this skill when building or modifying skills that consume git diff output. It guides agents to detect sem availability, offer user-approved installation when needed, and normalize sem or git diff output for downstream analysis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad activation terms can cause the skill to trigger when semantic-diff guidance is not needed. <br>
-Mitigation: Review the trigger terms before installation and narrow them if accidental invocation would interrupt the workflow. <br>
-Risk: Install-on-first-use guidance can involve package-manager commands or downloading a sem binary. <br>
-Mitigation: Review the proposed install command and source before running it, or decline installation and use the documented git-diff fallback path. <br>
+Risk: The broad triggers may activate the skill in unrelated git or foundation discussions. <br>
+Mitigation: Confirm that the task needs semantic diff guidance before applying the sem workflow. <br>
+Risk: The skill can propose installing sem from Cargo, Homebrew, or a release binary. <br>
+Mitigation: Only approve installation commands after deciding that sem is trusted and needed; otherwise use the documented git-diff fallback. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-sem-integration) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
-- [sem CLI repository](https://github.com/Ataraxy-Labs/sem) <br>
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
+- [sem project](https://github.com/Ataraxy-Labs/sem) <br>
+- [sem Linux binary release](https://github.com/Ataraxy-Labs/sem/releases/latest/download/sem-x86_64-unknown-linux-gnu) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON schema examples] <br>
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with bash and JSON code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes primary sem paths and git-diff fallback patterns for agent workflows.] <br>
+**Other Properties Related to Output:** [Includes sem detection patterns, installation command options, git-diff fallback commands, and normalized entity schemas.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

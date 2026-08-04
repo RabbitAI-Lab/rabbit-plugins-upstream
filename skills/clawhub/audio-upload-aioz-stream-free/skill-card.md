@@ -1,5 +1,5 @@
 ## Description: <br>
-Uploads local audio files to AIOZ Stream through the default Create, Upload Part, and Complete workflow, then returns an HLS streaming playback link. <br>
+Uploads selected local audio files to AIOZ Stream through a Create, Upload Part, and Complete workflow, then returns an HLS playback link using the user's AIOZ Stream API keys. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External developers, creators, and media teams use this skill to upload podcasts, lectures, or archived audio to AIOZ Stream and retrieve an HLS playback URL with default encoding settings. <br>
+External users and developers use this skill to publish podcasts, hosted voice content, or archived audio by uploading local files to AIOZ Stream and retrieving an HLS streaming URL. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: AIOZ Stream credentials are required for uploads and could be exposed through logs, shell history, or committed files. <br>
-Mitigation: Use stream-public-key and stream-secret-key only for the upload requests or secure environment handling, and avoid logging or committing those secrets. <br>
-Risk: The skill sends local audio files to the configured AIOZ Stream endpoint. <br>
-Mitigation: Confirm the endpoint is trusted and upload only audio files the user intends to send to that service. <br>
-Risk: The artifact includes a generic API_KEY example even though the documented upload flow uses two AIOZ Stream header keys. <br>
-Mitigation: Prefer stream-public-key and stream-secret-key for this skill, and do not rely on the generic API_KEY example for authentication. <br>
+Risk: The skill uploads selected local audio files to AIOZ and uses stream-public-key and stream-secret-key credentials. <br>
+Mitigation: Install only when that upload behavior is intended, keep keys in environment variables or a secret manager, and avoid logging or committing credentials. <br>
+Risk: The security evidence flags contradictory unsafe upload guidance and an arbitrary upload_url Python example. <br>
+Mitigation: Use only the intended HTTPS AIOZ API endpoint unless the destination and package are independently trusted. <br>
+Risk: The security evidence reports unsupported security claims that users should review first. <br>
+Mitigation: Confirm the security properties of the target API, endpoint, and runtime environment before relying on the skill for sensitive audio content. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/thcjp/skills/audio-upload-aioz-stream-free) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/audio-upload-aioz-stream-free) <br>
 - [AIOZ Stream create audio endpoint](https://api-w3stream.attoaioz.cyou/api/videos/create) <br>
 - [AIOZ Stream upload part endpoint](https://api-w3stream.attoaioz.cyou/api/videos/AUDIO_ID/part) <br>
 - [AIOZ Stream complete upload endpoint](https://api-w3stream.attoaioz.cyou/api/videos/AUDIO_ID/complete) <br>
-- [AIOZ Stream audio detail endpoint](https://api-w3stream.attoaioz.cyou/api/videos/AUDIO_ID) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with JSON examples and inline bash/curl commands] <br>
+**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with bash curl examples and JSON response examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns an HLS streaming URL or a status/error explanation after upload and transcoding checks.] <br>
+**Other Properties Related to Output:** [Returns an HLS playback link after upload and may report that server-side transcoding is still in progress.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,6 +1,6 @@
 # rune-incident
 
-> Rune L2 Skill | delivery | model: tier:mid
+> Rune L2 Skill | delivery | model: tier:heavy
 
 
 # incident

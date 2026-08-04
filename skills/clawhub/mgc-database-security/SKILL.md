@@ -2,14 +2,18 @@
 
 spec: usk/3.0
 id: mgc_database_security
-version: 1.1.0
+version: 1.2.0
 name: Database Credential Security (Zero‑Exposure Edition)
-description: Secure database credential management using MGC Blackbox. Supports MySQL, PostgreSQL, SQLite, MariaDB and other databases. Store credentials locally in encrypted form, retrieve at runtime without exposing to AI models.
+description: Secure database credential management using MGC Blackbox. Supports MySQL, PostgreSQL, SQLite, MariaDB and other databases. Store credentials locally in encrypted form, retrieve at runtime without exposing to AI models. Requires MGC 1.4.7+.
 author: MirginCipher Team
 license: MIT
 tags: database, mysql, postgresql, sqlite, mariadb, security, credential-management, zero-exposure, mgc
 platform_compatibility: windows, macos, linux
 changelog:
+  - version: 1.2.0
+    changes:
+      - Requires MGC 1.4.7+ for mgc_run support
+      - Use mgc_run instead of mgc_get action="run"
   - version: 1.1.0
     changes:
       - Added complete example section with workflow templates
@@ -322,7 +326,7 @@ Node B uses its private key to decrypt and execute. Node A's database script is 
 **A:**
 1. Node A creates the database script
 2. Use `mgc_seal` with Node B's public key
-3. Node B decrypts and executes using `mgc_get` with action="run"
+3. Node B decrypts and executes using `mgc_run`
 
 ### Q: Can I seal a script for multiple nodes?
 **A:** Currently, `mgc_seal` targets one node at a time. For multiple nodes, seal separately with each node's public key.

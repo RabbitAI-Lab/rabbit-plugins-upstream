@@ -7,23 +7,29 @@
 //
 // State layout (~/.cache/pricewin-hotel-deal-finder/session-<id>.json):
 //   {
-//     "id": "<8-char id>",
-//     "wsEndpoint": "ws://127.0.0.1:<port>/devtools/browser/<uuid>",
+//     "port": 51234,
 //     "pid": 12345,
+//     "token": "<64-hex auth token for the daemon's localhost API>",
 //     "createdAt": "2026-05-18T10:00:00Z"
 //   }
+//
+// The file carries the daemon's auth token, so it is created 0600 inside a 0700
+// directory: on a shared machine another local user must not be able to read it
+// and drive the browser.
 // ----------------------------------------------------------------------------
 
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import os from 'node:os';
-import { existsSync, mkdirSync } from 'node:fs';
+import { existsSync, mkdirSync, chmodSync } from 'node:fs';
 
 const STATE_DIR = path.join(os.homedir(), '.cache', 'pricewin-hotel-deal-finder');
 const DEFAULT_SESSION = 'default';
 
 function ensureDir() {
-  if (!existsSync(STATE_DIR)) mkdirSync(STATE_DIR, { recursive: true });
+  if (!existsSync(STATE_DIR)) mkdirSync(STATE_DIR, { recursive: true, mode: 0o700 });
+  // Tighten a directory an older version created 0755.
+  else chmodSync(STATE_DIR, 0o700);
 }
 
 function statePath(sessionId = DEFAULT_SESSION) {
@@ -32,7 +38,11 @@ function statePath(sessionId = DEFAULT_SESSION) {
 
 export async function saveState(state, sessionId = DEFAULT_SESSION) {
   ensureDir();
-  await fs.writeFile(statePath(sessionId), JSON.stringify(state, null, 2));
+  const file = statePath(sessionId);
+  await fs.writeFile(file, JSON.stringify(state, null, 2), { mode: 0o600 });
+  // writeFile's `mode` only applies when it creates the file — chmod covers the
+  // case where a previous run left a world-readable state file behind.
+  await fs.chmod(file, 0o600).catch(() => {});
 }
 
 export async function loadState(sessionId = DEFAULT_SESSION) {

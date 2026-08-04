@@ -1,42 +1,41 @@
 ## Description: <br>
-Monitors restaurant daily operations with three structured checks per day for opening, mid-shift, and closing compliance, then tracks patterns over time. <br>
+Daily operational compliance monitoring for restaurant and franchise operators. Three structured check-ins per day - opening, mid-shift, and closing - with pattern tracking. Built by a franchise GM with 16 years in QSR operations. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
 ## Publisher: <br>
-[blake27mc](https://clawhub.ai/user/blake27mc) <br>
+[mcphersonai](https://clawhub.ai/user/mcphersonai) <br>
 
 ### License/Terms of Use: <br>
-CC-BY-NC-4.0 <br>
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) <br>
 
 
 ## Use Case: <br>
-Restaurant and franchise operators use this skill to run daily operational compliance check-ins, log food safety and sanitation results, and surface weekly patterns for follow-up. <br>
+Restaurant and franchise operators, general managers, and shift leads use this skill to run opening, mid-shift, and closing compliance check-ins, log outcomes, track recurring issues, and produce weekly focus summaries. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill stores ongoing check history with employee or respondent details. <br>
-Mitigation: Define who may respond to checks and receive weekly summaries, tell staff what will be logged, minimize personal notes, and set a retention and deletion practice. <br>
-Risk: Scheduled checks may continue after the workflow is no longer needed. <br>
-Mitigation: Disable scheduled checks when the operational monitoring workflow ends. <br>
+Risk: The skill keeps ongoing operational check records that may include respondent names or roles and free-text shift notes. <br>
+Mitigation: Tell the team what will be retained, prefer role labels where practical, avoid unnecessary personal details, and confirm OpenClaw memory and cron retention and recipient scope before use. <br>
+Risk: Operators could treat conversational check-ins as a replacement for required corporate forms, audit records, or local health-code documentation. <br>
+Mitigation: Continue completing mandated compliance forms and apply local health-code and franchise requirements alongside this monitoring workflow. <br>
 
 
 ## Reference(s): <br>
-- [Qsr Daily Ops Monitor ClawHub listing](https://clawhub.ai/blake27mc/qsr-daily-ops-monitor) <br>
-- [blake27mc publisher profile](https://clawhub.ai/user/blake27mc) <br>
-- [Creative Commons Attribution-NonCommercial 4.0 International](https://creativecommons.org/licenses/by-nc/4.0/) <br>
+- [QSR Daily Ops Monitor on ClawHub](https://clawhub.ai/mcphersonai/skills/qsr-daily-ops-monitor) <br>
+- [McPherson AI](https://mcphersonai.com) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown check prompts, status summaries, setup confirmations, and weekly operational summaries] <br>
+**Output Format:** [Markdown-formatted conversational check-ins, setup confirmations, compliance logs, pattern alerts, and weekly summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Stores ongoing check history including date, check type, pass count, failed items, respondent, and notes.] <br>
+**Other Properties Related to Output:** [Uses ongoing memory for completed check records, respondent role/name, notes, completion status, and recurring compliance patterns.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata and artifact frontmatter) <br>
+1.0.2 (source: SKILL.md frontmatter and ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

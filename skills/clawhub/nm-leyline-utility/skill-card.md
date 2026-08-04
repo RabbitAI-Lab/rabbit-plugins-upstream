@@ -11,36 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use this skill to score whether an agent should respond, retrieve information, call a tool, verify work, delegate, or stop. It is intended for cost-aware orchestration and verification decisions during multi-step agent workflows. <br>
+Developers and agent builders use this skill to score candidate actions before responding, retrieving, calling tools, verifying, delegating, or stopping. It helps control unnecessary tool use and premature stopping in advisory orchestration workflows, with prescriptive gating available only when a consuming skill opts in. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad triggers may cause the skill to appear during general planning where utility scoring is unnecessary. <br>
-Mitigation: Use the scoring checklist when there is a meaningful cost, uncertainty, redundancy, delegation, or verification decision; skip it for obvious single-step actions. <br>
-Risk: A consuming skill that opts into utility_gated mode can strongly steer tool-use or delegation decisions. <br>
-Mitigation: Keep advisory mode as the default unless prescriptive behavior is explicitly desired, and review logged utility breakdowns before relying on gated decisions. <br>
-Risk: Heuristic scores can mis-rank actions when gain, uncertainty, or redundancy estimates are poorly calibrated. <br>
-Mitigation: Require all score components in the action report, check termination conditions after each step, and document any high-gain override with the gain value. <br>
+Risk: A consuming skill that enables prescriptive utility gating can make this framework control whether an agent responds, retrieves, calls a tool, verifies, delegates, or stops. <br>
+Mitigation: Review any consuming skill that sets utility_gated: true and use advisory mode unless mandatory gating is intentional. <br>
+Risk: The scoring framework relies on heuristic self-estimates for gain and uncertainty, so scores can be misleading when evidence is incomplete or poorly calibrated. <br>
+Mitigation: Require the agent to log the score breakdown and rationale, and review high-impact decisions before acting on them. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-leyline-utility) <br>
-- [ClawHub Metadata Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
-- [Action Selector](modules/action-selector.md) <br>
+- [Utility skill on ClawHub](https://clawhub.ai/athola/skills/nm-leyline-utility) <br>
+- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
 - [State Builder](modules/state-builder.md) <br>
+- [Action Selector](modules/action-selector.md) <br>
 - [Integration](modules/integration.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, text, markdown] <br>
-**Output Format:** [Markdown guidance with utility scores and action reports] <br>
+**Output Type(s):** [text, markdown, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with scoring formulas, tables, YAML snippets, and action-report templates] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces heuristic decision guidance; it does not execute tools or handle data directly.] <br>
+**Other Properties Related to Output:** [Produces advisory or opt-in prescriptive action-selection guidance; it does not include executable code.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: ClawHub release metadata; artifact frontmatter reports 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

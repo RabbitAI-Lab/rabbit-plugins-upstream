@@ -1,5 +1,5 @@
 ## Description: <br>
-Access Artsonia student-art portfolios, comments, fans, notification preferences, and artwork downloads through an MCP server. <br>
+Access Artsonia student-art portfolios, comments, and fans via MCP. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to let an agent connect to an Artsonia MCP server for linked student artwork portfolios. It supports reviewing portfolios and activity, posting comments, inviting fans, changing notifications, and downloading artwork when the user has supplied Artsonia account credentials. <br>
+External users and developers use this skill to connect an agent to an Artsonia parent or fan account, review student artwork portfolios, manage comments and fans, and download artwork when authorized. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The MCP server requires Artsonia account credentials and can expose linked student portfolio data to an agent. <br>
-Mitigation: Install only when the user is comfortable granting that access, keep credentials scoped to the intended account, and avoid sharing credential-bearing configuration. <br>
-Risk: Some tools can post comments, invite fans, change notifications, or download artwork to disk. <br>
-Mitigation: Confirm intent before using write, invitation, notification, or download tools, and review downloaded files and manifests before further sharing. <br>
+Risk: The MCP server receives access to an Artsonia parent or fan account. <br>
+Mitigation: Install and register it only for accounts the user is authorized to access, and keep account credentials in private configuration. <br>
+Risk: Downloaded artwork, sidecar JSON, comments, and teacher feedback can contain sensitive student data. <br>
+Mitigation: Use a private destination folder, avoid shared or synced locations, remove exported files when no longer needed, and set include_private:false when private artwork should be excluded. <br>
+Risk: Unpinned npx installs may change behavior across future package releases. <br>
+Mitigation: Pin the npm package version when repeatable installs are required. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/chrischall/artsonia-mcp) <br>
-- [artsonia-mcp npm package](https://www.npmjs.com/package/artsonia-mcp) <br>
-- [Artifact-linked source repository](https://github.com/chrischall/artsonia-mcp) <br>
+- [ClawHub Skill Page](https://clawhub.ai/chrischall/skills/artsonia-mcp) <br>
+- [npm Package](https://www.npmjs.com/package/artsonia-mcp) <br>
+- [Artifact-Declared Source Repository](https://github.com/chrischall/artsonia-mcp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON configuration and shell command snippets] <br>
+**Output Type(s):** [Text, API calls, Files, JSON, Shell commands, Configuration] <br>
+**Output Format:** [Natural-language responses, MCP tool results, setup snippets, downloaded image files, and optional JSON metadata sidecars] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Artsonia credentials and an installed MCP server; agent use may access student portfolio data or perform account actions.] <br>
+**Other Properties Related to Output:** [May save artwork images, comments, teacher feedback, indexes, and embedded metadata locally when download options are enabled.] <br>
 
 ## Skill Version(s): <br>
-0.5.0 (source: server release metadata) <br>
+0.8.3 (source: server evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

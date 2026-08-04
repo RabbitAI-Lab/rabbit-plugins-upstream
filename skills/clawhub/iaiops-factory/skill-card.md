@@ -1,5 +1,5 @@
 ## Description: <br>
-Iaiops Factory helps agents inspect and troubleshoot discrete-manufacturing systems across PLC, CNC, fieldbus, MES/SCADA, MQTT/Sparkplug B, and Unified Namespace workflows with read-first diagnostics and approval-gated writes. <br>
+Factory edition of iaiops for discrete-manufacturing lines across OPC-UA, Modbus-TCP/RTU, Siemens S7comm, Mitsubishi MC/MELSEC, Omron FINS, Allen-Bradley EtherNet/IP, EtherCAT, PROFINET, MTConnect, IO-Link, MQTT/Sparkplug B/UNS, plus downtime root-cause, OEE, and asset-inventory workflows with read-first and MOC-gated write behavior. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, controls engineers, and industrial operations teams use this skill to browse tags, diagnose connectivity and dataflow, analyze downtime and OEE, inventory assets, and prepare controlled write actions for factory production lines. <br>
+Manufacturing engineers, controls engineers, and operations teams use this skill to inspect, troubleshoot, and analyze discrete-manufacturing PLC, CNC, gateway, UNS, and production-line data. It emphasizes read-first diagnostics and requires managed change approval for high-impact write actions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: High-impact write tools could affect production control equipment if used without authorization. <br>
-Mitigation: Keep write tools disabled unless a formal MOC or approval workflow is active, require dry-run review first, and preserve rollback or undo information before any approved change. <br>
-Risk: EtherCAT and PROFINET operations may require raw-socket or privileged network access. <br>
-Mitigation: Run the skill only in environments where the agent is authorized to inspect industrial systems, and limit privileged access to the required dedicated industrial network interface. <br>
-Risk: SCADA API tokens, MQTT publish access, and PLC write functions can create operational impact if over-scoped or misused. <br>
-Mitigation: Use scoped credentials from a secret store, prefer read-only tokens where possible, and audit write-capable actions across MCP and CLI use. <br>
+Risk: High-impact write tools could affect production control systems if enabled without authorization. <br>
+Mitigation: Keep write tools disabled by default, require formal management-of-change approval, verify dry-run behavior, and confirm undo or rollback data before any production write. <br>
+Risk: Broad access to PLCs, gateways, brokers, and credentials can expand operational blast radius. <br>
+Mitigation: Install only where industrial-control access is intended and restrict credentials and network reach to the specific devices, gateways, and brokers required for the task. <br>
 
 
 ## Reference(s): <br>
-- [Iaiops Factory on ClawHub](https://clawhub.ai/zw008/skills/iaiops-factory) <br>
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-factory) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and structured tool-use guidance with inline commands and configuration snippets] <br>
+**Output Type(s):** [guidance, shell commands, configuration, analysis] <br>
+**Output Format:** [Markdown with inline shell commands and structured troubleshooting guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include read-first diagnostics, evidence-linked analysis, dry-run write plans, and rollback notes.] <br>
+**Other Properties Related to Output:** [May include protocol-specific tool names, diagnostic sequences, risk labels, and MOC-gated write guidance.] <br>
 
 ## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+0.22.0 (source: ClawHub release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

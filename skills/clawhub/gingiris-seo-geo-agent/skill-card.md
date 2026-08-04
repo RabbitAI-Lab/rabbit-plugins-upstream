@@ -1,5 +1,5 @@
 ## Description: <br>
-A multilingual SOP for running an autonomous SEO/GEO agent that manages keyword mapping, landing-page planning, daily reporting, IndexNow, AI-crawler access, and conversion-oriented content workflows. <br>
+Gingiris SEO/GEO Agent is an operational SOP that guides an agent through daily SEO and generative engine optimization work, including onboarding, GSC checks, keyword and backlink tracking, IndexNow submission, and reporting. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, founders, growth marketers, technical SEOs, and content teams use this skill to operate an SEO/GEO agent for search optimization workflows, including keyword-to-landing-page tracking, daily reports, CTA blocks, and AI-search-friendly publishing practices. <br>
+External users, growth marketers, technical SEOs, founders, and agent developers use this skill to run structured SEO/GEO operations for websites and products. It helps an agent collect site context, produce daily and weekly reports, plan keyword and landing-page work, track backlinks, and identify human-only tasks such as account authorization or payment. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent toward using third-party SEO accounts, API keys, publishing tokens, and site-changing workflows. <br>
-Mitigation: Use project-scoped, least-privilege credentials stored in a secret manager, avoid personal or root tokens, and set API budget limits. <br>
-Risk: SEO publishing, robots.txt edits, IndexNow pushes, and other public-facing or paid actions can affect real sites and accounts. <br>
-Mitigation: Require human approval before publishing, deployment, robots.txt changes, IndexNow pushes, or any paid or public-facing action. <br>
-Risk: SEO automation guidance may produce incorrect, misleading, or unsuitable changes for a specific site. <br>
-Mitigation: Review recommendations and scan the skill before deployment, especially when connecting it to real sites or accounts. <br>
+Risk: SEO, analytics, and indexing workflows may require service credentials or API keys. <br>
+Mitigation: Keep credentials in environment variables or a secrets vault, prefer project-limited credentials, and avoid pasting secrets into reports or content drafts. <br>
+Risk: Automated SEO actions can publish misleading metrics or act on stale Search Console data. <br>
+Mitigation: Cross-check external metrics before publication and verify GSC availability before using ranking data for decisions. <br>
+Risk: Changes to robots.txt, sitemap, IndexNow, analytics, or published content can affect site visibility and measurement. <br>
+Mitigation: Review proposed technical and publishing changes before applying them, especially on production domains. <br>
 
 
 ## Reference(s): <br>
-- [Full SEO/GEO Agent SOP](references/full-sop.md) <br>
-- [Hugging Face dataset](https://huggingface.co/datasets/Gingiris/gingiris-seo-geo-agent) <br>
+- [Full SEO/GEO SOP](references/full-sop.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/gingiris-1031/skills/gingiris-seo-geo-agent) <br>
+- [Gingiris Skills](https://gingiris.tools/skills/) <br>
+- [Hugging Face Dataset](https://huggingface.co/datasets/Gingiris/gingiris-seo-geo-agent) <br>
+- [IndexNow API Endpoint](https://api.indexnow.org/indexnow) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with tables, templates, checklists, and inline configuration examples] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with templates, tables, checklists, and shell/API examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill output intended for human review before site, account, publishing, or paid actions.] <br>
+**Other Properties Related to Output:** [Produces SEO/GEO operating plans, daily and weekly reports, keyword maps, content briefs, configuration checklists, and human task lists.] <br>
 
 ## Skill Version(s): <br>
-1.0.9 (source: server release evidence) <br>
+2.0.1 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

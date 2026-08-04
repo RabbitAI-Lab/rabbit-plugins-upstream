@@ -11,28 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and documentation maintainers use this skill to create, revise, and validate images for Markdown, PDF, DOCX, web pages, merge requests, and release artifacts. <br>
+Developers and documentation maintainers use this skill to create, regenerate, and review images, diagrams, screenshots, and generated graphics for Markdown, PDFs, DOCX, web pages, merge requests, and release artifacts. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generated or revised images and downstream documents may be incorrect, stale, or unsuitable for the requested format. <br>
-Mitigation: Review generated images and rebuilt artifacts before accepting changes, and run the generated image checker when *.image.genai prompt files are present. <br>
+Risk: The skill may create or update repository image artifacts next to *.image.genai prompt files. <br>
+Mitigation: Review generated .svg, .png, and .webp siblings, confirm requested formats and dimensions, and inspect diffs before merging. <br>
+Risk: Image quality claims can be misleading if validation checks only source files instead of downstream documents. <br>
+Mitigation: Validate the final Markdown, PDF, DOCX, web page, or release bundle that embeds the image before closing review. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-image-generation) <br>
+- [Publisher profile](https://clawhub.ai/user/xrowgmbh) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands] <br>
-**Output Format:** [Markdown guidance with inline file paths and shell commands] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and generated repository image files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update image prompt files and generated SVG, PNG, and WebP assets when used by an agent.] <br>
+**Other Properties Related to Output:** [May create or update .svg, .png, and .webp siblings for *.image.genai prompts and report validation status.] <br>
 
 ## Skill Version(s): <br>
-1.75.3 (source: server release evidence) <br>
+1.78.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -55,8 +55,8 @@ def print_json(data: dict) -> None:
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Query local Xiaoheli Financial Statement Assistant data.")
-    parser.add_argument("--base-url", help="Override local app base URL, e.g. http://127.0.0.1:8765")
+    parser = argparse.ArgumentParser(description="查询本机小河狸财报助手中的财务数据。")
+    parser.add_argument("--base-url", help="指定本机服务地址，例如 http://127.0.0.1:8765")
     sub = parser.add_subparsers(dest="command", required=True)
 
     sub.add_parser("health")

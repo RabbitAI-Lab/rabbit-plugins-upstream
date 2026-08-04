@@ -96,7 +96,7 @@ async function resolveDefaultUserOpenId() {
 async function fetchDefaultChannel(accessToken) {
   try {
 
-    const url = new URL("https://api.opphub.ruiplus.cn/api/opc/me");
+    const url = new URL("https://api.opphub.ruiplus.cn/api/user/me");
     return await new Promise((resolve) => {
       const mod = url.protocol === "https:" ? https : http;
       const req = mod.request(url, {
@@ -111,7 +111,7 @@ async function fetchDefaultChannel(accessToken) {
         res.on("data", (d) => (body += d));
         res.on("end", () => {
           if (res.statusCode === 404) {
-            resolve({ source: "fallback_404", reason: "/api/opc/me 404 (server 团队待实现)" });
+            resolve({ source: "fallback_404", reason: "/api/user/me 404 (server 团队待实现)" });
             return;
           }
           if (res.statusCode !== 200) {
@@ -120,7 +120,7 @@ async function fetchDefaultChannel(accessToken) {
           }
           try {
             const j = JSON.parse(body);
-            // 期望: { ok: true, opcId, channels: [{channelType, accountId, recipientId, isDefault}], defaultChannel: {...} }
+            // 期望: { ok: true, userId, channels: [{channelType, accountId, recipientId, isDefault}], defaultChannel: {...} }
             const def = j.defaultChannel ?? j.channels?.find((ch) => ch.isDefault) ?? null;
             if (!def) {
               resolve({ source: "fallback_no_default", reason: "server 返了但没 defaultChannel", data: j });
@@ -282,6 +282,7 @@ async function main() {
         delivery: cronAddResult.delivery,
         hint: cronAddResult.delivery.source === "server"
           ? "cron 每天 09:00 跑 check-update, 推送到 server 给的 defaultChannel"
+          : "cron 每天 09:00 跑 check-update, fallback 到本地 defaultChannel",
       });
       return;
     } catch (e) {

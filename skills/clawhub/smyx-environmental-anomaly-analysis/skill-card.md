@@ -1,5 +1,5 @@
 ## Description: <br>
-Combines continuous livestock barn video with environmental sensor data such as temperature, humidity, and ammonia to identify group stress responses caused by abnormal in-barn conditions. <br>
+Combines continuous livestock barn video with environmental sensor data to identify group stress responses associated with abnormal in-barn conditions. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Farm operators, livestock environment teams, and agent developers use this skill to analyze barn video and optional sensor time series for environment-linked group stress indicators. It returns structured anomaly findings, stress levels, historical report listings, and report links for review. <br>
+Farm operations teams, animal welfare reviewers, and developers use this skill to analyze livestock barn media together with temperature, humidity, ammonia, carbon dioxide, or related sensor data. It returns behavior-environment correlation findings, stress level indicators, report links, and historical cloud report listings for pre-inspection and anomaly review. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security scan verdict is suspicious because the skill sends barn media or supplied URLs to a Life Emergence/Open API service and can access authenticated report history. <br>
-Mitigation: Use only with non-sensitive footage and sensor data that may be processed by that external service; review the service relationship and data handling expectations before deployment. <br>
-Risk: The skill performs automatic identity creation and stores or reuses identity-linked values and tokens in local workspace data. <br>
-Mitigation: Run it in a dedicated workspace, inspect local data persistence such as data/smyx-api-key.txt and the SQLite token store, and avoid shared workspaces unless account-linking and retention behavior is acceptable. <br>
-Risk: Analysis output is an anomaly-screening aid and may be incorrect or incomplete for animal welfare or facility control decisions. <br>
-Mitigation: Treat results as review material and require qualified personnel to verify findings before changing equipment settings or making operational decisions. <br>
+Risk: The skill sends supplied barn media, URLs, and related metadata to Lifeemergence/Open API services for analysis. <br>
+Mitigation: Use it only with media and sensor data approved for that service boundary, and review retention, access, and data-sharing expectations before processing sensitive farm footage. <br>
+Risk: The skill may create or reuse a local internal identity and store account tokens in a workspace SQLite database. <br>
+Mitigation: Run it in a controlled workspace, restrict local database access, and rotate or remove stored credentials according to the deployment's credential handling policy. <br>
+Risk: Historical report queries return cloud report history associated with the resolved internal identity. <br>
+Mitigation: Confirm the active identity context before listing reports and avoid sharing returned report links outside authorized farm or account users. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-environmental-anomaly-analysis) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
-- [SMYX analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+- [Environmental anomaly API documentation](references/api_doc.md) <br>
+- [Common analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, files] <br>
-**Output Format:** [Markdown report text with JSON-style structured analysis and optional saved output file.] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown or structured JSON text with report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include behavior findings, environmental correlation results, stress levels, historical report lists, and cloud report links.] <br>
+**Other Properties Related to Output:** [May include behavior observations, environment correlation results, stress-level labels, exported report image URLs, and cloud history listings.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: server release metadata; SKILL.md frontmatter says 1.0.2) <br>
+1.0.5 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

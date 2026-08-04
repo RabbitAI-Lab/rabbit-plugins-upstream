@@ -1,13 +1,13 @@
 ---
 name: "signal-dreaming"
-description: "Safe single-owner bounded memory consolidation with guarded backups, recovery, and deterministic audits."
+description: "Safe single-owner staged memory consolidation with autonomous bounded index compaction."
 ---
 
 # Signal Dreaming
 
 Consolidate daily logs into L2 topic files and a compact `MEMORY.md` index. Preserve the proven v1.3.1 `Sense → Consolidate → Settle` model while adding deterministic P0 safety guards.
 
-Release candidate: `3.0.0-rc.1`.
+Release candidate: `3.0.0-rc.3`.
 
 ## Ownership contract
 
@@ -43,7 +43,7 @@ Zero scheduled writers is acceptable for an explicitly invoked manual run and pr
 - Minimum and tested OpenClaw: `2026.7.1-2`.
 - Minimum and tested Node.js: `22.23.1`.
 - Tested platform for this release candidate: macOS arm64.
-- Linux and Windows are not supported by `3.0.0-rc.1` until their isolated acceptance matrices pass.
+- Linux and Windows are not supported by `3.0.0-rc.3` until their isolated acceptance matrices pass.
 - No third-party npm packages or Bash runtime are required.
 
 Future OpenClaw releases may work only when the public CLI fields still match the validated contract. Unknown fields fail closed.
@@ -59,92 +59,88 @@ Future OpenClaw releases may work only when the public CLI fields still match th
 
 Do not depend on recall JSON. Detect work from daily-log SHA-256 changes, including same-day appends and suffixed logs.
 
+
 ## Workflow
 
 Read `references/dream-protocol.md` completely before a write run.
 
 1. Run `preflight.mjs`.
-2. Generate a read-only delta plan:
+2. Generate and save a read-only plan:
 
-   ```bash
+   ~~~bash
    node <SKILL_DIR>/scripts/delta-state.mjs plan <WORKSPACE_ROOT> > <PLAN_FILE>
-   ```
+   ~~~
 
-   `<PLAN_FILE>` is the saved JSON file path passed to `begin`.
+   The planner combines changed daily logs and index maintenance. Stop only when `"noop": true`. A hard-limit index must produce a non-noop `compact-first` plan even when no daily log changed.
+3. Read selected daily logs and relevant L2 files. When `plan.index.maintenanceRequired` is true, prioritize semantic compaction: keep current state, recovery conditions, authority boundaries, and L2 pointers; move detail to L2 before removing it from the index.
+4. Begin the guarded candidate transaction:
 
-3. Inspect the saved plan. Stop with zero writes when it says `"noop": true`.
-   `"batchCapped": true` means additional eligible logs were deferred by the per-run count or byte ceiling; it does not describe the 7-day bootstrap window.
-4. Read only the selected daily logs and relevant L2 files. Build an exact list of intended L2 and `MEMORY.md` changes.
-5. Create a unique run id and begin guarded backup:
-
-   ```bash
+   ~~~bash
    node <SKILL_DIR>/scripts/run-guard.mjs create-run-id <WORKSPACE_ROOT>
    node <SKILL_DIR>/scripts/run-guard.mjs begin <WORKSPACE_ROOT> <RUN_ID> <PLAN_FILE> MEMORY.md memory/dream-log.md memory/<topic>.md
    node <SKILL_DIR>/scripts/run-guard.mjs verify-before-write <WORKSPACE_ROOT> <RUN_ID>
-   ```
+   ~~~
 
-   Copy the exact id printed by `create-run-id` into every `<RUN_ID>` position.
+5. Edit only the manifest's candidate files under `.backup/memory-dreams/<RUN_ID>/candidate/`. Never edit live `MEMORY.md`, live L2, or the diary during the candidate phase.
+6. Prepare the diary entry JSON and semantically review candidate L2 files.
+7. Finalize:
 
-6. Edit only the planned L2 files and `MEMORY.md`. Do not edit `memory/dream-log.md`; finalization appends and trims it deterministically.
-7. Prepare the diary entry JSON described in the protocol.
-8. Semantically review touched L2 files for topic identity, lifecycle, authority, contradictions, and privacy.
-9. Finalize:
-
-   ```bash
+   ~~~bash
    node <SKILL_DIR>/scripts/run-guard.mjs finalize <WORKSPACE_ROOT> <RUN_ID> <ENTRY_JSON> --semantic-review-confirmed
-   ```
+   ~~~
 
-Finalization audits paths, backups, daily-log immutability, planned-file scope, sizes, pointers, diary numbering, and credential categories before advancing state. Omit `--semantic-review-confirmed` when no L2 file is touched.
+Finalization audits the candidate, rechecks every live hash, renders the diary in the candidate tree, then commits planned files and advances state. Candidate rejection leaves live memory untouched. Omit `--semantic-review-confirmed` only when no L2 candidate is touched.
+
 
 ## Limits
 
 - Missing state: process only the most recent 7 calendar days.
 - Per run: at most 32 daily logs and 512 KiB total input.
-- `--full-history` is manual only and still processes one bounded oldest-first batch.
+- `--full-history` is manual only and remains bounded.
 - `MEMORY.md` at `0–8192` bytes is healthy.
-- `8193–10240` bytes is a soft warning.
-- More than `10240` bytes is a hard failure and cannot commit.
+- `8193–10240` bytes is a soft trimming band.
+- More than `10240` bytes is a hard failure for candidates and a mandatory `compact-first` trigger for the planner.
+- A soft-band index triggers maintenance when it changed since the last successful review or that review is at least 7 days old. An unchanged recently reviewed soft-band index does not loop nightly.
+- A maintenance-only candidate must reduce `MEMORY.md`; otherwise reject it without writing a diary or advancing state.
+
 
 ## Failure and recovery
 
-Never start over an active, stale, or unreviewed incomplete run.
+Manifest states distinguish candidate failure from uncertain live state.
 
-- On a known failure, record it:
+- `candidate_rejected`: deterministic candidate failure; live memory was not changed, the lock is released, and no acknowledgement is required.
+- `incomplete`: a live commit may be partial or an older live-edit run needs reconciliation. Inspect backups and live hashes before acknowledgement.
+- `committed`: candidate audit, live hash recheck, planned-file commit, diary, and state all completed.
 
-  ```bash
-  node <SKILL_DIR>/scripts/run-guard.mjs fail <WORKSPACE_ROOT> <RUN_ID> <REASON>
-  ```
+Never start over an active, stale, or unreviewed incomplete run. For an incomplete run:
 
-- Inspect `.backup/memory-dreams/<run-id>/manifest.json` and its `files/` backups.
-- Restore or reconcile files manually; P0 does not provide automatic rollback.
-- Only after human review, acknowledge the exact run id:
+~~~bash
+node <SKILL_DIR>/scripts/run-guard.mjs ack-incomplete <WORKSPACE_ROOT> <RUN_ID> --confirm <RUN_ID>
+~~~
 
-  ```bash
-  node <SKILL_DIR>/scripts/run-guard.mjs ack-incomplete <WORKSPACE_ROOT> <RUN_ID> --confirm <RUN_ID>
-  ```
+Acknowledgement records review; it does not restore files.
 
-Acknowledgement does not restore files. It records review and clears only that stale lock.
+Inventory retained V2 and V3 transactions without mutating them:
 
-For `STATE_INVALID` or `STATE_SCHEMA_UNSUPPORTED`, do not delete or edit the state cursor. Inspect its hash, review the file, then quarantine that exact version:
+~~~bash
+node <SKILL_DIR>/scripts/transaction-list.mjs <WORKSPACE_ROOT>
+~~~
 
-```bash
+The inventory accepts legacy V2 `workspace/entries` manifests and V3 `root/plannedFiles` manifests. It recognizes the legacy backup lock directory and the V3 `logs/signal-dreaming/run.lock` file, fails closed when both lock formats are present, and rejects mixed or conflicting manifest identities. V3 results are diagnostic only and never emit automatic rollback commands.
+
+For `STATE_INVALID` or `STATE_SCHEMA_UNSUPPORTED`, inspect and quarantine only the exact reviewed state hash:
+
+~~~bash
 node <SKILL_DIR>/scripts/delta-state.mjs inspect-state <WORKSPACE_ROOT>
 node <SKILL_DIR>/scripts/delta-state.mjs quarantine-state <WORKSPACE_ROOT> --confirm <STATE_SHA256>
-```
+~~~
 
-Quarantine verifies a recoverable `.bak` copy under `.backup/memory-dreams/state-recovery/` before removing the active cursor. The next plan uses the normal bounded 7-day bootstrap.
+Run standalone audit and isolated acceptance tests with:
 
-Run a standalone read-only audit when needed:
-
-```bash
+~~~bash
 node <SKILL_DIR>/scripts/dream-audit.mjs <WORKSPACE_ROOT>
-```
-
-Run the isolated acceptance suite:
-
-```bash
 node <SKILL_DIR>/scripts/self-test.mjs
-```
+~~~
 
 ## Scheduling
 

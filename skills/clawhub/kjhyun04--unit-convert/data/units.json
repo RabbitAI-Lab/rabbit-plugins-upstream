@@ -1,0 +1,197 @@
+{
+  "length": {
+    "base": "m",
+    "units": {
+      "mm": 0.001,
+      "cm": 0.01,
+      "m": 1,
+      "km": 1000,
+      "in": 0.0254,
+      "ft": 0.3048,
+      "yd": 0.9144,
+      "mi": 1609.344,
+      "nmi": 1852
+    },
+    "aliases": {
+      "millimeter": "mm",
+      "centimeter": "cm",
+      "meter": "m",
+      "metre": "m",
+      "kilometer": "km",
+      "kilometre": "km",
+      "inch": "in",
+      "foot": "ft",
+      "feet": "ft",
+      "yard": "yd",
+      "mile": "mi",
+      "밀리미터": "mm",
+      "센티미터": "cm",
+      "센치": "cm",
+      "미터": "m",
+      "킬로미터": "km",
+      "인치": "in",
+      "피트": "ft",
+      "야드": "yd",
+      "마일": "mi",
+      "해리": "nmi"
+    }
+  },
+  "mass": {
+    "base": "kg",
+    "units": {
+      "mg": 0.000001,
+      "g": 0.001,
+      "kg": 1,
+      "t": 1000,
+      "oz": 0.028349523125,
+      "lb": 0.45359237,
+      "st": 6.35029318
+    },
+    "aliases": {
+      "milligram": "mg",
+      "gram": "g",
+      "kilogram": "kg",
+      "tonne": "t",
+      "ton": "t",
+      "ounce": "oz",
+      "pound": "lb",
+      "lbs": "lb",
+      "stone": "st",
+      "밀리그램": "mg",
+      "그램": "g",
+      "킬로그램": "kg",
+      "톤": "t",
+      "온스": "oz",
+      "파운드": "lb"
+    }
+  },
+  "volume": {
+    "base": "l",
+    "units": {
+      "ml": 0.001,
+      "l": 1,
+      "m3": 1000,
+      "tsp": 0.00492892159375,
+      "tbsp": 0.01478676478125,
+      "floz": 0.0295735295625,
+      "cup": 0.2365882365,
+      "pt": 0.473176473,
+      "qt": 0.946352946,
+      "gal": 3.785411784
+    },
+    "aliases": {
+      "milliliter": "ml",
+      "millilitre": "ml",
+      "liter": "l",
+      "litre": "l",
+      "teaspoon": "tsp",
+      "tablespoon": "tbsp",
+      "fluidounce": "floz",
+      "pint": "pt",
+      "quart": "qt",
+      "gallon": "gal",
+      "밀리리터": "ml",
+      "리터": "l",
+      "세제곱미터": "m3",
+      "작은술": "tsp",
+      "티스푼": "tsp",
+      "큰술": "tbsp",
+      "테이블스푼": "tbsp",
+      "컵": "cup",
+      "파인트": "pt",
+      "쿼트": "qt",
+      "갤런": "gal"
+    }
+  },
+  "area": {
+    "base": "m2",
+    "units": {
+      "cm2": 0.0001,
+      "m2": 1,
+      "km2": 1000000,
+      "ha": 10000,
+      "acre": 4046.8564224,
+      "ft2": 0.09290304,
+      "pyeong": 3.305785
+    },
+    "aliases": {
+      "hectare": "ha",
+      "sqm": "m2",
+      "sqft": "ft2",
+      "pyung": "pyeong",
+      "제곱센티미터": "cm2",
+      "제곱미터": "m2",
+      "제곱킬로미터": "km2",
+      "헥타르": "ha",
+      "에이커": "acre",
+      "제곱피트": "ft2",
+      "평": "pyeong"
+    }
+  },
+  "speed": {
+    "base": "mps",
+    "units": {
+      "mps": 1,
+      "kmh": 0.2777777777777778,
+      "mph": 0.44704,
+      "kn": 0.5144444444444445
+    },
+    "aliases": {
+      "ms": "mps",
+      "kph": "kmh",
+      "knot": "kn",
+      "knots": "kn",
+      "초속미터": "mps",
+      "시속킬로미터": "kmh",
+      "시속마일": "mph",
+      "노트": "kn"
+    }
+  },
+  "data": {
+    "base": "byte",
+    "units": {
+      "bit": 0.125,
+      "byte": 1,
+      "kb": 1000,
+      "mb": 1000000,
+      "gb": 1000000000,
+      "tb": 1000000000000,
+      "kib": 1024,
+      "mib": 1048576,
+      "gib": 1073741824,
+      "tib": 1099511627776
+    },
+    "aliases": {
+      "b": "byte",
+      "bytes": "byte",
+      "kilobyte": "kb",
+      "megabyte": "mb",
+      "gigabyte": "gb",
+      "terabyte": "tb",
+      "비트": "bit",
+      "바이트": "byte",
+      "킬로바이트": "kb",
+      "메가바이트": "mb",
+      "기가바이트": "gb",
+      "테라바이트": "tb"
+    }
+  },
+  "temperature": {
+    "base": "c",
+    "affine": true,
+    "units": {
+      "c": { "scale": 1, "offset": 0 },
+      "f": { "scale": 0.5555555555555556, "offset": -17.77777777777778 },
+      "k": { "scale": 1, "offset": -273.15 }
+    },
+    "aliases": {
+      "celsius": "c",
+      "centigrade": "c",
+      "fahrenheit": "f",
+      "kelvin": "k",
+      "섭씨": "c",
+      "화씨": "f",
+      "켈빈": "k"
+    }
+  }
+}

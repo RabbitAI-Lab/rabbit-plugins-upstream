@@ -1,8 +1,8 @@
 
 ## How to Typical MaybeSheet Worksheet Creation
 
-For this skill, the accepted `cost_monthly` Gold output is a PG/db-table created
-through `stage-03-silver2gold.md`. An Excelize worksheet may be created later as
+For this skill, the accepted `cost_monthly` Gold output is a Base-backed db-table created
+through `stage-03-silver2gold.md`. An Excel worksheet may be created later as
 an optional workbook-facing presentation pivot, but it does not replace the
 required Gold db-table.
 
@@ -12,7 +12,7 @@ Reference the MaybeSheet CLI skill docs before changing command shapes:
 - `../../../mcp/maybeai-sheet-cli-skill/references/formulas-sql.md`
 - `../../../mcp/maybeai-sheet-cli-skill/references/file-management.md`
 
-### PG/db-table engine
+### Base-backed db-table route
 
 Use this path for accepted Gold tables and other SQL-backed handoff tables:
 
@@ -25,7 +25,7 @@ mbs db-table sample --doc-id <DOC_ID> --name cost_monthly --limit 20 --output js
 mbs db-table read --doc-id <DOC_ID> --name cost_monthly --limit 100 --output json
 ```
 
-### Excelize/excel engine
+### Sheet mode
 
 Use this path only for optional workbook-facing presentation worksheets,
 reports, charts, images, merged cells, styles, or visible cell formulas after
@@ -39,5 +39,3 @@ mbs excel-worksheet calculate --doc-id <DOC_ID> --worksheet-name <REPORT_WORKSHE
 mbs formula read --doc-id <DOC_ID> --worksheet-name <REPORT_WORKSHEET> --range E2 --output json
 mbs excel-worksheet check-error --doc-id <DOC_ID> --worksheet-name <REPORT_WORKSHEET> --output json
 ```
-
-

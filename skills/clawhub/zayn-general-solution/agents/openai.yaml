@@ -1,0 +1,4 @@
+interface:
+  display_name: "通用问题解决方案"
+  short_description: "跨行业比较修复、重做、退款等补救方案的成本、风险与影响"
+  default_prompt: "Use $zayn-general-solution to compare resolution options, costs, risks, and customer impact."

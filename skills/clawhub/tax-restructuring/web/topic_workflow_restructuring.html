@@ -199,7 +199,7 @@ button:hover { opacity:.92; }
     <div class="kb-banner">
         <div class="kb-title">根据 tax-policy-knowledge 财税知识库与技能矩阵生成</div>
         <span class="kb-link" onclick="copyKbLink()">🔗 点击查看并复制链接</span>
-        <div class="kb-cta">觉得好用请点 ★ 收藏 | 有需求建议可加企鹅号 <b>1817694478</b> 或在评论区留言 | 有你的关注与支持是我们功能升级持续更新的最大动力！</div>
+        <div class="kb-cta">本自检页为本地交互工具，所填数据仅保存在本机浏览器、不上传任何服务器；完整功能请在 WorkBuddy 内调用本技能获取。</div>
     </div>
 
     <h1>📋 企业重组与并购税务规则包</h1>
@@ -266,6 +266,7 @@ button:hover { opacity:.92; }
       <li><b>将发送的数据</b>：仅本次填写的税务指标数值（如研发费用占比、人员比例等），<b>不含</b>企业名称、统一社会信用代码、注册地址、成立时间等身份信息。</li>
       <li><b>用途</b>：经 HTTPS 加密连接发送至云端无状态自评服务，用于规则判定并即时返回结果。</li>
       <li><b>不留存</b>：该服务不留存您提交的数据，亦不与任何身份关联。</li>
+      <li><b>匿名访问</b>：本次访问不关联任何账号或身份；为调用云端服务自动签发的临时密钥仅存于本次浏览器会话（关闭标签页即失效），不跨会话留存，也不写入本地持久存储。</li>
     </ul>
     <label class="consent-check"><input type="checkbox" id="consentChk"/> 我已阅读并同意上述数据发送说明</label>
     <div class="consent-btns">
@@ -278,22 +279,29 @@ button:hover { opacity:.92; }
 <script>
 const API = "https://mcp.aitaxs.top/api/v1";
 // ===== 统一注册 + API Key 安全鉴权（与 Python 客户端一致） =====
+// 安全约束（防止匿名调用泄露信息）：
+//  1) 匿名访问：不关联任何账号/身份，仅用于调用无状态自评服务；
+//  2) 知情同意门控：未获用户显式同意(CONSENTED)前，绝不发卡、绝不调用，杜绝静默匿名访问；
+//  3) 密钥会话级：key 仅存于 sessionStorage（关闭标签页即失效），不跨会话持久化，缩小 XSS 窃取窗口。
 const AUTH_LS_KEY = "tax_policy_mcp_api_key";
 const AUTH_LS_CID = "tax_policy_mcp_client_id";
+function _consentOk(){ return (typeof CONSENTED !== "undefined") && !!CONSENTED; }
 function _webClientId(){
-  let cid = localStorage.getItem(AUTH_LS_CID);
-  if(!cid){ cid = "tax-web-" + Math.random().toString(36).slice(2,10) + Date.now().toString(36); localStorage.setItem(AUTH_LS_CID, cid); }
+  let cid = sessionStorage.getItem(AUTH_LS_CID);
+  if(!cid){ cid = "tax-web-" + Math.random().toString(36).slice(2,10) + Date.now().toString(36); sessionStorage.setItem(AUTH_LS_CID, cid); }
   return cid;
 }
 async function _ensureApiKey(){
-  let key = localStorage.getItem(AUTH_LS_KEY);
+  // 防御纵深：未获知情同意前绝不匿名发卡/调用
+  if(!_consentOk()) return null;
+  let key = sessionStorage.getItem(AUTH_LS_KEY);
   if(key) return key;
   try{
     const res = await fetch(API + "/auth/register", {
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({ name:"tax-policy-web-"+_webClientId().slice(0,8), user_id:"auto", device_id:_webClientId() })
     });
-    if(res.ok){ const d = await res.json(); if(d && d.api_key){ localStorage.setItem(AUTH_LS_KEY, d.api_key); return d.api_key; } }
+    if(res.ok){ const d = await res.json(); if(d && d.api_key){ sessionStorage.setItem(AUTH_LS_KEY, d.api_key); return d.api_key; } }
   }catch(e){ console.warn("API Key 注册失败：", e); }
   return null;
 }
@@ -479,7 +487,12 @@ function runCalc(modKey) {
     if (!spec.compute) return;
     const card = document.querySelector('.widget-card[data-mod="'+modKey+'"]');
     const f = {};
-    card.querySelectorAll("[data-f]").forEach(el => { f[el.dataset.f] = el.value; });
+    card.querySelectorAll("[data-f]").forEach(el => {
+        const raw = el.value;
+        if (el.tagName === "SELECT") { f[el.dataset.f] = raw; return; }
+        const num = (raw === "" || raw === null) ? 0 : Number(raw);
+        f[el.dataset.f] = isNaN(num) ? raw : num;
+    });
     const m = (RULES[TOPIC] && RULES[TOPIC][modKey]) || {};
     let res;
     try {
@@ -788,7 +801,7 @@ function generateReport() {
         RULES.landing_roadmap.slice(1).forEach(function(r){ report += "· " + r[0] + "（" + r[1] + "）：" + r[2] + "\n"; });
         report += "\n";
     }
-    report += "---\n根据 tax-policy-knowledge 财税知识库与技能矩阵生成\n企鹅号 1817694478（欢迎留言与关注）\n";
+    report += "---\n根据 tax-policy-knowledge 财税知识库与技能矩阵生成\n";
     navigator.clipboard.writeText(report).then(() => toastMsg("📋 报告已复制，可粘贴保存"));
 }
 

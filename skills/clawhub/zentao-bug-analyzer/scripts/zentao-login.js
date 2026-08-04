@@ -15,47 +15,7 @@
 
 const { chromium } = require('playwright');
 const http = require('http');
-
-function parseArgs() {
-  const args = process.argv.slice(2);
-  const config = {
-    account: 'wyhe',
-    password: '',
-    zentaoUrl: 'http://zentao.gxatek.com:20080',
-    port: 9224,
-  };
-  for (const arg of args) {
-    if (arg.startsWith('--account=')) config.account = arg.split('=')[1];
-    if (arg.startsWith('--password=')) config.password = arg.split('=')[1];
-    if (arg.startsWith('--zentao-url=')) config.zentaoUrl = arg.split('=')[1];
-    if (arg.startsWith('--port=')) config.port = parseInt(arg.split('=')[1], 10);
-  }
-
-  // 从配置文件读取密码（如果命令行未提供）
-  if (!config.password) {
-    const fs = require('fs');
-    const path = require('path');
-    const home = process.env.USERPROFILE || process.env.HOME;
-    const workspaceDirs = [
-      path.join(home, '.openclaw-auto-bug-analyze', 'workspace'),
-      path.join(home, '.openclaw', 'workspace'),
-    ];
-    for (const dir of workspaceDirs) {
-      const configPath = path.join(dir, 'bug-analyzer-config.json');
-      if (fs.existsSync(configPath)) {
-        const cfg = JSON.parse(fs.readFileSync(configPath, 'utf-8'));
-        if (cfg.zentao) {
-          config.account = config.account || cfg.zentao.account;
-          config.password = config.password || cfg.zentao.password;
-          config.zentaoUrl = config.zentaoUrl || cfg.zentao.url;
-        }
-        break;
-      }
-    }
-  }
-
-  return config;
-}
+const { parseArgs, readConfig } = require('./zentao-utils');
 
 async function getWsEndpoint(port) {
   return new Promise((resolve, reject) => {
@@ -78,7 +38,22 @@ async function getWsEndpoint(port) {
 }
 
 async function main() {
-  const config = parseArgs();
+  const config = parseArgs({
+    account: 'wyhe',
+    password: '',
+    zentaoUrl: 'http://zentao.gxatek.com:20080',
+    port: 9224,
+  });
+
+  // 从配置文件读取密码（如果命令行未提供）
+  if (!config.password) {
+    const cfg = readConfig();
+    if (cfg && cfg.zentao) {
+      config.account = config.account || cfg.zentao.account;
+      config.password = config.password || cfg.zentao.password;
+      config.zentaoUrl = config.zentaoUrl || cfg.zentao.url;
+    }
+  }
 
   if (!config.password) {
     console.error('[ERROR] 密码未提供，请通过 --password 参数或配置文件提供');
@@ -105,17 +80,27 @@ async function main() {
     await page.fill('#account', config.account);
     await page.fill('input[name="password"]', config.password);
     await page.click('#submit');
-    await page.waitForTimeout(3000);
 
-    // 检查登录是否成功
-    const currentUrl = page.url();
-    if (currentUrl.includes('user-login')) {
-      const error = await page.$('.alert-danger, .help-block');
+    // 使用 waitForURL 替代 hardcoded 3s wait：等待页面跳转到非登录页（成功）或停留在错误页
+    try {
+      await page.waitForURL((url) => !url.toString().includes('user-login'), { timeout: 15000 });
+      console.error('[INFO] 登录成功，页面已跳转');
+    } catch {
+      // 15 秒后仍在 login 页面 → 登录失败
+      const errorEl = await page.$('.alert-danger, .help-block');
       let errorText = '未知错误';
-      if (error) {
-        errorText = (await error.textContent()).trim();
+      if (errorEl) {
+        errorText = (await errorEl.textContent()).trim();
       }
-      console.error(`[ERROR] 登录失败: ${errorText}`);
+      console.error(`[ERROR] 登录失败（超时未跳转）: ${errorText}`);
+      await browser.close();
+      process.exit(1);
+    }
+
+    // 二次确认：检查页面是否包含登录成功标志（用户名显示）
+    const bodyText = await page.evaluate(() => document.body.innerText || '');
+    if (bodyText.includes('登录') && bodyText.includes('密码')) {
+      console.error('[ERROR] 登录失败：页面仍显示登录表单');
       await browser.close();
       process.exit(1);
     }
@@ -135,7 +120,7 @@ async function main() {
     process.exit(1);
   }
 
-  // 输出到 stdout
+  // 输出到 stdout（PID 是 Node.js 进程 PID，用于步骤 6 清理）
   console.log(`WS=${wsEndpoint}`);
   console.log(`PID=${process.pid}`);
 

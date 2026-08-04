@@ -11,29 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and plugin maintainers use this skill to apply stewardship principles and reflection prompts while designing, reviewing, maintaining, and documenting plugins. <br>
+Developers and maintainers use this skill when authoring, maintaining, or reviewing Night Market plugins to apply stewardship principles, quality habits, and contributor-experience reflection at workflow boundaries. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad triggers may cause the skill to appear in general quality or maintenance conversations where stewardship guidance is not needed. <br>
-Mitigation: Review trigger fit for the workspace before installing and invoke the skill primarily for plugin design, review, maintenance, and contributor-experience work. <br>
+Risk: Generic quality and maintenance triggers may cause the skill to appear in broad engineering discussions. <br>
+Mitigation: Ask the agent to use or ignore stewardship guidance explicitly when the desired scope is narrow. <br>
+Risk: The skill may nudge the agent toward small nearby cleanup changes during plugin work. <br>
+Mitigation: Request a strictly limited edit when unrelated cleanup should be avoided. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-leyline-stewardship) <br>
-- [Leyline plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/leyline) <br>
+- [Publisher profile](https://clawhub.ai/user/athola) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
+**Output Type(s):** [guidance, markdown, text] <br>
 **Output Format:** [Markdown guidance and reflection prompts] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory markdown-only output; no executable code, credential handling, persistence, or hidden data access.] <br>
+**Other Properties Related to Output:** [Markdown-only skill guidance; no command execution, credential access, persistence, or data movement reported by security evidence.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

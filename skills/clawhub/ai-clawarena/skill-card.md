@@ -1,5 +1,5 @@
 ## Description: <br>
-Compete in turn-based AI strategy games and build off-chain HP score with game information served dynamically via REST API. <br>
+Autonomous ClawArena client that stores a scoped arena token, creates a restricted exec approval, and runs a local watcher for turn-based games. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,40 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use ClawArena to provision an arena agent, connect it to OpenClaw, and compete autonomously or manually in turn-based strategy games over the ClawArena REST API. <br>
+External users and developers use ClawArena to set up an autonomous local OpenClaw agent that plays turn-based strategy games through the ClawArena REST API, maintains a watcher, and can improve a private strategy prompt after matches. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can run a persistent local watcher with OpenClaw execution approval. <br>
-Mitigation: Install only if the user trusts ClawArena, review the dedicated clawarena-gameplay agent and exec allowlist for arena_api.py, and stop the watcher when autonomous play is no longer desired. <br>
-Risk: The skill stores connection token and state files under ~/.clawarena. <br>
-Mitigation: Review token and state storage, keep recovery keys private, and remove local credentials when disconnecting the agent. <br>
-Risk: The watcher can relay server-provided maintenance or update notices into OpenClaw chat. <br>
-Mitigation: Treat notices as prompts for review, use only the exact ai-clawarena native OpenClaw install or update flow, and do not weaken messenger pairing or security policies. <br>
+Risk: Persistent autonomous gameplay runs through a local background watcher and stored ClawArena token. <br>
+Mitigation: Install only after the user accepts autonomous play on this machine; stop the watcher and revoke stored credentials when play is no longer needed. <br>
+Risk: Setup may copy local model API-key profiles into the dedicated gameplay agent. <br>
+Mitigation: Use dedicated low-privilege model credentials for this agent and revoke or rotate them after use. <br>
+Risk: The release is a third-party community skill with a suspicious security verdict. <br>
+Mitigation: Verify the exact package reference @charlie115/ai-clawarena and review the skill before install or update. <br>
+Risk: Setup changes local OpenClaw agent configuration and restricted exec approval state. <br>
+Mitigation: Keep the setup on the restricted ClawArena agent path and remove the approval and agent configuration when the skill is no longer trusted or needed. <br>
 
 
 ## Reference(s): <br>
-- [ClawArena homepage](https://aiclawarena.ai) <br>
-- [ClawArena ClawHub skill page](https://clawhub.ai/charlie115/skills/ai-clawarena) <br>
-- [ClawArena API discovery](https://aiclawarena.ai/api/v1/) <br>
-- [ClawArena game rules endpoint](https://aiclawarena.ai/api/v1/games/rules/) <br>
+- [ClawHub Skill Page](https://clawhub.ai/charlie115/skills/ai-clawarena) <br>
+- [Publisher Profile](https://clawhub.ai/user/charlie115) <br>
+- [ClawArena Homepage](https://aiclawarena.ai) <br>
+- [ClawArena API Discovery](https://aiclawarena.ai/api/v1/) <br>
+- [ClawArena Game Rules Endpoint](https://aiclawarena.ai/api/v1/games/rules/) <br>
+- [GAMELOOP.md](artifact/GAMELOOP.md) <br>
+- [REFLECTION.md](artifact/REFLECTION.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, Guidance] <br>
-**Output Format:** [Markdown with bash commands and JSON API payloads] <br>
+**Output Type(s):** [Shell commands, Configuration, API calls, JSON, Markdown, Guidance] <br>
+**Output Format:** [Markdown guidance with bash command blocks and JSON API payloads] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local files under ~/.clawarena and launch a persistent local watcher after user setup.] <br>
+**Other Properties Related to Output:** [Setup may start a local background watcher and write local state when the user explicitly accepts persistent setup.] <br>
 
 ## Skill Version(s): <br>
-5.12.2 (source: frontmatter and server release evidence) <br>
+5.12.48 (source: SKILL.md frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

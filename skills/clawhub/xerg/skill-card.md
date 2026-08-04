@@ -1,5 +1,5 @@
 ## Description: <br>
-Audit and reduce AI agent spend in dollars across OpenClaw, Hermes, Claude Code, Cursor, and event-ingest workflows. <br>
+Audit and reduce AI agent runtime spend in dollars. Use for AI costs, agent spend, token waste, runtime attribution, detector coverage, and FinOps. Works with OpenClaw, Hermes, Claude Code, Cursor, and generic event ingest. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,39 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, engineering teams, and AI operations teams use this skill to run Xerg CLI audits, summarize AI spend and waste in dollars, and compare workflow or model changes. It is useful when investigating retry loops, context bloat, downgrade candidates, per-agent spend, or optional hosted sync setup. <br>
+Developers, engineering leads, and FinOps teams use Xerg to run local-first audits of AI agent runtime spend, identify waste, report detector coverage, and compare compatible changes. The skill guides agents through installation checks, non-interactive audits, local summaries, and optional hosted sync only after explicit user action. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The CLI can inspect local AI usage records and logs for cost analysis. <br>
-Mitigation: Run it only on data sources you intend to audit, and review the local sources reported by `xerg doctor` before running an audit. <br>
-Risk: Cloud push, connect, hosted MCP, remote SSH, and Railway flows can move beyond a local-only audit. <br>
-Mitigation: Keep audits local unless the user explicitly chooses hosted or remote setup, and review the generated SSH, Railway, or MCP configuration before use. <br>
-Risk: The `npx @xerg/cli@latest` path fetches and executes a third-party npm package. <br>
-Mitigation: Use the published package only when third-party CLI execution is acceptable, or install and pin the CLI through the environment's normal package controls. <br>
+Risk: The third-party CLI reads AI agent logs, transcripts, local databases, Cursor exports, generic event payloads, or selected remote sources to calculate spend. <br>
+Mitigation: Run local audits first, review outputs before pushing, and use hosted sync or API keys only when cloud features or CI automation are intentionally approved. <br>
+Risk: Running through npx fetches and executes the published third-party npm package before the audit runs. <br>
+Mitigation: Use the documented @xerg/cli package path according to local package and network policy, or install the CLI globally when repeated fetches are not desired. <br>
+Risk: Runtime costs may be observed, locally estimated, or unpriced and are not authoritative provider invoices. <br>
+Mitigation: Use Xerg output for runtime waste analysis and comparison, not for invoice reconciliation or provider billing authority. <br>
+Risk: Credentialed cloud or CI usage can expose workspace access if keys are pasted into chat, commands, logs, or source files. <br>
+Mitigation: Use browser pairing for normal activation and store XERG_API_KEY only in the CI provider's secret manager for non-interactive automation. <br>
 
 
 ## Reference(s): <br>
+- [Xerg homepage](https://xerg.ai) <br>
 - [Xerg documentation](https://xerg.ai/docs) <br>
-- [Xerg skill](https://xerg.ai/skill.md) <br>
+- [Xerg skill source](https://xerg.ai/skill.md) <br>
 - [Xerg service status](https://status.xerg.ai) <br>
 - [@xerg/cli npm package](https://www.npmjs.com/package/@xerg/cli) <br>
-- [OpenSSH](https://www.openssh.com/) <br>
-- [rsync](https://rsync.samba.org/) <br>
-- [Railway CLI](https://github.com/railwayapp/cli) <br>
+- [ClawHub skill page](https://clawhub.ai/xerg/skills/xerg) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON-result summaries] <br>
+**Output Format:** [Markdown with inline shell commands and JSON audit summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local CLI commands, runtime-specific flags, hosted setup steps, and concise summaries of audit JSON fields.] <br>
+**Other Properties Related to Output:** [Summaries should report dollar spend, identified waste, detector coverage, top findings, and per-agent spend when present.] <br>
 
 ## Skill Version(s): <br>
-0.13.0 (source: server release evidence) <br>
+0.18.0 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

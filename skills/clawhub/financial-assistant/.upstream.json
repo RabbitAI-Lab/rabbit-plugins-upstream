@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/financial-assistant",
   "slug": "financial-assistant",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1783583769336,
-  "contentHash": "2e27a5cb53c652b0e4428a10148ad0f70a18a963f0e57ed957d6be9318d3a275",
-  "fetchedAt": "2026-07-26T18:17:34.138Z"
+  "version": "1.0.3",
+  "updatedAt": 1785482318769,
+  "contentHash": "2f4d0f42b9713f039a324710855d55639bd7432a823aa51aee5f0d722c32b4bd",
+  "fetchedAt": "2026-08-04T10:27:07.335Z"
 }

@@ -1,5 +1,5 @@
 ## Description: <br>
-Use when writing, editing, or reviewing Russian-language text, or when user mentions ru-text; covers typography, info-style, editorial, UX writing, business correspondence, and AI-text cleanup. <br>
+ru-text provides Russian text quality guidance for typography, info-style, editorial grammar, UX writing, business correspondence, and AI-text cleanup. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Writers, editors, product teams, and agents use this skill to produce or review Russian-language text with consistent typography, clearer style, UX copy, business-writing conventions, and quality scoring. <br>
+Writers, editors, product teams, and developers use this skill to improve Russian-language output, normalize typography, clean AI-generated prose, and assess text quality across editorial, UX, business, and content contexts. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Automatic typography and editorial normalization can change exact source text where byte-for-byte preservation matters. <br>
-Mitigation: Disable or explicitly constrain the skill for legal quotations, tests, logs, literal transcription, and other workflows that require exact formatting preservation. <br>
+Risk: Always-on Russian text normalization can alter exact wording, typography, product strings, legal text, code-adjacent text, or intentionally preserved formatting. <br>
+Mitigation: State preservation requirements explicitly and review corrected output before using it in contexts where exact text matters. <br>
+Risk: Editorial guidance and quality scoring can be subjective or inappropriate for a requested style, domain, or audience. <br>
+Mitigation: Treat recommendations as review input, prefer the user's requested style when it conflicts with defaults, and have a human editor approve high-impact text. <br>
 
 
 ## Reference(s): <br>
 - [ru-text homepage](https://ru-text.org) <br>
-- [ClawHub skill page](https://clawhub.ai/talkstream/skills/ru-text) <br>
 - [Sources and Attribution](references/sources.md) <br>
 - [Russian typography rules](references/typography.md) <br>
 - [Info-style methodology](references/info-style.md) <br>
 - [UX writing in Russian](references/ux-writing.md) <br>
 - [Russian business writing guide](references/business-writing.md) <br>
-- [Scoring: text quality assessment](references/scoring.md) <br>
+- [Text quality scoring rubric](references/scoring.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Analysis, Guidance] <br>
-**Output Format:** [Markdown and plain text with corrected Russian prose, change lists, quality scores, and editorial guidance] <br>
+**Output Type(s):** [text, markdown, guidance] <br>
+**Output Format:** [Markdown prose with corrected text, change notes, checklists, or quality scores depending on the user task] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May automatically normalize Russian typography and editorial style when generating Russian text.] <br>
+**Other Properties Related to Output:** [Non-executing text guidance; may apply broadly to Russian-language responses.] <br>
 
 ## Skill Version(s): <br>
-1.10.1 (source: server release metadata) <br>
+2.0.1 (source: release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

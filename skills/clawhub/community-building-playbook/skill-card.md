@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps agents plan and operate developer and user communities, including ambassador programs, community-led growth, events, content strategy, and health metrics. <br>
+Build and grow developer and user communities from scratch, covering ambassador programs, community-led growth, event operations, content strategy, and health metrics. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External founders, developer advocates, community operators, and startup teams use this skill to design community programs, ambassador operations, event playbooks, content plans, and community health metrics for open-source, SaaS, or brand communities. <br>
+Community, developer relations, growth, and startup operators use this skill to plan community launches, ambassador programs, events, content workflows, and community health metrics for open-source projects, SaaS products, and brands. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Outreach and ambassador application templates may collect personal information or encourage repeated unsolicited contact if reused unchanged. <br>
-Mitigation: Add a privacy notice, collect only necessary information, define retention and access controls, follow platform anti-spam rules, and avoid repeated unsolicited outreach. <br>
-Risk: Community-growth benchmarks and playbooks may be misapplied before a product has enough user pull to support a community program. <br>
-Mitigation: Use the readiness checklist and adapt ambassador, event, and metric targets to the product stage before launching a formal program. <br>
+Risk: Cold outreach and public posting workflows may violate consent expectations, platform policies, or rate limits if used without safeguards. <br>
+Mitigation: Require opt-in or prior-relationship outreach, platform-policy checks, rate limits, and human approval before DMs or public posts. <br>
+Risk: Ambassador applications and member directories may collect personal data without enough privacy controls. <br>
+Mitigation: Add a privacy notice, minimize collected fields, and collect only data needed for community operations. <br>
+Risk: Operational community advice may be applied too directly for a specific product, region, or community maturity level. <br>
+Mitigation: Review and edit the playbook before relying on it operationally, including ownership, response SLAs, escalation paths, and platform-safety gates. <br>
 
 
 ## Reference(s): <br>
 - [Community Building Benchmarks](references/benchmarks.md) <br>
 - [Community Building Templates](references/templates.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/gingiris-1031/skills/community-building-playbook) <br>
+- [Brand24](https://brand24.com/) <br>
+- [Mention](https://mention.com) <br>
+- [Asana Ambassador Program](https://academy.asana.com/page/become-an-asana-ambassador) <br>
+- [Asana Community](https://asana.com/community) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration, Text] <br>
-**Output Format:** [Markdown guidance with checklists, tables, and copy-ready templates] <br>
+**Output Type(s):** [guidance, markdown, configuration] <br>
+**Output Format:** [Markdown playbooks, checklists, templates, tables, and operational guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable strategic playbook output; outreach and form templates should be adapted before use.] <br>
+**Other Properties Related to Output:** [Non-executable community growth guidance; review and adapt before operational use.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+1.0.6 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

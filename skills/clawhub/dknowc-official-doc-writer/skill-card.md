@@ -1,5 +1,5 @@
 ## Description: <br>
-Dknowc Official Doc Writer helps agents draft, revise, review, and produce Word-format Chinese official documents and formal administrative materials, using DKnowc outline and search services when policy, data, standards, or case support is needed. <br>
+This skill helps agents draft, revise, review, and package Chinese official documents and formal organization materials using DKnowc outline/search services, local review guidance, and DOCX generation. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,39 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, employees, and agents use this skill to prepare Chinese official documents, administrative materials, policy-supported reports, Word deliverables, red-head documents, and supporting source-note HTML when DKnowc search results are used. <br>
+Employees, external users, and agents use this skill to produce Chinese official documents, formal correspondence, policy-supported reports, DOCX deliverables, red-head document variants, and separate source-note HTML when search evidence is used. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive writing requests, drafts, personal data, internal case details, or policy material may be sent to DKnowc services when outline or search features are used. <br>
-Mitigation: Use the skill only when external processing by DKnowc is permitted, and avoid submitting confidential or personal data unless approved. <br>
-Risk: Local configuration, profile, outline result, and search result files may retain sensitive operational data after use. <br>
-Mitigation: Periodically review or delete config.ini, config/user_profile.json, official-docs/outline-results, and official-docs/search-results files as appropriate. <br>
+Risk: Official-document outline and search workflows may send drafting details or sensitive policy topics to DKnowc external services. <br>
+Mitigation: Use outline/search features only when the organization permits that third-party service use, and avoid submitting confidential drafting details unless approved. <br>
+Risk: User-driven registration can save a local API key in the skill directory. <br>
+Mitigation: Treat config.ini as a local secret, do not upload or package it, and rotate the API key if exposure is suspected. <br>
+Risk: Generated official documents can include incorrect, unsupported, or misleading policy and data claims if source material is weak or unreviewed. <br>
+Mitigation: Apply the bundled review checklist, verify high-risk claims against accepted sources, and keep searched source notes separate for human review. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/dylanzhangzx/skills/dknowc-official-doc-writer) <br>
-- [DKnowc manual registration page](https://platform.dknowc.cn/auth/#/register?channel=2787E171-B0E5-4328-9946-47AC52434D1F&type=6) <br>
+- [Publisher profile](https://clawhub.ai/user/dylanzhangzx) <br>
+- [DKnowc MaaS platform](https://platform.dknowc.cn/) <br>
 - [DKnowc dependable search endpoint](https://open.dknowc.cn/dependable/search/) <br>
-- [Output guide](artifact/reference/output_guide.md) <br>
-- [Search policy](artifact/reference/search_policy.md) <br>
-- [Review checklist](artifact/reference/review_checklist.md) <br>
-- [Task router](artifact/reference/task_router.md) <br>
-- [Material usage guidance](artifact/reference/material_usage_guidance.md) <br>
+- [Search policy](reference/search_policy.md) <br>
+- [Task router](reference/task_router.md) <br>
+- [Output guide](reference/output_guide.md) <br>
+- [Review checklist](reference/review_checklist.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance, shell commands, JSON search or outline artifacts, Word .docx files, and HTML source-note files] <br>
+**Output Type(s):** [text, markdown, files, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown or plain-text drafts, DOCX files, HTML source-note files, JSON search or outline artifacts, and shell commands.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Normal output may include official-document text, generated .docx files, optional red-head .docx files, DKnowc search result JSON, outline JSON, and source-note HTML.] <br>
+**Other Properties Related to Output:** [Long formal materials default to DOCX delivery; searched source material is separated into an HTML provenance note rather than embedded in the official document.] <br>
 
 ## Skill Version(s): <br>
-3.2.1 (source: server evidence and changelog, released 2026-07-24) <br>
+3.2.5 (source: server evidence release.version, artifact _meta.json, README, and CHANGE_log.md) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

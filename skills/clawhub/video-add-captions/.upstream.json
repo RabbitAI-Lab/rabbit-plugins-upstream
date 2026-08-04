@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/video-add-captions",
   "slug": "video-add-captions",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1784797487287,
-  "contentHash": "01c985d28e92541c238e791f63c7ac8b5a0d72f1781291369764de417c06ae75",
-  "fetchedAt": "2026-07-26T18:07:19.746Z"
+  "version": "1.0.5",
+  "updatedAt": 1785474225248,
+  "contentHash": "463bf86ee9cce62436f940c4eb9f836666acd6bd32fbec3e38dd651c718c45b7",
+  "fetchedAt": "2026-08-04T10:27:16.647Z"
 }

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/invoice-assistant",
   "slug": "invoice-assistant",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1783584044065,
-  "contentHash": "471f1ce07d6b5e729f1b932d1f922aea52a4eee6129394c524d43096c7d3be37",
-  "fetchedAt": "2026-07-26T18:17:34.212Z"
+  "version": "1.0.1",
+  "updatedAt": 1785489525784,
+  "contentHash": "be3c4310a5e6b70ab002367b758eb0afb50fb0c8194ea777d21683ddde447eb7",
+  "fetchedAt": "2026-08-04T10:27:01.558Z"
 }

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/dingtalk-auto-reply",
   "slug": "dingtalk-auto-reply",
   "ownerHandle": null,
-  "version": "0.1.0",
-  "updatedAt": 1784106956455,
-  "contentHash": "2c3364590c6e221dfe7da2827dce459e4bc769cf829ad7832c55918659dc27bf",
-  "fetchedAt": "2026-07-26T18:14:00.092Z"
+  "version": "0.1.5",
+  "updatedAt": 1785829977773,
+  "contentHash": "863f805183454b6c6f4d14832a4b7f7429a27753d0ca2f22250e43afd5211597",
+  "fetchedAt": "2026-08-04T10:08:00.906Z"
 }

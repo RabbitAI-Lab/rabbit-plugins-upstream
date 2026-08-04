@@ -1,0 +1,14 @@
+{
+  "session_id": "mock-cited-test-001",
+  "date": "2026-07-28",
+  "started_at": "2026-07-28T17:17:16+0800",
+  "skills_called": [
+    "linkfox-zhihuiya-patent-cited"
+  ],
+  "deliverables": [],
+  "data_files": [
+    "data\\linkfox-zhihuiya-patent-cited-1785230236000000.json"
+  ],
+  "media_files": [],
+  "last_used_at": "2026-07-28T17:17:16+0800"
+}

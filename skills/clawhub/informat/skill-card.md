@@ -1,5 +1,5 @@
 ## Description: <br>
-Informat helps agents administer Informat platform workspaces by reading method parameter references, querying existing application structure, and issuing documented system method calls. <br>
+Use when operating the 织信/Informat platform, including apps, tables, workflows, automations, scripts, APIs, dashboards, records, listeners, schedules, or platform-generated files. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and workspace administrators use this skill to inspect and manage Informat applications, tables, dashboards, automations, workflows, scripts, and records through documented system methods. <br>
+Developers and Informat administrators use this skill to query, configure, and operate Informat platform applications, data tables, workflows, automations, scripts, APIs, dashboards, records, listeners, schedules, and generated files. It is intended for sessions where the user needs guided platform operations with schema and documentation checks before mutating app or production data. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent broad live-system administration powers when configured with an Informat agent token. <br>
-Mitigation: Use a least-privilege token, scope access to the intended workspace, and avoid production applications unless the action is necessary and approved. <br>
-Risk: Deletes, publishing, bulk record changes, script execution, JavaScript evaluation, outbound web requests, email, and notifications can have irreversible or external effects. <br>
-Mitigation: Require human confirmation for those actions and review the exact method name, target app, and JSON parameters before execution. <br>
-Risk: Incorrect IDs or field names can modify the wrong Informat object or cause failed operations. <br>
-Mitigation: Follow the documented discovery flow: query existing structures, retrieve full field definitions, and read the matching parameter reference before any create or modify call. <br>
+Risk: The skill can administer Informat teams and apps and mutate production data, including deletes and publishing. <br>
+Mitigation: Install only for trusted users, use least-privilege Informat agent tokens, and require explicit human confirmation for destructive operations and publishing. <br>
+Risk: The skill can create, save, and execute scripts or JavaScript-like operations that may affect data or system behavior. <br>
+Mitigation: Review generated scripts before saving or running them, and require confirmation before using execution, system, process, or eval capabilities. <br>
+Risk: The skill can send email, make web/API-oriented changes, and handle credential-adjacent Git or token configuration. <br>
+Mitigation: Avoid granting the skill in shared or untrusted sessions, confirm outbound email and web calls, and protect any credentials with least-privilege and rotation practices. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/informat365/informat) <br>
-- [Informat platform host](https://ai.ainformat.com/) <br>
-- [Skill instructions](artifact/SKILL.md) <br>
-- [Method caller script](artifact/scripts/call.js) <br>
-- [Application publish parameter reference](artifact/references/system_app_publish.json) <br>
-- [JavaScript evaluation parameter reference](artifact/references/system_javascript_eval.json) <br>
-- [Bulk record deletion parameter reference](artifact/references/system_table_record_batch_delete.json) <br>
-- [System email parameter reference](artifact/references/system_send_system_email.json) <br>
+- [ClawHub skill page](https://clawhub.ai/informat365/skills/informat) <br>
+- [SKILL.md](artifact/SKILL.md) <br>
+- [Informat platform documentation index](artifact/references/doc/markdown/) <br>
+- [Informat script API reference](artifact/references/doc/markdown/script/) <br>
+- [call_informat.js](artifact/scripts/call_informat.js) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON parameter examples] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with command snippets, JSON parameter files, and generated platform code or configuration when requested] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct an agent to create JSON parameter files and invoke the bundled Node.js caller against an Informat workspace.] <br>
+**Other Properties Related to Output:** [May include downloadable file links returned by the Informat platform upload flow.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+1.0.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -11,31 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to review test-suite quality, identify coverage gaps, assess assertion and scenario quality, and plan remediation before releases or after test failures. <br>
+Developers and engineers use this skill to audit test suites before releases or after failures, identifying framework coverage, scenario quality issues, invariant erosion, and concrete remediation actions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad testing-related prompts. <br>
-Mitigation: Use it when test-suite review, coverage analysis, or release-readiness assessment is intended. <br>
-Risk: The skill can suggest package installation, test execution, and coverage commands. <br>
-Mitigation: Review commands before running them, especially in large or sensitive repositories. <br>
+Risk: Suggested local commands may inspect repository files, run tests, generate coverage artifacts, or install test tooling. <br>
+Mitigation: Review each command for the target repository before execution, and approve package installation or coverage tooling explicitly. <br>
+Risk: Broad test-audit triggers can produce recommendations without enough project-specific evidence. <br>
+Mitigation: Require the agent to log executed commands, outputs, coverage data, and cited evidence before accepting quality or release recommendations. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-pensive-test-review) <br>
-- [Pensive Plugin Homepage](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+- [ClawHub skill page](https://clawhub.ai/athola/skills/nm-pensive-test-review) <br>
+- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/pensive) <br>
+- [Publisher profile](https://clawhub.ai/user/athola) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with structured findings, remediation plans, and inline shell commands] <br>
+**Output Type(s):** [Analysis, Markdown, Shell commands, Guidance] <br>
+**Output Format:** [Markdown with structured review sections and inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include coverage summaries, quality issues, recommendations, and commands for framework detection or test execution.] <br>
+**Other Properties Related to Output:** [May include framework detection, coverage findings, quality issues, remediation plans, and approval recommendations.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

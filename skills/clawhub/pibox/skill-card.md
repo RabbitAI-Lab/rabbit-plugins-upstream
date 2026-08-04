@@ -1,5 +1,5 @@
 ## Description: <br>
-pibox lets agents and developers run pi-coding-agent in a Docker container through shell, REST, OpenAI-compatible chat, MCP, Telegram, or cron interfaces. <br>
+pibox helps agents and developers run pi-coding-agent inside an aicodebox container through interactive shell, one-shot execution, REST, OpenAI-compatible chat, MCP, Telegram, and cron interfaces. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and automation teams use pibox to expose pi-coding-agent as a containerized coding agent that can be driven from scripts, HTTP clients, OpenAI-compatible clients, MCP-aware agents, Telegram, or scheduled cron jobs. <br>
+Developers and engineers use this skill to choose, configure, and operate pibox modes for remote coding-agent access over HTTP, OpenAI-compatible clients, MCP, Telegram, cron, or Docker one-shot runs. It is most useful when an agent needs guidance for programmatic execution, workspace file access, model configuration, or safe deployment boundaries. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Unauthenticated API or MCP surfaces can allow remote agent execution and workspace file access when bearer tokens are empty. <br>
-Mitigation: Set non-empty API and MCP bearer tokens, bind services to localhost, or place them behind an authenticating proxy. <br>
-Risk: Workspace mounts expose files to the coding agent and to network surfaces enabled by the deployment. <br>
-Mitigation: Mount only the workspace intended for agent access and avoid shared unauthenticated deployments. <br>
-Risk: Delete and cancel routes can remove files or interrupt runs without undo. <br>
-Mitigation: Treat delete and cancel actions as admin-only operations and confirm the specific target before use. <br>
+Risk: REST, OpenAI-compatible, or MCP surfaces can be unauthenticated when their bearer-token environment variables are unset. <br>
+Mitigation: Set strong PIBOX_API_MODE_TOKEN and PIBOX_MCP_MODE_TOKEN values before exposing services, and bind to localhost or place the service behind an authenticating proxy. <br>
+Risk: Workspace file deletion and run cancellation are destructive and may affect shared or in-flight work. <br>
+Mitigation: Treat delete and cancel actions as admin-level operations, confirm the exact target before use, and avoid shared unauthenticated workspaces. <br>
+Risk: Telegram and cron operation can run agent tasks or access workspaces without an interactive approval moment. <br>
+Mitigation: Restrict Telegram chats and users, review cron job definitions before deployment, and scope workspaces to the intended automation. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/pibox) <br>
-- [Publisher profile](https://clawhub.ai/user/psyb0t) <br>
-- [Setup reference](references/setup.md) <br>
-- [docker-pibox repository](https://github.com/psyb0t/docker-pibox) <br>
+- [pibox ClawHub listing](https://clawhub.ai/psyb0t/skills/pibox) <br>
+- [pibox setup reference](references/setup.md) <br>
+- [pibox project homepage](https://github.com/psyb0t/docker-pibox) <br>
 - [pi-coding-agent](https://github.com/earendil-works/pi-mono/tree/main/packages/coding-agent) <br>
 - [docker-aicodebox](https://github.com/psyb0t/docker-aicodebox) <br>
 - [Model Context Protocol](https://modelcontextprotocol.io) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline code blocks, shell commands, JSON examples, and configuration snippets] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with inline shell commands, JSON examples, and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill guides setup and use of a high-power networked coding-agent surface; generated commands and configuration should be reviewed before execution.] <br>
+**Other Properties Related to Output:** [May include HTTP API calls, MCP setup commands, Docker commands, environment variables, and safety guidance.] <br>
 
 ## Skill Version(s): <br>
-0.15.3 (source: server release evidence) <br>
+0.15.8 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes child activity videos or video URLs to identify happy moments such as laughter, jumping, clapping, and joyful reactions, then returns structured reports with captured moment links and positive-reinforcement actions. <br>
+Analyzes fixed-camera child activity videos to identify happy moments, produce structured event reports with snapshots or clip links, and guide positive reinforcement actions. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, parents, caregivers, and developers can use this skill to process child activity media through Life Emergence cloud services and review structured happy-moment reports. Use requires appropriate consent and controls for child photos, videos, report access, retention, and deletion. <br>
+Parents, caregivers, educators, or agents supporting child activity monitoring use this skill to analyze home, classroom, playground, or activity-center video for positive emotional moments and produce reports or history views for guardian review. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Child photos, videos, or video URLs are sent to Life Emergence cloud services for analysis and historical report retrieval. <br>
-Mitigation: Use only with explicit guardian consent, documented retention and deletion expectations, and clear limits on who may access generated reports. <br>
-Risk: The skill can create or reuse local account identity records and tokens in the workspace. <br>
-Mitigation: Review workspace data storage before deployment, restrict filesystem access, and rotate or delete local identity data when the skill is removed or transferred. <br>
-Risk: Captured child moments and report links may expose sensitive media if shared beyond authorized caregivers. <br>
-Mitigation: Limit report access to approved guardians or operators, verify deletion controls, and avoid use on shared devices without account separation. <br>
-Risk: Positive-reinforcement outputs can be inappropriate if they over-trigger, misclassify emotional context, or encourage performative behavior. <br>
-Mitigation: Keep human review and opt-out controls in place, apply the documented safety checks before saving clips, and maintain conservative reinforcement frequency. <br>
+Risk: Processes sensitive child media, snapshots, identity-linked report history, and report links through a remote service. <br>
+Mitigation: Use only with explicit guardian consent and confirm retention, deletion, pause or opt-out controls, and access restrictions with the provider before deployment. <br>
+Risk: Creates or reuses persistent local identity records and stores service tokens for API access. <br>
+Mitigation: Run in an isolated workspace, protect local data files, and remove or rotate stored credentials when the skill is no longer needed. <br>
+Risk: Automated capture and encouragement can preserve unsuitable moments or over-reinforce performative behavior. <br>
+Mitigation: Require safety review before saving clips, provide deletion and pause controls, avoid psychological labeling, and keep encouragement frequency low. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-happy-moment-capture-analysis) <br>
+- [API interface documentation](references/api_doc.md) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON text with report links] <br>
+**Output Format:** [Markdown text with structured JSON report content and report links.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write an optional output file when the user supplies an output path.] <br>
+**Other Properties Related to Output:** [Can optionally write the displayed result to a user-specified output file.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+1.0.6 (source: server release evidence; artifact frontmatter declares 1.0.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

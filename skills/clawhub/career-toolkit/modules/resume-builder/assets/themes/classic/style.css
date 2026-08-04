@@ -1,0 +1,152 @@
+/* Classic Resume Theme — Clean professional styling */
+
+@page {
+  size: A4;
+  margin: 15mm 18mm;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: "Noto Sans CJK SC", "PingFang SC", "Microsoft YaHei", "Source Han Sans SC", "Helvetica Neue", Arial, sans-serif;
+  font-size: 10pt;
+  color: #1a1a1a;
+  line-height: 1.5;
+  background: #fff;
+}
+
+.resume {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 0 12px;
+}
+
+/* ===== Header ===== */
+.header {
+  text-align: center;
+  padding-bottom: 12px;
+  margin-bottom: 10px;
+  border-bottom: 2px solid #2c3e50;
+}
+.header.has-avatar {
+  display: flex;
+  align-items: stretch;
+  gap: 20px;
+  text-align: left;
+}
+.header-main {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.name {
+  font-size: 22pt;
+  font-weight: 700;
+  margin: 0 0 4px 0;
+  color: #111;
+  letter-spacing: 3px;
+}
+.english-name { font-size: 11pt; font-weight: 400; color: #555; margin-left: 8px; }
+.label { font-size: 10.5pt; color: #333; margin-bottom: 6px; }
+.contact {
+  font-size: 9.5pt;
+  color: #333;
+  margin-top: 4px;
+  line-height: 1.8;
+}
+.contact span { margin: 0 8px; white-space: nowrap; }
+.contact.meta { color: #555; font-size: 9pt; }
+.avatar {
+  width: 90px;
+  height: 120px;
+  border-radius: 4px;
+  object-fit: cover;
+  border: 1px solid #ddd;
+  flex-shrink: 0;
+}
+
+/* ===== Sections ===== */
+.section {
+  margin-top: 10px;
+}
+.section-title {
+  font-size: 11pt;
+  font-weight: 700;
+  color: #111;
+  border-bottom: 1px solid #333;
+  padding-bottom: 2px;
+  margin: 8px 0 6px 0;
+  letter-spacing: 1px;
+}
+.summary { margin: 4px 0; color: #222; font-size: 10pt; }
+
+/* ===== Entries ===== */
+.entry {
+  margin-bottom: 8px;
+  page-break-inside: avoid;
+}
+.entry-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: baseline;
+  flex-wrap: wrap;
+}
+.entry-title { font-size: 10pt; }
+.entry-title strong { font-weight: 700; }
+.entry-meta { font-size: 9.5pt; color: #444; white-space: nowrap; }
+.entry-sub {
+  font-size: 9.5pt;
+  color: #333;
+  margin: 1px 0;
+}
+.entry-sub.tech { color: #444; font-style: normal; font-size: 9pt; }
+.sep { color: #888; margin: 0 4px; }
+.date { color: #444; }
+.tag {
+  display: inline-block;
+  font-size: 8pt;
+  padding: 0 5px;
+  margin-left: 5px;
+  color: #444;
+  border: 0.5pt solid #999;
+  border-radius: 1px;
+}
+
+/* ===== Lists ===== */
+.highlights, .skill-list {
+  margin: 2px 0;
+  padding-left: 18px;
+}
+.highlights li, .skill-list li {
+  margin: 1.5px 0;
+  font-size: 9.5pt;
+  line-height: 1.5;
+}
+
+/* ===== Skills table ===== */
+.skill-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 9.5pt;
+  margin: 4px 0;
+}
+.skill-table td {
+  padding: 2px 8px 2px 0;
+  vertical-align: top;
+  line-height: 1.5;
+}
+.skill-table td:first-child {
+  font-weight: 700;
+  white-space: nowrap;
+  width: 1%;
+  padding-right: 16px;
+}
+
+/* ===== Links ===== */
+a { color: #1a1a1a; text-decoration: none; border-bottom: 0.5px solid #888; }
+a:hover { border-bottom-color: #111; }

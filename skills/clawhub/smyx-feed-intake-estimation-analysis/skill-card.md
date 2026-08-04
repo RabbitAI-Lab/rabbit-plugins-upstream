@@ -1,5 +1,5 @@
 ## Description: <br>
-Estimates daily feed intake per livestock individual from continuous feeder videos by tracking the change of feed remaining in the trough, and outputs intake trend with anomaly alerts. | 通过食槽视频估算每日采食量变化，异常时预警。 <br>
+Estimates daily feed intake per livestock individual from continuous feeder videos by tracking the change of feed remaining in the trough, and outputs intake trend with anomaly alerts. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,16 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to estimate livestock feed intake from fixed feeder images or videos, review intake trends, and identify abnormal feeding patterns. It also supports querying prior feed-intake reports associated with the current account identity. <br>
+External users and farm-management teams use this skill to analyze feeder images, videos, or media URLs and estimate livestock feed intake trends with anomaly alerts. It is intended for visual intake estimation and report lookup, not feeding-ration or nutrition advice. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Feeder images or videos, report queries, and account identity data are sent to lifeemergence.com services. <br>
-Mitigation: Install and use only after confirming that these remote-service data flows are acceptable for the workspace and livestock operation. <br>
-Risk: The security evidence reports automatic identity creation or reuse and local token storage. <br>
-Mitigation: Review identity lifecycle, token storage location, and shared-workspace access before use in sensitive environments. <br>
+Risk: The skill sends feeder images, videos, or supplied media URLs to lifeemergence.com services for cloud analysis. <br>
+Mitigation: Use it only with media approved for external cloud processing and avoid uploading unrelated sensitive footage. <br>
+Risk: The skill can create or reuse a local service identity and persist session tokens locally. <br>
+Mitigation: Review or clear workspace data files when identity or token reuse is not desired. <br>
+Risk: History lookup can query account-scoped cloud reports when broad report-list triggers are used. <br>
+Mitigation: Invoke history lookup only when the user clearly intends to retrieve prior feed-intake reports. <br>
 
 
 ## Reference(s): <br>
@@ -31,13 +33,13 @@ Mitigation: Review identity lifecycle, token storage location, and shared-worksp
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON text, with optional saved output file] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
+**Output Format:** [Markdown or JSON analysis output with feed-intake estimates, trend labels, anomaly alerts, and report links.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs can include structured intake estimates, trend labels, anomaly alerts, historical report tables, and report links.] <br>
+**Other Properties Related to Output:** [Accepts feeder image or video file paths and media URLs; history lookup returns an account-scoped report table.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata; skill frontmatter reports 1.0.3) <br>
+1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.4) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

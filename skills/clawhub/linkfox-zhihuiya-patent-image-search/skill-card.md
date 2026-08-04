@@ -1,5 +1,5 @@
 ## Description: <br>
-Searches the Zhihuiya patent database for visually similar design patents from a public image URL or an uploaded local image. <br>
+Searches the Zhihuiya patent image database by public image URL and returns visually similar design patent records for prior-art and appearance risk review. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, agents, and cross-border commerce teams use this skill to compare product or design images against design patent records, review similar patent results, and identify cases that may need professional patent counsel. <br>
+External users and developers use this skill to search for design patents that look similar to a product image, then review ranked patent matches, similarity scores, patent metadata, and legal-status filters before consulting qualified patent counsel. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Image URLs, uploaded local images, API credentials, and possible feedback text are sent to LinkFox services. <br>
-Mitigation: Use the skill only with images and text approved for external processing, and avoid confidential or unpublished product images unless that transfer is acceptable. <br>
-Risk: Local images are uploaded to obtain public URLs for patent image search. <br>
-Mitigation: Prefer already public image URLs for sensitive workflows, or confirm that temporary public upload is acceptable before using a local file. <br>
-Risk: Full search responses are stored locally and may include patent results and request context. <br>
-Mitigation: Review the saved `linkfox/` data files and clear cached or stored results before working with sensitive matters. <br>
-Risk: The search output indicates visual similarity and does not determine legal infringement. <br>
-Mitigation: Treat results as triage evidence and consult a qualified patent attorney before making legal or commercial decisions. <br>
+Risk: Image URLs and search parameters are sent to LinkFox/Zhihuiya for patent image search. <br>
+Mitigation: Use only images and query parameters that are acceptable to share with the service provider. <br>
+Risk: Local product images may be uploaded to public temporary hosting to obtain a searchable URL. <br>
+Mitigation: Avoid confidential local images unless temporary public hosting is acceptable for the task. <br>
+Risk: Full search responses and cache files are written locally. <br>
+Mitigation: Review local LinkFox session and cache directories before sharing the workspace or artifacts. <br>
+Risk: The skill may report feedback to a separate LinkFox endpoint. <br>
+Mitigation: Check feedback behavior before deployment in workflows that handle sensitive user comments or proprietary context. <br>
+Risk: Similarity scores can inform review but do not determine patent infringement. <br>
+Mitigation: Present scores as visual similarity signals and advise users to consult a professional patent attorney for legal conclusions. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-patent-image-search) <br>
-- [Zhihuiya patent image search API reference](references/api.md) <br>
-- [LinkFox API key guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
-- [LinkFox account and credits console](https://os.linkfox.com/) <br>
+- [Zhihuiya Patent Image Search API Reference](artifact/references/api.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-patent-image-search) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, JSON, markdown] <br>
-**Output Format:** [Markdown guidance with Python commands and JSON patent-search responses or summaries] <br>
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON API/search results saved to local files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved locally; large responses are summarized unless inline output is requested.] <br>
+**Other Properties Related to Output:** [Full responses are saved under LinkFox session data; large responses are summarized unless inline output is requested.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+1.0.6 (source: ClawHub server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,53 +1,130 @@
 # 黄金追踪 — 智能体操作手册
 
-## 安装后初始化
+> 本文档使用 RFC 2119 关键词：**MUST**（必须）/ **MUST NOT**（不得）/ **SHOULD**（应当）。
+> 任何违反 MUST/MUST NOT 的输出都会被 `check_analysis.py` 拒绝，本次分析视为失败。
 
-安装此技能后，**必须先运行初始化脚本**：
+---
+
+## 0. 三条铁律（先读这一段）
+
+1. **每个数据点 MUST 有来源 URL** —— 不输出裸结论。
+2. **每个判断 MUST 有因果链** —— 说明为什么看多/看空，并显式引用至少 1 条 source URL。
+3. **不得编造** —— 没有数据时 MUST 使用占位值 `no_data`，绝不补全、绝不臆测。
+
+违反任意一条，`check_analysis.py` 都会以非零退出码拒绝本次分析。这意味着你不能宣布"分析完成"。
+
+---
+
+## 1. 安装后初始化
+
+安装此技能后，**MUST 先运行**：
 
 ```bash
 python3 scripts/setup.py
 ```
 
-该脚本会完成以下工作：
-1. 检查 Python 版本（>=3.8）
-2. 创建所需目录（`logs/` `archive/` `alerts/` `.cache/`）
-3. 验证所有脚本和配置文件完整
-4. 初始化 `state.json`（首次为空状态，`fetch.py` 运行后填入真实数据）
-5. 运行健康检查
+该脚本会检查 Python 版本（>=3.8）、创建目录、验证脚本完整、初始化 `state.json`、运行健康检查。
 
-**初始化完成前不要执行其他命令。** 如果 `setup.py` 报错，修复后重新运行。
+**初始化完成前 MUST NOT 执行其他命令。** 如果 `setup.py` 报错，修复后重新运行。
 
 ---
 
-## 运行流程
+## 2. 运行流程（每次分析周期）
 
-每次运行黄金追踪时，按以下顺序执行。这是一个完整的分析周期：
+按以下顺序执行。每一步都标注了**输入 → 动作 → 输出 → 自检**四件套。
 
-### 第1步：获取数据
+### 第 1 步：获取数据
 
-```bash
-python3 scripts/fetch.py
-```
+| 项 | 内容 |
+|---|---|
+| 输入 | 无（自动从远程拉取） |
+| 动作 | `python3 scripts/fetch.py` |
+| 输出 | JSON 打印到 stdout，同时更新 `state.json` |
+| 自检 | stdout 中 `price_usd > 0` 且 `errors` 为空 |
 
 - 从 `goldpricez.com` 获取美元金价，从 `open.er-api.com` 获取 USD/CNY 汇率
 - 自动验证价格范围（$1000-$10000, 汇率 6.0-8.0），异常值会被拒绝
-- 更新 `state.json` 中的 `current_price`、`last_price`、`change_pct` 等字段
-- 5分钟内重复运行会使用缓存，避免频繁请求
+- 5 分钟内重复运行会使用缓存
 
-**输出**：JSON 格式的价格数据，同时更新 `state.json`。
+### 第 2 步：市场分析（智能体核心工作）
 
-### 第2步：市场分析（智能体核心工作）
+这是**你的工作**，不是脚本能完成的。读 `state.json` 取当前价格后，按以下子步骤执行：
 
-这是**你的工作**，不是脚本能完成的。读取 `state.json` 获取当前价格后：
+#### 2.1 搜索新闻（web_search）
 
-1. **搜索新闻**：用 `web_search` 搜索当前影响金价的因素（见下方「新闻搜索」章节）
-2. **读取来源**：用 `web_fetch` 读取找到的文章，提取关键信息
-3. **推理判断**：对每个因素判断方向（bullish/bearish/mixed/neutral）并给出因果链
-4. **综合判断**：权衡各因素权重，形成一句话核心判断
+| 项 | 内容 |
+|---|---|
+| 输入 | `state.json` 中的当前价格 |
+| 动作 | 用 `web_search` 检索当前影响金价的因素 |
+| 输出 | 一组候选 URL |
+| 自检 | 候选 URL 覆盖 ≥ 2 个独立域名（防止单源依赖） |
 
-### 第3步：写入分析日志
+**MUST**：搜索角度随当前市场动态选择，**MUST NOT** 局限于固定来源。参考方向（仅示例，非清单）：
+- 美联储政策 / 利率 / 降息预期
+- 地缘政治冲突
+- 通胀数据（CPI、PCE）
+- 央行购金
+- 美元指数（DXY）
+- 实际利率
+- ETF 资金流向 / 持仓
+- 季节性模式
 
-将分析结果写入 `logs/YYYY-MM-DD.yaml`（同一天多次运行则追加新的 YAML 文档）：
+**来源多样性约束**：整篇分析最终 MUST 覆盖 ≥ 2 个独立域名（见 [config.yaml](file:///Users/jeromexqian/Projects/gold-tracker/config.yaml) `output.constraints.min_unique_domains`）。
+
+#### 2.2 抓取并记录每个 URL（关键：反幻觉关卡）
+
+| 项 | 内容 |
+|---|---|
+| 输入 | 2.1 选出的候选 URL |
+| 动作 | 对每个 URL 执行：(a) `web_fetch <url>` 读取内容；(b) **立即** `python3 scripts/log_fetch.py <url> "<标题>"` 记录 |
+| 输出 | `.cache/fetch_log.json` 中累积已抓取的 URL |
+| 自检 | `python3 scripts/log_fetch.py list` 显示的 URL 数 ≥ 2，且覆盖 ≥ 2 个独立域名 |
+
+**MUST**：每次 `web_fetch` 之后**立即**调用 `log_fetch.py` 记录该 URL。未记录的 URL 不会通过第 4 步的 sources 校验。
+
+**MUST NOT**：在 `sources` 字段中写入未出现在 `fetch_log.json` 中的 URL —— 这会被识别为"凭空编造来源"并拒绝本次分析。
+
+#### 2.3 推理判断
+
+对每个因素判断方向并给出因果链。**MUST** 满足：
+
+- `impact` MUST 取以下值之一（大小写敏感）：
+  `bullish` · `bearish` · `mixed` · `neutral` · `slightly_bullish` · `slightly_bearish`
+- `reasoning` MUST 是一条完整因果链（"因为 X → 所以 Y → 对金价影响 Z"），**MUST NOT** 是断言
+- `reasoning` 中 MUST NOT 出现以下措辞（违反即拒绝）：
+  `根据经验` / `众所周知` / `一般来说` / `通常情况下` / `据了解` / `据业内人士` / `显而易见`
+- `reasoning` 中提到的任何数字/数据 MUST 在 sources 中能找到出处；找不到则 MUST 改写为定性描述或使用 `no_data`
+
+#### 2.4 综合判断
+
+权衡各因素权重，形成一句话核心判断（写入 `summary.focus`）。
+
+**MUST NOT** 在 `summary.focus` 中使用上述禁用措辞。
+
+### 第 3 步：写入分析日志
+
+将本次分析追加到 `logs/YYYY-MM-DD.yaml`（同一天多次运行则追加新的 YAML 文档，用 `---` 分隔）。
+
+#### 字段约束表（硬性）
+
+| 字段 | 类型 | 必填 | 取值/格式 | 说明 |
+|---|---|---|---|---|
+| `run_id` | string | ✅ | `"YYYYMMDD-HHMM"` | 本次运行唯一 ID |
+| `timestamp` | string | ✅ | ISO8601 带时区 `+08:00` | 例 `"2026-07-23T14:30+08:00"` |
+| `price_data.gold.price_usd` | number | ✅ | 1000-10000 | 美元/盎司 |
+| `price_data.gold.price_cny` | number | ✅ | > 0 | 元/克 |
+| `price_data.fx.usd_cny` | number | ✅ | 6.0-8.0 | 美元兑人民币 |
+| `price_data.fx.source` | string | ✅ | 任意 | 数据源标识 |
+| `summary.focus` | string | ✅ | 非空，无禁用措辞 | 一句话核心判断 |
+| `key_factors` | list | ✅ | 长度 2-6 | 至少 2 条，至多 6 条 |
+| `key_factors[].factor` | string | ✅ | 非空 | 因素标题 |
+| `key_factors[].impact` | string | ✅ | 枚举（见 2.3） | 方向 |
+| `key_factors[].reasoning` | string | ✅ | 非空，无禁用措辞 | 因果链 |
+| `key_factors[].sources` | list | ✅ | 长度 ≥ 1 | 该因素的支撑 URL |
+| `sources` | list | ✅ | 长度 ≥ 2，覆盖 ≥ 2 域名 | 整篇分析的全部 URL |
+| `sources[]` | string | ✅ | 合法 http(s) URL，且 MUST 在 fetch_log 中 | 顶层 sources 汇总 |
+
+#### 模板（严格遵守）
 
 ```yaml
 ---
@@ -61,39 +138,68 @@ price_data:
     usd_cny: 6.78
     source: open.er-api.com
 summary:
-  focus: "一句话描述当前主线"
+  focus: "一句话描述当前主线（禁止使用'根据经验/众所周知'等措辞）"
 key_factors:
   - factor: "FOMC 即将召开会议"
     impact: "bearish"
-    reasoning: "这个因素如何影响金价"
+    reasoning: "因为 X → 所以 Y → 对金价影响 Z（因果链，引用来源中的具体数据）"
+    sources:
+      - "https://www.reuters.com/..."
+  - factor: "央行持续购金"
+    impact: "bullish"
+    reasoning: "世界黄金协会数据显示 X 吨购入 → 需求端支撑 → 价格上行"
+    sources:
+      - "https://www.gold.org/..."
 sources:
-  - "https://..."
+  - "https://www.reuters.com/..."
+  - "https://www.gold.org/..."
 ```
 
-**影响方向值**（必须使用这些）：
-`bullish` · `bearish` · `mixed` · `neutral` · `slightly_bullish` · `slightly_bearish`
+**无数据时**：相应字段 MUST 填 `no_data`，**MUST NOT** 留空字符串，**MUST NOT** 编造。
 
-### 第4步：更新完整分析
+### 第 4 步：通过硬校验门槛（关键）
 
-将完整分析写入 `analysis.md`（**覆盖更新**，不是追加）。格式参考现有 `analysis.md` 文件。
+**MUST** 依次运行以下两个命令，且都必须以 exit 0 通过：
 
-### 第5步：检测提醒
+```bash
+python3 scripts/validate.py           # 项目级结构校验
+python3 scripts/check_analysis.py     # 本次分析的反幻觉校验
+```
+
+`check_analysis.py` 会校验：
+1. 顶层字段齐全（`run_id` / `timestamp` / `price_data` / `summary` / `key_factors` / `sources`）
+2. `key_factors` 数量在 `[2, 6]` 之间
+3. 每个 factor 含 `factor` / `impact` / `reasoning` / `sources` 四字段
+4. `impact` 在允许枚举内
+5. `sources` 是合法 http(s) URL
+6. **每个 source URL MUST 出现在 `.cache/fetch_log.json` 中**（即真的 web_fetch 过）
+7. 整篇 sources 覆盖 ≥ 2 个独立域名
+8. 每个 factor 至少引用 1 条 source
+9. `reasoning` 和 `summary.focus` 不含禁用措辞
+
+**任意一条 ERROR 都意味着你不能宣布分析完成。** 必须修复日志后重新运行，直到通过为止。
+
+### 第 5 步：更新完整分析
+
+将通过校验的完整分析写入 `analysis.md`（**覆盖更新**，不是追加）。格式参考现有 `analysis.md` 文件。
+
+### 第 6 步：检测提醒
 
 ```bash
 python3 scripts/alert_manager.py detect
 ```
 
 - 基于动态阈值检测价格异动
-- 对比多个基准（last_price、开盘价、24小时均价）
+- 对比多个基准（last_price、开盘价、24 小时均价）
 - 触发后自动创建提醒记录到 `alerts/YYYY-MM-DD.json`
-- 同类提醒30分钟冷却期，每日最多10条
+- 同类提醒 30 分钟冷却期，每日最多 10 条
 
-如果有提醒触发，你可以将其标记为已发送：
+如果有提醒触发，可标记为已发送：
 ```bash
 python3 scripts/alert_manager.py status <alert_id> sent
 ```
 
-### 第6步：生成摘要
+### 第 7 步：生成摘要
 
 ```bash
 python3 scripts/summary.py brief   # 简报（用于推送）
@@ -102,13 +208,13 @@ python3 scripts/summary.py full    # 完整摘要
 
 简报从 `state.json` 和当日最新日志生成。**审核内容后**再发送给用户。
 
-### 第7步：维护（定期执行）
+### 第 8 步：维护（定期执行）
 
 ```bash
 python3 scripts/normalize.py              # 标准化日志中的时间戳和影响方向
 python3 scripts/archive_manager.py archive # 归档非当日日志到 archive/YYYY-MM/
 python3 scripts/alert_manager.py auto_resolve  # 自动解决超时提醒
-python3 scripts/alert_manager.py cleanup  # 清理30天前的提醒记录
+python3 scripts/alert_manager.py cleanup  # 清理 30 天前的提醒记录
 ```
 
 或一键执行：
@@ -118,7 +224,24 @@ python3 scripts/validate.py && python3 scripts/normalize.py && python3 scripts/a
 
 ---
 
-## 运行频率
+## 3. 输出前自检 Checklist
+
+宣布"分析完成"前，**MUST** 逐条确认（任何一条 No 都不能宣布完成）：
+
+- [ ] `python3 scripts/validate.py` 退出码 0
+- [ ] `python3 scripts/check_analysis.py` 退出码 0
+- [ ] `key_factors` 至少 2 条、至多 6 条
+- [ ] 每个 factor 都有 `factor` / `impact` / `reasoning` / `sources`
+- [ ] 所有 `impact` 都在 6 个标准值内
+- [ ] 每个 factor 的 `sources` 至少 1 条 URL
+- [ ] 整篇 `sources` 至少覆盖 2 个独立域名
+- [ ] 每个 source URL 都在 `python3 scripts/log_fetch.py list` 的输出里
+- [ ] `reasoning` 和 `summary.focus` 不含禁用措辞
+- [ ] 没有数据的地方使用了 `no_data`，没有编造
+
+---
+
+## 4. 运行频率
 
 数据获取由 crontab 自动调度（纯脚本，不消耗 token）；分析由智能体在关键时段主动触发（消耗 token）。详见下方「定时调度」章节。
 
@@ -143,7 +266,7 @@ python3 scripts/validate.py && python3 scripts/normalize.py && python3 scripts/a
 
 ---
 
-## 定时调度（crontab）
+## 5. 定时调度（crontab）
 
 安装此技能的智能体（如 OpenClaw）**应自动配置 crontab** 来执行纯脚本任务。以下为推荐配置模板（路径需替换为实际安装路径）：
 
@@ -187,9 +310,13 @@ python3 scripts/validate.py && python3 scripts/normalize.py && python3 scripts/a
 
 ---
 
-## 新闻搜索：保持灵活
+## 6. 新闻搜索：保持灵活 + 来源多样
 
-**不要局限于固定的信息来源。** 黄金的驱动因素随时间变化 —— 搜索当前影响市场的任何因素。
+**MUST NOT** 局限于固定信息来源。黄金的驱动因素随时间变化 —— 搜索当前影响市场的任何因素。
+
+**MUST** 保证整篇分析的 `sources` 覆盖 ≥ 2 个独立域名，避免单源依赖。
+
+**MUST NOT** 在 `sources` 中写入未实际 `web_fetch` 过的 URL。每次 `web_fetch` 后 MUST 调用 `log_fetch.py` 记录。
 
 搜索角度（仅示例，非清单）：
 - 美联储政策 / 利率
@@ -201,19 +328,11 @@ python3 scripts/validate.py && python3 scripts/normalize.py && python3 scripts/a
 - ETF 资金流向 / 持仓
 - 季节性模式
 
-找到最佳来源，用 `web_fetch` 读取，引用它们。如果某个维度找不到数据，**跳过它 —— 不要编造**。
+找到最佳来源，用 `web_fetch` 读取，再用 `log_fetch.py` 记录，最后在 YAML 中引用它们。如果某个维度找不到数据，**MUST 跳过它 —— MUST NOT 编造**。
 
 ---
 
-## 三条铁律
-
-1. **每个数据点都要有来源 URL** — 不输出裸结论
-2. **每个判断都要有因果链** — 说明为什么看多/看空
-3. **不编造** — 没有数据就留白，不补全
-
----
-
-## 状态文件（state.json）
+## 7. 状态文件（state.json）
 
 `fetch.py` 运行后自动更新。读取它来获取最新价格，避免重复请求：
 
@@ -232,19 +351,19 @@ python3 scripts/validate.py && python3 scripts/normalize.py && python3 scripts/a
 }
 ```
 
-**不要手动编辑 `state.json`**，它由 `fetch.py` 自动维护。
+**MUST NOT** 手动编辑 `state.json`，它由 `fetch.py` 自动维护。
 
 ---
 
-## 提醒系统
+## 8. 提醒系统
 
 基于**动态阈值**的智能提醒系统：
 
-1. **动态阈值**：根据过去7天波动率自动调整（默认 ±1%，范围 0.5%-3%）
-2. **多基准比较**：同时对比 last_price、当日开盘价、24小时均价
-3. **防震荡机制**：同类提醒30分钟冷却期，每日最多10条提醒
+1. **动态阈值**：根据过去 7 天波动率自动调整（默认 ±1%，范围 0.5%-3%）
+2. **多基准比较**：同时对比 last_price、当日开盘价、24 小时均价
+3. **防震荡机制**：同类提醒 30 分钟冷却期，每日最多 10 条提醒
 4. **状态管理**：pending → sent → acknowledged → resolved/dismissed
-5. **自动清理**：24小时未处理自动标记resolved，30天后删除
+5. **自动清理**：24 小时未处理自动标记 resolved，30 天后删除
 
 ```bash
 python3 scripts/alert_manager.py detect          # 检测并创建提醒
@@ -257,11 +376,11 @@ python3 scripts/alert_manager.py threshold       # 查看当前动态阈值
 
 提醒类型：
 - `price_breakout_high/low` — 突破阈值的涨跌提醒
-- `price_reversal_up/down` — 反转方向提醒（变动达阈值70%）
+- `price_reversal_up/down` — 反转方向提醒（变动达阈值 70%）
 
 ---
 
-## 归档系统
+## 9. 归档系统
 
 ```bash
 python3 scripts/archive_manager.py archive       # 归档所有非当日日志
@@ -276,37 +395,46 @@ python3 scripts/archive_manager.py summary       # 显示索引摘要
 
 ---
 
-## 目录职责
+## 10. 目录职责
 
 | 路径 | 内容 | 生命周期 |
 |------|------|----------|
 | `logs/` | 当日 YAML 日志 | 自动归档（非当日） |
-| `archive/YYYY-MM/` | 历史日志 | 365天 |
+| `archive/YYYY-MM/` | 历史日志 | 365 天 |
 | `archive/index.json` | 归档索引 | 自动更新 |
-| `alerts/` | 价格提醒 JSON | 30天 |
+| `alerts/` | 价格提醒 JSON | 30 天 |
 | `analysis.md` | 当前完整分析 | 覆盖更新 |
 | `state.json` | 最新价格快照 | 自动更新 |
-| `.cache/` | HTTP 响应缓存 | 自动过期（5分钟） |
+| `.cache/` | HTTP 响应缓存 + `fetch_log.json` | 自动过期（5 分钟）/ 分析结束前有效 |
 
 ---
 
-## 错误处理
+## 11. 错误处理
 
 ### fetch.py 失败
 
 | 错误 | 原因 | 处理 |
 |------|------|------|
-| 金价获取失败 | 网络问题或 goldpricez.com 不可用 | 等待5分钟后重试；仍失败则使用上次 `state.json` 中的价格 |
+| 金价获取失败 | 网络问题或 goldpricez.com 不可用 | 等待 5 分钟后重试；仍失败则使用上次 `state.json` 中的价格 |
 | 汇率获取失败 | open.er-api.com 不可用 | 同上；可手动查询汇率并告知用户 |
 | 金价异常 | 价格超出 $1000-$10000 范围 | 数据源可能返回错误数据，不要使用该价格 |
 | state.json 不存在 | 首次运行或被误删 | 运行 `python3 scripts/setup.py` 重新初始化 |
 
 ### 数据源不可用时的降级策略
 
-1. 优先使用缓存数据（`.cache/` 目录，5分钟有效）
+1. 优先使用缓存数据（`.cache/` 目录，5 分钟有效）
 2. 缓存过期则使用 `state.json` 中的最后已知价格
 3. 在分析中明确标注「数据可能过期」
-4. **不要使用过期数据触发提醒**
+4. **MUST NOT** 使用过期数据触发提醒
+
+### check_analysis.py 报告错误
+
+- **缺顶层字段**：补全 YAML 模板对应字段
+- **impact 不在枚举**：改为 6 个标准值之一（`bullish/bearish/mixed/neutral/slightly_bullish/slightly_bearish`）
+- **source URL 未在 fetch_log**：要么真的 `web_fetch` 并 `log_fetch.py` 记录，要么从 sources 中删除该 URL
+- **来源覆盖域名不足**：补抓一个不同域名的来源
+- **含禁用措辞**：改写为有据可查的因果链
+- **factor 数量不足/超限**：补足至 ≥ 2 或裁剪至 ≤ 6
 
 ### validate.py 报告错误
 
@@ -317,22 +445,23 @@ python3 scripts/archive_manager.py summary       # 显示索引摘要
 
 ---
 
-## 脚本参考
+## 12. 脚本参考
 
 | 脚本 | 作用 | 何时运行 |
 |------|------|----------|
 | `setup.py` | 环境初始化 | 安装后首次运行 |
 | `fetch.py` | 获取金价和汇率 | 每次分析开始时 |
-| `validate.py` | 验证项目完整性 | 维护时 |
-| `normalize.py` | 标准化日志格式 | 每周1次 |
+| `validate.py` | 验证项目完整性 | 维护时 + 分析完成后 |
+| `check_analysis.py` | 本次分析的反幻觉硬校验 | **每次写日志后、宣布完成前** |
+| `log_fetch.py` | 记录 web_fetch 行为到 fetch_log | **每次 web_fetch 后立即** |
+| `normalize.py` | 标准化日志格式 | 每周 1 次 |
 | `alert_manager.py` | 提醒检测与管理 | 每次 fetch 后 |
-| `archive_manager.py` | 归档与历史查询 | 每日1次 |
+| `archive_manager.py` | 归档与历史查询 | 每日 1 次 |
 | `summary.py` | 生成简报/摘要 | 每次分析后 |
-| `dedup.py` | 旧版提醒去重（legacy） | 仅处理 .md 格式提醒时 |
 
 ---
 
-## 推送通知格式（<2000 字节）
+## 13. 推送通知格式（< 2000 字节）
 
 ```
 🥇 **黄金追踪** · MM-DD
@@ -347,3 +476,5 @@ python3 scripts/archive_manager.py summary       # 显示索引摘要
 
 来源: site · site · site
 ```
+
+**MUST**：推送中的每个 `site.com` MUST 是本次分析 `sources` 中真实存在的域名，**MUST NOT** 编造。

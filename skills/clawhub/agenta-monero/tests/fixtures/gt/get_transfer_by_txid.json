@@ -1,0 +1,1 @@
+{"jsonrpc":"2.0","id":"0","result":{"transfer":{"txid":"0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef","amount":1500000000000,"fee":80000000000,"confirmations":15,"address":"55ABC","address_index":3,"type":"in","timestamp":1535918400,"unlock_time":0}}}

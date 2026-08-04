@@ -1,0 +1,49 @@
+name: 商业战略圆桌
+description: 战略方向、市场进入、商业模式、职业/创业选择等重大决策
+mode: deep  # 5-7 角色，3 轮 + 可选检索
+
+domain_keywords:
+  - 战略
+  - 方向
+  - 规划
+  - 要不要进入
+  - 创业
+  - 转型
+  - 商业模式
+  - 市场
+  - 职业
+  - offer
+  - 跳槽
+
+required_roles:
+  - roles/devil-advocate        # 失败模式
+  - roles/optimist              # 机会与 upside
+  - roles/systems-thinker       # 长期与二阶效应
+
+suggested_experts:
+  - experts/business/saas-strategy    # 商业模式视角（涉及 SaaS/订阅时）
+
+conditional_experts:
+  - when: "AI|大模型|LLM|Agent"
+    add: experts/ai-llm/ai-product-manager
+  - when: "定价|获客|增长|SaaS"
+    add: experts/business/saas-strategy
+  - when: "用户|需求|产品"
+    add: roles/user-advocate
+
+optional_roles:
+  - roles/resource-constraint   # 资源约束
+  - roles/data-evidence         # 市场数据验证
+
+protocol: protocols/debate-protocol
+
+special_instructions: |
+  战略级讨论必须覆盖：
+  1. 机会评估：这个方向的 upside 是什么？窗口期多长？
+  2. 失败模式：最可能的死法是什么？
+  3. 不对称性：下行有限吗？上行够大吗？
+  4. 路径依赖：这个选择会锁死什么、打开什么？
+  5. 可逆性：错了能撤吗？撤退成本多大？
+  6. 时间尺度：1 年、3 年、5 年分别怎么看？
+
+output_protocol: protocols/synthesis-protocol

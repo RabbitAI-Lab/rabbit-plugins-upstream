@@ -1,5 +1,5 @@
 ## Description: <br>
-Scans short-form Chinese web-fiction ranking samples from platforms such as Zhihu Yanyan, Qimao, Black Rock, and Dianzhong to identify current genre, emotion, and topic signals. <br>
+Analyzes short-form Chinese web fiction rankings across platforms such as Zhihu Yanyan, Qimao, Heiyan, and Dianzhong to identify current genre, emotion, and topic trends. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators, editors, and developers use this skill to collect or review short-story ranking samples, compare platform trends, and turn those observations into topic candidates, risk thresholds, and follow-up validation actions. <br>
+Writers, editors, and market analysts use this skill to scan short-form web fiction rankings, compare platform patterns, and turn sampled market signals into topic candidates, risk thresholds, and follow-up validation steps. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The Black Rock collector can use a logged-in admin browser token to query protected backend APIs. <br>
-Mitigation: Install only when this collection behavior is intended, use a dedicated browser profile or account where possible, and confirm the account is allowed to access the backend API. <br>
-Risk: Ranking-based market signals can become stale quickly and may mislead writing decisions if treated as durable trends. <br>
-Mitigation: Require each report to state the sample date, confidence level, saturation risk, and next rescan time before using it for planning. <br>
-Risk: Browser scraping in a profile with unrelated active sessions can expose sensitive session context to collection scripts. <br>
-Mitigation: Run browser-based collection in a dedicated profile that does not contain unrelated sensitive logins. <br>
+Risk: The Heiyan collection path can use a logged-in Chrome admin session to access backend management APIs, and generated reports may contain non-public book metadata. <br>
+Mitigation: Run the skill only with an account that has the minimum necessary access, prefer public or platform-approved exports where possible, and review generated reports before sharing them. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/worldwonderer/skills/story-short-scan) <br>
-- [OpenClaw Metadata Source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Real Market Data Reference](references/real-market-data.md) <br>
+- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-short-scan) <br>
+- [OpenClaw metadata link](https://github.com/worldwonderer/oh-story-claudecode) <br>
+- [Short-form web fiction market data reference](references/real-market-data.md) <br>
+- [Dianzhong browse page](https://www.ishugui.com/browse) <br>
+- [Heiyan booklist page](https://manage.zhangwenpindu.cn/books/booklist) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown reports with tables, ranked recommendations, and optional command guidance for browser-based data collection] <br>
+**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
+**Output Format:** [Markdown reports with tables, optional JavaScript scraper commands, and generated market-scan data files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports should include sample date, trend confidence, saturation risk, and the next recommended rescan time.] <br>
+**Other Properties Related to Output:** [Reports should include sample date, trend confidence, and rescan timing; browser-CDP collection may require an authenticated browser session.] <br>
 
 ## Skill Version(s): <br>
-1.1.8 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+1.1.9 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

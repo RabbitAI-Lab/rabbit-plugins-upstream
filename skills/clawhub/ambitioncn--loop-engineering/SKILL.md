@@ -1,6 +1,6 @@
 ---
-name: loop-engineering
-description: "Loop engineering CLI v0.4.4 with project intake, adaptive queues, progress reports, and human gates."
+name: "loop-engineering"
+description: "Loop Engineering v0.6 with lifecycle tools, explainable drift, live progress, amendments, supersede routing, workers, and gates."
 ---
 
 # Loop Engineering
@@ -44,9 +44,13 @@ loop-engineering project-intake --root /path/to/workspace --name <project> --bri
 loop-engineering project-plan --root /path/to/workspace --project <project>
 loop-engineering project-status --root /path/to/workspace --project <project>
 loop-engineering enqueue --root /path/to/workspace --queue <queue> --title "Title" --task "Task body"
+loop-engineering route-message --root /path/to/workspace --message "User message" [--queue <queue>] [--route --confirm-execute] [--source-channel <channel> --source-target <target> --source-account <account> --source-message-id <id> --source-reply-to <id>]
 loop-engineering queue-init --root /path/to/workspace --queue <queue>
 loop-engineering run-queue --root /path/to/workspace --config configs/loops/queues/<queue>.json
 loop-engineering queue-status --root /path/to/workspace --queue <queue>
+loop-engineering queue-terminal-notify --root /path/to/workspace --queue <queue> (--notify-command "command" | --dry-run)
+loop-engineering queue-human-input-notify --root /path/to/workspace --queue <queue> (--notify-command "command" | --dry-run)
+loop-engineering queue-human-input-resolve --root /path/to/workspace --queue <queue> --gate-id <task:checkpoint> --input "Human response"
 loop-engineering queue-scheduler-tick --root /path/to/workspace --config configs/loops/queues/<queue>.json
 loop-engineering queue-scheduler-tick --root /path/to/workspace --queue <queue> --plan-only --json
 loop-engineering queue-peek --root /path/to/workspace --queue <queue>
@@ -122,6 +126,16 @@ Supported check types:
 
 - `files`: assert relative paths exist.
 - `command`: run a shell command and compare its exit code.
+- `json-value`: compare one JSON value via an RFC 6901 `pointer` and record
+  structured `expected` / `actual` drift evidence.
+
+After a failed loop-spec run, generate a read-only remediation review with:
+
+```bash
+loop-engineering repair-plan --root /path/to/workspace --id <loop-id> --output repair-plan.json
+```
+
+The repair plan never edits configuration and has no automatic apply mode.
 
 ## Observability
 
@@ -152,6 +166,17 @@ rate, average duration, latest matching run, and recent failure reasons. Use
 ## Queue Runner
 
 Use queue commands only for explicit loop-managed handoffs, not ordinary chat.
+
+For conversation-facing integrations, use `route-message` before queue
+commands. Status/progress/failure questions remain read-only; explicit
+execution requires `--confirm-execute`. Routed tasks retain source metadata and
+use contextual `model_assessed` risk rather than topic/keyword rejection.
+Use `queue-terminal-notify` from a watcher to deliver terminal task states
+idempotently back to the recorded source.
+Use `queue-human-input-notify` while tasks are active so checkpoint-level
+human gates are delivered immediately with their concrete blocker. Route
+`LOOP <gate-id> <input>` replies to `queue-human-input-resolve`; it records the
+response and requeues a terminal blocked task with that input attached.
 
 Use project intake before queue commands when the user has a project brief
 rather than a scoped task. `project-intake` converts the brief into a

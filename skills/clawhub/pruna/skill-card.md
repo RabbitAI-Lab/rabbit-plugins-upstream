@@ -1,5 +1,5 @@
 ## Description: <br>
-Use when installing the full Pruna generative media suite: guides, tools, and workflows in one package. <br>
+Use when installing the full Pruna generative media suite: all guides, tools, and workflows in one package. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill bundle to install Pruna generative media guidance, API workflows, and media-generation tools for images, video, audio, narration, music, captions, and multi-step content production. <br>
+External users and developers use this skill to install the full Pruna generative media suite, including prompt guides, media-generation tools, and multi-step image, video, audio, and editing workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompts, uploaded media, and generated outputs may be sent to Pruna or Replicate. <br>
-Mitigation: Avoid sensitive media unless the user has approved the external service use and data handling terms. <br>
-Risk: Workflows may consume paid API credits. <br>
-Mitigation: Confirm cost expectations before making API calls, especially for batches or multi-step media workflows. <br>
-Risk: API keys are required for Pruna and some audio tools. <br>
-Mitigation: Keep API keys scoped, private, and out of generated files, logs, and shared transcripts. <br>
+Risk: The install command auto-confirms installation of the full Pruna media-generation suite and its listed dependencies. <br>
+Mitigation: Review the dependency list before installation and use this bundle only when the full suite is intended. <br>
+Risk: Generation workflows may require Pruna or Replicate credentials and can trigger paid API calls. <br>
+Mitigation: Confirm API-key availability, billing expectations, and generation scope before running media-generation workflows. <br>
 
 
 ## Reference(s): <br>
-- [Pruna ClawHub skill page](https://clawhub.ai/pruna-ai/skills/pruna) <br>
 - [Pruna dashboard](https://dashboard.pruna.ai/) <br>
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/pruna) <br>
+- [Publisher profile](https://clawhub.ai/user/pruna-ai) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline commands and API workflow instructions] <br>
+**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
+**Output Format:** [Markdown with inline shell commands and configuration requirements] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide agents to call Pruna or Replicate APIs, use curl, and assemble media with ffmpeg or ffprobe.] <br>
+**Other Properties Related to Output:** [The skill routes the agent toward Pruna suite skills for prompt writing, API use, media generation, and ffmpeg-based assembly.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release evidence and artifact metadata) <br>
+1.0.9 (source: server evidence and frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,0 +1,65 @@
+<!doctype html>
+<!--
+================================================================
+  html-slides 样板页 · 方式 B(flex/grid 流式)· 原型 9「不对称分栏 7:5」
+  页面骨架(标题/页码)仍用绝对定位;
+  内容区用 flex 容器排布:容器本身不标记、不可见,
+  可见叶子全是 data-object(或位于已标记对象内部的流式子元素)。
+  转换契约:reference/html-spec.md 第 2B 章;设计契约:design-principles.md
+================================================================
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>页面标题 · 不对称分栏</title>
+<link rel="stylesheet" href="../assets/theme.css">
+</head>
+<body>
+<div class="slide-container" style="background:var(--off-white);">
+
+  <!-- ── 页面骨架:绝对定位 ─────────────────────────────── -->
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:1720px;top:92px;width:100px;text-align:right;z-index:10;">
+    <div class="num" style="font-size:16px;font-weight:600;color:var(--text-tertiary);letter-spacing:2px;">03 / 12</div>
+  </div>
+  <div data-object="true" data-object-type="textbox" style="position:absolute;left:100px;top:120px;width:1720px;z-index:10;">
+    <div style="font-size:60px;font-weight:700;line-height:1.2;color:var(--charcoal);">
+      主栏观点的 action title,一句话说透
+    </div>
+  </div>
+
+  <!-- ══ 不对称分栏:flex 容器(不标记)+ 主栏 textbox + 辅栏深色面 ══
+       7:5 份数比;辅栏是"证据区"不是卡片,主栏裸排保持编辑感。 -->
+  <div style="position:absolute;left:100px;top:340px;width:1720px;display:flex;gap:60px;">
+    <!-- 主栏 7 份:裸排版论述(无底色无边框,用 textbox) -->
+    <div data-object="true" data-object-type="textbox" style="flex:7;">
+      <div style="font-size:26px;font-weight:700;line-height:1.35;color:var(--charcoal);">核心论述一段,粗体开场,两行内说完</div>
+      <div style="font-size:22px;line-height:1.65;color:var(--text-primary);margin-top:24px;">
+        论证正文 4-6 行,自然往下排。行距 1.65 是编辑感的来源;段间用空行分段,不用缩进。
+        <br><br>
+        第二段继续论证或给例证。主栏不装盒子——留白和字距本身就是层次。
+      </div>
+    </div>
+    <!-- 辅栏 5 份:深色证据面(shape,高度撑满内容区) -->
+    <div data-object="true" data-object-type="shape" style="flex:5;height:560px;background:var(--deep-navy);border-radius:10px;padding:40px;">
+      <div style="font-size:20px;font-weight:600;letter-spacing:2px;color:var(--accent-orange);">关键证据</div>
+      <div class="num" style="font-size:72px;font-weight:800;line-height:1.1;color:var(--on-navy-text);margin-top:16px;">
+        87<span style="font-size:36px;">%</span>
+      </div>
+      <div style="font-size:20px;line-height:1.55;color:var(--on-navy-sub);margin-top:16px;">
+        证据说明 1-2 行,与大数字互相印证
+      </div>
+      <div style="height:1px;background:var(--deep-navy-light);margin-top:32px;"></div>
+      <div style="font-size:18px;line-height:1.55;color:var(--on-navy-dim);margin-top:24px;">
+        次要证据或口径说明;深底上的浅色文字一律用 --on-navy-* 预算混合色,不用 rgba
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<template data-slide-notes>
+【核心逻辑】这页演示方式 B + 原型 9:flex 7:5 不对称分栏,主栏裸排 textbox + 辅栏深色证据面。
+【版式自检】内容带 340→900(≥85%);辅栏大数字 72px;全页装饰 0 件;左对齐。
+</template>
+</body>
+</html>

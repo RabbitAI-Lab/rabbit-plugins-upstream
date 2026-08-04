@@ -1,5 +1,5 @@
 ## Description: <br>
-Plg Playbook provides product-led growth guidance for freemium design, self-serve onboarding, viral mechanics, usage-based expansion signals, and enterprise upsell. <br>
+The complete Product-Led Growth playbook covering freemium model design, self-serve onboarding, activation metrics, and the transition from individual users to enterprise accounts. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External founders, growth teams, and SaaS operators use this skill to get PLG playbook guidance for converting free or self-serve usage into paid expansion and enterprise revenue. <br>
+External founders, growth teams, product managers, and SaaS operators use this skill to plan product-led growth motions, including freemium design, self-serve onboarding, activation metrics, and PLG-to-enterprise handoffs. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The playbook can surface during broad SaaS, activation, or self-serve growth conversations where its PLG advice may not match the user's market, pricing model, or constraints. <br>
-Mitigation: Treat outputs as strategic guidance and validate assumptions with current customer data before changing pricing, packaging, or growth motions. <br>
-Risk: Enterprise contracting guidance may touch payment milestones, late fees, private deployment, and scope-change process. <br>
-Mitigation: Have qualified commercial and legal reviewers adapt the guidance to the relevant jurisdiction, customer segment, and company policy before use. <br>
+Risk: External links and commercial bundle references may take users outside ClawHub. <br>
+Mitigation: Review link destinations and purchase terms before visiting, sharing information, or buying linked resources. <br>
+Risk: PLG and enterprise handoff guidance may not fit every product, customer segment, or contract situation. <br>
+Mitigation: Validate activation metrics, sales-assist gates, deployment thresholds, and contract terms with the appropriate business, legal, and finance reviewers before applying them. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/gingiris-1031/skills/plg-playbook) <br>
-- [Related Gingiris B2B Growth skill](https://clawhub.ai/gingiris-1031/skills/gingiris-b2b-growth) <br>
-- [Gingiris skills collection](https://gingiris.tools/skills/) <br>
+- [Publisher profile](https://clawhub.ai/user/gingiris-1031) <br>
+- [English reference guide](references/en/README.md) <br>
+- [Japanese reference guide](references/ja/README.md) <br>
+- [Korean reference guide](references/ko/README.md) <br>
+- [Related B2B growth skill](https://clawhub.ai/gingiris-1031/skills/gingiris-b2b-growth) <br>
+- [Gingiris skills index](https://clawhub.ai/gingiris-1031) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with occasional shell command blocks] <br>
+**Output Type(s):** [Guidance, Markdown, Configuration] <br>
+**Output Format:** [Markdown playbook guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only playbook; security evidence reports no hidden code, data access, or privileged behavior.] <br>
+**Other Properties Related to Output:** [Content-only skill with no tool, API, shell, data-access, or persistence behavior found in security evidence.] <br>
 
 ## Skill Version(s): <br>
-1.3.0 (source: server release evidence) <br>
+1.3.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

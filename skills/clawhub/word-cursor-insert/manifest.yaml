@@ -1,5 +1,5 @@
 name: word-cursor-insert
-version: 1.0.1
+version: 1.0.2
 display_name: Word 光标插入
 description: >-
   连接当前已打开的 Word 文档，把文本/段落或 Excel/CSV 表格精准插入光标处。

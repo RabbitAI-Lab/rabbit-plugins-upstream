@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-bom-discover-gcp",
   "slug": "agent-bom-discover-gcp",
   "ownerHandle": null,
-  "version": "0.98.0",
-  "updatedAt": 1784946315174,
-  "contentHash": "2327bd1148d3cc0fb6ee27c93e2878a9c2c6617c687ab1d25b31f192c52e131c",
-  "fetchedAt": "2026-07-26T18:04:21.912Z"
+  "version": "0.98.3",
+  "updatedAt": 1785737439738,
+  "contentHash": "774aa7a1d29716d1137fbe4a5470f40c369589f462d8ae0d2409c8b972112703",
+  "fetchedAt": "2026-08-04T10:13:44.968Z"
 }
