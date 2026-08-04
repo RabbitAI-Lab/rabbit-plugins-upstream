@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/amazon-elasticache",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "amazon-elasticache",
+  "branch": "main",
+  "pushedAt": "2026-08-04T05:21:19Z",
+  "contentHash": "138469c67313cf544dd9cbf49981e8c8565e0367977453394d0c1414f295cf5c",
+  "fetchedAt": "2026-08-04T10:03:47.004Z"
+}

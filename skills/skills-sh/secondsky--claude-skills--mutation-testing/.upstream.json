@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/mutation-testing",
+  "repo": "secondsky/claude-skills",
+  "skillId": "mutation-testing",
+  "branch": "main",
+  "pushedAt": "2026-08-03T20:30:31Z",
+  "contentHash": "0172e79571f12f507369e5104425c82e5b741293c0f435fd9b2facd4b1c1cc66",
+  "fetchedAt": "2026-08-04T10:03:13.993Z"
+}

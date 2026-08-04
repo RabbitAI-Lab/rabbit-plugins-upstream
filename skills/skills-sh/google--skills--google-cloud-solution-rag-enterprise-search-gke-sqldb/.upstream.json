@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-solution-rag-enterprise-search-gke-sqldb",
+  "repo": "google/skills",
+  "skillId": "google-cloud-solution-rag-enterprise-search-gke-sqldb",
+  "branch": "main",
+  "pushedAt": "2026-08-04T09:24:45Z",
+  "contentHash": "83d899797ba404f7b9b5099bc70db9421595930782189f15ae2064be24385c66",
+  "fetchedAt": "2026-08-04T10:02:18.864Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/agent-platform-skill-registry",
+  "repo": "google/skills",
+  "skillId": "agent-platform-skill-registry",
+  "branch": "main",
+  "pushedAt": "2026-08-04T09:24:45Z",
+  "contentHash": "56e90905474188b4098fd39ad5a2450aca1a33490fb29dd200e1655300a1a96d",
+  "fetchedAt": "2026-08-04T10:02:18.617Z"
+}

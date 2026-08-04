@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-sdk-python-usage",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-sdk-python-usage",
+  "branch": "main",
+  "pushedAt": "2026-08-04T05:21:19Z",
+  "contentHash": "ea378e5c261c26fce2cebc9ea0c7cbadceaebaa79306497c3689fb5b102fb8b4",
+  "fetchedAt": "2026-08-04T10:03:46.671Z"
+}
