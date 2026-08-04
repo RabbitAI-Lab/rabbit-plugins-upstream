@@ -1,5 +1,5 @@
 ## Description: <br>
-企业出海全球合规指引专项助手，帮助中国企业梳理主要海外投资目的地的用工、薪酬、税务、转让定价、数据跨境、反洗钱、反腐败、知识产权和外资安全审查等合规事项。 <br>
+Tax Global Compliance helps organizations assess overseas employment, payroll, tax, transfer-pricing, data-transfer, and related compliance risks for Chinese companies expanding abroad. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External business, tax, legal, HR, and compliance teams use this skill to ask scenario-based questions about overseas expansion and to draft practical checklists for country labor rules, payroll and tax, transfer pricing, data export, investment entry, anti-corruption, anti-money-laundering, and IP risk. It is a guidance aid and should be reviewed against current official sources and qualified local professional advice before action. <br>
+External business, tax, legal, and compliance teams use this skill to ask scenario-based questions, run self-checks, identify cross-border compliance gaps, and prepare practical next steps before overseas market entry or operations. <br>
 
 ### Deployment Geography for Use: <br>
-Global, with source material focused on China outbound investment and examples for the United States, Saudi Arabia, Indonesia, Mexico, and Brunei. <br>
+Global, with source material focused on China outbound operations and selected destination countries. <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can send compliance, tax, payroll, and business-risk questions to a third-party backend at mcp.aitaxs.top. <br>
-Mitigation: Use it only when that data handling is acceptable for the organization; avoid entering sensitive company identifiers or confidential facts unless approved. <br>
-Risk: The skill stores API credentials locally under the tax policy client configuration area. <br>
-Mitigation: Review local credential storage before installation, restrict access to the user profile, and remove stored credentials when the skill is no longer used. <br>
-Risk: The init_agent.py helper can modify MCP client configuration when run intentionally or when TAX_ENABLE_AUTOSETUP is enabled. <br>
-Mitigation: Do not run config/init_agent.py or set TAX_ENABLE_AUTOSETUP=1 unless client configuration changes are intended; review backups and resulting MCP server entries. <br>
-Risk: Cross-border compliance guidance may be incomplete or outdated for a specific jurisdiction or transaction. <br>
-Mitigation: Verify outputs against current official sources and qualified local legal, tax, HR, or compliance advisers before operational use. <br>
+Risk: Compliance questions and tool inputs may be sent to a third-party cloud tax service. <br>
+Mitigation: Use only with organization-approved data handling, and avoid entering confidential payroll, tax, employee, investment, or cross-border transaction details unless approved. <br>
+Risk: The skill can store a local API key and logs under the user's home directory. <br>
+Mitigation: Review local storage policy before use, restrict file access where needed, and remove or rotate stored credentials if the skill is no longer approved. <br>
+Risk: Optional setup code can modify MCP client configuration files. <br>
+Mitigation: Run setup in dry-run mode first, inspect proposed configuration changes, and rely on backups before enabling automatic writes. <br>
+Risk: Fallback public search can provide less authoritative or less current tax guidance than the cloud knowledge service. <br>
+Mitigation: Treat fallback output as preliminary and verify material compliance decisions against official sources or qualified local professionals. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-global-compliance) <br>
-- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
-- [SkillHub topic workflow](https://skillhub.cn/skills/tax-global-compliance) <br>
-- [Tax policy knowledge matrix](https://skillhub.cn/skills/tax-policy-knowledge) <br>
+- [Enterprise overseas compliance self-check page](https://mcp.aitaxs.top/web/topic_workflow_global_compliance.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [Tax policy knowledge MCP service](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration, Shell commands] <br>
-**Output Format:** [Conversational text and Markdown checklists, with optional local configuration snippets or shell commands for MCP setup.] <br>
+**Output Type(s):** [text, markdown, guidance, configuration, shell commands] <br>
+**Output Format:** [Markdown and structured text, with optional local helper output as plain text.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use a third-party MCP service for policy Q&A, risk checks, tax calculations, and knowledge-base metadata; includes offline reference scripts for limited fallback guidance.] <br>
+**Other Properties Related to Output:** [May route questions to a cloud MCP service and may use local offline fallback guidance when the service is unavailable.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: frontmatter and server-resolved release metadata) <br>
+3.15.10 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

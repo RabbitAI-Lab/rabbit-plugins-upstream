@@ -1,5 +1,5 @@
 ## Description: <br>
-Use when someone wants a slideshow story with narration or music, using picture-book illustrated frames with Ken Burns or gentle p-video motion. <br>
+Use when someone wants a slideshow story with narration or music - picture-book illustrated frames with Ken Burns or gentle p-video motion. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,20 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators and developers use this skill to plan and generate illustrated story reels with staged approval gates for stills, audio, optional p-video motion, and final MP4 assembly. <br>
+Creators, marketers, educators, and developers use this skill to plan and generate illustrated slideshow-style story reels with narration or music. It guides staged review gates for stills, audio, optional p-video motion, and final reel assembly. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Paid API calls can incur cost during still, audio, and optional p-video phases. <br>
-Mitigation: Use the documented approval gates before TTS, music, video, and assembly steps. <br>
-Risk: API credentials may be exposed if broadly shared with subagents or logs. <br>
-Mitigation: Keep PRUNA_API_KEY and REPLICATE_API_TOKEN scoped to the parent agent or approved per-lane work only. <br>
-Risk: Local ffmpeg assembly may overwrite an existing MP4 at the target path. <br>
-Mitigation: Use a dedicated output directory and confirm the final MP4 path before assembly. <br>
-Risk: Plan files and generated media may contain confidential prompts, narration, or project details. <br>
-Mitigation: Treat plan.json and media under the output directory as confidential local files. <br>
+Risk: Paid API use and media uploads to Pruna and Replicate may incur cost and expose project media to external services. <br>
+Mitigation: Confirm budget and upload acceptability before installation or generation, and use the documented approval gates before paid audio, video, or assembly phases. <br>
+Risk: Generated plan and media files may contain confidential prompts or story details. <br>
+Mitigation: Use an appropriate output directory, treat generated plan and media files as confidential, and remove local artifacts when they are no longer needed. <br>
+Risk: ffmpeg assembly can overwrite the selected output MP4 path. <br>
+Mitigation: Confirm the output directory and filename before assembly, especially when reusing an existing project folder. <br>
 
 
 ## Reference(s): <br>
@@ -34,19 +32,16 @@ Mitigation: Treat plan.json and media under the output directory as confidential
 - [Illustrated story reel p-video motion](references/illustrated-story-reel-p-video-motion.md) <br>
 - [Illustrated story reel positive still prompts](references/illustrated-story-reel-prompts.md) <br>
 - [Illustrated story reel quality gates](references/illustrated-story-reel-quality.md) <br>
-- [Pruna P-API predictions endpoint](https://api.pruna.ai/v1/predictions) <br>
-- [Pruna P-API file upload endpoint](https://api.pruna.ai/v1/files) <br>
-- [Replicate predictions endpoint](https://api.replicate.com/v1/models/{owner}/{name}/predictions) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with JSON story plans, API payloads, shell commands, and generated media paths] <br>
+**Output Type(s):** [Guidance, Markdown, Text, Configuration, Shell commands] <br>
+**Output Format:** [Markdown guidance with JSON story-plan templates and inline shell/API command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces plan.json and staged media under the output directory; final assembly is usually story_reel.mp4.] <br>
+**Other Properties Related to Output:** [May create plan.json, still images, audio files, optional motion clips, and story_reel.mp4 under the selected output directory.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server evidence, release metadata, and skill metadata) <br>
+1.0.9 (source: server release metadata, SKILL.md frontmatter, skill metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

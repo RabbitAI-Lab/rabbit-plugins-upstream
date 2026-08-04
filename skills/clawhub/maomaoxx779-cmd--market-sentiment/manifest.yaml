@@ -1,0 +1,11 @@
+name: 牛股王市场情绪指标
+slug: market-sentiment
+version: 1.0.0
+description: 牛股王独家研发的A股市场情绪指标，基于板块热度、赚钱效应等多维度数据综合评分，提示市场情绪持续向好/向坏、关注度提升/下降的板块，辅助把握结构性机会。
+author: 牛股王 (niuguwang.com)
+category: 金融投资
+tags:
+  - A股
+  - 市场情绪
+  - 赚钱效应
+  - 牛股王

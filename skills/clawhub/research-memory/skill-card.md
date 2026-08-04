@@ -1,5 +1,5 @@
 ## Description: <br>
-Build a persistent, searchable knowledge base from articles, papers, documents, and notes using BlueColumn. <br>
+Give AI agents persistent BlueColumn research memory for storing, recalling, and searching research context, requiring a BlueColumn API key. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Researchers, analysts, and developers use this skill to save selected articles, papers, documents, and notes to BlueColumn, then recall synthesized answers and citations from the stored knowledge base. <br>
+External users and developers use this skill to give an agent persistent research memory through BlueColumn, including storing research notes, creating quick notes, and recalling prior findings during later interactions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill uses a sensitive BlueColumn API key. <br>
-Mitigation: Keep the bc_live API key private and avoid logging, sharing, or embedding it in saved content. <br>
-Risk: Selected research content is stored in remote persistent memory. <br>
-Mitigation: Avoid saving confidential or regulated material unless BlueColumn retention and deletion controls meet the user's requirements. <br>
+Risk: The skill can lead agents to store conversation summaries in a third-party persistent memory service. <br>
+Mitigation: Use it only for research notes intentionally approved for BlueColumn storage, and avoid secrets, credentials, personal data, confidential business information, and regulated content unless an explicit storage policy allows it. <br>
+Risk: The artifact requires a BlueColumn API key and directs agents to read it from available key storage. <br>
+Mitigation: Confirm key handling policy before installation and limit access to the BlueColumn API key to agents and workflows that need persistent research memory. <br>
 
 
 ## Reference(s): <br>
-- [BlueColumn API Reference](references/api.md) <br>
-- [BlueColumn](https://bluecolumn.ai) <br>
+- [BlueColumn API documentation](https://bluecolumn.ai/docs) <br>
+- [ClawHub skill page](https://clawhub.ai/bluecolumnconsulting-lgtm/skills/research-memory) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, API calls, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON API payloads] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with inline bash code blocks and API usage guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a BlueColumn bc_live API key; saved content and recall results are handled by BlueColumn.] <br>
+**Other Properties Related to Output:** [Produces guidance for agent memory API calls; does not itself store data without an agent executing the described requests.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+1.0.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Endpoint Aiops helps agents triage and operate managed-endpoint fleets with health, inventory, login-storm, drift, patch, profile-assignment, reboot, audit, budget, and undo workflows. <br>
+Provides governed managed-endpoint fleet operations for health overview, inventory, endpoint scoring, login-storm analysis, drift and patch checks, profile assignment, and reboot workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,27 +7,29 @@ This skill is ready for commercial/non-commercial use. <br>
 [zw008](https://clawhub.ai/user/zw008) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-Developers, IT operators, and endpoint administrators use this skill to inspect managed-endpoint fleet health, diagnose login storms and drift, rank endpoint risk, and perform guarded remediation such as profile assignment or reboot. <br>
+Developers, IT operators, and endpoint administrators use this skill to inspect managed endpoint fleets, diagnose login storms and drift, assess patch compliance, and perform guarded remediation actions such as assigning profiles or rebooting endpoints. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can change or reboot managed endpoints and has no enforced read-only or approval gate for agent-driven writes. <br>
-Mitigation: Install it with a tightly scoped management account, preferably read-only until writes are intentionally needed; use dry-run and confirmation paths before profile assignment or reboot. <br>
-Risk: Endpoint credentials and local audit or undo data may expose sensitive endpoint, user, profile, or management-server information. <br>
-Mitigation: Treat ENDPOINT_AIOPS_MASTER_PASSWORD as a secret, avoid long-lived shell exports where possible, and review local ~/.endpoint-aiops data handling for sensitive environments. <br>
-Risk: The REST paths and some dialect behavior are modelled and have not been exercised against a live endpoint-management server. <br>
-Mitigation: Run endpoint-aiops doctor and validate behavior against a non-production or read-only target before relying on results or enabling write operations. <br>
+Risk: The skill can perform disruptive endpoint changes, including profile assignment and reboots, without its own read-only or approval gate. <br>
+Mitigation: Use a read-only management account by default, grant write-capable credentials only when endpoint changes are approved, and use dry-run previews before state-changing operations. <br>
+Risk: A broadly inherited master-password environment variable can expose access to the encrypted credential store. <br>
+Mitigation: Provide ENDPOINT_AIOPS_MASTER_PASSWORD only to the intended MCP or CLI process, or use an interactive prompt for local CLI sessions. <br>
+Risk: Legacy plaintext API-key environment variables may still be honored as fallback credentials. <br>
+Mitigation: Migrate legacy API-key variables into the encrypted secret store and remove them from shell profiles, CI settings, and shared environments. <br>
+Risk: Modeled endpoint-management REST paths have not been exercised against a live management server. <br>
+Mitigation: Run endpoint-aiops doctor and validate read operations in a non-production or read-only environment before enabling write-capable credentials. <br>
 
 
 ## Reference(s): <br>
-- [Endpoint Aiops ClawHub page](https://clawhub.ai/zw008/skills/endpoint-aiops) <br>
-- [Endpoint-AIops project homepage](https://github.com/AIops-tools/Endpoint-AIops) <br>
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/endpoint-aiops) <br>
+- [Project homepage](https://github.com/AIops-tools/Endpoint-AIops) <br>
 - [Capabilities reference](references/capabilities.md) <br>
 - [CLI reference](references/cli-reference.md) <br>
 - [Setup and security guide](references/setup-guide.md) <br>
@@ -35,13 +37,13 @@ Mitigation: Run endpoint-aiops doctor and validate behavior against a non-produc
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Analysis, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and structured tool results] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with CLI commands and structured tool-result summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Tool results may include capped list envelopes with returned, limit, and truncated fields; write workflows may record audit and undo state locally.] <br>
+**Other Properties Related to Output:** [Includes capped-list truncation indicators, uncapped fleet totals, risk-tier labels for write actions, and dry-run guidance for state-changing commands.] <br>
 
 ## Skill Version(s): <br>
-0.6.0 (source: server release metadata and target metadata) <br>
+0.8.0 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,7 +1,7 @@
 ---
 name: scavio-walmart
 description: Search Walmart products and look up product details by product ID. Supports delivery speed, ZIP code, and in-store availability filters. Returns structured JSON.
-version: 2.0.3
+version: 2.0.4
 tags: walmart, retail, product-search, ecommerce, price-lookup, shopping, agents, langchain, crewai, autogen, structured-data, json, ai-agents
 metadata:
   openclaw:
@@ -30,7 +30,7 @@ Use this skill when the user asks to:
 
 ## Setup
 
-Get a free API key at https://scavio.dev (250 free credits/month, no card required):
+Get a free API key at https://scavio.dev (50 free credits to get started, no card required):
 
 ```bash
 export SCAVIO_API_KEY=sk_live_your_key

@@ -1,5 +1,5 @@
 ## Description: <br>
-Combines facial blood flow and emotional characteristics to analyze stress index, anxiety tendency, and depression tendency for mental health monitoring scenarios. <br>
+Analyzes face image or video inputs to produce psychological stress, anxiety tendency, and depression tendency assessment reports for mental health monitoring scenarios. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent users can use this skill to submit face image or video media for a psychological stress assessment report covering stress index, anxiety tendency, and depression tendency. The skill is intended for mental health monitoring and screening support, not clinical diagnosis. <br>
+External users and agents use this skill to submit face media for psychological stress assessment, receive structured results, and retrieve prior cloud-hosted reports. It is suited to mental health monitoring workflows where users understand that the assessment is informational and not a clinical diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Face media and inferred mental-health results are sent to the publisher's remote service and may be linked to local or cloud identity state. <br>
-Mitigation: Use only with clear subject consent, review the publisher's data handling terms, and confirm retention, deletion, token, and identity-linking controls before production use. <br>
-Risk: Stress, anxiety, and depression tendency outputs may be mistaken for clinical conclusions. <br>
-Mitigation: Present results as screening or monitoring support only and route persistent or concerning results to qualified mental-health professionals. <br>
-Risk: History-report queries can expose prior psychological assessment records associated with the resolved user identity. <br>
-Mitigation: Limit access to authorized users and review who can retrieve report history before enabling the skill in shared, workplace, school, or clinical settings. <br>
+Risk: Face media and psychological-stress inferences may be sent to a remote service and later retrieved as cloud history. <br>
+Mitigation: Use only with explicit user understanding and approved media; clarify retention, retrieval, and deletion expectations before use. <br>
+Risk: Reports may be linked to an internal identity and reusable local tokens. <br>
+Mitigation: Avoid shared workspaces unless identity isolation is in place, and review token storage and account-scoping practices before deployment. <br>
+Risk: Stress, anxiety, and depression tendency outputs may be mistaken for clinical diagnosis. <br>
+Mitigation: Present results as informational mental health assessment references and direct users with persistent concerns to qualified professionals. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-psychological-stress-assessment-analysis) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+- [API interface documentation](references/api_doc.md) <br>
 - [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON psychological stress assessment report] <br>
+**Output Type(s):** [text, markdown, JSON, files, guidance] <br>
+**Output Format:** [Markdown or JSON analysis report with optional saved output file and report link] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return structured stress, anxiety, and depression tendency results, report links, and history-report tables; documented media inputs include image or video files and remote media URLs with a 10 MB file-size limit.] <br>
+**Other Properties Related to Output:** [May include stress index, anxiety tendency, depression tendency, suggestions, history tables, and exported report URLs.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact SKILL.md declares 1.0.9) <br>
+1.0.9 (source: server release evidence; artifact frontmatter reports 1.0.12) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Fix Plan helps agents maintain fix_plan.md and checklist.md trackers, including item schema, priority triage, deferred plan stubs, GitHub state sync, completed-item archiving, and issue draft lifecycle cleanup. <br>
+Manages fix_plan.md and checklist.md trackers by formatting schema, triaging blockers, syncing external issue state, moving completed work, and maintaining related planning topics. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,38 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers and engineering agents use this skill to keep project tracker files compact, structured, and synchronized with GitHub issue and pull request state. It is intended for task-list housekeeping, deferred plan capture, completed-work archiving, and issue draft cleanup. <br>
+Developers and project maintainers use this skill to keep Markdown work trackers consistent, prioritized, synchronized with external issue state, and trimmed as completed work moves into summaries or archives. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Cleanup flows can rewrite fix_plan.md or checklist.md and archive or delete tracker entries. <br>
-Mitigation: Use explicit tracker paths, run cleanup with --dry-run first, and review the backup and resulting diff before accepting archive or delete flows. <br>
-Risk: Archive and RAG receiver flows can store detailed work history, operational metadata, or sensitive tracker content outside the active file. <br>
-Mitigation: Enable only trusted --archive or --rag receivers, and redact secrets, private logs, and sensitive incident details before dispatch. <br>
-Risk: GitHub sync can change tracker item state based on gh CLI results. <br>
-Mitigation: Run sync against the intended repository with an authenticated gh session and review the sync report before committing tracker updates. <br>
+Risk: Qdrant lookup and ingest helpers can process plan or research Markdown through configured external tooling. <br>
+Mitigation: Do not invoke artifact_pre_lookup.py or artifact_post_ingest.py unless you intend that behavior, trust the configured Qdrant setup, and trust the qdrant-import.py helper in the home skill directory. <br>
+Risk: Tracker lifecycle actions can move completed entries, append extracted checklist items, or otherwise modify fix_plan.md or checklist.md. <br>
+Mitigation: Use explicit /fix-plan commands, keep backups for completed-item moves, and review tracker diffs before relying on the updated plan. <br>
+Risk: Optional RAG dispatch can store full plan or research bodies outside the tracker. <br>
+Mitigation: Supply --rag only when the destination skill and storage location are known and acceptable for the content being indexed. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/drumrobot/skills/fix-plan) <br>
-- [Skill overview](artifact/SKILL.md) <br>
-- [Format guide](artifact/format.md) <br>
-- [Priority guide](artifact/priority.md) <br>
-- [Move and archive guide](artifact/move.md) <br>
-- [GitHub sync guide](artifact/sync.md) <br>
-- [Issue drafts lifecycle](artifact/issue-drafts.md) <br>
-- [Changelog](artifact/CHANGELOG.md) <br>
+- [Format guide](format.md) <br>
+- [Priority guide](priority.md) <br>
+- [Sync guide](sync.md) <br>
+- [Sync automation guide](sync-automation.md) <br>
+- [Move guide](move.md) <br>
+- [Completion criteria guide](completion-criteria.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with tracker edits and inline shell commands] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with optional code, shell command, and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update local tracker files and archive completed or draft entries when invoked with the documented cleanup flows.] <br>
+**Other Properties Related to Output:** [May edit tracker files or emit commands when invoked by an agent with the required tools.] <br>
 
 ## Skill Version(s): <br>
-0.3.3 (source: server release metadata and CHANGELOG.md, released 2026-07-23) <br>
+0.5.0 (source: release evidence and changelog, released 2026-08-03) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

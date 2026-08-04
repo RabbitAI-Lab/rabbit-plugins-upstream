@@ -1,5 +1,5 @@
 ## Description: <br>
-IPLocate lets an agent look up IP geolocation, ASN, privacy, hosting, company, and abuse data through an OOMOL-connected IPLocate account. <br>
+This skill guides agents to use the OOMOL IPLocate connector for single, batch, and self IP intelligence lookups. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and external users use this skill to run IPLocate lookups for single IP addresses, batches of IPs, or the connector server's outgoing IP address. It supports geolocation and network-intelligence workflows while relying on the live IPLocate connector schema. <br>
+Developers and external users use this skill to look up IP geolocation, ASN, privacy, hosting, company, and abuse data through their OOMOL-connected IPLocate account. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: IP addresses submitted for lookup may be sent through the OOMOL/IPLocate connector path. <br>
-Mitigation: Install and use this skill only when that connector path is acceptable for the IP data being queried. <br>
-Risk: First-time use may require installing the oo CLI and connecting an IPLocate API key in OOMOL. <br>
-Mitigation: Use setup steps only after an authentication or connection failure, and confirm the account and API-key connection before retrying lookups. <br>
+Risk: IP addresses provided for lookup are sent to IPLocate through OOMOL. <br>
+Mitigation: Use the skill only when the user expects an IPLocate lookup through their OOMOL-connected account and avoid submitting unrelated sensitive data. <br>
+Risk: The skill depends on an OOMOL account, an IPLocate connection, and available billing credit. <br>
+Mitigation: Run setup or billing commands only when connector commands fail with the matching authentication, connection, or credit error. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-iplocate) <br>
+- [ClawHub IPLocate skill page](https://clawhub.ai/oomol/skills/oo-iplocate) <br>
 - [IPLocate homepage](https://www.iplocate.io/) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+- [OOMOL CLI](https://github.com/oomol-lab/oo-cli) <br>
+- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector responses use JSON with data and meta.executionId when actions run with --json.] <br>
+**Other Properties Related to Output:** [Uses live connector schema inspection before constructing action payloads; connector responses are JSON.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+1.0.1 (source: server release evidence and artifact metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

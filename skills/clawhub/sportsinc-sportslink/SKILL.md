@@ -13,7 +13,7 @@ description: >
   imported. It is customer-agnostic (every Sports Inc dealer uses this same
   API) and touches no ERP — pair it with a payables workflow (e.g.
   `drivethru-payable-matching`) to match against POs and create the bill.
-version: 0.3.2
+version: 0.4.0
 emoji: 🏟️
 homepage: https://www.sportsinc.com
 metadata:
@@ -219,6 +219,50 @@ Error:
   }
 }
 ```
+
+### Replying to a delegated *task* — compact markdown, not raw JSON
+
+The JSON envelope above is the contract for a **synchronous** `send_message`
+call, where the caller reads the object programmatically. But when the payables
+agent reaches you as an **async delegated task** (it `start_task`s you a request
+and you report back with an outcome/summary), your reply is **free text another
+agent reads**, and that summary field has a hard **~20,000-character limit**. A
+raw JSON dump of several POs' invoices overflows it and is **silently
+truncated** — which hands the payables agent a half-parsed payload and corrupts
+its billing. (This is exactly what happened once: five POs of pretty-printed
+JSON, cut off mid-object.)
+
+So on a delegated task, **run `get-for-a2a` / `list` as usual, then hand back a
+compact markdown breakdown** in your outcome summary — never paste the raw
+JSON. Markdown carries all the same data in a fraction of the characters and the
+payables agent reads it directly (it does not need strict JSON). Include every
+field it needs, terse, and **do not wrap it in a code fence** (fences add bulk
+and confuse parsing):
+
+- One `## <po_number>` heading per PO.
+- One bullet per SI document: `si_doc_number`, `invoice_number`,
+  `invoice_date`, `due_date`, `is_credit`, `has_lines`, and the money from
+  `charges` + `total` (`merchandise`, `freight`, `si_upcharge`, `total`).
+- Under each document with `has_lines: true`, one terse line per item:
+  `item`, `upc`, `size`, `qty_shipped`, `net_price`, `extension`, `description`.
+  For a `has_lines: false` document write `detail no` and omit item lines.
+
+Example — keep it this tight (normalised field values, no code fence around it
+in your real reply):
+
+```text
+## P09409
+- SI 23962348 | inv# 6164920830 | 2026-02-16 | due 2026-05-10 | credit no | detail yes | merch 51.00 freight 8.58 upcharge 0.48 total 60.06
+  - JP1477 | 197612326076 | S | qtyShip 1 | net 12.75 | ext 12.75 | TF SHRT TIGHT M BLACK
+  - JP1477 | 197612326083 | M | qtyShip 3 | net 12.75 | ext 38.25 | TF SHRT TIGHT M BLACK
+- SI 23972779 | inv# 6164929812 | 2026-02-17 | due 2026-05-10 | credit no | detail yes | merch 180.61 freight 0.00 upcharge 1.45 total 182.06
+  - JJ1179 | 196476717082 | L | qtyShip 1 | net 25.50 | ext 25.50 | GG SL HD MGREYH
+```
+
+If even the compact form would be too large (many POs, many lines), **never cut
+it silently**: return the POs you can and end with an explicit
+`NOTE: truncated — returned N of M POs, ask again for the rest`, so the caller
+knows to re-request rather than bill from a partial payload.
 
 The `retriable` flag indicates whether the caller should retry (transient
 connection errors) or escalate (auth/config errors).

@@ -1,0 +1,603 @@
+{
+  "code": 2000,
+  "data": [
+    {
+      "accountAvgList": [
+        {
+          "fansType": "0-5K",
+          "name": "总点赞数中位数",
+          "value": "362.61"
+        },
+        {
+          "fansType": "0-5K",
+          "name": "总收藏数中位数",
+          "value": "117.75"
+        },
+        {
+          "fansType": "0-5K",
+          "name": "近30天发作品数中位数",
+          "value": "3.00"
+        },
+        {
+          "fansType": "0-5K",
+          "name": "近30天作品互动量中位数",
+          "value": "71.65"
+        },
+        {
+          "fansType": "0-5K",
+          "name": "作品总数中位数",
+          "value": "16.73"
+        },
+        {
+          "fansType": "5K-5w",
+          "name": "作品总数中位数",
+          "value": "120.30"
+        },
+        {
+          "fansType": "5K-5w",
+          "name": "总点赞数中位数",
+          "value": "41604.23"
+        },
+        {
+          "fansType": "5K-5w",
+          "name": "总收藏数中位数",
+          "value": "16201.18"
+        },
+        {
+          "fansType": "5K-5w",
+          "name": "近30天发作品数中位数",
+          "value": "6.00"
+        },
+        {
+          "fansType": "5K-5w",
+          "name": "近30天作品互动量中位数",
+          "value": "483.50"
+        },
+        {
+          "fansType": "5w-50w",
+          "name": "作品总数中位数",
+          "value": "245.56"
+        },
+        {
+          "fansType": "5w-50w",
+          "name": "近30天作品互动量中位数",
+          "value": "3797.60"
+        },
+        {
+          "fansType": "5w-50w",
+          "name": "近30天发作品数中位数",
+          "value": "7.00"
+        },
+        {
+          "fansType": "5w-50w",
+          "name": "总收藏数中位数",
+          "value": "148994.22"
+        },
+        {
+          "fansType": "5w-50w",
+          "name": "总点赞数中位数",
+          "value": "398278.10"
+        },
+        {
+          "fansType": ">50w",
+          "name": "作品总数中位数",
+          "value": "428.73"
+        },
+        {
+          "fansType": ">50w",
+          "name": "总点赞数中位数",
+          "value": "4371187.20"
+        },
+        {
+          "fansType": ">50w",
+          "name": "总收藏数中位数",
+          "value": "1295796.82"
+        },
+        {
+          "fansType": ">50w",
+          "name": "近30天发作品数中位数",
+          "value": "7.00"
+        },
+        {
+          "fansType": ">50w",
+          "name": "近30天作品互动量中位数",
+          "value": "33700.54"
+        }
+      ],
+      "accountExcellentList": [
+        {
+          "fansType": "0-5K",
+          "name": "总点赞数中位数",
+          "value": "31087.00"
+        },
+        {
+          "fansType": "0-5K",
+          "name": "总收藏数中位数",
+          "value": "7368.00"
+        },
+        {
+          "fansType": "0-5K",
+          "name": "近30天发作品数中位数",
+          "value": "12.00"
+        },
+        {
+          "fansType": "0-5K",
+          "name": "近30天作品互动量中位数",
+          "value": "38878.00"
+        },
+        {
+          "fansType": "0-5K",
+          "name": "作品总数中位数",
+          "value": "23.00"
+        },
+        {
+          "fansType": "5K-5w",
+          "name": "作品总数中位数",
+          "value": "136.50"
+        },
+        {
+          "fansType": "5K-5w",
+          "name": "总点赞数中位数",
+          "value": "329082.00"
+        },
+        {
+          "fansType": "5K-5w",
+          "name": "总收藏数中位数",
+          "value": "82391.50"
+        },
+        {
+          "fansType": "5K-5w",
+          "name": "近30天发作品数中位数",
+          "value": "24.00"
+        },
+        {
+          "fansType": "5K-5w",
+          "name": "近30天作品互动量中位数",
+          "value": "124263.00"
+        },
+        {
+          "fansType": "5w-50w",
+          "name": "作品总数中位数",
+          "value": "284.50"
+        },
+        {
+          "fansType": "5w-50w",
+          "name": "近30天作品互动量中位数",
+          "value": "254721.50"
+        },
+        {
+          "fansType": "5w-50w",
+          "name": "近30天发作品数中位数",
+          "value": "19.00"
+        },
+        {
+          "fansType": "5w-50w",
+          "name": "总收藏数中位数",
+          "value": "481938.50"
+        },
+        {
+          "fansType": "5w-50w",
+          "name": "总点赞数中位数",
+          "value": "2381874.00"
+        },
+        {
+          "fansType": ">50w",
+          "name": "作品总数中位数",
+          "value": "485.50"
+        },
+        {
+          "fansType": ">50w",
+          "name": "总点赞数中位数",
+          "value": "7763569.00"
+        },
+        {
+          "fansType": ">50w",
+          "name": "总收藏数中位数",
+          "value": "1654083.00"
+        },
+        {
+          "fansType": ">50w",
+          "name": "近30天发作品数中位数",
+          "value": "12.00"
+        },
+        {
+          "fansType": ">50w",
+          "name": "近30天作品互动量中位数",
+          "value": "251250.50"
+        }
+      ],
+      "avatar": null,
+      "collected": 13076094,
+      "desc": "",
+      "fans": 4931601,
+      "fansGender": {
+        "male_ratio": 0.17436274807989494,
+        "female_ratio": 0.8256372519201051
+      },
+      "gmtCreate": "2026-06-02 08:58:09",
+      "interactiveCountThirty": 53030,
+      "level": "金冠薯",
+      "liked": 45892757,
+      "nickname": "祝晓晗",
+      "noteCountThirty": 29,
+      "recentIndex": 803.59,
+      "redId": "xiaohan96",
+      "similarAccounts": [
+        {
+          "avatar": null,
+          "collected": 2604863,
+          "fans": 2369878,
+          "fansGender": {
+            "male_ratio": 0.12595068027210882,
+            "female_ratio": 0.8740493197278911
+          },
+          "interactiveCountThirty": 902594,
+          "level": 0,
+          "liked": 19382525,
+          "nickname": "芭比小郭",
+          "noteCountThirty": 19,
+          "recentIndex": 1026.46,
+          "redId": "95384837072",
+          "topAges": "<18",
+          "topProvinces": "广东",
+          "totalWork": 220,
+          "url": "https://www.xiaohongshu.com/user/profile/67626c97000000001801435f",
+          "userAttribute": "头部kol"
+        },
+        {
+          "avatar": null,
+          "collected": 7985513,
+          "fans": 2835798,
+          "fansGender": {
+            "male_ratio": 0.13550122998477437,
+            "female_ratio": 0.8644987700152256
+          },
+          "interactiveCountThirty": 2007623,
+          "level": 0,
+          "liked": 40196901,
+          "nickname": "蚂蚁",
+          "noteCountThirty": 10,
+          "recentIndex": 1004.92,
+          "redId": "5357740093",
+          "topAges": "<18",
+          "topProvinces": "广东",
+          "totalWork": 203,
+          "url": "https://www.xiaohongshu.com/user/profile/62f67a61000000001f00719f",
+          "userAttribute": "头部kol"
+        },
+        {
+          "avatar": null,
+          "collected": 917692,
+          "fans": 1096084,
+          "fansGender": {
+            "male_ratio": 0.09566666666666669,
+            "female_ratio": 0.9043333333333333
+          },
+          "interactiveCountThirty": 1246466,
+          "level": 0,
+          "liked": 13400038,
+          "nickname": "aespa_official",
+          "noteCountThirty": 72,
+          "recentIndex": 985.2,
+          "redId": "95528159449",
+          "topAges": "<18",
+          "topProvinces": "广东",
+          "totalWork": 408,
+          "url": "https://www.xiaohongshu.com/user/profile/684e9fae000000001b0229c4",
+          "userAttribute": "头部kol"
+        },
+        {
+          "avatar": null,
+          "collected": 7638747,
+          "fans": 2656734,
+          "fansGender": {
+            "male_ratio": 0.2558446502184974,
+            "female_ratio": 0.7441553497815026
+          },
+          "interactiveCountThirty": 912881,
+          "level": 0,
+          "liked": 29780079,
+          "nickname": "来福来福",
+          "noteCountThirty": 9,
+          "recentIndex": 973.44,
+          "redId": "11387446761",
+          "topAges": "<18",
+          "topProvinces": "广东",
+          "totalWork": 563,
+          "url": "https://www.xiaohongshu.com/user/profile/64073a24000000001001fb29",
+          "userAttribute": "头部kol"
+        },
+        {
+          "avatar": null,
+          "collected": 5464703,
+          "fans": 3577431,
+          "fansGender": {
+            "male_ratio": 0.13232343520041556,
+            "female_ratio": 0.8676765647995845
+          },
+          "interactiveCountThirty": 1743129,
+          "level": 0,
+          "liked": 45574088,
+          "nickname": "妮娜Nina",
+          "noteCountThirty": 22,
+          "recentIndex": 972.88,
+          "redId": "600189452",
+          "topAges": "18-24",
+          "topProvinces": "广东",
+          "totalWork": 468,
+          "url": "https://www.xiaohongshu.com/user/profile/58f8081750c4b405671b388d",
+          "userAttribute": "头部kol"
+        },
+        {
+          "avatar": null,
+          "collected": 3276830,
+          "fans": 1069590,
+          "fansGender": {
+            "male_ratio": 0.13642666666666664,
+            "female_ratio": 0.8635733333333333
+          },
+          "interactiveCountThirty": 955405,
+          "level": 0,
+          "liked": 19317265,
+          "nickname": "吴拽拽",
+          "noteCountThirty": 23,
+          "recentIndex": 969.08,
+          "redId": "WSQYDJ",
+          "topAges": "<18",
+          "topProvinces": "广东",
+          "totalWork": 592,
+          "url": "https://www.xiaohongshu.com/user/profile/5c71631b0000000011002c57",
+          "userAttribute": "头部kol"
+        }
+      ],
+      "topAges": "<18",
+      "topProvinces": "山东",
+      "totalWork": 1187,
+      "url": "https://www.xiaohongshu.com/user/profile/5d26c62100000000120236c3",
+      "userAttribute": "头部kol",
+      "works": [
+        {
+          "collectedCount": 54,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g0k0322ubp7pv74005n96oogkkdm3544lv4o?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-26 08:20:02",
+          "desc": "",
+          "id": "6a60f21d000000000f012b0f",
+          "interactiveCount": 1076,
+          "likedCount": 974,
+          "sharedCount": 3,
+          "title": "当我爸非要书法展示，怎么这么较真呢",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a60f21d000000000f012b0f"
+        },
+        {
+          "collectedCount": 92,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g0k0322m634ll6s005n96oogkkdm3e16p6bo?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-25 08:20:02",
+          "desc": "",
+          "id": "6a589254000000000f016907",
+          "interactiveCount": 1245,
+          "likedCount": 1138,
+          "sharedCount": 1,
+          "title": "当我是公司的销冠，执行力拉满！",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a589254000000000f016907"
+        },
+        {
+          "collectedCount": 124,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g34o322m62hrkn0105n96oogkkdm3s4oj6mo?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-24 08:20:02",
+          "desc": "",
+          "id": "6a58922f000000000401e9d2",
+          "interactiveCount": 1571,
+          "likedCount": 1411,
+          "sharedCount": 5,
+          "title": "当我爸非要吃波士顿龙虾，这一嗓子吓我一跳",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a58922f000000000401e9d2"
+        },
+        {
+          "collectedCount": 106,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g0k0322u1e5nsn4005n96oogkkdm3basvktg?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-23 08:20:03",
+          "desc": "",
+          "id": "6a609d62000000000f01e90c",
+          "interactiveCount": 1055,
+          "likedCount": 915,
+          "sharedCount": 8,
+          "title": "结局老爸怎么问这种问题？",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a609d62000000000f01e90c"
+        },
+        {
+          "collectedCount": 74,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g0k0322m61rhvmu005n96oogkkdm3lshs9jg?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-23 08:20:02",
+          "desc": "",
+          "id": "6a5891fb0000000004028778",
+          "interactiveCount": 1029,
+          "likedCount": 925,
+          "sharedCount": 7,
+          "title": "在老爸的公司上班有多爽？",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a5891fb0000000004028778"
+        },
+        {
+          "collectedCount": 98,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g0k0322m61b5i6s005n96oogkkdm3pjml5ng?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-22 08:20:02",
+          "desc": "",
+          "id": "6a5891da000000000f029338",
+          "interactiveCount": 1473,
+          "likedCount": 1342,
+          "sharedCount": 6,
+          "title": "老爸以为逃过一劫，没想到还是被拿捏了",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a5891da000000000f029338"
+        },
+        {
+          "collectedCount": 66,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g34o322m60s7tn4105n96oogkkdm33jcao88?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-21 08:20:02",
+          "desc": "",
+          "id": "6a5891b9000000001d023a17",
+          "interactiveCount": 799,
+          "likedCount": 697,
+          "sharedCount": 1,
+          "title": "父女联手硬扛加班，谁都不肯多干一分钟",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a5891b9000000001d023a17"
+        },
+        {
+          "collectedCount": 2343,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g34o322m60bfin01g5n96oogkkdm3pc64ce8?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-20 08:20:02",
+          "desc": "",
+          "id": "6a58919c000000000101f647",
+          "interactiveCount": 14123,
+          "likedCount": 11647,
+          "sharedCount": 46,
+          "title": "打工父女一起飙演技，老板的心在滴血！",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a58919c000000000101f647"
+        },
+        {
+          "collectedCount": 42,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g34o322ncvgis74105n96oogkkdm3cts0320?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-19 08:20:02",
+          "desc": "",
+          "id": "6a59d0e3000000000100c2c7",
+          "interactiveCount": 426,
+          "likedCount": 366,
+          "sharedCount": 3,
+          "title": "相亲遇到妈宝男被刁难，我的反击太解气了",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a59d0e3000000000100c2c7"
+        },
+        {
+          "collectedCount": 119,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g0k0322m5uuuen4005n96oogkkdm3balv1tg?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-19 08:20:01",
+          "desc": "",
+          "id": "6a58917200000000110155ff",
+          "interactiveCount": 1618,
+          "likedCount": 1465,
+          "sharedCount": 6,
+          "title": "万万没想到我和顾客的距离差一副眼镜",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a58917200000000110155ff"
+        },
+        {
+          "collectedCount": 173,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g34o322m5ufg9n21g5n96oogkkdm3f40khq8?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-18 08:20:02",
+          "desc": "",
+          "id": "6a58911f000000002201934f",
+          "interactiveCount": 2267,
+          "likedCount": 2063,
+          "sharedCount": 9,
+          "title": "故意跟老爸耍心机，反转结局完全想不到",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a58911f000000002201934f"
+        },
+        {
+          "collectedCount": 43,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g0k0322ncuh42700g5n96oogkkdm3plivb3g?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-17 14:50:39",
+          "desc": "",
+          "id": "6a59d0bf000000000101cdb8",
+          "interactiveCount": 758,
+          "likedCount": 646,
+          "sharedCount": 5,
+          "title": "相亲遇上土豪直接送房，结局反转万万没想到",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a59d0bf000000000101cdb8"
+        },
+        {
+          "collectedCount": 65,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g34o322m5tvkd74f05n96oogkkdm3kboq0jg?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-17 08:20:02",
+          "desc": "",
+          "id": "6a5890ff00000000110132fc",
+          "interactiveCount": 850,
+          "likedCount": 762,
+          "sharedCount": 4,
+          "title": "老爸作弊套路太深，我差点就当真了",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a5890ff00000000110132fc"
+        },
+        {
+          "collectedCount": 184,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g0k0322m5t60jn2005n96oogkkdm30fid3k8?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-16 16:05:50",
+          "desc": "",
+          "id": "6a5890de000000000402bf71",
+          "interactiveCount": 2272,
+          "likedCount": 2033,
+          "sharedCount": 12,
+          "title": "半夜偷偷加餐，转头撞见老爸，当场社死",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a5890de000000000402bf71"
+        },
+        {
+          "collectedCount": 100,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g0k0322m5s5ob72005n96oogkkdm3rnn2eao?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-16 16:04:54",
+          "desc": "",
+          "id": "6a5890a6000000000f028dcc",
+          "interactiveCount": 1046,
+          "likedCount": 874,
+          "sharedCount": 7,
+          "title": "当我穿越体验当妈妈，结尾太感动了",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a5890a6000000000f028dcc"
+        },
+        {
+          "collectedCount": 17501,
+          "cover": "https://sns-na-i27.xhscdn.com/spectrum/1040g34o322c1rjc970105n96oogkkdm39ouk5i8?imageView2/2/w/576/format/heif/q/58%7CimageMogr2/strip&redImage/frame/0/enhance/4&ap=1&sc=V_PRV&sign=02eef0d7abcc2f6b691cb9e696fc8eed&t=6a6786d7&origin=0",
+          "createTime": "2026-07-14 08:20:02",
+          "desc": "",
+          "id": "6a4e322d00000000110058e1",
+          "interactiveCount": 233878,
+          "likedCount": 215791,
+          "sharedCount": 688,
+          "title": "打工人的自律，全靠演技！",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a4e322d00000000110058e1"
+        },
+        {
+          "collectedCount": 250,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g0k0322c1r29jn2005n96oogkkdm38buippg?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-13 08:20:02",
+          "desc": "",
+          "id": "6a4e320b000000001503eeb3",
+          "interactiveCount": 3451,
+          "likedCount": 3173,
+          "sharedCount": 11,
+          "title": "自从当上小姨，家庭地位直接一路飙升",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a4e320b000000001503eeb3"
+        },
+        {
+          "collectedCount": 62,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g34o322c1qh4en0105n96oogkkdm3cdarc6o?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-12 08:20:01",
+          "desc": "",
+          "id": "6a4e31e6000000001503eded",
+          "interactiveCount": 815,
+          "likedCount": 738,
+          "sharedCount": 5,
+          "title": "父女俩精心准备惊喜礼物，到头来居然被嫌弃",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a4e31e6000000001503eded"
+        },
+        {
+          "collectedCount": 72,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g34o322c1q2na70205n96oogkkdm3o94oj78?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-11 08:20:02",
+          "desc": "",
+          "id": "6a4e31c600000000070286f3",
+          "interactiveCount": 998,
+          "likedCount": 911,
+          "sharedCount": 8,
+          "title": "老爸沉浸式体验教小孩，突然有点心疼他了！",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a4e31c600000000070286f3"
+        },
+        {
+          "collectedCount": 68,
+          "cover": "http://sns-img-hw.xhscdn.net/spectrum/1040g34o322c1p26mms105n96oogkkdm3pdi1q3g?imageView2/2/w/1080/format/webp",
+          "createTime": "2026-07-10 08:20:02",
+          "desc": "",
+          "id": "6a4e31a7000000000f02802e",
+          "interactiveCount": 914,
+          "likedCount": 832,
+          "sharedCount": 5,
+          "title": "人事内心独白：我的心跳跟过山车一样",
+          "workUrl": "https://www.xiaohongshu.com/explore/6a4e31a7000000000f02802e"
+        }
+      ]
+    }
+  ],
+  "msg": "成功"
+}

@@ -89,6 +89,11 @@ async function getRemoteVersion() {
   }
 }
 
+// 去 "v" 前缀 (gh release tag 返 "v4.0.1", _meta.json 返 "4.0.1")
+function stripPrefix(v) {
+  return String(v).replace(/^v/, "");
+}
+
 function compareSemver(a, b) {
   // 用 字符串数组比, 只要 主.次.补丁 都同名, 就 localeCompare 预发布部分
   const mainA = stripPrefix(a);

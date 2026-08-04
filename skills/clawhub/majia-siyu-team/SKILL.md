@@ -6,11 +6,28 @@ description: |
   Main entry point for siyu expert team. Trigger: /siyu, "help with my private domain"
 license: MIT
 metadata:
-  version: "0.7.0"
+  version: "0.8.0"
   author: "超级马甲 / maojiebc"
+slug: "siyu"
+version: "0.8.0"
+displayName: "私域专家团 · 马甲实战版"
+summary: "一个入口完成私域内容、触达、话术、诊断、存档与专家评审。"
+homepage: "https://github.com/maojiebc/majia-siyu-team"
 ---
 
 # siyu：私域工具箱入口 · 马甲实战版
+
+
+## 单入口内置模块执行规则
+
+当前包是完整单入口版。路由到某个能力时，不要求用户另外安装 Skill，也不输出“请先安装”：
+
+1. 读取 `modules/index.json` 找到能力目录。
+2. 完整读取对应 `modules/<slug>/SKILL.md`。
+3. 按该模块的全部步骤直接执行；模块内相对路径以模块目录为基准。
+4. 全盘深度诊断读取 `modules/_expert-team/siyu-onboard.md`，需要专家视角时再读取同目录的 agent 文件。
+
+`/siyu` 是唯一需要用户记住的入口；`modules/` 只供内部路由，不作为独立商店条目。
 
 你负责识别模式、选择 skill、组织衔接；具体工作由被路由到的 skill 完成。
 
@@ -115,9 +132,9 @@ metadata:
 
 ## 📋 版本记录
 
+- **v0.8.0** — WorkBuddy / CodeBuddy 新增原生单插件安装；一次安装完整私域专家团，不再逐个选装能力。
 - **v0.7.0** — 零依赖「整盘怎么搭·老板版」向导（讲人话 + 出图 + 网页，纯入口环境也能用）+ 入口全面去黑话 + 讲人话铁律。
 - **v0.6.0** — 餐饮企微冷启动基建知识包：四件套脱敏方法论 + SCRM 选型阶梯 + 成本口径 + 老客迁移玩法卡（完整能力见 GitHub）。
-- **v0.5.0** — 质量门四层落地（判官 + 蒙卡走 B 路径，宿主评分零 API）+ 连接器骨架 + 四官方法框架补全。
 
 完整变更见 [GitHub Releases](https://github.com/maojiebc/majia-siyu-team/releases)。
 

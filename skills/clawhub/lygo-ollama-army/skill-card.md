@@ -1,5 +1,5 @@
 ## Description: <br>
-Local Ollama daemons and optional LYGO stack queue roles run when LYGO_STACK_ROOT is configured, with security guidance against remote LLM use, git push, ClawHub publishing, and autonomous social posting. <br>
+Local Ollama automation for queue-driven multi-role work, reviewed task proposals, and local monitoring with social, planting, public probe, and privileged actions kept behind explicit opt-in gates. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,46 +7,41 @@ This skill is ready for commercial/non-commercial use. <br>
 [deepseekoracle](https://clawhub.ai/user/deepseekoracle) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+LYGO Sovereign License v2.0 <br>
 
 
 ## Use Case: <br>
-Developers and operators use this skill to run local Ollama assistant daemons, queue reviewed LYGO stack tasks, monitor local stack status, and generate local drafts or analysis. Stack-touching roles require a controlled LYGO_STACK_ROOT clone and explicit user approval before queue files or long-running automation are started. <br>
+Developers and local operators use this skill to coordinate Ollama-backed worker roles, propose reviewed queue tasks, inspect local health state, and run optional LYGO stack checks from a trusted local workspace. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security evidence flags this as a real local automation skill with queue-driven stack mutation and account or social pulse roles broader than the top-level safety claims. <br>
-Mitigation: Install only on a machine and LYGO_STACK_ROOT clone the operator controls; review SECURITY.md, SECURITY_AUDIT.md, AGENT_CONTRACT.md, and command-center configuration before enabling stack roles. <br>
-Risk: Long-running supervisors, cron flows, and daemon roles can keep processing local queues after startup. <br>
-Mitigation: Do not run army_autonomous_supervisor.py, cron examples, desktop launchers, seed scripts, or full-capacity scripts unless the operator has reviewed the scripts and intentionally wants those effects. <br>
-Risk: Queue task files can trigger stack audits, self-tuning, planting, registry operations, or other local mutations when daemons are active. <br>
-Mitigation: Agents should propose task JSON for human approval first; write queue files only after approval and only for a validated LYGO_STACK_ROOT. <br>
-Risk: Outbound webhook and social or account pulse behavior can interact with external services if explicitly enabled. <br>
-Mitigation: Keep webhook environment variables, social pulse roles, publishing paths, and sensitive account tooling disabled unless the operator has reviewed the code and requested that behavior. <br>
-Risk: Planting, self-tune, seed, and full-capacity paths can change local workspace state or expand automation scope. <br>
-Mitigation: Keep default configuration gates disabled, including planting.enabled, self_tune.enabled, LYGO_ARMY_FULL_CAPACITY, LYGO_ARMY_SEED_TASKS, and LYGO_ARMY_WEBHOOK_ENABLE, until intentionally enabled by the operator. <br>
+Risk: Included launch and tuning paths can run long-lived local automation, spawn Python processes, or change configuration. <br>
+Mitigation: Review before installing, use the documented safe first run for initial testing, and avoid start_army_full_capacity.ps1 unless you accept autonomous background work. <br>
+Risk: Optional public probes, self tuning, planting, social publishing, privileged roles, and external memory writes increase operational risk when enabled. <br>
+Mitigation: Leave self_tune, planting, social_publish, public probe flags, allow_privileged_roles, and allow_external_memory_write disabled unless explicitly needed and reviewed. <br>
+Risk: The optional LYGO_STACK_ROOT integration can touch tools from an external local stack clone. <br>
+Mitigation: Set LYGO_STACK_ROOT only to a trusted clone controlled by the operator. <br>
 
 
 ## Reference(s): <br>
+- [Security Guide](references/SECURITY.md) <br>
+- [Agent Contract](references/AGENT_CONTRACT.md) <br>
+- [Security Audit](references/SECURITY_AUDIT.md) <br>
+- [SkillSpector Audit](references/SKILLSPECTOR_AUDIT.md) <br>
+- [LYGO protocol stack homepage](https://github.com/DeepSeekOracle/lygo-protocol-stack) <br>
 - [ClawHub skill page](https://clawhub.ai/deepseekoracle/skills/lygo-ollama-army) <br>
-- [LYGO RESONANCE companion site](https://deepseekoracle.github.io/Excavationpro/LYGORESONANCE.html) <br>
-- [Security guidance](references/SECURITY.md) <br>
-- [SkillSpector security audit response](references/SECURITY_AUDIT.md) <br>
-- [Agent contract](references/AGENT_CONTRACT.md) <br>
-- [Command center README](ollama_command_center/README.md) <br>
-- [Example command-center configuration](ollama_command_center/config/army_config.example.json) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with shell command snippets, configuration notes, and reviewed JSON task proposals.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JSON task proposals and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are intended for local Ollama and LYGO stack workflows; queue tasks and long-running daemons require human review before execution.] <br>
+**Other Properties Related to Output:** [May propose queue task JSON for human review and may produce local status, result, and log files when the operator runs the included utilities.] <br>
 
 ## Skill Version(s): <br>
-0.5.0 (source: server release evidence and SKILL.md metadata) <br>
+0.8.0 (source: target metadata, SKILL.md frontmatter, claw.json, release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

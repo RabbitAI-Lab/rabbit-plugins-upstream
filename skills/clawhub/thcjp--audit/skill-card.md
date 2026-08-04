@@ -1,5 +1,5 @@
 ## Description: <br>
-Audit helps agents inspect code, contracts, and assets and return structured audit-oriented results. <br>
+Audit helps agents review code, contracts, and assets for security, compliance, vulnerability, and risk concerns, with Chinese-language interaction support. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and technical reviewers use this skill to audit code, contracts, assets, and related development or deployment work. Because the skill can request command execution, it is best used in environments where command use is expected and reviewed. <br>
+Developers, security reviewers, and automation teams use this skill to ask an agent for security audit, compliance review, vulnerability scanning, and risk-assessment guidance for technical projects. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can request shell command execution for broad audit tasks. <br>
-Mitigation: Use it only in workspaces where command execution is acceptable, and require explicit approval before commands read sensitive files, modify files, deploy, install packages, or contact external services. <br>
-Risk: The audit scope is broad and the artifact gives limited detail about when commands should run. <br>
-Mitigation: Review proposed commands and audit conclusions before acting on them, especially for code, contracts, assets, deployment, or security decisions. <br>
-Risk: The release evidence and artifact disagree on license terms. <br>
-Mitigation: Confirm whether MIT-0 or Proprietary terms govern this release before publication or installation. <br>
+Risk: The skill requests broad read, write, and command-execution authority without enough scoping or enforceable safety controls. <br>
+Mitigation: Use it in a controlled workspace, avoid sensitive or production repositories unless command restrictions are added, and require explicit approval for changes or deployments. <br>
+Risk: Security audit guidance may be incomplete or unsuitable for complex decisions that require human judgment. <br>
+Mitigation: Treat results as review assistance, validate findings with trusted security tools, and require qualified human review before acting on high-impact recommendations. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/audit) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or structured text, with JSON examples and optional shell commands] <br>
+**Output Format:** [Markdown, text, or JSON responses] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include audit findings, configuration advice, error-handling guidance, and command suggestions.] <br>
+**Other Properties Related to Output:** [May propose file changes or command execution through the host agent; review outputs before applying them.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata and artifact frontmatter) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

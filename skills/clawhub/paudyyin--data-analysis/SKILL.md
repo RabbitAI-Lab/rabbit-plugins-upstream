@@ -1,11 +1,12 @@
----
-name: Data Analysis
+﻿---
+name: data-analysis
 slug: data-analysis
-version: 1.0.2
+version: 1.1.0
 homepage: https://clawic.com/skills/data-analysis
-description: "Data analysis and visualization. Query databases, generate reports, automate spreadsheets, and turn raw data into clear, actionable insights. Use when (1) you need to analyze, visualize, or explain data; (2) the user wants reports, dashboards, or metrics turned into a decision; (3) the work involves SQL, Python, spreadsheets, BI tools, or notebooks; (4) you need to compare segments, cohorts, funnels, experiments, or time periods; (5) the user explicitly installs or references the skill for the current task."
-changelog: Added metric contracts, chart guidance, and decision brief templates for more reliable analysis.
-metadata: {"clawdbot":{"emoji":"D","requires":{"bins":[]},"os":["linux","darwin","win32"]}}
+description: "Analyze data and generate visualizations �� query databases, build reports, automate spreadsheets"
+tags: [analysis, data, visual, template-based, report-generation]
+changelog: "v1.1.0: 增加错误处理、降级策略、依赖声明、数据源验证清单。v1.0.2: Added metric contracts, chart guidance, and decision brief templates."
+metadata: {"clawdbot":{"emoji":"D","requires":{"bins":["python3"],"pip":["pandas","numpy"]},"os":["linux","darwin","win32"]}}}
 ---
 
 ## When to Use
@@ -15,8 +16,6 @@ Use this skill when the user needs to analyze, explain, or visualize data from S
 Use it for KPI debugging, experiment readouts, funnel or cohort analysis, anomaly reviews, executive reporting, and quality checks on metrics or query logic.
 
 Prefer this skill over generic coding or spreadsheet help when the hard part is analytical judgment: metric definition, comparison design, interpretation, or recommendation.
-
-User asks about: analyzing data, finding patterns, understanding metrics, testing hypotheses, cohort analysis, A/B testing, churn analysis, or statistical significance.
 
 ## Core Principle
 
@@ -119,6 +118,43 @@ For technique details and when to use each, see `techniques.md`.
 3. **State limitations** - what this analysis can't tell you
 4. **Recommend next steps** - what would strengthen the conclusion
 
+## 错误处理与降级策�?
+### 数据获取失败
+| 场景 | 处理方式 |
+|------|---------|
+| SQL 连接超时 | 重试 1 �?�?提示用户检查网络连接和数据库状�?|
+| CSV/Excel 文件损坏 | 尝试 `encoding='utf-8'` �?`encoding='gbk'` �?`encoding='latin1'` 依次降级 |
+| 数据为空 | 明确告知"查询结果为空"，分析可能原因（筛选条件过严、时间范围无数据�?|
+| 字段缺失 | 列出缺失字段，询问用户是否用替代字段或中止分�?|
+
+### 计算异常
+| 场景 | 处理方式 |
+|------|---------|
+| 除零错误 | 返回 N/A 并标注原因，不用 0 �?Infinity 替代 |
+| 数据类型不匹�?| 自动尝试类型转换（str→float），失败则标注异常行 |
+| 内存不足（大文件�?| 建议分块读取（`chunksize`），或采样分�?|
+
+### 结果异常
+| 场景 | 处理方式 |
+|------|---------|
+| 结果明显偏离预期 | 先检查数据质量（空值、重复、异常值），再检查逻辑 |
+| 统计检验不显著 | 如实报告，不 p-hacking，建议增加样本量或调整指�?|
+
+## 依赖声明
+
+### Python 核心依赖
+```bash
+pip install pandas numpy scipy matplotlib seaborn
+```
+
+### 可选依�?| �?| 用�?|
+|----|------|
+| `scikit-learn` | 回归/聚类/降维 |
+| `statsmodels` | 时间序列/统计检�?|
+| `openpyxl` | Excel 读写 |
+| `sqlalchemy` | 数据库连�?|
+| `plotly` | 交互式图�?|
+
 ## Red Flags to Escalate
 
 - User wants to "prove" a predetermined conclusion
@@ -126,40 +162,9 @@ For technique details and when to use each, see `techniques.md`.
 - Data quality issues that invalidate analysis
 - Confounders that can't be controlled for
 
-## External Endpoints
+## 版本历史
 
-This skill makes no external network requests.
-
-| Endpoint | Data Sent | Purpose |
-|----------|-----------|---------|
-| None | None | N/A |
-
-No data is sent externally.
-
-## Security & Privacy
-
-Data that leaves your machine:
-- Nothing by default.
-
-Data that stays local:
-- Nothing by default.
-
-This skill does NOT:
-- Access undeclared external endpoints.
-- Store credentials or raw exports in hidden local memory files.
-- Create or depend on local folder systems for persistence.
-- Create automations or background jobs without explicit user confirmation.
-- Rewrite its own instruction source files.
-
-## Related Skills
-Install with `clawhub install <slug>` if user confirms:
-- `sql` - query design and review for reliable data extraction.
-- `csv` - cleanup and normalization for tabular inputs before analysis.
-- `dashboard` - implementation patterns for KPI visualization layers.
-- `report` - structured stakeholder-facing deliverables after analysis.
-- `business-intelligence` - KPI systems and operating cadence beyond one-off analysis.
-
-## Feedback
-
-- If useful: `clawhub star data-analysis`
-- Stay updated: `clawhub sync`
+| 版本 | 日期 | 变更 |
+|------|------|------|
+| 1.1.0 | 2026-06-29 | 增加错误处理、降级策略、依赖声�?|
+| 1.0.2 | 2026-06-20 | Added metric contracts, chart guidance, decision brief templates |

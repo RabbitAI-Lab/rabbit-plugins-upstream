@@ -1,5 +1,5 @@
 ## Description: <br>
-This skill helps agents query Zhihuiya (PatSnap) for forward citation counts and citing-patent details for a single patent by publication number or internal patent ID. <br>
+从智慧芽（PatSnap）查询专利被引用数据，包括被引用次数和引用专利详情。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Employees, external users, and developers use this skill to retrieve factual patent forward-citation metrics and citing-patent details from Zhihuiya (PatSnap). It is intended for single-patent citation lookup and tabular reporting, not patent valuation, legal-status review, or backward-citation research. <br>
+External users and agents use this skill to query Zhihuiya (PatSnap) forward citation counts and citing-patent details for one or more patent IDs or publication numbers. It supports citation comparison and factual patent influence analysis while avoiding patent valuation or investment advice. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Patent queries, API keys, and session metadata are sent to external LinkFox endpoints. <br>
-Mitigation: Install and use the skill only when LinkFox is trusted for the relevant patent data and credentials. <br>
-Risk: The API gateway can be configured through LINKFOX_TOOL_GATEWAY. <br>
-Mitigation: Verify that LINKFOX_TOOL_GATEWAY is unset or points to a trusted HTTPS endpoint before running the helper script. <br>
-Risk: Full API responses are written to a local linkfox directory and cache. <br>
-Mitigation: Review local storage policies and clean saved response files when patent query data should not persist. <br>
-Risk: The security review flagged under-scoped feedback reporting and possible onboarding-support installation. <br>
-Mitigation: Review feedback and onboarding behavior before deployment, especially in environments with strict data-sharing or installation controls. <br>
+Risk: Patent queries and full API responses are sent to LinkFox and stored locally, including cache files. <br>
+Mitigation: Use the skill only when those data flows are acceptable, avoid submitting sensitive patent queries without approval, and review or remove saved response and cache files after use. <br>
+Risk: The skill can direct the agent to install an auxiliary remote onboarding skill when authentication or credits fail. <br>
+Mitigation: Require explicit user confirmation before installing auxiliary skills or downloading remote skill packages. <br>
+Risk: Feedback text can be sent to a separate LinkFox feedback endpoint. <br>
+Mitigation: Require explicit confirmation before submitting feedback and avoid including confidential user content in feedback payloads. <br>
+Risk: The service consumes credits based on returned result count. <br>
+Mitigation: Tell the user before additional or repeated lookups and avoid automatic retries or broad query expansion. <br>
 
 
 ## Reference(s): <br>
-- [智慧芽-专利被引用 API 参考](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-patent-cited) <br>
+- [智慧芽-专利被引用 API 参考](artifact/references/api.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-patent-cited) <br>
+- [LinkFox Tool Gateway API](https://tool-gateway.linkfox.com/zhihuiya/patentCited) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON parameters, shell commands, and tabular patent-citation summaries] <br>
+**Output Type(s):** [API Calls, JSON, Markdown, Files, Shell commands, Guidance] <br>
+**Output Format:** [Markdown summaries and tables, JSON API responses, and saved JSON data files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The helper script saves full JSON API responses locally, uses a 24-hour cache by default, and summarizes large responses unless inline output is requested.] <br>
+**Other Properties Related to Output:** [Requires a LinkFox API key; caches repeated requests for 24 hours and saves full API responses locally.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+1.0.6 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

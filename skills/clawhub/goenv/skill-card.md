@@ -1,5 +1,5 @@
 ## Description: <br>
-Goenv guides agents in helping Go developers install and use the github.com/psyb0t/goenv library, a two-state ENV-based prod/dev helper with default-to-prod behavior. <br>
+Goenv helps agents guide Go developers in adding and using github.com/psyb0t/goenv, a small library that reads ENV and reports dev only for the exact value "dev", defaulting all other values to prod. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to add or review a small prod/dev switch in Go applications, including install commands, import examples, and ENV behavior checks. <br>
+Developers and engineers use this skill to add a simple prod/dev environment switch to Go applications or to review existing goenv usage and its exact default-to-prod behavior. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The ENV switch only distinguishes exact lowercase dev from prod, so staging, test, empty, or mistyped values resolve to prod. <br>
-Mitigation: Confirm that a two-state dev/prod model and default-to-prod behavior match the application's deployment semantics before adopting it. <br>
-Risk: The skill guides installation of a third-party Go module. <br>
-Mitigation: Review and pin the module as part of normal dependency intake before use in production code. <br>
+Risk: The library reads the hardcoded ENV variable and treats every value except exactly "dev" as "prod". <br>
+Mitigation: Confirm the application wants exact ENV=dev semantics and set ENV deliberately before process launch. <br>
+Risk: The go get step fetches third-party module code through the configured Go module source. <br>
+Mitigation: Review the selected module version and source according to the project's dependency policy before adding it. <br>
+Risk: The goenv.Type alias does not provide compile-time enum safety over arbitrary strings. <br>
+Mitigation: Use goenv.Get(), goenv.IsProd(), goenv.IsDev(), and the exported constants rather than treating unrelated strings as validated environments. <br>
 
 
 ## Reference(s): <br>
-- [Goenv ClawHub skill page](https://clawhub.ai/psyb0t/skills/goenv) <br>
-- [goenv repository homepage](https://github.com/psyb0t/goenv) <br>
-- [setup & reference](references/setup.md) <br>
+- [Goenv setup and reference](references/setup.md) <br>
+- [Goenv ClawHub page](https://clawhub.ai/psyb0t/skills/goenv) <br>
+- [Goenv project homepage](https://github.com/psyb0t/goenv) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with Go and shell snippets] <br>
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with Go and bash code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Focuses on the ENV variable, Go toolchain usage, and the library's exact dev/prod behavior.] <br>
+**Other Properties Related to Output:** [May include install commands, import examples, environment-variable settings, and notes about prod/dev behavior.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+1.0.8 (source: server-resolved release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

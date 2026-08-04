@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 import re
 import time
 import urllib.error
@@ -218,13 +219,57 @@ def boundary_map(reference_norms: list[str], raw_norms: list[str], boundary: int
     return max(0, min(len(raw_norms), mapped))
 
 
+def reference_text_for_raw_span(reference_text: str, raw_words: list[str]) -> str | None:
+    """Crop a reference cue to the lexical span owned by one Fun-ASR segment.
+
+    Reference cues often straddle ASR boundaries. They may correct spelling, but
+    they must never lend leading/trailing words to the current ASR segment.
+    """
+    tokens = display_tokens(reference_text)
+    raw_norms = [token_norm(word) for word in raw_words if token_norm(word)]
+    reference_norms = [token.norm for token in tokens]
+    if not tokens or not raw_norms:
+        return None
+    matcher = SequenceMatcher(None, reference_norms, raw_norms, autojunk=False)
+    blocks = [block for block in matcher.get_matching_blocks() if block.size]
+    if not blocks:
+        return None
+    matched = sum(block.size for block in blocks)
+    minimum_matches = 1 if len(raw_norms) <= 2 else 2
+    if matched < minimum_matches or matched / len(raw_norms) < 0.5:
+        return None
+
+    first = blocks[0]
+    last = blocks[-1]
+    leading_raw = first.b
+    trailing_raw = len(raw_norms) - (last.b + last.size)
+    candidate_start = max(0, first.a - leading_raw)
+    candidate_end = min(len(tokens), last.a + last.size + trailing_raw)
+    candidate_norms = reference_norms[candidate_start:candidate_end]
+    if not candidate_norms:
+        return None
+    max_extra = max(2, math.ceil(len(raw_norms) * 0.25))
+    if len(candidate_norms) > len(raw_norms) + max_extra:
+        return None
+    if abs(len(candidate_norms) - len(raw_norms)) > max_extra:
+        return None
+    if SequenceMatcher(None, candidate_norms, raw_norms, autojunk=False).ratio() < 0.55:
+        return None
+    start_char = tokens[candidate_start].start
+    end_char = tokens[candidate_end - 1].end
+    return reference_text[start_char:end_char].strip(" ,;:")
+
+
 def chunk_segment_with_reference(
     asr_index: int,
     reference_text: str,
     raw_words: list[str],
     max_display_tokens: int,
 ) -> list[SegmentChunk] | None:
-    tokens = display_tokens(reference_text)
+    fitted_reference = reference_text_for_raw_span(reference_text, raw_words)
+    if not fitted_reference:
+        return None
+    tokens = display_tokens(fitted_reference)
     raw_norms = [token_norm(word) for word in raw_words if token_norm(word)]
     reference_norms = [token.norm for token in tokens]
     if not tokens or not raw_norms:
@@ -233,7 +278,7 @@ def chunk_segment_with_reference(
     if similarity < 0.45:
         return None
 
-    pieces = token_boundaries(reference_text, tokens, max_display_tokens)
+    pieces = token_boundaries(fitted_reference, tokens, max_display_tokens)
     while len(pieces) > len(raw_words) and len(pieces) > 1:
         start, _end = pieces[-2]
         _next_start, end = pieces[-1]
@@ -253,7 +298,7 @@ def chunk_segment_with_reference(
     ):
         if raw_end <= raw_start:
             continue
-        display = reference_text[tokens[token_start].start : tokens[token_end - 1].end].strip(" ,;:")
+        display = fitted_reference[tokens[token_start].start : tokens[token_end - 1].end].strip(" ,;:")
         raw = " ".join(raw_words[raw_start:raw_end]).strip()
         if not display or not raw:
             continue
@@ -268,8 +313,12 @@ def build_chunks(
     transcript: dict,
     max_display_tokens: int,
     source_references: dict[int, str] | None = None,
+    reference_stats: dict[str, object] | None = None,
 ) -> list[SegmentChunk]:
     chunks: list[SegmentChunk] = []
+    fallback_chunks: list[SegmentChunk] = []
+    reference_candidates = 0
+    reference_used_segments = 0
     for asr_index, segment in enumerate(transcript.get("segments", []), start=1):
         text = " ".join(str(segment.get("text") or "").split())
         raw_words = [
@@ -278,12 +327,33 @@ def build_chunks(
         ]
         raw_words = [word for word in raw_words if word]
         reference_text = (source_references or {}).get(asr_index - 1, "")
+        fallback = chunk_segment(asr_index, text, raw_words, max_display_tokens)
+        fallback_chunks.extend(fallback)
         referenced = (
             chunk_segment_with_reference(asr_index, reference_text, raw_words, max_display_tokens)
             if reference_text
             else None
         )
-        chunks.extend(referenced or chunk_segment(asr_index, text, raw_words, max_display_tokens))
+        if reference_text:
+            reference_candidates += 1
+        if referenced:
+            reference_used_segments += 1
+        chunks.extend(referenced or fallback)
+    reference_disabled = reference_candidates >= 4 and reference_used_segments * 2 < reference_candidates
+    if reference_disabled:
+        chunks = fallback_chunks
+        reference_used_segments = 0
+    if reference_stats is not None:
+        reference_stats.update(
+            {
+                "candidate_segments": reference_candidates,
+                "corrected_segments": reference_used_segments,
+                "reference_disabled": reference_disabled,
+                "status": "disabled_as_anomalous" if reference_disabled else (
+                    "applied_with_asr_boundaries" if reference_used_segments else "not_applied"
+                ),
+            }
+        )
     return chunks
 
 
@@ -615,7 +685,14 @@ def main() -> int:
             f"{len(cues)} cues mapped to {len(source_references)} ASR segments",
             flush=True,
         )
-    chunks = build_chunks(transcript, args.max_display_tokens, source_references)
+    reference_stats: dict[str, object] = {}
+    chunks = build_chunks(transcript, args.max_display_tokens, source_references, reference_stats)
+    if reference_stats.get("reference_disabled"):
+        print(
+            "Source subtitle reference was disabled because most mapped text failed lexical "
+            "scope checks; using Fun-ASR text and boundaries only.",
+            flush=True,
+        )
     translation_context, translation_context_sha256 = load_translation_context(args.translation_context)
     translations = load_cache(args.cache, translation_context_sha256)
     print(f"Chunks: {len(chunks)}; cached translations: {len(translations)}", flush=True)
@@ -664,6 +741,8 @@ def main() -> int:
             else ""
         ),
         "reference_corrected_chunks": sum(1 for chunk in chunks if chunk.reference_used),
+        "source_reference_status": reference_stats.get("status", "not_applied"),
+        "source_reference_candidate_segments": reference_stats.get("candidate_segments", 0),
         "translation_context": str(args.translation_context.resolve()),
         "translation_context_sha256": translation_context_sha256,
         "domain_prompt_applied": True,

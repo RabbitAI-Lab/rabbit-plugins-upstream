@@ -1,6 +1,6 @@
 {
   "id": "key_safe_skill_generator",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "name": "Key‑Safe Skill Generator (Zero‑Exposure Edition)",
   "description": "A documentation‑only meta‑skill that teaches AI agents how to generate secure, zero‑exposure skills using MGC Blackbox for credential management. Contains no executable code.",
   "author": "MirginCipher Team",
@@ -24,7 +24,7 @@
       "parameters": {}
     }
   ],
-  "mcp_tools": ["mgc_save", "mgc_get", "mgc_list", "mgc_seal"],
+  "mcp_tools": ["mgc_save", "mgc_get", "mgc_run", "mgc_list", "mgc_seal"],
   "install": {
     "pip": ["mgc-blackbox"],
     "mcp": ["mgc"]
@@ -35,6 +35,14 @@
     "no_executable_code": true
   },
   "changelog": [
+    {
+      "version": "1.2.0",
+      "changes": [
+        "Added mgc_run tool documentation",
+        "Added node_pub acquisition method (WebUI recommended)",
+        "Updated mgc_save to support seal package storage (ext01, ext03)"
+      ]
+    },
     {
       "version": "1.1.0",
       "changes": [

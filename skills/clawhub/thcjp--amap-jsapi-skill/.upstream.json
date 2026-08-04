@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/amap-jsapi-skill",
   "slug": "amap-jsapi-skill",
   "ownerHandle": "thcjp",
-  "version": "1.1.1",
-  "updatedAt": 1778491730325,
-  "contentHash": "1f45a7df1555d2e93a0c540aa3f80ce51038a725b798aef97f900bc6c0e4158a",
-  "fetchedAt": "2026-07-26T18:06:29.819Z"
+  "version": "1.0.2",
+  "updatedAt": 1785661985049,
+  "contentHash": "b4a3fc82b530f18566d61c238ae2ffe31b15f70db41b6615f4c862296d2415e1",
+  "fetchedAt": "2026-08-04T10:21:21.824Z"
 }

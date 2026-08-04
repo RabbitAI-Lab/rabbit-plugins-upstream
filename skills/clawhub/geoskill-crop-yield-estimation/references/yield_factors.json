@@ -1,0 +1,86 @@
+{
+  "crop_parameters": {
+    "maize": {
+      "planting_doy": 120,
+      "growth_days": 150,
+      "water_demand_mm": 500,
+      "optimal_temp_c": 25,
+      "base_temp_c": 10",
+      "fresh_dry_ratio": 0.85,
+      "typical_yield_range_kg_ha": [3000, 12000]
+    },
+    "wheat": {
+      "planting_doy": 270,
+      "growth_days": 240,
+      "water_demand_mm": 450,
+      "optimal_temp_c": 20,
+      "base_temp_c": 5",
+      "fresh_dry_ratio": 0.88,
+      "typical_yield_range_kg_ha": [2000, 8000]
+    },
+    "rice": {
+      "planting_doy": 100,
+      "growth_days": 130,
+      "water_demand_mm": 800,
+      "optimal_temp_c": 28,
+      "base_temp_c": 12",
+      "fresh_dry_ratio": 0.87,
+      "typical_yield_range_kg_ha": [3000, 9000]
+    },
+    "soybean": {
+      "planting_doy": 130,
+      "growth_days": 120,
+      "water_demand_mm": 450,
+      "optimal_temp_c": 24,
+      "base_temp_c": 10",
+      "fresh_dry_ratio": 0.88,
+      "typical_yield_range_kg_ha": [1500, 4000]
+    }
+  },
+  "yield_unit_conversions": {
+    "t_ha": {"to_kg_ha": 1000.0, "description": "吨/公顷"},
+    "kg_ha": {"to_kg_ha": 1.0, "description": "千克/公顷"},
+    "kg_m2": {"to_kg_ha": 10.0, "description": "千克/平方米"},
+    "g_m2": {"to_kg_ha": 10.0, "description": "克/平方米"},
+    "jin_mu": {"to_kg_ha": 750.0, "description": "斤/亩"}
+  },
+  "feature_definitions": {
+    "ndvi_mean": {"type": "remote_sensing", "description": "归一化植被指数均值", "source": "Sentinel-2/Landsat"},
+    "ndvi_max": {"type": "remote_sensing", "description": "归一化植被指数峰值", "source": "Sentinel-2/Landsat"},
+    "ndvi_std": {"type": "remote_sensing", "description": "归一化植被指数标准差", "source": "Sentinel-2/Landsat"},
+    "evi_mean": {"type": "remote_sensing", "description": "增强型植被指数均值", "source": "MODIS/Sentinel-2"},
+    "lai_mean": {"type": "remote_sensing", "description": "叶面积指数均值", "source": "MODIS"},
+    "gndvi_mean": {"type": "remote_sensing", "description": "绿色归一化植被指数均值", "source": "Sentinel-2"},
+    "gdd": {"type": "weather", "description": "生长度日", "source": "ERA5/NASA POWER"},
+    "precip_total": {"type": "weather", "description": "总降水量 (mm)", "source": "GPM/ERA5"},
+    "precip_std": {"type": "weather", "description": "降水标准差", "source": "GPM/ERA5"},
+    "temp_mean": {"type": "weather", "description": "平均气温 (°C)", "source": "ERA5"},
+    "temp_max": {"type": "weather", "description": "最高气温 (°C)", "source": "ERA5"},
+    "solar_radiation": {"type": "weather", "description": "太阳辐射 (W/m²)", "source": "NASA POWER"},
+    "vapor_pressure_deficit": {"type": "weather", "description": "水汽压差 (kPa)", "source": "ERA5"},
+    "soil_organic_carbon": {"type": "soil", "description": "土壤有机碳 (g/kg)", "source": "SoilGrids"},
+    "soil_ph": {"type": "soil", "description": "土壤 pH", "source": "SoilGrids"},
+    "soil_clay_pct": {"type": "soil", "description": "黏粒含量 (%)", "source": "SoilGrids"},
+    "soil_sand_pct": {"type": "soil", "description": "砂粒含量 (%)", "source": "SoilGrids"},
+    "soil_water_capacity": {"type": "soil", "description": "土壤持水能力 (mm)", "source": "SoilGrids"},
+    "elevation": {"type": "terrain", "description": "海拔 (m)", "source": "DEM"},
+    "slope": {"type": "terrain", "description": "坡度 (°)", "source": "DEM"}
+  },
+  "validation_schemes": {
+    "random": "随机划分 (80/20)",
+    "leave_one_year": "留一年度验证",
+    "leave_one_region": "留一区域验证",
+    "blocked": "分块验证 (前80%训练，后20%验证)"
+  },
+  "model_types": {
+    "random_forest": "随机森林回归",
+    "gradient_boosting": "梯度提升回归",
+    "ensemble": "集成模型 (RF + GB)"
+  },
+  "uncertainty_methods": {
+    "quantile_regression_forest": "利用 RF 各树预测分位数",
+    "boosting_stage_variance": "利用 GB 后期阶段方差",
+    "ensemble_spread": "利用集成模型间差异 + 树方差",
+    "naive_margin": "简单 ±15% 边际"
+  }
+}

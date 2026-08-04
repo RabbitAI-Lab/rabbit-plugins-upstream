@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-aiops",
   "slug": "vmware-aiops",
   "ownerHandle": null,
-  "version": "1.8.10",
-  "updatedAt": 1784964425655,
-  "contentHash": "c0ca91becbf33bafc545ea45441006f24a3d777874915818ef7095cf64c114a2",
-  "fetchedAt": "2026-07-26T18:04:16.648Z"
+  "version": "1.8.11",
+  "updatedAt": 1785553895179,
+  "contentHash": "261a6a9e439ee0a97ff4f54c349b6054479f512581007808dd1b1322381d432e",
+  "fetchedAt": "2026-08-04T10:25:03.761Z"
 }

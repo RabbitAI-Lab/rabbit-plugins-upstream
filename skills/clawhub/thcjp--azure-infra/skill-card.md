@@ -1,5 +1,5 @@
 ## Description: <br>
-Azure Infra helps agents use a local Azure CLI session to query, diagnose, audit, and manage Azure resources, defaulting to read-only operations and requiring explicit confirmation for write or destructive changes. <br>
+Uses local Azure CLI commands to help agents query, diagnose, audit, and manage Azure cloud resources, with read-only operations by default and confirmation required for changes. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, cloud engineers, and operators use this skill to inventory Azure resources, review health, audit security posture, analyze cost data, and prepare controlled Azure CLI changes across subscriptions. <br>
+Developers, DevOps engineers, and cloud operators use this skill to inspect Azure subscriptions, diagnose resource health, review security posture, analyze costs, and prepare Azure CLI commands for approved changes. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Azure CLI commands can change, delete, scale, or alter access to cloud resources when a user deliberately requests write, IAM, billing, or destructive actions. <br>
-Mitigation: Keep routine work read-only; before any write action, verify the displayed subscription, target resource, full command, and expected impact, then require explicit user confirmation. <br>
-Risk: The skill operates through the user's local Azure CLI session, so results and side effects depend on the currently authenticated account, tenant, and subscription. <br>
-Mitigation: Check Azure CLI login state and subscription context before running commands, and clearly label the subscription or tenant used for resource-scope results. <br>
-Risk: Azure administration workflows can expose sensitive values if credential-bearing resources are queried too broadly. <br>
-Mitigation: Do not print or log access keys, client secrets, tokens, passwords, or raw Key Vault secret values; report only names and metadata for secrets. <br>
+Risk: The skill can lead an agent to run Azure CLI commands under the user's current Azure login, including potentially impactful cloud-management operations. <br>
+Mitigation: Keep actions read-only by default; require review of the full command, target subscription or resource, and expected impact before any write or destructive operation. <br>
+Risk: The security review says the artifact describes broad file, API, callback, and API-key capabilities that are not clearly scoped to Azure work. <br>
+Mitigation: Limit use to Azure resource queries unless the publisher narrows those capabilities, and do not retrieve or display secret values. <br>
 
 
 ## Reference(s): <br>
-- [Azure Infra on ClawHub](https://clawhub.ai/thcjp/skills/azure-infra) <br>
-- [Publisher Profile](https://clawhub.ai/user/thcjp) <br>
-- [Skill Homepage](https://skillhub.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/azure-infra) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline Azure CLI command examples and structured JSON-style result summaries] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown with inline Azure CLI command blocks, tables, and concise status summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should identify the active Azure subscription or tenant when relevant and avoid exposing secrets, tokens, passwords, or raw Key Vault secret values.] <br>
+**Other Properties Related to Output:** [Results should identify the active Azure subscription context and avoid displaying secret values.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+1.0.4 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,0 +1,84 @@
+{
+  "version": "1.0.0",
+  "description": "泥石流风险评价因子配置",
+  "factor_names": [
+    "slope",
+    "profile_curvature",
+    "plan_curvature",
+    "flow_accumulation",
+    "basin_relief",
+    "material_source",
+    "rainfall_intensity",
+    "valley_width"
+  ],
+  "factor_descriptions": {
+    "slope": "坡度 (度)",
+    "profile_curvature": "剖面曲率",
+    "plan_curvature": "平面曲率",
+    "flow_accumulation": "汇流累积量 (像元数)",
+    "basin_relief": "沟域落差 (米)",
+    "material_source": "松散物源量 (立方米)",
+    "rainfall_intensity": "降雨强度 (毫米/小时)",
+    "valley_width": "沟谷宽度 (米)"
+  },
+  "d8_encoding": {
+    "1": "E (东)",
+    "2": "SE (东南)",
+    "4": "S (南)",
+    "8": "SW (西南)",
+    "16": "W (西)",
+    "32": "NW (西北)",
+    "64": "N (北)",
+    "128": "NE (东北)"
+  },
+  "material_source_levels": {
+    "sparse": {"code": 1, "description": "稀疏物源", "factor_weight": 0.3},
+    "moderate": {"code": 2, "description": "中等物源", "factor_weight": 0.6},
+    "abundant": {"code": 3, "description": "丰富物源", "factor_weight": 1.0}
+  },
+  "rainfall_scenarios": {
+    "20yr": {"code": 1, "description": "20年一遇", "intensity_factor": 0.7, "threshold_mm_h": 30},
+    "50yr": {"code": 2, "description": "50年一遇", "intensity_factor": 1.0, "threshold_mm_h": 45},
+    "100yr": {"code": 3, "description": "100年一遇", "intensity_factor": 1.3, "threshold_mm_h": 60}
+  },
+  "runout_methods": {
+    "geometric": "保守几何扩散 (默认)",
+    "ramms": "RAMMS 动力学模型 (预留接口)",
+    "flo2d": "FLO-2D 动力学模型 (预留接口)"
+  },
+  "risk_schemas": {
+    "three_class": {
+      "description": "三级分类",
+      "thresholds": [0.33, 0.66],
+      "labels": ["low", "moderate", "high"],
+      "labels_zh": ["低", "中等", "高"]
+    },
+    "four_class": {
+      "description": "四级分类",
+      "thresholds": [0.25, 0.5, 0.75],
+      "labels": ["low", "moderate", "high", "very_high"],
+      "labels_zh": ["低", "中等", "高", "极高"]
+    },
+    "five_class": {
+      "description": "五级分类",
+      "thresholds": [0.2, 0.4, 0.6, 0.8],
+      "labels": ["very_low", "low", "moderate", "high", "very_high"],
+      "labels_zh": ["极低", "低", "中等", "高", "极高"]
+    }
+  },
+  "sensitivity_parameters": {
+    "outlet_shift_pixels": 2,
+    "flow_threshold_variation": 0.2,
+    "dem_resolution_variation": 0.2
+  },
+  "geometric_runout": {
+    "fan_angle_degrees": 11,
+    "description": "H/L = tan(α), α为堆积扇坡角"
+  },
+  "references": [
+    "Takahashi, T. (2007). Debris Flow: Mechanics, Prediction and Countermeasures. Taylor & Francis.",
+    "Hungr, O., et al. (2005). The Varnes classification of landslide types. Landslides, 3(2), 159-174.",
+    "Horton, P., et al. (2013). Flow-R: a model for susceptibility mapping of debris flows. Natural Hazards, 67(3), 1191-1213.",
+    "Kang, S., & Lee, S. (2018). Debris flow susceptibility assessment using GIS and machine learning. Sustainability, 10(8), 2945."
+  ]
+}

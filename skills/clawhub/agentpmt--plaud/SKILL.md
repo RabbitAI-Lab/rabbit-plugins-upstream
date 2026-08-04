@@ -1,7 +1,7 @@
 ---
 name: plaud
 description: "Plaud: Work with the user's connected Plaud account to act on their voice recordings. Use when an agent needs plaud, turn meeting recordings into crm notes and follow up tasks, draft follow up emails from a call transcript, summarize interviews and save notes to a shared doc, extract action items from voice memos into a task manager, get current user, get file, file id through AgentPMT-hosted remote tool calls. Discovery terms: plaud, turn meeting recordings into crm notes and follow up tasks."
-version: 1.0.0
+version: 1.0.1
 homepage: https://www.agentpmt.com/marketplace/plaud
 compatibility: "Agent instructions for AgentPMT-hosted remote tool calls. Follow this skill body for supported account, wallet, and setup routes. No local command runtime is declared."
 metadata: {"author":"agentpmt","openclaw":{"homepage":"https://www.agentpmt.com/marketplace/plaud"}}
@@ -9,7 +9,7 @@ metadata: {"author":"agentpmt","openclaw":{"homepage":"https://www.agentpmt.com/
 # Plaud
 
 ## Freshness
-Last updated: `2026-07-21`.
+Last updated: `2026-07-28`.
 
 If the current date is more than 7 days after the last updated date, reinstall this skill from skills.sh or ClawHub before relying on endpoints, schemas, setup steps, or examples.
 
@@ -31,7 +31,7 @@ Only surface recordings the connected Plaud account can access, and respect the 
 - Use this skill for `Plaud` on AgentPMT.
 - Use it when an agent needs this specific tool's behavior, schema, inputs, outputs, and invocation shape.
 - Search and activation keywords: plaud, turn meeting recordings into crm notes and follow up tasks, draft follow up emails from a call transcript, summarize interviews and save notes to a shared doc, extract action items from voice memos into a task manager, get current user, get file, file id.
-- Supported action names: `get_current_user`, `get_file`, `get_note`, `get_transcript`, `list_files`.
+- Supported action names: `get_current_user`, `get_file`, `get_instructions`, `get_note`, `get_transcript`, `list_files`.
 
 ## Use Cases
 - Turn meeting recordings into CRM notes and follow-up tasks
@@ -53,11 +53,12 @@ No categories or industry tags are published for this tool.
 
 ## Actions And Schema
 Complete generated action schema: `./schema.md`.
-Supported action count: `5`.
+Supported action count: `6`.
 x402 availability: not enabled for this product.
 
 - `get_current_user` (action slug: `get-current-user`): Get current authenticated user info Price: `5` credits. Parameters: none.
 - `get_file` (action slug: `get-file`): Get details of a specific Plaud recording by ID Price: `5` credits. Parameters: `file_id`.
+- `get_instructions` (action slug: `get-instructions`): Get tool instructions and available actions. Price: `5` credits. Parameters: none.
 - `get_note` (action slug: `get-note`): Fetch AI-generated notes for a Plaud recording — compact summary, action items, and key topics Price: `5` credits. Parameters: `file_id`.
 - `get_transcript` (action slug: `get-transcript`): Fetch the full timestamped transcript with speaker attribution for a Plaud recording Price: `5` credits. Parameters: `file_id`.
 - `list_files` (action slug: `list-files`): List Plaud recordings. Supports optional client-side filtering: `query` (case-insensitive name substring), `date_from`/`date_to` (YYYY-MM-DD, inclusive). When any filter is set, paginates up to 5 pages × 100 recordings and returns all matches. Price: `5` credits. Parameters: `date_from`, `date_to`, `page`, `page_size`, `query`.

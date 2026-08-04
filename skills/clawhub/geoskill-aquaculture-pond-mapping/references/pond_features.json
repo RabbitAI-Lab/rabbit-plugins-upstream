@@ -1,0 +1,127 @@
+{
+  "description": "Aquaculture pond classification feature parameters and thresholds. Used for rule-based classification of water bodies into aquaculture ponds, natural water, and paddy fields.",
+  "version": "1.0.0",
+  "parameters": {
+    "min_area_m2": {
+      "value": 500.0,
+      "description": "Minimum pond area in square meters. Smaller objects are excluded as noise.",
+      "unit": "m2"
+    },
+    "max_area_m2": {
+      "value": 500000.0,
+      "description": "Maximum pond area in square meters. Larger objects are likely natural lakes.",
+      "unit": "m2"
+    },
+    "min_rectangularity": {
+      "value": 0.65,
+      "description": "Minimum rectangularity (area / bounding box area). Higher values indicate more rectangular shapes typical of aquaculture ponds.",
+      "range": [0, 1]
+    },
+    "max_compactness": {
+      "value": 0.85,
+      "description": "Maximum compactness (4*pi*area / perimeter^2). Circle = 1. Ponds typically moderate.",
+      "range": [0, 1]
+    },
+    "min_aspect_ratio": {
+      "value": 1.2,
+      "description": "Minimum aspect ratio (max dimension / min dimension). Very low ratios indicate square shapes.",
+      "range": [1, null]
+    },
+    "max_aspect_ratio": {
+      "value": 8.0,
+      "description": "Maximum aspect ratio. Very high ratios indicate elongated shapes unlikely to be ponds.",
+      "range": [1, null]
+    },
+    "water_freq_threshold": {
+      "value": 0.3,
+      "description": "Water frequency threshold below which water bodies are considered seasonal (likely aquaculture).",
+      "range": [0, 1]
+    },
+    "texture_threshold": {
+      "value": 0.15,
+      "description": "Texture score threshold for embankment detection. Higher values indicate more embankment-like texture.",
+      "range": [0, 1]
+    },
+    "adjacency_distance": {
+      "value": 50.0,
+      "description": "Maximum distance (map units) to consider patches as adjacent/neighbors.",
+      "unit": "m"
+    },
+    "min_adjacent_ponds": {
+      "value": 2,
+      "description": "Minimum number of adjacent ponds to classify as aquaculture cluster.",
+      "unit": "count"
+    }
+  },
+  "classification_weights": {
+    "rectangularity": {
+      "weight": 0.30,
+      "description": "Weight for rectangularity score in final classification. Most important feature for pond identification."
+    },
+    "compactness": {
+      "weight": 0.15,
+      "description": "Weight for compactness score. Moderate importance."
+    },
+    "water_frequency": {
+      "weight": 0.20,
+      "description": "Weight for water frequency score. Seasonal water suggests managed ponds."
+    },
+    "texture": {
+      "weight": 0.15,
+      "description": "Weight for texture score. Embankment texture indicates human construction."
+    },
+    "adjacency": {
+      "weight": 0.20,
+      "description": "Weight for adjacency score. Clustered ponds indicate aquaculture areas."
+    }
+  },
+  "classification_thresholds": {
+    "aquaculture": {
+      "min_score": 0.55,
+      "description": "Minimum total score to classify as aquaculture pond."
+    },
+    "paddy": {
+      "min_score": 0.35,
+      "description": "Score range for paddy field classification (between aquaculture and natural water)."
+    },
+    "natural_water": {
+      "max_score": 0.35,
+      "description": "Maximum score for natural water classification."
+    }
+  },
+  "feature_computation": {
+    "rectangularity": "area / bounding_box_area",
+    "compactness": "4 * pi * area / perimeter^2",
+    "aspect_ratio": "max(width, height) / min(width, height)",
+    "water_frequency": "fraction of time steps where pixel is water",
+    "texture_score": "0.5 * normalized_local_variance + 0.5 * edge_density",
+    "adjacency_score": "n_adjacent_ponds / min_adjacent_ponds"
+  },
+  "change_detection": {
+    "new_pond": {
+      "code": 1,
+      "description": "Water body present in latest period but not in baseline."
+    },
+    "abandoned_pond": {
+      "code": -1,
+      "description": "Water body present in baseline but not in latest period."
+    },
+    "stable_pond": {
+      "code": 0,
+      "description": "Water body present in both periods."
+    },
+    "expanded_pond": {
+      "code": 2,
+      "description": "Pond area increased significantly between periods."
+    },
+    "shrunk_pond": {
+      "code": -2,
+      "description": "Pond area decreased significantly between periods."
+    }
+  },
+  "references": {
+    "ndwi": "McFeeters 1996 - The use of the Normalized Difference Water Index (NDWI) in the delineation of open water features",
+    "mndwi": "Xu 2006 - Modification of normalised difference water index (NDWI) to enhance open water features in remotely sensed imagery",
+    "pond_classification": "Two-step approach: water extraction followed by shape/texture/adjacency classification"
+  }
+}

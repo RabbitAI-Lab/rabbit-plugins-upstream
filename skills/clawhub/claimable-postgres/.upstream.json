@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/claimable-postgres",
   "slug": "claimable-postgres",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1778491656611,
-  "contentHash": "f656c86fff453d57fab0301a6e9425c8aa91873ccd763204e13337ac1e827551",
-  "fetchedAt": "2026-07-26T20:19:05.831Z"
+  "version": "1.0.5",
+  "updatedAt": 1785564178643,
+  "contentHash": "baba51b9505caa7e0b1c99454927d66adb09d7788934a971c6c7ef901fb05983",
+  "fetchedAt": "2026-08-04T10:24:50.646Z"
 }

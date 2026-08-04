@@ -1,5 +1,5 @@
 ## Description: <br>
-SCVD General Store helps agents shop at a human-run public HTTPS store for real goods, human labor, signed artifacts, and free verification or guestbook services, using USDC on Base over x402 v2 for paid items. <br>
+A live x402 practice counter and general store for agents that offers real USDC settlement on Base, signed artifacts, free conformance checks, and selected human-labor services. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,41 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External agents and developers use this skill to interact with a public store that offers signed records, verification endpoints, free services, and paid purchases or human-labor requests. It is most relevant when an agent needs auditable artifacts, out-of-band checks, x402 payment testing, or a public HTTPS workflow that avoids local code execution and credential sharing. <br>
+Developers and external agents use this skill to test x402 payment, signing, retry, idempotency, receipt verification, and conformance flows against a live counterparty. Agents can also buy signed artifacts or request listed services when they need a verifiable third-party record. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Paid purchases can spend USDC on Base or submit wallet payment signatures to the store. <br>
-Mitigation: Verify the live price, item specification, payment terms, and destination before signing any wallet payment. <br>
-Risk: Guestbook, letter, order, and callback workflows send submitted text or URLs to an external service. <br>
-Mitigation: Treat these fields as external-service data and avoid submitting secrets, credentials, or sensitive personal information. <br>
-Risk: Store item prices, stock, and fulfillment windows can change over time. <br>
-Mitigation: Fetch the live menu or relevant endpoint immediately before relying on item details or making a purchase. <br>
+Risk: Paid calls settle real USDC on Base and retry loops can duplicate charges. <br>
+Mitigation: Use idempotency keys for paid retries and start with the lowest-cost endpoint when testing. <br>
+Risk: Free-form text, wallet-derived identifiers, and signed artifacts may become public or long-lived. <br>
+Mitigation: Do not submit secrets, sensitive personal data, or private operational details in request fields. <br>
+Risk: The skill interacts with a live third-party service outside NVIDIA ownership. <br>
+Mitigation: Review the service terms, verification model, and current menu or stock data before relying on an artifact. <br>
 
 
 ## Reference(s): <br>
-- [SCVD General Store homepage](https://scvd.store) <br>
-- [ClawHub skill page](https://clawhub.ai/seancrecord/skills/scvd-general-store) <br>
-- [Live menu and stock](https://scvd.store/menu.json) <br>
-- [Listing specification schema](https://scvd.store/schemas/listing-spec-v1.json) <br>
-- [Store statistics](https://scvd.store/stats) <br>
-- [SCVD signing key](https://scvd.store/.well-known/scvd-signing-key) <br>
+- [SCVD General Store](https://scvd.store) <br>
+- [Try x402](https://scvd.store/try) <br>
+- [Menu JSON](https://scvd.store/menu.json) <br>
+- [x402 Conformance API](https://scvd.store/api/conformance/v1) <br>
+- [Conformance Vectors](https://scvd.store/.well-known/conformance/offer-receipt-vectors.json) <br>
+- [Signing Key](https://scvd.store/.well-known/scvd-signing-key) <br>
+- [Attestation Model](https://scvd.store/attestation) <br>
+- [Corrections](https://scvd.store/corrections) <br>
+- [ClawHub Skill Page](https://clawhub.ai/seancrecord/skills/scvd-general-store) <br>
+- [Publisher Profile](https://clawhub.ai/user/seancrecord) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with HTTPS endpoints, JSON payload examples, and payment flow instructions] <br>
+**Output Type(s):** [Guidance, API calls, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with HTTPS request examples and JSON payload examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill may guide agents to send public HTTPS requests, submit user-provided text to external services, or authorize wallet payments only after live item details are verified.] <br>
+**Other Properties Related to Output:** [May lead the agent to submit live HTTPS requests that spend real USDC or publish user-entered content.] <br>
 
 ## Skill Version(s): <br>
-2.2.0 (source: server release evidence) <br>
+2.8.0 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

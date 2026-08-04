@@ -11,37 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent users use ShieldCortex to add persistent local memory, semantic recall, knowledge graph features, and security scanning or enforcement around memory writes and tool output. <br>
+Developers and agent users use ShieldCortex to add persistent local memory, semantic recall, knowledge graph behavior, and security scanning to AI-agent workflows. It is suited for teams that want memory retention with reviewable controls for prompt injection, credential leakage, memory poisoning, and optional cloud sync. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can persist conversation-derived data in local memory. <br>
-Mitigation: Review auto-memory and proactive recall settings before enabling; disable auto-memory for sensitive projects and regularly inspect or purge ~/.shieldcortex. <br>
-Risk: The hook can automatically change or delete hook files during bootstrap. <br>
-Mitigation: Review self-heal behavior before use; set SHIELDCORTEX_SKIP_SELF_HEAL=1 or disable self-heal in config when automatic file changes are not acceptable. <br>
-Risk: Optional cloud sync can transmit selected memory content when explicitly enabled. <br>
-Mitigation: Keep cloud sync disabled unless needed; if enabling it, review API key, memory classification, and content-mode settings first. <br>
+Risk: The skill can retain conversation content and agent memories locally. <br>
+Mitigation: Review captured memories, disable auto-memory or proactive recall when working with sensitive content, and periodically purge or inspect ~/.shieldcortex/. <br>
+Risk: The skill can scan sensitive local agent files and persistently modify agent hook or MCP configuration files. <br>
+Mitigation: Install only after review, run setup intentionally, inspect the declared read/write paths, and keep self-heal warn-only with SHIELDCORTEX_SKIP_SELF_HEAL=1 or the self-heal config when desired. <br>
+Risk: Cloud sync can transmit memory data when explicitly enabled. <br>
+Mitigation: Keep cloud sync disabled unless needed, provide a cloud API key only for approved workflows, and use the available metadata-only or classification controls for sensitive data. <br>
 
 
 ## Reference(s): <br>
-- [ShieldCortex ClawHub page](https://clawhub.ai/jarvis-drakon/skills/shieldcortex) <br>
-- [Publisher profile](https://clawhub.ai/user/jarvis-drakon) <br>
+- [ShieldCortex ClawHub skill page](https://clawhub.ai/jarvis-drakon/skills/shieldcortex) <br>
 - [ShieldCortex homepage](https://shieldcortex.ai) <br>
-- [ShieldCortex documentation](https://shieldcortex.ai/docs) <br>
-- [ShieldCortex source link from metadata](https://github.com/Drakon-Systems-Ltd/ShieldCortex) <br>
 - [ShieldCortex npm package](https://www.npmjs.com/package/shieldcortex) <br>
+- [Drakon Systems publisher profile](https://github.com/Drakon-Systems-Ltd) <br>
+- [ShieldCortex documentation](https://shieldcortex.ai/docs) <br>
+- [ShieldCortex changelog](https://shieldcortex.ai/changelog) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with command examples and configuration snippets] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands, local MCP/tool responses, and configuration instructions] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local CLI commands, MCP configuration, and security guidance for the user's agent environment.] <br>
+**Other Properties Related to Output:** [May write local memory, configuration, hook/plugin files, and audit logs when installed and enabled by the user.] <br>
 
 ## Skill Version(s): <br>
-4.47.16 (source: server release metadata and skill frontmatter) <br>
+4.47.30 (source: server release metadata and skill frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

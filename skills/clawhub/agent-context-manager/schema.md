@@ -18,13 +18,15 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions. |
+| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version. |
+| `expected_revision` | `integer` | yes | Required CAS revision for update/archive. |
 
 Sample parameters:
 
 ```json
 {
-  "context_document_id": "example context document id"
+  "context_document_id": null,
+  "expected_revision": null
 }
 ```
 
@@ -33,9 +35,17 @@ Generated JSON parameter schema:
 ```json
 {
   "context_document_id": {
-    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions.",
+    "default": null,
+    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version.",
     "required": true,
     "type": "string"
+  },
+  "expected_revision": {
+    "default": null,
+    "description": "Required CAS revision for update/archive.",
+    "minimum": 1,
+    "required": true,
+    "type": "integer"
   }
 }
 ```
@@ -52,13 +62,13 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions. |
+| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version. |
 
 Sample parameters:
 
 ```json
 {
-  "context_document_id": "example context document id"
+  "context_document_id": null
 }
 ```
 
@@ -67,7 +77,8 @@ Generated JSON parameter schema:
 ```json
 {
   "context_document_id": {
-    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions.",
+    "default": null,
+    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version.",
     "required": true,
     "type": "string"
   }
@@ -97,14 +108,12 @@ Sample parameters:
 
 ```json
 {
-  "agent_edit_approval_required": true,
-  "body": "example body",
+  "agent_edit_approval_required": null,
+  "body": null,
   "document_scope": "private",
-  "summary": "example summary",
-  "tags": [
-    "example tag"
-  ],
-  "title": "example title"
+  "summary": null,
+  "tags": null,
+  "title": null
 }
 ```
 
@@ -113,11 +122,13 @@ Generated JSON parameter schema:
 ```json
 {
   "agent_edit_approval_required": {
+    "default": null,
     "description": "When true, agents need a user-approved temporary unlock before editing this document.",
     "required": false,
     "type": "boolean"
   },
   "body": {
+    "default": null,
     "description": "Document body for create/update.",
     "required": true,
     "type": "string"
@@ -133,11 +144,13 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "summary": {
+    "default": null,
     "description": "Optional short summary for create/update.",
     "required": false,
     "type": "string"
   },
   "tags": {
+    "default": null,
     "description": "Optional tags for create/update.",
     "items": {
       "description": "",
@@ -147,6 +160,7 @@ Generated JSON parameter schema:
     "type": "array"
   },
   "title": {
+    "default": null,
     "description": "Document title for create/update.",
     "required": true,
     "type": "string"
@@ -166,13 +180,13 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions. |
+| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version. |
 
 Sample parameters:
 
 ```json
 {
-  "context_document_id": "example context document id"
+  "context_document_id": null
 }
 ```
 
@@ -181,7 +195,8 @@ Generated JSON parameter schema:
 ```json
 {
   "context_document_id": {
-    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions.",
+    "default": null,
+    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version.",
     "required": true,
     "type": "string"
   }
@@ -233,9 +248,9 @@ Sample parameters:
 
 ```json
 {
-  "include_archived": true,
+  "include_archived": false,
   "limit": 100,
-  "query": "example search query",
+  "query": null,
   "scope": "private"
 }
 ```
@@ -245,6 +260,7 @@ Generated JSON parameter schema:
 ```json
 {
   "include_archived": {
+    "default": false,
     "description": "When true, include archived documents in list results.",
     "required": false,
     "type": "boolean"
@@ -258,6 +274,7 @@ Generated JSON parameter schema:
     "type": "integer"
   },
   "query": {
+    "default": null,
     "description": "Optional search over title, summary, and tags for list.",
     "required": false,
     "type": "string"
@@ -288,13 +305,13 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions. |
+| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version. |
 
 Sample parameters:
 
 ```json
 {
-  "context_document_id": "example context document id"
+  "context_document_id": null
 }
 ```
 
@@ -303,7 +320,60 @@ Generated JSON parameter schema:
 ```json
 {
   "context_document_id": {
-    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions.",
+    "default": null,
+    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version.",
+    "required": true,
+    "type": "string"
+  }
+}
+```
+
+## `restore_version`
+
+Action slug: `restore-version`
+
+Price: `0` credits
+
+Restore a retained Agent Context version using CAS.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version. |
+| `expected_revision` | `integer` | yes | Required CAS revision for update/archive. |
+| `version_id` | `string` | yes | Agent Context document version ObjectId. Required for version_detail/restore_version. |
+
+Sample parameters:
+
+```json
+{
+  "context_document_id": null,
+  "expected_revision": null,
+  "version_id": null
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "context_document_id": {
+    "default": null,
+    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version.",
+    "required": true,
+    "type": "string"
+  },
+  "expected_revision": {
+    "default": null,
+    "description": "Required CAS revision for update/archive.",
+    "minimum": 1,
+    "required": true,
+    "type": "integer"
+  },
+  "version_id": {
+    "default": null,
+    "description": "Agent Context document version ObjectId. Required for version_detail/restore_version.",
     "required": true,
     "type": "string"
   }
@@ -324,7 +394,8 @@ Parameters:
 |---|---|---|---|
 | `agent_edit_approval_required` | `boolean` | no | When true, agents need a user-approved temporary unlock before editing this document. |
 | `body` | `string` | no | Document body for create/update. |
-| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions. |
+| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version. |
+| `expected_revision` | `integer` | yes | Required CAS revision for update/archive. |
 | `summary` | `string` | no | Optional short summary for create/update. |
 | `tags` | `array` | no | Optional tags for create/update. |
 | `title` | `string` | no | Document title for create/update. |
@@ -333,14 +404,13 @@ Sample parameters:
 
 ```json
 {
-  "agent_edit_approval_required": true,
-  "body": "example body",
-  "context_document_id": "example context document id",
-  "summary": "example summary",
-  "tags": [
-    "example tag"
-  ],
-  "title": "example title"
+  "agent_edit_approval_required": null,
+  "body": null,
+  "context_document_id": null,
+  "expected_revision": null,
+  "summary": null,
+  "tags": null,
+  "title": null
 }
 ```
 
@@ -349,26 +419,38 @@ Generated JSON parameter schema:
 ```json
 {
   "agent_edit_approval_required": {
+    "default": null,
     "description": "When true, agents need a user-approved temporary unlock before editing this document.",
     "required": false,
     "type": "boolean"
   },
   "body": {
+    "default": null,
     "description": "Document body for create/update.",
     "required": false,
     "type": "string"
   },
   "context_document_id": {
-    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions.",
+    "default": null,
+    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version.",
     "required": true,
     "type": "string"
   },
+  "expected_revision": {
+    "default": null,
+    "description": "Required CAS revision for update/archive.",
+    "minimum": 1,
+    "required": true,
+    "type": "integer"
+  },
   "summary": {
+    "default": null,
     "description": "Optional short summary for create/update.",
     "required": false,
     "type": "string"
   },
   "tags": {
+    "default": null,
     "description": "Optional tags for create/update.",
     "items": {
       "description": "",
@@ -378,8 +460,52 @@ Generated JSON parameter schema:
     "type": "array"
   },
   "title": {
+    "default": null,
     "description": "Document title for create/update.",
     "required": false,
+    "type": "string"
+  }
+}
+```
+
+## `version_detail`
+
+Action slug: `version-detail`
+
+Price: `0` credits
+
+Fetch one retained Agent Context version detail with its snapshot.
+
+Parameters:
+
+| Parameter | Type | Required | Description |
+|---|---|---|---|
+| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version. |
+| `version_id` | `string` | yes | Agent Context document version ObjectId. Required for version_detail/restore_version. |
+
+Sample parameters:
+
+```json
+{
+  "context_document_id": null,
+  "version_id": null
+}
+```
+
+Generated JSON parameter schema:
+
+```json
+{
+  "context_document_id": {
+    "default": null,
+    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version.",
+    "required": true,
+    "type": "string"
+  },
+  "version_id": {
+    "default": null,
+    "description": "Agent Context document version ObjectId. Required for version_detail/restore_version.",
+    "required": true,
     "type": "string"
   }
 }
@@ -397,13 +523,13 @@ Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
-| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions. |
+| `context_document_id` | `string` | yes | Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version. |
 
 Sample parameters:
 
 ```json
 {
-  "context_document_id": "example context document id"
+  "context_document_id": null
 }
 ```
 
@@ -412,7 +538,8 @@ Generated JSON parameter schema:
 ```json
 {
   "context_document_id": {
-    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions.",
+    "default": null,
+    "description": "Agent Context document ObjectId. Required for fetch/update/archive/clone_template/versions/version_detail/restore_version.",
     "required": true,
     "type": "string"
   }

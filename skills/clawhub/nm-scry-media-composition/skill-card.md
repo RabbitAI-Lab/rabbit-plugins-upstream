@@ -11,31 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and technical writers use this skill to combine existing GIFs, videos, and images into tutorial or documentation media using manifest-driven FFmpeg composition. <br>
+Developers and documentation authors use this skill to combine existing GIF, video, or image assets into tutorial and demo compositions using manifest-driven ffmpeg commands. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill guides an agent to run local media-processing commands that write combined output files. <br>
-Mitigation: Confirm FFmpeg execution is intended, review output paths before running commands, and verify the combined file exists with expected size and dimensions. <br>
-Risk: Manifest-provided prerequisite commands can affect the local environment if they are untrusted. <br>
-Mitigation: Use trusted manifests and review any `requires` commands before allowing an agent to execute them. <br>
+Risk: Generated ffmpeg examples may overwrite existing media outputs when run with overwrite flags. <br>
+Mitigation: Review the manifest output paths before execution and run commands only in the intended workspace. <br>
+Risk: Composition manifests may include prerequisite commands for generating component media. <br>
+Mitigation: Inspect any manifest requirement commands before running them and confirm they match the expected local project workflow. <br>
+Risk: Broad trigger terms may cause the skill to appear for unrelated media or tutorial tasks. <br>
+Mitigation: Use the skill only when the task explicitly requires combining multiple media assets into a composite output. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scry-media-composition) <br>
-- [Project homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scry) <br>
+- [Homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scry) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with YAML manifests and inline bash code blocks] <br>
+**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
+**Output Format:** [Markdown guidance with YAML manifest examples and ffmpeg shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides an agent to validate media component outputs, run FFmpeg composition commands, and report output file metrics.] <br>
+**Other Properties Related to Output:** [Commands are intended for local media composition and may overwrite output files when ffmpeg is run with overwrite flags.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter says 1.9.8) <br>
+1.9.17 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

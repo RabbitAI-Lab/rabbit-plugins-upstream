@@ -47,13 +47,23 @@ function bail(msg, code = 1) {
   process.exit(code);
 }
 
+// Every daemon endpoint requires the per-run token from the 0600 state file.
+// A state file without one belongs to a pre-1.1.3 daemon still running; the
+// call will 401 and the user just needs `browse close` + `launch`.
+function authHeaders(state) {
+  return state?.token ? { 'x-pricewin-token': state.token } : {};
+}
+
 async function daemonState() {
   const state = await loadState();
   if (!state) return null;
   if (!isProcessAlive(state.pid)) return null;
   // ping to confirm daemon is responsive
   try {
-    const res = await fetch(`http://127.0.0.1:${state.port}/ping`, { signal: AbortSignal.timeout(2000) });
+    const res = await fetch(`http://127.0.0.1:${state.port}/ping`, {
+      headers: authHeaders(state),
+      signal: AbortSignal.timeout(2000),
+    });
     if (res.ok) return state;
   } catch { /* dead */ }
   return null;
@@ -64,7 +74,7 @@ async function call(endpoint, args = {}) {
   if (!state) bail('No daemon running — call `launch` first.');
   const res = await fetch(`http://127.0.0.1:${state.port}/${endpoint}`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 'Content-Type': 'application/json', ...authHeaders(state) },
     body: JSON.stringify(args),
     signal: AbortSignal.timeout(120_000),
   });

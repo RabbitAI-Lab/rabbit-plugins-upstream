@@ -1,0 +1,21 @@
+# Dockerfile for Linux cross-platform testing
+# 
+# Usage:
+#   cd skill
+#   docker build -f Dockerfile.test -t watchitai-test .
+#   docker run -it --rm watchitai-test
+#   docker run -it --rm watchitai-test bash run.sh info
+#   docker run -it --rm watchitai-test bash run.sh permissions
+
+FROM ubuntu:22.04
+
+WORKDIR /app
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && apt-get install -y \
+    nodejs \
+    npm \
+    python3 \
+    python3-pip \
+    python3-pil \

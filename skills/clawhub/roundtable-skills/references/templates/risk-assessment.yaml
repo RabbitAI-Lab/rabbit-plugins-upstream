@@ -1,0 +1,45 @@
+name: 风险评估圆桌
+description: 系统性识别方案/项目的风险，区分致命风险与可管理风险，给出缓解措施
+mode: standard
+
+domain_keywords:
+  - 风险
+  - 可能出什么问题
+  - 会不会失败
+  - 坑
+  - 靠谱吗
+  - 评估一下
+  - pre-mortem
+
+required_roles:
+  - roles/devil-advocate        # 主角：系统性失败模式分析
+  - roles/systems-thinker       # 二阶效应与连锁反应
+
+suggested_experts: []  # 按议题领域动态匹配
+
+conditional_experts:
+  - when: "AI|LLM|模型|生成"
+    add: experts/ai-llm/ai-safety-alignment
+  - when: "架构|系统|服务|并发"
+    add: experts/engineering/distributed-systems
+  - when: "合规|医疗|金融|监管"
+    add: experts/cross-industry/healthcare-compliance
+  - when: "用户|产品|市场"
+    add: roles/user-advocate
+
+optional_roles:
+  - roles/optimist              # 平衡视角：哪些风险被高估了
+  - roles/resource-constraint   # 缓解措施的成本
+  - roles/data-evidence         # 风险概率的证据评估
+
+protocol: protocols/debate-protocol
+
+special_instructions: |
+  风险评估的输出必须区分：
+  1. 致命风险（Kill risks）：一旦发生项目即失败，必须先有缓解方案才能推进
+  2. 重大风险（Major）：显著影响成败或体验，需要预案
+  3. 一般风险（Minor）：可接受或低成本兜底
+  每个风险必须附：发生概率估计 + 影响程度 + 缓解措施 + 缓解成本。
+  乐观推动者在本模板中的特殊职责：指出哪些风险被高估，防止因过度保守而瘫痪。
+
+output_protocol: protocols/synthesis-protocol

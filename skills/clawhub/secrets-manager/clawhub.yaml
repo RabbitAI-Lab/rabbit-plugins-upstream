@@ -1,8 +1,8 @@
 slug: secrets-manager
 name: secrets-manager
 owner: jlacroix82
-description: Encrypted local secret store for OpenClaw agents. AES-256-GCM authenticated encryption with per-secret random IVs, master key in chmod 0600 .master-key file. Store, retrieve, rotate, and audit secrets. Safe command injection (writes to temp file by default; --inject-stdout requires --confirm-expose). Master key is recoverable from .master-key file; losing it makes stored secrets unrecoverable.
-version: 1.1.9
+description: "Encrypted local secret store for OpenClaw agents. A PURE STORE: AES-256-GCM authenticated encryption with per-secret random IVs, master key in chmod 0600 .master-key file. Modes: store, get (masked; --raw prints plaintext), list (names+metadata only), delete (irreversible), rotate / rotate --all (archive old as retired), audit (--expired/--stale), status. NEVER writes plaintext secrets to disk or generates executable command scripts — command injection lives in the separate secrets-inject skill. SECRETS_DIR and SECRETS_MASTER_KEY env overrides supported. Losing .master-key makes secrets unrecoverable."
+version: 1.1.14
 type: skill
 author: OpenClaw
 license: MIT
@@ -29,8 +29,9 @@ permissions:
 data_retention:
   secrets: 'AES-256-GCM encrypted, chmod 0600, persists until deleted'
   master_key: '256-bit key in .master-key file, chmod 0600'
-  temp_files: 'chmod 0600, /tmp/secrets-inject-*.sh, not auto-cleaned'
 security_notes:
   - 'Master key auto-generated on first store; backup is your responsibility'
   - 'Losing .master-key = unrecoverable secrets'
-  - 'Plaintext only printed via explicit --get --raw or --inject-stdout --confirm-expose'
+  - 'Plaintext only printed via explicit --get --raw (to stdout); no plaintext written to disk'
+  - 'SECRETS_MASTER_KEY env override: NEVER set it in shared, containerized, CI, or logged environments — anyone who can read process env or logs can recover the key. Prefer the file-based .master-key (chmod 0600) on a single-user host.'
+  - 'Command injection / secret substitution is NOT provided here; use the separate secrets-inject skill (high-privilege).'

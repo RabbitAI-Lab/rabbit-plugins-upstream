@@ -214,7 +214,7 @@ button:hover { opacity:.92; }
 </div>
 
 <div class="step-panel" id="step1">
-<div class="card"><h2>② 合规指标自检</h2><div class="sub">填写企业实际情况，系统将自动对照判定标准给出是否达标</div><div class="ind-section"><div class="ind-input" data-key="supplier_screened"><label><b>已对供应商做开票资质与真实性筛查</b></label><label class="checkbox-wrap"><input type="checkbox" id="i_supplier_screened"/><span class="check-label">已落实 / 满足条件</span></label><div class="hint">政策依据：发票管理办法及以数治税监管规则</div></div><div class="ind-input" data-key="four_flow_consistent"><label><b>合同/票据/资金/货物流四流一致</b></label><label class="checkbox-wrap"><input type="checkbox" id="i_four_flow_consistent"/><span class="check-label">已落实 / 满足条件</span></label><div class="hint">政策依据：发票合规正负面清单</div></div><div class="ind-input" data-key="abnormal_handled"><label><b>收到异常凭证已及时进项转出并配合核查</b></label><label class="checkbox-wrap"><input type="checkbox" id="i_abnormal_handled"/><span class="check-label">已落实 / 满足条件</span></label><div class="hint">政策依据：异常增值税扣税凭证处理规则</div></div><div class="ind-input" data-key="no_shell_feature"><label><b>自身未触发空壳虚开特征</b></label><label class="checkbox-wrap"><input type="checkbox" id="i_no_shell_feature"/><span class="check-label">已落实 / 满足条件</span></label><div class="hint">政策依据：危害税收征管犯罪打击规则</div></div><div class="ind-input" data-key="einvoice_managed"><label><b>已建立数电票全生命周期管理</b></label><label class="checkbox-wrap"><input type="checkbox" id="i_einvoice_managed"/><span class="check-label">已落实 / 满足条件</span></label><div class="hint">政策依据：全面数字化电子发票推广规则</div></div></div><div class="btn-row"><button class="btn secondary" onclick="prevStep()">← 上一步</button><button class="btn" onclick="runIndicatorCheck()">🔍 立即自检</button></div></div><div id="indicatorResult" style="display:none"></div>
+<div class="card"><h2>② 合规指标自检</h2><div class="sub">填写企业实际情况，系统将自动对照判定标准给出是否达标</div><div class="ind-section"><div class="ind-input" data-key="supplier_screened"><label><b>已对供应商做开票资质与真实性筛查</b></label><label class="checkbox-wrap"><input type="checkbox" id="i_supplier_screened"/><span class="check-label">已落实 / 满足条件</span></label><div class="hint">政策依据：发票管理办法及以数治税监管规则</div></div><div class="ind-input" data-key="four_flow_consistent"><label><b>合同/票据/资金/货物流四流一致</b></label><label class="checkbox-wrap"><input type="checkbox" id="i_four_flow_consistent"/><span class="check-label">已落实 / 满足条件</span></label><div class="hint">政策依据：发票合规正负面清单</div></div><div class="ind-input" data-key="abnormal_handled"><label><b>收到异常凭证已及时进项转出并配合核查</b></label><label class="checkbox-wrap"><input type="checkbox" id="i_abnormal_handled"/><span class="check-label">已落实 / 满足条件</span></label><div class="hint">政策依据：异常增值税扣税凭证处理规则</div></div><div class="ind-input" data-key="no_shell_feature"><label><b>自身未触发空壳虚开特征</b></label><label class="checkbox-wrap"><input type="checkbox" id="i_no_shell_feature"/><span class="check-label">已落实 / 满足条件</span></label><div class="hint">政策依据：危害税收征管犯罪打击规则</div></div><div class="ind-input" data-key="einvoice_managed"><label><b>已建立数电票全生命周期管理</b></label><label class="checkbox-wrap"><input type="checkbox" id="i_einvoice_managed"/><span class="check-label">已落实 / 满足条件</span></label><div class="hint">政策依据：全面数字化电子发票推广规则</div></div><div class="ind-input" data-key="mw02_invoice_redrush"><label><b>恶意红冲/反复红冲识别</b></label><label class="checkbox-wrap"><input type="checkbox" id="i_mw02_invoice_redrush"/><span class="check-label">已落实 / 满足条件</span></label><div class="hint">政策依据：发票管理办法及正负面清单</div></div><div class="ind-input" data-key="mw02_fund_return"><label><b>资金回流信号核验</b></label><label class="checkbox-wrap"><input type="checkbox" id="i_mw02_fund_return"/><span class="check-label">已落实 / 满足条件</span></label><div class="hint">政策依据：发票合规正负面清单</div></div></div><div class="btn-row"><button class="btn secondary" onclick="prevStep()">← 上一步</button><button class="btn" onclick="runIndicatorCheck()">🔍 立即自检</button></div></div><div id="indicatorResult" style="display:none"></div>
 </div>
 
 <div class="step-panel" id="step2">
@@ -266,6 +266,7 @@ button:hover { opacity:.92; }
       <li><b>将发送的数据</b>：仅本次填写的税务指标数值（如研发费用占比、人员比例等），<b>不含</b>企业名称、统一社会信用代码、注册地址、成立时间等身份信息。</li>
       <li><b>用途</b>：经 HTTPS 加密连接发送至云端无状态自评服务，用于规则判定并即时返回结果。</li>
       <li><b>不留存</b>：该服务不留存您提交的数据，亦不与任何身份关联。</li>
+      <li><b>匿名访问</b>：本次访问不关联任何账号或身份；为调用云端服务自动签发的临时密钥仅存于本次浏览器会话（关闭标签页即失效），不跨会话留存，也不写入本地持久存储。</li>
     </ul>
     <label class="consent-check"><input type="checkbox" id="consentChk"/> 我已阅读并同意上述数据发送说明</label>
     <div class="consent-btns">
@@ -278,22 +279,29 @@ button:hover { opacity:.92; }
 <script>
 const API = "https://mcp.aitaxs.top/api/v1";
 // ===== 统一注册 + API Key 安全鉴权（与 Python 客户端一致） =====
+// 安全约束（防止匿名调用泄露信息）：
+//  1) 匿名访问：不关联任何账号/身份，仅用于调用无状态自评服务；
+//  2) 知情同意门控：未获用户显式同意(CONSENTED)前，绝不发卡、绝不调用，杜绝静默匿名访问；
+//  3) 密钥会话级：key 仅存于 sessionStorage（关闭标签页即失效），不跨会话持久化，缩小 XSS 窃取窗口。
 const AUTH_LS_KEY = "tax_policy_mcp_api_key";
 const AUTH_LS_CID = "tax_policy_mcp_client_id";
+function _consentOk(){ return (typeof CONSENTED !== "undefined") && !!CONSENTED; }
 function _webClientId(){
-  let cid = localStorage.getItem(AUTH_LS_CID);
-  if(!cid){ cid = "tax-web-" + Math.random().toString(36).slice(2,10) + Date.now().toString(36); localStorage.setItem(AUTH_LS_CID, cid); }
+  let cid = sessionStorage.getItem(AUTH_LS_CID);
+  if(!cid){ cid = "tax-web-" + Math.random().toString(36).slice(2,10) + Date.now().toString(36); sessionStorage.setItem(AUTH_LS_CID, cid); }
   return cid;
 }
 async function _ensureApiKey(){
-  let key = localStorage.getItem(AUTH_LS_KEY);
+  // 防御纵深：未获知情同意前绝不匿名发卡/调用
+  if(!_consentOk()) return null;
+  let key = sessionStorage.getItem(AUTH_LS_KEY);
   if(key) return key;
   try{
     const res = await fetch(API + "/auth/register", {
       method:"POST", headers:{"Content-Type":"application/json"},
       body: JSON.stringify({ name:"tax-policy-web-"+_webClientId().slice(0,8), user_id:"auto", device_id:_webClientId() })
     });
-    if(res.ok){ const d = await res.json(); if(d && d.api_key){ localStorage.setItem(AUTH_LS_KEY, d.api_key); return d.api_key; } }
+    if(res.ok){ const d = await res.json(); if(d && d.api_key){ sessionStorage.setItem(AUTH_LS_KEY, d.api_key); return d.api_key; } }
   }catch(e){ console.warn("API Key 注册失败：", e); }
   return null;
 }
@@ -305,7 +313,7 @@ async function apiFetch(path, init){ init = init || {}; init.headers = init.head
   return fetch(API + path, init);
 }
 const TOPIC = "invoice_compliance";
-const RULES = {"topic": "invoice_compliance", "title": "数电票合规与空壳虚开防范规则包", "version": "1.0.0", "updated": "2026-07-25", "version_note": "v1.0.0 新建专题：覆盖数电票合规、空壳虚开识别、受票方防范与四流一致校验。", "desc": "数电票合规规则——空壳虚开特征识别、受票方防范、合同票据资金货物流四流一致、异常凭证应对。", "web_page": "https://skillhub.cn/skills/tax-invoice-compliance", "bizTypes": {"selfcheck": {"name": "发票合规自检", "rules": ["indicators"], "version": "1.0.0"}, "risk_scan": {"name": "发票虚开风险扫描", "rules": ["risks"], "version": "1.0.0"}}, "indicators": [{"key": "supplier_screened", "name": "已对供应商做开票资质与真实性筛查", "type": "bool_pass", "threshold": true, "policy": "发票管理办法及以数治税监管规则", "desc": "核查对方经营范围、注册地址真实性、开票额度异常，防范取得虚开发票。"}, {"key": "four_flow_consistent", "name": "合同/票据/资金/货物流四流一致", "type": "bool_pass", "threshold": true, "policy": "发票合规正负面清单", "desc": "四流须闭环印证，留存物流单据与资金凭证，杜绝资金回流。"}, {"key": "abnormal_handled", "name": "收到异常凭证已及时进项转出并配合核查", "type": "bool_pass", "threshold": true, "policy": "异常增值税扣税凭证处理规则", "desc": "收到异常扣税凭证通知及时进项转出，配合税务机关核查，争取善意取得抗辩。"}, {"key": "no_shell_feature", "name": "自身未触发空壳虚开特征", "type": "bool_pass", "threshold": true, "policy": "危害税收征管犯罪打击规则", "desc": "避免同地址/IP批量注册、短期暴力开票、未申报走逃等空壳特征。"}, {"key": "einvoice_managed", "name": "已建立数电票全生命周期管理", "type": "bool_pass", "threshold": true, "policy": "全面数字化电子发票推广规则", "desc": "数电票开具、接收、查验、抵扣、归档全流程规范化。"}], "risks": [{"code": "IC-R01", "name": "取得涉嫌虚开发票", "level": "高", "trigger": "上游走逃或异常凭证，导致进项转出与补税", "suggestion": "加强供应商准入筛查，四流校验，收到异常凭证及时转出并配合核查。"}, {"code": "IC-R02", "name": "自身触发空壳虚开", "level": "高", "trigger": "同IP/地址批量注册、暴力开票、走逃失联", "suggestion": "规范注册与开票行为，确保真实经营与申报，远离空壳虚开模式。"}, {"code": "IC-R03", "name": "四流不一致", "level": "高", "trigger": "合同票据资金货物流无法闭环印证", "suggestion": "建立四流一致性校验流程，留存完整业务链条证据。"}, {"code": "IC-R04", "name": "资金回流", "level": "高", "trigger": "对公付款后经个人账户回流", "suggestion": "规范资金收付路径，杜绝个人账户回流，确保交易真实。"}, {"code": "IC-R05", "name": "善意取得抗辩缺失", "level": "中", "trigger": "无法证明不知情、真实交易、合理对价", "suggestion": "留存交易真实性证据链，争取不罚仅补税的善意取得认定。"}], "qa_prompts": {"受票防范": {"icon": "🛡️", "prompts": ["怎么防范取得虚开发票", "收到异常凭证怎么办", "善意取得虚开怎么抗辩"]}, "开票合规": {"icon": "🧾", "prompts": ["数电票合规要注意什么", "空壳虚开有哪些特征", "四流一致怎么理解"]}, "风险自查": {"icon": "🔍", "prompts": ["企业发票合规怎么自查", "数电票虚开风险有哪些"]}}, "qa_examples": [{"q": "怎么防范取得虚开发票", "a": "建立供应商准入筛查（经营范围、注册地址真实性、开票额度异常），坚持合同、票据、资金、货物流四流一致并留存物流单据，收到异常扣税凭证及时进项转出并配合核查。"}, {"q": "空壳虚开有哪些特征", "a": "典型特征包括同地址或同IP批量注册、无实际经营场所、短期内大量顶额开票、进项明显不匹配、开票后未申报走逃失联、资金经个人账户回流。以数治税已对此精准识别。"}, {"q": "收到异常凭证怎么办", "a": "收到异常增值税扣税凭证通知后应及时作进项转出，配合税务机关核查，并收集真实交易、合理对价、不知情等证据，争取善意取得抗辩（不罚仅补税）。"}], "loop_example": {"name": "发票合规闭环", "steps": ["供应商准入筛查与分级管理", "合同签订明确涉税与四流要求", "收票查验、资金规范支付、留存物流单据", "异常凭证监控与及时进项转出", "数电票全生命周期归档", "定期发票合规自查与员工培训"]}, "sample_data": {"supplier_screened": true, "four_flow_consistent": true, "abnormal_handled": false, "no_shell_feature": true, "einvoice_managed": true}};
+const RULES = {"topic": "invoice_compliance", "title": "数电票合规与空壳虚开防范规则包", "version": "1.0.0", "updated": "2026-07-25", "version_note": "v1.0.0 新建专题：覆盖数电票合规、空壳虚开识别、受票方防范与四流一致校验。", "desc": "数电票合规规则——空壳虚开特征识别、受票方防范、合同票据资金货物流四流一致、异常凭证应对。", "web_page": "https://skillhub.cn/skills/tax-invoice-compliance", "bizTypes": {"selfcheck": {"name": "发票合规自检", "rules": ["indicators"], "version": "1.0.0"}, "risk_scan": {"name": "发票虚开风险扫描", "rules": ["risks"], "version": "1.0.0"}}, "indicators": [{"key": "supplier_screened", "name": "已对供应商做开票资质与真实性筛查", "type": "bool_pass", "threshold": true, "policy": "发票管理办法及以数治税监管规则", "desc": "核查对方经营范围、注册地址真实性、开票额度异常，防范取得虚开发票。"}, {"key": "four_flow_consistent", "name": "合同/票据/资金/货物流四流一致", "type": "bool_pass", "threshold": true, "policy": "发票合规正负面清单", "desc": "四流须闭环印证，留存物流单据与资金凭证，杜绝资金回流。"}, {"key": "abnormal_handled", "name": "收到异常凭证已及时进项转出并配合核查", "type": "bool_pass", "threshold": true, "policy": "异常增值税扣税凭证处理规则", "desc": "收到异常扣税凭证通知及时进项转出，配合税务机关核查，争取善意取得抗辩。"}, {"key": "no_shell_feature", "name": "自身未触发空壳虚开特征", "type": "bool_pass", "threshold": true, "policy": "危害税收征管犯罪打击规则", "desc": "避免同地址/IP批量注册、短期暴力开票、未申报走逃等空壳特征。"}, {"key": "einvoice_managed", "name": "已建立数电票全生命周期管理", "type": "bool_pass", "threshold": true, "policy": "全面数字化电子发票推广规则", "desc": "数电票开具、接收、查验、抵扣、归档全流程规范化。"}, {"key": "mw02_invoice_redrush", "name": "恶意红冲/反复红冲识别", "type": "bool_pass", "threshold": true, "policy": "发票管理办法及正负面清单", "desc": "对同一笔业务恶意红冲、反复红冲冲抵收入属违规"}, {"key": "mw02_fund_return", "name": "资金回流信号核验", "type": "bool_pass", "threshold": true, "policy": "发票合规正负面清单", "desc": "公转私/私转公/关联方资金闭环等资金回流为虚开高危信号"}], "risks": [{"code": "IC-R01", "name": "取得涉嫌虚开发票", "level": "高", "trigger": "上游走逃或异常凭证，导致进项转出与补税", "suggestion": "加强供应商准入筛查，四流校验，收到异常凭证及时转出并配合核查。"}, {"code": "IC-R02", "name": "自身触发空壳虚开", "level": "高", "trigger": "同IP/地址批量注册、暴力开票、走逃失联", "suggestion": "规范注册与开票行为，确保真实经营与申报，远离空壳虚开模式。"}, {"code": "IC-R03", "name": "四流不一致", "level": "高", "trigger": "合同票据资金货物流无法闭环印证", "suggestion": "建立四流一致性校验流程，留存完整业务链条证据。"}, {"code": "IC-R04", "name": "资金回流", "level": "高", "trigger": "对公付款后经个人账户回流", "suggestion": "规范资金收付路径，杜绝个人账户回流，确保交易真实。"}, {"code": "IC-R05", "name": "善意取得抗辩缺失", "level": "中", "trigger": "无法证明不知情、真实交易、合理对价", "suggestion": "留存交易真实性证据链，争取不罚仅补税的善意取得认定。"}], "qa_prompts": {"受票防范": {"icon": "🛡️", "prompts": ["怎么防范取得虚开发票", "收到异常凭证怎么办", "善意取得虚开怎么抗辩"]}, "开票合规": {"icon": "🧾", "prompts": ["数电票合规要注意什么", "空壳虚开有哪些特征", "四流一致怎么理解"]}, "风险自查": {"icon": "🔍", "prompts": ["企业发票合规怎么自查", "数电票虚开风险有哪些"]}}, "qa_examples": [{"q": "怎么防范取得虚开发票", "a": "建立供应商准入筛查（经营范围、注册地址真实性、开票额度异常），坚持合同、票据、资金、货物流四流一致并留存物流单据，收到异常扣税凭证及时进项转出并配合核查。"}, {"q": "空壳虚开有哪些特征", "a": "典型特征包括同地址或同IP批量注册、无实际经营场所、短期内大量顶额开票、进项明显不匹配、开票后未申报走逃失联、资金经个人账户回流。以数治税已对此精准识别。"}, {"q": "收到异常凭证怎么办", "a": "收到异常增值税扣税凭证通知后应及时作进项转出，配合税务机关核查，并收集真实交易、合理对价、不知情等证据，争取善意取得抗辩（不罚仅补税）。"}], "loop_example": {"name": "发票合规闭环", "steps": ["供应商准入筛查与分级管理", "合同签订明确涉税与四流要求", "收票查验、资金规范支付、留存物流单据", "异常凭证监控与及时进项转出", "数电票全生命周期归档", "定期发票合规自查与员工培训"]}, "sample_data": {"supplier_screened": true, "four_flow_consistent": true, "abnormal_handled": false, "no_shell_feature": true, "einvoice_managed": true}};
 const WIDGETS = {"invoice_compliance": {"risk_overview": {"kind": "checklist", "title": "专题风险点速览", "intro": "勾选自查是否存在以下典型风险，系统汇总风险项与整改建议", "items": [{"label": "取得涉嫌虚开发票", "hint": "加强供应商准入筛查，四流校验，收到异常凭证及时转出并配合核查。"}, {"label": "自身触发空壳虚开", "hint": "规范注册与开票行为，确保真实经营与申报，远离空壳虚开模式。"}, {"label": "四流不一致", "hint": "建立四流一致性校验流程，留存完整业务链条证据。"}, {"label": "资金回流", "hint": "规范资金收付路径，杜绝个人账户回流，确保交易真实。"}, {"label": "善意取得抗辩缺失", "hint": "留存交易真实性证据链，争取不罚仅补税的善意取得认定。"}], "conclusion_ok": "✅ 未发现勾选风险项（仍需结合业务核实）", "conclusion_no": "⚠️ 已勾选风险项，请关注对应整改建议", "_mod": "risk_overview"}}};
 const TOTAL_STEPS = 5;
 const HAS_IND = true;
@@ -479,7 +487,12 @@ function runCalc(modKey) {
     if (!spec.compute) return;
     const card = document.querySelector('.widget-card[data-mod="'+modKey+'"]');
     const f = {};
-    card.querySelectorAll("[data-f]").forEach(el => { f[el.dataset.f] = el.value; });
+    card.querySelectorAll("[data-f]").forEach(el => {
+        const raw = el.value;
+        if (el.tagName === "SELECT") { f[el.dataset.f] = raw; return; }
+        const num = (raw === "" || raw === null) ? 0 : Number(raw);
+        f[el.dataset.f] = isNaN(num) ? raw : num;
+    });
     const m = (RULES[TOPIC] && RULES[TOPIC][modKey]) || {};
     let res;
     try {

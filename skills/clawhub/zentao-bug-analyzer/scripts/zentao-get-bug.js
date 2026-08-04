@@ -6,22 +6,78 @@
  *   node zentao-get-bug.js --ws=<wsEndpoint> --bug-id=<id> [--zentao-url=http://zentao.gxatek.com:20080]
  *
  * 输出 (stdout):
- *   Bug 详情 JSON 对象
+ *   Bug 详情 JSON 对象 + 操作历史 JSON 数组（分行分隔输出）
  *
  * 需要先启动 zentao-login.js 获取 WS endpoint。
  */
 
-const { chromium } = require('playwright');
+const { parseArgs, connectAndGetPage } = require('./zentao-utils');
 
-function parseArgs() {
-  const args = process.argv.slice(2);
-  const config = { wsEndpoint: '', bugId: 0, zentaoUrl: 'http://zentao.gxatek.com:20080' };
-  for (const arg of args) {
-    if (arg.startsWith('--ws=')) config.wsEndpoint = arg.slice(5);
-    if (arg.startsWith('--bug-id=')) config.bugId = parseInt(arg.slice(9), 10);
-    if (arg.startsWith('--zentao-url=')) config.zentaoUrl = arg.split('=')[1];
+/**
+ * 从 HTML 中提取 JSON 数组。用于从 zen-tao bug-view 页面提取 historyChanges 数据。
+ * 比简单括号匹配更健壮：使用 JSON 感知的解析。
+ */
+function extractJsonArray(html, keyName) {
+  // 尝试找到 keyName 的位置
+  let idx = html.indexOf('&quot;' + keyName + '&quot;');
+  if (idx < 0) {
+    idx = html.indexOf('"' + keyName + '"');
   }
-  return config;
+  if (idx < 0) {
+    idx = html.indexOf(keyName);
+  }
+  if (idx < 0) {
+    return null; // 未找到，返回 null 让调用方处理
+  }
+
+  // 向前找 '['
+  let start = idx;
+  while (start > 0 && html[start] !== '[') start--;
+  if (html[start] !== '[') return null;
+
+  // 括号深度匹配找 ']'
+  let depth = 0;
+  let end = start;
+  let inString = false;
+  let escape = false;
+  for (let i = start; i < html.length; i++) {
+    const ch = html[i];
+    if (escape) {
+      escape = false;
+      continue;
+    }
+    if (ch === '\\') {
+      escape = true;
+      continue;
+    }
+    if (ch === '"') {
+      inString = !inString;
+      continue;
+    }
+    if (inString) continue;
+    if (ch === '[') depth++;
+    else if (ch === ']') { depth--; if (depth === 0) { end = i + 1; break; } }
+  }
+
+  const raw = html.substring(start, end);
+
+  // HTML 实体解码（覆盖常见实体）
+  const decoded = raw
+    .replace(/&quot;/g, '"')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/&#39;/g, "'")
+    .replace(/&#x27;/g, "'")
+    .replace(/&#x2F;/g, '/')
+    .replace(/&#(\d+);/g, (_, n) => String.fromCharCode(parseInt(n, 10)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, n) => String.fromCharCode(parseInt(n, 16)));
+
+  try {
+    return JSON.parse(decoded);
+  } catch (e) {
+    return { _parseError: e.message, _sample: raw.substring(0, 1000) };
+  }
 }
 
 async function main() {
@@ -38,13 +94,7 @@ async function main() {
 
   console.error(`[INFO] 连接到浏览器: ${config.wsEndpoint}`);
 
-  const browser = await chromium.connectOverCDP(config.wsEndpoint);
-
-  // 取已有的 context/page（或新建）
-  const contexts = browser.contexts();
-  const context = contexts.length > 0 ? contexts[0] : await browser.newContext();
-  const pages = context.pages();
-  const page = pages.length > 0 ? pages[0] : await context.newPage();
+  const { page } = await connectAndGetPage(config.wsEndpoint);
 
   console.error(`[INFO] 获取 Bug #${config.bugId} 详情和操作历史...`);
 
@@ -75,43 +125,21 @@ async function main() {
       return { _fetchError: `bug-view 页面请求失败 (HTTP ${resp.status})` };
     }
     const html = await resp.text();
-
-    // 提取 operation history JSON 数组
-    // 注意: page.evaluate 中 fetch 的 HTML 引号为 &quot; 而非 "（实体编码）
-    const idx = html.indexOf('&quot;historyChanges&quot;') > 0
-      ? html.indexOf('&quot;historyChanges&quot;')
-      : html.indexOf('historyChanges');
-    if (idx < 0) {
-      return [];
-    }
-
-    // 向前找 '[' 
-    let start = idx;
-    while (start > 0 && html[start] !== '[') start--;
-    // 括号深度匹配找 ']'
-    let depth = 0;
-    let end = start;
-    for (let i = start; i < html.length; i++) {
-      if (html[i] === '[') depth++;
-      else if (html[i] === ']') { depth--; if (depth === 0) { end = i + 1; break; } }
-    }
-
-    const raw = html.substring(start, end);
-    const json = raw.replace(/&quot;/g, '"').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
-    try {
-      return JSON.parse(json);
-    } catch (e) {
-      return { _parseError: e.message, _sample: raw.substring(0, 1000) };
-    }
+    // 返回原始 HTML，由 Node.js 端做 JSON 提取（更健壮）
+    return { _htmlSource: true, html };
   }, { bugId: config.bugId, zentaoUrl: config.zentaoUrl });
 
-  const result = { bug: bugResult, history: historyResult };
-
-  if (result.error) {
-    console.error(`[ERROR] 请求失败 (HTTP ${result.status}): ${result.statusText}`);
-    console.log(JSON.stringify(result));
-    process.exit(1);
+  let history;
+  if (historyResult._htmlSource) {
+    history = extractJsonArray(historyResult.html, 'historyChanges');
+    if (history === null) {
+      history = []; // historyChanges 未找到，返回空数组
+    }
+  } else {
+    history = historyResult; // 兼容 fetch 错误等返回
   }
+
+  const result = { bug: bugResult, history };
 
   // 分行输出：先输出 bug，再输出 history（避免单次 JSON.stringify 太大导致进程超时）
   console.log('---BUG_START---');

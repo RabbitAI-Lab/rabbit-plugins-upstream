@@ -3,7 +3,7 @@ name: p-image-edit
 description: Use when someone wants to edit an existing photo — change outfits or backgrounds, compose from reference images, or apply prompt-driven edits.
 license: MIT
 metadata:
-  version: "1.0.7"
+  version: "1.0.9"
   package: pruna-skills
   pruna_model: p-image-edit
 ---
@@ -25,7 +25,7 @@ Follow each skill's **Before generating** / craft sections — do not restate gu
 
 ## Agent habit
 
-In the **first reply**, name `` `p-image-edit` `` in backticks, confirm `PRUNA_API_KEY`, then ask for the source photo (and edit brief). Draft edits with **Prompt craft (dynamic + faithful)**. Redirect to `p-image-try-on` when the job is garment fit from packshots.
+In the **first reply**, name `` `p-image-edit` `` in backticks, confirm `PRUNA_API_KEY`, then ask for the source photo (and edit brief). Open intake → **`generation-diversity`** clarification intake when needed. Draft edits with **Prompt craft (dynamic + faithful)**. Redirect to `p-image-try-on` when the job is garment fit from packshots.
 
 ## Prompt craft (dynamic + faithful)
 
@@ -47,7 +47,7 @@ Use a different skill instead:
 
 | Skill | Description | Install |
 | --- | --- | --- |
-| `p-image` | Use when someone wants a fast AI image — product shots, hero visuals, mood boards, or draft photos from a text prompt. | `npx skills add PrunaAI/pruna-skills@p-image -y` |
+| `p-image` | Use when someone explicitly wants the fastest, cheapest photo generation — mood boards, bulk panels, or quick iterations — not when controlled photoreal or in-image text is needed. | `npx skills add PrunaAI/pruna-skills@p-image -y` |
 | `p-image-try-on` | Use when someone wants virtual try-on — dress a person in clothes from reference photos for fashion or ecommerce. | `npx skills add PrunaAI/pruna-skills@p-image-try-on -y` |
 | `p-image-upscale` | Use when someone wants to upscale or sharpen an existing image for print, large crops, or higher-quality delivery. | `npx skills add PrunaAI/pruna-skills@p-image-upscale -y` |
 

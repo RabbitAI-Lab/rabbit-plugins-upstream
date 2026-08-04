@@ -1,5 +1,5 @@
 ## Description: <br>
-Loop engineering CLI v0.4.4 with project intake, adaptive queues, progress reports, and human gates. <br>
+Loop Engineering v0.6 with lifecycle tools, explainable drift, live progress, amendments, supersede routing, workers, and gates. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to manage explicit loop-engineering workflows for project intake, queue setup, adaptive queue execution, progress reporting, and review-gated code worktree handoffs. <br>
+Developers and engineers use this skill when they explicitly want loop-managed task execution with preflight checks, queue routing, progress reporting, review artifacts, and gated repair or code-worktree handoffs in a trusted workspace. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Queue dispatcher commands and cron entries can run local workflows in the target workspace. <br>
-Mitigation: Review queue configs, dispatcher commands, and cron entries before execution; start with manual ticks and inspect generated run artifacts before scheduling recurring runs. <br>
-Risk: Commands using `--confirm-apply` or `--confirm-cleanup` can change local files or remove reviewed worktrees. <br>
-Mitigation: Use the read-only planning, status, review bundle, patch verification, and cleanup-plan commands first, and supply confirmation flags only after human review. <br>
-Risk: High-risk process-control, live instrumentation, publishing, destructive, credential, or production configuration actions may exceed ordinary loop automation expectations. <br>
-Mitigation: Keep those actions separately gated and stop at artifacts for human review unless the user explicitly approves execution. <br>
+Risk: The workflow can execute workspace commands and manage queue artifacts. <br>
+Mitigation: Use it only in trusted workspaces, keep queues scoped, and review loop configs and dispatcher commands before execution. <br>
+Risk: Patch application, cleanup, cron, notifications, external sends, publishing, destructive commands, production config changes, memory operations, and credential changes can have high impact. <br>
+Mitigation: Require the documented confirmation gates and separate approval before taking those actions. <br>
+Risk: Live instrumentation or process-control work can leave child processes running after timeouts. <br>
+Mitigation: Stop at artifacts and human review unless execution is explicitly approved, terminate the process group on timeout, and verify no child instrumentation or proxy process remains. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/ambitioncn/skills/loop-engineering) <br>
-- [NPM Package Reference](references/npm-package.md) <br>
+- [npm Package](references/npm-package.md) <br>
+- [ClawHub skill page](https://clawhub.ai/ambitioncn/skills/loop-engineering) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands, JSON configuration examples, and artifact paths] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, JSON, Guidance] <br>
+**Output Format:** [Markdown guidance with shell commands, JSON configuration examples, and local artifact paths] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local loop configuration, queue state, status ledgers, review bundles, patches, and closeout artifacts when the user explicitly runs the corresponding CLI commands.] <br>
+**Other Properties Related to Output:** [Produces read-only plans, status summaries, queue/worktree review artifacts, patch handoff commands, and confirmation-gated execution guidance.] <br>
 
 ## Skill Version(s): <br>
-0.4.4 (source: server release evidence and package reference, released 2026-07-23) <br>
+0.6.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

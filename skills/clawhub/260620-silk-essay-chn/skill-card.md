@@ -1,5 +1,5 @@
 ## Description: <br>
-以 Hermes 作文代理（essay agent）的方式，产出关于「绫罗绸缎」的深度文章框架。本文案代理不产出最终文章，而是提供结构、角度与检索策略。 <br>
+Provides a Simplified Chinese research and essay framework for agents writing about the silk textile categories 绫、罗、绸、缎. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,29 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Writers, researchers, and essay agents use this skill to plan a long-form Simplified Chinese essay on the history, textile categories, literary references, and cultural meaning of 绫罗绸缎. <br>
+Writers, researchers, and essay agents use this skill to plan a deep Chinese-language article about 绫、罗、绸、缎, including structure, research angles, source strategy, and verification criteria. It is intended to guide research and composition rather than directly supply a finished essay. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Source-priority guidance could lead agents to over-rely on Wikipedia for important historical or textile facts. <br>
-Mitigation: Prefer museum, academic, and primary sources for important claims, and use Wikipedia only for orientation or cross-checking. <br>
+Risk: The skill guides agents toward a Chinese-language research framework rather than a finished article. <br>
+Mitigation: Users who need a final essay or another language/script should state that preference clearly before the agent writes. <br>
+Risk: Web research may surface inaccurate or inconsistent historical and cultural claims. <br>
+Mitigation: Review generated material and cross-check key facts against museum, academic, and primary-source references before use. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/j3ffyang/skills/260620-silk-essay-chn) <br>
-- [Publisher profile](https://clawhub.ai/user/j3ffyang) <br>
+- [Server-resolved GitHub provenance](https://github.com/j3ffyang/ai-custom-skills/tree/main/hermes/260620-silk-essay-chn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and essay outline text in Simplified Chinese] <br>
+**Output Type(s):** [Text, Markdown, Guidance] <br>
+**Output Format:** [Markdown prose and structured outline guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires web research for source checking; produces an essay framework rather than a final essay.] <br>
+**Other Properties Related to Output:** [Chinese-language essay framework with research strategy, source priorities, and verification checklist.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+1.0.1 (source: release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

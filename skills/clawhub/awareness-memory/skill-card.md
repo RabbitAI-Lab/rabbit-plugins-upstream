@@ -1,5 +1,5 @@
 ## Description: <br>
-Persistent memory across sessions that automatically recalls past decisions, code, and tasks before each prompt, saves session checkpoints, and provides manual Bash tools for searching, recording, and querying memory. <br>
+Persistent memory across sessions - local-first, no account needed. Automatically recalls past decisions, code, and tasks before each prompt, and saves session checkpoints. Also provides manual tools for searching, recording, and querying memory via Bash commands. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to recall prior decisions, code context, tasks, and knowledge across sessions, then record meaningful work back to memory. It supports automatic hooks plus manual Bash commands for search, lookup, import, setup, and recording. <br>
+Developers and agent users use this skill to recall relevant prior decisions, tasks, and knowledge across sessions, then record useful checkpoints and structured memory for future work. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompt text, memory records, and prior memory or session snippets may be stored locally or sent to the Awareness API when cloud credentials are configured. <br>
-Mitigation: Use the skill only in workspaces where that data flow is acceptable, and prefer an explicitly started local daemon for sensitive work. <br>
-Risk: The skill persists API credentials and may write environment variables to a shell profile during setup. <br>
-Mitigation: Review credential storage after setup and remove shell-profile or global OpenClaw credential writes if broad persistence is not desired. <br>
-Risk: The skill automatically starts services, initiates cloud authentication, and can import past OpenClaw history. <br>
-Mitigation: Review the artifact and security guidance before installation, especially in sensitive workspaces. <br>
+Risk: Cloud mode can send prompt text and saved memories to awareness.market when credentials are configured. <br>
+Mitigation: Use local mode when sensitive work is possible, and avoid installing the skill in workspaces where prompts may contain secrets or private conversation history. <br>
+Risk: The setup flow stores long-lived credentials locally and may add Awareness environment variables to the user's shell profile. <br>
+Mitigation: Review local credential storage and shell profile changes after setup, keep credentials off shared machines, and clear them when the skill is no longer needed. <br>
+Risk: First-run behavior can import existing OpenClaw memory and session history without a clear opt-in. <br>
+Mitigation: Review existing OpenClaw memory and session files before first use, especially in workspaces that may contain secrets or private conversations. <br>
+Risk: The skill can automatically start the local Awareness daemon through the actively maintained @awareness.market/local package. <br>
+Mitigation: Review or preinstall the local daemon package before use, and monitor local service startup in locked-down environments. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/edwin-hao-ai/awareness-memory) <br>
-- [Publisher Profile](https://clawhub.ai/user/edwin-hao-ai) <br>
-- [Release Changelog](artifact/CHANGELOG.md) <br>
-- [Skill Instructions](artifact/SKILL.md) <br>
+- [ClawHub skill page](https://clawhub.ai/edwin-hao-ai/skills/awareness-memory) <br>
+- [Awareness SDK source link from skill text](https://github.com/everest-an/Awareness-SDK) <br>
+- [Awareness local endpoint](http://localhost:37800) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline Bash commands, XML recall blocks, and JSON-compatible memory records] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and text context with XML-wrapped recall snippets, plus command-line setup and memory commands.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js and stores credentials in the user's Awareness configuration when cloud mode is configured.] <br>
+**Other Properties Related to Output:** [Requires Node.js; supports darwin, linux, and win32 according to ClawHub metadata.] <br>
 
 ## Skill Version(s): <br>
-0.3.10 (source: server release metadata and changelog, released 2026-04-19) <br>
+0.3.11 (source: server release evidence and changelog, released 2026-07-31) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

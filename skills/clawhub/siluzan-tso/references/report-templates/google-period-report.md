@@ -53,7 +53,7 @@ siluzan-tso google-analysis render \
 模板源码：`report-templates/google-period-report.html`（结构与样式，ECharts 渲染逻辑已内联）。
 
 `render` 会向输出目录写入 HTML，并注入 `window.__GOOGLE_PERIOD_REPORT__`。  
-传 `--snapshot-dir` 时 CLI 自动从快照合并 KPI、每日趋势图表、周期汇总/系列/设备/地域/关键词表格（Agent JSON 中已有字段不覆盖）。本期 KPI 优先 `campaigns` 累加，勿用延迟的 `stats`/overview 手工填账户级消耗。
+传 `--snapshot-dir` 时 CLI 自动从快照合并 KPI、每日趋势图表、周期汇总/系列/设备/地域/关键词表格：**数值一律以 CLI 快照覆盖**（`meta` 仅补空）。本期 KPI 优先 `campaigns` 累加；Agent 只写 `narrative`，勿自填 `kpis`/`tables`。
 
 ---
 
@@ -120,4 +120,4 @@ siluzan-tso google-analysis -a <id> --start <s> --end <e> --json-out ./snap-goog
 | 直接展示 `row.campaignStatusDisplay`                                              | 读 `campaignStatus` 后自行 `MAP[s] \|\| '已移除'`（`Enabled` 未命中键时会全变「已移除」） |
 | 需要英文枚举时读 `campaignStatus` 或 `campaignStatusV2`，展示前 `.upper()` 再映射 | 用 `stats` / `list-accounts` 的账户 `status` 充当系列状态                                 |
 
-原始枚举为 PascalCase（`Enabled`），与 `ad campaigns` 的 `statusDisplay`（有效/未投放/已结束使用）口径不同；周期报告「状态」列统一用 **`campaignStatusDisplay`**。
+原始枚举为 PascalCase（`Enabled`），与 `ad campaigns` 的 `statusDisplay`（如 `Enabled·有效` / `Enabled·投放期已结束`）口径不同；周期报告「状态」列统一用 **`campaignStatusDisplay`**。

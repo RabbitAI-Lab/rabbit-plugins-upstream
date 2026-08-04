@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides HyperFrames animation authoring guidance, including atomic motion rules, multi-phase blueprints, scene transitions, runtime adapters, and choreography audit support. <br>
+Provides HyperFrames animation rules, scene blueprints, transitions, techniques, runtime adapter guidance, and animation-map auditing support for deterministic, seek-safe motion work. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and designers use this skill to select and compose deterministic HyperFrames motion patterns, scene blueprints, transitions, and runtime-specific animation code for web and video compositions. <br>
+Developers and motion designers use this skill to author, adapt, and audit HyperFrames animation compositions across GSAP, Lottie, Three.js, Anime.js, CSS animations, WAAPI, and TypeGPU. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Example HTML loads JavaScript from public CDNs. <br>
-Mitigation: Review CDN sources and use pinned or locally hosted dependencies when running examples in controlled environments. <br>
-Risk: The animation-map helper can bootstrap HyperFrames packages when they are not bundled in the local environment. <br>
-Mitigation: Set HYPERFRAMES_SKILL_PKG_VERSION to an exact version before running the helper when deterministic dependency resolution is required. <br>
+Risk: Example files can fetch JavaScript from public CDNs when run. <br>
+Mitigation: Review example dependencies before execution and use approved, pinned, or locally mirrored assets where the deployment environment requires that control. <br>
+Risk: The animation-map tooling may bootstrap a HyperFrames package version when local packages are unavailable. <br>
+Mitigation: Set HYPERFRAMES_SKILL_PKG_VERSION to an exact trusted version or run the tooling in a project with local HyperFrames packages installed. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes-animation) <br>
-- [Skill overview](artifact/SKILL.md) <br>
-- [Rules index](artifact/rules-index.md) <br>
-- [Blueprints index](artifact/blueprints-index.md) <br>
-- [Transitions overview](artifact/transitions/overview.md) <br>
-- [Motion techniques](artifact/techniques.md) <br>
-- [GSAP documentation](https://gsap.com/docs/v3/) <br>
-- [Anime.js documentation](https://animejs.com/documentation/) <br>
-- [Lottie-web project](https://github.com/airbnb/lottie-web) <br>
-- [MDN CSS animation reference](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/animation) <br>
+- [ClawHub Skill Page](https://clawhub.ai/heygen-com/skills/hyperframes-animation) <br>
+- [GSAP Documentation](https://gsap.com/docs/v3/) <br>
+- [Three.js WebGLRenderer Documentation](https://threejs.org/docs/pages/WebGLRenderer.html) <br>
+- [Anime.js Documentation](https://animejs.com/documentation/) <br>
+- [MDN Web Animations API Guide](https://developer.mozilla.org/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API) <br>
+- [lottie-web](https://github.com/airbnb/lottie-web) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code snippets, shell commands, and configuration notes] <br>
+**Output Format:** [Markdown guidance with code snippets and shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can produce deterministic HyperFrames animation recipes, runtime adapter guidance, and animation-map audit commands.] <br>
+**Other Properties Related to Output:** [May produce deterministic animation recipes, runtime-specific implementation guidance, and local audit commands.] <br>
 
 ## Skill Version(s): <br>
-1.0.12 (source: server release metadata) <br>
+1.0.14 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

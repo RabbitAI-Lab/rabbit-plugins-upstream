@@ -38,7 +38,41 @@ alerts:
 output:
   timezone: "Asia/Shanghai"
   max_factors_per_analysis: 6
+  min_factors_per_analysis: 2      # 每次分析至少给出 2 个因素，避免单点支撑
   max_push_bytes: 2000
+  # 硬约束：违反任意一条 check_analysis.py 都会报错并阻止本次分析结束
+  constraints:
+    # impact 字段必须取以下值之一（大小写敏感）
+    allowed_impacts:
+      - bullish
+      - bearish
+      - mixed
+      - neutral
+      - slightly_bullish
+      - slightly_bearish
+    # 每个 key_factor 条目必须齐全的字段
+    required_factor_fields:
+      - factor
+      - impact
+      - reasoning
+      - sources        # 每个 factor 必须显式列出支撑它的来源 URL
+    # sources 校验规则
+    sources:
+      must_be_http_url: true        # 必须是 http(s):// 开头的合法 URL
+      must_be_in_fetch_log: true    # 必须出现在 .cache/fetch_log.json 中（即 agent 真的 web_fetch 过）
+      min_count_per_factor: 1       # 每个 factor 至少 1 条来源
+      min_unique_domains: 2         # 整篇分析至少覆盖 2 个不同域名（防止单源依赖）
+    # 禁止出现的措辞（命中即报错）
+    forbidden_phrases:
+      - "根据经验"
+      - "众所周知"
+      - "一般来说"
+      - "通常情况下"
+      - "据了解"
+      - "据业内人士"
+      - "显而易见"
+    # 没有数据时必须使用的占位值（不能用空字符串、不能编造）
+    no_data_marker: "no_data"
 
 # ---- 验证规则 ----
 validation:

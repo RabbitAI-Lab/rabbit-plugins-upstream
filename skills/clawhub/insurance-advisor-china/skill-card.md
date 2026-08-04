@@ -1,5 +1,5 @@
 ## Description: <br>
-中国大陆AI保险顾问。为个人和家庭提供全方位的保险咨询、产品对比、方案设计、投保指导。当用户询问保险配置、保险方案、产品对比、重疾险/医疗险/寿险/意外险/储蓄险推荐、保费计算、保障缺口分析、需求分析、核保合规、理赔等问题时使用。 <br>
+中国大陆AI保险顾问，为个人和家庭提供保险咨询、产品对比、方案设计、投保指导、保费计算、保障缺口分析、核保合规和理赔支持。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users in mainland China use this skill to compare insurance products, estimate premiums, analyze coverage gaps, design family protection plans, and receive general underwriting, compliance, and claims guidance. Its outputs are reference guidance and should be checked against official insurer channels before purchase decisions. <br>
+External users in mainland China can use this skill to assess household insurance needs, compare Chinese insurance products, estimate premiums, design coverage plans, and receive general compliance or claims guidance. <br>
 
 ### Deployment Geography for Use: <br>
-China mainland <br>
+China (Mainland) <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may be treated as licensed insurance or financial advice. <br>
-Mitigation: Treat outputs as reference guidance, not professional recommendations, and verify suitability with qualified professionals or official insurer channels. <br>
-Risk: Product availability and premium estimates may be outdated or differ from official insurer quotes. <br>
-Mitigation: Verify product availability, policy terms, and premiums through official channels before making purchase decisions. <br>
-Risk: Needs analysis can involve sensitive personal, financial, or health details. <br>
-Mitigation: Share only the minimum information needed for the task and avoid unnecessary personal or health details. <br>
-Risk: The skill may mention one insurance sales company contact in a disclosed purchase-channel context. <br>
-Mitigation: Present that contact only when the user asks about purchase channels and keep the provided disclaimer that it is not a recommendation or endorsement. <br>
+Risk: The skill may ask for personal, family, health, income, mortgage, and existing-policy details. <br>
+Mitigation: Provide only information needed for the advisory task and avoid entering unnecessary sensitive details. <br>
+Risk: Static product data may be outdated or may not reflect current premiums, coverage, availability, or sales contacts. <br>
+Mitigation: Verify premiums, coverage terms, product availability, and any sales contact directly with licensed insurance professionals before buying. <br>
+Risk: Insurance guidance can affect financial, health, and legal decisions. <br>
+Mitigation: Treat outputs as general advice and have final purchase, underwriting, compliance, and claims decisions reviewed by qualified professionals. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mnetfairy/skills/insurance-advisor-china) <br>
-- [Insurance knowledge reference](artifact/references/insurance-knowledge.md) <br>
-- [Compliance reference](artifact/references/compliance.md) <br>
-- [Insurance product data](artifact/references/products.json) <br>
+- [Insurance Knowledge](references/insurance-knowledge.md) <br>
+- [Compliance Guidance](references/compliance.md) <br>
+- [Insurance Product Data](references/products.json) <br>
+- [ClawHub Skill Page](https://clawhub.ai/mnetfairy/skills/insurance-advisor-china) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Chinese markdown responses, JSON from helper scripts, and inline shell command examples] <br>
+**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
+**Output Format:** [Chinese Markdown advice with JSON outputs from local helper scripts] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local reference data and calculator scripts; product and premium outputs require official verification.] <br>
+**Other Properties Related to Output:** [May use local script calls for needs analysis, premium calculation, and plan design; product data is static and should be verified before purchase decisions.] <br>
 
 ## Skill Version(s): <br>
-1.8.400 (source: server release evidence) <br>
+1.8.429 (source: server release evidence and product metadata; artifact SKILL.md frontmatter says 1.8.347) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

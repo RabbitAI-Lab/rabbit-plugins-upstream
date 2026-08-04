@@ -59,6 +59,8 @@ For XHS, call `xhs_search_notes` with `keyword`, optional `page_token`, `sort_ty
 Do not pass `page` to `xhs_search_notes`; omit `page_token` on the first request.
 Continue pagination only when `next_page_token` is not empty, and pass the complete returned `next_page_token` back unchanged as `page_token` for the same keyword, sort, note type, publish-time range, and caller chain.
 
+XHS search parameter naming reminder: direct CLI uses `--sort-type`, `--publish-time-range`, and `--note-type`; the `xhs_search_notes` MCP tool uses `sort_type`, `publish_time_range`, and `note_type`. Do not pass `sortType`, `publishTimeRange`, or `noteType`.
+
 ## Output Guidance
 
 输出为小红书内容研究报告：样本表、标题钩子、内容角度、互动信号、可复用选题、完整原始 URL 和完整 `note_id`。

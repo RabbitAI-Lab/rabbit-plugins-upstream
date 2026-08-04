@@ -3,11 +3,14 @@
 
 import { parseArgs } from "./args.js";
 import { request } from "./http.js";
-import type { FetchLike, HttpMethod } from "./http.js";
+import type { BinaryFetchLike, FetchLike, HttpMethod } from "./http.js";
 import { createMcpSession } from "./mcp.js";
+import { uploadMedia } from "./media.js";
+import { createTerm, failureMessage, formatCount } from "./ui.js";
+import type { SummaryRow, Term, TermHost } from "./ui.js";
 
 // Kept in sync with cli/package.json by hand (zero-dep simplicity).
-export const VERSION = "0.2.2";
+export const VERSION = "0.3.2";
 
 const DEFAULT_BASE_URL = "https://tokei.io";
 
@@ -19,9 +22,21 @@ export interface Io {
   // Reads a file for `--data @file.json`. Optional so embedders without a
   // filesystem can omit it.
   readFile?: (path: string) => string;
+  // Reads a file as raw bytes for `media:upload <file>`. Optional so
+  // embedders without a filesystem can omit it (the command then reports a
+  // usage error) — same idiom as readFile.
+  readFileBytes?: (path: string) => Uint8Array;
+  // Raw-bytes PUT used by `media:upload`'s step 2 (signed-URL upload).
+  // Optional so embedders without network access for binary bodies can omit
+  // it (the command then reports a usage error) — same idiom as readFile.
+  binaryFetchImpl?: BinaryFetchLike;
   // Line stream driving the `mcp` command. Optional so embedders without a
   // stdin can omit it (the command then reports a usage error).
   stdin?: AsyncIterable<string>;
+  // Raw stream access for the interactive UI. Optional: when absent — tests,
+  // embedders, MCP — the UI is inert and output is byte-identical to the
+  // JSON-only behaviour. Distinct from `stdout`, which is a *line* writer.
+  term?: TermHost;
 }
 
 interface FlagSpec {
@@ -80,7 +95,12 @@ const COMMANDS: Record<string, CommandSpec> = {
   "pages:list": {
     buildPath: () => "/contests",
     flags: [
-      { name: "status", param: "status", kind: "enum", values: ["draft", "active", "ended", "paused"] },
+      {
+        name: "status",
+        param: "status",
+        kind: "enum",
+        values: ["draft", "active", "completed", "deleted"],
+      },
       { name: "mode", param: "mode", kind: "enum", values: ["competition", "gamification", "sharing_only"] },
       PAGE,
       PER_PAGE,
@@ -101,6 +121,11 @@ const COMMANDS: Record<string, CommandSpec> = {
     buildPath: (id) => `/contests/${enc(id!)}/leaderboard`,
     flags: [PAGE, PER_PAGE],
   },
+  "referrals:top": {
+    positional: "contestId",
+    buildPath: (id) => `/contests/${enc(id!)}/referrals`,
+    flags: [PAGE, PER_PAGE],
+  },
   "entries:list": {
     positional: "contestId",
     buildPath: (id) => `/contests/${enc(id!)}/entries`,
@@ -114,6 +139,10 @@ const COMMANDS: Record<string, CommandSpec> = {
   "templates:list": {
     buildPath: () => "/templates",
     flags: [],
+  },
+  "actions:catalog": {
+    buildPath: () => "/actions/catalog",
+    flags: [{ name: "type", param: "type", kind: "string" }],
   },
   "pages:clone": {
     method: "POST",
@@ -152,6 +181,15 @@ const COMMANDS: Record<string, CommandSpec> = {
         kind: "enum",
         values: ["narrow", "medium", "wide", "max-w-2xl", "max-w-3xl", "max-w-4xl"],
       },
+      // Media (S2.5): public_url values from media:upload. See media:upload's
+      // help entry for the two-step flow that produces them.
+      { name: "image-video", field: "image_video", kind: "string" },
+      { name: "secondary-image", field: "secondary_image", kind: "string" },
+      { name: "third-image", field: "third_image", kind: "string" },
+      { name: "fourth-image", field: "fourth_image", kind: "string" },
+      { name: "fifth-image", field: "fifth_image", kind: "string" },
+      { name: "background-image", field: "background_image", kind: "string" },
+      { name: "og-image", field: "og_image", kind: "string" },
     ],
     acceptsData: true,
     requireBody: true,
@@ -210,6 +248,118 @@ const COMMANDS: Record<string, CommandSpec> = {
     flags: [],
   },
 };
+
+// ---------------------------------------------------------------------------
+// Presentation only. Kept out of COMMANDS so the API spec table stays a pure
+// description of the wire protocol.
+//
+// Copy uses "page", matching README.md and the pages:* command names — the
+// `/contests` path and `contestId` positional are the wire format, and --mode
+// also accepts sharing_only/gamification, which are not contests.
+//
+// One step per real request: the CLI issues exactly one HTTP call per command
+// (media:upload is the sole two-phase flow), so there is never more than one
+// tick to show. Anything more would be invented progress.
+interface CommandCopy {
+  pending: string;
+  done: string | ((payload: unknown) => string);
+}
+
+/**
+ * How many records the response covers.
+ *
+ * Prefers `pagination.total_count` over `data.length`: list endpoints default
+ * to 25 per page, so `data.length` silently caps the reported figure at the
+ * page size ("25 pages" when there are 30). Falls back to the array length for
+ * unpaginated responses.
+ */
+function dataCount(payload: unknown): number | undefined {
+  if (payload === null || typeof payload !== "object") return undefined;
+  const total = (payload as { pagination?: { total_count?: unknown } }).pagination?.total_count;
+  if (typeof total === "number") return total;
+  const data = (payload as { data?: unknown }).data;
+  return Array.isArray(data) ? data.length : undefined;
+}
+
+function counted(noun: string, fallback: string): (payload: unknown) => string {
+  return (payload) => {
+    const n = dataCount(payload);
+    if (n === undefined) return fallback;
+    return `${formatCount(n)} ${n === 1 ? noun : `${noun}s`}`;
+  };
+}
+
+const COPY: Record<string, CommandCopy> = {
+  me: { pending: "Verifying your API key", done: "Signed in" },
+  "pages:list": { pending: "Fetching your pages", done: counted("page", "Pages loaded") },
+  "pages:get": { pending: "Loading page", done: "Page loaded" },
+  "pages:clone": { pending: "Creating page from template", done: "Page created" },
+  "pages:update": { pending: "Saving changes", done: "Changes saved" },
+  "pages:publish": { pending: "Publishing page", done: "Page is live" },
+  "pages:unpublish": { pending: "Returning page to draft", done: "Page is a draft" },
+  "templates:list": {
+    pending: "Fetching templates",
+    done: counted("template", "Templates loaded"),
+  },
+  "actions:catalog": { pending: "Fetching action catalog", done: "Catalog loaded" },
+  stats: { pending: "Gathering analytics", done: "Analytics ready" },
+  leaderboard: { pending: "Ranking entrants", done: "Leaderboard ready" },
+  "referrals:top": {
+    pending: "Ranking referrers",
+    done: counted("referrer", "Top referrers loaded"),
+  },
+  "entries:list": { pending: "Fetching entries", done: counted("entry", "Entries loaded") },
+  "entries:create": { pending: "Recording entry", done: "Entry recorded" },
+  "surveys:list": {
+    pending: "Fetching survey responses",
+    done: counted("response", "Responses loaded"),
+  },
+  "webhooks:list": { pending: "Fetching webhooks", done: counted("webhook", "Webhooks loaded") },
+  "webhooks:create": { pending: "Registering webhook", done: "Webhook registered" },
+  "webhooks:delete": { pending: "Removing webhook", done: "Webhook removed" },
+};
+
+/**
+ * The account summary shown after `me`. Renders only fields the payload
+ * actually contains — /me returns no permission or access flags, so nothing
+ * resembling a capability checklist can be shown truthfully.
+ */
+function renderAccountSummary(term: Term, payload: unknown): void {
+  const data =
+    payload !== null && typeof payload === "object"
+      ? ((payload as { data?: unknown }).data as Record<string, unknown> | undefined)
+      : undefined;
+  if (!data) return;
+
+  const rows: SummaryRow[] = [];
+  const plan = data.plan;
+  if (typeof plan === "string") rows.push({ label: "Plan", value: plan.toUpperCase() });
+
+  const usage = data.api_usage as Record<string, unknown> | undefined;
+  if (usage && typeof usage.requests_today === "number" && typeof usage.daily_limit === "number") {
+    rows.push({
+      label: "Requests today",
+      value: `${formatCount(usage.requests_today)} / ${formatCount(usage.daily_limit)}`,
+    });
+  }
+  if (typeof data.active_contests === "number") {
+    rows.push({ label: "Active pages", value: formatCount(data.active_contests) });
+  }
+  const rl = (payload as { rate_limit?: { remaining?: unknown; limit?: unknown } }).rate_limit;
+  if (rl && typeof rl.remaining === "number" && typeof rl.limit === "number") {
+    rows.push({
+      label: "Rate limit",
+      value: `${formatCount(rl.remaining)} / ${formatCount(rl.limit)} remaining`,
+    });
+  }
+
+  const email = typeof data.email === "string" ? data.email : undefined;
+  term.summary({
+    welcome: email ? `Welcome back, ${email}` : undefined,
+    rows,
+    closing: "Tokei Agent ready",
+  });
+}
 
 const COMMAND_NAMES = Object.keys(COMMANDS);
 
@@ -356,18 +506,27 @@ Usage:
 Commands (read):
   me                          Show the authenticated account / API key
   pages:list                  List promotions
-                                --status draft|active|ended|paused
+                                --status draft|active|completed|deleted
                                 --mode competition|gamification|sharing_only
                                 --page <n>  --per-page <1-100>
   pages:get <contestId>       Get a single promotion
   stats <contestId>           Analytics for a promotion
   leaderboard <contestId>     Leaderboard   --page <n>  --per-page <1-100>
+  referrals:top <contestId>   Top referrers, ranked by conversions, plus
+                              click/conversion totals. Only entrants who have
+                              actually referred someone are listed.
+                                --page <n>  --per-page <1-100>
   entries:list <contestId>    List entries  --page <n>  --per-page <1-100>  --email <addr>
   surveys:list <contestId>    Survey responses  --page <n>  --per-page <1-100>
   webhooks:list               List webhook subscriptions  --page <n>  --per-page <1-100>
   templates:list              List the platform's named starting points (id,
                               slug, name, skin, entry_method_count) — clone one
                               by slug with pages:clone --template <slug>.
+  actions:catalog             List every entry-action type Tokei supports
+                              (label, description, points, platform, whether
+                              it's trust-based/verifiable) — same list for
+                              every key.
+                                --type <actionType>  (unknown type is a 400)
 
 Commands (write — need a read+write API key):
   pages:clone                 Create a promotion by cloning one you own; omit
@@ -381,13 +540,26 @@ Commands (write — need a read+write API key):
                                 --description <d>  --prize <name>  --end-date <iso>
                                 --campaign-url <url>  --image-url <url>
                                 --status draft|active  --idempotency-key <k>  --data
+  media:upload <file>         Upload an image or video (two-step: request a
+                              signed ticket, PUT the bytes) and print a
+                              public_url to feed into pages:update's media
+                              flags below. ≤5MB per file — the signed-upload
+                              bucket caps this for video too, not just images.
+                              Content type is inferred from the extension
+                              (.jpg/.jpeg/.png/.gif/.webp/.mp4/.webm/.mov);
+                              override with --content-type <type>.
   pages:update <contestId>    Update a promotion. Simple fields via flags; prizes,
                               reward_thresholds (or a full body) via --data.
                                 --title <t>  --description <d>
                                 --start-date <iso>  --end-date <iso>
                                 --template basic-new|showcase|future
                                 --dark-mode true|false  --primary-color <hex>
-                                --card-width narrow|medium|wide  --data
+                                --card-width narrow|medium|wide (or max-w-2xl|3xl|4xl)
+                                --image-video <url>  --secondary-image <url>
+                                --third-image <url>  --fourth-image <url>
+                                --fifth-image <url>  --background-image <url>
+                                --og-image <url>  --data
+                              (media URLs come from media:upload's public_url)
   pages:publish <contestId>   Publish a page (status -> active). Requires an
                               end_date in the future, already stored or sent
                               in --data, e.g. --data '{"end_date":"..."}'
@@ -443,7 +615,10 @@ export async function main(argv: string[], io: Io): Promise<number> {
   }
 
   if (command === undefined) {
-    return usageError(io, `No command given. Valid commands: ${COMMAND_NAMES.join(", ")}, mcp`);
+    return usageError(
+      io,
+      `No command given. Valid commands: ${COMMAND_NAMES.join(", ")}, media:upload, mcp`,
+    );
   }
 
   if (command === "mcp") {
@@ -457,6 +632,44 @@ export async function main(argv: string[], io: Io): Promise<number> {
       if (reply !== undefined) io.stdout(reply);
     }
     return 0;
+  }
+
+  // media:upload is a two-call flow (POST a ticket, then PUT the bytes) that
+  // doesn't fit the single-request CommandSpec shape, so it's handled here,
+  // ahead of the COMMANDS table lookup.
+  if (command === "media:upload") {
+    const filePath = positionals[0];
+    if (filePath === undefined) {
+      return usageError(io, "media:upload requires a <file> argument");
+    }
+    const knownFlags = new Set(["content-type"]);
+    for (const provided of Object.keys(flags)) {
+      if (!knownFlags.has(provided)) {
+        return usageError(io, `Unknown flag --${provided} for this command`);
+      }
+    }
+    if (flags["content-type"] === "") {
+      return usageError(io, "--content-type requires a value");
+    }
+
+    const apiKey = io.env.TOKEI_API_KEY;
+    if (!apiKey) {
+      return usageError(io, "TOKEI_API_KEY is not set. Create a key at https://tokei.io and export it.");
+    }
+    const baseUrl = io.env.TOKEI_API_URL || DEFAULT_BASE_URL;
+
+    const outcome = await uploadMedia({
+      filePath,
+      contentTypeOverride: flags["content-type"],
+      apiKey,
+      baseUrl,
+      fetchImpl: io.fetchImpl,
+      binaryFetchImpl: io.binaryFetchImpl,
+      readFileBytes: io.readFileBytes,
+    });
+    if (outcome.kind === "usage_error") return usageError(io, outcome.message);
+    io.stdout(JSON.stringify(outcome.payload, null, 2));
+    return outcome.exitCode;
   }
 
   const spec = COMMANDS[command];
@@ -490,12 +703,37 @@ export async function main(argv: string[], io: Io): Promise<number> {
 
   const baseUrl = io.env.TOKEI_API_URL || DEFAULT_BASE_URL;
 
-  const { payload, exitCode } = await request(
+  // Presentation only. `term` is undefined for pipes, redirects, CI, MCP and
+  // tests, in which case this whole block collapses to the original single
+  // io.stdout() call below.
+  const copy = COPY[command];
+  const term = copy ? createTerm(io.term) : undefined;
+  // The full wordmark is reserved for `me`; routine commands get a step line.
+  term?.start(copy!.pending, { logo: command === "me" });
+
+  const { payload, exitCode, status } = await request(
     { baseUrl, apiKey, path: spec.buildPath(positional), query, method: spec.method, body },
     io.fetchImpl,
   );
 
-  io.stdout(JSON.stringify(payload, null, 2));
+  if (term) {
+    if (exitCode === 0) {
+      const done = copy!.done;
+      await term.finish("done", typeof done === "function" ? done(payload) : done);
+      if (command === "me") {
+        renderAccountSummary(term, payload);
+      } else {
+        io.stdout(JSON.stringify(payload, null, 2));
+      }
+    } else {
+      // The ✗ line is a summary, never a replacement: the full error object
+      // still goes to stdout so it stays inspectable.
+      await term.finish("fail", failureMessage(status, payload));
+      io.stdout(JSON.stringify(payload, null, 2));
+    }
+  } else {
+    io.stdout(JSON.stringify(payload, null, 2));
+  }
 
   if (spec.warnSecretOnce && exitCode === 0) {
     const data = (payload as { data?: unknown }).data;

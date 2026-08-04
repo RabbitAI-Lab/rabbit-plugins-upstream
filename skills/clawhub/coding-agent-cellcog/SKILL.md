@@ -54,6 +54,10 @@ print(result["message"])
 This skill requires the `cellcog` skill for SDK setup and API calls.
 
 ```bash
+# Claude Code, Cursor, Codex + 70 more agents
+npx skills add cellcog/skills --skill cellcog
+
+# OpenClaw
 clawhub install cellcog
 ```
 

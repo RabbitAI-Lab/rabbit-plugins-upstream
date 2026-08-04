@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cn-llm-router",
   "slug": "cn-llm-router",
   "ownerHandle": null,
-  "version": "2.1.0",
-  "updatedAt": 1784884414240,
-  "contentHash": "0de924fc556132ddeb5b8adde5792494c567b849c833c6e9c6ea759413922965",
-  "fetchedAt": "2026-07-26T18:05:27.193Z"
+  "version": "2.2.0",
+  "updatedAt": 1785579600803,
+  "contentHash": "d5defa3b51b32a39a52fce38bb7c756b16e38c716153f511974be06fec25f009",
+  "fetchedAt": "2026-08-04T10:24:11.771Z"
 }

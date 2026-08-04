@@ -1,5 +1,5 @@
 ## Description: <br>
-A Chinese-language assistant for construction-industry tax compliance, risk self-checks, policy Q&A, tax calculations, invoice and prepayment guidance, and remediation planning. <br>
+建筑施工行业财税合规、税务风险识别与合规落地实操专题助手，覆盖异地预缴、甲供工程、简易计税、发票备注、挂靠虚开、四流合一、跨地区企业所得税预缴、农民工工资专户个税、印花税、环保税、暂估成本和工程建设产业链相关财税场景。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and business teams use this skill to ask construction tax compliance questions, run self-checks, identify tax and operating risks, and generate practical remediation guidance. Developers and agents may also use its MCP and offline workflows to route tax-policy questions, risk checks, and calculations. <br>
+External users, tax practitioners, construction businesses, and compliance teams use this skill to ask construction-industry tax questions, run structured compliance self-checks, identify tax and operating risks, and prepare practical remediation guidance. Outputs should be reviewed against current official policy and professional advice before filings or regulated decisions. <br>
 
 ### Deployment Geography for Use: <br>
-China <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Tax questions, risk scenarios, and self-check metrics may be sent to external services. <br>
-Mitigation: Use only with non-sensitive or properly authorized data, and avoid pasting personal, payroll, bank, tax ID, or confidential business records unless the remote-service behavior has been reviewed. <br>
-Risk: The skill can store service credentials and logs locally. <br>
-Mitigation: Review local credential and log storage before deployment, restrict file access where appropriate, and rotate or remove credentials if the environment is shared. <br>
-Risk: MCP auto-setup and matrix installation can modify local agent configuration or install additional skills into the user skills directory. <br>
-Mitigation: Treat setup and installer actions as privileged, prefer dry-run mode or explicit approval, and review target paths before allowing filesystem changes. <br>
+Risk: Cloud-backed tax assistance, MCP setup code, and client configuration changes may expose sensitive business workflows or alter local agent behavior. <br>
+Mitigation: Review the MCP setup and auto-configuration paths before installation, disable unneeded setup behavior, and use the skill only in environments approved for cloud-backed tax assistance. <br>
+Risk: Local credential storage and logging can retain sensitive tax, payroll, contract, banking, or project information. <br>
+Mitigation: Avoid entering unredacted identifiers or confidential records, review credential and log storage before use, and clear or restrict local logs in shared or regulated environments. <br>
+Risk: Tax guidance and calculations may be outdated, jurisdiction-specific, or unsuitable for direct filing decisions. <br>
+Mitigation: Treat outputs as advisory, verify conclusions against official tax authority sources, and obtain qualified professional review before filings, audits, disputes, or legal decisions. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-construction) <br>
-- [Construction compliance self-check page](https://mcp.aitaxs.top/web/topic_workflow_construction.html) <br>
+- [Construction tax compliance self-check page](https://mcp.aitaxs.top/web/topic_workflow_construction.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with optional structured self-check results, configuration snippets, and shell command examples] <br>
+**Output Type(s):** [Text, Markdown, Guidance, Configuration, Shell commands] <br>
+**Output Format:** [Markdown guidance with structured checklists, risk explanations, report-style text, links, and occasional inline commands or configuration instructions] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call remote MCP services for policy Q&A, risk checks, tax calculations, and knowledge-base metadata; includes local offline fallback guidance.] <br>
+**Other Properties Related to Output:** [May route users to a web-based self-check workflow and cloud-backed MCP services; results are advisory and require professional review for filings or legal matters.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: server release metadata and SKILL.md frontmatter) <br>
+3.15.10 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

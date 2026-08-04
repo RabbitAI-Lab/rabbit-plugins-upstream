@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/invoice-auto-forward",
   "slug": "invoice-auto-forward",
   "ownerHandle": null,
-  "version": "1.0.7",
-  "updatedAt": 1784875072390,
-  "contentHash": "21c7237726b7513821a575e6f603fd6e1ece51cb9795a9cff9b9f3ec4e78e17a",
-  "fetchedAt": "2026-07-26T18:05:35.688Z"
+  "version": "1.0.8",
+  "updatedAt": 1785392196356,
+  "contentHash": "26538cb42ead0694cc6b23c5c1f2260c6ffc9db6c7e378f193b42e3188a9f291",
+  "fetchedAt": "2026-08-04T10:30:24.702Z"
 }

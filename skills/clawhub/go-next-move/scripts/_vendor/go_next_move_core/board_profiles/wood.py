@@ -42,8 +42,19 @@ def classify_cell(features: common.IntersectionFeatures) -> str:
         and features.mean_s < 45.0
         and features.edge_contrast > -4.0
     )
-    black_ok = features.dark_fraction > 0.30 or (
-        features.mean_v < 108 and features.very_dark_fraction > 0.10
+    # Empty wood and the thick outer board frame can be dark enough to pass a
+    # broad darkness test, especially after a perspective warp.  A real black
+    # stone either has a substantial near-black core or is consistently dark
+    # across both the center and most of its circular footprint.  The latter
+    # path covers matte black stones whose compressed pixels never reach the
+    # absolute near-black threshold.
+    black_ok = (
+        features.dark_fraction > 0.30
+        and features.very_dark_fraction > 0.20
+    ) or (
+        features.dark_fraction > 0.84
+        and features.center_dark_fraction > 0.98
+        and features.mean_v < 82.0
     )
     white_ok = (
         white_bright_ok

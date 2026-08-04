@@ -72,26 +72,38 @@ def context_report(doc, sel):
     return in_table
 
 
-ID_WIN = 40  # chars of context to check for an already-inserted short value
-
-
 def insert_text(doc, sel, text, newline, idempotent=True):
-    # Idempotent guard for short values (e.g. a single number): if the value
-    # already sits right next to the cursor, skip instead of duplicating it
-    # (prevents "77" when re-run). Long text is never skipped -- re-inserting a
-    # paragraph is usually intentional, and substring checks false-positive.
-    if idempotent and len(text) <= 8:
-        start = sel.Start
-        end = sel.End
-        before = doc.Range(max(start - ID_WIN, 0), start).Text if start > 0 else ""
-        after = doc.Range(end, min(end + ID_WIN, doc.Content.End)).Text if end < doc.Content.End else ""
-        if text in (before + after):
-            print("SKIP text already present near cursor (idempotent, no duplicate)")
+    # Bounded near-cursor idempotency (one COM read, O(window)): skip only if the
+    # EXACT text already sits within ~150 chars of the cursor.
+    #   - Long text: exact match is safe (a unique paragraph won't falsely match).
+    #   - Short text (<=8): require a word boundary so "7" won't match inside "177".
+    # Use --no-idempotent to force insertion regardless.
+    if idempotent and text:
+        W = 150
+        s, e = sel.Start, sel.End
+        dend = doc.Content.End
+        before = doc.Range(max(s - W, 0), s).Text if s > 0 else ""
+        after = doc.Range(e, min(e + W, dend)).Text if e < dend else ""
+        near = before + after
+        dup = False
+        if text in near:
+            if len(text) <= 8:
+                for m in range(len(near) - len(text) + 1):
+                    if near[m:m + len(text)] == text:
+                        prev = near[m - 1] if m > 0 else ""
+                        nxt = near[m + len(text)] if m + len(text) < len(near) else ""
+                        if not (prev.isalnum() and nxt.isalnum()):
+                            dup = True
+                            break
+            else:
+                dup = True
+        if dup:
+            print("SKIP text already present near cursor (%d字, 幂等跳过)" % len(text))
             return
     if newline:
         sel.TypeParagraph()
     sel.TypeText(text)
-    print("OK text inserted at cursor")
+    print("OK text inserted at cursor (%d字)" % len(text))
 
 
 def insert_table(doc, sel, data, use_title):
@@ -145,6 +157,10 @@ def main():
         a = args[i]
         if a == "--text":
             text_mode = args[i + 1]
+            i += 2
+        elif a == "--file":
+            with open(args[i + 1], encoding="utf-8") as _f:
+                text_mode = _f.read().rstrip("\r\n")
             i += 2
         elif a == "--newline":
             newline = True

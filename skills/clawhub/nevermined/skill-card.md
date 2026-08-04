@@ -1,5 +1,5 @@
 ## Description: <br>
-Use when an AI agent must operate on Nevermined autonomously, purchase payment plans via x402, manage card or stablecoin payment delegation, obtain API keys, register payment plans or AI agents, check credits or revenue, or add x402 payment protection to TypeScript and Python agents. <br>
+Guides agents and developers through Nevermined payment operations, including x402 plan purchases, card or stablecoin delegation, API key handling, plan and agent registration, credit or revenue checks, and adding payment protection to TypeScript or Python agents. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,26 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External developers and autonomous agents use this skill to integrate Nevermined payments, buy or settle access through x402, manage payment delegations, and protect agent endpoints with paid access controls. <br>
+External developers and autonomous-agent operators use this skill to buy or settle Nevermined payment plans, manage card or stablecoin delegations, and add x402 payment gates to Express, FastAPI, MCP, Google A2A, LangChain, LangGraph, or Strands agents. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Nevermined API keys, payment tokens, payment method identifiers, and delegation identifiers can expose credentials or authorize spend if logged or stored insecurely. <br>
-Mitigation: Store secrets in a secret manager, avoid logging query strings or full tokens, and require HTTPS for any non-local deployment. <br>
-Risk: Using live payment rails can move real money or consume paid credits. <br>
-Mitigation: Start in sandbox, require explicit selection of live mode, and use tight delegation budgets with short durations. <br>
-Risk: Out-of-date API or SDK assumptions can cause payment flow failures or incorrect integration behavior. <br>
-Mitigation: Pin the Nevermined API version, verify endpoints against current Nevermined documentation, and refresh cached skill copies before production use. <br>
+Risk: Payment credentials, delegation IDs, payment method IDs, or payment tokens may be exposed through logs, callback query strings, shell history, or process arguments. <br>
+Mitigation: Keep NVM_API_KEY and delegation IDs in a secret store, avoid logging callback request lines or full payment tokens, and use HTTPS for any non-local agent endpoint. <br>
+Risk: Live payment flows can move real funds or consume paid credits. <br>
+Mitigation: Start in sandbox, use live only when explicitly required, and test payment flows with low-value plans before production use. <br>
+Risk: Overbroad delegations can authorize more spending than intended. <br>
+Mitigation: Use short-lived, low-limit delegations and monitor settle receipts, remaining balances, and delegation transactions. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/nevermined-io/skills/nevermined) <br>
-- [Nevermined App](https://nevermined.app) <br>
-- [Nevermined Documentation](https://nevermined.ai/docs) <br>
-- [Autonomous Agent Purchase Guide](https://nevermined.ai/docs/getting-started/ai-agent-purchase) <br>
-- [Get Your API Key](https://nevermined.ai/docs/getting-started/get-your-api-key) <br>
-- [Card Enrollment and Delegation](https://nevermined.ai/docs/solutions/card-delegation) <br>
-- [API Changelog](https://nevermined.ai/docs/development-guide/api-changelog) <br>
 - [Autonomous Agent Operations](references/autonomous-operations.md) <br>
 - [Client-Side Integration](references/client-integration.md) <br>
-- [Customer Onboarding](references/customer-onboarding.md) <br>
 - [Payment Plans](references/payment-plans.md) <br>
 - [Seller Operations](references/seller-operations.md) <br>
+- [White-label Customer Onboarding](references/customer-onboarding.md) <br>
 - [x402 Protocol](references/x402-protocol.md) <br>
 - [Express.js Integration](references/express-integration.md) <br>
 - [FastAPI Integration](references/fastapi-integration.md) <br>
@@ -45,16 +38,19 @@ Mitigation: Pin the Nevermined API version, verify endpoints against current Nev
 - [Google A2A Integration](references/a2a-integration.md) <br>
 - [LangChain and LangGraph Integration](references/langchain-integration.md) <br>
 - [Strands Agent Integration](references/strands-integration.md) <br>
+- [Nevermined Documentation](https://nevermined.ai/docs) <br>
+- [Get a Nevermined API Key](https://nevermined.ai/docs/agents-guide/get-api-key) <br>
+- [Nevermined App](https://nevermined.app) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline JSON, TypeScript, Python, and shell command blocks] <br>
+**Output Type(s):** [guidance, shell commands, code, configuration] <br>
+**Output Format:** [Markdown guidance with REST examples and TypeScript/Python snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes REST, SDK, framework integration, environment variable, and operational runbook guidance.] <br>
+**Other Properties Related to Output:** [Includes API calls, environment variables, and payment-flow safeguards; no executable files are produced by the skill itself.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter states 0.5.1) <br>
+1.0.7 (source: server release metadata; artifact frontmatter reports 0.5.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

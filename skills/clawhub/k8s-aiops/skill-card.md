@@ -1,5 +1,5 @@
 ## Description: <br>
-K8s Aiops helps agents operate kubeconfig-reachable Kubernetes clusters by listing and inspecting resources, reading logs, running read-only diagnostics, and performing governed write operations such as scaling, rollouts, deletes, namespace changes, and node cordon, uncordon, or drain. <br>
+k8s-aiops helps agents inspect, diagnose, and operate kubeconfig-reachable Kubernetes clusters with governed read and write workflows, audit records, dry-run support, and undo metadata for reversible writes. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,40 +7,41 @@ This skill is ready for commercial/non-commercial use. <br>
 [zw008](https://clawhub.ai/user/zw008) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, platform engineers, and SREs use this skill to inspect Kubernetes state, diagnose unhealthy workloads, review pod logs and events, and execute governed operational changes through CLI or MCP tools. <br>
+Developers, platform engineers, and SREs use this skill to query Kubernetes resources, review logs and events, run read-only diagnostics, and perform governed operational changes such as scaling, rollouts, deletion, namespace operations, and node maintenance. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact cluster writes using the privileges of the configured kubeconfig. <br>
-Mitigation: Use a dedicated least-privilege kubeconfig, prefer read-only RBAC by default, and grant delete, drain, rollout undo, or namespace mutation verbs only when explicitly needed. <br>
-Risk: MCP write tools can mutate real cluster state without an internal approval gate. <br>
-Mitigation: Review production or shared-cluster use before installation, scope targets and namespaces tightly, use dry-run previews where supported, and rely on Kubernetes RBAC as the enforcement boundary. <br>
-Risk: Insecure kubeconfig TLS settings can weaken the cluster connection. <br>
-Mitigation: Check kubeconfig TLS settings before use and avoid contexts that rely on insecure-skip-tls-verify for production or shared clusters. <br>
+Risk: The skill can perform destructive Kubernetes changes using the permissions available in the configured kubeconfig. <br>
+Mitigation: Install it only for agents that should operate Kubernetes and prefer a narrowly scoped or read-only ServiceAccount by default. <br>
+Risk: Production admin credentials would allow the agent to delete workloads or namespaces, drain nodes, change images, and apply stored undo actions. <br>
+Mitigation: Do not connect production admin kubeconfigs unless those actions are intended and governed by the operator. <br>
+Risk: The local k8s-aiops state directory contains audit history and undo metadata. <br>
+Mitigation: Protect the state directory, relocate it only when needed, and keep it accessible only to trusted users. <br>
 
 
 ## Reference(s): <br>
-- [k8s-aiops homepage](https://github.com/AIops-tools/K8s-AIops) <br>
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/k8s-aiops) <br>
+- [Project homepage](https://github.com/AIops-tools/K8s-AIops) <br>
 - [Capabilities](references/capabilities.md) <br>
-- [Setup Guide](references/setup-guide.md) <br>
 - [CLI Reference](references/cli-reference.md) <br>
+- [Setup Guide](references/setup-guide.md) <br>
 - [Agent Guardrails](references/agent-guardrails.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and text with inline shell commands, CLI examples, and MCP tool guidance] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown with inline shell commands, configuration snippets, and structured Kubernetes operation guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May describe Kubernetes API results, dry-run previews, audit behavior, undo guidance, and RBAC or kubeconfig troubleshooting.] <br>
+**Other Properties Related to Output:** [May invoke read and write Kubernetes operations through the k8s-aiops CLI or MCP server, subject to the permissions of the configured kubeconfig.] <br>
 
 ## Skill Version(s): <br>
-0.8.0 (source: server release metadata) <br>
+0.10.0 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -12,7 +12,7 @@ Use one API key to manage the cloud-phone lifecycle and then operate the running
 The API key is user-provided input. If the user has not supplied one in the current conversation, ask exactly one short question:
 
 ```text
-请直接提供用于 DuoPlus AI 控制的 API Key。
+Please provide the API key for DuoPlus AI control.
 ```
 
 Accept the key directly in the conversation. Do not tell the user to configure PowerShell, shell profiles, permanent environment variables, secret managers, or restart the AI application. If the user already supplied the key, do not ask again.
@@ -70,7 +70,7 @@ python3 scripts/duoplus_ai.py --api-key 'API_KEY' ensure-ready IMAGE_ID
 
 Treat `power-off`, `restart`, and proxy changes as state-changing operations. Perform them only when explicitly requested or when restoring the initial stopped state after this skill powered the phone on. Power-on can start billable temporary compute; always track whether the skill started it.
 
-Before power-on, inspect `http_status`. Value `1` supports AI HTTP control; value `0` does not. The client blocks power-on by default for unsupported phones and reports `该云机不支持 AI 操作云机`. If the user explicitly wants only lifecycle power-on without AI automation, use `power-on IMAGE_ID --allow-no-ai`; do not continue to Gateway actions afterward.
+Before power-on, inspect `http_status`. Value `1` supports AI HTTP control; value `0` does not. The client blocks power-on by default for unsupported phones and reports `This cloud phone does not support AI cloud-phone automation`. If the user explicitly wants only lifecycle power-on without AI automation, use `power-on IMAGE_ID --allow-no-ai`; do not continue to Gateway actions afterward.
 
 Read [references/control-api.md](references/control-api.md) when handling lifecycle, routing, proxy configuration, status failures, or regional deployments.
 

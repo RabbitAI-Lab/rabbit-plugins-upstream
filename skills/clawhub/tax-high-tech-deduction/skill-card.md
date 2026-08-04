@@ -1,5 +1,5 @@
 ## Description: <br>
-高企认定与研发费用加计扣除全链条财税合规助手，帮助企业测算高企认定指标、归集和分摊研发费用、生成辅助账和多口径报表，并提示资格维持与稽查风险。 <br>
+Assists with Chinese high-tech enterprise certification and R&D expense super-deduction compliance through indicator checks, expense classification guidance, multi-basis reporting, self-check workflows, and audit-response guidance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External tax, finance, and R&D compliance teams use this skill to evaluate Chinese high-tech enterprise qualification and R&D super-deduction scenarios, prepare self-checks, and generate working guidance for evidence-chain, allocation, ledger, and reporting workflows. <br>
+External users, tax advisors, finance teams, and compliance teams use this skill to assess Chinese high-tech enterprise qualification, R&D super-deduction eligibility, evidence retention, auxiliary ledgers, and tax audit readiness. <br>
 
 ### Deployment Geography for Use: <br>
-Global <br>
+China <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The authoritative security summary flags cloud processing of tax inputs by mcp.aitaxs.top. <br>
-Mitigation: Review before installing when handling confidential tax, payroll, R&D, employee, or financial records, and use only if cloud processing by mcp.aitaxs.top is acceptable. <br>
-Risk: The authoritative security summary flags local credential and log storage under ~/.tax-policy-client and browser localStorage credentials for the web page. <br>
-Mitigation: Limit use on shared machines, protect the local user profile, and review local storage policies before entering sensitive business data. <br>
-Risk: The authoritative security guidance flags possible installation or replacement of additional skills through the matrix installer. <br>
-Mitigation: Avoid the matrix installer unless package provenance is verified and changes under ~/.skills are acceptable. <br>
+Risk: Sensitive tax, payroll, audit, or R&D information may be processed by cloud services at mcp.aitaxs.top. <br>
+Mitigation: Use the skill only when that cloud processing is acceptable, avoid entering secrets or unnecessary company identifiers, and minimize confidential inputs. <br>
+Risk: Credentials, logs, and raw prompts may be stored locally under ~/.tax-policy-client. <br>
+Mitigation: Avoid entering secrets and periodically inspect or delete local logs and stored credentials. <br>
+Risk: The skill can modify MCP client configuration when TAX_ENABLE_AUTOSETUP is enabled. <br>
+Mitigation: Keep TAX_ENABLE_AUTOSETUP disabled unless automatic setup is intentional, and review client configuration changes before enabling it. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-high-tech-deduction) <br>
-- [Interactive high-tech tax compliance workflow](https://mcp.aitaxs.top/web/topic_workflow_high_tech.html) <br>
-- [Tax policy knowledge service endpoint](https://mcp.aitaxs.top/api/services/tax-policy-knowledge/mcp) <br>
+- [High-tech tax workflow](https://mcp.aitaxs.top/web/topic_workflow_high_tech.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text with optional JSON, CSV, shell command, and configuration snippets] <br>
+**Output Type(s):** [guidance, markdown, configuration] <br>
+**Output Format:** [Markdown text with structured checklists, calculations, report sections, and links to interactive workflows] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call cloud MCP tools for policy Q&A, risk checks, calculations, and knowledge-base metadata; includes local offline fallback guidance and a browser workflow.] <br>
+**Other Properties Related to Output:** [May include self-check prompts, evidence-chain summaries, auxiliary-ledger guidance, and MCP setup guidance.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: frontmatter and server release metadata) <br>
+3.15.10 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

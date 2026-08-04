@@ -1,5 +1,5 @@
 ## Description: <br>
-Guides agents through critical triage of PR/MR review feedback, including verifying suggestions, pushing back with evidence when needed, and implementing only confirmed fixes. <br>
+Helps agents process PR/MR review feedback critically by verifying correctness before acting, pushing back on incorrect suggestions, and avoiding performative agreement. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,30 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering agents use this skill to respond to PR/MR review comments, triage automated or human suggestions, and decide whether to fix, clarify, or push back with evidence. <br>
+Developers and engineering agents use this skill to triage, respond to, and selectively implement PR/MR review feedback with evidence-based judgment. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may use an existing GitHub CLI session to read PR comments or draft and post review-thread replies when asked. <br>
-Mitigation: Review the target repository, comments, and reply text before allowing commands that read or post PR review content. <br>
-Risk: Incorrect triage could accept bad review feedback or dismiss valid feedback. <br>
-Mitigation: Require evidence-backed verification, escalate ambiguous or security-related suggestions, and test each implemented fix individually. <br>
+Risk: Incorrect reviewer suggestions can lead an agent to introduce bugs or unnecessary complexity. <br>
+Mitigation: Verify each suggestion against the codebase, cite concrete evidence, and implement only feedback that is technically correct. <br>
+Risk: Automated review handling can overreach when feedback is security-related, ambiguous, architectural, or user-visible. <br>
+Mitigation: Escalate these cases instead of auto-fixing or auto-declining them, especially in headless mode. <br>
+Risk: The skill may guide an agent to read and respond to PR review comments using existing GitHub access. <br>
+Mitigation: Use it only in the intended review workflow with appropriate repository permissions and review proposed responses before posting when risk is unclear. <br>
 
 
 ## Reference(s): <br>
+- [Skill specification](SPEC.md) <br>
 - [Headless Mode](references/headless-mode.md) <br>
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-receiving-code-review) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Text, Markdown, Shell commands] <br>
-**Output Format:** [Markdown guidance with optional structured triage summaries and inline shell commands] <br>
+**Output Type(s):** [Guidance, Text, Markdown, Code, Shell commands] <br>
+**Output Format:** [Markdown responses with optional code, shell commands, and structured triage summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Headless mode returns AUTO-FIX, AUTO-DECLINE, ESCALATE, and PRIOR FEEDBACK sections.] <br>
+**Other Properties Related to Output:** [Headless mode may return grouped AUTO-FIX, AUTO-DECLINE, ESCALATE, and prior-feedback results.] <br>
 
 ## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+4.3.3 (source: release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

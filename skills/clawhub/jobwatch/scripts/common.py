@@ -1,6 +1,7 @@
 """JobWatcher shared helpers: env, HTTP (stdlib only), state, logging."""
 import json
 import os
+import sys
 import time
 import uuid
 import urllib.request
@@ -128,20 +129,111 @@ def multipart_post(url, fields, file_field, filename, file_bytes,
     return http(url, method="POST", headers=h, data=body, timeout=timeout)
 
 
-# ---------- credentials ----------
-# 最小权限：默认只读 HOME/.env 里用户自己填的 key。复用 OpenClaw / Telegram 宿主
-# 配置里的凭证属于跨作用域读取，默认关闭；仅当用户显式 JOBWATCH_ALLOW_HOST_CREDS=1
-# 时才启用。见 SKILL.md「隐私与数据流 · ③ 凭证读取」。
+# ---------- egress consent (runtime gate) ----------
+# This skill sends data to third parties. The rule enforced here, in code and not
+# only in documentation: every outbound call that carries user data must first pass
+# through require_egress_consent(), which fails closed and prints exactly what is
+# about to leave the machine and where it is going.
+#
+# Consent is granted per destination, by either:
+#   - JOBWATCH_EGRESS_ALLOW="llm,firecrawl,jina,twobrain,telegram" (or "all"), or
+#   - a consent record written during onboarding at <HOME>/state/egress_consent.json
+# Calls to public ATS job boards (Greenhouse / Ashby / Lever) send only the company
+# slug you configured, which is public information, and are therefore not gated.
 
-def _host_creds_allowed():
-    return os.environ.get("JOBWATCH_ALLOW_HOST_CREDS", "").strip() in ("1", "true", "yes")
+EGRESS_TARGETS = {
+    "llm": "the full text of your JOB_PROFILE.md and the full job-description text",
+    "firecrawl": "the URL of a job posting you are watching",
+    "jina": "the URL of a job posting you are watching",
+    "twobrain": "archived job-description documents and the questions you ask",
+    "telegram": "the notification message body",
+}
+_EGRESS_WARNED = set()
+
+
+def _egress_allowed(target):
+    env = os.environ.get("JOBWATCH_EGRESS_ALLOW", "").strip().lower()
+    if env in ("all", "*"):
+        return True
+    if target in [t.strip() for t in env.split(",") if t.strip()]:
+        return True
+    record = ROOT / "state" / "egress_consent.json"
+    if record.exists():
+        try:
+            granted = json.loads(record.read_text()).get("granted", [])
+            return target in granted or "all" in granted
+        except (OSError, ValueError):
+            return False
+    return False
+
+
+def require_egress_consent(target, detail=None):
+    """Fail closed unless the user has consented to this destination.
+
+    Raises RuntimeError when consent is absent, and prints a one-line warning to
+    stderr the first time each destination is used in a run, so the transmission is
+    never silent.
+    """
+    what = detail or EGRESS_TARGETS.get(target, "user data")
+    if not _egress_allowed(target):
+        raise RuntimeError(
+            f"jobwatch: refusing to send data to '{target}' without consent.\n"
+            f"  About to send: {what}\n"
+            f"  To allow, either re-run onboarding, or set "
+            f"JOBWATCH_EGRESS_ALLOW={target} (comma-separated, or 'all')."
+        )
+    if target not in _EGRESS_WARNED:
+        _EGRESS_WARNED.add(target)
+        print(f"[jobwatch] sending to '{target}': {what}", file=sys.stderr)
+    return True
+
+
+# ---------- credentials ----------
+# Least privilege: by default this skill reads only the keys you put in HOME/.env.
+# Reading credentials that belong to the host (the OpenClaw auth store, or the bot
+# token in openclaw.json) is a cross-scope read. It is OFF by default and happens
+# only when the user explicitly sets JOBWATCH_ALLOW_HOST_CREDS=1. When it does
+# happen, a warning is printed so the read is never silent.
+# See SKILL.md, "Privacy & Data Flow — ③ credential reads".
+
+_HOST_CRED_WARNED = set()
+
+# Exactly three host credentials can ever be read, each behind its own name so the
+# opt-in can be scoped to one rather than granted wholesale.
+HOST_CRED_SCOPES = ("openrouter", "telegram_token", "telegram_chat")
+
+
+def _host_creds_allowed(scope):
+    """True only if the user opted in to *this specific* host credential.
+
+    JOBWATCH_ALLOW_HOST_CREDS accepts a comma-separated list of the scopes above —
+    e.g. "telegram_token" grants the bot token and nothing else. The legacy values
+    1/true/yes/all still grant all three, so existing setups keep working.
+    """
+    raw = os.environ.get("JOBWATCH_ALLOW_HOST_CREDS", "").strip().lower()
+    if not raw:
+        return False
+    if raw in ("1", "true", "yes", "all", "*"):
+        return True
+    return scope in [s.strip() for s in raw.split(",") if s.strip()]
+
+
+def _warn_host_cred_read(what):
+    if what not in _HOST_CRED_WARNED:
+        _HOST_CRED_WARNED.add(what)
+        print(
+            f"[jobwatch] reading host credential ({what}) because "
+            f"JOBWATCH_ALLOW_HOST_CREDS=1. Unset it to keep this skill to its own .env.",
+            file=sys.stderr,
+        )
 
 
 def _openrouter_key_from_store():
     """OpenClaw 凭证存储兜底：旧版 JSON 文件 → 新版（2026.7.1+）SQLite。
     仅在 JOBWATCH_ALLOW_HOST_CREDS 开启时读取宿主 auth store。"""
-    if not _host_creds_allowed():
+    if not _host_creds_allowed("openrouter"):
         return None
+    _warn_host_cred_read("OpenClaw OpenRouter key")
     legacy = OPENCLAW_DIR / "agents" / "main" / "agent" / "auth-profiles.json"
     if legacy.exists():
         profiles = json.loads(legacy.read_text()).get("profiles", {})
@@ -180,7 +272,8 @@ def telegram_token():
     t = os.environ.get("TELEGRAM_BOT_TOKEN")
     if t:
         return t
-    if _host_creds_allowed():  # 复用 openclaw.json 里的 bot token 需显式开启
+    if _host_creds_allowed("telegram_token"):  # 复用 openclaw.json 里的 bot token 需显式开启
+        _warn_host_cred_read("Telegram bot token from openclaw.json")
         p = OPENCLAW_DIR / "openclaw.json"
         if p.exists():
             cfg = json.loads(p.read_text())
@@ -194,13 +287,85 @@ def telegram_chat_id():
     cid = os.environ.get("TELEGRAM_CHAT_ID") or CONFIG["telegram"].get("chat_id")
     if cid:
         return cid
-    if _host_creds_allowed():  # 复用 openclaw allowFrom 需显式开启
+    if _host_creds_allowed("telegram_chat"):  # 复用 openclaw allowFrom 需显式开启
+        _warn_host_cred_read("Telegram allowFrom list from OpenClaw credentials")
         p = OPENCLAW_DIR / "credentials" / "telegram-default-allowFrom.json"
         if p.exists():
             allow = json.loads(p.read_text()).get("allowFrom", [])
             if allow:
                 return str(allow[0])
     raise RuntimeError("No Telegram chat id (env TELEGRAM_CHAT_ID / config.json；或 JOBWATCH_ALLOW_HOST_CREDS=1)")
+
+
+# ---------- endpoint / credential binding ----------
+# A credential is only ever attached to the endpoint it was issued for. Without
+# this rule a user who points LLM_BASE_URL (or screen.base_url) at an arbitrary
+# host would silently ship their OpenRouter Bearer token — possibly the *host*
+# OpenClaw one — to that host. Provider A's key must never travel to provider B.
+
+OPENROUTER_HOST = "openrouter.ai"
+_CRED_WARNED = set()
+
+
+def endpoint_host(url):
+    from urllib.parse import urlparse
+    return (urlparse(url).hostname or "").lower()
+
+
+def _is_local(host):
+    return host in ("localhost", "127.0.0.1", "::1", "") or host.endswith(".local")
+
+
+def _warn_no_cred(host, hint):
+    if host not in _CRED_WARNED:
+        _CRED_WARNED.add(host)
+        print(f"[jobwatch] sending no credential to '{host}' — {hint}", file=sys.stderr)
+
+
+def credential_for_endpoint(base_url, purpose="judge"):
+    """The API key the user provisioned *for this endpoint*, or "" if none.
+
+    judge  : LLM_API_KEY is paired with LLM_BASE_URL / config judge.base_url by the
+             user, so it is sent to that endpoint. OPENROUTER_API_KEY and the host
+             OpenClaw OpenRouter key belong to OpenRouter and go nowhere else.
+    screen : an overridden screen.base_url is a *separate* endpoint and never
+             inherits the judge credential — it needs SCREEN_LLM_API_KEY. Pointing
+             screen at a local model therefore needs no key at all, which is the
+             intended zero-cost setup.
+    """
+    host = endpoint_host(base_url)
+    if purpose == "screen":
+        key = os.environ.get("SCREEN_LLM_API_KEY")
+        if key:
+            return key
+        # Same endpoint as judge → same credential is legitimately in scope.
+        judge_base = (os.environ.get("LLM_BASE_URL")
+                      or CONFIG.get("judge", {}).get("base_url")
+                      or f"https://{OPENROUTER_HOST}/api/v1")
+        if host and host == endpoint_host(judge_base):
+            return credential_for_endpoint(base_url, purpose="judge")
+        if host == OPENROUTER_HOST:
+            return _openrouter_credential()
+        if not _is_local(host):
+            _warn_no_cred(host, "set SCREEN_LLM_API_KEY if this endpoint needs one "
+                                "(the judge/OpenRouter key is deliberately not reused)")
+        return ""
+    key = os.environ.get("LLM_API_KEY")
+    if key:
+        return key
+    if host == OPENROUTER_HOST:
+        return _openrouter_credential()
+    if not _is_local(host):
+        _warn_no_cred(host, "set LLM_API_KEY if this endpoint needs one "
+                            "(your OpenRouter key is deliberately not reused)")
+    return ""
+
+
+def _openrouter_credential():
+    try:
+        return openrouter_key()
+    except RuntimeError:
+        return ""
 
 
 # ---------- state ----------

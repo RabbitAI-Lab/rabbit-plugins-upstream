@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes frontal face images or videos with multimodal physiological features to provide early health-risk screening and alerts for conditions such as heart attack, stroke, hypertension, and hyperlipidemia. <br>
+Combines frontal facial image capture with multimodal physiological feature analysis to provide early risk screening and alerts for chronic and acute conditions such as heart attack, stroke, hypertension, and hyperlipidemia. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and care-setting operators use this skill to submit a frontal face image or short video for early health-risk screening and to retrieve prior cloud reports. It supports daily screening workflows for homes, communities, and elderly care facilities, but its results are not a substitute for professional medical diagnosis. <br>
+External users and care-support teams can use this skill to analyze frontal face images or short videos for early health-risk screening and to retrieve prior cloud-hosted screening reports. The results are screening references only and do not replace professional medical diagnosis or examination. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive face images, videos, and health-risk report queries are sent to the vendor cloud service. <br>
-Mitigation: Use only with informed consent and appropriate privacy approval, and avoid uploading data that is not authorized for vendor processing. <br>
-Risk: The skill may silently create or reuse persistent local identities and store tokens in the workspace. <br>
-Mitigation: Run it in a controlled workspace, review local credential-storage policy before use, and clear or revoke stored credentials when they are no longer needed. <br>
-Risk: Screening output could be mistaken for a medical diagnosis. <br>
-Mitigation: Present results as early screening information only and refer high-risk findings to qualified healthcare professionals. <br>
+Risk: Sensitive face images, videos, and health-risk outputs may be sent to an external cloud service. <br>
+Mitigation: Use only with informed consent and only in environments where cloud processing of health-related media is acceptable. <br>
+Risk: The skill silently creates or reuses an identity and may associate reports with locally stored tokens and report history. <br>
+Mitigation: Review identity and local storage behavior before installation, and clear stored credentials or report history according to the deployment policy. <br>
+Risk: Health-risk outputs can be mistaken for medical diagnosis. <br>
+Mitigation: Present outputs as early screening references and direct users to professional medical care for diagnosis, examination, or high-risk findings. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-contactless-health-risk-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-contactless-health-risk-detection-analysis) <br>
+- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [API Interface Documentation](artifact/references/api_doc.md) <br>
+- [Analysis API Error Reference](artifact/skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON report text, with optional saved output file] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration] <br>
+**Output Format:** [Markdown and JSON-like structured analysis text with report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts a local image or video path, a public media URL, history-list mode, detail level, and optional output path; supports jpg/jpeg/png/mp4/avi/mov inputs up to 10 MB.] <br>
+**Other Properties Related to Output:** [May write the returned report text to a user-specified output file.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter lists 1.0.9) <br>
+1.0.9 (source: server release metadata; artifact frontmatter states 1.0.11) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

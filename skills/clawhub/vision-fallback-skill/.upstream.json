@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vision-fallback-skill",
   "slug": "vision-fallback-skill",
   "ownerHandle": null,
-  "version": "0.1.1",
-  "updatedAt": 1782983217885,
-  "contentHash": "61051a9346f96f611fe6c9d8437493c6308f44de36acae135301339d07fa0b61",
-  "fetchedAt": "2026-07-26T18:21:08.905Z"
+  "version": "1.4.3",
+  "updatedAt": 1785210062780,
+  "contentHash": "217abdc9166b8b2821dec333ed280eab45301e2b01ae4ac406abc0a73f8617d6",
+  "fetchedAt": "2026-08-04T10:37:09.753Z"
 }

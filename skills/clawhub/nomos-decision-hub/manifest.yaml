@@ -1,0 +1,22 @@
+name: nomos-decision-hub
+version: 1.1.0
+display_name: NOMOS Intelligent Decision-Hub
+description: Deterministic (non-probabilistic) decision-making, causal counterfactual analysis, and compliance-grade decision audit trails (IMDA AI Verify 95/100). Research/onboarding bundle for the NOMOS Intelligent Decision-Hub v0.3.0.
+author: NOHN-AI
+license: Dual-track — individual non-commercial research free; enterprise use requires paid authorization (see SKILL.md).
+tags:
+  - decision-making
+  - deterministic
+  - causal-audit
+  - imda
+  - governance
+  - audit-trail
+  - root-cause
+  - robustness
+  - enterprise
+  - materica
+categories:
+  - decision
+  - audit
+  - governance
+  - enterprise

@@ -5,6 +5,7 @@ import { createRequire } from 'node:module';
 
 import { getTplPlugins } from './tpl-func.js';
 import { extractLiteral, optimizeRegex, reg2keywords } from './reg-prefilter.js';
+import { safeCodeBlock, safeEvidenceLine, safeMarkdownTableCell } from './safe-output.js';
 import AhoCorasick from './aho-corasick.js';
 
 const require = createRequire(import.meta.url);
@@ -437,17 +438,27 @@ export function buildTimeline(lines, options = {}) {
 
 export function renderTimelineMarkdown(timeline) {
   const lines = ['# SDK 日志时间线', ''];
-  if (timeline.sdk) lines.push(`- sdk: ${timeline.sdk}`);
-  if (timeline.logType) lines.push(`- logType: ${timeline.logType}`);
-  if (timeline.timeline) lines.push(`- timeline: ${timeline.timeline.name}`);
+  if (timeline.sdk) lines.push(`- sdk: ${safeMarkdownTableCell(timeline.sdk, { maxChars: 120 })}`);
+  if (timeline.logType) lines.push(`- logType: ${safeMarkdownTableCell(timeline.logType, { maxChars: 80 })}`);
+  if (timeline.timeline) lines.push(`- timeline: ${safeMarkdownTableCell(timeline.timeline.name, { maxChars: 120 })}`);
   if (lines.at(-1) !== '') lines.push('');
   lines.push('## 摘要', '', '```json', JSON.stringify(timeline.summary, null, 2), '```', '', '## 关键事件', '');
-  lines.push('| 时间 | 行号 | 级别 | 规则 | 说明 | 原文 |');
-  lines.push('|---|---:|---|---|---|---|');
+  lines.push('| 时间 | 行号 | 级别 | 规则 | 说明 |');
+  lines.push('|---|---:|---|---|---|');
   for (const e of timeline.events) {
-    const desc = String(e.desc || '').replace(/\|/g, '\\|').replace(/\s+/g, ' ').slice(0, 280);
-    const text = String(e.log || e.text || '').replace(/\|/g, '\\|').replace(/\s+/g, ' ').slice(0, 180);
-    lines.push(`| ${e.timeText || ''} | ${e.line || e.index || ''} | ${e.level || ''} | ${e.ruleDesc || e.ruleId || ''} | ${desc} | ${text} |`);
+    const desc = safeMarkdownTableCell(e.desc || '', { maxChars: 280 });
+    const rule = safeMarkdownTableCell(e.ruleDesc || e.ruleId || '', { maxChars: 160 });
+    const time = safeMarkdownTableCell(e.timeText || '', { maxChars: 80 });
+    const level = safeMarkdownTableCell(e.level || '', { maxChars: 40 });
+    lines.push(`| ${time} | L${e.line || e.index || ''} | ${level} | ${rule} | ${desc} |`);
   }
+
+  if (timeline.events.length > 0) {
+    const evidence = timeline.events
+      .map(e => safeEvidenceLine(e.line || e.index || '', e.log || e.text || '', { maxChars: 500 }))
+      .join('\n');
+    lines.push('', '## 证据片段（已脱敏/截断）', '', safeCodeBlock(evidence, 'text'));
+  }
+
   return `${lines.join('\n')}\n`;
 }

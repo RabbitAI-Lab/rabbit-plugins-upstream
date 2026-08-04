@@ -1,39 +1,41 @@
 ## Description: <br>
-AI game asset generation and game development powered by CellCog for character-consistent art, sprites, tilesets, music, UI, 3D models, game design documents, level design, and prototypes. <br>
+AI game asset generation and game development powered by CellCog, including character-consistent art, sprites, tilesets, music, UI, 3D models, game design documents, level design, and game prototypes. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
 ## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+[cellcog](https://clawhub.ai/user/cellcog) <br>
 
 ### License/Terms of Use: <br>
 MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and game creators use this skill to ask CellCog for cohesive game-development assets and design deliverables, including character art, sprites, tilesets, UI, 3D GLB models, music, game design documents, level design, and prototypes. <br>
+Developers and game teams use this skill to ask CellCog for cohesive game assets, design documents, level concepts, UI elements, 3D models, and prototype guidance from a shared game brief. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompts and project details may be sent to the CellCog external service. <br>
-Mitigation: Avoid sending secrets, unreleased proprietary material, regulated data, or client-owned assets unless sharing them with CellCog is permitted. <br>
+Risk: Game briefs, references, and generated-asset requests may be shared with the CellCog external service. <br>
+Mitigation: Confirm the user's CellCog account and data-use expectations before sending confidential or unreleased material. <br>
+Risk: The skill requires CELLCOG_API_KEY in the environment. <br>
+Mitigation: Store the API key using the agent environment's secret-management practices and avoid exposing it in prompts, logs, or generated files. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/nitishgargiitd/skills/game-asset-generation-cellcog) <br>
-- [CellCog](https://cellcog.ai) <br>
+- [ClawHub skill listing](https://clawhub.ai/cellcog/skills/game-asset-generation-cellcog) <br>
+- [CellCog homepage](https://cellcog.ai) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline Python and shell command examples] <br>
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions] <br>
+**Output Format:** [Markdown guidance with Python and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; prompts and project details may be sent to the CellCog external service.] <br>
+**Other Properties Related to Output:** [May guide an agent to use CellCog with CELLCOG_API_KEY for external game-asset and game-development generation workflows.] <br>
 
 ## Skill Version(s): <br>
-1.0.14 (source: server release metadata) <br>
+1.0.16 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

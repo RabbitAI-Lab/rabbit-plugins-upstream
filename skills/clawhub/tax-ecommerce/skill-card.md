@@ -1,5 +1,5 @@
 ## Description: <br>
-国内电商平台、直播带货、MCN、网红主播、平台报送等财税政策、收入确认、虚开发票、私户收款风险、真实案例、报告模板与实操指引专题助手。 <br>
+国内电商平台、直播带货、MCN、主播和平台报送场景的财税合规专题助手，提供政策问答、风险自查、案例分析、报告模板和实操指引。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and tax/compliance practitioners use this skill to review Chinese domestic e-commerce and livestreaming tax scenarios, identify common compliance risks, and draft self-check reports or response guidance. <br>
+Business users, tax professionals, platform merchants, livestream teams, and agent developers use this skill to ask ecommerce and livestream tax-compliance questions, run lightweight self-checks, identify invoice and private-account collection risks, and draft practical remediation guidance. <br>
 
 ### Deployment Geography for Use: <br>
-China <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Tax questions, business scenarios, and self-check metrics may be sent to external services. <br>
-Mitigation: Avoid entering confidential taxpayer identities or sensitive financial details unless external processing is acceptable for the use case. <br>
-Risk: The skill may persist credentials or logs and can modify client integration settings when optional setup flows are enabled. <br>
-Mitigation: Review or disable local logs, and use matrix installer or MCP auto-setup only when persistent client configuration changes are intended. <br>
-Risk: Generated tax analysis may be incomplete or unsuitable for a specific filing, audit, or legal dispute. <br>
-Mitigation: Treat outputs as self-check guidance and review important conclusions with qualified tax or legal professionals before acting. <br>
+Risk: The skill can send tax questions and self-check data to a remote cloud service. <br>
+Mitigation: Review the configured service endpoint before use and avoid entering taxpayer IDs, account numbers, invoice details, or confidential business facts unless that data handling is approved. <br>
+Risk: The skill can store local credentials, cache files, and logs under ~/.tax-policy-client. <br>
+Mitigation: Inspect and protect the local data directory, remove stale credentials or logs when no longer needed, and apply local access controls appropriate for tax-related data. <br>
+Risk: The skill can modify local MCP or client configuration when auto-setup is enabled. <br>
+Mitigation: Run setup in dry-run mode first, review any proposed Claude/Cursor/Cline configuration entries and backups, and only enable write mode after approving the change. <br>
+Risk: Tax calculations and policy guidance may be incomplete or time-sensitive. <br>
+Mitigation: Treat outputs as advisory, confirm current rules with official tax authority sources or qualified professionals, and do not use the skill as a substitute for filing, audit, or legal representation. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-ecommerce) <br>
-- [E-commerce compliance self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_ecommerce.html) <br>
+- [Publisher profile](https://clawhub.ai/user/zxj2devs) <br>
+- [Ecommerce compliance self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_ecommerce.html) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
+- [National Taxation Administration website](https://www.chinatax.gov.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown text with checklists, examples, links, and compliance report templates] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, Guidance] <br>
+**Output Format:** [Markdown text, JSON-like tool responses, Python code, shell commands, configuration snippets, and local HTML workflow output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Cloud-backed tax assistant; users should review generated guidance and avoid submitting sensitive taxpayer identities or confidential financial details unless they accept external processing.] <br>
+**Other Properties Related to Output:** [May produce advisory tax-compliance answers, self-check findings, calculation results, remediation checklists, report drafts, and local setup guidance.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: frontmatter and server release evidence) <br>
+3.15.10 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

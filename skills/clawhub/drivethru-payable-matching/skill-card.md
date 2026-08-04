@@ -1,5 +1,5 @@
 ## Description: <br>
-Payable matching for BaconCo that reconciles vendor documents and Sports Inc invoices against Odoo purchase orders, corrects supported PO line price variances, files reviewed documents, and creates draft vendor bills for human posting. <br>
+Payable matching for BaconCo that reconciles vendor documents and Sports Inc invoices against Odoo purchase orders, corrects supported price variances, creates or posts vendor bills only when totals match, and routes unresolved cases for human review. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Finance operations agents use this skill to review Odoo Purchasing documents, compare vendor prices against confirmed purchase orders, correct unambiguous price variances, and route unresolved issues for human review. The Sports Inc flow extends the same matching process to API-sourced invoices and creates draft bills that a human must post. <br>
+Employees and authorized finance operators use this skill to reconcile live Odoo purchasing and payables records for BaconCo. It supports invoice-to-PO matching, PO price corrections, internal audit notes, document filing, Sports Inc payables creation, and guarded posting when totals reconcile. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can make live accounting changes, including PO line price corrections and draft vendor bill creation. <br>
-Mitigation: Install only for trusted AP automation agents, use a least-privilege Odoo token, require clear operator approval for batch corrections and draft bills, and keep audit logging enabled. <br>
-Risk: Runtime dependency bootstrapping may install Python packages when the host has not preinstalled them. <br>
-Mitigation: Prefer host-managed or pinned dependencies, and review the runtime environment before enabling the skill. <br>
-Risk: Sports Inc delegated credential sharing can expose an API key to an unintended agent connection if configured incorrectly. <br>
-Mitigation: Enable Sports Inc credential sharing only on the intended delegated connection and test the flow in a sandbox or small folder first. <br>
+Risk: The skill can modify live Odoo purchasing and payables records, including PO prices, document filing, chatter notes, draft bills, and posted vendor bills. <br>
+Mitigation: Install it only for agents authorized to perform BaconCo/Odoo payables work, confirm the intended Odoo environment, and use draft or dry-run mode for first runs or uncertain posting flows. <br>
+Risk: Credential exposure could grant access to the Odoo MCP endpoint or related payables integrations. <br>
+Mitigation: Protect ODOO_MCP_TOKEN and SPORTSINC_API_KEY as secrets, avoid pasting them into chat, and restrict runtime access to authorized operators. <br>
+Risk: Rendered invoice image directories may contain sensitive payable documents. <br>
+Mitigation: Periodically clean rendered image outputs and restrict filesystem access to directories used for document rendering. <br>
+Risk: Incorrect matching or premature posting could create inaccurate financial records. <br>
+Mitigation: Correct only vendor-supported price variances, route ambiguous quantity, line, vendor, or total mismatches to human review, and post bills only when configured total checks pass. <br>
 
 
 ## Reference(s): <br>
-- [Matching Procedure](references/matching_procedure.md) <br>
-- [Sports Inc Payables](references/sportsinc_payables.md) <br>
+- [ClawHub skill page](https://clawhub.ai/zmtucker/skills/drivethru-payable-matching) <br>
 - [Odoo](https://www.odoo.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/zmtucker/skills/drivethru-payable-matching) <br>
+- [Payable matching procedure](references/matching_procedure.md) <br>
+- [Sports Inc payables procedure](references/sportsinc_payables.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON command payloads and shell command examples] <br>
+**Output Type(s):** [Analysis, Shell commands, API Calls, Code, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with JSON tool payloads and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operational instructions and tool-call payloads for Odoo payable matching; does not post vendor bills automatically.] <br>
+**Other Properties Related to Output:** [May produce live Odoo updates, internal log notes, document filing actions, draft vendor bills, and posted vendor bills when configured safeguards pass.] <br>
 
 ## Skill Version(s): <br>
-0.6.0 (source: frontmatter and server release evidence) <br>
+0.9.0 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

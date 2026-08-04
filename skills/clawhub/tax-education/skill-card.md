@@ -1,5 +1,5 @@
 ## Description: <br>
-学历教育免税、非学历教育简易计税、托育保育免税、非营利组织免税资格、培训机构预收学费与课时费收入确认、教师个税与社保、发票合规、私户收款隐匿收入与骗取留抵退税风险、真实稽查案例、合规报告与实操指引专题助手。 <br>
+Provides education-sector tax compliance guidance for Chinese education and training providers, including VAT exemptions, simplified taxation, nonprofit qualification, tuition revenue recognition, teacher tax and social insurance, invoicing, risk self-checks, cases, and compliance reports. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External education and training operators, finance teams, and advisors use this skill to self-check Chinese tax compliance questions around VAT exemptions, non-degree training tax treatment, nonprofit school qualification, tuition revenue recognition, invoices, teacher tax, social insurance, and risk response. It provides guidance, risk checklists, self-check workflows, and report-oriented tax compliance suggestions; it does not replace licensed tax, audit, or legal advice. <br>
+External operators, finance teams, tax staff, and advisors for education and training organizations use this skill to ask tax compliance questions, perform scenario self-checks, identify filing and invoicing risks, and draft compliance action reports. <br>
 
 ### Deployment Geography for Use: <br>
-China <br>
+Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill contacts mcp.aitaxs.top and related SkillHub or ClawHub services for policy tools, registration, downloads, and web self-check workflows. <br>
-Mitigation: Review the remote-service and retention posture before use, and avoid submitting confidential tax, payroll, student, or business data unless that posture is acceptable. <br>
-Risk: The client can store local API credentials under the user profile. <br>
-Mitigation: Treat the local client configuration as sensitive, restrict file access, and rotate or remove credentials when the skill is no longer trusted. <br>
-Risk: Setup and installer paths can change local MCP/client configuration and install additional tax skills. <br>
-Mitigation: Keep TAX_ENABLE_AUTOSETUP disabled and avoid setup or matrix installer scripts unless you intentionally want those local changes. <br>
-Risk: Tax calculations, exemption checks, and risk scores are advisory and may be incomplete for a specific taxpayer or locality. <br>
-Mitigation: Use outputs as a preliminary self-check and confirm material decisions with official tax sources or qualified tax, audit, or legal professionals. <br>
+Risk: Tax questions and scenarios may be sent to the provider's cloud MCP service. <br>
+Mitigation: Avoid entering taxpayer identifiers, bank details, confidential business records, or other sensitive data unless the provider's data handling terms have been reviewed and accepted. <br>
+Risk: The skill can create a local API key, device ID, and raw logs under ~/.tax-policy-client. <br>
+Mitigation: Restrict local file access, periodically review or remove stored credentials and logs, and rotate credentials if the workstation is shared or compromised. <br>
+Risk: Optional setup behavior can modify MCP client configuration. <br>
+Mitigation: Leave TAX_ENABLE_AUTOSETUP disabled and do not run config/init_agent.py directly unless configuration changes are intended; review any generated backups and client config entries. <br>
+Risk: Tax guidance can be time-sensitive and may not substitute for professional advice. <br>
+Mitigation: Confirm material conclusions against official tax authority sources or qualified tax professionals before filing, paying, claiming exemptions, or responding to audits. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zxj2devs/skills/tax-education) <br>
+- [ClawHub tax-education skill page](https://clawhub.ai/zxj2devs/skills/tax-education) <br>
 - [Education tax compliance self-check workflow](https://mcp.aitaxs.top/web/topic_workflow_education.html) <br>
-- [Tax policy knowledge matrix](https://skillhub.cn/skills/tax-policy-knowledge) <br>
-- [Skill source manifest](artifact/SKILL.md) <br>
-- [Matrix configuration](artifact/matrix.json) <br>
+- [Tax compliance self-check portal](https://mcp.aitaxs.top/web/index_topic_pages.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration, shell commands] <br>
-**Output Format:** [Markdown guidance with optional links, checklists, report text, and configuration or installation commands] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown responses with structured checklists, links, calculations, and report-style guidance.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call remote MCP tools, use a local offline fallback for limited checks, and produce compliance self-check prompts or report-ready text.] <br>
+**Other Properties Related to Output:** [Outputs may rely on remote MCP tools for current policy answers and should be reviewed against official tax sources before filing or making legal decisions.] <br>
 
 ## Skill Version(s): <br>
-3.14.38 (source: frontmatter and server release evidence) <br>
+3.15.10 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

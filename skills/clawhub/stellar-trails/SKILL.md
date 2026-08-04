@@ -16,7 +16,7 @@ metadata:
 
 ## Metadata
 
-- **version**: 9.9.1
+- **version**: 9.10.4
 
 ---
 
@@ -159,7 +159,7 @@ Step 3 runs `clawhub inspect` — output is ground truth from an external binary
 # In the z.ai sandbox this directory usually does not exist (skill is installed
 # via clawhub, not git clone), so SSV is skipped gracefully. Running bare
 # `git fetch` from /home/z/my-project/ would operate on the sandbox workspace
-# repo — explicitly forbidden by knowledge/platform/zai-sandbox.md.
+# repo — explicitly forbidden by knowledge/zai-sandbox.md.
 if [ -d "$HOME/.stellar-trails-repo/.git" ]; then
   git -C "$HOME/.stellar-trails-repo" fetch origin --quiet 2>/dev/null
   BRANCH=$(git -C "$HOME/.stellar-trails-repo" branch --show-current 2>/dev/null || echo main)
@@ -176,6 +176,26 @@ grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-tra
 SKILL_VERSION_LINE=$(grep -n '^- \*\*version\*\*:' /home/z/my-project/skills/stellar-trails/SKILL.md | head -1 | cut -d: -f1)
 echo "  E7 token: $(cat /tmp/st-active)"
 echo "  E10 line proof: SKILL.md line ${SKILL_VERSION_LINE}: $(sed -n "${SKILL_VERSION_LINE}p" /home/z/my-project/skills/stellar-trails/SKILL.md)"
+# Auto Git Identity Setup (NEW in v9.10.1) — if PAT exists, auto-configure git identity
+# from GitHub API. Fixes: Z User author, credentials gagal, UUID local.
+# Runs automatically every activation — no manual step needed.
+if [ -f /home/z/my-project/upload/PAT ]; then
+  _GH_TOKEN=$(tr -d '[:space:]' < /home/z/my-project/upload/PAT)
+  _OWNER_JSON=$(curl -sS -m 10 -H "Authorization: Bearer $_GH_TOKEN" https://api.github.com/user 2>/dev/null)
+  _OWNER_LOGIN=$(echo "$_OWNER_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin).get('login',''))" 2>/dev/null)
+  if [ -n "$_OWNER_LOGIN" ]; then
+    _OWNER_NAME=$(echo "$_OWNER_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('name') or d.get('login',''))" 2>/dev/null)
+    _OWNER_EMAIL="${_OWNER_LOGIN}@users.noreply.github.com"
+    git config --global user.email "$_OWNER_EMAIL" 2>/dev/null
+    git config --global user.name "$_OWNER_NAME" 2>/dev/null
+    git config --global credential.helper store 2>/dev/null
+    echo "https://${_OWNER_LOGIN}:${_GH_TOKEN}@github.com" > ~/.git-credentials 2>/dev/null
+    chmod 600 ~/.git-credentials 2>/dev/null
+    export GIT_AUTHOR_NAME="$_OWNER_NAME" GIT_AUTHOR_EMAIL="$_OWNER_EMAIL"
+    export GIT_COMMITTER_NAME="$_OWNER_NAME" GIT_COMMITTER_EMAIL="$_OWNER_EMAIL"
+    echo "  Git identity: $_OWNER_NAME <$_OWNER_EMAIL> (auto-configured from PAT)"
+  fi
+fi
 ```
 
 **Step 2 — Start popup server + verify mascot**: **E7 gate check at top of bash block** — verifies Step 1 ran by checking hash token.
@@ -198,7 +218,7 @@ MASCOT=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/chibi.svg 
 if [ "$HTTP" = "200" ]; then echo "✓ Step 2: popup server running on :3000 (HTTP $HTTP, mascot $MASCOT)"; else echo "✗ Step 2 FAILED: popup server not responding (HTTP $HTTP)"; fi
 ```
 
-**z.ai sandbox note**: The popup server runs on `localhost:3000` inside the sandbox, but z.ai does NOT expose raw ports to the user's browser. The popup is only visible through the z.ai preview URL pattern: `https://preview-<bot-id>.space-z.ai/`. If the sandbox exposes a preview panel, the popup appears there; otherwise the popup runs but is invisible to the user (activation still succeeds — the popup is decorative, not functional). See `knowledge/platform/zai-sandbox.md` for details.
+**z.ai sandbox note**: The popup server runs on `localhost:3000` inside the sandbox, but z.ai does NOT expose raw ports to the user's browser. The popup is only visible through the z.ai preview URL pattern: `https://preview-<bot-id>.space-z.ai/`. If the sandbox exposes a preview panel, the popup appears there; otherwise the popup runs but is invisible to the user (activation still succeeds — the popup is decorative, not functional). See `knowledge/zai-sandbox.md` for details.
 
 **Step 3 — Auto-update via ClawHub**: **E7 gate check + E11 oracle** — clawhub output written to `/tmp/st-clawhub-oracle.json` for Step 4 cross-verification.
 
@@ -350,7 +370,7 @@ This version adds three deterministic enforcement layers that shift compliance f
 
 Every task passes through all six phases (IDLE → SPECIFY → PLAN → IMPLEMENT → VERIFY → DELIVER). No phase is skipped, even for Minimal tier.
 
-**Mechanism**: Each phase entry requires a phase-marker print of the form `📍 ENTER <PHASE>` before any other phase work. Each phase exit requires `📍 EXIT <PHASE> → <NEXT>`. The DELIVER report's `Phase Trace` field lists every phase-marker pair. Missing markers = compliance bug.
+**Mechanism**: Each phase entry requires a phase-marker print of the form `☄️ ENTER <PHASE>` before any other phase work. Each phase exit requires `☄️ EXIT <PHASE> → <NEXT>`. The DELIVER report's `Phase Trace` field lists every phase-marker pair. Missing markers = compliance bug.
 
 **Why**: Phase skipping is the #1 silent failure mode. The marker print makes skipping visible in the transcript, not invisible in the LLM's hidden reasoning.
 
@@ -673,7 +693,7 @@ python3 << 'PYEOF'
 import re, subprocess, tempfile, os
 with open('skill/stellar-trails/SKILL.md') as f:
     content = f.read()
-blocks = re.findall(r'```bash\n(.*?)```', content, re.DOTALL)
+blocks = re.findall(r'\x60\x60\x60bash\n(.*?)\x60\x60\x60', content, re.DOTALL)
 fail = 0
 for i, block in enumerate(blocks, 1):
     with tempfile.NamedTemporaryFile(mode='w', suffix='.sh', delete=False) as f:
@@ -782,7 +802,8 @@ fi
 
 #### Check 8: Markdown fence count is even (no orphan code blocks)
 ```bash
-FENCES=$(grep -c '```' skill/stellar-trails/SKILL.md)
+_F=$(printf '\x60\x60\x60')
+FENCES=$(grep -c "$_F" skill/stellar-trails/SKILL.md)
 if [ $((FENCES % 2)) -eq 0 ]; then
   echo "✓ Check 8: markdown fences even ($FENCES)"
 else

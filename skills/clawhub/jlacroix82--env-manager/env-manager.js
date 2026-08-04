@@ -37,12 +37,14 @@ const path = require('path');
 // the command and runs it (or not) using its own shell tool.
 
 const DEFAULT_ACCEPTED_BINARIES = [
-  'python3', 'node', 'npm', 'docker', 'go',
-  'rustc', 'pip3', 'lsof', 'which', 'mkdir',
-  'mvn', 'gradle', 'cargo', 'ruby', 'pip',
-  'make', 'gcc', 'g++', 'clang', 'cmake',
-  'java', 'javac', 'dotnet', 'go1',
-  'perl', 'php', 'lua', 'tclsh',
+  // Declared scope: Python / Node / Docker / Go / Rust scaffolding only.
+  'python3', 'pip3',          // Python
+  'node', 'npm',              // Node
+  'docker',                   // Docker
+  'go',                       // Go
+  'rustc', 'cargo',           // Rust
+  // Read-only inspection helpers (no execution of project code).
+  'lsof', 'which', 'mkdir',
 ];
 
 // ─── Workspace helpers ─────────────────────────────────────────────────────

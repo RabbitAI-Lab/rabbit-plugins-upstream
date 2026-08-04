@@ -11,16 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and skill authors use this guidance to sanitize untrusted external content before an agent processes it, reducing prompt-injection and unsafe code-execution risk. <br>
+Developers and agent builders use this skill to decide when external content needs sanitization and to apply checklist-based protections before using untrusted web, GitHub, or user-provided content. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The artifact describes automatic sanitization, but the referenced hook is not included in this release artifact. <br>
-Mitigation: Do not assume automatic sanitization is active; install and verify the full plugin or hook separately, or apply the checklist manually. <br>
-Risk: Guidance-only content can reduce mistakes but cannot enforce safe handling of untrusted input by itself. <br>
-Mitigation: Review workflows that consume external content and confirm they follow the sanitization checklist before deployment. <br>
+Risk: Users may assume automated sanitization is active when only this guideline skill is installed. <br>
+Mitigation: Confirm the separate plugin hook is installed for automated enforcement; otherwise apply the sanitization checklist manually. <br>
+Risk: Workflows that fetch public web or GitHub content can ingest prompt-injection text, hidden formatting, or unsafe code-execution patterns. <br>
+Mitigation: Review those workflows and apply truncation, boundary markers, instruction stripping, hidden-text stripping, and code-execution prevention before using external content. <br>
 
 
 ## Reference(s): <br>
@@ -30,12 +30,12 @@ Mitigation: Review workflows that consume external content and confirm they foll
 
 ## Skill Output: <br>
 **Output Type(s):** [Guidance, Markdown] <br>
-**Output Format:** [Markdown guidance and checklist text] <br>
+**Output Format:** [Markdown guidance with checklist steps] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; automatic sanitization is not active unless the separate hook or full plugin is installed and verified.] <br>
+**Other Properties Related to Output:** [No executable code is included in the artifact; automated-hook behavior requires a separate plugin hook installation.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: release evidence) <br>
+1.9.17 (source: ClawHub release metadata; artifact frontmatter reports 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
