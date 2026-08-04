@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/assistant-ui/skills/tools",
+  "repo": "assistant-ui/skills",
+  "skillId": "tools",
+  "branch": "main",
+  "pushedAt": "2026-08-02T08:22:04Z",
+  "contentHash": "80494dcda99ffc40b1bc195b7a2c91b64173bb08a1e3563f9fd2d5e1470c9a0a",
+  "fetchedAt": "2026-08-04T10:03:55.083Z"
+}

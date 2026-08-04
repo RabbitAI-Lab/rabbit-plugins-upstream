@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/softaworks/agent-toolkit/jira",
+  "repo": "softaworks/agent-toolkit",
+  "skillId": "jira",
+  "branch": "main",
+  "pushedAt": "2026-03-05T16:46:24Z",
+  "contentHash": "ba6b75f35f6f89071081df79cd372cddef700cbe1a41a8587e499717c5b29099",
+  "fetchedAt": "2026-08-04T10:03:55.315Z"
+}

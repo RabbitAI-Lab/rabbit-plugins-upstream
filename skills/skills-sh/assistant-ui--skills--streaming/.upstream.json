@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/assistant-ui/skills/streaming",
+  "repo": "assistant-ui/skills",
+  "skillId": "streaming",
+  "branch": "main",
+  "pushedAt": "2026-08-02T08:22:04Z",
+  "contentHash": "07d647af2308e1099bec5d88b7dcfc40ad6dbed8308ac3e377ba32cd8239469c",
+  "fetchedAt": "2026-08-04T10:03:55.082Z"
+}

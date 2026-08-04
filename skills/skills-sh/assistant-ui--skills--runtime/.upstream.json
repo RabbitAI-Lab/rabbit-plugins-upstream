@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/assistant-ui/skills/runtime",
+  "repo": "assistant-ui/skills",
+  "skillId": "runtime",
+  "branch": "main",
+  "pushedAt": "2026-08-02T08:22:04Z",
+  "contentHash": "3c34094d0b1bf442a8af67a607c60d10a2c5b085637e39f89f3296042a1b7f83",
+  "fetchedAt": "2026-08-04T10:03:55.086Z"
+}

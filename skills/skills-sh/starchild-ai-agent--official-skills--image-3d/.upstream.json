@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/image-3d",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "image-3d",
+  "branch": "main",
+  "pushedAt": "2026-08-03T10:22:28Z",
+  "contentHash": "bd068d6c6ff91cdbbc1be2317303487110991812ed2ab164c6b4f12de589bc96",
+  "fetchedAt": "2026-08-04T10:02:20.758Z"
+}

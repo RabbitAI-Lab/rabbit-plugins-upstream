@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/workflow-from-chats",
+  "repo": "cursor/plugins",
+  "skillId": "workflow-from-chats",
+  "branch": "main",
+  "pushedAt": "2026-08-03T17:49:44Z",
+  "contentHash": "fb9c92d1037bd1cb6267a303b4d93d13112b0c6595add146330d149b8a539571",
+  "fetchedAt": "2026-08-04T10:02:48.167Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/assistant-ui/skills/update",
+  "repo": "assistant-ui/skills",
+  "skillId": "update",
+  "branch": "main",
+  "pushedAt": "2026-08-02T08:22:04Z",
+  "contentHash": "72d7a322fdbbeed805bc761ecee66a9d5ace72fab9e83bd62c033f2d88b68a40",
+  "fetchedAt": "2026-08-04T10:03:55.090Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/cursor-sdk",
+  "repo": "cursor/plugins",
+  "skillId": "cursor-sdk",
+  "branch": "main",
+  "pushedAt": "2026-08-03T17:49:44Z",
+  "contentHash": "5eb63949c1e13bd07aab94eedfcd5a5f330b45d8eea7324d37adbef82bf6d469",
+  "fetchedAt": "2026-08-04T10:02:48.299Z"
+}

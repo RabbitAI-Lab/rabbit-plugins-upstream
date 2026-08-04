@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-network-monitoring",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-network-monitoring",
+  "branch": "main",
+  "pushedAt": "2026-08-04T05:21:19Z",
+  "contentHash": "ead9086f3940611d6bc164cca7a6223da1defd0289762af73a53ed39ab680275",
+  "fetchedAt": "2026-08-04T10:03:47.168Z"
+}
