@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/mblode/agent-skills/ui-audit",
+  "repo": "mblode/agent-skills",
+  "skillId": "ui-audit",
+  "branch": "main",
+  "pushedAt": "2026-08-05T01:56:38Z",
+  "contentHash": "7bd06a2120eec305fb9eb1c67545c81ee51f95c69fad03191209ec36a2773eda",
+  "fetchedAt": "2026-08-05T10:01:17.226Z"
+}

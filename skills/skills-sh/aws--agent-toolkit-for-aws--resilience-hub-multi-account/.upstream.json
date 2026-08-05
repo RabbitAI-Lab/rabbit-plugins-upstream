@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/resilience-hub-multi-account",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "resilience-hub-multi-account",
+  "branch": "main",
+  "pushedAt": "2026-08-04T13:12:03Z",
+  "contentHash": "a79372f58232a90c567f78792739508160c6bd3b429ab1ede14503afc70f5e47",
+  "fetchedAt": "2026-08-05T10:02:00.313Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/podcast-studio",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "podcast-studio",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "1f0595b65dd80567e7eb6d4a00b42455d076e46ae3a8579ef7672ef40e840f68",
+  "fetchedAt": "2026-08-05T10:01:51.593Z"
+}

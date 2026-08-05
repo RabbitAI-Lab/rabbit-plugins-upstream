@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/session-report",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "session-report",
+  "branch": "main",
+  "pushedAt": "2026-08-05T08:10:49Z",
+  "contentHash": "1c73f709756d9008e2331a10ca3a9171b618033779dd59223b2f34c78304912b",
+  "fetchedAt": "2026-08-05T10:00:41.970Z"
+}

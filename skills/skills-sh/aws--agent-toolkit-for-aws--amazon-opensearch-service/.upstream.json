@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/amazon-opensearch-service",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "amazon-opensearch-service",
+  "branch": "main",
+  "pushedAt": "2026-08-04T13:12:03Z",
+  "contentHash": "3e65815a608cab2146d2be49bdf59f325389a163ab5a5363774aa09712c69a86",
+  "fetchedAt": "2026-08-05T10:02:00.093Z"
+}

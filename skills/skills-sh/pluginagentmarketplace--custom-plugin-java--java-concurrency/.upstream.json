@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/pluginagentmarketplace/custom-plugin-java/java-concurrency",
+  "repo": "pluginagentmarketplace/custom-plugin-java",
+  "skillId": "java-concurrency",
+  "branch": "main",
+  "pushedAt": "2026-01-05T11:55:40Z",
+  "contentHash": "ef9088a51e83bd219f60f857ba1ad561cb3805ea2473c3cc1733c511ea5c210c",
+  "fetchedAt": "2026-08-05T10:00:44.680Z"
+}

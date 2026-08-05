@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/customer-review-aggregator",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "customer-review-aggregator",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "0b1771298f722fea2ebbb8f58f2ea130ae197b80f68751a741474608685a8ad6",
+  "fetchedAt": "2026-08-05T10:01:51.584Z"
+}

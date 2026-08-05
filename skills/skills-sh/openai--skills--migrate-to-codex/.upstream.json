@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/migrate-to-codex",
+  "repo": "openai/skills",
+  "skillId": "migrate-to-codex",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "03642ca8f58f283cd1e8601d5885c5e7f82f4bda51bb69959cf7925c5e3f9895",
+  "fetchedAt": "2026-08-05T10:00:48.407Z"
+}

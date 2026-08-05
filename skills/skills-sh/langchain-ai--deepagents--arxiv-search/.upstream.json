@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/langchain-ai/deepagents/arxiv-search",
+  "repo": "langchain-ai/deepagents",
+  "skillId": "arxiv-search",
+  "branch": "main",
+  "pushedAt": "2026-08-05T09:32:14Z",
+  "contentHash": "1760bf902857c2eacc35bd079649b4e46e014414f113609237e0438c82c45986",
+  "fetchedAt": "2026-08-05T10:02:16.410Z"
+}

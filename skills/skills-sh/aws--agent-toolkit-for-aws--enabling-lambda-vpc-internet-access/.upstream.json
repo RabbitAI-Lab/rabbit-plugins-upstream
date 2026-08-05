@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/enabling-lambda-vpc-internet-access",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "enabling-lambda-vpc-internet-access",
+  "branch": "main",
+  "pushedAt": "2026-08-04T13:12:03Z",
+  "contentHash": "63d0f869bbe2808c70f812923a7484b5c88dccf6690ff9e1f978c19b1ac71070",
+  "fetchedAt": "2026-08-05T10:02:00.046Z"
+}

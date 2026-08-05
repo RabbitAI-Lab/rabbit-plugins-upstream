@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/amazon-bedrock",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "amazon-bedrock",
+  "branch": "main",
+  "pushedAt": "2026-08-04T13:12:03Z",
+  "contentHash": "b5f89b9fa2378016e8b84cdc63f935a0d5648b4455b585b1992f2a049cf23c25",
+  "fetchedAt": "2026-08-05T10:01:59.935Z"
+}

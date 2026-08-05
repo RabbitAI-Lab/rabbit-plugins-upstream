@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/recommendation-engine",
+  "repo": "secondsky/claude-skills",
+  "skillId": "recommendation-engine",
+  "branch": "main",
+  "pushedAt": "2026-08-04T23:06:36Z",
+  "contentHash": "7c1fc242309d202829f21c33183fdaef5ed2da15fcd2e7650c6385693b74fafa",
+  "fetchedAt": "2026-08-05T10:01:33.542Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/chromedevtools/chrome-devtools-mcp/memory-leak-debugging",
+  "repo": "chromedevtools/chrome-devtools-mcp",
+  "skillId": "memory-leak-debugging",
+  "branch": "main",
+  "pushedAt": "2026-08-05T10:01:01Z",
+  "contentHash": "d2ea5f47a8da0be496485f3e60b2ad93c6b25e50cd9484d698e5a1799074687f",
+  "fetchedAt": "2026-08-05T10:01:48.980Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-performance",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-performance",
+  "branch": "trunk",
+  "pushedAt": "2026-08-03T05:26:29Z",
+  "contentHash": "96c8fd2c810ed8f0704eb5f5f6a8a7171e5a8f48dd244c8096065cdaa621eae3",
+  "fetchedAt": "2026-08-05T10:02:02.923Z"
+}
