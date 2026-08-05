@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-rest-api",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-rest-api",
+  "branch": "trunk",
+  "pushedAt": "2026-08-03T05:26:29Z",
+  "contentHash": "ab5e320af7ab504e1bd4270a0cb60fdbe19373f936dfb6f9f20fc46690dbe53d",
+  "fetchedAt": "2026-08-05T10:02:02.921Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/code-review",
+  "repo": "secondsky/claude-skills",
+  "skillId": "code-review",
+  "branch": "main",
+  "pushedAt": "2026-08-04T23:06:36Z",
+  "contentHash": "a3657702bd324e27b227104ce9fde7e5a757b71e5803f85f28aa1c03eceb9259",
+  "fetchedAt": "2026-08-05T10:01:33.284Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/josiahsiegel/claude-plugin-marketplace/docker-security-guide",
+  "repo": "josiahsiegel/claude-plugin-marketplace",
+  "skillId": "docker-security-guide",
+  "branch": "main",
+  "pushedAt": "2026-06-18T20:57:10Z",
+  "contentHash": "c7ef5d1c826b1006bdd43379638441e1d0531929416cd3c81b4f1750332f5fa6",
+  "fetchedAt": "2026-08-05T10:01:17.944Z"
+}

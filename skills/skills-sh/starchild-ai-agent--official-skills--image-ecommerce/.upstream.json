@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/image-ecommerce",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "image-ecommerce",
+  "branch": "main",
+  "pushedAt": "2026-08-03T10:22:28Z",
+  "contentHash": "3ef15467fde7d453c239f0220c1302139bd3bbb9d975c2bed94fb60fbd61990d",
+  "fetchedAt": "2026-08-05T10:00:51.367Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/create-plugin-scaffold",
+  "repo": "cursor/plugins",
+  "skillId": "create-plugin-scaffold",
+  "branch": "main",
+  "pushedAt": "2026-08-05T00:24:23Z",
+  "contentHash": "220e2b4476bfc305a3c28b4ea43bc591d397f1cbea5dc0a19ab3836312a5858c",
+  "fetchedAt": "2026-08-05T10:01:08.707Z"
+}

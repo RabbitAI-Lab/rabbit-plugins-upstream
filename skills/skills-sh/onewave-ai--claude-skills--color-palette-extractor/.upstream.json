@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/color-palette-extractor",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "color-palette-extractor",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "19546da7d27916b8b0f63e2a5b9f01861b535f3a0f064618358b5f77d71deafb",
+  "fetchedAt": "2026-08-05T10:01:51.514Z"
+}

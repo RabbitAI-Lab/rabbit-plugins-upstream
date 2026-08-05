@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/github-pr-workflow",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "github-pr-workflow",
+  "branch": "main",
+  "pushedAt": "2026-08-05T09:32:24Z",
+  "contentHash": "f8686d95c593bff0b860007e1b2babba0d1ddaf5bcc3a5f572233358347ebab4",
+  "fetchedAt": "2026-08-05T10:02:04.578Z"
+}
