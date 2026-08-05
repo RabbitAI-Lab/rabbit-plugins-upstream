@@ -1,41 +1,44 @@
 ## Description: <br>
-Multi-stage deep intelligence pipeline (Search -> Filter -> Fetch -> Synthesize) that turns a query into a structured research report with full source citations. <br>
+Multi-stage deep intelligence pipeline (Search -> Filter -> Fetch -> Synthesize). Turns a query into a structured research report with full source citations. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
 ## Publisher: <br>
-[JonathanJing](https://clawhub.ai/user/JonathanJing) <br>
+[jonathanjing](https://clawhub.ai/user/jonathanjing) <br>
 
 ### License/Terms of Use: <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Researchers, analysts, and developers use this skill to turn a web research question into a filtered, fetched, and synthesized Markdown report or comparison with source citations. <br>
+Developers, analysts, and external users use Deep Scout to turn a research question into a filtered, fetched, and synthesized Markdown report with citations. It is intended for web intelligence workflows where source collection, relevance filtering, and report synthesis need to be coordinated by an agent. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Research queries and fetched web content may be sent through search, fetch, crawl, browser, and LLM tools. <br>
-Mitigation: Avoid secrets, private account pages, regulated data, and confidential internal URLs; use --no-browser or --no-firecrawl when a narrower research path is needed. <br>
-Risk: Generated reports can contain stale, incomplete, or misinterpreted web evidence. <br>
-Mitigation: Review cited sources and check important claims before relying on the report. <br>
-Risk: Optional file output can create local reports that persist beyond the session. <br>
-Mitigation: Choose output paths deliberately and keep generated reports within the intended workspace. <br>
+Risk: Research queries, target URLs, and fetched page text may be sent through search/fetch providers, optional Firecrawl/browser tooling, and LLM synthesis. <br>
+Mitigation: Use the skill only for topics approved for those providers, avoid secrets and regulated data, and disable Firecrawl or browser fallback when those channels are not acceptable. <br>
+Risk: Reports and resumable state may retain sensitive research content locally. <br>
+Mitigation: Choose a safe output path and clean up ~/.openclaw/state/deep-scout when reports or state may contain sensitive information. <br>
+Risk: Web-derived reports can be incomplete, stale, or affected by source quality. <br>
+Mitigation: Review cited sources, check the Conflicts & Gaps section, and verify high-impact claims before using the report for decisions. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/JonathanJing/deep-scout) <br>
+- [ClawHub skill page](https://clawhub.ai/jonathanjing/skills/deep-scout) <br>
+- [ClawHub metadata homepage](https://clawhub.ai/jonathanjing/deep-scout) <br>
+- [Example research report](artifact/examples/openclaw-acquisition.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown research reports or comparison tables with source citations; optional local file output.] <br>
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
+**Output Format:** [Markdown research reports or comparisons, with JSON action blocks during orchestration] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Default depth is 5 fetched URLs; reports target concise Markdown with source links and can disable browser or Firecrawl fallback.] <br>
+**Other Properties Related to Output:** [Reports include source citations, can be written to an output file, and default to stdout.] <br>
 
 ## Skill Version(s): <br>
-0.1.4 (source: server release evidence and SKILL.md frontmatter) <br>
+0.1.5 (source: server release, OpenClaw metadata, and clawhub.json) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

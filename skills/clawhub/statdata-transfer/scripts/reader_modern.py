@@ -319,28 +319,86 @@ def _read_html(filepath: str, timestamp: str) -> StatFileResult:
     }
 
 
-def _read_csv(filepath: str, timestamp: str, encoding: str = None) -> StatFileResult:
-    """读入 CSV 文件，使用 pd.read_csv。"""
+def _detect_delimiter(filepath: str, encoding: str) -> tuple:
+    """从文件前几行探测分隔符，返回 (sep, auto_detected: bool)。
+    
+    常见分隔符：逗号、分号、制表符、竖线。若探测结果与默认逗号不同，
+    标记 auto_detected=True 以便上层告警（欧洲 CSV 常用分号）。
+    """
+    import csv as _csv
+    try:
+        with open(filepath, "r", encoding=encoding, errors="replace", newline="") as f:
+            sample_lines = []
+            for _ in range(5):
+                line = f.readline()
+                if not line:
+                    break
+                sample_lines.append(line.rstrip("\n").rstrip("\r"))
+    except Exception:
+        return ",", False
+    candidates = [",", ";", "\t", "|"]
+    counts = {d: 0 for d in candidates}
+    for line in sample_lines:
+        if not line.strip():
+            continue
+        for d in candidates:
+            counts[d] += line.count(d)
+    best = max(candidates, key=lambda d: counts[d])
+    if counts[best] == 0:
+        return ",", False
+    # 仅当最佳分隔符与默认逗号不同、且确有出现时，视为自动探测
+    detected = best != ","
+    return best, detected
+
+
+def _read_csv(filepath: str, timestamp: str, encoding: str = None, sep: str = None) -> StatFileResult:
+    """读入 CSV 文件，使用 pd.read_csv。
+
+    支持：
+    - 编码自动探测（UTF-16 经 BOM 判定；否则回退 utf-8-sig / utf-8 / gbk / latin-1）
+    - 分隔符自动探测（逗号 / 分号 / 制表符 / 竖线）；也可经 sep 显式指定
+    """
     warnings_list = []
     csv_metadata: dict[str, Any] = {}
     
     # 尝试检测编码
     if encoding is None:
-        # 尝试常见编码
+        # 先用 BOM 判定 UTF-16（UTF-16 文件必带 BOM，避免与 GBK 误判冲突）
         enc_detected = "utf-8"
-        for enc in ["utf-8-sig", "utf-8", "gbk", "gb2312", "latin-1"]:
-            try:
-                df = pd.read_csv(filepath, encoding=enc, nrows=5)
-                enc_detected = enc
-                break
-            except (UnicodeDecodeError, UnicodeError):
-                continue
+        try:
+            with open(filepath, "rb") as _f:
+                _head = _f.read(2)
+            if _head == b"\xff\xfe":
+                enc_detected = "utf-16-le"
+            elif _head == b"\xfe\xff":
+                enc_detected = "utf-16-be"
+            else:
+                # 无 BOM：按常见编码回退（utf-8 优先，GBK 在 utf-16 之前以免误判）
+                for enc in ["utf-8-sig", "utf-8", "gbk", "gb2312", "latin-1"]:
+                    try:
+                        df = pd.read_csv(filepath, encoding=enc, nrows=5)
+                        enc_detected = enc
+                        break
+                    except (UnicodeDecodeError, UnicodeError):
+                        continue
+        except (OSError, IOError):
+            enc_detected = "utf-8"
         encoding = enc_detected
+
+    # 分隔符自动探测（仅在未显式指定时）
+    auto_detected = False
+    if sep is None:
+        sep, auto_detected = _detect_delimiter(filepath, encoding)
     
     # Read full file with detected/specified encoding
-    df = pd.read_csv(filepath, encoding=encoding)
+    df = pd.read_csv(filepath, encoding=encoding, sep=sep)
     csv_metadata["encoding"] = encoding
-    csv_metadata["separator_guess"] = ","
+    csv_metadata["separator_guess"] = sep
+    if auto_detected:
+        warnings_list.append(_bilingual(
+            f"CSV 分隔符非逗号，已自动探测为 '{sep}' | CSV delimiter auto-detected as '{sep}' (non-comma)",
+            f"CSV 分隔符非逗号，已自动探测为 '{sep}'",
+        ))
     
     if df.empty:
         warnings_list.append(_bilingual("CSV file parsed result is empty", "CSV 文件解析结果为空"))

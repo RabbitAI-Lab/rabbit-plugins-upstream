@@ -192,7 +192,10 @@ QuantAll 是独立的 HTTP 服务，**不依赖 UpdateStock 启动**。三种方
 | `batch_weight` | 批量权重对比（多权重方案） |
 | `heat_map` | 热力图统计 |
 | `get_user_selection` | 获取用户 GUI 交互选中 |
+|`run_task_file`|执行本地json文件的任务，构建稳定任务流程|
+|`execute_python_script`|执行本地python脚本，在构建任务流程中可扩展功能|
 | `MCP_Close` | 关闭服务 ⚠️（仅不再需要时调用） |
+
 
 ### AI 使用前必知
 
@@ -216,3 +219,4 @@ QuantAll 是独立的 HTTP 服务，**不依赖 UpdateStock 启动**。三种方
 - **v1.0** — 首版发布。13 个工具，配套 ai_prompts.toml 和 playbook 实战手册。PyPI 在线安装。
 - **v1.0.1** — 新增技能升级流程；requirements.txt 更新为 >=1.0.1；SKILL.md 精简至 500 行以内。
 - **v1.0.2** — 优化 clawhub 审查问题：触发条件收窄（仅明确量化需求时触发）、能力声明透明化（venv/pip/mcp.json/HTTP 服务全部显式声明）、新增 AI 操作用户电脑的行为规范表、详细工具用法指向 ai_prompts.toml 不在 SKILL.md 展开。新增批量分析工具 `batch_weight`/`batch_select`（对应 `weight_by_code`/`select_by_code` 的批量版本）。新增 `batch_factor_corr`（因子间批量相关性计算，支持自定义基准因子）。新增 `how_code`（代码执行环境说明，帮助 AI 快速上手）。新增 exec 内置函数 `row_top_n(df,n)`/`row_bottom_n(df,n)`（截面 Top/Bottom N 筛选）。热力图/直方图统计新增 `summary` 评估参数（分布均匀度/边缘突发等）。`batch_weight` 新增 `view` 参数（summary=评估参数/heatmap=完整矩阵）及"权重未改变"提示。`batch_select` mode 重命名为描述性名称（independent_summary/independent_heatmap/intersect/union）。修复批量因子分析执行异常及 batch_select intersect/union/independent 模式 bug。requirements.txt 固定版本号。
+-**v1.0.3**—requirements.txt 更新为 ==1.0.4，pip install --upgrade quantall 更新。新增技能`run_task_file`和`execute_python_script`。`batch_factor_corr`和`batch_factor_analysis`新增保存本地excel。新增`UpdateStock_script.py`数据库更新脚本。

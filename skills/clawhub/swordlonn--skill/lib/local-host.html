@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WatchItAI - 屏幕共享</title>
+  <script src="https://unpkg.com/peerjs@1.5.4/dist/peerjs.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/qrcode@1.5.4/lib/browser.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+      background: #0a0e1a; color: #cbd5e1; min-height: 100vh;
+    }
+    .header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 20px; border-bottom: 1px solid rgba(51,65,85,0.4);
+      background: rgba(10,14,26,0.8); backdrop-filter: blur(12px);
+    }
+    .logo { display: flex; align-items: center; gap: 10px; font-size: 18px; font-weight: 700; color: #fff; }
+    .logo-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: linear-gradient(135deg, #06b6d4, #7c3aed);
+      display: grid; place-items: center; font-size: 18px;
+    }
+    .logo .ai { background: linear-gradient(135deg, #06b6d4, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .status-badge {
+      display: flex; align-items: center; gap: 8px; padding: 6px 14px;
+      border-radius: 8px; font-size: 13px; font-weight: 500;
+    }
+    .status-badge.idle { background: rgba(51,65,85,0.4); color: #94a3b8; }
+    .status-badge.live { background: rgba(16,185,129,0.15); color: #34d399; }
+    .status-badge.error { background: rgba(244,63,94,0.15); color: #fb7185; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; }
+    .dot.idle { background: #64748b; }
+    .dot.live { background: #34d399; animation: pulse 2s infinite; }
+    .dot.error { background: #fb7185; }
+    @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: 0.5; } }
+
+    .container { max-width: 900px; margin: 0 auto; padding: 24px 20px; }
+
+    /* Idle view */
+    .idle-card {
+      max-width: 480px; margin: 40px auto; padding: 36px;
+      background: rgba(15,23,42,0.6); border: 1px solid rgba(51,65,85,0.4);
+      border-radius: 20px; backdrop-filter: blur(12px);
+    }
+    .idle-card h1 { font-size: 24px; color: #fff; text-align: center; margin-bottom: 8px; }
+    .idle-card .subtitle { font-size: 14px; color: #64748b; text-align: center; margin-bottom: 28px; }
+    .field-label {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.05em; color: #64748b; margin-bottom: 8px;
+      display: flex; align-items: center; gap: 6px;
+    }
+    .seg-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+    .seg-btn {
+      padding: 10px; border-radius: 10px; border: 1px solid rgba(51,65,85,0.6);
+      background: rgba(15,23,42,0.4); color: #64748b; cursor: pointer;
+      font-size: 14px; font-weight: 500; transition: all 0.2s; text-align: center;
+    }
+    .seg-btn:hover { border-color: rgba(100,116,139,0.8); color: #cbd5e1; }
+    .seg-btn.active { border-color: rgba(6,182,212,0.6); background: rgba(6,182,212,0.1); color: #fff; }
+    .seg-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    .perm-group { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+    .perm-btn {
+      display: flex; align-items: center; gap: 10px; padding: 14px;
+      border-radius: 12px; border: 1px solid rgba(51,65,85,0.6);
+      background: rgba(15,23,42,0.4); cursor: pointer; transition: all 0.2s; text-align: left;
+    }
+    .perm-btn:hover { border-color: rgba(100,116,139,0.8); }
+    .perm-btn.active.view { border-color: rgba(6,182,212,0.6); background: rgba(6,182,212,0.1); }
+    .perm-btn.active.control { border-color: rgba(124,58,237,0.6); background: rgba(124,58,237,0.1); }
+    .perm-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .perm-btn .perm-title { font-size: 14px; font-weight: 600; color: #fff; }
+    .perm-btn .perm-desc { font-size: 11px; color: #64748b; }
+
+    .start-btn {
+      width: 100%; padding: 14px; border: none; border-radius: 12px;
+      background: linear-gradient(135deg, #06b6d4, #7c3aed);
+      color: #fff; font-size: 16px; font-weight: 600; cursor: pointer;
+      transition: transform 0.15s; display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .start-btn:hover { transform: translateY(-1px); }
+    .start-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    .bridge-hint {
+      margin-top: 12px; padding: 10px 12px; border-radius: 10px;
+      font-size: 12px; display: flex; align-items: flex-start; gap: 8px;
+    }
+    .bridge-hint.ok { background: rgba(16,185,129,0.1); border: 1px solid rgba(16,185,129,0.3); color: #34d399; }
+    .bridge-hint.warn { background: rgba(245,158,11,0.1); border: 1px solid rgba(245,158,11,0.3); color: #fbbf24; }
+
+    /* Sharing view */
+    .sharing-grid { display: grid; grid-template-columns: auto 1fr; gap: 20px; margin-bottom: 20px; }
+    @media (max-width: 700px) { .sharing-grid { grid-template-columns: 1fr; } }
+    .qr-card {
+      padding: 24px; background: rgba(15,23,42,0.6); border: 1px solid rgba(51,65,85,0.4);
+      border-radius: 16px; display: flex; flex-direction: column; align-items: center;
+    }
+    .qr-wrapper { background: #fff; padding: 12px; border-radius: 12px; }
+    .qr-wrapper canvas { display: block; }
+    .qr-label { margin-top: 12px; font-size: 12px; color: #64748b; text-align: center; }
+
+    .info-card {
+      padding: 20px; background: rgba(15,23,42,0.6); border: 1px solid rgba(51,65,85,0.4);
+      border-radius: 16px; display: flex; flex-direction: column; gap: 16px;
+    }
+    .link-row { display: flex; gap: 10px; align-items: center; }
+    .link-input {
+      flex: 1; padding: 12px; border-radius: 10px; border: 1px solid rgba(51,65,85,0.6);
+      background: rgba(15,23,42,0.6); color: #67e8f9; font-family: monospace;
+      font-size: 13px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .copy-btn {
+      padding: 12px 16px; border: none; border-radius: 10px;
+      background: linear-gradient(135deg, #06b6d4, #7c3aed); color: #fff;
+      font-size: 13px; font-weight: 600; cursor: pointer; white-space: nowrap;
+    }
+    .copy-btn.copied { background: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.4); }
+    .stat-row { display: flex; gap: 16px; }
+    .stat-item {
+      flex: 1; padding: 10px 14px; border-radius: 10px;
+      border: 1px solid rgba(51,65,85,0.6); background: rgba(15,23,42,0.4);
+    }
+    .stat-label { font-size: 10px; text-transform: uppercase; color: #64748b; }
+    .stat-value { font-size: 16px; font-weight: 600; color: #cbd5e1; font-family: monospace; }
+    .stat-value.warn { color: #fb7185; }
+
+    .quality-row { display: flex; gap: 6px; }
+    .quality-btn {
+      flex: 1; padding: 8px; border-radius: 8px; border: 1px solid rgba(51,65,85,0.6);
+      background: rgba(15,23,42,0.4); color: #64748b; cursor: pointer; font-size: 12px; transition: all 0.2s;
+    }
+    .quality-btn:hover { color: #cbd5e1; }
+    .quality-btn.active { border-color: rgba(6,182,212,0.6); background: rgba(6,182,212,0.1); color: #fff; }
+
+    .control-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 16px 20px; background: rgba(15,23,42,0.6);
+      border: 1px solid rgba(51,65,85,0.4); border-radius: 16px; gap: 12px;
+    }
+    .switch-btn {
+      padding: 10px 16px; border-radius: 10px; border: 1px solid rgba(51,65,85,0.6);
+      background: rgba(15,23,42,0.4); color: #cbd5e1; cursor: pointer; font-size: 13px;
+    }
+    .switch-btn:hover { border-color: rgba(100,116,139,0.8); }
+    .stop-btn {
+      padding: 12px 24px; border: none; border-radius: 10px;
+      background: rgba(244,63,94,0.2); border: 1px solid rgba(244,63,94,0.4);
+      color: #fb7185; font-size: 14px; font-weight: 600; cursor: pointer;
+    }
+    .stop-btn:hover { background: rgba(244,63,94,0.3); }
+
+    .error-msg {
+      margin-top: 12px; padding: 10px 14px; border-radius: 10px;
+      background: rgba(244,63,94,0.1); border: 1px solid rgba(244,63,94,0.3);
+      color: #fb7185; font-size: 13px;
+    }
+    .hidden { display: none !important; }
+    .spinner { display: inline-block; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3); border-top-color: #fff; border-radius: 50%; animation: spin 0.8s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="logo">
+      <div class="logo-icon">📺</div>
+      WatchIt<span class="ai">AI</span>
+    </div>
+    <div id="statusBadge" class="status-badge idle">
+      <span class="dot idle"></span>
+      <span id="statusText">就绪</span>
+    </div>
+  </div>
+
+  <div class="container">
+    <!-- Idle View -->
+    <div id="idleView" class="idle-card">
+      <h1>共享你的屏幕</h1>
+      <p class="subtitle">选择选项后开始共享，生成会话链接在远端设备查看。</p>
+
+      <div class="field-label">⏱ 会话时长</div>
+      <div class="seg-group" id="durationGroup">
+        <button class="seg-btn" data-val="15">15 分钟</button>
+        <button class="seg-btn active" data-val="30">30 分钟</button>
+        <button class="seg-btn" data-val="60">60 分钟</button>
+      </div>
+
+      <div class="field-label">🛡 远端权限</div>
+      <div class="perm-group" id="permGroup">
+        <button class="perm-btn view active" data-val="view">
+          <span>👁</span>
+          <div>
+            <div class="perm-title">仅查看</div>
+            <div class="perm-desc">只能观看画面</div>
+          </div>
+        </button>
+        <button class="perm-btn control" data-val="control" id="controlBtn">
+          <span>🖱</span>
+          <div>
+            <div class="perm-title">可控制</div>
+            <div class="perm-desc">允许远程操作</div>
+          </div>
+        </button>
+      </div>
+
+      <div id="bridgeHint" class="bridge-hint ok hidden"></div>
+      <div id="idleError" class="error-msg hidden"></div>
+
+      <button id="startBtn" class="start-btn">
+        📡 开始共享
+      </button>
+    </div>
+
+    <!-- Sharing View -->
+    <div id="sharingView" class="hidden">
+      <div class="sharing-grid">
+        <div class="qr-card">
+          <div class="qr-wrapper"><canvas id="qrCanvas"></canvas></div>
+          <div class="qr-label">扫码查看</div>
+        </div>
+        <div class="info-card">
+          <div>
+            <div class="field-label">🔗 会话链接</div>
+            <div class="link-row">
+              <div id="shareLink" class="link-input"></div>
+              <button id="copyBtn" class="copy-btn">复制</button>
+            </div>
+          </div>
+          <div class="stat-row">
+            <div class="stat-item">
+              <div class="stat-label">剩余时间</div>
+              <div id="timerVal" class="stat-value">00:00</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">连接数</div>
+              <div id="viewerCount" class="stat-value">0</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-label">桥接</div>
+              <div id="bridgeStatus" class="stat-value">--</div>
+            </div>
+          </div>
+          <div>
+            <div class="field-label">画质</div>
+            <div class="quality-row" id="qualityGroup">
+              <button class="quality-btn" data-val="low">流畅</button>
+              <button class="quality-btn" data-val="medium">标清</button>
+              <button class="quality-btn active" data-val="high">高清</button>
+              <button class="quality-btn" data-val="original">原画</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="control-bar">
+        <button id="switchBtn" class="switch-btn">🔄 切换屏幕</button>
+        <button id="stopBtn" class="stop-btn">⏹ 停止共享</button>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function() {
+  "use strict";
+
+  // ---- Config from URL params ----
+  var params = new URLSearchParams(location.search);
+  var cfgDuration = parseInt(params.get("duration")) || 30;
+  var cfgPermission = params.get("permission") === "control" ? "control" : "view";
+  var cfgAudio = params.get("audio") !== "false";
+  var cfgAutoStart = params.get("autoStart") === "true";
+  var cfgSilent = params.get("silent") === "true";
+  // Pre-created session (from 'link' command)
+  var cfgSessionId = params.get("sessionId");
+  var cfgSessionToken = params.get("token");
+  var cfgShareUrl = params.get("shareUrl");
+  var cfgPeerConfig = null;
+  try {
+    var rawConfig = params.get("peerConfig");
+    if (rawConfig) cfgPeerConfig = JSON.parse(rawConfig);
+  } catch (e) { console.warn("[Config] Failed to parse peerConfig:", e); }
+  // Bridge token for WebSocket auth (separate from session token)
+  // Priority: bridgeToken param > token param (backward compat for 'share' command)
+  var cfgBridgeToken = params.get("bridgeToken") || params.get("token") || "";
+
+  // Override peerConfig to use local proxy (avoids CORS from localhost to watchitai.net)
+  // The bridge server proxies /peerjs/* requests to watchitai.net
+  if (cfgPeerConfig) {
+    cfgPeerConfig.host = location.hostname;
+    cfgPeerConfig.port = parseInt(location.port) || 8765;
+    cfgPeerConfig.secure = location.protocol === "https:";
+  }
+
+  // ---- API config (declared early to avoid hoisting issues) ----
+  var API_BASE = "/api";
+  var csrfToken = null;
+
+  // ---- State ----
+  var state = {
+    status: "idle",
+    session: null,
+    peer: null,
+    stream: null,
+    calls: new Map(),
+    conns: new Map(),
+    viewers: new Map(),
+    remaining: 0,
+    timer: null,
+    quality: "high",
+    ws: null,
+    wsConnected: false,
+    permission: cfgPermission,
+    duration: cfgDuration,
+    audio: cfgAudio,
+    silentMode: cfgSilent,
+    canvas: null,
+    canvasCtx: null,
+    canvasStream: null,
+    imgEl: null,
+    token: cfgBridgeToken,
+    sessionToken: cfgSessionToken,
+  };
+
+  // ---- DOM ----
+  var $ = function(id) { return document.getElementById(id); };
+  var idleView = $("idleView");
+  var sharingView = $("sharingView");
+  var startBtn = $("startBtn");
+  var stopBtn = $("stopBtn");
+  var switchBtn = $("switchBtn");
+  var copyBtn = $("copyBtn");
+  var statusBadge = $("statusBadge");
+  var statusText = $("statusText");
+  var bridgeHint = $("bridgeHint");
+  var idleError = $("idleError");
+
+  // ---- Init UI from config ----
+  function setActive(group, val) {
+    group.querySelectorAll("button").forEach(function(btn) {
+      btn.classList.toggle("active", btn.dataset.val === String(val));
+    });
+  }
+  setActive($("durationGroup"), cfgDuration);
+  setActive($("permGroup"), cfgPermission);
+
+  // 启动时获取 CSRF token（异步，不阻塞 UI）
+  initCsrfToken();
+
+  $("durationGroup").addEventListener("click", function(e) {
+    var btn = e.target.closest("button"); if (!btn) return;
+    state.duration = parseInt(btn.dataset.val);
+    setActive($("durationGroup"), state.duration);
+  });
+  $("permGroup").addEventListener("click", function(e) {
+    var btn = e.target.closest("button"); if (!btn) return;
+    if (btn.dataset.val === "control" && !state.wsConnected) return; // disabled
+    state.permission = btn.dataset.val;
+    setActive($("permGroup"), state.permission);
+  });
+  $("qualityGroup").addEventListener("click", function(e) {
+    var btn = e.target.closest("button"); if (!btn) return;
+    state.quality = btn.dataset.val;
+    setActive($("qualityGroup"), state.quality);
+    applyQuality(state.quality);
+  });
+
+  // ---- Bridge WebSocket (same origin, no PNA) ----
+  function initBridge() {
+    var wsUrl = "ws://" + location.host + "/bridge?token=" + state.token;
+    try {
+      state.ws = new WebSocket(wsUrl);
+    } catch (e) {
+      console.warn("[Bridge] Cannot create WebSocket:", e);
+      updateBridgeHint();
+      return;
+    }
+
+    state.ws.onopen = function() {
+      console.log("[Bridge] Connected");
+      state.wsConnected = true;
+      updateBridgeHint();
+      $("bridgeStatus").textContent = "已连接";
+      $("controlBtn").disabled = false;
+    };
+
+    state.ws.onclose = function() {
+      console.log("[Bridge] Disconnected");
+      state.wsConnected = false;
+      updateBridgeHint();
+      $("bridgeStatus").textContent = "未连接";
+      $("controlBtn").disabled = true;
+      // Reconnect after delay
+      setTimeout(function() {
+        if (state.status !== "sharing" || state.wsConnected) return;
+        console.log("[Bridge] Reconnecting...");
+        initBridge();
+      }, 3000);
+    };
+
+    state.ws.onerror = function(err) {
+      console.error("[Bridge] Error:", err);
+    };
+
+    state.ws.onmessage = function(event) {
+      try {
+        var msg = JSON.parse(event.data);
+        if (msg.type === "response" && msg.data?.id) {
+          // Response to a request - handled by sendMessage promises
+          var resolver = pendingRequests.get(msg.data.id);
+          if (resolver) {
+            pendingRequests.delete(msg.data.id);
+            if (msg.data.error) resolver.reject(new Error(msg.data.error));
+            else resolver.resolve(msg.data.result);
+          }
+        }
+      } catch (e) {
+        console.warn("[Bridge] Invalid message:", e);
+      }
+    };
+  }
+
+  var msgId = 0;
+  var pendingRequests = new Map();
+
+  function sendBridge(type, data) {
+    return new Promise(function(resolve, reject) {
+      if (!state.ws || state.ws.readyState !== WebSocket.OPEN) {
+        reject(new Error("Bridge not connected"));
+        return;
+      }
+      var id = ++msgId;
+      pendingRequests.set(id, { resolve: resolve, reject: reject });
+      state.ws.send(JSON.stringify({ id: id, type: type, data: data || {} }));
+      setTimeout(function() {
+        if (pendingRequests.has(id)) {
+          pendingRequests.delete(id);
+          reject(new Error("Bridge request timeout"));
+        }
+      }, 10000);
+    });
+  }
+
+  function updateBridgeHint() {
+    if (state.wsConnected) {
+      bridgeHint.className = "bridge-hint ok";
+      bridgeHint.textContent = "✓ 桥接服务已连接，远程控制可用。";
+      $("controlBtn").disabled = false;
+    } else {
+      bridgeHint.className = "bridge-hint warn";
+      bridgeHint.textContent = "⚠ 桥接服务未连接，仅支持查看模式。请确保 WatchItAI 技能已启动。";
+      $("controlBtn").disabled = true;
+      // If permission was control, switch to view
+      if (state.permission === "control") {
+        state.permission = "view";
+        setActive($("permGroup"), "view");
+      }
+    }
+    bridgeHint.classList.remove("hidden");
+  }
+
+  // ---- API calls (via local proxy to avoid CORS/CSRF issues) ----
+  // 使用本地 /api 代理转发到 watchitai.net，解决跨域 cookie 和 CSRF 问题
+  // API_BASE 和 csrfToken 已在顶部声明
+
+  // 启动时先获取 CSRF token（同源请求，cookie 自动携带）
+  function initCsrfToken() {
+    return fetch(API_BASE + "/csrf-token")
+      .then(function(res) { return res.json(); })
+      .then(function(data) {
+        if (data && data.token) {
+          csrfToken = data.token;
+          console.log("[CSRF] Token acquired");
+        }
+      })
+      .catch(function(err) {
+        console.warn("[CSRF] Failed to acquire token:", err.message);
+      });
+  }
+
+  function apiCall(method, path, body) {
+    var url = API_BASE + path;
+    var opts = {
+      method: method,
+      headers: { "Content-Type": "application/json" },
+    };
+    if (csrfToken) opts.headers["X-CSRF-Token"] = csrfToken;
+    if (body) opts.body = JSON.stringify(body);
+    return fetch(url, opts).then(function(res) {
+      return res.text().then(function(text) {
+        var json = text ? JSON.parse(text) : null;
+        if (!res.ok) throw new Error((json && json.error) || "API error " + res.status);
+        return json;
+      });
+    });
+  }
+
+  // ---- Silent screen share (native capture via WebSocket) ----
+  async function startSilentScreenShare() {
+    console.log("[Silent] Starting native screen capture mode");
+    
+    state.canvas = document.createElement("canvas");
+    state.canvasCtx = state.canvas.getContext("2d");
+    state.imgEl = new Image();
+    state.imgEl.crossOrigin = "anonymous";
+    
+    state.canvasStream = state.canvas.captureStream(15);
+    console.log("[Silent] Canvas stream created:", state.canvasStream.id);
+    
+    if (!state.ws || state.ws.readyState !== 1) {
+      throw new Error("Bridge WebSocket not connected");
+    }
+    
+    state.ws.addEventListener("message", handleScreenShareFrame);
+    
+    var started = await sendBridge("startScreenShare", { fps: 15 });
+    console.log("[Silent] Native screen capture started:", started);
+    
+    return state.canvasStream;
+  }
+
+  function handleScreenShareFrame(event) {
+    try {
+      var msg = JSON.parse(event.data);
+      if (msg.type === "screenShareFrame" && msg.data && msg.data.dataUrl) {
+        state.imgEl.onload = function() {
+          try {
+            state.canvas.width = state.imgEl.naturalWidth;
+            state.canvas.height = state.imgEl.naturalHeight;
+            state.canvasCtx.drawImage(state.imgEl, 0, 0);
+          } catch (e) {
+            console.warn("[Silent] Canvas draw error:", e.message);
+          }
+        };
+        state.imgEl.src = msg.data.dataUrl;
+      }
+    } catch (e) {
+      // Ignore non-JSON messages
+    }
+  }
+
+  function stopSilentScreenShare() {
+    console.log("[Silent] stopSilentScreenShare called");
+    if (state.ws && state.ws.readyState === 1) {
+      state.ws.send(JSON.stringify({
+        type: "stopScreenShare"
+      }));
+      state.ws.removeEventListener("message", handleScreenShareFrame);
+    }
+    if (state.canvasStream) {
+      state.canvasStream.getTracks().forEach(function(track) {
+        track.stop();
+      });
+      state.canvasStream = null;
+    }
+    state.canvas = null;
+    state.canvasCtx = null;
+    state.imgEl = null;
+  }
+
+  // ---- Status helpers ----
+  function setStatus(text, type) {
+    statusText.textContent = text;
+    statusBadge.className = "status-badge " + type;
+    statusBadge.querySelector(".dot").className = "dot " + type;
+  }
+
+  function showError(msg) {
+    idleError.textContent = msg;
+    idleError.classList.remove("hidden");
+  }
+  function clearError() { idleError.classList.add("hidden"); }
+
+  // ---- Start sharing ----
+  async function startSharing() {
+    clearError();
+    setStatus("正在初始化…", "idle");
+    startBtn.disabled = true;
+    startBtn.innerHTML = '<span class="spinner"></span> 正在初始化…';
+
+    try {
+      // 0. Ensure CSRF token is available before any POST request
+      // 优化：使用预创建会话时跳过 CSRF（link 命令已通过 /create-session 创建）
+      if (!csrfToken && !cfgSessionId) {
+        console.log("[CSRF] Waiting for token before starting...");
+        await initCsrfToken();
+      }
+      if (!csrfToken && !cfgSessionId) {
+        throw new Error("无法获取 CSRF token，请检查网络连接");
+      }
+
+      // 1. Create session (or use pre-created one from 'link' command)
+      var session;
+      if (cfgSessionId && cfgSessionToken) {
+        // Use pre-created session
+        session = {
+          id: cfgSessionId,
+          sessionId: cfgSessionId,
+          token: cfgSessionToken,
+          shareUrl: cfgShareUrl || "",
+          peerServerConfig: cfgPeerConfig,
+        };
+        console.log("[Session] Using pre-created session:", session.id);
+      } else {
+        session = await apiCall("POST", "/sessions", {
+          duration: state.duration,
+          permission: state.permission,
+          audio: state.audio,
+        });
+      }
+      state.session = session;
+      console.log("[Session] Ready:", session.id, "shareUrl:", session.shareUrl);
+
+      // 2. Capture screen
+      console.log("[StartSharing] Step 2: Capture screen, silentMode:", state.silentMode);
+      var stream;
+      if (state.silentMode) {
+        console.log("[StartSharing] Starting silent screen share...");
+        stream = await startSilentScreenShare();
+        console.log("[StartSharing] Silent screen share succeeded, stream:", stream);
+      } else {
+        var constraints = {
+          video: { width: { ideal: 1920 }, height: { ideal: 1080 }, frameRate: { ideal: 30 } },
+          audio: state.audio,
+        };
+        stream = await navigator.mediaDevices.getDisplayMedia(constraints);
+        stream.getVideoTracks()[0].addEventListener("ended", function() {
+          stopSharing();
+        });
+      }
+      state.stream = stream;
+      console.log("[StartSharing] Step 2 done, stream tracks:", stream.getTracks().length);
+
+      // 3. Create Peer
+      var peerConfig = session.peerServerConfig;
+      if (!peerConfig) {
+        // Fallback: use watchitai.net PeerJS server (not localhost)
+        peerConfig = {
+          host: "watchitai.net",
+          port: 443,
+          path: "/peerjs/myapp",
+          secure: true,
+          key: "watchitai",
+          config: { iceServers: [{ urls: "stun:stun.l.google.com:19302" }] },
+        };
+      }
+      console.log("[Peer] Config:", peerConfig);
+      var peer = new Peer(peerConfig);
+      state.peer = peer;
+
+      peer.on("error", function(err) {
+        console.error("[Peer] Error:", err);
+        showError("Peer 错误：" + (err.message || err.type || "unknown"));
+      });
+
+      peer.on("disconnected", function() {
+        try { peer.reconnect(); } catch (e) {}
+      });
+
+      peer.on("call", function(call) {
+        var peerId = call.peer;
+        state.calls.set(peerId, call);
+        call.answer(state.stream);
+
+        call.on("stream", function() {
+          updateViewer(peerId, { status: "connected" });
+        });
+
+        // Monitor ICE state
+        var pc = call.peerConnection;
+        if (pc) {
+          pc.addEventListener("iceconnectionstatechange", function() {
+            if (pc.iceConnectionState === "connected" || pc.iceConnectionState === "completed") {
+              updateViewer(peerId, { status: "connected" });
+            } else if (["failed", "disconnected", "closed"].indexOf(pc.iceConnectionState) >= 0) {
+              updateViewer(peerId, { status: "disconnected" });
+            }
+          });
+        }
+
+        call.on("close", function() { removeViewer(peerId); });
+        call.on("error", function() { updateViewer(peerId, { status: "disconnected" }); });
+      });
+
+      peer.on("connection", function(conn) {
+        var peerId = conn.peer;
+        state.conns.set(peerId, conn);
+        addViewer(peerId, conn.metadata && conn.metadata.label);
+
+        conn.on("open", function() {
+          updateViewer(peerId, { status: "connected" });
+          try {
+            conn.send({ type: "session-info", permission: state.permission, audio: state.audio, quality: state.quality });
+          } catch (e) {}
+        });
+
+        conn.on("data", function(data) {
+          handleControlMessage(peerId, data);
+        });
+
+        conn.on("close", function() { removeViewer(peerId); });
+        conn.on("error", function() { updateViewer(peerId, { status: "disconnected" }); });
+      });
+
+      // 4. Wait for peer open
+      await new Promise(function(resolve, reject) {
+        peer.once("open", resolve);
+        peer.once("error", reject);
+      });
+
+      if (!peer.id) throw new Error("Peer ID 未能获取");
+
+      // 5. Register host
+      await apiCall("POST", "/sessions/" + encodeURIComponent(session.id) + "/register", {
+        token: session.token,
+        peerId: peer.id,
+      });
+      console.log("[Host] Registered, peerId:", peer.id);
+
+      // 6. Start countdown & UI
+      state.remaining = state.duration * 60;
+      state.status = "sharing";
+      idleView.classList.add("hidden");
+      sharingView.classList.remove("hidden");
+      setStatus("共享中", "live");
+
+      // Display share link & QR
+      $("shareLink").textContent = session.shareUrl;
+      try {
+        if (typeof QRCode !== "undefined") {
+          QRCode.toCanvas($("qrCanvas"), session.shareUrl, {
+            margin: 1, width: 240, color: { dark: "#0a0e1aff", light: "#ffffffff" }
+          }, function() {});
+        }
+      } catch (e) {
+        console.warn("[QRCode] Failed to generate:", e.message);
+      }
+
+      startTimer();
+      $("bridgeStatus").textContent = state.wsConnected ? "已连接" : "未连接";
+
+    } catch (err) {
+      console.error("[StartSharing]", err);
+      console.error("[StartSharing] Stack:", err.stack);
+      if (state.ws && state.ws.readyState === 1) {
+        state.ws.send(JSON.stringify({
+          type: "showNotification",
+          data: { title: "Screen Share Error", body: err.message || "Unknown error" }
+        }));
+      }
+      var msg = err.name === "NotAllowedError" ? "已取消屏幕共享授权。" : (err.message || "未知错误");
+      showError(msg);
+      setStatus("错误", "error");
+      startBtn.disabled = false;
+      startBtn.innerHTML = "📡 开始共享";
+      cleanup();
+    }
+  }
+
+  // ---- Timer ----
+  function startTimer() {
+    if (state.timer) clearInterval(state.timer);
+    state.timer = setInterval(function() {
+      state.remaining--;
+      if (state.remaining <= 0) {
+        state.remaining = 0;
+        stopSharing();
+        return;
+      }
+      updateTimerDisplay();
+    }, 1000);
+    updateTimerDisplay();
+  }
+
+  function updateTimerDisplay() {
+    var s = state.remaining;
+    var h = Math.floor(s / 3600);
+    var m = Math.floor((s % 3600) / 60);
+    var sec = s % 60;
+    var pad = function(n) { return String(n).padStart(2, "0"); };
+    var display = h > 0 ? pad(h) + ":" + pad(m) + ":" + pad(sec) : pad(m) + ":" + pad(sec);
+    var el = $("timerVal");
+    el.textContent = display;
+    el.className = "stat-value" + (s <= 60 ? " warn" : "");
+  }
+
+  // ---- Viewer management ----
+  function addViewer(peerId, label) {
+    state.viewers.set(peerId, {
+      peerId: peerId,
+      label: label || ("Viewer-" + peerId.slice(0, 4).toUpperCase()),
+      status: "connecting",
+    });
+    updateViewerCount();
+  }
+
+  function updateViewer(peerId, patch) {
+    var v = state.viewers.get(peerId);
+    if (!v) return;
+    Object.assign(v, patch);
+    updateViewerCount();
+  }
+
+  function removeViewer(peerId) {
+    state.viewers.delete(peerId);
+    state.calls.delete(peerId);
+    state.conns.delete(peerId);
+    updateViewerCount();
+  }
+
+  function updateViewerCount() {
+    $("viewerCount").textContent = String(state.viewers.size);
+  }
+
+  // ---- Quality ----
+  function applyQuality(q) {
+    var stream = state.stream;
+    if (!stream) return;
+    var track = stream.getVideoTracks()[0];
+    if (!track) return;
+    var constraints = {
+      low: { width: 1280, height: 720, frameRate: 15 },
+      medium: { width: 1920, height: 1080, frameRate: 24 },
+      high: { width: 1920, height: 1080, frameRate: 30 },
+      original: {},
+    };
+    var c = constraints[q];
+    if (Object.keys(c).length === 0) return;
+    track.applyConstraints(c).catch(function() {});
+    // Notify viewers
+    state.conns.forEach(function(conn) {
+      try { if (conn.open) conn.send({ type: "quality", quality: q }); } catch (e) {}
+    });
+  }
+
+  // ---- Remote control ----
+  function handleControlMessage(peerId, data) {
+    if (!data || typeof data !== "object") return;
+    switch (data.type) {
+      case "ping":
+        try { state.conns.get(peerId).send({ type: "pong" }); } catch (e) {}
+        break;
+      case "mouse":
+        if (state.permission !== "control") return;
+        if (state.wsConnected) {
+          sendBridge("controlMouse", {
+            action: data.action, button: data.button || "left", x: data.x, y: data.y,
+          }).catch(function() {});
+        }
+        break;
+      case "key":
+        if (state.permission !== "control") return;
+        if (state.wsConnected) {
+          sendBridge("controlKey", {
+            action: data.action, key: data.key, code: data.code,
+            modifiers: data.modifiers || {},
+          }).catch(function() {});
+        }
+        break;
+      case "wheel":
+        if (state.permission !== "control") return;
+        if (state.wsConnected) {
+          sendBridge("controlWheel", { deltaX: data.deltaX, deltaY: data.deltaY }).catch(function() {});
+        }
+        break;
+      case "quality-change":
+        if (typeof data.quality === "string") {
+          state.quality = data.quality;
+          setActive($("qualityGroup"), data.quality);
+          applyQuality(state.quality);
+        }
+        break;
+    }
+  }
+
+  // ---- Switch screen ----
+  async function switchScreen() {
+    if (!state.stream) return;
+    try {
+      var newStream = await navigator.mediaDevices.getDisplayMedia({
+        video: { width: { ideal: 1920 }, height: { ideal: 1080 }, frameRate: { ideal: 30 } },
+        audio: state.audio,
+      });
+      var oldStream = state.stream;
+      state.stream = newStream;
+      var newTrack = newStream.getVideoTracks()[0];
+      newTrack.addEventListener("ended", function() { stopSharing(); });
+      state.calls.forEach(function(call) {
+        var pc = call.peerConnection;
+        if (pc) {
+          pc.getSenders().forEach(function(s) {
+            if (s.track && s.track.kind === "video" && newTrack) {
+              s.replaceTrack(newTrack).catch(function() {});
+            }
+          });
+        }
+      });
+      oldStream.getTracks().forEach(function(t) { t.stop(); });
+      applyQuality(state.quality);
+    } catch (err) {
+      console.warn("[SwitchScreen]", err);
+    }
+  }
+
+  // ---- Stop sharing ----
+  async function stopSharing() {
+    state.status = "stopping";
+    if (state.timer) { clearInterval(state.timer); state.timer = null; }
+    if (state.session) {
+      try {
+        await apiCall("POST", "/sessions/" + encodeURIComponent(state.session.id) + "/close", {
+          token: state.session.token,
+        });
+      } catch (e) { console.warn("[CloseSession]", e); }
+    }
+    cleanup();
+    state.status = "idle";
+    sharingView.classList.add("hidden");
+    idleView.classList.remove("hidden");
+    setStatus("就绪", "idle");
+    startBtn.disabled = false;
+    startBtn.innerHTML = "📡 开始共享";
+  }
+
+  function cleanup() {
+    if (state.silentMode) {
+      stopSilentScreenShare();
+    }
+    if (state.timer) { clearInterval(state.timer); state.timer = null; }
+    state.calls.forEach(function(c) { try { c.close(); } catch (e) {} });
+    state.calls.clear();
+    state.conns.forEach(function(c) { try { c.close(); } catch (e) {} });
+    state.conns.clear();
+    if (state.stream) {
+      state.stream.getTracks().forEach(function(t) { t.stop(); });
+      state.stream = null;
+    }
+    if (state.peer) {
+      try { state.peer.destroy(); } catch (e) {}
+      state.peer = null;
+    }
+    state.viewers.clear();
+    state.session = null;
+  }
+
+  // ---- Copy link ----
+  copyBtn.addEventListener("click", function() {
+    if (!state.session) return;
+    var url = state.session.shareUrl;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url).then(function() {
+        copyBtn.textContent = "✓ 已复制";
+        copyBtn.classList.add("copied");
+        setTimeout(function() { copyBtn.textContent = "复制"; copyBtn.classList.remove("copied"); }, 2000);
+      }).catch(function() { fallbackCopy(url); });
+    } else {
+      fallbackCopy(url);
+    }
+  });
+
+  function fallbackCopy(url) {
+    var el = document.createElement("textarea");
+    el.value = url;
+    document.body.appendChild(el);
+    el.select();
+    try { document.execCommand("copy"); copyBtn.textContent = "✓ 已复制"; copyBtn.classList.add("copied"); } catch (e) {}
+    document.body.removeChild(el);
+    setTimeout(function() { copyBtn.textContent = "复制"; copyBtn.classList.remove("copied"); }, 2000);
+  }
+
+  // ---- Event listeners ----
+  startBtn.addEventListener("click", startSharing);
+  stopBtn.addEventListener("click", stopSharing);
+  switchBtn.addEventListener("click", switchScreen);
+
+  // ---- Init ----
+  initBridge();
+  setStatus("就绪", "idle");
+
+  // Auto-start if requested (优化：移除500ms延迟，立即启动)
+  if (cfgAutoStart) {
+    // 等待 bridge WS 连接就绪后再自动启动
+    var autoStartCheck = setInterval(function() {
+      if (state.wsConnected || state._autoStartAttempts > 50) {
+        clearInterval(autoStartCheck);
+        startSharing();
+      }
+      state._autoStartAttempts = (state._autoStartAttempts || 0) + 1;
+    }, 50);
+  }
+})();
+</script>
+</body>
+</html>

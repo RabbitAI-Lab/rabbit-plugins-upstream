@@ -1,42 +1,55 @@
-## Description: <br>
-Identifies plant diseases from image or video input and returns structured diagnostic reports with disease type, likely cause, severity, prevention suggestions, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies plant diseases from image or video input and returns structured diagnostic reports with disease type, cause, severity, prevention suggestions, and report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, growers, gardeners, and plant-care developers use this skill to analyze plant photos or videos for disease diagnosis and prevention guidance. It can also retrieve cloud-hosted historical analysis reports associated with the resolved user identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends plant images or videos to configured Life Emergence cloud APIs for analysis. <br>
-Mitigation: Use only when users are comfortable sharing those media inputs with the configured cloud service, and confirm the publisher's retention and deletion practices before deployment. <br>
-Risk: The skill silently creates or reuses a cloud-linked identity and may keep local SQLite records that include authentication tokens. <br>
-Mitigation: Review before installing, require clear disclosure or opt-in for account creation and token storage, and document how local and cloud report data can be deleted. <br>
+## Use Case:
 
+External users and agents use this skill to analyze plant photos or videos for disease diagnosis, prevention guidance, and cloud report retrieval. It is intended for agricultural production, horticulture, garden maintenance, and plant protection workflows where visual symptoms need structured triage.
 
-## Reference(s): <br>
-- [API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-disease-recognition-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON diagnostic reports with optional shell command examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include disease labels, likely causes, severity, prevention suggestions, report links, and historical report listings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: release evidence; artifact frontmatter reports 1.0.8) <br>
+Risk: Plant images or videos may be uploaded to the publisher's cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive media unless cloud processing by this publisher is acceptable, and review organizational data-handling requirements before use.
+
+Risk: The skill may automatically create or reuse an account identity, query cloud report history, read a workspace API-key file, and persist session tokens locally.
+
+Mitigation: Use isolated workspaces for evaluation, review local credential and token storage before installation, and confirm account-linked history behavior is acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-disease-recognition-analysis)
+- [API interface documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown and structured JSON text with optional report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local image/video files, public media URLs, history-list queries, and optional file output.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata; artifact frontmatter states 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

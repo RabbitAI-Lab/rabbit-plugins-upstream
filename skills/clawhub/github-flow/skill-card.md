@@ -1,5 +1,5 @@
 ## Description: <br>
-Github Flow guides agents through GitHub issue, pull request, review, merge, dependency, authentication, and publication workflows using GitHub CLI-first procedures. <br>
+GitHub issue and pull request workflow automation for agents, covering issue creation, PR bodies, reviews, dependency tracking, CI and merge gates, account handling, push guards, and public-repository sanitization. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,39 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers and engineering agents use this skill to convert plans into GitHub issues and PRs, manage review and merge flows, enforce public-repository hygiene, and handle GitHub CLI authentication and scope checks. <br>
+Developers and engineering agents use this skill to turn plans, research, and implementation work into GitHub issues, pull requests, reviews, comments, dependency links, and guarded merge or publish flows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents through high-impact GitHub actions, including token refreshes, public posting, force-pushes, direct branch pushes, and merges. <br>
-Mitigation: Install only where agent-managed GitHub workflows are intended, and require explicit user confirmation before token refreshes, public posts, force-pushes, direct master pushes, or merges. <br>
-Risk: Hardcoded account mappings and scope rules can cause work to run under the wrong GitHub identity or with broader access than expected. <br>
-Mitigation: Replace the documented accounts and scope rules with the user's own policy, then verify gh CLI identity, repository owner, and token scope before live operations. <br>
-Risk: Home-directory and cache assumptions can affect how credentials or local workflow state are reused between agent runs. <br>
-Mitigation: Review local credential storage, cache dependencies, and gh CLI state before enabling the skill in shared or sensitive environments. <br>
+Risk: The skill can lead an agent to create or edit GitHub issues and pull requests, post comments or reviews, push branches, request reviewers, and merge changes. <br>
+Mitigation: Install it only for repositories where the agent should have GitHub write authority, and review proposed issue, PR, review, push, and merge actions before allowing them to run. <br>
+Risk: The workflow relies on broad GitHub permissions and account switching, which can cause actions to run under the wrong identity or with more access than intended. <br>
+Mitigation: Use scoped GitHub accounts, verify the active account and required scopes before write operations, and prefer command-scoped token use for account-specific commands. <br>
+Risk: Public repository content can accidentally include personal data, internal paths, or sensitive operational details. <br>
+Mitigation: Run the skill's public-repository sanitization checks before publishing issue bodies, PR bodies, comments, or review text. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/drumrobot/skills/github-flow) <br>
-- [Publisher profile](https://clawhub.ai/user/drumrobot) <br>
+- [Skill overview](artifact/SKILL.md) <br>
+- [Changelog](artifact/CHANGELOG.md) <br>
+- [Authentication and scope guidance](artifact/auth-scope.md) <br>
+- [PR workflow guidance](artifact/pr.md) <br>
+- [Merge gates](artifact/merge.md) <br>
+- [Push guards](artifact/push-guards.md) <br>
+- [Public repository sanitization](artifact/sanitize.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and GitHub CLI/API examples] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands, code snippets, and occasional JSON or API payloads] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires local GitHub repository context and configured gh CLI credentials for live GitHub operations.] <br>
+**Other Properties Related to Output:** [May direct an agent to operate GitHub issues, pull requests, reviews, branches, and merges through the GitHub CLI and local helper scripts.] <br>
 
 ## Skill Version(s): <br>
-0.7.0 (source: server release metadata and CHANGELOG, released 2026-07-23) <br>
+0.8.0 (source: server release metadata and CHANGELOG.md, released 2026-08-03) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

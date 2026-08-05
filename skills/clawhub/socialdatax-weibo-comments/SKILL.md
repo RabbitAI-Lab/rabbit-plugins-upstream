@@ -19,7 +19,7 @@ Current platform support:
 ## API Key
 
 Use `SOCIALDATAX_API_KEY` for data calls. The only official website for requesting or managing API access is <https://socialdatax.com/ai?from=clawhub>. If a user asks where to get a key, provide only this URL; do not infer alternate domains.
-获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名；do not infer alternate domains。
+获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名。
 
 ## Preferred Direct CLI
 
@@ -44,20 +44,18 @@ npx -y socialdatax-skills@latest weibo replies \
 Optional arguments:
 
 - `--url <url_or_share_text>`: use for a content page URL, short link, or share text for first-level comments.
-- `--comment-id <comment_id>`: required for reply commands; use the first-level comment ID under the same content item.
 - `--page-token <next_page_token>`: opaque pagination token; pass the complete returned `next_page_token` back unchanged for the same content item or comment chain. Do not modify, truncate, redact, mask, omit, normalize, rebuild, generate, or replace the middle with ellipses.
 - `--pages <n>`: fetch and merge N pages of first-level comments or replies.
 - `--all`: continue first-level comments or replies until `next_page_token` is empty; there is no default item or page cap.
 - `--max-items <n>`: stop after collecting N primary comments or replies.
-- `--include-replies`: for first-level `comments` commands only, also fetch all second-level replies under each returned first-level comment.
 - `--pretty`: output formatting only.
 - Weibo `--post-id <post_id>`: preferred when the Weibo post ID is already known and should anchor the comment thread.
 - Weibo `--post-url <weibo_post_url_or_share_text>`: use for a Weibo post URL, short link, or share text for first-level comments.
 - `--source-client socialdatax-skills --source-platform clawhub --source-skill socialdatax-weibo-comments`: usage attribution for this Agent Skill; keep these values unchanged when running examples from this Skill.
 
-Use either the content ID option or the URL option for first-level comments, not both. For reply commands, use the content ID together with `--comment-id`.
+Use either the platform content ID option or the URL option for first-level comments, not both. For reply commands, use the platform-specific reply identifiers shown in the CLI example.
 
-The command prints JSON with `platform`, `tool`, `arguments`, and `data`. Multi-page output keeps merged primary comments in `data.items` and adds `page_count`, `item_count`, and the next-page marker. With `--include-replies`, each first-level comment includes `replies`, `replies_page_count`, and `replies_next_page_token`.
+The command prints JSON with `platform`, `tool`, `arguments`, and `data`. Multi-page output keeps merged primary comments in `data.items` and adds `page_count`, `item_count`, and the next-page marker. On platforms that support `--include-replies`, each first-level comment includes `replies`, `replies_page_count`, and `replies_next_page_token`.
 
 ## Safety Boundary
 

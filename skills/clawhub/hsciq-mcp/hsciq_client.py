@@ -12,6 +12,7 @@ HSCIQ MCP Python Client
 - 获取归类咨询单详情
 - 查看归类咨询单列表
 - 归类单讨论（新建/回复）
+- 获取行业分类列表（用于创建归类咨询单时选择 categoryId）
 
 使用示例:
     python hsciq_client.py search-code --keywords "塑料软管" --country CN
@@ -22,6 +23,7 @@ HSCIQ MCP Python Client
     python hsciq_client.py get-guilei-form --formId "abc123..."
     python hsciq_client.py list-my-guilei-forms --pageIndex 1
     python hsciq_client.py add-guilei-dialog-message --formId "abc..." --fieldKey "ProductNameCn" --content "追问"
+    python hsciq_client.py list-guilei-categories
 """
 
 import os
@@ -39,7 +41,7 @@ CONFIG_FILE = os.path.expanduser("~/.openclaw/workspace/hsciq-mcp-config.json")
 
 
 class HSCIQClient:
-    """HSCIQ MCP API 客户端"""
+    """HSCIQ MCP API 客户端（标准 MCP 协议，JSON-RPC over Stateless Streamable HTTP，端点 /mcp/rpc）"""
 
     def __init__(self, base_url: Optional[str] = None, api_key: Optional[str] = None):
         self.base_url = (base_url or os.getenv("HSCIQ_BASE_URL") or
@@ -47,6 +49,7 @@ class HSCIQClient:
         self.api_key = (api_key or os.getenv("HSCIQ_API_KEY") or
                        self._load_config().get("apiKey", ""))
         self.auth_header = self._load_config().get("authHeader", "X-API-Key")
+        self._request_id = 0
 
     def _load_config(self) -> Dict[str, str]:
         if os.path.exists(CONFIG_FILE):
@@ -57,26 +60,77 @@ class HSCIQClient:
                 pass
         return {}
 
-    def _request(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
-        url = f"{self.base_url}/mcp/tools/call"
-        headers = {"Content-Type": "application/json"}
+    @staticmethod
+    def _parse_sse(body: str) -> Dict[str, Any]:
+        """从 SSE (text/event-stream) 响应体中提取最后一条 message 事件的 JSON-RPC 数据；
+        兼容非 SSE 的纯 JSON（如 401 错误）。"""
+        data = None
+        for line in body.split('\n'):
+            t = line.strip()
+            if t.startswith('data:'):
+                data = t[5:].strip()
+        return json.loads(data if data else body)
+
+    def _rpc(self, method: str, params: Dict[str, Any]) -> Dict[str, Any]:
+        """标准 MCP JSON-RPC 调用。"""
+        url = f"{self.base_url}/mcp/rpc"
+        self._request_id += 1
+        headers = {
+            "Content-Type": "application/json",
+            "Accept": "application/json, text/event-stream",
+        }
         if self.api_key:
             headers[self.auth_header] = self.api_key
 
-        payload = {"toolName": tool_name, "arguments": arguments}
+        payload = {"jsonrpc": "2.0", "id": self._request_id, "method": method, "params": params}
         data = json.dumps(payload).encode('utf-8')
         req = urllib.request.Request(url, data=data, headers=headers, method='POST')
 
         try:
             with urllib.request.urlopen(req, timeout=30) as response:
-                return json.loads(response.read().decode('utf-8'))
+                body = response.read().decode('utf-8')
         except urllib.error.HTTPError as e:
             error_body = e.read().decode('utf-8') if e.fp else ""
+            try:
+                j = json.loads(error_body)
+                error_body = j.get("message") or j.get("error") or error_body
+            except Exception:
+                pass
             raise Exception(f"API request failed (HTTP {e.code}): {error_body}")
         except urllib.error.URLError as e:
             raise Exception(f"Network error: {e.reason}")
+
+        try:
+            envelope = self._parse_sse(body)
         except json.JSONDecodeError as e:
             raise Exception(f"Response parse error: {e}")
+
+        if envelope.get("error"):
+            err = envelope["error"]
+            raise Exception(f"{err.get('message', 'MCP error')} (code {err.get('code')})")
+        return envelope.get("result") or {}
+
+    def _request(self, tool_name: str, arguments: Dict[str, Any]) -> Dict[str, Any]:
+        """tools/call：优先返回 structuredContent.result，兜底解析 content[].text。"""
+        result = self._rpc("tools/call", {"name": tool_name, "arguments": arguments})
+
+        if result.get("isError") is True:
+            text = " ".join(c.get("text", "") for c in result.get("content", [])).strip()
+            raise Exception(text or f"Tool {tool_name} failed")
+
+        structured = result.get("structuredContent")
+        if structured is not None:
+            if isinstance(structured, dict) and "result" in structured:
+                return structured["result"]
+            return structured
+
+        text = "".join(c.get("text", "") for c in result.get("content", [])).strip()
+        if text:
+            try:
+                return json.loads(text)
+            except json.JSONDecodeError:
+                return {"text": text}
+        return result
 
     def search_code(self, keywords: str, country: str = "CN",
                     pageIndex: int = 1, pageSize: int = 10) -> Dict[str, Any]:
@@ -109,6 +163,7 @@ class HSCIQClient:
                            cas: Optional[str] = None, brand: Optional[str] = None,
                            model: Optional[str] = None, otherProductInfo: Optional[str] = None,
                            qq: Optional[str] = None, weixin: Optional[str] = None,
+                           categoryId: Optional[int] = None,
                            isPaid: bool = False, images: Optional[List[str]] = None) -> Dict[str, Any]:
         """
         创建 HS 归类咨询单，提交产品信息与图片给平台专业归类师人工审核。
@@ -124,14 +179,17 @@ class HSCIQClient:
             otherProductInfo: 其他产品信息
             qq: QQ 联系方式
             weixin: 微信联系方式
+            categoryId: 行业分类 ID（可选，通过 list_guilei_categories 获取可用分类列表）
             isPaid: 是否付费咨询
-            images: 图片文件路径列表（最多3张，每张≤1MB，支持jpg/png/gif/webp）
+            images: 图片文件路径列表（必填，至少1张，最多3张，每张≤1MB，支持jpg/png/gif/webp）
 
         Returns:
             {"formId": "...", "status": "已创建", "imageCount": N, "imageUrls": [...]}
         """
         if not productNameCn:
             raise ValueError("productNameCn is required")
+        if not images:
+            raise ValueError("images is required: at least 1 product image (1-3 images, ≤1MB each, jpg/png/gif/webp)")
 
         arguments: Dict[str, Any] = {"productNameCn": productNameCn}
         if productNameEn:
@@ -152,6 +210,8 @@ class HSCIQClient:
             arguments["qq"] = qq
         if weixin:
             arguments["weixin"] = weixin
+        if categoryId is not None:
+            arguments["categoryId"] = categoryId
         if isPaid:
             arguments["isPaid"] = isPaid
 
@@ -239,22 +299,19 @@ class HSCIQClient:
 
         return self._request("add_guilei_dialog_message", arguments)
 
+    def list_guilei_categories(self) -> Dict[str, Any]:
+        """
+        获取可用的行业分类列表，用于创建归类咨询单时选择 categoryId。
+
+        Returns:
+            [{"id": 1, "name": "分类名称"}, ...]
+        """
+        return self._request("list_guilei_categories", {})
+
     def list_tools(self) -> Dict[str, Any]:
-        url = f"{self.base_url}/mcp/tools/list"
-        headers = {"Content-Type": "application/json"}
-        if self.api_key:
-            headers[self.auth_header] = self.api_key
-        req = urllib.request.Request(url, data=b'{}', headers=headers, method='POST')
-        try:
-            with urllib.request.urlopen(req, timeout=30) as response:
-                return json.loads(response.read().decode('utf-8'))
-        except urllib.error.HTTPError as e:
-            error_body = e.read().decode('utf-8') if e.fp else ""
-            raise Exception(f"API request failed (HTTP {e.code}): {error_body}")
-        except urllib.error.URLError as e:
-            raise Exception(f"Network error: {e.reason}")
-        except json.JSONDecodeError as e:
-            raise Exception(f"Response parse error: {e}")
+        """tools/list：返回服务器公布的工具列表（含 inputSchema/outputSchema）。"""
+        result = self._rpc("tools/list", {})
+        return result.get("tools", [])
 
 
 def format_output(data: Dict[str, Any], indent: int = 2) -> str:
@@ -275,6 +332,7 @@ Usage examples:
   %(prog)s get-guilei-form --formId "abc123..."
   %(prog)s list-my-guilei-forms --pageIndex 1
   %(prog)s add-guilei-dialog-message --formId "abc..." --fieldKey "ProductNameCn" --content "追问"
+  %(prog)s list-guilei-categories
   %(prog)s list-tools
         """
     )
@@ -317,8 +375,9 @@ Usage examples:
     guilei_parser.add_argument('--otherProductInfo', help='Other product info')
     guilei_parser.add_argument('--qq', help='QQ contact')
     guilei_parser.add_argument('--weixin', help='WeChat contact')
+    guilei_parser.add_argument('--categoryId', type=int, help='Industry category ID (optional, get available list via list-guilei-categories)')
     guilei_parser.add_argument('--isPaid', action='store_true', help='Paid consultation')
-    guilei_parser.add_argument('--images', nargs='+', help='Image file paths (max 3, ≤1MB each, jpg/png/gif/webp)')
+    guilei_parser.add_argument('--images', nargs='+', required=True, help='Image file paths (required, 1-3 images, ≤1MB each, jpg/png/gif/webp)')
 
     # get-guilei-form
     get_form_parser = subparsers.add_parser('get-guilei-form', help='Get classification consultation form detail')
@@ -336,6 +395,9 @@ Usage examples:
     dialog_parser.add_argument('--content', required=True, help='Message content (required)')
     dialog_parser.add_argument('--dialogId', help='Dialog ID (reply to existing if set, create new if empty)')
     dialog_parser.add_argument('--messageType', type=int, help='Optional message type')
+
+    # list-guilei-categories
+    subparsers.add_parser('list-guilei-categories', help='List industry categories for create-guilei-form categoryId')
 
     # list-tools
     subparsers.add_parser('list-tools', help='List available tools')
@@ -371,6 +433,7 @@ Usage examples:
                 otherProductInfo=args.otherProductInfo,
                 qq=args.qq,
                 weixin=args.weixin,
+                categoryId=args.categoryId,
                 isPaid=args.isPaid,
                 images=args.images
             )
@@ -386,6 +449,8 @@ Usage examples:
                 dialogId=args.dialogId,
                 messageType=args.messageType
             )
+        elif args.command == 'list-guilei-categories':
+            result = client.list_guilei_categories()
         elif args.command == 'list-tools':
             result = client.list_tools()
 

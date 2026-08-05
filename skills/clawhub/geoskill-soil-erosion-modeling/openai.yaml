@@ -1,0 +1,15 @@
+name: geoskill-soil-erosion-modeling
+display_name: 土壤侵蚀建模
+description: |
+  RUSLE 模型空间化估算土壤侵蚀模数：A = R×K×L×S×C×P，含降雨侵蚀力、土壤可蚀性、坡长坡度、植被覆盖与水保措施六因子。Computes soil erosion modulus with RUSLE (R K L S C P) spatialized factors. 输出侵蚀模数与强度分级 GeoTIFF。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-soil-erosion-modeling.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - coastal
+  - gis
+  - mining
+  - raster
+  - remote-sensing

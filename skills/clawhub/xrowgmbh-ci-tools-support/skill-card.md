@@ -11,32 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and support maintainers use this skill to triage eligible CI Tools support issues and discussion threads, answer from public documentation or provided context, and hand off unsafe or out-of-scope requests. <br>
+Developers, support engineers, and maintainers use this skill to triage eligible GitLab support issues and discussions for the CI Tools components catalog, then provide grounded answers, focused follow-up questions, or handoffs. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Support may be provided to an unintended requester if SUPPORT_TRUSTED_DOMAINS is stale or too broad. <br>
-Mitigation: Keep SUPPORT_TRUSTED_DOMAINS current and verify the requester domain before answering. <br>
-Risk: Private customer details, private URLs, private logs, or internal project names could be exposed in public support replies. <br>
-Mitigation: Mark issues confidential when they include sensitive details and do not quote private logs into public places. <br>
-Risk: Incorrect CI Tools guidance could be given if component behavior or inputs are assumed. <br>
-Mitigation: Inspect the relevant public component template, documentation, issue, merge request, or pipeline log before answering. <br>
+Risk: The agent could provide support to an ineligible requester or for an out-of-scope issue. <br>
+Mitigation: Check the trusted requester domain list, confirm CI Tools relevance, and hand off or refuse when eligibility checks fail. <br>
+Risk: Support replies could expose private customer details, private URLs, credentials, or private logs. <br>
+Mitigation: Keep issues confidential when private details are present, avoid quoting private logs publicly, and scope any GitLab token to only the needed comment and label operations. <br>
+Risk: The agent could give unsupported CI component behavior or unsafe access guidance. <br>
+Mitigation: Inspect public component templates and cited sources before answering, ask for a public reproduction when context is missing, and refuse credential-recovery or access-bypass requests. <br>
 
 
 ## Reference(s): <br>
-- [ci-tools-support Support on ClawHub](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-support) <br>
+- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-support) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown support replies with citations or concise handoff guidance] <br>
+**Output Type(s):** [Text, Markdown, Guidance] <br>
+**Output Format:** [Markdown support replies, focused follow-up questions, handoff or refusal notes, and triage label guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses are constrained to eligible CI Tools support requests and public or explicitly provided information.] <br>
+**Other Properties Related to Output:** [Responses should be grounded in public documentation, public repository content, public GitLab history, or details explicitly provided in the request.] <br>
 
 ## Skill Version(s): <br>
-4.165.2 (source: server-resolved release metadata) <br>
+4.167.1 (source: release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

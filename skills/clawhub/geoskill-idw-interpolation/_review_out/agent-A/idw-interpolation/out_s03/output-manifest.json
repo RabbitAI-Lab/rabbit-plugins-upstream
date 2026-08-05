@@ -1,0 +1,47 @@
+{
+  "skill": "idw-interpolation",
+  "skill_version": "1.0.0",
+  "command": "idw-interpolation --bbox 121.0 31.0 122.0 32.0 --synthetic --output-dir _review_out/agent-A/idw-interpolation/out_s03 --quiet",
+  "started_at": "2026-08-03T17:45:16.220277Z",
+  "finished_at": "2026-08-03T17:45:16.379546Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out/agent-A/idw-interpolation/out_s03\\idw_result.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        121.0,
+        31.0,
+        122.0,
+        32.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_points": 50,
+    "power": 2.0,
+    "n_neighbors": null,
+    "result_min": 0.5841784384928606,
+    "result_max": 4.393767375476101,
+    "result_mean": 2.409625294349348
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "idw-interpolation"
+  },
+  "error": null
+}

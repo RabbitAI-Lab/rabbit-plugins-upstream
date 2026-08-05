@@ -1,0 +1,204 @@
+"""
+VERIFY phase: check if findings are resolved.
+
+The verifier is placed in the workdir (checked out at loop branch HEAD) with
+access to findings on disk. They can read files directly and run
+``git diff <branch-point>..HEAD`` to see the cumulative change. Output is
+validated JSON.
+
+``run_verify(findings, diff_text, review_cmd, providers, jsonio, timeout, workdir) -> dict``
+"""
+import json
+from collections.abc import Mapping
+from typing import Any
+
+from adversarial_common import NoProviderAvailable, gitops, run_phase_cmd
+from scripts.phases.runtime import (
+    merge_provider_history,
+    merge_runtime,
+    merge_warnings,
+    raise_no_provider_available,
+)
+
+__all__ = ["run_verify"]
+
+_VALID_VERDICTS = {"APPROVE", "REJECT"}
+_VALID_STATUS = {"resolved", "rejected", "disputed"}
+_VALID_CONFIDENCE = {"high", "medium", "low"}
+_VALID_BASIS = {"spec", "code", "inference", "external"}
+
+
+def _valid_distribution(distribution: Any) -> bool:
+    if not isinstance(distribution, dict):
+        return False
+    expected = {
+        "confidence": _VALID_CONFIDENCE,
+        "basis": _VALID_BASIS,
+    }
+    for category, labels in expected.items():
+        counts = distribution.get(category)
+        if not isinstance(counts, dict) or set(counts) != labels:
+            return False
+        if any(isinstance(value, bool) or not isinstance(value, int) or value < 0
+               for value in counts.values()):
+            return False
+    return True
+
+
+def _validate(payload: Any) -> bool:
+    if not isinstance(payload, dict):
+        return False
+    if payload.get("verdict") not in _VALID_VERDICTS:
+        return False
+    if not _valid_distribution(payload.get("epistemic_distribution")):
+        return False
+    results = payload.get("results")
+    if not isinstance(results, list):
+        return False
+    for item in results:
+        if not isinstance(item, dict):
+            return False
+        if item.get("status") not in _VALID_STATUS:
+            return False
+        if not isinstance(item.get("id"), str) or not item["id"].strip():
+            return False
+        if not isinstance(item.get("evidence"), str):
+            return False
+        if item.get("confidence") not in _VALID_CONFIDENCE:
+            return False
+        if item.get("basis") not in _VALID_BASIS:
+            return False
+    return True
+
+
+def run_verify(
+    findings: list,
+    diff_text: str,
+    review_cmd: str,
+    resolver: Any,
+    jsonio: Any,
+    timeout: int = 600,
+    workdir: str = "",
+    branch_point: str = "",
+    explicit_cmd: str | None = None,
+    force: bool = False,
+    force_provider: str | None = None,
+    execution: Mapping[str, Any] | None = None,
+    ledger: Any = None,
+) -> dict:
+    """Run VERIFY model with project access to the loop branch.
+
+    The verifier reads findings from review JSON, explores the code on disk,
+    runs ``git diff <branch-point>..HEAD`` to see changes, and outputs per-finding
+    status. JSON extraction tries multiple strategies to be model-agnostic.
+
+    Returns ``{"phase": "verify", "results": [...], "verdict": "...",
+               "exit_code": 0}``.
+    """
+    try:
+        branch = gitops.get_current_branch(workdir or ".")
+    except (gitops.GitError, OSError):
+        branch = "(unknown)"
+
+    diff_base = branch_point or "<branch-point>"
+    prompt = (
+        f"You are verifying code in a git branch checked out at `{branch}`.\n\n"
+        "For each finding below, determine whether it is **resolved** (code fixed), "
+        "**rejected** (finding was wrong), or **disputed** (unclear).\n\n"
+        f"The branch-point SHA for this review is `{diff_base}`.\n"
+        "To see the cumulative change since that branch point:\n"
+        f"  git diff {diff_base}..HEAD\n\n"
+        "To see full files: cat <filepath>\n\n"
+        f"Findings:\n{json.dumps(findings, indent=2)}\n\n"
+        "Output ONLY valid JSON:\n"
+        '{"results": [{"id": "A1", "status": "resolved|rejected|disputed", '
+        '"evidence": "concrete evidence", "confidence": "high|medium|low", '
+        '"basis": "spec|code|inference|external"}], '
+        '"epistemic_distribution": {"confidence": {"high": 0, "medium": 0, '
+        '"low": 0}, "basis": {"spec": 0, "code": 0, "inference": 0, '
+        '"external": 0}}, "summary": "N resolved, N rejected, N disputed", '
+        '"verdict": "APPROVE|REJECT"}'
+    )
+
+    runtime_calls = []
+    provider_results = []
+    parse_warnings = []
+
+    def _attempt(prompt_text):
+        execution_args = dict(execution or {})
+        if execution is not None or ledger is not None:
+            execution_args["phase"] = "verify"
+        if ledger is not None:
+            execution_args["ledger"] = ledger
+        command_args = {}
+        if resolver is None and explicit_cmd is None:
+            command_args["cmd"] = review_cmd
+        provider_result = run_phase_cmd(
+            phase_name="verify",
+            role="verify",
+            workdir=workdir,
+            resolver=resolver,
+            explicit_cmd=explicit_cmd,
+            force=force,
+            force_provider=force_provider,
+            stdin_text=prompt_text,
+            timeout=timeout,
+            persona="verifier",
+            **command_args,
+            **execution_args,
+        )
+        raise_no_provider_available(provider_result, "verify")
+        provider_results.append(provider_result)
+        stdout, stderr, code = provider_result[:3]
+        metadata = getattr(provider_result, "metadata", {})
+        runtime_calls.append(
+            dict(metadata) if isinstance(metadata, Mapping) else {}
+        )
+        if code != 0:
+            return None, f"VERIFY exited {code}: {(stderr or '')[:200]}", stdout
+        payload = jsonio.parse_json_output(stdout, warnings=parse_warnings)
+        return payload, None, stdout
+
+    try:
+        payload, err, stdout = _attempt(prompt)
+        if err:
+            return {
+                "phase": "verify", "exit_code": 1, "error": err,
+                "execution": merge_runtime(runtime_calls),
+                "provider_history": merge_provider_history(provider_results),
+            }
+        if not _validate(payload):
+            payload, err, stdout = _attempt(
+                prompt + "\n\nIMPORTANT: Respond with raw JSON only. "
+                "No markdown, no code fences, no explanations."
+            )
+            if err:
+                return {
+                    "phase": "verify", "exit_code": 1, "error": err,
+                    "execution": merge_runtime(runtime_calls),
+                    "provider_history": merge_provider_history(provider_results),
+                }
+            if not _validate(payload):
+                return {
+                    "phase": "verify", "exit_code": 1,
+                    "results": [], "verdict": "UNKNOWN",
+                    "error": "invalid JSON after retry", "stdout": stdout,
+                    "warnings": parse_warnings,
+                    "execution": merge_runtime(runtime_calls),
+                    "provider_history": merge_provider_history(provider_results),
+                }
+        return {
+            "phase": "verify", "exit_code": 0,
+            "results": payload.get("results", []),
+            "verdict": payload.get("verdict", "REJECT"),
+            "epistemic_distribution": payload["epistemic_distribution"],
+            "summary": payload.get("summary", ""),
+            "stdout": stdout,
+            "warnings": merge_warnings(payload, parse_warnings),
+            "execution": merge_runtime(runtime_calls),
+            "provider_history": merge_provider_history(provider_results),
+        }
+    except NoProviderAvailable:
+        raise
+    except Exception as exc:
+        return {"phase": "verify", "exit_code": 1, "error": str(exc)}

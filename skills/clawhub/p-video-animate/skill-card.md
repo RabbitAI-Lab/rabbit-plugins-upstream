@@ -1,5 +1,5 @@
 ## Description: <br>
-Guides an agent through using Pruna's p-video-animate API to animate a reference image with motion from a source video. <br>
+Use when someone wants a photo to move like another video - motion transfer, dance remixes, or performance variations from a template clip. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and creative operators use this skill to prepare prompts, upload source media, and call Pruna's API for motion-transfer video generation from one image and one motion-template video. <br>
+Developers and creative operators use this skill to guide an agent through Pruna video animation workflows that animate a reference image with motion from a source video. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Using the skill sends selected images and videos to Pruna's API with the user's PRUNA_API_KEY. <br>
-Mitigation: Use only media the user is allowed to upload and confirm credentials before making API calls. <br>
-Risk: Generated prompts or optional fields can change outputs or trigger paid API calls. <br>
-Mitigation: Review generated prompts and key parameters before submission, especially when the instruction prompt is not already locked. <br>
-Risk: The artifact exposes an optional disable_safety_checker field. <br>
-Mitigation: Be cautious with safety-check settings and keep default protections enabled unless the user has a justified need. <br>
+Risk: The workflow sends selected images, source videos, prompts, and API key-authenticated requests to Pruna. <br>
+Mitigation: Use the skill only when Pruna is an appropriate processor for the media, avoid private or sensitive assets when that is not true, and confirm PRUNA_API_KEY before any API call. <br>
+Risk: Optional related-skill installs can expand the agent workflow beyond this single Pruna model guide. <br>
+Mitigation: Review each optional related-skill install before accepting it and keep the workflow limited to the user's requested animation task. <br>
+Risk: Motion-transfer outputs may imply that the image subject performed motion from another video. <br>
+Mitigation: Confirm the source video, reference image, resolution, target frame rate, and any instruction_prompt before submission, and keep prompts narrow to the requested motion transfer. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/p-video-animate) <br>
+- [Pruna file upload API endpoint](https://api.pruna.ai/v1/files) <br>
+- [Pruna predictions API endpoint](https://api.pruna.ai/v1/predictions) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline curl examples and parameter notes] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline curl commands and JSON request examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a PRUNA_API_KEY and user-provided image and video URLs or uploaded Pruna file URLs.] <br>
+**Other Properties Related to Output:** [Guides authenticated Pruna API upload, prediction, polling, and download workflows for user-provided image and video inputs.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata and artifact metadata) <br>
+1.0.9 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

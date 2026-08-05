@@ -105,7 +105,9 @@ If Gmail tools are missing or the connection shows an error:
 
 ## Security & Permissions
 
-- Access is scoped to the connected Google account's Gmail mailbox.
+- The connection is an OAuth grant approved on Google's own consent screen. It covers full mailbox access (Google's `https://www.googleapis.com/auth/mail.google.com` scope), which is what read, search, draft, send, forward, and label operations require. The user can revoke it at any time at https://myaccount.google.com/permissions.
+- No password or app password is stored anywhere. Nothing durable lives on the user's machine.
+- Nothing runs on a timer. Gmail is touched only when the user asks.
 - **All write operations require explicit user confirmation.** Before executing any send, reply, forward, draft, label change, archive, or delete call, confirm the intended action with the user.
 - Destructive actions (permanent delete, trash) are marked as high-impact and must be confirmed.
 - Always confirm recipients, subject, and body before sending email.
@@ -280,7 +282,10 @@ clawlink_call_tool --tool "gmail_add_label_to_email" \
 - Custom label IDs (e.g., `Label_123`) are required for label operations — display names cannot be used.
 - The `thread_id` is required for replies. Leave subject empty when replying to stay in the same thread.
 - Message size limit is ~25 MB including attachments. Larger attachments may fail.
-- Gmail search query syntax: `from:`, `subject:`, `label:`, `is:unread`, `after:`, `before:`.
+- **`gmail_fetch_emails` defaults `max_results` to 1.** A request like "check my unread email" returns a single message unless you set it explicitly. Always pass a real number when the user asks for more than one.
+- Gmail search query syntax for the `query` argument, same as the Gmail search box: `from:`, `to:`, `subject:`, `label:`, `is:unread`, `has:attachment`, `in:inbox`, `newer_than:7d`, `older_than:1m`, `after:`, `before:`. Combine them freely (`from:stripe.com has:attachment newer_than:30d`).
+- Spam and trash are excluded unless `include_spam_trash` is set. If a message the user insists exists cannot be found, check there before reporting it missing.
+- `label_ids` filters on label IDs, not display names. Built-ins are uppercase (`INBOX`, `UNREAD`, `STARRED`, `SPAM`, `TRASH`); call `gmail_list_labels` first for custom ones.
 
 ## Error Handling
 
@@ -289,7 +294,8 @@ clawlink_call_tool --tool "gmail_add_label_to_email" \
 | Tool not found | The tool name does not exist in the current catalog. Verify with `clawlink_list_tools --integration gmail`. |
 | Missing connection | Gmail is not connected. Direct the user to https://claw-link.dev/dashboard?add=gmail. |
 | `404 Not Found` | Message or thread ID does not exist or is not accessible. |
-| `403 Forbidden` | Insufficient scopes or Gmail API quota exceeded. |
+| `403 Forbidden` | Most often a placeholder or example ID rather than a scope problem: an ID copied from documentation instead of one returned by a live search. Run a list or search call first, then retry with a real `message_id`, `thread_id`, or label ID. Otherwise it is Gmail API quota, or the connected account lacking access to the mailbox in the request. |
+| Worked before, now failing on every call | The OAuth token was invalidated. Google does this when the user changes their Google account password (refresh tokens carrying Gmail scopes are revoked), when they revoke the app's access, or after six months of non-use. Direct the user to reconnect at https://claw-link.dev/dashboard?add=gmail. |
 | `429 Rate Limit` | Too many requests. Apply exponential backoff. |
 | Write rejected | User did not confirm a write action. Always confirm before executing sends, replies, forwards, drafts, label changes, archive, or delete. |
 

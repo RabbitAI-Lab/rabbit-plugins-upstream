@@ -1,5 +1,5 @@
 ## Description: <br>
-Self-custody Ethereum agent wallet that runs locally as a Docker-based MCP server for reading wallet context, balances, DeFi positions, transaction previews, and message signing. <br>
+Self-custody Ethereum agent wallet that runs locally in Docker or Podman, keeps private keys on the user's machine, and lets an agent read wallet context, balances and DeFi positions, preview and execute sends, and sign plain messages or EIP-712 typed data. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to connect an agent to a local self-custody Ethereum wallet for wallet inspection, balance and DeFi position review, transaction previews, and approved signing actions. <br>
+External users and developers use Rustok Wallet to give an agent a local self-custody Ethereum wallet for checking balances and positions, previewing transactions, executing ETH sends, and producing wallet signatures. It is intended for users who deliberately accept the operational risk of agent-controlled real funds. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can control real funds when configured with signing capability. <br>
-Mitigation: Use small balances, restrict capabilities to read-only unless signing is needed, and verify each transaction preview before approval. <br>
-Risk: The recovery phrase, keyring password, and wallet environment file protect access to the wallet. <br>
-Mitigation: Back up the recovery phrase offline, keep secrets out of MCP configuration and shell history, and store the env file with private file permissions. <br>
-Risk: The package relies on an external proprietary Docker image tagged latest. <br>
-Mitigation: Install only when an agent-accessible self-custody wallet is intended, and review the image source and operational trust assumptions before use. <br>
+Risk: An agent can control a funded self-custody wallet and may move real funds when execution capabilities are enabled. <br>
+Mitigation: Keep only limited funds in the wallet, prefer read-only or preview-only capabilities unless execution is needed, and require a fresh transaction preview before execution. <br>
+Risk: Network exposure of the HTTP gateway can expand signing risk if API-key handling or access control is misconfigured. <br>
+Mitigation: Keep the gateway loopback-only by default and expose it over a network only when the operator intentionally configures an API key and accepts the risk. <br>
+Risk: Keyring password exposure can compromise access to the local wallet. <br>
+Mitigation: Use Podman secrets or a 0600 password file, and do not place the keyring password inline in shell history or MCP configuration. <br>
 
 
 ## Reference(s): <br>
-- [Rustok MCP homepage](https://github.com/rustok-org/mcp) <br>
-- [ClawHub skill page](https://clawhub.ai/temrjan/skills/rustok-wallet) <br>
+- [Rustok wallet homepage](https://github.com/rustok-org/mcp) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command snippets and JSON configuration examples] <br>
+**Output Format:** [Markdown with inline bash commands and JSON configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Docker, a local wallet volume, RPC URL configuration, and explicit user review before signing actions.] <br>
+**Other Properties Related to Output:** [Includes wallet setup, MCP configuration, capability guidance, transaction preview guidance, and operational cautions for self-custody use.] <br>
 
 ## Skill Version(s): <br>
-0.4.4 (source: frontmatter, claw.json, release evidence) <br>
+0.5.0 (source: SKILL.md frontmatter, claw.json, evidence release) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

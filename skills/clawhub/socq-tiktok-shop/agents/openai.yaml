@@ -1,0 +1,11 @@
+interface:
+  display_name: "SocQ TikTok Shop Research"
+  short_description: "Research public TikTok Shop data"
+  default_prompt: "Use $socq-tiktok-shop to research this topic on TikTok Shop."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "socq"
+      description: "Hosted SocQ TikTok Shop data tools"
+      transport: "streamable_http"
+      url: "https://api.socq.ai/mcp?platforms=tiktok-shop"

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/claude-session",
   "slug": "claude-session",
   "ownerHandle": null,
-  "version": "0.6.0",
-  "updatedAt": 1784815762218,
-  "contentHash": "3f40079275588bef009a0ce27ce2d48d3875082d82498fb618948f4c0bac0580",
-  "fetchedAt": "2026-07-26T18:07:00.295Z"
+  "version": "0.7.0",
+  "updatedAt": 1785828935520,
+  "contentHash": "e45f7ab8b61ec08ad91cf6158aa68c75b2d6b3588ccc7dcbefa7e70ba7cc7478",
+  "fetchedAt": "2026-08-05T10:06:33.206Z"
 }

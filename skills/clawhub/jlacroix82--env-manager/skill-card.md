@@ -1,42 +1,59 @@
-## Description: <br>
-Scaffolds dev project files for Python, Node, Docker, Go, and Rust, returning toolchain commands for the calling agent while writing files only inside the agent workspace. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Env Manager scaffolds starter files for Python, Node, Docker, Go, and Rust projects, tracks environment, service, and port metadata, and returns structured toolchain commands for the calling agent to inspect and run.
 
-## Publisher: <br>
-[jlacroix82](https://clawhub.ai/user/jlacroix82) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jlacroix82](https://clawhub.ai/user/jlacroix82)
 
-## Use Case: <br>
-Developers and agent operators use env-manager to scaffold starter project files for common language and toolchain environments and receive structured commands that the calling agent can review and run. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Workspace containment may not be reliably enforced before writing files. <br>
-Mitigation: Use only supported environment types with an explicit validated name, inspect returned paths before running generated commands, and avoid sensitive repositories until workspace root handling and type/name validation are verified. <br>
-Risk: Setup writes starter files and state during each successful setup call, with no preview step. <br>
-Mitigation: Review the target environment name, generated path, and existing files before invoking setup; do not call setup when file writes are not intended. <br>
-Risk: Returned shell commands could be run incorrectly by the calling agent. <br>
-Mitigation: Inspect each command object's binary, arguments, working directory, status, and warnings before execution; do not run commands marked blocked or not_found. <br>
+## Use Case:
 
+Developers and agents use this skill to initialize common project skeletons in a workspace and keep lightweight environment, service, and port inventory while deciding which generated toolchain commands to run.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jlacroix82/skills/env-manager) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration] <br>
-**Output Format:** [JSON objects, human-readable command text, and generated project files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated files are written during setup; returned commands are not executed by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: ClawHub release evidence) <br>
+Risk: Malformed setup input may create directories outside the promised workspace because of a type validation and path confinement gap.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Until the bug is fixed, pass only documented setup types (python, node, docker, go, rust) and sanitized environment names, and review generated file paths before accepting writes.
+
+Risk: Every setup call writes or overwrites scaffold and state files without a preview step.
+
+Mitigation: Use the skill in a disposable or version-controlled workspace and inspect changes before keeping them.
+
+Risk: The skill returns toolchain commands for a calling agent to run.
+
+Mitigation: Inspect command entries before execution, run only expected commands, and do not run entries marked blocked or not_found.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jlacroix82/skills/env-manager)
+- [README](artifact/README.md)
+- [Security audit](artifact/SECURITY-AUDIT.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Code, Shell commands, Configuration]
+
+**Output Format:** [JSON objects and plain text summaries; scaffold files and JSON state are written to the workspace.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill returns commands as data for the calling agent; it does not execute generated commands.]
+
+## Skill Version(s):
+
+3.0.8 (source: server release metadata and clawhub.yaml)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

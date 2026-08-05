@@ -1,48 +1,63 @@
-## Description: <br>
-Growth Engineer helps mobile app and agent-runtime teams correlate analytics, crashes, billing, feedback, store signals, and repo context into proposal drafts that can flow into agent chat, GitHub issues, or draft pull requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Growth Engineer for mobile apps and agent runtimes including OpenClaw and Hermes. Correlate analytics, crashes, billing, feedback, store signals, and repo context into proposal drafts that can flow into agent chat, GitHub issues, or draft pull requests.
 
-## Publisher: <br>
-[wotaso-dev](https://clawhub.ai/user/wotaso-dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wotaso-dev](https://clawhub.ai/user/wotaso-dev)
 
-## Use Case: <br>
-Developers and growth engineers use this skill to collect product, crash, monetization, store, feedback, and repo signals for mobile apps and turn them into execution-ready proposals, chat handoffs, GitHub issues, or draft pull requests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can install or update tools on the host. <br>
-Mitigation: Review before installing on a primary machine and prefer a dedicated workspace or host. <br>
-Risk: The skill can persist schedulers and recurring run state. <br>
-Mitigation: Verify cron, HEARTBEAT, and profile changes before enabling recurring runs. <br>
-Risk: Configured command sources or deliveries may execute shell commands or create external artifacts. <br>
-Mitigation: Disable self-update and command-based sources or deliveries unless needed, and keep provider and GitHub tokens read-only until artifact creation is explicitly desired. <br>
+## Use Case:
 
+Product engineers, growth engineers, and app maintainers use this skill to connect analytics, monetization, crash, feedback, store, and repo signals, then produce prioritized growth and production-health proposals for OpenClaw, Hermes, GitHub issues, or draft pull requests.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/wotaso-dev/skills/growth-engineer) <br>
-- [Growth Engineer Homepage](https://github.com/Wotaso/growth-engineer-skill) <br>
-- [Advanced Setup](references/advanced-setup.md) <br>
-- [Setup And Scheduling](references/setup-and-scheduling.md) <br>
-- [Required Secrets](references/required-secrets.md) <br>
-- [Input Schema](references/input-schema.md) <br>
-- [Generated GitHub Issue Template](references/issue-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, JSON configuration, local proposal or outbox files, and issue or pull request drafts when configured.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [External artifact creation is configurable; GitHub issues or draft pull requests should be created only when explicitly enabled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.209 (source: release evidence, SKILL.md metadata, package.json) <br>
+Risk: Running the skill can make lasting local automation changes, including tooling updates, config files, scheduler files, and external delivery artifacts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only in a trusted workspace, review generated config and cron settings, and enable GitHub writes or autopilot behavior only after explicit manual confirmation.
+
+Risk: Configured connectors may use credentials for analytics, billing, crash monitoring, store, GitHub, and notification systems.
+
+Mitigation: Use least-privilege tokens, keep secrets in the host terminal or secret store, and avoid exposing secrets in chat, repository files, logs, issue bodies, or pull request text.
+
+Risk: Custom commands, package installs, MCP token persistence, sudo setup, or isolated-runner setup can expand local execution scope.
+
+Mitigation: Avoid broad custom shell commands from untrusted config and require manual review before package installs, sudo actions, token persistence, or isolated-runner changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wotaso-dev/skills/growth-engineer)
+- [Declared project homepage](https://github.com/Wotaso/growth-engineer-skill)
+- [Advanced Setup](references/advanced-setup.md)
+- [Setup And Scheduling](references/setup-and-scheduling.md)
+- [Required Secrets](references/required-secrets.md)
+- [Input Schema](references/input-schema.md)
+- [Generated GitHub Issue Template](references/issue-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance, JSON summaries, local configuration files, shell commands, issue drafts, and optional GitHub issues or draft pull requests when configured]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write local outbox, connector-health, scheduler-proof, proposal, and configuration artifacts; external delivery is configuration-dependent.]
+
+## Skill Version(s):
+
+1.0.210 (source: server release, SKILL.md metadata, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

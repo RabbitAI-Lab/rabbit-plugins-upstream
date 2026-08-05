@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agentkey",
   "slug": "agentkey",
   "ownerHandle": null,
-  "version": "1.12.1",
-  "updatedAt": 1784884400438,
-  "contentHash": "7538c2233ff8334de33e8b75f74aca24284a3c4f3f540107165fec56bdbc24b5",
-  "fetchedAt": "2026-07-26T18:05:26.035Z"
+  "version": "1.13.0",
+  "updatedAt": 1785921233701,
+  "contentHash": "85b5bce905bb07af2bfdc9d2195a84b8223340c47ae4efc53fdec28b22b7d4c1",
+  "fetchedAt": "2026-08-05T10:02:11.423Z"
 }

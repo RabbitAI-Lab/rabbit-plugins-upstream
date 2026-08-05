@@ -1,0 +1,17 @@
+name: geoskill-irrigation-scheduling
+display_name: 灌溉制度优化
+description: |
+  基于 Penman-Monteith 需水与土壤水分平衡，按阈值触发灌溉日历。Computes crop water demand with Penman-Monteith, runs a soil water balance and triggers an irrigation calendar.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-irrigation-scheduling.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - dem
+  - gis
+  - hydrology
+  - mining
+  - optimization
+  - remote-sensing
+  - terrain

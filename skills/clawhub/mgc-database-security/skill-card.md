@@ -1,5 +1,5 @@
 ## Description: <br>
-Secure database credential management using MGC Blackbox for MySQL, PostgreSQL, SQLite, MariaDB, and related database workflows while avoiding direct credential exposure to AI models. <br>
+Database Credential Security (Zero‑Exposure Edition) teaches agents how to manage database credentials with MGC Blackbox while using local scripts for database operations. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and automation engineers use this skill to design database workflows that store credentials in MGC Blackbox, reference them by identifier, and retrieve them through trusted local execution paths instead of placing passwords in prompts, logs, or skill files. <br>
+Developers and engineers use this documentation skill to plan database automation that keeps passwords out of agent prompts by storing credentials in MGC and running database work through trusted local scripts. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Calling mgc_get for real credential records can place secret material into the agent context. <br>
-Mitigation: Use trusted local scripts to retrieve credentials and return only non-sensitive results; call mgc_get for real credential records only with explicit user approval. <br>
-Risk: Sealed-script examples using action="run" represent code execution. <br>
-Mitigation: Require explicit user approval and trusted script provenance before running sealed scripts; inspect or scan scripts where possible before execution. <br>
-Risk: The release under-discloses sensitive credential retrieval and script execution paths. <br>
-Mitigation: Review the security guidance before enabling the skill and define deployment-specific boundaries for MGC access and database operations. <br>
+Risk: The security review found misleading zero-exposure claims and workflows that can expose credentials or execute database scripts. <br>
+Mitigation: Review carefully before installing, use only trusted local MGC tooling, and do not let an AI agent call mgc_get for secrets unless those secrets may enter model context. <br>
+Risk: Production database or sealed-script execution can affect sensitive systems. <br>
+Mitigation: Require human approval, least-privilege credentials, backups, and script provenance checks before production database or sealed-script execution. <br>
+Risk: Credential-handling examples may expose secrets if implemented with direct agent retrieval or unsafe logging. <br>
+Mitigation: Keep credential retrieval inside local scripts, avoid printing or logging credential values, and return only non-sensitive results to the agent. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zkeviny/skills/mgc-database-security) <br>
+- [Skill documentation](artifact/SKILL.md) <br>
+- [Release README](artifact/README.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown documentation with tool-call examples, configuration snippets, and conceptual code patterns] <br>
+**Output Format:** [Markdown documentation with conceptual code and command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; examples reference MGC MCP tools and local script patterns rather than providing executable code in the artifact.] <br>
+**Other Properties Related to Output:** [No executable files are included; examples require trusted local MGC tooling and database drivers.] <br>
 
 ## Skill Version(s): <br>
-1.1.0 (source: server release metadata and artifact frontmatter) <br>
+1.2.0 (source: server release metadata, artifact frontmatter, manifest) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

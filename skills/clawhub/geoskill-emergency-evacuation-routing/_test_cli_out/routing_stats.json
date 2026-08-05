@@ -1,0 +1,14 @@
+{
+  "source": "synthetic",
+  "threshold": 1.0,
+  "capacity_per_shelter": 1000,
+  "n_origins": 3,
+  "n_shelters": 1,
+  "n_routes_assigned": 3,
+  "routes_avoid_hazard": true,
+  "route_costs": {
+    "1": 82.4861,
+    "0": 93.2624,
+    "2": 94.1882
+  }
+}

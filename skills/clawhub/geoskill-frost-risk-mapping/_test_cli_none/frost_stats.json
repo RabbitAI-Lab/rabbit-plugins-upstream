@@ -1,0 +1,21 @@
+{
+  "threshold_c": 0.0,
+  "n_dates": 30,
+  "shape": [
+    64,
+    64
+  ],
+  "correction": "none",
+  "dem_min_m": 10.264952659606934,
+  "dem_max_m": 851.378662109375,
+  "mean_frost_frequency": 0.22613120079040527,
+  "mean_frost_free_days": 14.53466796875,
+  "mean_frost_days": 6.783935546875,
+  "risk_distribution": {
+    "0": 26,
+    "1": 311,
+    "2": 2716,
+    "3": 953,
+    "4": 90
+  }
+}

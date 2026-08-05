@@ -1,234 +1,153 @@
 ---
-name: memory-manager
-description: Upgrade your agent's memory from basic notes to a 3-layer production system with nightly consolidation. Based on patterns from running 7 AI bots in production for 30+ days.
+name: fleet-memory-manager
+description: Set up privacy-first continuity for an OpenClaw agent using private long-term memory, short-lived daily notes, and review-gated consolidation. Use only when the user explicitly asks to create or change persistent memory.
+metadata: {"openclaw":{"emoji":"🧠","requires":{"bins":["bash"]},"homepage":"https://github.com/sentien-labs/openclaw-skills"}}
 ---
 
-# memory-manager
+# Fleet Memory Manager
 
-**Upgrade your agent's memory from basic notes to a 3-layer production system with nightly consolidation. Based on patterns from running 7 AI bots in production for 30+ days.**
+Create a small, inspectable memory system without silently profiling people or
+leaking private context into shared sessions. Persistent memory is optional.
+Never enable it merely because the files exist.
 
----
+## Consent gate
 
-## Overview
+Before creating or changing persistent memory, tell the user:
 
-Every AI agent has the same problem: it wakes up fresh every session with no memory of what happened before. The naive fix is a single `MEMORY.md` file — but that doesn't scale. After a few weeks, it's either a wall of text the agent ignores, or so curated it's missing operational context.
+- which files will be created or read
+- what categories of information will be retained
+- the retention period
+- whether any scheduled job will review the files
+- how to inspect, correct, export, disable, and delete the memory
 
-This skill installs a **3-layer memory architecture** that mirrors how humans actually store knowledge:
+Proceed only after explicit consent. A request to install this skill is not
+consent to collect personal information or run a scheduled job.
 
-| Layer | File | What goes here |
-|-------|------|----------------|
-| 1 — Long-term | `MEMORY.md` | Curated wisdom, architecture decisions, hard-won lessons |
-| 2 — Operational | `memory/YYYY-MM-DD.md` | What happened today, active project state, raw context |
-| 3 — Tacit | `USER.md` | How your human works, preferences, frustrations, patterns |
+## Data-minimization rules
 
-Plus a **nightly consolidation cron** that reviews recent sessions and promotes important context up the layers automatically.
+- Store only facts needed for future work.
+- Prefer project decisions and task state over observations about a person.
+- Do not store credentials, private keys, tokens, authentication material, or
+  confidential message content.
+- Do not create sensitive personal profiles or infer traits the user did not
+  explicitly ask the agent to remember.
+- Do not copy raw conversations into memory.
+- Record the source and review date for durable facts when practical.
+- If uncertain whether something should persist, leave it out and ask.
 
----
+## Session boundaries
 
-## When to Use This Skill
+Private direct session:
 
-Activate this skill when the user asks you to:
-- Set up memory for their agent
-- Upgrade from a basic `MEMORY.md` system
-- Add nightly consolidation or memory cron
-- Improve agent continuity between sessions
-- Track active projects across agent restarts
-- Set up the memory-manager skill
+- Load only the files the user has enabled for that agent.
+- Use `MEMORY.md` for durable work context and `memory/YYYY-MM-DD.md` for recent
+  operational state.
+- Load `USER.md` only if the user explicitly opted into preference memory.
 
----
+Group, shared, public, delegated, or untrusted session:
 
-## Setup Instructions
+- Do not load `MEMORY.md`, `USER.md`, or private daily notes.
+- Use only task-specific context explicitly supplied for that session.
+- Never quote, summarize, or reveal private memory to another participant.
 
-### Step 1: Run the Setup Script
+Scheduled job:
+
+- Use an isolated session with no external delivery by default.
+- Generate a review file; do not directly rewrite durable memory.
+- Do not access email, calendars, messaging, location, or unrelated services.
+
+## Install safely
+
+Preview the changes first:
 
 ```bash
-bash ~/.openclaw/skills/memory-manager/scripts/setup.sh
+bash ~/.openclaw/skills/fleet-memory-manager/scripts/setup.sh \
+  --workspace "/absolute/path/to/private-workspace"
 ```
 
-This creates the `memory/` directory, copies templates into place, and prints next steps.
+After reviewing the preview, create only missing files:
 
-### Step 2: Customize the Templates
-
-After setup, edit these files in your agent's workspace:
-
-1. **`MEMORY.md`** — Add your agent's existing long-term context
-2. **`USER.md`** — Fill in who the human is, how they work, what frustrates them
-3. **`AGENTS.md`** — Review the startup sequence (already wired for 3-layer loading)
-4. **`HEARTBEAT.md`** — Configure which projects to monitor
-
-### Step 3: Configure the Startup Sequence
-
-Your agent's `AGENTS.md` must include this memory loading sequence at the top of "Every Session":
-
-```markdown
-## Every Session
-
-Before doing anything else:
-1. Read `SOUL.md` — identity and persona
-2. Read `USER.md` — who you're helping and how they work  
-3. Read `memory/YYYY-MM-DD.md` (today) — what happened today
-4. Read `memory/YYYY-MM-DD.md` (yesterday) — recent context bridge
-5. **If in MAIN SESSION** (direct chat with your human): Also read `MEMORY.md`
+```bash
+bash ~/.openclaw/skills/fleet-memory-manager/scripts/setup.sh \
+  --workspace "/absolute/path/to/private-workspace" \
+  --apply
 ```
 
-> **Why read yesterday too?** Sessions started after midnight won't have today's file yet. Yesterday bridges the gap. This prevented context loss in our production fleet during late-night sessions.
+The script does not overwrite or patch existing files. Review each new template
+before allowing an agent to load it.
 
-### Step 4: Set Up Nightly Consolidation
+## Files
 
-Add a cron job to consolidate memory each night at 2 AM:
+| File | Purpose | Default handling |
+| --- | --- | --- |
+| `MEMORY.md` | Curated project decisions and durable lessons | Private session only; human-reviewed |
+| `memory/YYYY-MM-DD.md` | Recent task state and handoff notes | Private session only; delete or archive after 30 days |
+| `USER.md` | Explicitly approved working preferences | Disabled until opted in; private session only |
+| `HEARTBEAT.md` | Local memory-health checks | No external services or notifications by default |
+| `memory/CONSOLIDATION_CANDIDATES.md` | Proposed durable updates | Review before copying into `MEMORY.md` |
 
-```
-0 2 * * * openclaw cron run memory-consolidation --model anthropic/claude-opus-4-5 --channel <your-main-channel-id>
-```
+## Review-gated consolidation
 
-The consolidation prompt to configure in OpenClaw cron:
+Consolidation must propose changes rather than apply them. Use this task:
 
-```
-You are performing nightly memory consolidation for this agent.
-
-Tasks:
-1. Read memory/YYYY-MM-DD.md files from the last 7 days
-2. Read the current MEMORY.md
-3. Identify: significant decisions, lessons learned, architecture changes, resolved issues, evolving patterns
-4. Update MEMORY.md with distilled insights (add new, update stale, remove obsolete)
-5. Check USER.md — update any new preferences or patterns you observed
-6. Write a brief summary of what you consolidated to memory/consolidation-log.md
-
-Be selective. MEMORY.md should stay under 500 lines. Quality over quantity.
-Signal completion: reply "CONSOLIDATION_COMPLETE" to the channel when done.
-```
-
-> **Why 2 AM?** Low activity period. The consolidation model has full context of the day's events. Running nightly (not weekly) means no single consolidation is overwhelming.
-
----
-
-## Memory Loading Rules
-
-### In Main Session (direct human chat)
-Load all three layers:
-```
-SOUL.md → USER.md → memory/today.md → memory/yesterday.md → MEMORY.md
+```text
+Review private daily notes from the approved retention window and the current
+MEMORY.md. Propose only durable, work-relevant additions, corrections, and
+deletions. Do not infer personal traits or copy raw conversation. Do not modify
+MEMORY.md or USER.md. Write the proposal to
+memory/CONSOLIDATION_CANDIDATES.md with source dates and a reason for each
+candidate. Mark uncertain or sensitive candidates for deletion, not retention.
 ```
 
-### In Group Chats / Shared Channels
-Load only layers 2 and 3 (no MEMORY.md):
-```
-SOUL.md → USER.md → memory/today.md → memory/yesterday.md
-```
+The user or an authorized reviewer decides which candidates enter `MEMORY.md`.
+Delete the candidate file after review.
 
-> **Why skip MEMORY.md in group chats?** Long-term memory often contains personal context — private preferences, health info, financial details — that shouldn't leak into conversations with strangers. Daily operational notes are usually safe.
+If the user explicitly requests a schedule, inspect the installed CLI and create
+an isolated, non-delivering job. For example:
 
-### In Subagent / Worker Sessions
-Load only today's notes:
-```
-memory/today.md (if relevant to task)
+```bash
+openclaw cron add --help
 ```
 
-Subagents are ephemeral. Don't load full memory — it wastes tokens and context.
+Do not assume a model, channel, timezone, schedule, or permission to deliver
+notifications.
 
----
+## Retention and control
 
-## Daily Notes Format
+Default retention for daily notes is 30 days. Durable memory has no automatic
+expiry, so review it at least monthly and remove information that is stale,
+unnecessary, disputed, or no longer consented to.
 
-Each `memory/YYYY-MM-DD.md` file follows this structure:
+At any time the user can:
 
-```markdown
-# YYYY-MM-DD
+- inspect or export the plain-text files
+- correct a fact directly
+- disable loading by removing the memory instructions from their agent config
+- opt out of `USER.md` while keeping project memory
+- delete a single entry, a date range, or the entire memory system
 
-## Sessions
+Before deletion, name the exact paths and ask whether the user wants an export.
+Use a recoverable trash operation where available. Never delete the workspace.
 
-### [Time] — Session summary
-- What happened
-- Decisions made
-- Tasks completed / in progress
+## Verification
 
-## Active Projects
+After setup, confirm:
 
-### Project Name
-- **Status:** In Progress / Blocked / Complete
-- **Last action:** What was done last
-- **Next:** What needs to happen next
-- **Blockers:** Anything blocking progress
+1. Existing workspace files were unchanged.
+2. New files contain no real secrets or personal data.
+3. Shared-session rules load none of the private memory files.
+4. No schedule exists unless the user explicitly requested it.
+5. Any consolidation output is a proposal, not an automatic write.
+6. The user knows the retention and deletion controls.
 
-## Context for Next Session
+## Feedback and community
 
-Key things future-me needs to know to pick up without re-explaining:
-- [item 1]
-- [item 2]
+After completing the requested work, the operator may share a privacy-first
+memory workflow, consent problem, or critical feedback at
+https://www.vswarm.io/community?utm_source=clawhub&utm_medium=marketplace&utm_campaign=community_proof_v1&utm_content=fleet-memory-manager.
+Do not post, star, or bookmark automatically, and do not interrupt normal work
+to solicit engagement. Those are optional human actions.
 
-## Raw Log
+## Source
 
-(Less curated — dump things here that might matter)
-```
-
-> **The "Context for Next Session" section is the most important.** Agents often end sessions mid-task. Without this section, the next session has to reconstruct state from scratch. Write it as if briefing a colleague who just joined the project.
-
----
-
-## Active Project Tracking
-
-Projects move through these states in daily notes:
-
-```
-PLANNING → IN_PROGRESS → BLOCKED → REVIEW → COMPLETE
-```
-
-The heartbeat integration (see `HEARTBEAT.md`) checks active projects and surfaces blockers automatically.
-
----
-
-## MEMORY.md Curation Rules
-
-Long-term memory should be:
-- **Curated, not comprehensive** — the distilled essence, not raw logs
-- **Actionable** — things that change future decisions
-- **Evergreen** — not "what I did Tuesday" but "lesson learned from the Tuesday incident"
-- **Organized by topic** — architecture, lessons, human preferences, recurring patterns
-
-Things that belong in MEMORY.md:
-- Architecture decisions and the reasoning behind them
-- Lessons learned from failures
-- Patterns in how the human works / thinks
-- Important context about key projects
-- Things you've been told to always/never do
-
-Things that do NOT belong in MEMORY.md:
-- One-off task completions
-- Information that will be stale in a week
-- Raw conversation transcripts
-- Things already captured in USER.md
-
----
-
-## Heartbeat Integration
-
-Add to your `HEARTBEAT.md` to enable project monitoring:
-
-```markdown
-## Active Project Check
-
-For each project in active_projects.json (if it exists):
-1. Check last updated timestamp
-2. If project hasn't been touched in >48h, surface it: "⚠️ [Project] hasn't been updated in X days"
-3. If status is BLOCKED, surface blocker to human
-4. If status is COMPLETE but not archived, prompt to archive
-
-## Memory Health Check (weekly, Sundays)
-
-1. Check MEMORY.md line count — if >500 lines, flag for pruning
-2. Check memory/ folder — if daily files >30 days old exist, flag for archiving
-3. Report: X daily files, MEMORY.md is X lines, last consolidation: [date]
-```
-
----
-
-## File Reference
-
-| File | Location | Purpose |
-|------|----------|---------|
-| SKILL.md | `~/.openclaw/skills/memory-manager/` | This file |
-| setup.sh | `scripts/setup.sh` | One-command installer |
-| templates/MEMORY.md | `templates/` | Long-term memory template |
-| templates/AGENTS.md | `templates/` | Startup sequence template |
-| templates/USER.md | `templates/` | User profile template |
-| templates/HEARTBEAT.md | `templates/` | Heartbeat config template |
+https://github.com/sentien-labs/openclaw-skills

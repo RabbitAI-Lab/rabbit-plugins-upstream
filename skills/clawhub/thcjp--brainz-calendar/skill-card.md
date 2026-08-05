@@ -1,5 +1,5 @@
 ## Description: <br>
-Brainz Calendar helps an agent manage Google Calendar events with gcalcli, including creating, listing, and deleting events. <br>
+Brainz Calendar helps agents manage Google Calendar events with gcalcli, including creating, listing, and deleting events. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and other agent users use this skill to create, inspect, and delete Google Calendar events during project planning, task scheduling, and team coordination. It is not intended for personnel performance evaluation or non-Google calendar systems. <br>
+Developers, teams, and automation users can use this skill to plan work, query schedules, and manage Google Calendar events through an agent. It is intended for explicit Google Calendar tasks and is not suitable for personnel performance evaluation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can use shell commands to manage Google Calendar events, which may change a user's calendar if the request is too broad. <br>
-Mitigation: Limit use to explicit calendar requests and review proposed commands before execution. <br>
-Risk: Calendar deletion authority could remove unintended events, especially when deletion is based on a keyword. <br>
-Mitigation: Require confirmation before every deletion and prefer exact event IDs, dates, or titles over broad keyword deletion. <br>
-Risk: The artifact suggests a generic API_KEY without explaining why it is needed. <br>
-Mitigation: Do not set a generic API_KEY unless the publisher documents the need; keep any calendar credentials scoped and out of version control. <br>
+Risk: Calendar deletion actions can remove Google Calendar events. <br>
+Mitigation: Require the agent to show the exact event or events before deletion and proceed only after explicit confirmation. <br>
+Risk: Command execution through gcalcli can operate against authenticated calendar data. <br>
+Mitigation: Grant command execution only when gcalcli authentication and calendar scopes are understood and appropriate for the task. <br>
+Risk: The security review flagged the skill as not clearly scoped enough for command execution and deletion capabilities. <br>
+Mitigation: Review the skill before installing and use it only for explicit Google Calendar tasks. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/thcjp/skills/brainz-calendar) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+- [Brainz Calendar on ClawHub](https://clawhub.ai/thcjp/skills/brainz-calendar) <br>
+- [Publisher profile: thcjp](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON status examples and shell command recommendations] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline command and configuration examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May invoke command execution for gcalcli-based calendar operations when allowed by the agent environment.] <br>
+**Other Properties Related to Output:** [May include Google Calendar event details, deletion confirmations, troubleshooting steps, and setup guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release and SKILL.md frontmatter) <br>
+1.0.2 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

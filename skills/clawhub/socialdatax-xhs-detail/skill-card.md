@@ -1,42 +1,54 @@
-## Description: <br>
-Helps agents retrieve and summarize Xiaohongshu / XHS / RedNote note details, metrics, content, author, media, and related note data through SocialDataX. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Xiaohongshu / XHS / RedNote note detail retrieval for data analysis, note metrics, content research, and content analysis using SocialDataX.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-Developers, analysts, and agents use this skill to fetch read-only XHS note details by note ID or URL, then return structured facts such as title, content, author, publish time, interaction counts, images, and media summary. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Returned XHS note URLs can include xsec_token query parameters that may appear in chat outputs, saved references, or forwarded results. <br>
-Mitigation: Review where outputs are shared or stored before use, and only run the skill when preserving full tokenized note URLs is acceptable for the workspace. <br>
-Risk: The skill sends note IDs or full note URLs to SocialDataX using SOCIALDATAX_API_KEY. <br>
-Mitigation: Use a scoped SocialDataX API key from the user's environment and avoid submitting note URLs that should not be shared with the SocialDataX service. <br>
+## Use Case:
 
+Developers and analysts use this skill to fetch structured Xiaohongshu / XHS / RedNote note details by note ID or note URL for content analysis and reporting.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-xhs-detail) <br>
-- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub) <br>
-- [Publisher profile](https://clawhub.ai/user/devinchen2014) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with factual note summaries, optional shell commands, and JSON returned by the SocialDataX CLI or MCP tools.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY for data calls and node/npm for the direct CLI path; optional media saving writes only to a requested local output path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.14 (source: server release evidence) <br>
+Risk: The skill sends SOCIALDATAX_API_KEY-backed requests to SocialDataX at runtime.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when the operator is comfortable providing that API key to SocialDataX.
+
+Risk: Returned full XHS note URLs can include xsec_token query parameters and may be sensitive.
+
+Mitigation: Share or store returned full note URLs only with intended recipients and treat them as potentially sensitive.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-xhs-detail)
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with CLI commands and JSON data returned by SocialDataX tools]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY for detail requests; preserves full returned note URLs when present.]
+
+## Skill Version(s):
+
+0.1.15 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,15 @@
+name: geoskill-animated-map-series
+display_name: 动态地图序列 / 动画
+description: |
+  Compose multi-temporal rasters into unified rendered frames and a GIF animation
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-animated-map-series.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - time-series
+  - visualization

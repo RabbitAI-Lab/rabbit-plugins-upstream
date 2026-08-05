@@ -1,0 +1,4 @@
+interface:
+  display_name: "通用退换与补救受理"
+  short_description: "跨行业判断退换、重做、退款、取消与其他补救请求的受理路径"
+  default_prompt: "Use $zayn-general-rma to determine the appropriate return, refund, rework, or service remedy path."

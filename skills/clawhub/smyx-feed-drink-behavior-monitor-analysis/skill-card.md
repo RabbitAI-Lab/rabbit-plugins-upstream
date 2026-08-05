@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes fixed-camera feeder and waterer images or videos to quantify livestock feeding duration, feeding bouts, drinking frequency, baseline deviations, and behavior anomaly alerts. <br>
+Analyzes fixed-camera videos of feeders and waterers to quantify livestock feeding duration, feeding bouts, and drinking frequency, comparing them against individual baselines to raise behavior anomaly alerts. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Farm operators, livestock managers, and agents use this skill to analyze feeder or waterer camera footage, summarize feeding and drinking behavior, compare activity against historical baselines, and surface non-diagnostic anomaly alerts for husbandry review. <br>
+External users and agricultural operations use this skill to analyze fixed-camera livestock feeder or waterer images and videos for feeding duration, feeding bouts, drinking frequency, baseline deviations, and anomaly alerts. It also supports querying historical behavior monitoring reports from the configured service. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Using the skill may upload livestock images or videos, or forward video URLs, to a cloud analysis service. <br>
-Mitigation: Install and run it only in workspaces where cloud processing of that media is acceptable, and avoid providing footage that contains unrelated sensitive content. <br>
-Risk: The skill can query cloud report history and silently manage local account identity, including tokens or profile data in local storage. <br>
-Mitigation: Review workspace identity and storage practices before use, restrict access to the workspace, and clear local credentials when the skill is no longer needed. <br>
-Risk: Behavior anomaly alerts are observational and are not veterinary diagnosis or treatment advice. <br>
-Mitigation: Use results as husbandry decision support and confirm health or treatment decisions through farm procedures and qualified veterinary review. <br>
+Risk: Livestock images or videos, media URLs, generated identity values, and report queries are sent to configured lifeemergence.com services. <br>
+Mitigation: Use only media and URLs that the operator is authorized to send to the configured service, and avoid private or internal URLs unless the backend fetch path is trusted. <br>
+Risk: The local workspace data directory may contain a SQLite database with user records and service tokens. <br>
+Mitigation: Treat the workspace data directory as sensitive, restrict access to it, and clean stored state when the skill is no longer needed. <br>
+Risk: The skill produces behavior statistics and anomaly alerts, not veterinary diagnosis or treatment guidance. <br>
+Mitigation: Use outputs as decision-support data and confirm feeding, health, or treatment actions through farm procedures and qualified professionals. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-feed-drink-behavior-monitor-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Common analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-feed-drink-behavior-monitor-analysis) <br>
+- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [畜禽采食/饮水行为监测 API 接口文档](references/api_doc.md) <br>
+- [Common Analysis API 接口文档](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured reports with optional report links and shell command examples] <br>
+**Output Type(s):** [Analysis, Text, Markdown, JSON, Shell commands, Files] <br>
+**Output Format:** [Markdown or JSON text, with optional saved output files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include feeding duration, feeding frequency, drinking frequency, time distribution, baseline deviation level, anomaly level, and cloud report links.] <br>
+**Other Properties Related to Output:** [Outputs may include structured behavior metrics, anomaly levels, historical report lists, and report links.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.3) <br>
+1.0.6 (source: server release metadata; artifact SKILL.md frontmatter says 1.0.4) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

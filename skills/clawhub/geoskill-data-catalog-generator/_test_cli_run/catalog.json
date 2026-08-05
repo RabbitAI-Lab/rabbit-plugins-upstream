@@ -1,0 +1,142 @@
+{
+  "summary": {
+    "n_files": 5,
+    "n_readable": 5,
+    "n_errors": 0,
+    "total_size_bytes": 104422,
+    "total_vector_features": 11,
+    "categories": {
+      "Single-band raster": 1,
+      "Point vector": 1,
+      "Multispectral raster": 1,
+      "Line vector": 1,
+      "Polygon vector": 1
+    },
+    "formats": {
+      "GeoTIFF": 2,
+      "GeoJSON": 1,
+      "GeoPackage": 1,
+      "Shapefile": 1
+    },
+    "source": "synthetic"
+  },
+  "entries": [
+    {
+      "path": "./_test_cli_run\\source\\dem.tif",
+      "name": "dem.tif",
+      "size_bytes": 1373,
+      "status": "ok",
+      "error": null,
+      "kind": "raster",
+      "format": "GeoTIFF",
+      "width": 16,
+      "height": 16,
+      "band_count": 1,
+      "dtype": "float32",
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution": [
+        0.0625
+      ],
+      "nodata": -9999.0
+    },
+    {
+      "path": "./_test_cli_run\\source\\pois.geojson",
+      "name": "pois.geojson",
+      "size_bytes": 1291,
+      "status": "ok",
+      "error": null,
+      "kind": "vector",
+      "format": "GeoJSON",
+      "feature_count": 8,
+      "geometry_types": [
+        "Point"
+      ],
+      "fields": [
+        "id"
+      ],
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.08564916714363,
+        39.1136720199214,
+        116.80127446520639,
+        39.9562672548361
+      ]
+    },
+    {
+      "path": "./_test_cli_run\\source\\rgb.tif",
+      "name": "rgb.tif",
+      "size_bytes": 3218,
+      "status": "ok",
+      "error": null,
+      "kind": "raster",
+      "format": "GeoTIFF",
+      "width": 16,
+      "height": 16,
+      "band_count": 3,
+      "dtype": "float32",
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution": [
+        0.0625
+      ],
+      "nodata": -9999.0
+    },
+    {
+      "path": "./_test_cli_run\\source\\roads.gpkg",
+      "name": "roads.gpkg",
+      "size_bytes": 98304,
+      "status": "ok",
+      "error": null,
+      "kind": "vector",
+      "format": "GeoPackage",
+      "feature_count": 2,
+      "geometry_types": [
+        "LineString"
+      ],
+      "fields": [
+        "id"
+      ],
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ]
+    },
+    {
+      "path": "./_test_cli_run\\source\\zones.shp",
+      "name": "zones.shp",
+      "size_bytes": 236,
+      "status": "ok",
+      "error": null,
+      "kind": "vector",
+      "format": "Shapefile",
+      "feature_count": 1,
+      "geometry_types": [
+        "Polygon"
+      ],
+      "fields": [
+        "id"
+      ],
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        116.5,
+        39.5
+      ]
+    }
+  ]
+}

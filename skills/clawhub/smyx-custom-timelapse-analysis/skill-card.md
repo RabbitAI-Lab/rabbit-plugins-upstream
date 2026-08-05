@@ -1,5 +1,5 @@
 ## Description: <br>
-Generates condensed time-lapse album highlight reports from local or URL videos by extracting segments that match user-specified keywords or targets. <br>
+Generates condensed album highlights by extracting target video segments based on specified keywords or subjects. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Agents use this skill when a user wants to find and summarize people, pets, scenes, or events in long videos, or retrieve prior time-lapse analysis reports linked to the current account identity. <br>
+External users and developers use this skill to submit local or URL-based videos with target keywords, then receive structured condensed highlight analysis, report links, or cloud history results. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can send videos, video URLs, and prompts to a cloud analysis service. <br>
-Mitigation: Use it only with media that is appropriate for the listed cloud processing behavior, and avoid sensitive personal media unless that handling is acceptable. <br>
-Risk: The skill silently creates or reuses an account-like identifier and stores account tokens locally. <br>
-Mitigation: Run it in an environment where local account persistence is expected, and clear the skill data store when account linkage should not persist. <br>
-Risk: The skill can retrieve account-linked historical reports with limited user control. <br>
-Mitigation: Review history-query requests before use and avoid sharing the resulting report list or links outside the intended account context. <br>
+Risk: Local media files or video URLs may be sent to configured lifeemergence.com cloud services for analysis. <br>
+Mitigation: Use only videos whose provider, consent, and retention requirements are acceptable; avoid sensitive media unless those conditions are satisfied. <br>
+Risk: The skill may create or reuse an internal identity and retrieve cloud report history associated with that identity. <br>
+Mitigation: Run the skill in a controlled workspace, review who can access that workspace, and avoid sharing generated identities or history outputs. <br>
+Risk: Authentication tokens may be stored in the workspace data database. <br>
+Mitigation: Restrict workspace file access, clean local data after use when appropriate, and rotate or revoke credentials if the workspace may have been exposed. <br>
+Risk: Keyword-target extraction quality is unverified by the provided evidence. <br>
+Mitigation: Test representative sample videos and manually review generated highlight reports before relying on them for important decisions or publication. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-custom-timelapse-analysis) <br>
+- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [API interface documentation](references/api_doc.md) <br>
+- [Analysis API interface documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Markdown report text with embedded JSON and report links; optional saved output file] <br>
+**Output Type(s):** [text, markdown, JSON, shell commands, files, guidance] <br>
+**Output Format:** [Markdown text with JSON report bodies, report links, and optional saved output files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report history and export links; detail can be basic, standard, or json.] <br>
+**Other Properties Related to Output:** [Outputs may depend on cloud analysis services and the selected detail level.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter declares 1.0.8) <br>
+1.0.9 (source: server release metadata; artifact frontmatter reports 1.0.11) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

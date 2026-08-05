@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/analyze",
   "slug": "analyze",
   "ownerHandle": "thcjp",
-  "version": "1.0.0",
-  "updatedAt": 1778487906275,
-  "contentHash": "4bd673a7f852ecda9782d172efafb05f6a61deefe3999f99288883bf299e316a",
-  "fetchedAt": "2026-07-26T18:06:25.310Z"
+  "version": "1.0.2",
+  "updatedAt": 1785662076047,
+  "contentHash": "c63c0250d0ad40a23b3a63a808452c2f972812ce72e169591a65940f1eaf85af",
+  "fetchedAt": "2026-08-05T10:18:52.974Z"
 }

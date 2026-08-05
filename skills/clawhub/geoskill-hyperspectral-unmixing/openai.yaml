@@ -1,0 +1,12 @@
+name: geoskill-hyperspectral-unmixing
+display_name: 高光谱端元提取与解混
+description: |
+  VCA/N-FINDR端元提取+nnls线性解混丰度反演
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-hyperspectral-unmixing.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - remote-sensing

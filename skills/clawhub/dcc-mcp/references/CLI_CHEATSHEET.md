@@ -101,6 +101,13 @@ treated as deletion. When the same instance becomes ready, query the core job.
 For an `isolated` operation, rediscover its typed status tool and query the
 operation ID even after adapter restart.
 
+`call --wait` keeps polling the same job across transient gateway connection,
+404, 429, 502, 503, and 504 failures until the total wait timeout. It emits
+`control_plane_reconnecting` and adds `wait_recovery` after recovery; neither
+path resubmits work. A 410 lifecycle response becomes
+`tracking_status=owner_exited`. Read `previous_status`, `retryable`, and
+`recommended_next_action` instead of treating every missing route as 503.
+
 If owner death or remote TTL expiry removes the row, wait for an explicitly
 authorized DCC restart, then use the replacement instance and fresh
 `search`/`describe` results. Old instance IDs, slugs, direct URLs, and core jobs
@@ -129,11 +136,13 @@ paths, or full tool payloads.
 |---------|---------|
 | `dcc-mcp-cli install --dcc-type maya --version 2026` | Build an auditable adapter install plan with machine-readable `next_steps`, without changing local state |
 | `dcc-mcp-cli install --dcc-type maya --version 2026 --python "<mayapy>" --execute` | Execute package install after consent; rolls back on failure and verifies pip/path outputs |
+| `dcc-mcp-cli install --dcc-type maya --dcc-path "<maya-executable>"` | Supply a non-standard DCC executable/application path when the host is not found automatically |
 | `dcc-mcp-cli marketplace search --query "maya rigging" --limit 20` | Find installable Skill packages with released and current CLI builds |
 | `dcc-mcp-cli marketplace inspect <package_name>` | Inspect the selected skill package metadata before installing |
-| `dcc-mcp-cli marketplace install <package_name> --dcc maya` | Install a skill package into the local marketplace root |
+| `dcc-mcp-cli marketplace install <package_name> --dcc maya --reload` | Install an exact package ID and ask running Maya adapters to re-scan skill paths |
 | `dcc-mcp-cli reload-skills --dcc-type maya` | Ask running Maya adapters to re-scan installed skill paths |
 | `dcc-mcp-cli marketplace update <package_name> --dcc maya` | Update an installed skill package from the catalog |
+| `dcc-mcp-cli marketplace uninstall <package_name> --reload` | Remove an installed skill package; infer its DCC when it is installed for one DCC and refresh the adapter |
 
 After adapter package install, follow the plan's `next_steps`: read the
 adapter-maintained `install.md` when `read-install-instructions` is present,
@@ -150,10 +159,10 @@ any log paths, then run `wait-ready` or `doctor` before calling tools.
 Marketplace search and inspect do not require a live DCC instance. Always query
 the CLI before recommending a marketplace Skill. If the first query is empty,
 retry once with fewer capability words or without the DCC filter; never invent
-a package name. Inspect the selected package before a consent-gated install or
-update.
-After installing or updating marketplace skills, run `reload-skills`, then use
-`load-skill` if the adapter has not auto-loaded the new skill.
+a package name. Inspect unfamiliar packages before a consent-gated mutation;
+an exact known ID can be installed directly, and `--dcc` can be omitted for a
+single-DCC package. Prefer install `--reload`; after updates or installs without
+that flag, run `reload-skills`, then use `load-skill` if needed.
 
 ## Example: inventory
 
@@ -219,5 +228,6 @@ python scripts/dcc_gateway.py call maya.a1b2c3d4.maya_primitives__create_sphere 
 | `total == 0` | Start a DCC adapter, then re-run `dcc-mcp-cli list` |
 | Listed row is booting or `dispatch_status=unavailable` | Read `direct_control.recommended_next_action` and `direct_control.diagnostics`, then run `dcc-mcp-cli wait-ready --dcc-type <dcc> --instance-id <id>` or `dcc-mcp-cli doctor`; do not call tools until `direct_control.ready=true` |
 | `unknown-slug` | Re-run `search`; the instance may have restarted |
+| `instance-offline` | Read `previous_status`: `never-registered` is 404, temporary unroutability is 503, and `exited` / `host-died` / `heartbeat-timeout` is 410. Preserve any job ID and never replay a mutation blindly |
 | `invalid-params` | Fix the JSON object per `describe` output |
 | `instance-leased` / `lease-owner-mismatch` | Pass the exact workflow owner with `--meta-json`, or select another instance; do not guess another owner's value |

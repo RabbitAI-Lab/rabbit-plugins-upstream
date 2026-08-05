@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "standard": "building-footprint-height / 2.5D urban model",
+  "description": "建筑轮廓高度估算参数与质量阈值",
+  "height_method": {
+    "dsm_minus_dtm": {
+      "description": "DSM 减 DTM 得到离地高度（推荐方法）",
+      "priority": 1,
+      "nodata_value_dsm": -9999.0,
+      "nodata_value_dtm": -9999.0
+    },
+    "point_cloud_quantile": {
+      "description": "点云分位数高度（需 LiDAR 点云）",
+      "priority": 2,
+      "quantile": 0.95,
+      "min_points_per_building": 10
+    },
+    "shadow_based": {
+      "description": "阴影长度反推高度（需太阳角度）",
+      "priority": 3,
+      "solar_elevation_deg": 45.0,
+      "solar_azimuth_deg": 180.0
+    }
+  },
+  "floor_height": {
+    "residential_m": 3.0,
+    "commercial_m": 3.6,
+    "industrial_m": 4.5,
+    "default_m": 3.0,
+    "uncertainty_m": 0.5,
+    "note": "层数为假设值，仅作代理指标"
+  },
+  "qa_thresholds": {
+    "min_area_m2": 10.0,
+    "max_height_m": 828.0,
+    "min_height_m": 1.0,
+    "max_height_stdev_m": 15.0,
+    "edge_buffer_m": 0.5,
+    "min_coverage_ratio": 0.5,
+    "max_volume_m3": 1000000.0
+  },
+  "quality_codes": {
+    "1": "高度可靠（DSM-DTM 差值，覆盖度>80%）",
+    "2": "高度较可靠（点云分位数，点数>50）",
+    "3": "高度估算（阴影反推或粗 DEM）",
+    "4": "高度可疑（覆盖度<50% 或异常值）",
+    "5": "高度缺失（无有效数据）"
+  },
+  "output": {
+    "formats": ["geojson", "gpkg", "cityjson_optional"],
+    "required_fields": [
+      "building_id", "height_m", "floors_proxy", "volume_m3",
+      "footprint_area_m2", "quality_code", "height_method"
+    ]
+  }
+}

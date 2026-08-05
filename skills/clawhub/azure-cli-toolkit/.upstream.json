@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/azure-cli-toolkit",
   "slug": "azure-cli-toolkit",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1784871491273,
-  "contentHash": "de458a869b7dd0b1af7ddfb4316f30362e4496dfb4056f7a1bd64d06b32f7ed8",
-  "fetchedAt": "2026-07-26T18:06:04.300Z"
+  "version": "1.0.2",
+  "updatedAt": 1785664188978,
+  "contentHash": "de6eaeb2cc2429d8c8ef2de749c00b3ee714c669773d707d82acd0372ac23409",
+  "fetchedAt": "2026-08-05T10:17:06.222Z"
 }

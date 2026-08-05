@@ -11,37 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill inside Claude Code to route large MCP, data pipeline, and chained-tool workflows through focused modules for pattern selection, subagent coordination, validation, and result synthesis. <br>
+Developers and agent operators use this skill to decide when to route multi-tool, data-heavy, or context-sensitive workflows through MCP servers, subagents, and validation modules. It provides orchestration guidance for reducing context overhead while preserving review checkpoints for complex agent workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: MCP workflow context may include proprietary code, secrets, customer data, or sensitive datasets. <br>
-Mitigation: Review before installing in sensitive environments and require explicit invocation for MCP workflows. <br>
-Risk: External result storage or debug logs may retain sensitive workflow context without clear safeguards. <br>
-Mitigation: Allow external storage and debug logging only in approved, access-controlled locations with redaction and retention limits. <br>
-Risk: Unrestricted MCP servers or subagents may expand workflow access beyond the intended scope. <br>
-Mitigation: Restrict which MCP servers and subagents may run before using the skill. <br>
+Risk: Broad automatic triggers may route workflows into MCP/subagent orchestration when simpler execution would be safer or easier to review. <br>
+Mitigation: Use the skill only when MCP or subagent orchestration is intentionally desired, and review trigger conditions before enabling it in shared or production environments. <br>
+Risk: External state storage, debug logging, or persisted intermediate context can expose secrets, private datasets, or account-connected MCP results. <br>
+Mitigation: Disable or tightly control external result storage and debug logging unless sensitive data redaction and retention controls are in place. <br>
+Risk: Workflows involving private data or connected MCP tools can expand the impact of an incorrect orchestration decision. <br>
+Mitigation: Review the skill before installation in sensitive environments and keep human approval around MCP tool access, account-connected connectors, and data-handling steps. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-mcp-code-execution) <br>
-- [clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
-- [MCP coordination patterns](artifact/modules/mcp-coordination.md) <br>
-- [MCP execution patterns](artifact/modules/mcp-patterns.md) <br>
-- [MCP subagents module](artifact/modules/mcp-subagents.md) <br>
-- [MCP validation module](artifact/modules/mcp-validation.md) <br>
+- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline code and shell command examples] <br>
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
+**Output Format:** [Markdown guidance with code and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides workflow routing steps, module checklists, MCP execution patterns, validation guidance, and result synthesis guidance.] <br>
+**Other Properties Related to Output:** [Includes orchestration checklists, module routing guidance, token-budget recommendations, and validation checkpoints.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: ClawHub release evidence; artifact frontmatter reports 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,43 +1,59 @@
-## Description: <br>
-用于微博评论分析、微博评论回复、微博评论洞察、用户反馈、口碑分析、痛点总结和内容讨论分析。覆盖 Weibo comments and comment replies，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于微博评论分析、微博评论回复、微博评论洞察、用户反馈、口碑分析、痛点总结和内容讨论分析。覆盖 Weibo comments and comment replies，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users, developers, and analysts use this skill to retrieve Weibo post comments and comment replies through SocialDataX, then summarize audience feedback, sentiment themes, objections, pain points, FAQs, and discussion patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill calls SocialDataX with the user's SOCIALDATAX_API_KEY and can consume API credits. <br>
-Mitigation: Confirm the key belongs to the intended SocialDataX account before use, and prefer --max-items or --pages when cost or volume needs to be bounded. <br>
-Risk: Using --all or --include-replies can retrieve many comments or replies and increase API usage. <br>
-Mitigation: Start with one page or a low --max-items value, then expand pagination only when the extra coverage is needed. <br>
-Risk: Pagination tokens are opaque and changing them can cause failed or inconsistent retrieval. <br>
-Mitigation: Pass returned next_page_token values back unchanged for the same Weibo post or comment chain. <br>
+## Use Case:
 
+Agents use this skill to retrieve and analyze Weibo first-level comments and comment replies for audience feedback, sentiment themes, objections, pain points, FAQ extraction, and discussion summaries.
 
-## Reference(s): <br>
-- [SocialDataX AI API access](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-comments) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, API Calls, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include paginated Weibo comment data, merged item counts, next-page tokens, and user-facing analysis grouped by observed themes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: The skill depends on the SocialDataX npm package and API service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm trust in the SocialDataX package and service before installing or running the skill.
+
+Risk: SOCIALDATAX_API_KEY is required for runtime data calls.
+
+Mitigation: Set the key only in the intended execution environment and avoid embedding it in files or shared outputs.
+
+Risk: Broad comment collection can consume SocialDataX credits.
+
+Mitigation: Prefer --max-items or limited --pages unless broad collection is intentional.
+
+## Reference(s):
+
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-comments)
+- [ClawHub publisher profile](https://clawhub.ai/user/devinchen2014)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON-backed analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY at runtime and may return paginated Weibo comment or reply data.]
+
+## Skill Version(s):
+
+0.1.17 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

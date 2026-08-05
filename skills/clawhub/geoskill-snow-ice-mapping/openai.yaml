@@ -1,0 +1,16 @@
+name: geoskill-snow-ice-mapping
+display_name: 积雪/冰体遥感制图
+description: |
+  利用 NDSI 指数与温度阈值提取积雪/冰体覆盖范围，输出积雪栅格与面积统计
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-snow-ice-mapping.py
+runtime: python>=3.9
+tags:
+  - climate
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - visualization
+  - weather

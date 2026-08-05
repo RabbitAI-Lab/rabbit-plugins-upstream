@@ -1,5 +1,5 @@
 ## Description: <br>
-Converts a user-confirmed local video into bilingual ASS and SRT subtitles using OkFile upload, Alibaba Fun-ASR word timestamps, and either qwen-mt-plus or the current Agent model for translation review and QA. <br>
+Converts a user-selected local video into bilingual Chinese/source-language ASS and SRT subtitles after explicit consent for OkFile audio upload, Alibaba Fun-ASR transcription, and qwen-mt-plus or current-Agent text processing. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,40 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to turn local recorded videos into bilingual Chinese/source-language ASS and SRT subtitles after confirming the video path, translation mode, output location, and external processing consent. <br>
+External users and developers use this skill to produce quality-controlled bilingual subtitles for local recorded videos such as lectures, training content, interviews, podcasts, market reviews, and screen recordings. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Selected video audio and subtitle text may be sent to external providers. <br>
-Mitigation: Proceed only after explicit external-processing consent; use the fixed OkFile and Alibaba endpoints or the selected current Agent model, and review provider retention policies for sensitive videos. <br>
-Risk: Alibaba and OkFile credentials are required for the workflow. <br>
-Mitigation: Keep API keys in the local .env file and do not paste them into chat. <br>
+Risk: Selected audio and subtitle text may be processed by external services. <br>
+Mitigation: Use the skill only for videos the user is allowed to send to OkFile, Alibaba Fun-ASR, and either qwen-mt-plus or the current Agent model service, and require explicit external-processing consent before processing. <br>
+Risk: Provider credentials are required for transcription, upload, and optional qwen-mt-plus translation. <br>
+Mitigation: Keep DASHSCOPE_API_KEY, ALIYUN_WORKSPACE_ID, and OKFILE_TOKEN in the local .env file only, and do not paste secrets into chat. <br>
+Risk: ASR, translation, or alignment mistakes can produce misleading subtitles. <br>
+Mitigation: Rely on the workflow's validation and QA gates before export, and review the resulting ASS/SRT files before using them in sensitive settings. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/aiaaaa4/skills/video-translate) <br>
-- [Video Translation Execution Contract](references/execution-contract.md) <br>
-- [Screen Context Rules](references/screen_context.md) <br>
-- [ASR Hotwords - English Trading Videos](references/asr_hotwords_en.md) <br>
-- [Trading Translation Glossary](references/trading_glossary.md) <br>
-- [Term Repair Rules](references/term_repair_rules.json) <br>
+- [execution-contract.md](references/execution-contract.md) <br>
+- [screen_context.md](references/screen_context.md) <br>
+- [asr_hotwords_en.md](references/asr_hotwords_en.md) <br>
+- [trading_glossary.md](references/trading_glossary.md) <br>
+- [term_repair_rules.json](references/term_repair_rules.json) <br>
 - [OkFile API keys](https://www.okfile.com/en/account/api-keys) <br>
 - [Alibaba Model Studio API key](https://help.aliyun.com/zh/model-studio/get-api-key) <br>
+- [Alibaba Fun-ASR recorded speech recognition API](https://help.aliyun.com/zh/model-studio/fun-asr-recorded-speech-recognition-http-api) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files] <br>
-**Output Format:** [Markdown guidance and shell commands; final subtitle artifacts are ASS and SRT files.] <br>
+**Output Type(s):** [Files, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Bilingual ASS and SRT subtitle files with a concise Markdown delivery summary] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces one bilingual ASS file and one bilingual SRT file after source analysis, translation review, deterministic QA, and final whole-document QC pass.] <br>
+**Other Properties Related to Output:** [Requires explicit external-processing consent, local provider credentials, ffmpeg, and validated QA gates before export.] <br>
 
 ## Skill Version(s): <br>
-1.5.2 (source: server release evidence) <br>
+1.7.0 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

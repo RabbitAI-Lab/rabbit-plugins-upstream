@@ -1,0 +1,9 @@
+{
+  "mean_score": 0.22405952215194702,
+  "parking_fraction": 0.35650634765625,
+  "mean_asphalt": 0.2280198633670807,
+  "mean_markings": 0.06475585699081421,
+  "mean_regularity": 0.5347461700439453,
+  "n_valid_pixels": 16384,
+  "n_total_pixels": 16384
+}

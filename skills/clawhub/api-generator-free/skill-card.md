@@ -1,5 +1,5 @@
 ## Description: <br>
-Generates basic API code scaffolds for RESTful Express.js CRUD endpoints, GraphQL type/query/mutation schemas, and Jest + Supertest test suites. <br>
+Api Generator Free helps developers generate basic API scaffolding, including RESTful CRUD endpoints, GraphQL schemas, and Jest/Supertest test suites. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to ask an agent for starter API implementation code, GraphQL schemas, and API test suites for named resources. <br>
+Developers and engineers use this skill to draft API boilerplate, GraphQL type/query/mutation schemas, and test scaffolds for explicit REST, GraphQL, or test-generation tasks. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill asks agents to run an unspecified bash script that is not included in the package. <br>
-Mitigation: Review the package before installation and only run commands that point to identified, trusted scripts. <br>
-Risk: The skill suggests setting a broad API_KEY value even though the packaged evidence does not identify a required external service. <br>
-Mitigation: Avoid setting unrelated API keys for this skill and keep credentials out of generated files and version control. <br>
+Risk: The security summary flags a mismatch between requested execution/file-writing authority and the free-version claim that direct file writes are not supported. <br>
+Mitigation: Install only when the operator is comfortable supervising command execution, generated code, npm installs, and any file changes. <br>
+Risk: Generated API, authentication, rate-limiting, or test code may be incomplete or unsuitable for production security requirements. <br>
+Mitigation: Review generated code, dependency choices, authentication handling, and tests before integrating the output into an application. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/api-generator-free) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+- [Artifact skill definition](artifact/SKILL.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and generated source code] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown with code blocks and structured JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated code is described as stdout output that users can redirect into project files.] <br>
+**Other Properties Related to Output:** [May propose npm dependencies, generated API scaffolds, tests, and configuration; free-version scope should be checked before file writes.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release evidence; artifact frontmatter lists 1.0.0) <br>
+1.0.3 (source: server release metadata; artifact frontmatter says 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

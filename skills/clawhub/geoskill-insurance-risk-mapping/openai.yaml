@@ -1,0 +1,15 @@
+name: geoskill-insurance-risk-mapping
+display_name: 保险风险制图
+description: |
+  Multi-hazard probability times asset value times vulnerability curves to compute expected loss for insurance risk mapping
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-insurance-risk-mapping.py
+runtime: python>=3.9
+tags:
+  - disaster
+  - extraction
+  - gis
+  - remote-sensing
+  - risk
+  - visualization

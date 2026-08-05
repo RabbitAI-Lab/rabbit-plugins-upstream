@@ -2,7 +2,7 @@
 
 ## 需求
 
-Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
 目标用户：API developers, backend teams, developer-experience teams, and maintainers who must make services understandable to other engineers
 
@@ -10,14 +10,14 @@ Validated demand: Backend and platform teams need practical help generating, imp
 
 需求评分：100/100
 
-证据覆盖：12 条信号，覆盖 3 个来源类型。
+证据覆盖：12 条信号，覆盖 4 个来源类型。
 
 ## 来源证据
 
-- csdn-search：[OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search：[Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues：[Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues：[[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
+- csdn-search：[OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=1894437f3e5142f0b0650e0ce62c9c36&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base5&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- csdn-search：[Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=1894437f3e5142f0b0650e0ce62c9c36&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base5&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues：[docs: rename deprecated 'HAPI'/'HolmesGPT API' references to 'Kubernaut Agent (KA)'](https://github.com/jordigilh/kubernaut/issues/1806)
+- hacker-news-ask-hn：[Ask HN: Security advisory Azure trusted launch VMs](https://news.ycombinator.com/item?id=49122711)
 - segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
 - segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
 - segmentfault-search：[typescript](https://segmentfault.com/t/typescript)
@@ -25,7 +25,7 @@ Validated demand: Backend and platform teams need practical help generating, imp
 - segmentfault-search：[答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
 - segmentfault-search：[OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
 - segmentfault-search：[答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues：[Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- github-issues：[Secured Admin Editorial Projection HTTP command — Slice 34](https://github.com/nazmi02551/KEFE/issues/186)
 
 ## 这个技能如何满足需求
 

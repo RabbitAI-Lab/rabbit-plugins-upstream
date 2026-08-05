@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes smart greenhouse plant imagery with optional environmental sensor context to produce plant stress findings and prioritized climate-control actions such as irrigation, shading, fan, wet-curtain, and heating commands. <br>
+Analyzes greenhouse plant images or videos with environmental context to produce structured plant-stress findings and prioritized climate-control recommendations. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Greenhouse operators and agricultural engineers use this skill to submit plant images, videos, or URLs and receive structured plant-state analysis, prioritized climate-control actions, resource-use suggestions, and cloud history report links. <br>
+Greenhouse operators, agritech developers, and automation engineers use this skill to analyze plant canopy media and related climate signals, then receive structured findings and prioritized irrigation, shading, ventilation, wet-curtain, or heating recommendations. Its outputs are decision support for greenhouse control workflows and should be confirmed against local safety policies before actuator execution. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Greenhouse images, videos, URLs, and analysis requests may be sent to an external lifeemergence cloud service. <br>
-Mitigation: Use only media and URLs approved for external processing, and avoid private camera footage or sensitive operational data unless the publisher documents retention and handling practices. <br>
-Risk: Reports are tied to an automatically managed identity and can be queried from cloud history. <br>
-Mitigation: Confirm how identity creation, token storage, and report history are managed before installation, and restrict use to environments where this linkage is acceptable. <br>
-Risk: The output proposes greenhouse control actions that may be unsuitable for local equipment or crop conditions. <br>
-Mitigation: Treat recommendations as decision support and require local controller safeguards or human review before executing irrigation, shading, ventilation, wet-curtain, or heating actions. <br>
+Risk: Greenhouse media, media URLs, and report-history requests may be sent to external cloud services. <br>
+Mitigation: Use only with authorized greenhouse media and approved cloud account behavior; review the configured API service before installation. <br>
+Risk: The skill may create or reuse an account identity and persist returned tokens locally. <br>
+Mitigation: Install only where local token persistence is acceptable, and protect or rotate stored credentials according to site policy. <br>
+Risk: Climate-control recommendations could affect actuators if applied directly. <br>
+Mitigation: Require local controller safety checks and human or controller confirmation before executing irrigation, shading, ventilation, wet-curtain, or heating actions. <br>
 
 
 ## Reference(s): <br>
@@ -32,13 +32,13 @@ Mitigation: Treat recommendations as decision support and require local controll
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with command examples and report links] <br>
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
+**Output Format:** [Markdown or JSON structured analysis with report links and prioritized greenhouse control recommendations] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report links and prioritized greenhouse control actions; does not provide PID values or valve-opening percentages.] <br>
+**Other Properties Related to Output:** [May write results to a file when requested; history listing output is rendered as a Markdown table.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: server release evidence; artifact frontmatter says 1.0.5) <br>
+1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -17,7 +17,8 @@
 import json
 import os
 
-from common import CONFIG, http_json
+from common import (CONFIG, credential_for_endpoint, http_json,
+                    require_egress_consent)
 from judge import llm_endpoint, PROFILE
 
 BATCH = 18  # 每次 LLM 调用筛多少个标题
@@ -41,12 +42,16 @@ def _profile_brief(maxchars=1200):
 
 def _resolve_endpoint():
     """screen 端点：默认复用 judge 的解析；screen.base_url / screen.model 可单独覆盖
-    （例如把 screen 指向本地 Ollama 做免费筛，judge 仍走云端）。"""
+    （例如把 screen 指向本地 Ollama 做免费筛，judge 仍走云端）。
+
+    覆盖了 base_url 就是**另一个端点**，不会把 judge/OpenRouter 的 key 顺手带过去：
+    要凭证就单独配 SCREEN_LLM_API_KEY，指向本地模型则本来就不需要 key。
+    """
     base, key = llm_endpoint()
     cfg = _screen_cfg()
     if cfg.get("base_url"):
         base = cfg["base_url"].rstrip("/")
-        key = os.environ.get("LLM_API_KEY", key)  # 本地 Ollama 可无 key
+        key = credential_for_endpoint(base, purpose="screen")
     model = cfg.get("model") or CONFIG["judge"]["model"]
     return base, key, model
 
@@ -55,6 +60,10 @@ def _screen_batch(items, base, key, model):
     lines = [f'{i}. {it["company"]} | {it["title"]} | {it.get("location", "")}'
              for i, it in enumerate(items)]
     user = f"USER PROFILE (brief):\n{_profile_brief()}\n\nJOBS:\n" + "\n".join(lines)
+    require_egress_consent(
+        "llm",
+        f"a brief of your job profile plus {len(items)} company/title/location lines, to {base}",
+    )
     headers = {"Authorization": f"Bearer {key}"} if key else {}
     resp = http_json(
         f"{base}/chat/completions", method="POST", headers=headers,

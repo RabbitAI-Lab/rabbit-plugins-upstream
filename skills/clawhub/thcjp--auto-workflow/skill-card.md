@@ -1,5 +1,5 @@
 ## Description: <br>
-Builds automation workflows from repetitive tasks by planning execution steps, handling retries, monitoring progress, and reporting results. <br>
+Auto Workflow helps an agent identify repetitive tasks, design automation workflows, and generate scripts or configuration for independent developers and small teams. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, operators, and individual builders use this skill to turn repetitive work into structured automation workflows with task planning, conditional execution, retry handling, logs, and status summaries. <br>
+Developers, independent builders, and small teams use this skill to turn recurring manual operations into repeatable automation plans, scripts, and configuration. It is best suited to routine workflows where generated actions can be reviewed before execution. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may request shell command execution while building or running automation workflows. <br>
-Mitigation: Review each planned command before execution and require explicit approval for commands that change files, run jobs, call APIs, or affect user accounts. <br>
-Risk: Scheduled jobs, email sending, and API-driven steps can run beyond the user's immediate review if they are not scoped. <br>
-Mitigation: Use only non-sensitive accounts unless explicit approval, logging, and schedule limits are configured for the workflow. <br>
-Risk: Automation output can be incorrect when the task description is ambiguous or the runtime environment is incomplete. <br>
-Mitigation: Validate workflow plans, required environment settings, and final results before relying on them for operational decisions. <br>
+Risk: Generated automations may run scripts, send messages, change files, create scheduled jobs, or touch backups and business data without adequate approval boundaries. <br>
+Mitigation: Require explicit user approval before any generated automation is executed or scheduled, and review the proposed workflow, commands, affected files, recipients, and data sources first. <br>
+Risk: The artifact describes encryption, audit, access-control, and API-key protections that are not proven by the server security evidence. <br>
+Mitigation: Rely only on protections provided and enforced by the host platform, and do not treat the skill text as evidence of implemented security controls. <br>
+Risk: Automation generated from an incomplete task description may encode the wrong process or repeat mistakes at scale. <br>
+Mitigation: Test proposed workflows on a limited sample, inspect logs and outputs, and expand scope only after the result matches the intended manual process. <br>
 
 
 ## Reference(s): <br>
-- [Auto Workflow ClawHub listing](https://clawhub.ai/thcjp/skills/auto-workflow) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/auto-workflow) <br>
+- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON-shaped workflow results, execution logs, and optional command or configuration snippets.] <br>
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with possible code, shell command, or configuration blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include workflow plans, status summaries, retry details, scheduled-task guidance, and file or command changes when approved.] <br>
+**Other Properties Related to Output:** [May propose scripts, scheduled jobs, file changes, messages, backups, or business-data workflows; execution should require explicit host-agent approval.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+1.0.4 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

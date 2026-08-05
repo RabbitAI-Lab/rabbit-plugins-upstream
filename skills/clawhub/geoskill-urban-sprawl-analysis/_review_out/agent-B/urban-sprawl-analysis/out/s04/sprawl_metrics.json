@@ -1,0 +1,117 @@
+{
+  "dates": [
+    {
+      "present": true,
+      "urban_pixels": 290,
+      "urban_area_km2": -137139.69545577955,
+      "perimeter_pixels": 53,
+      "perimeter_km": -10849.88103934777,
+      "compactness": 1.0,
+      "fractal_dimension": 1.0,
+      "centroid": [
+        27.24737787356321,
+        -9.55596264367816
+      ],
+      "date_index": 0,
+      "year": 2000
+    },
+    {
+      "present": true,
+      "urban_pixels": 542,
+      "urban_area_km2": -256309.3618518363,
+      "perimeter_pixels": 76,
+      "perimeter_km": -15558.319980951519,
+      "compactness": 1.0,
+      "fractal_dimension": 1.0,
+      "centroid": [
+        25.735508917589186,
+        -9.555408210332104
+      ],
+      "date_index": 1,
+      "year": 2005
+    },
+    {
+      "present": true,
+      "urban_pixels": 898,
+      "urban_area_km2": -424660.16041134496,
+      "perimeter_pixels": 101,
+      "perimeter_km": -20676.1883957382,
+      "compactness": 1.0,
+      "fractal_dimension": 1.0,
+      "centroid": [
+        21.521343726800268,
+        -9.555250092798811
+      ],
+      "date_index": 2,
+      "year": 2010
+    },
+    {
+      "present": true,
+      "urban_pixels": 1402,
+      "urban_area_km2": -662999.4932034584,
+      "perimeter_pixels": 128,
+      "perimeter_km": -26203.48628370782,
+      "compactness": 1.0,
+      "fractal_dimension": 1.0,
+      "centroid": [
+        14.934327448882556,
+        -9.555553078934855
+      ],
+      "date_index": 3,
+      "year": 2015
+    }
+  ],
+  "changes": [
+    {
+      "from_year": 2000,
+      "to_year": 2005,
+      "new_pixels": 252,
+      "lost_pixels": 0,
+      "net_pixels": 252,
+      "new_area_km2": -119169.66639605672,
+      "net_area_km2": -119169.66639605672,
+      "growth_rate": 0.0,
+      "centroid_shift_km": 165.96603767495634
+    },
+    {
+      "from_year": 2005,
+      "to_year": 2010,
+      "new_pixels": 356,
+      "lost_pixels": 0,
+      "net_pixels": 356,
+      "new_area_km2": -168350.7985595087,
+      "net_area_km2": -168350.7985595087,
+      "growth_rate": 0.0,
+      "centroid_shift_km": 462.6121734684473
+    },
+    {
+      "from_year": 2010,
+      "to_year": 2015,
+      "new_pixels": 504,
+      "lost_pixels": 0,
+      "net_pixels": 504,
+      "new_area_km2": -238339.33279211345,
+      "net_area_km2": -238339.33279211345,
+      "growth_rate": 0.0,
+      "centroid_shift_km": 723.0929808499667
+    }
+  ],
+  "summary": {
+    "n_dates": 4,
+    "interval_years": 5,
+    "total_new_pixels": 1112,
+    "total_net_pixels": 1112,
+    "total_new_area_km2": -525859.7977476788,
+    "total_net_area_km2": -525859.7977476788,
+    "net_expansion_detected": true,
+    "first_centroid": [
+      27.24737787356321,
+      -9.55596264367816
+    ],
+    "last_centroid": [
+      14.934327448882556,
+      -9.555553078934855
+    ],
+    "total_centroid_shift_km": 1351.6698053945904
+  }
+}

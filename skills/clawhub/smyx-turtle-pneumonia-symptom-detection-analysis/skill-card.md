@@ -1,5 +1,5 @@
 ## Description: <br>
-Through fixed enclosure cameras, the skill analyzes turtle mouth and nasal media to identify frequent open-mouth breathing in non-feeding states, visible mucus, and nasal discharge that may warrant a pneumonia risk warning. <br>
+This skill analyzes turtle enclosure video inputs to identify visual respiratory warning signs such as frequent open-mouth breathing, mouth or nasal mucus, nasal discharge, abnormal posture, and related pneumonia-risk alerts. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, animal-care operators, and developers use this skill to analyze turtle enclosure images or videos for visual respiratory warning signs and to produce structured risk reports, recommendations, report links, or historical report tables. The output is a visual risk assessment aid and is not a veterinary diagnosis. <br>
+External users, reptile keepers, breeders, animal-care staff, and developers can use this skill to submit turtle enclosure footage for visual respiratory-sign analysis and to review generated pneumonia-risk warning reports. It supports analysis of current footage and retrieval of cloud-hosted historical warning reports. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill sends turtle enclosure media or video URLs to the Life Emergence backend for analysis. <br>
-Mitigation: Use only media and URLs that are appropriate for cloud processing, and avoid URLs that contain embedded access tokens or other sensitive values. <br>
-Risk: The skill can create or reuse a cloud-linked identity and persists login tokens and identity records locally. <br>
-Mitigation: Review and manage the workspace data directory before and after use, especially in shared environments. <br>
-Risk: Historical report queries are served from the cloud and can reveal prior analysis records associated with the linked identity. <br>
-Mitigation: Run history queries only in contexts where the linked identity and its report history are intended to be used. <br>
-Risk: The skill provides visual health risk warnings that could be mistaken for a veterinary diagnosis. <br>
-Mitigation: Treat results as visual screening guidance only and consult a qualified reptile veterinarian for diagnosis and treatment decisions. <br>
+Risk: The skill sends turtle videos or URLs to the lifeemergence.com cloud service for processing. <br>
+Mitigation: Use it only with footage that may be processed by that cloud service, and avoid sensitive footage unless local policies allow that processing. <br>
+Risk: The skill silently creates or reuses a local identity, registers or logs into the remote service, and stores returned tokens in the workspace data database. <br>
+Mitigation: Review workspace access, local data retention, and token deletion practices before use in shared or sensitive environments. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-turtle-pneumonia-symptom-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-turtle-pneumonia-symptom-detection-analysis) <br>
+- [API Documentation](references/api_doc.md) <br>
+- [Skill Usage Demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON-like structured report with shell command examples and report links] <br>
+**Output Format:** [JSON or Markdown text report with report links and optional file output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May query cloud-hosted analysis and history APIs and may save requested output to a file.] <br>
+**Other Properties Related to Output:** [Outputs include visual analysis results, warning levels, recommended next actions, disclaimers, and report export links when returned by the service.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter states 1.0.6) <br>
+1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.9) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

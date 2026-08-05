@@ -1,178 +1,114 @@
 #!/usr/bin/env bash
-# =============================================================================
-# memory-manager setup.sh
-#
-# One-command setup for the 3-layer memory system.
-# Run this from your agent's workspace directory.
-#
-# Usage:
-#   cd ~/your-agent-workspace
-#   bash ~/.openclaw/skills/memory-manager/scripts/setup.sh
-#
-# What this does:
-#   1. Creates memory/ directory for daily notes
-#   2. Copies templates (MEMORY.md, USER.md, HEARTBEAT.md, AGENTS.md)
-#      into your workspace — skips any that already exist
-#   3. Creates today's daily notes file
-#   4. Prints next steps
-# =============================================================================
-
 set -euo pipefail
 
-SKILL_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-TEMPLATES_DIR="$SKILL_DIR/templates"
-WORKSPACE_DIR="${1:-$(pwd)}"
+usage() {
+  printf '%s\n' \
+    'Usage: setup.sh --workspace /absolute/private/workspace [--apply]' \
+    '' \
+    'Default mode is a dry run. --apply creates only missing files and never' \
+    'overwrites or patches existing workspace content.'
+}
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-BOLD='\033[1m'
-NC='\033[0m' # No Color
+workspace=''
+apply='false'
 
-echo ""
-echo -e "${BOLD}memory-manager setup${NC}"
-echo -e "${BLUE}Setting up 3-layer memory system in: ${WORKSPACE_DIR}${NC}"
-echo ""
+while [ "$#" -gt 0 ]; do
+  case "$1" in
+    --workspace)
+      [ "$#" -ge 2 ] || { usage >&2; exit 2; }
+      workspace="$2"
+      shift 2
+      ;;
+    --apply)
+      apply='true'
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      printf 'Unknown argument: %s\n' "$1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Step 1: Create memory/ directory
-# ─────────────────────────────────────────────────────────────────────────────
-MEMORY_DIR="$WORKSPACE_DIR/memory"
+[ -n "$workspace" ] || { usage >&2; exit 2; }
+case "$workspace" in
+  /*) ;;
+  *) printf 'Workspace must be an absolute path.\n' >&2; exit 2 ;;
+esac
+[ -d "$workspace" ] || { printf 'Workspace does not exist: %s\n' "$workspace" >&2; exit 2; }
 
-if [ -d "$MEMORY_DIR" ]; then
-  echo -e "  ${YELLOW}→${NC} memory/ directory already exists — skipping"
-else
-  mkdir -p "$MEMORY_DIR"
-  echo -e "  ${GREEN}✓${NC} Created memory/ directory"
-fi
+workspace="$(cd "$workspace" && pwd -P)"
+case "$workspace" in
+  /|/Users|/home|/root)
+    printf 'Refusing broad workspace path: %s\n' "$workspace" >&2
+    exit 2
+    ;;
+esac
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Step 2: Copy templates (skip if file already exists)
-# ─────────────────────────────────────────────────────────────────────────────
-copy_template() {
-  local template_file="$TEMPLATES_DIR/$1"
-  local dest_file="$WORKSPACE_DIR/$2"
-  local label="$3"
+skill_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd -P)"
+templates_dir="$skill_dir/templates"
+today="$(date +%Y-%m-%d)"
 
-  if [ ! -f "$template_file" ]; then
-    echo -e "  ${RED}✗${NC} Template not found: $template_file"
-    return 1
-  fi
+printf 'Fleet Memory Manager setup\n'
+printf 'Workspace: %s\n' "$workspace"
+printf 'Mode: %s\n\n' "$([ "$apply" = 'true' ] && printf 'apply' || printf 'dry-run')"
 
-  if [ -f "$dest_file" ]; then
-    echo -e "  ${YELLOW}→${NC} $label already exists — skipping (keeping yours)"
+create_from_template() {
+  source_file="$templates_dir/$1"
+  destination="$workspace/$2"
+  if [ -e "$destination" ]; then
+    printf 'UNCHANGED existing %s\n' "$destination"
+  elif [ "$apply" = 'true' ]; then
+    cp "$source_file" "$destination"
+    printf 'CREATED %s\n' "$destination"
   else
-    cp "$template_file" "$dest_file"
-    echo -e "  ${GREEN}✓${NC} Created $label from template"
+    printf 'WOULD CREATE %s\n' "$destination"
   fi
 }
 
-echo ""
-echo -e "${BOLD}Copying templates...${NC}"
-copy_template "MEMORY.md"    "MEMORY.md"    "MEMORY.md (long-term memory)"
-copy_template "USER.md"      "USER.md"      "USER.md (user profile)"
-copy_template "AGENTS.md"    "AGENTS.md"    "AGENTS.md (startup sequence)"
-copy_template "HEARTBEAT.md" "HEARTBEAT.md" "HEARTBEAT.md (heartbeat config)"
+if [ -e "$workspace/memory" ] && [ ! -d "$workspace/memory" ]; then
+  printf 'Cannot create memory directory; a non-directory exists at %s/memory\n' "$workspace" >&2
+  exit 2
+fi
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Step 3: Create today's daily notes file
-# ─────────────────────────────────────────────────────────────────────────────
-TODAY=$(date +%Y-%m-%d)
-DAILY_FILE="$MEMORY_DIR/$TODAY.md"
-
-echo ""
-echo -e "${BOLD}Setting up daily notes...${NC}"
-
-if [ -f "$DAILY_FILE" ]; then
-  echo -e "  ${YELLOW}→${NC} Today's notes ($TODAY.md) already exist — skipping"
+if [ -d "$workspace/memory" ]; then
+  printf 'UNCHANGED existing %s/memory\n' "$workspace"
+elif [ "$apply" = 'true' ]; then
+  mkdir "$workspace/memory"
+  printf 'CREATED %s/memory\n' "$workspace"
 else
-  cat > "$DAILY_FILE" << EOF
-# $TODAY
-
-<!-- Daily notes created by memory-manager setup -->
-<!-- This is Layer 2 of your 3-layer memory system -->
-<!-- Write here during sessions; nightly cron promotes important stuff to MEMORY.md -->
-
-## Sessions
-
-<!-- Add session notes here as you work -->
-
-## Active Projects
-
-<!-- Track project state so future sessions can pick up without re-explaining -->
-
-## Context for Next Session
-
-<!-- THIS IS THE MOST IMPORTANT SECTION -->
-<!-- Write what future-you needs to know to pick up without asking again -->
-<!-- Think: "briefing a colleague who just joined" -->
-
-- Memory-manager setup complete
-- Templates copied to workspace — customize USER.md and MEMORY.md next
-
-## Raw Log
-
-<!-- Less curated — dump things here that might matter later -->
-<!-- The nightly consolidation will extract what's worth keeping -->
-
-- memory-manager installed and configured
-EOF
-  echo -e "  ${GREEN}✓${NC} Created today's daily notes: memory/$TODAY.md"
+  printf 'WOULD CREATE %s/memory\n' "$workspace"
 fi
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Step 4: Create heartbeat state file
-# ─────────────────────────────────────────────────────────────────────────────
-HEARTBEAT_STATE="$MEMORY_DIR/heartbeat-state.json"
-if [ ! -f "$HEARTBEAT_STATE" ]; then
-  cat > "$HEARTBEAT_STATE" << EOF
-{
-  "lastChecks": {
-    "email": null,
-    "calendar": null,
-    "weather": null,
-    "projects": null,
-    "memoryHealth": null
-  },
-  "installDate": "$(date -u +%Y-%m-%dT%H:%M:%SZ)",
-  "lastConsolidation": null
-}
-EOF
-  echo -e "  ${GREEN}✓${NC} Created heartbeat state file"
+create_from_template 'MEMORY.md' 'MEMORY.md'
+create_from_template 'USER.md' 'USER.md'
+create_from_template 'AGENTS.md' 'AGENTS.md'
+create_from_template 'HEARTBEAT.md' 'HEARTBEAT.md'
+
+daily_file="$workspace/memory/$today.md"
+if [ -e "$daily_file" ]; then
+  printf 'UNCHANGED existing %s\n' "$daily_file"
+elif [ "$apply" = 'true' ]; then
+  {
+    printf '# %s\n\n' "$today"
+    printf 'Retention: review or delete after %s.\n\n' "$(date -v+30d +%Y-%m-%d 2>/dev/null || date -d '+30 days' +%Y-%m-%d 2>/dev/null || printf '30 days')"
+    printf '## Task state\n\n- Add only work-relevant facts needed for continuity.\n\n'
+    printf '## Decisions\n\n- None recorded.\n\n'
+    printf '## Next session\n\n- Review the new memory templates before enabling them.\n'
+  } > "$daily_file"
+  printf 'CREATED %s\n' "$daily_file"
+else
+  printf 'WOULD CREATE %s\n' "$daily_file"
 fi
 
-# ─────────────────────────────────────────────────────────────────────────────
-# Step 5: Summary and next steps
-# ─────────────────────────────────────────────────────────────────────────────
-echo ""
-echo -e "${GREEN}${BOLD}Setup complete!${NC}"
-echo ""
-echo -e "${BOLD}Files created in $WORKSPACE_DIR:${NC}"
-echo ""
-echo "  memory-manager-skill/"
-echo "  ├── MEMORY.md          ← Layer 1: Long-term memory (customize this)"
-echo "  ├── USER.md            ← Layer 3: User profile (fill this in)"
-echo "  ├── AGENTS.md          ← Startup sequence (already wired for 3 layers)"
-echo "  ├── HEARTBEAT.md       ← Heartbeat config (customize project list)"
-echo "  └── memory/"
-echo "      ├── $TODAY.md  ← Today's operational notes"
-echo "      └── heartbeat-state.json"
-echo ""
-echo -e "${BOLD}Next steps:${NC}"
-echo ""
-echo -e "  ${BLUE}1.${NC} Edit USER.md — fill in who the human is, how they work"
-echo -e "  ${BLUE}2.${NC} Edit MEMORY.md — add any existing long-term context"
-echo -e "  ${BLUE}3.${NC} Edit HEARTBEAT.md — add your active projects to monitor"
-echo -e "  ${BLUE}4.${NC} Add the nightly consolidation cron (see SKILL.md for prompt)"
-echo ""
-echo -e "${BOLD}Nightly consolidation cron (add in OpenClaw):${NC}"
-echo ""
-echo "  Schedule: 0 2 * * *"
-echo "  Model:    anthropic/claude-opus-4-5"
-echo "  Channel:  <your-main-channel-id>"
-echo "  Prompt:   (see SKILL.md → 'Step 4: Set Up Nightly Consolidation')"
-echo ""
-echo -e "  ${YELLOW}Tip:${NC} Run 'openclaw skills show memory-manager' to see the full prompt."
-echo ""
+printf '\nNo existing files were modified. No schedule was created.\n'
+if [ "$apply" != 'true' ]; then
+  printf 'Review this preview, then rerun with --apply if the user consents.\n'
+else
+  printf 'Review every created file before enabling memory loading.\n'
+fi

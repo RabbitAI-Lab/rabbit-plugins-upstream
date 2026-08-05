@@ -1,0 +1,19 @@
+{
+  "model": "rf",
+  "n_samples": 16384,
+  "n_features": 4,
+  "prevalence": 0.1639404296875,
+  "cv_auc": 0.705786233664887,
+  "variable_importance": {
+    "temperature": 0.048259223647745,
+    "precipitation": 0.04626141879394267,
+    "ndvi": 0.8513501983689543,
+    "elevation": 0.05412915918935801
+  },
+  "band_names": [
+    "temperature",
+    "precipitation",
+    "ndvi",
+    "elevation"
+  ]
+}

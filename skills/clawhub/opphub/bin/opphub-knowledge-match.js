@@ -264,7 +264,7 @@ async function main() {
   }
 
   // 启发式: 召回结果去重 entryId, 不同 entry 数 < 5 视为不足
-  // 精确判断需 server 端 API 查 opc 总数, v3.3 schema 红线 (等 server 接)
+  // 精确判断需 server 端 API 查 user 总数, v3.3 schema 红线 (等 server 接)
   const allHits = [
     ...upstreamResults.flatMap((r) => r.results),
     ...downstreamResults.flatMap((r) => r.results),

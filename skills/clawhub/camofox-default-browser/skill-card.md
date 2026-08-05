@@ -1,5 +1,5 @@
 ## Description: <br>
-Anti-detection browser automation via Camoufox Firefox fork — bypasses Cloudflare, captcha, and bot blocking <br>
+Advanced browser automation via the Camoufox Firefox fork for authorized automation tasks that encounter bot protection. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,41 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and operators use this skill to route OpenClaw browser automation through Camoufox for authorized work on sites where standard browser automation is blocked or challenged. It provides tab control, navigation, snapshots, screenshots, JavaScript evaluation, and optional cookie import through the camofox tool set. <br>
+Developers and operators use this skill to drive OpenClaw browser automation through Camoufox when authorized workflows need tabs, snapshots, clicks, typing, navigation, screenshots, JavaScript evaluation, or cookie-backed sessions on bot-hardened websites. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Anti-detection browser automation can be used to bypass site protections or terms where the user lacks authorization. <br>
-Mitigation: Install and use only for authorized automation, and do not use it to bypass protections on sites where permission is absent. <br>
-Risk: Imported cookie files can grant live access to user accounts. <br>
-Mitigation: Keep cookie import disabled unless needed, protect cookie files as credentials, and require CAMOFOX_API_KEY when enabling the import endpoint. <br>
-Risk: The local background server exposes browser-control routes if access controls are not configured. <br>
-Mitigation: Use CAMOFOX_ACCESS_KEY or equivalent local access controls and restrict server exposure to trusted local callers. <br>
-Risk: Telemetry or persisted browser profiles may create privacy or compliance concerns. <br>
-Mitigation: Review crash telemetry and profile persistence settings, and disable telemetry with CAMOFOX_CRASH_REPORT_ENABLED=false when required. <br>
+Risk: Anti-detection browser automation can be misused or violate site authorization and terms. <br>
+Mitigation: Use only for approved automation on services where authorization and applicable terms have been confirmed. <br>
+Risk: Imported cookie files can provide full account access if exposed. <br>
+Mitigation: Protect cookie files with owner-only permissions, keep them outside shared temporary locations, and delete them when the task is complete. <br>
+Risk: The local automation server may expose sensitive browser controls if reachable by untrusted clients. <br>
+Mitigation: Bind the service to localhost, avoid exposing port 9377, and require an API key or gateway control for sensitive operations. <br>
+Risk: Crash telemetry or browsing artifacts may be inappropriate in sensitive environments. <br>
+Mitigation: Disable telemetry where required and avoid retaining screenshots, logs, cookies, or temporary browsing artifacts longer than necessary. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/akdira/skills/camofox-default-browser) <br>
-- [Artifact-declared Camoufox browser homepage](https://github.com/jo-inc/camofox-browser) <br>
+- [Camoufox browser repository](https://github.com/jo-inc/camofox-browser) <br>
+- [Camoufox releases](https://github.com/jo-inc/camofox/releases) <br>
+- [AGENTS.md](artifact/AGENTS.md) <br>
+- [API.md](artifact/API.md) <br>
+- [CONFIGURATION.md](artifact/CONFIGURATION.md) <br>
+- [INSTALL.md](artifact/INSTALL.md) <br>
+- [SECURITY.md](artifact/SECURITY.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON-like tool parameters and shell command examples] <br>
+**Output Type(s):** [Shell commands, Configuration, API calls, Code, Markdown, Guidance] <br>
+**Output Format:** [Markdown with JSON examples and inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces guidance for using camofox browser automation tools; screenshots may be returned as base64 by the underlying tool.] <br>
+**Other Properties Related to Output:** [Produces agent-facing tool guidance for Camoufox browser automation, including tab control, snapshots, navigation, screenshots, JavaScript evaluation, cookie import, installation, and security practices.] <br>
 
 ## Skill Version(s): <br>
-1.1.0 (source: server release evidence and SKILL.md frontmatter) <br>
+1.1.2 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

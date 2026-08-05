@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes adult front-facing facial images or short videos to estimate visual fatigue and stress indicators, returning a 0-100 fatigue/stress index with contributing features and directional suggestions. <br>
+Analyzes adult frontal face images or short videos to estimate visual fatigue and stress indicators, produce a 0-100 fatigue/stress score, and return structured results with directional wellness suggestions. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, employees, and developers can use this skill to assess adult facial fatigue or stress indicators from clear face images or short videos for personal status monitoring, workplace wellness displays, smart mirrors, or health-management applications. Results are directional visual assessments and do not replace medical diagnosis or clinical stress evaluation. <br>
+External users and developers use this skill to evaluate adult facial fatigue/stress signals from submitted images, videos, or URLs and to retrieve prior cloud reports. The output is for personal status monitoring and workplace wellness support, not medical diagnosis or clinical stress assessment. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Facial images, videos, derived fatigue/stress reports, and persistent user identifiers are sent to the publisher cloud service. <br>
-Mitigation: Use the skill only with explicit consent from the person depicted, avoid unnecessary or third-party face media, and confirm retention and deletion options before deployment. <br>
-Risk: The skill may silently create or reuse a persistent user identity for analysis and history lookup. <br>
-Mitigation: Separate identities between users, review local identity and token storage, and document how users can clear or rotate the stored identity. <br>
-Risk: A face-based fatigue/stress score can be mistaken for a medical or clinical assessment. <br>
-Mitigation: Present outputs as directional visual indicators only, preserve the non-diagnostic warning, and advise professional follow-up for persistent high scores or symptoms. <br>
+Risk: Sensitive face images, videos, or URLs are sent to external services for cloud processing. <br>
+Mitigation: Use only with informed subject consent and with media appropriate for external cloud analysis. <br>
+Risk: The skill may create or reuse an internal identity and retrieve prior cloud reports with limited user control. <br>
+Mitigation: Review identity and report-history behavior before installation, especially in shared or enterprise environments. <br>
+Risk: Local credential persistence may occur as part of API access. <br>
+Mitigation: Install only where local token storage is acceptable and manage the runtime environment as sensitive. <br>
+Risk: Single-image fatigue or stress scoring can be affected by lighting, makeup, filters, pose, and image quality. <br>
+Mitigation: Treat results as directional wellness guidance and not as medical diagnosis or clinical stress assessment. <br>
 
 
 ## Reference(s): <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-adult-facial-fatigue-stress-index-analysis) <br>
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-adult-facial-fatigue-stress-index-analysis) <br>
+- [API Documentation](artifact/references/api_doc.md) <br>
+- [SMYX Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+- [Skill Demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Analysis, API Calls, Markdown, JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with fatigue/stress score, level, contributing features, suggestions, and optional report links] <br>
+**Output Type(s):** [Analysis, Markdown, JSON, Guidance] <br>
+**Output Format:** [Markdown or JSON structured report with report links.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save results to an output file and may return historical report lists from the publisher cloud service.] <br>
+**Other Properties Related to Output:** [May include face-detection status, fatigue/stress score, level, contributing facial features, suggestions, medical follow-up hint, and history report links.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter and changelog text state 1.0.4) <br>
+1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

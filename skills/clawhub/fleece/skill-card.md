@@ -1,44 +1,64 @@
-## Description: <br>
-Fleece is a credit card research and redemption CLI for rewards rates, fees, welcome bonuses, statement credits, transfer partners, wallet analysis, ROI estimates, recommendations, merchant category codes, and award travel search. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fleece is a credit card research and redemption CLI for looking up rewards rates, fees, bonuses, credits, transfer partners, point valuations, application rules, lounge access, travel protections, wallet gaps, ROI estimates, recommendations, merchant category codes, and award flight or hotel searches.
 
-## Publisher: <br>
-[chenyuan99](https://clawhub.ai/user/chenyuan99) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chenyuan99](https://clawhub.ai/user/chenyuan99)
 
-## Use Case: <br>
-Developers, agents, and credit card rewards users use Fleece to query current US card information, compare card portfolios, analyze spending profiles, and generate JSON-friendly redemption research workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Fleece can store personal card inventory, spending habits, travel goals, credit limits, expiration dates, and other profile details. <br>
-Mitigation: Enter only the minimum profile data needed, avoid full account details, and review or remove local profile data when it is no longer needed. <br>
-Risk: Personalized research may send profile or card context to external services such as Brave Search or OpenAI. <br>
-Mitigation: Avoid entering sensitive financial details, keep API keys scoped to this use case, and review prompts or command inputs before running personalized searches. <br>
-Risk: Running the Streamlit app on a shared server can expose debug, history, image-fetching, or stored-profile behavior to other users. <br>
-Mitigation: Prefer local execution for personal finance research and harden access controls, history handling, and image-fetching behavior before shared deployment. <br>
+## Use Case:
 
+Developers, agents, and credit card users use Fleece to research US credit card rewards, compare cards, estimate wallet gaps and ROI, and generate award travel search URLs. The skill can guide CLI use, local profile setup, and JSON-based workflows for card and redemption analysis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/chenyuan99/fleece) <br>
-- [PyPI Package](https://pypi.org/project/fleece-cli/) <br>
-- [Project Website](https://getfleece.io/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI examples and JSON command-output expectations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands commonly return JSON with ok and error fields; some workflows require BRAVE_API_KEY or OPENAI_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: ClawHub release) <br>
+Risk: The release security summary reports that the artifact includes broader iOS, wallet, location, Gmail, and safety-filter-bypass behavior beyond the core CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only the components needed for the intended workflow, and review the iOS, wallet, location, Gmail, and agent-instruction files before broad multi-agent installation or app builds.
+
+Risk: The CLI can store card and spending profile data locally in fleece.db.
+
+Mitigation: Use the local profile feature only when comfortable with local storage of card and spending details, and avoid entering full card numbers or other sensitive credentials.
+
+Risk: Live research sends relevant query context to Brave Search when BRAVE_API_KEY-backed commands are used.
+
+Mitigation: Configure BRAVE_API_KEY only when external search is acceptable, and avoid including sensitive personal or account information in search-backed queries.
+
+Risk: The bundled Gmail spend skill can analyze purchase and travel emails to estimate spending behavior.
+
+Mitigation: Keep Gmail access read-only, report aggregates instead of full message content, and require explicit user confirmation before writing Fleece profile updates.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chenyuan99/skills/fleece)
+- [Fleece website](https://getfleece.io/)
+- [fleece-cli on PyPI](https://pypi.org/project/fleece-cli/)
+- [PointsYeah](https://www.pointsyeah.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON]
+
+**Output Format:** [Markdown guidance with CLI command examples and JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Most CLI commands support --json; live research commands may require BRAVE_API_KEY and profile-aware commands can use local fleece.db data.]
+
+## Skill Version(s):
+
+1.6.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

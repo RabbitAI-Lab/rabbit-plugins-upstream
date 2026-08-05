@@ -1,5 +1,5 @@
 ## Description: <br>
-Generates a three-minute book explainer video from a book title and author, including review script, storyboard, AI illustrations, TTS narration, captions, and final MP4 composition. <br>
+Generates a three-minute book explainer video from a book title and author, including review copy, storyboard prompts, AI illustrations, TTS narration, subtitles, and a final MP4. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,37 +7,45 @@ This skill is ready for commercial/non-commercial use. <br>
 [chenjun198711](https://clawhub.ai/user/chenjun198711) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-External creators, developers, and content teams use this skill to turn a book title and author into a short narrated review video workflow. It guides an agent through book research, script and storyboard generation, image and TTS asset creation, subtitle timing, cover generation, and final MP4 assembly. <br>
+Creators, marketers, educators, and agent users use this skill to turn a book title and author into a narrated short-form reading video. Developers can also use it as a cross-platform workflow for generating scripts, images, audio, captions, cover art, and video assembly commands. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The workflow may send book names, author names, generated narration, image prompts, and caption text to search, image-generation, LLM, and TTS providers. <br>
-Mitigation: Use only content appropriate for those providers, review provider terms and retention settings, and avoid sensitive or private material unless the selected services are approved for it. <br>
-Risk: Running added scripts or API configuration may perform external calls and local media processing. <br>
-Mitigation: Review any scripts and API environment variables before execution, then run the workflow in a controlled workspace with only the credentials required for the selected providers. <br>
+Risk: The security scan reports broad runtime authority during use. <br>
+Mitigation: Review before installing, run in a virtual environment or container, and keep generated outputs inside a dedicated project directory. <br>
+Risk: The security scan reports automatic installation of unpinned packages during use. <br>
+Mitigation: Preinstall and pin dependencies before execution instead of allowing automatic package installation. <br>
+Risk: The skill can use multiple external providers that require API credentials. <br>
+Mitigation: Provide only the API keys needed for the selected image or TTS provider. <br>
+Risk: The security guidance calls out SD_WEBUI_URL as a sensitive runtime endpoint. <br>
+Mitigation: Set SD_WEBUI_URL only to a trusted local endpoint. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chenjun198711/skills/book-video-generator) <br>
-- [Server-resolved GitHub provenance](https://github.com/chenjun198711/book-video-generator) <br>
+- [Skill prompts](references/prompts.md) <br>
+- [Cross-platform guide](references/CROSS_PLATFORM.md) <br>
+- [Original workflow reference](references/workflow-original.yaml) <br>
+- [Optional media assets](assets/README.md) <br>
 - [Agent Skills open standard](https://agentskills.io) <br>
-- [Volcengine TTS console](https://console.volcengine.com/speech/new) <br>
+- [Book video generator demo](https://chenjun198711.github.io/book-video-generator/) <br>
+- [Volcengine image model setup](https://console.volcengine.com/ark/region:ark+cn-beijing/openManagement) <br>
+- [Volcengine speech setup](https://console.volcengine.com/speech/new) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance with JSON snippets, shell commands, and generated media file paths] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files] <br>
+**Output Format:** [Structured workflow guidance with JSON payloads and shell commands; generated artifacts include MP4 video, images, audio, captions, and configuration files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce JSON storyboards, image prompts, MP3 narration, ASS subtitles, cover images, and an MP4 output under output/{book_name}_三分钟精读书.mp4.] <br>
+**Other Properties Related to Output:** [Creates project-local output files and may call external image-generation and TTS providers depending on configuration.] <br>
 
 ## Skill Version(s): <br>
-0.1.0 (source: server release metadata; artifact frontmatter says 2.6.0) <br>
+2.8.0 (source: frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

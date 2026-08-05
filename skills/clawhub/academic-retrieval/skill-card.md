@@ -1,42 +1,54 @@
-## Description: <br>
-Sciverse academic paper retrieval: structured metadata search, semantic chunk retrieval for RAG, and byte-range content reading. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieve academic papers by structured metadata, perform semantic chunk search for RAG, and read byte-range content for citation-grade scientific literature.
 
-## Publisher: <br>
-[sciverse](https://clawhub.ai/user/sciverse) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[sciverse](https://clawhub.ai/user/sciverse)
 
-## Use Case: <br>
-Developers and external agent users use this skill to locate academic papers, retrieve metadata and semantic excerpts, read accessible full text ranges, and fetch referenced paper figures or table images for citation-grounded workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries, requested document identifiers, and the Sciverse API token are sent to Sciverse. <br>
-Mitigation: Install only when Sciverse academic retrieval is intended, keep the token scoped to this service, and avoid using SCIVERSE_BASE_URL unless it points to a trusted sciverse.space endpoint. <br>
-Risk: Full-text reading may be unavailable for papers without accessible content or caller authorization. <br>
-Mitigation: Check is_content_accessible before calling read_content and fall back to metadata or semantic search results when full text cannot be read. <br>
+## Use Case:
 
+Developers and agent users use this skill to locate academic papers, retrieve citation-oriented paper metadata, perform semantic chunk retrieval for RAG, and expand selected chunks into byte-range excerpts or referenced figure resources.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sciverse/skills/academic-retrieval) <br>
-- [Sciverse homepage](https://sciverse.space) <br>
-- [Sciverse API endpoint](https://api.sciverse.space) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, shell commands] <br>
-**Output Format:** [JSON responses and Markdown text fragments, with shell command examples for direct invocation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCIVERSE_API_TOKEN; read_content only works when full text is available and authorized.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.9.0 (source: SKILL.md frontmatter, manifest.json, server release metadata) <br>
+Risk: Agents query Sciverse using SCIVERSE_API_TOKEN, so an overly broad or exposed token could be misused.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for workflows that need Sciverse access, keep the token private and scoped, and avoid printing or sharing it.
+
+Risk: Returned paper text and images are external content and may be incomplete, inaccessible, or misleading if used without verification.
+
+Mitigation: Treat returned content as source material, verify citations against the original papers, and check content accessibility before expanding excerpts.
+
+## Reference(s):
+
+- [Sciverse homepage](https://sciverse.space)
+- [ClawHub skill page](https://clawhub.ai/sciverse/skills/academic-retrieval)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [JSON responses containing paper metadata, text excerpts, Markdown fragments, and base64-encoded image resources]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SCIVERSE_API_TOKEN; optional SCIVERSE_BASE_URL is restricted to sciverse.space domains.]
+
+## Skill Version(s):
+
+0.11.1 (source: release evidence, SKILL.md frontmatter, manifest.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

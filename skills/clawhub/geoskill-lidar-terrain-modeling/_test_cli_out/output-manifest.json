@@ -1,0 +1,104 @@
+{
+  "skill": "lidar-terrain-modeling",
+  "skill_version": "1.0.0",
+  "command": "lidar-terrain-modeling --bbox 116 39 117 40 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-03T21:38:12.926607Z",
+  "finished_at": "2026-08-03T21:38:13.165850Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "method": "idw",
+    "resolution": 1.0,
+    "synthetic": true,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\dem.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": 692.7197469574273,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\slope.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": 692.7197469574273,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\aspect.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": 692.7197469574273,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\terrain_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "idw",
+    "grid": [
+      124,
+      160
+    ],
+    "dem_mean": 99.99964904785156,
+    "slope_mean_deg": 0.15441042184829712,
+    "slope_max_deg": 0.4519360363483429,
+    "dem_rmse_vs_truth_m": 0.4266733402865313
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "lidar-terrain-modeling"
+  },
+  "error": null
+}

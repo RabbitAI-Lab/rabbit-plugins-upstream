@@ -7,13 +7,14 @@ import json
 import os
 import sys
 
-from common import CONFIG, http, http_json
+from common import CONFIG, http, http_json, require_egress_consent
 
 
 def firecrawl_scrape(url):
     key = os.environ.get("FIRECRAWL_API_KEY")
     if not key:
         raise RuntimeError("FIRECRAWL_API_KEY not set")
+    require_egress_consent("firecrawl", f"the URL of the posting being scraped: {url}")
     resp = http_json(
         "https://api.firecrawl.dev/v1/scrape",
         method="POST",
@@ -28,6 +29,7 @@ def firecrawl_scrape(url):
 
 
 def jina_reader(url):
+    require_egress_consent("jina", f"the URL of the posting being read: {url}")
     headers = {}
     if os.environ.get("JINA_API_KEY"):  # 免 key 通道对部分站点收紧，有 key 更稳
         headers["Authorization"] = f"Bearer {os.environ['JINA_API_KEY']}"

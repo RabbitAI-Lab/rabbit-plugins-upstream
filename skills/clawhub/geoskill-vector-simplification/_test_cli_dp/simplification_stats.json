@@ -1,0 +1,11 @@
+{
+  "method": "douglas-peucker",
+  "tolerance": 0.001,
+  "target_vertices": null,
+  "input_vertices": 259,
+  "output_vertices": 158,
+  "vertex_reduction": 101,
+  "vertex_reduction_pct": 39.0,
+  "area_retention": 0.994885,
+  "source": "synthetic"
+}

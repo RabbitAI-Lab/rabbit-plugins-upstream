@@ -1,5 +1,5 @@
 ## Description: <br>
-Automatically searches academic literature from Semantic Scholar, arXiv, and CrossRef, filters and clusters relevant papers, and generates a structured literature review draft. <br>
+Conduct structured literature reviews with systematic search and synthesis. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, researchers, and research assistants use this agent to collect papers for a topic, rank and group the results, and draft a review with trends, themes, and references. <br>
+Researchers, students, and technical writers use this skill to retrieve public academic papers, rank and cluster results, and draft structured literature reviews for a specified research topic. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Research topics and queries are sent to public academic search services. <br>
-Mitigation: Avoid submitting confidential, embargoed, or sensitive research topics unless the public services are approved for that use. <br>
-Risk: Optional LLM polishing may send generated drafts and paper summaries to the configured model provider. <br>
-Mitigation: Keep LLM polishing disabled for confidential work, or configure only a provider that is approved for the data being processed. <br>
-Risk: Optional clustering and document-export dependencies can vary across environments. <br>
-Mitigation: Use a virtual environment with pinned dependency versions for reproducible installs and reviews. <br>
+Risk: Research topics and retrieved paper metadata are sent to public academic services during search. <br>
+Mitigation: Use only non-confidential topics or run the skill in an environment where calls to Semantic Scholar, arXiv, and CrossRef are acceptable. <br>
+Risk: Optional LLM polishing can send draft content and paper summaries to the configured LLM provider. <br>
+Mitigation: Keep LLM polishing disabled for confidential work unless the configured provider and API endpoint are approved. <br>
+Risk: Dependencies are specified with lower bounds rather than a locked set. <br>
+Mitigation: Review and pin dependency versions before using the skill in sensitive or production environments. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/paudyyin/lit-review) <br>
-- [Semantic Scholar paper search API](https://api.semanticscholar.org/graph/v1/paper/search) <br>
-- [arXiv API query endpoint](http://export.arxiv.org/api/query) <br>
-- [CrossRef works API](https://api.crossref.org/works) <br>
-- [Optional DeepSeek-compatible LLM endpoint](https://api.deepseek.com/v1) <br>
+- [ClawHub skill page](https://clawhub.ai/paudyyin/skills/lit-review) <br>
+- [Publisher profile](https://clawhub.ai/user/paudyyin) <br>
+- [Semantic Scholar Graph API](https://api.semanticscholar.org/graph/v1/paper/search) <br>
+- [arXiv API](http://export.arxiv.org/api/query) <br>
+- [CrossRef Works API](https://api.crossref.org/works) <br>
+- [README.md](artifact/README.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown literature review drafts, optional DOCX or plain text files, command-line guidance, and Python usage examples] <br>
+**Output Type(s):** [text, markdown, configuration, shell commands, files] <br>
+**Output Format:** [Markdown review text, optional Markdown and BibTeX files, and command-line status JSON] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include paper metadata, topic clusters, trend summaries, and reference lists derived from public academic search results.] <br>
+**Other Properties Related to Output:** [Outputs summarize retrieved paper metadata, topic clusters, research trends, and references; optional LLM polishing can change wording when configured.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata, skill.md frontmatter, package.json) <br>
+1.1.0 (source: server release metadata and artifact frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

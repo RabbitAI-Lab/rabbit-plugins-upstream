@@ -1,0 +1,62 @@
+{
+  "classification": "strahler",
+  "code_table": {
+    "1": "tropical-wet",
+    "2": "tropical-dry",
+    "3": "subtropical-moist",
+    "4": "mediterranean",
+    "5": "marine-west-coast",
+    "6": "moist-continental",
+    "7": "dry-continental",
+    "8": "subarctic",
+    "9": "tundra",
+    "10": "polar-ice"
+  },
+  "method": "strahler",
+  "total_pixels": 4096,
+  "pixel_area_km2": 2.3344926066116454,
+  "classes": [
+    {
+      "code": 1,
+      "label": "tropical-wet",
+      "pixel_count": 1280,
+      "fraction": 0.3125,
+      "area_km2": 2988.150536462906
+    },
+    {
+      "code": 3,
+      "label": "subtropical-moist",
+      "pixel_count": 323,
+      "fraction": 0.078857421875,
+      "area_km2": 754.0411119355615
+    },
+    {
+      "code": 4,
+      "label": "mediterranean",
+      "pixel_count": 635,
+      "fraction": 0.155029296875,
+      "area_km2": 1482.4028051983948
+    },
+    {
+      "code": 5,
+      "label": "marine-west-coast",
+      "pixel_count": 322,
+      "fraction": 0.07861328125,
+      "area_km2": 751.7066193289498
+    },
+    {
+      "code": 6,
+      "label": "moist-continental",
+      "pixel_count": 640,
+      "fraction": 0.15625,
+      "area_km2": 1494.075268231453
+    },
+    {
+      "code": 9,
+      "label": "tundra",
+      "pixel_count": 896,
+      "fraction": 0.21875,
+      "area_km2": 2091.705375524034
+    }
+  ]
+}

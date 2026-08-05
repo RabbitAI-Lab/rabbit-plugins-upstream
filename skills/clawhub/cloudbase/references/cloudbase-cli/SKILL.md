@@ -1,7 +1,7 @@
 ---
 name: cloudbase-cli
 description: CloudBase CLI (tcb, 云开发CLI, Tencent CloudBase命令行) resource management skill. This skill should be used when users need to deploy cloud functions, manage CloudRun apps, upload files to storage, query NoSQL/MySQL databases, deploy static hosting, set access permissions, or configure CORS/domains/routing via tcb commands. Also use for CI/CD pipeline scripting, batch operations, terminal-based CloudBase management, or when the user prefers CLI over SDK/MCP.
-version: 2.24.1
+version: 2.25.9
 alwaysApply: false
 ---
 
@@ -10,18 +10,15 @@ alwaysApply: false
 Manage CloudBase resources via `tcb` CLI — deterministic, scriptable, auditable.
 The preferred interface for AI agents in CI/CD, batch operations, and resource management.
 
-## Standalone Install Note
+## Sibling skills (local only)
 
-If this environment only installed the current skill, start from the CloudBase main entry and use the published `cloudbase/references/...` paths for sibling skills.
+Sibling CloudBase skills ship beside this skill. Use local relative paths such as `../auth-tool-cloudbase/SKILL.md`.
 
-- CloudBase main entry: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md`
-- Current skill raw source: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloudbase-cli/SKILL.md`
+If a referenced sibling skill file is missing from this environment, ask the user to install the full CloudBase plugin (or the missing skill). Do **not** HTTP-fetch remote skill or protocol markdown into the agent context.
 
-Keep local `references/...` paths for files that ship with the current skill directory. When this file points to a sibling skill such as `cloud-functions` or `cloudrun-development`, use the standalone fallback URL shown next to that reference.
-
-**Cross-cutting protocols** (load for deployment and change operations):
-- Change Safety Protocol: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloudbase-platform/references/protocols/change-safety-protocol.md`
-- Deployment Gate: `https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/cloudbase-platform/references/protocols/deployment-gate.md`
+**Cross-cutting protocols** (required before code changes or deployments):
+- Change Safety Protocol: `../cloudbase-platform/references/protocols/change-safety-protocol.md`
+- Deployment Gate: `../cloudbase-platform/references/protocols/deployment-gate.md`
 
 ## Core Principles
 
@@ -59,7 +56,7 @@ Use when the user wants to manage CloudBase resources via command line:
 ## Do NOT use for
 
 - SDK-based in-app integration (web/miniprogram/node) → use `cloud-functions`,
-  `no-sql-web-sdk`, `auth-web`, etc.
+  `cloudbase-document-database-web-sdk`, `auth-web-cloudbase`, etc.
 - MCP tool calls for IDE-integrated workflows → use CloudBase MCP directly
 - Console UI operations
 - CloudBase Agent SDK development → use `cloudbase-agent-ts`
@@ -74,7 +71,7 @@ Use when the user wants to manage CloudBase resources via command line:
 4. **Stop loading more context** once you have the workflow and command
    syntax for the current task.
 5. **If the task shifts to SDK/in-app code**, switch to the appropriate
-   SDK skill (e.g., `cloud-functions`, `no-sql-web-sdk`) instead.
+   SDK skill (e.g., `cloud-functions`, `cloudbase-document-database-web-sdk`) instead.
 
 ## Routing
 
@@ -107,3 +104,18 @@ Use when the user wants to manage CloudBase resources via command line:
 - [ ] Used `--dry-run` before destructive operations?
 - [ ] Verified the result after each operation?
 - [ ] Stayed within CLI scope — did not drift into SDK code?
+
+## Reference index
+
+All packaged reference files (required for skill lint reachability):
+
+- [access.md](references/access.md)
+- [app.md](references/app.md)
+- [cloudrun.md](references/cloudrun.md)
+- [core.md](references/core.md)
+- [functions.md](references/functions.md)
+- [hosting.md](references/hosting.md)
+- [mysql.md](references/mysql.md)
+- [nosql.md](references/nosql.md)
+- [permission.md](references/permission.md)
+- [storage.md](references/storage.md)

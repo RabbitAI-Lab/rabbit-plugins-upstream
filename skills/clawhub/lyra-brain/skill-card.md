@@ -1,5 +1,5 @@
 ## Description: <br>
-LYRA 3-Brain Memory helps agents keep working, library, and outer-reference memory through session snips, local memory growth, recall, and heartbeat workflows. <br>
+LYRA 3-Brain Memory gives agents explicit local disk recall, logging, and graph-growth workflows under LYRA_CORE_ROOT with consent-gated writes and no network behavior. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,40 +7,39 @@ This skill is ready for commercial/non-commercial use. <br>
 [deepseekoracle](https://clawhub.ai/user/deepseekoracle) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+LYGO Sovereign License v2.0 <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use this skill when they want an agent to remember completed work, append compact session logs, grow a local memory graph, and recall prior task context from a configured LYRA_CORE workspace. <br>
+Developers and agent operators use this skill when a LYRA-based agent needs persistent local memory operations: recalling prior stored context, writing small session snips, or growing compact facts into a local graph after explicit user consent. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can create persistent local memory, and the security scan says that storage behavior needs review before installation. <br>
-Mitigation: Confirm where LYRA_CORE_ROOT points, what content will be stored, and how to disable or delete memory before enabling session logging or memory growth. <br>
-Risk: Session snips and grow commands may capture sensitive operational details if users provide secrets or tokens. <br>
-Mitigation: Do not pass API keys, Discord tokens, moltx_sk_* values, or other secrets into memory commands; review snip lines before writing them. <br>
-Risk: Running the skill against the wrong shared workspace could append memory to another user's tree. <br>
-Mitigation: Set LYRA_CORE_ROOT explicitly to the intended local LYRA_CORE directory and require consent before writing to shared or external workspaces. <br>
+Risk: Persistent memory writes can retain session-derived text on disk after the chat ends. <br>
+Mitigation: Use write commands only after explicit user consent, set LYRA_CORE_ROOT or LYRA_CORE to a directory the operator controls, and delete or archive the memory files when they should no longer persist. <br>
+Risk: Secrets or sensitive personal data could be stored if supplied to memory or graph-growth commands. <br>
+Mitigation: Do not store credentials, tokens, private keys, or sensitive personal data; the skill evidence describes secret checks and no-secrets guidance for write inputs. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deepseekoracle/skills/lyra-brain) <br>
-- [Project link from metadata](https://github.com/DeepSeekOracle/lygo-protocol-stack) <br>
-- [Agent contract](references/AGENT_CONTRACT.md) <br>
-- [Memory layout](references/MEMORY_LAYOUT.md) <br>
-- [Security notes](references/SECURITY.md) <br>
+- [LYRA 3-Brain Memory on ClawHub](https://clawhub.ai/deepseekoracle/skills/lyra-brain) <br>
+- [LYGO Protocol Stack](https://github.com/DeepSeekOracle/lygo-protocol-stack) <br>
+- [Agent Contract](references/AGENT_CONTRACT.md) <br>
+- [Memory Layout](references/MEMORY_LAYOUT.md) <br>
+- [Security](references/SECURITY.md) <br>
+- [SkillSpector Audit](references/SKILLSPECTOR_AUDIT.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and local file outputs] <br>
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration instructions] <br>
+**Output Format:** [Markdown with inline shell commands and local file path guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May append markdown memory files, reference stubs, and graph entries under the configured LYRA_CORE_ROOT.] <br>
+**Other Properties Related to Output:** [May invoke local Python CLIs for recall or consent-gated persistent writes when the operator has configured LYRA_CORE_ROOT.] <br>
 
 ## Skill Version(s): <br>
-2.0.0 (source: server release metadata and skill metadata) <br>
+2.1.0 (source: frontmatter, claw.json, server release) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

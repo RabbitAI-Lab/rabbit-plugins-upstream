@@ -1,6 +1,6 @@
 ---
 name: demandex
-version: 0.2.0
+version: 0.3.0
 description: >-
   E-commerce demand intelligence for AI agents — the index of what people want next. Mines Reddit
   complaint/intent posts across ~70 communities into scored opportunity cards with verbatim evidence
@@ -55,6 +55,7 @@ Each paid call is a flat price per call, paid via x402. Compute-first / settle-a
 | GET | `/v1/opportunities/trending` | **$0.01** | Top 20 active opportunity cards by score as TEASERS (`id, slug, title, category, score, signalCount, lastSeen`). No evidence — buy `/v1/opportunity` for the full card. |
 | GET | `/v1/opportunities?category=SLUG` | **$0.02** | Up to 50 active cards in a category, each a teaser + `summary`. Requires `?category=`; optional `?minScore=` (0-100). Unknown/missing category → no-charge 400 listing valid categories. |
 | GET | `/v1/opportunity?id=ID` \| `?slug=SLUG` | **$0.05** | One FULL opportunity card: all score components (freqScore, intensityScore, wtpScore), productAngle, summary, `evidence[]` (verbatim quotes with subreddit, upvotes, permalink), builderMomentum, firstSeen/lastSeen, signalCount, distinctAuthors. Exactly one of `id`\|`slug` (else no-charge 400); not found → no-charge 404. |
+| GET | `/v1/brief?category=SLUG` | **$0.25** | Whole-job market brief in ONE call: current trending demand signals + the top 10 highest-scored open opportunities (optional `?category=` slug filter; unknown → no-charge 400) + per-category counts — equivalent to several separate paid calls. No trending signals and no open opportunities while the index warms → no-charge 503 corpus_warming. Compute-first / settle-after. Carries `generatedAt` + per-section timestamps. |
 | POST | `/v1/gauge` | **$0.03** | Demand verdict for any physical-product query, cached 7 days by normalized query (corpus-only synthesis + 1 LLM call). |
 | POST | `/v1/gauge/live` | **$0.10** | Same as `/v1/gauge` but combines the mined corpus with a LIVE Reddit search at request time (up to 50 posts) + LLM synthesis, under a 45s budget (timeout → no-charge 504). Never a cache hit. |
 
@@ -131,7 +132,7 @@ Start on the free plane to learn Demandex for zero cost, then spend only where i
 
 1. `GET /v1/categories` — poll this to see which categories have live opportunity cards and how fresh they are (`lastUpdated`, `topScore`). Cheap change-detection.
 2. `GET /v1/sample/opportunity` — wire up your full-card parser here for free; it is the same shape as the paid `/v1/opportunity`.
-3. Then buy: `/v1/opportunities/trending` ($0.01) to browse, `/v1/opportunities?category=` ($0.02) to drill into a category, `/v1/opportunity?slug=` ($0.05) for full evidence, and `/v1/gauge` ($0.03) / `/v1/gauge/live` ($0.10) for ad-hoc verdicts.
+3. Then buy: `/v1/opportunities/trending` ($0.01) to browse, `/v1/opportunities?category=` ($0.02) to drill into a category, `/v1/opportunity?slug=` ($0.05) for full evidence, `/v1/brief` ($0.25) for a whole-job market brief in one call, and `/v1/gauge` ($0.03) / `/v1/gauge/live` ($0.10) for ad-hoc verdicts.
 
 ## Machine discovery
 

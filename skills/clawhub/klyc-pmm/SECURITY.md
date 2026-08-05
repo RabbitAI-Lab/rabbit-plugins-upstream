@@ -47,7 +47,7 @@ Zero analytics. Zero tracking. Zero phoning home beyond explicit actions (push/s
 
 ## Reporting
 
-Security issues: contact via the Kunlun community at https://ai.syln.cn
+Security issues: contact via the Kunlun community at https://kunlunyaochi.com
 
 ## Audit History
 

@@ -1,0 +1,183 @@
+"""
+CHALLENGE phase: the plan-challenger model reviews ``plan.md``.
+
+The prompt references ``plan.md`` and ``spec.md`` on disk in the phase working
+directory; the challenger reads them with its own file tools (the pipeline
+guarantees the working directory is the provider's cwd). Only a bounded
+existence check runs locally. Output is validated JSON findings; one retry
+with a stricter instruction on invalid JSON.
+
+Provider-aware execution is routed through the shared ``run_phase_cmd`` API;
+the legacy *run* injection remains available for tests and downstream callers.
+"""
+from pathlib import Path
+
+from adversarial_common import NoProviderAvailable, run_phase_cmd
+
+from . import (enhance_cmd_for_project, provider_history,
+               raise_no_provider_available, read_utf8_regular, resolve_persona,
+               runtime_metadata, try_parse_json)
+
+__all__ = ["run_challenge"]
+
+_VALID_VERDICTS = {"REQUEST_CHANGES", "APPROVE", "REJECT"}
+_VALID_SEVERITIES = {"blocker", "major", "minor", "nit"}
+_REQUIRED_FINDING_KEYS = {"id", "severity", "step", "summary", "evidence"}
+
+
+def _validate(payload):
+    """Lightweight schema check for challenger output. No jsonschema dep."""
+    if not isinstance(payload, dict):
+        return False
+    if payload.get("verdict") not in _VALID_VERDICTS:
+        return False
+    findings = payload.get("findings")
+    if not isinstance(findings, list):
+        return False
+    for finding in findings:
+        if not isinstance(finding, dict):
+            return False
+        if not _REQUIRED_FINDING_KEYS.issubset(finding.keys()):
+            return False
+        if finding.get("severity") not in _VALID_SEVERITIES:
+            return False
+    return True
+
+
+def _build_prompt(branch_point=""):
+    diff_base = branch_point or "<branch-point>"
+    return (
+        "Challenge the implementation plan at `plan.md` against its "
+        "specification at `spec.md` (both in the current directory — read "
+        "them with your file tools before answering).\n"
+        f"The branch-point SHA for this review is `{diff_base}`. Inspect "
+        f"the cumulative change with `git diff {diff_base}..HEAD`.\n"
+        "Look for, in priority order: missing steps (uncovered spec "
+        "requirements or acceptance criteria), circular or wrong "
+        "dependencies, untestable steps, missing risk documentation, wrong "
+        "file assignments, steps too large for one dev-loop iteration.\n\n"
+        "Output ONLY valid JSON:\n"
+        '{"findings": [{"id": "P1", "severity": "blocker|major|minor|nit", '
+        '"step": "P2|overall", "summary": "one-line issue", '
+        '"evidence": "exact plan text or step id"}], '
+        '"verdict": "REQUEST_CHANGES|APPROVE|REJECT", '
+        '"summary": "counts by severity"}'
+    )
+
+
+def run_challenge(review_cmd, workdir, timeout, resolver=None, run=None,
+                 branch_point="", *, explicit_cmd=None, force=False,
+                 force_provider=None, ledger=None, show_costs=False, max_retries=3,
+                 max_input_chars=None, max_output_chars=None):
+    """
+    Run the plan-challenger against ``<workdir>/plan.md``.
+
+    Returns ``{"phase": "challenge", "exit_code": 0, "findings": [...],
+    "verdict": "..."}``; on failure ``{"phase": "challenge", "exit_code": 1,
+    "error": "..."}``. *run* is injectable for tests.
+    """
+    if run is None and callable(resolver) and not hasattr(resolver, "resolve"):
+        run, resolver = resolver, None
+    for filename in ("plan.md", "spec.md"):
+        path = Path(workdir) / filename
+        # Mirror phase_verify: read+decode here so an unreadable-but-existing
+        # file fails cleanly. Text is NOT re-embedded in the prompt.
+        try:
+            read_utf8_regular(path)
+        except FileNotFoundError:
+            return {"phase": "challenge", "exit_code": 1,
+                    "error": f"could not read {filename}: not found in {workdir}"}
+        except UnicodeDecodeError:
+            return {"phase": "challenge", "exit_code": 1,
+                    "error": f"could not read {filename}: not valid UTF-8"}
+        except OSError as exc:  # IsADirectoryError, PermissionError, etc.
+            return {"phase": "challenge", "exit_code": 1,
+                    "error": f"could not read {filename}: {exc}"}
+
+    prompt = _build_prompt(branch_point)
+
+    provider_results = []
+    runtime_calls = []
+
+    def _attempt(prompt_text):
+        if run is not None:
+            result = run(
+                review_cmd, prompt_text, "plan-challenger", timeout, workdir,
+                ledger=ledger, show_costs=show_costs,
+                max_retries=max_retries, max_input_chars=max_input_chars,
+                max_output_chars=max_output_chars,
+            )
+        else:
+            legacy_cmd = enhance_cmd_for_project(review_cmd, workdir)
+            selected_explicit = (
+                enhance_cmd_for_project(explicit_cmd, workdir)
+                if explicit_cmd is not None else None
+            )
+            command_args = {}
+            if resolver is None and explicit_cmd is None:
+                command_args["cmd"] = legacy_cmd
+            persona_cmd = selected_explicit or (
+                legacy_cmd if resolver is None else ""
+            )
+            execution_args = {
+                "stdin_text": prompt_text, "timeout": timeout,
+                "persona_file": resolve_persona("plan-challenger", persona_cmd),
+                "persona": "plan-challenger", "ledger": ledger,
+                "show_costs": show_costs, "max_retries": max_retries,
+            }
+            if max_input_chars is not None:
+                execution_args["max_input_chars"] = max_input_chars
+            if max_output_chars is not None:
+                execution_args["max_output_chars"] = max_output_chars
+            result = run_phase_cmd(
+                phase_name="challenge", role="challenger", workdir=workdir,
+                resolver=resolver, explicit_cmd=selected_explicit, force=force,
+                force_provider=force_provider, **command_args, **execution_args,
+            )
+            raise_no_provider_available(result, "challenger", "challenge")
+        provider_results.append(result)
+        runtime_calls.append(runtime_metadata(result))
+        stdout, stderr, code = result[:3]
+        if code != 0:
+            return None, f"CHALLENGE exited {code}: {(stderr or '')[:200]}", stdout
+        return try_parse_json(stdout), None, stdout
+
+    def _evidence():
+        return {
+            "execution": {"calls": runtime_calls},
+            "provider_history": provider_history(provider_results),
+        }
+
+    try:
+        payload, err, stdout = _attempt(prompt)
+        if err:
+            return {"phase": "challenge", "exit_code": 1, "error": err,
+                    "stdout": stdout, **_evidence()}
+        if not _validate(payload):
+            payload, err, stdout = _attempt(
+                prompt + "\n\nIMPORTANT: Respond with raw JSON only, matching "
+                         "the schema exactly. No markdown, no code fences, "
+                         "no explanations."
+            )
+            if err:
+                return {"phase": "challenge", "exit_code": 1, "error": err,
+                        "stdout": stdout, **_evidence()}
+            if not _validate(payload):
+                return {
+                    "phase": "challenge", "exit_code": 1,
+                    "findings": [], "verdict": "UNKNOWN",
+                    "error": "invalid JSON after retry", "stdout": stdout,
+                    **_evidence(),
+                }
+        return {
+            "phase": "challenge", "exit_code": 0,
+            "findings": payload["findings"],
+            "verdict": payload["verdict"],
+            "summary": payload.get("summary", ""),
+            "stdout": stdout,
+            **_evidence(),
+        }
+    except NoProviderAvailable:
+        raise
+    except Exception as exc:  # defensive: never leak an exception to the loop
+        return {"phase": "challenge", "exit_code": 1, "error": str(exc)}

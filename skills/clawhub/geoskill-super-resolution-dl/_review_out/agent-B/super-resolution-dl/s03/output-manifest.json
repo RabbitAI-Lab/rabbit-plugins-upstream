@@ -1,0 +1,73 @@
+{
+  "skill": "super-resolution-dl",
+  "skill_version": "1.0.0",
+  "command": "super-resolution-dl --bbox 116.39 39.90 116.40 39.91 --synthetic --quiet --output-dir _review_out\\agent-B\\super-resolution-dl\\s03",
+  "started_at": "2026-08-03T17:07:00.029892Z",
+  "finished_at": "2026-08-03T17:07:01.498250Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "scale": 2,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out\\agent-B\\super-resolution-dl\\s03\\super_resolved.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.39,
+        39.9,
+        116.4,
+        39.91
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out\\agent-B\\super-resolution-dl\\s03\\quality_metrics.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "scale": 2,
+    "amount": 0.5,
+    "method": "srcnn_dong2014",
+    "device": "cuda",
+    "weights_source": "cached",
+    "train_mse": null,
+    "train_epochs": null,
+    "input_shape": [
+      32,
+      32
+    ],
+    "output_shape": [
+      64,
+      64
+    ],
+    "psnr_db": 32.387984061577576,
+    "ssim": 0.9127810792480785,
+    "psnr_bicubic_only_db": 32.41214461021507
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "super-resolution-dl",
+    "dl_backend": "torch+CUDA (SRCNN Dong 2014)"
+  },
+  "error": null
+}
