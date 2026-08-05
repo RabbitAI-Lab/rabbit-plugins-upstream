@@ -1,5 +1,5 @@
 ## Description: <br>
-ClawHub Sync helps developers publish locally developed skills to ClawHub in bulk or one at a time, with gitignore-based filtering, allowlist control, incremental sync records, and dry-run checks. <br>
+Helps agents publish and synchronize local skills to ClawHub and Tencent SkillHub using allowlists, version checks, filtered temporary publish directories, and platform-specific release commands. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and skill maintainers use this skill to publish local skills to ClawHub, run dry-run readiness checks, manage publish allowlists, and update sync records for incremental releases. <br>
+Developers and skill maintainers use this skill to prepare, verify, and publish local skill directories to ClawHub or Tencent SkillHub. It is intended for release management workflows that need platform routing, version tracking, and protection against accidental upload of ignored local configuration. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can publish local skill files to a public ClawHub release, which could expose secrets, customer data, or unrelated local files if the publish set is wrong. <br>
-Mitigation: Confirm the logged-in ClawHub account, run a dry-run, review the allowlist, inspect the generated /tmp/clawhub-publish-* directory, and exclude secrets, customer data, and unrelated context files before publishing. <br>
-Risk: A license mismatch can cause an unsuitable skill to be published to ClawHub. <br>
-Mitigation: Check the target skill license before publishing and keep restrictive licenses out of the sync allowlist. <br>
+Risk: Publishing workflows can upload local skill contents to public hubs, including unintended files if the working tree or filters are wrong. <br>
+Mitigation: Inspect the prepared temporary publish directory before publishing and keep private configuration, tokens, customer data, and case files out of publishable skill directories. <br>
+Risk: The workflow depends on authenticated ClawHub or SkillHub CLI sessions and may affect public release state. <br>
+Mitigation: Confirm the active CLI account before publishing, use dry-run or whoami checks when available, and avoid storing API tokens in configuration files. <br>
+Risk: Platform routing and license rules can cause a skill to be sent to the wrong hub or released under unexpected terms. <br>
+Mitigation: Review the allowlist, license field, target platform, version, and changelog before executing publish commands. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Sync release page](https://clawhub.ai/cat-xierluo/clawhub-sync) <br>
-- [ClawHub Skill Format](https://github.com/openclaw/clawhub/blob/main/docs/skill-format.md) <br>
+- [ClawHub release page](https://clawhub.ai/cat-xierluo/skills/clawhub-sync) <br>
+- [Project homepage](https://github.com/cat-xierluo/legal-skills) <br>
+- [ClawHub CLI documentation](https://docs.openclaw.ai/clawhub/cli) <br>
+- [ClawHub Skill Format documentation](https://docs.openclaw.ai/clawhub/skill-format) <br>
+- [Tencent SkillHub publishing tutorial](https://skillhub.cn/tutorials#publish-via-cli) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command snippets and YAML configuration updates] <br>
+**Output Type(s):** [guidance, shell commands, configuration, code] <br>
+**Output Format:** [Markdown with shell commands, YAML examples, and helper script guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can produce sync result summaries, error messages, publish commands, allowlist checks, and sync-record updates.] <br>
+**Other Properties Related to Output:** [May direct agents to create filtered temporary publish directories, run platform CLIs, and update local sync records.] <br>
 
 ## Skill Version(s): <br>
-1.4.1 (source: server release evidence; artifact frontmatter and changelog show 1.4.0) <br>
+1.6.0 (source: server release evidence, SKILL.md frontmatter, CHANGELOG.md released 2026-08-03) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

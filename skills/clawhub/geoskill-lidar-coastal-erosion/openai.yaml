@@ -1,0 +1,15 @@
+name: geoskill-lidar-coastal-erosion
+display_name: LiDAR海岸侵蚀分析
+description: |
+  两期LiDAR点云/DSM差分计算海岸侵蚀堆积量，提取海岸线并用EPR端点变化率量化后退速率
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-lidar-coastal-erosion.py
+runtime: python>=3.9
+tags:
+  - coastal
+  - extraction
+  - gis
+  - lidar
+  - point-cloud
+  - remote-sensing

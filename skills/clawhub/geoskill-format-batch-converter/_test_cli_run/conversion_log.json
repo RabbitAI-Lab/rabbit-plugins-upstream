@@ -1,0 +1,38 @@
+{
+  "entries": [
+    {
+      "source": "./_test_cli_run\\source\\synthetic_points.geojson",
+      "kind": "vector",
+      "status": "ok",
+      "target": "./_test_cli_run\\converted\\synthetic_points.gpkg",
+      "bytes": 98304,
+      "message": ""
+    },
+    {
+      "source": "./_test_cli_run\\source\\synthetic_polys.shp",
+      "kind": "vector",
+      "status": "ok",
+      "target": "./_test_cli_run\\converted\\synthetic_polys.gpkg",
+      "bytes": 98304,
+      "message": ""
+    },
+    {
+      "source": "./_test_cli_run\\source\\synthetic_raster.tif",
+      "kind": "raster",
+      "status": "ok",
+      "target": "./_test_cli_run\\converted\\synthetic_raster.tif",
+      "bytes": 605,
+      "message": ""
+    }
+  ],
+  "summary": {
+    "n_inputs": 3,
+    "n_converted": 3,
+    "n_errors": 0,
+    "n_skipped": 0,
+    "total_output_bytes": 197213
+  },
+  "source": "synthetic",
+  "vector_target": "gpkg",
+  "raster_target": "tif"
+}

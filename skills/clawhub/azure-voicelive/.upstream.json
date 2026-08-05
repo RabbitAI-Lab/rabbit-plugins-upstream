@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/azure-voicelive",
   "slug": "azure-voicelive",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1784871559508,
-  "contentHash": "f58365ea9af05db73cb54936383e79505ab72f9430975ad1f227c806cbad7ed5",
-  "fetchedAt": "2026-07-26T18:06:01.734Z"
+  "version": "1.0.2",
+  "updatedAt": 1785664477252,
+  "contentHash": "a1e036b1e664888f310ac3655b01d25fb5dab965cbbb577eadd366d4f792637f",
+  "fetchedAt": "2026-08-05T10:16:51.303Z"
 }

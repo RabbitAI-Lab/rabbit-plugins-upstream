@@ -1,6 +1,6 @@
 ---
 name: clawseccheck
-version: 3.57.0
+version: 3.60.0
 description: Free, local security self-audit for your own OpenClaw agent. Reads your OpenClaw config, bootstrap files, log files, agent session logs, and installed skills — read-only against your OpenClaw setup, plus a bounded host-security scan; writes only its own local report/history (removable with --purge). Scores your setup (A–F) and reports the most urgent holes — it never changes your OpenClaw setup. No API key; the scanner itself makes no network calls. Use it when you want to check or audit your OpenClaw agent's security, find prompt-injection or misconfiguration risks, or see your A–F security score.
 license: MIT
 metadata: {"openclaw":{"emoji":"🦞","os":["darwin","linux","win32"],"user-invocable":true},"display_name":{"en":"ClawSecCheck — OpenClaw Security Self-Audit"},"display_description":{"en":"Free, local security self-audit for your own OpenClaw agent. Reads your OpenClaw config, bootstrap files, log files, agent session logs, and installed skills — read-only against your OpenClaw setup, plus a bounded host-security scan; writes only its own local report/history (removable with --purge). Scores your setup (A–F) and reports the most urgent holes — it never changes your OpenClaw setup. No API key; the scanner itself makes no network calls. Use it when you want to check or audit your OpenClaw agent's security, find prompt-injection or misconfiguration risks, or see your A–F security score."},"tags":{"en":["security","openclaw","ai-agent","audit","prompt-injection","llm-security","self-audit","sarif"]}}
@@ -43,6 +43,8 @@ It runs a **read-only** local script that inspects the user's own agent. **Full 
 - text of **installed skills/plugins** (including Python AST-scan, parse-only — never executed)
 - `~/.openclaw/logs/config-audit.jsonl` and `config-health.json` — config-write provenance & integrity
 - `~/.openclaw/agents/.../sessions/*.jsonl` — Codex session logs for approval-policy posture
+- the cron job store, the two global OpenClaw dotenv files, and OpenClaw-related systemd
+  user-unit `Environment=`/`EnvironmentFile=` lines
 - **host recon (beyond OpenClaw's own scope, skip with `--no-host`):** existence of IDS, FIM, EDR
   and firewall config files, of their binaries on `PATH`, and of systemd enable-symlinks; the
   *contents* of a few known firewall config files, to read whether the firewall is on and whether
@@ -51,6 +53,11 @@ It runs a **read-only** local script that inspects the user's own agent. **Full 
   (`http_proxy`/`https_proxy`/...); and on Windows only, a handful of read-only registry queries
   under `HKEY_LOCAL_MACHINE` for the same signals (a service key's existence, the firewall's on/off
   state — never a secret value). Reads only, no subprocess, no network
+- **the installed npm dependency tree (beyond OpenClaw's own scope, skip with `--no-deptree`):**
+  the OpenClaw package root is located from `PATH` (no subprocess), then its `node_modules` is
+  walked to read each package's `package.json`, each package root's `binding.gyp`, and the
+  in-package files those name as install-time targets — the two ways a dependency can run code at
+  install time. Bounded (2000 packages), symlinks never followed, nothing ever executed
 - credential-store path-existence inventory: checks whether `.env`, SSH key dirs, keychain/keyring
   directories, and browser cookie stores **exist** near the agent home (never reads their contents)
 - the ClawHub CLI's own plaintext token-store config (outside the OpenClaw home) — opened to check
@@ -59,18 +66,24 @@ It runs a **read-only** local script that inspects the user's own agent. **Full 
 - permissions of memory/log paths
 
 It makes **no network calls of its own**
-and **never modifies your OpenClaw setup** — *read-only* means it never touches `openclaw.json`, your
-skills, or your bootstrap files. What it *does* write stays **on your own machine and is never
-uploaded** — none of it touches your OpenClaw setup, only ClawSecCheck's own state: a private local
-audit history under `~/.clawseccheck/` (owner-only — opt out with `--no-history`), any report files
-you explicitly request via a flag (`--save`, `--badge`, `--html`, `--sarif`, `--monitor`, `--trend`,
-`--log`), and a small freshness ledger (`~/.clawseccheck/coverage.json`) recording when you last ran
-an opt-in active self-test (`--canary`/`--redteam`/`--dryrun`/`--self-test`/`--vet-mcp`). `--purge`
+and **never modifies `openclaw.json`, your skills, or your bootstrap files** — with exactly one
+named, opt-in, confirmation-gated exception, covered below. What it *does* write stays **on your
+own machine and is never uploaded**: almost all of it lands in ClawSecCheck's own state, not your
+OpenClaw setup — a private local audit history under `~/.clawseccheck/` (owner-only — opt out with
+`--no-history`), any report files you explicitly request via a flag (`--save`, `--badge`, `--html`,
+`--sarif`, `--pdf`, `--monitor`, `--trend`, `--log`), and a small freshness ledger
+(`~/.clawseccheck/coverage.json`) recording when you last ran an opt-in active self-test
+(`--canary`/`--redteam`/`--dryrun`/`--self-test`/`--vet-mcp`). The one write that lands inside the
+audited OpenClaw home is `--apply-ignore-proposals` (opt-in, confirmation-gated): it appends
+entries a prior `--propose-ignore` run already proposed to `<home>/.clawseccheckignore`, never
+inventing one — see "Judge-panel fan-out" below. `--purge`
 deletes its four known store files (history/events/state/coverage) plus their lock siblings in one
 step; a crash-artifact `.tmp` sibling, if one is ever left behind, is not touched by `--purge` and
 needs a manual `rm`. Scoping flags at a glance: `--no-history` (skip
 local history), `--no-host` (skip the host-recon bullet above), `--no-native` (skip the one external
-command below). Pure Python standard library, no dependencies.
+command below), `--no-sockets` (skip the B340 effective-bind socket scan — the escape hatch if it
+false-FAILs on an unusual host), `--no-deptree` (skip the npm dependency-tree walk — the escape
+hatch on a very large tree). Pure Python standard library, no dependencies.
 
 It also runs OpenClaw's **built-in** audit — the one fixed, read-only external command
 `openclaw security audit --json` (its read-only mode, never a fixing one; the only subprocess call
@@ -145,11 +158,26 @@ plain-language question survive). This section generalizes the isolator pattern 
 from "one verdict per target" to "one **panel** of distinct-lens verdicts per packet
 item," so the second opinion draws on more than one way of reading the same evidence.
 
-**When to run it:** only as an extra, opt-in step after Step 3's Dashboard, when the
-user asks for a judge review / second opinion on the scan's borderline results — not
-automatically on every audit (same spirit as the ⚡ live tests in Section 6).
+**When to run it:** as a MANDATORY part of the SAME guided-flow turn as Step 2's audit,
+whenever item 1 ("Check everything") was chosen — the same posture the capability
+self-report/`--attest` step already has (F-043): run it every time, never wait for the
+user to ask (Dave, 2026-07-30 — this reverses the prior "opt-in, only when asked"
+policy; see Step 2). Step 2's own `--judge-packet --attest` pull already hands you the
+`judgePacket` array in the same step — fan out the panel below over every item in it
+immediately, BEFORE presenting Step 3's Dashboard, so the pasted card's "Second opinion
+(advisory)" block already carries real per-item verdicts rather than a bare pending
+count. **Outside item 1's flow** — the user explicitly asks for "a second opinion" /
+"review the borderline findings" without having just run the full audit (Step 5's
+`judge packet` branch) — this panel stays exactly what it always was: run only when
+asked, per [`docs/FLOW_CHOICES.md`](docs/FLOW_CHOICES.md)'s `Choice: judge packet`
+section.
 
-1. Run `python3 {baseDir}/audit.py --judge-packet` and parse its `judgePacket` array.
+1. Run `python3 {baseDir}/audit.py --judge-packet --attest <path-or- ->` (the same
+   attestation file/stdin Step 2 just assembled) and parse its `judgePacket` array.
+   This pull is cheap and own-config-only — it never runs `--full`'s heavier sweep/
+   behavioral phases, so it costs nothing extra on top of Step 3's own
+   `--dashboard --full` render below. (Outside item 1's flow, drop `--attest` if there
+   is no attestation for this turn.)
 2. For each item, spawn **3 judge subagents**, each given a distinct lens on the **same**
    packet item (input is the item's `redacted_evidence`/`question` fields, plus its
    engine-authored `safe_facts` (C-284 — e.g. a validated destination hostname) and
@@ -185,14 +213,23 @@ automatically on every audit (same spirit as the ⚡ live tests in Section 6).
    `maxSpawnDepth: 1`, **ephemeral** — and bound concurrency the same way
    (`maxChildrenPerAgent` / `agents.subagents.maxConcurrent`); fan out across packet
    items, not unboundedly across items × 3 lenses at once.
-5. **Opt-in + graceful fallback**, same rule as that file's: if subagents are unavailable,
-   fall back to reasoning through all 3 lenses yourself in one inline turn per item,
-   with the SECURITY rule as the active guard — never claim a panel ran when it did not.
-6. Present the collected per-item majority verdicts as a **"Second opinion (advisory)"**
-   panel, explicitly labeled and **separate from the scored Dashboard** — feed them back
-   with `--judged` to render the combined report. This extends the "Verdicts are
-   advisory narration only" rule in [`docs/ISOLATION.md`](docs/ISOLATION.md): a judge panel can re-rank or annotate a finding
-   the engine already reported, but it can never raise or lower the A–F grade.
+5. **Mandatory, with graceful fallback**: run this panel every time item 1's audit
+   completes — never skip it and never wait to be asked, the same posture Step 2's
+   attestation already has. If subagents are unavailable, fall back to reasoning
+   through all 3 lenses yourself in one inline turn per item, with the SECURITY rule as
+   the active guard — never claim a panel ran when it did not, and never claim 3
+   distinct subagents ran when you reasoned through it inline instead.
+6. Build the verdicts JSON from the collected per-item majority votes and feed it back
+   as Step 3's `--judged-bundle <file-or- ->`'s `judged` bucket (see Step 3), so the
+   ONE pasted Dashboard card already shows the resulting **"Second opinion (advisory)"**
+   block, explicitly labeled and **separate from the scored Dashboard** — never a
+   follow-up message. (Outside item 1's flow, the standalone `--judge-packet` this
+   panel answered is instead fed back with `--judged <file>`, which renders just the
+   audit's grade/findings plus this same advisory panel — see
+   [`docs/FLOW_CHOICES.md`](docs/FLOW_CHOICES.md).) This extends the "Verdicts are
+   advisory narration only" rule in [`docs/ISOLATION.md`](docs/ISOLATION.md): a judge
+   panel can re-rank or annotate a finding the engine already reported, but it can
+   never raise or lower the A–F grade.
 7. **Optional, only on the user's OWN config, only if they ask to reduce noise:** the
    same verdicts JSON can instead be fed to `--propose-ignore` (C-253), which prints
    PROPOSED `.clawseccheckignore` entries for items the panel verdicted SAFE — never
@@ -334,7 +371,7 @@ rest on demand. The number, the phrase, or a tap all select an item; free phrasi
 
 | Choice | Flag(s) | Notes |
 |--------|---------|-------|
-| 1 Check everything ("check" / "go") | `--full` (+ auto capability self-report, see Step 2) | Read-only audit **+** capability self-report (resolves B43/B44 inline instead of leaving them UNKNOWN for a separate "deeper" step — F-043) **+** self-test scenario generation (canary/dryrun/redteam — generates injection scenarios; it does not itself run a behavioral verdict) **+** MCP vet **+** a per-skill sweep of every installed skill (`CLAWSECCHECK SKILL SWEEP`, one merged vet verdict per skill), in one go. The sweep is **visibility only** — its verdicts are deliberately not folded into the audit score or grade. The actual ⚡ live behavioral test (VULNERABLE vs RESISTANT) is a separate, opt-in step offered after the dashboard (Section 6, item a) — not part of item 1. |
+| 1 Check everything ("check" / "go") | `--dashboard --full` (+ auto capability self-report AND a mandatory judge panel, see Step 2) | Full pipeline in one go: audit **+** capability self-report (B43/B44 resolved inline instead of UNKNOWN — F-043) **+** MCP vet **+** per-skill/per-plugin sweeps (`Skills`/`Plugins`, one merged verdict per item, F-150) **+** the highest-risk chains (`RISK Chains`) **+** a behavioral/trajectory replay (`Behavioural`, F-151) **+** a MANDATORY judge-panel second opinion (`Second opinion (advisory)` — see Step 2's "Judge-panel fan-out" protocol above). Everything here is **visibility/advisory-only** — it never moves the score or grade — except two disclosed, cap-only exceptions: a fired behavioral detector (F-154) and a VULNERABLE live-test verdict (F-155, Section 6). All rendered as ONE fixed-order Dashboard card by the merged Step 2+3 command (F-153) — see Step 2/3 below for the exact protocol, and [`docs/USAGE.md`](docs/USAGE.md) for the full flag-by-flag composition. The live injection test (⚡, Section 6 item a) stays a separate, opt-in step — not part of item 1. |
 | 2 Check before install | `--vet <path>` (autodetects skill · plugin · MCP spec; `--vet-skill` / `--vet-plugin` force an engine) · `--vet-mcp [name]` (configured MCP) · `--vet-source <slug\|url>` (before anything is even downloaded) | Supply-chain check on something you're about to trust. See the vet flow in Step 5 → [`docs/FLOW_CHOICES.md`](docs/FLOW_CHOICES.md). |
 | 3 Report & history | default report · `--save <path>` · `--trend` · `--badge <path>` | Show or save the last result, the score trend, or a shareable badge. |
 | 4 Menu | `--functions` (Screen 12 — the full palette) | Saying "menu" / "functions" / "more" expands the complete capability list — run `python3 {baseDir}/audit.py --functions` (or present its output). Every capability appears as a speakable prompt grounded to its real flag (verify, what-changed, html, sarif, percentile, risk-paths, the vet family, the ⚡ live tests, …), so there's no wall of raw flags. (`--menu` itself renders *this* Welcome screen; the palette is one level deeper.) |
@@ -352,26 +389,36 @@ folded into the single scan itself (F-043). Run the interrogation protocol docum
 section before you run it**: answer your own tool/verb inventory, `approval_gates`,
 and `untrusted_to_action` from your own runtime (you already know these), self-probe
 `host_monitors` with your own shell access and fall back to asking the user only if the probe is
-inconclusive, then assemble and feed the attestation in the SAME turn as the scan — one
-interaction, not two:
+inconclusive, then assemble the attestation into a file (or have it ready for stdin) — you feed
+the SAME attestation into both commands below, in the SAME turn.
+
+Then, still before showing anything to the user, run the now-**mandatory** judge-panel pull
+(Dave, 2026-07-30 — this used to be an opt-in extra the user had to ask for; it now runs every
+time item 1 is chosen, the same posture the capability self-report already has):
 
 ```
-python3 {baseDir}/audit.py --full --attest <path-or- ->
+python3 {baseDir}/audit.py --judge-packet --attest <path-or- ->
 ```
 
-**This command's stdout is internal-only. Do NOT show it, paste it, or summarize it to the
-user.** It exists solely so you (the agent) can confirm the scan ran and the attestation was
-consumed — nothing more. It prints a long (~700-line) human-formatted report as a side effect;
-that text is **not** the chat deliverable and must never be relayed, quoted, or pasted into the
-conversation. The **only** chat-visible artifact in this flow is the `--dashboard` card built in
-Step 3 below — always run that separately and paste *its* output instead.
+**This command's stdout is internal-only: parse it to run the panel below, but never paste,
+quote, or summarize its raw JSON to the user** — the panel's own output (the "Second opinion"
+block Step 3 pastes) is the user-facing artifact, not this packet. It is a cheap, own-config-only
+pull — it never runs `--full`'s heavier sweep/behavioral phases, so it adds no real cost on top
+of Step 3's own `--full` render below, and it does not by itself replace Step 3 (it consumes the
+attestation for THIS command only; Step 3's command below needs the same `--attest` again, since
+each invocation is its own fresh process — attestation is never persisted between them). Parse
+the `judgePacket` array and run the "Judge-panel fan-out for `--judge-packet` items" protocol
+above **now, unconditionally** — 3 lensed judge subagents per borderline item, majority vote per
+item — building the verdicts JSON Step 3 will feed back. An empty `judgePacket` just means
+nothing was in the borderline band this run; proceed to Step 3 with no verdicts file (omit
+`--judged-bundle` entirely).
 
 If the self-probe is inconclusive and the user doesn't know the `host_monitors` answer either,
-leave it `unknown` — never invent one — and proceed with the scan anyway; an unanswered field just
-means that one sub-check stays UNKNOWN.
+leave it `unknown` — never invent one — and proceed anyway; an unanswered field just means that
+one sub-check stays UNKNOWN.
 
-**For any other item**, run the flag for that mode directly — no self-report needed. Pick the right
-interpreter for the OS:
+**For any other item**, run the flag for that mode directly — no self-report and no judge panel
+needed. Pick the right interpreter for the OS:
 
 - **Linux / macOS:** `python3 {baseDir}/audit.py`
 - **Windows:** `python {baseDir}\audit.py` (or `py {baseDir}\audit.py`)
@@ -386,15 +433,37 @@ that as-is and stop; there's nothing to score. Any CI/artifact/work flag (`--jso
 are always honored. (A home that *exists* but can't be read is a different case — a plain
 "Cannot read the OpenClaw home" error, exit code 1.)
 
+**The command errors, hangs, or produces nothing at all?** That means ClawSecCheck *itself* has a
+problem — not the audited OpenClaw setup. Tell the user plainly that the tool hit a snag (not their
+config), then ask them to run one diagnostic command and share what it prints:
+
+```
+python3 {baseDir}/audit.py --debug
+```
+
+Relay its output and point to [`docs/TROUBLESHOOTING.md`](docs/TROUBLESHOOTING.md) for the fix, or
+filing an issue if nothing there applies. Never guess at a fix or edit the user's OpenClaw config to
+work around it yourself — remediation is out of scope here the same way it is in Step 4/5 below.
+
 ### Step 3 — Present the Dashboard
 
-**This step produces the ONLY chat-visible deliverable in this guided flow.** Nothing from
-Step 2's `--full --attest` run is ever shown to the user — always execute Step 3 in full, even
-though Step 2 already printed something that looks like a finished report; that report is
-internal-only (see Step 2) and does not substitute for the steps below.
+**This step produces the ONLY chat-visible deliverable in this guided flow.** For item 1,
+Step 2's `--judge-packet` pull is never shown to the user — it exists solely to source the
+mandatory judge panel (see Step 2); it does not substitute for the paste below.
 
-Run `python3 {baseDir}/audit.py --json` and use the structured output to build the Dashboard below.
-Frame the whole result as an **OpenClaw Security Audit** — not "your setup" or "my agent."
+For item 1, run ONE command — the merged Step 2+3 render (F-153, C-297). It re-consumes the
+SAME attestation Step 2 assembled (so B43/B44 come back assessed in THIS render too, not just
+in Step 2's internal pull — each invocation is its own fresh process, so `--attest` has to be
+passed again) and folds in the mandatory judge panel's verdicts:
+
+```
+python3 {baseDir}/audit.py --dashboard --full --attest <path-or- -> --judged-bundle <verdicts-path-or- ->
+```
+
+`<verdicts-path-or- ->` is the file (or `-` for stdin) holding `{"judged": {...}}` — the
+verdicts map Step 2's mandatory judge panel just built. Omit `--judged-bundle` entirely only
+when Step 2 found `judgePacket` empty (genuinely nothing to judge this run). Frame the whole
+result as an **OpenClaw Security Audit** — not "your setup" or "my agent."
 
 **Plain-language rule:** Never use internal codes like "B2 FAIL". Describe the actual risk in one
 sentence. Examples:
@@ -403,36 +472,57 @@ sentence. Examples:
 - "A1 FAIL (trifecta 3/3)" → "Your agent has three risky things active at once: it accepts outside
   input, holds sensitive data, and can take actions online. That combination is the most dangerous setup."
 - "B1 FAIL" → "Your agent's config file is readable by anyone on this computer."
-- "C5 FAIL" → "One of your installed skills has code patterns used by malware."
+- "B13 FAIL" → "One of your installed skills has code patterns used by malware."
 
-Present all six sections below **in one message**, in order. Render menus and prose
-sections (5-6) as ordinary text — do NOT wrap them in a code block or monospace fence;
-that rule does not apply to the Section 1-2 Dashboard card, which must be pasted exactly
-as the tool prints it (see below) because its frame relies on monospace alignment.
+Present the pasted card, then the two prose sections below it, **in one message**. Render
+Sections 5-6 as ordinary text — do NOT wrap them in a code block or monospace fence; that
+rule does not apply to the pasted card itself, which must be pasted exactly as the tool
+prints it (see below) because its frame relies on monospace alignment.
 
-**Channel-aware delivery:** the full Dashboard card can exceed a chat channel's message
-limit (e.g. Telegram's ~4096-character cap — Sections 1-2 alone can already run to
-≈6,482 characters). If the destination channel truncates long messages, deliver a
-compact summary instead with `--card` (grade + score + trifecta) and offer to save the
-full report as a file via `--save <path>` or `--html <path>`.
+**Channel-aware delivery:** the combined card can exceed a chat channel's message limit (e.g.
+Telegram's ~4096-character cap — Sections 1-2 alone can already run to ≈6,482 characters,
+before the pipeline blocks below add more). If the destination channel truncates long
+messages, add `--compact` to the command above instead — it condenses Plugins/MCP/RISK
+Chains to headline counts, trims each Findings/"Worth a glance" finding's "why" text and
+drops its evidence bullets (kept, not dropped — just condensed, since Findings is what
+actually scales with a bad config's FAIL/WARN count), and appends a `--save`/`--html`
+pointer for the full detail — or fall back to `--card` (grade + score + trifecta only)
+and offer to save the full report via `--save <path>` / `--html <path>`.
 
-**Sections 1-2 — the Dashboard card: do not compose it, paste it.**
+**Do not compose the card — paste it.**
 
 Live testing showed that when the model composes the grade card / findings sections
-itself, the 🦞 header and the family frame silently vanish. So Sections 1-2 are one
-deterministic render. Run:
-
-```
-python3 {baseDir}/audit.py --dashboard
-```
-
-and paste its **entire stdout here, verbatim**. It emits, in order:
+itself, the 🦞 header and the family frame silently vanish. So the WHOLE card above is one
+deterministic render — paste its **entire stdout here, verbatim**. It emits, in this fixed
+order (F-153):
 
 - **Section 1 — Grade card:** `🦞 OpenClaw Security Audit — Grade {grade} · {score}/100`,
   a 16-cell score-bar, and the count of non-suppressed FAIL/WARN findings.
   **No standalone Lethal Trifecta chip (F-044)** — trifecta state is one Privilege &
   Execution finding among others in Section 2.
 - **Section 2 — Findings, grouped by area** (details below).
+- **Skills** (B-356, when skills are installed): a compact per-skill vet verdict — install
+  count, a `clean:` list, and a `verdict - reason` line for anything flagged. Reuses the
+  same scoring path `--vet-skill` uses.
+- **Plugins** (F-150): the same shape, one merged vet verdict per installed plugin.
+- **MCP**: a per-server verdict, reusing `--vet-mcp`'s own axis logic against the config
+  already in memory (no second re-read).
+- **RISK Chains**: the highest-risk capability chains `--risk-paths` would show.
+- **Behavioural** (F-151): a one-paragraph summary folding in both `--behavioral`'s
+  metadata-only T1/T2/T3 signals and `--analyze-trajectory`'s indicator-vs-tool-call
+  correlation — shown even to say "nothing fired" (Golden Rule #4), never silently
+  omitted. A fired T1/T2/T3/B191 detector separately caps the grade (F-154) — already
+  reflected in the Grade card above, not something you compute yourself.
+- **"Second opinion (advisory)"**: the mandatory judge panel's own verdicts from Step 2 —
+  per-item annotations, explicitly advisory, never changing the Grade card above.
+- **Section 3 — Coverage of OpenClaw surfaces** (details below).
+- **Section 4 — "Worth a glance"** (details below).
+
+Skills/Plugins/MCP/RISK Chains are each independently **omitted** only when there is
+genuinely nothing to show (no skills/plugins/MCP servers installed, no RISK chain
+detected) — Behavioural and Second opinion are always shown once computed, even to report
+"nothing fired" / "nothing in the borderline band," per the same never-guess-a-PASS rule
+the rest of the audit follows.
 
 Do **not** re-draw the frame, swap it for markdown bold, drop the rule lines, or re-order —
 paste exactly what the command prints. Your own prose around the paste follows the
@@ -475,36 +565,24 @@ finding: remediation is out of ClawSecCheck's scope — it is a reports-only aud
 invent fix commands on its behalf; point the user at the finding's `why:` facts and the
 relevant OpenClaw docs instead.
 
-Example of what the `--dashboard` card prints (paste the **real** output, not this sample):
-
-```
-🦞 OpenClaw Security Audit — Grade F · 49/100
-████████░░░░░░░░  ·  3 issues
-
-— Findings —
-┌──────────────────────────────
-│ 🌐 Exposure & Network — 1 issue(s)
-└──────────────────────────────
-🔴 CRITICAL  insecure control-UI auth
-    why: anyone on your local network can send commands to your agent right now — no pairing or auth required
-
-┌──────────────────────────────
-│ 🔑 Privilege & Execution — 2 issue(s)
-└──────────────────────────────
-🔴 CRITICAL  Lethal Trifecta (untrusted input × sensitive data × outbound)
-    why: all three legs are active — outside input, sensitive data, and outbound actions; one injected prompt is enough to exfiltrate everything
-🟠 HIGH  tool profile broader than minimal
-    why: the "coding" profile gives the agent filesystem write, shell, and package-install access — a hijacked agent can run arbitrary code
-```
+A full worked example of the Grade card + findings block (real box-drawing, real
+severity dots) lives in [`docs/USAGE.md`](docs/USAGE.md) next to the `--dashboard --full`
+reference — read it there if you want to see the exact shape before your first paste.
+**Always paste the real output, not a remembered sample** — and remember the real paste
+continues past the Grade card + Findings with Skills/Plugins/MCP/RISK
+Chains/Behavioural/Second opinion/Coverage/Worth a glance, in that order.
 
 **Section 3 — Coverage of OpenClaw surfaces**
 
-Read `coverage.summary` and `coverage.gaps` from the JSON.
+Already part of the SAME pasted stdout above — nothing to build from a separate JSON call.
+It looks like this (names/counts vary; the `not-checkable`/`roadmap` lines appear only when
+that bucket is non-empty):
 
 ```
 — Coverage of OpenClaw surfaces —
-✅ Checked {checked} · ◑ Partial/UNKNOWN {partial}  (of 13 surfaces)
-○ Roadmap {roadmap} · ⊘ Not-checkable {not_checkable}  (known gaps — separate axis, not part of the 13)
+✅ checked {checked} · ◑ partial/unknown {partial}  (of {checked+partial} config surfaces)
+⊘ not-checkable {N} (no OpenClaw config control): {name, name, ...}
+○ roadmap {M} (no check yet): {name, name, ...}
 ```
 
 Since the pasted Section 2 no longer tallies UNKNOWN, this coverage line is the single place
@@ -520,20 +598,18 @@ control to audit there.
 
 **Section 4 — Worth a glance**
 
-The pasted `--dashboard` card already excludes `MEDIUM`/`ATTESTED` findings from Section 2,
-so this section is their only home — you don't need to pull them out of Section 2 yourself.
+Already part of the SAME pasted stdout above (a `— 👀 Worth a glance —` block, omitted
+entirely when nothing qualifies) — the pasted card already excludes `MEDIUM`/`ATTESTED`
+findings from Section 2's findings block, so this is their only home; you don't pull them
+out yourself. It reuses the SAME per-finding line format Section 2 uses (severity dot,
+title, `why:` line) — it is not a separately-worded narrative, so paste it exactly like the
+rest of the card rather than composing your own bullets.
 
-If any findings have `confidence` = `"MEDIUM"` or `"ATTESTED"`:
-
-```
-👀 Worth a glance — lower-confidence heuristics, confirm before acting:
-  • {plain-language title}: {what the specific concern is and why it matters}
-    → to confirm: {one action the user can take to verify or dismiss it}
-```
-
-Frame as heuristics — not definitive findings. Each bullet must say **what was seen and why it
-could matter** — never just a label. Include a concrete confirmation step so the user knows what
-to do next. The user should confirm before acting on them.
+**Your own surrounding prose is where the "confirm before acting" framing lives:** introduce
+this block as heuristics, not definitive findings — say **what was seen and why it could
+matter**, and suggest one concrete way the user could confirm or dismiss each item, rather
+than acting on it outright. Don't rewrite the pasted lines themselves to do this — add the
+framing before/after the paste, the same discipline the rest of the card already follows.
 
 **Section 5 — Scope + history**
 
@@ -542,11 +618,19 @@ to do next. The user should confirm before acting on them.
    A static audit bounds what your agent *can* do, not how it *behaves* at runtime —
    OpenClaw core has no runtime egress/taint gate, so a clean Lethal Trifecta here isn't
    a runtime guarantee; a high grade means "not statically lethal-capable", not "runtime-proof".
-   One exception: a corroborated runtime signal (a trajaudit indicator match) can CAP
-   this grade, never raise it — everything else runtime-observed (--behavioral's
-   T1/T2/T3, and every B164 signal including exfil_evidence, included) still cannot
-   move it either way.
-   History: ~/.clawseccheck/ (--no-history to skip).
+   Three exceptions, all cap-only (never raise the grade): (1) a corroborated runtime
+   signal (a trajaudit indicator match); (2) a VULNERABLE verdict from the live
+   injection test below (menu item a) — RESISTANT or no verdict submitted changes
+   nothing (the agent under test grading its own resistance is never trusted upward);
+   (3) a fired --behavioral detector (T1/T2/T3/B191) when --full ran WITHOUT --fast
+   (F-154) — that's the only path that computes this cap: a --full --fast run and a
+   standalone --behavioral run never wire it into a score at all, and a --full run
+   that ran the analysis but never fired one changes nothing. Every OTHER
+   runtime-observed signal (every B164 signal including
+   exfil_evidence) still cannot move it either way.
+   History: ~/.clawseccheck/ (--no-history to skip; a live-test verdict only reaches
+   history/trend when the test was run with a fixed --seed — an unseeded verdict still
+   caps THIS grade but is never recorded, so a fresh random token can't manufacture drift).
 ```
 
 If grade is C or worse, add one sentence: "To see if your agent actually *resists* an injection
@@ -555,17 +639,30 @@ attack, choose the live test from the menu below."
 **Section 6 — Next menu (inline, same message)**
 
 Append immediately at the end of the Dashboard (see Step 4 for routing detail). No "deeper scan"
-item — the capability self-report already ran automatically in Step 2 (F-043), so there's nothing
-left to offer as a separate follow-up (C-132). Render menus as ordinary text — do NOT wrap them
+item — the capability self-report already ran automatically in Step 2 (F-043) — and no "second
+opinion" item either — the mandatory judge panel already ran in Step 2 and its verdicts are
+already in the pasted card above (C-297) — so there's nothing left to offer as a separate
+follow-up for either (C-132). Render menus as ordinary text — do NOT wrap them
 in a code block or monospace fence:
 
 > Next — ✅ read-only · ⚡ touches live agent (asks)
 >   a ⚡ Live injection test   b ✅ Turn on monitoring
 >   c ✅ Save full report      d ✅ Menu   Start with a?
 
-Item a is not a duplicate of Step 2's audit: the full audit only *generated* injection
-scenarios (and never showed them to the user — Step 2 is internal-only), it never ran one
-against you, so this is the first real behavioral test (VULNERABLE vs RESISTANT) in the flow.
+Item a is not a duplicate of anything in Step 2/3: nothing so far actually ran an injection
+against you — the Behavioural block above is a post-hoc replay of past activity, and the
+mandatory judge panel only reviewed borderline findings, not tested the agent live — so this
+is the first real behavioral test (VULNERABLE vs RESISTANT) in the flow.
+
+The verdict now reaches the grade, cap-only (F-155): feed it back via `--dashboard --full
+--judged-bundle <file>`'s `liveTest` bucket (exact JSON shape:
+[`docs/OUTPUT_SCHEMA.md`](docs/OUTPUT_SCHEMA.md) §12). A VULNERABLE verdict hard-caps
+the grade at the same ceiling a proven CRITICAL FAIL gets; RESISTANT or nothing
+submitted changes nothing — never an ordinary scored point, never a reason to raise
+anything (self-attestation guard). Pass `--seed <value>` to the harness itself and echo
+that same value in the bucket to make the run reproducible and eligible for
+`--monitor`/`--trend`; without it, the verdict still caps this one report but is
+excluded from history.
 
 ### Step 4 — Next menu routing
 
@@ -608,6 +705,11 @@ routing index only, not the flow.
 - **trend** — `--trend`
 - **percentile** — `--percentile`
 - **share grade** — `--badge grade.svg` or `--card`
+- **attachable report for a phone / mobile chat** — `--pdf report.pdf` — a filesystem path is
+  useless to a user reading from a phone, but a PDF opens inline in a mobile chat client's own
+  viewer where an HTML attachment would just be a download. **Attach the PDF file itself into
+  the reply — never paste its path, and never re-render its contents into chat text** (same
+  doctrine as the `--badge` SVG: attach the artifact, don't redraw it).
 - **behavioral audit** — `--behavioral` (always relay its output in full)
 - **trajectory incident analysis** — `--analyze-trajectory` (a `⚠ INCIDENT SIGNAL` line is a real incident finding)
 - **judge packet** — `--judge-packet` (summarize it; never paste the raw JSON, never drop it)
@@ -630,16 +732,18 @@ dispatcher; the full protocol behind each row is the matching `## Choice:` secti
 | "is my MCP safe", "check my connected servers", "vet my MCP", "are my MCP servers trusted", "MCP supply chain" | `--vet-mcp` (add `--json` or `--sarif PATH` for machine-readable / CI output) |
 | "what dangerous actions can my agent take", "least privilege", "check my tools", "capability", "blast radius", "deeper check" | `--ask` then `--attest <filled.json>` |
 | "monitor", "watch", "alert me", "ongoing", "keep checking" | `--monitor` (ask first) |
-| "canary", "injection test", "am I vulnerable", "try an attack" | `--canary` then `--dryrun` |
+| "canary", "injection test", "am I vulnerable", "try an attack" | `--canary` then `--dryrun` — the standalone equivalent of Section 6's menu item a. A submitted VULNERABLE verdict fed back via `--dashboard --full --judged-bundle <file>`'s `liveTest` bucket hard-caps the grade (F-155); RESISTANT or nothing submitted changes nothing (self-attestation guard) — see Step 3, Section 6. |
 | "red team", "adversarial", "attack suite" | `--redteam` |
 | "trend", "history", "am I improving", "getting better" | `--trend` |
 | "percentile", "compare", "above average", "how do I rank" | `--percentile` |
 | "badge", "share my grade", "shareable", "certificate" | `--badge` or `--card` |
 | "HTML report", "full report" | `--html report.html` |
+| "PDF", "send me a PDF", "phone", "mobile", "attach the report" | `--pdf report.pdf` — attach the file itself, never paste the path |
 | "JSON", "machine readable", "raw data" | `--json` |
-| "what did my agent actually do", "behavioral", "runtime audit", "did it really do that", "prove it happened" | `--behavioral` — post-hoc, proof-by-log tool-call sequences from the trajectory sidecar; metadata-only, WARN-only, never scored. **Always relay the output — never drop it.** |
-| "did a suspicious skill's instructions actually run", "was this indicator acted on" | `--analyze-trajectory` — post-hoc, correlates installed-skill indicators against real tool-call arguments. **Any `⚠ INCIDENT SIGNAL` line is a real incident finding — never drop it.** |
-| "second opinion", "judge packet", "review the borderline findings" | `--judge-packet` — JSON list of borderline findings for host-agent review; summarize item count + per-item verdicts, offer to save large output to a file, **never paste raw JSON, never drop it** |
+| "what did my agent actually do", "behavioral", "runtime audit", "did it really do that", "prove it happened" | `--behavioral` — post-hoc, proof-by-log tool-call sequences from the trajectory sidecar; metadata-only, WARN-only, never scored. **Always relay the output — never drop it.** (Item 1's `--dashboard --full` also runs this as its "Behavioural" block — F-151 — but that block is a one-paragraph summary; a fired T1/T2/T3/B191 detector there also caps the grade, F-154. A user asking for this by name should still get the standalone command for the full per-line detail.) |
+| "did a suspicious skill's instructions actually run", "was this indicator acted on" | `--analyze-trajectory` — post-hoc, correlates installed-skill indicators against real tool-call arguments. **Any `⚠ INCIDENT SIGNAL` line is a real incident finding — never drop it.** (Folded into item 1's `--dashboard --full` "Behavioural" block too, F-151 — same one-paragraph-summary caveat as the row above; ask for the standalone command for full detail.) |
+| "second opinion", "judge packet", "review the borderline findings" | Outside item 1's flow: `--judge-packet` — JSON list of borderline findings for host-agent review; summarize item count + per-item verdicts, offer to save large output to a file, **never paste raw JSON, never drop it** — then feed panel verdicts back with `--judged <file>` (see `docs/FLOW_CHOICES.md`). Inside item 1's flow this already ran, MANDATORY, in Step 2 — its verdicts are already in the pasted "Second opinion (advisory)" block, nothing further to do (C-297). |
+| "scan everything", "maximum coverage", "don't skip anything", "check the full logs" | add `--exhaustive` to whatever command is already running (composes with `--full`; has effect on its own too, since B164/B180 run on every audit) — raises the trajectory-file / log-sink / per-line scan caps instead of the interactive-fast defaults. Slower; offer it after a normal run's own disclosure names something skipped (a file-count cap, a time-budget skip, an oversized-line gap) and the user wants that specific gap closed, not as a default suggestion on every run. |
 
 ---
 
@@ -659,28 +763,15 @@ ClawSecCheck is a **reports-only checker**. It does NOT fix, and it does NOT app
 
 ## Keeping ClawSecCheck current (advisory only)
 
-A **stale security scanner is itself a risk** — an old build misses the latest checks, the same
-"outdated install is the attack target" hygiene ClawSecCheck flags in others (B25 / C4). The tool
-stays honest about this **without breaking its own promises**, by drawing a hard line:
-
-- ClawSecCheck itself **never touches the network** — not to check for updates, not for anything.
-  Its staleness signals are all **offline**: (a) a report line that reads the local clock and an
-  optional local hint file (`~/.clawseccheck/latest.json`) — it never fetches that file and never
-  writes it as a side effect of an audit (suppress with `--no-update-notice` or
-  `CLAWSECCHECK_NO_UPDATE_NOTICE=1`); and (b) a hedged nudge that fires only when an overwhelming
-  majority of *scored* checks came back UNKNOWN on a populated config — a possible sign that
-  OpenClaw moved a field path and this build is stale for your version. It is deliberately worded
-  as a possibility ("either a minimal setup, or possibly stale"), never an assertion, and computes
-  purely from this run's own findings — no network, no schema fetch.
-- **Updating is the user's own action, never an automatic step.** Do not check for or install
-  updates as a side effect of running an audit. If — and only if — the user explicitly asks to
-  update, they run the same tool they installed it with themselves (e.g.
-  `openclaw skills update clawseccheck` or `clawhub update --all`), reviewing or pinning a tag
-  rather than blind-updating anything security-sensitive.
-- After any update the user can confirm integrity with `--verify-self` (SHA-256 of the engine)
-  against the trusted release digest.
-
-The contract stays simple: the audit is **local-only and read-only**; anything that reaches the
+A **stale security scanner is itself a risk**, so the tool nudges honestly **without breaking its
+own promises**: every staleness signal is 100% offline (a local-clock/build-date report line plus
+an optional local hint file it never fetches, and a hedged "mostly UNKNOWN" nudge) — the exact
+mechanics are in [`docs/USAGE.md`](docs/USAGE.md) under "Staleness reminder (offline)".
+**Updating is the user's own action, never an automatic step** — never check for or install
+updates as a side effect of running an audit; if the user explicitly asks, they run the tool they
+installed it with (`openclaw skills update clawseccheck` / `clawhub update --all`), and can
+confirm integrity afterward with `--verify-self` (SHA-256 against the trusted release digest). The
+contract stays simple: the audit is **local-only and read-only**; anything that reaches the
 network is an **explicit, user-initiated** action — never something the skill does on its own.
 
 ---

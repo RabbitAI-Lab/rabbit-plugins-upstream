@@ -1,6 +1,10 @@
 # ClawSecCheck — Frequently Asked Questions
 
-Answers to the most common questions about ClawSecCheck output, grades, and usage.
+Answers to the most common questions about ClawSecCheck output, grades, and usage —
+i.e. questions about *your audited setup*. If ClawSecCheck itself won't run, crashes,
+or OpenClaw never picks it up, that's a different problem — see
+[`docs/TROUBLESHOOTING.md`](TROUBLESHOOTING.md) instead.
+
 For the full check catalog see [`docs/CHECKS.md`](CHECKS.md).
 For the threat mapping see [`docs/THREAT_COVERAGE.md`](THREAT_COVERAGE.md).
 For all flags run `clawseccheck --help`.
@@ -70,9 +74,16 @@ they never add or remove a scored point, they just lower the ceiling.
 
 | Signal | Score capped at | Grade ceiling | What the report says |
 |---|---|---|---|
-| A check **crashed or timed out** | 49 | F | `N check(s) crashed or timed out this run: cannot rule out a CRITICAL condition`, plus a `N checks did not run` banner above the score |
+| A check **crashed, timed out, or hit an unreadable/corrupted input it needed** | 49 | F | `N check(s) could not reach a reliable verdict this run: cannot rule out a CRITICAL condition`, plus an `N checks could not reach a reliable verdict this run` banner above the score |
 | `openclaw.json` is present but **unreadable / unparseable** | 49 | F | `openclaw.json unreadable/unparseable this run: cannot rule out a CRITICAL condition` |
 | A **corroborated runtime signal** in your own trajectory log | 79 | C | `corroborated runtime signal: …` |
+
+The first row covers two shapes: the engine itself gave up on a check (a crash or a
+timeout — B-313), or a check ran fine but honestly couldn't tell you its own answer
+because something it needed to read was unreadable, corrupt, or malformed (B-399) — as
+opposed to a check finding nothing to look at, which never triggers this cap. "There was
+nothing to check" and "something broke while we tried to check" are different facts, and
+only the second one caps the grade.
 
 The reasoning is the same in all three cases, and it is deliberate: the audit lost
 visibility into something, and the honest assumption about an unexamined check is
@@ -95,10 +106,13 @@ for a timeout, valid JSON for an unparseable config — and the cap lifts on the
 - Secrets or tokens stored in plaintext inside `openclaw.json` or a bootstrap file (**B1**).
 - Gateway exposed with no authentication (**B2**).
 - Installed third-party skill flagged as suspicious or dangerous by the malware scan (**B13**).
-- Control-plane tools (config, cron, gateway) reachable over the HTTP gateway (**B32**).
-- A `dangerously*` sandbox escape flag is enabled (**B48**).
-- **No FAIL at all** — a check crashed or timed out, or `openclaw.json` could not be
-  parsed. See the cap table above; the report names which one it was.
+- An `ownerAllowFrom`/`autoApproveCidrs` wildcard grants owner command authority or
+  device auto-pairing to ANY sender/IP (**B48**, the wildcard-authority case
+  specifically — a plain break-glass override on its own is HIGH severity and caps
+  the grade at C, not F).
+- **No FAIL at all** — a check crashed, timed out, hit an unreadable/corrupted input it
+  needed, or `openclaw.json` could not be parsed. See the cap table above; the report
+  names which one it was.
 
 After fixing the underlying issue, re-run `clawseccheck` to see the new score.
 
@@ -164,9 +178,12 @@ score. To confirm what is suppressed, use `--show-suppressed` again.
 
 ## I get permission errors — what do I do?
 
-ClawSecCheck never changes your OpenClaw config or the files it audits — it only writes
-its own score history under `~/.clawseccheck/`. Permission errors mean the *audit* cannot
-read a file it needs to inspect.
+ClawSecCheck never changes your OpenClaw config, and by default only writes its own
+score history under `~/.clawseccheck/` — a few flags write other local files when you
+ask (`--save`, `--badge`, `--html`, `--sarif`, `--pdf`, `--monitor`), and the one
+exception that touches the audited home itself is `--apply-ignore-proposals`, opt-in
+and confirmation-gated (see above). Permission errors mean the *audit* cannot read a
+file it needs to inspect.
 
 **Most common causes and fixes:**
 
@@ -296,8 +313,12 @@ clawseccheck --home /path/to/custom/openclaw/home
 - **Non-standard install paths.** If OpenClaw was installed system-wide or in a
   non-default location, pass the path to the directory that contains `openclaw.json`.
 
-The `.clawseccheckignore` suppress-file and the `--monitor` state snapshot default to
-paths inside the home directory you specify, so they stay per-profile automatically.
+The `.clawseccheckignore` suppress-file defaults to a path inside the home directory
+you specify, so it stays per-profile automatically. The `--monitor` state snapshot does
+**not** — its default (`~/.clawseccheck/state.json`) is a single fixed path independent
+of `--home`, so auditing two different `--home` profiles with `--monitor` and no other
+change writes both to the same shared snapshot. Pass `--state PATH` explicitly per
+profile if you run `--monitor` against more than one home.
 
 ---
 

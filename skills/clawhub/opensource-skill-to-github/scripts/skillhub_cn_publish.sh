@@ -46,7 +46,12 @@ AUTH="Authorization: Bearer $SKILLHUB_CN_TOKEN"
 SLUG="$(basename "$FORK")"
 NAME="$(grep -m1 -o '^name:[[:space:]]*.*' "$FORK/SKILL.md" 2>/dev/null | sed 's/^name:[[:space:]]*//' || echo "$SLUG")"
 NAME="${NAME:-$SLUG}"
-VERSION="$(grep -m1 -o '\*\*Version\*\*:[[:space:]]*[0-9]*\.[0-9]*\.[0-9]*' "$FORK/SKILL.md" 2>/dev/null | grep -o '[0-9]*\.[0-9]*\.[0-9]*' || echo '1.0.0')"
+# Version：优先 frontmatter `version:` 字段，回退正文 `**Version**: x.y.z`，最后兜底 1.0.0
+# 注意：grep 无匹配返回 1，set -euo pipefail 下须 || true 防脚本中断
+VERSION="$(grep -m1 -o '^version:[[:space:]]*[0-9]*\.[0-9]*\.[0-9]*' "$FORK/SKILL.md" 2>/dev/null | grep -o '[0-9]*\.[0-9]*\.[0-9]*' || true)"
+if [[ -z "$VERSION" ]]; then
+  VERSION="$(grep -m1 -o '\*\*Version\*\*:[[:space:]]*[0-9]*\.[0-9]*\.[0-9]*' "$FORK/SKILL.md" 2>/dev/null | grep -o '[0-9]*\.[0-9]*\.[0-9]*' || true)"
+fi
 VERSION="${VERSION:-1.0.0}"
 # displayName：优先 # 一级标题，回退 name
 DISPLAY="$(grep -m1 -o '^#[[:space:]]*.*' "$FORK/SKILL.md" 2>/dev/null | sed 's/^#[[:space:]]*//' || echo "$NAME")"

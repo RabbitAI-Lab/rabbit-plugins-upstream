@@ -1,0 +1,70 @@
+{
+  "login_success_any": [
+    {"kind": "text", "value": "发布笔记"},
+    {"kind": "text", "value": "创作中心"},
+    {"kind": "css", "value": "a[href*='publish']"},
+    {"kind": "css", "value": "[class*='avatar']"}
+  ],
+  "publish_entry_any": [
+    {"kind": "text", "value": "发布笔记"},
+    {"kind": "text", "value": "发布"},
+    {"kind": "css", "value": "a[href*='publish']"}
+  ],
+  "image_upload_input_any": [
+    {"kind": "css", "value": "input[type='file'][accept*='image']"},
+    {"kind": "css", "value": "input[type='file'][accept*='.jpg']"},
+    {"kind": "css", "value": "input[type='file'][accept*='.png']"},
+    {"kind": "css", "value": "input[type='file']"}
+  ],
+  "image_tab_any": [
+    {"kind": "text", "value": "上传图文"}
+  ],
+  "title_input_any": [
+    {"kind": "placeholder", "value": "填写标题"},
+    {"kind": "placeholder", "value": "请输入标题"},
+    {"kind": "css", "value": "input[placeholder*='标题']"},
+    {"kind": "css", "value": "textarea[placeholder*='标题']"}
+  ],
+  "body_input_any": [
+    {"kind": "placeholder", "value": "输入正文描述，真诚有价值的分享予人温暖"},
+    {"kind": "css", "value": "div[contenteditable='true']:not([class*='comment']):not([class*='Comment'])"},
+    {"kind": "css", "value": "[contenteditable='true']:not([class*='comment']):not([class*='Comment'])"},
+    {"kind": "css", "value": "textarea[placeholder*='输入正文描述']"},
+    {"kind": "placeholder", "value": "添加正文"},
+    {"kind": "placeholder", "value": "请输入正文"},
+    {"kind": "css", "value": "textarea[placeholder*='正文']"},
+    {"kind": "css", "value": "[contenteditable='true']"}
+  ],
+  "publish_button_any": [
+    {"kind": "role", "role": "button", "name": "发布"},
+    {"kind": "text", "value": "发布"}
+  ],
+  "save_draft_button_any": [
+    {"kind": "role", "role": "button", "name": "保存草稿"},
+    {"kind": "role", "role": "button", "name": "存草稿"},
+    {"kind": "role", "role": "button", "name": "暂存离开"},
+    {"kind": "role", "role": "button", "name": "暂存"},
+    {"kind": "role", "role": "button", "name": "保存并退出"},
+    {"kind": "text", "value": "保存草稿"},
+    {"kind": "text", "value": "存草稿"},
+    {"kind": "text", "value": "暂存离开"},
+    {"kind": "text", "value": "暂存"},
+    {"kind": "text", "value": "保存并退出"},
+    {"kind": "text", "value": "退出前保存"},
+    {"kind": "text", "value": "草稿"}
+  ],
+  "save_draft_success_any": [
+    {"kind": "text", "value": "已保存到草稿"},
+    {"kind": "text", "value": "草稿已保存"},
+    {"kind": "text", "value": "保存成功"},
+    {"kind": "text", "value": "已保存"},
+    {"kind": "css", "value": "[class*='toast']"},
+    {"kind": "css", "value": "[class*='Toast']"}
+  ],
+  "success_any": [
+    {"kind": "text", "value": "发布成功"},
+    {"kind": "text", "value": "提交成功"},
+    {"kind": "text", "value": "审核"},
+    {"kind": "text", "value": "已发布"}
+  ]
+}

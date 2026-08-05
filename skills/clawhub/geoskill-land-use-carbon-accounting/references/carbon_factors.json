@@ -1,0 +1,103 @@
+{
+  "description": "IPCC-compliant default carbon stock factors for land use carbon accounting (Tier 1/2 auxiliary). Carbon density in tC/ha (tons of carbon per hectare).",
+  "version": "1.0.0",
+  "source": "IPCC 2006 Guidelines, IPCC EFDB, 2013 Wetlands Supplement",
+  "note": "Values are illustrative defaults for MVP. Real applications require region-specific factors from national GHG inventories.",
+  "land_cover_classes": {
+    "FL": {"name": "Forest Land", "name_zh": "林地", "color": "#228B22"},
+    "CL": {"name": "Cropland", "name_zh": "耕地", "color": "#FFD700"},
+    "GL": {"name": "Grassland", "name_zh": "草地", "color": "#90EE90"},
+    "WL": {"name": "Wetlands", "name_zh": "湿地", "color": "#4169E1"},
+    "SL": {"name": "Settlements", "name_zh": "建设用地", "color": "#DC143C"},
+    "OL": {"name": "Other Land", "name_zh": "其他土地", "color": "#808080"}
+  },
+  "carbon_pools": {
+    "BAG": {"name": "Above-ground Biomass", "name_zh": "地上生物量"},
+    "BBG": {"name": "Below-ground Biomass", "name_zh": "地下生物量"},
+    "DW":  {"name": "Dead Wood", "name_zh": "死木"},
+    "LT":  {"name": "Litter", "name_zh": "凋落物"},
+    "SOC": {"name": "Soil Organic Carbon", "name_zh": "土壤有机碳"}
+  },
+  "ecological_zones": {
+    "tropical":   {"name": "Tropical",   "name_zh": "热带"},
+    "subtropical":{"name": "Subtropical","name_zh": "亚热带"},
+    "temperate":  {"name": "Temperate",  "name_zh": "温带"},
+    "boreal":     {"name": "Boreal",     "name_zh": "寒带"}
+  },
+  "carbon_density": {
+    "tropical": {
+      "FL": {"BAG": 120.0, "BBG": 30.0, "DW": 8.0, "LT": 5.0, "SOC": 90.0},
+      "CL": {"BAG": 5.0,   "BBG": 2.0,  "DW": 0.0, "LT": 1.0, "SOC": 50.0},
+      "GL": {"BAG": 3.0,   "BBG": 5.0,  "DW": 0.0, "LT": 2.0, "SOC": 70.0},
+      "WL": {"BAG": 30.0,  "BBG": 15.0, "DW": 2.0, "LT": 8.0, "SOC": 200.0},
+      "SL": {"BAG": 0.0,   "BBG": 0.0,  "DW": 0.0, "LT": 0.0, "SOC": 30.0},
+      "OL": {"BAG": 1.0,   "BBG": 2.0,  "DW": 0.0, "LT": 0.5, "SOC": 20.0}
+    },
+    "subtropical": {
+      "FL": {"BAG": 80.0,  "BBG": 22.0, "DW": 6.0, "LT": 4.0, "SOC": 80.0},
+      "CL": {"BAG": 4.0,   "BBG": 1.5,  "DW": 0.0, "LT": 1.0, "SOC": 45.0},
+      "GL": {"BAG": 2.5,   "BBG": 4.0,  "DW": 0.0, "LT": 1.5, "SOC": 60.0},
+      "WL": {"BAG": 25.0,  "BBG": 12.0, "DW": 2.0, "LT": 6.0, "SOC": 180.0},
+      "SL": {"BAG": 0.0,   "BBG": 0.0,  "DW": 0.0, "LT": 0.0, "SOC": 25.0},
+      "OL": {"BAG": 0.8,   "BBG": 1.5,  "DW": 0.0, "LT": 0.3, "SOC": 18.0}
+    },
+    "temperate": {
+      "FL": {"BAG": 60.0,  "BBG": 18.0, "DW": 10.0, "LT": 8.0, "SOC": 100.0},
+      "CL": {"BAG": 3.0,   "BBG": 1.0,  "DW": 0.0,  "LT": 0.5, "SOC": 55.0},
+      "GL": {"BAG": 2.0,   "BBG": 3.5,  "DW": 0.0,  "LT": 1.0, "SOC": 75.0},
+      "WL": {"BAG": 20.0,  "BBG": 10.0, "DW": 3.0,  "LT": 5.0, "SOC": 250.0},
+      "SL": {"BAG": 0.0,   "BBG": 0.0,  "DW": 0.0,  "LT": 0.0, "SOC": 35.0},
+      "OL": {"BAG": 0.5,   "BBG": 1.0,  "DW": 0.0,  "LT": 0.2, "SOC": 22.0}
+    },
+    "boreal": {
+      "FL": {"BAG": 40.0,  "BBG": 12.0, "DW": 15.0, "LT": 12.0, "SOC": 150.0},
+      "CL": {"BAG": 2.0,   "BBG": 0.8,  "DW": 0.0,  "LT": 0.3, "SOC": 60.0},
+      "GL": {"BAG": 1.5,   "BBG": 3.0,  "DW": 0.0,  "LT": 0.8, "SOC": 80.0},
+      "WL": {"BAG": 15.0,  "BBG": 8.0,  "DW": 4.0,  "LT": 6.0, "SOC": 350.0},
+      "SL": {"BAG": 0.0,   "BBG": 0.0,  "DW": 0.0,  "LT": 0.0, "SOC": 40.0},
+      "OL": {"BAG": 0.3,   "BBG": 0.8,  "DW": 0.0,  "LT": 0.1, "SOC": 25.0}
+    }
+  },
+  "uncertainty": {
+    "description": "Default coefficient of variation (CV) for carbon density factors, used in Monte Carlo simulation",
+    "FL": 0.30,
+    "CL": 0.25,
+    "GL": 0.30,
+    "WL": 0.40,
+    "SL": 0.50,
+    "OL": 0.50
+  },
+  "conversion": {
+    "C_to_CO2e": 3.6666666666666665,
+    "description": "Carbon to CO2 equivalent conversion factor"
+  },
+  "land_cover_mapping": {
+    "description": "Common land cover classification codes to unified IPCC classes",
+    "from_glc_fcs30": {
+      "10": "FL", "20": "FL", "30": "FL", "40": "FL",
+      "50": "WL", "60": "WL", "70": "WL",
+      "80": "CL", "90": "CL",
+      "100": "GL", "110": "GL",
+      "120": "OL", "130": "SL", "140": "OL", "150": "OL", "160": "OL", "170": "WL", "180": "WL", "190": "SL", "200": "OL", "210": "OL", "220": "OL"
+    },
+    "from_esri_lulc": {
+      "1": "WL", "2": "FL", "3": "FL", "4": "FL", "5": "FL",
+      "6": "GL", "7": "OL",
+      "8": "CL", "9": "CL",
+      "10": "WL", "11": "WL",
+      "12": "SL"
+    },
+    "from_copernicus": {
+      "111": "SL", "112": "SL", "121": "SL", "122": "SL", "123": "SL", "124": "SL",
+      "131": "SL", "132": "SL", "133": "SL", "141": "SL", "142": "SL",
+      "211": "CL", "212": "CL", "213": "CL",
+      "221": "CL", "222": "CL", "223": "CL",
+      "231": "CL", "241": "CL", "242": "CL", "243": "CL", "244": "CL",
+      "311": "FL", "312": "FL", "313": "FL",
+      "321": "GL", "322": "GL", "323": "GL", "324": "GL",
+      "331": "OL", "332": "OL", "333": "OL", "334": "OL", "335": "OL",
+      "411": "WL", "412": "WL", "421": "WL", "422": "WL",
+      "511": "WL", "512": "WL", "521": "WL", "522": "WL", "523": "WL"
+    }
+  }
+}

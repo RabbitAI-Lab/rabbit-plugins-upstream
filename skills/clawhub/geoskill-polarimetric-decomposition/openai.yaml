@@ -1,0 +1,12 @@
+name: geoskill-polarimetric-decomposition
+display_name: 极化SAR分解
+description: |
+  极化SAR分解：Cloude-Pottier H/A/α 特征分解与 Freeman 三分量分解，输出散射熵、各向异性、散射角与表面/二面角/体散射功率
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-polarimetric-decomposition.py
+runtime: python>=3.9
+tags:
+  - gis
+  - remote-sensing
+  - visualization

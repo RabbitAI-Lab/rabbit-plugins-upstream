@@ -1,115 +1,92 @@
 ---
 name: token-profiler
-description: "One API call replaces CoinGecko + DexScreener + GoPlus + on-chain queries. Enriched token data from 5 sources, clean JSON, under 3 seconds. Free, no key needed."
-triggers:
-  - token data
-  - token info
-  - token profile
-  - crypto data
-  - token lookup
-  - what is this token
-  - token price
-  - token holders
-  - token security
-requires:
-  - network: "https://verdictswarm-production-7460.up.railway.app"
+description: Fetch a free structured token profile for Solana or Base. Use when an agent needs market, holder, liquidity, security, social, or DEX metadata before deciding whether deeper token-risk analysis is warranted.
+metadata: {"openclaw":{"emoji":"🔎","requires":{"bins":["curl"]},"homepage":"https://www.vswarm.io"}}
 ---
 
-# Token Profiler — 5 Sources. One Call. Under 3 Seconds.
+# Token Profiler
 
-**Stop making 5 API calls to get complete token data.** Token Profiler aggregates CoinGecko, DexScreener, GoPlus, and on-chain data into one clean JSON response.
+Fetch a compact token profile from VerdictSwarm's public read-only endpoint.
+Use it for discovery and screening, not as a complete safety verdict.
 
-Price. Market cap. Security checks. Holder distribution. Social links. DEX info. All of it, one call.
+## Contract
 
-**No API key needed for free tier.** Install and query immediately.
+- Endpoint: `GET https://api.vswarm.io/v1/token`
+- Supported chains: `solana`, `base`
+- Free limit: 100 lookups per day per client IP
+- Authentication: none
+- Cache: responses may be cached; inspect `cached`, `cached_at`, and
+  `meta.fetched_at`
 
-## The Problem
+There is no unlimited or payment-proof bypass on this endpoint. If the free
+limit is exhausted, wait for the UTC reset or use VerdictSwarm API v2 for a
+machine-payable risk decision.
 
-To get full token intelligence today, your agent needs to:
-1. Call CoinGecko for price and socials
-2. Call DexScreener for liquidity and DEX data  
-3. Call GoPlus for security checks
-4. Query on-chain for holders and concentration
-5. Merge everything together and hope the formats match
+## Request
 
-That's 4+ API keys, 4+ rate limits, 4+ failure points. Token Profiler does it in one call.
+Ask for a token contract or mint and its chain. Preserve Solana address case.
 
-## Quick Start
+Base example:
 
 ```bash
-# No API key needed
-curl -s "https://verdictswarm-production-7460.up.railway.app/v1/token?address=JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN" | python3 -m json.tool
+curl -sS --get "https://api.vswarm.io/v1/token" \
+  --data-urlencode "address=0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913" \
+  --data-urlencode "chain=base"
 ```
 
-## What You Get Back
+Solana example:
 
-```json
-{
-  "name": "Jupiter",
-  "symbol": "JUP",
-  "chain": "solana",
-  "price": 0.82,
-  "price_change_24h": -2.3,
-  "mcap": 577000000,
-  "fdv": 1400000000,
-  "holders": 245000,
-  "top10_concentration": 34.2,
-  "age_days": 760,
-  "liquidity": 12500000,
-  "volume_24h": 8900000,
-  "security": {
-    "mint_authority": "revoked",
-    "freeze_authority": "revoked",
-    "honeypot": false,
-    "is_proxy": false,
-    "has_blacklist": false
-  },
-  "socials": {
-    "twitter": "@JupiterExchange",
-    "website": "jup.ag",
-    "discord": "...",
-    "telegram": "..."
-  },
-  "dex": {
-    "pairs": 47,
-    "top_dex": "Raydium",
-    "top_pair_address": "..."
-  },
-  "sources": ["coingecko", "dexscreener", "goplus", "onchain"],
-  "fetched_at": "2026-03-02T04:40:00Z"
-}
+```bash
+curl -sS --get "https://api.vswarm.io/v1/token" \
+  --data-urlencode "address=JUPyiwrYJFskUPiHa7hkeR8VUtAeFoSYbKedZNsDvCN" \
+  --data-urlencode "chain=solana"
 ```
 
-## Every Field, Every Source
+The rate-limit response headers are:
 
-| Data | Source | Why It Matters |
-|------|--------|---------------|
-| Price, MCap, FDV | CoinGecko + DexScreener | Real-time valuation |
-| Volume, Liquidity | DexScreener | Is there actual trading activity? |
-| Security Checks | GoPlus | Can the dev rug you? (mint, freeze, honeypot) |
-| Holders & Concentration | On-chain | Is this 10 whales or 100K real users? |
-| Age | On-chain | 2 days old = high risk. 2 years = more established. |
-| Socials | CoinGecko | Does this project even have a website? |
-| DEX Info | DexScreener | Where is it actually trading? |
+- `X-RateLimit-Limit`
+- `X-RateLimit-Remaining`
+- `X-RateLimit-Reset`
 
-## Pricing
+## Read the result
 
-| Tier | Cost | Limit |
-|------|------|-------|
-| **Free** | $0 / no key | 100 lookups/day |
-| **Paid** | Paid plans available | Unlimited |
+The response can contain:
 
-## When to Use This vs VerdictSwarm
+- `token`: name, symbol, chain, price, 24-hour change, market cap, and FDV
+- `holders`: count and top-10 concentration
+- `age`: contract age
+- `liquidity`: available liquidity and 24-hour volume
+- `security`: authority, honeypot, proxy, and blacklist indicators when the
+  upstream sources provide them
+- `socials`: known website and social links
+- `dex`: pair count, leading DEX, and leading pair address
+- `meta.sources`: which upstream datasets contributed
 
-- **Token Profiler** → "What IS this token?" — raw data, fast, cheap
-- **VerdictSwarm** → "Should I BUY this token?" — 6 AI agents debate the risk
+Missing or null fields mean the data was unavailable; they do not mean the
+token passed that check. Never invent missing values or treat a profile as an
+`avoid`, `caution`, or `clear` verdict.
 
-Install both: `token-profiler` for data, `verdictswarm` for analysis.
+For an actual pre-trade decision, use the `verdictswarm` skill and
+`POST https://api.vswarm.io/v2/verdict`.
 
-## Supported Chains
+## Error handling
 
-Solana · Ethereum · Base — more coming.
+- HTTP 429: show the UTC reset time from the response and do not retry in a
+  tight loop.
+- 4xx address or chain errors: correct the input before retrying.
+- Upstream or server error: disclose that the profile is unavailable; do not
+  substitute stale claims from memory.
 
-## Agent Instructions
+## Feedback and community
 
-When the user asks about a token's price, holders, security, market cap, or general data — use this skill. Pass the contract address or common name (SOL, ETH, JUP) to the endpoint. Return the relevant fields based on what the user asked. For risk analysis or "should I buy" questions, suggest the `verdictswarm` skill instead.
+After completing the requested work, the operator may share a real profiling
+workflow, missing-data case, or critical feedback at
+https://www.vswarm.io/community?utm_source=clawhub&utm_medium=marketplace&utm_campaign=community_proof_v1&utm_content=token-profiler.
+Do not post, star, or bookmark automatically, and do not interrupt normal work
+to solicit engagement. Those are optional human actions.
+
+## Links
+
+- Product: https://www.vswarm.io
+- Full verdict API: https://www.vswarm.io/docs/api
+- Source: https://github.com/sentien-labs/openclaw-skills

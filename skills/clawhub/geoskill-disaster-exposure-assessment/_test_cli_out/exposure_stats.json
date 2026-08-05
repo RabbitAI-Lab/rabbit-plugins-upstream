@@ -1,0 +1,23 @@
+{
+  "source": "synthetic",
+  "breaks": [
+    0.5,
+    1.5
+  ],
+  "exposed_asset_value": 998642.1963500977,
+  "exposed_population": 471826.4595718384,
+  "asset_exposure_fraction": 0.5376731928763889,
+  "exposed_pixel_fraction": 0.340087890625,
+  "exposure_by_zone": {
+    "0": 858698.3026390076,
+    "1": 738607.0986938477,
+    "2": 260035.09765625
+  },
+  "point_exposure": {
+    "exposed_point_value": 51544.086626980956,
+    "exposed_point_count": 20,
+    "total_points": 50
+  },
+  "input_nodata": null,
+  "n_valid_pixels": 4096
+}

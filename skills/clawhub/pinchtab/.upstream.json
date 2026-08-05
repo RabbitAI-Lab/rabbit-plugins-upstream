@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/pinchtab",
   "slug": "pinchtab",
   "ownerHandle": null,
-  "version": "0.15.0",
-  "updatedAt": 1784398944171,
-  "contentHash": "f3ed6cddda86dbf88459ac064829defe13967bdfe1d9323fbb2ec15e800e9221",
-  "fetchedAt": "2026-07-26T18:10:48.567Z"
+  "version": "0.15.1",
+  "updatedAt": 1785769975165,
+  "contentHash": "2ea9e9e8040f6f11179c89e594b77492bc4d50891ad8d5040ddd560fdba07a47",
+  "fetchedAt": "2026-08-05T10:08:20.650Z"
 }

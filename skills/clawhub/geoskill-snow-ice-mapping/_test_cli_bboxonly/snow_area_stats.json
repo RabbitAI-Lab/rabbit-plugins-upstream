@@ -1,0 +1,13 @@
+{
+  "snow_pixels": 5253,
+  "total_pixels": 16384,
+  "snow_fraction": 0.320618,
+  "pixel_area_km2": 0.579534,
+  "snow_area_km2": 3044.2911,
+  "total_area_km2": 9495.0819,
+  "ndsi_threshold": 0.4,
+  "green_index": 1,
+  "swir_index": 4,
+  "temp_threshold": null,
+  "mean_ndsi": -0.0897
+}

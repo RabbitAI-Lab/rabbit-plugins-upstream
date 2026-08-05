@@ -1,0 +1,347 @@
+"""Self-check for the v4 phase modules.
+
+Runs the full build -> review -> fix -> verify -> finalize flow (and the
+arbiter) against a throwaway git repo using a stub ``providers``/``jsonio`` so
+no real model is invoked. Run with: ``python3 scripts/phases/test_phases.py``
+or ``pytest scripts/phases/test_phases.py``.
+"""
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+from unittest.mock import patch
+
+# Self-contained path bootstrap: adversarial-common is a sibling skill and the
+# skill root must be on sys.path so ``scripts.phases`` is importable directly.
+_HERE = os.path.dirname(os.path.abspath(__file__))
+_SKILL_ROOT = os.path.dirname(os.path.dirname(_HERE))
+if _SKILL_ROOT not in sys.path:
+    sys.path.insert(0, _SKILL_ROOT)
+_COMMON = os.path.abspath(os.path.join(_SKILL_ROOT, os.pardir, "adversarial-common"))
+if os.path.isdir(_COMMON) and _COMMON not in sys.path:
+    sys.path.insert(0, _COMMON)
+
+from adversarial_common import (  # noqa: E402
+    ProviderDecision,
+    RunResult,
+    gitops,
+    jsonio,
+)
+
+from scripts.phases.phase_build import run_build  # noqa: E402
+from scripts.phases.phase_review import run_review  # noqa: E402
+from scripts.phases.phase_fix import run_fix  # noqa: E402
+from scripts.phases.phase_verify import run_verify  # noqa: E402
+from scripts.phases.phase_arbiter import run_arbiter  # noqa: E402
+from scripts.phases.phase_git import setup_git, finalize_git  # noqa: E402
+
+
+class StubProviders:
+    """Stand-in for adversarial_common.providers: writes canned files/JSON."""
+
+    def __init__(self, workdir):
+        self.workdir = workdir
+        self.roles = []
+        self.prompts = []
+
+    def resolve(self, role, *, workdir, force=False, force_provider=None):
+        return ProviderDecision(
+            alias=force_provider or f"fake-{role}",
+            command=f"fake-{role}",
+            quota_state="UNKNOWN",
+            fallback=False,
+            reason="test provider",
+            raw_snapshot={},
+            forced=force or force_provider is not None,
+            error=None,
+        )
+
+    def run_cli(self, cmd, stdin_text=None, timeout=600, cwd=None,
+                persona=None, **_kwargs):
+        role_by_persona = {
+            "builder": "builder", "fixer": "fixer", "critic": "critic",
+            "verifier": "verifier", "judge": "judge",
+        }
+        result = self.run_cmd(
+            cmd, stdin_text=stdin_text, timeout=timeout, cwd=cwd,
+            role=role_by_persona.get(persona),
+        )
+        return RunResult(result)
+
+    def run_cmd(self, cmd, stdin_text=None, timeout=600, cwd=None, role=None,
+                project=None):
+        self.roles.append(role)
+        self.prompts.append({"role": role, "text": stdin_text or ""})
+        if role == "builder":
+            with open(os.path.join(self.workdir, "app.txt"), "w") as fh:
+                fh.write("v1\n")
+            return "built app.txt", "", 0
+        if role == "fixer":
+            with open(os.path.join(self.workdir, "app.txt"), "a") as fh:
+                fh.write("fixed\n")
+            return "fixed", "", 0
+        if role == "critic":
+            return (json.dumps({
+                "findings": [{
+                    "id": "A1", "severity": "major", "file": "app.txt",
+                    "line": 1, "summary": "needs fixing", "evidence": "trivial",
+                }],
+                "verdict": "REQUEST_CHANGES",
+            }), "", 0)
+        if role == "verifier":
+            return (json.dumps({
+                "results": [{
+                    "id": "A1", "status": "resolved", "evidence": "fixed",
+                    "confidence": "high", "basis": "code",
+                }],
+                "epistemic_distribution": {
+                    "confidence": {"high": 1, "medium": 0, "low": 0},
+                    "basis": {
+                        "spec": 0, "code": 1, "inference": 0, "external": 0,
+                    },
+                },
+                "verdict": "APPROVE",
+                "warnings": ["verifier supplied warning"],
+            }), "", 0)
+        if role == "judge":
+            return (json.dumps({
+                "verdict": "APPROVE", "conditions": ["keep tests green"],
+            }), "", 0)
+        return "", "", 0
+
+
+def _git(workdir, *args):
+    return subprocess.run(["git", *args], capture_output=True, text=True,
+                          cwd=workdir)
+
+
+def _run_full_flow():
+    tmp = tempfile.mkdtemp(prefix="acl-phases-")
+    try:
+        providers = StubProviders(tmp)
+        gitops.auto_init(tmp)  # creates main + identity
+
+        setup = setup_git(tmp, "demo feature", "main")
+        assert setup["exit_code"] == 0, setup
+        assert setup["branch"] == "loop/demo-feature/1"
+        assert setup["branch_point"]
+        assert setup["stash_id"] == ""  # clean tree
+
+        with patch("adversarial_common.runner.run_cli", providers.run_cli):
+            build = run_build("Demo spec\nsecond line", "fake-dev", tmp, 60,
+                              "demo-feature", providers)
+        assert build["exit_code"] == 0, build
+        assert build["commit_sha"]
+        diff = gitops.get_diff(tmp, setup["branch_point"])
+        assert "app.txt" in diff
+
+        with patch("adversarial_common.runner.run_cli", providers.run_cli):
+            review = run_review(
+                diff, "fake-review", providers, jsonio,
+                branch_point=setup["branch_point"])
+        assert review["exit_code"] == 0, review
+        assert review["verdict"] == "REQUEST_CHANGES"
+        assert review["findings"][0]["id"] == "A1"
+        review_prompt = next(
+            p["text"] for p in providers.prompts if p["role"] == "critic")
+        assert setup["branch_point"] in review_prompt
+        assert "HEAD~1" not in review_prompt
+
+        with patch("adversarial_common.runner.run_cli", providers.run_cli):
+            fix = run_fix(
+                review["findings"], "fake-dev", tmp, 60, "demo-feature",
+                1, providers,
+            )
+        assert fix["exit_code"] == 0, fix
+        assert fix["loop"] == 1 and fix["commit_sha"]
+
+        diff2 = gitops.get_diff(tmp, setup["branch_point"])
+        with patch("adversarial_common.runner.run_cli", providers.run_cli):
+            verify = run_verify(
+                review["findings"], diff2, "fake-review", providers, jsonio,
+                branch_point=setup["branch_point"])
+        assert verify["exit_code"] == 0, verify
+        assert verify["verdict"] == "APPROVE"
+        assert verify["results"][0]["status"] == "resolved"
+        assert verify["warnings"] == ["verifier supplied warning"]
+        verify_prompt = next(
+            p["text"] for p in providers.prompts if p["role"] == "verifier")
+        assert setup["branch_point"] in verify_prompt
+        assert "HEAD~1" not in verify_prompt
+
+        # evidence artifact for the tag
+        evidence = os.path.join(tmp, "final.json")
+        with open(evidence, "w") as fh:
+            json.dump({"verdict": "APPROVE"}, fh)
+
+        final = finalize_git(tmp, "demo-feature", "main", "APPROVE", evidence)
+        assert final["exit_code"] == 0, final
+        assert final["merged"] is True
+
+        # loop branch gone, change landed on main
+        assert not gitops.branch_exists(tmp, "loop/demo-feature/1")
+        with open(os.path.join(tmp, "app.txt")) as fh:
+            assert "fixed" in fh.read()
+
+        return tmp
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _run_reject_flow():
+    tmp = tempfile.mkdtemp(prefix="acl-phases-rej-")
+    try:
+        providers = StubProviders(tmp)
+        gitops.auto_init(tmp)
+        setup_git(tmp, "rej", "main")
+        with patch("adversarial_common.runner.run_cli", providers.run_cli):
+            run_build("rej spec", "fake-dev", tmp, 60, "rej", providers)
+        final = finalize_git(tmp, "rej", "main", "REJECT", "")
+        assert final["exit_code"] == 0 and final["merged"] is False, final
+        msg = _git(tmp, "log", "-1", "--pretty=%s").stdout.strip()
+        assert msg.startswith("[REJECTED]"), msg
+        # loop branch still exists (not merged)
+        assert gitops.branch_exists(tmp, "loop/rej/1")
+        return tmp
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _run_arbiter():
+    tmp = tempfile.mkdtemp(prefix="acl-phases-arb-")
+    try:
+        providers = StubProviders(tmp)
+        with patch("adversarial_common.runner.run_cli", providers.run_cli):
+            arb = run_arbiter(
+                [{"id": "A1", "status": "disputed"}],
+                "fake-dev", "fake-review", "fake-judge", providers,
+            )
+        assert arb["exit_code"] == 0, arb
+        assert arb["verdict"] == "APPROVE"
+        assert arb["conditions"] == ["keep tests green"]
+        return tmp
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _run_retry_on_bad_json():
+    """review must retry once when the first JSON is malformed."""
+    tmp = tempfile.mkdtemp(prefix="acl-phases-bad-")
+    try:
+        calls = {"n": 0}
+
+        class BadProviders:
+            def run_cmd(self, cmd, stdin_text=None, timeout=600, cwd=None,
+                        role=None, project=None):
+                calls["n"] += 1
+                if calls["n"] == 1:
+                    return "this is not json at all", "", 0
+                return (json.dumps({
+                    "findings": [{
+                        "id": "A1", "severity": "minor", "file": "f",
+                        "line": 1, "summary": "s", "evidence": "e",
+                    }],
+                    "verdict": "APPROVE",
+                }), "", 0)
+
+        provider = StubProviders(tmp)
+        responses = BadProviders()
+        provider.run_cli = lambda *args, **kwargs: RunResult(
+            responses.run_cmd(
+                args[0], stdin_text=kwargs.get("stdin_text"),
+                timeout=kwargs.get("timeout", 600), cwd=kwargs.get("cwd"),
+                role="critic",
+            )
+        )
+        with patch("adversarial_common.runner.run_cli", provider.run_cli):
+            out = run_review("diff", "fake", provider, jsonio)
+        assert out["exit_code"] == 0, out
+        assert calls["n"] == 2  # one retry
+        return tmp
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _run_verdict_missing_fields_infra():
+    """A structurally empty verdict is EXIT_INFRA, never APPROVE/REJECT."""
+    tmp = tempfile.mkdtemp(prefix="acl-phases-empty-")
+    try:
+        class EmptyProviders:
+            def run_cmd(self, cmd, stdin_text=None, timeout=600, cwd=None,
+                        role=None, project=None):
+                return "{}", "", 0
+
+        provider = StubProviders(tmp)
+        responses = EmptyProviders()
+        provider.run_cli = lambda *args, **kwargs: RunResult(
+            responses.run_cmd(
+                args[0], stdin_text=kwargs.get("stdin_text"),
+                timeout=kwargs.get("timeout", 600), cwd=kwargs.get("cwd"),
+                role="critic",
+            )
+        )
+        with patch("adversarial_common.runner.run_cli", provider.run_cli):
+            out = run_review("diff", "fake", provider, jsonio)
+        assert out["exit_code"] == 1, out
+        assert out["infra"] is True, out
+        assert out["verdict"] not in ("APPROVE", "REJECT"), out
+        return tmp
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def _run_unrecoverable_verdict_blocks_approve():
+    """Persistent JSON decode failure is EXIT_INFRA; loop must not APPROVE."""
+    tmp = tempfile.mkdtemp(prefix="acl-phases-undec-")
+    try:
+        class UndecodableProviders:
+            def run_cmd(self, cmd, stdin_text=None, timeout=600, cwd=None,
+                        role=None, project=None):
+                return "not valid json at all, still not valid", "", 0
+
+        provider = StubProviders(tmp)
+        responses = UndecodableProviders()
+        provider.run_cli = lambda *args, **kwargs: RunResult(
+            responses.run_cmd(
+                args[0], stdin_text=kwargs.get("stdin_text"),
+                timeout=kwargs.get("timeout", 600), cwd=kwargs.get("cwd"),
+                role="critic",
+            )
+        )
+        with patch("adversarial_common.runner.run_cli", provider.run_cli):
+            out = run_review("diff", "fake", provider, jsonio)
+        assert out["exit_code"] == 1, out
+        assert out["infra"] is True, out
+        assert out["verdict"] != "APPROVE", out
+        return tmp
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+
+
+def test_verdict_missing_fields_infra():
+    _run_verdict_missing_fields_infra()
+
+
+def test_unrecoverable_verdict_blocks_approve():
+    _run_unrecoverable_verdict_blocks_approve()
+
+
+def test_v4_phases():
+    """pytest entry point — exercises every phase end to end."""
+    _run_full_flow()
+    _run_reject_flow()
+    _run_arbiter()
+    _run_retry_on_bad_json()
+    _run_verdict_missing_fields_infra()
+    _run_unrecoverable_verdict_blocks_approve()
+
+
+def main():
+    test_v4_phases()
+    print("OK: all v4 phase modules pass")
+
+
+if __name__ == "__main__":
+    main()

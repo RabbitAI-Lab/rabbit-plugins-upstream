@@ -1,0 +1,14 @@
+name: geoskill-precision-farming-zoning
+display_name: 精准农业管理分区
+description: |
+  多源数据标准化后用 K-means 聚类生成管理分区并给出每区建议。Standardizes multi-source layers, clusters them with K-means into management zones with per-zone advice.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-precision-farming-zoning.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - gis
+  - land-use
+  - machine-learning
+  - remote-sensing

@@ -1,0 +1,39 @@
+{
+  "zooms": {
+    "6": {
+      "count": 1,
+      "tiles": [
+        {
+          "x": 52,
+          "y": 24,
+          "path": "6\\52\\24.png",
+          "quadkey": "132100"
+        }
+      ]
+    },
+    "7": {
+      "count": 1,
+      "tiles": [
+        {
+          "x": 105,
+          "y": 48,
+          "path": "7\\105\\48.png",
+          "quadkey": "1321001"
+        }
+      ]
+    }
+  },
+  "total_tiles": 2,
+  "tile_size": 256,
+  "bbox": [
+    116.0,
+    39.0,
+    117.0,
+    40.0
+  ],
+  "source": "synthetic",
+  "zoom_levels": [
+    6,
+    7
+  ]
+}

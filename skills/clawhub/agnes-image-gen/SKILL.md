@@ -34,11 +34,18 @@ agent_created: true
 
 ## API Reference
 
-### Endpoint
+### Endpoint（双端点容灾）
 
-```
-POST https://apihub.agnes-ai.com/v1/images/generations
-```
+脚本自动按以下顺序尝试，前一个访问不了就切到下一个，**无需手动干预**：
+
+| 优先级 | Endpoint | 说明 |
+|--------|----------|------|
+| 1（主） | `https://apihub.agnes-ai.com/v1/images/generations` | 国际主端点 |
+| 2（容灾） | `https://apihub.agnes-ai.cn/v1/images/generations` | **国内容灾端点**：主端点 TCP 不可达时自动切换（国内网络访问 Agnes 更稳） |
+
+- 调用前会做轻量连通性探测（TCP 层，8s 超时），主端点不可达时**立即跳过**而非空等，再尝试国内网关。
+- 端点可达但请求失败（限速/5xx）会在该端点内重试，耗尽后才跳到下一端点。
+- 运行结束会打印「本次使用: <实际端点>」，方便确认走的是哪个。
 
 > 注意：文生图与图生图**共用同一端点** `/v1/images/generations`，不再使用 `/v1/images/edits`。
 
@@ -250,7 +257,7 @@ curl -s -X POST "https://apihub.agnes-ai.com/v1/images/generations" \
 ```bash
 curl -s -X POST "https://apihub.agnes-ai.com/v1/images/generations" \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer sk-8Rzd2yCbFzOi1vxojseH8C5D8w3u4aMdNWsPNzxk0G7339Cz" \
+  -H "Authorization: Bearer sk-8Rzd2yCbFzOi1vxojseH8C5D8w3aMdNWsPNzxk0G7339Cz" \
   -d '{
     "model": "agnes-image-2.1-flash",
     "prompt": "将天空替换为璀璨星空，银河清晰可见，深蓝色调，保留原主体与构图",

@@ -1,5 +1,5 @@
 ## Description: <br>
-Code Workflow guides agents through a staged code-change process covering research, planning, user review, test-driven implementation, and optional pull request evidence capture. <br>
+Code Workflow guides coding agents through a four-stage research, planning, user-review, and TDD implementation process for code changes, issue work, and pull requests with optional visual evidence. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,37 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers and engineering agents use this skill to structure non-trivial code changes, preserve research and plan artifacts, require explicit review before implementation, and apply TDD-oriented implementation and verification steps. <br>
+Developers and engineering agents use this skill to structure moderate or complex code changes: research the repository, write auditable plans, obtain explicit user review, implement with TDD, and prepare pull requests with supporting evidence when requested. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: A hook resource is described as advisory but can block execution when undecided plan markers are detected. <br>
-Mitigation: Review the hook behavior before enabling it, and either make the hook warning-only or document and accept its blocking behavior. <br>
-Risk: Broad plan and research search rules can read unrelated local planning documents into the agent context. <br>
-Mitigation: Limit searches to task-relevant issue numbers, explicit domain keywords, and configured project plan directories. <br>
-Risk: Strict workflow gates can slow or interrupt small changes when applied too broadly. <br>
-Mitigation: Use the skill for moderate or complex code changes, and rely on the documented trivial-task exception for simple one- or two-line edits. <br>
+Risk: The skill can guide an agent toward persistent repository changes such as plans, local indexes, branches, commits, issue comments, and pull requests. <br>
+Mitigation: Use it only in repositories where that level of agent authority is intended, and review plans before they are committed, posted, or used to start implementation. <br>
+Risk: Plan or research artifacts may contain private implementation details and can be routed to external memory or indexing receivers when optional RAG dispatch is enabled. <br>
+Mitigation: Avoid the optional RAG dispatch flag unless the receiver is trusted for the repository data, and keep sensitive projects on local file artifacts when possible. <br>
+Risk: GitHub issue comments, pull request bodies, and visual attachments may expose internal context outside the local workspace. <br>
+Mitigation: Require explicit user intent before posting externally or creating a pull request, and review generated content and captures for sensitive details. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/drumrobot/skills/code-workflow) <br>
-- [Skill manifest](SKILL.md) <br>
-- [Workflow steps](steps.md) <br>
-- [Implementation guidance](implement.md) <br>
-- [PR workflow](pr.md) <br>
-- [Release changelog](CHANGELOG.md) <br>
+- [Skill overview](artifact/SKILL.md) <br>
+- [Research, plan, review, and branch workflow](artifact/steps.md) <br>
+- [TDD implementation workflow](artifact/implement.md) <br>
+- [PR workflow with visual evidence](artifact/pr.md) <br>
+- [Plan and research pre-search obligation](artifact/plan-research-search.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with command snippets, workflow checklists, and file-oriented instructions] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands, checklists, code snippets, and PR body templates] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide creation of research and plan Markdown files, test code, Git commands, and pull request evidence when explicitly requested.] <br>
+**Other Properties Related to Output:** [May lead an agent to create or update workspace research files, plan files, task checklists, branches, commits, GitHub issue comments, and pull request content.] <br>
 
 ## Skill Version(s): <br>
-0.5.0 (source: server release metadata and CHANGELOG.md) <br>
+0.6.0 (source: server release metadata and CHANGELOG, released 2026-08-03) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

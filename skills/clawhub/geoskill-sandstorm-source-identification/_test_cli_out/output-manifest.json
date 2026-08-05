@@ -1,0 +1,99 @@
+{
+  "skill": "sandstorm-source-identification",
+  "skill_version": "1.0.0",
+  "command": "sandstorm-source-identification --bbox 80 40 81 41 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-02T20:59:41.837017Z",
+  "finished_at": "2026-08-02T20:59:42.030124Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "bbox": [
+      80.0,
+      40.0,
+      81.0,
+      41.0
+    ],
+    "threshold": 6.0,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\emission_potential.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        80.0,
+        40.0,
+        81.0,
+        41.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\source_mask.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        80.0,
+        40.0,
+        81.0,
+        41.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\source_contribution.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        80.0,
+        40.0,
+        81.0,
+        41.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\sandstorm_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "mean_potential": 0.03279862925410271,
+    "max_potential": 0.27560049295425415,
+    "source_pixels": 355,
+    "source_fraction": 0.086669921875,
+    "mean_contribution": 0.0005877541261725128
+  },
+  "software": {
+    "python": "3.12.10",
+    "skill": "sandstorm-source-identification"
+  },
+  "error": null
+}

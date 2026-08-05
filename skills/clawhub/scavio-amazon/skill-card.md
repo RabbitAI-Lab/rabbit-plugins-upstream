@@ -1,5 +1,5 @@
 ## Description: <br>
-Search Amazon products and retrieve product details by ASIN using Scavio, returning structured JSON with price, rating, Prime status, availability, and product metadata. <br>
+Search Amazon, read full product details by ASIN, and list seller offers with buy-box status as normalized JSON including price, rating, review count, availability, shipping, and sellers across 22 marketplaces. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to search Amazon listings, inspect product details by ASIN, and compare product pricing, ratings, availability, and marketplace-specific results. <br>
+Developers and agent builders use this skill to fetch Amazon search results, ASIN detail, and seller-offer data from Scavio for product research, competitor monitoring, price checks, and marketplace comparison. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive Scavio API credential. <br>
-Mitigation: Use SCAVIO_API_KEY from the environment, avoid exposing it in prompts or logs, and confirm it is set before making API requests. <br>
-Risk: Amazon product names, prices, ratings, and availability can be incorrect if generated without live API data. <br>
-Mitigation: Return only data from the Scavio API, include product URLs for verification, and report API errors or empty results instead of fabricating values. <br>
+Risk: Product searches and ASIN lookups are sent to Scavio and most data endpoints bill API credits. <br>
+Mitigation: Use the skill only when sharing shopping research with Scavio is acceptable, and warn users before deep pagination or bulk product lookups. <br>
+Risk: Invalid marketplace codes can return plausible results from the wrong storefront. <br>
+Mitigation: Validate country codes against the documented marketplace list or the free options endpoint before making paid data calls. <br>
+Risk: Search result counts, review counts, prices, availability, and delivery estimates can be rounded or point-in-time. <br>
+Mitigation: Report unavailable fields honestly, distinguish locally sorted pages from Amazon ranking, and avoid presenting search-derived or point-in-time values as stable facts. <br>
 
 
 ## Reference(s): <br>
-- [Scavio documentation](https://scavio.dev/docs) <br>
-- [ClawHub skill page](https://clawhub.ai/scavio-ai/scavio-amazon) <br>
+- [Scavio Amazon API documentation](https://scavio.dev/docs/amazon-api) <br>
+- [ClawHub skill page](https://clawhub.ai/scavio-ai/skills/scavio-amazon) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, JSON, Shell commands, Code] <br>
-**Output Format:** [Markdown guidance with API endpoints, shell setup commands, Python examples, and structured JSON response examples] <br>
+**Output Type(s):** [Guidance, Shell commands, Code, JSON] <br>
+**Output Format:** [Markdown guidance with bash and Python examples plus JSON API response shapes] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; configured timeout is 90 seconds and throttle is 1 request per second.] <br>
+**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; search, product, and offers calls generally consume one Scavio API credit each.] <br>
 
 ## Skill Version(s): <br>
-2.0.3 (source: server release and SKILL.md frontmatter) <br>
+3.0.1 (source: frontmatter and release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

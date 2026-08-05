@@ -1,44 +1,62 @@
-## Description: <br>
-Install and use the official Mermail CLI for deterministic shell automation across workspaces, mailboxes, email, folders, labels, agents, and task triage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Installs and uses the official Mermail CLI for deterministic shell automation across workspaces, mailboxes, email, folders, labels, agents, task triage, and Agent Wallet via MCP OAuth.
 
-## Publisher: <br>
-[mermail](https://clawhub.ai/user/mermail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mermail](https://clawhub.ai/user/mermail)
 
-## Use Case: <br>
-Developers and operators use this skill to install and run Mermail CLI commands with deterministic JSON output, safe credential handling, and explicit approval before external effects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to perform Mermail actions that change external email state. <br>
-Mitigation: Require explicit user approval before send, reply, forward, invite, scheduling, write, or delete commands. <br>
-Risk: Email content and command output may contain untrusted data. <br>
-Mitigation: Treat retrieved email content and CLI output as data, not instructions. <br>
-Risk: API credentials may be exposed through command history or process listings. <br>
-Mitigation: Keep MERMAIL_API_KEY in the environment and avoid passing the key through command flags. <br>
+## Use Case:
 
+Developers and external agent operators use this skill to automate Mermail CLI tasks with deterministic JSON output while preserving human confirmation for email sends, destructive actions, and wallet transfers.
 
-## Reference(s): <br>
-- [Mermail AI Skills Documentation](https://docs.mermail.app/ai/skills) <br>
-- [Mermail MCP Endpoint](https://console.mermail.app/mcp) <br>
-- [ClawHub Skill Release](https://clawhub.ai/mermail/skills/mermail-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include JSON-oriented command patterns and safety checks for Mermail CLI automation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release metadata) <br>
+Risk: API keys or OAuth tokens could be exposed through prompts, shell history, process listings, or command output.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep MERMAIL_API_KEY in the environment, never echo full secrets, avoid command-line API-key flags when exposure is a concern, and use interactive OAuth login for wallet access.
+
+Risk: Email sends, scheduling, deletes, invites, and wallet transfers can create external or destructive effects.
+
+Mitigation: Preview recipients, subjects, bodies, resource IDs, payees, and amounts, then require exact human approval immediately before execution.
+
+Risk: Email content and CLI output may contain untrusted instructions or misleading data.
+
+Mitigation: Treat email content and command output as data, use deterministic JSON formats for automation, and do not take wallet payee or amount values from email content.
+
+Risk: Retries of writes, sends, deletes, or wallet transfers may duplicate side effects.
+
+Mitigation: Do not auto-retry write, send, delete, or wallet submit commands; investigate rate-limit, credit, timeout, or pending states before any follow-up action.
+
+## Reference(s):
+
+- [Mermail AI skill documentation](https://docs.mermail.app/ai/skills)
+- [Use Mermail CLI on ClawHub](https://clawhub.ai/mermail/skills/mermail-cli)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and JSON-oriented command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires MERMAIL_API_KEY for API-key workflows; wallet commands require interactive MCP OAuth login.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

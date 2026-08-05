@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/servicepack",
   "slug": "servicepack",
   "ownerHandle": null,
-  "version": "1.2.8",
-  "updatedAt": 1785082352745,
-  "contentHash": "67551e649dd870dd7dbc548f7bec740dbb78468f6fa6287c8458afe9d7524571",
-  "fetchedAt": "2026-07-26T18:03:10.996Z"
+  "version": "1.2.15",
+  "updatedAt": 1785615971625,
+  "contentHash": "609c9781875b7b060e96588f7fe0ec199b7ecb6d95b56b3f030bb64ea2d6f7f9",
+  "fetchedAt": "2026-08-05T10:20:48.865Z"
 }

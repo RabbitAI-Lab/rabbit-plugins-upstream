@@ -11,29 +11,29 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and maintainers use this skill to guide new contributors through staged codebase onboarding challenges covering architecture, domain logic, interfaces, patterns, and hardening. <br>
+Developers and engineering teams use this skill to guide new contributors through staged codebase onboarding, including architecture, domain logic, interfaces, patterns, and hardening topics. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Agent-proposed file changes during onboarding may be incorrect or unsuitable for the target codebase. <br>
-Mitigation: Review any proposed file changes separately before applying or relying on them. <br>
+Risk: The skill may activate during contributor onboarding discussions and track onboarding progress or answer history. <br>
+Mitigation: Install and enable it only where structured onboarding and progress tracking are desired. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-gauntlet-onboard) <br>
-- [Skill homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet) <br>
+- [Claude Night Market gauntlet plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/gauntlet) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and progress prompts] <br>
+**Output Type(s):** [text, guidance] <br>
+**Output Format:** [Markdown-style conversational guidance and progress summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; prompts the agent to load, present, and report onboarding progress.] <br>
+**Other Properties Related to Output:** [Tracks onboarding stage, challenge attempts, mastery, and answer history when used in the intended workflow.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -225,9 +225,9 @@ async function pollDeviceFlow({ deviceCode, interval, expiresIn }) {
     const data = await tokenResp.json().catch(() => ({}));
     if (tokenResp.ok && data.access_token) {
       const jwtPayload = decodeJwtPayload(data.access_token);
-      let opcId = jwtPayload?.opcId ?? jwtPayload?.sub ?? "";
-      if (!opcId) {
-        opcId = (await fetchUserinfo(data.access_token)) ?? data.opc_id ?? "";
+      let userId = jwtPayload?.userId ?? jwtPayload?.sub ?? "";
+      if (!userId) {
+        userId = (await fetchUserinfo(data.access_token)) ?? data.user_id ?? "";
       }
       const t = {
         access_token: data.access_token,
@@ -236,7 +236,7 @@ async function pollDeviceFlow({ deviceCode, interval, expiresIn }) {
         refresh_expires_at:
           Date.now() + (data.refresh_expires_in ?? 30 * 24 * 3600) * 1000,
         scope: data.scope,
-        opc_id: opcId,
+        user_id: userId,
         obtained_at: new Date().toISOString(),
       };
 
@@ -263,7 +263,7 @@ async function pollDeviceFlow({ deviceCode, interval, expiresIn }) {
       out({
         ok: true,
         stage: "logged_in",
-        opc_id: opcId,
+        user_id: userId,
         token_expires_at: new Date(t.expires_at).toISOString(),
         storage: process.platform === "darwin"
           ? `macOS Keychain (service=openclaw-opphub-uat, account=opphub:default)`
@@ -271,7 +271,7 @@ async function pollDeviceFlow({ deviceCode, interval, expiresIn }) {
         cron_auto_setup: cronSpawn.action ?? "unknown",
         cron_check: cronSpawn.cron_check ?? null,
         next_steps: {
-          bot_prompt: `✅ 登录成功！OPC ID: ${opcId}
+          bot_prompt: `✅ 登录成功！OPC ID: ${userId}
 
 现在可以试试:
 · 「偶合商机」 — 看捰合市场
@@ -290,6 +290,7 @@ async function pollDeviceFlow({ deviceCode, interval, expiresIn }) {
     if (data.error === "slow_down") { pollInterval += 5000; continue; }
     if (data.error === "expired_token") {
       clearStartState();
+      err("device_flow_expired", "device flow 超时 (请重新跑 login-start)", {
         next_steps: { bot_prompt: "@bot 重新跑偶合登陆" },
       });
     }
@@ -307,13 +308,13 @@ async function fetchUserinfo(accessToken) {
     });
     if (!r.ok) return null;
     const u = await r.json();
-    return u.opcId ?? u.opc_id ?? null;
+    return u.userId ?? u.user_id ?? null;
   } catch {
     return null;
   }
 }
 
-// 不调 userinfo API (server 端 /api/oauth/userinfo 是否存在未验, plugin 走的是 JWT 解 opcId)
+// 不调 userinfo API (server 端 /api/oauth/userinfo 是否存在未验, plugin 走的是 JWT 解 userId)
 function decodeJwtPayload(token) {
   try {
     const payload = token.split(".")[1];
@@ -340,7 +341,7 @@ async function main() {
   function resolveOpcId(t) {
     if (!t?.access_token) return null;
     const payload = decodeJwtPayload(t.access_token);
-    return payload?.opcId ?? payload?.sub ?? null;
+    return payload?.userId ?? payload?.sub ?? null;
   }
 
   // 读 package.json 的 version
@@ -428,10 +429,26 @@ async function main() {
     //      不是 server 团队活, 是 skill 端没去查
     const defaultChannel = await getDefaultChannel();
 
+    let knowledgeStatus = { entries: 0, lastKnowledgeAt: null };
+    try {
+      const { fileURLToPath } = await import("node:url");
+      const { dirname } = await import("node:path");
+      const skillDir = dirname(dirname(fileURLToPath(import.meta.url)));
+      const { stdout: kStdout } = await execpFile("node", [join(skillDir, "bin/opphub-knowledge-status.js"), "--json"]);
+      const kObjStart = kStdout.indexOf("{");
+      if (kObjStart >= 0) {
+        const k = JSON.parse(kStdout.slice(kObjStart));
+        knowledgeStatus = {
+          entries: k.knowledgeCount ?? k.entries?.length ?? 0,
+          lastKnowledgeAt: k.lastKnowledgeAt ?? null,
+        };
+      }
+    } catch {}
+
     out({
       ok: true,
       status: s,
-      opc_id: resolveOpcId(t),
+      user_id: resolveOpcId(t),
       expires_at: t ? new Date(t.expires_at).toISOString() : null,
       obtained_at: t?.obtained_at ?? null,
       refresh_expires_at: t?.refresh_expires_at ? new Date(t.refresh_expires_at).toISOString() : null,
@@ -448,10 +465,7 @@ async function main() {
           : "plugin 未装 · 推送走 skill 自带 cron(每天 09:00 检查 skill 版本, 不查撮合)",
       },
       cron_check: await getCronCheck(),
-      knowledge_status: {
-        entries: 0,           // 后续调 bin/opphub-knowledge-status 填 (server 端 GET /api/knowledge)
-        lastKnowledgeAt: null,
-      },
+      knowledge_status: knowledgeStatus,
       link_health: {
         ws_connected: false,  // 待 plugin v0.6.x 上报 server ws 状态后填
         cron_ok: null,
@@ -602,7 +616,7 @@ async function main() {
       out({
         ok: true,
         stage: "already_logged_in",
-        opc_id: resolveOpcId(t),
+        user_id: resolveOpcId(t),
         expires_at: new Date(t.expires_at).toISOString(),
         status_snapshot: {
           plugin: plugin.installed

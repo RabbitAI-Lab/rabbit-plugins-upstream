@@ -1,43 +1,60 @@
-## Description: <br>
-HF Daily Deep Researcher coordinates multi-agent workflows that scan Hugging Face Daily Papers and arXiv, prioritize relevant papers, and generate periodic or deep-dive research reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+HuggingFace Daily Papers and arXiv multi-agent research system that runs light scanning or deep research workflows to find papers, analyze priority work, and produce research reports.
 
-## Publisher: <br>
-[tomfoxxxx](https://clawhub.ai/user/tomfoxxxx) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tomfoxxxx](https://clawhub.ai/user/tomfoxxxx)
 
-## Use Case: <br>
-Researchers and developers use this skill to monitor configured AI research areas, identify high-priority new papers, and produce weekly, monthly, or comprehensive Markdown research reports with analysis and validation notes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may read USER.md, MEMORY.md, and recent memory files to infer research interests, then persist derived preferences locally. <br>
-Mitigation: Review config.json before use, remove shipped profile values, and run it only in workspaces where those memory files may be used for paper-tracking personalization. <br>
-Risk: The artifact includes Feishu cloud-report behavior and a configured folder token, while cloud behavior is under-disclosed in the release evidence. <br>
-Mitigation: Remove or replace the folder token, keep cloud_upload disabled unless publication is intended, and require explicit approval before uploading reports. <br>
-Risk: Unattended cron execution could repeatedly scan, store, and potentially publish research reports without fresh scope confirmation. <br>
-Mitigation: Avoid unattended cron use until scan scope, storage location, and upload controls are reviewed and documented for the deployment. <br>
+## Use Case:
 
+Researchers, developers, and research teams use this skill to monitor HuggingFace Daily Papers and arXiv for new work in configured research areas, then produce weekly, monthly, or deep-dive Markdown research reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tomfoxxxx/skills/hf-daily-deep-researcher) <br>
-- [arXiv API](https://export.arxiv.org/api/query?search_query={query}&max_results=50) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown research reports with structured tables, paper analyses, trend summaries, validation notes, and occasional configuration or command guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save local report and history files; Feishu cloud publication should remain explicit and disabled unless intentionally configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.1.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can read workspace profile, memory, and recent memory files during initialization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review init.py before running it and avoid initialization unless you consent to using local profile and memory context for configuration.
+
+Risk: Configuration may include personal research focus, local history paths, and a Feishu folder token.
+
+Mitigation: Review and clear config.json before use, keep cloud_upload disabled unless report publishing is intended, and rotate or remove any folder token not meant for the release environment.
+
+Risk: Recurring runs and Feishu publishing can repeatedly generate and send research reports without enough up-front review.
+
+Mitigation: Do not enable cron or cloud publishing until destination, retention, and review expectations are understood.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tomfoxxxx/skills/hf-daily-deep-researcher)
+- [Hugging Face Daily Papers API](https://huggingface.co/api/daily_papers?date=YYYY-MM-DD)
+- [arXiv API query endpoint](https://export.arxiv.org/api/query?search_query=all:KEYWORD&sortBy=submittedDate&sortOrder=descending&max_results=50)
+- [arXiv HTML paper view](https://arxiv.org/html/{arxiv_id})
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports, structured research notes, JSON configuration updates, and occasional shell commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save reports locally and can upload to Feishu when explicitly configured.]
+
+## Skill Version(s):
+
+5.2.5 (source: server release metadata; artifact frontmatter reports 5.2.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

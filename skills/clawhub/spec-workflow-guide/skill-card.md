@@ -1,44 +1,52 @@
-## Description: <br>
-Guides agents through requirements, technical design, and task planning before medium-to-large coding changes, especially when work spans modules or acceptance criteria are unclear. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when medium-to-large changes need explicit requirements, technical design, and task planning before implementation, especially for multi-module work, unclear acceptance criteria, or architecture-heavy requests.
 
-## Publisher: <br>
-[binggg](https://clawhub.ai/user/binggg) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[binggg](https://clawhub.ai/user/binggg)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and engineering agents use this skill to decide when a larger change needs explicit requirements, design, and task planning before implementation. It guides the agent through concise, reviewable Markdown planning artifacts with user confirmation between phases.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill can slow larger coding work by asking the agent to produce requirements, design, and task documents before implementation.
+
+Mitigation: Use it for medium-to-large or unclear changes, and skip the full workflow for small, low-risk tasks with clear acceptance criteria.
+
+Risk: Planning artifacts may encode incorrect assumptions if the original request is underspecified.
+
+Mitigation: Require user confirmation before moving from requirements to design, from design to tasks, and from tasks to implementation.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and engineering teams use this skill to have an agent clarify requirements, document design decisions, and prepare implementation tasks before starting substantial or ambiguous coding work. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can slow larger tasks by requiring requirements, design, and task confirmation before coding. <br>
-Mitigation: Apply it to medium-to-large or unclear work, and skip the full workflow for small, low-risk changes with clear acceptance criteria. <br>
-Risk: Planning documents can capture incorrect scope when the request is underspecified. <br>
-Mitigation: Ask follow-up questions for core product behavior and require confirmation before moving from requirements to design, tasks, and execution. <br>
+**Output Format:** [Markdown planning documents and concise agent guidance]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/binggg/skills/spec-workflow-guide) <br>
-- [CloudBase main entry](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/SKILL.md) <br>
-- [Spec workflow raw source](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/spec-workflow/SKILL.md) <br>
-- [UI design sibling reference](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/ui-design/SKILL.md) <br>
-- [Data model sibling reference](https://cnb.cool/tencent/cloud/cloudbase/cloudbase-skills/-/git/raw/main/skills/cloudbase/references/data-model-creation/SKILL.md) <br>
+**Other Properties Related to Output:** [Produces requirements.md, design.md, and tasks.md under specs/<spec_name>/ when the full workflow is appropriate.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown planning documents and implementation checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce requirements.md, design.md, and tasks.md under a specs directory before implementation.] <br>
+1.18.26 (source: server release metadata; artifact frontmatter reports 2.25.9)
 
-## Skill Version(s): <br>
-1.18.14 (source: ClawHub release evidence; artifact frontmatter reports 2.24.1) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

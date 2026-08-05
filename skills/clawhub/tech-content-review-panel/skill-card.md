@@ -1,5 +1,5 @@
 ## Description: <br>
-Reviews finished tech, AI, or industry deep-analysis drafts with an eight-role expert panel that verifies facts and originality, checks style and depth, and produces publish-ready revision guidance. <br>
+Reviews finished tech, AI, or industry deep-analysis drafts with an eight-role expert panel that checks facts, originality, style red lines, structure, professional depth, and distribution fit before publication. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Writers, editors, analysts, and content strategists use this skill to review completed tech, AI, data, or industry deep-analysis drafts before publication. It provides a structured panel critique, fact and originality checks, style red-line review, depth assessment, distribution feedback, and prioritized revision guidance. <br>
+External authors, editors, and content strategists use this skill to review finished tech, AI, or industry research drafts before publication. It provides fact and originality checks, reader-role critique, professional-depth assessment, and distribution feedback in an evaluate-revise-recheck loop. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Fact and originality checks may use web searches with facts or distinctive phrasing from a draft. <br>
-Mitigation: Avoid using the skill on confidential unpublished material unless external search exposure is acceptable, or remove sensitive details before review. <br>
-Risk: Editorial recommendations or fact-check results can be incomplete or mistaken if source evidence is weak. <br>
-Mitigation: Treat to-verify items and must-fix recommendations as review inputs, and confirm important claims against reliable sources before publication. <br>
+Risk: Fact claims in a draft may be stale, unverifiable, or unsupported. <br>
+Mitigation: Verify foundational numbers, company names, dates, policies, and events against traceable online sources; mark unresolved claims as to-verify and do not pass the draft until they are resolved. <br>
+Risk: Originality checks may send draft arguments or distinctive phrasing through web search, which can be inappropriate for confidential drafts. <br>
+Mitigation: Use the skill only for drafts that are suitable for web-assisted review, or remove confidential details before running fact and originality checks. <br>
+Risk: Distribution recommendations may conflict with professional restraint and can over-optimize for hooks. <br>
+Mitigation: Surface hook-versus-credibility tradeoffs as explicit author-decision items instead of forcing a single recommendation. <br>
 
 
 ## Reference(s): <br>
-- [Tech Content Review Panel on ClawHub](https://clawhub.ai/haiyangchenbj/skills/tech-content-review-panel) <br>
-- [Six Depth Moves](references/depth-playbook.md) <br>
+- [Professional Depth Playbook](references/depth-playbook.md) <br>
+- [ClawHub skill page](https://clawhub.ai/haiyangchenbj/skills/tech-content-review-panel) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Structured Markdown review with role-labeled sections, pass or reject status, issue categories, and prioritized revision guidance.] <br>
+**Output Type(s):** [Text, Markdown, Guidance] <br>
+**Output Format:** [Markdown-style structured review with pass or reject gates, per-role critique, and prioritized revision items] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include fact and originality verification notes, style red-line findings, depth-move coverage, distribution feedback, and author-decision tradeoffs.] <br>
+**Other Properties Related to Output:** [Includes must-fix, suggested, optional, and author-decision categories; may include source-backed fact and originality findings.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release metadata) <br>
+1.1.0 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

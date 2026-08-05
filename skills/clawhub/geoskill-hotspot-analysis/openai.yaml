@@ -1,0 +1,12 @@
+name: geoskill-hotspot-analysis
+display_name: 热点分析
+description: |
+  Getis-Ord Gi*热点分析+核密度估计+多尺度显著性检验
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-hotspot-analysis.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - remote-sensing

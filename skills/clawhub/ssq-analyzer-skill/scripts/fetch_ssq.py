@@ -9,6 +9,7 @@ import json
 import os
 import sqlite3
 import sys
+import time
 from datetime import datetime
 
 import requests
@@ -71,6 +72,8 @@ def fetch_draws(issue_count=MAX_PER_PAGE):
     """从 cwl.gov.cn 拉取开奖数据"""
     params = {"name": "ssq", "issueCount": issue_count}
     headers = {"User-Agent": "SSQAnalyzer/1.0"}
+    # 请求间隔保护，避免触发平台限流
+    time.sleep(1)
     resp = requests.get(CWL_API, params=params, headers=headers, timeout=20)
     resp.raise_for_status()
     data = resp.json()

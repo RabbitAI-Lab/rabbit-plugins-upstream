@@ -1,0 +1,40 @@
+{
+  "method": "dos",
+  "sensor": "generic",
+  "solar_zenith_deg": 30.0,
+  "dark_object_percentile": 1.0,
+  "bands": [
+    {
+      "band_index": 0,
+      "band_name": "blue",
+      "wavelength_um": 0.48,
+      "esun": 1970.0,
+      "dn_dark": 4302.02931640625,
+      "rho_dark": 0.07921845724887941
+    },
+    {
+      "band_index": 1,
+      "band_name": "green",
+      "wavelength_um": 0.56,
+      "esun": 1842.0,
+      "dn_dark": 4028.0515795898436,
+      "rho_dark": 0.07932765900285227
+    },
+    {
+      "band_index": 2,
+      "band_name": "red",
+      "wavelength_um": 0.66,
+      "esun": 1547.0,
+      "dn_dark": 1974.089686279297,
+      "rho_dark": 0.046290919430054485
+    },
+    {
+      "band_index": 3,
+      "band_name": "nir",
+      "wavelength_um": 0.86,
+      "esun": 951.0,
+      "dn_dark": 455.9716857910156,
+      "rho_dark": 0.017393084201820157
+    }
+  ]
+}

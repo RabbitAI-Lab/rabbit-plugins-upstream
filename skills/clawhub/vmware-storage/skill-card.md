@@ -1,5 +1,5 @@
 ## Description: <br>
-Use this skill to manage VMware storage tasks such as datastore browsing, deployable image scans, iSCSI target configuration, and vSAN health and capacity checks. <br>
+Use this skill whenever the user needs to manage VMware storage, including datastores, iSCSI targets, and vSAN clusters. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, infrastructure engineers, and VMware administrators use this skill to inspect datastores, find deployable images, configure iSCSI targets, and review vSAN health and capacity from an agent workflow. <br>
+Developers and infrastructure operators use this skill to inspect VMware storage, find datastore images, manage iSCSI targets, and check vSAN health or capacity through CLI and MCP workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can change VMware storage configuration, including iSCSI targets, which may affect host or datastore availability. <br>
-Mitigation: Restrict use to VMware administrators, use a dedicated least-privilege vSphere account, review policy gates, and run dry-run before iSCSI changes. <br>
-Risk: Credentials and local audit logs may contain sensitive operational data. <br>
-Mitigation: Keep ~/.vmware-storage/.env at 600 permissions or inject secrets from a manager, and treat ~/.vmware/audit.db as sensitive operational data. <br>
+Risk: VMware storage operations can affect production datastores, iSCSI targets, or vSAN capacity. <br>
+Mitigation: Use minimum-needed VMware RBAC, explicitly verify the target vCenter or ESXi host, and prefer dry-run before state-changing iSCSI operations. <br>
+Risk: Credential material may be stored in the local vmware-storage environment file. <br>
+Mitigation: Keep ~/.vmware-storage/.env locked down or use a secret manager, and avoid storing passwords in shared configuration files. <br>
+Risk: Diagnostic shortcuts such as doctor --skip-auth can bypass normal connectivity and authentication checks. <br>
+Mitigation: Treat skipped-auth diagnostics as last-resort troubleshooting, not as proof that a target is safe to operate on. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-storage) <br>
-- [Project homepage](https://github.com/zw008/VMware-Storage) <br>
+- [Project homepage](https://github.com/vmware-skills/VMware-Storage) <br>
 - [Setup Guide](references/setup-guide.md) <br>
 - [CLI Reference](references/cli-reference.md) <br>
 - [VMware Storage Capabilities](references/capabilities.md) <br>
-- [Operating vmware-storage with a local / small model](references/agent-guardrails.md) <br>
+- [Agent Guardrails](references/agent-guardrails.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI/MCP workflow guidance] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls, Markdown] <br>
+**Output Format:** [Markdown guidance with CLI commands and MCP tool call recommendations] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes local VMware storage administration guidance; write operations should use dry-run, policy gates, and audit logging.] <br>
+**Other Properties Related to Output:** [May reference JSON-style MCP result envelopes for datastore, iSCSI, and vSAN operations.] <br>
 
 ## Skill Version(s): <br>
-1.8.8 (source: server release evidence) <br>
+1.8.9 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

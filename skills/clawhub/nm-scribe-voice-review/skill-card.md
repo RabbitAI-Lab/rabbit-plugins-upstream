@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Writers, editors, and agents use this skill to review generated prose against a voice profile, automatically fix hard failures, and present advisory prose and craft recommendations for user decisions. <br>
+Developers, writers, and content teams use this skill to review generated or existing prose against a voice profile, separate hard failures from advisory feedback, and apply selected improvements before saving the final text. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can automatically modify generated text when it detects hard failures. <br>
-Mitigation: Review the diff and final text before publishing, and confirm automatic hard-failure edits are acceptable for the document. <br>
-Risk: Learning mode can save local review snapshots under the user's voice profile directory. <br>
-Mitigation: Confirm whether learning mode is enabled and where snapshots are stored before using the skill on important or confidential text. <br>
-Risk: Advisory prose and craft recommendations may not match the author's intent. <br>
-Mitigation: Treat advisory tables as suggestions and rely on the user's accept, reject, or rewrite decisions before finalizing text. <br>
+Risk: Broad review-related triggers may activate the skill on drafts the user did not intend to process. <br>
+Mitigation: Install only when the user is comfortable with this review workflow and confirm the target draft before running it. <br>
+Risk: Automatic hard-failure fixes can change prose before advisory review. <br>
+Mitigation: Review the reported fixes and final diff before relying on or publishing the saved text. <br>
+Risk: Learning mode can save additional draft snapshots that may contain sensitive or proprietary text. <br>
+Mitigation: Avoid sensitive drafts unless storage locations and retention expectations are understood. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-voice-review) <br>
-- [Scribe plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
+- [Claude Night Market scribe plugin](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown advisory tables and edited text] <br>
+**Output Type(s):** [text, markdown, guidance, files] <br>
+**Output Format:** [Markdown advisory tables, user decision prompts, prose edits, and saved text files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May apply hard-failure edits before presenting advisory review decisions; may save snapshots when learning mode is enabled.] <br>
+**Other Properties Related to Output:** [May auto-fix hard failures, present advisory changes for user choice, save final text, and optionally save learning snapshots.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: server release metadata; artifact frontmatter reports 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

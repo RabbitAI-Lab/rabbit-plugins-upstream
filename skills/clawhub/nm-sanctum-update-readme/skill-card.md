@@ -11,33 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and documentation maintainers use this skill to restructure a README after meaningful project changes, using repository context, language detection, exemplar research, and review steps to guide edits. <br>
+Developers and maintainers use this skill to restructure and refresh a repository README after project changes, using language detection, exemplar research, outline alignment, README edits, and final verification. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad documentation and research triggers may activate the workflow for requests that are not intended to update a README. <br>
-Mitigation: Confirm the target file and README scope before allowing edits. <br>
-Risk: README restructuring can introduce inaccurate claims, stale links, or misleading guidance. <br>
-Mitigation: Review the README diff, verify links and citations, and keep claims grounded in repository evidence before relying on the output. <br>
+Risk: The skill may edit README.md based on broad documentation triggers. <br>
+Mitigation: Use it only for intended README restructuring work and review the resulting diff before committing. <br>
+Risk: The workflow may use web research for public README examples. <br>
+Mitigation: Check exemplar citations and ensure adopted README patterns are supported by repository evidence. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-update-readme) <br>
-- [Sanctum plugin homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
-- [Language Audit Patterns](modules/language-audit.md) <br>
-- [Exemplar Research Patterns](modules/exemplar-research.md) <br>
+- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown prose, README edits, command snippets, and verification notes] <br>
+**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
+**Output Format:** [Markdown guidance with command snippets and README edits] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May edit README.md or a specified documentation file and may include citations from exemplar research.] <br>
+**Other Properties Related to Output:** [Produces a revised README workflow output and a verification summary; installers should review the resulting diff before committing.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter lists 1.9.8) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

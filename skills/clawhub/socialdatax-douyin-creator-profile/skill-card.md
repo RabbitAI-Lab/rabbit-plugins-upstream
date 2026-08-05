@@ -1,44 +1,59 @@
-## Description: <br>
-用于抖音达人数据、抖音达人信息、账号资料、创作者画像、主页信息和粉丝规模查询，覆盖 Douyin creator profiles through SocialDataX. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents look up public Douyin creator profile data, including account basics, creator positioning, homepage information, and audience scale, through SocialDataX.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External agents and developers use this skill to look up Douyin creator profile data from SocialDataX by sec_user_id or profile URL, then report available account basics, creator positioning, audience scale, and profile facts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a SOCIALDATAX_API_KEY and sends lookup parameters to the SocialDataX service. <br>
-Mitigation: Confirm trust in the SocialDataX npm package and service before installation, and configure the API key only in an environment where this data sharing is acceptable. <br>
-Risk: API calls may consume SocialDataX account credits. <br>
-Mitigation: Use specific lookup parameters, check account balance before repeated use, and avoid repeated retries for insufficient-balance errors. <br>
-Risk: Returned profile data can be incomplete or unavailable for some Douyin creators. <br>
-Mitigation: Report only fields present in the response and keep profile facts separate from any strategic interpretation. <br>
+## Use Case:
 
+External users and developers use this skill to retrieve public Douyin creator profile facts by sec_user_id, profile URL, short link, or share text. It is suited for profile lookup, audience-scale checks, and separating returned profile facts from later strategic interpretation.
 
-## Reference(s): <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-creator-profile) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/devinchen2014) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or text with shell command examples; executed SocialDataX calls return JSON profile data.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only lookup output; profile fields may include names, platform IDs, bio, verification, follower counts, following counts, received likes, IP location, and gender when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: The skill relies on a SocialDataX API key and may consume paid balance or credits during repeated profile lookups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when SocialDataX usage is intended, keep SOCIALDATAX_API_KEY scoped to the correct account, and review billing or balance behavior before repeated use.
+
+Risk: Returned creator profile data is third-party API data and may be incomplete, stale, or unsuitable for unsupported inferences.
+
+Mitigation: Report profile fields as returned facts, preserve API errors, and separate factual profile data from any strategic interpretation.
+
+Risk: Insufficient-balance responses can trigger repeated failed calls if retried blindly.
+
+Mitigation: Do not retry insufficient-balance errors repeatedly; show the recharge URL exactly as returned and continue only after the user confirms recharge.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-creator-profile)
+- [devinchen2014 publisher profile](https://clawhub.ai/user/devinchen2014)
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY and node/npm; profile lookups use either sec_user_id or profile-url input.]
+
+## Skill Version(s):
+
+0.1.17 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

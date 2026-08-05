@@ -1,5 +1,5 @@
 ## Description: <br>
-Governed Nutanix Prism Central v4 operations for estate health, inventory, VM lifecycle, storage, networking, data protection, alerts, LCM upgrades, capacity forecasting, and RCA through a 51-tool MCP and CLI surface. <br>
+Nutanix AIops enables agents to inspect and operate Nutanix Prism Central v4 estates across clusters, VMs, storage, networking, data protection, alerts, LCM, capacity, diagnostics, and RCA with governed CLI and MCP workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,25 +11,23 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and infrastructure operators use this skill to inspect, diagnose, and operate Nutanix Prism Central v4 estates from an agent workflow. It is intended for Nutanix environments only and includes both read-only diagnostics and write-capable maintenance workflows. <br>
+Infrastructure operators, SREs, and developers use this skill to diagnose Nutanix estates, triage alerts, forecast capacity, and perform governed VM, storage, network, DR, and lifecycle operations through Prism Central v4. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill exposes powerful Prism Central write actions without an in-skill approval or read-only policy gate. <br>
-Mitigation: Install it with a deliberately scoped Prism Central account; start with a read-only Viewer role and use write-capable credentials only for controlled maintenance contexts. <br>
-Risk: High-risk operations can delete, migrate, restore, fail over, or update infrastructure resources. <br>
-Mitigation: Use the documented dry-run previews, CLI double confirmation, ETag handling, and audit annotations before running destructive or state-changing actions. <br>
-Risk: Secrets and local audit or undo databases may contain sensitive operational information. <br>
-Mitigation: Protect NUTANIX_AIOPS_MASTER_PASSWORD as a secret, avoid the legacy plaintext password fallback, and review handling of audit.db and undo.db under the Nutanix AIops home directory. <br>
-Risk: Some behavior is validated against mocked v4 REST responses and still needs live verification for production confidence. <br>
-Mitigation: Run nutanix-aiops doctor and perform live validation in a Nutanix Community Edition or controlled Prism Central environment before relying on LCM update, PD failover, or ESXi VM listing paths. <br>
+Risk: The skill can expose destructive Nutanix Prism Central operations without a built-in approval or read-only control. <br>
+Mitigation: Start with a dedicated read-only Prism Central account and enable write-capable credentials only for controlled maintenance workflows with clear human approval outside the skill. <br>
+Risk: The skill stores sensitive local state under ~/.nutanix-aiops/. <br>
+Mitigation: Protect ~/.nutanix-aiops/, prefer the encrypted credential store, and avoid long-lived environment-variable secrets where possible. <br>
+Risk: High-impact infrastructure changes can affect VMs, storage, networking, data protection, and lifecycle management. <br>
+Mitigation: Use dry-run previews where supported, confirm the exact target resource, and keep write permissions scoped to the operator's intended maintenance window. <br>
 
 
 ## Reference(s): <br>
+- [Nutanix AIops GitHub repository](https://github.com/AIops-tools/Nutanix-AIops) <br>
 - [ClawHub skill page](https://clawhub.ai/zw008/skills/nutanix-aiops) <br>
-- [Project homepage](https://github.com/AIops-tools/Nutanix-AIops) <br>
 - [Capabilities reference](references/capabilities.md) <br>
 - [CLI reference](references/cli-reference.md) <br>
 - [Setup and security guide](references/setup-guide.md) <br>
@@ -37,13 +35,13 @@ Mitigation: Run nutanix-aiops doctor and perform live validation in a Nutanix Co
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and MCP tool outputs] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with CLI commands and structured MCP tool output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operational observations, RCA summaries, dry-run previews, task references, and configuration guidance for Prism Central workflows.] <br>
+**Other Properties Related to Output:** [May operate Nutanix Prism Central through local CLI or MCP tools; destructive workflows should be previewed with dry-run and separately authorized by the operator.] <br>
 
 ## Skill Version(s): <br>
-0.7.0 (source: server release metadata) <br>
+0.9.0 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -9,6 +9,7 @@ from __future__ import annotations
 import ipaddress
 import os
 import re
+from collections.abc import Hashable
 from pathlib import Path
 from urllib.parse import urlparse
 from ..catalog import (
@@ -19,6 +20,7 @@ from ..catalog import (
 from ..collector import (
     Context,
     dig,
+    limit_hits_for,
 )
 # _escape_embedded_header_lines lives in collector.py (the sole legitimate emitter of
 # the "# file: <name>" header convention) — reused here so MCP tool descriptions get
@@ -33,6 +35,7 @@ from ..collector import (  # noqa: F401
     _OWN_SKILL_NAMES,
     _is_own_source,
 )
+from ..iocdb import known_bad_host_records as _iocdb_known_bad_host_records
 
 
 def _is_posix() -> bool:
@@ -297,6 +300,27 @@ def parse_bind_host(value) -> str:
 SECRET_KEY_RE = re.compile(r"(password|secret|token|api[_-]?key|apikey|bottoken)", re.I)
 
 
+# C-358: the npm dependency-tree blind spot, declared rather than left silent. _mcp.py's
+# plugin content scan already discloses its own (stronger, name-pruned) exclusion —
+# "coverage: node_modules/ (third-party npm deps) excluded from the content scan"
+# (checks/_mcp.py, _PLUGIN_SKIP_DIRS). Neither the installed-skill path (B13/vet_skill)
+# nor B42 prune node_modules/ by name — a skill's dependency tree is walked as ordinary
+# skill content, capped like everything else (collector.py's _MAX_FILES_PER_SKILL /
+# _MAX_BYTES_PER_SKILL truncation already surfaces honestly as its own UNKNOWN when hit —
+# that is NOT this gap). The real gap: the tree is never analysed AS a dependency tree —
+# no lockfile reconciliation, no per-package lifecycle-hook review. These two notes are
+# evidence-only (appended to Finding.evidence, never to detail) — they must never move a
+# verdict, grade, or finding id.
+NPM_DEPTREE_HOOK_COVERAGE_NOTE = (
+    "coverage: install-lifecycle hooks in the installed dependency tree (node_modules/) "
+    "are not examined"
+)
+NPM_DEPTREE_SKILL_COVERAGE_NOTE = (
+    "coverage: a skill's dependency tree is scanned as ordinary files, not analysed as a "
+    "dependency tree — no lockfile reconciliation, no per-package lifecycle-hook review"
+)
+
+
 SECRET_PATTERNS = [
     re.compile(r"sk-ant-[a-z0-9-]{8,}", re.I),
     re.compile(r"sk-[a-zA-Z0-9]{20,}"),
@@ -390,7 +414,42 @@ _CRED_RE = re.compile(
     # C-198: real default on-disk crypto-wallet stores — Geth/go-ethereum's keystore dir
     # and the Solana CLI's default keypair path (both well-known, documented paths, not
     # fabricated — grounded the same way as the .aws/.kube/.config/gcloud entries above).
-    r"\.ethereum/keystore|\.config/solana(?:/id\.json)?",
+    r"\.ethereum/keystore|\.config/solana(?:/id\.json)?|"
+    # E-065/C-323: same widening as skillast.py's _CRED_PATH_RE/_SH_CRED_FILE_RE — a
+    # process's own environment (procfs), the K8s service-account bearer token mount,
+    # and the Docker/Swarm secrets mount, all read by the HF-incident reproduction.
+    #
+    # B-425: the K8s mount below is one fully-specified FILE that is always the bearer
+    # token itself, so it stays a bare match. The other two additions broke the
+    # discipline every OTHER entry in this regex already follows — a specific
+    # credential-bearing FILENAME (`.ssh/id_[a-z0-9]+`, `.aws/credentials`), never a
+    # bare directory or a content-agnostic diagnostic path. `/run/secrets/[^/\s"']+`
+    # matched ANY file under the Docker/Swarm secret mount (a TLS CA cert, a license
+    # file — not just an actual secret), and a bare `/proc/*/environ` mention alone
+    # treated "read my own environment" as inherently a credential access. Confirmed
+    # false-FAIL via B63 (`_has_outbound_exfil`, checks/_content.py): a skill reading a
+    # Docker-mounted TLS CA cert (`/run/secrets/registry_ca.pem`) and asking not to
+    # paste the PEM blob into chat hard-FAILed, while the identical instruction over
+    # `/etc/pki/...` did not (B-425). Narrowed the same way B-366 already
+    # narrowed `_B63_SECRET_TERM_RE`'s bare `.ssh`/`.aws` substrings to actual
+    # credential-bearing filenames: `/run/secrets/` now requires the filename itself to
+    # look secret-shaped (same noun set `_B63_SECRET_TERM_RE`, checks/_content.py, uses
+    # — duplicated rather than imported: this module is a Layer-1 leaf and _content.py
+    # is Layer-2), and a bare `/proc/*/environ` mention now requires one of those same
+    # nouns within 60 chars either side — mirroring skillast.py's AST-level
+    # CRED_EXFIL_FLOW/SHELL_CRED_EXFIL, which already require an actual
+    # credential-derived value reaching a sink, not just path presence. A genuine
+    # `/run/secrets/db_password` or `/run/secrets/api_key` read is unaffected.
+    r"/proc/(?:self|\d+)/environ(?=[^\n]{0,60}(?<![a-z])(?:secret|token|credential|"
+    r"password|passwd|api[_\- ]?key|private[_\- ]?key|access[_\- ]?key|passphrase|"
+    r"mnemonic)s?(?![a-z]))|"
+    r"(?<![a-z])(?:secret|token|credential|password|passwd|api[_\- ]?key|"
+    r"private[_\- ]?key|access[_\- ]?key|passphrase|mnemonic)s?(?![a-z])"
+    r"[^\n]{0,60}/proc/(?:self|\d+)/environ|"
+    r"/var/run/secrets/kubernetes\.io/serviceaccount/token|"
+    r"/run/secrets/[^/\s\"']*(?<![a-z])(?:secret|token|credential|password|passwd|"
+    r"api[_\- ]?key|private[_\- ]?key|access[_\- ]?key|passphrase|mnemonic)s?"
+    r"(?![a-z])[^/\s\"']*",
     re.I,
 )
 
@@ -429,15 +488,59 @@ _EXFIL_RE = re.compile(
 # skill-content blob. Deliberately narrower than _EXFIL_RE above: no generic curl/wget/
 # base64 keywords, only known drop-point HOSTNAMES, since an MCP server's argv commonly
 # contains a real `curl`/generic verb without that being any kind of signal.
-_KNOWN_EXFIL_HOST_RE = re.compile(
-    r"\b(glot\.io|pastebin\.com|hastebin|transfer\.sh|0x0\.st|webhook\.site|requestbin|"
-    r"rentry\.co|rentry\.org|"
-    r"beeceptor\.com|interactsh\.com|oast\.(?:pro|fun|me|live|site|online)|"
-    r"canarytokens\.(?:com|net|org)|file\.io|localtunnel\.me|trycloudflare\.com|"
-    r"[a-z0-9-]+\.ngrok(?:-free)?\.(?:io|app)|ngrok\.io|ngrok-free\.app|"
-    r"[a-z0-9-]+\.pipedream\.net|pipedream\.net)\b",
-    re.I,
-)
+#
+# B-384: the bundled, dated IOC dataset's HOST literals (../iocdb.py) are
+# spliced into this SAME alternation (built once at import time, same as before) rather
+# than living behind a second, separately-compiled regex (the former `_IOCDB_HOST_RE` /
+# `_compile_iocdb_host_re()`, removed here). Two regexes independently derived from
+# overlapping "known-bad host" concepts disagreed with each other and with
+# iocdb.is_known_bad_host() on borderline text (`_IOCDB_HOST_RE`'s plain `\b...\b`
+# alternation matched a hyphen-adjacent substring like "evil-laosji.net" and a
+# dataset-host-as-prefix string like "laosji.net.evil.example" that
+# iocdb.is_known_bad_host() correctly rejects). Collapsing to one canonical
+# alternation removes that drift outright: each IOC host below gets its own
+# lookaround-bounded fragment (`_iocdb_host_fragment`) that mirrors
+# iocdb.is_known_bad_host()'s type-honored exact-vs-subdomain contract exactly
+# (see tests/test_iocdb.py's regex/function agreement test), rather than the
+# generic list's looser `\b...\b` word-boundary style, which stays as-is for the
+# generic entries (unchanged, no false-negative risk introduced there). As a side
+# effect this also collapses what used to be two separate linear passes over the
+# same skill text in correlation_indicators() below into one.
+_DOMAIN_LEFT_CHARS = "a-z0-9-"  # chars that would extend a label to the LEFT
+_HOST_CHARS = "a-z0-9.-"  # chars that would extend a host on the RIGHT (or, for an
+# IP -- which has no "subdomain" concept -- on the LEFT too: a "." immediately before
+# an IP literal is NOT a subdomain separator, unlike for a domain).
+
+
+def _iocdb_host_fragment(value: str, type_: str) -> str:
+    """One regex alternative for a single iocdb HOSTS record, precisely mirroring
+    iocdb.is_known_bad_host()'s type-honored contract: "ip" records match exact-only
+    (full host-char boundary on both sides), "domain" records match exact-or-subdomain
+    (the left boundary additionally allows a "." so a real subdomain like
+    "cdn.<host>" still matches, but a hyphen/letter/digit directly before it --
+    "evil-<host>" -- does not)."""
+    esc = re.escape(value)
+    left = _HOST_CHARS if type_ == "ip" else _DOMAIN_LEFT_CHARS
+    return rf"(?<![{left}]){esc}(?![{_HOST_CHARS}])"
+
+
+def _build_known_exfil_host_re() -> re.Pattern:
+    generic = (
+        r"\b(?:glot\.io|pastebin\.com|hastebin|transfer\.sh|0x0\.st|webhook\.site|requestbin|"
+        r"rentry\.co|rentry\.org|"
+        r"beeceptor\.com|interactsh\.com|oast\.(?:pro|fun|me|live|site|online)|"
+        r"canarytokens\.(?:com|net|org)|file\.io|localtunnel\.me|trycloudflare\.com|"
+        r"[a-z0-9-]+\.ngrok(?:-free)?\.(?:io|app)|ngrok\.io|ngrok-free\.app|"
+        r"[a-z0-9-]+\.pipedream\.net|pipedream\.net)\b"
+    )
+    ioc_fragments = [
+        _iocdb_host_fragment(value, typ)
+        for value, typ in sorted(_iocdb_known_bad_host_records())
+    ]
+    return re.compile("(?:" + "|".join([generic, *ioc_fragments]) + ")", re.I)
+
+
+_KNOWN_EXFIL_HOST_RE = _build_known_exfil_host_re()
 
 
 # F-124/E-044 layer-fix: moved here VERBATIM from trajaudit.py (see _CRED_RE note above
@@ -482,7 +585,9 @@ def correlation_indicators(installed_skills):
     Deliberately narrower than trajaudit.skill_indicators: only tokens whose appearance in
     the agent's OWN log corpus is strong cross-artifact evidence — credential-shaped paths
     (_CRED_RE), secret-named paths WITH a '/' separator (_SECRET_PATH_RE + the B-157 filter),
-    and KNOWN drop-point hosts (_KNOWN_EXFIL_HOST_RE). The bare _EXFIL_RE verbs
+    and KNOWN drop-point hosts (_KNOWN_EXFIL_HOST_RE — B-384: this now already
+    includes the bundled IOC dataset's HOST literals, spliced into its own alternation, so a
+    separate iocdb-only regex is no longer iterated here too). The bare _EXFIL_RE verbs
     (curl/wget/fetch/base64/POST) are EXCLUDED — base-rate noise in any web/exec-capable
     agent's logs. Keys are normalized (tilde-stripped, lowercased) for a case-insensitive
     substring membership test; values are the declaring skill name. Capped at
@@ -569,6 +674,14 @@ def _config_unreadable(cid: str, ctx: Context) -> "Finding | None":
     Callers: ``if (f := _config_unreadable("B1", ctx)) is not None: return f`` (or the
     non-walrus two-line form) before trusting ``ctx.config``/``dig(ctx.config, ...)`` for
     an affirmative verdict.
+
+    B-399: this is THE canonical engine-side UNKNOWN — the collector positively found
+    openclaw.json and positively failed to parse/read it, which is categorically
+    different from a check finding nothing to look at. Marked ``engine_degraded=True`` so
+    scoring.DEGRADED_CHECK_CAP (via ``_degraded_signal``) hard-caps the grade even when a
+    caller invokes ``compute()`` without ``ctx`` (so scoring.CONFIG_BLIND_CAP's own
+    ctx.config_parse_error read never fires) — every one of this helper's ~30 call sites
+    across checks/*.py gets that protection for free, with no per-check change needed.
     """
     if not ctx.config_parse_error:
         return None
@@ -577,7 +690,54 @@ def _config_unreadable(cid: str, ctx: Context) -> "Finding | None":
         UNKNOWN,
         "openclaw.json present but unparseable/unreadable — cannot determine.",
         "Fix openclaw.json so it is valid JSON and owner-readable, then re-run the audit.",
+        engine_degraded=True,
     )
+
+
+def _surface_absent(ctx: Context, *domains: str) -> bool:
+    """True ONLY when the auditor read the locus COMPLETELY, where this surface would be.
+
+    Never a claim that the check applies — only that the read was complete. F-138/B1's
+    ``Finding.not_applicable`` exists precisely so a migrating check can compute this
+    instead of hand-writing ``True`` in each "no X configured" branch: a shortened,
+    unreadable, or absent config automatically degrades the flag back to ordinary
+    UNKNOWN through ``__post_init__``, with no per-check effort.
+
+    CRITICAL — why ``config_found`` is required, not just ``not config_parse_error``:
+    ``collector.py``'s ``ctx.config_parse_error = ctx.config_found and not parsed_ok``
+    means that on a host where ``openclaw.json`` is ENTIRELY ABSENT, ``config_parse_error``
+    is ``False`` and ``ctx.config`` is ``{}``. Every "no X configured" branch would fire,
+    and the naive predicate ``not ctx.config_parse_error`` alone would wrongly mark ~25
+    checks "not applicable" on a plain non-OpenClaw machine — the exact lying PASS this
+    field exists to prevent, and it would smear ``report.py``'s honest non-OpenClaw
+    wording. Requiring ``config_found`` closes that hole.
+
+    ``limit_hits_for(ctx, *domains)`` deliberately INCLUDES untagged limit-hit entries
+    (Golden Rule #4 — an unknown scan-completeness signal must not resolve into a
+    convenient answer) — see its own docstring. Mirrors ``dossier.py``'s
+    ``_danger_coverage_gap``, which already does this reasoning for the Danger axis.
+
+    A check whose surface lives on DISK rather than in ``openclaw.json`` (e.g. the
+    installed-skill corpus) must ALSO check :func:`_skill_corpus_complete` (or the
+    equivalent per-collector completeness flag) — config-locus completeness alone does
+    not prove a disk-read locus was complete.
+    """
+    return (
+        getattr(ctx, "config_found", False)
+        and not getattr(ctx, "config_parse_error", False)
+        and not limit_hits_for(ctx, *domains)
+    )
+
+
+def _skill_corpus_complete(ctx: Context) -> bool:
+    """True when the installed-skill discovery walk was NOT capped or left partial.
+
+    The disk-locus counterpart to :func:`_surface_absent`'s config-locus check — a check
+    concluding "no installed skill has X" needs BOTH: the frontier walk actually finished
+    (not ``skills_frontier_partial``) and nothing was skipped by the hard cap
+    (``skills_capped_count == 0``). Either alone still leaves skills this audit never saw.
+    """
+    return not ctx.skills_frontier_partial and ctx.skills_capped_count == 0
 
 
 def _finding(
@@ -590,6 +750,9 @@ def _finding(
     pass_confidence=None,
     severity=None,
     scored=None,
+    not_applicable=False,
+    sub_signals=None,
+    engine_degraded=False,
 ) -> Finding:
     """*scored*: per-finding override of CheckMeta.scored, same shape as *severity*.
 
@@ -602,6 +765,18 @@ def _finding(
     CheckMeta stay scored=False (preserving the documented WARN/PASS non-scoring
     behavior) while the FAIL finding itself still participates. Defaults to
     CheckMeta.scored when omitted — every existing caller is unaffected.
+
+    *not_applicable* (F-138/B1): per-branch, same shape as *scored* — see
+    Finding.not_applicable. Defaults False; every existing caller is unaffected.
+
+    *sub_signals* (F-154 round 2): per-branch, same shape — see Finding.sub_signals.
+    Defaults to an empty frozenset when omitted; every existing caller is unaffected.
+
+    *engine_degraded* (B-399): pass True only for an UNKNOWN whose cause is ENGINE-SIDE
+    (crash/timeout/scan-budget escape, or an input the check expected to read that turned
+    out unreadable/corrupt) — never for a plain "nothing to check" UNKNOWN. See
+    ``Finding.engine_degraded``'s own docstring (catalog.py) for the full reasoning.
+    Defaults False, so every existing caller is unaffected.
     """
     m = _meta(cid)
     return Finding(
@@ -616,6 +791,9 @@ def _finding(
         evidence or [],
         confidence=confidence or m.confidence,
         pass_confidence=pass_confidence,
+        not_applicable=not_applicable,
+        sub_signals=frozenset(sub_signals) if sub_signals else frozenset(),
+        engine_degraded=engine_degraded,
     )
 
 
@@ -717,6 +895,73 @@ def _norm_group_policy(channel_name, value):
     return "open" if channel_name == "feishu" and value == "allowall" else value
 
 
+# B-389 (C-135 review of the fix below): a channel-level credential does not stop
+# governing traffic once `accounts` is added — OpenClaw runs it as an extra IMPLICIT
+# default account alongside the explicitly configured ones (`hasImplicitDefaultAccount`,
+# account-helpers-BAtt8fRD.js:15-19: `for (const key of
+# options?.implicitDefaultAccount?.channelKeys ?? []) if
+# (hasConfiguredAccountValue(channel?.[key])) return true`). So a still-running base
+# account's own dmPolicy/groupPolicy can't be dropped just because `accounts` exists —
+# only when nothing on the base node would spawn that implicit account. Grounded per
+# channel against the installed dist (each channel registers its own trigger keys):
+#   telegram      botToken / tokenFile           account-selection-CccGNkkz.js:59-63
+#   discord       token                          accounts-B2tNBeEr.js:12-15
+#   googlechat    serviceAccount(Ref|File)        accounts-CwNpKTEr.js:17-23
+#   zalo          botToken / tokenFile            accounts-C-ZPmqpb.js:72-75
+#   zalouser      profile                         setup-core-YieAw3pa.js:17-20
+#   imessage      cliPath / dbPath                accounts-DzM4R0Z8.js:9
+#   raft          profile                         setup-DWCfQpXL.js:14-20
+# feishu and nextcloud-talk register a bespoke predicate (multiple fields ANDed
+# together) instead of a single-key-present check — handled explicitly below.
+# Every other channel in the installed dist (slack/matrix/signal/msteams/line/...)
+# registers no implicitDefaultAccount trigger at all, so this table is exhaustive for
+# the channels where the gap can occur, not an arbitrarily incomplete allowlist.
+_IMPLICIT_DEFAULT_ACCOUNT_KEYS = {
+    "telegram": ("botToken", "tokenFile"),
+    "discord": ("token",),
+    "googlechat": ("serviceAccount", "serviceAccountRef", "serviceAccountFile"),
+    "zalo": ("botToken", "tokenFile"),
+    "zalouser": ("profile",),
+    "imessage": ("cliPath", "dbPath"),
+    "raft": ("profile",),
+}
+
+
+def _channel_has_implicit_default_account(name: str, raw_node: dict) -> bool:
+    """True when *raw_node* (the UNMERGED base channel node) carries a credential that
+    makes OpenClaw run it as an implicit default account alongside any explicitly
+    configured ``accounts`` — see the grounding above ``_IMPLICIT_DEFAULT_ACCOUNT_KEYS``.
+
+    Truthiness mirrors the dist's own ``hasConfiguredAccountValue`` exactly (a string
+    counts only after ``.strip()``; any other non-``None`` value counts as-is —
+    account-helpers-BAtt8fRD.js:61-64).
+
+    Deliberately config-only: the dist ALSO treats a matching env var (e.g.
+    ``$TELEGRAM_BOT_TOKEN``) as triggering the same implicit account, which this cannot
+    see — clawseccheck reads only the config file, and the target OpenClaw process' real
+    runtime environment is not reliably observable from here (e.g. a systemd service's
+    environment need not match this host's shell). That env-var route stays a
+    documented, deliberate residual false negative — the same "narrows, does not close"
+    trade-off ``_resolved_channel_nodes``' own docstring already accepts elsewhere, not a
+    new one introduced here.
+    """
+    if not isinstance(raw_node, dict):
+        return False
+
+    def _present(value) -> bool:
+        if isinstance(value, str):
+            return bool(value.strip())
+        return value is not None
+
+    if name == "feishu":
+        return _present(raw_node.get("appId")) and _present(raw_node.get("appSecret"))
+    if name == "nextcloud-talk":
+        return _present(raw_node.get("baseUrl")) and (
+            _present(raw_node.get("botSecret")) or _present(raw_node.get("botSecretFile"))
+        )
+    return any(_present(raw_node.get(key)) for key in _IMPLICIT_DEFAULT_ACCOUNT_KEYS.get(name, ()))
+
+
 def _open_channels(cfg: dict) -> list[str]:
     """Channels where dmPolicy/groupPolicy == 'open' (truly public — anyone can command).
 
@@ -730,9 +975,35 @@ def _open_channels(cfg: dict) -> list[str]:
         # DISABLED open channel produced §5 hard-FAIL false positives (B2/B55).
         if not isinstance(c, dict) or c.get("enabled") is False:
             continue
-        nodes = [c] + list((c.get("accounts") or {}).values())
+        # B-389: read the RESOLVED per-account node, not the raw [c] + accounts.values()
+        # idiom the old code used — see _resolved_channel_nodes' docstring for why that
+        # shallow walk is unsound (a vestigial base-level "open" policy still scored as
+        # open even when every real running account overrides it to pairing/allowlist).
+        # Mirrors the precedent _open_wildcard_group_channels already set for the
+        # identical shape. _resolved_channel_nodes already degrades a schema-drifted
+        # "accounts" (list/string instead of dict) to "no accounts" (B-378), so that
+        # handling doesn't need to be duplicated here.
+        nodes = _resolved_channel_nodes(c)
+        # C-135 follow-up on the same B-389 fix: the base node can still be a LIVE
+        # implicit default account (see _channel_has_implicit_default_account) even once
+        # `accounts` is configured — it joins, not replaces. Add it back only then;
+        # unconditionally adding it back would reintroduce the exact bug this fix exists
+        # to close (a vestigial base policy with no live account behind it at all).
+        accounts = c.get("accounts")
+        if isinstance(accounts, dict) and accounts and _channel_has_implicit_default_account(name, c):
+            nodes = [*nodes, c]
         for node in nodes:
-            if isinstance(node, dict) and (
+            if not isinstance(node, dict):
+                continue
+            # B-391: a resolved node's own `enabled: false` (a per-account disable —
+            # e.g. a retired account left in place with its old, wide-open policy still
+            # on record) means that account ingests nothing, same reasoning as the
+            # channel-level B-041 guard above. The merged node carries the account's
+            # own `enabled` key verbatim (mergeAccountConfig is a shallow spread), so
+            # this is a plain per-node read, not a new merge rule.
+            if node.get("enabled") is False:
+                continue
+            if (
                 node.get("dmPolicy") == "open"
                 or _norm_group_policy(name, node.get("groupPolicy")) == "open"
             ):
@@ -870,12 +1141,26 @@ def _resolved_channel_nodes(c: dict) -> list[dict]:
     account alongside explicit accounts is a known false NEGATIVE. That is the safe
     direction under Golden Rule #5 and is deliberate; do not "fix" it by also evaluating
     the raw base node, which reintroduces the first false positive above.
+
+    B-391 (mixed-schema ``accounts``): the pre-existing B-378 guard above degrades an
+    ``accounts`` that is a list/string/empty dict to "no accounts" (``[c]``), but a MIXED
+    dict — some entries genuine account dicts, one entry drifted to some other type —
+    used to fall through the list comprehension's ``isinstance(acc, dict)`` filter
+    silently: the well-formed entries produced a non-empty ``merged``, so the ``merged or
+    [c]`` fallback never fired, and the malformed entry (and, since ``accounts`` is
+    configured, the base node too) was dropped from the walk with no trace. We cannot
+    tell whether that malformed entry is a live account whose (unreadable) policy might
+    be wide open, so — same zero-false-PASS reasoning as the B-378 guard — treat ANY
+    non-dict entry as schema drift for the WHOLE ``accounts`` block and fall back to
+    ``[c]``, rather than silently proceeding on the well-formed subset alone.
     """
     accounts = c.get("accounts")
     if not isinstance(accounts, dict) or not accounts:
         return [c]
+    if any(not isinstance(acc, dict) for acc in accounts.values()):
+        return [c]
     base = {k: v for k, v in c.items() if k != "accounts"}
-    merged = [{**base, **acc} for acc in accounts.values() if isinstance(acc, dict)]
+    merged = [{**base, **acc} for acc in accounts.values()]
     return merged or [c]
 
 
@@ -929,6 +1214,15 @@ def _open_wildcard_group_channels(cfg: dict) -> dict:
     * ``enabled: False`` channels are skipped (B-041 — a disabled channel ingests
       nothing), so this composes with ``_external_input_channels`` / ``_open_channels``,
       which already skip them;
+    * a RESOLVED node's own ``enabled: false`` is also skipped — a per-account disable
+      (e.g. a retired account left in place with its old, wide-open wildcard-group policy
+      still on record) ingests nothing, same reasoning as the channel-level guard above
+      and as the identical guard `_open_channels` carries for the dmPolicy/groupPolicy
+      leg. This is a caller-side scoping choice layered on top of `_resolved_channel_nodes`
+      (which does not itself drop disabled nodes), not a different restriction predicate —
+      B140's own check (`check_wildcard_group_ingress`) deliberately does NOT skip
+      `enabled` at all, at either the channel or node level (see its docstring), so there
+      is no upstream handling to lean on here;
     * ``_wildcard_group_is_reachable`` drops group-ingress-off nodes (C-135, see there).
 
     ``channels.defaults`` is a config block, not a provider, and is excluded (the same
@@ -938,7 +1232,21 @@ def _open_wildcard_group_channels(cfg: dict) -> dict:
     for name, c in _channels(cfg).items():
         if name == "defaults" or not isinstance(c, dict) or c.get("enabled") is False:
             continue
-        for node in _resolved_channel_nodes(c):
+        nodes = _resolved_channel_nodes(c)
+        # Skipping a disabled resolved node (below) must not also silence the BASE
+        # node's own policy: a channel-level credential keeps running once `accounts`
+        # is added, so OpenClaw synthesizes an implicit default account carrying the
+        # base policy. Without this add-back, a single `accounts: {retired:
+        # {enabled: false}}` entry made the whole channel's open wildcard group
+        # invisible even though the implicit default account still ingests — a false
+        # NEGATIVE, and this helper feeds the behavioral arming and the RISK chains.
+        # Same guard `_open_channels` and `_b171_open_channels` already apply.
+        accounts = c.get("accounts")
+        if isinstance(accounts, dict) and accounts and _channel_has_implicit_default_account(name, c):
+            nodes = [*nodes, c]
+        for node in nodes:
+            if not isinstance(node, dict) or node.get("enabled") is False:
+                continue
             gap = _wildcard_group_gap(node)
             if gap and _wildcard_group_is_reachable(node):
                 out[name] = gap
@@ -972,12 +1280,23 @@ def _external_input_channels(cfg: dict) -> list[str]:
         if name in open_wildcard:
             out.append(name)
             continue
-        nodes = [c] + list((c.get("accounts") or {}).values())
+        # B-378: a schema-drifted "accounts" (list/string instead of dict) must
+        # degrade to "no accounts", never raise.
+        accounts = c.get("accounts")
+        nodes = [c] + (list(accounts.values()) if isinstance(accounts, dict) else [])
         for node in nodes:
-            if isinstance(node, dict) and (
-                node.get("dmPolicy") in _UNTRUSTED_INPUT_POLICIES
-                or _norm_group_policy(name, node.get("groupPolicy"))
-                in _UNTRUSTED_INPUT_POLICIES
+            if not isinstance(node, dict):
+                continue
+            dm_policy = node.get("dmPolicy")
+            group_policy = _norm_group_policy(name, node.get("groupPolicy"))
+            # B-378: an unmodeled dmPolicy/groupPolicy (e.g. a list) is never a
+            # genuine policy member — only a hashable value even needs the `in` test.
+            if (
+                (isinstance(dm_policy, Hashable) and dm_policy in _UNTRUSTED_INPUT_POLICIES)
+                or (
+                    isinstance(group_policy, Hashable)
+                    and group_policy in _UNTRUSTED_INPUT_POLICIES
+                )
             ):
                 out.append(name)
                 break
@@ -1127,14 +1446,23 @@ def _untrusted_input_channels(cfg: dict) -> list[str]:
     for name, c in _channels(cfg).items():
         if not isinstance(c, dict) or c.get("enabled") is False:
             continue
-        nodes = [c] + list((c.get("accounts") or {}).values())
+        # B-378: a schema-drifted "accounts" (list/string instead of dict) must
+        # degrade to "no accounts", never raise.
+        accounts = c.get("accounts")
+        nodes = [c] + (list(accounts.values()) if isinstance(accounts, dict) else [])
         for node in nodes:
             if not isinstance(node, dict):
                 continue
+            dm_policy = node.get("dmPolicy")
+            group_policy = _norm_group_policy(name, node.get("groupPolicy"))
+            # B-378: an unmodeled dmPolicy/groupPolicy (e.g. a list) is never a
+            # genuine policy member — only a hashable value even needs the `in` test.
             if (
-                node.get("dmPolicy") in _UNTRUSTED_INPUT_POLICIES
-                or _norm_group_policy(name, node.get("groupPolicy"))
-                in _UNTRUSTED_INPUT_POLICIES
+                (isinstance(dm_policy, Hashable) and dm_policy in _UNTRUSTED_INPUT_POLICIES)
+                or (
+                    isinstance(group_policy, Hashable)
+                    and group_policy in _UNTRUSTED_INPUT_POLICIES
+                )
             ):
                 out.append(name)
                 break
@@ -1231,11 +1559,25 @@ _LEG_KEYS = ("untrusted input", "sensitive data", "outbound actions")
 def _has_approval_gate(cfg: dict) -> bool:
     """Return True when the config has a meaningful exec approval gate.
 
-    Real fields (docs.openclaw.ai/tools/permission-modes):
+    Real fields — grounded against the installed OpenClaw dist's Zod schema
+    (`zod-schema.agent-runtime-C02vY4RT.js:358-381`, ToolExecBaseShape), which
+    corrects the field-list doc at docs.openclaw.ai/tools/permission-modes:
       tools.exec.mode     — deny/allowlist/ask/auto/full
-      tools.exec.security — deny/ask/full
+      tools.exec.security — deny/allowlist/full   ("ask" is NOT a valid value of THIS
+                             field — it belongs to tools.exec.ask below; a Zod
+                             .strict() config can't even set mode together with
+                             security/ask, see addExecPolicyModeConflictIssue)
       tools.exec.ask      — off/on-miss/always
     Non-existent: tools.confirm, tools.requireApproval, tools.elevated.requireApproval
+
+    security="allowlist" is a real gate even with an empty/default allowlist and even
+    when tools.exec.ask is unset (default "off"): verified against the live runtime
+    decision path (exec-approvals-BIKWP8_V.js requiresExecApproval/
+    hasGatewayAllowlistMiss, consumed by bash-tools-DHyGpWCr.js) — a non-matching
+    command is either routed to human approval (ask="on-miss"/"always") or denied
+    outright ("exec denied: allowlist miss", ask="off"). There is no path where
+    security="allowlist" alone lets an unmatched command run unattended, so a sparse
+    allowlist makes this MORE restrictive, never a false gate.
     """
     mode = dig(cfg, "tools.exec.mode")
     security = dig(cfg, "tools.exec.security")
@@ -1247,7 +1589,7 @@ def _has_approval_gate(cfg: dict) -> bool:
     # Do not re-flag "auto" as a false-PASS (previously reported and closed not-a-bug).
     if mode in ("deny", "allowlist", "ask", "auto"):
         return True
-    if security in ("deny", "ask"):
+    if security in ("deny", "allowlist"):
         return True
     if ask in ("on-miss", "always"):
         return True
@@ -1332,8 +1674,11 @@ _JSONL_SCAN_CAP = 1_000_000  # B-104: byte budget for tailing append-only JSONL 
 _MCP_REMOTE_TRANSPORTS = ("sse", "http", "streamable-http", "streamablehttp", "websocket", "ws")
 
 
-def _custom(cid, severity, status, detail, fix, ev=None) -> Finding:
-    """Build a finding with an explicit severity (for dynamic-severity checks)."""
+def _custom(cid, severity, status, detail, fix, ev=None, not_applicable=False) -> Finding:
+    """Build a finding with an explicit severity (for dynamic-severity checks).
+
+    *not_applicable* (F-138/B1): see Finding.not_applicable / _finding()'s docstring.
+    """
     m = BY_ID[cid]
     return Finding(
         m.id,
@@ -1346,6 +1691,7 @@ def _custom(cid, severity, status, detail, fix, ev=None) -> Finding:
         m.scored,
         ev or [],
         confidence=m.confidence,
+        not_applicable=not_applicable,
     )
 
 
@@ -1698,6 +2044,58 @@ def _mcp_leg_contributions(cfg: dict) -> dict:
     return contribs
 
 
+def _unpolicied_open_wildcard_group_channels(cfg: dict) -> dict:
+    """B-371: the strict subset of `_open_wildcard_group_channels` (B-297) whose SAME
+    resolved node declares neither `dmPolicy` nor `groupPolicy` at all.
+
+    Used ONLY by `_trifecta_legs` (A1's CRITICAL-scored, hard-FAIL-capable leg). B41 /
+    B46's own `ext_ch` / RISK-01/02/03 keep reading the full, unguarded
+    `_open_wildcard_group_channels` via `_external_input_channels` — unaffected, since
+    none of them can hard-FAIL on it (B140 is WARN-never-FAIL, RiskPaths never move the
+    A-F score, B41/B46 are WARN-capped).
+
+    Why the extra guard exists here and nowhere else: `_wildcard_group_gap` treats only
+    the schema-valid `groupPolicy == "disabled"` (`GroupPolicySchema =
+    _enum(["open","disabled","allowlist"])`) as a closing signal — see its docstring.
+    An explicit-but-UNMODELED policy value (not a real schema literal — e.g. a config a
+    live OpenClaw instance's own zod validation would reject, or simply a value this
+    package hasn't been taught) is therefore read as "not disabled", i.e. open, same as
+    a genuinely absent field. That reading is the right call for the WARN-only/advisory
+    consumers above (better to nudge on something unparseable than stay silent), but
+    plugging it un-narrowed into A1 — a hard CRITICAL FAIL — would flip on ANY group
+    config carrying some policy value the resolver doesn't happen to recognize, which is
+    indistinguishable here from a deliberate, safe restriction. C-135 found this via two
+    pre-existing FP-guard tests
+    (`tests/test_checks.py::test_a1_approval_gated_group_bot_not_untrusted_input`,
+    `::test_a1_owner_only_group_bot_not_untrusted_input`) that broke under the first,
+    unguarded attempt at this fix — both went red before this guard was added, so this
+    isn't a hypothetical. Scoped instead to exactly the shape B-297's own docstring
+    calls "the commonest real open-group config": a channel/account node with NO
+    dmPolicy/groupPolicy field at all (verified live in the referenced
+    `coding_telegram_insecure` real-fleet config — see `_trifecta_legs`).
+    """
+    out = {}
+    for name, c in _channels(cfg).items():
+        if name == "defaults" or not isinstance(c, dict) or c.get("enabled") is False:
+            continue
+        for node in _resolved_channel_nodes(c):
+            # B-438 (C-135 adversarial review): mirror the per-resolved-node
+            # `enabled: false` skip `_open_wildcard_group_channels` already carries — a
+            # retired/disabled account left with its old open wildcard-group policy still
+            # on record ingests nothing, same reasoning as that sibling's own guard. This
+            # helper feeds A1's CRITICAL hard-FAIL leg (`_trifecta_legs`), so missing it
+            # is a real false-positive FAIL, not just a missed WARN.
+            if not isinstance(node, dict) or node.get("enabled") is False:
+                continue
+            if node.get("dmPolicy") is not None or node.get("groupPolicy") is not None:
+                continue
+            gap = _wildcard_group_gap(node)
+            if gap and _wildcard_group_is_reachable(node):
+                out[name] = gap
+                break
+    return out
+
+
 # ---------------------------------------------------------------- Block A
 def _trifecta_legs(ctx: Context) -> dict:
     """The three lethal-trifecta legs computed from the GLOBAL config surface.
@@ -1705,14 +2103,34 @@ def _trifecta_legs(ctx: Context) -> dict:
     Shared by A1 (check_trifecta) and B46 (check_multiagent_exposure) so both read
     one definition of the legs. Keys are the human-facing labels A1 emits; insertion
     order is preserved (input → sensitive → outbound).
+
+    B-371 (2026-07-31): the untrusted-input leg now ALSO counts
+    `_unpolicied_open_wildcard_group_channels` — a B-297 open `groups["*"]` entry with
+    no dmPolicy/groupPolicy at all. Before this, A1 was the one CRITICAL-scored consumer
+    of the dmPolicy/groupPolicy allowlist that could not see that shape at all (B41's
+    `_external_input_channels` already could), even though it is the commonest real
+    open-community-bot config and B140 already WARNs on it. That gap was deliberately
+    left open when B-297 landed pending "its own C-135 pass" (see the now-updated
+    `tests/test_b297_wildcard_group_ingress_leg.py`) — this is that pass. Verified
+    against every local `fixtures/` home (549) and the full clawrange corpus (73 real
+    configs, read-only): exactly one config's A1 verdict changes,
+    `coding_telegram_insecure` (PASS→FAIL) — an open Telegram group with no allowFrom
+    feeding a "coding"-profile agent with ungated exec, a genuine 3/3 trifecta A1 was
+    previously blind to. Deliberately NOT the full `_external_input_channels` reading —
+    see `_unpolicied_open_wildcard_group_channels`'s docstring for why a narrower guard
+    is used here specifically (two existing FP-guard tests, `test_checks.py`'s
+    `test_a1_approval_gated_group_bot_not_untrusted_input` /
+    `test_a1_owner_only_group_bot_not_untrusted_input`, would otherwise regress).
+    `_untrusted_input_channels` itself is unchanged.
     """
     cfg = ctx.config
     tools = _enabled_tools(cfg)
     untrusted_ch = _untrusted_input_channels(cfg)
+    unpolicied_wildcard = _unpolicied_open_wildcard_group_channels(cfg)  # B-371
     web_fetch = _web_fetch_enabled(cfg)
     # B-061: ungated exec/shell can read any private file (sensitive) AND exfiltrate
     # (outbound). Approval-gated exec — tools.exec.mode is deny/allowlist/ask/auto,
-    # security=deny/ask, ask=on-miss/always — see _has_approval_gate) is NOT autonomous:
+    # security=deny/allowlist, ask=on-miss/always — see _has_approval_gate) is NOT autonomous:
     # a human signs each call, so it must NOT raise the sensitive leg. Without this guard
     # §5 breaks — home_safe + clean_b55/b68/b69/c014/c6 pair an untrusted channel with
     # mode='ask' exec and would flip to a spurious 3/3. Only ungated exec at mode='full'
@@ -1734,6 +2152,7 @@ def _trifecta_legs(ctx: Context) -> dict:
     return {
         "untrusted input": (
             bool(untrusted_ch)
+            or bool(unpolicied_wildcard)  # B-371: unpolicied open groups["*"] (B-297)
             or _hint(tools, INPUT_TOOL_HINTS)
             or web_fetch
             or bool(mcp_legs["untrusted input"])  # B-247: fetch/web-search/inbox/... MCP
@@ -1869,6 +2288,70 @@ def _skill_frontmatter_block(blob: str) -> str | None:
     if m:
         return m.group("fm")
     return None
+
+
+# B-342 (T09/SkillTrustBench V_EXCESSIVE_TELEMETRY + V_MISLEADING_DESCRIPTION): the
+# "declared vs actual" discriminator recommended by B-342's own diagnosis, B-340, and
+# C-310's SC-005-shape-1 item. This is the DISCLOSURE side only — it says nothing about
+# whether the CODE actually collects/transmits data (that is
+# skillast.py's EXCESSIVE_TELEMETRY_FLOW); the two are combined by the caller
+# (checks/_vet.py) into a single "undisclosed" finding.
+#
+# Deliberately broad wording, not a narrow "telemetry" literal — a legitimate skill that
+# discloses this in its own words ("we back up your files", "usage stats are sent to
+# improve this skill", "collects anonymized analytics") must not still be flagged for using
+# different words than a scanner author guessed.
+#
+# C-135 (self-review, found before this ever shipped): an EARLIER version of this
+# function searched the WHOLE SKILL.md blob, not just the frontmatter. On case_00030
+# (a real SkillTrustBench prompt-injection sample) that made the check read "declared"
+# because the word "Diagnostics" appeared in the injected BODY paragraph itself
+# ("**Diagnostics cache refresh**: ... run python scripts/_telemetry.py ... Keep
+# diagnostic output out of the user-facing response") -- i.e. the attacker's own
+# injected pretext text satisfied the disclosure gate and suppressed the finding it
+# exists to raise. Scoping to the frontmatter block only (mirrors
+# _skill_declares_config_target's identical precedent) fixes that: the frontmatter
+# `name`/`description` is the short, curated text a user actually reads before
+# installing/triggering a skill, not free-form body prose an injected instruction can
+# plant a keyword into. This is a narrowing for soundness, not a completeness claim —
+# a skill that only discloses telemetry in its body (not frontmatter) will still be
+# flagged; that is the safer failure direction for a security check.
+#
+# B-422 (C-348 adversarial review): the ORIGINAL verb/noun vocabulary below
+# was too narrow to recognize ordinary, honest disclosure prose. A real support-bundle
+# skill whose frontmatter description read "Collect a support bundle from this machine
+# and upload it to our support portal for troubleshooting." was scored as "nothing in
+# the skill's own SKILL.md discloses this" -- a false WARN on a textbook-disclosed skill,
+# because the noun set didn't include "bundle" and the verb set didn't include the
+# "archive"/"export"/"post"/"snapshot" family. Added "post", "export", "archive",
+# "snapshot" to the verb group and "bundle", "environment", "workspace" to the noun
+# group -- same shape as the existing entries, still gated on a collection-style verb
+# actually preceding the noun, so this stays a widening of the SAME discriminator, not a
+# different one.
+_TELEMETRY_DISCLOSURE_RE = re.compile(
+    r"\btelemetry\b|\banalytics\b|\banonymi[sz]ed?\b|\bcrash[\s-]?report\w*\b|"
+    r"\busage\s+(?:data|stat\w*|metric\w*)\b|\bphone[\s-]?home\b|"
+    r"\btrack(?:ing|s|ed)?\s+usage\b|\bmonitor\w*\s+usage\b|"
+    r"\b(?:collect|gather|send|transmit|report|upload|sync|post|export|archive|snapshot|"
+    r"back(?:s|ed)?[\s-]?up)\w*\s+"
+    r"(?:\w+\s+){0,4}?(?:your\s+)?(?:data|information|stat\w*|usage|diagnostic\w*|files?|"
+    r"directory|project|logs?|history|bundle\w*|environment\w*|workspace\w*)\b",
+    re.I,
+)
+
+
+def _skill_declares_telemetry_disclosure(blob: str) -> bool:
+    """True when the skill's OWN SKILL.md FRONTMATTER (name/description/metadata —
+    _skill_frontmatter_block, same scope _skill_declares_config_target uses) discloses
+    that it collects/sends usage, diagnostic, or file/data information — the
+    "declared" half of the declared-vs-actual discriminator. Deliberately does NOT
+    search the whole blob/body prose — see the C-135 note above the regex for the real
+    false-negative that scoping choice fixes (an injected body instruction can plant a
+    disclosure-shaped word that was never the skill's own stated purpose)."""
+    fm = _skill_frontmatter_block(blob)
+    if not fm:
+        return False
+    return bool(_TELEMETRY_DISCLOSURE_RE.search(fm))
 
 
 # ──────────────────────────────────────────────────────────────────────────────
@@ -2104,3 +2587,103 @@ def _gateway_remote_exposure_reason(cfg: dict) -> str | None:
     if mode in ("serve", "funnel"):
         return f"gateway.tailscale.mode={mode}"
     return None
+
+
+# B-397: relocated from _config.py (B323-only originally) -- B326 needs the identical
+# env-var-reference detection, so per §3.1's "reused by 2+ topics -> _shared.py" rule
+# this leaves its original topic module rather than reaching across it.
+_B323_ENV_VAR_NAME_RE = re.compile(r"^[A-Z_][A-Z0-9_]*$")
+
+
+def _b323_parse_env_token_at(value: str, index: int) -> "tuple[str, int] | None":
+    """Faithful port of OpenClaw's ``parseEnvTokenAt``
+    (``env-substitution-CATXLg7n.js:32-58``).
+
+    Returns ``("escaped", end)`` for a ``$${NAME}`` token, ``("substitution", end)``
+    for a ``${NAME}`` token, or ``None`` if *index* isn't the start of either --
+    including the case where ``NAME`` doesn't match OpenClaw's own
+    ``ENV_VAR_NAME_PATTERN`` (``/^[A-Z_][A-Z0-9_]*$/``, all-caps only) or the ``}``
+    is missing. *end* is the index of the closing ``}``.
+    """
+    if index >= len(value) or value[index] != "$":
+        return None
+    nxt = value[index + 1] if index + 1 < len(value) else ""
+    after_next = value[index + 2] if index + 2 < len(value) else ""
+    if nxt == "$" and after_next == "{":
+        start = index + 3
+        end = value.find("}", start)
+        if end != -1:
+            name = value[start:end]
+            if _B323_ENV_VAR_NAME_RE.match(name):
+                return ("escaped", end)
+    if nxt == "{":
+        start = index + 2
+        end = value.find("}", start)
+        if end != -1:
+            name = value[start:end]
+            if _B323_ENV_VAR_NAME_RE.match(name):
+                return ("substitution", end)
+    return None
+
+
+def _b323_contains_env_var_reference(value: str) -> bool:
+    """Faithful port of OpenClaw's ``containsEnvVarReference()``
+    (``env-substitution-CATXLg7n.js:102-112``).
+
+    Only an unescaped ``${ALL_CAPS_NAME}`` counts as a real, filtered reference.
+    An escaped ``$${NAME}`` token, or a ``${...}``-shaped token whose name is not
+    all-caps (lowercase/mixed-case, digit-leading, etc.) or is missing its closing
+    ``}``, does NOT count -- OpenClaw's own ``isConfigRuntimeEnvVarAllowed()`` does
+    not block those values; it applies them verbatim (literal ``$`` characters and
+    all) to the runtime environment. A naive ``"${" in value`` substring test
+    conflates these two cases and was found (C-135 adversarial pass) to silently
+    miss a config-declared literal PATH override that OpenClaw actually applies,
+    whenever the token merely *looks* like a substitution (e.g.
+    ``${systemRoot}:/opt/evil/bin`` -- mixed-case name, not a real reference, but
+    the naive check skipped it as if it were one).
+    """
+    if "$" not in value:
+        return False
+    i = 0
+    n = len(value)
+    while i < n:
+        if value[i] != "$":
+            i += 1
+            continue
+        token = _b323_parse_env_token_at(value, i)
+        if token is not None:
+            kind, end = token
+            if kind == "escaped":
+                i = end + 1
+                continue
+            if kind == "substitution":
+                return True
+        i += 1
+    return False
+
+
+# OpenClaw folds a small set of tool names to a canonical id BEFORE any allow/deny
+# matching, on BOTH sides of the comparison (dist tool-policy-BHUGxE3p.js:12-22
+# TOOL_NAME_ALIASES + normalizeToolName; applied to allow AND deny at
+# tool-policy-match-CgU98OQh.js:9-19). Without the same fold, denying "apply-patch"
+# fails to suppress a grant of "apply_patch" and we report a config that correctly
+# hardened itself. Deliberately ONLY the two policy-layer aliases: the dynamic
+# (thread-lifecycle DYNAMIC_TOOL_NAME_ALIASES) and native-hook
+# (NATIVE_HOOK_TOOL_NAME_ALIASES, exec_command->exec) tables are applied at a
+# different layer and are folded by behavioral._t3_canon, not here.
+_TOOL_NAME_ALIASES = {"bash": "exec", "apply-patch": "apply_patch"}
+
+
+def _canon_tool(token) -> str:
+    """One allow/deny token, lowercased, stripped and alias-folded.
+
+    Mirrors OpenClaw's normalizeToolName (tool-policy-BHUGxE3p.js:19-22). Returns ""
+    for anything that is not a usable string, so callers can filter blanks the way
+    normalizeToolList does (tool-policy-BHUGxE3p.js:44-47).
+    """
+    if isinstance(token, bytes):
+        token = token.decode("utf-8", "replace")
+    if not isinstance(token, str):
+        return ""
+    s = token.strip().lower()
+    return _TOOL_NAME_ALIASES.get(s, s)

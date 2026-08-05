@@ -1,0 +1,59 @@
+{
+  "skill": "noise-pollution-mapping",
+  "skill_version": "1.0.0",
+  "command": "noise-pollution-mapping --bbox 116 39 117 40 --synthetic --source-type line --quiet --output-dir ./_test_st_line",
+  "started_at": "2026-08-02T21:53:38.658510Z",
+  "finished_at": "2026-08-02T21:53:38.833493Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "flow": 1000.0,
+    "speed": 60.0,
+    "source_type": "line",
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_st_line\\noise_level.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_st_line\\noise_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "source_level_dB": 61.583624920952495,
+    "mean_noise_dB": 2.810995578765869,
+    "max_noise_dB": 61.58362579345703
+  },
+  "software": {
+    "python": "3.12.10",
+    "skill": "noise-pollution-mapping"
+  },
+  "error": null
+}

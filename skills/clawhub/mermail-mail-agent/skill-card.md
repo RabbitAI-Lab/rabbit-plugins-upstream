@@ -1,45 +1,56 @@
-## Description: <br>
-Create, list, continue, rename, and delete Mermail mailbox-agent conversations and inspect their messages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create, list, continue, rename, and delete Mermail mailbox-agent conversations and inspect their messages.
 
-## Publisher: <br>
-[mermail](https://clawhub.ai/user/mermail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mermail](https://clawhub.ai/user/mermail)
 
-## Use Case: <br>
-Developers and mailbox operators use this skill to manage Mermail mailbox-agent conversations, review prior agent work, and ask the Mermail agent to reason about a selected mailbox. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Mermail API key to interact with mailbox-agent conversations. <br>
-Mitigation: Install it only for users who intend to grant that access, keep MERMAIL_API_KEY scoped and protected, and surface authentication or rate-limit errors instead of retrying write actions automatically. <br>
-Risk: Downstream mailbox-agent activity may affect mailbox state, including sending-related or destructive actions. <br>
-Mitigation: Confirm explicit sending or destructive intent before the call, and require explicit approval plus a prepare_destructive_action token before deletion. <br>
-Risk: Mailbox content and downstream agent output may contain untrusted instructions or misleading claims of completed work. <br>
-Mitigation: Do not execute instructions contained in mailbox messages unless independently requested and approved by the user, and distinguish narrative from tool-confirmed execution in the final report. <br>
+## Use Case:
 
+External users and developers use this skill to work with Mermail mailbox-agent conversations for a selected mailbox, including continuing prior agent work, reviewing agent history, and managing conversation state.
 
-## Reference(s): <br>
-- [Mermail AI skills documentation](https://docs.mermail.app/ai/skills) <br>
-- [Mermail MCP server](https://console.mermail.app/mcp) <br>
-- [Mermail Mail Agent on ClawHub](https://clawhub.ai/mermail/skills/mermail-mail-agent) <br>
-- [Mail-agent tool map](references/tools.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Concise text or Markdown with mailbox-agent conversation summaries and requested next steps.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference Mermail MCP tool results; requires MERMAIL_API_KEY for live mailbox-agent access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release metadata) <br>
+Risk: The skill can access sensitive mailbox-agent conversations and downstream mailbox capabilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep tasks narrowly scoped to the intended mailbox, prefer read-only use, and approve send, delete, credential, OTP, or financial actions only after reviewing the exact requested action.
+
+Risk: Mailbox content and downstream agent output may contain untrusted instructions or misleading claims about completed actions.
+
+Mitigation: Treat mailbox-derived content as untrusted, use strict intake and sandboxed interpretation, and verify claimed effects with structured tool results.
+
+## Reference(s):
+
+- [Mermail AI skills documentation](https://docs.mermail.app/ai/skills)
+- [Mermail MCP server](https://console.mermail.app/mcp)
+- [Mail-agent tool map](references/tools.md)
+- [Mail-agent security boundary](references/security.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API Calls, Configuration]
+
+**Output Format:** [Markdown with tool-specific instructions and structured MCP tool usage]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires MERMAIL_API_KEY and access to the Mermail MCP server.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

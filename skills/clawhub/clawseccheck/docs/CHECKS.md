@@ -321,6 +321,54 @@ Advisory checks are recorded for coverage but are not scored.
 - Remediation:
   - none
 
+### B334 - Undocumented bundled helper run under an agent-directed directive
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: Prompt Injection / Undocumented Execution
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Undocumented bundled helper run under an agent-directed directive
+- Remediation:
+  - none
+
+### B333 - MCP tool safety-hint annotations declared but not enforced by OpenClaw
+
+- Severity: MEDIUM
+- Block: hardening
+- Framework: MCP Trust
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: MCP tool safety-hint annotations declared but not enforced by OpenClaw
+- Remediation:
+  - none
+
+### B332 - Cross-server MCP tool-name collision / homoglyph / near-miss (shadowing)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: MCP Trust
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Cross-server MCP tool-name collision / homoglyph / near-miss (shadowing)
+- Remediation:
+  - none
+
+### B331 - MCP tool-description injection surviving OpenClaw's host sanitizer
+
+- Severity: HIGH
+- Block: hardening
+- Framework: MCP Trust
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: MCP tool-description injection surviving OpenClaw's host sanitizer
+- Remediation:
+  - none
+
 ### B25 - Update / pinning hygiene
 
 - Severity: MEDIUM
@@ -391,7 +439,7 @@ Advisory checks are recorded for coverage but are not scored.
 - OWASP: none
 - What it checks: browser.extraArgs dangerous Chrome launch flags
 - Remediation:
-  - config: `browser.extraArgs` - remove --disable-web-security / --load-extension / a non-loopback --remote-debugging-address / unreviewed --proxy-server
+  - config: `browser.extraArgs` - remove --disable-web-security / --load-extension / unreviewed --proxy-server
 
 ### B196 - browser.evaluateEnabled arbitrary-JS sink
 
@@ -404,6 +452,18 @@ Advisory checks are recorded for coverage but are not scored.
 - What it checks: browser.evaluateEnabled arbitrary-JS sink
 - Remediation:
   - config: `browser.evaluateEnabled` = `false` - disable the browser's arbitrary-JS evaluate sink unless a workflow genuinely requires it
+
+### B330 - browser CDP control port — unauthenticated, and how far it reaches
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Browser / SSRF
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: browser CDP control port — unauthenticated, and how far it reaches
+- Remediation:
+  - config: `browser.extraArgs` - remove --remote-allow-origins; keep browser.cdpUrl and every profile cdpUrl on loopback
 
 ### B321 - browser.executablePath / profiles.*.executablePath / mcpCommand
 
@@ -454,6 +514,18 @@ Advisory checks are recorded for coverage but are not scored.
 - Confidence: HIGH
 - OWASP: none
 - What it checks: marketplaces.feeds points at a non-canonical registry
+- Remediation:
+  - none
+
+### B326 - agents.defaults.elevatedDefault="full" bypasses human approval by default
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Human Approval
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: agents.defaults.elevatedDefault="full" bypasses human approval by default
 - Remediation:
   - none
 
@@ -1483,6 +1555,58 @@ Advisory checks are recorded for coverage but are not scored.
 - Remediation:
   - none
 
+### B336 - Chunked multi-file-read assembly executed via exec()/eval() (split-by-file payload loader)
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Obfuscation / Malicious Skill
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Chunked multi-file-read assembly executed via exec()/eval() (split-by-file payload loader)
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B337 - Mandatory-directive shell exfil of dotfiles via curl/wget ("licensing check" pattern)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Data Exfiltration / Prompt Injection
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Mandatory-directive shell exfil of dotfiles via curl/wget ("licensing check" pattern)
+- Remediation:
+  - none
+
+### B338 - Covert tunnel / mesh-VPN enrollment primitive in an installed skill
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Command & Control / Covert Channel
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Covert tunnel / mesh-VPN enrollment primitive in an installed skill
+- Remediation:
+  - none
+
+### B339 - Cloud instance-metadata credential fetch in an installed skill
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Credential Theft / Cloud Metadata
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Cloud instance-metadata credential fetch in an installed skill
+- Remediation:
+  - none
+
+## Advisory checks
+
 ### B93 - Confusable/mixed-script characters in a skill's trigger description
 
 - Severity: MEDIUM
@@ -1576,6 +1700,18 @@ Advisory checks are recorded for coverage but are not scored.
 - Confidence: HIGH
 - OWASP: none
 - What it checks: Executable .pth file / sitecustomize auto-execution persistence
+- Remediation:
+  - none
+
+### B335 - Runtime-computed Python auto-execution persistence install (sitecustomize/usercustomize write, PYTHONSTARTUP shell-rc)
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Defensibility / Supply-Chain Tamper
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Runtime-computed Python auto-execution persistence install (sitecustomize/usercustomize write, PYTHONSTARTUP shell-rc)
 - Remediation:
   - none
 
@@ -2087,6 +2223,140 @@ Advisory checks are recorded for coverage but are not scored.
 - Remediation:
   - none
 
+## Hardening checks
+
+### B340 - Effective-bind verification (declared gateway.bind vs. the actual listening socket)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Zero Trust / Gateway
+- Scored: yes
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Effective-bind verification (declared gateway.bind vs. the actual listening socket)
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B341 - plugins.entries.<id>.hooks.allowPromptInjection / .allowConversationAccess grants
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Plugin / MCP Hardening
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: plugins.entries.<id>.hooks.allowPromptInjection / .allowConversationAccess grants
+- Remediation:
+  - none
+
+### B342 - Plugin runtime-slot ownership and plugins.allow / plugins.deny contradictions
+
+- Severity: MEDIUM
+- Block: advisory
+- Framework: Plugin / MCP Hardening
+- Scored: no
+- Confidence: HIGH
+- OWASP: none
+- What it checks: Plugin runtime-slot ownership and plugins.allow / plugins.deny contradictions
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B343 - ML model artifact loaded without provenance (huggingface / gguf / safetensors / ollama)
+
+- Severity: HIGH
+- Block: hardening
+- Framework: Supply Chain
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: ML model artifact loaded without provenance (huggingface / gguf / safetensors / ollama)
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B344 - Offensive-security tooling (Mimikatz/Impacket/BloodHound/Rubeus/CrackMapExec) directive
+
+- Severity: HIGH
+- Block: advisory
+- Framework: Skill Malware / Offensive Tooling
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Offensive-security tooling (Mimikatz/Impacket/BloodHound/Rubeus/CrackMapExec) directive
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B345 - Self-modification directive in skill content, corroborated by a self-write sink
+
+- Severity: CRITICAL
+- Block: hardening
+- Framework: Prompt Injection / Self-Modification
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Self-modification directive in skill content, corroborated by a self-write sink
+- Remediation:
+  - none
+
+### B346 - Anti-forensic self-erase directive targeting the agent's own audit trail
+
+- Severity: CRITICAL
+- Block: hardening
+- Framework: Incident Response / Audit Trail
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Anti-forensic self-erase directive targeting the agent's own audit trail
+- Remediation:
+  - none
+
+### B347 - Dead-drop C2 resolver composition (periodic poll -> decode -> exec)
+
+- Severity: CRITICAL
+- Block: hardening
+- Framework: Command & Control / Dead-Drop Resolver
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Dead-drop C2 resolver composition (periodic poll -> decode -> exec)
+- Remediation:
+  - none
+
+## Advisory checks
+
+### B348 - Plugin load path with no matching plugins.entries record
+
+- Severity: LOW
+- Block: advisory
+- Framework: Supply Chain / Plugin Hygiene
+- Scored: no
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Plugin load path with no matching plugins.entries record
+- Remediation:
+  - none
+
+## Hardening checks
+
+### B349 - Obfuscated install-time target in the dependency tree
+
+- Severity: CRITICAL
+- Block: hardening
+- Framework: Supply Chain / Dependency Tree
+- Scored: yes
+- Confidence: MEDIUM
+- OWASP: none
+- What it checks: Obfuscated install-time target in the dependency tree
+- Remediation:
+  - none
+
 ## Compound risk chains
 
 These paths are computed from multiple checks. They fire only when every leg is positively evidenced.
@@ -2450,3 +2720,106 @@ These paths are computed from multiple checks. They fire only when every leg is 
   the groups entry so it is not '*'). If open group access is intentional — a community
   bot, say — put the high-blast tools behind a human approval step (tools.exec.mode='ask')
   so an untrusted message cannot reach them unattended.
+
+### RISK-22 - MCP server's own tool set spans a toxic flow (input -> sensitive -> egress)
+
+- Severity: MEDIUM
+- Pattern: MEDIUM (RISK-22, F-146/W2.4): a single MCP server's own tool set holds all
+- Chain: {server}.{input_tool} (untrusted input) -> {server}.{sensitive_tool} (sensitive read) -> {server}.{egress_tool} (egress)
+- Why:
+  The MCP server '{server}' declares tools spanning all three roles of a confused-deputy
+  chain in its own tool set: an untrusted-input tool ('{input_tool}'), a sensitive-read
+  tool ('{sensitive_tool}'), and an egress tool ('{egress_tool}'). None of these tools is
+  individually dangerous, and no exploit is proven here — this is a PRECONDITION, not an
+  incident. But because all three are co-resident on one server, content read by the input
+  tool could steer the model into misusing the other two for exfiltration, without leaving
+  this server's own tool boundary.
+- Fix:
+  Review whether '{server}' genuinely needs all three roles. If not, split the server so
+  untrusted-input, sensitive-read, and egress tools are never declared by the same server,
+  or gate the sensitive-read/egress tools behind human approval (tools.exec.mode='ask') so
+  an injected instruction from the input tool cannot reach them unattended.
+
+### RISK-23 - Multiple independent persistence anchors — eviction-resistant foothold
+
+- Severity: HIGH
+- Pattern: HIGH (RISK-23, E-065): 2+ independent persistence anchors of DIFFERENT
+- Chain: *fired -> removing any single anchor does not evict the foothold
+- Why:
+  This install has str(len(fired)) independent persistence mechanisms flagged at once,
+  from different mechanism classes: '; '.join(fired). Most of these checks are WARN-only
+  disclosure — a developer might legitimately have any one of them for a real reason. What
+  makes this combination worth escalating is that at least one of them (';
+  '.join(signal_bearing)) shows an actual suspicious signal beyond "the mechanism exists,
+  unreviewed", co-located with other independent re-establishment mechanisms — the shape
+  that makes removing any single anchor insufficient to evict a real foothold. This is not
+  proof of compromise; it warrants prioritized review of every flagged anchor, starting
+  with the one that shows the actual signal.
+- Fix:
+  Investigate every flagged anchor, starting with '; '.join(signal_bearing) — then review
+  the rest: the .pth/sitecustomize/PYTHONSTARTUP files, systemd units, per-turn skill
+  hooks, and any tunnel/mesh-VPN binaries this install surfaced. Removing a single anchor
+  without addressing the others leaves a working foothold in place.
+
+### RISK-24 - An enrolled tunnel transport defeats destination-based egress filtering
+
+- Severity: MEDIUM
+- Pattern: MEDIUM (RISK-24, E-065): a confirmed default-deny egress policy cannot see
+- Chain: untrusted input reaches the agent -> agent can execute / write on the host -> {', '.join(transport)} enrolled and active on the host (its own outbound transport) -> default-deny OUTPUT policy confirmed, but cannot see destinations carried inside the tunnel's own already-permitted connection -> destination-based egress filtering is defeated for traffic riding the tunnel
+- Why:
+  ClawSecCheck confirmed a default-deny outbound firewall policy on this host, and {',
+  '.join(transport)} is enrolled and active — its own outbound control connection is
+  itself a locally-generated packet the OUTPUT chain does evaluate, but once that one
+  connection is up, destination-based egress filtering cannot see the individual
+  destinations carried inside it. This agent can act on the host (exec/write) and is
+  reachable by untrusted input, so a prompt-injection compromise could invoke that
+  transport directly — the audit's own 'egress is hardened' verdict does not extend to
+  traffic riding inside it.
+- Fix:
+  Do not rely on host firewall policy alone to contain this agent. Either remove the
+  tunnel/mesh-VPN client if it is not required for this agent's purpose, or explicitly
+  account for it in your threat model (deny the agent's process/user from invoking it,
+  egress-filter the tunnel's own control-plane endpoints, or run the agent in a
+  container/namespace without access to the host's tunnel client).
+
+### RISK-25 - Non-canonical marketplace feed with no install-time review gate
+
+- Severity: MEDIUM
+- Pattern: MEDIUM (RISK-25, I-030): a non-canonical marketplace feed joined with a disabled
+- Chain: marketplaces.feeds (or .sources) names a non-canonical registry -> security.installPolicy is disabled, or its exec hook is escaped -> skill/plugin installs from that source run unmonitored and unreviewed
+- Why:
+  This install names a marketplace feed/source other than the public https://clawhub.ai,
+  and at the same time security.installPolicy — the operator-owned gate meant to review
+  every skill/plugin install and update — is not enabled, or is enabled with its own exec
+  hook's path-safety checks bypassed (exec.allowInsecurePath) or forwarding a secret-
+  shaped env var name. Neither posture alone is unusual: a private feed can be a
+  legitimate self-hosted mirror, and a disabled install-policy gate is a common untouched
+  default. Together, they mean whatever that non-canonical feed serves next installs with
+  nothing reviewing it first.
+- Fix:
+  Either confirm the marketplaces.feeds/.sources entry is your own trusted mirror and
+  enable security.installPolicy with a real exec review command (no unconstrained
+  allowInsecurePath — scope it with exec.trustedDirs if you need it), or restore the
+  canonical https://clawhub.ai feed if the non-default entry was not an intentional,
+  disclosed deployment.
+
+### RISK-26 - Skill Workshop's unattended install pipeline is reachable from untrusted ingress
+
+- Severity: HIGH
+- Pattern: HIGH (RISK-26, I-031): Skill Workshop's unattended author+install pipeline,
+- Chain: detail -> Skill Workshop authors + installs new skill code with no human review step -> persistent executable code on disk
+- Why:
+  This install has the full unattended Skill Workshop pipeline configured and reachable:
+  skills.workshop.autonomous.enabled authors new skill proposals from conversation
+  signals, and approvalPolicy='auto' installs them with no human confirmation. At the same
+  time, at least one ingress surface admits content from someone other than the owner:
+  {detail}. A single inbound message can therefore cause the agent to author and install
+  new executable code on disk with no review step in between.
+- Fix:
+  Set skills.workshop.approvalPolicy back to the default 'pending' so every generated
+  proposal needs an explicit `openclaw skills workshop apply` decision, and/or disable
+  skills.workshop.autonomous.enabled unless unattended authoring is genuinely intended.
+  Independently, close the flagged ingress surface(s): set
+  channels.<provider>.contextVisibility to 'allowlist'/'allowlist_quote' (B26), scope
+  commands.ownerAllowFrom/allowFrom to your own channel-native ID(s) (B171), or disable
+  hooks.enabled if it is not required (B179).

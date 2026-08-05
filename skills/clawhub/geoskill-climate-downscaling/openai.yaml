@@ -1,0 +1,14 @@
+name: geoskill-climate-downscaling
+display_name: 气候降尺度
+description: |
+  统计降尺度：用多元回归建立粗分辨率气候变量与高分辨率地形预测因子的关系，并对残差做空间插值，生成高分辨率气候栅格
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-climate-downscaling.py
+runtime: python>=3.9
+tags:
+  - climate
+  - gis
+  - raster
+  - remote-sensing
+  - weather

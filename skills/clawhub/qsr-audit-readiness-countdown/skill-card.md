@@ -1,5 +1,5 @@
 ## Description: <br>
-QSR Audit Readiness Countdown guides restaurant and franchise operators through a 30-day milestone process for EcoSure, health department, corporate brand, and franchise compliance audits. <br>
+30-day countdown protocol for third-party compliance audits, including EcoSure, health department, corporate brand audits, and franchise compliance reviews. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,34 +7,36 @@ This skill is ready for commercial/non-commercial use. <br>
 [mcphersonai](https://clawhub.ai/user/mcphersonai) <br>
 
 ### License/Terms of Use: <br>
-CC-BY-NC-4.0 <br>
+Creative Commons Attribution-NonCommercial 4.0 International (CC BY-NC 4.0) <br>
 
 
 ## Use Case: <br>
-General managers, assistant managers, shift leads, and franchise operators use this skill to plan, track, and review audit readiness tasks across a 30-day countdown. It helps generate milestone checklists, findings, corrective actions, team readiness checks, and post-audit pattern tracking. <br>
+Restaurant and franchise operators, general managers, assistant managers, and shift leads use this skill to prepare for third-party compliance audits through a 30-day milestone countdown. It helps track walkthrough findings, corrective actions, team readiness, mock audits, final sweeps, and post-audit learning. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Audit findings, corrective actions, and respondent names may be retained in agent memory. <br>
-Mitigation: Use roles instead of personal names, avoid confidential corporate details unless needed, and clear or disable memory when workplace retention rules require it. <br>
-Risk: Readiness guidance may not match a specific audit program if the current audit criteria are not supplied. <br>
-Mitigation: Provide the current checklist when available and have the responsible manager verify outputs against the applicable audit standard before relying on them. <br>
+Risk: Countdown records may include audit dates, findings, corrective actions, staff roles, and operational compliance details. <br>
+Mitigation: Use only workplace-approved memory or storage, and avoid sensitive employee personal data or confidential corporate audit materials unless workplace policy permits that use. <br>
+Risk: Universal food-safety and audit-preparation guidance may not match a specific auditor's current criteria or local requirements. <br>
+Mitigation: Provide the official audit checklist when available and have a responsible manager verify recommendations against local, corporate, and third-party audit requirements. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/mcphersonai/qsr-audit-readiness-countdown) <br>
+- [QSR Audit Readiness Countdown on ClawHub](https://clawhub.ai/mcphersonai/skills/qsr-audit-readiness-countdown) <br>
+- [McPherson AI publisher profile](https://clawhub.ai/user/mcphersonai) <br>
+- [README.md](artifact/README.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown text with milestone checklists, audit questions, readiness summaries, findings, and corrective actions.] <br>
+**Output Type(s):** [text, markdown, guidance] <br>
+**Output Format:** [Markdown-style conversational prompts, milestone summaries, checklist outputs, findings, corrective actions, and readiness status messages] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Conversation-only output; may use agent memory for milestone status, findings, corrective actions, and respondent role or name.] <br>
+**Other Properties Related to Output:** [Stores milestone state as dated countdown records when agent memory is available; no external audit-platform integration is required.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+1.0.1 (source: SKILL.md frontmatter, evidence release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

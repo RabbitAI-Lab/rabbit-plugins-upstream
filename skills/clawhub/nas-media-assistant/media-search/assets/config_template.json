@@ -1,0 +1,81 @@
+{
+  "cache_dir": ".cache",
+  "timeout": 30,
+  "health_file": ".cache/health.json",
+  "web_sources": [
+    {
+      "id": "souxunlei",
+      "name": "搜迅雷",
+      "domains": [
+        "https://www.souxunlei.org"
+      ],
+      "parser": "souxunlei",
+      "search_url": "https://www.souxunlei.org/souxunlei/{hex}_1_id.html",
+      "credibility": 0.7,
+      "enabled": true,
+      "priority": 1,
+      "note": "关键词转UTF-8 hex编码，hash即magnet btih"
+    },
+    {
+      "id": "yilu",
+      "name": "1lou",
+      "domains": [
+        "https://1lou.me",
+        "https://1lou.one",
+        "https://1lou.icu",
+        "https://1lou.xyz",
+        "https://1lou.info",
+        "https://1lou.vip",
+        "https://1lou.pro"
+      ],
+      "parser": "yilu",
+      "search_url": "https://1lou.me/search.htm?keyword={q}",
+      "credibility": 0.7,
+      "enabled": true,
+      "priority": 2,
+      "note": "Xiuno BBS(BT之家1LOU站)，GET 搜索 search.htm?keyword=；帖子页无 magnet，下载为 attach-download 种子文件(.torrent)；多域名 failover(parser 内切)；过滤网盘类(夸克/网盘/片源/无字)；推荐 qBittorrent"
+    },
+    {
+      "id": "xl720",
+      "name": "迅雷电影天堂",
+      "domains": [
+        "https://www.xl720.com"
+      ],
+      "parser": "xl720",
+      "search_url": "https://www.xl720.com/?s={q}",
+      "credibility": 0.7,
+      "enabled": true,
+      "priority": 5
+    },
+    {
+      "id": "dongmanhuayuan",
+      "name": "动漫花园",
+      "domains": [
+        "https://www.dongmanhuayuan.com"
+      ],
+      "parser": "dongmanhuayuan",
+      "search_url": "https://www.dongmanhuayuan.com/dosearch/?key={q}",
+      "credibility": 0.7,
+      "enabled": true,
+      "priority": 4
+    },
+    {
+      "id": "nyaa",
+      "name": "Nyaa",
+      "domains": [
+        "https://nyaa.si"
+      ],
+      "parser": "nyaa",
+      "search_url": "https://nyaa.si/?q={q}",
+      "credibility": 0.7,
+      "enabled": true,
+      "priority": 3,
+      "note": "国际动漫+影视磁力站，requests直接拿magnet，反爬弱"
+    }
+  ],
+  "top_n": 3,
+  "min_relevance": 0.6,
+  "verify_timeout": 60,
+  "link": "web",
+  "tier1_size": 3
+}

@@ -37,6 +37,6 @@
 
 ### 3. 二维码
 
-使用 `qrcode_img_path` 对应的图片文件发送给用户
+使用 `qrcode_image_url` 渲染给用户：Markdown `![酷狗登录二维码](<qrcode_image_url>)`，让客户端拉取并渲染
 
 ---

@@ -1,0 +1,12 @@
+name: geoskill-spatial-join-analysis
+display_name: 空间连接分析
+description: |
+  空间关系判断(intersects/within/nearest)+属性聚合统计
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-spatial-join-analysis.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - remote-sensing

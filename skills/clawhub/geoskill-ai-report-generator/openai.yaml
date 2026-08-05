@@ -1,0 +1,14 @@
+name: geoskill-ai-report-generator
+display_name: AI遥感分析报告生成
+description: |
+  分析结果JSON模板填充，生成结构化HTML/Markdown报告（离线numpy等价实现）
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-ai-report-generator.py
+runtime: python>=3.9
+tags:
+  - ai
+  - analysis
+  - gis
+  - machine-learning
+  - remote-sensing

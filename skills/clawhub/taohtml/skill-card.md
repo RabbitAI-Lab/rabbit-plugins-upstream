@@ -1,5 +1,5 @@
 ## Description: <br>
-TaoHtml turns initial ideas, Word/PDF source material, existing slides, and HTML into polished 16:9 offline HTML reports and presentation-ready decks as a high-design alternative to PPT/PPTX. <br>
+TaoHtml helps agents turn ideas, Word/PDF files, slides, or HTML into polished offline 16:9 HTML reports and presentation-ready decks with guided structure, visual design, QA, and handoff. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Employees, external creators, and developers use TaoHtml to turn ideas, source documents, existing slides, or HTML into portable offline reports and presentation-ready decks with structured intake, visual-system selection, browser QA, and a verification handoff. <br>
+Agents, developers, and report producers use TaoHtml to plan, design, generate, QA, and hand off offline HTML reports and decks from ideas or bound source materials while preserving evidence and verification boundaries. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Local scripts process supplied documents and images, and browser QA uses Playwright/Chromium. <br>
-Mitigation: Run the skill in a trusted workspace, review supplied files before processing, and keep runtime dependencies patched, especially Pillow. <br>
-Risk: Reusable corporate-template storage can mix sensitive client branding if shared carelessly. <br>
-Mitigation: Set TAOHTML_HOME per client or workspace and archive profiles that should not be reused. <br>
-Risk: The Report IR and compiler path is marked as an experimental pilot path in the artifact. <br>
-Mitigation: Use direct HTML for normal customer work and enter Report IR only when explicitly authorized. <br>
+Risk: Local file processing, browser QA, and PDF/image parsing may expose sensitive source material to the installation environment. <br>
+Mitigation: Install only in environments where local document processing and browser QA are acceptable, and bind only intended source files. <br>
+Risk: Corporate templates or screenshots may be persisted through the TaoHtml profile store. <br>
+Mitigation: Review ~/.taohtml or TAOHTML_HOME profile-store behavior before using sensitive corporate templates or screenshots. <br>
+Risk: Outdated parsing dependencies can increase exposure when handling untrusted files. <br>
+Mitigation: Ensure dependencies, especially Pillow, resolve to patched versions before processing untrusted files. <br>
 
 
 ## Reference(s): <br>
-- [TaoHtml Skill Definition](artifact/SKILL.md) <br>
-- [Runtime Contract](artifact/references/runtime-contract.md) <br>
-- [Content Editor Contract](artifact/references/content-editor.md) <br>
-- [PPT-Like Report Building Playbook](artifact/references/process-playbook.md) <br>
-- [Production Authorization](artifact/references/production-authorization.md) <br>
-- [Project Handoff](artifact/references/project-handoff.md) <br>
-- [Visual Systems](artifact/references/visual-systems.md) <br>
+- [TaoHtml Skill Page](https://clawhub.ai/taogeo/skills/taohtml) <br>
+- [Runtime Contract](references/runtime-contract.md) <br>
+- [Process Playbook](references/process-playbook.md) <br>
+- [Visual Systems](references/visual-systems.md) <br>
+- [Static Reference VI](references/static-reference-vi.md) <br>
+- [Project Handoff](references/project-handoff.md) <br>
+- [Content Editor Contract](references/content-editor.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance plus generated HTML/CSS/JavaScript files, JSON handoff or QA records, and shell commands.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
+**Output Format:** [Markdown guidance with generated HTML/CSS/JavaScript files, JSON handoff records, and shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces offline 16:9 HTML reports and decks; editor changes export as a new HTML file and may require an accompanying assets package.] <br>
+**Other Properties Related to Output:** [Produces offline 16:9 HTML report/deck artifacts with QA and verification handoff; may use bundled scripts for validation and packaging.] <br>
 
 ## Skill Version(s): <br>
-0.5.0 (source: ClawHub release evidence) <br>
+0.5.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,0 +1,15 @@
+name: geoskill-lidar-powerline-detection
+display_name: LiDAR电力线检测
+description: |
+  从LiDAR点云提取电力线、拟合悬链线弧垂、聚类塔架，并计算线树距离
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-lidar-powerline-detection.py
+runtime: python>=3.9
+tags:
+  - energy
+  - extraction
+  - gis
+  - lidar
+  - point-cloud
+  - remote-sensing

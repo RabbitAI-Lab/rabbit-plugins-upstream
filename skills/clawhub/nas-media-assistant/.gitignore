@@ -1,0 +1,50 @@
+# macOS
+.DS_Store
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.venv/
+venv/
+
+# 缓存与运行时状态
+media-lookup/.cache/
+media-search/.cache/
+media-organizer/.cache/
+media-search/assets/config.json
+health.json
+
+# 配置（含密钥，不入库）
+config.yaml
+
+# Codex 任务交接文档（属 codex 使用范围，不随 skill 包发布）
+HANDOFF.md
+
+# 通用运行时残留（防御性忽略）
+*.log
+*.tmp
+*.bak
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+
+# Python 包构建/测试/lint 缓存
+*.egg-info/
+build/
+dist/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+.tox/
+
+# Node（备用，scripts 若用 node 时生效）
+node_modules/
+package-lock.json

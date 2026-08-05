@@ -1,5 +1,5 @@
 ## Description: <br>
-Bilibili Helper Free helps Bilibili creators draft video titles, descriptions, tags, and spoken scripts for upload preparation. <br>
+bilibili-helper-free helps Bilibili creators draft video titles, descriptions, tags, and spoken scripts before publishing. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Bilibili content creators and their agents use this skill to prepare upload-ready titles, descriptions, tags, and basic spoken scripts before publishing videos. <br>
+External Bilibili creators and entry-level content operators use this skill to prepare draft titles, descriptions, tags, and spoken scripts for video submissions. The generated text is intended for human review before posting. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generated titles, descriptions, tags, or scripts may be inaccurate, low quality, or misaligned with current Bilibili rules and recommendation behavior. <br>
-Mitigation: Review generated posting text, titles, and tags before publishing, and check current platform guidance for sensitive or restricted topics. <br>
-Risk: The artifact declares command execution and describes an optional local bili.sh workflow that is not necessary for ordinary drafting use. <br>
-Mitigation: Only allow command execution when the local workflow is intentionally installed and trusted; otherwise use the skill for text drafting only. <br>
-Risk: API key configuration examples could lead users to expose credentials if copied into shared files or version control. <br>
-Mitigation: Store API keys in the local environment or a secrets manager and avoid committing credentials to repositories or shared logs. <br>
+Risk: The security evidence flags broad read, write, command, API, file, and callback behavior that is not tightly scoped to a text drafting helper. <br>
+Mitigation: Install only in an environment where local file access, command execution, and external callback/API behavior are acceptable, or ask the publisher to narrow those capabilities. <br>
+Risk: Generated Bilibili titles, tags, and scripts can be inaccurate, poorly matched to a channel, or affected by changing platform review rules. <br>
+Mitigation: Review and edit generated content before publication, especially for sensitive topics, category fit, tag limits, and time-length claims. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/bilibili-helper-free) <br>
 - [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Plain text or Markdown with optional shell command snippets and JSON-shaped examples] <br>
+**Output Format:** [Plain text and Markdown with JSON examples and inline bash commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated posting materials should be reviewed by the creator before use on Bilibili.] <br>
+**Other Properties Related to Output:** [Outputs include draft Bilibili titles, descriptions, tags, and scripts for manual review before use.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -27,6 +27,7 @@
 - [测试与 CI](#测试与-ci)
 - [常见问题 FAQ](#常见问题-faq)
 - [注意事项](#注意事项)
+- [🤝 贡献](#贡献)
 - [License](#license)
 
 ## 项目结构（模块化）
@@ -63,8 +64,8 @@ scripts/
 ### 核心功能
 
 - 🔐 **登录认证** —— 手机号 + 密码登录，Token 本地缓存（文件权限 `0o600`）
-- 📁 **文件夹管理** —— 创建、列表、删除、移动
-- 📄 **文档管理** —— 创建、获取、保存、删除
+- 📁 **文件夹管理** —— 创建、列表、删除、移动（✅ v1.3.9 起 `move` 已修复，端点 `/list/custom/drag`）
+- 📄 **文档管理** —— 创建、获取、删除、保存、重命名（✅ v1.3.9 起 `save` 走 `/colla/events`、`rename` 走 `/list/rename_doc` 已可用；`save` 需配置 `MUBU_MEMBER_ID`，见下方配置）
 - 📋 **大纲导出** —— 导出为 Markdown 格式（往返保真）
 
 ### 版本亮点（v1.2.0）
@@ -86,7 +87,7 @@ scripts/
 | 里程碑 | 能力 | 说明 |
 | :--- | :--- | :--- |
 | **Roadmap · 整树导出** | 🌳 `export-tree` | 递归导出整个文件夹树为嵌套 `.md`（子文件夹→子目录），单点失败不阻断遍历 |
-| **Roadmap · 重命名** | ✏️ `rename` | 文档走 `save_doc` name（round-trip 保内容）；文件夹走已验证端点 `/list/rename_folder`（`folderId` 填自身 id） |
+| **v1.3.9 · 重命名** | ✏️ `rename` | 文档走独立端点 `/list/rename_doc`（`documentId` + `name`，已真机验证）；文件夹走已验证端点 `/list/rename_folder`（`folderId` 填自身 id）|
 | **Roadmap · 互操作** | 🔁 OPML / FreeMind | `opml <doc_id> --format opml\|freeplane` 导出为 OPML 2.0 / FreeMind XML，兼容 XMind 等大纲工具 |
 | **Roadmap · 大重构** | 📦 模块拆分 | `scripts/mubu_api.py` 拆分为 `scripts/mubu/`（config/convert/client/cli），shim 向后兼容，`import mubu_api` 与 `from mubu.client import MubuClient` 均可用——**93 用例通过，接口零破坏** |
 
@@ -135,6 +136,8 @@ flowchart LR
 ```bash
 export MUBU_PHONE="你的手机号"
 export MUBU_PASSWORD="你的密码"
+# 可选：幕布 colla 成员 ID（仅 save 写回需要；登录后自动缓存到 ~/.mubu_token，一般无需手动设置）
+export MUBU_MEMBER_ID="你的幕布 colla 成员 ID"
 ```
 
 或写入仓库外的凭据文件 `~/.workbuddy/.env.mubu`（环境变量优先于文件，文件权限自动 `0o600`）：
@@ -142,6 +145,8 @@ export MUBU_PASSWORD="你的密码"
 ```ini
 MUBU_PHONE=你的手机号
 MUBU_PASSWORD=你的密码
+# 可选：幕布 colla 成员 ID（仅 save 写回需要；登录后自动缓存，一般无需手动设置）
+MUBU_MEMBER_ID=你的幕布 colla 成员 ID
 ```
 
 配置完成后即可继续下面的「30 秒快速体验」；也可用 `python3 scripts/mubu_api.py login` 交互式输入（缺失时自动提示）。
@@ -196,6 +201,8 @@ pip install -r requirements-dev.txt
 ```bash
 export MUBU_PHONE="你的手机号"
 export MUBU_PASSWORD="你的密码"
+# 可选：幕布 colla 成员 ID（仅 save 写回需要；登录后自动缓存到 ~/.mubu_token，一般无需手动设置）
+export MUBU_MEMBER_ID="你的幕布 colla 成员 ID"
 ```
 
 或在 `~/.workbuddy/.env.mubu` 文件中配置（环境变量优先于文件）：
@@ -203,6 +210,8 @@ export MUBU_PASSWORD="你的密码"
 ```ini
 MUBU_PHONE=你的手机号
 MUBU_PASSWORD=你的密码
+# 可选：幕布 colla 成员 ID（仅 save 写回需要；登录后自动缓存，一般无需手动设置）
+MUBU_MEMBER_ID=你的幕布 colla 成员 ID
 ```
 
 ## 快速开始
@@ -248,14 +257,14 @@ python3 scripts/mubu_api.py get <doc_id>
 # 导出为 Markdown（往返保真，非占位）
 python3 scripts/mubu_api.py get <doc_id> --export markdown
 
-# 保存文档
+# 保存文档（✅ v1.3.9 起可用：走 /colla/events 协同端点；需配置 MUBU_MEMBER_ID，见配置）
 python3 scripts/mubu_api.py save <doc_id> --content "内容"
 python3 scripts/mubu_api.py save <doc_id> --file content.md
 
 # 从 Markdown 文件导入更新文档
 python3 scripts/mubu_api.py save <doc_id> --md outline.md
 
-# 移动文档到其他文件夹
+# 移动文档到其他文件夹（✅ v1.3.9 起可用：端点 /list/custom/drag）
 python3 scripts/mubu_api.py move <doc_id> --target <folder_id>
 
 # 删除（软删除 → 本地回收站；执行前仍须确认目标 ID；必须显式 --yes；--type 默认 folder）
@@ -269,7 +278,7 @@ python3 scripts/mubu_api.py search "项目" --json
 # 递归导出整个文件夹树为嵌套 Markdown 文件（默认当前目录，--output 指定输出根）
 python3 scripts/mubu_api.py export-tree --folder <root_folder_id> --output ./backup
 
-# 重命名文档（走 save_doc 的 name 参数，round-trip 保内容）
+# 重命名文档（✅ v1.3.9 起可用：独立端点 /list/rename_doc）
 python3 scripts/mubu_api.py rename <doc_id> --name "新标题" --type doc
 
 # 重命名文件夹（已真机验证端点 /list/rename_folder，folderId 填自身 id）
@@ -282,19 +291,19 @@ python3 scripts/mubu_api.py opml <doc_id> --format freeplane
 
 ## Agent 触发词
 
-> 幕布、mubu、幕布大纲导入导出
+> 幕布、mubu、幕布导入 Obsidian、mubu 同步、幕布笔记导出
 
 当对话中出现以上关键词时，Skill 可被自动触发。
 
 ## 测试与 CI
 
-本地运行全部测试（共 **100** 个 pytest 用例）：
+本地运行全部测试（共 **112** 个 pytest 用例）：
 
 ```bash
 PYTHONPATH=scripts python -m pytest -v
 ```
 
-持续集成：在 push 到 `main` 分支或提交 Pull Request 时，GitHub Actions 会于 **Python 3.9 / 3.10 / 3.11 / 3.12** 矩阵中自动运行测试。100 个用例在四个 Python 版本上均真实执行（非假成功）。
+持续集成：在 push 到 `main` 分支或提交 Pull Request 时，GitHub Actions 会于 **Python 3.9 / 3.10 / 3.11 / 3.12** 矩阵中自动运行测试。112 个用例在四个 Python 版本上均真实执行（非假成功）。
 
 ## 常见问题 FAQ
 
@@ -325,8 +334,24 @@ A：当前不支持。大纲折叠状态 `expand`、有序列表 `1.`、图片 /
 - 当前为 Markdown 导入/导出**往返保真**，**非**真正的双向同步（无 diff/merge，重复导入会生成新副本）；真正的双向同步（true-sync）不在本期范围。
 - 多个顶层标题导入时，首个为根，其余作为根的子节点。
 - `search` 为本地过滤：从根文件夹递归遍历所有子文件夹按名称匹配（大小写不敏感）。幕布无公开 `/search` 端点，故依赖本地遍历，文件夹极多时可能稍慢。
+- ✅ **写回类操作已可用**：`save`（端点 `/colla/events`）、`move`（端点 `/list/custom/drag`）、doc `rename`（端点 `/list/rename_doc`）均已在 v1.3.9 经真机验证。
+- ⚠️ **`save` 需 colla 成员 ID**：私人文档的 `memberId` 任何 API 都不暴露（login / JWT / `/user/info` 均不含），`save_doc` 依赖 `MUBU_MEMBER_ID` 环境变量，或登录后写入 `~/.mubu_token` 缓存的 `member_id`。缺失时会明确报错，请按配置章节设置。
 
 > 说明：v1.3.5 已包含 M1–M9 及 P2 全部能力，并新增软删除 / 本地回收站（`delete`→软删除、`restore` 恢复、`purge` 彻底删除、`trash` 列表），以上为功能边界而非未完成项。
+
+## 🤝 贡献
+
+欢迎各种形式的参与 —— 无论是提 Bug、给建议，还是直接发 PR，都十分期待！
+
+- 🐛 **遇到问题？** 请在 [GitHub Issues](https://github.com/liuboacean/mubu-integration/issues) 里描述复现步骤（含命令输出与报错），方便快速定位。
+- 💡 **有想法 / 建议？** 同样开一个 Issue，标签选 `enhancement`，说说你希望支持的能力或改进点。
+- 🔧 **想直接改代码？** 欢迎 Fork 后提交 Pull Request：
+  1. Fork 本仓库并切到新分支（`git checkout -b fix/xxx` 或 `feat/xxx`）；
+  2. 本地跑通测试：`PYTHONPATH=scripts python -m pytest -v`（需 **112 passed**）；
+  3. 提交 PR 到 `main`，GitHub Actions 会在 Python 3.9–3.12 矩阵上自动验证；
+  4. 说明清楚改动动机与验证结果，便于评审合并。
+
+> 这是一个基于幕布 Web API 逆向实现的非官方 Skill，接口细节可能随幕布版本变化。如果你逆向到了新的端点或踩到了新的返回码，尤其欢迎开 Issue / PR 同步，帮大家少走弯路。
 
 ## License
 

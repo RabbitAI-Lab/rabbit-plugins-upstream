@@ -102,9 +102,13 @@ from ._shared import (
     _meta,
     _finding,
     _config_unreadable,
+    _surface_absent,
+    _skill_corpus_complete,
     _channels,
     _UNTRUSTED_INPUT_POLICIES,
     _norm_group_policy,
+    _IMPLICIT_DEFAULT_ACCOUNT_KEYS,
+    _channel_has_implicit_default_account,
     _open_channels,
     _external_input_channels,
     _channels_with_context_visibility_all,
@@ -171,8 +175,14 @@ from ._egress import (
     check_browser_evaluate_enabled,
     check_browser_executable_path,
     check_browser_existing_session_profile,
+    check_browser_cdp_control_port,
     _cdp_url_classify,
     _cdp_url_display,
+    _cdp_allow_origins_findings,
+    _offhost_cdp_endpoints,
+    _chrome_switch_name,
+    _remote_debug_bind_class,
+    _whatwg_url,
     check_outbound_proxy,
     check_provider_baseurl,
     check_cachetrace_redaction,
@@ -191,6 +201,7 @@ from ._egress import (
 )
 
 from ._shared import (_trifecta_legs,)
+from ._shared import (_unpolicied_open_wildcard_group_channels,)  # B-371
 from ._agents import (
     _B21_OBEY_RE,
     _B21_SAFE_STANCE_RE,
@@ -223,14 +234,18 @@ from ._capability import (
     _B31_WRITE_CLASS,
     _B71_INEFFECTIVE_RE,
     _FS_WRITE_TOOL_HINTS,
+    _ToolPolicyView,
+    _agent_profile_widenings,
     _approval_bypass_actors,
     _b31_collect_deny_lists,
     _b68_fs_tools_granted,
     _has_heartbeat_signal,
+    _tool_policy_view,
     check_attestation_mismatch,
     check_capability_blast_radius,
     check_declared_effective_proven,
     check_effective_tools,
+    check_elevated_default_full,
     check_exec_applypatch_workspace,
     check_exec_strict_inline_eval,
     check_fs_write_exposure,
@@ -263,8 +278,6 @@ from ._config import (
     _NATIVE_UNCONDITIONAL_CRITICAL_CHECK_IDS,
     _is_native_unconditional_critical_check_id,
     _ENV6_TOGGLES,
-    _b323_parse_env_token_at,
-    _b323_contains_env_var_reference,
     _b323_is_literal_path_override,
     check_env_vars_path_override,
     check_audit_target_divergence,
@@ -275,6 +288,7 @@ from ._config import (
     check_controlui_origins,
     check_credential_blast_radius,
     check_dangerous_overrides,
+    check_effective_bind,
     check_gateway,
     check_gateway_rate_limit,
     check_hook_template_content,
@@ -292,6 +306,7 @@ from ._config import (
 )
 
 from ._shared import (INJECTION_PATTERNS, LOG_SCAN_INJECTION_PATTERNS, _FM_BLOCK_BARE_RE, _FM_BLOCK_HEADERED_RE, _HOOK_EXEC_RE, _skill_frontmatter_block,)
+from ._shared import (_B323_ENV_VAR_NAME_RE, _b323_parse_env_token_at, _b323_contains_env_var_reference,)  # B-397: relocated from _config (reused by B326 too)
 from ._lifecycle import (
     _APPROVAL_BYPASS_RE,
     _B182_ENV_OVERRIDES,
@@ -336,6 +351,7 @@ from ._lifecycle import (
     check_cron_run_log_orphans,
     check_cron_scheduler,
     check_declared_skill_reconciliation,
+    check_dependency_tree_hooks,
     check_exec_approvals_grants,
     check_hook_policy_bypass,
     check_human_approval,
@@ -415,7 +431,9 @@ from ._content import (
     _B65_QUERY_RE,
     _B65_TRIGGER_RE,
     _B65_WINDOW,
+    _B66_AUTHORITY_NEUTRALIZE_RE,
     _B66_CORE_RE,
+    _B66_MODE_DECLARATION_RE,
     _B66_RESET_RE,
     _B66_ROLE_START_RE,
     _B66_WEAK_RE,
@@ -439,6 +457,7 @@ from ._content import (
     _CLICKFIX_PROXIMITY_WINDOW,
     _CLICKFIX_REMOTE_FETCH_RE,
     _CLICKFIX_TRUSTED_INSTALLERS,
+    _clickfix_public_ip_fetch,
     _clickfix_trusted_installer,
     _DECODED_BAD_RE,
     _DECODED_STRONG_RE,
@@ -525,6 +544,7 @@ from ._content import (
     _b64_classify,
     _b64_reported_or_quoted,
     _b65_scan,
+    _b66_authority_override_scan,
     _b66_scan,
     _b67_has_source_contract,
     _b74_forged_turn_has_directive,
@@ -572,15 +592,19 @@ from ._content import (
     _whole_text_is_defensive,
     check_agent_snooping,
     check_capability_intent_mismatch,
+    check_chunked_file_assembly_exec,
     check_clickfix_setup_section,
+    check_cloud_metadata_credential_fetch,
     check_conditional_sleeper_trigger,
     check_config_trust_widening,
     check_cross_file_boundary_payload,
     check_cross_file_payload,
     check_cross_file_plaintext_payload,
     check_cross_skill_combined_effect,
+    check_deaddrop_resolver,
     check_dependency_confusion,
     check_dormant_capability,
+    check_dotfile_exfil_directive,
     check_dynamic_dispatch_obfuscation,
     check_event_hook_interceptor,
     check_forged_provenance,
@@ -595,19 +619,26 @@ from ._content import (
     check_lifecycle_hooks_extended,
     check_manifest_absent,
     check_markdown_image_exfil,
+    check_model_artifact_provenance,
+    check_offensive_tooling_directive,
     check_overt_secret_exfil,
     check_per_source_trust_contracts,
     check_persona_jailbreak,
     check_prompt_self_replication,
     check_pth_persistence,
+    check_python_runtime_persist_install,
     check_prose_bulk_exfil,
     check_remote_code_dependency,
+    check_self_erase_directive,
+    check_self_modification_directive,
     check_self_privesc_directive,
     check_silent_instruction,
     check_social_engineering_phishing,
     check_symlink_escape,
     check_tool_output_trust_inversion,
     check_trigger_homoglyph,
+    check_tunnel_enrollment,
+    check_undocumented_helper_directive,
     check_unicode_obfuscation,
     check_unsafe_deserialization,
 )
@@ -681,20 +712,50 @@ from ._vet import (
 
 from ._mcp import (
     _C038_COMMENT_RE,
+    _B331_AUTHORITY_BASE_RE,
+    _B331_CONFIDENTIAL_RE,
+    _B331_DATA_URI_RE,
+    _B331_DATA_URI_SAFE_MIME_RE,
+    _B331_DISREGARD_FORGET_RE,
+    _B331_EXFIL_PARAM_RE,
+    _B331_PREAMBLE_RE,
+    _B331_ROLE_TAG_RE,
     _C038_DATA_URI_RE,
     _C038_HIDDEN_INSTR_RE,
     _C038_PARAM_INJECT_RE,
+    _HOST_SANITIZE_DISREGARD_RE,
+    _HOST_SANITIZE_IGNORE_RE,
+    _HOST_SANITIZE_PLACEHOLDER,
+    _HOST_SANITIZE_TEXT_LIMIT,
+    _INSTR_OVERRIDE_SRC,
     _LP_CAP_FAMILIES,
     _LP_SCOPE_READONLY_RE,
     _LP_SCOPE_WRITE_RE,
     _MCP_AXIS_BEHAVIOR,
     _MCP_AXIS_BUILD,
     _MCP_AXIS_CONNECTIONS,
+    _B332_CLONE_JACCARD,
+    _B332_CLONE_MIN_NAMES,
+    _B332_GENERIC_TOOL_NAMES,
+    _B332_MAX_TOTAL_NAMES,
+    _B332_MIN_SPECIFIC_LEN,
+    _B332_MIN_WARN_LEN,
+    _B332_ZERO_WIDTH_RE,
+    _B333_HINT_KEYS,
     _MCP_CONN_STRING_CREDENTIAL_RE,
     _MCP_CURL_RE,
     _MCP_META_IP_RE,
+    _MCP_RING_SKIP_IDS,
+    _MCP_RING_SKIP_STATUSES,
     _MCP_SECRET_ENV_RE,
+    _MCP_SURFACE_SENTINEL_HOME,
     _MCP_UNPINNED_RE,
+    _PARAM_EXFIL_DEST_RE,
+    _PARAM_OVERRIDE_INSTR_RE,
+    _PARAM_OVERRIDE_LOOSE_RE,
+    _PARAM_JAILBREAK_PERSONA,
+    _PARAM_ROLE_FORGERY_RE,
+    _PARAM_SENTENCE_SPLIT_RE,
     _PLUGIN_FILE_CAP,
     _PLUGIN_MCP_SKIP,
     _PLUGIN_SKIP_DIRS,
@@ -702,31 +763,59 @@ from ._mcp import (
     _VET_MCP_BROAD_SCOPE_RE,
     _VET_MCP_DANGEROUS_CMDS,
     _VET_MCP_RUNNER_CMDS,
+    _VET_MCP_SCOPE_LIST_SEP_RE,
+    _VET_MCP_SCOPE_SEGMENT_SEP_RE,
     _VET_MCP_UNPINNED_PKG_RE,
     _VET_RANK_STATUS,
+    _b331_authority_hit,
+    _b331_authority_verdict,
+    _b331_data_uri_hit,
+    _b331_exfil_param_hit,
+    _b331_findings,
+    _b331_secrecy_hit,
+    _b331_tool_findings,
+    _b332_bare_tool_name,
+    _b332_clone_server_pairs,
+    _b332_collisions,
+    _b332_finding_from_surfaces,
+    _b332_homoglyph_signal,
+    _b332_is_generic,
+    _b332_unique_names,
+    _b333_hinted_tool_names,
+    _b333_surface_verdict,
+    _host_sanitize_simulated,
     _load_mcp_spec_file,
     _lp_detect_caps,
     _mcp_has_tool_restrictions,
     _mcp_reason_axis,
     _mcp_server_risks,
     _mcp_value_looks_secret,
+    _merge_mcp_surface_ring,
+    _param_override_reason,
     _plugin_finding,
     _vet_mcp_least_privilege,
+    _vet_mcp_scope_is_broad,
     _vet_mcp_server,
     _vet_mcp_tool_poisoning,
     check_mcp,
     check_mcp_bypass_highblast,
     check_mcp_external_endpoint,
     check_mcp_hardening,
+    check_mcp_host_sanitizer_gap,
     check_mcp_server_exfil_host_in_args,
     check_mcp_tool_inheritance,
+    check_mcp_tool_name_shadowing,
+    check_mcp_unenforced_annotations,
     check_plugin_app_server_command,
     check_plugin_clawhub_trust,
+    check_plugin_hook_grants,
     check_plugin_permission_mode,
+    check_plugin_slots_and_deny,
     check_plugin_tool_result_middleware,
     check_codex_plugin_hooks,
     check_compiled_tool_poisoning,
     check_orphaned_plugin_caches,
+    check_undeclared_plugin_load_path,
     vet_mcp,
     vet_plugin,
 )
@@ -1166,6 +1255,9 @@ CHECKS = [
     check_mcp_hardening,
     check_mcp_external_endpoint,
     check_mcp_server_exfil_host_in_args,
+    check_mcp_unenforced_annotations,  # B333 — declared MCP annotations OpenClaw never reads (F-143/W2.1)
+    check_mcp_host_sanitizer_gap,  # B331 — MCP tool-description injection past the host sanitizer (F-144/W2.2)
+    check_mcp_tool_name_shadowing,  # B332 — cross-server tool-name collision/homoglyph/near-miss (F-145/W2.3)
     check_proxy_header_forging,
     check_monitoring,
     check_autonomy,
@@ -1200,6 +1292,7 @@ CHECKS = [
     check_host_firewall,
     check_host_egress_posture,
     check_capability_blast_radius,
+    check_elevated_default_full,  # B326 — agents.defaults.elevatedDefault="full" bypasses approval
     check_attestation_mismatch,
     check_declared_effective_proven,
     check_agent_separation,
@@ -1213,6 +1306,8 @@ CHECKS = [
     check_controlui_origins,
     check_plugin_permission_mode,
     check_plugin_app_server_command,  # B167 — plugin appServer.command remote-fetch scan (B-231)
+    check_plugin_hook_grants,  # B341 — per-plugin-entry prompt-mutation / transcript-read grants
+    check_plugin_slots_and_deny,  # B342 — plugin slot ownership + allow/deny contradiction
     check_hook_policy_bypass,
     check_cron_scheduler,
     check_cron_job_content,  # B168 — cron job store payload.message/trigger.script scan (B-231)
@@ -1239,6 +1334,7 @@ CHECKS = [
     check_config_health_integrity,
     check_session_approval_policy,
     check_gateway_rate_limit,
+    check_effective_bind,  # B340 — corroborate declared gateway.bind against the actual listening socket (F-156)
     check_subagent_spawn_limits,
     check_cachetrace_redaction,
     # B-281/B-282 (ENV-1/ENV-6): is the audited file the one the agent loads, and is a
@@ -1258,6 +1354,7 @@ CHECKS = [
     check_systemd_persistence,  # B150 — systemd user-unit Restart=always persistence
     check_codex_plugin_hooks,  # B151 — codex connector shell hooks in the plugin doc-cache
     check_orphaned_plugin_caches,  # B152 — on-disk plugin cache not in plugins.entries
+    check_undeclared_plugin_load_path,  # B348 — plugins.load.paths entry not in plugins.entries (F-161)
     check_clawhub_lock_verification,  # B135 — accepted-despite-failed-verification install
     check_skill_install_tamper,  # B181 — installed skill modified since its recorded install hash (B-257)
     check_clawhub_token_store,  # B182 — ClawHub CLI plaintext token store perms, outside the OpenClaw home (B-259)
@@ -1265,6 +1362,7 @@ CHECKS = [
     check_declared_skill_reconciliation,  # B158 — declared-but-unresolved skill-load source (F-119)
     check_audit_suppressions,  # B173 — security.audit.suppressions self-blinds native audit (B-237)
     check_install_policy_gate,  # B174 — security.installPolicy.* gate + exec-hook escape flags (B-238)
+    check_dependency_tree_hooks,  # B349 — obfuscated install-lifecycle hook target in the dependency tree (F-167)
     check_hooks_enable_toggles,  # B179 — hooks.enabled / hooks.internal(.load.extraDirs) enable-toggle inventory (B-250)
     check_plugin_clawhub_trust,  # B177 — OpenClaw's own persisted per-plugin ClawHub trust verdict (B-240)
     check_plugin_tool_result_middleware,  # B187 — non-bundled plugin declares agentToolResultMiddleware (B-292, RT-2)
@@ -1275,6 +1373,7 @@ CHECKS = [
     check_browser_evaluate_enabled,  # B196 — browser.evaluateEnabled arbitrary-JS sink (E-060 item 3)
     check_browser_executable_path,  # B321 — browser.executablePath / profiles.*.executablePath / mcpCommand (E-060 item 4)
     check_browser_existing_session_profile,  # B322 — browser.profiles.*.userDataDir / cdpUrl / driver:"existing-session" (E-060 item 5)
+    check_browser_cdp_control_port,  # B330 — unauthenticated CDP control port: off-host cdpUrl / --remote-allow-origins (C-298)
     check_marketplace_feed_provenance,  # B325 — marketplaces.feeds non-canonical registry (E-060 item 8)
     check_exec_safe_bin_trusted_dirs,  # B328 — tools.exec.safeBinTrustedDirs writable-dir promotion (E-060 item 11)
     # B191 (F-134, DISK-1) is DELIBERATELY NOT REGISTERED HERE. It is cataloged in
@@ -1323,6 +1422,10 @@ def _check_error_finding(chk, exc: BaseException) -> Finding:
         framework="Engine robustness",
         scored=False,
         evidence=[f"error type: {type(exc).__name__}"],
+        # B-399: redundant with the `ERR:` id prefix `_degraded_signal` already keys on,
+        # set anyway so the flag stays the single source of truth for "this UNKNOWN is
+        # engine-side" across every producer, not just this one.
+        engine_degraded=True,
     )
 
 
@@ -1353,15 +1456,20 @@ def _check_budget_finding(chk, kind: str, seconds: float | None = None) -> Findi
         framework="Engine robustness",
         scored=False,
         evidence=[f"scan budget: {kind}"],
+        # B-399: see the matching note in _check_error_finding above.
+        engine_degraded=True,
     )
 
 
 def run_all(ctx: Context, check_budget_s: float = DEFAULT_CHECK_BUDGET_S,
             audit_budget_s: float = DEFAULT_AUDIT_BUDGET_S) -> list[Finding]:
     # Per-check isolation (B-101) + wall-clock budget (C-159): a crashing OR hanging
-    # check degrades to one UNKNOWN finding instead of aborting the audit. Catch
-    # ScanBudgetExceeded before the generic Exception; catch Exception (not
-    # BaseException) so KeyboardInterrupt / SystemExit still propagate.
+    # check degrades to one UNKNOWN finding instead of aborting the audit. This is the
+    # DESIGNATED handler for a per-check deadline: ScanBudgetExceeded derives from
+    # BaseException (B-352), so it reaches here past every inner `except Exception` in
+    # the check's call graph rather than being swallowed into a lying PASS, and the
+    # generic `except Exception` below (deliberately not BaseException, so
+    # KeyboardInterrupt / SystemExit still propagate) can no longer shadow it.
     findings: list[Finding] = []
     deadline = audit_deadline(audit_budget_s)
     for chk in CHECKS:

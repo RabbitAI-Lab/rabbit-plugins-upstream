@@ -1,5 +1,5 @@
 ## Description: <br>
-Through fixed enclosure cameras or supplied image and video inputs, this skill analyzes a snake's open-mouth imagery for visual signs associated with stomatitis risk, including mucosa color, pus points, ulcers, necrotic tissue, image quality, and contextual exclusion signals. <br>
+Analyzes snake mouth images, videos, or URLs to identify visual stomatitis risk signals such as mucosa color changes, pus points, ulcers, necrotic tissue, and image-quality or context conditions that affect reliability. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, reptile keepers, breeders, reptile veterinary teams, and developers can use this skill to analyze snake mouth images or videos, produce structured visual risk reports, and query cloud-hosted historical reports. It is intended to support observation and escalation to a qualified reptile veterinarian, not to diagnose disease or prescribe treatment. <br>
+External users, reptile keepers, breeding farms, and reptile veterinary teams use this skill to submit snake mouth media for visual analysis and receive structured stomatitis risk reports, non-treatment guidance, and report links. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Snake mouth images, videos, URLs, and account-linked report queries are sent to a remote Life Emergence/SMYX cloud service. <br>
-Mitigation: Use the skill only with media and URLs approved for remote processing, and confirm the service's retention, deletion, and access controls before deployment. <br>
-Risk: The skill can silently create or reuse local identity records and tokens. <br>
-Mitigation: Avoid shared workspaces or existing smyx-api-key.txt/user databases unless identity reuse is intended; isolate deployments by workspace and review stored credentials before installation. <br>
-Risk: Visual health analysis may be mistaken for veterinary diagnosis or treatment advice. <br>
-Mitigation: Present outputs as visual risk observations only, avoid drug or procedure recommendations, and direct urgent or repeated findings to a qualified reptile veterinarian. <br>
-Risk: Poor image quality or missing context can produce unreliable findings. <br>
-Mitigation: Require clear, well-lit open-mouth imagery, species and husbandry context, and return an unreliable-signal result when the mouth is obscured, under-resolution, reflective, or captured during feeding. <br>
+Risk: Uploaded files or provided URLs are processed by LifeEmergence cloud APIs. <br>
+Mitigation: Do not provide private URLs, sensitive enclosure footage, or proprietary media unless cloud processing is acceptable. <br>
+Risk: The skill silently creates or reuses a persistent local identity and stores account tokens locally. <br>
+Mitigation: Review or clear the workspace data used by the skill after use or before uninstalling it. <br>
+Risk: Visual risk output could be mistaken for a veterinary diagnosis or treatment plan. <br>
+Mitigation: Use the report as screening guidance only and route concerning results to a professional reptile veterinarian; do not add drug, dosage, or surgical instructions. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-snake-stomatitis-detection-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-snake-stomatitis-detection-analysis) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API reference](references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Structured analysis report, Markdown history table, JSON detail mode, and optional output file] <br>
+**Output Type(s):** [text, markdown, json, guidance] <br>
+**Output Format:** [Markdown and JSON analysis reports with optional saved output files and report export links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include visual findings, risk level, recommended non-prescriptive actions, disclaimers, and report links when available.] <br>
+**Other Properties Related to Output:** [May include cloud report links and history-list results; accepts local image/video files or public media URLs.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+1.0.7 (source: server release metadata; artifact frontmatter says 1.0.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

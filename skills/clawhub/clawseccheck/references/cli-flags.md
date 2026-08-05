@@ -8,23 +8,69 @@ kept here so the always-loaded playbook stays lean.
 - `--save PATH` — write the report to a local file.
 - `--sarif PATH` — write a local SARIF 2.1.0 file (for CI / GitHub Code Scanning; never uploaded).
   Works with `--vet`/`--vet-mcp` too, as a side output alongside the human report.
+- `--pdf PATH` — write the complete audit (every FAIL/WARN finding, paginated) as a base-14-only
+  PDF — no font embedding, no JavaScript, no forms. This is the mobile-chat deliverable: a
+  filesystem path is useless to a user reading from a phone, but a PDF opens inline in a chat
+  client's own viewer (unlike `--html`, which most mobile clients hand over as a download). If
+  the user is talking from a phone/chat client, attach the PDF file itself into the reply — never
+  paste its path or re-render its contents into the chat text (same doctrine as the `--badge`
+  SVG: attach the artifact, don't redraw it).
 - `--json` with `--vet`/`--vet-mcp` — emits the risk-dossier JSON object (`mode`, `target`,
   `target_type`, `verdict`, `grade`, `score`, `axes[]`, `findings[]`): the five risk axes
   (danger / build / behavior / persistence / connections) plus an A–F grade. Exit code is 1 on
   SUSPICIOUS/DANGEROUS. See `docs/OUTPUT_SCHEMA.md` §11.
 - `--fail-under N` — exit with code 1 if score is below N (useful for CI pipelines).
-- `--exit-code` — exit 1 on a FAIL verdict from any of four sources: (1) an unsuppressed
+- `--exit-code` — exit 1 on a FAIL verdict from any of five sources: (1) an unsuppressed
   `FAIL` audit finding; (2) under `--full`, a `FAIL` MCP server; (3) under `--full`, a
-  `DANGEROUS` installed skill from the skill sweep; (4) on any run, a present-but-unparseable
+  `DANGEROUS` installed skill from the skill sweep; (4) under `--full` (and not `--fast`), a
+  `DANGEROUS` installed plugin from the plugin sweep; (5) on any run, a present-but-unparseable
   `openclaw.json` (which yields only UNKNOWN/WARN findings, so a FAIL-only gate would
-  otherwise stay green on a broken config). Sources 2 and 3 are FAIL-only — a SUSPICIOUS
-  (WARN) server or skill does not trip it, and neither does a skipped or partially-scanned
-  skill: an incomplete sweep is disclosed in its printed section, never by reddening the gate.
+  otherwise stay green on a broken config). Sources 2-4 are FAIL-only — a SUSPICIOUS
+  (WARN) server, skill, or plugin does not trip it, and neither does a skipped or
+  partially-scanned target: an incomplete sweep is disclosed in its printed section, never
+  by reddening the gate. The adjudication phase (judge packet / second opinion) never trips
+  this — advisory-only by design.
   `--vet`'s exit code is a separate contract (1 on SUSPICIOUS *or* DANGEROUS).
+- `--fast` — only with `--full`: skip the plugin sweep, behavioral replay, and skill sweep,
+  keeping the audit + self-test + vet-mcp + the (free) adjudication packet. For CI runs where
+  the deep phases are too slow; this is the pre-F-150 `--full` shape.
+- `--exhaustive` — raise the trajectory-file / log-sink / per-line scan caps instead of the
+  interactive-fast defaults: every trajectory file (not just the 60 most recent), every log
+  sink (not cut off by the cumulative time budget), and the FULL byte range of an over-length
+  log line via overlapping sliding windows (not only its head/tail). Applies to B164/B180,
+  which run on every audit — has effect with or without `--full`. The per-check and
+  whole-audit wall-clock budgets are raised in the same step, so scanning more cannot degrade
+  a check into a timed-out UNKNOWN. Slower; offer it after a normal run flags something
+  suspicious and the user wants maximum coverage, not as a default.
+- `--judged-bundle PATH` (`-` for stdin): feed back a host-agent judge's answers to a
+  prior `--full --json` packet in one file (`attestation` / `judged` / `vetJudged`
+  buckets). Under `--full`, produces a `"Second opinion (advisory)"` section and, in
+  `--json`, a `secondOpinion` array; own-config verdicts may only annotate (never change
+  score/grade), swept-target verdicts are escalate-only. Its `liveTest` bucket also has
+  a separate, narrower effect WITHOUT `--full`: `--trend`/`--monitor`/`--percentile`/
+  `--next` each honor it on its own to cap the reported score/percentile.
 - `--verbose` / `--debug` / `--log PATH` — local logging with secret redaction.
 - `--no-native` — skip the built-in `openclaw security audit` (for offline / hermetic testing).
+- `--no-deptree` — skip the OpenClaw dependency-tree walk behind B349 ("Obfuscated install-time
+  target in the dependency tree"). That walk is on by default here, and is the one part of an
+  audit that reads outside the OpenClaw home: it resolves the installed OpenClaw package root
+  from `PATH` (`shutil.which`, no subprocess), then walks that package's `node_modules` and reads
+  each package's `package.json`, each package root's `binding.gyp`, and the in-package files
+  those name as install-time targets. Read-only and offline throughout: symlinks are never
+  followed, nothing is ever executed, and the walk is bounded to 2000 packages (a walk truncated
+  by that budget is reported as UNKNOWN, never as a clean tree). Use it on a very large installed
+  tree, or to keep the scan inside the OpenClaw home. Note the asymmetry with the library API:
+  `audit()` takes `include_deptree=False` by default, so only the CLI walks unless asked.
 - `--no-update-notice` — suppress the offline "your build may be stale" reminder
   (also via `CLAWSECCHECK_NO_UPDATE_NOTICE=1`). The reminder is offline-only — never a network call.
+- `--no-freshness-notice` — suppress the report's advisory freshness lines (also via
+  `CLAWSECCHECK_NO_FRESHNESS_NOTICE=1`). On a normal audit that is three advisories: the
+  coverage-freshness reminder for the opt-in capabilities (`--self-test` / `--redteam` /
+  `--dryrun` / `--canary`, and `--vet-mcp`) when one is stale or has never been run; the IOC
+  dataset's own staleness notice; and the coverage notice naming the ecosystems that dataset
+  ships no indicators for. The same switch suppresses the IOC pair on `--vet-source`, where the
+  two print to stderr. All of it is offline and advisory — never a network call, never a finding,
+  and never a change to score or grade; none of it appears in `--json` / `--card` / `--sarif`.
 - `--verify-self` — print SHA-256 digest of ClawSecCheck's source files for tamper detection.
 - `--show-suppressed` — list any findings the user has silenced via `.clawseccheckignore`.
 - `--ask` — emit a JSON attestation template (the facts config can't show: real tool inventory,
@@ -37,11 +83,11 @@ kept here so the always-loaded playbook stays lean.
   (non-suppressed FAIL/WARN, high-confidence, grouped by the 7 families, already framed in the
   open 3-sided box) and exit. Agent-facing: SKILL.md Step 3 runs this and pastes the output
   verbatim, so the family frame is deterministic instead of model-drawn. `--ascii` degrades the
-  frame to `[Family] — N to fix` brackets.
+  frame to `[Family] — N issue(s)` brackets.
 
 **Mode precedence.** Most flags above select a single mode; only one runs per invocation
 (resolved in a fixed order, `--json` winning over `--card` on the default report path). If you
-pass a second mode, or a modifier the chosen mode can't use (e.g. `--save` with `--card`, or
+pass a second mode, or a modifier the chosen mode can't use (e.g. `--save` with `--vet`, or
 `--exit-code` with `--sarif`), ClawSecCheck prints a `note: …` to **stderr** naming what was
 ignored and continues — machine-readable stdout (`--json`/`--sarif`) stays clean. `--no-history`
 is honored everywhere except `--trend`/`--monitor`, which record a score point as part of their job.

@@ -49,3 +49,15 @@ CC BY-NC 4.0 with McPherson AI commercial-use clarification as described in the 
 McPherson AI  
 San Diego, CA  
 Built from real QSR operating experience.
+
+---
+
+## McPherson Governance V6 private shadow beta
+
+McPherson AI is preparing an invite-only V6 beta for OpenClaw operators and builders. V6 provides agent and capability discovery, AutoMap proposals, Governability Diagnosis, and reviewable evidence through Observa.
+
+Shadow mode observes and evaluates activity without blocking, approving, denying, delaying, or rewriting actions.
+
+[Request private beta access](https://mcphersonai.com/contact?utm_source=github&utm_medium=skill-readme&utm_campaign=governance-v6-shadow-beta&utm_content=qsr-shift-reflection#governance-setup)
+
+*This publisher notice does not change this skill’s behavior, data handling, or license.*

@@ -1,5 +1,5 @@
 ## Description: <br>
-Read-only Calibre catalog lookup and one-book analysis-comments workflow over a running Calibre Content server, including ID-based viewing requests while excluding title, author, tag, series, and other metadata edits. <br>
+Calibre catalog lookup, viewing, and delegated one-book analysis. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and Calibre library operators use this skill to let an agent inspect a Calibre library, answer list/search/ID lookup questions, and run one-book text analysis that can write analysis HTML back to Calibre comments when explicitly invoked. <br>
+Developers and agents use this skill to inspect a Calibre catalog, retrieve book details, and coordinate one-book analysis through a constrained subagent workflow. It is intended for existing Calibre Content server environments where lookup and analysis comments are part of the user's library workflow. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Bundled extracted book-text cache files may expose copyrighted or private library content. <br>
-Mitigation: Remove bundled state/cache files before installation or use, and clear cached text or database artifacts when analysis data is no longer needed. <br>
-Risk: The workflow requires Calibre Content Server credentials and can write analysis HTML to the comments metadata field. <br>
-Mitigation: Use a least-privilege Calibre account, restrict .env file permissions, avoid plaintext password arguments where possible, and review comments-write behavior before enabling the analysis apply workflow. <br>
+Risk: Analysis completion can write generated analysis into a book's Calibre comments. <br>
+Mitigation: Review the target book and generated analysis before routine use, and use a dedicated low-privilege Calibre account where possible. <br>
+Risk: Credential handling has avoidable leakage risk when connecting to the Calibre Content server. <br>
+Mitigation: Keep CALIBRE_* environment files scoped to the runtime, prefer CALIBRE_PASSWORD over inline passwords, and review password-redaction behavior before deployment. <br>
+Risk: Low extracted text or comic-centric titles can produce poor or inappropriate text analysis. <br>
+Mitigation: Follow the built-in low-text confirmation step and exclude manga or comic-centric books from the text analysis pipeline. <br>
 
 
 ## Reference(s): <br>
-- [Calibre Catalog Read on ClawHub](https://clawhub.ai/nextaltair/calibre-catalog-read) <br>
-- [Subagent analysis prompt](references/subagent-analysis.prompt.md) <br>
-- [Subagent input schema](references/subagent-input.schema.json) <br>
-- [Subagent analysis output schema](references/subagent-analysis.schema.json) <br>
+- [ClawHub skill page](https://clawhub.ai/nextaltair/skills/calibre-catalog-read) <br>
+- [README](README.md) <br>
+- [Subagent Analysis Prompt](references/subagent-analysis.prompt.md) <br>
+- [Subagent Analysis Schema](references/subagent-analysis.schema.json) <br>
+- [Subagent Input Schema](references/subagent-input.schema.json) <br>
+- [JSON Schema Draft 2020-12](https://json-schema.org/draft/2020-12/schema) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON catalog or analysis outputs.] <br>
+**Output Format:** [Markdown guidance with shell command examples and JSON schema contracts; delegated book analysis returns schema-valid JSON and can be rendered into Calibre comments.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [One-book analysis runs produce schema-conformant JSON and may update Calibre comments metadata after completion.] <br>
+**Other Properties Related to Output:** [Requires node, uv, calibredb, ebook-convert, and CALIBRE_PASSWORD; optional CALIBRE_USERNAME may be used for authenticated Calibre Content server access.] <br>
 
 ## Skill Version(s): <br>
-1.0.10 (source: server release evidence) <br>
+1.0.13 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

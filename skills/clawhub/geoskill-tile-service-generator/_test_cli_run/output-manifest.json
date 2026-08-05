@@ -1,0 +1,50 @@
+{
+  "skill": "tile-service-generator",
+  "skill_version": "1.0.0",
+  "command": "tile-service-generator --bbox 116 39 117 40 --synthetic --min-zoom 6 --max-zoom 7 --output-dir ./_test_cli_run --quiet",
+  "started_at": "2026-08-03T17:26:28.884295Z",
+  "finished_at": "2026-08-03T17:26:28.895037Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "min_zoom": 6,
+    "max_zoom": 7,
+    "synthetic": true,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_run\\tiles.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "zoom_levels": [
+      6,
+      7
+    ],
+    "total_tiles": 2,
+    "tile_size": 256
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "tile-service-generator"
+  },
+  "error": null
+}

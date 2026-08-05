@@ -14,7 +14,7 @@ import sys
 
 from .doctor import diagnose
 from .lifecycle import initialize, status, uninstall
-from .orchestrator import run_auto
+from .orchestrator import run_auto, validated_host_gate
 from .pipeline import build, render, scan, validate
 from .result import render_result
 from .updater import incremental_update
@@ -92,17 +92,21 @@ def main(argv: list[str] | None = None) -> int:
             max_vault_depth=args.max_vault_depth,
         )
     elif args.command == "run":
-        payload, exit_code = run_auto(
-            workspace=workspace,
-            sources=args.source or [],
-            requested_config=args.config,
-            mode=args.mode,
-            privacy_mode="metadata-only",
-            preferred_port=args.port,
-            max_vault_depth=args.max_vault_depth,
-            resume=args.resume,
-            validated_host=args.validated_host,
-        )
+        host_gate = validated_host_gate(args.validated_host)
+        if host_gate is not None:
+            payload, exit_code = host_gate
+        else:
+            payload, exit_code = run_auto(
+                workspace=workspace,
+                sources=args.source or [],
+                requested_config=args.config,
+                mode=args.mode,
+                privacy_mode="metadata-only",
+                preferred_port=args.port,
+                max_vault_depth=args.max_vault_depth,
+                resume=args.resume,
+                validated_host=args.validated_host,
+            )
     elif args.command == "scan":
         payload, exit_code = scan(workspace=workspace, requested_config=args.config)
     elif args.command == "build":

@@ -1,0 +1,13 @@
+name: geoskill-image-quality-assessment
+display_name: 影像质量评估
+description: |
+  评估多光谱影像辐射质量（SNR/条纹/坏线）与几何质量（云量/清晰度），输出质量评分 JSON + HTML 报告。Assess radiometric (SNR, striping, dead lines) and geometric (cloud, sharpness) quality of multispectral imagery; outputs a scored JSON and HTML report.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-image-quality-assessment.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - machine-learning
+  - remote-sensing

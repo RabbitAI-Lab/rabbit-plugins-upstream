@@ -1,0 +1,4 @@
+interface:
+  display_name: "PDF Reader"
+  short_description: "PDF 转 Markdown 并输出页码与质量指标"
+  default_prompt: "Use $pdf-reader to convert this PDF into Markdown with page markers and quality metrics."

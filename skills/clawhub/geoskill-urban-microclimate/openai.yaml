@@ -1,0 +1,17 @@
+name: geoskill-urban-microclimate
+display_name: 城市微气候分析
+description: |
+  Analyze urban heat island intensity and ventilation index from land surface temperature, NDVI, impervious surface and building morphology.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-urban-microclimate.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - climate
+  - gis
+  - raster
+  - remote-sensing
+  - urban
+  - vegetation
+  - weather

@@ -1,0 +1,12 @@
+name: geoskill-impervious-surface-trend
+display_name: 不透水面变化趋势
+description: |
+  多期不透水面比例逐像元趋势拟合（线性/指数），计算增长速率并识别增长热点
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-impervious-surface-trend.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - remote-sensing

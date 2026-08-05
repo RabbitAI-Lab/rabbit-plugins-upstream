@@ -5,12 +5,13 @@ Use mainland Chinese trading-community wording. Prefer concise subtitle language
 
 ## Core Terms
 
-- scalper: 剥头皮交易员 / 超短线交易员; never translate as 黄牛
-- scalping: 剥头皮 / 超短线
+- scalper: 剥头皮交易者; do not generalize it to 超短线交易者, and never translate it as 黄牛
+- scalping / scalp trade: 剥头皮交易 / 剥头皮单; use 短周期交易 or 超短线交易 only when the source explicitly says short-term trading
 - price action: 价格行为
 - candlestick: K 线
 - order flow: 订单流
 - footprint chart / order-flow chart: 足迹图 / 订单流图
+- zero prints: 单侧零成交
 - Deep Charts: Deep Charts; keep product name in English unless the user asks otherwise
 - smart money: 聪明钱
 - informed money: 知情资金 / 信息优势资金

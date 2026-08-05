@@ -1,5 +1,5 @@
 ## Description: <br>
-DCC-MCP helps agents connect to and operate live DCC applications through structured DCC-MCP tools, with CLI-first marketplace discovery and setup guidance. <br>
+DCC-MCP routes agents to DCC-MCP CLI or MCP workflows for controlling live Maya, Blender, Houdini, Photoshop, 3ds Max, Nuke, Unreal, Godot, RenderDoc, Substance 3D, and related marketplace skills. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, technical artists, and agent operators use this skill to route DCC control requests to live Maya, Blender, Houdini, Photoshop, 3ds Max, Nuke, Unreal, Godot, RenderDoc, Substance 3D, and related DCC tooling. It also guides marketplace search, package inspection, consent-gated installs or updates, and gateway troubleshooting. <br>
+Developers, technical artists, and agent operators use this skill to discover live DCC instances, search or invoke structured DCC capabilities, and manage DCC-MCP marketplace skill packages with consent-gated setup and update steps. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to control live DCC applications and change active creative sessions. <br>
-Mitigation: Use the skill only when DCC-MCP control is intended, inspect tool schemas before calls, prefer structured tools, and verify results after actions. <br>
-Risk: CLI installs, marketplace installs or updates, adapter setup, remote gateway profiles, and daemon actions can change local tools or installed skills. <br>
-Mitigation: Require explicit user consent before these actions and follow the artifact's consent-gated setup and marketplace inspection steps. <br>
-Risk: A missing CLI may trigger a binary installation path. <br>
-Mitigation: Use only the documented verified installer path, which checks the official release manifest and SHA-256 digest and fails closed on mismatch. <br>
+Risk: The skill can direct an agent to operate live DCC applications and affect important project files. <br>
+Mitigation: Use it only for intended DCC automation tasks and review prompts carefully before allowing changes to live applications or project files. <br>
+Risk: The skill can guide local installs, updates, adapter execution, gateway profile changes, or remote gateway use. <br>
+Mitigation: Require explicit user consent before those actions and follow the documented consent-gated setup and update paths. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/loonghao/skills/dcc-mcp) <br>
-- [Clawdis Homepage](https://github.com/dcc-mcp/dcc-mcp-core/blob/main/skills/dcc-mcp/SKILL.md) <br>
-- [CLI Cheatsheet](references/CLI_CHEATSHEET.md) <br>
-- [Zero Instances CLI Setup Guide](references/ZERO_INSTANCES_CLI.md) <br>
+- [DCC-MCP Skill Page](https://clawhub.ai/loonghao/skills/dcc-mcp) <br>
+- [DCC-MCP Source Skill](https://github.com/dcc-mcp/dcc-mcp-core/blob/main/skills/dcc-mcp/SKILL.md) <br>
+- [CLI cheatsheet](references/CLI_CHEATSHEET.md) <br>
+- [Zero instances CLI setup guide](references/ZERO_INSTANCES_CLI.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and configuration instructions] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include consent-gated setup steps, CLI command sequences, gateway profile guidance, DCC tool-call arguments, and bounded troubleshooting summaries.] <br>
+**Other Properties Related to Output:** [Agent-facing workflow guidance; command outputs may be JSON or compact text depending on CLI flags.] <br>
 
 ## Skill Version(s): <br>
-0.19.79 (source: frontmatter metadata and server release evidence) <br>
+0.19.91 (source: server release metadata and SKILL.md metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

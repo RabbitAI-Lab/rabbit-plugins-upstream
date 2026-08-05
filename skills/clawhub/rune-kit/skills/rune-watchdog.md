@@ -1,6 +1,6 @@
 # rune-watchdog
 
-> Rune L3 Skill | monitoring | model: tier:mid
+> Rune L3 Skill | monitoring | model: tier:light
 
 
 # watchdog

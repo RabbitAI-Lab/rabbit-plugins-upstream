@@ -1,5 +1,5 @@
 ## Description: <br>
-Detects people in target areas from monitoring videos or video URLs and returns structured human-detection reports for access monitoring. <br>
+Detects people in target areas from video files or URLs using computer vision and returns structured reports with counts, intrusion indicators, recommendations, and report links. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and site security teams use this skill to analyze fixed-camera monitoring footage for personnel presence, counts, intrusion indicators, and prior report lookup. <br>
+Developers and operators use this skill to analyze surveillance video or image inputs for human presence, counts, repeated appearances, and intrusion indicators in parks, offices, and restricted areas. It can also retrieve cloud-hosted historical detection reports linked to the managed user identity. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Monitoring footage or video URLs may be sent to a configured remote service. <br>
-Mitigation: Use only footage approved for this service and avoid workplace, restricted-area, or personally identifiable media unless retention and processing controls have been reviewed. <br>
-Risk: The skill can silently create or reuse a local identity and persist account tokens in a workspace SQLite database. <br>
-Mitigation: Run it in an environment where token storage is acceptable, access to the workspace database is controlled, and persisted identities can be reviewed or cleared. <br>
-Risk: Historical cloud report lookup may expose prior analysis records associated with the resolved identity. <br>
-Mitigation: Limit use to authorized operators and verify that cloud report access aligns with organizational privacy and access-control requirements. <br>
+Risk: Video or image files and URLs are uploaded to configured cloud APIs for analysis. <br>
+Mitigation: Use only authorized footage, avoid sensitive surveillance media unless operators understand the upload path, and review the lifeemergence.com service terms and retention/deletion behavior before use. <br>
+Risk: The skill silently creates or reuses local identity and token records for report association and history queries. <br>
+Mitigation: Review local workspace data files such as smyx-common-claw.db and smyx-api-key.txt, and confirm operators understand how cloud reports are linked to the internally managed identity. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-human-detection-analysis) <br>
-- [API 接口文档](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-human-detection-analysis) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API interface documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON text reports, with optional saved output files] <br>
+**Output Type(s):** [Text, Markdown, JSON, Shell commands] <br>
+**Output Format:** [Markdown reports and JSON structured results, with optional saved output files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return structured detection results, report links, and historical report tables; video inputs are documented as mp4, avi, or mov up to 10MB.] <br>
+**Other Properties Related to Output:** [Accepts a local video path or public video URL, optional detection-region coordinates, and a history-list mode that retrieves reports from the configured cloud API.] <br>
 
 ## Skill Version(s): <br>
-1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.10) <br>
+1.0.8 (source: server release metadata; artifact frontmatter states 1.0.13) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

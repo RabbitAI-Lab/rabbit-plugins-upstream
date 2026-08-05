@@ -1,7 +1,7 @@
 ---
 name: rustok-wallet-tui
 description: Self-custody Ethereum agent wallet. Installs with one command and runs entirely on your machine as a single container image (MCP over stdio); private keys never leave it. Read wallet context, balances and DeFi positions (Aave v3, ERC-4626); preview transactions and sign messages. Sending funds on-chain requires your approval in a separate terminal console, never inside the agent chat; message signing is not console-gated. You assume all risk for funds on the agent wallet — there are no hard-coded spending limits.
-version: 0.8.2
+version: 0.8.4
 metadata:
   openclaw:
     emoji: "🦀"
@@ -29,6 +29,9 @@ private keys live only in the user's local Docker volume and never leave it.
 
 The wallet's guarantee is narrow and specific. State it plainly; do not oversell it.
 
+The full list of boundaries — password delivery, updates, what we do not verify at
+all — lives in [docs/CAVEATS.md](https://github.com/rustok-org/mcp/blob/main/docs/CAVEATS.md).
+
 | | |
 |---|---|
 | **Protected** | Private keys stay in the user's **local Docker volume** and never leave the machine. **Sending funds on-chain** (`execute_transaction`) is parked and requires the user's approval in a **separate console window** (`rustok console`, opened by the user — see below), with a PIN for high-risk items. |
@@ -51,18 +54,47 @@ true: keys stay local, and **on-chain sends** are human-gated in the console.
 ## One-time onboarding (the user does this in their own terminal, once)
 
 Three commands, in a **terminal the agent cannot see** — the full guide is
-[docs/INSTALL.md](https://github.com/rustok-org/mcp/blob/main/docs/INSTALL.md):
+[docs/INSTALL.md](https://github.com/rustok-org/mcp/blob/main/docs/INSTALL.md).
+
+**1. Install the `rustok` command.** Fetch the installer to a file, read that
+file, then run **that same file** — what you read is exactly what runs. This is a
+wallet: fetching a script straight into a shell means running code you never saw,
+and one look costs less than that trade.
 
 ```bash
-# 1. install the `rustok` command (pulls the image by digest; verifies the
-#    signature too when cosign is available)
 curl --proto '=https' --tlsv1.2 -fsSL \
-  https://raw.githubusercontent.com/rustok-org/mcp/wallet-tui-v0.8.2/scripts/install.sh | sh
+  https://raw.githubusercontent.com/rustok-org/mcp/wallet-tui-v0.8.4/scripts/install.sh -o install.sh
+less install.sh      # ~150 lines of POSIX sh
+sh install.sh
+```
 
-# 2. create the wallet — prints the 12-word phrase and the approval PIN ONCE
+It pulls the wallet image **by digest** (those bytes or nothing) and verifies who
+built it with cosign when cosign is available. The release notes for that tag
+publish the script's `sha256` if you would rather check the bytes than read them.
+
+<details>
+<summary>The one-liner, if you have already read the script</summary>
+
+```bash
+curl --proto '=https' --tlsv1.2 -fsSL \
+  https://raw.githubusercontent.com/rustok-org/mcp/wallet-tui-v0.8.4/scripts/install.sh | sh
+```
+
+Piping to a shell runs whatever the URL serves at that moment, unreviewed. The
+tag pins a *version*, not the bytes — the identities bound to exact bytes live
+**inside** the script (the image digest and the shim's commit SHA). Fine once you
+have read it; not the way to meet it.
+</details>
+
+**2. Create the wallet** — prints the 12-word phrase and the approval PIN ONCE:
+
+```bash
 rustok init
+```
 
-# 3. register this wallet with the agent client
+**3. Register this wallet with the agent client:**
+
+```bash
 rustok connect claude
 ```
 
@@ -97,13 +129,14 @@ the secret store; on docker, keep it in a private `0600` file and pass its *path
 # One-time (podman): the value never touches history, inspect or configs.
 read -r -s -p "Keyring password: " pw && printf '%s' "$pw" | podman secret create rustok-keyring-claude - && unset pw
 
-podman run -i --rm --init \
+podman run -i --rm \
   --label rustok=wallet --label rustok.agent=claude \
   -v rustok-wallet-tui:/data \
-  --secret rustok-keyring-claude,type=env,target=RUSTOK_KEYRING_PASSWORD \
+  --secret rustok-keyring-claude,type=mount,mode=0400,uid=1000,gid=1000 \
+  -e RUSTOK_KEYRING_PASSWORD_FILE=/run/secrets/rustok-keyring-claude \
   -e RUSTOK_ALLOWED_CHAINS="1,8453" \
   -e RUSTOK_RPC_URLS_1="https://your-rpc" \
-  ghcr.io/rustok-org/rustok-wallet-tui:v0.8.2
+  ghcr.io/rustok-org/rustok-wallet-tui:v0.8.4
 ```
 
 ```bash
@@ -111,14 +144,14 @@ podman run -i --rm --init \
 umask 077
 read -r -s -p "Keyring password: " pw && printf '%s' "$pw" > ~/.rustok-keyring-pass && unset pw
 
-docker run -i --rm --init \
+docker run -i --rm \
   --label rustok=wallet --label rustok.agent=claude \
   -v rustok-wallet-tui:/data \
   -v ~/.rustok-keyring-pass:/run/keyring-pass:ro \
   -e RUSTOK_KEYRING_PASSWORD_FILE=/run/keyring-pass \
   -e RUSTOK_ALLOWED_CHAINS="1,8453" \
   -e RUSTOK_RPC_URLS_1="https://your-rpc" \
-  ghcr.io/rustok-org/rustok-wallet-tui:v0.8.2
+  ghcr.io/rustok-org/rustok-wallet-tui:v0.8.4
 ```
 
 > Legacy `--env-file` delivery still works but is deprecated: the value lands in
@@ -161,13 +194,14 @@ password is delivered by the podman secret (or the docker `_FILE` mount) above,
   "mcpServers": {
     "rustok": {
       "command": "podman",
-      "args": ["run", "-i", "--rm", "--init",
+      "args": ["run", "-i", "--rm",
                "--label", "rustok=wallet", "--label", "rustok.agent=claude",
                "-v", "rustok-wallet-tui:/data",
-               "--secret", "rustok-keyring-claude,type=env,target=RUSTOK_KEYRING_PASSWORD",
+               "--secret", "rustok-keyring-claude,type=mount,mode=0400,uid=1000,gid=1000",
+               "-e", "RUSTOK_KEYRING_PASSWORD_FILE=/run/secrets/rustok-keyring-claude",
                "-e", "RUSTOK_ALLOWED_CHAINS=1,8453",
                "-e", "RUSTOK_RPC_URLS_1",
-               "ghcr.io/rustok-org/rustok-wallet-tui:v0.8.2"],
+               "ghcr.io/rustok-org/rustok-wallet-tui:v0.8.4"],
       "env": {
         "RUSTOK_RPC_URLS_1": "https://your-rpc"
       }
@@ -195,6 +229,14 @@ normal preview/confirm flow — never move funds without their explicit approval
 The stdio wallet image is process-trusted and exposes **all** tools by default.
 To run a restricted agent, set `RUSTOK_MCP_CAPABILITIES` to a subset
 (`read_wallet` / `preview_tx` / `execute_tx`) — e.g. `read_wallet` for read-only.
+The ceiling is enforced by the gateway, on the path every request takes: it
+covers the MCP tools below **and** the HTTP routes behind them, so a session
+cannot reach past its capabilities by calling the gateway directly. Until this
+release it was checked in the MCP layer only, which left every route reachable
+beside it — on this edition the core refused signing for its own unrelated
+reasons, but a session narrowed away from `read_wallet` still read the wallet
+address and every balance. A client may narrow its own session further in
+`initialize`, and can never widen it.
 
 | Tool | Capability | What it does |
 |------|-----------|--------------|

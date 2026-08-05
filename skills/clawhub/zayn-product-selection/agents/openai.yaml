@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-product-selection"
+  short_description: "结合市场需求、供应能力、资金占用与售后风险评估候选产品"
+  default_prompt: "使用 $zayn-product-selection 评估候选产品的市场机会与进入风险。"

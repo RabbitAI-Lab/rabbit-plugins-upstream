@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/azure-ai-voicelive-py",
   "slug": "azure-ai-voicelive-py",
   "ownerHandle": "thcjp",
-  "version": "0.1.0",
-  "updatedAt": 1778485891685,
-  "contentHash": "72e8cf8c8d0c8d32accbc61bf9119d30f36682247330f33aad742e3676a77052",
-  "fetchedAt": "2026-07-26T18:06:14.450Z"
+  "version": "1.0.3",
+  "updatedAt": 1785664095695,
+  "contentHash": "f691d9211eecaac6475a0f1123536687aa28d57b1058aa8d3f59638ce59902fc",
+  "fetchedAt": "2026-08-05T10:17:21.230Z"
 }

@@ -1,0 +1,164 @@
+{
+  "version": "1.0.0",
+  "description": "SAR 油膜检测模型参数 — 暗斑分割、形状纹理特征、风场过滤与置信度评分",
+  "detection_methods": {
+    "threshold_basic": {
+      "name": "基础阈值分割",
+      "description": "基于 SAR 后向散射系数的简单阈值分割",
+      "bands_required": ["sar_vv"],
+      "parameters": {
+        "backscatter_threshold_db": -18.0,
+        "dark_spot_sigma": 3.0
+      }
+    },
+    "threshold_adaptive": {
+      "name": "自适应阈值分割",
+      "description": "基于局部统计的自适应阈值",
+      "bands_required": ["sar_vv"],
+      "parameters": {
+        "window_size": 51,
+        "C": -2.0,
+        "global_sigma": 3.0
+      }
+    },
+    "multi_feature": {
+      "name": "多特征融合检测",
+      "description": "结合形状、纹理、风场和船舶线索的融合检测",
+      "bands_required": ["sar_vv", "wind_speed"],
+      "parameters": {
+        "shape_weight": 0.25,
+        "texture_weight": 0.2,
+        "wind_weight": 0.25,
+        "ship_weight": 0.15,
+        "context_weight": 0.15
+      }
+    }
+  },
+  "shape_features": {
+    "compactness": {
+      "name": "紧凑度",
+      "description": "4π × 面积 / 周长²，接近 1 为圆形",
+      "oil_range": [0.1, 0.8],
+      "unitless": true
+    },
+    "elongation": {
+      "name": "伸长率",
+      "description": "长轴 / 短轴，油膜通常伸长",
+      "oil_range": [1.5, 20.0],
+      "unitless": true
+    },
+    "solidity": {
+      "name": "实心度",
+      "description": "面积 / 凸包面积",
+      "oil_range": [0.5, 1.0],
+      "unitless": true
+    },
+    "area_m2": {
+      "name": "面积",
+      "description": "暗斑面积（平方米）",
+      "min_oil_area_m2": 1000.0,
+      "max_oil_area_m2": 100000000.0,
+      "unit": "m²"
+    }
+  },
+  "texture_features": {
+    "mean_backscatter": {
+      "name": "平均后向散射",
+      "description": "暗斑内平均后向散射系数",
+      "oil_range_db": [-25.0, -15.0],
+      "unit": "dB"
+    },
+    "backscatter_std": {
+      "name": "后向散射标准差",
+      "description": "暗斑内后向散射标准差，油膜通常均匀",
+      "oil_range_db": [0.0, 5.0],
+      "unit": "dB"
+    },
+    "contrast_to_background": {
+      "name": "背景对比度",
+      "description": "暗斑与周围海面的后向散射差异",
+      "oil_range_db": [5.0, 25.0],
+      "unit": "dB"
+    }
+  },
+  "wind_filter": {
+    "low_wind": {
+      "name": "低风区",
+      "speed_range_ms": [0.0, 3.0],
+      "description": "低风区可能产生自然油膜（生物膜、内波）",
+      "risk": "high_false_positive",
+      "action": "flag_for_review"
+    },
+    "optimal_wind": {
+      "name": "适宜风区",
+      "speed_range_ms": [3.0, 10.0],
+      "description": "适宜风速区间，油膜检测最佳",
+      "risk": "low",
+      "action": "process_normally"
+    },
+    "high_wind": {
+      "name": "高风区",
+      "speed_range_ms": [10.0, 25.0],
+      "description": "高风区油膜易破碎扩散",
+      "risk": "moderate",
+      "action": "process_with_caution"
+    },
+    "extreme_wind": {
+      "name": "极端风区",
+      "speed_range_ms": [25.0, 100.0],
+      "description": "极端风区油膜难以存留",
+      "risk": "very_low_confidence",
+      "action": "low_confidence_flag"
+    }
+  },
+  "ship_correlation": {
+    "ais_match_distance_km": 5.0,
+    "ais_match_time_hours": 24.0,
+    "description": "AIS 数据缺失时不强行归因船舶",
+    "min_ship_length_m": 20.0
+  },
+  "confidence_levels": {
+    "very_low": {
+      "name": "极低",
+      "color": "#6c757d",
+      "score_range": [0.0, 0.2],
+      "description": "不太可能是油膜"
+    },
+    "low": {
+      "name": "低",
+      "color": "#ffc107",
+      "score_range": [0.2, 0.4],
+      "description": "少量油膜证据"
+    },
+    "moderate": {
+      "name": "中等",
+      "color": "#fd7e14",
+      "score_range": [0.4, 0.6],
+      "description": "中等油膜证据，建议复核"
+    },
+    "high": {
+      "name": "高",
+      "color": "#dc3545",
+      "score_range": [0.6, 0.8],
+      "description": "较强油膜证据，建议优先复核"
+    },
+    "very_high": {
+      "name": "极高",
+      "color": "#721c24",
+      "score_range": [0.8, 1.0],
+      "description": "强油膜证据，强烈建议复核"
+    }
+  },
+  "qa_thresholds": {
+    "min_valid_fraction": 0.5,
+    "max_cloud_fraction": 0.3,
+    "min_wind_coverage": 0.8,
+    "max_land_fraction": 0.5
+  },
+  "natural_slick_indicators": {
+    "low_wind_parallel_lines": "低风区平行线状暗斑可能是内波",
+    "coastal_streak": "近岸条带状暗斑可能是生物膜",
+    "rain_cell": "圆形均匀暗斑可能是雨胞",
+    "eddies": "涡旋状暗斑可能是海洋涡流"
+  }
+}

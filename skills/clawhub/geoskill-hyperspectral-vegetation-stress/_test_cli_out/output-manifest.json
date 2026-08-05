@@ -1,0 +1,108 @@
+{
+  "skill": "hyperspectral-vegetation-stress",
+  "skill_version": "1.0.0",
+  "command": "hyperspectral-vegetation-stress --bbox 116 39 117 40 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-03T17:43:35.681724Z",
+  "finished_at": "2026-08-03T17:43:35.887355Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "method": "red_edge",
+    "synthetic": true,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\stress_level.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": 255.0,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\stress_index.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": -9999.0,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\anomaly.geojson",
+      "kind": "vector",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": 3,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\stress_report.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "red_edge",
+    "n_bands": 36,
+    "mean_stress": 0.18193034827709198,
+    "class_counts": {
+      "0": 3458,
+      "1": 81,
+      "2": 164,
+      "3": 393
+    },
+    "n_anomalies": 3,
+    "n_valid_pixels": 147456,
+    "n_total_pixels": 4096,
+    "input_nodata": null,
+    "synthetic_n_stress_pixels": 638
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "hyperspectral-vegetation-stress"
+  },
+  "error": null
+}

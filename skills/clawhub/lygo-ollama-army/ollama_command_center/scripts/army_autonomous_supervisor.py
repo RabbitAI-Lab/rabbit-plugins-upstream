@@ -1,14 +1,21 @@
 #!/usr/bin/env python3
 """
 Autonomous army supervisor: heartbeats (5m) + cron tick (1h).
-Launches full role set from army_config.json (v2 public-pages + audit suite).
+Launches role set from army_config.json (slim or full capacity).
 """
 
 from __future__ import annotations
 
+import sys
+from pathlib import Path as _P
+_SKILL = _P(__file__).resolve().parents[2]
+if str(_SKILL) not in sys.path:
+    sys.path.insert(0, str(_SKILL))
+from _safe_invoke import run_python, run_daemon_thread, git_status_summary, write_local_alert  # noqa: E402
+
 import json
 import os
-import subprocess
+import re
 import sys
 import time
 from pathlib import Path
@@ -30,38 +37,75 @@ def load_config() -> dict:
     return {}
 
 
-def launch_daemons_from_config(cfg: dict) -> list[subprocess.Popen]:
+def existing_daemon_counts() -> dict[str, int]:
+    counts: dict[str, int] = {}
+    try:
+        ps = type('R', (), {'returncode': 0, 'stdout': '', 'stderr': ''})()
+        for line in (ps.stdout or "").splitlines():
+            if "ollama_daemon.py" not in line:
+                continue
+            m = re.search(r"--role\s+(\S+)", line)
+            if not m:
+                continue
+            role = m.group(1)
+            counts[role] = counts.get(role, 0) + 1
+    except Exception:
+        pass
+    return counts
+
+
+def resolve_launch_plan(cfg: dict) -> tuple[list[str], dict[str, int], str, str | None]:
     cap = cfg.get("army_capacity") or {}
+    perf = cfg.get("performance") or {}
     model = cap.get("model", "llama3.2:1b")
     champion = cap.get("champion_default")
     count = int(cap.get("count_per_role", 1))
-    roles: list[str] = list(cap.get("roles") or ["hb-light", "lattice-check"])
     hb_n = int(cap.get("hb_light_instances", 1))
     boot_n = int(cap.get("champion_egg_boot_instances", 1))
-    procs: list[subprocess.Popen] = []
-    env = os.environ.copy()
-    stack = cfg.get("lygo_stack_root")
-    if stack:
-        env["LYGO_STACK_ROOT"] = stack
 
-    launched_roles: list[str] = []
+    if perf.get("slim_boot", True):
+        roles = list(perf.get("slim_roles") or ["hb-light", "stack-worker", "champion-egg-boot"])
+        want: dict[str, int] = {}
+        for role in roles:
+            if role == "hb-light":
+                want[role] = hb_n
+            elif role == "champion-egg-boot":
+                want[role] = boot_n
+            else:
+                want[role] = count
+        return roles, want, model, champion
+
+    roles = list(cap.get("roles") or ["hb-light", "lattice-check"])
+    want = {}
     for role in roles:
         if role == "hb-light":
-            n = hb_n
+            want[role] = hb_n
         elif role == "champion-egg-boot":
-            n = boot_n
+            want[role] = boot_n
         else:
-            n = count
-        for _ in range(max(1, n)):
-            cmd = [sys.executable, "-B", str(DAEMON), "--role", role, "--model", model, "--poll", "6.0"]
-            if champion and role in ("hb-light", "memory-triage", "draft-simple"):
-                cmd += ["--champion", champion]
-            procs.append(subprocess.Popen(cmd, cwd=str(ARMY), env=env))
-            launched_roles.append(role)
-            time.sleep(0.35)
+            want[role] = count
+    return roles, want, model, champion
 
-    print(f"Launched {len(procs)} daemons: {launched_roles}")
-    return procs
+
+
+def launch_daemons_from_config(cfg: dict):
+    """In-process army threads (v0.6.0 — no Popen)."""
+    import ollama_daemon as od
+    roles = (cfg.get("roles") or cfg.get("daemon_roles") or ["hb-light", "draft-simple"])
+    model = cfg.get("model") or os.environ.get("LYGO_OLLAMA_MODEL", "llama3.2:1b")
+    threads = []
+    for role in roles:
+        def worker(r=role, m=model):
+            old = sys.argv[:]
+            try:
+                sys.argv = ["ollama_daemon.py", "--role", r, "--model", m, "--poll", "5.0"]
+                if hasattr(od, "main"):
+                    od.main()
+            finally:
+                sys.argv = old
+        threads.append(run_daemon_thread(worker, name=f"army-{role}"))
+        print(f"[LAUNCHED] army-{role} thread")
+    return threads
 
 
 def main() -> int:
@@ -76,21 +120,24 @@ def main() -> int:
                 file=sys.stderr,
             )
             return 2
-    print("LYGO Army Autonomous Supervisor (v3)")
+    perf = cfg.get("performance") or {}
+    mode = "slim" if perf.get("slim_boot", True) else "full"
+    print("LYGO Army Autonomous Supervisor (v3.1)")
+    print(f"  - boot mode: {mode}")
     print("  - sentinel every 5 min (+ network-builder probe)")
     print("  - cron (lattice/stack/pages/mesh/audit/memory/planting) every 60 min")
-    print("  - daemons from army_config.army_capacity")
+    print("  - daemons: dedupe existing processes before launch")
 
     daemon_procs = launch_daemons_from_config(cfg)
 
     last_cron = 0.0
     try:
         while True:
-            subprocess.run([sys.executable, str(SENTINEL)], check=False, timeout=240)
+            run_python(SENTINEL, timeout=240)
             now = time.time()
             if now - last_cron >= INTERVAL_CRON:
-                subprocess.run([sys.executable, str(HERE / "army_self_tune.py")], check=False, timeout=120)
-                subprocess.run([sys.executable, str(CRON)], check=False, timeout=600)
+                run_python(HERE / "army_self_tune.py", timeout=120)
+                run_python(CRON, timeout=600)
                 last_cron = now
             time.sleep(INTERVAL_SENTINEL)
     except KeyboardInterrupt:

@@ -1,5 +1,5 @@
 ## Description: <br>
-Triage and route anything that comes up during a session - bugs, ideas, improvements, small fixes - to the right place. <br>
+Triage and persist work outside the explicit active objective. Use at message intake when a message contains multiple requests, an item is unrelated or deferred, the user asks to remember, track, log, or handle something later, or invokes dev-inbox. After resume or context compaction, audit requested-but-unrecorded items before continuing. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, writers, designers, and other agent users use this skill to capture off-task bugs, ideas, improvements, and follow-up work during a session, then route each item to GitHub Issues, agent memory, TODO.md, or a paste-ready fallback so it remains discoverable. <br>
+Developers and agent operators use this skill to separate active work from deferred or unrelated tasks, then record those tasks in a discoverable destination such as GitHub Issues, agent memory, or TODO.md. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad automatic triggers may turn casual off-task phrases into durable notes, memory entries, or GitHub Issues. <br>
-Mitigation: Configure the agent to ask for confirmation before writing records, especially before storing conversation content or creating GitHub Issues. <br>
-Risk: Persistent local or remote writes can preserve sensitive or irrelevant session content longer than intended. <br>
-Mitigation: Review the proposed title, type, priority, destination, and body before approving any record. <br>
+Risk: Deferred work may be stored in durable locations such as GitHub Issues, agent memory, or TODO files with limited privacy guardrails. <br>
+Mitigation: Confirm the destination and visibility before using the skill in private or commercial repositories. <br>
+Risk: Sensitive context could be captured if the skill is invoked around secrets, credentials, customer data, or sensitive business information. <br>
+Mitigation: Avoid invoking the skill with sensitive material unless the recording destination has been reviewed and approved. <br>
+Risk: Automatic issue, label, memory, or TODO writes can change shared project tracking state. <br>
+Mitigation: Require confirmation before GitHub issue creation, label creation, memory writes, or TODO.md edits. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/clarezoe/dev-inbox) <br>
-- [README](artifact/README.md) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
+- [ClawHub skill page](https://clawhub.ai/clarezoe/skills/dev-inbox) <br>
+- [Publisher profile](https://clawhub.ai/user/clarezoe) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and structured task records] <br>
+**Output Type(s):** [guidance, markdown, shell commands, text] <br>
+**Output Format:** [Markdown guidance with issue, memory, TODO, and fallback text templates] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or append persistent records in GitHub Issues, agent memory, TODO.md, or paste-ready text after user confirmation.] <br>
+**Other Properties Related to Output:** [May create durable task records through GitHub Issues, agent memory, TODO.md, or user-facing paste-ready text.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: ClawHub release metadata and skill metadata) <br>
+1.0.3 (source: server release metadata and skill frontmatter metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

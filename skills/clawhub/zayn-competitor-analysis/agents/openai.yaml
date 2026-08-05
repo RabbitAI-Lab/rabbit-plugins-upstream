@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-competitor-analysis"
+  short_description: "基于公开证据分析竞争重叠、优势、威胁和差异化机会"
+  default_prompt: "使用 $zayn-competitor-analysis 分析目标竞争对手及差异化机会。"

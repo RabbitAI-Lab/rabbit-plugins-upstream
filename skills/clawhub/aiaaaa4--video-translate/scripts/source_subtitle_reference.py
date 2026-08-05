@@ -12,6 +12,7 @@ TIMESTAMP_RE = re.compile(
     r"(?P<end>(?:\d{2,}:)?\d{2}:\d{2}[,.]\d{3})"
 )
 TAG_RE = re.compile(r"<[^>]+>")
+MIN_TEMPORAL_OVERLAP_RATIO = 0.65
 
 
 @dataclass(frozen=True)
@@ -63,16 +64,17 @@ def load_source_subtitle(path: Path) -> list[SubtitleCue]:
 def references_by_asr_segment(transcript: dict, cues: list[SubtitleCue]) -> dict[int, str]:
     segments = transcript.get("segments", [])
     assigned: dict[int, list[str]] = {}
-    for cue in cues:
-        best_index: int | None = None
-        best_overlap = 0.0
-        for index, segment in enumerate(segments):
-            start = float(segment.get("start") or 0.0)
-            end = float(segment.get("end") or start)
+    for index, segment in enumerate(segments):
+        start = float(segment.get("start") or 0.0)
+        end = float(segment.get("end") or start)
+        segment_duration = end - start
+        if segment_duration <= 0:
+            continue
+        for cue in cues:
             overlap = max(0.0, min(cue.end, end) - max(cue.start, start))
-            if overlap > best_overlap:
-                best_overlap = overlap
-                best_index = index
-        if best_index is not None and best_overlap > 0:
-            assigned.setdefault(best_index, []).append(cue.text)
+            cue_duration = cue.end - cue.start
+            overlap_base = min(segment_duration, cue_duration)
+            if overlap_base <= 0 or overlap / overlap_base < MIN_TEMPORAL_OVERLAP_RATIO:
+                continue
+            assigned.setdefault(index, []).append(cue.text)
     return {index: " ".join(texts) for index, texts in assigned.items() if texts}

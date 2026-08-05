@@ -1,0 +1,7 @@
+{
+  "master": {
+    "pageNumbers": true,
+    "footer": "golden-fixture",
+    "footerColor": "999999"
+  }
+}

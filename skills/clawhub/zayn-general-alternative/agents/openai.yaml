@@ -1,0 +1,4 @@
+interface:
+  display_name: "通用替代方案"
+  short_description: "跨行业比较替代选项、关键差异、实施风险、适用条件与确认边界"
+  default_prompt: "Use $zayn-general-alternative to compare these replacement options and identify confirmation risks."

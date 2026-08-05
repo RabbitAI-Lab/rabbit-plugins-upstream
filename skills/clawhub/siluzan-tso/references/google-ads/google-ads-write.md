@@ -7,8 +7,17 @@
 
 - 新建搜索系列 / PMax
 - campaign-validate / campaign-create / campaign-edit
-- 组/创意/关键词写操作
+- **ad ad-create（RSA）** / ad-edit / 组/关键词写操作
 - extension / device-bid
+
+---
+
+## 写操作硬纪律（Agent 易踩）
+
+- **必须** `--commit "…"`；漏了会直接失败。
+- 列表命令：`ad campaigns` / `ad groups` / `ad list` / `ad keywords`（**没有** `google-ads`、没有必用 `campaign-list`；`campaign-list` 仅为 `campaigns` 别名）。
+- `--json-out <path>`：**路径必填**，JSON 落盘；禁止 `--json-out` 裸用或管道 stdout。
+- 系列 `statusDisplay` 含「投放期已结束」≠ 已删除；以 JSON **`statusV2`** 为准（见 `google-ads-read.md`）。
 
 ---
 
@@ -237,6 +246,34 @@ siluzan-tso ad campaign-edit -a <accountId> --id <campaignId> \
 ```bash
 siluzan-tso ad adgroup-rename -a <accountId> --id <adGroupId> --name <新名称>
 ```
+
+---
+
+## ad ad-create — 创建自适应搜索广告（RSA）
+
+在已有广告组下新增 RSA。提交前 CLI **本地校验**字数/条数（超限不打 API）。
+
+```bash
+siluzan-tso ad ad-create \
+  -a <accountId> \
+  --adgroup-id <adGroupId> --adgroup-name <adGroupName> \
+  --final-url <https://...> \
+  --headlines "H1,H2,H3,..." \
+  --descriptions "D1,D2[,D3,D4]" \
+  [--path1 <p1>] [--path2 <p2>] \
+  --commit "在 <组名> 下创建 RSA …" \
+  [--json-out <path>]
+```
+
+| 约束 | 值 |
+| ---- | -- |
+| headlines | **3–15** 条，每条 **≤30** Google 字符（CJK×2） |
+| descriptions | **2–4** 条，每条 **≤90** Google 字符（CJK×2） |
+| path1/path2 | 可选，各 **≤15** |
+
+创建后暂停：`ad ad-status -a <accountId> --id <adId> --status Paused --commit "创建后暂停"`。若列表找不到新广告，给 `ad-status` / `ad list` 加宽 `--start`/`--end`。
+
+文案合规见 `rules/google-ads-compliance-copy.md`。
 
 ---
 

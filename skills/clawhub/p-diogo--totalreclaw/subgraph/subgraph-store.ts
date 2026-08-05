@@ -25,6 +25,10 @@ import { CONFIG, getDataEdgeAddressOverride } from '../config.js';
 import { buildRelayHeaders } from '../billing/relay-headers.js';
 import { rpcRequest, rpcWithRetry } from '../billing/relay.js';
 import { signUserOp } from '../crypto/vault-crypto.js';
+import {
+  MAX_BATCH_BYTES,
+  groupAndStoreAdaptive,
+} from './batch-sizing.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -388,6 +392,37 @@ async function getInitCode(
   return { factory, factoryData };
 }
 
+/**
+ * Re-assert the initCode decision after sponsorship (#391, AA24 guard).
+ *
+ * ERC-4337 v0.7 `pm_sponsorUserOperation` is documented (Pimlico) to return
+ * ONLY gas-limit + paymaster fields — it does not echo `factory`/`factoryData`
+ * back. But the response is merged with a bare `Object.assign`, so a relay
+ * proxy or paymaster change that echoes `factory: null` (or junk) would
+ * silently strip the initCode from a counterfactual UserOp — the bytes that
+ * get hashed + signed would then omit the fields the EntryPoint validates,
+ * reproducing the AA24 signature-error ship-stopper (first write from a fresh
+ * pair stores 0 facts). Rather than trust every sponsor response forever,
+ * re-apply the deployment decision `getInitCode` made for THIS attempt:
+ * an undeployed sender gets its computed initCode restored; a deployed (or
+ * AA10 force-deployed) sender gets any sponsor-added factory fields removed
+ * (a stray `factory: null` key would otherwise change the hashed JSON and
+ * trip bundler serde).
+ */
+function reassertInitCodeAfterSponsorship(
+  op: Record<string, any>,
+  factory: string | null,
+  factoryData: string | null,
+): void {
+  if (factory) {
+    if (op.factory !== factory) op.factory = factory;
+    if (op.factoryData !== factoryData) op.factoryData = factoryData;
+  } else {
+    delete op.factory;
+    delete op.factoryData;
+  }
+}
+
 // ---------------------------------------------------------------------------
 // On-chain submission (ERC-4337 UserOps via relay.ts network site)
 // ---------------------------------------------------------------------------
@@ -544,6 +579,8 @@ async function submitFactOnChainLocked(
       // is present but the sender is already deployed.
       const sponsorResult = await rpc('pm_sponsorUserOperation', [unsignedOp, entryPoint]);
       Object.assign(unsignedOp, sponsorResult);
+      // #391 AA24 guard: the sponsor response must not strip (or add) initCode.
+      reassertInitCodeAfterSponsorship(unsignedOp, factory, factoryData);
 
       // 8. Hash and sign the UserOp via WASM
       const opJson = JSON.stringify(unsignedOp);
@@ -618,18 +655,37 @@ async function submitFactOnChainLocked(
  *
  * Falls back to single-fact path for batches of 1 (no multicall overhead).
  */
+/**
+ * Result of submitting a batch on-chain (internal#449). The base four fields
+ * (`txHash` / `userOpHash` / `success` / `batchSize`) are unchanged from
+ * pre-#449 so existing single-payload callers keep working; `errors` +
+ * `groupResults` carry the byte-capped grouping detail for multi-payload
+ * callers. For the single-group case (today's callers) `errors` is empty and
+ * `groupResults` has one entry.
+ */
+export interface BatchSubmitResult {
+  txHash: string;
+  userOpHash: string;
+  success: boolean;
+  batchSize: number;
+  /** Surfaced per-group errors (empty on full success). */
+  errors: string[];
+  /** One entry per successfully stored group/half (the AA10/AA25 receipt result). */
+  groupResults: Array<{ txHash: string; userOpHash: string; success: boolean; batchSize: number }>;
+}
+
 export async function submitFactBatchOnChain(
   protobufPayloads: Buffer[],
   config: SubgraphStoreConfig,
-): Promise<{ txHash: string; userOpHash: string; success: boolean; batchSize: number }> {
+): Promise<BatchSubmitResult> {
   if (!protobufPayloads.length) {
-    return { txHash: '', userOpHash: '', success: true, batchSize: 0 };
+    return { txHash: '', userOpHash: '', success: true, batchSize: 0, errors: [], groupResults: [] };
   }
 
   // Single fact — use standard path (avoids multicall overhead)
   if (protobufPayloads.length === 1) {
     const result = await submitFactOnChain(protobufPayloads[0], config);
-    return { ...result, batchSize: 1 };
+    return { ...result, batchSize: 1, errors: [], groupResults: [{ ...result, batchSize: 1 }] };
   }
 
   if (!config.relayUrl) {
@@ -643,9 +699,63 @@ export async function submitFactBatchOnChain(
   const eoa = getWasm().deriveEoa(config.mnemonic) as { private_key: string; address: string };
   const sender = config.walletAddress || await deriveSmartAccountAddress(config.mnemonic, config.chainId);
 
-  return withSenderLock(sender, () => submitFactBatchOnChainLocked(
-    protobufPayloads, config, eoa, sender,
-  ));
+  // Count cap tracks the installed core's hard `encodeBatchCall` guard, read at
+  // runtime via `getMaxBatchSize` so a group can never exceed what the installed
+  // @totalreclaw/core accepts — stale cores (<2.5.5) enforce 15, current (≥2.5.5)
+  // enforce 30 (#392 Part 2). The byte cap (MAX_BATCH_BYTES) is the real governor.
+  // Fallback is the CONSERVATIVE floor (15, the stale-core encodeBatchCall
+  // guard), not the current 30 (review #531 finding 4): if the binding were
+  // ever absent, a 30-count group would hit a 15-enforcing encodeBatchCall
+  // throw — which is not a sim revert, so it would surface as a failure
+  // instead of halving. 15 can never exceed any core's guard.
+  let maxCount = 15;
+  try {
+    const live = getWasm().getMaxBatchSize();
+    if (typeof live === 'number' && live > 0) maxCount = live;
+  } catch {
+    // Binding absent (very old core) — keep the conservative floor.
+  }
+
+  return withSenderLock(sender, async () => {
+    // Byte-capped grouping + adaptive halve-on-simfail (internal#449). Groups the
+    // encoded payloads by BOTH the count cap and MAX_BATCH_BYTES using each
+    // buffer's real protobuf length, then stores each group through the existing
+    // submitFactBatchOnChainLocked (AA25 mutex + AA10 handling left intact). A
+    // group that sim-reverts (`-32500`) is halved and retried down to a single
+    // fact, so oversized imports succeed instead of failing at the encode guard.
+    const storeFn = async (group: Buffer[]) => {
+      const r = await submitFactBatchOnChainLocked(group, config, eoa, sender);
+      if (!r.success) {
+        // Mined-but-reverted receipt — NOT a sim-time size revert (isSimRevertError
+        // returns false on this message), so it surfaces as an error, not a halve.
+        throw new Error(
+          `Group of ${group.length} mined but receipt.success=false (tx=${(r.txHash || '').slice(0, 10)}…)`,
+        );
+      }
+      return r;
+    };
+    const { results, errors } = await groupAndStoreAdaptive(
+      protobufPayloads, storeFn, maxCount, MAX_BATCH_BYTES, b => b.length,
+    );
+    // Preserve the pre-#449 throw-on-failure contract: if NOTHING was stored,
+    // surface the failure as a thrown error (e.g. an AA25-exhausted batch
+    // rejects rather than resolving to success=false — pinned by
+    // initcode-lifecycle Scenario 7). Partial success (some groups stored, some
+    // failed) returns success=false with the per-group detail so a future
+    // multi-payload caller can see which groups landed on-chain.
+    if (errors.length > 0 && results.length === 0) {
+      throw new Error(errors.join('; '));
+    }
+    const batchSize = results.reduce((n, r) => n + r.batchSize, 0);
+    return {
+      txHash: results[0]?.txHash ?? '',
+      userOpHash: results[0]?.userOpHash ?? '',
+      success: errors.length === 0,
+      batchSize,
+      errors,
+      groupResults: results,
+    };
+  });
 }
 
 async function submitFactBatchOnChainLocked(
@@ -772,6 +882,8 @@ async function submitFactBatchOnChainLocked(
       // is present but the sender is already deployed.
       const sponsorResult = await rpc('pm_sponsorUserOperation', [unsignedOp, entryPoint]);
       Object.assign(unsignedOp, sponsorResult);
+      // #391 AA24 guard: the sponsor response must not strip (or add) initCode.
+      reassertInitCodeAfterSponsorship(unsignedOp, factory, factoryData);
 
       // Hash and sign via WASM
       const opJson = JSON.stringify(unsignedOp);

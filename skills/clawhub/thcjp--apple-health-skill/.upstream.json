@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/apple-health-skill",
   "slug": "apple-health-skill",
   "ownerHandle": "thcjp",
-  "version": "1.0.0",
-  "updatedAt": 1778486238781,
-  "contentHash": "48da77741641d9a2507792381fe0c610b1621ff2fe8bd19fc4c3cbf17cf0e9b8",
-  "fetchedAt": "2026-07-26T18:06:20.162Z"
+  "version": "1.0.2",
+  "updatedAt": 1785663036038,
+  "contentHash": "10a05f30acd8da209ae45ccf1eea687de827ede101923d1864cc847da9c0948e",
+  "fetchedAt": "2026-08-05T10:18:06.928Z"
 }
