@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/hermes-agent-skill-authoring",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "hermes-agent-skill-authoring",
+  "branch": "main",
+  "pushedAt": "2026-08-06T09:34:54Z",
+  "contentHash": "3f44e94b1831bc96a592cb7c5aee9c05fd7155091b2df95da101ae25f6358b9b",
+  "fetchedAt": "2026-08-06T10:04:36.482Z"
+}

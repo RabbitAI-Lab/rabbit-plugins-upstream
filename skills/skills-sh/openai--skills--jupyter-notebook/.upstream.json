@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/jupyter-notebook",
+  "repo": "openai/skills",
+  "skillId": "jupyter-notebook",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "a16fb2c592ac8846940db7ad61bb8fbe814339c1a5d6041f759cc74301c11457",
+  "fetchedAt": "2026-08-06T10:03:28.924Z"
+}

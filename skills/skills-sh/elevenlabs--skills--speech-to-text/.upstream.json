@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/elevenlabs/skills/speech-to-text",
+  "repo": "elevenlabs/skills",
+  "skillId": "speech-to-text",
+  "branch": "main",
+  "pushedAt": "2026-08-05T23:59:00Z",
+  "contentHash": "915084357b75f3b3668f7ab35ed483755cfc6134e6e027cc3b37d35f7a84d89d",
+  "fetchedAt": "2026-08-06T10:03:44.945Z"
+}

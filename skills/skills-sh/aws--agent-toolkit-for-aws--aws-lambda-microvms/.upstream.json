@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-lambda-microvms",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-lambda-microvms",
+  "branch": "main",
+  "pushedAt": "2026-08-06T10:02:14Z",
+  "contentHash": "e6a2b105d6401ac527a56112130f909b549f222bed1221ba6012535fc68da959",
+  "fetchedAt": "2026-08-06T10:04:37.014Z"
+}

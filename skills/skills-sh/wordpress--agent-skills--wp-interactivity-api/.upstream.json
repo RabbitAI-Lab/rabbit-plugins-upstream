@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-interactivity-api",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-interactivity-api",
+  "branch": "trunk",
+  "pushedAt": "2026-08-03T05:26:29Z",
+  "contentHash": "b6d79c9b8eeafbdacf061168b97a925c8017955f605fe8b7e1c561baf1f388c9",
+  "fetchedAt": "2026-08-06T10:04:39.610Z"
+}

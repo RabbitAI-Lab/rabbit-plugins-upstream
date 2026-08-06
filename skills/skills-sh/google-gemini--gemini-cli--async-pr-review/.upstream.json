@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google-gemini/gemini-cli/async-pr-review",
+  "repo": "google-gemini/gemini-cli",
+  "skillId": "async-pr-review",
+  "branch": "main",
+  "pushedAt": "2026-08-06T02:06:27Z",
+  "contentHash": "7c71bab04ea4f78dd302047dbbb768686f8bc56a63d9620c386213d1bab89be1",
+  "fetchedAt": "2026-08-06T10:03:50.290Z"
+}
