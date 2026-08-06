@@ -11,33 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents working with memory-palace data use this skill to visualize palace structure, entity relationships, synapse strength, and knowledge topology. <br>
+Developers and knowledge-work agents use this skill to inspect memory-palace structure, entity relationships, synapse strength, and topology through Mermaid diagrams or inline ASCII overviews. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generic trigger words such as memory, visualization, mermaid, diagram, and graph may invoke the skill unintentionally. <br>
-Mitigation: Install and enable it only when memory-palace visualization is desired, and review invocation context before using generated diagrams. <br>
-Risk: Mermaid rendering can expose generated diagram contents to the configured rendering tool or service. <br>
-Mitigation: Use a trusted local or approved private Mermaid renderer for sensitive palace data, or remove sensitive contents before rendering. <br>
-Risk: The artifact states the skill contract is unwired and may not be invoked by a palace command. <br>
-Mitigation: Use the documented PalaceRenderer or palace_manager.py path directly until command integration is available. <br>
+Risk: Broad triggers such as memory, diagram, and graph may activate the skill more often than intended. <br>
+Mitigation: Review activation context before using the generated diagram guidance, and route non-memory-palace diagramming tasks to a more specific skill. <br>
+Risk: The skill documentation says command wiring is pending, so users may expect a direct slash-command workflow that is not available in the artifact. <br>
+Mitigation: Use the documented PalaceRenderer or palace_manager.py workflow until command integration is confirmed. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-memory-palace-palace-diagram) <br>
-- [Memory palace plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
+- [Memory Palace plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Mermaid diagram text, ASCII diagrams, and Markdown guidance] <br>
+**Output Type(s):** [Text, Markdown, Code] <br>
+**Output Format:** [Mermaid diagram code or ASCII text, usually presented in Markdown] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require configured memory-palace data and a trusted Mermaid rendering tool for rendered diagrams.] <br>
+**Other Properties Related to Output:** [May use Mermaid Chart MCP rendering for Mermaid output; ASCII output is displayed inline.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/wiplash-agent",
   "slug": "wiplash-agent",
   "ownerHandle": null,
-  "version": null,
-  "updatedAt": 1782268307375,
-  "contentHash": "8f579946ed47a089fc554a6cce8b5d30a8da5532d5bc50b42740fe346b78c9b5",
-  "fetchedAt": "2026-07-26T18:24:29.746Z"
+  "version": "1.1.0",
+  "updatedAt": 1785337546131,
+  "contentHash": "3a1ca42523a78727b115e6166e271d5b661ef63a3d0842e31a5a435d70b12f29",
+  "fetchedAt": "2026-08-06T10:33:00.382Z"
 }

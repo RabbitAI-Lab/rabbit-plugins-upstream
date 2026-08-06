@@ -10,11 +10,11 @@ guardrails below are adapted, with thanks, from the working configuration
 [@juanpf-ha](https://github.com/juanpf-ha) developed while running
 vmware-monitor and vmware-aria against a production vSphere estate with Llama
 3.3 70B FP8 on an on-prem H100
-([VMware-AIops#31](https://github.com/zw008/VMware-AIops/issues/31)). The
+([VMware-AIops#31](https://github.com/vmware-skills/VMware-AIops/issues/31)). The
 cross-skill rules are identical across this family; the parts below marked
 vmware-harden are specific to this skill.
 
-vmware-harden exposes 6 MCP tools and every one of them is a read. The risk
+vmware-harden exposes 8 MCP tools and every one of them is a read. The risk
 here is not a destructive call — there is none to make. It is that compliance
 output is exactly the shape of text a small model likes to embellish, and an
 invented violation, or an invented clean bill of health, is a costly answer.
@@ -135,4 +135,4 @@ Local-model compatibility is an explicit design constraint for this family, and
 the evidence base is small. If you evaluate a model against this skill —
 Qwen, Mistral, Granite, or anything else — a report of what worked and what did
 not is genuinely useful:
-[github.com/zw008/VMware-Harden/issues](https://github.com/zw008/VMware-Harden/issues).
+[github.com/vmware-skills/VMware-Harden/issues](https://github.com/vmware-skills/VMware-Harden/issues).

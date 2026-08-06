@@ -3,7 +3,7 @@
 **报告日期**：YYYY-MM-DD  
 **审查对象**：`<skill-path>`  
 **Skill 名称**：`<skill-name>`  
-**审查范围**：发布前验收 / 改造评估 / 第三方审查 / 回归检查  
+**审查范围**：创建预检 / 发布前验收 / 改造评估 / 第三方审查 / 回归检查
 **审查配置**：通用规则 / 项目规则 / 本地 review profile  
 **归档位置**：未归档 / `archive/YYYYMMDD_HHMMSS_<target-slug>/`
 
@@ -31,6 +31,8 @@
 | 工作流与输出 | ✅/⚠️/❌ | `<执行步骤、依赖、脚本、输出验收>` |
 | 业务流深度 | ✅/⚠️/❌ | `<Trigger / Intake / Reasoning / Output / Safety>` |
 | 可评估性 | ✅/⚠️/❌ | `<Hard Fail、样例、验收标准、动态评估基础>` |
+| Harness 可靠性 | ✅/⚠️/❌ | `<独立验证、候选绑定、故障注入、闭环和组合边界>` |
+| 指令稳定性 | ✅/⚠️/❌ | `<evaluator-signed 外部硬约束基线/held-out、当前 Harness evidence、逐约束追踪、验证模态、产物阶段、签名运行记录和漂移结果>` |
 
 ## 二、严重问题
 
@@ -45,7 +47,8 @@
 - **修正方式**：
   1. `<第一步修正动作>`
   2. `<第二步修正动作>`
-- **设计理念**：`<为什么这样改是对的——背后 skill 写作原理，一句话；结构性建议必填，可引用对应 standards 的「设计理念」小节；纯事实问题（文件缺失、引用断裂、命名）可省>`
+- **为什么错(原理)**：`<这个问题的技术原理——违反了 skill 哪条写作 / 渐进式披露 / 可执行流程 / 安全原理,一句话讲透>`
+- **最优设计**：`<根据原理该怎么设计才对——给具体范例(如"description 该写 功能+触发+不触发 三件事,例:本技能应在 X 时用,不要用于 Y")>`
 - **复查标准**：`<修正后如何确认问题已解决>`
 
 ## 三、警告问题
@@ -59,7 +62,8 @@
 - **问题说明**：`<具体问题>`
 - **影响**：`<维护、发布、隐私、复用或评估风险>`
 - **建议修正**：`<具体可执行建议>`
-- **设计理念**：`<为什么这样改是对的——背后 skill 写作原理，一句话；结构性建议必填，纯事实问题可省>`
+- **为什么错(原理)**：`<这个问题的技术原理——违反了哪条 skill 写作原理,一句话>`
+- **最优设计**：`<根据原理该怎么设计才对,给具体范例>`
 - **优先级**：高 / 中 / 低
 
 ## 四、信息提示
@@ -91,14 +95,41 @@
 - **修正方式**：`<具体修正动作>`
 - **复查标准**：`<如何确认风险已删除、降级或有用户确认与范围限制>`
 
-## 六、建议修正顺序
+## 六、Harness 可靠性
+
+> 创建预检、重大改造或正式验收必须填写；快速审查不能取得 `HARNESS_REVIEW_VERIFIED` 时，明确写 `NOT_VERIFIED`。
+
+| 层 | 状态 | 证据或缺口 |
+|----|------|------------|
+| Contract | ✅/⚠️/❌ | `<输入、输出、副作用、失败和例外>` |
+| Producer | ✅/⚠️/❌ | `<真实执行路径和产物>` |
+| Verifier | ✅/⚠️/❌ | `<独立 gate 是否检查真实产物>` |
+| Evidence Binding | ✅/⚠️/❌ | `<候选/策略哈希、实时 checker 重跑与陈旧证据处理>` |
+| Fault Injection | ✅/⚠️/❌ | `<正常、失败、逃逸和历史回归用例>` |
+| Closure | ✅/⚠️/❌/不适用 | `<任务/finding 关闭条件与复算>` |
+| Composition | ✅/⚠️/❌/不适用 | `<跨 Skill 契约、版本和薄适配器>` |
+
+- **审查证据状态**：`HARNESS_REVIEW_VERIFIED` / `NOT_VERIFIED`
+- **指令稳定性状态**：`INSTRUCTION_STABILITY_VERIFIED` / `INSTRUCTION_STABILITY_EVIDENCE_READY（不得作完成结论）` / `NOT_VERIFIED`
+- **业务验证状态**：`DOMAIN_VERIFIED` / `NOT_VERIFIED` / 不适用
+- **候选聚合哈希**：`<sha256 或未生成>`
+- **策略聚合哈希**：`<sha256 或未生成>`
+- **稳定性合同 / evaluator Ed25519-signed 外部硬约束基线与 held-out / Harness evidence 哈希**：`<sha256 或未生成>`
+- **运行证据/签名回执/受信公钥 ID**：`<sha256、key id 或未生成>`
+- **候选信任与执行环境**：`<自有/已审查可信/第三方未知；普通工作区/隔离环境>`
+- **故障注入结果**：`<反例名称、checker/参数、预期非零退出码、本次实际退出码与输出哈希>`
+- **多轮覆盖结果**：`<run 数、相同 input/config 哈希、唯一 nonce/签名 producer log、hidden cases、hard constraint ids、checker modality、artifact stage、measurement 类型/阈值与 observable 比较>`
+- **总体成熟度**：L0 / L1 / L2 / L3 / L4
+- **剩余人工判断**：`<不能由机器门禁替代的语义判断>`
+
+## 七、建议修正顺序
 
 | 顺序 | 修正项 | 文件 | 预期结果 | 验证方式 |
 |------|--------|------|----------|----------|
 | 1 | `<修正项>` | `<file-path>` | `<预期结果>` | `<验证方式>` |
 | 2 | `<修正项>` | `<file-path>` | `<预期结果>` | `<验证方式>` |
 
-## 七、复查清单
+## 八、复查清单
 
 - [ ] 严重问题已全部关闭
 - [ ] 警告问题已处理或记录为后续任务
@@ -109,12 +140,18 @@
 - [ ] 安全评估已覆盖凭证、危险执行、网络外联、依赖/MCP 和提示词安全
 - [ ] 若进入发布流程，LICENSE、CHANGELOG、version、README / Marketplace 已同步
 - [ ] 输出流程、验收标准和可评估性说明已补齐
+- [ ] 生产器不为自己签发最终 PASS，独立验证器检查真实产物
+- [ ] 正式验收证据绑定当前候选、当前策略和非空日志
+- [ ] 至少一个故障注入或逃逸反例已证明会被阻断
+- [ ] 每条硬约束已映射到 active checker、正确验证模态、产物阶段和正反例
+- [ ] 声称稳定时，evaluator Ed25519-signed 外部硬约束基线/held-out 与当前 Harness evidence 有效，至少三轮同输入/配置、绑定候选与 producer 的唯一签名运行记录逐约束通过，最终签名回执已由 `verify-receipt` 复验
+- [ ] 完成结论明确区分 Harness 审查、指令稳定性与业务功能验证
 
-## 八、最终处理意见
+## 九、最终处理意见
 
 `<给出是否建议发布、是否需要二次审查、是否需要先完成指定修正项的结论。>`
 
-## 九、审查依据
+## 十、审查依据
 
 - `references/skill-standards.md`
 - `references/repository-skill-discovery-standards.md`
@@ -126,10 +163,12 @@
 - `references/publishing-standards.md`
 - `references/workflow-output-standards.md`
 - `references/business-flow-rubric.md`
+- `references/harness-reliability-standards.md`
+- `references/instruction-stability-standards.md`
 - `references/reporting-standards.md`
 - `references/archive-standards.md`
 
-## 十、归档说明
+## 十一、归档说明
 
 - **是否归档**：是 / 否
 - **归档目录**：`archive/YYYYMMDD_HHMMSS_<target-slug>/`

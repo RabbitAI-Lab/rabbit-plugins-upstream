@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to delegate large-context analysis, summarization, batch processing, and multi-file review tasks to a configured Qwen CLI environment. <br>
+Developers and engineers use this skill to delegate large-context analysis, summarization, batch processing, and multi-file review tasks to Qwen CLI through the shared delegation-core workflow. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Selected prompts and file contents can be processed by the external Qwen CLI or provider. <br>
-Mitigation: Limit delegated prompts and file sets to intended, non-sensitive material and review what will be sent before execution. <br>
-Risk: Broad activation triggers such as cli can make the skill available in situations where Qwen delegation was not intended. <br>
-Mitigation: Narrow or disable generic triggers and invoke Qwen delegation explicitly when that behavior is desired. <br>
-Risk: Delegated model output can be incomplete, incorrect, or unsuitable for direct application. <br>
-Mitigation: Review Qwen responses before applying generated code, configuration, or operational guidance. <br>
+Risk: Qwen delegation can send prompts and included file contents to the configured Qwen or Alibaba model service. <br>
+Mitigation: Use narrow file selections, avoid broad globs over sensitive repositories, and review what will be included before delegation. <br>
+Risk: QWEN_API_KEY or Qwen login credentials are required for some workflows. <br>
+Mitigation: Manage Qwen credentials as sensitive secrets and avoid exposing them in prompts, shell history, logs, or committed files. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conjure-qwen-delegation) <br>
-- [Conjure homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/athola) <br>
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conjure) <br>
+- [Qwen-specific configuration](modules/qwen-specifics.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with bash command examples and CLI usage guidance] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with inline bash code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Output may include Qwen CLI commands, model selection guidance, authentication setup, and delegation patterns; structured output depends on the requested Qwen format.] <br>
+**Other Properties Related to Output:** [May include Qwen model choices, CLI options, authentication steps, and file inclusion patterns.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter says 1.9.8) <br>
+1.9.17 (source: ClawHub release evidence; artifact frontmatter lists 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

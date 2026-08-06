@@ -1,5 +1,5 @@
 ## Description: <br>
-JF Open Pro AI Elderly Care helps authorized users monitor JF Tech elderly-care devices for falls, abnormal behavior, service status, alert thresholds, and daily or weekly activity and diet statistics. <br>
+Provides JF Tech elderly-care device commands for checking and changing care service status, configuring abnormal-behavior alerts, and querying fall, routine, and diet data. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External developers, care-service operators, and authorized caregivers use this skill to query and manage JF Tech elderly-care monitoring for bound online devices with an active service plan. <br>
+External caregivers, family members, and integrators use this skill to operate authorized JF Tech elderly-care monitoring devices, review alerts and activity summaries, and adjust monitoring settings. <br>
 
 ### Deployment Geography for Use: <br>
-China mainland, Asia, Europe, and North America, based on the documented JF endpoint regions. <br>
+China, Asia, Europe, and North America, based on the documented service regions; review routing before use outside China because the scripts use the China API endpoint. <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive monitoring data about an elderly or vulnerable person. <br>
-Mitigation: Use it only with authorization to monitor the device and with appropriate notice or consent from the person being monitored. <br>
-Risk: JF app secrets, authorization tokens, device serial numbers, and user IDs can expose accounts or monitored-device data if leaked. <br>
-Mitigation: Store these values in protected environment variables or a secret manager and avoid passing them where command history or process lists may reveal them. <br>
-Risk: The skill can disable monitoring or change abnormal-behavior thresholds. <br>
-Mitigation: Confirm changes before applying them and restrict use on shared systems or unattended automation. <br>
+Risk: The skill handles sensitive monitoring data, including credentials, authorization tokens, device identifiers, alarm records, routine data, diet data, and returned media references. <br>
+Mitigation: Install and run it only with appropriate consent or lawful caregiver authority, and protect credentials and returned monitoring data as sensitive information. <br>
+Risk: Switch and configuration actions can change safety-related elderly-care monitoring settings without an additional built-in confirmation step. <br>
+Mitigation: Manually confirm switch and configuration commands before execution, especially when disabling care monitoring or changing abnormal-behavior thresholds. <br>
+Risk: The scripts use the China JF Tech API endpoint even though the skill documentation lists multiple service regions. <br>
+Mitigation: Review endpoint routing, regional availability, and data-transfer requirements before using the skill outside China. <br>
+Risk: Some helper calls reference the move-card signing value without passing it through every query function, which may cause selected API commands to fail until corrected in the runtime environment. <br>
+Mitigation: Test each action in a non-production environment and ensure the signing move-card value is correctly supplied before relying on the skill for caregiving workflows. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jftech/jf-open-pro-ai-elderly-care) <br>
-- [JF Open Platform](https://developer.jftech.com) <br>
-- [JF signature algorithm documentation](https://docs.jftech.com/docs?menusId=2531aba7e2d84e13ad8ce977007922f3&siderId=609261d9bb5049c3a2fc7222adf465fb&lang=zh) <br>
-- [JF timestamp algorithm documentation](https://docs.jftech.com/docs?menusId=2531aba7e2d84e13ad8ce977007922f3&siderId=8da7ad6119fd41159e2026c71ddb3555&lang=zh) <br>
-- [JF service card usage documentation](https://docs.jftech.com/docs?menusId=54582398fd8d4248962354e92ac2e47a&siderId=d2c0d9105d9c4b78bc0d2ee3851d2557&lang=zh) <br>
+- [ClawHub skill page](https://clawhub.ai/jftech/skills/jf-open-pro-ai-elderly-care) <br>
+- [JF Tech developer portal](https://developer.jftech.com) <br>
+- [JF Tech signature algorithm documentation](https://docs.jftech.com/docs?menusId=2531aba7e2d84e13ad8ce977007922f3&siderId=609261d9bb5049c3a2fc7222adf465fb&lang=zh) <br>
+- [JF Tech timestamp algorithm documentation](https://docs.jftech.com/docs?menusId=2531aba7e2d84e13ad8ce977007922f3&siderId=8da7ad6119fd41159e2026c71ddb3555&lang=zh) <br>
+- [JF Tech package card usage documentation](https://docs.jftech.com/docs?menusId=54582398fd8d4248962354e92ac2e47a&siderId=d2c0d9105d9c4b78bc0d2ee3851d2557&lang=zh) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON API responses] <br>
+**Output Type(s):** [Text, JSON, Shell commands, Configuration guidance] <br>
+**Output Format:** [Command-line text or JSON responses from JF Tech API calls] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires JF credentials, authorization token, device serial number, user ID, and an online bound device with the elderly-care service plan.] <br>
+**Other Properties Related to Output:** [Requires authorized JF Tech credentials, a bound online device, and an active elderly-care package.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

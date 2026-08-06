@@ -1,0 +1,8 @@
+.adversarial-plan/
+__pycache__/
+
+.venv/
+.pytest_cache/
+*.py[cod]
+.adversarial-loop/
+step-P*-spec.md

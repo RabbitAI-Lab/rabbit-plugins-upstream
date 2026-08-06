@@ -1,10 +1,10 @@
 ---
 name: FarmDash Futures Strategist
-description: "Adaptive Hyperliquid perps execution engine for OpenClaw agents. Provides research, pre-trade simulation, predictive funding shifts, and zero-custody EIP-712 order routing with forensic telemetry. Scout (5/day), Pioneer (unlimited), and Syndicate (unlimited) execution supported."
-version: "3.0.1"
+description: "Research, size, and route user-signed Hyperliquid perpetual futures with funding analysis, drawdown guards, EIP-712, and zero custody."
+version: "3.2.1"
 author: FarmDash Pioneers (@Parmasanandgarlic)
 homepage: https://www.farmdash.one/agents
-tags: ["defi", "ai-agent", "autonomous-agent", "openclaw", "clawhub", "mcp", "crypto", "web3", "onchain", "hyperliquid", "perps", "futures", "trading", "funding-rates", "funding-arb", "market-making", "risk-management", "liquidation", "zero-custody", "eip-712", "trail-heat", "farmdash", "forensics", "shadow-mode", "oracle-latency", "monetization", "syndicate-tier", "hft", "delta-neutral", "hedging", "blockchain-forensics", "automated-trading", "l2"]
+tags: ["defi", "hyperliquid", "hyperliquid-api", "perpetual-futures", "perps-trading", "defi-trading", "ai-trading-agent", "funding-rates", "funding-arbitrage", "position-sizing", "drawdown-control", "liquidation-risk", "eip-712", "zero-custody", "openclaw", "mcp", "risk-management", "farmdash"]
 env:
   FARMDASH_API_KEY:
     description: "Optional Bearer token for Pioneer or Syndicate tier. Scout mode works with no key or with the public fd_scout_free token. Never share private keys, seed phrases, or mnemonics with this skill — perps execution uses EIP-712 local signing only via the user's Hyperliquid API wallet."
@@ -34,7 +34,7 @@ Core posture:
 The bundled `openapi.yaml` file in this folder is the contract for the futures endpoints used by this skill version.
 
 ## Value-Aligned Monetization Protocol (v3.0 Upgrade)
-Hyperliquid perps execution requires high-frequency data streams, oracle latency checks, and robust RPC infrastructure. This skill employs a strict, non-predatory monetization model to sustain these operations:
+Hyperliquid perps execution requires current market/account data, guarded request handling, and robust venue connectivity. This skill employs a strict, non-predatory monetization model to sustain these operations:
 
 ### 1. Execution Gating and Limits
 Execution (`execute_perp_order`, `cancel_perp_order`) is available to all tiers:
@@ -86,17 +86,23 @@ FarmDash is zero-custody for futures execution.
 3. FarmDash validates guardrails and forwards the signed request.
 4. The API wallet can trade and cancel orders, but cannot withdraw funds.
 
+Hyperliquid identity has two distinct roles. `agentAddress` is the EIP-712/API-wallet signer and FarmDash caller identity. When that signer is delegated by a master account, `accountAddress` is the master, subaccount, or vault that owns the equity, positions, fills, funding history, and orders. Always supply both in delegated-wallet flows. Omit `accountAddress` only when the signer directly owns the trading account. FarmDash verifies delegated ownership against Hyperliquid `userRole`, and execution independently recovers the signer from the exact L1 action, nonce, expiry, environment, signature, and any routing address. If the owner is a subaccount or vault, FarmDash includes that same address as Hyperliquid `vaultAddress` in both the action hash and exchange request. Never size a delegated trade from the API wallet's empty clearinghouse state.
+
 Hard rules:
 * never ask for a private key, seed phrase, or wallet export
 * never imply that a bearer token can replace a local signature
 * never skip the research step before non-reduce-only execution
+* never accept a claimed signer/account relationship that Hyperliquid does not currently report
+* never submit when the recovered L1 signer differs from `agentAddress`
 * Never ask the user to paste a private key, seed phrase, or raw wallet export into the agent.
 
 ## Data Sent to FarmDash (Disclosure)
 *Security boundaries:* All operations use public or pre-signed EIP-712 payloads. Private key material is never required or processed by this skill. Verify the full surface against the bundled `openapi.yaml`.
 
 ## Pre-Execution Confirmation Protocol (Mandatory)
-Before calling `execute_perp_order` or `cancel_perp_order`, present the user with: asset, direction, size, leverage, entry/stop/take-profit, estimated liquidation price, margin impact, regime label, oracle latency status, and confidence score. Wait for an explicit affirmative ("yes / confirm / proceed"). If the quote or strategy object is older than ~30 seconds, re-run `analyze_futures_strategy` before signing. Implicit consent from earlier in the conversation is not sufficient.
+Before calling `execute_perp_order` or `cancel_perp_order`, present the user with: asset, direction, size, risk-notional, leverage metadata, entry/stop/take-profit, margin impact, regime label, confidence score and scale, data timestamp, order type/TIF, reduce-only status, exact limit or trigger price, and the signed builder recipient/rate (`f=1` = 0.1 bp = 0.001% of filled notional). Wait for an explicit affirmative ("yes / confirm / proceed"). If analysis is older than 30 seconds, re-run it; the server gate expires after 60 seconds. Implicit consent from earlier in the conversation is not sufficient.
+
+Do not present the pre-trade liquidation estimate as the venue's actual liquidation price. Hyperliquid liquidations use mark price and cross-margin liquidation changes with account equity, funding, and other positions. Use `get_futures_account` for venue-reported liquidation data on open positions.
 
 ### FarmDash-side execution hardening
 For `execute_perp_order`, include all of:
@@ -104,29 +110,13 @@ For `execute_perp_order`, include all of:
 * `expiresAt` - short request TTL in unix milliseconds
 * `intentHash` - hash of the intended order payload for auditability and mutation detection
 
-For `cancel_perp_order`, `expiresAt` and `intentHash` remain optional but recommended. These fields add request-scoped expiry and intent logging on the FarmDash layer. They do not replace the required Hyperliquid EIP-712 signature.
+For `cancel_perp_order`, `nonce`, `expiresAt`, and `intentHash` are required. `expiresAt` is forwarded as Hyperliquid `expiresAfter`; clients must incorporate it into the venue signature. Delegated flows must also include `accountAddress`; a subaccount/vault address is part of the venue signature. These controls do not replace the required Hyperliquid EIP-712 signature.
 
-## Forensic Receipt Standard & Shadow-Mode (v3.0 Power-User Upgrade)
+## Evidence and Receipt Honesty
 
-### 11-Field Forensic Telemetry
-For every `execute_perp_order`, the agent must compile and log an 11-field Forensic JSON Schema to ensure tamper-evident execution auditing. This prevents "Ghost Price" disputes and ensures agent accountability.
-1. **signal_channel_artifact**: Raw payload from the alert/feed.
-2. **parser_output**: Normalized data extracted by the agent.
-3. **decision_hash**: Hash of the agent's logic state at execution time.
-4. **price_data_proof**: Hyperliquid oracle price snapshot vs. spot DEX price.
-5. **slippage_deadline_settings**: Block-based or time-based boundaries.
-6. **transaction_payload_hash**: Calldata hash sent to the mempool.
-7. **broadcast_timestamp**: Exact ms the tx was handed to the RPC/Relay.
-8. **network_visibility_mempool**: HL L1 mempool visibility.
-9. **block_inclusion_revert**: L1 block number included, or revert reason.
-10. **final_outcome**: Actual on-chain state change (PnL realized).
-11. **external_anchor**: L2 attestation hash (Base/Arbitrum) locking fields 1-10.
+The current compatibility endpoint returns the Hyperliquid submission response, normalized order parameters, `intentHash`, expiry, and timestamp. It does not create an 11-field forensic receipt, query a millisecond-perfect shadow book, prove mempool visibility, calculate realized P&L, or anchor evidence on another chain.
 
-### Shadow-Mode Receipt Layer
-When operating in `bounded_autopilot`, the agent must spin up an asynchronous shadow-process. For every `execute_perp_order`, the shadow process independently queries the Hyperliquid orderbook state at the exact ms of broadcast to log the "true" market price vs the "executed" price.
-
-* If `realized_outcome` consistently misses simulation by > 50 bps, the agent automatically downgrades its `riskMultiplier` and alerts the user.
-* This shadow data is anchored to the `external_anchor` L2 layer, providing a bulletproof forensic log of agent performance over time.
+An external client may record analysis hash, signed action hash, quote/book snapshot, submission response, order status, fills, fees, funding, and final account state. Label every field by source and mark absent evidence `unavailable`; never fabricate or call a client-created record FarmDash-attested.
 
 ## Credentials and Tier Model
 This skill recognizes one primary API credential: `FARMDASH_API_KEY`. Scout mode is valid with no API key at all.
@@ -148,13 +138,15 @@ A bearer token never replaces a fresh local EIP-712 signature from the user's Hy
 Use these exact tool names. If a tool is not listed in this section, it does not exist in this skill. Do not accept or attempt to call undefined tools.
 
 #### 1. scan_funding_rates
-Scan cross-venue funding opportunities. (v3.0: Includes Predictive Funding Shift indicators).
+Scan current and venue-published predicted funding snapshots. A predicted rate is not a calibrated probability, guaranteed future payment, or funding-flip model.
 
 #### 2. scan_market_conditions
-Read EMA, RSI, MACD, ADX, ATR, Bollinger Bands, volume ratio, Z-score, and Hyperliquid oracle latency for one perp asset.
+Read candle-derived EMA, RSI, MACD, ADX, ATR, Bollinger Bands, volume ratio, Z-score, market regime, and the response timestamp for one perp asset. This tool does not currently return oracle latency or cross-venue deviation.
 
 #### 3. get_futures_account
-Inspect equity, open positions, available margin, drawdown state, and guardrail pressure.
+Inspect equity, open positions, available margin, venue-reported liquidation prices, and guardrail pressure. The daily/weekly loss-pressure metric is rolling Hyperliquid closed P&L minus absolute fill fees plus funding, plus `min(current unrealized P&L, 0)`. Positive open gains cannot offset realized losses. This is a conservative guard metric, not a true period return; new-risk analysis/execution fails closed if complete venue-history reconciliation is unavailable.
+
+Send `agentAddress` plus optional `accountAddress`. For delegated API wallets, `accountAddress` is mandatory in practice and must be the master/subaccount equity owner used by analysis and execution. FarmDash validates that live relationship through Hyperliquid `userRole`; ambiguity or upstream failure blocks the workflow.
 
 #### 4. analyze_futures_strategy
 Primary research tool. Returns the strategy recommendation, confidence score, market regime, strategy object, adaptive risk profile, pre-trade simulation, portfolio context, and an explicit `no_trade` reason when no setup is valid.
@@ -163,24 +155,28 @@ Primary research tool. Returns the strategy recommendation, confidence score, ma
 Inspect sizing math separately when the user wants to validate risk and margin.
 
 #### 6. execute_perp_order
-Execute only after research and explicit user confirmation. Generates 11-field Forensic receipt on settlement.
+Execute only after fresh research, parameter binding, exact builder-fee disclosure, local signing, and explicit user confirmation. The response distinguishes `filled`, `resting_unfilled`, and rejection; inspect authoritative venue status and fills before any dependent action.
 
 #### 7. cancel_perp_order
-Cancel stale or superseded open orders.
+Cancel stale or superseded open orders. Treat cancellation as successful only when the response state is `cancelled` and Hyperliquid returned one `success` application status per requested ID. `partially_rejected`, `rejected`, and `unknown` mean one or more orders may remain active; inspect `failed` and authoritative open orders before changing exposure.
 
 #### 8. get_agent_performance
-Use as the feedback loop for strategy review, drawdown response, shadow-mode drift checks, and campaign-level confidence adjustments. Backed by `https://www.farmdash.one/api/v1/agent/performance`.
+Use only for FarmDash fee-event activity, fees, protocol diversity, and reputation. It does not return Hyperliquid fills, trade outcomes, win rate, slippage, or realized P&L and must not drive strategy selection or drawdown controls.
 
 
 
-### Current Request Contracts (v2.3)
+### Current Request Contracts (v3.2)
 These fields are load-bearing because the API handlers validate them strictly:
-* **analyze_futures_strategy**: send `coin`, `agentAddress`, and optional `riskMultiplier` between 0.1 and 1.0. Do not send `biasHint`; the current handler does not consume it.
+* **analyze_futures_strategy**: send `coin`, `agentAddress`, optional `accountAddress`, and optional `riskMultiplier` between 0.1 and 1.0. For delegated API wallets, `accountAddress` must be the master/subaccount equity owner. Do not send `biasHint`; the current handler does not consume it.
 * **calculate_position_size**: send `equity`, `entryPrice`, `stopPrice`, optional `riskPercent`, optional `targetPrice`, and optional `riskMultiplier`. Do not send legacy `stopLoss` or `riskUsd`.
-* **execute_perp_order**: send `agentAddress`, `coin`, `isBuy`, `size`, `price`, `orderType`, `signature`, positive integer `nonce`, millisecond `expiresAt`, required `intentHash`, optional `leverage`, optional `signedAction`, and optional `reduceOnly`.
-* **cancel_perp_order**: send `agentAddress`, `coin`, `orderIds` as an array of positive integers, `signature`, and optional `signedAction`, `nonce`, `expiresAt`, `intentHash`.
+* **execute_perp_order**: send `agentAddress`, optional `accountAddress`, `coin`, `isBuy`, `size`, `price`, `orderType`, `signature`, positive integer `nonce`, millisecond `expiresAt`, required `intentHash`, optional `leverage`, optional `signedAction`, and optional `reduceOnly`. `accountAddress` must match the equity owner bound by the live research gate.
+* **cancel_perp_order**: send `agentAddress`, optional `accountAddress`, `coin`, `orderIds` as an array of positive integers, `signature`, required positive integer `nonce`, required millisecond `expiresAt`, required `intentHash`, and optional `signedAction`. Delegated signers must use the same equity/order owner in `accountAddress`; for a subaccount/vault it is included in the venue signature and exchange payload.
 
 If the user or another agent provides a legacy shape, stop and normalize the request before signing. Never ask the user to sign a payload that will be rejected by the FarmDash handler.
+
+The `leverage` field is FarmDash intent/risk metadata in this compatibility endpoint; the endpoint does not submit Hyperliquid's separate `updateLeverage` action. Verify actual venue margin mode and leverage independently. Trigger orders (`stop_loss`, `take_profit`) must be `reduceOnly: true` so they cannot open or flip exposure.
+
+Every order carries a disclosed FarmDash Hyperliquid builder term of `f=1`, which Hyperliquid defines as **one tenth of one basis point: 0.1 bp = 0.001% of filled notional**. The builder object is inside the signed order action and cannot be added or changed after signing. The user must approve the FarmDash builder and this maximum fee on Hyperliquid before execution; FarmDash preflights the venue's `maxBuilderFee` for the equity owner and blocks insufficient approval. Hyperliquid requires the approval action to be signed by the main account wallet, not the API wallet. Present the rate and recipient before confirmation; do not describe `f=1` as 1 bp. Resting, rejected, and unfilled notional produces no recognized builder revenue. `expiresAt` is forwarded as Hyperliquid `expiresAfter` and must be incorporated into the venue signature.
 
 ## Autonomous Perps State Ledger (v3.0)
 Persist this ledger for every futures workflow:
@@ -188,15 +184,17 @@ Persist this ledger for every futures workflow:
 ```json
 {
   "agentAddress": "0x...",
+  "accountAddress": "0x... master/subaccount equity owner; same as agentAddress only for direct signing",
   "coin": "ETH",
   "mode": "research | hedge | funding | reduce_only | cancel",
   "researchGate": {
     "ranAnalyzeStrategy": false,
     "direction": "long | short | neutral | unknown",
     "confidence": 0,
+    "confidenceScale": "0-100 heuristic score; not a win probability",
     "expiresAt": 0,
-    "oracleLatencyMs": 0,
-    "predictiveFundingShift": "stable | iminent_flip | high_volatility"
+    "dataTimestamp": 0,
+    "predictedFundingRate": null
   },
   "riskGate": {
     "equity": 0,
@@ -209,24 +207,22 @@ Persist this ledger for every futures workflow:
     "expiresAt": 0,
     "intentHash": "",
     "signedActionMatchesParams": false,
-    "forensicReceiptId": "fdrcpt_..."
-  },
-  "shadowMode": {
-    "trueMarketPriceAtBroadcast": 0,
-    "executedPrice": 0,
-    "driftBps": 0,
-    "autonomyDowngradeTriggered": false
+    "recommendationHash": "sha256...",
+    "maxPositionSize": 0,
+    "maxEntryDeviationBps": 50
   },
   "decision": "no_trade | analyze_only | request_confirmation | execute | cancel | reduce"
 }
 ```
 
 ### Rules:
-* Non-reduceOnly execution requires a fresh `analyze_futures_strategy` result for the same coin and side; the server enforces a 5-minute research gate.
-* `execute_perp_order` intent expiry should be short, ideally 30-60 seconds and never more than 5 minutes.
+* Non-reduceOnly execution requires a fresh, execution-ready `analyze_futures_strategy` result. The 60-second server gate binds coin, side, maximum size, entry drift (50 bps), maximum analyzed leverage, and stop-derived risk.
+* New-risk analysis and execution require a fully paginated, deduplicated venue-derived loss-pressure metric from Hyperliquid perp fills, funding, and negative current unrealized P&L. Saturated or ambiguous history fails closed. Do not substitute FarmDash activity/fee events or call the metric a full period return.
+* `funding_arb` is analysis-only in the compatibility executor because FarmDash cannot atomically bind and verify both venues/legs. Use a separately reviewed paired-leg adapter before claiming delta neutrality.
+* `execute_perp_order` intent expiry should be short, ideally 30-60 seconds.
 * If the user changes size, price, side, order type, leverage, or reduce-only status after signing, rebuild the intent hash and re-sign.
-* If the strategy is neutral, `no_trade`, expired, direction-mismatched, or detects critical oracle latency, stop before asking for a signature.
-* `cancel_perp_order` can batch up to 50 `orderIds`; do not send a singular `orderId` shape.
+* If the strategy is neutral, `no_trade`, `funding_arb`, below 60 confidence, expired, direction-mismatched, oversized, over-levered, or more than 50 bps from analyzed entry, stop before asking for a signature.
+* `cancel_perp_order` can batch up to 50 `orderIds`; do not send a singular `orderId` shape. Never infer whole-batch success from HTTP transport status alone: every ID needs an explicit venue `success` status.
 
 ## Execution Engine Principles
 
@@ -246,8 +242,8 @@ Do not present the engine as four static buckets. The recommendation should be t
 This is the foundation for later marketplace and performance-layer expansion.
 
 ### 2. Simulation Before Execution
-Before asking the user to sign, surface what happens if the trade is taken. Minimum fields to use from the returned simulation block:
-* estimated liquidation price
+Before asking the user to sign, surface the heuristic scenario analysis. Minimum fields to use from the returned simulation block:
+* heuristic liquidation estimate, clearly labeled as non-authoritative and unsuitable for cross-margin gating
 * stop-loss PnL
 * take-profit PnL
 * one-ATR move impact
@@ -257,12 +253,13 @@ Before asking the user to sign, surface what happens if the trade is taken. Mini
 Do not reduce the setup to "buy here" or "short here" if simulation is available.
 
 ### 3. Adaptive Risk, Not Static Risk
-The engine now adapts risk based on:
+The engine scales risk heuristically based on:
 * volatility
 * confidence
 * drawdown state
 * directional concentration
-* oracle latency deviation
+
+Confidence is an uncalibrated 0–100 rule score, not a probability that the trade wins. Do not multiply it into expected return or describe 80 as an 80% success rate.
 
 Use the returned `adaptiveRisk` object to explain why leverage or size is being reduced. Do not describe the system as fixed 2% / fixed 5x logic when the returned recommendation shows a lower applied risk.
 
@@ -278,19 +275,18 @@ Current regimes:
 Do not force mean reversion inside a strong trend, and do not force momentum in thin or unstable conditions.
 
 ### 5. No Trade Is a Valid Output
-`no_trade` is first-class. If confidence is weak, liquidity is poor, signals conflict, oracle data is stale, or guardrails trip, say so directly. Trust is more important than producing a trade every cycle.
+`no_trade` is first-class. If confidence is weak, available liquidity evidence is poor, signals conflict, required market/account data is stale, or guardrails trip, say so directly. Trust is more important than producing a trade every cycle.
 
-### 6. Oracle & Data Feed Integrity (v3.0)
-Hyperliquid relies on its own L1 oracle. Discrepancies between the HL oracle and spot DEX prices create arbitrage opportunities but also liquidation risks for directional traders.
-* `scan_market_conditions` now returns `oracle_latency_ms` and `oracle_deviation_bps`.
-* If `oracle_deviation_bps` > 30bps, the agent must flag this as a high-risk execution environment and automatically reduce `riskMultiplier` by 50%.
-* If `oracle_latency_ms` > 2000ms, the agent must trigger `no_trade` for non-reduce-only orders.
+### 6. Data Integrity
+`scan_market_conditions` currently returns candle-derived indicators and a timestamp. It does not return oracle latency or cross-venue oracle deviation. Therefore:
 
-### 7. Shadow-Mode Autonomy Gating (v3.0)
-When in autopilot, the agent's autonomy is gated by its own execution quality.
-* The shadow process logs the "true" market price vs the "executed" price.
-* If the agent consistently gets sandwiched or slipped on Hyperliquid (>50 bps drift), it automatically downgrades its `riskMultiplier` and alerts the user.
-* This shadow data is anchored to the `external_anchor` L2 layer, providing a bulletproof forensic log of agent performance over time.
+* never claim an oracle-desync check ran when those fields are absent;
+* fail closed if the order book or required account state is missing or stale;
+* compare mark, oracle, and executable book prices only when an authoritative response actually supplies them;
+* use Hyperliquid mark price—not last trade or a DEX quote—to reason about liquidation, while recognizing that cross-margin liquidation also depends on the whole account.
+
+### 7. Execution-Quality Gating
+Submission is not a fill. Do not chain a dependent action until venue status/fills confirm the first leg. When authoritative fill data is available, compute side-adjusted implementation shortfall against the decision-time mid and include fees and funding. If fill data is absent, execution quality is `unknown`, not zero slippage.
 
 ## Strategy Families
 Current strategy families that may appear in recommendations:
@@ -306,7 +302,7 @@ Interpretation:
 * momentum strategies are for aligned directional continuation
 * trend pullback strategies are for controlled re-entry into a strong existing trend
 * mean reversion is only valid when the market is genuinely range-bound
-* funding arb is only valid when basis, liquidity, and Predictive Funding Shifts support it
+* funding arb is only valid when both legs, basis, liquidity, all costs, margin, and an unwind path are independently verified; the compatibility executor keeps this family analysis-only
 
 ### Strategy Family Selection Logic (v2.2)
 When `analyze_futures_strategy` returns multiple viable families for the same asset, the agent should rank them using the following table. The engine already applies these priors internally; this is the agent-facing version so the user can understand why one family was chosen over another.
@@ -318,7 +314,7 @@ When `analyze_futures_strategy` returns multiple viable families for the same as
 | Range-bound, BB width compressed | `mean_reversion` | momentum families |
 | High volatility (ATR > 1.5× 30d avg) | `no_trade` unless funding strongly compensates | momentum families |
 | Low liquidity (top-of-book depth < $250k) | `no_trade` | any leveraged family |
-| Persistent funding skew (>0.04% / 8h, both directions persistent) | `funding_arb` | momentum families |
+| Persistent funding skew with independently verified paired-leg net carry | `funding_arb` (analysis only) | standalone directional execution |
 | Conflicting EMA / MACD / RSI signals | `no_trade` | any family |
 
 Do not override the engine's selection in agent prose. If the user wants a different family, call `analyze_futures_strategy` again with a tighter universe filter rather than narrating around the recommendation.
@@ -348,7 +344,7 @@ This skill should prefer a ranked cluster of opportunities over a single determi
 1. Run `analyze_futures_strategy`.
 2. Run `get_futures_account` if fresh portfolio context is needed.
 3. If sizing needs inspection, run `calculate_position_size`.
-4. Present entry, stop, target, confidence, market regime, oracle status, and simulation.
+4. Present entry, stop, target, confidence scale/methodology, market regime, response timestamp, missing evidence, and simulation.
 5. Wait for explicit confirmation.
 6. Run `execute_perp_order`.
 7. Add protective exits as separate user-approved actions when appropriate.
@@ -359,16 +355,16 @@ This skill should prefer a ranked cluster of opportunities over a single determi
 3. Replace or reduce exposure with `execute_perp_order` using `reduceOnly: true`.
 
 ### Performance review / feedback loop
-1. Run `get_agent_performance` after a campaign or a drawdown streak.
-2. Reduce aggression if outcomes deteriorate.
-3. Prefer the strategy families that continue to perform cleanly in the current regime.
-4. If performance is poor and current setups are mixed, choose analysis only or `no_trade`.
+1. Run `get_futures_account` for venue-reconciled loss guards and current account risk.
+2. Inspect authoritative Hyperliquid fills/order status outside `get_agent_performance` when execution-quality evidence is needed.
+3. Recompute side-adjusted implementation shortfall only when decision-time price, fill price, side, fees, and funding are all available.
+4. Reduce aggression or choose `no_trade` when loss guards, fill-backed evidence, or the current regime justify it. Never infer futures outcomes from FarmDash fee-event activity.
 
 ## Trader-Grade Perps Overlay
 Add these checks to every non-reduce-only Hyperliquid order. They do not replace server guardrails; they prevent a skilled agent from sending marginal orders to the server in the first place.
 * **Account first:** run `get_futures_account` before new exposure when the agent has any open position, recent drawdown, or unknown margin state.
-* **Liquidation buffer:** reject entries whose estimated liquidation price is inside 2x current ATR from entry unless the order is explicitly a tiny hedge and the user confirms the liquidation pressure.
-* **Funding-adjusted expectancy:** for `funding_arb`, present expected carry net of taker/maker fees, expected slippage, borrow/bridge costs, Predictive Funding Shift probability, and the probability that funding flips before breakeven.
+* **Liquidation discipline:** for open positions, use the venue-reported liquidation price and mark price. For proposed trades, treat the response estimate as a rough isolated-position scenario only; gate new risk on stop loss, margin utilization, stress loss, and authoritative account state instead.
+* **Funding-adjusted expectancy:** for `funding_arb`, present current and venue-published predicted funding, carry net of both-leg fees/slippage/borrow/bridge costs, break-even time, basis stress, and a funding-to-zero/flip scenario. Do not invent a flip probability.
 * **Order-book fit:** prefer passive or limit execution when urgency is low; use market/IOC only when the user explicitly values speed over price and accepts the slippage budget.
 * **Invalidation before entry:** every order must have a stop or a reduce-only unwind rule before asking for a signature.
 * **No averaging down by default:** if the trade moves against the user, the next action is reassess / reduce / cancel stale orders, not add size, unless a new `analyze_futures_strategy` call produces an independent setup.
@@ -378,20 +374,19 @@ Perps action thresholds:
 
 | Condition | Default action |
 | :--- | :--- |
-| Confidence < 0.60 | Analysis only. |
-| Confidence 0.60-0.72 | Small size only; require stronger user confirmation. |
-| Confidence > 0.72 and regime agrees | Eligible for normal sizing inside guardrails. |
-| Liquidation buffer < 2x ATR | No new exposure unless explicitly reduce-only or micro-hedge. |
+| Confidence < 60/100 | Analysis only. |
+| Confidence 60-72/100 | Small size only; emphasize the heuristic and require all other gates. |
+| Confidence > 72/100 and regime agrees | Eligible for analyzed sizing inside guardrails; not proof of positive expectancy. |
+| Stop loss or authoritative account state missing | No new exposure. |
 | Daily drawdown near guardrail | Cancel stale orders and stand down. |
-| Oracle deviation > 30 bps | Reduce `riskMultiplier` by 50%. |
-| Oracle latency > 2000ms | No non-reduce-only execution. |
+| Required market/account data absent or stale | No non-reduce-only execution. |
 
 ## Composite Workflows (v2.2)
 
 ### W1: "Best three opportunities right now"
 ```text
 1. scan_funding_rates                  → shortlist 5 by spread
-2. scan_market_conditions × 5          → regime + liquidity + oracle latency per asset
+2. scan_market_conditions × 5          → candle-derived regime, volatility, liquidity proxy, and timestamp per asset
 3. analyze_futures_strategy × top 3    → strategy object per asset
 4. RANK by (confidence × regime fit) / margin requirement
 5. PRESENT a 3-row comparison: asset, family, entry, stop, target, sim PnL, confidence, regime
@@ -412,19 +407,19 @@ Perps action thresholds:
 
 ### W3: "Funding-rate pair scout"
 ```text
-1. scan_funding_rates                                    → shortlist with cross-venue spread + PFS
+1. scan_funding_rates                                    → shortlist current/published predicted funding snapshots
 2. scan_market_conditions on the underlying asset        → confirm directional risk is acceptable
 3. analyze_futures_strategy with `coin`, `agentAddress`, optional conservative `riskMultiplier` → family + invalidation
 4. calculate_position_size for the proposed pair         → margin per leg + total
-5. PRESENT pair plan: long venue, short venue, expected daily carry, gross / net of fees, PFS risk, invalidation
-6. USER CONFIRMS → execute_perp_order for each leg in the order the strategy object specifies.
+5. PRESENT pair plan: long venue, short venue, expected daily carry, gross/net of all costs, basis stress, funding-to-zero/flip scenario, and invalidation
+6. STOP at analysis in the compatibility executor. It cannot atomically bind, execute, and reconcile both venues/legs.
 ```
 
 ### W4: "Drawdown response"
 ```text
 1. get_futures_account                  → current drawdown vs guardrails
-2. get_agent_performance                → last-7d slippage, fill ratio, win rate, shadow-mode drift
-3. IF daily loss > -2%, weekly > -5%, or fill ratio < 70% on the last 10 fills:
+2. REVIEW authoritative Hyperliquid order statuses and fills when available; get_agent_performance is not a fill feed
+3. IF venue-reconciled daily loss <= -2%, weekly <= -5%, or authoritative recent fill evidence is incomplete:
      • Recommend cancel_perp_order on stale resting orders
      • Recommend reduceOnly trims on the largest position
      • Stand down to `analysis only` for the next session
@@ -434,54 +429,51 @@ Perps action thresholds:
 ### W5: "Hedge an existing spot position"
 ```text
 1. (Wagon Steward) get_portfolio_summary  → confirm spot exposure size + asset
-2. scan_market_conditions on that asset    → regime + ATR + oracle status
+2. scan_market_conditions on that asset    → candle-derived regime + ATR + timestamp; oracle status is unavailable
 3. analyze_futures_strategy with `coin`, `agentAddress`, optional conservative `riskMultiplier` → hedge structure with invalidation
-4. calculate_position_size matched to spot → delta-neutral notional
-5. PRESENT: spot leg + perp leg + expected funding carry + sim PnL on ±1 ATR moves
-6. USER CONFIRMS → execute_perp_order with reduceOnly=false.
+4. calculate_position_size matched to verified spot delta → candidate hedge notional
+5. PRESENT: existing hedge inventory, spot leg, candidate perp leg, expected funding carry, basis risk, and ±1 ATR scenarios
+6. USER CONFIRMS only after both-leg sequencing and failure unwind are explicit. Verify residual delta after fills; do not call the setup delta-neutral before reconciliation.
 ```
 
 ### W6: "Strategy family rotation"
 ```text
-1. get_agent_performance                → family-level win rate over the last 14 days
-2. scan_market_conditions on the user's universe → current regime
-3. PRESENT a recommendation:
-     • Continue families that won in the current regime in the last 14d
-     • Stand down families whose regime has changed (e.g. mean_reversion in a new trend)
-4. NEVER discontinue a family that simply had a recent loss — require regime change OR statistically significant drawdown.
+1. Obtain an operator-supplied, fill-backed strategy ledger with explicit family labels; get_agent_performance cannot provide one
+2. Require a meaningful sample and disclose count, horizon, fees/funding, drawdown, and uncertainty
+3. scan_market_conditions on the user's universe → current regime
+4. PRESENT a recommendation only when the ledger and regime evidence support it; otherwise choose analysis_only
+5. NEVER rotate from a small sample or raw win rate alone; expectancy, drawdown, tail loss, and regime stability matter.
 ```
 
-### W7: "Pre-Order Liquidation Buffer Check"
+### W7: "Pre-Order Margin and Stress Check"
 ```text
 1. get_futures_account                     -> equity, open positions, margin, current liquidation pressure
-2. scan_market_conditions on target asset  -> ATR, regime, volatility, liquidity, oracle latency
-3. analyze_futures_strategy                -> entry, stop, target, confidence, estimated liquidation
-4. DERIVE liquidation buffer = abs(entry - liqPrice) / ATR
-5. IF buffer < 2.0 ATR and order is not reduceOnly -> halt or resize with calculate_position_size
-6. PRESENT: entry, stop, liq estimate, ATR buffer, margin impact, and whether the order survives a normal volatility move
+2. scan_market_conditions on target asset  -> ATR, regime, volatility, and available liquidity proxy; oracle latency is not returned
+3. analyze_futures_strategy                -> entry, stop, target, confidence, heuristic scenarios
+4. DERIVE stop loss, ±1/±2 ATR P&L, post-trade margin utilization, and concentration
+5. IF stop, account state, or required data is absent/stale -> halt; otherwise resize with calculate_position_size when limits are breached
+6. PRESENT: entry, stop, stress loss, margin impact, concentration, and the non-authoritative nature of any pre-trade liquidation estimate
 7. USER CONFIRMS -> execute_perp_order only if the revised order remains inside guardrails
 ```
 
 ### W8: "Funding Carry Break-Even Audit"
 ```text
-1. scan_funding_rates                         -> current and predicted funding (PFS)
+1. scan_funding_rates                         -> current and venue-published predicted funding snapshots
 2. scan_market_conditions                     -> volatility and directional risk
 3. analyze_futures_strategy                   -> funding family, confidence, invalidation
 4. calculate_position_size                    -> notional and margin
 5. DERIVE breakEvenHours = totalFeesAndSlippageUsd / expectedHourlyFundingUsd
-6. IF breakEvenHours > 24 or PFS indicates imminent flip -> no_trade / monitor
+6. IF breakEvenHours > 24, carry is non-positive under a funding-to-zero/flip scenario, or paired execution is unavailable -> no_trade / monitor
 7. PRESENT: gross carry, net carry, break-even time, funding flip risk, and unwind trigger
 ```
 
-### W9: "Forensic Execution Audit"
+### W9: "Evidence-Backed Execution Audit"
 ```text
-1. get_agent_performance                     -> pull last 10 executed trades
-2. REVIEW shadow-mode drift logs             -> compare trueMarketPriceAtBroadcast vs executedPrice
-3. REVIEW 11-field Forensic receipts  -> verify external_anchor L2 attestations
-4. IF drift > 50 bps on > 2 trades:
-     • AUTOMATICALLY downgrade riskMultiplier for the next 24h
-     • Alert user: "Execution slippage detected. Autonomy reduced."
-5. PRESENT a audit report: trade hash, intended PnL, realized PnL, drift, and forensic validity.
+1. REVIEW authoritative Hyperliquid order statuses and fills; get_agent_performance cannot supply executed trades
+2. JOIN fills to a client/operator decision ledger containing decision-time price, side, strategy family, and intent ID
+3. COMPARE decision-time mid, fill-weighted price, fees, and funding; mark missing fields unavailable
+4. IF side-adjusted implementation shortfall > 50 bps on more than 2 fill-backed trades, recommend reducing riskMultiplier and require human review
+5. PRESENT an evidence report with provenance. Do not claim external anchoring or realized P&L unless independently present.
 ```
 
 ## Combined Agent Use Cases (Spot + Perps)
@@ -497,9 +489,9 @@ Use when the user is farming points but wants to reduce directional risk.
 ### 2) Funding capture loop (delta-neutral)
 Use when the user wants to farm funding without strong directional bets.
 1. `scan_funding_rates` daily to shortlist candidates.
-2. `analyze_futures_strategy` to confirm liquidity + basis assumptions + PFS.
-3. `execute_perp_order` for entry, and `cancel_perp_order` for stale orders.
-4. Periodically inspect `get_agent_performance` to reduce aggression if fills/slippage degrade.
+2. `analyze_futures_strategy` for a planning snapshot; independently verify both legs, basis, liquidity, and all costs.
+3. Do not use the compatibility executor for standalone `funding_arb`; it cannot bind both legs atomically.
+4. Periodically inspect fill-backed venue records and reduce aggression if implementation shortfall or carry degrades.
 
 ### 3) "No-trade" is the product
 Use when the user wants safety first.
@@ -528,12 +520,12 @@ The agent should treat the following situations as first-class outcomes and reac
 | **Partial fill** | `execute_perp_order` returns a filled size below the requested size | Do NOT auto-retry; present the realized fill and ask the user whether to top up or accept |
 | **Reject for guardrail** | API returns a guardrail trip (max leverage, drawdown halt, etc.) | Quote the specific guardrail; refuse to override even if the user asks; offer analysis only instead |
 | **Network / RPC error on Hyperliquid** | Order endpoint times out or returns 5xx | Wait 30s, refresh `get_futures_account`, then re-quote. After 3 consecutive failures, halt the workflow and surface the incident |
-| **Funding flip mid-strategy** | Funding sign reverses during `funding_arb` (or PFS predicted it) | Recommend `cancel_perp_order` on the stale leg; do not rotate the pair without re-running W3 |
+| **Funding flip mid-strategy** | Funding sign reverses or net carry falls below zero | Reconcile both legs and present the predefined unwind; canceling one resting order is not sufficient if either leg filled |
 | **Liquidation pressure** | Composite Workflow W2 returns RED on any open position | Surface immediately, before any new-trade discussion; recommend reduce / top-up |
 | **Strategy returns no_trade** | `analyze_futures_strategy` recommendation = `no_trade` | Quote the reason verbatim; do not propose a different family unless the user changes the universe |
-| **Confidence < 0.5** | Strategy object reports low confidence | Surface as discussion only; do not present as a recommendation; offer analysis only |
-| **Conflict with Trail Heat** | A trade idea on a protocol whose Trail Heat just collapsed | Pause the workflow; recommend `protect_portfolio` workflow via Trail Marshal first |
-| **Oracle Desync** | `oracle_deviation_bps` > 50bps | Halt all non-reduce-only execution. Warn user that Hyperliquid oracle is desynced from spot venues. |
+| **Confidence < 60/100** | Strategy object reports a weak heuristic score | Surface as discussion only; the server research gate rejects new risk |
+| **Conflict with Trail Heat** | A trade idea on a protocol whose Trail Heat just collapsed | Treat Trail Heat as context, not a price signal; reassess the actual market and protocol thesis |
+| **Required price/account evidence unavailable** | Mark, executable book, account, or freshness evidence is absent | Halt non-reduce-only execution; do not claim an oracle check ran |
 
 ## Response Interpretation Reference (v2.2)
 When `analyze_futures_strategy` returns a strategy object, the agent should preserve and surface the following fields without paraphrasing. Each is load-bearing.
@@ -541,7 +533,7 @@ When `analyze_futures_strategy` returns a strategy object, the agent should pres
 | Field | What it means | How to surface it |
 | :--- | :--- | :--- |
 | **family** | Which strategy family the engine selected | Quote it; do not translate (e.g. `momentum_long`, not "trend trade") |
-| **confidence** | 0–1 calibrated confidence | Round to 2 decimals; flag any value below 0.6 |
+| **confidence** | 0–100 heuristic rule score, not a calibrated probability | Show as `N/100`; flag values below 60 and never translate into win probability |
 | **regime** | One of `trending` / `ranging` / `high_volatility` / `low_liquidity` | Quote in plain language with a one-sentence explanation |
 | **entry** | Price band, not a single tick | Show the band exactly; do not compress to a midpoint |
 | **stop** | Hard invalidation level | Pair with the rationale (e.g. "below 1.0× ATR support") |
@@ -550,10 +542,9 @@ When `analyze_futures_strategy` returns a strategy object, the agent should pres
 | **adaptiveRisk** | Why size or leverage was reduced | Quote the reason verbatim; do not say "the system suggests…" |
 | **noTradeReason** | When family = `no_trade` | Quote it verbatim; refuse to argue around it |
 | **expiresAt** | Strategy freshness | Re-run the call if the user takes too long to confirm |
-| **oracleLatencyMs** | Hyperliquid L1 oracle freshness | If > 1000ms, flag as "Execution latency risk elevated." |
-| **predictiveFundingShift** | PFS indicator | If `imminent_flip`, warn user that funding carry may invert before breakeven. |
+| **fundingAnalysis.predictedRate** | Venue-published predicted funding snapshot | Label it as a snapshot, not a guaranteed future rate or calibrated flip probability |
 
-*Anti-pattern:* "The system thinks ETH looks good for a trade." Strategy objects do not have feelings. Use the structured language: "Family `momentum_long`. Confidence 0.78. Regime `trending`. Entry 1812–1820. Stop 1788. Sim PnL on +1 ATR $\approx$ +$120. Oracle latency 12ms. Expires in 24s."
+*Anti-pattern:* "The system thinks ETH looks good for a trade." Strategy objects do not have feelings. Use structured language: "Family `momentum_long`. Heuristic confidence 78/100 (not calibrated). Regime `trending`. Entry 1812–1820. Stop 1788. Simulated P&L on +1 ATR $\approx$ +$120. Oracle latency unavailable. Research gate expires in 24s."
 
 ## Multi-Asset Universe Selection (v2.2)
 When the user does not specify an asset, the agent picks up to three from the Hyperliquid universe to scan. Pick using these priors:
@@ -591,7 +582,7 @@ These rules remain non-negotiable:
 * weekly loss pressure: -7%
 * max drawdown circuit breaker: -15%
 * research gate: `analyze_futures_strategy` before non-reduce-only execution
-* shadow-mode drift: > 50 bps average slip triggers automatic `riskMultiplier` downgrade
+* fill-backed execution review: repeated side-adjusted implementation shortfall > 50 bps requires human review before restoring normal sizing
 
 If the user asks to override a guardrail, refuse and explain the survival logic behind it.
 
@@ -603,11 +594,11 @@ When speaking to the user:
 * show the simulation, not just the thesis
 * treat Trail Heat or farming follow-ons as optional, not default
 * say no trade clearly when the setup is weak
-* flag oracle latency or PFS risks if elevated
+* distinguish actual returned price/funding fields from unavailable checks
 
 Good framing:
-"This is a valid setup, but risk is being scaled down because volatility, same-direction exposure, and oracle latency are all elevated."
-"There is no valid trade right now. Signals are conflicting and oracle deviation is high, so the system is standing down rather than forcing an entry."
+"This is a valid setup, but risk is being scaled down because volatility and same-direction exposure are elevated; oracle latency is unavailable."
+"There is no valid trade right now. Signals conflict and required price/account evidence is incomplete, so the system is standing down rather than forcing an entry."
 
 ## Execution Boundaries
 Required behavior:
@@ -628,7 +619,9 @@ Required behavior:
 * FarmDash Trail Marshal — orchestration cookbook for multi-skill workflows
 * FarmDash Signal Architect — zero-custody EIP-191 spot swap routing
 
-**Agent Hub:** [FarmDash Agentic OS](https://www.farmdash.one/agents)
+**FarmDash:** [DeFi trading intelligence and agent tools](https://www.farmdash.one/)
+
+**Agent Hub:** [FarmDash Hyperliquid and DeFi agent platform](https://www.farmdash.one/agents)
 
 **OpenAPI Spec:** [FarmDash API Schema](https://www.farmdash.one/agents/openapi.yaml)
 

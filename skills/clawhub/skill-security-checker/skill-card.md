@@ -1,5 +1,5 @@
 ## Description: <br>
-Skill Security Checker audits agent skill folders for static security patterns, dependency issues, permission risks, quality checks, and optional sandboxed runtime behavior, producing text, JSON, or HTML reports. <br>
+Skill Security Checker helps agents audit skill directories for static security risks, dependency vulnerabilities, permission overreach, quality issues, optional sandbox behavior, supply-chain findings, and CI/CD report generation. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,29 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and skill publishers use this skill to check ClawHub, WorkBuddy, or SkillHub skills before release or in CI/CD, with findings, scores, and remediation guidance for security and quality issues. <br>
+Developers, reviewers, and CI maintainers use this skill to scan ClawHub, SkillHub, or WorkBuddy skill directories before release or during pull-request checks. It supports local audits, third-party skill assessment, and automated quality gates with remediation guidance. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The server security review flags the release as suspicious because optional dynamic scanning with allowed domains may provide broader Docker network access than the documentation implies. <br>
-Mitigation: Use static scanning or dynamic scanning without allowed domains by default; enable allowed domains only for reviewed targets and treat that mode as general network access for scanned code. <br>
+Risk: The skill can check GitHub for release updates during normal operation. <br>
+Mitigation: Use --skip-update in offline or sensitive environments. <br>
+Risk: Supply-chain checks may perform external vulnerability or package metadata lookups that reveal dependency names. <br>
+Mitigation: Avoid --supply-chain for private dependency names unless those lookups are acceptable. <br>
+Risk: Dynamic scanning executes target skill scripts to observe behavior. <br>
+Mitigation: Enable --dynamic only when Docker or Windows Sandbox isolation is available; otherwise rely on static and supply-chain scans. <br>
+Risk: The tool may create local cache files for update or supply-chain metadata. <br>
+Mitigation: Review or clear the local cache when operating in sensitive environments. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/fyniujin/skills/skill-security-checker) <br>
 - [Scan Patterns Reference](references/scan-patterns.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Terminal text, JSON, or HTML reports with findings, scores, and remediation suggestions.] <br>
-**Output Parameters:** [1D; target skill path plus optional format, output path, update-check, dynamic scan, allow-domain, and timeout flags.] <br>
-**Other Properties Related to Output:** [Runs locally; dynamic mode can execute scanned code in Docker or Windows Sandbox.] <br>
+**Output Type(s):** [Analysis, Text, JSON, HTML, SARIF, Shell commands, Configuration instructions, Guidance] <br>
+**Output Format:** [Text, JSON, HTML, and SARIF reports with scores, findings, exit codes, CI configuration, and remediation guidance.] <br>
+**Output Parameters:** [1D] <br>
+**Other Properties Related to Output:** [Can write report files via an output path; optional dynamic and supply-chain checks may add runtime behavior and dependency-risk findings.] <br>
 
 ## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+3.0.0 (source: frontmatter, release evidence, artifact metadata, and changelog) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Estimates an indoor plant transpiration rate index from thermal or RGB leaf imagery with optional environmental data, then returns a structured plant stress and root water-uptake assessment. <br>
+Estimates an indoor plant transpiration-rate index from thermal leaf images, or RGB images combined with environmental context, and returns plant water-stress and root water-uptake guidance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, plant-care operators, greenhouse teams, and smart-planter workflows use this skill to analyze leaf imagery and produce transpiration-rate, root water-uptake, stress, and care-guidance outputs for indoor plants. <br>
+Developers and plant-care operators use this skill to submit indoor plant leaf images or videos for transpiration-rate estimation, water-stress screening, root water-uptake assessment, care recommendations, and cloud history lookup. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Cloud-backed analysis sends media, URLs, identity data, and report-history requests to lifeemergence.com services. <br>
-Mitigation: Use only with data appropriate for third-party cloud processing, and avoid private files or URLs unless the publisher clarifies consent, retention, and authentication handling. <br>
-Risk: The security evidence says the skill automatically creates or reuses backend identities and stores token-capable local SQLite state. <br>
-Mitigation: Review local storage and identity behavior before deployment, restrict execution to trusted environments, and clear local state when account linkage should not persist. <br>
-Risk: The authoritative security verdict is suspicious because user-facing disclosure around cloud processing, identity reuse, and local token storage is weak. <br>
-Mitigation: Require deployment review and user disclosure before enabling the skill in workflows that handle sensitive images, URLs, or account-linked history. <br>
+Risk: Submitted media and URLs are processed by a remote cloud service. <br>
+Mitigation: Use non-sensitive plant media and avoid submitting regulated or private imagery unless cloud processing has been approved. <br>
+Risk: The skill can automatically create or reuse a service identity and persist service tokens in a workspace SQLite database. <br>
+Mitigation: Review token persistence before installing in shared environments, restrict workspace access, and remove persisted identifiers or tokens when they are no longer needed. <br>
+Risk: Historical report retrieval depends on remote service state associated with the resolved identity. <br>
+Mitigation: Confirm the intended account context before using history lookup and avoid treating remote history as local memory. <br>
 
 
 ## Reference(s): <br>
-- [API interface documentation](references/api_doc.md) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-transpiration-rate-estimation-analysis) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API documentation](references/api_doc.md) <br>
+- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON text, with optional file output] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and JSON-style structured text, with optional saved output files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured analysis results, report links, history-query output, and command examples for local script execution.] <br>
+**Other Properties Related to Output:** [May include a report export link and Markdown tables for historical report listings.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release evidence; SKILL.md frontmatter lists 1.0.4) <br>
+1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

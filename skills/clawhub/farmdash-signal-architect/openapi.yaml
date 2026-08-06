@@ -3,7 +3,7 @@ info:
   title: FarmDash Signal Architect API
   version: 1.1.1
   description: |
-    Zero-custody intelligence and control API for DeFi agents and serious airdrop farmers:
+    Customer-controlled intelligence and execution API for DeFi agents and serious airdrop farmers:
     structured opportunity intelligence, quote generation, user-authorized onchain execution,
     x402 flows, and fee history. FarmDash never receives private
     keys or seed phrases and never holds user funds. Wallet-affecting operations
@@ -11,7 +11,7 @@ info:
 
     ## Authentication
     - **Scout (Free)**: No auth. 5 requests/24h per IP.
-    - **Pioneer**: `Authorization: Bearer <PIONEER_KEY>`. 500 requests/day.
+    - **Pioneer**: `Authorization: Bearer <PIONEER_KEY>`. 1,500 requests/day.
     - **Syndicate**: `Authorization: Bearer <SYNDICATE_KEY>`. $199/mo USDC, 50,000 requests/day, webhooks, unrestricted CORS, and advanced control/session tooling for teams and serious agents.
     - **Swap execution**: Requires fresh quote review plus EIP-191 agent wallet signature.
     - **Delegation/autopilot**: Requires explicit user-configured budgets, allowlists, and revocation path.
@@ -72,7 +72,7 @@ paths:
               description: USDC contract on Base
             X-Payment-Amount:
               schema: { type: string }
-              description: Amount in token decimals (e.g. 990000 = 0.99 USDC)
+              description: Quoted amount in token decimals (e.g. 10000 = 0.01 USDC default overage)
             X-Payment-Chain-Id:
               schema: { type: string }
               description: "8453 (Base)"
@@ -160,7 +160,7 @@ paths:
           required: false
           schema:
             type: string
-            enum: [lifi, zerox, x402]
+            enum: [lifi, zerox, x402, okx]
           description: Force a specific routing protocol (auto-selected if omitted)
         - in: query
           name: walletAddress
@@ -452,7 +452,7 @@ components:
           properties:
             amount:
               type: string
-              example: '0.99 USDC'
+              example: '0.01 USDC'
             chain:
               type: string
               example: Base
@@ -616,7 +616,7 @@ components:
       properties:
         protocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox, x402, okx]
         estimatedOutput:
           type: string
           description: Expected output amount in wei
@@ -746,15 +746,13 @@ components:
         slippage:
           type: number
           minimum: 0.01
-          maximum: 50
+          maximum: 5
           default: 0.5
           description: Slippage tolerance in percent
         protocol:
           type: string
           enum: [lifi, zerox, x402]
           description: Force protocol (auto-selected if omitted)
-        volumeHintUSD:
-          type: number
         expectedUpsideUsd:
           type: number
           description: Optional upside estimate in USD for positive-net-edge checks
@@ -793,7 +791,7 @@ components:
       properties:
         selectedProtocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox, x402, okx]
         routeReason:
           type: string
         mevProtection:
@@ -812,7 +810,7 @@ components:
             properties:
               protocol:
                 type: string
-                enum: [lifi, zerox, x402]
+                enum: [lifi, zerox, x402, okx]
               estimatedOutput: { type: string }
               feeAmountUsd: { type: number }
               gasEstimateUsd: { type: number, nullable: true }
@@ -915,7 +913,7 @@ components:
           example: swap_halted
         selectedProtocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox, x402, okx]
         executionAlpha:
           $ref: '#/components/schemas/ExecutionAlphaReport'
         riskReport:
@@ -934,7 +932,7 @@ components:
         toAddress: { type: string, pattern: '^0x[a-fA-F0-9]{40}$' }
         protocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox, x402, okx]
         slippage: { type: number }
         expectedUpsideUsd: { type: number }
         riskBufferUsd: { type: number }
@@ -956,7 +954,7 @@ components:
           enum: [manual, quoted]
         selectedProtocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox, x402, okx]
           nullable: true
         executionAlpha:
           allOf:
@@ -994,7 +992,7 @@ components:
           format: date-time
         protocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox, x402, okx]
         from_token:
           type: string
         to_token:

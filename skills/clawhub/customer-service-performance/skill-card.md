@@ -1,42 +1,60 @@
-## Description: <br>
-通过Python脚本读取Excel数据和规则文件，转换为文本后由大模型解析字段、阶梯规则与权重，自动完成逐行核算与排名输出。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+客服绩效核算 reads user-provided customer-service workload data and performance rules, calculates per-agent scores with visible intermediate steps, and outputs performance details, team distribution, and manual-review items.
 
-## Publisher: <br>
-[zenobiazizi](https://clawhub.ai/user/zenobiazizi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zenobiazizi](https://clawhub.ai/user/zenobiazizi)
 
-## Use Case: <br>
-Customer service operations managers and analysts use this skill to calculate agent performance scores and rankings from supplied data and scoring rules, then produce a concise management report. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Performance spreadsheets and rule files may contain real names, employee IDs, or other sensitive employee data. <br>
-Mitigation: Remove or mask sensitive fields where possible before giving files to the agent. <br>
-Risk: Scores and rankings may affect management, pay, or evaluation decisions if used without review. <br>
-Mitigation: Independently verify calculations, rule interpretation, and rankings before using results for personnel decisions. <br>
-Risk: Large or unsupported input files can fail during local file conversion. <br>
-Mitigation: Keep individual files within the documented 10 MB limit and use the supported .xlsx, .xls, .md, .txt, or .csv formats. <br>
+## Use Case:
 
+Customer-service managers and operations teams use this skill to calculate draft agent performance scores from Excel or CSV workload data and configurable scoring rules. The output is intended for review and audit before any payroll, evaluation, or HR decision.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zenobiazizi/skills/customer-service-performance) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Text, Shell commands, Guidance] <br>
-**Output Format:** [Markdown table and narrative report, with shell command guidance for reading supported files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads user-provided .xlsx, .xls, .md, .txt, and .csv files up to the documented 10 MB limit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter declares 1.1.0) <br>
+Risk: The skill processes employee workload and performance data that may contain sensitive personal or employment information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the agent may access the specific workload and rule files needed for the calculation; keep processing local and mask personal identifiers beyond required employee IDs.
+
+Risk: Draft score outputs could be mistaken for final payroll, evaluation, or HR decisions.
+
+Mitigation: Treat all reports as review drafts, retain the required manual-review warning, and independently verify results before using them for compensation or performance decisions.
+
+Risk: Missing data, ambiguous rules, or mismatched columns can produce incomplete or misleading scores.
+
+Mitigation: Flag missing or ambiguous items for manual review, avoid silently scoring missing values as zero, and confirm unclear column mappings or rule definitions before relying on results.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zenobiazizi/skills/customer-service-performance)
+- [Default customer-service performance rules](artifact/references/rules-default.md)
+- [Custom rules guide](artifact/references/rules-guide.md)
+- [Sample performance report](artifact/examples/sample-report.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Guidance]
+
+**Output Format:** [Excel workbook when supported; otherwise Markdown tables with a summary, score details, team distribution, and manual-review list.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should show raw values, matched scoring tiers, dimension scores, weights, weighted results, total scores, and review warnings.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

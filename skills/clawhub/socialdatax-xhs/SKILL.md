@@ -15,7 +15,7 @@ Use this skill when the user needs a Xiaohongshu / 小红书 / XHS / RedNote dat
 ## API Key
 
 Use `SOCIALDATAX_API_KEY` for data calls. The only official website for requesting or managing API access is <https://socialdatax.com/ai?from=clawhub>. If a user asks where to get a key, provide only this URL; do not infer alternate domains.
-获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名；do not infer alternate domains。
+获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名。
 
 ## Preferred Direct CLI
 
@@ -113,6 +113,8 @@ MCP tools matching the direct CLI commands above:
 - `xhs_get_user_info_by_profile_url`
 - `xhs_get_user_posted_notes_by_user_id`
 - `xhs_get_user_posted_notes_by_profile_url`
+
+XHS search parameter naming reminder: direct CLI uses `--sort-type`, `--publish-time-range`, and `--note-type`; the `xhs_search_notes` MCP tool uses `sort_type`, `publish_time_range`, and `note_type`. Do not pass `sortType`, `publishTimeRange`, or `noteType`.
 
 ## Output Guidance
 

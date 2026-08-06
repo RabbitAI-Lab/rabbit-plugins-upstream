@@ -1,0 +1,14 @@
+name: geoskill-environmental-impact-assessment
+display_name: 环境影响评价
+description: |
+  多压力因子归一化加权叠加得综合影响指数，独立概率模型估算累积效应，按阈值划分5 级影响等级。Assesses environmental impact grades by multi-factor overlay and cumulative effects. 输出影响指数与等级 GeoTIFF。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-environmental-impact-assessment.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - raster
+  - remote-sensing
+  - vector

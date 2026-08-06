@@ -1,12 +1,12 @@
 # eKYC Suite Face Compare
 
-Current version: 1.0.9
+Current version: 1.0.15
 Summary: Focused eKYC Suite skill for KYC face comparison, face matching, selfie verification, and selfie-to-document identity checks.
 Tool: face_compare
 Result: structured 0-100 similarity score.
 Install: clawhub install ekyc-suite-face-compare
 Related npm MCP: @wefi-ai/ekyc-suite-face-compare-mcp
-Contact: carochen112233@gmail.com
+Contact: carochen112233@gmail.com for trial access, PoC evaluation, face-comparison thresholds, pricing, and eKYC integration requirements.
 Canonical Skill URL: https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-face-compare
 Related MCP URL: https://www.npmjs.com/package/@wefi-ai/ekyc-suite-face-compare-mcp
 Parent Skill URL: https://clawhub.ai/carochen112233-commits/skills/ekyc-suite

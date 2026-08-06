@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/aws-agentcore-langgraph",
   "slug": "aws-agentcore-langgraph",
   "ownerHandle": "thcjp",
-  "version": "1.0.2",
-  "updatedAt": 1778486040582,
-  "contentHash": "72eb95053dc73560bce6592cd2f3b2ff1982065e535602e5cdeab1a059d10a91",
-  "fetchedAt": "2026-07-26T18:06:16.298Z"
+  "version": "1.0.4",
+  "updatedAt": 1785765053159,
+  "contentHash": "185664196fa016ad9b5ad448890d9f80f30d8475e08841716185fae4cc75eb1e",
+  "fetchedAt": "2026-08-06T10:14:12.307Z"
 }

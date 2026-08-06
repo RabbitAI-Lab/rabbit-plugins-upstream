@@ -1,0 +1,14 @@
+name: geoskill-least-cost-path
+display_name: 最小成本路径
+description: |
+  成本距离计算+Dijkstra回溯链接+路径提取，输出最小成本路径
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-least-cost-path.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - network
+  - remote-sensing
+  - vector

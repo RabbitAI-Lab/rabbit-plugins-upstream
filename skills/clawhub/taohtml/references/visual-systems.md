@@ -6,13 +6,19 @@ Use this router only after content and chapter structure are clear. Its purpose 
 
 A unique eligible active enterprise profile remains the automatic route defined in `profile-memory.md`; do not enter this router, reopen its reference images, or present built-in choices for that route.
 
+For every other visual route, resolve reference availability before this catalog. Unless the customer has already supplied a supported reference, explicitly named a built-in system, or explicitly delegated the built-in choice, ask exactly one customer-facing question:
+
+> 本次是否有希望参考的模板、企业母版或喜欢的意向图？有的话请上传静态截图；没有则从内置视觉系统中选择。
+
+This is a visual-source decision, not an open-ended aesthetic interview. A clear “有” or a supplied reference starts the supported static-reference route below; a clear “没有” starts this catalog route. Do not recommend, show, or choose a fallback built-in system before that decision is known. An already confirmed active enterprise Profile is a known visual binding, so it remains the sole no-repeat reuse exception; a customer request to change it reopens this reference-first choice.
+
 When the user chooses “use my reference” and supplies one supported reconstruct still or one to three supported corporate-family stills, do not use this router. Read `static-reference-vi.md`, apply its current-session readability gate, extract only visible static composition, hierarchy, image treatment, module language, and evidence treatment, render the unified VI standards board, and wait for clear confirmation of that exact current board. Do not infer dynamic rules, force one of the built-in systems, or reduce the reference to colors.
 
 If the current session cannot reliably locate static visual facts, follow the two recovery paths in `static-reference-vi.md`; do not guess or maintain a model matrix here. A clear PPT, webpage, video, state sequence, more than three corporate screenshots, or multiple reconstruct screenshots is an unsupported reference input rather than “no clear reference”: ask for a supported representative raster input and do not enter this router unless the customer explicitly abandons the reference route. Never infer movement from those sources.
 
 ## Catalog Display And Selection
 
-When no clear reference exists and no enterprise profile applies, enter this router. Apply one of these mutually exclusive rules:
+When no clear reference exists after the customer explicitly has no reference, has already named a concrete built-in system, or has explicitly delegated the built-in choice, and no enterprise profile applies, enter this router. Apply one of these mutually exclusive rules:
 
 - If the user has already specified one concrete built-in system, adopt it directly without displaying the catalog.
 - Show a category subset only when the user has proactively and explicitly constrained the acceptable range of the built-in catalog and that constraint maps unambiguously to one declared category. Determine the user's stated scope from meaning rather than literal phrase matching. The current business-oriented subset is **严谨咨询报告** and **稳重企业年报**; the current design-led or less-business-oriented subset is **黑白荧光卡片** and **杂志图文拼贴**.

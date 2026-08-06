@@ -1,5 +1,5 @@
 ## Description: <br>
-Anthropics Frontend Design helps agents generate distinctive production-grade frontend interfaces and code across HTML/CSS/JS, React, and Vue, with guidance on typography, color, motion, layout, and visual texture. <br>
+Anthropics Frontend Design helps agents create distinctive production-oriented frontend interfaces across HTML/CSS/JS, React, and Vue, with guidance for typography, color, motion, layout, and visual texture. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, designers, and agent users use this skill to create landing pages, dashboards, brand pages, product displays, and reusable frontend components with a clear aesthetic direction and production-oriented implementation details. <br>
+Developers, designers, and agent users use this skill to generate frontend pages, dashboards, brand visuals, and reusable components with a deliberate aesthetic direction and production-oriented code. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may use local command execution for frontend builds or previews. <br>
-Mitigation: Review generated shell commands before execution and run previews or builds in a controlled project workspace. <br>
-Risk: Supplying a callback URL may send result data to an external destination. <br>
-Mitigation: Use callback URLs only when the destination is trusted and the data being sent is appropriate to share. <br>
-Risk: Generated frontend code may require review for accessibility, responsiveness, browser compatibility, and performance. <br>
-Mitigation: Inspect and test generated interfaces before deployment, including contrast, semantic markup, responsive layouts, and animation cost. <br>
+Risk: The skill requests broad command, file, API, and callback capabilities without tight boundaries. <br>
+Mitigation: Run it only in workspaces where file edits and command execution are acceptable, review generated diffs and commands before use, and require explicit confirmation for callback URLs or external API calls. <br>
+Risk: Sensitive API keys or private design data could be exposed through prompts, generated files, logs, or external integrations. <br>
+Mitigation: Avoid providing secrets or confidential design data, keep credentials in environment variables, and review generated output before committing or sharing it. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/anthropics-frontend-design) <br>
 - [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+- [Artifact skill definition](artifact/SKILL.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code snippets, frontend source files, and optional shell commands] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown with frontend code, shell snippets, configuration guidance, and optional JSON status output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce runnable frontend assets and preview or build commands for the selected stack.] <br>
+**Other Properties Related to Output:** [May create or modify frontend files and may include commands for previewing or validating generated interfaces.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+1.0.3 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

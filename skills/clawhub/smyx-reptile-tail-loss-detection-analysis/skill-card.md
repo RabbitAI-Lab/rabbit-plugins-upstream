@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes gecko and lizard tail images or video to detect abnormal tail shortening, visible tail-tip wounds or scabs, and tail-loss event reports. <br>
+Detects possible tail-loss events in gecko or lizard images or videos by comparing tail length against historical or body-length baselines and flagging wounds, scabs, or abnormal shortening. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External reptile keepers, breeders, and smart-vivarium developers use this skill to analyze supplied reptile tail images or videos, query historical reports, and receive structured tail-loss alerts with care-oriented guidance. <br>
+External reptile keepers, breeders, and smart-vivarium operators use this skill to analyze gecko or lizard tail media for possible autotomy events, image-quality issues, and history reports. The skill is intended to support monitoring workflows and does not replace professional veterinary review. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill sends reptile images or media URLs to Life Emergence cloud APIs. <br>
-Mitigation: Use only with media the user is allowed to upload, and disclose that analysis is cloud-connected rather than local-only. <br>
-Risk: The skill silently creates or reuses an internal account identity and queries cloud history. <br>
-Mitigation: Review account and history behavior before deployment, especially for shared workspaces or regulated environments. <br>
-Risk: The skill stores account tokens in a local workspace SQLite database. <br>
-Mitigation: Restrict workspace access, rotate or clear credentials when decommissioning, and avoid running it in untrusted shared directories. <br>
-Risk: Visual analysis may produce unreliable or overstated tail-loss findings when images are incomplete, low resolution, poorly lit, or lack SVL/reference context. <br>
-Mitigation: Require clear full-tail imagery and keep the documented unreliable-signal path for low-quality inputs instead of forcing a diagnosis. <br>
-Risk: Care guidance could be mistaken for veterinary diagnosis or treatment. <br>
-Mitigation: Keep outputs limited to visual observations and non-prescriptive guidance, and direct suspected infection or severe injury cases to a qualified reptile veterinarian. <br>
+Risk: The security review says the skill uploads reptile enclosure images or videos and related account metadata to configured LifeEmergence services. <br>
+Mitigation: Use only with media the user is comfortable sending to those services, and avoid sensitive household footage unless the publisher provides clear consent, retention, and deletion controls. <br>
+Risk: The security review says the skill automatically creates or reuses identity and stores tokens in a local workspace database. <br>
+Mitigation: Review the local workspace data location and remove stored identity or token data when the skill is no longer needed. <br>
+Risk: The security review says the skill relies on cloud history retrieval for report lists. <br>
+Mitigation: Treat history output as dependent on the configured cloud service and verify important records before making operational decisions. <br>
 
 
 ## Reference(s): <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-reptile-tail-loss-detection-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [API documentation](references/api_doc.md) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis reports] <br>
+**Output Type(s):** [analysis, markdown, json, shell commands] <br>
+**Output Format:** [Markdown or JSON structured analysis report with optional report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, alert levels, tail-length measurements, wound indicators, and historical report tables.] <br>
+**Other Properties Related to Output:** [May include tail-length estimates, shortening ratio, wound or scab indicators, alert level, recommended actions, disclaimers, and cloud history results.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter reports 1.0.6) <br>
+1.0.7 (source: ClawHub release metadata; artifact frontmatter reports 1.0.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

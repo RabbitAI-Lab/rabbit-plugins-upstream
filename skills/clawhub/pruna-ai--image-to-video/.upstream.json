@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/image-to-video",
   "slug": "image-to-video",
   "ownerHandle": "pruna-ai",
-  "version": "0.1.5",
-  "updatedAt": 1778991395968,
-  "contentHash": "7246253a151dab109562a3fec053be651435359c30d2539c49785f1a22e371da",
-  "fetchedAt": "2026-07-26T18:07:14.144Z"
+  "version": "1.0.9",
+  "updatedAt": 1785824425107,
+  "contentHash": "a3574c3c99737a0399e23d355b88913d23f887db2a49891b937a9d2793933c1d",
+  "fetchedAt": "2026-08-06T10:12:45.938Z"
 }

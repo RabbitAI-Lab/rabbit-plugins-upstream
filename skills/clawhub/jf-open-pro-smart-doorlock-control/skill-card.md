@@ -1,5 +1,5 @@
 ## Description: <br>
-JFTech smart door lock control skill for checking door-lock support, logging in to a device, obtaining a device API token, and sending a remote one-key unlock command. <br>
+Controls JFTech smart door lock devices by checking door-lock capability, logging in, obtaining device access tokens, reading configuration, and sending remote unlock commands. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and operators use this skill to integrate JFTech smart door locks with an agent workflow for device capability checks, token retrieval, configuration lookup, device login, and remote unlock operations. <br>
+Developers and operators use this skill to manage bound, online JFTech smart door locks through the JFTech OpenAPI, including capability checks, token retrieval, device login, configuration reads, and remote unlock actions. <br>
 
 ### Deployment Geography for Use: <br>
 China mainland, Asia, Europe, and North America <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can remotely unlock a physical smart door lock, and the security evidence reports weak documented safeguards around immediate unlock actions. <br>
-Mitigation: Install only when the publisher is trusted, restrict who can invoke the skill, and require explicit confirmation or stronger authorization before every unlock command. <br>
-Risk: The skill depends on API credentials, app secrets, device serial numbers, and device tokens for lock operations. <br>
-Mitigation: Store credentials outside prompts and logs, scope them to the intended device and region, rotate tokens when exposed, and avoid sharing unlock-capable environment variables. <br>
-Risk: A configurable endpoint could send lock-control requests outside the intended regional JFTech host. <br>
-Mitigation: Pin JF_ENDPOINT to the intended JFTech regional host before use and review any endpoint changes before executing device actions. <br>
+Risk: The skill can send a remote unlock command for a physical door without a built-in confirmation step. <br>
+Mitigation: Require explicit human approval immediately before any unlock action is executed. <br>
+Risk: Misconfigured endpoints or overly broad endpoint control could send requests outside documented vendor regional hosts. <br>
+Mitigation: Restrict JF_ENDPOINT to documented JFTech regional API hosts. <br>
+Risk: The required JF environment variables include credentials and device access tokens. <br>
+Mitigation: Store credentials securely, limit access to trusted users and devices, and rotate device tokens when needed. <br>
+Risk: Generic unlock triggers can cause accidental or unintended unlock requests. <br>
+Mitigation: Avoid broad natural-language triggers for unlock actions and require precise operator intent. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jftech/jf-open-pro-smart-doorlock-control) <br>
-- [JFTech open platform documentation](https://docs.jftech.com) <br>
+- [JFTech Open Platform documentation](https://docs.jftech.com) <br>
+- [ClawHub skill page](https://clawhub.ai/jftech/skills/jf-open-pro-smart-doorlock-control) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
+**Output Type(s):** [Shell commands, Text, API Calls, Configuration guidance] <br>
+**Output Format:** [Markdown with inline bash commands and command-line text output] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires JFTech account, app credentials, device serial number, device token, and regional API endpoint configuration.] <br>
+**Other Properties Related to Output:** [Requires JF account, application, device serial number, and device token environment variables.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+1.0.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

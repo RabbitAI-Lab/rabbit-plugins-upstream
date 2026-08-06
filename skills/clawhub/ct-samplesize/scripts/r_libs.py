@@ -315,7 +315,127 @@ I18N_R = r"""# =================================================================
     en = "(Use rpact::getDesignMAMS for exact calculations with selection rules)",
     zh = "(使用 rpact::getDesignMAMS 进行含选择规则的精确计算)"
   ),
-  label.n = list(en = "N:", zh = "N:")
+  label.n = list(en = "N:", zh = "N:"),
+  # ── v3.5.0 PASS-survival extensions / PASS 生存扩展 ──
+  r_header.surv_equiv_power = list(en = "\n========== Survival Equivalence (Power given N) ==========", zh = "\n========== 生存等效 (给定 N 求功效) =========="),
+  r_header.surv_equiv_n = list(en = "\n========== Survival Equivalence (TOST on HR) ==========", zh = "\n========== 生存等效 (HR 等效性 TOST) =========="),
+  r_header.surv_sup_power = list(en = "\n========== Survival Superiority by Margin (Power given N) ==========", zh = "\n========== 生存优效含界值 (给定 N 求功效) =========="),
+  r_header.surv_sup_n = list(en = "\n========== Survival Superiority by Margin ==========", zh = "\n========== 生存优效含界值 =========="),
+  r_header.cox_cov_power = list(en = "\n========== Cox Covariate Power (Power given N) ==========", zh = "\n========== Cox 协变量功效 (给定 N 求功效) =========="),
+  r_header.cox_cov_n = list(en = "\n========== Cox Covariate Power (Vittinghoff) ==========", zh = "\n========== Cox 协变量功效 (Vittinghoff 法) =========="),
+  r_header.onesample_surv_power = list(en = "\n========== One-Sample Exponential (Power given N) ==========", zh = "\n========== 单样本指数 (给定 N 求功效) =========="),
+  r_header.onesample_surv_n = list(en = "\n========== One-Sample Exponential Survival ==========", zh = "\n========== 单样本指数生存 =========="),
+  r_header.comprisk_power = list(en = "\n========== Competing Risks (Power given N) ==========", zh = "\n========== 竞争风险 (给定 N 求功效) =========="),
+  r_header.comprisk_n = list(en = "\n========== Competing Risks (Cumulative Incidence) ==========", zh = "\n========== 竞争风险 (累积发生率) =========="),
+  r_header.recur_power = list(en = "\n========== Recurrent Events (Power given N) ==========", zh = "\n========== 复发事件 (给定 N 求功效) =========="),
+  r_header.recur_n = list(en = "\n========== Recurrent Events (Andersen-Gill) ==========", zh = "\n========== 复发事件 (Andersen-Gill) =========="),
+  r_header.histctrl_power = list(en = "\n========== Historical Control (Power given N) ==========", zh = "\n========== 历史对照 (给定 N 求功效) =========="),
+  r_header.histctrl_n = list(en = "\n========== Historical Control Log-Rank ==========", zh = "\n========== 历史对照 Log-Rank =========="),
+  label.eq_margin_hr = list(en = "Equivalence margin (HR):", zh = "等效界值 (HR):"),
+  label.sup_margin_hr = list(en = "Superiority margin (HR):", zh = "优效界值 (HR):"),
+  label.cox_hr = list(en = "Covariate HR:", zh = "协变量 HR:"),
+  label.cox_r2 = list(en = "R^2 (other covariates):", zh = "R² (其它协变量):"),
+  label.cox_prev = list(en = "Covariate prevalence:", zh = "协变量患病率:"),
+  label.cox_event_prop = list(en = "Expected event proportion:", zh = "预期事件比例:"),
+  label.events_needed = list(en = "Required events (d):", zh = "所需事件数 (d):"),
+  label.median0 = list(en = "Null median survival:", zh = "原假设中位生存:"),
+  label.median1 = list(en = "Alternative median survival:", zh = "备择中位生存:"),
+  label.hazard0 = list(en = "Null hazard (lambda0):", zh = "原假设风险率 (λ0):"),
+  label.hazard1 = list(en = "Alternative hazard (lambda1):", zh = "备择风险率 (λ1):"),
+  label.events_h0 = list(en = "Expected events under H0:", zh = "H0 下预期事件数:"),
+  label.events_h1 = list(en = "Expected events under H1:", zh = "H1 下预期事件数:"),
+  label.ci_control = list(en = "Cumulative incidence (control):", zh = "累积发生率 (对照):"),
+  label.ci_treatment = list(en = "Cumulative incidence (treatment):", zh = "累积发生率 (治疗):"),
+  label.rate_control = list(en = "Recurrent-event rate (control, /py):", zh = "复发事件率 (对照, /人年):"),
+  label.rate_ratio = list(en = "Rate ratio:", zh = "率比:"),
+  label.recur_followup = list(en = "Follow-up (years):", zh = "随访时间 (年):"),
+  label.person_time = list(en = "Person-time per group:", zh = "每组人年:"),
+  label.hist_median = list(en = "Historical control median:", zh = "历史对照中位:"),
+  label.new_median = list(en = "New-arm median:", zh = "新臂中位:"),
+  label.hist_n = list(en = "Historical control n:", zh = "历史对照样本量:"),
+  label.total_with_dropout = list(en = "Total N (with dropout):", zh = "总 N (含脱落):"),
+  header.gsd_proportion_power = list(en = "GROUP-SEQUENTIAL TWO PROPORTIONS -- POWER", zh = "成组序贯·两比例 -- 效能"),
+  header.gsd_proportion_n = list(en = "GROUP-SEQUENTIAL TWO PROPORTIONS -- SAMPLE SIZE", zh = "成组序贯·两比例 -- 样本量"),
+  header.gsd_survival_power = list(en = "GROUP-SEQUENTIAL SURVIVAL -- POWER", zh = "成组序贯·生存 -- 效能"),
+  header.gsd_survival_n = list(en = "GROUP-SEQUENTIAL SURVIVAL -- SAMPLE SIZE", zh = "成组序贯·生存 -- 样本量"),
+  header.gsd_hazard_power = list(en = "GROUP-SEQUENTIAL HAZARD RATE -- POWER", zh = "成组序贯·风险率 -- 效能"),
+  header.gsd_hazard_n = list(en = "GROUP-SEQUENTIAL HAZARD RATE -- SAMPLE SIZE", zh = "成组序贯·风险率 -- 样本量"),
+  header.gsd_poisson_power = list(en = "GROUP-SEQUENTIAL POISSON RATE -- POWER", zh = "成组序贯·Poisson 率 -- 效能"),
+  header.gsd_poisson_n = list(en = "GROUP-SEQUENTIAL POISSON RATE -- SAMPLE SIZE", zh = "成组序贯·Poisson 率 -- 样本量"),
+  label.p1 = list(en = "P1 (control):", zh = "P1 (对照):"),
+  label.p2 = list(en = "P2 (treatment):", zh = "P2 (治疗):"),
+  label.proportion_metric = list(en = "Metric:", zh = "度量:"),
+  label.rate1 = list(en = "Lambda1 (treatment):", zh = "λ1 (治疗):"),
+  label.rate2 = list(en = "Lambda2 (control):", zh = "λ2 (对照):"),
+  label.adjusted_n = list(en = "Adjusted n:", zh = "调整后 n:"),
+  label.adjusted_n_per_group = list(en = "Adjusted n per group:", zh = "调整后每组 n:"),
+  label.adjusted_total = list(en = "Adjusted total:", zh = "调整后总样本量:"),
+  label.approx_n_per_group_surv = list(en = "Approx n per group (event_rate=%s):", zh = "近似每组 n (event_rate=%s):"),
+  label.assumed_diff = list(en = "假设真实差异 |p1-p2|: ", zh = "假设真实差异 |p1-p2|: "),
+  label.cluster_size_m = list(en = "Cluster size m:", zh = "群组大小 m:"),
+  label.clusters_per_group = list(en = "Clusters per group:", zh = "群组数 (每组):"),
+  label.cohens_d = list(en = "Cohen's d:", zh = "Cohen's d:"),
+  label.control_h0 = list(en = "Control / H0 (p1):", zh = "对照组 / H0 (p1):"),
+  label.control_rate_ni = list(en = "对照组有效率 p1:", zh = "对照组有效率 p1:"),
+  label.control_rate_ni_short = list(en = "对照组有效率 p1: %s", zh = "对照组有效率 p1: %s"),
+  label.correlation = list(en = "Correlation:", zh = "相关系数:"),
+  label.deff = list(en = "Design effect (DEFF):", zh = "设计效应 (DEFF):"),
+  label.dropout_note_inline = list(en = "含10%%脱落率:", zh = "含10%%脱落率:"),
+  label.each_group = list(en = "每组:", zh = "每组:"),
+  label.each_group_n = list(en = "Each group n:", zh = "每组 n:"),
+  label.effective_n_per_group = list(en = "Effective individual n per group (n_total/2/DEFF):", zh = "有效个体 n 每组 (总 n/2/DEFF):"),
+  label.f_effect = list(en = "f:", zh = "f:"),
+  label.given_n = list(en = "Given n:", zh = "给定 n:"),
+  label.given_n_per_group = list(en = "Given n per group:", zh = "给定每组 n:"),
+  label.h0_auc = list(en = "H0 AUC:", zh = "H0 AUC:"),
+  label.h0_proportion = list(en = "H0 proportion (p0):", zh = "H0 率 (p0):"),
+  label.h1_auc = list(en = "H1 AUC:", zh = "H1 AUC:"),
+  label.h1_proportion = list(en = "H1 proportion (p1):", zh = "H1 率 (p1):"),
+  label.hazard_ratio_surv = list(en = "Hazard ratio:", zh = "风险比:"),
+  label.icc = list(en = "ICC:", zh = "ICC:"),
+  label.implied_n_clusters = list(en = "Implied n clusters per group:", zh = "隐含群组数 (每组):"),
+  label.k_groups = list(en = "k groups:", zh = "k 组:"),
+  label.n_pairs = list(en = "n (pairs):", zh = "n (对子数):"),
+  label.n_per_arm = list(en = "每组样本量 n1:", zh = "每组样本量 n1:"),
+  label.n_per_group_total = list(en = "n per group:", zh = "每组 n:"),
+  label.n_total = list(en = "n:", zh = "n:"),
+  label.n_total_result = list(en = "n (total):", zh = "n (合计):"),
+  label.ni_margin = list(en = "非劣效界值 delta:", zh = "非劣效界值 delta:"),
+  label.ni_margin_short = list(en = "非劣效界值 delta: %s", zh = "非劣效界值 delta: %s"),
+  label.one_sided_alpha = list(en = "单侧 α: %s, 把握度: %s, 1:1 分配", zh = "单侧 α: %s, 把握度: %s, 1:1 分配"),
+  label.result_header = list(en = "--- 结果 ---", zh = "--- 结果 ---"),
+  label.sample_size_per_group = list(en = "Sample size per group:", zh = "每组样本量:"),
+  label.side = list(en = "Side:", zh = "单/双侧:"),
+  label.single_endpoint_n = list(en = "Single endpoint n:", zh = "单终点 n:"),
+  label.survival_note = list(en = "
+注意: 当前仅计算所需事件数。如需样本量请提供参数", zh = "
+注意: 当前仅计算所需事件数。如需样本量请提供参数"),
+  label.target_power = list(en = "Target power:", zh = "目标功效:"),
+  label.total_clusters = list(en = "Total:", zh = "总群组数:"),
+  label.total_events = list(en = "Total events:", zh = "总事件数:"),
+  label.total_events_needed = list(en = "Total events needed (Schoenfeld):", zh = "所需总事件数 (Schoenfeld):"),
+  label.total_n_ni = list(en = "总样本量 N:", zh = "总样本量 N:"),
+  label.total_n_surv = list(en = "Total N:", zh = "总 N:"),
+  label.total_sample_size = list(en = "Total sample size:", zh = "总样本量:"),
+  label.total_sample_size_result = list(en = "总样本量 N:", zh = "总样本量 N:"),
+  label.treatment_h1 = list(en = "Treatment / H1 (p2):", zh = "处理组 / H1 (p2):"),
+  label.treatment_rate_ni = list(en = "试验组有效率 p2:", zh = "试验组有效率 p2:"),
+  label.treatment_rate_ni_short = list(en = "试验组有效率 p2: %s", zh = "试验组有效率 p2: %s"),
+  label.ve = list(en = "VE:", zh = "VE:"),
+  label.with_dropout = list(en = "含 10%% 脱落率:", zh = "含 10%% 脱落率:"),
+  r_header.roc_n = list(en = "
+========== ROC Sample Size ==========", zh = "
+========== ROC 样本量 =========="),
+  r_header.roc_power = list(en = "
+========== ROC Sample Size (Power given N) ==========", zh = "
+========== ROC 样本量 (给定 N 求功效) =========="),
+  label.planned_events = list(en = "Planned events per stage:", zh = "各阶段计划事件数:"),
+  label.expected_n = list(en = "Expected total N:", zh = "预期总样本量:"),
+  label.expected_events = list(en = "Expected events:", zh = "预期事件数:"),
+  label.empirical_power = list(en = "Empirical power (sim):", zh = "经验功效 (模拟):"),
+  label.stop_prob = list(en = "Stage-wise reject probabilities:", zh = "各阶段拒绝概率:"),
+  header.gsd_survival_sim = list(en = "GROUP-SEQUENTIAL SURVIVAL -- MONTE-CARLO SIMULATION", zh = "成组序贯·生存 -- 蒙特卡洛模拟"),
+  header.gsd_hazard_sim = list(en = "GROUP-SEQUENTIAL HAZARD RATE -- MONTE-CARLO SIMULATION", zh = "成组序贯·风险率 -- 蒙特卡洛模拟")
 )
 
 # ── Translation function / 翻译函数 ──
@@ -328,6 +448,13 @@ t <- function(key, ...) {
   } else {
     text
   }
+}
+
+# R-side alias for the Python _qt() helper used by generated cat() lines.
+# Python: _qt(key, **kw) -> escaped "string literal" (for f-strings).
+# R:     generated code emits cat(._qt("label.xxx"), ...) -> resolve to t().
+._qt <- function(key, ...) {
+  t(key, ...)
 }
 """
 

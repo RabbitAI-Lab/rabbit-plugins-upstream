@@ -1,5 +1,5 @@
 ## Description: <br>
-杰峰设备列表查询技能（开发版）。查询开发者账号下绑定的设备列表，支持分页查询和按设备序列号条件查询。 <br>
+Queries the JFTech Open Platform for device lists bound to a developer account, with pagination and optional serial-number filtering. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and operators with a JFTech Open Platform account use this skill to list bound devices, page through device records, or query up to 100 devices by serial number. <br>
+External developers and device operations teams use this skill to query JFTech devices bound to an open-platform account, either by page or by a list of device serial numbers. <br>
 
 ### Deployment Geography for Use: <br>
-China mainland, Asia, Europe, and North America <br>
+China mainland, Asia, Europe, and North America, based on the documented JFTech API endpoint regions. <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can expose device passwords or login tokens in terminal output or JSON logs. <br>
-Mitigation: Run it only in trusted terminals, avoid shared logs for JSON output, and rotate affected credentials if output may have been exposed. <br>
-Risk: The API host is controlled by the JF_ENDPOINT environment variable. <br>
-Mitigation: Set JF_ENDPOINT only to official JFTech API hosts before execution. <br>
-Risk: Signed requests use developer-account credentials. <br>
-Mitigation: Use credentials for an account you control and store JF_UUID, JF_APP_KEY, and JF_APP_SECRET outside shared shell history or committed files. <br>
+Risk: Device passwords, login tokens, and account credentials can be exposed in command output, JSON output, logs, tickets, or chat transcripts. <br>
+Mitigation: Use only in a trusted workspace, avoid JSON output unless raw records are intentionally needed, and redact passwords and login tokens before sharing results downstream. <br>
+Risk: The skill makes authenticated requests to region-specific JFTech API endpoints and can enumerate devices bound to the configured account. <br>
+Mitigation: Run it only with authorized JFTech credentials, verify the selected JF_ENDPOINT region before use, and limit serial-number queries to intended devices. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub skill page](https://clawhub.ai/jftech/skills/jf-open-pro-device-list) <br>
 - [JFTech Open Platform documentation](https://docs.jftech.com) <br>
-- [ClawHub skill page](https://clawhub.ai/jftech/jf-open-pro-device-list) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Configuration instructions, Text, JSON] <br>
-**Output Format:** [Command-line output in simple text, table, or JSON formats] <br>
+**Output Type(s):** [text, JSON, shell commands, guidance] <br>
+**Output Format:** [Plain text tables or simple text, with optional JSON device records] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires JFTech credentials and may return device serial numbers, usernames, passwords, nicknames, and login tokens.] <br>
+**Other Properties Related to Output:** [Outputs can include device serial numbers, usernames, nicknames, passwords, and login tokens returned by the JFTech API.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release and frontmatter) <br>
+1.0.1 (source: server-resolved release metadata; artifact frontmatter says 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

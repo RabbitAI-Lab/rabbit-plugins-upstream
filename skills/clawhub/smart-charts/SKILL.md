@@ -1,6 +1,6 @@
 ---
 name: "smart-charts"
-version: “4.0.1”
+version: “5.0.0”
 description: "Intelligent chart generation and data analysis skill. Reads user-supplied data files (CSV/Excel/JSON), analyzes data characteristics with LLM assistance, auto-recommends and generates interactive ECharts visualizations."
 author: "smart-charts"
 license: "MIT"
@@ -20,10 +20,8 @@ max_file_size_mb: 100
 
 # Smart Charts
 
-> 本 skill 用于将数据文件（CSV/Excel/JSON）自动转化为交互式 ECharts 图表。
-> 上传数据 → 自动分析 → 推荐图表类型 → 生成交互式 HTML。支持 16 种图表类型，多文件合并，以及 LLM 生成的数据转换代码（在沙箱中安全执行）。
->
-> The sections below are written for the agent. Read them to decide when and how to call this skill.
+> 将数据文件（CSV/Excel/JSON）转化为交互式 ECharts HTML。支持 16 种图表类型、多文件合并、LLM 数据转换代码（沙箱执行）。
+> CLI 细节、flags 语义、错误码表、FAQ 见 [REFERENCE.md](./REFERENCE.md)。
 
 ---
 
@@ -40,13 +38,24 @@ Load this skill when **any** of the following is met:
 
 ## Hard Constraints (MUST follow)
 
-1. **MUST follow the CLI workflow**: `data_parser.py` → confirm & recommend → `chart_generator.py`. Do NOT write ad-hoc Python scripts to replace CLI calls, even if the data looks messy.
-2. **MUST use CLI parameters for messy headers** instead of bypassing the workflow. `data_parser.py` and `chart_generator.py` both accept `--skiprows N` / `--header-row N` / `--sheet <name|index>` for multi-row headers, leading junk rows, and multi-sheet Excel files. The value of N is determined by inspecting the actual data — never hard-coded.
-3. **MUST use `--transform-code`** for column renaming / reshaping / aggregation when raw columns don't match the target chart format. Data parsing layer only handles "which row is the header"; all other cleaning belongs to transform code.
-4. **MUST report unsupported scenarios**: if a data structure is genuinely unsupported by CLI (e.g. nested objects >1 level), report the issue to the user with a suggestion before falling back to manual scripting. Never silently bypass.
+1. **MUST follow the CLI workflow**: `data_parser.py` → `chart_generator.py`，不要自写脚本替代 CLI。
+2. **Messy headers MUST use CLI flags**（`--skiprows N` / `--header-row N` / `--sheet`，语义见 REFERENCE.md），N 由实际数据决定，不得拍脑袋固定。
+3. **列重命名/重塑/聚合 MUST use `--transform-code`**。解析层只解决"哪行是表头"，其余清洗归 transform。
+4. **MUST report unsupported scenarios**: CLI 确实不支持的（如嵌套 JSON 超过 1 层），先向用户说明并给建议，不得静默绕过。
 5. **MUST NOT hard-code absolute paths** in generated code; resolve paths at runtime.
-6. **MUST NOT skip the confirm step** unless the user explicitly says "auto-generate" / "no need to confirm".
-7. **MUST keep chart language consistent with the data language**: all chart text (title, series names, tooltips, buttons, footer, HTML `lang`) follows the data's language (auto-detected: CJK ratio > 5% → Chinese, otherwise English). Pass `--lang zh|en` ONLY when the user explicitly requests a specific language. Never mix languages within one chart.
+6. **不要主动传 `--lang`**；CLI 自动跟随数据语言。仅当用户明确要求某种语言时才传。
+
+---
+
+## When to Confirm (判据，非禁令)
+
+生成图表是廉价可逆动作，默认不需要逐步请示。只在**语义有歧义**时先确认：
+
+- 数据同时适合多种图表类型，且选择会影响结论表达（如占比 vs 趋势）
+- 多文件存在多种合理合并策略（纵向拼接 vs 横向关联 vs 分开分析）
+- 用户意图涉及取值口径（如"销量"可能指件数或金额）
+
+意图明确时（用户指定了图表类型，或数据形态显然匹配某一种）直接生成，交付时一句话说明选了什么、为什么。用户说"自动生成/不用确认"时一律跳过确认。
 
 ---
 
@@ -56,13 +65,9 @@ Load this skill when **any** of the following is met:
 
 **Not supported:** Databases (export to CSV first), real-time/streaming data, geo maps, >100 MB files, nested JSON >1 level, non-tabular data (images/audio/video). Auto-merge requires ≥50% column overlap.
 
-**Network requirement:** Generated HTML loads ECharts via CDN (jsdelivr/unpkg). An internet connection is required to render the charts. Agent operation assumes connectivity is already available.
+**Network requirement:** Generated HTML loads ECharts via CDN (jsdelivr/unpkg); rendering requires internet.
 
----
-
-## Security
-
-LLM-generated transform code is executed with three safety layers (no user confirmation needed): (1) keyword blacklist (blocks `exec`, `eval`, `open`, `import`, `os.system`, etc.), (2) AST whitelist (only allows assignments, calls, loops, comprehensions), (3) sandbox builtins (only safe functions like `len`, `range`, `sorted`; `open`/`exec`/`eval`/`__import__` removed). Blocked code raises `CodeValidationError` with a `suggestion` field explaining how to resolve.
+**Security:** transform 代码由沙箱强制校验（黑名单 + AST 白名单 + 安全 builtins），违规会返回带 `suggestion` 的结构化错误，按提示修正重试即可，无需用户确认。机制细节见 REFERENCE.md。
 
 ---
 
@@ -70,77 +75,28 @@ LLM-generated transform code is executed with three safety layers (no user confi
 
 1. **Obtain data** — user uploads file(s) or provides path(s).
 2. **Parse data** — call `data_parser.py` on all files; for multiple files, assess merge feasibility.
-3. **Confirm & recommend** — display summary table; recommend merge/separate/join strategy and chart type(s) based on data semantics; wait for user confirmation.
-4. **Transform (if needed)** — if raw data doesn't match target chart's input format, LLM generates pandas transform code → security check (blacklist + AST) → execute in sandbox → standardized DataFrame. On failure: retry max 2 times, then fall back to original data + auto-detection.
-5. **Generate charts** — call `chart_generator.py` → ECharts HTML. Merged data → cross-group comparison; separate data → independent charts per file.
-6. **Present results** — interactive charts via `html_path`.
+3. **Recommend (& confirm if ambiguous)** — recommend chart type(s) by data semantics; confirm only per "When to Confirm" above.
+4. **Transform (if needed)** — raw data 不匹配目标图表输入格式时，生成 `--transform-code`。
+5. **Generate charts** — call `chart_generator.py` → ECharts HTML.
+6. **Present results** — 按下方 Exit Criteria 验收后立即展示。
 
-**Key principles:** multi-file first; confirm before executing; LLM chooses chart types by data semantics (never hard-code mapping); never hard-code absolute paths (resolve at runtime); present results immediately; adapt data via transform code when needed; security by default.
+## Exit Criteria (什么算做完，机械可判定)
 
----
-
-## Configuration
-
-```yaml
-output_dir: ./smart_charts_output  # optional; never hard-code absolute paths
-```
-
----
-
-## Error Codes
-
-All errors are returned as structured dicts via `SmartChartsError.to_dict()`:
-`{"error": <message>, "code": <int>, "code_name": <str>, "details": {...}}`.
-The `details` field always includes a `suggestion` telling the agent how to recover.
-
-| Code | Name | Meaning |
-|------|------|---------|
-| 1001 | FILE_NOT_FOUND | File path does not exist |
-| 1002 | FILE_PERMISSION_DENIED | Path is not a regular file |
-| 1003 | FILE_FORMAT_INVALID | Unsupported file extension |
-| 1004 | FILE_SIZE_EXCEEDED | File exceeds 100 MB limit |
-| 2001 | DATA_PARSE_ERROR | Parsing failed (encoding, structure, etc.) |
-| 2003 | DATA_EMPTY | File or cleaned data is empty |
-| 2004 | DATA_TYPE_MISMATCH | Data type mismatch |
-| 3001 | TRANSFORM_EXEC_ERROR | Transform code execution failed (blacklist/AST/timeout) |
-| 3002 | TRANSFORM_NO_RESULT | Transform code did not produce `result` variable |
-| 3003 | TRANSFORM_INVALID_RESULT | `result` is not a DataFrame |
-| 3004 | TRANSFORM_EMPTY_RESULT | `result` DataFrame is empty |
-| 4001 | CHART_GENERATION_ERROR | Chart generation failed |
-| 4002 | CHART_TYPE_UNSUPPORTED | Unsupported chart type |
-| 4003 | CHART_CONFIG_ERROR | Axis field does not exist in DataFrame |
-| 9999 | UNKNOWN_ERROR | Unclassified error |
+- ✅ **成功**: `chart_generator.py` stdout 为 `{"chart": {"success": true, ...}}`，且 `html_path` 指向的文件存在且非空 → 立即将图表呈现给用户。
+- ❌ **失败**: `success: false` 或 exit code 1 → 读 `error.details.suggestion`，修正后重试；**同一环节最多重试 2 次**。
+- 🛑 **仍失败**: 把 `code_name` 和 `suggestion` 如实报告用户并给出建议。**不得**静默改用自写脚本兜底（违反约束 1/4）。
 
 ---
 
 ## Data Parsing
 
-> `{skill_base}` = root directory of this skill (contains `SKILL.md`).
-
-Single file:
 ```bash
-python {skill_base}/core/data_parser.py <file_path> [--summary] [--skiprows N] [--header-row N] [--sheet <name|index>]
+python {skill_base}/core/data_parser.py <file1> [file2 ...] [--summary] [--merge] [--skiprows N] [--header-row N] [--sheet <name|index>]
 ```
 
-Multiple files (with optional auto-merge):
-```bash
-python {skill_base}/core/data_parser.py <file1> <file2> ... [--merge] [--summary]
-```
-
-**Header / row-skipping flags (single-file only):**
-- `--skiprows N` — skip the first N rows, then read the next row as the header. Use when the file has leading junk rows (notes, blanks) before any header.
-- `--header-row N` — treat the 0-indexed row N as the header; rows above N are dropped. Use when the file has multi-row headers (merged cells, sub-headers) and you want one specific row as the column name.
-- `--sheet <name|index>` — pick an Excel sheet by name or 0-indexed position (default: 0).
-- The value of N is determined by inspecting the actual data (e.g. via a first `data_parser.py` run without flags). **Never assume a fixed N for all files.**
-
-**Merge behavior:**
-- Identical columns → vertical concat. **⚠️ A `source_file` column is injected** to indicate each row's origin file. Downstream transform code must account for this extra column.
-- ≥50% column overlap → horizontal join on shared key.
-- No common structure → error (advise analyzing separately).
-
-**Programmatic API:** `DataParser.parse_files(paths, merge=...) -> {'merged': bool, 'data': ..., 'merge_type': Optional[str]}`.
-- `parse_file(path, skiprows=None, header_row=None, sheet_name=0)` — single file with optional header cleaning.
-- `parse_files(paths, merge=...)` — multi-file; `merge=False` returns `List[{'file', 'data'}]`, `merge=True` returns merged `DataFrame`.
+- `{skill_base}` = 本 skill 根目录（含 SKILL.md）。
+- flags 的精确语义、多编码回退、sheet 选择细节见 REFERENCE.md。
+- **Merge 关键 gotcha**: 纵向拼接会注入 `source_file` 列标识来源文件，下游 transform 代码必须考虑到这个额外列。≥50% 列重叠走横向关联；无共同结构报错（建议分开分析）。
 
 ---
 
@@ -149,24 +105,17 @@ python {skill_base}/core/data_parser.py <file1> <file2> ... [--merge] [--summary
 ```bash
 python {skill_base}/core/chart_generator.py \
   <file_path> <chart_type> \
-  --title "Chart Title" \
-  --x-axis "date" \
-  --y-axis "revenue profit" \
-  --transform-code "<pandas code>" \
-  --skiprows N --header-row N --sheet <name|index> \
-  --lang zh|en \
-  --output-dir "./output"
+  --title "Chart Title" --x-axis "date" --y-axis "revenue profit" \
+  --transform-code "<pandas code>" --skiprows N --header-row N --sheet <name|index> \
+  --lang zh|en --output-dir "./output"
 ```
 
-**Parameters:** `file_path` (required), `chart_type` (required, see table), `--title` (default follows `--lang` / data language), `--x-axis` (auto-detected if omitted), `--y-axis` (space-separated; defaults to first 5 numeric columns), `--transform-code` (LLM-generated pandas code, validated + executed before rendering), `--skiprows` / `--header-row` / `--sheet` (same semantics as `data_parser.py`; pass-through to the parsing step), `--lang zh|en` (optional; overrides auto-detection), `--output-dir` (default: `./smart_charts_output`).
-
-**Language consistency (MUST follow):** all chart text — title, series names, tooltip labels, action buttons ("Save Image" / "Fullscreen"), scroll hint, footer, and the HTML `lang` attribute — MUST follow the data's language. The CLI auto-detects Chinese vs. English from column names and string-cell content (CJK ratio > 5% → `zh`, otherwise `en`). Pass `--lang zh` or `--lang en` ONLY when the user explicitly requests a specific language; otherwise let auto-detection match the data. Never mix languages within a single chart.
-
-**Overflow handling:** when a chart's data points exceed the zoom threshold (default 15), the generated HTML automatically enables ECharts `dataZoom` (slider + inside-drag) and a horizontal scrollbar on the chart container, so users can drag the slider, scroll horizontally, or click the fullscreen button to inspect all data points. No agent action needed.
+- 成功输出 `{"chart": {"success": true, "html_path": ...}}` 到 stdout；失败输出结构化错误 JSON（`details.suggestion` 给出恢复方法）。完整参数与错误码表见 REFERENCE.md。
+- 数据点超过阈值（默认 15）时 HTML 自动启用 dataZoom + 横向滚动，无需 agent 处理。
 
 ### Chart Types
 
-LLM must check whether raw data matches the required format; if not, generate transform code.
+选择图表前先核对原始数据是否匹配 Required Format；不匹配则用 transform 代码适配。
 
 | ID | Best For | Trigger Keywords | y_axis Cardinality | Required DataFrame Format | Example Columns |
 |----|----------|------------------|:-------------------:|--------------------------|-----------------|
@@ -200,9 +149,8 @@ result = ChartGenerator(output_dir="./output").generate_chart(
     df=df, chart_type="bar", title="Regional Revenue",
     x_axis="region", y_axis=["revenue"], lang=None,
 )
-# result = {"chart": {"success": True, "html_path": "...", "chart_type": "bar", "title": "..."}}
 
-# Batch — returns {'charts': [...]} where each item has the same shape as 'chart' above
+# Batch — returns {'charts': [...]}，每项结构与单图一致
 result = ChartGenerator(output_dir="./output").generate_multi_charts(
     df=df,
     chart_configs=[
@@ -213,37 +161,17 @@ result = ChartGenerator(output_dir="./output").generate_multi_charts(
 )
 ```
 
-On failure, `success` is `False` and `error` holds the structured dict (same shape as `SmartChartsError.to_dict()`). No exception is raised — the agent inspects `success` to decide next steps.
+失败时 `success` 为 `False`、`error` 为结构化错误字典，不抛异常——检查 `success` 决定下一步。
 
 ---
 
-## Transform Code Generation
+## Transform Code Contract
 
-When raw data doesn't match the target chart's input format, use this prompt template:
+契约（由沙箱强制，违反会收到带 `suggestion` 的错误，按提示修正即可）：
 
-```
-Known information:
-- Raw data columns: {columns_with_dtypes}
-- Data sample (first 5 rows): {sample}
-- Target chart type: {chart_type}
-- Required format for this chart: {chart_input_spec}
-
-Generate a pandas code snippet that transforms df into a result DataFrame matching the chart's input format.
-
-Rules:
-1. Only use variables: df, pd, np
-2. Must produce a variable named result (pd.DataFrame)
-3. Do not modify df in-place; use df.copy() or chain operations
-4. Keep code concise; prefer pandas built-in methods (pivot_table, melt, groupby, rename, etc.)
-5. If raw data already matches the required format, output an empty string
-6. Do NOT use: import, open, exec, eval, os, sys, subprocess, file I/O, network calls
-
-Output format:
-```python
-# {one-line description of what the transform does}
-{transform_code}
-```
-```
+- 可用变量只有 `df`, `pd`, `np`；必须产出名为 `result` 的 `pd.DataFrame`
+- 不要原地修改 `df`（用 `df.copy()` 或链式操作）
+- 原始数据已匹配目标格式时，不传 `--transform-code`
 
 **Common transform patterns:**
 - Long→multi-series: `result = df.pivot_table(index='<time>', columns='<category>', values='<value>', aggfunc='sum').reset_index()`
@@ -255,5 +183,3 @@ Output format:
 - Rename messy/uninformative column names (after `--header-row` leaves columns like `10分`, `unnamed_3`): `result = df.rename(columns={'unnamed_0':'student_id','unnamed_1':'name','10分':'homework_score','30分':'exam_score'})`
 - Forward-fill merged cells (when only the first row of a group is populated): `result = df.ffill()`
 - Combine sub-headers into a single column name (when `--header-row N` flattens one row but loses context): `result = df.rename(columns={c: f'{c}_score' for c in df.columns if c not in ['student_id','name']})`
-
-For CLI reference and installation instructions, see [REFERENCE.md](./REFERENCE.md).

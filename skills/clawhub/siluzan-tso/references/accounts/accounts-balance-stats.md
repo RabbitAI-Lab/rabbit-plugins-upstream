@@ -152,9 +152,8 @@ siluzan-tso accounts-digest -m Google --start 2026-07-20 --end 2026-07-20 \
 ## stats — 查询投放消耗数据
 
 > **数据时效性**：
-> - **Google**：走 `account-spend-overview`（2026-05 起），后端按日期窗口分流——
->   - 窗口完全在历史 → `database` 模式：含余额、状态、币种、账户名、当期展点消等完整字段；
->   - 窗口包含今天 → `googleCombined` 模式：只返回实时聚合的展点消（**没有**余额/状态/币种/账户名）。
+> - **Google**：走 `account-spend-overview`；`--start` / `--end` 日历日按 **UTC+8** 转为 `YYYY-MM-DDTHH:mm:ss+08:00` 再请求（起 00:00:00、止 23:59:59，含今天时 end 截到当前时刻）。与 `google-analysis`（只传年月日）口径不同。
+>   - 窗口完全在历史 → `database` 模式；窗口含今天 → `googleCombined` 模式（仅实时消耗，无余额/状态/币种/账户名）。
 > - **TikTok / Yandex / BingV2 / Kwai**：走旧版 `accountsoverview`，每日凌晨同步昨天数据，**不能查今天**。判断这几家的「今天/当天/今日消耗」仍需走 `google-analysis(-batch) --sections overview`（仅 Google）。
 > - 完整时效性表见 `references/analytics/account-analytics.md` 顶部。
 
@@ -178,8 +177,9 @@ siluzan-tso stats -m <媒体类型> [选项]
 
 1. 用户若已给出账户号（如 Yandex `porg-kqquuxx6`），`-a` **必须原样用该 mediaCustomerId**；先 `list-accounts -m <媒体> -k <mediaCustomerId>` 核验存在即可。
 2. **禁止**把 `ma.entityId`、`externalMediaAccountTokenId` 或会话里其它 UUID 传给 `-a`（会空结果，verbose 常打出被吞的 `HTTP 403`，**不等于** OAuth 过期）。
-3. 仅当 `list-accounts` 显示 `invalidOAuthToken=true`（或授权状态列为失效），且用户确认后，才走 `account reauth --id <entityId> --i-confirm --commit "…"`（见 `accounts-permissions.md`）。
-4. `list-accounts` 显示 `Linked` + `hasToken:1` + `invalidOAuthToken:false` 时，**禁止**因 stats 空结果自行 `reauth`/解绑。
+3. Google：若 `list-accounts` 显示套餐**未激活**（`scopeActivatedSources` 为空），`balance` 等可能无数据——向用户说明需先激活套餐；**禁止**用非 CLI / 自拼请求等方式绕过。
+4. 仅当 `list-accounts` 显示 `invalidOAuthToken=true`（或授权状态列为失效），且用户确认后，才走 `account reauth --id <entityId> --i-confirm --commit "…"`（见 `accounts-permissions.md`）。
+5. `list-accounts` 显示 `Linked` + `hasToken:1` + `invalidOAuthToken=false` 且套餐已激活时，**禁止**因 stats/balance 空结果自行 `reauth`/解绑。
 
 **示例：**
 

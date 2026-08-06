@@ -1,46 +1,62 @@
-## Description: <br>
-Helps agents split staged Git changes into focused commits and generate Conventional Commit messages while leaving push, merge, PR, and issue-closing decisions to a separate Git workflow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Git Batch Commit helps agents split staged Git changes into focused commits, generate conventional commit messages, and, when configured, prompt before optional ClawHub/SkillHub publishing or subtree pushes.
 
-## Publisher: <br>
-[cat-xierluo](https://clawhub.ai/user/cat-xierluo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cat-xierluo](https://clawhub.ai/user/cat-xierluo)
 
-## Use Case: <br>
-Developers and engineers use this skill when staged changes span multiple logical categories and they want an agent to propose grouped commits, generate commit messages, and optionally run the included commit helper. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may prompt for ClawHub publishing or sync-state changes when a `skills/clawhub-sync/` workflow is present. <br>
-Mitigation: Approve sync or publish prompts only after inspecting the publish directory, confirming no secrets or private files are included, and intentionally accepting allowlist or sync-record updates. <br>
-Risk: The helper creates Git commits and can reorganize the staged state through local Git commands. <br>
-Mitigation: Review proposed groups first, use dry-run mode when uncertain, and keep only intended files staged before creating commits. <br>
+## Use Case:
 
+Developers and agents use this skill to organize staged repository changes into multiple focused commits with standardized messages. It is intended for commit splitting and message generation, while broader branch, PR, merge, push, and issue-closing decisions remain outside its core role.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/cat-xierluo/git-batch-commit) <br>
-- [Publisher profile](https://clawhub.ai/user/cat-xierluo) <br>
-- [Homepage](https://github.com/cat-xierluo/legal-skills) <br>
-- [Commit Types](references/commit-types.md) <br>
-- [Conventional Commits](references/conventional-commits.md) <br>
-- [ClawHub Sync Check](references/clawhub-sync-check.md) <br>
-- [Subtree Push Check](references/subtree-push-check.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and generated commit message text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May invoke local Python helper scripts and Git commands after user review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The skill can mutate a Git repository by reorganizing staged changes and creating commits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use dry-run or the default confirmation flow for normal work, and review proposed commit groups before allowing commits.
+
+Risk: The --yes option can skip interactive confirmation in automation or non-interactive sessions.
+
+Mitigation: Use --yes only in trusted repositories or controlled automation where the staged changes have already been reviewed.
+
+Risk: Configured ClawHub/SkillHub publishing or subtree pushing can upload or push repository content after a prompt.
+
+Mitigation: Read each publishing or subtree push prompt carefully and approve only the intended external upload or remote push.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/cat-xierluo/skills/git-batch-commit)
+- [Project homepage](https://github.com/cat-xierluo/legal-skills)
+- [Commit types reference](references/commit-types.md)
+- [Conventional commits reference](references/conventional-commits.md)
+- [ClawHub sync check reference](references/clawhub-sync-check.md)
+- [Subtree push check reference](references/subtree-push-check.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and terminal-oriented text, with optional JSON output from the categorization script]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reorganize staged Git changes and create commits; dry-run mode reports proposed groups without committing.]
+
+## Skill Version(s):
+
+1.4.2 (source: server release metadata, SKILL.md frontmatter, CHANGELOG released 2026-08-05)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

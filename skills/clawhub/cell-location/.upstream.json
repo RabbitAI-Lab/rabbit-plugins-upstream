@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cell-location",
   "slug": "cell-location",
   "ownerHandle": null,
-  "version": "1.0.8",
-  "updatedAt": 1781666832123,
-  "contentHash": "363f7e17f52e3e8416a7701c3b2cfe4782553c876fa3973ed8442c9becedf9c5",
-  "fetchedAt": "2026-07-26T18:27:49.170Z"
+  "version": "1.0.10",
+  "updatedAt": 1785405940469,
+  "contentHash": "851f9981f1c805e78ac2f4e4048c0471076bc5c076136abef0393de6768900b9",
+  "fetchedAt": "2026-08-06T10:29:52.428Z"
 }

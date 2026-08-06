@@ -1,0 +1,13 @@
+name: geoskill-transfer-learning-rs
+display_name: 遥感迁移学习
+description: |
+  特征提取+微调分类器+精度评估，输出分类结果与精度报告（离线numpy等价实现）
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-transfer-learning-rs.py
+runtime: python>=3.9
+tags:
+  - ai
+  - extraction
+  - gis
+  - remote-sensing

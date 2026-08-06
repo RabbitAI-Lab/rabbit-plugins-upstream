@@ -1,0 +1,13 @@
+name: geoskill-geodatabase-management
+display_name: 空间数据库管理
+description: |
+  在 GeoPackage 中建表、导入矢量要素、创建空间索引并执行空间查询。Create tables, import vector features, build spatial indexes and run spatial queries in a GeoPackage.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-geodatabase-management.py
+runtime: python>=3.9
+tags:
+  - gis
+  - raster
+  - remote-sensing
+  - vector

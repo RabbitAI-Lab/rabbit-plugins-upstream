@@ -11,31 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and architects use this skill to decide when and how to apply a pipes-and-filters pipeline for ETL, streaming analytics, CI/CD, and other sequential data transformations. <br>
+Developers and software architects use this skill to evaluate, plan, and document pipes-and-filters pipeline architectures for ETL, streaming analytics, CI/CD, and other sequential transformation workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may be triggered for broad architecture, pipeline, or streaming discussions where pipes-and-filters guidance is not intended. <br>
-Mitigation: Confirm that the user is asking about sequential data transformations before applying the pattern-specific guidance. <br>
-Risk: Architecture guidance can be incomplete or misleading if adopted without review. <br>
-Mitigation: Review the proposed pipeline stages, schemas, back-pressure behavior, and operational assumptions before implementation. <br>
+Risk: Broad architecture and pipeline triggers may activate the skill when a different architecture pattern is intended. <br>
+Mitigation: Narrow the trigger terms for local deployments or ask the agent to confirm that pipes-and-filters is the intended pattern before applying the guidance. <br>
+Risk: The artifact references a broader Claude Code plugin outside this release. <br>
+Mitigation: Review that external plugin separately before installing or relying on its agents, hooks, or commands. <br>
+Risk: Pipeline designs can fail around bottlenecks, schema drift, or back-pressure if the guidance is applied without system-specific validation. <br>
+Mitigation: Validate stage contracts, load behavior, buffering, retry logic, and observability requirements before deployment. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub Skill Page](https://clawhub.ai/athola/skills/nm-archetypes-architecture-paradigm-pipeline) <br>
-- [Project Homepage from ClawHub Metadata](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
+- [Claude Night Market Archetypes](https://github.com/athola/claude-night-market/tree/master/plugins/archetypes) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown guidance with architecture recommendations, deliverables, and risk mitigations] <br>
+**Output Type(s):** [Guidance, Markdown, Configuration] <br>
+**Output Format:** [Markdown prose with adoption steps, deliverables, risks, and mitigation guidance.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; no tools, MCP references, credential variables, or shell commands were detected.] <br>
+**Other Properties Related to Output:** [Advisory architecture guidance only; no executable output or privileged access.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata) <br>
+1.9.17 (source: server release evidence; artifact frontmatter lists 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

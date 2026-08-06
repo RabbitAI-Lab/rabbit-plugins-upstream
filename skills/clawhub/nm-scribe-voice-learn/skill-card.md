@@ -1,5 +1,5 @@
 ## Description: <br>
-Improves a voice profile by learning from manual edits, refining registers and reducing voice drift over time. <br>
+Improves a voice profile by learning from manual edits. Use after editing generated text to refine registers and close voice drift over time. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, writers, and agent users use this skill after manually editing generated text to compare review and edit snapshots, identify recurring voice patterns, and propose updates to voice-profile rules. <br>
+Developers and writers use this skill after manually editing generated drafts to compare post-review and post-edit versions, identify recurring voice patterns, and propose profile updates for user approval. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill stores generated and edited writing samples in the local voice-profile directory. <br>
-Mitigation: Avoid running it on sensitive drafts unless local snapshot retention is acceptable, and review or clean stored snapshots periodically. <br>
-Risk: Broad trigger terms could invoke the learning flow when it is not intended. <br>
-Mitigation: Invoke the skill deliberately after completing manual edits and confirm proposed profile changes before applying them. <br>
+Risk: Generated, reviewed, and manually edited drafts may be retained in a local voice-profile learning directory. <br>
+Mitigation: Install only when local retention is acceptable, and periodically review or clean $HOME/.claude/voice-profiles/*/learning when drafts may contain sensitive material. <br>
+Risk: Learning proposals can introduce incorrect, stale, or contradictory voice rules if accepted without review. <br>
+Mitigation: Use the skill's evidence thresholds, contradiction checks, and user-approval step before applying profile changes. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-voice-learn) <br>
-- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
+- [Scribe homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples and shell command snippets] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with JSON snippets and shell command blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces pattern analysis, hold/apply recommendations, proposed profile-rule edits, and local accumulator updates for user review.] <br>
+**Other Properties Related to Output:** [May propose accumulator entries, register or craft-rule edits, contradiction notices, and cleanup guidance for local voice-profile learning files.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

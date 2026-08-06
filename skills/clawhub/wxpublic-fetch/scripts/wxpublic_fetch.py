@@ -46,7 +46,11 @@ def img_filename(img_url):
     base = path.split("/")[-1] or hashlib.md5(img_url.encode()).hexdigest()[:8]
     if not any(base.lower().endswith(ext) for ext in IMG_EXTS):
         base += ".jpg"
-    return base
+    stem, ext = os.path.splitext(base)
+    # CDN images often share a basename (for example, 640.jpg); retain it but
+    # key the local file by its full URL so separate images never collide.
+    url_hash = hashlib.sha256(img_url.encode("utf-8")).hexdigest()[:12]
+    return f"{stem}-{url_hash}{ext}"
 
 
 def download_image(img_url, images_dir):

@@ -1,41 +1,54 @@
-## Description: <br>
-Tune llama.cpp GGUF inference on CPU-only and edge machines with 1-4 cores or low RAM for maximum tokens per second. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tunes llama.cpp GGUF inference for CPU-only and edge systems by guiding benchmark sweeps for threads, flash attention, KV-cache format, batch size, and quant selection.
 
-## Publisher: <br>
-[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw)
 
-## Use Case: <br>
-Developers and engineers use this skill to benchmark and tune local llama.cpp GGUF inference on CPU-only VPS, container, single-board computer, sandbox, or other low-resource edge environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Suggested build and benchmark commands can consume CPU and RAM or fail outside a llama.cpp workspace. <br>
-Mitigation: Run commands only in an intended llama.cpp workspace, review them before execution, and monitor resource use on constrained systems. <br>
-Risk: CPU tuning recommendations may not transfer to every model, llama.cpp version, or host environment. <br>
-Mitigation: Benchmark one variable at a time and validate the chosen settings on the target model and hardware before deployment. <br>
+## Use Case:
 
+Developers and engineers use this skill to tune llama.cpp GGUF models on CPU-only VPS, container, SBC, sandbox, or other low-resource edge systems.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/edge-cpu-gguf-tuner) <br>
-- [Publisher profile](https://clawhub.ai/user/orionshaowswmw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and benchmark tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides CPU tuning recommendations for llama.cpp GGUF inference, including build, benchmark, validation, and deployment command examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Benchmarking and local inference commands can consume CPU, memory, and time on constrained systems.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before running them, start with short benchmark repetitions, and monitor system resources during sweeps.
+
+Risk: Optional model or llama.cpp downloads may introduce unverified third-party artifacts.
+
+Mitigation: Verify downloaded models and llama.cpp sources separately before using them.
+
+## Reference(s):
+
+- [README.md](README.md)
+- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/edge-cpu-gguf-tuner)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local benchmarking and tuning recommendations; it does not execute commands on its own.]
+
+## Skill Version(s):
+
+1.1.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

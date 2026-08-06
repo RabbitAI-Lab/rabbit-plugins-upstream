@@ -1,17 +1,21 @@
 ﻿# 广告投放计划模板
 
-> 用途：从已确认的 `campaign-create` JSON **投影**用户可见的 Markdown 表格（勿与 JSON 矛盾）。流程与门禁见 `references/google-ads/google-ads-campaign-plan.md`。
-> 触发：用户要投放方案/确认稿；**先完成 JSON + validate，再填本模板正文**。
-> 字段契约：`assets/campaign-create-template.json` + `campaign-create-template.md`  
-> 关键词数量建议：`google-ads-keyword-taxonomy.md`（Agent 参考，CLI 不强制）
+> 用途：用户审查用的搜索广告计划结构；字段须与已落盘的 `campaign-create` JSON 一致。流程见 `references/google-ads/google-ads-campaign-plan.md`。
+> 触发：出方案 / 创建前确认。
+> 字段契约：`assets/campaign-create-template.json` + `campaign-create-template.md`
+> 关键词数量建议：`google-ads-keyword-taxonomy.md`
 
 ---
 
 ## 交付顺序（固定）
 
-1. **JSON 代码块**（唯一数据源）
-2. **下方模板正文**（从 JSON 填充）
-3. **待确认**（改需求只改 JSON）
+1. 落盘与模板同构的 **`campaign-create` JSON**（唯一可执行数据源；对话里勿贴整份 JSON 当主交付）。
+2. **创建阶段**跑 `ad campaign-validate`；**仅出方案**可跳过 validate。
+3. **审查稿（必做）**：Agent **写代码**（Node/Python）读取该 JSON，按下方模板投影为完整文件并交给用户审查。
+   - 默认输出 **Markdown**（`./campaign-plan.md`）。
+   - 用户要求 Excel / 表格 / 其他格式时，同一脚本改输出格式；数值与文案仍只从 JSON 读出。
+   - 审查稿须含：**全部**广告组关键词、系列否定词、每组 RSA 全部标题/描述、Extensions 全文——**禁止**只交「方案总结」条数勾选/概览表。
+4. 用户确认后改需求只改 JSON → 重跑脚本刷新审查稿 →（创建阶段）再 validate → `ad campaign-create`。
 
 ### 创意与否定词数量（关键词见 taxonomy）
 
@@ -55,7 +59,7 @@
 
 ## 模板正文（Markdown 投影，须与 JSON 一致）
 
-AI 生成计划时，**先写好 JSON，再按以下格式输出说明**。`{{占位符}}` 由 JSON 字段填充，不得手写与 JSON 矛盾的数值。
+投影脚本按以下格式写审查稿。`{{占位符}}` 只从 JSON 读取，不得手写与 JSON 矛盾的数值。
 
 ---
 

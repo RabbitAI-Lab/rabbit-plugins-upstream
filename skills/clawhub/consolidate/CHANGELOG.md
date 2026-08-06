@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.5.1](https://github.com/es6kr/skills/compare/consolidate-v0.5.0...consolidate-v0.5.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* promote next-fix staging (38 fixes across 16 skills) ([94f8c33](https://github.com/es6kr/skills/commit/94f8c33800ce411ae63e22c5259cdae8435508a4))
+
+## [0.5.0](https://github.com/es6kr/skills/compare/consolidate-v0.4.0...consolidate-v0.5.0) (2026-08-03)
+
+
+### Features
+
+* **consolidate:** cross-platform noncompliant-review-comment guard ([#166](https://github.com/es6kr/skills/issues/166)) ([168fb9c](https://github.com/es6kr/skills/commit/168fb9cfecc3249c181572910a9925257fbe52a2))
+* promote next-feat to main ([4fbe313](https://github.com/es6kr/skills/commit/4fbe31332c58bf24327d819cc9204ebda2d4afa8))
+
 ## [0.4.0](https://github.com/es6kr/skills/compare/consolidate-v0.3.6...consolidate-v0.4.0) (2026-07-23)
 
 

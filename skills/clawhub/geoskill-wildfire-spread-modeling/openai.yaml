@@ -1,0 +1,13 @@
+name: geoskill-wildfire-spread-modeling
+display_name: 野火蔓延模拟
+description: |
+  元胞自动机叠加坡度风速燃料湿度修正的过火面积模拟
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-wildfire-spread-modeling.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - remote-sensing
+  - vegetation

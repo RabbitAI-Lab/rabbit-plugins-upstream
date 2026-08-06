@@ -1,0 +1,20 @@
+{
+  "source": "synthetic",
+  "method": "sam",
+  "n_bands": 36,
+  "shape": [
+    64,
+    64
+  ],
+  "class_counts": {
+    "0": 3458,
+    "1": 197,
+    "2": 54,
+    "3": 387
+  },
+  "mean_stress": 0.137762650847435,
+  "n_anomalies": 1,
+  "aux_mean": {
+    "sam_angle": 0.0413287952542305
+  }
+}

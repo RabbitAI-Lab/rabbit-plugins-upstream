@@ -1,0 +1,67 @@
+{
+  "skill": "pca-dimension-reduction",
+  "skill_version": "1.0.0",
+  "command": "pca-dimension-reduction --bbox 116 39 117 40 --synthetic --n-components 3 --quiet --output-dir ./_test_pca_basic",
+  "started_at": "2026-08-03T10:24:27.346285Z",
+  "finished_at": "2026-08-03T10:24:27.524007Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "n_components": 3,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_pca_basic\\pca_components.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 3,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_pca_basic\\pca_statistics.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_bands": 6,
+    "n_components": 3,
+    "pc1_explained_ratio": 0.9911627842635758,
+    "cumulative_kept": 0.99474799858598,
+    "n_valid_pixels": 16384,
+    "synthetic_mean_per_band": [
+      0.4248342514038086,
+      0.5155196189880371,
+      0.6046525835990906,
+      0.6948754787445068,
+      0.784958004951477,
+      0.874694287776947
+    ]
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "pca-dimension-reduction"
+  },
+  "error": null
+}

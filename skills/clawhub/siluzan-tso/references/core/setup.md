@@ -139,6 +139,7 @@ siluzan-tso config show
 ## 使用 webUrl 进行网页操作
 
 - 涉及充值、账户激活、首页看板等**必须在网页完成**的操作时，应先通过 `siluzan-tso config show` 获取 `webUrl` 值，再按各业务文档提供的相对路径拼接完整链接，引导用户在浏览器中完成后续步骤。
+- **硬约束**：`webUrl` **必须**来自当轮 `config show` 输出；路径**必须**来自已 Read 的业务文档路径表。**禁止**凭记忆写出完整平台 URL，**禁止**把 `apiBaseUrl` / `googleApiUrl` 当作浏览器地址发给用户。文档未给出相对路径时不要拼接。详见 `agent-conventions.md` §四。
 
 ## 更新
 

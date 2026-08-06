@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/aws-infra",
   "slug": "aws-infra",
   "ownerHandle": "thcjp",
-  "version": "1.0.0",
-  "updatedAt": 1778485857338,
-  "contentHash": "0e58ecd417a1a81df5c6785b1bd85b8c559e27969252c8aecceb3ecedf743653",
-  "fetchedAt": "2026-07-26T18:06:12.677Z"
+  "version": "1.0.4",
+  "updatedAt": 1785663846060,
+  "contentHash": "8907b3553896b2939c6713edc95aac30e40f299901f7dc51efa85171fe7b5be7",
+  "fetchedAt": "2026-08-06T10:22:20.681Z"
 }

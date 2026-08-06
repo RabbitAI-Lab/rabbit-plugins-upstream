@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/haos-ssh-maintenance",
   "slug": "haos-ssh-maintenance",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1778492403242,
-  "contentHash": "62853471aac3a186fe7f247a0247f850bfe6fea262fb16f66230f4609391d005",
-  "fetchedAt": "2026-07-26T19:36:31.770Z"
+  "version": "1.0.2",
+  "updatedAt": 1785381724938,
+  "contentHash": "603582a7682adf10b1849e6493992181a76cd00412b7764238f866ff8adb3380",
+  "fetchedAt": "2026-08-06T10:32:14.981Z"
 }

@@ -11,14 +11,16 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to create or update Makefiles for Python, Rust, and TypeScript projects with standard testing, linting, formatting, build, and workflow automation targets. <br>
+Developers and engineers use this skill to create or update standard Makefiles for Python, Rust, or TypeScript projects with common install, lint, format, typecheck, test, build, clean, and publish targets. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generated or updated Makefile targets can alter local build artifacts or affect release workflows, especially targets such as publish, clean, or deploy. <br>
-Mitigation: Review the generated Makefile before accepting changes and inspect sensitive targets before running them. <br>
+Risk: Generated Makefile targets such as publish, deploy, clean, or install can change environments, delete files, or publish artifacts if run without review. <br>
+Mitigation: Review generated targets before running them and use help or dry-run workflows where available. <br>
+Risk: Standard Makefile templates may not fit projects with complex or exclusive alternative build systems. <br>
+Mitigation: Use the skill only for Makefile-related changes and adapt generated targets to the project's established build workflow. <br>
 
 
 ## Reference(s): <br>
@@ -27,13 +29,13 @@ Mitigation: Review the generated Makefile before accepting changes and inspect s
 
 
 ## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with Makefile snippets and shell command examples] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with Makefile snippets and shell command examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces Makefile-generation guidance that may result in local project-file changes.] <br>
+**Other Properties Related to Output:** [Generated Makefile targets should be reviewed before use, especially publish, deploy, clean, or install targets.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

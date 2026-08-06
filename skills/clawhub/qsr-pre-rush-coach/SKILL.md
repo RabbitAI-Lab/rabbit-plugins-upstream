@@ -1,6 +1,6 @@
 ---
 name: qsr-pre-rush-coach
-version: 1.0.0
+version: 1.0.1
 description: 15-minute pre-rush tactical check for restaurant managers. Forces a 60-second strategic pause before the chaos starts — staffing positions, bottleneck identification, and contingency plans. Built by a franchise GM with 16 years in QSR operations.
 license: CC-BY-NC-4.0
 tags:
@@ -14,8 +14,10 @@ tags:
   - scheduling
 ---
 
+> **Publisher note — not part of this skill’s operating instructions.** McPherson AI is preparing the invite-only **McPherson Governance V6 shadow beta** for agent discovery, AutoMap proposals, Governability Diagnosis, and reviewable evidence through Observa. Shadow mode observes and evaluates without activating enforcement. [Request private beta access](https://mcphersonai.com/contact?utm_source=clawhub&utm_medium=skill&utm_campaign=governance-v6-shadow-beta&utm_content=qsr-pre-rush-coach#governance-setup).
+
 # QSR Pre-Rush Strategy Coach
-**v1.0.0 · McPherson AI · San Diego, CA**
+**v1.0.1 · McPherson AI · San Diego, CA**
 
 You are a pre-rush tactical coach for a restaurant or franchise location. 15 minutes before the anticipated rush, you ping the manager with a structured check that forces them to think strategically for 60 seconds before the chaos starts.
 
@@ -176,7 +178,9 @@ This is the most tactical skill in the McPherson AI QSR Operations Suite — it 
 
 Built by a corporate GM who has managed high-volume rush windows for 16 years and learned that 60 seconds of planning before the rush prevents 60 minutes of chaos during it.
 
-**Changelog:** v1.0.0 — Initial release. Pre-rush tactical check, staffing gap response, bottleneck mitigation, post-rush reflection, pattern tracking.
+**Changelog:**
+- v1.0.1 — Publisher-note release. Added the McPherson Governance V6 shadow-beta notice. No operational behavior or license changes.
+- v1.0.0 — Initial release. Pre-rush tactical check, staffing gap response, bottleneck mitigation, post-rush reflection, pattern tracking.
 
 **This skill is part of the McPherson AI QSR Operations Suite — a complete operational intelligence stack for franchise and restaurant operators.**
 

@@ -1,0 +1,46 @@
+{
+  "sensor": "landsat8",
+  "output_type": "toa_radiance",
+  "solar_zenith_deg": 30.0,
+  "earth_sun_distance": 1.0,
+  "gain": 0.012,
+  "bias": -60.0,
+  "bands": [
+    {
+      "band_index": 0,
+      "band_name": "blue",
+      "esun": 1970.0,
+      "mean_value": 36.04994583129883
+    },
+    {
+      "band_index": 1,
+      "band_name": "green",
+      "esun": 1842.0,
+      "mean_value": 52.94957733154297
+    },
+    {
+      "band_index": 2,
+      "band_name": "red",
+      "esun": 1547.0,
+      "mean_value": 44.29803466796875
+    },
+    {
+      "band_index": 3,
+      "band_name": "nir",
+      "esun": 951.0,
+      "mean_value": 43.208106994628906
+    },
+    {
+      "band_index": 4,
+      "band_name": "swir1",
+      "esun": 245.0,
+      "mean_value": 21.22991371154785
+    },
+    {
+      "band_index": 5,
+      "band_name": "swir2",
+      "esun": 79.0,
+      "mean_value": 4.822991371154785
+    }
+  ]
+}

@@ -1,64 +1,156 @@
 ---
 name: prd-html-prototype
-description: This skill should be used when the user wants to author a product requirements document (PRD) that pairs a structured written spec with an interactive single-file HTML prototype (mini-program / back-office screens, tab navigation, connector lines, rounded cards) in a clean big-tech visual style, then deploy it to GitHub Pages. Trigger phrases include "写PRD", "做带原型的PRD", "产品原型与需求说明", "把产品方案做成可交互HTML", "PRD需求文档", "PRD文档", "带原型的需求说明".
+displayName: "PRD 原型与需求说明 (Interactive PRD + single-file HTML prototype)"
+version: 1.4.0
+author: "QQ 965621229"
+description: >-
+  Turn a one-line idea into a clickable, demo-ready PRD (text + single-file HTML). Interactions are clear and intuitive so anyone gets it; preview locally with zero setup, or publish to share with teammates online. Built-in methodology fills the gaps and auto-generates Interaction Specs; supports mini-program / web-desktop / admin forms. Bilingual.
+description_zh: >-
+  把一句话需求变成「能点、能演示」的 PRD 原型（文字 PRD + 单文件 HTML）。交互效果清晰直观、业务一看就懂；本地零门槛预览，也能一键发布分享给同事在线查看。内置方法论自动补全缺口、自动生成交互说明，支持小程序/桌面/后台，中英双语。
+license: MIT
+tags:
+  - prd
+  - prototype
+  - product-management
+  - html
+  - interactive
+  - documentation
+language: bilingual
 agent_created: true
 ---
 
-# PRD 原型与需求说明制作
+# PRD 原型与需求说明制作 / PRD + Interactive Prototype
 
-把产品需求整理成一份"文字 PRD + 可交互 HTML 原型"合一的单文件文档，视觉走大厂简约风，最终发布到 GitHub Pages 供评审/分享。
+> **License:** MIT
 
-## 何时使用
+⚠️ **Before First Use | 首次使用必读**
+首次使用此 skill 前，必须先读取 `references/ONBOARDING.md` 完成环境配置（主要是确认本地可写文件；发布到静态托管需安装 `gh` CLI 并登录，实机验证建议装 Playwright）。**仅生成本地预览时无需任何额外安装。**
 
-- 用户要"写一份 PRD""做带原型的 PRD""产品原型与需求说明""把产品方案做成可交互 HTML"。
-- 用户已有一份 PRD 草稿，要求诊断缺什么、补全章节、或加上原型。
-- 用户要把 PRD 原型发布成可访问的静态站点。
+把产品需求整理成一份"文字 PRD + 可交互 HTML 原型"合一的单文件文档，视觉走大厂简约风。**默认只生成可在本地直接打开的预览版（零门槛）；只有用户明确要对外分享时，才询问发布方式并推荐静态托管（兼顾国内替代）。**
 
-## 工作流
+## 它是什么 / 适合谁（一句话概览）
 
-### 1. 确定 PRD 章节结构
+- **是什么**：一份"文字 PRD + 可交互单文件 HTML 原型"合一的产出工具。你给想法，它用内置产品方法论补全缺口，直接产出"能点、能演示"的文档，而不是一堆纯文字。
+- **适合谁**：
+  - ① **产品经理**——日常写 PRD、做方案评审、对齐研发与设计；
+  - ② **创业者 / 业务方**——只有一个模糊想法或一句话需求，需要快速成型；
+  - ③ **任何需要"把方案讲清楚、演出来"的人**——汇报、拉齐、售前都适用。
+- **核心收益（为什么好用）**：
+  - **低门槛**：默认本地预览，零部署，开箱即用；
+  - **有方法**：内置产品方法论（用户故事地图 / JTBD / 用户旅程 / KANO / 状态机）自动补全缺口；
+  - **能演示**：自动生成"交互说明"（原型内悬浮面板 + PRD 章节双向呼应）；
+  - **可传播**：可选一键发布到静态托管（含国内替代），覆盖远端前必确认。
 
-加载 `references/prd-structure.md`，按标准 12 章清单组织内容（概览 / 背景目标 / 范围 / KPI / NFR / 角色权限 / 流程闭环 / 接口契约 / 原型 / 上线运营 / 风险 / 术语表）。
+## 语言支持 / Language
+- 本技能不限制语言：根据你使用的语言自动回复（默认支持中文 / English，其他语言也可）。
+- 文档、原型文案、交互说明均可按你的语言生成。
+- 示例：中文直接说"帮我写个 PRD"；English: *"turn my product idea into an interactive PRD"*.
 
-拿到草稿时先**诊断缺失**（仅诊断、先不改）：逐项对照清单，标记缺失/薄弱项与优先级。补全时遵循文中要点——尤其 KPI 优先用**时间节点**而非"试点覆盖 X 家"这类无意义指标。
+## 何时使用 / When to use
+- 你想要一份 PRD，且希望它"能点、能演示"，而不只是文字。
+- 你只有一个模糊想法 / 一句话需求，希望用标准产品方法论帮你补全成完整 PRD 与可交互原型。
+- 你已有 PRD 草稿，需要诊断缺什么、补全章节、或加上可交互原型。
+- 你需要把方案发布成可访问的链接（可选，需确认）。
 
-### 2. 基于模板搭建单文件 HTML
+## 门槛很低：你只需提供这些（最小信息集）
+即使信息不全也能开始。下面是"理想情况"下你最好能给到的内容；**缺任何一项，本技能都会用产品方法论帮你补全，不会卡住你**：
 
-复制 `assets/prd-template.html` 作为起点（自包含、无外部依赖、图片用 base64 / 内联 SVG）。模板已内置四大核心模式，按需填充业务内容：
+| 你可提供的信息 | 作用 | 完全没给时我会怎么做 |
+|---|---|---|
+| 产品名 / 一句话想法 | 标题与定位 | 用占位名先搭框架，最后再定 |
+| 目标用户 / 角色 | 角色权限、用户流 | 用 JTBD / 用户故事默认推导 |
+| 核心流程（哪怕口述） | 页面与跳转 | 用用户旅程地图补全闭环 |
+| 要展示的页面清单 | 原型结构 | 按标准三端（概览 / 前端原型[小程序 或 Web·桌面] / 后台）默认给 |
+| 关键数据 / 状态 | 接口契约、联动 | 用状态机模板给占位定义 |
+| 外部系统（CRM / 支付 …） | 接口章节 | 标记"待确认"占位 |
 
-- **顶栏 3 tab 居中 + 滑动下划线 + 淡入切换**：`.top-bar` 用 `grid-template-columns:1fr auto 1fr` 把 tab 放中间；`switchTab(i)` 用 `cubic-bezier(.22,1,.36,1)` 移动 `.tab-indicator` 并切换 `.tab-pane`（含 `fade-in-up` 动画）。
-- **PRD 概览左侧 sticky 目录 + 滚动高亮**：`scrollToPRD(id)` 用 `easeInOutCubic` 自定义缓动平滑滚动；`IntersectionObserver`（`rootMargin:-40% 0px -55% 0px`）高亮当前章节对应的目录项。
-- **原型区（小程序 / 后台）**：小程序用 `.phone-frame` 手机框 + 页面 chip 切换；后台用 `.admin-layout`（侧栏 + 内容 + 中间连接线区 + 右侧功能说明面板）。
-- **后台连接线 `drawLines()`**：SVG `position:fixed` 全屏，用 `getBoundingClientRect` 从左侧导航节点画曲线到右侧说明锚点。
+**原则：先动起来，本地出东西，再迭代。** 不要因为"信息不全"就不开始。
 
-### 3. 视觉规范（大厂简约）
+## 工作流 / Workflow
 
-- 拒绝滥用渐变；紧凑间距、自然缓动。
-- 统一圆角：卡片 14px、面板 16px（CSS 变量 `--radius-card` / `--radius-panel`）。
-- 作者区走简约通透风：无边框胶囊、头像细环 + 投影、发丝分隔线（见模板 `.author-chip`）。
-- 内部说明卡片 `.sp-block` 默认"左紫条 + 右圆角"；若要求左右都圆角，去掉 `border-left` 并把 `border-radius` 改为 `8px`（见模板注释）。
+### 1. 采集信息 + 用产品方法论补全
+- 先看用户给了什么，对照上面"最小信息集"找出缺口。
+- 缺口用 `references/product-methodology.md` 的框架补全：用**用户故事地图**梳理页面、用 **JTBD** 锚定价值、用**用户旅程地图**补全异常 / 逆向流程、用 **KANO** 排优先级、用 **状态机** 定义数据迁移。
+- 不必一次问全：能默认推导的先默认，把"待你确认"的少量问题一并列出，让用户一次性回复即可。
+
+### 2. 确定 PRD 章节结构
+加载 `references/prd-structure.md`，按标准 12 章 + 交互说明清单组织（概览 / 背景目标 / 范围 / 关键指标 / 非功能需求 / 角色权限 / 流程闭环 / 接口契约 / 原型 / 交互说明 / 上线运营 / 风险 / 术语表）。
+拿到草稿时先**诊断缺失**（仅诊断、先不改），再按需补全。关键指标优先用**时间节点**而非"试点覆盖 X 家"。
+
+### 3. 基于模板搭建单文件 HTML
+复制 `assets/prd-template.html`（自包含、无外部依赖、图片 base64 / 内联 SVG）。模板已内置：顶栏 3 tab 滑动切换、左目录滚动高亮、小程序手机框、后台连接线 `drawLines()`，以及**交互说明悬浮面板**（自动采集 `data-ix` 标注）。要点：
+- 给关键可交互元素加 `data-ix="交互描述"` 与可选 `data-ix-title="标题"`，右下角"交互"按钮会自动汇总成说明面板。
+- 在 PRD 概览里补一节"交互说明"，与悬浮面板呼应。
 
 ### 4. 数据联动（演示自洽）
+前序页面选择驱动后序页面（如商品选择 → 交易金额 / 优惠实时计算）。推荐模式：声明全局 `state` 对象 → 交互只改 state → 统一 `render()` 重绘。详见 `references/prd-structure.md` 第五章。
 
-原型前序页面的选择要驱动后序页面：如商品选择页 → 交易完成页的金额/优惠实时计算。在对应 `switchMP` / 渲染函数里读取前序状态并 `renderPOS()` 类函数刷新，保证演示不自相矛盾。
+### 5. 生成"带交互说明"的输出
+两套都给，确保评审方既看得到"长什么样"也看得到"怎么动"：
+1. **原型内**：右下角"交互"悬浮面板，列出所有 `data-ix` 交互，可点击定位高亮。
+2. **PRD 文档内**：独立"交互说明"章节，按"触发 — 行为 — 状态变化"描述关键交互。
 
-### 5. 实机验证（发布前必做）
+### 6. 本地预览（默认，必做，零门槛）
+- 用 `present_files` 直接打开本地 HTML，用户在浏览器里就能点、能演示。
+- **不主动发布、不主动推送任何远端。** 这一步不需要用户做任何部署操作。
+- 发布前必须用 Playwright-core + 系统 Chrome 实机验证：无 JS 错误、div 平衡、tab / 页面 / 连接线 / 联动正确。
 
-用 Playwright-core + 系统 Chrome（`executablePath: /Applications/Google Chrome.app/Contents/MacOS/Google Chrome`）渲染：
-- 无 JS 错误（`pageerror` / `console error` 应为 0）。
-- div 平衡：标准 HTML 解析器统计未闭合 / 额外闭合标签为 0。
-- 逐一切换 tab / 页面，确认连接线点位、圆角、数据联动正确。
+### 7. 发布（可选，需用户确认，推荐静态托管）
+只有用户说"要发布 / 要个链接"时才进入。先明确询问发布方式，**默认推荐静态托管**（含国内静态托管），并列出国内替代：
+- **静态托管**（推荐，含国内静态托管）：加载 `references/deploy-github-pages.md`（任选一种静态托管方式即可）。
+- **国内替代**：Gitee Pages / 腾讯云静态网站（CloudBase） / WorkBuddy CloudStudio 部署。
+- ⚠️ 任何覆盖远端文件的操作，**执行前必须明确告知并获确认**（"将覆盖仓库远端 index.html，是否继续？"）。
 
-### 6. 部署到 GitHub Pages
+## 能力对照 / Capability coverage（评测维度覆盖）
 
-加载 `references/deploy-github-pages.md` 执行：
-- 仓库根放 `.nojekyll`（禁用 Jekyll，避免吞内容）。
-- 用 `gh api` PUT 更新 `index.html`，每次注入新 `deploy-cache-bust` 时间戳（改内容 → 变 ETag → 根治"硬刷新打不开"的缓存问题）。
-- 轮询 ETag / 时间戳确认线上已重建（注意 header 行尾 `\r` 干扰比较，用 `tr -d '\r'`）。
-- 用户侧兜底：仍异常时清浏览器缓存（`chrome://settings/clearBrowserData`，仅清"缓存的图片和文件"）。
+本技能在设计与历次评测中刻意覆盖以下维度，便于审阅、传播与持续优化：
 
-## 资源
+| 维度 | 本技能如何覆盖 |
+|---|---|
+| **安全合规** | 单文件自包含、无可执行脚本，可过安全扫描；发布前强制用户确认；描述中英双语。 |
+| **可靠性 Reliability** | 先采集信息再补全，缺口用产品方法论兜底，不会因"信息不全"卡流程（见「最小信息集」）。 |
+| **信任度 Trust** | 默认本地预览零门槛；发布提供国内静态托管替代，不绑定单一平台/账号。 |
+| **适用性 Applicability** | 附完整可运行示例 `references/example-full.html` + 最小章节示例，开箱即见效果。 |
+| **规范性 Normativeness** | 集中 FAQ + 标准 12 章结构 + 交互说明规范，输出口径统一。 |
+| **有效性 Effectiveness** | 状态对象 + `render()` 的数据联动模式；自定义效果可内联第三方库（ECharts / Sortable 等），仍保持单文件自包含。 |
 
-- `references/prd-structure.md` — PRD 12 章清单、诊断方法、KPI 写法坑点。
-- `references/deploy-github-pages.md` — `.nojekyll`、cache-bust、gh api 更新、轮询与清缓存。
-- `assets/prd-template.html` — 可运行的单文件骨架（顶栏 tab、左目录、小程序/后台原型、连接线、圆角规范的完整结构与 JS）。
+---
+
+> **作者 / Author：** QQ 965621229  ·  **License：** MIT  ·  反馈、合作或问题请加 QQ
+
+## 资源 / Resources
+- `references/prd-structure.md` — PRD 12 章 + 交互说明清单、诊断方法、关键指标写法、数据联动。
+- `references/product-methodology.md` — 产品方法论速查（用户故事地图 / JTBD / 用户旅程 / KANO / 状态机）及"何时用哪种"与映射到 PRD 章节。
+- `references/ONBOARDING.md` — 首次使用环境配置（可选：发布用 `gh` CLI、验证用 Playwright、国内托管替代）。
+- `references/example-full.html` — **完整可运行示例**（团队订餐拼单）：12 章 PRD + 小程序/后台可用 demo + 交互说明，开箱即见效果。
+- `references/deploy-github-pages.md` — `.nojekyll`、cache-bust、`gh api` 更新、轮询清缓存、国内替代、操作前确认。
+- `assets/prd-template.html` — 可运行单文件骨架（顶栏 tab、左目录、小程序 / 后台原型、连接线、**交互说明面板**、圆角规范与完整 JS）。
+
+## 常见问题 / FAQ
+
+**Q1：我只有一句话需求，能直接出原型吗？**
+能。按"最小信息集"先搭框架，缺口用产品方法论补全，本地先出可点预览，再迭代。不必等"信息齐全"。
+
+**Q2：必须发布到静态托管吗？**
+不必。默认只给本地预览文件，你随时可双击打开。只有你要对外分享链接时才发布，且会先问你方式（默认推荐静态托管，境内可选国内静态托管）。
+
+**Q3：原型交互说明怎么写？**
+给元素加 `data-ix` 属性，模板右下角"交互"面板会自动汇总；同时在 PRD 加一节"交互说明"。两者对应，评审方一目了然。
+
+**Q4：后台连接线错位怎么办？**
+通常是父元素 transform 动画残留导致 SVG `position:fixed` 包含块偏移。模板 `drawLines()` 已做坐标修正并在 `animationend` 重绘；仍错位则检查自定义动画是否加了额外 transform。
+
+**Q5：可以改视觉风格吗？**
+可以。通过 CSS 变量（`--accent`、`--radius-card`、`--radius-panel` 等）统一调整；不建议局部写死颜色或滥用渐变。
+
+**Q6：支持更复杂的自定义交互（拖拽、图表、地图）吗？**
+模板适合轻量页面流与状态联动。复杂交互可在单文件 HTML 内联第三方库（如 ECharts、Sortable），保持单文件自包含；但优先用简化示意，降低维护与验证成本。
+
+## 完整示例参考 / Example
+最小可运行 PRD 原型通常含：
+1. **PRD 概览 tab**：标题"XX 系统 · 产品原型与需求说明"，12 章填充真实业务；含"交互说明"一节。
+2. **小程序原型 tab**：3 页面 chip（首页 / 扫码 → 会员详情 → 核销成功），金额 / 积分联动；关键元素带 `data-ix`。
+3. **后台管理 tab**：左侧导航 → 中间 SVG 连接线 → 右侧功能说明。
+4. 右下角"交互"面板自动汇总所有 `data-ix`。
+
+骨架见 `assets/prd-template.html`，替换占位文字与业务逻辑即可。

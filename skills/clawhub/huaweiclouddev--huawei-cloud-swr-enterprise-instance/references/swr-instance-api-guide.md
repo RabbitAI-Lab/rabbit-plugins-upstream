@@ -40,7 +40,7 @@ hcloud SWR CreateInstance --name=prod-instance --spec=swr.ee.professional --char
 # Create instance with OBS encryption
 hcloud SWR CreateInstance --name=secure-instance --spec=swr.ee.professional --charge_mode=postPaid --vpc_id=<vpc-id> --subnet_id=<subnet-id> --enterprise_project_id=0 --obs_encrypt=true --obs_enc_kms_key_id=<kms-key-id> --cli-region=cn-north-4
 
-# Create instance with 国密 encryption
+# Create instance with GM (Chinese national cryptographic standard) encryption
 hcloud SWR CreateInstance --name=gm-instance --spec=swr.ee.professional --charge_mode=postPaid --vpc_id=<vpc-id> --subnet_id=<subnet-id> --enterprise_project_id=0 --obs_encrypt=true --encrypt_type=gm --cli-region=cn-north-4
 
 # Create instance without intranet access
@@ -64,7 +64,7 @@ hcloud SWR CreateInstance --name=tagged-instance --spec=swr.ee.professional --ch
 - `--description` (optional, body): Instance description
 - `--enable_intranet_access` (optional, body): Create internal access, default `true`
 - `--obs_encrypt` (optional, body): Enable OBS bucket encryption
-- `--encrypt_type` (optional, body): Encryption algorithm, `gm` for 国密, empty for AES-256
+- `--encrypt_type` (optional, body): Encryption algorithm, `gm` for GM (Chinese national cryptographic standard), empty for AES-256
 - `--obs_bucket_name` (optional, body): Custom OBS bucket name (skips OBS encryption config)
 - `--obs_enc_kms_key_id` (optional, body): KMS key ID for OBS encryption
 - `--resource_tags.[N].key` (optional, body): Tag key in indexed format
@@ -890,6 +890,35 @@ hcloud SWR DeleteInstanceJob --job_id=<job-id> --cli-region=cn-north-4
 - `--job_id` (required, path): Job ID
 - `--project_id` (required, path, auto-filled): Project ID
 
+## Instance Audit Log Operations
+
+SWR enterprise instances provide built-in audit logging via the `ListAuditLogs` API. This records image upload and download operations (pull, delete, create) for tracking and compliance — no dependency on CTS required.
+
+### 1. List Audit Logs
+
+```bash
+# List pull (download) audit logs
+hcloud SWR ListAuditLogs --instance_id=<instance-id> --project_id=<project-id> --operation=pull --cli-region=cn-north-4
+
+# List delete audit logs
+hcloud SWR ListAuditLogs --instance_id=<instance-id> --project_id=<project-id> --operation=delete --cli-region=cn-north-4
+
+# List create (upload) audit logs
+hcloud SWR ListAuditLogs --instance_id=<instance-id> --project_id=<project-id> --operation=create --cli-region=cn-north-4
+
+# Paginate results
+hcloud SWR ListAuditLogs --instance_id=<instance-id> --project_id=<project-id> --operation=pull --limit=20 --offset=0 --cli-region=cn-north-4
+```
+
+**Parameters**:
+- `--instance_id` (required, path): Enterprise repository instance ID
+- `--project_id` (required, path): Project ID
+- `--operation` (required, query): Operation type — `pull`, `delete`, or `create`
+- `--limit` (optional): Page size
+- `--offset` (optional): Page offset
+
+> 💡 **Note**: SWR `ListAuditLogs` provides image-level audit trails specific to the SWR enterprise instance. For broader cloud-level audit trails across all services, use Huawei Cloud CTS (Cloud Trace Service).
+
 ## Common Region IDs
 
 | Region Name                    | Region ID        |
@@ -920,6 +949,28 @@ hcloud SWR DeleteInstanceJob --job_id=<job-id> --cli-region=cn-north-4
 | `RequestLimitExceeded`  | Too many requests           | Add delay between batch requests                  |
 | `DomainNameInvalid`     | Domain naming violation     | Follow domain naming rules                      |
 | `DefaultDomainCannotDelete` | Cannot delete default domain | Only custom domains can be deleted           |
+
+## Unsupported Operations
+
+The following operations are NOT available through the SWR Enterprise Instance API (`hcloud SWR`):
+
+| Operation | Alternative | Notes |
+| --------- | ----------- | ----- |
+| Image push/pull (`docker push`/`docker pull`) | Use `docker` CLI directly | Requires credentials from `CreateInstanceLtCredential` or `CreateInstanceTempCredential` and `docker login` first |
+| Image build (`docker build`) | Use `docker` CLI or CodeArts Build | SWR is a registry, not a build service |
+| Image tag (`docker tag`) | Use `docker` CLI directly | Tagging is a local Docker operation |
+| Image copy/sync between instances | CLI available: `CreateInstanceReplicationPolicy` etc. | Use `hcloud SWR CreateInstanceReplicationPolicy` or SWR enterprise instance console |
+| Image retention/aging policies | CLI available but not documented in this skill | Use `hcloud SWR CreateInstanceRetentionPolicy` / `ListInstanceRetentionPolicies` etc., or SWR enterprise instance console |
+| Webhook management | CLI available but not documented in this skill | Use `hcloud SWR CreateInstanceWebhook` / `ListInstanceWebhooks` etc., or SWR enterprise instance console |
+| Image signing policies | CLI available but not documented in this skill | Use `hcloud SWR CreateInstanceSignPolicy` / `ListInstanceSignPolicies` etc., or SWR enterprise instance console |
+| Resource tag management | CLI available but not documented in this skill | Use `hcloud SWR CreateInstanceResourceTags` / `ListInstanceResourceTags` etc., or TMS console |
+| IAM delegation management | Not supported by this skill | Use IAM console to configure delegation. `CheckAgency`/`CreateAgency` are for SWR→CCE/CCI direction, not enterprise instance delegation |
+| Garbage collection | Not supported via API | Contact Huawei Cloud support for GC operations |
+| Backup/restore instance | Not supported via API | Use CBR or contact support for instance-level backup |
+| RBAC/permission management | Limited to namespace-level `metadata.public` | Fine-grained IAM policies at account level |
+
+**Key Distinction**: `hcloud SWR` commands manage the **instance infrastructure** (create, configure, delete).
+For **image operations** (push, pull, build, tag), use the `docker` CLI after authenticating with SWR credentials.
 
 ## Related Documentation
 

@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides JFTech device cloud storage workflows for querying cloud video lists, retrieving playback or download URLs, and querying cloud alarm messages for devices with an active cloud storage plan. <br>
+Provides JFTech device cloud-storage video listing, playback/download URL retrieval, and cloud alarm message queries for devices with an active cloud-storage plan. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and operators use this skill to run JFTech cloud-camera storage tasks from an agent, including video list lookup, playback or MP4 download URL retrieval, and alarm-message lookup. <br>
+Developers and operators use this skill to query JFTech cloud camera recordings, obtain playback or download URLs, and review cloud alarm messages after configuring the required JFTech credentials and device identifiers. <br>
 
 ### Deployment Geography for Use: <br>
-China, Asia, Europe, and North America <br>
+China Mainland, Asia, Europe, and North America <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill handles surveillance footage metadata, playback URLs, app secrets, and device tokens. <br>
-Mitigation: Use only in trusted environments, keep credentials out of shared shells, logs, and screenshots, and treat returned playback or download URLs as sensitive access links. <br>
-Risk: The configurable JF_ENDPOINT can direct credentialed API requests away from expected regional JFTech domains. <br>
-Mitigation: Set JF_ENDPOINT only to official JFTech regional domains documented for CN, AS, EU, or NA deployments. <br>
+Risk: The skill handles sensitive camera recordings and can print playback or download URLs to the console. <br>
+Mitigation: Run it only in trusted terminals and avoid command histories, logs, shared screens, or transcripts that could expose video URLs. <br>
+Risk: JF_APP_SECRET and JF_DEVICE_TOKEN are sensitive credentials required for API access. <br>
+Mitigation: Store credentials in a secure environment manager, limit access to the runtime environment, and rotate credentials if exposure is suspected. <br>
+Risk: JF_ENDPOINT can be overridden, which could send signed requests to an untrusted host. <br>
+Mitigation: Set JF_ENDPOINT only to trusted JFTech regional hosts such as the documented CN, AS, EU, or NA endpoints. <br>
 
 
 ## Reference(s): <br>
 - [JFTech Open Platform documentation](https://docs.jftech.com) <br>
-- [ClawHub skill page](https://clawhub.ai/jftech/jf-open-pro-cloud-record) <br>
+- [ClawHub skill page](https://clawhub.ai/jftech/skills/jf-open-pro-cloud-record) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/jftech) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON-like API result summaries] <br>
+**Output Type(s):** [text, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and console text or JSON API results] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May expose sensitive playback or download URLs returned by the JFTech cloud API.] <br>
+**Other Properties Related to Output:** [May print sensitive playback or download URLs that are valid for 24 hours.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+1.0.1 (source: server release evidence; artifact metadata reports 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

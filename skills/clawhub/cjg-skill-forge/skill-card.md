@@ -1,5 +1,5 @@
 ## Description: <br>
-Skill Forge is a meta-skill for creating, upgrading, reviewing, and consolidating WorkBuddy skills using feedback loops, coverage audits, external benchmarking, validation, and a weighted review rubric. <br>
+Skill Forge helps WorkBuddy users create, improve, review, and consolidate agent skills through structured forge, review, recast, and clarity workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,45 +11,41 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and skill authors use Skill Forge to create or upgrade skills, audit whether a skill meets quality targets, and plan consolidation of overlapping local skills. <br>
+Developers, skill authors, and agent operators use this skill to design new skills, audit existing skills with a rubric, consolidate overlapping local skills, and prepare releases with validation and review steps. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Default local feedback logs and anonymous cloud feedback uploads may be unsuitable for users who do not want usage signals recorded or sent to bundled endpoints. <br>
-Mitigation: Review the install notice and use the documented opt-outs before relying on the skill when local logging or cloud upload is not acceptable. <br>
-Risk: Publishing and proposal commands can read local credentials and change or publish skill packages. <br>
-Mitigation: Treat those commands as privileged actions; review command arguments, credential locations, and package contents before execution. <br>
-Risk: Semantic recast scanning can send skill metadata to a configured embedding service when semantic mode is enabled. <br>
-Mitigation: Use the default non-semantic scan unless external metadata processing is acceptable. <br>
+Risk: The skill may observe usage patterns, write local signal logs, and anonymously upload feedback to configured cloud endpoints unless the user opts out. <br>
+Mitigation: Review the packaged cloud_config.json endpoints before installation and opt out of cloud upload or local logging when those feedback flows are not acceptable. <br>
+Risk: Registration, proposal review, and publishing workflows rely on local creator credentials or platform tokens. <br>
+Mitigation: Use your own email and credentials, keep creator tokens local, and confirm which local credential files or platform logins will be used before running registration or publishing commands. <br>
+Risk: Semantic scan mode may send local skill metadata to an embedding provider. <br>
+Mitigation: Avoid semantic scan mode unless sending that metadata to the configured provider is acceptable for the skill being analyzed. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Forge release page](https://clawhub.ai/j-levee/skills/cjg-skill-forge) <br>
-- [Anti-Patterns](references/anti-patterns.md) <br>
-- [Churn Reflector](references/churn-reflector.md) <br>
-- [Real-Machine Forge](references/contest-hard-forge.md) <br>
-- [Coverage Audit](references/coverage-audit.md) <br>
-- [Coverage Seeding Rules](references/coverage-seeding.md) <br>
-- [Feedback Loop](references/feedback-loop.md) <br>
-- [Persona Skill Design](references/persona-design.md) <br>
-- [Project Governance](references/project-governance.md) <br>
-- [Quality Iteration Playbook](references/quality-iteration-playbook.md) <br>
-- [Simulation Testing](references/simulation-testing.md) <br>
-- [Skill Consolidation](references/skill-consolidation.md) <br>
-- [Skill Review Rubric](references/skill-review-rubric.md) <br>
-- [Skill Types](references/skill-types.md) <br>
+- [ClawHub skill page](https://clawhub.ai/j-levee/skills/cjg-skill-forge) <br>
+- [Skill review rubric](references/skill-review-rubric.md) <br>
+- [Quality iteration playbook](references/quality-iteration-playbook.md) <br>
+- [Coverage audit and real-material ID extraction](references/coverage-audit.md) <br>
+- [Feedback loop](references/feedback-loop.md) <br>
+- [Skill consolidation](references/skill-consolidation.md) <br>
+- [Cloud configuration schema](references/cloud-config-schema.md) <br>
+- [Simulation testing](references/simulation-testing.md) <br>
+- [Project governance](references/project-governance.md) <br>
+- [Clarity fidelity template](references/clarity-fidelity-template.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown prose with checklists, scores, code snippets, shell commands, and JSON or configuration examples] <br>
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration, Analysis] <br>
+**Output Format:** [Markdown guidance with command examples, generated skill files, configuration snippets, and local analysis reports] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce skill drafts, review scores, audit reports, recast plans, and publishing guidance.] <br>
+**Other Properties Related to Output:** [May produce local reports, proposed skill changes, release checks, registration commands, and publishing commands.] <br>
 
 ## Skill Version(s): <br>
-2.9.5 (source: frontmatter and server release evidence) <br>
+2.9.7 (source: server release evidence and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

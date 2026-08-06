@@ -1,0 +1,80 @@
+{
+  "name": "nas-media-assistant",
+  "version": "2.1.2",
+  "description": "NAS 影视助手：从 手机端 -> OpenClaw  驱动的影视识别/检索/下载/归档总控技能包。首次使用需完成环境自检(SKILL.md 模式 0 首次引导),通过后才进入正常检索/下载/整理模式",
+  "required_binaries": [
+    {
+      "name": "node",
+      "min_version": "18.0.0",
+      "reason": "运行内联 node -e 做 JSON 解析与状态判断"
+    },
+    {
+      "name": "python3",
+      "min_version": "3.9",
+      "reason": "运行检索调度器,TMDB查询,ffprobe信息提取"
+    },
+    {
+      "name": "curl",
+      "min_version": "7.0.0",
+      "reason": "调用 Jackett / qBittorrent WebAPI"
+    },
+    {
+      "name": "jq",
+      "min_version": "1.6",
+      "reason": "历史依赖,脚本已用 python3 解析 JSON;保留为可选,缺失不影响运行",
+      "optional": true
+    },
+    {
+      "name": "ffprobe",
+      "min_version": "4.0",
+      "reason": "media-organizer 提取媒体文件音轨/字幕/分辨率信息（可选,缺失则[信息]标签降级）",
+      "optional": true
+    }
+  ],
+  "optional_env": [
+    {
+      "name": "MOVIES_DIR",
+      "reason": "影视库路径:Openclaw 可读写路径,在用户首次调用时声明并注入环境变量,后续会话复用,若Docker部署（容器内默认 /media/movies）",
+      "default": "/media/movies"
+    },
+    {
+      "name": "XUNLEI_INBOX",
+      "reason": "迅雷下载暂存路径:Openclaw 可读写路径,在用户首次调用时声明并注入环境变量,后续会话复用,若Docker部署（容器内默认 /media/xunlei-inbox）",
+      "default": "/media/xunlei-inbox"
+    }
+  ],
+  "sub_skills": [
+    "media-lookup/SKILL.md",
+    "media-search/SKILL.md",
+    "downloader-manager/SKILL.md",
+    "media-organizer/SKILL.md"
+  ],
+  "required_env": [
+    {
+      "name": "TMDB_API_KEY",
+      "reason": "media-lookup(TMDB 媒体识别)必填;获取:themoviedb.org/settings/api 申请,免费;在用户首次调用时声明并注入环境变量,后续会话复用"
+    },
+    {
+      "name": "QB_URL",
+      "reason": "qBittorrent WebUI 地址（如 http://127.0.0.1:8888）;qBittorrent下载器,用户需要自行部署后,在用户首次调用时声明并注入环境变量,后续会话复用.与 XUNLEI_SSE_URL 至少配一个",
+      "required_with": ["QB_USER", "QB_PASS"],
+      "anyOf": ["QB_URL", "XUNLEI_SSE_URL"]
+    },
+    {
+      "name": "QB_USER",
+      "reason": "qBittorrent WebUI 用户名;仅在配 QB_URL 时必填",
+      "required_with": ["QB_URL"]
+    },
+    {
+      "name": "QB_PASS",
+      "reason": "qBittorrent WebUI 密码;仅在配 QB_URL 时必填",
+      "required_with": ["QB_URL"]
+    },
+    {
+      "name": "XUNLEI_SSE_URL",
+      "reason": "NAS需安装迅雷,迅雷云盘网页 → 设置 → Cloud MCP 启用,复制 SSE 连接串;与 QB_URL 至少配一个",
+      "anyOf": ["QB_URL", "XUNLEI_SSE_URL"],
+      "optional": true
+    }
+  ]
+}

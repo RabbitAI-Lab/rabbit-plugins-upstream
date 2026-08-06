@@ -1,0 +1,78 @@
+{
+  "skill": "temperature-anomaly-mapping",
+  "skill_version": "1.0.0",
+  "command": "temperature-anomaly-mapping --bbox 116 39 117 40 --synthetic --n-dates 12 --n-years 4 --quiet --output-dir ./_test_cli_anom",
+  "started_at": "2026-08-03T17:10:16.834542Z",
+  "finished_at": "2026-08-03T17:10:16.971784Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "n_dates": 12,
+    "n_years": 4,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_anom\\anomaly.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 2,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_anom\\anomaly_class.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_anom\\timeseries.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "period": 12,
+    "n_frames": 48,
+    "latest_mean_anomaly": 1.7465860843658447,
+    "latest_mean_std_anomaly": 0.5651232004165649,
+    "latest_warm_fraction": 0.469970703125,
+    "latest_cold_fraction": 0.134521484375
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "temperature-anomaly-mapping"
+  },
+  "error": null
+}

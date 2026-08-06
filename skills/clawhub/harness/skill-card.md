@@ -1,41 +1,61 @@
-## Description: <br>
-Harness guides agents through stable LLM workflows with pipeline sequencing, guardrail checks, and bounded recovery from verification failures. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Harness coordinates stable agent workflows by enforcing clarify-ground-plan-generate-verify pipelines, guardrails for scope and destructive actions, and bounded recovery from verification failures.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent operators use Harness to structure autonomous or headless LLM workflows so intent is clarified, source truth is checked, execution stays in scope, and verification failures are handled with bounded retry or escalation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Configured pipeline, guard, or recovery receivers can change the actual execution behavior. <br>
-Mitigation: Review any custom receivers before deployment and confirm their security posture matches the intended workflow. <br>
+## Use Case:
 
+Developers and engineers use this skill to wrap autonomous or repeated agent workflows with clarification, grounding, scoped execution, verification, and recovery behavior.
 
-## Reference(s): <br>
-- [Harness Skill Page](https://clawhub.ai/drumrobot/skills/harness) <br>
-- [Pipeline Guide](pipeline.md) <br>
-- [Guardrails Guide](guardrails.md) <br>
-- [Recovery Guide](recovery.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with structured workflow reports and optional delegated code or shell-command outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May delegate planning and implementation to configured pipeline receivers; retry budget defaults to 2.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata, skill frontmatter, and changelog) <br>
+Risk: Broad trigger phrases may activate the harness for general workflow-stability requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit topic names such as pipeline, guardrails, or recovery when invoking the skill.
+
+Risk: Delegated planning or generation steps can propose or execute actions outside the user's intended scope.
+
+Mitigation: Apply the built-in scope check before dispatched stages and verify the final diff against the stated request and plan.
+
+Risk: Destructive commands or state-changing operations could be requested during an autonomous workflow.
+
+Mitigation: Require explicit, single-use authorization that names the exact operation and target before allowing denylisted actions.
+
+## Reference(s):
+
+- [Harness Skill Page](https://clawhub.ai/drumrobot/skills/harness)
+- [Harness Overview](artifact/SKILL.md)
+- [Pipeline Guide](artifact/pipeline.md)
+- [Guardrails Guide](artifact/guardrails.md)
+- [Recovery Guide](artifact/recovery.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with checklists, reports, clarifying questions, command examples, and configuration options.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce guardrail block reports, scope drift reports, verification reports, retry traces, and fallback summaries.]
+
+## Skill Version(s):
+
+0.1.1 (source: frontmatter, release evidence, changelog released 2026-08-05)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

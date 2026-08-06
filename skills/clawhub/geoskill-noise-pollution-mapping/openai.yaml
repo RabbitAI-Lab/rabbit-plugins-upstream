@@ -1,0 +1,17 @@
+name: geoskill-noise-pollution-mapping
+display_name: 噪声污染制图
+description: |
+  交通噪声衰减模型制图 dB(A) 等级：FHWA 简化声源级、点/线源几何发散、建筑屏障衰减与地面吸收。Maps traffic noise levels with distance attenuation, building shielding and terrain. 输出噪声级 GeoTIFF + 参数 JSON。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-noise-pollution-mapping.py
+runtime: python>=3.9
+tags:
+  - ai
+  - dem
+  - extraction
+  - gis
+  - network
+  - raster
+  - remote-sensing
+  - terrain

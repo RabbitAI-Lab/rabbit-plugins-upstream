@@ -1,0 +1,15 @@
+name: geoskill-sandstorm-source-identification
+display_name: 沙尘暴源区识别
+description: |
+  低NDVI裸土风速起沙阈值融合的沙尘暴源区识别
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-sandstorm-source-identification.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - vegetation

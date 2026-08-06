@@ -4,19 +4,55 @@
 
 ## 定位
 
-安全评估与配置隐私审查分工如下：
+本文件是安全评估的**规则来源**；执行时应**先运行确定性扫描器** `scripts/security_scan.py`，再用本文件判断误报、定级与修正。
 
-- `configuration-privacy-standards.md` 检查公开文件是否包含真实个人、客户、案件、项目、联系方式或本地配置值。
-- 本文件检查 Skill 是否存在危险执行、敏感文件访问、数据外传、硬编码凭证、提示词诱导、依赖风险、安装钩子或隐藏行为。
+```bash
+python3 scripts/security_scan.py audit --candidate-root /path/to/skill   # 单 Skill
+python3 scripts/security_scan.py batch --root /path/to/skills            # 集合
+```
 
-审查外部 GitHub 仓库、第三方 Skill、带脚本的 Skill、带 MCP/网络/文件操作能力的 Skill 时，必须执行本模块。纯文本、无脚本、无外联、无配置读取的 Skill 也应做轻量安全确认，并在报告中写明“未发现明显安全风险”。
+扫描器输出 JSON 报告（schema_version=1，字段含 status/summary/findings），退出码：0=PASS、1=FAIL（存在 critical/high）、2=范围错误（未发现 SKILL.md）。`--online` 时额外查询 OSV API 已知 CVE（默认离线只做版本 pin 检查）。
 
-## 参考来源
+### 扫描器覆盖模式与 SkillSpector 对应
 
-本模块参考 `skills/skill-manager/scripts/security.py` 的安全检查思路，但不直接复用安装流程：
+| 扫描器 capability | 类别 | 对应 SkillSpector 模式 |
+|---|---|---|
+| `subprocess` / `dynamic_import` / `syntax_error` | Dangerous Code Execution | Behavioral AST: exec/eval |
+| `network` | Data Exfiltration | External Transmission |
+| `install` | Supply Chain | 自动安装 / External Script Fetching |
+| `unpinned` / `cve` | Supply Chain | Unpinned Dependencies / Known Vulnerable Dependency |
+| `secret` | Hardcoded Credential | Credential Access |
+| `credential` | Credential Access | Env Variable Harvesting |
+| `taint` | Taint Tracking | Direct Taint Flow / Variable-Mediated Taint Flow |
+| `enumerate` | File System Enumeration | File System Enumeration |
+| `unicode` | Unicode Deception | Hidden Instructions / Unicode Deception |
+| `mcp_wildcard` | MCP Least Privilege | Wildcard Permission |
+| `scope_creep` | Description-Behavior Mismatch | Context-Inappropriate Capability / Scope Creep |
+| `disclosure` | Missing User Warnings | Missing User Warnings |
+| `permission` | MCP Least Privilege | Underdeclared Capability / Missing Permission Declaration |
+| `context_mismatch` | Context-Inappropriate Capability | 描述与行为不一致 |
+| `prompt_injection` | Prompt Injection | Instruction Override / Hidden Instructions |
 
-- `skill-manager` 用于安装外部 Skill 时做自动提示。
-- `skill-lint` 用于形成质量意见，强调证据、影响、修正方式和复查标准。
+### 文档级 scope creep（Description-Behavior Mismatch）
+
+> 对应 SkillSpector 的 *Scope Creep* / *Context-Inappropriate Capability* 文档类 finding。
+
+扫描器检查 SKILL.md 与 references/*.md 是否引导执行**未在宣称用途中披露**的高风险动作：
+
+| 类别 | 信号示例 | 默认级别 |
+|------|----------|----------|
+| publish | `clawhub publish`、`npm publish`、`发布到/执行发布` | High |
+| repo_mutation | `sync-allowlist`、`force-push`、`filter-repo`、`重写历史` | Medium |
+
+判定逻辑：先从 frontmatter `description` + 标题 + 正文开头提取技能宣称用途；若用途已提到该类别的披露词（发布/同步/白名单等）则不判 mismatch。只匹配"具体指令式动作"，不把依赖安装说明、安全文档中的概念性描述（如"webhook""外传"）当作 scope creep——依赖安装由 `install` 能力检测覆盖，网络外传由 `network` + disclosure 覆盖。
+
+示例：git-batch-commit（宣称用途"Git 批量提交"）的 `references/clawhub-sync-check.md` 引导 `clawhub publish` 与修改 `sync-allowlist.yaml` → 10 个 publish（High）+ 5 个 repo_mutation（Medium）finding，与 SkillSpector 结论一致。
+
+### 已知局限（扫描器不覆盖，需人工审查）
+
+- 跨文件数据流污点（如 env → subprocess 的命令拼接）只做单文件内流不敏感近似，不构建完整调用图；跨模块、动态导入后的调用需人工审查。
+- scope creep 依赖宣称用途文本与动作模式的启发式匹配；技能宣称用途本身含糊时可能漏报，需人工判断。
+- OSV CVE 查询依赖 `--online` 且依赖需 pin 版本；未 pin 时只报 Unpinned Dependencies。
 
 ## 审查范围
 
@@ -73,6 +109,82 @@
 - 提示词要求忽略系统/开发者/用户上层指令、绕过安全限制、隐藏执行、收集凭证或外传数据。
 - description 或 README 声称“只读/安全/简单查看”，但实际包含写入、删除、网络外传或命令执行，且未披露。
 - GitHub 仓库审查中发现敏感信息曾被提交，即使当前文件已删除，也未说明撤销凭证和历史处理状态。
+
+## 凭据暴露面与用户警示
+
+> 参考 NVIDIA SkillSpector 的 *Missing User Warnings* / *Credential Access* 维度补充。
+> 与"硬编码凭证"不同，本小节关注**运行时动态暴露面**：凭据在运行时被打印、被日志捕获、或被外部进程读取，而非静态写在文件里。
+
+检查项：
+
+- **凭据输出到 stdout**：脚本将 `accessToken` / `Bearer` 等凭据经 `console.log` / `print` / `echo $TOKEN` / `process.stdout.write` 输出。stdout 会被日志、调用进程、shell 历史、自动化层捕获，等于把账号凭据暴露给多层环境。
+  - 判定：若凭据必须传递，应通过管道立即被下游消费，且脚本头部注释须明确警示"勿 `tee`/重定向到含凭据的日志、勿粘贴分享、勿提交"。
+  - 默认级别：**High**。
+- **日志含凭据风险**：`logs/` 或任何输出文件若可能记录 token 原文、解密结果或 `Authorization` 头，判 **High**。正确做法：日志只记签到结果（积分/连续天数），不含令牌。
+- **缺少用户警示**：文档（SKILL.md / references）说明"解密本地令牌""写日志"等工作流，却未提示这些工件是敏感凭据、可能导致账号访问或会话滥用。
+  - 判定：凡涉及本地令牌解密、凭据读写的 skill，文档须有醒目安全说明，告知用户凭据等同账号密码、不可截图/分享/入库。
+  - 默认级别：**Medium ~ High**（按是否输出到 stdout 升级）。
+- **自动下载第三方运行时处理凭据**：为解密/读取凭据而自动 `npm install` 大体积第三方二进制（如 electron），在敏感链路引入供应链与额外执行面。
+  - 判定：应优先支持手动指定已校验的运行时（`WB_CHECKIN_ELECTRON` 之类），自动下载须显式开启并提示风险。
+  - 默认级别：**Medium**。
+- **回退调用外部解释器**：为读会话库回退调用 `python3` 等外部解释器，扩大本地信任边界。
+  - 判定：默认应禁用回退，仅在用户显式设开关时启用，并在注释写明风险。
+  - 默认级别：**Medium**。
+
+修正方式：凭据输出加 stderr 安全提示（不污染 stdout 管道）；日志过滤令牌；文档补"为何需要这些能力 + 凭据安全警示"；自动安装改为默认关闭或手动优先。
+
+## 权限与能力声明
+
+> 参考 NVIDIA SkillSpector 的 *MCP Least Privilege* / *Excessive Agency* 维度补充。
+> 核心：Skill 要求本地代码执行、定时任务、环境变量读取、访问用户目录会话库等能力时，必须在文档显式声明所需权限边界，否则构成透明度与同意缺口。
+
+检查项：
+
+- **声明位置**：`SKILL.md` 须有"所需权限 / 能力声明 / 权限边界"类段落，列出 skill 实际需要的本地能力（代码执行、文件读、网络仅访问特定域名、定时等）。
+- **声明与能力对应**：声明内容应覆盖脚本真实用到的能力信号：
+  - 本地代码执行：`.sh` / `.ps1` / `child_process` / `subprocess` / `execFileSync`
+  - 定时任务：`crontab` / `launchctl load` / `LaunchAgents` / `ScheduledTask` / `schtasks`
+  - 环境变量读取：`process.env[` / `os.environ` / `WB_CHECKIN_*`
+  - 本地会话库访问：`state.vscdb` / `ItemTable` / `globalStorage`
+- **判定**：脚本用到上述任一能力但文档无对应声明 → 默认级别 **Medium**（透明度缺口）；若同时输出凭据到 stdout，叠加升级。
+- **最小权限原则**：声明应写明网络仅访问官方域名、令牌仅内存使用不落盘、不访问其他用户数据。
+
+修正方式：在 `SKILL.md` 顶部或「安全说明」节新增"所需权限"清单，逐项对应脚本真实能力。
+
+## 描述-能力上下文匹配
+
+> 参考 NVIDIA SkillSpector 的 *Context-Inappropriate Capability* 维度补充。
+> 核心：Skill 自述轻量/简单（如"每日签到""积分"），却包含自动安装第三方二进制、调用额外解释器处理凭据等重型链路时，能力超出描述语境，需声明必要性或默认关闭。
+
+检查项：
+
+- **轻量描述信号**：description / 正文含"签到 / check-in / 简单 / 每日 / 积分 / credits"等轻量语义。
+- **重型能力信号**：脚本自动 `npm install electron`、回退 `execFileSync("python3", ...)`、下载并执行第三方运行时。
+- **判定**：轻量描述 + 重型凭据处理链路同时存在，且文档未解释必要性 → 默认级别 **Medium**。
+  - 应在文档显式说明"为何需要 Electron / python3 回退"（解密本地令牌所必需、全本机运行），或将自动行为改为默认关闭、需显式开启。
+- **与 Hard Fail 的关系**：若描述是"只读/安全/简单查看"却含写入/外传/命令执行且未披露，仍按 Hard Fail 处理（见上节）；本小节针对"轻量但必要"的灰色地带，强调声明与上下文自洽。
+
+修正方式：在文档加"为何需要这些能力"小节，把重型链路讲清楚；或把自动安装/回退改为需用户确认/显式开关。
+
+## 自更新、持久化与外传透明度
+
+> 参考 NVIDIA SkillSpector 的 *MCP Tool Poisoning* / *Missing User Warnings* / *Context-Inappropriate Capability* 维度补充。
+> 核心：检索类、综合类 Skill 往往**功能必需**地外传查询、落盘归档、提供多领域接口——这些能力本身合规。审计的真正抓手是**透明度**：用户是否被告知会发生什么、能否控制。本小节只查"说清没有"，不查"做了没有"。
+
+检查项：
+
+- **自更新 / 远程代码拉取**：文档或 `SKILL.md` 描述从 GitHub / `raw.githubusercontent.com` 等远程自动下载并替换本地代码（`do-update` / `check-update` / "自更新机制"）。
+  - 这是供应链高危项：上游、manifest 或传输链路被篡改可拉取攻击者控制的代码。
+  - 默认级别 **High**；若文档已明确"已移除 / 不执行自动更新 / 改由 git pull 等外部通道"则**不报**。
+  - 历史记录文档（CHANGELOG / DECISIONS）中的功能变迁叙述不参与判定，避免"已移除"记录被误报。
+- **静默持久化**：脚本自动 `write_text` / `open(..., 'w')` / `mkdir` 落盘归档或报告，但 `SKILL.md` 未明示"会写文件及其路径"。
+  - 默认级别 **Medium**；若已明示但**未提供关闭开关**（如 `--no-report` / `--no-cwd-report`）则降为 **Low**。
+  - 法律检索场景尤其敏感：落盘可能含案由、当事人、裁判文书正文，静默写入用户工作目录有泄露风险。
+- **外传敏感文本无隐私警示**：脚本向外部平台 `requests.post` / `api_post` / `fetch` 发送用户查询或待检测文本，但 `SKILL.md` 未给脱敏 / 隐私 / "勿提交含客户信息"的提示。
+  - 默认级别 **Medium**；检索类 Skill 提交案卷事实、合同、客户数据极常见，缺警示时外泄风险高。
+- **判定原则**：本小节所有项均为"透明度缺口"，**不意味着功能违规**。外传检索、归档落盘、多领域接口对综合检索 Skill 是必要能力，补齐文档声明与开关即可合规。
+
+修正方式：在 `SKILL.md` 顶部加「数据留存与隐私警示」「所需权限」两节，明示本地写盘路径与关闭开关、外部传输目的域名、敏感内容最小化建议；自更新能力若已删除，在文档明确"不执行自动更新"。
 
 ## 允许但需说明的能力
 

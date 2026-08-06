@@ -1,5 +1,5 @@
 ## Description: <br>
-Captures and retrieves PR-review findings in memory palaces for storing architectural decisions, recurring patterns, standards, and lessons for future reference. <br>
+Captures and retrieves PR-review findings in memory palaces for future architectural decisions, patterns, standards, and lessons. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,29 +11,29 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and reviewers use this skill after PR review to decide which findings should become persistent project knowledge and where to store them in a memory palace. <br>
+Developers and engineering teams use this skill after PR reviews to capture durable review findings, classify them into project memory rooms, and retrieve relevant past decisions during future work. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can preserve PR review knowledge such as security findings, design decisions, PR numbers, and participant names. <br>
-Mitigation: Use it only in projects where persistent internal knowledge capture is acceptable, and review captured entries before storing or sharing them. <br>
+Risk: The skill can persist private PR review context, including participant names, file references, findings, and architectural decisions. <br>
+Mitigation: Use it only in projects where searchable retention of that review context is acceptable; define retroactive-capture rules and periodically prune outdated or confidential entries. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-memory-palace-review-chamber) <br>
-- [ClawDIS homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/memory-palace) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with examples, checklists, tables, and command snippets] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with structured examples, command snippets, and configuration guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces structured review-capture guidance rather than executable code.] <br>
+**Other Properties Related to Output:** [Produces review-memory capture and retrieval guidance for an agent; does not itself execute repository changes.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

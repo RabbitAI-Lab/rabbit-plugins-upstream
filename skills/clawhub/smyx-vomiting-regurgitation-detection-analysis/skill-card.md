@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes indoor fixed-camera pet video to detect vomiting or regurgitation behavior, vomitus appearance, event timing, frequency, and report history. <br>
+Detects pet vomiting or regurgitation behavior from fixed indoor camera video and returns structured observations about event timing, frequency, motion cues, vomitus characteristics, and report links. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and pet-care operators use this skill to review indoor pet camera footage for visual signs of vomiting or regurgitation and to retrieve prior cloud reports. Results are behavioral observations and should not be treated as veterinary diagnosis. <br>
+External pet owners, multi-pet households, senior pet caregivers, and animal-hospital staff can use this skill to analyze indoor pet videos for visual vomiting or regurgitation indicators and retrieve historical structured reports. The outputs are behavior observations, not medical diagnoses. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive indoor pet camera footage and report data may be sent to a remote service for analysis and history lookup. <br>
-Mitigation: Install only after confirming user consent, service trust, data retention expectations, and whether the uploaded media is appropriate for cloud processing. <br>
-Risk: The skill can silently create or reuse cloud identity state and persist local tokens. <br>
-Mitigation: Review account creation, token storage, and cleanup behavior before deployment; restrict execution to environments where that identity behavior is acceptable. <br>
-Risk: Broad automatic triggers can initiate remote analysis or report retrieval when users provide pet footage or ask for historical reports. <br>
-Mitigation: Require clear operator confirmation for sensitive media workflows and document when remote calls occur. <br>
+Risk: Indoor pet videos may contain sensitive household imagery and are sent to external services for analysis. <br>
+Mitigation: Use the skill only when cloud processing is acceptable, limit submissions to necessary footage, and avoid videos that reveal unrelated private spaces or people. <br>
+Risk: Analysis activity is associated with an automatically managed local or cloud identity. <br>
+Mitigation: Review the identity and account model before installation and use an environment where persisted identity data can be managed or removed. <br>
+Risk: Historical reports may be stored and retrieved from cloud services. <br>
+Mitigation: Confirm that report retention and deletion controls meet the deployment's privacy requirements before using history lookup features. <br>
+Risk: The skill provides visual behavior observations that may be mistaken for veterinary diagnosis. <br>
+Mitigation: Present results as observational support only and escalate frequent, bloody, or severe vomiting indicators to a qualified veterinarian. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-vomiting-regurgitation-detection-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-vomiting-regurgitation-detection-analysis) <br>
+- [API documentation](references/api_doc.md) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with report links] <br>
+**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
+**Output Format:** [Markdown or JSON structured analysis report with observations, risk prompts, recommendations, history tables, and report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the analysis result to a user-selected output file.] <br>
+**Other Properties Related to Output:** [May include cloud-hosted report links and historical report query results.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter states 1.0.7) <br>
+1.0.6 (source: server release metadata; artifact frontmatter lists 1.0.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

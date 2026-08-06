@@ -1,0 +1,20 @@
+{
+  "method": "ihs",
+  "scale": 4,
+  "n_bands": 3,
+  "ms_shape": [
+    3,
+    64,
+    64
+  ],
+  "pan_shape": [
+    1,
+    256,
+    256
+  ],
+  "output_shape": [
+    3,
+    256,
+    256
+  ]
+}

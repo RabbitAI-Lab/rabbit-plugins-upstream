@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-market-research"
+  short_description: "按行业、地区、客户和时间边界开展结构化市场与行业研究"
+  default_prompt: "使用 $zayn-market-research 调研指定市场的需求、竞争、机会与风险。"

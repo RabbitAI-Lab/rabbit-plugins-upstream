@@ -1,0 +1,22 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Distribution / packaging
+dist/
+build/
+*.egg-info/
+
+# macOS
+.DS_Store
+
+# IDE
+.vscode/
+.idea/
+
+# Local config / secrets
+*.log
+
+# Skill-specific local data (kept out of repo, not user data)
+# mood_diary.json is user data, not gitignored

@@ -1,7 +1,7 @@
 ---
 name: pricewin-hotel-deal-finder
 description: "Find the cheapest hotel deal by comparing live prices across Booking.com, Agoda, Google Hotels, and OpenTravel for any city worldwide and any travel dates — one command returns ranked best-value, cheapest, and quality picks with direct booking links, all normalized to USD. Use whenever someone asks for hotel prices, hotel deals, the cheapest room or rate, best hotel rates, a hotel price comparison, or which OTA is cheaper — e.g. 'is Booking or Agoda cheaper for Tokyo', 'find me a hotel in Bangkok under $100', 'compare hotel prices for 12–15 Aug', 'cheapest hotel near Shinjuku'."
-version: 1.1.2
+version: 1.1.3
 author: PriceWin
 platforms: [linux, macos, windows]
 tags: [hotel-price-comparison, compare-hotel-prices, cheapest-hotel, cheapest-hotels, hotel-deals, booking-vs-agoda, best-hotel-rates, best-rates, hotel-search, hotel-booking, price-comparison, booking-com, agoda, google-hotels, opentravel, ota, hotel, hotels, travel, travel-deals, trip-planning, accommodation, deals]
@@ -175,5 +175,12 @@ Runs locally, needs no API keys, and collects no personal data — the only data
 sent out is the search query (city, dates, guests). Scraped hotel text is treated
 as untrusted: `sanitizeText()` in `bin/search.js` strips control/zero-width/bidi
 and markdown-control characters before any of it reaches model output, and booking
-links are restricted to `http(s)`. Full disclosure of commands run, downloads, and
-network egress is in [`SECURITY.md`](./SECURITY.md).
+links are restricted to `http(s)`.
+
+The local browser daemon is **loopback-only, token-authenticated** (a per-run
+token in a `0600` state file), rejects non-loopback `Host` headers against DNS
+rebinding, and keeps the **Chromium sandbox enabled** — `--no-sandbox` is used
+only where it cannot work (root on Linux, or explicit `PRICEWIN_NO_SANDBOX=1`).
+
+Full disclosure of commands run, downloads, and network egress is in
+[`SECURITY.md`](./SECURITY.md).

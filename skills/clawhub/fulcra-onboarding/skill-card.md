@@ -11,38 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill to connect to Fulcra, authenticate the Fulcra CLI or MCP connector, and choose a task-driven or recommended onboarding path for Fulcra capabilities. <br>
+External users and their agents use this skill to connect to Fulcra, authenticate with the Fulcra CLI or MCP connector, choose a useful onboarding direction, and create an initial view, coordination structure, or project dashboard. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Authentication or CLI actions may connect an agent to sensitive Fulcra life data. <br>
-Mitigation: Require explicit user consent before checking authentication state or initiating login, and present the authentication URL and user code directly to the user. <br>
-Risk: Fulcra CLI capabilities can access sensitive data, create schemas, and manage remote files when directed. <br>
-Mitigation: Review prompts and proposed commands before approval, especially actions involving data access, schema creation, file upload, or remote file management. <br>
-Risk: Network-restricted environments may fail during CLI authentication. <br>
-Mitigation: Use the documented MCP connector path when CLI network access is unavailable. <br>
+Risk: The skill connects an agent to a Fulcra account that may contain sensitive personal data such as health, location, calendar, activity, and agent artifacts. <br>
+Mitigation: Use it only when the user wants Fulcra account access, request explicit consent before authentication or sensitive data access, and keep actions scoped to the user's stated goal. <br>
+Risk: Authentication uses a browser login flow and can store Fulcra credentials on the local filesystem. <br>
+Mitigation: Use the documented device-code flow, keep the device code private, and make local credential storage clear before completing setup. <br>
+Risk: The skill may create persistent records or upload local files to Fulcra. <br>
+Mitigation: Confirm with the user before uploading files or creating persistent records, and explain what will be stored in Fulcra. <br>
 
 
 ## Reference(s): <br>
-- [Fulcra Onboarding on ClawHub](https://clawhub.ai/fulcra/skills/fulcra-onboarding) <br>
-- [Fulcra publisher profile](https://clawhub.ai/user/fulcra) <br>
-- [Fulcra CLI reference](references/fulcra-cli.md) <br>
-- [Fulcra onboarding authentication reference](references/fulcra-onboarding-auth.md) <br>
-- [Fulcra MCP connector documentation](https://fulcradynamics.github.io/developer-docs/mcp-server/) <br>
-- [Fulcra Context iOS app](https://apps.apple.com/app/id1633037434) <br>
+- [Fulcra CLI](references/fulcra-cli.md) <br>
+- [Fulcra Getting Started: Authentication](references/fulcra-onboarding-auth.md) <br>
+- [Fulcra MCP documentation](https://fulcradynamics.github.io/developer-docs/mcp-server/) <br>
 - [Context Web](https://context.fulcradynamics.com/) <br>
+- [Fulcra Cookbook](https://www.fulcradynamics.com/resources/cookbook) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands and links] <br>
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
+**Output Format:** [Conversational Markdown with links, inline shell commands, and setup guidance.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompts for user consent before authentication and presents task-driven next steps.] <br>
+**Other Properties Related to Output:** [May guide browser-based authentication, Fulcra CLI setup, data views, project files, and persistent Fulcra records with user consent.] <br>
 
 ## Skill Version(s): <br>
-0.1.7 (source: release evidence) <br>
+0.2.0 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

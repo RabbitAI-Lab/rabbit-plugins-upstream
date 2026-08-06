@@ -1,0 +1,21 @@
+{
+  "name": "qianwen-cdp",
+  "version": "1.0.0",
+  "description": "原生 Chrome DevTools Protocol 驱动千问浏览器（qianwen.exe），复用真实登录态做办公自动化",
+  "main": "qw.cjs",
+  "scripts": {
+    "test": "echo \"no test\""
+  },
+  "keywords": [
+    "qianwen",
+    "qwen",
+    "cdp",
+    "devtools-protocol",
+    "browser-automation",
+    "automation"
+  ],
+  "dependencies": {
+    "ws": "^8.18.0"
+  },
+  "license": "MIT"
+}

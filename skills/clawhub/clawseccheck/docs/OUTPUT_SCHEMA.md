@@ -9,10 +9,12 @@ connectors) may rely on the field names, types, and envelope shapes described he
 - `--lang` / `--lang he` CLI flag removed; output is English-only.
 - No `lang` field in any JSON or SARIF output.
 
-**Stability rule:** field names and top-level envelope shapes are frozen. New
-**optional** top-level fields may be added in any minor release. Fields will not
-be removed or renamed without a major version bump (see `CHANGELOG.md` and
-versioning §6 in `CLAUDE.md`).
+**Stability rule:** top-level field names and envelope shapes are frozen. New
+**optional** top-level fields may be added in any minor release. A top-level field
+will not be removed or renamed without a major version bump (see `CHANGELOG.md` and
+versioning §6 in `CLAUDE.md`). §17 states exactly what "frozen" covers — read it
+before assuming a nested key is part of the contract; notably, the subject keys inside
+`inventory` (§18) track the check taxonomy and are **not** frozen.
 
 ---
 
@@ -27,9 +29,10 @@ versioning §6 in `CLAUDE.md`).
 | `capped` | `bool` | yes | `true` if the score was capped below `raw_score` (e.g. Lethal Trifecta triggered). |
 | `raw_score` | `int` | yes | Score before any cap is applied. Equals `score` when `capped` is `false`. |
 | `cap_severity` | `str \| null` | yes | Severity that drove the score cap (`"CRITICAL"`, `"HIGH"`, …), or `null` when no *scored* FAIL capped the score. `null` alongside `capped: true` means a runtime signal (see `runtime_capped`) drove the cap instead, not a scored FAIL. |
-| `runtime_capped` | `bool` | yes | `true` when a corroborated *runtime* signal — never a config-static finding — capped the score (I-025). The one eligible signal is a trajaudit-style skill/bootstrap indicator match (`--analyze-trajectory`). It never earns or costs an ordinary scored point — this is a hard cap only, applied after any severity-driven cap above. Every runtime-consuming check (`B83`, `B84`, `B85`, `B164`, `B180`, and the `--behavioral`-only `T1`/`T2`/`T3`) can never move the grade any other way, and this stays `false` for all of them. (`B164`'s `exfil_evidence` class was briefly cap-eligible on its same-line arm under an earlier ruling; retracted after four independent adversarial reviews found no sound host/verb gate exists for this tool's own audience — `exfil_evidence` is WARN-only, permanently, same-line or cross-line.) Same "`true` alongside `capped: false`" nuance as `config_blind_capped` applies when nothing else was scorable this run either — see that row. |
+| `runtime_capped` | `bool` | yes | `true` when a corroborated *runtime* signal — never a config-static finding — capped the score (I-025). The one eligible signal is a trajaudit-style skill/bootstrap indicator match (`--analyze-trajectory`). It never earns or costs an ordinary scored point — this is a hard cap only, applied after any severity-driven cap above. `B83`, `B84`, `B85`, `B164` and `B180` can never move the grade any other way, and this stays `false` for all of them. (`B164`'s `exfil_evidence` class was briefly cap-eligible on its same-line arm under an earlier ruling; retracted after four independent adversarial reviews found no sound host/verb gate exists for this tool's own audience — `exfil_evidence` is WARN-only, permanently, same-line or cross-line.) F-154: the `--behavioral`-only `T1`/`T2`/`T3` (plus `B191`) can also never set THIS field `true` — but they gained a SEPARATE cap channel of their own, see `behavioral_capped` below. Same "`true` alongside `capped: false`" nuance as `config_blind_capped` applies when nothing else was scorable this run either — see that row. |
 | `runtime_cap_reason` | `str \| null` | yes | Stable label for the eligible runtime signal that fired, e.g. `"trajaudit indicator match"`. `null` when `runtime_capped` is `false`. |
-| `config_blind_capped` | `bool` | yes | `true` when `openclaw.json` was present but unparseable/unreadable this run (see `config_parse_error` below) and that alone hard-capped the score at the same ceiling a proven CRITICAL FAIL gets (B-306). Without this cap, a config-derived check correctly degrading FAIL/WARN to UNKNOWN (because it could no longer read the config) could otherwise let the grade rise even though the audit saw strictly less evidence, not more. Composes with `cap_severity`/`runtime_capped` — whichever cap is tightest wins; this one takes reporting priority when it is the binding one. **Can be `true` alongside `capped: false`**: when nothing else was scorable this run either (`score`/`raw_score` both `0`), there is nothing for the cap to numerically reduce, but a blind config is still real signal — B-306's follow-up fix (C-135, 2026-07-21) forces `grade: "F"`/`assessable: true` here instead of silently falling back to the neutral `"N/A"` this combination used to produce. |
+| `config_blind_capped` | `bool` | yes | `true` when `openclaw.json` could not actually be read this run — either present but unparseable/unreadable (see `config_parse_error` below, B-306) or wholly ABSENT (`config_found: false`, B-363) — and that alone hard-capped the score at the same ceiling a proven CRITICAL FAIL gets. Without this cap, a config-derived check correctly degrading FAIL/WARN to UNKNOWN (because it could no longer read the config) could otherwise let the grade rise even though the audit saw strictly less evidence, not more — and an absent config is strictly less evidence than an unreadable one, so it must never score better. Composes with `cap_severity`/`runtime_capped` — whichever cap is tightest wins; this one takes reporting priority when it is the binding one. **Can be `true` alongside `capped: false`**: when nothing else was scorable this run either (`score`/`raw_score` both `0`), there is nothing for the cap to numerically reduce, but a blind config is still real signal — B-306's follow-up fix (C-135, 2026-07-21) forces `grade: "F"`/`assessable: true` here instead of silently falling back to the neutral `"N/A"` this combination used to produce. |
+| `config_blind_reason` | `str \| null` | yes | Which config-blind state drove `config_blind_capped`: `"unreadable"` (present but unparseable) or `"absent"` (no config found at all), or `null` when `config_blind_capped` is `false` (B-363). |
 | `assessable` | `bool` | yes | `false` for the distinct "N/A / nothing scorable" state (empty / all-UNKNOWN / all-advisory config, and neither `config_blind_capped` nor `runtime_capped` fired) — lets a consumer tell a real `F` apart from a not-assessable `"N/A"` config. `true` for every normal audit, **and also** when nothing else was scorable but `config_parse_error`/a corroborated runtime signal fired: B-306 forces a real `grade: "F"` (`score: 0`) in that case rather than falling back to the neutral `"N/A"` — a blind config or corroborated runtime evidence is real, alarming signal, never "nothing known". |
 | `trifecta` | `str` | yes | Lethal Trifecta sub-score expressed as `"<n>/3"` (e.g. `"2/3"`). `"?/3"` means check A1 did not run. |
 | `findings` | `array[Finding]` | yes | All check results. See §2. |
@@ -44,12 +47,27 @@ versioning §6 in `CLAUDE.md`).
 | `audited_config_path` | `string \| null` | yes | Absolute path of the config file this run actually read — every finding in the payload describes this file and only this file. May be a legacy `clawdbot.json`, which OpenClaw's resolver prefers when it exists. When `config_found` is `false` this still names the canonical path that was looked for. Compare it against check `B183`, which reports whether OpenClaw's own resolver (`OPENCLAW_CONFIG_PATH` / `OPENCLAW_HOME` / `OPENCLAW_STATE_DIR`) selects a different file. `null` only when no context was supplied to the renderer. |
 | `config_parse_error` | `bool` | yes | `true` when `openclaw.json` was present but could not be parsed into a config object (syntax error, size-cap truncation, or a non-object top level). A gating consumer should treat `true` as "scan incomplete", not a clean result — the run is UNKNOWN-heavy. A valid empty `{}` config is `false`. |
 | `config_symlink_escapes_home` | `bool` | yes | `true` when `openclaw.json` is a symlink whose target leaves its config directory AND that target is a readable regular file owned by the auditing user — a benign dotfiles layout (stow/chezmoi/yadm/bare-git). The collector follows it and audits the real bytes, so this is NOT a blind config: `config_parse_error` stays `false` and the run is never `config_blind_capped` for this reason. Lets a consumer distinguish a safely-relocated config from a genuinely dark one. `false` on every normal (non-symlinked, or in-directory-symlinked) run. |
-| `degraded_capped` | `bool` | yes | `true` when a check that crashed or timed out this run (`Finding.id` prefixed `"ERR:"`) alone hard-capped the score at the same ceiling a proven CRITICAL FAIL gets (B-313). Same shape as `config_blind_capped` but at check-granularity instead of config-granularity: a degraded check's own would-be verdict is unknowable, so the sound worst-case assumption is "cannot rule out a CRITICAL". Composes with `cap_severity`/`runtime_capped`/`config_blind_capped` — whichever cap is tightest wins; only `true` when THIS cap was the one that actually lowered the score below what the other caps already produced. |
-| `degraded_count` | `int` | yes | How many checks crashed or timed out this run (`0` when none did) — unconditional, independent of whether `degraded_capped` ended up strictly binding. A consumer should treat any nonzero value as "this grade is incomplete", even when a tighter cap already explains the number on screen. |
+| `degraded_capped` | `bool` | yes | `true` when a check that could not reach a reliable verdict this run alone hard-capped the score at the same ceiling a proven CRITICAL FAIL gets. Two causes compose here: a check the run_all wrapper had to crash/timeout out of (`Finding.id` prefixed `"ERR:"`, B-313), or a check that ran to completion but honestly reported its own UNKNOWN as engine-side — an input it expected to read that turned out unreadable/corrupt/malformed, or a scan-budget escape internal to its own logic (`Finding.engine_degraded == true`, B-399). Neither counts a check whose UNKNOWN means "there was simply nothing to check" (a genuinely absent config/feature) — that case leaves this field untouched. Same shape as `config_blind_capped` but at check-granularity instead of config-granularity: a degraded check's own would-be verdict is unknowable, so the sound worst-case assumption is "cannot rule out a CRITICAL". Composes with `cap_severity`/`runtime_capped`/`config_blind_capped` — whichever cap is tightest wins; only `true` when THIS cap was the one that actually lowered the score below what the other caps already produced. |
+| `degraded_count` | `int` | yes | How many checks could not reach a reliable verdict this run — crashed, timed out, or hit an engine-side-degraded UNKNOWN (see `degraded_capped`) — `0` when none did. Unconditional, independent of whether `degraded_capped` ended up strictly binding. A consumer should treat any nonzero value as "this grade is incomplete", even when a tighter cap already explains the number on screen. |
+| `live_injection_capped` | `bool` | yes | F-155: `true` when a submitted VULNERABLE verdict from a live injection-test harness (`--canary`/`--dryrun`/`--redteam`/`--multiturn`) alone hard-capped the score at the same ceiling a proven CRITICAL FAIL gets — see `--full --judged-bundle`'s `liveTest` bucket (§12). Self-attestation guard: the verdict is produced by the agent UNDER TEST, so a RESISTANT verdict or no submission at all leaves this `false` — never an ordinary scored point, never a reason to raise anything. Composes with `cap_severity`/`runtime_capped`/`config_blind_capped`/`degraded_capped` — whichever cap is tightest wins; only `true` when THIS cap was the one that actually lowered the score below what the other caps already produced. |
+| `live_injection_cap_reason` | `str \| null` | yes | Stable label naming which harness/scenario(s) drove `live_injection_capped`, e.g. `"redteam:PI-01"` — built only from allow-listed tool names and validated scenario ids, never free text from the submission. `null` when `live_injection_capped` is `false`. |
+| `behavioral_capped` | `bool` | yes | F-154: `true` when a fired T1 (behavioral trifecta), T2 (outcome anomaly), T3 (capability drift) or B191 (audit-trail divergence) detector alone hard-capped the score — but ONLY when `--full` ran WITHOUT `--fast` (a plain `clawseccheck` audit, `--full --fast`, and a standalone `--behavioral` run all never set this — `--behavioral` on its own renders its own report and never touches `score` at all; the analysis is deliberately not run automatically for performance/privacy reasons — see `BEHAVIORAL_SIGNAL_CAP`). All four detectors cap at the same MEDIUM-FAIL ceiling — T1's original tighter HIGH ceiling was retracted (B-416): its ingress/sensitive/egress legs are classified by VERB NAME ONLY, no argument/value linkage, so an entirely benign, causally-unrelated tool sequence (e.g. "look something up, then use my own stored credentials, then send a report") satisfies the identical shape a genuine attack chain would, and hard-capping that at the tighter ceiling produced an undiagnosable false positive with no actionable remediation. None of the four ever earns or costs an ordinary scored point (Golden Rule #5) — this is a hard cap only, applied after every other cap above. Composes with `cap_severity`/`runtime_capped`/`config_blind_capped`/`degraded_capped`/`live_injection_capped` — whichever cap is tightest wins; only `true` when THIS cap was the one that actually lowered the score below what the other caps already produced. |
+| `behavioral_cap_reason` | `str \| null` | yes | Stable label naming which behavioral detector(s) drove `behavioral_capped`, e.g. `"T1 behavioral trifecta"` (joined with `"; "` when more than one fired) — never free text. `null` when `behavioral_capped` is `false`. |
 | `config_parse_reason` | `string \| null` | yes | Short diagnostic for why `config_parse_error` is `true` (the raw loader message), OR a note that a dotfiles-style symlink was safely followed when `config_symlink_escapes_home` is `true`. `null` when the config parsed cleanly with no relocation. Never contains a secret or file-content value. |
 | `errors` | `array[str]` | yes | Human-readable collection/parse messages (e.g. the `openclaw.json` parse error). Empty array on a clean run. |
-| `inventory` | `object` | yes | Owner-facing "Inventory by subject" regrouping (System/Agents/Skills/MCP/Channels) of the SAME `findings` above. Purely additive/presentation — never affects `score`/`grade`. See §18. |
+| `inventory` | `object` | yes | Owner-facing "Inventory by subject" regrouping (OpenClaw core/Host machine/Agents/Skills/MCP/Plugins/Channels/Logs & trajectories) of the SAME `findings` above. Purely additive/presentation — never affects `score`/`grade`. See §18. |
+| `skill_sweep` | `object` | only with `--full` | Per-skill vet verdict for every installed skill (the second engine, on top of the audit) — the machine-readable form of `--full`'s printed SKILL SWEEP section. Absent (key not present) on a plain `--json` run without `--full`. Visibility only — never affects `score`/`grade`. See §19. |
 | `scan_receipt` | `str` | yes | Deterministic content-integrity hash over all findings, formatted `"sha256:<64-hex-chars>"`. Same findings set (any order) always yields the same receipt; a changed finding set changes it. Not a security signature — a drift/tamper-evidence checksum for the scan output itself. |
+| `phases` | `array[object]` | only with `--full` | One entry per `--full` pipeline phase (skill sweep, plugin sweep, behavioral, adjudication), in run order. Each entry: `name` (`str`), `status` (`"ran"`/`"skipped"`/`"not_reached"`/`"unavailable"`/`"error"`), `elapsed_s` (`float`, wall-clock — the one non-deterministic value in the payload), `complete` (`bool`, false when the phase could not account for everything it is responsible for), `detail` (`str`, one plain-English sentence), `notScanned` (`array[str]`, every target this phase cannot vouch for). Absent on a plain `--json` run without `--full`. |
+| `complete` | `bool` | only with `--full` | `true` only when every `--full` phase ran and accounted for everything it covers — `false` if any phase was skipped, not reached (pipeline budget exhausted), or errored. Does not affect `score`/`grade`; a truncated `--full` run is reported here and in `notScanned`, never by silently reddening the exit code. Absent without `--full`. |
+| `notScanned` | `array[str]` | only with `--full` | Every target across all `--full` phases that no phase could vouch for, named individually (the union of each phase's own `notScanned`). Absent without `--full`. |
+| `judgePacket` | `array[JudgePacketItem]` | only with `--full` | The same adjudication packet the standalone `--judge-packet` flag produces (see §12) — folded into `--full --json` as the P9 adjudication phase's output instead of requiring a separate invocation. May be an empty array. Absent without `--full`. |
+| `vetPackets` | `array[object]` | only with `--full` | One judge packet per `--vet` target passed alongside `--full` (empty array when none were), each shaped `{"target": str, "targetFingerprint": str, "judgePacket": array[JudgePacketItem]}` — same item shape as `judgePacket` above, scoped per target. Absent without `--full`. |
+| `attestTemplate` | `object` | only with `--full` | Pre-run attestation template — the same structure produced standalone by the attestation self-report path (see `attest.py`), included here so a `--full` consumer does not need a second invocation to get it. Absent without `--full`. |
+| `pluginSweep` | `object` | only with `--full` | Per-plugin vet verdict for every installed plugin (P7), the machine-readable form of `--full`'s printed PLUGIN SWEEP section — same shape as `skill_sweep` above: `no_roots` (`bool`, the installed-plugin index itself could not be read), `no_targets` (`bool`, the index was read but names zero plugins), `complete` (`bool`), `counts` (`object`: `total`/`fails`/`warns`/`safe`/`truncated`/`skipped`), `not_scanned` (`array[str]`). Absent (key not present) when the phase did not run — e.g. `--full --fast`, or a build with no plugin-sweep implementation. Visibility only — never affects `score`/`grade`. |
+| `coveragePage` | `object` | only with `--full` | Per-subject (8-subject taxonomy) scanned-vs-total, every gap named rather than merely counted — a different question from `inventory`'s "what did we find". See §20. |
+| `secondOpinion` | `array[object]` | only with `--full --judged-bundle <file>` | One row per borderline-band item, annotated with a submitted judge verdict when the bundle supplied one: `finding_id` (`str`), `target` (`str`), `engine_disposition` (`str`), `judge_verdict` (`str` or `null` — unreviewed items still appear), `annotation` (`str`, human-readable). Advisory only — annotates an existing finding, never alters `score`/`grade`/`findings`. Absent unless a judged bundle was supplied. |
+| `vetSecondOpinion` | `array[object]` | only with `--full --judged-bundle <file>` carrying a non-empty `vetJudged` array | F-152: the escalate-only counterpart to `secondOpinion` above, for the bundle's SEPARATE `vetJudged` bucket (untrusted content swept by the skill/plugin sweeps) rather than the user's own config. One row per vet-target finding that was actually ESCALATED (rows with no status change are omitted — an empty array means "verdicts were submitted, nothing escalated", not "nothing was submitted"): `finding_id` (`str`), `target` (`str`, the swept target's bare name), `engine_disposition` (`str`, the pre-escalation status), `judge_verdict` (`str`, the POST-escalation status — never a field named `verdict`, to avoid implying it echoes the submitted `SAFE`/`SUSPICIOUS`/`DANGEROUS` value verbatim), `annotation` (`str`, human-readable). Escalate-only and per-target-fingerprint-bound, exactly like the standalone `--vet-judged` path (§15) this reuses: a row's underlying finding can only ever rank higher than the deterministic engine already ranked it, never lower, and a `vetJudged` entry is matched to a target ONLY by that target's own `targetFingerprint` (C-135) — an entry whose fingerprint matches no currently swept target is dropped wholesale, never applied to a different target as a fallback. Never alters `score`/`grade`/the top-level `findings` array — those describe the user's OWN config, which a vet target's own escalated pool never touches. Absent unless the bundle's `vetJudged` array was non-empty. **Includes the three always-offered C-255 pre-install prose-attestation ids** (`ATTEST-PROSE-MISMATCH`/`ATTEST-PROSE-INJECTION`/`ATTEST-PROSE-SOCIAL-ENG`) when a SUSPICIOUS/DANGEROUS verdict creates a brand-new finding for one — `engine_disposition` reads `"UNKNOWN"` for that row (there was no pre-existing finding at all, matching the `engine_disposition: "UNKNOWN"` the judge packet item itself already carried — see §12's `redacted_evidence` note for these ids) and `judge_verdict` reads `"WARN"` (the safety ceiling these three ids are capped at — never `"FAIL"`, since they carry zero independent deterministic signal). The join binding a packet item to its row is by `finding_id`, not position, precisely so this always-offered, no-prior-finding case is never structurally excluded. |
 
 ### Skeleton
 
@@ -63,8 +81,13 @@ versioning §6 in `CLAUDE.md`).
   "runtime_capped": false,
   "runtime_cap_reason": null,
   "config_blind_capped": false,
+  "config_blind_reason": null,
   "degraded_capped": false,
   "degraded_count": 0,
+  "live_injection_capped": false,
+  "live_injection_cap_reason": null,
+  "behavioral_capped": false,
+  "behavioral_cap_reason": null,
   "assessable": true,
   "trifecta": "1/3",
   "findings": [ ... ],
@@ -82,15 +105,20 @@ versioning §6 in `CLAUDE.md`).
   "config_parse_reason": null,
   "errors": [],
   "inventory": {
-    "system": { "status": "FAIL", "findings": ["B2"] },
+    "openclaw": { "status": "FAIL", "findings": ["B2"] },
+    "host": { "status": "WARN", "findings": ["B50"] },
     "agents": { "status": "PASS", "findings": [], "roster": ["(default)"], "attested": false },
     "skills": [ { "name": "pdf", "verdict": "NO KNOWN ISSUE", "status": "PASS", "reasons": [] } ],
     "mcp": [ { "name": "slack", "verdict": "ok", "reasons": [] } ],
-    "channels": { "status": "WARN", "findings": ["B26"], "roster": ["telegram"] }
+    "plugins": { "scanned": false, "rows": [] },
+    "channels": { "status": "WARN", "findings": ["B26"], "roster": ["telegram"] },
+    "logs": { "status": "PASS", "findings": [] }
   },
   "scan_receipt": "sha256:9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08"
 }
 ```
+
+`skill_sweep` is omitted from this skeleton (it appears only under `--full` — see §19).
 
 ---
 
@@ -116,6 +144,7 @@ Shared by `--json` and `--vet` mode.
 | `remediation` | `object` | Paste-ready remediation. Keys: `commands` (`array[str]`) and `config` (`array[object]`). |
 | `evidence` | `array[str]` | Supporting evidence strings (sanitised; no raw secrets). May be empty. |
 | `surface` | `str` | OpenClaw surface slug this check belongs to (e.g. `"gateway"`, `"tools"`, `"bootstrap"`). `""` for findings not in the CATALOG (e.g. MCP-vet diagnostics). One of the 14 slugs in `catalog.SURFACES` or `""`. |
+| `not_applicable` | `bool` | `true` when the check determined its SURFACE does not exist on this host (e.g. no MCP servers configured at all), as opposed to the surface existing but nothing wrong being found — never true unless `status` is also `"UNKNOWN"`. `false` on every other finding. F-138/B1 landed the field (`Finding.not_applicable` plumbing + the `_surface_absent` predicate); F-139/B2 wired the first emitters — B15, B24, B166, and the MCP-VET "no MCP servers to vet" diagnostic — all gated on "the config was actually read completely and still shows no MCP surface in any known form", never merely "we couldn't tell". Always present (unlike `blast_radius`). |
 | `blast_radius` | `object` | **Only present when `status` is `"FAIL"` and a config context is available** (always true for the real `clawseccheck --json` CLI path; absent in library calls to `render_json()` made without `ctx`). Estimated attacker gain if this finding is exploited. See below. |
 
 ### `blast_radius` object (FAIL findings only)
@@ -172,6 +201,7 @@ item describes a manual configuration step.
   },
   "evidence": ["tools.output.sanitize = false"],
   "surface": "bootstrap",
+  "not_applicable": false,
   "blast_radius": {
     "open_channels": 1,
     "has_exec": true,
@@ -258,8 +288,8 @@ is unavailable.
     }
   ],
   "edges": [
-    {"from": "input", "to": "main"},
-    {"from": "main", "to": "mcp:brave-search"}
+    ["input", "main"],
+    ["main", "mcp:brave-search"]
   ]
 }
 ```
@@ -276,12 +306,15 @@ is unavailable.
 | `can_write_memory` | `bool` | `true` if the node has write access to memory / workspace. |
 | `can_egress` | `bool` | `true` if the node can make outbound network calls. |
 
-### Edge fields
+### Edge shape
 
-| Field | Type | Description |
+Each edge is a 2-element JSON array `[from, to]` — not an object — of source/destination
+node `id` strings.
+
+| Position | Type | Description |
 |---|---|---|
-| `from` | `str` | Source node `id`. |
-| `to` | `str` | Destination node `id`. |
+| `[0]` | `str` | Source node `id`. |
+| `[1]` | `str` | Destination node `id`. |
 
 ---
 
@@ -623,6 +656,34 @@ agent to review and answer. **Read-only and purely additive**: it never re-runs 
 never changes any Finding's status/severity/score, and never contacts an LLM or the
 network itself.
 
+**`--full --json` cross-reference (F-152):** this exact packet is also embedded as the
+top-level `judgePacket` key of a `--full --json` run (§1) — no separate `--judge-packet`
+invocation is needed. Its answers travel back the same way, too: `--full
+--judged-bundle <file>` accepts a `judged` object of verdicts for THIS own-config
+packet (own-config, annotate-only — see §13's `secondOpinion` and its `--full`
+counterpart in §1). The bundle's SEPARATE `vetJudged` array answers the per-target
+`vetPackets` this same `--full --json` run also carries (§1) — the escalate-only
+sibling this packet's own authority rule does not apply to; see §15's own
+`--full`/`--judged-bundle` note below for that path.
+
+**`--full --judged-bundle`'s FOURTH bucket, `liveTest` (F-155):** a separate submission
+channel from the three above — it carries no relation to the audit's own borderline
+band, but reuses the identical bundle file/parsing shape (no second flag, no second
+bound) rather than inventing one. Shape:
+`{"seed": "<string>|omit", "verdicts": [{"tool": "canary"|"redteam"|"dryrun"|"multiturn",
+"id": "<scenario id>", "verdict": "VULNERABLE"|"RESISTANT"}, ...]}`. Self-attestation
+guard: only a `"VULNERABLE"` entry can ever move anything (`live_injection_capped` in
+§1) — a `"RESISTANT"` entry, an unrecognized tool/id/verdict, or an absent bucket has
+ZERO effect, by construction, not by convention (the verdict is produced by the agent
+UNDER TEST, so the asymmetry is load-bearing). `seed` gates recordability, not the cap
+itself: only a bucket carrying a non-empty `seed` string (the same value passed to the
+harness's own `--seed`, making its tokens reproducible) is eligible to be written into
+`~/.clawseccheck/history.jsonl`/`--trend`/the `--monitor` baseline — an unseeded
+(randomly-tokened) VULNERABLE verdict still caps THIS run's grade, but that run is never
+recorded, so a random token cannot manufacture drift across runs. Malformed/forged
+entries are dropped per-entry (never a crash), mirroring `judged`/`vetJudged`'s own
+defensive parsing.
+
 Sources folded into the packet:
 
 - every unsuppressed `UNKNOWN` finding from the audit;
@@ -657,7 +718,7 @@ Sources folded into the packet:
 | `engine_disposition` | `str` | The underlying status: `"WARN"` or `"UNKNOWN"` (this artifact never carries `PASS`/`FAIL` items). |
 | `question` | `str` | Plain-language attestation question for the host agent, ending in the same answer tail the `verdict_schema` beside it declares (`[SAFE / SUSPICIOUS / DANGEROUS + reason]`). |
 | `verdict_schema` | `object` | Fixed answer contract: `{"verdict": ["SAFE", "SUSPICIOUS", "DANGEROUS"], "reason": "free text"}` — exactly the entry shape §13's input contract requires, so a verdicts file written straight from this field is accepted as-is by `--judged` / `--propose-ignore` / `--vet-judged`. (Through v3.56.0 this field wrongly advertised `{"answer": ["yes", "no"], ...}`, which every consumer rejected; `yes`/`no` cannot express the SUSPICIOUS-vs-DANGEROUS distinction the `--vet-judged` escalation ladder depends on, so the packet was corrected to the parser's vocabulary rather than the reverse.) |
-| `safe_facts` | `object` | C-284: engine-extracted structured facts, never copied from prose. Today carries at most one key, `destination_host` (`str`, absent when none) — the hostname of the first URL found in the finding's raw evidence, reduced to bare `[a-z0-9-]`+`.` (no scheme/userinfo/port/path/query/fragment) and length-capped at 100 chars (C-135, 2026-07-24: the DNS protocol's 253-char ceiling was too permissive — several long hyphenated labels chained by dots can still spell a multi-clause directive within it; 100 stays comfortably above any realistic real-world hostname while shrinking that payload budget); anything that fails that shape check is dropped, never truncated. `{}` when no destination could be safely extracted. This exists because `redacted_evidence` deliberately strips content-ring findings down to a location suffix (the matched prose can itself be a jailbreak directive aimed at the judge) — `safe_facts` restores just enough for the judge to check a first-party-endpoint allowlist without reopening that redaction. |
+| `safe_facts` | `object` | C-284: engine-extracted structured facts, never copied from prose. Carries up to two independent keys, each present only when extracted: `destination_host` (`str`) — the hostname of the first URL found in the finding's raw evidence, reduced to bare `[a-z0-9-]`+`.` (no scheme/userinfo/port/path/query/fragment) and length-capped at 100 chars (C-135, 2026-07-24: the DNS protocol's 253-char ceiling was too permissive — several long hyphenated labels chained by dots can still spell a multi-clause directive within it; 100 stays comfortably above any realistic real-world hostname while shrinking that payload budget); anything that fails that shape check is dropped, never truncated. `config_field_paths` (`array[str]`, C-361) — up to 6 distinct `dig()`-style config field paths (e.g. `"gateway.bind"`) recovered from the finding's evidence, used as a fallback when `redacted_evidence` would otherwise carry no location suffix. A config-derived finding routinely populates only `config_field_paths` with no `destination_host` at all. `{}` when neither could be safely extracted. This exists because `redacted_evidence` deliberately strips content-ring findings down to a location suffix (the matched prose can itself be a jailbreak directive aimed at the judge) — `safe_facts` restores just enough for the judge to check a first-party-endpoint allowlist or the actual config field in question, without reopening that redaction. |
 | `corroboration` | `object` | C-285: `{"count": int, "check_ids": [str, ...], "scope": "target"}` — engine-authored, ids-only (no titles/details/evidence/paths). `count`/`check_ids` are the distinct unsuppressed WARN/FAIL check ids sharing this item's own `target` field, across the FULL findings list (not just other packet items); `check_ids` naturally includes this item's own id when its own status is WARN/FAIL, and naturally omits it when the item itself is UNKNOWN (most packet items) — in that case the field reflects purely how much OTHER live signal exists for the same target. `scope: "target"` matches C-252's own measurement unit (`docs/design/severity-separability.md` §5.1: one SkillTrustBench case per subject, not per file) — a lone WARN and a WARN sitting alongside three others on the same target used to be presented identically; C-252 found the co-occurrence count is the strongest signal separating malicious from benign in this engine's own output (monotonic, reaching 100% purity at 4+ distinct checks), stronger than `Finding.confidence`. **Context, not a verdict** — this field never implies a threshold (`count >= N` is not a rule the packet enforces or suggests); `SKILL.md`'s panel guidance says so explicitly. |
 
 ### Skeleton
@@ -898,6 +959,20 @@ is submit a verdict that changes nothing (the escalate-only structure gives it n
 way to make the target look SAFER) — the downside is bounded to "no escalation
 happened," never "a hidden real problem."
 
+**`--full`/`--judged-bundle` cross-reference (F-152).** The same escalate-only cycle
+now also runs INSIDE `--full`, for every target its skill/plugin sweeps already vetted
+— not just a single standalone `--vet` invocation. `--full --json` carries one
+`vetPackets` entry per swept target (§1), each with its own `targetFingerprint`,
+exactly like this section's standalone `targetFingerprint` field. Answer them together
+in one file via `--full --judged-bundle <file>`'s `vetJudged` array — one entry per
+target, each shaped `{"targetFingerprint": str, "verdicts": [...]}` (the SAME
+`verdicts` shape §13 documents) — and the result is `vetSecondOpinion` (§1): one row
+per finding that was actually escalated, rendered in `--full`'s ADJUDICATION section
+alongside the own-config second opinion. The binding, degrade-on-mismatch, and
+escalate-only rules above are unchanged and enforced per target — a `vetJudged` entry
+is matched ONLY by its own `targetFingerprint`, never by name, and a mismatch drops
+that one entry (never a fallback to a different target) rather than the whole bundle.
+
 ---
 
 ## 16. Pre-Install Prose Attestation (C-255)
@@ -979,7 +1054,9 @@ is unaffected by this extension). This is an accepted, disclosed limitation.
 
 ### Frozen (breaking change requires major version bump)
 
-- Top-level field names in all three output modes.
+- Top-level field names in all three output modes. **Only the top level.** A key nested
+  inside a top-level object is frozen only if it is named below — this list is the whole
+  contract, not an illustration of it.
 - `Finding` object field names and their enumerated values (`severity`, `status`, `confidence`).
 - SARIF `$schema` URI, `version`, and the `runs[0].tool.driver` shape.
 - `verdict` enumeration in `--vet` mode.
@@ -998,9 +1075,15 @@ is unaffected by this extension). This is an accepted, disclosed limitation.
 - New check IDs in `findings` or SARIF `rules`.
 - New fields inside `capability_graph` nodes or edges.
 - New fields in `intentAttestationRequests` items.
+- New optional fields on the `Finding` object (§2) — existing field names and their
+  enumerated values stay frozen (F-138/B1 added `not_applicable` this way).
 
 ### Not part of the public contract
 
+- The subject keys inside `inventory` (§18) and `coveragePage` (§20). Both objects are
+  presentation regroupings of `findings`, and their keys follow the check taxonomy: v3.60.0
+  replaced `inventory.system` with `openclaw` + `host` and added `plugins` + `logs`, in a
+  minor release, deliberately. Key off `findings[].id` if you need stability.
 - Text content of `title`, `detail`, `fix`, `why`, `question`, and `message.text`
   fields — these may change to improve accuracy without a version bump.
 - `runs[0].properties.*` SARIF extension fields — present only when context is
@@ -1010,28 +1093,39 @@ is unaffected by this extension). This is an accepted, disclosed limitation.
 
 ---
 
-## 18. `inventory` Object (F-131 — Inventory by Subject, Phase 1)
+## 18. `inventory` Object (F-131 — Inventory by Subject, Phase 1; extended to 8 subjects by F-163)
 
 Owner-facing regrouping of the SAME `findings` (§2) above by the entities an owner
-actually owns — System, Agents, Skills, MCP servers, Channels — instead of the 7
-analyst-facing security families the text report groups by underneath it. Purely
-additive and presentation-only: it never changes `score`, `grade`, or any `Finding`;
-every finding id it lists also appears, unchanged, in the top-level `findings` array.
+actually owns — OpenClaw core, Host machine, Agents, Skills, MCP servers, Plugins,
+Channels, Logs & trajectories — instead of the 7 analyst-facing security families the
+text report groups by underneath it. Purely additive and presentation-only: it never
+changes `score`, `grade`, or any `Finding`; every finding id it lists also appears,
+unchanged, in the top-level `findings` array.
 
-Skills and MCP servers get a **per-instance** verdict (one entry per installed skill /
-configured MCP server, reusing the same scoring paths `--vet <skill>` / `--vet-mcp` use).
-System, Agents, and Channels stay **bucket-level** in Phase 1 — one rolled-up status plus
-the ids of the surface's own FAIL/WARN findings — because no `Finding` carries a
-precise per-instance (e.g. "which channel") attribution yet; that is deferred to a
-possible Phase 2.
+Skills, MCP servers, and Plugins get a **per-instance** verdict (one entry per
+installed skill / configured MCP server / swept plugin, reusing the same scoring
+paths `--vet <skill>` / `--vet-mcp` / the plugin sweep use). OpenClaw core, Host
+machine, Agents, Channels, and Logs & trajectories stay **bucket-level** — one
+rolled-up status plus the ids of the surface's own FAIL/WARN findings — because no
+`Finding` carries a precise per-instance (e.g. "which channel") attribution yet; that
+is deferred to a possible Phase 2.
+
+**F-163 change note**: the old 5-subject shape's `"system"` key is gone, replaced by
+two subjects — `"openclaw"` (OpenClaw's own configuration: gateway, tools, secrets,
+monitoring, hooks, update, sessions) and `"host"` (the host machine: network IDS,
+audit logging, file-integrity monitoring, EDR, native binary PATH). `"plugins"` and
+`"logs"` are new. A JSON consumer keyed on the old 5-key shape must be updated.
 
 | Field | Type | Description |
 |---|---|---|
-| `system` | `object` | Bucket: `{"status": str, "findings": array[str]}`. `status` is the worst status (`FAIL` > `WARN` > `UNKNOWN` > `PASS`) among findings on the system surfaces (gateway, tools, secrets, monitoring, hooks, host, update, sessions); `findings` lists the ids of that bucket's own FAIL/WARN findings. |
-| `agents` | `object` | Bucket, same shape as `system`, plus: `roster` (`array[str]`) — agent names, preferring an attested roster (`--attest`) over the static `agents.list` config, falling back to `["(default)"]`; `attested` (`bool`) — `true` when the roster came from an attestation self-report. |
+| `openclaw` | `object` | Bucket: `{"status": str, "findings": array[str]}`. `status` is the worst status (`FAIL` > `WARN` > `UNKNOWN` > `PASS`) among findings on the OpenClaw-core surfaces (gateway, tools, secrets, monitoring, hooks, update, sessions); `findings` lists the ids of that bucket's own FAIL/WARN findings. |
+| `host` | `object` | Bucket, same shape as `openclaw`, scoped to the `host` surface (network IDS, audit logging, file-integrity monitoring, EDR, native binary PATH safety, systemd persistence) — answers "is this MACHINE monitored", a distinct question from "is OpenClaw configured well". |
+| `agents` | `object` | Bucket, same shape as `openclaw`, plus: `roster` (`array[str]`) — agent names, preferring an attested roster (`--attest`) over the static `agents.list` config, falling back to `["(default)"]`; `attested` (`bool`) — `true` when the roster came from an attestation self-report. |
 | `skills` | `array[object]` | One entry per installed skill: `{"name": str, "verdict": str, "status": str, "reasons": array[str]}`. `verdict` reuses the same word set `--vet` uses (`"NO KNOWN ISSUE"`, `"SUSPICIOUS"`, `"DANGEROUS"`, `"UNKNOWN"`); `status` is the underlying `PASS`/`WARN`/`FAIL`/`UNKNOWN`; `reasons` holds up to 3 sanitised detail strings. Empty array when no skills are installed. A skill the per-skill scan budget could not reach reports `status: "UNKNOWN"` with a reason explaining why — never a false `"NO KNOWN ISSUE"`. |
 | `mcp` | `array[object]` | One entry per configured MCP server (both `mcp.servers` nesting and legacy `mcpServers`/`mcp_servers`): `{"name": str, "verdict": str, "reasons": array[str]}`. `verdict` is `"ok"` (no supply-chain/trust signal), or `"WARN"`/`"FAIL"`/`"UNKNOWN"`. Empty array when no MCP servers are configured. |
-| `channels` | `object` | Bucket, same shape as `system`, plus: `roster` (`array[str]`) — configured channel provider names (the `defaults` pseudo-provider excluded). |
+| `plugins` | `object` | `{"scanned": bool, "rows": array[object]}`. `scanned` is `false` when this run never swept plugins (plain `audit()`/`--json` without `--full` — a plugin sweep is `--full`-only) — distinct from `true` with an empty `rows` (a real sweep found zero installed plugins). Each row: `{"name": str, "status": str}` (`PASS`/`WARN`/`FAIL`/`UNKNOWN`/`"SKIPPED"`/`"TRUNCATED"`). |
+| `channels` | `object` | Bucket, same shape as `openclaw`, plus: `roster` (`array[str]`) — configured channel provider names (the `defaults` pseudo-provider excluded). |
+| `logs` | `object` | Bucket, same shape as `openclaw`, scoped to the `logs` surface (trajectory sidecar / audit-trail / log-content-scan / behavioral checks — B164, B180, B85, T1, T2, T3, B191). |
 
 ### Notes
 
@@ -1039,3 +1133,110 @@ possible Phase 2.
   `ctx` is unavailable), matching every other always-present top-level field.
 - The exact wording of `reasons[]` entries is **not** part of the frozen contract (same
   rule as `detail`/`fix` text elsewhere in this doc) — only the field names/types are.
+
+---
+
+## 19. `skill_sweep` Object (F-149 — installed-skill sweep under `--full --json`)
+
+`--full` runs a second engine on top of the audit: the audit's own `surface="skills"`
+checks and the shared content ring answer "is anything wrong across this fleet",
+attributed to the HOME; the sweep answers "which skill, and how bad is THAT one" — one
+merged vet verdict per installed skill (the same engine `--vet <path>` uses), which is
+the unit an owner actually acts on. The printed `--full` report has always carried this
+as its "CLAWSECCHECK SKILL SWEEP" section; `--full --json` did not carry it at all until
+this field was added — a `--json` consumer had no way to see per-skill vet verdicts.
+
+Present **only** when `--full` was given (omitted — key absent, not `null` — on a plain
+`--json` run). Visibility only, same as the printed section: never folds into the
+top-level `score`/`grade`/`findings` above.
+
+| Field | Type | Description |
+|---|---|---|
+| `checked_dirs` | `array[str]` | Every skill-root directory that exists under this home (`skills/`, `workspace/skills/`, `workspace-home/skills/`, `workspace-work/skills/`, `.agents/skills/` — see `collector.SKILL_DIRS`). Empty when none exist. |
+| `no_roots` | `bool` | `true` when no skill-root directory exists at all — nothing to sweep. |
+| `no_targets` | `bool` | `true` when at least one root exists but none contains an installed skill (a `SKILL.md`-bearing directory). |
+| `truncated` | `bool` | `true` when the whole-sweep wall-clock budget or a per-target scan budget cut the run short — at least one target in `targets` carries `"SKIPPED"` or `"TRUNCATED"`. |
+| `complete` | `bool` | `not truncated` — provided so a consumer does not have to negate the field above. |
+| `worst` | `str` | Worst verdict among scanned targets: `"PASS"`, `"WARN"`, or `"FAIL"`. Does not account for truncation — check `truncated` separately; an incomplete sweep is never claimed clean by this field alone. |
+| `counts` | `object` | `{"total": int, "fails": int, "warns": int, "truncated": int, "skipped": int, "safe": int}`. `total` excludes `"SKIPPED"` rows (attempted-but-unscanned targets are not "checked"); `safe` excludes `fails`/`warns`/`truncated` — an unscanned or partially-scanned target is never folded into `safe`. |
+| `targets` | `array[object]` | One entry per skill the sweep accounted for, **including** ones it never fully scanned: `{"name": str, "status": str, "evidence_count": int}`. `status` is one of `"PASS"`, `"WARN"`, `"FAIL"`, `"UNKNOWN"`, `"SKIPPED"` (budget exhausted before this target was reached), `"TRUNCATED"` (this target's own scan was cut short). `name` is sanitized (skill names are attacker-controlled — untrusted, third-party directory names). |
+| `not_scanned` | `array[str]` | Names of every target with `status` `"SKIPPED"` or `"TRUNCATED"` — the same list `counts.skipped + counts.truncated` sizes, spelled out. |
+
+### Skeleton
+
+```json
+{
+  "skill_sweep": {
+    "checked_dirs": ["/home/you/.openclaw/skills"],
+    "no_roots": false,
+    "no_targets": false,
+    "truncated": false,
+    "complete": true,
+    "worst": "PASS",
+    "counts": {"total": 2, "fails": 0, "warns": 0, "truncated": 0, "skipped": 0, "safe": 2},
+    "targets": [
+      {"name": "pdf-tools", "status": "PASS", "evidence_count": 0},
+      {"name": "web-search", "status": "PASS", "evidence_count": 0}
+    ],
+    "not_scanned": []
+  }
+}
+```
+
+### Notes
+
+- `--exit-code` treats a `"FAIL"` target FAIL-only, mirroring the vet-mcp rule: a
+  `"WARN"` (SUSPICIOUS) skill never trips it, and neither does truncation alone — an
+  incomplete sweep is surfaced through `truncated`/`not_scanned`, not by reddening a
+  CI gate that would otherwise be green.
+- The sweep runs silently under `--json` (no narrated output mixed into stdout) — the
+  JSON document on stdout is the complete, sole output.
+
+---
+
+## 20. `coveragePage` Object (F-165 — "was everything looked at", V1)
+
+Present under `--full --json` only (a plugin/skill sweep pass has to have run to
+answer the question at all — omitted, key absent, on a plain `--json` without
+`--full`). Answers a different question than `inventory` (§18): that states what each
+subject's checks/instances *found*; this states, per subject, how much of that
+subject was actually *scanned* — and names every gap rather than only counting it, the
+same "no silent caps" rule the rest of this tool follows.
+
+One entry per subject in the 8-subject taxonomy (§18):
+
+| Field | Type | Description |
+|---|---|---|
+| `total` | `int \| null` | How many things this subject owns (checks for a bucket subject, installed targets for a sweep subject). `null` means this run never swept the subject at all (`skills`/`plugins` on a run without `--full` or under `--fast`) — distinct from `0` (swept, and there was nothing to scan). |
+| `scanned` | `int \| null` | How many of `total` reached a conclusive verdict. For `openclaw`/`host`/`agents`/`channels`/`logs` (bucket subjects): checks that returned `PASS`/`FAIL`/`WARN` rather than `UNKNOWN`. For `skills`/`plugins`: installed targets the sweep fully scanned (neither `SKIPPED` nor `TRUNCATED`). `mcp` is always fully scanned (`scanned == total`) — MCP vetting is not sweep-budgeted. `null` mirrors `total`'s `null`. |
+| `not_scanned` | `array[str]` | Every gap, named — check ids (bucket subjects) or target names (`skills`/`plugins`), never merely a count. Empty when `scanned == total`. |
+| `note` | `str \| null` | Present only for the `null`/`0` cases above: `"not scanned this run (needs --full)"`, `"none installed"`, or `"none configured"` (`mcp` with zero configured servers). `null` for every ordinary scanned-vs-total entry. |
+
+### Skeleton
+
+```json
+{
+  "coveragePage": {
+    "openclaw": {"total": 68, "scanned": 33, "not_scanned": ["B17", "B31", "..."]},
+    "host": {"total": 8, "scanned": 6, "not_scanned": ["B101", "B150"]},
+    "agents": {"total": 34, "scanned": 24, "not_scanned": ["B18", "B22", "..."]},
+    "skills": {"total": 0, "scanned": 0, "not_scanned": [], "note": "none installed"},
+    "mcp": {"total": 0, "scanned": 0, "not_scanned": [], "note": "none configured"},
+    "plugins": {"total": 0, "scanned": 0, "not_scanned": [], "note": "none installed"},
+    "channels": {"total": 3, "scanned": 3, "not_scanned": []},
+    "logs": {"total": 7, "scanned": 0, "not_scanned": ["B164", "B180", "..."]}
+  }
+}
+```
+
+### Notes
+
+- Presentation-only, same as `inventory` — never alters `score`/`grade`/`findings`.
+- **V1 scope**: `logs` is CHECK-granularity here (same as the other bucket subjects),
+  not the file/byte-level detail ("N of M trajectory files, X of Y MB scanned") a
+  future revision may add — that data exists today only as prose inside
+  `B164`/trajectory-audit/behavioral findings, not as structured counts.
+- **V1 scope**: also rendered as a text section (`--full`, banner `CLAWSECCHECK
+  COVERAGE`) built from the same `build_coverage_page` function. `--dashboard --full`,
+  `--html`, and `--pdf` do not carry this page yet — they render through a separate
+  code path that does not call `pipeline.run_pipeline`.

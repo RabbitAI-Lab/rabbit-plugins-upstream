@@ -1,0 +1,111 @@
+name: gongwen-format-pro
+slug: gongwen-format-pro
+version: 2.1.0
+displayName: 党政机关公文格式标准排版（GB/T 9704-2012）
+author: "一线评标专家&ChesaraM"
+license: MIT
+category: 办公文档
+tags:
+  - 公文排版
+  - GB/T 9704-2012
+  - 党政机关公文
+  - 红头文件
+  - 公文质检
+  - 文风净化
+  - docx
+
+description: >-
+  严格依据《党政机关公文格式》GB/T 9704-2012 的公文排版与质检校对一体化技能。
+  三大能力：①排版——将 Markdown/TXT/DOCX 草稿转换为国标合规的 Word 公文，覆盖版头红头、
+  发文字号、签发人、2 号小标宋标题、主送机关、3 号仿宋正文与一/（一）/1./（1）四级标题字体、
+  附件说明与附件正文另面编排、发文机关署名与成文日期、附注、版记、页码；②质检——扫描已有
+  .docx 公文，按高/中/低三级输出不合规清单与整改建议；③文风净化——去除口语、网络用语、
+  AI 腔与常见错别字，统一为公务书面语，高风险表述只标记不改写。
+
+triggers:
+  - 公文排版
+  - 公文格式
+  - 标准格式排版
+  - 材料排版
+  - 红头文件
+  - 帮我排个版
+  - 排版成 Word
+  - 生成正式文件
+  - 发文格式
+  - 通知格式
+  - 请示格式
+  - 报告格式
+  - 会议纪要排版
+  - GB/T 9704
+  - 公文质检
+  - 公文格式检查
+  - 公文校对纠错
+  - 统一公文文风
+  - 去口语化
+  - 去 AI 味
+  - 改成公务书面语
+
+entry: SKILL.md
+
+files:
+  - SKILL.md
+  - README.md
+  - manifest.yaml
+  - gongwen_config.demo.json
+  - scripts/gongwen_format.py
+  - scripts/gongwen_check.py
+  - scripts/style_clean.py
+  - references/gb9704-2012.md
+  - references/qc-checklist.md
+  - references/style-guide.md
+  - references/cli-reference.md
+  - references/faq.md
+
+requirements:
+  python: ">=3.9"
+  packages:
+    - python-docx
+  optional:
+    - name: LibreOffice
+      reason: 仅在使用 --pdf 导出 PDF 时需要
+    - name: pypdf
+      reason: 仅在需要直接读取 PDF 文本层作为输入时（--input x.pdf）需要
+
+capabilities:
+  network: false
+  external_api: false
+  writes_files: true
+  notes: 技能不自主发起任何外部 API 或联网调用，仅处理用户提供的本地文件。
+
+feedback:
+  channel: GitHub Issues
+  account: 项目仓库 Issues
+  note: 使用问题、误报反馈、实务建议，欢迎通过项目仓库提交 Issue 反馈。
+
+changelog:
+  - version: 2.1.0
+    date: 2026-08-06
+    changes:
+      - 交互层：SKILL.md 新增交互铁律、模糊输入兜底、必须拒绝的请求；交付用模拟执行反馈模板
+      - 新增 Markdown 红头预览方案（无执行能力时的结构化兜底）
+      - 文风净化 FLAG 项新增批量确认话术（替换/保留二选一）
+      - 三脚本写文件前自动备份原稿为 .bak-时间戳，防覆盖丢失
+      - 友好错误处理：文件被占用/无权限/编码错误给出可操作提示与解决方案
+      - 支持读取 PDF 文本层作为输入（gongwen_format.py / style_clean.py，需 pypdf）
+      - 质检新增内容逻辑校验：无效日期（月/日越界）、成文日期早于发文字号年份，列为低级别
+      - 新增 references/faq.md 常见问题文档
+      - 明确本地处理声明：纯本地运行、不联网、不上传文件
+  - version: 2.0.0
+    date: 2026-08-06
+    changes:
+      - 合并 1.0.0 的 JSON 配置驱动与 1.4.0 的 CLI 与智能层级识别，统一为单一引擎
+      - 修正版记字号（3 号→4 号仿宋），符合 GB/T 9704-2012
+      - 修正页码策略：默认全篇编码，首页不编页码改为可选项
+      - 新增字体回退链，探测本机字体文件，解决 Windows 上国标字体名失配
+      - 新增页码奇偶位（单页右空一字、双页左空一字）与一字线
+      - 新增 gongwen_check.py 格式质检脚本，30+ 检查项，高/中/低三级报告
+      - 新增 style_clean.py 文风净化脚本，REPLACE/FLAG 双档处理，139 条规则
+      - 修正 Markdown 标题深度与中文层次序号冲突时的判级（以中文序号为准）
+      - 新增正文首行与公文标题重复时的自动去重（支持省略机关名的短式标题）
+      - 质检新增无序号小标题字体豁免，与排版脚本口径统一，消除误报
+      - 新增 4 份 references 文档（国标速查、质检清单、文风词表、参数手册）

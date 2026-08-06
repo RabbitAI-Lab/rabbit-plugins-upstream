@@ -1,0 +1,14 @@
+name: geoskill-disaster-exposure-assessment
+display_name: 灾害暴露度评估
+description: |
+  危险区与资产人口空间叠加的暴露量统计
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-disaster-exposure-assessment.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - disaster
+  - gis
+  - remote-sensing
+  - risk

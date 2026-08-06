@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/modelshow",
   "slug": "modelshow",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1779077507447,
-  "contentHash": "ddf15950ea7fe6007db2746694d3c6b6bc54e2b36a2b265785c18a5d9fec2efa",
-  "fetchedAt": "2026-07-26T18:52:10.638Z"
+  "version": "1.2.0",
+  "updatedAt": 1785536574025,
+  "contentHash": "47faa0c7a2c304969c948432d61e3e865549345645fc002fdcc368c00cdc29ec",
+  "fetchedAt": "2026-08-06T10:27:14.655Z"
 }

@@ -11,31 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to execute existing implementation plans in dependency order, track task progress, apply TDD and checkpoint validation, and prepare completion reports. <br>
+Developers and engineering agents use this skill after project planning is complete to execute task lists, validate checkpoints, track progress, manage blockers, and report completion. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The workflow may guide high-impact production migration or data-change work. <br>
-Mitigation: Keep dry-run, explicit confirmation, verification, and cleanup gates in place before applying changes. <br>
-Risk: Task progress or completion reports could be inaccurate if checkpoints are skipped. <br>
-Mitigation: Validate acceptance criteria, tests, quality checks, and blockers at each checkpoint before marking tasks complete. <br>
+Risk: Broad development triggers may activate the skill during casual coding or exploratory questions. <br>
+Mitigation: Use it for planned implementation work after a concrete plan exists, and avoid invoking it for isolated or exploratory tasks. <br>
+Risk: The workflow encourages local test and quality-gate commands that can be slow, fail in unprepared environments, or affect local project state. <br>
+Mitigation: Review commands before execution and run them in the intended project environment with dependencies installed. <br>
+Risk: The skill may guide agents to maintain project-local progress state such as `.attune/execution-state.json`. <br>
+Mitigation: Confirm progress tracking files are appropriate for the repository and review them before committing or sharing. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-project-execution) <br>
-- [Attune plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with code, shell command, and JSON examples] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with inline code, shell commands, JSON examples, and checklist-style reports] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+**Other Properties Related to Output:** [May guide agents to update project-local progress state and run local test or quality-gate commands.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: server release metadata; artifact frontmatter lists 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

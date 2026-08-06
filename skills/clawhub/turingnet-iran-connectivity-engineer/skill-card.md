@@ -1,44 +1,55 @@
-## Description: <br>
-Turing-inspired, privacy-first IT and telecommunications engineering for lawful Internet troubleshooting, evidence-based incident reporting, and authorized resilience work affecting users and organizations in Iran. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TuringNet Iran Connectivity Engineer provides privacy-first connectivity troubleshooting, outage documentation, authorized resilience review, and bilingual support templates for lawful network support work.
 
-## Publisher: <br>
-[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw)
 
-## Use Case: <br>
-External users, support teams, schools, small businesses, nonprofits, and authorized network or service operators use this skill to structure lawful connectivity troubleshooting, privacy-preserving outage reports, bilingual support tickets, and authorized resilience planning for Internet and mobile-service issues affecting users and organizations in Iran. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles connectivity incidents that may involve sensitive user, subscriber, device, location, or network evidence. <br>
-Mitigation: Collect only redacted, minimum necessary evidence; avoid secrets and subscriber identifiers; keep original evidence local; and use public reports only in aggregate, opt-in form. <br>
-Risk: Network or shell diagnostics could be misused outside the operator's authority. <br>
-Mitigation: Run diagnostics only on systems the operator owns or is explicitly authorized to assess, keep network access disabled by default, and avoid scanning, flooding, exploitation, tunnels, or control bypass. <br>
-Risk: Outage analysis can lead to unsupported attribution or misleading causal claims. <br>
-Mitigation: Separate observations from hypotheses, document confidence and unresolved alternatives, and attribute causes only when credible, relevant evidence supports the conclusion. <br>
+## Use Case:
 
+IT support staff, incident coordinators, and authorized operators use this skill to collect privacy-minimized connectivity evidence, draft support and status updates, and plan safe troubleshooting or resilience actions within an approved scope.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/turingnet-iran-connectivity-engineer) <br>
-- [Skill definition](artifact/SKILL.md) <br>
-- [Agent discovery card](artifact/AGENT_DISCOVERY.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance, checklists, support-ticket drafts, incident reports, playbooks, and approved local diagnostic command suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Network access is disabled by default; diagnostics are limited to local parsing and explicitly authorized, low-rate checks on systems the operator owns or is permitted to assess.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: server release evidence) <br>
+Risk: The artifact references executable helpers and an external self-heal script that are not included in the inspected release.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify that any referenced script exists in the installed environment and review external shell code before running commands from the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/turingnet-iran-connectivity-engineer)
+- [Agent discovery card](artifact/AGENT_DISCOVERY.md)
+- [Skill source](artifact/SKILL.md)
+- [Authorization intake template](artifact/templates/authorization_intake.md)
+- [Bilingual evidence intake template](artifact/templates/evidence_intake_bilingual.md)
+- [Low-bandwidth playbook](artifact/templates/low_bandwidth_playbook.md)
+- [Validation checklist](artifact/templates/validation_checklist.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown templates, checklists, support-ticket drafts, status updates, and shell command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Privacy-minimized and evidence-based; outputs should stay within the user's authorized scope.]
+
+## Skill Version(s):
+
+2.1.3 (source: server release metadata; artifact SKILL.md frontmatter reports 2.2.0 and artifact _meta.json reports 2.1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

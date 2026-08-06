@@ -1,0 +1,47 @@
+{
+  "skill": "geodatabase-management",
+  "source": "synthetic",
+  "layer": "cities",
+  "n_features": 100,
+  "indexed_features": 100,
+  "has_spatial_index": true,
+  "query_bbox": [
+    116.0,
+    39.0,
+    117.0,
+    40.0
+  ],
+  "query_indexed_count": 100,
+  "query_brute_count": 100,
+  "query_consistent": true,
+  "database_info": {
+    "path": "./_test_cli_run\\database.gpkg",
+    "layers": [
+      {
+        "layer": "cities",
+        "data_type": "features",
+        "feature_count": 100,
+        "has_spatial_index": true
+      }
+    ],
+    "sqlite_tables": [
+      "gpkg_spatial_ref_sys",
+      "gpkg_contents",
+      "gpkg_ogr_contents",
+      "gpkg_geometry_columns",
+      "gpkg_tile_matrix_set",
+      "gpkg_tile_matrix",
+      "cities",
+      "sqlite_sequence",
+      "gpkg_extensions",
+      "rtree_cities_geom",
+      "rtree_cities_geom_rowid",
+      "rtree_cities_geom_node",
+      "rtree_cities_geom_parent",
+      "idx_cities_geom",
+      "idx_cities_geom_rowid",
+      "idx_cities_geom_node",
+      "idx_cities_geom_parent"
+    ]
+  }
+}

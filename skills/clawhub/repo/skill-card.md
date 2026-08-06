@@ -1,43 +1,55 @@
-## Description: <br>
-Project initialization toolkit. contributing - auto-generate CONTRIBUTING.md from project structure [contributing.md]. "init", "project init", "initialize project", "contributing guide", "CONTRIBUTING.md", "contributing generate" triggers <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Project initialization toolkit that analyzes project structure and settings to generate a project-specific CONTRIBUTING.md guide.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and maintainers use this skill to inspect a repository's project structure, configuration files, package scripts, and conventions, then draft a project-specific CONTRIBUTING.md guide. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated CONTRIBUTING.md content may be incorrect or misleading if repository conventions are ambiguous or incomplete. <br>
-Mitigation: Review the generated guide against the repository's actual setup before accepting it. <br>
-Risk: Broad trigger phrases such as "init" may invoke the skill unintentionally. <br>
-Mitigation: Use explicit prompts for contributing-guide generation and review activation before allowing file writes. <br>
-Risk: The skill can propose overwriting an existing CONTRIBUTING.md file. <br>
-Mitigation: Confirm before overwrite and keep the existing file available for comparison. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect repository configuration, project layout, package metadata, style settings, and hooks, then draft a CONTRIBUTING.md guide that reflects the detected project conventions.
 
-## Reference(s): <br>
-- [Contributing Generator](contributing.md) <br>
-- [Repo skill page](https://clawhub.ai/drumrobot/repo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a CONTRIBUTING.md draft from repository configuration and directory structure; review before accepting or overwriting files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.0 (source: server release metadata and CHANGELOG, released 2026-06-03) <br>
+Risk: Broad trigger phrases such as init or contributing guide may activate the skill unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the agent's proposed action before allowing it to analyze or write repository files.
+
+Risk: Generated CONTRIBUTING.md content may not match the repository owner's preferred language, workflow, or project policy.
+
+Mitigation: Review the generated guide before accepting it, with attention to language choice, commands, hooks, and overwrite prompts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/repo)
+- [Contributing generator guide](artifact/contributing.md)
+- [Release changelog](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with project-specific guidance and inline shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose writing CONTRIBUTING.md after analyzing repository configuration; existing files should be reviewed before overwrite.]
+
+## Skill Version(s):
+
+0.3.1 (source: server release metadata, created 2026-08-06)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

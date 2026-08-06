@@ -1,5 +1,5 @@
 ## Description: <br>
-Use when an understood video project needs selective transcript-timed titles, lower-thirds, statistics, lists, quotes, chapter cards, or calls to action authored as HyperFrames HTML graphics. <br>
+Use when an understood video project needs selective transcript-timed titles, lower-thirds, statistics, metric spotlights, comparisons, lists, quotes, chapter cards, or calls to action authored as HyperFrames HTML graphics. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Video editors and agentic video-production workflows use this skill after video understanding to turn approved semantic moments into transcript-timed content cards and transparent graphics overlays. It guides theme selection, card planning, human review, HyperFrames composition, and render contribution handoff. <br>
+Video editors, creative developers, and agentic video-production workflows use this skill to turn reviewed semantic video moments into transcript-timed content-card overlays and reviewable render artifacts. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill reads and writes local video workflow files and can change project plans, review artifacts, cache files, and render contributions. <br>
-Mitigation: Run it only in the intended project workspace, review generated plans and summaries before final render, and keep normal project backups or version control checkpoints. <br>
-Risk: The workflow runs local tools such as Python, ffmpeg, npx HyperFrames, and Chrome-based rendering. <br>
-Mitigation: Install only in environments where those tools are expected, review commands before execution, and keep runtime dependencies pinned or reviewed for production work. <br>
-Risk: Preview galleries and review pages may involve browser activity and example dependencies that are not suitable for offline or privacy-sensitive workflows. <br>
-Mitigation: For offline or sensitive projects, review or bundle preview dependencies before use and avoid opening externally dependent examples until they are cleared. <br>
+Risk: The skill launches local HTML review pages in the user's normal desktop browser. <br>
+Mitigation: Confirm browser-opening steps before execution and run the skill in a project sandbox when possible. <br>
+Risk: Some example HTML files load remote scripts or fonts, and HyperFrames may fetch runtime assets on demand. <br>
+Mitigation: Vendor or pin external JavaScript and fonts before use, and verify render-time assets are local before producing final overlays. <br>
+Risk: The workflow modifies project work and review files as it drafts plans, builds review pages, and applies selected cards. <br>
+Mitigation: Review generated plans and browser review summaries before applying changes, and keep normal version-control or backup checkpoints. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub Skill Page](https://clawhub.ai/whitetowerai/skills/video-add-content-cards) <br>
+- [Content Card Chart Data](artifact/reference/chart-data.md) <br>
 - [Content Cards Review UX Design](artifact/reference/ux-design.md) <br>
 - [Content Cards Review Template Implementation Plan](artifact/reference/ux-implementation-plan.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/whitetowerai/skills/video-add-content-cards) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with shell commands and generated project files, including JSON plans, HTML compositions, review pages, Markdown summaries, and transparent video overlay assets.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, files] <br>
+**Output Format:** [Markdown guidance with JSON plans, HTML/CSS/JavaScript compositions, review files, and shell commands.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an existing video-understand project, ffmpeg, Python, Node.js 22 or newer, HyperFrames, and headless Chrome-compatible rendering.] <br>
+**Other Properties Related to Output:** [Produces project files under work/ and review/ plus transparent overlay render assets after human approval gates.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+1.0.4 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

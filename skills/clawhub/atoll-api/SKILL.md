@@ -22,7 +22,7 @@ Goals (directional objectives with deadlines)
 
 This means an agent can reason: "We're off pace on paying_customers → the Content Pipeline initiative should drive signups but has stalled issues → unblocking those is the highest-leverage action right now."
 
-Agents are org members with the same API, same permissions, same ability to create goals, update KPIs, propose initiatives, and execute work. The system does not distinguish between human and agent actions.
+Agents are organization members using the same API and authorization model as humans. Effective organization role and project scope still govern each action; agent identity does not bypass those checks.
 
 ## Authentication
 
@@ -69,6 +69,8 @@ If you are intentionally staying on this legacy alias, keep the `atoll-api` entr
 
 If `$ATOLL_ORG_ID` is empty, the URL collapses to `/api/orgs//issues` which 308-redirects to a non-existent route and returns `Unauthorized` — a misleading symptom that looks like an auth failure. `GET /api/auth/me` alone cannot catch this since it doesn't depend on `$ATOLL_ORG_ID`. Always guard both vars.
 
+For agent diagnostics, `/api/auth/me` reports the organization role in `auth.role` and live per-project `view`/`edit`/`admin` grants in `auth.projectAccess[]`. Project-scoped agents intentionally remain org guests. Organization-role and project-access changes are read live and do not require key rotation; `scopes: []` is normal for a standard agent key.
+
 ## Quick Start — CLI (recommended)
 
 Install globally or use via npx:
@@ -100,7 +102,14 @@ Profiles can store default org ID, project, team, and base URL values. For named
 
 Env vars remain supported for CI, containers, and one-off runtime usage, but persistent developer/agent machines should prefer profiles. When a profile is selected, ambient `ATOLL_*` env vars do not silently override profile context; conflicting env values fail before network calls. Pass `--profile`, use repo-local `.atoll/context.json`, or opt into env mode with `--env-mode` / `ATOLL_ENV_MODE=1`.
 
-`atoll issue list` and `atoll issue create` apply the selected default team unless a command-level `--team` override is passed. For `atoll issue create`, `--project` accepts a project ID, slug, or exact name. `--milestone` accepts a milestone ID, or an exact milestone name when a project is selected with `--project` or the active profile's default project.
+Repo-local `baseUrl` values cannot reuse a saved profile key unless that same base URL is stored in the profile. Set `ATOLL_TRUST_REPO_BASE_URL=1` only for a single process after verifying both the repository and destination host.
+
+`atoll issue list` and `atoll issue create` apply the selected default team unless a command-level `--team` override is passed. Issue command `--project` flags accept a project ID, slug, or exact name, including list and bulk defaults. In bulk JSON items, `project` accepts those references while `projectId` and `project_id` are canonical IDs. `--milestone` accepts a milestone ID, or an exact milestone name when a project is selected with `--project` or the active profile's default project.
+
+`atoll issue list --open` excludes terminal statuses `done` and `cancelled`,
+plus archived issues, while preserving every custom and other non-terminal
+status. It composes with other list filters, ordering, pagination, and JSON,
+and cannot be combined with `--include-archived`.
 
 Common commands:
 
@@ -114,6 +123,7 @@ atoll agent-context
 
 # List tasks
 atoll issue list --json
+atoll issue list --open
 atoll issue list --status todo --priority 1 --limit 25
 atoll issue list --scope blocked --initiative initiative-uuid --order-by due_date --order-dir asc
 
@@ -125,6 +135,7 @@ atoll issue view ATOLL-42   # alias kept for humans
 atoll issue create --title "Fix login bug" --status todo --priority 1
 atoll issue create --title "Plan rollout" --project project-slug --milestone "Launch"
 atoll issue create --title "Weekly status review" --due-date 2026-07-06 --recurrence weekly
+atoll issue create --title "MWF status review" --due-date 2026-07-06 --recurrence weekly --recurrence-days mon,wed,fri
 atoll issue upsert --match-title --project <project-id> --title "Fix login bug" --status todo
 atoll issue bulk-create --file ./issues.json --continue-on-error
 
@@ -142,6 +153,8 @@ atoll issue assign ATOLL-42 --to self
 atoll comment add ATOLL-42 --body "Working on this now"
 atoll comment add ATOLL-42 --body "tagging..." --mention-member <member-id>
 atoll comment add ATOLL-42 --body "tagging..." --mention "Raphael Ubales"
+atoll comment add ATOLL-42 --body "Agent update" --source-harness codex --source-thread-id <thread-id>
+atoll comment add ATOLL-42 --body "Continuing this" --reply-to-comment <comment-id>
 
 # --mention-member uses a stable Atoll org member ID; --mention exact-matches display names and fails on ambiguity.
 
@@ -150,6 +163,12 @@ atoll label list
 atoll label add ATOLL-42 bug
 atoll notification list --json
 atoll notification ack notification-uuid
+atoll inbox list --json
+atoll inbox view email-uuid --json
+atoll inbox triage email-uuid --category support --priority 1 --status action_required
+atoll inbox resolve email-uuid --note "Handled in ATOLL-123"
+# Draft only; this does not send:
+atoll inbox draft email-uuid --from support@atollhq.com --to user@example.com --subject "Re: Help" --body-file ./reply.txt
 atoll subtask create ATOLL-42 --title "Verify recurrence"
 atoll activity issue ATOLL-42
 
@@ -174,6 +193,7 @@ atoll feedback "The status error should list custom board statuses"
 
 # Projects & milestones
 atoll project list
+atoll board-column create --project <project> --key review --label "In Review" --description "Ready for review"
 atoll project delete <project-id> --confirm DELETE
 atoll milestone list --project <project-id>
 atoll milestone upsert --project <project-id> --name "v1.0" --date 2026-06-01
@@ -205,8 +225,10 @@ CLI JSON conventions:
 - Project-scoped `atoll issue list --json` includes `project_context`; `atoll issue get/view --json` includes `status_column` plus `project_context` when available.
 - For initiative execution context via API, `GET /api/orgs/{id}/initiatives/{initiativeId}/issues?details=1` returns accessible task details from linked projects, direct issue links, and linked milestones.
 - Diagnostics and errors go to stderr.
+- Machine-readable JSON preserves API strings exactly; human terminal output removes ANSI/VT, control, and bidirectional formatting characters from API-supplied strings.
 - Interactive CLI update notices also go to stderr and are suppressed for JSON/non-TTY/CI/completion flows.
 - `atoll agent-context` returns a versioned command/flag manifest, available profile context, and structured `cli.update_available` metadata.
+- Weekly issue recurrence accepts unique selected weekdays with `--recurrence weekly --recurrence-days mon,wed,fri`. Read JSON exposes normalized `recurrence_days` and `recurrence_schedule`; unrelated updates preserve the schedule.
 - `atoll heartbeat --json` includes the same structured `cli` update metadata for agents, plus `attention_items`, `attention_summary`, and `recommended_action` when Atoll can propose one concrete strategy-backed next action. `atoll heartbeat --signals-only --json` preserves filtered `signals`, `attention_items`, `attention_summary`, and `recommended_action` for short polling. Handle direct attention items first, then call each handled item's `ack_endpoint`. Follow `recommended_action.usage_guidance`: prefer `suggested_write.operation` when it still matches the board, preserve KPI/initiative/initiative_target/why-now/expected-impact/first-step/success-criteria evidence, and avoid copying deferred busywork into issue or comment payloads. If a `start_work` recommendation uses `issue.update` with a body, update the issue status and preserve that body as an issue comment; `PATCH /issues/{issueId}` accepts `comment_body` for this same-request progress note.
 - `atoll plan validate/apply` consumes `schemaVersion: "atoll.plan.v1"` files with `milestones`, `issues`, `dependencies`, `initiativeLinks`, and `milestoneLinks`; local `key` values can be referenced by `milestoneKey`, `issueKey`, `dependsOn`, `blockedBy`, or `blocks`.
 
@@ -214,7 +236,7 @@ CLI JSON conventions:
 
 When a human asks you to help automate a KPI from a third-party API, use this Atoll skill. If the current agent environment does not have the `atoll` skill or this legacy `atoll-api` alias installed, tell the user to install the `atoll` skill before continuing or use the Atoll CLI/MCP tools directly if they are available.
 
-Agents may create draft syncs and validate proposed configs only after a human admin has allowlisted the exact destination host in Atoll. Human admins must create or review the draft in Settings > Integrations > KPI syncs, edit supported request/extraction fields and secrets through structured UI, dry-run, publish, disable, or run-now with snapshot writing.
+Organization-wide non-guest agents may create draft syncs and validate proposed configs for KPIs they can read, but only after a human admin has allowlisted the exact destination host in Atoll. Guest and project-scoped agents cannot use the KPI or nested sync routes. Human admins must create or review the draft in Settings > Integrations > KPI syncs, edit supported request/extraction fields and secrets through structured UI, dry-run, publish, disable, or run-now with snapshot writing.
 
 ```bash
 atoll kpi sync validate <kpi-id> \
@@ -240,9 +262,13 @@ npm install -g @atollhq/mcp-server
 PORT=8787 atoll-mcp
 ```
 
-Remote MCP clients call `POST /mcp` with Streamable HTTP and should send `Authorization: Bearer sk_atoll_...` per request. Single-tenant deployments can set `ATOLL_API_KEY` and `ATOLL_ORG_ID` as environment variables.
+HTTP mode binds to `127.0.0.1` by default. External binding requires both `ATOLL_MCP_HOST=<external-host>` and `ATOLL_MCP_ALLOW_EXTERNAL=1` and should be used only behind a trusted TLS/authenticated network boundary.
 
-The MCP server mirrors core CLI workflows with tools such as `atoll_get_heartbeat`, issue/project/goal/KPI/initiative/milestone tools, dependency tools, webhook tools, `atoll_send_feedback`, and `atoll_api_request` for advanced endpoints. `atoll_add_comment` accepts `mentions: [{ "member_id": "member-id" }]` for structured mention fanout; `atoll_update_issue` accepts `comment_body` for durable progress comments.
+Remote MCP clients call `POST /mcp` with Streamable HTTP and must send `Authorization: Bearer sk_atoll_...` per request. HTTP requests never fall back to a process-level `ATOLL_API_KEY`; that fallback is available only in explicit `--stdio` mode. HTTP deployments may set `ATOLL_ORG_ID` and `ATOLL_BASE_URL` as defaults.
+
+The server validates each HTTP bearer token through `/api/auth/me` before MCP dispatch and rejects request bodies over 1 MiB, including chunked requests.
+
+The MCP server mirrors core CLI workflows with tools such as `atoll_get_heartbeat`, issue/project/goal/KPI/initiative/milestone tools, dependency tools, webhook tools, `atoll_send_feedback`, and `atoll_api_request` for advanced endpoints. `atoll_add_comment` accepts structured mentions, `reply_to_comment_id`, and explicit agent `source_metadata`; it does not infer harness thread IDs. `atoll_update_issue` accepts `comment_body` for durable progress comments.
 
 Keep Atoll skills separate from the MCP package. Skills are client-side agent guidance; the MCP server is runtime infrastructure for auth, transport, validation, and Atoll API calls.
 
@@ -260,7 +286,7 @@ atoll issue list --json --limit 10
 
 If the user is setting up Atoll in another AI tool, give them a copyable prompt. Keep secrets out of chat: tell the user to run auth commands locally and never ask them to paste `sk_atoll_...` keys into a model conversation unless they explicitly choose that risk.
 
-If the user is in Atoll's first-run setup wizard, the key may be setup-scoped. In that mode, inspect the repo or interview the user, then create or revise the setup proposal only. Do not try to create projects, goals, KPIs, initiatives, or issues directly, and do not approve/apply the proposal. The human reviews the editable proposal in Atoll and approves it there.
+If the user is in Atoll's first-run setup wizard, the key may be setup-scoped. In that mode, inspect the repo or interview the user, then create or revise the setup proposal only. Do not try to create projects, goals, KPIs, initiatives, or issues directly, and do not approve/apply the proposal. The human reviews the editable proposal in Atoll and approves it there. Treat the setup key as temporary: it expires after 24 hours and Atoll revokes it when setup is applied, skipped, or failed. Continued use requires a separately minted ordinary key.
 
 ### Prompt: Create the First Board
 
@@ -347,12 +373,14 @@ The primary pattern for autonomous agents. Prefer `atoll heartbeat --json` when 
 - **KPI pace**: `pace_needed` vs `pace_actual`, trend (`accelerating`/`decelerating`/`flat`), staleness
 - **Initiative progress**: total/completed/stalled/blocked issue counts, expected KPI impacts, and initiative targets
 - **Assigned work** for this agent
-- **Project context**: relevant board columns, including optional descriptions that explain stage criteria for agents
+- **Project context**: relevant board columns, including optional descriptions that explain stage criteria for agents. Project-scoped guests receive every explicitly accessible board while idle; personal agents retain relevant inherited-project context.
 - **Signals** sorted by severity — the agent's prioritized to-do list
 - **Attention items**: direct current-member notifications such as mentions, assignments, assignee comments, and creator-visible status changes, with an `ack_endpoint` to call after handling
-- **Recommended action**: one deterministic strategy-backed next action when Atoll has enough evidence (`create_work`, `start_work`, `escalate_blocker`, or `refresh_metric`), including why-now, expected impact, first step, success criteria, quality warnings, and any suggested write.
+- **Recommended action**: one deterministic strategy-backed next action when Atoll has enough evidence (`create_work`, `start_work`, `escalate_blocker`, `refresh_metric`, or `investigate`), including why-now, expected impact, first step, success criteria, quality warnings, and any suggested write. An investigation can use `suggested_write.operation: "none"` when heartbeat lacks enough detail for a safe write.
 
-Heartbeat is org-scoped, but project-bound payload details are filtered by the caller's project access. Owners/admins receive full org context; members/guests only receive project-bound strategy, work health, assigned work, milestone signals, and board context for accessible projects. Non-guest members can also see unprojected org-level strategy. Shared initiatives can appear with counts and signals based only on accessible work.
+Recommendation ordering keeps blockers and urgent initiative targets first, followed by executable work for off-pace KPIs and in-progress work linked to stale KPIs. Signal-backed assigned work (an `issue_stale` signal on the issue or a `milestone_overdue` signal on its milestone) is compared with critical standalone overdue milestones by urgency; the stronger execution or recovery case wins. When a critical milestone wins without assigned work, Atoll recommends investigation before stale-metric maintenance. A stale KPI refresh still precedes creating a new bet, beginning initiative work whose only trigger is KPI staleness and that is not yet underway, or unrelated assigned work.
+
+Heartbeat is org-scoped, but project-bound payload details are filtered by the caller's project access. Owners/admins receive full org context; members/guests only receive project-bound strategy, work health, assigned work, milestone signals, and board context for accessible projects. Project-scoped guests receive every explicitly accessible board while idle; personal agents retain relevant inherited-project context. Non-guest members can also see unprojected org-level strategy. Shared initiatives can appear with counts and signals based only on accessible work.
 
 Signal types: `kpi_off_pace`, `kpi_stale`, `issue_stale`, `issue_blocked`, `milestone_overdue`, `initiative_stalled`, `initiative_target_due_soon`, `initiative_target_overdue`, `initiative_target_blocked`, `webhook_failing`. Severity: `info`, `warning`, `critical`.
 
@@ -411,13 +439,33 @@ atoll kpi snapshot add paying_customers --value 42 --initiative "Content pipelin
 atoll kpi snapshot list paying_customers --include-attribution --json
 ```
 
-Project-scoped agent profiles apply their default project to `atoll initiative list` and `atoll initiative create`. Use `--project <id-or-slug>` to override that project, or `--org-wide` to intentionally suppress the default project. API callers can pass `project_id` or `projectId` on create, and `?project_id=...` on list; guest/project-scoped callers must use a project they can access, and create requires edit/admin project access.
+Project-scoped agent profiles apply their default project to `atoll initiative list` and `atoll initiative create`. Use `--project <id-or-slug>` to override that project, or `--org-wide` to intentionally suppress the default project. API callers can pass `project_id` or `projectId` on create, and `?project_id=...` on list; guest/project-scoped callers must use a project they can access, and create requires edit/admin project access. Projectless organization-wide initiative creation requires an organization owner/admin.
+
+Project-linked initiative reads require access to at least one linked project.
+The authoritative set includes explicit project links and projects inferred
+from direct issue/milestone links. Updating an initiative or mutating its issue,
+milestone, or target links requires edit/admin access to every linked project;
+a requested issue or milestone project must already be linked when it is
+project-bound. Eligible non-guests may link and unlink writable projectless
+issues; projectless milestones are unsupported. KPI-impact reads omit
+unreadable KPIs and KPI-impact writes require owner/admin Strategy access.
+Projectless initiative writes require an organization owner/admin.
+Treat `404` as concealed absence or unreadable scope and `403` as insufficient
+write access to a readable initiative.
+
+KPIs are organization-wide Strategy resources. Owners/admins may read and
+write; other non-guest organization members may read values, snapshots, and
+redacted per-KPI sync metadata but cannot create, update, delete, or record
+snapshots. Guest/project-scoped agents receive `403` for the collection and
+concealed `404` responses for direct KPI, snapshot, and per-KPI sync
+read/draft routes. Verify the active profile's organization-wide role before
+running KPI commands.
 
 Every KPI snapshot can be attributed to an initiative or issue, building a record of *what actually moved the numbers*. Keep KPI-to-initiative impact links separate from snapshot attribution: an initiative link means the initiative is expected to move the KPI, while snapshot attribution records the source of one measurement. Heartbeat reports one canonical status per KPI and can explain a KPI with `atoll heartbeat --explain-kpi <kpi> --json`.
 
 ### Audit and improve the strategy
 
-Use the audit to review the whole strategy chain at a high level and fix structural problems — the common one being initiatives created without a goal.
+Use the audit to review the strategy chain visible to the caller at a high level and fix structural problems — the common one being initiatives created without a goal.
 
 ```bash
 atoll strategy audit            # human-readable, grouped by severity
@@ -425,6 +473,12 @@ atoll strategy audit --json     # findings[] for programmatic remediation
 ```
 
 `GET /api/orgs/{id}/strategy/audit` returns `findings[]` (each with a `type`, `severity`, the relevant entity id, and a concrete `suggested_fix`) plus `summary` counts. It diagnoses; you remediate with the normal write endpoints. Typical loop:
+
+The audit follows the caller's project access. Owners/admins receive
+organization-wide execution evidence. Other non-guests receive project-bound
+issues, milestones, target links, and target findings only for readable
+projects. A restricted caller with no readable projects receives no issue or
+target execution evidence. Guests cannot run the audit.
 
 1. `atoll strategy audit --json` to get findings.
 2. For each finding, apply its `suggested_fix`, e.g.:
@@ -441,6 +495,16 @@ This is the structural-health lens (is the strategy well-formed?), complementary
 
 `POST /api/orgs/{id}/issues/bulk` with `{ "issues": [{...}, ...] }` (max 50).
 
+### Google Chat notifications
+
+Google Chat is a separate notification channel. Notification preferences accept `channel: "google_chat"` for `mention.created`; muting it does not acknowledge or clear in-app notifications.
+
+User pairing is human-driven. When verified-email auto-linking is ambiguous, Google Chat receives `REQUEST_CONFIG` and sends the user to Atoll to sign in, choose one of their own workspace memberships, and return to Chat. Sending the stable word `connect` in the Atoll direct message explicitly starts this flow for reconnects or additional workspaces. `GET|POST /api/integrations/google-chat/connect-session` and the org-scoped member status, disconnect, and test endpoints require an authenticated human web session and reject `sk_atoll_...` agent or integration keys. `POST /api/orgs/{id}/integrations/google-chat/link-token` remains a manual fallback. Do not call `/api/integrations/google-chat/events` as an Atoll API client: Google Chat calls that endpoint with a Google-signed OIDC ID token whose audience is the callback URL.
+
+Mention notifications are queued durably and dispatched asynchronously immediately after the notification request. A 15-minute recovery drain retries interrupted or transiently failed deliveries with deterministic Google request/message IDs, exponential backoff, and a five-attempt limit.
+
+Config sessions and unused manual connect tokens expire after 10 minutes. Session completion and identical event replays are idempotent and cannot establish a different member or direct-message link.
+
 ### Outbound webhooks
 
 `POST /api/webhooks` creates outbound webhooks. Receiver URLs must be HTTPS DNS hostnames; Atoll rejects IP literals, `localhost`, `.local` hosts, URL credentials, and fragments at creation. Delivery also resolves DNS and refuses private, loopback, link-local, documentation, multicast, and other non-public addresses; redirects are not followed.
@@ -448,9 +512,11 @@ This is the structural-health lens (is the strategy well-formed?), complementary
 Webhook creation returns a raw `whsec_...` secret once. Delivery requests include:
 
 - `X-Atoll-Signature`: `sha256=` plus an HMAC-SHA256 over the raw body, keyed by the SHA-256 hex digest of the raw secret.
+- `X-Atoll-Signature-Version`: the primary signing-key version.
+- `X-Atoll-Signatures`: versioned signatures during a bounded key-overlap window.
 - `X-Atoll-Delivery-Id`: stable delivery id for receiver-side deduplication.
 
-Delivery rows expose `delivery_id`, `status`, and `next_retry_at`. Network failures and 5xx responses retry quickly in-process, then persist `status: retry_pending` with `next_retry_at`; an internal drain retries due deliveries every 15 minutes.
+Webhook administration is owner/admin only. Lists return an origin-only `destination_display`; paths, queries, and signing material are never returned. Payload schema version `2` is allowlisted and omits descriptions, comment bodies, and raw change values. Delivery rows expose safe `delivery_id`, `status`, `status_code`, `error_code`, and retry timing, but not payloads, receiver response bodies, or raw errors. Network failures and 5xx responses retry quickly in-process, then persist `status: retry_pending` with `next_retry_at`; an internal drain retries due deliveries every 15 minutes.
 
 ### Billing and plan limits
 
@@ -475,7 +541,8 @@ Full endpoint tables and field schemas:
 | KPIs | POST `.../kpis` | GET `.../kpis` | PATCH `.../kpis/{id}` | DELETE `.../kpis/{id}` |
 | Initiatives | POST `.../initiatives` (`project_id`/`projectId` optional; required for guests) | GET `.../initiatives` (`project_id` optional; required for guests) | PATCH `.../initiatives/{id}` | DELETE `.../initiatives/{id}` |
 | Milestones | POST `.../milestones` | GET `.../milestones` | PATCH `.../milestones/{id}` | DELETE `.../milestones/{id}` |
-| Comments | POST `.../comments` with `{ body, mentions? }` | GET `.../comments` | PATCH `.../comments/{id}` | DELETE `.../comments/{id}` |
+| Comments | POST `.../comments` with `{ body, mentions?, reply_to_comment_id?, source_metadata? }` | GET `.../comments` or `.../comments/{id}` | PATCH `.../comments/{id}` | DELETE `.../comments/{id}` |
+| Attachments | POST `.../attachments` | GET `.../attachments` or `.../attachments/{id}/content` | — | DELETE `.../attachments/{id}` |
 | Subtasks | POST `.../subtasks` | GET `.../subtasks` | PATCH `.../subtasks/{id}` | DELETE `.../subtasks/{id}` |
 
 Initiative create accepts `title` or legacy `name`, plus camelCase aliases `goalId`, `ownerId`, and `targetDate`.
@@ -484,11 +551,44 @@ All endpoints are under `/api/orgs/{orgId}/...`.
 
 Issue comments inherit issue project permissions: listing comments requires access to the issue's project, comment writes (add, edit, delete) require write access to that project, edit/delete still require comment authorship, and guests cannot access comments on unprojected issues.
 
+Project-bound milestone, status-update, board-column, issue-activity, and PR-link
+reads require effective project access. Milestone create/update, status-update
+create, board-column mutations, and project-bound PR-link create require `edit`
+or `admin`; eligible non-guests may read issue activity and read or attach PR
+links for projectless issues. Milestone delete remains organization
+owner/admin-only. Issue activity is read-only. Organization activity and
+analytics are limited to the caller's accessible projects, with eligible
+non-guests also receiving projectless data; project-health contains accessible
+projects only. Do not treat org membership alone as project authorization.
+
+Issue templates follow the same effective-project boundary: project-template
+reads require project access and writes require `edit`/`admin`.
+Organization-wide templates are readable by non-guests and manageable only by
+organization owners/admins; guest/project-scoped agents never receive them.
+Avatar mutations require both caller and target to belong to the organization
+in the request path. Avatar pointer changes use compare-and-set semantics;
+concurrent changes return `409`, and successful mutations with durable Storage
+cleanup still queued return `202` with `cleanup_pending: true`. A conflict can
+also include `cleanup_pending: true` when cleanup of a staged or retired object
+remains queued. An authenticated 15-minute worker drains due jobs
+independently, with avatar requests providing an additional opportunistic
+sweep.
+
 Comment bodies accept Markdown/plain text or existing rich-text HTML. Atoll stores and returns comment bodies as sanitized HTML. If sanitization leaves no visible text or safe media, the request returns `400` with `body is required` for direct comments or `comment_body is required` for issue updates with `comment_body`.
 
 Structured mentions are recommended for agents and integrations. Direct comment requests accept `mentions: [{ "member_id": "member-id" }]`; issue updates that create comments accept `comment_mentions: [{ "member_id": "member-id" }]`. `member_id` is the stable Atoll org member ID, not an auth user ID or display name. Markdown and HTML `atoll:member` links remain backward-compatible.
 
+Use `reply_to_comment_id` for a direct reply. List/read responses include the relationship plus `reply_to_comment.source_metadata`, allowing an orchestration agent to route a human reply back to the originating harness thread without a separate run resource.
+
+Agent-authored direct comments may include explicit `source_metadata` with `harness`, `thread_id` and/or `session_id`, and optional `host_id`. Unknown keys are rejected, humans cannot submit agent provenance, and harnesses must supply values explicitly. Never include credentials or secrets. Issue-update comments accept the same object as `comment_source_metadata`.
+
 Responses that create comments include `mentions: { requested, created, skipped }`. Each `skipped[]` entry includes `member_id` and `reason`; reasons are `invalid_member_id`, `not_found`, `self_mention`, `no_project_access`, `guest_unprojected_issue`, `unsupported_member_type`, and `mentions_muted`.
+
+Issue attachments inherit the same issue permissions. Project-scoped reads require project access; upload and delete require `edit` or `admin`. Guests cannot access attachments on unprojected issues, while non-guests follow the org-level issue rule.
+
+Attachment metadata contains `id`, `filename`, `file_size`, `mime_type`, `uploaded_by`, `created_at`, and a relative `url`. Resolve `url` against the Atoll base URL and resend the bearer credential or browser session. It is an authenticated API path, not a public or transferable storage URL; clients that consumed the former absolute public URLs must migrate.
+
+Uploads use multipart field `file`, must be non-empty, and are limited to 10 MiB (`413` when exceeded). Declared images must be signature-valid PNG, JPEG, GIF, or WebP; SVG and other declared image types are rejected. Other files are accepted but forced to download as `application/octet-stream`.
 
 † `DELETE /issues/{id}` requires `owner` or `admin` role — any caller without that role (including member-role agents) gets `403`. If you just need to remove a task, use `POST /api/orgs/{orgId}/issues/{issueId}/archive` (soft delete, no role gate); reverse with `DELETE` on the same path (unarchive). In the CLI, prefer `atoll issue archive <id>`. Permanent `atoll issue delete <id>` requires `--force` and supports `--dry-run`.
 
@@ -541,6 +641,6 @@ atoll feedback resend fb_123
 - Request bodies accept camelCase; responses use snake_case
 - Descriptions support Markdown; comment bodies accept Markdown/plain text or rich-text HTML and are stored as sanitized HTML
 - All timestamps are ISO 8601 UTC
-- Board statuses are customizable per project -- query `/board-columns` for available values and optional column descriptions
+- Board statuses are customizable per project -- query `/board-columns` for available values and optional column descriptions; append a column with `atoll board-column create`, using `--description` or `--description-file` for agent guidance
 - API changes appear in real-time on the web board
 - List endpoints support `limit` (default 25, max 100), `offset` pagination, and optional `shape=envelope` / `response_shape=cli` for `{ resource, items, total, limit, offset, nextOffset, truncated, hint }`

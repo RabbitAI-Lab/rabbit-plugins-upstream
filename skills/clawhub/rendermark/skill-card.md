@@ -1,5 +1,5 @@
 ## Description: <br>
-RenderMark helps agents render, export, publish, share, validate, compare, and sync styled markdown documents through an MCP server. <br>
+RenderMark helps agents render, export, publish, share, validate, diff, and sync Markdown documents through the RenderMark MCP server. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, technical writers, and external users use this skill when they need an agent to turn markdown into styled documents, exports, hosted pages, shareable previews, visual diffs, or synchronized documentation. <br>
+Developers, technical writers, and other document authors use this skill when an agent needs to turn Markdown into styled previews, PDFs, DOCX files, HTML, images, hosted pages, Google Docs, visual diffs, or GitHub-synced documentation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Published, shared, or synchronized documents may send content outside the user's machine or expose it to unintended recipients. <br>
-Mitigation: Confirm document content, destination, sharing recipients, and visibility settings before publishing, syncing, or sending invites. <br>
-Risk: API keys and optional provider credentials stored in ~/.rendermark/config.json could be exposed or misused. <br>
-Mitigation: Protect the config file, prefer environment-specific credentials, and rotate keys if they may have been disclosed. <br>
-Risk: PDF, image, and Google Docs publishing depend on additional browser, Browserless, or OAuth configuration. <br>
-Mitigation: Verify Chrome or Browserless setup for PDF/image export and complete Google OAuth setup before using Google Docs publishing. <br>
+Risk: Publishing, sharing, or GitHub sync actions can expose private or unintended document content. <br>
+Mitigation: Review document content, share recipients, and publish settings before sharing links or enabling sync, especially for private repository material. <br>
+Risk: The local RenderMark configuration can contain API keys or OAuth tokens. <br>
+Mitigation: Protect ~/.rendermark/config.json and use environment or account controls appropriate for RenderMark and Google credentials. <br>
+Risk: Rendered or exported documents may preserve mistakes, broken links, or misleading formatting from the source Markdown. <br>
+Mitigation: Use validation and preview workflows for important documents before publishing, exporting, or sending them to others. <br>
 
 
 ## Reference(s): <br>
-- [RenderMark Website](https://rendermark.app) <br>
+- [RenderMark Skill on ClawHub](https://clawhub.ai/jmsaavedra/skills/rendermark) <br>
+- [RenderMark Homepage](https://rendermark.app) <br>
+- [RenderMark MCP Server on npm](https://www.npmjs.com/package/@rendermark/mcp-server) <br>
 - [Setup Guide](references/setup-guide.md) <br>
 - [Tools Reference](references/tools-reference.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with tool names, parameters, file paths, URLs, and setup commands] <br>
+**Output Type(s):** [Text, Markdown, Files, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with MCP tool calls that can return file paths, HTML, image data, document URLs, or document metadata] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce exported document files, hosted document URLs, preview images, rendered HTML, document diffs, validation results, and configuration guidance.] <br>
+**Other Properties Related to Output:** [Outputs may depend on RenderMark API access, local browser availability for PDF or image export, and optional Google OAuth configuration for Google Docs publishing.] <br>
 
 ## Skill Version(s): <br>
-0.1.8 (source: server release metadata and skill frontmatter) <br>
+0.1.10 (source: server release metadata, target metadata, and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

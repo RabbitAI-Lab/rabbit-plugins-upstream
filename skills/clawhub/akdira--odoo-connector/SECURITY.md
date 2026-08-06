@@ -33,7 +33,7 @@ password = os.environ.get("ODOO_PASSWORD")
 
 ❌ **Don't:**
 ```python
-password = "my_secret_password"  # COMMITTED TO GIT
+password = "EXAMPLE_PLACEHOLDER_DO_NOT_USE"  # NEVER commit real credentials
 ```
 
 Use one of these approaches:
@@ -148,6 +148,42 @@ def audited_create(models, db, uid, password, model, values):
 - Use different API keys for development, staging, and production
 - Monitor Odoo login logs for suspicious authentication attempts
 
+## Legal & ToS Compliance
+
+### Authorization Requirements
+
+**You must have explicit authorization before using this skill to access any Odoo instance.**
+
+- **Own instances:** You may freely access Odoo instances you own or operate
+- **Client instances:** Obtain written authorization from the system owner before connecting
+- **Third-party instances:** Do not access systems you do not own without explicit written permission
+
+### Terms of Service
+
+Many Odoo hosting providers (Odoo.sh, SaaS instances) have Terms of Service that restrict automated access. Before using XML-RPC automation:
+
+1. Review the hosting provider's ToS regarding API access and automation
+2. Ensure your usage complies with rate limiting and acceptable use policies
+3. Understand that unauthorized access attempts may result in account suspension or legal action
+
+### Account Lockout Risk
+
+Repeated failed authentication attempts may trigger account lockout or IP blocking. To minimize risk:
+
+- Store credentials securely to prevent typos
+- Use API keys instead of passwords (they don't trigger the same lockout mechanisms)
+- Implement exponential backoff in retry logic
+- Monitor authentication logs for failed attempts
+
+### Responsible Use
+
+This skill is designed for legitimate business automation of Odoo ERP systems you are authorized to access. Do not use this skill to:
+
+- Access systems without authorization
+- Circumvent security controls on systems you don't own
+- Perform unauthorized data extraction or manipulation
+- Violate any applicable laws or regulations
+
 ## Security Checklist
 
 Before deploying an Odoo integration to production:
@@ -162,3 +198,6 @@ Before deploying an Odoo integration to production:
 - [ ] API keys rotated regularly
 - [ ] Connection test script passing
 - [ ] Documentation reviewed for accidental credential exposure
+- [ ] **Explicit authorization obtained for target Odoo instance**
+- [ ] **ToS compliance verified with hosting provider**
+- [ ] **Staging environment tested before production deployment**

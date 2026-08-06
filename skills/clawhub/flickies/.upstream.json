@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/flickies",
   "slug": "flickies",
   "ownerHandle": null,
-  "version": "0.3.11",
-  "updatedAt": 1785068273077,
-  "contentHash": "7fa01e1eb817e112e9247e2448039fcd38d6b58abc596c940d6b95b5873134a1",
-  "fetchedAt": "2026-07-26T18:03:30.202Z"
+  "version": "0.3.16",
+  "updatedAt": 1785617232294,
+  "contentHash": "0b99771a99552127f6e0f9661112ee581c8e5ad86274bc774ca47c1358b9b6e5",
+  "fetchedAt": "2026-08-06T10:25:19.323Z"
 }

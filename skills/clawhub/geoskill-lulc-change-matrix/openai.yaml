@@ -1,0 +1,14 @@
+name: geoskill-lulc-change-matrix
+display_name: 土地覆被转移矩阵
+description: |
+  两期土地覆被分类栅格逐像元交叉制表，输出转移矩阵、变化面积统计与 Sankey 流向数据
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-lulc-change-matrix.py
+runtime: python>=3.9
+tags:
+  - gis
+  - land-use
+  - raster
+  - remote-sensing
+  - time-series

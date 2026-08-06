@@ -1,0 +1,76 @@
+{
+  "version": "1.0.0",
+  "description": "Coastal flood scenario parameters for sea level rise and storm surge",
+  "vertical_datums": {
+    "MSL": {"name": "Mean Sea Level", "offset_m": 0.0},
+    "NAVD88": {"name": "North American Vertical Datum 1988", "offset_m": 0.0},
+    "WGS84": {"name": "WGS84 Ellipsoid", "offset_m": null},
+    "local_msl": {"name": "Local Mean Sea Level", "offset_m": 0.0},
+    "unknown": {"name": "Unknown", "offset_m": null}
+  },
+  "scenarios": {
+    "slr_0.5m": {
+      "name": "Sea Level Rise 0.5m",
+      "description": "Conservative sea level rise scenario (IPCC RCP4.5 by 2100)",
+      "water_level_m": 0.5,
+      "category": "sea_level_rise",
+      "probability": null
+    },
+    "slr_1.0m": {
+      "name": "Sea Level Rise 1.0m",
+      "description": "Moderate sea level rise scenario (IPCC RCP8.5 by 2100)",
+      "water_level_m": 1.0,
+      "category": "sea_level_rise",
+      "probability": null
+    },
+    "slr_2.0m": {
+      "name": "Sea Level Rise 2.0m",
+      "description": "High-end sea level rise scenario (ice sheet instability)",
+      "water_level_m": 2.0,
+      "category": "sea_level_rise",
+      "probability": null
+    },
+    "storm_10yr": {
+      "name": "10-year Storm Surge",
+      "description": "Storm surge with 10-year return period",
+      "water_level_m": 1.5,
+      "category": "storm_surge",
+      "probability": 0.10
+    },
+    "storm_50yr": {
+      "name": "50-year Storm Surge",
+      "description": "Storm surge with 50-year return period",
+      "water_level_m": 2.5,
+      "category": "storm_surge",
+      "probability": 0.02
+    },
+    "storm_100yr": {
+      "name": "100-year Storm Surge",
+      "description": "Storm surge with 100-year return period",
+      "water_level_m": 3.5,
+      "category": "storm_surge",
+      "probability": 0.01
+    },
+    "combined_1m_100yr": {
+      "name": "1m SLR + 100yr Storm",
+      "description": "Combined 1m sea level rise and 100-year storm surge",
+      "water_level_m": 4.5,
+      "category": "combined",
+      "probability": 0.01
+    }
+  },
+  "exposure_categories": {
+    "population": {"unit": "people", "description": "Resident population count"},
+    "buildings": {"unit": "sq_m", "description": "Building footprint area"},
+    "roads": {"unit": "meters", "description": "Road network length"},
+    "critical_facilities": {"unit": "count", "description": "Hospitals, schools, power stations"},
+    "agriculture": {"unit": "sq_km", "description": "Agricultural land area"}
+  },
+  "thresholds": {
+    "depth_low_m": 0.3,
+    "depth_medium_m": 1.0,
+    "depth_high_m": 2.0,
+    "min_connected_fraction": 0.01,
+    "max_inland_distance_km": 50.0
+  }
+}

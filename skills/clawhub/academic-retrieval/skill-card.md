@@ -1,42 +1,59 @@
-## Description: <br>
-Sciverse academic paper retrieval: structured metadata search, semantic chunk retrieval for RAG, and byte-range content reading. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sciverse Academic Retrieval helps agents search academic paper metadata, retrieve semantic chunks for RAG, and read byte-range content for citation-grade scientific literature.
 
-## Publisher: <br>
-[sciverse](https://clawhub.ai/user/sciverse) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[sciverse](https://clawhub.ai/user/sciverse)
 
-## Use Case: <br>
-Developers and external agent users use this skill to locate academic papers, retrieve metadata and semantic excerpts, read accessible full text ranges, and fetch referenced paper figures or table images for citation-grounded workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries, requested document identifiers, and the Sciverse API token are sent to Sciverse. <br>
-Mitigation: Install only when Sciverse academic retrieval is intended, keep the token scoped to this service, and avoid using SCIVERSE_BASE_URL unless it points to a trusted sciverse.space endpoint. <br>
-Risk: Full-text reading may be unavailable for papers without accessible content or caller authorization. <br>
-Mitigation: Check is_content_accessible before calling read_content and fall back to metadata or semantic search results when full text cannot be read. <br>
+## Use Case:
 
+Developers and external agent users use this skill to ground research workflows in academic paper metadata, semantic search chunks, and source text excerpts. It is suited for literature discovery, RAG citation support, DOI lookup, citation or reference exploration, and figure retrieval when content references images.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sciverse/skills/academic-retrieval) <br>
-- [Sciverse homepage](https://sciverse.space) <br>
-- [Sciverse API endpoint](https://api.sciverse.space) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, shell commands] <br>
-**Output Format:** [JSON responses and Markdown text fragments, with shell command examples for direct invocation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCIVERSE_API_TOKEN; read_content only works when full text is available and authorized.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.9.0 (source: SKILL.md frontmatter, manifest.json, server release metadata) <br>
+Risk: Research queries, filters, document identifiers, and content or figure requests are sent to Sciverse.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not include secrets, regulated data, or confidential proprietary research context unless the Sciverse account and organizational policy allow it.
+
+Risk: The skill requires a Sciverse API token for requests.
+
+Mitigation: Provide the token through the documented environment variable and avoid exposing it in prompts, logs, or shared command examples.
+
+Risk: Full-text access depends on paper availability and caller authorization.
+
+Mitigation: Check accessibility fields before requesting content and verify cited excerpts against returned source text.
+
+## Reference(s):
+
+- [Sciverse](https://sciverse.space)
+- [ClawHub Skill Page](https://clawhub.ai/sciverse/skills/academic-retrieval)
+- [Publisher Profile](https://clawhub.ai/user/sciverse)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [JSON responses with paper metadata, semantic search chunks, byte-range text or Markdown fragments, and base64-encoded image resources when requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Sciverse API token and may return only metadata when full text is unavailable or unauthorized.]
+
+## Skill Version(s):
+
+0.12.0 (source: frontmatter, manifest, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,5 @@
 ## Description: <br>
-Accounting Finance helps finance analysts, institutional investors, and corporate finance teams perform valuation modeling, financial analysis, risk assessment, batch processing, and automated report generation. <br>
+Accounting Finance helps financial analysts, institutional investors, and corporate finance teams run valuation modeling, financial analysis, risk assessment, batch processing, and automated report generation workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and finance professionals use this skill to automate financial modeling, valuation analysis, risk checks, and report drafting for securities, companies, and portfolios. It is intended for analytical workflow support, with human review of financial conclusions before use. <br>
+Financial analysts, institutional investors, and corporate finance teams use this skill to automate valuation modeling, financial statement analysis, fraud and risk checks, batch monitoring, and report generation. Developers can configure Python-based workflows and optional market-data providers for repeatable finance analysis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Local execution and file writes can affect the user's workspace. <br>
-Mitigation: Review generated scripts and shell commands before running them, and execute the skill in a controlled workspace. <br>
-Risk: API keys and private financial data may be handled during analysis workflows. <br>
-Mitigation: Keep credentials and private financial data in controlled local configuration and avoid sharing generated artifacts outside approved channels. <br>
-Risk: Financial analysis outputs may be incomplete, stale, or unsuitable for direct decision-making. <br>
-Mitigation: Validate assumptions, data sources, and conclusions with qualified human review before using reports for business or investment decisions. <br>
+Risk: Finance workspaces may contain unpublished or confidential financial data, and the skill can read and write finance files and generated reports. <br>
+Mitigation: Run the skill in a protected workspace, restrict access to generated reports, and avoid using confidential financial data unless the workspace and workflow are approved for that data. <br>
+Risk: Optional market-data providers require API keys and may send financial queries to external services. <br>
+Mitigation: Store API keys securely, configure only the providers intended for the workflow, and avoid external provider calls when unpublished or confidential data should remain local. <br>
+Risk: Generated valuation and risk outputs depend on input quality, assumptions, and configured models. <br>
+Mitigation: Have qualified finance reviewers validate source data, model assumptions, and generated reports before using outputs for business, investment, or compliance decisions. <br>
 
 
 ## Reference(s): <br>
@@ -30,13 +30,13 @@ Mitigation: Validate assumptions, data sources, and conclusions with qualified h
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, JSON-style result objects, Python execution steps, configuration notes, and generated report files such as Excel, PDF, DOCX, or HTML.] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with JSON, YAML, and Python examples plus generated report artifacts when configured] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run local Python and write report or configuration files; review generated commands, scripts, and outputs before relying on them.] <br>
+**Other Properties Related to Output:** [May read and write local finance files, run Python analysis, and generate PDF, DOCX, HTML, or Excel reports when configured.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter lists 1.0.1) <br>
+1.0.4 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

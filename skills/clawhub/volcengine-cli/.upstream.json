@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/volcengine-cli",
   "slug": "volcengine-cli",
   "ownerHandle": null,
-  "version": "1.1.1",
-  "updatedAt": 1783948650965,
-  "contentHash": "dd1546d8c586c12c318bcdb0ccd096424d18f20303f2121bceeeb92e7758be30",
-  "fetchedAt": "2026-07-26T18:15:08.458Z"
+  "version": "1.1.2",
+  "updatedAt": 1785465047236,
+  "contentHash": "4d1af70d93b9b0b1a514d293b92577d9ccde6cb743f4f3d1b60d35e5736b724a",
+  "fetchedAt": "2026-08-06T10:28:44.841Z"
 }

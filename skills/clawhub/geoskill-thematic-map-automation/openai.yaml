@@ -1,0 +1,13 @@
+name: geoskill-thematic-map-automation
+display_name: 专题地图自动化
+description: |
+  Automate choropleth, proportional symbol and dot density thematic maps to PNG or PDF
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-thematic-map-automation.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - remote-sensing
+  - visualization

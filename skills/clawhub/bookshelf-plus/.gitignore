@@ -1,0 +1,36 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# 環境變數（不要上傳金鑰）
+.env
+.env.local
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# 暫存
+*.log
+*.tmp
+*.swp
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-*
+
+# 測試輸出
+report*.md
+bookshelf*.csv
+bookshelf*.md

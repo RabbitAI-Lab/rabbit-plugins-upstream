@@ -1,0 +1,17 @@
+name: geoskill-urban-drainage-analysis
+display_name: 城市排水分析
+description: |
+  基于 D8 流向汇流、洼地识别与不透水面径流系数的城市内涝风险评估
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-urban-drainage-analysis.py
+runtime: python>=3.9
+tags:
+  - ai
+  - analysis
+  - dem
+  - extraction
+  - gis
+  - remote-sensing
+  - terrain
+  - urban

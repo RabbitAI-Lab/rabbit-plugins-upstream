@@ -1,0 +1,35 @@
+name: douyin-video-parser
+version: "1.1.0"
+license: MIT
+author: 斑斑
+description: >
+  把抖音视频链接转成中文字幕稿，并自动做重点总结和结构抓取。
+  完全本地、免费、离线，不依赖任何 API key 或 cookie 登录。
+  原理：iesdouyin share API 拿 mp4 直链 → 下载 → faster-whisper 转写 →
+  输出逐字稿（带时间戳）+ 连贯稿（无时间戳），
+  AI 自动执行后处理分析（核心观点/结构拆解/金句提取/内容判断）。
+
+triggers:
+  - 抖音视频解析
+  - douyin-video-parser
+  - 拆视频
+  - 视频转文字
+  - 抖音字幕
+  - 视频转写
+  - 字幕分离
+  - 逐字稿
+  - 分析视频
+  - 听视频
+  - 读视频
+
+instructions: SKILL.md
+
+dependencies:
+  pip:
+    - faster-whisper
+
+files:
+  - skill.yaml
+  - scripts/transcribe.py
+  - SKILL.md
+  - LICENSE

@@ -1,5 +1,5 @@
 ## Description: <br>
-Supports JFTech camera image orientation tasks, including querying and setting horizontal mirror and vertical flip configuration. <br>
+Controls and queries horizontal mirror and vertical flip settings for JFTech camera images through JFTech OpenAPI. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to inspect or change image flip and mirror settings for bound, online JFTech camera devices through the JFTech OpenAPI. <br>
+Developers and operators use this skill to inspect or change image orientation for bound, online JFTech cameras, especially when cameras are mounted upside down or mirrored. <br>
 
 ### Deployment Geography for Use: <br>
-China, Asia, Europe, and North America <br>
+Mainland China, Asia, Europe, and North America via the listed JFTech regional API endpoints. <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can change a camera's saved image orientation configuration. <br>
-Mitigation: Use it only with devices you own or administer, verify the target device and channel before changing settings, and use the reset action when the intended orientation is not achieved. <br>
-Risk: Credentials and device tokens are used for device-control API calls, and an unexpected endpoint could expose them. <br>
-Mitigation: Keep JF_APP_SECRET and JF_DEVICE_TOKEN tightly scoped and rotated, and use only documented JFTech regional endpoints. <br>
-Risk: When current camera configuration is missing, the script can fall back to a default Camera.Param payload before writing changes. <br>
-Mitigation: Review the current device configuration before writes, and consider modifying the script to fail instead of writing defaults when Camera.Param is absent. <br>
+Risk: The skill uses JFTech API credentials and a device token to access camera configuration. <br>
+Mitigation: Provide only the minimum device scope available, keep credentials in the operator environment or secret store, and rotate tokens when they expire or are exposed. <br>
+Risk: Set and reset actions can immediately change the live camera image orientation and persist until changed again. <br>
+Mitigation: Confirm the target device, channel, and action before applying changes, and query the current configuration before and after updates. <br>
+Risk: Changing JF_ENDPOINT can direct requests away from the intended JFTech regional API host. <br>
+Mitigation: Use only the official regional JFTech API endpoint for the deployment region. <br>
 
 
 ## Reference(s): <br>
-- [JFTech Open Platform documentation](https://docs.jftech.com) <br>
-- [ClawHub skill page](https://clawhub.ai/jftech/jf-open-pro-device-image-flip) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/jftech) <br>
+- [JFTech Open Platform Documentation](https://docs.jftech.com) <br>
+- [ClawHub Skill Page](https://clawhub.ai/jftech/skills/jf-open-pro-device-image-flip) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown documentation and command-line text output] <br>
+**Output Format:** [Markdown guidance with shell commands and CLI status text] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires JFTech account, application credentials, device token, device serial number, and an online bound device.] <br>
+**Other Properties Related to Output:** [Uses JFTech API credentials and device identifiers supplied by the operator to query or update camera orientation.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+1.0.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

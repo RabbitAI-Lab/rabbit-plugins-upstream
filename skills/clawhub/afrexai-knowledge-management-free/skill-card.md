@@ -1,5 +1,5 @@
 ## Description: <br>
-Afrexai Knowledge Management Free helps an agent capture unstructured knowledge, structure entities and relationships, query associations, surface relevant context, and manage a local knowledge base lifecycle. <br>
+Afrexai Knowledge Management Free helps agents capture unstructured notes or documents as structured knowledge entities and relationships, query those relationships, and surface related knowledge from a local knowledge base. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, developers, and agent operators can use this skill to turn meeting notes, technical decisions, project documentation, code context, and natural-language questions into structured knowledge entries, relationship paths, and concise retrieval results. <br>
+Developers, teams, and automation users can use this skill to capture meeting notes, project documents, technical decisions, and natural-language questions as structured knowledge entries and relationship-based answers. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requests broad shell-command authority without explaining why it needs that power. <br>
-Mitigation: Install only when shell-command authority is acceptable, and review any proposed command before execution. <br>
-Risk: The skill may create or maintain a local knowledge base that could contain sensitive personal or confidential information. <br>
-Mitigation: Keep sensitive material out of the knowledge base unless storage location, retention behavior, and deletion or archival steps are understood. <br>
-Risk: Outdated, conflicting, or low-confidence knowledge entries could lead to misleading association results. <br>
-Mitigation: Preserve source context and confidence values, review conflicts before relying on results, and mark stale or disproven entries as deprecated. <br>
+Risk: Broad read, write, and exec authority can affect local files or run commands. <br>
+Mitigation: Review proposed reads, writes, and commands before approval, and run the skill in a sandboxed workspace. <br>
+Risk: Inconsistent API, callback URL, and local-only storage guidance can create unclear data flows. <br>
+Mitigation: Use non-sensitive documents unless storage locations, callback URLs, and external API behavior are explicitly configured and approved. <br>
+Risk: Knowledge extraction and relationship reasoning can produce incorrect, stale, or overconfident links. <br>
+Mitigation: Validate captured entities, sources, confidence values, and relationship paths before using outputs for decisions. <br>
 
 
 ## Reference(s): <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/afrexai-knowledge-management-free) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp) <br>
+- [Artifact SKILL.md](artifact/SKILL.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON-shaped examples and status/result fields] <br>
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JSON examples and possible shell command proposals] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include structured entities, relationships, source context, confidence values, summaries, execution logs, and error fields.] <br>
+**Other Properties Related to Output:** [May propose local file reads, writes, or command execution; review before approving actions.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence; artifact frontmatter lists 1.0.0) <br>
+1.0.3 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

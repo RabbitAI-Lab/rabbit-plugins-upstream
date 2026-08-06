@@ -1,45 +1,64 @@
-## Description: <br>
-Uses fixed home-camera video to identify prolonged standing and frequent bending by a pregnant person, summarize posture and fatigue-risk signals, and produce rest reminders for health reference rather than medical diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed-camera home video to detect prolonged standing, bending, and related pregnancy over-fatigue signals, producing posture metrics, rest reminders, and report links for health reference rather than medical diagnosis.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers can use this skill to analyze fixed-camera video from homes, prenatal schools, community health centers, or smart-home and pregnancy-management apps for posture, standing-duration, bending-frequency, and reminder generation. The output is intended for wellness reference and should not be used as medical diagnosis or treatment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive in-home pregnancy-related video or video URLs are sent to external Life Emergence services. <br>
-Mitigation: Use only with the pregnant person's explicit informed consent, verify the configured service endpoints, and avoid submitting footage unless the privacy and retention terms are acceptable. <br>
-Risk: Reports are tied to a persistent local or remote identity and auth tokens may be stored locally. <br>
-Mitigation: Use a dedicated workspace or account, review local token storage before deployment, and clear credentials and report history when no longer needed. <br>
-Risk: The analysis may be mistaken for clinical advice. <br>
-Mitigation: Present outputs as wellness reminders and posture statistics only, and direct users to qualified medical care for symptoms or pregnancy health concerns. <br>
+## Use Case:
 
+External developers and operators use this skill to connect fixed-camera pregnancy posture analysis into smart-home, prenatal-school, community health, or pregnancy-management workflows. It is intended for visual posture statistics, fatigue-risk reminders, history lookup, and report export links, not diagnosis or medical treatment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pregnant-posture-fatigue-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Pregnant posture fatigue API documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON-style structured analysis with posture metrics, alert type, alert level, reminder text, recommended action, and optional report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the analysis result to a user-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; SKILL.md frontmatter lists 1.0.6) <br>
+Risk: Pregnancy-related home camera footage and analysis history are sensitive and may be processed through the vendor's cloud service with report links.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit informed consent, limit inputs to necessary footage, protect exported reports and local workspace data, and avoid shared-device workflows unless identities are separated.
+
+Risk: The skill may silently create or reuse a persistent local/cloud identity for analysis history.
+
+Mitigation: Confirm the intended identity context before use, separate users on shared devices, and review local configuration or cached identity state when changing users.
+
+Risk: The output could be mistaken for medical advice even though it is intended as health reference only.
+
+Mitigation: Present results as posture statistics and friendly reminders, keep diagnosis and treatment decisions with qualified medical professionals, and escalate urgent symptoms to clinical care.
+
+Risk: Visual posture detection can be unreliable when the full body is not visible, lighting is poor, camera angle is unsuitable, or clothing obscures posture.
+
+Mitigation: Use stable full-body camera coverage with adequate lighting and treat alerts as supportive signals to review alongside user context and daily trends.
+
+## Reference(s):
+
+- [Pregnant posture fatigue detection API documentation](artifact/references/api_doc.md)
+- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pregnant-posture-fatigue-detection-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files, guidance]
+
+**Output Format:** [Markdown text containing structured analysis, JSON-style posture and fatigue-risk fields, history tables, reminder guidance, and report links; optionally saved to a local output file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud-hosted report export links and history-query results associated with a persistent internal identity.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata; artifact SKILL.md frontmatter says 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

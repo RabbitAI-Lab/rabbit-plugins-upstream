@@ -11,31 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, product teams, and specification authors use this skill to turn feature ideas into structured specifications with user scenarios, functional requirements, measurable success criteria, assumptions, and quality checks. <br>
+Developers, product managers, and teams use this skill to turn feature descriptions into user-focused specifications with scenarios, functional requirements, acceptance criteria, and measurable success criteria. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can be triggered by broad terms such as requirements or specification, causing it to activate when a user did not intend to draft a formal spec. <br>
-Mitigation: Disable the skill or narrow trigger usage when explicit invocation is preferred. <br>
-Risk: Generated specifications may contain assumptions or requirements that do not match stakeholder intent. <br>
-Mitigation: Review generated specifications with stakeholders before using them for planning or implementation. <br>
+Risk: The skill can activate during broad requirements discussions because its triggers cover general specification and acceptance-criteria terms. <br>
+Mitigation: Review generated specifications before using them for planning or implementation, and confirm that assumptions match stakeholder intent. <br>
+Risk: Incorrect or overly vague guidance could lead to misleading feature requirements. <br>
+Mitigation: Use the included checklist dimensions and measurable success-criteria patterns to review clarity, completeness, coverage, and testability. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-spec-kit-spec-writing) <br>
-- [Spec Kit homepage](https://github.com/athola/claude-night-market/tree/master/plugins/spec-kit) <br>
+- [Publisher profile](https://clawhub.ai/user/athola) <br>
+- [OpenClaw homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/spec-kit) <br>
+- [Specification Structure](artifact/modules/specification-structure.md) <br>
+- [Success Criteria Patterns](artifact/modules/success-criteria-patterns.md) <br>
+- [Checklist Quality Dimensions](artifact/modules/checklist-dimensions.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown specification guidance and checklist-style text] <br>
+**Output Format:** [Markdown specifications, user stories, checklists, and acceptance criteria guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces human-readable specification sections, success criteria, acceptance guidance, and requirements-quality checklist prompts; it does not execute code or access data by itself.] <br>
+**Other Properties Related to Output:** [May include documented assumptions or clarification markers when feature descriptions are incomplete.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+1.9.17 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

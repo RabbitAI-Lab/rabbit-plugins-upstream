@@ -1,0 +1,15 @@
+name: geoskill-ai-time-series-forecast
+display_name: AI时序预测
+description: |
+  LSTM 时序预测网络（torch+CUDA，默认） + 经典线性/多项式/AR(p) 解释基线：多步外推 + 留出 MAE/RMSE 验证 + 逐像元栅格输出
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-ai-time-series-forecast.py
+runtime: python>=3.9
+tags:
+  - ai
+  - gis
+  - raster
+  - remote-sensing
+  - simulation
+  - time-series

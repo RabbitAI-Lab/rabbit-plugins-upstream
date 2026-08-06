@@ -1,5 +1,5 @@
 ## Description: <br>
-Browser-driven adidas Click B2B toolkit that places purchase orders and checks live inventory or wholesale pricing on the adidas Click portal with Playwright. <br>
+Browser-driven adidas Click B2B toolkit that uses Playwright to place purchase orders and run live inventory or wholesale-pricing checks on the adidas Click portal. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External agents and business users use this skill to draft or place adidas Click B2B purchase orders, and to check live stock levels or wholesale net pricing before buying. It is intended for accounts where adidas Click browser automation is authorized. <br>
+External users and agents use this skill to draft or submit adidas Click B2B purchase orders, check live stock levels, and calculate wholesale pricing for selected styles, sizes, and quantities. The ordering path can place real purchases when explicitly confirmed. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can place a real adidas Click purchase order with no sandbox when confirm=true is used. <br>
-Mitigation: Use dry runs first, confirm order details with the user, and only run confirm=true for an intended purchase on an authorized account. <br>
-Risk: The skill uses adidas Click credentials and may receive them through environment variables, stdin JSON, or CLI flags. <br>
-Mitigation: Treat credentials as secrets, prefer environment variables or stdin JSON, and avoid exposing credentials in shell history or process listings. <br>
-Risk: On shared accounts, the skill can create, switch, and delete matching carts while pricing checks briefly create a throwaway cart. <br>
-Mitigation: Use the default fresh-cart behavior, keep the DO NOT BUY marker for pricing checks, review warnings, and manually remove any leftover throwaway cart if deletion fails. <br>
-Risk: Browser automation may be blocked, stall, or require a one-time Chromium download and display support. <br>
-Mitigation: Install the declared Playwright dependency, expect the first-run Chromium download, and use headed mode or Linux Xvfb only where the account and host environment permit it. <br>
+Risk: The skill can place real adidas B2B orders and has no sandbox order path. <br>
+Mitigation: Run dry runs first and require explicit user confirmation before using confirm=true. <br>
+Risk: The skill intentionally masks browser automation signals to operate through adidas Click anti-bot controls. <br>
+Mitigation: Install only when authorized to automate the adidas Click account and after accepting the related legal and compliance risk. <br>
+Risk: The skill handles adidas Click credentials and may mutate carts on a shared account. <br>
+Mitigation: Store credentials in environment or secret storage, prefer a dedicated account, and require explicit confirmation before cart-deleting workflows. <br>
 
 
 ## Reference(s): <br>
-- [Order Flow Notes](references/order_flow_notes.md) <br>
-- [adidas Click B2B Portal](https://b2bportal.adidas-group.com) <br>
+- [adidas Click Portal](https://b2bportal.adidas-group.com) <br>
 - [ClawHub Skill Page](https://clawhub.ai/zmtucker/skills/drivethru-adidas-click) <br>
+- [order_flow_notes.md](references/order_flow_notes.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [JSON, guidance] <br>
-**Output Format:** [JSON object on stdout, with structured error JSON on failure] <br>
+**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
+**Output Format:** [JSON command output with human-facing guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Order results can include dry-run status, submitted confirmation number, totals, warnings, out-of-stock decisions, inventory, pricing, and cart deletion status.] <br>
+**Other Properties Related to Output:** [Uses Python and Playwright; credentials may be supplied through environment variables, stdin JSON, or CLI flags.] <br>
 
 ## Skill Version(s): <br>
-0.5.1 (source: frontmatter and server release evidence) <br>
+0.6.0 (source: frontmatter and release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

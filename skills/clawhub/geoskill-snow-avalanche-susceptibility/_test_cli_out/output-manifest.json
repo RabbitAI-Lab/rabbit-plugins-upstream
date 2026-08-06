@@ -1,0 +1,83 @@
+{
+  "skill": "snow-avalanche-susceptibility",
+  "skill_version": "1.0.0",
+  "command": "snow-avalanche-susceptibility --bbox 90 30 91 31 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-03T13:38:26.716325Z",
+  "finished_at": "2026-08-03T13:38:27.530811Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "bbox": [
+      90.0,
+      30.0,
+      91.0,
+      31.0
+    ],
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\susceptibility.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        90.0,
+        30.0,
+        91.0,
+        31.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\susceptibility_level.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        90.0,
+        30.0,
+        91.0,
+        31.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\avalanche_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "input_nodata": -9999.0,
+    "n_valid_pixels": 4096,
+    "n_total_pixels": 4096,
+    "mean_susceptibility": 0.5761513113975525,
+    "max_susceptibility": 0.8694672584533691,
+    "very_high_fraction": 0.13330078125,
+    "high_plus_fraction": 0.679443359375
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "snow-avalanche-susceptibility"
+  },
+  "error": null
+}

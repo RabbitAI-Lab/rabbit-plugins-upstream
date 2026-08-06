@@ -1,0 +1,13 @@
+name: geoskill-earthquake-liquefaction-risk
+display_name: 地震液化风险评估
+description: |
+  Youd简化法结合地质地下水位与PGA的液化指数评估
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-earthquake-liquefaction-risk.py
+runtime: python>=3.9
+tags:
+  - disaster
+  - gis
+  - remote-sensing
+  - risk

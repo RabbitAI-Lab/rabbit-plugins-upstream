@@ -11,13 +11,21 @@ import shutil
 import sys
 import time
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
 from dotenv import load_dotenv, set_key
 
 from skill_update import DEV_CACHE_FILE, check_for_update
+
+# Usage tracking is strictly optional: a broken tracker must never take the
+# CLI down with it.
+try:
+    from usage_tracker import track
+except Exception:  # noqa: BLE001 - fail-open: any tracker breakage must not take the CLI down
+    def track(event_name):
+        return None
 
 # ── Constants ──────────────────────────────────────────────────────────────────
 ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
@@ -284,12 +292,19 @@ def safe_join_path(base_dir, filename):
 
 
 def fmt_time(ts):
-    """Format an ISO timestamp for display, return '' if missing."""
+    """Format a backend timestamp for display in the local timezone.
+
+    Backend timestamps are UTC; values without an explicit offset are
+    interpreted as UTC, then converted to the machine-local timezone.
+    Returns '' if missing.
+    """
     if not ts:
         return ""
     try:
-        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-        return dt.strftime("%Y-%m-%d %H:%M")
+        dt = datetime.fromisoformat(str(ts).strip().replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone().strftime("%Y-%m-%d %H:%M")
     except Exception:
         return ts[:16] if len(ts) >= 16 else ts
 
@@ -331,7 +346,7 @@ SYNC_MANIFEST_NAME = ".shifu-sync.json"
 
 def _now_iso():
     """UTC timestamp, second precision, Z-suffixed — matches image-manifest style."""
-    return datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _mask_phone(phone):
@@ -1489,10 +1504,17 @@ def _tts_model_options(tts_config):
 
 
 def _filter_tts_voices_for_model(provider, voices, model):
-    if _tts_provider_name(provider) != "volcengine":
-        return voices
     model_key = _string_tts_value(model)
     if not model_key:
+        return voices
+    # Providers whose voices declare a resource_id (volcengine resources,
+    # tencent TextToVoice tiers) require the voice to match the selected
+    # model; providers without the annotation keep their full list. This
+    # mirrors the platform editor's filterTtsVoicesForModel behavior.
+    has_resource_annotations = any(
+        _string_tts_value(v.get("resource_id")) for v in voices
+    )
+    if not has_resource_annotations:
         return voices
     return [
         v for v in voices
@@ -1513,7 +1535,12 @@ def _select_platform_tts_defaults(speed, tts_config):
     """Mirror the platform editor's default provider/model/voice selection."""
     providers = _tts_providers_by_name(tts_config)
     model_options = _tts_model_options(tts_config)
-    default_model_option = model_options[0] if model_options else None
+    # Prefer the option the platform declares as default (is_default); older
+    # backends without the marker fall back to the first option.
+    default_model_option = next(
+        (o for o in model_options if o.get("is_default")),
+        model_options[0] if model_options else None,
+    )
     provider = ""
     model = ""
 
@@ -2229,7 +2256,7 @@ def _build_import_json(course_dir, title=None, description=None,
 
     import_data = {
         "version": "1.0",
-        "exported_at": datetime.now().isoformat(),
+        "exported_at": _now_iso(),
         "shifu": {
             "shifu_bid": shifu_bid,
             "title": title,
@@ -2648,7 +2675,7 @@ def cmd_upload_image(args):
                 "local": local_rel,
                 "remote": remote_url,
                 "alt": alt,
-                "uploaded_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "uploaded_at": _now_iso(),
                 "bytes": len(file_bytes),
                 "original_bytes": original_bytes,
                 "mime": mime,
@@ -2665,7 +2692,7 @@ def cmd_upload_image(args):
             "source_url": args.url,
             "remote": remote_url,
             "alt": alt,
-            "uploaded_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "uploaded_at": _now_iso(),
         })
 
 
@@ -2996,6 +3023,13 @@ def main():
 
     handler = commands.get(args.command)
     if handler:
+        # check-update runs once per session (session-controls.md), so it
+        # doubles as the session-start marker; every other command reports
+        # its own name. Only the command name is sent, never its arguments.
+        if args.command == "check-update":
+            track("skill_start")
+        else:
+            track(f"cli_{args.command}")
         handler(args)
     else:
         parser.print_help()

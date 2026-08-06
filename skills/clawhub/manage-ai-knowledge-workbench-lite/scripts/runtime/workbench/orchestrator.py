@@ -55,6 +55,32 @@ FORBIDDEN_HOST_PRODUCTS = {
 }
 
 
+def validated_host_gate(validated_host: str | None) -> tuple[dict[str, Any], int] | None:
+    """Fail closed when a caller supplies an invalid agent-host identity.
+
+    This helper is intentionally public so every CLI boundary can enforce the
+    same trust rule before forwarding caller-controlled input to the workflow.
+    """
+
+    host_product = validated_host.split("/", 1)[0].lower() if validated_host and "/" in validated_host else ""
+    if validated_host is None or (
+        VALIDATED_HOST_PATTERN.fullmatch(validated_host) is not None
+        and host_product not in FORBIDDEN_HOST_PRODUCTS
+    ):
+        return None
+
+    cause = make_result(
+        status="error",
+        code="VALIDATED_HOST_INVALID",
+        message=(
+            "--validated-host must be Product/version from the agent host CLI "
+            "(for example OpenClaw/2026.6.11); OS, kernel, device, user, and account identities are invalid."
+        ),
+        next_actions=[{"action": "probe_agent_cli_version_and_retry"}],
+    )
+    return _fail(stage="DISCOVER", cause=cause, stages=[], artifacts=[], config=None)
+
+
 def _deduplicate(values: list[str]) -> list[str]:
     return list(dict.fromkeys(values))
 
@@ -218,21 +244,9 @@ def run_auto(
     resumed_from: str | None = None
     workspace_created = False
 
-    host_product = validated_host.split("/", 1)[0].lower() if validated_host and "/" in validated_host else ""
-    if validated_host is not None and (
-        VALIDATED_HOST_PATTERN.fullmatch(validated_host) is None
-        or host_product in FORBIDDEN_HOST_PRODUCTS
-    ):
-        cause = make_result(
-            status="error",
-            code="VALIDATED_HOST_INVALID",
-            message=(
-                "--validated-host must be Product/version from the agent host CLI "
-                "(for example OpenClaw/2026.6.11); OS, kernel, device, user, and account identities are invalid."
-            ),
-            next_actions=[{"action": "probe_agent_cli_version_and_retry"}],
-        )
-        return _fail(stage="DISCOVER", cause=cause, stages=stages, artifacts=artifacts, config=None)
+    host_gate = validated_host_gate(validated_host)
+    if host_gate is not None:
+        return host_gate
 
     if not workspace.exists():
         try:

@@ -30,7 +30,7 @@ hcloud SWR ListReposDetails --namespace=group-dev --cli-region=cn-north-4
 hcloud SWR ListReposDetails --namespace=group-dev --limit=20 --offset=0 --cli-region=cn-north-4
 
 # Sort by most recently updated
-hcloud SWR ListReposDetails --namespace=group-dev --order_column=updated_at --order_type=desc --cli-region=cn-north-4
+hcloud SWR ListReposDetails --namespace=group-dev --order_column=updated_time --order_type=desc --cli-region=cn-north-4
 
 # Sort by tag count (order_column uses "tag_count" even though response field is "num_images")
 hcloud SWR ListReposDetails --namespace=group-dev --order_column=tag_count --order_type=desc --cli-region=cn-north-4
@@ -102,8 +102,13 @@ hcloud SWR ShowRepository --namespace=group-dev --repository=my-app --cli-region
 
 ### W4: Update Repository Properties
 
+⚠️ **SECURITY WARNING for `is_public=true`**: When changing repository visibility from private to public, the skill MUST:
+1. Display warning: "Public repositories allow any user to pull images, which may pose security risks."
+2. Require explicit user confirmation (yes/no) before proceeding
+3. Abort the operation if the user declines
+
 ```bash
-# Change visibility from private to public
+# Change visibility from private to public (requires user confirmation due to security risk)
 hcloud SWR UpdateRepo --namespace=group-dev --repository=my-app --is_public=true --cli-region=cn-north-4
 
 # Update description

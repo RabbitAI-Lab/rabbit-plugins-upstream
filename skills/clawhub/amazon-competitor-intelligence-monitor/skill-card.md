@@ -1,5 +1,5 @@
 ## Description: <br>
-Amazon competitor intelligence engine for one-shot competitor teardowns and recurring per-competitor monitoring with alerts using ZooData API data. <br>
+Amazon Competitor Intelligence Monitor helps agents run focused ZooData-powered competitor scans or monitoring checks for Amazon keywords, ASINs, brands, and defined competitor sets. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,40 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External sellers, brand operators, and commerce analysts use this skill to analyze identified Amazon competitors by keyword, ASIN, or brand and to monitor tracked ASINs for price, ranking, listing, review, and fulfillment changes. <br>
+External sellers, marketplace operators, and agent users use this skill to analyze known Amazon competitors, compare market position, identify pricing and review patterns, and monitor tracked ASINs for changes. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Bundled monitor-data includes a pre-filled collagen peptides configuration and baseline with tracked ASINs. <br>
-Mitigation: Inspect or clear monitor-data before installing, then create monitoring state only for competitors selected by the user. <br>
-Risk: Recurring Quick Checks may spend ZooData API credits or continue tracking products that are not relevant to the user's current task. <br>
-Mitigation: Enable scheduled checks only after explicit user selection, review tracked ASINs, and monitor API credit usage. <br>
-Risk: Keywords, ASINs, categories, and review requests are sent to ZooData for analysis. <br>
-Mitigation: Treat those inputs as third-party API data and avoid submitting sensitive or unauthorized competitor lists. <br>
-Risk: API credentials may be exposed if entered directly into prompts or persisted in local files. <br>
-Mitigation: Prefer the ZOODATA_API_KEY environment variable and avoid embedding keys in generated reports or shared configuration. <br>
+Risk: The runtime can resolve credentials from legacy APICLAW_API_KEY or ~/.apiclaw/config.json sources. <br>
+Mitigation: Run the skill with a dedicated ZOODATA_API_KEY and do not expose unrelated legacy API keys or ~/.apiclaw/config.json to the agent environment. <br>
+Risk: Monitoring state and review fallback work files can leave competitor targets or review data in local directories. <br>
+Mitigation: Periodically clean monitor-data and /tmp review work directories, especially in shared or long-lived agent runtimes. <br>
+Risk: Broad competitor scans can consume account credits quickly. <br>
+Mitigation: Confirm estimated credit cost before multi-call scans and prefer granular commands when operating under a credit cap. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/apiclaw/skills/amazon-competitor-intelligence-monitor) <br>
-- [Publisher Profile](https://clawhub.ai/user/apiclaw) <br>
-- [ZooData Skills Homepage](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
-- [ZooData](https://zoodata.ai) <br>
-- [ZooData API Documentation](https://api.zoodata.ai/api-docs) <br>
-- [API Key Setup](https://zoodata.ai/en/api-keys) <br>
-- [API Field Reference](references/reference.md) <br>
+- [ClawHub skill page](https://clawhub.ai/apiclaw/skills/amazon-competitor-intelligence-monitor) <br>
+- [Project homepage](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
+- [ZooData API keys](https://zoodata.ai/en/api-keys) <br>
+- [ZooData pricing](https://zoodata.ai/en/pricing) <br>
+- [ZooData API field reference](artifact/references/reference.md) <br>
+- [ZooData CLI contract](artifact/references/cli-contract.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, API calls, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports with tables, alerts, data provenance, API usage summaries, and inline shell commands when setup or scheduled checks are needed.] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown reports with tables, status messages, and optional shell commands; the bundled CLI produces JSON evidence for the agent to summarize.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZOODATA_API_KEY; full scans consume about 28-35 credits and quick checks consume about 5-10 credits.] <br>
+**Other Properties Related to Output:** [Reports should match the user's language, include confidence labels, data provenance, API usage, and credit consumption when API calls run.] <br>
 
 ## Skill Version(s): <br>
-1.1.4 (source: evidence release, artifact frontmatter, target metadata) <br>
+1.1.8 (source: skill metadata and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -11,33 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to audit, score, and generate README files for open source projects, libraries, CLI tools, apps, agent skills, and data resources. It helps classify project type, choose a README template, produce Markdown, and run a pre-publish checklist. <br>
+Developers and documentation maintainers use this skill to audit, score, create, and improve project README files across common project types. It helps agents classify a project, run README quality checks, generate Markdown documentation, and apply a pre-publish checklist. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The onboarding flow can inventory public GitHub repositories if the user agrees to repo-wide README evaluation. <br>
-Mitigation: Decline repo-wide evaluation unless it is needed, or select specific repositories before the skill audits README files. <br>
-Risk: Generated README content or proposed documentation edits may be inaccurate, incomplete, or not match the project maintainer's intent. <br>
-Mitigation: Review the README preview and checklist results before allowing file changes or publishing generated documentation. <br>
+Risk: The skill reads README content and project metadata to classify projects and score documentation quality. <br>
+Mitigation: Confirm the target project path and intended files before running scans or generating documentation. <br>
+Risk: The onboarding workflow can optionally review public GitHub repository READMEs. <br>
+Mitigation: Decline the onboarding repository audit for local-only use, or approve only the public repositories intended for review. <br>
+Risk: README generation or multilingual output can replace or add documentation files. <br>
+Mitigation: Review the preview or diff before allowing README.md or language-specific README files to be written. <br>
 
 
 ## Reference(s): <br>
-- [Better Readme on ClawHub](https://clawhub.ai/thomaszhou22/better-readme) <br>
+- [ClawHub Skill Page](https://clawhub.ai/thomaszhou22/skills/better-readme) <br>
 - [Scoring Rubric](references/scoring-rubric.md) <br>
 - [README Templates](references/templates.md) <br>
 - [Pre-Publish Checklist](references/pre-publish-checklist.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown README content, audit reports, JSON score output, and shell command suggestions] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance, README drafts, audit scores, optional JSON audit output, and inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can produce English README.md by default and additional language README files only when requested.] <br>
+**Other Properties Related to Output:** [May generate or revise README.md and optional language-specific README files after user review.] <br>
 
 ## Skill Version(s): <br>
-1.1.0 (source: SKILL.md frontmatter and server release evidence) <br>
+1.1.1 (source: server release metadata; artifact frontmatter says 1.1.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
