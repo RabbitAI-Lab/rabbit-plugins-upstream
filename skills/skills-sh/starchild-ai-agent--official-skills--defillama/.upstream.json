@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/defillama",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "defillama",
+  "branch": "main",
+  "pushedAt": "2026-08-03T10:22:28Z",
+  "contentHash": "6018d8054570deda7f6f829c5180636fee133761d221047f298a5448d338b833",
+  "fetchedAt": "2026-08-06T10:03:29.947Z"
+}

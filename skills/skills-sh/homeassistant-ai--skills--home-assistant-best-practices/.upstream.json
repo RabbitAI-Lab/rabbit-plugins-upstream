@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/homeassistant-ai/skills/home-assistant-best-practices",
+  "repo": "homeassistant-ai/skills",
+  "skillId": "home-assistant-best-practices",
+  "branch": "main",
+  "pushedAt": "2026-08-02T19:25:39Z",
+  "contentHash": "de56779cc93740c2fbc72262ecb225ed2693ded624546abe31e7c466fda392bb",
+  "fetchedAt": "2026-08-06T10:04:18.342Z"
+}

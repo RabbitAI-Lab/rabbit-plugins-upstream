@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/skill-scanner",
+  "repo": "getsentry/skills",
+  "skillId": "skill-scanner",
+  "branch": "main",
+  "pushedAt": "2026-08-03T09:16:55Z",
+  "contentHash": "06b3038291b08aee8fb5bd7d33b6c09f51981633c58cff8b535c4f73c409f3bc",
+  "fetchedAt": "2026-08-06T10:03:21.728Z"
+}

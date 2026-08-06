@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/clickhouse/agent-skills/clickhouse-js-node-troubleshooting",
+  "repo": "clickhouse/agent-skills",
+  "skillId": "clickhouse-js-node-troubleshooting",
+  "branch": "main",
+  "pushedAt": "2026-08-02T03:11:54Z",
+  "contentHash": "111a2d61366d2d78237512dce6e030d66079b7c61f53b06ed6817d376281aae1",
+  "fetchedAt": "2026-08-06T10:03:43.776Z"
+}

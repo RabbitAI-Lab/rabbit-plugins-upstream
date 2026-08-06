@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/assistant-ui/skills/thread-list",
+  "repo": "assistant-ui/skills",
+  "skillId": "thread-list",
+  "branch": "main",
+  "pushedAt": "2026-08-02T08:22:04Z",
+  "contentHash": "071eafcdeb9cdc948d442ceb1ff5613a0334a1639e4ec406216faa8b1de7f27e",
+  "fetchedAt": "2026-08-06T10:04:40.508Z"
+}
