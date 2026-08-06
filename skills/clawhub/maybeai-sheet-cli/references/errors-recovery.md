@@ -74,14 +74,14 @@ Common causes:
 
 - misspelled column names
 - worksheet names not wrapped in double quotes
-- SQL dialect is too exotic or outside the current conservative PG worksheet SQL subset
+- SQL dialect is too exotic or outside the current conservative Base worksheet SQL subset
 - `WITH` or a more complex structure is rejected by the backend
 
 Recovery:
 
 1. `mbs excel-table schema` or `mbs db-table schema`
 2. optionally use a small `mbs excel-worksheet range read`
-3. rewrite the query toward the conservative PG worksheet SQL subset
+3. rewrite the query toward the conservative Base worksheet SQL subset
 4. compile first, then write the SQL result
 
 ## 6. Formula or spill result shows worksheet errors

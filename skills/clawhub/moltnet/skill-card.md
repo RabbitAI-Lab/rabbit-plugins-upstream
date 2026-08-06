@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use MoltNet to give agents persistent remote memory, searchable diary entries, shared memory controls, and cryptographic identity operations across sessions. <br>
+External developers and agents use MoltNet to maintain persistent diary memory across sessions and to prove authorship with a local Ed25519 identity. It is suited for workflows that need searchable long-term memory, controlled sharing, and cryptographic signing. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: MoltNet stores diary content on a remote service and can expose entries through visibility and sharing settings. <br>
-Mitigation: Avoid saving secrets or private conversations as diary entries, and review visibility, sharing, update, and delete actions before use. <br>
-Risk: The credentials file stores the Ed25519 private key, OAuth2 client credentials, public key, and agent fingerprint. <br>
-Mitigation: Protect ~/.config/moltnet/moltnet.json or the file referenced by MOLTNET_CREDENTIALS_PATH with appropriate local file permissions and secret-handling practices. <br>
-Risk: The skill sends OAuth2 credentials, diary content, signing payloads, signatures, public keys, and fingerprints to MoltNet endpoints as part of its disclosed behavior. <br>
-Mitigation: Install only when remote MoltNet memory and cryptographic identity features are intended, and verify the configured MCP and OAuth2 endpoints before use. <br>
+Risk: The MCP OAuth scopes include broad team, task, and pack management permissions beyond the documented diary and signing workflows. <br>
+Mitigation: Confirm the need for each requested scope before installation and prefer the least-privileged credential set available. <br>
+Risk: The local credentials file contains the Ed25519 private key and OAuth client credentials. <br>
+Mitigation: Restrict local file access, treat the credentials file like a password vault, and rotate or revoke credentials if it is exposed. <br>
+Risk: Diary content and signing payloads are sent to remote MoltNet endpoints. <br>
+Mitigation: Review memory content before saving it, avoid unnecessary sensitive data, and set diary visibility deliberately. <br>
 
 
 ## Reference(s): <br>
-- [MoltNet ClawHub page](https://clawhub.ai/getlarge/moltnet) <br>
-- [MoltNet homepage](https://github.com/getlarge/themoltnet) <br>
-- [MoltNet CLI install behavior](https://github.com/getlarge/themoltnet/blob/main/packages/cli/install.js) <br>
+- [MoltNet ClawHub Skill Page](https://clawhub.ai/getlarge/skills/moltnet) <br>
+- [MoltNet Project Homepage](https://github.com/getlarge/themoltnet) <br>
+- [MoltNet MCP Endpoint](https://mcp.themolt.net/mcp) <br>
+- [MoltNet OAuth2 Token Endpoint](https://api.themolt.net/oauth2/token) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline commands, MCP tool calls, and JSON-style tool arguments or results] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and MCP tool interactions] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require remote MCP calls, local MoltNet CLI execution, and credentials stored at ~/.config/moltnet/moltnet.json or MOLTNET_CREDENTIALS_PATH.] <br>
+**Other Properties Related to Output:** [Uses a remote MCP service for diary, identity, sharing, trust, and signing workflows, plus local CLI commands for Ed25519 signing.] <br>
 
 ## Skill Version(s): <br>
-0.28.0 (source: server evidence, version.txt, CHANGELOG released 2026-04-21) <br>
+0.29.0 (source: server release evidence, CHANGELOG, version.txt) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -44,14 +44,23 @@ from ..skillast import simulate_effects as _simulate_effects
 from ..scanbudget import (
     DEFAULT_VET_TARGET_BUDGET_S,
     ScanBudgetExceeded,
+    check_deadline,
     cpu_deadline,
     cpu_exceeded,
+    owned_by,
 )
 from ..textnorm import (
     normalize_for_scan,
 )
+from ..iocdb import (
+    is_known_bad_host as _iocdb_is_known_bad_host,
+    known_bad_sources as _iocdb_known_bad_sources,
+)
 
 from ._shared import (
+    NPM_DEPTREE_SKILL_COVERAGE_NOTE,
+    _FM_BLOCK_BARE_RE,
+    _FM_BLOCK_HEADERED_RE,
     _KNOWN_EXFIL_HOST_RE,
     _MANIFEST_HEADER_RE,
     _SENTENCE_BREAK_RE,
@@ -59,6 +68,7 @@ from ._shared import (
     _is_own_source,
     _is_public_ip,
     _mcp_servers,
+    _skill_declares_telemetry_disclosure,
     _skill_frontmatter_block,
 )
 from ._content import (
@@ -93,14 +103,18 @@ from ._content import (
     _whole_text_is_defensive,
     check_agent_snooping,
     check_capability_intent_mismatch,
+    check_chunked_file_assembly_exec,
     check_clickfix_setup_section,
+    check_cloud_metadata_credential_fetch,
     check_conditional_sleeper_trigger,
     check_config_trust_widening,
     check_cross_file_boundary_payload,
     check_cross_file_payload,
     check_cross_file_plaintext_payload,
+    check_deaddrop_resolver,
     check_dependency_confusion,
     check_dormant_capability,
+    check_dotfile_exfil_directive,
     check_dynamic_dispatch_obfuscation,
     check_event_hook_interceptor,
     check_forged_provenance,
@@ -114,19 +128,26 @@ from ._content import (
     check_lifecycle_hooks_extended,
     check_manifest_absent,
     check_markdown_image_exfil,
+    check_model_artifact_provenance,
+    check_offensive_tooling_directive,
     check_overt_secret_exfil,
     check_per_source_trust_contracts,
     check_persona_jailbreak,
     check_prompt_self_replication,
     check_pth_persistence,
+    check_python_runtime_persist_install,
     check_prose_bulk_exfil,
     check_remote_code_dependency,
+    check_self_erase_directive,
+    check_self_modification_directive,
     check_self_privesc_directive,
     check_silent_instruction,
     check_social_engineering_phishing,
     check_symlink_escape,
     check_tool_output_trust_inversion,
     check_trigger_homoglyph,
+    check_tunnel_enrollment,
+    check_undocumented_helper_directive,
     check_unicode_obfuscation,
     check_unsafe_deserialization,
 )
@@ -481,6 +502,53 @@ def _redirect_targets_file(blob: str, fname_start: int) -> bool:
     shell `\\` line-continuation (`echo payload \\` / `  >> CLAUDE.md`) — the simple
     same-line check above used to see that line as blank and false-treat it as a bare
     blockquote. Checked as a fallback only when the same-line check already failed.
+
+    B-341 — ACCEPTED RESIDUAL, four independent rounds retracted (CLAUDE.md §2.5): a
+    whole-line bash COMMENT can contain a prose "greater than" chain of comparisons
+    that is syntactically identical to a redirect — SkillTrustBench license.sh's
+    `# Priority: ENV var > openclaw.json (python3 > node > jq fallbacks)` is
+    documenting a lookup order, not writing a file, but the pre-'>' text on that line
+    is non-empty ("# Priority: ENV var "), so the same-line check below calls it a
+    real redirect (case_02462/01124/03655/00629/04600/05386/01677/05447 in the
+    SkillTrustBench corpus — this function's FP is the reason those cases still FAIL).
+
+    Every attempt to fix this soundly was retracted by independent C-135 review:
+      - round 1: `line.lstrip().startswith("#")` on one physical line in isolation.
+        Exploitable — a `#`-looking line can actually be the still-open tail of a
+        single-quoted string spanning a literal newline from a prior line
+        (`printf 'text\\n#fake-comment' > CLAUDE.md`), with a real redirect later on
+        that same line, outside the quote.
+      - round 2: a real bash quote-STATE machine (single/double/none), blob-wide, with
+        a word-boundary guard against an apostrophe glued onto a preceding word char
+        (a contraction). Broken by a LEADING-apostrophe contraction ('cause, 'til,
+        'em) — no preceding word char to gate on — which poisoned everything AFTER IT
+        in the entire blob as "quoted, therefore inert".
+      - round 3: retracted general tracking; replaced with "a `#`-comment line
+        containing >= 2 `>` characters (an A > B > C chain) is not a redirect". Broken
+        because an attacker can pad the printf bypass's fake-comment tail with one
+        extra literal `>` to reach the >= 2 threshold and reopen the exact round-1
+        bypass.
+      - round 4: the seemingly-correct missing bash rule — inside a genuine unquoted
+        `#`-comment, bash does not scan for quotes at all, so a real per-blob lexer
+        (comment-to-EOL, multi-line single-quote, escaped double-quote) should have
+        been sound. Broken anyway: this function's `blob` is NOT pure bash source — it
+        is a flat concatenation of EVERY file in a skill, including Markdown PROSE
+        that was never bash and was never meant to be lexed as bash. A faithful bash
+        lexer fed English prose containing a MID-WORD apostrophe ("the agent's own
+        context file") correctly (per real bash rules) reads it as a quote-open — bash
+        itself would do the same if this text were actually run as a shell script —
+        and that quote then swallows a genuine redirect elsewhere in the SAME file
+        (`bad_b13_real_agent_config_write` fixture) as "quoted, therefore inert". The
+        problem was never the lexer's fidelity to bash; it's that faithful bash
+        lexing is the wrong tool for a blob that isn't reliably bash in the first
+        place. A 5th patch was not attempted (CLAUDE.md §2.5 process, agreed with the
+        orchestrator after this round).
+
+    Left as the pre-B-341 behavior: a whole-line "#"-comment gets NO special
+    treatment — see the plain same-line-prefix check below. This is deliberately the
+    ORIGINAL (pre-B-341) shape, not a partial fix; solving it soundly needs a notion
+    of "which parts of this blob are really bash source" (fence/section-aware, not a
+    lexer), which is a real per-file-type-parsing project, not a regex/lexer tweak.
     """
     prefix_start = max(0, fname_start - _REDIR_PREFIX_WINDOW)
     prefix = _HTML_TAG_RE.sub(" ", blob[prefix_start:fname_start])
@@ -738,14 +806,34 @@ _TEST_FIXTURE_BASENAME_RE = re.compile(
 # around a live payload is a harder, residual case the tool still surfaces as WARN
 # (not silently drops) rather than FAIL.
 #
-# Python test idioms are specific enough that ONE match suffices (a bare
-# `def test_...(` or `import pytest` is not something an unrelated script would
-# plausibly carry by accident).
-_TEST_SHAPE_RE = re.compile(
-    r"\bdef\s+test_\w*\s*\(|\bimport\s+pytest\b|\bimport\s+unittest\b|"
-    r"\bclass\s+Test\w*\b|@pytest\.mark\b|\bself\.assert\w*\(",
-    re.I,
-)
+# C-135 (round 2, B-408): the "ONE match suffices" reasoning above was live-repro'd
+# as a real FAIL-evasion bypass, the same class already fixed for the JS leg below —
+# a bare `import pytest` line, never otherwise used, is exactly the kind of
+# zero-cost decoy an attacker can drop into a file named test_*.py to make a live,
+# unconditionally-executed credential-exfiltration payload register as "the skill's
+# own test fixture" and be excluded from scanning entirely. `import pytest` alone
+# does NOT require authoring a real function — it is a single, forgeable line, no
+# different in kind from the JS leg's single gratuitous `import { expect } from
+# '@jest/globals'` bypass C-135 already closed. Fixed with the same discipline: each
+# idiom is a separate compiled regex and _pos_in_test_fixture_file requires
+# _PYTHON_TEST_SHAPE_MIN_SIGNALS distinct ones, not any single one alone.
+_PYTHON_TEST_SHAPE_SIGNALS = [
+    re.compile(r"\bdef\s+test_\w*\s*\(", re.I),
+    re.compile(r"\bimport\s+pytest\b", re.I),
+    re.compile(r"\bimport\s+unittest\b", re.I),
+    re.compile(r"\bclass\s+Test\w*\b", re.I),
+    re.compile(r"@pytest\.mark\b", re.I),
+    re.compile(r"\bself\.assert\w*\(", re.I),
+    # A bare `assert` statement — real pytest-style test bodies overwhelmingly use
+    # this instead of self.assert*(. Pairs with `def test_...(` to recognize the
+    # single most common real shape (a function definition that actually asserts
+    # something) as 2 signals, while a bare decoy `def test_evil(): pass` or a bare
+    # decoy `import pytest` with no assertion anywhere still falls short.
+    re.compile(r"\bassert\b", re.I),
+]
+
+
+_PYTHON_TEST_SHAPE_MIN_SIGNALS = 2
 
 
 # B-204: JS/TS test shape. _TEST_FIXTURE_BASENAME_RE already admits .spec.js/
@@ -839,17 +927,35 @@ def _manifest_header_matches(blob: str) -> list[re.Match[str]]:
     return list(_MANIFEST_HEADER_RE.finditer(blob))
 
 
+def _manifest_match_is_test_fixture(m: "re.Match[str]") -> bool:
+    """Shared predicate behind _pos_in_test_fixture_file: True when a single
+    _MANIFEST_HEADER_RE match's basename+body qualify as a genuine test-fixture file
+    — the two-part rule (basename convention AND real test-code shape) documented on
+    _pos_in_test_fixture_file below."""
+    if not _TEST_FIXTURE_BASENAME_RE.match(m.group("name").strip()):
+        return False
+    body = m.group("body")
+    py_signal_count = sum(1 for rx in _PYTHON_TEST_SHAPE_SIGNALS if rx.search(body))
+    if py_signal_count >= _PYTHON_TEST_SHAPE_MIN_SIGNALS:
+        return True
+    js_signal_count = sum(1 for rx in _JS_TEST_SHAPE_SIGNALS if rx.search(body))
+    if js_signal_count >= _JS_TEST_SHAPE_MIN_SIGNALS:
+        return True
+    shell_signal_count = sum(1 for rx in _SHELL_TEST_SHAPE_SIGNALS if rx.search(body))
+    return shell_signal_count >= _SHELL_TEST_SHAPE_MIN_SIGNALS
+
+
 def _pos_in_test_fixture_file(
     blob: str, pos: int, header_matches: list[re.Match[str]] | None = None
 ) -> bool:
     """True when *pos* falls inside a "# file: <name>" section whose basename matches
     a test-file naming convention AND whose body has genuine test-code shape — both
-    are required (C-135: a forged header alone is not enough). A Python test idiom
-    (_TEST_SHAPE_RE) is specific enough to count alone (it requires authoring a real
-    function definition, not just a one-line import); JS and shell idioms are each
-    generic/forgeable enough alone (C-135) that at least their respective MIN_SIGNALS
-    distinct ones must be present. Scopes a down-rank to exactly that file, not the
-    whole skill (a live attack elsewhere is unaffected).
+    are required (C-135: a forged header alone is not enough). Python, JS, and shell
+    idioms are each generic/forgeable enough alone (C-135, round 2 for the Python leg —
+    a bare `import pytest` decoy is not costlier to forge than the JS leg's single-
+    import bypass) that at least their respective MIN_SIGNALS distinct ones must be
+    present. Scopes a down-rank to exactly that file, not the whole skill (a live
+    attack elsewhere is unaffected).
 
     *header_matches*: pass a precomputed _manifest_header_matches(blob) result when
     calling this in a loop over many matches of the SAME blob (see
@@ -859,16 +965,7 @@ def _pos_in_test_fixture_file(
     matches = header_matches if header_matches is not None else _MANIFEST_HEADER_RE.finditer(blob)
     for m in matches:
         if m.start("body") <= pos < m.end("body"):
-            if not _TEST_FIXTURE_BASENAME_RE.match(m.group("name").strip()):
-                return False
-            body = m.group("body")
-            if _TEST_SHAPE_RE.search(body):
-                return True
-            js_signal_count = sum(1 for rx in _JS_TEST_SHAPE_SIGNALS if rx.search(body))
-            if js_signal_count >= _JS_TEST_SHAPE_MIN_SIGNALS:
-                return True
-            shell_signal_count = sum(1 for rx in _SHELL_TEST_SHAPE_SIGNALS if rx.search(body))
-            return shell_signal_count >= _SHELL_TEST_SHAPE_MIN_SIGNALS
+            return _manifest_match_is_test_fixture(m)
     return False
 
 
@@ -988,6 +1085,59 @@ def _redirect_target_is_throwaway(blob: str, fname_start: int) -> bool:
     return any(am.group("var") == var for am in _MKTEMP_ASSIGN_RE.finditer(blob))
 
 
+# C-135 (SkillTrustBench case_00587): a write whose DESTINATION PATH itself carries an
+# unambiguous backup/template/archive marker adjacent to the agent-context filename is
+# not persistence into the LIVE config — it is the skill producing a sanitized COPY at a
+# clearly-labeled backup location (agent-migrate: redacts secrets out of the live
+# openclaw.json, then writes the redacted copy to something like
+# `agent-backup/openclaw.json.template`). This reads what the literal path STRING says,
+# not a proximity window over surrounding prose: the accepted-residual comment above
+# _manifest_section_span is explicit that another window-width tweak is not an
+# acceptable fix for this detector's remaining false-FAIL classes, and this is
+# deliberately not that — the marker must sit in the SAME contiguous path TOKEN that
+# contains the filename match (no whitespace/quote/paren between them), so it cannot be
+# bought by merely mentioning "backup" somewhere nearby in unrelated surrounding prose,
+# only by the destination path an attacker cannot rename without also renaming where the
+# bytes actually land.
+_BACKUP_PATH_MARKER_RE = re.compile(r"backup|template|archive|\.bak\b|sanitiz|sanitis", re.I)
+
+# Characters that can appear inside one shell/path TOKEN — just enough to walk out to
+# the edges of a bare or quoted path argument, not a general command parser.
+_PATH_TOKEN_CHARS_RE = re.compile(r"[\w./\\~$:{}-]")
+
+
+def _write_target_path_token(blob: str, m: "re.Match[str]") -> str:
+    """The contiguous path-like token containing filename match *m* — the run of path
+    characters immediately touching the match on both sides, stopping at the first
+    whitespace/quote/paren/etc. This is the literal write-DESTINATION text as written,
+    never a prose window."""
+    start, end = m.start(), m.end()
+    while start > 0 and _PATH_TOKEN_CHARS_RE.match(blob[start - 1]):
+        start -= 1
+    while end < len(blob) and _PATH_TOKEN_CHARS_RE.match(blob[end]):
+        end += 1
+    return blob[start:end]
+
+
+def _write_target_is_backup_artifact(blob: str, m: "re.Match[str]") -> bool:
+    """C-135 (case_00587): True when the literal path token containing filename match
+    *m* itself names a backup/template/archive/sanitized artifact — see
+    _BACKUP_PATH_MARKER_RE above.
+
+    C-135 (round 2, B-408): the marker search is a raw substring match over the
+    UN-normalized token, so a `..` parent-traversal segment lets the marker sit in a
+    path component that is itself cancelled out on resolution — e.g.
+    `agent-backup/../CLAUDE.md` contains "backup" as a string but resolves to the
+    exact same live path as bare `CLAUDE.md`. Reject the exemption outright whenever
+    the token contains a traversal segment; _PARENT_TRAVERSAL_RE already exists in
+    this module for the identical "can't trust this path string, it climbs back out"
+    reasoning (_redirect_target_is_throwaway)."""
+    token = _write_target_path_token(blob, m)
+    if _PARENT_TRAVERSAL_RE.search(token):
+        return False
+    return bool(_BACKUP_PATH_MARKER_RE.search(token))
+
+
 def _agent_config_write_hits(
     name: str, blob: str, fence_ranges: list[tuple[int, int]]
 ) -> list[tuple[str, str]]:
@@ -1010,6 +1160,10 @@ def _agent_config_write_hits(
     module already apply, simply never wired up here), and (3) a redirect whose target
     is a throwaway temp dir (_redirect_target_is_throwaway).
 
+    C-135: a fourth — the write DESTINATION path itself names a backup/template/
+    archive artifact (_write_target_is_backup_artifact), so the same filename match
+    substring is not persistence into the live config.
+
     B-287 NARROWS this detector's false-FAIL rate; it does not make it exact. Known
     remaining over-fire, reproduced and deliberately left alone: a skill whose declared
     job IS managing agent-context files, writing them into its own DATA directory rather
@@ -1031,6 +1185,9 @@ def _agent_config_write_hits(
             continue  # the injected "# file: <name>" header itself — not skill content
         if _pos_in_test_fixture_file(blob, m.start(), _headers):
             continue  # the skill's own test fixture, not a live write
+        if _write_target_is_backup_artifact(blob, m):
+            continue  # C-135 (case_00587): destination path names a backup/template
+            # artifact, not the live config — see _write_target_is_backup_artifact
         fname = m.group(0)
         # B-287: clamp the proximity window to the filename's own file section so a
         # verb from an adjacent file can never pair with it.
@@ -1267,32 +1424,114 @@ def _authkey_persistence_hits(
 # MEMORY.md" matched. Giving "set" the same stem wildcard the siblings have makes the
 # alternation internally consistent; it is not a widening of the verb SET, which was
 # always intended to cover this word's normal forms.
+#
+# C-135 (SkillTrustBench case_04133): the same internal-consistency gap, this time for
+# "modify" — every OTHER alternative already carries a `\w*` stem, but "modify" was
+# simply absent, so a frontmatter description that plainly says "...and can **modify**
+# your SOUL.md daily..." never satisfied the verb half of the two-part (verb + literal
+# filename) test even though it is exactly the self-declaration this gate exists to
+# recognize. Adding the verb widens the VOCABULARY only — the CONCRETE target filename
+# must still appear in the same 80-char window, so this cannot by itself manufacture a
+# match; case_01826 (generic "config manager" with no named file) still fails it.
 _CONFIG_DECLARE_VERB_RE = re.compile(
     r"\b(?:configur\w*|customi[sz]\w*|set\w*\s*-?\s*up\w*|manag\w*|edit\w*|updat\w*|"
-    r"writ\w*|generat\w*)\b",
+    r"writ\w*|generat\w*|modif\w*)\b",
     re.I,
 )
 
 
+# C-135 (SkillTrustBench case_04876/case_05047): a skill's stated purpose is not always
+# confined to the frontmatter `description:` — a very ordinary README shape is a short
+# "## What this skill does" / "## Description" / "## Overview" section immediately
+# under the title, restating the frontmatter description in more detail (case_04876:
+# "Updates `AGENTS.md` to enforce the workflow" lives there, not in `description:`).
+# Scanning the WHOLE body for this vocabulary would let an attacker plant a throwaway
+# declare-verb+filename sentence anywhere in an unrelated doc just to buy the down-rank
+# — the exact risk _skill_declares_telemetry_disclosure's frontmatter-only scoping
+# (checks/_shared.py) exists to avoid for its own, sibling, declared-vs-actual gate. So
+# this stays bounded to the FIRST level-2/3 heading that appears after the frontmatter
+# (skipping the bare `# Title` line, which is level 1) — AND ONLY when that heading's
+# own title is one of this small purpose-describing vocabulary. Any other first heading
+# (case_05047's actual first heading is "## When to Use", with the AGENTS.md-write
+# declaration itself sitting many sections later, under "## Operational Learnings") means
+# there is no qualifying top section and this returns None — it does not keep scanning
+# for a LATER heading with a matching title, which is what would turn "immediately
+# following" into "anywhere". case_05047 is therefore not fixed by this widening; no
+# further-reaching scope was found that stays sound (see the fix notes).
+_TOP_HEADING_RE = re.compile(r"^#{2,3}[ \t]+(?P<title>[^\n]*)\n", re.MULTILINE)
+
+_TOP_SECTION_TITLE_RE = re.compile(
+    r"^(?:what\s+this\s+skill\s+does|what\s+it\s+does|description|overview|purpose)\W*$",
+    re.I,
+)
+
+# Hard cap on how much of the top section is scanned even when no next heading is found
+# (a skill with only one, very long, top-level section) — keeps this a bounded excerpt,
+# never an unbounded whole-body scan.
+_TOP_SECTION_MAX_CHARS = 3000
+
+
+def _skill_top_section_text(blob: str) -> str | None:
+    """C-135 (case_04876): the skill's own top purpose-describing section — see the
+    _TOP_HEADING_RE comment above for the bounding rules. Returns None if the blob has
+    no frontmatter, or its first level-2/3 heading isn't one of the recognized
+    purpose-section titles.
+
+    C-135 (round 2, B-408): *blob* is the multi-file concatenated text
+    check_installed_skills operates on (every bundled file glued together by
+    _read_skill_text with "# file: <name>" headers) — not SKILL.md's own text alone.
+    An unbounded `blob[fm_end:]` sails straight past a single-`#`-prefixed
+    "# file: <next>" header (it doesn't match `#{2,3}`) into the NEXT file's raw
+    content, so a `##`-shaped comment line placed anywhere in an attacker-controlled
+    bundled script — with zero relationship to SKILL.md's own declared purpose —
+    could satisfy _TOP_HEADING_RE first. Clamp to SKILL.md's own section, the same
+    idiom _agent_config_write_hits/_pos_in_test_fixture_file already use via
+    _manifest_header_matches, so this can never reach past SKILL.md's own body."""
+    hm = _FM_BLOCK_HEADERED_RE.search(blob)
+    fm_end = hm.end() if hm else None
+    if fm_end is None:
+        bm = _FM_BLOCK_BARE_RE.match(blob)
+        fm_end = bm.end() if bm else None
+    if fm_end is None:
+        return None
+    rest_end = len(blob)
+    for m in _manifest_header_matches(blob):
+        if m.start("body") <= fm_end <= m.end("body"):
+            rest_end = m.end("body")
+            break
+    rest = blob[fm_end:rest_end]
+    first = _TOP_HEADING_RE.search(rest)
+    if not first or not _TOP_SECTION_TITLE_RE.match(first.group("title").strip()):
+        return None
+    body_start = first.end()
+    nxt = _TOP_HEADING_RE.search(rest, body_start)
+    body_end = nxt.start() if nxt else len(rest)
+    body_end = min(body_end, body_start + _TOP_SECTION_MAX_CHARS)
+    return rest[body_start:body_end]
+
+
 def _skill_declares_config_target(blob: str, target_fname: str) -> bool:
-    """B-193: True when the skill's OWN SKILL.md frontmatter (name/description) names
-    the exact write-target file near a configuration verb — the skill's stated purpose,
-    not a bare self-declared allowlist (case_01826, a legitimate statusline configurator
-    whose entire job is writing .claude/settings.json). Requires the CONCRETE target
-    filename, not just any configuration-sounding language, so a skill that declares
-    itself a generic "config manager" without naming this specific file does not
-    qualify — narrows the self-declaration to something an attacker can't get for free
-    just by claiming to be helpful."""
-    fm = _skill_frontmatter_block(blob)
-    if not fm:
-        return False
+    """B-193: True when the skill's OWN SKILL.md frontmatter (name/description) — or,
+    C-135, its top purpose-describing section immediately after
+    (_skill_top_section_text) — names the exact write-target file near a configuration
+    verb — the skill's stated purpose, not a bare self-declared allowlist (case_01826, a
+    legitimate statusline configurator whose entire job is writing .claude/settings.json).
+    Requires the CONCRETE target filename, not just any configuration-sounding
+    language, so a skill that declares itself a generic "config manager" without naming
+    this specific file does not qualify — narrows the self-declaration to something an
+    attacker can't get for free just by claiming to be helpful."""
     target_stem = target_fname.rsplit("/", 1)[-1]
-    fm_lower = fm.lower()
-    idx = fm_lower.find(target_stem.lower())
-    if idx == -1:
-        return False
-    window = fm[max(0, idx - 80) : idx + len(target_stem) + 80]
-    return bool(_CONFIG_DECLARE_VERB_RE.search(window))
+    target_lower = target_stem.lower()
+    for scope in (_skill_frontmatter_block(blob), _skill_top_section_text(blob)):
+        if not scope:
+            continue
+        idx = scope.lower().find(target_lower)
+        if idx == -1:
+            continue
+        window = scope[max(0, idx - 80) : idx + len(target_stem) + 80]
+        if _CONFIG_DECLARE_VERB_RE.search(window):
+            return True
+    return False
 
 
 # C-135 (adversarial review): a self-declared config-writer's "no other signal" gate is
@@ -1718,6 +1957,29 @@ _AGENCY_DOUBLE_NEG_RE = re.compile(
 )
 
 
+# C-135 (round 2, B-408): two affirmative-governance shapes — a "only run X when the
+# user explicitly asks" consent gate (SkillTrustBench case_01018), and a `--help`/-h
+# CLI-doc marker (case_02565) — were attempted here and RETRACTED after an independent
+# adversarial pass, TWICE, found real bypasses in each successive tightening:
+#
+# Round 1: a whole-paragraph-bound consent-gate search let an unrelated same-paragraph
+# consent sentence immunize an unrelated live directive. Tightened to same-clause-
+# backward or one-sentence-forward.
+#
+# Round 2 (on the tightened version): a live "execute arbitrary code" directive placed
+# one sentence before an UNRELATED, different-topic consent-gate sentence ("Only send
+# telemetry data when the user explicitly asks for it") still got wrongly immunized —
+# neither helper checks that the governing phrase is actually ABOUT the same action as
+# the exec-verb; distance alone was never sufficient, only relatedness would be. The
+# CLI-help-doc marker has the identical problem in the other direction: nothing stops
+# genuinely dangerous content from continuing in the SAME sentence right after "--help".
+#
+# No sound narrow fix (distance bound, clause bound, marker proximity) closed this in
+# two attempts — a real fix needs topical/referential binding between the governing
+# phrase and the exec-verb's own object, which is squarely the "cannot be discriminated
+# by sound static means" territory CLAUDE.md §2.5 routes to the judge band rather than
+# a third regex-iteration round. case_01018 and case_02565 are known, accepted, unfixed
+# spurious FAILs as a result.
 def _agency_prohibition_governs(blob: str, m: re.Match) -> bool:
     """B-197: True when a prohibition phrase GOVERNS the matched exec-directive text
     (same sentence, positioned before it, no double-negation) — mirrors B-194's
@@ -2679,6 +2941,28 @@ _REPUTABLE_INSTALL_HOSTS = (
 )
 
 
+# I-032 (C-259 corpus follow-up): 18/374 real gold-normal benign skills hit the
+# pipe-to-shell HIGH bucket below specifically because they cite example.com —
+# an RFC 2606 second-level domain that is administratively barred from ever
+# resolving to a live service, so it structurally CANNOT be a real dropper
+# host (this is a provable fact about the domain, not a corpus-tuned
+# heuristic). RFC 2606 §3 reserves ONLY example.com/example.net/example.org
+# (plus the .test/.example/.invalid/.localhost TLDs, not relevant to a
+# two-label host match here). C-135 adversarial review (found while
+# implementing this) checked a 4th candidate, example.edu, against the actual
+# RFC 2606 text and IANA's reserved-domains page — neither lists it, and it is
+# NOT non-resolving (it is EDUCAUSE's live .edu site, which happens to mirror
+# the IANA placeholder page as a discretionary courtesy, not a protocol
+# guarantee) — a public, deliberately-chosen dropper host would defeat the
+# "provable fact" premise this whole downgrade relies on, so it is
+# deliberately excluded. Do not add it back without first re-grounding the
+# claim the same way. Matching is EXACT only (`h in _RESERVED_EXAMPLE_DOMAINS`,
+# no endswith/suffix check) — a suffix match would let a crafted
+# "evil-example.com" or "example.com.attacker.io" slip through as if it were
+# the reserved domain itself.
+_RESERVED_EXAMPLE_DOMAINS = frozenset({"example.com", "example.net", "example.org"})
+
+
 # Bounded quantifiers ({0,256}) instead of unbounded [^\n|]* — two adjacent
 # unbounded same-class runs split by a tail that fails on no-pipe lines caused
 # catastrophic O(n^2) backtracking, so one long line of attacker-controlled
@@ -2726,6 +3010,22 @@ def _blank_fences(blob: str, ranges: list[tuple[int, int]]) -> str:
     return "".join(chars)
 
 
+# C-135 (round 2, B-408): a prior draft of this fix allowlisted yt-dlp's own
+# `--cookies-from-browser <browser>` flag (SkillTrustBench case_04193) by exempting
+# any _CRED_RE match with that flag text nearby. RETRACTED — an independent
+# adversarial pass proved this a real FAIL-evasion bypass, not a theoretical one:
+# _has_non_negated_cred_match is an any() over every _CRED_RE match in the WHOLE
+# document, so exempting the one match nearest the flag text silently zeroes out
+# the entire cross-skill cred+exfil correlation even when a genuinely unrelated,
+# separately-located credential-theft directive is the actual reason the check
+# should fire — e.g. a decoy "--cookies-from-browser" mention placed anywhere in
+# the document suppresses detection of real exfiltration prose elsewhere in the
+# same file. The claim "an attacker gains nothing by wrapping a live directive in
+# this flag spelling" was empirically false: the attacker does not need to wrap
+# anything — the exemption's effect is document-wide, not local to the flag text.
+# case_04193 (SkillTrustBench) is a known, accepted, unfixed spurious FAIL as a
+# result; do not re-attempt a text-proximity allowlist here without also solving
+# the document-wide-any() scoping problem.
 def _has_non_negated_cred_match(blob: str) -> bool:
     """B-144: True when _CRED_RE matches somewhere in *blob* outside a negation context.
 
@@ -2743,7 +3043,9 @@ def _has_non_negated_cred_match(blob: str) -> bool:
     dampen a genuine, unrelated credential-path match much further down the blob;
     only a negator that grammatically governs the SAME clause counts.
     """
-    return any(not _negation_governs_trigger(blob, m.start()) for m in _CRED_RE.finditer(blob))
+    return any(
+        not _negation_governs_trigger(blob, m.start()) for m in _CRED_RE.finditer(blob)
+    )
 
 
 def _has_cred_exfil_outside_fence(blob: str, fence_ranges: list[tuple[int, int]]) -> bool:
@@ -2752,6 +3054,19 @@ def _has_cred_exfil_outside_fence(blob: str, fence_ranges: list[tuple[int, int]]
     A line is only considered if its start position is outside every known fence
     range.  A line that is entirely inside a fenced code block is skipped so that
     documentation examples do not trigger a CRITICAL finding.
+
+    C-135 (round 2, B-408): a test-fixture-file exemption (SkillTrustBench
+    case_04843, via _pos_in_test_fixture_file — the same guard several sibling B13
+    detectors already apply to their own trigger patterns) was attempted here and
+    RETRACTED. An independent adversarial pass found the shared signal-counting
+    guard it depends on is itself bypassable with two cheap, structurally
+    unconnected decoy signals (e.g. a no-op `def test_x(): pass` plus a floating,
+    unrelated `assert True`), which would silently suppress detection of a live
+    credential-exfiltration payload on this — the highest-severity same-line cred+
+    exfil CRITICAL — detector. That guard is sound enough for the lower-stakes
+    checks it already protects elsewhere in this module; it is not sound enough to
+    extend to this one. case_04843 is a known, accepted, unfixed spurious FAIL as a
+    result.
     """
     pos = 0
     for ln in blob.splitlines():
@@ -2888,6 +3203,19 @@ def _powershell_encoded_payloads(blob: str) -> list[str]:
 # simply absent from the dict at that point — this never forces new work, only
 # records what was already known. Retention only — informational bookkeeping for a
 # future evidence-accumulation consumer; never itself changes a verdict.
+#
+# C-353 (measured, then retracted): an escalator ("B13 WARN + corroborating_buckets
+# non-empty -> FAIL") was proposed and tested against the SkillTrustBench corpus
+# attribution (eval/skilltrustbench/c353_bucket_attribution.py, 2,555 cases). The
+# aggregate lift (0.775 -> 0.932 precision) is real but is a Simpson's-paradox
+# artifact: 88.5% of it is explained by winner-bucket base rates alone (buckets like
+# warns_chunked_file_exec/warns_shell_injection are already >=0.98 precision with or
+# without corroboration; warns_content/warnings/warns_unpinned sit at 0.44-0.52 and
+# rarely co-fire with another bucket at all). Simulating the rule on the same corpus
+# produces 18 new false FAILs on gold-benign skills — a hard C-303/GR#5 blocker — for
+# ~0.015 of real precision gain, 78.9% of escalations landing in buckets with zero
+# headroom left. Anyone reopening this should re-run the per-bucket attribution
+# first, not just the aggregate number.
 def _b13_verdict(
     severity: str,
     status: str,
@@ -2898,6 +3226,10 @@ def _b13_verdict(
     winner: str,
 ) -> Finding:
     fx = _custom("B13", severity, status, detail, fix, ev)
+    # C-358: coverage disclosure only, appended to evidence (never detail) — every
+    # check_installed_skills verdict routed through this helper carries it, so it can
+    # never be mistaken for a clean "the dependency tree was looked at and is fine".
+    fx.evidence = fx.evidence + [NPM_DEPTREE_SKILL_COVERAGE_NOTE]
     fx.corroborating_buckets = [
         name for name, bucket in signal_buckets.items() if bucket and name != winner
     ]
@@ -2928,9 +3260,11 @@ def check_installed_skills(ctx: Context) -> Finding:
     )
     warns_timebomb: list[str] = []
     warns_host_exfil: list[str] = []  # C-203: host/machine-identity info -> outbound sink
+    warns_telemetry_undisclosed: list[str] = []  # B-342: undisclosed excessive telemetry
     warns_curl_dropper: list[str] = []  # C-205: argv-list curl/wget staging a script to /tmp
     warns_shell_injection: list[str] = []  # C-199: subprocess/os.system shell-injection-prone shape
     warns_insecure_tempfile: list[str] = []  # C-199: hardcoded predictable /tmp write (CWE-377)
+    warns_chunked_file_exec: list[str] = []  # B336: chunked multi-file-read helper -> exec/eval
     warns_install_curl: list[str] = []  # F-097: down-ranked install-doc curl|bash / fetch
     warns_js: list[str] = []  # F-064: soft JS/TS signals (child_process template, dynamic require)
     warns_content: list[
@@ -3127,10 +3461,15 @@ def check_installed_skills(ctx: Context) -> Finding:
                 # F-097: pipe-to-shell to the skill's own host or under an install/setup
                 # heading is a documented installer -> WARN; else it stays FAIL.
                 _own = _own_host is not None and (h == _own_host or h.endswith("." + _own_host))
+                # I-032: an RFC 2606 reserved example domain (exact match only — see
+                # _RESERVED_EXAMPLE_DOMAINS above) can never be a live dropper host,
+                # so it downgrades the same as an own-host/install-heading match. This
+                # never suppresses the finding outright, only downgrades HIGH -> WARN.
+                _reserved_example = h in _RESERVED_EXAMPLE_DOMAINS
                 # B-193: same test-fixture FP driver as the base64/exec label above
                 # (case_01472) — a live pipe-to-shell string inside the skill's own
                 # tests/test_*.py is a fixture, not a directive.
-                if _own or _under_install_heading(blob, pm.start()):
+                if _own or _under_install_heading(blob, pm.start()) or _reserved_example:
                     warns_install_curl.append(msg)
                 elif _pos_in_test_fixture_file(blob, pm.start()):
                     warns_content.append(msg + " (inside the skill's own test fixture)")
@@ -3140,6 +3479,13 @@ def check_installed_skills(ctx: Context) -> Finding:
         # Cross-skill cred+exfil: run against the blob with fenced spans blanked so
         # a credential path that only appears inside a documentation example does not
         # combine with an exfil host reference to produce a cross-skill finding.
+        #
+        # C-135 (round 2, B-408): a test-fixture-file exemption (SkillTrustBench
+        # case_04843, also blanking _test_fixture_file_spans) was attempted here and
+        # RETRACTED for the same reason as _has_cred_exfil_outside_fence above — the
+        # shared signal-counting guard it depends on is bypassable with two cheap,
+        # structurally unconnected decoy signals. case_04843 is a known, accepted,
+        # unfixed spurious FAIL as a result.
         _blob_nofence = _blank_fences(blob, _fr)
         _has_same_line = _has_cred_exfil_outside_fence(blob, _fr)
         _has_cross = bool(
@@ -3326,6 +3672,18 @@ def check_installed_skills(ctx: Context) -> Finding:
                 if af.rule == "HOST_INFO_EXFIL_FLOW":
                     warns_host_exfil.append(f"{name}: {af.reason} ({relpath}:{af.lineno})")
                     continue
+                # B-342 (T09/SkillTrustBench V_EXCESSIVE_TELEMETRY): a function combining
+                # >=2 over-collection axes reaches a network sink. WARN-grade, and ONLY
+                # surfaced when the skill's OWN SKILL.md does NOT disclose the collection
+                # (_skill_declares_telemetry_disclosure) — a disclosed telemetry/diagnostics/
+                # backup skill is not flagged; an undisclosed one is the actual T09 gap this
+                # closes (V_EXCESSIVE_TELEMETRY co-occurring with V_MISLEADING_DESCRIPTION).
+                if af.rule == "EXCESSIVE_TELEMETRY_FLOW":
+                    if not _skill_declares_telemetry_disclosure(blob):
+                        warns_telemetry_undisclosed.append(
+                            f"{name}: {af.reason} ({relpath}:{af.lineno})"
+                        )
+                    continue
                 # C-205: argv-list curl/wget staging a script to a writable/tmp path.
                 # WARN-grade (staging a download isn't itself proof of malice).
                 if af.rule == "DROPPER_DOWNLOAD_TO_TMP":
@@ -3340,6 +3698,27 @@ def check_installed_skills(ctx: Context) -> Finding:
                 if af.rule == "SHELL_INJECTION_RISK":
                     warns_shell_injection.append(f"{name}: {af.reason} ({relpath}:{af.lineno})")
                     continue
+                # B336: chunked/part-file read+join composed into exec()/eval() — the
+                # split-by-file scanner-evasion loader shape. WARN-grade only — routed
+                # here, BEFORE the generic crit/cred-exfil fallthrough below, so this
+                # rule can never become FAIL-capable regardless of its own "info"
+                # severity label or any co-occurring cred/exfil signal.
+                if af.rule == "CHUNKED_FILE_EXEC":
+                    warns_chunked_file_exec.append(f"{name}: {af.reason} ({relpath}:{af.lineno})")
+                    continue
+                # Argv-list tunnel/mesh-VPN launch primitive (TUNNEL_LAUNCH_ARGV).
+                # WARN-only, HIGH severity but explicitly not
+                # FAIL-capable (checks/_content.py's check_tunnel_enrollment / B338 —
+                # a bare launch primitive alone is real and benign, same standing
+                # policy as B334/B336/B337). Routed here, BEFORE the generic crit/
+                # cred-exfil fallthrough below (mirrors CHUNKED_FILE_EXEC's guard just
+                # above), so it can never bleed into THIS function's own B13 verdict
+                # regardless of its own "info" severity label or any co-occurring
+                # cred/exfil signal — B338 already reports it independently via
+                # SKILL_CONTENT_RING (check_dynamic_dispatch_obfuscation/B91's exact
+                # wiring template), so this rule has no B13-facing bucket at all.
+                if af.rule == "TUNNEL_LAUNCH_ARGV":
+                    continue
                 loc = f"{relpath}:{af.lineno}"
                 if af.severity == "crit":
                     crit.append(f"{name}: {af.reason} ({loc})")
@@ -3348,13 +3727,14 @@ def check_installed_skills(ctx: Context) -> Finding:
             # simulate_effects never raises; guard here too in case of future
             # refactors or mocking in tests.
             #
-            # C-175: ScanBudgetExceeded must NOT be swallowed here — it is a plain
-            # Exception subclass, so a bare `except Exception` catches the per-check
-            # wall-clock deadline firing mid-simulation and silently treats a
-            # truncated analysis as "nothing found", letting this check fall through
-            # to a false PASS instead of the UNKNOWN run_all's own ScanBudgetExceeded
-            # handler is meant to produce. Re-raise it before the catch-all so the
-            # budget signal reaches run_all regardless of which check triggered it.
+            # C-175: ScanBudgetExceeded must NOT be swallowed here. A bare
+            # `except Exception` catching the per-check wall-clock deadline firing
+            # mid-simulation silently treats a truncated analysis as "nothing found",
+            # letting this check fall through to a false PASS instead of the UNKNOWN
+            # run_all's own ScanBudgetExceeded handler is meant to produce. Since B-352
+            # the type derives from BaseException, so the catch-all below cannot reach
+            # it and this re-raise is belt-and-braces — kept deliberately, because it
+            # documents the requirement at the site that has to satisfy it.
             try:
                 _ep = _simulate_effects(src, relpath)
             except ScanBudgetExceeded:
@@ -3407,10 +3787,12 @@ def check_installed_skills(ctx: Context) -> Finding:
         "warns_install_curl": warns_install_curl,
         "warns_env_exfil": warns_env_exfil,
         "warns_host_exfil": warns_host_exfil,
+        "warns_telemetry_undisclosed": warns_telemetry_undisclosed,
         "warns_curl_dropper": warns_curl_dropper,
         "warns_timebomb": warns_timebomb,
         "warns_shell_injection": warns_shell_injection,
         "warns_insecure_tempfile": warns_insecure_tempfile,
+        "warns_chunked_file_exec": warns_chunked_file_exec,
         "warns_js": warns_js,
         "warns_content": warns_content,
         "warns_notify_host": warns_notify_host,
@@ -3579,6 +3961,36 @@ def check_installed_skills(ctx: Context) -> Finding:
             "warns_host_exfil",
         )
 
+    # B-342 (T09/SkillTrustBench V_EXCESSIVE_TELEMETRY): a function combines >=2
+    # over-collection axes (bulk env dump, recursive/bulk filesystem or directory
+    # enumeration, shell/command-history file read) and the result reaches a network
+    # sink, with no disclosure of this anywhere in the skill's own SKILL.md. WARN-first
+    # (same dual-use rationale as warns_host_exfil); ranked just below it — an
+    # undisclosed bulk local-data collector is a comparable but slightly narrower
+    # signal than a bare host-identity phone-home.
+    if warns_telemetry_undisclosed:
+        extra = (
+            f" (+{len(warns_telemetry_undisclosed) - 6} more)"
+            if len(warns_telemetry_undisclosed) > 6
+            else ""
+        )
+        return _b13_verdict(
+            HIGH,
+            WARN,
+            "Possible undisclosed telemetry/data collection in installed skill(s): "
+            + "; ".join(warns_telemetry_undisclosed[:6])
+            + extra,
+            "A skill collects data across multiple axes (bulk environment-variable dump, "
+            "recursive/bulk filesystem or directory enumeration, or a shell/command-history "
+            "file read) and sends it to a network endpoint, but nothing in the skill's own "
+            "SKILL.md discloses this. Confirm the destination is trusted and the collection "
+            "is something you'd expect — an undisclosed collector reading history/env/files "
+            "and phoning it home is the excessive-telemetry pattern this rule targets.",
+            warns_telemetry_undisclosed,
+            _signal_buckets,
+            "warns_telemetry_undisclosed",
+        )
+
     # C-205: argv-list curl/wget staging a script into a writable/tmp-like path — the
     # "download now, exec later" dropper split (no literal pipe for B100 to match,
     # often a variable URL). WARN-first: staging a download isn't itself proof of
@@ -3599,6 +4011,32 @@ def check_installed_skills(ctx: Context) -> Finding:
             warns_curl_dropper,
             _signal_buckets,
             "warns_curl_dropper",
+        )
+
+    # B336: a locally-defined helper reads and joins multiple chunked/part files at
+    # runtime, and the assembled result is exec()'d/eval()'d — the split-by-file
+    # scanner-evasion loader shape (the payload never exists whole in any single
+    # shipped .py file). WARN-first, ranked just below the staged-dropper WARN — a
+    # confirmed chunked-loader shape is a comparably strong signal to a staged dropper.
+    if warns_chunked_file_exec:
+        extra = (
+            f" (+{len(warns_chunked_file_exec) - 6} more)"
+            if len(warns_chunked_file_exec) > 6
+            else ""
+        )
+        return _b13_verdict(
+            HIGH,
+            WARN,
+            "Possible split-by-file payload loader in installed skill(s): "
+            + "; ".join(warns_chunked_file_exec[:6])
+            + extra,
+            "A helper reads and joins multiple chunked/part files at runtime and executes "
+            "the assembled result via exec()/eval() — the documented split-by-file "
+            "scanner-evasion loader shape. Read the reassembled content; if it is not "
+            "something you deliberately embedded, treat the skill as malicious.",
+            warns_chunked_file_exec,
+            _signal_buckets,
+            "warns_chunked_file_exec",
         )
 
     # F-058: a dangerous sink gated on a wall-clock date or an environment variable — a
@@ -3858,6 +4296,7 @@ def check_installed_skills(ctx: Context) -> Finding:
         f"Scanned {n} installed skill(s); no shell-exec / exfiltration / obfuscation "
         "patterns found.",
         "Keep installing only skills whose source you've reviewed — trust no one.",
+        [NPM_DEPTREE_SKILL_COVERAGE_NOTE],
     )
 
 
@@ -3883,12 +4322,13 @@ def _run_content_ring(
     """Run SKILL_CONTENT_RING against `ctx` and return only the actionable (FAIL/WARN)
     findings, de-duplicated by (id, detail).
 
-    F-148: bounded by a cooperative per-target ceiling checked between checks (see the
-    comment in the body for why a hard per-check deadline cannot be nested here yet). Once
-    it is exhausted the remaining checks are skipped and the shortfall is recorded via
-    `note_limit(..., LIMIT_DOMAIN_SKILL, ...)`, so the gap is visible as data rather than
-    silently reported as a clean scan. The FAIL/WARN-only return contract below is
-    unchanged — callers read `ctx.limit_hits` for the coverage gap.
+    F-148: bounded by a cooperative per-target ceiling checked between checks, AND
+    (B-347) the ring's own hard wall-clock deadline armed around the whole loop — see
+    the comment in the body for both. Once either is exhausted the remaining checks are
+    skipped and the shortfall is recorded via `note_limit(..., LIMIT_DOMAIN_SKILL, ...)`,
+    so the gap is visible as data rather than silently reported as a clean scan. The
+    FAIL/WARN-only return contract below is unchanged — callers read `ctx.limit_hits` for
+    the coverage gap.
 
     PASS/UNKNOWN ring results are dropped on purpose: for a pre-install verdict they add
     no signal, and an UNKNOWN would wrongly outrank a clean PASS (flipping a safe skill to
@@ -3909,51 +4349,101 @@ def _run_content_ring(
     # reason, and NOT load-immunity: CPU time inflates under contention just as wall does
     # (measured 2.60x vs 2.6x). Headroom is what protects the verdict; see scanbudget.py.
     #
-    # COOPERATIVE ONLY, deliberately. The obvious move — wrapping each check in
-    # `check_deadline` the way run_all does — is unsound here, because this loop can already
-    # run INSIDE someone else's armed itimer: report.py:_skill_inventory arms one per skill,
-    # and vet_plugin arms one around its bundled-skill dispatch. (run_all is NOT such a
-    # frame: it arms around ring checks as members of CHECKS, which is a different call
-    # path — nothing in CHECKS reaches this function.) `check_deadline` disarms the timer
-    # in its `finally`, and a disarm is indistinguishable from an expiry, so a nested
-    # arm/disarm would not delay the outer per-skill deadline but DELETE it, silently
-    # undoing a protection C-159 added. A hard per-ring-check cap therefore needs a
-    # re-entrant `check_deadline` first; until then the cooperative ceiling below is the
-    # bound that is actually safe to add, and it is enough to stop an unbounded sweep.
+    # B-347: the loop is now ALSO wrapped in the ring's OWN hard `check_deadline` — the
+    # wiring the comment here used to defer ("needs its own adversarial review"). It is
+    # safe now because two things are both true: `check_deadline` is re-entrant (a stack
+    # of absolute deadlines; a nested block is clamped to the outer's remaining time, and
+    # the outer is restored — never cancelled — on exit, so arming our own frame here
+    # cannot delete a caller's (e.g. report.py:_skill_inventory's per-skill frame)), and
+    # every catch below is gated on `owned_by(exc, own_frame)` before it is ever treated
+    # as ours. A `ScanBudgetExceeded` reaching the `except` inside the loop is one of
+    # three things, and only the first is safe to swallow here:
+    #   1. THIS block's own deadline (`owned_by(...)` True) — the loop stops, but every
+    #      FAIL/WARN a completed check already produced this call is kept and returned,
+    #      not thrown away (the B-347 bug: the old code re-raised unconditionally here
+    #      and unwound the whole partial `out` list even when the ring itself had run to
+    #      within a hair of finishing 39 checks).
+    #   2. An OUTER owner's deadline (report.py:_skill_inventory's per-skill frame today;
+    #      a future vet_plugin dispatch frame) — `owned_by(...)` is False, and it MUST be
+    #      re-raised untouched: swallowing it here hands that owner a partial scan
+    #      dressed up as a complete one, the false-PASS-adjacent shape C-175 fixed.
+    #   3. skillast.py's unattributed, non-timer cooperative raise (owner=None, its own
+    #      reached-sinks cap) — `owned_by(...)` is False for a None owner too (never
+    #      matches any frame), so it also re-raises, exactly as before: it belongs to
+    #      nobody here and travels to its real handler.
+    # `run_all` is NOT an outer frame for this function specifically: it arms its own
+    # `check_deadline` around each member of CHECKS (a different call path, one member
+    # at a time), and nothing in CHECKS calls `_run_content_ring`.
     deadline = cpu_deadline(target_budget_s)
     skipped: list[str] = []
-    for check in SKILL_CONTENT_RING:
-        name = getattr(check, "__name__", "ring check")
-        if cpu_exceeded(deadline):
-            skipped.append(name)
-            continue
-        try:
-            fx = check(ctx)
-        except ScanBudgetExceeded:
-            # Re-raised, NOT swallowed, and caught before the catch-all below precisely so
-            # it cannot be: ScanBudgetExceeded is a plain Exception subclass, so the bare
-            # `except Exception` would eat a deadline belonging to an OUTER owner
-            # (report.py:_skill_inventory's per-skill frame, or vet_plugin's dispatch
-            # frame), which needs the signal to reach it so it can report that target
-            # UNKNOWN. It also carries the cooperative, non-timer raise skillast.py emits
-            # for its own reached-sinks cap, which belongs to run_all. Eating any of them
-            # here hands the owner a partial scan dressed up as a complete one — the
-            # false-PASS shape C-175 fixed at :3345.
-            raise
-        except Exception:  # noqa: BLE001 — a ring check must never break --vet
-            continue
-        if fx.status not in (FAIL, WARN):
-            continue
-        key = (fx.id, fx.detail)
-        if key in seen:
-            continue
-        seen.add(key)
-        out.append(fx)
+    own_deadline_hit = False
+    with check_deadline(target_budget_s) as own_frame:
+        for idx, check in enumerate(SKILL_CONTENT_RING):
+            try:
+                # B-394: `name = getattr(...)` and `cpu_exceeded(deadline)` used to sit
+                # OUTSIDE this try, guarded by nothing — a SIGALRM landing on either
+                # line (the signal can fire on any bytecode boundary, not just inside
+                # `check(ctx)`; see memory reference_python_signal_mask_not_atomic) threw
+                # ScanBudgetExceeded straight out of this function. Since B-352 made
+                # that type a BaseException specifically so nothing swallows it by
+                # accident, nothing up the stack caught it either — it escaped
+                # `_run_content_ring` entirely instead of being handled by the
+                # `owned_by(...)` logic below. Moving both lines inside the try changes
+                # nothing about their normal-path behavior (no exception, same skip/
+                # continue as before) and closes the window that produced the OBSERVED
+                # 10/30 CI failure rate under load (B-394's own measurement).
+                #
+                # NOT fully closed (C-135 round 2, confirmed by disassembling this
+                # function and reading co_exceptiontable): the `continue` right after
+                # `skipped.append(name)` compiles, in CPython 3.11+'s zero-cost
+                # exception model, to a jump instruction covered by the enclosing
+                # `with check_deadline(...)` block's OWN exception-table entry, not this
+                # try's — a signal landing on exactly that jump still bypasses
+                # `owned_by(...)` and escapes uncaught. This is a residual, not a
+                # regression: it is a narrower version of the SAME landing-spot class
+                # this fix closes, reachable only by a signal arriving during one
+                # specific ~1-instruction transition rather than across two whole
+                # unguarded lines, and it was only reproduced via `sys.settrace`-timed
+                # signal injection forcing the landing spot — not observed under real
+                # load, unlike the bug this fix targets. Eliminating it would mean never
+                # using `continue`/`break` inside a try guarding a signal-based
+                # exception anywhere a loop needs to skip an iteration, which is not
+                # achievable by restructuring THIS loop alone (the loop-back jump has to
+                # land somewhere). Documented here rather than chased further.
+                name = getattr(check, "__name__", "ring check")
+                if cpu_exceeded(deadline):
+                    skipped.append(name)
+                    continue
+                fx = check(ctx)
+            except ScanBudgetExceeded as exc:
+                if not owned_by(exc, own_frame):
+                    raise
+                # Our OWN hard deadline fired mid-check: this check and everything
+                # after it never got a verdict this call, so all of them count as
+                # skipped for the coverage-gap message below.
+                own_deadline_hit = True
+                skipped.extend(
+                    getattr(c, "__name__", "ring check") for c in SKILL_CONTENT_RING[idx:]
+                )
+                break
+            except Exception:  # noqa: BLE001 — a ring check must never break --vet
+                continue
+            if fx.status not in (FAIL, WARN):
+                continue
+            key = (fx.id, fx.detail)
+            if key in seen:
+                continue
+            seen.add(key)
+            out.append(fx)
     if skipped:
+        reason = (
+            f"the ring's own {target_budget_s:g}s hard scan deadline fired mid-check"
+            if own_deadline_hit
+            else f"the {target_budget_s:g}s per-target CPU scan budget was exhausted"
+        )
         gap = (
             f"content-ring coverage is incomplete: {len(skipped)} of "
-            f"{len(SKILL_CONTENT_RING)} content-security check(s) did not run — the "
-            f"{target_budget_s:g}s per-target CPU scan budget was exhausted "
+            f"{len(SKILL_CONTENT_RING)} content-security check(s) did not run — {reason} "
             f"({', '.join(skipped[:3])}{', …' if len(skipped) > 3 else ''})"
         )
         # Recorded on ctx where every other truncation in this engine records it …
@@ -3982,6 +4472,11 @@ def coverage_gap_finding(detail: str) -> Finding:
     this is a synthetic vet-only verdict id with no CheckMeta, and `_custom()` resolves
     its id through BY_ID. Keeping it out of CATALOG is deliberate — it is not a check,
     and adding it would move `len(CATALOG)` and redden every shipped check-count claim.
+
+    B-399: `engine_degraded=True` below is this docstring's own "hitting the ceiling
+    BOUGHT a cleaner verdict" measurement, closed one layer up — a truncated scan
+    reaching a caller that folds this into a full-audit finding set now hard-caps via
+    scoring.DEGRADED_CHECK_CAP instead of scoring identically to a genuine clean PASS.
     """
     return Finding(
         "VET-COVERAGE",
@@ -3998,6 +4493,7 @@ def coverage_gap_finding(detail: str) -> Finding:
         "hand before trusting it.",
         "Skill Trust",
         False,
+        engine_degraded=True,
     )
 
 
@@ -4063,13 +4559,49 @@ def vet_skill(path: str | Path) -> Finding:
     ctx.installed_skill_py = {name or "skill": py_sources}
     ctx.installed_skill_shell = {name or "skill": shell_sources}
     ctx.installed_skill_js = {name or "skill": js_sources}
-    finding = check_installed_skills(ctx)
+    # B-394: vet_skill is meant to be one of this exception's "designated per-target
+    # handler[s]" (cli.main's own docstring names "the vet dispatch sites" as such) —
+    # the CLI's bare `f = vet_skill(...)` call sites (--vet/--advise on one target) own
+    # no deadline of their own above this, unlike the sweep path (cli.py's bulk --vet,
+    # which already catches ScanBudgetExceeded by name) or report.py's _skill_inventory
+    # (which arms its own check_deadline around the ring call). Both calls below can
+    # raise it even with no timer involved at all: skillast.py's own reached-sinks cap
+    # cooperatively raises with owner=None when it hits its cap, from EITHER
+    # check_installed_skills (via its own effect-simulation pass) or _run_content_ring.
+    # Left unguarded, that reaches only cli.main's last-resort top-level handler, whose
+    # own docstring says reaching it "should not happen by design" — and that handler
+    # discards the ENTIRE result, including a FAIL check_installed_skills already found
+    # before the cap fired, rather than reporting the honest "keep the base verdict,
+    # disclose what we missed" policy report.py:1059 already documents for the
+    # identical situation. `exc.owner is not None` still re-raises: if some future
+    # caller ever wraps vet_skill in its own check_deadline, that owner's expiry must
+    # keep travelling to it, not be swallowed here (the false-PASS-adjacent shape
+    # C-175 fixed, restated one layer up — see owned_by()'s docstring).
+    try:
+        finding = check_installed_skills(ctx)
+    except ScanBudgetExceeded as exc:
+        if exc.owner is not None:
+            raise
+        gap = coverage_gap_finding(
+            "content-ring coverage is incomplete: the scan budget was exhausted "
+            "before the base scan could complete"
+        )
+        gap.ctx = ctx
+        return gap
     # F-048: also run the shared content-security ring. check_installed_skills has already
     # populated ctx.effect_profiles (so B62 can compare declared vs actual capability), and
     # ctx.installed_skills / ctx.installed_skill_py are set above. Fold in only the
     # actionable (FAIL/WARN) ring results: surface the worst as the primary verdict and
     # carry the rest on .ring_findings for the JSON / human / SARIF renderers.
-    ring = _run_content_ring(ctx)
+    try:
+        ring = _run_content_ring(ctx)
+    except ScanBudgetExceeded as exc:
+        if exc.owner is not None:
+            raise
+        ring = [coverage_gap_finding(
+            "content-ring coverage is incomplete: the scan budget was exhausted "
+            "before every content-security check had run"
+        )]
     if ring:
         pool = [finding, *ring]
         primary = max(pool, key=lambda fx: _VET_MERGE_RANK.get(fx.status, 0))
@@ -4180,41 +4712,25 @@ def detect_vet_type(target: str | Path, home: str | Path = "~/.openclaw") -> str
 #
 # The known-bad catalog is seeded ONLY from real, primary-source-verified public advisories
 # (§2.4 — no fabricated IOCs), each entry citing its advisory. It is a POINT-IN-TIME SNAPSHOT
-# (2026-07-03), not a live feed (the feed idea is I-004's territory). Every entry below was
-# verified against the PRIMARY advisory text before commit (§4 wall, C-145): indicators the
-# primary source did not confirm were left out — e.g. the "hightower6eu" publisher account
-# (unconfirmed on the Koi page, and vet_source has no publisher field to match it against).
-# Generic slugs ("update", "pdfcheck") and shared hosts (rentry.co, glot.io, *.vercel.app)
-# are excluded as false-positive-prone. Tests inject synthetic catalogs via the
-# known_bad/known_good parameters. Ecosystem keys: "npm", "pypi", "clawhub", "git", "url",
-# "any". Slug pools match a source's name; the "url"/"any" pools also match a URL's host.
-_SOURCE_KNOWN_BAD: dict = {
-    "npm": frozenset(),
-    "pypi": frozenset(),
-    "clawhub": frozenset(
-        {
-            # Palo Alto Unit 42, "OpenClaw's Skill Marketplace and the Emerging AI Supply
-            # Chain Threat" (2026-06-23) — verified verbatim against
-            # unit42.paloaltonetworks.com/openclaw-ai-supply-chain-risk/.
-            "omnicogg",  # AMOS dropper hidden behind ~22 MB README padding (scanner evasion)
-            "money-radar",  # runtime affiliate-link injection abusing agent advisory authority
-            "letssendit",  # agentic meme-token front-running scheme
-            "ai-tradingview-assistant-for-macos",  # macOS infostealer delivery
-            "tradingview-ai-indicator-assistant",  # macOS infostealer delivery
-        }
-    ),
-    "git": frozenset(),
-    "url": frozenset(
-        {
-            # Malicious infrastructure hosts (matched against a vetted URL's host, incl.
-            # subdomains). Koi Security "ClawHavoc" (2026-02-01, koi.ai) + Unit 42 (2026-06-23).
-            "91.92.242.30",  # shared ClawHavoc C2 — confirmed by BOTH Koi and Unit 42
-            "laosji.net",  # Unit 42 — payload / hosting infrastructure
-            "letssendit.fun",  # Unit 42 — letssendit campaign infrastructure
-        }
-    ),
-    "any": frozenset(),
-}
+# (see ..iocdb.REVISION), not a live feed (the feed idea is I-004's territory). Every entry
+# was verified against the PRIMARY advisory text before commit (§4 wall, C-145): indicators
+# the primary source did not confirm were left out — e.g. the "hightower6eu" publisher
+# account (unconfirmed on the Koi page, and vet_source has no publisher field to match it
+# against). Generic slugs ("update", "pdfcheck") and shared hosts (rentry.co, glot.io,
+# *.vercel.app) are excluded as false-positive-prone. Tests inject synthetic catalogs via
+# the known_bad/known_good parameters. Ecosystem keys: "npm", "pypi", "clawhub", "git",
+# "url", "any". Slug pools match a source's name; the "url"/"any" pools also match a URL's
+# host.
+#
+# The catalog itself (records + per-entry provenance: source_url, source_name,
+# first_seen, note) now lives in ../iocdb.py — a dated, provenance-bound
+# dataset shared with the C-221 cross-artifact host correlation (checks/_shared.py /
+# _egress.py) and the install-directive / remote-dependency known-bad-host checks
+# (checks/_content.py), not just this one gate. `known_bad_sources()` builds the exact
+# same dict[str, frozenset] shape this literal used to be — see its docstring for how
+# HOSTS records populate the "url" pool only (the "any" pool stays empty of host
+# literals, exactly as the former literal had it), preserving prior behavior unchanged.
+_SOURCE_KNOWN_BAD: dict = _iocdb_known_bad_sources()
 
 
 # Known-good identity pools for typosquat comparison, per ecosystem, used ON TOP of
@@ -4401,10 +4917,29 @@ def vet_source(
         + (f" · kind≈{info['kind']}" if info.get("kind") else "")
         + (f" · version={info['version']}" if info.get("version") else " · version=unpinned")
     ]
+    # B-385: the IOC dataset's own freshness advisory used to be folded into `notes`
+    # (-> Finding.evidence) here. Removed -- date.today()-derived text has NO business
+    # in Finding.evidence/detail: it changes daily once the dataset crosses
+    # ..iocdb.STALE_AFTER_DAYS (2026-10-31 for the shipped dataset), making vet output
+    # non-reproducible across days and drifting tests/finding_fingerprint_manifest.txt's
+    # hashes with zero code change. Staleness is PRESENTATION, not evidence about the
+    # vetted subject -- callers now read it via ..iocdb.freshness_notice() directly and
+    # surface it through a renderer-only channel (see cli.py's --vet-source branch),
+    # never through this Finding.
 
     # 1. Known-bad IOC — exact ecosystem+name match (a bare registry name is checked
     #    against every ecosystem, mirroring OpenClaw's bare-spec resolution order).
+    # B-436: for eco == "url", `name`/`plain` is a URL's PATH BASENAME (the last path
+    # segment) -- NOT a package/slug identity -- while the "url" pool is populated
+    # (also) from iocdb.HOSTS host IOCs (see known_bad_sources()'s own docstring).
+    # Matching a basename against that pool false-FAILed any URL whose filename
+    # happens to equal a known-bad host string (e.g. a blocklist mirror literally
+    # named "laosji.net"), even though the URL's actual HOST is unrelated. The real
+    # host is checked correctly below (step 1b, keyed off info["host"]), so a URL
+    # source's own "url" pool is excluded here.
     eco_keys = [eco, "any"] if eco != "registry" else list(bad.keys())
+    if eco == "url":
+        eco_keys = [k for k in eco_keys if k != "url"]
     for k in eco_keys:
         pool = bad.get(k) or frozenset()
         if name.lower() in pool or plain in pool:
@@ -4413,19 +4948,46 @@ def vet_source(
             )
             break
 
-    # 1b. Known-bad HOST — a URL (or git) whose host is, or is a subdomain of, a known-bad
-    #     domain/IP in the url/any pool. The name check above matches slugs/packages; this
-    #     matches infrastructure IOCs (a source served straight off known-bad C2 infra).
+    # 1b. Known-bad HOST — a URL/git source whose host is, or is a subdomain of, a
+    #     known-bad domain/IP. The name check above matches slugs/packages; this
+    #     matches infrastructure IOCs (a source served straight off known-bad C2
+    #     infra). B-436: this used to re-implement its own type-blind host match
+    #     (`host_l == h or host_l.endswith("." + h)`) over the flat eco/"any" pools --
+    #     ignoring each record's own "ip" vs "domain" type (an IP record has no
+    #     meaningful "subdomain", so "sub.<bad-ip>" wrongly matched) and never firing
+    #     for eco == "git" (HOSTS values only ever populate the "url" pool, so a
+    #     git:-sourced install off known-bad infra was silently never flagged). Both
+    #     are exactly what iocdb.is_known_bad_host() -- the one canonical,
+    #     type-honoring predicate -- already exists to prevent.
+    #
+    #     B-436 FOLLOW-UP: the fix above called iocdb.is_known_bad_host() directly,
+    #     which always consults the module-level (live, shipped) dataset -- silently
+    #     bypassing vet_source's OWN `known_bad=` parameter, its documented
+    #     test-isolation mechanism (step 1's name check above still honors it via
+    #     `bad`). A caller that explicitly overrides the catalog to be empty (or to a
+    #     fixed test fixture) must not have step 1b quietly fall back to production
+    #     IOCs. So: when an override was actually injected, match against ITS pools
+    #     (the pre-B-436 flat exact-or-subdomain check -- an injected dict has no
+    #     per-record "ip" vs "domain" type, so it cannot honor that distinction; that
+    #     refinement stays scoped to the canonical predicate/live dataset). Only when
+    #     `known_bad` is None (the real, default catalog) do we delegate to the
+    #     canonical, type-honoring, dot-stripping `is_known_bad_host()`.
     host_l = (info.get("host") or "").lower()
     if host_l and not reasons_bad:
-        for k in (eco, "any"):
-            pool = bad.get(k) or frozenset()
-            if any(host_l == h or host_l.endswith("." + h) for h in pool):
-                reasons_bad.append(
-                    f"host '{host_l}' is known-compromised infrastructure "
-                    f"(exact IOC match, catalog: {k})"
-                )
-                break
+        if known_bad is not None:
+            for k in (eco, "any"):
+                pool = bad.get(k) or frozenset()
+                if any(host_l == h or host_l.endswith("." + h) for h in pool):
+                    reasons_bad.append(
+                        f"host '{host_l}' is known-compromised infrastructure "
+                        f"(exact IOC match, catalog: {k})"
+                    )
+                    break
+        elif _iocdb_is_known_bad_host(host_l):
+            reasons_bad.append(
+                f"host '{host_l}' is known-compromised infrastructure "
+                f"(exact IOC match, catalog: url)"
+            )
 
     # 2. Typosquat vs the brand list + ecosystem known-good pools + real plugin ids.
     pool = set(_KNOWN_NAMES) | set(good.get("plugin-ids") or ())
@@ -4568,6 +5130,10 @@ SKILL_CONTENT_RING = (
     check_capability_intent_mismatch,  # B62 — capability–intent mismatch
     check_silent_instruction,  # B63 — "don't tell the user"
     check_instruction_hierarchy_override,  # B64 — instruction-hierarchy override
+    check_dotfile_exfil_directive,  # B337 — mandatory-directive shell exfil of dotfiles (B-364)
+    check_tunnel_enrollment,  # B338 — covert tunnel / mesh-VPN enrollment primitive (E-065)
+    check_cloud_metadata_credential_fetch,  # B339 — cloud instance-metadata credential fetch (E-065)
+    check_undocumented_helper_directive,  # B334 — undocumented bundled helper + directive
     check_self_privesc_directive,  # B159 — self-privilege-escalation directive (C-207)
     check_prose_bulk_exfil,  # B160 — prose-intent bulk-data exfiltration (C-210)
     check_social_engineering_phishing,  # B163 — social-engineering / credential-phishing prose (C-209)
@@ -4589,14 +5155,21 @@ SKILL_CONTENT_RING = (
     check_cross_file_plaintext_payload,  # B154 — cross-file split PLAINTEXT payload reassembly
     check_dynamic_dispatch_obfuscation,  # B91 — dynamic-dispatch sink obfuscation (F-102)
     check_unsafe_deserialization,  # B92 — unsafe deserialization sink (F-098)
+    check_chunked_file_assembly_exec,  # B336 — chunked multi-file-read assembly -> exec/eval
     check_trigger_homoglyph,  # B93 — confusable characters in trigger description (F-103)
     check_lifecycle_hooks_extended,  # B94 — extended lifecycle hooks beyond postinstall (F-099)
     check_dependency_confusion,  # B95 — unpinned dep name resembling a well-known package (F-101)
     check_event_hook_interceptor,  # B97 — per-turn event-hook interceptor in a skill (F-104)
     check_manifest_absent,  # B98 — undeclared privilege: risky effects, no tools manifest
     check_pth_persistence,  # B99 — .pth/sitecustomize auto-execution persistence (F-088)
+    check_python_runtime_persist_install,  # B335 — runtime-computed sitecustomize/PYTHONSTARTUP install (T06/B-343)
     check_clickfix_setup_section,  # B100 — ClickFix paste-into-terminal + remote-fetch (F-090)
     check_config_trust_widening,  # B96 — config-driven trust widening, heuristic-only (F-100)
     check_install_directive_supply_chain,  # B103 — install[] supply-chain provenance (B-099)
     check_interpreter_interpolation_injection,  # B153 — interpreter one-liner interpolation
+    check_model_artifact_provenance,  # B343 — ML model artifact provenance (C-341)
+    check_offensive_tooling_directive,  # B344 — offensive-security tooling directive (C-338)
+    check_self_modification_directive,  # B345 — self-modification directive (B-392)
+    check_self_erase_directive,  # B346 — anti-forensic self-erase directive (F-160)
+    check_deaddrop_resolver,  # B347 — dead-drop C2 resolver: poll -> decode -> exec (F-159)
 )

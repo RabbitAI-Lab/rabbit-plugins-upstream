@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/edge-cpu-gguf-tuner",
   "slug": "edge-cpu-gguf-tuner",
   "ownerHandle": null,
-  "version": "1.1.0",
-  "updatedAt": 1785030115405,
-  "contentHash": "562fff3660e74ed56ebfb09ecbb698bbb68a819d3399fe273da526f5348736d4",
-  "fetchedAt": "2026-07-26T18:03:45.843Z"
+  "version": "1.1.5",
+  "updatedAt": 1786009339409,
+  "contentHash": "a9834fb8717bdba27c7ac94945abe36b2b9a73412913ac4c3b8e4cd12ece48c4",
+  "fetchedAt": "2026-08-06T10:04:43.289Z"
 }

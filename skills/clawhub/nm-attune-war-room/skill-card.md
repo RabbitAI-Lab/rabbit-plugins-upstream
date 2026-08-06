@@ -11,20 +11,20 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and technical decision makers use this skill to assess reversibility, convene multiple AI expert perspectives, pressure-test trade-offs, and synthesize a decision for high-stakes architecture or strategy choices. <br>
+Developers and technical decision makers use this skill to structure high-stakes architectural or strategic deliberations, compare courses of action, pressure-test assumptions, and produce a decision record with dissent, risks, and reversal planning. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Project context may be sent to configured external model tools during expert-panel analysis. <br>
-Mitigation: Install only when this data flow is acceptable, and avoid using the skill with confidential or restricted project material unless the configured tools are approved. <br>
-Risk: Decision summaries may be offered for GitHub Discussions publication by default. <br>
-Mitigation: Decline publishing for confidential work and review any proposed discussion body before allowing publication. <br>
-Risk: The artifact documents a GLM fallback that skips permissions. <br>
-Mitigation: Do not use the permission-skipping fallback or alias unless it has been explicitly reviewed and approved for the environment. <br>
-Risk: Local decision archives can retain sensitive deliberation content. <br>
-Mitigation: Review and delete local Strategeion archives when they contain sensitive material or are no longer needed. <br>
+Risk: Deliberation records may be retained locally or posted to GitHub Discussions. <br>
+Mitigation: Confirm storage and deletion expectations before use, and require explicit approval before publishing decision summaries externally. <br>
+Risk: The artifact includes fallback guidance using --dangerously-skip-permissions for a GLM command path. <br>
+Mitigation: Remove or disable permission-bypass command guidance before installation and use standard approval controls for external model invocations. <br>
+Risk: The workflow can execute repo-local scripts for deferred capture or orchestration. <br>
+Mitigation: Review repo-local scripts before execution and avoid automatic script execution in untrusted workspaces. <br>
+Risk: GitHub Discussion publishing uses the user's authenticated gh credentials. <br>
+Mitigation: Verify the target repository, category, and discussion body before publishing, and skip publishing when credentials or repository permissions are not appropriate. <br>
 
 
 ## Reference(s): <br>
@@ -36,13 +36,13 @@ Mitigation: Review and delete local Strategeion archives when they contain sensi
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown decision documents with command examples and local session records.] <br>
+**Output Type(s):** [analysis, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown decision records with inline shell commands and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce reversibility scores, expert-panel summaries, premortems, dissenting views, and optional GitHub Discussion summaries.] <br>
+**Other Properties Related to Output:** [May save local session artifacts and publish summarized decision records to GitHub Discussions when prerequisites are met and publishing is not declined.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence; artifact frontmatter reports 1.9.8) <br>
+1.9.17 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

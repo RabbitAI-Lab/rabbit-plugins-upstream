@@ -1,43 +1,58 @@
-## Description: <br>
-Loop engineering CLI v0.4.4 with project intake, adaptive queues, progress reports, and human gates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Durable explicit task/project loops with verification, revisions, live progress, and governed completion.
 
-## Publisher: <br>
-[ambitioncn](https://clawhub.ai/user/ambitioncn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ambitioncn](https://clawhub.ai/user/ambitioncn)
 
-## Use Case: <br>
-Developers and engineers use this skill to manage explicit loop-engineering workflows for project intake, queue setup, adaptive queue execution, progress reporting, and review-gated code worktree handoffs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queue dispatcher commands and cron entries can run local workflows in the target workspace. <br>
-Mitigation: Review queue configs, dispatcher commands, and cron entries before execution; start with manual ticks and inspect generated run artifacts before scheduling recurring runs. <br>
-Risk: Commands using `--confirm-apply` or `--confirm-cleanup` can change local files or remove reviewed worktrees. <br>
-Mitigation: Use the read-only planning, status, review bundle, patch verification, and cleanup-plan commands first, and supply confirmation flags only after human review. <br>
-Risk: High-risk process-control, live instrumentation, publishing, destructive, credential, or production configuration actions may exceed ordinary loop automation expectations. <br>
-Mitigation: Keep those actions separately gated and stop at artifacts for human review unless the user explicitly approves execution. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to route explicit loop requests into governed task or project workflows with queue execution, verification, revision handling, and completion reporting.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/ambitioncn/skills/loop-engineering) <br>
-- [NPM Package Reference](references/npm-package.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands, JSON configuration examples, and artifact paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local loop configuration, queue state, status ledgers, review bundles, patches, and closeout artifacts when the user explicitly runs the corresponding CLI commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.4 (source: server release evidence and package reference, released 2026-07-23) <br>
+Risk: Loop execution can direct Codex to operate task and project workflows in a workspace.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that operating model is intended, and inspect queue, task, run, and acceptance evidence before treating work as complete.
+
+Risk: Patch application, worktree cleanup, scheduling, external notifications, production changes, credential work, and device instrumentation can affect local or external systems.
+
+Mitigation: Require the explicit confirmation gates described by the skill before allowing those actions.
+
+Risk: A dispatcher-successful run can still produce incomplete or unacceptable work.
+
+Mitigation: Review final judgement, acceptance reviews, checkpoints, verification evidence, unmet checks, blockers, and revision records before reporting completion.
+
+## Reference(s):
+
+- [npm Package](references/npm-package.md)
+- [ClawHub skill page](https://clawhub.ai/ambitioncn/skills/loop-engineering)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, markdown, code]
+
+**Output Format:** [Markdown guidance with inline shell commands and file/path references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces governed workflow guidance and commands for explicit loop invocations; no fixed token cap.]
+
+## Skill Version(s):
+
+0.7.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

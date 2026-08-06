@@ -1,0 +1,15 @@
+{
+  "name": "market-intelligence",
+  "version": "1.0.0",
+  "description": "Generates 3 daily market intelligence reports: Trending Web Traffic, Stock Sentiment List (Reddit + X/Twitter), and Daily Equity Raise Summary. Self-contained, saves structured Markdown. Your agent becomes a morning briefing machine.",
+  "category": "Finance, Legal & Accounting",
+  "price": 25,
+  "tags": [
+    "market-intelligence",
+    "trading",
+    "investing",
+    "reports",
+    "sentiment",
+    "web-traffic"
+  ]
+}

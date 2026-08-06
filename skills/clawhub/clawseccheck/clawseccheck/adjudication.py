@@ -33,6 +33,14 @@ audit() pass already collected:
 Every string field is routed through logsafe.redact() before it reaches the
 packet — no raw skill source or secret value ever appears in the output.
 
+Explicitly declined: whether a security-branded skill is an *effective* scanner
+(ESET's H1 2026 threat report names this class "benign but problematic" — thin
+tools that merely wrap a reputation lookup). Efficacy isn't a signal derivable
+from source structure, no source (a)-(e) above fires for an honest-but-weak
+scanner, and a synthesized judge question would only recreate the same
+false-confidence problem one layer up. Decision (2026-08-01): out of scope for
+both a new check and this module.
+
 Stdlib only. No network, no subprocess, no writes.
 """
 from __future__ import annotations
@@ -206,9 +214,67 @@ def _target_from_evidence(f) -> str:
 _LOC_SUFFIX_RE = re.compile(r"\(([^()\s][^()]*:\d+)\)\s*$")
 
 
+# C-361: real dig() root namespaces (grepped from checks/*.py + collector.py, not
+# invented -- Golden Rule #4). _config_field_path only treats a dotted/bracketed
+# token as an engine-authored config field path -- never skill prose -- when here.
+_CONFIG_PATH_ROOTS = frozenset({
+    "agents", "auth", "channels", "commands", "config", "cron", "discovery",
+    "env", "gateway", "heartbeat", "hooks", "lastTouchedVersion", "logging",
+    "marketplaces", "mcp", "meta", "models", "network", "openclaw", "plugins",
+    "proxy", "secrets", "security", "skills", "subagents", "tools", "update",
+})
+
+# A dotted/bracketed config-path SHAPE anchored at the start of an evidence string --
+# identifier segments joined by '.' or indexed with '[<digits>]'. No whitespace or
+# punctuation besides '.', '[', ']', '_' survives -- same "narrow shape, not free
+# text" defense as _safe_destination_host's hostname gate (C-284). The trailing
+# lookahead requires a non-identifier, non-':' boundary right after the match, so a
+# skill's "name: ..." evidence convention is never mistaken for a path.
+_CONFIG_PATH_RE = re.compile(
+    r"^(?P<path>[a-zA-Z][a-zA-Z0-9_]*(?:\.[a-zA-Z][a-zA-Z0-9_]*|\[\d+\])+)(?![A-Za-z0-9_:])"
+)
+
+_MAX_FIELD_PATH_LEN = 120
+
+
+def _config_field_path(evidence_entry: str) -> "str | None":
+    """Leading config field path (e.g. ``gateway.trustedProxies``) at the start of
+    *evidence_entry*, or None. Always STRUCTURAL (a real dig() call site name, see
+    ``_CONFIG_PATH_ROOTS``) -- never the free-text value/prose that may follow it;
+    everything past the matched path is discarded, like ``_evidence_locations``
+    already discards everything but a trailing ``(relpath:lineno)`` location.
+    """
+    m = _CONFIG_PATH_RE.match(evidence_entry)
+    if not m:
+        return None
+    path = m.group("path")
+    root = re.split(r"[.\[]", path, maxsplit=1)[0]
+    if root not in _CONFIG_PATH_ROOTS:
+        return None
+    return path[:_MAX_FIELD_PATH_LEN]
+
+
+def _config_field_paths(f) -> list:
+    """Distinct config field paths from *f*'s evidence, in order, capped at 6."""
+    paths: list = []
+    for e in (f.evidence or []):
+        p = _config_field_path(e)
+        if p and p not in paths:
+            paths.append(p)
+    return paths[:6]
+
+
+# C-361: the old, contentless fallback shape, named so build_judge_packet can
+# recognize (and omit) an item still empty after the field-path fallback fires.
+_FALLBACK_EVIDENCE_RE = re.compile(
+    r"^\d+ evidence entr(?:y|ies) in the full report \(not reproduced here\)$"
+)
+
+
 def _evidence_locations(f) -> str:
-    """Skill-relative file:line locations pulled from a Finding's evidence,
-    with the matched free text itself dropped.
+    """Skill-relative file:line locations pulled from a Finding's evidence, with the
+    matched free text itself dropped -- falling back to a config field path
+    (C-361) when no location suffix exists, and only then to a contentless count.
 
     Several content-ring checks (persona-jailbreak, sleeper-trigger, secret-
     exfil, ...) quote the actual matched skill prose in their evidence so a
@@ -218,10 +284,18 @@ def _evidence_locations(f) -> str:
     text. Since this packet is meant for an external host-agent judge to
     read, only the location is surfaced here; the matched text itself never
     reaches this module's output.
+
+    C-361: config-derived findings (the audit-path majority) cite a dig() field path
+    like ``mcp.servers[2].command``, not a file:line -- so before this fix they
+    ALWAYS hit this fallback with zero information. ``_config_field_path`` extracts
+    that path under the same "narrow shape, never free text" discipline as above.
     """
     locs = [m.group(1) for e in (f.evidence or []) if (m := _LOC_SUFFIX_RE.search(e))]
     if locs:
         return redact("; ".join(locs))
+    paths = _config_field_paths(f)
+    if paths:
+        return redact("; ".join(paths))
     n = len(f.evidence) if f.evidence else (1 if f.detail else 0)
     if n == 0:
         return ""
@@ -366,6 +440,14 @@ def _attach_corroboration(items: list[dict], findings) -> list[dict]:
 
 def _item_from_finding(f) -> dict:
     host = _safe_destination_host(f)
+    field_paths = _config_field_paths(f)
+    # C-284/C-361: engine-authored facts only, never copied from prose. Always a
+    # dict (empty when nothing could be safely extracted).
+    safe_facts: dict = {}
+    if host:
+        safe_facts["destination_host"] = host
+    if field_paths:
+        safe_facts["config_field_paths"] = field_paths
     return {
         "finding_id": f.id,
         "target": _target_from_evidence(f),
@@ -373,11 +455,25 @@ def _item_from_finding(f) -> dict:
         "engine_disposition": f.status,
         "question": _question_for(f.id),
         "verdict_schema": _VERDICT_SCHEMA,
-        # C-284: engine-authored, never copied from prose — see _safe_destination_host.
-        # Always present (empty when no destination could be safely extracted) so a
-        # consumer never needs to branch on the key's existence.
-        "safe_facts": {"destination_host": host} if host else {},
+        "safe_facts": safe_facts,
     }
+
+
+# C-361: an item built from a finding that DID carry evidence, yet still collapses to
+# zero usable signal (no location/field-path, no curated question, no real target, no
+# safe_facts), asks the judge about something it structurally cannot see -- omit it
+# rather than ship an unanswerable question (2 real items beats 43 empty ones).
+# Scoped to findings that HAD evidence: a bare UNKNOWN with NO evidence at all keeps
+# its long-standing generic-question posture unchanged.
+def _is_judgeable(item: dict, f) -> bool:
+    if not (f.evidence or []):
+        return True
+    ev = item["redacted_evidence"]
+    has_real_evidence = bool(ev) and not _FALLBACK_EVIDENCE_RE.match(ev)
+    has_curated_question = f.id in _ID_QUESTIONS or f.id in _RULE_QUESTIONS
+    has_real_target = item["target"] != f.id
+    has_safe_facts = bool(item["safe_facts"])
+    return has_real_evidence or has_curated_question or has_real_target or has_safe_facts
 
 
 def _recover_dropped_taint(ctx) -> list[dict]:
@@ -462,8 +558,17 @@ def _is_borderline(f) -> bool:
     ever consider exactly the same population build_judge_packet already showed the
     judge — it must never propose suppressing a finding the judge never saw, and by
     construction (UNKNOWN/WARN only) it can never even reach a FAIL-status finding.
+
+    F-139/B2: a not_applicable finding (surface positively confirmed absent, e.g.
+    "no MCP servers configured" on a config we actually read completely) is
+    excluded — there is nothing borderline/actionable for a judge to adjudicate
+    when the surface it would be judging doesn't exist. This one predicate change
+    covers build_judge_packet, build_ignore_proposals (C-253), AND the escalation
+    path (_escalate_finding exits early on `not _is_borderline(f)`) — no separate
+    not-applicable handling is needed in _escalated_status; it is structurally
+    unreachable there once _is_borderline excludes it.
     """
-    return not getattr(f, "suppressed", False) and (
+    return not getattr(f, "suppressed", False) and not getattr(f, "not_applicable", False) and (
         f.status == UNKNOWN or (f.status == WARN and f.id in _FN_PRONE_WARN_IDS)
     )
 
@@ -478,7 +583,15 @@ def build_judge_packet(ctx, findings) -> list[dict]:
     Finding's status/severity/score. Deterministic: same inputs always sort to
     the same output order, regardless of dict-iteration order upstream.
     """
-    items: list[dict] = [_item_from_finding(f) for f in (findings or []) if _is_borderline(f)]
+    items: list[dict] = []
+    for f in (findings or []):
+        if not _is_borderline(f):
+            continue
+        item = _item_from_finding(f)
+        # C-361: scoped to this population only -- the B62/recovered-taint/env-auth
+        # sources below always carry real evidence by construction.
+        if _is_judgeable(item, f):
+            items.append(item)
 
     items.extend(_b62_items(ctx))
     items.extend(_recover_dropped_taint(ctx))
@@ -509,6 +622,12 @@ _MAX_VERDICTS_BYTES = 2_000_000
 # Derived from the SAME tuple the packet advertises (see _VERDICT_VALUES) so the
 # contract shown to the judge and the guard applied to its answer can never drift.
 _VALID_VERDICTS = frozenset(_VERDICT_VALUES)
+
+# B-406: severity rank derived from the SAME severity-ascending tuple (SAFE=0 <
+# SUSPICIOUS=1 < DANGEROUS=2), so the duplicate-entry resolution below can never
+# rank against a vocabulary that has drifted from what the packet actually declared.
+# See its one call site in _parse_verdicts for why this exists.
+_VERDICT_RANK = {verdict: rank for rank, verdict in enumerate(_VERDICT_VALUES)}
 
 _PRIORITY_BY_VERDICT = {
     "DANGEROUS": "treat as high priority",
@@ -581,6 +700,21 @@ def _parse_verdicts(raw: str) -> dict:
     JSON artifact). This is the single funnel all three consumers use -- ``--judged``,
     ``--propose-ignore`` and ``--vet-judged`` -- so the diagnostic cannot be wired up
     for one of them and forgotten for the others.
+
+    B-406: a payload carrying more than one entry for the SAME ``(finding_id,
+    target)`` pair (e.g. several judge-panel lens verdicts a host agent forwarded
+    without pre-reducing them to one, or a retried judge call appended rather than
+    replaced) no longer resolves to "whichever the array happened to list last" --
+    that made the applied verdict depend on submission order alone, so byte-identical
+    input could silently produce a different outcome across two calls. The MOST
+    SEVERE of the conflicting verdicts (_VERDICT_RANK) now always wins, regardless of
+    array order -- the same fail-safe direction SKILL.md's own panel tie-break
+    already uses ("a tie escalates to the worst of the three rather than picking
+    arbitrarily"), just applied to duplicate entries instead of a 3-way tie. This
+    covers exactly the "same input, same output" property every consumer needs, but
+    it is deliberately scoped to entries the SAME parse call actually sees -- it
+    cannot make two wholly separate invocations of an external judge agree with each
+    other; nothing offline and stdlib-only can compel that.
     """
     if not isinstance(raw, str) or len(raw.encode("utf-8", "surrogatepass")) > _MAX_VERDICTS_BYTES:
         _note_nothing_applied(
@@ -606,8 +740,17 @@ def _parse_verdicts(raw: str) -> dict:
         verdict = entry.get("verdict")
         if not (isinstance(fid, str) and isinstance(target, str) and verdict in _VALID_VERDICTS):
             continue
+        key = (fid, target)
+        existing = out.get(key)
+        # B-406: a later, LESS severe duplicate must never silently overwrite an
+        # already-parsed more-severe one for the same key -- see the docstring note.
+        # An equal-or-more-severe duplicate still overwrites (keeps the loop's
+        # existing "last one wins" behavior for votes/reason metadata when the
+        # verdict itself does not regress).
+        if existing is not None and _VERDICT_RANK[verdict] < _VERDICT_RANK[existing["verdict"]]:
+            continue
         votes = entry.get("votes")
-        out[(fid, target)] = {"verdict": verdict, "votes": votes if isinstance(votes, dict) else None}
+        out[key] = {"verdict": verdict, "votes": votes if isinstance(votes, dict) else None}
     # An explicitly empty "verdicts": [] IS "no verdicts submitted" -- say nothing.
     # Entries that were submitted and all rejected is the case worth shouting about.
     if entries and not out:

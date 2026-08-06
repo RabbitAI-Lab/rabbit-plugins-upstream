@@ -1,0 +1,78 @@
+{
+  "skill": "urban-sprawl-analysis",
+  "skill_version": "1.0.0",
+  "command": "urban-sprawl-analysis --bbox 179.5 -10 -179.5 -9 --synthetic --output-dir _review_out/agent-B/urban-sprawl-analysis/out/s04 --quiet",
+  "started_at": "2026-08-03T17:45:39.948379Z",
+  "finished_at": "2026-08-03T17:45:40.420027Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "n_dates": 4,
+    "synthetic": true,
+    "bbox": [
+      179.5,
+      -10.0,
+      -179.5,
+      -9.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out/agent-B/urban-sprawl-analysis/out/s04\\sprawl_metrics.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out/agent-B/urban-sprawl-analysis/out/s04\\centroid_trajectory.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out/agent-B/urban-sprawl-analysis/out/s04\\urban_footprint.geojson",
+      "kind": "vector",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": 4,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_dates": 4,
+    "net_expansion_detected": true,
+    "total_net_area_km2": -525859.7977476788,
+    "total_centroid_shift_km": 1351.6698053945904,
+    "n_polygons": 4,
+    "synthetic_pixels_per_date": [
+      290,
+      542,
+      898,
+      1402
+    ]
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "urban-sprawl-analysis"
+  },
+  "error": null
+}

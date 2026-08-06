@@ -1,0 +1,29 @@
+"""Pytest fixtures for insurance-risk-mapping tests."""
+import importlib.util
+import os
+import sys
+import pytest
+
+SKILL_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+SCRIPT = os.path.join(SKILL_DIR, "geoskill-insurance-risk-mapping.py")
+
+
+def load_module():
+    spec = importlib.util.spec_from_file_location("insurance_risk_mapping", SCRIPT)
+    module = importlib.util.module_from_spec(spec)
+    sys.modules["insurance_risk_mapping"] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+mod = load_module()
+
+
+@pytest.fixture
+def skill_dir():
+    return SKILL_DIR
+
+
+@pytest.fixture
+def script_path():
+    return SCRIPT

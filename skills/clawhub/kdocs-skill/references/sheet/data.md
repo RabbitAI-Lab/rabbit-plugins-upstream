@@ -40,7 +40,9 @@
 
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `range` (object, 必填): 选区范围（必须为对象，即使只读取一个单元格也必须包裹在对象中传入，不可传数组），行列索引均为 0-based
 
@@ -114,8 +116,6 @@
 #### 功能说明
 
 批量更新单元格选区数据，支持写值/公式、设置格式、合并单元格、写入图片。
-每项操作必须包含 `opType` 和四个坐标字段（`rowFrom`/`rowTo`/`colFrom`/`colTo`）。
-**`rangeData` 必须为对象数组（`array[object]`），即使只操作一个单元格也必须包裹在数组中传入，不可传单个对象。**
 
 
 
@@ -123,14 +123,17 @@
 
 - **前置检查**：调用 sheet.get_range_data 读取目标区域现有数据，确认覆盖范围
 - **前置检查**：使用该工具前必须先调用get_sheets_info确认要操作的工作表id，不得自行捏造工作表id。
-- **提示**：每项必须包含 rowFrom/rowTo/colFrom/colTo 四个坐标；opType 必须使用 formula/format/merge/picture
 
 **幂等性**：是
 
+> 每项必须包含 `opType`（仅 `formula`/`format`/`merge`/`picture`）和四个坐标字段（`rowFrom`/`rowTo`/`colFrom`/`colTo`）；`rangeData` 必须为对象数组，即使单个单元格也不可传单个对象
 > 参数名使用 camelCase（如 `opType`、`rowFrom`、`alcH`、`cellPicInfo`）
 > merge 操作的 `type` 使用 `MergeCenter`、`MergeContent`、`MergeSame`、`MergeColumns`
 > picture 操作的 `cellPicInfo.tag` 使用 `local` / `attachment` / `url`，并按 tag 传 `uploadId` / `attachmentId` / `url`
 > 该工具暂不支持写入在线图片，请使用 `sheet.range_data_batch_update` 工具。
+> **改日期/数字显示格式属于 format 操作**：用 `opType=format` + `xf.numfmt`（如 `yyyy-mm-dd`、`0.00%`），**不要用 `opType=formula` 重写格式化字符串**——写入的字符串会被引擎按原有格式重新渲染，显示效果不变。
+> **日期单元格的值和格式是两层**：值层是内部数值（如 44961），格式层控制显示（`yyyy/m/d` vs `yyyy-mm-dd`）。改显示只改格式层即可，值层无需动。
+> **`formula` 值以 `+`/`-`/`=` 开头会被当作公式解析**：写字面文本（如 `+86 手机号`）会报 Internal error，须前置 `'` 强制文本（如 `'+86 138…`），存储时引号不会带入。
 
 #### 调用示例
 
@@ -243,9 +246,11 @@
 
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
-- `rangeData` (array[object], 必填): 单元格操作数组（必须为数组，即使只有一项操作也不可传单个对象），每项必须包含 `opType` 和坐标字段，详见 param_detail
+- `rangeData` (array[object], 必填): ⚠️ 单元格操作数组（必填，不可传单个对象），每项必须包含 `opType` 和坐标字段，详见 param_detail
 
 **rangeData 每项字段：**
 
@@ -348,7 +353,7 @@
 | `uls` | integer | 否 | 下划线类型 |
 | `sss` | integer | 否 | 上下标类型 |
 | `themeFont` | integer | 否 | 字体类型 |
-| `color` | object | 否 | 字体颜色（颜色对象，见下方颜色说明） |
+| `color` | object | 否 | 字体颜色（颜色对象，见下方颜色说明）。**不确定颜色值时不传此字段**，禁止用占位符 |
 
 **xf.fill 字段：**
 
@@ -363,7 +368,7 @@
 | 字段 | 类型 | 必填 | 说明 |
 |------|------|------|------|
 | `type` | integer | 是 | 颜色类型：0=ICV，1=THEME 主题色，2=ARGB，254=无颜色（背景透明），255=自动色（字体/边框默认） |
-| `value` | integer | 是 | ARGB 整数值（type=2 时有效），如纯红 `0xFFFF0000` = `4294901760` |
+| `value` | integer | 是 | ARGB 整数值（type=2 时有效）。十进制 = 十六进制 ARGB 转十进制整数，如纯红 `0xFFFF0000` → `int(0xFFFF0000)` = `4294901760` |
 | `tint` | integer | 是 | 透明度，调节颜色深浅 |
 
 
@@ -425,7 +430,9 @@
 
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `range_data` (array[object], 必填): 范围数组；调用方需保证参数在行列最大最小值范围内，超过则执行失败。最大值可通过 `sheet.get_sheets_info` 获取
 - `shift_type` (string, 可选): 移动方式，默认向上移动。可选值：`shift_up` / `shift_left`；默认值：`shift_up`
@@ -502,7 +509,9 @@ range_data.op_type的枚举值只有cell_operation_type_formula，cell_operation
 
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `range_data` (array[object], 可选): 新行各列的数据，按列顺序追加至已使用区域末尾，不可为空数组。
 
@@ -601,7 +610,9 @@ range_data.op_type的枚举值只有cell_operation_type_formula，cell_operation
 
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `range` (object, 必填): 筛选区域
 - `page` (object, 可选): 分页参数（可选）
@@ -837,7 +848,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `chartType` (string, 必填): 图表类型（共 31 种，见 `param_detail`）。可选值：`column_clustered` / `column_stacked` / `column_stacked_100` / `bar_clustered` / `bar_stacked` / `bar_stacked_100` / `line` / `line_stacked` / `line_stacked_100` / `line_markers` / `line_markers_stacked` / `line_markers_stacked_100` / `pie` / `pie_of_pie` / `bar_of_pie` / `doughnut` / `area` / `area_stacked` / `area_stacked_100` / `scatter` / `scatter_smooth` / `scatter_smooth_no_markers` / `scatter_lines` / `scatter_lines_no_markers` / `bubble` / `radar` / `radar_markers` / `radar_filled` / `stock_hlc` / `stock_vhlc` / `stock_ohlc` / `stock_vohlc`
 - `sourceAddress` (string, 必填): 数据源地址，如 `A1:D5` 或跨表 `'数据表'!A1:D5`
@@ -923,7 +936,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `sourceAddress` (string, 必填): 源区域地址，如 `A1:A5`（填充种子，须包含在 `targetAddress` 内）
 - `targetAddress` (string, 必填): 目标区域地址，如 `A1:A10`（填充扩展范围，须包含 `sourceAddress`）
@@ -979,7 +994,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 
 #### 返回值说明
@@ -1122,7 +1139,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `index` (integer, 必填): 图表索引（1-based，同 `sheet.get_chart_information` 返回编号）
 - `updateType` (string, 必填): 操作类型，决定本次更新的目标属性。可选值：`title` / `type` / `data_source` / `position` / `legend` / `axis_title`
@@ -1224,7 +1243,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `sourceAddress` (string, 必填): 数据源地址，如 `A1:E100` 或跨表 `'Sheet1'!A1:E100`；不带 sheet 前缀时默认使用当前工作表
 - `tableDestination` (string, 可选): 透视表放置位置（如 `G1`），留空则自动放置
@@ -1312,7 +1333,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `range` (string, 必填): 单元格区域，如 `A1:C3`
 - `across` (boolean, 可选): 是否按行合并；`true` 表示每行内合并为一个单元格，`false` 或不传则整个区域合并为一个单元格；默认值：`false`
@@ -1355,7 +1378,7 @@ user_cover 上传并带 map_id：
 
 #### 操作约束
 
-- **前置检查**：建议先用 `sheet.get_range_data` 核对排序区域和关键字段列，避免误排
+- **前置检查**：先用 `sheet.get_sheets_info` 获取 `rowTo`/`colTo` 确定数据范围，据此构造 `range`（如 `rowTo=10` 则 `A1:F11`），禁止凭直觉猜行数
 - **前置检查**：使用该工具前必须先调用get_sheets_info确认要操作的工作表id，不得自行捏造工作表id。
 - **提示**：`range` 必须是合法 A1 区域；`key2`/`key3` 仅在已传上一级 key 时才有意义
 
@@ -1401,7 +1424,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `range` (string, 必填): 排序区域，如 `A1:D10`
 - `key` (string, 必填): 第一排序字段，列字母（如 `B`）或列号（1-based）
@@ -1544,7 +1569,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `tableName` (string, 必填): 透视表名称，同 `sheet.get_pivot_tables` 返回的 `tableName`
 - `updateType` (string, 必填): 操作类型。可选值：`set_source_data` / `add_fields` / `add_data_field` / `refresh` / `clear_all_filters` / `set_table_style` / `row_axis_layout` / `subtotal_location` / `set_grand_total_name` / `set_merge_labels` / `set_row_grand` / `set_column_grand` / `add_calculated_field` / `clear_table`
@@ -1699,7 +1726,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `tableName` (string, 必填): 透视表名称，同 `sheet.get_pivot_tables` 返回的 `tableName`
 - `fieldName` (string, 必填): 字段名称
@@ -1793,7 +1822,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `tableName` (string, 必填): 透视表名称，同 `sheet.get_pivot_tables` 返回的 `tableName`
 
@@ -1902,7 +1933,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `tableName` (string, 可选): 透视表名称；不传则返回透视表列表，传则进入字段或数据项层级
 - `fieldName` (string, 可选): 字段名称（必须传字段的 sourceName，而非 caption）；传 `tableName` 后再传 `fieldName` 则返回该字段的数据项
@@ -2006,7 +2039,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `range` (string, 必填): 单元格区域，如 `A1:H10`（列宽）、`1:10`（行高）、`A:D`（列宽）
 - `fit_type` (string, 可选): 自适应类型。可选值：`columns` / `rows` / `auto`；默认值：`auto`
@@ -2082,7 +2117,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 表格文件 ID（kdocs 文件 ID）
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `range` (string, 必填): 单元格区域，如 `B2:B10`
 
@@ -2142,6 +2179,7 @@ user_cover 上传并带 map_id：
 
 - **前置检查**：建议先读取目标区域数据，确认覆盖范围与格式影响
 - **前置检查**：使用该工具前必须先调用get_sheets_info确认要操作的工作表id，不得自行捏造工作表id。
+- **禁止**：`formula` 操作 `col_from`/`col_to` 之间每个单元格都会被填入相同值。标题跨列展示必须用 `merge` + 单格 `formula` 两步，禁止用 `formula` 直接跨多列填充相同文本。
 
 **幂等性**：是
 
@@ -2153,6 +2191,9 @@ user_cover 上传并带 map_id：
 > 与 `sheet.update_range_data` 相比：两者在文本/公式写入、格式设置、合并单元格等能力上基本一致；本工具额外支持图片写入，而 `sheet.update_range_data` 不支持图片写入。
 > 若任务包含图片插入，请优先使用 `sheet.range_data_batch_update`；不涉及图片时`sheet.range_data_batch_update`和`sheet.update_range_data`工具均可使用。
 > 使用该工具写入数据后，读取数据优先使用'sheet.find_range_data'工具。
+> ⚠️ 本工具 `op_type` 仅支持四个全称：`cell_operation_type_formula`、`cell_operation_type_picture`、`cell_operation_type_format`、`cell_operation_type_merge`。短形式（`formula`/`picture`/`format`/`merge`）一律不可用。`update_range_data` 用简写，两个工具不可混用。
+> **空白表格填写**：空值字段的框架行也必须写入 rangeData（formula 值可为空字符串 `""`），不能跳过，否则表格结构不完整。
+> **`formula` 值以 `+`/`-`/`=` 开头会被当作公式解析**：写字面文本（如 `+86 手机号`）会报 Internal error，须前置 `'` 强制文本（如 `'+86 138…`），存储时引号不会带入。
 
 #### 调用示例
 
@@ -2202,7 +2243,9 @@ user_cover 上传并带 map_id：
 
 #### 参数说明
 
-- `file_id` (string, 必填): 文件 ID
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
 - `worksheet_id` (integer, 必填): 工作表 ID
 - `range_data` (array[object], 必填): 单元格操作数组
 
@@ -2238,6 +2281,146 @@ user_cover 上传并带 map_id：
 |------|------|------|
 | `code` | integer | 响应码 |
 | `msg` | string | 响应消息 |
+
+
+---
+
+## 21. sheet.insert_rows_cols
+
+#### 功能说明
+
+在指定工作表中插入行或列。type=row 时需传 row_from/row_to，type=col 时需传 col_from/col_to。
+适用于 Excel（.xlsx）和智能表格（.ksheet）。
+
+
+
+#### 操作约束
+
+- **前置检查**：使用该工具前必须先调用get_sheets_info确认要操作的工作表id，不得自行捏造工作表id。
+
+**幂等性**：否 — 重复调用会插入多行/多列，先确认是否已成功
+
+> 行列索引均为 0-based
+
+#### 调用示例
+
+插入行：
+
+```json
+{
+  "file_id": "string",
+  "worksheet_id": 1,
+  "type": "row",
+  "row_from": 3,
+  "row_to": 5
+}
+```
+
+插入列：
+
+```json
+{
+  "file_id": "string",
+  "worksheet_id": 1,
+  "type": "col",
+  "col_from": 2,
+  "col_to": 4
+}
+```
+
+
+#### 参数说明
+
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
+- `worksheet_id` (integer, 必填): 工作表 ID
+- `type` (string, 必填): 插入类型。可选值：`row` / `col`
+- `row_from` (integer, 可选): 插入起始行索引（type=row 时必填，0-based）
+- `row_to` (integer, 可选): 插入结束行索引（type=row 时必填）
+- `col_from` (integer, 可选): 插入起始列索引（type=col 时必填，0-based）
+- `col_to` (integer, 可选): 插入结束列索引（type=col 时必填）
+
+#### 返回值说明
+
+```json
+{
+  "code": 0,
+  "msg": "string"
+}
+
+```
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `code` | integer | 响应码 |
+| `msg` | string | 错误描述，code 非 0 时返回失败原因 |
+
+
+---
+
+## 22. sheet.set_range_width_height
+
+#### 功能说明
+
+调整指定区域的行高和列宽。width 和 height 至少传一个，单位 twip（twip = pixel × 1440 / dpi）。
+适用于 Excel（.xlsx）和智能表格（.ksheet）。
+
+
+
+#### 操作约束
+
+- **前置检查**：使用该工具前必须先调用get_sheets_info确认要操作的工作表id，不得自行捏造工作表id。
+
+**幂等性**：是
+
+> 行列索引均为 0-based
+> 单位换算：twip = pixel × 1440 / dpi
+
+#### 调用示例
+
+设置列宽和行高：
+
+```json
+{
+  "file_id": "string",
+  "worksheet_id": 1,
+  "range": {
+    "row_from": 0,
+    "row_to": 1,
+    "col_from": 0,
+    "col_to": 1
+  },
+  "width": 3000,
+  "height": 4000
+}
+```
+
+
+#### 参数说明
+
+- `url` (string, 三选一必填: `url` / `link_id` / `file_id`): 文档 URL
+- `link_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 分享链接 ID
+- `file_id` (string, 三选一必填: `url` / `link_id` / `file_id`): 文件 ID
+- `worksheet_id` (integer, 必填): 工作表 ID
+- `range` (object, 必填): 调整范围
+- `width` (integer, 可选): 列宽（twip），须 > 0
+- `height` (integer, 可选): 行高（twip），须 > 0
+
+#### 返回值说明
+
+```json
+{
+  "code": 0,
+  "msg": "string"
+}
+
+```
+
+| 字段 | 类型 | 说明 |
+|------|------|------|
+| `code` | integer | 响应码 |
+| `msg` | string | 错误描述，code 非 0 时返回失败原因 |
 
 
 ---

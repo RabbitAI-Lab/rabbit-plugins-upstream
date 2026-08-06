@@ -1,0 +1,88 @@
+{
+  "skill": "volcanic-hazard-assessment",
+  "skill_version": "1.0.0",
+  "command": "volcanic-hazard-assessment --bbox 120 30 121 31 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-03T18:01:35.753251Z",
+  "finished_at": "2026-08-03T18:01:35.883996Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "bbox": [
+      120.0,
+      30.0,
+      121.0,
+      31.0
+    ],
+    "years_since": 20.0,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\activity_score.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        120.0,
+        30.0,
+        121.0,
+        31.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\activity_level.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        120.0,
+        30.0,
+        121.0,
+        31.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\volcano_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "mean_score": 0.15368236601352692,
+    "max_score": 0.9353680610656738,
+    "recency": 0.6703200460356393,
+    "level_fraction": {
+      "normal": 0.87158203125,
+      "advisory": 0.07373046875,
+      "watch": 0.029052734375,
+      "warning": 0.016845703125,
+      "extreme": 0.0087890625
+    },
+    "alert_fraction": 0.025634765625
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "volcanic-hazard-assessment"
+  },
+  "error": null
+}

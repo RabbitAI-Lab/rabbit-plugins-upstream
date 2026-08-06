@@ -21,5 +21,13 @@ StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=buzz-zaphoid
 
+# Hardening — relax (e.g. add ReadWritePaths=) if this breaks the agent's
+# access to its WorkingDirectory.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+ReadWritePaths=/path/to/ccagent
+
 [Install]
 WantedBy=multi-user.target

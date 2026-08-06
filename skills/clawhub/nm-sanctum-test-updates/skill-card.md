@@ -11,33 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use this skill to discover test gaps, generate or update test scaffolding, apply TDD/BDD patterns, and validate test quality after code or execution-markdown changes. <br>
+Developers and engineering teams use this skill to discover test gaps, generate or update pytest-oriented tests, and validate test quality after code changes. It is intended for test maintenance, TDD/BDD workflows, refactoring support, and CI-oriented quality checks. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may inspect repository code and propose generated or edited tests. <br>
-Mitigation: Review proposed changes before keeping them and scope agent access to the intended workspace. <br>
-Risk: Validation workflows may run tests or shell commands from the target project. <br>
-Mitigation: Run untrusted tests in an isolated workspace when possible and approve commands before execution. <br>
-Risk: Generated tests can initially fail by design under the TDD workflow. <br>
-Mitigation: Confirm failures are expected RED-phase failures, then complete implementation and rerun validation before merging. <br>
+Risk: The skill may lead an agent to scan repository contents, create or edit tests, and run pytest or mutation-testing workflows with workspace side effects. <br>
+Mitigation: Use targeted paths where possible, review proposed file changes before accepting them, and run validation in trusted repositories or disposable worktrees/containers when side effects matter. <br>
+Risk: Generated tests or test-maintenance guidance can be incorrect, brittle, or misaligned with intended design invariants. <br>
+Mitigation: Review generated tests, preserve human review for invariant changes, and verify results with the repository's normal test and quality gates. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-sanctum-test-updates) <br>
-- [Original plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
+- [Project homepage from ClawHub metadata](https://github.com/athola/claude-night-market/tree/master/plugins/sanctum) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline code blocks and shell commands] <br>
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
+**Output Format:** [Markdown guidance with inline shell commands and example test code; referenced workflows may also describe JSON report output.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose generated or edited tests, validation commands, quality checklists, and review guidance for developer approval.] <br>
+**Other Properties Related to Output:** [Can propose targeted test updates, generated test scaffolding, validation steps, and quality-review findings for repository paths.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: ClawHub release evidence) <br>
+1.9.17 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

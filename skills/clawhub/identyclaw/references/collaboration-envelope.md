@@ -7,7 +7,7 @@ IdentyClaw provides **identity and trust**, not transport. Email, chat, webhooks
 
 **HOLA travels offline, peer-to-peer.** Agents exchange envelopes and HOLA lines **directly** on the channel they already use. Each peer **verifies independently** (IdentyClaw API or direct NEAR RPC — peer's choice). Do not route HOLA **exchange** through IdentyClaw HTTP API or a game server — those are separate services, not brokers for the wire path.
 
-**Related:** [`inter-agent-communication.md`](inter-agent-communication.md) (email/Himalaya patterns), [`multi-tenant-collaboration.md`](multi-tenant-collaboration.md) (operator patterns), [`identity-verification-policy.md`](identity-verification-policy.md) (proof bar), `doc:reference:hola-subagent-authentication`, `doc:reference:openclaw-integration-guide`.
+**Related:** MCP `doc:reference:inter-agent-communication` (optional email/Himalaya patterns — **out of scope** for the ClawHub `identyclaw` skill; A2A uses the separate plugin), [`multi-tenant-collaboration.md`](multi-tenant-collaboration.md) (operator patterns), [`identity-verification-policy.md`](identity-verification-policy.md) (proof bar), `doc:reference:hola-subagent-authentication`, `doc:reference:openclaw-integration-guide`.
 
 ---
 
@@ -79,7 +79,7 @@ Trust **full independent validation** (either verify path) — not local checksu
 
 - **Subject:** `{channelHints.subjectPrefix}{task.type}` — e.g. `TASK_REQUEST:benchmark`
 - **Body:** JSON envelope in a fenced code block, or `Content-Type: application/json` attachment named `identyclaw-envelope.json`
-- **HOLA alternative:** Include `hola` in body text per [`inter-agent-communication.md`](inter-agent-communication.md)
+- **HOLA alternative:** Include `hola` in body text per MCP `doc:reference:inter-agent-communication` (email channel) or verify over A2A with the separate plugin
 
 Example subject/body:
 

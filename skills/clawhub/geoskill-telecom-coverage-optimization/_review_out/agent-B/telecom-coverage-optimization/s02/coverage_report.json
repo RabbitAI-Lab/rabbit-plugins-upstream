@@ -1,0 +1,13 @@
+{
+  "source": "synthetic",
+  "environment": "suburban",
+  "frequency_mhz": 900.0,
+  "threshold_dbm": -100.0,
+  "n_towers": 2,
+  "coverage_fraction": 0.01812744140625,
+  "blind_fraction": 0.98187255859375,
+  "mean_rsl_dbm": -113.28306579589844,
+  "min_rsl_dbm": -122.37240600585938,
+  "max_rsl_dbm": -51.36307907104492,
+  "suggestion": "盲区占比偏高(>30%)，建议增补基站或提高发射功率/天线高度。"
+}

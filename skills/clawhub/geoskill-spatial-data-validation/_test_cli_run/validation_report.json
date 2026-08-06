@@ -1,0 +1,78 @@
+{
+  "n_features": 6,
+  "geometry": {
+    "valid_count": 4,
+    "invalid_count": 2,
+    "score": 0.6667,
+    "details": [
+      {
+        "index": 0,
+        "valid": false,
+        "reason": "Self-intersection[116.133333333333 39.2]"
+      },
+      {
+        "index": 1,
+        "valid": false,
+        "reason": "null geometry"
+      },
+      {
+        "index": 2,
+        "valid": true,
+        "reason": "valid"
+      },
+      {
+        "index": 3,
+        "valid": true,
+        "reason": "valid"
+      },
+      {
+        "index": 4,
+        "valid": true,
+        "reason": "valid"
+      },
+      {
+        "index": 5,
+        "valid": true,
+        "reason": "valid"
+      }
+    ]
+  },
+  "topology": {
+    "duplicate_geometries": 0,
+    "overlapping_pairs": [],
+    "n_overlaps": 0,
+    "score": 1.0
+  },
+  "attributes": {
+    "n_features": 6,
+    "fields": {
+      "id": {
+        "present": true,
+        "null_count": 0,
+        "null_fraction": 0.0
+      },
+      "name": {
+        "present": true,
+        "null_count": 1,
+        "null_fraction": 0.1667
+      },
+      "class": {
+        "present": true,
+        "null_count": 0,
+        "null_fraction": 0.0
+      }
+    },
+    "attribute_completeness": 0.9444,
+    "score": 0.9444
+  },
+  "crs": {
+    "expected_epsg": 4326,
+    "actual_epsg": 4326,
+    "crs_string": "EPSG:4326",
+    "consistent": true,
+    "score": 1.0
+  },
+  "overall_score": 0.8528,
+  "grade": "B",
+  "source": "synthetic"
+}

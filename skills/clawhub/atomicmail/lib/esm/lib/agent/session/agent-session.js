@@ -204,6 +204,7 @@ export class AgentSession {
             authUrl: this.authUrl,
             scryptSalt: this.scryptSalt,
             username,
+            utm: options.utm,
         });
         if (!result.apiKey) {
             throw new Error("Signup did not return an apiKey — this indicates a server bug.");

@@ -1,0 +1,5 @@
+,0_water,1_vegetation,2_cropland,row_total
+0_water,2160,0,0,2160
+1_vegetation,0,2872,2024,4896
+2_cropland,0,0,2160,2160
+col_total,2160,2872,4184,9216

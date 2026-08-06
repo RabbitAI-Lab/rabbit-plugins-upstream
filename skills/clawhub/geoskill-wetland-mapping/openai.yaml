@@ -1,0 +1,17 @@
+name: geoskill-wetland-mapping
+display_name: 湿地制图
+description: |
+  融合 NDWI/MNDWI、NDVI、地形低洼与 SAR 后向散射，规则阈值分类湿地类型并统计面积
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-wetland-mapping.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - extraction
+  - gis
+  - hydrology
+  - raster
+  - remote-sensing
+  - sar
+  - vegetation

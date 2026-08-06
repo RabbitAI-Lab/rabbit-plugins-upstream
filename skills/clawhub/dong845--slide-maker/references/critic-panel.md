@@ -2,6 +2,18 @@
 
 ## The CONTRACT CARD — full field list
 
+**Before dispatching the CONTENT lens on a source-backed deck, run
+`python3 scripts/trace_composed.py <deck>.pptx --source <the source files>` and hand the critic
+its COMPOSED list.** It splits the shipped lines into source-quoted and author-composed, and the
+content defects live in the second set: on one measured deck all three of the worst — an invented
+product mechanism, a process gate attributed to the wrong step, a required install line silently
+dropped — were lines written from memory of the source hours after reading it, while every
+verbatim-quoted line was clean. Aiming the lens at those lines instead of re-reading twelve pages
+is the cheapest real reduction available in this loop. It also reports, exactly rather than
+heuristically, any NUMBER or identifier on a slide that appears nowhere in the source — that class
+caught a wrapped install command whose visible text copied as a 404 path. It is triage, not a
+verdict: a composed line is not wrong, it is simply unquoted, so nothing but a reader can confirm it.
+
    - **The CONTRACT CARD — assemble it at dispatch, from the approved plans (declarations only,
      never rationale).** A compact artifact the coordinator builds for every pipeline-built deck:
      the **deck memory sentence + emotional-curve line** (peak marked), the **per-slide
@@ -11,7 +23,13 @@
      critics judge completeness against its built-around/summarised set, NOT the whole book, and
      read a `cut` row as a conscious cut), **on a video-sourced deck the transcript status**
      (supplied-transcript locator, or the "video read visual-only — spoken content is a GAP" line),
-     and the Design plan's **declared contracts** — the skeleton rhythm
+     and the Design plan's **declared contracts** — **the `concept:` line (what this deck's idea is a
+     PICTURE of, plus the two pictures it beat)**, so the distinctiveness lens can ask the one
+     question nothing else in the loop asks: *does the built deck look like the picture it said it
+     was?* Without it the concept is a field that gets filled at plan time and is never tested
+     against pixels — the exact aspiration-without-enforcement shape this skill keeps rediscovering,
+     and the reason `signature move` grew a `signature_proof` and `carried_by` grew a structural
+     count. The skeleton rhythm
      map, the WOW slide(s), the money slide (the slide the deck exists for), **the `boldness:` dial +
      the `signature move:` line INCLUDING its `carried_by:` slides** (so the distinctiveness lens can
      judge whether the declared risk actually landed in the pixels or got sanded back to safe — and,
@@ -44,6 +62,60 @@
      overshoot against the user's actual words, not a reconstruction. For an external
      deck under review/redesign or a direction preview (no Step-1 plan exists), state
      "none-declared" explicitly in the dispatch instead.
+
+## Cutting a review's cost — what was MEASURED, and what was not
+
+A controlled A/B on the skill's own 7-slide defect fixture (`tests/lint_fixture.py`, seven
+planted defects), two design critics, identical except for how they read:
+
+| | A: open every slide, read rubric + design-principles | B: survey sheet first, rubric only |
+|---|---|---|
+| tokens | 93,918 | **68,416  (-27%)** |
+| wall clock | 159.5s | **124.7s  (-22%)** |
+| planted defects found | 5/5 | **5/5** |
+
+Recall held. But the saving did **not** come from where it was expected:
+
+🔴 **The contact sheet saved nothing. B opened all seven slides at full size anyway**
+(`slides_opened_full: [1..7]`), because "open only what looks suspect" is prose with no
+backstop — exactly the class of instruction a model skips with nothing to report it. The
+-27% is almost entirely the reference load: `design-principles.md` (~20.5k tok) plus the
+rubric's per-purpose and high-stakes sections (~4.1k tok) = ~24.6k, against a measured
+delta of 25.5k.
+
+So: **the lever is what a critic READS, not how many images it opens.** Per critic, the
+standing reference load is ~62.6k tokens — `agents/critic.md` ~24.8k, `review-rubrics.md`
+~17.4k, `design-principles.md` ~20.5k — which on a four-lens round is ~250k spent
+re-reading three files. Images are ~1.5k each, so a whole 12-slide deck is ~18k: an order
+of magnitude less.
+
+**What is safe to act on today** (a deck needs exactly one of these, by construction):
+- the rubric's nine per-purpose sections — read only the one matching this deck's purpose
+- `## Finding-level cross-validation (high-stakes only)` — skip it at `fast` / `standard`
+
+**What is NOT yet established.** B also skipped `design-principles.md` entirely and still
+found 5/5 — but the fixture's planted defects are layout faults the Universal rubric already
+covers. That is one run on one deck; it is NOT evidence that a design lens can drop the craft
+reference on a deck with subtler problems. Do not generalise from it without a second
+experiment on a deck whose defects are craft-level rather than geometric.
+
+**If the contact sheet is to earn its place, it needs a backstop, not a paragraph** — the
+review schema would have to require `slides_opened_full` with a reason per slide, so the cost
+is auditable and opening all twelve has to be justified twelve times. Until that exists,
+treat `scripts/contact_sheet.py` as a convenience for a human skimming a deck, not as a
+critic-time optimisation.
+
+🔴 **Whatever you cut, cut COST, never SCOPE.** A fresh reviewer told "check 3, 6 and 8"
+cannot catch the regression you introduced on slide 10 — and a second round exists precisely
+because round 1's fixes are themselves unreviewed changes. (History: a scoped round 2 was
+proposed once and demolished in audit for exactly this reason.)
+
+**Before spending a round on a defect class, ask whether a lint could decide it.** Measured
+example: a caption sized for one line that rendered as two, dropping its second line onto the
+footer, survived a full round-1 review and was found only by round 2 — because `measure_text`
+under-reported bold width in font-collection families, so the build-time assert and the build
+lint both passed. Fixing the measurement moved that whole class to a CRITICAL that fires in
+milliseconds. A round spent finding what a lint could have decided is a round wasted.
 
 ## Handling a returned review — strengths, probes, and ceilings
 
@@ -108,8 +180,8 @@ deck with no Step-1 plan. On all three the tier is `standard` and the hand-off r
 `review: standard (no tier collected — <which path>)`. A tier that is silently undefined is how a
 default becomes whatever the run happened to feel like.
 
-**🔴 Two shapes no tier may alter, because they are not weight.** (1) On a **large/sectioned
-deck**, the per-section critics plus the one whole-deck coherence critic run at EVERY tier
+**🔴 Two shapes no tier may alter, because they are not weight.** (1) On a **large deck (~15+
+slides)**, the per-section critics plus the one whole-deck coherence critic run at EVERY tier
 (`references/large-deck-orchestration.md`) — the tier moves rounds and the provenance sample, never
 the sectioned panel shape; a 40-slide deck reviewed as one document is not a cheaper review, it is
 a different and worse one. (2) **Corroborated consent stays required wherever the stakes section
@@ -138,7 +210,7 @@ line — `references/handoff-checklist.md` owns both.
        purpose:** a short single-paper talk (e.g. a ~10-min conference oral) takes the
        **light** end — 2 critics, and **skip the arbiter pass** below; a long, career-
        defining deck (a 45-min job talk, thesis defense, or investor pitch) earns the
-       **full** 2–3-critic panel **plus** that arbiter cross-validation. For a **large/sectioned deck**, add **per-section critics plus one
+       **full** 2–3-critic panel **plus** that arbiter cross-validation. For a **large deck (~15+ slides)** — a size threshold, NOT "was it built by section authors": from ~9 slides the BUILD fans out (`references/large-deck-orchestration.md`) while the review stays whole-deck — add **per-section critics plus one
        whole-deck critic for coherence/arc/seams**, then — after the arbiter pass below —
        **route only the *promoted* findings** back to the section that owns each slide
        (see `references/large-deck-orchestration.md`). Keep

@@ -1,0 +1,62 @@
+{
+  "skill": "green-infrastructure-mapping",
+  "skill_version": "1.0.0",
+  "command": "green-infrastructure-mapping --bbox 116 39 117 40 --synthetic --output-dir Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\green-infrastructure-mapping\\_test_cli_synth --quiet",
+  "started_at": "2026-08-03T17:17:16.049705Z",
+  "finished_at": "2026-08-03T17:17:16.257789Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "ndvi_threshold": 0.3,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\green-infrastructure-mapping\\_test_cli_synth\\green_infrastructure.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 2,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\green-infrastructure-mapping\\_test_cli_synth\\green_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_valid_pixels": 16384,
+    "input_nodata": null,
+    "mean_ndvi": 0.42336082458496094,
+    "green_fraction": 0.51495361328125,
+    "tree_count": 303,
+    "connectivity_index": 0.9709612421476829,
+    "n_patches": 6,
+    "synthetic_n_trees": 25
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "green-infrastructure-mapping"
+  },
+  "error": null
+}

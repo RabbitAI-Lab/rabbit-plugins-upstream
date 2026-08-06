@@ -1,45 +1,59 @@
-## Description: <br>
-Fetch a pre-transaction risk score and advisory recommendation for tokens on Solana, Base, Ethereum, Arbitrum, BSC, and HyperEVM before the user trades, swaps, or provides liquidity. Read-only; never signs or moves funds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetch a pre-transaction risk score and advisory recommendation for tokens on Solana, Base, Ethereum, Arbitrum, BSC, and HyperEVM before the user trades, swaps, or provides liquidity.
 
-## Publisher: <br>
-[babyscaphe](https://clawhub.ai/user/babyscaphe) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[babyscaphe](https://clawhub.ai/user/babyscaphe)
 
-## Use Case: <br>
-Developers and agents use Bitfence before token swaps, DEX trades, liquidity provision, or staking involving unfamiliar tokens. It returns advisory risk scoring and recommendations so the user can decide whether to proceed, seek approval, or stop. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid risk checks may spend USDC on Base mainnet. <br>
-Mitigation: Inform the user about x402 payment before the first paid check in a session and avoid loops, polling, or batch calls. <br>
-Risk: Contextual checks may share position size and total portfolio size with Bitfence. <br>
-Mitigation: Use contextual analysis only after the user opts in to sharing those values. <br>
-Risk: A risk score is advisory and cannot guarantee token safety. <br>
-Mitigation: Present recommendations, confidence, flags, and reasoning clearly while leaving the final decision to the user. <br>
+## Use Case:
 
+Developers and agents use Bitfence before token swaps, DEX trades, staking, or liquidity actions involving unfamiliar tokens to request an advisory risk score and recommendation. The skill is read-only and helps users review risk before deciding whether to proceed.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/babyscaphe/skills/bitfence) <br>
-- [Bitfence website](https://www.bitfence.ai) <br>
-- [Bitfence API root](https://api.bitfence.ai) <br>
-- [Bitfence X profile](https://x.com/bitfenceai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, API Calls, Guidance, JSON] <br>
-**Output Format:** [JSON risk report with concise human-facing guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only advisory output; contextual checks may include position-aware risk fields when the user opts in.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.7 (source: server evidence release.version) <br>
+Risk: Paid API calls may spend USDC on Base mainnet.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inform the user about pricing and obtain consent before the first paid risk check in a session.
+
+Risk: Contextual checks may disclose position size and portfolio size.
+
+Mitigation: Use the contextual endpoint only after the user opts in to sharing that additional context.
+
+Risk: Risk scores and recommendations are advisory and may not guarantee trading safety.
+
+Mitigation: Surface warnings, confidence, reasoning, and any circuit-breaker flags clearly so the user can make the final decision.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/babyscaphe/skills/bitfence)
+- [Bitfence website](https://www.bitfence.ai)
+- [Bitfence API root](https://api.bitfence.ai)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Analysis, Guidance]
+
+**Output Format:** [JSON risk reports summarized as concise user-facing guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include advisory recommendation, risk score, confidence, reasoning, circuit-breaker flags, degraded-source details, and contextual position guidance when the user opts in.]
+
+## Skill Version(s):
+
+0.7.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

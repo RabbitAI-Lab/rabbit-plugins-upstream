@@ -2,11 +2,16 @@ import argparse
 import json
 import math
 import os
+import re
 import ssl
 import sys
+import time
 import urllib.parse
 import urllib.request
-from datetime import datetime
+from datetime import datetime, timedelta
+
+# 统一未收录提示
+UNIFIED_NOT_FOUND_MSG = "未查询到相关账号：当前 Skill 仅收录热门账号。如需定制数据，可邮件联系红狐数据咨询：redfoxdata@proton.me"
 
 # 导入HTML检查模块和生成模块
 try:
@@ -785,8 +790,8 @@ def _analyze_single_account(raw, has_works=True):
         raw: 原始账号数据
         has_works: 是否有作品数据，False时跳过作品相关分析
     """
-    # 无作品提示
-    no_works_hint = "" if has_works else "该账号暂未获取到近7天作品"
+    # 无作品确认提示（有账号但无作品时）
+    no_works_hint = "" if has_works else "检测到该账号近30天无作品数据。请确认：该账号近30天是否真的无作品？\n1.该账号近30天确实无作品，直接分析\n2.该账号近30天有作品，需要实时获取最新作品（大概需要30分钟，自动推送诊断报告）"
 
     fans = raw.get("fans", 0)
     nickname = raw.get("nickname", "")
@@ -1177,7 +1182,7 @@ def cmd_query(user_ids, force_analyze=False):
     except Exception as e:
         print(json.dumps({
             "status": "error",
-            "message": f"请求失败: {str(e)}",
+            "message": f"请求失败: {str(e)}。{UNIFIED_NOT_FOUND_MSG}",
             "query_type": "not_found",
             "data": {"accounts": []}
         }, ensure_ascii=False))
@@ -1186,7 +1191,7 @@ def cmd_query(user_ids, force_analyze=False):
     if isinstance(raw, dict) and raw.get("code") == 5000:
         print(json.dumps({
             "status": "error",
-            "message": f"接口返回: {raw.get('msg', '系统忙')}",
+            "message": f"接口返回: {raw.get('msg', '系统忙')}。{UNIFIED_NOT_FOUND_MSG}",
             "query_type": "not_found",
             "data": {"accounts": []}
         }, ensure_ascii=False))
@@ -1207,6 +1212,7 @@ def cmd_query(user_ids, force_analyze=False):
         print(json.dumps({
             "status": "success",
             "query_type": "not_found",
+            "message": UNIFIED_NOT_FOUND_MSG,
             "data": {"accounts": []}
         }, ensure_ascii=False))
         return
@@ -1238,7 +1244,7 @@ def cmd_query(user_ids, force_analyze=False):
                     "status": "success",
                     "query_type": "multi",
                     "message": "数据已保存到 output/raw_data.json 中，请读取该文件获取数据进行分析",
-                    "no_works_hint": "该账号已重新同步，但暂未获取到近7天作品数据"
+                    "no_works_hint": "检测到该账号近30天无作品数据。请确认：该账号近30天是否真的无作品？\n1.该账号近30天确实无作品，直接分析\n2.该账号近30天有作品，需要实时获取最新作品（大概需要30分钟，自动推送诊断报告）"
                 }
                 print(json.dumps(output, ensure_ascii=False))
                 return
@@ -1280,7 +1286,7 @@ def cmd_query(user_ids, force_analyze=False):
                     "status": "success",
                     "query_type": "single",
                     "message": "数据已保存到 output/raw_data.json 中，请读取该文件获取数据进行分析",
-                    "no_works_hint": "该账号已重新同步，但暂未获取到近7天作品数据"
+                    "no_works_hint": "检测到该账号近30天无作品数据。请确认：该账号近30天是否真的无作品？\n1.该账号近30天确实无作品，直接分析\n2.该账号近30天有作品，需要实时获取最新作品（大概需要30分钟，自动推送诊断报告）"
                 }
                 print(json.dumps(output, ensure_ascii=False))
                 return
@@ -1306,7 +1312,7 @@ def cmd_query(user_ids, force_analyze=False):
     print(json.dumps({
         "status": "success",
         "query_type": "not_found",
-        "message": "未查询到该账号，请检查小红书号是否正确"
+        "message": UNIFIED_NOT_FOUND_MSG
     }, ensure_ascii=False))
 
 
@@ -1322,28 +1328,20 @@ def cmd_sync_notes(red_ids, account_names=None):
 
     for i, red_id in enumerate(red_ids):
         account_name = account_names[i] if account_names and i < len(account_names) else f"账号{red_id}"
+
         try:
             body = {"redId": red_id, "source": "小红书账号诊断-ClawHub"}
             result_data = _native_post(SYNC_API_URL, body)
 
-            if isinstance(result_data, dict) and result_data.get("code") == 5000:
-                results.append({
-                    "redId": red_id,
-                    "redId_str": str(red_id),
-                    "account_name": account_name,
-                    "status": "success",
-                    "schedule_required": True,
-                    "schedule_time_minutes": 30
-                })
-            else:
-                results.append({
-                    "redId": red_id,
-                    "redId_str": str(red_id),
-                    "account_name": account_name,
-                    "status": "success",
-                    "schedule_required": True,
-                    "schedule_time_minutes": 30
-                })
+            # 无论接口返回什么，都认为同步请求已发出
+            results.append({
+                "redId": red_id,
+                "redId_str": str(red_id),
+                "account_name": account_name,
+                "status": "success",
+                "schedule_required": True,
+                "schedule_time_minutes": 30
+            })
         except Exception as e:
             results.append({
                 "redId": red_id,

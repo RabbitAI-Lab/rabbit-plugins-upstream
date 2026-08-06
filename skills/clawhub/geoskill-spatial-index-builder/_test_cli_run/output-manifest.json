@@ -1,0 +1,52 @@
+{
+  "skill": "spatial-index-builder",
+  "skill_version": "1.0.0",
+  "command": "spatial-index-builder --bbox 116 39 117 40 --synthetic --features 150 --queries 10 --output-dir ./_test_cli_run --quiet",
+  "started_at": "2026-08-03T14:57:36.441717Z",
+  "finished_at": "2026-08-03T14:57:36.748969Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "queries": 10,
+    "synthetic": true,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_run\\spatial_index_report.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_features": 150,
+    "n_queries": 10,
+    "all_consistent": true,
+    "indexes": {
+      "rtree": 0.0643,
+      "quadtree": 0.0252,
+      "geohash": 2.3548,
+      "brute_force": 0.9514
+    }
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "spatial-index-builder"
+  },
+  "error": null
+}

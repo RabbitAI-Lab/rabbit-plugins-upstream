@@ -1,3 +1,2 @@
-- Fix Issue #22: Emit warning when matching transaction falls outside amount bounds
-- Fix Issue #24: Use current date as reference in estimate-period
-- fix: identify drifting ~30-day recurring payments as days interval
+- Add --raw-split stats mode (ownership split without reimbursement adjustments)
+- Fix: exclude zero-adjusted transactions from uncategorized lists

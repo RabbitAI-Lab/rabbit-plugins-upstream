@@ -77,11 +77,11 @@ Bearer token auth — attached to every request as `Authorization: Bearer <token
 | `tempo_update_worklog(id, authorAccountId, startDate, timeSpentSeconds, ...)` | Update an existing worklog |
 | `tempo_delete_worklog(id)` | Delete a worklog |
 | `tempo_search_worklogs(authorIds?, issueIds?, projectIds?, from?, to?, ...)` | Advanced search via POST |
-| `tempo_get_worklogs_by_user(accountId, from?, to?)` | All worklogs for a user |
-| `tempo_get_worklogs_by_project(projectId, from?, to?)` | All worklogs for a Jira project |
-| `tempo_get_worklogs_by_issue(issueId, from?, to?)` | All worklogs for a Jira issue |
-| `tempo_get_worklogs_by_team(teamId, from?, to?)` | All worklogs for a Tempo team |
-| `tempo_get_worklogs_by_account(accountKey, from?, to?)` | All worklogs for a Tempo account |
+| `tempo_get_worklogs_by_user(accountId, from?, to?, updatedFrom?)` | All worklogs for a user |
+| `tempo_get_worklogs_by_project(projectId, from?, to?, updatedFrom?)` | All worklogs for a Jira project |
+| `tempo_get_worklogs_by_issue(issueId, from?, to?, updatedFrom?)` | All worklogs for a Jira issue |
+| `tempo_get_worklogs_by_team(teamId, from?, to?, updatedFrom?)` | All worklogs for a Tempo team |
+| `tempo_get_worklogs_by_account(accountKey, from?, to?, updatedFrom?)` | All worklogs for a Tempo account |
 
 ### Plans (Resource Allocations)
 | Tool | Description |
@@ -100,29 +100,36 @@ Bearer token auth — attached to every request as `Authorization: Bearer <token
 | `tempo_create_team(name, ...)` | Create a new team |
 | `tempo_update_team(id, name, ...)` | Update a team |
 | `tempo_delete_team(id)` | Delete a team |
-| `tempo_get_team_memberships(...)` | List team memberships |
-| `tempo_search_team_memberships(...)` | Advanced membership search via POST |
+| `tempo_get_team_memberships(teamId)` | All memberships for one team |
+| `tempo_search_team_memberships(teamIds?, accountIds?, roleIds?)` | Membership search across teams via POST |
 
 ### Accounts
 | Tool | Description |
 |------|-------------|
 | `tempo_get_accounts()` | List all accounts (OPEN and CLOSED) |
-| `tempo_get_account(key)` | Get a single account by key |
-| `tempo_search_accounts(...)` | Search accounts by status, category, or project |
+| `tempo_get_account(id)` | Get a single account by **numeric id** |
+| `tempo_search_accounts(ids?, keys?, statuses?, global?)` | Search accounts; also resolves a key to an id |
 | `tempo_create_account(key, name, ...)` | Create a new account |
 | `tempo_update_account(key, name, ...)` | Update an account |
 | `tempo_delete_account(key)` | Delete an account |
-| `tempo_get_account_categories()` | List all account categories |
+| `tempo_get_account_categories(id?)` | List account categories (not paginated) |
 
 ### Projects & Timesheets
 | Tool | Description |
 |------|-------------|
 | `tempo_get_projects()` | List Tempo Financial Manager projects |
 | `tempo_get_project(id)` | Get a project by id |
-| `tempo_get_timesheet_approval_status(accountId, from?, to?)` | Get timesheet approval status for a user |
+| `tempo_get_timesheet_approval_status(accountId, from, to?)` | Get timesheet approval status for a user |
 | `tempo_get_timesheet_approvals_waiting()` | List timesheets waiting for approval |
+| `tempo_get_timesheet_approvals_by_team(teamId, from, to?)` | Get every team member's approval for a period |
+| `tempo_get_timesheet_reviewers(accountId)` | List who can review a user's timesheet |
 | `tempo_search_timesheet_approval_logs(...)` | Search approval audit logs |
-| `tempo_get_periods(from?, to?)` | Get Tempo period definitions |
+| `tempo_submit_timesheet(accountId, from, to?, ...)` | Submit a timesheet for approval |
+| `tempo_approve_timesheet(accountId, from, to?, ...)` | Approve a submitted timesheet |
+| `tempo_reject_timesheet(accountId, from, to?, ...)` | Reject a submitted timesheet |
+| `tempo_reopen_timesheet(accountId, from, to?, ...)` | Reopen an approved timesheet |
+| `tempo_recall_timesheet(accountId, from, to?, ...)` | Recall your own unapproved timesheet |
+| `tempo_get_periods(from, to)` | Get Tempo period definitions |
 | `tempo_get_user_schedule(accountId, from, to)` | Get a user's work schedule |
 | `tempo_get_global_configuration()` | Get global Tempo settings |
 | `tempo_get_work_attributes()` | List custom worklog attributes |
@@ -156,13 +163,30 @@ tempo_get_timesheet_approvals_waiting()
 tempo_get_timesheet_approval_status(accountId, from: "2026-03-01", to: "2026-03-31")
 ```
 
+**Act on a timesheet (all five actions are confirm-gated — the first call is a dry run):**
+```
+tempo_get_periods(from: "2026-03-01", to: "2026-03-31")   # find the period boundaries
+tempo_approve_timesheet(accountId, from: "2026-03-01", to: "2026-03-31", comment: "LGTM")
+tempo_approve_timesheet(accountId, from: "2026-03-01", to: "2026-03-31", comment: "LGTM", confirm: true)
+```
+
+**Chase a team's outstanding timesheets for a period:**
+```
+tempo_get_timesheet_approvals_by_team(teamId: 42, from: "2026-03-01", to: "2026-03-31")
+tempo_get_timesheet_reviewers(accountId)   # who to route a submission to
+```
+
 ## Notes
 
 - `timeSpentSeconds` is always an integer (e.g. `3600` = 1 hour, `1800` = 30 min)
 - `authorAccountId` is the Atlassian account id (not a username) — required for all worklog operations
 - `tempo_get_plans` requires both `from` and `to` — no other filter is mandatory
+- `tempo_get_periods` requires both `from` and `to`; `tempo_get_timesheet_approval_status` requires `from` (`to` optional) — the API rejects these calls without a period
 - Default pagination limit is 50 for most endpoints; use `offset` + `limit` to page through results
+- Accounts are addressed **two different ways**: `tempo_get_account` takes the numeric `id`, while update and delete take the string `key`. Resolve a key to an id with `tempo_search_accounts(keys: ["ACCOUNT-123"])`
 - `tempo_delete_worklog` is a hard delete — there is no restore
+- Timesheet actions take the period as `from` (required) + `to` (optional) — they apply to a whole period, not an individual worklog. `submit`/`recall` are the timesheet owner's actions; `approve`/`reject`/`reopen` require reviewer permissions
+- `recall` pulls back a timesheet that is still waiting for approval; `reopen` undoes an approval that already went through
 
 ## Acknowledgement of Terms
 

@@ -1,0 +1,16 @@
+name: geoskill-crop-rotation-detection
+display_name: 作物轮作检测
+description: |
+  多年度分类编码轮作序列，识别轮作模式并统计频率。Detects crop rotation by encoding multi-year classifications into sequences, recognizing patterns and counting frequencies.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-crop-rotation-detection.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - extraction
+  - gis
+  - lidar
+  - machine-learning
+  - point-cloud
+  - remote-sensing

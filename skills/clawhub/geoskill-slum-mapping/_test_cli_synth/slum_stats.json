@@ -1,0 +1,8 @@
+{
+  "mean_slum_index": 0.3044196367263794,
+  "slum_fraction": 0.476806640625,
+  "mean_texture": 0.08049727231264114,
+  "threshold": 0.5,
+  "n_valid_pixels": 16384,
+  "n_total_pixels": 16384
+}

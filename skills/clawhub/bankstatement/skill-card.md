@@ -1,39 +1,54 @@
-## Description: <br>
-流水报告生成，基于用户输入的Excel/PDF流水文件路径和问题，自动上传文件并生成分析报告。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+流水报告生成，基于用户输入的Excel/PDF流水文件路径和问题，自动上传文件并生成分析报告。
 
-## Publisher: <br>
-[ufcfengbin](https://clawhub.ai/user/ufcfengbin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ufcfengbin](https://clawhub.ai/user/ufcfengbin)
 
-## Use Case: <br>
-Employees, external users, and developers can use this skill to upload bank statement PDF or Excel files and request a generated analysis report. It is intended for workflows where the user explicitly wants bank statement processing and a report link. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uploads sensitive bank statement files to a remote service for report generation. <br>
-Mitigation: Use it only when the user intends to send those files, verify exact file paths before upload, protect ZY_TOKEN from logs or shell history, and review the provider's privacy, retention, deletion, and report-link access practices. <br>
+## Use Case:
 
+External users and agents use this skill to analyze Excel or PDF bank-statement files and generate a bank-statement report from a user question.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ufcfengbin/bankstatement) <br>
-- [Token setup instructions](https://mp.weixin.qq.com/s/5AE3mQhsW_g-3R6C26i-9Q) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Text or Markdown with a report link] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses ZY_TOKEN and user-provided local file paths; uploaded files are processed by the dfwytech/Ziya service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: Sensitive bank statements and report prompts are sent to an external dfwytech service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for files and prompts that may be shared with that provider, and confirm the exact file path before upload.
+
+Risk: Broad or ambiguous file paths could result in uploading the wrong financial document.
+
+Mitigation: Require an explicit local file path and stop the workflow when the target file is unclear or missing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ufcfengbin/skills/bankstatement)
+- [ZY_TOKEN setup article](https://mp.weixin.qq.com/s/5AE3mQhsW_g-3R6C26i-9Q)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Markdown, Guidance]
+
+**Output Format:** [Markdown guidance with bash commands; upload returns JSON and report generation returns report text or a report link.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZY_TOKEN and an explicit local bank-statement file path.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

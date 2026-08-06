@@ -25,6 +25,25 @@ The agent runs `npx -y @true402.dev/rugcheck 0x…` and gates on the verdict (no
 
 Set `PAYER_PRIVATE_KEY` to a Base wallet holding a little USDC to pay ~$0.005–0.01 per check over x402 (gas sponsored — the wallet needs no ETH). The key signs locally and is never sent anywhere; the client refuses to sign any single charge above **$0.10**. Without a key, the free daily trial applies.
 
+### Handling that key
+
+A private key in an environment variable is reachable from shell history, process listings, crash
+dumps, container introspection and any log that prints the environment. The design already limits
+the damage — signing is local, and the client will not sign a charge above $0.10 — but the wallet is
+still spendable by anything that can read the variable. So:
+
+- **Use a dedicated wallet, funded with a few dollars.** Never a wallet holding anything you would
+  mind losing, and never one that is also an identity or a treasury.
+- **Keep it out of files that travel.** No `.env` in git, no plaintext in a Dockerfile or CI log.
+  A secret manager or a local-only file with restricted permissions; export it in the shell that
+  needs it, not in a global profile.
+- **Top it up rather than pre-loading it.** The per-call cost is fractions of a cent, so a small
+  float covers thousands of checks and bounds the worst case.
+- **Rotate by moving on.** There is no revocation for a leaked key — generate a new wallet, move the
+  remaining balance, and stop using the old one.
+- **You do not need it to evaluate this.** The free daily trial returns the same real verdict with
+  no wallet at all; add a key only when the volume needs it.
+
 ## Links
 
 - Live in-browser check: https://true402.dev/check

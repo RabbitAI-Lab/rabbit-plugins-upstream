@@ -17,7 +17,7 @@ xlrd>=2.0               # Excel .xls read (legacy)
 scipy>=1.11             # MATLAB .mat
 h5py>=3.10              # HDF5
 pyarrow>=17.0           # Parquet, Feather, Arrow, ORC (>=17.0 修复 CVE-2024-52338 反序列化；CVE-2026-25087 仅影响 C++ 预缓冲 API，Python 绑定不受影响)
-lxml>=6.0               # XML, HTML, CDISC ODM (>=6.0 修复 CVE-2026-41066 XXE)
+lxml>=6.1.0             # XML, HTML, CDISC ODM (>=6.1.0 修复 CVE-2026-41066 XXE；6.0 本身仍受影响，勿用 >=6.0)
 odfpy>=1.4              # ODS (OpenDocument Spreadsheet)
 tableauhyperapi>=0.0.22502  # Tableau Hyper .hyper read/write (ships prebuilt native libhyper; Python >=3.6, verified on 3.13)
 dbfread>=2.0.7          # dBASE / FoxPro .dbf read (pure-Python; 2.0.7 uses DBF(load=True))

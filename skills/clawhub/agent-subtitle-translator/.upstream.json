@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-subtitle-translator",
   "slug": "agent-subtitle-translator",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1784317547787,
-  "contentHash": "ef4a98a9c50f9c56b270d41d373e7943c6c2de326a4e7f287ae23775605639f5",
-  "fetchedAt": "2026-07-26T18:11:52.269Z"
+  "version": "1.0.7",
+  "updatedAt": 1785829086794,
+  "contentHash": "79c3cc22da1e04eb6d5ed0e89bdfe52e76f80334be40a2f35a14cd8ef34e737a",
+  "fetchedAt": "2026-08-06T10:12:19.723Z"
 }

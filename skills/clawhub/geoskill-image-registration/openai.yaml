@@ -1,0 +1,12 @@
+name: geoskill-image-registration
+display_name: 影像配准
+description: |
+  相位相关 FFT 估计平移量，实现亚像素影像配准
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-image-registration.py
+runtime: python>=3.9
+tags:
+  - gis
+  - preprocessing
+  - remote-sensing

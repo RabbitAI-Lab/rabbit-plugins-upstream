@@ -1,0 +1,11 @@
+name: geoskill-spatial-autocorrelation
+display_name: 空间自相关分析
+description: |
+  Global Moran I+LISA+Gi*+蒙特卡洛检验，评估空间聚集模式
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-spatial-autocorrelation.py
+runtime: python>=3.9
+tags:
+  - gis
+  - remote-sensing

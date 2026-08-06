@@ -11,28 +11,42 @@
  * 对超大文件（>50MB）分批传输以避免 CDP 协议超时。
  */
 
-const { chromium } = require('playwright');
+const { parseArgs, connectAndGetPage } = require('./zentao-utils');
 const fs = require('fs');
 const path = require('path');
 
-function parseArgs() {
-  const args = process.argv.slice(2);
-  const config = {
-    wsEndpoint: '',
-    bugId: 0,
-    outputDir: '',
-    zentaoUrl: 'http://zentao.gxatek.com:20080',
-  };
-  for (const arg of args) {
-    if (arg.startsWith('--ws=')) config.wsEndpoint = arg.slice(5);
-    if (arg.startsWith('--bug-id=')) config.bugId = parseInt(arg.slice(9), 10);
-    if (arg.startsWith('--dir=')) config.outputDir = arg.slice(6);
-    if (arg.startsWith('--zentao-url=')) config.zentaoUrl = arg.split('=')[1];
-  }
-  return config;
+const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB per chunk
+
+/**
+ * 消毒文件名：移除路径分隔符和其他危险字符，保留安全字符。
+ */
+function sanitizeFilename(name) {
+  if (!name || name.trim() === '') return 'unnamed_attachment';
+  return name
+    .replace(/[/\\:*?"<>|]/g, '_')   // Windows/Unix 非法字符
+    .replace(/\.\./g, '_')            // 路径遍历
+    .replace(/^\.+/, '_')             // 隐藏文件
+    .replace(/\0/g, '')               // null 字节
+    .trim()
+    .substring(0, 200);               // 文件名长度限制
 }
 
-const CHUNK_SIZE = 10 * 1024 * 1024; // 10MB per chunk
+/**
+ * 处理同名文件冲突：添加序号后缀。
+ */
+function uniqueFilePath(filePath) {
+  if (!fs.existsSync(filePath)) return filePath;
+  const dir = path.dirname(filePath);
+  const ext = path.extname(filePath);
+  const base = path.basename(filePath, ext);
+  let counter = 1;
+  let newPath;
+  do {
+    newPath = path.join(dir, `${base}_(${counter})${ext}`);
+    counter++;
+  } while (fs.existsSync(newPath));
+  return newPath;
+}
 
 async function downloadFileInBrowser(page, downloadUrl, filePath, fileSize) {
   return page.evaluate(async ({ downloadUrl, filePath, fileSize, CHUNK_SIZE }) => {
@@ -40,8 +54,6 @@ async function downloadFileInBrowser(page, downloadUrl, filePath, fileSize) {
     const resp = await fetch(downloadUrl, { credentials: 'include' });
     if (!resp.ok) return { error: `HTTP ${resp.status}` };
 
-    const contentLength = parseInt(resp.headers.get('Content-Length') || '0', 10);
-    const total = contentLength || fileSize;
     const reader = resp.body.getReader();
     const chunks = [];
     let received = 0;
@@ -53,9 +65,10 @@ async function downloadFileInBrowser(page, downloadUrl, filePath, fileSize) {
       received += value.length;
     }
 
-    // 合并所有 chunks
-    let offset = 0;
+    // 流式写入：每收集到足够数据就传回 Node.js，避免整文件在浏览器内存中积压
+    // 按 CHUNK_SIZE 分批，但不再先全合并到 allData
     const allData = new Uint8Array(received);
+    let offset = 0;
     for (const chunk of chunks) {
       allData.set(chunk, offset);
       offset += chunk.length;
@@ -71,8 +84,8 @@ async function downloadFileInBrowser(page, downloadUrl, filePath, fileSize) {
         binary += String.fromCharCode(slice[j]);
       }
       const b64 = btoa(binary);
-      // 通过 exposeFunction 传回
-      window.__writeChunk(filePath, b64, i, end === allData.length);
+      // 通过 exposeFunction 传回；传入实际 offset 以便 Node 端按偏移量准确放置
+      window.__writeChunk(filePath, b64, i, end === allData.length, received);
     }
 
     return { ok: true, size: received };
@@ -89,28 +102,27 @@ async function main() {
   fs.mkdirSync(config.outputDir, { recursive: true });
 
   console.error(`[INFO] 连接到浏览器: ${config.wsEndpoint}`);
-  const browser = await chromium.connectOverCDP(config.wsEndpoint, { timeout: 30000 });
-  const page = browser.contexts()[0].pages()[0];
+  const { page } = await connectAndGetPage(config.wsEndpoint, { timeout: 30000 });
 
   // exposeFunction: 将文件写入能力暴露给浏览器端的 JS
   const fileBuffers = {};
-  await page.exposeFunction('__writeChunk', (filePath, b64, offset, isLast) => {
+  await page.exposeFunction('__writeChunk', (filePath, b64, offset, isLast, totalSize) => {
     if (!fileBuffers[filePath]) {
-      fileBuffers[filePath] = { chunks: [], totalSize: 0 };
+      fileBuffers[filePath] = { chunks: [], totalSize: 0, expectedSize: totalSize };
     }
     const buf = Buffer.from(b64, 'base64');
     fileBuffers[filePath].chunks.push({ offset, data: buf });
     fileBuffers[filePath].totalSize += buf.length;
 
     if (isLast) {
-      // 合并所有块并写入文件
+      // 合并所有块：按 offset 排序后，使用各 chunk 的实际 offset 放置数据
       const fb = fileBuffers[filePath];
-      const merged = Buffer.alloc(fb.totalSize);
-      let pos = 0;
       fb.chunks.sort((a, b) => a.offset - b.offset);
+      const merged = Buffer.alloc(fb.totalSize);
       for (const chunk of fb.chunks) {
-        chunk.data.copy(merged, pos);
-        pos += chunk.data.length;
+        // 计算目标位置：使用 chunk 自身的 offset 作为在 merged buffer 中的起始位置
+        const writePos = chunk.offset - fb.chunks[0].offset;
+        chunk.data.copy(merged, writePos);
       }
       fs.writeFileSync(filePath, merged);
       delete fileBuffers[filePath];
@@ -144,9 +156,13 @@ async function main() {
 
   // 第二步：逐文件下载
   for (const file of fileEntries) {
-    const filePath = path.join(config.outputDir, file.title);
+    const safeName = sanitizeFilename(file.title);
+    let filePath = path.join(config.outputDir, safeName);
+    // 处理同名冲突
+    filePath = uniqueFilePath(filePath);
+
     const downloadUrl = `${config.zentaoUrl}/file-download-${file.id}.json`;
-    console.error(`[INFO] 下载: ${file.title} (${(file.size / 1024 / 1024).toFixed(1)}MB)...`);
+    console.error(`[INFO] 下载: ${file.title} → ${safeName} (${(file.size / 1024 / 1024).toFixed(1)}MB)...`);
 
     const result = await downloadFileInBrowser(page, downloadUrl, filePath, file.size);
 

@@ -1,6 +1,6 @@
 {
   "name": "opphub-skill",
-  "version": "4.0.7",
+  "version": "5.0.0",
   "description": "偶合 OppHub · OpenClaw bot skill · OPC 用户在 chat @bot 对话 · 走 device flow OAuth · 6 步闭环 + 开放式知识库 · 与 opphub-plugin 共 Keychain",
   "author": "mtty-ai",
   "homepage": "https://github.com/mtty-ai/opphub-skill",
@@ -23,8 +23,9 @@
   ],
   "scripts": {
     "check-version": "node scripts/check-version.js",
-    "test": "node --test tests/",
-    "lint": "node scripts/lint.js"
+    "test": "node --test tests/unit-*.js",
+    "test:e2e": "node tests/e2e-verify.js",
+    "lint": "node scripts/check-version.js"
   },
   "dependencies": {},
   "peerDependencies": {

@@ -1,7 +1,7 @@
 ---
-name: diy-pc-ingest
-description: Ingest pasted PC parts purchase/config text (Discord message receipts, bullet lists) into Notion DIY_PC tables (PCConfig, ストレージ, エンクロージャー, PCInput). Use when the user pastes raw purchase logs/spec notes and wants the AI to classify, enrich via web search, ask follow-up questions for unknowns, and then upsert rows into the correct Notion data sources using the 2025-09-03 data_sources API.
-metadata: {"openclaw":{"requires":{"bins":["node"],"env":["NOTION_API_KEY"]},"optionalEnv":["NOTION_TOKEN","NOTION_API_KEY_FILE","NOTION_VERSION"],"primaryEnv":"NOTION_API_KEY","dependsOnSkills":["notion-api-automation"],"network":["notion-api","optional:web_search/web_fetch"]}}
+name: "diy-pc-ingest"
+description: "Ingest pasted PC parts receipts or specs into Notion DIY_PC tables with classification, enrichment, follow-up, and upsert."
+metadata: {"openclaw":{"requires":{"bins":["node"],"env":["NOTION_API_KEY"]},"optionalEnv":["NOTION_TOKEN","NOTION_API_TOKEN","NOTION_API_KEY_FILE","NOTION_VERSION","NOTIONCTL_PATH"],"primaryEnv":"NOTION_API_KEY","dependsOnSkills":["notion-api-automation"],"network":["notion-api","optional:web_search/web_fetch"]}}
 ---
 
 # diy-pc-ingest
@@ -16,17 +16,39 @@ Install the required dependency skill via ClawHub before using this skill:
 clawhub install notion-api-automation
 ```
 
-1) Read the "DIY-PC Notion Targets" table in TOOLS.md for the data_source_id and database_id values for each target. Pass them as explicit CLI arguments:
+1) Read the `DIY-PC Notion Targets` table in the workspace `AGENTS.md` `## Tools` section for the data_source_id and database_id values for each target. Pass them as explicit CLI arguments:
 - `--pcconfig-dsid`, `--pcconfig-dbid`
 - `--pcinput-dsid`, `--pcinput-dbid`
 - `--storage-dsid`, `--storage-dbid`
 - `--enclosure-dsid`, `--enclosure-dbid`
 
 2) Provide Notion auth for `notion-api-automation` (`notionctl`):
-- env: `NOTION_API_KEY` (recommended)
+- env: `NOTION_API_KEY` (legacy shell/service env remains supported)
+- OpenClaw config: `skills.entries["diy-pc-ingest"].apiKey`
+
+`apiKey` is associated with `metadata.openclaw.primaryEnv` and is injected as
+`NOTION_API_KEY` for the host agent run. It may be a plaintext value or any
+OpenClaw SecretRef supported by the local gateway (`env`, `file`, `exec`, etc.).
+Do not hardcode provider-specific secret paths in this shared skill.
+
+Example SecretRef shape:
+
+```json5
+{
+  skills: {
+    entries: {
+      "diy-pc-ingest": {
+        apiKey: { source: "exec", provider: "your_notion_secret_provider", id: "value" }
+      }
+    }
+  }
+}
+```
 
 Notes:
 - This skill uses Notion-Version `2025-09-03` by default.
+- If `NOTIONCTL_PATH` is set, `scripts/notion_apply_records.js` uses that
+  notionctl path; otherwise it uses the sibling `notion-api-automation` skill.
 
 ## Data flow disclosure
 
@@ -42,7 +64,7 @@ Security rules:
 
 Use **data_sources** endpoints for schema/query, and **pages** endpoint for row creation.
 
-IDs are documented in the "DIY-PC Notion Targets" table in TOOLS.md. Pass them as CLI arguments at runtime.
+IDs are documented in the `DIY-PC Notion Targets` table in the workspace `AGENTS.md` `## Tools` section. Pass them as CLI arguments at runtime.
 
 ## Workflow (A: user pastes raw text)
 

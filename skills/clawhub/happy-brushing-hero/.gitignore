@@ -1,0 +1,22 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# 作業系統
+.DS_Store
+Thumbs.db
+
+# 編輯器
+.idea/
+.vscode/
+*.swp
+
+# 日誌與暫存
+*.log
+*.tmp
+
+# 資料檔（小朋友的刷牙記錄，不進版本控制）
+.bookshelf-plus/

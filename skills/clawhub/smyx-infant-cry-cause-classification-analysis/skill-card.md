@@ -1,5 +1,5 @@
 ## Description: <br>
-Classifies likely infant cry causes from audio or audio-video input and returns confidence, secondary causes, acoustic feature summaries, directional soothing suggestions, and report links. <br>
+This skill analyzes infant cry audio or audio-bearing video through a cloud service and returns likely cry causes, confidence, supporting acoustic features, calming suggestions, and report links. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External developers and product teams use this skill to connect baby-monitoring or parenting workflows to infant cry cause classification, historical report lookup, and structured caregiver-facing result summaries. Outputs should be treated as parenting support rather than medical diagnosis. <br>
+External caregivers, nursery operators, daycare staff, and developers use this skill to classify likely causes of infant crying from uploaded audio, video, or URLs and to retrieve cloud-hosted historical reports. Results are parenting support signals and should not be treated as medical diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive infant audio or video may be uploaded to a cloud service for processing. <br>
-Mitigation: Use only with guardian consent, avoid unnecessary recordings, and confirm that cloud processing, retention, and access controls meet the deployment's privacy requirements. <br>
-Risk: The skill may silently create or reuse account identity data and retrieve cloud history tied to that identity. <br>
-Mitigation: Review identity handling before installation, isolate workspace state where needed, and confirm that history retrieval is appropriate for the user and environment. <br>
-Risk: Cry cause classifications can be mistaken for medical conclusions. <br>
-Mitigation: Present results as acoustic classification and directional soothing support only, and direct caregivers to professional care for persistent abnormal crying or concerning symptoms. <br>
+Risk: Infant or household recordings and historical reports are processed through a cloud service and linked to persistent identities. <br>
+Mitigation: Verify guardian consent before use, disclose cloud processing, and confirm users have an appropriate way to manage or delete stored reports and tokens. <br>
+Risk: Cry-cause classifications may be mistaken for clinical guidance. <br>
+Mitigation: Present results as non-diagnostic parenting support and direct caregivers to seek professional care for persistent, severe, or medically concerning crying. <br>
+Risk: History queries can expose sensitive prior infant cry reports. <br>
+Mitigation: Limit report access to the intended account context and review outputs before sharing report links or exported report images. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-infant-cry-cause-classification-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [Infant Cry Cause Classification API Documentation](artifact/references/api_doc.md) <br>
-- [Common Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+- [Infant Cry Cause Classification API Documentation](references/api_doc.md) <br>
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON-like structured text, with optional saved report files when an output path is provided.] <br>
+**Output Type(s):** [Analysis, Markdown, JSON, Files, Shell commands] <br>
+**Output Format:** [Markdown text containing structured JSON-style analysis, report links, and optional saved result files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces likely cry cause, confidence, secondary causes, cry duration, acoustic feature summary, soothing hint, history listings, and report links.] <br>
+**Other Properties Related to Output:** [May upload local media or submit media URLs to the configured cloud service; history listing is returned from the cloud API.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.6 (source: server release metadata; artifact frontmatter says 1.0.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

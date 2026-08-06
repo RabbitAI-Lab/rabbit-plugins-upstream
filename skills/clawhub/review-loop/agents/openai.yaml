@@ -1,0 +1,7 @@
+interface:
+  display_name: "Review Loop"
+  short_description: "Iterative no-fork review, fix, and commit workflow"
+  default_prompt: "Use $review-loop to run a bounded read-only review loop, verify findings, fix accepted issues, retest, and commit."
+
+policy:
+  allow_implicit_invocation: false

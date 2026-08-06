@@ -1,5 +1,5 @@
 ## Description: <br>
-Polishes working code through successive quality passes in fresh subagents. Use after tests pass when code needs multi-dimension refinement before release. <br>
+Polishes working code through successive quality passes after tests pass, helping agents refine correctness, clarity, consistency, and release polish. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering teams use this skill after tests pass to iteratively refine working code across correctness, clarity, consistency, and polish before review or release. <br>
+Developers and engineers use this skill after working code and tests are in place to run a structured refinement loop across correctness, clarity, consistency, and production polish before review or release. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The workflow may edit files in the selected target during iterative polishing. <br>
-Mitigation: Review the target scope before use and inspect resulting diffs before committing changes. <br>
-Risk: The workflow may write local state under .attune/, which can create repository-cleanliness issues if committed unintentionally. <br>
-Mitigation: Delete or ignore .attune/dorodango-state.json when the state should not be committed. <br>
-Risk: Polishing suggestions or edits could introduce incorrect behavior despite passing earlier tests. <br>
-Mitigation: Run the project test suite and review changes after each pass, especially after clarity, consistency, and polish edits. <br>
+Risk: The workflow can modify code in the target area. <br>
+Mitigation: Review diffs and rerun the relevant test suite before accepting changes. <br>
+Risk: The workflow can run test or build commands in the workspace. <br>
+Mitigation: Use it in a trusted repository and inspect proposed commands before execution. <br>
+Risk: The workflow stores resume state in .attune/dorodango-state.json. <br>
+Mitigation: Review the state file before sharing the workspace or committing generated files. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-attune-dorodango) <br>
-- [Metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
-- [Pass definitions](artifact/modules/pass-definitions.md) <br>
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/attune) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with code-editing steps, shell command suggestions, and JSON state tracking] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with code edits, shell command recommendations, and a local JSON resume state file] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write local polishing state under .attune/dorodango-state.json] <br>
+**Other Properties Related to Output:** [May create or update .attune/dorodango-state.json to track polishing progress.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

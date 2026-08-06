@@ -1,5 +1,5 @@
 ## Description: <br>
-Piper TTS Pro helps agents generate local text-to-speech audio with voice selection, long-text splitting and merging, batch generation, SSML-style controls, and WAV or MP3 output. <br>
+Beware Piper Tts helps agents guide local Piper text-to-speech workflows for generating WAV or MP3 audio from text, including voice selection, long-text splitting, batch generation, and basic speech-style controls. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent users use this skill to turn text, articles, dialogue, and batch prompts into local speech outputs for voice messages, audio content, accessibility reading, and localization workflows. <br>
+External users, developers, and automation teams use this skill when they want an agent to prepare local Piper TTS commands and guidance for single-clip, long-form, multi-voice, or batch audio generation. It is best suited to local speech generation where users can review commands, destinations, and dependencies before execution. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill documentation mixes local-only claims with callback URLs and external message delivery, which can expose source text or generated audio outside the local environment. <br>
-Mitigation: Use only non-sensitive text unless local-only operation is confirmed, avoid callback_url, and explicitly control Telegram, Discord, or other external delivery. <br>
-Risk: Referenced execution scripts are not included in the artifact, so their behavior cannot be reviewed from this release package alone. <br>
-Mitigation: Inspect and scan the referenced scripts before installation or use, especially in privacy-sensitive environments. <br>
-Risk: Voice setup can require network access for first-time model downloads despite later offline inference. <br>
-Mitigation: Pre-download and approve required voice files in a controlled environment before using the skill for production workflows. <br>
+Risk: The security evidence marks the release suspicious because its automation scope is broad and its network, API, and delivery guidance is inconsistent. <br>
+Mitigation: Install only for intended local Piper speech generation, review generated shell commands before execution, and avoid callback, Telegram, Discord, or API delivery paths unless the exact destination and command behavior are controlled. <br>
+Risk: The skill can guide installation or execution of local TTS tools and write generated audio files. <br>
+Mitigation: Run commands in a reviewed local environment, write outputs only to expected directories, and avoid processing sensitive text unless the local storage and sharing path are acceptable. <br>
+Risk: The evidence warns that API-key and integration instructions are under-specified. <br>
+Mitigation: Do not provide secrets or route sensitive text or audio through external integrations until the commands, credentials, and recipients have been independently reviewed. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/beware-piper-tts) <br>
-- [Skill homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples, audio file paths, and voice-message markup.] <br>
+**Output Format:** [Markdown with inline shell commands and generated audio file paths] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce MP3 or WAV files through referenced local scripts; generated audio can be delivered through external channels when configured.] <br>
+**Other Properties Related to Output:** [May produce local WAV or MP3 file paths and voice-message wrapper text when the recommended commands are run.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+1.0.3 (source: ClawHub server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -9,8 +9,10 @@ def main():
     name, version = sys.argv[1], sys.argv[2]
 
     work_repo = str(WORK_REPO)
+    # 兼容两种仓库结构：旧 workbuddy-skills 用 skills/ 子目录，maby_skills 技能在顶层
     skill_dir = os.path.join(work_repo, "skills", name)
-
+    if not os.path.isdir(skill_dir):
+        skill_dir = os.path.join(work_repo, name)
     if not os.path.isdir(skill_dir):
         print(f"  ❌ 未找到技能目录: {skill_dir}")
         sys.exit(1)

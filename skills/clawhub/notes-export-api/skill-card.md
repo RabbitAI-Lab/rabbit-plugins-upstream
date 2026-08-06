@@ -1,5 +1,5 @@
 ## Description: <br>
-Exports Markdown notes to Smartisan-style long PNG images through a configurable notes-export-api endpoint, optionally uploading referenced local images first. <br>
+Connects to a caller-configured Smartisan Notes service with a username or email and password to manage the current account's cloud workspace, query and edit notes, handle folders and note state, generate WeChat-ready rich HTML, and export Markdown or local Markdown files as themed PNG long images. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and note-taking users use this skill to export inline Markdown or local Markdown files as Smartisan-style PNG note images. It is useful for batch note image generation, including Markdown files that reference local images. <br>
+Developers, operators, and external users use this skill to manage a self-hosted Smartisan Notes workspace through explicit service credentials, generate WeChat-ready HTML, and export Markdown notes as PNG long images. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Markdown note content may be sent to a remote export service when no trusted local endpoint is configured. <br>
-Mitigation: Use an explicit local or trusted endpoint through --endpoint or NOTES_EXPORT_API_BASE_URL before exporting sensitive notes. <br>
-Risk: Local images referenced by Markdown files can be uploaded to the same export service during export. <br>
-Mitigation: Review Markdown image references before export and avoid private local images unless the configured service is trusted. <br>
-Risk: Local .env files are sourced during execution and can change the export endpoint. <br>
-Mitigation: Inspect repository and skill .env files before running the script and set the intended endpoint explicitly. <br>
+Risk: The PNG export script executes .env files as shell code. <br>
+Mitigation: Use only env files you created and inspected, keep them private, and avoid any .env file from an untrusted source. <br>
+Risk: The skill can update, soft delete, permanently delete, or bulk export notes after authenticating to the configured service. <br>
+Mitigation: Confirm destructive or bulk actions before running them, list or get real note IDs first, and use permanent deletion only when explicitly requested. <br>
+Risk: Account credentials can be exposed if passed on the command line or committed in configuration files. <br>
+Mitigation: Prefer private env files or environment variables, avoid echoing passwords, and do not commit NOTES_API_USERNAME or NOTES_API_PASSWORD values. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/zhaoolee/notes-export-api) <br>
-- [notes-export-api project link from skill artifact](https://github.com/zhaoolee/notes) <br>
+- [Workspace API and command reference](references/workspace-api.md) <br>
+- [ClawHub skill release page](https://clawhub.ai/zhaoolee/skills/notes-export-api) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples; script output is a PNG file path.] <br>
+**Output Type(s):** [Shell commands, Configuration, JSON, Markdown, HTML, Files, Guidance] <br>
+**Output Format:** [Markdown guidance with shell commands and JSON/API outputs; scripts can write HTML and PNG files.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports inline Markdown or a UTF-8 Markdown file, optional filename, optional theme, and endpoint configuration through command arguments or NOTES_EXPORT_API_BASE_URL.] <br>
+**Other Properties Related to Output:** [Requires an explicit service base URL; note management also requires caller-provided account credentials.] <br>
 
 ## Skill Version(s): <br>
-0.1.2 (source: server release metadata) <br>
+0.3.1 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

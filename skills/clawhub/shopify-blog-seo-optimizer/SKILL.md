@@ -3,7 +3,7 @@ name: "shopify-blog-seo-optimizer"
 slug: "shopify-blog-seo-optimizer"
 displayName: "Shopify Blog SEO Optimizer"
 description: "Audit a Shopify Article, research content and E-E-A-T gaps, generate a reviewable HTML candidate, and produce one audit-plus-storefront-preview report before any approved update. Use when a merchant gives an Article URL, title, or Article ID and wants safer blog SEO and reading-experience improvements."
-version: 1.0.0
+version: 1.0.1
 author: "Selofy (lvsao)"
 license: MIT
 platforms: [macos, linux, windows]
@@ -56,6 +56,7 @@ metadata:
     homepage: "https://github.com/lvsao/shopify-skill-hub"
   hermes:
     tags: [Shopify, Ecommerce, SEO, E-E-A-T, Content]
+    category: productivity
     related_skills: [seo-audit, shopify-admin]
 ---
 
@@ -190,6 +191,16 @@ node <absolute-path-to-skill>/scripts/shopify-blog-seo-admin.mjs verify --env sk
 ```
 
 The helper only writes `body` and `summary`, checks `userErrors`, and rejects `--execute` without an explicit approval marker. Afterward compare semantic markers, not byte-for-byte HTML, because Shopify may normalize markup.
+
+## Deterministic validation
+
+Run the no-network regression suite before submitting or updating the Hermes PR:
+
+```text
+node --test <absolute-path-to-skill>/tests/test-shopify-blog-seo-optimizer.mjs
+```
+
+The suite covers report CSP and untrusted HTML handling, public URL validation, DNS-to-private-range rejection, and the preview-only report path. It does not need a Shopify store, credentials, or package installation.
 
 ## Failure handling
 

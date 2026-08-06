@@ -1,0 +1,13 @@
+name: geoskill-interactive-webgis
+display_name: 交互式WebGIS平台
+description: |
+  Configure a lightweight WebGIS with query support as a self-contained HTML app
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-interactive-webgis.py
+runtime: python>=3.9
+tags:
+  - ai
+  - gis
+  - machine-learning
+  - remote-sensing

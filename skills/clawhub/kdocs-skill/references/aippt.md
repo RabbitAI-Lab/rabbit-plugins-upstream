@@ -25,8 +25,7 @@ AI PPT 仅包含一个通用接口 `aippt.execute`，通过 `task_type` 参数�
 - 每次调用超时设为 1800000 毫秒：--timeout 1800000
 
 ### 文档引用方式
-
-文档转 PPT 场景下，`input` 数组中的文档引用使用 `link_id`（从金山文档链接路径末尾提取的 link_id，无需先调 `get_share_info`）。
+文档转 PPT 场景下，`input` 数组中的文档引用使用 `link_id`。
 
 ---
 
@@ -229,7 +228,7 @@ AI PPT 仅包含一个通用接口 `aippt.execute`，通过 `task_type` 参数�
 - `input` (array[object], 可选): 技能输入内容数组，每项为 `{type, content, ...}` 对象。与 `interaction_response` 互斥。
 type 枚举：
 - `text`：文本指令或主题描述
-- `link_id`：从金山文档链接提取的 link_id
+- `link_id`：分享链接 ID
 
 当 `mode` 为 `basic` 时，`text` 类型的 input 项可额外携带：
 - `scene_tags`：场景标签数组，如 `["总结汇报"]`

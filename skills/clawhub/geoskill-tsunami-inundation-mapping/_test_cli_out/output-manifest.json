@@ -1,0 +1,121 @@
+{
+  "skill": "tsunami-inundation-mapping",
+  "skill_version": "1.0.0",
+  "command": "tsunami-inundation-mapping --bbox 120 30 121 31 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-03T17:40:30.693828Z",
+  "finished_at": "2026-08-03T17:40:31.060100Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "bbox": [
+      120.0,
+      30.0,
+      121.0,
+      31.0
+    ],
+    "water_level": 10.0,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\inundation.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        120.0,
+        30.0,
+        121.0,
+        31.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\water_depth.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        120.0,
+        30.0,
+        121.0,
+        31.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\arrival_time.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        120.0,
+        30.0,
+        121.0,
+        31.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\evacuation_zone.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        120.0,
+        30.0,
+        121.0,
+        31.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\tsunami_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "water_level": 10.0,
+    "inundated_pixels": 1037,
+    "inundated_area_km2": 2329.1957060875106,
+    "max_depth_m": 10.632386207580566,
+    "mean_depth_m": 5.168090343475342,
+    "max_arrival_s": 4795.828125,
+    "evacuation_pixels": 502,
+    "n_total_pixels": 4096,
+    "n_valid_pixels": 4096,
+    "input_nodata_handling": "NoData->NaN"
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "tsunami-inundation-mapping"
+  },
+  "error": null
+}

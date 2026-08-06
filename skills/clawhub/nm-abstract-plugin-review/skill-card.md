@@ -11,33 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and maintainers use this skill to scope changed plugins, run tiered quality gates, and summarize pass, warning, or fail results before merge or release. <br>
+Developers and release maintainers use this skill to scope and run tiered quality reviews for plugin changes before branch work, pull requests, and releases. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad review, quality, validation, testing, and architecture triggers may activate the skill on general audit requests. <br>
-Mitigation: Use explicit tier and scope wording, and review the planned checks before allowing the agent to proceed. <br>
-Risk: The skill can guide an agent to run repo-local validation, test, lint, typecheck, git diff, and dependency-map commands. <br>
-Mitigation: Run it only in compatible repositories where local quality checks are appropriate, and inspect commands before execution. <br>
-Risk: Some checks depend on Night Market configuration, scripts, or evaluator skills that may not exist in other repositories. <br>
-Mitigation: Confirm required config and scripts are present; when unavailable, report skipped checks rather than treating them as completed. <br>
+Risk: Broad trigger words may cause the skill to activate during ordinary review requests. <br>
+Mitigation: Invoke or configure the skill specifically for plugin-review tasks when broad review activation is not desired. <br>
+Risk: Suggested make targets and local Python scripts execute code from the checked-out repository. <br>
+Mitigation: Run command examples only in repositories and branches that the user trusts. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-abstract-plugin-review) <br>
-- [clawdis homepage: claude-night-market abstract plugin](https://github.com/athola/claude-night-market/tree/master/plugins/abstract) <br>
+- [Plugin homepage](https://github.com/athola/claude-night-market/tree/master/plugins/abstract) <br>
+- [Publisher profile](https://clawhub.ai/user/athola) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown review report with tables, verdicts, scorecards, and inline shell commands.] <br>
+**Output Type(s):** [Analysis, Markdown, Shell commands, Guidance] <br>
+**Output Format:** [Markdown with tables, verdicts, scorecards, and inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include quality gate exit-code guidance and tier-specific remediation actions.] <br>
+**Other Properties Related to Output:** [May include CI/CD exit-code guidance for quality gate mode.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata; artifact frontmatter lists 1.9.8) <br>
+1.9.17 (source: ClawHub release metadata; artifact frontmatter reports 1.9.8) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

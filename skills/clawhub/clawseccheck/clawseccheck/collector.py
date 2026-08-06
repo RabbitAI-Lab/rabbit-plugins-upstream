@@ -1,7 +1,14 @@
-"""Read-only collection of OpenClaw config + bootstrap files.
+"""Read-only collection of OpenClaw config, bootstrap files, and related host artifacts.
 
-Reads ONLY: ~/.openclaw/openclaw.json and workspace bootstrap markdown files.
-No network. No writes. Pure stdlib.
+This module never writes, never makes a network call, and imports nothing beyond the
+stdlib — but "reads only config and bootstrap files" undersells its real scope, which
+every check needs to draw on. The ``LIMIT_DOMAIN_*`` constants below name every domain
+it reads from: ``~/.openclaw/openclaw.json``, workspace bootstrap markdown, installed
+skill/plugin text, the cron job store, exec-approvals state, the OpenClaw dotenv files
+and systemd ``EnvironmentFile=`` lines, subagent-run and audit-event trails. Each read
+is bounded (size caps, no execution of anything read) — see the individual
+``_collect_*`` functions and ``SECURITY_MODEL.md`` for the full, itemized capability
+surface. No network. No writes. Pure stdlib.
 """
 from __future__ import annotations
 
@@ -34,9 +41,25 @@ from .textnorm import normalize_for_scan, obfuscation_signals
 # Bootstrap / prompt files injected into the system prompt as "trusted context".
 # The native `openclaw security audit` does not inspect these files; checks
 # B6/B7/B9 cover that gap.
+#
+# B-365: BOOT.md is the ONE bootstrap file with an automatic EXECUTION trigger, not
+# merely an injection surface — the bundled `boot-md` hook (`gateway:startup` event)
+# runs it once per agent workspace on every gateway restart, no user turn involved
+# (grounded against the installed dist's own docs, `~/.npm-global/lib/node_modules/
+# openclaw/`: docs/concepts/agent-workspace.md:85, docs/automation/hooks.md:229,280,
+# docs/cli/hooks.md:31,101, docs/reference/templates/BOOT.md). Before this fix it was
+# absent here, so an attacker who could write one file into the workspace got a
+# directive-injection surface the whole content ring (B6/B7/B9 and friends, which all
+# iterate ctx.bootstrap) never saw at all. Adding it here is enough — those checks
+# already scan every ctx.bootstrap entry by name, so BOOT.md is now covered by the
+# SAME generic detection as SOUL.md/AGENTS.md/TOOLS.md, with no new check id needed.
+# (The `boot-md` hook itself ships DISABLED by default and must be explicitly enabled
+# via `openclaw hooks enable boot-md`, i.e. `hooks.internal.entries.boot-md.enabled` /
+# `hooks.internal.enabled` in openclaw.json — reading that toggle to gate severity is
+# left for a follow-up task, not this fix.)
 BOOTSTRAP_FILES = [
     "SOUL.md", "AGENTS.md", "TOOLS.md", "MEMORY.md", "IDENTITY.md",
-    "USER.md", "HEARTBEAT.md", "BOOTSTRAP.md", "memory.md",
+    "USER.md", "HEARTBEAT.md", "BOOTSTRAP.md", "memory.md", "BOOT.md",
 ]
 
 WORKSPACE_DIRS = ["workspace-home", "workspace-work", "workspace"]
@@ -320,13 +343,28 @@ class _ScopedLimitSink:
 # fake PASS). Recording the OSError in ``ctx.errors`` (when a Context is available) keeps
 # that degrade from being silent, matching how every other permission failure in this
 # module is surfaced.
-def _safe_is_dir(p: Path, ctx: Context | None = None, what: str | None = None) -> bool:
-    """``Path.is_dir()`` that answers False instead of raising on a permission error."""
+def _safe_is_dir(p: Path, ctx: Context | None = None, what: str | None = None,
+                  domain: str | None = None) -> bool:
+    """``Path.is_dir()`` that answers False instead of raising on a permission error.
+
+    B-404: when *domain* is given (alongside *ctx*), a genuine OSError also
+    becomes a domain-tagged ``limit_hits`` entry, not just a ``ctx.errors`` note — so a
+    consumer asking "was MY scan complete?" (``limit_hits_for``) can see a root that could
+    be confirmed to exist but could not be stat'd (e.g. a permission-denied skill root),
+    distinct from a root that simply is not there (which stays silent, exactly as before).
+    Purely additive: every existing caller that never passes *domain* keeps writing only
+    to ``ctx.errors``, unchanged.
+    """
     try:
         return p.is_dir()
     except OSError as exc:
         if ctx is not None:
             ctx.errors.append(f"could not check {what or p}: {exc}")
+            if domain is not None:
+                note_limit(
+                    ctx.limit_hits, domain,
+                    f"could not check {what or p} ({exc.__class__.__name__}) — not scanned",
+                )
         return False
 
 
@@ -440,6 +478,35 @@ class Context:
     native: object = None                           # NativeResult from openclaw security audit
     host: object = None                             # hostwatch.detect() result; set by audit(include_host=True)
     include_host: bool = False                      # host-filesystem scanning enabled (audit(include_host=True) / not --no-host)
+    # F-156: sockets.scan_listening_sockets() result; set by audit(include_sockets=True).
+    # None (the hermetic default) means the runtime socket scan was not run at all —
+    # check_effective_bind reports UNKNOWN, exactly like ctx.host is None for B50-B54.
+    sockets: object = None
+    include_sockets: bool = False  # /proc/net/tcp{,6} listening-socket scan enabled
+    # F-164: --exhaustive widens the DoS/ReDoS-guard ceilings scanbudget.limits_for()
+    # hands back (traj/log scan caps, per-check/audit wall-clock budgets) instead of
+    # today's defaults. No behavior of its own here — same pattern as include_sockets
+    # above — just a flag other code (scanbudget.limits_for, run_all callers) can read.
+    exhaustive: bool = False
+    # C-135 bug 1: the proc_root audit() was called with (default "/proc"), carried on ctx
+    # so check_effective_bind's best-effort PID correlation (sockets.identify_listener_process)
+    # reads from the SAME root a test injected for the socket scan itself, rather than a
+    # second, independent "/proc" hardcode. Always set by audit(), not just when
+    # include_sockets=True, so it is available whenever ctx.sockets happens to be populated.
+    proc_root: str = "/proc"
+    # F-167: deptree.scan_dep_tree() result for the OpenClaw install; set by
+    # audit(include_deptree=True), exactly as `sockets` above is set by
+    # include_sockets. B349 READS this and never walks the filesystem itself --
+    # hermetic-by-default, and one walk per audit rather than one per check call.
+    # (Without this, B349's PATH discovery ran on every Context: measured at 2.4s,
+    # 102% of a whole audit's runtime, and it reached into the real machine's global
+    # npm install from tests that had built a Context over a fixture home.)
+    dep_tree: object = None
+    include_deptree: bool = False  # OpenClaw dependency-tree walk enabled
+    # Root override for that walk. None means "discover it from PATH"
+    # (deptree.find_package_root); tests and fixtures set a synthetic tree, exactly as
+    # proc_root lets a test drive B340 without a real /proc.
+    openclaw_pkg_root: "Path | None" = None
     # B-231 sub-item 1: normalized cron jobs (from ~/.openclaw/cron/jobs.json, or the
     # SQLite-backed cron_jobs table when the JSON file is absent). Each entry is a plain
     # dict: id, name, enabled, delete_after_run, trigger_script, payload_kind,
@@ -559,6 +626,16 @@ class Context:
     # ring checks (B42 install-policy, B87 symlink-escape) don't cross-attribute another
     # skill's evidence onto this one.
     installed_skill_dirs: dict = field(default_factory=dict)
+    # B-404: every skill-load root _read_installed_skills actually confirmed
+    # exists and walked — the hardcoded SKILL_DIRS entries, any config-declared workspace/
+    # extraDirs/plugins.load.paths root, the personal ~/.agents/skills tier, a bundled-root
+    # env override, and plugin-skills — resolved-path deduped in the same order the walk
+    # used. This is the single source of truth for "was there anywhere to look"; cli.py's
+    # sweep_installed_skills reads it instead of re-deriving its own, narrower root list
+    # (the bug this field exists to close: a second, flat iterdir()-only guess over just
+    # the static SKILL_DIRS silently missed every grouped/config-declared root and then
+    # still reported the sweep complete).
+    installed_skill_roots: list = field(default_factory=list)
     attestation: dict = field(default_factory=dict)  # agent self-report (--attest); see attest.py
     _collected_skill_files: dict[str, list[dict]] = field(default_factory=dict)
 
@@ -1975,10 +2052,11 @@ def _read_installed_skills(home: Path, ctx: Context) -> None:
             _override = Path(_value).expanduser()
         except (OSError, ValueError, RuntimeError):
             continue
-        if _safe_is_dir(_override, ctx, what=f"bundled skills root '{_override}'"):
+        if _safe_is_dir(_override, ctx, what=f"bundled skills root '{_override}'",
+                        domain=LIMIT_DOMAIN_SKILL):
             roots.append((_override, False))
     plugin_skills = home / "plugin-skills"
-    if _safe_is_dir(plugin_skills, ctx, what=f"'{plugin_skills}'"):
+    if _safe_is_dir(plugin_skills, ctx, what=f"'{plugin_skills}'", domain=LIMIT_DOMAIN_SKILL):
         roots.append((plugin_skills, True))
     seen_roots: set[Path] = set()
     for base, allow_symlink in roots:
@@ -1986,7 +2064,12 @@ def _read_installed_skills(home: Path, ctx: Context) -> None:
         # home, e.g. chmod 000) must be skipped like a root that does not exist at all —
         # ctx.installed_skills then simply stays emptier, which check_installed_skills
         # (B13) already degrades to UNKNOWN for, never a crash or a fake clean PASS.
-        if not _safe_is_dir(base, ctx, what=f"skill root '{base}'"):
+        # B-404: unlike a root that genuinely does not exist, a root that
+        # exists but could not be stat'd (permission denied) is a REAL enumeration
+        # failure — domain=LIMIT_DOMAIN_SKILL records it so a consumer asking "was this
+        # scan complete" (limit_hits_for) can see it, instead of it reading identically
+        # to "nothing configured here".
+        if not _safe_is_dir(base, ctx, what=f"skill root '{base}'", domain=LIMIT_DOMAIN_SKILL):
             continue
         try:
             base_key = base.resolve()
@@ -1995,6 +2078,9 @@ def _read_installed_skills(home: Path, ctx: Context) -> None:
         if base_key in seen_roots:
             continue
         seen_roots.add(base_key)
+        # B-404: the single source of truth for "which roots did the real
+        # discovery engine confirm and walk" — see the field's docstring on Context.
+        ctx.installed_skill_roots.append(base)
         for sd, target in _iter_skill_dirs_guarded(base, allow_symlink, ctx):
             if len(ctx.installed_skills) >= _MAX_SKILLS:
                 # B-268: this used to `return` — the collection stopped dead, leaving

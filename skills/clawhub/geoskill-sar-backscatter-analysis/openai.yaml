@@ -1,0 +1,15 @@
+name: geoskill-sar-backscatter-analysis
+display_name: SAR后向散射分析
+description: |
+  多时相 SAR 后向散射时序统计：逐像元均值/标准差/振幅/变异系数与极化比。Multi-temporal SAR backscatter time-series statistics (mean/std/amplitude/CV) and polarization ratio. 输入多时相 σ⁰ 立方体（或用 --synthetic 生成含植被物候正弦信号的时序），输出多波段统计 GeoTIFF + 时序曲线 JSON。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-sar-backscatter-analysis.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - raster
+  - remote-sensing
+  - sar
+  - time-series

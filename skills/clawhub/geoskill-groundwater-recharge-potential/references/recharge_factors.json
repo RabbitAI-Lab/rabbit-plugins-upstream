@@ -1,0 +1,74 @@
+{
+  "version": "1.0.0",
+  "description": "Default factor scoring and weighting tables for groundwater recharge potential screening",
+  "factors": {
+    "slope": {
+      "weight": 0.20,
+      "direction": "lower_better",
+      "score_type": "linear",
+      "unit": "degrees",
+      "description": "Slope steepness in degrees; flatter terrain favors infiltration",
+      "scoring_notes": "0-5° = excellent, 5-15° = good, 15-30° = moderate, >30° = poor"
+    },
+    "soil_permeability": {
+      "weight": 0.20,
+      "direction": "higher_better",
+      "score_type": "linear",
+      "unit": "cm_hr",
+      "description": "Soil permeability proxy from SoilGrids or field data",
+      "scoring_notes": "Higher values indicate more permeable soils"
+    },
+    "geology": {
+      "weight": 0.15,
+      "direction": "categorical",
+      "score_type": "categorical",
+      "unit": "class",
+      "description": "Geological formation type ranked by permeability",
+      "score_map": {
+        "1": {"score": 0.9, "label": "Alluvial deposits / sand & gravel"},
+        "2": {"score": 0.7, "label": "Sandstone / weathered granite"},
+        "3": {"score": 0.5, "label": "Limestone / fractured rock"},
+        "4": {"score": 0.3, "label": "Shale / claystone"},
+        "5": {"score": 0.1, "label": "Massive igneous / metamorphic"}
+      }
+    },
+    "land_cover": {
+      "weight": 0.15,
+      "direction": "categorical",
+      "score_type": "categorical",
+      "unit": "class",
+      "description": "Land cover type ranked by infiltration favorability",
+      "score_map": {
+        "1": {"score": 0.9, "label": "Bare land / fallow"},
+        "2": {"score": 0.8, "label": "Grassland / meadow"},
+        "3": {"score": 0.7, "label": "Cropland / agriculture"},
+        "4": {"score": 0.5, "label": "Shrubland"},
+        "5": {"score": 0.3, "label": "Forest / woodland"},
+        "6": {"score": 0.1, "label": "Urban / impervious"},
+        "7": {"score": 0.0, "label": "Water body"}
+      }
+    },
+    "drainage_density": {
+      "weight": 0.10,
+      "direction": "lower_better",
+      "score_type": "linear",
+      "unit": "km_km2",
+      "description": "Drainage density; lower density favors infiltration over runoff",
+      "scoring_notes": "0-1 km/km² = excellent, 1-2 = good, 2-4 = moderate, >4 = poor"
+    },
+    "rainfall": {
+      "weight": 0.20,
+      "direction": "higher_better",
+      "score_type": "linear",
+      "unit": "mm_yr",
+      "description": "Annual rainfall amount; more rain provides more recharge source",
+      "scoring_notes": "Higher rainfall = greater recharge potential"
+    }
+  },
+  "references": [
+    "Saaty, T.L. (1980). The Analytic Hierarchy Process. McGraw-Hill.",
+    "Bonham-Carter, G.F. (1994). Geographic Information Systems for Geoscientists. Pergamon.",
+    "Singh, S.K. et al. (2013). Groundwater potential zoning in GIS environment. J. Geol. Soc. India.",
+    "Yeh, H.F. et al. (2016). GIS for the assessment of groundwater recharge potential zone. Sustainability."
+  ]
+}

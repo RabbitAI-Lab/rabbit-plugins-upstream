@@ -1,0 +1,11 @@
+interface:
+  display_name: "SocQ Threads Research"
+  short_description: "Research public Threads data"
+  default_prompt: "Use $socq-threads-research to research this topic on Threads."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "socq"
+      description: "Hosted SocQ Threads data tools"
+      transport: "streamable_http"
+      url: "https://api.socq.ai/mcp?platforms=threads"

@@ -1,0 +1,5 @@
+interface:
+  display_name: Landing Page Conversion Audit
+  short_description: Audit a landing page, sales page or checkout page for conversion leaks and return a fix list ordered by expected revenue impact.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg

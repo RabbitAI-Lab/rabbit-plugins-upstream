@@ -1,0 +1,57 @@
+{
+  "classes": [
+    0,
+    1,
+    2
+  ],
+  "summary": {
+    "total_pixels": 9216,
+    "changed_pixels": 2024,
+    "unchanged_pixels": 7192,
+    "change_fraction": 0.21961805555555555,
+    "pixel_area_km2": 1.1387642583890398,
+    "total_area_km2": 10494.851405313391,
+    "changed_area_km2": 2304.8588589794167,
+    "per_class": [
+      {
+        "class_index": 0,
+        "class_name": "water",
+        "t1_pixels": 2160,
+        "t2_pixels": 2160,
+        "persistent_pixels": 2160,
+        "gross_loss_pixels": 0,
+        "gross_gain_pixels": 0,
+        "net_change_pixels": 0,
+        "t1_area_km2": 2459.730798120326,
+        "t2_area_km2": 2459.730798120326,
+        "net_change_area_km2": 0.0
+      },
+      {
+        "class_index": 1,
+        "class_name": "vegetation",
+        "t1_pixels": 4896,
+        "t2_pixels": 2872,
+        "persistent_pixels": 2872,
+        "gross_loss_pixels": 2024,
+        "gross_gain_pixels": 0,
+        "net_change_pixels": -2024,
+        "t1_area_km2": 5575.389809072739,
+        "t2_area_km2": 3270.530950093322,
+        "net_change_area_km2": -2304.8588589794167
+      },
+      {
+        "class_index": 2,
+        "class_name": "cropland",
+        "t1_pixels": 2160,
+        "t2_pixels": 4184,
+        "persistent_pixels": 2160,
+        "gross_loss_pixels": 0,
+        "gross_gain_pixels": 2024,
+        "net_change_pixels": 2024,
+        "t1_area_km2": 2459.730798120326,
+        "t2_area_km2": 4764.589657099743,
+        "net_change_area_km2": 2304.8588589794167
+      }
+    ]
+  }
+}

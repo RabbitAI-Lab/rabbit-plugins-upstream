@@ -1,0 +1,21 @@
+{
+  "source": "synthetic",
+  "scale": 3,
+  "amount": 0.5,
+  "method": "srcnn_dong2014",
+  "device": "cuda",
+  "weights_source": "cached",
+  "train_mse": null,
+  "train_epochs": null,
+  "input_shape": [
+    21,
+    21
+  ],
+  "output_shape": [
+    63,
+    63
+  ],
+  "psnr_db": 28.179986060031787,
+  "ssim": 0.8748380548596253,
+  "psnr_bicubic_only_db": 28.19595737720393
+}

@@ -1,6 +1,6 @@
 # rune-skill-router
 
-> Rune L0 Skill | orchestrator | model: tier:light
+> Rune L0 Skill | orchestrator | model: tier:mid
 
 
 ## Live Routing Context

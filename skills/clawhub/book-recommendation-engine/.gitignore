@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.DS_Store
+_tmp_*/
+.bookshelf-plus/recommendations/cache/
+.bookshelf-plus/recommendations/wishlist.json

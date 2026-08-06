@@ -475,7 +475,7 @@ def main():
                               help='显示详细信息')
     output_group.add_argument('--json', action='store_true',
                               help='JSON 格式输出完整响应')
-    output_group.add_argument('--region', default='ap-guangzhou',
+    output_group.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'),
                               help='地域，默认 ap-guangzhou')
     output_group.add_argument('--dry-run', action='store_true',
                               help='预览请求参数，不实际执行')

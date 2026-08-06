@@ -1,5 +1,5 @@
 ## Description: <br>
-Accurately identifies cat and dog breeds and supports distinguishing between different individuals in multi-pet households; an essential assistant for intelligent pet butlers. | 宠物品种个体识别技能，精准识别猫狗宠物品种，支持多宠家庭区分不同独立个体，智能宠物管家好帮手 <br>
+Accurately identifies cat and dog breeds and supports distinguishing between different individuals in multi-pet households; an essential assistant for intelligent pet butlers. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill to analyze pet images or videos, identify cat and dog breeds, distinguish individual pets in multi-pet households, and retrieve prior recognition reports. <br>
+External users and agents use this skill to analyze pet images, videos, or media URLs for cat and dog breed identification, individual pet distinction, confidence-bearing structured results, and history/report lookup. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Media and URL inputs are sent to a cloud pet-recognition service. <br>
-Mitigation: Use only media acceptable for external cloud processing, and avoid private household footage or identifying content unless the account linkage and provider retention model are acceptable. <br>
-Risk: The skill silently creates or reuses an account identity and stores authentication tokens/profile data in the workspace. <br>
-Mitigation: Review the workspace data and account-linkage behavior before installation; use an isolated workspace or account when privacy boundaries matter. <br>
-Risk: History and report APIs can retrieve prior recognition reports tied to the managed identity. <br>
-Mitigation: Limit access to the workspace and provider account, and avoid shared identities for sensitive media. <br>
+Risk: Pet images, videos, or supplied URLs are processed by external LifeEmergence services. <br>
+Mitigation: Use only media appropriate for cloud processing, avoid private or internal URLs, and do not submit sensitive home footage unless cloud processing is acceptable. <br>
+Risk: The skill can create or reuse a persistent account identity and store service tokens in the workspace. <br>
+Mitigation: Run it in an isolated workspace, review stored credentials before reuse, and remove local account/token data when the skill is no longer needed. <br>
+Risk: History lookup can retrieve account-linked prior analysis reports. <br>
+Mitigation: Confirm the user intends to list historical reports and that the active workspace identity is the expected one before using report-history functionality. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-breed-individual-recognition-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API 接口文档](artifact/references/api_doc.md) <br>
-- [smyx_analysis API接口文档](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-breed-individual-recognition-analysis) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [Pet recognition API documentation](references/api_doc.md) <br>
+- [Common analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, files] <br>
-**Output Format:** [Markdown or JSON analysis report text, with optional file output when requested.] <br>
+**Output Type(s):** [Text, Markdown, JSON] <br>
+**Output Format:** [Markdown text containing structured JSON results and report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may include pet count, breed and individual labels, confidence values, remarks, history entries, and report/export links.] <br>
+**Other Properties Related to Output:** [May write the same result text to a user-specified output file.] <br>
 
 ## Skill Version(s): <br>
-1.0.8 (source: SKILL.md frontmatter and ClawHub release evidence) <br>
+1.0.9 (source: server release evidence; artifact frontmatter reports 1.0.10) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

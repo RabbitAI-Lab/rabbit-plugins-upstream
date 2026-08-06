@@ -1,5 +1,5 @@
 ## Description: <br>
-Helps an agent prepare and run spoken narration or voiceover generation with Gemini 3.1 Flash TTS through Replicate. <br>
+Use when someone needs spoken narration or voiceover - explainer tracks, documentary lines, or voice to pair with generated video. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and creators use this skill to collect text, voice, style prompt, and language inputs, then guide a Replicate text-to-speech request for narration, documentary lines, explainer voiceover, or audio to pair with generated video. <br>
+Developers and creators use this skill to prepare Replicate Gemini Flash TTS requests for narration, explainer tracks, documentary lines, and voiceover audio paired with generated video. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: A Replicate API token is required to generate audio. <br>
-Mitigation: Keep REPLICATE_API_TOKEN in the local environment and do not include it in prompts, generated files, or shared logs. <br>
-Risk: Optional related PrunaAI skills may broaden the installed skill set. <br>
-Mitigation: Install only the companion skills needed for the workflow and review them before adding the full suite. <br>
-Risk: Generated narration may not match the intended text, tone, voice, or language. <br>
-Mitigation: Confirm text, voice, prompt, and language_code before generation, then review the downloaded audio before using it. <br>
+Risk: The skill sends the user's script and style prompt to Replicate for text-to-speech generation. <br>
+Mitigation: Confirm the script, voice, language, and style prompt with the user before making the Replicate request. <br>
+Risk: Generated audio may need length checks or editing before it is used in downstream video or narration workflows. <br>
+Mitigation: Use ffmpeg or ffprobe when trimming, concatenating, mixing, or verifying clip length for downstream use. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/gemini-3-1-flash-tts) <br>
-- [Replicate model readme](https://replicate.com/google/gemini-3.1-flash-tts/readme) <br>
+- [Replicate Gemini 3.1 Flash TTS readme](https://replicate.com/google/gemini-3.1-flash-tts/readme) <br>
+- [Replicate Gemini 3.1 Flash TTS predictions endpoint](https://api.replicate.com/v1/models/google/gemini-3.1-flash-tts/predictions) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown guidance with bash and curl examples] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls] <br>
+**Output Format:** [Markdown with inline shell commands and JSON request examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REPLICATE_API_TOKEN; ffmpeg and ffprobe are needed for trimming, concatenating scene voiceover, or mixing with a music bed.] <br>
+**Other Properties Related to Output:** [Guides the agent through Replicate TTS request setup, polling, download, and optional audio post-processing.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill frontmatter) <br>
+1.0.9 (source: server release metadata and skill metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

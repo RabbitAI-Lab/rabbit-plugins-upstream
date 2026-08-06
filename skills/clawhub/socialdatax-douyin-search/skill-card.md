@@ -1,43 +1,54 @@
-## Description: <br>
-用于抖音数据分析、抖音热榜、抖音作品搜索、图文搜索、关键词检索、内容调研、竞品分析和趋势研究。覆盖 Douyin hot search and work search，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents retrieve Douyin hot-search rankings and keyword-based work search results for content research, competitor analysis, and trend scanning.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External analysts, marketers, researchers, and developers use this skill to fetch Douyin hot-search and keyword-search data for content research, competitor analysis, and trend scanning. It helps agents summarize visible ranking signals and search results while preserving traceable IDs, URLs, authors, counts, and publish times when useful. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Douyin search terms and requests are sent to SocialDataX under the user's API key. <br>
-Mitigation: Use this skill only when the user is comfortable sharing those search terms with SocialDataX, and keep SOCIALDATAX_API_KEY in the runtime environment rather than embedding it in skill files. <br>
-Risk: Using socialdatax-skills@latest can change CLI behavior or supply-chain exposure over time. <br>
-Mitigation: Pin or review the npm package version before installation in stricter environments. <br>
-Risk: Search results are bounded by pagination and filters and may not represent complete Douyin platform coverage. <br>
-Mitigation: State query bounds in summaries and preserve returned IDs, URLs, counts, publish times, content types, and next-page markers when traceability matters. <br>
+## Use Case:
 
+Social media analysts, marketers, researchers, and agent developers use this skill to gather Douyin hot-search and keyword-search evidence for public content research, trend scanning, and competitive analysis.
 
-## Reference(s): <br>
-- [SocialDataX AI API access](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown summaries with inline shell commands and JSON result excerpts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY at runtime and may include Douyin content IDs, URLs, titles, authors, metrics, publish times, content type, and pagination markers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.15 (source: server evidence) <br>
+Risk: The skill requires a SocialDataX API key for Douyin data lookups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user is comfortable providing `SOCIALDATAX_API_KEY` to the SocialDataX npm, CLI, or MCP integration before installation or execution.
+
+Risk: Search and hot-list outputs can support interpretation but may not be complete or stable over time.
+
+Mitigation: Keep observed ranking signals separate from interpretation and include traceable IDs, URLs, authors, counts, publish times, and content types when available.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin-search)
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries with inline shell commands and JSON-derived observations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include Douyin content IDs, URLs, titles or descriptions, authors, engagement counts, publish times, content type, and pagination guidance when available.]
+
+## Skill Version(s):
+
+0.1.16 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

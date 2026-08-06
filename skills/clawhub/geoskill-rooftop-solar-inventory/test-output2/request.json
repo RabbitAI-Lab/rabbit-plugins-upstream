@@ -1,0 +1,13 @@
+{
+  "timestamp": "2026-07-27T17:21:22.220284+00:00",
+  "setback_m": 1.0,
+  "panel_type": "mono_perc_540w",
+  "min_contiguous_area_m2": 10.0,
+  "annual_ghi_kwh_per_m2": 1400.0,
+  "performance_ratio": 0.82,
+  "electricity_price_cny_per_kwh": 0.55,
+  "discount_rate": 0.06,
+  "system_lifetime_years": 25,
+  "n_buildings": 5,
+  "output_dir": "test-output2"
+}

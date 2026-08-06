@@ -1,6 +1,6 @@
 ---
 name: codex-delegate
-version: 0.1.0
+version: 0.1.3
 description: Delegate coding, repository analysis, file edits, test runs, or code review to the local Codex CLI without embedding an OpenAI API key. This skill was created to work with ChatGPT/Codex enterprise accounts that may not have the same level of API access. Invokes codex exec with existing ChatGPT/Codex CLI authentication and returns Codex's final output.
 license: MIT
 metadata: {"openclaw":{"requires":{"bins":["codex"]}}}
@@ -8,7 +8,7 @@ metadata: {"openclaw":{"requires":{"bins":["codex"]}}}
 
 # Codex Delegate
 
-Invoke this skill only with an **explicit command** from the user, such as `@codex-delegate` or `/codex-delegate`, or when the user directly asks to delegate a **specific coding task** (e.g., "use Codex to refactor this file," "ask Codex to review this PR"). Do NOT auto-trigger on casual mentions of "Codex" or "delegate" in general conversation, or on non-coding tasks. Do NOT auto-trigger on casual mentions of "Codex" or "delegate" in general conversation. This skill hands coding/repository tasks to the local Codex CLI and is meant for local, trusted operator setups where `codex` is already installed and signed in.
+Use this skill when the user wants OpenClaw to hand a coding or repository task to Codex and receive a result back. It is meant for local, trusted operator setups where `codex` is already installed and signed in.
 
 ## Preconditions
 
@@ -57,6 +57,19 @@ npm test 2>&1 | {baseDir}/scripts/codex-delegate.sh \
 ```
 
 Use `--prompt-file path` when a generated prompt is already on disk. Use `--stdin-file path` when another tool wrote context to a file.
+
+## Permissions
+
+This skill requires:
+- `exec`: Run the `codex` CLI and the bundled wrapper script
+- `fs.read`: Read repository files for analysis
+- `fs.write`: Write files when `--sandbox workspace-write` is used
+
+## Scope
+
+This skill is limited to delegating coding and repository tasks to the local Codex CLI.
+It does not manage Codex configuration, handle authentication, or perform actions outside the target repository.
+All write operations require explicit user confirmation before proceeding.
 
 ## Delegation Workflow
 

@@ -1,0 +1,19 @@
+{
+  "boundary_adjustment_threshold_m": 0.3,
+  "area_change_threshold_m2": 1.0,
+  "perimeter_change_threshold_m": 1.0,
+  "split_merge_area_tolerance": 0.15,
+  "min_parcel_area_m2": 1.0,
+  "max_boundary_shift_m": 5.0,
+  "description": "Default cadastral business rules for change detection in China",
+  "rules": {
+    "new": "Parcel exists only in after epoch",
+    "deleted": "Parcel exists only in before epoch",
+    "expanded": "Matched, area increased beyond threshold",
+    "reduced": "Matched, area decreased beyond threshold",
+    "unchanged": "Matched, area within tolerance",
+    "split": "One before parcel → multiple after parcels",
+    "merge": "Multiple before parcels → one after parcel",
+    "boundary_adjust": "Matched, boundary shift detected but area unchanged"
+  }
+}

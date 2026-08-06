@@ -1,0 +1,14 @@
+{
+  "method": "productivity",
+  "weights": {
+    "w_veg": 0.6,
+    "w_texture": 0.25,
+    "w_terrain": 0.15
+  },
+  "window": 5,
+  "s_max": 200.0,
+  "k": 3.0,
+  "mean_ndvi": 0.3289760649204254,
+  "mean_texture": 0.056523267179727554,
+  "mean_roughness": 7.564786911010742
+}

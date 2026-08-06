@@ -1,47 +1,61 @@
-## Description: <br>
-Recommends benchmark and top Douyin accounts for a supplied Douyin nickname or account ID, using RedFox API data to return account metrics, comparison tables, commonalities, differences, and optimization suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+抖音相似账号推荐工具，输入抖音账号名称或账号ID，通过红狐API接口获取本账号数据、内容数据和相似账号推荐数据，深度分析共通点、差异点和优化建议。
 
-## Publisher: <br>
-[redfox-data](https://clawhub.ai/user/redfox-data) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[redfox-data](https://clawhub.ai/user/redfox-data)
 
-## Use Case: <br>
-Douyin creators, content operators, MCN teams, and brand marketing teams use this skill to find comparable accounts, evaluate top accounts in a niche, and turn RedFox account metrics into growth, topic, and placement guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent API-key storage or readback can expose a RedFox API key beyond the current session. <br>
-Mitigation: Use a scoped, revocable RedFox API key stored in a platform secret store or temporary session environment, and avoid writing the key to shell profile files. <br>
-Risk: The account collection flow submits a Douyin account ID to RedFox for later processing. <br>
-Mitigation: Run the sync flow only after the user explicitly approves submitting that account ID for collection. <br>
-Risk: Subscription and push prompts can create follow-up notifications or service commitments without clear user intent. <br>
-Mitigation: Treat subscription setup as a separate opt-in step and confirm frequency, timing, and cancellation expectations before enabling it. <br>
-Risk: RedFox account data may be stale, incomplete, or unsuitable as the only basis for commercial decisions. <br>
-Mitigation: Check the reported data timestamp and validate important placement or growth decisions against additional sources before acting. <br>
+## Use Case:
 
+External Douyin creators, brand operators, MCN teams, and content teams use this skill to find comparable or top-performing Douyin accounts and review account metrics, content patterns, and optimization suggestions.
 
-## Reference(s): <br>
-- [Core workflow](artifact/references/core_workflow.md) <br>
-- [RedFox API key settings](https://redfox.hk/settings/api-keys?source=clawhub) <br>
-- [RedFox data platform](https://redfox.hk/) <br>
-- [ClawHub skill page](https://clawhub.ai/redfox-data/skills/douyin-similar-account) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, text, shell commands, guidance] <br>
-**Output Format:** [Markdown report with account summaries, comparison tables, analysis notes, and operational prompts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a RedFox API key and may call RedFox endpoints for account lookup, account collection, and subscription-related flows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence) <br>
+Risk: The skill sends Douyin account identifiers and the user's RedFox API key to RedFox.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that data sharing is acceptable, and prefer a temporary environment variable or dedicated secret manager for the API key.
+
+Risk: The skill documentation and behavior may encourage persisting or revealing API keys.
+
+Mitigation: Do not write the API key into shell startup files, logs, prompts, or output; avoid echoing the full key.
+
+Risk: query_wrapper.py ignores the requested account and runs a hard-coded lookup.
+
+Mitigation: Avoid query_wrapper.py and invoke scripts/douyin_similar_account.py with an explicit account_id after reviewing the command.
+
+## Reference(s):
+
+- [Core Workflow](references/core_workflow.md)
+- [README.en.md](README.en.md)
+- [ClawHub Skill Page](https://clawhub.ai/redfox-data/skills/douyin-similar-account)
+- [RedFoxHub](https://redfox.hk)
+- [RedFox Similar Accounts API](https://redfox.hk/story/api/dyUser/querySimilarAccounts)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Analysis, API Calls, Shell commands, Guidance]
+
+**Output Format:** [Markdown report with account details, recommendation tables, and analysis text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires REDFOX_API_KEY and sends the requested Douyin account identifier to RedFox.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

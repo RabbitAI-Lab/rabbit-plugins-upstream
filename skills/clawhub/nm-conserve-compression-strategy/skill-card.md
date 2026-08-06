@@ -1,5 +1,5 @@
 ## Description: <br>
-Recommends context compression strategies for bloated or quota-heavy sessions. <br>
+Recommends context compression strategies for bloated or quota-heavy sessions <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent users use this skill to analyze session context pressure, choose a compression or delegation strategy, and reduce log-related context bloat before it affects task work. <br>
+Developers and agent operators use this skill to analyze bloated or quota-heavy sessions, choose a context-reduction strategy, and estimate savings before task transitions or debugging work. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may recommend saving session state or context archives that retain secrets, credentials, proprietary logs, or private conversation details. <br>
-Mitigation: Before using those recommendations, review the planned files under .claude/session-state.md or .claude/context-archive/, remove sensitive material, and treat the files as retained local records until deleted. <br>
+Risk: Saved session notes or archived context could include secrets or private content if users preserve state without review. <br>
+Mitigation: Review saved notes and archives before retaining or sharing them, and remove secrets or private content before using clear, archive, or catchup workflows. <br>
+Risk: Delegating work or spawning continuation agents can expose task context beyond the current session boundary. <br>
+Mitigation: Use continuation or delegation only when it fits the task and the shared context is appropriate for the receiving agent. <br>
+Risk: Compression can remove or distort details needed for log debugging. <br>
+Mitigation: Filter logs at the source and measure token savings before using compression; keep original logs available when full fidelity is required. <br>
 
 
 ## Reference(s): <br>
+- [Log Debugging Hygiene](modules/log-debugging-hygiene.md) <br>
+- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-conserve-compression-strategy) <br>
-- [ClawHub metadata homepage](https://github.com/athola/claude-night-market/tree/master/plugins/conserve) <br>
-- [Drain3](https://github.com/logpai/Drain3) <br>
-- [logs-tokenizer](https://github.com/sergeivaskov/logs-tokenizer) <br>
-- [LLMLingua](https://github.com/microsoft/LLMLingua) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with analysis summaries, option recommendations, and inline shell commands] <br>
+**Output Type(s):** [guidance, markdown, shell commands] <br>
+**Output Format:** [Markdown guidance with command examples and recommended workflow steps] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May recommend local session-state or context-archive files when preserving context before clearing or compacting.] <br>
+**Other Properties Related to Output:** [Produces recommendations only; no bundled code executes automatically.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release evidence) <br>
+1.9.17 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
