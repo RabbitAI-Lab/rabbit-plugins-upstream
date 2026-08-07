@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/launch-with-aws",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "launch-with-aws",
+  "branch": "main",
+  "pushedAt": "2026-08-07T08:10:02Z",
+  "contentHash": "fe261c66e9b59f74143efac0069fe9e7c9580615fd85c75ccad4d3c526d6cbe0",
+  "fetchedAt": "2026-08-07T08:35:31.131Z"
+}

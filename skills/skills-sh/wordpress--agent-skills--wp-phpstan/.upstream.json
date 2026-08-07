@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-phpstan",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-phpstan",
+  "branch": "trunk",
+  "pushedAt": "2026-08-03T05:26:29Z",
+  "contentHash": "aa9fe9eff7da107047c381b59437c225cf04ae589a9524dae9e26d539388983f",
+  "fetchedAt": "2026-08-07T08:35:41.576Z"
+}

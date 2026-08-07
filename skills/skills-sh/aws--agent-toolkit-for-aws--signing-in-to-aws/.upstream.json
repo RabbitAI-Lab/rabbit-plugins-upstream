@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/signing-in-to-aws",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "signing-in-to-aws",
+  "branch": "main",
+  "pushedAt": "2026-08-07T08:10:02Z",
+  "contentHash": "c64937e8a0724c38a1d0943c80c655fab5008f2b3d803dd59b3fccf30489f002",
+  "fetchedAt": "2026-08-07T08:35:30.865Z"
+}

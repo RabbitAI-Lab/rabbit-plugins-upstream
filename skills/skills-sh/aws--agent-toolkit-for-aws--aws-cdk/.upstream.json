@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-cdk",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-cdk",
+  "branch": "main",
+  "pushedAt": "2026-08-07T08:10:02Z",
+  "contentHash": "d42224780225ebfcf2f036d3bd522564701fd1aff2e701c52e864789b34b16ab",
+  "fetchedAt": "2026-08-07T08:35:30.574Z"
+}

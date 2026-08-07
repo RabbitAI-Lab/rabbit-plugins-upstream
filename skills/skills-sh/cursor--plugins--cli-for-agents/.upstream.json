@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/cli-for-agents",
+  "repo": "cursor/plugins",
+  "skillId": "cli-for-agents",
+  "branch": "main",
+  "pushedAt": "2026-08-06T23:18:38Z",
+  "contentHash": "f841153e16518e5bc2c14f416ec0b3522e2bf97c9adbfb9b9594e8c139f4a839",
+  "fetchedAt": "2026-08-07T08:34:30.246Z"
+}
