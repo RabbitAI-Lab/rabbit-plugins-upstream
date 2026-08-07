@@ -1,46 +1,57 @@
-## Description: <br>
-ContentStudio helps agents schedule social-media posts across Facebook, LinkedIn, Twitter/X, Instagram, YouTube, TikTok, Pinterest, Threads, Tumblr, Bluesky, and Google Business Profile, and manage posts, media, workspaces, accounts, campaigns, labels, categories, and team members through the ContentStudio CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ContentStudio is a tool to schedule social-media posts and manage the social inbox across Facebook, LinkedIn, Twitter/X, Instagram, YouTube, TikTok, Pinterest, Threads, Tumblr, Bluesky, and Google Business Profile.
 
-## Publisher: <br>
-[contentstudio-official](https://clawhub.ai/user/contentstudio-official) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[contentstudio-official](https://clawhub.ai/user/contentstudio-official)
 
-## Use Case: <br>
-Developers, operators, and AI agents use this skill to automate ContentStudio social-media workflows from the terminal, including listing resources, creating or approving posts, uploading media, connecting accounts, and auditing workspace data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, approve, delete, upload, connect accounts, or delete content from social platforms through a real ContentStudio workspace. <br>
-Mitigation: Review dry-run output first, confirm the workspace and target posts or accounts, and require explicit approval before mutating commands. <br>
-Risk: Using the wrong active workspace can apply changes to the wrong ContentStudio account or social channels. <br>
-Mitigation: Check the active workspace before mutations and ask the user to confirm whether to proceed there or select a different workspace. <br>
-Risk: Bulk scripts or delete operations can amplify mistakes across many posts or accounts. <br>
-Mitigation: Avoid copying bulk examples without adding a review step, paginate deliberately, and verify each destructive target before execution. <br>
+## Use Case:
 
+Developers, operators, and AI-agent users use this skill to manage ContentStudio workspaces from the terminal, including social post scheduling, media management, approval workflows, inbox review, and customer-facing replies.
 
-## Reference(s): <br>
-- [ContentStudio Skill on ClawHub](https://clawhub.ai/contentstudio-official/skills/contentstudio) <br>
-- [ContentStudio API Guide](https://api.contentstudio.io/guide) <br>
-- [ContentStudio API Docs](https://api.contentstudio.io/api-docs) <br>
-- [contentstudio-cli npm Package](https://www.npmjs.com/package/contentstudio-cli) <br>
-- [ContentStudio Website](https://contentstudio.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with contentstudio CLI commands and JSON-response handling instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the contentstudio CLI and CONTENTSTUDIO_API_KEY. The skill emphasizes --json output, dry-run review for mutations, workspace confirmation, and pagination handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The assistant can operate a ContentStudio account and perform account-changing or customer-facing social media actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this delegation is intended, use a least-privilege API key where possible, and review customer-facing messages before sending.
+
+Risk: Create, update, delete, approve, and reply actions could affect the wrong workspace or social account.
+
+Mitigation: Keep dry-run previews enabled before mutations and confirm the target workspace before executing changes.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/contentstudio-official/skills/contentstudio)
+- [ContentStudio API Guide](https://api.contentstudio.io/guide)
+- [ContentStudio API Docs](https://api.contentstudio.io/api-docs)
+- [ContentStudio CLI npm Package](https://www.npmjs.com/package/contentstudio-cli)
+- [ContentStudio Website](https://contentstudio.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON response handling]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the ContentStudio CLI and requires CONTENTSTUDIO_API_KEY for authenticated operations.]
+
+## Skill Version(s):
+
+1.1.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

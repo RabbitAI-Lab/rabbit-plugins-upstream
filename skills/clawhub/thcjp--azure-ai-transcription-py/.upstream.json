@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/azure-ai-transcription-py",
   "slug": "azure-ai-transcription-py",
   "ownerHandle": "thcjp",
-  "version": "0.1.0",
-  "updatedAt": 1778485891685,
-  "contentHash": "188e487e895a43f8a1bdac91f22f310b9ea1d5dab9a851fd24438d2454c42c01",
-  "fetchedAt": "2026-07-26T18:06:15.834Z"
+  "version": "1.0.3",
+  "updatedAt": 1785664031037,
+  "contentHash": "f81cb6bcf08fb51358096c7a4827517b312a11a0e14a1c41a09f18a63981efcb",
+  "fetchedAt": "2026-08-07T08:55:51.474Z"
 }

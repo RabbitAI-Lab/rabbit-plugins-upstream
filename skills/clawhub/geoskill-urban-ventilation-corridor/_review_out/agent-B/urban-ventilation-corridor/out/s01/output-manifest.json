@@ -1,0 +1,76 @@
+{
+  "skill": "urban-ventilation-corridor",
+  "skill_version": "1.0.0",
+  "command": "urban-ventilation-corridor --bbox 116.0 39.0 117.0 40.0 --synthetic --output-dir _review_out/agent-B/urban-ventilation-corridor/out/s01",
+  "started_at": "2026-08-03T17:47:07.648619Z",
+  "finished_at": "2026-08-03T17:47:07.823445Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "footprints": null,
+    "roughness_coeff": 0.1,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out/agent-B/urban-ventilation-corridor/out/s01\\ventilation.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 2,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out/agent-B/urban-ventilation-corridor/out/s01\\corridor.geojson",
+      "kind": "vector",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": 1,
+      "row_count": null
+    },
+    {
+      "path": "_review_out/agent-B/urban-ventilation-corridor/out/s01\\ventilation_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "mean_roughness_m": 1.3505492210388184,
+    "mean_ventilation_potential": 0.5306985378265381,
+    "corridor_cost": 2.5536129474639893,
+    "corridor_vertices": 128
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "urban-ventilation-corridor"
+  },
+  "error": null
+}

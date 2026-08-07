@@ -1,5 +1,5 @@
 ## Description: <br>
-Looks up detailed vehicle profile information from a VIN through Juhe Data's paid VIN query service and returns a structured Markdown report after the disclosed Alipay payment flow. <br>
+This skill looks up detailed vehicle profile and configuration information from a user-provided VIN, using Juhe's paid VIN query service after payment and privacy confirmation. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill to query a paid VIN vehicle-data service for vehicle make, model, year, powertrain, dimensions, tire specifications, emissions standard, announcement number, and related profile fields. It is suited to vehicle-record review and pre-transaction checks where third-party data is acceptable as reference information. <br>
+External users and agents use this skill to retrieve vehicle make, model, year, powertrain, dimensions, tire specifications, emissions standard, and other record details for a specific VIN. It is suited to vehicle profile checks where the user has explicitly agreed to the paid lookup and VIN transmission. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: A VIN is sent to Juhe's vehicle-data service as part of a paid query. <br>
-Mitigation: Show the paid-query and privacy notice before collection, send only the VIN over HTTPS, and avoid collecting phone numbers, identity documents, addresses, bank data, device identifiers, or location. <br>
-Risk: Users may treat third-party vehicle profile data as authoritative for registration, legal, insurance, or purchase decisions. <br>
-Mitigation: Present results as reference information and direct users to verify important decisions against actual vehicle registration records or manufacturer sources. <br>
-Risk: The skill depends on a paid Alipay payment flow before returning query results. <br>
-Mitigation: Require explicit user confirmation, preserve the payment response without changing order or resource details, and stop without querying if the user cancels payment. <br>
+Risk: Each lookup is a paid service and transmits the provided VIN to Juhe's service. <br>
+Mitigation: Require explicit payment and privacy confirmation before collecting the VIN or initiating the lookup. <br>
+Risk: Vehicle records from a third-party data provider may be incomplete or delayed. <br>
+Mitigation: Present results as reference information and direct users to verify important decisions against official vehicle records or manufacturer sources. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-vin-query-details-a2a) <br>
-- [Publisher profile](https://clawhub.ai/user/juhemcp) <br>
-- [Juhe VIN query API endpoint](https://zxw-apis.juhe.cn/a2a/query) <br>
-- [Skill behavior specification](artifact/SKILL.md) <br>
-- [Output format specification](artifact/OUT_FORMAT.md) <br>
+- [Juhe VIN query endpoint](https://apis.juhe.cn/a2a/query) <br>
+- [Output format](artifact/OUT_FORMAT.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown vehicle report with tabular fields, plus payment-flow guidance and an HTTPS JSON request example] <br>
+**Output Type(s):** [Markdown, Text, Guidance] <br>
+**Output Format:** [Markdown vehicle information report after a paid API lookup] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a single VIN for each paid lookup; outputs only fields returned by the vehicle-data service and avoids raw JSON or HTML in the user-facing result.] <br>
+**Other Properties Related to Output:** [Uses only returned API fields, includes a no-records path, and appends a third-party data disclaimer.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+1.0.7 (source: release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

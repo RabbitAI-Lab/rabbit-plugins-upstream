@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-company-research"
+  short_description: "调查企业公开身份、业务、规模信号、团队、认证和近期动态"
+  default_prompt: "使用 $zayn-company-research 调查目标企业的公开背景与经营信号。"

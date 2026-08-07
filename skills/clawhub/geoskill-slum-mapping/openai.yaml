@@ -1,0 +1,15 @@
+name: geoskill-slum-mapping
+display_name: 贫民窟/棚户区制图
+description: |
+  Map slums and shanty areas using a multi-indicator index of texture, building density, night light and population density.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-slum-mapping.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - urban
+  - visualization

@@ -17,19 +17,38 @@ payloads), nor the `sessionKey` peer-id segment `origin` is bucketed from (PII).
 Findings are WARN-only, `scored=False` (Golden Rule #5) — a heuristic on observed VERB
 NAMES classified by role (ingress/sensitive/egress), not on the untouched payload
 content, so confidence stays MEDIUM even though "this verb ran" itself is log-observed
-HIGH-confidence fact. T1/T2 never run as part of the main `audit()`/CHECKS list or the
-A-F score — only through `--behavioral`, mirroring `--analyze-trajectory`'s own
-`trajaudit.py` scope.
+HIGH-confidence fact. T1/T2 never run as part of the main `audit()`/CHECKS list — only
+through `--behavioral`/`--full`, mirroring `--analyze-trajectory`'s own `trajaudit.py`
+scope, and no finding here ever becomes an ordinary scored point.
+
+F-154: since this module's own `analyze()` actually ran (--behavioral or --full), a
+fired T1/T2/T3/B191 WARN MAY CAP the A-F grade — never raise it, never earn/cost an
+ordinary scored point. See `grade_cap_signal` below (the reducer `scoring.compute`'s
+`behavioral_fired_ids` argument is built from) and `scoring.BEHAVIORAL_SIGNAL_CAP`'s
+docstring for the full cap-only mechanism, the per-detector ceiling rationale, and why
+this is gated on this module's analysis having ACTUALLY run this invocation — a plain
+`clawseccheck` audit that never ran `--behavioral`/`--full` sees byte-identical
+behaviour to before this cap existed.
 """
 from __future__ import annotations
 
 import re
+from collections.abc import Hashable
 from pathlib import Path
 
 from . import attest
 from .catalog import PASS, UNKNOWN, WARN
-from .checks import INPUT_TOOL_HINTS, _finding, check_audit_trail_signals
+from .checks import (
+    INPUT_TOOL_HINTS,
+    _channels,
+    _finding,
+    _norm_group_policy,
+    _open_wildcard_group_channels,
+    _UNTRUSTED_INPUT_POLICIES,
+    check_audit_trail_signals,
+)
 from .collector import dig
+from .scanbudget import limits_for
 from .trajectory import EXTERNAL_ORIGIN_KINDS, read_events, read_proven_tools
 
 # C-170 adversarial pass found the naive "reuse A1's three hint tuples verbatim"
@@ -245,11 +264,108 @@ def _classify_verb_role(name: str | None) -> str | None:
 #    does everything through `bash` classifies as EGRESS/EXEC. On the real host, 0 of
 #    1,270 observed tool calls classify as sensitive. Fixing ingress alone therefore
 #    does not make T1 functional there.
-def _classify_event_role(event: dict) -> str | None:
+#
+# F-154 (round 2, C-135 finding) — group/channel origin gets the SAME discriminator.
+# The paragraph above already reasoned through this exact ambiguity for `direct`/DM
+# origin ("a DM-delivered injection from a non-owner still does not arm ingress...
+# arming it would reproduce exactly the false-positive shape") but the original B-298
+# landing never extended it to `group`/`channel` — those armed UNCONDITIONALLY on
+# origin kind alone, with no way to tell "the owner talking in his own private bot
+# group" (an everyday devops/coding-agent turn) apart from "a stranger in a genuinely
+# open group". Reproduced: a group-origin `prompt.submitted` + a sensitive-hint call +
+# a bash/exec call armed T1 even when the group's own config is owner-only.
+#
+# The fix mirrors the direct-origin comment's own prescription verbatim: "the channel's
+# configured dmPolicy, which A1 already reads STATICALLY" — for a group/channel-origin
+# event the equivalent, already-available static signal is that SAME channel's
+# `groupPolicy` (not `dmPolicy` — an open DM policy says nothing about who can post in a
+# GROUP on that channel; see `_group_untrusted_origin_channels`'s own docstring for why
+# this is deliberately NOT `_untrusted_input_channels`, which conflates the two). A
+# group/channel-origin message now arms ingress only when THIS PARTICULAR channel's
+# `groupPolicy` is one of `_UNTRUSTED_INPUT_POLICIES` (open/allowlist/pairing) — i.e.
+# only when config itself says a non-owner sender can actually reach that surface. This
+# preserves T1's actual detection target (a genuinely stranger-exposed group/channel
+# still arms — see the "still fires" test) while an owner-only/restrictive group
+# (absent groupPolicy, "owner", or per-message "ask" approval) no longer manufactures a
+# false trifecta purely from its origin kind, the same discipline `direct` already gets.
+def _group_untrusted_origin_channels(cfg: dict) -> "frozenset[str]":
+    """Channel ids (e.g. "telegram") whose GROUP-facing config admits a message
+    authored by a non-owner sender — either `groupPolicy` in `_UNTRUSTED_INPUT_POLICIES`
+    (open/allowlist/pairing; Feishu's "allowall" alias normalized to "open" via
+    `_norm_group_policy`, same as `_untrusted_input_channels`), OR an effectively-
+    unrestricted wildcard group (B-382, below).
+
+    Built once per `analyze()` call and threaded down to `_classify_event_role`, which
+    only arms a group/channel-origin `prompt.submitted` event's ingress leg when its
+    `originChannel` is a member of this set — i.e. when THIS channel's own config says
+    a stranger can actually reach its group/broadcast surface, mirroring the exact
+    static discriminator the direct-origin comment above already names.
+
+    Deliberately NOT `checks._untrusted_input_channels` (checks/_shared.py): that
+    helper ORs `dmPolicy` and `groupPolicy` together into one per-channel flag, so a
+    channel with an open DM policy but an OWNER-ONLY `groupPolicy` would still arm here
+    on a group-origin message purely because of its (irrelevant) DM setting —
+    reproducing a narrower version of the exact false-positive shape this fix exists
+    to close. `groupPolicy` alone is the field that actually governs who can post in a
+    group/broadcast surface; `dmPolicy` governs 1:1 delivery and has no bearing on it.
+
+    B-382: the groupPolicy-only check above missed the B-297 wildcard-group shape —
+    `channels.<provider>.groups {"*": {...}}` — entirely. That shape is how open group
+    access is actually written in real configs and carries NO `dmPolicy`/`groupPolicy`
+    field at all, so a bare `{"groups": {"*": {}}}` channel (no `groupPolicy` key to
+    even normalize) fell straight through the loop below and this function returned an
+    empty set, even though `checks._shared._external_input_channels` — the sibling
+    trifecta-ingress helper this one is modelled on — already treated it as untrusted
+    ingress. Fixed by ALSO arming from `checks._shared._open_wildcard_group_channels`,
+    the same grounded, reachability- and allowFrom-aware predicate B-297/B140 use,
+    rather than re-deriving a second, narrower notion of "open wildcard group" here.
+    That helper already excludes `channels.defaults` (a config block, not a real
+    per-channel wildcard — B140/B26's own rule), so no separate exclusion is needed
+    here; `test_b382_channels_defaults_block_alone_does_not_arm` pins that this stays
+    true.
+    """
+    out = set(_open_wildcard_group_channels(cfg))
+    for name, c in _channels(cfg).items():
+        if not isinstance(c, dict) or c.get("enabled") is False:
+            continue
+        # B-378: `or {}` only rescues an EMPTY/missing "accounts" key, not a WRONG
+        # TYPE — a schema-drifted config with accounts as a list or a bare string
+        # raised AttributeError/TypeError here with no containment above this
+        # function (see cli.py's _resolve_runtime_caps, which now also wraps the
+        # whole analyze() call as defense in depth; this is the actual root-cause
+        # guard). A malformed accounts block degrades to "no accounts", never a crash.
+        accounts = c.get("accounts")
+        nodes = [c] + (list(accounts.values()) if isinstance(accounts, dict) else [])
+        for node in nodes:
+            if not isinstance(node, dict):
+                continue
+            # B-378: _norm_group_policy passes an unmodeled value through unchanged
+            # (by design — see its own docstring), so a schema-drifted groupPolicy
+            # shaped as a list (e.g. {"groupPolicy": ["open"]}) reaches this `in` test
+            # as an unhashable type and raised TypeError. Only a hashable (str-shaped)
+            # policy can ever be a genuine member of _UNTRUSTED_INPUT_POLICIES anyway.
+            policy = _norm_group_policy(name, node.get("groupPolicy"))
+            if isinstance(policy, Hashable) and policy in _UNTRUSTED_INPUT_POLICIES:
+                out.add(name.strip().lower())
+                break
+    return frozenset(out)
+
+
+def _classify_event_role(
+    event: dict, untrusted_origin_channels: "frozenset[str]" = frozenset()
+) -> str | None:
     """Classify one EVENT into a trifecta leg — verb role first, then channel origin.
 
     Falls through to the channel ingress leg only for an event that carries no verb
     role at all, so an explicit verb classification always wins.
+
+    *untrusted_origin_channels* (F-154 round 2) — the set `_group_untrusted_origin_
+    channels` computed for this run. A group/channel-origin event only arms ingress
+    when its `originChannel` is a member; absent evidence that the channel's own
+    `groupPolicy` admits a non-owner sender, origin kind ALONE is no longer sufficient
+    — the same non-arming discipline `direct` origin already gets above. Defaults to
+    an empty set (never arms on origin alone) so an explicit verb classification is
+    always the one intended discriminator when no channel context is supplied.
     """
     role = _classify_verb_role(event.get("name"))
     if role:
@@ -257,6 +373,8 @@ def _classify_event_role(event: dict) -> str | None:
     if (
         event.get("type") == "prompt.submitted"
         and event.get("origin") in EXTERNAL_ORIGIN_KINDS
+        and isinstance(event.get("originChannel"), str)
+        and event["originChannel"].strip().lower() in untrusted_origin_channels
     ):
         return "ingress"
     return None
@@ -328,19 +446,23 @@ def _disambiguated_labels(firing_keys: list[str]) -> list[str]:
 # order (by seq/ts), within one thread.
 # ---------------------------------------------------------------------------
 
-def _t1_thread_trifecta(thread_events: list[dict]) -> str | None:
+def _t1_thread_trifecta(
+    thread_events: list[dict], untrusted_origin_channels: "frozenset[str]" = frozenset()
+) -> str | None:
     """How this thread's ingress leg was armed, when it shows ingress -> sensitive ->
     egress in that order; ``None`` when it shows no trifecta.
 
     Returns ``"verb"`` when an ingress TOOL VERB opened the chain, or the external
     origin kind ("group"/"channel") when an externally-delivered channel message did
-    (B-298). The caller needs the distinction: reporting "an ingress verb ran" for a
-    channel-armed firing would be a false statement about what the log shows.
+    (B-298, narrowed F-154 round 2 — only when *untrusted_origin_channels* says that
+    channel's own config admits a non-owner sender). The caller needs the distinction:
+    reporting "an ingress verb ran" for a channel-armed firing would be a false
+    statement about what the log shows.
     """
     armed_by: str | None = None
     seen_sensitive_after_ingress = False
     for ev in thread_events:
-        role = _classify_event_role(ev)
+        role = _classify_event_role(ev, untrusted_origin_channels)
         if role == "ingress":
             if armed_by is None:
                 armed_by = "verb" if ev.get("name") else str(ev.get("origin"))
@@ -351,18 +473,25 @@ def _t1_thread_trifecta(thread_events: list[dict]) -> str | None:
     return None
 
 
-def check_behavioral_trifecta(groups: dict[str, list[dict]]) -> object:
+def check_behavioral_trifecta(
+    groups: dict[str, list[dict]], untrusted_origin_channels: "frozenset[str]" = frozenset()
+) -> object:
     """T1 — behavioral trifecta, proven by the trajectory log (not declared capability).
 
     WARN — at least one thread shows an ingress leg (an ingress VERB, or an
-           externally-delivered group/channel message — B-298), then a sensitive-verb,
-           then an egress-verb, in that order.
+           externally-delivered group/channel message whose channel's own config
+           admits a non-owner sender — B-298, narrowed F-154 round 2), then a
+           sensitive-verb, then an egress-verb, in that order.
     PASS — threads present, no thread shows the ordered sequence.
+
+    *untrusted_origin_channels* — see `_group_untrusted_origin_channels`; defaults to
+    an empty set (no channel arms on origin alone) when the caller supplies nothing,
+    matching `_classify_event_role`'s own default.
     """
     firing_keys: list[str] = []
     armed_by: dict[str, str] = {}
     for group_key, thread_events in groups.items():
-        ingress = _t1_thread_trifecta(thread_events)
+        ingress = _t1_thread_trifecta(thread_events, untrusted_origin_channels)
         if ingress:
             firing_keys.append(group_key)
             armed_by[group_key] = ingress
@@ -382,8 +511,11 @@ def check_behavioral_trifecta(groups: dict[str, list[dict]]) -> object:
             "externally-delivered group/channel message), then a sensitive-data verb, "
             f"then an egress verb, ran in this order within a thread: {detail}.",
             "Review the trajectory sidecar for the named thread(s) manually. This is "
-            "proof-by-log of the same pattern A1 flags by capability — untrusted input "
-            "reached sensitive data and then left the agent, in one observed sequence.",
+            "proof-by-log that an ingress-classified action, a sensitive-data action, "
+            "and an egress action ran in that temporal order, in one thread. Verb order "
+            "alone does not prove data actually flowed between them (B-416): three "
+            "causally-unrelated actions in an ordinary workflow can satisfy this shape, "
+            "so treat it as a lead to review manually, not confirmed exfiltration.",
             firing[:6],
         )
     return _finding(
@@ -607,7 +739,9 @@ def check_capability_drift(ctx) -> object:
             "No OpenClaw home to read a trajectory log from — capability drift can't be assessed.",
             "Run --behavioral on a host with an OpenClaw agent's session trajectories.",
         )
-    observed, meta = read_proven_tools(home)
+    lim = limits_for(ctx)
+    observed, meta = read_proven_tools(home, max_files=lim.traj_max_files,
+                                        max_bytes_per_file=lim.traj_max_bytes_per_file)
     if not meta.get("present"):
         return _finding(
             "T3",
@@ -760,6 +894,8 @@ def _audit_event_sessions(ctx) -> "frozenset[str]":
     """
     out = set()
     for row in getattr(ctx, "audit_events", None) or ():
+        if not isinstance(row, dict):  # B-378: defensive — collector always yields
+            continue                   # dict rows, but never trust that unguarded.
         sid = row.get("session_id")
         if isinstance(sid, str) and sid.strip():
             out.add(sid.strip())
@@ -790,6 +926,28 @@ def audit_trail_divergence(ctx, events: list[dict]) -> "frozenset[str]":
     return frozenset(audit_sessions - traj_sessions)
 
 
+def explicit_path_problem(explicit_path: str | None) -> str | None:
+    """Why an explicitly-named --behavioral PATH cannot be read, or None if it is fine.
+
+    B-462: when the user names a file, a bad path is THEIR fact, not the host's. A typo
+    used to fall through to the generic "no trajectory sidecars found ... run on a host
+    where an OpenClaw agent has produced session trajectories" — blaming the machine,
+    never echoing the path, and exiting 0 under a green tick.
+
+    Shared by `analyze` and the CLI's exit-code decision so the two cannot disagree, and
+    so deciding the exit code costs a stat rather than a second full `analyze()` pass over
+    every trajectory file.
+    """
+    if not explicit_path:
+        return None
+    p = Path(explicit_path).expanduser()
+    if not p.exists():
+        return f"{explicit_path}: no such file or directory"
+    if p.is_dir():
+        return f"{explicit_path}: is a directory, not a trajectory file"
+    return None
+
+
 def analyze(ctx, *, explicit_path: str | None = None) -> dict:
     """Run the v1 behavioral detectors (T1, T2, T3) plus the B191 audit-trail signal, and
     return a result dict.
@@ -803,7 +961,16 @@ def analyze(ctx, *, explicit_path: str | None = None) -> dict:
     sidecar exists — which correctly makes every audit_events session "divergent").
     """
     home = getattr(ctx, "home", None)
-    events, meta = read_events(home, explicit_path=explicit_path)
+    lim = limits_for(ctx)
+    # B-462: when the user names a file explicitly, a bad path is THEIR fact, not the
+    # host's. Previously a typo'd --behavioral PATH fell through to the generic "no
+    # trajectory sidecars found ... run on a host where an OpenClaw agent has produced
+    # session trajectories" — blaming the machine for a typo, never echoing the path, and
+    # exiting 0 with a green tick.
+    explicit_path_error = explicit_path_problem(explicit_path)
+    events, meta = read_events(home, explicit_path=explicit_path,
+                                max_files=lim.traj_max_files,
+                                max_bytes_per_file=lim.traj_max_bytes_per_file)
     result = {
         "present": meta["present"],
         "files_scanned": meta["files_scanned"],
@@ -814,6 +981,7 @@ def analyze(ctx, *, explicit_path: str | None = None) -> dict:
         "event_count": len(events),
         "thread_count": 0,
         "findings": [],
+        "explicit_path_error": explicit_path_error,
     }
     b191 = check_audit_trail_signals(
         ctx,
@@ -826,13 +994,85 @@ def analyze(ctx, *, explicit_path: str | None = None) -> dict:
 
     groups = group_events_by_thread(events)
     result["thread_count"] = len(groups)
+    # F-154 (round 2): the channel-scoped discriminator for T1's group/channel ingress
+    # leg — see `_group_untrusted_origin_channels`. Computed once per analyze() call
+    # from `ctx.config` (never re-read per-event).
+    cfg = getattr(ctx, "config", None) or {}
+    untrusted_origin_channels = _group_untrusted_origin_channels(cfg)
     result["findings"] = [
-        check_behavioral_trifecta(groups),
+        check_behavioral_trifecta(groups, untrusted_origin_channels),
         check_outcome_anomaly(groups),
         check_capability_drift(ctx),
         b191,
     ]
     return result
+
+
+# ---------------------------------------------------------------------------
+# F-154 — cap-only grade signal (mirrors trajaudit.grade_cap_signal / pipeline.
+# live_test_cap_signal's naming, one reducer per source module).
+# ---------------------------------------------------------------------------
+
+
+# F-154 (round 2, C-135 finding): B191 folds THREE sub-signals into one WARN status
+# (checks/_host.py:check_audit_trail_signals) — "blocked" and "evasive" are near-zero-FP
+# runtime facts, but "divergence" is that check's OWN docstring calling it expected,
+# near-certain-benign background noise on any host that has rotated its 60-file
+# trajectory cap or intentionally disabled tracing (both common, legitimate choices).
+# Capping the grade on bare divergence alone permanently ceilinged any long-lived,
+# healthy install at B, with no actionable remediation. So the reducer below only
+# counts a B191 WARN toward the cap when at least one of the two STRONG sub-signals
+# actually fired (`Finding.sub_signals`, set by check_audit_trail_signals) — the
+# rendered WARN finding itself is untouched: it still reports and evidences all three
+# signals to a human reader, and Golden Rule #5's scored=False is unaffected either way.
+_B191_STRONG_SUB_SIGNALS = frozenset({"blocked", "evasive"})
+
+
+def grade_cap_signal(result: dict) -> "frozenset[str]":
+    """F-154: reduce an `analyze()` result to the set of BEHAVIORAL_CHECK_IDS that
+    fired WARN this run — the ONLY intended producer of `scoring.compute`'s
+    `behavioral_fired_ids` argument.
+
+    *result* is whatever `analyze(ctx)` returned. This function does no I/O and never
+    re-reads the trajectory sidecar — it only filters findings `analyze()` already
+    computed, so calling it costs nothing beyond the `analyze()` call itself.
+
+    Callers must only ever pass a `result` from an `analyze()` call THIS invocation
+    actually performed — in practice only a `--full` run without `--fast` does this in
+    `cli.py`; a standalone `--behavioral` run never calls this function at all — see
+    `scoring.BEHAVIORAL_SIGNAL_CAP`'s docstring for why this cap is gated on actual execution
+    rather than computed automatically inside `scoring.compute`. There is no "present"
+    gate here beyond that: `analyze()`'s own result already encodes "nothing to
+    replay" as an empty/PASS finding set (T1/T2/T3 absent when no trajectory sidecar
+    exists — see `analyze`'s own docstring), which naturally reduces to an empty
+    frozenset below, exactly like the "no cap" case.
+
+    B191 is additionally gated on `_B191_STRONG_SUB_SIGNALS` above (F-154 round 2): a
+    B191 WARN whose `sub_signals` is bare `{"divergence"}` does not cap, even though it
+    is still WARN/reported like any other B191 finding.
+    """
+    fired: set = set()
+    for f in result.get("findings", ()):
+        if f.id not in BEHAVIORAL_CHECK_IDS or f.status != WARN:
+            continue
+        if f.id == "B191":
+            # B-386: `sub_signals`' `frozenset` type (catalog.py) is only a hint under
+            # `from __future__ import annotations` — never runtime-enforced — so a
+            # caller-built Finding (e.g. a test, or a future producer) can hand this a
+            # plain list/tuple. `&` raises TypeError on those, so normalize before
+            # intersecting — same coerce-or-empty pattern this module already uses for
+            # `attested` (see the `reported` handling earlier in this file).
+            sub_signals = (
+                f.sub_signals
+                if isinstance(f.sub_signals, (set, frozenset))
+                else frozenset(f.sub_signals)
+                if isinstance(f.sub_signals, (list, tuple))
+                else frozenset()
+            )
+            if not (sub_signals & _B191_STRONG_SUB_SIGNALS):
+                continue
+        fired.add(f.id)
+    return frozenset(fired)
 
 
 def render_behavioral_analysis(ctx, *, explicit_path: str | None = None, ascii_only: bool = False) -> str:
@@ -842,6 +1082,11 @@ def render_behavioral_analysis(ctx, *, explicit_path: str | None = None, ascii_o
     ok = "[ok]" if ascii_only else "✓"
     q = "[?]" if ascii_only else "?"
     lines = ["Behavioral trajectory audit (post-hoc, read-only, metadata-only)"]
+
+    # B-462: a path the user typed that does not resolve is reported as such, before any
+    # note about the host — otherwise a typo reads as "your machine has no trajectories".
+    if r.get("explicit_path_error"):
+        lines.append(f"  {warn} {r['explicit_path_error']}")
 
     if not r["present"]:
         # B191 (F-134) still runs below even here — it reads a SEPARATE store
@@ -875,6 +1120,11 @@ def render_behavioral_analysis(ctx, *, explicit_path: str | None = None, ascii_o
                 "trajectory file(s) — the oldest session(s) were not analyzed. Results are "
                 "INCOMPLETE (treat as UNKNOWN, not authoritative)."
             )
+        elif getattr(ctx, "exhaustive", False) and r["files_total"]:
+            # F-164 SC-5: silence must never be the only signal for completeness under
+            # --exhaustive — say so affirmatively, mirroring trajaudit.py's own sites.
+            lines.append(f"  {ok} Scanned all {r['files_total']} of {r['files_total']} "
+                         "trajectory file(s).")
 
     any_warn = False
     for f in r["findings"]:
@@ -890,5 +1140,17 @@ def render_behavioral_analysis(ctx, *, explicit_path: str | None = None, ascii_o
             lines.append(f"  {ok} {f.id} — {f.detail}")
 
     if not any_warn:
-        lines.append(f"  {ok} No behavioral anomalies found.")
+        # B-462: the rule is already stated ten lines up for an individual finding —
+        # "mark it as UNKNOWN, never a ✓, so it doesn't read as a clean pass" — and the
+        # summary used to break it, printing a green all-clear for a run in which every
+        # detector returned UNKNOWN and zero bytes of trajectory were read.
+        unknowns = [f for f in r["findings"] if f.status == UNKNOWN]
+        if r["findings"] and len(unknowns) == len(r["findings"]):
+            lines.append(f"  {q} No behavioural verdict — every detector returned UNKNOWN "
+                         "(reasons above). Nothing was assessed, which is not a clean result.")
+        elif unknowns:
+            lines.append(f"  {ok} No behavioral anomalies found in what could be assessed "
+                         f"({len(unknowns)} detector(s) returned UNKNOWN — see above).")
+        else:
+            lines.append(f"  {ok} No behavioral anomalies found.")
     return "\n".join(lines)

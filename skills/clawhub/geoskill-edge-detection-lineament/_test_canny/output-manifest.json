@@ -1,0 +1,71 @@
+{
+  "skill": "edge-detection-lineament",
+  "skill_version": "1.0.0",
+  "command": "edge-detection-lineament --bbox 116 39 117 40 --synthetic --method canny --quiet --output-dir ./_test_canny",
+  "started_at": "2026-08-03T13:18:57.097079Z",
+  "finished_at": "2026-08-03T13:18:57.601929Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "method": "canny",
+    "threshold": 0.1,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_canny\\edges.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": -9999.0,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_canny\\lineaments.geojson",
+      "kind": "vector",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": 16,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "canny",
+    "threshold": 0.1,
+    "edge_density": 0.07269965277777778,
+    "n_edge_pixels": 670,
+    "n_lineaments": 16,
+    "mean_lineament_length_px": 49.805687500000005,
+    "n_valid_pixels": 9216,
+    "n_total_pixels": 9216,
+    "valid_pixel_ratio": 1.0,
+    "input_nodata": null,
+    "synthetic_true_lines": 3
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "edge-detection-lineament"
+  },
+  "error": null
+}

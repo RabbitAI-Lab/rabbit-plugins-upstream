@@ -1,0 +1,17 @@
+name: geoskill-climate-zone-classification
+display_name: 气候区划
+description: |
+  基于月均温与月降水栅格的气候区划，支持柯本-盖格（Köppen-Geiger）规则树与简化 Strahler 发生分类，输出气候类别码 GeoTIFF + 面积统计 JSON，可选双期变化检测。Climate zone classification from monthly temperature/precipitation rasters (Köppen-Geiger rule tree & simplified Strahler), with area statistics and optional change detection.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-climate-zone-classification.py
+runtime: python>=3.9
+tags:
+  - climate
+  - extraction
+  - gis
+  - lidar
+  - machine-learning
+  - point-cloud
+  - raster
+  - remote-sensing

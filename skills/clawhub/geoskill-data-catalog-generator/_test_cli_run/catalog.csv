@@ -1,0 +1,6 @@
+name,kind,format,category,crs_family,features_or_bands,geometry_types,bbox_wgs84,size_bytes,status
+dem.tif,raster,GeoTIFF,Single-band raster,Geographic (WGS 84),1,,116.000000;39.000000;117.000000;40.000000,1373,ok
+pois.geojson,vector,GeoJSON,Point vector,Geographic (WGS 84),8,Point,116.085649;39.113672;116.801274;39.956267,1291,ok
+rgb.tif,raster,GeoTIFF,Multispectral raster,Geographic (WGS 84),3,,116.000000;39.000000;117.000000;40.000000,3218,ok
+roads.gpkg,vector,GeoPackage,Line vector,Geographic (WGS 84),2,LineString,116.000000;39.000000;117.000000;40.000000,98304,ok
+zones.shp,vector,Shapefile,Polygon vector,Geographic (WGS 84),1,Polygon,116.000000;39.000000;116.500000;39.500000,236,ok

@@ -1,23 +1,22 @@
 ---
 name: xproof
-version: 3.3.7
-description: "Certify what your agent decided (WHY) before acting, and what it produced (WHAT) after. 4W audit trail on MultiversX, violations layer on Base, trust score."
-skill_visibility: public
+version: 3.3.0
+description: Prove Before & After Act — WHO from MX-8004 identity, WHAT/WHEN/WHY from xProof. Full 4W audit trail, trust score, violations layer. REST API, MCP, x402. $0.01/proof flat. No proof = no critical action.
 homepage: https://xproof.app
 metadata: {"xproof":{"category":"proof,security,compliance,accountability,prove-before-act","api_base":"https://xproof.app"}}
 ---
 
-# xProof — Prove Before & After Act
+# xProof -- Prove Before & After Act — Accountability Layer for AI Agents
 
-Anchor reasoning (WHY) before execution and actual result (WHAT) after — creating a complete, tamper-proof 4W audit trail on MultiversX (Who via MX-8004, What/When/Why via xProof). Trust score, violations layer, public verification.
+This skill enables your agent to **anchor reasoning (WHY) on-chain before executing any significant action and the actual result (WHAT) after** — creating a complete Prove Before & After Act cycle. Enforce pre-execution audit logging and detect violations via Base, producing tamper-proof, publicly verifiable records of who decided what, when, and why.
 
-## The Core Pattern
+## The Core Pattern: Prove Before & After Act
 
 ```
 1. Reason (WHY) → 2. Hash locally → 3. Anchor WHY on-chain → 4. Get proof_id → 5. Execute → 6. Hash result (WHAT) → 7. Anchor WHAT on-chain → 8. Full 4W trail
 ```
 
-The `proof_id` from step 4 is your immutable pre-execution commitment — if something goes wrong, you have forensic evidence that the reasoning preceded the action.
+Anchor reasoning (WHY) on-chain **before** execution. Anchor the actual result/output (WHAT) **after** for a complete 4W audit trail. The proof_id is your immutable pre-execution commitment — if something goes wrong, you have forensic evidence that the reasoning preceded the action.
 
 **4W breakdown — what each letter means and who provides it:**
 
@@ -32,7 +31,7 @@ xProof owns WHAT / WHEN / WHY and the causal link that proves reasoning preceded
 
 > **Agent reference:** [`https://xproof.app/agent-context`](https://xproof.app/agent-context) — 13 Q&A sections written specifically for autonomous agents: production deployment patterns, retry policy, x402 payment walkthrough, 4W audit trail deep-dive, privacy model, fleet monitoring, latency benchmarks, and framework integration examples (LangChain, CrewAI, AutoGen, LlamaIndex, OpenAI Agents SDK, Fetch.ai).
 
-**Why anchor before acting?** An agent that proves its reasoning before executing is fundamentally more trustworthy than one that cannot. It creates an unbreakable causal chain: the intent existed before the action, and the blockchain makes that sequence immutable.
+**Why Prove Before Act?** An agent that can prove its reasoning before acting is fundamentally more trustworthy than one that cannot. It creates an unbreakable causal chain: the intent existed before the action, and the blockchain makes that sequence immutable.
 
 **Why audit?** Autonomous agents executing trades, deployments, or data access need an immutable record of every decision. The Agent Audit Log Standard enforces this: no proof = no execution.
 
@@ -56,40 +55,20 @@ Payment: USDC on Base (x402, no account) or EGLD on MultiversX (ACP/wallet) or p
 The canonical source for all skill files is the **main xProof repository** (`jasonxkensei/xProof`), which is the repository audited by security tools. Install from there directly:
 
 ```bash
-mkdir -p <SKILL_DIR>/xproof/references
+mkdir -p .agent/skills/xproof/references
 
 # Core Skill — from the canonical main repository
 curl -sL https://raw.githubusercontent.com/jasonxkensei/xProof/main/clawhub-publish/xproof/SKILL.md \
-  > <SKILL_DIR>/xproof/SKILL.md
+  > .agent/skills/xproof/SKILL.md
 
 # Reference Manuals
 for f in certification x402 mcp; do
   curl -sL "https://raw.githubusercontent.com/jasonxkensei/xProof/main/clawhub-publish/xproof/references/${f}.md" \
-    > "<SKILL_DIR>/xproof/references/${f}.md"
+    > ".agent/skills/xproof/references/${f}.md"
 done
 ```
 
 > **Source verification:** All files above are served from `github.com/jasonxkensei/xProof` — the same repository that contains the server code, contracts, and SDKs. You can audit the full source at that URL before installing.
-
-## Data & Privacy
-## Data & Privacy
-
-> **Transparency notice — what leaves your environment when using this skill.**
-
-| Data field | Sent to xproof.app? | Notes |
-|:---|:---:|:---|
-| File content / raw text | **Never** | Hash locally; only the digest crosses the boundary |
-| `file_hash` (SHA-256 hex, 64 chars) | Yes | One-way fingerprint; original content cannot be reconstructed |
-| `filename` / `author` | Optional | Metadata you explicitly supply; omit if sensitive |
-| `action_description` / `context` | Optional | Only when you call `/api/audit` or `audit_agent_session` |
-| USDC payment (x402) | Yes — Base chain | On-chain transaction; amount is your configured ceiling |
-| API key (`pm_...`) | Yes — HTTP header | Treat like a password; never log or commit |
-
-**What xproof.app does NOT receive:** raw file contents, prompt text, model weights, environment variables, or any field you do not explicitly pass.
-
-**Data retention:** proof records are permanent and public by default (that is the point — immutable evidence). Before certifying, confirm you want the hash publicly anchored on MultiversX mainnet forever.
-
-**Skill file:** this file (`<SKILL_DIR>/xproof/SKILL.md`) is intentionally public and contains no secrets. It is documentation only — API patterns, pricing, and integration examples. Safe to audit, share, or version-control.
 
 ## Security
 
@@ -163,7 +142,41 @@ x402 is not a separate skill -- it is a payment method. When you call `POST /api
 
 ---
 
-## 2. Webhooks
+## 2. Coherence Loop — close the WHY→WHAT link
+
+Anchoring the WHY and the WHAT is not enough: you must **link** them. An unlinked WHY anchor shows as **divergent** in your public coherence history after 1 hour, and after the 2-hour TTL it is additionally flagged as a proposed fault violation — both lower your public coherence rate.
+
+**Full loop:** `check_coherence` (WHY) → execute → `certify_file` with `metadata.why_proof_id` (WHAT) → `POST /api/coherence/link`.
+
+```bash
+# Step 4 — close the loop (API key required; both proofs must be yours)
+curl -X POST https://xproof.app/api/coherence/link \
+  -H "Authorization: Bearer pm_..." \
+  -H "Content-Type: application/json" \
+  -d '{"why_proof_id": "<UUID from check_coherence>", "what_proof_id": "<UUID from certify_file>"}'
+# → 200 {"success": true, "coherence_check": {"coherence_score": 85, ...},
+#        "score_breakdown": {"linked": true, "what_within_1h": true,
+#                            "what_references_why": true, "what_confirmed_on_chain": false,
+#                            "execution_preceded_intent": false}}
+```
+
+**Score (0–100):** 50 for linking + 15 if WHAT within 1h of WHY + 20 if WHAT's `metadata.why_proof_id` references the WHY + 15 if WHAT confirmed on-chain. WHAT certified *before* the WHY → base halved to 25.
+
+**Error cases:**
+
+| Status | Error | Meaning |
+|:--|:--|:--|
+| `409` | `ALREADY_LINKED` | WHY anchor already linked to a *different* WHAT. Re-linking the same pair returns 200 with `already_linked: true` (idempotent). |
+| `400` | `NOT_A_COHERENCE_ANCHOR` | `why_proof_id` is a regular proof. Create the WHY via the `check_coherence` MCP tool, or certify with `metadata.type = "coherence_check"`. |
+| `404` | `WHY_PROOF_NOT_FOUND` / `WHAT_PROOF_NOT_FOUND` | Proof missing or owned by another account. |
+
+**SDK helpers:** `client.link_coherence(why_proof_id, what_proof_id)` (Python `xproof` ≥ 0.2.10) · `client.linkCoherence(whyProofId, whatProofId)` (npm `@xproof/xproof` ≥ 0.1.11).
+
+**Check your history:** `GET https://xproof.app/api/agents/<wallet>/coherence` — public; per-anchor status (`linked` / `pending` / `divergent`) + aggregate coherence rate.
+
+---
+
+## 3. Webhooks
 
 Supply an optional `webhook_url` field on `POST /api/proof` or `POST /api/batch` to receive a callback when the proof is confirmed on-chain.
 
@@ -187,7 +200,7 @@ No raw file content, no API keys, no account information, and no metadata beyond
 
 ```bash
 # Example proof request with webhook
-curl -X POST ${XPROOF_BASE_URL}/api/proof \
+curl -X POST https://xproof.app/api/proof \
   -H "Authorization: Bearer pm_..." \
   -H "Content-Type: application/json" \
   -d '{
@@ -252,21 +265,26 @@ sha256sum myfile.pdf | awk '{print $1}'
 # Then POST the hash to /api/proof
 
 # Anchor via MCP
-curl -X POST ${XPROOF_BASE_URL}/mcp \
+curl -X POST https://xproof.app/mcp \
   -H "Authorization: Bearer pm_..." \
   -d '{"jsonrpc":"2.0","id":1,"method":"tools/call","params":{"name":"certify_file","arguments":{"file_hash":"...","filename":"myfile.pdf"}}}'
 
 # Verify a proof
-curl ${XPROOF_BASE_URL}/api/proof/<proof_id>
+curl https://xproof.app/api/proof/<proof_id>
 
 # Get badge (embed in README)
 ![xProof](https://xproof.app/badge/<proof_id>)
 
 # Batch anchor
-curl -X POST ${XPROOF_BASE_URL}/api/batch \
+curl -X POST https://xproof.app/api/batch \
   -H "Authorization: Bearer pm_..." \
   -d '{"files":[{"file_hash":"...","filename":"a.txt"},{"file_hash":"...","filename":"b.txt"}]}'
 
+# Close the WHY→WHAT coherence loop (after check_coherence + certify_file)
+curl -X POST https://xproof.app/api/coherence/link \
+  -H "Authorization: Bearer pm_..." \
+  -d '{"why_proof_id":"<why-uuid>","what_proof_id":"<what-uuid>"}'
+
 # Health check
-curl ${XPROOF_BASE_URL}/api/acp/health
+curl https://xproof.app/api/acp/health
 ```

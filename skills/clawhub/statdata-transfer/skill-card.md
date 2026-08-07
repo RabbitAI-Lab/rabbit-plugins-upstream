@@ -1,5 +1,5 @@
 ## Description: <br>
-Read and convert 50+ statistical software and clinical trial data formats into Python/pandas, preserving variable labels, value labels, and missing-value metadata where the source format supports them. <br>
+Read and convert 50+ statistical and clinical-trial data formats while preserving variable labels, value labels, and missing-value metadata for binary statistical formats. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,38 +11,37 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers, data engineers, statisticians, and clinical data teams use this skill to inspect, read, and convert statistical datasets across formats such as SPSS, Stata, SAS, R, Excel, Parquet, HDF5, JSON, and CSV while surfacing metadata-loss warnings. <br>
+Developers, data analysts, and clinical data managers use this skill to inspect and convert SPSS, Stata, SAS, R, Excel, Parquet, JSON, CSV, and related statistical files while understanding which metadata will be preserved or lost. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Optional environment setup can modify the local Python environment when package installation is explicitly requested. <br>
-Mitigation: Run environment checks without installation by default and use `python scripts/check_env.py --install` only in an environment where dependency changes are acceptable. <br>
-Risk: Some R-backed formats can invoke a local R interpreter when `allow_r_exec=True` is enabled for trusted files. <br>
-Mitigation: Keep R execution disabled for untrusted files and prefer pure-Python parsing paths for sensitive or unknown datasets. <br>
-Risk: The opt-in R bridge may briefly materialize converted data in a temporary CSV file. <br>
-Mitigation: Avoid R-backed conversion paths for highly sensitive data unless the working environment and temporary-file handling are acceptable. <br>
+Risk: The skill reads local data files and writes converted outputs, sidecar metadata, and possible .hyper backups. <br>
+Mitigation: Review the planned input and output paths before execution and handle sensitive or regulated data according to local data-governance controls. <br>
+Risk: R-backed conversions can invoke a local R interpreter for trusted files when explicitly enabled. <br>
+Mitigation: Keep R-backed conversions disabled for untrusted or highly sensitive files and enable allow_r_exec only for trusted inputs. <br>
+Risk: The optional environment checker can install missing Python packages when explicitly requested. <br>
+Mitigation: Run optional package installation only in an intended environment, preferably an isolated virtual environment. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/medstatstar/skills/statdata-transfer) <br>
-- [Project Homepage](https://github.com/medstatstar/statdata-transfer) <br>
-- [README](artifact/README.md) <br>
-- [Chinese README](artifact/README_ZH.md) <br>
-- [Usage Examples](artifact/references/usage_examples.py) <br>
-- [New Formats Architecture Analysis](artifact/references/new_formats_architecture_analysis.json) <br>
-- [Version 1.4 Implementation Summary](artifact/references/v1.4_implementation_summary.json) <br>
+- [ClawHub skill page](https://clawhub.ai/medstatstar/skills/statdata-transfer) <br>
+- [Project homepage](https://github.com/medstatstar/statdata-transfer) <br>
+- [README](README.md) <br>
+- [Chinese README](README_zh-CN.md) <br>
+- [Usage examples](references/usage_examples.py) <br>
+- [R project](https://cran.r-project.org/) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python examples, shell commands, and structured conversion results] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown responses with Python code snippets and shell commands; converted data files are written only when explicitly requested.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce pandas DataFrames, metadata dictionaries, warning lists, and converted data files when used with local files.] <br>
+**Other Properties Related to Output:** [May write converted files, sidecar metadata, and .hyper backup files when the user asks the agent to execute a conversion.] <br>
 
 ## Skill Version(s): <br>
-2.1.0 (source: server release metadata and SKILL.md frontmatter) <br>
+2.2.1 (source: SKILL.md frontmatter, CHANGELOG, release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,0 +1,91 @@
+{
+  "dates": [
+    {
+      "present": true,
+      "urban_pixels": 290,
+      "urban_area_km2": 330.2416349328215,
+      "perimeter_pixels": 53,
+      "perimeter_km": 56.722671167096706,
+      "compactness": 1.0,
+      "fractal_dimension": 1.0,
+      "centroid": [
+        121.42410201149426,
+        31.44403735632184
+      ],
+      "date_index": 0,
+      "year": 2000
+    },
+    {
+      "present": true,
+      "urban_pixels": 555,
+      "urban_area_km2": 632.014163405917,
+      "perimeter_pixels": 80,
+      "perimeter_km": 85.6191262899573,
+      "compactness": 1.0,
+      "fractal_dimension": 1.0,
+      "centroid": [
+        121.43210397897897,
+        31.444641516516516
+      ],
+      "date_index": 1,
+      "year": 2005
+    },
+    {
+      "present": true,
+      "urban_pixels": 964,
+      "urban_area_km2": 1097.7687450870342,
+      "perimeter_pixels": 105,
+      "perimeter_km": 112.37510325556896,
+      "compactness": 1.0,
+      "fractal_dimension": 1.0,
+      "centroid": [
+        121.45418395573998,
+        31.444577714384508
+      ],
+      "date_index": 2,
+      "year": 2010
+    }
+  ],
+  "changes": [
+    {
+      "from_year": 2000,
+      "to_year": 2005,
+      "new_pixels": 265,
+      "lost_pixels": 0,
+      "net_pixels": 265,
+      "new_area_km2": 301.7725284730955,
+      "net_area_km2": 301.7725284730955,
+      "growth_rate": 0.9137931034482759,
+      "centroid_shift_km": 0.7628961014122959
+    },
+    {
+      "from_year": 2005,
+      "to_year": 2010,
+      "new_pixels": 409,
+      "lost_pixels": 0,
+      "net_pixels": 409,
+      "new_area_km2": 465.7545816811172,
+      "net_area_km2": 465.7545816811172,
+      "growth_rate": 0.736936936936937,
+      "centroid_shift_km": 2.0969933841919945
+    }
+  ],
+  "summary": {
+    "n_dates": 3,
+    "interval_years": 5,
+    "total_new_pixels": 674,
+    "total_net_pixels": 674,
+    "total_new_area_km2": 767.5271101542127,
+    "total_net_area_km2": 767.5271101542127,
+    "net_expansion_detected": true,
+    "first_centroid": [
+      121.42410201149426,
+      31.44403735632184
+    ],
+    "last_centroid": [
+      121.45418395573998,
+      31.444577714384508
+    ],
+    "total_centroid_shift_km": 2.8575789754805556
+  }
+}

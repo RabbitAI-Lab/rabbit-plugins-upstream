@@ -1,51 +1,70 @@
-## Description: <br>
-Siluzan TSO helps agents route and execute advertising account, campaign, reporting, market analysis, and operations workflows for the TSO ad platform through the siluzan-tso CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Siluzan TSO routes agents through Siluzan advertising workflows for account management, Google, Bing, Yandex, TikTok, Kwai, and Meta ad operations, reporting, market analysis, keyword planning, alerts, finance, and hosted automation.
 
-## Publisher: <br>
-[sigedev01-bit](https://clawhub.ai/user/sigedev01-bit) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[sigedev01-bit](https://clawhub.ai/user/sigedev01-bit)
 
-## Use Case: <br>
-Advertising operations teams, developers, and agents use this skill to select the correct TSO workflow for ad account management, campaign creation, reporting, diagnostics, keyword planning, market analysis, finance, permissions, and operational monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can affect campaigns, accounts, reports, permissions, invoices, and local assistant configuration. <br>
-Mitigation: Install and use it only for trusted TSO accounts, keep access scoped to the needed task, and require review before write actions or permission and finance operations. <br>
-Risk: The one-click installers perform broad local setup, including global CLI installation and assistant skill registration. <br>
-Mitigation: Prefer manual or scoped installation after reading the installer scripts, and avoid one-click installation on sensitive workstations. <br>
-Risk: Workflows may handle sensitive URLs, market plans, account data, PII, financial records, and generated HTML reports that load remote scripts. <br>
-Mitigation: Limit inputs to necessary data, review generated reports before sharing, and avoid opening generated HTML in high-trust browser sessions when remote script loading is a concern. <br>
+## Use Case:
 
+External teams and operators use this skill to guide an agent through Siluzan TSO ad-account operations, campaign creation, reporting, diagnostics, optimization, finance, alerts, and market-analysis workflows. It is intended for authenticated Siluzan CLI use where live advertising accounts and business data may be involved.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sigedev01-bit/skills/siluzan-tso) <br>
-- [Publisher profile](https://clawhub.ai/user/sigedev01-bit) <br>
-- [References index](references/README.md) <br>
-- [Setup guide](references/core/setup.md) <br>
-- [Intent routing](references/core/intent-routing.md) <br>
-- [Core playbooks](references/core/playbooks.md) <br>
-- [Core workflows](references/core/workflows.md) <br>
-- [Account analytics](references/analytics/account-analytics.md) <br>
-- [Google Ads campaign planning](references/google-ads/google-ads-campaign-plan.md) <br>
-- [Market analysis guide](references/analytics/market-analysis-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON payloads, and generated report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce HTML, Excel, JSON, or campaign configuration files depending on the selected TSO workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.38 (source: server release metadata and _meta.json) <br>
+Risk: The skill depends on a global, persistent advertising-operations CLI installation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after reviewing the installer and trusting the Siluzan CLI publisher; prefer manual installation through the normal npm registry on a non-shared machine.
+
+Risk: The workflows can affect live ad accounts, budgets, deletions, withdrawals, lead exports, and account-opening actions.
+
+Mitigation: Require explicit human confirmation before any live account, budget, deletion, withdrawal, lead export, or account-opening operation.
+
+Risk: Generated reports, account snapshots, and raw lead outputs may contain sensitive business or personal data.
+
+Mitigation: Restrict where outputs are stored and shared, and handle exported reports and lead data as sensitive material.
+
+Risk: Authentication uses persistent Siluzan credentials or environment-provided tokens.
+
+Mitigation: Use short-lived or scoped credentials when available, avoid shared machines, and clear or rotate credentials after use in temporary environments.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/sigedev01-bit/skills/siluzan-tso)
+- [Skill Definition](SKILL.md)
+- [Reference Index](references/README.md)
+- [Setup and Authentication](references/core/setup.md)
+- [Intent Routing](references/core/intent-routing.md)
+- [Analysis Playbooks](references/core/playbooks.md)
+- [Operations Workflows](references/core/workflows.md)
+- [Google Ads Campaign Planning](references/google-ads/google-ads-campaign-plan.md)
+- [Account Analytics](references/analytics/account-analytics.md)
+- [Guard Automation](references/operations/guard.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with shell commands, JSON snapshots, HTML or Excel report files, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js 18+, siluzan-tso-cli, and authenticated Siluzan credentials.]
+
+## Skill Version(s):
+
+1.1.43 (source: server release evidence and artifact/_meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,5 @@
 ## Description: <br>
-Pay for things safely from your agent - gasless USDC on Base plus JIT single-use virtual cards via the Z-Zero MCP server. <br>
+Pay for things safely from your agent — gasless USDC on Base plus JIT single-use virtual cards via the Z-Zero MCP server. Card data never enters the model context, and no payment executes without explicit human approval. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to let an agent prepare payment flows through the Z-Zero MCP server while keeping card data out of model context. It is intended for gasless USDC payments on Base and just-in-time single-use virtual card checkout flows that require human confirmation before spending. <br>
+Developers and operators use this skill to let an agent assist with real purchases through the Z-Zero MCP server while keeping payment credentials out of model context and requiring explicit human approval before checkout. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill delegates real money movement to an external MCP package, and the security evidence says the runtime flow can execute payments without a clearly enforced human-approval gate. <br>
-Mitigation: Use low spending caps, confirm the exact final amount yourself, and require approval before allowing auto_pay_checkout or any payment tool to run. <br>
-Risk: Using an unpinned npm package can change the payment runtime between installs. <br>
-Mitigation: Prefer a pinned z-zero-mcp-server package version instead of @latest and review the installed package before deployment. <br>
+Risk: The skill can assist with real purchases and money movement. <br>
+Mitigation: Install only when that capability is intended, show the final total to the operator, and wait for explicit approval before checkout. <br>
+Risk: The Z-Zero API key grants access to payment tooling. <br>
+Mitigation: Keep the API key protected and provide it through the configured Z_ZERO_API_KEY environment variable. <br>
+Risk: The release depends on an external MCP server package. <br>
+Mitigation: Review the MCP server and package source before deployment, as recommended by the server security guidance. <br>
 
 
 ## Reference(s): <br>
-- [Z-Zero homepage](https://www.clawcard.store) <br>
-- [Z-Zero agent dashboard](https://www.clawcard.store/dashboard/agents) <br>
-- [z-zero-mcp-server on npm](https://www.npmjs.com/package/z-zero-mcp-server) <br>
-- [Base mainnet transfer proof](https://basescan.org/tx/0xdfd1f2f824e1232c3e03c52485332570ff01fbb0340c5571f699ed1218735d7a) <br>
-- [ClawHub skill listing](https://clawhub.ai/dempty-glitch/skills/z-zero-payments) <br>
+- [ClawHub skill page](https://clawhub.ai/dempty-glitch/skills/z-zero-payments) <br>
+- [Z-Zero homepage](https://z-zero.xyz) <br>
+- [Z-Zero agent dashboard](https://z-zero.xyz/dashboard/agents) <br>
+- [z-zero-mcp-server npm package](https://www.npmjs.com/package/z-zero-mcp-server) <br>
+- [Base mainnet payment proof](https://basescan.org/tx/0xdfd1f2f824e1232c3e03c52485332570ff01fbb0340c5571f699ed1218735d7a) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls, text] <br>
-**Output Format:** [Markdown with inline JSON and shell command examples] <br>
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
+**Output Format:** [Markdown instructions with JSON configuration examples and command references] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npx and Z_ZERO_API_KEY; payment actions should be reviewed with low spending caps and explicit final-amount confirmation.] <br>
+**Other Properties Related to Output:** [Requires npx and Z_ZERO_API_KEY; payment actions require explicit human approval.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+1.1.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

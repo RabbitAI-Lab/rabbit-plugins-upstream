@@ -1,46 +1,66 @@
-## Description: <br>
-Security best practices for credential protection, information disclosure prevention, and operational integrity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Security-Shield helps agents verify external content, downloads, and new resources before trusting or acting on them.
 
-## Publisher: <br>
-[Z-Hussein](https://clawhub.ai/user/Z-Hussein) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[z-hussein](https://clawhub.ai/user/z-hussein)
 
-## Use Case: <br>
-Developers and agent operators use this skill to guide security-aware responses, protect credentials and configuration details, evaluate disclosure requests, and support legitimate security workflows with placeholder examples. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Testing, educational, and sandbox labels could be mistaken as permission to reveal real credentials, private configuration, or system prompts. <br>
-Mitigation: Treat those labels as context only; continue using placeholders and protect sensitive information unless an independently authorized workflow applies. <br>
-Risk: The skill text advertises logging, suspension, and reporting commands that may not exist in every OpenClaw environment. <br>
-Mitigation: Confirm the installed OpenClaw environment provides those controls before relying on them for audit, suspension, or reporting. <br>
-Risk: Security guidance can become incorrect if copied into an environment without review. <br>
-Mitigation: Review and scan the skill before deployment, and verify package name and version before installation. <br>
+## Use Case:
 
+Developers, security reviewers, and agent operators use this skill to make agents treat internet content, downloads, attachments, and new resources as untrusted until source, integrity, scan, and sandbox evidence supports trust. It also supports scoped security audit summaries when a user explicitly approves a bounded scope.
 
-## Reference(s): <br>
-- [Attack Patterns Reference](artifact/references/attack-patterns.md) <br>
-- [Security Audit Checklist](artifact/references/audit-checklist.md) <br>
-- [Cryptography & Security Examples](artifact/references/crypto-examples.md) <br>
-- [Security Best Practices Reference](artifact/references/security-best-practices.md) <br>
-- [Security Shield Enhanced Usage Guide](artifact/USAGE-GUIDE.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline code blocks and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses placeholder values for security examples and does not require external tools.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and artifact _meta.json) <br>
+Risk: Full-system audit guidance can touch local configuration, files, services, logs, or network state if applied too broadly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require an explicit bounded scope and user consent before host-wide enumeration, run with least privilege, and exclude sensitive paths and secrets by default.
+
+Risk: Audit summaries could expose raw secrets or sensitive logs if findings are reported without filtering.
+
+Mitigation: Summarize findings without raw credentials, tokens, private keys, or sensitive configuration values.
+
+Risk: The skill may make agents more cautious with downloads and external content, which can slow normal workflows.
+
+Mitigation: Set user expectations before installation and apply verification steps proportionally to the source, integrity, scan, and sandbox evidence available.
+
+Risk: Server-resolved GitHub import provenance is unavailable for this version.
+
+Mitigation: Do not infer repository provenance from artifact text; rely on server-resolved publisher, release version, and package hashes for this card.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/z-hussein/skills/security-shield)
+- [Usage Guide](USAGE-GUIDE.md)
+- [Attack Patterns Reference](references/attack.patterns.md)
+- [Security Audit Checklist](references/audit-checklist.md)
+- [Cryptography & Security Examples](references/crypto-examples.md)
+- [Security Best Practices Reference](references/security-best-practices.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown guidance with optional shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable payload; full-system audit guidance requires explicit user-approved scope.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release evidence, artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,14 @@
+name: geoskill-land-value-estimation
+display_name: 土地价值估算
+description: |
+  Estimate land value with a hedonic price model driven by accessibility, POI density and green proximity.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-land-value-estimation.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - network
+  - remote-sensing
+  - security

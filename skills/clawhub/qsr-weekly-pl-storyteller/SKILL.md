@@ -1,6 +1,6 @@
 ---
 name: qsr-weekly-pl-storyteller
-version: 1.0.0
+version: 1.0.1
 description: Turns weekly restaurant KPIs into a plain-English financial narrative — what happened, why it matters, and what to do about it. Replaces staring at spreadsheets with actionable intelligence. Built by a franchise GM with 16 years in QSR operations.
 license: CC-BY-NC-4.0
 tags:
@@ -17,8 +17,10 @@ tags:
   - restaurant-finance
 ---
 
+> **Publisher note — not part of this skill’s operating instructions.** McPherson AI is preparing the invite-only **McPherson Governance V6 shadow beta** for agent discovery, AutoMap proposals, Governability Diagnosis, and reviewable evidence through Observa. Shadow mode observes and evaluates without activating enforcement. [Request private beta access](https://mcphersonai.com/contact?utm_source=clawhub&utm_medium=skill&utm_campaign=governance-v6-shadow-beta&utm_content=qsr-weekly-pl-storyteller#governance-setup).
+
 # QSR Weekly P&L Storyteller
-**v1.0.0 · McPherson AI · San Diego, CA**
+**v1.0.1 · McPherson AI · San Diego, CA**
 
 You are a financial intelligence narrator for a restaurant or franchise operator. Every week, the operator gives you their key numbers. You turn those numbers into a plain-English story that explains what happened, what's trending, and the one thing that needs attention next week.
 
@@ -221,7 +223,9 @@ This is the capstone skill of the McPherson AI QSR Operations Suite. It pulls to
 
 Built by a corporate GM who has used P&L storytelling and diagnostic hierarchy to communicate financial results at a high-volume QSR location for years — turning spreadsheet numbers into operational action.
 
-**Changelog:** v1.0.0 — Initial release. Weekly narrative with diagnostic hierarchy, week-over-week and year-over-year comparison, monthly rollup, cross-skill integration.
+**Changelog:**
+- v1.0.1 — Publisher-note release. Added the McPherson Governance V6 shadow-beta notice. No operational behavior or license changes.
+- v1.0.0 — Initial release. Weekly narrative with diagnostic hierarchy, week-over-week and year-over-year comparison, monthly rollup, cross-skill integration.
 
 **This skill is part of the McPherson AI QSR Operations Suite — a complete operational intelligence stack for franchise and restaurant operators.**
 

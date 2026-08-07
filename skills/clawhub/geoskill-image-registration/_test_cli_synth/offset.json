@@ -1,0 +1,11 @@
+{
+  "source": "synthetic",
+  "estimated_shift_y": 4.0015025304386,
+  "estimated_shift_x": -5.999772857340029,
+  "shift_magnitude": 7.21174714204406,
+  "n_bands": 3,
+  "interior_rmse_vs_ref": 1.1871905428701409e-05,
+  "true_shift_y": 4.0,
+  "true_shift_x": -6.0,
+  "shift_recovery_error": 0.0015196024173770638
+}

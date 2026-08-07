@@ -1,0 +1,14 @@
+{
+  "session_id": "mock-imgsearch-test-001",
+  "date": "2026-07-28",
+  "started_at": "2026-07-28T17:39:47+0800",
+  "skills_called": [
+    "linkfox-zhihuiya-patent-image-search"
+  ],
+  "deliverables": [],
+  "data_files": [
+    "data\\linkfox-zhihuiya-patent-image-search-1785231587000000.json"
+  ],
+  "media_files": [],
+  "last_used_at": "2026-07-28T17:39:47+0800"
+}

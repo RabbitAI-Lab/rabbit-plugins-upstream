@@ -1,27 +1,21 @@
-# Swarming Rules — Add to SOUL.md
+# Multi-agent operating rules
 
-## Multi-Agent Collaboration
-When working in a swarming channel with other agents:
-
-### Engagement Rules
-- Only @mention another agent when you have **new information**, a **counterpoint**, or a **concrete next step**
-- Don't respond to simple acknowledgments ("agreed", "good point", "makes sense")
-- If you agree with the other agent's finding, say so in one line and move to action
-- After 3 exchanges without new information, post a summary and stop
-
-### Handoff Protocol
-- When handing off to another agent, clearly state:
-  1. What you found
-  2. What you tried
-  3. What you think they should look at next
-- Use @mention to hand off — don't assume they'll see your message otherwise
-
-### Loop Prevention
-- Never respond to your own messages (OpenClaw handles this, but be aware)
-- If you and the other agent reach the same conclusion, one of you posts the final summary — don't both repeat it
-- If the conversation stalls (same points going back and forth), break the loop: "We're circling. Here's what we know: [summary]. Next step: [action]."
-
-### Quality Standards
-- Every message should advance the solution — no filler, no performative agreement
-- Include evidence: config snippets, error messages, file paths
-- End conversations with a clear **action item** and **owner** (which agent or human does what next)
+1. The orchestrator owns decomposition, conflict resolution, and final delivery.
+2. Every task has one owner, one outcome, and an objective acceptance test.
+3. Delegate only independent work; do not create agents for trivial sequential
+   steps.
+4. Maximum active agents: `<number>`.
+5. Maximum delegation depth: `<number>`; use `1` unless deeper delegation is
+   explicitly justified.
+6. Per-task limits: `<time>`, `<tokens>`, `<spend>`, and `<retries>`.
+7. Agents may access only listed files, tools, channels, and external systems.
+8. External messages, payments, publishing, and destructive actions require the
+   authorization stated in the task contract.
+9. Agents report evidence, changed artifacts, tests, and unresolved risks.
+10. Agents stop when acceptance tests pass, a limit is reached, or the same
+    blocker repeats. They do not loop indefinitely.
+11. One writer owns a file at a time. Conflicting edits return to the
+    orchestrator for integration.
+12. Secrets stay in approved secret storage and never enter prompts or reports.
+13. The reviewer is independent from the author when risk justifies review.
+14. The orchestrator closes temporary agents and bindings after final delivery.

@@ -1,47 +1,64 @@
-## Description: <br>
-Analyzes fixed-camera home video or video URLs for solo-living elder monitoring, detects prolonged lack of visible activity, and returns structured long-term immobility alerts and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed-camera home video for solo-living elder activity and produces long-term no-activity alerts when configured inactivity thresholds, default 12 hours, are exceeded.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External caregivers, family members, community elder-care teams, and developers use this skill to submit home-monitoring video for long-term no-activity analysis and to retrieve structured alert reports. It is intended as an auxiliary monitoring workflow and does not provide medical diagnosis or rescue instructions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Home-monitoring video or video URLs are sent to a remote Life Emergence service for processing. <br>
-Mitigation: Use only with informed consent from the monitored person or authorized family, avoid visual coverage of highly sensitive areas when possible, and submit only approved video sources. <br>
-Risk: The skill may silently create or reuse a local identity, log in to a remote account, and store tokens in a local SQLite database under the workspace data directory. <br>
-Mitigation: Review account-linkage behavior before installation, protect the workspace data directory, and clear stored tokens or local user records when the skill is no longer needed. <br>
-Risk: The security verdict is suspicious because the skill handles sensitive home video while performing remote account and token management. <br>
-Mitigation: Review and scan the skill before deployment, restrict execution to trusted environments, and confirm the remote service relationship is acceptable for the organization. <br>
-Risk: Long-term immobility alerts are auxiliary visual activity signals, not medical diagnoses or emergency response instructions. <br>
-Mitigation: Manually verify any alert by phone or an in-person check and do not rely on the skill as the sole emergency response mechanism. <br>
+## Use Case:
 
+External caregivers, community elder-care operators, and smart-home integrators use this skill to analyze elder-care camera video or video URLs for prolonged inactivity and produce structured alerts, report links, and history reports. It is an auxiliary monitoring tool and does not provide medical diagnosis or rescue instructions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-long-term-immobility-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API error reference](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON text containing structured activity analysis, alert status, history records, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the returned report text to a user-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter states 1.0.6) <br>
+Risk: Sensitive elder-care home video or video URLs may be sent to LifeEmergence services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with consent from the monitored person or lawful representative, avoid bathroom or bedroom cameras where possible, and confirm that service-side handling meets the deployment's privacy requirements.
+
+Risk: The skill can create or reuse local account identity state and retain tokens or default identity data in the workspace.
+
+Mitigation: Restrict workspace access, review the local data store before and after use, and delete retained identity or token state when it should not persist.
+
+Risk: Account-linked history reports can expose sensitive monitoring results.
+
+Mitigation: Limit who can request report history, treat generated report links as sensitive, and audit access before enabling shared or unattended use.
+
+Risk: Long-term inactivity alerts are safety-relevant but are based on visual activity analysis rather than medical assessment.
+
+Mitigation: Treat alerts as prompts for immediate human verification by phone or in person, and do not use the skill as a medical diagnosis or emergency response substitute.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-long-term-immobility-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](references/api_doc.md)
+- [Shared API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown text with structured JSON report content, command examples, alert fields, history tables, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local video files or video URLs, history listing, optional output file writing, and basic/standard/json detail levels; documented media constraints include mp4, avi, and mov files up to 10 MB.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter says 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

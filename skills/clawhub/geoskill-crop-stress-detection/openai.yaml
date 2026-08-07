@@ -1,0 +1,16 @@
+name: geoskill-crop-stress-detection
+display_name: 作物胁迫检测
+description: |
+  融合 CWSI 水分胁迫、红边叶绿素与 SAR 含水量，检测作物胁迫等级。Detects crop stress by fusing CWSI water stress, red-edge chlorophyll and SAR water content.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-crop-stress-detection.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - extraction
+  - gis
+  - hydrology
+  - remote-sensing
+  - sar
+  - water

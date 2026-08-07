@@ -1,5 +1,5 @@
 ## Description: <br>
-TrueNAS AIops helps an agent inspect, diagnose, and perform governed operations on a TrueNAS SCALE appliance through CLI and MCP tools. <br>
+TrueNAS AIops helps agents inspect and administer TrueNAS SCALE storage, including health diagnostics, ZFS pools, datasets, snapshots, disks, alerts, services, replication, and cloud-sync tasks with audit and risk-tiered governance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, operators, and storage administrators use this skill to triage TrueNAS SCALE health, inspect pools, datasets, snapshots, disks, alerts, services, replication, and run guarded write actions when appropriate. <br>
+Developers, storage administrators, and operations teams use this skill to triage TrueNAS SCALE appliances, collect root-cause analysis, inspect storage resources, and perform governed operational actions such as scrubs, dataset creation, snapshots, and service restarts. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent operational access to a TrueNAS appliance, including write-capable actions. <br>
-Mitigation: Use a limited-permission TrueNAS API key and grant write permissions only when the operating context requires them. <br>
-Risk: MCP write tools include high-impact actions such as snapshot deletion and service restart without a built-in approval gate. <br>
-Mitigation: Treat snapshot_delete and service_restart as high-impact, use dry-run where available, and require external operator approval before invoking destructive actions. <br>
-Risk: The artifact states that endpoint behavior is mock-validated only and not yet verified against a live appliance. <br>
-Mitigation: Run truenas-aiops doctor and verify behavior in a non-production or limited-permission environment before relying on it for production operations. <br>
-Risk: The master password environment variable can be exposed through shells, CI logs, or process handling. <br>
-Mitigation: Handle TRUENAS_AIOPS_MASTER_PASSWORD as a secret, avoid echoing it, and prefer secret-management facilities for non-interactive use. <br>
+Risk: Agents can invoke high-impact TrueNAS storage write actions, and the security evidence reports no in-tool read-only mode or approval gate. <br>
+Mitigation: Install only for TrueNAS systems the agent is allowed to administer; use a least-privilege or read-only TrueNAS API key by default and grant write permissions only for approved workflows. <br>
+Risk: Snapshot deletion is irreversible and service restarts can disrupt access to the appliance. <br>
+Mitigation: Prefer dry-run previews and explicit user workflow controls before write actions; rely on account permissions for enforcement and review the local audit trail after execution. <br>
+Risk: TrueNAS API credentials and the TRUENAS_AIOPS_MASTER_PASSWORD unlock sensitive appliance access. <br>
+Mitigation: Treat the master password and any legacy environment API keys as secrets, migrate plaintext credentials into the encrypted store, and clean up migrated plaintext files after validation. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/zw008/skills/truenas-aiops) <br>
 - [Project homepage](https://github.com/AIops-tools/TrueNAS-AIops) <br>
+- [Agent guardrails](references/agent-guardrails.md) <br>
 - [Capabilities](references/capabilities.md) <br>
 - [CLI reference](references/cli-reference.md) <br>
 - [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, configuration notes, and operational guidance] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown with inline shell commands and structured tool-result summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide calls to CLI or MCP tools that return structured operational data from the configured TrueNAS appliance.] <br>
+**Other Properties Related to Output:** [May include TrueNAS operational findings, command recommendations, dry-run guidance, and configuration or credential setup steps.] <br>
 
 ## Skill Version(s): <br>
-0.6.0 (source: server release evidence) <br>
+0.9.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

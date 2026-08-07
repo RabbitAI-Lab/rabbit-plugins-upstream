@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and content creators use this skill to convert local recordings into optimized GIFs with ffmpeg presets, quality options, and output verification steps. <br>
+Developers and content creators use this skill to convert local webm, mp4, mov, or avi recordings into optimized animated GIFs for demos and documentation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Broad trigger words can cause the skill to be considered for general video or conversion tasks. <br>
-Mitigation: Confirm the task is GIF conversion and review the ffmpeg command before running it. <br>
-Risk: The generated ffmpeg commands operate on local input and output paths. <br>
-Mitigation: Verify the source video path and destination GIF path before execution. <br>
+Risk: Generic trigger words may activate the skill for broader video or optimization requests. <br>
+Mitigation: Confirm that the user intends GIF conversion before applying the workflow. <br>
+Risk: Conversion commands operate on local input and output file paths. <br>
+Mitigation: Validate the source video path and confirm the destination GIF path before running ffmpeg. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scry-gif-generation) <br>
-- [OpenClaw homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scry) <br>
+- [Project homepage from metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scry) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with bash command examples] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with inline bash code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces ffmpeg command variants and verification steps for user-selected local video files.] <br>
+**Other Properties Related to Output:** [Produces ffmpeg command guidance and verification steps for generating GIF files.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: server release metadata) <br>
+1.9.17 (source: evidence.release.version) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

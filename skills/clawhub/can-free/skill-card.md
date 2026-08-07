@@ -1,5 +1,5 @@
 ## Description: <br>
-Can Free helps agents create local Clock Address Naming records with a Unix-millisecond timestamp, SHA-256 content hash, human-readable label, and CAN/NOT self-check. <br>
+can-free helps agents create Clock Address Naming records by timestamping content, computing SHA-256 hashes, appending local three-column logs, and performing CAN/NOT self-checks. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use this skill to stamp event payloads with content-addressed audit metadata and append local log records for later verification and lookup. <br>
+Developers and agent users use can-free to create local content-addressed audit records for tool outputs, files, or structured data. The skill records WHEN, WHERE, and WHAT values and checks whether each entry is complete enough to return CAN or NOT. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Outbound callback URL and API-key behavior is under-explained despite the local logging positioning. <br>
-Mitigation: Review configuration before installation, avoid sensitive payload metadata, and do not provide callback URLs or API keys unless the destination is controlled. <br>
-Risk: Local timestamp and hash records can be misleading if system time is wrong or content encoding changes. <br>
-Mitigation: Confirm host clock accuracy, use full SHA-256 hashes where possible, and normalize byte encoding before logging. <br>
+Risk: Broad read, write, and exec authority could allow local file access or command execution beyond basic content-address logging. <br>
+Mitigation: Run the skill in a constrained workspace, review proposed commands before execution, and grant only the minimum filesystem access needed for the intended log file. <br>
+Risk: Local logs and hashes may be derived from sensitive content. <br>
+Mitigation: Avoid sensitive inputs unless retention is acceptable, redact confidential values before hashing or logging, and store append-only logs in access-controlled locations. <br>
+Risk: Callback URL, API integration, network, and command-execution references are unresolved or inconsistent in the release evidence. <br>
+Mitigation: Disable callbacks and network/API use unless the endpoint behavior, authentication, and transport security are explicitly reviewed. <br>
 
 
 ## Reference(s): <br>
-- [Can Free on ClawHub](https://clawhub.ai/thcjp/skills/can-free) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
-- [CAN evaluation endpoint](https://xc.cx/can/evaluate) <br>
-- [CAN public log](https://xc.cx/can/log) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/can-free) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples and optional shell command snippets] <br>
+**Output Type(s):** [text, json, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JSON examples and append-only log record examples.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Describes append-only log rows with WHEN, WHERE, and WHAT fields, CAN/NOT self-check results, and JSON-style execution status.] <br>
+**Other Properties Related to Output:** [May include local log entries with WHEN, WHERE, and WHAT fields.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+1.0.3 (source: server release metadata; SKILL.md frontmatter reports 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

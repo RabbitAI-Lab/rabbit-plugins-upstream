@@ -1,5 +1,5 @@
 ## Description: <br>
-This skill lets an agent query Juhe Data for vehicle transfer-history records by VIN through a paid Alipay A2M/HTTP 402 flow. <br>
+This skill uses Juhe Data's vehicle transfer-history API to query paid VIN-based transfer records, including transfer dates, origin and destination cities, total transfer count, and related result details. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill to check vehicle transfer-history records for a provided VIN, including transfer month, prior and current cities, and total transfer count. It is aimed at second-hand vehicle transaction, finance, and insurance review workflows that need a paid third-party data lookup. <br>
+External users and agents use this skill to check a vehicle's historical ownership-transfer records from a VIN before used-car, finance, or insurance decisions. The skill is designed for paid lookups that disclose the payment requirement and send only the VIN needed for the query. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill initiates a paid VIN lookup through an Alipay payment flow. <br>
-Mitigation: Before payment, verify the VIN, price, Alipay order details, and that the request is for a Juhe vehicle transfer-history query. <br>
-Risk: The VIN is sent to a third-party vehicle-data API for lookup. <br>
-Mitigation: Collect only the VIN after user confirmation and send it only to the fixed Juhe endpoint documented for this skill. <br>
-Risk: Vehicle transfer-history data may be delayed or incomplete. <br>
-Mitigation: Present results as reference information and advise users not to rely on the lookup as the sole basis for transaction, insurance, finance, or legal decisions. <br>
+Risk: Each lookup is a paid request that uses an external payment flow. <br>
+Mitigation: Show the payment amount, order details, and payment options before the user approves payment. <br>
+Risk: The query sends the vehicle VIN to Juhe Data for the lookup. <br>
+Mitigation: Disclose VIN transmission before payment and send only the VIN required for the current query. <br>
+Risk: Vehicle transfer-history data may be delayed, incomplete, or unsuitable as the sole basis for a transaction decision. <br>
+Mitigation: Present results as reference information and include a reminder to verify against official vehicle registration records. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-vehicle-owner-a2a) <br>
-- [Juhe vehicle lookup endpoint](https://apis.juhe.cn/a2a/query) <br>
+- [Publisher profile](https://clawhub.ai/user/juhemcp) <br>
+- [Juhe vehicle transfer query endpoint](https://apis.juhe.cn/a2a/query) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown tables with short payment, validation, and status messages] <br>
+**Output Type(s):** [text, markdown, guidance] <br>
+**Output Format:** [Markdown] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a valid VIN and paid Alipay confirmation; final records are rendered only from Juhe API response fields.] <br>
+**Other Properties Related to Output:** [Renders paid query results from returned vehicle-transfer fields only, with a VIN summary, transfer-record table, and data-source disclaimer.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

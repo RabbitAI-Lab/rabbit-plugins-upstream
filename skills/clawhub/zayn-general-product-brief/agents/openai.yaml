@@ -1,0 +1,4 @@
+interface:
+  display_name: "通用产品与服务速览"
+  short_description: "跨行业整理实体产品、数字产品或服务的用途、能力与信息缺口"
+  default_prompt: "Use $zayn-general-product-brief to create an evidence-based brief for this product or service."

@@ -17,7 +17,8 @@
 | `google-ads-pmax-guide.md` | PMax 运营（配合 `assets/pmax-create-template.md`） |
 | `google-ads-conversion-architecture.md` | 转化追踪架构 |
 | `google-ads-landing-page-discovery-via-webfetch.md` | 落地页发现（WebFetch） |
-| `google-ads-launch-plan-template.md` | 上线计划模板 |
+| `google-ads-launch-plan-template.md` | 搜索投放审查稿（Agent 写代码从 JSON 投影） |
+| `google-ads-pmax-launch-plan-template.md` | PMax 投放审查稿（Agent 写代码从 JSON 投影） |
 | `sensitive-industries.md` | 敏感行业限制 |
 
 宿主编排自动优化：`references/operations/hosted-automation-optimize-index.md`。

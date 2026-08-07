@@ -7,8 +7,17 @@
 
 - 新建搜索系列 / PMax
 - campaign-validate / campaign-create / campaign-edit
-- 组/创意/关键词写操作
+- **ad ad-create（RSA）** / ad-edit / 组/关键词写操作
 - extension / device-bid
+
+---
+
+## 写操作硬纪律（Agent 易踩）
+
+- **必须** `--commit "…"`；漏了会直接失败。
+- 列表命令：`ad campaigns` / `ad groups` / `ad list` / `ad keywords`（**没有** `google-ads`、没有必用 `campaign-list`；`campaign-list` 仅为 `campaigns` 别名）。
+- `--json-out <path>`：**路径必填**，JSON 落盘；禁止 `--json-out` 裸用或管道 stdout。
+- 系列 `statusDisplay` 含「投放期已结束」≠ 已删除；以 JSON **`statusV2`** 为准（见 `google-ads-read.md`）。
 
 ---
 
@@ -23,7 +32,7 @@
 
 | 需要的 ID           | 获取命令                                                                |
 | ------------------- | ----------------------------------------------------------------------- |
-| `accountId`（`-a`） | `siluzan-tso list-accounts --json-out ./snap` → `mediaCustomerId`       |
+| `accountId`（`-a`） / JSON `account` | `list-accounts -m Google` → `mediaCustomerId`（纯数字；UI 带连字符 CID 可传入，CLI 去横杠，见 [google-ads.md](google-ads.md) Gotchas） |
 | 广告系列 `id`       | `siluzan-tso ad campaigns -a <accountId> --json-out ./snap` → `id`      |
 | 广告组 `id`、`name` | `siluzan-tso ad groups -a <accountId> --json-out ./snap` → `id`、`name` |
 | 广告 `id`           | `siluzan-tso ad list -a <accountId> --json-out ./snap` → `id`           |
@@ -33,7 +42,7 @@
 
 ## 新建广告系列（方案 + 创建）
 
-> **Search 流程与校验**：`references/google-ads/google-ads-campaign-plan.md`。本文件只写 **命令参数**（`campaign-validate` / `campaign-create` / `batch` 见下文各节）。
+> **Search 流程与校验**：`references/google-ads/google-ads-campaign-plan.md`。审查稿结构：`rules/google-ads-launch-plan-template.md`（JSON 落盘后 Agent **写代码**投影完整审查稿，用户确认再 create）。本文件只写 **命令参数**（`campaign-validate` / `campaign-create` / `batch` 见下文各节）。
 
 ---
 
@@ -41,12 +50,13 @@
 
 > **与 Search 隔离**：勿用 `campaign-create` 或 `campaign-create-template.json`。网关摘录见 `references/google-ads/pmax-api.md`。
 
-| 步骤         | 命令                                                                                                                                                                                                               |
+| 步骤         | 命令 / 动作                                                                                                                                                                                                        |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | 模板         | 复制 `assets/pmax-create-template.json`，字段见 `assets/pmax-create-template.md`                                                                                                                                   |
 | **素材转换** | `siluzan-tso ad pmax-image-convert --input ./banner.jpg --output-dir ./assets --prefix <name> [--update-config ./pmax.json]`                                                                                       |
 | 地理 ID      | 多国：`ad geo resolve -a <accountId> --from-file ./locations.json --json-out ./snap-geo`；单国：`ad geo search -a <accountId> -q "<地区名>"`                                                                         |
 | 校验         | `siluzan-tso ad pmax-validate --config-file ./pmax.json [--json-out ./snap-pmax]`（图片规格 + 文案超长 `lengthViolations`；超长勿自动截断，见 `references/google-ads/google-ads-campaign-plan.md` § 超长人工确认） |
+| **审查稿**   | Agent **写代码**读 JSON，按 `rules/google-ads-pmax-launch-plan-template.md` 投影完整文件（默认 MD；用户指定则 Excel 等）→ 用户确认；**禁止**只交概览表                                                             |
 | 创建         | `siluzan-tso ad pmax-create --config-file ./pmax.json [--json-out ./snap-pmax]`                                                                                                                                    |
 | 复核         | `siluzan-tso ad campaigns -a <accountId> --json-out ./snap` → `channelTypeV2` 为 `PERFORMANCE_MAX`                                                                                                                 |
 
@@ -167,10 +177,11 @@ BatchJob 常漏 **附加信息**（Sitelink）与 **投放地域**；系列/组/
 3. 扩展字段映射：`Properties.Text` + `DestinationUrl` → `ad extension sitelink`；`CALLOUT` → `callout`；`CALL` → `call`；`STRUCTURED_SNIPPET` → `snippet`。
 4. 有缺失时 CLI **exit 2**；补建后再跑一次 `ad batch diff`，直到 `ok===true`。
 5. 向用户汇报已补挂条数（地域 + Sitelink 等）。
+6. **无论全成功或部分失败**，收尾必须把 **`reportMarkdown` 全文以 Markdown 发给用户**（见 `--md-out` / `reportMarkdownFile`）。**禁止**只说「已创建成功」或只复述「未发现缺失」。见 `agent-conventions.md` §四。
 
 完整流水线见 `references/google-ads/google-ads-campaign-plan.md` § batch diff 后自动补建。
 
-**`ad batch diff` 比对维度：**系列是否存在 → **`targetedLocations`（投放国家/地域 id）** → 各 `AdGroupsForBatchJob[].Name` → 组内关键词（匹配类型+词面）→ RSA 首条标题 → 系列否定词 → 附加信息条数。`--json-out` 含 `ok` / `agentHint` / `counts.plannedLocations|liveLocations`。
+**`ad batch diff` 比对维度：**系列是否存在 → **`targetedLocations`（投放国家/地域 id）** → 各 `AdGroupsForBatchJob[].Name` → 组内**每条**关键词（匹配类型+词面）→ RSA **每条**标题/描述（及整条 RSA）→ 系列**每条**否定词 → 附加信息条数。`--json-out` 含 `ok` / `items[]` / `statusCounts` / `missing` / **`reportMarkdown`** / **`reportMarkdownFile`** / `agentHint` / `counts`。另写 Markdown 文件（`--md-out`，默认与 json-out 同目录）。
 
 **`ad batch get` 输出：**摘要表 + `reason`/`errors`；`--json-out` 另含 **`agentWorkflow`**（`nextCommand` 指向 batch diff 或继续轮询）。
 
@@ -237,6 +248,34 @@ siluzan-tso ad campaign-edit -a <accountId> --id <campaignId> \
 ```bash
 siluzan-tso ad adgroup-rename -a <accountId> --id <adGroupId> --name <新名称>
 ```
+
+---
+
+## ad ad-create — 创建自适应搜索广告（RSA）
+
+在已有广告组下新增 RSA。提交前 CLI **本地校验**字数/条数（超限不打 API）。
+
+```bash
+siluzan-tso ad ad-create \
+  -a <accountId> \
+  --adgroup-id <adGroupId> --adgroup-name <adGroupName> \
+  --final-url <https://...> \
+  --headlines "H1,H2,H3,..." \
+  --descriptions "D1,D2[,D3,D4]" \
+  [--path1 <p1>] [--path2 <p2>] \
+  --commit "在 <组名> 下创建 RSA …" \
+  [--json-out <path>]
+```
+
+| 约束 | 值 |
+| ---- | -- |
+| headlines | **3–15** 条，每条 **≤30** Google 字符（CJK×2） |
+| descriptions | **2–4** 条，每条 **≤90** Google 字符（CJK×2） |
+| path1/path2 | 可选，各 **≤15** |
+
+创建后暂停：`ad ad-status -a <accountId> --id <adId> --status Paused --commit "创建后暂停"`。若列表找不到新广告，给 `ad-status` / `ad list` 加宽 `--start`/`--end`。
+
+文案合规见 `rules/google-ads-compliance-copy.md`。
 
 ---
 

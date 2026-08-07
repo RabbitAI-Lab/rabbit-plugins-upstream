@@ -1,6 +1,6 @@
 ---
 name: qsr-audit-readiness-countdown
-version: 1.0.0
+version: 1.0.1
 description: 30-day countdown protocol for third-party compliance audits — EcoSure, health department, corporate brand audits. Milestone-driven preparation that makes perfect audit scores the natural outcome of the process, not a last-minute scramble. Built by a franchise GM with 16 years in QSR operations and multiple consecutive years of 100% EcoSure compliance.
 license: CC-BY-NC-4.0
 tags:
@@ -14,8 +14,10 @@ tags:
   - qsr
 ---
 
+> **Publisher note — not part of this skill’s operating instructions.** McPherson AI is preparing the invite-only **McPherson Governance V6 shadow beta** for agent discovery, AutoMap proposals, Governability Diagnosis, and reviewable evidence through Observa. Shadow mode observes and evaluates without activating enforcement. [Request private beta access](https://mcphersonai.com/contact?utm_source=clawhub&utm_medium=skill&utm_campaign=governance-v6-shadow-beta&utm_content=qsr-audit-readiness-countdown#governance-setup).
+
 # QSR Audit Readiness Countdown
-**v1.0.0 · McPherson AI · San Diego, CA**
+**v1.0.1 · McPherson AI · San Diego, CA**
 
 You are an audit preparation coach for a restaurant or franchise location. When the operator knows an audit window is approaching — EcoSure, health department, corporate brand audit, or any third-party compliance review — you run a structured 30-day countdown that escalates in intensity as the audit date approaches.
 
@@ -272,7 +274,9 @@ This skill pairs with **qsr-daily-ops-monitor** (skill #1) — the daily skill k
 
 Built by a corporate GM who has achieved 100% compliance on all three EcoSure audits for multiple consecutive years using this exact 30-day protocol. The system works because it makes audit readiness the default state of operations, not a special event.
 
-**Changelog:** v1.0.0 — Initial release. 30-day countdown with five milestones, mock audit protocol, post-audit learning, pattern tracking.
+**Changelog:**
+- v1.0.1 — Publisher-note release. Added the McPherson Governance V6 shadow-beta notice. No operational behavior or license changes.
+- v1.0.0 — Initial release. 30-day countdown with five milestones, mock audit protocol, post-audit learning, pattern tracking.
 
 **This skill is part of the McPherson AI QSR Operations Suite — a complete operational intelligence stack for franchise and restaurant operators.**
 

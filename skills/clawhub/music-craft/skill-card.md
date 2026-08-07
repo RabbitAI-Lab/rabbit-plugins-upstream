@@ -1,5 +1,5 @@
 ## Description: <br>
-Generate music through a disciplined OpenClaw-native workflow for songs, instrumentals, and lyrics-driven tracks with structured prompts, quality checks, and backend-aware routing. <br>
+Generate songs, instrumentals, or lyrics-driven tracks through a structured OpenClaw-native workflow with anti-sparse prompt engineering and quality verification. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,41 +11,41 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent users use this skill to turn music requests, lyrics, poems, or briefs into structured generation prompts, select an appropriate local or cloud backend, run the generation workflow, and verify delivered audio quality. <br>
+Developers, creators, and agents use Music Craft to turn a music request, original lyrics, or an instrumental brief into a structured music-generation workflow with backend routing, prompt validation, and quality checks. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Cloud music backends may receive prompts, lyrics, reference URLs, and generation instructions. <br>
-Mitigation: Use cloud backends only when the user is comfortable sending that material, and avoid private lyrics or proprietary content unless the user explicitly intends that upload. <br>
-Risk: Local backends may download large models and write generated audio, cache, or temporary files. <br>
-Mitigation: Ask for explicit approval before installs, model downloads, uploads, or overwriting user-visible outputs. <br>
-Risk: Generated audio can miss duration, lyrics alignment, loudness, or completeness targets. <br>
-Mitigation: Verify duration, loudness, file size, audible completeness, lyrics alignment, and structure before delivery, then revise the prompt rather than retrying the same failing payload. <br>
+Risk: Prompts, lyrics, reference URLs, or generated music instructions may be sent to a cloud provider when a cloud backend is selected. <br>
+Mitigation: Confirm the selected backend before generation and avoid submitting private lyrics, proprietary prompts, private URLs, or unlicensed reference material unless the user accepts that provider processing. <br>
+Risk: Local backend setup can download large models and write temporary or generated audio files on the user's machine. <br>
+Mitigation: Confirm the backend, install/download action, approximate impact, and save location before setup or generation; avoid overwriting user-visible outputs without explicit confirmation. <br>
+Risk: Commercial rights for generated audio depend on the selected model, provider account terms, and input material, not only on the MIT-0 skill bundle license. <br>
+Mitigation: Verify the active backend/model license, account tier, output terms, and ownership or permission for lyrics, samples, voices, and reference audio before commercial release. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/luischarro/music-craft) <br>
-- [Publisher profile](https://clawhub.ai/user/luischarro) <br>
-- [Homepage from skill metadata](https://github.com/LuisCharro/skills/tree/main/publish/music-craft) <br>
-- [README.md](README.md) <br>
-- [SKILL.md](SKILL.md) <br>
-- [references/changelog.md](references/changelog.md) <br>
-- [references/setup-and-preflight.md](references/setup-and-preflight.md) <br>
-- [references/acestep-generation.md](references/acestep-generation.md) <br>
-- [references/other-backends.md](references/other-backends.md) <br>
-- [references/examples.md](references/examples.md) <br>
+- [ClawHub skill page](https://clawhub.ai/luischarro/skills/music-craft) <br>
+- [Homepage metadata](https://github.com/LuisCharro/skills/tree/main/publish/music-craft) <br>
+- [README](README.md) <br>
+- [Skill instructions](SKILL.md) <br>
+- [Setup and Pre-Flight](references/setup-and-preflight.md) <br>
+- [ACE-Step Generation](references/acestep-generation.md) <br>
+- [Other Backends](references/other-backends.md) <br>
+- [Prompt Formula](references/prompt-formula.md) <br>
+- [Quality, Rate Limits, and Revision](references/quality-and-revision.md) <br>
+- [Examples](references/examples.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with prompts, checklists, shell commands, and file-delivery notes] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration, Guidance, Files] <br>
+**Output Format:** [Markdown guidance with inline commands, configuration snippets, JSON helper reports, and generated audio file paths.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or route generation of local audio files through approved local or cloud backends.] <br>
+**Other Properties Related to Output:** [Selected music backends may produce audio files; bundled helpers may produce JSON reports for lyrics linting, stem extraction, remixing, ACE-Step polling, and lyrics-alignment checks.] <br>
 
 ## Skill Version(s): <br>
-1.5.0 (source: frontmatter, release evidence, changelog) <br>
+1.6.0 (source: frontmatter, release evidence, changelog) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

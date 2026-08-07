@@ -1,0 +1,12 @@
+name: geoskill-pca-dimension-reduction
+display_name: 主成分分析降维
+description: |
+  多波段影像PCA变换，输出主成分GeoTIFF、特征值方差贡献率与载荷矩阵
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-pca-dimension-reduction.py
+runtime: python>=3.9
+tags:
+  - gis
+  - raster
+  - remote-sensing

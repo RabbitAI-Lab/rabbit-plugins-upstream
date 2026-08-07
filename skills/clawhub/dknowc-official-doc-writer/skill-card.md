@@ -1,47 +1,63 @@
-## Description: <br>
-Dknowc Official Doc Writer helps agents draft, revise, review, and produce Word-format Chinese official documents and formal administrative materials, using DKnowc outline and search services when policy, data, standards, or case support is needed. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+深知公文写作 helps office, administrative, secretarial, and enterprise users draft, revise, review, and deliver formal Chinese workplace documents with optional DKnowC Trusted Search sourcing, Word output, red-head formatting, and HTML provenance reports.
 
-## Publisher: <br>
-[dylanzhangzx](https://clawhub.ai/user/dylanzhangzx) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dylanzhangzx](https://clawhub.ai/user/dylanzhangzx)
 
-## Use Case: <br>
-External users, employees, and agents use this skill to prepare Chinese official documents, administrative materials, policy-supported reports, Word deliverables, red-head documents, and supporting source-note HTML when DKnowc search results are used. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive writing requests, drafts, personal data, internal case details, or policy material may be sent to DKnowc services when outline or search features are used. <br>
-Mitigation: Use the skill only when external processing by DKnowc is permitted, and avoid submitting confidential or personal data unless approved. <br>
-Risk: Local configuration, profile, outline result, and search result files may retain sensitive operational data after use. <br>
-Mitigation: Periodically review or delete config.ini, config/user_profile.json, official-docs/outline-results, and official-docs/search-results files as appropriate. <br>
+## Use Case:
 
+Office staff, administrative teams, secretarial roles, and enterprise or public-sector users use this skill to turn notes, meeting records, source materials, and drafts into formal Chinese documents. It also supports review of existing Word documents, .docx delivery, optional red-head formatting, and separate source-trace HTML when search-backed materials are used.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dylanzhangzx/skills/dknowc-official-doc-writer) <br>
-- [DKnowc manual registration page](https://platform.dknowc.cn/auth/#/register?channel=2787E171-B0E5-4328-9946-47AC52434D1F&type=6) <br>
-- [DKnowc dependable search endpoint](https://open.dknowc.cn/dependable/search/) <br>
-- [Output guide](artifact/reference/output_guide.md) <br>
-- [Search policy](artifact/reference/search_policy.md) <br>
-- [Review checklist](artifact/reference/review_checklist.md) <br>
-- [Task router](artifact/reference/task_router.md) <br>
-- [Material usage guidance](artifact/reference/material_usage_guidance.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance, shell commands, JSON search or outline artifacts, Word .docx files, and HTML source-note files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Normal output may include official-document text, generated .docx files, optional red-head .docx files, DKnowc search result JSON, outline JSON, and source-note HTML.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.2.1 (source: server evidence and changelog, released 2026-07-24) <br>
+Risk: The skill uses DKnowC remote MaaS and search services, including phone-number and SMS-code account setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only in environments where this remote-service dependency and account setup flow are acceptable for the documents being handled.
+
+Risk: The registration flow can persistently store DKNOWC_API_KEY in ~/.zshrc.
+
+Mitigation: Prefer a platform secret store or session-only environment variable for sensitive-document workflows or shared machines, and remove or rotate the shell-profile key when it is no longer appropriate.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dylanzhangzx/skills/dknowc-official-doc-writer)
+- [Publisher Profile](https://clawhub.ai/user/dylanzhangzx)
+- [DKnowC Open Service](https://open.dknowc.cn/)
+- [DKnowC MaaS Platform](https://platform.dknowc.cn/)
+- [Task Router](reference/task_router.md)
+- [Search Policy](reference/search_policy.md)
+- [Search Guide](reference/search_guide.md)
+- [Material Usage Guidance](reference/material_usage_guidance.md)
+- [Output Guide](reference/output_guide.md)
+- [Review Checklist](reference/review_checklist.md)
+- [Official Document Standards Index](reference/standards/00_索引.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown or text guidance, shell commands, JSON intermediates, .docx Word documents, and HTML provenance reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Normal delivery is a Word .docx for formal documents; searched materials can produce a separate HTML provenance report. The artifact states that automatic PDF generation is not supported.]
+
+## Skill Version(s):
+
+3.3.0 (source: evidence.json release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,16 @@
+name: geoskill-ecological-corridor-design
+display_name: 生态廊道设计
+description: |
+  由栖息地适宜性构建阻力面，Dijkstra 最小成本路径识别生态廊道，并计算 PC 景观连通性指数。Designs ecological corridors with least-cost paths and connectivity indices. 输出阻力面与廊道 GeoTIFF + 参数 JSON。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-ecological-corridor-design.py
+runtime: python>=3.9
+tags:
+  - biodiversity
+  - extraction
+  - gis
+  - network
+  - raster
+  - remote-sensing
+  - vector

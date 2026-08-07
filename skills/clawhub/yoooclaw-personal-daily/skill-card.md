@@ -1,42 +1,53 @@
-## Description: <br>
-Generates a personalized daily news briefing from configured user interest topics, using bounded web searches and strict recency and source-quality filters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates a personalized daily news digest from the user's configured topics, using current web search results and source-quality filtering.
 
-## Publisher: <br>
-[vivalavida-say-hi](https://clawhub.ai/user/vivalavida-say-hi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vivalavida-say-hi](https://clawhub.ai/user/vivalavida-say-hi)
 
-## Use Case: <br>
-External users use this skill to turn selected topics, such as AI models, electric vehicles, startup financing, humanoid robotics, companies, or products, into a concise daily news digest with links to selected sources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Configured interest topics may be exposed through web searches. <br>
-Mitigation: Avoid confidential or highly sensitive topics in the interests file or scheduled message. <br>
-Risk: Daily search filtering can miss relevant current news or exclude items without explicit date signals. <br>
-Mitigation: Treat the briefing as a high-density digest and follow source URLs before relying on a news item for decisions. <br>
-Risk: Accidental activation could run searches using saved interests. <br>
-Mitigation: Use explicit prompts for personalized daily reports and review configured topics before scheduled use. <br>
+## Use Case:
 
+External users use this skill to turn their configured interests into a concise daily news digest. It is suited for tracking current events across topics such as AI, electric vehicles, startups, robotics, companies, or products.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/vivalavida-say-hi/yoooclaw-personal-daily) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-like conversational briefing text with topic sections, source URLs, summaries, and a fallback message when no current news is found.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs no files; target length is under 1500 Chinese characters with each item summarized in no more than three sentences.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Configured interests may be sent as web-search queries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Installers should only configure topics they are comfortable using for web search.
+
+Risk: A vague prompt could activate the personalized digest unexpectedly.
+
+Mitigation: Ask the agent to confirm before running the digest when activation intent is unclear.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/vivalavida-say-hi/skills/yoooclaw-personal-daily)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Structured chat text in Chinese with grouped news summaries and source URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Does not generate files; full digest is limited to about 1500 Chinese characters when enough current news is available.]
+
+## Skill Version(s):
+
+1.0.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

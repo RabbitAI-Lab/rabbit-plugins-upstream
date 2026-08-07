@@ -1,4 +1,3 @@
-# InvAssistant — Personal Investment Portfolio Management Framework
 
 A WorkBuddy/CodeBuddy Skill implementing a multi-asset investment strategy framework. Covers US, A-share, and HK stocks with asset-class differentiated rules, portfolio-level risk controls, and disciplined execution protocols.
 

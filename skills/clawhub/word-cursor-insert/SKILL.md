@@ -7,6 +7,15 @@ description: 写报告时，把选中的一段话或 Excel/CSV 文件等内容�
 
 > ⚡ 手写报告利器：把一段话、一个 Excel/CSV 表格，精准塞进 Word 光标所在位置。连接你正在编辑的 Word，读懂光标处语境，单调用完成插入，重复执行也不会多插——快、准、稳。
 
+## 最快用法（默认就这么跑，一条 Bash 调用）
+用 managed venv 的 python 直接跑脚本，文本走 `--text`，表格走文件路径：
+- 文本：`~/.workbuddy/binaries/python/envs/default/Scripts/python.exe scripts/word_cursor_insert.py --text "要插的内容" [--newline]`
+- 长文本怕命令行乱码：写到 utf-8 文件后 `--file 路径.txt`
+- 表格：`... word_cursor_insert.py 表.xlsx [--no-title]`（或 `.csv`）
+- 强制插入（绕过就近判重）：加 `--no-idempotent`
+
+**一条命令插完，信任返回即停。不要先读脚本、不要插完另跑校验、不要为长中文额外写临时 py——那都是多出来的往返。**
+
 ## Overview
 Insert data into the cursor of the Word document the user currently has open.
 Two modes: (1) a CSV/list becomes a formatted Word table (title + bold header +
@@ -28,8 +37,7 @@ context read, single tool call).
   `doc.Range(0, sel.Start)`. Cost must stay O(window), independent of doc size.
 - Do NOT re-run a COM call because the terminal looked garbled — that duplicates
   the insertion. Judge success from stdout/result only.
-- Pass data via files (ASCII temp path); do not put long Chinese strings on the
-  command line.
+- 默认直接 `--text "中文内容"` 走命令行（managed python 在 Windows 下吃中文 argv 没问题）。**临时文件只是中文万一乱码的兜底**（用 `--file 路径.txt`），非必做步骤——别为每次插入都先写个 py，那多一趟往返。
 - **一眼能定就直接跑，别深思**：结果形态明显时（标量填空 / 表格中转），直接执行
   单调用快路径，不要追加分析、验证或解释性思考步骤。一次调用已含计算+查上下文+
   幂等判重，无需任何前置/后置回合。
@@ -58,10 +66,11 @@ context read, single tool call).
    - Free location / list source → table mode.
 4. Insert via `scripts/word_cursor_insert.py` (run with the managed venv python):
    - Table: `word_cursor_insert.py <csv_path> [--no-title]`
-   - Text : `word_cursor_insert.py --text "7" [--newline]`
-   The script prints a short verification (title / rows / cols / first / last).
-   **Trust it and stop — do NOT run a separate verification read of the document;
-   that is a redundant round trip.** Do not re-run.
+   - Text : `word_cursor_insert.py --text "内容" [--newline]`（长文本用 `--file 路径.txt`）
+   - 就近判重默认开启：光标 ~150 字内已有完全相同内容则自动跳过（防重复段落，长文本也安全）；要强插加 `--no-idempotent`。
+   The script prints a short result (SKIP / OK + 字数). **Trust it and stop — do
+   NOT run a separate verification read of the document; that is a redundant round
+   trip.** Do not re-run.
 5. Report the outcome to the user (e.g. "已插入标题 + 19 行表格" or
    "光标处已填入 7").
 
@@ -81,7 +90,7 @@ val = 7                              # (A) 标量/文本；或 val = sum(...) / 
 # =======================================================
 word = win32com.client.GetActiveObject("Word.Application")
 doc = word.ActiveDocument; sel = word.Selection
-# 有界窗口判重(只查光标前后, 避免整段 in 误判, 如"17"含"7")
+# 有界窗口整段判重(脚本已内置: 长文本整段比对, 短文本带边界, 不会"17"误判"7")
 win=60; s=sel.Start; e=sel.End; dend=doc.Content.End
 before = doc.Range(max(s-win,0), s).Text if s>0 else ""
 after = doc.Range(e, min(e+win,dend)).Text if e<dend else ""
@@ -91,9 +100,7 @@ else:
     sel.TypeText(str(val)); act = f"INSERTED {val}"
 print("elapsed_s:", round(time.time()-t0,3), "|", act)  # 1 call: 算+查上下文+插
 ```
-- (A) text / paragraph: `--text "..." [--newline]`, or the skeleton above.
-  Long Chinese paragraphs: read them from a temp file; don't pass very long
-  strings on the command line.
+- (A) text / paragraph: `--text "..." [--newline]`（长文本用 `--file 路径.txt` 读文件）；临时文件只是兜底，默认直接 `--text`。
 - (B) table (Excel or CSV): `word_cursor_insert.py 表.xlsx [--no-title]` (or
   `表.csv`) reads the file and inserts it as a Word table (bold header + borders
   + autofit). Format is auto-detected by extension; rows relayed as-is — NO
@@ -112,3 +119,4 @@ Run scripts with `~/.workbuddy/binaries/python/envs/default/Scripts/python.exe`.
 - Table insertion always starts on a new paragraph after the cursor; inline text
   mode inserts at the cursor with no paragraph break (add `--newline` to force
   one).
+- 字数统计即时：`len(text)` 一次得出，不要为计数去读整篇文档或逐字遍历；报数写 `~N字` 即可，精确与否无所谓，快最重要。

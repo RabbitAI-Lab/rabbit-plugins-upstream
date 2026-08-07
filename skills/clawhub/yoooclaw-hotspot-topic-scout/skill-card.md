@@ -1,38 +1,57 @@
-## Description: <br>
-Helps content creators, editors, and operators combine selected notification signals with web search to identify timely topic ideas, viral references, competitor activity, and audience needs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hotspot Topic Scout helps content creators, editors, and operations leads identify timely topic ideas, viral-content references, competitor moves, and audience needs from selected notifications and current web signals.
 
-## Publisher: <br>
-[vivalavida-say-hi](https://clawhub.ai/user/vivalavida-say-hi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vivalavida-say-hi](https://clawhub.ai/user/vivalavida-say-hi)
 
-## Use Case: <br>
-External content teams and creators use this skill to turn recent private notification signals and public web trends into prioritized content planning recommendations. It organizes findings into topic ideas, viral references, competitor updates, and audience demand. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may inspect broad phone notifications and private group, team, or fan communications while collecting topic signals. <br>
-Mitigation: Use narrow app, group, and time limits; exclude personal chats, confidential channels, client messages, and authentication-code notifications; ask for private signals to be aggregated or redacted before search or output. <br>
+## Use Case:
 
+External content creators, editors, and operations leads use this skill to turn selected notification activity and current web-search results into ranked content opportunities, competitor updates, and audience-demand signals.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/vivalavida-say-hi/yoooclaw-hotspot-topic-scout) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown-style conversational text with categorized recommendations and source labels] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Does not generate files; ranks multiple candidate topics when evidence is sufficient and returns a fallback message when useful material is sparse.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill can read broad phone notifications and group-chat content, which may include private, workplace, client, or confidential information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure it only for clearly selected apps, groups, and topics, and avoid allowing all notifications to be analyzed.
+
+Risk: Private notification signals may be summarized with web-search context while producing topic recommendations.
+
+Mitigation: Review generated recommendations before sharing them and remove private names, chat details, or confidential facts from downstream content planning.
+
+Risk: The security verdict is suspicious because the skill lacks enough scoping or privacy controls for notification-derived signals.
+
+Mitigation: Review the skill before installing and use the narrowest practical monitoring scope for the intended content workflow.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/vivalavida-say-hi/skills/yoooclaw-hotspot-topic-scout)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown-style conversational text with categorized recommendations, source labels, priority ratings, and suggested content angles]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill does not generate files; it summarizes candidate topics and may output a fallback message when evidence is sparse.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

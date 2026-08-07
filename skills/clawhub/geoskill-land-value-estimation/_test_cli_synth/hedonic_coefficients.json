@@ -1,0 +1,7 @@
+{
+  "intercept": 1000.0,
+  "coef_accessibility": 5000.0,
+  "coef_poi": 2000.0,
+  "coef_green": 1500.0,
+  "decay": 30.0
+}

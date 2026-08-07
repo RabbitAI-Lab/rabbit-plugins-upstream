@@ -1,0 +1,16 @@
+name: geoskill-3d-terrain-visualization
+display_name: 三维地形可视化
+description: |
+  Render 3D terrain from DEM and imagery with vertical exaggeration and an HTML viewer
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-3d-terrain-visualization.py
+runtime: python>=3.9
+tags:
+  - ai
+  - dem
+  - gis
+  - machine-learning
+  - remote-sensing
+  - terrain
+  - visualization

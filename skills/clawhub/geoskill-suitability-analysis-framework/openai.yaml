@@ -1,0 +1,13 @@
+name: geoskill-suitability-analysis-framework
+display_name: 适宜性分析框架
+description: |
+  因子标准化+AHP/熵权法赋权+加权叠加+适宜性分级
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-suitability-analysis-framework.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - land-use
+  - remote-sensing

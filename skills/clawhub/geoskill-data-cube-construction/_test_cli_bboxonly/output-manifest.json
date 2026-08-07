@@ -1,0 +1,68 @@
+{
+  "skill": "data-cube-construction",
+  "skill_version": "1.0.0",
+  "command": "data-cube-construction --bbox 116 39 117 40 --output-dir Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\data-cube-construction\\_test_cli_bboxonly --quiet",
+  "started_at": "2026-08-03T12:49:27.110159Z",
+  "finished_at": "2026-08-03T12:49:27.298590Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "n_dates": 6,
+    "bands": 4,
+    "synthetic": false
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\data-cube-construction\\_test_cli_bboxonly\\data_cube.nc",
+      "kind": "netcdf",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 4,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\data-cube-construction\\_test_cli_bboxonly\\cube_metadata.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "shape": [
+      6,
+      4,
+      96,
+      96
+    ],
+    "n_dates": 6,
+    "n_bands": 4,
+    "n_valid_pixels": 221184,
+    "input_nodata": null,
+    "global_mean": 0.15745292603969574,
+    "global_std": 0.15470004081726074,
+    "netcdf_roundtrip_ok": true
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "data-cube-construction"
+  },
+  "error": null
+}

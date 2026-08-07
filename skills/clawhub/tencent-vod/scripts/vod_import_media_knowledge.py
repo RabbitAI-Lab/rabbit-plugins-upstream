@@ -429,7 +429,7 @@ def main():
                                help='媒体文件 ID（必填）')
     import_parser.add_argument('--definition', type=int, default=100,
                                help='大模型理解模板 ID（默认 100，包含音频级别的摘要和 ASR）')
-    import_parser.add_argument('--region', default='ap-guangzhou',
+    import_parser.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'),
                                help='地域，默认 ap-guangzhou')
     import_parser.add_argument('--no-wait', action='store_true',
                                help='仅提交任务，不等待结果')
@@ -449,7 +449,7 @@ def main():
                               help='媒体文件 ID 列表（必填，空格分隔）')
     batch_parser.add_argument('--definition', type=int, default=100,
                               help='大模型理解模板 ID（默认 100，包含音频级别的摘要和 ASR）')
-    batch_parser.add_argument('--region', default='ap-guangzhou',
+    batch_parser.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'),
                               help='地域，默认 ap-guangzhou')
     batch_parser.add_argument('--json', action='store_true',
                               help='JSON 格式输出完整结果')

@@ -1,0 +1,13 @@
+name: geoskill-image-mosaicking
+display_name: 无缝影像镶嵌
+description: |
+  重叠瓦片羽化/均值融合，拼接为无缝镶嵌影像
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-image-mosaicking.py
+runtime: python>=3.9
+tags:
+  - ai
+  - gis
+  - preprocessing
+  - remote-sensing

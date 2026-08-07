@@ -1,48 +1,59 @@
-## Description: <br>
-Helps agents maintain and install the Hekouwang Typora theme by generating light and dark CSS from tokens, sampling reference colors, and verifying font and rendering behavior. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Maintains the hekouwang light and dark Typora themes and guides agents through token-driven CSS generation, sampled color matching, font fallback verification, installation, troubleshooting, and Typora theme publishing.
 
-## Publisher: <br>
-[huiyonghkw](https://clawhub.ai/user/huiyonghkw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[huiyonghkw](https://clawhub.ai/user/huiyonghkw)
 
-## Use Case: <br>
-Developers and theme authors use this skill to edit, build, install, and validate Typora theme variants with token-driven CSS, reference color sampling, and font fallback checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installation writes theme CSS and font files under the local Typora themes folder. <br>
-Mitigation: Review the install command before running it; the installer backs up existing theme CSS into a subdirectory and is designed to be idempotent. <br>
-Risk: The --use-local-anthropic option copies proprietary fonts already installed on the user's machine for personal use only. <br>
-Mitigation: Leave the option disabled unless the user understands the font licensing limits; do not redistribute copied proprietary fonts and rely on the bundled Inter fallback for normal releases. <br>
-Risk: The publishing workflow includes GitHub commands that act under the user's account. <br>
-Mitigation: Review any GitHub publishing commands before execution and confirm repository, branch, and pull request targets. <br>
+## Use Case:
 
+Developers and designers use this skill to maintain or adapt Typora themes, especially Chinese long-form light and dark themes, by editing token sources, generating CSS, validating fonts and colors, installing locally, and preparing theme.typora.io submissions.
 
-## Reference(s): <br>
-- [Project homepage](https://github.com/huiyonghkw/hekouwang-typora-theme-skill) <br>
-- [Token customization guide](references/tokens.md) <br>
-- [Typora theme specification notes](references/typora-spec.md) <br>
-- [Font strategy and licensing notes](references/fonts.md) <br>
-- [Theme workflow guide](references/workflow.md) <br>
-- [Typora custom theme documentation](https://theme.typora.io/doc/Write-Custom-Theme/) <br>
-- [Hekouwang Typora theme repository](https://github.com/huiyonghkw/hekouwang-typora-theme) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON token edits, and generated CSS files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write Typora theme CSS and font assets to the local Typora themes folder when installation commands are executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter, changelog, server release) <br>
+Risk: Local installation or publishing commands may run external repository scripts or GitHub CLI operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review install.sh and any GitHub CLI commands before execution, and run them only in a trusted local workspace.
+
+Risk: Theme edits can silently appear ineffective in Typora because modified CSS and fonts may not reload or may fall back without errors.
+
+Mitigation: Follow the documented build, install, full Typora restart, color verification, and font fallback probe steps before treating changes as complete.
+
+## Reference(s):
+
+- [Skill definition](artifact/SKILL.md)
+- [tokens.json adjustment guide](artifact/references/tokens.md)
+- [Typora theme specification and selector map](artifact/references/typora-spec.md)
+- [Font strategy and licensing boundaries](artifact/references/fonts.md)
+- [Theme workflow](artifact/references/workflow.md)
+- [Project homepage from ClawHub metadata](https://github.com/huiyonghkw/hekouwang-typora-theme)
+- [Typora custom theme documentation](https://theme.typora.io/doc/Write-Custom-Theme/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands, CSS/token editing instructions, and publishing steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent guidance for local theme files and Typora workflows; does not produce autonomous network actions.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

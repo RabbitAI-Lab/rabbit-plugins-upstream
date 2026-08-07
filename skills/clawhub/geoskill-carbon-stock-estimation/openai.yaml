@@ -1,0 +1,16 @@
+name: geoskill-carbon-stock-estimation
+display_name: 碳储量估算
+description: |
+  由 NDVI 幂律异速生长方程估算地上生物量碳，叠加根茎比地下碳与类型化土壤碳密度。Estimates carbon stocks from biomass allometry and soil carbon density. 输出地上碳/土壤碳/总碳三张 GeoTIFF 与汇总 JSON。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-carbon-stock-estimation.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - analysis
+  - gis
+  - mining
+  - raster
+  - remote-sensing
+  - vegetation

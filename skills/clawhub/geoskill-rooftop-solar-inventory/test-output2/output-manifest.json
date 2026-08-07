@@ -1,0 +1,54 @@
+{
+  "timestamp": "2026-07-27T17:21:22.336908+00:00",
+  "analysis_parameters": {
+    "timestamp": "2026-07-27T17:21:22.220284+00:00",
+    "setback_m": 1.0,
+    "panel_type": "mono_perc_540w",
+    "min_contiguous_area_m2": 10.0,
+    "annual_ghi_kwh_per_m2": 1400.0,
+    "performance_ratio": 0.82,
+    "electricity_price_cny_per_kwh": 0.55,
+    "discount_rate": 0.06,
+    "system_lifetime_years": 25,
+    "n_buildings": 5,
+    "output_dir": "test-output2"
+  },
+  "output_files": {
+    "roof_planes.geojson": "test-output2\\roof_planes.geojson",
+    "solar_candidates.geojson": "test-output2\\solar_candidates.geojson",
+    "building_potential.csv": "test-output2\\building_potential.csv",
+    "request.json": "test-output2\\request.json",
+    "dataset-manifest.json": "test-output2\\dataset-manifest.json"
+  },
+  "n_candidates": 5,
+  "total_capacity_kw": 269.46,
+  "total_annual_kwh": 293873.1,
+  "total_investment_cny": 343561.5,
+  "building_rankings": [
+    {
+      "rank": 1,
+      "building_id": 2,
+      "score": 1.0
+    },
+    {
+      "rank": 2,
+      "building_id": 0,
+      "score": 0.7667
+    },
+    {
+      "rank": 3,
+      "building_id": 3,
+      "score": 0.7264
+    },
+    {
+      "rank": 4,
+      "building_id": 1,
+      "score": 0.5615
+    },
+    {
+      "rank": 5,
+      "building_id": 4,
+      "score": 0.4529
+    }
+  ]
+}

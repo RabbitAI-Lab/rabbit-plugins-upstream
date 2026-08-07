@@ -1,56 +1,66 @@
-## Description: <br>
-TikTok product-selection and shoppable-video toolkit that integrates EchoTik and FastMoss commerce data with TikTok shoppable-video APIs for product research, trend analysis, promotional-video analysis, and shoppable-video publishing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+TikTok 选品与带货视频一站式 AI 工具集，整合 EchoTik/FastMoss 选品数据与 TikTok 官方带货视频 API，覆盖 TikTok Shop 选品、爆品趋势、带货视频分析与可购物视频发布。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, e-commerce operators, marketers, and developers use this skill to research TikTok Shop products, compare sales and GMV signals, inspect promotional videos, manage creator authorization, and prepare or publish shoppable videos through the supported TikTok video workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can call external LinkFox, EchoTik, FastMoss, and TikTok-related services using configured credentials. <br>
-Mitigation: Use only trusted gateway settings and scoped API credentials, and avoid running the skill in workspaces where commerce or account data should not be retained. <br>
-Risk: The skill can save full API responses locally, including commerce, account, or token-adjacent workflow data. <br>
-Mitigation: Review saved response paths, restrict workspace access, and remove retained response files when they are no longer needed. <br>
-Risk: Some product-research calls may consume paid API credits or quota. <br>
-Mitigation: Require explicit user confirmation before paid calls, repeated pagination, changed search parameters, or retries after empty results. <br>
-Risk: The TikTok workflow can prepare and publish public shoppable videos. <br>
-Mitigation: Require explicit confirmation before posting, verify the selected account, product_id, video file, title, and precheck status, and mask access or refresh tokens in user-facing output. <br>
+## Use Case:
 
+E-commerce operators, creators, and agent workflows use this skill to research TikTok Shop products, compare EchoTik and FastMoss trend data, inspect promotional video performance, authorize TikTok creator accounts, and publish shoppable videos through the supported LinkFox and TikTok API flows.
 
-## Reference(s): <br>
-- [Skill source](artifact/SKILL.md) <br>
-- [EchoTik TikTok new product ranking](artifact/references/linkfox-echotik-list-new-product-rank.md) <br>
-- [EchoTik TikTok product search](artifact/references/linkfox-echotik-list-product.md) <br>
-- [EchoTik TikTok batch product detail](artifact/references/linkfox-echotik-batch-product-detail.md) <br>
-- [EchoTik TikTok product video](artifact/references/linkfox-echotik-product-video.md) <br>
-- [EchoTik TikTok video download URL](artifact/references/linkfox-echotik-get-video-download-url.md) <br>
-- [FastMoss TikTok top-selling ranking](artifact/references/linkfox-fastmoss-product-rank-top-selling.md) <br>
-- [FastMoss TikTok product search](artifact/references/linkfox-fastmoss-product-search.md) <br>
-- [TikTok video authorization and token management](artifact/references/linkfox-tiktok-video-auth.md) <br>
-- [TikTok shoppable-video products](artifact/references/linkfox-tiktok-video-products.md) <br>
-- [TikTok shoppable-video API workflow](artifact/references/linkfox-tiktok-video.md) <br>
-- [Shoppable video large-file upload](artifact/references/large-file-upload.md) <br>
-- [TikTok Shop Partner Center large-file upload documentation](https://partner.tiktokshop.com/docv2/page/shoppable-video-large-file-upload) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, code] <br>
-**Output Format:** [Markdown guidance with JSON parameters, shell commands, and saved JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts can save full API responses under the workspace linkfox data directory and may print summaries for large responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+Risk: The skill handles LinkFox API keys and TikTok creator authorization tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this credential access is acceptable, avoid exposing full tokens, and protect or remove local response and cache files that may contain sensitive business data.
+
+Risk: The skill can perform user-directed TikTok shoppable-video publishing and LinkFox billing or order-related flows.
+
+Mitigation: Review commands and parameters before posting videos or starting chargeable API calls, and require explicit user confirmation for actions that publish content or consume paid credits.
+
+Risk: Changing the LinkFox gateway endpoint could route requests away from the intended service.
+
+Mitigation: Keep LINKFOX_TOOL_GATEWAY pointed only at the legitimate LinkFox gateway before running the scripts.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-tiktok-selection-and-shoppable-video)
+- [Publisher profile](https://clawhub.ai/user/linkfox-ai)
+- [EchoTik product search reference](references/linkfox-echotik-list-product.md)
+- [EchoTik new product ranking reference](references/linkfox-echotik-list-new-product-rank.md)
+- [FastMoss top-selling product ranking reference](references/linkfox-fastmoss-product-rank-top-selling.md)
+- [FastMoss product search reference](references/linkfox-fastmoss-product-search.md)
+- [TikTok video authorization reference](references/linkfox-tiktok-video-auth.md)
+- [TikTok shoppable video reference](references/linkfox-tiktok-video.md)
+- [TikTok shoppable video products reference](references/linkfox-tiktok-video-products.md)
+- [Large file upload reference](references/large-file-upload.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON parameters, shell commands, and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local LinkFox response/cache files and may initiate user-directed API calls for TikTok product research, authorization, uploads, and shoppable-video publishing.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence; artifact frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

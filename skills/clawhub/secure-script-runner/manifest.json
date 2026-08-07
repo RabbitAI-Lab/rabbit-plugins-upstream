@@ -1,14 +1,14 @@
 {
   "id": "secure_script_runner",
-  "version": "1.0.1",
+  "version": "1.1.0",
   "name": "Secure Script Runner (Zero‑Exposure Sandbox)",
-  "description": "Zero‑exposure script execution using MGC Blackbox. Store scripts encrypted, execute locally, AI default sees no plaintext. Supports MCP/API/WebUI execution, internal credential calls, and script sealing. This skill only executes scripts with explicit user authorization and will never automatically execute any scripts or call any credentials.",
+  "description": "Zero‑exposure script execution using MGC Blackbox. Store scripts encrypted, execute in blackbox, AI sees no plaintext. Supports MCP (mgc_run) / API / WebUI execution, internal credential calls, and script sealing. This skill only executes scripts with explicit user authorization and will never automatically execute any scripts.",
   "author": "MirginCipher Team",
   "license": "MIT",
-  "tags": ["security", "script", "zero-exposure", "mgc", "sandbox", "execution"],
+  "tags": ["security", "script", "zero-exposure", "mgc", "sandbox", "execution", "blackbox"],
   "platform_compatibility": ["windows", "macos", "linux"],
-  "mcp_tools": ["mgc_save", "mgc_get", "mgc_seal", "mgc_list", "mgc_open_webui"],
-  "install": "pip install mgc-blackbox",
+  "mcp_tools": ["mgc_save", "mgc_run", "mgc_list", "mgc_seal", "mgc_open_webui"],
+  "install": "pip install mgc-blackbox>=1.4.9",
   "runtime": "mgc",
   "port": 57219,
   "links": {
@@ -21,7 +21,8 @@
     "zero trust",
     "sandbox",
     "encrypted execution",
-    "script sealing"
+    "script sealing",
+    "blackbox"
   ],
   "disclaimers": [
     "This skill only executes scripts with explicit user authorization.",

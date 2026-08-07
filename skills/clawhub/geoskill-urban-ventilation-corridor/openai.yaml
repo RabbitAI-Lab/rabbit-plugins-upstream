@@ -1,0 +1,14 @@
+name: geoskill-urban-ventilation-corridor
+display_name: 城市通风廊道分析
+description: |
+  Derive aerodynamic roughness and ventilation potential from building morphology and extract least-resistance ventilation corridors.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-urban-ventilation-corridor.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - network
+  - remote-sensing
+  - urban

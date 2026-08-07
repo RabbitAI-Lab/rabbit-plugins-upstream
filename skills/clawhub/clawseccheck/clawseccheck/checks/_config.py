@@ -9,6 +9,7 @@ import os
 import re
 from pathlib import Path
 from .. import attest as _attest
+from .. import sockets as _sockets
 from ..catalog import (
     CRITICAL,
     FAIL,
@@ -20,6 +21,7 @@ from ..catalog import (
 )
 from ..collector import (
     BOOTSTRAP_FILES,
+    LIMIT_DOMAIN_CONFIG,
     SKILL_DIRS,
     Context,
     dig,
@@ -47,11 +49,15 @@ from ._shared import (
     SECRET_PATTERNS,
     SENSITIVE_TOOL_HINTS,
     _LEG_KEYS,
+    _b323_contains_env_var_reference,
+    _canonical_ipv4,
+    _channel_has_implicit_default_account,
     _channels,
     _config_unreadable,
     _enabled_tools,
     _external_input_channels,
     _finding,
+    _gateway_remote_exposure_reason,
     _hint,
     _hooks_session_key_exposures,
     _is_secret_reference,
@@ -61,7 +67,9 @@ from ._shared import (
     _perms_loose,
     _plugins,
     _profile_is_powerful,
+    _resolved_channel_nodes,
     _secret_paths,
+    _surface_absent,
     _trifecta_legs,
     _web_fetch_enabled,
     parse_bind_host,
@@ -303,13 +311,14 @@ def _has_world_open_cidr(value) -> bool:
 
 # F-036: for a 2/3 config, name the one missing leg + the concrete field that would
 # complete the trifecta. Grounded only in field paths the engine already reads
-# (_untrusted_input_channels / INPUT_TOOL_HINTS + web for input; SENSITIVE_TOOL_HINTS,
-# ungated exec, credentials/ for sensitive; OUTBOUND_TOOL_HINTS, exec, elevated, web for
-# outbound). No new schema invented.
+# (_untrusted_input_channels / _unpolicied_open_wildcard_group_channels (B-371) /
+# INPUT_TOOL_HINTS + web for input; SENSITIVE_TOOL_HINTS, ungated exec, credentials/ for
+# sensitive; OUTBOUND_TOOL_HINTS, exec, elevated, web for outbound). No new schema invented.
 _MISSING_LEG_ACTIVATORS = {
     "untrusted input": (
         "a non-owner channel (channels.<name>.dmPolicy/groupPolicy in "
-        "open/allowlist/paired), an input tool (tools.allow: web/email/imap/rss/fetch), "
+        "open/allowlist/paired), an unpolicied, unrestricted channels.<name>.groups[\"*\"] "
+        "entry (B-297/B-371), an input tool (tools.allow: web/email/imap/rss/fetch), "
         "or tools.web.fetch.enabled"
     ),
     "sensitive data": (
@@ -689,6 +698,14 @@ def check_control_plane_mutation(ctx: Context) -> Finding:
              control-plane tools are not explicitly denied in gateway.tools.deny.
     PASS   — control-plane tools are denied / not re-enabled.
     UNKNOWN — no gateway config present.
+              F-140: sets ``not_applicable`` only when the config locus was read
+              COMPLETELY and ``gateway`` is still not a dict. The HTTP gateway is the
+              ONLY reachability path this check models — with no gateway there is no
+              HTTP surface over which a control-plane tool could be reached, so absence
+              here is genuine inapplicability rather than an unassessed risk. The whole
+              read is ``ctx.config``, so config-locus completeness is the entire proof
+              obligation; an absent/unparseable/truncated config degrades the flag back
+              to ordinary UNKNOWN and the check keeps its blind-spot posture.
     """
     cfg = ctx.config
     gw = cfg.get("gateway")
@@ -698,6 +715,7 @@ def check_control_plane_mutation(ctx: Context) -> Finding:
             UNKNOWN,
             "No gateway config — control-plane mutation reachability not applicable.",
             "—",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
         )
 
     gw_tools = gw.get("tools") if isinstance(gw.get("tools"), dict) else {}
@@ -1238,14 +1256,41 @@ def _b171_open_channels(cfg: dict) -> list[str]:
     Deliberately duplicated rather than parameterizing the shared `_open_channels()` (B2):
     B2 asks a different question (gateway auth / "anyone can command") that is out of
     scope for this fix.
+
+    B-390: reads the RESOLVED per-account node (`_resolved_channel_nodes`), not the raw
+    ``[c] + accounts.values()`` idiom this used before -- see that helper's own docstring
+    for the full grounding (mirrors the identical B-389 fix already landed in the sibling
+    `_open_channels`). The bug this closes: a vestigial base-level `dmPolicy: "open"`
+    (template scaffolding, no live credential behind it) was scored as open EVEN WHEN
+    every real, running account overrode it to something restrictive -- because the raw
+    walk evaluated the unmerged base node IN ADDITION TO each account's own raw node,
+    never asking whether the account's override actually replaces it.
+
+    Same C-135 follow-up as `_open_channels`: blindly dropping the base node whenever
+    `accounts` is configured would trade that false positive for a worse false NEGATIVE --
+    a channel-level credential (e.g. a `botToken`) does not stop running once `accounts`
+    is added; OpenClaw synthesizes an extra IMPLICIT default account that keeps the base
+    node's own (possibly still-open, no-gate) policy live alongside the explicit accounts.
+    So the base node is added back to the walk exactly when
+    `_channel_has_implicit_default_account` says it is genuinely still live -- never
+    unconditionally.
     """
     out: list[str] = []
     for name, c in _channels(cfg).items():
         if not isinstance(c, dict) or c.get("enabled") is False:
             continue
-        nodes = [c] + list((c.get("accounts") or {}).values())
+        nodes = _resolved_channel_nodes(c)
+        accounts = c.get("accounts")
+        if isinstance(accounts, dict) and accounts and _channel_has_implicit_default_account(name, c):
+            nodes = [*nodes, c]
         for node in nodes:
             if not isinstance(node, dict):
+                continue
+            # B-390: a resolved node's own `enabled: false` (a per-account disable --
+            # e.g. a retired account left in place with its old, wide-open policy still
+            # on record) means that account authorizes no in-chat commands at all, same
+            # reasoning as the channel-level guard above.
+            if node.get("enabled") is False:
                 continue
             dm_open = node.get("dmPolicy") == "open" and not _b171_scoped_list(
                 node.get("allowFrom")
@@ -2034,6 +2079,16 @@ def check_gateway(ctx: Context) -> Finding:
             UNKNOWN,
             "No config loaded — cannot assess gateway.",
             "Run on the host with ~/.openclaw present.",
+            # B-362: sets not_applicable only when the config locus was read COMPLETELY
+            # and cfg is still empty. Every condition this check grades (bind, auth mode,
+            # trusted-proxy identity, open channels) is a plain ctx.config read, so a
+            # genuinely empty (but completely-read) config means none of that surface
+            # exists to misconfigure -- not merely an unassessed risk. _surface_absent's
+            # own config_found gate keeps a host with NO openclaw.json at all (a
+            # non-OpenClaw machine) on the real-UNKNOWN side, matching the existing
+            # check_control_plane_mutation precedent for the same "no gateway config"
+            # wording.
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
         )
     # C-182: `if not cfg:` above only catches a WHOLE-CONFIG-empty state. A
     # present-but-malformed `gateway` value (e.g. `"gateway": null`, a list, a
@@ -2041,6 +2096,10 @@ def check_gateway(ctx: Context) -> Finding:
     # ("absent") without raising — indistinguishable from "gateway key simply
     # not present" — and falls through to a confident PASS below. A field that
     # genuinely can't be assessed must read UNKNOWN, not a fabricated PASS.
+    # B-362: this malformed-value branch stays a REAL UNKNOWN (never not_applicable)
+    # -- a present-but-corrupt `gateway` value is not "no such surface", it is "we
+    # cannot tell what was intended", which is exactly the ambiguous case the sweep
+    # must not flip.
     gw_present = isinstance(cfg, dict) and "gateway" in cfg
     gw = cfg.get("gateway") if gw_present else None
     if gw_present and not isinstance(gw, dict):
@@ -2759,6 +2818,19 @@ def check_trustedproxy_loopback(ctx: Context) -> Finding:
             "If you use a reverse proxy, configure gateway.auth.mode=trusted-proxy "
             "explicitly (with requiredHeaders/allowUsers) and bind the gateway to "
             "loopback.",
+            # B-362: sets not_applicable only when the config locus was read COMPLETELY
+            # and neither locus is set. Grounded (dist docs/gateway/index.md,
+            # configuration-reference.md, onboard.md): "token" is the default auth mode
+            # and trusted-proxy delegation is an explicit opt-in
+            # (gateway.auth.mode="trusted-proxy") -- with mode not set to it AND
+            # allowLoopback unset, the spoofable-header surface this check grades
+            # genuinely does not exist, not merely an unassessed risk. Both loci are
+            # plain ctx.config reads, so config-locus completeness is the whole proof
+            # obligation. (Contrast: this is unlike check_sandbox's "no exec tools"
+            # branch, which was left un-converted -- a full/unrestricted tool profile is
+            # OpenClaw's own default when tools.profile is unset, so absence there does
+            # NOT mean the surface is off.)
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
         )
     bind_host = parse_bind_host(dig(cfg, "gateway.bind", ""))
     if mode == "trusted-proxy" and bind_host not in LOOPBACK:
@@ -2813,6 +2885,678 @@ def check_trustedproxy_loopback(ctx: Context) -> Finding:
         "risk detected).",
         "Keep gateway.auth.trustedProxy.requiredHeaders/allowUsers and/or "
         "gateway.trustedProxies configured, or bind the gateway to loopback.",
+    )
+
+
+def _parse_bind_port_raw(value) -> "str | None":
+    """Extract the raw port SUBSTRING from a gateway.bind value (no range/decimal
+    validation), mirroring parse_bind_host's own handling of the bracketed-IPv6 /
+    host:port / bare forms (checks/_shared.py).
+
+    Returns None when no port substring is present at all — an empty value, a bare
+    address with no port, or a bare (unbracketed) IPv6 literal where "the port" would
+    be ambiguous. Splitting this out from :func:`_parse_bind_port` (B-374 follow-up,
+    C-135 round 2) lets a caller distinguish "gateway.bind names no port at all" from
+    "gateway.bind names a port string that turned out to be invalid" — two different
+    UNKNOWN reasons check_effective_bind reports distinctly.
+    """
+    s = str(value or "").strip()
+    if not s:
+        return None
+    if s.startswith("["):
+        end = s.find("]")
+        if end != -1 and s[end + 1 :].startswith(":"):
+            return s[end + 2 :]
+        return None
+    if s.count(":") == 1:
+        _, _, port_str = s.partition(":")
+        return port_str
+    return None  # bare wildcard/IPv6 literal with no unambiguous port
+
+
+def _parse_bind_port(value) -> "int | None":
+    """Extract the port from a gateway.bind value as a validated 1-65535 int.
+
+    Returns None when no port can be unambiguously extracted (see
+    :func:`_parse_bind_port_raw`), the extracted text is not a plain decimal integer,
+    or the value parses but falls outside the valid TCP port range.
+
+    B-374 follow-up (C-135 round 2, 2026-07-31): uses ``str.isdecimal()``, not
+    ``str.isdigit()``, before calling ``int()``. A handful of Unicode characters (e.g.
+    the superscript ``"²"``) satisfy ``isdigit()`` while still raising ``ValueError``
+    out of ``int()`` — the OLD code could crash on a config value shaped like
+    ``"8080²"`` instead of degrading to UNKNOWN. ``isdecimal()`` only accepts
+    characters ``int()`` can actually parse, so this now never raises. The 1-65535
+    range check is new too — the old code accepted any positive int without an upper
+    bound. A ``None`` return here never raises — ``check_effective_bind`` falls back
+    to ``gateway.port`` next (B-400: including OpenClaw's own grounded default port
+    when ``gateway.port`` is itself absent — see ``_DEFAULT_GATEWAY_PORT``), not
+    straight to "nothing to look up".
+    """
+    port_str = _parse_bind_port_raw(value)
+    if port_str is None or not port_str.isdecimal():
+        return None
+    try:
+        port = int(port_str)
+    except ValueError:  # pragma: no cover - isdecimal() already guards this
+        return None
+    if not (1 <= port <= 65535):
+        return None
+    return port
+
+
+def _declared_bind_class(cfg: dict) -> str:
+    """Classify the DECLARED ``gateway.bind`` as ``loopback`` / ``remote`` / ``ambiguous``.
+
+    C-135 finding: a naive ``parse_bind_host(bind) in LOOPBACK`` test (what B2/B70 use
+    for their own, different, purpose) is WRONG for two of the current schema's five
+    ``gateway.bind`` profiles — ``auto`` resolves to loopback on bare metal but to
+    ``0.0.0.0`` inside a container, and ``custom`` resolves through the SEPARATE
+    ``gateway.customBindHost`` field, not the profile name itself. Reusing that naive
+    test here would misclassify a container's ``bind=auto`` (genuinely, correctly
+    ``0.0.0.0``) as "declared loopback", and the moment the effective socket confirms
+    the wildcard bind, this check would FAIL a config that is working exactly as
+    designed — a textbook false FAIL this module exists to never produce.
+
+    So this reuses ``_gateway_remote_exposure_reason`` (checks/_shared.py) — the
+    already-grounded, already-tested resolver RISK-20 relies on for the identical
+    per-profile logic (``loopback``/``local``/host:port → the shared ``LOOPBACK``
+    predicate; ``lan``/``tailnet`` → always remote; ``custom`` → discriminated by
+    ``customBindHost``; Tailscale ``serve``/``funnel`` → always remote regardless of
+    bind) — but does NOT stop at its ``Optional[str]`` return. That function
+    deliberately collapses two different truths into one ``None``: "provably
+    loopback" and "genuinely unprovable from a config file alone" (``auto``; ``custom``
+    with no valid ``customBindHost``, which — per that function's own docstring — the
+    product refuses to even start with). Corroboration needs the two kept apart:
+    treating "unprovable" as "declared loopback" is exactly the false-FAIL risk above,
+    so an ambiguous profile is reported as its own bucket instead — an honest UNKNOWN,
+    never a guess in either direction.
+
+    C-135 bug 2 (independent review, 2026-07-30): an ABSENT or empty ``gateway.bind``
+    is classified the same as ``auto`` — ambiguous — NOT ``loopback``. Grounded against
+    the installed dist (``net-BOKtNTf8.js:161-178``, ``defaultGatewayBindMode``): when
+    ``gateway.bind`` is unset, the vendor's own effective default is ``loopback`` on
+    bare metal but resolves through the SAME container-detecting path as an explicit
+    ``auto`` — ``0.0.0.0`` inside a container, "for port-forwarding compatibility", by
+    design. That is exactly the ambiguity the ``auto`` branch above exists to never
+    guess at, and an absent bind reaches it through an identical vendor code path, not
+    a different one — so it gets the identical verdict.
+    """
+    if _gateway_remote_exposure_reason(cfg) is not None:
+        return "remote"
+    profile = str(dig(cfg, "gateway.bind", "") or "").strip().lower()
+    if profile in ("auto", ""):
+        return "ambiguous"
+    if profile == "custom" and _canonical_ipv4(dig(cfg, "gateway.customBindHost")) is None:
+        return "ambiguous"
+    return "loopback"
+
+
+# B-400 (2026-08-01, independent review): the B-374 classifier below this
+# comment (see git history) DID fix the "unresolved identity keeps FAIL" bug (Golden
+# Rule #5), but its POSITIVE "gateway" evidence was still a bare, case-insensitive
+# substring test -- `"openclaw" in (identity.name + " " + identity.cmdline)` -- over
+# the WHOLE joined command line. That credits ANY process whose argv merely mentions
+# the word "openclaw" anywhere at all: `ssh -L 8080:localhost:8080
+# user@my-openclaw-server` (the hostname), a text editor opened on this very repo's
+# path, or a shell script invoked from a directory someone happened to name
+# "openclaw" -- none of them are OpenClaw, all of them would have been confidently
+# credited as the gateway, turning an unrelated decoy into a scored FAIL.
+#
+# Replaced with a two-signal classifier that requires the RESOLVED EXECUTABLE PATH
+# (`/proc/<pid>/exe`, sockets.ProcessIdentity.exe -- added alongside this fix) to
+# clear the candidate first: unlike argv/cmdline, this is a symlink the KERNEL points
+# at the inode that was actually `execve()`'d, so nothing in a process's own
+# arguments can spoof it.
+#
+#   1. exe unresolved (permission denied reading another UID's /proc/<pid>/exe is the
+#      common, expected case -- sockets.py's own doctrine)  -> "unknown". Never trust
+#      name/cmdline text alone when the one unspoofable signal is unavailable -- that
+#      would just reintroduce the retired substring bug for exactly the processes it
+#      is hardest to positively rule out.
+#   2. exe resolves to a binary literally named "openclaw" (a compiled/bundled
+#      single-binary install)                                -> "gateway" directly.
+#   3. exe resolves to a real script-interpreter binary (node/bun/deno -- what
+#      OpenClaw's own `#!/usr/bin/env node` launcher, confirmed against the installed
+#      dist's `openclaw.mjs`, actually runs under) -- exe alone can never confirm
+#      OpenClaw here, since /proc/<pid>/exe for an INTERPRETED process always names
+#      the interpreter, never the invoked script. Fall back to cmdline, but
+#      STRUCTURALLY: only a path-shaped token (contains "/") whose own path segments
+#      name an OpenClaw install (see _names_openclaw_install) counts -- never a raw
+#      substring test over the whole joined line, which is what let a bare hostname
+#      argument like "user@my-openclaw-server" or a flag value count as evidence
+#      before. Confirms  -> "gateway"; nothing matches -> "unknown" (a real node/bun/
+#      deno process that plausibly isn't OpenClaw, but isn't positively ruled out
+#      either -- see the module docstring's accepted-FN trade).
+#   4. exe resolves to anything else specific and nameable (ssh, a text editor, bash,
+#      ...)                                                   -> "foreign". This is
+#      the exact defense the retired substring test could never provide: none of
+#      these three ticket-cited decoys survive step 4, regardless of what
+#      "openclaw"-shaped text appears anywhere in their argv, because their
+#      executable is never node/bun/deno/openclaw in the first place.
+_INTERPRETER_EXE_BASENAMES = frozenset({"node", "bun", "deno"})
+
+
+def _names_openclaw_install(path: str) -> bool:
+    """True when *path* — a single argv TOKEN already filtered by the caller to look
+    like a filesystem path (contains ``/``), never arbitrary free text such as a
+    hostname or a flag value — structurally names an OpenClaw install.
+
+    Checked as PATH SEGMENTS (split on ``/``, compared whole, never a substring
+    search), so a decoy directory that merely CONTAINS "openclaw" as part of a longer
+    name (``/tmp/my-openclaw-notes/script.js``) does NOT match — only an EXACT
+    segment does. Three real shapes match, all grounded against this project's own
+    installed dist:
+
+    * a segment exactly ``openclaw`` — covers both the standard npm package layout
+      (``.../node_modules/openclaw/...``, global or local, any package manager) and a
+      direct top-level install directory (``/opt/openclaw/...``);
+    * a segment exactly ``.openclaw`` — the state/install directory convention
+      (``~/.openclaw/dist/cli.js``, this machine's own live shape);
+    * the final segment (basename) IS the real entry point itself — ``openclaw`` (the
+      installed ``bin/openclaw`` symlink's own name, confirmed by actually invoking a
+      shebang-symlinked launcher and inspecting its resulting ``argv`` — see this
+      task's C-135 notes) or ``openclaw.mjs`` (the resolved package script,
+      ``~/.npm-global/lib/node_modules/openclaw/openclaw.mjs`` on this machine).
+
+    Deliberately NOT a bare substring test over the whole path or the whole cmdline —
+    see the block comment above :func:`_classify_listener_identity` for exactly why
+    that was the bug this replaces (B-400).
+    """
+    segments = [s for s in path.replace("\\", "/").lower().split("/") if s]
+    if not segments:
+        return False
+    if "openclaw" in segments or ".openclaw" in segments:
+        return True
+    return segments[-1] in ("openclaw", "openclaw.mjs")
+
+
+def _classify_listener_identity(identity: "object | None") -> str:
+    """Classify a resolved ``sockets.ProcessIdentity`` (or ``None`` -- unresolved) for
+    one non-loopback listener as ``"gateway"`` | ``"foreign"`` | ``"unknown"``.
+
+    ``"gateway"``  -- positive evidence: the resolved executable IS OpenClaw (a
+                      binary literally named ``openclaw``), or is a real
+                      node/bun/deno interpreter AND the invoked script's path
+                      structurally names an OpenClaw install
+                      (:func:`_names_openclaw_install`).
+    ``"foreign"``  -- positive evidence of the opposite: the resolved executable is a
+                      specific, nameable binary that is neither OpenClaw itself nor a
+                      script-interpreter that could plausibly be running it (e.g.
+                      ``ssh``, a text editor, ``bash`` -- or Docker's userland proxy
+                      sharing the port number).
+    ``"unknown"``  -- no identity evidence either way: the inode could not be
+                      resolved to any process at all (permission denied reading
+                      another user's ``/proc``, no inode recorded, the process
+                      vanished, multiple PIDs disagreed on a name), the resolved
+                      process's ``/proc/<pid>/exe`` itself could not be read (equally
+                      common, equally expected -- never silently fall back to
+                      trusting argv/cmdline text alone when this happens), or the
+                      executable IS a real interpreter but nothing in its command
+                      line structurally names an OpenClaw install.
+    """
+    if identity is None:
+        return "unknown"
+    exe = getattr(identity, "exe", "") or ""
+    if not exe:
+        return "unknown"
+    exe_basename = exe.replace("\\", "/").rsplit("/", 1)[-1].lower()
+    if exe_basename == "openclaw":
+        return "gateway"
+    if exe_basename in _INTERPRETER_EXE_BASENAMES:
+        cmdline = getattr(identity, "cmdline", "") or ""
+        for token in cmdline.split():
+            if "/" in token and _names_openclaw_install(token):
+                return "gateway"
+        return "unknown"
+    return "foreign"
+
+
+# B-400 (2026-08-01): OpenClaw's OWN documented/grounded default gateway
+# port, used when gateway.port is genuinely ABSENT from the config (never when it is
+# present but malformed -- see the port-resolution block in check_effective_bind for
+# that distinction). Ground truth is the installed dist's own resolver, not a guess:
+# `paths-BMBAvkNf.js:193` -- `const DEFAULT_GATEWAY_PORT = 18789;` -- and
+# `paths-BMBAvkNf.js:230-238`'s `resolveGatewayPort(cfg, env)`, which checks
+# `OPENCLAW_GATEWAY_PORT` first, then `cfg?.gateway?.port` (if a positive finite
+# number), and ONLY THEN falls back to this exact constant -- the identical
+# precedence this check now mirrors for the config-only signal it can see. Also
+# documented in the public dist's own `.d.ts`: `types.openclaw-CXjMEWAQ.d.ts:1224`,
+# "Single multiplexed port for Gateway WS + HTTP (default: 18789)." Manifest entry:
+# `gateway.port` (already grounded in tests/grounded_schema_paths.txt; this constant
+# is the DEFAULT VALUE for that same field, additionally grounded in
+# docs/research/openclaw-schema-recon.md's `gateway.port` entry).
+#
+# Before this fix, an absent gateway.port made check_effective_bind report UNKNOWN
+# ("nothing to look up") even when a real, world-open listener sat on OpenClaw's own
+# real default port -- a genuine coverage blind spot, not a false FAIL: the single
+# most common real config shape (gateway.port simply never set, which is valid and
+# common since the field is `.optional()`) got NO runtime corroboration at all.
+_DEFAULT_GATEWAY_PORT = 18789
+
+
+def check_effective_bind(ctx: Context) -> Finding:
+    """B340 (F-156): corroborate the DECLARED ``gateway.bind`` against the ACTUAL
+    listening socket, read from ``/proc/net/tcp{,6}`` (see ``sockets.py``).
+
+    Every other gateway-exposure verdict (B2, B70) is declared-state only — it reads
+    ``gateway.bind`` and reasons about that string. It never checks what the process is
+    actually listening on, which is a real blind spot in both directions: a config that
+    says loopback while an env override/wrapper/reverse-proxy actually exposes the port
+    (false PASS elsewhere), or a config that says wide-open while the gateway is not
+    even running (false FAIL elsewhere). This check adds the one runtime signal that
+    closes that gap.
+
+    Route decision (recorded per the task DoD): **no subprocess** — ``sockets.py``
+    reads ``/proc/net/tcp{,6}`` directly, matching ``hostwatch.py``'s "no subprocess, no
+    network" doctrine rather than ``native.py``'s guarded-subprocess precedent. Read-only,
+    stdlib-only, and — because it parses the fixed ``local_address`` column instead of
+    regexing a whole ``ss``/``netstat`` line — structurally immune to the peer-column bug
+    a competitor tool shipped (see ``sockets.py``'s module docstring).
+
+    Matching a listener to the declared port is still by PORT NUMBER first — that part
+    of the original design is unchanged. C-135 bug 1 (independent review, 2026-07-30,
+    live-reproduced on the reviewer's own machine against ``fixtures/home_safe`` —
+    Docker's userland proxy sharing port 8080 with a correctly loopback-only declared
+    gateway) showed that port-number-alone matching has a real false-positive-FAIL
+    mode, so this adds the ``/proc/*/fd`` PID correlation the original design had
+    scoped out as unneeded: when the declared-loopback/effective-non-loopback
+    condition is reached, every non-loopback listener's owning process is resolved
+    from its socket inode (``sockets.identify_listener_process``, one ``/proc`` walk
+    shared across all of them via ``sockets.build_inode_index``) and classified by
+    :func:`_classify_listener_identity`.
+
+    B-374 (C-135 round 2, 2026-07-31) REPLACED the original one-sided calibration.
+    The original fix could only ever DOWNGRADE FAIL to WARN, and only on POSITIVE
+    evidence the listener was something else — any unresolved identity (permission
+    denied, no matching inode, disagreeing names) kept the FAIL, which is itself an
+    unproven guess in the FAIL direction (Golden Rule #5 forbids exactly this). Now:
+    the verdict stays FAIL ONLY when at least one non-loopback listener is POSITIVELY
+    confirmed to be the gateway itself — see :func:`_classify_listener_identity`; the
+    moment NONE of them can be so confirmed — whether because they positively resolve
+    to something else (Docker's userland proxy) or because identity resolution is
+    inconclusive (permission denied is the common case) — this reports UNKNOWN instead
+    of FAIL. This is a deliberate, accepted false-negative trade: a real lying gateway
+    whose ``/proc/<pid>/fd`` this reader cannot read now also reads UNKNOWN, not FAIL.
+    B2/B70 still assess the DECLARED posture regardless, so the config's own stated
+    exposure is never hidden — only THIS check's runtime corroboration backs off. Every
+    existing synthetic ``Context`` the test suite injects with no inode data at all
+    now resolves to UNKNOWN in this branch (not "keep FAIL" as before) — see
+    ``tests/test_b340_effective_bind.py``.
+
+    B-400 (2026-08-01, independent review) tightened WHAT counts as
+    "positively confirmed" again: B-374's own positive-evidence signal was still a
+    bare substring test for ``"openclaw"`` over the whole joined ``comm``/``cmdline``
+    text, which credits any decoy that merely MENTIONS the word anywhere in its argv
+    (an SSH tunnel to a host named ``...openclaw...``, a text editor with this repo's
+    path open, a shell script run from a directory literally named ``openclaw``) as
+    the gateway itself. :func:`_classify_listener_identity` now requires the
+    KERNEL-RESOLVED executable path (``/proc/<pid>/exe``, ``sockets.ProcessIdentity.
+    exe`` — unlike argv, not something a process's own arguments can spoof) to name a
+    real script interpreter or OpenClaw itself before cmdline is even consulted, and
+    even then only a PATH-SHAPED, PATH-SEGMENT match counts, never a raw substring
+    over free text. See that function's own docstring for the full four-way
+    breakdown, and ``tests/test_b340_effective_bind.py``'s decoy-process tests
+    (SSH tunnel, text editor, shell script from an ``openclaw``-named directory) for
+    the exact shapes this now clears that the old substring test did not.
+
+    Scoring (B-387, C-135 round 2, 2026-07-31): every PASS and WARN branch below
+    passes ``scored=False`` explicitly — B340 can never EARN a scored point, only ever
+    COST one via the single FAIL branch (which stays scored, HIGH-capped at 79). Before
+    this, a declared-remote config whose effective bind also read non-loopback (the
+    "already assessed by B2/B70" PASS below) scored a full-weight PASS — so WIDENING
+    ``gateway.bind`` from loopback to remote could swap a capped FAIL (a correctly
+    -declared config hitting an attribution edge case) for a full-weight PASS, i.e. a
+    LESS secure declaration scoring BETTER on this one check. Making every non-FAIL
+    branch unscored closes that inversion structurally: widening the declared/actual
+    exposure can only ever move this check from "scores a capped FAIL" to "scores
+    nothing", never to "scores a PASS" — see ``tests/test_b340_effective_bind.py``'s
+    monotonicity test.
+
+    Fully enumerated verdict table (``declared`` = ``_declared_bind_class``, which
+    resolves the FULL 5-profile ``gateway.bind`` enum — not a naive ``LOOPBACK``
+    membership test, see its own docstring for why that would false-FAIL a container's
+    ``bind=auto``; ``effective`` = every listener found on the declared port, ALL
+    loopback or not — a dual-stack 127.0.0.1 + [::1] pair on the same port is ONE
+    effective state, not two findings):
+
+        declared      | effective         | verdict
+        --------------+-------------------+----------------------------------------
+        loopback      | loopback          | PASS (unscored) — corroborates B2
+        loopback      | not loopback,      | FAIL (scored) — at least one non-loopback
+                      | >=1 confirmed      |   listener positively confirmed as the
+                      | gateway            |   gateway itself; the config lies
+        loopback      | not loopback,      | UNKNOWN — no non-loopback listener could be
+                      | none confirmed     |   positively tied to the gateway process
+                      | gateway            |   (foreign process, or unresolvable)
+        remote        | loopback           | WARN (unscored) — config is dangerous but
+                      |                    |   not currently exposed
+        remote        | not loopback       | PASS (unscored) — declared exposure is
+                      |                    |   real; B2/B70 already assess it
+        ambiguous     | (any)              | UNKNOWN — profile (auto / custom w/o a
+                      |                    |   valid customBindHost) is not resolvable
+                      |                    |   from the config alone; corroborating it
+                      |                    |   either way would be a guess
+        (any)         | no listener found  | UNKNOWN — gateway not running, nothing measured
+                      |                    |   (checked against the resolved port, which may
+                      |                    |   be OpenClaw's own default — see "Port source")
+        (any)         | /proc unavailable  | UNKNOWN — platform not supported, or scan not run
+        (any)         | gateway.port       | UNKNOWN — gateway.bind embeds no port AND
+                      | present, malformed |   gateway.port is present but not a valid
+                      |                    |   1-65535 port (a real config error — never
+                      |                    |   silently defaulted, see "Port source")
+        (any)         | port out of range  | UNKNOWN — gateway.bind names an embedded port
+                      |                    |   that is out of 1-65535 range
+
+    Port source (C-135 finding, fixed before this shipped; B-400 extended
+    it): this package's whole existing gateway-check family (B2, B70) reads
+    ``gateway.bind`` as a ``host:port`` string via ``parse_bind_host`` — the shape every
+    fixture in this repo uses. But the CURRENT installed OpenClaw schema (grounded
+    directly against the dist, since the recon doc does not cover this:
+    ``zod-schema-O9ml_nmo.js``, the ``gateway: object({ port:
+    number().int().positive().optional(), mode: union([literal("local"),
+    literal("remote")]).optional(), bind: union([literal("auto"), literal("lan"),
+    literal("loopback"), literal("custom"), literal("tailnet")]).optional(),
+    customBindHost: string().optional(), ... })`` block) makes ``gateway.bind`` a
+    5-value MODE enum with no embedded port at all — confirmed against this machine's
+    own live ``~/.openclaw/openclaw.json`` (``"bind": "loopback", "port": 18789``,
+    sibling fields). Reading only an embedded port would make this check report UNKNOWN
+    on every config shaped this way — a real coverage gap on the exact real-fleet
+    config available for this check's own C-135 pass, not a false FAIL, but real
+    enough that it defeats the check's purpose. So the port is resolved, in order: (1)
+    an embedded ``host:port`` in ``gateway.bind`` (the fixture/legacy shape); (2) the
+    sibling ``gateway.port`` (grounded above; manifest entry in
+    ``tests/grounded_schema_paths.txt``) when ``gateway.bind`` is a bare mode string
+    and ``gateway.port`` IS present and a valid 1-65535 int; (3) — B-400 —
+    OpenClaw's own grounded default, :data:`_DEFAULT_GATEWAY_PORT` (18789), when
+    ``gateway.port`` is genuinely ABSENT (the single most common real shape, since the
+    field is ``.optional()``): before this, an absent ``gateway.port`` made this check
+    report UNKNOWN ("nothing to look up") even against a real, world-open listener on
+    OpenClaw's own real default port — a coverage blind spot, not a false FAIL, but one
+    that defeated corroboration on the most common config shape. A ``gateway.port`` that
+    IS present but not a valid port (a string, an out-of-range int, ...) is a genuine
+    config error and is never silently treated as "absent" — it stays its own distinct
+    UNKNOWN (see the port-resolution block below), never masked by the default.
+    """
+    cfg = ctx.config
+    if not cfg:
+        return _finding(
+            "B340",
+            UNKNOWN,
+            "No config loaded — cannot corroborate gateway.bind against the actual "
+            "listening socket.",
+            "Run on the host with ~/.openclaw present.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
+    gw_present = isinstance(cfg, dict) and "gateway" in cfg
+    gw = cfg.get("gateway") if gw_present else None
+    if gw_present and not isinstance(gw, dict):
+        return _finding(
+            "B340",
+            UNKNOWN,
+            "gateway config value is present but malformed (not an object) — cannot "
+            "corroborate it against the actual listening socket.",
+            "Fix `gateway` to be a config object, or remove the key.",
+        )
+
+    bind_raw = dig(cfg, "gateway.bind", "")
+    declared_class = _declared_bind_class(cfg)
+    if declared_class == "ambiguous":
+        return _finding(
+            "B340",
+            UNKNOWN,
+            f"gateway.bind={bind_raw!r} is a profile whose actual bind cannot be "
+            "determined from the config alone ('auto' resolves differently inside a "
+            "container vs. bare metal; a 'custom' profile with no valid "
+            "gateway.customBindHost cannot even start) — nothing to corroborate.",
+            "Set gateway.bind to an explicit profile ('loopback'/'lan'/'tailnet'), or "
+            "give a 'custom' profile a valid gateway.customBindHost, so this check can "
+            "state what is actually declared.",
+        )
+    declared_loopback = declared_class == "loopback"
+    # Port source, in order: an embedded host:port in gateway.bind (the shape every
+    # fixture in this repo uses), falling back to the sibling gateway.port (the shape
+    # the CURRENT OpenClaw schema actually uses when gateway.bind is a bare mode
+    # string — see the docstring's "Port source" note; grounded against the dist,
+    # manifest entry in tests/grounded_schema_paths.txt).
+    bind_port_raw = _parse_bind_port_raw(bind_raw)
+    port = _parse_bind_port(bind_raw)
+    if port is None and bind_port_raw is not None:
+        # B-374 follow-up (C-135 round 2): gateway.bind DID name a port substring, but
+        # it is not a valid 1-65535 decimal port -- a distinct UNKNOWN from "no port
+        # declared at all" below (never "gateway is not running").
+        return _finding(
+            "B340",
+            UNKNOWN,
+            f"gateway.bind={bind_raw!r} names a port ({bind_port_raw!r}) that is not a "
+            "valid TCP port (1-65535) — cannot look up which listening socket to "
+            "corroborate it against.",
+            "Set gateway.bind to a valid host:port (port 1-65535), or set gateway.port "
+            "to a valid port, so this check can corroborate it against the actual "
+            "listening socket.",
+        )
+    used_default_port = False
+    if port is None:
+        gw_port = dig(cfg, "gateway.port")
+        if gw_port is None:
+            # B-400: genuinely ABSENT (the key is missing, or explicitly
+            # null) -- gateway.port is `.optional()` in the real schema, and this is
+            # by far the most common real-config shape for it. Fall back to OpenClaw's
+            # own grounded default (_DEFAULT_GATEWAY_PORT) instead of reporting
+            # UNKNOWN outright, mirroring the vendor's own resolveGatewayPort()
+            # precedence. Never applies when gateway.port IS present but malformed --
+            # see the `else` branch below, which stays a distinct UNKNOWN.
+            port = _DEFAULT_GATEWAY_PORT
+            used_default_port = True
+        elif isinstance(gw_port, int) and not isinstance(gw_port, bool):
+            if 1 <= gw_port <= 65535:
+                port = gw_port
+            else:
+                # Same distinction as above, sourced from gateway.port instead.
+                return _finding(
+                    "B340",
+                    UNKNOWN,
+                    f"gateway.port={gw_port!r} is not a valid TCP port (1-65535) — "
+                    f"cannot look up which listening socket to corroborate "
+                    f"gateway.bind={bind_raw!r} against.",
+                    "Set gateway.port to a valid port (1-65535) so this check can "
+                    "corroborate the declared bind against the actual listening "
+                    "socket.",
+                )
+        else:
+            # Present, but not a number at all (a string, list, dict, ...) -- a real
+            # config error. Never silently treated the same as "absent -> use the
+            # grounded default"; that would mask a genuine misconfiguration instead of
+            # surfacing it.
+            return _finding(
+                "B340",
+                UNKNOWN,
+                f"gateway.port={gw_port!r} is not a valid TCP port (1-65535) — "
+                f"cannot look up which listening socket to corroborate "
+                f"gateway.bind={bind_raw!r} against.",
+                "Set gateway.port to a valid port (1-65535) so this check can "
+                "corroborate the declared bind against the actual listening "
+                "socket.",
+            )
+
+    sockets_result = getattr(ctx, "sockets", None)
+    if sockets_result is None:
+        return _finding(
+            "B340",
+            UNKNOWN,
+            "The effective-bind socket scan was not run (audit(include_sockets=True), "
+            "or the CLI's --no-sockets was passed) — cannot corroborate gateway.bind "
+            "against reality.",
+            "Run the full CLI audit (omit --no-sockets) so this check can read "
+            "/proc/net/tcp{,6} and corroborate the declared bind.",
+        )
+    if not sockets_result.available:
+        return _finding(
+            "B340",
+            UNKNOWN,
+            f"Could not read the host's listening-socket table: {sockets_result.reason}.",
+            "Run ClawSecCheck on Linux with /proc mounted (the standard case) so this "
+            "check can corroborate the declared bind against reality.",
+        )
+
+    port_source = (
+        f"gateway.port unset — falling back to OpenClaw's own default port {port}"
+        if used_default_port
+        else f"the port gateway.bind={bind_raw!r} declares"
+    )
+    matches = _sockets.listeners_for_port(sockets_result, port)
+    if not matches:
+        return _finding(
+            "B340",
+            UNKNOWN,
+            f"Nothing is listening on port {port} ({port_source}) — the gateway is not "
+            "running, or is listening elsewhere; nothing to corroborate.",
+            "Start the gateway and re-run the audit so this check can corroborate "
+            "gateway.bind against the actual listening socket.",
+        )
+
+    classes = {_sockets.classify_host(m.host) for m in matches}
+    effective_loopback = classes <= {"loopback"}
+    evidence = [
+        f"gateway.bind={bind_raw!r} (declared class={declared_class!r})",
+        "effective listener(s): "
+        + ", ".join(f"{m.host}:{m.port} ({_sockets.classify_host(m.host)})" for m in matches),
+    ]
+    if used_default_port:
+        evidence.append(
+            f"gateway.port was not set in config — corroborated against OpenClaw's "
+            f"own grounded default port {_DEFAULT_GATEWAY_PORT}, not a value read "
+            "from this config"
+        )
+
+    if declared_loopback and not effective_loopback:
+        non_loopback = [m for m in matches if _sockets.classify_host(m.host) != "loopback"]
+        proc_root = getattr(ctx, "proc_root", None) or "/proc"
+        # One /proc walk serves every non-loopback listener on this port (B-374
+        # follow-up) instead of re-scanning /proc/*/fd once per listener.
+        inode_index = _sockets.build_inode_index(proc_root=proc_root)
+        identities = [
+            _sockets.identify_listener_process(
+                getattr(m, "inode", ""), proc_root=proc_root, index=inode_index
+            )
+            for m in non_loopback
+        ]
+        confirmed_gateway = [
+            m
+            for m, ident in zip(non_loopback, identities)
+            if _classify_listener_identity(ident) == "gateway"
+        ]
+        if not confirmed_gateway:
+            # B-374: NONE of the non-loopback listeners on this port could be
+            # POSITIVELY tied to the OpenClaw gateway process itself -- a foreign
+            # process sharing the port number (Docker's userland proxy is the
+            # live-reproduced example), or an identity this reader has no
+            # permission/evidence to resolve either way (permission denied reading
+            # another user's /proc is the normal case). Keeping FAIL here -- as the
+            # original C-135 bug-1 fix did -- is itself an unproven guess in the FAIL
+            # direction, which Golden Rule #5 forbids. Report UNKNOWN instead; this is
+            # a deliberate, accepted false-negative trade (see the function
+            # docstring): B2/B70 still assess the DECLARED posture regardless.
+            reasons = []
+            for m, ident in zip(non_loopback, identities):
+                if ident is None:
+                    reasons.append(f"{m.host}:{m.port} — process identity unresolvable")
+                else:
+                    reasons.append(
+                        f"{m.host}:{m.port} held by pid {ident.pid} ({ident.name}) — "
+                        "not identifiable as the OpenClaw gateway"
+                    )
+            return _finding(
+                "B340",
+                UNKNOWN,
+                f"gateway.bind={bind_raw!r} declares a loopback bind, and a non-loopback "
+                f"listener was found on port {port}, but it could not be positively tied "
+                "to the OpenClaw gateway process itself: " + "; ".join(reasons) + ". This "
+                "could be gateway.bind lying (env override/launch wrapper/reverse proxy), "
+                "or an unrelated process coincidentally sharing the port number — not "
+                "distinguishable from a config file and a /proc read alone.",
+                f"Confirm what is actually listening on port {port} (e.g. `lsof -i "
+                f":{port}` or `ss -tlnp` as root) to determine whether gateway.bind is "
+                "being honored, then re-run this audit.",
+                evidence=evidence + reasons,
+            )
+        return _finding(
+            "B340",
+            FAIL,
+            f"gateway.bind={bind_raw!r} declares a loopback bind, but the gateway is "
+            f"ACTUALLY listening on a non-loopback address on port {port} — the config "
+            "lies and the port is reachable from the network (env override, launch "
+            "wrapper, or a reverse proxy re-publishing it).",
+            "Find why the running gateway does not match the declared bind (an "
+            "env-var override or launch wrapper is the usual cause) and align it with "
+            "gateway.bind, or update gateway.bind to state reality.",
+            evidence=evidence
+            + [
+                f"{m.host}:{m.port} confirmed via pid {ident.pid} ({ident.name})"
+                for m, ident in zip(non_loopback, identities)
+                if _classify_listener_identity(ident) == "gateway"
+            ],
+            scored=True,
+        )
+    if not declared_loopback and effective_loopback:
+        # B-374 follow-up (item 4): when the DECLARED-remote classification actually
+        # comes from Tailscale serve/funnel (which requires a loopback gateway.bind —
+        # see _gateway_remote_exposure_reason's docstring), name that reason instead
+        # of telling the owner to "set gateway.bind to loopback" when it may already
+        # BE loopback and Tailscale's own relay path is what exposes it.
+        exposure_reason = _gateway_remote_exposure_reason(cfg)
+        if exposure_reason is not None and exposure_reason.startswith("gateway.tailscale.mode="):
+            detail = (
+                f"{exposure_reason} publishes the gateway externally regardless of "
+                f"gateway.bind={bind_raw!r} — the gateway is currently only listening "
+                f"loopback-only on port {port} on this host, but Tailscale's own "
+                "serve/funnel relay is what actually exposes it, not this machine's "
+                "socket."
+            )
+            fix = (
+                "Confirm the Tailscale serve/funnel exposure is intentional — it "
+                "publishes the gateway regardless of gateway.bind. Disable "
+                "gateway.tailscale.mode if that is not intended."
+            )
+        else:
+            detail = (
+                f"gateway.bind={bind_raw!r} declares a non-loopback bind, but the "
+                f"gateway is currently only listening on loopback on port {port} — the "
+                "config is dangerous even though nothing is exposed right now."
+            )
+            fix = (
+                "Set gateway.bind to loopback (127.0.0.1) so the declared and actual "
+                "posture match, or confirm the non-loopback bind is intentional before "
+                "it takes effect."
+            )
+        return _finding(
+            "B340",
+            WARN,
+            detail,
+            fix,
+            evidence=evidence,
+            scored=False,
+        )
+    if declared_loopback:
+        return _finding(
+            "B340",
+            PASS,
+            f"gateway.bind={bind_raw!r} is loopback and the gateway is ACTUALLY "
+            f"listening loopback-only on port {port} (corroborates B2).",
+            "Keep gateway.bind loopback and re-run this corroboration after any config "
+            "or deployment change.",
+            evidence=evidence,
+            scored=False,
+        )
+    return _finding(
+        "B340",
+        PASS,
+        f"gateway.bind={bind_raw!r} declares a non-loopback bind and the gateway is "
+        f"ACTUALLY listening non-loopback on port {port} — the declared exposure is "
+        "real, and already assessed by B2/B70.",
+        "See B2/B70 for the auth/exposure posture of this bind.",
+        evidence=evidence,
+        scored=False,
     )
 
 
@@ -3117,76 +3861,6 @@ def check_shell_env_fallback(ctx: Context) -> Finding:
         "Keep it that way unless a specific workflow depends on profile-defined "
         "secrets or PATH customizations from the login shell.",
     )
-
-
-_B323_ENV_VAR_NAME_RE = re.compile(r"^[A-Z_][A-Z0-9_]*$")
-
-
-def _b323_parse_env_token_at(value: str, index: int) -> "tuple[str, int] | None":
-    """Faithful port of OpenClaw's ``parseEnvTokenAt``
-    (``env-substitution-CATXLg7n.js:32-58``).
-
-    Returns ``("escaped", end)`` for a ``$${NAME}`` token, ``("substitution", end)``
-    for a ``${NAME}`` token, or ``None`` if *index* isn't the start of either --
-    including the case where ``NAME`` doesn't match OpenClaw's own
-    ``ENV_VAR_NAME_PATTERN`` (``/^[A-Z_][A-Z0-9_]*$/``, all-caps only) or the ``}``
-    is missing. *end* is the index of the closing ``}``.
-    """
-    if index >= len(value) or value[index] != "$":
-        return None
-    nxt = value[index + 1] if index + 1 < len(value) else ""
-    after_next = value[index + 2] if index + 2 < len(value) else ""
-    if nxt == "$" and after_next == "{":
-        start = index + 3
-        end = value.find("}", start)
-        if end != -1:
-            name = value[start:end]
-            if _B323_ENV_VAR_NAME_RE.match(name):
-                return ("escaped", end)
-    if nxt == "{":
-        start = index + 2
-        end = value.find("}", start)
-        if end != -1:
-            name = value[start:end]
-            if _B323_ENV_VAR_NAME_RE.match(name):
-                return ("substitution", end)
-    return None
-
-
-def _b323_contains_env_var_reference(value: str) -> bool:
-    """Faithful port of OpenClaw's ``containsEnvVarReference()``
-    (``env-substitution-CATXLg7n.js:102-112``).
-
-    Only an unescaped ``${ALL_CAPS_NAME}`` counts as a real, filtered reference.
-    An escaped ``$${NAME}`` token, or a ``${...}``-shaped token whose name is not
-    all-caps (lowercase/mixed-case, digit-leading, etc.) or is missing its closing
-    ``}``, does NOT count -- OpenClaw's own ``isConfigRuntimeEnvVarAllowed()`` does
-    not block those values; it applies them verbatim (literal ``$`` characters and
-    all) to the runtime environment. A naive ``"${" in value`` substring test
-    conflates these two cases and was found (C-135 adversarial pass) to silently
-    miss a config-declared literal PATH override that OpenClaw actually applies,
-    whenever the token merely *looks* like a substitution (e.g.
-    ``${systemRoot}:/opt/evil/bin`` -- mixed-case name, not a real reference, but
-    the naive check skipped it as if it were one).
-    """
-    if "$" not in value:
-        return False
-    i = 0
-    n = len(value)
-    while i < n:
-        if value[i] != "$":
-            i += 1
-            continue
-        token = _b323_parse_env_token_at(value, i)
-        if token is not None:
-            kind, end = token
-            if kind == "escaped":
-                i = end + 1
-                continue
-            if kind == "substitution":
-                return True
-        i += 1
-    return False
 
 
 def _b323_is_literal_path_override(key: object, value: object) -> bool:

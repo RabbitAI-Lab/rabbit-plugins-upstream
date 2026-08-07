@@ -1,0 +1,48 @@
+{
+  "skill": "metadata-standards-checker",
+  "skill_version": "1.0.0",
+  "command": "metadata-standards-checker --bbox 117.0 39.0 116.0 40.0 --synthetic --output-dir .\\out_s06_bbox",
+  "started_at": "2026-08-03T22:08:56.966945Z",
+  "finished_at": "2026-08-03T22:08:56.991357Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "standard": "auto",
+    "synthetic": true,
+    "bbox": [
+      117.0,
+      39.0,
+      116.0,
+      40.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": ".\\out_s06_bbox\\metadata_report.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_files": 3,
+    "mean_completeness": 0.9394,
+    "files_passed": 2,
+    "total_errors": 2,
+    "total_warnings": 5
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "metadata-standards-checker"
+  },
+  "error": null
+}

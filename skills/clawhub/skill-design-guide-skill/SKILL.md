@@ -5,9 +5,11 @@ description: >
   Design better AI skills with proven architecture patterns. Helps you decide
   Workflow vs Agent, pick the right pattern (Prompt Chaining, Routing,
   Parallelization, Orchestrator-Workers, Evaluator-Optimizer), write clean
-  SKILL.md files, and catch common mistakes with a 25-point quality checklist.
+  SKILL.md files, and catch common mistakes with a governance-aware quality checklist.
   Based on design principles from Anthropic, OpenAI, and LangChain.
-version: "1.4.3"
+description_zh: "Skill 设计指南：用成熟架构模式设计更优 AI Skill，帮你判断该用 Workflow 还是 Agent，从工作流模式中选最合适的，用检查清单把关质量。"
+
+version: "1.4.7"
 agent_created: true
 category: "Architecture / Design Patterns"
 license: "MIT"
@@ -19,6 +21,18 @@ read_when:
   - "design skill architecture, workflow or agent, choose workflow pattern"
   - "review skill design, skill quality checklist, brain hands session"
   - "skill anti-patterns, prompt chaining vs routing, when to use agent"
+metadata:
+  openclaw:
+    tags:
+      - skill-design
+      - agent-architecture
+      - prompt-engineering
+      - workflow-patterns
+      - best-practices
+      - developer-tools
+      - ai-agents
+      - openclaw
+      - llm-engineering
 ---
 
 # Skill Design Guide
@@ -128,6 +142,7 @@ Five workflow patterns. Full details in `references/pattern-details.md`.
 ---
 name: my-skill
 description: One sentence. Trigger keywords: a, b, c.
+description_zh: "Skill 设计指南：用成熟架构模式设计更优 AI Skill，帮你判断该用 Workflow 还是 Agent，从工作流模式中选最合适的，用检查清单把关质量。"
 version: 1.0.0
 read_when:
   - "trigger phrase 1"
@@ -180,7 +195,7 @@ Overview paragraph.
 
 ## Step 4: Quality Checklist
 
-After completing a skill, run the full 25-point checklist. Load `references/quality-checklist.md` for details.
+After completing a skill, run the full governance-aware checklist. Load `references/quality-checklist.md` for details.
 
 Structure ✓ | Principles ✓ | Tools ✓ | Guardrails ✓ | Observability ✓
 
@@ -230,9 +245,12 @@ When the skill is ready to share on ClawHub/GitHub, use **`skill-publish`** to a
 
 ---
 
-*v1.4.3 | Based on Anthropic/OpenAI/LangChain design principles | 2026-06-23*
+*v1.4.6 | Based on Anthropic/OpenAI/LangChain design principles | 2026-08-02*
 
 **Changelog:**
+- v1.4.6: Published merged content to the correct slug `skill-design-guide-skill` — restores 9 `metadata.openclaw.tags` (discoverability) + 1.4.4 governance-aware checklist / Governance & Continuity checks. (Prior 1.4.5/1.4.6 attempts landed on a stray `skill-design-guide` slug by mistake; that duplicate should be deleted.)
+- v1.4.5: Restored `metadata.openclaw.tags` (9 discoverability tags) dropped in the 1.4.4 sync; no content change beyond 1.4.4 governance additions
+- v1.4.4: Added governance checks for single source of truth, private-data separation, secret scanning, retry/re-run, external-action gates, and persistent task continuity
 - v1.4.3: Restored display name "Skill Design Guide"
 - v1.4.2: Consolidated `reference/` + `references/` into a single `references/` dir; fixed all reference paths
 - v1.4.1: Fixed display name

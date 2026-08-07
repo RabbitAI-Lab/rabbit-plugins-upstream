@@ -224,6 +224,7 @@ There is a real learning curve to generating videos with CellCog. It takes time,
 
 ## If CellCog is not installed
 
-Run `/cellcog-setup` (or `/cellcog:cellcog-setup` depending on your tool) to install and authenticate.
-**OpenClaw users:** Run `clawhub install cellcog` instead.
+**Claude Code, Cursor, Codex + 70 more agents:** `npx skills add cellcog/skills --skill cellcog`
+**OpenClaw:** `clawhub install cellcog`
+**CellCog plugin users:** run `/cellcog-setup` (or `/cellcog:cellcog-setup` depending on your tool)
 **Manual setup:** `pip install -U cellcog` and set `CELLCOG_API_KEY`. See the **cellcog** skill for SDK reference.

@@ -1,65 +1,70 @@
-## Description: <br>
-Nano (XNO) supports cryptocurrency wallet operations, transaction analysis, explorer lookups, address validation, unit conversion, and block-lattice guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Nano (XNO) cryptocurrency wallet operations, transaction analysis, and explorer lookups. Use for send/receive, balances, pending funds, address validation, unit conversion, tx/hash/account lookup, explorer links, and Nano block-lattice questions. Prefer xno-mcp first; use xno-skills CLI as fallback.
 
-## Publisher: <br>
-[casualsecurityinc](https://clawhub.ai/user/casualsecurityinc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[casualsecurityinc](https://clawhub.ai/user/casualsecurityinc)
 
-## Use Case: <br>
-External users, developers, and wallet operators use this skill when an agent needs to work with Nano/XNO wallets, balances, pending funds, payment requests, transaction history, explorer links, and Nano protocol questions. The skill guides MCP tool use first and CLI commands as a fallback for compatible agent environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically broadcast receive/open transactions and may activate on generic wallet, balance, invoice, or open-account requests. <br>
-Mitigation: Install it only for Nano/XNO wallet work and require explicit confirmation before receive/open, send, refund, representative change, or spending-limit/config changes. <br>
-Risk: Wallet seeds or private keys could be exposed if they are provided to an agent. <br>
-Mitigation: Do not share seeds or private keys with the agent; use OWS-managed wallet flows and placeholder commands when private-key signing is unavoidable. <br>
-Risk: Ambiguous refund, send, or representative-change requests can move funds or alter wallet governance incorrectly. <br>
-Mitigation: Validate destination addresses, show full addresses and amounts, and require operator confirmation before executing value-moving or representative-changing actions. <br>
+## Use Case:
 
+Developers, operators, and agents use this skill to manage Nano/XNO wallet workflows, inspect balances and transaction history, validate addresses, generate payment QR codes, and look up Nano account or block information. It is intended for Nano protocol tasks only, with MCP tools preferred and CLI commands used as a fallback.
 
-## Reference(s): <br>
-- [Nano Protocol](https://nano.org) <br>
-- [MCP Reference](references/mcp.md) <br>
-- [Wallets Reference](references/wallets.md) <br>
-- [Balance Reference](references/balance.md) <br>
-- [Receive Reference](references/receive.md) <br>
-- [Send Reference](references/send.md) <br>
-- [Transaction History Reference](references/history.md) <br>
-- [Address Validation Reference](references/validate.md) <br>
-- [Unit Conversion Reference](references/convert.md) <br>
-- [QR Reference](references/qr.md) <br>
-- [Message Signing Reference](references/sign.md) <br>
-- [Message Verification Reference](references/verify.md) <br>
-- [Representative Change Reference](references/change-rep.md) <br>
-- [RPC Account Balance Reference](references/rpc_account-balance.md) <br>
-- [RPC Account Info Reference](references/rpc_account-info.md) <br>
-- [RPC Receivable Reference](references/rpc_receivable.md) <br>
-- [RPC Capability Probe Reference](references/rpc_probe-caps.md) <br>
-- [Submit Block Reference](references/submit-block.md) <br>
-- [Block Send Reference](references/block_send.md) <br>
-- [Block Receive Reference](references/block_receive.md) <br>
-- [Block Change Reference](references/block_change.md) <br>
-- [Diagnostics Reference](references/diag.md) <br>
-- [Nano Representative Lists](https://blocklattice.io/representatives) <br>
-- [NanoTicker Representatives](https://nanoticker.org/representatives) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON tool-call examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access for RPC-backed wallet and explorer operations; address validation and unit conversion can be performed offline.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.5.2 (source: server release evidence) <br>
+Risk: Broad triggers can activate the skill for generic wallet, balance, invoice, pending-funds, or account-opening requests outside the intended Nano/XNO context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the task is specifically about the Nano protocol before using the skill; ask for clarification when the word Nano could refer to another product or concept.
+
+Risk: Balance checks can automatically claim pending funds by broadcasting receive or open blocks.
+
+Mitigation: Install and enable the skill only where automatic receipt of pending Nano funds is acceptable, and review wallet actions before running balance workflows in sensitive accounts.
+
+Risk: Send, refund, and representative-change operations can affect wallet funds or delegation.
+
+Mitigation: Confirm full destination addresses, refund recipients, amounts, representative changes, and spending-limit changes with the operator before execution.
+
+Risk: Raw private-key signing could expose secret material if a key is pasted into an agent context.
+
+Mitigation: Do not provide private keys or mnemonics to the agent; use the documented placeholder command locally for low-level signing and use OWS-backed flows for wallet operations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/casualsecurityinc/skills/nano)
+- [Nano Protocol](https://nano.org)
+- [xno-skills MCP Reference](artifact/references/mcp.md)
+- [Wallet Balance Reference](artifact/references/balance.md)
+- [Send Reference](artifact/references/send.md)
+- [Receive Reference](artifact/references/receive.md)
+- [Address Validation Reference](artifact/references/validate.md)
+- [Blocklattice Representatives](https://blocklattice.io/representatives)
+- [Nanoticker Representatives](https://nanoticker.org/representatives)
+- [OWS Message Signing Support PR](https://github.com/open-wallet-standard/core/pull/217)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline JSON and bash command examples; tool results may be returned as structured JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access for wallet, RPC, and explorer operations; address validation and diagnostics can operate without network access.]
+
+## Skill Version(s):
+
+4.6.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,5 @@
 ## Description: <br>
-Api Development helps agents coordinate API design, implementation, testing, documentation, deployment, and response handling for API development tasks with a clear technical stack. <br>
+Meta-skill that helps agents orchestrate API development work, including design, documentation, testing, deployment support, API calls, file handling, and command execution. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and technical agents use this skill to plan and execute API development work, including request construction, service calls, response parsing, error handling, documentation, testing, and deployment support. <br>
+Developers and engineers can use this skill to guide an agent through API lifecycle tasks such as request construction, service calls, response parsing, documentation, testing, and deployment-oriented workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill asks for an unspecified API key, which could lead users to expose credentials without a clear provider or purpose. <br>
-Mitigation: Only provide credentials for a confirmed API provider and task, keep secrets out of source control and chat logs, and prefer scoped or temporary keys. <br>
-Risk: The skill can involve command execution and outbound service calls without clear scoping. <br>
-Mitigation: Review proposed commands and network calls before execution, restrict them to explicit API development tasks, and run them in a controlled environment. <br>
+Risk: The skill has broad API-development authority, including file, command, and network-oriented actions without clearly defined limits. <br>
+Mitigation: Run it in a sandbox or limited project directory, use least-privilege API keys, and review proposed command execution, file writes, external API calls, and deployment actions before allowing them. <br>
+Risk: The security verdict is suspicious because the skill is not clearly malicious but has broad authority and unclear confirmation boundaries. <br>
+Mitigation: Install only when that authority is acceptable for the project and require explicit approval for high-impact operations. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/api-development) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance and structured JSON examples, with code or shell command snippets when needed] <br>
+**Output Format:** [Markdown and JSON-like structured results with command and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include execution logs, status fields, generated API artifacts, and configuration guidance.] <br>
+**Other Properties Related to Output:** [May propose file writes, shell commands, external API calls, and deployment actions that should be reviewed before execution.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.2 (source: server release evidence; artifact frontmatter lists 1.0.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

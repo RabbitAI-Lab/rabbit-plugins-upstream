@@ -1,5 +1,5 @@
 ## Description: <br>
-Translate one subtitle file at a time with deterministic local parsing, timeline preservation, strict batch mapping, and safe output composition. <br>
+Translates one SRT, VTT, or ASS subtitle file at a time with local timeline handling, strict ID validation, safe output composition, and an optional loopback-only visualizer. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users, developers, and agent operators use this skill to translate SRT, WebVTT/VTT, and ASS subtitle files while preserving timing and supported subtitle structure. <br>
+External users and developers use this skill to translate a single subtitle file while preserving timing, supported ASS structure, and validation traceability. It is useful when an agent needs deterministic subtitle parsing, batched translation prompts, response validation, and final subtitle/report generation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Subtitle text is sent to the agent's selected translation model, which may be inappropriate for confidential media. <br>
-Mitigation: Use the skill only with subtitle content approved for that model path, and avoid confidential subtitle files unless the model handling is acceptable. <br>
-Risk: Shared installations and optional symlinks can expose the skill to multiple agent runtimes or overwrite an existing local setup. <br>
-Mitigation: Review installation destinations and symlinks before installing or sharing the skill across runtimes. <br>
-Risk: Invalid translation responses can break subtitle mapping, hard line breaks, or ASS style markers. <br>
-Mitigation: Validate every batch response, retry structural errors, and stop when required IDs, wrappers, BR markers, or fixed-structure markers still mismatch. <br>
-Risk: Some ASS karaoke timing or unresolved inline style markers may be degraded to static text. <br>
-Mitigation: Report karaoke degradations and inline-style fallback IDs from the final report so users understand any formatting loss. <br>
+Risk: The skill reads the selected subtitle file and writes local work, output, and report files. <br>
+Mitigation: Run it only on intended subtitle files, review generated paths before sharing outputs, and use overwrite flags only when replacement is intentional. <br>
+Risk: The optional visualizer stores task history in the user's home directory, which can retain subtitle content on shared machines. <br>
+Mitigation: Stop the visualizer after use and manually clear ~/.agent-subtitle-translator/visualizer when subtitle contents are sensitive. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/lumen01/skills/agent-subtitle-translator) <br>
-- [README](artifact/README.md) <br>
-- [Skill instructions](artifact/SKILL.md) <br>
+- [Server-resolved GitHub source](https://github.com/Lumen01/agent-subtitle-translator) <br>
+- [Artifact README](README.md) <br>
+- [Artifact skill instructions](SKILL.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and generated subtitle/report files] <br>
+**Output Type(s):** [text, markdown, shell commands, files, guidance] <br>
+**Output Format:** [Markdown progress updates plus generated subtitle and JSON report files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Processes one subtitle file per run; generated batches contain stable IDs and subtitle text, not timelines or raw ASS override tags.] <br>
+**Other Properties Related to Output:** [Processes one selected subtitle file per run and reports validation, degradation, output path, format, encoding, entry count, and time range.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+1.0.7 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Queue Aiops helps agents inspect and operate Redis and RabbitMQ deployments, including memory, latency, backlog, connection churn, policies, audited writes, and undo-aware workflows. <br>
+Queue AIops helps agents inspect and operate Redis caches and RabbitMQ brokers with overview, memory, latency, backlog, churn RCA, governed writes, audit, undo, and risk-tier support. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,40 +7,40 @@ This skill is ready for commercial/non-commercial use. <br>
 [zw008](https://clawhub.ai/user/zw008) <br>
 
 ### License/Terms of Use: <br>
-MIT-0 <br>
+MIT <br>
 
 
 ## Use Case: <br>
-Developers, SREs, and platform operators use this skill to inspect Redis caches and RabbitMQ brokers, triage memory, latency, backlog, and connection churn issues, and perform governed broker changes when appropriate. <br>
+Developers and operations engineers use this skill to investigate Redis and RabbitMQ health, triage memory pressure, latency, queue backlog, and connection churn, and execute governed broker changes with audit and undo context. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can perform destructive Redis or RabbitMQ writes through MCP without a built-in approval gate. <br>
-Mitigation: Start with read-only Redis ACL or RabbitMQ monitoring accounts, grant write permissions only when needed, and require explicit human approval before purge, delete-queue, Redis CONFIG SET, or policy changes. <br>
-Risk: Purge and queue deletion can remove messages that undo workflows cannot restore. <br>
-Mitigation: Use dry-run previews, confirm the queue state and business impact first, and reserve destructive actions for cases with explicit sign-off. <br>
-Risk: QUEUE_AIOPS_MASTER_PASSWORD unlocks the encrypted broker secret store. <br>
-Mitigation: Provide the master password through a private runtime environment and keep it out of shared configuration, logs, and source control. <br>
+Risk: The skill exposes high-impact Redis and RabbitMQ write or delete actions without an enforceable read-only mode or approval gate. <br>
+Mitigation: Start with tightly scoped read-only monitoring credentials, use external approval before privileged operations, and connect production accounts only after target scope is clear. <br>
+Risk: Queue purge/delete operations and broker policy or configuration changes can destroy data or change production behavior. <br>
+Mitigation: Use dry-run previews, CLI double confirmation, explicit target and vhost scoping, audit annotations, and review undo limitations before execution. <br>
+Risk: Secret-handling mistakes can expose QUEUE_AIOPS_MASTER_PASSWORD or legacy plaintext broker credentials. <br>
+Mitigation: Protect ~/.queue-aiops, avoid hardcoding secrets in shared files, screenshots, or logs, and migrate away from legacy plaintext secret environment variables. <br>
 
 
 ## Reference(s): <br>
-- [Project homepage](https://github.com/AIops-tools/Queue-AIops) <br>
-- [Capability reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+- [Queue AIops Homepage](https://github.com/AIops-tools/Queue-AIops) <br>
+- [Capabilities Reference](references/capabilities.md) <br>
+- [CLI Reference](references/cli-reference.md) <br>
+- [Setup Guide](references/setup-guide.md) <br>
+- [Agent Guardrails](references/agent-guardrails.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON snippets] <br>
+**Output Type(s):** [Analysis, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON-style tool results] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include broker observations, RCA findings, dry-run recommendations, and audit or undo guidance.] <br>
+**Other Properties Related to Output:** [May include broker RCA findings, dry-run previews, audit context, risk tiers, and undo descriptors.] <br>
 
 ## Skill Version(s): <br>
-0.4.0 (source: server release metadata) <br>
+0.6.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

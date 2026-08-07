@@ -1,0 +1,15 @@
+name: geoskill-map-symbology-optimizer
+display_name: 地图符号优化
+description: |
+  Optimize map symbology using color theory, contrast, visual hierarchy and accessible palettes
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-map-symbology-optimizer.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - optimization
+  - remote-sensing
+  - security
+  - visualization

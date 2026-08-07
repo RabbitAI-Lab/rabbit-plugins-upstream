@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/canvas-json-handler",
   "slug": "canvas-json-handler",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1784871853926,
-  "contentHash": "e030cd38c401e2d886c09c6b0f17deaf292722acd1e80ebdeb99682cfafbb908",
-  "fetchedAt": "2026-07-26T18:05:54.043Z"
+  "version": "1.0.2",
+  "updatedAt": 1785665909691,
+  "contentHash": "dcba261df9c0ea1f6610e82a21121c2802d57cd425950ad615471a73abda0778",
+  "fetchedAt": "2026-08-07T08:54:14.064Z"
 }

@@ -1,0 +1,8 @@
+{
+  "name": "self-improving",
+  "version": "2.0.0",
+  "description": "Self-reflection + Self-criticism + Self-learning + Self-organizing memory + Structured logging. Agent evaluates its own work, catches mistakes, logs learnings/errors/feature requests with structured IDs, and improves permanently.",
+  "keywords": ["self-improvement", "learning", "memory", "error-logging", "reflection"],
+  "license": "MIT",
+  "author": "pskoett (original) + Anthropic (self-improving-agent) + integrated by paudyyin"
+}

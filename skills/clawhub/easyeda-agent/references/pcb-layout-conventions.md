@@ -33,7 +33,10 @@
 
 ### 0.2 agent **没有**的数据（规则必须优雅降级）
 
-- ❌ **板框/outline 读取动作**（当前 actions.go 无 `pcb.outline.*`）。所有"贴边/边缘 keep-out/角落"规则**在拿不到 outline 时降级为 advisory**，或先用 `debug.exec_js` 探一次板框多边形再算。
+- ✅ **板框/outline 可读**：先用 `easyeda pcb outline-get` 读取 segment/arc 数量与
+  bbox；需要完整几何时再查 `references/pcb.md` 中的 outline typed actions。只有活体
+  outline 确实不可用时，"贴边/边缘 keep-out/角落"规则才降级为 advisory；不要为读板框
+  默认转向 `debug.exec_js`。
 - ❌ **元件高度 Z**：靠 designator（J/X/Y/电解 C）+ bbox 尺寸**代理**，不是真高度。
 - ❌ **铜箔/铺铜/平面分割几何**：靠 net 成员关系 + 块几何**推断**，不是真平面。涉及"平面分割/回流连续性"的检查一律标 advisory。
 - ❌ **元件电气值/容值/封装代码**（`pcb.components.list` 不返回 value）：按容值排序之类的规则**不可检测**，除非接 BOM；默认跳过。
@@ -297,6 +300,27 @@ LDO SOT-23-5（U6）+ Type-C（U2）+ **USB HUB QFN-24（U16，自带晶振 X2�
   开发板交付以此为标杆。
 - **多页原理图分工**（实战派 S3：P1 主控 82 件 / P2 外设 100 件 / P3 音频 122 件）
   ——S1 分页原则的官方实例。
+
+### 7.10 官方板对标基准#4：M5Stack StickS3（极密集消费成品，2026-07-23）
+
+拆 M5Stack StickS3(ESP32-S3-PICO，48×24×15mm 掌上机)——**消费成品形态**的量化对标，
+补前三块开发板缺的「极密集 + 音频 + 电池」维度。详见 `docs/board-absorption-sticks3.md`。
+
+| 维度 | StickS3 做法 | 采纳 |
+|---|---|---|
+| USB 架构 | **纯原生 USB 无桥芯片**(S3 内置 USB-Serial，D+/D- 直连 C 口，无 CH340) | USB 第 3 种架构:极密集/成本敏感 S3 消费品整颗省桥;见 `design-decisions §USB接口架构` |
+| 自动下载 | **无 DTR/RTS 自动下载管**(原生 USB CDC 软复位进下载) | 原生 USB 免掉双三极管电路——`design-decisions §自动下载`第 3 选项 |
+| USB 差分 | 22R 串阻 + SDMM0806 **共模扼流圈**再出连接器 | 原生 USB D± 加共模扼流(比裸走线抗扰强)——见 §7.3 |
+| 地策略 | 数字 + 音频双地，**R35 0402 单点桥** AGND↔GND(回流走 LDO 衬底) | 印证 §7.9 判据(≥2 地域→单点桥);音频轨用独立干净 LDO |
+| 电源架构 | **PY32L020 单片机当 PMIC** + 多域 L0-L3B(可编程，待机 52µA) | 超低待机产品参考(固件私有，硬件可仿，不做块) |
+| 天线 | PICO-1 **SiP 内置 PCB 天线**(免外挂天线/匹配) | 模组内置天线本体侧禁铺铜 keepout;省 §7.1 晶振/天线匹配 |
+| D 类功放输出 | SPK± 各 **120R@100MHz 磁珠 + 100pF** EMI | 喇叭线长时输出磁珠+EMI 电容(音频块自带) |
+| 密集布局 | 主板 48×24 + **BTB 子板**(IR/SPK 外置)分担板面 | 极密集时用 BTB 子板把非核心外设(红外/喇叭)拆出 |
+| 外设丰度 | LCD(ST7789 SPI)/音频(ES8311+AW8737+mic)/IMU(BMI270)/IR | 抽成 11 个 block(补 `audio`/`display` 新类目) |
+
+**StickS3 vs N8R8 的取舍**:N8R8 是开发板→重调试(HUB 双通道 USB + 自动下载 + 半孔邮票);
+StickS3 是成品→重集成密度(纯原生 USB + PMIC 省电 + 双板)。**开发板对标看调试完备度，
+成品对标看密度/功耗/外设集成**——两类基准各取所需。
 
 ---
 

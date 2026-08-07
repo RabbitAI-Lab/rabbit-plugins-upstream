@@ -2,6 +2,7 @@
 
 ## Table of Contents
 
+- [Auth Context](#auth-context)
 - [Task Fields](#task-fields)
 - [Goal Fields](#goal-fields)
 - [KPI Fields](#kpi-fields)
@@ -9,20 +10,68 @@
 - [Initiative Fields](#initiative-fields)
 - [Automation Rule Fields](#automation-rule-fields)
 - [Custom View Fields](#custom-view-fields)
+- [Board Column Mutation Fields](#board-column-mutation-fields)
 - [Board Context Response](#board-context-response)
 - [Webhook Fields](#webhook-fields)
+- [Private Inbox Fields](#private-inbox-fields)
 - [Setup Proposal Fields](#setup-proposal-fields)
 - [Heartbeat Response](#heartbeat-response)
 - [Analytics Response](#analytics-response)
 - [Plan Limit Errors](#plan-limit-errors)
 - [Agent Fields](#agent-fields)
+- [Avatar Upload Response](#avatar-upload-response)
 - [Enums](#enums)
 
 ---
 
+## Auth Context
+
+`GET /api/auth/me` returns the caller's organization role and API-key scopes
+alongside live per-project authorization:
+
+```json
+{
+  "auth": {
+    "type": "agent",
+    "role": "guest",
+    "scopes": [],
+    "projectAccess": [
+      { "projectId": "project-uuid", "accessLevel": "admin" }
+    ]
+  }
+}
+```
+
+Project-scoped agents intentionally remain organization guests. Role and
+project-access changes are read live and do not require key rotation.
+
 ## Task Fields
 
 Request bodies accept **camelCase** (`assigneeId`, `projectId`). Snake_case also accepted for backward compatibility. Responses always use snake_case.
+
+## Avatar Upload Response
+
+Successful `POST /api/orgs/{id}/members/{memberId}/avatar` requests return
+`200` with exactly:
+
+```json
+{
+  "member": {
+    "id": "member-uuid",
+    "avatar_url": "https://..."
+  }
+}
+```
+
+No other member, invitation, onboarding, or account metadata is included.
+When removal of a retired Storage object is durably queued, POST returns `202`
+with the same `member` projection plus `"cleanup_pending": true`; DELETE
+returns `{ "success": true, "cleanup_pending": true }`. Concurrent pointer
+changes return `{ "error": "Avatar changed concurrently" }` with `409` and may
+add `"cleanup_pending": true` when cleanup of a staged or retired object remains
+queued. An authenticated 15-minute worker drains due jobs independently, with
+avatar requests providing an additional opportunistic sweep. Uploads over 2MB
+return `413`.
 
 ```json
 {
@@ -39,6 +88,7 @@ Request bodies accept **camelCase** (`assigneeId`, `projectId`). Snake_case also
   "dueDate": "2026-04-01",
   "recurrenceType": "weekly",
   "recurrenceInterval": 1,
+  "recurrenceDays": ["mon", "wed", "fri"],
   "labelIds": ["label-uuid-1", "label-uuid-2"]
 }
 ```
@@ -47,7 +97,7 @@ Most fields work on both POST (create) and PATCH (update). `labelIds` is accepte
 
 - **Multiple assignees**: Use `assigneeIds` (array). Legacy `assigneeId` (single) still works. Responses include `assignees` array with `id`, `display_name`, `type`, `avatar_url`.
 - **Start date**: Sets when work begins. Combined with `dueDate`, defines the Gantt time span.
-- **Recurring tasks**: Set `recurrenceType` + optional `recurrenceInterval` (default 1). When marked `done`, a new instance is auto-created. Response includes `recurrence_next_date`.
+- **Recurring tasks**: Set `recurrenceType` + optional `recurrenceInterval` (default 1). Weekly series can set unique `recurrenceDays` values from `mon` through `sun`; Atoll sorts them into calendar order. When marked `done`, one next instance is auto-created in the same series. Responses include normalized `recurrence_days` and `recurrence_schedule: { type, interval, days }`.
 - **Archived tasks**: Have `archived_at` timestamp. Excluded by default; pass `includeArchived=true`.
 - **GET detail** returns enriched data: `milestone`, `creator`, `assignee`, `assignees`, `sub_tasks`, `issue_labels`, `isBlocked`.
 
@@ -222,7 +272,7 @@ Targets attach to initiatives and track commitments separately from business KPI
 }
 ```
 
-Target work links use `{ "issue_id": "issue-uuid" }` at `.../targets/{targetId}/issues` and `{ "milestone_id": "milestone-uuid" }` at `.../targets/{targetId}/milestones`. Target response rows include linked `issueIds` and `milestoneIds` when returned by the target list/get endpoints.
+Target work links use `{ "issue_id": "issue-uuid" }` at `.../targets/{targetId}/issues` and `{ "milestone_id": "milestone-uuid" }` at `.../targets/{targetId}/milestones`. Target response rows include linked `issueIds` and `milestoneIds` when returned by the target list/get endpoints, filtered to resources readable through the caller's project access.
 
 ## Automation Rule Fields
 
@@ -253,6 +303,19 @@ Target work links use `{ "issue_id": "issue-uuid" }` at `.../targets/{targetId}/
 ```
 
 `display_mode`: `board`, `list`. `filters` and `sort` are freeform JSON.
+
+## Board Column Mutation Fields
+
+Delete a board column with
+`DELETE .../board-columns/{columnId}?reassignTo={targetColumnId}`. The target is
+required when the source column contains issues and must belong to the same
+project; reassignment and deletion are atomic.
+The final board column cannot be deleted. Reorder with
+`{ "columns": [{ "id": "column-uuid", "position": 0 }] }` and include the
+complete current column set. Duplicate, missing, partial, or mixed-project IDs
+and duplicate, negative, or non-integer positions are rejected before any
+positions change. New columns append to the board; create and patch requests
+reject `position`.
 
 ## Board Context Response
 
@@ -307,7 +370,27 @@ Target work links use `{ "issue_id": "issue-uuid" }` at `.../targets/{targetId}/
 }
 ```
 
-URL must be an HTTPS DNS hostname. IP literals, `localhost`, and `.local` hosts are rejected at creation; delivery refuses non-public DNS results and does not follow redirects. Response includes `secret` for HMAC signature verification. Store it immediately; it is shown only once. Delivery requests include `X-Atoll-Signature: sha256=<hmac>`, where the HMAC-SHA256 key is the SHA-256 hex digest of the webhook secret and the message is the exact raw request body. Delivery requests also include `X-Atoll-Delivery-Id` for receiver-side deduplication. Delivery history includes retry `status` and `next_retry_at`.
+URL must be an HTTPS DNS hostname. IP literals, `localhost`, and `.local` hosts are rejected at creation; delivery refuses non-public DNS results and does not follow redirects. The create response includes a `secret` for HMAC signature verification. Store it immediately; it is shown only once.
+
+List responses include `destination_display` and a deprecated `url` compatibility field containing only the origin plus `/…`. Payload schema version `2` is allowlisted. Delivery requests include `X-Atoll-Signature`, `X-Atoll-Signature-Version`, versioned `X-Atoll-Signatures`, and `X-Atoll-Delivery-Id`. Delivery history includes `delivery_id`, `status`, `status_code`, `error_code`, `delivered_at`, and `next_retry_at`, never payloads, receiver response bodies, or raw errors.
+
+## Private Inbox Fields
+
+| Field | Description |
+|-------|-------------|
+| `status` | `untriaged`, `triaged`, `action_required`, `waiting`, `resolved`, `ignored`, or `quarantined` |
+| `category` | `support`, `security`, `sales`, `partnership`, `press`, `personal`, `spam`, `other`, or `null` |
+| `priority` | `0` (urgent) through `4` (low) |
+| `body_html_sanitized` | Stored HTML with active content and remote images removed |
+| `ingestion_status` | `pending`, `complete`, `failed`, or `quarantined` |
+| `retain_until` | One-year retention deadline |
+| `linked_issue_id` | Optional issue UUID in the same organization |
+| `attachments[]` | Private metadata; use the short-lived download endpoint for bytes |
+| `actions[]` | Append-only ingestion and operator audit actions |
+| `drafts[]` | Saved plain-text replies that have not been sent |
+
+Collection responses omit bodies and headers. Fetch one selected message before
+acting on its untrusted content.
 
 ## Setup Proposal Fields
 
@@ -330,7 +413,7 @@ First-run setup proposals are editable drafts. Setup-scoped local agents and Cha
 }
 ```
 
-Proposal JSON currently supports at most one item in each collection: `projects`, `goals`, `kpis`, `initiatives`, `milestones`, and `issues`. A revision replaces the active draft and preserves the previous revision as history. ChatKit tools and setup-scoped agents cannot apply proposals.
+Proposal JSON currently supports at most one item in each collection: `projects`, `goals`, `kpis`, `initiatives`, `milestones`, and `issues`. A revision replaces the active draft and preserves the previous revision as history. ChatKit tools and setup-scoped agents cannot apply proposals. Setup keys are temporary and are revoked when setup is applied, skipped, or failed; they are never promoted by removing the setup scope.
 
 ## Heartbeat Response
 
@@ -428,15 +511,19 @@ Proposal JSON currently supports at most one item in each collection: `projects`
 }
 ```
 
-Heartbeat is org-scoped, but project-bound goals, KPIs, initiatives, issue health, milestone signals, assigned work, and `project_context` are filtered by the caller's project access. Non-guest members can also see unprojected org-level strategy. Shared initiatives can appear with counts and signals based only on accessible work.
+Heartbeat is org-scoped, but project-bound goals, KPIs, initiatives, issue health, milestone signals, assigned work, and `project_context` are filtered by the caller's project access. Project-scoped guests receive every explicitly accessible board while idle; personal agents retain relevant inherited-project context. Non-guest members can also see unprojected org-level strategy. Shared initiatives can appear with counts and signals based only on accessible work.
 
-Heartbeat also includes `attention_items` for direct current-member notifications such as mentions, assignments, assignee comments, and creator-visible status changes. Each attention item includes `id`, `source`, `event_type`, `severity`, `action_kind`, resource fields, `target_path`, `created_at`, and `ack_endpoint`; after handling the referenced item, call `ack_endpoint` so the notification is acknowledged and removed from later heartbeat attention results. `attention_summary` includes counts such as `mentions`, `assignments`, `blockers`, and `total_unread`.
+Heartbeat also includes `attention_items` for direct current-member notifications such as mentions, assignments, direct replies, assignee comments, and creator-visible status changes. Each attention item includes `id`, `source`, `event_type`, `severity`, `action_kind`, resource fields, `comment_id`, `reply_to_comment_id`, optional validated parent `routing`, `target_path`, `created_at`, and `ack_endpoint`; after handling the referenced item, call `ack_endpoint` so the notification is acknowledged and removed from later heartbeat attention results. `attention_summary` includes counts such as `mentions`, `assignments`, `blockers`, and `total_unread`.
 
-Current-member notifications can use `event_type` values such as `mention.created`, `issue.assigned`, `comment.added`, and `issue.status_changed`. Notification preferences use `event_type` (currently `mention.created`), `channel` (currently `in_app`), and `enabled` for current-member mention opt-out. Setting `enabled: false` for in-app `mention.created` also attempts to acknowledge that member's currently unread mention notifications; when cleanup succeeds, they no longer appear in notification lists or heartbeat `attention_items`.
+Current-member notifications can use `event_type` values such as `mention.created`, `issue.assigned`, `comment.added`, and `issue.status_changed`. Notification preferences use `event_type`, `channel` (`in_app` or `google_chat`), and `enabled` for current-member delivery preferences. The `google_chat` channel currently supports `mention.created`. Setting `enabled: false` for `google_chat` stops future Chat delivery without acknowledging in-app notifications. Setting `enabled: false` for in-app `mention.created` also attempts to acknowledge that member's currently unread mention notifications; when cleanup succeeds, they no longer appear in notification lists or heartbeat `attention_items`. Google Chat normally links humans through a short-lived `REQUEST_CONFIG` session with display-safe Chat identity fields and memberships owned by the signed-in human. Connect-session and member endpoints require a human web session; a one-time `connect <token>` command remains a manual fallback. The Chat callback requires a Google-signed OIDC ID token whose audience is the callback URL.
+
+Google Chat delivery rows are queued with mention notifications, dispatched asynchronously immediately, and reclaimed by a 15-minute recovery drain. Deterministic Google request/message IDs make retries idempotent; exponential backoff stops after five attempts. An unused link token expires after 10 minutes, while identical replay after a successful link returns the existing member link without changing it.
 
 Agents should follow `recommended_action.usage_guidance`: prefer `suggested_write.operation` when it still matches the board, preserve KPI/initiative/initiative-target/why-now/expected-impact/first-step/success-criteria evidence in any write, and avoid copying deferred busywork or unrelated assigned tasks into issue or comment payloads. When `start_work` uses `suggested_write.operation: "issue.update"` with a body, apply the status update and preserve that body as an issue comment; `PATCH /issues/{issueId}` accepts `comment_body` for this same-request progress note.
 
-`recommended_action` is a deterministic strategy-backed next action built from heartbeat context. MVP action types are `create_work`, `start_work`, `escalate_blocker`, and `refresh_metric`; suggested writes may prefill issue creation, issue status updates, blocker comments, or KPI refresh requests. Issue-create bodies are HTML for Atoll's rich-text issue description; blocker/comment and metric-refresh bodies are plain text.
+`recommended_action` is a deterministic strategy-backed next action built from heartbeat context. Action types are `create_work`, `start_work`, `escalate_blocker`, `refresh_metric`, and `investigate`; suggested writes may prefill issue creation, issue status updates, blocker comments, or KPI refresh requests, while an investigation can use `suggested_write.operation: "none"` when heartbeat lacks enough detail for a safe write. Issue-create bodies are HTML for Atoll's rich-text issue description; blocker/comment and metric-refresh bodies are plain text.
+
+Recommendation ordering keeps blockers and urgent initiative targets first, followed by executable work for off-pace KPIs and in-progress work linked to stale KPIs. Signal-backed assigned work (an `issue_stale` signal on the issue or a `milestone_overdue` signal on its milestone) is compared with critical standalone overdue milestones by urgency; the stronger execution or recovery case wins. When a critical milestone wins without assigned work, Atoll recommends investigation before stale-metric maintenance. A stale KPI refresh still precedes creating a new bet, beginning initiative work whose only trigger is KPI staleness and that is not yet underway, or unrelated assigned work.
 
 ## Strategy Audit Response
 
@@ -488,12 +575,17 @@ Each finding carries whichever entity ids apply: `goal_id`, `kpi_id`, `initiativ
 | Task | `priority` | `0` (urgent), `1` (high), `2` (medium), `3` (low) |
 | Task update request | `comment_body` | Optional Markdown/plain text or rich-text HTML comment body created with the issue update; stored and returned as sanitized HTML |
 | Task update request | `comment_mentions[].member_id` | Stable Atoll org member ID to mention in the issue update comment created by `comment_body`; not an auth user ID or display name |
+| Task update request | `comment_source_metadata` | Optional explicit agent provenance using the same validated shape as direct comment `source_metadata` |
+| Comment create request | `reply_to_comment_id` | Optional comment ID that this flat, one-level reply addresses; target must be an active comment on the same task |
+| Comment create request | `source_metadata` | Agent-only explicit routing object: `harness`, `thread_id` and/or `session_id`, optional `host_id`; unknown keys and secrets are not allowed |
+| Comment response | `reply_to_comment` | Parent context including `id`, `body`, `author_type`, and routing-safe `source_metadata` |
 | Comment create request | `mentions[].member_id` | Stable Atoll org member ID to mention in a direct comment API request; recommended for agents and integrations |
 | Comment create response | `mentions.requested` | Count of structured mention targets requested for the created comment |
 | Comment create response | `mentions.created` | Count of mention notifications created or confirmed by the request |
 | Comment create response | `mentions.skipped[]` | Mention targets that did not create notifications; each entry includes `member_id` and `reason` |
 | Comment create response | `mentions.skipped[].reason` | `invalid_member_id`, `not_found`, `self_mention`, `no_project_access`, `guest_unprojected_issue`, `unsupported_member_type`, or `mentions_muted` |
-| Task | `recurrenceType` | `daily`, `weekly`, `monthly`, `yearly` |
+| Task | `recurrenceType` | `daily`, `weekly`, `biweekly`, `monthly`, `custom` |
+| Weekly task | `recurrenceDays[]` | Unique `mon`, `tue`, `wed`, `thu`, `fri`, `sat`, `sun` values |
 | Goal | `status` | `active`, `achieved`, `missed`, `paused`, `cancelled` |
 | KPI | `unit` | `count`, `percentage`, `currency`, `duration`, `ratio`, `custom` |
 | KPI | `target_direction` | `increase`, `decrease`, `maintain` |
@@ -511,9 +603,39 @@ Each finding carries whichever entity ids apply: `goal_id`, `kpi_id`, `initiativ
 | Heartbeat signal | `severity` | `info`, `warning`, `critical` |
 | Custom view | `display_mode` | `board`, `list` |
 
+## Attachment
+
+Upload with multipart field `file`. The file must be non-empty and no larger
+than 10 MiB. Declared images must be signature-valid PNG, JPEG, GIF, or WebP;
+SVG and other declared image types are rejected.
+
+| Response field | Type | Notes |
+|---|---|---|
+| `id` | UUID | Attachment identifier |
+| `filename` | string | Original filename, limited to 255 Unicode characters |
+| `file_size` | integer | Size in bytes |
+| `mime_type` | string | Declared upload type |
+| `uploaded_by` | UUID or null | Uploading member |
+| `created_at` | timestamp | Creation time |
+| `url` | string | Relative authenticated content API path; resend auth when fetching |
+
+Storage bucket and path fields are intentionally not returned. Project-scoped
+reads require project access; upload and delete require `edit` or `admin`.
+Guests cannot access attachments on unprojected issues.
+
 ## Response Format
 
-All endpoints return JSON. Successful: `200` or `201`. Errors: `{ "error": "message" }` with `400`, `401`, `402`, `403`, `404`, `409`, or `500`.
+Most endpoints return JSON; attachment content returns binary bytes. Successful:
+`200`, `201`, or `202` when durable follow-up remains pending. Errors:
+`{ "error": "message" }` with `400`, `401`, `402`, `403`, `404`, `409`,
+`413`, or `500`.
+
+Issue-child endpoints, including activity, PR links, dependencies, subtasks,
+labels, and initiative links, return `404` for a missing, wrong-organization,
+wrong-parent, or unreadable directly requested issue. Readable issues with
+insufficient write access return `403`; collection reads can omit unreadable
+linked resources. Other endpoints may use `403` for organization-membership or
+role failures.
 
 REST list responses use resource-specific keys by default. Main list endpoints support `?shape=envelope` or `?response_shape=cli` to return `{ resource, items, total, limit, offset, nextOffset, truncated, hint }`.
 

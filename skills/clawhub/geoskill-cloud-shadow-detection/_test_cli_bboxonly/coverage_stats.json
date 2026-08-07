@@ -1,0 +1,13 @@
+{
+  "cloud_pixels": 441,
+  "shadow_pixels": 225,
+  "clear_pixels": 15718,
+  "total_pixels": 16384,
+  "cloud_fraction": 0.026917,
+  "shadow_fraction": 0.013733,
+  "cloud_shadow_fraction": 0.040649,
+  "cloud_threshold": 0.3,
+  "shadow_threshold": 0.1,
+  "solar_azimuth_deg": 160.0,
+  "shadow_shift_pixels": 10.0
+}

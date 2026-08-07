@@ -1,12 +1,12 @@
 ---
 name: vindex
-version: 1.3.0
+version: 1.4.0
 description: >-
   Vehicle intelligence for AI agents — decode any 17-char VIN with a factory-warranty-terms
   block, MERGED US (NHTSA) + Canada (Transport Canada) recalls, LLM-clustered known issues with
   ODI citations plus a reliability-aggregates block, and itemized used-car drive-away costs for
-  all 50 US states + DC and all 13 Canadian jurisdictions. Pay-per-call via x402 (USDC on Base or
-  Solana); no accounts, no keys. Free /v1/sample/* endpoints return every response shape before you pay.
+  all 50 US states + DC and all 13 Canadian jurisdictions. Pay-per-call via x402 (USDC on Base);
+  no accounts, no keys. Free /v1/sample/* endpoints return every response shape before you pay.
 homepage: https://vindexapi.dev
 metadata:
   openclaw:
@@ -20,8 +20,6 @@ metadata:
 API at `https://api.vindexapi.dev`. Vindex aggregates free, public-domain vehicle-safety data and sells thin intelligence layers on top, priced per call. It is the only API that merges US (NHTSA) and Canada (Transport Canada) recalls in one response. Strictly pay-per-call via x402 — no accounts, no API keys, no bundles. Compute-first / settle-after: you are **never** charged for an error or a below-threshold (insufficient-data) answer.
 
 VINs are used only as cache keys (up to 90 days), never linked to a person. Vindex is **NOT** a vehicle-history report — it makes no liens/accidents/odometer claims.
-
-> Payment mode is currently **mock** (live wallet pending); the flow documented here is the LIVE x402 flow that ships to agents. Check the active mode any time at `GET /health` (`live|mock`).
 
 ## Free endpoints (no auth, no payment)
 
@@ -40,7 +38,7 @@ Every `/v1/sample/*` endpoint always serves the SAME fixed sample vehicle (**201
 curl https://api.vindexapi.dev/v1/sample/known-issues
 ```
 
-## Paid endpoints (x402 V2, USDC on Base or Solana, per-call)
+## Paid endpoints (x402 V2, USDC on Base, per-call)
 
 Each paid call is a flat price per call, paid via x402. Every JSON response also carries a `disclaimer` string.
 
@@ -51,6 +49,7 @@ Each paid call is a flat price per call, paid via x402. Every JSON response also
 | GET | `/v1/known-issues?vin=VIN` | **$0.05** | LLM-clustered named failure modes from NHTSA complaints; EVERY issue cites verified ODI complaint numbers (validated against the source set — hallucination-gated). ALSO returns a `reliability` aggregates block (top components; severity: crashes/fires/injuries; US & Canada recall counts incl. Canadian units affected) + the full decoded `vehicle` + `complaintsAnalyzed` (sample size) vs `complaintCount` (total). Refuses (uncharged, but still returns decode + reliability) below 15 complaints. 90-day cache |
 | GET | `/v1/purchase-costs?country=CA&province=BC&price=25000&sale_type=private\|dealer` | **$0.02** | Itemized Canadian used-vehicle closing costs for any of the 10 provinces + 3 territories (BC/AB/SK/MB/ON/QC/NB/NS/PE/NL/YT/NT/NU): provincial tax (PST/RST/QST/HST or GST-only) + transfer/registration/plate fees + inspection, per-line `sourceUrl` + confidence |
 | GET | `/v1/purchase-costs?country=US&state=CA&price=25000&sale_type=private\|dealer` | **$0.02** | Itemized US used-vehicle closing costs for any of the 50 states + DC (sales/use/excise tax, title, first-year registration, inspection, dealer doc fee), per-line `sourceUrl` + confidence |
+| GET | `/v1/prepurchase?vin=VIN&country=CA\|US` | **$0.25** | Whole-job pre-purchase bundle: normalized decode + safety recalls + known-issue/reliability summary + a jurisdiction-level CA/US ownership-cost estimate for the decoded vehicle, in ONE call (equivalent to 4 separate paid calls, composed in-process). Decode computed first — invalid VIN/decode failure is UNCHARGED; settles only if decode succeeds AND ≥2 of the 3 secondary sections are available (else UNCHARGED `insufficient_sections`). Cost section is an estimate — call `/v1/purchase-costs` for an exact itemized figure. Each section carries its own fetch provenance. 90-day-strictest composite cache |
 
 Purchase-costs is ONE endpoint selected by `country=CA|US`: CA requires `province`, US requires `state` (same $0.02 price). Required params: `vin` (17 chars, no I/O/Q) on the VIN routes; `country` + `province`/`state` + `price` + `sale_type` on the purchase-cost route. There is NO separate reliability endpoint — its aggregates ship inside every `/v1/known-issues` response.
 
@@ -58,12 +57,12 @@ Optional CA purchase-costs params: `&buyer_has_plates=true` (selects plate-depen
 
 Optional US purchase-costs params: `&trade_in=5000` (deducted from tax base only where the state grants a FULL dealer trade-in credit), `&local_rate=1.5` (exact county/city surtax %; omitted → sales-tax line carries a range up to the state max). Special regimes are handled automatically (DC tiered title EXCISE; IL RUT-50 private-party flat fee; SC 5% IMF capped $500; AK/AZ/HI/MT/NV/NH/OR levy no state sales tax on private-party sales).
 
-Prices are USD, settled as USDC (6 decimals). A mock mode exists for testing (`x-mock-payment` header); the flow above is live x402.
+Prices are USD, settled as USDC (6 decimals) on Base.
 
 ## Paying (x402)
 
 Paid endpoints are a flat price per call — decode $0.01, recalls $0.01, known-issues $0.05,
-purchase-costs $0.02 — via x402 (USDC; Base and Solana supported). Server flow is
+purchase-costs $0.02, prepurchase $0.25 — via x402 (USDC on Base). Server flow is
 compute-first / settle-after: you are **never** charged for an error or a below-threshold
 (insufficient-data) answer. Try every response shape for free first via `/v1/sample/*`. Agents
 can use the `vindex-mcp` npm package (an MCP server) which handles payment, or read the full

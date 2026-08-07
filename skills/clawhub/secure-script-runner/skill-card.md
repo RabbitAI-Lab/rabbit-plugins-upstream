@@ -1,44 +1,54 @@
-## Description: <br>
-Secure Script Runner is a documentation skill for storing encrypted scripts in MGC Blackbox and guiding explicit, user-approved local execution through MCP, REST API, or WebUI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents and operators through storing encrypted scripts and running them through MGC Blackbox with explicit user authorization and no plaintext script exposure to the AI.
 
-## Publisher: <br>
-[zkeviny](https://clawhub.ai/user/zkeviny) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zkeviny](https://clawhub.ai/user/zkeviny)
 
-## Use Case: <br>
-Developers, operators, and AI-agent users use this skill to document workflows for encrypted local script storage, explicit script execution, credential access review, and script sealing with MGC Blackbox. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local script execution can run untrusted or harmful code on the user's machine. <br>
-Mitigation: Require explicit user authorization and review the script source, purpose, sensitive-data access, and dangerous-command risk before execution. <br>
-Risk: Scripts may access local MGC credentials or sensitive outputs. <br>
-Mitigation: Confirm token access, expected outputs, and credential need before allowing mgc_get with action="run" or any credential calls. <br>
-Risk: Zero-exposure execution means the agent may not be able to inspect plaintext script content before running it. <br>
-Mitigation: Only run scripts from trusted sources after a human verifies the script provider and purpose. <br>
+## Use Case:
 
+Developers and operators use this skill to configure local MGC Blackbox workflows for encrypted script storage, blackbox execution, runtime parameter passing, credential access from scripts, and script sealing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zkeviny/skills/secure-script-runner) <br>
-- [MGC Blackbox project](https://github.com/zkeviny/MGC-Blackbox) <br>
-- [MGC Blackbox issues](https://github.com/zkeviny/MGC-Blackbox/issues) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline Python, JSON, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; local script execution requires explicit user authorization.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: The skill teaches opaque stored script execution, so agents may not be able to inspect script behavior before execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Approve each script only after independently verifying its source, contents, purpose, and network behavior.
+
+Risk: Stored scripts may access local resources or MGC credentials.
+
+Mitigation: Limit credential availability, run only trusted scripts, and require explicit user authorization before storing or executing any script.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zkeviny/skills/secure-script-runner)
+- [MGC Blackbox Repository](https://github.com/zkeviny/MGC-Blackbox)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with Python, JSON, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires explicit user authorization before script storage or execution; the skill states that agents receive execution results rather than script plaintext or stdout.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release metadata, SKILL.md frontmatter, manifest.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,79 @@
+{
+  "skill": "emergency-evacuation-routing",
+  "skill_version": "1.0.0",
+  "command": "emergency-evacuation-routing --bbox 116 39 117 40 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-03T13:23:25.752817Z",
+  "finished_at": "2026-08-03T13:23:25.923286Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ],
+    "threshold": 1.0,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\distance_to_shelter.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": -1.0,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\evacuation_routes.geojson",
+      "kind": "vector",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": 3,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\routing_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_routes_assigned": 3,
+    "routes_avoid_hazard": true,
+    "mean_route_cost": 89.97888662667178,
+    "n_valid_cost_pixels": 2304,
+    "n_total_pixels": 2304,
+    "valid_cost_ratio": 1.0,
+    "input_nodata": null
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "emergency-evacuation-routing"
+  },
+  "error": null
+}
