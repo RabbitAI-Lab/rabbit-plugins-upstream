@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/timestream-influxdb",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "timestream-influxdb",
+  "branch": "main",
+  "pushedAt": "2026-08-07T08:10:02Z",
+  "contentHash": "4a5aa059906adb628aab0859645fce8765f3580b6ea722454e039a3e831e7111",
+  "fetchedAt": "2026-08-07T08:35:31.138Z"
+}

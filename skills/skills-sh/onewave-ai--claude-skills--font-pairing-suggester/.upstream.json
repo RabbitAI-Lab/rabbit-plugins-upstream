@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/font-pairing-suggester",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "font-pairing-suggester",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "7971e12863fa15d9c9249049c8ab866e68796becd1e7f6b217bda2d886b719b0",
+  "fetchedAt": "2026-08-07T08:35:28.516Z"
+}

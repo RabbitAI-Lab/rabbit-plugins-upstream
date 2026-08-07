@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/imagegen",
+  "repo": "openai/skills",
+  "skillId": "imagegen",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "0db6b41f6507dc5c3bd3d2507d55367b517b2e9a2d6e3374e7ace40999cfa12e",
+  "fetchedAt": "2026-08-07T08:34:08.233Z"
+}

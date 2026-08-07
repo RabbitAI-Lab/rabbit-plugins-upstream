@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/pluginagentmarketplace/custom-plugin-java/java-maven",
+  "repo": "pluginagentmarketplace/custom-plugin-java",
+  "skillId": "java-maven",
+  "branch": "main",
+  "pushedAt": "2026-01-05T11:55:40Z",
+  "contentHash": "5c5f2d5f46a1132d656a497961f7d7de3f2239bebd21f7272ab252197edd1e21",
+  "fetchedAt": "2026-08-07T08:34:04.944Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/rds-oss",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "rds-oss",
+  "branch": "main",
+  "pushedAt": "2026-08-07T08:10:02Z",
+  "contentHash": "d8471810584f989c60c2112c1a7a87df83133f52f2590ccd81d288615b03319d",
+  "fetchedAt": "2026-08-07T08:35:31.068Z"
+}

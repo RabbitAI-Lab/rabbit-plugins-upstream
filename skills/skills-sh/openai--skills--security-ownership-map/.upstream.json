@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/security-ownership-map",
+  "repo": "openai/skills",
+  "skillId": "security-ownership-map",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "accc2056aa2e80424484aa203358b0a841c9a67f86d251e89b410ae541f3a611",
+  "fetchedAt": "2026-08-07T08:34:08.296Z"
+}

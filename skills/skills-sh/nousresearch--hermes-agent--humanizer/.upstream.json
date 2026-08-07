@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/humanizer",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "humanizer",
+  "branch": "main",
+  "pushedAt": "2026-08-07T08:26:19Z",
+  "contentHash": "f25d2d4ff309e5951a733b24a0275f9182c58dd29adf02c25c3bdb57e2872b34",
+  "fetchedAt": "2026-08-07T08:35:39.435Z"
+}

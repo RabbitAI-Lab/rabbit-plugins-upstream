@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/finding-data-lake-assets",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "finding-data-lake-assets",
+  "branch": "main",
+  "pushedAt": "2026-08-07T08:10:02Z",
+  "contentHash": "013dfe93d4a9f204abe517434f1570256b138dae36c4923b30c705350b3a1149",
+  "fetchedAt": "2026-08-07T08:35:30.690Z"
+}

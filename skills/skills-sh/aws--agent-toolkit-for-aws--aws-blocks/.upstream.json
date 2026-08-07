@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-blocks",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-blocks",
+  "branch": "main",
+  "pushedAt": "2026-08-07T08:10:02Z",
+  "contentHash": "5bbaef3fa12d59fd10fcb24aeaafa53891ed290774f79b4d0121ef6786eff806",
+  "fetchedAt": "2026-08-07T08:35:30.906Z"
+}

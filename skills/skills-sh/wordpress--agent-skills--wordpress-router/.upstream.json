@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wordpress-router",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wordpress-router",
+  "branch": "trunk",
+  "pushedAt": "2026-08-03T05:26:29Z",
+  "contentHash": "1f7803e985c8fd580c61799b55f9d58b93096ef2c6fd8760f41278efd3631fbe",
+  "fetchedAt": "2026-08-07T08:35:41.571Z"
+}
