@@ -1,44 +1,43 @@
 ## Description: <br>
-Read and analyze local Little Beaver Invoice Assistant data through the app's localhost Skill API, including invoice ledgers, invoice items, companies, customer, supplier, and product rankings, monthly invoice trends, tax invoice summaries, and archived electronic invoice attachment metadata. <br>
+读取并分析本机“小河狸发票助手”中的发票台账、明细、趋势、排行和已归档电子发票附件数据。 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
 ## Publisher: <br>
-[littlebeaverstudio](https://clawhub.ai/user/littlebeaverstudio) <br>
+[yk-niu](https://clawhub.ai/user/yk-niu) <br>
 
 ### License/Terms of Use: <br>
 MIT <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to let an agent connect to a locally running 小河狸发票助手 desktop app, read invoice data through a localhost API, and produce invoice ledger, ranking, trend, tax-summary, and attachment-metadata analysis. It is intended for read-only extraction and analysis; attachment opening should happen only after an explicit user request. <br>
+Finance and operations users use this skill to let an agent query local Little Beaver Invoice Assistant data for invoice ledger summaries, customer and supplier rankings, monthly trends, tax amount summaries, and attachment metadata. It supports read-only analysis and local attachment opening; it does not import, modify, delete, or upload invoice records. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can return sensitive invoice, tax, company, counterparty, item, and attachment metadata from a local business ledger. <br>
-Mitigation: Use it only with intentional access to the local app, scope requests to the needed company and date range, and avoid sharing returned data outside the approved workflow. <br>
-Risk: The open-attachment action launches a local PDF, OFD, or XML file in the user's default application. <br>
-Mitigation: Open attachments only after an explicit user request and when the user is comfortable launching the local file. <br>
-Risk: Invoice and tax summaries are invoice-ledger calculations and may not match final tax payable or filing results. <br>
-Mitigation: State the company, date range, and whether voided invoices were excluded, and treat results as analysis inputs rather than final tax advice. <br>
+Risk: The skill can expose sensitive invoice ledger data, tax IDs, amounts, raw invoice JSON, and attachment metadata to the agent. <br>
+Mitigation: Install only when this access is intended, keep the endpoint on 127.0.0.1 or localhost, and request only the minimum data needed for the user's question. <br>
+Risk: Opening attachments can launch a local PDF, OFD, or XML viewer and reveal local documents on the user's machine. <br>
+Mitigation: Call open-attachment only when the user explicitly asks to open a specific archived attachment. <br>
+Risk: Invoice ledger calculations can be mistaken for formal tax filing conclusions. <br>
+Mitigation: Present results as ledger analysis, include company and date scope, state whether voided invoices are excluded, and avoid describing outputs as final tax declarations. <br>
 
 
 ## Reference(s): <br>
-- [小河狸发票助手本机 Skill API](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/littlebeaverstudio/skills/invoice-assistant) <br>
-- [Publisher profile](https://clawhub.ai/user/littlebeaverstudio) <br>
+- [ClawHub skill page](https://clawhub.ai/yk-niu/skills/invoice-assistant) <br>
+- [Local Skill API reference](references/api.md) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-backed analysis with inline shell command examples] <br>
+**Output Format:** [Markdown and JSON summaries with optional shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads from a localhost API and returns scoped invoice, company, ranking, summary, item, and attachment metadata; it does not import, modify, delete, or upload invoice data.] <br>
+**Other Properties Related to Output:** [Uses local localhost API responses and should report selected company, date range, and whether voided invoices are excluded.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+1.0.1 (source: ClawHub release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,47 +1,61 @@
-## Description: <br>
-Story Import turns an existing Chinese-language novel or short story into a structured writing project that can be continued with related story-writing skills. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Imports an existing long or short Chinese novel into a structured writing project so later writing skills can continue it from recovered source text, analysis assets, outlines, settings, and tracking state.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and writing-workflow agents use this skill to import an existing manuscript, analyze it by length, and rebuild it as a long-form or short-form project with settings, outlines, tracking files, benchmark references, and continuation-ready context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can copy, create, or overwrite manuscript-derived project files in local writing-project directories. <br>
-Mitigation: Invoke it explicitly, point it only at intended manuscript sources, and review overwrite notices and generated files before continuing the writing workflow. <br>
-Risk: Importing a directory that contains unrelated private material could expose that material to the analysis workflow. <br>
-Mitigation: Use a dedicated manuscript file or clean project directory, and avoid selecting folders that contain unrelated sensitive files. <br>
+## Use Case:
 
+External authors and writing-assistant users use this skill to convert an existing manuscript into a resumable story project. It supports long and short fiction by routing to the appropriate analysis pipeline and then rebuilding project files for follow-on writing workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/worldwonderer/skills/story-import) <br>
-- [Metadata Source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Length Routing Rules](references/length-routing.md) <br>
-- [Long-Form Structure Mapping](references/structure-mapping-long.md) <br>
-- [Short-Form Structure Mapping](references/structure-mapping-short.md) <br>
-- [Character State Reverse Rules](references/character-state-reverse.md) <br>
-- [State Tracking Protocol](references/state-tracking.md) <br>
-- [Text Format and Structure Rules](references/format-and-structure.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with file paths, project-structure plans, status summaries, and command-style workflow handoffs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces or updates local manuscript-derived project files under directories such as 拆文库/, the book project directory, 对标/, 追踪/, and .active-book.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release evidence) <br>
+Risk: The skill can create and modify a novel project in the workspace.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the target project path before running it and keep backups of important manuscripts.
+
+Risk: Initialization may move old tracking files into a project archive.
+
+Mitigation: Confirm the project is the intended import target before initialization and inspect the archived tracking files if migration is needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-import)
+- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode)
+- [Length routing rules](references/length-routing.md)
+- [Long-form structure mapping](references/structure-mapping-long.md)
+- [Short-form structure mapping](references/structure-mapping-short.md)
+- [Tracking transaction protocol](references/tracking-transaction.md)
+- [State tracking protocol](references/state-tracking.md)
+- [Character state reverse rules](references/character-state-reverse.md)
+- [Format and structure rules](references/format-and-structure.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with project file, JSON tracking-state, and shell-command instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates or modifies workspace files for a novel-writing project and may move old tracking files into an archive during initialization.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release metadata; artifact frontmatter reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

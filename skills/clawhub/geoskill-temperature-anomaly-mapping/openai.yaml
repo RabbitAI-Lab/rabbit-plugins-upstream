@@ -1,0 +1,17 @@
+name: geoskill-temperature-anomaly-mapping
+display_name: 温度异常制图
+description: |
+  计算温度距平（当期温度减多年同期气候态）与标准化距平，划分暖/冷异常等级，输出距平栅格、异常等级 GeoTIFF 与时序 JSON。Temperature anomaly mapping: current minus multi-year climatology, standardized anomalies, and warm/cold anomaly classes, outputting anomaly rasters, a class GeoTIFF, and a time-series JSON.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-temperature-anomaly-mapping.py
+runtime: python>=3.9
+tags:
+  - climate
+  - extraction
+  - gis
+  - lidar
+  - point-cloud
+  - raster
+  - remote-sensing
+  - time-series

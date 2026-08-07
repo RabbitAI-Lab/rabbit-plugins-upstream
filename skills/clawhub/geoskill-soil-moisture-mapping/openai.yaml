@@ -1,0 +1,17 @@
+name: geoskill-soil-moisture-mapping
+display_name: 土壤湿度制图
+description: |
+  用热惯量法与 SAR Dubois 模型估算表层土壤湿度并划分干旱等级。Estimates surface soil moisture via thermal inertia and the SAR Dubois model, with drought grading.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-soil-moisture-mapping.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - climate
+  - extraction
+  - gis
+  - mining
+  - remote-sensing
+  - sar
+  - visualization

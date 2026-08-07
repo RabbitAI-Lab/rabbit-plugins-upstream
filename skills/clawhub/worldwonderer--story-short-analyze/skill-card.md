@@ -1,48 +1,69 @@
-## Description: <br>
-Analyzes short-form Chinese web fiction by breaking down story premise, structure, emotional arcs, reversals, writing techniques, character functions, and reusable genre patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+story-short-analyze guides agents through a Chinese short-story analysis workflow that identifies genre, structure, emotional arcs, twists, writing techniques, and resonance, then writes reusable Markdown reports and metadata for downstream story drafting.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-External users and writing teams use this skill to produce structured literary analysis of short web-fiction works they are authorized to analyze. The generated analysis supports later drafting workflows by preserving plot nodes, technique notes, source backups, and metadata. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill saves full copies of user-provided stories and derived reports in the project workspace. <br>
-Mitigation: Use it only with fiction the user has the right to analyze, store outputs in approved workspace locations, and remove source backups when they are no longer needed. <br>
-Risk: Market-oriented genre guidance may be unsuitable when the user needs neutral literary criticism. <br>
-Mitigation: Review the genre framing before reuse and request neutral literary analysis when market-oriented advice is not desired. <br>
+## Use Case:
 
+Writers, editors, and agent developers use this skill to analyze short-form Chinese web fiction that they have the right to process, producing structured story analysis, reusable craft notes, and metadata for a downstream writing workflow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-short-analyze) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Output contract](references/output-contract.md) <br>
-- [Output templates](references/output-templates.md) <br>
-- [Short story decomposition methodology](references/material-decomposition.md) <br>
-- [Genre catalog](references/genre-catalog.md) <br>
-- [Quality checklist](references/quality-checklist.md) <br>
-- [AI-style banned words and sentence patterns](references/banned-words.md) <br>
-- [Anti-AI writing guide](references/anti-ai-writing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, configuration, guidance] <br>
-**Output Format:** [Markdown reports, JSON metadata, and local source-backup files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes analysis artifacts under a per-story output directory, including a main report, plot-node notes, technique notes, source backups, and _meta.json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.12 (source: server release metadata; artifact frontmatter reports 3.0.0) <br>
+Risk: The skill saves local copies of user-provided fiction and generated analysis under 拆文库/{书名}/.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only with works the user has the right to analyze, provide only the intended file path or pasted text, and review or remove local backups according to the user's data-handling needs.
+
+Risk: The analysis output can be reused by a downstream writing workflow and may preserve too much of a source story's structure, voice, or protected expression if used carelessly.
+
+Mitigation: Review downstream use for originality, avoid copying specific plot expression or passages, and treat the analysis as craft guidance rather than a license to reproduce the source.
+
+Risk: The skill may analyze fictional abuse, violence, revenge, infidelity, and other dark genre elements.
+
+Mitigation: Keep outputs framed as literary criticism and writing analysis, and do not convert fictional material into real-world instructions or endorsement.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-short-analyze)
+- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode)
+- [Output contract](references/output-contract.md)
+- [Output templates](references/output-templates.md)
+- [Short-story decomposition methodology](references/material-decomposition.md)
+- [Quality checklist](references/quality-checklist.md)
+- [Anti-AI-writing report check](references/anti-ai-writing.md)
+- [Banned words](references/banned-words.md)
+- [Genre catalog](references/genre-catalog.md)
+- [Genre core mechanics](references/genre-core-mechanics.md)
+- [Genre readers](references/genre-readers.md)
+- [Genre writing formulas](references/genre-writing-formulas.md)
+- [Genre writing techniques](references/genre-writing-techniques.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, files, guidance]
+
+**Output Format:** [Markdown reports and JSON metadata written to local files, with concise conversational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces a source-text backup, analysis report, plot-node report, writing-technique report, and _meta.json under a per-title directory.]
+
+## Skill Version(s):
+
+1.1.13 (source: server release metadata; artifact frontmatter says 3.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

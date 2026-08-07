@@ -16,6 +16,15 @@ StandardOutput=journal
 StandardError=journal
 SyslogIdentifier=buzz-relay
 
+# Hardening — the relay writes a git pack cache to its working directory
+# and may need Docker socket access for media storage. ReadWritePaths
+# grants write access to only those paths under ProtectSystem=strict.
+NoNewPrivileges=true
+ProtectSystem=strict
+ProtectHome=read-only
+PrivateTmp=true
+ReadWritePaths=/home/marvin/.openclaw/workspace/repos/buzz
+
 # Give the relay time to connect to Postgres/Redis/MinIO on startup
 ExecStartPre=/bin/sleep 3
 

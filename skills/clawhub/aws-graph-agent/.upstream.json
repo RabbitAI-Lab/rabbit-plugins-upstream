@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/aws-graph-agent",
   "slug": "aws-graph-agent",
   "ownerHandle": null,
-  "version": "1.0.3",
-  "updatedAt": 1784868409414,
-  "contentHash": "ccf84abc3dc293ed5a1d1b30b47c195618eb0d890951f396cf07226d4aaef087",
-  "fetchedAt": "2026-07-26T18:06:08.506Z"
+  "version": "1.0.4",
+  "updatedAt": 1785663789562,
+  "contentHash": "f8c72986c8d71bc78b3faf5a4805362aff940c19c26f8a971d419c2bac80e0ca",
+  "fetchedAt": "2026-08-07T08:55:58.690Z"
 }

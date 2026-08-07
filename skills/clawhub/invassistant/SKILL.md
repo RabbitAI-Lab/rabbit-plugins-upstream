@@ -1,9 +1,11 @@
----
 name: invassistant
 description: >
   Multi-asset investment portfolio management framework with A/B/C asset-class differentiated rules,
   7 red-line portfolio risk controls, and 4-factor QMS quality scoring.
   Covers US, A-share (China), and HK stocks with disciplined entry/exit logic.
+description_zh: "多资产投资组合管理框架：A/B/C 类资产差异化规则、7 条红线组合风险控制、四因子质量管理；覆盖美股、A 股、港股，纪律化进出场逻辑。"
+version: "2.3.4"
+
 allowed-tools:
   - read_file
   - write_to_file
@@ -30,7 +32,7 @@ metadata:
 
 # InvAssistant
 
-> Multi-asset investment portfolio management framework — current version v2.1.2 (2026-06-06).
+> Multi-asset investment portfolio management framework — current version v2.3.3 (2026-08-07).
 > Core philosophy: portfolio before stock-picking, discipline before inspiration. Rules are guardrails, not cages.
 
 ---
@@ -199,6 +201,8 @@ QMS = 0.35 × Earnings Trend
 
 | Version | Date | Summary |
 |---------|------|---------|
+| v2.3.3 | 2026-08-07 | Sync SKILL.md version declaration with ClawHub package metadata |
+| v2.3.2 | 2026-06-06 | Fix display name (remove Clean suffix) |
 | v2.1.2 | 2026-06-06 | Audit cleanup: bilingual README, remove legacy files |
 | v2.1.1 | 2026-06-04 | Mode D: A-class candidate zone entry (no observation delay) |
 | v2.1 | 2026-05-18 | A/B/C asset classification; 7 red lines; 4-factor QMS; trailing stop removed from A-class |

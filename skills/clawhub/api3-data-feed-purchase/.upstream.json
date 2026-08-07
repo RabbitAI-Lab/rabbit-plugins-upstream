@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/api3-data-feed-purchase",
   "slug": "api3-data-feed-purchase",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1783927319888,
-  "contentHash": "e11de76e861a737dbd768527e4fe6bd1980ea114087f9749d22fe4f8e9ddb94f",
-  "fetchedAt": "2026-07-26T18:15:48.427Z"
+  "version": "0.7.0",
+  "updatedAt": 1785764299615,
+  "contentHash": "10b85800ccdfb5a09c6c99d74517ab452c88d780a37475f84db189c02a15fbf0",
+  "fetchedAt": "2026-08-07T08:48:09.895Z"
 }

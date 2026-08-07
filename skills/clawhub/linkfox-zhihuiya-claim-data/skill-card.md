@@ -1,5 +1,5 @@
 ## Description: <br>
-Retrieves Zhihuiya (PatSnap) patent claim data for one patent by patent ID or publication number. <br>
+Retrieves patent claims data from Zhihuiya (PatSnap) by patent ID or publication number and helps agents present claim text, claim counts, and family-substitution notices. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-IP professionals, patent analysts, R&D teams, and agent developers use this skill to fetch and present the claims section for a single patent. It supports claim-count review, independent or dependent claim display, and optional related-family substitution when claims are unavailable. <br>
+External users, IP professionals, patent analysts, and R&D teams use this skill to retrieve and present patent claim text and claim counts for one or more patent IDs or publication numbers. It is suited to claims lookup and display, not legal interpretation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill stores full API responses locally, and saved responses may include patent claim data and request metadata. <br>
-Mitigation: Review the saved LinkFox response directory before sharing or committing workspace files, and control the execution directory when handling sensitive patent work. <br>
-Risk: The skill can consume paid LinkFox/Zhihuiya credits and is limited to one patent per request. <br>
-Mitigation: Confirm the target patent and expected credit usage before repeated calls, especially for multiple-patent workflows. <br>
-Risk: The skill includes feedback submission and onboarding/install behavior that can involve additional network calls. <br>
-Mitigation: Disable or control feedback and onboarding flows unless the user explicitly accepts those extra network and installation behaviors. <br>
+Risk: Patent identifiers, claim queries, API credentials, and session metadata may be sent to LinkFox or Zhihuiya services. <br>
+Mitigation: Use the skill only when the user accepts that data sharing, and keep API credentials scoped to trusted use. <br>
+Risk: The network gateway can be overridden with LINKFOX_TOOL_GATEWAY, which could route authenticated requests to an unintended endpoint. <br>
+Mitigation: Set LINKFOX_TOOL_GATEWAY only to a trusted endpoint or leave it unset to use the default LinkFox gateway. <br>
+Risk: Full patent-claims responses and cache data are written under local linkfox directories and may include sensitive patent data. <br>
+Mitigation: Review where response files are stored and delete cached or saved data when it is no longer needed. <br>
+Risk: Queries can consume paid credits, and onboarding or feedback flows may make additional network requests. <br>
+Mitigation: Ask for explicit user consent before paid calls, onboarding-skill installation, or feedback submission. <br>
 
 
 ## Reference(s): <br>
-- [Zhihuiya Claim Data API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-claim-data) <br>
+- [Zhihuiya Claims API Reference](references/api.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, API calls, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses, saved response files, and optional shell command examples] <br>
+**Output Type(s):** [Text, Markdown, JSON, Files, Shell commands, Guidance] <br>
+**Output Format:** [Markdown guidance with JSON API responses and saved JSON data files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a LinkFox API key, queries one patent per call, uses a 24-hour local cache, and may summarize large responses while saving the full JSON response.] <br>
+**Other Properties Related to Output:** [The script saves full API responses locally, prints small responses inline, summarizes larger responses, and uses a 24-hour local cache.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+1.0.6 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

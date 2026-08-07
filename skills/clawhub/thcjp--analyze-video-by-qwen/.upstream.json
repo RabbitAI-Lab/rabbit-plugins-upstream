@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/analyze-video-by-qwen",
   "slug": "analyze-video-by-qwen",
   "ownerHandle": "thcjp",
-  "version": "1.0.1",
-  "updatedAt": 1778492049576,
-  "contentHash": "12a0f9157f5aa7437584691e8f816df8c5c724dc152b92782a1931f9bd88e762",
-  "fetchedAt": "2026-07-26T18:06:26.181Z"
+  "version": "1.0.2",
+  "updatedAt": 1785662097189,
+  "contentHash": "112445e9713b8d681c71b63a69b1323dc1f2cace6cbdbd584dc6f912f84cbc7e",
+  "fetchedAt": "2026-08-07T08:57:19.427Z"
 }

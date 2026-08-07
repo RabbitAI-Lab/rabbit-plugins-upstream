@@ -1,0 +1,75 @@
+{
+  "skill": "atmospheric-correction",
+  "skill_version": "1.0.0",
+  "command": "atmospheric-correction --bbox 116 39 117 40 --synthetic --sensor sentinel2 --quiet --output-dir ./_test_sensor_sentinel2",
+  "started_at": "2026-08-03T13:38:41.997657Z",
+  "finished_at": "2026-08-03T13:38:43.865689Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "sensor": "sentinel2",
+    "method": "dos",
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_sensor_sentinel2\\surface_reflectance.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 6,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_sensor_sentinel2\\correction_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "dos",
+    "sensor": "sentinel2",
+    "n_bands": 6,
+    "mean_reflectance_per_band": [
+      0.04618354141712189,
+      0.06106668710708618,
+      0.08098852634429932,
+      0.16203412413597107,
+      0.3143412470817566,
+      0.2214668095111847
+    ],
+    "overall_mean_reflectance": 0.1476801484823227,
+    "synthetic_truth_mean_per_band": {
+      "band_0": 0.06638312339782715,
+      "band_1": 0.10427786409854889,
+      "band_2": 0.10387556254863739,
+      "band_3": 0.16481775045394897,
+      "band_4": 0.3143412470817566,
+      "band_5": 0.2214667946100235
+    }
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "atmospheric-correction"
+  },
+  "error": null
+}

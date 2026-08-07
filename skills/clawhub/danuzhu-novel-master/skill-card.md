@@ -1,5 +1,5 @@
 ## Description: <br>
-大女主小说创作主编 is a Chinese-language fiction workflow that coordinates outlining, drafting, review, revision, continuation, and TXT formatting for female-led long-form novels. <br>
+Orchestrates Chinese 大女主 fiction creation from outline through drafting, polishing, review, and TXT delivery when a user explicitly asks to write a female-lead novel. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,39 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users who want an autonomous Chinese-language long-form fiction workflow can use this skill to generate or continue female-led novels from outline through reviewed drafts and final TXT output. <br>
+External writers and creative agents use this skill to generate Chinese female-lead web fiction with a fixed first-person heroine voice, coordinated outlining, chapter drafting, anti-AI-style polishing, review, and final text formatting. It is suited for short fiction by default and can adapt to longer user-requested works. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The workflow can inspect existing novel files and write intermediate or final files in the selected output folder. <br>
-Mitigation: Use a dedicated output folder and avoid pointing the skill at sensitive directories or unrelated personal files. <br>
-Risk: The workflow is highly autonomous and may make creative decisions without user checkpoints. <br>
-Mitigation: Review outlines, drafts, and the final TXT before publication or other external use. <br>
-Risk: The workflow uses named literary-style roles as creative references. <br>
-Mitigation: Review generated text for originality, rights concerns, and suitability before distribution. <br>
+Risk: The workflow can create or overwrite outline, chapter, final Markdown, and TXT files in its selected output directory. <br>
+Mitigation: Run it in a project-specific output directory and review existing files before allowing overwrite-oriented continuation. <br>
+Risk: The skill is highly opinionated: the heroine, point of view, and narrative voice default strongly to 王枫 and first-person oral storytelling. <br>
+Mitigation: Edit the skill or provide explicit creative constraints before use when a different protagonist, perspective, or voice is required. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kongzichixiangjiao/danuzhu-novel-master) <br>
-- [Artifact README](README.md) <br>
-- [Main skill definition](SKILL.md) <br>
-- [Writing subskill](references/05-写手/SKILL.md) <br>
-- [Review subskill](references/06-检查/SKILL.md) <br>
-- [Formatting subskill](references/07-排版/SKILL.md) <br>
+- [ClawHub skill page](https://clawhub.ai/kongzichixiangjiao/skills/danuzhu-novel-master) <br>
+- [Publisher profile](https://clawhub.ai/user/kongzichixiangjiao) <br>
+- [Primary skill definition](artifact/SKILL.md) <br>
+- [README and example prompt](artifact/README.md) <br>
+- [Narrative writer reference](artifact/references/09-八卦女生叙事人格/SKILL.md) <br>
+- [Logic checker reference](artifact/references/06a-逻辑检查/SKILL.md) <br>
+- [Text checker reference](artifact/references/06b-文字检查/SKILL.md) <br>
+- [Narrative review reference](artifact/references/06c-叙事审稿/SKILL.md) <br>
+- [Typesetting reference](artifact/references/07-排版/SKILL.md) <br>
+- [Anti-AI-style polishing reference](artifact/references/08-去AI味/SKILL.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown drafts, review notes, shell-command guidance, and final TXT fiction output] <br>
+**Output Type(s):** [Markdown, Text, Guidance] <br>
+**Output Format:** [Markdown outlines and chapter files, final plain-text novel files, and concise status guidance.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create numbered intermediate Markdown files and a final TXT file in the chosen output folder.] <br>
+**Other Properties Related to Output:** [Creates or overwrites outline, chapter, final Markdown, and TXT files in the selected output directory.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server evidence release.version) <br>
+1.1.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

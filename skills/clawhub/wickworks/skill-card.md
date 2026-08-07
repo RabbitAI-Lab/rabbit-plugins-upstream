@@ -1,5 +1,5 @@
 ## Description: <br>
-wickworks helps agents compute technical indicators and Smart-Money-Concepts primitives from caller-provided OHLC candlestick bars through a stateless REST or MCP service. <br>
+wickworks helps agents compute technical indicators and Smart-Money-Concepts primitives from user-supplied OHLC candlestick bars through a stateless REST or MCP service. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and trading-data agents use wickworks when they already have OHLC bars and need technical indicators or SMC structures computed without forecasting, scoring, or stateful data storage. <br>
+Developers and market-data analysts use this skill when an agent needs to compute technical indicators, support/resistance structures, order blocks, fair-value gaps, or related OHLC primitives without producing forecasts or trading opinions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The wickworks service is auth-less if exposed beyond localhost. <br>
-Mitigation: Bind it to localhost by default and expose it off-host only behind an authenticated reverse proxy or VPN. <br>
-Risk: Using an unpinned container image can reduce deployment reproducibility. <br>
-Mitigation: Pin a specific Docker image version for deployments that need repeatable behavior. <br>
-Risk: Requests can fail when they exceed configured bar limits or do not include enough warm-up bars for selected indicators. <br>
-Mitigation: Respect MAX_BARS and MIN_BARS settings, and handle insufficient_bars and 413 responses in the calling workflow. <br>
+Risk: The wickworks service is auth-less by default, so a network-exposed instance can be called by anyone who can reach it. <br>
+Mitigation: Bind the service to localhost by default and expose it beyond the machine only behind an authenticated reverse proxy or VPN. <br>
+Risk: OHLC bars or account-derived market data sent to an untrusted instance could disclose sensitive data. <br>
+Mitigation: Send data only to a wickworks instance operated by the user or another trusted operator. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/wickworks) <br>
 - [wickworks setup](references/setup.md) <br>
+- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/wickworks) <br>
 - [Model Context Protocol](https://modelcontextprotocol.io) <br>
+- [wickworks homepage](https://github.com/psyb0t/docker-wickworks) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [JSON, API calls, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with shell, JSON, REST, and MCP examples; service responses are JSON.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with JSON, shell command, and configuration examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Computes stateless, NaN-safe outputs from caller-provided OHLC bars and returns insufficient-input or oversize-request errors when limits are not met.] <br>
+**Other Properties Related to Output:** [Guides agents to call a stateless service that returns NaN-safe JSON indicator and SMC outputs from supplied bars.] <br>
 
 ## Skill Version(s): <br>
-0.6.3 (source: server release metadata) <br>
+0.6.8 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

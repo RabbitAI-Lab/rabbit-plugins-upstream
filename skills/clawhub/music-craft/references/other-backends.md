@@ -1,12 +1,23 @@
 # Other Backends
 
-Backend guides for everything that is not ACE-Step: MusicGen (local, free),
+Backend guides for everything that is not ACE-Step: MusicGen (local,
+non-commercial weights),
 the mmx CLI (MiniMax), Stable Audio (Stability AI REST API), and generic
 CLI backends. Load this when the selected backend is one of these.
 
-## MusicGen (local — free, no API key, no quota)
+## MusicGen (local — non-commercial weights, no API key, no quota)
 
-**Best for:** fully offline generation, no API dependency, unlimited use. **Trade-off:** quality is lower than MiniMax/ACE-Step, especially for vocals. Use as a fallback or for instrumentals.
+**License gate:** AudioCraft code is MIT, but MusicGen model weights are
+CC-BY-NC 4.0. Use this backend only for personal, research, or other
+non-commercial work permitted by that license. Do not use its output for
+commercial releases, monetized channels, client work, paid products, or
+advertising. For commercial local generation, use a backend whose exact model
+checkpoint terms permit it, such as the currently documented ACE-Step 1.5
+route, after verifying the current license.
+
+**Best for:** fully offline non-commercial generation, no API dependency, and
+no quota. **Trade-off:** quality is lower than MiniMax/ACE-Step, especially
+for vocals. Use it for sketches or non-commercial instrumentals.
 
 MusicGen takes a single text description. It does NOT have a separate lyrics parameter — the text description IS the entire input. MusicGen was trained on short natural-language descriptions, NOT structured production sheets like MiniMax. The skill must reformat the prompt before passing it.
 

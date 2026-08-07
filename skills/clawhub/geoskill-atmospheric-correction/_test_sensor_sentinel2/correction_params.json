@@ -1,0 +1,56 @@
+{
+  "method": "dos",
+  "sensor": "sentinel2",
+  "solar_zenith_deg": 30.0,
+  "dark_object_percentile": 1.0,
+  "bands": [
+    {
+      "band_index": 0,
+      "band_name": "blue",
+      "wavelength_um": 0.49,
+      "esun": 1950.0,
+      "dn_dark": 404481.7928125,
+      "rho_dark": 0.0752460326818081
+    },
+    {
+      "band_index": 1,
+      "band_name": "green",
+      "wavelength_um": 0.56,
+      "esun": 1820.0,
+      "dn_dark": 397994.248125,
+      "rho_dark": 0.07932766090307698
+    },
+    {
+      "band_index": 2,
+      "band_name": "red",
+      "wavelength_um": 0.66,
+      "esun": 1550.0,
+      "dn_dark": 197791.81703125002,
+      "rho_dark": 0.04629092541703381
+    },
+    {
+      "band_index": 3,
+      "band_name": "re1",
+      "wavelength_um": 0.7,
+      "esun": 1430.0,
+      "dn_dark": 92032.10296875,
+      "rho_dark": 0.02334654123830165
+    },
+    {
+      "band_index": 4,
+      "band_name": "nir",
+      "wavelength_um": 0.84,
+      "esun": 990.0,
+      "dn_dark": 41070.80078125,
+      "rho_dark": 0.015049331786994236
+    },
+    {
+      "band_index": 5,
+      "band_name": "swir1",
+      "wavelength_um": 1.61,
+      "esun": 245.0,
+      "dn_dark": 7003.513671875,
+      "rho_dark": 0.010369770322818389
+    }
+  ]
+}

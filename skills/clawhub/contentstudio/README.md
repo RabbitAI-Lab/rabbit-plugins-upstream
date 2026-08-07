@@ -142,9 +142,10 @@ contentstudio --json campaigns:list
 contentstudio --json categories:list
 contentstudio --json labels:list
 contentstudio --json team:list
+contentstudio --json approval-workflows:list   # use an item's _id as --approval-workflow-id
 ```
 
-All support `--page`, `--per-page`, and `--search` filters.
+All support `--page` and `--per-page`; the campaigns/categories/labels/team lists also support `--search`.
 
 ## Connecting Social Accounts
 
@@ -194,6 +195,17 @@ contentstudio --json accounts:add-facebook-group \
 
 The image URL is optional.
 
+### Remove (disconnect) an account
+
+```bash
+# preview first
+contentstudio --json accounts:remove <account_id> --dry-run
+# then actually remove
+contentstudio --json accounts:remove <account_id>
+```
+
+`account_id` is the account's `_id` from `accounts:list`. Requires the `save_social` permission (403 otherwise); 404 if the account isn't in the workspace.
+
 All three connect commands support `--dry-run` to preview the payload without calling the API.
 
 ## Creating Posts
@@ -224,6 +236,11 @@ Options:
 | `--video-url` | External video URL |
 | `--media-id` | ID of media in your library (from `media:list`). Repeatable. |
 | `--post-type` | `feed` \| `reel` \| `story` \| `feed+reel` \| `feed+story` \| `feed+reel+story` \| `carousel` \| `carousel+story` \| `video` \| `shorts` |
+| `--facebook-carousel '<json>'` | Facebook carousel (Facebook accounts only): JSON object `{cards:[{image,link,title?,description?}], call_to_action?, end_card?, end_card_url?, accounts?}`. 2–10 cards. CLI adds `is_carousel_post:true`. |
+| `--threads '<json>'` | Threads multi-thread (Threads accounts only): JSON array `[{message, media?, media_ids?}]`. Max 10 items. CLI adds `has_multi_threads:true`. |
+| `--twitter '<json>'` | Twitter/X threaded tweets (Twitter accounts only): JSON array `[{message, media?, media_ids?}]`. Max 10 tweets. CLI adds `has_threaded_tweets:true`. No mixed media per tweet (no images+video together), max 1 video per tweet. |
+| `--first-comment "<message>"` | First comment (≤2000 chars). Build `first_comment:{message, accounts?}`. Requires `--first-comment-account`. |
+| `--first-comment-account <id>` | Account for the first comment. Repeatable. Must be a subset of `--account`; backend 422s if omitted when `--first-comment` is set. |
 | `--dry-run` | Print the body that would be POSTed and exit (no API call) |
 
 ### Multi-account post
@@ -252,6 +269,80 @@ contentstudio posts:create \
   -t draft \
   --media-id <media_library_id>
 ```
+
+### Queued post (added to the publishing queue; no explicit time)
+
+```bash
+contentstudio posts:create \
+  -c "Filler post for the queue" \
+  -i <account_id> \
+  -t queued
+```
+
+`scheduled_at` is optional for `queued` — the backend slots it into the workspace queue automatically.
+
+### Content-category post (accounts come from the category — no `-i`)
+
+```bash
+# Find a category id first:
+contentstudio --json categories:list
+
+# --content-category-id is required for -t content_category; accounts are derived from the category:
+contentstudio posts:create \
+  -c "Evergreen tip of the day" \
+  -t content_category \
+  --content-category-id <category_id>
+```
+
+### Facebook carousel (2–10 cards, Facebook accounts only)
+
+```bash
+contentstudio --json posts:create --dry-run \
+  -c "Shop the new collection" \
+  -i <facebook_account_id> \
+  -t scheduled \
+  -s "2026-07-01 10:00:00" \
+  --facebook-carousel '{"cards":[{"image":"https://e.com/1.jpg","link":"https://e.com/p1","title":"Tee"},{"image":"https://e.com/2.jpg","link":"https://e.com/p2","title":"Hoodie"}],"call_to_action":"SHOP_NOW","end_card":true,"end_card_url":"https://e.com/shop"}'
+```
+
+The CLI parses the JSON locally and adds `is_carousel_post: true`. A carousel and a colored-background text post (`--facebook-background-id`) are different Facebook formats — use one or the other, not both in the same post. CTA values (33 total) include `SHOP_NOW`, `LEARN_MORE`, `BUY_NOW`, `SIGN_UP`, … (see `SKILL.md` for the full list). The backend validates card counts and CTA values.
+
+### Threads multi-thread (chained, max 10 items, Threads accounts only)
+
+```bash
+contentstudio --json posts:create --dry-run \
+  -c "🧵 A thread on shipping CLIs" \
+  -i <threads_account_id> \
+  -t draft \
+  --threads '[{"message":"1/ Start small."},{"message":"2/ Ship a demo.","media":["https://e.com/demo.mp4"]},{"message":"3/ Iterate in public."}]'
+```
+
+The top-level `-c / --content` is the lead post; each `--threads` item is a chained reply, in order (don't repeat the lead text in the items). The CLI parses the JSON array locally and sets `has_multi_threads: true`. Each item needs `message` or `media`; Threads allows mixed media.
+
+### Twitter/X threaded tweets (chained, max 10 tweets, Twitter accounts only)
+
+```bash
+contentstudio --json posts:create --dry-run \
+  -c "Why we built a CLI 🧵" \
+  -i <twitter_account_id> \
+  -t draft \
+  --twitter '[{"message":"1/ Start with the contract."},{"message":"2/ Show, don'\''t tell.","media":["https://e.com/x.jpg"]},{"message":"3/ Ship it."}]'
+```
+
+The top-level `-c / --content` is the lead tweet; each `--twitter` item is a follow-up tweet in the chain, in order (don't repeat the lead text in the items). The CLI parses the JSON array locally and sets `has_threaded_tweets: true`. Each item needs `message` or `media`. Unlike Threads, Twitter does **not** allow mixed media in one tweet (no images + video together) and allows **max 1 video per tweet** — the backend enforces this and returns a 422 if violated.
+
+### Post with a first comment
+
+```bash
+contentstudio --json posts:create --dry-run \
+  -c "New drop is live 🎉" \
+  -i <account_id> \
+  -t draft \
+  --first-comment "🔗 link in bio" \
+  --first-comment-account <account_id>
+```
+
+The CLI builds `first_comment: { message, accounts }`. `--first-comment-account` is **required** by the backend when `--first-comment` is set and must be a subset of the `-i / --account` IDs; otherwise the API returns a 422.
 
 ### Full body via `--body <file.json>`
 
@@ -290,6 +381,10 @@ Body schema:
     "approve_option": "anyone",
     "notes": "please review"
   },
+  // facebook_options: use EITHER carousel OR facebook_background_id (different FB formats, not both):
+  "facebook_options":  { "carousel": { "is_carousel_post": true, "cards": [ {"image":"https://...","link":"https://...","title":"...","description":"..."} ], "call_to_action": "SHOP_NOW", "end_card": true, "end_card_url": "https://..." } },
+  // colored-background text post instead: "facebook_options": { "facebook_background_id": "<id>" },
+  "threads_options":   { "has_multi_threads": true, "multi_threads": [ {"message":"1/ ..."}, {"message":"2/ ...","media":["https://...mp4"]} ] },
   "youtube_options":   { "title": "...", "privacy_status": "public", "category": "EDUCATION", "tags": ["tag1"], "license": "youtube", "made_for_kids": false },
   "tiktok_options":    { "privacy_level": "PUBLIC_TO_EVERYONE", "disable_comment": false, "disable_duet": false, "disable_stitch": false, "auto_add_music": false },
   "pinterest_options": { "title": "...", "link": "https://..." },
@@ -316,6 +411,25 @@ contentstudio --json posts:list                                          # all r
 contentstudio --json posts:list --status draft --per-page 5
 contentstudio --json posts:list --status scheduled --status published
 contentstudio --json posts:list --date-from 2026-04-01 --date-to 2026-04-30
+```
+
+### Update a post
+
+`posts:update <post_id>` takes the **same flags/body** as `posts:create` (both `--body` and shortcut mode) and PUTs to `/workspaces/{w}/posts/{post_id}`. The backend rejects the update (422) once the post is `published` or `processing`.
+
+```bash
+# Preview an edit (change text + reschedule)
+contentstudio --json posts:update <post_id> -c "Updated copy" -i <account_id> -t scheduled -s "2026-08-01 10:00:00" --dry-run
+
+# Attach an approval workflow (get the id from approval-workflows:list)
+contentstudio --json posts:update <post_id> -c "Q3 launch" -i <account_id> -t draft --approval-workflow-id <workflow_id>
+
+# Mutate the already-attached workflow (update only)
+contentstudio --json posts:update <post_id> -c "Q3 launch" -i <account_id> -t draft --approval-workflow-action restart --approval-workflow-notes "please re-review"
+
+# LinkedIn poll (text-only; requires --post-type poll)
+contentstudio --json posts:update <post_id> -c "Vote!" -i <linkedin_account_id> -t draft --post-type poll \
+  --linkedin-options '{"poll":{"question":"Best day to ship?","options":["Mon","Fri"],"duration":"SEVEN_DAYS"}}'
 ```
 
 ### Delete a post
@@ -361,6 +475,209 @@ contentstudio --json comments:add <post_id> "Heads up" --mention <user_id> --men
 
 # Preview
 contentstudio --json comments:add <post_id> "test" --note --dry-run
+```
+
+> Note: `comments:*` are **ContentStudio-internal** comments on a *draft/scheduled
+> post* — collaboration between your team. To reply to a real comment left by a
+> real person on a published post, use the Social Inbox commands below.
+
+## Social Inbox
+
+The inbox brings DMs, post comments, and reviews into one place. It models all
+three as **elements**, each identified by an `element_ref`:
+
+**Ids come from `element_details`.** Use `element_details.element_id` — it is
+accepted by every element-scoped command:
+
+| Id from `inbox:list` | Used by |
+|----------------------|---------|
+| `element_details.element_id` | every element-scoped command, plus `messages` / `send` / `notes` / `bookmarks` |
+| `element_details.post_id` | `comments`, `comment-add` |
+
+The row's top-level `element_ref` is an internal reference, not a command
+argument — take the id from `element_details`.
+
+| Inbox type | What it is |
+|------------|------------|
+| `conversation` | A DM thread (Facebook / Instagram) |
+| `post` | A published post with comments on it |
+| `review` | A review (e.g. Google Business Profile) |
+
+Most write commands also need `--platform-id` — the connected account the item
+belongs to, since replies go out through that account. Find it with
+`accounts:list`.
+
+### Browse and search
+
+```bash
+# Counts per bucket — cheapest way to see if anything needs attention
+contentstudio --json inbox:summary
+
+# Everything
+contentstudio --json inbox:list
+
+# Just unanswered DMs, 50 at a time
+contentstudio --json inbox:list --type conversation --action all --limit 50
+
+# Full-text search, restricted to one Facebook account
+contentstudio --json inbox:list \
+  --search "refund" \
+  --channels '{"facebook":["<account_id>"]}'
+
+# Filter by tag
+contentstudio --json inbox:list --tag <tag_id> --tag <tag_id>
+```
+
+Inbox lists use `--limit` (with `--per-page` accepted as an alias) and `--page`.
+
+**Limits the API enforces**, checked client-side before any request goes out:
+
+| Limit | Applies to |
+|-------|------------|
+| `--limit` ≤ 200 | `inbox:list`, `inbox:messages`, `inbox:comments` |
+| ≤ 100 `--element` refs | `inbox:update` |
+| Exactly one operation per call | `inbox:update` (`--status` / `--archived` / `--assigned` are mutually exclusive) |
+| Tag name ≤ 50 chars | `inbox:tag-create` |
+
+`inbox:update` may also come back as a **partial** success (HTTP `207`) when
+some elements could not be updated. The CLI prints a warning listing the
+untouched refs instead of reporting a clean pass.
+
+### Read a thread
+
+```bash
+# Messages, newest first
+contentstudio --json inbox:messages <conversation_id> --sort-order desc --limit 20
+
+# A thread also contains team activity entries (marked done, archived, ...).
+# Those have `message: null` and an `action` block — filter on
+# `action == null` when you want customer messages only.
+
+# Comments on a published post
+contentstudio --json inbox:comments <post_id>
+
+# Team-only notes attached to a conversation
+contentstudio --json inbox:notes <conversation_id>
+
+# Starred messages
+contentstudio --json inbox:bookmarks <conversation_id>
+
+# Who am I talking to?
+contentstudio --json inbox:contact <element_ref>
+```
+
+### Reply
+
+These reach real customers. Preview with `--dry-run` first.
+
+```bash
+# Send a DM
+contentstudio --json inbox:send <conversation_id> \
+  --platform-type facebook \
+  --platform-id <account_id> \
+  --message "Thanks for reaching out — shipping today!" \
+  --dry-run
+
+# Send a DM with an image attached
+contentstudio --json inbox:send <conversation_id> \
+  --platform-type instagram --platform-id <account_id> \
+  --message "Here's the size chart" \
+  --file ./size-chart.png --file-type image
+
+# Comment on a post
+contentstudio --json inbox:comment-add <post_id> \
+  --platform-type facebook --platform-id <account_id> \
+  --message "Glad you like it!"
+
+# Reply to a specific comment (threaded)
+contentstudio --json inbox:comment-add <post_id> \
+  --platform-type facebook --platform-id <account_id> \
+  --comment-id <comment_id> --message "DMing you the details."
+
+# Facebook private reply — answers a public comment via DM
+contentstudio --json inbox:comment-add <post_id> \
+  --platform-type facebook --platform-id <account_id> \
+  --comment-id <comment_id> --private-reply \
+  --message "Sent you a DM with your order info."
+
+# Reply to a review (upsert — replaces an existing reply)
+contentstudio --json inbox:review-reply <review_id> \
+  --platform-id <account_id> --reply "Thanks for the feedback!"
+
+# Internal note — your team only, never shown to the customer
+contentstudio --json inbox:note-add <conversation_id> \
+  --platform-type facebook --platform-id <account_id> \
+  --message "Escalated to billing" --mention <user_id>
+```
+
+Retrying a send? Pass `--idempotency-key <uuid>` so a repeated request isn't
+delivered twice. It protects sequential retries, not concurrent ones.
+
+### Triage
+
+```bash
+contentstudio --json inbox:mark-read <element_ref>
+
+# Bulk: close out several at once (max 100 refs per call)
+contentstudio --json inbox:update \
+  --element <ref_1> --element <ref_2> --status done
+
+# Archive / assign — exactly ONE operation per call
+contentstudio --json inbox:update --element <ref> --archived
+contentstudio --json inbox:update --element <ref> \
+  --assigned --assigned-to '{"id":"<user_id>"}'
+
+# Star a message
+contentstudio --json inbox:star <message_id>
+contentstudio --json inbox:unstar <message_id>
+```
+
+### Moderate
+
+```bash
+# Hide is reversible — prefer it over delete
+contentstudio --json inbox:comment-hide <comment_id>
+contentstudio --json inbox:comment-unhide <comment_id> \
+  --platform-type facebook --platform-id <account_id>
+
+# Like / unlike (Facebook)
+contentstudio --json inbox:comment-like <comment_id>
+contentstudio --json inbox:comment-unlike <comment_id>
+
+# Delete a comment (LinkedIn additionally needs --comment-urn)
+contentstudio --json inbox:comment-delete <comment_id> \
+  --platform-type facebook --platform-id <account_id>
+
+# Delete a message / a review reply
+contentstudio --json inbox:message-delete <message_id> --platform-id <account_id>
+contentstudio --json inbox:review-reply-delete <review_id> --platform-id <account_id>
+```
+
+### Tags
+
+```bash
+contentstudio --json inbox:tags
+contentstudio --json inbox:tag-create --name "VIP" --color "#ff0055"
+contentstudio --json inbox:tag-update <tag_id> --name "VIP customer"
+contentstudio --json inbox:tag-delete --tag <tag_id> --tag <tag_id>
+
+# Fold several tags into one new tag
+contentstudio --json inbox:tag-merge --name "Support" --color "#0088ff" \
+  --tag <tag_id> --tag <tag_id>
+
+# Attach / detach on an element
+contentstudio --json inbox:tag-attach <element_ref> \
+  --tag <tag_id> --platform-id <account_id> --inbox-type conversation
+contentstudio --json inbox:tag-detach <element_ref> <tag_id> \
+  --platform-id <account_id> --inbox-type conversation
+```
+
+### Updating contact details
+
+```bash
+contentstudio --json inbox:contact-update <element_ref> \
+  --platform-id <account_id> \
+  --name "Jane Doe" --email jane@example.com --company "Acme"
 ```
 
 ## Media Library
@@ -729,6 +1046,7 @@ The CLI wraps these 20 endpoints from the ContentStudio v1 public API. Base URL:
 | POST   | `/workspaces/{w}/connect/{platform}` | `accounts:connect <platform>` |
 | POST   | `/workspaces/{w}/add/bluesky` | `accounts:add-bluesky` |
 | POST   | `/workspaces/{w}/add/facebook-group` | `accounts:add-facebook-group` |
+| DELETE | `/workspaces/{w}/accounts/{account_id}` | `accounts:remove <account_id>` |
 | GET    | `/workspaces/{w}/campaigns` | `campaigns:list` |
 | GET    | `/workspaces/{w}/content-categories` | `categories:list` |
 | GET    | `/workspaces/{w}/labels` | `labels:list` |

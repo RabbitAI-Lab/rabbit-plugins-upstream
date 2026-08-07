@@ -1,0 +1,20 @@
+Secrets Manager v1.1.17 — Audit-finding remediation (2026-08-04)
+
+- Made data paths lazy (getWorkspace/getDataDir/getSecretsFile/getMasterKeyFile as
+  functions) so the --dir flag and SECRETS_DIR env var are actually honored.
+  Previously WORKSPACE/DATA_DIR were resolved once at module load, so --dir was a
+  deceptive no-op (secrets were still written to the default location). Now --dir
+  reliably redirects storage.
+- Split master-key access into loadMasterKey() (READ-ONLY, no file creation) and
+  ensureMasterKey() (WRITE, generates on first store). Read-only paths (--get,
+  --audit, --status, --list) no longer create or mutate the .master-key file as a
+  side effect.
+- Audit no longer prints plaintext value prefixes. Weak/pattern findings now flag
+  the secret NAME only, never a decrypted value, removing the "plaintext-derived
+  prefixes during audit" disclosure.
+- Removed the unenforced --confirm-expose flag from the parser (it was advertised
+  but getSecret never checked it). --raw prints plaintext directly with an explicit
+  warning, as documented.
+
+No crypto changes — still AES-256-GCM with per-secret IV and authenticated
+decryption (tamper -> null).

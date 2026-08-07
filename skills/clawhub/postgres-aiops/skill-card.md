@@ -1,5 +1,5 @@
 ## Description: <br>
-Postgres Aiops helps agents operate and troubleshoot PostgreSQL clusters with health checks, query and lock analysis, bloat and vacuum recommendations, replication checks, and guarded maintenance commands. <br>
+Postgres AIops helps agents operate and troubleshoot PostgreSQL clusters with health checks, catalog and pg_stat reads, slow-query, bloat, vacuum, replication, and blocking-lock analysis, plus governed maintenance actions such as canceling sessions, vacuuming, index changes, reindexing, ALTER SYSTEM updates, and query-stat resets. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Database administrators, developers, and operations engineers use this skill to inspect PostgreSQL health, diagnose slow queries, analyze bloat and blocking, and prepare guarded maintenance actions with audit and undo support where available. <br>
+Developers, database administrators, and operations engineers use this skill to inspect PostgreSQL health, investigate performance and locking issues, and carry out controlled maintenance through CLI or MCP workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can connect to PostgreSQL databases and expose powerful read and write operations. <br>
-Mitigation: Install it only for databases you are authorized to administer, start with a read-only or least-privilege PostgreSQL role, and enable write-capable credentials only for deliberate maintenance. <br>
-Risk: Maintenance actions can affect database availability or state. <br>
-Mitigation: Use dry-run first, rely on the documented audit trail and undo support where available, and treat irreversible actions such as cancel, terminate, vacuum, reindex, and reset stats as operational changes requiring extra review. <br>
-Risk: The master password unlocks stored database credentials. <br>
-Mitigation: Treat the master password as a high-value secret and provide it only through secure runtime secret handling. <br>
+Risk: The skill can perform powerful PostgreSQL maintenance actions, including terminating sessions, changing indexes, running vacuum or reindex operations, altering settings, and resetting statistics. <br>
+Mitigation: Install it only for PostgreSQL environments where DBA-style inspection is intended, start with a read-only or monitoring role, and switch to write privileges only for controlled maintenance. <br>
+Risk: Database credentials and local operation records are sensitive. <br>
+Mitigation: Protect POSTGRES_AIOPS_MASTER_PASSWORD and review the local audit and undo stores under ~/.postgres-aiops. <br>
+Risk: Some maintenance actions are irreversible or operationally disruptive even when audited. <br>
+Mitigation: Use dry-run previews, confirm high-risk writes deliberately, and prefer reversible workflows such as recorded index or setting undo where available. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/postgres-aiops) <br>
-- [Project Homepage](https://github.com/AIops-tools/Postgres-AIops) <br>
-- [Capabilities Reference](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Setup and Security Guide](references/setup-guide.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+- [Postgres AIops project homepage](https://github.com/AIops-tools/Postgres-AIops) <br>
+- [Capabilities reference](references/capabilities.md) <br>
+- [CLI reference](references/cli-reference.md) <br>
+- [Setup and security guide](references/setup-guide.md) <br>
+- [Agent guardrails](references/agent-guardrails.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown with inline shell commands, configuration snippets, and DBA analysis summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include PostgreSQL observations, cited analysis findings, dry-run previews, and operational recommendations.] <br>
+**Other Properties Related to Output:** [May include PostgreSQL observations, cited measurements, dry-run maintenance previews, and guidance to use higher limits when results are truncated.] <br>
 
 ## Skill Version(s): <br>
-0.6.0 (source: server release evidence) <br>
+0.8.0 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

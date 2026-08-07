@@ -1,0 +1,76 @@
+{
+  "skill": "texture-feature-extraction",
+  "skill_version": "1.0.0",
+  "command": "texture-feature-extraction --bbox 116 39 117 40 --synthetic --window 5 --quiet --output-dir ./_test_tex_basic",
+  "started_at": "2026-08-03T17:21:34.595454Z",
+  "finished_at": "2026-08-03T17:21:35.490578Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "window": 5,
+    "features": null,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_tex_basic\\texture_features.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 3,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_tex_basic\\texture_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "window": 5,
+    "features": [
+      "contrast",
+      "homogeneity",
+      "energy"
+    ],
+    "mean_per_feature": {
+      "contrast": 80.12570190429688,
+      "homogeneity": 0.5127662420272827,
+      "energy": 0.4899882674217224
+    },
+    "synthetic_regions": {
+      "smooth": [
+        0,
+        32
+      ],
+      "rough": [
+        32,
+        64
+      ]
+    }
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "texture-feature-extraction"
+  },
+  "error": null
+}

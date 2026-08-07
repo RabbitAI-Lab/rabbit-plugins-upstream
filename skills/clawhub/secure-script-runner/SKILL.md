@@ -1,14 +1,20 @@
 ---
 spec: usk/3.0
 id: secure_script_runner
-version: 1.0.1
+version: 1.1.0
 name: Secure Script Runner (Zero‑Exposure Sandbox)
-description: Zero‑exposure script execution using MGC Blackbox. Store scripts encrypted, execute locally, AI default sees no plaintext. Supports MCP/API/WebUI execution, internal credential calls, and script sealing. This skill only executes scripts with explicit user authorization and will never automatically execute any scripts.
+description: Zero‑exposure script execution using MGC Blackbox. Store scripts encrypted, execute in blackbox, AI sees no plaintext. Supports MCP (mgc_run) / API / WebUI execution, internal credential calls, and script sealing. This skill only executes scripts with explicit user authorization and will never automatically execute any scripts.
 author: MirginCipher Team
 license: MIT
-tags: security, script, zero-exposure, mgc, sandbox, execution
+tags: security, script, zero-exposure, mgc, sandbox, execution, blackbox
 platform_compatibility: windows, macos, linux
 changelog:
+  - version: 1.1.0
+    changes:
+      - Core flow upgrade: Uses mgc_run for blackbox script execution (no script exposure to AI)
+      - Removed mgc_get(action="run") as recommended method
+      - Added ext02 parameter passing specification
+      - Adapted to MGC 1.4.9 sandbox mode
   - version: 1.0.1
     changes:
       - Security hardening update: added security warnings, permission boundaries, script source review checklist
@@ -25,12 +31,12 @@ Secure Script Runner is a documentation skill that teaches how to execute script
 
 This skill enables:
 - Store scripts encrypted in local MGC
-- Execute scripts locally (AI sees results only)
-- Three execution modes: MCP, API, WebUI
+- **Execute scripts in blackbox** (AI sees results only, no stdout)
+- Multiple execution modes: MCP (`mgc_run`, recommended), API, WebUI
 - Scripts can call internal MGC credentials
 - Script sealing for cross‑node delegation
 
-This skill **only provides documentation**, but involves local script execution, which requires manual human approval.
+This skill **only provides documentation**, but involves script execution, which requires manual human approval.
 
 ---
 
@@ -40,6 +46,7 @@ After reading this documentation, an AI agent will understand how to:
 
 - Store scripts securely in MGC Blackbox
 - Execute scripts via MCP (AI), API (script), or WebUI (human)
+- Pass runtime parameters to scripts via `ext02`
 - Call MGC internal credentials from scripts
 - Seal scripts using node public key
 - Build zero‑exposure workflows
@@ -48,12 +55,14 @@ After reading this documentation, an AI agent will understand how to:
 
 # Prerequisites
 
-1. **Install MGC Blackbox**: `pip install mgc-blackbox`
-2. **Start MGC service**: `mgc` (runs at http://127.0.0.1:57219)
-3. **MCP tools available**: Use `mgc_save`, `mgc_get`, `mgc_seal`
+1. **Install MGC Blackbox**: `pip install mgc-blackbox>=1.4.9`
+2. **Start MGC service**: `mgc` (WebUI: http://127.0.0.1:57218, API: http://127.0.0.1:57219)
+3. **MCP tools available**: `mgc_save`, `mgc_run`, `mgc_list`, `mgc_seal`, `mgc_open_webui`
 4. **Token file**: `~/.mgc/database/mgc_black_box/.mgc_token`
 
-> **Important:** For AI agents, use **MCP tools**. CLI may have port conflicts in some environments.
+> **Important:** For AI agents, use **MCP tools**. `mgc_run` is the preferred tool for executing scripts as it provides true zero‑exposure.
+
+> **Sandbox mode (Trae Work / Workbuddy):** MGC 1.4.9 introduced sandbox mode. In this mode, scripts executed via `mgc_run` run in an isolated environment, further enhancing security. The AI can call `mgc_open_webui` to guide the user to view the status.
 
 ---
 
@@ -64,12 +73,12 @@ After reading this documentation, an AI agent will understand how to:
 ```
 Script (plaintext) → MGC Encryption → Encrypted Storage
                                               ↓
-                              Local Execution (MGC)
+                              Blackbox Execution (MGC)
                                               ↓
                               AI receives result only
 ```
 
-AI executes but **never sees script plaintext**.
+AI executes but **never sees script plaintext** or standard output.
 
 ---
 
@@ -77,9 +86,11 @@ AI executes but **never sees script plaintext**.
 
 | Mode | Interface | Use Case |
 |------|-----------|----------|
-| **MCP** | mgc_get | AI agents |
-| **REST API** | /api/mgc/sensitive/get | System scripts |
+| **MCP (Recommended)** | `mgc_run` | AI agents (blackbox, zero‑exposure) |
+| **REST API** | `/api/mgc/sensitive/run` | System scripts |
 | **WebUI** | http://127.0.0.1:57218 | Human operators |
+
+> **Note:** `mgc_get(action="run")` is still available, but `mgc_run` is recommended as it is explicitly designed for execution and does not expose the process.
 
 ---
 
@@ -94,8 +105,8 @@ Store a script with execution metadata:
 mgc_save(
     info_type="script",
     info_owner="my_script",
-    ext01="python",           # Startup command
-    ext02="script.py arg1",  # Default runtime args
+    ext01="python",           # Startup command (e.g., python, python3)
+    ext02="",                 # Default runtime args (optional)
     content="print('Hello from zero‑exposure!')"
 )
 ```
@@ -114,35 +125,50 @@ mgc_save(
 
 # Executing Scripts
 
-## Mode 1: Via MCP (AI)
+## Mode 1: Via MCP (AI) - Recommended
+
+Execute using the `mgc_run` tool:
 
 ```python
-# Execute via MCP tool
-result = mgc_get(
-    info_type="script",
+# Basic execution
+result = mgc_run(
+    info_owner="my_script"
+)
+
+# Execution with parameters (via ext02)
+import json
+params = {"arg1": "value1", "arg2": "value2"}
+result = mgc_run(
     info_owner="my_script",
-    action="run"
+    ext02=json.dumps(params)  # Must be a JSON string
 )
 # AI receives execution result only
 ```
 
+> **ext02 Parameter Specification:**
+> - `ext02` is used to pass runtime parameters to the script.
+> - It **must** be converted to a JSON string using `json.dumps()`.
+> - Failure to do so may cause MCP serialization errors (HTTP 422).
+> - The script can read these parameters from environment variables or standard input.
+
 ## Mode 2: Via REST API (Script)
 
 ```bash
-curl -X POST http://127.0.0.1:57219/api/mgc/sensitive/get \
+# Execute script
+curl -X POST http://127.0.0.1:57219/api/mgc/sensitive/run \
   -H "Content-Type: application/json" \
   -H "X-MGC-Token: $(cat ~/.mgc/database/mgc_black_box/.mgc_token)" \
   -d '{
     "info_type": "script",
     "info_owner": "my_script",
-    "action": "run"
+    "ext02": "{\"arg1\": \"value1\"}"
   }'
 ```
 
 ## Mode 3: Via WebUI (Human)
 
 1. Open WebUI: http://127.0.0.1:57218
-2. Navigate to Get page
+2. Navigate to Skill page
 3. Find your script
 4. Click "Run" button
 
@@ -177,7 +203,7 @@ def get_mgc_credential(info_type, info_owner):
         return json.loads(resp.read().decode())["data"]
 ```
 
-> **Note:** Credentials are retrieved locally, script executes locally, AI never sees plaintext.
+> **Note:** Credentials are retrieved locally, script executes in blackbox, AI never sees plaintext.
 
 ---
 
@@ -224,7 +250,7 @@ Sealed scripts are encrypted and can only be executed by the target node.
 
 # MCP Tools Reference
 
-## mgc_save
+## mgc_save (Store Script)
 
 **Arguments:**
 ```json
@@ -232,25 +258,35 @@ Sealed scripts are encrypted and can only be executed by the target node.
   "info_type": "script",
   "info_owner": "unique identifier",
   "ext01": "startup command (python, node, etc.)",
-  "ext02": "default runtime arguments",
+  "ext02": "default runtime arguments (optional)",
   "content": "script plaintext"
 }
 ```
 
-## mgc_get
+## mgc_run (Execute Script - Recommended)
 
 **Arguments:**
 ```json
 {
-  "info_type": "script",
   "info_owner": "script identifier",
-  "action": "get | run"
+  "ext02": "runtime parameters (JSON string, optional)"
 }
 ```
 
-**Returns:** Script content or execution result
+**Returns:** Script execution result
 
-## mgc_seal
+## mgc_list (List Scripts)
+
+**Arguments:**
+```json
+{
+  "info_type": "script"
+}
+```
+
+**Returns:** List of scripts (no plaintext)
+
+## mgc_seal (Seal Script)
 
 **Arguments:**
 ```json
@@ -263,13 +299,17 @@ Sealed scripts are encrypted and can only be executed by the target node.
 
 **Returns:** Sealed script (encrypted with target node key)
 
+## mgc_open_webui (Open WebUI)
+
+**Purpose:** Opens the MGC WebUI in the browser for user to view or manually operate.
+
 ---
 
 # Security Notes
 
-1. **Zero‑exposure**: Script executes locally, AI receives result only (unless user actively exposes)
+1. **Zero‑exposure**: Script executes in blackbox, AI receives result only (unless user actively exposes)
 2. **Encrypted storage**: All scripts encrypted at rest
-3. **No plaintext leakage**: AI default does not see script content
+3. **No plaintext leakage**: AI default does not see script content or stdout
 4. **Script sealing**: Cross‑node scripts stay encrypted
 
 ---

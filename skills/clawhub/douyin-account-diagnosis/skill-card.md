@@ -1,45 +1,61 @@
-## Description: <br>
-抖音账号诊断宗师 accepts a Douyin account name or ID, queries RedFox account and content data, and produces a four-dimension account diagnosis covering account scale, content performance, operational activity, and platform index. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill diagnoses Douyin account health by fetching RedFox profile and recent content data, then producing a six-dimension score, risk alerts, and optimization suggestions.
 
-## Publisher: <br>
-[if530770](https://clawhub.ai/user/if530770) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[if530770](https://clawhub.ai/user/if530770)
 
-## Use Case: <br>
-External brands, MCN operators, creators, and content operations teams use this skill to evaluate Douyin account quality, compare account performance, and generate data-backed optimization suggestions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a RedFox API key and sends entered Douyin account names or IDs to RedFox for lookup. <br>
-Mitigation: Configure the key only in the expected environment variable, avoid exposing it in prompts or logs, and use the skill only when sending those account identifiers to RedFox is acceptable. <br>
-Risk: API calls may consume RedFox credits. <br>
-Mitigation: Use explicit account lookup requests and confirm that API-credit consumption is acceptable before repeated or batch-style use. <br>
-Risk: Fallback results from non-RedFox sources may be lower confidence. <br>
-Mitigation: Prefer RedFox-backed results and clearly treat fallback data as lower confidence when RedFox lookup is unavailable. <br>
+## Use Case:
 
+External Douyin operators, brands, MCNs, creators, and business-development reviewers use this skill to evaluate account health, benchmark competitors, screen partnership risks, and identify data-backed optimization priorities.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/if530770/douyin-account-diagnosis) <br>
-- [Core workflow](references/core_workflow.md) <br>
-- [RedFox API endpoint](https://redfox.hk/story/api/dyUser/query) <br>
-- [Publisher profile](https://clawhub.ai/user/if530770) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown diagnostic report with scoring breakdowns, account metrics, risk notes, and optimization guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REDFOX_API_KEY; account names or IDs entered by the user are sent to RedFox for lookup and may consume API credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill sends queried Douyin nicknames or IDs, returned profile data, and recent-content data to RedFox.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that account data may be processed through RedFox, and avoid submitting accounts whose analysis would expose sensitive business intelligence without approval.
+
+Risk: The release evidence reports a hardcoded shared RedFox API key.
+
+Mitigation: Configure a revocable REDFOX_API_KEY under the user's control and avoid relying on the embedded shared key.
+
+Risk: Generated reports may contain competitor, partnership, or account-quality intelligence.
+
+Mitigation: Treat generated reports as business-sensitive and limit distribution to authorized reviewers.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/if530770/skills/douyin-account-diagnosis)
+- [Core Workflow](references/core_workflow.md)
+- [Diagnosis Rules](references/diagnosis_rules.md)
+- [API Reference](references/api_reference.md)
+- [RedFox Data Service](https://redfox.hk)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Structured Markdown diagnostic report with tables, risk alerts, recent-content details, and prioritized recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a 100-point composite score across six account-health dimensions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

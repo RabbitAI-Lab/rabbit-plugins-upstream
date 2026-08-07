@@ -1,45 +1,55 @@
-## Description: <br>
-Hotel search and pricing via the RollingGo CLI for destination-based hotel discovery, filtering, hotel details, room pricing, and hotel tag lookup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+RollingGo Hotel helps agents search, compare, and book hotel accommodations through RollingGo hotel services.
 
-## Publisher: <br>
-[dreamtzlong](https://clawhub.ai/user/dreamtzlong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dreamtzlong](https://clawhub.ai/user/dreamtzlong)
 
-## Use Case: <br>
-External users and developers use this skill to search hotels, compare current room details and pricing, inspect valid hotel tags, and prepare booking links through the RollingGo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a RollingGo API key and can handle hotel search details. <br>
-Mitigation: Use per-skill secret injection, avoid placing real keys directly on command lines, and install only if RollingGo is trusted with those details. <br>
-Risk: The runtime guidance installs or executes rollinggo@latest by default. <br>
-Mitigation: Pin a reviewed RollingGo CLI version in sensitive environments instead of always resolving the latest package. <br>
+## Use Case:
 
+External users and travel-support agents use this skill to find hotels, compare rooms and prices, guide booking decisions, create hotel orders, and retrieve hotel order status.
 
-## Reference(s): <br>
-- [RollingGo Hotel page](https://clawhub.ai/dreamtzlong/rollinggo-hotel) <br>
-- [RollingGo service homepage](https://mcp.agentichotel.cn) <br>
-- [RollingGo API key application](https://mcp.agentichotel.cn/apply) <br>
-- [RollingGo NPX Reference](references/rollinggo-npx.md) <br>
-- [RollingGo UV Reference](references/rollinggo-uv.md) <br>
-- [Claw Host Environment Reference](references/claw-host-env.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON-oriented result handling guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses RollingGo CLI output, JSON by default, with table output only for hotel search.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release evidence) <br>
+Risk: The skill can install and auto-update unpinned external executables used during hotel workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only trusted, pinned, and verified CLI releases, and do not allow unattended auto-updates during a booking workflow.
+
+Risk: The skill can log in, handle travel contact details, retrieve order history, create real hotel orders, and show payment links.
+
+Mitigation: Require explicit user confirmation before booking, confirm guest name and email before order creation, and keep payment completion under user control.
+
+## Reference(s):
+
+- [CLI Command Parameter Specifications](artifact/references/cli-params.md)
+- [ClawHub Skill Page](https://clawhub.ai/dreamtzlong/skills/rollinggo-hotel)
+- [Publisher Profile](https://clawhub.ai/user/dreamtzlong)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown hotel result cards and plain-language booking guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Hides technical command details from end users and requires explicit confirmation before booking actions.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata; artifact frontmatter reports 1.1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

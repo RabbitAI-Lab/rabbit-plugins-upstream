@@ -1,6 +1,8 @@
 # 企业尽调报告 Pro（标准版）
 
-支付宝 AI 付费 Skill。产品形态：**一次付费套餐 = 工商主体 + 风险汇总**，输出带摘要灯的尽调报告。
+支付宝 AI 付费 Skill。产品形态：**一次付费套餐 = 企业详细工商信息 + 风险汇总**，输出带摘要灯的尽调报告。
+
+> **敏感数据提示（运营方 / 集成方）：** 返回结果可能含法人与主要人员姓名、股东名称、**企业注册地址**、统一社会信用代码/注册号、机构股东证照号，以及被执行/失信中的案号与主体标识字段。查询方无需提供个人隐私，但报告本身含公开敏感标识，须最小化展示与留存。**若返回身份证号须脱敏展示**（前6后4，见 `OUT_FORMAT.md`），禁止明文回显与日志落地。**自然人股东不返回证件类型与证件号**；**不返回自然人住址**；机构股东可能返回营业执照类公开标识（勿文档写成「一律非公示项」）。
 
 ## 目录说明
 
@@ -36,8 +38,8 @@ docs/
 
 | Skill                       | 定位                                       |
 | --------------------------- | ------------------------------------------ |
-| `../enterprise-details-a2a` | 仅工商档案查询                             |
-| 本 Skill                    | 尽调标准版，**已含工商主体，无需先查轻量** |
+| `../enterprise-details-a2a` | 仅企业详细工商信息                            |
+| 本 Skill                    | 尽调标准版，**已含企业详细工商信息，无需先查轻量** |
 
 ## 完整返回数据说明
 
@@ -48,7 +50,7 @@ docs/
 | error_code               | int    | 错误码，`0` 成功                                  |
 | reason                   | string | 状态信息                                          |
 | data                     | obj    | **套餐结果根对象**|
-| data.companyinfo         | obj    | 企业工商主体，详见下文与 `docs/工商主体信息.md`   |
+| data.companyinfo         | obj    | 企业详细工商信息，详见下文与 `docs/工商主体信息.md`   |
 | data.shixinbeizhixingren | obj    | 失信分页对象                                      |
 | data.beizhixingrenxinxi  | obj    | 被执行分页对象                                    |
 | data.xianzhigaoxiaofei   | obj    | 限高分页对象                                      |
@@ -123,6 +125,8 @@ docs/
 
 ### 股东 partners[]（共 1 名）
 
+> 口径：自然人股东不返回 `identify_type` / `identify_no`（多为 `-`）；企业/机构股东可能返回公开证照类型与号码。渲染规则见 `OUT_FORMAT.md`。
+
 | 股东名称                     | 类型     | 认缴出资额    | 出资方式 | 出资时间   |
 | ---------------------------- | -------- | ------------- | -------- | ---------- |
 | 北京汇智聚合教育科技有限公司 | 企业法人 | 1000 万人民币 | 货币     | 2030-01-01 |
@@ -181,7 +185,7 @@ docs/
 | caseCode       | string | 案号                          |
 | execCourtName  | string | 执行法院                      |
 | execMoney      | string | 执行标的                      |
-| partyCardNum   | string | 证件号                        |
+| partyCardNum   | string | 主体标识（组织机构代码/统一社会信用代码等；也可能为身份证号）。若为身份证号须按 `OUT_FORMAT.md` **脱敏**后展示；企业主体标识原样展示；禁止日志落地明文身份证号 |
 | caseCreateTime | string | 立案时间                      |
 | caseStatus     | string | 案件状态（已不披露 / 公示中） |
 | inputTime      | string | 首次采集                      |
@@ -203,7 +207,7 @@ docs/
 | reqKeyWord             | string | 查询关键词         |
 | iName                  | string | 名称               |
 | caseCode               | string | 案号               |
-| cardNum                | string | 证件号             |
+| cardNum                | string | 主体标识（组织机构代码/统一社会信用代码等；也可能为身份证号）。若为身份证号须按 `OUT_FORMAT.md` **脱敏**后展示；企业主体标识原样展示；禁止日志落地明文身份证号 |
 | courtName              | string | 执行法院           |
 | areaName               | string | 省份               |
 | gistId                 | string | 执行依据文号       |

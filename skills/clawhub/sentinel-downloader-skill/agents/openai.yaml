@@ -1,0 +1,4 @@
+description: Download Sentinel satellite imagery (Sentinel-1/2/5P) via STAC API with
+  cloud cover filtering and batch download support
+display_name: Sentinel Downloader
+name: sentinel-downloader

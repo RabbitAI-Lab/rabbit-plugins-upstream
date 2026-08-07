@@ -1,0 +1,64 @@
+{
+  "skill": "building-density-mapping",
+  "skill_version": "1.0.0",
+  "command": "building-density-mapping --bbox 116 39 117 40 --synthetic --output-dir Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\building-density-mapping\\_test_cli_synth --quiet",
+  "started_at": "2026-08-03T14:42:38.152774Z",
+  "finished_at": "2026-08-03T14:42:38.318866Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "heights": null,
+    "kernel_size": 5,
+    "floor_height": 3.0,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\building-density-mapping\\_test_cli_synth\\building_density.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 2,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\building-density-mapping\\_test_cli_synth\\density_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "mean_density": 0.28369140625,
+    "max_density": 1.0,
+    "mean_far": 2.838754653930664,
+    "max_far": 17.127185821533203,
+    "n_valid_pixels": 16384,
+    "n_total_pixels": 16384,
+    "synthetic_footprint_fraction": 0.28369140625,
+    "synthetic_mean_height": 33.7022590637207
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "building-density-mapping"
+  },
+  "error": null
+}

@@ -1,5 +1,5 @@
 ## Description: <br>
-Api Integration Free helps agents draft RESTful API calls, API key authentication setup, Python requests templates, and basic error handling for third-party service integration. <br>
+Helps agents guide developers through basic RESTful API integration with API key authentication, Python requests examples, and basic HTTP error handling. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to have an agent prepare basic REST API integration guidance, API key request headers, Python requests examples, and simple HTTP error handling. <br>
+Developers and automation teams use this skill to plan basic RESTful API integrations, configure API key based authentication, and generate simple Python requests patterns with basic error handling. It is not intended for reverse engineering closed APIs or for advanced OAuth2, JWT, GraphQL, or rate-limit handling workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generated request code can send data to external services or callback URLs selected by the user. <br>
-Mitigation: Run generated code only against trusted services and callback URLs, and test with non-production credentials first. <br>
-Risk: API keys or sensitive internal data could be exposed if pasted into prompts, logs, generated examples, or version control. <br>
-Mitigation: Use environment variables or a secrets manager, avoid sharing unnecessary sensitive data, and review generated snippets before storing or running them. <br>
-Risk: The free skill covers only basic HTTP error handling and does not include full rate-limit, token-refresh, OAuth2, JWT, or GraphQL handling. <br>
-Mitigation: Add service-specific handling for authentication lifecycle, retries, rate limits, and error classes before production use. <br>
+Risk: The skill requests command and file authority while broadening beyond API integration into generic development and file processing. <br>
+Mitigation: Limit use to API integration tasks and allow shell commands or file writes only when the exact action is clear and user-approved. <br>
+Risk: API keys or other credentials could be exposed in prompts, logs, generated examples, or checked-in files. <br>
+Mitigation: Keep API keys in environment variables, avoid pasting secrets into prompts or logs, and review generated code before storing or sharing it. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/api-integration-free) <br>
-- [SkillHub Homepage](https://skillhub.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/api-integration-free) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell snippets plus JSON output examples] <br>
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with Python, shell, and JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Free release focuses on RESTful calls, API key authentication, and basic raise_for_status error handling; OAuth2, JWT, GraphQL, token refresh, and rate-limit handling are described as paid-tier limitations.] <br>
+**Other Properties Related to Output:** [May include example REST calls, API key environment-variable setup, and structured result examples.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+1.0.3 (source: ClawHub release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

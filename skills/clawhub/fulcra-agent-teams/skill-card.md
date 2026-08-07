@@ -11,35 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent operators use this skill to create persistent Fulcra team workspaces, coordinate work through shared inboxes, and store user-approved artifacts in versioned file storage. <br>
+Developers and agent operators use this skill to set up Fulcra-backed team workspaces, exchange inbox messages, preserve shared progress, and store approved user artifacts across one or more agents. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Persistent shared state can retain team context, inbox messages, and generated artifacts across sessions. <br>
-Mitigation: Install only when durable Fulcra workspaces are desired, and review workspace contents and ownership boundaries before enabling team coordination. <br>
-Risk: Optional HEARTBEAT.md entries, cron jobs, and MEMORY.md edits can cause future automated processing of team inbox data. <br>
-Mitigation: Require explicit user consent before enabling automation or local memory updates, and review the exact background task or memory directive before approval. <br>
-Risk: Uploading private artifacts or transferring context between agents can expose user data to unintended team members. <br>
-Mitigation: Require explicit user approval for artifact uploads and cross-agent data transfer, and verify the target team, member, and path before running Fulcra CLI commands. <br>
+Risk: Shared team memory can expose private workspace context or files to another agent or principal. <br>
+Mitigation: Require explicit authorization before transferring data between agents, define the team and allowed data scope up front, and avoid sharing raw private files unless the user clearly intends it. <br>
+Risk: Automated heartbeat or cron checks can continue processing team inboxes beyond the user's expected scope. <br>
+Mitigation: Enable automation only with explicit consent, document the exact team, inbox, task scope, and duration, and include current team and member context in each automated run. <br>
+Risk: Inbox cleanup can remove the visible copy of a task before the agent has preserved it. <br>
+Mitigation: Archive the inbox message first, verify the archived file exists, and delete the inbox copy only after that verification succeeds. <br>
+Risk: Artifact uploads can store sensitive generated files in Fulcra. <br>
+Mitigation: Ask for explicit approval before uploading artifacts and place non-markdown outputs only in the documented artifact namespace. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/fulcra/skills/fulcra-agent-teams) <br>
+- [ClawHub skill page](https://clawhub.ai/fulcra/skills/fulcra-agent-teams) <br>
 - [Fulcra Agent Teams CLI Reference](references/fulcra-agent-teams-cli.md) <br>
-- [Fulcra CLI Documentation](https://raw.githubusercontent.com/fulcradynamics/agent-skills/main/skills/fulcra-onboarding/references/fulcra-cli.md) <br>
-- [Open Knowledge Format Specification](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) <br>
+- [Fulcra CLI documentation](https://raw.githubusercontent.com/fulcradynamics/agent-skills/main/skills/fulcra-onboarding/references/fulcra-cli.md) <br>
+- [Open Knowledge Format specification](https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and path conventions] <br>
+**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
+**Output Format:** [Markdown guidance with file path conventions and inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes consent gates for artifact uploads, automation, and local memory updates.] <br>
+**Other Properties Related to Output:** [May create or update Fulcra file-store content only after user consent.] <br>
 
 ## Skill Version(s): <br>
-0.0.7 (source: server release metadata) <br>
+0.0.8 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

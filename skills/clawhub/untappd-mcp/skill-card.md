@@ -1,43 +1,57 @@
-## Description: <br>
-Search Untappd beers, breweries, and venues; read user profiles, check-ins, wishlists, distinct beers, badges, friends, and your friend activity feed; and post check-ins, toasts, and comments to your own Untappd account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Untappd beers, breweries, and venues; read user profiles, check-ins, wishlists, distinct beers, badges, friends, and your friend activity feed; and post check-ins, toasts, and comments to your own Untappd account.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agents use this skill to answer Untappd questions about beers, breweries, venues, users, check-ins, wishlists, badges, friends, and venue menus. With explicit confirmation, it can also help post check-ins, toasts, and comments to the configured Untappd account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an Untappd username and password plus mobile-app client credentials obtained outside a normal OAuth flow. <br>
-Mitigation: Install only after reviewing the underlying MCP server's credential storage and token transmission behavior, and keep secrets out of logs. <br>
-Risk: Posting tools can affect the user's public Untappd account. <br>
-Mitigation: Use the built-in dry-run preview behavior and require confirm: true before making posting calls. <br>
-Risk: The local or remote cache may contain account activity data and incomplete history coverage. <br>
-Mitigation: Treat cache contents as account activity data, protect the cache location, and rely on freshness and coverage caveats when interpreting not-found results. <br>
+## Use Case:
 
+External users and developers use this skill to search Untappd beer, brewery, venue, and account activity data, maintain a local check-in cache, and prepare confirm-gated write actions such as check-ins, toasts, and comments.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/untappd-mcp) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/chrischall) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown or plain text guidance with tool names, configuration details, and account-action previews] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Write actions are confirm-gated and cache-backed queries report freshness and coverage caveats.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: server release evidence) <br>
+Risk: The skill requires Untappd login credentials and unofficial mobile API credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in a trusted runtime, store credentials as secrets, and avoid sharing logs or environment dumps that could expose them.
+
+Risk: The skill can cache account and social-activity data locally or in a per-user remote store.
+
+Mitigation: Treat the cache as sensitive data, restrict profile lookups to public or explicitly intended users, and remove cached data when it is no longer needed.
+
+Risk: Confirm-gated actions can post check-ins, toasts, or comments to a public Untappd account.
+
+Mitigation: Review each dry-run preview carefully and only set confirm:true when the account action is intended.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/untappd-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with tool names, environment variables, and action parameters]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes dry-run previews for confirm-gated posting actions before any public Untappd account change is made.]
+
+## Skill Version(s):
+
+1.8.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

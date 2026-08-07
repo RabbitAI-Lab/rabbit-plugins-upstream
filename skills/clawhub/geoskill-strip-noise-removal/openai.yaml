@@ -1,0 +1,13 @@
+name: geoskill-strip-noise-removal
+display_name: 条带噪声去除
+description: |
+  去除 Landsat7 SLC-off / MODIS 等条带噪声，支持矩匹配与加权线性回归。Destriping for Landsat7 SLC-off / MODIS via moment matching and weighted linear regression; outputs a corrected GeoTIFF and gap mask.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-strip-noise-removal.py
+runtime: python>=3.9
+tags:
+  - gis
+  - machine-learning
+  - raster
+  - remote-sensing

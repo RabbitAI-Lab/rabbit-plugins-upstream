@@ -1,7 +1,7 @@
 ---
 name: payql
 description: "Get live on-chain data from The Graph, paid per query in USDC over x402 — gasless, keyless, bring-your-own-wallet. Each query spends real USDC (~$0.01) from a wallet you control — use a dedicated, low-balance Base wallet. Discover the right live subgraph, see the price before paying, then pull the data in one loop. Trigger keywords: subgraph, The Graph, GraphQL, on-chain data, DeFi, DEX, pool, TVL, swap, NFT, ENS, token holders, governance, x402, pay per query, USDC, Base, gateway."
-version: 0.1.1
+version: 0.1.5
 homepage: https://github.com/PaulieB14/payql
 metadata:
   clawdbot:

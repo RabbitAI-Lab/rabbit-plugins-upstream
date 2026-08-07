@@ -1,0 +1,12 @@
+name: geoskill-raster-resampling
+display_name: 栅格重采样
+description: |
+  用最近邻 / 双线性 / 三次卷积改变栅格分辨率，输出重采样后的 GeoTIFF 与统计。Resample raster resolution with nearest / bilinear / cubic convolution and emit a GeoTIFF plus statistics.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-raster-resampling.py
+runtime: python>=3.9
+tags:
+  - gis
+  - raster
+  - remote-sensing

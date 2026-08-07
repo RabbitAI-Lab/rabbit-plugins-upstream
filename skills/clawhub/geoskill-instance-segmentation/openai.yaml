@@ -1,0 +1,14 @@
+name: geoskill-instance-segmentation
+display_name: 实例分割
+description: |
+  阈值分割+连通域标记+实例属性提取，输出实例标注GeoJSON（离线numpy等价实现）
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-instance-segmentation.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - machine-learning
+  - remote-sensing
+  - vector

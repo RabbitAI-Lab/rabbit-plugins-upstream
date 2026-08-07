@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata>
+  <idinfo>
+    <citation><citeinfo><title>Synthetic FGDC Dataset</title></citeinfo></citation>
+    <descript><abstract>Sample FGDC abstract.</abstract><purpose>Testing</purpose></descript>
+    <timeperd><timeinfo><sngdate><caldate>20260101</caldate></sngdate></timeinfo></timeperd>
+    <status><progress>Complete</progress><update>None planned</update></status>
+    <spdom><bounding>
+      <westbc>116.0</westbc><eastbc>117.0</eastbc><northbc>40.0</northbc><southbc>39.0</southbc>
+    </bounding></spdom>
+    <keywords><theme><themekt>None</themekt><themekey>synthetic</themekey></theme></keywords>
+    <accconst>None</accconst>
+    <useconst>None</useconst>
+    <ptcontac><cntinfo><cntorgp><cntorg>Synthetic Org</cntorg></cntorgp></cntinfo></ptcontac>
+  </idinfo>
+  <metainfo>
+    <metd>20260101</metd>
+    <metc><cntinfo><cntorgp><cntorg>Synthetic Org</cntorg></cntorgp></cntinfo></metc>
+    <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+  </metainfo>
+</metadata>

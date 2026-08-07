@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/claude-tmux",
   "slug": "claude-tmux",
   "ownerHandle": "thcjp",
-  "version": "1.0.0",
-  "updatedAt": 1778989833325,
-  "contentHash": "e908af0fb1fe0cba47516c6c80bedf248222a5132edbc906fd30986eb646837f",
-  "fetchedAt": "2026-07-26T18:05:55.972Z"
+  "version": "1.0.2",
+  "updatedAt": 1785666672750,
+  "contentHash": "63783c14a1b26fac34994693b6f237dd242660ae84482f318915b00ca09a83ab",
+  "fetchedAt": "2026-08-07T08:53:44.477Z"
 }

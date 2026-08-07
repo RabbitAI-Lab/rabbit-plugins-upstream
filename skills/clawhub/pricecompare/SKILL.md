@@ -1,7 +1,7 @@
 ---
 name: 购物省钱宝 - 京东/淘宝/拼多多优惠查询
 description: 京东/淘宝/拼多多商品比价、优惠券查询、口令解析与链接转链省钱助手。帮用户在三平台找到最低价。Use when: 想查某商品在哪个平台最便宜、想搜索商品看有没有优惠券、收到电商分享口令想解析、拿到商品链接想转优惠链接省钱购买。Supports product search, price comparison across JD/Taobao/PDD, coupon discovery, share-code parsing, affiliate link conversion. 适用于：帮我查XX的价格、XX在哪买最便宜、这个口令帮我看看、这个链接有优惠吗、帮我找XX的优惠券、哪个平台买XX最省钱、对比XX价格、查一下XX多少钱。Save money on every purchase.
-version: 1.5.5
+version: 1.5.6
 ---
 
 # PriceCompare · 购物省钱宝
@@ -116,3 +116,4 @@ handle_message(user_raw_message, keyword=extracted_product_name)
 - 无搜索结果 → 建议放宽关键词
 - parse_share 失败 → 自动 fallback 到商品搜索
 - API 异常 → 提示服务暂时不可用
+- 京东搜索返回"京东平台暂时无法获取该关键词的商品" → 建议用户简化关键词（去掉"百亿补贴"等活动词）或改用淘宝/拼多多查询

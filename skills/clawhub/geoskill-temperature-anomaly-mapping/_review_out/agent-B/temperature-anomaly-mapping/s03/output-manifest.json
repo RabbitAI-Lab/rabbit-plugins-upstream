@@ -1,0 +1,78 @@
+{
+  "skill": "temperature-anomaly-mapping",
+  "skill_version": "1.0.0",
+  "command": "temperature-anomaly-mapping --bbox 116.39 39.90 116.40 39.91 --quiet --output-dir _review_out\\agent-B\\temperature-anomaly-mapping\\s03",
+  "started_at": "2026-08-03T17:10:11.504283Z",
+  "finished_at": "2026-08-03T17:10:11.659104Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "n_dates": 12,
+    "n_years": 5,
+    "synthetic": false
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out\\agent-B\\temperature-anomaly-mapping\\s03\\anomaly.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.39,
+        39.9,
+        116.4,
+        39.91
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 2,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out\\agent-B\\temperature-anomaly-mapping\\s03\\anomaly_class.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.39,
+        39.9,
+        116.4,
+        39.91
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out\\agent-B\\temperature-anomaly-mapping\\s03\\timeseries.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "period": 12,
+    "n_frames": 60,
+    "latest_mean_anomaly": 1.8465162515640259,
+    "latest_mean_std_anomaly": 0.6394798159599304,
+    "latest_warm_fraction": 0.454345703125,
+    "latest_cold_fraction": 0.132568359375
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "temperature-anomaly-mapping"
+  },
+  "error": null
+}

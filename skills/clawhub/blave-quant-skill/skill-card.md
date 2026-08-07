@@ -1,51 +1,71 @@
-## Description: <br>
-Blave Quant Skill gives agents a documentation-based reference for Blave market alpha data, Taiwan market data, CME/ICE futures OHLCV, and spot, futures, margin, funding, and account workflows across supported exchanges. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+blave-quant helps agents retrieve Blave market alpha, futures and Taiwan market data, and work through exchange trading API workflows across supported crypto venues.
 
-## Publisher: <br>
-[blave-wei](https://clawhub.ai/user/blave-wei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[blave-wei](https://clawhub.ai/user/blave-wei)
 
-## Use Case: <br>
-Developers and trading-focused agent users use this skill to fetch market data, build analysis, and prepare exchange API calls for supported venues. It is also used to guide order, funding, and transfer workflows that require explicit user confirmation before any write action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: High-authority exchange API credentials can place trades, manage positions, submit funding actions, or transfer funds when write permissions are enabled. <br>
-Mitigation: Use dedicated least-privilege API keys, disable withdrawals, enable IP allowlists, and only add exchange credentials for venues the user intends to use. <br>
-Risk: Marketplace strategy downloads can result in local Python code execution near trading credentials. <br>
-Mitigation: Review and security scan downloaded strategy code, isolate it in a sandbox, and do not run it on the host or near live trading credentials without approval. <br>
-Risk: Trading or funding actions can cause financial loss if executed unintentionally or with incorrect parameters. <br>
-Mitigation: Require the user to reply exactly CONFIRM for each write action, present a one-screen action summary first, and verify the result after execution. <br>
+## Use Case:
 
+External developers, market analysts, and trading operators use this skill to query Blave market data, inspect Taiwan stock and futures data, and prepare exchange API workflows. The skill supports read-only analysis as well as trading, transfer, and funding actions that require explicit user confirmation.
 
-## Reference(s): <br>
-- [Blave Quant Skill on ClawHub](https://clawhub.ai/blave-wei/skills/blave-quant-skill) <br>
-- [Blave homepage](https://blave.org) <br>
-- [Blave API reference](artifact/references/blave-api.md) <br>
-- [Blave indicator guide](artifact/references/blave-indicator-guide.md) <br>
-- [TradingView stream reference](artifact/references/tradingview-stream.md) <br>
-- [Marketplace reference](artifact/references/marketplace.md) <br>
-- [Gate.io reference](artifact/references/gateio-skill.md) <br>
-- [Binance reference](artifact/references/binance-skill.md) <br>
-- [BitMart futures reference](artifact/references/bitmart-futures-skill.md) <br>
-- [TWSE/TPEX reference](artifact/references/twse-skill.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with API request examples, configuration snippets, and optional code or shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read operations can be described directly; write operations require one explicit CONFIRM per action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.15.0 (source: frontmatter and server release metadata) <br>
+Risk: Agents may use optional exchange API credentials for live trading, transfer, or funding actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use dedicated read-only or trading-only keys, disable withdrawals, enable IP allowlisting where available, and keep the skill's explicit confirmation requirement for write actions.
+
+Risk: Marketplace or shared strategy Python code may be downloaded and run without adequate review.
+
+Mitigation: Review and sandbox third-party strategy code before execution, and avoid running marketplace code in shared or privileged environments.
+
+## Reference(s):
+
+- [Blave Homepage](https://blave.org)
+- [Blave API Examples](references/blave-api.md)
+- [Blave Indicator Interpretation Guide](references/blave-indicator-guide.md)
+- [Hyperliquid API Reference](references/hyperliquid-api.md)
+- [TradingView Signal Stream](references/tradingview-stream.md)
+- [BitMart Futures Trading](references/bitmart-futures-skill.md)
+- [BitMart Spot Trading](references/bitmart-spot-skill.md)
+- [OKX Trading](references/okx-skill.md)
+- [Bybit Trading](references/bybit-skill.md)
+- [BingX Trading](references/bingx-skill.md)
+- [Bitget Trading](references/bitget-skill.md)
+- [Binance Trading](references/binance-skill.md)
+- [Bitfinex Trading and Funding](references/bitfinex-skill.md)
+- [KuCoin Trading](references/kucoin-skill.md)
+- [Gate.io Trading](references/gateio-skill.md)
+- [Taiwan Stock Market Data](references/twse-skill.md)
+- [Taiwan Stock Broker Branch Flow Reference](references/twse-bsr-reference.md)
+- [Taiwan Stock Fundamental Data](references/twstock-fundamentals-reference.md)
+- [Blave Agent Strategy Marketplace API](references/marketplace.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, API calls]
+
+**Output Format:** [Markdown guidance with code snippets, shell commands, JSON API examples, and configuration notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require Blave API credentials and optional exchange credentials; write actions require explicit user confirmation.]
+
+## Skill Version(s):
+
+1.20.0 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

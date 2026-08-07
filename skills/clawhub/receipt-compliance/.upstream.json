@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/receipt-compliance",
   "slug": "receipt-compliance",
   "ownerHandle": null,
-  "version": "3.7.0",
-  "updatedAt": 1784714946769,
-  "contentHash": "1219f2025144306070ecbd2b8a96c1d894a0ad4327070620d2efe73ea8a6b18b",
-  "fetchedAt": "2026-07-26T18:08:14.626Z"
+  "version": "4.1.0",
+  "updatedAt": 1785944083380,
+  "contentHash": "ff48e6091688f85640c9c9176e5c5742617481f18dfd26cd794f63fe233dbee0",
+  "fetchedAt": "2026-08-07T08:41:37.066Z"
 }

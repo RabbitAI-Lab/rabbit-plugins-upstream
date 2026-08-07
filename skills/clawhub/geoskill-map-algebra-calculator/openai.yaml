@@ -1,0 +1,17 @@
+name: geoskill-map-algebra-calculator
+display_name: 地图代数计算器
+description: |
+  Evaluate band math expressions like NDVI on rasters with a safe expression parser
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-map-algebra-calculator.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - analysis
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - vegetation
+  - visualization

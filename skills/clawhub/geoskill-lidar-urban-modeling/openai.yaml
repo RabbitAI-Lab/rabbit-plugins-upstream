@@ -1,0 +1,17 @@
+name: geoskill-lidar-urban-modeling
+display_name: LiDAR 城市三维建模
+description: |
+  LiDAR点云地面滤波生成nDSM，连通域+矢量化提取建筑轮廓并估算高度与体积
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-lidar-urban-modeling.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - extraction
+  - gis
+  - lidar
+  - point-cloud
+  - remote-sensing
+  - urban
+  - vector

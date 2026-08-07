@@ -1,0 +1,10 @@
+# Requirements for crop-yield-estimation
+# Shared data-download library (Planetary Computer / NASA POWER / OSM)
+geoskill-data-fetcher>=0.2.0
+
+# Third-party dependencies used by this skill
+numpy
+rasterio
+scikit-learn
+scipy
+shapely

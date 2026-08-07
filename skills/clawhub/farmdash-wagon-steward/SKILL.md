@@ -1,10 +1,10 @@
 ---
 name: FarmDash Wagon Steward
-description: "Read-only DeFi portfolio aggregation skill for OpenClaw agents. Returns wallet balances across EVM chains, scores capital efficiency, surfaces idle stablecoins, tracks position drift versus a target allocation, and produces rebalancing proposals as research output. Strict read-only surface: every tool is a GET endpoint that returns analysis. The user's separately-installed execution skill is responsible for any on-chain action under its own ClawScan-reviewed contract."
-tags: ["defi", "ai-agent", "autonomous-agent", "openclaw", "clawhub", "mcp", "crypto", "web3", "onchain", "portfolio", "wallet", "wallet-analytics", "position-tracker", "capital-efficiency", "rebalancing", "yield-farming", "airdrop", "evm", "multi-chain", "read-only", "zero-custody", "farmdash", "wagon-steward"]
+description: "Analyze read-only multichain EVM portfolios, wallet balances, idle stablecoins, capital efficiency, allocation drift, and rebalance proposals."
+tags: ["defi", "defi-portfolio", "crypto-portfolio-tracker", "wallet-analytics", "multichain-portfolio", "evm-wallet", "portfolio-analysis", "asset-allocation", "portfolio-rebalancing", "capital-efficiency", "idle-stablecoins", "position-tracking", "onchain-portfolio", "read-only", "openclaw", "ai-agent", "mcp", "farmdash"]
 author: FarmDash Pioneers (@Parmasanandgarlic)
 homepage: https://www.farmdash.one/agents
-version: "0.6.1"
+version: "0.7.1"
 icon: 🪵
 env:
   FARMDASH_API_KEY:
@@ -92,81 +92,19 @@ Top-level snapshot. Use this first — it grounds every other recommendation.
 
 **Inputs:** current MCP uses `address` (required EVM address) and optional `chains` (comma-separated Alchemy network IDs such as `eth-mainnet,base-mainnet`). Legacy examples may say `walletAddress`; map that to `address` before calling.
 
-**Returns:**
+**Current returns:** `address`, queried Alchemy `networks`, `portfolio.totalValueUsd`, `nativeBalanceUsd`, `erc20Count`, `chainsActive`, `chainDistribution`, up to ten `topTokens`, and `timestamp`.
 
-```
-{
-  "totalValueUSD": 12480.32,
-  "byChain": [
-    { "chainId": 1, "chainName": "Ethereum", "valueUSD": 6200.00, "percent": 49.7 },
-    { "chainId": 8453, "chainName": "Base", "valueUSD": 3100.50, "percent": 24.8 },
-    ...
-  ],
-  "byAsset": [
-    { "symbol": "ETH", "valueUSD": 5400.00, "percent": 43.3 },
-    { "symbol": "USDC", "valueUSD": 3200.50, "percent": 25.6 },
-    ...
-  ],
-  "topProtocolPositions": [
-    { "protocol": "etherfi", "valueUSD": 2400.00, "asset": "weETH" },
-    ...
-  ],
-  "asOf": "2026-05-12T18:00:00Z"
-}
-```
+It does not currently identify protocol positions, liabilities, LP composition, locked/vesting balances, lending debt, perp exposure, cost basis, or cross-chain balances outside the requested/default network set. Treat `totalValueUsd` as a partial observable-wallet estimate, not net asset value.
 
 **Agent posture:** Start a wagon-aware conversation with this tool when the user has Pioneer access. If the call returns 402, explain that wallet portfolio reads require Pioneer and continue with non-wallet public research instead of fabricating balances. Do not narrate the entire response; surface the totals plus any flags Wagon Steward returns or that you derive (over-concentration, large idle capital, stale positions).
 
 ---
 
-### `get_position_health` (Pioneer)
+### `get_position_health` (compatibility alias; Pioneer)
 
-Per-position deep-dive: APR, age, unrealized P&L, IL exposure, and a rebalance hint.
+Despite its legacy name, the current MCP mapping calls `/api/v1/agent/performance`. It returns FarmDash activity metrics (swap count, volume, fees, average size, protocol diversity, active days), Trail Cred/ranking data, daily activity, and a timestamp.
 
-**Inputs:** current MCP uses `address`. Legacy examples may say `walletAddress`; map that to `address` before calling.
-
-**Returns:**
-
-```
-{
-  "positions": [
-    {
-      "protocol": "etherfi",
-      "chain": "ethereum",
-      "asset": "weETH",
-      "valueUSD": 2400.00,
-      "apr": 3.4,
-      "aprDelta30d": -0.6,
-      "impermanentLossUSD": 0,
-      "daysSinceEntry": 47,
-      "rebalanceHint": "hold",
-      "notes": "APR drifting; still above stablecoin alternatives."
-    },
-    {
-      "protocol": "aerodrome",
-      "chain": "base",
-      "asset": "USDC-WETH LP",
-      "valueUSD": 1800.00,
-      "apr": 12.8,
-      "aprDelta30d": 1.2,
-      "impermanentLossUSD": -42.50,
-      "daysSinceEntry": 12,
-      "rebalanceHint": "monitor",
-      "notes": "IL accelerating with WETH up 6%; reassess if 5-day IL > $80."
-    }
-  ]
-}
-```
-
-**Agent posture:** Treat `rebalanceHint` as a discussion starter, never a directive. Always pair the hint with the *reason* in `notes` so the user can override.
-
-| Hint | Meaning | Suggested phrasing |
-|---|---|---|
-| `hold` | Position is healthy at the user's risk tier | "Looks fine; keep watching APR drift." |
-| `monitor` | Drift detected but not actionable yet | "Worth checking again in 3–7 days." |
-| `reduce` | Concentration or IL exceeds soft limits | "Consider trimming on the next strong candle." |
-| `exit` | Risk gate breached or thesis broken | "The case has weakened; here's why." |
-| `add` | Allocation is below target and APR is favorable | "If you have idle capital, this slot has room." |
+It does **not** return farming positions, APR, unrealized or realized P&L, impermanent loss, collateral health, liquidation distance, or rebalance hints. Never use it to claim a DeFi position is healthy. For a real position review, obtain protocol-native position/debt data and authoritative prices; if those tools are unavailable, say position health is unavailable.
 
 ---
 
@@ -176,31 +114,15 @@ Surfaces stablecoins or unstaked native assets sitting unused.
 
 **Inputs:** current MCP uses `address`. `minThresholdUSD` is a derived agent display filter; apply it after the response if needed.
 
-**Returns:**
+**Current returns:** `idleCapitalUsd`, `idleAssets`, count, networks, and timestamp. The filter treats configured stablecoin symbols and native assets as potentially idle. It does not know reserves, collateral needs, pending transactions, tax obligations, user intent, or a top yield destination, and it does not calculate opportunity cost.
 
-```
-{
-  "totalIdleUSD": 1860.00,
-  "items": [
-    {
-      "chain": "arbitrum",
-      "asset": "USDC",
-      "amountUSD": 1240.00,
-      "opportunityCostPerDay": 0.41,
-      "topYieldOption": { "protocol": "aave-v3", "apr": 12.0 }
-    },
-    ...
-  ]
-}
-```
-
-**Agent posture:** Mention idle capital exactly once per conversation — repeated mention turns into nagging. If the user wants to deploy it, hand off to Trail Marshal `idle_capital_deploy` workflow or a direct Signal Architect quote.
+**Agent posture:** Call it "candidate liquid reserves," not idle capital, until the user confirms required gas, collateral, withdrawal, tax, and emergency reserves. Analysis may compare options; no automatic deployment intent.
 
 ---
 
-### `get_capital_efficiency` (Pioneer)
+### `get_capital_efficiency` (derived procedure, not an MCP tool)
 
-A single 0–100 score summarizing how productively the wagon is working.
+A client-side 0–100 heuristic for discussion. The current server does not return this score. It is not risk-adjusted return, Sharpe ratio, expected utility, or a mandate to deploy reserves.
 
 **Formula (transparent):**
 
@@ -226,18 +148,18 @@ score = 100
   "recommendations": [
     "Move 1240 idle USDC on Arbitrum into a Pioneer-grade lending pool.",
     "Top-1 concentration is 49.7% — diversify before adding.",
-    "Aerodrome LP is trending below median; consider reducing 20%."
+    "Uniswap V3 LP is trending below median; consider reducing 20%."
   ]
 }
 ```
 
-**Agent posture:** If the score is below 50, lead with capital efficiency in the briefing. If above 80, only mention if the user asks. Never editorialize the score — quote it neutrally.
+**Agent posture:** Show every input and exclude unpriced/missing assets from the calculation rather than assigning zero. Do not lead with this score when coverage is incomplete, and never let it override user reserve requirements or protocol risk.
 
 ---
 
-### `get_rebalance_plan` (Pioneer)
+### `get_rebalance_plan` (derived procedure, not an MCP tool)
 
-Given a target allocation, produce a swap list to reach it.
+Pair current wallet data with `optimize_portfolio` and fresh quotes to draft a proposal. The illustrative schema below is not a current Wagon endpoint response.
 
 **Inputs:**
 
@@ -276,9 +198,9 @@ Given a target allocation, produce a swap list to reach it.
 
 ---
 
-### `watch_wagon` (Syndicate)
+### `watch_wagon` (derived procedure, not an MCP tool)
 
-Subscribe to portfolio-drift, idle-capital, and position-health events.
+Implement only in a client/orchestrator that performs repeated reads and owns its webhook lifecycle. The current MCP registry does not expose `watch_wagon`, and Wagon cannot claim a server subscription exists.
 
 **Inputs:**
 
@@ -294,7 +216,7 @@ Subscribe to portfolio-drift, idle-capital, and position-health events.
 }
 ```
 
-**Returns:** A `watchId` and the active threshold set. Cron evaluates every 15 min and emits events of type `wagon.event.*` on breach.
+The example input below is a design pattern, not a promise of a `watchId`, 15-minute cron, or `wagon.event.*` server events.
 
 ---
 
@@ -312,23 +234,24 @@ Trail Intelligence  →  Wagon Steward  →  Signal Architect / Futures Strategi
 | **Trail Intelligence** | Before recommending any new entry — confirm the protocol is still hot | TI returns Trail Heat + risk → WS confirms feasibility against current balances |
 | **Trail Marshal** | When the user wants the whole sequence orchestrated | TM calls WS first to ground the plan in real balances, then calls SA/FS to execute |
 | **Signal Architect** | When the rebalance plan needs to actually move tokens | WS produces the plan, SA quotes + executes each swap with user confirmation |
-| **Futures Strategist** | When the user wants to hedge the wagon's spot exposure | WS provides spot exposure context, FS sizes a delta-neutral perp |
+| **Futures Strategist** | When the user wants to hedge observable spot exposure | WS passes partial spot context; Hedge Warden/FS plan a candidate hedge and post-fill reconciliation measures residual delta |
 
 **Important:** Wagon Steward never auto-calls another skill. It produces analysis; the user (or an orchestrator like Trail Marshal) decides what to do with it.
 
 ---
 
-## Output Format Standards
+## Output and Coverage Standards
 
 Every Wagon Steward response includes:
 
 | Field | Always present | Why |
 |---|---|---|
-| `asOf` | Yes | DeFi changes fast; agents must time-bound analysis |
-| `walletAddress` | Yes | Echo the wallet so the agent never confuses contexts |
-| `tier` | Yes | Tells the agent if it should ask for an upgrade |
-| `confidence` | When derived | 0–1; lower when one chain is rate-limited or stale |
-| `staleAfterMs` | Yes | Caching hint for orchestrators |
+| `timestamp` / normalized `asOf` | When returned | Time-bound the snapshot; never invent source time |
+| `address` | Yes for wallet calls | Prevent context confusion |
+| queried networks | Yes | Make coverage boundaries visible |
+| priced/unpriced counts and values | Derive when possible | Missing/unpriced assets are unknown, not zero |
+| confidence | Only when methodology is stated | Never present an arbitrary 0–1 value as API output |
+| freshness limit | Client policy | State the policy separately from source data |
 
 ---
 
@@ -379,6 +302,21 @@ Decision rules:
 - If a rebalance requires swaps, return a plan and hand off to Signal Architect for quotes and signatures.
 - If spot exposure needs a hedge, pass the asset, notional size, and risk concern to Futures Strategist; do not size perps from this skill alone.
 
+## Portfolio Risk Contract
+
+Before recommending new risk, create a coverage table for observable assets, unpriced assets, missing chains, debt/liabilities, LP look-through, locked balances, and off-wallet/perp exposure. If any material category is unavailable, label portfolio NAV and concentration as partial.
+
+Apply limits hierarchically:
+
+- preserve explicit gas, collateral, withdrawal, tax, and emergency reserves;
+- measure concentration by asset, stablecoin issuer, protocol, chain, bridge, venue, and correlated factor—not token symbol alone;
+- look through LP, vault, LST/LRT, and receipt tokens when authoritative composition exists;
+- calculate pre/post-trade weights using conservative executable prices and include fees/slippage;
+- use rebalance bands and minimum trade sizes to prevent churn;
+- never call a portfolio delta-neutral until actual spot and hedge fills are reconciled and residual delta is measured.
+
+Unknown balances or liabilities block claims about net exposure. A wallet-balance snapshot alone cannot establish solvency, P&L, or complete portfolio risk.
+
 ---
 
 ## Recommended Workflows
@@ -387,8 +325,8 @@ Decision rules:
 
 ```
 1. get_portfolio_summary           → totals + top positions
-2. get_capital_efficiency          → single score with breakdown
-3. get_idle_capital                → unused stables (only if > $100)
+2. DERIVE coverage-aware capital efficiency only if inputs are complete
+3. get_idle_capital                → candidate liquid reserves; confirm reserve requirements
 4. PRESENT a 3-line briefing:
      • Total + biggest concentration
      • Capital efficiency score + top reason
@@ -400,8 +338,8 @@ Decision rules:
 
 ```
 1. get_portfolio_summary
-2. get_position_health
-3. PRESENT existing concentration + drift
+2. get_position_health → activity metrics only; obtain protocol-native position health separately
+3. PRESENT observable concentration + explicit coverage gaps
 4. NOTE if the new entry would push any concentration above 40%
 5. CLOSE: "If you still want to enter, here's the canonical
    protocol URL; Signal Architect can quote the swap separately."
@@ -411,7 +349,7 @@ Decision rules:
 
 ```
 1. get_portfolio_summary
-2. get_position_health for every position
+2. Obtain protocol-native position/debt health; do not use the compatibility activity endpoint as position health
 3. (optional) Trail Intelligence: get_trail_heat for current positions
 4. get_rebalance_plan with the user's target allocation
 5. PRESENT the plan as a discussion: which swaps, why, fees, drift closed
@@ -421,9 +359,9 @@ Decision rules:
 ### Workflow 4: "Idle Capital Deploy"
 
 ```
-1. get_idle_capital
-2. (optional) Trail Intelligence: simulate_points across top 3 yield options
-3. PRESENT comparison: protocol, APR, gas cost, sybil risk
+1. get_idle_capital → candidate reserves, pending user reserve confirmation
+2. Supply Master: compare_yields across eligible pools
+3. PRESENT comparison: base/reward APY, stability, TVL, protocol/asset risk, all costs, exit constraints, and missing evidence
 4. CLOSE: "I can hand off to Signal Architect to position you. Want to proceed?"
 ```
 
@@ -464,7 +402,8 @@ Decision rules:
 - **FarmDash Signal Architect** — zero-custody EIP-191 swap routing
 - **FarmDash Futures Strategist** — zero-custody EIP-712 perps execution
 
-**Agent Hub:** [FarmDash Agentic OS](https://www.farmdash.one/agents)
+**FarmDash:** [Multichain DeFi portfolio intelligence](https://www.farmdash.one/)
+**Agent Hub:** [FarmDash portfolio analytics for autonomous agents](https://www.farmdash.one/agents)
 **OpenAPI Spec:** [FarmDash API Schema](https://www.farmdash.one/agents/openapi.yaml)
 **MCP Config:** [FarmDash MCP Server](https://www.farmdash.one/.well-known/mcp.json)
 

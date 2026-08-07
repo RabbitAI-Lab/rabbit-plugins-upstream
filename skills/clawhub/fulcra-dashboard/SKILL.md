@@ -17,6 +17,19 @@ This dashboard is designed to present the user's Fulcra data, which can be viewe
 
 Important: The local working application root must never be published to the public internet directly, as it often contains intermediate files and full datasets. If the user wishes to share a dashboard, you must deploy only the isolated `public/` directory that contains only the specific data and files intended for publication.
 
+## Reliable Delivery & Intent
+
+The primary and preferred method for delivering this view is generating a robust HTML application locally (via the static triad) and optionally publishing it (e.g., via Surge). Our goal is to make something impressive. 
+
+However, you must be aware of the user's intent:
+- **High-Fidelity Goal:** If the user is specifically trying to build a high-quality dashboard, you should spend more time troubleshooting and trying to make the static triad, localhost server, or public deployment work.
+- **Fast Visibility (e.g., Onboarding):** If the user is just trying to view things for the first time (such as during the `fulcra-onboarding` flow), give faster delivery more weight.
+
+If the primary static triad and deployment routes are truly not viable in the current environment, you must gracefully fall back to alternative delivery mechanisms. Alternative options include (but are not limited to):
+- **Prefab (`https://gofastmcp.com/apps/prefab`):** Using an external rapid-UI generator if configured.
+- **Custom HTML/Image Generation:** Generating a simpler bespoke HTML file or using Python (e.g., `matplotlib`) to render a static image chart summarizing the data.
+- **ASCII Charts & Markdown:** As a last resort, or for extremely fast inline updates, render the data directly in the chat using Markdown tables and ASCII visualizations.
+
 ## Architecture Decrees
 
 When constructing this dashboard, you **must** follow these strict architectural rules to prevent the file from becoming a tangled, unmaintainable monolith:
@@ -130,10 +143,11 @@ Do not assume this skill is always run immediately after `fulcra-onboarding`.
    - **Crucial Warning & Confirmation:** Directly at the point of publishing (before running any deployment tools), you must present a clear warning to the user. State exactly which data files are inside the `public/` directory and will be made public, and explicitly ask for their final confirmation to proceed with the deployment.
    - Wait for their explicit confirmation before proceeding.
    - If they agree, offer them three deployment options, ordered by ease of use:
-     - **Option 1: Surge (Easiest, No Git Required)**
+     - **Option 1: Surge (Secure & Easiest, No Git Required)**
        - Installation: `npm install -g surge`
-       - Deployment: Run `surge` inside the `public/` directory.
-       - UX: The user will be prompted in the terminal for an email/password to create a free account on the fly, and then an auto-generated domain will be provided. Instantly deploys the folder.
+       - Security Prep: Before deploying, ensure you insert `<meta name="robots" content="noindex, nofollow">` into the `<head>` of `public/index.html` to prevent search engine indexing. (Surge subdomains are not publicly indexed or discoverable by default, so this combination provides security through obscurity and explicit opt-out).
+       - Deployment: Generate a random 6-character alphanumeric suffix and run `surge . <project-name>-<random-suffix>.surge.sh` inside the `public/` directory.
+       - UX: The user will be prompted in the terminal for an email/password to create a free account on the fly (if not already authenticated). The folder will instantly deploy to the unguessable subdomain. You must present the final link to the user explicitly as an `https://` URL.
      - **Option 2: GitHub Pages (Best for Version Control)**
        - Installation: Ensure `gh` (GitHub CLI) is installed and authenticated (`gh auth status`).
        - Deployment: Navigate into the `public/` directory, initialize git, create the repository, and push (`git init && git add . && git commit -m "Initial public export" && gh repo create <name> --public --source=. --remote=origin --push`).

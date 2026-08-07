@@ -1,0 +1,33 @@
+{
+  "timestamp": "2026-07-27T17:21:22.242743+00:00",
+  "n_buildings": 5,
+  "dsm_available": false,
+  "buildings_source": "synthetic",
+  "buildings": [
+    {
+      "building_id": 0,
+      "building_type": "residential",
+      "footprint_area_m2": 541.42
+    },
+    {
+      "building_id": 1,
+      "building_type": "commercial",
+      "footprint_area_m2": 319.89
+    },
+    {
+      "building_id": 2,
+      "building_type": "industrial",
+      "footprint_area_m2": 783.43
+    },
+    {
+      "building_id": 3,
+      "building_type": "residential",
+      "footprint_area_m2": 496.9
+    },
+    {
+      "building_id": 4,
+      "building_type": "commercial",
+      "footprint_area_m2": 202.63
+    }
+  ]
+}

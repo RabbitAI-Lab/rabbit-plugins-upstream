@@ -1,8 +1,8 @@
 # Xerg
 
-Find wasted AI spend in OpenClaw, Hermes, Claude Code, Cursor, and any framework that can export a JSON event payload.
+Find wasted AI spend in OpenClaw, Hermes, QM, Claude Code, Cursor, and any framework that can export a JSON event payload.
 
-Xerg is a local-first CLI for auditing AI spend in dollars, not raw token counts. It reads OpenClaw logs/transcripts or an independent sanitized trace capture, Hermes v0.17+ `state.db` with optional observer/certified trace enrichment, Claude Code transcripts, and Cursor usage exports — plus event payloads from any framework via `xerg ingest` — separates confirmed waste from savings opportunities, and lets you measure fixes with `--compare`.
+Xerg is a local-first CLI for auditing AI spend in dollars, not raw token counts. It reads OpenClaw logs/transcripts or an independent sanitized trace capture, Hermes v0.17+ `state.db` with optional observer/certified trace enrichment, Claude Code transcripts, and Cursor usage exports — plus event payloads from any framework via `xerg ingest` — separates identified waste from savings opportunities, reports what detector spend was assessed, and lets you measure compatible fixes with `--compare`.
 
 Everything runs locally by default. The CLI is publicly installable from npm as `@xerg/cli`, but it is not open source. No account is required for local audits. A free hosted workspace keeps the last 30 days of pushed audits; hosted MCP requires a Pro or Enterprise workspace.
 
@@ -46,7 +46,7 @@ npx @xerg/cli@latest init
 - **Downgrade candidates** - expensive models on operationally simple tasks
 - **Idle waste** - recurring heartbeat or monitoring loops worth reviewing
 
-Local JSON findings can include `signalSource`, `ruleId`, and evidence references so agents can distinguish observed signals from inferred or legacy unknown provenance. Compare output leads with normalized waste rate and per-unit rows before workload-dependent spend deltas.
+Local JSON findings can include `signalSource`, `ruleId`, and evidence references so agents can distinguish observed signals from inferred or legacy unknown provenance. Compare output leads with normalized identified-waste rate and per-unit rows only when detector coverage is compatible, before workload-dependent spend deltas.
 
 ## Quick Start
 
@@ -65,14 +65,17 @@ xerg audit --json
 xerg audit --json --compare
 xerg collect openclaw
 xerg collect hermes --state-db ~/.hermes/state.db
+xerg doctor --runtime qm
+xerg audit --runtime qm --since 7d
 xerg audit --otlp-file ./openclaw.capture.jsonl
 ```
 
-Add `--runtime openclaw`, `--runtime hermes`, or `--runtime claude-code` when more than one runtime is detected.
+Add `--runtime openclaw`, `--runtime hermes`, or `--runtime claude-code` when more than one local runtime is detected. QM is never auto-detected and always uses `--runtime qm` after administrator setup.
 
 ## Sources
 
 - Local machine: OpenClaw, Hermes, and Claude Code (`xerg audit --runtime claude-code`)
+- Explicit QM source: host-independent `qm-snapshot/v1`, strict view-only direct PostgreSQL, or the certified Fly-contained exporter
 - Independent local OpenClaw traces: `xerg collect openclaw` or `xerg audit --otlp-file <capture.jsonl>`
 - Certified local Hermes trace enrichment: `xerg collect hermes --state-db <path>` or `xerg audit --runtime hermes --state-db <path> --otlp-file <capture.jsonl>`
 - Local Cursor usage export: `xerg audit --cursor-usage-csv ./cursor-usage.csv`
@@ -84,23 +87,25 @@ If local defaults are empty, inspect the target directly first with `xerg doctor
 ## Optional Hosted Follow-Up
 
 ```bash
-xerg connect
+xerg activate --push-latest
 xerg mcp-setup
 ```
 
-- `connect` offers browser auth and pushing the latest audit
+- `activate` offers browser approval and pushes the latest audit; add `--organization-id org_...` to require one exact Clerk workspace, or `--connect-only` to pair without auditing or pushing
 - `mcp-setup` prints or writes hosted MCP config for supported clients
 - local audits and compare remain available if you skip hosted setup
 
 ## Security And Data Flow
 
-- Local audits read OpenClaw, Hermes, Claude Code, Cursor usage, or ingest payload files and may write local JSON snapshots for `--compare`.
-- Hermes uses `~/.hermes/state.db` read-only by default and as its sole monetary authority. Optional observer telemetry and certified trace enrichment preserve authoritative token buckets and audit identity; analysis coverage and the complete mechanical-efficiency block remain local and are excluded from push payloads.
+- Local audits read OpenClaw, Hermes, QM snapshots, Claude Code, Cursor usage, or ingest payload files and may write local JSON snapshots for `--compare`.
+- Hermes uses `~/.hermes/state.db` read-only by default and as its sole monetary authority. Optional observer telemetry and certified trace enrichment preserve authoritative token buckets and `economicAuditId`; analysis `auditId` changes when coverage/findings change. Push v5 includes only content-free detector eligibility and source stability; detailed mechanics remain local.
+- QM strict direct mode uses a dedicated export-view-only reader. Fly Managed Postgres instead uses a disclosed one-shot process boundary inside QM core and does not claim database least privilege. Both use a backed-up identity key and HMAC raw IDs before persistence; content fields are not exported, and `openrouter/auto` placeholders remain unpriced. In 0.19.0 a QM Slack agent can audit an authorized pre-created snapshot with an operator-provisioned exact CLI but cannot initiate live collection. Current Fly Sprites require that CLI to be explicitly installed and verified inside the private persistent Sprite because they do not apply the configured sandbox OCI image.
 - Both trace collectors bind only to loopback, sanitize before persistence, receive traces only, and never push automatically. `analysisCoverage`, `toolActivity`, and `workloadEconomics` remain local.
 - Remote OpenClaw audits pull selected files to local temporary storage before analysis.
 - Xerg Cloud sync only happens when you run `connect`, `audit --push`, or `push`.
 - Push payloads include audit totals, rollups, findings, recommendations, comparison deltas, and source metadata. They exclude raw prompt and response content, local source file paths, local snapshot store paths, and internal finding details.
 - Rollup-level provenance (per-finding `signalSource`, waste-by-signal-source totals, and pricing coverage counts) is carried on the wire; evidence references and internal details stay local.
+- Runtime costs may be observed, locally estimated, or unpriced. They are not authoritative provider invoices; Xerg does not currently ingest provider bills, reconcile invoices, or convert runtime audits to FOCUS.
 
 ## CI And Automation
 

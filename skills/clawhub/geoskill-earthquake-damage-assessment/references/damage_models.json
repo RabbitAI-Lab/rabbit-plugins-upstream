@@ -1,0 +1,177 @@
+{
+  "version": "1.0.0",
+  "description": "地震损害评估模型参数 — 损毁分级、特征权重、建筑类型与阈值",
+  "damage_models": {
+    "sar_coherence": {
+      "name": "SAR 相干性变化检测",
+      "description": "基于震前震后 SAR 相干性下降检测建筑损毁",
+      "bands_required": ["coherence_pre", "coherence_post"],
+      "valid_range": [0.0, 1.0],
+      "damage_thresholds": {
+        "none": [0.7, 1.0],
+        "slight": [0.5, 0.7],
+        "moderate": [0.3, 0.5],
+        "severe": [0.1, 0.3],
+        "destroyed": [0.0, 0.1]
+      },
+      "weights": {
+        "coherence_drop": 0.6,
+        "texture_change": 0.4
+      }
+    },
+    "optical_ndvi": {
+      "name": "光学 NDVI 变化检测",
+      "description": "基于震前震后 NDVI 变化检测植被/建筑变化",
+      "bands_required": ["red_pre", "nir_pre", "red_post", "nir_post"],
+      "valid_range": [-1.0, 1.0],
+      "damage_thresholds": {
+        "none": [-0.05, 0.05],
+        "slight": [-0.15, -0.05],
+        "moderate": [-0.3, -0.15],
+        "severe": [-0.5, -0.3],
+        "destroyed": [-1.0, -0.5]
+      },
+      "weights": {
+        "ndvi_drop": 0.5,
+        "texture_change": 0.3,
+        "shadow_change": 0.2
+      }
+    },
+    "combined": {
+      "name": "SAR + 光学融合模型",
+      "description": "综合 SAR 相干性和光学变化特征",
+      "bands_required": ["coherence_post", "red_post", "nir_post"],
+      "weights": {
+        "sar": 0.5,
+        "optical": 0.3,
+        "exposure": 0.2
+      }
+    }
+  },
+  "building_types": {
+    "rc_frame": {
+      "name": "钢筋混凝土框架",
+      "vulnerability": "medium",
+      "coherence_sensitivity": 0.7,
+      "typical_area_m2": 200.0
+    },
+    "masonry": {
+      "name": "砖混结构",
+      "vulnerability": "high",
+      "coherence_sensitivity": 0.8,
+      "typical_area_m2": 120.0
+    },
+    "adobe": {
+      "name": "土坯/砖木",
+      "vulnerability": "very_high",
+      "coherence_sensitivity": 0.9,
+      "typical_area_m2": 80.0
+    },
+    "steel": {
+      "name": "钢结构",
+      "vulnerability": "low",
+      "coherence_sensitivity": 0.5,
+      "typical_area_m2": 500.0
+    },
+    "unknown": {
+      "name": "未知类型",
+      "vulnerability": "medium",
+      "coherence_sensitivity": 0.7,
+      "typical_area_m2": 150.0
+    }
+  },
+  "road_types": {
+    "highway": {
+      "name": "高速公路",
+      "width_m": 20.0,
+      "traffic_capacity": 10000
+    },
+    "primary": {
+      "name": "主干道",
+      "width_m": 12.0,
+      "traffic_capacity": 5000
+    },
+    "secondary": {
+      "name": "次干道",
+      "width_m": 8.0,
+      "traffic_capacity": 2000
+    },
+    "residential": {
+      "name": "居民区道路",
+      "width_m": 5.0,
+      "traffic_capacity": 500
+    }
+  },
+  "quality_control": {
+    "cloud": {
+      "method": "高反射率阈值",
+      "blue_threshold": 0.15,
+      "description": "蓝光波段反射率超过阈值判定为云"
+    },
+    "shadow": {
+      "method": "阴影检测",
+      "nir_threshold": 0.05,
+      "description": "近红外反射率过低判定为阴影"
+    },
+    "sar_noise": {
+      "method": "SAR 相干性噪声",
+      "min_coherence": 0.05,
+      "description": "相干性过低区域不可靠"
+    }
+  },
+  "damage_levels": {
+    "none": {
+      "name": "无损毁",
+      "color": "#28a745",
+      "probability_range": [0.0, 0.2],
+      "description": "无明显变化"
+    },
+    "slight": {
+      "name": "轻微",
+      "color": "#ffc107",
+      "probability_range": [0.2, 0.4],
+      "description": "可能有轻微损伤"
+    },
+    "moderate": {
+      "name": "中等",
+      "color": "#fd7e14",
+      "probability_range": [0.4, 0.6],
+      "description": "疑似中等损毁"
+    },
+    "severe": {
+      "name": "严重",
+      "color": "#dc3545",
+      "probability_range": [0.6, 0.8],
+      "description": "疑似严重损毁"
+    },
+    "destroyed": {
+      "name": "毁坏",
+      "color": "#721c24",
+      "probability_range": [0.8, 1.0],
+      "description": "疑似完全毁坏"
+    }
+  },
+  "impact_thresholds": {
+    "default": {
+      "damage_probability": 0.5,
+      "min_building_area_m2": 50.0,
+      "population_density_per_km2": 100
+    },
+    "strict": {
+      "damage_probability": 0.7,
+      "min_building_area_m2": 100.0,
+      "population_density_per_km2": 500
+    },
+    "relaxed": {
+      "damage_probability": 0.3,
+      "min_building_area_m2": 20.0,
+      "population_density_per_km2": 50
+    }
+  },
+  "intensity_zones": {
+    "VI": {"name": "VI度", "radius_km": 50, "weight": 0.3},
+    "VII": {"name": "VII度", "radius_km": 30, "weight": 0.5},
+    "VIII": {"name": "VIII度", "radius_km": 15, "weight": 0.8},
+    "IX+": {"name": "IX度及以上", "radius_km": 5, "weight": 1.0}
+  }
+}

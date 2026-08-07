@@ -1,5 +1,5 @@
 ## Description: <br>
-Creates professional dark-themed SVG diagrams, including architecture, flow, and sequence-style diagrams, for reporting and data visualization tasks. <br>
+Baoyu Diagram helps agents create professional dark-themed SVG diagrams, including architecture diagrams, flowcharts, and sequence-style diagrams, from natural-language requests. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,29 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to turn text or structured content into dark-themed SVG diagrams for architecture, workflow, sequence, reporting, and data visualization scenarios. <br>
+Developers, teams, and automation users use this skill to ask an agent for static SVG diagrams for architecture, process, sequence, UI, report, or data-visualization materials. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill asks for broad local shell-command authority without a clear scope for diagram generation. <br>
-Mitigation: Run it in a constrained workspace and require explicit review before any command execution. <br>
-Risk: Diagram inputs or referenced files may contain sensitive content. <br>
-Mitigation: Avoid providing sensitive files, secrets, or broad API keys to the skill. <br>
+Risk: Broad read/write/command authority could affect files, commands, credentials, or external services if granted without supervision. <br>
+Mitigation: Run the skill in a sandboxed agent environment, grant only the tools needed for the specific diagram task, and review proposed file writes or commands before execution. <br>
+Risk: Generated diagrams or supporting explanations may be incorrect or misleading when the prompt or source context is incomplete. <br>
+Mitigation: Review the generated SVG, labels, flows, and assumptions before publishing or using the result in business or technical decisions. <br>
 
 
 ## Reference(s): <br>
-- [Baoyu Diagram on ClawHub](https://clawhub.ai/thcjp/skills/baoyu-diagram) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Files, Guidance] <br>
-**Output Format:** [Markdown and JSON-like structured responses containing SVG diagram code or diagram configuration.] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with SVG/code outputs, JSON examples, and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are oriented toward dark-themed SVG/data visualization artifacts and are not intended for real-time stream processing or complex human-judgment decisions.] <br>
+**Other Properties Related to Output:** [Outputs should be reviewed before file writes, command execution, API use, or publication.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+1.0.2 (source: server-resolved release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Retrieves patent description/specification data from the Zhihuiya patent database for a single patent ID or publication number. <br>
+Retrieves patent specification and full description data from the Zhihuiya patent database by patent ID or publication number. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to retrieve full patent description text from LinkFox/Zhihuiya services when a user supplies a single patent ID or publication number. <br>
+Developers and patent-research users use this skill to retrieve full patent descriptions for one or more known patent IDs or publication numbers, including optional family-member substitution when the target description is unavailable. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Patent identifiers and retrieved descriptions are sent to LinkFox/Zhihuiya services. <br>
-Mitigation: Install and use only when that data sharing is acceptable for the patents being queried. <br>
-Risk: Full API responses are saved locally and may persist beyond the immediate task. <br>
-Mitigation: Review the saved linkfox data location and delete stored responses when they are no longer needed. <br>
-Risk: The skill can report interaction feedback through a separate LinkFox endpoint. <br>
-Mitigation: Review feedback behavior before use and avoid sending sensitive user details in feedback content. <br>
-Risk: Queries may consume paid LinkFox/Zhihuiya credits. <br>
-Mitigation: Confirm credit consumption before running lookups, especially when users request multiple patents. <br>
+Risk: The skill performs LinkFox/Zhihuiya API calls that may consume credits. <br>
+Mitigation: Confirm the lookup scope with the user before additional or repeated queries, especially for batch requests. <br>
+Risk: The skill uses API keys from environment variables and writes full response data and cache files locally. <br>
+Mitigation: Use only trusted execution environments, protect local output directories, and avoid sending sensitive patent data unless the user accepts the data-handling behavior. <br>
+Risk: The security review flags automatic feedback reporting and onboarding ZIP installation behavior for review before installation. <br>
+Mitigation: Allow feedback submission or onboarding installation only after explicitly trusting the LinkFox source and understanding what data may be sent or installed. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-description-data) <br>
-- [Zhihuiya patent description API reference](references/api.md) <br>
-- [LinkFox API key and credit guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
+- [Zhihuiya Patent Description API Reference](references/api.md) <br>
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-description-data) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, shell commands, JSON API responses, and saved JSON files] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, API Calls] <br>
+**Output Format:** [Markdown guidance with JSON API parameters, shell command examples, and saved JSON response files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts one patentId or patentNumber per request, plus optional replaceByRelated; large responses are saved locally and summarized unless inline output is requested.] <br>
+**Other Properties Related to Output:** [Writes full API responses and 24-hour cache files locally; large responses are summarized unless inline output is requested.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+1.0.6 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,0 +1,17 @@
+name: geoskill-farmland-productivity
+display_name: 农田生产力评估
+description: |
+  基于 NDVI 时序积分估算累积生物量，叠加气候校正得到生产力指数。Estimates cumulative biomass from NDVI time-series integration with climate correction to yield a productivity index.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-farmland-productivity.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - analysis
+  - climate
+  - gis
+  - machine-learning
+  - preprocessing
+  - raster
+  - remote-sensing

@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, documentation maintainers, and release reviewers use this skill to scan prose, comments, READMEs, and public documentation for AI-writing markers, identity leaks, unsupported claims, hallucinated references, and cleanup candidates. It can also guide remediation and CI guardrails when reviewers want structured findings rather than a passive detector. <br>
+Developers and documentation maintainers use this skill to audit prose, code comments, READMEs, and repository documentation for AI-writing markers, hallucinated references, identity leaks, and cleanup candidates before publishing or merging. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security review reports a suspicious posture because the skill asks for broader repository cleanup, security review, and remediation authority than its short prose-detector summary suggests. <br>
-Mitigation: Install it only when that broader repo-aware review is desired, run it on explicit target paths, and review its proposed changes before applying them. <br>
-Risk: The workflow can inspect sensitive project surfaces such as secrets, agent configs, package registries, URLs, CI, and pre-commit hooks. <br>
-Mitigation: Run it in a controlled workspace, avoid unnecessary secret exposure, and scope scans to files or directories that need review. <br>
-Risk: Remediation output may include diffs or cleanup recommendations that could remove meaningful comments, change public API documentation, or overcorrect low-confidence findings. <br>
-Mitigation: Keep auto-apply disabled unless a reviewer has approved the proposed diffs, and require human decisions for low-confidence findings. <br>
+Risk: The skill performs broad repository and documentation auditing, which can produce findings beyond lightweight prose detection. <br>
+Mitigation: Use report-only review by default and require a human to approve findings before changing files. <br>
+Risk: Network validation, delegated remediation, auto-apply behavior, and local scan history can expand the skill's operational footprint. <br>
+Mitigation: Require explicit approval before network checks, delegated remediation, or auto-apply runs, and avoid --track unless local scan history is acceptable. <br>
+Risk: Over-aggressive cleanup can remove useful comments, historical text, or low-confidence patterns that are legitimate in context. <br>
+Mitigation: Follow the artifact's anti-goals: do not auto-apply low-confidence findings, preserve safety and invariant comments, and surface uncertain changes for human decision. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/athola/skills/nm-scribe-slop-detector) <br>
-- [Clawdis homepage](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
+- [OpenClaw homepage metadata](https://github.com/athola/claude-night-market/tree/master/plugins/scribe) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports, structured finding records, JSON Lines for CI, and inline shell commands or configuration snippets.] <br>
+**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown reports, structured finding records, and optional CI JSON or JSONL] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Findings may include severity, confidence, evidence, rationale, suggested fixes, and diffs for high-confidence cases; default unattended behavior is report-only.] <br>
+**Other Properties Related to Output:** [May include line-anchored findings, scores, suggested fixes, high-confidence diffs, CI exit status, and optional local scan history when tracking is enabled.] <br>
 
 ## Skill Version(s): <br>
-1.9.16 (source: ClawHub release metadata; artifact frontmatter reports 1.9.8) <br>
+1.9.17 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

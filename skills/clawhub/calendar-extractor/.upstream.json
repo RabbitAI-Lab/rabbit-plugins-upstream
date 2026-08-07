@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/calendar-extractor",
   "slug": "calendar-extractor",
   "ownerHandle": null,
-  "version": "0.7.1",
-  "updatedAt": 1784964446600,
-  "contentHash": "ca3f04e5f0de7c77e9d5951e91f535a8e5bbe2f535aa916cb4b0fe3928d0e673",
-  "fetchedAt": "2026-07-26T18:04:17.189Z"
+  "version": "0.7.2",
+  "updatedAt": 1785658571364,
+  "contentHash": "159cc6b52707cfac5bde976dbb20ea16b7c2c8c422a64f524102b43cddd06010",
+  "fetchedAt": "2026-08-07T08:58:25.808Z"
 }

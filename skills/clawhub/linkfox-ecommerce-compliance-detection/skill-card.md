@@ -1,63 +1,74 @@
-## Description: <br>
-Linkfox 电商合规检测 helps agents run e-commerce intellectual property compliance checks, patent lookups, and image-based patent searches using LinkFox Ruiguan and Zhihuiya tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+电商知识产权与合规检测一站式 AI 工具集，整合睿观知产合规检测（版权/商标/外观专利/实用新型专利/图片政策）与智慧芽专利数据查询（著录/权利要求/说明书/附图/法律状态/家族/引用/以图搜图/PDF）共 2 类底层工具、22 项子能力。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to select and run LinkFox e-commerce IP compliance checks for copyright, trademark, design patent, utility patent, image policy, and patent data workflows. It is intended to surface structured risk indicators and patent records, not to provide legal advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send credentials and task data to an environment-selected LinkFox gateway. <br>
-Mitigation: Use it only with a trusted HTTPS LINKFOX_TOOL_GATEWAY and scoped credentials for this service. <br>
-Risk: API responses may be written outside the current project when the workspace is not writable. <br>
-Mitigation: Run the skill in a controlled workspace and review generated linkfox session data paths before sharing or retaining outputs. <br>
-Risk: The artifact includes a fallback path that may direct users to install a remote ZIP for onboarding. <br>
-Mitigation: Avoid remote ZIP install fallback unless the package source is independently trusted and verified. <br>
+## Use Case:
 
+External e-commerce sellers, compliance analysts, and agent users use this skill to check product images and listing text for copyright, trademark, patent, TRO, policy, and patent-data risks before publication or review.
 
-## Reference(s): <br>
-- [linkfox-ruiguan-copyright-detection.md](artifact/references/linkfox-ruiguan-copyright-detection.md) <br>
-- [linkfox-ruiguan-detection-patent-design.md](artifact/references/linkfox-ruiguan-detection-patent-design.md) <br>
-- [linkfox-ruiguan-gun-parts-search.md](artifact/references/linkfox-ruiguan-gun-parts-search.md) <br>
-- [linkfox-ruiguan-text-trademark-detection.md](artifact/references/linkfox-ruiguan-text-trademark-detection.md) <br>
-- [linkfox-ruiguan-trademark-graphic-detection.md](artifact/references/linkfox-ruiguan-trademark-graphic-detection.md) <br>
-- [linkfox-ruiguan-utility-patent-detection.md](artifact/references/linkfox-ruiguan-utility-patent-detection.md) <br>
-- [linkfox-zhihuiya-abstract-data-translated.md](artifact/references/linkfox-zhihuiya-abstract-data-translated.md) <br>
-- [linkfox-zhihuiya-abstract-image.md](artifact/references/linkfox-zhihuiya-abstract-image.md) <br>
-- [linkfox-zhihuiya-bibliography.md](artifact/references/linkfox-zhihuiya-bibliography.md) <br>
-- [linkfox-zhihuiya-claim-data-translated.md](artifact/references/linkfox-zhihuiya-claim-data-translated.md) <br>
-- [linkfox-zhihuiya-claim-data.md](artifact/references/linkfox-zhihuiya-claim-data.md) <br>
-- [linkfox-zhihuiya-description-data-translated.md](artifact/references/linkfox-zhihuiya-description-data-translated.md) <br>
-- [linkfox-zhihuiya-description-data.md](artifact/references/linkfox-zhihuiya-description-data.md) <br>
-- [linkfox-zhihuiya-fulltext-image.md](artifact/references/linkfox-zhihuiya-fulltext-image.md) <br>
-- [linkfox-zhihuiya-legal-status.md](artifact/references/linkfox-zhihuiya-legal-status.md) <br>
-- [linkfox-zhihuiya-patent-cited.md](artifact/references/linkfox-zhihuiya-patent-cited.md) <br>
-- [linkfox-zhihuiya-patent-family.md](artifact/references/linkfox-zhihuiya-patent-family.md) <br>
-- [linkfox-zhihuiya-patent-forward-citation.md](artifact/references/linkfox-zhihuiya-patent-forward-citation.md) <br>
-- [linkfox-zhihuiya-patent-image-search.md](artifact/references/linkfox-zhihuiya-patent-image-search.md) <br>
-- [linkfox-zhihuiya-pdf-data.md](artifact/references/linkfox-zhihuiya-pdf-data.md) <br>
-- [linkfox-zhihuiya-simple-bibliography.md](artifact/references/linkfox-zhihuiya-simple-bibliography.md) <br>
-- [linkfox-zhihuiya-utility-patent-image-search.md](artifact/references/linkfox-zhihuiya-utility-patent-image-search.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses saved to files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts may summarize large responses and write full JSON responses under a linkfox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata; artifact frontmatter says 1.0.0) <br>
+Risk: The skill can send product images, listing text, patent identifiers, phone/login data during onboarding, and billing actions to LinkFox-related services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when the user accepts that data transfer, and obtain explicit consent before using any feedback endpoint.
+
+Risk: The LINKFOX_TOOL_GATEWAY environment variable can redirect tool traffic to another gateway.
+
+Mitigation: Leave LINKFOX_TOOL_GATEWAY unset unless the destination is trusted and expected for the deployment.
+
+Risk: Tool responses may be stored in local linkfox output directories, including fallback locations.
+
+Mitigation: Run from a private writable project directory and review or remove local linkfox output directories after use.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-ecommerce-compliance-detection)
+- [Skill Source Overview](artifact/SKILL.md)
+- [Onboarding Reference](artifact/references/onboarding.md)
+- [Ruiguan Copyright Detection](artifact/references/linkfox-ruiguan-copyright-detection.md)
+- [Ruiguan Graphic Trademark Detection](artifact/references/linkfox-ruiguan-trademark-graphic-detection.md)
+- [Ruiguan Text Trademark Detection](artifact/references/linkfox-ruiguan-text-trademark-detection.md)
+- [Ruiguan Design Patent Detection](artifact/references/linkfox-ruiguan-detection-patent-design.md)
+- [Ruiguan Utility Patent Detection](artifact/references/linkfox-ruiguan-utility-patent-detection.md)
+- [Ruiguan Image Policy Compliance Search](artifact/references/linkfox-ruiguan-gun-parts-search.md)
+- [Zhihuiya Patent Image Search](artifact/references/linkfox-zhihuiya-patent-image-search.md)
+- [Zhihuiya Utility Patent Image Search](artifact/references/linkfox-zhihuiya-utility-patent-image-search.md)
+- [Zhihuiya Bibliography](artifact/references/linkfox-zhihuiya-bibliography.md)
+- [Zhihuiya Patent Claims](artifact/references/linkfox-zhihuiya-claim-data.md)
+- [Zhihuiya Legal Status](artifact/references/linkfox-zhihuiya-legal-status.md)
+- [Zhihuiya Patent Family](artifact/references/linkfox-zhihuiya-patent-family.md)
+- [Zhihuiya Patent Citations](artifact/references/linkfox-zhihuiya-patent-cited.md)
+- [Zhihuiya Forward Citation](artifact/references/linkfox-zhihuiya-patent-forward-citation.md)
+- [Zhihuiya PDF Data](artifact/references/linkfox-zhihuiya-pdf-data.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API responses and saved result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a LinkFox API key; tools may write response JSON under local linkfox output directories and may summarize large responses.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

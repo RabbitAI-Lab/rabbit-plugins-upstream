@@ -1,13 +1,13 @@
 ---
 name: maverick-docusign-mcp
-description: Search, read, and manage DocuSign envelopes, recipients, templates, documents, and signing status through a local MCP wrapper. Use when the user asks about DocuSign signing workflows.
+description: Read DocuSign account, envelope, recipient, template, and signing-status data through DocuSign's official developer MCP server. Use when the user asks to inspect DocuSign signing workflows without changing them.
 metadata:
   openclaw:
-    emoji: "✍️"
+    emoji: '✍️'
+    homepage: https://developers.docusign.com/tools/mcp-server/
     requires:
       bins:
         - mcporter
-        - uv
       env:
         - MAVERICK_DOCUSIGN_MCP_ACCESS_TOKEN
         - MAVERICK_DOCUSIGN_MCP_REFRESH_TOKEN
@@ -19,37 +19,44 @@ metadata:
     install:
       - id: node
         kind: node
-        package: mcporter
+        package: mcporter@0.12.3
         bins:
           - mcporter
         label: Install mcporter (node)
-      - id: brew-uv
-        kind: brew
-        formula: uv
-        bins:
-          - uv
-        label: Install uv (brew)
 ---
 
 # DocuSign
 
-## Quick start
+## How to use this skill
 
-This skill is a thin pass-through to a local stdio MCP server. mcporter spawns the skill's Python server on each call, refreshes the OAuth access token when needed, and injects the fresh token into the server env.
+This skill is a thin pass-through to DocuSign's official developer MCP server at `https://mcp-d.docusign.com/mcp`. The bundle exposes only the six approved read tools. The live server remains the source of truth for their current schemas and server-published instructions.
+
+Discover the live tool schemas before calling a tool:
 
 ```sh
 mcporter --config {baseDir}/mcporter.json list maverick-docusign --schema
 ```
 
-For structured output:
+Call a discovered read tool with structured output:
 
 ```sh
 mcporter --config {baseDir}/mcporter.json call --output json maverick-docusign.<tool> key=value
 ```
 
-## Safety
+The allowed tools are exactly:
 
-Write operations that create, send, void, update, or modify envelopes, recipients, templates, and documents can affect real signing workflows. Confirm clear user intent before invoking write tools — search and read tools are safe to call freely while exploring. Read envelope status, recipients, tabs, and document details before updating anything.
+- `getUserInfo`
+- `getAccount`
+- `getEnvelopes`
+- `getEnvelope`
+- `listRecipients`
+- `getTemplates`
+
+## Read-only boundary
+
+This first release cannot create, send, void, update, remind, pause, resume, or otherwise change DocuSign data. The `allowedTools` list in `mcporter.json` enforces that boundary at the tool layer. Do not try to bypass it with direct DocuSign API calls or a different MCP configuration.
+
+Agreement Manager tools are also excluded because this release requests only the `signature` OAuth scope. It does not request `adm_store_unified_repo_read`.
 
 ## Authentication
 
@@ -66,13 +73,17 @@ For refresh-aware seeding, setup also reads optional expiry metadata env vars wh
 - `MAVERICK_DOCUSIGN_MCP_EXPIRES_IN`
 - `MAVERICK_DOCUSIGN_MCP_REFRESH_TOKEN_EXPIRES_AT`
 
-mcporter refreshes expired DocuSign access tokens through DocuSign's token endpoint before spawning the stdio server, then injects the token into `MAVERICK_DOCUSIGN_MCP_ACCESS_TOKEN`. If calls keep returning auth errors after retry, the OAuth grant has likely been revoked or expired; reconnect the integration.
+mcporter sends the refreshed bearer token to DocuSign's hosted MCP server and refreshes expired access tokens through DocuSign's demo token endpoint. If calls keep returning authentication errors after retry, the OAuth grant has likely been revoked or expired; reconnect the integration.
 
 ## Data flow
 
-Tool calls run locally: mcporter spawns this skill's Python MCP server as a subprocess, and that server forwards DocuSign API requests with the refreshed OAuth bearer token. DocuSign sees the envelope, recipient, template, document, and signing-status data referenced by each call. Use this skill for DocuSign-related work only; do not pass unrelated sensitive content through these tools.
+Tool arguments and results travel over HTTPS to DocuSign's hosted developer MCP server. DocuSign sees the account, envelope, recipient, template, and signing-status data referenced by each call. Use this skill only with a DocuSign developer/demo account and do not pass unrelated sensitive content through these tools. Production endpoint promotion is outside this bundle's scope.
 
 ## Dependencies
 
-- **`mcporter`** ([github.com/steipete/mcporter](https://github.com/steipete/mcporter)) — MCP CLI used to invoke the local MCP server. Auto-installed via `npm install -g --ignore-scripts mcporter` if missing on PATH (see `install` spec in frontmatter). The install spec uses unpinned `mcporter` (npm `latest`); operators with strict supply-chain controls should override the install to pin a specific version.
-- **`uv`** ([docs.astral.sh/uv](https://docs.astral.sh/uv/)) — runs the Python wrapper and local MCP server from their inline dependency metadata.
+- **`mcporter`** ([github.com/openclaw/mcporter](https://github.com/openclaw/mcporter)) — MCP CLI used to discover and call the hosted MCP server. If it is missing from `PATH`, the frontmatter installs the exact `mcporter@0.12.3` package with npm install scripts disabled.
+
+## References
+
+- DocuSign MCP overview: <https://developers.docusign.com/tools/mcp-server/>
+- DocuSign developer MCP endpoint: <https://mcp-d.docusign.com/mcp>

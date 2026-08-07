@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/coingecko-api",
   "slug": "coingecko-api",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778492345143,
-  "contentHash": "68913c8d4460899dc28e8f82726077c33ac1dc8b0205db301735647036281c22",
-  "fetchedAt": "2026-07-26T19:39:42.896Z"
+  "version": "1.0.1",
+  "updatedAt": 1785482352005,
+  "contentHash": "622ba455321c0e70b2bf299b373ac02955e528de0109a6232769d42c27bdb44e",
+  "fetchedAt": "2026-08-07T09:02:12.486Z"
 }

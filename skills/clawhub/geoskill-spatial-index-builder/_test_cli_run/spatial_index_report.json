@@ -1,0 +1,40 @@
+{
+  "n_features": 150,
+  "n_queries": 10,
+  "indexes": [
+    {
+      "index": "rtree",
+      "total_ms": 0.643,
+      "avg_ms": 0.0643,
+      "speedup_vs_brute": 14.8,
+      "avg_hits": 2.3,
+      "consistent_with_brute": true
+    },
+    {
+      "index": "quadtree",
+      "total_ms": 0.252,
+      "avg_ms": 0.0252,
+      "speedup_vs_brute": 37.74,
+      "avg_hits": 2.3,
+      "consistent_with_brute": true
+    },
+    {
+      "index": "geohash",
+      "total_ms": 23.548,
+      "avg_ms": 2.3548,
+      "speedup_vs_brute": 0.4,
+      "avg_hits": 2.3,
+      "consistent_with_brute": true
+    },
+    {
+      "index": "brute_force",
+      "total_ms": 9.514,
+      "avg_ms": 0.9514,
+      "speedup_vs_brute": 1.0,
+      "avg_hits": 2.3,
+      "consistent_with_brute": true
+    }
+  ],
+  "all_consistent": true,
+  "source": "synthetic"
+}

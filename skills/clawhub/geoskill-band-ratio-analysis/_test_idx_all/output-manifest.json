@@ -1,0 +1,164 @@
+{
+  "skill": "band-ratio-analysis",
+  "skill_version": "1.0.0",
+  "command": "band-ratio-analysis --bbox 116 39 117 40 --synthetic --quiet --output-dir ./_test_idx_all",
+  "started_at": "2026-08-03T13:38:41.997657Z",
+  "finished_at": "2026-08-03T13:38:46.831741Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "indices": null,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_idx_all\\ndvi.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_idx_all\\ndwi.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_idx_all\\mndwi.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_idx_all\\ndbi.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_idx_all\\evi.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_idx_all\\savi.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_idx_all\\index_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_indices": 6,
+    "indices": [
+      "ndvi",
+      "ndwi",
+      "mndwi",
+      "ndbi",
+      "evi",
+      "savi"
+    ],
+    "mean_per_index": {
+      "ndvi": 0.3766196668148041,
+      "ndwi": -0.35317885875701904,
+      "mndwi": -0.25292864441871643,
+      "ndbi": -0.16718466579914093,
+      "evi": 0.3493436574935913,
+      "savi": 0.3187776505947113
+    },
+    "synthetic_mean_per_band": {
+      "blue": 0.06638312339782715,
+      "green": 0.10427786409854889,
+      "red": 0.10387556254863739,
+      "nir": 0.31490564346313477,
+      "swir1": 0.2312028408050537,
+      "swir2": 0.18889844417572021
+    }
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "band-ratio-analysis"
+  },
+  "error": null
+}

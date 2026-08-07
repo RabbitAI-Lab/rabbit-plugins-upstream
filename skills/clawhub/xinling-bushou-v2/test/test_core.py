@@ -1,6 +1,6 @@
 """
 test/test_core.py
-心灵补手 V2.0 核心功能测试
+心灵补手 V3.5.0 核心功能测试
 """
 
 import unittest

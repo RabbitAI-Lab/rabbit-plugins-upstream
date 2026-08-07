@@ -1,7 +1,7 @@
 ---
 name: product-validation-planner
 description: >-
-  Help users with Validated demand: Founders and builders need a repeatable way to turn rough product ideas into validated plans, prototypes, and user-facing positioning. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.. Use when a user asks for business-and-operations, product idea, validation, prototype, saas, or needs a practical workflow, artifact, checklist, analysis, or implementation support for this requirement.
+  Help users with Validated demand: Founders and builders need a repeatable way to turn rough product ideas into validated plans, prototypes, and user-facing positioning. This requirement is supported by 11 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.. Use when a user asks for business-and-operations, product idea, validation, prototype, saas, or needs a practical workflow, artifact, checklist, analysis, or implementation support for this requirement.
 ---
 
 # Product Validation Planner
@@ -10,10 +10,10 @@ description: >-
 
 Use this skill to help solo founders, product managers, makers, and small teams who need to test whether a product idea is worth building before spending heavily with:
 
-> Validated demand: Founders and builders need a repeatable way to turn rough product ideas into validated plans, prototypes, and user-facing positioning. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+> Validated demand: Founders and builders need a repeatable way to turn rough product ideas into validated plans, prototypes, and user-facing positioning. This requirement is supported by 11 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
 
 Demand score: 100/100 (`70/70` demand, `30/30` local feasibility).
-Evidence: 12 signals across 3 source families.
+Evidence: 11 signals across 3 source families.
 
 Read `references/requirement-plan.md` when source evidence, planning details, or review criteria are needed.
 

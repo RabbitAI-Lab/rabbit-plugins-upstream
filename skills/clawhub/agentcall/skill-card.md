@@ -1,52 +1,62 @@
-## Description: <br>
-AgentCall lets agents provision phone numbers, send and receive SMS, place voice calls, configure inbound and outbound AI voice calls, manage call memory, and use related AgentCall API workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AgentCall lets an agent provision and manage phone numbers for SMS, OTP extraction for controlled apps, voice calls, AI voice receptionists, proactive text schedules, webhooks, and call memory through the AgentCall API.
 
-## Publisher: <br>
-[kintupercy](https://clawhub.ai/user/kintupercy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kintupercy](https://clawhub.ai/user/kintupercy)
 
-## Use Case: <br>
-Developers and agent operators use this skill to give an AI agent controlled access to AgentCall telephony workflows, including phone number provisioning, SMS, OTP extraction for apps they control, AI receptionists, outbound AI calls, schedules, webhooks, and call memory. It is intended for users who are prepared to manage real recipients, paid usage, credentials, and privacy-sensitive call data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can trigger real SMS messages, voice calls, outbound AI calls, and callbacks to real people. <br>
-Mitigation: Confirm the recipient, purpose, message or prompt, and user authorization before any external communication. <br>
-Risk: Several actions can create recurring or per-minute costs, including phone numbers, AI voice, Premium Voice, recording, and proactive schedules. <br>
-Mitigation: Confirm the plan, expected budget, billing mode, rates, and scope before invoking billable actions; monitor usage after persistent configurations are enabled. <br>
-Risk: Inbound AI, schedules, webhooks, and memory settings can keep operating after initial setup. <br>
-Mitigation: Confirm persistent settings up front, review them after setup, and disable or cancel them when the stated need has ended. <br>
-Risk: Call recording and call memory may involve sensitive personal or business information. <br>
-Mitigation: Use recording only after explicit opt-in, disclose recording where appropriate, and limit memory or webhook configuration to contexts the user has approved. <br>
-Risk: The skill requires sensitive AgentCall credentials and can optionally handle customer-supplied provider keys for BYOK voice billing. <br>
-Mitigation: Use environment variables or approved secret storage, avoid exposing key values in conversation, and confirm BYOK mode changes before storing or removing provider keys. <br>
+## Use Case:
 
+Developers and agent operators use this skill to give an AI agent controlled telephony capabilities for business messaging, phone-number management, voice calling, AI receptionist setup, post-call records, and related webhook integrations.
 
-## Reference(s): <br>
-- [ClawHub AgentCall skill page](https://clawhub.ai/kintupercy/agentcall) <br>
-- [Publisher profile](https://clawhub.ai/user/kintupercy) <br>
-- [AgentCall API plain-text reference](https://api.agentcall.co/llms.txt) <br>
-- [AgentCall pricing](https://agentcall.co/#pricing) <br>
-- [AgentCall voice prompt guide](https://agentcall.co/docs/voice-prompts) <br>
-- [AgentCall post-call webhook guide](https://agentcall.co/docs/post-call-webhook) <br>
-- [AgentCall Hermes walkthrough](https://agentcall.co/docs/hermes) <br>
+### Deployment Geography for Use:
 
+Global, subject to AgentCall carrier and feature restrictions documented for specific telephony paths such as US and Canada support for AI voice features.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, text] <br>
-**Output Format:** [Markdown guidance with API paths, JSON request examples, curl commands, and configuration values] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide authenticated AgentCall API calls that affect real phone numbers, SMS, voice calls, webhooks, schedules, recordings, and memory settings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.12.0 (source: server release metadata and artifact manifest) <br>
+Risk: Telephony actions can contact real people or incur charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation for recipients, message or call purpose, scope, and expected cost before sending SMS, placing calls, scheduling proactive texts, or provisioning numbers.
+
+Risk: Persistent inbound AI can continue answering calls, accumulating usage, and storing conversation data after setup.
+
+Mitigation: Confirm the exact number, prompt, recording setting, notification destinations, duration, and budget before enabling; monitor usage and disable the configuration when it is no longer needed.
+
+Risk: Recording calls and BYOK provider keys introduce privacy and secret-handling concerns.
+
+Mitigation: Confirm recording opt-in and disclosure expectations, confirm BYOK billing-mode changes before storing a provider key, and avoid retrying or probing when API guardrails return plan, payment, or verification errors.
+
+## Reference(s):
+
+- [AgentCall API reference](https://api.agentcall.co/llms.txt)
+- [AgentCall voice prompt guide](https://agentcall.co/docs/voice-prompts)
+- [AgentCall Hermes walkthrough](https://agentcall.co/docs/hermes)
+- [AgentCall post-call webhook walkthrough](https://agentcall.co/docs/post-call-webhook)
+- [ClawHub skill page](https://clawhub.ai/kintupercy/skills/agentcall)
+- [Publisher profile](https://clawhub.ai/user/kintupercy)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with API endpoints, JSON request examples, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide authenticated AgentCall API calls that contact real people, incur charges, configure persistent AI receptionists, store call records, or manage webhooks.]
+
+## Skill Version(s):
+
+2.12.2 (source: server release evidence and artifact claw.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

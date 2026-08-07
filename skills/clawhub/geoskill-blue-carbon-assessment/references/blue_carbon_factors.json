@@ -1,0 +1,127 @@
+{
+  "version": "1.0.0",
+  "description": "Blue carbon ecosystem carbon density factors (IPCC Tier 1 default values). Units: tC/ha for biomass, tC/ha for soil (depth-specific). DEFAULT FACTORS ARE FOR SCREENING ONLY — project-level requires field sampling.",
+  "ecosystems": {
+    "mangrove": {
+      "name": "红树林",
+      "name_en": "Mangrove",
+      "description": "Tropical/subtidal forested wetlands in intertidal zones",
+      "above_ground_biomass_tC_ha": {
+        "value": 75.0,
+        "uncertainty_pct": 30.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "below_ground_biomass_tC_ha": {
+        "value": 45.0,
+        "uncertainty_pct": 35.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "soil_carbon_tC_ha_0_30cm": {
+        "value": 150.0,
+        "uncertainty_pct": 25.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "soil_carbon_tC_ha_0_100cm": {
+        "value": 280.0,
+        "uncertainty_pct": 25.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "soil_carbon_tC_ha_0_200cm": {
+        "value": 420.0,
+        "uncertainty_pct": 30.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "annual_accumulation_rate_tC_ha_yr": {
+        "value": 6.5,
+        "uncertainty_pct": 40.0,
+        "source": "Alongi 2014"
+      }
+    },
+    "salt_marsh": {
+      "name": "盐沼",
+      "name_en": "Salt Marsh",
+      "description": "Coastal herbaceous wetlands in intertidal zones",
+      "above_ground_biomass_tC_ha": {
+        "value": 6.0,
+        "uncertainty_pct": 25.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "below_ground_biomass_tC_ha": {
+        "value": 35.0,
+        "uncertainty_pct": 30.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "soil_carbon_tC_ha_0_30cm": {
+        "value": 120.0,
+        "uncertainty_pct": 20.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "soil_carbon_tC_ha_0_100cm": {
+        "value": 230.0,
+        "uncertainty_pct": 20.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "soil_carbon_tC_ha_0_200cm": {
+        "value": 350.0,
+        "uncertainty_pct": 25.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "annual_accumulation_rate_tC_ha_yr": {
+        "value": 2.5,
+        "uncertainty_pct": 35.0,
+        "source": "Ouyang et al. 2017"
+      }
+    },
+    "seagrass": {
+      "name": "海草床",
+      "name_en": "Seagrass Meadow",
+      "description": "Submerged aquatic vegetation in shallow coastal waters",
+      "above_ground_biomass_tC_ha": {
+        "value": 1.5,
+        "uncertainty_pct": 40.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "below_ground_biomass_tC_ha": {
+        "value": 2.0,
+        "uncertainty_pct": 40.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "soil_carbon_tC_ha_0_30cm": {
+        "value": 90.0,
+        "uncertainty_pct": 30.0,
+        "source": "IPCC 2013 Wetlands Supplement"
+      },
+      "soil_carbon_tC_ha_0_100cm": {
+        "value": 180.0,
+        "uncertainty_pct": 30.0,
+        "source": "Fourqurean et al. 2012"
+      },
+      "soil_carbon_tC_ha_0_200cm": {
+        "value": 300.0,
+        "uncertainty_pct": 35.0,
+        "source": "Fourqurean et al. 2012"
+      },
+      "annual_accumulation_rate_tC_ha_yr": {
+        "value": 1.2,
+        "uncertainty_pct": 45.0,
+        "source": "Duarte et al. 2013"
+      }
+    }
+  },
+  "soil_depths": {
+    "0_30cm": {"min_cm": 0, "max_cm": 30, "label": "0-30cm"},
+    "0_100cm": {"min_cm": 0, "max_cm": 100, "label": "0-100cm"},
+    "0_200cm": {"min_cm": 0, "max_cm": 200, "label": "0-200cm"}
+  },
+  "change_types": {
+    "loss": {"code": -1, "label": "退化/损失", "description": "Ecosystem area decrease or degradation"},
+    "stable": {"code": 0, "label": "稳定", "description": "No significant change"},
+    "gain": {"code": 1, "label": "恢复/增长", "description": "Ecosystem area increase or restoration"}
+  },
+  "thresholds": {
+    "min_mapping_unit_ha": 0.5,
+    "min_change_detection_years": 1,
+    "max_uncertainty_pct": 80.0,
+    "default_confidence_level": 0.95
+  }
+}

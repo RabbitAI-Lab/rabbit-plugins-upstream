@@ -1,0 +1,13 @@
+name: geoskill-crs-transformation
+display_name: 坐标系转换
+description: |
+  基于 pyproj 的 EPSG 坐标参考系转换，内置 WGS84 / GCJ02 / BD09 互转，支持点集与矢量要素。EPSG coordinate reference system transformation via pyproj with built-in WGS84 / GCJ02 / BD09 conversions for point sets and vector features.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-crs-transformation.py
+runtime: python>=3.9
+tags:
+  - gis
+  - remote-sensing
+  - tooling
+  - vector

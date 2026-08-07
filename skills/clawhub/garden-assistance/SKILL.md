@@ -1,7 +1,7 @@
 ---
 name: garden-assistance
-description: Manage a climate-generalizable raised-bed garden assistance skill: planted crops, Open-Meteo weekly forecasts, sowing recommendations, watering-week plans, reminders, harvest windows, and garden memory files.
-version: 1.0.1
+description: Manage a climate-generalizable raised-bed garden with planted crops, Open-Meteo weekly forecasts, sowing recommendations, watering-week plans, reminders, harvest windows, and garden memory files.
+version: 1.0.2
 ---
 
 # Garden Assistance

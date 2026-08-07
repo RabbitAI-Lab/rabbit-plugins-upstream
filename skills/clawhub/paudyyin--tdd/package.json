@@ -1,0 +1,12 @@
+{
+  "name": "tdd",
+  "version": "2.1.0",
+  "description": "测试驱动开发。Red-Green-Refactor循环，垂直切片式tracer bullet方法。",
+  "author": "yindb2 (adapted from community skill)",
+  "category": "coding",
+  "triggers": ["TDD", "测试驱动", "red-green-refactor", "测试优先", "单元测试", "集成测试", "写测试", "覆盖率"],
+  "dependencies": {
+    "coding-framework": ">=10.0.0",
+    "iterative-loop": ">=1.0.0"
+  }
+}

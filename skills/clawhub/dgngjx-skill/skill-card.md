@@ -1,48 +1,58 @@
-## Description: <br>
-A multifunction utility toolbox that helps agents provide image, PDF, video, data conversion, text, developer, education, everyday utility, and system tools, including v3.6 additions for file hashing, UUIDs, timestamps, IP tools, expanded unit conversion, and MD5/SHA/base conversion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dgngjx Skill is a multi-purpose utility toolbox for agents, covering image processing, PDF conversion, data conversion, text tools, developer tools, video tools, education, lifestyle utilities, practical utilities, and system tools.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-External users, employees, and developers use this skill as a general-purpose toolbox for calculations, conversions, local file utilities, HTTP checks, media/PDF/image workflows, and system-resource inspection from an agent session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is a broad local toolbox that can read and write user-selected files, inspect local system resources, and rename files after preview. <br>
-Mitigation: Use it only in directories you intend to modify, review paths and previews before confirming operations, and keep backups for important files. <br>
-Risk: The skill can make outbound requests to user-supplied and third-party URLs. <br>
-Mitigation: Use trusted URLs, avoid sending sensitive data, and treat responses from third-party services as untrusted input. <br>
-Risk: The security evidence says file-safety and network-safety promises are weaker than the included examples consistently enforce. <br>
-Mitigation: Do not rely solely on the documented filters; review proposed file and network actions before execution, especially around protected or sensitive file types. <br>
-Risk: Some features require optional dependencies or external tools such as Pillow, PyPDF2, rembg, jieba, qrcode, or FFmpeg. <br>
-Mitigation: Confirm package names and install commands before running them, prefer isolated environments, and install only the dependencies needed for the requested task. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent for common utility work such as conversions, text analysis, file-oriented image/PDF/video tasks, HTTP checks, system checks, history lookup, and configuration guidance.
 
-## Reference(s): <br>
-- [Dgngjx Skill on ClawHub](https://clawhub.ai/fyniujin/skills/dgngjx-skill) <br>
-- [Online Mortgage Calculator](https://www.zhujisuanqi.com/) <br>
-- [Tax Calculator](https://www.taxcalculator.com) <br>
-- [Base64 Online](https://www.base64encode.org/) <br>
-- [Photopea](https://www.photopea.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline code blocks and command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose optional dependency installation commands and file operations that require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can retain user activity, including input and output summaries, in a hidden local history file under ~/.workbuddy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or disable history behavior before using confidential prompts, file paths, API endpoints, or work data, and clear ~/.workbuddy/dgngjx_history.json when needed.
+
+Risk: Network-capable tools can contact third-party services or user-supplied URLs.
+
+Mitigation: Review URLs before execution and avoid sending secrets, private endpoints, or sensitive work data through these tools.
+
+Risk: The documentation gives an incorrect FAQ path for the history file.
+
+Mitigation: Use the scanner-identified actual history path, ~/.workbuddy/dgngjx_history.json, when auditing or clearing stored history.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/dgngjx-skill)
+- [Source skill documentation](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, plain text, JSON snippets, and inline shell or Python commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Some workflows may create or modify local files when the user chooses file-processing tools.]
+
+## Skill Version(s):
+
+3.7.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -62,6 +62,7 @@ The traps that actually bite, in the order people hit them:
 |---|---|---|
 | `AttributeError: ISOCELES_TRIANGLE` | The enum is spelled `MSO_SHAPE.ISOSCELES_TRIANGLE` (double S) | Fix the spelling; when unsure of any enum name: `python3 -c "from pptx.enum.shapes import MSO_SHAPE; print([n for n in dir(MSO_SHAPE) if 'TRI' in n])"` |
 | `FileNotFoundError` on an asset (hero.png, icon, plate) | Build run from the wrong directory — relative paths resolve against the CWD | Run from the deck folder, or better: build paths from `ROOT = Path(__file__).parent` like the templates do |
+| `ValueError: text(): non-positive box …` | A box's size was DERIVED from arithmetic that came out ≤ 0 — classically `h = card_h - 1.42` where `card_h` is 1.30. python-pptx used to accept it silently, the run then overflowed a box with no interior, and every geometry check stayed green because there was nothing to overlap | The traceback names the slide function, which is where the bad arithmetic is. Reserve the fixed elements FIRST, then derive this box from what is left (`vstack(…, bottom=)` / `rows()` / `content_band()`) rather than subtracting a hand-picked constant |
 | `ValueError: hub_spoke(): radius … too small` (and similar from deckkit helpers) | The helper pre-checked your geometry and refused to draw an overlapping diagram | The message states the minimum that fits — pass that radius/size, or drop the element count |
 | Colors behave oddly / `AttributeError` on a color | Passing a hex string where an `RGBColor` is needed (or vice versa) | deckkit component APIs take `RGBColor(0xRR, 0xGG, 0xBB)`; only documented string params take hex |
 | `TypeError` on `text(...)` rows | The rows argument is a list of paragraphs, each a list of run tuples: `[[(txt, size, color, bold, italic, font)]]` | Match that nesting exactly — one missing bracket level is the classic cause |
@@ -76,16 +77,19 @@ it refuses to save while criticals exist. Codes, in plain words:
 | `OFF_CANVAS` ✗ | A shape/text sticks out past a canvas edge (message names which edge) | Move or shrink it — the canvas is `0..W × 0..H` of **your** deck (the skill's templates build `10 × 5.625` in by default; `13.333 × 7.5` only when the deck was authored at that size — check your `blank_deck(W, H)` call); full-bleed images use `picture(..., fit="cover")` at exactly canvas size |
 | `OVERFLOW` ✗ | More text than its visible (filled/outlined) box can hold — it will clip or spill in the render | The message shows text-height vs box-height: shorten the text, shrink the font 1–2 pt, or grow the box; `fit_text_size()` computes the largest size that fits |
 | `TEXT_OVERLAP` ✗ | Two text blocks intersect — one will sit on the other | Move one, or restructure (merge into one block / put the label inside the panel it annotates) |
+| `STRETCHED THIN` • | A wide blank vertical channel runs through the slide's interior. Two calibration fixes since: the content test is now RELATIVE to the slide's own dynamic range (a fixed colour distance is a light-deck number — on a near-black canvas panels differ from the canvas by ~42 and read as blank, so the check found "voids" between glyph strokes and fired on 7 of 20 slides of a professional dark briefing, one of them filled edge-to-edge with a chart); and a channel with real ink on BOTH flanks is a GUTTER, not emptiness — a two-column comparison or a divider with a numeral left and a graphic right is composition | If it still fires, the void has content on one side only. Enrich, merge with a neighbour, or declare the quiet register with `design_intent(envelope=…)` |
+| `PLATE NOT VISIBLE` • | An interior page's full-bleed background has been scrimmed into a flat field — its exposed area varies by <0.6 grey levels. It satisfies "a plate on every page" in code while reading as no plate at all, and no contrast check can see it (a whiter background only makes dark text score *better*). Cover / dividers / closer are exempt — their imagery is loud by design | Lift the scrim and recover text contrast with the frosted blocks instead (`generated-template.md`'s visibility floor). Measured on real renders: 1.58 as generated, 1.16 under a light wash, 0.21 scrimmed to near-white |
+| `FONT NOT INSTALLED` • | A face the deck DECLARES (`FONT`/`MONO`/`EAFONT`/…) is not on this machine, so measurement falls back to a metric-incompatible substitute — and every wrap/fit/overflow check in the library is computed from that measurement, so all of them carry ~1 line of slack. The shipped defaults `Calibri`/`Consolas` are Office faces absent from macOS | `deckkit.use_platform_fonts()` near the top of the build (picks installed equivalents for this OS), or set the faces yourself. `deckkit.font_health()` lists what is missing |
 | `ESCAPES_CARD` • | A child element pokes past the edge of the card/panel it visually belongs to | Shrink the child or its step spacing until it sits ≥0.1 in inside the card |
 | `OFFCENTER` • | A single text line sits noticeably high or low inside its tall box — looks like a spacing bug | Cheapest: `anchor=MSO_ANCHOR.MIDDLE` on the textbox at the card's exact x/y/w/h; else shrink the box to the text or move its y; harmless on deliberately top-anchored chips |
 | `SLIVER_GAP` • | Two blocks almost touch (a hair-thin gap) — reads as a rendering accident | Open the gap to ≥ ~0.13 in — derive the pitch from `rows()`/`vstack()`, never `block_h + ε` (touching edges are their own flaw — "one merged block"; deliberately-jointed zones are a named exception, not the default fix) |
 | `FOOTER` • | Content dips into the reserved footer band at the bottom | Keep content above the band (the card/panel variant of the message gives the exact y-line; the text variant quotes the colliding block — move it up) |
-| `OLDSTYLE_FIGURES` ✗ | A big number is set in a face whose digits sit at different heights (Georgia, Hoefler Text, Constantia… — measured from the installed font, not a fixed list) — 6 and 8 ride high, 3/4/5/7/9 drop below the line, so the number looks like it bobs up and down | Keep the serif for WORDS and set any run containing digits in a lining-figure face — Helvetica Neue, Arial or Cambria. Only fires at 20pt and above; old-style figures in body prose are correct and are not flagged. See `references/font-guidance.md` |
+| `OLDSTYLE_FIGURES` • | A big number is set in a face whose digits sit at different heights (Georgia, Hoefler Text, Constantia… — measured from the installed font, not a fixed list) — 6 and 8 ride high, 3/4/5/7/9 drop below the line, so the number looks like it bobs up and down | Keep the serif for WORDS and set any run containing digits in a lining-figure face — Helvetica Neue, Arial or Cambria. Only fires at 20pt and above; old-style figures in body prose are correct and are not flagged. See `references/font-guidance.md` |
 | `CJK_NO_EA` ✗ | CJK text with no `<a:ea>` font — PowerPoint/LibreOffice would pick an uncontrolled fallback and 避头尾 never engages | Set `deckkit.EAFONT = "Hiragino Sans GB"` (macOS; Microsoft YaHei on Windows, Noto Sans CJK SC on Linux) before building — `references/multilingual.md` has the pairing table |
 | `CONNECTOR_IN_BOX` ✗ | An arrow/line endpoint sits in a block's interior and is drawn ABOVE the block, so the stroke crosses it (classic: hub-and-spoke connectors anchored at the hub's centre, cutting through its own label) | Dock both ends on block EDGES — `connect_boxes(a, b)` / `hub_spokes(hub, spokes)` from the block rects, or `edge_point(rect, toward)` for one end. Or add the connector BEFORE the node so the node paints over the seam. Never pass a block's centre as an endpoint on a line that's drawn on top |
 | `[components] N cluster(s) look like a form the library already implements` (printed by `component_audit.py`) | The build script composed a common form — a bar row, a 100% band, a tile row, a marker row — from raw `box`/`text` while a component for it exists and was never called. The hand-roll re-inherits the geometry bugs the component fixes. | **Not an error, and not a blocker.** Either build the component, or record the one clause that makes the hand-roll deliberate (a bespoke composition IS the signature move). The tool suppresses a cluster whenever a component that could have drawn it was called, so a flag means the library genuinely went unused. |
 | `INHERITED_EFFECT` (build-time WARN) | A shape still carries the theme `<p:style>` — it was created with raw python-pptx, not deckkit, so LibreOffice draws a soft drop shadow under it (the '2010 SmartArt' look deckkit strips everywhere else). | Create the shape through a deckkit helper, or pass it through `deckkit._flat(shape)` after creating it. |
-| `RULE_THROUGH_TEXT` | A thin decorative rule (divider / hairline / accent bar) is drawn **through** a text block's ink instead of between blocks. Always caused by a hand-picked `y`: the rule was placed under text of a given length, then the text was edited and grew into it. | Derive the rule's position from the block it follows — capture the loop's end (`stack_end = y + pad`) and draw the rule there. Moving the coordinate by hand fixes today's wording and breaks again on the next edit. |
+| `RULE_THROUGH_TEXT` ✗ | A thin decorative rule (divider / hairline / accent bar) is drawn **through** a text block's ink instead of between blocks. Always caused by a hand-picked `y`: the rule was placed under text of a given length, then the text was edited and grew into it. | Derive the rule's position from the block it follows — capture the loop's end (`stack_end = y + pad`) and draw the rule there. Moving the coordinate by hand fixes today's wording and breaks again on the next edit. |
 
 A build that ends `0 critical, N warning(s)` **saves fine** — warnings are judgment calls; the two
 you most often accept deliberately are `OFFCENTER` on chip labels and `ESCAPES_CARD` on
@@ -106,6 +110,7 @@ already know which — neither combines with `--deliverables` or with each other
 
 | Symptom | Cause | Fix |
 |---|---|---|
+| `bash: command not found` / `render_deck.sh` won't run (native Windows PowerShell or cmd) | There is no bash. The `.sh` files are thin shims that forward to the `.py` entry points; everything else in the toolchain is already cross-platform Python | Call the Python directly: `python scripts\render_deck.py <deck.pptx>` and `python scripts\check_env.py`. macOS / Linux / Git Bash / WSL keep using the `.sh` wrappers unchanged |
 | `no such file: … .pptx` | The path didn't resolve — **most often a previous shell `cd`-ed somewhere else** and a relative path now points nowhere | Re-run from the deck folder, or pass the absolute path |
 | `LibreOffice produced no PDF from … .pptx` (render_deck.py prints the soffice command, exit code, and stderr) | soffice failed — the deck is open in another app, or a **sandboxed runtime blocked soffice** (see SKILL.md's Codex sandbox note) | Read the captured stderr it printed; close any open copy of the file; in a sandbox, rerun just the render command with elevated/unsandboxed execution. Last resort: `pkill -f soffice`, wait 2 s, retry (each run already uses its own temp profile, so this is rarely the cause) |
 | Renders look blurry when zooming into crops | Rasterization is a fixed 2× (~144 DPI, `fitz.Matrix(2, 2)` in `render_deck.py`) — plenty for the lint/critic loop | Zoom the pptx/PDF itself for fine inspection; the deck is unaffected — the PNG is only a preview. (If you must, raise the Matrix zoom in `render_deck.py`) |
@@ -131,12 +136,105 @@ These fail the exit code and must reach **0** before hand-off. Plain-word dictio
 | `TEXT ON IMAGE` | Render-pixel estimate: text sits on a photo/gradient with est. contrast < 1.5:1 — unreadable (the class solid-fill checks can't see; needs renders) | Add an opaque panel or scrim behind the text, or move it off the busy region (pixel sampling already accounts for an existing scrim) |
 
 Render-time **advisory `[warn]`s** (never fail the exit code): `LOW CONTRAST` / `BODY CONTRAST`
-(1.8–4.5:1 bands), `MISSING ALT-TEXT`, `MATH-FONT TOFU RISK`, `GROUPED-ONLY` content — plus the
+(1.8–4.5:1 bands), `MISSING ALT-TEXT`, `MATH-FONT TOFU RISK`, `GROUPED-ONLY` content,
+**`UNSOURCED NUMBER`** — plus the
 **accessibility set**: `TEXT-ON-IMAGE CONTRAST` (the 1.5–3.0 band of the hard check above),
 `NO SLIDE TITLE` / `DUPLICATE SLIDE TITLES` (screen readers navigate by unique titles; an
 off-canvas-invisible title is the sanctioned trick for statement slides), `READING ORDER` (title
 should be first in z-order — add it first in the build code), and `NON-TEXT CONTRAST` (icons/lines
 < 3:1 vs backing, WCAG 1.4.11). Resolve or consciously accept per §7.
+
+**Paint-order and deck-level codes `lint_deck.py` also prints, which this page used to omit.**
+SKILL.md routes ANY finding here and tells you to report it in this page's plain language, so a code
+the linter emits and this page never names sends you back to reading source. The first three are
+PIXEL-BACKED — they disable themselves with a `[skipped] … NOT checked:` line when no renders sit
+beside the deck, and `0 findings` with that line present is a different sentence from `0 findings`
+without it.
+
+| You see | What it means | First fix |
+|---|---|---|
+| `TEXT NOT VISIBLE` ✗ | Asked straight from the pixels: does this text line render ANY glyphs at all? Deliberately cause-agnostic, so it catches a picture, a group, a gradient, or a same-colour-as-its-ground block covering the text without needing to know which it was | Find what is painted over that line and move it, restyle it, or reorder it. Paint order is the usual cause: a shape added AFTER a text box draws on top of it while every geometry check stays green |
+| `OCCLUSION` ✗ | A text block is N% covered by the **union** of everything painted over it — union, because the old per-shape threshold was slipped by a thing built from many small parts (a 150-tile field erasing a caption, a dashed rule of 40 boxes struck through a footnote) | Same as above. Do not chase the individual shape; look at what the region accumulates |
+| `CAPTION NOT ALIGNED` ✗ | A caption under a multi-panel figure is off its panel's centre. The panels are ONE picture at unequal widths, so captions placed on the text grid (`ML + i*CW/4`) cannot line up by construction | Export each panel's span from the plotting script and place captions from the picture's PLACED rect (`dk.picture` returns the shape; `pic.left/914400` is the real x after `fit="contain"` letterboxing). PRE-FLIGHT 9 covers every OTHER label — this lint backstops only the captions-under-panels case |
+| `TITLE-RULE MONOCULTURE` • | The same thin rule sits under the title at the same height on >60% of content slides — a `head()`-style helper stamped one treatment deck-wide | Rotate 2–3 title treatments (accent rule · eyebrow in a filled tab · left vertical bar · section ordinal · motif mark). The visual SYSTEM stays constant; you rotate the chrome, not the identity |
+| `ONE-OFF CANVAS FLIP` • | Exactly ONE interior slide's canvas value departs sharply from the rest — reads as a mistake rather than a rhythm event | Make the flip RECUR as a divider family or a bookend, or return that slide to the deck's canvas. On the generated-template branch the plate stays on every content page and rhythm comes from imagery strength instead |
+| `FLAT RHYTHM` • | With renders present: no light/dark or colour-temperature event anywhere across the deck — the rhythm map's Background-mode column is single-note | Give the deck at least one value event (a dark divider, a full-bleed hero, a warm-accent conflict page). Needs `./render` PNGs beside the deck or `--renders <dir>`; without them the check silently does not run |
+| `FLAT TYPE` • | No run anywhere reaches 2× the body size — the deck has no typographic hero | Let one thing win per slide (the squint test). This is the type-scale drama rule failing measurably, not a style opinion |
+
+**`UNSOURCED NUMBER` — how to read it.** It is *deck-level*: it fires only when a magnitude
+(`$400B`, `81%`, `+46pt`, `2.3x`, `95 亿`) appears on a slide with no source stated **and no source
+is stated anywhere in the deck for that same figure**. So a recap or divider restating a number
+sourced on its own page stays clean — that is normal, good practice, and the reason the check is not
+per-slide. Bare integers are excluded on purpose (page chrome `13 / 20`, section indices, years);
+counting them made a first cut fire on 4 of 20 slides of a professionally-made deck.
+- **Fix:** `deckkit.source_note(slide, "Crunchbase Q1 2026", as_of="30 July 2026")` — the per-slide
+  provenance line; or cite it in the **speaker notes**, which count (a presented deck legitimately
+  keeps the slide clean and the citation in the notes).
+- **If the attribution is already there in prose** ("这是 README 举的例子"), it is a false alarm —
+  the source-phrase vocabulary is deliberately generous but cannot be exhaustive. Accept and move on.
+- **If you cannot name where the figure came from, that is not a lint problem.** It is the
+  never-invent floor: source it, go qualitative, or ask. This is the one advisory whose finding may
+  mean the *content* is wrong rather than the formatting.
+
+**`bar of means` (pre-flight, advisory — needs `--build`).** The build script computes a mean or
+median and feeds that variable to a column/bar `native_chart`. A bar's length asserts "this value
+fills the range from zero", which is a claim about a COUNT; over sample measurements it hides n, the
+shape of the spread and any outlier, and invites reading two bar heights as if the samples did not
+overlap. **Fix:** `designed_charts.distribution(out, groups, ...)` — it picks a box plot at n≥5 and
+mean ± error at n=3–4 for you, overlays every observation, and prints which interval it drew.
+**Ignore it only if these are POPULATION means rather than a sample** — that is a fair bar, and
+nothing in the file separates the two, which is why this is advisory and not a failure. It stays
+silent on a bar of counts and on a LINE of averages over time; both are legitimate.
+
+**`LOPSIDED` on a deliberately asymmetric slide.** An editorial composition weighted to one side,
+with the other half held as air, is a design choice — and "rebalance" is the one piece of advice that
+would wreck it. Declare it: `deckkit.design_intent(slide, weight="left", reason="…")` (also
+`"right"` / `"asymmetric"`); `envelope=` silences it too. Undeclared lopsidedness still flags, so the
+declaration is the record of a decision, not a mute button.
+
+**`[skipped] slide N: rotated/flipped group`.** That slide's shapes were **NOT geometry-checked** —
+overlap, overflow, occlusion, density and type-scale all skip it. A rotated group's children are no
+longer axis-aligned in slide space, and every check here reasons about axis-aligned boxes, so the
+lint refuses to guess rather than invent overlaps. Ungroup it (or drop the rotation) to have it
+examined. Note the related rule: two shapes **inside the same group** never raise `OVERLAP` — a group
+is an authored composition (a badge on a card, an icon on a panel), and that is how layering is built.
+A child colliding with anything OUTSIDE its group is still caught.
+
+**`SCALE DRIFT` (deck-level, advisory).** The `type_scale` in `.deck-gates.json` and the type the
+deck actually sets disagree. `render_deck --gate-check` requires that field; nothing used to compare
+it to the artifact, so a deck could declare `{34, 24, 14}`, set 31/22/17 throughout, and pass both
+gates clean. Two narrow checks only: **body** must be the size carrying the most text (a declared
+14pt against a deck set at 17pt is the declaration being fiction), and **display/title** must at
+least appear somewhere. A long tail of other sizes is NOT flagged — the skill's own five-slide
+example uses twelve sizes, and any "every size must be a declared tier" rule would fire on correct
+work. A hero number, a page number, a caption are all untouched.
+- **Fix:** correct whichever is wrong — usually the declaration, written early and never revisited.
+- Pass `--gates <path>` to point at a gates file elsewhere; with no file, the check is silent.
+- **`SCALE DRIFT NOT CHECKED`** means most of the deck's text INHERITS its size from the
+  layout/theme rather than setting it on the run, so there is too little explicitly-sized text
+  to say which size is the body. It is reported rather than passed over in silence, because a
+  silent skip is indistinguishable from a clean result. Set sizes on the runs (deckkit's
+  `text()` always does) or read the scale by eye.
+
+**`design_plan` is missing `signature_proof` on a deliberately plain deck.** A working session —
+a lab meeting, a status update — is told by `design-by-purpose.md` to "optimise for fast technical
+read, not polish", so it takes no aesthetic risk and has nothing to prove with a rendered PNG. The
+escape is the one `agents/slide-design.md` already documents, now honoured by the gate: set
+`"boldness": "conservative"` and write the signature move as **`deliberately restrained: <why>`**.
+`signature_proof` then drops; `signature_move`, `carried_by`, `palette`, `type_scale`,
+`icon_family` and `form_ledger` all stay required, and the phrase buys nothing above the
+conservative dial. Do NOT reach for `{"design_plan": {"waived": …}}` for this — that switches off
+palette contrast and the type scale as well.
+
+**`TEXT WALL` / `CROWDED` on backup or appendix slides, or `UNDERFILLED` on the closing slide of a
+deck that has them.** A thesis defense is told to "plan for backup/appendix slides for Q&A", and
+that material is dense on purpose — judged as presented content it draws a finding on every backup
+slide, and the trailing run also steals the closer's exemption by making a backup slide the last
+one. Mark the start: `deckkit.design_intent(slide, role="appendix", reason="…")`. From there the
+run is read at *briefing* density and the slide before it is treated as the closer. The bar RISES,
+it does not vanish — a genuinely crammed appendix slide is still caught, which is what
+design-by-purpose means by "dense is correct on these surfaces … but typed and organised, never
+freeform cramming".
 
 **When a finding seems wrong:** each check has documented escapes (shadow pairs, chip labels,
 containment). Don't fight the linter in code — adjust the deck (rename, nudge 0.05 in) and move on;

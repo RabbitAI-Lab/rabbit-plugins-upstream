@@ -1,5 +1,5 @@
 ## Description: <br>
-Autonomously build and refresh on demand a metadata-only local Markdown or Obsidian knowledge index with an offline HTML dashboard. <br>
+AI Knowledge Workbench Lite builds and refreshes a metadata-only local knowledge index and offline HTML dashboard for a user-authorized Markdown folder or Obsidian vault. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,42 +7,40 @@ This skill is ready for commercial/non-commercial use. <br>
 [alexfengrui](https://clawhub.ai/user/alexfengrui) <br>
 
 ### License/Terms of Use: <br>
-MIT No Attribution <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent users use this skill to build a local, metadata-only knowledge workbench from an authorized Markdown folder or Obsidian vault, including derived Markdown indexes, an offline HTML dashboard, status checks, on-demand refresh, and safe uninstall. <br>
+Developers, knowledge workers, and agent users use this skill to turn one authorized local Markdown folder or Obsidian vault into a metadata-only derived knowledge index and offline dashboard, then refresh, inspect, or safely uninstall the managed state on demand. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill reads authorized Markdown files to extract metadata and structure. <br>
-Mitigation: Install it only for directories the user is willing to have scanned for metadata, and keep note bodies out of model transport and dashboard output. <br>
-Risk: The skill writes derived dashboard and index files inside the selected workspace. <br>
-Mitigation: Limit operation to a user-authorized workspace and distinguish derived folders from original source notes. <br>
-Risk: The build performs a temporary loopback verification step. <br>
-Mitigation: Use it as a local build verification step and stop it after verification rather than treating it as a persistent service. <br>
+Risk: Generated local indexes, dashboard files, and diagnostics can expose metadata such as relative paths, tags, headings, links, hashes, and environment details. <br>
+Mitigation: Use the skill only with workspaces or vaults suitable for local indexing, and review generated files or diagnostic output before sharing them. <br>
+Risk: The runtime reads authorized Markdown to extract metadata, so using it on an unintended directory could expose local structure to generated outputs. <br>
+Mitigation: Run it only against one user-authorized workspace or source directory, and pause for confirmation before accessing new directories, deleting outputs, or performing external data transfer. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/alexfengrui/skills/manage-ai-knowledge-workbench-lite) <br>
-- [Runtime contract](references/RUNTIME_CONTRACT.md) <br>
-- [Privacy boundary](references/PRIVACY.md) <br>
-- [Autonomy gates](references/AUTONOMY_GATES.md) <br>
+- [ClawHub listing](https://clawhub.ai/alexfengrui/skills/manage-ai-knowledge-workbench-lite) <br>
+- [Lite runtime contract](references/RUNTIME_CONTRACT.md) <br>
+- [Lite privacy boundary](references/PRIVACY.md) <br>
+- [Lite autonomy and gates](references/AUTONOMY_GATES.md) <br>
 - [OpenClaw Getting Started](https://docs.openclaw.ai/start/getting-started) <br>
 - [Python downloads](https://www.python.org/downloads/) <br>
 - [Obsidian downloads](https://obsidian.md/download) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Markdown, Configuration, Files] <br>
-**Output Format:** [Markdown guidance plus JSON command results and generated local Markdown/HTML files] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files] <br>
+**Output Format:** [Markdown or text guidance with structured JSON command status; generated workspace files include derived Markdown indexes and an offline HTML dashboard.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces derived outputs inside the selected workspace and reports structured status codes.] <br>
+**Other Properties Related to Output:** [Metadata-only local processing; writes reserved derived directories only inside the selected workspace.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release metadata) <br>
+1.0.3 (source: server release metadata, SKILL.md frontmatter, README.md, runtime manifest) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

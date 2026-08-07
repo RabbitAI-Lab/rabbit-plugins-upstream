@@ -1,44 +1,60 @@
-## Description: <br>
-Identifies negative emotions such as crying, anger, fear, and distress in children's surveillance footage and produces alerts, soothing reminders, and caregiver-facing reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes child monitoring images, video, and optional audio to classify visible emotional state, intensity, duration, negative-emotion alerts, and soothing guidance for parent, caregiver, or classroom review.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External caregivers, daycare operators, and developers use this skill to analyze child-focused images or video for negative emotion signals and to retrieve cloud-hosted historical analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Children's images, videos, remote media URLs, report history requests, and account-linked identifiers may be sent to configured Life Emergence cloud services. <br>
-Mitigation: Install and operate only after confirming consent, legal basis, retention and deletion terms, and who can access historical reports. <br>
-Risk: The skill silently creates or reuses identity for report association. <br>
-Mitigation: Review identity handling before deployment and restrict report-history access to authorized operators. <br>
-Risk: The authoritative security verdict is suspicious because consent and retention controls are unclear. <br>
-Mitigation: Treat deployment as requiring security and privacy review before use with real children's media. <br>
+## Use Case:
 
+External users, caregivers, educators, and developers use this skill to analyze child-focused video or audio/video inputs for emotion categories such as happy, calm, sad, angry, fear, cry, and surprise, and to retrieve structured historical reports. Outputs should support awareness and communication, not clinical diagnosis.
 
-## Reference(s): <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-emotion-recognition-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-backed text output from Python CLI commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links and optional local output files when the CLI --output parameter is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.15 (source: server release evidence) <br>
+Risk: Child video, optional audio, report queries, identity metadata, and generated report links may be sent to configured cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use only with guardian or institutional consent, confirm authorization for the media being analyzed, and review where reports and tokens are stored before deployment.
+
+Risk: The skill silently creates or reuses identity metadata for analysis and historical report lookup.
+
+Mitigation: Review the configured identity and token handling before installation, and restrict use to environments where account association and report retention are acceptable.
+
+Risk: Emotion classifications and soothing suggestions can be mistaken for clinical or psychological advice.
+
+Mitigation: Present outputs as communication support only; do not use them as diagnosis, and seek professional help for persistent or concerning negative emotions.
+
+## Reference(s):
+
+- [Child Emotion Recognition API Documentation](references/api_doc.md)
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-child-emotion-recognition-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON structured analysis report with emotion fields, alerts, soothing hints, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save the generated report to a user-specified output file.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release metadata; artifact frontmatter reports 1.0.7)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

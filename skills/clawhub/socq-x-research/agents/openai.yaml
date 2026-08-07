@@ -1,0 +1,11 @@
+interface:
+  display_name: "SocQ X Research"
+  short_description: "Research public X data"
+  default_prompt: "Use $socq-x-research to research this topic on X."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "socq"
+      description: "Hosted SocQ X data tools"
+      transport: "streamable_http"
+      url: "https://api.socq.ai/mcp?platforms=x"

@@ -1,0 +1,59 @@
+{
+  "methods": {
+    "trapezoidal": {
+      "name": "梯形积分法",
+      "name_en": "Trapezoidal Integration",
+      "description": "Compute area at each level by pixel counting, then integrate area curve using trapezoidal rule to obtain storage curve. Suitable for regularly spaced elevation levels.",
+      "formula_area": "A(h) = count(DEM <= h) * pixel_area",
+      "formula_storage": "V(h_i) = V(h_{i-1}) + (A(h_i) + A(h_{i-1})) / 2 * (h_i - h_{i-1})",
+      "requirements": ["Sorted ascending elevation levels", "Consistent pixel area"],
+      "monotonicity": "Area curve is non-decreasing by construction. Storage curve is non-decreasing if levels are ascending.",
+      "references": [
+        "Sawunyama, T. (2009). Estimating storage in reservoirs using remote sensing. IAHS Publ. 333.",
+        "Zhang, S. et al. (2014). Capability evaluation of retrieving reservoir parameters."
+      ]
+    },
+    "prism": {
+      "name": "棱柱法",
+      "name_en": "Prism Method",
+      "description": "Compute storage directly as sum of (level - elevation) * pixel_area for each inundated pixel. More accurate for irregular levels but computationally heavier.",
+      "formula_area": "A(h) = count(DEM <= h) * pixel_area",
+      "formula_storage": "V(h) = sum(max(h - DEM_i, 0)) * pixel_area, for all valid pixels i",
+      "requirements": ["DEM with valid elevation data"],
+      "monotonicity": "Monotonicity is enforced post-hoc by taking cumulative maximum.",
+      "references": [
+        "McFeeters, S.K. (1996). The use of Normalized Difference Water Index. Remote Sensing."
+      ]
+    }
+  },
+  "vertical_datums": {
+    "common_datums": ["WGS84", "CGCS2000", "EGM96", "EGM2008", "Local"],
+    "warning": "Public DEMs (SRTM, Copernicus DEM) typically use ellipsoidal heights (WGS84/CGCS2000). Water gauge levels may use local datums. Datum mismatch introduces systematic bias in absolute storage."
+  },
+  "error_sources": {
+    "dem_vertical": {
+      "typical_rmse_m": {
+        "SRTM": 5.0,
+        "Copernicus DEM": 4.0,
+        "ASTER GDEM": 7.0,
+        "User survey": 0.5
+      },
+      "impact": "Directly affects storage volume. Propagates as: dV = A(h) * dh"
+    },
+    "water_level": {
+      "typical_rmse_m": 0.1,
+      "impact": "Affects both area and storage. Propagates as: dA = dA/dh * dh, dV = A * dh"
+    },
+    "water_boundary": {
+      "typical_error_px": 1.0,
+      "impact": "Affects area delineation. Mixed pixels at water edge introduce systematic bias."
+    }
+  },
+  "limitations": [
+    "Public DEMs represent post-impoundment topography and cannot capture original reservoir basin shape.",
+    "Sediment deposition alters topography over time; single DEM cannot represent multi-period bathymetry.",
+    "Water level and satellite image dates may not coincide exactly.",
+    "Mixed pixel effects at water boundaries cause area uncertainty.",
+    "Relative storage change is more reliable than absolute storage volume."
+  ]
+}

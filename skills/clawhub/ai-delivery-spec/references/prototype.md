@@ -1,7 +1,7 @@
 # 页面、原型与可测试性合同 / Page, Prototype And Testability Contract
 
 创建、反推、评审或修复交互原型时加载。原型是需求基线的可操作投影，不是独立的范围或业务权威。
-大型工程原型允许拆分本地 HTML/CSS/JavaScript，但所有依赖和锚点必须能从同一根目录枚举。
+用户指定单 HTML 时就用一个 HTML；大型工程原型可拆分本地 HTML/CSS/JavaScript，但所有依赖和锚点必须能从同一根目录枚举。存量小迭代默认把现有页面作为布局、密度、组件和视觉语言的权威，不因“改进设计”而擅自重画。
 
 ## 1. 输入合同 / Input Contract
 
@@ -124,6 +124,25 @@ SSE/WebSocket/倒计时/推送按需加载 `references/patterns/realtime-contrac
 数据范围、代表性数据量、关键流程和验收锚点。移除行为必须有已批 `CHG-*` 或明确缩减范围；
 视觉更干净但行为丢失仍然失败。
 
+用户要求“修改、升级、融合、替换”存量原型时，等价性是硬完成条件：未授权变化之外的
+view/action/handler/field/state/role path 和代表性数据量不得减少。只实现代表性字段或样本只能标为
+`demo_slice`，不能作为目标原型交付；用户未批准缩减时状态必须是 `BLOCKED`。至少记录修改前后计数、
+丢失集合、批准的移除引用和 `parity_status=pass|blocked`。
+
+集成类页面先在原型状态仓中声明：
+
+```text
+authority_source -> aggregator/transformer -> consumer
+read_direction=
+write_target=
+trigger=manual|scheduled|event
+failure_owner=
+correction_owner=
+queue=
+```
+
+正向上报、反向同步和纠错申请必须使用不同命令/队列；共用一个入口时也要分别呈现授权、进度和结果。
+
 出现重复函数、层叠覆盖、内联 handler 引号问题、运行时补动作 ID、实体动作路由到错误弹窗时，
 停止继续打补丁。保留交互台账和样本数据，以一个状态仓、每页一个 renderer、一个动作注册表重建。
 状态变化尽量只改需要的 class/attribute/content，避免重建 DOM 导致焦点、光标、滚动和引用丢失。
@@ -156,21 +175,31 @@ L3必须遍历所有声明页面的可见动作，而不是每角色只走一条
 
 用户无法从界面推断下一步时停止并记录阻断，测试过程中不要口头提示“设计意图”。
 
-## 9. 视觉与可访问性基线 / Visual And Accessibility Baseline
+## 9. 视觉锁与可访问性基线 / Visual Lock And Accessibility Baseline
 
-- 使用一致的间距、字体、颜色、组件和图标体系；
-- 保持信息层级和任务聚焦，不堆无业务意义的驾驶舱装饰；
-- 状态不能只靠颜色；
-- 按范围提供键盘/焦点、标签、对比度、错误关联和减少动效；
-- 声明响应式优先级：哪些重排、折叠、只读或迁移到其他表面；
-- 作为验收证据的打印/导出保留字段、分页、签署、版本和归档元数据。
+先判断视觉权威：
 
-视觉重设计前确认 feeling、reference、explicit taboo 三项用户方向，登记为 `DEC-AESTHETIC-*`；
-无法确认时创建 P1 `UNK-*` 且 `blocks_stage: baseline`，不能私自选择风格。多个方向最多先做一个
-屏幕或方向卡（style + feeling关键词 + reference + taboo），确认后再扩展全站。
+- 存量小迭代：现有 HTML、截图和已批准页面是默认视觉权威。继承页面骨架、信息密度、字号、颜色、间距、控件高度、圆角、表格、表单、弹窗和按钮用法；除非用户明确要求重设计，不询问美学方向，不换设计系统。
+- 同一项目多页面：先从权威页面提取一份紧凑视觉锁，随后所有页面复用；不得逐页重新发挥。
+- 绿地内部工具：用户未给视觉方向时，选择一个克制、可逆、以任务为中心的默认方案直接推进；不因缺少审美决策阻断原型。
+- 品牌化、外部客户展示或多个方向会显著改变交付时：才确认 feeling、reference、explicit taboo，必要时登记 `DEC-AESTHETIC-*`，先做一个代表屏再扩展。
 
-随后固定一个设计系统基线（如 Ant Design 5 tokens/components）；确有需要时只引入一个专门设计
-Skill，不能声称执行了未安装 Skill。桌面和窄屏分别截全页图并视觉复核。高保真不能补偿缺失交互。
+视觉锁至少固定：
+
+| 项 | 必须固定的内容 |
+|---|---|
+| tokens | 主/辅/状态色、背景、边框、阴影、圆角、间距阶梯、控件高度 |
+| typography | 字体、字号层级、字重、行高；主文本不得小于 11px |
+| shell | 导航、页头、内容宽度、栅格、固定/滚动区和响应式优先级 |
+| components | 主/次/幽灵/危险按钮、输入、选择、表格、标签、卡片、弹窗的唯一变体与使用边界 |
+| density | 列表行高、表单间距、留白和信息密度 |
+| taboos | 禁止的装饰、渐变、驾驶舱堆叠或与权威页面冲突的风格 |
+
+单 HTML 用一个 CSS token 区和一套组件类；多文件用同一 token/组件入口。新增页面只能复用视觉锁或通过明确变更更新它。视觉复核至少检查 token 漂移、同名组件变体、页面骨架漂移、字号/控件高度漂移和信息密度突变。
+
+同时满足：状态不能只靠颜色；保持信息层级和任务聚焦，不堆无业务意义的驾驶舱装饰；按范围提供键盘/焦点、标签、对比度、错误关联和减少动效；打印/导出保留字段、分页、签署、版本和归档元数据。桌面和适用窄屏分别截全页图复核。高保真不能补偿缺失交互。
+
+确有需要时只引入一个专门设计 Skill，不能声称执行未安装 Skill，也不能让两个工具生成竞争设计系统。
 
 ## 10. 锁定与验收 / Lock And Acceptance
 
@@ -184,8 +213,13 @@ region_count=
 action_count=
 state_count=
 role_paths=
+baseline_ref=
+parity_status=pass|blocked|not_applicable
+preserved_counts=
+approved_removals=
 browser_evidence_status=pending|passed|blocked
-aesthetic_decision_ref=DEC-AESTHETIC-*|UNK-*
+visual_authority=existing|greenfield_default|DEC-AESTHETIC-*
+design_lock_ref=inline|file|DEC-AESTHETIC-*
 gaps=
 evidence_location=
 ```
@@ -243,3 +277,28 @@ classification：confirmed、inferred、unknown、defect_candidate。核心未�
 已有 PRD 时，恢复观察使用 `INV-*`，并通过 `baseline_requirement_refs`、`mapping_status`、准确
 `target_refs` 映射。所有推断项进入有责任人的 `RBATCH-*`；未确认、否决或转未知前不得声明
 `baseline_ready`。反推能恢复交互证据，不能推断 API语义、指标口径、权限权威、合规或 AC 真相。
+
+## 存量资产处置 / Legacy Asset Disposition
+
+Stage 0 盘点恢复"有什么"，处置决定"怎么对待"。5.4.1 起，每个 view 类盘点条目建议用
+`disposition` 字段登记处置方式（见 `schemas/stage0-inventory.schema.json` 与
+`references/templates/stage0-inventory-template.yaml`），五选一：
+
+| 处置 | 定义 | 何时选择 |
+|---|---|---|
+| `adopt_page` | 整页直接采用，行为与视觉均不重做 | 页面已满足目标合同，仅需补锚点和状态 |
+| `inherit_layout` | 保留布局与信息架构，重做视觉层 | 结构合理但视觉不达标，已确认 `DEC-AESTHETIC-*` |
+| `rebuild_interaction` | 保留业务流程，重做交互与状态模型 | 流程正确但交互断裂、状态隐式或锚点不可枚举 |
+| `reuse_component` | 仅复用局部组件，页面其余部分重画 | 只有个别表格、表单等组件达到复用标准 |
+| `discard` | 废弃重画，不作为新页面基础 | 行为或结构与目标合同冲突，或属重复/死页面 |
+
+规则：
+
+- `disposition` 不替代 classification 和 `mapping_status`；条目仍需先完成来源、分类和基线映射。
+- 未登记 `disposition` 的条目按未定处置对待，不得默认整页采用。
+- `discard` 或任何移除存量行为的处置，仍需已批 `CHG-*` 或明确缩减范围；缺陷候选未经
+  `DEC/CHG` 不得借处置名义升级为目标需求。
+- `inherit_layout` 与涉及视觉重做的处置，先完成美学方向确认；`rebuild_interaction` 重画部分
+  按本文件全部交互合同执行。
+- 处置结论是原型迭代等价性比较（第 7 节）的基线：声明保留的布局、流程或组件必须出现在
+  等价性核对范围内。

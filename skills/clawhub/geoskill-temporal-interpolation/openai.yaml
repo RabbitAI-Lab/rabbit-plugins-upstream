@@ -1,0 +1,16 @@
+name: geoskill-temporal-interpolation
+display_name: 时序插值与重建
+description: |
+  对NDVI时序做Savitzky-Golay滤波或样条插值平滑重建，输出规则时序GeoTIFF与平滑参数
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-temporal-interpolation.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - gis
+  - raster
+  - remote-sensing
+  - time-series
+  - vector
+  - vegetation

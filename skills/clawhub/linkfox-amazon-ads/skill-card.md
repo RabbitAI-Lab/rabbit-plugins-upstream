@@ -1,49 +1,62 @@
-## Description: <br>
-Linkfox Amazon Ads helps agents authorize Amazon Ads accounts, manage SP/SB/SD ads, and retrieve Amazon Ads reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+LinkFox Amazon Ads helps agents handle Amazon Ads authorization, SP/SB/SD campaign management, and end-to-end advertising report retrieval.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External ecommerce advertisers, operators, and developers use this skill to bind Amazon Ads accounts, inspect or update ad entities, and pull structured campaign performance reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles Amazon Ads credentials and business reports. <br>
-Mitigation: Install and run it only in an environment approved for local storage of those credentials and reports, and review generated outputs before sharing them. <br>
-Risk: API host and credential behavior depends on environment configuration. <br>
-Mitigation: Use trusted environment variables for API keys and host configuration, and avoid untrusted runtime configuration. <br>
-Risk: Report-serving features and persisted outputs may expose advertising data if used carelessly. <br>
-Mitigation: Keep report-serving local, avoid binding it to non-local interfaces, and clean persisted outputs when they are no longer needed. <br>
+## Use Case:
 
+External Amazon Ads operators and commerce teams use this skill to authorize ad accounts, inspect or change SP/SB/SD advertising entities, and retrieve structured performance reports. It is suited for workflows that need token handling, campaign metadata operations, or report downloads through LinkFox.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-ads) <br>
-- [Amazon Ads authorization reference](artifact/references/linkfox-amazon-ads-auth.md) <br>
-- [Amazon Ads management reference](artifact/references/linkfox-amazon-ads-manager.md) <br>
-- [Amazon Ads reporting reference](artifact/references/linkfox-amazon-ads-report.md) <br>
-- [Sponsored Products API reference](artifact/references/api/sp.md) <br>
-- [Sponsored Brands API reference](artifact/references/api/sb.md) <br>
-- [Sponsored Display API reference](artifact/references/api/sd.md) <br>
-- [Report types index](artifact/references/report-types/index.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API Calls, JSON, Files] <br>
-**Output Format:** [Markdown guidance with command examples, JSON API responses, and generated report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May persist local JSON responses and downloaded report data; report-serving links are time-limited.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release evidence; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill can perform create and update actions that may affect Amazon Ads spend.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review every create or update action before execution and keep the skill limited to trusted operators.
+
+Risk: The skill handles Amazon Ads API keys, OAuth tokens, report files, stdout logs, and clipboard authorization URLs.
+
+Mitigation: Use a single-user workspace, treat generated LinkFox data directories and temporary report files as sensitive, and delete report or export files when finished.
+
+Risk: Credential-bearing requests can be redirected if endpoint override environment variables are changed.
+
+Mitigation: Keep endpoint override variables unset or restrict them to trusted LinkFox HTTPS hosts.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-ads)
+- [Amazon Ads Authorization Reference](references/linkfox-amazon-ads-auth.md)
+- [Amazon Ads Management Reference](references/linkfox-amazon-ads-manager.md)
+- [Amazon Ads Report Reference](references/linkfox-amazon-ads-report.md)
+- [Report Types Index](references/report-types/index.md)
+- [Onboarding Reference](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions, API Calls, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON inputs or outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts may save full responses to local JSON files and print either full JSON or summaries depending on response size.]
+
+## Skill Version(s):
+
+1.2.1 (source: server release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

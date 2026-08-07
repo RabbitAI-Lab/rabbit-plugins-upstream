@@ -1,0 +1,11 @@
+# Requirements for crop-type-mapping
+# Shared data-download library (Planetary Computer / NASA POWER / OSM)
+geoskill-data-fetcher>=0.2.0
+
+# Third-party dependencies used by this skill
+fiona
+numpy
+rasterio
+scikit-learn
+scipy
+shapely

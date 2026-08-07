@@ -20,8 +20,10 @@ It also tracks environments, ports, and services in `memory/environments/`.
 
 - It does not run shell commands, scripts, or binaries.
 - It does not import or use any process-spawning module.
-- It does not modify files outside the agent workspace.
-- It does not read or accept `ENV_DIR` for runtime path redirection.
+- It does not modify files outside the project workspace (repo root). An optional
+  `ENV_MANAGER_WORKSPACE` env var can relocate the workspace, but only to a
+  descendant of the repo root (paths outside the repo are refused).
+- It does not accept a `--dir` CLI flag for runtime path redirection.
 - It does not perform network calls.
 
 ## Programmatic use
@@ -54,13 +56,23 @@ node env-manager.js --ports --free
 node env-manager.js --commands
 ```
 
+> **Note on `--services --start/--stop/--status`:** these commands only **toggle a
+> `running` flag inside `services.json`** (metadata). They do NOT start, stop, signal,
+> or otherwise control any real OS process or external service. There is no
+> process-spawning code path anywhere in this skill — the calling agent runs the
+> actual commands it was handed. The service "state" is bookkeeping only.
+
 ## Data storage
 
-State is written to `memory/environments/` inside the agent workspace:
+Two kinds of files are written, all inside the project workspace (repo root):
 
-- `environments.json`
-- `ports.json`
-- `services.json`
+1. **Scaffold files** — per the table above, written into a project directory
+   (`environments/<name>/`) during `--setup`. These are the starter files
+   (`package.json`, `Dockerfile`, `main.go`, `Cargo.toml`, etc.).
+2. **State files** — written to `memory/environments/`:
+   - `environments.json`
+   - `ports.json`
+   - `services.json`
 
 No other paths are touched.
 

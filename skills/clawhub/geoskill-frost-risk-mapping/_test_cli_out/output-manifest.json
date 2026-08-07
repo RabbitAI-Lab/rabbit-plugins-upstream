@@ -1,0 +1,106 @@
+{
+  "skill": "frost-risk-mapping",
+  "skill_version": "1.0.0",
+  "command": "frost-risk-mapping --bbox 116 39 117 40 --synthetic --quiet --output-dir ./_test_cli_out",
+  "started_at": "2026-08-03T17:07:51.826814Z",
+  "finished_at": "2026-08-03T17:07:52.045142Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "dem": null,
+    "threshold": 0.0,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\frost_risk.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": -1.0,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\frost_free_period.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": -1.0,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\frost_frequency.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": -9999.0,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\frost_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "threshold_c": 0.0,
+    "correction": "terrain",
+    "mean_frost_frequency": 0.22613120079040527,
+    "mean_frost_free_days": 14.53466796875,
+    "risk_distribution": {
+      "0": 26,
+      "1": 311,
+      "2": 2716,
+      "3": 953,
+      "4": 90
+    },
+    "n_valid_pixels": 122880,
+    "n_total_pixels": 122880,
+    "synthetic_dem_range": [
+      10.264952659606934,
+      851.378662109375
+    ]
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "frost-risk-mapping"
+  },
+  "error": null
+}
