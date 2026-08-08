@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/routing-traffic-with-route53-and-cloudfront",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "routing-traffic-with-route53-and-cloudfront",
+  "branch": "main",
+  "pushedAt": "2026-08-08T03:07:50Z",
+  "contentHash": "02de4bceaa551e1a3c5bc5c32f407c521fa61bc344f462b7b916f5e2235e0d2a",
+  "fetchedAt": "2026-08-08T08:05:01.779Z"
+}

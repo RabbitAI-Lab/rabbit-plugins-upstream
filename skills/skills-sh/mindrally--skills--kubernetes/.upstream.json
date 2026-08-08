@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/mindrally/skills/kubernetes",
+  "repo": "mindrally/skills",
+  "skillId": "kubernetes",
+  "branch": "main",
+  "pushedAt": "2026-06-09T21:37:11Z",
+  "contentHash": "13905b629f7b3f5ba3a7d1325d75e4d1cd2286a66015e64f1dca3c11dfa48e35",
+  "fetchedAt": "2026-08-08T08:03:37.286Z"
+}

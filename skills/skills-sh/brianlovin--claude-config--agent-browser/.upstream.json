@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/brianlovin/claude-config/agent-browser",
+  "repo": "brianlovin/claude-config",
+  "skillId": "agent-browser",
+  "branch": "main",
+  "pushedAt": "2026-03-25T17:52:51Z",
+  "contentHash": "2c4f335b67175f2b90d09a7e8522530dd6f4a91f04c96054ee75bbfa3710b090",
+  "fetchedAt": "2026-08-08T08:03:37.007Z"
+}

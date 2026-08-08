@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/api-contract-testing",
+  "repo": "secondsky/claude-skills",
+  "skillId": "api-contract-testing",
+  "branch": "main",
+  "pushedAt": "2026-08-06T21:41:29Z",
+  "contentHash": "aa679f967208758c488a182b3a79601f2cd6f2a7ecc947ce77eff2373d8b1828",
+  "fetchedAt": "2026-08-08T08:04:35.488Z"
+}

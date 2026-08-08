@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-wpcli-and-ops",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-wpcli-and-ops",
+  "branch": "trunk",
+  "pushedAt": "2026-08-03T05:26:29Z",
+  "contentHash": "fb39a43d02f48b6a377e3c8e8c78ef05aecc7b07d2aedce546a3b3efde1a157e",
+  "fetchedAt": "2026-08-08T08:05:12.917Z"
+}
