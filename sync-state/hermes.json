@@ -2,7 +2,7 @@
   "repos": {
     "huggingface/skills": {
       "defaultBranch": "main",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "ids": [
         "huggingface--skills--skills--hf-cli",
         "huggingface--skills--skills--hf-cloud-aws-context-discovery",
@@ -33,7 +33,7 @@
     },
     "anthropics/skills": {
       "defaultBranch": "main",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "ids": [
         "anthropics--skills--skills--algorithmic-art",
         "anthropics--skills--skills--brand-guidelines",
@@ -106,7 +106,7 @@
     },
     "NVIDIA/skills": {
       "defaultBranch": "main",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "ids": [
         "NVIDIA--skills--skills--accelerated-computing-cudf",
         "NVIDIA--skills--skills--aiq-deploy",
@@ -411,7 +411,7 @@
     },
     "garrytan/gstack": {
       "defaultBranch": "main",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "ids": [
         "garrytan--gstack--autoplan",
         "garrytan--gstack--benchmark",
@@ -470,7 +470,7 @@
     },
     "NousResearch/hermes-agent": {
       "defaultBranch": "main",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "ids": [
         "official--security--1password",
         "official--finance--3-statement-model",
@@ -583,253 +583,253 @@
     "huggingface--skills--skills--hf-cli": {
       "repo": "huggingface/skills",
       "path": "skills/hf-cli",
-      "pushedAt": "2026-07-27T09:19:45Z",
-      "contentHash": "7e90003be46c689b985425e0b8a2a9129c6e7c59a86e1808697876df193641a1"
+      "pushedAt": "2026-08-07T13:44:54Z",
+      "contentHash": "d12bd3ef9fe83040deb6ffc7082743836a015a25978a4879695677df6e8e7b83"
     },
     "huggingface--skills--skills--hf-cloud-aws-context-discovery": {
       "repo": "huggingface/skills",
       "path": "skills/hf-cloud-aws-context-discovery",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "9bdde665f2671fda65aa0b19deec79ce44068c86e098048cf9ea65ffc0a43ae8"
     },
     "huggingface--skills--skills--hf-cloud-python-env-setup": {
       "repo": "huggingface/skills",
       "path": "skills/hf-cloud-python-env-setup",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "6fd9a0c8d73c24e0029d173a3dc7a1f6290deb3406f86ff90dd55c5509a80b6e"
     },
     "huggingface--skills--skills--hf-cloud-sagemaker-deployment-planner": {
       "repo": "huggingface/skills",
       "path": "skills/hf-cloud-sagemaker-deployment-planner",
-      "pushedAt": "2026-07-27T09:19:45Z",
-      "contentHash": "a74e44ef1c6ed89b2f543441750e73d302c6bac5f86e291529cc7d79d6a35320"
+      "pushedAt": "2026-08-07T13:44:54Z",
+      "contentHash": "bac0f6366f18cd0476ba4eb3c21bf1f4134149a95fbe5932142a13c4ec58379b"
     },
     "huggingface--skills--skills--hf-cloud-sagemaker-iam-preflight": {
       "repo": "huggingface/skills",
       "path": "skills/hf-cloud-sagemaker-iam-preflight",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "2b4aea0fbfc5e1be375dcaa736c0b73bfed5235dde2239c527d7667f53aedc08"
     },
     "huggingface--skills--skills--hf-cloud-sagemaker-production-defaults": {
       "repo": "huggingface/skills",
       "path": "skills/hf-cloud-sagemaker-production-defaults",
-      "pushedAt": "2026-07-27T09:19:45Z",
-      "contentHash": "8360e265f19804dffb853ea959db33cd9772dd43ee350d85df9721d32c794cac"
+      "pushedAt": "2026-08-07T13:44:54Z",
+      "contentHash": "56a2948743714a567401148cb91ba5dcd8942f2b24b18c7f4c907ca1b48cd308"
     },
     "huggingface--skills--skills--hf-cloud-serving-image-selection": {
       "repo": "huggingface/skills",
       "path": "skills/hf-cloud-serving-image-selection",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "a4400b71c5fd6c8fb415edbafa1698eb97919b7f701b73995efb4c18ecfc5dbf"
     },
     "huggingface--skills--skills--hf-mem": {
       "repo": "huggingface/skills",
       "path": "skills/hf-mem",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "3aff722cc14f7e96bd4ee560c604ef6878e7e1274053339e0ca5592b04126e8f"
     },
     "huggingface--skills--skills--huggingface-best": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-best",
-      "pushedAt": "2026-07-27T09:19:45Z",
-      "contentHash": "cbbd7eb795e970a1bc98ef8975ec3d7610b1ee105322049ebf5b38668b0ddb63"
+      "pushedAt": "2026-08-07T13:44:54Z",
+      "contentHash": "e3298a2659600c9759eedc0b25427d9c3496d03473a12c2ebf908d989d88ec79"
     },
     "huggingface--skills--skills--huggingface-community-evals": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-community-evals",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "bae75cff5774c2c8dcaef0fb4c0c0a5e939d4980cfa5e5905f9ecfac3d4fc191"
     },
     "huggingface--skills--skills--huggingface-datasets": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-datasets",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "a4c7a02a81f5e19e03636c9616c574cb87dc6ec5ba5dbbe66decc1320a27e162"
     },
     "huggingface--skills--skills--huggingface-gradio": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-gradio",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "4a61841a5d979b80f10ef83161fcb2c7cba2737b75ba5737f9dafcbbff652c8d"
     },
     "huggingface--skills--skills--huggingface-llm-trainer": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-llm-trainer",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "7d89e01764b250a76627695df2adcf87997680643ebc4b31a5b47a445e6ee32d"
     },
     "huggingface--skills--skills--huggingface-local-models": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-local-models",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "5266228fb59c2b729a77acc788a0b7de6393cbd1f5ad82aac7fa7bc5c1763b2e"
     },
     "huggingface--skills--skills--huggingface-lora-space-builder": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-lora-space-builder",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "d0e32d306d231e926653b16127641e0b832d2d0112c14e45ed76799b7d8a3a1d"
     },
     "huggingface--skills--skills--huggingface-paper-publisher": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-paper-publisher",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "50d1b50a60449863e55f824fd6f4eb0f75852336d0b7ad013be086859611a5ec"
     },
     "huggingface--skills--skills--huggingface-papers": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-papers",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "4a49169c04447a7eec73af9557987381f6016723acf46715dfee77d5c811add5"
     },
     "huggingface--skills--skills--huggingface-spaces": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-spaces",
-      "pushedAt": "2026-07-27T09:19:45Z",
-      "contentHash": "6a22f572157818351164f72a7a1261e8c89c20a860fec448707d5e4d1928a8be"
+      "pushedAt": "2026-08-07T13:44:54Z",
+      "contentHash": "71483e710c9e39c5c2686ef126e8e7d301d670d1401c7a8165658b20f3f6fbe5"
     },
     "huggingface--skills--skills--huggingface-tool-builder": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-tool-builder",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "4f6ed880aca2e6ed03d8ab6727534be4756d049b56024c11fb8e7941f331b6c4"
     },
     "huggingface--skills--skills--huggingface-trackio": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-trackio",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "e6ec0b3b514ad83e062ec5ef77b2be542aa2c12ce4f280b9079aa11a3382de9a"
     },
     "huggingface--skills--skills--huggingface-vision-trainer": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-vision-trainer",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "d0fd46f727d2376aed8ea5633ea6edc628ae6326ce29a38d8e2d9b9c1665a98a"
     },
     "huggingface--skills--skills--huggingface-zerogpu": {
       "repo": "huggingface/skills",
       "path": "skills/huggingface-zerogpu",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "ebd3fcb4dd14feaf878780031c0656dfc328fe49f2d922c02e0df13d3c498682"
     },
     "huggingface--skills--skills--train-sentence-transformers": {
       "repo": "huggingface/skills",
       "path": "skills/train-sentence-transformers",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "2d0a425da328bf9ba1694f4036de5fd07bf46ccac4d9cf909e89d0dea5439baa"
     },
     "huggingface--skills--skills--transformers-js": {
       "repo": "huggingface/skills",
       "path": "skills/transformers-js",
-      "pushedAt": "2026-07-27T09:19:45Z",
+      "pushedAt": "2026-08-07T13:44:54Z",
       "contentHash": "6dd75a09bf111379baf3be7d4c6c56da61a1dcf5d1c06f8ee1f3063d5b232d5b"
     },
     "huggingface--skills--skills--trl-training": {
       "repo": "huggingface/skills",
       "path": "skills/trl-training",
-      "pushedAt": "2026-07-27T09:19:45Z",
-      "contentHash": "94080518b6f38211d4d708f786252ad5e9261b34975f7ef0e83ea877773c60e5"
+      "pushedAt": "2026-08-07T13:44:54Z",
+      "contentHash": "375345448d51a51ed9aa4869fde7b38855dfe9ae275a4795ac283fefec45202f"
     },
     "anthropics--skills--skills--algorithmic-art": {
       "repo": "anthropics/skills",
       "path": "skills/algorithmic-art",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "8c15717769d76330df4387b85402a3754d858b97749ae259d3365ea9ea394f89"
     },
     "anthropics--skills--skills--brand-guidelines": {
       "repo": "anthropics/skills",
       "path": "skills/brand-guidelines",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "ddf22e788d6aa33e818ec59be85d4fba5aeda23075518dafc412bb90b7cc63ce"
     },
     "anthropics--skills--skills--canvas-design": {
       "repo": "anthropics/skills",
       "path": "skills/canvas-design",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "b958beb4e89a524215b7a5b5f2aa3e0d8b49ba516b74b5fcd704b1d48addad67"
     },
     "anthropics--skills--skills--claude-api": {
       "repo": "anthropics/skills",
       "path": "skills/claude-api",
-      "pushedAt": "2026-07-24T20:12:36Z",
-      "contentHash": "d789c96aefba862371c7510a61829c980726d111d92493fc3660718061da4f2a"
+      "pushedAt": "2026-08-07T17:14:15Z",
+      "contentHash": "0edeb8927ff4beeb13b7d5635e419ac926346aed1e4b8116230684813ea90969"
     },
     "anthropics--skills--skills--doc-coauthoring": {
       "repo": "anthropics/skills",
       "path": "skills/doc-coauthoring",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "fd8325cb199c45d53792e9fbc144d72832900c77aa31bc3b781099d5cbe81266"
     },
     "anthropics--skills--skills--docx": {
       "repo": "anthropics/skills",
       "path": "skills/docx",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "7d67716c32e093e685627dca5e7f8622e8865e26ff0db941172406929797d47a"
     },
     "anthropics--skills--skills--frontend-design": {
       "repo": "anthropics/skills",
       "path": "skills/frontend-design",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "665c585455decbcb02116bc928adf5148b9cd0f67b7eb4908c8c0d647c00f68a"
     },
     "anthropics--skills--skills--internal-comms": {
       "repo": "anthropics/skills",
       "path": "skills/internal-comms",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "9ad903576ebda039209c784708f8a69135aef47ce3532438d0870a00ca30d00d"
     },
     "anthropics--skills--skills--mcp-builder": {
       "repo": "anthropics/skills",
       "path": "skills/mcp-builder",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "5a904ea67e691bc7454cc2a631f24a52f3a95f397d76862cdfc6a9370d79363d"
     },
     "anthropics--skills--skills--pdf": {
       "repo": "anthropics/skills",
       "path": "skills/pdf",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "6a01b6dc757b8856d7eba5e9985d8550783f946d7afdf86402ba324b93239fc0"
     },
     "anthropics--skills--skills--pptx": {
       "repo": "anthropics/skills",
       "path": "skills/pptx",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "542c716c50714598b19d12ba977d6c878d650b5798a8588026700d11bcd854bf"
     },
     "anthropics--skills--skills--skill-creator": {
       "repo": "anthropics/skills",
       "path": "skills/skill-creator",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "4557d54c524c67984e4bab23fa436e90196292ae8df4d2093f0ce0e6951bfc1c"
     },
     "anthropics--skills--skills--slack-gif-creator": {
       "repo": "anthropics/skills",
       "path": "skills/slack-gif-creator",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "4d8f2d75bc0f0ff84efe56ee3abf91ac9ae14a892b48c32f0222df14c6eb96fb"
     },
     "anthropics--skills--skills--theme-factory": {
       "repo": "anthropics/skills",
       "path": "skills/theme-factory",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "50bc5c8d91691c22c80aa3a77d437243398121a724531737530f4ed30cddf879"
     },
     "anthropics--skills--skills--web-artifacts-builder": {
       "repo": "anthropics/skills",
       "path": "skills/web-artifacts-builder",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "0f102ba19f13b4deb19f2248a5014952d2af1521129a5a0e4f3d805f74632b75"
     },
     "anthropics--skills--skills--webapp-testing": {
       "repo": "anthropics/skills",
       "path": "skills/webapp-testing",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "abfaf4cc6cf572346e22fed42dc0cfaacd2f64c5d9667f44a94b02ea0d3b1342"
     },
     "anthropics--skills--skills--xlsx": {
       "repo": "anthropics/skills",
       "path": "skills/xlsx",
-      "pushedAt": "2026-07-24T20:12:36Z",
+      "pushedAt": "2026-08-07T17:14:15Z",
       "contentHash": "f38e1245e48604aada998d989633de07e4c4fb9a8ddc0872219d2d36e6c538b6"
     },
     "openai--skills--skills--.curated--aspnet-core": {
@@ -1099,43 +1099,43 @@
     "NVIDIA--skills--skills--accelerated-computing-cudf": {
       "repo": "NVIDIA/skills",
       "path": "skills/accelerated-computing-cudf",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "3d4b629caafef2f0a968c1f8ebf16363b358bf18787a2b4a10a21b3acfc4ba0a"
     },
     "NVIDIA--skills--skills--aiq-deploy": {
       "repo": "NVIDIA/skills",
       "path": "skills/aiq-deploy",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "e875e32020700f1c859235bf415d5271ec2be2c4044ea245489d2c283c3e37fd"
     },
     "NVIDIA--skills--skills--aiq-research": {
       "repo": "NVIDIA/skills",
       "path": "skills/aiq-research",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "9c1c51687c88bcad634ceec985bc8f70fd0fc1df60b642193207b89896690082"
     },
     "NVIDIA--skills--skills--amc-run-sample-calibration": {
       "repo": "NVIDIA/skills",
       "path": "skills/amc-run-sample-calibration",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "1060ad18563cf0124c5fc8da3b546c95178867c36ccff3fad2637ee4b59c7b62"
     },
     "NVIDIA--skills--skills--amc-run-video-calibration": {
       "repo": "NVIDIA/skills",
       "path": "skills/amc-run-video-calibration",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "7ad15a473d3a3f8dc21700cebf3aa40cccdf9e789facb85ab9da62a230eb0569"
     },
     "NVIDIA--skills--skills--amc-setup-calibration-stack": {
       "repo": "NVIDIA/skills",
       "path": "skills/amc-setup-calibration-stack",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "7ab49dacd55bd57704ad193eca6417b00802a5175ec00d638f29f63dba8680db"
     },
     "NVIDIA--skills--skills--cudaq-guide": {
       "repo": "NVIDIA/skills",
       "path": "skills/cudaq-guide",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "2b4d51cebe31386c4f79b4d201fc7447e9489fd9f4f0bb302e512c5065a563de"
     },
     "NVIDIA--skills--skills--cufolio": {
@@ -1147,2689 +1147,2689 @@
     "NVIDIA--skills--skills--cuopt-developer": {
       "repo": "NVIDIA/skills",
       "path": "skills/cuopt-developer",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "7c813a278be7430ff7e28bfb9dec85e7a5750c7b37ad862a5b0e9ab539df9132"
     },
     "NVIDIA--skills--skills--cuopt-install": {
       "repo": "NVIDIA/skills",
       "path": "skills/cuopt-install",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "0e14baa627759a912ea1f9329b2c828bf81dee08be94a6652604e18befb8e21d"
     },
     "NVIDIA--skills--skills--cuopt-multi-objective-exploration": {
       "repo": "NVIDIA/skills",
       "path": "skills/cuopt-multi-objective-exploration",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "9868debd4580cd23969d5bec4b20ccdb3964b7a72703cad152e73fe4e86ba248"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "443a5ca564c9a772dfce20e40c4c29d2d0ae8127ba976c535360e9a6ab3ee482"
     },
     "NVIDIA--skills--skills--cuopt-numerical-optimization-api": {
       "repo": "NVIDIA/skills",
       "path": "skills/cuopt-numerical-optimization-api",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "800b1eacc801f96b41aa523df9b71b766c3a60c384f88f2d8a890eaf33c50551"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "2328c156aa92e44552f69c56c25fb1e13aaa8c03afd12470d8aebb662b9430de"
     },
     "NVIDIA--skills--skills--cuopt-numerical-optimization-formulation": {
       "repo": "NVIDIA/skills",
       "path": "skills/cuopt-numerical-optimization-formulation",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "bb58713ed091759f9356b96cc06096ecb819679723a9da38822b3b42011b4bb9"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "720e61bed1e56ea3dc9c55aebc51c5f39610e8e7c86075f1eb74f2cb6019f7b6"
     },
     "NVIDIA--skills--skills--cuopt-routing-api-python": {
       "repo": "NVIDIA/skills",
       "path": "skills/cuopt-routing-api-python",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "3dee4f00a1f5a8736c12622a9b8bf32d714185ad217d6bd4c02f8a2b71b0fc95"
     },
     "NVIDIA--skills--skills--cuopt-server-api-python": {
       "repo": "NVIDIA/skills",
       "path": "skills/cuopt-server-api-python",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "6de54731aef08cdf9e850e2a61b0f01e2dab85eebcc94157eaa21c3b2fd8281f"
     },
     "NVIDIA--skills--skills--cupynumeric-hdf5": {
       "repo": "NVIDIA/skills",
       "path": "skills/cupynumeric-hdf5",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "489fe6a38b98ada84232622b33a3891a73d0a78bd09db8beb5e154e26f1ef5d8"
     },
     "NVIDIA--skills--skills--cupynumeric-install": {
       "repo": "NVIDIA/skills",
       "path": "skills/cupynumeric-install",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "1642a8ddfab09838349f14f956fc3e749f165e21e46e88aecff9d04784966e18"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "e1dacb295c87942fe11f6ac158c7ab552d64b64835160fa98da971ce683d4b21"
     },
     "NVIDIA--skills--skills--cupynumeric-migration-readiness": {
       "repo": "NVIDIA/skills",
       "path": "skills/cupynumeric-migration-readiness",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "ef2d0f2c86e7f4e8a0c99c90f369441c053071ac32ad103f03b328f564393cd1"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "ffef2c56fd3dd2d19a7f9b6e8e09da0b2fdacab67f80ba0fc2c58dc2ca071386"
     },
     "NVIDIA--skills--skills--cupynumeric-parallel-data-load": {
       "repo": "NVIDIA/skills",
       "path": "skills/cupynumeric-parallel-data-load",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "5fcdeb0a4dcafadc9b27fe93390918e9ef83a060c6b4f135d733c07363e41a7a"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "41fc57db57e34a0f415e65589b4f78428c2d0c4111d1e304ab1bfb4b7e4d6d97"
     },
     "NVIDIA--skills--skills--dali-dynamic-mode": {
       "repo": "NVIDIA/skills",
       "path": "skills/dali-dynamic-mode",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "08f5dc39b2babca4660e7a582d86654795793a9fb4f94f5a073fa093240bc645"
     },
     "NVIDIA--skills--skills--data-designer": {
       "repo": "NVIDIA/skills",
       "path": "skills/data-designer",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "b85b68ea6bcc4477d9a84087419172ab62f84ad3750a23f47bffb251a0a4cbd8"
     },
     "NVIDIA--skills--skills--deepstream-dev": {
       "repo": "NVIDIA/skills",
       "path": "skills/deepstream-dev",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "df1ccc13aa638d46acc92dfd2d496059c144932833bdbb24739a8a4c7eb6a2fe"
     },
     "NVIDIA--skills--skills--deepstream-generate-pipeline": {
       "repo": "NVIDIA/skills",
       "path": "skills/deepstream-generate-pipeline",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "541631b48d26aed67c204f9bf454bf926ddd8ec7c0bfcebc5fb8a545c840fa9e"
     },
     "NVIDIA--skills--skills--deepstream-import-vision-model": {
       "repo": "NVIDIA/skills",
       "path": "skills/deepstream-import-vision-model",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "aadfba4f5adca661a09865a0475e54d4008c558af6c27643ab487f474bd44355"
     },
     "NVIDIA--skills--skills--deepstream-profile-pipeline": {
       "repo": "NVIDIA/skills",
       "path": "skills/deepstream-profile-pipeline",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "9439b48a2030ee27386f6972b8eef3425b8ca5438fb032bf12138e927e12f6e0"
     },
     "NVIDIA--skills--skills--deepstream-sop": {
       "repo": "NVIDIA/skills",
       "path": "skills/deepstream-sop",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "02fde2125f399d7ace035f571037ffa826ed67341a814d1e8908841a20bfb57a"
     },
     "NVIDIA--skills--skills--dicom-metadata-extract": {
       "repo": "NVIDIA/skills",
       "path": "skills/dicom-metadata-extract",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "cecf94c841b298a10e9f2691b67ffb7e31f9dfb1da8d064cfa238e9711538667"
     },
     "NVIDIA--skills--skills--dicom-series-preflight": {
       "repo": "NVIDIA/skills",
       "path": "skills/dicom-series-preflight",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d586de09197638989bceeaa45622761dbe6056c4c07ef5e591463b9107cb3619"
     },
     "NVIDIA--skills--skills--dicom-series-to-volume": {
       "repo": "NVIDIA/skills",
       "path": "skills/dicom-series-to-volume",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "c386e6d3d2bb44a7fc2f15a51f5da86563e8b428ae71c611d04726ba3b50cfba"
     },
     "NVIDIA--skills--skills--digital-health-clinical-asr-build": {
       "repo": "NVIDIA/skills",
       "path": "skills/digital-health-clinical-asr-build",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "c34c333b9e021936e9fad34b84e2b1227b0f01ef7e9eecdebedba4f56535717c"
     },
     "NVIDIA--skills--skills--digital-health-clinical-asr-eval": {
       "repo": "NVIDIA/skills",
       "path": "skills/digital-health-clinical-asr-eval",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "73b7ec147f68e362700b93512b3d489b1d0aec901f499ce3f86a98a1e3a1547d"
     },
     "NVIDIA--skills--skills--digital-health-clinical-asr-finetune": {
       "repo": "NVIDIA/skills",
       "path": "skills/digital-health-clinical-asr-finetune",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "443f4f4460c44879b962dd1c815d57ad8377ecc833cee47ddfbb1f77e07ec8b7"
     },
     "NVIDIA--skills--skills--digital-health-clinical-asr-setup": {
       "repo": "NVIDIA/skills",
       "path": "skills/digital-health-clinical-asr-setup",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "121c161294b5697035c9f0d1e96e789566f84c64b53d4c623a3172aa53bc00b3"
     },
     "NVIDIA--skills--skills--doca-aes-gcm": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-aes-gcm",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "8d105bbc2db5df7eb412a574247d5d47c72f4ae16655cae25c21f670ab086b8e"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "f1d691d48c87d07887a9ad2ca9a1ee21eb3cba048cc8d5a582502add887a28fe"
     },
     "NVIDIA--skills--skills--doca-argp": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-argp",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "439b0b8ba25861899d69bc87549357234b73ff8090fc5c49981011eb643d64d5"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "7eb9b4e605aea212f6785f852ae4ecf833c4859ae53853eb5c03f66d8364df66"
     },
     "NVIDIA--skills--skills--doca-argus": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-argus",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "da515a44bcc1429bb1a8b1f99aab05b60221369736c7a71953dd9a61542874a1"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "25348d77665e0e34ee6e839d3219782955341d60e58d40b8e0d2c034bca8c1b6"
     },
     "NVIDIA--skills--skills--doca-bare-metal-deployment": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-bare-metal-deployment",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "be32321c27df251324f8a3f36939de482318c6bb848114d8da31967e6e852017"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "7af6dbe763f9b84e5aa44fe5a94af2d86d26c2189a343475f3f8741131c54896"
     },
     "NVIDIA--skills--skills--doca-bench": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-bench",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "a19c8986b98b91ad7853524268f38d8bcea9583a218b62df752c52fd08c4506a"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "84461656073832bb5de4e13911a6a95865fdff3f44a3e7415d8d65e257785fa8"
     },
     "NVIDIA--skills--skills--doca-bench-extension": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-bench-extension",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "40e838fd0dc44007e3c1a915fe187cb4c3bc1b8cdd1b29cdebbdd52e0c362990"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "798e7bdd2ab3042d589c2badfd20fb26d9b7346fa45de705b19c96c1e835142d"
     },
     "NVIDIA--skills--skills--doca-bf3-deployment": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-bf3-deployment",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "741236415688513b8fc325ff0738e6c07eff617e6c2745e6630951fa872274a3"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "3645443ac2ed84d85972684a7975fc14a23c569ad9b7033d5f31f366478d6e95"
     },
     "NVIDIA--skills--skills--doca-bf4-deployment": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-bf4-deployment",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "fe9b122e2e9e547f7be776b4ef9ea11aa5eb0ceb48b56cad175e0c135b90c84d"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "45dee33aaa9176b7f249f8b8eb069bb545b4ac18788033c09225f4bc09350014"
     },
     "NVIDIA--skills--skills--doca-caps": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-caps",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "ba50834b909e465676a7e751e2fd74771b0d9b73f72b25fb92202998b07384a5"
     },
     "NVIDIA--skills--skills--doca-collectx-deployment": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-collectx-deployment",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "aa0a0b366dcde1d4f4054a5741e713e7606eb9991df426837dfe6f5e4926b9bf"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "180fd00088b1b67217f331c381b27e856338ce2d93723f035f9a059af8355ddf"
     },
     "NVIDIA--skills--skills--doca-comch": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-comch",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "3f90a80ef20febfba66f1a77b4fe046749ab5bd1b125b5dcf12d7ce246e10fdb"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "425c84500300873debfe5268945969f735021a6432ae220c516829e7b18d20dc"
     },
     "NVIDIA--skills--skills--doca-comm-channel-admin": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-comm-channel-admin",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "304a8311974514636be9752281cc3875d79cdf29ee813217670d5d35ed2b16cd"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "aa8a6ea8351d252f92468fd84b621e08074cf42b222a8d224b729afb9645ca32"
     },
     "NVIDIA--skills--skills--doca-common": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-common",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "f11e8c58c1af0a0752747f936921488e2a79881777ca5517f2a3118897c0be64"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "f5e4cb94863649a9b4f4bdda7a6f2427f8db47308a5a1a830288f271a7e06cc7"
     },
     "NVIDIA--skills--skills--doca-compress": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-compress",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "4215e412debdb3d4b535fb8b25698e0057317c001334da84879ba327e3714e31"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "a94b69f1201dd4865631ab6fd633da8b1a9bcbda4d1c7815978f3bc00535e3ad"
     },
     "NVIDIA--skills--skills--doca-container-deployment": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-container-deployment",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "3257975bc10ae742a73b8fdd7f760b5966fce84145e3e950a39484a7dc2390be"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "150c120c662f9b7e7007f65a3ab9c86fff5467d431e6529e8de86e29e0e43f5f"
     },
     "NVIDIA--skills--skills--doca-debug": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-debug",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "0191f8a6427ee884bc22c83162af598231a05da706dfda6b0f01028f7df89c9f"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "e6417cb116e5f3adf578f0a32dca7d2a075a96b1020144df49ed21f36d85b06c"
     },
     "NVIDIA--skills--skills--doca-devemu": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-devemu",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "3c3fd281b3d2e3b055193ec22d4e03c7308ec1a7142e242066e91a1695f378f3"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "091070479dc2b2f6480b9c9d71682bd5afc0d0c2ae004e0693866ba0c5ec9e97"
     },
     "NVIDIA--skills--skills--doca-dma": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-dma",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "95e5524678ad86c83638947b02bd6a816b90501c1e8743a42678cf5e491d7732"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "5183e754c3cb25160a3ff983d08edee194c4a0d92ff16713677de1b1975a1372"
     },
     "NVIDIA--skills--skills--doca-dms": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-dms",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "6e20c3da926766bf8db037c1d5d60e6ffbd37697175a5bfa1b9270bb1fddc7a9"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "ed9cc08101b670b297da4b6006d54ec789679b8ee33f1a712224fbe0f08b2eab"
     },
     "NVIDIA--skills--skills--doca-dpa": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-dpa",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "82192007dbf05f51b28ff1a1446600a28fd3affc7b7b0fe1007b38610bdb914f"
     },
     "NVIDIA--skills--skills--doca-dpa-hl-tracer": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-dpa-hl-tracer",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "def8a72eb92211e9a3f59a1ce454c2b95db70ae71dc5456069f627869d1b28fc"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "ce3cdc6f9ec7f2b19d56c9699b96a5fee98a2f105e52911a1e4b51f695eeec0d"
     },
     "NVIDIA--skills--skills--doca-dpdk-bridge": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-dpdk-bridge",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "6d50a62c8705d88dd50b436c4c8527233d410acdef7d45e0b631bbaad99e506a"
     },
     "NVIDIA--skills--skills--doca-erasure-coding": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-erasure-coding",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "697e6a45db3c8dba7156c122f414d7448b64722798599ed39f48f517599051bb"
     },
     "NVIDIA--skills--skills--doca-eth": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-eth",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "2e58d4282f7d02ba1da8b202131fd59a19735730700549981873e0d00303ba37"
     },
     "NVIDIA--skills--skills--doca-firefly": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-firefly",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "f2c140e25c2ed0628908a7ce4a9639b54f9f75e200ad6ab90cca3c2a04b00656"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "d2cb3933ed607d99659b0dce11842f5350ed7d26f355439bafd63b5eab2436e8"
     },
     "NVIDIA--skills--skills--doca-flow": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-flow",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "90eca2a2debf6175f6a82596178943ba55b9439fa668018398ab92f8c6b8bf02"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "1061386a1af2a5fd504274dc31ce7ee3ecc4e80676f21bcf0a46782fcd14608b"
     },
     "NVIDIA--skills--skills--doca-flow-dpa-perf": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-flow-dpa-perf",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "fe3e34001ff72507a910832c19f02eef08e8e9424fd1cfd9f90b64760007bf9c"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "ef74eb5dd73b57cd0261f3eeb89d5959f50db862af50518304dcb38f73dabfdb"
     },
     "NVIDIA--skills--skills--doca-flow-dpa-provider": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-flow-dpa-provider",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "f503004a3263fefbcc55d3b2a0a77f7eb8a399975776a30f9c103c5cb6c9ed9c"
     },
     "NVIDIA--skills--skills--doca-flow-grpc-server": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-flow-grpc-server",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "0b32cfbeadf3112c898668ae8accb6ec2e46fe3d8fdb2de7fb5fdb6a80ead65a"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "5edceb98d8ecfbb865de289777c33549ce5c7bf03d21ca8ea4ca1c839750578f"
     },
     "NVIDIA--skills--skills--doca-flow-perf": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-flow-perf",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "d356839c278fb3cc7e8b3d5fc00441dde5f93642dc218944ecee2c8fe7233343"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "7b597551d933e086afacfda4c5fb51068d39d121003223a9d5ee9e4033978beb"
     },
     "NVIDIA--skills--skills--doca-flow-tune": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-flow-tune",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "c03c74b048768d4825f4b695473c1aab0936a43d30abf207906a7d4577ec88a5"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "c80a9239695452fdc5e87aa490c4d919dbecf19827dd021bf498615b8dfed457"
     },
     "NVIDIA--skills--skills--doca-gpi": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-gpi",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "519d68e8ebfe2c6ab7308642c7f85f835df044467265b51bb24b7fb520cc19d9"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "9be085600d6aef6ba65716115a201d6def0ca8eb0eb8021dd247b991d3739c03"
     },
     "NVIDIA--skills--skills--doca-gpunetio": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-gpunetio",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "87bf2db16fc76b615ff1ff78616f1bce20c72191c140954cb5a5cefa8131593c"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "d39ae35fa0e73932d4399ec004e7d6aa2cb91fe475f80a370b239ce2be6b43cb"
     },
     "NVIDIA--skills--skills--doca-gpunetio-ib-write-bw": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-gpunetio-ib-write-bw",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "81af12f3a106104e4adf6cb64e4d468ce062c6c2c4bbe6ec271d5fccaee201e9"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "a2ceb40af41653ce21257a4956ec9c53543005e34e3b09af19e9c20ef14cc756"
     },
     "NVIDIA--skills--skills--doca-gpunetio-ib-write-lat": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-gpunetio-ib-write-lat",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "1562f6eafbddfcc5af4fa6476d929d6cc7911e562c8dedf060b4ce294fff487e"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "b700a8b026707d24a3e3323a28f0586075938ceb162a46d85f9e1c740444296b"
     },
     "NVIDIA--skills--skills--doca-hardware-safety": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-hardware-safety",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "c62ba4a3043a54f395575f2f62af2d7bdd18afc8c17c905922e53cafde28d119"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "26913af72d863b6aba4b66f8bf4a5bdb0a9b0bb8cbacc4f8ac33283946a7c0e1"
     },
     "NVIDIA--skills--skills--doca-mgmt": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-mgmt",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "28e44219b6eea443927a016f199e790b70f39e27713f8d3c48b9a4e9e39ca533"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "424c819104caf4f1f8cb96f301e7c83781734ea44bbe5bf0e72f8872c593fd7c"
     },
     "NVIDIA--skills--skills--doca-pcc": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-pcc",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "434459c8f42b0ba357751cb5943ec3f1a6fff5b143b20d7b11f592dfff2f7768"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "72f4a9f017963a43ecb2c88c2d793a048aa9ee30781dd02f4cd0389ccd136761"
     },
     "NVIDIA--skills--skills--doca-pcc-counters": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-pcc-counters",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "0a8797462a846d7a9d54ab034702b3e3208b078d3a623fe7490822fba784b994"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "7f1c5ae6106268109ecb338de29a1655001ea6971403d9f0b1af193b80609adb"
     },
     "NVIDIA--skills--skills--doca-pcc-ztr-rttcc-algo": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-pcc-ztr-rttcc-algo",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "42c95853954f7ba0dcd0c1cb9519fb49b170b81d55c25dcc37218d299bf1df0e"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "d6ab84a0dff0537b83e7788975e022bcfe84df2fdd55a0236aa8757516e220c6"
     },
     "NVIDIA--skills--skills--doca-programming-guide": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-programming-guide",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "cc1b9b93c6b9386dc853b53b4d54730e3c79b2f9b8a0b2f36cff1c6155b75cca"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "0380aacc1d3a9b3a888eb1685ab1e70dc71c56316ffd6f6af4b28e7de6f3680f"
     },
     "NVIDIA--skills--skills--doca-public-knowledge-map": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-public-knowledge-map",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "46828e0e551d3654753e33ce96a1745223b3d16f32ccdefcbdf89c009beeb204"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "10b6f646e32ef5432854f602dd4a83d70d415247b2579820b919b09f1a6ace0f"
     },
     "NVIDIA--skills--skills--doca-rdma": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-rdma",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "8776b5cfef10d65f109b302717050ec94bc76f831fe8e9bdc1b634bcdc1859cb"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "63963b3e5146f301468f20b31d2e54ee3eacf816487e18f6d364f5c9eedb8400"
     },
     "NVIDIA--skills--skills--doca-rdmi": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-rdmi",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "114213b1a95994d5bdae100852ec0d9a1956887eac07fdeee24638c8e776a518"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "9916009e296e24f0ce5edcad6b4ffa6fc677538a1e8c69d27afa9d0c1fab2be9"
     },
     "NVIDIA--skills--skills--doca-rmax": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-rmax",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "b6fe77c18b742ee32623970449cf87150a96dbcfa812602ffadc04b2120015fa"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "64058c444cf8ae01af43e56a2dfd945b595e4408fdd3fa448980ce0cd78965d9"
     },
     "NVIDIA--skills--skills--doca-setup": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-setup",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "747d510b652ff7af300586d8d15f0b56c741fe960040472622315fbb6485476b"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "377c9902c4a09e9c289fd43234ee1b2b384d4b7d4bde23ea832effe14d508817"
     },
     "NVIDIA--skills--skills--doca-sha": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-sha",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "9076fcf925c0e941c338d5cb62951229a7ae27e90ff4bfc4fba14deb8c673c4c"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "ab78b1d648f373b9447593e0769f7487f218d2eca48ba83365dd24275290b0f1"
     },
     "NVIDIA--skills--skills--doca-sha-offload-engine": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-sha-offload-engine",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "a73b9574a32636bddfeaa7f00bde127c6c304d20133eaf10217319819e8096ef"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "a10c5793bc568b2d13d918271ba3fc86ac505c7f88ae0f6b5b4e06c3f2128564"
     },
     "NVIDIA--skills--skills--doca-socket-relay": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-socket-relay",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "71fe3f511c91920e6314b6d9f4229551de467d78b2a8546c3a1d11da5bba5e34"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "572a091ae312cc937748f527d893e7b7eb33825d331c44bbb1a662e4ba423fd1"
     },
     "NVIDIA--skills--skills--doca-spcx-cc": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-spcx-cc",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "d8ca20f75e0f9bf923405fa4ae61119e714635655799db1c1a5dacfa363143a6"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "75d4316cbdb8a0be606aa6886b60efeb06a131be539330f6ef3c00320b0c57d5"
     },
     "NVIDIA--skills--skills--doca-sta": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-sta",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "ad92209650e4f46d68fc0f67e03eafa22eb8ee756def6d085d4a399a6c79d866"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "dfb2ed2b03e9e85b47fb962b659728372e5e4165e8e278a549f5454f89ed49cb"
     },
     "NVIDIA--skills--skills--doca-structured-tools-contract": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-structured-tools-contract",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "1e60c12436b41a6eb6d222fc3fd9d27d60ed81f871bec724247354071562ba32"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "cbbd25a05cc1768aaaf7e86e4be98c2c309e30b5144b1c551d102998e5d4f1cc"
     },
     "NVIDIA--skills--skills--doca-telemetry": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-telemetry",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "0d4b7454136cadee12678e70fdd54abf4bdd22d7d65ed4dfc174862c9769be53"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "f6cc5c40ddd946ad093b5b8ff19be19bfb56ca46a526dd33239db8826de9a1d5"
     },
     "NVIDIA--skills--skills--doca-telemetry-exporter": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-telemetry-exporter",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "970002ee123dee9606bb09f7d51ebfc9f2aac2b52bdd1dab916618975b1f92bd"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "b85fbeaaffb16d0111a968682b2bd054ae9882ecfd3c1923ee281bfcc5c50759"
     },
     "NVIDIA--skills--skills--doca-telemetry-utils": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-telemetry-utils",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "c767dffd84457b55afe1da3aeb4473d86f7403980dc2e205ca47e191c2232e4c"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "23c23ed3852a638341e2e099709e8ed3dfa43ed6b4273b1b7d0f0b6f736e5547"
     },
     "NVIDIA--skills--skills--doca-upgrade": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-upgrade",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "5d6d606013b51abd204de00a6cda5ea6d11bf469651e2590cbdefccd87eebf34"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "d918b1ab4bb7c6773794245901aa60e2c645a0e37dfe3a6f9e3a9b7b8e77b2c2"
     },
     "NVIDIA--skills--skills--doca-urom": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-urom",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "5450e4aeae209cbcc8b5be5b640e87e05ea5c53d4351ad9bf999edc39fb31741"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "6241bc6c998e0f8d48810560e005a605c487a58b536e2624ada4dba4fd5ad031"
     },
     "NVIDIA--skills--skills--doca-urom-svc": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-urom-svc",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "9b9668146ef0464fff9abce0571935ee14144cb60af638f8e0259e2b8422a6dd"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "fbf898a1e4a13f33947dd274b0bf4b178989d26595225747428fcf254eb83b48"
     },
     "NVIDIA--skills--skills--doca-verbs": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-verbs",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "4f75732f4d17413c16c063ebbc30ed75a6d62b635ba3a191abbf964da296c416"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "68a14d5ed9c4992134c8b1ae245f835f8b227fb369d26b5f15a68fad6f3ef5eb"
     },
     "NVIDIA--skills--skills--doca-version": {
       "repo": "NVIDIA/skills",
       "path": "skills/doca-version",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "fa9b93701e5b4132038bd2713a6b56c5ccd9bb57ecb755f7d5f3fe66bc10361a"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "0be2f621e47a40c16b024ac790625375d6bb6007daa37e1ee8eb07ed3eb44d46"
     },
     "NVIDIA--skills--skills--dynamo-interconnect-check": {
       "repo": "NVIDIA/skills",
       "path": "skills/dynamo-interconnect-check",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "a5ecc993de4682f534ffe0b4275f28d0ae362eaebe47bca1ee25ff3fdb91d43e"
     },
     "NVIDIA--skills--skills--dynamo-recipe-runner": {
       "repo": "NVIDIA/skills",
       "path": "skills/dynamo-recipe-runner",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "06a84277056f6eab97a9726bb9780d3c19221d04dd2bc87943193b7141661a62"
     },
     "NVIDIA--skills--skills--dynamo-router-starter": {
       "repo": "NVIDIA/skills",
       "path": "skills/dynamo-router-starter",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "f335e3d197ca703026916428aae14ebc37f5cea3cf669856e468cd43a8afb292"
     },
     "NVIDIA--skills--skills--dynamo-troubleshoot": {
       "repo": "NVIDIA/skills",
       "path": "skills/dynamo-troubleshoot",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "7c30fca2d1f8d5d5df475affb718bff387b7b478f9da0f941f15202068ce66a7"
     },
     "NVIDIA--skills--skills--earth2studio-create-datasource": {
       "repo": "NVIDIA/skills",
       "path": "skills/earth2studio-create-datasource",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "61ec0fa9b77c6e4518adac334d455ac0959c690e29df40a014e696bbc8e706c7"
     },
     "NVIDIA--skills--skills--earth2studio-create-diagnostic": {
       "repo": "NVIDIA/skills",
       "path": "skills/earth2studio-create-diagnostic",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "378aabe8be16cd60d617085544b59f7d93232e97d162dc716d8ab31bf26c06c2"
     },
     "NVIDIA--skills--skills--earth2studio-create-prognostic": {
       "repo": "NVIDIA/skills",
       "path": "skills/earth2studio-create-prognostic",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "dec111e230d61c82c465bece506a538124aaad09f7c3495f2ac244fa0eac9c66"
     },
     "NVIDIA--skills--skills--earth2studio-data-fetch": {
       "repo": "NVIDIA/skills",
       "path": "skills/earth2studio-data-fetch",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d8d0c786826da4ea4210c952533bcdd587a2bf30f65753b5b88e047b9c44bcb2"
     },
     "NVIDIA--skills--skills--earth2studio-deterministic-forecast": {
       "repo": "NVIDIA/skills",
       "path": "skills/earth2studio-deterministic-forecast",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "1db7527adbfa7b7bb6d661a8ddbeec02514261b45fdda180b51ec1b899c8de3e"
     },
     "NVIDIA--skills--skills--earth2studio-discover": {
       "repo": "NVIDIA/skills",
       "path": "skills/earth2studio-discover",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "4a993a3bb179e0c71eb5de043a06343779f2464436ac98009ade1c6feafd28ce"
     },
     "NVIDIA--skills--skills--earth2studio-install": {
       "repo": "NVIDIA/skills",
       "path": "skills/earth2studio-install",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "b020d4b6a79ec0edfe969bb700f2178aa202a27d6a9c7ea7b6159aebfbcee689"
     },
     "NVIDIA--skills--skills--holoscan-install-conda": {
       "repo": "NVIDIA/skills",
       "path": "skills/holoscan-install-conda",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "6b33b481a001009baf260e563fa4f9b052b350212a19c785325ecd660fef8d70"
     },
     "NVIDIA--skills--skills--holoscan-install-container": {
       "repo": "NVIDIA/skills",
       "path": "skills/holoscan-install-container",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "5b9bfdac9759d0ad9f6ea041b2ad71c001d4563a42525a55554f846e0f617b77"
     },
     "NVIDIA--skills--skills--holoscan-install-debian": {
       "repo": "NVIDIA/skills",
       "path": "skills/holoscan-install-debian",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "00962d366df2be5598ef0b703decc8a054d39bbe48d5a634ff5f113698f5dc3d"
     },
     "NVIDIA--skills--skills--holoscan-install-source": {
       "repo": "NVIDIA/skills",
       "path": "skills/holoscan-install-source",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "f5f67cd6ca2e4459f4a331b3a1c103953fcb8781b197ae74cbf4c952042a4dd8"
     },
     "NVIDIA--skills--skills--holoscan-install-wheel": {
       "repo": "NVIDIA/skills",
       "path": "skills/holoscan-install-wheel",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "51d4617ba0f84a2b6824f565161512408746602a4575fd0249e86d2c672127ce"
     },
     "NVIDIA--skills--skills--holoscan-setup": {
       "repo": "NVIDIA/skills",
       "path": "skills/holoscan-setup",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "e50b1ddf2c627ae1842e09fd16455b617f282a7d4d5d7b75e4dc6ddecaff0b8d"
     },
     "NVIDIA--skills--skills--hsb-app": {
       "repo": "NVIDIA/skills",
       "path": "skills/hsb-app",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "97b4f9743100994ed7c41e86604e622d39f4aed065f8d15bc7feee7d487592cd"
     },
     "NVIDIA--skills--skills--hsb-flash": {
       "repo": "NVIDIA/skills",
       "path": "skills/hsb-flash",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "262c9a7e54558064be44874dcfe0d96f90fe885becf8b7578952e6db9c04ef45"
     },
     "NVIDIA--skills--skills--hsb-setup": {
       "repo": "NVIDIA/skills",
       "path": "skills/hsb-setup",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "bd02bd37fd4645dde03fe2f92c4db66e3ee34fd2d8f2b75889306f95da66309b"
     },
     "NVIDIA--skills--skills--hsb-test": {
       "repo": "NVIDIA/skills",
       "path": "skills/hsb-test",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "ce1db91c024a0311ccdc80ca1561672a22f3a7bff7a2551702ac3280a78fe1d6"
     },
     "NVIDIA--skills--skills--jetson-build-source": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-build-source",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "ab3209c8b36a410b868b0131880dcfc71549aade650af90bbad83f3183fc6ec2"
     },
     "NVIDIA--skills--skills--jetson-customize-camera": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-customize-camera",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "2079e0d76368ef562c896a0606ad4541c415462c2842ccd247d524c8f4ae223e"
     },
     "NVIDIA--skills--skills--jetson-customize-clocks": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-customize-clocks",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "95b646aeb8d5fdfa50cf776ca997cd998aea942ff9e4b767905e98acc8eb2d01"
     },
     "NVIDIA--skills--skills--jetson-customize-fan": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-customize-fan",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "8b3b0df33c887c20122dfccaa4a8dc9c0d6a122182576b62860db6438700fb40"
     },
     "NVIDIA--skills--skills--jetson-customize-mgbe": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-customize-mgbe",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "306f5877e1b989df5263bf93cd25fd436168b16a49e6fc46450fdc7e0afcdd97"
     },
     "NVIDIA--skills--skills--jetson-customize-nvpmodel": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-customize-nvpmodel",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "2b3296c2aaad9070841bc021c7f5466394ac361f5183308ba846917d9f05f9df"
     },
     "NVIDIA--skills--skills--jetson-customize-pcie": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-customize-pcie",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "af59718b835e1f4deb19c7931f791dab90ce5fdb5a0448d2a49c16cefb112b8a"
     },
     "NVIDIA--skills--skills--jetson-customize-pinmux": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-customize-pinmux",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "6580f884324721b9af77ffa9be152b0a876e78f523220ac24b758ff402334952"
     },
     "NVIDIA--skills--skills--jetson-customize-uphy": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-customize-uphy",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "a30eafbcd29b07f7ff09dedf5ea879d7d03adbaf95f67bfdd894564fc7311463"
     },
     "NVIDIA--skills--skills--jetson-customize-usb": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-customize-usb",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "bdf50d891c27ba792b2eca8d1c80258eb1ded8ae7d84dddb63fd979ab5e59ea1"
     },
     "NVIDIA--skills--skills--jetson-derive-carrier": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-derive-carrier",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "90fff26be3d37faa52fdef6399f547eab95be55135f028c9231eea5d7dc69601"
     },
     "NVIDIA--skills--skills--jetson-diagnostic": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-diagnostic",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "6712553b42575f133e051ec481f80862feb15e2344ca6be3f7de017df9ecbbd0"
     },
     "NVIDIA--skills--skills--jetson-download-bsp": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-download-bsp",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "b3759b714c47d70effde431e01c6611c5de1bd5addec66d2fd659534ee8d4d53"
     },
     "NVIDIA--skills--skills--jetson-flash-image": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-flash-image",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "094129e2f132817e8be079113ae8546983bc1281a7f2c26af76f6de6bd9c071e"
     },
     "NVIDIA--skills--skills--jetson-generate-kb": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-generate-kb",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d25e128efe7edc141f47be616fdb0c768624c558640682a87534ef4e58773aff"
     },
     "NVIDIA--skills--skills--jetson-headless-mode": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-headless-mode",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "55f30a73358e897de319b8f947e8e0c9714bbb589c2b3e2511490ecae8557db8"
     },
     "NVIDIA--skills--skills--jetson-inference-mem-tune": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-inference-mem-tune",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "26add5b381d417bff27ff41dabe32203db7931d84ed1fc45ceec752b4b6486ce"
     },
     "NVIDIA--skills--skills--jetson-init-image": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-init-image",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "fc227ab95775f1a0360c31641280f1ea1603fead0d2c74cf7740b8e502be28b4"
     },
     "NVIDIA--skills--skills--jetson-init-source": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-init-source",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "a8d8924eca68e0b35147b67d5c38520e1a2a703658081f63ae0264dfa4863401"
     },
     "NVIDIA--skills--skills--jetson-init-target": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-init-target",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "0456a07298f952072e102a8c0e4d8a1312772730ac22174b22da4a491a86883c"
     },
     "NVIDIA--skills--skills--jetson-link-docs": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-link-docs",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "4d43d04c7f49f3f5db325f357d46a8b2c558fd5067d7ec01b1be0a1a112e4e91"
     },
     "NVIDIA--skills--skills--jetson-llm-benchmark": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-llm-benchmark",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "413d6fa5a54e3095e72fe2b85e32a1baedc2e8a19bc97bc80c515cf2eb013965"
     },
     "NVIDIA--skills--skills--jetson-llm-serve": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-llm-serve",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "5f335464cd5cc4e31806750b761b290deb212291f1d53a70bf1530aa66b3dabc"
     },
     "NVIDIA--skills--skills--jetson-memory-audit": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-memory-audit",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "2018ff6f1e23093ff666f5b07bec268bee418f538710440a79e3209f24c7cf5b"
     },
     "NVIDIA--skills--skills--jetson-optimize-memory": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-optimize-memory",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "238be5da06491c041c3ad73affeb2d51da97065d6d9c27ed0101bc3b77a66d61"
     },
     "NVIDIA--skills--skills--jetson-package": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-package",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "c302be06679e00d9f42f210bf3c5b82a44c5022f6d4069d22ad8d9ccdcb272d5"
     },
     "NVIDIA--skills--skills--jetson-print-bsp-info": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-print-bsp-info",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "23df100a4429c73e737c2ca4b06d7f782c91187dfc00a4ee44f4fe2bc9750018"
     },
     "NVIDIA--skills--skills--jetson-print-device-info": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-print-device-info",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "ccea95939f0aceca98813e14c5a6d22d192a042f660b3474d589f1fc444b6476"
     },
     "NVIDIA--skills--skills--jetson-promote-image": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-promote-image",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "dc92a15e21bf30d9189b30068a0624d58211ec69cbbb5d07a6fd3e20aa739fff"
     },
     "NVIDIA--skills--skills--jetson-quick-start": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-quick-start",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "332d53001554b5cb06cecfd11a47249fd9619ace59d873323e71c5c8d58693c4"
     },
     "NVIDIA--skills--skills--jetson-set-target": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-set-target",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "01342fcbc8217b6dfaab61134a1c63ea6fc567511354c6d021560be38e28baf8"
     },
     "NVIDIA--skills--skills--jetson-speculative-decoding": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-speculative-decoding",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "02260969bbc810aacad3a2c2c5a4827d3540708965630b7a31b4e05c7c93869d"
     },
     "NVIDIA--skills--skills--jetson-validate-image": {
       "repo": "NVIDIA/skills",
       "path": "skills/jetson-validate-image",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "a5bfc299c004e0ec8faf3dfa122c783cdec6f52225c44ea752dfb2f8727a2f2c"
     },
     "NVIDIA--skills--skills--launch-nemo-rl": {
       "repo": "NVIDIA/skills",
       "path": "skills/launch-nemo-rl",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "3aa4298a0fc248123633e0512f970f2bbe225cb74d090c285ae31f22f8d63862"
     },
     "NVIDIA--skills--skills--mcore-create-issue": {
       "repo": "NVIDIA/skills",
       "path": "skills/mcore-create-issue",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "4cf78297d5b78d968562a3a1801f3dba557501b23eaf27ca0fcdef80ac4f2d73"
     },
     "NVIDIA--skills--skills--mcore-linting-and-formatting": {
       "repo": "NVIDIA/skills",
       "path": "skills/mcore-linting-and-formatting",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "089312da655fd59d609a92958dc46bb14fc05b92ba84a026b45d4d413dd4f90a"
     },
     "NVIDIA--skills--skills--mcore-run-on-slurm": {
       "repo": "NVIDIA/skills",
       "path": "skills/mcore-run-on-slurm",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "0f991af3581fe6a2618b2c2f045601294cee5fab154d88a66e68f6b972cf26c4"
     },
     "NVIDIA--skills--skills--mcore-split-pr": {
       "repo": "NVIDIA/skills",
       "path": "skills/mcore-split-pr",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "869d3c8995d11c4a724a542a5c6b6dd73fb48bd265e148d93c65b8b723046495"
     },
     "NVIDIA--skills--skills--mcore-testing": {
       "repo": "NVIDIA/skills",
       "path": "skills/mcore-testing",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "cdf295866635248a3445b0b56dc91b3f47e0f57c17f188790587e1d0b391e703"
     },
     "NVIDIA--skills--skills--nemo-automodel-distributed-training": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-automodel-distributed-training",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "0dff14df2a60134f4cb7dc889ae4634e61e89ce64883b2058ac554eb0a44bb19"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "6b168e606848e6d28daca9a9ec6a13d86127b98face5ac2ef825edc1f60fc491"
     },
     "NVIDIA--skills--skills--nemo-automodel-launcher-config": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-automodel-launcher-config",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "49bbcf4087b5489d5c38475e8937b0eabc73854ee4bfb6eda77e79b7830e0b5d"
     },
     "NVIDIA--skills--skills--nemo-automodel-model-onboarding": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-automodel-model-onboarding",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "782922d06f7a6d973bc1e3356aafcf12c2cd0ba7932eea21d86774dc201e33de"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "1366afb949944d728b64633af2e41af2b111a0bbd04e615a8370a3f06ae5a851"
     },
     "NVIDIA--skills--skills--nemo-automodel-recipe-development": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-automodel-recipe-development",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "a53d4d8608cdb6b9c21d2062d113ccd506e8aae60b3847fed250ee88ba49da1f"
     },
     "NVIDIA--skills--skills--nemo-data-designer-plugin": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-data-designer-plugin",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "bc1f5085bc5c30f1ff3d3ce4e84e62e425155b01796fc2517557745041d98041"
     },
     "NVIDIA--skills--skills--nemo-evaluator-plugin": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-evaluator-plugin",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "386604bbafa53947faf127755e8d0f1e54180cc2f7ff27ea8165c3027e8ee12a"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "a44864dae60ef2d4e0b4aa189b1e287ff62ed438d0ebb746b37b6df018461ff9"
     },
     "NVIDIA--skills--skills--nemo-mbridge-mlm-bridge-training": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-mlm-bridge-training",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "4ac8967865d66e8d18a35f05f4f84bb14494d6e70e9178bda45073066ebb2838"
     },
     "NVIDIA--skills--skills--nemo-mbridge-multi-node-slurm": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-multi-node-slurm",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "358da5db3831fc2147cdbf56d520a5cd8cbd56f456b394abfc76cada62e1ede9"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-activation-recompute": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-activation-recompute",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "50c9c976597f589ad1f3aaf730fb0f0f54493513539d3fe2a0ac83246c6c8a75"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-cpu-offloading": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-cpu-offloading",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "a7d704c51a66738f84499e15ce0acb3fe099d911675b777974da63bd819112e8"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-cuda-graphs": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-cuda-graphs",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "761f758608d76d07bd31d4490a219a2eaa22f05f9776993d3ac7d1956da9338b"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-expert-parallel-overlap": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-expert-parallel-overlap",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "44cc9558fd9ca1f98759846244aba48385a6ad445cbe402d3c30bc1978b9d2b3"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-hierarchical-context-parallel": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-hierarchical-context-parallel",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d203e7d3c6ec3e5d355abff191de832e53f4eb19f8b3f2c4668f737856d3453f"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-megatron-fsdp": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-megatron-fsdp",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "ed20c6f2e1e589b70c0997c0f74cd45ba869566060b72f8f97691c4b041e3a74"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-memory-tuning": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-memory-tuning",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "9804e741314804db5cb85f1b0f0332b75406abd1467e35337314feccb8b5677e"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-moe-comm-overlap": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-moe-comm-overlap",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "7cb1e41661b20ecca671c45fec8ce9ad130ffd680d59f49f33904c892b76c690"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-moe-dispatcher-selection": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-moe-dispatcher-selection",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "378737140711ab997f7580b704406dd9e805d7fb45388ec0f62cffd457ddc489"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-moe-hardware-configs": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-moe-hardware-configs",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "6c00407fbfa5d7d4e6cccddf349fe4969e27c9ef751adfbf742029d7fdb9edf8"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-moe-long-context": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-moe-long-context",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "75001392a946ac9be112a22e021590f4f35aa2c30ac083ceefa493b88251fbf5"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-moe-optimization-workflow": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-moe-optimization-workflow",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "9736873ba37e3697e13dfce296771adae457d57297bf1ea46eefba2023c7c20e"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-moe-vlm-training": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-moe-vlm-training",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "27e5a129e8d305c3b12caba1308ea96569990a39eacdacec4fe32192522a1d7b"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-parallelism-strategies": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-parallelism-strategies",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "27d8f909e627490bd7c765473b2d414f688d6d04f67acface98a9184d9f0e1e5"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-sequence-packing": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-sequence-packing",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "31579c19add19ae504888e02bf94968df7e76065b5fc16a142ada1dbbb42aed2"
     },
     "NVIDIA--skills--skills--nemo-mbridge-perf-tp-dp-comm-overlap": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-perf-tp-dp-comm-overlap",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "08b135a07d88f8b15ff616a06f86f76e1726c5ab276cef82b8d5ee0e90f9cb09"
     },
     "NVIDIA--skills--skills--nemo-mbridge-recipe-recommender": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-recipe-recommender",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "1475f0292a2158bea21ea0a9a3ac9a0df8f5b167d1ec4d29c4806de1ecf5eaad"
     },
     "NVIDIA--skills--skills--nemo-mbridge-resiliency": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-mbridge-resiliency",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "9a894a06cc33cc54e31f1c7781b5d3057f6b73ebcd7d0a6e79b932bbaa2c71a1"
     },
     "NVIDIA--skills--skills--nemo-relay-debug-runtime-integration": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-relay-debug-runtime-integration",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "98041c4f65489a265f8f20401f9dbb12e0280a5d308bca79524f0acfeaf3e119"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "9f30ead00c9ad9203bb70527607d87d3d7dfd60c90b565d85b5dbac01cd80a0a"
     },
     "NVIDIA--skills--skills--nemo-relay-install": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-relay-install",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "0cc1a36e537d6ba988dfda066143aa03729901493cb87a54a2317873a8f87690"
     },
     "NVIDIA--skills--skills--nemo-relay-instrument-calls": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-relay-instrument-calls",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "879d5f4745be39487be63353cd68c1f53a78841ce44139cf5b64e3de30dd29fc"
     },
     "NVIDIA--skills--skills--nemo-relay-instrument-context-isolation": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-relay-instrument-context-isolation",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "0d2d102839db9e7e0e58fb12f538ca55089687e1427a30508205ba634661d2f4"
     },
     "NVIDIA--skills--skills--nemo-relay-instrument-typed-wrappers": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-relay-instrument-typed-wrappers",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "7786ea865b7644150947ccea3f8019b255e85cd369efd0d7b7b3132eba983f56"
     },
     "NVIDIA--skills--skills--nemo-relay-migrate-from-flow": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-relay-migrate-from-flow",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "9c4406efb884cf07cf5bf44efc4686f7bae90f98edf045b8d2e586c06658a7ad"
     },
     "NVIDIA--skills--skills--nemo-relay-plugin-adaptive-tuning": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-relay-plugin-adaptive-tuning",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "85ef05d7513db6d0b57bf61b708961de6e462d2e15b5fb4eb091bf51dd36e3f1"
     },
     "NVIDIA--skills--skills--nemo-relay-plugin-build": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-relay-plugin-build",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "fe98f586c435d807b511d61e920174e62f10f32061946d98a1efa4dd4819c93a"
     },
     "NVIDIA--skills--skills--nemo-retriever": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-retriever",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d48d53db9f581b1abc070290c3deba389e7e8220807d0a1cf3240b6bd9cca85f"
     },
     "NVIDIA--skills--skills--nemo-rl-auto-research": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-rl-auto-research",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "b220f0002f18e3c879035b0345beed2122f4189105b621fe11531f9cbaa20c9e"
     },
     "NVIDIA--skills--skills--nemo-rl-brev-etiquette": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-rl-brev-etiquette",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "61fff57e2a4febb3d0b281229cd73c379d17f54af00b5eb758bd92b362fc951d"
     },
     "NVIDIA--skills--skills--nemo-rl-docs": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-rl-docs",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "5b754c0b9569c028a47cea3eb54f0ea74d7aeea65692e374a07dfd9cc442b25c"
     },
     "NVIDIA--skills--skills--nemo-rl-session-memory": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemo-rl-session-memory",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "7e1bd4aa4680f09dc814944ec9c9e312f6ce42e137986d03a71d4cffd53ffd8e"
     },
     "NVIDIA--skills--skills--nemoclaw-user-guide": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemoclaw-user-guide",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "4e81c3b7b8bf1e7c8a8f3002ed553e88589fd5a1532f4a10e3a150141da67eb8"
     },
     "NVIDIA--skills--skills--nemotron-asr-finetune": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemotron-asr-finetune",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "c06e54c66817b13c3ed9f380db706e8b1c70f07c9e2df31d788a31a1f4a9e213"
     },
     "NVIDIA--skills--skills--nemotron-customize": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemotron-customize",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "507798bdc1f5c6505b21a169d786059ae3ccfde0b92aeb280df964ed04a0ad31"
     },
     "NVIDIA--skills--skills--nemotron-policy-generator": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemotron-policy-generator",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "4cf1f813614cac79f1cf62aca472678d671ebee4e8fb2d6365818d381c8db2ae"
     },
     "NVIDIA--skills--skills--nemotron-retrieval-recipes": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemotron-retrieval-recipes",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "ddea4d001a371f9752a39ac21b544fce0b79d9708923c301648e4fcd03ad8337"
     },
     "NVIDIA--skills--skills--nemotron-speech": {
       "repo": "NVIDIA/skills",
       "path": "skills/nemotron-speech",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "2f97f7a4a6bf351677a432f553dbc60dd6ce7806a3c593d676c6e8bef056a650"
     },
     "NVIDIA--skills--skills--nv-generate-ct-rflow": {
       "repo": "NVIDIA/skills",
       "path": "skills/nv-generate-ct-rflow",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "66e878781c8de965887b6813a4f5610f640b140b3c32f3e55fed51bf3b340414"
     },
     "NVIDIA--skills--skills--nv-generate-mr": {
       "repo": "NVIDIA/skills",
       "path": "skills/nv-generate-mr",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "b56eca614498eae36774f6742291ae0bf43ac634165f7008358eda0ec88b1485"
     },
     "NVIDIA--skills--skills--nv-generate-mr-brain": {
       "repo": "NVIDIA/skills",
       "path": "skills/nv-generate-mr-brain",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "0cc49f5cddc8c312e70cabf3750c037e73efad40f4e88c09fa175b9df2277356"
     },
     "NVIDIA--skills--skills--nv-generate-mr-brain-finetune": {
       "repo": "NVIDIA/skills",
       "path": "skills/nv-generate-mr-brain-finetune",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "8b2e345ab6adea39c0ec8800493f652fc88ddde4babfa03c1209e8c8efddb88b"
     },
     "NVIDIA--skills--skills--nv-generate-vae-finetune": {
       "repo": "NVIDIA/skills",
       "path": "skills/nv-generate-vae-finetune",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "5599592e09c2ee3506aacc1b13a029a2af5105f9866dfbc93980bbbad2183618"
     },
     "NVIDIA--skills--skills--nv-reason-cxr": {
       "repo": "NVIDIA/skills",
       "path": "skills/nv-reason-cxr",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "78dd2c778171cb253740e4aa43da1d26494b40d1b877c36e3be0445dce72a2ea"
     },
     "NVIDIA--skills--skills--nv-segment-ct": {
       "repo": "NVIDIA/skills",
       "path": "skills/nv-segment-ct",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "b6c129707ed3d42bdbf5024d53fb8634b9669759ad5f6c5aba6baaee426da3bc"
     },
     "NVIDIA--skills--skills--nv-segment-ct-finetune": {
       "repo": "NVIDIA/skills",
       "path": "skills/nv-segment-ct-finetune",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "f7341daa9f3b1f27554cdc768dd9634a1d17e87b62e0656d6e0a7437bdd97d58"
     },
     "NVIDIA--skills--skills--nv-segment-ctmr": {
       "repo": "NVIDIA/skills",
       "path": "skills/nv-segment-ctmr",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "43cb4ff055c1d6a53319e6900bbbd01d6f437e16a335b027724e9d0aee4e52f4"
     },
     "NVIDIA--skills--skills--nvidia-skill-finder": {
       "repo": "NVIDIA/skills",
       "path": "skills/nvidia-skill-finder",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "8b58f5294a9d84ae3104f468d82f6b69229c22c55dc6b74c83f9153bd2e699d7"
     },
     "NVIDIA--skills--skills--omniverse-cad-to-simready": {
       "repo": "NVIDIA/skills",
       "path": "skills/omniverse-cad-to-simready",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "bd3708a251503558f5ecc04d56ca2a819b875bcb140ee16b6fab2156c766caed"
     },
     "NVIDIA--skills--skills--omniverse-realtime-viewer": {
       "repo": "NVIDIA/skills",
       "path": "skills/omniverse-realtime-viewer",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d5f2691db873510eabdfe1466f9578554df98f74c9e276b23bcb508b56272847"
     },
     "NVIDIA--skills--skills--omniverse-usd-performance-tuning": {
       "repo": "NVIDIA/skills",
       "path": "skills/omniverse-usd-performance-tuning",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "e980eab39efbc0707a91c2f4b5e9839db0c8d03139e630d0f6660952bfbb70c3"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "880b2e6da750e9b8124f7af2063dfb5a9f1c603ff9c032ad8d9885aaf8e31778"
     },
     "NVIDIA--skills--skills--physical-ai-defect-image-generation": {
       "repo": "NVIDIA/skills",
       "path": "skills/physical-ai-defect-image-generation",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "04e375473c2fa6cd10b67ba3766f28e7488db13da6a07e253aced6b839bfd8e9"
     },
     "NVIDIA--skills--skills--physical-ai-infrastructure-setup-and-resilient-scaling": {
       "repo": "NVIDIA/skills",
       "path": "skills/physical-ai-infrastructure-setup-and-resilient-scaling",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "3f58e1173cdbbf9a5467a362214437418839da6c7e649d77de475fad5aac0fcd"
     },
     "NVIDIA--skills--skills--physical-ai-neural-reconstruction": {
       "repo": "NVIDIA/skills",
       "path": "skills/physical-ai-neural-reconstruction",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "9ef14a64ded8db2ac7e5772938368c6d9e06fec9cce30e5894d40d648566d910"
     },
     "NVIDIA--skills--skills--physical-ai-people-attribute-search": {
       "repo": "NVIDIA/skills",
       "path": "skills/physical-ai-people-attribute-search",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "465c8448b8ee22d3880df56be4b6fe743a671f836017deef74aa11ba87a8fc20"
     },
     "NVIDIA--skills--skills--physical-ai-video-data-augmentation": {
       "repo": "NVIDIA/skills",
       "path": "skills/physical-ai-video-data-augmentation",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "ba95a6b820ac656f624a70315fdf015b38b222dcc174ca761ccaa6c6e94e0f70"
     },
     "NVIDIA--skills--skills--physicsnemo-discover": {
       "repo": "NVIDIA/skills",
       "path": "skills/physicsnemo-discover",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "dbf12802ae5789dd84261f1c8c3d605a188a52d61167d76167b3885c8f0d40fb"
     },
     "NVIDIA--skills--skills--rag-blueprint": {
       "repo": "NVIDIA/skills",
       "path": "skills/rag-blueprint",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "3316593cfe176a9f4c39e9eef092aa3374866fb9de5325851ffebe2b0a374e73"
     },
     "NVIDIA--skills--skills--rag-eval": {
       "repo": "NVIDIA/skills",
       "path": "skills/rag-eval",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d5bcd1c664211ef06b5f697adbad1e7369980e963409a71c406cdcfa301625cd"
     },
     "NVIDIA--skills--skills--rag-perf": {
       "repo": "NVIDIA/skills",
       "path": "skills/rag-perf",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "326046f246511f64b2d8bbe668568493f02d2ffec69f7e5599fccf041e964fa6"
     },
     "NVIDIA--skills--skills--skill-card-generator": {
       "repo": "NVIDIA/skills",
       "path": "skills/skill-card-generator",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "fc02c3d6d1396660dbf2de80f53e68b9553d9f6cec17122f03715b2b2b589a6b"
     },
     "NVIDIA--skills--skills--tao-analyze-changenet-rca": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-analyze-changenet-rca",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "bb30e2579c6cf2cae0ce39e8756b222109cf1943aede0e595970bba6f8d32916"
     },
     "NVIDIA--skills--skills--tao-analyze-gaps-visual-changenet": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-analyze-gaps-visual-changenet",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "b741eb416cec58f18a619c8d711a28b13e1a4cdd7743ebd790b57c4fd74d4d07"
     },
     "NVIDIA--skills--skills--tao-analyze-gaps-vlm-bcq": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-analyze-gaps-vlm-bcq",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "5271986b19168ddc62fe75461a67bc3d2064e5c8aca60b3025c157d4ba4abbce"
     },
     "NVIDIA--skills--skills--tao-convert-dataset-format": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-convert-dataset-format",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "22387d4ef96dc6854b838ab465dd88ef11168cacbaa4ee6a96179e7ec9f83e3d"
     },
     "NVIDIA--skills--skills--tao-finetune-clip": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-finetune-clip",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "b0158c1786acfe3ebb50c96e22fa1abb84a62fd7e1317860cb1cb40234d31b4a"
     },
     "NVIDIA--skills--skills--tao-finetune-cosmos-embed": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-finetune-cosmos-embed",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "c01a3993b67597859db90841d22d02062a30c32fabfd06c364508324b0b67183"
     },
     "NVIDIA--skills--skills--tao-finetune-cosmos-reason": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-finetune-cosmos-reason",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "ddb22e33b740ad2ae41665e0764342211dfdc97e0c74b11e8914af4c89c3d39a"
     },
     "NVIDIA--skills--skills--tao-finetune-huggingface-model": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-finetune-huggingface-model",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "3a7272bbb7ba72fe265f98a6961283e0dc897bd0c23e8a7967ce9be14d0f995f"
     },
     "NVIDIA--skills--skills--tao-generate-image-grounding": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-generate-image-grounding",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "93942743217021ed1cf9b6712c74dd806c6bb0151bf6614ccb066ea57da3a57b"
     },
     "NVIDIA--skills--skills--tao-generate-referring-expressions": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-generate-referring-expressions",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d4ade0e82a98fa4f53842c2ddc458658c115986f43b711e83974d69cf6d4f72f"
     },
     "NVIDIA--skills--skills--tao-generate-video-reasoning-annotations": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-generate-video-reasoning-annotations",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "33044b83769dc6a5199bc2a724b82351df6f0a8fd8ea9b93363c742b61e11cfb"
     },
     "NVIDIA--skills--skills--tao-launch-workflow": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-launch-workflow",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "cee2d6f2a47c47497d0dcc7642e8927d299f287a65af08faea3d54f0ff96134f"
     },
     "NVIDIA--skills--skills--tao-list-capabilities": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-list-capabilities",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "ae4768647d3a8cf44921b9e39b9c4795372695b2e70f9106dac41422ced55f99"
     },
     "NVIDIA--skills--skills--tao-mine-aoi-images": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-mine-aoi-images",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "1c262af4bdb176d215aef4e36d02bdbe75f42b17d2660bf6d71bf50e89033060"
     },
     "NVIDIA--skills--skills--tao-port-huggingface-model": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-port-huggingface-model",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "7a9e1fc8e68c63fb8587235fe4f8b1e119ac65acb6f17b2f432d857ce06d3ec3"
     },
     "NVIDIA--skills--skills--tao-route-visual-changenet-samples": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-route-visual-changenet-samples",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "600dc3d3853ba4e74bda1079ee6faf56bd07f776af58c3f060bb96c84e90d858"
     },
     "NVIDIA--skills--skills--tao-run-automl": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-run-automl",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "90b787dc152456cbb61ae12f44203aaa455b6dea1d3eb10c7bbf394fbb255510"
     },
     "NVIDIA--skills--skills--tao-run-automl-deft-pipeline": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-run-automl-deft-pipeline",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "54a24b01935e08178d0894611236f1979c4440bf42007dd18f8cf0022aed8e01"
     },
     "NVIDIA--skills--skills--tao-run-deft-aoi": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-run-deft-aoi",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "4bf0439732fa70e3efcafae07648d830cb4ca6290751eb1d4c4a717877c634f0"
     },
     "NVIDIA--skills--skills--tao-run-inference-service": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-run-inference-service",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "de9b5b3bb2cf407331ee361ecd85c7b3240fe4e71b17c4725a134c53520eee16"
     },
     "NVIDIA--skills--skills--tao-run-on-brev": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-run-on-brev",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "76959bd9114fae46f8b76e159e8c76038348c5c13573edc1ddc7768c0df9a713"
     },
     "NVIDIA--skills--skills--tao-run-on-kubernetes": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-run-on-kubernetes",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d4b77b9999c651ad6835f625e097c08da171f46e83c76c8df97800827752275c"
     },
     "NVIDIA--skills--skills--tao-run-on-local-docker": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-run-on-local-docker",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "a73fb408db82e87a5abc0fb00130fa2d55c1a7bc0f1c14d6a1707fcf6cd1e8b1"
     },
     "NVIDIA--skills--skills--tao-run-on-slurm": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-run-on-slurm",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "1257c6df102f72d4257ad134de954ad0d50cd69274fa23f6d68ed5aa72976956"
     },
     "NVIDIA--skills--skills--tao-run-platform": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-run-platform",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "46808c8edd6172cef4aa4fd0e7d7037652eb8588b15cdbb6256d735ea4699d60"
     },
     "NVIDIA--skills--skills--tao-setup-nvidia-gpu-host": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-setup-nvidia-gpu-host",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "8a66534e0c67c473ad5d8aa7d759d59fd21528d9f8870774cde4a5b6636f11ad"
     },
     "NVIDIA--skills--skills--tao-train-action-recognition": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-action-recognition",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "0f299798187ffc65c3e17e9bed21295a2a5770c070ba76efcaba3646690d05e9"
     },
     "NVIDIA--skills--skills--tao-train-bevfusion": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-bevfusion",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "678f273e9d9300b7dac83d1724d67d10e9f31ab9bb7f750a3df5d65e9ae63b29"
     },
     "NVIDIA--skills--skills--tao-train-centerpose": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-centerpose",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "efeb4c9ae72846c145d9a8023ef6bc94a3619de1d2779e6dda4feb8e194a6dd4"
     },
     "NVIDIA--skills--skills--tao-train-deformable-detr": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-deformable-detr",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "e684f93cbf4241e6bb5bc0f7e2f0b77c49fcff521aa9d772e792aa115384342a"
     },
     "NVIDIA--skills--skills--tao-train-depth-anything-v2": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-depth-anything-v2",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "895e86d6dfdecdc0d08aff49f47f2a3ad310fb0c0f2b2728d75b19d121b33bf8"
     },
     "NVIDIA--skills--skills--tao-train-dino": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-dino",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "90d99d7a9313938ee46462edf913efde8fb372af8c8528ac2c7ebcc4b4ea0490"
     },
     "NVIDIA--skills--skills--tao-train-fast-foundation-stereo": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-fast-foundation-stereo",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "90ad574545be2e2eea0837a9adf4c15e3cf0b3df6f050fa2114918fad0b2cc57"
     },
     "NVIDIA--skills--skills--tao-train-foundation-stereo": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-foundation-stereo",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "242ca618a56f587911408370fa803cc6ed4a02daaeb0af7dd29eb16d36ad973f"
     },
     "NVIDIA--skills--skills--tao-train-grounding-dino": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-grounding-dino",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d477c10a6bc88a4dbc844598c1e70b644519619f7832c10f380b1fcfd428272c"
     },
     "NVIDIA--skills--skills--tao-train-image-classification": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-image-classification",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "bd7716ef34c95d22c487199f41509608f5c5fdc8dfcfec7b503168640720e8ad"
     },
     "NVIDIA--skills--skills--tao-train-mask-auto-encoder": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-mask-auto-encoder",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "951cf147b8b8a71c68122589ec2b14d23e15e9c84c68bd7c1a65b62b3b0ab673"
     },
     "NVIDIA--skills--skills--tao-train-mask-auto-label": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-mask-auto-label",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "3d05900d5c99eab2f8820850442c5a7f823d3ae217aeed58dbb461323989786c"
     },
     "NVIDIA--skills--skills--tao-train-mask-grounding-dino": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-mask-grounding-dino",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "12aa253bf73239d051b852c4f55246117c2fdd554c6b43ce7d9bb29be5f976bd"
     },
     "NVIDIA--skills--skills--tao-train-mask2former": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-mask2former",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "080949ca4d30ada13662324e92b98a380e775e111d584279e42a96bc0f9d708a"
     },
     "NVIDIA--skills--skills--tao-train-metric-learning-recognition": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-metric-learning-recognition",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "4276c6ceda1ad83f0aea8991003a4d6f529e262d8206e639fc29f5c323f897a1"
     },
     "NVIDIA--skills--skills--tao-train-nvdinov2": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-nvdinov2",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "5e70bc8b9f0f2d7b9e4cd4efebeab3c368d9a6e8347b66ee9982bd3588ff0fd2"
     },
     "NVIDIA--skills--skills--tao-train-nvpanoptix3d": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-nvpanoptix3d",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "aa70373fadef0ad7d80dac1aa9c9fe65a34f26446c25ddd8ff74bd76d1a7476a"
     },
     "NVIDIA--skills--skills--tao-train-ocdnet": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-ocdnet",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "fd1993c7f018634622bbc2ee96acac71d05d7f225a286e5b4a9e465682a9ee04"
     },
     "NVIDIA--skills--skills--tao-train-ocrnet": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-ocrnet",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "8d27c0941769aef817b5856bd2e096f0f304484ecc0eae21f146551ad990223d"
     },
     "NVIDIA--skills--skills--tao-train-oneformer": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-oneformer",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "719d85cd828e10b8b69a7fdb7adcd433d5a525dd4f08168b1143019c08ed9451"
     },
     "NVIDIA--skills--skills--tao-train-optical-inspection": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-optical-inspection",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d0dc1f5f8242276cfea22c1ab84a489a0357aeaaf3fc5055c1b4749ecf0b3f35"
     },
     "NVIDIA--skills--skills--tao-train-pointpillars": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-pointpillars",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "05c540909a848e42eb4644702e49c7a8117a68e9279029165c2672e67b332144"
     },
     "NVIDIA--skills--skills--tao-train-pose-classification": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-pose-classification",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d7fbd274aeba1b19385f002375391218289e34aba135a1f077faff3305853957"
     },
     "NVIDIA--skills--skills--tao-train-reid": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-reid",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "45fe747fba1290ba38a35ad860fb32c64ad066f2d0b6aab2adf3343880fc0b0f"
     },
     "NVIDIA--skills--skills--tao-train-rtdetr": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-rtdetr",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "65209764d7d33be8e411e6e839ad283ffed19bae6cde0690aa8e3f577996589b"
     },
     "NVIDIA--skills--skills--tao-train-segformer": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-segformer",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "426a2b57d2bf95c91e4ceefcabcf7f9ce59f1fa4fcdc1c499b472b11846e033f"
     },
     "NVIDIA--skills--skills--tao-train-single-step": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-single-step",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "23e4e11a70be6c0e77d9d7fbec93479a2566e16de75cddbc4edfaf2f2b72d0f8"
     },
     "NVIDIA--skills--skills--tao-train-sparse4d": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-sparse4d",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "6ac3c553b55fb1cb7d799ebe37f38e21f4c634b0d09e8e32efcb725383599668"
     },
     "NVIDIA--skills--skills--tao-train-visual-changenet": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-train-visual-changenet",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "ef5fe6815868e2adf740b3487a95dbeed1f494277d0ad6b1a36d17a255ba4cbf"
     },
     "NVIDIA--skills--skills--tao-validate-dataset-format": {
       "repo": "NVIDIA/skills",
       "path": "skills/tao-validate-dataset-format",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "e95f52b12dcd99a45146ca5d54a92f9f320b88e84b61d9b41f059ac1148a2581"
     },
     "NVIDIA--skills--skills--tilegym-adding-cutile-kernel": {
       "repo": "NVIDIA/skills",
       "path": "skills/tilegym-adding-cutile-kernel",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "8d1294d38865b8f0e71823df8ced38c95e4acd600caad47239f4479e9ad2fc55"
     },
     "NVIDIA--skills--skills--tilegym-converting-cutile-to-julia": {
       "repo": "NVIDIA/skills",
       "path": "skills/tilegym-converting-cutile-to-julia",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "d5ddc704538081074beaa56c95651276b3f4a4312a9004c08001841f26037e12"
     },
     "NVIDIA--skills--skills--tilegym-converting-cutile-to-triton": {
       "repo": "NVIDIA/skills",
       "path": "skills/tilegym-converting-cutile-to-triton",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "eea8fb1eef04a448a29bc4f8bdaea8c9939805a4d08c04a3fa7c8c2db9494120"
     },
     "NVIDIA--skills--skills--tilegym-cutile-autotuning": {
       "repo": "NVIDIA/skills",
       "path": "skills/tilegym-cutile-autotuning",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "3b4bca25d7818b75e3d63c9af166478ea4c956f3d5f2a45d603ae4db008f0067"
     },
     "NVIDIA--skills--skills--tilegym-cutile-python": {
       "repo": "NVIDIA/skills",
       "path": "skills/tilegym-cutile-python",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "159a0edfe616dc7261394e9100e3de67b5960f88737ace7c0ff35d660bf73ddc"
     },
     "NVIDIA--skills--skills--tilegym-improve-cutile-kernel-perf": {
       "repo": "NVIDIA/skills",
       "path": "skills/tilegym-improve-cutile-kernel-perf",
-      "pushedAt": "2026-07-27T08:33:51Z",
-      "contentHash": "5f33cf6b48bde28468b9187ec28e0013c58a535aa63848cfa2a3a17ce3fb4ffe"
+      "pushedAt": "2026-08-07T18:46:21Z",
+      "contentHash": "c9d40f15a66b05473491c636c9484b672d0c91b236eefb3fb3ee08929ddb26d8"
     },
     "NVIDIA--skills--skills--tilegym-monkey-patch-kernels-to-transformers": {
       "repo": "NVIDIA/skills",
       "path": "skills/tilegym-monkey-patch-kernels-to-transformers",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "563fbce411697f368201c0ca30feb507fb4026ff7c813c5c5ff4498d6c498422"
     },
     "NVIDIA--skills--skills--vss-ask-video": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-ask-video",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "21b0e1c745317cf94d7e8dba21858e7a1dd042925a864bf61b78496d997a61e4"
     },
     "NVIDIA--skills--skills--vss-deploy-dense-captioning": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-deploy-dense-captioning",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "3e2802f9c3c1ebd853e54965926e120b4f43a4cda3f3043a00e50f3c24958d49"
     },
     "NVIDIA--skills--skills--vss-deploy-detection-tracking-2d": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-deploy-detection-tracking-2d",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "e0c11bc079033463ec8cab88868b2bfba33caadd42267bea9a4ac831b62f25dc"
     },
     "NVIDIA--skills--skills--vss-deploy-detection-tracking-3d": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-deploy-detection-tracking-3d",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "7336b5aebe6eabf4bafd5edca005d57b02533e01bb1e33e59aa584079ce19fc6"
     },
     "NVIDIA--skills--skills--vss-deploy-profile": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-deploy-profile",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "e26902a58461c547b80100ad401e9a443c38a74bb8b5faf7c2836a5e05374dc7"
     },
     "NVIDIA--skills--skills--vss-deploy-video-embedding": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-deploy-video-embedding",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "97b413a225fe3d7880d96f2c01e1e18d49f6ed6ac7205494eca3de3c4c7b358e"
     },
     "NVIDIA--skills--skills--vss-generate-video-calibration": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-generate-video-calibration",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "69bc2adf5481035a2776b5c542ae4a47f843f17d070192864413f68e944ccbe3"
     },
     "NVIDIA--skills--skills--vss-generate-video-report": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-generate-video-report",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "2f148782f42935cd9de7cf56747a239bdcf7c1b51b64c9d2a602794d91bf1ae9"
     },
     "NVIDIA--skills--skills--vss-manage-alerts": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-manage-alerts",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "f3e0419f3a5933f29c8dd36abc633c06f626e2c1058afe27def72c2315f82486"
     },
     "NVIDIA--skills--skills--vss-manage-video-io-storage": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-manage-video-io-storage",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "87977d49418ddc53c524b9ce495d3a43e87b925ce7438c9db8929850c2aa5a66"
     },
     "NVIDIA--skills--skills--vss-query-analytics": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-query-analytics",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "890185c16f4238aa21d55113d1c31c89656ecdaaadc416711af4fafd2a4a925b"
     },
     "NVIDIA--skills--skills--vss-search-archive": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-search-archive",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "e554e1d21227075cf49414a719e9f60d63cc561450f5a520e63229d704c61bd9"
     },
     "NVIDIA--skills--skills--vss-setup-behavior-analytics": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-setup-behavior-analytics",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "3ba8305a81c0f1433a3eaf50b99f7372e1fbed1c40a50b627a8dc2eee2fdbb4c"
     },
     "NVIDIA--skills--skills--vss-setup-video-analytics-api": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-setup-video-analytics-api",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "4911755cd88ff95819e9fc1e4df4777320146369b08c7a1a6d65e12850151684"
     },
     "NVIDIA--skills--skills--vss-summarize-video": {
       "repo": "NVIDIA/skills",
       "path": "skills/vss-summarize-video",
-      "pushedAt": "2026-07-27T08:33:51Z",
+      "pushedAt": "2026-08-07T18:46:21Z",
       "contentHash": "b3716f08b77e0c496a95aafefd382d30bb20794a1f1903f70a098cf3b359ef05"
     },
     "garrytan--gstack--autoplan": {
       "repo": "garrytan/gstack",
       "path": "autoplan",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "27b9321eb8b1ac3df46dbad00c303380d4bc5e4193e1b14123f52338483822b0"
     },
     "garrytan--gstack--benchmark": {
       "repo": "garrytan/gstack",
       "path": "benchmark",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "60c1602410dcba9507c853e8f87ac2a0d9dcfd12a535a4e8619591bda8292635"
     },
     "garrytan--gstack--benchmark-models": {
       "repo": "garrytan/gstack",
       "path": "benchmark-models",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "145c0668479433b8f3593671ad8ed65cd4b065a92734ac41e1327a382a57ef8e"
     },
     "garrytan--gstack--browse": {
       "repo": "garrytan/gstack",
       "path": "browse",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "c55f29ffe24bf0fe00cb14b97aa4e2cacc5e876c657c3ebc8e5c13bdd7bbdb90"
     },
     "garrytan--gstack--canary": {
       "repo": "garrytan/gstack",
       "path": "canary",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "b4bc4d24ef328753e2ff721f21a2f5f0c10c058f8b2b190d09709047798d65ba"
     },
     "garrytan--gstack--careful": {
       "repo": "garrytan/gstack",
       "path": "careful",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "fa2488a709c50deeebd2b9ba15781a39ee646404b4f9fa0b61d043afbf1d156f"
     },
     "garrytan--gstack--codex": {
       "repo": "garrytan/gstack",
       "path": "codex",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "f70cf3d0f83f833087a2b149586152702ab8723ef78e1c92a0bc6882c16062ca"
     },
     "garrytan--gstack--context-restore": {
       "repo": "garrytan/gstack",
       "path": "context-restore",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "82050355de5f1bfea23268c5e4f06ed9375031ef308c07202b5d16dca2522e12"
     },
     "garrytan--gstack--context-save": {
       "repo": "garrytan/gstack",
       "path": "context-save",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "ef8cf605836b509932e5f0fc7d678b5dd19ddb67a8c299b46a96395a7fe58a0e"
     },
     "garrytan--gstack--cso": {
       "repo": "garrytan/gstack",
       "path": "cso",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "15ee201d362d74f3f9e98f7b03310b6c4fee94f04a6e5cc36deb519d7e5b1637"
     },
     "garrytan--gstack--design-consultation": {
       "repo": "garrytan/gstack",
       "path": "design-consultation",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "8944304d19b0f24a8b65daa429280c8a49b765543dace74200f7c5fc30b5c2e5"
     },
     "garrytan--gstack--design-html": {
       "repo": "garrytan/gstack",
       "path": "design-html",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "e58cc65a7f73263ec5e44d62dc5472fb6898ab76911464e192acbe5a58f77cad"
     },
     "garrytan--gstack--design-review": {
       "repo": "garrytan/gstack",
       "path": "design-review",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "533e7fe33af4b87719529328f8bf208a87a272542bc5f479119a2bd997b8a28a"
     },
     "garrytan--gstack--design-shotgun": {
       "repo": "garrytan/gstack",
       "path": "design-shotgun",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "e5bf2e9b67534e2adb711bb1c834133939c7b2860d99bc570addb05339728c09"
     },
     "garrytan--gstack--devex-review": {
       "repo": "garrytan/gstack",
       "path": "devex-review",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "5634f74c68b28606d7f3b3f7783792e4b94113539abca04d51ccb2082a0b5f50"
     },
     "garrytan--gstack--diagram": {
       "repo": "garrytan/gstack",
       "path": "diagram",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "b64b314ac419bf9438108b64cc3cf3880dd15882d462a871cd72b5c253f69ed3"
     },
     "garrytan--gstack--document-generate": {
       "repo": "garrytan/gstack",
       "path": "document-generate",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "9c510d71a17cfa0301a106f7b7bf44cab3257123f69be6bdc81ac9d1207b0e1f"
     },
     "garrytan--gstack--document-release": {
       "repo": "garrytan/gstack",
       "path": "document-release",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "a650c1d74f91c8d9b7a69eb8be61dc5c7111e36c5f49998781eb5e539b54d388"
     },
     "garrytan--gstack--freeze": {
       "repo": "garrytan/gstack",
       "path": "freeze",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "0c807bcffa20c150a0b40072ce48fdfa5c80c59af544c8945a0ae55facdf1400"
     },
     "garrytan--gstack--gstack-upgrade": {
       "repo": "garrytan/gstack",
       "path": "gstack-upgrade",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "4e1f2691a56dd32bf0c0394227e0cbe5250d6652db96e6192c9b87fcad43d9af"
     },
     "garrytan--gstack--guard": {
       "repo": "garrytan/gstack",
       "path": "guard",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "8f185750d0902fc9dc6d25c9fd99da639fa398341c8a0718c38ae036b086c72e"
     },
     "garrytan--gstack--health": {
       "repo": "garrytan/gstack",
       "path": "health",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "86242147de78bdd343dffb2821880a63afa824d0c4cfa08c99fc3749bae8bcd4"
     },
     "garrytan--gstack--investigate": {
       "repo": "garrytan/gstack",
       "path": "investigate",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "af75bd4efa3c59734e9bdb967f7b6d570963da7f2b284e181c6031e809691b3b"
     },
     "garrytan--gstack--ios-clean": {
       "repo": "garrytan/gstack",
       "path": "ios-clean",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "04376c58cd42b9fc551a77b534f6bc932867042e358aac469ad951a7a438219d"
     },
     "garrytan--gstack--ios-design-review": {
       "repo": "garrytan/gstack",
       "path": "ios-design-review",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "319ed095500beadd228d82524fc21579d7d1a5799cc029fb2ef15e743b641969"
     },
     "garrytan--gstack--ios-fix": {
       "repo": "garrytan/gstack",
       "path": "ios-fix",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "834a6e96aef20ce61dffca9d350b2817b2abee4aabe448109fc592621061483a"
     },
     "garrytan--gstack--ios-qa": {
       "repo": "garrytan/gstack",
       "path": "ios-qa",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "e5f207a29c3223e33e2d4785a5b04dfa2f2fe325faad8f7a65e5454abec8f4f3"
     },
     "garrytan--gstack--ios-sync": {
       "repo": "garrytan/gstack",
       "path": "ios-sync",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "f3bf7fe118de1e1099ce62c7ae867cf1feb0c1067215bc88d641064dc3f31640"
     },
     "garrytan--gstack--land-and-deploy": {
       "repo": "garrytan/gstack",
       "path": "land-and-deploy",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "7be7e1ceba84c1bcaf20cc9d0995bc80b0f211d2fbcf66d3fd656a15cb24cbcd"
     },
     "garrytan--gstack--landing-report": {
       "repo": "garrytan/gstack",
       "path": "landing-report",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "c9e4d36bcc125dfdf9b7a70322b5eaa7d1bbb68fc3acaf075bce09a4fe9f946e"
     },
     "garrytan--gstack--learn": {
       "repo": "garrytan/gstack",
       "path": "learn",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "da66045b035386e1a6656e04690477c36dee42662b5e09c545d91458b3d477ef"
     },
     "garrytan--gstack--make-pdf": {
       "repo": "garrytan/gstack",
       "path": "make-pdf",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "e8d2749339e2c4eefc4b08a913f4f80e3716051e57f14b1ea5eed9ba5e6158b7"
     },
     "garrytan--gstack--office-hours": {
       "repo": "garrytan/gstack",
       "path": "office-hours",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "3d54709854dd6226fff81f3c368576b6c482bf10c533690bd2ec5f3abd1f965c"
     },
     "garrytan--gstack--open-gstack-browser": {
       "repo": "garrytan/gstack",
       "path": "open-gstack-browser",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "a8e7928a00041c936dbccc4386ba27e65fbd15088efbc4688da616db0f3ae69d"
     },
     "garrytan--gstack--pair-agent": {
       "repo": "garrytan/gstack",
       "path": "pair-agent",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "fb400c2dd90d2f267d24dd7f533f30149da8c32f1caf29fa24666482eee4e5ec"
     },
     "garrytan--gstack--plan-ceo-review": {
       "repo": "garrytan/gstack",
       "path": "plan-ceo-review",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "effa1a998da9d91127bc145417870b12896741d61c01c34e585f073f1f72e6b7"
     },
     "garrytan--gstack--plan-design-review": {
       "repo": "garrytan/gstack",
       "path": "plan-design-review",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "bf8bc877d1852cb26e31f2302634fd8351ea032598ac2cacbe6c57d45c3ab554"
     },
     "garrytan--gstack--plan-devex-review": {
       "repo": "garrytan/gstack",
       "path": "plan-devex-review",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "73bfef6d7444e28ffb8bde377b0f5b1899fdca19af0c5dd9bd8277a13c8f7b92"
     },
     "garrytan--gstack--plan-eng-review": {
       "repo": "garrytan/gstack",
       "path": "plan-eng-review",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "1ea57c082ef9e5f4910acfd91af55ccd9c970f1c4cc46e25995fba589f7d3b61"
     },
     "garrytan--gstack--plan-tune": {
       "repo": "garrytan/gstack",
       "path": "plan-tune",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "6f7d1d40b83c99e539961a2d0575d4f1c4c71fd351d09f380f0b7e69bae437ad"
     },
     "garrytan--gstack--qa": {
       "repo": "garrytan/gstack",
       "path": "qa",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "a504a633975e4a6531aac3d8dd1970f9089591e9108cd3190ac290ab44391813"
     },
     "garrytan--gstack--qa-only": {
       "repo": "garrytan/gstack",
       "path": "qa-only",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "e3fe55254144e445a7ba9b137b48fbf32cd6111c6658608807ab721ecf669d75"
     },
     "garrytan--gstack--retro": {
       "repo": "garrytan/gstack",
       "path": "retro",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "59e0d473f2634bb22ff27abcac05f6144c230b4c37dc62fb442ed29d098a96cf"
     },
     "garrytan--gstack--review": {
       "repo": "garrytan/gstack",
       "path": "review",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "ea0f701ef985207fb2399614fbb00a4bd6836da96ab263a62e0f0a1126be095c"
     },
     "garrytan--gstack--scrape": {
       "repo": "garrytan/gstack",
       "path": "scrape",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "345dbe3fac5e2e9c7b7be85036e8c416c9d8928c51879105cfd2b108d7963786"
     },
     "garrytan--gstack--setup-browser-cookies": {
       "repo": "garrytan/gstack",
       "path": "setup-browser-cookies",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "3d575765a65c58029e055974fe97424993325950638b302228a0dd671a2dead4"
     },
     "garrytan--gstack--setup-deploy": {
       "repo": "garrytan/gstack",
       "path": "setup-deploy",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "c401820704acaa052041f7da65e1d29154c881f221282c1fb1d2ebbc6b399de2"
     },
     "garrytan--gstack--setup-gbrain": {
       "repo": "garrytan/gstack",
       "path": "setup-gbrain",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "43a84535638a109d83fc9e2795ad7231deeecb0e4d69f3d3c43d79d9849e06ee"
     },
     "garrytan--gstack--ship": {
       "repo": "garrytan/gstack",
       "path": "ship",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "c541e7ce76165dd0ce433ba6a9eb08d2daebba41eba84e4210ef66b665e7f3c0"
     },
     "garrytan--gstack--skillify": {
       "repo": "garrytan/gstack",
       "path": "skillify",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "679fed7db80a0cc376f409801b6fde43de6e5a6d5e9ca4839836db9854d8b767"
     },
     "garrytan--gstack--spec": {
       "repo": "garrytan/gstack",
       "path": "spec",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "0b737e28f49e92f83b4d13c611534331c33512038febdc64e6a8d51ca4134b95"
     },
     "garrytan--gstack--sync-gbrain": {
       "repo": "garrytan/gstack",
       "path": "sync-gbrain",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "4aabeae9d3a9f359c4e12afdc719292b2fb1eec025cd4ffb2a924a1604aab05a"
     },
     "garrytan--gstack--unfreeze": {
       "repo": "garrytan/gstack",
       "path": "unfreeze",
-      "pushedAt": "2026-07-15T01:33:47Z",
+      "pushedAt": "2026-08-07T22:49:25Z",
       "contentHash": "0b507898c6f696e5b2bcfa42738d21bff95457052731c8fe4bd64eb8f3be34f9"
     },
     "official--security--1password": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/security/1password",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "029c44800a5f283375d73ab651c4c9a5ad116c3b286858332c0ab25eb5eacd28"
     },
     "official--finance--3-statement-model": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/finance/3-statement-model",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "d57ba45dd2739113c645aefd7a3e69048a708c01aa61876f867975d1477ca831"
     },
     "official--dogfood--adversarial-ux-test": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/dogfood/adversarial-ux-test",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "7d934904e69969119c9b9f9ddcb635e648356e82c846802c445d6f88f2ebf793"
     },
     "official--email--agentmail": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/email/agentmail",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "dff0ea4c2c1a7973a81b989686fdf4515af6c2876c2ee0cf35ee4591f8fd909f"
     },
     "official--autonomous-ai-agents--antigravity-cli": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/autonomous-ai-agents/antigravity-cli",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "c3db7bd765b769c6c5f9ae02a70145fe060541eed5a82adcdc6b1870cf3d316d"
     },
     "official--mlops--training--axolotl": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/training/axolotl",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "536b20695a1499177e974faafd743a45eb6f3f008307ce4b2b00d48413c104fa"
     },
     "official--creative--baoyu-article-illustrator": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/creative/baoyu-article-illustrator",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "f2216ccfa81b7cc521424963075dea218b6e3cc00152e889a6372a5c288b44ae"
     },
     "official--creative--baoyu-comic": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/creative/baoyu-comic",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "5a9f0fb07eafeeacbcd46d4c2d836f11e4fb797ed59b0222d9d614dd5c24eecd"
     },
     "official--research--bioinformatics": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/research/bioinformatics",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "182cc106ea42ef06636c01e674846b39176c403f37eda61a68949c15f7878229"
     },
     "official--autonomous-ai-agents--blackbox": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/autonomous-ai-agents/blackbox",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "8895164e934ae142afd0f0eed33a3752f204af8e29b1ae224d6aaa969273f9b3"
     },
     "official--creative--blender-mcp": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/creative/blender-mcp",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "b18350b603a808d3396ec488b787879b373d70e478105b00f2733cd307addd58"
     },
     "official--productivity--canvas": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/productivity/canvas",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "acdd9f7e2d2fe0bc8892c89a1eeeaacc886694ff92042258c1977484621ca87c"
     },
     "official--mlops--chroma": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/chroma",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "7bf35ed66957c81ea8d064e066e8f46348bf1b99828a71cbca8c391e3930f970"
     },
     "official--mlops--clip": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/clip",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "ee752cab63648d9e45266e7e91f298992f950e567be09abb5d45454c86b860f7"
     },
     "official--web-development--cloudflare-temporary-deploy": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/web-development/cloudflare-temporary-deploy",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "2435a81358450cba112ce5b29cc55cb407960ab626533174127121234cbb6ba6"
     },
     "official--software-development--code-wiki": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/software-development/code-wiki",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "e5fd14dc30100ebdba456fc1e5ad41d98858592aedba5b403b524a41d578222e"
     },
     "official--finance--comps-analysis": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/finance/comps-analysis",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "8de88b0609a7e3d63fa78632f526a6bd5fe483f14fe4359752d81daca21e42cd"
     },
     "official--creative--concept-diagrams": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/creative/concept-diagrams",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "24d4ce99e632746eca65aa5010e04e762b8a2554be41d1ce8f461559abed3eda"
     },
     "official--creative--creative-ideation": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/creative/creative-ideation",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "491628c81810300b23cb6ed9ea49cf0122262da0158edbf4ffd12b86c2a1e9b7"
     },
     "official--research--darwinian-evolver": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/research/darwinian-evolver",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "a0e2292a4b4df1df1634a67c54d55c3a3457d64b8f0f34965b420968685ad237"
     },
     "official--finance--dcf-model": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/finance/dcf-model",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "c2230d31823cc7bd4b8bde55ec7b9d9370722af952d30a134c848b4ca5af32d0"
     },
     "official--mlops--torchtitan": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/torchtitan",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "7b5d8ca9443260387ee9cd658aadddc03c7e2e7becb5a95cdc7e9f72711cfec3"
     },
     "official--devops--docker-management": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/devops/docker-management",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "eb95e33dd5dc50157bc475844d836e6b94c3a3a9649c6f57b854387b0ec9c7e1"
     },
     "official--research--domain-intel": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/research/domain-intel",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "e19834333c049ecb1990730ccd5d251ea3d2ecc70cb36311f6c86bf4dc5d4fd1"
     },
     "official--research--drug-discovery": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/research/drug-discovery",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "38d5b41fd9fdbdab63d0fb399427fd4d58a7fd019bd7e532a05c32fc5952ba01"
     },
     "official--mlops--research--dspy": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/research/dspy",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "eed8df1d7735fa5ed5f6fb6a08485945266a4eea2de9816a0d6b8423f0e53e6e"
     },
     "official--research--duckduckgo-search": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/research/duckduckgo-search",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "9fd8a22636750965ee1d0bd53f2466573d71f42d1adb059e4357e0e95b316300"
     },
     "official--blockchain--evm": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/blockchain/evm",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "83cdb19b378112a7755dba3787a1706b550c931156f1f61075b5268225e3c0d8"
     },
     "official--finance--excel-author": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/finance/excel-author",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "494f254f5d2537ac867ccac25d33947ad32ed58292c0060cede742bcb9a71558"
     },
     "official--mlops--faiss": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/faiss",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "15ecdfdc9d7dbe5cf358faedbe05d1832bd20c425d6bb3ab012073d10f18f7e9"
     },
     "official--mcp--fastmcp": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mcp/fastmcp",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "fd8ebf2424f57ae58909fbfd3ed05a344b84c86d1db52dfa2851db21dd079e33"
     },
     "official--mlops--training--trl-fine-tuning": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/training/trl-fine-tuning",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "39a0cb9885435f5eb0fd57e3ad8df0de603ca9d5a0697b78747b14def640eb9c"
     },
     "official--health--fitness-nutrition": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/health/fitness-nutrition",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "c892293c8319044eddc530f69e019649f16040ef68daad77fc288cb7c3888c36"
     },
     "official--research--gitnexus-explorer": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/research/gitnexus-explorer",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "6bf4f230e99b862cf1b9502b886b25a0f7ff0e726b00e0b03a9fe2db0f88caf3"
     },
     "official--security--godmode": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/security/godmode",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "f57d20054b11e679353c9d032d6b958ba16c07458b290ecca31167fc48c80d6f"
     },
     "official--autonomous-ai-agents--grok": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/autonomous-ai-agents/grok",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "c7266a5f5d046b7da642cf89ecdd596b479be6dca4cc91b42805c9433a1cd5fe"
     },
     "official--mlops--guidance": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/guidance",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "5aa17514576cbc6beb71ac6caad6e8bfa51e24007ed8bac058c06dfe7795fac1"
     },
     "official--productivity--here-now": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/productivity/here-now",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "0f71509954e34ec71a1f04533a1bfd26c0f7b40963eea751aa4cec512bc82d56"
     },
     "official--devops--hermes-s6-container-supervision": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/devops/hermes-s6-container-supervision",
-      "pushedAt": "2026-07-27T07:24:11Z",
-      "contentHash": "d95bd275847d734a9d330661a3685cd7d0eaf13afe360c99a09dedd9783ce737"
+      "pushedAt": "2026-08-08T08:01:05Z",
+      "contentHash": "233aa8bcdad84605e00f0ba28cfafbc9097c4ffc97ddb050e3bd9931eb84eb94"
     },
     "official--autonomous-ai-agents--honcho": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/autonomous-ai-agents/honcho",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "f48bad220f31f8dc3a98d8404c6e8b9f4812eaa12af1e38c86d1a3e1f686c77c"
     },
     "official--mlops--accelerate": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/accelerate",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "5e7e94ed6d9a30a8162f9d954062c638049dd54eaa1caf1c1d70bd0863a77726"
     },
     "official--mlops--huggingface-tokenizers": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/huggingface-tokenizers",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "87ec2965b62b2d63b86a48e5a7f83f8acb7a112f44c3a55af3707431d33b7e51"
     },
     "official--creative--hyperframes": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/creative/hyperframes",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "0a11dfb0c4a311e9a92ad49762610a23d8b241df298524489557fe4a3449b9ae"
     },
     "official--blockchain--hyperliquid": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/blockchain/hyperliquid",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "9145ae6e9dba3b0553ba0e1330730d165c4264e21eaa7b1a4604097f56c2e92a"
     },
     "official--devops--cli": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/devops/cli",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "676d081a4ae62386d0e92be08b1ebe46d16a541caacb6e85e96968fdc90fe9d4"
     },
     "official--mlops--instructor": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/instructor",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "15f4638418b940281697dd3e9c32cfdffffbd67e79324cbd441ec5df9a599cea"
     },
     "official--creative--kanban-video-orchestrator": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/creative/kanban-video-orchestrator",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "4910a5ff2611b3e1390d90a0f7b4c3c92c4178d07e72c5348ca438a173e9b752"
     },
     "official--mlops--lambda-labs": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/lambda-labs",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "c341886c2b45a064a74c8a85903a2b2f46d6f49dbe150b279c6858203f4c5df5"
     },
     "official--finance--lbo-model": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/finance/lbo-model",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "d8717ce9ed4b9e40da2fc4f69a0e72d2872980225574a1a8abf8f48b57929be0"
     },
     "official--mlops--llava": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/llava",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "ac856998ebb95afdeefe941e91818a1bac9b252e60f38aa0a5aff393d5dcfa82"
     },
     "official--mcp--mcp-oauth-remote-gateway": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mcp/mcp-oauth-remote-gateway",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "ae368ea6d9be56765ed45fffd2ecfb67317092103ecb205162d454fadbe4472f"
     },
     "official--mcp--mcporter": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mcp/mcporter",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "cdb917c6228567de9a38598942ea7f2f44464cde9c717f5c33f0b918af04c52a"
     },
     "official--creative--meme-generation": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/creative/meme-generation",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "3d439257cc3937d2d08238c7d4581777afae0833a593514df9adaa45823012c5"
     },
     "official--productivity--memento-flashcards": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/productivity/memento-flashcards",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "5d40e85642685ac2fd4749dec28b1048253da42e4cfa68d274c6ae04adb9c04b"
     },
     "official--finance--merger-model": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/finance/merger-model",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "bf03ae39c6c3266b5805d1d974559d56c2d02f747022b0366b16c7699daf1c3f"
     },
     "official--gaming--minecraft-modpack-server": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/gaming/minecraft-modpack-server",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "7b280be63bf365e98ee8c32b574d323101d63ead46e7934e8a17d9daf89742e2"
     },
     "official--mlops--modal": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/modal",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "6bfbe30c610f68c0bc902aabc99fe9cab5c84bcf204b96505de895c5c6f19d6b"
     },
     "official--payments--mpp-agent": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/payments/mpp-agent",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "68b938688cef8b1cd17a2ed8b8f82e0ca465c5d7d8770ed710f8ea2899ed7d97"
     },
     "official--mlops--nemo-curator": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/nemo-curator",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "4bb700c78f3ec80dc86dee422706b828c01bc09a4074602659799d058f27ba40"
     },
     "official--health--neuroskill-bci": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/health/neuroskill-bci",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "52701f2fff1969a683786cf73b507c1a56a0979d2361e8e21bf33ed5bb623981"
     },
     "official--mlops--obliteratus": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/obliteratus",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "7e5042c9cde138ac2443d38d595eb7300b6d22de3d45cfc1e094dbee67ef9ad7"
     },
     "official--communication--one-three-one-rule": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/communication/one-three-one-rule",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "194ca759562a73ac1cd1b7b9e789598159cf787ca48f5a03c7476eb892d29477"
     },
     "official--migration--openclaw-migration": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/migration/openclaw-migration",
-      "pushedAt": "2026-07-27T07:24:11Z",
-      "contentHash": "31826c5ae27d22fc6d23e86dc67f59e4d13fca3dc37995273e720d0119531779"
+      "pushedAt": "2026-08-08T08:01:05Z",
+      "contentHash": "ef9ab8382eec63dc093bd2c71b32ba06fba95aedc8fe98fc9c5c8fa11982f6ac"
     },
     "official--autonomous-ai-agents--openhands": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/autonomous-ai-agents/openhands",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "983d7548679fad9c7557932bd26b8d629dbdc9ea02c2f3c5882b5e4a700db800"
     },
     "official--mlops--flash-attention": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/flash-attention",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "8966964f91de4d348e243fdebae2d8a91ff140f64b213c38b9e9dcab6b443bbf"
     },
     "official--research--osint-investigation": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/research/osint-investigation",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "e609f9dae3389d1cd021a4e3ccaf2518d722eb23c301b1d34a854507ef922e80"
     },
     "official--security--oss-forensics": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/security/oss-forensics",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "fecceec0df7bc9881b8b16bb47bb60f3d5611c67cae77c49c3252fabb77abfd1"
     },
     "official--mlops--inference--outlines": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/inference/outlines",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "543ae89da4165d295b02d1a4eb8f0d14f4b62979ce58d72333f5b0811b5ecd2a"
     },
     "official--web-development--page-agent": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/web-development/page-agent",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "d4838b00331e23f80a5a4dad51c5a1c10bb073c0faa1f0b8b2a0d8730e70e2c7"
     },
     "official--research--parallel-cli": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/research/parallel-cli",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "df5d6f6a9b1a2279217fd52efc0230cb32651d86c23e750b2f821ba309084409"
     },
     "official--mlops--peft": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/peft",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "9130f26642b43b27eff842ed7f224ae3f46893f2c1afd0f6187cf363c888ea58"
     },
     "official--mlops--pinecone": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/pinecone",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "1f7ec9ca6f6d2b8b114f45da4f4cc9f585c9ac18487d7cbd9db14057830cc202"
     },
     "official--devops--pinggy-tunnel": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/devops/pinggy-tunnel",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "b81adf019729dc40ea7ad21f6b51aa5d967cf7987166850022d0d04dab7bea3a"
     },
     "official--creative--pixel-art": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/creative/pixel-art",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "06ef8938adeb9ce005edaf026397a6851f5f15d9765a6af29316538ce10ae086"
     },
     "official--gaming--pokemon-player": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/gaming/pokemon-player",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "8e611a65654769924da5a3bd8d7a1b4c1e58e857bf0d6ffaa1218386681033a1"
     },
     "official--finance--pptx-author": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/finance/pptx-author",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "8c3c3eee8bfd6120eb733835080eb4a85646edcc823946697f64e7211474cd90"
     },
     "official--mlops--pytorch-fsdp": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/pytorch-fsdp",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "9c84c2e21d80396fac93ab2696bb45d77090fcbf3662f2b82df48393a3f0dce6"
     },
     "official--mlops--pytorch-lightning": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/pytorch-lightning",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "18d05d02a12525c3262dc186d5a1a95557faa84fba44399c700bb0d65b103427"
     },
     "official--mlops--qdrant": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/qdrant",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "a0b08f5972a517d244bd42d59905d0eeefc82deda0c6ef6364e29307f5d6de31"
     },
     "official--research--qmd": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/research/qmd",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "7c8c26f105dc4df01fc7ebc366c29c2da25ae66fc208ed4c9882d09687621a54"
     },
     "official--software-development--rest-graphql-debug": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/software-development/rest-graphql-debug",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "e2b87278021373360468cb129649c3320d406fbcdef7bfe1a495699778a829a7"
     },
     "official--research--scrapling": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/research/scrapling",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "7e3200b84046a8610ede02a5966edb8e7f8e37c2ad073a1a0aa868749eeb59ce"
     },
     "official--research--searxng-search": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/research/searxng-search",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "ed579dfaf2f1e7fe4eec6b8914b4354f0f124e5b3eec65ae3b014fbdb6f775b1"
     },
     "official--security--sherlock": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/security/sherlock",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "fd666c3a22118350e889cc453d54ecf0a448ff44866f748465a3db5f4f3e19cb"
     },
     "official--productivity--shop": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/productivity/shop",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "1b57543a9aedd2d8e1f5b05ace1d19f726e51de44771d8be58b1a9b764849cc0"
     },
     "official--productivity--shopify": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/productivity/shopify",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "9cf85e9ea6985f72f41f007b081163097a1dd0da5a31d401f138ca8512a109d4"
     },
     "official--mlops--simpo": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/simpo",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "d852ba8ce5f4d6eb50f94d689a90bcc6b04a6d3cfe29e462549ef9e3c9b146f9"
     },
     "official--productivity--siyuan": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/productivity/siyuan",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "06840173d1ff4b906c2a0aabd7b54712d9b9c2ba3bbde6edff648dea4fa6c402"
     },
     "official--mlops--slime": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/slime",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "a94d74dce7769a26d8ca94d9556de762161c584d170462d9d902523cedca2df0"
     },
     "official--blockchain--solana": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/blockchain/solana",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "65dcca327c49682464e8ee79d17e83d6574aecf2e3318afe1ff20176a3c3789e"
     },
     "official--mlops--saelens": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/saelens",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "954eef215675e0f666a192293ab140f5135bff5e9087e4448873b3fc44e25eb9"
     },
     "official--mlops--stable-diffusion": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/stable-diffusion",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "be38800dcdf0ada42a2c54a16ee0d9b37cccf0e8a980103258edc2ad1f9e7746"
     },
     "official--finance--stocks": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/finance/stocks",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "a01ab04b4141c65be0f8e083c2dbe32145a3da6dc00df95a0d0a606ac917fd92"
     },
     "official--payments--stripe-link-cli": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/payments/stripe-link-cli",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "3f370f171e3d4b5a9c7d1fea0225f42b1fee9a2cd3b2eeae270270e005de73b8"
     },
     "official--payments--stripe-projects": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/payments/stripe-projects",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "78e1e6ae521e9516b6d066ad60c29fa9fda891379991f49c7b6dc55470e12b1c"
     },
     "official--software-development--subagent-driven-development": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/software-development/subagent-driven-development",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "e9f6858c068a063bc457acfd2a056a34ce3402e32d87beb68dbe2aeba2e8c41c"
     },
     "official--productivity--telephony": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/productivity/telephony",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "aceaa377811df0bba46456a5b06d2c888c7bd52b33cd58ab9b4980b3d750f563"
     },
     "official--mlops--tensorrt-llm": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/tensorrt-llm",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "ea04a59b49ed7418612285a12c126d552c860e59996a5a34fe20d4398d0900f2"
     },
     "official--security--unbroker": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/security/unbroker",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "bbc5f9df52e0893c63557be1fcd14b9d3a28b1075aa517dd83f1816076461653"
     },
     "official--creative--unreal-mcp": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/creative/unreal-mcp",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "6c89e28bb61d9ca7a67b420f4bcfa40e5cd9dd38d6861f31bf7505fd80a6b7bb"
     },
     "official--mlops--training--unsloth": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/training/unsloth",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "e8288a28874cb382883235fdf0b2315c5a1a84a7e1ab747b253062b2d5046426"
     },
     "official--devops--watchers": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/devops/watchers",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "416be4a1fc22948d16f7b13999183ccd0fde2562c21f78fc1542e5336ec73f2e"
     },
     "official--security--web-pentest": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/security/web-pentest",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "0c2e8aad41719f1ae56a728eecbb8a4378b5ff2ebe2fd500e0aa07d4c1ff98ae"
     },
     "official--mlops--whisper": {
       "repo": "NousResearch/hermes-agent",
       "path": "optional-skills/mlops/whisper",
-      "pushedAt": "2026-07-27T07:24:11Z",
+      "pushedAt": "2026-08-08T08:01:05Z",
       "contentHash": "db746eaaff11f3a673c144d5d013eb9212964880b73e11c9f9447bd86d509117"
     }
   },
