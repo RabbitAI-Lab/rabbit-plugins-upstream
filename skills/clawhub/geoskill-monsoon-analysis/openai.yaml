@@ -1,0 +1,17 @@
+name: geoskill-monsoon-analysis
+display_name: 季风分析
+description: |
+  分析季风系统：风场季节反转、季风指数、降水集中度与季风进退日期突变点检测，支持东亚/南亚区域
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-monsoon-analysis.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - climate
+  - disaster
+  - extraction
+  - gis
+  - remote-sensing
+  - risk
+  - weather

@@ -1,0 +1,17 @@
+name: geoskill-tsunami-inundation-mapping
+display_name: 海啸淹没制图
+description: |
+  Bathtub水文连通淹没建模,输出水深、到达时间与撤离区
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-tsunami-inundation-mapping.py
+runtime: python>=3.9
+tags:
+  - disaster
+  - extraction
+  - gis
+  - hydrology
+  - remote-sensing
+  - risk
+  - visualization
+  - water

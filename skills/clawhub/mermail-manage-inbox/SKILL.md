@@ -1,6 +1,6 @@
 ---
 name: mermail-manage-inbox
-description: Read, search, inspect, download, organize, label, move, mark, and delete Mermail email and threads. Use for inbox cleanup, finding messages, managing folders or custom labels, handling attachments, marking messages read, moving mail, or emptying trash.
+description: Read, search, inspect, download, organize, label, move, mark, and delete Mermail email and threads. Use for inbox cleanup, finding ordinary messages, managing folders or custom labels, handling attachments, marking messages read, moving mail, or emptying trash. Use mermail-agent-inbox instead when provisioning an email identity and correlating a third-party verification, sign-in, onboarding, receipt, or order-status message.
 metadata:
   openclaw:
     requires:
@@ -17,12 +17,13 @@ Use Mermail MCP read tools to identify exact resources before changing the inbox
 
 ## Workflow
 
-1. Resolve the mailbox with `list_mailboxes` only when its ID is not already known.
-2. Use `search_emails`, `list_emails`, `get_email`, or `get_thread` to establish the smallest exact target set.
+1. Resolve the mailbox with `list_mailboxes` only when its ID is not already known. Prefer `public_id` as `mailboxId` (UUID, hosted alias id, or current email are all accepted).
+2. Use `search_emails`, `list_emails`, `get_email`, or `get_thread` to establish the smallest exact target set. Pass MCP filters as a native JSON object under `query`; never JSON-encode or stringify that object. For newest-first listing, use `sortColumn: "date"` and `sortDirection: "DESC"` rather than an invented combined sort value. For expected verification mail, constrain sender, recipient, subject, and a `date_start` captured before the triggering action; do not select by display name alone.
 3. Show the proposed folder, label, read-state, move, or deletion changes before a write when the user's request is not already explicit.
 4. For bulk operations, report the match count and target IDs before execution. Do not broaden the selection after approval.
 5. For destructive tools, obtain explicit approval, call `prepare_destructive_action` with the exact tool arguments, then call the tool once with its token.
-6. Report partial failures without retrying destructive operations automatically.
+6. Deleting a **regular draft** with `delete_email` / `bulk_delete_emails` hard-deletes it (DB + blob storage) and never moves it to Trash — same as in-app Discard. Do not tell the user the draft was trashed. Scheduled drafts cancel in place unless `permanent` is forced; for non-draft mail, trash is the default unless `permanent=true`.
+7. Report partial failures without retrying destructive operations automatically.
 
 Use an idempotency key for writes when supported. Stop on `401`, `402`, `403`, or `429`; explain the actionable cause without exposing credentials or private message content unnecessarily.
 

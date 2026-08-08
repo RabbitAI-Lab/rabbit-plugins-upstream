@@ -1,52 +1,67 @@
-## Description: <br>
-Graph Advocate routes plain-English blockchain data questions to Graph Protocol services and returns live data for subgraphs, token activity, DeFi, NFTs, prediction markets, Hyperliquid, x402 analytics, and related MCP packages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Route any blockchain data question to the right Graph Protocol service and return live data from subgraphs, Token API, x402 analytics, prediction-market spread routes, Hyperliquid routes, and protocol-specific MCP packages.
 
-## Publisher: <br>
-[paulieb14](https://clawhub.ai/user/paulieb14) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[paulieb14](https://clawhub.ai/user/paulieb14)
 
-## Use Case: <br>
-Developers and agents use Graph Advocate to turn blockchain analytics questions into the right data route, query-ready request, and live response across The Graph, Token API, prediction-market, Hyperliquid, and x402 data sources. It is useful for wallet, token, DeFi, NFT, market, and agent-reputation analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Blockchain questions, wallet addresses, and trading intent are sent to graphadvocate.com. <br>
-Mitigation: Avoid sending private keys, seed phrases, confidential strategies, or sensitive internal context; use the skill only when the remote endpoint is trusted for the query. <br>
-Risk: Optional x402 paid endpoints can spend USDC when the agent runtime accepts payment challenges. <br>
-Mitigation: Start without a wallet; for paid mode, require interactive per-call approval, use a dedicated low-balance wallet, and set per-call and total spend caps. <br>
-Risk: Autonomous loops can exhaust free quota or trigger repeated paid calls if payment approval is automated. <br>
-Mitigation: Check quota before use and enforce call-count, time, and cost ceilings before each paid request. <br>
+## Use Case:
 
+Developers, analysts, and agent builders use this skill to route plain-English blockchain data questions to appropriate Graph Protocol, Token API, Polymarket, Hyperliquid, Aave, x402, and related data services. It helps agents produce query-ready requests, live data responses, and setup guidance for supported free and opt-in paid endpoints.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/paulieb14/skills/graph-advocate) <br>
-- [Graph Advocate homepage](https://github.com/PaulieB14/graph-advocate) <br>
-- [Graph Advocate endpoint](https://graphadvocate.com/) <br>
-- [Token API reference](references/token-api.md) <br>
-- [Subgraph Registry reference](references/subgraph-registry.md) <br>
-- [Aave MCP reference](references/aave.md) <br>
-- [Polymarket MCP reference](references/polymarket.md) <br>
-- [Hyperliquid reference](references/hyperliquid.md) <br>
-- [x402 Payment Analytics reference](references/x402.md) <br>
-- [The Graph](https://thegraph.com) <br>
-- [Subgraph Studio](https://thegraph.com/studio) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, guidance] <br>
-**Output Format:** [JSON response with routing guidance, query-ready arguments, live execution results, and supporting links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cache hints, get-started links, paid endpoint previews, and x402 payment challenge details when optional paid mode is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.9.1 (source: server release evidence and skill.json) <br>
+Risk: Blockchain questions, wallet addresses, and possible trading intent are sent to graphadvocate.com and related data providers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when that disclosure is acceptable, and do not submit private keys, seed phrases, API keys, confidential strategy details, or other sensitive private context.
+
+Risk: Opt-in x402 endpoints can settle paid USDC requests when the caller runtime accepts payment challenges.
+
+Mitigation: Keep paid mode interactive, review each 402 challenge before signing, use a dedicated low-balance wallet, set per-call and total spend caps, and check free-quota status before paid calls.
+
+Risk: Optional external MCP packages and upstream services may have separate trust, credential, and versioning requirements.
+
+Mitigation: Audit optional packages separately, pin known versions, provide only the required credentials such as GRAPH_API_KEY, and use embedded reference tables when remote reference data conflicts with the installed skill.
+
+## Reference(s):
+
+- [Aave MCP Reference](references/aave.md)
+- [Hyperliquid Reference](references/hyperliquid.md)
+- [Polymarket MCP Reference](references/polymarket.md)
+- [Subgraph Registry Reference](references/subgraph-registry.md)
+- [Token API Reference](references/token-api.md)
+- [x402 Payment Analytics Reference](references/x402.md)
+- [Graph Advocate Agent Card](https://graphadvocate.com/.well-known/agent-card.json)
+- [Graph Advocate MCP Catalog](https://graphadvocate.com/mcp/catalog)
+- [The Graph Studio](https://thegraph.com/studio/)
+- [Token API Polymarket Documentation](https://thegraph.com/docs/en/token-api/polymarket-markets/markets/)
+- [Graph Advocate Hyperliquid Documentation](https://docs.graphadvocate.com/hyperliquid)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, API Calls, Configuration, Guidance]
+
+**Output Format:** [Structured JSON responses with query-ready tool arguments, live data payloads when available, and concise explanatory text.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include service recommendations, confidence, execution results, get-started links, cache duration, free-quota information, and opt-in x402 payment challenge details.]
+
+## Skill Version(s):
+
+2.9.2 (source: frontmatter, skill.json, ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -50,6 +50,18 @@ A worktree that passed the gate is **inactive** (reuse candidate) if any of:
 | Not currently checked out by any session | No editor/terminal has `cwd` in that worktree |
 | Stale fix/refactor branch with no recent commits | `git log -1 --format=%ci <branch>` older than 7 days |
 
+### 2.5 Repurposable candidates (synced-to-origin, over-limit fallback)
+
+**Distinct from "inactive" above.** A worktree can have recent activity and an unmerged branch, yet still be safe to repurpose if its branch is **fully pushed to origin** — repointing it to a new branch loses nothing, since the existing work already lives on the remote.
+
+```bash
+# For each candidate <W>:
+git -C <W> log @{u}..HEAD --oneline   # unpushed commits ahead of the branch's upstream — empty = fully synced
+git -C <W> status --porcelain          # empty = no uncommitted local changes either
+```
+
+A worktree is **repurposable** when both checks are empty (fully pushed + clean). This is a weaker guarantee than "inactive" (the branch may still be under active review elsewhere), so it is used only as a **fallback** — when the worktree count is over the limit and no §2 inactive candidate exists.
+
 ### 3. Decision — reuse or create
 
 ```
@@ -57,7 +69,10 @@ inactive candidates found?
 ├─ YES → AskUserQuestion: which one to reuse?
 │        ├─ User selects one → Step 4A (rename/move)
 │        └─ User says "create new" → Step 4B (new)
-└─ NO  → Step 4B (new)
+└─ NO  → worktree count over the limit (see "Inactive Worktree Count Limit")?
+         ├─ YES → repurposable candidate found (§2.5)? → oldest one → Step 4A (rename/move)
+         │        └─ none found → report to user, ask before creating new
+         └─ NO  → Step 4B (new)
 ```
 
 **AskUserQuestion options must include both reuse and new-create** when inactive candidates exist.
@@ -115,6 +130,35 @@ git branch --show-current   # must match intended branch
 
 If branch mismatch → do NOT proceed with Write/Edit. Fix first (checkout or re-create).
 
+## Commit → worktree → cherry-pick → draft PR (promote local work)
+
+When work accumulates on a local/working branch and needs to land as a reviewable PR, the pattern is: commit on the local branch first, resolve the target base branch, acquire a worktree off that base (reuse-first, per the decision tree above), cherry-pick the commit(s) into it, push, and open a draft PR. Never push the local branch directly, and never move uncommitted changes between branches — commit first, then cherry-pick the commit.
+
+### Steps
+
+1. **Commit on the local/working branch.** The commit is the unit that moves — not the working-tree diff.
+2. **Resolve the target base branch.** Two shapes:
+   - **Staging-branch model** (a project routes patch-type changes through one staging branch and feature-type changes through another, merging into a longer-lived integration branch later): derive the base from the commit's conventional-commit type. Check whether the target file/directory already **diverges** on a longer-lived staging branch — if so, prefer that staging branch regardless of commit type (see the project's own base-branch resolution rule, if one exists, for the exact divergence check).
+   - **Plain-base model** (no staging tier): the base is simply the repo's usual integration branch for the change being made.
+3. **Acquire a worktree off the resolved base** — follow the decision tree above (§"Worktree decision tree"): inventory first, reuse an inactive worktree if one exists, otherwise create new off `origin/<base>`.
+4. **Cherry-pick the commit(s)** from the local branch into the worktree. On conflict, stop and resolve manually — do not force through.
+5. **Push the worktree's branch**, then open a **draft PR** (base = the branch resolved in step 2).
+
+### Automation available
+
+`scripts/local-to-staging-pr.sh <repo-dir> <commit-sha> [--branch <name>] [--base <staging-branch>] [--push [--body-file <path>]]` automates steps 2-4 for repos following the staging-branch model: it derives the base from the commit's conventional-commit tag (override with `--base` for a plain-base repo or a divergence-override case), creates the worktree off `origin/<base>`, cherry-picks, and runs a pre-flight scaffolding check (confirms every directory the commit touches already has its baseline file present on the target base, before creating the worktree). Before creating the worktree, it also runs a **non-interactive** subset of the reuse-first gate (§"Worktree decision tree" Steps 1-3): it reclaims any existing `.claude/worktrees/` entry whose branch is already merged into `origin/main` (safe — no unique commits to lose). It does not implement the full interactive gate for *unmerged* inactive candidates, since that choice requires a human (`AskUserQuestion`); a script cannot make it. By default it stops after a clean cherry-pick and prints the push/PR commands — push and `gh pr create --draft` remain manual, keeping the PR title/body under human review before it goes out. Pass `--push` to also push once you've decided to (same per-invocation call as a bare `git push`), and `--push --body-file <path>` to also open the draft PR from a body you've already authored and reviewed — content authorship still happens before the flag is used, this only automates the ceremony around it.
+
+For plain-base repos (no staging tier), steps 2-5 are manual: run the reuse-first gate (§"Worktree decision tree" Steps 1-3 — inventory, then reuse an inactive worktree if one exists) → `git fetch origin <base>` → worktree add off `origin/<base>` (only if no reuse candidate) → cherry-pick → push → `gh pr create --draft`.
+
+### Don't / Do
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Push the local/working branch directly to move its commits onto a PR branch | Commit on local first → cherry-pick the commit(s) onto a clean branch off the resolved base → push that branch |
+| 2 | Stash or checkout to shuffle *uncommitted* changes onto another branch | Commit first — the commit, not the working-tree diff, is what cherry-picks cleanly |
+| 3 | Derive the base purely from the commit's conventional-commit tag when the target file/directory is already known to diverge on a longer-lived staging branch | Check divergence first (e.g. `git diff origin/<default-base> origin/<staging-base> -- <path>`) — a non-empty diff means the staging branch overrides the tag-derived default |
+| 4 | Open the PR as ready-for-review by default | Draft is the default for a freshly promoted commit — convert to ready only after the author decides it's reviewable |
+
 ## Default Path Rules
 
 | Environment | Worktree path |
@@ -170,6 +214,25 @@ Reuse via rename is the default for inactive worktrees (Don't/Do rule #5). Howev
 2. If count > 5 after this just-completed worktree → choose A (remove)
 3. If count ≤ 5 → choose B (detach + branch -D) for reuse
 4. Always pull main worktree to `origin/main` regardless of A or B
+
+### Over-limit selection when no inactive candidate exists (HARD STOP)
+
+When the worktree count already exceeds the limit and §2's inactive-candidate check finds none (all branches are unmerged and have recent commits), do **not** default to creating a new worktree or working directly in the main worktree. Apply the repurposable-candidate fallback (§2.5): among worktrees whose branch is fully pushed to origin and synced, **select the oldest one** (by last-commit timestamp) and repurpose it via `/git-repo rename-worktree`.
+
+**Why oldest**: age is the tie-breaker once safety (fully pushed) is established — an older worktree is less likely to represent someone's imminent next action, and "fully pushed" guarantees no data loss regardless of age.
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | Conclude "no reuse candidate" once §2's inactive criteria all fail, and default to creating a new worktree or working in the main worktree | Before concluding no candidate exists, run the repurposable check (§2.5) across the worktrees over the limit |
+| 2 | Repurpose the newest pushed+synced worktree on the assumption it's "most likely genuinely done" | Select the **oldest** pushed+synced worktree — recency is not a completion signal, only sync status is |
+| 3 | Repurpose a worktree with unpushed commits or uncommitted changes just because it's old | Both checks (unpushed commits + uncommitted changes) must be empty — an old-but-dirty worktree is still someone's WIP |
+
+**Self-check (before proposing "no reuse candidate, create new" when over the limit)**:
+1. Did §2's inactive check return zero candidates?
+2. Is the current worktree count over the limit?
+3. If both yes, did you run the repurposable check (§2.5 — unpushed commits + uncommitted changes, both empty) across the existing worktrees?
+4. Among repurposable candidates, did you select by **oldest** timestamp, not newest or arbitrary?
+5. Only if the repurposable check also finds zero candidates → report this to the user and ask before creating new or working in the main worktree
 
 ### Origin
 

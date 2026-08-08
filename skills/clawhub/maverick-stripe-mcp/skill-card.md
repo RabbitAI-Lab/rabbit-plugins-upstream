@@ -1,45 +1,65 @@
-## Description: <br>
-Search, read, and manage Stripe account data through Stripe's hosted MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Safely inspect Stripe payments, customers, invoices, and subscriptions through Stripe's official remote MCP with MCP-native OAuth and an allowlisted read-only tool set.
 
-## Publisher: <br>
-[maverick](https://clawhub.ai/user/maverick) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[maverick](https://clawhub.ai/user/maverick)
 
-## Use Case: <br>
-External users, developers, and operators use this skill to inspect Stripe payment data and manage customers, products, prices, invoices, subscriptions, refunds, balances, and related documentation through Stripe's MCP server. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change real Stripe account data, including customer, invoice, subscription, refund, balance, and payment information. <br>
-Mitigation: Install only when the agent should work with Stripe data, use restricted or test-mode Stripe credentials where possible, and require explicit confirmation before write-capable actions. <br>
-Risk: The skill requires the MAVERICK_STRIPE_MCP_ACCESS_TOKEN bearer token. <br>
-Mitigation: Store the credential in the runtime secret store or environment, avoid embedding it in code, and rotate or revoke the token if authentication fails or access is no longer needed. <br>
-Risk: Write-capable calls can alter billing or money movement state. <br>
-Mitigation: Inspect current object state before changing it and require explicit confirmation before creating invoices, issuing refunds, changing subscriptions, or modifying customer or payment data. <br>
+## Use Case:
 
+Developers, finance operators, and support teams use this skill to inspect single-account Stripe payments, customers, invoices, subscriptions, account context, and Stripe documentation through allowlisted read tools. It is intended for sandbox-first validation before account-data reads.
 
-## Reference(s): <br>
-- [Stripe MCP overview and bearer authentication](https://docs.stripe.com/mcp) <br>
-- [Stripe restricted API keys](https://docs.stripe.com/keys/restricted-api-keys) <br>
-- [mcporter config reference](https://github.com/openclaw/mcporter/blob/main/docs/config.md) <br>
-- [ClawHub skill page](https://clawhub.ai/maverick/maverick-stripe-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and optional JSON tool-call output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the live Stripe MCP tool catalog as the source of truth for available tools and parameters.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The agent may read live Stripe account data if the connected authorization is not confirmed as sandbox.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use sandbox first and confirm whether the authorization is sandbox or live before account-data reads.
+
+Risk: Re-running setup with stale OAuth values can overwrite a newer stored refresh token.
+
+Mitigation: Run setup only after fresh authorization or intentional credential rotation.
+
+Risk: The allowlist restricts tool names, while broad GET-style Stripe API paths may still reach unexpected readable resources.
+
+Mitigation: Discover the live tool schema before use and review requested Stripe API paths before executing reads.
+
+Risk: A saved local authorization state does not prove Stripe access remains valid after dashboard revocation.
+
+Mitigation: Treat remote call success as the practical authorization check and disconnect or reauthorize when revocation is suspected.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/maverick/skills/maverick-stripe-mcp)
+- [Stripe MCP overview and OAuth notes](https://docs.stripe.com/mcp)
+- [Model Context Protocol authorization](https://modelcontextprotocol.io/specification/2025-11-25/basic/authorization)
+- [Stripe restricted API keys](https://docs.stripe.com/keys/restricted-api-keys)
+- [mcporter config reference](https://github.com/openclaw/mcporter/blob/main/docs/config.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls]
+
+**Output Format:** [Markdown guidance with shell commands and optional JSON MCP responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses allowlisted Stripe MCP read tools and OAuth-backed local credential storage.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

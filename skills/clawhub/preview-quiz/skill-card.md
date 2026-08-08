@@ -1,5 +1,5 @@
 ## Description: <br>
-Create a shareable RooQuiz preview quiz: a right/wrong assessment where correct answers earn points and the taker gets a score, then return a browser-openable preview link. <br>
+Create a shareable RooQuiz preview quiz that scores right/wrong answers and returns a browser-openable temporary preview link without requiring an account, login, or API key. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, educators, and content creators use this skill to build a graded quiz JSON payload, submit it to RooQuiz's preview endpoint, and share a short-lived preview link for review or testing. <br>
+External users and developers use this skill to draft graded quizzes, submit them to RooQuiz's preview service, and receive a temporary browser link for review or sharing. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Quiz titles, questions, answers, descriptions, and links are sent to RooQuiz/Quizster to create a temporary preview. <br>
-Mitigation: Do not use the skill with secrets, private business material, student records, health data, or other sensitive content; use a self-hosted deployment or optional secret when access control matters. <br>
-Risk: Preview links are temporary and are not a permanent publishing mechanism. <br>
-Mitigation: Recreate the quiz or publish it through RooQuiz if a durable form is needed. <br>
+Risk: Quiz text and answers are sent to RooQuiz's preview service to generate a temporary public-token link. <br>
+Mitigation: Avoid putting private, regulated, or sensitive content into previews unless external hosting is acceptable. <br>
+Risk: Preview links are temporary and may be shared with anyone who has the token, unless a secret is configured. <br>
+Mitigation: Use the optional secret for restricted previews and recreate the quiz in RooQuiz when a permanent form is needed. <br>
+Risk: Malformed quiz JSON can fail server validation and prevent preview creation. <br>
+Mitigation: Follow the documented quiz schema, use valid identifiers for question and option codes, and correct any HTTP 400 validation errors before sharing. <br>
 
 
 ## Reference(s): <br>
-- [Preview Quiz Skill Page](https://clawhub.ai/rooquiz/skills/preview-quiz) <br>
-- [RooQuiz Preview API](https://preview.rooquiz.com/api/preview-forms) <br>
-- [Quizster Preview Links](https://quizster.app) <br>
+- [ClawHub skill page](https://clawhub.ai/rooquiz/skills/preview-quiz) <br>
+- [RooQuiz preview API endpoint](https://preview.rooquiz.com/api/preview-forms) <br>
+- [RooQuiz preview link base](https://quizster.app) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with JSON examples, HTTP request examples, shell commands, and preview URLs] <br>
+**Output Format:** [Markdown with JSON, HTTP, and shell command snippets plus a preview link.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces temporary preview links that expire after about one hour; an optional secret can be used when access control matters.] <br>
+**Other Properties Related to Output:** [Creates short-lived RooQuiz preview links; user-provided quiz content is sent to RooQuiz's preview service.] <br>
 
 ## Skill Version(s): <br>
-0.1.1 (source: server release evidence) <br>
+0.1.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,5 +1,5 @@
 ## Description: <br>
-Cheat Code Paid helps teams query external and internal knowledge sources with batch retrieval, custom data source configuration, local caching, team sharing, and result quality scoring. <br>
+Cheat Code Paid guides agents through enterprise knowledge retrieval and coding assistance workflows, including batch queries, custom data sources, local caching, team knowledge sharing, and structured troubleshooting. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and enterprise teams use this skill to configure multi-source knowledge retrieval, run batch research queries, cache results, and share query results across a team. <br>
+Developers, engineering teams, and enterprise users use this skill to retrieve and consolidate knowledge from configured sources, run batch technical research, cache useful results, and share query history for team workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Cached and shared query results can retain secrets, customer data, source excerpts, incident details, or confidential architecture information. <br>
-Mitigation: Connect only approved sources, restrict who can read shared stores, avoid syncing sensitive results without controls, and apply secret scanning and retention rules. <br>
-Risk: Custom internal data sources may expose information beyond the intended audience if credentials or team storage are too broad. <br>
-Mitigation: Use least-privilege tokens, separate data sources by audience, and review shared outputs before adding them to team knowledge repositories. <br>
+Risk: The skill requests broad command, file, API, cache, and shared-storage authority. <br>
+Mitigation: Review before installing and use it only with approved knowledge sources and execution permissions. <br>
+Risk: Knowledge retrieval may involve secrets, sensitive code, or internal documents. <br>
+Mitigation: Avoid submitting sensitive material unless the destination is approved by the organization. <br>
+Risk: Cache and shared directories can expose information if committed to repositories or synced broadly. <br>
+Mitigation: Keep cache and shared directories out of repositories or sync folders unless the contents are intended for that audience. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/cheat-code-paid) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON configuration examples] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with inline code, shell commands, configuration snippets, and structured JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference external knowledge services, configured data sources, local cache directories, and team-shared knowledge storage.] <br>
+**Other Properties Related to Output:** [May include query plans, troubleshooting steps, scoring summaries, and cache or data-source configuration guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence and SKILL.md frontmatter) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,0 +1,16 @@
+name: geoskill-web-map-generation
+display_name: 交互式Web地图生成
+description: |
+  Generate interactive web maps from GeoTIFF or GeoJSON with Leaflet templates and metadata
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-web-map-generation.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - vector
+  - vegetation
+  - visualization

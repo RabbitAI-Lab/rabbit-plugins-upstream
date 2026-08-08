@@ -1,0 +1,14 @@
+name: geoskill-public-health-spatial
+display_name: 公共卫生空间分析
+description: |
+  Spatial scan statistics, kernel density, environment association and accessibility for public health spatial analysis
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-public-health-spatial.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - network
+  - remote-sensing
+  - security

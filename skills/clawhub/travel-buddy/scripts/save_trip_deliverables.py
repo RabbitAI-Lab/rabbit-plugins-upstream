@@ -1,0 +1,154 @@
+#!/usr/bin/env python3
+"""Validate and save a Travel Buddy plan JSON plus its rendered HTML locally.
+
+Usage: python save_trip_deliverables.py <plan.json|-> [--workspace PATH] [--slug NAME] [--overwrite]
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import re
+import sys
+import unicodedata
+from datetime import datetime
+from pathlib import Path
+
+from check_plan_consistency import (
+    check_accommodation_coverage,
+    check_budget,
+    check_cross_references,
+    check_dates,
+    check_day_internals,
+    check_dining,
+    check_routes,
+    check_verification,
+    check_walking,
+)
+from render_final_trip_html import read_json, render, validate_plan
+from validate_trip_html import validate as validate_html
+
+
+DEFAULT_WORKSPACE = Path.home() / "Travel Buddy"
+
+CONSISTENCY_CHECKS = (
+    check_routes,
+    check_walking,
+    check_day_internals,
+    check_cross_references,
+    check_dates,
+    check_accommodation_coverage,
+    check_dining,
+    check_budget,
+)
+
+
+def safe_slug(value: object) -> str:
+    normalized = unicodedata.normalize("NFKC", str(value or "trip"))
+    normalized = re.sub(r"[^\w-]+", "-", normalized, flags=re.UNICODE).strip("-_")
+    return normalized[:80] or "trip"
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Save a validated Travel Buddy HTML and source JSON.")
+    parser.add_argument("plan", help="Plan JSON path, or - to read standard input")
+    parser.add_argument("--workspace", default=str(DEFAULT_WORKSPACE), help="Output root containing html and plans")
+    parser.add_argument("--slug", default=None, help="Stable output name; defaults to date and trip title")
+    parser.add_argument("--overwrite", action="store_true", help="Explicitly replace matching plan and HTML files")
+    parser.add_argument(
+        "--verification",
+        default=None,
+        help="Verification report JSON from the parallel-verify stage (see references/verification.md)",
+    )
+    parser.add_argument(
+        "--unverified",
+        action="store_true",
+        help="Save without a verification report. Records verification_status='unverified' in the "
+             "saved plan so the gap is visible rather than assumed away.",
+    )
+    args = parser.parse_args()
+    try:
+        plan = read_json(args.plan)
+    except (OSError, ValueError, json.JSONDecodeError) as exc:
+        print(f"ERROR: Could not read plan JSON: {exc}", file=sys.stderr)
+        return 2
+    errors = validate_plan(plan)
+    if errors:
+        print("INVALID PLAN", file=sys.stderr)
+        for error in errors:
+            print(f"- {error}", file=sys.stderr)
+        return 1
+
+    # Structure gates prove the page is well-formed; these prove the plan agrees with itself.
+    # Both ran clean once on a plan whose "lightest walking day" was its heaviest.
+    consistency_errors: list[str] = []
+    notes: list[str] = []
+    for check in CONSISTENCY_CHECKS:
+        check(plan, consistency_errors, notes)
+
+    if args.verification:
+        try:
+            report = json.loads(Path(args.verification).read_text(encoding="utf-8"))
+        except (OSError, ValueError, json.JSONDecodeError) as exc:
+            print(f"ERROR: Could not read verification report: {exc}", file=sys.stderr)
+            return 2
+        check_verification(report, consistency_errors, notes, plan=plan, plan_path=args.plan)
+        plan["verification_status"] = "verified"
+        plan["verification_report"] = str(args.verification)
+    elif args.unverified:
+        plan["verification_status"] = "unverified"
+    else:
+        print(
+            "ERROR: No verification report. Pass --verification <report.json> after running the "
+            "parallel-verify stage in references/verification.md, or --unverified to save anyway "
+            "and record the gap. Structure gates cannot tell you whether a fare, an opening time, "
+            "or an entry rule is true.",
+            file=sys.stderr,
+        )
+        return 1
+
+    for note in notes:
+        print(f"note: {note}")
+    if consistency_errors:
+        print("PLAN CONSISTENCY FAILED", file=sys.stderr)
+        for error in consistency_errors:
+            print(f"- {error}", file=sys.stderr)
+        return 1
+    rendered_html = render(plan)
+    required_booking_types = {"hotel"}
+    if plan["trip"].get("arrival_transport_mode") == "flight":
+        required_booking_types.add("flight")
+    if plan.get("booking_options", {}).get("attraction_tickets"):
+        required_booking_types.add("ticket")
+    html_errors = validate_html(
+        rendered_html,
+        len(plan["days"]),
+        required_booking_types,
+        plan["transport_preference"]["mode"],
+    )
+    if html_errors:
+        print("RENDERING ERROR", file=sys.stderr)
+        for error in html_errors:
+            print(f"- {error}", file=sys.stderr)
+        return 1
+    trip = plan["trip"]
+    date_part = safe_slug(trip.get("start_date") or datetime.now().date().isoformat())
+    slug = safe_slug(args.slug or trip.get("title"))
+    stem = f"{date_part}-{slug}"
+    workspace = Path(args.workspace).expanduser()
+    plan_dir, html_dir = workspace / "plans", workspace / "html"
+    plan_dir.mkdir(parents=True, exist_ok=True)
+    html_dir.mkdir(parents=True, exist_ok=True)
+    plan_path, html_path = plan_dir / f"{stem}.json", html_dir / f"{stem}.html"
+    if not args.overwrite and (plan_path.exists() or html_path.exists()):
+        print("ERROR: Output already exists. Choose a new --slug or pass --overwrite.", file=sys.stderr)
+        return 2
+    plan_path.write_text(json.dumps(plan, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    html_path.write_text(rendered_html, encoding="utf-8")
+    print(f"Plan JSON: {plan_path}")
+    print(f"Final HTML: {html_path}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes reptile and arachnid pet media through a cloud API to produce structured Pet Safety Guardian health reports with observed condition, possible disease risks, care suggestions, and report links. <br>
+Analyzes reptile and arachnid pet videos or URLs with a cloud API to return structured health findings, care suggestions, historical report data, and report links. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill to submit reptile or arachnid pet videos, files, or URLs for cloud-assisted visual health screening. It can also retrieve cloud report-history lists and return structured health findings, recommendations, and report links. <br>
+External users and agents use this skill to submit reptile or arachnid pet media for cloud health analysis, receive structured findings and care suggestions, and retrieve prior cloud reports. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Reptile media, video URLs, and report-history requests are sent to the Life Emergence cloud service. <br>
-Mitigation: Use the skill only with user-approved media and URLs, and confirm before uploads or report-history queries. <br>
-Risk: The skill can create or reuse a cloud-linked local identity and stores authentication material locally. <br>
-Mitigation: Review local identity and token retention behavior, protect local data files, and avoid placing unrelated secrets in data/smyx-api-key.txt. <br>
-Risk: Generated health analysis is advisory and may be incomplete or incorrect for medical decisions. <br>
-Mitigation: Present results as health reference guidance and direct users to a qualified veterinarian for diagnosis or treatment decisions. <br>
+Risk: Cloud-backed analysis uploads media files or submits remote URLs outside the local environment. <br>
+Mitigation: Use only media and URLs appropriate for the publisher's cloud service, and avoid sensitive media or private/internal URLs unless that data handling is acceptable. <br>
+Risk: The workflow can create or reuse an internal identity, store tokens, and list prior cloud reports. <br>
+Mitigation: Review account, token, and report-history behavior before deployment, and run it only where cloud-linked history access is expected. <br>
+Risk: The artifact includes camera-monitoring commands outside the core health-analysis flow. <br>
+Mitigation: Avoid monitoring commands unless camera use has been explicitly reviewed and approved for the deployment. <br>
+Risk: Health findings are advisory and may be incorrect or incomplete. <br>
+Mitigation: Treat reports as reference information and consult a qualified veterinarian for diagnosis or treatment decisions. <br>
 
 
 ## Reference(s): <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-crawl-analysis) <br>
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-crawl-analysis) <br>
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API documentation](references/api_doc.md) <br>
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown reports and JSON-formatted structured analysis; optional saved output file.] <br>
+**Output Type(s):** [Text, Markdown, JSON, Files, Guidance] <br>
+**Output Format:** [Markdown text with structured JSON sections and report links; optional saved output file.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report export links, cloud report-history tables, and health reference guidance that should not replace professional veterinary diagnosis.] <br>
+**Other Properties Related to Output:** [May include cloud report export links and historical report lists.] <br>
 
 ## Skill Version(s): <br>
-1.0.8 (source: frontmatter and server release evidence) <br>
+1.0.10 (source: server release and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

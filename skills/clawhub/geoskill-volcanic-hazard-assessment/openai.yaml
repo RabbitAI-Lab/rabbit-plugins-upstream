@@ -1,0 +1,15 @@
+name: geoskill-volcanic-hazard-assessment
+display_name: 火山灾害评估
+description: |
+  融合热红外异常、InSAR形变与SO2柱浓度的火山活动等级评估
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-volcanic-hazard-assessment.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - disaster
+  - gis
+  - remote-sensing
+  - risk
+  - sar

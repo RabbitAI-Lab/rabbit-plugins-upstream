@@ -1,7 +1,7 @@
 ---
 name: riffkit
-version: "1.2.2"
-updated_at: "2026-07-22"
+version: "1.2.4"
+updated_at: "2026-08-08"
 source_url: "https://riffkit.ai/SKILL.md"
 homepage: "https://riffkit.ai"
 description: "Riff winning short videos — give one source (a TikTok link, an uploaded video, or an analyzed template) and the backend riffs its emotion formula into your own AI video (post-ready short-form or UGC-style ad creative), with optional digital character, product placement, and language. You riff the formula, not the video.
@@ -18,7 +18,7 @@ description: "Riff winning short videos — give one source (a TikTok link, an u
 
 ## Skill scope
 
-This skill makes **riff videos** only: it analyzes a source video's emotion formula and regenerates it as your own AI video. That is the entire product surface. If a user asks for something outside this — a different content format, or a feature this product doesn't have — say plainly that this product only makes riff videos; don't call unrelated APIs and don't steer them elsewhere.
+This skill makes short AI videos in exactly two modes: **riff videos** (analyze a source video's emotion formula and regenerate it as your own) and **creation videos** (author an original ad video from a written creative direction — no source video; `POST /api/creation/batch`). That is the entire product surface. If a user asks for something outside this — a different content format, or a feature this product doesn't have — say plainly that this product only makes riff videos; don't call unrelated APIs and don't steer them elsewhere.
 
 **No staff/admin features are exposed.** This skill covers only endpoints a normal authenticated user can call. Building platform templates by analyzing new sources, publishing/unpublishing platform templates, cross-scope task search, manually granting/clawing back credits — all staff-only. This document never lists them and the agent never calls them.
 
@@ -320,6 +320,31 @@ No body, no auth. **Response:**
 
 **Content-Type:** `multipart/form-data`
 
+> **Non-ASCII text: write it to a UTF-8 file, don't inline it in the shell.**
+> For `content_anchor` and `user_hint`, pass the value by file reference:
+>
+> ```
+> printf '%s' "$BRIEF" > /tmp/anchor.txt      # or your language's write-file call
+> curl … -F "content_anchor=<'/tmp/anchor.txt'"
+> ```
+>
+> (`-F "name=<file"` reads the field VALUE from the file. That is not `@file`,
+> which would attach it as an upload.)
+>
+> Why: when a brief is typed straight into a `curl -F "content_anchor=主题：…"`
+> command, the bytes that reach the wire are whatever the shell's codepage
+> produced. On a non-UTF-8 console — the Windows default in CJK locales — those
+> are GBK/Big5/Shift-JIS bytes, and the field is stored as mojibake
+> (`主题：一条…` → `Ö÷Ìâ£ºÒ»Ìõ…`). This happened on prod: six riffs rendered
+> from garbage briefs and were billed normally. The server now rejects it with
+> **400** instead, but the 400 is a backstop — you cannot see the corruption
+> from inside the agent, because the text you wrote was correct and it was
+> mangled a layer below you. Writing the file avoids the shell layer entirely.
+>
+> **If you do get that 400:** do NOT resend the same command; it will fail
+> identically. Switch to the file form above. Already using it? Then the file
+> itself isn't UTF-8 — rewrite it with an explicit UTF-8 encoding.
+
 **Source (exactly one):**
 
 | Param | Type | Notes |
@@ -336,7 +361,8 @@ No body, no auth. **Response:**
 | `product_id` | string | `""` | Empty = no product placement (`no_product` mode) |
 | `product_visibility` | string | `on_camera` | `on_camera` / `off_camera`; only effective when `product_id` is non-empty (ignored when empty) |
 | `language` | string | `en` | Must be a code from `GET /api/languages` (currently `en` / `es` / `pt` / `id` / `de` / `fr` / `it` / `ja` / `zh-CN`); an invalid value returns 400 |
-| `resolution` | string | `720p` | `720p` / `1080p`. **1080p bills 2.5× the video seconds** (720p is the base rate). Invalid value → 400; `1080p` on a Fast-tier deployment → 400 (Fast has no 1080p) |
+| `video_backend` | string | `seedance` | `seedance` (default) / `minimax`. Picks the render engine. **Resolution is engine-scoped** — see `resolution` below. An engine the deployment has no key for → 400 `video_backend_unavailable`; unknown value → 400 |
+| `resolution` | string | engine base | Engine-scoped: `720p` / `1080p` for `seedance`, `768P` / `2K` for `minimax`. **Omit it** and you get that engine's base tier — do not send `720p` with `minimax`, the vocabularies are disjoint and a cross-engine value is a 400. Billing is per second at the tier's own rate, quoted against the 720p base: 1080p ×2.5, 768P ×0.5, 2K ×0.8. `1080p` on a Fast-tier deployment → 400 (Fast has no 1080p). Live rates: `GET /api/billing/subscription` → `video_credits_per_second_map`; the engines a deployment offers and each one's tiers: `GET /api/settings` → `video_backends` |
 | `content_anchor` | string | `""` | Creative direction (≤5000 chars); to place a product image on camera, write that image's `name` in the text (on_camera; plain name match) |
 | `user_hint` | string | `""` | Hook hint (≤5000); **new source only** — ignored when `formula_id` is given |
 | `video_ratios` | string | `'["9:16"]'` | JSON-array string of delivery aspect ratios. **Vertical group `9:16` / `3:4` / `1:1` / `4:5` can be multi-selected** (one master render fans out into a reframed video per ratio, each billed as its own video); a **horizontal ratio `16:9` / `4:3` / `21:9` must be requested alone** (list length 1). Deduped + returned in canonical order. Invalid ratio / horizontal-mixed → 400 |
@@ -369,7 +395,8 @@ No body, no auth. **Response:**
 | `product_visibility` | string | | `on_camera` | Only `on_camera`/`off_camera`; `no_product` is derived from `product_id=null`, never passed directly |
 | `content_anchor` | string | | `""` | ≤5000 chars |
 | `language` | string | ✓ | | Must be a code from `GET /api/languages` |
-| `resolution` | string | | `720p` | `720p` / `1080p` (1080p bills 2.5× the seconds; Fast tier rejects 1080p) |
+| `video_backend` | string | | `seedance` | `seedance` (default) / `minimax`. Picks the render engine. **Resolution is engine-scoped** — see `resolution` below. An engine the deployment has no key for → 400 `video_backend_unavailable`; unknown value → 400 |
+| `resolution` | string | | engine base | Engine-scoped: `720p` / `1080p` for `seedance`, `768P` / `2K` for `minimax`. **Omit it** and you get that engine's base tier — do not send `720p` with `minimax`, the vocabularies are disjoint and a cross-engine value is a 400. Billing is per second at the tier's own rate, quoted against the 720p base: 1080p ×2.5, 768P ×0.5, 2K ×0.8. `1080p` on a Fast-tier deployment → 400 (Fast has no 1080p). Live rates: `GET /api/billing/subscription` → `video_credits_per_second_map`; the engines a deployment offers and each one's tiers: `GET /api/settings` → `video_backends` |
 | `video_ratios` | string[] | | `["9:16"]` | Delivery aspect ratios (array here, unlike riffs' string). Vertical group `9:16`/`3:4`/`1:1`/`4:5` multi-selectable (fans out one video per ratio × character); a horizontal ratio `16:9`/`4:3`/`21:9` must be alone. Invalid / horizontal-mixed → 400 |
 
 **Response (`PipelineBatchResponse`):** `batch_id` / `task_ids[]` / `total` (`task_ids` are the MASTER tasks; extra-ratio reframe children join the same `batch_id` after each master completes).
@@ -381,6 +408,27 @@ Add extra **vertical** aspect ratios to renders you already have, without re-gen
 #### `GET /api/pipeline/backfill/occupied?asset_id=<id>` — ratios already produced
 
 Returns `{occupied: string[]}` — the delivery ratios already delivered or in-flight for the asset's render family (grey these out in a ratio picker; they'd be skipped by the backfill).
+
+#### `POST /api/creation/batch` — creation video (original, no source video)
+
+The second generation mode: no source video, no template — the **creative direction IS the script's source**, so here it is REQUIRED (on riffs it optionally steers a template). The engine authors an original ad video from it (per-second billing, same rates as riffs).
+
+**Content-Type:** `application/json`
+
+| Param | Type | Required | Notes |
+|------|------|------|------|
+| `content_anchor` | string | **yes** | Creative direction, 1-5000 chars — the story/scene, captions, lines, pacing. The more specific, the more controllable |
+| `character_ids` | string[] | no | Empty = Auto (AI generates the on-screen person) |
+| `product_id` | string? | no | null = no product placement. `on_camera` placement requires the product to have images (400 otherwise) |
+| `product_visibility` | string | no | `on_camera` (default) / `off_camera` |
+| `duration_mode` | string | no | `smart` (default: AI picks the length by content, capped at 45s AND at what the balance affords) / `fixed` |
+| `duration_seconds` | int | with fixed | 4-45; required when `duration_mode=fixed` |
+| `language` | string | no | Default `en`; same whitelist as riffs |
+| `video_backend` | string | no | `seedance` (default) / `minimax`; 400 if not configured on the deployment |
+| `resolution` | string | no | Engine-scoped — `720p`/`1080p` (seedance) or `768P`/`2K` (minimax). Omit for the engine base tier; a cross-engine value is a 400. Same rate rules as riffs |
+| `video_ratio` | string | no | Single ratio, default `9:16` (creation has no reframe fan-out at submit; use backfill later — currently riff-only) |
+
+**Response:** `{batch_id, task_ids: string[], total}` — one task per character (or one Auto task). Task `type` is `creation`; poll the batch exactly like a riff. 402 detail shape is identical to riffs. Task output shows in Library like any riff (`AssetOut.content_anchor` carries the direction).
 
 ---
 
@@ -467,6 +515,16 @@ When a template's analysis is stale (`analysis_prompt_is_latest=false`), re-run 
 
 > Choose a character by `persona` feel + `gender` / `age_range` + `has_any_active_avatar`. Creating/editing characters (needs reference_image + persona) is left to the Settings UI; Riffkit doesn't proactively guide creation. There is no `description` field (account identity lives entirely in `persona`).
 
+`CharacterOut` also carries `voice_sample` (string?, web path; null = none) — a 4-15s clean-speech clip the engine locks as the character's voice on dialogue segments (riffs AND creations, automatic once set).
+
+#### `POST /api/characters/{character_id}/voice-sample` — upload voice sample
+
+**Content-Type:** `multipart/form-data`, field `audio` (**mp3/wav only** — Seedance accepts exactly these; ≤5MB, duration 4-15s — 5-10s is best; no background music/noise). **Response:** updated `CharacterOut`. Replacing = upload again (pointer swaps).
+
+#### `DELETE /api/characters/{character_id}/voice-sample`
+
+Clears the sample (generation falls back to the default voice). **Response:** updated `CharacterOut`.
+
 ---
 
 ### Products
@@ -538,7 +596,7 @@ Add an image. URL or file (**either/or**). Max 8 images per product, ≤50MB eac
 | Field | Type | Notes |
 |------|------|------|
 | `id` | string | Task ID |
-| `type` | string | `pipeline` (riff generation) or `analyze` (template analysis) |
+| `type` | string | `pipeline` (riff generation) / `creation` (original video) / `analyze` (template analysis) |
 | `status` | string | `queued` → `running` → `completed` / `failed` / `dead` / `cancelled` |
 | `progress` | int | 0-100 |
 | `current_step` | string? | Current step (e.g. "Stage B — creative adaptation") |
@@ -547,8 +605,9 @@ Add an image. URL or file (**either/or**). Max 8 images per product, ≤50MB eac
 | `batch_id` | string? | Batch ID |
 | `product_visibility` | string? | `on_camera` / `off_camera` / `no_product` (config replay) |
 | `language` | string? | Language code |
-| `content_anchor` | string? | Creative direction |
+| `content_anchor` | string? | Creative direction (riff AND creation — same field) |
 | `user_hint` | string? | Hook hint (analyze tasks only) |
+| `duration_mode` / `duration_seconds` | string? / int? | Creation tasks only: `smart`/`fixed` + the fixed seconds |
 | `segment_count` | int? | Number of video segments (pipeline only) |
 | `submitted_by_user_id` | string? | Submitter user_id (in a team scope, resolve to a member via `/api/scopes/{id}/members`; a solo scope = the owner) |
 | `result` | any? | On success, contains asset_id etc. |
@@ -560,7 +619,7 @@ Add an image. URL or file (**either/or**). Max 8 images per product, ≤50MB eac
 
 #### `GET /api/tasks` — list tasks
 
-**Query:** `status` (single or comma-separated allowlist like `failed,dead`), `type` (use `pipeline`), `date_from` / `date_to` (`YYYY-MM-DD` or full ISO 8601; Task.created_at is naive UTC), `submitted_by_user_id` (filter by submitter, only meaningful in a team scope), `limit` (default 100, 1-500), `offset`. Header `X-Total-Count`.
+**Query:** `status` (single or comma-separated allowlist like `failed,dead`), `type` (`pipeline` / `creation` / `analyze`), `date_from` / `date_to` (`YYYY-MM-DD` or full ISO 8601; Task.created_at is naive UTC), `submitted_by_user_id` (filter by submitter, only meaningful in a team scope), `limit` (default 100, 1-500), `offset`. Header `X-Total-Count`.
 
 **Response:** `TaskOut[]`. Usage: "how many are running now" → `?status=running`; "last 10 failures" → `?status=failed&limit=10`; "today's tasks" → `?date_from=2026-06-20&date_to=2026-06-20`.
 
@@ -664,7 +723,7 @@ No body. Bootstraps subtitle data for older videos (`{status: "queued", task_id}
 
 ### Billing & balance
 
-> **Billing rules (use this framing when explaining to users)**: charged only by **successfully generated video seconds** — 720p is 10,000 credits/s (≈$1/s), 1080p is 25,000 credits/s (≈$2.5/s); **analysis is free** (re-riffing the same source reuses the cached analysis); **you pay only for video seconds actually generated** — a run that produces no video output costs nothing, but any seconds already rendered (including on cancel or a later-stage failure) are charged and not refunded. One standard video ≈ 15s @720p ≈ 150,000 credits. Subscription credits are valid for the period and don't roll over. Get the exact rate from `video_credits_per_second` on `GET /api/billing/subscription` — don't hardcode.
+> **Billing rules (use this framing when explaining to users)**: charged only by **successfully generated video seconds**, at the rate of the tier that rendered them — Seedance 720p 10,000 credits/s (≈$1/s) / 1080p 25,000 (≈$2.5/s), MiniMax H3 768P 5,000 (≈$0.5/s) / 2K 8,000 (≈$0.8/s). The engine is the user's choice at submit (`video_backend`), so **a cheaper engine is a real lever** when someone is short on balance — offer it before offering an upgrade. **analysis is free** (re-riffing the same source reuses the cached analysis); **you pay only for video seconds actually generated** — a run that produces no video output costs nothing, but any seconds already rendered (including on cancel or a later-stage failure) are charged and not refunded. One standard video ≈ 15s @720p ≈ 150,000 credits. Subscription credits are valid for the period and don't roll over. Get exact rates from `GET /api/billing/subscription` — `video_credits_per_second` is the 720p base and `video_credits_per_second_map` has every tier; never hardcode either.
 
 **402 handling (hard constraint):** when submit (`riffs` / `pipeline/batch`) lacks balance, it returns **HTTP 402** with a structured `detail`:
 
@@ -731,6 +790,7 @@ List scope members (you must be a member, else 403). Returns `[{id, scope_id, us
 | Intent | Example | Action |
 |---------|-------------|-----------|
 | One-shot riff | "riff this link", "make me one from this video" | `POST /api/riffs` (source + optional config; confirm before submit) |
+| Original / no source | "make an original ad, no reference", "just write me a video about X", "创作一条" | `POST /api/creation/batch` (creative direction REQUIRED — draft it with the user, confirm before submit) |
 | Riff a new viral | "why did this TikTok pop off — riff it for me" | `POST /api/riffs` (pass `tiktok_url`/`video` → analyze→generate) |
 | Run an existing template | "make one with template 3" | `POST /api/riffs` (pass `formula_id`) |
 | Browse templates | "what templates are there", "which is hot lately" | `GET /api/formulas?status=analyzed&template_type=pipeline` (by `used_count` / `tags`) |
@@ -745,6 +805,7 @@ List scope members (you must be a member, else 403). Returns `[{id, scope_id, us
 | Check balance / spend | "how much is left", "how much today" | `GET /api/usage/credits` / `GET /api/usage/summary?period=today` |
 | Stop a task | "stop it", "cancel" | `POST /api/tasks/{id}/cancel` (note no refund of what's charged) |
 | Retry | "try again", "re-run" | `POST /api/tasks/{id}/retry` (state estimated cost, confirm first) |
+| Set a character's voice | "use my voice for this character", "lock her voice" | `POST /api/characters/{id}/voice-sample` (mp3/wav, 4-15s clean speech) — then automatic on every riff/creation |
 
 **Routing principle:** when intent is ambiguous, ask — don't guess and proceed.
 
@@ -843,7 +904,7 @@ Filenames are case-sensitive: `SKILL.md` (this file), `HEARTBEAT.md` (version-ch
 Check each item in order; on any failure, return to the previous step and reinstall:
 
 1. **Files present** — `ls "${SKILLS_ROOT}/Riffkit/"` includes `SKILL.md` and `HEARTBEAT.md`, exact case.
-2. **Version matches** — this file's frontmatter `version` equals `curl -s https://riffkit.ai/SKILL.json | jq -r .version` (currently: `1.1.3`).
+2. **Version matches** — this file's frontmatter `version` equals `curl -s https://riffkit.ai/SKILL.json | jq -r .version` (currently: `1.2.3`).
 3. **Network reachable** — `curl -sS -o /dev/null -w "%{http_code}" https://riffkit.ai/api/auth/me` returns `401` (no cookie is normal).
 4. **Auth reachable** — the one-click sign-in is live: `curl -s -X POST https://riffkit.ai/api/skill/device/authorize` returns JSON with a `user_code`.
 

@@ -1,5 +1,5 @@
 ## Description: <br>
-Generates Huawei Cloud pre-order price estimates, prepares confirmed allowlisted hcloud create commands with dry-run and cost checks, and gives console-only unsubscribe guidance. <br>
+Generate Huawei Cloud pre-order price estimates, safely provision allowlisted resources via hcloud, and guide unsubscribe requests to the console only. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,40 +11,45 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, cloud operators, and cost reviewers use this skill to estimate Huawei Cloud costs, prepare tightly controlled resource creation through hcloud, and route unsubscribe requests to the Huawei Cloud console with account and refund checks. <br>
+Developers, cloud operators, and finance-aware engineering teams use this skill to quote Huawei Cloud resources, prepare controlled provisioning commands, and route unsubscribe requests to the Huawei Cloud console. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Confirmed create or order actions can change the user's Huawei Cloud account and incur charges. <br>
-Mitigation: Use least-privilege IAM credentials and require runtime help lookup, cost review, successful --dryrun, and explicit user confirmation before execution. <br>
-Risk: Cloud pricing or resource parameters may be inaccurate if inferred from memory or copied from stale examples. <br>
-Mitigation: Use only current hcloud help and BSS pricing responses, and disclose unknown costs before asking for confirmation. <br>
-Risk: Credential exposure could occur if access keys or tokens are pasted into chat. <br>
-Mitigation: Refuse credentials in chat and direct users to configure hcloud locally with least-privilege IAM credentials. <br>
+Risk: The skill can create billable Huawei Cloud resources after user approval. <br>
+Mitigation: Use least-privilege IAM credentials, review quoted costs, require a successful hcloud --dryrun, and obtain explicit confirmation before running provisioning commands. <br>
+Risk: Huawei Cloud AK/SK keys or tokens could be exposed if pasted into chat. <br>
+Mitigation: Do not accept credentials in chat; direct users to configure hcloud locally and verify with non-secret configuration checks. <br>
+Risk: Partner delegated-token workflows can query customer account scope. <br>
+Mitigation: Avoid delegated-token workflows unless the operator has explicit customer authorization and understands the account scope being queried. <br>
+Risk: Automated unsubscribe or delete actions can cause data loss or incorrect refunds. <br>
+Mitigation: Do not run or emit unsubscribe CLI/API commands; guide users to the Huawei Cloud console and remind them to back up data and review account, resource, refund, and related-resource details. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/agenticweb4/skills/huawei-cloud-cost-estimation) <br>
-- [Huawei Cloud KooCLI quick installation](https://support.huaweicloud.com/qs-hcli/hcli_02_003.html) <br>
-- [Huawei Cloud console](https://console.huaweicloud.com) <br>
-- [Huawei Cloud unsubscribe rules](https://support.huaweicloud.com/usermanual-billing/unsubscription_topic_2000010.html) <br>
-- [Pricing commands](references/pricing/commands.md) <br>
+- [Publisher profile](https://clawhub.ai/user/agenticweb4) <br>
+- [KooCLI installation guide](references/cli-installation.md) <br>
+- [Pricing command contract](references/pricing/commands.md) <br>
+- [Pricing IAM policies](references/pricing/iam-policies.md) <br>
+- [Pricing semantic catalog](references/pricing/semantic/catalog.yml) <br>
 - [Lifecycle concepts](references/lifecycle/concepts.md) <br>
 - [Lifecycle command allowlist](references/lifecycle/commands.md) <br>
-- [Pricing IAM policies](references/pricing/iam-policies.md) <br>
-- [KooCLI installation guide](references/cli-installation.md) <br>
+- [Huawei Cloud unsubscribe rules](https://support.huaweicloud.com/usermanual-billing/unsubscription_topic_2000010.html) <br>
+- [Huawei Cloud KooCLI quick install](https://support.huaweicloud.com/qs-hcli/hcli_02_003.html) <br>
+- [Huawei Cloud API Explorer](https://console.huaweicloud.com/apiexplorer/#/openapi/overview) <br>
+- [Huawei Cloud IAM best practices](https://support.huaweicloud.com/bestpractice-iam/iam_0426.html) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with hcloud command snippets and cost summaries] <br>
+**Output Format:** [Markdown with quoted prices, command proposals, confirmation prompts, and console guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Create flows require runtime help lookup, successful --dryrun, cost review or explicit unknown-cost acknowledgment, and user confirmation before execution.] <br>
+**Other Properties Related to Output:** [Requires hcloud and locally configured Huawei Cloud credentials; provisioning commands require runtime help, cost review, dry-run, and explicit user confirmation.] <br>
 
 ## Skill Version(s): <br>
-3.1.0 (source: release evidence and frontmatter) <br>
+3.2.3 (source: SKILL.md frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

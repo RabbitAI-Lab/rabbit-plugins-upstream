@@ -1,44 +1,60 @@
-## Description: <br>
-Analyzes plant root images or videos from transparent pots, smart seedling boxes, plant factories, or hydroponic systems to report visual root-health indicators, a 0-100 health score, a vitality grade, and care-direction guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill analyzes images or videos of plant roots in transparent pots, seedling boxes, hydroponic systems, or plant factories to estimate root health, vitality grade, rot indicators, and care-adjustment guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, growers, and operators of transparent-pot, smart-seedling-box, plant-factory, or hydroponic systems use this skill to analyze root imagery for root-tip color, root-hair density, branching structure, rot symptoms, vitality grade, and practical care adjustments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can upload local plant media or submit media URLs to lifeemergence.com services for analysis. <br>
-Mitigation: Use only media that is appropriate to send to the external service, and review network behavior and service terms before deployment. <br>
-Risk: The skill silently creates or reuses an internal user identity and stores account tokens in a local workspace database. <br>
-Mitigation: Run it in a controlled workspace, restrict access to local data files, and clear stored identity or token state when rotating users or environments. <br>
-Risk: History queries retrieve cloud report records for the resolved internal identity with limited user control. <br>
-Mitigation: Confirm the active identity before use and limit installation to environments where automatic report-history retrieval is acceptable. <br>
+## Use Case:
 
+External users and developers use this skill to submit root images or videos for visual plant-root health assessment and to retrieve structured reports or historical report lists. It is intended for care guidance and monitoring, not for definitive agronomic diagnosis or pesticide recommendations.
 
-## Reference(s): <br>
-- [Root health API reference](references/api_doc.md) <br>
-- [Shared health-analysis API reference](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, files, guidance] <br>
-**Output Format:** [Markdown text containing structured analysis results, JSON-style details, report links, and optional saved output files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload local media or submit media URLs to lifeemergence.com services and may query cloud report history for the resolved internal user identity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Plant media and report requests are processed through cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only non-sensitive plant images or videos and run the skill only in environments where external processing is acceptable.
+
+Risk: The skill may silently create or reuse an identity and retrieve identity-linked report history.
+
+Mitigation: Use a dedicated workspace or account for this skill, especially when multiple people share the same environment.
+
+Risk: Account tokens may be stored locally for later API calls.
+
+Mitigation: Review local storage and token handling before installation, and clear stored credentials when the workspace should no longer retain access.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-root-health-transparent-pot-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Interface Documentation](references/api_doc.md)
+- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown and JSON-like structured text with optional report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a root health score, vitality grade, rot indicators, care guidance, export links, or historical-report tables.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

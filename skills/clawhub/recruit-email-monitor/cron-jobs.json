@@ -6,19 +6,19 @@
   "jobs": [
     {
       "id": "recruit-email-heartbeat",
-      "name": "招聘邮件心跳检查",
+      "name": "招聘邮件心跳检查（Agent 判定）",
       "enabled": true,
       "schedule": {
         "kind": "cron",
         "expr": "0 * * * *",
         "staggerMs": 300000
       },
-      "description": "每小时检查邮箱，发现新招聘邮件时记录到表格并发送飞书通知",
+      "description": "每小时拉取未处理邮件，由 Agent 逐封判断是否为招聘邮件并记录到表格",
       "notifyOnMatch": true,
       "wakeMode": "now",
       "payload": {
         "kind": "systemEvent",
-        "text": "python3 scripts/email-heartbeat-check.py"
+        "text": "运行招聘邮件监控检查（Agent 判定模式）：1) cd <skill-dir> && python3 scripts/fetch-emails.py 拉取未处理邮件候选；2) 读取 scripts/pending_candidates.json，逐封自行判断是否为招聘邮件（verdict: yes/no；yes 时给出 type: 笔试/测评|面试|Offer/录用|宣讲会|投递确认|其他招聘相关，可提取 deadline 截止时间），写入 scripts/pending_judged.json；3) 运行 python3 scripts/record-emails.py 记录结果到表格；4) 向用户简要汇报本次发现，有招聘邮件时重点提示内容与截止时间。"
       },
       "sessionTarget": "main"
     },

@@ -1,0 +1,9 @@
+{
+  "mean_density": 0.28369140625,
+  "max_density": 1.0,
+  "mean_far": 2.838754653930664,
+  "max_far": 17.127185821533203,
+  "floor_height_m": 3.0,
+  "n_valid_pixels": 16384,
+  "n_total_pixels": 16384
+}

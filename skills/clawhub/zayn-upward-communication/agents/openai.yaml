@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-upward-communication"
+  short_description: "帮助不同岗位完成面向经理或老板的汇报、请示、审批与升级沟通"
+  default_prompt: "使用 $zayn-upward-communication 帮我整理一份让经理可以快速判断并回复的沟通内容。"

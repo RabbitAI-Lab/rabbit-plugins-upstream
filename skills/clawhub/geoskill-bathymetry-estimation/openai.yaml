@@ -1,0 +1,12 @@
+name: geoskill-bathymetry-estimation
+display_name: 遥感水深反演
+description: |
+  用 Stumpf 对数比值或 Lyzenga 线性变换从蓝绿波段反演浅海水深，含校准与精度评估
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-bathymetry-estimation.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - remote-sensing

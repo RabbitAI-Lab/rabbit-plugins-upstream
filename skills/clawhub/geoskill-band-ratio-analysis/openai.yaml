@@ -1,0 +1,15 @@
+name: geoskill-band-ratio-analysis
+display_name: 波段比值分析
+description: |
+  批量计算NDVI/NDWI/MNDWI/NDBI/EVI/SAVI等光谱指数，逐指数输出GeoTIFF与值域统计
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-band-ratio-analysis.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - analysis
+  - gis
+  - raster
+  - remote-sensing
+  - vegetation

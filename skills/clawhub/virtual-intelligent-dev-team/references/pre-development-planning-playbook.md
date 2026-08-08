@@ -69,6 +69,12 @@ If `docs/progress/MASTER.md` already exists:
    - target state
    - hard constraints
    - primary priority
+   - reference-bounded scope — any trigger-style or interception-style
+     interaction in the scope must carry a concrete reference basis: a design
+     link, a doc verbatim quote, or a user verbatim quote. Do not advance a
+     change on inferred business intent alone. Prefer a strong-signal keyword
+     checklist for scope identification over free-form semantic judgment, and
+     record which reference backs each trigger so later phases can audit it
 2. Analyze only what is needed:
    - architecture and entry points
    - key modules and dependencies
@@ -99,7 +105,7 @@ When this branch is active, the user-facing answer should include:
 2. what artifacts were created or refreshed
 3. what the first execution phase is
 4. what future sessions should read first
-5. whether `.skill-context/project-context.md` now carries the planning resume context
+5. whether `.vidt/context/project-context.md` now carries the planning resume context
 
 For the user-facing answer shape, use:
 

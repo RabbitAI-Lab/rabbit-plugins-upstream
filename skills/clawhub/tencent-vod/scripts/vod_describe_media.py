@@ -600,7 +600,7 @@ def main():
     parser.add_argument('--sub-app-id', type=int,
                         default=int(os.environ.get('TENCENTCLOUD_VOD_SUB_APP_ID', 0)) or None,
                         help='子应用 ID（也可通过环境变量 TENCENTCLOUD_VOD_SUB_APP_ID 设置）')
-    parser.add_argument('--region', default='ap-guangzhou', help='地域')
+    parser.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'), help='地域')
     parser.add_argument('--json', action='store_true', help='JSON 格式输出')
     parser.add_argument('--dry-run', action='store_true', help='预览请求参数')
 

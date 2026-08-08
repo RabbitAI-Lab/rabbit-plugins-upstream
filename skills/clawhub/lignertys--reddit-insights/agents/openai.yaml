@@ -1,0 +1,5 @@
+interface:
+  display_name: Reddit Insights
+  short_description: Search Reddit posts by meaning via the reddapi.dev index.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg

@@ -1,7 +1,7 @@
 ---
 name: scavio-tiktok
 description: Look up TikTok profiles, search videos and users, explore hashtags, read comments, and traverse the social graph (followers/followings). Eleven endpoints, all at 1 credit per request.
-version: 1.0.3
+version: 1.0.4
 tags: tiktok, social, video, influencer, hashtag, creator, short-form, agents, langchain, crewai, autogen, structured-data, json, ai-agents, rag, research
 metadata:
   openclaw:
@@ -34,7 +34,7 @@ Use this skill when the user asks to:
 
 ## Setup
 
-Get a free API key at https://scavio.dev (250 free credits/month, no card required):
+Get a free API key at https://scavio.dev (50 free credits to get started, no card required):
 
 ```bash
 export SCAVIO_API_KEY=sk_live_your_key

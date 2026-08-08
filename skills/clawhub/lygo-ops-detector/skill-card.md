@@ -1,42 +1,67 @@
-## Description: <br>
-LYGO Ops Detector analyzes text, described actions, and association patterns with deterministic heuristics to surface evasion, coordination, and institutional-signaling indicators. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+LYGO Ops Detector is a local deterministic CLI skill that scores operator-supplied text for evasion, coordination, and policy-refusal discourse signals while excluding identity profiling and doxing.
 
-## Publisher: <br>
-[deepseekoracle](https://clawhub.ai/user/deepseekoracle) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deepseekoracle](https://clawhub.ai/user/deepseekoracle)
 
-## Use Case: <br>
-Agents, analysts, and developers use this skill to evaluate supplied statements, logs, or behavior descriptions for measurable evasion and coordination signals. Its output is advisory and should support human review, not identity-based judgments or public accusations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Detector scores can be mistaken for proof of wrongdoing or identity-based conclusions. <br>
-Mitigation: Use scores only as advisory pattern signals, review the cited evidence manually, and avoid public accusations, employment decisions, legal claims, or identity-based judgments without independent evidence and human review. <br>
-Risk: Sensitive or untrusted text may contain misleading, poisoned, or incomplete context. <br>
-Mitigation: Run analysis locally, verify primary sources, separate observed signals from inference, and quarantine suspicious inputs before relying on results. <br>
+## Use Case:
 
+Developers, analysts, and agent operators use this skill to run reproducible local checks on pasted or consented text for discourse-pattern signals, inspect JSON or text reports, show signal boundaries, and rerun the public labeled evaluation suite.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/deepseekoracle/skills/lygo-ops-detector) <br>
-- [AETHON D9 Blueprint](references/AETHON_D9_BLUEPRINT.md) <br>
-- [Security and Ethics](references/SECURITY.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown analysis with optional JSON or CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes score breakdowns, observed signals, verdicts, and action-focused disclaimers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Heuristic false positives or false negatives could cause reputational harm if scores are treated as proof about a person.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat outputs as weak discourse signals only; require human review, primary sources, and cited pattern hits before any consequential action.
+
+Risk: Private messages, logs, or association strings may contain sensitive data.
+
+Mitigation: Prefer redacted pasted text; use file inputs only when the operator has authority and passes --i-consent.
+
+Risk: The tool could be misused for identity, profession, affiliation, or social-graph profiling.
+
+Mitigation: Invoke only for explicit ops-detector or evasion-index requests, analyze text rather than people, and do not score bare job or affiliation labels as operational signals.
+
+Risk: Short-suite calibration metrics can be mistaken for production performance.
+
+Mitigation: Use the documented operational bar for strong language, present calibration only as ranking evidence, and rerun the evaluation suite after pattern changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deepseekoracle/skills/lygo-ops-detector)
+- [Project homepage](https://github.com/DeepSeekOracle/lygo-protocol-stack)
+- [AETHON D9 blueprint](references/AETHON_D9_BLUEPRINT.md)
+- [Security and ethics notes](references/SECURITY.md)
+- [SkillSpector audit response](references/SKILLSPECTOR_AUDIT.md)
+- [Labeled discourse evaluation suite](tests/labeled_discourse_suite.json)
+- [Last evaluation report](tests/last_eval_report.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Plain text or JSON reports, markdown guidance, and runnable Python CLI commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Core analysis is local and deterministic; file-based inputs require operator consent; evaluation report writes are constrained to tests/.]
+
+## Skill Version(s):
+
+1.2.2 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

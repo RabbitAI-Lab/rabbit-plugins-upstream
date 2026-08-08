@@ -29,48 +29,56 @@ from dotenv import load_dotenv
 load_dotenv()
 
 
+class ErrorCode:
+    """Stable, machine-matchable error identifiers returned as ``error_code``."""
 
-def _create_new_evm_wallet(save_dir: Optional[str] = None) -> str:
-    """ Create a new EVM wallet and save to json """
+    INVALID_ARGUMENT = "invalid_argument"
+    INVALID_JSON = "invalid_json"
+    MISSING_ENV_VAR = "missing_env_var"
+    NETWORK_ERROR = "network_error"
+    INTERNAL_ERROR = "internal_error"
 
-    # Create new evm wallet
-    account = Account.create()
-    wallet_data = {
-        "time_created": datetime.now().strftime("%d/%m/%Y, %H:%M:%S.%s"),
-        "type": "evm", 
-        "address": account.address, 
-        "key": account.key.hex(),
-        "notes": "NEW_WALLET"
+
+class CliError(Exception):
+    """An expected command-line error that can be returned as JSON."""
+
+    def __init__(self, message: str, error_code: str = ErrorCode.INVALID_ARGUMENT) -> None:
+        super().__init__(message)
+        self.error_code = error_code
+
+
+class AgentArgumentParser(argparse.ArgumentParser):
+    """An ArgumentParser that reports failures as ``CliError`` instead of
+    printing usage text and calling ``sys.exit`` directly, so agents always
+    receive a single JSON error object rather than plain-text usage output."""
+
+    def error(self, message: str) -> None:  # type: ignore[override]
+        raise CliError(message, ErrorCode.INVALID_ARGUMENT)
+
+
+def emit(payload: Dict[str, Any], status: int = 0) -> int:
+    """Write one JSON result and return its intended process status."""
+    print(json.dumps(payload, sort_keys=True))
+    return status
+
+
+def emit_error(error: CliError, status: int, type_name: Optional[str] = None) -> int:
+    payload: Dict[str, Any] = {
+        "ok": False,
+        "error": str(error),
+        "error_code": error.error_code,
     }
-    # Save wallet to json file
-    save_dir = save_dir or str()
-    save_path = os.path.join(save_dir, f"evm_{account.address}.json")
-    with open(save_path, "w") as file:
-        file.write(json.dumps(wallet_data, indent=4))
-    os.chmod(save_path, 0o600)
-
-    print(
-        "\n[!] SECURITY WARNING\n"
-        f"    Wallet file saved to: {save_path}\n"
-        "    This file contains an UNENCRYPTED, spend-capable EVM private key stored in plaintext.\n"
-        "    - Do NOT commit this file to version control.\n"
-        "    - Do NOT back it up to cloud storage.\n"
-        "    - File permissions have been set to 600 (owner read/write only).\n"
-        "    - Use a dedicated low-balance wallet to limit exposure.\n",
-        file=sys.stderr,
-    )
-
-    # Output
-    return f"[+] EVM Wallet created successfully: {account.address} and saved to {save_path}."
+    if type_name is not None:
+        payload["type"] = type_name
+    return emit(payload, status)
 
 
-
-def _list_x402_resources(limit: int = 50, offset: int = 0) -> str:
+def _list_x402_resources(limit: int = 50, offset: int = 0) -> Any:
     """
     Lists x402 resources from the Coinbase CDP Bazaar.
 
     Returns:
-        A JSON-formatted string of catalog resources.
+        The parsed JSON catalog response (dict or list).
     """
     base_url = "https://api.cdp.coinbase.com/platform/v2/x402/discovery/resources"
 
@@ -79,13 +87,13 @@ def _list_x402_resources(limit: int = 50, offset: int = 0) -> str:
     try:
         response = requests.get(base_url, params=params, timeout=10)
         response.raise_for_status()
-        return json.dumps(response.json(), indent=2)
+        return response.json()
 
     except requests.RequestException as e:
-        return f"Error listing services: {str(e)}"
+        raise CliError(f"Error listing services: {e}", ErrorCode.NETWORK_ERROR) from e
 
 
-def _search_x402_resources(query: str) -> str:
+def _search_x402_resources(query: str) -> Any:
     """
     Searches x402 resources from the Coinbase CDP Bazaar.
 
@@ -93,7 +101,7 @@ def _search_x402_resources(query: str) -> str:
         query: A search string for semantic search.
 
     Returns:
-        A JSON-formatted string of matching services.
+        The parsed JSON search response (dict or list).
     """
     base_url = "https://api.cdp.coinbase.com/platform/v2/x402/discovery/search"
 
@@ -102,17 +110,63 @@ def _search_x402_resources(query: str) -> str:
     try:
         response = requests.get(base_url, params=params, timeout=10)
         response.raise_for_status()
-        return json.dumps(response.json(), indent=2)
+        return response.json()
 
     except requests.RequestException as e:
-        return f"Error searching services: {str(e)}"
+        raise CliError(f"Error searching services: {e}", ErrorCode.NETWORK_ERROR) from e
 
 
-def _init_x402_evm_client(evm_wallet_secret: Optional[str] = None) -> x402ClientSync:
+def _http_request(
+    url: str,
+    request_header: Optional[Dict[str, Any]] = None,
+    request_type: str = "post",
+    request_data: Optional[Dict[str, Any]] = None,
+    timeout: int = 60,
+) -> Tuple[int, Dict[str, Any]]:
+    """
+    Make a plain HTTP request without x402 signing.
+    
+    Used for dry-run/inspection to see what the server returns (typically 402 Payment Required).
+
+    Returns:
+        (status_code, response_data) where response_data is a dict parsed from JSON if possible,
+        otherwise {"raw": "..."}.
+    """
+    if request_type.lower() not in ("get", "post"):
+        raise CliError(f"Unsupported request method: {request_type}", ErrorCode.INVALID_ARGUMENT)
+
+    header = request_header or dict()
+
+    try:
+        match request_type.lower():
+            case "post":
+                service_response = requests.post(url, headers=header, json=request_data, timeout=timeout)
+            case "get":
+                service_response = requests.get(url, headers=header, params=request_data, timeout=timeout)
+            case _:
+                raise ValueError(f"Unknown request type: {request_type}")
+
+        try:
+            payload = service_response.json()
+            if isinstance(payload, dict):
+                return service_response.status_code, payload
+            return service_response.status_code, {"data": payload}
+        except ValueError:
+            return service_response.status_code, {"raw": service_response.text}
+
+    except requests.RequestException as e:
+        raise CliError(f"Request to {url} failed: {e}", ErrorCode.NETWORK_ERROR) from e
+
+
+def _init_x402_evm_client() -> x402ClientSync:
 
     # Create the eth wallet for the agent to use
-    evm_wallet_secret = os.getenv("CLIENT_EVM_WALLET_SECRET", evm_wallet_secret)
-    assert evm_wallet_secret is not None, "evm_wallet_secret missing! Pass evm_wallet_secret or set env-variable CLIENT_EVM_WALLET_SECRET"
+    evm_wallet_secret = os.getenv("CLIENT_EVM_WALLET_SECRET")
+    if evm_wallet_secret is None:
+        raise CliError(
+            "CLIENT_EVM_WALLET_SECRET is not set; set it via a .env file or the shell environment.",
+            ErrorCode.MISSING_ENV_VAR,
+        )
     evm_wallet = Account.from_key(evm_wallet_secret)
 
     # Init the x402 client
@@ -123,7 +177,7 @@ def _init_x402_evm_client(evm_wallet_secret: Optional[str] = None) -> x402Client
         networks=[
             # Base
             "eip155:8453",      # -> base 
-            "eip155:84532",     # -> base-sepolia
+            # "eip155:84532",   # -> base-sepolia
         ]
     )
 
@@ -139,13 +193,14 @@ def _x402_request(
     timeout: int = 60,
 ) -> Tuple[int, Dict[str, Any]]:
     """
-    Request an x402-paywalled endpoint
+    Request an x402-paywalled endpoint with automatic payment signing.
 
     Returns:
         (status_code, response_data) where response_data is a dict parsed from JSON if possible,
         otherwise {"raw": "..."}.
     """
-    assert request_type.lower() in ["get", "post"]
+    if request_type.lower() not in ("get", "post"):
+        raise CliError(f"Unsupported request method: {request_type}", ErrorCode.INVALID_ARGUMENT)
 
     with x402_requests(x402_client) as session:
 
@@ -169,7 +224,7 @@ def _x402_request(
                 return service_response.status_code, {"raw": service_response.text}
 
         except requests.RequestException as e:
-            return 0, {"error": "request_failed", "details": str(e), "url": url}
+            raise CliError(f"Request to {url} failed: {e}", ErrorCode.NETWORK_ERROR) from e
 
 
 def _parse_request_data(raw_request_data: Optional[str]) -> Optional[Dict[str, Any]]:
@@ -179,10 +234,10 @@ def _parse_request_data(raw_request_data: Optional[str]) -> Optional[Dict[str, A
     try:
         parsed = json.loads(raw_request_data)
     except json.JSONDecodeError as exc:
-        raise ValueError(f"request-data must be valid JSON: {exc.msg}") from exc
+        raise CliError(f"request-data must be valid JSON: {exc.msg}", ErrorCode.INVALID_JSON) from exc
 
     if not isinstance(parsed, dict):
-        raise ValueError("request-data must decode to a JSON object")
+        raise CliError("request-data must decode to a JSON object", ErrorCode.INVALID_JSON)
 
     return parsed
 
@@ -194,20 +249,12 @@ def _parse_request_header(raw_request_header: Optional[str]) -> Optional[Dict[st
     try:
         parsed = json.loads(raw_request_header)
     except json.JSONDecodeError as exc:
-        raise ValueError(f"request-header must be valid JSON: {exc.msg}") from exc
+        raise CliError(f"request-header must be valid JSON: {exc.msg}", ErrorCode.INVALID_JSON) from exc
 
     if not isinstance(parsed, dict):
-        raise ValueError("request-header must decode to a JSON object")
+        raise CliError("request-header must decode to a JSON object", ErrorCode.INVALID_JSON)
 
     return parsed
-
-
-def _print_response(response: Any) -> None:
-    if isinstance(response, (dict, list)):
-        print(json.dumps(response, indent=2, sort_keys=True))
-        return
-
-    print(response)
 
 
 def _generate_discovery_filename(command_name: str) -> str:
@@ -221,27 +268,338 @@ def _save_discovery_output(output: Any, command_name: str, output_dir: Optional[
     output_path = target_dir / _generate_discovery_filename(command_name)
 
     with output_path.open("w", encoding="utf-8") as file:
-        if isinstance(output, str):
-            try:
-                parsed_output = json.loads(output)
-            except json.JSONDecodeError:
-                file.write(output)
-            else:
-                json.dump(parsed_output, file, indent=2)
-                file.write("\n")
-        else:
-            json.dump(output, file, indent=2)
-            file.write("\n")
+        json.dump(output, file, indent=2)
+        file.write("\n")
 
     return str(output_path)
 
 
+def _save_request_output(
+    command_name: str,
+    request_header: Optional[Dict[str, Any]],
+    request_data: Optional[Dict[str, Any]],
+    response: Dict[str, Any],
+    output_dir: Optional[str] = None,
+) -> str:
+    """Save a request/response pair to a timestamped JSON file.
+
+    The file has the shape ``{"input": {"header": ..., "data": ...}, "response": ...}``,
+    where ``response`` is either the successful ``{"status_code": ..., "data": ...}``
+    payload or an ``{"error": ..., "error_code": ...}`` payload on failure.
+    """
+    payload = {
+        "input": {"header": request_header, "data": request_data},
+        "response": response,
+    }
+    return _save_discovery_output(payload, command_name, output_dir)
+
+
+def command_discover_list(args: argparse.Namespace) -> Dict[str, Any]:
+    """
+    List available x402 resources from the Coinbase CDP discovery catalog.
+    
+    Returns a paginated list of x402 services. Each resource in the response includes:
+    - resource: The HTTPS endpoint URL for this service
+    - description: Human-readable service description
+    - accepts: Array of payment options (amount, network, token, etc.)
+    - quality: Usage metrics (total calls, unique payers in last 30 days)
+    - extensions.bazaar.info: Example input/output for this service
+    
+    Example output structure:
+    {
+        "ok": true,
+        "action": "discover-list",
+        "resources": {
+            "items": [
+                {
+                    "resource": "https://api.example.com/service",
+                    "description": "Service description",
+                    "accepts": [
+                        {
+                            "scheme": "exact",
+                            "network": "eip155:8453",
+                            "asset": "0x...(token_address)",
+                            "amount": "1000",
+                            "payTo": "0x...(recipient_address)"
+                        }
+                    ],
+                    "quality": {
+                        "l30DaysTotalCalls": 1000,
+                        "l30DaysUniquePayers": 625
+                    }
+                }
+            ]
+        }
+    }
+    
+    Pagination:
+    - Use --limit to control page size (default 50, max 100)
+    - Use --offset to fetch additional pages (default 0)
+    - When --save is set, the response is also written to a timestamped JSON file
+    """
+    resources = _list_x402_resources(limit=args.limit, offset=args.offset)
+    result: Dict[str, Any] = {"ok": True, "action": "discover-list", "resources": resources}
+    if args.save:
+        result["saved_to"] = _save_discovery_output(resources, "discover_list", args.output_dir)
+    return result
+
+
+def command_discover_search(args: argparse.Namespace) -> Dict[str, Any]:
+    """
+    Semantically search for x402 resources matching a query string.
+    
+    Returns a list of matching services sorted by relevance. The search index includes:
+    - service descriptions and names
+    - tags (e.g., "weather", "crypto news", "blockchain data")
+    - quality metrics
+    
+    Example output structure:
+    {
+        "ok": true,
+        "action": "discover-search",
+        "resources": {
+            "meta": {
+                "searchToken": "<search_token>"
+            },
+            "partialResults": false,
+            "resources": [
+                {
+                    "resource": "https://api.example.com/service",
+                    "serviceName": "Service Provider Name",
+                    "description": "Service description",
+                    "tags": ["tag1", "tag2", "tag3"],
+                    "accepts": [
+                        {
+                            "scheme": "exact",
+                            "network": "eip155:8453",
+                            "asset": "0x...(token_address)",
+                            "amount": "1000"
+                        }
+                    ],
+                    "quality": {
+                        "l30DaysTotalCalls": 1595,
+                        "l30DaysUniquePayers": 116
+                    }
+                }
+            ]
+        }
+    }
+    
+    Parsing guidance:
+    - Extract .resources[].resource to get the URL for request info/pay
+    - Check .resources[].accepts[0].amount to verify the cost
+    - Use .resources[].description and .tags to understand the service
+    - partialResults: true means the search timed out; results are incomplete
+    """
+    resources = _search_x402_resources(args.query)
+    result: Dict[str, Any] = {"ok": True, "action": "discover-search", "resources": resources}
+    if args.save:
+        result["saved_to"] = _save_discovery_output(resources, "discover_search", args.output_dir)
+    return result
+
+
+def command_request_info(args: argparse.Namespace) -> Dict[str, Any]:
+    """
+    Inspect an x402 endpoint without payment to see what it requires.
+    
+    Makes a plain HTTP request and captures the response, typically a 402 Payment Required
+    with payment instructions. Use this BEFORE calling request pay to verify:
+    - The endpoint is reachable
+    - The payment amount and recipient
+    - The input/output format
+    - Whether the service is working
+    
+    Does NOT require CLIENT_EVM_WALLET_SECRET (no payment is attempted).
+    
+    Example output structure (typical 402 response):
+    {
+        "ok": true,
+        "action": "request-info",
+        "status_code": 402,
+        "data": {
+            "payment_instruction": {
+                "amount": "1000",
+                "asset": "0x...(token_address)",
+                "payTo": "0x...(recipient_address)",
+                "scheme": "exact",
+                "network": "eip155:8453"
+            }
+        }
+    }
+    
+    Parsing guidance:
+    - Check .status_code: 402 = payment required (expected), others = service error
+    - Extract payment details to confirm amount before paying
+    - HTTP 4xx/5xx errors from the destination are still .ok: true (they're valid responses)
+    - Transport errors (DNS, timeout, connection refused) produce .ok: false
+
+    Saving:
+    - --save is enabled by default; pass --no-save to disable it
+    - When enabled, writes a JSON file shaped like
+      {"input": {"header": ..., "data": ...}, "response": {...}}, where "response" is
+      either {"status_code": ..., "data": ...} on success or {"error": ..., "error_code": ...}
+      on failure
+    """
+    request_data = _parse_request_data(args.data)
+    request_header = _parse_request_header(args.header)
+
+    try:
+        status_code, response = _http_request(
+            url=args.url,
+            request_header=request_header,
+            request_type=args.method,
+            request_data=request_data,
+            timeout=args.timeout,
+        )
+    except CliError as error:
+        if args.save:
+            _save_request_output(
+                "request_info",
+                request_header,
+                request_data,
+                {"error": str(error), "error_code": error.error_code},
+                args.output_dir,
+            )
+        raise
+
+    result: Dict[str, Any] = {"ok": True, "action": "request-info", "status_code": status_code, "data": response}
+    if args.save:
+        result["saved_to"] = _save_request_output(
+            "request_info",
+            request_header,
+            request_data,
+            {"status_code": status_code, "data": response},
+            args.output_dir,
+        )
+    return result
+
+
+def command_request_pay(args: argparse.Namespace) -> Dict[str, Any]:
+    """
+    Make a signed x402 payment request to a paywalled endpoint.
+    
+    This command:
+    1. Reads CLIENT_EVM_WALLET_SECRET from environment
+    2. Creates an EVM wallet instance
+    3. Initiates the x402 payment flow (signing, authorization)
+    4. Sends the paywalled request
+    5. Returns the service response
+    
+    WARNING: THIS SPENDS REAL MONEY ON BASE MAINNET IMMEDIATELY
+    No confirmation prompt is shown — the payment is authorized the moment this runs.
+    Always call request info first to verify the endpoint.
+    
+    Example output structure (successful payment + service response):
+    {
+        "ok": true,
+        "action": "request-pay",
+        "status_code": 200,
+        "data": {...service response data...}
+    }
+    
+    Example output structure (service error after payment):
+    {
+        "ok": true,
+        "action": "request-pay",
+        "status_code": 500,
+        "data": {"raw": "...error message..."}
+    }
+    
+    Example output structure (wallet funding error):
+    {
+        "ok": false,
+        "error": "Insufficient balance in wallet for payment",
+        "error_code": "network_error",
+        "type": "PaymentError"
+    }
+    
+    Parsing guidance:
+    - .ok: true means the payment went through (even if status_code is 4xx/5xx from service)
+    - Check .status_code: 200+ = service response received, 4xx/5xx = service error
+    - .data contains either JSON response or {"raw": "..."} if response is not JSON
+    - .ok: false means payment failed or network error; check .error_code
+    - Critical error codes: missing_env_var, network_error, internal_error
+    
+    Wallet/Payment Requirements:
+    - CLIENT_EVM_WALLET_SECRET must be set (read-only from environment)
+    - Wallet must have sufficient USDC on Base mainnet
+    - Network must be Base mainnet (eip155:8453) only
+
+    Saving:
+    - --save is enabled by default; pass --no-save to disable it
+    - When enabled, writes a JSON file shaped like
+      {"input": {"header": ..., "data": ...}, "response": {...}}, where "response" is
+      either {"status_code": ..., "data": ...} on success or {"error": ..., "error_code": ...}
+      on failure
+    """
+    request_data = _parse_request_data(args.data)
+    request_header = _parse_request_header(args.header)
+
+    try:
+        x402_client = _init_x402_evm_client()
+
+        print(
+            "\n[!] PAID REQUEST WARNING\n"
+            f"    Destination: {args.method.upper()} {args.url}\n"
+            f"    Headers provided: {'yes' if request_header else 'no'}\n"
+            f"    Data provided: {'yes' if request_data else 'no'}\n"
+            "    This will transmit the request (including any headers/data above) to the\n"
+            "    third-party endpoint shown and immediately authorize an on-chain payment\n"
+            "    from your wallet. There is no further confirmation prompt — review the\n"
+            "    destination and payload carefully before running this command.\n"
+            "    To inspect what this endpoint requires before paying, first run with: request info\n",
+            file=sys.stderr,
+        )
+
+        status_code, response = _x402_request(
+            x402_client=x402_client,
+            url=args.url,
+            request_header=request_header,
+            request_type=args.method,
+            request_data=request_data,
+            timeout=args.timeout,
+        )
+    except CliError as error:
+        if args.save:
+            _save_request_output(
+                "request_pay",
+                request_header,
+                request_data,
+                {"error": str(error), "error_code": error.error_code},
+                args.output_dir,
+            )
+        raise
+
+    result: Dict[str, Any] = {"ok": True, "action": "request-pay", "status_code": status_code, "data": response}
+    if args.save:
+        result["saved_to"] = _save_request_output(
+            "request_pay",
+            request_header,
+            request_data,
+            {"status_code": status_code, "data": response},
+            args.output_dir,
+        )
+    return result
+
+
 def _build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(description="CLI for x402 discovery and paywalled requests")
-    subparsers = parser.add_subparsers(dest="command", required=True)
+    parser = AgentArgumentParser(
+        description="CLI for x402 discovery and paywalled requests",
+        epilog=(
+            "Related skills:\n"
+            "  create-crypto-wallets  Generate and manage crypto wallets securely\n"
+            "                         Install: openclaw skills install @beocca/create-crypto-wallets\n"
+            "  keepass-cli            Manage secrets and credentials securely in encrypted vaults\n"
+            "                         Install: openclaw skills install @beocca/keepass-cli\n"
+        ),
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+    subparsers = parser.add_subparsers(dest="command", required=True, parser_class=AgentArgumentParser)
 
     discover_parser = subparsers.add_parser("discover", help="Discover x402 services")
-    discover_subparsers = discover_parser.add_subparsers(dest="discover_command", required=True)
+    discover_subparsers = discover_parser.add_subparsers(
+        dest="discover_command", required=True, parser_class=AgentArgumentParser
+    )
 
     list_parser = discover_subparsers.add_parser("list", help="List available x402 resources")
     list_parser.add_argument(
@@ -267,6 +625,7 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Directory where the JSON file should be written",
     )
+    list_parser.set_defaults(handler=command_discover_list)
 
     search_parser = discover_subparsers.add_parser("search", help="Search x402 resources")
     search_parser.add_argument("query", help="Semantic search query")
@@ -281,90 +640,134 @@ def _build_parser() -> argparse.ArgumentParser:
         default=None,
         help="Directory where the JSON file should be written",
     )
+    search_parser.set_defaults(handler=command_discover_search)
 
-    wallet_parser = subparsers.add_parser("wallet", help="Manage local EVM wallets")
-    wallet_subparsers = wallet_parser.add_subparsers(dest="wallet_command", required=True)
-
-    wallet_create_parser = wallet_subparsers.add_parser("create", help="Create a new EVM wallet")
-    wallet_create_parser.add_argument(
-        "--save-dir",
-        default=None,
-        help="Directory where the generated wallet JSON should be saved",
+    request_parser = subparsers.add_parser("request", help="Make requests to x402 endpoints")
+    request_subparsers = request_parser.add_subparsers(
+        dest="request_command", required=True, parser_class=AgentArgumentParser
     )
 
-    request_parser = subparsers.add_parser("request", help="Make an x402-paid request")
-    request_parser.add_argument("url", help="Paywalled endpoint URL")
-    request_parser.add_argument(
+    # request info: inspect server response without payment
+    info_parser = request_subparsers.add_parser(
+        "info", help="Inspect server response (likely 402 Payment Required) without sending payment"
+    )
+    info_parser.add_argument("url", help="Endpoint URL to inspect")
+    info_parser.add_argument(
         "--method",
         choices=["get", "post"],
         default="post",
         help="HTTP method to use for the request",
     )
-    request_parser.add_argument(
+    info_parser.add_argument(
         "--data",
         default=None,
         help='Request payload as a JSON object string, for example \'{"foo":"bar"}\'',
     )
-    request_parser.add_argument(
+    info_parser.add_argument(
         "--header",
         default=None,
         help='Request headers as a JSON object string, for example \'{"Authorization":"Bearer ..."}\'',
     )
-    request_parser.add_argument(
+    info_parser.add_argument(
         "--timeout",
         type=int,
         default=60,
         help="Request timeout in seconds",
     )
-    request_parser.add_argument(
-        "--evm-wallet-secret",
-        default=None,
-        help="Private key for the EVM wallet, or set CLIENT_EVM_WALLET_SECRET",
+    info_parser.add_argument(
+        "--save",
+        dest="save",
+        action="store_true",
+        default=True,
+        help="Save the request input and response to a JSON file (default: enabled)",
     )
+    info_parser.add_argument(
+        "--no-save",
+        dest="save",
+        action="store_false",
+        help="Disable saving the request input and response to a JSON file",
+    )
+    info_parser.add_argument(
+        "--output-dir",
+        "-o",
+        default=None,
+        help="Directory where the JSON file should be written",
+    )
+    info_parser.set_defaults(handler=command_request_info)
+
+    # request pay: make signed x402 payment
+    pay_parser = request_subparsers.add_parser(
+        "pay", help="Make a signed x402 payment request (immediately moves funds)"
+    )
+    pay_parser.add_argument("url", help="Paywalled endpoint URL")
+    pay_parser.add_argument(
+        "--method",
+        choices=["get", "post"],
+        default="post",
+        help="HTTP method to use for the request",
+    )
+    pay_parser.add_argument(
+        "--data",
+        default=None,
+        help='Request payload as a JSON object string, for example \'{"foo":"bar"}\'',
+    )
+    pay_parser.add_argument(
+        "--header",
+        default=None,
+        help='Request headers as a JSON object string, for example \'{"Authorization":"Bearer ..."}\'',
+    )
+    pay_parser.add_argument(
+        "--timeout",
+        type=int,
+        default=60,
+        help="Request timeout in seconds",
+    )
+    pay_parser.add_argument(
+        "--save",
+        dest="save",
+        action="store_true",
+        default=True,
+        help="Save the request input and response to a JSON file (default: enabled)",
+    )
+    pay_parser.add_argument(
+        "--no-save",
+        dest="save",
+        action="store_false",
+        help="Disable saving the request input and response to a JSON file",
+    )
+    pay_parser.add_argument(
+        "--output-dir",
+        "-o",
+        default=None,
+        help="Directory where the JSON file should be written",
+    )
+    pay_parser.set_defaults(handler=command_request_pay)
 
     return parser
 
 
-
-if __name__ == "__main__":
+def main(argv: Optional[list] = None) -> int:
     parser = _build_parser()
-    args = parser.parse_args()
+    try:
+        args = parser.parse_args(argv)
+    except CliError as error:
+        return emit_error(error, 2)
 
-    if args.command == "discover":
-        if args.discover_command == "list":
-            discovered = _list_x402_resources(limit=args.limit, offset=args.offset)
-            if args.save:
-                saved_path = _save_discovery_output(discovered, "discover_list", args.output_dir)
-                print(f"saved_to: {saved_path}")
-            _print_response(discovered)
-            sys.exit(0)
-
-        if args.discover_command == "search":
-            discovered = _search_x402_resources(args.query)
-            if args.save:
-                saved_path = _save_discovery_output(discovered, "discover_search", args.output_dir)
-                print(f"saved_to: {saved_path}")
-            _print_response(discovered)
-            sys.exit(0)
-
-    if args.command == "wallet" and args.wallet_command == "create":
-        created_wallet = _create_new_evm_wallet(save_dir=args.save_dir)
-        _print_response(created_wallet)
-        sys.exit(0)
-
-    if args.command == "request":
-        request_data = _parse_request_data(args.data)
-        request_header = _parse_request_header(args.header)
-        x402_client = _init_x402_evm_client(evm_wallet_secret=args.evm_wallet_secret)
-        status_code, response = _x402_request(
-            x402_client=x402_client,
-            url=args.url,
-            request_header=request_header,
-            request_type=args.method,
-            request_data=request_data,
-            timeout=args.timeout,
+    try:
+        return emit(args.handler(args))
+    except CliError as error:
+        return emit_error(error, 2)
+    except Exception as error:  # noqa: BLE001 - convert any unexpected failure to structured JSON
+        return emit(
+            {
+                "ok": False,
+                "error": str(error),
+                "error_code": ErrorCode.INTERNAL_ERROR,
+                "type": type(error).__name__,
+            },
+            1,
         )
 
-        print(f"status_code: {status_code}")
-        _print_response(response)
-        sys.exit(0)
+
+if __name__ == "__main__":
+    sys.exit(main())

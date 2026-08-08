@@ -1,45 +1,60 @@
-## Description: <br>
-Finds Amazon products that compete in the same Jiimore niche segments as a reference ASIN, with filters for conversion, clicks, sales, reviews, ratings, price, FBA fees, and gross margin. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Finds Amazon products competing in the same Jiimore niche as a reference ASIN and supports filtering by conversion, clicks, sales, reviews, ratings, price, FBA fees, and gross margin.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External Amazon sellers and ecommerce analysts use this skill to query LinkFox Jiimore data for same-niche competing ASINs in the US, JP, and DE marketplaces, then filter and compare products by conversion, traffic, sales, reviews, price, fees, and margin. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; marketplace queries are limited to US, JP, and DE Amazon data. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: ASIN query data, the LinkFox API key, and optional session metadata are sent to LinkFox services. <br>
-Mitigation: Use a scoped API key, avoid submitting sensitive proprietary context, and review the request parameters before execution. <br>
-Risk: LINKFOX_TOOL_GATEWAY can redirect API traffic if set. <br>
-Mitigation: Keep LINKFOX_TOOL_GATEWAY unset unless the destination is controlled and trusted. <br>
-Risk: Full API responses are saved locally under a linkfox directory that may be outside the current project when fallback paths are used. <br>
-Mitigation: Run the skill from the intended writable workspace and handle saved result files as sensitive business data. <br>
-Risk: Repeated or high-frequency calls consume LinkFox credits. <br>
-Mitigation: Tell users about credit cost before repeated retrievals and rely on the built-in cache when repeating the same parameter set. <br>
+## Use Case:
 
+External Amazon sellers and ecommerce analysts use this skill to find same-niche competitors for a reference ASIN and compare marketplace metrics. It is suited to objective competitor discovery and filtering, not keyword research, ad management, supplier sourcing, or listing optimization.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-jiimore-page-asins-by-asin) <br>
-- [Jiimore ASIN product mining API reference](artifact/references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON request parameters, shell commands, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The script writes full API responses under a local linkfox data directory, prints small responses inline, summarizes larger responses, and uses a 24-hour local cache by default.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: ASIN queries, session metadata, and LinkFox responses are sent to LinkFox services and full responses may be stored locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when this data sharing and local storage are acceptable, and periodically delete local LinkFox response and cache files if the data is sensitive.
+
+Risk: The skill may involve phone/SMS login, API-key handling, and payment or billing flows.
+
+Mitigation: Prefer obtaining API keys and completing payments directly on the LinkFox website, and avoid sharing more credential or payment data through the agent than needed.
+
+Risk: Custom LinkFox endpoint environment variables can redirect requests away from default LinkFox services.
+
+Mitigation: Avoid setting custom LinkFox endpoint environment variables unless the destination is fully trusted.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-jiimore-page-asins-by-asin)
+- [API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries and tables, JSON API responses, local JSON data files, and shell commands for API and onboarding flows]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full API responses under the LinkFox session data directory, caches identical queries for 24 hours, and summarizes responses larger than 8 KB unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

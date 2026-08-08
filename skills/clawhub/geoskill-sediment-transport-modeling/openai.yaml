@@ -1,0 +1,13 @@
+name: geoskill-sediment-transport-modeling
+display_name: 泥沙输移模拟
+description: |
+  RUSLE 土壤侵蚀模型 + 泥沙输移比(SDR)估算流域产沙量，识别关键泥沙源区
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-sediment-transport-modeling.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - extraction
+  - gis
+  - remote-sensing

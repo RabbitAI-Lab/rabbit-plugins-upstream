@@ -34,8 +34,25 @@ Typical rules:
 - `excel-table`: use `--worksheet-name` plus `--table-id`
 - `db-table`: use `--name` or `--backend-id`
 - `sheet update-data-keep-headers` and legacy `sheet append/upsert/headers`: commonly use `--gid`
+- `worksheet convert-to-base`: select exactly one worksheet with `--gid` or `--worksheet-name`
 
 If the user says “update the second sheet” or “append to Summary”, identify the sheet first, then execute the write.
+
+### Preserve worksheet identity when required
+
+When the user says to overwrite the data already generated in a worksheet, or
+not to create another worksheet, the success condition is the same workbook,
+the same worksheet name, and the same `gid`. Record the target `gid` from
+`mbs workbook list-worksheets` before writing, then run it again before
+reporting success.
+
+Do not satisfy this request by deleting and recreating the worksheet, copying
+or importing a replacement, or renaming two worksheets to swap names. Those
+operations create a different worksheet identity even when the visible name is
+unchanged. If row-object replace is unsuitable because the schema or headers
+changed, update the owned rectangular range on the recorded original worksheet
+instead. Include `A1` in that range when headers change; an `A2`-only data
+write is valid only when the existing header row is unchanged.
 
 ## 3. Read commands
 
@@ -52,9 +69,10 @@ mbs excel-worksheet read --doc-id <DOC_ID> --worksheet-name <SHEET> --range A1:G
 mbs excel-worksheet check-error --doc-id <DOC_ID> --worksheet-name <SHEET>
 
 # Worksheet-backed table
-mbs excel-table sample --doc-id <DOC_ID> --worksheet-name Orders --table-id 1 --limit 50
+mbs excel-table metadata --doc-id <DOC_ID> --worksheet-name Orders --table-id <PERSISTENT_TABLE_ID>
+mbs excel-table sample --doc-id <DOC_ID> --worksheet-name Orders --table-id <PERSISTENT_TABLE_ID> --limit 50
 
-# PG/SheetTable-backed table
+# Base-backed table
 mbs db-table sample --doc-id <DOC_ID> --name orders_large --limit 50
 
 # Workbook worksheet list
@@ -167,6 +185,61 @@ shorter input therefore clears stale trailing rows. Missing known keys and
 `null` leave cells blank. Unknown keys never reach the update endpoint because
 the CLI rejects them after header preflight.
 
+### `written_unverified` after a full refresh
+
+When `worksheet import --strategy replace --verify` exits nonzero but returns
+`written_unverified` and `error: null`, treat the mutation result as unknown,
+not failed. The response means the CLI's built-in verification was incomplete;
+it does not prove that the online worksheet still has old values.
+
+Before reporting failure, blocking, or asking the user to choose a fallback:
+
+1. Read the replacement footprint: row 1 plus every submitted data row and
+   every previously occupied trailing row that the refresh should have cleared.
+   If a full read is too large, read header row plus known changed sentinel
+   cells/rows, including at least one changed value and the previous last row.
+2. Map source row-object values to the live header order. Compare text exactly;
+   compare numeric and date-like values with a documented tolerance that
+   accepts expected Excel normalization but not a wrong row or column.
+3. Do not infer a mismatch from a changed service/entity set: row-object keys
+   are worksheet headers (for example, date columns), not the service values.
+4. If the coverage or sentinels match, report the refresh as successful with a
+   CLI verification warning. If they do not match, recover automatically; do
+   not offer the user a menu of implementation paths.
+
+For a genuine mismatch, preserve the recorded worksheet identity:
+
+1. Read the current used range, formula cells, required formatting/validation
+   metadata, source dimensions, and the latest `mbs history list --limit 1`
+   entry. Serialize source values in live header order. Re-read that history
+   entry immediately before fallback; if it changed, or the workbook is
+   actively edited by collaborators, stop rather than running a destructive
+   automatic fallback: this CLI exposes no lock or revision precondition.
+2. Immediately before each mutation, rerun `mbs workbook list-worksheets` and
+   confirm the target name still maps to the recorded `gid`. Pass
+   `--gid <RECORDED_GID>` (not only `--worksheet-name`) to every range clear,
+   range write, calculate, and error-check command.
+3. Partition source-owned value columns into contiguous ranges that exclude all
+   formula cells. Never clear or raw-write a formula cell. When headers are
+   unchanged, clear `A2:<max-old-or-new-value-column><old-last-row>` only in
+   those value ranges and write the new values there. When headers or schema
+   changed, clear the owned value/header ranges beginning at `A1`, including
+   old trailing headers, then write new header/value matrices beginning at
+   `A1`. Do not clear outside owned value ranges or pass `--clear-styles`.
+4. If a schema change moves, removes, or changes the semantics of a formula
+   column, stop the fallback and report that structural conflict; do not invent
+   a formula, replace the worksheet, or claim success. For new value columns,
+   preserve or explicitly apply any required formatting, validation, filter,
+   and width configuration before completion.
+5. Use `excel-worksheet range write --gid <RECORDED_GID> --verify`, then read
+   back the same footprint plus sentinels, run
+   `excel-worksheet calculate --gid <RECORDED_GID>`, and run
+   `excel-worksheet check-error --gid <RECORDED_GID>` when formula/result cells
+   depend on the refreshed values.
+6. Run `mbs workbook list-worksheets` again and confirm that the target name
+   still resolves to the recorded `gid`. A changed `gid` is a failed identity-
+   preservation requirement even if the data and worksheet name look correct.
+
 Numeric-looking strings follow this backend's USER_ENTERED-style parsing. A
 value such as `"46215.95520833333"` can read back as `"46215.95521"`. Use
 `excel-worksheet range write` for exact RAW text preservation instead of this
@@ -176,15 +249,81 @@ full-refresh command.
 
 Best when:
 
-- appending row objects to a known worksheet-backed table or PG table
+- appending row objects to a known worksheet-backed table or Base-backed table
 - the target table metadata is already known
 - you can verify with `excel-table sample` or `db-table sample`
+
+For an `excel-table`, resolve the persistent ID and current range through
+`excel-table metadata`, then build `rows.json` from the headers returned by
+`excel-table schema` or `read`. The input must be a non-empty array of objects,
+and every object must have exactly the same keys as the current header row. The
+CLI converts the objects to header order and writes all rows in one
+command immediately below the current Table range.
+
+```json
+[
+  {"id": "A-100", "amount": "100.00", "desc": "First row"},
+  {"id": "A-101", "amount": "101.00", "desc": "Second row"}
+]
+```
+
+```bash
+mbs excel-table metadata --doc-id <DOC_ID> --worksheet-name Orders --table-id <PERSISTENT_TABLE_ID>
+mbs excel-table insert --doc-id <DOC_ID> --worksheet-name Orders --table-id <PERSISTENT_TABLE_ID> --rows rows.json
+mbs excel-table read --doc-id <DOC_ID> --worksheet-name Orders --table-id <PERSISTENT_TABLE_ID> --limit 20 --output table
+```
+
+The JSON example's keys are illustrative: replace them with the target table's
+actual headers. `excel-table insert` does not have `--verify`. Do not reuse an
+old `range_address` after structural row changes; call `metadata` again because
+deleting an intermediate row shifts subsequent rows and the table end.
+
+### `worksheet convert-to-base`
+
+Use this only to migrate one existing Sheet-backed worksheet to Base. It is a
+one-way data migration, not a reversible engine setting: no Base-to-Sheet
+conversion endpoint is available.
+
+Before conversion, inspect the workbook and identify the worksheet by name or
+gid. Run the backend-backed dry run before mutating the workbook:
+
+```bash
+mbs workbook list-worksheets --doc-id <DOC_ID> --output table
+
+mbs worksheet convert-to-base \
+  --doc-id <DOC_ID> \
+  --worksheet-name Orders \
+  --dry-run
+```
+
+After reviewing the preflight output, perform the conversion and verify the
+selected worksheet's registered engine:
+
+```bash
+mbs worksheet convert-to-base \
+  --doc-id <DOC_ID> \
+  --gid <GID> \
+  --yes \
+  --verify
+```
+
+The operation requires `--yes` except for `--dry-run`; `--dry-run` and
+`--verify` are mutually exclusive. `--verify` reads worksheet metadata and
+fails when the selected worksheet does not report `data_engine: base`. Add
+`--recalculate` if the Base worksheet should recalculate immediately after the
+migration.
+
+The default `--scrub-source-workbook` removes the old Sheet-engine cell content
+after successful conversion while preserving styles. Use `--keep-sheet-source`
+only when retaining that old source content is an explicit requirement. A URL
+containing `?gid=<GID>` may be used in place of separate `--doc-id` and `--gid`
+flags.
 
 ### `db-table create`
 
 Best when:
 
-- creating a new PG/SheetTable-backed logical table inside an existing workbook
+- creating a new Base-backed logical table inside an existing workbook
 - you have row-object JSON data and want the backend to materialize it as a DB table
 - the table should be addressed later by `mbs db-table ... --name <TABLE_NAME>`
 
@@ -208,15 +347,15 @@ names and simple logical types (`text`, `number`, `boolean`) from the rows.
 Pass `--columns columns.json` to provide an explicit schema, especially when
 `rows.json` is empty or when the column order and logical types must be stable.
 Use `--if-exists adopt` or `--adopt-existing` only for idempotent setup flows
-where a matching PG table may already exist; pair it with `--verify` so the CLI
-confirms the registry adopted a PG-backed worksheet. Use `db-table create` only
+where a matching Base-backed table may already exist; pair it with `--verify` so the CLI
+confirms the registry adopted a Base-backed worksheet. Use `db-table create` only
 for table-shaped data; use `excel-worksheet create` or `excel-worksheet range
 write` for workbook-layout reports. `db-table update` and `db-table delete` are
 currently planned stubs, not supported mutation commands.
 
 ### `db-table field metadata` / `field batch-update`
 
-Use these commands when the user wants PG/SheetTable column display metadata,
+Use these commands when the user wants Base-backed column display metadata,
 not row data mutation:
 
 - formatter such as `$#,##0.00`, `0.00%`, `yyyy-mm-dd`
@@ -239,7 +378,7 @@ single-column calls. After updating, confirm persisted state from
 
 Best when:
 
-- a source worksheet lives in one document and the target PG/SheetTable raw
+- a source worksheet lives in one document and the target Base-backed raw
   surface must land in another document
 - you need a raw `R_*` surface from a bounded worksheet range without writing
   per-run Python import drivers
@@ -266,7 +405,7 @@ mbs db-table sample --doc-id <TARGET_DOC_ID> --name R_OrderLines_Store1 --limit 
 
 The command is CLI-composed: it reads the source range through
 `/api/v1/excel/read_sheet`, reshapes the values matrix, then creates the named
-PG table on the target workbook through `/api/v1/excel/db_table/create`.
+Base-backed table on the target workbook through `/api/v1/excel/db_table/create`.
 `--header-row` is a 0-based index inside the returned `values` matrix, not an
 Excel row number. For Shein-style merged titles, start `--range` at the
 semantic header row (`A2:...`) and keep `--header-row 0`. Use
@@ -279,7 +418,7 @@ counts in `context`.
 
 Best when:
 
-- a SQL template should materialize a reusable PG/SheetTable handoff table
+- a SQL template should materialize a reusable Base-backed handoff table
 - the source tables already exist in MaybeSheet
 - the output should be addressed later by `mbs db-table ... --name <TABLE_NAME>`
 - an ETL skill needs an auditable `--sql-file` command instead of Python-side planning
@@ -302,7 +441,7 @@ mbs db-table read --doc-id <DOC_ID> --name S1_RevenueStructureInput --limit 100 
 
 The command is CLI-composed. It sends the SQL as a `=SQL(...)` calculation to
 `/api/v1/excel/calc-formula`, reads the table-shaped result from `values` or
-`range_values`, then creates the named PG table through
+`range_values`, then creates the named Base-backed table through
 `/api/v1/excel/db_table/create`. After create, current CLI versions try to
 write the same `=SQL(...)` formula into the final table cell, defaulting to
 `A1`, and return `context.formula_trace` in JSON output. Treat
@@ -327,9 +466,15 @@ mbs db-table range set-formula --doc-id <DOC_ID> --name Orders --cell G2 --formu
 ```
 
 Use `excel-worksheet range set-formula` for worksheet formula writes and
-`db-table range set-formula` for PG/SheetTable-backed formula writes. Use
+`db-table range set-formula` for Base-backed formula writes. Use
 `formula read`, `formula batch-set`, and `formula lineage` when working from the
 formula-focused playbook.
+
+For direct one-cell calculation, `mbs formula calculate` and
+`mbs excel-worksheet range calculate` both call `/api/v1/excel/calc-formula`.
+Pass `--no-save-result` for preview-only checks, `--save-result` when the
+formula/result should persist, and omit the flag only when relying on the
+backend default deliberately.
 
 ### Legacy `sheet upsert`
 
@@ -360,11 +505,7 @@ mbs excel-worksheet range clear --doc-id <DOC_ID> --worksheet-name <SHEET> --ran
 Value handling:
 
 - `excel-worksheet range write` defaults to `RAW`; numeric-looking strings such as `"5.53%"` and `"9,007,000"` stay strings.
-- Use `value_input_option=USER_ENTERED` only when you want Excel-like parsing of formulas, dates, numbers, and percentages.
-- Read the response `message` after writes:
-  - `parse_result=NOT_REQUESTED` means `RAW` kept numeric-looking strings as text; inspect `preserved_values`.
-  - `parse_result=PASS` means `USER_ENTERED` parsed the submitted numeric-looking strings; inspect `parsed_values`.
-  - `parse_result=PARTIAL` means values in `parsed_values` parsed, while values in `preserved_text_values` may stay text unless the target cells are numeric-formatted.
+- Current `mbs` range-write exposes no `USER_ENTERED` or `value_input_option` flag. Do not pass one or infer `parse_result` fields; use a command that explicitly exposes parsing semantics if they are required.
 
 ### `clear_range`
 
@@ -414,7 +555,7 @@ Guidance:
   For cross-document native copy, use `mbs worksheet import --strategy create --transfer-mode native --doc-id <TARGET_DOC_ID> --source-doc-id <SOURCE_DOC_ID> --source-worksheet-name <SHEET>`;
   it routes the cross-document `/api/v1/excel/copy_worksheet` contract and
   preserves the source worksheet engine. Use the default values mode or
-  `db-table create-from-range` when the target should instead be a raw PG
+  `db-table create-from-range` when the target should instead be a raw Base-backed
   `R_*` surface.
 
 ## 7. Post-write verification

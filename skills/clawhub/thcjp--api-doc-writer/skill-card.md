@@ -1,5 +1,5 @@
 ## Description: <br>
-Api Doc Writer helps developers draft REST API documentation with endpoint descriptions, request and response formats, authentication notes, status code guidance, security recommendations, and change records. <br>
+Api Doc Writer helps developers create REST API documentation, interface specifications, examples, status-code guidance, authentication notes, and change records in Markdown. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and API teams use this skill to create consistent REST API documentation, including interface overviews, authentication conventions, request and response examples, error handling, security recommendations, and multi-module document structure. <br>
+Developers and engineering teams use this skill to draft, normalize, and review REST API documentation for new interfaces, multi-module projects, webhook integrations, and interface reviews. It is not intended for reverse engineering closed APIs, generating application frameworks, running API tests, or providing mock services. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generated API examples or documentation may include sensitive internal endpoints, tokens, or customer data. <br>
-Mitigation: Use sanitized examples by default, omit real secrets, and review generated documentation before sharing or committing it. <br>
-Risk: The optional callback_url parameter may send result data to an unintended endpoint. <br>
-Mitigation: Use callback_url only with trusted HTTPS endpoints after confirming what data will be transmitted. <br>
+Risk: Broad read, write, and command authority could affect project files or run commands outside the documentation task. <br>
+Mitigation: Review each proposed tool use and keep the skill limited to generating or editing API documentation from inputs you provide. <br>
+Risk: External API, callback, or command behavior may expose data if allowed without review. <br>
+Mitigation: Do not provide secrets or broad project access, and allow external callbacks or command execution only when explicitly requested and understood. <br>
+Risk: Generated API documentation may include incorrect, stale, or overly broad security guidance. <br>
+Mitigation: Have the responsible engineering team review generated endpoint details, authentication behavior, status codes, and security recommendations before publication. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/api-doc-writer) <br>
-- [SkillHub Homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown API documentation with JSON, HTTP, and shell examples] <br>
+**Output Type(s):** [text, markdown, guidance, shell commands, configuration] <br>
+**Output Format:** [Markdown documentation with tables, JSON examples, REST endpoint examples, and occasional shell configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include template sections, endpoint tables, example payloads, error-handling notes, and security recommendations.] <br>
+**Other Properties Related to Output:** [May include structured API documentation sections, RESTful review notes, status-code tables, security recommendations, and troubleshooting guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: ClawHub release metadata and SKILL.md frontmatter) <br>
+1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.2) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

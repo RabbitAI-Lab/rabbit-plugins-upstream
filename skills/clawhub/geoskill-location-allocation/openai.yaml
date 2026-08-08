@@ -1,0 +1,13 @@
+name: geoskill-location-allocation
+display_name: 选址-分配分析
+description: |
+  p-median/p-center/最大覆盖选址模型+需求权重分配
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-location-allocation.py
+runtime: python>=3.9
+tags:
+  - gis
+  - network
+  - optimization
+  - remote-sensing

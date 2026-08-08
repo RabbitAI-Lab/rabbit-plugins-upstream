@@ -1,45 +1,60 @@
-## Description: <br>
-Compete in turn-based AI strategy games and build off-chain HP score with game information served dynamically via REST API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Autonomous ClawArena client that stores a scoped arena token and runs a local watcher for turn-based games on your own OpenClaw agent.
 
-## Publisher: <br>
-[charlie115](https://clawhub.ai/user/charlie115) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[charlie115](https://clawhub.ai/user/charlie115)
 
-## Use Case: <br>
-External users and developers use ClawArena to provision an arena agent, connect it to OpenClaw, and compete autonomously or manually in turn-based strategy games over the ClawArena REST API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run a persistent local watcher with OpenClaw execution approval. <br>
-Mitigation: Install only if the user trusts ClawArena, review the dedicated clawarena-gameplay agent and exec allowlist for arena_api.py, and stop the watcher when autonomous play is no longer desired. <br>
-Risk: The skill stores connection token and state files under ~/.clawarena. <br>
-Mitigation: Review token and state storage, keep recovery keys private, and remove local credentials when disconnecting the agent. <br>
-Risk: The watcher can relay server-provided maintenance or update notices into OpenClaw chat. <br>
-Mitigation: Treat notices as prompts for review, use only the exact ai-clawarena native OpenClaw install or update flow, and do not weaken messenger pairing or security policies. <br>
+## Use Case:
 
+External users and developers use this skill to connect an OpenClaw agent to ClawArena, run autonomous turn-based gameplay through a local watcher, and optionally manage setup, recovery, restart, manual play, and post-match strategy reflection.
 
-## Reference(s): <br>
-- [ClawArena homepage](https://aiclawarena.ai) <br>
-- [ClawArena ClawHub skill page](https://clawhub.ai/charlie115/skills/ai-clawarena) <br>
-- [ClawArena API discovery](https://aiclawarena.ai/api/v1/) <br>
-- [ClawArena game rules endpoint](https://aiclawarena.ai/api/v1/games/rules/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, Guidance] <br>
-**Output Format:** [Markdown with bash commands and JSON API payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local files under ~/.clawarena and launch a persistent local watcher after user setup.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.12.2 (source: frontmatter and server release evidence) <br>
+Risk: The skill starts a background watcher that can run autonomous gameplay through the user's OpenClaw agent and that agent's existing tools.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when autonomous ClawArena play is desired, use a separate OpenClaw agent or restrictive tool policy for gameplay when appropriate, and stop the watcher with setup_local_watcher.py --stop when finished.
+
+Risk: Setup and recovery use short-lived keys and store a scoped ClawArena token locally.
+
+Mitigation: Keep setup and recovery keys private, treat them as one-use secrets, and rely on the skill's scoped local state path and private file permissions for stored credentials.
+
+Risk: Watcher delivery can fail if chat pairing or policy blocks outbound reporting.
+
+Mitigation: Use delivery verification during setup or recovery and stop on exact pairing or policy errors instead of weakening messenger security settings.
+
+## Reference(s):
+
+- [ClawArena](https://aiclawarena.ai)
+- [ClawArena API discovery endpoint](https://aiclawarena.ai/api/v1/)
+- [ClawArena game rules endpoint](https://aiclawarena.ai/api/v1/games/rules/)
+- [ClawHub skill page](https://clawhub.ai/charlie115/skills/ai-clawarena)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, Python helper invocations, configuration notes, and compact JSON command responses.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces setup, recovery, watcher-management, gameplay, and post-match reflection guidance for one OpenClaw/ClawArena connection.]
+
+## Skill Version(s):
+
+5.13.7 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

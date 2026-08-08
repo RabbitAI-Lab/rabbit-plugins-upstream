@@ -1,50 +1,61 @@
-## Description: <br>
-Analyzes WeChat Official Accounts across reading volume, engagement rate, update frequency, and RedFox Index, benchmarks them against industry averages, and produces actionable optimization recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+公众号账号诊断工具是对任意公众号账号进行四维度量化评分（内容健康度、用户活跃度、内容核心数据、运营规范性），对标行业平均水平，输出可落地的运营优化建议。
 
-## Publisher: <br>
-[redfox-data](https://clawhub.ai/user/redfox-data) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[redfox-data](https://clawhub.ai/user/redfox-data)
 
-## Use Case: <br>
-External WeChat account owners, new-media operators, brand teams, and MCN agencies use this skill to diagnose WeChat Official Account performance, compare peer accounts, and plan data-driven content and operations improvements. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queried WeChat account identifiers and returned account data are sent to and received from redfox.hk. <br>
-Mitigation: Use the skill only for accounts you are comfortable querying through RedFox, and confirm the API key source, scope, expiry, and revocation path before use. <br>
-Risk: The skill handles REDFOX_API_KEY and may read shell profile files when the environment variable is not set. <br>
-Mitigation: Configure the key through a secure environment or secret mechanism, avoid pasting it into prompts or files, and rotate it if exposed. <br>
-Risk: Returned data and generated reports can be stored locally as raw JSON, structured report JSON, and HTML files. <br>
-Mitigation: Review generated output files before sharing or committing them, and remove local reports that contain sensitive account data. <br>
-Risk: Subscription and sync flows can create delayed rechecks or reminder tasks. <br>
-Mitigation: Enable follow-up sync or calendar reminders only after explicit user consent, and review any created task before relying on it. <br>
+## Use Case:
 
+External users such as WeChat account owners, social media operators, MCN agencies, brands, and content creators use this skill to query RedFox data and produce account health diagnostics, industry benchmarking, and optimization suggestions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/redfox-data/skills/wechat-account-analyzer) <br>
-- [Publisher profile](https://clawhub.ai/user/redfox-data) <br>
-- [Core workflow](references/core_workflow.md) <br>
-- [API guide](references/api_guide.md) <br>
-- [Workflow guide](references/workflow_guide.md) <br>
-- [RedFoxHub](https://redfox.hk/) <br>
-- [RedFox API key settings](https://redfox.hk/settings/api-keys?source=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files, Guidance] <br>
-**Output Format:** [Five-section Markdown diagnostic report, structured JSON status and report data, and optional HTML report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REDFOX_API_KEY, queries redfox.hk with account identifiers, and may write raw data, report data, and HTML files locally.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and target metadata) <br>
+Risk: The skill handles a RedFox API key and may guide users toward persistent REDFOX_API_KEY configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing; set REDFOX_API_KEY only for the current session or with a secret manager, and avoid automatic edits to shell profile files.
+
+Risk: Reports and raw API data may persist locally in output files and include queried account identifiers or API-derived account metrics.
+
+Mitigation: Review and delete generated output files when reports or raw API data should not remain on disk.
+
+Risk: Diagnostics depend on RedFox API data availability, freshness, and account lookup accuracy.
+
+Mitigation: Treat findings as API-derived analysis, confirm questionable results with RedFox or source account data, and do not generate estimates when an account is not found.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/redfox-data/skills/wechat-account-analyzer)
+- [RedFox Hub](https://redfox.hk/)
+- [Core workflow](artifact/references/core_workflow.md)
+- [API guide](artifact/references/api_guide.md)
+- [Workflow guide](artifact/references/workflow_guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, HTML, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown diagnostic reports, JSON status/data files, and optional HTML reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses REDFOX_API_KEY for RedFox API access; output may include queried account identifiers and API-derived account metrics.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

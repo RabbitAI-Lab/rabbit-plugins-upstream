@@ -194,24 +194,24 @@ python git-sync.py <name> [--skip-market] [--market-only] [--pypi] [--release]
 
 `manifest.py` 是独立 CLI，管理维护清单（manifest.json），不污染 git-sync 主流程。
 
-### 清单条目结构（v2.29.0 更新）
+### 清单条目结构（v2.37.0 多仓库）
 
 ```json
 {
   "repos": {
-    "workbuddy-skills": {
+    "<技能仓库名>": {
       "items": {
-        "rag-assistant": {
+        "my-agent": {
           "type": "agent",
-          "source_path": "C:/Users/sm001/WorkBuddy/rag-assistant",
-          "repo_path": "agent/rag-assistant",
+          "source_path": "C:/Users/你的用户名/你的开发目录/my-agent",
+          "repo_path": "my-agent",
           "added_at": "2026-07-21",
           "uploaded": true,
           "gitee_ok": true,
           "github_ok": true,
-          "version": "1.7.0",
-          "gitee_version": "1.7.0",
-          "github_version": "1.7.0",
+          "version": "1.0.0",
+          "gitee_version": "1.0.0",
+          "github_version": "1.0.0",
           "note": ""
         }
       }
@@ -223,36 +223,38 @@ python git-sync.py <name> [--skip-market] [--market-only] [--pypi] [--release]
 | 字段 | 说明 | 自动填充 |
 |------|------|---------|
 | `type` | `skill` 或 `agent` | 必需 |
-| `source_path` | 源绝对路径（开发目录） | skill → `~/.workbuddy/skills/<name>/`，agent → `~/.workbuddy/agent/<name>/`，可用 `--source-path` 覆盖 |
-| `repo_path` | 仓库内相对路径 | skill → `skills/<name>/`，agent → `agent/<name>/`，可用 `--repo-path` 覆盖 |
+| `source_path` | 源绝对路径（开发目录） | skill → `$SKILLS_DIR/<name>/`（技能安装目录），agent → 开发目录，可用 `--source-path` 覆盖 |
+| `repo_path` | 仓库内相对路径（多仓库模型下为顶层相对路径） | skill → `<name>/`（技能仓库顶层），agent → `<name>/`（智能体仓库顶层），可用 `--repo-path` 覆盖 |
 | `added_at` | 添加日期 | 自动 |
 | `uploaded` / `gitee_ok` / `github_ok` | 推送状态 | 自动更新 |
 | `version` / `gitee_version` / `github_version` | 版本号 | 自动更新 |
 
 ### 命令参考
 
+> 仓库名参数：使用 `config.json` 注册表中实际配置的仓库名（v2.37.0 多仓库，下例用 `<repo>` 占位）。
+
 ```bash
 # ── 查询类 ──
 python manifest.py list                              # 列出所有条目
-python manifest.py list workbuddy-skills             # 按仓库过滤
-python manifest.py check workbuddy-skills my-skill    # 是否在清单内（退出码: 0=双 ok, 1=部分, 2=未找到）
-python manifest.py version workbuddy-skills my-skill  # 查询版本号
+python manifest.py list <repo>                       # 按仓库过滤（如 config 中配置的任意仓库名）
+python manifest.py check <repo> my-skill             # 是否在清单内（退出码: 0=双 ok, 1=部分, 2=未找到）
+python manifest.py version <repo> my-skill           # 查询版本号
 
 # ── 更新类 ──
-python manifest.py add workbuddy-skills my-skill --type skill                 # 加入（默认路径自动填充）
-python manifest.py add workbuddy-skills my-skill --type agent                 # agent 类型
-python manifest.py add workbuddy-skills my-agent --type agent --source-path "C:/path/to/dev"  # 自定义源路径
-python manifest.py add workbuddy-skills my-agent --type agent --repo-path "agent/custom"      # 自定义仓库路径
-python manifest.py add workbuddy-skills my-skill --type skill --uploaded      # 加入并标记已上传
-python manifest.py remove workbuddy-skills my-skill                           # 从清单删除
-python manifest.py version workbuddy-skills my-skill 1.9.0                    # 更新版本号（双平台）
-python manifest.py version workbuddy-skills my-skill 1.9.0 --platform gitee   # 仅更新码云
-python manifest.py set-uploaded workbuddy-skills my-skill --platform gitee    # 标记平台已上传
-python manifest.py set-uploaded workbuddy-skills my-skill --platform both     # 标记双平台已上传
+python manifest.py add <repo> my-skill --type skill                  # 加入（默认路径自动填充）
+python manifest.py add <repo> my-agent --type agent                  # agent 类型
+python manifest.py add <repo> my-agent --type agent --source-path "C:/path/to/dev"  # 自定义源路径
+python manifest.py add <repo> my-agent --type agent --repo-path "custom"            # 自定义仓库路径
+python manifest.py add <repo> my-skill --type skill --uploaded      # 加入并标记已上传
+python manifest.py remove <repo> my-skill                           # 从清单删除
+python manifest.py version <repo> my-skill 1.9.0                    # 更新版本号（双平台）
+python manifest.py version <repo> my-skill 1.9.0 --platform gitee   # 仅更新码云
+python manifest.py set-uploaded <repo> my-skill --platform gitee    # 标记平台已上传
+python manifest.py set-uploaded <repo> my-skill --platform both     # 标记双平台已上传
 
 # ── 同步类 ──
-python manifest.py diff workbuddy-skills              # 对比清单(uploaded=true) vs 仓库实际文件
-python manifest.py sync-readme workbuddy-skills        # 根据仓库实际文件全量重新生成 README.md
+python manifest.py diff <repo>                        # 对比清单(uploaded=true) vs 仓库实际文件
+python manifest.py sync-readme <repo>                 # 根据仓库实际文件全量重新生成 README.md
 ```
 
 ### 三单一致模型
@@ -262,7 +264,7 @@ python manifest.py sync-readme workbuddy-skills        # 根据仓库实际文�
 | # | 单 | 内容 | 维护方式 |
 |---|----|------|---------|
 | 第一单 | **本地源文件** | `_meta.json` version + `SKILL.md` frontmatter version | 开发者手动维护（两者必须一致） |
-| 第二单 | **远程仓库实际文件** | 推送到 Gitee/GitHub 后，`skills/<name>/_meta.json` 中的 version | 由 git-sync 推送，与本地一致 |
+| 第二单 | **远程仓库实际文件** | 推送到 Gitee/GitHub 后，目标仓库 `<name>/_meta.json`（多仓库模型顶层）中的 version | 由 git-sync 推送，与本地一致 |
 | 第三单 | **维护清单** | `manifest.json` 中的 `version` / `gitee_version` / `github_version` | 推送成功后自动更新 |
 
 **三单一致的完整语义：**
@@ -293,7 +295,7 @@ python manifest.py sync-readme workbuddy-skills        # 根据仓库实际文�
 ```
 本地源文件 (_meta.json + SKILL.md frontmatter version 一致)
     ↓ 推送
-远程仓库 (skills/<name>/ 实际文件)
+远程仓库 (<技能仓库名>/<name>/ 或 <智能体仓库名>/<name>/ 实际文件)
     ↓ 推送成功后更新
 维护清单 (manifest.json)
     ├─ gitee_ok=true  → Gitee 三单一致
@@ -308,14 +310,18 @@ README.md（技能列表 + 目录树）
 
 ---
 
-## 路径变量说明
+## 路径变量说明（v2.37.0 多仓库）
 
-| 变量 | 默认值 | 说明 |
-|------|--------|------|
-| `SKILLS_DIR` | `~/.workbuddy/skills`（Python 中为 `Path.home() / "WorkBuddy" / "skills"`） | 技能源目录（本地 skill 所在位置） |
-| `WORK_REPO` | `~/.workbuddy/workbuddy-skills`（Python `_paths.py` 中为 `Path.home() / "WorkBuddy" / "workbuddy-skills"`） | Git 工作仓库（推送目标）。注意：Windows 上 `~` 与 `Path.home()` 可能解析为不同的物理目录 |
-| `MANIFEST_FILE` | `skills/.standardization/git-sync/data/manifest.json`（绝对路径 `~/.workbuddy/skills/.standardization/git-sync/data/manifest.json`） | 维护清单文件路径 |
-| `DIST_DIR` | `~/.workbuddy/skills/.dist` | ZIP 统一输出目录 |
+> **统一管理机制**：所有路径在 `scripts/_paths.py` 统一定义（唯一来源），其他脚本一律 `from _paths import ...` 引用，不各自写死路径。仓库路径（`WORK_REPO` 等）由 `config.json` 的 `repos` 注册表配置 + `get_work_repo(type)` 动态解析。
+
+| 变量 | 来源 | 说明 |
+|------|------|------|
+| `SKILLS_ROOT` | `_paths.py`（`SKILL_DIR.parent`） | 技能安装根目录（`SKILL_DIR` 即本技能所在目录） |
+| `WORK_REPO` | `_paths.py` → `get_work_repo(type)`（从 `config.json` 注册表解析） | Git 工作仓库（推送目标），skill → 技能仓库、agent → 智能体仓库 |
+| `DIST_DIR` | `_paths.py`（`SKILLS_ROOT / ".dist"`） | ZIP 统一输出目录 |
+| `MANIFEST_FILE` | `_paths.py`（`SKILLS_ROOT/.standardization/git-sync/data/manifest.json`） | 维护清单文件路径 |
+| `CONFIG_FILE` | `_paths.py`（`SKILLS_ROOT/.standardization/git-sync/data/config.json`） | 平台配置（repos 注册表） |
+| `TEMP_DIR` | `_paths.py`（`STD_DIR / "temp"`） | 决策文件等临时文件目录 |
 
 ## ZIP 打包：LLM 动态过滤（v2.26+）
 
@@ -381,14 +387,14 @@ LLM 接收扫描发现列表后，按以下原则自动判断：
 | 邮箱地址 | 公开文档中的署名邮箱 → 保留；代码中的测试邮箱 → 保留；疑似个人邮箱 → 脱敏 | `[email-redacted]` 在 LICENSE 中 → 保留 |
 | Token / API Key | 一律脱敏 | `api_key=sk-xxx` → 替换为 `<REDACTED>` |
 | 私钥内容 | 一律脱敏 | PEM 格式密钥 → 替换 |
-| 内网 IP | 脱敏 | `[internal-ip-redacted]` → `<REDACTED_IP>` |
-| 本地绝对路径 | public_docs 中的路径 → 保留；代码中硬编码 → 脱敏 | `C:\Users\sm001` 在文档中 → 保留 |
-| 配置用户名 | 保留（来自 config.json 的 author/gitee.user） | `[username-redacted]` → 保留 |
+| 内网 IP | 脱敏 | `192.168.1.1` → `<REDACTED_IP>` |
+| 本地绝对路径 | public_docs 中的路径 → 保留；代码中硬编码 → 脱敏 | `C:\Users\USERNAME` 在文档中 → 保留 |
+| 配置用户名 | 保留（来自 config.json 的 author/gitee.user） | `wUwproject` → 保留 |
 
 ### 打包时行为
 
 ```
-源文件（~/.workbuddy/skills/my-skill/）  ← 不变
+源文件（$SKILLS_DIR/my-skill/）  ← 不变
      ↓ 复制到临时副本
 临时副本（/tmp/xxx/）                     ← 执行脱敏操作
      ↓ 打包
@@ -397,4 +403,4 @@ LLM 接收扫描发现列表后，按以下原则自动判断：
 临时副本删除
 ```
 
-同步到仓库时，脱敏作用于工作仓库副本（WORK_REPO/skills/<name>/），源文件同样不变。
+同步到仓库时，脱敏作用于工作仓库副本（目标仓库 `<name>/` 目录，仓库路径由 `config.json` 注册表决定），源文件同样不变。

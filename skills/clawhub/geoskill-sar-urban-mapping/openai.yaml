@@ -1,0 +1,16 @@
+name: geoskill-sar-urban-mapping
+display_name: SAR 城市制图
+description: |
+  基于SAR后向散射与GLCM纹理的城市建成区提取：Otsu/固定σ⁰阈值 + GLCM对比度纹理 + 形态学闭运算，输出城市范围二值GeoTIFF与面积统计JSON。SAR urban/built-up mapping via backscatter threshold, GLCM texture and morphology.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-sar-urban-mapping.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - sar
+  - urban
+  - visualization

@@ -1,43 +1,60 @@
-## Description: <br>
-Estimates an indoor plant transpiration rate index from thermal or RGB leaf imagery with optional environmental data, then returns a structured plant stress and root water-uptake assessment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Estimates an indoor plant transpiration-rate index from thermal or RGB leaf imagery and optional environmental data, returning water-stress, root-vigor, and care guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Developers, plant-care operators, greenhouse teams, and smart-planter workflows use this skill to analyze leaf imagery and produce transpiration-rate, root water-uptake, stress, and care-guidance outputs for indoor plants. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cloud-backed analysis sends media, URLs, identity data, and report-history requests to lifeemergence.com services. <br>
-Mitigation: Use only with data appropriate for third-party cloud processing, and avoid private files or URLs unless the publisher clarifies consent, retention, and authentication handling. <br>
-Risk: The security evidence says the skill automatically creates or reuses backend identities and stores token-capable local SQLite state. <br>
-Mitigation: Review local storage and identity behavior before deployment, restrict execution to trusted environments, and clear local state when account linkage should not persist. <br>
-Risk: The authoritative security verdict is suspicious because user-facing disclosure around cloud processing, identity reuse, and local token storage is weak. <br>
-Mitigation: Require deployment review and user disclosure before enabling the skill in workflows that handle sensitive images, URLs, or account-linked history. <br>
+## Use Case:
 
+External users and developers use this skill to analyze indoor plant leaf images or videos, estimate relative transpiration rate, and review structured guidance about water stress, root water-uptake activity, and care direction.
 
-## Reference(s): <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON text, with optional file output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured analysis results, report links, history-query output, and command examples for local script execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; SKILL.md frontmatter lists 1.0.4) <br>
+Risk: Plant media, URLs, and report queries may be sent to lifeemergence.com or open.lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only inputs appropriate for that remote processing path, and avoid files or URLs that contain sensitive content or embedded secrets.
+
+Risk: The skill can automatically create or reuse a local identity and persist service tokens in a workspace SQLite database.
+
+Mitigation: Review or clear the workspace data directory when account linkage should not persist, and treat stored tokens as sensitive local data.
+
+Risk: The release includes generic or pet-health components that may not match the plant transpiration use case.
+
+Mitigation: Review generated reports and service behavior before relying on the skill for operational plant-care decisions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-transpiration-rate-estimation-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](references/api_doc.md)
+- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, guidance]
+
+**Output Format:** [Markdown or JSON analysis report with optional report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a transpiration-rate index, root-vigor assessment, stress indicators, care suggestions, and a historical report table.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence; artifact frontmatter reports 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Email Assistant"
+  short_description: "Find, summarize, prioritize, draft, and send confirmed email"
+  default_prompt: "Use $email-assistant to show today's email, highlight what is valuable, summarize next actions with source references, draft replies when useful, and send only after I confirm the exact draft."

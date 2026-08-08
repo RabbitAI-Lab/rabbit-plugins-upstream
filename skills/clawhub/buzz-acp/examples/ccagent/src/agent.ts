@@ -14,13 +14,49 @@ import {
   type PromptRequest,
   type PromptResponse,
 } from "@zed-industries/agent-client-protocol";
-import { query } from "@anthropic-ai/claude-agent-sdk";
+import { query, tool, createSdkMcpServer } from "@anthropic-ai/claude-agent-sdk";
+import { execFile } from "node:child_process";
+import { promisify } from "node:util";
+import { z } from "zod";
 
 export const AGENT_NAME = "Zaphoid";
 
 const SYSTEM_PROMPT = `You are Zaphoid, an ACP (Agent Client Protocol) test agent built on Claude. \
 You are being used to validate ACP wiring between this agent and another agent platform. \
 If asked who or what you are, identify yourself as Zaphoid.`;
+
+const execFileAsync = promisify(execFile);
+
+/**
+ * The only tool Zaphoid gets. Scoped to exactly the one action a reply requires
+ * (posting to a Buzz channel) instead of granting general Bash — args are passed
+ * as discrete argv entries via execFile (no shell interpolation).
+ */
+const sendBuzzMessage = tool(
+  "send_buzz_message",
+  "Post a reply to a Buzz channel. This is the ONLY way to publish a reply.",
+  {
+    channel: z.string().min(1).max(200).regex(/^[A-Za-z0-9._-]+$/),
+    text: z.string().min(1).max(10000),
+  },
+  async ({ channel, text }) => {
+    try {
+      const { stdout } = await execFileAsync(
+        "buzz",
+        ["messages", "send", "--channel", channel, "--content", text],
+        { timeout: 15_000 },
+      );
+      return { content: [{ type: "text", text: stdout || "Message sent." }] };
+    } catch (err) {
+      return {
+        content: [{ type: "text", text: `Failed to send: ${err instanceof Error ? err.message : String(err)}` }],
+        isError: true,
+      };
+    }
+  },
+);
+
+const buzzMcpServer = createSdkMcpServer({ name: "buzz", version: "1.0.0", tools: [sendBuzzMessage] });
 
 interface SessionState {
   cwd: string;
@@ -36,8 +72,8 @@ function textOf(block: ContentBlock): string | undefined {
 
 /**
  * A minimal ACP agent that forwards prompts to Claude via the Claude Agent SDK
- * and streams the reply back as `agent_message_chunk` updates. Bash is enabled
- * (bypassPermissions) solely so the agent can run `buzz messages send` itself —
+ * and streams the reply back as `agent_message_chunk` updates. The only tool
+ * exposed to the model is `send_buzz_message`, a scoped in-process MCP tool —
  * per buzz-acp's harness contract, that's the only way a reply is ever
  * published; the ACP session/update stream is display-only and never posted.
  */
@@ -69,9 +105,9 @@ export class ZaphoidAgent implements Agent {
   async newSession(params: NewSessionRequest): Promise<NewSessionResponse> {
     const sessionId = randomUUID();
     // `systemPrompt` isn't part of the official ACP schema, but buzz-acp sends it
-    // with per-turn operating instructions (how to use the `buzz` CLI to reply,
+    // with per-turn operating instructions (how to call send_buzz_message to reply,
     // channel/thread context, etc.) — without it the agent has no way to know it
-    // must call `buzz messages send` to actually post anything.
+    // must call that tool to actually post anything.
     const harnessPrompt = (params as { systemPrompt?: string }).systemPrompt;
     const systemPrompt = harnessPrompt
       ? `${SYSTEM_PROMPT}\n\n${harnessPrompt}`
@@ -99,24 +135,25 @@ export class ZaphoidAgent implements Agent {
     const abortController = new AbortController();
     session.abortController = abortController;
 
-    const stream = query({
+    const makeStream = (resume: string | undefined) => query({
       prompt: text,
       options: {
         cwd: session.cwd,
-        // Zaphoid's own reply is only "sent" when it runs `buzz messages send`
-        // itself (see buzz-acp's base_prompt.md) — Bash is the minimum tool
-        // access that makes that possible. bypassPermissions is required since
-        // this runs unattended under systemd with no one to approve prompts.
-        tools: ["Bash"],
-        allowedTools: ["Bash"],
-        permissionMode: "bypassPermissions",
-        allowDangerouslySkipPermissions: true,
+        // Zaphoid's own reply is only "sent" when it calls send_buzz_message
+        // (see buzz-acp's base_prompt.md) — no built-in tools (Bash included)
+        // are granted, so there's nothing else a permission bypass would ever
+        // need to cover; allowedTools pre-approves this one MCP tool.
+        tools: [],
+        mcpServers: { buzz: buzzMcpServer },
+        allowedTools: ["mcp__buzz__send_buzz_message"],
+        permissionMode: "default",
         systemPrompt: session.systemPrompt,
-        resume: session.claudeSessionId,
+        resume,
         abortController,
       },
     });
 
+    let stream = makeStream(session.claudeSessionId);
     let stopReason: PromptResponse["stopReason"] = "end_turn";
 
     try {
@@ -159,6 +196,28 @@ export class ZaphoidAgent implements Agent {
     } catch (err) {
       if (abortController.signal.aborted) {
         stopReason = "cancelled";
+      } else if (
+        session.claudeSessionId &&
+        err instanceof Error &&
+        err.message.includes("No conversation found with session ID")
+      ) {
+        // Stale Claude Code session ID (e.g. after a restart) — clear it and
+        // retry once from scratch so the conversation continues without error.
+        console.error(`[Zaphoid] Stale session ID ${session.claudeSessionId} — retrying fresh`);
+        session.claudeSessionId = undefined;
+        stream = makeStream(undefined);
+        try {
+          for await (const message of stream) {
+            if ("session_id" in message && message.session_id) {
+              session.claudeSessionId = message.session_id;
+            }
+            if (message.type === "result") {
+              stopReason = message.subtype === "success" ? "end_turn" : "refusal";
+            }
+          }
+        } catch (retryErr) {
+          throw retryErr;
+        }
       } else {
         throw err;
       }

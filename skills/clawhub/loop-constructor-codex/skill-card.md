@@ -1,5 +1,5 @@
 ## Description: <br>
-Design an engineered gated loop for a medium or large semi-autonomous AI coding task executed with the Codex CLI, emitted as a runnable .loop runbook without executing the loop. <br>
+Designs engineered gated loops for medium or large semi-autonomous AI-coding tasks on the Codex CLI and emits runnable `.loop/` runbooks without executing them. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineers use this skill to design check-gated Codex CLI runbooks for medium and large coding tasks, including decision logs, machine-checkable loop-design JSON, and runnable .loop documentation. It is for planning and persisting the loop design, not for executing the generated workflow. <br>
+Developers and engineers use this skill to design a staged, machine-checkable Codex workflow for a substantial coding task before an agent executes it. It produces a `.loop/` runbook, loop-design JSON, decision log, contract, and verification steps. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Generated runbooks may later guide powerful semi-autonomous Codex coding workflows. <br>
-Mitigation: Review the generated .loop files, sandbox settings, checks, and human approval points before running any workflow. <br>
-Risk: An incorrect or hollow stage check could let a generated loop appear complete while the implementation is still wrong. <br>
-Mitigation: Run the bundled linter and perform the fresh-reader review of each check, falsifiable condition, passing-but-wrong case, contract assertion, and stop condition before use. <br>
-Risk: Following generated Codex commands with excessive permissions could expand the workflow's blast radius. <br>
-Mitigation: Use read-only evaluators, workspace-write generators, explicit human approval for host or production access, and avoid danger-full-access unless a reviewer accepts that risk. <br>
+Risk: Generated runbooks can include `codex exec`, git worktree, or check commands that may modify a target repository when an operator later runs them. <br>
+Mitigation: Review generated runbooks and commands before execution, and use the intended sandbox and approval settings for later operator steps. <br>
+Risk: The skill writes design artifacts, usually under `.loop/`, into the project where it is used. <br>
+Mitigation: Install and invoke it only when project-local `.loop/` artifacts are desired, then review the generated files before adopting the runbook. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/vincentjiang06/skills/loop-constructor-codex) <br>
-- [README](artifact/README.md) <br>
-- [Codex CLI runtime mapping](artifact/references/codex-runtime.md) <br>
-- [Loop selection procedure](artifact/references/loop-selection.md) <br>
-- [Canonical loop-design shape](artifact/references/loop-design-shape.md) <br>
-- [Operating model behind the shape](artifact/references/loops-model.md) <br>
-- [Loop-principle map](artifact/references/loop-principle-map.md) <br>
-- [Fresh-reader checklist](artifact/assets/fresh-reader-checklist.md) <br>
+- [Codex CLI runtime mapping](references/codex-runtime.md) <br>
+- [Canonical loop-design shape](references/loop-design-shape.md) <br>
+- [loop-principle map - 9 steps to KB grounding](references/loop-principle-map.md) <br>
+- [The loop-selection procedure (D0-D6)](references/loop-selection.md) <br>
+- [The operating model behind the shape (LOOPS.md)](references/loops-model.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [JSON, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown runbook plus machine-checkable JSON loop design with inline shell commands and configuration guidance] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown plus JSON loop-design files and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes .loop/<slug>.loop.md and .loop/<slug>.loop.json after linting; design-only and does not execute the generated loop.] <br>
+**Other Properties Related to Output:** [Produces bounded `.loop/` artifacts and design/runbook guidance; it does not execute the designed loop.] <br>
 
 ## Skill Version(s): <br>
-0.1.1 (source: server release metadata; artifact frontmatter and changelog report 0.1.0) <br>
+0.2.0 (source: server evidence, frontmatter, changelog released 2026-07-31) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

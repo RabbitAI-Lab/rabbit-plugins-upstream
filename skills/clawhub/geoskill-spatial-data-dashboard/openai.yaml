@@ -1,0 +1,14 @@
+name: geoskill-spatial-data-dashboard
+display_name: 空间数据仪表盘
+description: |
+  Build spatial dashboards combining map layers and statistical charts into HTML
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-spatial-data-dashboard.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - machine-learning
+  - remote-sensing
+  - visualization

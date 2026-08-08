@@ -1,5 +1,5 @@
 ## Description: <br>
-Classify, route, and orchestrate incoming agent tasks by determining task type, complexity, skill match, and execution path. <br>
+Schedules and coordinates long-running agent tasks after routing by skill-router, including complexity assessment, sub-agent delegation, Hat-system orchestration, and closeout checks. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent users use this skill as an orchestration layer for incoming user messages, including task classification, complexity assessment, skill matching, and delegation to main-session, spawned, or scheduled execution. <br>
+Agent operators and developers use this skill to classify complex requests, choose an execution route, delegate work to sub-agents, and run closeout checks for long-running workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can save conversation-derived personal data into memory or profile files. <br>
-Mitigation: Constrain or disable profile extraction and memory sync, and review generated records before allowing durable storage. <br>
-Risk: The skill can run local scripts, spawn background work, schedule work, and commit repository changes. <br>
-Mitigation: Require explicit user approval for script execution, spawned or scheduled work, and commits; disable autocommit and cron/spawn behavior unless needed. <br>
-Risk: Broad routing and orchestration behavior can affect many tasks when installed as an always-on helper. <br>
-Mitigation: Install only when an always-on task router is intended, and limit its scope through agent permissions and workspace policies. <br>
+Risk: The skill is a broad workflow orchestrator that can store user memory, run local scripts, create skills, and commit files automatically. <br>
+Mitigation: Review or disable the profile observer, memory writes, git commit step, skill creation flow, and host script hooks before installation. <br>
+Risk: Automatic persistence and execution paths can expose sensitive personal, business, or credential-bearing workspace material. <br>
+Mitigation: Use only in workspaces where persistence and execution are constrained, and avoid sensitive workspaces unless those paths are reviewed. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/paudyyin/skills/daily-agent) <br>
+- [ClawHub skill page](https://clawhub.ai/paudyyin/skills/daily-agent) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and plain text with optional inline code or command blocks] <br>
+**Output Format:** [Markdown guidance with optional code, shell command, and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include routing decisions, task briefs, plans, memory/profile updates, scheduled work, or repository changes depending on enabled behavior.] <br>
+**Other Properties Related to Output:** [May delegate work, propose or run local scripts, create files, and record memory when installed in a capable agent environment.] <br>
 
 ## Skill Version(s): <br>
-2.15.1 (source: server release evidence; artifact frontmatter reports 2.17.0, package.json reports 2.2.0, and _meta.json reports 1.0.0) <br>
+2.18.0 (source: release evidence and frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

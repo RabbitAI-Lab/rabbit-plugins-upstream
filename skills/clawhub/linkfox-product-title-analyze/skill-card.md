@@ -1,44 +1,63 @@
-## Description: <br>
-Analyzes product listing titles by tokenizing them and extracting keyword frequencies, scene words, audience words, materials, and other title attribute dimensions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes previously queried Amazon product titles to extract and count one requested attribute dimension, such as scene words, audience terms, materials, colors, or feature words.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Amazon sellers, marketplace analysts, and agents use this skill to analyze previously retrieved product titles one attribute dimension at a time, then compare recurring keywords and grouped title patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product titles, related product data, session metadata, and possible feedback text may be sent to LinkFox or external services. <br>
-Mitigation: Use the skill only with data acceptable for third-party processing, avoid sensitive product information, and confirm API key configuration intentionally. <br>
-Risk: Analysis responses and caches can persist locally and may contain business or product data. <br>
-Mitigation: Review generated files under the local LinkFox output and cache directories, and delete them when retention is not needed. <br>
-Risk: Title analysis can consume paid credits, especially for large product sets or repeated calls. <br>
-Mitigation: Confirm high-volume analysis with the user before proceeding and use the built-in cache for repeated identical requests. <br>
+## Use Case:
 
+External Amazon sellers and e-commerce analysts use this skill to find recurring keyword and attribute patterns in product listing titles that have already been retrieved in the current conversation. It supports competitive title analysis, title keyword frequency review, and attribute-based grouping one dimension at a time.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-product-title-analyze) <br>
-- [LinkFox Publisher Profile](https://clawhub.ai/user/linkfox-ai) <br>
-- [API Reference](artifact/references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, saved JSON response files, and summarized JSON or table-ready results.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Analyzes one requested title attribute dimension per call; large responses are summarized on stdout while full responses are saved locally.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Product titles and related product data are sent to a paid LinkFox cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user accepts sharing that product data with LinkFox and understands that each call may consume credits.
+
+Risk: The artifact includes account login, API-key generation, quota purchase, and payment QR workflows that go beyond title analysis.
+
+Mitigation: Run onboarding and payment flows only after explicit user intent, and verify plan, price, payment method, and order status before presenting next steps.
+
+Risk: Full analysis responses are stored locally in a linkfox session data directory.
+
+Mitigation: Treat saved response files as potentially sensitive and review or remove them according to the user's data-retention expectations.
+
+Risk: Setup guidance can persist API keys in shell startup files.
+
+Mitigation: Avoid modifying shell startup files unless the user intentionally wants a persistent LinkFox API key.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-product-title-analyze)
+- [商品标题分词分析 API 参考](artifact/references/api.md)
+- [解决认证和积分问题](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown tables and concise text for the user, plus JSON API responses saved to session data files when the script is run.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Analyzes one title-attribute dimension per API call; full responses are saved under a linkfox session data directory, and large responses may be summarized on stdout.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

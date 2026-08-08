@@ -1,44 +1,63 @@
-## Description: <br>
-Identifies likely plant leaf diseases from leaf images or videos by analyzing visible lesion features and returning a structured result with confidence, general care guidance, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies likely plant leaf diseases from leaf image or video inputs by analyzing lesion features and returning a structured report with confidence scores and general prevention guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External gardeners, growers, greenhouse operators, and farm inspectors use this skill to analyze plant leaf images or videos for likely disease type, confidence, and general non-chemical care direction. Agents can also query account-linked historical plant disease reports from the configured cloud service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Plant images or videos are processed by the configured lifeemergence.com cloud service. <br>
-Mitigation: Install and use the skill only where external cloud processing of plant media is approved, and avoid submitting confidential or regulated images unless data handling terms are understood. <br>
-Risk: The skill can silently create or reuse an internal account identity, store related tokens locally, and query account-linked report history. <br>
-Mitigation: Run the skill in an isolated workspace, review token and identity state before deployment, and prefer a release that documents how to clear or disable saved identity state. <br>
-Risk: Leaf disease symptoms can be visually similar or mixed, so the generated identification may be uncertain. <br>
-Mitigation: Treat results as diagnostic support only, review confidence and image quality, and consult a qualified plant health expert before taking high-impact treatment action. <br>
+## Use Case:
 
+External users and developers use this skill to analyze plant leaf images, videos, local files, or URLs for likely disease type, confidence, and general prevention direction. It is suited for plant factories, greenhouses, home gardening, farm inspection, and horticultural maintenance workflows.
 
-## Reference(s): <br>
-- [Plant Leaf Disease Identification API documentation](references/api_doc.md) <br>
-- [Common analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON analysis output, with optional shell commands for invocation and optional saved result files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns likely disease identification, confidence, visible lesion features, general care direction, and report links; history queries are returned as Markdown tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter declares 1.0.6) <br>
+Risk: Plant images, videos, or URLs may be sent to lifeemergence.com services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only non-sensitive plant media and confirm external cloud processing is acceptable before installation.
+
+Risk: The skill may silently create or reuse a persistent identity and store local token data in the workspace.
+
+Mitigation: Install only in workspaces where persistent account-linked identity behavior is acceptable, and clear local identity or token data when retiring the skill.
+
+Risk: Historical report queries may access account-linked report history.
+
+Mitigation: Limit use to accounts where report history access is expected and review retention and account behavior before deployment.
+
+Risk: Disease identification results may be uncertain for unclear images, similar symptoms, or mixed infections.
+
+Mitigation: Treat results as diagnostic support, use clear close-range images, and consult plant health experts for high-impact treatment decisions.
+
+## Reference(s):
+
+- [Plant Leaf Disease Identification API Documentation](references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-plant-leaf-disease-identification-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON structured analysis report, with optional saved text output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include disease identification results, confidence scores, general prevention guidance, report links, or a Markdown table of historical reports.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence; artifact frontmatter reports 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

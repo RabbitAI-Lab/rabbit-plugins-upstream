@@ -1,45 +1,60 @@
-## Description: <br>
-Combines continuous livestock barn video with environmental sensor data such as temperature, humidity, and ammonia to identify group stress responses caused by abnormal in-barn conditions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Combines livestock behavior in continuous barn videos with environmental sensor data such as temperature, humidity, and ammonia to identify group stress responses caused by abnormal in-barn conditions.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Farm operators, livestock environment teams, and agent developers use this skill to analyze barn video and optional sensor time series for environment-linked group stress indicators. It returns structured anomaly findings, stress levels, historical report listings, and report links for review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan verdict is suspicious because the skill sends barn media or supplied URLs to a Life Emergence/Open API service and can access authenticated report history. <br>
-Mitigation: Use only with non-sensitive footage and sensor data that may be processed by that external service; review the service relationship and data handling expectations before deployment. <br>
-Risk: The skill performs automatic identity creation and stores or reuses identity-linked values and tokens in local workspace data. <br>
-Mitigation: Run it in a dedicated workspace, inspect local data persistence such as data/smyx-api-key.txt and the SQLite token store, and avoid shared workspaces unless account-linking and retention behavior is acceptable. <br>
-Risk: Analysis output is an anomaly-screening aid and may be incorrect or incomplete for animal welfare or facility control decisions. <br>
-Mitigation: Treat results as review material and require qualified personnel to verify findings before changing equipment settings or making operational decisions. <br>
+## Use Case:
 
+Farm operators, livestock technicians, and agents use this skill to correlate barn video with environmental sensor data and produce anomaly reports for group stress monitoring. It can also retrieve cloud-hosted historical reports for the same workspace identity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-environmental-anomaly-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
-- [SMYX analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, files] <br>
-**Output Format:** [Markdown report text with JSON-style structured analysis and optional saved output file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include behavior findings, environmental correlation results, stress levels, historical report lists, and cloud report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; SKILL.md frontmatter says 1.0.2) <br>
+Risk: Barn media, sensor data, and historical report queries are processed by a remote service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with data approved for remote processing and confirm retention and deletion expectations before handling sensitive operational records.
+
+Risk: The skill may automatically create or reuse a local workspace identity.
+
+Mitigation: Prefer explicit account setup and review the workspace identity state before use in shared or regulated environments.
+
+Risk: Authentication tokens may be stored in a local SQLite database.
+
+Mitigation: Apply local token storage controls, restrict workspace access, and clear stored credentials when the skill is no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-environmental-anomaly-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Environmental anomaly API documentation](references/api_doc.md)
+- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, guidance]
+
+**Output Format:** [Markdown and JSON-style structured analysis reports with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud report export links and historical report listings.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

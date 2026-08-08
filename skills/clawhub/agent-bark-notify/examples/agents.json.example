@@ -1,0 +1,14 @@
+{
+  "workbuddy": {
+    "group": "WorkBuddy",
+    "icon": "https://bark.ilumen.cc/icons/agents/workbuddy-v1.png"
+  },
+  "codex": {
+    "group": "Codex",
+    "icon": "https://example.com/icons/codex.png"
+  },
+  "claude": {
+    "group": "Claude",
+    "icon": "https://example.com/icons/claude.png"
+  }
+}

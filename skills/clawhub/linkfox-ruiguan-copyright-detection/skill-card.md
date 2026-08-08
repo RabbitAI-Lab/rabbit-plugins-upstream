@@ -1,43 +1,64 @@
-## Description: <br>
-Helps agents check image copyright infringement risk with Ruiguan by submitting public image URLs and summarizing similarity, rights-owner, TRO, and radar-detection results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Checks image URLs against Ruiguan copyright-detection data to surface similar registered works, rights-owner details, TRO indicators, and infringement-risk signals.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External e-commerce sellers, designers, and agents use this skill to assess whether product or design images resemble registered copyrighted works before publication. It presents factual risk indicators and recommends legal counsel for definitive copyright assessments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Image URLs and local images uploaded for checking may be sent to LinkFox/Ruiguan services, and uploaded local images may become public temporary URLs. <br>
-Mitigation: Use the skill only with images whose sharing is acceptable, and avoid confidential product or customer images unless that data flow is approved. <br>
-Risk: API results may be saved locally and cached. <br>
-Mitigation: Review the local linkfox data directory after use and remove sensitive result files when they are no longer needed. <br>
-Risk: The skill may forward environment metadata and report feedback to a separate LinkFox endpoint. <br>
-Mitigation: Review the data-sharing behavior before commercial use and avoid including sensitive user or project details in feedback content. <br>
+## Use Case:
 
+External sellers, designers, and e-commerce teams use this skill to check product or design images before publication. It returns similarity matches, rights-owner details, TRO flags, and factual risk signals for review, without replacing legal advice.
 
-## Reference(s): <br>
-- [睿观-版权检测 API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-copyright-detection) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown summaries with optional shell commands and saved JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can cache responses for 24 hours and save full API responses under a local linkfox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill may send image URLs or uploaded local images to LinkFox services for copyright analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for images the user is comfortable sharing with LinkFox, and avoid private or pre-release assets unless a temporary public upload is acceptable.
+
+Risk: Authentication, SMS login, API key generation, and payment flows can expose sensitive account or billing information.
+
+Mitigation: Ask for explicit user authorization before account or payment steps, avoid displaying secrets unnecessarily, and direct users to official LinkFox account flows when possible.
+
+Risk: Detection results and cache files may be stored locally under a linkfox session directory.
+
+Mitigation: Tell users where result files are saved and remove generated result or cache files when they contain sensitive image URLs or analysis results.
+
+Risk: Copyright similarity and TRO indicators can be mistaken for definitive legal conclusions.
+
+Mitigation: Present results as factual detection signals and recommend legal counsel for final copyright or infringement decisions.
+
+## Reference(s):
+
+- [Ruiguan Copyright Detection API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-copyright-detection)
+- [ClawHub publisher profile](https://clawhub.ai/user/linkfox-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON files, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries with JSON API responses and saved JSON result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full detection responses to a local linkfox session data directory and may summarize large responses in stdout.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

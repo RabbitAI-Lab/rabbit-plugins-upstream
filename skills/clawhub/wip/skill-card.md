@@ -1,46 +1,62 @@
-## Description: <br>
-Tracks in-session work progress by registering multi-step tasks, updating task status, recovering work after context compaction, and guiding cleanup or resume flows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Track in-session work progress by registering multi-step work, updating task status, handling cleanup, and recovering remaining work after a compact.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and coding agents use this skill to keep multi-step work visible during a session, resume remaining tasks after interruptions or compaction, and maintain task records across Claude Code and Antigravity environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can steer an agent to delete task records or mutate checklist files. <br>
-Mitigation: Review task cleanup decisions before installation and require explicit confirmation before deleting pending tasks or changing persistent checklist files. <br>
-Risk: The workflow can steer an agent to run GitHub, remote, deploy, ssh, or curl checks. <br>
-Mitigation: Require explicit user approval before external checks and restrict execution to repositories and endpoints the user has authorized. <br>
-Risk: The workflow may manage home-directory state such as a Claude cache file. <br>
-Mitigation: Install only if home-directory writes and removals are acceptable, and review any home-directory operation before allowing it. <br>
+## Use Case:
 
+Developers and coding agents use this skill to keep multi-step work visible across a session, choose directions for remaining tasks, and preserve unfinished work through task tools, checklists, or WIP commits.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/wip) <br>
-- [WIP skill entry](SKILL.md) <br>
-- [Resume workflow](resume.md) <br>
-- [Claude Code WIP guide](claude.md) <br>
-- [Antigravity WIP tracking](antigravity.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with task-record examples, inline code blocks, and a shell hook script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct an agent to create, update, or delete task records and to run external verification checks when the workflow requires primary-source status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.1 (source: server release metadata and changelog, released 2026-07-23) <br>
+Risk: Automatic task cleanup can remove task records without enough user control.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review cleanup behavior before use and add explicit confirmation gates before deleting anything other than clearly completed task records.
+
+Risk: The skill may run command-line checks against repositories, deployment targets, or remote services.
+
+Mitigation: Require confirmation before SSH, curl, GitHub CLI, deployment checks, background execution, or other commands that touch external systems.
+
+Risk: The skill can persist shared local state under the user's home directory.
+
+Mitigation: Review any writes outside the workspace and restrict or confirm home-directory state changes before installation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/wip)
+- [WIP skill definition](SKILL.md)
+- [Resume workflow guide](resume.md)
+- [Claude Code WIP guide](claude.md)
+- [Antigravity WIP guide](antigravity.md)
+- [Task completion detection hook](resources/wip-task-complete-detect.sh)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with task-tool calls, checklist entries, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update local task records, checklist files, WIP commits, or task-completion reminders depending on the agent environment.]
+
+## Skill Version(s):
+
+0.4.3 (source: release metadata and CHANGELOG, released 2026-08-05)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

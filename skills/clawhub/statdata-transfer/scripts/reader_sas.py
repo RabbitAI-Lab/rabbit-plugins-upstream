@@ -10,7 +10,7 @@ from typing import Any, Optional
 import pandas as pd
 import pyreadstat
 
-from .reader_core import (ColumnInfo, BaseMeta, StatFileResult, _calc_missing_pct, _get_source_type, _build_column_report, _build_metadata, _extract_pyreadstat_meta, _normalize_missing_ranges, _normalize_missing_user_values)
+from .reader_core import (ColumnInfo, BaseMeta, StatFileResult, _calc_missing_pct, _get_source_type, _build_column_report, _build_metadata, _extract_pyreadstat_meta, _normalize_value_labels, _normalize_missing_ranges, _normalize_missing_user_values, _normalize_mr_sets)
 
 # ============================================================
 # SAS 格式读入（.sas7bdat/.xpt/.sas7bcat）

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/openclaw-unreal-skill",
   "slug": "openclaw-unreal-skill",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1783509649526,
-  "contentHash": "6d859b26eefe6d15c92343ddaddcff789ff5b971016c97a18e657c69b22ba471",
-  "fetchedAt": "2026-07-26T18:17:59.198Z"
+  "version": "1.0.2",
+  "updatedAt": 1786012101255,
+  "contentHash": "af51e41ea9f7580366b96a6858d4bb814020b03d9344dd4e29230472c52bcc8c",
+  "fetchedAt": "2026-08-08T08:10:16.957Z"
 }

@@ -1,0 +1,6 @@
+dem_download
+fiona>=1.8.0
+numpy>=1.21.0
+planetary-computer>=0.5.0
+pystac-client>=0.6.0
+rasterio>=1.3.0

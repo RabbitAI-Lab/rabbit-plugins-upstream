@@ -11,33 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to provision short-lived Neon Postgres databases for local development, demos, prototypes, and tests when no existing DATABASE_URL is available. <br>
+Developers and agents use this skill to provision short-lived Postgres databases for local development, demos, prototypes, and tests, then capture DATABASE_URL-style connection strings and claim links for project setup. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can create temporary Neon databases and place generated database credentials in project environment files. <br>
-Mitigation: Use it for development, demos, and tests; keep .env files out of source control and avoid sensitive or production data unless the database is properly claimed and managed. <br>
-Risk: CLI and Vite plugin paths rely on external packages executed in the target project. <br>
-Mitigation: Review package use before choosing those paths, and prefer the REST API path when the agent needs predictable behavior with no added runtime dependency. <br>
-Risk: Seed SQL may modify or remove database contents. <br>
-Mitigation: Review destructive SQL such as DROP, TRUNCATE, or mass DELETE before running seed scripts. <br>
+Risk: Temporary database credentials can be written into local env files. <br>
+Mitigation: Confirm the target env file and variable key, avoid overwriting existing values, and ensure env files are ignored by version control. <br>
+Risk: The skill can create external temporary Postgres databases for an agent workflow. <br>
+Mitigation: Use it for development or test work, recommend standard Neon provisioning for production workloads, and provide the claim URL when persistence is needed. <br>
+Risk: Seed SQL may be destructive if it contains DROP, TRUNCATE, or broad DELETE statements. <br>
+Mitigation: Ask for confirmation before running destructive seed SQL and report what was executed. <br>
 
 
 ## Reference(s): <br>
-- [Claimable Postgres API](https://neon.new/api/v1/database) <br>
-- [Claimable Postgres Vite Plugin Docs](https://neon.com/docs/reference/claimable-postgres#vite-plugin) <br>
+- [ClawHub skill page](https://clawhub.ai/andrelandgraf/skills/claimable-postgres) <br>
+- [Parent Neon skill](https://neon.com/docs/ai/skills/neon/SKILL.md) <br>
+- [Claimable Postgres API base](https://neon.new/api/v1) <br>
+- [Claimable Postgres docs](https://neon.com/docs/reference/claimable-postgres#vite-plugin) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and environment variable examples] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration, Code] <br>
+**Output Format:** [Markdown with inline bash, JSON, and TypeScript code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include REST API JSON parsing guidance and .env key names for generated database URLs.] <br>
+**Other Properties Related to Output:** [May guide an agent to create temporary external Postgres databases and write DATABASE_URL values to env files.] <br>
 
 ## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+1.0.5 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

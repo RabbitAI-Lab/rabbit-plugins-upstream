@@ -7,6 +7,38 @@ and this skill adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-08-07
+
+### Changed
+
+- Consolidated references into SKILL.md following the skill's own single-file-first stance: description-guide.md, patterns.md, and checklist.md folded in (negative triggers, manually-invoked-skills note, CLI-embedded pattern, MCP/subagent guidance, Claude A/B loop, compact pre-publish checklist); redundant examples and generic workflow patterns dropped.
+- claude-code-features.md merged into a new "Claude Code Specifics" section after verifying every claim against official docs (Claude Code v2.1.224): ~85% is now covered verbatim by the expanded official skills docs and collapsed to links; kept the injection footgun, undocumented frontmatter keys (display-name, default-enabled, fallback, case-insensitive parsing), and behavior deltas (fork background-by-default since v2.1.218, per-turn allowed-tools grant, directory-derived command names, compaction re-attach budgets, listing budget mechanics, skill stacking, additionalDirectories not loading skills).
+- clawhub-publishing.md rewritten quirks-only (~5.5k chars, was 16.7k) and kept as the sole reference (conditional-loading test: needed only when publishing). Doc-covered material replaced with links to ClawHub's five docs; verified against clawhub CLI v0.23.3 and moderation engine v2.4.26.
+- Size guidance is now chars-only: 25k recommended / 50k hard ceiling via `wc -c`; line counts dropped as a metric (identical content varies 2x in lines depending on formatting).
+- Frontmatter table completed with `background` and `shell` fields.
+
+### Removed
+
+- Stale ClawHub facts: the capability-tags system (retired upstream 2026-06-17), the "5 new skills/hour" rate limit (now 200 new skills per 24 hours), the "text-based files only" upload rule (binaries now accepted), and the claim that `--slug`/`--name`/`--changelog`/`--tags` left the CLI (all alive in v0.23.3, plus new `--categories`/`--topics`).
+- Stale Claude Code facts: outdated bundled-skills table (roster churns; linked to the commands reference instead), unconditional PowerShell env-var requirement, `/review` listed as a Skill-tool built-in (now an alias of `/code-review`).
+
+### Fixed
+
+- `allowed-tools` documented as a per-turn grant (was "while the skill is active").
+
+## [0.7.0] - 2026-08-07
+
+### Changed
+
+- Repositioned the skill as opinionated guidance for any agent, distilled from the spec, official docs, and production experience (was "following Anthropic's official guidelines"); deviations from official guidance are now marked where they occur.
+- Replaced "Progressive Disclosure (Most Important)" with "Single File vs. references/ (Most Important)": single-file SKILL.md is the default; split only when content is conditionally loaded (big chunks needed by only some invocations) AND size pressure exists. Distribution is a veto - skills that must travel as one file (CLI-embedded, pasted, printed by a command) stay single-file and get condensed carefully, never lossily trimmed.
+- Size guidance is now two-tier: 500 lines / 25k chars recommended, 1000 lines / 50k chars hard ceiling, checked with `wc -c` (chars are easier for models to verify than tokens).
+- Troubleshooting row and quality checklist reworded to match the new stance.
+
+### Added
+
+- references/patterns.md: "Single-File Skill Embedded in a CLI" pattern (compile SKILL.md into the binary, print via a `<tool> skill` subcommand - the shape playwright-cli, browser-use, and agent-browser converge on).
+
 ## [0.6.3] - 2026-07-22
 
 ### Added

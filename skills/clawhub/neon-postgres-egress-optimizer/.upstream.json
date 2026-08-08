@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/neon-postgres-egress-optimizer",
   "slug": "neon-postgres-egress-optimizer",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778491985988,
-  "contentHash": "1cdd17555ed154001d406a4e36a3381ad6c8cbb2da32428914213e75891709ba",
-  "fetchedAt": "2026-07-26T20:01:56.853Z"
+  "version": "1.0.2",
+  "updatedAt": 1785564178873,
+  "contentHash": "cf70370c59b40d316acb8583cf5c883b144de2c9a940b0c03c01177bd9bb48ae",
+  "fetchedAt": "2026-08-08T08:31:33.162Z"
 }

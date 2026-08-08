@@ -1,5 +1,5 @@
 ## Description: <br>
-Use when an agent needs to call the FlowUs API through the FlowUs CLI, authenticate FlowUs, upload a file, create or update a page, query a database, search content, edit Markdown page content, or any task involving the `flowus` command. <br>
+Use the FlowUs CLI safely for authorized API, content, and file tasks. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to inspect FlowUs CLI help, verify authentication, and perform authorized FlowUs API, content, database, search, Markdown, and file workflows. <br>
+Developers and agents use this skill to operate the FlowUs CLI for authorized FlowUs API, page, database, search, Markdown, and file workflows while checking authentication and write intent before remote actions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can use configured FlowUs credentials and act through the user's FlowUs account. <br>
-Mitigation: Install only for intended FlowUs account use, verify authentication with the CLI before API calls, and avoid exposing bearer tokens in commands, logs, files, or chat. <br>
-Risk: Authorized write actions can modify pages, blocks, databases, Markdown content, and uploaded files in a remote workspace. <br>
-Mitigation: Review the exact target and expected impact before writes, read current content when feasible, and use available idempotency or version controls. <br>
-Risk: Installing or updating the external FlowUs CLI runs downloaded software. <br>
-Mitigation: Require explicit user approval, use the official FlowUs CDN URL, verify source, version, and integrity data when available, and prefer manual installation if integrity data is unavailable. <br>
+Risk: The skill can guide agents through installing or updating the FlowUs CLI distribution. <br>
+Mitigation: Confirm trust in the FlowUs CLI distribution and require explicit user approval before install or update actions. <br>
+Risk: FlowUs credentials may be exposed if copied into chat, command arguments, files, logs, or shared shells. <br>
+Mitigation: Use saved credentials, FLOWUS_TOKEN, or an approved secret channel, and redact credentials from outputs. <br>
+Risk: Authenticated FlowUs commands can create, update, append, upload, or replace workspace content. <br>
+Mitigation: Verify authentication, target workspace, target object, operation, expected impact, and user approval before write actions. <br>
 
 
 ## Reference(s): <br>
-- [FlowUs CLI skill on ClawHub](https://clawhub.ai/flowus/skills/flowus-skills) <br>
+- [FlowUs CLI ClawHub skill page](https://clawhub.ai/flowus/skills/flowus-skills) <br>
 - [FlowUs CLI installer](https://cdn2.flowus.cn/flowus-cli/install) <br>
 - [FlowUs CLI Windows installer](https://cdn2.flowus.cn/flowus-cli/install.ps1) <br>
 - [FlowUs API base URL](https://api.flowus.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON-oriented CLI guidance] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown with inline shell commands, JSON command output guidance, and configuration notes] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prefers `--json` command output and local request-body files for stable, reviewable FlowUs operations.] <br>
+**Other Properties Related to Output:** [May produce FlowUs CLI commands, request body files, Markdown page content, and safety checks before authenticated or write actions.] <br>
 
 ## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+1.0.5 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

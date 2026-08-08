@@ -11,16 +11,9 @@
 | 操作 | 说明 |
 |------|------|
 | 参数解析 | `--skip-market` / `--market-only` / `--pypi` / `--release` |
-| `all` 模式 | `git-sync all` 遍历 `skills/` 和 `agent/` 全部项目 |
+| `all` 模式 | `git-sync all` 遍历配置的全部仓库项目（仓库名/路径由 `config.json` 的 `repos` 注册表决定） |
 | 类型检测 | 自动识别 skill（`_meta.json`）或 agent（`__init__.py`） |
 | 版本号读取 | skill→`_meta.json`，agent→`__init__.py` 中的 `__version__` |
-
-### 步骤 0.5：文件路径校准（v2.3+）
-
-| 校验项 | 规则 |
-|--------|------|
-| 路径穿越防护 | 拒绝 `../`、`..\\`、`/` 开头、`C:` 开头 |
-| 目标路径范围 | `realpath` 必须在 `WORK_REPO/{skills|agent}/` 内 |
 
 ### 步骤 0.7：版本号比对（v1.6+）
 
@@ -39,23 +32,23 @@
 
 ### 步骤 3.7：LLM 文件过滤器（v2.29.0，替换硬编码黑名单）
 
-Python 扫描源目录文件树 + 自动查找规则文件（`blueprint*`, `*rules*`, `blueprints/`），生成扫描报告后**全量打印文件列表 + 排除规则到 stdout**，要求 WorkBuddy 在回复中输出决策 JSON。决策写入 `.file_filter_{name}.json.decisions.json`，**重新运行 git-sync 后读取该文件继续同步**。
+Python 扫描源目录文件树 + 自动查找规则文件（`blueprint*`, `*rules*`, `blueprints/`），生成扫描报告后**全量打印文件列表 + 排除规则到 stdout**，要求调用方（AI 助手）在回复中输出决策 JSON。决策写入 `.file_filter_{name}.json.decisions.json`，**重新运行 git-sync 后读取该文件继续同步**。
 
 交互流程：
 1. git-sync 扫描文件 → 打印完整文件列表 + 排除规则 → 退出（返回 None）
-2. WorkBuddy 看到输出后，审核文件列表，按规则决定保留/排除
-3. WorkBuddy 在回复中输出 `{"allow": ["path/to/file.py", ...]}`，**同时写入决策文件**
+2. 调用方（AI 助手）看到输出后，审核文件列表，按规则决定保留/排除
+3. 调用方（AI 助手）在回复中输出 `{"allow": ["path/to/file.py", ...]}`，**同时写入决策文件**
 4. 重新运行 git-sync → 读取决策文件 → 只复制允许的文件 → 继续后续步骤
 
 | 环境 | 行为 |
 |------|------|
 | 有决策文件 | 直接读取，跳过审核 |
-| 无决策文件 | 打印审核指令，等待 WorkBuddy 回复决策 |
+| 无决策文件 | 打印审核指令，等待调用方（AI 助手）回复决策 |
 | 决策文件解析失败 | 默认保留所有文件 |
 
 ### 步骤 4：同步文件
 
-仅复制 LLM 允许列表中的文件到 `workbuddy-skills/` 仓库。
+仅复制 LLM 允许列表中的文件到目标仓库（按 `get_work_repo(type)` 解析，v2.37.0 多仓库模型：skill → 技能仓库、agent → 智能体仓库，具体路径见 `config.json` 注册表）。
 
 ### 步骤 4.5：LLM 脱敏
 
@@ -63,7 +56,7 @@ Python 扫描源目录文件树 + 自动查找规则文件（`blueprint*`, `*rul
 
 ### 步骤 5：更新 README.md（skill + agent）
 
-全量扫描 workrepo/skills/ + agent/，生成技能表格 + 智能体表格。
+按仓库类型扫描：技能仓库扫技能目录，智能体仓库扫智能体目录（仓库路径由 `config.json` 注册表决定），生成技能表格 + 智能体表格。
 
 ### 步骤 6：提交并推送到双平台
 
@@ -112,13 +105,13 @@ Gitee + GitHub，失败自动 pull --rebase 重试。
 
 ### 步骤 2：同步文件到工作仓库
 
-将技能从 ``~/.workbuddy/skills/`<skill-name>/` 同步到 `WORK_REPO/skills/<skill-name>/`。
+将技能从 `$SKILLS_DIR/<skill-name>/` 同步到目标仓库（`get_work_repo(type)` 返回的仓库路径下的 `<name>/` 目录，具体路径由 `config.json` 注册表声明）。
 
 ### 步骤 3：全量重新生成 README.md
 
 > **关键原则**：README.md = 仓库实际内容，不手动维护。
 
-从仓库 `skills/` 目录实际扫描，全量替换 README.md 中的技能列表表格和目录结构。
+从仓库实际目录扫描，全量替换 README.md 中的技能列表表格和目录结构（多仓库模型下各仓库维护各自 README）。
 
 ### 步骤 3.5：SKILL.md 审查输出
 
@@ -161,7 +154,7 @@ git add → git commit → git pull --rebase → git push
 
 ### 步骤 6：统一输出 + HTML 索引
 
-1. 复制 ZIP 到统一目录 `~/.workbuddy/skills/.dist/`
+1. 复制 ZIP 到统一目录 `$SKILLS_DIR/.dist/`
 2. 自动生成/刷新 `index.html` 索引页（含 file:// 链接 + 文件大小 + 时间）
 3. 自动打开 dist/ 目录（Windows explorer / macOS open / Linux xdg-open）
 
@@ -169,24 +162,38 @@ git add → git commit → git pull --rebase → git push
 
 ---
 
-## config.json 完整配置模板
+## config.json 完整配置模板（v2.37.0 多仓库模型）
+
+> 实际配置位于数据目录（`$SKILLS_DIR/.standardization/git-sync/data/config.json`），含 repos 注册表。**下方为示例结构，仓库名/路径/用户名均需按用户实际配置修改。**
 
 ```json
 {
   "author": "你的作者名",
   "email": "你的邮箱（可选，用于 git commit author）",
   "gitee": {
-    "user": "你的码云用户名",
-    "repo": "workbuddy-skills",
-    "branch": "main",
-    "remote_name": "gitee"
+    "user": "你的码云用户名"
   },
   "github": {
-    "user": "你的 GitHub 用户名",
-    "repo": "workbuddy-skills",
-    "branch": "main",
-    "remote_name": "origin"
-  }
+    "user": "你的 GitHub 用户名"
+  },
+  "repos": {
+    "示例仓库名_skills": {
+      "type": "skills",
+      "path": "C:/Users/你的用户名/你的技能仓库本地路径",
+      "gitee": { "user": "你的码云用户名", "repo": "技能仓库名" },
+      "github": { "user": "你的 GitHub 用户名", "repo": "技能仓库名" },
+      "readme": { "title": "技能仓库标题", "description": "仓库描述", "repo_name": "技能仓库名", "banner": "历史存档说明（可选）" }
+    },
+    "示例仓库名_agents": {
+      "type": "agents",
+      "path": "C:/Users/你的用户名/你的智能体仓库本地路径",
+      "gitee": { "user": "你的码云用户名", "repo": "智能体仓库名" },
+      "github": { "user": "你的 GitHub 用户名", "repo": "智能体仓库名" },
+      "readme": { "title": "智能体仓库标题", "description": "仓库描述", "repo_name": "智能体仓库名", "banner": "历史存档说明（可选）" }
+    }
+  },
+  "source_overrides": {},
+  "gitee_token": "可选：Gitee API token"
 }
 ```
 
@@ -196,15 +203,17 @@ git add → git commit → git pull --rebase → git push
 |------|---------|
 | `author` | `_meta.json` 默认作者名；敏感扫描中的用户名检测基准 |
 | `email` | git commit 的 author email（`git-sync.py` 中的 `step_commit_and_push()` 使用） |
-| `gitee.user` / `github.user` | 生成的查看链接和 README 安装命令中的用户名占位符 |
-| `gitee.repo` / `github.repo` | 工作仓库名称（通常两个平台相同） |
-| `branch` | 推送目标分支（通常为 main） |
+| `repos.<name>.type` | 仓库类型：`skills`（skill 项目）或 `agents`（agent 项目），`get_repo_name()` 按此匹配项目归属 |
+| `repos.<name>.path` | 仓库本地路径，`get_work_repo(type)` 据此返回 |
+| `repos.<name>.gitee/github` | 各平台用户名 + 仓库名（推送目标） |
+| `repos.<name>.readme` | README 生成配置（标题、描述、banner 存档说明） |
+| `gitee_token` | Gitee API token（Release 创建等 API 操作） |
 
 ---
 
 ## 跨平台环境适配
 
-> 本技能依赖 `rsync` 做本地文件同步。不同平台/安装方式下 `rsync` 可用性不同，需提前确认。
+> 本技能优先用 `rsync` 做本地文件同步；rsync 不可用时（如部分 Windows Git 环境）自动 fallback 到 Python 完整流程（`git-sync.py`），功能等价，无需手动干预。
 
 ### 环境矩阵
 
@@ -212,7 +221,7 @@ git add → git commit → git pull --rebase → git push
 |------|----------------|------|
 | Linux / macOS | ✅ 自带 | 无需额外操作 |
 | Git for Windows 完整版 | ✅ 自带 | 位于 Git 安装目录的 usr/bin/ 下 |
-| **WorkBuddy PortableGit** | ❌ 不含 | 需手动安装（见下方） |
+| **Windows 便携版 Git** | ❌ 不含 | 需手动安装（见下方） |
 | Cygwin / MSYS2 | ✅ 自带 | 通过包管理器安装 |
 | WSL | ✅ 自带 | 无需额外操作 |
 
@@ -221,9 +230,9 @@ git add → git commit → git pull --rebase → git push
 当 `rsync` 不可用时，脚本会 fallback 到 `sync_with_exclude.py`（Python 方案）。
 
 **问题根因：**
-- Git Bash 只对 **MSYS2 编译的程序** 自动转换 Unix 路径（`[local-path-redacted]` → `C:\Users\...`）
+- Git Bash 只对 **MSYS2 编译的程序** 自动转换 Unix 路径（`/c/Users/...` → `C:\Users\...`）
 - 如果 `python` 是 **Windows 原生 exe**（如 `.workbuddy\binaries\...`），路径不会被转换
-- Python 收到 `[local-path-redacted]` 会误解为 `C:\c\Users\...`，导致文件找不到
+- Python 收到 `/c/Users/...` 会误解为 `C:\c\Users\...`，导致文件找不到
 
 **症状：**
 ```
@@ -240,16 +249,16 @@ C:\Users\USERNAME\.workbuddy\binaries\python\...\python.exe: can't open file 'c:
 
 ### 各平台安装 rsync
 
-#### Windows（WorkBuddy PortableGit 环境）
+#### Windows（便携版 Git 环境）
 
-**方式一：下载独立 rsync.exe 放到 PortableGit**
+**方式一：下载独立 rsync.exe 放到 Git 的 usr/bin**
 
 ```bash
-# 在 Git Bash 中执行，下载 rsync.exe 到 PortableGit/usr/bin/
-cd $HOME/.workbuddy/vendor/PortableGit/usr/bin/
+# 在 Git Bash 中执行，下载 rsync.exe 到 Git 安装目录的 usr/bin/
+cd $GIT_INSTALL/usr/bin/
 # 从 Git for Windows 获取 rsync 工具
 # 在 Git Bash 中执行：
-cd $HOME/.workbuddy/vendor/PortableGit/usr/bin/
+cd $GIT_INSTALL/usr/bin/
 # 安装 rsync（如已安装可跳过）
 # 验证
 rsync --version
@@ -302,14 +311,11 @@ pacman -S rsync
 
 ### 正确调用方式
 
-本机 rsync 不可用，实际走 `git-sync.py`。支持以下用法：
+本机 rsync 不可用，实际走 `git-sync.py`（`git-sync.sh` 会自动切换）。支持以下用法：
 
 ```bash
-# 基础用法（自动识别类型）
+# 基础用法（自动识别类型，版本号自动从 _meta.json/__init__.py 读取）
 python git-sync.py <name>
-
-# 指定版本
-python git-sync.py <name> <version>
 
 # 跳过市场发布
 python git-sync.py <name> --skip-market
@@ -330,65 +336,53 @@ python git-sync.py all
 python git-sync.py rag-assistant --pypi --release --skip-market
 ```
 
+> ⚠️ 注意：`git-sync.py` 不接收版本号位置参数（版本自动读取），`--skip-market` 同时跳过市场与 PyPI。
+
 ---
 
 ## 配置说明（LLM 参考）
 
-> 本技能的配置存放在数据目录，脚本自动读取，无需手动创建文件。
+> 本技能的配置存放在数据目录，脚本自动读取，无需手动创建文件。**完整结构见上文「config.json 完整配置模板（v2.37.0 多仓库模型）」**，此处仅补充定位与字段要点。
 
 ### 配置文件位置
 
 | 文件 | 路径 | 说明 |
 |------|------|------|
-| `config.json` | `skills/.standardization/git-sync/data/config.json` | 平台用户名、仓库名、分支等配置 |
-| `manifest.json` | `skills/.standardization/git-sync/data/manifest.json` | 技能同步状态清单 |
+| `config.json` | `$SKILLS_DIR/.standardization/git-sync/data/config.json` | 平台用户名、repos 注册表、gitee_token 等配置 |
+| `manifest.json` | `$SKILLS_DIR/.standardization/git-sync/data/manifest.json` | 技能同步状态清单（按 repos 组织条目） |
 
-### config.json 字段说明
+### config.json 字段要点（v2.37.0 多仓库）
 
-| 字段 | 说明 | 默认值 |
-|------|------|--------|
-| `author` | `_meta.json` 默认作者名；敏感扫描中的用户名检测基准 | `[username-redacted]` |
-| `gitee.user` | 码云用户名，用于生成查看链接和 README 命令 | `[username-redacted]` |
-| `gitee.repo` | 码云仓库名 | `workbuddy-skills` |
-| `gitee.branch` | 码云推送目标分支 | `main` |
-| `github.user` | GitHub 用户名 | `[username-redacted]` |
-| `github.repo` | GitHub 仓库名 | `workbuddy-skills` |
-| `github.branch` | GitHub 推送目标分支 | `main` |
+| 字段 | 说明 |
+|------|------|
+| `author` | `_meta.json` 默认作者名；敏感扫描中的用户名检测基准 |
+| `repos` | **核心注册表**：每个仓库条目含 `type`（skills/agents）、`path`、`gitee`/`github`（user+repo）、`readme` 配置 |
+| `repos.<name>.type` | 项目类型→仓库归属的唯一映射（skill→skills 仓库、agent→agents 仓库） |
+| `gitee_token` | Gitee API token（Release 创建等 API 操作） |
+| `source_overrides` | 个别项目的源路径覆盖（manifest 未命中时用） |
 
 ### 脚本读取方式
 
-所有 `git-sync` 脚本通过以下逻辑定位 `config.json`：
+所有 `git-sync` 脚本**不从 `_paths.py` 之外的任何地方读取路径**——路径常量在 `scripts/_paths.py` 统一定义，脚本直接引用：
 
 ```python
-import os
-SKILLS_DIR = os.path.expanduser('~/.workbuddy/skills')
-GIT_SYNC_DATA = os.path.join(SKILLS_DIR, '.standardization', 'git-sync', 'data')
-config_path = os.path.join(GIT_SYNC_DATA, 'config.json')
+# scripts/_paths.py（唯一路径来源）
+SKILLS_ROOT   = SKILL_DIR.parent                       # 技能安装根目录
+CONFIG_FILE   = SKILLS_ROOT / ".standardization" / "git-sync" / "data" / "config.json"
+MANIFEST_FILE = SKILLS_ROOT / ".standardization" / "git-sync" / "data" / "manifest.json"
+WORK_REPO     = get_work_repo(type)                    # 从 config.json 注册表解析
+
+# 其他脚本一律：
+from _paths import CONFIG_FILE, MANIFEST_FILE, WORK_REPO
 ```
 
 ### 初始化配置
 
-首次使用本技能前，确保数据目录中存在 `config.json`：
+首次使用本技能前，确保数据目录中存在 `config.json`（**必须含 repos 注册表**，参考上文完整模板）：
 
 ```bash
-mkdir -p ~/.workbuddy/skills/.standardization/git-sync/data
-cat > ~/.workbuddy/skills/.standardization/git-sync/data/config.json << 'EOF'
-{
-  "author": "your-name-here",
-  "gitee": {
-    "user": "your-gitee-username",
-    "repo": "workbuddy-skills",
-    "branch": "main",
-    "remote_name": "gitee"
-  },
-  "github": {
-    "user": "your-github-username",
-    "repo": "workbuddy-skills",
-    "branch": "main",
-    "remote_name": "origin"
-  }
-}
-EOF
+mkdir -p $SKILLS_DIR/.standardization/git-sync/data
+# 将上文「config.json 完整配置模板」写入该路径，替换占位符
 ```
 
-> ⚠️ `config.json` 含用户名等敏感信息，已被 `--exclude=config.json` 排除在同步/打包范围外，不会上传到远程仓库。
+> ⚠️ `config.json` 含用户名等敏感信息，已被排除在同步/打包范围外，不会上传到远程仓库。

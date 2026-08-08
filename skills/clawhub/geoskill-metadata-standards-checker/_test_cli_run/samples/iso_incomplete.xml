@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmd:MD_Metadata xmlns:gmd="http://www.isotc211.org/2005/gmd"
+                 xmlns:gco="http://www.isotc211.org/2005/gco">
+  
+  <gmd:language><gco:CharacterString>eng</gco:CharacterString></gmd:language>
+  <gmd:characterSet><gmd:MD_CharacterSetCode>utf8</gmd:MD_CharacterSetCode></gmd:characterSet>
+  <gmd:hierarchyLevel><gmd:MD_ScopeCode>dataset</gmd:MD_ScopeCode></gmd:hierarchyLevel>
+  <gmd:contact><gmd:CI_ResponsibleParty><gmd:organisationName>
+    <gco:CharacterString>Synthetic Org</gco:CharacterString></gmd:organisationName>
+  </gmd:CI_ResponsibleParty></gmd:contact>
+  <gmd:dateStamp><gco:Date>2026-01-01</gco:Date></gmd:dateStamp>
+  <gmd:metadataStandardName><gco:CharacterString>ISO 19115</gco:CharacterString></gmd:metadataStandardName>
+  <gmd:referenceSystemInfo><gmd:MD_ReferenceSystem>
+    <gmd:referenceSystemIdentifier><gmd:RS_Identifier>
+      <gmd:code><gco:CharacterString>EPSG:4326</gco:CharacterString></gmd:code>
+    </gmd:RS_Identifier></gmd:referenceSystemIdentifier>
+  </gmd:MD_ReferenceSystem></gmd:referenceSystemInfo>
+  <gmd:identificationInfo><gmd:MD_DataIdentification>
+    <gmd:citation><gmd:CI_Citation><gmd:title>
+      <gco:CharacterString>Synthetic Dataset</gco:CharacterString></gmd:title>
+    </gmd:CI_Citation></gmd:citation>
+    
+    
+    <gmd:topicCategory><gmd:MD_TopicCategoryCode>geoscientificInformation</gmd:MD_TopicCategoryCode></gmd:topicCategory>
+    <gmd:extent><gmd:EX_Extent><gmd:geographicElement>
+      <gmd:EX_GeographicBoundingBox>
+        <gmd:westBoundLongitude><gco:Decimal>116.0</gco:Decimal></gmd:westBoundLongitude>
+        <gmd:eastBoundLongitude><gco:Decimal>117.0</gco:Decimal></gmd:eastBoundLongitude>
+        <gmd:southBoundLatitude><gco:Decimal>39.0</gco:Decimal></gmd:southBoundLatitude>
+        <gmd:northBoundLatitude><gco:Decimal>40.0</gco:Decimal></gmd:northBoundLatitude>
+      </gmd:EX_GeographicBoundingBox>
+    </gmd:geographicElement></gmd:EX_Extent></gmd:extent>
+  </gmd:MD_DataIdentification></gmd:identificationInfo>
+</gmd:MD_Metadata>

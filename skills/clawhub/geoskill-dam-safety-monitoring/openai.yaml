@@ -1,0 +1,16 @@
+name: geoskill-dam-safety-monitoring
+display_name: 大坝安全遥感监测
+description: |
+  融合 InSAR 形变、水位变化、NDVI 异常与热红外渗流的大坝安全综合风险评估
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-dam-safety-monitoring.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - analysis
+  - gis
+  - raster
+  - remote-sensing
+  - sar
+  - vegetation

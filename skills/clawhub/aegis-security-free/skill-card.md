@@ -1,5 +1,5 @@
 ## Description: <br>
-Aegis Security Free gives AI agents basic blockchain safety checks for address reputation, token honeypot detection, and free-tier usage monitoring on Ethereum and Base. <br>
+Aegis Security Free helps agents perform basic blockchain safety checks, including address reputation, token honeypot checks, free quota lookup, and risk-level summaries for Ethereum and Base. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External developers and agent users can use this skill to guide read-only pre-transaction checks before sending funds or buying tokens. It helps query address reputation, token honeypot risk, and remaining free quota while keeping final crypto decisions subject to user review. <br>
+External developers and agent users can use this skill for basic pre-transaction blockchain safety checks on Ethereum and Base. It is intended for address reputation checks, token honeypot screening, quota lookup, and human review of medium or higher risk results. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The evidence notes inconsistent API key setup guidance. <br>
-Mitigation: Clarify whether the free version needs an API key before installation, and store any required secret in a platform secret store rather than shell history or committed files. <br>
-Risk: The skill uses a stable client fingerprint for quota tracking. <br>
-Mitigation: Use a pseudonymous, non-sensitive identifier and avoid embedding personal data, wallet secrets, or private keys in the fingerprint value. <br>
-Risk: Blockchain safety results may be incomplete or incorrect for financial decisions. <br>
-Mitigation: Treat address and token checks as advisory, require user review for material transactions, and block or escalate HIGH and CRITICAL findings. <br>
+Risk: The skill requests broad shell execution and local read capability for a narrow blockchain lookup workflow. <br>
+Mitigation: Review before installing and prefer a version that limits execution to specific HTTP requests needed for address, token, and usage checks. <br>
+Risk: API key and client fingerprint handling are not fully explained in the release evidence. <br>
+Mitigation: Use environment variables for secrets, avoid committing keys, and confirm how client fingerprints are generated, stored, and transmitted before use. <br>
+Risk: Blockchain risk results may be incomplete or uncertain. <br>
+Mitigation: Use results as decision support only, require human review for MEDIUM risk results, and block or explicitly confirm HIGH and CRITICAL risk activity. <br>
 
 
 ## Reference(s): <br>
-- [Aegis Security Free on ClawHub](https://clawhub.ai/thcjp/skills/aegis-security-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Skill homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with curl commands and JSON response examples] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JSON-shaped API response examples and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only safety-check guidance; free version is limited to Ethereum and Base and results should be treated as advisory.] <br>
+**Other Properties Related to Output:** [Outputs include safety guidance and API response fields; results are not a guarantee of blockchain transaction safety and should be reviewed for important decisions.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+1.0.3 (source: server release evidence and artifact frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

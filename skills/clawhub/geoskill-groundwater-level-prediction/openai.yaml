@@ -1,0 +1,14 @@
+name: geoskill-groundwater-level-prediction
+display_name: 地下水位预测
+description: |
+  基于历史水位时序与降水/开采驱动因子，用回归或随机森林预测未来地下水位并做空间插值与不确定性评估
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-groundwater-level-prediction.py
+runtime: python>=3.9
+tags:
+  - gis
+  - hydrology
+  - remote-sensing
+  - simulation
+  - water

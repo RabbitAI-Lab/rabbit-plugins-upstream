@@ -1,45 +1,59 @@
-## Description: <br>
-Video Analyzer locally decomposes videos into transcripts, scene and OCR analysis, multimodal timelines, timestamped highlights, and HTML/JSON/Markdown reports with multi-engine ASR and Chinese-language enhancements. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+video-analyzer turns local or downloadable videos into structured reports with transcripts, scene and OCR analysis, multimodal alignment, timestamped summaries, editing suggestions, and subtitle or timeline exports.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Developers and content analysts use this skill to process local or downloadable video into structured reports, transcripts, scene summaries, timestamped highlights, and chapter assets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill presents itself as local/offline but can perform update checks, first-run model downloads, and remote video downloads. <br>
-Mitigation: For sensitive or air-gapped use, preinstall required models, use local video files, and run with --no-update-check. <br>
-Risk: Remote media download behavior and media parsing can expose users to untrusted URLs or attacker-supplied video files. <br>
-Mitigation: Avoid untrusted URLs, process only trusted media when possible, and run the tool in an isolated environment for untrusted inputs. <br>
-Risk: External media tooling and Python dependencies affect the security of video processing. <br>
-Mitigation: Pin and update dependencies, and configure trusted ffmpeg and ffprobe paths before processing sensitive files. <br>
+## Use Case:
 
+Developers, content analysts, and editors use this skill to analyze video files or supported video URLs into transcripts, visual scene data, speaker labels, summaries, subtitles, and editing assets.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/video-analyzer) <br>
-- [Skill instructions](artifact/SKILL.md) <br>
-- [README](artifact/README.md) <br>
-- [Configuration reference](artifact/config.yaml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [files, markdown, JSON, HTML, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with shell commands; generated analysis artifacts may include HTML, JSON, Markdown, SRT/VTT, images, and video clips.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are written to a local output directory; optional features can generate chapter clips, subtitles, timeline assets, and cached model/media files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.5.0 (source: frontmatter, server release metadata) <br>
+Risk: The security review marks the release suspicious because it claims offline operation while it can contact the internet, download remote videos with weakened TLS checks, and save sensitive analysis outputs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when local file access, subprocess execution, and network access are acceptable; for sensitive use, run only on local video files and use --no-update-check.
+
+Risk: Remote downloads may expose the agent to untrusted content and weakened certificate checks.
+
+Mitigation: Avoid authenticated or private platform URLs, prefer pre-downloaded local media, and treat downloaded media and derived reports as untrusted until reviewed.
+
+Risk: Generated transcripts, subtitles, caches, and HTML reports can contain sensitive video or speech content.
+
+Mitigation: Review output directories after each run and delete generated reports, caches, and subtitles when they are no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/video-analyzer)
+- [README.md](artifact/README.md)
+- [SKILL.md](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with command examples plus generated report files such as HTML, JSON, Markdown, SRT, VTT, ASS, EDL, shell scripts, and configuration outputs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local analysis artifacts and may generate transcripts, subtitles, thumbnails, summaries, platform metadata, and editing timelines depending on command options.]
+
+## Skill Version(s):
+
+4.1.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,56 @@
-## Description: <br>
-Build Grafana dashboards as code with grafana-foundation-sdk typed builders for TypeScript or Go. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build Grafana dashboards as code with the grafana-foundation-sdk typed builders (TypeScript or Go). Use when creating, modifying, or generating Grafana dashboard JSON programmatically, converting hand-written dashboard JSON to typed code, building monitoring dashboards, or working with Prometheus/Loki queries in dashboards.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and infrastructure engineers use this skill to create, modify, generate, or convert Grafana dashboard JSON through typed builder APIs. It is suited for monitoring dashboard work that includes Prometheus and Loki queries, reusable dashboard components, and generated dashboard files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill pins a pre-1.0 Grafana Foundation SDK version, so API changes may affect generated dashboard code. <br>
-Mitigation: Confirm the pinned SDK version is acceptable for the target project before adopting or updating generated code. <br>
-Risk: Generated dashboard JSON may include project-specific datasource UIDs, namespaces, or output paths. <br>
-Mitigation: Review dashboard JSON diffs before committing or deploying generated files. <br>
+## Use Case:
 
+Developers and infrastructure engineers use this skill to create, modify, convert, and generate Grafana dashboards as typed TypeScript or Go code, then serialize them to Grafana dashboard JSON or deployment manifests.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/grafana-foundation-sdk) <br>
-- [ClawHub metadata homepage](https://github.com/tenequm/skills/tree/main/skills/grafana-foundation-sdk) <br>
-- [Common Dashboard Patterns](references/patterns.md) <br>
-- [TypeScript API Reference](references/typescript-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with TypeScript, Go, JSON, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces dashboard-as-code guidance and examples that may generate Grafana dashboard JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.2 (source: server release metadata, SKILL.md metadata, CHANGELOG.md released 2026-07-22) <br>
+Risk: Generated dashboards and Prometheus or Loki queries may expose sensitive operational data to dashboard viewers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated dashboards, datasource scopes, variables, and queries before deploying or sharing them.
+
+Risk: Generated dashboard code can rely on pre-1.0 SDK behavior, unchecked TypeScript, or stale generated JSON.
+
+Mitigation: Pin the SDK version, run project-local type checks or builds, regenerate dashboard JSON after generator edits, and review the generated output.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/grafana-foundation-sdk)
+- [OpenClaw Homepage](https://github.com/tenequm/skills/tree/main/skills/grafana-foundation-sdk)
+- [TypeScript API Reference](references/typescript-api.md)
+- [Common Dashboard Patterns](references/patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with TypeScript, Go, shell, and JSON snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce dashboard JSON or Kubernetes dashboard/provisioning manifests for review before deployment.]
+
+## Skill Version(s):
+
+0.2.3 (source: evidence release, frontmatter, changelog released 2026-08-07)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

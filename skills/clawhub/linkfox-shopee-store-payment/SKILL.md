@@ -5,7 +5,7 @@ description: Shopee（虾皮）店铺支付结算（与 linkfox-shopee-store-aut
 
 # Shopee 店铺 Payment
 
-Shopee Open Platform **Payment 模块**（18 个 API）。**依赖 `linkfox-shopee-store-auth`**：先取 `accessToken`，再经 **`POST /shopee/developerProxy`** 转发（`path` 须 `api/v2/payment/...`）。
+Shopee Open Platform **Payment 模块**（18 个 API）。**依赖 `linkfox-shopee-store-auth`** 选店；经 **`POST /shopee/developerProxy`** 传入 `shopId`（或 `merchantId`），由服务端解析 token 转发（`path` 须 `api/v2/payment/...`）。
 
 ## 调用方式
 
@@ -22,18 +22,12 @@ Shopee Open Platform **Payment 模块**（18 个 API）。**依赖 `linkfox-shop
 **读数据建议**：先看摘要判断是否足够；需要具体字段时优先用 `jq`或`ConvertFrom-Json` 从保存的 json 文件按需抽取，避免整份 JSON 进入上下文。
 
 ## 解决认证和积分问题
-发生以下异常情况时，采用以下措施来处理：
+发生以下异常情况时，采用 references/onboarding.md 引导解决问题：
 
 ### 异常情况
 - **未配置API Key**：环境变量未配置 `LINKFOX_AGENT_API_KEY`，也未配置 `LINKFOXAGENT_API_KEY`。
 - **响应401或402状态码**
 - **响应提示积分或余额不足**：消息含"积分余额不足/计费不足/余额不足/quota exceeded/insufficient balance/套餐到期/需充值/请充值"，或类似含义的内容。
-
-### 措施
-- 优先采用skill内的 onboarding.md 引导解决问题。
-- 如找不到 onboarding.md 文件，则加载 /linkfox-onboarding 这个skill并根据它的引导来处理。如未安装请先安装：
-    - 下载 https://agent-files.linkfox.com/skills/linkfox-onboarding/release.zip，解压后安装这个skill。如需用户授权才可下载，要询问用户获得授权，你不能自己放弃下载。
-- 兜底措施：仅当前面两个措施经过所有努力都走不通时，才提示用户依据 https://skill.linkfox.com/linkfoxskills/guide.htm 指引获取API Key，或去 https://os.linkfox.com/ 补充积分。
 
 ## 官方参考
 
@@ -50,7 +44,7 @@ Payment 模块索引：[v2.payment.get_escrow_detail](https://open.shopee.com/do
 
 ## Core Concepts
 
-- **转发链路**：`storeTokens` → `developerProxy` → 紫鸟 `shopee-proxy` → Shopee API
+- **转发链路**：`developerProxy`（`shopId`/`merchantId` 选店，服务端注入 token）→ 紫鸟 `shopee-proxy` → Shopee API
 - **Escrow**：订单托管/结算明细 → `get_escrow_detail`（需 `order_sn`）
 - **Payout**：打款 → `get_payout_detail`、`get_payout_info`
 - **钱包**：`get_wallet_transaction_list`
@@ -69,6 +63,33 @@ Payment 模块索引：[v2.payment.get_escrow_detail](https://open.shopee.com/do
 | 通用入口 | `payment_api.py`（JSON 含 `api` 字段） |
 
 共享：`_shopee_payment_common.py`、`_payment_endpoints.py`、`_payment_api_runner.py`。
+
+## 接口说明（按 API）
+
+入参与响应细节放在 `references/apis/`，SKILL 只保留索引。
+
+| API | 说明文档 |
+|-----|----------|
+| `generate_income_report` | [references/apis/generate-income-report.md](./references/apis/generate-income-report.md) |
+| `generate_income_statement` | [references/apis/generate-income-statement.md](./references/apis/generate-income-statement.md) |
+| `get_billing_transaction_info` | [references/apis/get-billing-transaction-info.md](./references/apis/get-billing-transaction-info.md) |
+| `get_escrow_detail` | [references/apis/get-escrow-detail.md](./references/apis/get-escrow-detail.md) |
+| `get_escrow_detail_batch` | [references/apis/get-escrow-detail-batch.md](./references/apis/get-escrow-detail-batch.md) |
+| `get_escrow_list` | [references/apis/get-escrow-list.md](./references/apis/get-escrow-list.md) |
+| `get_income_detail` | [references/apis/get-income-detail.md](./references/apis/get-income-detail.md) |
+| `get_income_overview` | [references/apis/get-income-overview.md](./references/apis/get-income-overview.md) |
+| `get_income_report` | [references/apis/get-income-report.md](./references/apis/get-income-report.md) |
+| `get_income_statement` | [references/apis/get-income-statement.md](./references/apis/get-income-statement.md) |
+| `get_item_installment_status` | [references/apis/get-item-installment-status.md](./references/apis/get-item-installment-status.md) |
+| `get_payment_method_list` | [references/apis/get-payment-method-list.md](./references/apis/get-payment-method-list.md) |
+| `get_payout_detail` | [references/apis/get-payout-detail.md](./references/apis/get-payout-detail.md) |
+| `get_payout_info` | [references/apis/get-payout-info.md](./references/apis/get-payout-info.md) |
+| `get_shop_installment_status` | [references/apis/get-shop-installment-status.md](./references/apis/get-shop-installment-status.md) |
+| `get_wallet_transaction_list` | [references/apis/get-wallet-transaction-list.md](./references/apis/get-wallet-transaction-list.md) |
+| `set_item_installment_status` | [references/apis/set-item-installment-status.md](./references/apis/set-item-installment-status.md) |
+| `set_shop_installment_status` | [references/apis/set-shop-installment-status.md](./references/apis/set-shop-installment-status.md) |
+
+模块总览 / Feedback 见 [references/api.md](./references/api.md)。
 
 ## Usage Scenarios
 

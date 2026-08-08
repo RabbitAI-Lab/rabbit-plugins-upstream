@@ -1,0 +1,12 @@
+name: geoskill-image-fusion-pan-sharpening
+display_name: 影像融合与全色锐化
+description: |
+  Brovey/IHS 全色锐化，融合多光谱与全色波段生成高空间分辨率影像
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-image-fusion-pan-sharpening.py
+runtime: python>=3.9
+tags:
+  - gis
+  - preprocessing
+  - remote-sensing

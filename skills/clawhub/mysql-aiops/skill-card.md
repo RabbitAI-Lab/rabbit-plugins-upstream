@@ -1,5 +1,5 @@
 ## Description: <br>
-Mysql Aiops helps agents operate and troubleshoot MySQL 8.x and MariaDB 10.6+ servers with governed DBA workflows for health checks, slow-query analysis, lock waits, replication lag, fragmentation, index health, and audited maintenance actions. <br>
+MySQL AIops helps agents inspect and troubleshoot MySQL or MariaDB servers, including health checks, slow-query and lock-wait root-cause analysis, replication lag analysis, fragmentation analysis, index health checks, and guarded DBA actions. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -7,22 +7,22 @@ This skill is ready for commercial/non-commercial use. <br>
 [zw008](https://clawhub.ai/user/zw008) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, database administrators, and operations teams use this skill to inspect MySQL or MariaDB server state, diagnose performance and replication issues, and prepare governed maintenance actions with audit records and dry-run previews. <br>
+Database administrators, SREs, and developers use this skill to let an agent collect MySQL/MariaDB operational evidence, explain common performance or replication issues, and propose or run governed maintenance actions when privileges allow. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill exposes powerful MySQL/MariaDB write operations such as killing sessions, changing global variables, optimizing tables, and creating or dropping indexes. <br>
-Mitigation: Start with a least-privilege read-only account for monitoring, grant write privileges only when needed, use dry-run previews, and rely on the skill's audit records and reversible-operation undo descriptors where available. <br>
-Risk: Database credentials and the master password protect access to production systems. <br>
-Mitigation: Protect MYSQL_AIOPS_MASTER_PASSWORD and the ~/.mysql-aiops directory carefully, and use the encrypted secrets store rather than legacy plaintext password environment variables. <br>
-Risk: Some diagnostic behavior depends on database configuration and live validation, including performance_schema availability and MySQL versus MariaDB feature differences. <br>
-Mitigation: Run mysql-aiops doctor before relying on live diagnostics, confirm performance_schema is enabled for query-stat workflows, and review flavor-specific results before applying remediation. <br>
+Risk: The skill can inspect and potentially change a MySQL/MariaDB server, including killing sessions, changing indexes, and running SET GLOBAL operations. <br>
+Mitigation: Start with a least-privilege read-only database account and grant write privileges only when those DBA actions are intended and approved. <br>
+Risk: Local configuration, encrypted secrets, audit logs, and undo state are stored under ~/.mysql-aiops by default. <br>
+Mitigation: Protect the ~/.mysql-aiops directory, avoid the legacy plaintext password environment variable, and use the encrypted secrets workflow documented by the skill. <br>
+Risk: Some operational queries are mock-validated and still need live verification against the target MySQL or MariaDB environment. <br>
+Mitigation: Run mysql-aiops doctor and perform a live verification pass before relying on findings in production operations. <br>
 
 
 ## Reference(s): <br>
@@ -35,13 +35,13 @@ Mitigation: Run mysql-aiops doctor before relying on live diagnostics, confirm p
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Analysis, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured diagnostic summaries] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and structured tool results] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dry-run maintenance previews, measured database findings, audit-oriented context, and configuration guidance.] <br>
+**Other Properties Related to Output:** [Outputs may include database observations, RCA findings, dry-run previews, audit-oriented status details, and configuration steps.] <br>
 
 ## Skill Version(s): <br>
-0.4.0 (source: server release metadata) <br>
+0.6.0 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

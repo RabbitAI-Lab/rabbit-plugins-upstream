@@ -1,44 +1,65 @@
-## Description: <br>
-This skill retrieves SellerSprite category-level Amazon market statistics for a node path, including top-listing averages, price, BSR, sales, seller counts, and new-product indicators. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetches SellerSprite market-statistics dashboards for Amazon category node paths, including top-listing averages, BSR, sales, seller counts, and new-product metrics.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External marketplace sellers, analysts, and agents use this skill to evaluate Amazon category market quality and competition from SellerSprite statistics for a known category node path. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: API keys, request details, and session or app identifiers are sent to the configured LinkFox gateway. <br>
-Mitigation: Use a dedicated LinkFox API key, check LINKFOX_TOOL_GATEWAY before running, and avoid exposing unrelated sensitive environment variables in the agent session. <br>
-Risk: SellerSprite market-statistics calls consume paid credits. <br>
-Mitigation: Confirm the query parameters and expected credit use before repeated calls; rely on the built-in 24-hour cache for identical requests. <br>
-Risk: Full API responses and cache data are written to local linkfox data directories. <br>
-Mitigation: Review the selected output directory and clean stored response or cache files when they contain sensitive commercial research. <br>
+## Use Case:
 
+External sellers, marketplace analysts, and agents use this skill to retrieve paid SellerSprite category statistics for a supplied marketplace and category node path. It is used to assess market quality and competition from aggregate listing, sales, seller, BSR, and new-product indicators.
 
-## Reference(s): <br>
-- [API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-sellersprite-market-statistics) <br>
-- [SellerSprite Market Statistics Gateway](https://tool-gateway.linkfox.com/sellersprite/market/statistics) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [JSON response files with stdout JSON or summary text, plus concise Markdown guidance for interpreting the statistics.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox API credentials; API results are cached for 24 hours and full responses are written under a linkfox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Requests use API keys and can be redirected through LinkFox endpoint override environment variables.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep API keys scoped and private, and only set endpoint override variables when the destination is trusted.
+
+Risk: The onboarding flow can process phone/SMS login, API key generation, package listing, and billing orders.
+
+Mitigation: Use the onboarding commands only when needed, confirm plan and payment details with the user, and avoid exposing returned credentials.
+
+Risk: Full API responses are saved locally and small or inline responses may be printed to stdout.
+
+Mitigation: Review saved response paths and stdout output before sharing logs or committing workspace files.
+
+Risk: Uncached statistics requests consume 15 credits.
+
+Mitigation: Explain additional credit cost before repeated calls and rely on the default cache for identical requests when appropriate.
+
+## Reference(s):
+
+- [Skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-sellersprite-market-statistics)
+- [SellerSprite market statistics API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [LinkFox agent portal](https://agent.linkfox.com/)
+- [SellerSprite market statistics endpoint](https://tool-gateway.linkfox.com/sellersprite/market/statistics)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Files, JSON, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [JSON responses saved to local files with stdout summaries or full inline JSON, plus Markdown guidance for interpretation and onboarding.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full responses under a local linkfox session directory, uses a 24-hour cache by default, and consumes 15 credits per uncached statistics request.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

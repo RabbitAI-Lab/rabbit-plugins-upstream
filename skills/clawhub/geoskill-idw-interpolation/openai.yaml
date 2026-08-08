@@ -1,0 +1,13 @@
+name: geoskill-idw-interpolation
+display_name: 反距离权重插值
+description: |
+  反距离权重(IDW)空间插值，支持幂参数和搜索半径，输出插值栅格GeoTIFF
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-idw-interpolation.py
+runtime: python>=3.9
+tags:
+  - gis
+  - raster
+  - remote-sensing
+  - vector

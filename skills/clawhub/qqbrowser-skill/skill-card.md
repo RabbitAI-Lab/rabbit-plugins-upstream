@@ -1,43 +1,63 @@
-## Description: <br>
-Browser automation CLI for AI agents. Use when the user needs to interact with websites, including navigating pages, filling forms, clicking buttons, taking screenshots, extracting data, or automating any browser task. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Browser automation CLI for AI agents that helps agents open, navigate, interact with, extract data from, screenshot, download from, and replay tasks on websites.
 
-## Publisher: <br>
-[qqbrowserteam](https://clawhub.ai/user/qqbrowserteam) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qqbrowserteam](https://clawhub.ai/user/qqbrowserteam)
 
-## Use Case: <br>
-Developers and AI-agent operators use QQBrowserUse to drive QQ Browser for website navigation, form interaction, screenshots, downloads, and page data extraction. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can take real browser actions such as navigation, clicks, form submission, downloads, and page-script actions. <br>
-Mitigation: Use it only for intentional QQ Browser automation and require explicit user confirmation before purchases, form submissions, account changes, downloads, or page-script actions. <br>
-Risk: A misconfigured bridge endpoint or exposed local configuration could route browser control through an untrusted service. <br>
-Mitigation: Keep ZCLAW_BASE_URL pointed at a trusted bridge and protect ~/.zclaw/config.json. <br>
+## Use Case:
 
+Developers and AI agent operators use this skill to automate real browser tasks such as navigation, form interaction, screenshots, downloads, structured extraction, and reusable playbook replay.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/qqbrowserteam/skills/qqbrowser-skill) <br>
-- [PyPI Package](https://pypi.org/project/qqbrowser-skill/) <br>
-- [QQ Browser Homepage](https://browser.qq.com/) <br>
-- [QQBrowserSkillReport](https://bak.res.qq.com/nav/qqbrowser_skills/QQBrowserSkillReport.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, files, guidance] <br>
-**Output Format:** [Markdown and text snapshots with shell command examples and temporary file paths for screenshots or downloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Browser snapshots use element indices for interaction; indices must be refreshed after navigation or page changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.9.0 (source: server release evidence) <br>
+Risk: The skill can control a browser for real web tasks, including posting, purchasing, deleting, messaging, and submitting forms.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before side-effecting actions and prefer drafts, test data, or manual review for non-idempotent workflows.
+
+Risk: Reusable playbooks can replay browser actions and may repeat side effects if run without review.
+
+Mitigation: Review saved playbooks before reuse and verify replay behavior safely before using live targets.
+
+Risk: The skill supports downloads and JavaScript-based extraction on web pages that may contain sensitive information.
+
+Mitigation: Use downloads and JavaScript extraction only on intended pages and avoid exposing sensitive page content unless needed for the task.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/qqbrowserteam/skills/qqbrowser-skill)
+- [QQ Browser Homepage](https://browser.qq.com/)
+- [PyPI Package](https://pypi.org/project/qqbrowser-skill/)
+- [QQBrowserSkillReport](https://bak.res.qq.com/nav/qqbrowser_skills/QQBrowserSkillReport.html)
+- [Command Reference](references/commands.md)
+- [Session Lifecycle](references/session-lifecycle.md)
+- [Playbook Guide](references/playbook.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Code, Configuration, Markdown, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON playbooks, and browser task results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce browser screenshots, downloaded files, structured page data, and reusable playbook files when the user requests those actions.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

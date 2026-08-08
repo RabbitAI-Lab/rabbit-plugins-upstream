@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/mt5-httpapi",
   "slug": "mt5-httpapi",
   "ownerHandle": null,
-  "version": "4.8.0",
-  "updatedAt": 1785074536332,
-  "contentHash": "77de351328208085350d1bf92d9d436b0813de6b710ad12625a6891c8fc4bf36",
-  "fetchedAt": "2026-07-26T18:03:16.139Z"
+  "version": "4.12.0",
+  "updatedAt": 1786065033320,
+  "contentHash": "4f74fe4d536d847a359781077f77dc54a9fc75c46f1097468cd70b85947b052a",
+  "fetchedAt": "2026-08-08T08:09:41.201Z"
 }

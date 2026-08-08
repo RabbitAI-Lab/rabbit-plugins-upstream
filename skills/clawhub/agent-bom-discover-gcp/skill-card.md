@@ -1,42 +1,55 @@
-## Description: <br>
-Discovers GCP-hosted AI agent and MCP-relevant assets from operator-approved projects, emits canonical agent-bom inventory JSON, and can scan that inventory when requested. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover GCP-hosted AI agent and MCP-relevant assets from the operator's environment, emit canonical agent-bom inventory JSON, and scan it without giving agent-bom long-lived GCP credentials.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers, cloud engineers, and security reviewers use this skill to inventory Vertex AI, Cloud Run, Cloud Functions, GKE, and related agentic GCP infrastructure with operator-controlled credentials. It helps produce canonical agent-bom inventory and optional scan findings without handing agent-bom long-lived GCP credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Overbroad GCP credentials could expose more project inventory than intended. <br>
-Mitigation: Use read-only or short-lived GCP credentials, confirm the selected project, and avoid broad production credentials unless they are necessary for the inventory. <br>
-Risk: Inventory output may contain sensitive resource or environment metadata. <br>
-Mitigation: Write inventory only to an operator-selected path, review the JSON before sharing it, and rely on the skill's credential redaction behavior for credential-like values. <br>
+## Use Case:
 
+Developers and security engineers use this skill to inventory approved GCP projects for Vertex AI, Cloud Run, Cloud Functions, GKE, and related agentic infrastructure. It produces canonical inventory that can be reviewed locally or scanned with agent-bom when findings are requested.
 
-## Reference(s): <br>
-- [agent-bom GitHub repository](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-discover-gcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, json] <br>
-**Output Format:** [Markdown with bash command blocks and JSON file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operator-selected inventory JSON and optional agent-bom scan findings JSON; credentials remain in the operator environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill can inventory cloud resources from approved GCP projects and may expose environment details in generated inventory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only or short-lived credentials, restrict discovery to operator-approved projects, and review generated inventory before sharing it outside the environment.
+
+Risk: GCP credential material could be mishandled if copied into chat or written to unintended locations.
+
+Mitigation: Keep credentials in the operator environment, do not paste private keys or tokens into chat, and confirm the inventory output path before running discovery.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/msaad00/skills/agent-bom-discover-gcp)
+- [agent-bom Project Homepage](https://github.com/msaad00/agent-bom)
+- [agent-bom on PyPI](https://pypi.org/project/agent-bom/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON inventory output paths]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces operator-selected inventory JSON and optional local agent-bom scan findings when requested.]
+
+## Skill Version(s):
+
+0.99.0 (source: server release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,54 @@
-## Description: <br>
-Harvest every ponytail: shortcut comment into one debt ledger, so deferrals get tracked instead of forgotten. One-shot report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Harvests ponytail shortcut comments into a debt ledger so deliberate deferrals stay visible instead of being forgotten.
 
-## Publisher: <br>
-[dietrichgebert](https://clawhub.ai/user/dietrichgebert) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dietrichgebert](https://clawhub.ai/user/dietrichgebert)
 
-## Use Case: <br>
-Developers and engineers use this skill to scan a repository for deliberate `ponytail:` shortcut comments and turn them into a grouped debt ledger. It helps teams track ceilings, upgrade triggers, and missing trigger information without changing source files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The ledger may omit debt markers if a repository uses comment prefixes beyond the documented grep pattern. <br>
-Mitigation: Extend the search pattern for the repository's languages before treating the ledger as complete. <br>
-Risk: Rows without an upgrade trigger can silently become stale process debt. <br>
-Mitigation: Review entries tagged no-trigger and add a concrete revisit trigger before relying on the ledger for planning. <br>
-Risk: Persisting the ledger writes a new repository file when explicitly requested. <br>
-Mitigation: Review the requested output path and generated markdown before committing it. <br>
+## Use Case:
 
+Developers and maintainers use this skill to scan a repository for `ponytail:` debt markers and turn matching comments into a concise ledger with file locations, ceilings, upgrade triggers, and no-trigger counts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dietrichgebert/skills/ponytail-debt) <br>
-- [Homepage](https://github.com/DietrichGebert/ponytail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, shell commands, files] <br>
-**Output Format:** [Markdown ledger with repository file and line references; optionally a persisted markdown file when requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports marker totals and tags entries with missing upgrade triggers as no-trigger.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.8.4 (source: server release metadata) <br>
+Risk: Repository comments may contain sensitive implementation details that appear in the generated ledger.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the skill only where showing matching source comments is acceptable, and review the report before sharing it.
+
+Risk: Persisting the ledger writes a file when explicitly requested.
+
+Mitigation: Confirm the destination and generated content before asking the agent to save a ledger file.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/DietrichGebert/ponytail)
+- [ClawHub skill page](https://clawhub.ai/dietrichgebert/skills/ponytail-debt)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown-style ledger with file and line references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [One-shot report; optional ledger file only when explicitly requested.]
+
+## Skill Version(s):
+
+4.9.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

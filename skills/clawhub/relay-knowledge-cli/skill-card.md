@@ -1,5 +1,5 @@
 ## Description: <br>
-Relay Knowledge CLI guides agents in using the local relay-knowledge CLI for repository indexing, knowledge graph queries, GraphRAG retrieval, code graph navigation, impact analysis, diagnostics, and upgrade checks. <br>
+Relay Knowledge CLI guides agents to use the local relay-knowledge CLI for repository indexing, knowledge graph ingestion, GraphRAG queries, code graph search, feature flag analysis, impact analysis, and diagnostics. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering agents use this skill to index local repositories, query code and software graphs, inspect feature flags, run diagnostics, and manage knowledge-map workflows through the relay-knowledge CLI. <br>
+Developers and agent operators use this skill to help agents run relay-knowledge CLI workflows for local repository indexing, code and software graph queries, GraphRAG retrieval, feature flag analysis, impact analysis, setup diagnostics, and install or upgrade checks. It is intended for CLI-based repository knowledge work and explicitly keeps protocol integrations such as MCP and ACP out of scope. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to index and query local repositories and maintain local runtime state. <br>
-Mitigation: Use scoped repository paths or a temporary RELAY_KNOWLEDGE_HOME for tests, and review install, service, write, and knowledge-map mutation commands before execution. <br>
-Risk: Large repository indexing and service workflows can run as durable background tasks. <br>
-Mitigation: Inspect status before retrying, let managed services drain active tasks when present, and use bounded worker attempts for queued or retrying tasks. <br>
+Risk: Repository indexing may read private source code and store derived indexes in relay-knowledge runtime state. <br>
+Mitigation: Use narrow repository paths, isolated temporary homes for tests, local deterministic backends where appropriate, and remove temporary runtime state after smoke checks. <br>
+Risk: Running an untrusted or incompatible relay-knowledge binary could expose local repository content or produce misleading diagnostics. <br>
+Mitigation: Prefer a bundled asset only after its version check succeeds, otherwise use a trusted published release or Cargo install path and verify release archives when downloading. <br>
+Risk: Large indexing tasks can continue beyond command-runner timeouts and leave active leases or queued work. <br>
+Mitigation: Inspect repo status, let managed services drain active work, wait for lease recovery when needed, and use bounded index-worker attempts for queued or retrying tasks. <br>
 
 
 ## Reference(s): <br>
-- [Relay Knowledge homepage](https://github.com/coolplayagent/relay-knowledge) <br>
-- [ClawHub skill page](https://clawhub.ai/stevetdp/relay-knowledge-cli) <br>
-- [CLI workflows](references/cli-workflows.md) <br>
-- [Knowledge map workflows](references/knowledge-map-workflows.md) <br>
+- [Relay Knowledge GitHub Homepage](https://github.com/coolplayagent/relay-knowledge) <br>
+- [ClawHub Skill Page](https://clawhub.ai/stevetdp/skills/relay-knowledge-cli) <br>
+- [CLI Workflows](references/cli-workflows.md) <br>
+- [Knowledge Map Workflows](references/knowledge-map-workflows.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON-oriented CLI workflows] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands and JSON-oriented CLI examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prefers machine-readable JSON command output, scoped repository paths, and temporary RELAY_KNOWLEDGE_HOME for isolated tests.] <br>
+**Other Properties Related to Output:** [Emphasizes machine-readable CLI output with --format json and status-driven handling for long-running local indexing tasks.] <br>
 
 ## Skill Version(s): <br>
-1.1.12 (source: server release metadata and skill metadata) <br>
+1.1.13 (source: evidence release, skill metadata, target metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

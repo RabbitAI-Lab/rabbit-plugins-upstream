@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 InvAssistant — 数据获取模块
 统一的 Yahoo Finance 数据获取，包含 429 重试和限流延迟。

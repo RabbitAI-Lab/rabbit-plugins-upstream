@@ -1,0 +1,99 @@
+{
+  "skill": "cyclone-damage-assessment",
+  "skill_version": "1.0.0",
+  "command": "cyclone-damage-assessment --bbox 120 25 121 26 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-03T12:06:41.058898Z",
+  "finished_at": "2026-08-03T12:06:41.189749Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "bbox": [
+      120.0,
+      25.0,
+      121.0,
+      26.0
+    ],
+    "vmax": 50.0,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\wind_speed.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        120.0,
+        25.0,
+        121.0,
+        26.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\damage_ratio.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        120.0,
+        25.0,
+        121.0,
+        26.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\loss.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        120.0,
+        25.0,
+        121.0,
+        26.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\cyclone_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "max_wind_ms": 50.0,
+    "mean_damage_ratio": 0.5037267208099365,
+    "total_loss": 2804106.0,
+    "total_exposure": 5566999.0,
+    "loss_ratio": 0.5037015676498413
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "cyclone-damage-assessment"
+  },
+  "error": null
+}

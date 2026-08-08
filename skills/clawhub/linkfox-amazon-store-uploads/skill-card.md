@@ -1,47 +1,66 @@
-## Description: <br>
-亚马逊店铺文件上传技能，通过 LinkFox 网关调用 Amazon SP-API Uploads API v2020-11-01 创建上传目的地，并将文件上传到返回的 URL 以供 A+ Content、Messaging 等后续 API 使用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates Amazon SP-API Uploads API destinations through LinkFox, computes or accepts contentMD5 values, uploads files to returned upload URLs, and guides authentication or billing recovery when needed.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External developers and marketplace operators use this skill to create Amazon SP-API upload destinations, compute or provide contentMD5 values, and upload binary files for downstream A+ Content or Messaging workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Full upload and API responses, including presigned URLs, headers, upload IDs, or seller metadata, may be saved in the workspace linkfox session directory. <br>
-Mitigation: Run the skill only in workspaces where those saved JSON files are acceptable, restrict access to the workspace, and delete the saved response files after use when they contain sensitive data. <br>
-Risk: Uploads depend on LinkFox API credentials and Amazon store authorization state. <br>
-Mitigation: Use the required LinkFox API key environment variable and the companion Amazon store auth skill only in approved environments; rotate or revoke credentials if response files or shell history expose sensitive values. <br>
-Risk: The uploaded bytes must match the contentMD5 used when creating the Amazon upload destination. <br>
-Mitigation: Prefer filePath or contentBase64 inputs that allow the script to compute contentMD5, or verify the Base64 MD5 manually before uploading. <br>
+## Use Case:
 
+External developers, operators, and agents use this skill to prepare binary files for Amazon A+ Content, Messaging, or similar workflows by creating upload destinations and PUT-uploading matching bytes. It is intended for users who already have an Amazon seller context, a LinkFox API key, and the companion store-auth skill for seller and region selection.
 
-## Reference(s): <br>
-- [linkfox-amazon-store-uploads API reference](references/api.md) <br>
-- [Amazon SP-API createUploadDestinationForResource](https://developer-docs.amazon.com/sp-api/reference/createuploaddestinationforresource) <br>
-- [Amazon SP-API create an upload destination](https://developer-docs.amazon.com/sp-api/docs/create-an-upload-destination) <br>
-- [Amazon SP-API Messaging API reference](https://developer-docs.amazon.com/sp-api/docs/messaging-api-v1-reference) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-uploads) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/linkfox-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples and shell commands; scripts emit JSON responses or summaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts save full API/upload responses under a local linkfox session directory and print full JSON or a concise summary depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill handles Amazon store workflow data and upload destinations through LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when LinkFox is trusted for the relevant Amazon seller workflow and verify sellerId, region, marketplaceId, resource, contentMD5, and contentType before execution.
+
+Risk: Authentication flows can request phone/SMS login and generate or expose LinkFox API keys.
+
+Mitigation: Use onboarding commands only after the user explicitly initiates them, keep API keys out of shared logs, and prefer environment-variable configuration over pasting keys into prompts.
+
+Risk: Billing flows can list paid plans and create payment orders.
+
+Mitigation: Run payment commands only with explicit user consent, confirm the selected plan and payment method before order creation, and avoid polling payment status automatically.
+
+Risk: Saved response files may contain sensitive upload URLs, headers, order data, or other workflow details.
+
+Mitigation: Review the ./linkfox session output directory after use and remove persisted files when the workspace should not retain that data.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-uploads)
+- [API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [Amazon createUploadDestinationForResource](https://developer-docs.amazon.com/sp-api/reference/createuploaddestinationforresource)
+- [Amazon Create an upload destination](https://developer-docs.amazon.com/sp-api/docs/create-an-upload-destination)
+- [Amazon Messaging API reference](https://developer-docs.amazon.com/sp-api/docs/messaging-api-v1-reference)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON stdout, and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Default script behavior saves full JSON responses under ./linkfox/<date>/<session>/data; small responses are printed in full, large responses are summarized unless --inline is used.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

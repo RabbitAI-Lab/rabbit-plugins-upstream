@@ -1,0 +1,14 @@
+name: geoskill-viewshed-analysis
+display_name: 视域分析
+description: |
+  基于DEM的视线分析，含地球曲率修正和多观察点叠加
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-viewshed-analysis.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - dem
+  - gis
+  - remote-sensing
+  - terrain

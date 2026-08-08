@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/aws-toolkit",
   "slug": "aws-toolkit",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1784868434152,
-  "contentHash": "3e986d20ae027dc7073c89e559d3bdee653956d11c897de0363f67157c0226b6",
-  "fetchedAt": "2026-07-26T18:06:06.080Z"
+  "version": "1.0.2",
+  "updatedAt": 1785663897636,
+  "contentHash": "f4e1af2b696e104264c435b4f33fe9d1a50acfefea0bed88dfadbe85448d5157",
+  "fetchedAt": "2026-08-08T08:27:09.032Z"
 }

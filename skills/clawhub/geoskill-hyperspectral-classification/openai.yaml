@@ -1,0 +1,15 @@
+name: geoskill-hyperspectral-classification
+display_name: 高光谱分类
+description: |
+  PCA降维+RF/SVM逐像元高光谱监督分类
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-hyperspectral-classification.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - lidar
+  - machine-learning
+  - point-cloud
+  - remote-sensing

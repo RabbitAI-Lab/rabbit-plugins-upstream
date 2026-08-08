@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/easyeda-agent",
   "slug": "easyeda-agent",
   "ownerHandle": null,
-  "version": "0.18.0",
-  "updatedAt": 1784734220034,
-  "contentHash": "96d7c2e6e2d4e05797795131a1f75e88d11c3aa477715541f619ad5df338dcdd",
-  "fetchedAt": "2026-07-26T18:07:56.119Z"
+  "version": "0.21.4",
+  "updatedAt": 1786100305382,
+  "contentHash": "e2ae483347033d8d52dcb23c4d83c72a1104b15087b3546a29e62c9435619da2",
+  "fetchedAt": "2026-08-08T08:07:20.121Z"
 }

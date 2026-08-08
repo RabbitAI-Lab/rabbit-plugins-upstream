@@ -14,13 +14,13 @@
 
 ## 预算与 ROI 自控
 
-| 场景 | 自动动作（摘要） | SOP（只读这一份） |
-| ---- | ---------------- | ----------------- |
-| 单日预算熔断 | 当日花费相对日预算达阈值 → 暂停系列 | `references/operations/hosted-automation-self-control.md` |
+| 场景 | 自动动作（摘要） | 首选 CLI / SOP（只读一份） |
+| ---- | ---------------- | -------------------------- |
+| 单日预算熔断 | 当日花费相对日预算达阈值 → 暂停系列 | **首选** `references/operations/guard.md`（`guard budget-circuit`）；细节/单户排障见 `hosted-automation-self-control.md` |
 | CPA 飙升自动降价 | 窗内 CPA 超目标 → 下调出价上限 | `references/operations/hosted-automation-optimize-weak-downbid.md` |
-| 连续空耗自动暂停 | 当日花费达阈值且 0 转化 → 暂停组/创意；宿主发 **告警P1**「空耗熔断」 | `references/operations/hosted-automation-self-control.md` |
+| 连续空耗自动暂停 | 当日花费达阈值且 0 转化 → 暂停组/创意；宿主发 **告警P1**「空耗熔断」 | **首选** `references/operations/guard.md`（`guard zero-conv`）；细节见 `hosted-automation-self-control.md` |
 
-> **消耗 ≠ 日消耗**：`spend` 为 `--start`～`--end` 合计。单日熔断须 `start=end=当日`；续航日均用 `balance-scan.dailySpend`。
+> **消耗 ≠ 日消耗**：`spend` 为 `--start`～`--end` 合计。`guard` 命令已强制 `--date` 单日；手写 `ad campaigns` 时须 `start=end=当日`。续航日均用 `balance-scan.dailySpend`。
 
 ## 异常监控
 

@@ -1,0 +1,13 @@
+name: geoskill-llm-spatial-query
+display_name: LLM空间查询
+description: |
+  自然语言规则解析+geopandas空间查询，输出查询结果GeoJSON（离线numpy等价实现）
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-llm-spatial-query.py
+runtime: python>=3.9
+tags:
+  - ai
+  - gis
+  - remote-sensing
+  - vector

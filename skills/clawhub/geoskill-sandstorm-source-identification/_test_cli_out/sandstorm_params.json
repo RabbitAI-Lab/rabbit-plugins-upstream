@@ -1,0 +1,11 @@
+{
+  "source": "synthetic",
+  "threshold": 6.0,
+  "ndvi_thresh": 0.15,
+  "bare_thresh": 0.5,
+  "wind_dir_deg": 270.0,
+  "receptor_rc": [
+    32.0,
+    32.0
+  ]
+}

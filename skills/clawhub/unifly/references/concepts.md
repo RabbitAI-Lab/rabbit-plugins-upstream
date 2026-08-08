@@ -40,12 +40,17 @@ The default site is named `default`.
 
 ### Device States
 
-- **ONLINE**: Device is connected and operating normally
-- **OFFLINE**: Device is unreachable
-- **PENDING**: Device discovered but not yet adopted
-- **ADOPTING**: Adoption in progress
-- **UPGRADING**: Firmware upgrade in progress
-- **PROVISIONING**: Configuration being applied
+JSON output serializes states in PascalCase — match these exact strings
+in `jq` filters (`select(.state == "Online")`, not `"ONLINE"`):
+
+- **Online**: Device is connected and operating normally
+- **Offline**: Device is unreachable
+- **PendingAdoption**: Device discovered but not yet adopted
+- **Adopting**: Adoption in progress
+- **Updating**: Firmware upgrade in progress
+- **GettingReady**: Configuration being applied
+- Also possible: **Deleting**, **ConnectionInterrupted**, **Isolated**,
+  **Unknown**
 
 ## Dual-API Architecture
 
@@ -92,11 +97,12 @@ Hybrid is still the safest default when you need live WebSocket features
 
 ## Command Authentication Gate Matrix
 
-Only Integration-only commands call `ensure_integration_access`. Session-backed
-commands fail naturally when the session client is unavailable. On UniFi OS,
-API key mode instantiates both the Integration client and a session HTTP
-client, so most HTTP commands work without username/password. Use this
-matrix to pick the right `auth_mode`.
+Integration-only commands call `ensure_integration_access`, and most
+session-backed commands call `ensure_session_access`, both producing a
+clear auth-mode error; a few (countries, radius, wans) surface a plain
+client error instead. On UniFi OS, API key mode instantiates both the
+Integration client and a session HTTP client, so most HTTP commands work
+without username/password. Use this matrix to pick the right `auth_mode`.
 
 ### Integration API required (API key)
 
@@ -105,7 +111,6 @@ matrix to pick the right `auth_mode`.
 - `firewall policies` (all subcommands)
 - `firewall zones` (all subcommands)
 - `hotspot` (list/get/create/delete/purge)
-- `nat policies` (list/get/create/delete)
 - `networks` (list/get/create/update/delete/refs)
 - `traffic-lists` (list/get/create/update/delete)
 - `wans` (list)
@@ -125,6 +130,8 @@ matrix to pick the right `auth_mode`.
 - `clients wifi <ip>`: `/v2/api/site/{site}/wifiman/{ip}/`
 - `devices` adopt, remove, restart, locate, port-cycle, upgrade, provision,
   speedtest (all route through `cmd/devmgr` and `cmd/stamgr`)
+- `devices ports`, `devices ports-export`, `devices port-set`: switch port
+  overrides via `/rest/device/{id}` (`port_overrides`)
 - `clients` authorize, unauthorize, block, unblock, kick, forget (via
   `cmd/stamgr`)
 - `dpi status | enable | disable`: `/set/setting/dpi`
@@ -139,6 +146,7 @@ matrix to pick the right `auth_mode`.
 - `vpn peers` (list/get/create/update/delete/subnets): `/v2/api/site/{site}/wireguard/*/users`
 - `vpn magic-site-to-site` (list/get): `/v2/api/site/{site}/magicsitetositevpn/configs`
 - `vpn settings` (list/get/set/patch): `/rest/setting`
+- `settings` (list/get/set/export): `/rest/setting`
 - `wifi neighbors`: `/stat/rogueap`
 - `wifi channels`: `/stat/current-channel`
 - `nat policies` (list/get/create/update/delete): Session v2 API
@@ -161,6 +169,14 @@ falls back to polling when no session cookie is available.
 - `clients find`: inherits the merged view
 - `devices list`: Integration fetch, Session API `num_sta` merged by MAC
 - `topology`: depends on merged `uplink_device_mac` for tree construction
+
+### Site Manager cloud (cloud auth mode)
+
+- `cloud hosts | sites | devices | isp | sdwan | switch`: direct calls to
+  the Site Manager fleet API at `api.ui.com/v1/`; no controller connection
+  needed. With `auth_mode = "cloud"`, Integration-backed commands tunnel
+  through the cloud connector; Session-only commands still need direct
+  controller access.
 
 ### Raw API escape hatch
 
@@ -195,8 +211,11 @@ falls back to polling when no session cookie is available.
    `clients wifi`), admin operations, and enriched `clients list` /
    `devices list`. Live `events watch` still will not.
 2. **"I have username + password only"** → `auth_mode = "session"`. Events,
-   stats, device commands work. Modern entities (DNS policies, NAT policies,
-   traffic lists, ACL) require Integration and will fail.
+   stats, device commands, NAT policies, firewall groups, switch port
+   config-as-code (`devices ports / ports-export / port-set`), and site
+   `settings` all work. Modern Integration entities (DNS policies, traffic
+   lists, ACL, firewall policies and zones) require Integration and will
+   fail.
 3. **"I have both"** → `auth_mode = "hybrid"`. Recommended when the task
    needs live WebSocket streaming or maximum controller compatibility.
 4. **"Agent will manage multiple sites/controllers"** → Use named profiles
@@ -233,8 +252,10 @@ over CLI flags when running in automation contexts:
 | `UNIFI_INSECURE` | `1` to accept self-signed TLS certs                  |
 | `UNIFI_TIMEOUT`  | Request timeout in seconds                           |
 | `UNIFI_TOTP`     | One-time password for MFA-protected accounts         |
+| `UNIFI_HOST_ID`  | Site Manager console/host ID for cloud mode          |
+| `UNIFI_DEMO`     | `1` to sanitize PII in output (demo mode)            |
 | `NO_COLOR`       | Standard no-color flag (respected by output painter) |
-| `UNIFLY_THEME`   | TUI theme name (TUI only, not CLI)                   |
+| `UNIFLY_THEME`   | Color theme name for both CLI output and the TUI     |
 
 Resolution priority (highest wins): CLI flags > environment variables >
 config file > built-in defaults.
@@ -319,14 +340,14 @@ control traffic between zone pairs.
 Built-in zones:
 
 - **Internal**: LAN networks
-- **External**:WAN/Internet traffic
+- **External**: WAN/Internet traffic
 - **DMZ**: Public-facing services
 - **VPN**: VPN-originated traffic
 - **Hotspot**: Guest/hotspot networks
 
 Policies define rules between source and destination zones:
 
-- **Action**:`ALLOW`, `BLOCK`, `REJECT`
+- **Action**: `ALLOW`, `BLOCK`, `REJECT`
 - **Direction**: Implied by zone pair
 - **Logging**: Optional rule-level logging
 - **Order**: First match wins; ordering matters
@@ -380,7 +401,7 @@ archive-all`.
 
 `unifly stats` pulls from Session API report endpoints. Supported intervals:
 
-- `5minute`: High resolution, short retention window
+- `5m`: High resolution, short retention window
 - `hourly`: Medium resolution
 - `daily`: Long-term trends
 - `monthly`: Capacity planning
@@ -410,7 +431,7 @@ Common failures and how to diagnose them:
 | `profile 'foo' not found`                     | No matching profile in config                            | Run `unifly config profiles` to list        |
 | `keyring error`                               | Keyring daemon not running (Linux)                       | Unlock keyring or use plaintext config      |
 | `Integration filter parse error`              | Bad filter DSL syntax                                    | Check `.eq('x')`, `.contains('y')` form     |
-| Empty `clients list` wireless/bytes fields    | Integration-only mode                                    | Switch to Hybrid for enriched fields        |
+| Empty `clients list` wireless/bytes fields    | No session HTTP access (non-UniFi-OS, integration mode)  | API key on UniFi OS or `hybrid` mode        |
 | Silent result truncation (25 rows)            | Default list limit                                       | Pass `--all` or `--limit 200`               |
 
 ## Limits and Known Gaps

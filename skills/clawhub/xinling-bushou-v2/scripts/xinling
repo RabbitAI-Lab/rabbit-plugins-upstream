@@ -1,0 +1,376 @@
+#!/usr/bin/env python3
+"""
+心灵补手 V3.5.0 - 命令行工具
+
+用法:
+    xinling list                    # 列出所有人格
+    xinling check                   # 健康检查（验证所有人格可加载）
+    xinling show <persona_id>       # 显示人格详情
+    xinling activate <persona_id>    # 激活人格（生成激活命令）
+    xinling add <persona_id> <file> # 添加新人格
+    xinling test <persona_id>       # 测试人格
+"""
+
+import sys
+import json
+import argparse
+from pathlib import Path
+
+# 添加项目根目录到路径
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
+from core.persona_engine import PersonaEngine, PersonaLoadError
+from core.persona_registry import PersonaRegistry
+from schemas.launch_config import RelationshipMode
+
+
+VERSION = "3.5.0"
+
+
+def cmd_list(engine: PersonaEngine):
+    """列出所有人格"""
+    personas = engine.registry.list_personas()
+    print(f"\n{'='*50}")
+    print(f"  心灵补手 V{VERSION} - 已注册人格")
+    print(f"{'='*50}\n")
+
+    for pid in personas:
+        info = engine.registry.get_persona_info(pid)
+        name = info.get('name', pid)
+        desc = info.get('description', 'N/A')
+        tags = ', '.join(info.get('tags', []))
+        print(f"  [{pid}]")
+        print(f"    名称: {name}")
+        print(f"    描述: {desc}")
+        print(f"    标签: {tags}")
+        print()
+
+    print(f"共 {len(personas)} 个人格\n")
+
+
+def cmd_check(engine: PersonaEngine):
+    """健康检查 - 验证所有人格可加载 (V3.5.0)"""
+    print(f"\n{'='*50}")
+    print(f"  心灵补手 V{VERSION} 健康检查")
+    print(f"{'='*50}\n")
+
+    r = engine.health_check()
+    print(f"总人格: {r['total']} | 可正常加载: {r['ok']} | 失败: {len(r['failed'])}\n")
+
+    if r["failed"]:
+        for f in r["failed"]:
+            print(f"❌ {f['persona_id']}: {f['error']}")
+            if f["hint"]:
+                print(f"   💡 {f['hint']}")
+        print("\n⚠️ 有失败项，请根据提示修复。")
+        return 1
+    else:
+        print("✅ 所有人格均可正常加载激活，系统健康！")
+        return 0
+
+
+def cmd_show(engine: PersonaEngine, persona_id: str):
+    """显示人格详情"""
+    try:
+        persona = engine.load_persona(persona_id)
+    except PersonaLoadError as e:
+        print(e.friendly())
+        return 1
+
+    meta = persona.get('meta', {})
+    identity = persona.get('identity', {})
+    behavior = persona.get('behavior', {})
+
+    print(f"\n{'='*50}")
+    print(f"  人格详情: {meta.get('name', persona_id)}")
+    print(f"{'='*50}\n")
+
+    print(f"ID: {meta.get('id')}")
+    print(f"名称: {meta.get('name')}")
+    print(f"描述: {meta.get('description')}")
+    print(f"版本: {meta.get('version')}")
+    print(f"标签: {', '.join(meta.get('tags', []))}")
+    print()
+
+    print(f"人称:")
+    print(f"  第一人称: {identity.get('pronouns', {}).get('first_person')}")
+    print(f"  第二人称: {identity.get('pronouns', {}).get('second_person')}")
+    print()
+
+    print(f"行为配置:")
+    print(f"  谄媚程度: {behavior.get('level')}/10")
+    print(f"  关系模式: {behavior.get('relationship_mode')}")
+    print(f"  触发关键词: {', '.join(behavior.get('activation', {}).get('trigger_keywords', []))}")
+    print()
+
+    # 能力边界 (V3.5.0)
+    limitations = persona.get('limitations') or meta.get('limitations') or []
+    if limitations:
+        print("能力边界:")
+        for lim in limitations:
+            print(f"  ⚠️ {lim}")
+        print()
+
+    # 显示示例话术
+    phrases = persona.get('phrases', {}).get('seeds', {})
+    if 'task_completed' in phrases:
+        print("示例话术 (任务完成):")
+        for level in ['1-3', '4-6', '7-9', '10']:
+            if level in phrases['task_completed']:
+                example = phrases['task_completed'][level][0]
+                print(f"  L{level}: {example}")
+
+    print()
+
+
+def cmd_activate(engine: PersonaEngine, persona_id: str, level: int = None):
+    """激活人格"""
+    override = {}
+    if level:
+        override = {"behavior": {"level": level}}
+
+    try:
+        compiled = engine.activate_persona(
+            session_id="cli_activate",
+            persona_id=persona_id,
+            relationship=RelationshipMode.STACK,
+            override_config=override if override else None
+        )
+    except PersonaLoadError as e:
+        print(e.friendly())
+        return 1
+
+    print(f"\n{'='*50}")
+    print(f"  人格激活成功")
+    print(f"{'='*50}\n")
+
+    print(f"人格ID: {compiled.id}")
+    print(f"名称: {compiled.name}")
+    print(f"谄媚程度: {compiled.level}/10")
+    print(f"关系模式: {compiled.relationship.value}")
+    print()
+
+    # 能力边界提示
+    limitations = compiled.metadata.get('limitations') or []
+    if limitations:
+        print("⚠️ 能力边界提示:")
+        for lim in limitations:
+            print(f"  - {lim}")
+        print()
+
+    print("生成的人格片段:")
+    print("-" * 40)
+    print(compiled.fragment)
+    print("-" * 40)
+    print()
+
+    # 生成OpenClaw调用示例
+    print("OpenClaw 调用示例:")
+    print("-" * 40)
+    print(f'sessions_spawn("{compiled.id}_session", ')
+    print(f'    runtime="subagent",')
+    print(f'    persona_id="{compiled.id}",')
+    print(f'    extra_system_content="""{compiled.fragment}"""')
+    print(")")
+    print()
+
+
+def cmd_add(engine: PersonaRegistry, persona_id: str, file_path: str):
+    """添加新人格"""
+    file_path = Path(file_path)
+
+    if not file_path.exists():
+        print(f"错误: 文件 '{file_path}' 不存在")
+        return 1
+
+    # 读取并验证JSON
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            persona_data = json.load(f)
+    except json.JSONDecodeError as e:
+        print(f"错误: JSON格式无效 - {e}")
+        return 1
+
+    # 检查必要字段
+    if 'meta' not in persona_data and 'name' not in persona_data:
+        print("错误: 人格定义缺少 meta 或 name 字段")
+        return 1
+
+    # 确定人格ID
+    actual_id = persona_data.get('meta', {}).get('id', persona_id)
+    if actual_id != persona_id:
+        print(f"警告: 文件中的ID '{actual_id}' 与指定的ID '{persona_id}' 不匹配")
+        actual_id = persona_id
+
+    # 保存到注册目录
+    target_dir = Path.home() / ".xinling-bushou-v2" / "personas"
+    target_dir.mkdir(parents=True, exist_ok=True)
+
+    target_file = target_dir / f"{actual_id}.json"
+
+    # 如果是scholar格式，转换为标准格式
+    if 'meta' not in persona_data:
+        # scholar格式，转换为标准格式
+        persona_data = {
+            "meta": {
+                "id": actual_id,
+                "name": persona_data.get('name', actual_id),
+                "version": "3.5.0",
+                "author": "ace",
+                "description": persona_data.get('description', ''),
+                "tags": ["flattering", "v3"],
+                "compatible_with": ["openclaw"]
+            },
+            "identity": {
+                "emoji": "📜",
+                "role": persona_data.get('name', '心灵补手'),
+                "pronouns": {
+                    "first_person": persona_data.get('pronouns', {}).get('self', '在下'),
+                    "second_person": persona_data.get('pronouns', {}).get('master', '先生')
+                }
+            },
+            "behavior": {
+                "relationship_mode": "stack",
+                "level": 5,
+                "tone": persona_data.get('description', ''),
+                "activation": {
+                    "trigger_keywords": ["完成", "搞定了", "解决了", "好", "棒", "厉害"],
+                    "always_on": False,
+                    "auto_activate": True
+                }
+            },
+            "phrases": persona_data.get('phrases', {}),
+            "limitations": persona_data.get('limitations', [])
+        }
+
+    with open(target_file, 'w', encoding='utf-8') as f:
+        json.dump(persona_data, f, ensure_ascii=False, indent=2)
+
+    # 更新注册表
+    engine.register_persona(
+        persona_id=actual_id,
+        file_path=f"personas/{actual_id}.json",
+        name=persona_data['meta'].get('name', actual_id),
+        description=persona_data['meta'].get('description', ''),
+        tags=persona_data['meta'].get('tags', []),
+        version=persona_data['meta'].get('version', '3.5.0')
+    )
+
+    print(f"\n✅ 人格 '{actual_id}' 添加成功!")
+    print(f"   文件: {target_file}")
+    print()
+
+
+def cmd_test(engine: PersonaEngine, persona_id: str):
+    """测试人格"""
+    print(f"\n{'='*50}")
+    print(f"  人格测试: {persona_id}")
+    print(f"{'='*50}\n")
+
+    try:
+        persona = engine.load_persona(persona_id)
+    except PersonaLoadError as e:
+        print(e.friendly())
+        return 1
+
+    # 测试激活
+    compiled = engine.activate_persona(
+        session_id="test_session",
+        persona_id=persona_id,
+        relationship=RelationshipMode.STACK
+    )
+
+    print(f"✅ 加载成功")
+    print(f"✅ 激活成功")
+    print(f"✅ 生成片段长度: {len(compiled.fragment)} 字符")
+    print()
+
+    # 测试各个场景的话术
+    phrases = persona.get('phrases', {}).get('seeds', {})
+    scenes = ['task_completed', 'share_good_news', 'general_praise']
+
+    print("话术测试:")
+    for scene in scenes:
+        if scene in phrases:
+            print(f"\n  [{scene}]")
+            for level in ['1-3', '4-6', '7-9', '10']:
+                if level in phrases[scene]:
+                    examples = phrases[scene][level][:2]
+                    for ex in examples:
+                        print(f"    L{level}: {ex}")
+
+    print(f"\n✅ 所有测试通过!\n")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description=f"心灵补手 V{VERSION} - 子代理人格赋予工具",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+示例:
+    xinling list                      列出所有人格
+    xinling check                     健康检查（推荐安装后先跑）
+    xinling show taijian              显示大太监人格详情
+    xinling activate taijian 8        激活大太夫人格(程度8)
+    xinling add songzhiwen corpus/scholar_full.json  添加宋之问人格
+    xinling test taijian              测试大太夫人格
+        """
+    )
+
+    subparsers = parser.add_subparsers(dest='command', help='子命令')
+
+    # list 命令
+    subparsers.add_parser('list', help='列出所有人格')
+
+    # check 命令 (V3.5.0)
+    subparsers.add_parser('check', help='健康检查（验证所有人格可加载）')
+
+    # show 命令
+    show_parser = subparsers.add_parser('show', help='显示人格详情')
+    show_parser.add_argument('persona_id', help='人格ID')
+
+    # activate 命令
+    activate_parser = subparsers.add_parser('activate', help='激活人格')
+    activate_parser.add_argument('persona_id', help='人格ID')
+    activate_parser.add_argument('--level', '-l', type=int, help='谄媚程度(1-10)')
+
+    # add 命令
+    add_parser = subparsers.add_parser('add', help='添加新人格')
+    add_parser.add_argument('persona_id', help='人格ID')
+    add_parser.add_argument('file', help='人格定义JSON文件')
+
+    # test 命令
+    test_parser = subparsers.add_parser('test', help='测试人格')
+    test_parser.add_argument('persona_id', help='人格ID')
+
+    args = parser.parse_args()
+
+    if not args.command:
+        parser.print_help()
+        return 0
+
+    # 初始化引擎
+    base_dir = Path.home() / ".xinling-bushou-v2"
+    registry = PersonaRegistry(base_dir)
+    engine = PersonaEngine(base_dir)
+
+    # 执行命令
+    if args.command == 'list':
+        cmd_list(engine)
+    elif args.command == 'check':
+        return cmd_check(engine)
+    elif args.command == 'show':
+        cmd_show(engine, args.persona_id)
+    elif args.command == 'activate':
+        level = args.level if hasattr(args, 'level') else None
+        cmd_activate(engine, args.persona_id, level)
+    elif args.command == 'add':
+        cmd_add(registry, args.persona_id, args.file)
+    elif args.command == 'test':
+        cmd_test(engine, args.persona_id)
+
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())

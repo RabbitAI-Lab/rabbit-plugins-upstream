@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, prompt authors, and AI reviewers use this skill to score, audit, lint, compare, and diagnose prompts before relying on them in production or cross-model workflows. It produces static quality and compatibility assessments without claiming measured runtime performance. <br>
+Developers, prompt engineers, and agent builders use this skill to statically score, audit, compare, and improve prompts before relying on them in production workflows. It helps separate general prompt quality from target-model compatibility and marks dynamic runtime metrics as not measured unless runtime evidence is supplied. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may read prompt files explicitly provided for analysis. <br>
-Mitigation: Only provide prompts and files intended for local review, and handle sensitive prompt content according to the user's data policy. <br>
-Risk: The bundled Python lint script may be executed during analysis. <br>
-Mitigation: Run the script only from the reviewed artifact in a trusted local environment; server security evidence reports no hidden network calls, credential handling, persistence, or destructive behavior. <br>
-Risk: Static compatibility predictions can be mistaken for measured model performance. <br>
-Mitigation: Label runtime metrics such as accuracy, hallucination rate, latency, cost, and consistency as not measured unless a separate dynamic evaluation was actually run. <br>
+Risk: Prompt content provided for benchmarking will be read and analyzed by the agent workflow. <br>
+Mitigation: Only provide prompts and related files that the agent is allowed to inspect, and handle sensitive prompt content according to the deployment environment's data policy. <br>
+Risk: Static scores and compatibility predictions can be mistaken for measured runtime performance. <br>
+Mitigation: Keep static findings separate from dynamic metrics, label runtime metrics as not run unless tests were actually executed, and run representative dynamic evaluations before relying on performance claims. <br>
+Risk: Deterministic lint findings are heuristic leads and may overstate or miss semantic issues. <br>
+Mitigation: Confirm lint findings against the prompt text and use the bundled scoring rubric before treating a finding as final. <br>
 
 
 ## Reference(s): <br>
-- [Scoring Rubric](references/scoring-rubric.md) <br>
-- [Report Schema](references/report-schema.md) <br>
-- [Model Compatibility Assessment](references/model-compatibility.md) <br>
-- [Prompt Benchmark on ClawHub](https://clawhub.ai/margaretzybgl/skills/prompt-benchmark) <br>
+- [Model compatibility assessment](artifact/references/model-compatibility.md) <br>
+- [Report schema](artifact/references/report-schema.md) <br>
+- [Static Prompt Benchmark scoring rubric](artifact/references/scoring-rubric.md) <br>
+- [Prompt Benchmark ClawHub page](https://clawhub.ai/margaretzybgl/skills/prompt-benchmark) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown report by default, with JSON report output when requested and optional inline shell commands for local linting.] <br>
+**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance] <br>
+**Output Format:** [Markdown report or JSON report with optional inline shell command for deterministic linting] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Static benchmark output separates universal prompt quality from target-model compatibility and marks dynamic metrics as not run unless runtime evidence is supplied.] <br>
+**Other Properties Related to Output:** [Static assessment only; dynamic metrics are reported as not run unless runtime evidence is supplied.] <br>
 
 ## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+1.0.1 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
