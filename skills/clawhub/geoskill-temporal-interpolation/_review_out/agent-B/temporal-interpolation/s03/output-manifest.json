@@ -1,0 +1,61 @@
+{
+  "skill": "temporal-interpolation",
+  "skill_version": "1.0.0",
+  "command": "temporal-interpolation --bbox 116.39 39.90 116.40 39.91 --synthetic --quiet --output-dir _review_out\\agent-B\\temporal-interpolation\\s03",
+  "started_at": "2026-08-03T17:11:40.615819Z",
+  "finished_at": "2026-08-03T17:11:41.084340Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "method": "savgol",
+    "n_dates": 12,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out\\agent-B\\temporal-interpolation\\s03\\smoothed_series.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.39,
+        39.9,
+        116.4,
+        39.91
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 12,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out\\agent-B\\temporal-interpolation\\s03\\smoothing_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "savgol",
+    "n_dates": 12,
+    "overall_mean_before": 0.4660665690898895,
+    "overall_mean_after": 0.4669875204563141,
+    "rmse_noisy_vs_clean": 0.09591850638389587,
+    "rmse_smoothed_vs_clean": 0.07400086522102356
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "temporal-interpolation"
+  },
+  "error": null
+}

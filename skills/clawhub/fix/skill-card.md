@@ -1,48 +1,58 @@
-## Description: <br>
-A behavior-correction skill that responds to fix-oriented feedback by analyzing the mistake, improving the relevant behavioral prompt, rule, memory, or hook, and then resuming the current work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A behavior-correction skill that responds to fix-oriented feedback by analyzing an agent mistake, improving the relevant prompt, rule, memory, hook, or procedure, and then resuming the original task.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent operators use this skill when an agent repeats or risks repeating an operational mistake and needs a structured root-cause analysis, prevention update, and completion of the interrupted work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make durable changes to agent behavior by editing rules, memories, skill files, settings, or hooks. <br>
-Mitigation: Install it only when that persistent behavior-correction workflow is desired, prefer `--plan` for review, and inspect diffs before accepting changes. <br>
-Risk: The trigger phrases are broad enough that the skill may be invoked accidentally during ordinary feedback. <br>
-Mitigation: Invoke it intentionally with an explicit `fix:` or `/fix` command and avoid enabling automatic behavior changes from ambiguous feedback. <br>
-Risk: Changes under agent configuration directories or hook registrations can affect future sessions beyond the current task. <br>
-Mitigation: Review proposed edits under `~/.claude`, `~/.agents`, `~/.gemini`, settings files, and hooks, and use local scoping when the correction should not be global. <br>
+## Use Case:
 
+Developers and agent operators use this skill when a user reports that an agent made a process or behavior mistake. It guides root-cause analysis, prevention-medium updates, verification, and completion of the user's original work.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/fix) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
-- [Step 2 Improvement Guide](artifact/step2-improvement.md) <br>
-- [Step 3 Resume Guide](artifact/step3-resume.md) <br>
-- [Step 4 Wrap-up Guide](artifact/step4-wrapup.md) <br>
-- [Behavior Discipline Guide](artifact/behavior-discipline.md) <br>
-- [Ambiguity Guard Hook](artifact/resources/fix-and-ambiguity-guard.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with optional code, shell commands, configuration changes, and generated files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or modify persistent agent behavior artifacts such as rules, skill files, memory entries, settings, hooks, or plan documents when invoked without planning-only mode.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.8 (source: server release metadata) <br>
+Risk: The skill can make persistent, high-impact changes to agent behavior assets such as rules, settings, hooks, memories, task state, plugins, and project knowledge stores.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit /fix or fix: invocation, review proposed persistent changes before applying them, and keep shared-repository changes under normal code review.
+
+Risk: Broadly worded correction requests can trigger remediation work that changes more than the user intended.
+
+Mitigation: Clarify ambiguous fix targets before execution and prefer plan-only review for complex or cross-file changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/fix)
+- [Fix skill source](artifact/SKILL.md)
+- [Step 2 prompt improvement guidance](artifact/step2-improvement.md)
+- [Step 3 resume guidance](artifact/step3-resume.md)
+- [Step 4 wrap-up guidance](artifact/step4-wrapup.md)
+- [Behavior discipline guidance](artifact/behavior-discipline.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with optional shell commands, code or configuration edits, and saved plan artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce persistent changes to prompts, rules, hooks, memories, task state, plugins, project knowledge stores, or commits when the workflow calls for them.]
+
+## Skill Version(s):
+
+0.3.10 (source: server release evidence; changelog released 2026-08-05)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

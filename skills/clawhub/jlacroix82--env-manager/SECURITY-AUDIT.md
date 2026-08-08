@@ -11,8 +11,8 @@ The skill does not invoke a shell, run binaries, or start any external process. 
 
 ## Trust boundaries
 
-- **File writes** are limited to a project directory inside the agent workspace (`<workspace>/environments/<name>/`) and a state directory (`<workspace>/memory/environments/`).
-- **No runtime path redirection.** The skill does not read or accept `ENV_DIR` and does not support a `--dir` flag.
+- **File writes** are limited to a project directory inside the project workspace (repo root) — `<workspace>/environments/<name>/` — and a state directory (`<workspace>/memory/environments/`). An optional `ENV_MANAGER_WORKSPACE` env var can relocate the workspace, but only to a descendant of the repo root; paths outside the repo are rejected.
+- **No runtime path redirection via CLI.** The skill does not read or accept `ENV_DIR` and does not support a `--dir` flag. The only path override is the confined `ENV_MANAGER_WORKSPACE` env var described above.
 - **No network calls.** The skill does not perform HTTP, fetch, or DNS.
 - **No environment-variable consumption beyond `PATH`** for the binary allowlist (which only collects resolved paths, never executes them).
 

@@ -1,5 +1,5 @@
 ## Description: <br>
-Runs a Telegram-based AnthroVision body-scan workflow that validates inputs and consent, submits a video scan, polls status, and returns structured body measurements and waist-to-hip ratio. <br>
+Runs a Telegram-based body-scan measurement workflow that submits a user-provided video to AnthroVision, manages consent and status polling, and returns deterministic measurements and waist-to-hip ratio output. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agent operators use this skill to process a consenting adult user's single-person body scan video for fitness tracking, body measurement, movement analysis, or body-composition change monitoring. It is not for medical diagnosis, minors, non-consenting people, or videos of anyone other than the consenting user. <br>
+External users and developers can use this skill to guide a Telegram body-measurement flow for consenting adult users, including input checks, scan submission, status polling, and structured measurement output. It is not intended for medical diagnosis, minors, non-consenting subjects, or multi-person videos. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive body videos and measurements are handled through an external AnthroVision bridge without enough detail about storage, access, retention, or deletion. <br>
-Mitigation: Deploy only after confirming where videos and measurements are sent and stored, who can access them, and how deletion works. <br>
-Risk: The skill could be misused for minors, medical diagnosis, non-consenting people, or videos of someone other than the consenting user. <br>
-Mitigation: Require explicit consent from the adult user being scanned and reject medical, minor, non-consensual, third-party, or multi-person scan requests. <br>
-Risk: The package includes unrelated security-scanning claims that do not align with the body-scan purpose. <br>
-Mitigation: Review the advertised capabilities before installation and treat unrelated security-scanning features as unsupported unless separately justified and validated. <br>
+Risk: The skill requests broad local read, write, and exec powers. <br>
+Mitigation: Narrow allowed powers to the AnthroVision body-scan bridge and remove local read, write, or exec access unless each operation is specifically justified and constrained. <br>
+Risk: Body videos are highly sensitive and may be sent to an external processor. <br>
+Mitigation: Require explicit consent and verify retention, deletion, data handling, and credential-scope policies before submitting any video. <br>
+Risk: The server security verdict is suspicious because privacy scope and external bridge behavior are not sufficiently detailed. <br>
+Mitigation: Review the skill before installation, document the external processing path, and deploy only after privacy and security controls are confirmed. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/anthrovision-telegram-body-scan) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-like structured text with scan identifiers, status fields, grouped measurements, waist-to-hip ratio, validation prompts, and timeout messages.] <br>
+**Output Format:** [Markdown text with structured status fields and bullet lists] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses deterministic response formatting and avoids forwarding arbitrary upstream strings, links, commands, or untrusted text.] <br>
+**Other Properties Related to Output:** [Includes scan status, grouped body measurements, waist-to-hip ratio, timeout prompts, and input validation guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

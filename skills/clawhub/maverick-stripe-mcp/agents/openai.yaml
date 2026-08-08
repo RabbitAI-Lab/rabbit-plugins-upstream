@@ -1,4 +1,4 @@
 interface:
-  display_name: "Stripe"
-  short_description: "Read and update Stripe payments, customers, invoices, and subscriptions"
-  default_prompt: "Use the Stripe MCP tools to help the user inspect payment data, manage customers and products, create invoices or payment links, and review account balances."
+  display_name: 'Stripe'
+  short_description: 'Safely inspect Stripe payments, customers, invoices, and subscriptions'
+  default_prompt: 'Confirm the selected Stripe environment, use sandbox for validation, then use the allowlisted Stripe MCP read tools to inspect payment, customer, invoice, and subscription data. Never claim write access, a verified sandbox/live mode from local sync state, or Stripe Connect access.'

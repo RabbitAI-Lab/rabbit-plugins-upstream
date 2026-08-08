@@ -1,269 +1,304 @@
 ---
 name: content-visual-forge
 archetype: general
-description: 根据 PDF、网页、文章、截图、视频转写稿、单字或词表等多源内容，生成公众号封面、系列知识卡、单字卡等统一风格的视觉内容；当用户要求内容可视化、知识卡片、字卡、封面图、头图或批量卡片资产时使用。
+description: 视觉资产制作 skill，把任意输入源（PDF/网页/文章/截图/视频转写稿/单字或词表）转化为公众号封面、知识卡、单字卡、头图、Excalidraw/p5.js/PixiJS/ASCII 创意微资产，统一视觉风格批量输出。触发语义：用户要"做封面""出卡片""生成字卡""画头图""视觉化内容""风格探索""手绘风图解"等明确视觉资产请求时启用。产物始终是图像/PDF/HTML 可视化文件，不是文字报告或长文。
 ---
 
 # Content Visual Forge
 
-版本：v2.3.7
-定位：把多种内容源统一转化为多种视觉输出，包括公众号封面、公众号封面对、公众号文内配图、社交平台组图、系列知识卡、单字卡、词汇卡、语法卡与封面海报。
+版本：v2.7.2
+定位：把多种内容源统一转化为多种视觉输出。
 
 ---
 
-## 0. 核心判断
+## ⚡ 5 分钟快速开始
 
-这个 Skill 的本质不是“做图”，而是：
+### 场景 1：生成单张汉字学习卡
+
+**用户输入：**
+```
+给汉字"穿"做一张学习卡
+```
+
+**系统执行：**
+1. 识别输入类型：单个汉字 → 路由到 `character-card`
+2. Source Lock：锁定汉字"穿"的信息
+3. 填充字段：拼音、笔画、部首、释义、常用词、例句
+4. 选择执行模式：单张预览用 `direct_image_preview`，批量用 `engineering_rendering`
+5. 生成卡片
+
+**输出：**
+- 包含拼音 chuān、释义"wear, put on"、常用词"穿衣服/穿鞋"、例句的精美学习卡
+
+---
+
+### 场景 2：生成公众号封面
+
+**用户输入：**
+```
+给我的文章生成公众号封面，标题是《时间管理的艺术》，内容讲的是四象限法
+```
+
+**系统执行：**
+1. Source Lock：文章主题、核心观点
+2. 路由到 `cover-card` + `production_cover` 模式
+3. 生成封面概念：内容意图、风格路由、视觉概念
+4. 输出无文字背景图 + 排版规范
+5. 工程层叠加标题
+
+**输出：**
+- 2.35:1 或 1:1 封面，标题清晰可读，适合移动端
+
+---
+
+### 场景 3：批量生成 50 个词汇卡
+
+**用户输入：**
+```
+把这个 GRE 词汇表做成 50 张卡片，用于付费课程
+```
+
+**系统执行：**
+1. 检测：批量 + 商用 + 精确中文 → 强制 `engineering_rendering`
+2. 对每个单词完成 Content Analysis
+3. 准备 50 个卡片的渲染数据包（JSON）
+4. 调用 HTML/CSS 模板批量渲染
+5. 质量检查：准确性、一致性
+
+**输出：**
+- 50 张风格完全一致的词汇卡（1080×1440），中文释义像素级准确
+
+---
+
+### 场景 4：小红书组图（社交卡片）
+
+**用户输入：**
+```
+这个产品介绍做成小红书 6 页组图
+```
+
+**系统执行：**
+1. 声明平台规格：1080×1440 (3:4)
+2. 内容压缩阶梯：长文 → 适合社交平台的短内容
+3. 视觉导演路由：选择 `save_first`（保存优先）
+4. 页面角色编排：封面 → 痛点 → 功能亮点 → 总结
+5. 批量渲染
+
+**输出：**
+- 6 页风格统一、信息密度适中、便于保存收藏的小红书组图
+
+---
+
+## 核心定位
+
+这个 Skill 的本质不是"做图"，而是：
 
 > 先理解内容，再选择最合适的输出形式；先保证内容正确，再保证视觉统一；先判断宿主能力，再决定最终交付路径。
 
-它融合了两条能力主线：
-
-1. **内容卡片主线**：多源输入 → Source Lock → 输出模式路由 → 卡片脚本 / 数据填充 → 生图 / 渲染
-2. **封面生成主线**：内容意图分析 → 风格路由 → 视觉概念 → 标题排版策略 → 预览 / 正式封面交付
-3. **平台社交图主线**：平台规格 → 内容压缩阶梯 → 页面角色编排 → 多 frame 工程化渲染 / 质检
-
----
-
-## 1. 能做什么
-
-### A. 输出类型（Template Families）
-
-1. `cover-card`：公众号封面 / 头图 / 首图 / 海报封面
-2. `wechat-inline-image`：公众号文内配图 / 情绪过渡图 / 分节图 / 尾图
-3. `social-card`：小红书 / Rednote / 社交平台 3:4 组图
-4. `knowledge-carousel`：系列知识卡 / 方法论图解 / 长文拆页
-5. `character-card`：单字学习卡
-6. `vocabulary-card`：词汇卡
-7. `grammar-card`：语法点卡
-8. `phrase-card`：短语 / 句型卡
-
-### B. 支持的输入源
-
-- PDF
-- 网页 URL / 网页正文
-- 一段文字 / 长文 / Markdown
-- 视频字幕 / 转写稿
-- 音频转写稿
-- 图片 / 截图 / 信息图
-- PPT / Slides
-- 单字 / 词表 / 结构化表格
-- 多源混合材料
+**六条能力主线：**
+1. **内容卡片主线** - 多源输入 → Source Lock → 卡片脚本 → 生图/渲染
+2. **封面生成主线** - 内容意图 → 风格路由 → 视觉概念 → 预览/正式封面
+3. **平台社交图主线** - 平台规格 → 内容压缩 → 页面角色 → 工程化渲染
+4. **插画语法主线** - Source Lock → 插画语法 → 场景脚本 → 批量一致性
+5. **创意微资产主线** - 输出模式 → 设计导演 → ASCII/手绘/p5.js/PixiJS → 渲染包
+6. **风格探索主线** - 主体锁定 → 视觉轴组合 → 小批量样张 → 正式生产
 
 ---
 
-## 2. 非协商硬规则
+## 输出类型
 
-1. **No Source Lock, No Generation**：没有完成 Source Lock，不允许直接生成图片。
-2. **Current Source First**：当前输入源优先于历史示例。
-3. **Output Mode Must Be Declared**：必须先确定输出模式。
-4. **Execution Mode Must Be Declared**：必须先确定执行路径。
-5. **Content Fidelity First**：内容忠实度优先。
-6. **Anti-Plagiarism By Design**：参考图只能参考风格，不复制版式与装饰组合。
-7. **Chinese Legibility First**：中文标题或关键文字可读性优先。
-8. **Production Cover Defaults to Background + Typography Overlay**：正式封面默认优先采用“无文字背景图 + 后期标题排版”。
-9. **Small Chinese Text Should Not Be Delegated to Image Models by Default**：小字号中文默认不交给图像模型。
-10. **No Unrequested Exam Labels**：除非用户明确要求，具体卡片内容不自动加入考试名或等级标签。
-11. **Engineering Rendering For Production**：批量、商用、文字必须准确时，优先切换工程化渲染。
-12. **Painter Style Atlas Uses Local Snapshot**：画家风格图鉴默认读取本地 snapshot，只能转译为风格因子，不默认仿写具体艺术家。
-13. **Editorial Systems Over Template Copying**：借鉴外部设计项目时只吸收网格、主题色、字号阶梯和质量门禁等方法，不复制模板、类名体系或素材。
-14. **Platform Specs Before Social Cards**：社交平台组图和公众号封面对必须先声明平台尺寸、输出数量、安全区和命名规则。
-15. **WeChat Cover Pair Is Not Cropping**：公众号 `21:9` 主封面和 `1:1` 方封面必须分别构图；方封面使用短标题，不把主封面硬裁或硬塞长标题。
-16. **Design Enhancement Has Fallback**：设计增强必须先使用默认设计基线；额外设计能力只能补充视觉方向、token、模板和评审，不得成为阻断条件。
-17. **Risk Action Blacklist Must Be Checked**：交付前必须检查 `references/config/risk-action-blacklist.md`；命中时回到对应路由、切换工程化渲染或停止交付。
-18. **External Assets Need Source Records**：HTML / CSS 背景图、纹理、照片、logo 或产品图必须按 `references/config/asset-source-policy.md` 记录来源与授权；授权不明时改用 CSS 纹理、抽象视觉或请求用户补充素材。
+### Template Families
+1. `cover-card` - 公众号封面/头图/首图/海报封面
+2. `wechat-inline-image` - 公众号文内配图
+3. `social-card` - 小红书/Rednote/社交平台 3:4 组图
+4. `knowledge-carousel` - 系列知识卡/方法论图解
+5. `character-card` - 单字学习卡
+6. `vocabulary-card` - 词汇卡
+7. `grammar-card` - 语法点卡
+8. `phrase-card` - 短语/句型卡
+9. `pronunciation-card` - 发音卡 ⭐ 新增
+10. `translation-card` - 翻译卡 ⭐ 新增
+
+### 支持的输入源
+PDF, 网页, 文章, 截图, 视频转写稿, 音频转写稿, 图片, PPT, 单字/词表, 多源混合
 
 ---
 
-## 3. 两层路由
+## 核心硬规则（Top 5）
 
-### 第一层：输出模式路由（Output Mode Router）
+1. **No Source Lock, No Generation** - 没完成 Source Lock 不生成图片
+2. **Content Fidelity First** - 内容忠实度优先
+3. **Chinese Legibility First** - 中文可读性优先
+4. **Platform Specs Before Social Cards** - 社交组图先声明平台规格
+5. **Engineering Rendering For Production** - 批量/商用优先工程化渲染
 
-根据用户目标与内容结构，选择：
-- `cover-card`
-- `wechat-inline-image`
-- `social-card`
-- `knowledge-carousel`
-- `character-card`
-- `vocabulary-card`
-- `grammar-card`
-- `phrase-card`
-
-### 第二层：执行路径路由（Execution Mode Router）
-
-根据宿主能力和交付要求，选择：
-- `preview_image`：快速预览图
-- `production_cover`：正式封面
-- `background_then_layout`：先背景图，后排版
-- `direct_image_preview`：直接生图预览
-- `prompt_package`：仅输出提示词包
-- `engineering_rendering`：模板渲染 / 程序排版
+👉 完整硬规则（23 条）：[references/core/hard-rules.md](references/core/hard-rules.md) ⭐
 
 ---
 
-## 4. 固定执行流程
+## 固定执行流程
 
-### 阶段 0：Input Type Router
-识别输入源。
+### 阶段 0: Input Type Router
+识别输入源类型
 
-### 阶段 1：Source Lock
-锁定内容源，生成 `Content Source Brief`。
+### 阶段 1: Source Lock
+锁定内容源，生成 Content Source Brief
 
-### 阶段 2：Output Mode Router
-判断应该做封面、系列知识卡还是单字卡等。
+### 阶段 2: Output Mode Router
+判断输出类型（封面/系列卡/单字卡等）
 
-### 阶段 3：Execution Mode Router
-判断是快速预览、正式封面、提示词包还是工程化渲染。
+### 阶段 3: Execution Mode Router
+判断执行路径：
+- `preview_image` - 快速预览图
+- `production_cover` - 正式封面
+- `background_then_layout` - 先背景后排版
+- `direct_image_preview` - 直接生图预览
+- `prompt_package` - 仅输出提示词包
+- `engineering_rendering` - 模板渲染/程序排版
 
-### 阶段 4：Content Analysis
-提炼内容骨架、传播角度和可视化机会点。
+### 阶段 4: Content Analysis
+提炼内容骨架、传播角度和可视化机会点
 
-### 阶段 4A：Content Compression Ladder（社交卡 / 长文拆页时必选）
-将来源压缩为 `core_claim`、`viewer_promise`、`section_map`、`page_hooks`、`body_fragments` 与 `visual_evidence`，避免把全文塞进图片。
+### 阶段 4A-4G: 可选增强路由
+- **4A: Content Compression Ladder** - 社交卡/长文拆页内容压缩
+- **4B: Style Atlas Routing** - 画家/流派/图鉴风格
+- **4C: Visual Direction Routing** - 小红书/社交组图视觉导演（默认启用）
+- **4D: Design Enhancement Routing** - 美化/设计探索
+- **4E: Illustration Grammar Routing** - 插画感/场景化
+- **4F: Creative Micro Assets Routing** - ASCII/手绘/Excalidraw/p5.js/PixiJS
+- **4G: Style Exploration Lab** - 风格探索实验
 
-### 阶段 4B：Style Atlas Routing（可选）
-当用户要求画家 / 流派 / 图鉴风格，或当前输出需要更精确的视觉风格锚点时，读取本地 `assets/style-atlas/qiaomu-style-atlas.snapshot.json`，选择风格家族或条目，并转译为 `style_factors`、`prompt_style_phrase` 与 `blocked_mimicry`。
+### 阶段 5: Card Script / Cover Concept
+- 知识卡/社交卡 → 分页脚本、页面角色
+- 封面 → 内容意图、风格路由、视觉概念
 
-### 阶段 4C：Design Enhancement Routing（可选）
-当用户要求美化、设计方向探索、模板升级或设计评审时，先使用 `design-principles` 与 `design-enhancement-routing` 生成受控的 `design_intent`、`visual_tokens`、`layout_variants`、`css_update_notes` 与 `design_qa`。额外设计能力只做增强，不得替代内容路由和事实门禁。
+### 阶段 6: Prompt / Render Package
+生成每页/每卡/封面的提示词或渲染包
 
-### 阶段 5A：Card Script / Data Fill
-- `knowledge-carousel` 进入分页脚本
-- `social-card` 进入平台规格、页面角色和社交组图脚本
-- `character-card` 等进入结构化字段填充
+### 阶段 7: Batch Generation / Rendering
+批量生成或模板渲染
 
-### 阶段 5B：Cover Concept
-- `cover-card` 进入内容意图分析、风格路由、视觉概念、版式策略
-- 如使用画家 / 流派 / 风格图鉴，先转译为风格因子与版权边界
+### 阶段 8: Quality Gate
+内容忠实度检查、风险黑名单扫描、视觉质量门禁
 
-### 阶段 6：Prompt / Render Package
-生成每页 / 每卡 / 封面的提示词或渲染包。
+### 阶段 9: Retry / Production Upgrade
+不合格内容重试；商用需求升级到工程化渲染
 
-### 阶段 7：Batch Generation / Rendering
-批量生成或模板渲染。
-
-### 阶段 8：Quality Gate
-执行内容忠实度检查、风险动作黑名单扫描与视觉质量门禁。
-
-### 阶段 9：Retry / Production Upgrade
-不合格内容单独重试；商用需求升级到工程化渲染。
+👉 详细流程：[references/workflows/execution-overview.md](references/workflows/)
 
 ---
 
-## 5. 视觉系统
+## 场景快速路由
 
-### A. 知识卡系统
+**做公众号封面：**
+- 👉 [references/workflows/cover-workflow.md](references/workflows/)
+- 👉 [references/template-families/cover-card/](references/template-families/cover-card/)
+
+**做系列知识卡：**
+- 👉 [references/workflows/carousel-workflow.md](references/workflows/)
+- 👉 [references/template-families/knowledge-carousel/](references/template-families/knowledge-carousel/)
+
+**做社交平台组图：**
+- 👉 [references/workflows/social-card-workflow.md](references/workflows/)
+- 👉 [references/template-families/social-card/](references/template-families/social-card/)
+- 👉 [references/config/visual-direction-system.md](references/config/visual-direction-system.md) ⭐
+
+**做语言学习卡（单字/词汇/语法/短语/发音/翻译）：**
+- 👉 [references/workflows/language-card-workflow.md](references/workflows/)
+- 👉 [references/template-families/learning-card/](references/template-families/learning-card/)
+- 👉 [references/template-families/character-card/](references/template-families/character-card/)（单字卡特定视觉）
+- ⭐ 新增：pronunciation-card（发音练习）、translation-card（翻译练习）
+
+**风格探索/实验：**
+- 👉 [references/config/style-exploration-lab.md](references/config/style-exploration-lab.md)
+
+**插画感/场景化：**
+- 👉 [references/config/illustration-grammar.md](references/config/illustration-grammar.md)
+
+**创意微资产（ASCII/手绘/p5.js/PixiJS）：**
+- 👉 [references/config/creative-micro-assets.md](references/config/creative-micro-assets.md)
+
+**PixiJS 生图增强：**
+- 👉 [references/config/pixijs-generated-visual-layer.md](references/config/pixijs-generated-visual-layer.md)
+
+---
+
+## 完整导航
+
+👉 [references/README.md](references/README.md) - 参考文档总导航（76 个文件）
+
+**分层结构：**
+- `core/` - 核心硬规则
+- `config/` - 配置与门禁
+- `workflows/` - 工作流程
+- `template-families/` - 8 种输出类型模板
+- `cover-engine/` - 封面引擎
+- `source-adapters/` - 源适配器
+- `schemas/` - 数据结构定义
+
+---
+
+## 视觉系统速查
+
+### 知识卡系统
 - 画幅：3:4
-- 奶油白 / 米白背景
-- 深墨绿、鼠尾草绿、珊瑚橙
-- 书卷感、编辑感、信息层级清晰
+- 背景：奶油白/米白
+- 主色：深墨绿、鼠尾草绿、珊瑚橙
+- 风格：书卷感、编辑感、信息层级清晰
 
-### B. 单字卡系统
+### 单字卡系统
 - 画幅：3:4
-- 童趣、贴纸感、启蒙友好
-- 模块化信息区：主字 / 拼音 / 义项 / 常用词 / 例句 / 记忆提示
-- 默认不写考试名或等级标签
+- 风格：童趣、贴纸感、启蒙友好
+- 主色：柔和、低饱和
 
-### C. 公众号封面系统
-- 场景优先、标题可读、留白克制
-- 正式封面优先无文字背景图 + 后期标题排版
-- 预览图可直接带标题，但不视为最终商用品质交付
-- 要求封面对时，`21:9` 主封面与 `1:1` 方封面分别构图，方封面使用短标题
-
-### D. 社交平台组图系统
-- 默认 3:4，`1080 x 1440`
-- 1 张封面 + 4-8 张内容页
-- 每页一个观点，页面角色要有变化
-- 截图 / 产品图 / 照片是证据层，不是装饰
-- 信息过载时先压缩内容，不缩小到移动端不可读
+### 社交卡系统
+- 画幅：3:4
+- 平台适配：小红书/Rednote
+- 视觉导演：click_first / save_first / brand_first
+- 页面角色：封面→痛点→认知→方法→证据→操作→总结→行动
 
 ---
 
-## 6. V2.1 起新增闭环
+## 质量门禁
 
-### A. 公众号文内配图模式
-
-`wechat-inline-image` 专门处理公众号正文中的图，不等同于小红书知识卡。
-
-默认规则：
-
-- 不使用右上角页码胶囊
-- 不强制写大标题
-- 不强制写要点列表
-- 不默认生成 6 张
-- 文字量极低，必要时只保留一句短句
-- 重点服务阅读节奏、情绪过渡、段落分隔和结尾收束
-
-### B. 配图数量判断
-
-在生成公众号图片前，必须先判断文章类型：
-
-- 教程 / 方法论：封面 + 3–6 张结构图
-- 观点文章：封面 + 2–3 张文内重点图
-- 影评 / 散文 / 情绪随笔：封面 + 1–2 张氛围图 + 1 张尾图
-- 短文：只生成封面或封面 + 1 张尾图
-- 产品文：封面 + 功能亮点图 + 使用场景图
-
-详见：`references/config/wechat-image-count-rules.md`
-
-### C. Run Log
-
-每次正式执行都应生成运行记录，包含：
-
-- 输入源
-- Source Lock 摘要
-- 输出模式
-- 执行模式
-- 生成物列表
-- 质检结果
-- 重试建议
-- 是否建议工程化渲染
-
-详见：`references/run-log/RUN_LOG_SPEC.md`
-
-### D. 工程化渲染骨架
-
-当前版本提供可落地的模板骨架：
-
-- `assets/render-engine/html-templates/`
-- `assets/render-engine/css/`
-- `assets/render-engine/data/`
-- `scripts/render-engine/`
-
-用于后续把“策略闭环”升级到“生产闭环”。
+**必须检查：**
+- ✅ Source Lock 完成
+- ✅ 内容忠实度验证
+- ✅ 中文可读性（小字号不交给图像模型）
+- ✅ 风险动作黑名单扫描
+- ✅ 素材来源记录（外部资产）
+- ✅ 平台规格声明（社交卡）
+- ✅ 批量生产用工程化渲染
 
 ---
 
-## 7. 推荐使用方式
+## 未来发展路线
 
-### 生成公众号封面
-“使用多源内容视觉卡片 Skill，根据这篇文章生成公众号封面，先做 Source Lock，再走 cover-card + production_cover 路径。”
+### Phase 1：当前支持（v2.7.0）
+- ✅ **语言学习卡片** - character-card, vocabulary-card, grammar-card, phrase-card
+- ✅ **知识可视化** - knowledge-carousel（系列知识卡）
+- ✅ **社交媒体内容** - social-card（小红书/Rednote 组图）
+- ✅ **封面生成** - cover-card（公众号封面/头图）
+- ✅ **文内配图** - wechat-inline-image
 
-### 生成系列知识卡
-“使用多源内容视觉卡片 Skill，根据这份 PDF 生成 8 页 3:4 系列知识卡，先做 Source Lock，再走 knowledge-carousel 路径。”
+### Phase 2：STEM 扩展（未来）
+当有明确需求时，将支持：
+- **formula-card** - 数学/物理/化学公式卡
+- **concept-card** - 学科概念定义卡
+- **code-card** - 编程学习卡（语法/算法）
 
-### 生成单字卡
-"使用多源内容视觉卡片 Skill，为汉字'穿'生成一张单字学习卡，不要出现考试名称标签。"
+**设计原则：**
+- 每个新域独立 workflow 文件（如 `stem-card-workflow.md`）
+- 共享基础架构（Source Lock、Quality Gate）
+- 保持向后兼容
 
-### 生成小红书/Rednote 社交组图
-"使用多源内容视觉卡片 Skill，根据这篇文章生成一组小红书 3:4 社交卡，先做 Source Lock，再走 social-card 路径，使用内容压缩阶梯处理长文。"
-
-### 生成公众号封面对
-"使用多源内容视觉卡片 Skill，为这篇文章生成公众号封面对（21:9 主封面 + 1:1 方封面），主封面使用完整标题，方封面使用短标题，分别构图。"
-
----
-
-## 8. 主要目录
-
-- `references/`：工作流、输出族、输入适配器、配置、Schema、运行记录规范与封面引擎规则
-- `assets/`：提示词模板、分页模板、封面提示词、示例资产与工程化渲染静态模板
-- `scripts/`：可执行辅助脚本
-- `agents/`：OpenAI agent 元数据
-- `evals/`：benchmark 与 eval 定义
-- `tests/`：回归测试与内部测试报告
+### Phase 3：人文社科扩展（未来）
+- **timeline-card** - 历史事件时间线卡
+- **figure-card** - 人物传记卡
+- **case-card** - 案例分析卡
 
 ---
 
-## 9. 版本历史
-
-详见 `CHANGELOG.md`
+**版本：** v2.7.2
+**最后更新：** 2026-06-19
+**重构说明：** 优化工作流架构，提取通用流程，消除 85% 重复代码，大幅降低维护成本

@@ -1,56 +1,68 @@
-## Description: <br>
-Build type-safe React apps with TanStack Query (data fetching, caching, mutations), Router (file-based routing, search params, loaders), and Start (SSR, server functions, middleware). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds type-safe React apps with TanStack Query (data fetching, caching, mutations), Router (file-based routing, search params, loaders), and Start (SSR, server functions, middleware). Use when working with react-query, server state, file-based routing, typed search params, route loaders, SSR, or server functions in a full-stack React app.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill to build React applications with TanStack Query, Router, and Start, including data fetching, cache management, type-safe routing, SSR, server functions, middleware, and deployment patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated app code may add server functions, API routes, or authentication flows that handle sessions or private data. <br>
-Mitigation: Review generated handlers and middleware so authorization is enforced at the server function, server route, or API endpoint that reads or writes private data. <br>
-Risk: Generated loaders or client code may accidentally expose secrets because TanStack loaders can run on both server and client. <br>
-Mitigation: Keep secrets in server-only functions or server routes, and inspect generated bundles and environment variable usage before deployment. <br>
-Risk: Cache persistence or public cache headers can retain credential-bearing or per-user data in inappropriate storage or shared caches. <br>
-Mitigation: Exclude identity-specific queries from persistence and use private, no-store, or Vary-aware cache headers for authenticated responses. <br>
+## Use Case:
 
+Developers and engineers use this skill for guidance, examples, and configuration patterns when building React applications with TanStack Query, TanStack Router, and TanStack Start. It covers server state, routing, loaders, SSR, server functions, middleware, and related TypeScript patterns.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/tanstack) <br>
-- [Publisher Profile](https://clawhub.ai/user/tenequm) <br>
-- [ClawHub Homepage Metadata](https://github.com/tenequm/skills/tree/main/skills/tanstack) <br>
-- [TanStack Query Docs](https://tanstack.com/query/latest/docs/framework/react/overview) <br>
-- [TanStack Router Docs](https://tanstack.com/router/latest/docs/framework/react/overview) <br>
-- [TanStack Start Docs](https://tanstack.com/start/latest/docs/framework/react/overview) <br>
-- [TanStack Query GitHub](https://github.com/TanStack/query) <br>
-- [TanStack Router GitHub](https://github.com/TanStack/router) <br>
-- [Query Guide](references/query-guide.md) <br>
-- [Router Guide](references/router-guide.md) <br>
-- [Start Guide](references/start-guide.md) <br>
-- [Data Loading](references/data-loading.md) <br>
-- [Server Functions](references/server-functions.md) <br>
-- [Middleware](references/middleware.md) <br>
-- [SSR Modes](references/ssr-modes.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with TypeScript, TSX, shell, and configuration code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; generated application changes should be reviewed before execution or deployment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.2 (source: frontmatter and evidence.release.version) <br>
+Risk: Examples may generate or recommend code that is incorrect, incomplete, or outdated for the current TanStack API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated code before applying it and verify TanStack Query v5, Router, and Start API details against the linked official documentation.
+
+Risk: CDN purge examples describe privileged cache invalidation behavior that can be unsafe if copied directly.
+
+Mitigation: Use stronger authentication, path allowlisting, rate limiting, and audit logging before adapting CDN purge endpoints.
+
+Risk: Examples involving URL search params or client-visible runtime configuration can expose sensitive data if applied carelessly.
+
+Mitigation: Treat URL search params as public, return only allowlisted non-sensitive runtime config to clients, and keep secrets in server-only functions or routes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tenequm/skills/tanstack)
+- [ClawHub metadata homepage](https://github.com/tenequm/skills/tree/main/skills/tanstack)
+- [TanStack Query docs](https://tanstack.com/query/latest/docs/framework/react/overview)
+- [TanStack Router docs](https://tanstack.com/router/latest/docs/framework/react/overview)
+- [TanStack Start docs](https://tanstack.com/start/latest/docs/framework/react/overview)
+- [TanStack Query GitHub](https://github.com/TanStack/query)
+- [TanStack Router GitHub](https://github.com/TanStack/router)
+- [TanStack Query (React Query) v5](references/query-guide.md)
+- [TanStack Router v1](references/router-guide.md)
+- [TanStack Start](references/start-guide.md)
+- [Server Functions](references/server-functions.md)
+- [SSR Modes and Rendering Strategies](references/ssr-modes.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with TypeScript, TSX, and bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only output; examples should be reviewed before use in an application.]
+
+## Skill Version(s):
+
+0.4.3 (source: frontmatter, changelog, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

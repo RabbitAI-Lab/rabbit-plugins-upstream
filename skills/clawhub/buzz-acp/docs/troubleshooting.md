@@ -41,11 +41,14 @@ buzz-admin add-member --pubkey <agent pubkey>
 
 **Cause:** The `.env` file isn't being sourced correctly when starting the relay manually (e.g. with `nohup . .env && binary`). Shell sourcing in a subshell doesn't export to the parent.
 
-**Fix:** Use systemd (which reads `EnvironmentFile=` properly), or export explicitly:
+**Fix:** Use systemd (which reads `EnvironmentFile=` properly), or source it into the current shell explicitly:
 ```bash
-export $(grep -v '^#' /path/to/buzz/.env | xargs)
+set -a
+source /path/to/buzz/.env
+set +a
 buzz-relay
 ```
+This still exposes secrets to the shell's environment (visible to child processes) — prefer systemd for anything beyond a one-off manual run.
 
 ---
 
@@ -103,7 +106,7 @@ Common causes:
 
 **Symptom:** Windows blocks `Buzz_x.x.xx_x64-setup_alpha-unsigned.exe`
 
-**Expected behaviour** — the installer is unsigned (alpha build). Click **More info → Run anyway**.
+**Expected behaviour** — the installer is unsigned (alpha build) and not code-signed. Only proceed if you downloaded it from the [official releases page](https://github.com/block/buzz/releases/latest) over HTTPS — checksum/signature verification isn't published yet for this alpha, so treat this as an explicit trust decision. If you accept that, click **More info → Run anyway**.
 
 ---
 

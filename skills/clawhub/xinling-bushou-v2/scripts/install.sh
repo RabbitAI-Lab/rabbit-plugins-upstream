@@ -1,11 +1,12 @@
 #!/bin/bash
 #
-# 心灵补手 V3.0 安装脚本
+# 心灵补手 V3.5.0 安装脚本
 #
 # 功能：
 # 1. 展示人格列表，让用户选择
 # 2. 自动注入选中的谄媚人格到SOUL.md
 # 3. 保留切换风格和关闭功能
+# 4. V3.5.0新增：安装后自动健康检查（验证所有人格可加载）
 #
 # 用法: ./install.sh
 #
@@ -17,7 +18,7 @@ PROJECT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 SOUL_PATH="$HOME/.openclaw/workspace/SOUL.md"
 
 echo "============================================"
-echo "  心灵补手 V3.0 安装程序"
+echo "  心灵补手 V3.5.0 安装程序"
 echo "============================================"
 echo ""
 
@@ -67,7 +68,7 @@ print(f'      ✅ 安装成功! 已注册 {len(personas)} 个人格')
 " 2>/dev/null || echo "      ⚠️ 验证跳过，请手动测试"
 
 # 6. 询问用户选择人格并注入到SOUL.md
-echo "[6/6] 选择谄媚人格..."
+echo "[6/7] 选择谄媚人格..."
 echo ""
 echo "请选择您想要的人格（输入数字）："
 echo ""
@@ -170,4 +171,23 @@ echo "  • 切换人格: 切换人格[名字]"
 echo "  • 查看状态: 补手状态"
 echo "  • 关闭功能: 关闭心灵补手"
 echo "  • 调整程度: 补手程度N"
+echo ""
+
+# 7. 健康检查 (V3.5.0)
+echo "[7/7] 运行健康检查..."
+python3 -c "
+import sys
+sys.path.insert(0, '$XINLING_DIR')
+from core.persona_engine import PersonaEngine
+engine = PersonaEngine()
+r = engine.health_check()
+print(f'  已注册人格: {r[\"total\"]} | 可正常加载: {r[\"ok\"]} | 失败: {len(r[\"failed\"])}')
+if r[\"failed\"]:
+    for f in r[\"failed\"]:
+        print(f'  ❌ {f[\"persona_id\"]}: {f[\"error\"]}')
+        if f[\"hint\"]:
+            print(f'     💡 {f[\"hint\"]}')
+else:
+    print('  ✅ 所有人格均可正常加载，安装健康！')
+" 2>/dev/null || echo "  ⚠️ 健康检查跳过，请手动执行 xinling check"
 echo ""

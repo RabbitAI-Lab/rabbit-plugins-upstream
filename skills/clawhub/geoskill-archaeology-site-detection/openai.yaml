@@ -1,0 +1,16 @@
+name: geoskill-archaeology-site-detection
+display_name: 考古遗址遥感探测
+description: |
+  LiDAR micro-topography, multispectral anomaly and SAR fusion for suspected archaeological site detection with anomaly grading
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-archaeology-site-detection.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - lidar
+  - point-cloud
+  - preprocessing
+  - remote-sensing
+  - sar

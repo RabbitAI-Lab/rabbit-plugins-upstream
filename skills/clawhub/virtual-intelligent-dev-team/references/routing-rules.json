@@ -1,0 +1,2632 @@
+{
+  "meta": {
+    "author": "fxbin",
+    "version": "v6.0.19",
+    "updated": "2026-07-26"
+  },
+  "thresholds": {
+    "max_agent_score": 20,
+    "high_confidence": 0.55,
+    "medium_confidence": 0.35,
+    "sentinel_overlay_threshold": 6
+  },
+  "default_process_lead_agent": "Git Workflow Guardian",
+  "default_unknown_lead_agent": "Technical Trinity",
+  "governance": {
+    "roundtable": {
+      "assistant_count_min": 1,
+      "confidence_max": 0.75,
+      "force_keywords": [
+        "圆桌会议",
+        "多智能体治理",
+        "cross-functional",
+        "governance",
+        "roundtable governance",
+        "regular governance"
+      ]
+    },
+    "privy_council": {
+      "prefer_regular_for_git": true,
+      "allow_high_risk_fast_track": false,
+      "force_fast_track_keywords": [
+        "紧急",
+        "立即",
+        "阻塞",
+        "P0",
+        "hotfix",
+        "实验性",
+        "快速验证"
+      ],
+      "force_regular_keywords": [
+        "审计",
+        "合规",
+        "高风险",
+        "核心模块",
+        "双签"
+      ]
+    },
+    "anti_gaming": {
+      "min_objective_signals_for_fast_track": 1,
+      "urgent_keywords": [
+        "紧急",
+        "立即",
+        "阻塞",
+        "P0",
+        "hotfix",
+        "实验性",
+        "快速验证"
+      ],
+      "objective_keywords": [
+        "生产故障",
+        "告警",
+        "失败",
+        "回滚",
+        "error",
+        "exception",
+        "500",
+        "timeout"
+      ]
+    },
+    "fast_track_control": {
+      "quota_per_24h": 3,
+      "cooldown_minutes": 30,
+      "window_hours": 24,
+      "write_event_log": true
+    },
+    "execution_control": {
+      "require_dri": true,
+      "slo_minutes": {
+        "low": 120,
+        "medium": 60,
+        "high": 30
+      }
+    },
+    "iteration_control": {
+      "default_online_round_cap": 3,
+      "default_offline_round_cap": 120,
+      "max_same_hypothesis_retries": 2,
+      "require_objective_signal": true,
+      "allowed_decisions": [
+        "keep",
+        "retry",
+        "rollback",
+        "stop"
+      ],
+      "required_artifacts": [
+        "assets/iteration-ledger-template.md",
+        "assets/round-reflection-template.md",
+        "assets/round-memory-template.md",
+        "assets/self-feedback-template.md",
+        "assets/distilled-patterns-template.md"
+      ]
+    },
+    "audit_control": {
+      "archive_levels": [
+        "draft",
+        "verified",
+        "gold"
+      ],
+      "default_archive_level": "draft",
+      "promotion_rules": [
+        "双签通过后可从 draft 提升到 verified",
+        "连续稳定达标后可从 verified 提升到 gold"
+      ]
+    }
+  },
+  "process_skill_lead_agents": {
+    "pre-development-planning": "Technical Trinity",
+    "bounded-iteration": "Technical Trinity",
+    "project-knowledge-capture": "Technical Trinity",
+    "release-gate": "Technical Trinity",
+    "git-workflow": "Git Workflow Guardian",
+    "using-git-worktrees": "Git Workflow Guardian"
+  },
+  "assistant_routing_rules": [
+    {
+      "lead_agent": "World-Class Product Architect",
+      "when_any_keywords": [
+        "backend",
+        "api",
+        "api contract",
+        "implementation plan",
+        "technical plan",
+        "tech plan",
+        "delivery plan",
+        "integration",
+        "technical implementation",
+        "frontend-backend",
+        "auth",
+        "error state",
+        "error states",
+        "后端",
+        "接口",
+        "接口契约",
+        "技术方案",
+        "联调",
+        "技术实现",
+        "落地方案",
+        "鉴权",
+        "登录",
+        "错误提示",
+        "空状态",
+        "失败反馈",
+        "接口失败",
+        "异常反馈"
+      ],
+      "add_assistants": [
+        "Technical Trinity"
+      ]
+    },
+    {
+      "lead_agent": "Git Workflow Guardian",
+      "when_any_keywords": [
+        "react",
+        "next.js",
+        "tailwind",
+        "shadcn",
+        "dashboard",
+        "ui",
+        "ux",
+        "frontend",
+        "front-end"
+      ],
+      "add_assistants": [
+        "World-Class Product Architect"
+      ]
+    },
+    {
+      "lead_agent": "Code Audit Council",
+      "when_any_keywords": [
+        "auth",
+        "api",
+        "backend",
+        "implementation",
+        "tech",
+        "technical",
+        "nest",
+        "nestjs",
+        "django",
+        "djagno",
+        "fastapi",
+        "spring",
+        "后端",
+        "接口",
+        "鉴权",
+        "登录"
+      ],
+      "add_assistants": [
+        "Technical Trinity"
+      ]
+    },
+    {
+      "lead_agent": "World-Class Product Architect",
+      "when_any_keywords": [
+        "commit",
+        "commits",
+        "push",
+        "pull request",
+        "merge request",
+        "rollback",
+        "branch",
+        "git workflow"
+      ],
+      "add_assistants": [
+        "Git Workflow Guardian"
+      ]
+    },
+    {
+      "lead_agent": "Sentinel Architect (NB)",
+      "when_any_keywords": [
+        "root cause",
+        "inspect the logs",
+        "read the logs",
+        "service",
+        "backend",
+        "api",
+        "config",
+        "mcp",
+        "server",
+        "incident",
+        "故障",
+        "根因",
+        "日志"
+      ],
+      "add_assistants": [
+        "Technical Trinity"
+      ]
+    }
+  ],
+  "priority_routing_rules": [
+    {
+      "agent": "Code Audit Council",
+      "any_keywords": [
+        "review",
+        "code review",
+        "pr review",
+        "security review",
+        "审计",
+        "代码审查",
+        "安全检查",
+        "漏洞"
+      ],
+      "exclude_if_any_keywords": [
+        "ui review",
+        "ux review",
+        "设计评审",
+        "视觉评审",
+        "动效评审"
+      ]
+    },
+    {
+      "agent": "Git Workflow Guardian",
+      "any_keywords": [
+        "git workflow",
+        "git-workflow",
+        "git flow",
+        "git-flow",
+        "分支策略",
+        "提交规范",
+        "conventional commits",
+        "commit message",
+        "status",
+        "git add",
+        "commit",
+        "commits",
+        "push",
+        "pull",
+        "checkout",
+        "merge",
+        "rebase",
+        "cherry-pick",
+        "tag",
+        "stash",
+        "提交",
+        "推送",
+        "分支",
+        "合并",
+        "回滚",
+        "提交信息",
+        "pr 流程",
+        "pr流程",
+        "pull request",
+        "merge request",
+        "拉取请求"
+      ],
+      "exclude_if_any_keywords": [
+        "ui",
+        "ux",
+        "dashboard",
+        "react",
+        "next.js",
+        "tailwind",
+        "frontend",
+        "front-end",
+        "healthcare",
+        "hipaa",
+        "compliance",
+        "regulated",
+        "fintech",
+        "government"
+      ]
+    }
+  ],
+  "agent_order": [
+    "Java Virtuoso",
+    "Sentinel Architect (NB)",
+    "Technical Trinity",
+    "Code Audit Council",
+    "Git Workflow Guardian",
+    "World-Class Product Architect",
+    "Data Pipeline Guardian",
+    "API Contract Sentinel"
+  ],
+  "agent_rules": {
+    "Java Virtuoso": {
+      "positive": [
+        {
+          "keyword": "java",
+          "score": 5
+        },
+        {
+          "keyword": "jdk",
+          "score": 5
+        },
+        {
+          "keyword": "jvm",
+          "score": 5
+        },
+        {
+          "keyword": "spring",
+          "score": 5
+        },
+        {
+          "keyword": "spring boot",
+          "score": 5
+        },
+        {
+          "keyword": "virtual thread",
+          "score": 4
+        },
+        {
+          "keyword": "loom",
+          "score": 4
+        },
+        {
+          "keyword": "gc",
+          "score": 4
+        },
+        {
+          "keyword": "full gc",
+          "score": 4
+        },
+        {
+          "keyword": "zgc",
+          "score": 4
+        },
+        {
+          "keyword": "g1",
+          "score": 4
+        },
+        {
+          "keyword": "java 8",
+          "score": 5
+        }
+      ],
+      "negative": [
+        {
+          "keyword": "前端",
+          "score": 3
+        },
+        {
+          "keyword": "ui",
+          "score": 3
+        },
+        {
+          "keyword": "ux",
+          "score": 3
+        },
+        {
+          "keyword": "tailwind",
+          "score": 3
+        },
+        {
+          "keyword": "商业模式",
+          "score": 4
+        },
+        {
+          "keyword": "融资",
+          "score": 4
+        },
+        {
+          "keyword": "python",
+          "score": 3
+        },
+        {
+          "keyword": "golang",
+          "score": 3
+        },
+        {
+          "keyword": "node",
+          "score": 3
+        },
+        {
+          "keyword": "node.js",
+          "score": 3
+        },
+        {
+          "keyword": "fastapi",
+          "score": 3
+        },
+        {
+          "keyword": "django",
+          "score": 3
+        },
+        {
+          "keyword": "flask",
+          "score": 3
+        },
+        {
+          "keyword": "nestjs",
+          "score": 3
+        },
+        {
+          "keyword": "express",
+          "score": 3
+        },
+        {
+          "keyword": "rust",
+          "score": 3
+        },
+        {
+          "keyword": "cargo",
+          "score": 3
+        },
+        {
+          "keyword": "tokio",
+          "score": 3
+        },
+        {
+          "keyword": "actix",
+          "score": 3
+        },
+        {
+          "keyword": "axum",
+          "score": 3
+        }
+      ],
+      "constraints": [
+        "禁止建议 java.util.Date；统一使用 java.time",
+        "Stream.parallel() 改动必须附性能基准",
+        "公共 API 变更必须同时更新 OpenAPI 契约与回归测试",
+        "JVM 调优建议必须标注 GC 算法与目标停顿时间"
+      ],
+      "evidence_requirements": [
+        "JVM 启动参数与运行时版本",
+        "受影响模块的回归测试结果",
+        "Spring Boot 启动耗时或吞吐基准（改动相关时）"
+      ]
+    },
+    "Sentinel Architect (NB)": {
+      "positive": [
+        {
+          "keyword": "高风险",
+          "score": 6
+        },
+        {
+          "keyword": "核心模块",
+          "score": 6
+        },
+        {
+          "keyword": "生产故障",
+          "score": 6
+        },
+        {
+          "keyword": "先调研再执行",
+          "score": 6
+        },
+        {
+          "keyword": "计划审批",
+          "score": 6
+        },
+        {
+          "keyword": "research",
+          "score": 5
+        },
+        {
+          "keyword": "innovate",
+          "score": 5
+        },
+        {
+          "keyword": "plan approval",
+          "score": 5
+        },
+        {
+          "keyword": "execute after research",
+          "score": 5
+        },
+        {
+          "keyword": "hot-fix",
+          "score": 5
+        },
+        {
+          "keyword": "hotfix",
+          "score": 5
+        },
+        {
+          "keyword": "rebase 冲突",
+          "score": 6
+        },
+        {
+          "keyword": "merge 冲突",
+          "score": 6
+        },
+        {
+          "keyword": "冲突处理",
+          "score": 5
+        },
+        {
+          "keyword": "mission critical",
+          "score": 5
+        },
+        {
+          "keyword": "零容错",
+          "score": 5
+        },
+        {
+          "keyword": "root cause",
+          "score": 6
+        },
+        {
+          "keyword": "find the root cause",
+          "score": 6
+        },
+        {
+          "keyword": "still fails",
+          "score": 6
+        },
+        {
+          "keyword": "multiple attempts",
+          "score": 5
+        },
+        {
+          "keyword": "after multiple attempts",
+          "score": 5
+        },
+        {
+          "keyword": "already tried",
+          "score": 5
+        },
+        {
+          "keyword": "tried two fixes",
+          "score": 6
+        },
+        {
+          "keyword": "stop guessing",
+          "score": 6
+        },
+        {
+          "keyword": "inspect the logs",
+          "score": 6
+        },
+        {
+          "keyword": "read the logs",
+          "score": 6
+        },
+        {
+          "keyword": "production incident",
+          "score": 6
+        },
+        {
+          "keyword": "systematically debug",
+          "score": 5
+        },
+        {
+          "keyword": "stuck debugging",
+          "score": 5
+        },
+        {
+          "keyword": "根因",
+          "score": 6
+        },
+        {
+          "keyword": "日志排查",
+          "score": 6
+        },
+        {
+          "keyword": "查看日志",
+          "score": 5
+        },
+        {
+          "keyword": "别猜",
+          "score": 6
+        },
+        {
+          "keyword": "重复失败",
+          "score": 6
+        },
+        {
+          "keyword": "多次尝试",
+          "score": 5
+        },
+        {
+          "keyword": "仍然失败",
+          "score": 6
+        }
+      ],
+      "negative": [
+        {
+          "keyword": "商业模式",
+          "score": 5
+        },
+        {
+          "keyword": "融资",
+          "score": 5
+        },
+        {
+          "keyword": "定价",
+          "score": 5
+        },
+        {
+          "keyword": "pricing",
+          "score": 5
+        },
+        {
+          "keyword": "monetization",
+          "score": 5
+        },
+        {
+          "keyword": "growth",
+          "score": 5
+        },
+        {
+          "keyword": "go-to-market",
+          "score": 5
+        },
+        {
+          "keyword": "strategy",
+          "score": 4
+        },
+        {
+          "keyword": "saas strategy",
+          "score": 5
+        }
+      ],
+      "constraints": [
+        "不得跳过风险评估直接进入执行",
+        "不得在没有回滚方案的情况下推进生产高风险变更",
+        "不得在反复失败场景下继续猜测，必须转入根因排查",
+        "重大变更必须保留人工 sign-off 节点"
+      ],
+      "evidence_requirements": [
+        "风险矩阵（影响面 / 回滚成本 / 监控信号）",
+        "分阶段执行计划与决策检查点",
+        "回滚策略与触发条件",
+        "上线前 checklist 与责任分工"
+      ]
+    },
+    "Technical Trinity": {
+      "positive": [
+        {
+          "keyword": "架构设计",
+          "score": 5
+        },
+        {
+          "keyword": "系统设计",
+          "score": 5
+        },
+        {
+          "keyword": "技术选型",
+          "score": 5
+        },
+        {
+          "keyword": "可扩展",
+          "score": 4
+        },
+        {
+          "keyword": "高并发",
+          "score": 4
+        },
+        {
+          "keyword": "云原生",
+          "score": 4
+        },
+        {
+          "keyword": "devsecops",
+          "score": 4
+        },
+        {
+          "keyword": "owasp",
+          "score": 4
+        },
+        {
+          "keyword": "sre",
+          "score": 4
+        },
+        {
+          "keyword": "重构",
+          "score": 4
+        },
+        {
+          "keyword": "技术债",
+          "score": 4
+        },
+        {
+          "keyword": "bug",
+          "score": 2
+        },
+        {
+          "keyword": "小 bug",
+          "score": 2
+        },
+        {
+          "keyword": "小bug",
+          "score": 2
+        },
+        {
+          "keyword": "修一下",
+          "score": 2
+        },
+        {
+          "keyword": "直接修",
+          "score": 2
+        },
+        {
+          "keyword": "跑回归",
+          "score": 2
+        },
+        {
+          "keyword": "python",
+          "score": 5
+        },
+        {
+          "keyword": "django",
+          "score": 5
+        },
+        {
+          "keyword": "flask",
+          "score": 5
+        },
+        {
+          "keyword": "fastapi",
+          "score": 5
+        },
+        {
+          "keyword": "celery",
+          "score": 4
+        },
+        {
+          "keyword": "golang",
+          "score": 5
+        },
+        {
+          "keyword": "gin",
+          "score": 5
+        },
+        {
+          "keyword": "fiber",
+          "score": 5
+        },
+        {
+          "keyword": "go kit",
+          "score": 4
+        },
+        {
+          "keyword": "node",
+          "score": 5
+        },
+        {
+          "keyword": "node.js",
+          "score": 5
+        },
+        {
+          "keyword": "express",
+          "score": 5
+        },
+        {
+          "keyword": "nestjs",
+          "score": 5
+        },
+        {
+          "keyword": "nest",
+          "score": 4
+        },
+        {
+          "keyword": "koa",
+          "score": 4
+        },
+        {
+          "keyword": "typescript backend",
+          "score": 4
+        },
+        {
+          "keyword": "npm",
+          "score": 3
+        },
+        {
+          "keyword": "rust",
+          "score": 5
+        },
+        {
+          "keyword": "cargo",
+          "score": 5
+        },
+        {
+          "keyword": "tokio",
+          "score": 5
+        },
+        {
+          "keyword": "actix",
+          "score": 5
+        },
+        {
+          "keyword": "axum",
+          "score": 5
+        },
+        {
+          "keyword": "warp",
+          "score": 4
+        },
+        {
+          "keyword": "rocket",
+          "score": 4
+        },
+        {
+          "keyword": "serde",
+          "score": 4
+        },
+        {
+          "keyword": "architecture",
+          "score": 5
+        },
+        {
+          "keyword": "system design",
+          "score": 5
+        },
+        {
+          "keyword": "module map",
+          "score": 4
+        },
+        {
+          "keyword": "zoom out",
+          "score": 4
+        },
+        {
+          "keyword": "call graph",
+          "score": 4
+        },
+        {
+          "keyword": "data flow",
+          "score": 4
+        },
+        {
+          "keyword": "seam",
+          "score": 4
+        },
+        {
+          "keyword": "adapter",
+          "score": 4
+        },
+        {
+          "keyword": "shallow module",
+          "score": 5
+        },
+        {
+          "keyword": "deep module",
+          "score": 5
+        },
+        {
+          "keyword": "deepening",
+          "score": 5
+        },
+        {
+          "keyword": "locality",
+          "score": 4
+        },
+        {
+          "keyword": "leverage",
+          "score": 4
+        },
+        {
+          "keyword": "testability",
+          "score": 4
+        },
+        {
+          "keyword": "migration",
+          "score": 4
+        },
+        {
+          "keyword": "架构",
+          "score": 5
+        },
+        {
+          "keyword": "模块地图",
+          "score": 4
+        },
+        {
+          "keyword": "调用链",
+          "score": 4
+        },
+        {
+          "keyword": "适配器",
+          "score": 4
+        },
+        {
+          "keyword": "可测试性",
+          "score": 4
+        }
+      ],
+      "negative": [],
+      "constraints": [
+        "架构变更必须给出模块/接口/边界影响范围",
+        "多语言实现建议必须落到 language-profiles.yaml 已注册的 profile",
+        "迁移与重构必须保留行为对等的回归证据",
+        "禁止把业务战略 / 融资 / 定价类请求路由到本 Agent"
+      ],
+      "evidence_requirements": [
+        "目标语言对应的 lint / test / build 命令（来自 language-profiles.yaml）",
+        "接口契约与现有调用方清单",
+        "回归测试结果或可运行验证脚本",
+        "对架构改造场景：模块地图或调用链证据"
+      ]
+    },
+    "Code Audit Council": {
+      "positive": [
+        {
+          "keyword": "code review",
+          "score": 6
+        },
+        {
+          "keyword": "review",
+          "score": 6
+        },
+        {
+          "keyword": "pr review",
+          "score": 6
+        },
+        {
+          "keyword": "security review",
+          "score": 6
+        },
+        {
+          "keyword": "代码review",
+          "score": 6
+        },
+        {
+          "keyword": "代码 review",
+          "score": 6
+        },
+        {
+          "keyword": "审计",
+          "score": 6
+        },
+        {
+          "keyword": "代码审查",
+          "score": 6
+        },
+        {
+          "keyword": "漏洞",
+          "score": 6
+        },
+        {
+          "keyword": "安全检查",
+          "score": 6
+        },
+        {
+          "keyword": "sql 注入",
+          "score": 6
+        },
+        {
+          "keyword": "xss",
+          "score": 6
+        },
+        {
+          "keyword": "idor",
+          "score": 6
+        },
+        {
+          "keyword": "pr 前检查",
+          "score": 5
+        },
+        {
+          "keyword": "合入前检查",
+          "score": 5
+        },
+        {
+          "keyword": "性能瓶颈",
+          "score": 4
+        },
+        {
+          "keyword": "n+1",
+          "score": 4
+        },
+        {
+          "keyword": "可读性",
+          "score": 4
+        }
+      ],
+      "negative": [
+        {
+          "keyword": "商业模式",
+          "score": 4
+        },
+        {
+          "keyword": "融资",
+          "score": 4
+        },
+        {
+          "keyword": "定价",
+          "score": 3
+        },
+        {
+          "keyword": "ui review",
+          "score": 6
+        },
+        {
+          "keyword": "ux review",
+          "score": 6
+        },
+        {
+          "keyword": "视觉评审",
+          "score": 6
+        },
+        {
+          "keyword": "动效评审",
+          "score": 6
+        }
+      ],
+      "constraints": [
+        "审查意见必须按严重度（P0/P1/P2）排序",
+        "必须区分 UI/UX 审查与代码/安全审查",
+        "禁止把业务战略类讨论归入审查范围",
+        "审计发现必须可执行：每条 finding 必须给出修复建议或建议的修复路径"
+      ],
+      "evidence_requirements": [
+        "受影响文件 / 模块清单",
+        "严重度判定依据（安全影响 / 可维护性 / 行为差异）",
+        "建议的修复 patch 或步骤",
+        "对 P0 finding：阻断合并的判断与依据"
+      ]
+    },
+    "Git Workflow Guardian": {
+      "positive": [
+        {
+          "keyword": "git workflow",
+          "score": 7
+        },
+        {
+          "keyword": "git-workflow",
+          "score": 7
+        },
+        {
+          "keyword": "git flow",
+          "score": 6
+        },
+        {
+          "keyword": "git-flow",
+          "score": 6
+        },
+        {
+          "keyword": "git",
+          "score": 4
+        },
+        {
+          "keyword": "status",
+          "score": 4
+        },
+        {
+          "keyword": "git add",
+          "score": 4
+        },
+        {
+          "keyword": "commit",
+          "score": 5
+        },
+        {
+          "keyword": "commits",
+          "score": 5
+        },
+        {
+          "keyword": "push",
+          "score": 5
+        },
+        {
+          "keyword": "pull",
+          "score": 4
+        },
+        {
+          "keyword": "branch",
+          "score": 4
+        },
+        {
+          "keyword": "checkout",
+          "score": 4
+        },
+        {
+          "keyword": "merge",
+          "score": 4
+        },
+        {
+          "keyword": "rebase",
+          "score": 5
+        },
+        {
+          "keyword": "cherry-pick",
+          "score": 5
+        },
+        {
+          "keyword": "tag",
+          "score": 4
+        },
+        {
+          "keyword": "stash",
+          "score": 4
+        },
+        {
+          "keyword": "pr",
+          "score": 5
+        },
+        {
+          "keyword": "mr",
+          "score": 5
+        },
+        {
+          "keyword": "pull request",
+          "score": 5
+        },
+        {
+          "keyword": "merge request",
+          "score": 5
+        },
+        {
+          "keyword": "提交",
+          "score": 5
+        },
+        {
+          "keyword": "推送",
+          "score": 5
+        },
+        {
+          "keyword": "分支",
+          "score": 4
+        },
+        {
+          "keyword": "合并",
+          "score": 4
+        },
+        {
+          "keyword": "冲突",
+          "score": 5
+        },
+        {
+          "keyword": "回滚",
+          "score": 5
+        },
+        {
+          "keyword": "提交信息",
+          "score": 5
+        }
+      ],
+      "negative": [
+        {
+          "keyword": "商业模式",
+          "score": 4
+        },
+        {
+          "keyword": "融资",
+          "score": 4
+        },
+        {
+          "keyword": "定价",
+          "score": 3
+        },
+        {
+          "keyword": "ui",
+          "score": 3
+        },
+        {
+          "keyword": "ux",
+          "score": 3
+        },
+        {
+          "keyword": "react",
+          "score": 3
+        }
+      ],
+      "constraints": [
+        "禁止直接推送到 main / master 等受保护分支",
+        "禁止跳过 PR 流程直接合并",
+        "冲突处理必须先 rebase 后 merge，不允许无视冲突直接 push",
+        "敏感操作（force push / 强制覆盖 / 删除远端分支）必须二次确认"
+      ],
+      "evidence_requirements": [
+        "当前分支状态（status / ahead-behind）",
+        "PR / MR 链接或编号",
+        "CI / lint / test 通过状态",
+        "涉及 worktree 时：worktree 路径与隔离分支清单"
+      ]
+    },
+    "World-Class Product Architect": {
+      "positive": [
+        {
+          "keyword": "product brief",
+          "score": 6
+        },
+        {
+          "keyword": "product strategy",
+          "score": 6
+        },
+        {
+          "keyword": "product council",
+          "score": 6
+        },
+        {
+          "keyword": "product expert team",
+          "score": 6
+        },
+        {
+          "keyword": "prd",
+          "score": 6
+        },
+        {
+          "keyword": "feature spec",
+          "score": 5
+        },
+        {
+          "keyword": "requirement analysis",
+          "score": 5
+        },
+        {
+          "keyword": "user research",
+          "score": 5
+        },
+        {
+          "keyword": "competitive analysis",
+          "score": 5
+        },
+        {
+          "keyword": "metrics",
+          "score": 5
+        },
+        {
+          "keyword": "roadmap",
+          "score": 5
+        },
+        {
+          "keyword": "sprint",
+          "score": 4
+        },
+        {
+          "keyword": "stakeholder",
+          "score": 4
+        },
+        {
+          "keyword": "acceptance criteria",
+          "score": 6
+        },
+        {
+          "keyword": "user flow",
+          "score": 6
+        },
+        {
+          "keyword": "user journey",
+          "score": 6
+        },
+        {
+          "keyword": "scope",
+          "score": 5
+        },
+        {
+          "keyword": "mvp",
+          "score": 5
+        },
+        {
+          "keyword": "onboarding",
+          "score": 5
+        },
+        {
+          "keyword": "beta",
+          "score": 6
+        },
+        {
+          "keyword": "internal beta",
+          "score": 6
+        },
+        {
+          "keyword": "user testing",
+          "score": 5
+        },
+        {
+          "keyword": "cohort",
+          "score": 5
+        },
+        {
+          "keyword": "内测",
+          "score": 6
+        },
+        {
+          "keyword": "用户反馈",
+          "score": 5
+        },
+        {
+          "keyword": "可用性测试",
+          "score": 5
+        },
+        {
+          "keyword": "需求拆解",
+          "score": 6
+        },
+        {
+          "keyword": "产品战略",
+          "score": 6
+        },
+        {
+          "keyword": "产品专家团",
+          "score": 6
+        },
+        {
+          "keyword": "产品团队",
+          "score": 5
+        },
+        {
+          "keyword": "功能规格",
+          "score": 5
+        },
+        {
+          "keyword": "需求分析",
+          "score": 5
+        },
+        {
+          "keyword": "用户研究",
+          "score": 5
+        },
+        {
+          "keyword": "竞品",
+          "score": 5
+        },
+        {
+          "keyword": "指标",
+          "score": 4
+        },
+        {
+          "keyword": "路线图",
+          "score": 5
+        },
+        {
+          "keyword": "迭代规划",
+          "score": 4
+        },
+        {
+          "keyword": "干系人",
+          "score": 4
+        },
+        {
+          "keyword": "验收标准",
+          "score": 6
+        },
+        {
+          "keyword": "用户流",
+          "score": 6
+        },
+        {
+          "keyword": "用户旅程",
+          "score": 6
+        },
+        {
+          "keyword": "范围",
+          "score": 5
+        },
+        {
+          "keyword": "需求文档",
+          "score": 5
+        },
+        {
+          "keyword": "前端",
+          "score": 6
+        },
+        {
+          "keyword": "ui",
+          "score": 6
+        },
+        {
+          "keyword": "ux",
+          "score": 6
+        },
+        {
+          "keyword": "交互",
+          "score": 6
+        },
+        {
+          "keyword": "design system",
+          "score": 5
+        },
+        {
+          "keyword": "prototype",
+          "score": 5
+        },
+        {
+          "keyword": "prototype design",
+          "score": 6
+        },
+        {
+          "keyword": "design prototype",
+          "score": 6
+        },
+        {
+          "keyword": "interactive prototype",
+          "score": 5
+        },
+        {
+          "keyword": "high-fidelity",
+          "score": 5
+        },
+        {
+          "keyword": "html prototype",
+          "score": 5
+        },
+        {
+          "keyword": "visual design",
+          "score": 5
+        },
+        {
+          "keyword": "page design",
+          "score": 4
+        },
+        {
+          "keyword": "component library",
+          "score": 5
+        },
+        {
+          "keyword": "dashboard",
+          "score": 5
+        },
+        {
+          "keyword": "responsive",
+          "score": 5
+        },
+        {
+          "keyword": "mobile",
+          "score": 5
+        },
+        {
+          "keyword": "accessibility",
+          "score": 5
+        },
+        {
+          "keyword": "a11y",
+          "score": 5
+        },
+        {
+          "keyword": "form ux",
+          "score": 5
+        },
+        {
+          "keyword": "information hierarchy",
+          "score": 4
+        },
+        {
+          "keyword": "validation",
+          "score": 4
+        },
+        {
+          "keyword": "conversion",
+          "score": 4
+        },
+        {
+          "keyword": "表单",
+          "score": 5
+        },
+        {
+          "keyword": "错误提示",
+          "score": 5
+        },
+        {
+          "keyword": "空状态",
+          "score": 5
+        },
+        {
+          "keyword": "失败反馈",
+          "score": 5
+        },
+        {
+          "keyword": "接口失败",
+          "score": 5
+        },
+        {
+          "keyword": "登录",
+          "score": 5
+        },
+        {
+          "keyword": "后台页面",
+          "score": 5
+        },
+        {
+          "keyword": "原型",
+          "score": 5
+        },
+        {
+          "keyword": "原型设计",
+          "score": 6
+        },
+        {
+          "keyword": "原型专家团",
+          "score": 6
+        },
+        {
+          "keyword": "设计原型",
+          "score": 6
+        },
+        {
+          "keyword": "高保真",
+          "score": 5
+        },
+        {
+          "keyword": "交互原型",
+          "score": 5
+        },
+        {
+          "keyword": "html 原型",
+          "score": 5
+        },
+        {
+          "keyword": "可运行原型",
+          "score": 5
+        },
+        {
+          "keyword": "设计系统",
+          "score": 5
+        },
+        {
+          "keyword": "视觉设计",
+          "score": 5
+        },
+        {
+          "keyword": "页面设计",
+          "score": 4
+        },
+        {
+          "keyword": "品牌调性",
+          "score": 4
+        },
+        {
+          "keyword": "视觉层次",
+          "score": 4
+        },
+        {
+          "keyword": "交互",
+          "score": 5
+        },
+        {
+          "keyword": "react",
+          "score": 5
+        },
+        {
+          "keyword": "next.js",
+          "score": 5
+        },
+        {
+          "keyword": "tailwind",
+          "score": 5
+        },
+        {
+          "keyword": "shadcn",
+          "score": 5
+        },
+        {
+          "keyword": "动效",
+          "score": 4
+        },
+        {
+          "keyword": "framer motion",
+          "score": 4
+        },
+        {
+          "keyword": "组件化",
+          "score": 4
+        },
+        {
+          "keyword": "页面改版",
+          "score": 4
+        },
+        {
+          "keyword": "仪表盘",
+          "score": 4
+        },
+        {
+          "keyword": "可访问性",
+          "score": 4
+        },
+        {
+          "keyword": "post-release",
+          "score": 6
+        },
+        {
+          "keyword": "post release",
+          "score": 6
+        },
+        {
+          "keyword": "after launch",
+          "score": 6
+        },
+        {
+          "keyword": "after release",
+          "score": 6
+        },
+        {
+          "keyword": "already live",
+          "score": 6
+        },
+        {
+          "keyword": "rollout feedback",
+          "score": 6
+        },
+        {
+          "keyword": "production feedback",
+          "score": 6
+        },
+        {
+          "keyword": "customer feedback",
+          "score": 6
+        },
+        {
+          "keyword": "telemetry",
+          "score": 5
+        },
+        {
+          "keyword": "support",
+          "score": 5
+        },
+        {
+          "keyword": "user feedback",
+          "score": 6
+        },
+        {
+          "keyword": "monitor",
+          "score": 4
+        },
+        {
+          "keyword": "reopen iteration",
+          "score": 5
+        },
+        {
+          "keyword": "发布后",
+          "score": 6
+        },
+        {
+          "keyword": "上线后",
+          "score": 6
+        },
+        {
+          "keyword": "上线反馈",
+          "score": 6
+        },
+        {
+          "keyword": "用户反馈回流",
+          "score": 6
+        },
+        {
+          "keyword": "真实反馈",
+          "score": 6
+        },
+        {
+          "keyword": "生产反馈",
+          "score": 6
+        },
+        {
+          "keyword": "发布后复盘",
+          "score": 6
+        }
+      ],
+      "negative": [
+        {
+          "keyword": "jvm",
+          "score": 4
+        },
+        {
+          "keyword": "gc",
+          "score": 4
+        },
+        {
+          "keyword": "java 8",
+          "score": 4
+        },
+        {
+          "keyword": "spring boot",
+          "score": 4
+        },
+        {
+          "keyword": "融资",
+          "score": 3
+        },
+        {
+          "keyword": "pricing",
+          "score": 4
+        },
+        {
+          "keyword": "monetization",
+          "score": 4
+        },
+        {
+          "keyword": "growth",
+          "score": 4
+        },
+        {
+          "keyword": "strategy",
+          "score": 4
+        }
+      ],
+      "constraints": [
+        "PRD / 验收标准必须先于实现工作产出",
+        "涉及 UI/UX 时必须给出可访问性检查清单",
+        "涉及发布后反馈回流时必须绑定监控信号而不是主观判断",
+        "禁止把后端基础设施 / 纯业务战略作为本 Agent 主线"
+      ],
+      "evidence_requirements": [
+        "用户流与验收标准",
+        "影响范围（界面 / 交互 / 设计系统 / 可访问性）",
+        "对内测 / beta 场景：cohort 定义与反馈门禁",
+        "对发布后场景：监控信号或真实用户反馈样本"
+      ]
+    },
+    "Data Pipeline Guardian": {
+      "positive": [
+        {"keyword": "data pipeline", "score": 6},
+        {"keyword": "ETL", "score": 6},
+        {"keyword": "ELT", "score": 6},
+        {"keyword": "stream processing", "score": 6},
+        {"keyword": "kafka", "score": 5},
+        {"keyword": "spark", "score": 5},
+        {"keyword": "flink", "score": 5},
+        {"keyword": "airflow", "score": 5},
+        {"keyword": "dbt", "score": 5},
+        {"keyword": "data quality", "score": 6},
+        {"keyword": "data governance", "score": 6},
+        {"keyword": "schema evolution", "score": 5},
+        {"keyword": "CDC", "score": 5},
+        {"keyword": "change data capture", "score": 5},
+        {"keyword": "data warehouse", "score": 5},
+        {"keyword": "data lake", "score": 5},
+        {"keyword": "data mesh", "score": 5},
+        {"keyword": "batch job", "score": 5},
+        {"keyword": "dataflow", "score": 5},
+        {"keyword": "pipeline orchestration", "score": 5},
+        {"keyword": "数据管道", "score": 6},
+        {"keyword": "数据流", "score": 5},
+        {"keyword": "数据质量", "score": 6},
+        {"keyword": "数据治理", "score": 6},
+        {"keyword": "schema 变更", "score": 5},
+        {"keyword": "数据血缘", "score": 5},
+        {"keyword": "实时计算", "score": 5},
+        {"keyword": "批处理", "score": 5},
+        {"keyword": "数据仓库", "score": 6},
+        {"keyword": "数仓", "score": 6},
+        {"keyword": "数据湖", "score": 5},
+        {"keyword": "实时数仓", "score": 6},
+        {"keyword": "数据流", "score": 6},
+        {"keyword": "数据中台", "score": 6},
+        {"keyword": "埋点", "score": 5},
+        {"keyword": "日志收集", "score": 5},
+        {"keyword": "Iceberg", "score": 5},
+        {"keyword": "Hudi", "score": 5},
+        {"keyword": "Delta Lake", "score": 5},
+        {"keyword": "Lambda架构", "score": 5},
+        {"keyword": "Kappa架构", "score": 5}
+      ],
+      "negative": [
+        {"keyword": "ui", "score": 3},
+        {"keyword": "ux", "score": 3},
+        {"keyword": "frontend", "score": 3},
+        {"keyword": "visual design", "score": 3},
+        {"keyword": "商业模式", "score": 6},
+        {"keyword": "融资", "score": 6},
+        {"keyword": "定价策略", "score": 6}
+      ],
+      "constraints": [
+        "数据管道变更必须评估对下游消费者的影响",
+        "schema 变更必须遵循向后兼容或显式迁移策略",
+        "数据质量问题必须分级（阻塞/告警/日志）并绑定处理策略",
+        "流处理场景必须明确 exactly-once/at-least-once 语义选择及其实现机制",
+        "禁止在没有数据血缘追踪的情况下推进复杂管道改造"
+      ],
+      "evidence_requirements": [
+        "管道拓扑图（来源/转换/目标）",
+        "数据质量检查点与规则清单",
+        "schema 契约与版本策略",
+        "失败场景处理方案（重试/死信/告警）",
+        "流处理语义保证机制与 checkpoint 策略",
+        "schema 变更向后兼容性分析与迁移步骤"
+      ]
+    },
+    "API Contract Sentinel": {
+      "positive": [
+        {"keyword": "API design", "score": 6},
+        {"keyword": "API contract", "score": 6},
+        {"keyword": "OpenAPI", "score": 6},
+        {"keyword": "Swagger", "score": 5},
+        {"keyword": "AsyncAPI", "score": 6},
+        {"keyword": "REST API", "score": 5},
+        {"keyword": "GraphQL", "score": 6},
+        {"keyword": "gRPC", "score": 6},
+        {"keyword": "protobuf", "score": 5},
+        {"keyword": "API versioning", "score": 6},
+        {"keyword": "backward compatibility", "score": 6},
+        {"keyword": "breaking change", "score": 6},
+        {"keyword": "API gateway", "score": 5},
+        {"keyword": "rate limiting", "score": 5},
+        {"keyword": "idempotency", "score": 5},
+        {"keyword": "API security", "score": 5},
+        {"keyword": "contract-first", "score": 6},
+        {"keyword": "API 设计", "score": 6},
+        {"keyword": "API 契约", "score": 6},
+        {"keyword": "接口设计", "score": 5},
+        {"keyword": "接口契约", "score": 6},
+        {"keyword": "接口版本", "score": 6},
+        {"keyword": "向后兼容", "score": 6},
+        {"keyword": "破坏性变更", "score": 6},
+        {"keyword": "限流", "score": 5},
+        {"keyword": "幂等", "score": 5},
+        {"keyword": "幂等性", "score": 5},
+        {"keyword": "API 安全", "score": 5},
+        {"keyword": "契约优先", "score": 6},
+        {"keyword": "API版本", "score": 6},
+        {"keyword": "API 版本", "score": 6},
+        {"keyword": "版本管理", "score": 5},
+        {"keyword": "schema演进", "score": 5},
+        {"keyword": "schema evolution", "score": 5},
+        {"keyword": "webhook", "score": 5},
+        {"keyword": "回调接口", "score": 5},
+        {"keyword": "session同步", "score": 5}
+      ],
+      "negative": [
+        {"keyword": "ui", "score": 3},
+        {"keyword": "ux", "score": 3},
+        {"keyword": "visual design", "score": 3},
+        {"keyword": "商业模式", "score": 4},
+        {"keyword": "融资", "score": 4},
+        {"keyword": "data pipeline", "score": 3},
+        {"keyword": "ETL", "score": 3}
+      ],
+      "constraints": [
+        "API 变更必须评估对现有客户端的兼容性影响",
+        "breaking change 必须显式标记并给出迁移窗口或版本策略",
+        "公开 API 必须配套 OpenAPI/AsyncAPI 规范",
+        "API 安全审查必须覆盖认证/授权/输入验证/速率限制",
+        "GraphQL schema 变更必须评估查询复杂度与 N+1 风险",
+        "禁止在没有客户端影响分析的情况下推进 breaking change"
+      ],
+      "evidence_requirements": [
+        "OpenAPI/AsyncAPI/GraphQL schema 规范",
+        "向后兼容性分析（字段变更/端点废弃/行为变更）",
+        "客户端影响清单（按调用方/使用频率/关键程度分级）",
+        "版本迁移计划与弃用时间表",
+        "威胁模型与缓解措施（涉及安全时）",
+        "速率限制策略与配额分配方案（涉及性能时）"
+      ]
+    }
+  },
+  "language_profiles": {
+    "python": {
+      "lead_agent": "Technical Trinity",
+      "keywords": [
+        "python",
+        "django",
+        "flask",
+        "fastapi",
+        "celery",
+        "gunicorn",
+        "uvicorn",
+        "pydantic"
+      ]
+    },
+    "go": {
+      "lead_agent": "Technical Trinity",
+      "bare_keyword": "go",
+      "context_keywords": [
+        "backend",
+        "api",
+        "service",
+        "server",
+        "gateway",
+        "microservice",
+        "grpc",
+        "后端",
+        "接口",
+        "服务",
+        "网关"
+      ],
+      "keywords": [
+        "go语言",
+        "golang",
+        "gin",
+        "fiber",
+        "go kit",
+        "gorm",
+        "grpc-go"
+      ]
+    },
+    "nodejs": {
+      "lead_agent": "Technical Trinity",
+      "keywords": [
+        "node",
+        "node.js",
+        "express",
+        "nestjs",
+        "koa",
+        "pm2",
+        "ts-node",
+        "typescript backend"
+      ]
+    },
+    "rust": {
+      "lead_agent": "Technical Trinity",
+      "keywords": [
+        "rust",
+        "cargo",
+        "tokio",
+        "actix",
+        "axum",
+        "warp",
+        "rocket",
+        "serde"
+      ]
+    },
+    "java": {
+      "lead_agent": "Java Virtuoso",
+      "profile": "java",
+      "keywords": [
+        "java",
+        "jdk",
+        "jvm",
+        "spring",
+        "spring boot",
+        "virtual thread",
+        "loom",
+        "gc",
+        "full gc",
+        "zgc",
+        "g1",
+        "java 8"
+      ]
+    },
+    "kotlin": {
+      "lead_agent": "Technical Trinity",
+      "profile": "kotlin",
+      "keywords": [
+        "kotlin",
+        "ktor",
+        "exposed",
+        "kotlinx",
+        "gradle.kts",
+        "kotlin DSL"
+      ]
+    },
+    "swift": {
+      "lead_agent": "Technical Trinity",
+      "profile": "swift",
+      "keywords": [
+        "swift",
+        "swiftui",
+        "uikit",
+        "vapor",
+        "swiftpm",
+        "swift package manager"
+      ]
+    },
+    "cpp": {
+      "lead_agent": "Technical Trinity",
+      "profile": "cpp",
+      "keywords": [
+        "cpp",
+        "c++",
+        "cmake",
+        "conan",
+        "vcpkg",
+        "clang",
+        "clang-tidy"
+      ]
+    },
+    "csharp": {
+      "lead_agent": "Technical Trinity",
+      "profile": "csharp",
+      "keywords": [
+        "csharp",
+        "c#",
+        "dotnet",
+        ".net",
+        "asp.net",
+        "blazor",
+        "entity framework"
+      ]
+    },
+    "php": {
+      "lead_agent": "Technical Trinity",
+      "profile": "php",
+      "keywords": [
+        "php",
+        "laravel",
+        "symfony",
+        "composer",
+        "phpcs",
+        "phpstan"
+      ]
+    },
+    "ruby": {
+      "lead_agent": "Technical Trinity",
+      "profile": "ruby",
+      "keywords": [
+        "ruby",
+        "rails",
+        "ruby on rails",
+        "gem",
+        "bundler",
+        "rspec",
+        "sinatra",
+        "rubocop"
+      ]
+    },
+    "elixir": {
+      "lead_agent": "Technical Trinity",
+      "profile": "elixir",
+      "keywords": [
+        "elixir",
+        "phoenix",
+        "erlang",
+        "otp",
+        "ecto",
+        "liveview",
+        "mix",
+        "credo"
+      ]
+    },
+    "scala": {
+      "lead_agent": "Technical Trinity",
+      "profile": "scala",
+      "keywords": [
+        "scala",
+        "play framework",
+        "akka",
+        "cats",
+        "zio",
+        "sbt",
+        "scalafix"
+      ]
+    }
+  },
+  "process_skill_rules": {
+    "pre-development-planning": [
+      {
+        "keyword": "rewrite",
+        "score": 1
+      },
+      {
+        "keyword": "migrate",
+        "score": 1
+      },
+      {
+        "keyword": "overhaul",
+        "score": 1
+      },
+      {
+        "keyword": "transform",
+        "score": 1
+      },
+      {
+        "keyword": "refactor entire project",
+        "score": 1
+      },
+      {
+        "keyword": "plan before coding",
+        "score": 1
+      },
+      {
+        "keyword": "planning before coding",
+        "score": 1
+      },
+      {
+        "keyword": "project-wide refactor",
+        "score": 1
+      },
+      {
+        "keyword": "large-scale refactor",
+        "score": 1
+      },
+      {
+        "keyword": "architecture migration",
+        "score": 1
+      },
+      {
+        "keyword": "rewrite this project",
+        "score": 1
+      },
+      {
+        "keyword": "大规模",
+        "score": 1
+      },
+      {
+        "keyword": "大规模迁移",
+        "score": 1
+      },
+      {
+        "keyword": "大规模重构",
+        "score": 1
+      },
+      {
+        "keyword": "项目级重构",
+        "score": 1
+      },
+      {
+        "keyword": "整仓改造",
+        "score": 1
+      },
+      {
+        "keyword": "整个项目重写",
+        "score": 1
+      },
+      {
+        "keyword": "规范驱动",
+        "score": 1
+      },
+      {
+        "keyword": "先规划再开发",
+        "score": 1
+      },
+      {
+        "keyword": "先别写代码",
+        "score": 1
+      },
+      {
+        "keyword": "migration",
+        "score": 1
+      },
+      {
+        "keyword": "system map",
+        "score": 1
+      },
+      {
+        "keyword": "module map",
+        "score": 1
+      },
+      {
+        "keyword": "zoom out before planning",
+        "score": 1
+      }
+    ],
+    "bounded-iteration": [
+      {
+        "keyword": "iterate",
+        "score": 1
+      },
+      {
+        "keyword": "iteration",
+        "score": 1
+      },
+      {
+        "keyword": "optimize",
+        "score": 1
+      },
+      {
+        "keyword": "benchmark",
+        "score": 1
+      },
+      {
+        "keyword": "regression",
+        "score": 1
+      },
+      {
+        "keyword": "compare against baseline",
+        "score": 1
+      },
+      {
+        "keyword": "another round",
+        "score": 1
+      },
+      {
+        "keyword": "迭代",
+        "score": 1
+      },
+      {
+        "keyword": "优化",
+        "score": 1
+      },
+      {
+        "keyword": "基准",
+        "score": 1
+      },
+      {
+        "keyword": "benchmark loop",
+        "score": 1
+      },
+      {
+        "keyword": "until stable",
+        "score": 1
+      },
+      {
+        "keyword": "max rounds",
+        "score": 1
+      },
+      {
+        "keyword": "multi-round",
+        "score": 1
+      },
+      {
+        "keyword": "回归",
+        "score": 1
+      },
+      {
+        "keyword": "对比基线",
+        "score": 1
+      },
+      {
+        "keyword": "再来一轮",
+        "score": 1
+      },
+      {
+        "keyword": "迭代到稳定",
+        "score": 1
+      },
+      {
+        "keyword": "多轮优化",
+        "score": 1
+      },
+      {
+        "keyword": "最大轮次",
+        "score": 1
+      },
+      {
+        "keyword": "自我优化",
+        "score": 1
+      }
+    ],
+    "using-git-worktrees": [
+      {
+        "keyword": "worktree",
+        "score": 1
+      },
+      {
+        "keyword": "git worktree",
+        "score": 1
+      },
+      {
+        "keyword": "并行开发",
+        "score": 1
+      },
+      {
+        "keyword": "隔离改动",
+        "score": 1
+      },
+      {
+        "keyword": "多分支并行",
+        "score": 1
+      },
+      {
+        "keyword": "同仓多任务",
+        "score": 1
+      },
+      {
+        "keyword": "hotfix 并行",
+        "score": 1
+      },
+      {
+        "keyword": "同时推进",
+        "score": 1
+      },
+      {
+        "keyword": "互不干扰",
+        "score": 1
+      },
+      {
+        "keyword": "交替推进",
+        "score": 1
+      },
+      {
+        "keyword": "不影响主线",
+        "score": 1
+      }
+    ],
+    "release-gate": [
+      {
+        "keyword": "release gate",
+        "score": 1
+      },
+      {
+        "keyword": "formal release gate",
+        "score": 1
+      },
+      {
+        "keyword": "ready to ship",
+        "score": 1
+      },
+      {
+        "keyword": "ready to release",
+        "score": 1
+      },
+      {
+        "keyword": "ship or hold",
+        "score": 1
+      },
+      {
+        "keyword": "release candidate",
+        "score": 1
+      },
+      {
+        "keyword": "release-readiness",
+        "score": 1
+      },
+      {
+        "keyword": "release readiness",
+        "score": 1
+      },
+      {
+        "keyword": "提交前验收",
+        "score": 1
+      },
+      {
+        "keyword": "发版前验收",
+        "score": 1
+      },
+      {
+        "keyword": "正式验收",
+        "score": 1
+      },
+      {
+        "keyword": "上线前验收",
+        "score": 1
+      },
+      {
+        "keyword": "能不能发版",
+        "score": 1
+      },
+      {
+        "keyword": "能不能提交",
+        "score": 1
+      },
+      {
+        "keyword": "这版能发吗",
+        "score": 1
+      },
+      {
+        "keyword": "能发布吗",
+        "score": 1
+      },
+      {
+        "keyword": "能不能发布",
+        "score": 1
+      },
+      {
+        "keyword": "现在能发布",
+        "score": 1
+      },
+      {
+        "keyword": "版本能发布",
+        "score": 1
+      },
+      {
+        "keyword": "能发版吗",
+        "score": 1
+      },
+      {
+        "keyword": "上线吗",
+        "score": 1
+      },
+      {
+        "keyword": "能不能上线",
+        "score": 1
+      },
+      {
+        "keyword": "能上线吗",
+        "score": 1
+      },
+      {
+        "keyword": "现在能上线",
+        "score": 1
+      },
+      {
+        "keyword": "可以发布吗",
+        "score": 1
+      },
+      {
+        "keyword": "可以发版吗",
+        "score": 1
+      }
+    ],
+    "project-knowledge-capture": [
+      {
+        "keyword": "AGENTS.md",
+        "score": 1
+      },
+      {
+        "keyword": ".agents/skills",
+        "score": 1
+      },
+      {
+        "keyword": "project-local skills",
+        "score": 1
+      },
+      {
+        "keyword": "AI development context",
+        "score": 1
+      },
+      {
+        "keyword": "AI onboarding",
+        "score": 1
+      },
+      {
+        "keyword": "codebase knowledge",
+        "score": 1
+      },
+      {
+        "keyword": "project knowledge",
+        "score": 1
+      },
+      {
+        "keyword": "future AI agents",
+        "score": 1
+      },
+      {
+        "keyword": "项目知识",
+        "score": 1
+      },
+      {
+        "keyword": "AI 开发上下文",
+        "score": 1
+      },
+      {
+        "keyword": "AI开发上下文",
+        "score": 1
+      },
+      {
+        "keyword": "项目本地 skill",
+        "score": 1
+      },
+      {
+        "keyword": "项目本地 skills",
+        "score": 1
+      },
+      {
+        "keyword": "代码库知识",
+        "score": 1
+      },
+      {
+        "keyword": "后续 AI",
+        "score": 1
+      },
+      {
+        "keyword": "避免重复造轮子",
+        "score": 1
+      },
+      {
+        "keyword": "补 AGENTS",
+        "score": 1
+      }
+    ],
+    "git-workflow": [
+      {
+        "keyword": "git workflow",
+        "score": 1
+      },
+      {
+        "keyword": "git-workflow",
+        "score": 1
+      },
+      {
+        "keyword": "git flow",
+        "score": 1
+      },
+      {
+        "keyword": "git-flow",
+        "score": 1
+      },
+      {
+        "keyword": "分支策略",
+        "score": 1
+      },
+      {
+        "keyword": "gitflow",
+        "score": 1
+      },
+      {
+        "keyword": "trunk based",
+        "score": 1
+      },
+      {
+        "keyword": "branch",
+        "score": 1
+      },
+      {
+        "keyword": "分支",
+        "score": 1
+      },
+      {
+        "keyword": "提交规范",
+        "score": 1
+      },
+      {
+        "keyword": "commit",
+        "score": 1
+      },
+      {
+        "keyword": "commits",
+        "score": 1
+      },
+      {
+        "keyword": "git commit",
+        "score": 1
+      },
+      {
+        "keyword": "提交",
+        "score": 1
+      },
+      {
+        "keyword": "提交代码",
+        "score": 1
+      },
+      {
+        "keyword": "提交改动",
+        "score": 1
+      },
+      {
+        "keyword": "commit message",
+        "score": 1
+      },
+      {
+        "keyword": "conventional commits",
+        "score": 1
+      },
+      {
+        "keyword": "push",
+        "score": 1
+      },
+      {
+        "keyword": "git push",
+        "score": 1
+      },
+      {
+        "keyword": "推送",
+        "score": 1
+      },
+      {
+        "keyword": "pr",
+        "score": 1
+      },
+      {
+        "keyword": "pr流程",
+        "score": 1
+      },
+      {
+        "keyword": "pull request",
+        "score": 1
+      },
+      {
+        "keyword": "merge request",
+        "score": 1
+      },
+      {
+        "keyword": "mr",
+        "score": 1
+      },
+      {
+        "keyword": "拉取请求",
+        "score": 1
+      },
+      {
+        "keyword": "pr 流程",
+        "score": 1
+      },
+      {
+        "keyword": "checkout",
+        "score": 1
+      },
+      {
+        "keyword": "merge",
+        "score": 1
+      },
+      {
+        "keyword": "rebase",
+        "score": 1
+      },
+      {
+        "keyword": "release",
+        "score": 1
+      },
+      {
+        "keyword": "发版",
+        "score": 1
+      },
+      {
+        "keyword": "发布",
+        "score": 1
+      },
+      {
+        "keyword": "tag",
+        "score": 1
+      },
+      {
+        "keyword": "status",
+        "score": 1
+      },
+      {
+        "keyword": "git add",
+        "score": 1
+      },
+      {
+        "keyword": "cherry-pick",
+        "score": 1
+      },
+      {
+        "keyword": "stash",
+        "score": 1
+      },
+      {
+        "keyword": "冲突",
+        "score": 1
+      },
+      {
+        "keyword": "回滚",
+        "score": 1
+      },
+      {
+        "keyword": "提交信息",
+        "score": 1
+      }
+    ]
+  }
+}

@@ -531,6 +531,13 @@ _SIZE_TRANSLATION_PREFIX = "CartModule-SizeBar-SizeTranslation-"
 #   material total:   #CartModule-MaterialRow-Summary-TotalQuantity-{style}
 #   product name:     #CartModule-TinyProduct-{style}-ProductName
 
+# Availability-date tab (outside the size table). The button text is the
+# earliest date on which the product can ship. If it isn't today, the size
+# table's inventory numbers refer to *that future date*, not today — so no
+# quantity is orderable now regardless of what the tiles show. Must be
+# checked first, before reading any size-tile inventory.
+_AVAILABLE_DATE_BUTTON = "#DateTabButton"
+
 
 # ---------------------------------------------------------------------------
 # Driver
@@ -802,11 +809,13 @@ class AdidasClickDriver:
             status, style, line, code = p["status"], p["style"], p["line"], p["code"]
 
             # "Not available" sizes can never be ordered (no quantity input) —
-            # drop them under every policy, with a clear note.
+            # drop them under every policy, with a clear note. Date-gated
+            # products (available date != today) surface the future date so
+            # the caller knows when the size can ship.
             if status == "unavailable":
                 results.append(
                     self._prepared_result(
-                        p, quantity=0, note="not available — cannot be ordered"
+                        p, quantity=0, note=self._status_note(p)
                     )
                 )
                 continue
@@ -868,6 +877,7 @@ class AdidasClickDriver:
         for style, lines in _group_by_style(request.lines).items():
             self._open_product(style)
             product_name = self._read_product_name(style)
+            available_today, available_date = self._product_available_today()
             code_map = self._size_code_map()
             for line in lines:
                 code = next(
@@ -880,6 +890,20 @@ class AdidasClickDriver:
                         f"Size {line.size!r} is not offered for {style}. "
                         f"Available sizes: {', '.join(sorted(code_map)) or '(none read)'}."
                     )
+                if not available_today:
+                    prepared.append(
+                        {
+                            "style": style,
+                            "line": line,
+                            "code": code,
+                            "product_name": product_name,
+                            "indicator": None,
+                            "available": 0,
+                            "status": "unavailable",
+                            "available_date": available_date,
+                        }
+                    )
+                    continue
                 status, indicator, available = self._classify_size(
                     style, code, line.quantity
                 )
@@ -966,6 +990,11 @@ class AdidasClickDriver:
     @staticmethod
     def _status_note(p: dict) -> str | None:
         if p["status"] == "unavailable":
+            if p.get("available_date"):
+                return (
+                    f"not available until {p['available_date']} — "
+                    "no inventory available today"
+                )
             return "not available — cannot be ordered"
         if p["status"] == "short":
             return (
@@ -1071,6 +1100,48 @@ class AdidasClickDriver:
             if code and label:
                 out[label] = code
         return out
+
+    def _product_available_today(self) -> tuple[bool, str | None]:
+        """Return ``(available_today, raw_date_text)`` from the availability tab.
+
+        The product page shows an availability-date button
+        (``#DateTabButton``) outside the size table — its text is the earliest
+        date on which the product can ship (e.g. ``"Jul 31, 2026"``). If that
+        isn't today, the size-tile inventory numbers refer to that future date
+        and nothing is orderable now; the order flow and inventory read both
+        gate on this before trusting the size tiles.
+
+        Fail-open: a missing/unparseable date returns ``(True, raw_or_None)``
+        with a warning log — a portal shape change should not silently block
+        every order. The raw text is returned either way so callers can
+        surface it.
+        """
+
+        from datetime import date, datetime
+
+        try:
+            raw = _clean(
+                self.page.locator(_AVAILABLE_DATE_BUTTON).first.inner_text()
+            ) or None
+        except Exception:  # noqa: BLE001
+            raw = None
+        if not raw:
+            logger.warning(
+                "adidas product page: availability date button (%s) missing "
+                "or empty — skipping the today check",
+                _AVAILABLE_DATE_BUTTON,
+            )
+            return True, None
+        try:
+            parsed = datetime.strptime(raw, "%b %d, %Y").date()
+        except ValueError:
+            logger.warning(
+                "adidas product page: could not parse availability date %r "
+                "(expected e.g. 'Jul 31, 2026') — skipping the today check",
+                raw,
+            )
+            return True, raw
+        return parsed == date.today(), raw
 
     def _read_inventory(self, style: str, code: str) -> str | None:
         """Return the inventory-indicator text for a size (e.g. '300+', '160', '0')."""
@@ -1439,13 +1510,18 @@ class AdidasClickDriver:
         for style, lines in _group_by_style(request.lines).items():
             self._open_product(style)
             product_name = self._read_product_name(style)
+            available_today, available_date = self._product_available_today()
             code_map = self._size_code_map()
             for line in lines:
                 wants_all = _norm(line.size) in {"", "*", "all"}
                 if wants_all:
                     for label, code in code_map.items():
                         results.append(
-                            self._inventory_line(style, label, code, product_name, line, None)
+                            self._inventory_line(
+                                style, label, code, product_name, line, None,
+                                available_today=available_today,
+                                available_date=available_date,
+                            )
                         )
                     continue
                 code = next(
@@ -1468,7 +1544,11 @@ class AdidasClickDriver:
                     )
                     continue
                 results.append(
-                    self._inventory_line(style, line.size, code, product_name, line, line.quantity)
+                    self._inventory_line(
+                        style, line.size, code, product_name, line, line.quantity,
+                        available_today=available_today,
+                        available_date=available_date,
+                    )
                 )
         return results
 
@@ -1480,8 +1560,34 @@ class AdidasClickDriver:
         product_name: str | None,
         line: OrderLine,
         requested: int | None,
+        *,
+        available_today: bool = True,
+        available_date: str | None = None,
     ) -> "CheckLineResult":
-        """Classify one size's stock into a :class:`CheckLineResult` (no cart)."""
+        """Classify one size's stock into a :class:`CheckLineResult` (no cart).
+
+        Short-circuits to ``unavailable`` when the product page's availability
+        date isn't today — the size-tile numbers refer to that future date, so
+        reading them for a "today" answer would report ghost stock.
+        """
+
+        if not available_today:
+            return CheckLineResult(
+                style=style,
+                size=size_label,
+                color=line.color or (product_name or ""),
+                requested_quantity=requested,
+                available=None,
+                available_count=0,
+                status=_INVENTORY_STATUS["unavailable"],
+                in_stock=False,
+                note=(
+                    f"not available until {available_date} — "
+                    "no inventory available today"
+                    if available_date
+                    else "not available — no inventory available today"
+                ),
+            )
 
         # Classify against 1 unit so "short" means "cannot even ship one" (== 0
         # with a restock date); the raw indicator carries the actual level.

@@ -1,0 +1,80 @@
+{
+  "skill": "metadata-standards-checker",
+  "source": "synthetic",
+  "n_files": 3,
+  "mean_completeness": 0.9394,
+  "files_passed": 2,
+  "results": [
+    {
+      "standard": "iso19115",
+      "completeness_score": 1.0,
+      "required_fields": 11,
+      "present_required": 11,
+      "errors": 0,
+      "warnings": 2,
+      "issues": [
+        {
+          "level": "warning",
+          "field": "keywords",
+          "message": "recommended element <keywords> not found"
+        },
+        {
+          "level": "warning",
+          "field": "resourceConstraints",
+          "message": "recommended element <resourceConstraints> not found"
+        }
+      ],
+      "passed": true,
+      "file": "iso_complete.xml"
+    },
+    {
+      "standard": "iso19115",
+      "completeness_score": 0.8182,
+      "required_fields": 11,
+      "present_required": 9,
+      "errors": 2,
+      "warnings": 2,
+      "issues": [
+        {
+          "level": "error",
+          "field": "fileIdentifier",
+          "message": "missing required element <fileIdentifier> for iso19115"
+        },
+        {
+          "level": "error",
+          "field": "abstract",
+          "message": "missing required element <abstract> for iso19115"
+        },
+        {
+          "level": "warning",
+          "field": "keywords",
+          "message": "recommended element <keywords> not found"
+        },
+        {
+          "level": "warning",
+          "field": "resourceConstraints",
+          "message": "recommended element <resourceConstraints> not found"
+        }
+      ],
+      "passed": false,
+      "file": "iso_incomplete.xml"
+    },
+    {
+      "standard": "fgdc",
+      "completeness_score": 1.0,
+      "required_fields": 11,
+      "present_required": 11,
+      "errors": 0,
+      "warnings": 1,
+      "issues": [
+        {
+          "level": "warning",
+          "field": "crossref",
+          "message": "recommended element <crossref> not found"
+        }
+      ],
+      "passed": true,
+      "file": "fgdc_complete.xml"
+    }
+  ]
+}

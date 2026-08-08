@@ -1,44 +1,55 @@
-## Description: <br>
-Winskill is a Windows Server operations toolbox that helps agents diagnose disk usage, IIS, services, Windows Update, performance, security logs, registry startup items, storage, networking, certificates, firewall rules, Docker, Kubernetes, and guided repair workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Winskill helps agents provide Windows Server administration guidance for disk analysis, safe cleanup, IIS and service checks, update diagnostics, security auditing, performance monitoring, container checks, compliance review, and multi-server operations.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Windows administrators, operations engineers, and support agents use this skill to generate PowerShell-based diagnostic and maintenance guidance for Windows Server environments. It is intended for local server triage, audit, cleanup, and confirmed repair workflows rather than unattended changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Repair and cleanup flows can stop services, reset networking, clear caches, or delete temporary files. <br>
-Mitigation: Run diagnosis-only steps first, review the proposed command list and impact, require explicit user confirmation, and schedule changes during a maintenance window. <br>
-Risk: Some procedures require administrator privileges on Windows servers and may affect availability. <br>
-Mitigation: Limit execution to authorized administrators, confirm backups or restore points where applicable, and avoid production execution without change approval. <br>
-Risk: The release makes read-only and offline safety claims that do not cover every repair behavior. <br>
-Mitigation: Treat the skill as a repair-capable administrative toolbox and review each generated command before running it. <br>
+## Use Case:
 
+IT administrators, operators, and developers use this skill to ask an agent for Windows Server diagnostics, maintenance command guidance, and operational review steps across local and remote server environments.
 
-## Reference(s): <br>
-- [Winskill ClawHub skill page](https://clawhub.ai/fyniujin/skills/winskill) <br>
-- [Docker Engine on Windows Server documentation](https://docs.docker.com/engine/install/windows-server/) <br>
-- [Install kubectl on Windows documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with PowerShell command blocks, tables, and Chinese-language operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes read-only diagnostic flows plus confirmed administrator repair and cleanup procedures.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The security summary identifies broad remote command execution and credential storage risk in the remote-management workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when multi-server Windows administration is intended, review every remote command before execution, and avoid the remote-management module unless stored credentials and arbitrary remote execution are acceptable.
+
+Risk: The security summary identifies scheduled tasks and destructive repair or cleanup steps that can conflict with read-only or offline safety expectations.
+
+Mitigation: Use read-only diagnostics by default, require explicit confirmation for service changes, cleanup, repair, and scheduled-task operations, and do not deploy this skill in restricted or offline environments as written.
+
+## Reference(s):
+
+- [ClawHub winskill release page](https://clawhub.ai/fyniujin/skills/winskill)
+- [Docker Engine on Windows Server installation documentation](https://docs.docker.com/engine/install/windows-server/)
+- [kubectl on Windows installation documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline PowerShell and shell command blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may require administrator review and explicit user confirmation before execution.]
+
+## Skill Version(s):
+
+3.0.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

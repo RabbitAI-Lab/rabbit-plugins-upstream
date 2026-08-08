@@ -1,47 +1,64 @@
-## Description: <br>
-基于产品信息检测和搜索相似的实用新型/发明专利，帮助跨境电商卖家在上架前识别潜在专利侵权和 TRO 风险。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects and searches similar US utility and invention patents from product information to help sellers identify patent similarity, validity, and TRO enforcement indicators before listing.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers and agents use this skill to query LinkFox/Ruiguan patent data with product titles, product descriptions, and a target US selling region, then review similar utility or invention patents, similarity scores, validity, and TRO indicators. It supports preliminary patent-risk screening and does not replace advice from a patent attorney. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product titles and descriptions are sent to LinkFox/Ruiguan external services for patent lookup. <br>
-Mitigation: Use the skill only when external transmission is authorized, and avoid submitting confidential unreleased product details unless the user accepts that exposure. <br>
-Risk: Full patent-search responses can be stored locally, including result and cache files. <br>
-Mitigation: Review and delete LinkFox result or cache files when they are no longer needed, especially after searches involving sensitive business context. <br>
-Risk: The tool gateway can be overridden by LINKFOX_TOOL_GATEWAY. <br>
-Mitigation: Check that LINKFOX_TOOL_GATEWAY is unset or points to an expected LinkFox/Ruiguan host before running searches. <br>
-Risk: Feedback reporting is an external data transmission path. <br>
-Mitigation: Do not include secrets, personal data, or confidential business context in feedback reports. <br>
+## Use Case:
 
+External sellers and agent operators use this skill to run product-title and product-description based patent similarity searches for US marketplace risk review. It supports factual review of patent results and TRO indicators, but it does not provide legal advice or infringement conclusions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-utility-patent-detection) <br>
-- [睿观-发明专利检测 API 参考](references/api.md) <br>
-- [LinkFox tool gateway](https://tool-gateway.linkfox.com/ruiguan/utilityPatentDetection) <br>
-- [LinkFox feedback API](https://skill-api.linkfox.com/api/v1/public/feedback) <br>
+### Deployment Geography for Use:
 
+Global; patent search coverage is currently limited to the United States.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with patent-result tables and JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Calls require a LinkFox API key, consume credits, support only US patent searches, return up to 200 results, and may save full API responses locally.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Product titles and descriptions are sent to LinkFox/Ruiguan for patent search.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting confidential pre-launch product details unless disclosure to the service is acceptable.
+
+Risk: The skill uses LinkFox API credentials and may guide phone/SMS onboarding or payment flows.
+
+Mitigation: Prefer official LinkFox web onboarding for credentials and billing, and verify payment actions before proceeding.
+
+Risk: Patent results, cache files, metadata, and payment QR artifacts may be stored locally.
+
+Mitigation: Review and clean generated linkfox response, cache, and QR files after use, especially on shared systems.
+
+Risk: Patent similarity and TRO indicators are risk signals, not legal conclusions.
+
+Mitigation: Use results for factual triage and consult a patent attorney before making infringement or launch decisions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-utility-patent-detection)
+- [API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries and tables, JSON API responses, and shell commands for LinkFox authentication or billing setup.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Patent queries use productTitle, productDescription, region, and topNumber; full API responses may be saved locally while large responses are summarized.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

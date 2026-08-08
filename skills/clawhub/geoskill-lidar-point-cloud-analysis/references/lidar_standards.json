@@ -1,0 +1,58 @@
+{
+  "description": "LiDAR point cloud classification standards and quality metrics",
+  "version": "1.0.0",
+  "asprs_classification": {
+    "0": {"name": "Created, Never Classified", "short": "NeverClassified"},
+    "1": {"name": "Unassigned", "short": "Unassigned"},
+    "2": {"name": "Ground", "short": "Ground"},
+    "3": {"name": "Low Vegetation", "short": "LowVeg"},
+    "4": {"name": "Medium Vegetation", "short": "MedVeg"},
+    "5": {"name": "High Vegetation", "short": "HighVeg"},
+    "6": {"name": "Building", "short": "Building"},
+    "7": {"name": "Low Point (Noise)", "short": "Noise"},
+    "8": {"name": "Model Key-point (Mass Point)", "short": "ModelKey"},
+    "9": {"name": "Water", "short": "Water"},
+    "10": {"name": "Rail", "short": "Rail"},
+    "11": {"name": "Road Surface", "short": "Road"},
+    "12": {"name": "Overlap/Reserved", "short": "Overlap"},
+    "13": {"name": "Wire - Guard", "short": "WireGuard"},
+    "14": {"name": "Wire - Conductor", "short": "WireCond"},
+    "15": {"name": "Transmission Tower", "short": "Tower"},
+    "16": {"name": "Wire-structure Connector", "short": "WireConn"},
+    "17": {"name": "Bridge Deck", "short": "Bridge"},
+    "18": {"name": "High Noise", "short": "HighNoise"}
+  },
+  "quality_thresholds": {
+    "min_density_pts_per_m2": 1.0,
+    "min_ground_fraction": 0.10,
+    "max_noise_fraction": 0.10,
+    "max_z_range_m": 500,
+    "min_ground_coverage": 0.05
+  },
+  "ground_methods": {
+    "grid_min": {
+      "name": "Grid Minimum",
+      "description": "Simple grid-based lowest point classification",
+      "parameters": {
+        "resolution": "Grid cell size in meters",
+        "slope_threshold": "Max height above local minimum for ground"
+      }
+    },
+    "pmf": {
+      "name": "Progressive Morphological Filter",
+      "description": "Morphological opening-based ground filtering",
+      "parameters": {
+        "cell_size": "Initial grid cell size",
+        "window": "Morphological window size",
+        "threshold": "Height threshold"
+      }
+    }
+  },
+  "product_types": {
+    "dem": "Digital Elevation Model (bare earth)",
+    "dsm": "Digital Surface Model (first return)",
+    "chm": "Canopy Height Model (DSM - DEM)",
+    "density": "Point density map (points/m2)",
+    "qa": "Quality assessment report"
+  }
+}

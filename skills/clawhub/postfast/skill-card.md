@@ -1,48 +1,67 @@
-## Description: <br>
-Schedule and manage social media posts across TikTok, Instagram, Facebook, X (Twitter), YouTube, LinkedIn, Threads, Bluesky, Pinterest, Telegram, and Google Business Profile using the PostFast API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Schedule and manage social media posts across TikTok, Instagram, Facebook, X (Twitter), YouTube, LinkedIn, Threads, Bluesky, Pinterest, Telegram, and Google Business Profile using the PostFast API.
 
-## Publisher: <br>
-[peturgeorgievv](https://clawhub.ai/user/peturgeorgievv) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[peturgeorgievv](https://clawhub.ai/user/peturgeorgievv)
 
-## Use Case: <br>
-External users, marketers, agencies, and developers use this skill to guide an agent through PostFast API workflows for scheduling, drafting, publishing, deleting, and analyzing social media posts across connected accounts. It is useful when the agent needs to produce API calls, JSON request bodies, upload steps, or platform-specific posting guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide live operations on connected social media accounts, including scheduling posts, deleting scheduled posts, and generating client connect links. <br>
-Mitigation: Before any live action, require explicit user confirmation of the target account, content, media, scheduled time, approval status, post ID, and connect-link recipient. <br>
-Risk: A PostFast workspace API key enables account and post management through the PostFast API. <br>
-Mitigation: Install and use the skill only with an intended workspace key, keep the key secret, and verify connected account status before scheduling or publishing. <br>
-Risk: Incorrect platform controls or media specifications can cause failed posts or unintended visibility. <br>
-Mitigation: Check the platform-specific controls, media limits, scheduled time, and draft versus publish status before creating or updating posts. <br>
+## Use Case:
 
+Developers, marketing teams, and automation agents use this skill to create, schedule, review, and manage social media content across connected PostFast accounts. It supports account discovery, media uploads, cross-posting, analytics lookup, follower history, comment inbox triage, replies, moderation actions, and platform-specific posting controls.
 
-## Reference(s): <br>
-- [PostFast homepage](https://postfa.st) <br>
-- [ClawHub skill page](https://clawhub.ai/peturgeorgievv/skills/postfast) <br>
-- [PostFast API Reference](references/api-reference.md) <br>
-- [Media Upload Flow](references/upload-flow.md) <br>
-- [Platform-Specific Controls Reference](references/platform-controls.md) <br>
-- [Media Specifications by Platform](references/media-specs.md) <br>
-- [PostFast Skill Examples](examples/EXAMPLES.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include PostFast API endpoints, curl commands, JSON payloads, media upload steps, and platform-specific posting constraints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.14.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The skill can schedule or publish content to live social channels.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted agent workflow that asks for confirmation before scheduling or sending public content, and scope the PostFast API key to acceptable workspaces and accounts.
+
+Risk: The skill exposes public and private reply actions that can represent the account owner.
+
+Mitigation: Require human review for replies, private replies, and social inbox triage where brand, privacy, or customer-support impact matters.
+
+Risk: The skill can delete or moderate public content, and deletion may be irreversible.
+
+Mitigation: Require explicit approval before deleting posts or comments, hiding comments, changing inbox state, or performing other moderation actions.
+
+Risk: Connect links can let clients attach social accounts to a workspace.
+
+Mitigation: Share connect links only with intended recipients and use API keys limited to workspaces where delegated account access is acceptable.
+
+## Reference(s):
+
+- [PostFast ClawHub skill page](https://clawhub.ai/peturgeorgievv/skills/postfast)
+- [PostFast homepage](https://postfa.st)
+- [PostFast API Reference](references/api-reference.md)
+- [Platform-Specific Controls Reference](references/platform-controls.md)
+- [Media Specifications by Platform](references/media-specs.md)
+- [Media Upload Flow](references/upload-flow.md)
+- [PostFast Skill Examples](examples/EXAMPLES.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON request bodies and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a PostFast workspace API key in POSTFAST_API_KEY and connected social accounts before live posting actions can succeed.]
+
+## Skill Version(s):
+
+1.15.1 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

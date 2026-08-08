@@ -157,7 +157,7 @@ siluzan-tso ad batch diff --batch-id <taskId> --config-file ./campaign.json --js
 | `Budget`                       | number                                                                                                                   | ✅ > 0             | 日预算（元）                  |
 | `BudgetShared`                 | boolean                                                                                                                  |                    | 共享预算时为 true             |
 | `BudgetId`                     | number / string                                                                                                          |                    | 共享预算 id                   |
-| `BudgetBudgetDeliveryMethodV2` | "STANDARD" \| "ACCELERATED" \| "UNSPECIFIED" \| "UNKNOWN"                                                                |                    | 默认 STANDARD                 |
+| `BudgetBudgetDeliveryMethodV2` | "STANDARD" \| "ACCELERATED" \| "UNSPECIFIED" \| "UNKNOWN"                                                                |                    | 默认 **STANDARD**；`ACCELERATED` 多数账户会被 Google 拒（validate 警告） |
 | `BiddingStrategyTypeV2`        | "TARGET_SPEND" \| "MANUAL_CPC" \| "TARGET_CPA" \| "TARGET_ROAS" \| "MAXIMIZE_CONVERSIONS" \| "MAXIMIZE_CONVERSION_VALUE" | ✅                 | 出价策略                      |
 | `TargetSpend_BidCeilingAmount` | number                                                                                                                   | TARGET_SPEND 时 ✅ | 每次点击费用上限（元）        |
 | `TargetCpa_BidingAmount`       | number                                                                                                                   | TARGET_CPA 时 ✅   | 目标 CPA（元）                |
@@ -201,7 +201,14 @@ siluzan-tso ad batch diff --batch-id <taskId> --config-file ./campaign.json --js
 | ----------------------------- | -------- | --------------------------------------------------------------------------------- |
 | `AdGroupsForBatchJob`         | object[] | **至少 1 组**；见下                                                               |
 | `NegativeKeywordsForBatchJob` | object[] | 系列级否词；元素：`{ KeywordText: string[], MatchTypeV2: "BROAD"\|"PHRASE"\|"EXACT", FinalURL: "" }`；**KeywordText 可含空格多词**（见模板示例） |
-| `ExtensionsForBatchJob`       | object[] | 附加信息；`Properties` 须 **string→string**（勿用数组值）。SITELINK 见下表        |
+| `ExtensionsForBatchJob`       | object[] | 附加信息；`Properties` 须 **string→string**（勿用数组值）。SITELINK / STRUCTURED_SNIPPET 见下 |
+
+#### STRUCTURED_SNIPPET（`typeV2` / `AssetFieldType` = `STRUCTURED_SNIPPET`）
+
+| 字段 | 说明 |
+| ---- | ---- |
+| `Properties.StructuredSnippetHeaderValue.Key` | **须为合法英文标头**（`ad extension snippet-headers`）。非法值如 `Features` 会被 `campaign-validate` 拦截（建议 `Amenities`） |
+| `Properties.StructuredSnippetHeaderValue.Value` | 非空字符串数组（各条目有长度上限） |
 
 #### SITELINK（`ExtensionsForBatchJob[i]`，`typeV2` / `AssetFieldType` = `SITELINK`）
 

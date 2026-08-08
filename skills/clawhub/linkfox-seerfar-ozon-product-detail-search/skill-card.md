@@ -1,46 +1,63 @@
-## Description: <br>
-Retrieves detailed Seerfar analytics for a single Ozon product SKU, including product identity, price, ratings, sales, revenue, inventory, category rank, seller, brand, fulfillment, listing age, and sales trend data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetches detailed Seerfar analytics for a single Ozon SKU, including product identity, pricing, reviews, sales and revenue estimates, stock, category rank, seller, brand, fulfillment, and listing age.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and ecommerce analysts use this skill to inspect one Ozon SKU at a time for product research, competitor teardown, listing diagnostics, sales-trend review, inventory checks, and category-rank tracking. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses LinkFox API credentials and can make paid Seerfar/Ozon lookup calls. <br>
-Mitigation: Install only when the LinkFox API key and tool gateway are trusted, and confirm with the user before repeated or high-frequency calls that consume credits. <br>
-Risk: Full product-response data is persisted locally and may include detailed market-analysis data from the lookup. <br>
-Mitigation: Run the skill in an appropriate workspace and review saved response files before sharing or retaining them. <br>
-Risk: The security scan notes external onboarding installation and automatic feedback telemetry as behavior users should review. <br>
-Mitigation: Decline or review separate onboarding installation prompts unless that capability is intended, and account for feedback telemetry in the user workflow. <br>
+## Use Case:
 
+External sellers, analysts, and agent users use this skill to inspect one Ozon product by SKU for product-detail reporting, competitor teardown, listing diagnostics, and sales-trend tracking. It is not intended for product discovery, shop catalog browsing, keyword mining, or batch comparison without one call per SKU.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-seerfar-ozon-product-detail-search) <br>
-- [Seerfar Ozon API reference](references/api.md) <br>
-- [LinkFox tool gateway](https://tool-gateway.linkfox.com) <br>
-- [LinkFox skill guide](https://skill.linkfox.com/linkfoxskills/guide.htm) <br>
-- [LinkFox account and credits portal](https://os.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses and saved JSON data files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an Ozon SKU; dateRange is optional. Full responses are saved locally, and large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The skill relies on LinkFox account credentials and may guide users through login, API key setup, and billing flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the first-party LinkFox site for login or billing when possible, run onboarding or order commands only intentionally, and treat API keys, SMS codes, payment orders, and payment QR outputs as sensitive.
+
+Risk: Full API responses and cached results may be written to generated linkfox directories in the user's workspace.
+
+Mitigation: Review saved response files before sharing a workspace and delete generated linkfox data that is no longer needed.
+
+Risk: Each product-detail lookup consumes LinkFox credits, and repeated SKU comparisons can incur additional cost.
+
+Mitigation: Confirm the SKU and date range before execution, rely on the 24-hour cache for repeated identical calls, and ask before running additional paid lookups.
+
+Risk: Sales and revenue values are Seerfar estimates, not official Ozon figures.
+
+Mitigation: Present metrics as analytics estimates, include the selected date range, and avoid using the output as the sole source for financial or operational decisions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-seerfar-ozon-product-detail-search)
+- [Seerfar Ozon Product Detail API Reference](artifact/references/api.md)
+- [Authentication and Billing Onboarding](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files, Shell commands, Configuration guidance]
+
+**Output Format:** [JSON responses saved to local files, with concise text or Markdown summaries and shell-command guidance for authentication and billing setup.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an Ozon SKU, supports an optional dateRange, uses a LinkFox API key, caches repeated calls for 24 hours, and may persist full API responses under a generated linkfox session directory.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

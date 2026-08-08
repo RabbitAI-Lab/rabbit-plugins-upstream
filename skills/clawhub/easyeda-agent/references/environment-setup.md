@@ -65,6 +65,47 @@ profile 里持久化)。
 一键装(平台可原地自动更新,但市场版本可能滞后 CLI);并开了 **允许外部交互**、
 登录过嘉立创账号。之后每次自举都无人工步骤。
 
+### 两个必踩的启动坑(2026-08-04 实测)
+
+1. **`browser is already running for …/chrome-profile`** —— chrome-devtools MCP 的
+   profile 被上次留下的孤儿实例占着(带 `--enable-automation` + `about:blank`,
+   **不是**用户的主 Chrome,后者用默认 profile 不带 `--user-data-dir`)。修法:
+   `pkill -f "chrome-devtools-mcp/chrome-profile"`,再调 `list_pages` 让 MCP 重开。
+
+2. **页面显示「登录/注册」但账号数据其实还在 → 点一下「登录」即恢复,不用真的重登。**
+   全新启动时页面可能先渲染成未登录态(`localStorage.isLogin` 里仍有
+   `{username,uuid}`,IndexedDB 里 `User_<uuid>_v6` 扩展库也在)。**此时连接器不加载**
+   ——扩展库按账号分,未登录就不挂载,`health` 的 windows 一直空。
+   点击顶栏「登录」链接会触发 session 恢复,顶栏随即显示用户名,连接器几秒内附着并
+   在页面上弹 `Connected to easyeda-agent (port …)`。
+   判据:`evaluate_script` 读 `localStorage.getItem('isLogin')` —— 有 uuid 就说明只是
+   渲染态没跟上,**别急着让用户重新扫码登录**。
+   (开源工程未登录也能打开,所以「工程打开成功」不代表连接器会附着,别用它当判据。)
+
+3. **daemon 重启后连接器不会自己回来,而且 `reload` 救不了 —— 必须关掉 tab 重开。**
+   实测(2026-08-04):daemon 停掉再起来后,连接器持续扫端口但**永远连不上**,
+   `navigate reload` 等 50s 无效;**关掉该 tab、`new_page` 开 `#id=` 直达页,5 秒就连上**。
+
+   根因:`transport.ts` 的 `WS_ID = 'easyeda-agent'` 是**固定常量**,而
+   `eda.sys_WebSocket.register()` 在同 id 连接仍被 EasyEDA 视为 "active" 时
+   **静默忽略新 url/callback**(该坑代码里早有注释)。daemon 消失留下的半关连接
+   把这个 id 卡住,而这个注册表活得比页面 reload 更久。**同族于**桌面版那条
+   「re-import 不 reload 已开窗口、必须完全退出 EasyEDA」。
+
+   **诊断三件套**(照顺序做,一次分清 daemon / 网络 / 连接器谁的问题):
+   ```
+   curl -s http://127.0.0.1:60832/health                      # ① daemon 活着?
+   curl -i -N -H "Connection: Upgrade" -H "Upgrade: websocket" \
+        -H "Sec-WebSocket-Version: 13" \
+        -H "Sec-WebSocket-Key: dGhlIHNhbXBsZSBub25jZQ==" \
+        http://127.0.0.1:60832/eda                            # ② WS 端点通? 期望 101
+   # ③ 页面里 evaluate: new WebSocket('ws://127.0.0.1:60832/eda') 能 open?
+   ```
+   三步全绿却仍 `windows: 0` ⇒ **就是 WS_ID 卡住**,别再 reload,直接关 tab 重开。
+   特征信号:console 里满屏 `WebSocket is closed before the connection is established`,
+   **含本该成功的那个端口**;而 `ERR_CONNECTION_REFUSED` 只是扫到空端口的正常噪音,
+   别被它带偏方向。
+
 ## 2. 热重载连接器(改了 extension/ 之后)
 
 不卸载、不重导入、不弹文件对话框——直接覆写 IndexedDB 里的执行文件。

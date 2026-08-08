@@ -1,5 +1,5 @@
 ## Description: <br>
-Detects the appearance of strangers near minors and actively issues safety reminder alerts to protect minor safety, suitable for homes, schools, childcare centers, and other scenarios. <br>
+Detects strangers near minors from monitoring images, videos, local files, or URLs and returns safety alerts, structured analysis, recommendations, and report links. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and operators use this skill to analyze monitoring images, videos, local files, or URLs for stranger proximity near minors, receive structured safety reports, and query cloud-hosted historical alert reports. <br>
+External users and developers use this skill to analyze monitoring media for possible strangers near minors, assess risk, and retrieve prior warning reports from the cloud service. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Monitoring images or videos and identifiers are sent to cloud services for processing. <br>
-Mitigation: Use only where cloud processing is approved, consent and retention requirements are understood, and the documented service endpoints are acceptable. <br>
-Risk: The skill can silently create or reuse an account-linked identity and store identity or auth material locally. <br>
-Mitigation: Review identity handling before installation and prefer a version that asks for explicit consent before uploads, account creation, or credential storage. <br>
-Risk: Safety-analysis outputs are advisory and may be incomplete or incorrect. <br>
-Mitigation: Treat reports as safety reference material, keep human review in the workflow, and do not replace professional security or emergency procedures. <br>
+Risk: Images or videos involving minors may be uploaded to the lifeemergence.com backend for analysis. <br>
+Mitigation: Use only with appropriate consent and confirm backend retention, deletion, and access-control policies before deployment. <br>
+Risk: Reports are associated with a silently managed local identity and persisted account tokens. <br>
+Mitigation: Review identity creation and token storage, and provide account revocation, token rotation, and deletion procedures for operators. <br>
+Risk: Cloud history retrieval may expose prior analysis reports and report links. <br>
+Mitigation: Limit report-list and export access to authorized users and audit access before use in homes, schools, or childcare settings. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-stranger-approach-warning-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-stranger-approach-warning-analysis) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API interface documentation](references/api_doc.md) <br>
+- [smyx_analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports, JSON details, and shell command invocations.] <br>
+**Output Type(s):** [Text, Markdown, JSON] <br>
+**Output Format:** [Markdown or JSON analysis output with optional saved result file] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save results to a local output file and can list cloud-hosted historical reports.] <br>
+**Other Properties Related to Output:** [May include structured findings, risk level, recommendations, report links, and cloud history tables.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata; SKILL.md frontmatter says 1.0.10) <br>
+1.0.9 (source: server release metadata; artifact frontmatter lists 1.0.12) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

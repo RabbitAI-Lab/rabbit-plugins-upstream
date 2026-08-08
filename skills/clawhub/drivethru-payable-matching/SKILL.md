@@ -17,12 +17,17 @@ description: >
   `Questions` subfolder — escalating genuine questions to a reviewer (default
   Zach Tucker). Also runs the buying-group payables flow: pull Sports Inc
   invoices from the SportsLink API (via the `sportsinc-sportslink` adapter),
-  reconcile each to its PO, correct price variances, and create the DRAFT vendor
-  bill for a human to post ("get the Sports Inc invoices and bill them", "match
-  the SI invoices to POs and create the payables"). Runs at volume on a low-cost
-  model. Driven by the Odoo `drivethru_mcp` MCP server; complements the broader
+  reconcile each to its PO, correct price variances, create the vendor bill and
+  — when the bill total matches the invoice within tolerance — POST it, leaving
+  any mismatch in draft for a human ("get the Sports Inc invoices and bill
+  them", "match the SI invoices to POs and post the payables", "match the vendor
+  invoice and post the bill if it matches"). Handles the multi-shipment case
+  where one PO returns several Sports Inc invoices, splitting it into one vendor
+  bill per shipment via `account.move.line` edits (the `ap_*_bill_line(s)`
+  tools). Runs at volume on a low-cost model.
+  Driven by the Odoo `drivethru_mcp` MCP server; complements the broader
   `drivethru-odoo` skill.
-version: 0.6.0
+version: 0.9.0
 emoji: 🧾
 homepage: https://www.odoo.com
 metadata:
@@ -263,19 +268,43 @@ Per document: PO number, lines changed (old → new) or "no change", whether the
 checked note was posted, and Matched vs Questions (and why). End with a folder
 tally so the inbox state is obvious.
 
-## Creating the payable (draft) and buying-group sources
+## Creating and posting the payable, and buying-group sources
 
 The same reconcile-then-file loop extends to **creating the vendor bill** once a
-PO's pricing is reconciled:
+PO's pricing is reconciled, and then **posting it when it matches**:
 
 ```bash
+# Create the DRAFT bill from a reconciled PO
 python3 scripts/paymatch.py bill '{"po_id": 13145, "vendor_bill_number": "<inv#>", "invoice_date": "2026-07-22", "expected_total": 1041.90, "tolerance": 0.02, "reviewer_user_id": 6, "review_note": "..."}'
+
+# Post it — ONLY when the bill total matches the vendor invoice
+python3 scripts/paymatch.py post '{"bill_id": 8842, "expected_total": 1041.90, "tolerance": 0.02, "note": "Matched to <inv#>; totals reconcile."}'
 ```
 
-`bill` creates the bill in **draft** and schedules a review activity — it never
-posts (a human posts it). `expected_total` (the invoice total) is verified within
-`tolerance`; a mismatch returns `success:false` and no bill is created, so you
-escalate rather than bill blind.
+`bill` creates the bill in **draft** and schedules a review activity. Then
+`post` performs the **match & post** step through the guarded
+`ap_post_vendor_bill` tool:
+
+- **Post only what matches.** `expected_total` (the vendor invoice total) is
+  **required** for `post`, and the tool **refuses to post** a bill whose total
+  deviates beyond `tolerance` (an **absolute currency amount** — e.g. `0.02` is
+  two cents, not 2%). A mismatch comes back as an error and the bill stays in
+  draft — **route it to a human, never post it.** This is the whole safety
+  contract: a vendor bill only posts when its numbers reconcile to the invoice.
+- **It's live and hard to reverse.** Posting writes the bill to the ledger
+  (unposting needs a reversing entry). Only post a bill you created from a PO
+  you reconciled in this same run, for an invoice whose total you verified.
+  Anything ambiguous — wrong total, wrong vendor, unexpected lines, a PO that
+  didn't fully reconcile — is a **Questions** escalation, not a post.
+- **Dry-run first if unsure.** Pass `"post": false` to preview: it returns
+  `would_post` + `total_check` (expected vs actual vs tolerance) and posts
+  nothing, so you can confirm the match before committing.
+- **Idempotent + audited.** Re-posting an already-posted bill is a safe no-op
+  (`already_posted: true`); each post leaves an internal **log note** on the
+  bill (never a "Send message", so nothing is emailed to the vendor).
+
+Posting is **opt-in per run**: if the task is only "create the payables" or a
+human wants to review before posting, stop at `bill` (draft) and skip `post`.
 
 ### Sports Inc (buying group — no per-invoice documents)
 
@@ -283,15 +312,37 @@ Sports Inc doesn't email individual invoices; they live in the **SportsLink
 API**. The `sportsinc-sportslink` adapter pulls them (normalised to the same
 invoice shape a PDF would give) and marks them consumed. The end-to-end loop —
 pull active SI invoices → reconcile to the PO → **auto-fix price variances,
-escalate quantity/line variances** → create the **draft** bill → **mark the SI
+escalate quantity/line variances** → create the bill → **post it when the total
+matches (`expected_total`), else leave it in draft for a human** → **mark the SI
 doc consumed only after the bill exists** (exactly-once) — plus credit/scanned
 handling and the SI-fee/`expected_total` nuance, is the dedicated procedure in
 [`references/sportsinc_payables.md`](references/sportsinc_payables.md). Read it
 before running the SI payables flow.
 
-Scope note: this skill reconciles and drafts; a human posts. Only create bills
-when the task is payables (folder pricing review alone stops at the "checked"
-note + filing).
+**One PO, several invoices (multi-shipment).** When a PO shipped in several
+boxes, Sports Inc returns **several documents for one PO number** — each with its
+own lines, freight, and `si_upcharge`. That PO bills as **one vendor bill per
+document**: create the draft, then carve it to each shipment with the
+`account.move.line` tools (`ap_get_vendor_bill` to see the lines, then
+`ap_delete_bill_lines` / `ap_update_bill_lines` / `ap_create_bill_line` to make
+each bill equal exactly one document), and post each at its own `docTotal`.
+Create **one bill per SI document but post only the ones the PO's quantities
+support**: a document the PO can't cover (an **over-invoice** — e.g. the vendor
+invoiced replacements for units it never originally shipped, after earlier bills
+consumed the PO's whole quantity) still becomes a bill via `ap_create_draft_bill`
+— built off the payload's product ids and left in **draft with a review
+activity**, never posted. **Skip** a PO whose SI documents lack line-level
+detail. The full carve procedure — and the `min_tracking_count` search filter
+that surfaces these POs — is in `references/sportsinc_payables.md` →
+*Multiple invoices for one PO*.
+
+Scope note: this skill reconciles, drafts, and — when the numbers match —
+**posts**. A bill only posts when its total reconciles to the vendor invoice
+within tolerance; anything that doesn't match stays in draft and goes to a
+human. Only create/post bills when the task is payables (folder pricing review
+alone stops at the "checked" note + filing), and stop at the draft (`bill`,
+skip `post`) whenever the task is "create the payables" or a human wants to
+review before posting.
 
 #### Agent-to-Agent (A2A) Mode for Sports Inc
 
@@ -325,6 +376,20 @@ agent) using the platform MCP tools** — there is no Python helper for it.
    {"include_historical": false}}`. The reply is the `get-for-a2a` envelope
    (`{success, invoices, metadata, error}`) — on `success:false`, read
    `error.retriable` to decide retry vs. escalate.
+
+**Async-task delegation (what the multi-invoice routine uses).** When you
+delegate the lookup as a **task** (`start_task`) rather than a synchronous
+`send_message`, the Sports Inc agent replies in its task **summary**, which is
+**size-capped (~20k chars)** — a raw JSON dump of several POs overflows it and
+is silently truncated, handing you a half-parsed payload. So **ask for a compact
+markdown breakdown, not JSON**: one section per PO, each SI document with its
+`si_doc_number`, `invoice_number`, `invoice_date`, `due_date`, `is_credit`,
+`has_lines`, the money (`merchandise`, `freight`, `si_upcharge`, `total`), and a
+terse line per item (`item`, `upc`, `size`, `qty_shipped`, `net_price`,
+`extension`, `description`). Markdown carries all the same data — you don't need
+strict JSON. If the reply looks cut off or is flagged truncated, treat it as
+**incomplete** and re-request (or fewer POs at a time) rather than billing a
+partial payload.
 
 Then continue the normal reconciliation/draft-bill loop with the returned
 `invoices` (same normalised shape as `sportslink.py list`).

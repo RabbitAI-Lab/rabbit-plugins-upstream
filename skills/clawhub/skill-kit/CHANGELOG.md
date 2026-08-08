@@ -1,5 +1,30 @@
 # Changelog
 
+## [0.6.1](https://github.com/es6kr/skills/compare/skill-kit-v0.6.0...skill-kit-v0.6.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* **hook-kit,skill-kit:** widen context-gate under-offer trigger + new-skill ready-ask gate ([#221](https://github.com/es6kr/skills/issues/221)) ([c127c72](https://github.com/es6kr/skills/commit/c127c72f3271826dffaced8d9442bf4f30f718d6))
+* promote next-fix staging (38 fixes across 16 skills) ([94f8c33](https://github.com/es6kr/skills/commit/94f8c33800ce411ae63e22c5259cdae8435508a4))
+* **skill-kit:** add explicit-ask axis to new-skill publication-readiness gate ([f7eb58d](https://github.com/es6kr/skills/commit/f7eb58d1fc2556f2526a0f1992e3c83e7380d4ac))
+* **skill-kit:** add new-skill publication-readiness gate to publish-scope ([5363490](https://github.com/es6kr/skills/commit/5363490006e1d6f0ca2c6187559bdeb2225aa1e6))
+* **skill-kit:** require relative paths for a skill's own bundled-script references ([#212](https://github.com/es6kr/skills/issues/212)) ([ff965f2](https://github.com/es6kr/skills/commit/ff965f26dfa21c3296a7aa09805633a9faaada69))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([951c1e6](https://github.com/es6kr/skills/commit/951c1e6871e78e226757c6a7ae5ae53efeb7bfb0))
+
+## [0.6.0](https://github.com/es6kr/skills/compare/skill-kit-v0.5.0...skill-kit-v0.6.0) (2026-07-28)
+
+
+### Features
+
+* bundle next-feat — fix-plan expansion, next reactive guard, github-repo extraction ([#195](https://github.com/es6kr/skills/issues/195)) ([cd65a85](https://github.com/es6kr/skills/commit/cd65a8519c88f080321d746ef197e90713039fa6))
+
+
+### Bug Fixes
+
+* **skill-kit:** add skip-condition-before-recommend self-check to invoke-discipline ([0f27fa0](https://github.com/es6kr/skills/commit/0f27fa01379790b56d0cebfbaee3142627218348))
+* **skill-kit:** add skip-condition-before-recommend self-check to invoke-discipline ([9e6503f](https://github.com/es6kr/skills/commit/9e6503f282251094b0eec69c6b207464362040cf))
+
 ## [0.5.0](https://github.com/es6kr/skills/compare/skill-kit-v0.4.2...skill-kit-v0.5.0) (2026-07-23)
 
 

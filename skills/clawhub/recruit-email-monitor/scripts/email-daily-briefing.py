@@ -8,6 +8,21 @@ import openpyxl
 from datetime import datetime, timedelta
 from collections import defaultdict
 import json
+import os
+
+# 本地配置文件（含 feishu_target，不随 Skill 发布）
+CONFIG_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'config.json')
+
+
+def load_config():
+    if os.path.exists(CONFIG_FILE):
+        with open(CONFIG_FILE, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return {}
+
+
+CFG = load_config()
+FEISHU_TARGET = CFG.get('feishu_target', 'user:YOUR_FEISHU_USER_ID')
 
 # 表格路径
 EXCEL_PATH = '/home/erhao/shared/招聘邮件汇总.xlsx'
@@ -205,14 +220,14 @@ def send_briefing(briefing):
     # 通过 OpenClaw CLI 发送 Feishu 消息
     print("\n📤 正在发送 Feishu 消息...")
     try:
-        # 发送到主人的 Feishu (ou_8de02604ccd510eeb4897ffd70d96c1d)
+        # 发送到主人的 Feishu（目标从本地 config.json 读取）
         cmd = [
             'openclaw', 'message', 'send',
             '--channel', 'feishu',
-            '--target', 'user:ou_8de02604ccd510eeb4897ffd70d96c1d',
+            '--target', FEISHU_TARGET,
             '--message', briefing.strip()
         ]
-        result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=90)
         
         if result.returncode == 0:
             print("✅ Feishu 消息发送成功！")

@@ -147,7 +147,7 @@ def adidas_create_purchase_order(
     purchase_order: dict | None = None,
     confirm: bool = False,
     screenshot_path: str | None = None,
-    headless: bool = True,
+    headless: bool = False,
     username: str | None = None,
     password: str | None = None,
     base_url: str | None = None,

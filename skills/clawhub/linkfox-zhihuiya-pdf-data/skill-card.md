@@ -1,45 +1,59 @@
-## Description: <br>
-Retrieves patent PDF full-text download links from the Zhihuiya patent database by patent ID or publication number. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过专利ID或公开号从智慧芽专利数据库下载专利PDF全文文档。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Patent researchers, developers, and agents use this skill to request a single patent PDF link from Zhihuiya using a patent ID or publication number, optionally falling back to a related family patent PDF when the original is unavailable. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Patent identifiers and the LinkFox API key are sent to the configured LinkFox gateway. <br>
-Mitigation: Use the skill only in controlled environments, review the configured gateway and environment variables, and avoid sensitive patent research unless that network path is acceptable. <br>
-Risk: The service consumes paid tokens or credits for each patent PDF result. <br>
-Mitigation: Confirm user intent before additional lookups, keep requests to one patent at a time, and rely on the built-in cache when repeating the same query. <br>
-Risk: Full API responses are retained locally and may include patent research context. <br>
-Mitigation: Review the linkfox session data and cache locations, limit access to the workspace, and clear stored responses when retention is not appropriate. <br>
-Risk: The artifact describes automatic feedback reporting for skill behavior and user sentiment. <br>
-Mitigation: Do not submit feedback automatically without user consent, especially when feedback could reveal research intent or proprietary context. <br>
+## Use Case:
 
+External users and agents use this skill to retrieve patent PDF full-text download links from the Zhihuiya/PatSnap patent database by patent ID or publication number, including batch retrieval and optional family-patent substitution.
 
-## Reference(s): <br>
-- [智慧芽 PDF全文查询 API 参考](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-pdf-data) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API Calls, JSON, Files, Markdown] <br>
-**Output Format:** [JSON responses saved to local files, with stdout JSON or summaries and Markdown tables for user-facing patent PDF links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Handles one patent per request, may cache responses for 24 hours, and records full API responses under a linkfox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill handles account login, API-key generation, payment flows, and feedback reporting in addition to PDF retrieval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for intended LinkFox/Zhihuiya paid-service use, review account and payment steps before execution, and protect API keys, phone verification codes, payment details, and feedback content.
+
+Risk: The skill persists full API responses, session metadata, and cache files that may contain patent queries, result data, and download links.
+
+Mitigation: Run it from a workspace appropriate for sensitive data, avoid full inline output unless needed, and remove generated linkfox data and cache files when they are no longer required.
+
+Risk: Patent PDF requests can consume paid credits, and batch requests may multiply cost.
+
+Mitigation: Confirm patent identifiers, result count expectations, and family-substitution settings before making calls; avoid automatic retries or speculative repeated queries.
+
+## Reference(s):
+
+- [API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-pdf-data)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown tables or lists with patent PDF links; JSON for saved API responses and command outputs.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save full API responses, session metadata, and 24-hour cache files under a local linkfox directory.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

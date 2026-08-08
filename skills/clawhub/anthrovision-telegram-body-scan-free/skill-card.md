@@ -1,5 +1,5 @@
 ## Description: <br>
-Runs a basic Telegram body-scan workflow that validates required inputs, submits a person video to an AnthroVision bridge, polls scan status, and returns basic body measurements. <br>
+Automates basic body scanning and measurement by submitting a user-provided video through Telegram and returning measurement results after polling. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agents use this skill to collect basic body measurements for fitness tracking or simple body-shape measurement from a consented single-person video in Telegram. <br>
+External users and agents use this skill to submit authorized single-person body videos for basic chest, waist, and hip measurements. It is suited to fitness tracking or sizing workflows that can tolerate asynchronous Telegram-based processing. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive real-person video and body measurements with weak consent disclosure. <br>
-Mitigation: Use only with videos where the subject has clearly consented, and confirm consent before submitting media for scanning. <br>
-Risk: Media and measurements are sent to an external AnthroVision bridge. <br>
-Mitigation: Review the external service and data handling requirements before use, and avoid submitting sensitive media unless the destination is trusted. <br>
-Risk: The optional callback_url can deliver scan-related data to a user-provided destination. <br>
-Mitigation: Use callback_url only when the destination is controlled and trusted, and disclose what data will be sent. <br>
-Risk: The free version does not provide explicit consent workflow, timeout handling, phone calibration prompts, or medical interpretation. <br>
-Mitigation: Treat outputs as basic measurements only, add operational checks outside the skill when those controls are required, and do not use the output as medical advice. <br>
+Risk: Sensitive real-person body videos may be processed through Telegram or an external service. <br>
+Mitigation: Use only self-provided or clearly authorized videos, and confirm privacy, retention, and deletion practices before deployment. <br>
+Risk: Consent safeguards are under-scoped for a body-measurement workflow. <br>
+Mitigation: Add explicit consent checks and narrow trigger conditions before using the skill in shared or customer-facing environments. <br>
 
 
 ## Reference(s): <br>
+- [AnthroVision Telegram Body Scan Free homepage](https://www.anthrovision.com/telegram-body-scan-free) <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/anthrovision-telegram-body-scan-free) <br>
-- [Skill homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown or plain text with scan status and basic measurement values] <br>
+**Output Type(s):** [text, markdown, configuration, guidance] <br>
+**Output Format:** [Markdown or structured text containing validation guidance, scan status, and basic measurement values] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include scan IDs, polling status, validation messages, and basic circumference measurements; does not provide medical or health interpretation.] <br>
+**Other Properties Related to Output:** [Outputs may include scan identifiers, processing status, and basic body measurements; no medical or health interpretation is claimed.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

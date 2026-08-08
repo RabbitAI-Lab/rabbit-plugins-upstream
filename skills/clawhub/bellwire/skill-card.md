@@ -1,51 +1,70 @@
-## Description: <br>
-Add, update, test, diagnose, or maintain Bellwire live cards and phone notifications in Node.js, Cloudflare Worker, and shell projects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Bellwire helps agents add, update, test, diagnose, and maintain private-first live cards, inbox events, and iPhone notifications in application backends, automation, and CI/CD workflows.
 
-## Publisher: <br>
-[xwchris](https://clawhub.ai/user/xwchris) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xwchris](https://clawhub.ai/user/xwchris)
 
-## Use Case: <br>
-Developers and engineers use this skill to connect repository events, health, metrics, payments, deployments, jobs, or other project state to Bellwire live cards, inbox entries, and phone notifications. It guides binding, project setup, Event Specs, live Surfaces, webhook adapters, testing, delivery checks, and troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bellwire tokens or sensitive event fields could be exposed in tracked files, logs, telemetry, test snapshots, or notification templates. <br>
-Mitigation: Store tokens only in an approved secret store, avoid logging payloads or authorization headers, and mark personal, customer, or credential fields as sensitive. <br>
-Risk: Destructive or interruptive operations such as deleting projects or enabling high-priority notifications could affect users unexpectedly. <br>
-Mitigation: Require explicit confirmation before deleting projects or requesting high-priority notifications, and verify the exact project and notification intent first. <br>
-Risk: Manual tests or server acceptance can be mistaken for production notification delivery. <br>
-Mitigation: Use the documented production verification gate and confirm real source operations, Bellwire readback, delivery status, and any claimed device presentation. <br>
+## Use Case:
 
+Developers and engineers use this skill to integrate Bellwire notifications and live cards into applications, including Private mode signed Direct v2 endpoints, opaque outboxes, provider webhooks, conformance tests, and production verification.
 
-## Reference(s): <br>
-- [Bellwire ClawHub skill page](https://clawhub.ai/xwchris/skills/bellwire) <br>
-- [GitHub repository](https://github.com/xwchris/bellwire.git) <br>
-- [Integration adapters](references/adapters.md) <br>
-- [Bellwire API](references/api.md) <br>
-- [Event Spec](references/event-spec.md) <br>
-- [Production verification](references/production-verification.md) <br>
-- [Security](references/security.md) <br>
-- [Surfaces](references/surfaces.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [Webhooks](references/webhooks.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline bash, TypeScript, YAML, JSON, and HTTP examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce Bellwire API calls and configuration changes that depend on user-provided tokens and project identifiers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill may cause an agent to modify application code, automation, or deployment workflows to send Bellwire notifications and cards.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when those integration changes are intended, and review generated diffs and project identifiers before applying them.
+
+Risk: Bellwire management, wake, and ingest tokens could be exposed if printed, committed, or stored outside an approved secret store.
+
+Mitigation: Keep tokens in platform secrets or an approved password manager, avoid logging token values or payloads, and remove temporary secret files after import.
+
+Risk: Hosted mode can store event, inbox, and surface content in Bellwire Cloud.
+
+Mitigation: Use Private mode by default and switch to Hosted mode only after explicit user approval.
+
+Risk: Destructive project operations can permanently remove project-scoped Bellwire data.
+
+Mitigation: Resolve the exact project ID and require explicit user intent before running delete or revocation commands.
+
+## Reference(s):
+
+- [Bellwire ClawHub Skill Page](https://clawhub.ai/xwchris/skills/bellwire)
+- [Integration Adapters](references/adapters.md)
+- [Bellwire API](references/api.md)
+- [Direct Connections](references/direct-connections.md)
+- [Event Spec](references/event-spec.md)
+- [Production Verification](references/production-verification.md)
+- [Security](references/security.md)
+- [Surfaces](references/surfaces.md)
+- [Troubleshooting](references/troubleshooting.md)
+- [Webhooks](references/webhooks.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with code, JSON, YAML, SQL, and shell command snippets.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,5 @@
 ## Description: <br>
-Playwright-browser-use helps an agent control a visible local Chrome or Edge browser with Playwright for page navigation, snapshots, clicks, form entry, scrolling, screenshots, and optional trusted JavaScript or Playwright code execution. <br>
+Playwright Browser Use provides a local Node.js Playwright CLI for visible browser automation, page snapshots, form interaction, screenshots, credential/session commands, page JavaScript evaluation, and sandboxed Playwright code execution. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,37 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers and agent users use this skill to automate browser tasks in a trusted local session, including opening pages, inspecting page state, interacting with forms, handling pagination, and coordinating manual login or verification steps. <br>
+Developers and agent operators use this skill to let an agent drive a local, user-visible Chrome or Edge session for web navigation, form filling, screenshots, downloads, pagination, and browser-state workflows. It is intended for trusted local use where the user can monitor and interrupt browser actions. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can control a visible local browser and interact with logged-in websites, including form submission and page actions. <br>
-Mitigation: Use it only in trusted local sessions where the user can observe and interrupt the browser, and confirm sensitive actions before submitting forms or changing data. <br>
-Risk: The eval capability can read page cookies or storage and make credentialed page requests. <br>
-Mitigation: Use PW_BROWSER_SAFE_MODE=1 when custom code is unnecessary, and avoid eval on untrusted or high-privilege pages. <br>
-Risk: The run-code capability can drive Playwright actions that trigger downloads, uploads, network requests, or local file writes through browser flows. <br>
-Mitigation: Run only trusted snippets that are needed for the task, review paths and target pages before file operations, and close the daemon after use. <br>
+Risk: The skill can automate a local browser session with access to logged-in state, cookies, localStorage, and credentialed requests. <br>
+Mitigation: Install and run it only with trusted agents in a local, visible browser session; avoid banking, email, admin, or other high-privilege logged-in sites unless each action is explicitly intended. <br>
+Risk: Exported cookie or storage files can function like passwords and may preserve access beyond the active session. <br>
+Mitigation: Treat exported cookie and storage files as secrets, delete them when done, and set PW_BROWSER_CRED_PERSIST=off when session cookies or localStorage must not be written to disk. <br>
+Risk: Code execution and credential primitives increase impact when a caller is untrusted or only partially trusted. <br>
+Mitigation: Use PW_BROWSER_SAFE_MODE=1 for untrusted or semi-trusted callers, and add sandboxing or network isolation when browser automation is driven by untrusted input. <br>
 
 
 ## Reference(s): <br>
-- [README](README.md) <br>
-- [Pagination strategy](references/pagination.md) <br>
-- [Rich text editor and SPA handling](references/rich-text-editor.md) <br>
-- [Running custom code](references/running-code.md) <br>
+- [ClawHub skill page](https://clawhub.ai/yicko/skills/playwright-browser-use) <br>
+- [README.en.md](README.en.md) <br>
+- [QUICKSTART.en.md](QUICKSTART.en.md) <br>
+- [Running code reference](references/running-code.md) <br>
+- [Pagination reference](references/pagination.md) <br>
+- [Rich text editor reference](references/rich-text-editor.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, code examples, and browser-operation instructions] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with inline shell commands, JSON command payloads, and browser automation procedures] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide agents to produce browser snapshots, screenshots, downloads, or local files when the user-authorized browser task requires them.] <br>
+**Other Properties Related to Output:** [Produces browser-control instructions and command patterns for a local Playwright CLI; outputs may include screenshots, page snapshots, cookie/storage files, and downloaded files when the agent invokes those commands.] <br>
 
 ## Skill Version(s): <br>
-1.0.11 (source: server release metadata) <br>
+1.0.16 (source: server release metadata and target metadata; artifact package.json version is 1.3.11) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

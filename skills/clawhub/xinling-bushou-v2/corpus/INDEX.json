@@ -1,7 +1,7 @@
 {
   "version": "2.0",
   "last_updated": "2026-04-09",
-  "name": "心灵补手V2.0语料库 - 总索引",
+  "name": "心灵补手V3.5.0语料库 - 总索引",
   "corpus_files": {
     "generation_algorithm.json": "语料生成算法规则（核心，10KB+）- 定义同义词替换/句式变换/情绪强度调节/质量控制",
     "scholar_full.json": "儒雅风完整语料（35KB）- 5场景×10等级×20变体（new_stage场景被截断）",

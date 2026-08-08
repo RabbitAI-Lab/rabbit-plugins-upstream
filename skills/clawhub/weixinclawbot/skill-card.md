@@ -1,42 +1,59 @@
-## Description: <br>
-通过 WorkBuddy 已连接的 ClawBot 微信 bot 通道主动向指定微信收件人发送文本、图片、文件和视频。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sends proactive text, image, file, and video messages through a WorkBuddy-connected ClawBot WeChat bot channel using local WorkBuddy credentials.
 
-## Publisher: <br>
-[noaheleven](https://clawhub.ai/user/noaheleven) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[noaheleven](https://clawhub.ai/user/noaheleven)
 
-## Use Case: <br>
-Developers and WorkBuddy operators use this skill when an agent needs to send explicit ClawBot WeChat notifications, status updates, or media attachments to a configured recipient using local WorkBuddy credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send real WeChat messages and media outward using local ClawBot credentials. <br>
-Mitigation: Install only for intentional outbound WeChat notification use, review the configured recipient before use, and require explicit confirmation before every send. <br>
-Risk: The skill reads local WorkBuddy bot credentials and cursor state that may contain sensitive tokens. <br>
-Mitigation: Do not share settings.json or claw-state cursor files, keep token values out of logs and prompts, and use only the local credential files for the intended account. <br>
-Risk: Network sending may require relaxed sandboxing, increasing the impact of unintended execution. <br>
-Mitigation: Avoid disabling sandbox protections except for a narrow, trusted run and only after verifying the recipient and message content. <br>
+## Use Case:
 
+Developers and WorkBuddy users use this skill to have an agent send intentional WeChat bot messages or media to a configured contact through the local ClawBot channel. It is intended for explicit push requests such as sending text, images, files, or videos.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/noaheleven/skills/weixinclawbot) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and command-line status output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May trigger outbound WeChat text or media sends through local WorkBuddy ClawBot credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill reads local WorkBuddy bot credentials and cursor data that can authorize outbound WeChat messages.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when that behavior is intended; keep WorkBuddy settings and cursor files local, and do not paste, share, or commit credential material.
+
+Risk: Outbound text, image, file, or video pushes may send unintended content to the configured contact.
+
+Mitigation: Use explicit ClawBot-specific prompts and confirm the recipient, message content, and media paths before executing the send command.
+
+Risk: Disabling sandbox protections for network access increases exposure during message or media upload.
+
+Mitigation: Keep sandbox protections enabled where possible; if network access must be allowed, use a controlled environment limited to the required WeChat and Tencent endpoints.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/noaheleven/skills/weixinclawbot)
+- [Artifact README](artifact/README.md)
+- [Artifact skill instructions](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and optional message content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May result in outbound WeChat bot messages or media uploads when the local send script is executed.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

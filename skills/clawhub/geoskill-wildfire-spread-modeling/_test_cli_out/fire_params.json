@@ -1,0 +1,25 @@
+{
+  "source": "synthetic",
+  "steps": 15,
+  "wind_speed": 1.0,
+  "wind_dir_deg": 45.0,
+  "base_prob": 0.6,
+  "burned_area_series": [
+    1,
+    5,
+    12,
+    23,
+    36,
+    60,
+    87,
+    109,
+    133,
+    155,
+    191,
+    229,
+    273,
+    310,
+    347,
+    396
+  ]
+}

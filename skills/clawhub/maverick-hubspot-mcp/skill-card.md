@@ -1,46 +1,61 @@
-## Description: <br>
-Search, read, and update HubSpot CRM contacts, companies, deals, tickets, associations, owners, and pipelines via HubSpot's hosted MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and read HubSpot CRM contacts, companies, deals, tickets, associations, owners, pipelines, campaigns, and conversations via HubSpot's hosted MCP server.
 
-## Publisher: <br>
-[maverick](https://clawhub.ai/user/maverick) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[maverick](https://clawhub.ai/user/maverick)
 
-## Use Case: <br>
-Employees, external operators, developers, and agents use this skill to inspect HubSpot CRM records, understand pipeline state, and make confirmed updates through HubSpot's hosted MCP tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can act as the connected HubSpot account and read or update CRM data within that account's OAuth grant. <br>
-Mitigation: Review the HubSpot OAuth grant before use, confirm user intent before write actions, and revoke the integration in HubSpot when it is no longer needed. <br>
-Risk: OAuth credentials are stored locally for use by mcporter. <br>
-Mitigation: Protect the local environment where the skill is installed and rotate or revoke HubSpot credentials if that environment is no longer trusted. <br>
-Risk: Tool arguments and results transit HubSpot's hosted MCP server. <br>
-Mitigation: Send only HubSpot-relevant data through tool arguments and avoid including unrelated sensitive information. <br>
+## Use Case:
 
+Employees and customer-facing teams use this skill to search and retrieve read-only HubSpot CRM, pipeline, owner, campaign, and customer context through HubSpot's hosted MCP server.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/maverick/maverick-hubspot-mcp) <br>
-- [Maverick Publisher Profile](https://clawhub.ai/user/maverick) <br>
-- [HubSpot MCP Server Documentation](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server) <br>
-- [HubSpot MCP Auth App Documentation](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#create-an-mcp-auth-app) <br>
-- [mcporter Config Reference](https://github.com/openclaw/mcporter/blob/v0.11.1/docs/config.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and MCP tool call results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Output depends on HubSpot's live MCP tool catalog and the connected account's OAuth grant.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill uses OAuth credentials that can read HubSpot CRM data through the connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the refresh token and client secret as sensitive, and revoke HubSpot app access when the integration is no longer needed.
+
+Risk: Tool arguments and results transit HubSpot's hosted MCP server.
+
+Mitigation: Avoid passing unrelated sensitive content as tool arguments and keep use scoped to HubSpot CRM lookup tasks.
+
+Risk: Re-running setup with stale OAuth values can overwrite a newer in-vault refresh token.
+
+Mitigation: Only rotate setup credentials with freshly minted OAuth values from the integration broker or require re-authorization if access is revoked.
+
+## Reference(s):
+
+- [HubSpot MCP server overview and endpoint](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server)
+- [HubSpot MCP auth app and required OAuth credentials](https://developers.hubspot.com/docs/apps/developer-platform/build-apps/integrate-with-the-remote-hubspot-mcp-server#create-an-mcp-auth-app)
+- [HubSpot OAuth token revocation](https://developers.hubspot.com/docs/api-reference/latest/authentication/oauth-tokens/revoke-token)
+- [mcporter config reference](https://github.com/openclaw/mcporter/blob/v0.12.3/docs/config.md)
+- [ClawHub skill page](https://clawhub.ai/maverick/skills/maverick-hubspot-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and optional JSON tool output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only HubSpot MCP results are limited by the reviewed tool allowlist and the connected HubSpot OAuth grant.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,139 @@
+{
+  "version": "1.0.0",
+  "framework": "TNFD LEAP",
+  "description": "TNFD LEAP approach indicators for nature-related financial risk screening",
+  "locate_indicators": {
+    "protected_area_proximity": {
+      "name": "Protected Area Proximity",
+      "name_zh": "保护区邻近度",
+      "description": "Distance from asset to nearest protected area (WDPA/KBA)",
+      "unit": "meters",
+      "data_sources": ["WDPA", "KBA", "national_protected_areas"],
+      "evidence_levels": ["measured", "estimated", "modelled", "gap"],
+      "thresholds": {
+        "direct_overlap_m": 0,
+        "buffer_5km_m": 5000,
+        "buffer_10km_m": 10000,
+        "buffer_30km_m": 30000
+      }
+    },
+    "water_stress": {
+      "name": "Water Stress",
+      "name_zh": "水资源压力",
+      "description": "Baseline water stress in asset location",
+      "unit": "index (0-5)",
+      "data_sources": ["WRI Aqueduct", "World Resources Institute"],
+      "evidence_levels": ["measured", "estimated", "modelled", "gap"],
+      "thresholds": {
+        "low": 1.0,
+        "medium": 2.0,
+        "high": 3.0,
+        "extremely_high": 4.0
+      }
+    },
+    "forest_cover": {
+      "name": "Forest Cover / Deforestation Pressure",
+      "name_zh": "森林覆盖/毁林压力",
+      "description": "Forest cover percentage and recent loss in asset vicinity",
+      "unit": "percent",
+      "data_sources": ["Hansen Global Forest Change", "JRC"],
+      "evidence_levels": ["measured", "estimated", "modelled", "gap"],
+      "thresholds": {
+        "intact": 80.0,
+        "moderate_loss": 50.0,
+        "high_loss": 20.0
+      }
+    },
+    "biodiversity_importance": {
+      "name": "Biodiversity Importance",
+      "name_zh": "生物多样性重要性",
+      "description": "Species richness and endemism in asset vicinity",
+      "unit": "index",
+      "data_sources": ["IBAT", "GBIF", "national_atlases"],
+      "evidence_levels": ["measured", "estimated", "modelled", "gap"],
+      "thresholds": {
+        "low": 0.25,
+        "medium": 0.5,
+        "high": 0.75
+      }
+    },
+    "ecosystem_integrity": {
+      "name": "Ecosystem Integrity",
+      "name_zh": "生态系统完整性",
+      "description": "State of ecosystem function and connectivity",
+      "unit": "index (0-1)",
+      "data_sources": ["local_assessment", "remote_sensing"],
+      "evidence_levels": ["measured", "estimated", "modelled", "gap"],
+      "thresholds": {
+        "intact": 0.75,
+        "modified": 0.5,
+        "degraded": 0.25
+      }
+    }
+  },
+  "evaluate_indicators": {
+    "dependency": {
+      "name": "Nature Dependency",
+      "name_zh": "自然依赖",
+      "description": "Business dependence on ecosystem services",
+      "categories": ["water_supply", "pollination", "flood_protection", "climate_regulation", "timber_fiber"],
+      "scoring": "sector-based materiality (0-5)"
+    },
+    "impact": {
+      "name": "Nature Impact",
+      "name_zh": "自然影响",
+      "description": "Business impact on natural capital",
+      "categories": ["land_use_change", "pollution", "water_withdrawal", "ghg_emissions", "invasive_species"],
+      "scoring": "pressure-based (0-5)"
+    }
+  },
+  "sector_materiality": {
+    "agriculture": {
+      "name": "Agriculture",
+      "dependency": {"water_supply": 5, "pollination": 4, "flood_protection": 3, "climate_regulation": 4, "timber_fiber": 1},
+      "impact": {"land_use_change": 5, "pollution": 4, "water_withdrawal": 5, "ghg_emissions": 3, "invasive_species": 2}
+    },
+    "mining": {
+      "name": "Mining",
+      "dependency": {"water_supply": 4, "pollination": 1, "flood_protection": 2, "climate_regulation": 2, "timber_fiber": 1},
+      "impact": {"land_use_change": 5, "pollution": 5, "water_withdrawal": 4, "ghg_emissions": 4, "invasive_species": 2}
+    },
+    "manufacturing": {
+      "name": "Manufacturing",
+      "dependency": {"water_supply": 3, "pollination": 1, "flood_protection": 2, "climate_regulation": 2, "timber_fiber": 3},
+      "impact": {"land_use_change": 3, "pollution": 4, "water_withdrawal": 3, "ghg_emissions": 4, "invasive_species": 1}
+    },
+    "energy": {
+      "name": "Energy",
+      "dependency": {"water_supply": 4, "pollination": 1, "flood_protection": 2, "climate_regulation": 3, "timber_fiber": 1},
+      "impact": {"land_use_change": 3, "pollution": 3, "water_withdrawal": 4, "ghg_emissions": 5, "invasive_species": 1}
+    },
+    "real_estate": {
+      "name": "Real Estate",
+      "dependency": {"water_supply": 3, "pollination": 1, "flood_protection": 4, "climate_regulation": 3, "timber_fiber": 2},
+      "impact": {"land_use_change": 4, "pollution": 3, "water_withdrawal": 2, "ghg_emissions": 3, "invasive_species": 2}
+    },
+    "tourism": {
+      "name": "Tourism",
+      "dependency": {"water_supply": 3, "pollination": 2, "flood_protection": 3, "climate_regulation": 4, "timber_fiber": 1},
+      "impact": {"land_use_change": 3, "pollution": 3, "water_withdrawal": 2, "ghg_emissions": 2, "invasive_species": 3}
+    },
+    "general": {
+      "name": "General",
+      "dependency": {"water_supply": 3, "pollination": 2, "flood_protection": 3, "climate_regulation": 3, "timber_fiber": 2},
+      "impact": {"land_use_change": 3, "pollution": 3, "water_withdrawal": 3, "ghg_emissions": 3, "invasive_species": 2}
+    }
+  },
+  "evidence_levels": {
+    "measured": {"code": "measured", "description": "Direct measurement or verified field data", "confidence": "high"},
+    "estimated": {"code": "estimated", "description": "Based on proxy data or nearby measurements", "confidence": "medium"},
+    "modelled": {"code": "modelled", "description": "Model output or remote sensing derived", "confidence": "medium"},
+    "gap": {"code": "gap", "description": "No data available - identified gap", "confidence": "none"}
+  },
+  "buffer_defaults": {
+    "facility": 5000,
+    "watershed": 10000,
+    "landscape": 30000,
+    "supply_chain": 50000
+  }
+}

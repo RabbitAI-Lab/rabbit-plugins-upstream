@@ -1,0 +1,48 @@
+name: 通用产品评审圆桌
+description: 评估消费互联网产品/小程序/App 想法的可行性、用户需求、增长与变现
+mode: standard
+
+# 首轮实测（2026-07-30 奶茶导航小程序）中发现缺口后补建
+domain_keywords:
+  - 小程序
+  - App
+  - 产品想法
+  - 要不要做
+  - 值不值得做
+  - 做个工具
+  - 导航
+  - 平台
+  - 副业
+
+required_roles:
+  - roles/devil-advocate      # 失败模式（必选）
+  - roles/user-advocate       # 用户价值锚定（必选）
+
+suggested_experts:
+  - experts/product/growth-pm   # 增长模型与冷启动
+
+conditional_experts:
+  - when: "机会|市场|能不能成|需求"
+    add: roles/optimist
+  - when: "外卖|餐饮|本地|门店|奶茶|团购|券"
+    add: experts/local-life/mini-program-ops
+  - when: "AI|LLM|大模型|智能"
+    add: experts/ai-llm/ai-product-manager
+  - when: "成本|投入|预算|ROI|副业"
+    add: roles/resource-constraint
+
+optional_roles:
+  - roles/data-evidence
+  - roles/systems-thinker
+
+protocol: protocols/debate-protocol
+
+special_instructions: |
+  消费互联网产品评审必须回答：
+  1. 需求断点：用户现有链路里，断点在哪个环节？（没有断点=伪需求）
+  2. 类比检验：如果灵感来自其他领域的成功模式，其成立前提在本领域是否存在？
+  3. 交易闭环：方案是否靠近交易？离交易越远，变现越难。
+  4. 平台依赖：载体（微信/抖音/App）的平台规则是否支持该形态？
+  5. 冷启动：零开发或低开发成本的验证路径是什么？数据达标标准是什么？
+
+output_protocol: protocols/synthesis-protocol

@@ -1,51 +1,66 @@
-## Description: <br>
-Story Long Write helps agents plan, draft, revise, and quality-check long-form Chinese web novel projects from premise and outline through chapter writing and state tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Long-form web fiction writing support from outline to prose, including worldbuilding, character management, plot-line management, chapter drafting, continuation, and revision workflows.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-External writers, writing teams, and agent operators use this skill to create and maintain long-form Chinese web novel projects, including genre positioning, character and world setup, outlines, chapter drafting, daily continuation, revision, and local quality checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Benchmarking and adaptation workflows can push users toward too-direct reuse of protected plots, scenes, distinctive characters, or an author's expression. <br>
-Mitigation: Use references for structure, pacing, and functional roles only; replace worlds, characters, scenes, and expression, then review generated text for originality before release. <br>
-Risk: The skill creates and edits local story project files, so broad use in an unrelated workspace could change files the user did not intend to include. <br>
-Mitigation: Run it in a dedicated writing directory and review large outlines, chapter rewrites, and script-driven changes before accepting them. <br>
-Risk: Examples involving abusive dialogue or conflict writing could be repurposed outside fiction. <br>
-Mitigation: Keep such language limited to clearly fictional characters and do not use it as real-world messages to people. <br>
+## Use Case:
 
+External users and writers use this skill to plan, draft, continue, revise, and quality-check long-form Chinese web fiction projects while maintaining outlines, character files, plot state, and manuscript artifacts in a workspace.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-long-write) <br>
-- [OpenClaw metadata source link](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Skill definition](artifact/SKILL.md) <br>
-- [Artifact protocols](artifact/references/artifact-protocols.md) <br>
-- [Reader contract and progression](artifact/references/reader-contract-and-progression.md) <br>
-- [Daily writing workflow](artifact/references/workflow-daily.md) <br>
-- [Revision workflow](artifact/references/workflow-revision.md) <br>
-- [Anti-AI writing guidance](artifact/references/anti-ai-writing.md) <br>
-- [Quality checklist](artifact/references/quality-checklist.md) <br>
-- [Plot special topics](artifact/references/plot-special-topics.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown project files, Chinese prose, outlines, review notes, and optional Node.js command output.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or edit local story-project files and may run report-only or normalization scripts for prose quality checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.14 (source: server release metadata; skill frontmatter reports 1.0.0) <br>
+Risk: The skill can create and modify manuscript, outline, benchmark, and tracking files in the active writing workspace.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only in a dedicated writing workspace and require explicit confirmation before large rewrites, imports, or broad file changes.
+
+Risk: The skill may run included local Python and Node scripts as part of tracking, punctuation normalization, or quality checks.
+
+Mitigation: Review script behavior before installation and run it only where local script execution is acceptable.
+
+Risk: The skill includes writing workflows that may adapt source plots or comparable works.
+
+Mitigation: Use public-domain, licensed, or user-owned reference material and avoid copyrighted works as beat-by-beat templates.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-long-write)
+- [workflow-setup.md](references/workflow-setup.md)
+- [workflow-daily.md](references/workflow-daily.md)
+- [workflow-revision.md](references/workflow-revision.md)
+- [quality-checklist.md](references/quality-checklist.md)
+- [reader-contract-and-progression.md](references/reader-contract-and-progression.md)
+- [state-tracking.md](references/state-tracking.md)
+- [genre-catalog.md](references/genre-catalog.md)
+- [anti-ai-writing.md](references/anti-ai-writing.md)
+- [artifact-protocols.md](references/artifact-protocols.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown prose, workspace files, outlines, manuscript text, tracking updates, and local script commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or modify project files for outlines, settings, chapters, tracking state, benchmarks, and quality checks.]
+
+## Skill Version(s):
+
+1.1.18 (source: server release evidence; artifact frontmatter reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

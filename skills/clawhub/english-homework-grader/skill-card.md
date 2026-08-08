@@ -1,40 +1,53 @@
-## Description: <br>
-Grades and provides age-appropriate feedback on English written homework for elementary students in grades 3-6. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Grades and provides age-appropriate feedback on English written homework for Chinese elementary school students in grades 3-6.
 
-## Publisher: <br>
-[terrycarter1985](https://clawhub.ai/user/terrycarter1985) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[terrycarter1985](https://clawhub.ai/user/terrycarter1985)
 
-## Use Case: <br>
-External users use this skill to grade, correct, and improve grade 3-6 English homework such as essays, sentences, fill-in-the-blank work, short answers, dictation, letters, and picture descriptions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student submissions may contain private student information. <br>
-Mitigation: Avoid submitting full names, addresses, school IDs, or other private student information unless truly necessary. <br>
-Risk: Automated grading feedback may be imperfect or context-dependent. <br>
-Mitigation: Review scores, corrections, and suggestions before using them for official assessment or student-facing feedback. <br>
+## Use Case:
 
+External users, parents, tutors, and educators use this skill to check, correct, grade, and explain grade 3-6 English homework in a supportive Chinese-language feedback style.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/terrycarter1985/english-homework-grader) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance] <br>
-**Output Format:** [Markdown grading report with score, rubric breakdown, error details, encouragement, and improvement suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Feedback language may follow the submission context or a requested language.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata) <br>
+Risk: The skill may respond too broadly to generic writing review requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it for grade 3-6 English homework contexts and confirm that the feedback matches the student's assignment before relying on it.
+
+Risk: Homework feedback may be inappropriate to share directly with a child without review.
+
+Mitigation: An adult should review the grading comments and adjust tone, accuracy, or curriculum fit before giving them to the student.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/terrycarter1985/skills/english-homework-grader)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown grading feedback with scores, corrections, explanations, suggestions, and encouragement]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language explanations with English examples where useful; feedback is calibrated for grades 3-6.]
+
+## Skill Version(s):
+
+2.0.0 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

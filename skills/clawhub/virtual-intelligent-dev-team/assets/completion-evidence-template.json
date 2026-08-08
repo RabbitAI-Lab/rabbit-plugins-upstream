@@ -1,0 +1,34 @@
+{
+  "schema_version": "completion-evidence/v1",
+  "generated_at": "",
+  "source_request": "",
+  "evidence_action": "<command or check performed>",
+  "result": {
+    "status": "not_run",
+    "summary": "<result or exit status summary>",
+    "exit_code": null
+  },
+  "covered_scope": [
+    "<what the evidence directly covers>"
+  ],
+  "uncovered_scope": [
+    "<uncovered scope, or none>"
+  ],
+  "residual_risk": [
+    "<residual risk, or none>"
+  ],
+  "confidence_grade": "C",
+  "worker_model": "<model name used by Worker, e.g. gpt-4o>",
+  "verifier_model": "<model name used by Verifier, e.g. claude-sonnet-4>",
+  "same_model_self_review": false,
+  "known_shortcuts": [
+    {
+      "location": "<文件路径:行号,故意走捷径的位置>",
+      "ceiling": "<这个 shortcut 能承受的上限>",
+      "upgrade_path": "<达到 ceiling 后的升级方案>"
+    }
+  ],
+  "evidence_refs": [
+    "<verifiable command, or existing local artifact path such as reports/checks.md>"
+  ]
+}

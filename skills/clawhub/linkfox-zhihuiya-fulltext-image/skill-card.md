@@ -1,46 +1,59 @@
-## Description: <br>
-Retrieves full-text patent images, including drawings, figures, diagrams, and charts, from the Zhihuiya patent data service by patent ID or publication number. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves full-text image metadata, including drawings, figures, diagrams, and download paths, from Zhihuiya patent documents by patent ID or publication number.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Patent analysts, IP teams, and agent users use this skill to retrieve and present visual content from a specific patent document. It is intended for patent-image lookup by patent ID or publication number, not broader patent search or legal-status analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Patent identifiers and session or app metadata are sent to LinkFox's gateway. <br>
-Mitigation: Review confidentiality before use and avoid running the skill on sensitive patent searches unless the user accepts that data transfer. <br>
-Risk: Requests consume paid LinkFox credits, with the artifact documenting an 81-credit cost. <br>
-Mitigation: Tell the user about cost before repeated or follow-up retrievals and avoid automatic retries or pagination without confirmation. <br>
-Risk: Full API responses and cache files are stored locally under a LinkFox output directory. <br>
-Mitigation: Treat saved response files as potentially sensitive and remove or protect them according to the user's data-handling needs. <br>
-Risk: The skill directs agents to submit feedback text to a separate LinkFox endpoint. <br>
-Mitigation: Do not include confidential user content in feedback and seek explicit user permission when feedback could reveal sensitive context. <br>
+## Use Case:
 
+Patent researchers, engineers, and agents use this skill to list and retrieve visual content from a specified patent document by patent ID or publication number. It helps inspect drawings, figures, diagrams, image categories, and image download paths returned by the Zhihuiya service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-fulltext-image) <br>
-- [智慧芽-全文附图 API 参考](references/api.md) <br>
-- [LinkFox publisher profile](https://clawhub.ai/user/linkfox-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, files] <br>
-**Output Format:** [Markdown summaries and tables, JSON API responses, and saved JSON files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a patent ID or publication number; each request returns up to 100 images and may consume paid credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: ClawHub security evidence marks this release suspicious because it fetches patent images and also includes account login, API-key generation, payment order creation, automatic feedback reporting, and broad local saving.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after reviewing the LinkFox endpoints and scripts; invoke registration, onboarding, order, or payment commands only after explicit user consent.
+
+Risk: Patent queries, API keys, account login data, phone/SMS onboarding data, and payment-flow data may be handled by LinkFox services.
+
+Mitigation: Use dedicated credentials, avoid sending sensitive patent queries unnecessarily, and keep LINKFOX_* endpoint environment variables locked to trusted values.
+
+Risk: The skill saves full responses and cache files in local linkfox directories.
+
+Mitigation: Run it from an appropriate project workspace and remove generated linkfox data or cache files when they are no longer needed.
+
+## Reference(s):
+
+- [智慧芽-全文附图 API 参考](references/api.md)
+- [解决认证和积分问题](references/onboarding.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-fulltext-image)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown summaries, JSON API responses, and shell commands for authentication or billing setup]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full API responses under local linkfox session data directories; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

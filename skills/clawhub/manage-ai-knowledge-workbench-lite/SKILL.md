@@ -1,7 +1,13 @@
 ---
 name: manage-ai-knowledge-workbench-lite
-description: Autonomously build and refresh on demand a metadata-only local Markdown or Obsidian knowledge index with an offline HTML dashboard.
-version: 1.0.1
+description: Build and refresh a metadata-only Markdown or Obsidian knowledge index in one authorized local workspace. The deterministic runtime reads Markdown headings/frontmatter/tags/links, writes only .ai-workbench, AI-Knowledge, and AI-Dashboard, and briefly binds 127.0.0.1 to verify the offline dashboard; it opens the local page only when requested. Requires Python 3.10+ and terminal access, does not upload note bodies, and does not run persistently. Before any terminal tool call, always read this SKILL.md, actually probe Python and the agent host CLI versions, and never use an OS, kernel, device, user, or account identity as validated_host.
+version: 1.0.3
+permissions:
+  - bash
+  - read
+  - write
+  - network
+  - env
 metadata:
   openclaw:
     emoji: "🧭"
@@ -14,6 +20,17 @@ metadata:
 ---
 # Manage AI Knowledge Workbench Lite
 
+## When to Use（何时使用）
+
+在以下请求中使用本 Skill：
+
+- 用户要把一个明确授权的 Markdown 文件夹或 Obsidian Vault 建成可浏览的本地知识工作台；
+- 用户要对已经初始化的工作台执行一次按需增量更新；
+- 用户要检查工作台状态、验证工作区完整性，或安全卸载受管运行状态并保留原始笔记与派生输出；
+- 用户明确接受 Metadata-only、本地优先、单工作区和无后台常驻的 Lite 边界。
+
+不要在用户要求正文语义摘要、持续监听、多工作区聚合、云端同步或付费 Pro 能力时触发本 Lite Skill；应如实说明这些能力不在本版本范围内。
+
 ## Run autonomously
 
 1. Resolve one user-authorized workspace and one source directory. When the user gives exactly one empty/Markdown directory or one existing Obsidian Vault, use that same directory for both `--workspace` and `--source`; never silently substitute the agent host's own workspace. Use separate paths only when the user explicitly supplies both, and ask once if the output location is genuinely ambiguous.
@@ -22,6 +39,8 @@ metadata:
 4. Treat `AUTO_RUN_READY` as a completed foreground build. Copy artifact paths from the command JSON instead of reconstructing them. Open the reported `index.html` only when requested, and claim it opened only after the open command exits successfully.
 5. Treat `AUTO_RUN_PAUSED` as an explicit user gate. Explain `needs_user_input`, resolve it once, then run with `--resume`.
 6. Treat `AUTO_RUN_FAILED` as an inspected failure. Follow only the bounded next action returned by the command.
+
+Packaged-runtime failure gate: if `scripts/workbench.py` or its vendored runtime is missing, unreadable, or cannot start, report `AUTO_RUN_FAILED` with a plain-language package-integrity message and stop. Do not invent a replacement script, download code, install dependencies, or fall back to an unverified global executable. Ask the user to reinstall the same verified package, then retry in a new session.
 
 Path execution invariant: pass every workspace and source path as one shell argument, with explicit quoting whenever it contains spaces or non-ASCII text. Do not run prerequisite `ls` or `mkdir` for a requested missing workspace; packaged `run` creates it safely. An unquoted path attempt is a failed command and must be disclosed even if a corrected command later succeeds.
 
@@ -42,5 +61,13 @@ For a prerequisite-only diagnosis, run `<python-command> <skill-directory>/scrip
 ## Privacy default
 
 Lite is fixed to Metadata-only. The deterministic local parser may read Markdown to extract frontmatter, headings, tags, and links, but it does not send file bodies to a model and does not embed note bodies, secrets, or absolute source paths in the dashboard.
+
+## Declared capabilities
+
+- Terminal: probe the Python and agent-host CLI versions and run the packaged foreground commands.
+- File read: inspect Markdown only inside the user-authorized source boundary.
+- File write: write only `.ai-workbench`, `AI-Knowledge`, and `AI-Dashboard` inside the selected workspace.
+- Network: bind only an ephemeral `127.0.0.1` loopback service for dashboard verification; do not call external APIs or upload note bodies.
+- Environment: read only process/runtime values needed for deterministic local execution; never print secrets.
 
 Read `references/RUNTIME_CONTRACT.md` for command results, `references/PRIVACY.md` for the exact privacy boundary, and `references/AUTONOMY_GATES.md` before permission, destructive, installation, or external actions.

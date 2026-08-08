@@ -1,0 +1,31 @@
+{
+  "tongcheng_refid": "",
+  "proxy_base": "https://cloudbase-d0grtsz3j7737094c-1454004821.ap-shanghai.app.tcloudbase.com/headless-api",
+  "proxy_token": "",
+  "deep_link_enabled": true,
+  "providers": {
+    "feizhu": {
+      "flight": false,
+      "hotel": true,
+      "ticket": true,
+      "monitor": false
+    },
+    "tongcheng": {
+      "flight": false,
+      "hotel": false,
+      "ticket": false
+    },
+    "ctrip": {
+      "flight": true,
+      "train": true,
+      "hotel": false,
+      "ticket": false
+    },
+    "rollinggo": {
+      "flight": false,
+      "hotel": false,
+      "ticket": false
+    }
+  },
+  "_comment_platform_keys": "平台密钥只通过云端环境变量注入，不写入此文件；skill 为薄壳，查询/链接/来源全部在云端 headless-api 完成"
+}

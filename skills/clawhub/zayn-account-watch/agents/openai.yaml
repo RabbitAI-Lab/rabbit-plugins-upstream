@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-account-watch"
+  short_description: "持续跟踪企业公开动态，识别商机、联系机会与风险信号"
+  default_prompt: "使用 $zayn-account-watch 扫描目标账户的新动态并给出合规行动建议。"

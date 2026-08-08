@@ -46,7 +46,12 @@ def unwrap_tencent_response(value):
             raise RuntimeError(text)
         return value
     if isinstance(value, dict):
-        if "status_code" in value and value.get("status_code") not in (200, "200"):
+        wrapped_data = unwrap_transport_data(value.get("data"))
+        if wrapped_data is not None:
+            return unwrap_tencent_response(wrapped_data)
+
+        status_code = value.get("status_code", value.get("statusCode"))
+        if status_code is not None and status_code not in (200, "200"):
             body = value.get("body")
             parsed_body = parse_json_text(body) if isinstance(body, str) else body
             raise RuntimeError(error_message_from_response(parsed_body) or json.dumps(value, ensure_ascii=False))
@@ -77,6 +82,17 @@ def unwrap_tencent_response(value):
                 if texts:
                     return "\n".join(texts)
     return value
+
+
+def unwrap_transport_data(value):
+    """Return an outer Skill transport envelope's payload, if present."""
+    if isinstance(value, str):
+        value = parse_json_text(value)
+    if not isinstance(value, dict):
+        return None
+    if any(key in value for key in ("status_code", "statusCode", "body", "result")):
+        return value
+    return None
 
 
 def is_error_text(text):

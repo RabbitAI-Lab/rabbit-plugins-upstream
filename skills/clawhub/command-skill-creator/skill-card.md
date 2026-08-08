@@ -1,40 +1,55 @@
-## Description: <br>
-Creates automation command skills, or slash commands, for Claude Code projects that automate multi-step workflows with safety gates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates automation command skills for Claude Code projects - imperative slash-command prompts in `.claude/skills/`, not knowledge or reference skills.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill to design command-style agent skills for repeatable workflows such as deploys, releases, migrations, commits, and cross-repo operations. It helps structure command frontmatter, phases, approval gates, error handling, and audit checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated commands may deploy, commit, delete, modify another repository, or call external APIs if used without review. <br>
-Mitigation: Review every generated command before use, keep disable-model-invocation enabled for side-effecting commands, restrict allowed tools where practical, and require explicit approval before irreversible actions. <br>
+## Use Case:
 
+Developers and engineers use this skill to create explicit slash-command skills for multi-step automation workflows such as deploys, commits, releases, migrations, and cross-repo operations. It emphasizes phased execution, approval gates, error handling, and audit checks for command skills that may cause side effects.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/command-skill-creator) <br>
-- [Project Homepage](https://github.com/tenequm/skills/tree/main/skills/command-skill-creator) <br>
-- [Command Skill Design Patterns](references/design-patterns.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown skill files with YAML frontmatter, phased instructions, command snippets, and audit notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces user-facing command skill guidance that should be reviewed before running side-effecting workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Generated command skills may later commit, deploy, modify repositories, or invoke external tooling when a user asks for those commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated command skills before use and require explicit approval checkpoints before file writes, commits, pushes, deploys, or other side effects.
+
+Risk: Generated skill guidance could be incorrect or misleading for a target repository's conventions.
+
+Mitigation: Audit the generated SKILL.md against the target project, run relevant tests or scans, and confirm cross-repo discovery and error-handling steps before deployment.
+
+## Reference(s):
+
+- [Command Skill Design Patterns](references/design-patterns.md)
+- [ClawHub skill page](https://clawhub.ai/tenequm/skills/command-skill-creator)
+- [Project homepage](https://github.com/tenequm/skills/tree/main/skills/command-skill-creator)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with YAML frontmatter and inline command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent-facing command skill drafts and audit guidance; review generated skills before use.]
+
+## Skill Version(s):
+
+0.1.3 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

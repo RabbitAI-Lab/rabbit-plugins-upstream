@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes pet hospital waiting-area video or image inputs through server-side APIs to identify anxiety-related behavior signals, assign a 1-5 anxiety level, and return a structured report without diagnosing disease or recommending treatment. <br>
+Analyzes pet hospital waiting-area videos or video URLs through a cloud API to identify anxiety-related behavior signals and return a standardized anxiety level from 1 to 5 without diagnosing disease or prescribing treatment. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External veterinary clinic staff and pet care operators use this skill to screen waiting-area media for pet anxiety indicators, prioritize high-stress pets for care or comfort, and review generated assessment reports. <br>
+External veterinary clinic staff, pet care operators, and agent users can use this skill to review waiting-area pet videos, surface visible stress indicators, and prioritize calming or intake workflow decisions. Results are for workflow support and behavioral observation, not clinical diagnosis or treatment. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Waiting-area media is uploaded to lifeemergence.com services and may include pets, owners, staff, or bystanders. <br>
-Mitigation: Use only media that the clinic is authorized to share, avoid unnecessary bystander footage, and confirm provider retention and endpoint trust before deployment. <br>
-Risk: The skill automatically creates or reuses an internal user identity and ties cloud history/report records to that identity. <br>
-Mitigation: Deploy with clear account ownership expectations and review cloud report access controls before enabling history queries. <br>
-Risk: Service tokens are stored in a local workspace SQLite database. <br>
-Mitigation: Restrict workspace access, avoid sharing generated local state, and rotate or clear tokens according to the provider's operational guidance. <br>
-Risk: Anxiety scoring may be affected by video quality, occlusion, camera angle, breed traits, or individual pet differences. <br>
-Mitigation: Treat the output as workflow support only and require staff to combine results with direct observation and clinical judgment. <br>
+Risk: Pet waiting-area videos or URLs are sent to a configured cloud service for analysis. <br>
+Mitigation: Use only videos approved for cloud processing, avoid unnecessary capture of people or clinic identifiers, and confirm consent for sensitive surroundings before use. <br>
+Risk: The skill can create or reuse an internal identity, store local account tokens, and query cloud report history. <br>
+Mitigation: Review the identity and token behavior before installation, run it in an environment with appropriate access controls, and limit use to operators who should see the associated report history. <br>
+Risk: Anxiety levels are estimates based on visible behavior signals and may vary with species, breed, camera angle, occlusion, or video quality. <br>
+Mitigation: Treat results as waiting-workflow support only and have clinic staff compare them with direct observation before prioritizing care or comfort actions. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-hospital-waiting-anxiety-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
 - [API documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [Skill usage demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with observed signals, anxiety level, recommendations, and report links] <br>
+**Output Type(s):** [analysis, markdown, JSON, files, shell commands, guidance] <br>
+**Output Format:** [Structured text or JSON analysis report, with optional Markdown table output for report history and optional saved result file.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can list cloud history reports and can write the analysis output to a local file when requested.] <br>
+**Other Properties Related to Output:** [Outputs may include observed behavior signals, anxiety level, risk prompts, suggestions, report links, and cloud report history.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+1.0.9 (source: server-resolved release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

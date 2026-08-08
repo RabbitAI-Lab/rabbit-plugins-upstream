@@ -1,42 +1,59 @@
-## Description: <br>
-Scaffolds dev project files for Python, Node, Docker, Go, and Rust, returning toolchain commands for the calling agent while writing files only inside the agent workspace. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scaffolds workspace-confined starter project files for Python, Node, Docker, Go, and Rust, tracks environment/service/port metadata, and returns toolchain commands as data for the calling agent to inspect and run.
 
-## Publisher: <br>
-[jlacroix82](https://clawhub.ai/user/jlacroix82) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jlacroix82](https://clawhub.ai/user/jlacroix82)
 
-## Use Case: <br>
-Developers and agent operators use env-manager to scaffold starter project files for common language and toolchain environments and receive structured commands that the calling agent can review and run. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Workspace containment may not be reliably enforced before writing files. <br>
-Mitigation: Use only supported environment types with an explicit validated name, inspect returned paths before running generated commands, and avoid sensitive repositories until workspace root handling and type/name validation are verified. <br>
-Risk: Setup writes starter files and state during each successful setup call, with no preview step. <br>
-Mitigation: Review the target environment name, generated path, and existing files before invoking setup; do not call setup when file writes are not intended. <br>
-Risk: Returned shell commands could be run incorrectly by the calling agent. <br>
-Mitigation: Inspect each command object's binary, arguments, working directory, status, and warnings before execution; do not run commands marked blocked or not_found. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to scaffold starter files for Python, Node, Docker, Go, and Rust projects, and to keep workspace-local environment, service, and port metadata. It returns setup and health-check commands as data for the calling agent to inspect and run separately.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jlacroix82/skills/env-manager) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration] <br>
-**Output Format:** [JSON objects, human-readable command text, and generated project files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated files are written during setup; returned commands are not executed by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: ClawHub release evidence) <br>
+Risk: Setup creates or overwrites starter project files and environment state on every successful setup call, with no preview or confirmation step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation workspace and requested environment name before calling setup, and avoid setup when existing starter files must be preserved.
+
+Risk: Returned command arrays are intended for a separate calling agent to execute, so running them without review could apply unwanted local toolchain actions.
+
+Mitigation: Inspect command status and warnings first; run only entries that are expected for the target project and treat blocked or not_found entries as non-executable.
+
+Risk: Service and port status is bookkeeping metadata, not live process control or live network truth.
+
+Mitigation: Use service and port records as inventory hints only, and verify real runtime state with separate trusted checks when needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jlacroix82/skills/env-manager)
+- [README](artifact/README.md)
+- [Security audit](artifact/SECURITY-AUDIT.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration]
+
+**Output Format:** [JSON objects and human-readable text containing scaffold metadata, warnings, generated-file status, and command arrays for the calling agent]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Setup calls write scaffold files and JSON state inside the workspace; command entries include status values such as ready, blocked, not_found, or error.]
+
+## Skill Version(s):
+
+3.0.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

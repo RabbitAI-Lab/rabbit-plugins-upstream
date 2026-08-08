@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/supervisor-config-gen",
   "slug": "supervisor-config-gen",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1785023425395,
-  "contentHash": "8058ad641ab2fc15c6b95c784fddde09caf2f9e62a00665e2f32bc5bb783352b",
-  "fetchedAt": "2026-07-26T18:03:49.926Z"
+  "version": "1.0.5",
+  "updatedAt": 1785614636766,
+  "contentHash": "0eddbc91387a52d5722e9345765e334a4bbda01ab817ed34576314e4711951d2",
+  "fetchedAt": "2026-08-08T08:30:34.530Z"
 }

@@ -1,45 +1,65 @@
-## Description: <br>
-Gov Procurement Analyst helps suppliers, procurement agents, and purchasing teams analyze Chinese government procurement opportunities, bid decisions, compliance risks, contracts, policies, and bid-document drafting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Gov Procurement Analyst supports Chinese government procurement workflows with opportunity discovery, bid decision analysis, tender document drafting support, enterprise due diligence, compliance checks, policy comparison, and bid-collusion risk review.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Suppliers, bid teams, procurement agents, and purchasing units use this skill to find public procurement notices, match opportunities to an enterprise profile, assess bid viability, draft bid materials, and review compliance or contract risks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist sensitive company profile data, qualifications, historical projects, and generated bid materials on the local machine. <br>
-Mitigation: Use explicit invocation, avoid sensitive certificates unless local-only processing is confirmed, and review how to list, delete, or disable stored profiles, archives, and material libraries. <br>
-Risk: Broad triggers, timed pushes, and update actions may produce or deliver procurement analysis outside the user's intended scope. <br>
-Mitigation: Confirm the target project, company, and delivery channel before relying on reports, and disable scheduled pushes or update actions when they are not needed. <br>
-Risk: Bid, contract, policy, and complaint guidance may be incomplete or unsuitable for a specific procurement matter. <br>
-Mitigation: Have qualified procurement, legal, or finance reviewers check generated reports and filing materials before submission. <br>
+## Use Case:
 
+External procurement teams, suppliers, bid agencies, and purchasing units use this skill to find public procurement opportunities, assess bid fit, prepare bid materials, review compliance risks, and maintain reusable procurement knowledge. Outputs are decision-support drafts and risk signals that require human review for legal, financial, and procurement decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/gov-procurement-analyst) <br>
-- [Procurement platforms and compliance guide](references/procurement-platforms.md) <br>
-- [Anti-scraping best practices](references/anti-scraping-best-practices.md) <br>
-- [Enterprise profiling and matching algorithm](references/enterprise-profiling.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown-style reports and guidance with optional JSON files from helper scripts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May persist local enterprise profiles, bid archives, material libraries, generated bid documents, and script output files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.7.0 (source: frontmatter, release evidence, README version history) <br>
+Risk: The skill stores procurement and enterprise-profile data locally, which may include sensitive business information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in an approved local workspace, limit access to generated files and databases, and review any exported or shareable reports before distribution.
+
+Risk: The skill uses network access to public procurement sites and may be affected by platform access rules, rate limits, login requirements, or anti-scraping controls.
+
+Mitigation: Restrict use to public information, honor robots.txt and platform terms, keep conservative request pacing, and skip sources that require login, payment, CAPTCHA bypass, or non-public access.
+
+Risk: Scheduled pushes, shareable reports, dependency installation, and hot-update behavior can move data or code outside the immediate analysis flow.
+
+Mitigation: Confirm destinations, sources, and approval steps before enabling scheduled sharing, installing dependencies, or applying updates.
+
+Risk: Generated bid, legal, compliance, pricing, and scoring guidance may be incomplete or misleading if source data is stale, limited, or inferred.
+
+Mitigation: Treat outputs as drafts, check confidence labels, verify important facts against official sources, and require qualified human review before procurement or legal action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/gov-procurement-analyst)
+- [README](README.md)
+- [Procurement platforms and compliance guide](references/procurement-platforms.md)
+- [Anti-scraping best practices](references/anti-scraping-best-practices.md)
+- [Enterprise profiling and matching algorithms](references/enterprise-profiling.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports, JSON result files, shell command examples, and prose guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local procurement analysis files and reusable knowledge records; legal, bid, compliance, and scoring outputs are draft support requiring human review.]
+
+## Skill Version(s):
+
+4.9.0 (source: frontmatter and server evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

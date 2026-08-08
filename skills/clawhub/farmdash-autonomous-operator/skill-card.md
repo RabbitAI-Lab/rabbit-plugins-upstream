@@ -1,5 +1,5 @@
 ## Description: <br>
-Session state and control-loop skill for OpenClaw. Manages sessions, FarmingContext, autopilot OODA control loops, circuit breakers, and Forensic receipts in zero-custody. <br>
+Run policy-bounded autonomous DeFi agents with session keys, OODA control loops, intent state, circuit breakers, recovery, and zero-custody execution. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and external DeFi agent operators use this skill to coordinate persistent FarmDash sessions, shared context, bounded autopilot control loops, policy checks, approvals, and forensic receipts. It is intended for zero-custody session and state coordination, not direct private-key custody or direct on-chain execution. <br>
+External developers and DeFi operators use this skill to coordinate policy-bounded autonomous DeFi sessions, intent lifecycle checks, approvals, circuit breakers, and recovery without giving private keys to the agent. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: DeFi autopilot coordination can create financial risk if budgets, allowlists, or execution approvals are too broad. <br>
-Mitigation: Keep budgets and allowlists tight, require explicit wallet approval for transactions, and halt workflows when risk limits or circuit breakers are reached. <br>
-Risk: FARMDASH_API_KEY and sessionToken values are sensitive credentials. <br>
-Mitigation: Store credentials only in the agent runtime or secret manager, avoid displaying session tokens in user-facing prose, and rotate credentials if exposed. <br>
-Risk: The skill coordinates intent routing and approval records but does not itself provide private-key custody or direct on-chain execution. <br>
-Mitigation: Use separate signing or execution skills for state-changing actions and verify that policy, simulation, and approval gates pass before execution. <br>
+Risk: Autonomous DeFi execution can create high-impact financial losses if grants, budgets, or approvals are too broad. <br>
+Mitigation: Keep session-key grants narrow, scoped, time-limited, and revocable; verify expiry and revocation paths; review every EIP-712 approval before signing. <br>
+Risk: Users could misunderstand a session token, context patch, or chat message as execution authority. <br>
+Mitigation: Treat execution authority as a separate signed grant or approval step, and never equate session state or natural-language configuration with permission to execute. <br>
+Risk: Private keys, seed phrases, or sensitive session tokens could be exposed during operation. <br>
+Mitigation: Never provide private keys or seed phrases to the skill, keep session tokens out of normal user-facing prose, and store runtime credentials securely. <br>
+Risk: Receipts or event snapshots may be misread as proof of fills, finality, realized profit and loss, or external settlement. <br>
+Mitigation: Use only returned, source-labeled evidence; require policy, simulation, approval, and observation gates; halt dependent actions when settlement is pending, partial, unknown, or unsupported. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub Skill Page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-autonomous-operator) <br>
-- [FarmDash Agents](https://www.farmdash.one/agents) <br>
-- [FarmDash Autonomous Operator Skill Manual](https://www.farmdash.one/openclaw-skills/farmdash-autonomous-operator/SKILL.md) <br>
+- [FarmDash Autonomous DeFi Agent Platform](https://www.farmdash.one/agents) <br>
+- [FarmDash DeFi Intelligence Homepage](https://www.farmdash.one/) <br>
+- [Canonical Autonomous Operator Skill Manual](https://www.farmdash.one/openclaw-skills/farmdash-autonomous-operator/SKILL.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and structured session or intent guidance for agent workflows] <br>
+**Output Type(s):** [Guidance, Configuration, JSON, API Calls] <br>
+**Output Format:** [Markdown guidance with structured JSON tool responses and EIP-712 approval payloads] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference session tokens, API keys, approval payloads, receipt IDs, and risk-state data that should be handled as sensitive operational context.] <br>
+**Other Properties Related to Output:** [May use FARMDASH_API_KEY for higher tiers; workflows require explicit policy, simulation, and approval gates before state-changing execution.] <br>
 
 ## Skill Version(s): <br>
-1.0.9 (source: ClawHub release metadata; artifact frontmatter reports 2.0.0) <br>
+1.0.10 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

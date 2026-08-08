@@ -1,45 +1,59 @@
-## Description: <br>
-Analyzes multi-pet images or videos to identify social interactions, classify behaviors such as sniffing, chasing, biting, fleeing, hiding, and play, and produce a structured behavior report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes multi-pet images or videos to identify social interactions such as sniffing, chasing, biting, fleeing, hiding, and playing, then returns a structured social-behavior report with durations, frequency, roles, observations, and report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External pet owners, boarding centers, daycare operators, and behavior clinics use this skill to analyze multi-pet media for interaction patterns, potential conflict, and social-behavior reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet or home-camera media and generated report history may be processed by lifeemergence.com cloud services. <br>
-Mitigation: Use only with media the user is authorized to share, avoid sensitive scenes, and confirm organizational approval for cloud processing before installation. <br>
-Risk: The skill can silently create or reuse a local identity, authenticate remotely, store returned tokens locally, and fetch report history tied to that identity. <br>
-Mitigation: Review local identity and token storage before deployment, restrict runtime access to trusted environments, and clear stored credentials when the skill is no longer needed. <br>
-Risk: Behavior classifications such as play, aggression, stress, or conflict are observational and can be uncertain from visual media alone. <br>
-Mitigation: Treat outputs as behavior observations rather than medical or training advice, and route serious conflict or welfare concerns to a qualified professional. <br>
+## Use Case:
 
+External users, pet-care operators, and developers use this skill to analyze multi-pet interaction media and produce behavior observations for homes, boarding centers, daycare, and animal behavior clinics. The results are for visual behavior observation and should not be treated as medical or training advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-social-interaction-analysis-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Pet social interaction API documentation](artifact/references/api_doc.md) <br>
-- [Common analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown text with structured JSON report content and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save output to a file when requested; history reports are fetched from the cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter says 1.0.5) <br>
+Risk: The skill may upload pet videos or media URLs to a remote service for cloud processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only with footage and URLs approved for cloud processing, and confirm user consent before submitting sensitive media.
+
+Risk: The skill may query cloud report history tied to a resolved user identity.
+
+Mitigation: Use approved accounts and review returned history before sharing it outside the intended user context.
+
+Risk: The skill may create or reuse an internal user identity and persist service tokens in the workspace data directory.
+
+Mitigation: Install and run it only in trusted workspaces, review local credential storage, and rotate or remove stored tokens when access is no longer needed.
+
+## Reference(s):
+
+- [Skill API Interface Documentation](references/api_doc.md)
+- [Shared Analysis API Interface Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON]
+
+**Output Format:** [Markdown report with structured JSON-style analysis results and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write the returned report to a user-specified output file and may return cloud report history for the resolved user identity.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata; artifact frontmatter says 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

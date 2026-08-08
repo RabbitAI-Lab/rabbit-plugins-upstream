@@ -224,7 +224,7 @@ async function main() {
     submitted: submitResult.submitted,
     deduplicated: submitResult.deduplicated,
     conflicts: submitResult.conflicts,
-    opcId: submitResult.opcId,
+    userId: submitResult.userId,
     nextStep: submitResult.nextStep,
     durationMs: Date.now() - t0,
   };

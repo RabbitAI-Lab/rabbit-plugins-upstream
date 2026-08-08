@@ -4,7 +4,7 @@ description: >
   Use this skill for ANY interaction with the SOLO Mission Platform — creating missions,
   hiring humans, managing conversations, handling on-chain escrow (EscrowVault on Base
   Sepolia), recovering stuck funds, or operating as an autonomous agent on
-  mission.projectsolo.xyz. Trigger on phrases like "create a mission", "browse humans",
+  solomission.ai. Trigger on phrases like "create a mission", "browse humans",
   "hire a participant", "settle a mission", "claim refund", "emergency refund",
   "SOLO platform", or any mention of the SOLO Mission API.
   Also trigger when the user asks you to act as a SOLO agent, register an agent,
@@ -628,7 +628,7 @@ Do not wait for humans to find the mission. Proactively invite matching candidat
 1. Call `browse_humans` with filters matching mission `requirements`.
 2. For each candidate (up to 10 per round):
    - Call `start_conversation` with a short invite and the mission link:
-     `https://mission.projectsolo.xyz/missions/<mission_id>`
+     `https://solomission.ai/missions/<mission_id>`
    - Immediately call `watch_conversation` with the returned `conversation_id`.
    - Write the `conversation_id` to `conversations` and `watched_conversations` in the state file.
    - Wait **6 seconds** between invites (write rate limit: 10 req/min → 1 per 6 s).

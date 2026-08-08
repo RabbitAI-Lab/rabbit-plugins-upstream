@@ -1,49 +1,68 @@
-## Description: <br>
-Claudify helps agents convert requested functionality into Claude Code automations and maintain them through improvement, persistence, and background polling workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Claudify guides agents through creating, improving, persisting, and monitoring Claude Code automations such as agents, skills, rules, slash commands, hooks, and plugin structures.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent operators use Claudify to decide whether requested functionality should become an agent, skill, rule, command, hook, or plugin, then produce the corresponding automation guidance and artifacts. It also supports follow-up maintenance workflows for self-improvement, knowledge persistence, and long-running background work discipline. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create persistent agent automations, including hooks that may run commands automatically. <br>
-Mitigation: Review proposed hooks and automation files before installation, require confirmation before writes, and prefer project-local scope. <br>
-Risk: The skill can inspect global Claude plugin metadata and write memory or failed-attempt records from session context. <br>
-Mitigation: Limit persistence to non-sensitive information, avoid global scope unless needed, and review memory or documentation changes before saving. <br>
-Risk: Example automations may stage git changes, install extensions, or log broad tool use if enabled without review. <br>
-Mitigation: Enable only examples that are needed for the project and remove or narrow commands that change repositories, install software, or collect excessive logs. <br>
+## Use Case:
 
+Developers and agent operators use this skill to decide which Claude Code automation type to create, collect requirements, generate or improve automation assets, preserve durable workflow knowledge, and keep long-running background work actively monitored.
 
-## Reference(s): <br>
-- [Claudify on ClawHub](https://clawhub.ai/drumrobot/skills/claudify) <br>
-- [SKILL.md](artifact/SKILL.md) <br>
-- [Background Polling](artifact/background-polling.md) <br>
-- [Improve](artifact/improve.md) <br>
-- [Persist](artifact/persist.md) <br>
-- [Automation Decision Guide](artifact/resources/automation-decision-guide.md) <br>
-- [Hook Examples](artifact/resources/hook-examples.md) <br>
-- [Plugin Creation](artifact/resources/plugin-creation.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with code, JSON, and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose file writes, hook configuration, persistent memory records, and automation artifacts that should be reviewed before installation or execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release metadata and CHANGELOG, released 2026-07-23; SKILL.md frontmatter lists 0.1.2) <br>
+Risk: Automation changes can affect agent behavior outside the immediate task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer project-local scope unless global behavior is intentional, and review generated automations before installation.
+
+Risk: Hook examples or hook configuration can run automatically on tool events.
+
+Mitigation: Review hook examples and settings before enabling them, and keep hook ownership tied to an appropriate skill.
+
+Risk: Persistence workflows can save sensitive or unnecessary session details.
+
+Mitigation: Avoid saving secrets, credentials, or sensitive session details into memory, documentation, or logs.
+
+Risk: Long-running background work can hang or leave the user without progress visibility.
+
+Mitigation: Use explicit command timeouts and active polling or wakeups for long-running background dispatches.
+
+## Reference(s):
+
+- [Claudify Skill Page](https://clawhub.ai/drumrobot/skills/claudify)
+- [Skill Definition](artifact/SKILL.md)
+- [Background Polling](artifact/background-polling.md)
+- [Improve Topic](artifact/improve.md)
+- [Persist Topic](artifact/persist.md)
+- [Automation Decision Guide](artifact/resources/automation-decision-guide.md)
+- [Hook Examples](artifact/resources/hook-examples.md)
+- [Plugin Creation Guide](artifact/resources/plugin-creation.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with tables, checklists, code blocks, file paths, and command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Topic-routed guidance for create, improve, persist, and background-polling workflows.]
+
+## Skill Version(s):
+
+0.5.2 (source: server release metadata and CHANGELOG, released 2026-08-05)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

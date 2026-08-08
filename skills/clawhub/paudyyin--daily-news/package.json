@@ -1,5 +1,5 @@
 {
-    "name":  "daily-news",
-    "version":  "1.0.0",
-    "description":  "Fetch top news from Baidu, Google, and other sources daily."
+  "name": "daily-news",
+  "version": "1.1.0",
+  "description": "每日新闻聚合工具。从百度热搜、Google Trends 等多源获取当日热点新闻，自动汇总排序输出。"
 }

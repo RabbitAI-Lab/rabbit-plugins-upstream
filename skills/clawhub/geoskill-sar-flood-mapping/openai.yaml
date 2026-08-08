@@ -1,0 +1,17 @@
+name: geoskill-sar-flood-mapping
+display_name: SAR洪水制图
+description: |
+  基于 SAR 低后向散射特性的洪水范围制图：Otsu 阈值分割低 σ⁰ 水体 + 形态学去噪 + 可选 DEM 坡度排除，并矢量化为 GeoJSON。SAR flood extent mapping via Otsu thresholding of low backscatter, morphological cleanup and vectorization. 输出洪水二值 GeoTIFF + 面积统计 JSON + 范围 GeoJSON。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-sar-flood-mapping.py
+runtime: python>=3.9
+tags:
+  - dem
+  - extraction
+  - gis
+  - hydrology
+  - raster
+  - remote-sensing
+  - sar
+  - terrain

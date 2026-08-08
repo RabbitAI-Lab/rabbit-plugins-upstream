@@ -1,0 +1,99 @@
+{
+  "weights": {
+    "hazard": 0.4,
+    "exposure": 0.35,
+    "evidence": 0.25
+  },
+  "high_threshold": 70,
+  "medium_threshold": 40,
+  "low_threshold": 20,
+  "hazard_factors": {
+    "dam_height": {
+      "high": 50,
+      "medium": 30,
+      "low": 15,
+      "unknown_score": 15
+    },
+    "capacity": {
+      "high": 10000000,
+      "medium": 1000000,
+      "low": 100000,
+      "unknown_score": 10
+    },
+    "water_change": {
+      "high_pct": 50,
+      "medium_pct": 20,
+      "low_pct": 10,
+      "minimal_pct": 5
+    },
+    "catchment_area": {
+      "high_km2": 10,
+      "medium_km2": 5,
+      "low_km2": 1
+    },
+    "runout_distance": {
+      "high_m": 5000,
+      "medium_m": 2000,
+      "low_m": 1000
+    }
+  },
+  "exposure_factors": {
+    "n_objects": {
+      "high": 100,
+      "medium": 50,
+      "low": 20,
+      "minimal": 5
+    },
+    "area_km2": {
+      "high": 10,
+      "medium": 5,
+      "low": 1,
+      "minimal": 0.1
+    }
+  },
+  "evidence_factors": {
+    "water_change_pct": {
+      "high": 30,
+      "medium": 15,
+      "low": 5,
+      "minimal": 1
+    },
+    "net_change_pixels": {
+      "high": 1000,
+      "medium": 500,
+      "low": 100
+    },
+    "catchment_area_km2": {
+      "high": 5,
+      "medium": 2,
+      "low": 0.5
+    }
+  },
+  "rainfall_scenarios": {
+    "100yr": {
+      "multiplier": 1.0,
+      "base_intensity_mm_hr": 100
+    },
+    "500yr": {
+      "multiplier": 1.3,
+      "base_intensity_mm_hr": 130
+    },
+    "1000yr": {
+      "multiplier": 1.5,
+      "base_intensity_mm_hr": 150
+    }
+  },
+  "runout_parameters": {
+    "simplified": {
+      "reach_angle": 0.15
+    },
+    "energy_line": {
+      "hl_ratio": 0.2
+    }
+  },
+  "deformation_threshold_mm_yr": 10.0,
+  "data_completeness": {
+    "low_threshold": 0.5,
+    "medium_threshold": 0.8
+  }
+}

@@ -1,0 +1,310 @@
+{
+  "_comment": "media-organizer curated 系列快路径（手工维护，随项目发布）。运行时不写入此文件。",
+  "_format": {
+    "series": "curated 系列名册：{name, folder, match_patterns, members[{title, year}]}"
+  },
+  "series": [
+    {
+      "name": "疯狂动物城",
+      "folder": "疯狂动物城（系列）",
+      "match_patterns": [
+        "疯狂动物城",
+        "Zootopia"
+      ],
+      "members": [
+        {
+          "title": "疯狂动物城",
+          "year": 2016
+        },
+        {
+          "title": "疯狂动物城2",
+          "year": 2025
+        }
+      ]
+    },
+    {
+      "name": "利刃出鞘",
+      "folder": "利刃出鞘（系列）",
+      "match_patterns": [
+        "利刃出鞘",
+        "Knives Out",
+        "玻璃洋葱",
+        "唤醒死人"
+      ],
+      "members": [
+        {
+          "title": "利刃出鞘",
+          "year": 2019
+        },
+        {
+          "title": "利刃出鞘：玻璃洋葱",
+          "year": 2022
+        },
+        {
+          "title": "利刃出鞘：唤醒死人",
+          "year": 2025
+        }
+      ]
+    },
+    {
+      "name": "哈利波特",
+      "folder": "哈利波特（系列）",
+      "match_patterns": [
+        "哈利·波特",
+        "哈利波特",
+        "Harry Potter"
+      ],
+      "members": [
+        {
+          "title": "哈利·波特与魔法石",
+          "year": 2001
+        },
+        {
+          "title": "哈利·波特与密室",
+          "year": 2002
+        },
+        {
+          "title": "哈利·波特与阿兹卡班的囚徒",
+          "year": 2004
+        },
+        {
+          "title": "哈利·波特与火焰杯",
+          "year": 2005
+        },
+        {
+          "title": "哈利·波特与凤凰社",
+          "year": 2007
+        },
+        {
+          "title": "哈利·波特与混血王子",
+          "year": 2009
+        },
+        {
+          "title": "哈利·波特与死亡圣器（上）",
+          "year": 2010
+        },
+        {
+          "title": "哈利·波特与死亡圣器（下）",
+          "year": 2011
+        }
+      ]
+    },
+    {
+      "name": "火影忍者剧场版",
+      "folder": "火影忍者剧场版（系列）",
+      "match_patterns": [
+        "火影忍者",
+        "Naruto"
+      ],
+      "members": [
+        {
+          "title": "大兴奋！三日月岛的动物骚动",
+          "year": 2006
+        },
+        {
+          "title": "大激突！幻之地底遗迹",
+          "year": 2005
+        },
+        {
+          "title": "大活剧！雪姬忍法帖",
+          "year": 2004
+        },
+        {
+          "title": "命运任务开始",
+          "year": 2007
+        },
+        {
+          "title": "羁绊",
+          "year": 2008
+        },
+        {
+          "title": "火之意志继承者",
+          "year": 2009
+        },
+        {
+          "title": "血狱",
+          "year": 2010
+        },
+        {
+          "title": "The Last",
+          "year": 2014
+        },
+        {
+          "title": "博人传",
+          "year": 2015
+        }
+      ]
+    },
+    {
+      "name": "速度与激情",
+      "folder": "速度与激情（系列）",
+      "match_patterns": [
+        "速度与激情",
+        "Fast and Furious",
+        "Fast & Furious"
+      ],
+      "members": []
+    },
+    {
+      "name": "复仇者联盟",
+      "folder": "复仇者联盟（系列）",
+      "match_patterns": [
+        "复仇者联盟",
+        "Avengers"
+      ],
+      "members": []
+    },
+    {
+      "name": "变形金刚",
+      "folder": "变形金刚（系列）",
+      "match_patterns": [
+        "变形金刚",
+        "Transformers"
+      ],
+      "members": []
+    },
+    {
+      "name": "碟中谍",
+      "folder": "碟中谍（系列）",
+      "match_patterns": [
+        "碟中谍",
+        "Mission Impossible"
+      ],
+      "members": []
+    },
+    {
+      "name": "加勒比海盗",
+      "folder": "加勒比海盗（系列）",
+      "match_patterns": [
+        "加勒比海盗",
+        "Pirates of the Caribbean"
+      ],
+      "members": []
+    },
+    {
+      "name": "漫威电影宇宙",
+      "folder": "漫威电影宇宙（系列）",
+      "match_patterns": [
+        "钢铁侠",
+        "美国队长",
+        "雷神",
+        "蜘蛛侠",
+        "黑寡妇",
+        "奇异博士",
+        "黑豹",
+        "惊奇队长",
+        "蚁人",
+        "银河护卫队",
+        "Iron Man",
+        "Captain America",
+        "Thor",
+        "Spider-Man"
+      ],
+      "members": []
+    },
+    {
+      "name": "指环王",
+      "folder": "指环王（系列）",
+      "match_patterns": [
+        "指环王",
+        "霍比特人",
+        "Lord of the Rings",
+        "The Hobbit"
+      ],
+      "members": []
+    },
+    {
+      "name": "生化危机",
+      "folder": "生化危机（系列）",
+      "match_patterns": [
+        "生化危机",
+        "Resident Evil"
+      ],
+      "members": []
+    },
+    {
+      "name": "猩球崛起",
+      "folder": "猩球崛起（系列）",
+      "match_patterns": [
+        "猩球崛起",
+        "猩球黎明",
+        "猩球大战",
+        "Planet of the Apes"
+      ],
+      "members": []
+    },
+    {
+      "name": "驯龙高手",
+      "folder": "驯龙高手（系列）",
+      "match_patterns": [
+        "驯龙高手",
+        "How to Train Your Dragon"
+      ],
+      "members": []
+    },
+    {
+      "name": "冰雪奇缘",
+      "folder": "冰雪奇缘（系列）",
+      "match_patterns": [
+        "冰雪奇缘",
+        "Frozen"
+      ],
+      "members": []
+    },
+    {
+      "name": "功夫熊猫",
+      "folder": "功夫熊猫（系列）",
+      "match_patterns": [
+        "功夫熊猫",
+        "Kung Fu Panda"
+      ],
+      "members": []
+    },
+    {
+      "name": "玩具总动员",
+      "folder": "玩具总动员（系列）",
+      "match_patterns": [
+        "玩具总动员",
+        "Toy Story"
+      ],
+      "members": []
+    },
+    {
+      "name": "电锯惊魂",
+      "folder": "电锯惊魂（系列）",
+      "match_patterns": [
+        "电锯惊魂",
+        "Saw",
+        "竖锯",
+        "漩涡"
+      ],
+      "members": []
+    },
+    {
+      "name": "灵魂摆渡",
+      "folder": "灵魂摆渡（系列）",
+      "match_patterns": [
+        "灵魂摆渡",
+        "黄泉",
+        "南洋传说"
+      ],
+      "members": [
+        {
+          "title": "灵魂摆渡·黄泉",
+          "year": 2018,
+          "type": "movie"
+        },
+        {
+          "title": "灵魂摆渡·南洋传说",
+          "year": 2021,
+          "type": "tv"
+        },
+        {
+          "title": "灵魂摆渡·十年",
+          "year": 2026,
+          "type": "tv"
+        }
+      ]
+    }
+  ]
+}

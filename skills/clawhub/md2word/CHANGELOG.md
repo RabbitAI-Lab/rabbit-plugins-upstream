@@ -2,6 +2,23 @@
 
 本文件记录 md2word 技能的所有重要变更。
 
+## [1.2.0] - 2026-08-05
+
+### 回退
+- **恢复外链图片默认下载（作者确认）**：撤销 v1.1.9 的 `--allow-remote-images` 开关与默认关闭行为。Markdown 中的外部 URL 图片重新**默认自动下载并嵌入 Word**（原行为），下载失败时降级为文字占位符。移除 `ALLOW_REMOTE_IMAGES` 门控与 CLI 参数。
+- 对应回归测试更新：删除开关相关用例，新增断言默认下载函数可用、开关已移除。
+
+### 文档完善
+- SKILL.md「所需权限与安全说明」网络访问章节改为"默认启用"，明确外链图片下载是默认行为，并保留对 SSRF/隐私风险的提示（仅建议处理可信来源文档）。
+
+## [1.1.9] - 2026-08-05
+
+### 新增
+- **外链图片下载开关（--allow-remote-images）**：`download_external_image()` 的网络行为默认关闭。未加开关时，Markdown 中的外部 URL 图片不再自动下载，改为跳过并以文字占位符替代；仅当用户显式传 `--allow-remote-images` 才向外部 URL 发起请求。消除转换不可信 Markdown 时的 SSRF/隐私泄露面。
+
+### 文档完善
+- **新增「所需权限与安全说明」章节**：披露本地代码执行（mmdc / rsvg-convert / cairosvg / node puppeteer）、网络访问（默认关闭的外链图片下载）、环境变量读取（MMDCCMD）、文件访问范围等能力边界，对应外部安全审查（SkillSpector）的 MCP Least Privilege / Missing User Warnings / Context-Inappropriate Capability 类问题。
+
 ## [1.1.8] - 2026-07-20
 
 ### 新增
@@ -32,12 +49,12 @@
 ## [1.1.5] - 2026-07-11
 
 ### 修复
-- **脚注 markdown 星号进 XML（footnote_handler）**：原实现把脚注 text 直接 `_xml_escape` 塞进单个 `<w:t>`，`*需律师现场确认*` 的星号原样进 footnotes.xml，Word 显示字面星号。新增 `_footnote_text_to_runs_xml()`：解析 `**bold**`/`*italic*`/`` `code` `` 转 Word runs（`<w:b/>`/`<w:i/>`/Consolas 等宽），既不显示字面星号、又保留斜体/粗体/代码格式。不处理 `_italic_`（避免下划线变量名误判）、嵌套与 `[link](url)`（留 follow-up）。
+- **脚注 markdown 星号进 XML（footnote_handler）**：原实现把脚注 text 直接 `_xml_escape` 塞进单个 `<w:t>`，`*需律师现场确认*` 的星号原样进 footnotes.xml，Word 显示字面星号。新增共享 inline parser：`footnote` 转 `<w:b/>`/`<w:i/>`/Consolas runs，`endnote` 同样拆成 python-docx runs；两条路径都不再显示字面星号/反引号。不处理 `_italic_`（避免下划线变量名误判）、嵌套与 `[link](url)`（留 follow-up）。
 - **中文撇号误判为英文所有格（formatter.py isalpha）**：`convert_quotes_to_chinese` 原用 `prev_c.isalpha() and next_c.isalpha()` 保留英文缩写/所有格撇号（don't/O'Brien），但 `'需'.isalpha()` 在 Python 返回 True（中文属 Unicode Lo），导致「中文'中文」被误判为英文所有格、本该转中文单引号 ‘’ 却保留 ASCII `'`。修：加 `.isascii()` 限定，只 ASCII 字母-撇号-ASCII 字母保留。
 
 ### 验证（眼见为实）
-- 单元测试：footnote runs 6 case ALL PASS（`*x*`→`<w:i/>`、`**x**`→`<w:b/>`、无字面星号；code/空/普通文本 OK）；convert_quotes_to_chinese 6 case（中文边界→中文单引号 ‘’；don't/O'Brien/API's→保留 ASCII `'`）。
-- 集成验证：造含中文撇号 + 星号脚注的 md 转 docx（legal preset, footnote 模式）—— document.xml `需律师现场确认`→中文单引号、don't/API's 保留 ASCII；footnotes.xml 无字面 `*`、含 `<w:i/>`/`<w:b/>`、脚注拆 runs。
+- 正式回归文件：`scripts/test_regressions.py` 覆盖中文引号与英文撇号、footnote OOXML 注入、bold/italic/code runs、endnote 路径无字面 Markdown。
+- 集成验证：构造含中文撇号 + 星号脚注的 docx，确认 document/footnotes XML 中中文单引号正确、don't/API's 保留 ASCII、footnotes.xml 无字面 `*` 且含 `<w:i/>`/`<w:b/>`。
 
 ## [1.1.4] - 2026-07-09
 

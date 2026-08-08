@@ -1,0 +1,88 @@
+{
+  "skill": "snow-ice-mapping",
+  "skill_version": "1.0.0",
+  "command": "snow-ice-mapping --bbox 116 39 117 40 --output-dir Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\snow-ice-mapping\\_test_cli_bboxonly --quiet",
+  "started_at": "2026-08-03T13:43:01.952902Z",
+  "finished_at": "2026-08-03T13:43:03.356286Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "ndsi_threshold": 0.4,
+    "green_index": 1,
+    "swir_index": 4,
+    "synthetic": false
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\snow-ice-mapping\\_test_cli_bboxonly\\snow_cover.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\snow-ice-mapping\\_test_cli_bboxonly\\ndsi.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\snow-ice-mapping\\_test_cli_bboxonly\\snow_area_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "input_nodata": -9999.0,
+    "n_valid_pixels": 16384,
+    "n_total_pixels": 16384,
+    "snow_pixels": 5253,
+    "total_pixels": 16384,
+    "snow_fraction": 0.320618,
+    "pixel_area_km2": 0.579534,
+    "snow_area_km2": 3044.2911,
+    "total_area_km2": 9495.0819,
+    "ndsi_threshold": 0.4,
+    "green_index": 1,
+    "swir_index": 4,
+    "temp_threshold": null,
+    "mean_ndsi": -0.0897,
+    "truth_snow_fraction": 0.320618
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "snow-ice-mapping"
+  },
+  "error": null
+}

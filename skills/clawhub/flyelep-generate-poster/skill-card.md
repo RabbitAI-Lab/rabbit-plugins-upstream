@@ -1,41 +1,57 @@
-## Description: <br>
-Uses the Flyelep API to generate e-commerce product main images and detail-page poster images. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates e-commerce product hero images, detail-page posters, and white-background product images through the Flyelep API.
 
-## Publisher: <br>
-[flyelepai](https://clawhub.ai/user/flyelepai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[flyelepai](https://clawhub.ai/user/flyelepai)
 
-## Use Case: <br>
-External users and e-commerce operators use this skill to prepare Flyelep API requests for product hero images and product detail posters across cross-border and Chinese marketplace formats. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product descriptions, reference image URLs, and the Flyelep API key are sent to Flyelep. <br>
-Mitigation: Use only product assets and prompts that are acceptable to share with Flyelep, avoid confidential inputs, and rotate the API key if it appears in logs or shared chats. <br>
-Risk: Image generation can be long-running or fail because of invalid credentials, service concurrency, queueing, or request timeouts. <br>
-Mitigation: Use 300-600 second request timeouts, handle 401 and 500 responses, check for empty data, and retry later when the service is busy. <br>
+## Use Case:
 
+External users and developers use this skill to collect product-generation parameters, call Flyelep's asynchronous poster-generation API, poll for task completion, and return generated image URLs for e-commerce product imagery.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/flyelepai/flyelep-generate-poster) <br>
-- [Flyelep poster generation API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/generate) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with JSON request bodies, curl examples, and generated image URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include semicolon-separated image URLs returned by Flyelep; image generation requests can require 300-600 second timeouts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Flyelep API keys may be exposed through local temp files, inline shell commands, logs, or command history.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a secret-handling method that avoids writing keys to payload_temp.json or embedding them directly in shell commands, delete any temporary payload files, and rotate the key if exposure is possible.
+
+Risk: Product descriptions and reference image URLs are sent to Flyelep for image generation.
+
+Mitigation: Install and use the skill only when users are comfortable sending that content to Flyelep.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/flyelepai/skills/flyelep-generate-poster)
+- [Flyelep publisher profile](https://clawhub.ai/user/flyelepai)
+- [Flyelep platform](https://www.flyelep.cn)
+- [Flyelep generateAsync API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/generateAsync)
+- [Flyelep queryTaskResult API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/queryTaskResult)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Configuration, Guidance, Text]
+
+**Output Format:** [Markdown guidance with JSON request bodies, shell commands, and generated image URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses asynchronous task submission and polling; generated images are returned as URLs rather than embedded image content.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

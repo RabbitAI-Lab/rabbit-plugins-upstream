@@ -23,6 +23,10 @@ All commands are **auto-approved** for SDK/agent users — fully autonomous, no 
 This skill requires the `cellcog` skill for SDK setup and API calls.
 
 ```bash
+# Claude Code, Cursor, Codex + 70 more agents
+npx skills add cellcog/skills --skill cellcog
+
+# OpenClaw
 clawhub install cellcog
 ```
 
@@ -202,6 +206,10 @@ Co-work enables the full spectrum of development tasks:
 
 For the best coding experience, also install `coding-agent-cellcog`:
 ```bash
+# Claude Code, Cursor, Codex + 70 more agents
+npx skills add cellcog/skills --skill coding-agent-cellcog
+
+# OpenClaw
 clawhub install coding-agent-cellcog
 ```
 

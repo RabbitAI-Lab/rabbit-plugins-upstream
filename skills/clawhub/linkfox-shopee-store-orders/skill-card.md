@@ -1,44 +1,60 @@
-## Description: <br>
-Helps agents query and manage Shopee store orders through LinkFox wrappers for the Shopee Open Platform Order module, including order lists, details, shipment/package views, cancellations, notes, split/unsplit actions, booking, invoices, and related FBS workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance and scripts for working with authorized Shopee store orders through LinkFox's Shopee developer proxy, including order lookup, package and shipment queries, cancellations, notes, booking workflows, and invoice/FBS operations.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and agent workflows use this skill to inspect Shopee order state, retrieve order and package details, and perform supported order-management actions after store authorization is available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, subject to Shopee account, marketplace, and endpoint-specific regional eligibility for invoice, FBS, and prescription-check APIs. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact Shopee order mutations such as cancellation, split/unsplit, buyer-cancellation handling, prescription-check handling, and note updates. <br>
-Mitigation: Require explicit confirmation of shop ID, order or package identifier, target API, and operation before running any mutating script. <br>
-Risk: Order responses may contain sensitive buyer, recipient, item, shipment, or invoice data and are saved to workspace files. <br>
-Mitigation: Use a controlled workspace, review saved LinkFox response files, restrict access to generated data, and avoid inline full-response output for sensitive data. <br>
-Risk: Some APIs are region or eligibility restricted, including invoice, FBS, and prescription-check functions. <br>
-Mitigation: Check the referenced API documentation and store eligibility before invoking region-limited endpoints. <br>
+## Use Case:
 
+External sellers, operators, and developers use this skill to retrieve and manage Shopee order data for authorized stores, including order lists and details, package and shipment views, cancellations, buyer-cancellation handling, notes, and invoice/FBS workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-orders) <br>
-- [Local API parameter reference](references/api.md) <br>
-- [Shopee Open Platform Order module](https://open.shopee.com/documents/v2/v2.order.get_order_list?module=94&type=1) <br>
+### Deployment Geography for Use:
 
+Global, subject to Shopee API regional restrictions noted for invoice and FBS endpoints.
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API calls, JSON, Files, Guidance] <br>
-**Output Format:** [JSON responses saved to workspace files, with stdout containing either full JSON or a concise summary depending on response size] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox API credentials and an authorized Shopee store; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill can perform live Shopee order-changing actions such as cancellation, split or unsplit, buyer-cancellation handling, invoice upload, note updates, payment onboarding, and prescription-related actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit human confirmation before executing any action that changes orders, uploads documents, starts payment flows, or affects account state.
+
+Risk: Full order responses may be stored locally and can include sensitive order or customer data.
+
+Mitigation: Review and regularly delete the local linkfox output directory, avoid sharing saved response files, and restrict workspace access.
+
+Risk: The skill depends on a local LinkFox API key for account and Shopee store access.
+
+Mitigation: Store the API key only in environment variables, avoid pasting it into prompts or files, and rotate it if exposure is suspected.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-orders)
+- [Shopee Open Platform Order Module](https://open.shopee.com/documents/v2/v2.order.get_order_list?module=94&type=1)
+- [LinkFox Shopee Orders API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON, API calls]
+
+**Output Format:** [Markdown guidance with Python shell commands and JSON request/response data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scripts write full responses to local linkfox/<date>/<session>/data JSON files and may print summaries for large responses.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

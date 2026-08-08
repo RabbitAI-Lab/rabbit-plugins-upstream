@@ -1,47 +1,69 @@
-## Description: <br>
-Amazon Analysis is a ZooData-powered agent skill for broad or composite Amazon market, product, competitor, pricing, listing, and seller research. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Amazon-domain general analysis and multi-endpoint research engine for broad or composite Amazon market and product research.
 
-## Publisher: <br>
-[apiclaw](https://clawhub.ai/user/apiclaw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[apiclaw](https://clawhub.ai/user/apiclaw)
 
-## Use Case: <br>
-Developers, operators, and Amazon sellers use this skill to run multi-endpoint Amazon research workflows, including market analysis, product selection, ASIN evaluation, pricing research, competitor comparison, listing guidance, and operational monitoring. The skill requires a ZooData API key and should be used as decision support rather than as the sole basis for business decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Amazon research queries, ASINs, keywords, and related business-analysis parameters are sent to ZooData. <br>
-Mitigation: Use only with data that may be shared with ZooData, avoid sensitive inputs, and make external API use clear to the user before running research workflows. <br>
-Risk: Reports can rely on sampled data, lower-bound estimates, fallback methods, or incomplete endpoint coverage. <br>
-Mitigation: Keep confidence labels, data provenance, API usage notes, missing-data limits, and fallback disclosures visible, and validate important business decisions with additional sources. <br>
-Risk: The bundled seller-origin case-study workflow includes nationality-focused profiling heuristics. <br>
-Mitigation: Avoid that workflow unless it is rewritten to use only explicit, relevant seller-location fields and to exclude speculative origin inference. <br>
+## Use Case:
 
+External sellers, analysts, and developers use this skill to run Amazon market, product, competitor, pricing, review, and category research through ZooData-backed workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/apiclaw/skills/amazon-analysis) <br>
-- [ZooData-Skills homepage](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
-- [ZooData](https://zoodata.ai) <br>
-- [ZooData API reference](https://api.zoodata.ai/openapi/v2) <br>
-- [API field reference](references/reference.md) <br>
-- [Execution guide](references/execution-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with inline shell commands, API-derived tables, confidence labels, data provenance, and API usage notes.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZOODATA_API_KEY; outputs may include sampled metrics, lower-bound estimates, and directional recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.8 (source: server evidence release and skill metadata) <br>
+Risk: The skill uses a ZooData API key and paid API calls, so broad or ambiguous requests may spend credits unintentionally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit Amazon, ASIN, category, or marketplace context and confirm estimated credit cost before multi-call scans.
+
+Risk: Persistent credential storage can increase exposure if the local environment is shared or compromised.
+
+Mitigation: Prefer ZOODATA_API_KEY in the environment over a home-directory config, and rely on the skill's trusted-host checks before sending credentials.
+
+Risk: Sampled marketplace data and broad routing can produce incomplete or misleading seller guidance if treated as definitive.
+
+Mitigation: Keep the required data-source, API-usage, and confidence-label sections in reports, and validate business decisions with additional sources.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/apiclaw/skills/amazon-analysis)
+- [ZooData-Skills repository](https://github.com/SerendipityOneInc/ZooData-Skills)
+- [ZooData](https://zoodata.ai)
+- [ZooData OpenAPI reference](https://api.zoodata.ai/openapi/v2)
+- [ZooData CLI Contract](references/cli-contract.md)
+- [Execution Guide](references/execution-guide.md)
+- [ZooData API Field Reference](references/reference.md)
+- [Amazon Seller Comprehensive Analysis & Case Studies](references/scenarios-composite.md)
+- [Amazon Product Evaluation & Risk Assessment](references/scenarios-eval.md)
+- [Amazon Product Expansion & Market Trends](references/scenarios-expand.md)
+- [Amazon Listing Optimization & Content Creation](references/scenarios-listing.md)
+- [Amazon Seller Daily Operations & Monitoring](references/scenarios-ops.md)
+- [Amazon Pricing Strategy & Profit Estimation](references/scenarios-pricing.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports with data-source, API-usage, confidence-label, and recommendation sections.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include tables; requires ZOODATA_API_KEY and consumes ZooData credits.]
+
+## Skill Version(s):
+
+1.1.13 (source: server evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

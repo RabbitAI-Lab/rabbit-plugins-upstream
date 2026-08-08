@@ -1,6 +1,10 @@
 # DAG Orchestration — RFC-Driven Multi-Unit Workflows
 
-The most sophisticated pattern: decompose an RFC into a dependency DAG, run each unit through tiered quality pipelines, land via merge queue.
+> ## ⚠️ Read Before Use
+>
+> This is the most powerful pattern in this skill. It decomposes an RFC into a dependency graph, runs each unit through tiered quality pipelines, and lands via a merge queue. The merge-conflict recovery flow was rewritten in 1.0.1 to **never include full diffs in agent prompts** — see `Merge-Conflict Recovery` below.
+
+The most sophisticated pattern: decompose an RFC into a dependency DAG, run each unit through tiered quality pipelines, land via merge queue with explicit human approval at each merge.
 
 ## Architecture
 
@@ -17,7 +21,8 @@ Break into work units with dependency DAG
 │  ├─ Quality Pipelines (per unit)      │
 │  │  research → plan → implement       │
 │  │  → test → review → fix → final     │
-│  └─ Merge Queue (rebase + test + land)│
+│  └─ Merge Queue (rebase + test →     │
+│     human approval → land)            │
 └───────────────────────────────────────┘
 ```
 
@@ -73,7 +78,7 @@ Each stage runs with a different agent/model:
 
 **Critical:** The reviewer never wrote the code it reviews. Eliminates author bias.
 
-## Merge Queue with Eviction
+## Merge Queue with Conflict Recovery
 
 After quality pipelines complete, units enter the merge queue:
 
@@ -81,36 +86,50 @@ After quality pipelines complete, units enter the merge queue:
 Unit branch
     │
     ├─ Rebase onto main
-    │   └─ Conflict? → EVICT (capture context)
+    │   └─ Conflict? → Conflict-recovery flow (see below)
     │
     ├─ Run tests
-    │   └─ Fail? → EVICT
+    │   └─ Fail? → Conflict-recovery flow (see below)
     │
-    └─ Pass → Fast-forward + delete branch
+    └─ Pass → Request human approval → Land → Delete branch
 ```
 
-**Eviction Recovery:**
-When evicted, full context is captured and fed back to implementer on next pass:
+**Land requires explicit human approval.** The merge queue prepares the merge but does not execute it. A human reviews the prepared diff and approves with `dag merge approve <unit-id>`.
 
-```markdown
-## MERGE CONFLICT — RESOLVE
+### Merge-Conflict Recovery (1.0.1 Rewrite)
 
-Your previous implementation conflicted with another unit.
-Restructure to avoid these files/lines:
+When a rebase conflict or test failure occurs, the unit does NOT get "evicted" with full diffs fed back into the agent prompt (the previous design, which was both unsafe and wasteful). Instead:
 
-{full diffs}
-```
+1. **Pause the unit.** Mark it as `blocked:conflict` in the DAG state file.
+2. **Write a structured `MERGE_NOTES.md`** at the unit's worktree root. Contents:
+   - The conflicting files (paths only, no diffs)
+   - The units/branches involved in the conflict
+   - The test command that failed and its exit code (no log content)
+   - A timestamp
+3. **Surface `MERGE_NOTES.md` to a human.** No automatic retry, no auto-feed to the next agent pass. A human reads the note and decides whether to:
+   - Reorder the DAG so the conflicting units are sequenced
+   - Manually resolve the conflict
+   - Adjust unit scopes to reduce overlap
+4. **Only after human approval**, the orchestrator restarts the unit with a fresh context window and a one-line summary of the conflict ("unit-X conflicted with unit-Y on file-Z; human resolved as [resolution]").
+
+**Why this design:**
+
+- **No full diffs in agent prompts.** Full diffs of internal code, paths, and structure are exactly the kind of context that should not be amplified through automated loops. The previous "capture context" pattern was both an exfiltration risk and a context-bloat trap.
+- **Human in the loop at the high-leverage point.** Reordering a DAG is one of the cheapest, highest-impact interventions. It's the right place for human judgment.
+- **Bounded recovery.** No retry storm, no context accumulation, no chance for the loop to "discover" that capturing more context helps.
 
 ## Worktree Isolation
 
 Each unit runs in isolated worktree. Pipeline stages **share** the same worktree, preserving state (context files, code changes) across research → plan → implement → test → review.
 
+Worktrees must be created under the repo's `.worktrees/<unit-id>/` directory — never in `~`, `/tmp`, or any shared location. The orchestrator validates the path before creating the worktree.
+
 ## Key Design Principles
 
 1. **Deterministic execution** — Upfront decomposition locks parallelism/ordering
-2. **Human review at leverage points** — Work plan is highest-leverage intervention
+2. **Human review at leverage points** — DAG reordering + final merge approval
 3. **Separate concerns** — Each stage separate context window
-4. **Conflict recovery with context** — Full eviction context enables intelligent re-runs
+4. **Bounded conflict recovery** — Structured notes, human decision, no diff amplification
 5. **Tier-driven depth** — Trivial changes skip research; large changes get max scrutiny
 6. **Resumable** — Full state persisted; resume from any point
 
