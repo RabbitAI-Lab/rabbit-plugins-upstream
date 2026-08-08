@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/m5-onboard",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "m5-onboard",
+  "branch": "main",
+  "pushedAt": "2026-08-08T07:39:14Z",
+  "contentHash": "0055402bef1b239c70311177c94262121da3070e06c7dbe7d042c1edbb9370d0",
+  "fetchedAt": "2026-08-08T08:03:36.353Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-abilities-verify",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-abilities-verify",
+  "branch": "trunk",
+  "pushedAt": "2026-08-03T05:26:29Z",
+  "contentHash": "72f5f80bb7edc607c2bad9a907f67484cb3d47d4f846c6b246b4fac1ca2bd911",
+  "fetchedAt": "2026-08-08T08:05:12.930Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-plugin-development",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-plugin-development",
+  "branch": "trunk",
+  "pushedAt": "2026-08-03T05:26:29Z",
+  "contentHash": "5f220c739e47e4a26c20defad0330c154867536c2787b952574b0b7145caa1f0",
+  "fetchedAt": "2026-08-08T08:05:12.906Z"
+}

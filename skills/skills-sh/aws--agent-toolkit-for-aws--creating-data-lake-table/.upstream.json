@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/creating-data-lake-table",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "creating-data-lake-table",
+  "branch": "main",
+  "pushedAt": "2026-08-08T03:07:50Z",
+  "contentHash": "4f31bf11255ceeb8c1cac2250a848de48b12c6833b6d43e7bb44a232886693f0",
+  "fetchedAt": "2026-08-08T08:05:01.674Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-messaging-and-streaming",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-messaging-and-streaming",
+  "branch": "main",
+  "pushedAt": "2026-08-08T03:07:50Z",
+  "contentHash": "ed51bfbf729e010313c5708ace3e37e2b8d62773dc1ae0f49e37ee7ea00af463",
+  "fetchedAt": "2026-08-08T08:05:01.619Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/sentry-for-ai/sentry-go-sdk",
+  "repo": "getsentry/sentry-for-ai",
+  "skillId": "sentry-go-sdk",
+  "branch": "main",
+  "pushedAt": "2026-08-07T18:52:42Z",
+  "contentHash": "d404cf8190b7d2507fc38a5def559549d969822168f6701b969778ffe3c8cbf3",
+  "fetchedAt": "2026-08-08T08:04:42.909Z"
+}
