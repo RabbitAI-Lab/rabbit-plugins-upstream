@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/amazon-aurora-mysql",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "amazon-aurora-mysql",
+  "branch": "main",
+  "pushedAt": "2026-08-08T03:07:50Z",
+  "contentHash": "e1a643537a4929b75a1b491c92f5dd4ed1f323db6592eec8e7c2bef820131f20",
+  "fetchedAt": "2026-08-09T08:07:21.411Z"
+}

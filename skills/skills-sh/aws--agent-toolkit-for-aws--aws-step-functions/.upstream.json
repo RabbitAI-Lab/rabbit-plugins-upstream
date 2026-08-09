@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-step-functions",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-step-functions",
+  "branch": "main",
+  "pushedAt": "2026-08-08T03:07:50Z",
+  "contentHash": "3e78e4c988f9c536d5e145ad1cfa7c0c91d8d6b4fdc5c0cfe5edaa66231a4c1a",
+  "fetchedAt": "2026-08-09T08:07:21.853Z"
+}

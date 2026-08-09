@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/withgraphite/agent-skills/graphite",
+  "repo": "withgraphite/agent-skills",
+  "skillId": "graphite",
+  "branch": "main",
+  "pushedAt": "2026-02-18T02:40:18Z",
+  "contentHash": "1688c27818d944285d4bb117a60aa7a83b8aacc5f3a362cd19f4ac38dd256bdf",
+  "fetchedAt": "2026-08-09T08:06:37.512Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/notion-meeting-intelligence",
+  "repo": "openai/skills",
+  "skillId": "notion-meeting-intelligence",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "999fcfe19a461d16295aa1e5d9f89b5d1f4d0d2a5deeda4af3696d91f29027b6",
+  "fetchedAt": "2026-08-09T08:06:05.146Z"
+}

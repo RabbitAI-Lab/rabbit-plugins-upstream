@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/reddit-thread-analyzer",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "reddit-thread-analyzer",
+  "branch": "main",
+  "pushedAt": "2026-07-15T21:30:08Z",
+  "contentHash": "ae3b1e9c7ac63a82773e6b3707aaf7a1bd448d9474140dd983b33d321d783697",
+  "fetchedAt": "2026-08-09T08:07:23.032Z"
+}
