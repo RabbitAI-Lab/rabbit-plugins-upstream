@@ -1,0 +1,17 @@
+name: geoskill-lidar-terrain-modeling
+display_name: LiDAR精细地形建模
+description: |
+  从LiDAR点云栅格化DEM(IDW/TIN)并派生坡度坡向，输出DEM/坡度/坡向栅格与统计
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-lidar-terrain-modeling.py
+runtime: python>=3.9
+tags:
+  - ai
+  - analysis
+  - dem
+  - gis
+  - lidar
+  - point-cloud
+  - raster
+  - remote-sensing

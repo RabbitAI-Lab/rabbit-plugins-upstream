@@ -25,25 +25,25 @@ Evidence coverage: 12 signals across 3 source families.
 Scoring rationale:
 
 - Evidence count: 12; required minimum: 3.
-- Distinct source families: 3; sources: csdn, github, segmentfault.
+- Distinct source families: 3; sources: csdn, github, hacker-news.
 - Demand score: 70/70 based on corroboration, source diversity, and professional/community signal.
 - Local feasibility score: 30/30.
 - Implementation is a documentation, workflow, code, or analysis skill that can run on ordinary CPU hardware.
 
 ## Evidence
 
-- csdn-search (2026-03-13T00:00:00+00:00): [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search (2025-09-05T00:00:00+00:00): [Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues (2026-07-12T05:32:50+00:00): [Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues (2026-07-25T08:25:57+00:00): [[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues (2026-07-26T05:12:50+00:00): [Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- csdn-search (2026-03-13T00:00:00+00:00): [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=2a4f8abaadda415080f45f94ddda0450&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^control&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- csdn-search (2025-09-05T00:00:00+00:00): [Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=2a4f8abaadda415080f45f94ddda0450&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^control&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues (2026-08-08T22:21:20+00:00): [DEN-3159: roll out ore.api-docs.v1 and same-org MCP pairing across the fleet](https://github.com/ORESoftware/mcp-rust-libs/issues/31)
+- github-issues (2026-08-08T21:59:55+00:00): [[Program] Calibrate production-ready hosted experience](https://github.com/MChartier/calibrate-health/issues/280)
+- github-issues (2026-08-01T06:07:25+00:00): [API slice 6: OpenAPI documentation, sample consumer, change log, security verification, and production readiness gate](https://github.com/DurantTL/imsda-events/issues/241)
+- github-issues (2026-08-06T22:56:04+00:00): [[Docs] API documentation — OpenAPI/Swagger for 351 endpoints](https://github.com/sumanthrangausa-06/Rekrut_AI_v2/issues/52)
+- hacker-news-search (2026-07-30T02:49:26+00:00): [Claude: Elevated errors across all models – Resolved](https://news.ycombinator.com/item?id=49105605)
+- hacker-news-search (2026-08-06T23:00:20+00:00): [AMD acquires Taalas to boost inference performance by etching models in silicon](https://news.ycombinator.com/item?id=49203797)
+- hacker-news-search (2026-08-03T17:44:00+00:00): [Ask HN: Who wants to be hired? (August 2026)](https://news.ycombinator.com/item?id=49159075)
+- hacker-news-search (2026-07-31T04:17:03+00:00): [2x, not 10x: coding with LLMs in 2026](https://news.ycombinator.com/item?id=49118943)
+- github-issues (2026-08-09T04:05:19+00:00): [Epic 4 — Communications Layer (ouroboros-rest)](https://github.com/NobuData/ouroboros/issues/4)
+- github-issues (2026-08-09T02:18:10+00:00): [Spec drift: opinion — REST base URL changed; all requests hitting wrong host (proxy.opinion.trade:8443 → openapi.opinion.trade)](https://github.com/pmxt-dev/pmxt/issues/1994)
 
 ## How The Skill Meets The Requirement
 

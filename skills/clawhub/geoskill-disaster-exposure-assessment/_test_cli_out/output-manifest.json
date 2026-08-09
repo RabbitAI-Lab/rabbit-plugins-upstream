@@ -1,0 +1,81 @@
+{
+  "skill": "disaster-exposure-assessment",
+  "skill_version": "1.0.0",
+  "command": "disaster-exposure-assessment --bbox 116 39 117 40 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-03T12:57:53.536471Z",
+  "finished_at": "2026-08-03T12:57:53.925276Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ],
+    "breaks": [
+      0.5,
+      1.5
+    ],
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\exposed_mask.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\hazard_zone.geojson",
+      "kind": "vector",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": 10,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\exposure_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "exposed_asset_value": 998642.1963500977,
+    "exposed_population": 471826.4595718384,
+    "asset_exposure_fraction": 0.5376731928763889,
+    "zone_feature_count": 10,
+    "n_valid_pixels": 4096,
+    "input_nodata": null
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "disaster-exposure-assessment"
+  },
+  "error": null
+}

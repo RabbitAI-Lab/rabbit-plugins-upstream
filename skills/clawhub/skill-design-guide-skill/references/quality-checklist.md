@@ -37,6 +37,15 @@
 - [ ] Can you trace which materials the Skill referenced?
 - [ ] Can you pinpoint which step failed when errors occur?
 
+## Governance & Continuity
+
+- [ ] **Single source of truth**: If working/published/installed copies exist, is one canonical source declared and are sync directions explicit?
+- [ ] **Private-data separation**: Are personal/company profiles, live state, credentials, and connector mappings separated from the reusable engine?
+- [ ] **Secret scan**: Has the full Skill directory, including references and scripts, been scanned for credentials and real identifiers?
+- [ ] **Retry and re-run**: Does failure handling require retry + cross-tool verification, and require re-running after a fix?
+- [ ] **External-action gate**: Are send, publish, deploy, update, and delete actions separated from generation and protected by confirmation?
+- [ ] **Task continuity**: For multi-Skill roadmaps, are all follow-up tasks and dependencies persisted, with the next unblocked task identified after completion?
+
 ## Production-Ready Extensions (Optional)
 
 For skills running in automation or serving multiple users:

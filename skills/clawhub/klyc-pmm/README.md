@@ -29,7 +29,7 @@ git clone <repo> && cd klyc-pmm && ./pmm_watch.sh init
 ## Recovery (when everything is lost)
 
 ```bash
-./pmm_recover.sh https://ai.syln.cn/klyc-pmm/YOUR_TOKEN
+./pmm_recover.sh https://kunlunyaochi.com/klyc-pmm/YOUR_TOKEN
 ```
 
 No dependency. Any AI agent with `curl` can do this.

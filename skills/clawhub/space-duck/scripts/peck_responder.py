@@ -503,11 +503,13 @@ def _compose_reply(envelope, soul, memory):
 
 def _run_critic(draft_reply, envelope, perms):
     """Invoke peck_critic.py to review the draft before sending.
-    Returns (verdict, reason, rewrite). Defaults to PASS on any failure
-    so a flaky critic never silently blocks legitimate replies."""
+    Returns (verdict, reason, rewrite). [HARDEN-071] Fail-CLOSED: the
+    critic only runs when the owner opted in (critic_mode), so a broken
+    critic returns HOLD — the reply is held and the owner is notified,
+    instead of shipping unreviewed output."""
     script = Path(__file__).parent / 'peck_critic.py'
     if not script.exists():
-        return 'PASS', 'critic_script_missing', ''
+        return 'HOLD', 'critic_script_missing', ''
     payload = json.dumps({
         'draft_reply': draft_reply,
         'inbound': envelope,
@@ -518,17 +520,17 @@ def _run_critic(draft_reply, envelope, perms):
                              input=payload,
                              capture_output=True, text=True, timeout=60)
         if out.returncode != 0:
-            return 'PASS', f'critic_exit_{out.returncode}', ''
+            return 'HOLD', f'critic_exit_{out.returncode}', ''
         try:
             data = json.loads(out.stdout)
         except json.JSONDecodeError:
-            return 'PASS', 'critic_non_json', ''
-        verdict = (data.get('verdict') or 'PASS').upper()
+            return 'HOLD', 'critic_non_json', ''
+        verdict = (data.get('verdict') or 'HOLD').upper()
         if verdict not in ('PASS', 'REVISE', 'BLOCK'):
-            verdict = 'PASS'
+            verdict = 'HOLD'
         return verdict, data.get('reason', ''), data.get('rewrite', '')
     except Exception as e:
-        return 'PASS', f'critic_invoke_error:{e}', ''
+        return 'HOLD', f'critic_invoke_error:{e}', ''
 
 
 def _send_handoff(target_sd, reason, original_envelope, our_take):
@@ -854,6 +856,10 @@ def main():
         if verdict == 'BLOCK':
             _log(f'critic BLOCK — aborting reply for peck_id={peck_id}')
             _notify_owner_silent_skip(envelope, f'critic BLOCK: {_why}', sd_name=_duck_label_for_notify)
+            sys.exit(0)
+        if verdict == 'HOLD':  # [HARDEN-071] critic unavailable → fail closed
+            _log(f'critic HOLD (unavailable: {_why}) — reply held for peck_id={peck_id}')
+            _notify_owner_silent_skip(envelope, f'critic unavailable ({_why}) — reply HELD, not sent. Fix the critic or set critic_mode=none to bypass.', sd_name=_duck_label_for_notify)
             sys.exit(0)
         if verdict == 'REVISE' and rewrite:
             reply = rewrite

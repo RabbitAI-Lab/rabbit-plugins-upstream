@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 InvAssistant — 配置初始化脚本
 生成默认的 invassistant-config.json 配置文件。

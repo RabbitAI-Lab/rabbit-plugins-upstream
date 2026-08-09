@@ -1,43 +1,64 @@
-## Description: <br>
-Searches 1688 by product image and returns visually similar supplier listings with prices, minimum order quantities, sales, seller badges, and trade metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches 1688 by product image to find visually similar or matching supplier listings with core sourcing data such as title, price, minimum order quantity, monthly sales, repurchase rate, trade score, and seller badges.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sourcing teams and agents use this skill to find visually similar products on 1688 from a public image URL, local uploaded image, Base64 image, or returned image ID. It helps compare supplier listings by price, minimum order quantity, monthly sales, repurchase rate, seller badges, and trade score. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local product images may be uploaded to a publicly reachable URL for search. <br>
-Mitigation: Use non-sensitive images, confirm the user is comfortable with public upload before searching local files, and treat generated image URLs as temporary shared data. <br>
-Risk: Search requests are sent through LinkFox/1688 services using configured credentials and gateway endpoints. <br>
-Mitigation: Verify LINKFOX_AGENT_API_KEY or LINKFOXAGENT_API_KEY and the gateway configuration before use, and avoid entering credentials into untrusted prompts. <br>
-Risk: Full API responses are persisted locally and may contain detailed search results. <br>
-Mitigation: Review where response files are written, keep them out of shared workspaces when results are sensitive, and delete saved files when no longer needed. <br>
+## Use Case:
 
+External sellers, sourcing teams, and agent users use this skill to locate visually similar 1688 wholesale products from a public image URL, uploaded local image, image ID, or raw Base64 image. It helps compare supplier listings by price, sales volume, order quantity, service score, repurchase rate, delivery details, and seller badges.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-1688-search-by-image) <br>
-- [1688 image search API reference](references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown summaries and tables with saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Large responses are summarized while full API responses are saved under the LinkFox session data directory; product results may include inline image URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Image URLs, uploaded local images, search parameters, API keys, onboarding data, account actions, billing requests, and feedback content may be sent to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with images and account data approved for third-party processing, avoid confidential product imagery, and review authentication, feedback, and billing flows before installation.
+
+Risk: Local image files can be uploaded to a public URL for 24 hours before search.
+
+Mitigation: Prefer already public image URLs when appropriate, and upload local files only after confirming the image can be publicly accessible for the validity window.
+
+Risk: The skill persists full API responses and cache data under a local linkfox session directory.
+
+Mitigation: Review generated response files for sensitive sourcing data, manage local retention, and clear the linkfox cache/session data when no longer needed.
+
+Risk: Search calls consume LinkFox credits and onboarding can initiate payment flows.
+
+Mitigation: Confirm expected credit usage with the user before repeated searches, validate plan and payment choices, and avoid automatic retries that increase cost.
+
+## Reference(s):
+
+- [1688-以图搜图 ClawHub page](https://clawhub.ai/linkfox-ai/skills/linkfox-1688-search-by-image)
+- [API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, JSON files]
+
+**Output Format:** [Markdown summaries and tables, shell command snippets, and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full API responses under a local linkfox session directory, may print compact summaries for large responses, and can emit public image URLs after upload.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

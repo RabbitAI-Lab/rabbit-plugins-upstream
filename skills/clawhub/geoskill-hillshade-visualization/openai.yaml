@@ -1,0 +1,15 @@
+name: geoskill-hillshade-visualization
+display_name: 山体阴影可视化
+description: |
+  Multi-directional hillshade with vertical exaggeration and color overlay using the Horn algorithm
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-hillshade-visualization.py
+runtime: python>=3.9
+tags:
+  - dem
+  - gis
+  - remote-sensing
+  - terrain
+  - vector
+  - visualization

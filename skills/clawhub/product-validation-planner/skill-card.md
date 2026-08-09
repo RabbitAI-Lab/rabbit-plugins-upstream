@@ -1,46 +1,59 @@
-## Description: <br>
-Helps founders, makers, product managers, and small teams turn rough product ideas into validated plans, prototype workflows, user-facing positioning, checklists, and decision support before heavy investment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps founders, product managers, makers, and small teams turn rough product ideas into validated plans, prototypes, positioning, checklists, and decision support.
 
-## Publisher: <br>
-[kyro-ma](https://clawhub.ai/user/kyro-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kyro-ma](https://clawhub.ai/user/kyro-ma)
 
-## Use Case: <br>
-External founders, product managers, makers, and small teams use this skill to evaluate product demand, organize validation work, shape prototype plans, and produce reusable workflows or checklists before committing substantial build effort. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad product, startup, SaaS, validation, and prototype requests may be routed into a product-validation workflow even when the user only wanted general business discussion. <br>
-Mitigation: Confirm the user's intended outcome, constraints, available inputs, and success criteria before producing a plan or artifact. <br>
-Risk: Validation plans and positioning guidance may be incomplete or misleading if based on weak assumptions or missing market context. <br>
-Mitigation: State assumptions and limits clearly, ask for missing information only when it materially changes the output, and include remaining risks or follow-up checks. <br>
+## Use Case:
 
+External founders, product managers, makers, and small teams use this skill to test whether a product idea is worth building before spending heavily. It turns the user's context into practical validation workflows, checklists, lightweight analyses, prototypes, positioning drafts, or implementation support.
 
-## Reference(s): <br>
-- [Requirement Plan](references/requirement-plan.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/kyro-ma/skills/product-validation-planner) <br>
-- [Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49045271) <br>
-- [RFC-0002 Slice 14/17: certify Lotus Idea data-product, trust telemetry, and canonical proof in platform gates](https://github.com/sgajbi/lotus-platform/issues/598) <br>
-- [Follow-up: extend meta validation config across the CMS](https://github.com/novaramedia/novaramedia-com/issues/572) <br>
-- [Correct Tool Contract startup-validation claim](https://github.com/Nokia-Bell-Labs/declarative-agents/issues/1006) <br>
-- [What I learned selling 2,500 MIDI recorders: Hardware is not so hard](https://news.ycombinator.com/item?id=48974605) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Analysis, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with checklists, workflows, decision support, and optional code or shell snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces tailored artifacts with visible assumptions, validation notes, remaining risks, and follow-up work when helpful.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.20260726.120312 (source: server release evidence) <br>
+Risk: Broad product, startup, validation, prototype, or SaaS wording may activate the skill for requests where a product validation workflow is not the best fit.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the user's actual goal before applying the workflow and narrow invocation triggers when precise routing matters.
+
+Risk: Product validation outputs can be mistaken for conclusive market proof when they are planning artifacts and decision support.
+
+Mitigation: Label assumptions and confidence clearly, validate demand with current user or market evidence, and keep follow-up risks visible.
+
+## Reference(s):
+
+- [Requirement Plan](references/requirement-plan.md)
+- [Product Validation Planner on ClawHub](https://clawhub.ai/kyro-ma/skills/product-validation-planner)
+- [Ventora Expands Its AI Business Builder to Help Solo Founders](https://news.ycombinator.com/item?id=49107855)
+- [Brainstorm persona happy-path harness options](https://github.com/FundLoop/fundloop-website/issues/97)
+- [Epic: skills the model can self-create, find, choose, and use skills that actually pay off](https://github.com/nearai/ironclaw/issues/6941)
+- [Emit deterministic SARIF for CI-native lint findings](https://github.com/flyingrobots/colorful-language/issues/188)
+- [The Disability Dongle: Why Silicon Valley Hates Me and You](https://news.ycombinator.com/item?id=49186637)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or plain text with optional code, command, checklist, template, or configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should state assumptions, limits, validation checks, and remaining risks when relevant.]
+
+## Skill Version(s):
+
+0.20260809.40514 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

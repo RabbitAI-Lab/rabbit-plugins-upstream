@@ -1,50 +1,61 @@
-## Description: <br>
-Generates a paid enterprise due diligence report from a company name, registration number, or unified social credit code, combining business registration details with public risk signals from Juhe Data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A paid enterprise due-diligence Skill that queries Juhe for company registration details and public risk signals, then renders a concise Markdown report.
 
-## Publisher: <br>
-[juhemcp](https://clawhub.ai/user/juhemcp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[juhemcp](https://clawhub.ai/user/juhemcp)
 
-## Use Case: <br>
-External users and business teams use this skill for paid pre-cooperation due diligence or supplier/customer risk checks when they have a specific Chinese company name, registration number, or unified social credit code. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, for Chinese enterprise public-record lookups <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The queried company name, registration number, or unified social credit code is sent to Juhe and payment is completed through Alipay. <br>
-Mitigation: Confirm user consent before payment, send only the required company keyword, and avoid unnecessary sharing of generated reports. <br>
-Risk: Risk modules show partial recent public records and may omit complete history or the latest official status. <br>
-Mitigation: State that the report is a quick-reference public-record compilation and direct users to official channels for complete or current verification. <br>
-Risk: Brand names, short names, or incomplete company names can trigger a paid lookup for the wrong entity. <br>
-Mitigation: Require the full registered company name, registration number, or unified social credit code before initiating payment. <br>
+## Use Case:
 
+External users and agent operators use this Skill for pre-cooperation company due diligence, supplier or customer risk screening, and checks for public records such as abnormal operations, enforcement, dishonesty, and consumption restrictions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/juhemcp/skills/juhe-enterprise-dd-pro-a2a) <br>
-- [Artifact README](artifact/README.md) <br>
-- [Product definition](artifact/PRODUCT.md) <br>
-- [Output format](artifact/OUT_FORMAT.md) <br>
-- [Business registration fields](artifact/docs/工商主体信息.md) <br>
-- [Business abnormality fields](artifact/docs/企业经营异常信息.md) <br>
-- [Enforcement record fields](artifact/docs/企业被执行人信息.md) <br>
-- [Dishonest judgment debtor fields](artifact/docs/企业失信被执行人信息.md) <br>
-- [High-consumption restriction fields](artifact/docs/企业限制高消费.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown report with structured tables, summary indicators, and concise risk notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a specific company keyword and successful payment; risk modules are partial recent records, not a complete legal or credit report.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The paid lookup sends the queried company name, registration number, or unified social credit code to Juhe and uses an Alipay payment flow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain explicit user confirmation before payment and query submission, and send only the single required enterprise identifier.
+
+Risk: Reports may contain public but sensitive identifiers, including legal representative names, shareholder names, registered addresses, credit codes, case information, and possible identity-number-like fields.
+
+Mitigation: Show and retain only the fields needed for the report, avoid logging full report data, and mask values determined to be personal ID numbers.
+
+Risk: Risk modules return only the most recent page and the rendered report applies display caps, so the output is not a complete legal or credit record.
+
+Mitigation: State that listed records are partial recent records, direct users to official sources for complete checks, and avoid legal, credit, or cooperation recommendations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/juhemcp/skills/juhe-enterprise-dd-pro-a2a)
+- [Skill Instructions](artifact/SKILL.md)
+- [Output Format](artifact/OUT_FORMAT.md)
+- [Product Scope](artifact/PRODUCT.md)
+- [Return Data Reference](artifact/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, API Calls, Shell commands, Guidance]
+
+**Output Format:** [Markdown report with tables, summary signals, payment-flow guidance, and bounded command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Paid lookup accepts one enterprise name, registration number, or unified social credit code. Risk modules are limited to the most recent page, with report display caps for enforcement, dishonesty, consumption restriction, and change records.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

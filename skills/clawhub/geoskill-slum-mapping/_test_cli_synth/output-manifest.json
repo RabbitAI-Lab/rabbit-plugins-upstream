@@ -1,0 +1,60 @@
+{
+  "skill": "slum-mapping",
+  "skill_version": "1.0.0",
+  "command": "slum-mapping --bbox 116 39 117 40 --synthetic --output-dir Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\slum-mapping\\_test_cli_synth --quiet",
+  "started_at": "2026-08-03T13:16:43.350062Z",
+  "finished_at": "2026-08-03T13:16:43.545362Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "threshold": 0.5,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\slum-mapping\\_test_cli_synth\\slum_index.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 2,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\slum-mapping\\_test_cli_synth\\slum_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "mean_slum_index": 0.3044196367263794,
+    "slum_fraction": 0.476806640625,
+    "mean_texture": 0.08049727231264114,
+    "threshold": 0.5,
+    "n_valid_pixels": 16384,
+    "n_total_pixels": 16384
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "slum-mapping"
+  },
+  "error": null
+}

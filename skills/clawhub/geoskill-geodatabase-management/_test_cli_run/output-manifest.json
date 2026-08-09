@@ -1,0 +1,60 @@
+{
+  "skill": "geodatabase-management",
+  "skill_version": "1.0.0",
+  "command": "geodatabase-management --bbox 116 39 117 40 --synthetic --features 100 --layer cities --output-dir ./_test_cli_run --quiet",
+  "started_at": "2026-08-03T08:50:44.659813Z",
+  "finished_at": "2026-08-03T08:50:45.704890Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "layer": "cities",
+    "synthetic": true,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_run\\database.gpkg",
+      "kind": "vector",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": 100,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_run\\database_report.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "layer": "cities",
+    "n_features": 100,
+    "indexed_features": 100,
+    "query_indexed_count": 100,
+    "query_consistent": true
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "geodatabase-management"
+  },
+  "error": null
+}

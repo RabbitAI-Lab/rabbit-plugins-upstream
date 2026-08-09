@@ -27,7 +27,7 @@ Do not call the contextual endpoint without the user's awareness that position-s
 
 ## Cost transparency
 
-Bitfence is monetised via the x402 protocol — each scoring request costs a small amount of USDC on Base mainnet (typically a few tenths of a cent). Before you begin using Bitfence in a session:
+Bitfence is monetised via the x402 protocol — each scoring request costs a small amount of USDC on Base mainnet ($0.10 for a token risk assessment, $0.20 for a contextual assessment). Before you begin using Bitfence in a session:
 
 - **Inform the user** that risk checks are paid and will draw from the wallet's USDC balance on Base mainnet.
 - **Ask for the user's consent** the first time you call Bitfence in a session, or when the user has not previously authorised paid risk checks.

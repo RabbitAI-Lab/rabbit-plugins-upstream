@@ -1,0 +1,14 @@
+name: geoskill-urban-canyon-analysis
+display_name: 城市峡谷分析
+description: |
+  Compute street canyon height-to-width ratio and sky view factor (SVF) from a digital surface model.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-urban-canyon-analysis.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - remote-sensing
+  - urban
+  - vegetation

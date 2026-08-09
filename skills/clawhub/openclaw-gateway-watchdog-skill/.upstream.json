@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/openclaw-gateway-watchdog-skill",
   "slug": "openclaw-gateway-watchdog-skill",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1779077224213,
-  "contentHash": "635cb3a91ecdfe2bca7a2a4b17b0a7fe429fed1ffbcee49e22a078de0a1c0b40",
-  "fetchedAt": "2026-07-26T18:53:22.380Z"
+  "version": "1.0.4",
+  "updatedAt": 1785776676495,
+  "contentHash": "dec0155cb17efb0820bd076da667b1926e23b01b0a659193e850bdc0107287c5",
+  "fetchedAt": "2026-08-09T08:22:43.422Z"
 }

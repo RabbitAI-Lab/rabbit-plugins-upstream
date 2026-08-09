@@ -1,5 +1,5 @@
 ## Description: <br>
-Attacks a skill, design, argument, codebase, or knowledge base with a fresh independent attacker rotating five lenses, recording only proven reproducible breakages and separate unproven flags. <br>
+Attacker red-teams skills, designs, arguments, code, or knowledge bases through five independent lenses, reporting proven findings and flags without modifying the target. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,37 +11,36 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, security reviewers, and maintainers use this skill to red-team artifacts with independent lens-based review and receive reproducible findings, flags, stop reasons, and coverage gaps. It is intended for authorized defensive review of owned artifacts or sandboxed targets. <br>
+Developers, reviewers, and agent operators use this skill to run an independent critique pass against a target and separate reproducible findings from lower-confidence flags. It is intended for red-team review and audit handoff, not for repairing the target. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can direct agents to test real targets and produce runnable bypass steps without clear authorization limits. <br>
-Mitigation: Use it only for authorized defensive review of owned artifacts or sandboxed targets; define the allowed target before use and supervise execution and web access. <br>
-Risk: Gaming and Reality lens runs can affect live third-party systems or real controls if aimed outside an approved scope. <br>
-Mitigation: Do not use those lenses against live third-party systems or real controls unless explicit permission and scope are documented. <br>
-Risk: A weak or insufficiently independent attacker can miss known defects and create false confidence. <br>
-Mitigation: Use the SEED gate, void runs that miss planted known defects, and record coverage gaps; prefer a different-vendor attacker and judge for high-stakes targets. <br>
+Risk: The skill may propose reproduction commands while attacking a target. <br>
+Mitigation: Review commands before execution, especially on sensitive repositories or systems. <br>
+Risk: The Evidence lens may use web search, which can expose target details if confidential material is included in queries. <br>
+Mitigation: Use an internal-only evidence pass for confidential targets and record the reduced coverage in coverage_gaps. <br>
+Risk: Findings and ledger records may contain sensitive project information. <br>
+Mitigation: Write findings only to approved local or repository locations and review access controls before sharing. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/vincentjiang06/skills/attacker) <br>
-- [README.en.md](README.en.md) <br>
-- [PROVE-OR-FLAG rubric](references/prove-or-flag.md) <br>
-- [SEED recipes](references/seed-recipes.md) <br>
-- [Output schema](schemas/output.json) <br>
-- [Shadow-map extractor](scripts/extract_shadow_map.py) <br>
+- [PROVE-OR-FLAG rubric](artifact/references/prove-or-flag.md) <br>
+- [Seed recipes](artifact/references/seed-recipes.md) <br>
+- [Fix-audit rotation](artifact/references/fix-audit.md) <br>
+- [Output schema](artifact/schemas/output.json) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, code, shell commands, guidance] <br>
-**Output Format:** [Markdown findings and flags, with optional JSON matching schemas/output.json] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [JSON matching artifact/schemas/output.json, with Markdown formats in lens-specific prompts] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Findings include lens, location, claim, reproduction, severity, and independence tier; unproven suspicions remain flags and coverage gaps report lens and independence limits.] <br>
+**Other Properties Related to Output:** [Includes findings, flags, stop reason, coverage gaps, and notes about unmet coverage or independence requirements.] <br>
 
 ## Skill Version(s): <br>
-0.5.0 (source: frontmatter, CHANGELOG, server release evidence) <br>
+0.7.0 (source: server release evidence and skill frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

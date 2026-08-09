@@ -1,42 +1,58 @@
-## Description: <br>
-Ship a complete AI album in one run: cache user-provided lyrics, render tracks through the Suno direct API, generate cover art, build a 1080p album film with karaoke subtitles, upload to YouTube, deploy to an internet radio server, and announce the release. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Ship a complete album in one run: write or reuse lyrics, render tracks, generate cover and slideshow art per song, publish either one album film or one video per track plus a playlist, deploy the audio to a radio host, premiere it on air, and fan out the links.
 
-## Publisher: <br>
-[nickflach](https://clawhub.ai/user/nickflach) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nickflach](https://clawhub.ai/user/nickflach)
 
-## Use Case: <br>
-Developers, creators, and release operators use this skill to run an end-to-end AI album release pipeline from a JSON album config, including music generation, cover art, video assembly, publishing, radio deployment, and announcement workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The pipeline can publish videos and social announcements automatically. <br>
-Mitigation: Run first with RELEASE_SKIP="youtube,deploy,announce" and review generated media, upload metadata, and outbound announcement text before enabling publication phases. <br>
-Risk: The deployment phase can use local credentials, copy files over SSH, and restart a remote radio service. <br>
-Mitigation: Confirm the JSON config, SSH target, destination paths, credentials, and service restart command before enabling deploy. <br>
-Risk: The optional lyrics-generation path can import code from HRM_LYRICS_SRC. <br>
-Mitigation: Prefer pre-created lyric cache files, or set HRM_LYRICS_SRC only to a code path that has been reviewed and trusted. <br>
+## Use Case:
 
+Artists, release operators, and automation-minded teams use this skill to coordinate a full album release across music generation, artwork, video publishing, radio deployment, premiere timing, and announcement fanout.
 
-## Reference(s): <br>
-- [Album Release Pipeline on ClawHub](https://clawhub.ai/nickflach/skills/album-release) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Code, Guidance] <br>
-**Output Format:** [Markdown with bash, JSON, Python, and JavaScript file references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operational release steps and scripts that may create media files, upload public videos, deploy audio over SSH, restart a remote service, and post announcements when executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: The skill guides visible production actions such as uploads, radio deployment, service restarts, premieres, and social announcements.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run a preflight that lists all targets and public effects, defaults to dry-run, and requires explicit confirmation before any upload, restart, premiere, or announcement.
+
+Risk: Provider credentials, tokens, host configuration, and environment setup can be stale or machine-specific.
+
+Mitigation: Probe token liveness, source the expected environment, compare available adapters with the intended fanout list, and confirm host registration before batch execution.
+
+Risk: Release phases can appear to succeed while silently skipping work, losing uploads, or missing generated assets.
+
+Mitigation: Use ledgers and post-action verification, including non-empty lyric or track ledgers, provider artifact IDs, and video existence checks before playlist creation or fanout.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/nickflach/skills/album-release)
+- [Publisher profile](https://clawhub.ai/user/nickflach)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, configuration, shell commands, markdown]
+
+**Output Format:** [Markdown guidance with configuration shapes, operational steps, and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides an agent through release planning and operational execution; it does not bundle the operator-specific runner or credentials.]
+
+## Skill Version(s):
+
+1.1.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

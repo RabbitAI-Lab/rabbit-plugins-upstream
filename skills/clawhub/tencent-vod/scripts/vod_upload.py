@@ -564,7 +564,7 @@ def main():
                                default=int(os.environ.get('TENCENTCLOUD_VOD_SUB_APP_ID', 0)) or None,
                                help='子应用 ID（也可通过环境变量 TENCENTCLOUD_VOD_SUB_APP_ID 设置）')
     upload_parser.add_argument('--app-name', help='通过应用名称/描述模糊匹配子应用（与 --sub-app-id 互斥）')
-    upload_parser.add_argument('--region', default='ap-guangzhou', help='地域，默认 ap-guangzhou')
+    upload_parser.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'), help='地域，默认 ap-guangzhou')
     upload_parser.add_argument('--verbose', action='store_true', help='显示详细上传信息')
     upload_parser.add_argument('--json', action='store_true', help='JSON 格式输出完整响应')
     upload_parser.add_argument('--dry-run', action='store_true', help='预览 ApplyUpload 请求参数，不实际执行')
@@ -589,7 +589,7 @@ def main():
                              default=int(os.environ.get('TENCENTCLOUD_VOD_SUB_APP_ID', 0)) or None,
                              help='子应用 ID（也可通过环境变量 TENCENTCLOUD_VOD_SUB_APP_ID 设置）')
     pull_parser.add_argument('--app-name', help='通过应用名称/描述模糊匹配子应用（与 --sub-app-id 互斥）')
-    pull_parser.add_argument('--region', default='ap-guangzhou', help='地域，默认 ap-guangzhou')
+    pull_parser.add_argument('--region', default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'), help='地域，默认 ap-guangzhou')
     pull_parser.add_argument('--no-wait', action='store_true', help='仅提交任务，不等待结果')
     pull_parser.add_argument('--max-wait', type=int, default=600, help='最大等待时间(秒)，默认 600')
     pull_parser.add_argument('--json', action='store_true', help='JSON 格式输出完整响应')

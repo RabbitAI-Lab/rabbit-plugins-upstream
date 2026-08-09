@@ -1,0 +1,4 @@
+interface:
+  display_name: "通用投诉分析"
+  short_description: "跨行业梳理产品、服务或项目投诉的事实、证据与处理阶段"
+  default_prompt: "Use $zayn-general-complaint to analyze this complaint and determine the next evidence-based action."

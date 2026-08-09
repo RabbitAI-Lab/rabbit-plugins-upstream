@@ -1,0 +1,13 @@
+name: geoskill-ai-accuracy-assessment
+display_name: AI模型精度评估
+description: |
+  混淆矩阵+OA/mIoU/F1计算+空间精度图，输出精度评估报告（离线numpy等价实现）
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-ai-accuracy-assessment.py
+runtime: python>=3.9
+tags:
+  - ai
+  - analysis
+  - gis
+  - remote-sensing

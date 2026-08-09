@@ -1,0 +1,11 @@
+name: geoskill-spectral-unmixing
+display_name: 光谱解混
+description: |
+  线性光谱解混LSMM，约束最小二乘求端元丰度，输出丰度图与端元光谱
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-spectral-unmixing.py
+runtime: python>=3.9
+tags:
+  - gis
+  - remote-sensing

@@ -1,38 +1,54 @@
-## Description: <br>
-Mcp Config helps agents add, move, format, and troubleshoot MCP server configuration across Claude Code, Cursor, and Antigravity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+mcp-config helps agents add, move, format, catalog, and troubleshoot MCP server configurations across supported coding agents.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineers use this skill to configure MCP servers, choose the correct scope, validate JSON or CLI registration, and diagnose connection failures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: MCP configuration examples can expose sensitive credentials or grant broad database access, especially when copied without review. <br>
-Mitigation: Use least-privilege credentials, avoid storing secrets in shared project config, prefer read-only database roles, and confirm global or project MCP changes before applying them. <br>
+## Use Case:
 
+Developers and engineers use this skill to configure MCP servers, choose the right scope for a server entry, move existing entries between scopes, and diagnose connection failures.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/mcp-config) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON snippets and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include MCP configuration examples that reference credentials or database access; users should apply least-privilege settings before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.0 (source: server release evidence) <br>
+Risk: PostgreSQL MCP examples may encourage unrestricted database access or inline credential handling.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review database examples before use, prefer read-only or least-privilege credentials, avoid committing secrets to project `.mcp.json`, and keep sensitive MCP servers in local or user scope when appropriate.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/mcp-config)
+- [Add MCP Server](artifact/add.md)
+- [MCP Server Catalog](artifact/catalog.md)
+- [MCP Server Connection Diagnostics](artifact/diagnostics.md)
+- [MCP Server Format](artifact/format.md)
+- [Move MCP Server](artifact/move.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown with inline bash and JSON code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include agent-specific MCP configuration steps, validation checks, and troubleshooting commands.]
+
+## Skill Version(s):
+
+0.3.1 (source: release evidence and CHANGELOG, released 2026-08-05)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

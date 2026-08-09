@@ -1,16 +1,58 @@
 # Virtual Intelligent Dev Team
 
+[![Version](https://img.shields.io/badge/version-v6.0.19-8b5cf6?style=flat-square)](./VERSION)
+[![License](https://img.shields.io/badge/license-MIT-10b981?style=flat-square)](./LICENSE)
+[![Status](https://img.shields.io/badge/status-production--ready-f59e0b?style=flat-square)]()
+[![Archetype](https://img.shields.io/badge/archetype-router-06b6d4?style=flat-square)](./SKILL.md)
+[![Agents](https://img.shields.io/badge/specialist_agents-8-3b82f6?style=flat-square)](./references/agent-catalog.md)
+[![Closures](https://img.shields.io/badge/closure_layers-6-a78bfa?style=flat-square)](https://fxbin.github.io/virtual-intelligent-dev-team/architecture.html)
+[![Languages](https://img.shields.io/badge/language_profiles-13-10b981?style=flat-square)](./references/language-profiles.yaml)
+[![Python](https://img.shields.io/badge/python-3.8+-3776ab?style=flat-square&logo=python&logoColor=white)]()
+
+> **面向复杂软件工作的闭环协调层**：用六层闭环承接专家路由 · 计划 · 执行 · 迭代 · Beta · Release · Feedback，并在 Delivery closure 内嵌 Team Engine Lite 对抗式验收，以工程约束门禁 · 反熵治理 · 自优化循环保障交付质量。
+> 适合接手"单个专家已经不够、单轮回答也不够"的复杂软件任务。
+
+---
+
+## 在线站点
+
+> 文档站使用纯静态 HTML/CSS/JS，可由独立仓库的 GitHub Actions 直接部署到 GitHub Pages。
+
+| 入口 | 说明 | 链接 |
+| --- | --- | --- |
+| 落地页 | 项目总览：定位 / 痛点 / 六层闭环 / Team Engine Lite / 8 Agent / Quick Start | [fxbin.github.io/virtual-intelligent-dev-team](https://fxbin.github.io/virtual-intelligent-dev-team) |
+| 闭环架构 | 六层 Closure、Delivery 子图与 Stage Council overlay | [Architecture](https://fxbin.github.io/virtual-intelligent-dev-team/architecture.html) |
+| 工程化四支柱 | Harness 门禁 · Team Engine Lite · 反熵治理 · 自优化循环 | [Engineering](https://fxbin.github.io/virtual-intelligent-dev-team/engineering.html) |
+| 8 Agent 角色图谱 | 8 个专家的职责、领域与证据要求 | [Agents](https://fxbin.github.io/virtual-intelligent-dev-team/agents.html) |
+| 能力矩阵对比 | 14 个维度对比本项目与普通多专家提示词 | [Matrix](https://fxbin.github.io/virtual-intelligent-dev-team/matrix.html) |
+
+> 独立仓库本地预览：运行 `python -m http.server 8000` 后访问 `http://localhost:8000/docs/`。在 `skill-hub` 根目录启动时，访问 `/virtual-intelligent-dev-team/docs/`。
+
+---
+
+## 项目定位
+
 `virtual-intelligent-dev-team` 是一个面向复杂软件工作的智能协作项目。
 
-它不只是”专家角色路由器”，而是把研发、产品、分轮内测、技术治理、发布门禁、显式 `/auto` 自动运行，以及状态驱动恢复，收拢成一个可持续迭代的闭环工作流。
+它不只是"专家角色路由器"，而是把研发、产品、分轮内测、技术治理、发布门禁、显式 `/auto` 自动运行，以及状态驱动恢复，收拢成一个可持续迭代的闭环工作流。
 
 一句话说：
 
-它适合接手”单个专家已经不够、单轮回答也不够”的复杂软件任务。
+它适合接手"单个专家已经不够、单轮回答也不够"的复杂软件任务。
 
 ---
 
 ## 🚀 5 分钟快速上手
+
+### 0. 运行维护脚本前安装依赖
+
+直接调用 skill 不需要额外安装；如果要运行路由、schema、遥测或回归脚本，先执行：
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+`requirements.txt` 统一声明 `jsonschema` 与 `PyYAML`，避免不同维护环境依赖隐式存在。
 
 ### 1. 最简单的使用场景（小切片交付）
 
@@ -127,7 +169,9 @@
 - anti-entropy governance：对 fallback growth、duplicate owner、adapter / guard 膨胀、delete vs compat 和 source-of-truth 删除边界做治理
 - 显式 `/auto` 自动运行与状态优先恢复
 - Team Engine Lite 的 Worker / Verifier 分离、RemediationPatch 和 DeliveryCycleReport
-- 受控真实 Subagent runtime eligibility：显式 multi-agent/subagent 请求或合格 `/auto` 工作流可生成 `SubagentRuntimePlan`，但只有宿主提供 spawn / wait / merge 证据时才声明真实 runtime
+- 受控真实 Subagent runtime eligibility：显式 multi-agent/subagent 请求或合格 `/auto` 工作流可生成 `SubagentRuntimePlan`；请求候选上限与宿主原子能力链共同决定 runtime tier，任一能力缺失都会 fail closed 到更低层级
+- 文件交接与完成证据：WorkOrder、ImplementationOutput、VerificationReport、RemediationPatch、DeliveryCycleReport 必须落到可校验文件；路径身份、角色方向、带时区时间戳和 schema 任一不符都会阻断验收
+- 结构化 Response Pack：Markdown 与 JSON sidecar 同步生成，scope boundary、runtime evidence、Team Engine 与 resume 信息可直接被 benchmark、automation 和 release gate 消费
 
 ## 核心能力
 
@@ -152,9 +196,9 @@
 - `反熵治理`
   - 遇到 duplicate owner、fallback、adapter、guard 或兼容路径增长时，先判断旧路径该删除、保留兼容，还是需要用户确认。
 - `Team Engine Lite`
-  - code-facing、release-facing、Git-facing 与 remediation 路线默认保留 Worker / Verifier 分离、max-cycle retry、RemediationPatch 和 DeliveryCycleReport。
+  - 作为 Delivery closure 内的交付子图，为 code-facing、release-facing、Git-facing 与 remediation 路线保留 Worker / Verifier 分离、max-cycle retry、RemediationPatch 和 DeliveryCycleReport。
 - `受控真实 Subagent runtime eligibility`
-  - 显式 multi-agent / subagent / parallel agent 请求会生成受控计划、角色边界、spawn policy、merge policy 和 fallback；没有宿主 runtime evidence 时仍保持 `soft_orchestration_only`。
+  - 显式 multi-agent / subagent / parallel agent 请求会生成受控计划、角色边界、spawn policy、merge policy 和 fallback；`spawn / wait / merge` 或 `create_session / kill_session / restart_session` 必须完整成链，且不得超过请求候选上限，否则自动降级。
 - `外部 Agent 后端软编排`
   - 可以把 Codex / Claude Code / OpenCode 当作角色后端，但默认只声明 `soft_orchestration_only`，不虚假声称真实异步多进程 runtime。
 - `有边界的迭代优化`
@@ -165,6 +209,16 @@
   - 不只做发布前 gate，也覆盖发布后的反馈回写与下一轮修复入口。
 - `阶段专家团`
   - 产品战略、PRD、用户研究、竞品、指标、路线图等请求可激活 `product-discovery-council`；高保真原型、设计系统、可运行 HTML 原型与可访问性审查可激活 `prototype-design-council`。两者都是 `World-Class Product Architect` 下面的 overlay，不会把简单任务升级成新顶层团队。
+- `Harness 工程约束门禁`
+  - 6 个 code-facing bundle（plan-first-build / product-spec-deliver / audit-fix-deliver / govern-change-safely / root-cause-remediate / direct-execution）执行前必须创建 `.vidt/harness/engineering-constraints.md`，含 Scope / Non-Negotiable Constraints / Forbidden Changes / Verification Evidence / Rollback And Stop Conditions 五个必填章节，把"实现前先约束"变成硬门禁。
+- `Team Engine Lite 对抗式验收`
+  - Worker 只产不验、Verifier 只验不产、Lead 只能基于 DeliveryCycleReport 接受；14 个合法状态（含 `spec_violation / human_resolved / resumed`）+ 5 个标准对象（WorkOrder / ImplementationOutput / VerificationReport / RemediationPatch / DeliveryCycleReport）；3 级 runtime claim（real_subagent_runtime / single_backend_multi_session / soft_orchestration_only）禁止把角色扮演误称为真实多 Agent runtime。
+- `Fail-closed 证据链`
+  - breaker、Verifier、file handoff、Team Engine drill 和 stress gate 默认拒绝不完整或不可重放的证据；Response Pack sidecar 固化 scope boundary、runtime evidence、covered / uncovered scope 与 residual risk。
+- `Anti-Entropy 反熵治理`
+  - 遇到 duplicate owner、fallback、adapter、guard 或兼容路径增长时，先分类（code-retirement / contract-carrying-code / derived-state / persistent-state），再选路径（delete-first / compat-exception / confirmation-first），未知依赖不等于活跃依赖证据。
+- `Self-Optimization 自优化循环`
+  - bounded iteration + mutation catalog + offline loop drill：可对自身的 `routing-rules.json` / `regression-cases.json` / `evals.json` 做 JSON-aware 确定性自优化；live ≤3 轮、offline ≤120 轮、same-hypothesis ≤2 次重试；`rollback / keep / pivot / resume / hold→bootstrap→auto-run` 路径均可离线 drill 验证。
 
 ## 能力矩阵
 
@@ -181,9 +235,13 @@
 | 阶段专家团 | 产品发现与原型设计可按需展开 council overlay | 常见做法要么单专家过载，要么所有任务都进重流程 |
 | Beta 验证 | 分轮内测、模拟用户、cohort ramp、反馈门禁 | 通常只有静态测试计划，没有结构化分轮验证 |
 | 工作流质量 | 触发健康、快路径廉价、证据新鲜度、artifact 懒创建、authority boundary | 容易越改越重，或把方法建议误说成最终权威 |
-| 反熵治理 | delete-first / compat-exception / confirmation-first 路径选择 | 常见做法是不断加 fallback 或 guard |
-| Subagent runtime | 显式请求时输出受控计划，真实执行必须有宿主 spawn / wait / merge 证据 | 容易把角色扮演误称为真实多 Agent runtime |
+| Subagent runtime | 请求候选上限 + 六项原子能力证据 + smoke test 共同决定三级 runtime，缺一即降级 | 容易把单个能力标志或角色扮演误称为真实多 Agent runtime |
 | 离线验证 | offline loop drill 验证回滚与恢复路径 | 很少验证关键闭环路径是否真的跑通 |
+| 工程约束门禁 | code-facing bundle 执行前必须创建 `.vidt/harness/engineering-constraints.md`，含 5 个必填章节 | 通常直接进入实现，缺少前置约束门禁 |
+| 对抗式验收 | Worker/Verifier/Lead 分离 + DeliveryCycleReport + 14 状态机 + `spec_violation` | 自产自审，或把角色扮演误称为真实多 Agent runtime |
+| 证据链 | 精确 file handoff + schema 校验 + Response Pack JSON sidecar + fail-closed gate | 证据靠自然语言转述，无法稳定重放或被下游消费 |
+| 反熵治理 | delete-first / compat-exception / confirmation-first 三路径决策 + 4 类目标分类 | 不断加 fallback 或 guard，旧路径永不退休 |
+| 自优化循环 | bounded iteration + mutation catalog + offline drill，可对自身 routing/evals 做确定性自优化 | 无自优化能力，或陷入"再来一轮"的无限自转 |
 
 ## 快速开始
 
@@ -258,6 +316,8 @@ virtual-intelligent-dev-team/
   - [docs/design-philosophy.md](docs/design-philosophy.md)
 - 文档索引：
   - [docs/README.md](docs/README.md)
+- 端到端示例：
+  - [assets/end-to-end-example.md](assets/end-to-end-example.md)
 
 如果你想先上手：
 
@@ -336,6 +396,13 @@ flowchart TD
     AB -->|否| AK
 ```
 
+**流程图与四大工程化支柱的映射**：
+
+- **Harness 工程约束门禁** → `AE` 节点：code-facing bundle 进入实现前必须经过此门禁
+- **Team Engine Lite 对抗式验收** → `AF` / `AG` / `AH` / `AI` 节点：Worker 产出 → Verifier 验收 → Lead 基于 DeliveryCycleReport 接受
+- **Anti-Entropy 反熵治理** → 贯穿 `N` / `O` 节点：加载协同治理轨道时触发 delete-first / compat-exception / confirmation-first 路径选择
+- **Self-Optimization 自优化循环** → `AI` 节点的"有界重试"体现了 bounded iteration 原则；skill 自身的 routing/evals 优化通过 offline loop drill 离线执行，不在此用户任务流程图中
+
 ## 如何调用
 
 最常见的调用方式：
@@ -374,74 +441,6 @@ python3 skill-forge/scripts/quick_validate.py ./virtual-intelligent-dev-team
 python3 -m unittest virtual-intelligent-dev-team.tests.test_routing_and_guardrails
 python3 virtual-intelligent-dev-team/scripts/validate_virtual_team.py --pretty
 ```
-
-## v5.0.0 Highlights
-
-v5.0 把"路由可见性 + Agent Manifest 治理 + 多语言覆盖"合并为一次发版，对应迭代路线图 §2.1 与 §2.4 的内容：
-
-- **治理基础（§2.1）**
-  - 决策日志从 `.skill-metrics/governance_events.jsonl` 迁移到 `.skill-metrics/decision-log.jsonl`，字段契约见 `references/decision-log.schema.json`。新字段 `decision` / `verifier` / `reason` / `evidence` 全部 optional，向后兼容。一次性迁移入口：`scripts/migrate_governance_events.py`。
-  - 6 个 Lead Agent 全部扩展 `Constraints`（硬护栏）和 `Evidence Requirements`（完成前必备证据）字段，叙述版在 `references/agent-catalog.md`，机器可读版在 `references/routing-rules.json → agent_rules[*]`。
-  - Harness 健康检查：`scripts/check_harness_health.py` 一次性覆盖 Agent Identity / Agent Manifest / Routing Rules / Workflow Bundles / Decision Log / Language Profiles 6 项检查，输出 HEALTHY / DEGRADED / BROKEN。
-  - 决策日志 Dashboard：`scripts/inspect_decision_log.py` 输出 JSON / Markdown / 自包含 HTML（无第三方依赖）。
-
-- **多语言 Profile 系统（§2.4）**
-  - `references/language-profiles.yaml`（schema `language-profiles/v1`）覆盖 9 种语言：java / kotlin / swift / cpp / csharp / php / ruby / elixir / scala。每种语言包含 ecosystem / conventions / verification / harness_constraints 四类上下文，由 LLM 在 agent 工作内存中按需注入。
-  - `references/routing-rules.json → language_profiles` 从 4 个扩展到 13 个：保留 python / go / nodejs / rust，新增 java / kotlin / swift / cpp / csharp / php / ruby / elixir / scala。Java 仍由 `Java Virtuoso` 独立处理。
-  - 完整性校验：`scripts/check_language_profiles.py` 校验 yaml ↔ json 单向一致性、必填字段、关键词重叠率。
-  - 三层解耦：路由（JSON）/ 上下文（YAML）/ 约束（YAML + Agent Manifest），加新语言只影响对应层。
-
-- **v5.5 已完成**
-  - 沉降精简：references/ 95 → 88 文件，I类组件内联至 SKILL.md
-  - 领域特化 Agent：Data Pipeline Guardian + API Contract Sentinel
-  - 平台化架构预留：`.skill-harness/trigger.yaml`（v0.5 schema）
-
-- **v5.7.0 — SKILL.md 结构清理**
-  - 删除重复的 Quick examples 和 Key terms 章节
-  - 清理 4 个死引用（output-contract.md, runtime-routing-index.md, workflow-bundles.md, decision-log-schema.md）
-  - 重写 Description：8 个 agent 全列出，精简至 280 字符
-  - Runtime Routing 表补齐 2 条新路由（data-pipeline-govern, api-contract-govern）
-
-### v5.0.1 — Decision Log Dashboard 视觉重做（patch bump）
-
-在 v5.0.0 基础上，仅重做 `scripts/inspect_decision_log.py` 的 `render_html()` 与 `render_markdown()`：
-
-- **Hero section**：深色渐变（#0f172a → #1e293b → #312e81）+ 双 radial-gradient 高光（紫 + 蓝）+ HEALTHY/EMPTY 状态徽章
-- **设计 token 系统**：CSS variables 统一颜色 / 字号 / 圆角 / 阴影；语义色 `--info` / `--ok` / `--warn` / `--err` / `--accent`
-- **4 个差异化 KPI 卡片**：events=蓝、throughput=紫、first/last=绿，hover 微抬升 + 阴影加深
-- **5 个分布卡片用语义色 bar**：
-  - Decision Distribution：🧭 icon，delivery_held=amber / release_hold=red / fast_track=purple
-  - Verifier Distribution：✅ icon，pass=green / fail=red / hold=amber / n_a=gray
-  - Lead Agent Distribution：👥 icon，neutral info
-  - Track Distribution：🚦 icon，regular=blue / fast=purple
-  - Risk Distribution：⚠️ icon，low=green / medium=amber / high=red
-- **Hourly Throughput 改为 inline SVG sparkline**：紫色渐变 area fill + 线 + peak 红点 + 极值坐标
-- **响应式**：`auto-fit` grid 在 < 640px 折叠为单列；KPI 网格降为 2 列
-- **可访问性**：`aria-label` / `aria-hidden` / contrast ≥ 4.5 / tabular-nums 数字对齐
-- **零依赖**：无 CDN、无 JS、无外部字体（系统字体栈）
-
-MarkDown 报告同步升级：emoji section 标题 + ASCII bar + sparkline code block。
-
-### v5.0.2 — Dashboard i18n + KPI 联动 + a11y v2（patch bump）
-
-在 v5.0.1 基础上扩展 `scripts/inspect_decision_log.py`：
-
-- **i18n 中英双语**：新增 `STRINGS` 字典（28 个 key × 2 语言）+ CLI `--language en|zh|auto`；`auto` 从 `LC_ALL` / `LANG` / `locale` 探测；fallback 永远走英文。`<html lang>`、`<title>`、hero / KPI / 分布标题 / 空状态 / footer 全部本地化。
-- **CSS-only KPI ↔ 分布卡片 hover 联动**（零 JS，纯 `:has()`）：
-  - KPI 卡片带 `data-focus="total|recent|history|latest"`
-  - 分布卡片带 `data-focus`（decision/verifier=latest, lead=total, track=history, risk=recent）
-  - hover 任意 KPI → 对应 dist-card 边框高亮 + 其他卡片淡化；反向同理
-  - hover 任意 dist-row → 所有卡片中同 `data-key` 行高亮（如 hover `low` 在 Risk 卡片，所有卡片的 `low` 行都亮）
-  - `:focus-within` 支持键盘焦点联动（Tab 即可触发）
-- **a11y v2**：
-  - **Skip link**：`<a class="skip-link" href="#main">` 默认隐藏，`:focus` 时显示在左上角
-  - **键盘导航**：所有 `.kpi` 和 `.dist-row` 加 `tabindex="0"`；`:focus-visible` 全局蓝色描边
-  - **ARIA 完整**：`role="list"` / `role="listitem"` / `aria-label` / `aria-labelledby` / `aria-live="polite"`（health badge）
-  - **SVG 标题**：`<title>` 子元素让屏幕阅读器读出 sparkline 数据
-  - **`prefers-reduced-motion`**：把所有 transition / animation 降到 0.01ms
-  - **`prefers-contrast: more`**：边框加粗到 2px、文字加深、focus 描边加粗到 4px
-
-中文样例产物：`/tmp/vidt-zh.html`（28.9KB）/ `/tmp/vidt-zh.md`（2.6KB）。
 
 ## 版本
 

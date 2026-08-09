@@ -14,6 +14,9 @@ assets after the user confirms scope and credit use.
 - `agents/`: Agent metadata.
 - `assets/lingzao-logo.png`: packaged brand icon used by Agent metadata.
 - `playbooks/`: creator-operation workflows used before answering.
+- `playbooks/router-index.json`: centralized route cards for every playbook.
+- `playbooks/router-cases.json`: representative user prompts and expected
+  primary routes.
 - `scripts/`: setup, version check, configuration, and CLI command scripts.
 - `skill-card.md`: marketplace summary source.
 
@@ -43,12 +46,57 @@ Before publishing a new Skill package:
 
 ## Recent Version Notes
 
+- `0.1.100`: insufficient-credit API and asynchronous image-batch failures now
+  render one concise Chinese recharge instruction instead of exposing the raw
+  `INSUFFICIENT_CREDITS` code or an English internal error, including
+  partial-success batches whose remaining items cannot continue. The source
+  package is prepared locally only and has not been published.
+
+- `0.1.99`: added explicit one-to-one reference mapping. Callers can pair each
+  ordered `--image` with one ordered output by setting
+  `--reference-mode one_to_one` and matching `--count`; the CLI rejects
+  mismatches and batches above four references before sending a paid request.
+  The pending-request fingerprint includes the normalized mapping mode, so
+  shared and one-to-one commands never resume each other's journal entry.
+  Shared multi-reference behavior remains the default. This source-only
+  package has not been published.
+
+- `0.1.98`: `generate-image --count N` remains one real batch with N image
+  items. The CLI keeps a privacy-safe pending request ID so an ambiguous
+  POST response, interrupted poll, or repeated third-party Agent process
+  resumes the same batch instead of generating and charging again. Terminal
+  commands clear the pending intent, so an explicit later generation uses a
+  new ID; `--new-request` is reserved for abandoning an ambiguous pending
+  intent. If another batch is already active, the CLI waits for it to finish
+  and then submits the new intent with its own unchanged ID instead of returning
+  the old batch. This source-only package has not been published.
+
+- `0.1.97`: added one machine-checkable router for all 40 playbooks and a
+  WeChat benchmark-fit/original-writing workflow. Agents now load at most one
+  primary plus two gate/support playbooks, while liked article links remain
+  optional when the user provides their own content. PR #294 review follow-up
+  makes all 24 representative cases execute the routing decision, reports the
+  actual successful-item charge for partial transcript batches, and includes
+  WeChat official accounts in generated discovery metadata. This source-only
+  package preserves the unreleased `0.1.95` and `0.1.96` changes and has not
+  been published.
+
+- `0.1.96`: short-video copy Markdown now preserves per-item retry, no-charge,
+  and shorter-video guidance when one item is too large. This package change
+  is prepared locally and has not been published.
+
+- `0.1.95`: Instagram `search-notes` now explicitly searches Reels. Agents use
+  `--note-type 视频笔记`, while legacy `不限` input is accepted and normalized
+  to video semantics. This package change is prepared locally and has not been
+  published.
+
 - `0.1.94`: after a successful Lingzao install or update, the installing Agent
   now proactively shares the Lingzao feature usage manual once. Dashboard
   prompts for Codex, Claude Code, WorkBuddy, and QoderWork use the same link;
   failed installs and ordinary later conversations do not repeat it. Focused
   install tests, the focused Dashboard E2E, typecheck, focused lint, and the
-  package dry run passed. Public Skill publishing remains a separate follow-up.
+  package dry run passed. R2/CDN and ClawHub `0.1.94` were published and
+  publicly verified through their separate release lanes.
 - `0.1.93`: adds Instagram public content and creator research to the same six
   platform-neutral commands. It preserves lossless creator/media IDs, exposes
   public avatar, cover, image, carousel, and video URLs present in the current

@@ -1,0 +1,72 @@
+# Dispatch Activation Cards
+
+Use these cards to keep multi-agent activation crisp. They are internal prompts for how the lead should frame the assistant's job.
+
+## Code Audit Council
+
+- Activate when: the user asks for review, audit, security assessment, or PR risk analysis.
+- Ask for:
+  - claim
+  - evidence
+  - severity-ordered findings
+  - behavioral regressions
+  - missing tests
+  - remediation priority
+
+## Git Workflow Guardian
+
+- Activate when: the request includes commit, push, branch, PR, merge, rebase, or worktree operations.
+- Ask for:
+  - claim
+  - evidence
+  - current safe Git stage
+  - minimal safe next command sequence
+  - branch and PR strategy
+  - stop conditions
+
+## Technical Trinity
+
+- Activate when: the task needs system design, implementation planning, or backend landing.
+- Ask for:
+  - claim
+  - evidence
+  - architecture shape
+  - implementation slices
+  - reliability and security tradeoffs
+  - smallest buildable next step
+
+## World-Class Product Architect
+
+- Activate when: the request is about product scope, user flow, acceptance criteria, UX, frontend interaction, design systems, visual quality, or responsive behavior.
+- Ask for:
+  - claim
+  - evidence
+  - target user flow
+  - acceptance criteria
+  - UI/interaction changes
+  - accessibility and responsiveness considerations
+  - implementation guidance
+
+## Sentinel Architect (NB)
+
+- Activate when: the work is high risk, production sensitive, or needs staged governance.
+- Ask for:
+  - claim
+  - evidence
+  - execution mode
+  - staged checkpoints
+  - rollback strategy
+  - stop conditions
+  - evidence needed before another fix attempt
+  - root-cause hypothesis and smallest validating step
+
+## Java Virtuoso
+
+- Activate when: Java or Spring is central to the task.
+- Ask for:
+  - claim
+  - evidence
+  - framework-aware implementation guidance
+  - migration or performance considerations
+  - concurrency and JVM implications
+  - Java-specific testing concerns

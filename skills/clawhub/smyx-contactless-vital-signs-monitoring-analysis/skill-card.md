@@ -1,5 +1,5 @@
 ## Description: <br>
-Non-contact detection of heart rate, respiration, blood oxygen, and heart rate variability using camera footage without wearable devices. <br>
+Non-contact detection of heart rate, respiration, blood oxygen, and heart rate variability. No wearable devices are required; monitoring is achieved solely through camera footage. | 无感生命体征监测分析技能，非接触检测心率、呼吸、血氧、心率变异性，无需穿戴设备，通过摄像头画面即可监测 <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,35 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to analyze face video or image inputs for contactless vital-sign estimates and to retrieve prior monitoring reports. Results are informational health references and are not a substitute for professional medical measurement or diagnosis. <br>
+External users, developers, and health-support workflows can use this skill to analyze camera video for non-contact heart rate, respiration, blood oxygen, and heart-rate-variability reporting. Results should be treated as health reference information, not as a replacement for professional medical measurement or diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Face/video health data and user-linked identifiers may be sent to the provider's cloud service. <br>
-Mitigation: Use only with appropriate consent and review the provider's privacy, retention, and data-handling practices before submitting sensitive footage. <br>
-Risk: The skill can create or reuse local identity state and store tokens for future report access. <br>
-Mitigation: Run in an environment where local credential and identity state can be inspected, protected, and removed when access is no longer needed. <br>
-Risk: Vital-sign analysis results may be mistaken for medical advice. <br>
-Mitigation: Present results as informational health references only and direct users to professional medical measurement or diagnosis for health decisions. <br>
+Risk: The skill sends face or video footage, derived vital-sign information, URLs, and internally generated identity data to a third-party cloud service. <br>
+Mitigation: Use it only with informed consent and after reviewing the service's privacy, retention, account, and deletion practices. <br>
+Risk: The security verdict is suspicious because the skill performs sensitive health-data processing with silent identity creation, token persistence, and cloud history access. <br>
+Mitigation: Review the security summary and guidance before installation, restrict use with sensitive data, and avoid relying on outputs for medical decisions. <br>
+Risk: Vital-sign estimates from camera footage may be unsuitable for diagnosis or emergency decisions. <br>
+Mitigation: Treat outputs as health reference information and direct users to professional medical measurement or care for abnormal or urgent results. <br>
 
 
 ## Reference(s): <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-contactless-vital-signs-monitoring-analysis) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-contactless-vital-signs-monitoring-analysis) <br>
+- [API documentation](artifact/references/api_doc.md) <br>
+- [Analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON health-analysis report with optional saved output file and report links] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and JSON-style structured analysis text with report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May retrieve cloud-hosted report history associated with internally managed user identity state.] <br>
+**Other Properties Related to Output:** [May save output to a file when an output path is provided.] <br>
 
 ## Skill Version(s): <br>
-1.0.10 (source: server release evidence; artifact frontmatter reports 1.0.7) <br>
+1.0.12 (source: server release metadata; SKILL.md frontmatter says 1.0.10) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

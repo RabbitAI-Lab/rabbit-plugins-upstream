@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes bathroom doorway or privacy-preserving silhouette video to detect elderly toilet entry and exit events, calculate continuous occupancy time, and alert when a stay exceeds the configured safety threshold. <br>
+Analyzes bathroom doorway or privacy-filtered monitoring video to track an elderly person's toilet occupancy time and produce an abnormal alert when the stay exceeds the configured threshold. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Caregivers, nursing-home operators, and home-safety system developers use this skill to monitor toilet occupancy duration from privacy-preserving camera inputs and surface abnormal-stay alerts for human follow-up. It provides monitoring statistics and alerts, not medical diagnosis or rescue instructions. <br>
+Caregivers, family members, and elder-care operators use this skill to analyze bathroom doorway or privacy-filtered monitoring video for extended toilet occupancy and receive structured alerts and report links when occupancy exceeds the threshold. It is an assistive monitoring tool and does not provide medical diagnosis. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill processes highly sensitive bathroom-monitoring footage or URLs through cloud APIs. <br>
-Mitigation: Use doorway-only or pre-blurred footage where possible, avoid credential-bearing URLs, and deploy only with informed consent from the monitored person or authorized caregivers. <br>
-Risk: Cloud history queries and report links may expose sensitive elder-care records if access controls or retention practices are weak. <br>
-Mitigation: Verify publisher retention, deletion, authentication, and access-control practices before use in a care environment. <br>
-Risk: The skill silently creates or reuses persistent local or remote user identities and tokens. <br>
-Mitigation: Review account association behavior before deployment and ensure operators understand how identities, tokens, and historical reports are created, reused, and revoked. <br>
+Risk: Highly sensitive bathroom-monitoring videos or URLs may be sent to cloud services for analysis. <br>
+Mitigation: Use only with explicit consent from the monitored person or authorized caregiver, prefer bathroom-doorway or privacy-filtered sources, and restrict inputs to trusted camera URLs or files. <br>
+Risk: The skill may automatically create or reuse identity records and store tokens locally. <br>
+Mitigation: Run it in a controlled environment, review local storage and token handling before deployment, and avoid exposing internal identity values in user-facing output. <br>
+Risk: Automated occupancy alerts can be incomplete, delayed, or incorrect and are not medical diagnoses. <br>
+Mitigation: Treat alerts as prompts for human verification and maintain a separate emergency-response process. <br>
 
 
 ## Reference(s): <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-elderly-toilet-time-abnormal-analysis) <br>
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-elderly-toilet-time-abnormal-analysis) <br>
+- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
+- [API interface reference](artifact/references/api_doc.md) <br>
+- [Skill demo](https://lifeemergence.com/sample.html) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown summary with structured JSON analysis results and report links] <br>
+**Output Type(s):** [Text, Markdown, JSON] <br>
+**Output Format:** [Markdown text with structured JSON content and report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can list cloud-hosted historical reports and export report links when requested.] <br>
+**Other Properties Related to Output:** [Can optionally write the generated report text to a local output file when --output is provided.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: SKILL.md frontmatter and server release metadata) <br>
+1.0.7 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,43 +1,60 @@
-## Description: <br>
-Filters and analyzes Etsy stores by sales, favorites, reviews, opening date, country, category, and Raving or star status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Etsy店铺查询 helps agents filter and retrieve Etsy store data by sales, favorites, reviews, opening date, country, category, and Raving or star status.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and developers use this skill to query Etsy store data, screen stores by performance and profile filters, and inspect returned store metrics through LinkFox's third-party data service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends Etsy search parameters and an API key to a third-party LinkFox gateway. <br>
-Mitigation: Use the skill only when the user trusts LinkFox with the query parameters and key, and confirm that any gateway override is expected before execution. <br>
-Risk: Queries may consume paid LinkFox credits, with cost based on the number of returned stores. <br>
-Mitigation: Confirm the expected page size and obtain user approval before running paid queries or additional pages. <br>
-Risk: Full API responses may be saved locally and cached in linkfox-related directories. <br>
-Mitigation: Treat saved files as potentially sensitive and delete cached or session outputs when the results or search terms should not persist. <br>
+## Use Case:
 
+External users and developers use this skill to query and compare Etsy shops through LinkFox's hosted data service, including filtering by activity, sales, review, favorite, geography, category, and status signals.
 
-## Reference(s): <br>
-- [API Reference](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-etsy-store-query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API parameters, shell commands, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The helper script may save full API responses under linkfox-related local directories and print either full JSON or a concise summary depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: ClawHub release evidence) <br>
+Risk: The security verdict is suspicious because the skill includes account login, API key generation, and payment-order flows in addition to Etsy store queries.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user intends to use LinkFox's paid hosted service, and ask for explicit user confirmation before account setup, SMS-code handling, API-key configuration, or billing actions.
+
+Risk: Queries consume paid credits based on returned store count and may incur higher-than-expected cost for broad or repeated searches.
+
+Mitigation: Explain the dynamic credit rule before running broad queries, use scoped filters and pagination, and let the user decide whether to continue.
+
+Risk: Endpoint override environment variables can redirect requests away from the default LinkFox services.
+
+Mitigation: Use endpoint overrides only in trusted development environments and review them before executing authentication, billing, or query commands.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-etsy-store-query)
+- [_ehunt_storeQuery API reference](artifact/references/api.md)
+- [Authentication and billing onboarding](artifact/references/onboarding.md)
+- [LinkFox tool gateway](https://tool-gateway.linkfox.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API responses and optional saved JSON files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The query script may summarize large responses while saving the full response as a JSON data file.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,65 @@
-## Description: <br>
-Simulates Amazon storefront searches and returns real-time search results data such as product positions, prices, ratings, review counts, brands, delivery details, and sponsored status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Simulates real user searches on Amazon storefronts to retrieve real-time keyword ranking and search results page data for product research, ASIN position checks, competitor discovery, price comparison, sponsored product analysis, and new product monitoring.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Amazon sellers, e-commerce analysts, and agent users use this skill to inspect live Amazon search result pages for keyword ranking, competitor discovery, price comparison, sponsored product analysis, and new product monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review flagged that the skill sends Amazon search terms, marketplace settings, delivery ZIPs, API credentials, and session-related headers to LinkFox. <br>
-Mitigation: Use only approved LinkFox credentials, avoid sensitive business queries unless necessary, and confirm the user is comfortable sharing the requested search context before calling the API. <br>
-Risk: Raw search responses are saved on disk and may contain query details, product data, delivery simulation settings, and session metadata. <br>
-Mitigation: Run the skill in a dedicated workspace, inspect generated linkfox files before sharing them, and delete saved response files when they are no longer needed. <br>
-Risk: Each Amazon search consumes LinkFox credits, and repeated retries, pagination, or parameter changes can increase cost. <br>
-Mitigation: Explain additional credit usage before follow-up searches and avoid automatic retries, keyword changes, page turns, or delivery ZIP changes without user confirmation. <br>
-Risk: The artifact includes onboarding-download and feedback-reporting flows that may contact LinkFox services beyond the search API. <br>
-Mitigation: Ask for explicit user consent before downloading onboarding materials or sending feedback, and skip those flows when they are not needed for the task. <br>
+## Use Case:
 
+External Amazon sellers and ecommerce analysts use this skill to inspect current Amazon search results across supported marketplaces, including ranking positions, prices, ratings, sponsored flags, and delivery-related fields. Agents can use it to plan API calls, summarize SERP data, and guide users through authentication or billing issues when needed.
 
-## Reference(s): <br>
-- [亚马逊前端搜索模拟 API 参考](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON files, guidance] <br>
-**Output Format:** [Markdown summaries and tables with optional shell commands and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full responses are saved under a local linkfox session data directory; large responses are summarized unless inline output is explicitly requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill requires a LinkFox API key and may handle generated keys during onboarding.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat API keys, shell-profile exports, saved JSON responses, and local cache files as sensitive; review or delete local linkfox output directories after use.
+
+Risk: The onboarding workflow can involve phone/SMS registration and billing or payment order flows.
+
+Mitigation: Use script-driven registration or payment only when the user intentionally wants the agent involved in account setup or purchasing.
+
+Risk: Search calls consume LinkFox credits and repeated exploratory queries can increase cost.
+
+Mitigation: Explain expected credit use before high-frequency calls, reuse the 24-hour cache for identical parameters, and ask before retrying with changed keywords, pages, or delivery locations.
+
+Risk: The security verdict is suspicious because the skill combines credentials, billing actions, automatic feedback reporting, and durable local storage.
+
+Mitigation: Install only after reviewing these behaviors and confirming that LinkFox service access, feedback reporting, and local persistence are acceptable for the intended environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-search)
+- [亚马逊前端搜索模拟 API 参考](references/api.md)
+- [解决认证和积分问题](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+- [LinkFox agent portal](https://agent.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with JSON request examples, shell commands, and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search results are cached for 24 hours by parameter set; full API responses are written under a local linkfox output directory, with stdout showing either full JSON for small responses or a concise summary for large responses.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

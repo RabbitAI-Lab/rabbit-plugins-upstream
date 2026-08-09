@@ -1,45 +1,63 @@
-## Description: <br>
-Helps agents search and filter Amazon products with Keepa data across category, price, monthly sales, keywords, BSR, reviews, ratings, package dimensions, weight, and fulfillment criteria. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+基于Keepa数据的亚马逊高级商品搜索与筛选，支持品类、价格、月销量、关键词、BSR排名、评论数、评分、包装尺寸、重量、配送方式等多维度条件。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, product researchers, and e-commerce operators use this skill to turn multi-criteria Amazon product research requests into Keepa product-search parameters, run the LinkFox-backed search, and present structured product results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a LinkFox API key and calls LinkFox services. <br>
-Mitigation: Install and run it only when sharing the API key and product-search queries with LinkFox services is acceptable. <br>
-Risk: Full product-search responses are saved locally and may contain sensitive sourcing research. <br>
-Mitigation: Review the configured output location before use, avoid sensitive searches when local retention is not acceptable, and clean saved response files according to workspace policy. <br>
-Risk: Feedback reporting can send observations about skill behavior or user reactions to a separate LinkFox feedback API. <br>
-Mitigation: Review or disable feedback behavior before using the skill in workflows where user comments, business context, or query details should not be reported. <br>
-Risk: The onboarding flow can direct installation of a remote LinkFox onboarding ZIP. <br>
-Mitigation: Install the onboarding package only after confirming the source is trusted and the user has approved the download and installation. <br>
+## Use Case:
 
+External Amazon sellers, e-commerce operators, and agents use this skill to build multi-criteria Keepa product searches, call the LinkFox Keepa search endpoint, and present product research results with sales, price, BSR, rating, review, fulfillment, and package filters.
 
-## Reference(s): <br>
-- [Keepa Product Search API Reference](artifact/references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-keepa-product-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, files, guidance] <br>
-**Output Format:** [Markdown guidance with JSON request parameters, shell-command examples, stdout summaries, and saved JSON response files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The script saves full product-search responses locally; responses up to 8 KB are printed in full, larger responses print a summary unless --inline is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill sends search parameters and an API key to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only approved LinkFox credentials, avoid including unnecessary sensitive business data in search parameters, and review endpoint access before use.
+
+Risk: The skill can guide users through account setup, API-key creation, and payment flows.
+
+Mitigation: Prefer self-service setup in LinkFox, and do not hand an agent SMS codes, payment choices, or other account recovery details unless that workflow is explicitly approved.
+
+Risk: Full API responses are written to local session files.
+
+Mitigation: Review and remove saved response files when they contain sensitive product research data, credentials, or account-related information.
+
+Risk: Keepa searches can consume paid LinkFox credits.
+
+Mitigation: Confirm cost-bearing searches before additional pages, history-enabled requests, or modified retry queries.
+
+## Reference(s):
+
+- [Keepa product search API reference](references/api.md)
+- [LinkFox authentication and billing onboarding](references/onboarding.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-keepa-product-search)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, JSON, API calls, files, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and saved JSON response files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are persisted under a local linkfox session directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

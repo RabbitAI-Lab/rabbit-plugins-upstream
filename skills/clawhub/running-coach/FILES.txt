@@ -1,0 +1,12 @@
+SKILL.md
+references/session_types.md
+references/zone_calc.md
+references/periodization.md
+references/injury_check.md
+references/report_template.md
+references/profile_schema.md
+references/pace_system.md
+references/warmup_cooldown.md
+references/strength_recovery.md
+references/nutrition.md
+references/race_tactics.md

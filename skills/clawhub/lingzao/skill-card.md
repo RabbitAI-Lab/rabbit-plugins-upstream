@@ -1,48 +1,65 @@
-## Description: <br>
-灵造 helps WorkBuddy, OpenClaw, Codex, and similar agents support creator research and self-media operations across Xiaohongshu, Douyin, TikTok, Instagram, YouTube, and WeChat public-account workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+灵造 helps WorkBuddy, OpenClaw, Codex, and similar agents route cross-platform creator research and self-media operations work, with optional paid public-content lookup, comment analysis, transcript extraction, WeChat article data, and creator image generation when the user configures Lingzao credits and an API key.
 
-## Publisher: <br>
-[itxiaohao](https://clawhub.ai/user/itxiaohao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[itxiaohao](https://clawhub.ai/user/itxiaohao)
 
-## Use Case: <br>
-External creators, marketers, and agent users use this skill to plan topics, diagnose accounts, design titles and covers, rewrite drafts, run pre-publish checks, review post-publish data, prepare cross-platform content packages, and call Lingzao public-data or image-generation services after confirming scope and credit use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Public links, prompts, and selected reference images may be sent to the Lingzao service when paid lookup or image generation is used. <br>
-Mitigation: Use the API key only for intended tasks, avoid private platform credentials or sensitive images, and confirm the scope before service calls. <br>
-Risk: Paid public-data lookups, comment reads, transcript extraction, article metrics, and image generation can consume Lingzao credits. <br>
-Mitigation: Keep credit-budget confirmations enabled, start with a small first-pass scope, and require explicit approval before larger plans. <br>
-Risk: Knowledge-base export or local file output can persist generated analysis beyond the chat. <br>
-Mitigation: Write or sync outputs only after the user intentionally selects the destination and confirms the export. <br>
-Risk: A custom base URL or update command could route requests somewhere unexpected. <br>
-Mitigation: Review the configured base URL and approve update or setup commands before running them. <br>
+## Use Case:
 
+External creators, creator-operations teams, and agent users use this skill to plan topics, analyze accounts and public content, design titles and covers, check pre-publication risk, review post-publication data, package cross-platform content, and optionally call Lingzao paid services for public lookup or image generation.
 
-## Reference(s): <br>
-- [Lingzao Skill page](https://clawhub.ai/itxiaohao/skills/lingzao) <br>
-- [Lingzao dashboard and setup](https://lingzao.atian.vip) <br>
-- [Lingzao feature usage manual](https://my.feishu.cn/docx/Y2HQdj5mzoFx4vxfij3cl9TRnjh?from=from_copylink) <br>
-- [Package index](artifact/index.md) <br>
-- [Main skill instructions](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration, code, text] <br>
-**Output Format:** [Markdown, plain text, shell command examples, local files, and optional JSON from CLI commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require LINGZAO_API_KEY and confirmed credit use for public-data lookup, comments, transcript extraction, article metrics, or image generation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.94 (source: evidence.release.version and artifact/VERSION) <br>
+Risk: The skill can spend paid Lingzao credits for public-content lookup, comment retrieval, transcript extraction, article data, and image generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm task scope and estimated credit use before paid calls, keep the first pass small, and require explicit user confirmation before larger plans.
+
+Risk: The skill stores a Lingzao API key and base URL in local configuration when setup is run.
+
+Mitigation: Review the API key and base URL before setup, rely on the masked config display for checks, and avoid exposing credentials in user-facing output.
+
+Risk: User-provided screenshots, reference images, links, or content may be used in the current Lingzao request.
+
+Mitigation: Avoid sending private screenshots, credentials, cookies, or sensitive reference images unless the user intends them to be used for that request.
+
+Risk: Creator-operation guidance can become misleading if it promises outcomes or copies another creator too closely.
+
+Mitigation: Keep outputs framed as workflow support, avoid promises of viral growth or monetization, and use the included platform and content risk gates for publishable Xiaohongshu content.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/itxiaohao/skills/lingzao)
+- [Lingzao Dashboard and Setup Hub](https://lingzao.atian.vip)
+- [Lingzao Usage Manual](https://my.feishu.cn/docx/Y2HQdj5mzoFx4vxfij3cl9TRnjh?from=from_copylink)
+- [Package Index](artifact/index.md)
+- [Router Index](artifact/playbooks/router-index.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, Code, Files]
+
+**Output Format:** [Markdown guidance with optional shell commands, configuration JSON, generated files, and saved image assets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Paid public-content lookups and image generation require user-confirmed scope, credit budget, and a configured Lingzao API key.]
+
+## Skill Version(s):
+
+0.1.100 (source: server release evidence and artifact/VERSION)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

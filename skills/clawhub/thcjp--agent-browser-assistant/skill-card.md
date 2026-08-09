@@ -1,5 +1,5 @@
 ## Description: <br>
-Agent Browser Assistant helps browser-capable agents automate web navigation, page interactions, retries, and data collection workflows. <br>
+Agent Browser Assistant helps agents automate browser interactions and web data collection, including navigation, element interaction, extraction, retries, proxy configuration, and structured responses. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agent users use this skill to guide browser automation tasks such as navigating pages, interacting with elements, extracting page content, and returning structured results. It is best suited for permitted web automation and scraping workflows where the user can review scope, consent, and target-site constraints. <br>
+External users, developers, and automation teams can use this skill to direct an agent through authorized browser automation and web data extraction workflows. It is intended for Chinese-language interaction and returns structured success, data, and error information for follow-up processing. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may automate websites and collect page contents or screenshots beyond what a user expects from its API-wrapper framing. <br>
-Mitigation: Review the requested automation scope before use and avoid private accounts, credentials, personal data, or sensitive business pages unless clear consent exists. <br>
-Risk: Browser automation and scraping can violate target-site rules or access restrictions. <br>
-Mitigation: Use the skill only on websites where automation is permitted and keep interaction rates and collection scope within the site's allowed use. <br>
+Risk: The skill requests broad file and command access for browser automation workflows. <br>
+Mitigation: Require explicit approval before running commands, custom scripts, proxies, or file writes, especially in sensitive workspaces or accounts. <br>
+Risk: The skill promotes anti-bot bypass techniques. <br>
+Mitigation: Use it only for clearly authorized browser automation or data extraction, and avoid using it to bypass anti-bot or anti-scraping controls. <br>
+Risk: Dynamic pages and selectors can fail or produce incomplete extracted data. <br>
+Mitigation: Review extracted results, retry cautiously, and update selectors or instructions when page structure changes. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/agent-browser-assistant) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON-style result examples and shell configuration snippets] <br>
+**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with JSON response examples and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured page data or screenshots when used by a browser-capable agent.] <br>
+**Other Properties Related to Output:** [May propose browser actions, command execution, file access, proxy configuration, and structured success/error results.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+1.0.4 (source: server release metadata and SKILL.md frontmatter) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,0 +1,82 @@
+{
+  "classification": "koppen",
+  "code_table": {
+    "1": "Af",
+    "2": "Am",
+    "3": "Aw",
+    "4": "As",
+    "5": "BWh",
+    "6": "BWk",
+    "7": "BSh",
+    "8": "BSk",
+    "9": "Csa",
+    "10": "Csb",
+    "11": "Csc",
+    "12": "Cwa",
+    "13": "Cwb",
+    "14": "Cwc",
+    "15": "Cfa",
+    "16": "Cfb",
+    "17": "Cfc",
+    "18": "Dsa",
+    "19": "Dsb",
+    "20": "Dsc",
+    "21": "Dwa",
+    "22": "Dwb",
+    "23": "Dwc",
+    "24": "Dwd",
+    "25": "Dfa",
+    "26": "Dfb",
+    "27": "Dfc",
+    "28": "Dfd",
+    "29": "ET",
+    "30": "EF"
+  },
+  "method": "koppen",
+  "total_pixels": 4096,
+  "pixel_area_km2": 2.3344926066116454,
+  "classes": [
+    {
+      "code": 1,
+      "label": "Af",
+      "pixel_count": 640,
+      "fraction": 0.15625,
+      "area_km2": 1494.075268231453
+    },
+    {
+      "code": 3,
+      "label": "Aw",
+      "pixel_count": 640,
+      "fraction": 0.15625,
+      "area_km2": 1494.075268231453
+    },
+    {
+      "code": 5,
+      "label": "BWh",
+      "pixel_count": 640,
+      "fraction": 0.15625,
+      "area_km2": 1494.075268231453
+    },
+    {
+      "code": 15,
+      "label": "Cfa",
+      "pixel_count": 640,
+      "fraction": 0.15625,
+      "area_km2": 1494.075268231453
+    },
+    {
+      "code": 26,
+      "label": "Dfb",
+      "pixel_count": 640,
+      "fraction": 0.15625,
+      "area_km2": 1494.075268231453
+    },
+    {
+      "code": 29,
+      "label": "ET",
+      "pixel_count": 896,
+      "fraction": 0.21875,
+      "area_km2": 2091.705375524034
+    }
+  ]
+}

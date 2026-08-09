@@ -12,7 +12,7 @@
 
 | 场景          | 正确做法                                                                                                                                                            |
 | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 创建 PMax     | `pmax-validate` → 用户确认 → `pmax-create`                                                                                                                          |
+| 创建 PMax     | `pmax-validate` → **写代码**从 JSON 投影完整审查稿 → 用户确认 → `pmax-create`                                                                                        |
 | 文案超长      | `pmax-validate --json-out` 读 `lengthViolations`（含完整 `text`）；**勿自动截断**，列改写方案给用户确认后再改 JSON 并重跑 validate（同 Search `campaign-validate`） |
 | 金额          | JSON 填**主币种「元」**；CLI 提交前 `budget`、`targetCpa_BidingAmount` ×100                                                                                         |
 | 图片          | **只填 `imagePaths`** 指向本地 PNG/JPEG（**相对路径相对 `--config-file` 所在目录**；`pmax-validate` 会检查文件是否存在）；`pmax-create` 自动上传并用 assetId 创建（勿把 Base64 提交进 Git） |
@@ -26,15 +26,17 @@
 
 ---
 
-## 方案生成（Agent 出投放方案时）
+## 方案生成与审查（Agent）
 
-出 PMax **投放方案**（Markdown + JSON）时，除标题/描述/图片外，**Lead Gen / B2B 场景默认包含潜在客户表单**：
+出 PMax 方案时：先落盘本模板同构 JSON，再按 `references/google-ads/rules/google-ads-pmax-launch-plan-template.md` **写代码**从 JSON 投影完整审查稿（默认 Markdown；用户要求 Excel 等则改输出格式）。审查稿须含全部短/长标题、描述与附加资产正文，**禁止**只交概览表。
 
-1. JSON：`campaignExtensions.leadForm` 字段结构与 `pmax-lead-form-template.json` 的 `leadForm` 相同（`businessName`、`headline`、`description`、`privacyPolicyUrl`、`finalUrl`、`fields`）。
-2. Markdown：单独一节 **「潜在客户表单」**，列出表单标题、描述、收集字段、隐私政策 URL；**不得**只在 JSON 里写而方案正文遗漏。
-3. `privacyPolicyUrl`：从落地页站点找 `/privacy`、`/terms` 等；找不到时向用户确认，**禁止**编造 URL。
-4. 用户说「不要表单 / 仅品牌曝光 / 纯电商 Shopping」→ 可省略 `leadForm` 并在方案中说明原因。
-5. `pmax-validate` 会校验 `leadForm`；创建后 `--json-out` 的 `campaignExtensions.leadForm` 段含 `ok` / `error`。
+**Lead Gen / B2B 默认含潜在客户表单**：
+
+1. JSON：`campaignExtensions.leadForm` 结构同 `pmax-lead-form-template.json` 的 `leadForm`。
+2. 审查稿单独一节 **「潜在客户表单」**（标题/描述/字段/privacyPolicyUrl）；不得只写在 JSON 里。
+3. `privacyPolicyUrl`：从站点找 `/privacy`、`/terms` 等；找不到则向用户确认，**禁止**编造。
+4. 用户明确不要表单 → 可省略 `leadForm` 并在审查稿说明原因。
+5. 创建阶段：`pmax-validate`；创建后 `--json-out` 的 `campaignExtensions.leadForm` 含 `ok` / `error`。
 
 ---
 
@@ -43,7 +45,7 @@
 ```bash
 siluzan-tso ad geo search -a <accountId> -q "United States"
 siluzan-tso ad pmax-validate --config-file ./pmax.json --json-out ./snap-pmax
-# 用户确认方案后：
+# Agent 写代码：读 pmax.json → 写出完整审查稿（见 google-ads-pmax-launch-plan-template.md）→ 用户确认后：
 siluzan-tso ad pmax-create --config-file ./pmax.json --json-out ./snap-pmax
 siluzan-tso ad campaigns -a <accountId> --json-out ./snap
 ```

@@ -1,0 +1,53 @@
+{
+  "skill": "format-batch-converter",
+  "skill_version": "1.0.0",
+  "command": "format-batch-converter --bbox 116 39 117 40 --synthetic --vector-target gpkg --output-dir ./_test_cli_run --quiet",
+  "started_at": "2026-08-03T17:05:22.573762Z",
+  "finished_at": "2026-08-03T17:05:23.110187Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "vector_target": "gpkg",
+    "raster_target": "tif",
+    "recursive": false,
+    "synthetic": true,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_run\\conversion_log.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_inputs": 3,
+    "n_converted": 3,
+    "n_errors": 0,
+    "n_skipped": 0,
+    "total_output_bytes": 197213,
+    "vector_target": "gpkg",
+    "raster_target": "tif",
+    "n_input_files": 3
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "format-batch-converter"
+  },
+  "error": null
+}

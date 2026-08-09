@@ -1,44 +1,60 @@
-## Description: <br>
-Detects indoor plant light stress from images, videos, URLs, and optional lux data, then reports whether lighting appears insufficient, excessive, or normal with care suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects and analyzes indoor plant light stress from images, videos, URLs, and optional lux data, identifying low-light or excessive-light symptoms and suggesting care adjustments.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to analyze indoor plant images, videos, or URLs for signs of low-light or excessive-light stress and receive structured care guidance. It also supports querying cloud-hosted historical light-stress reports associated with the skill's internal identity state. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Plant images, videos, or supplied URLs may be sent to Life Emergence cloud APIs for analysis. <br>
-Mitigation: Use the skill only with media and URLs that are acceptable to process through that cloud service. <br>
-Risk: The skill may create or reuse persistent local and remote identity state for report history. <br>
-Mitigation: Review identity and report-retention expectations before enabling historical report queries. <br>
-Risk: Real secrets placed in local API-key files may be mishandled if publisher guidance is unclear. <br>
-Mitigation: Avoid storing production secrets in data/smyx-api-key.txt unless the publisher documents that workflow clearly. <br>
+## Use Case:
 
+Plant-care users, smart-planter operators, home gardeners, office plant caretakers, and developers can use this skill to analyze plant media for insufficient, excessive, or normal light conditions and receive structured adjustment guidance. The skill can also query cloud-hosted historical light-stress reports associated with the current internal identity.
 
-## Reference(s): <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-indoor-plant-light-stress-detect-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON-style structured analysis with report links and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call remote Life Emergence APIs for analysis and historical report retrieval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence; artifact frontmatter says 1.0.5) <br>
+Risk: Plant images, videos, or media URLs are sent to the LifeEmergence cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media you are comfortable uploading to that service, and avoid sensitive images or videos.
+
+Risk: Reports may be associated with an automatically resolved or created internal identity.
+
+Mitigation: Review whether identity-linked cloud report history is acceptable before using analysis or list mode.
+
+Risk: Service tokens and identity values may be stored in the workspace data directory.
+
+Mitigation: Review and remove data/smyx-api-key.txt and related workspace data if the identity or token should not be reused.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-indoor-plant-light-stress-detect-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Interface Documentation](artifact/references/api_doc.md)
+- [Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown text containing structured JSON analysis, care suggestions, report links, or historical report tables.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud report export links and historical report records when list mode is used.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence; artifact frontmatter reports 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

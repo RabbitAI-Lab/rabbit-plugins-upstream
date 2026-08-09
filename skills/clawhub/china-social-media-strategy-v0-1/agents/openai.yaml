@@ -1,0 +1,4 @@
+interface:
+  display_name: "China Social Media Strategy"
+  short_description: "Plan China social media market entry"
+  default_prompt: "Use $china-social-media-strategy to create a China social media GTM plan for an overseas company."

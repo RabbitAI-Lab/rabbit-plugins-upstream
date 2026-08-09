@@ -1,45 +1,62 @@
-## Description: <br>
-A Chinese-language meta-skill for domain evaluation, workflow restructuring, skill generation, and general task execution using catalog, requirements, and exemplar reference files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Meta Skill System provides a Chinese-language methodology framework for domain evaluation, workflow reconstruction, skill generation, and general task execution.
 
-## Publisher: <br>
-[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng)
 
-## Use Case: <br>
-External users and developers use this skill to guide agents through methodology tasks such as evaluating whether a domain should exist, simplifying workflows for AI-assisted execution, generating new skill artifacts, and producing structured analysis or plans. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill has a broad activation scope and can guide agents through skill generation, workflow restructuring, web research, file operations, and possible shell or Python use. <br>
-Mitigation: Use explicit task boundaries and require confirmation before running commands, writing files, editing generated skills, or relying on external search results. <br>
-Risk: Security evidence marks the release as suspicious because the shell and Python fallback is under-scoped. <br>
-Mitigation: Review the requested action before installation or execution, and prefer sandboxed execution with user approval for file and command operations. <br>
+## Use Case:
 
+Developers, workflow designers, and advanced agent users use this skill to route methodology tasks, evaluate whether domains should exist, simplify workflows, generate structured skill payloads, and execute tasks through reusable operation frameworks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wangjiaocheng/skills/meta-skill-system) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/wangjiaocheng) <br>
-- [Meta-skill catalog](references/meta-skill-catalog.md) <br>
-- [Meta-skill requirements](references/meta-skill-requirements.md) <br>
-- [Exemplars index](references/exemplars.md) <br>
-- [Full prompt bundle](references/meta-skill-system-prompt.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or plain text with optional code and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce structured plans, generated skill files, search guidance, command suggestions, and review checklists depending on the user task.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata) <br>
+Risk: The skill has broad activation and can guide generation or modification of other skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use narrow, explicit task triggers and review generated skill content before installation or reuse.
+
+Risk: The skill can propose script-generation and shell-command workflows.
+
+Mitigation: Do not allow script writing or command execution unless the user task clearly requires it, and inspect commands before running them.
+
+Risk: Generated methodology outputs may contain incorrect or overgeneralized guidance.
+
+Mitigation: Review outputs against the target domain, especially when using them for organizational decisions, workflow redesign, or generated skill releases.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wangjiaocheng/skills/meta-skill-system)
+- [Publisher profile](https://clawhub.ai/user/wangjiaocheng)
+- [Task catalog and dependency topology](artifact/references/meta-skill-catalog.md)
+- [Task requirements](artifact/references/meta-skill-requirements.md)
+- [Example index](artifact/references/meta-skill-exemplars.md)
+- [Combined prompt reference](artifact/references/meta-skill-system-prompt.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and structured text, with code blocks or shell commands when a requested skill-generation task calls for them]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are methodology-driven task analyses, generated skill files, workflow plans, templates, or implementation guidance; review generated skills and commands before use.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

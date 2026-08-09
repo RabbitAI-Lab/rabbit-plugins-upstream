@@ -1,0 +1,13 @@
+{
+  "height_m": 100.0,
+  "z_ref_m": 10.0,
+  "roughness": 0.14,
+  "air_density": 1.225,
+  "fit_method": "moment",
+  "n_dates": 50,
+  "mean_wpd": 1435.3602294921875,
+  "mean_wind_speed": 10.644994735717773,
+  "mean_weibull_k": 2.05611515045166,
+  "mean_weibull_c": 11.997340202331543,
+  "estimated_annual_energy_mwh": 6132.0
+}

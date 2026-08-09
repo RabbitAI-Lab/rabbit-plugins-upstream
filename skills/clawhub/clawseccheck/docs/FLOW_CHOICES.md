@@ -32,6 +32,9 @@ A–F grade + NO KNOWN ISSUE/SUSPICIOUS/DANGEROUS verdict over five axes — **d
 stages for later), **connections** (whom it reaches out to). Lead with the grade + verdict, then
 name any axis that is WARN/FAIL and why; note that N/A axes weren't assessable (e.g. a doc-only
 skill with no code). Report the verdict in plain language:
+- **No grade at all** (`Grade: N/A (UNKNOWN)`, "This target is not a skill package … no verdict
+  is given") -> the tool refused to grade what it was pointed at. Say so plainly and ask for a
+  skill directory or `SKILL.md`; do not present the absence of findings as a clean result.
 - NO KNOWN ISSUE -> "Grade looks clean — no suspicious patterns on any axis."
 - SUSPICIOUS -> "A couple of axes are worth a closer look (I'll name them). I'd be cautious."
 - DANGEROUS -> "This skill contains patterns used by malware (the danger axis fails). Do not
@@ -74,7 +77,10 @@ X" end to end: (1) `--vet-source <target>` — the identity gate above; stop her
 steps + a consent line), then prints the exact fetch+isolate+cleanup commands for *you* (the
 agent) to run — a temp quarantine dir outside every OpenClaw auto-load path, the right fetch verb
 for the target's ecosystem (npm/pypi/git/url), never executed by the tool itself. (3) Run those
-commands yourself. (4) `--advise <quarantine-path>` — reframes the same risk dossier as an
+commands yourself — **unless the tool refused to build a plan**: for a target it cannot quote
+safely (shell metacharacters, control characters) it prints `I will not build a fetch plan for
+this target.` and no commands at all. There is nothing to run; ask the user for a plain target
+rather than improvising a fetch of your own. (4) `--advise <quarantine-path>` — reframes the same risk dossier as an
 install decision: **INSTALL** / **CAUTION** / **DO-NOT-INSTALL**, each with a plain-words
 restatement ("In plain words: …"), a "how I decided" line, the reasons, and a cleanup command.
 Relay it directly:
@@ -129,8 +135,9 @@ names. This is the most important field: it is what lets the audit see whether a
 
 **Step 3 — answer what you can from your own context; ask the user only what they alone know.**
 
-For **approval_gates** — answer this yourself:
-> Look at your own tool grants and session parameters. If you are required to call `request_approval` or `ask_user` before every side-effecting action → `gated`. Otherwise → `ungated`.
+For **approval_gates** — answer this yourself, per action class (`exec`, `send`, `write` —
+not a single scalar):
+> For each of `exec`, `send`, `write`: are you required to call `request_approval` or `ask_user` before acting in that class? → `"required"`. Do you act without asking? → `"auto"`. Not sure? → `"unknown"`.
 
 For **untrusted_to_action** — answer this yourself:
 > Combine: do you have any channel with open/allowlist/paired dmPolicy or groupPolicy (external ingress exists)? AND do you have outbound tools (email, webhook, exec, deploy, etc.) without an approval gate? If both → `ungated`. If approval gate present → `gated`.
@@ -175,7 +182,8 @@ python3 {baseDir}/audit.py --attest -                # or pipe the JSON via stdi
 weaker than a config fact — advisory, and it never overrides one):
 - **B43 — Capability blast-radius.** Only reversible verbs (search/get/draft/label) → PASS:
   "forward-exfil and delete-evidence are physically impossible." A send/forward, delete-forever, or
-  mailbox-config (auto-forward/filter) verb that can fire without approval → FAIL.
+  mailbox-config (auto-forward/filter) verb that can fire without approval → WARN (never FAIL —
+  B43 is `ATTESTED`/advisory, so a self-report can only warn, not fail the grade).
 - **B44 — Self-report ⇄ config drift.** Config `tools.allow` grants a dangerous verb you did *not*
   list → flagged (drift / blind spot / something masking a capability).
 

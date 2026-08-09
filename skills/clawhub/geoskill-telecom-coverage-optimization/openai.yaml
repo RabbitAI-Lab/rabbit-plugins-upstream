@@ -1,0 +1,17 @@
+name: geoskill-telecom-coverage-optimization
+display_name: 通信覆盖优化
+description: |
+  Simplified Okumura-Hata propagation with terrain and buildings to map coverage and blind spots for telecom planning
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-telecom-coverage-optimization.py
+runtime: python>=3.9
+tags:
+  - ai
+  - dem
+  - energy
+  - extraction
+  - gis
+  - optimization
+  - remote-sensing
+  - terrain

@@ -1,0 +1,89 @@
+{
+  "skill": "lidar-coastal-erosion",
+  "skill_version": "1.0.0",
+  "command": "lidar-coastal-erosion --bbox 116 39 117 40 --synthetic --dt 20 --output-dir ./_test_cli_dt --quiet",
+  "started_at": "2026-08-03T21:32:18.655657Z",
+  "finished_at": "2026-08-03T21:32:18.940890Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "dt_years": 20.0,
+    "threshold": 0.0,
+    "synthetic": true,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_dt\\elevation_change.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": 788.0481525020274,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_dt\\coastline_change.geojson",
+      "kind": "vector",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": 2,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_dt\\erosion_rates.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_diff_pixels": 15260,
+    "n_erosion_pixels": 9708,
+    "n_accretion_pixels": 5552,
+    "n_unchanged_pixels": 0,
+    "n_valid_transects": 140,
+    "mean_retreat_m": 4316.091940741731,
+    "mean_epr_m_per_yr": 215.80459703708658,
+    "erosion_volume_m3": 11517567646.642017,
+    "net_volume_m3": -11418752499.64024,
+    "frac_eroding": 1.0,
+    "synthetic_true_retreat_m": 4294.86243113605
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "lidar-coastal-erosion"
+  },
+  "error": null
+}

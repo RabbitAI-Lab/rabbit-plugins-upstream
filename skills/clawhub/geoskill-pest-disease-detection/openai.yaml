@@ -1,0 +1,14 @@
+name: geoskill-pest-disease-detection
+display_name: 病虫害遥感检测
+description: |
+  基于红边异常、热红外温度、纹理变化与多时相早期胁迫检测，识别疑似病虫害区域。Detects suspected pest/disease areas from red-edge anomaly, thermal, texture and multi-temporal early stress.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-pest-disease-detection.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - extraction
+  - gis
+  - remote-sensing
+  - time-series

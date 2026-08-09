@@ -61,6 +61,9 @@ All MCP tools use `POST` method:
 | `create_weekly_objective` | Create weekly goal | [schema](schemas/create_weekly_objective.json) |
 | `create_braindump_task` | Create backlog task | [schema](schemas/create_braindump_task.json) |
 | `create_channel` | Create channel/context | [schema](schemas/create_channel.json) |
+| `accept_meeting_invite` | RSVP yes to a meeting — **visible to organizer and attendees, confirm first** | [schema](schemas/accept_meeting_invite.json) |
+| `decline_meeting_invite` | RSVP no to a meeting — **visible to organizer and attendees, confirm first** | [schema](schemas/decline_meeting_invite.json) |
+| `log_user_feedback` | Send feedback to Sunsama — **retained externally, confirm wording** | [schema](schemas/log_user_feedback.json) |
 
 ## Common Endpoints
 

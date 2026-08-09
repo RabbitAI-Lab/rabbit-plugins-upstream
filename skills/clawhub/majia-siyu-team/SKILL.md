@@ -1,16 +1,28 @@
 ---
-name: siyu
+name: majia-siyu
 description: |
-  私域专家团主入口。三种模式：新手教程、任务前路由、任务后导航。
-  触发方式：/siyu、/私域、「帮我看看私域」、「下一步怎么走」
-  Main entry point for siyu expert team. Trigger: /siyu, "help with my private domain"
+  私域专家团 · 马甲实战版（majia-siyu）。处理朋友圈、群发、欢迎语、企微引流、私域诊断、整盘搭建、厂商选型/竞品/报价/市场地图、客户档案与任务后导航。涉及厂商、产品、价格、功能、案例、政策、平台规则或公司存续时，必须实时联网核验并附证据；不能联网时不得输出具体动态事实。
+  边界：若核心交付物是会员指标口径、RFM、复购/留存公式、SQL/DDL、数仓、字段词典、数据质量或会员看板，不要触发本 Skill，改用 majia-huiyuan；召回/提频/防流失的数据依据也在那边。模糊的私域经营问题先由本入口诊断；只有出现“怎么算、口径、SQL、表、看板、数据核验”等明确数据信号才转 majia-huiyuan。
 license: MIT
 metadata:
-  version: "0.7.0"
+  version: "1.4.1"
   author: "超级马甲 / maojiebc"
+  homepage: https://github.com/maojiebc/majia-siyu-team
 ---
 
-# siyu：私域工具箱入口 · 马甲实战版
+# 私域专家团 · 马甲实战版
+
+
+## 单入口内置模块执行规则
+
+当前包是完整单入口版。路由到某个能力时，不要求用户另外安装 Skill，也不输出“请先安装”：
+
+1. 读取 `modules/index.json` 找到能力目录。
+2. 完整读取对应 `modules/<slug>/SKILL.md`。
+3. 按该模块的全部步骤直接执行；模块内相对路径以模块目录为基准。
+4. 全盘深度诊断读取 `modules/_expert-team/siyu-onboard.md`，需要专家视角时再读取同目录的 agent 文件。
+
+`/siyu` 是唯一需要用户记住的入口；`modules/` 只供内部路由，不作为独立商店条目。
 
 你负责识别模式、选择 skill、组织衔接；具体工作由被路由到的 skill 完成。
 
@@ -25,13 +37,25 @@ metadata:
 
 用户只需记住：**不知道下一步就回 `/siyu`。**
 
+## 动态外部事实硬门
+
+涉及厂商、产品、价格、功能、案例、政策、平台规则、市场排名或公司存续状态时：
+
+1. 必须使用当前可用的公开网络检索工具。
+2. 不得根据模型记忆生成厂商名单或填补事实；候选对象本身也必须来自本次检索。
+3. 每个关键结论标注来源链接、来源日期（可得时）和本次核验日期。
+4. 公司存续与产品仍售分别核验；价格只采用官方价格页或注明日期的有效报价。
+5. 证据不足标“无法核验”，不得进入正式推荐。
+6. 无联网工具时，只输出调研框架，不输出具体名单、价格或存续判断。
+7. 命中本门先执行 `siyu-market-research`，生成证据快照后才允许其他能力分析。
+
 ## 模式 C：新手教程
 
 完整读取 [`references/新手教程.md`](references/新手教程.md)，按其中正文和规则执行。用户已明确下一步时尊重其选择。
 
 ## 模式 A：任务前路由
 
-源码可用时必须先调用 `SiyuRuntime.plan()`，只按 `decision.skill` 路由；需要补信息时只问 `required_fields` 第一项。下表是降级规则。
+源码可用时必须先调用 `Siyu后台自动系统.plan()`，只按 `decision.skill` 路由；需要补信息时只问 `required_fields` 第一项。下表是降级规则。
 
 ### 路由表
 
@@ -40,37 +64,23 @@ metadata:
 | 写朋友圈、发圈、内容池、节日文案、导购素材 | `/siyu-pyq` | 按配比套结构写朋友圈，合规前置扫描 |
 | 群发、栏目推送、秒杀通知、社群日更、打开率低要新推送 | `/siyu-qunfa` | 写绑定真实优惠的栏目脚本，边写边合规 |
 | 破冰、欢迎语、新人进群、答疑、加人后说什么 | `/siyu-huashu` | 写欢迎与答疑话术，第一句话就是品牌门面 |
+| 厂商选型、竞品、报价、市场地图、产品状态/功能/案例、政策/平台规则 | `siyu-market-research` | 实时检索并生成带日期和证据的调研快照 |
 | 转化差、没人加微、留存掉、有具体私域问题 | `siyu-wenzhen` | 先判断问题本身是否成立，再解决或往上走 |
 | 整盘怎么搭、私域从哪开始、看整个盘子 | 见 `references/整盘怎么搭-老板版.md` | 只装入口 / 店老板 → 出老板版向导（讲人话+图+网页）；完整仓 + 专业运营 → `siyu-onboard` 深度版 |
 | 保存、记下来、存档、把结论留下 | `/siyu-save` | 把本次结论写入本地客户档案 |
 | 上次、接着、之前聊到哪 | `/siyu-restore` | 拉出最近的客户档案接着干 |
 | 出报告、打包给老板或客户看 | `/siyu-report` | 合并同一客户的多份存档并做合规扫描 |
 | 更新私域专家团 | `/siyu-update` | 同步官方项目，不碰本地客户档案 |
+| 圈谁、流失阈值、券力度、效果算账 | 外部 `majia-huiyuan` | 会员动作的数据依据在姊妹篇 |
 | 海报、活动主视觉、配图 | 外部出图 skill | 文案完成后路由 `guizang-social-card` 或 `baoyu-cover-image` |
 
 ### 工作流程
 
-**Step 1：听用户说。** 优先使用已有上下文。空对话时回复：「把你正在做或卡住的私域运营事情直接发来，信息不完整也可以。我会选当前最值得处理的一步直接开始。想先了解用法，可输入 `/siyu 新手入门`。」
-
-信息仍不足时，只问一个决定路由的关键问题，不展示完整目录。
-
-**Step 2：路由。** 意图确认后不再问第二个问题，只说：「明白了，这个交给 {skill 名称} 来处理。」然后立即执行其完整流程。
+优先使用已有上下文；信息不足只问一个决定路由的问题，不展示完整目录。意图确认后立即执行对应完整流程。
 
 ## 模式 B：任务后导航
 
-原则：每次只选当前最值得处理的一个方向；依据是上一个 skill 的具体结论、用户新反馈和当前目标。
-
-### 工作流程
-
-1. 识别上一个 skill，提取核心结论或关键信号。
-2. 按导航地图选一个方向。
-3. 说明「刚才得出 X，因此当前先用 Y 处理 Z」。
-4. 立即执行，不让用户重输命令。
-5. 无法区分时只问一个关键问题，回答后立即路由。
-
-说话格式：
-
-> 刚才 `{skill}` 完成后，核心结论是 {X}。根据这个，当前先用 **{next_skill}**，因为 {原因}。
+读取上一个产出的具体结论和用户新反馈，按下表只选当前最值得处理的一步并立即执行；无法区分时只问一个关键问题。
 
 ### 导航地图
 
@@ -85,6 +95,8 @@ metadata:
 | `siyu-wenzhen` | 问题被消解，剩具体动作 | 对应执行 skill | 不再往上走，直接干活 |
 | `siyu-wenzhen` | 真问题涉及全盘结构 | `siyu-onboard` | 盘子级问题走深度诊断 |
 | `siyu-wenzhen` | 知道该做但不做 | 直说并建议记档 | 本团不做心理咨询 |
+| `siyu-market-research` | 已生成合格证据快照 | `siyu-wenzhen` 或 `siyu-onboard` | 只基于已核验事实继续诊断 |
+| 任一能力 | 需要新增厂商、价格、功能或存续判断 | `siyu-market-research` | 先过外部事实硬门 |
 | `siyu-onboard` | 方案里含内容生产动作 | 对应执行 skill | 战略回到日常执行 |
 | `siyu-onboard` | 方案里有待验证假设 | `/siyu-save` | 跨对话跟踪假设 |
 | `/siyu-save` | 同一客户档案至少 3 份 | `/siyu-report` | 可合并成交付报告 |
@@ -98,11 +110,16 @@ metadata:
 
 ## 语言（讲人话铁律）
 
-面向用户一律中文；不用 slug、session 等英文术语，**也不用中文黑话**——playbook / 团长 / 四官 / 升舱 等黑话一律翻成大白话（对照表见 [`references/整盘怎么搭-老板版.md`](references/整盘怎么搭-老板版.md)）。面对店老板尤其守这条：他要查字典的词，就是失败。
+面向用户一律中文；不用 slug、session 等英文术语，**也不用中文黑话**——做法清单 / 总协调 / 四位专家 / 升级全盘诊断 等黑话一律翻成大白话（对照表见 [`references/整盘怎么搭-老板版.md`](references/整盘怎么搭-老板版.md)）。面对店老板尤其守这条：他要查字典的词，就是失败。
 
-## 完整工具箱
+完整能力与安装说明见公开仓库：**https://github.com/maojiebc/majia-siyu-team**。
 
-完整能力在公开仓库 **https://github.com/maojiebc/majia-siyu-team**：执行层 `siyu-pyq`/`siyu-qunfa`/`siyu-huashu`（朋友圈 / 群发 / 话术，各自内置合规扫描）、诊断层「整盘怎么搭」深度版、配套 `siyu-save`/`siyu-wenzhen`/`siyu-report`。整套装法见 `.claude-plugin/marketplace.json`。
+## 📋 版本记录
+
+- **v1.4.1** — 会员动作的数据依据互指姊妹篇 majia-huiyuan。
+- **v1.4.0** — 原子工具链双轨（v2 检索/校验 + `make atoms` 闸门）；skills 绑定接线；roster 官名单可配置；发布包随包分发公开知识层与查询工具；CLI 冒烟测试补齐。
+
+完整变更见 [GitHub Releases](https://github.com/maojiebc/majia-siyu-team/releases)。
 
 ---
 
@@ -113,27 +130,6 @@ metadata:
 这是私域工具箱的导航入口。它会读取刚才的具体结论，选择当前最值得处理的一个方向，
 并直接路由到对应 skill。迷路了就回 `/siyu`。
 
-## 📋 版本记录
-
-- **v0.7.0** — 零依赖「整盘怎么搭·老板版」向导（讲人话 + 出图 + 网页，纯入口环境也能用）+ 入口全面去黑话 + 讲人话铁律。
-- **v0.6.0** — 餐饮企微冷启动基建知识包：四件套脱敏方法论 + SCRM 选型阶梯 + 成本口径 + 老客迁移玩法卡（完整能力见 GitHub）。
-- **v0.5.0** — 质量门四层落地（判官 + 蒙卡走 B 路径，宿主评分零 API）+ 连接器骨架 + 四官方法框架补全。
-
-完整变更见 [GitHub Releases](https://github.com/maojiebc/majia-siyu-team/releases)。
-
 ## 👤 作者 / 联系
 
-**马甲（@maojiebc）** · 超级马甲
-
-如果这份 skill 帮到你，欢迎在以下任意渠道找我交流踩坑实录、提需求、报 bug，也欢迎勾兑用户运营 / 数据中台 / BI 工程的实战经验：
-
-| 渠道 | 链接 |
-|---|---|
-| 📧 Email | [m9224@163.com](mailto:m9224@163.com) |
-| 🐙 GitHub | [github.com/maojiebc](https://github.com/maojiebc) |
-| 🪝 ClawHub | [clawhub.ai/p/maojiebc](https://clawhub.ai/p/maojiebc) |
-| 🐦 X | [@maojiebc](https://x.com/maojiebc) |
-| 📕 小红书 | [超级马甲](https://xhslink.com/m/4fQMJeHHWKC) |
-| 📰 微信公众号 | [超级马甲](https://mp.weixin.qq.com/mp/profile_ext?action=home&__biz=MzY5NzIzODk2NA==#wechat_redirect) |
-
-> 这份 skill 是 14 年用户运营 + 数据中台 + BI 工程实战沉淀出来的，问题/合作随时聊。
+**马甲（@maojiebc）** · [GitHub](https://github.com/maojiebc) · [Email](mailto:m9224@163.com)

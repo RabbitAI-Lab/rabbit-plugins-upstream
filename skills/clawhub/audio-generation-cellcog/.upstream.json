@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/audio-generation-cellcog",
   "slug": "audio-generation-cellcog",
   "ownerHandle": null,
-  "version": "1.0.13",
-  "updatedAt": 1784278536435,
-  "contentHash": "f0faadfc445244daed94d623986ddd3e24948bba031b4d3d0314cff839e38371",
-  "fetchedAt": "2026-07-26T18:11:59.643Z"
+  "version": "1.0.15",
+  "updatedAt": 1785737311845,
+  "contentHash": "1e979b01b5a71ad94725509d33294a3f6d4943cdaac62cc248274c1279796800",
+  "fetchedAt": "2026-08-09T08:25:42.586Z"
 }

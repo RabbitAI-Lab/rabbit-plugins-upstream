@@ -1,0 +1,26 @@
+{
+  "skill_name": "github-fetch",
+  "evals": [
+    {
+      "id": 1,
+      "name": "download-ffmpeg-release-asset",
+      "prompt": "下载 GitHub 上 BtbN/FFmpeg-Builds 的 release 资产 ffmpeg-n7.1-latest-linux64-lgpl-shared-7.1.tar.xz 到 /tmp/gf-eval1，直连很慢，用代理镜像，下载后做 sha256 校验并解压，告诉我解压后的 bin 目录在哪",
+      "expected_output": "文件成功下载到 /tmp/gf-eval1，通过校验，解压后有 bin/ffmpeg 可执行文件，报告了代理来源和速度",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "clone-small-repo-recursive",
+      "prompt": "clone GitHub 仓库 badlogic/pi-skills 到 /tmp/gf-eval2，含子模块，直连不行就用代理",
+      "expected_output": "/tmp/gf-eval2/pi-skills 存在且包含 SKILL.md 文件（仓库结构完整）",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "resolve-release-by-pattern",
+      "prompt": "查 BtbN/FFmpeg-Builds 最新 release 的资产列表，匹配文件名包含 n7.1 和 linux64 的资产，下载第一个匹配的（不用解压），放到 /tmp/gf-eval3",
+      "expected_output": "通过 API 查询到资产列表，按正则选出匹配资产并下载成功，报告了文件名",
+      "files": []
+    }
+  ]
+}

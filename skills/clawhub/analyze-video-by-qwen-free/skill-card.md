@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyze Video By Qwen Free uses Qwen 3.5 Plus through Alibaba Cloud DashScope to summarize and describe local video files with fixed default analysis settings. <br>
+Analyze Video By Qwen Free helps agents analyze local video files with Qwen 3.5 Plus through Alibaba Cloud DashScope and return basic scene descriptions and content summaries. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Creators and agent users use this skill to get quick scene descriptions and content summaries for local video files. It is intended for default-parameter video overviews, not remote URL analysis, custom prompts, custom frame rates, high-precision action recognition, or content moderation. <br>
+External users, developers, and creators use this skill to submit local video files for quick scene description and basic content understanding through DashScope, using default frame sampling and prompt settings. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Analyzed video content may be sent to Alibaba Cloud DashScope. <br>
-Mitigation: Use the skill only for videos whose confidentiality, privacy, and regulatory requirements are compatible with the provider's data handling terms. <br>
-Risk: The documented API-key check could display or log the DashScope API key. <br>
-Mitigation: Check configuration without printing the secret value, and avoid sharing API keys in chat, logs, or command output. <br>
+Risk: The skill sends local video content to Alibaba Cloud DashScope for remote analysis. <br>
+Mitigation: Use it only with media approved for external processing, and avoid sensitive or regulated videos unless an appropriate approval path is in place. <br>
+Risk: The documented API key check command may expose credentials in terminal output or logs. <br>
+Mitigation: Configure credentials carefully and avoid commands or logging practices that print API keys. <br>
+Risk: The trigger language is broader than the actual video-analysis behavior. <br>
+Mitigation: Use the skill specifically for local video content analysis and review proposed commands before execution. <br>
 
 
 ## Reference(s): <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/analyze-video-by-qwen-free) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON-shaped result examples] <br>
+**Output Format:** [Markdown guidance with shell command examples and JSON-shaped analysis output.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require local DashScope API-key configuration and may send analyzed video content to Alibaba Cloud DashScope.] <br>
+**Other Properties Related to Output:** [Uses default FPS=2 and a default prompt; outputs a basic scene/content summary or error guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+1.0.2 (source: ClawHub release evidence; artifact frontmatter says 1.0.0) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,0 +1,14 @@
+name: geoskill-lulc-accuracy-assessment
+display_name: 分类精度评估
+description: |
+  分类栅格对参考样本的混淆矩阵精度评估：OA/Kappa/PA/UA/F1，分层随机抽样验证点
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-lulc-accuracy-assessment.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - land-use
+  - raster
+  - remote-sensing

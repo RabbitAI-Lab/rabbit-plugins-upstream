@@ -14,10 +14,10 @@ Validated demand: Agent users show strong demand for ontology-style workflows on
 
 ## 来源证据
 
-- clawhub-popular-skill：[Popular Clawhub skill demand: Self-Improving + Proactive Agent has 205,564 downloads](https://clawhub.ai/skills/self-improving)
-- clawhub-popular-skill：[Popular Clawhub skill demand: ontology has 194,568 downloads](https://clawhub.ai/skills/ontology)
-- clawhub-popular-skill：[Popular Clawhub skill demand: Multi Search Engine has 157,954 downloads](https://clawhub.ai/skills/multi-search-engine)
-- clawhub-popular-skill：[Popular Clawhub skill demand: AdMapix has 132,642 downloads](https://clawhub.ai/skills/admapix)
+- clawhub-popular-skill：[Popular Clawhub skill demand: Self-Improving + Proactive Agent has 206,583 downloads](https://clawhub.ai/skills/self-improving)
+- clawhub-popular-skill：[Popular Clawhub skill demand: ontology has 195,705 downloads](https://clawhub.ai/skills/ontology)
+- clawhub-popular-skill：[Popular Clawhub skill demand: Multi Search Engine has 158,814 downloads](https://clawhub.ai/skills/multi-search-engine)
+- clawhub-popular-skill：[Popular Clawhub skill demand: AdMapix has 132,862 downloads](https://clawhub.ai/skills/admapix)
 - segmentfault-search：[HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
 - segmentfault-search：[javascript](https://segmentfault.com/t/javascript)
 - segmentfault-search：[typescript](https://segmentfault.com/t/typescript)
@@ -25,7 +25,7 @@ Validated demand: Agent users show strong demand for ontology-style workflows on
 - segmentfault-search：[第十章：OntologyOps 完整方案](https://segmentfault.com/a/1190000047947726)
 - segmentfault-search：[Comp 3710 人工智能](https://segmentfault.com/a/1190000041581431)
 - segmentfault-search：[4种通过LLM进行文本知识图谱的构建方法对比介绍](https://segmentfault.com/a/1190000044569069)
-- github-issues：[[Architecture][Enterprise Context] 회사 온톨로지·Knowledge Graph·권한 기반 Context Resolver 설계](https://github.com/nodease/mbased/issues/643)
+- github-issues：[Remaining Vulkan porting tasks.](https://github.com/bryanedds/Nu/issues/1415)
 
 ## 这个技能如何满足需求
 

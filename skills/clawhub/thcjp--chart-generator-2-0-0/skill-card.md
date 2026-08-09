@@ -1,5 +1,5 @@
 ## Description: <br>
-Chart Generator 2 0 0 helps agents turn structured or textual data into SVG bar, line, and pie charts for reports and data visualization. <br>
+Chart Generator 2 0 0 helps agents generate SVG charts and simple data visualizations such as bar, line, pie, and sparkline-style charts from supplied data. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, analysts, and external agent users use this skill to generate chart outputs from datasets or chart requests for analysis, reporting, and visualization workflows. <br>
+Developers, analysts, and automation users can use this skill to produce lightweight chart outputs and chart-generation guidance from structured or textual data. The artifact states it is not intended for real-time stream processing or complex decisions that require human judgment. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill requests local command-execution capability without clearly limiting when commands are needed. <br>
-Mitigation: Review proposed commands before allowing execution and run the skill only in an environment appropriate for chart-generation work. <br>
-Risk: Local command execution can expose sensitive files or environment values if used on sensitive inputs or in a secrets-bearing shell. <br>
-Mitigation: Use non-sensitive chart inputs, avoid exposing secrets in the runtime environment, and prefer an isolated workspace. <br>
+Risk: The security evidence rates the skill as suspicious because it requests broad read, write, and command execution authority beyond a tightly scoped SVG chart generator. <br>
+Mitigation: Install and run it only in a restricted workspace, grant least-privilege file access, and review proposed commands and file writes before execution. <br>
+Risk: The security evidence notes API, credential, file-processing, and command-execution behavior. <br>
+Mitigation: Avoid providing secrets or broad workspace access unless the publisher clarifies exact commands, files, API calls, and output behavior. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/chart-generator-2-0-0) <br>
-- [Homepage](https://skillhub.cn) <br>
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/chart-generator-2-0-0) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Files, Code, Text] <br>
-**Output Format:** [SVG chart output with JSON-style result metadata and optional text chart examples] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files] <br>
+**Output Format:** [Markdown guidance with JSON examples, shell snippets, and SVG chart file outputs] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports bar, line, and pie chart requests; not intended for real-time streaming data.] <br>
+**Other Properties Related to Output:** [May include SVG charts, ASCII chart examples, status metadata, and setup guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.2 (source: server release evidence; artifact frontmatter reports 1.0.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

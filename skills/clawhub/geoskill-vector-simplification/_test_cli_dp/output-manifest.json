@@ -1,0 +1,62 @@
+{
+  "skill": "vector-simplification",
+  "skill_version": "1.0.0",
+  "command": "vector-simplification --bbox 116 39 117 40 --synthetic --method douglas-peucker --tolerance 0.001 --output-dir ./_test_cli_dp --quiet",
+  "started_at": "2026-08-03T18:01:25.517913Z",
+  "finished_at": "2026-08-03T18:01:25.855872Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "method": "douglas-peucker",
+    "tolerance": 0.001,
+    "synthetic": true,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_dp\\simplified.geojson",
+      "kind": "vector",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": 4,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_dp\\simplification_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "douglas-peucker",
+    "n_features": 4,
+    "input_vertices": 259,
+    "output_vertices": 158,
+    "vertex_reduction_pct": 39.0,
+    "area_retention": 0.994885
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "vector-simplification"
+  },
+  "error": null
+}

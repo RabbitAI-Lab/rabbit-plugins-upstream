@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/azure-cli",
   "slug": "azure-cli",
   "ownerHandle": "thcjp",
-  "version": "1.0.0",
-  "updatedAt": 1778485848771,
-  "contentHash": "c8aa7d4c1751ee8e3b40df82b2c44cde8fbfabd12e2657593577c2dbcf4bcea6",
-  "fetchedAt": "2026-07-26T18:06:12.700Z"
+  "version": "1.0.2",
+  "updatedAt": 1785664159305,
+  "contentHash": "10483de95e0c0eb7ae32118d2a3e44e25164f0c352bf38b19da204123edbec8b",
+  "fetchedAt": "2026-08-09T08:30:17.331Z"
 }

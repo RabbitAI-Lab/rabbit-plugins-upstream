@@ -43,6 +43,7 @@ python {skill_base}/core/data_parser.py <file1> <file2> ... [--merge] [--summary
 - Identical columns → vertical concat (adds a `source_file` column to indicate each row's origin file).
 - ≥50% overlap → horizontal join on shared key.
 - No common structure → error (advise analyzing separately).
+- `--merge --summary` 模式下 stdout 为纯 JSON，合并方式体现在 JSON 的 `merge_type` 字段（不打印额外文本行，保证机器可读）。
 
 **Formats:** CSV/.tsv/.txt (auto-detect delimiter + encoding), .xlsx/.xls (first non-empty sheet), .json (array format + 1-level nested objects).
 
@@ -51,6 +52,26 @@ python {skill_base}/core/data_parser.py <file1> <file2> ... [--merge] [--summary
 {"error": "<message>", "code": <int>, "code_name": "<NAME>", "details": {...}}
 ```
 The `details` field always includes a `suggestion` for recovery. Other exceptions (e.g. `KeyboardInterrupt`) are printed as plain text.
+
+**Error codes:**
+
+| Code | Name | Meaning |
+|------|------|---------|
+| 1001 | FILE_NOT_FOUND | File path does not exist |
+| 1002 | FILE_PERMISSION_DENIED | Path is not a regular file |
+| 1003 | FILE_FORMAT_INVALID | Unsupported file extension |
+| 1004 | FILE_SIZE_EXCEEDED | File exceeds 100 MB limit |
+| 2001 | DATA_PARSE_ERROR | Parsing failed (encoding, structure, etc.) |
+| 2003 | DATA_EMPTY | File or cleaned data is empty |
+| 2004 | DATA_TYPE_MISMATCH | Data type mismatch |
+| 3001 | TRANSFORM_EXEC_ERROR | Transform code execution failed (blacklist/AST/timeout) |
+| 3002 | TRANSFORM_NO_RESULT | Transform code did not produce `result` variable |
+| 3003 | TRANSFORM_INVALID_RESULT | `result` is not a DataFrame |
+| 3004 | TRANSFORM_EMPTY_RESULT | `result` DataFrame is empty |
+| 4001 | CHART_GENERATION_ERROR | Chart generation failed |
+| 4002 | CHART_TYPE_UNSUPPORTED | Unsupported chart type |
+| 4003 | CHART_CONFIG_ERROR | Axis field does not exist in DataFrame |
+| 9999 | UNKNOWN_ERROR | Unclassified error |
 
 ---
 

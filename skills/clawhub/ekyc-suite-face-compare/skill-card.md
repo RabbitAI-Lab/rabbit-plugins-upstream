@@ -1,5 +1,5 @@
 ## Description: <br>
-eKYC Suite Face Compare compares two consented face images for KYC and eKYC selfie verification and returns a structured 0-100 similarity score from the configured eKYC Suite Cloud backend. <br>
+eKYC Suite Face Compare is a focused KYC face-comparison skill for AI agents that compares two consented face images and returns a structured similarity score. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,18 +11,18 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Agent developers, fintech onboarding teams, compliance engineers, and identity-verification builders use this skill to compare two authorized face images as one signal in human-reviewed KYC onboarding and selfie-to-document checks. <br>
+Agent developers, fintech onboarding teams, compliance engineers, and identity-verification builders use this skill to compare two consented face images for selfie verification, selfie-to-document checks, and human-reviewed KYC onboarding. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill processes biometric face images by sending them to the configured eKYC Suite Cloud endpoint. <br>
-Mitigation: Use it only with user authorization for biometric processing, defined retention and access policies, and an operator-controlled HTTPS endpoint. <br>
-Risk: A similarity score can be over-relied on as proof of identity. <br>
-Mitigation: Treat the score as one verification signal, apply deployment-specific thresholds and retry rules, and route uncertain or high-impact outcomes to human review. <br>
-Risk: Optional attribution environment variables are forwarded as request headers when set. <br>
-Mitigation: Keep optional source, client, workspace, and install context values free of sensitive data that should not be sent to the backend. <br>
+Risk: Face images are sensitive biometric data and are sent to a configured HTTPS eKYC backend. <br>
+Mitigation: Use the skill only with user authorization, a trusted EKYC_CLOUD_ENDPOINT, and clear backend retention, access, and compliance controls. <br>
+Risk: A similarity score can be misused as the sole basis for a high-impact identity decision. <br>
+Mitigation: Treat the score as one verification signal and apply deployment-specific thresholds, retry rules, and human review. <br>
+Risk: Endpoint or credential misconfiguration could route submitted media to an unintended backend. <br>
+Mitigation: Configure only a trusted HTTPS endpoint, keep EKYC_CLOUD_API_KEY protected, and verify deployment settings before processing images. <br>
 
 
 ## Reference(s): <br>
@@ -35,13 +35,13 @@ Mitigation: Keep optional source, client, workspace, and install context values 
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [JSON result with concise explanatory text or Markdown guidance] <br>
+**Output Type(s):** [json, shell commands, guidance] <br>
+**Output Format:** [JSON response plus Markdown command guidance] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a similarity score and available backend response metadata; the score should be treated as a verification signal rather than standalone legal identity proof.] <br>
+**Other Properties Related to Output:** [Returns a structured 0-100 similarity score and cloud response metadata from the configured eKYC backend.] <br>
 
 ## Skill Version(s): <br>
-1.0.10 (source: frontmatter and server release metadata) <br>
+1.0.15 (source: frontmatter, changelog, release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -3,7 +3,7 @@ name: avatar-multi-scene
 description: Use when someone wants the same person hosting several clips — multi-segment UGC, comparison reels, or mixed speaking and animated scenes with continuity.
 license: MIT
 metadata:
-  version: "1.0.7"
+  version: "1.0.9"
   package: pruna-skills
 ---
 
@@ -13,7 +13,7 @@ Install and load these skills before generating (skip if already in context via 
 
 | Skill | Description | Install |
 | --- | --- | --- |
-| `p-image` | Use when someone wants a fast AI image — product shots, hero visuals, mood boards, or draft photos from a text prompt. | `npx skills add PrunaAI/pruna-skills@p-image -y` |
+| `p-image` | Use when someone explicitly wants the fastest, cheapest photo generation — mood boards, bulk panels, or quick iterations — not when controlled photoreal or in-image text is needed. | `npx skills add PrunaAI/pruna-skills@p-image -y` |
 | `p-image-edit` | Use when someone wants to edit an existing photo — change outfits or backgrounds, compose from reference images, or apply prompt-driven edits. | `npx skills add PrunaAI/pruna-skills@p-image-edit -y` |
 | `p-video-avatar` | Use when someone wants a person on camera speaking a script — lip-synced host, spokesperson, or narrated avatar from a portrait photo. | `npx skills add PrunaAI/pruna-skills@p-video-avatar -y` |
 | `p-video-animate` | Use when someone wants a photo to move like another video — motion transfer, dance remixes, or performance variations from a template clip. | `npx skills add PrunaAI/pruna-skills@p-video-animate -y` |
@@ -66,6 +66,8 @@ Follow this skill in **plain language** when talking to the person requesting th
 
 ## Intake: ask before generating
 
+Open intake → **`generation-diversity`** clarification intake.
+
 **Do not** call `POST /v1/predictions` until the user has answered and you have recorded the answers (use defaults only if the user explicitly opts in):
 
 | Topic | Questions |
@@ -74,6 +76,7 @@ Follow this skill in **plain language** when talking to the person requesting th
 | **Scope** | How many speaking scenes or beats? Approximate total runtime after assembly? |
 | **Cast** | Who speaks, in what order? One character throughout or multiple? |
 | **Look** | Aspect for stills and feel (`9:16` / `16:9`)? Avatar output `720p` or `1080p`? |
+| **Media source** | **Generate** hero plates with `p-image` / edits vs **upload-only** references; user-owned motion templates for animate beats? |
 | **Voice** | For **each named character**, pick **one** Pruna `voice` and `voice_language` and **reuse it in every scene** that character speaks. Any words that must be pronounced exactly (names, acronyms)? |
 | **Style** | Agreed **style bible** line for all image prompts? |
 | **Character sheet** | Per speaker: age range, wardrobe baseline, hair, skin/realism level, personality adjectives—record before hero generation (see **Character sheet** below). |

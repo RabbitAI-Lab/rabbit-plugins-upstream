@@ -1,0 +1,14 @@
+name: geoskill-solar-radiation-modeling
+display_name: 太阳辐射建模
+description: |
+  天文辐射+地形遮蔽+大气透过率建模，输出地表太阳辐射量栅格
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-solar-radiation-modeling.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - energy
+  - gis
+  - raster
+  - remote-sensing

@@ -59,7 +59,8 @@ def main():
         payload = json.loads(sys.stdin.read() or '{}')
     except json.JSONDecodeError as e:
         _log(f'stdin not JSON: {e}')
-        print(json.dumps({'verdict': 'PASS', 'reason': 'critic_unavailable', 'rewrite': ''}))
+        # [HARDEN-073] fail closed: HOLD, never PASS, when the critic can't run
+        print(json.dumps({'verdict': 'HOLD', 'reason': 'critic_bad_input', 'rewrite': ''}))
         return 0
 
     draft   = (payload.get('draft_reply') or '').strip()
@@ -94,21 +95,21 @@ def main():
     try:
         out = subprocess.run(cmd, capture_output=True, text=True, timeout=TIMEOUT)
     except subprocess.TimeoutExpired:
-        _log('claude CLI timed out — defaulting to PASS')
-        print(json.dumps({'verdict': 'PASS', 'reason': 'critic_timeout', 'rewrite': ''}))
+        _log('claude CLI timed out — HOLD (fail closed)')  # [HARDEN-073]
+        print(json.dumps({'verdict': 'HOLD', 'reason': 'critic_timeout', 'rewrite': ''}))
         return 0
     except FileNotFoundError:
-        _log('claude CLI missing — defaulting to PASS')
-        print(json.dumps({'verdict': 'PASS', 'reason': 'critic_unavailable', 'rewrite': ''}))
+        _log('claude CLI missing — HOLD (fail closed)')  # [HARDEN-073]
+        print(json.dumps({'verdict': 'HOLD', 'reason': 'critic_unavailable', 'rewrite': ''}))
         return 0
     except Exception as e:
-        _log(f'claude CLI error: {e}')
-        print(json.dumps({'verdict': 'PASS', 'reason': f'critic_error:{e}', 'rewrite': ''}))
+        _log(f'claude CLI error: {e}')  # [HARDEN-073]
+        print(json.dumps({'verdict': 'HOLD', 'reason': f'critic_error:{e}', 'rewrite': ''}))
         return 0
 
     if out.returncode != 0:
-        _log(f'claude CLI exit {out.returncode}: {out.stderr[:200]}')
-        print(json.dumps({'verdict': 'PASS', 'reason': 'critic_nonzero_exit', 'rewrite': ''}))
+        _log(f'claude CLI exit {out.returncode}: {out.stderr[:200]}')  # [HARDEN-073]
+        print(json.dumps({'verdict': 'HOLD', 'reason': 'critic_nonzero_exit', 'rewrite': ''}))
         return 0
 
     raw = (out.stdout or '').strip()
@@ -119,16 +120,16 @@ def main():
             raw = raw[4:].strip()
     try:
         parsed = json.loads(raw)
-        verdict = (parsed.get('verdict') or 'PASS').upper()
+        verdict = (parsed.get('verdict') or 'HOLD').upper()
         if verdict not in ('PASS', 'REVISE', 'BLOCK'):
-            verdict = 'PASS'
+            verdict = 'HOLD'  # [HARDEN-073] unknown verdict = fail closed
         rewrite = (parsed.get('rewrite') or '').strip()
         reason  = (parsed.get('reason') or '').strip()[:200]
         _log(f'verdict={verdict} reason={reason!r}')
         print(json.dumps({'verdict': verdict, 'reason': reason, 'rewrite': rewrite}))
     except json.JSONDecodeError:
-        _log('critic CLI returned non-JSON — defaulting to PASS')
-        print(json.dumps({'verdict': 'PASS', 'reason': 'critic_unparseable', 'rewrite': ''}))
+        _log('critic CLI returned non-JSON — HOLD (fail closed)')  # [HARDEN-073]
+        print(json.dumps({'verdict': 'HOLD', 'reason': 'critic_unparseable', 'rewrite': ''}))
     return 0
 
 

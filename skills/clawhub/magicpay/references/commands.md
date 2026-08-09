@@ -266,28 +266,24 @@ owner and continue from that state. Use typed action approval before any final
 Pay, Book, Send, Submit, login, identity submission, account change, or other
 consequential action.
 
-### `magicpay fill-field --request-json <json>`
+### `magicpay fill-field --field-ref <fieldRef> --target <target> [--item-ref <itemRef> | --item-id <id>] [--projection-part <part>]`
 
 Use `fill-field` only as a lower-automation recovery step after `plan-fill` /
-`apply-fill` missed a field or matched the wrong target. The agent supplies
-explicit value-free assignments. Each assignment identifies an approved Memory
-field and one currently observed browser target:
+`apply-fill` missed a field or matched the wrong target. One invocation fills
+one explicit value-free Memory field into one currently observed browser
+target:
 
-```json
-{
-  "assignments": [
-    {
-      "itemRef": "mem_profile",
-      "fieldRef": "field.email",
-      "targetRef": "selector:1"
-    }
-  ]
-}
+```bash
+magicpay fill-field --field-ref field.email --target 1
+magicpay fill-field --field-ref field.email --target 1 --item-ref mem_profile
+magicpay fill-field --field-ref field.birth_date --target 2 --projection-part year
 ```
 
-Use `itemRef` or `itemId` to narrow the Memory item when needed, `fieldRef` to
-select the field, and `targetRef` from the current browser observation. Do not
-invent refs; if the target evidence is stale, re-observe or rerun
+Use `--item-ref` or `--item-id` to narrow the Memory item when needed,
+`--field-ref` to select the field, and `--target` for the current observed
+browser target. `--target` accepts the bare observed id such as `1` or the
+canonical ref such as `selector:1`; prefer the bare id from observation output.
+Do not invent refs; if the target evidence is stale, re-observe or rerun
 `plan-fill` instead.
 
 The command fetches the current Memory catalog, resolves each assignment to a

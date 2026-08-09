@@ -1,0 +1,17 @@
+name: geoskill-crop-counting-yield
+display_name: 作物计数与产量估算
+description: |
+  冠层峰值检测加分水岭分割统计株数，结合经验模型估算产量。Counts plants via canopy peak detection plus watershed segmentation and estimates yield with an empirical model.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-crop-counting-yield.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - analysis
+  - dem
+  - extraction
+  - gis
+  - hydrology
+  - lidar
+  - machine-learning

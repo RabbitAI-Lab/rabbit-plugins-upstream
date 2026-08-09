@@ -20,8 +20,9 @@ Guidance:
 - Use `mbs excel-worksheet range set-formula` when you need to persist one worksheet formula or a batch of worksheet formulas.
 - Use `mbs formula batch-set` when you need the workbook-level batch alias for many formulas across worksheets.
 - Treat `mbs formula set` as a compatibility alias for single worksheet formula writes; prefer the `excel-worksheet range` form in new examples.
-- Use `mbs db-table range set-formula` when the target is a PG/SheetTable-backed table.
-- Use `mbs excel-worksheet range calculate` for temporary preview or debugging.
+- Use `mbs db-table range set-formula` when the target is a Base-backed table.
+- Use `mbs excel-worksheet range calculate --no-save-result` for temporary preview or debugging.
+- Use `mbs formula calculate --save-result` or `mbs excel-worksheet range calculate --save-result` only when a one-cell calculation should also persist the formula/result.
 - Use `mbs excel-worksheet calculate` for one-sheet refresh after data changes.
 - Use `mbs workbook calculate` when downstream formulas span worksheets.
 - Use `mbs excel-worksheet check-error` after writes or recalculation when the result worksheet must be free of worksheet errors.
@@ -40,7 +41,8 @@ mbs db-table range set-formula --doc-id <DOC_ID> --name Orders --cell G2 --formu
 mbs workbook calculate --doc-id <DOC_ID>
 mbs excel-worksheet calculate --doc-id <DOC_ID> --worksheet-name <SHEET>
 mbs formula read --doc-id <DOC_ID> --worksheet-name <SHEET> --range A1:E20
-mbs excel-worksheet range calculate --doc-id <DOC_ID> --worksheet-name <SHEET> --cell E2 --formula '=SUM(B2:D2)'
+mbs excel-worksheet range calculate --doc-id <DOC_ID> --worksheet-name <SHEET> --cell E2 --formula '=SUM(B2:D2)' --no-save-result
+mbs formula calculate --doc-id <DOC_ID> --worksheet-name <SHEET> --cell E2 --formula '=SUM(B2:D2)' --save-result
 mbs excel-worksheet check-error --doc-id <DOC_ID> --worksheet-name <SHEET>
 mbs formula lineage --doc-id <DOC_ID> --worksheet-name <SHEET> --cell E2 --format tree
 ```
@@ -51,7 +53,7 @@ For SQL-over-sheet work, choose the persistence model deliberately:
   `db-table range set-formula` when the workbook should recalculate from source
   tables later.
 - Use `db-table create-from-query` when the result should become a reusable
-  PG/SheetTable handoff table. Current CLI versions still try to keep the
+  Base-backed handoff table. Current CLI versions still try to keep the
   source `=SQL(...)` formula in the final table cell, defaulting to `A1`, and
   report that attempt in `context.formula_trace`.
 - For user-facing silver handoffs such as `OrderDetailsStructureInput`, treat
@@ -74,7 +76,9 @@ Treat them like writing a formula into a cell in Excel or Google Sheets.
 | `mbs excel-worksheet range set-formula ... --formula '=SQL(...)'` succeeds | Formula is saved in the target cell | Recalculated immediately by default |
 | Same command with `--skip-recalculation` | Formula is still saved in the target cell | Existing displayed value may remain stale until a calculate command runs |
 | Source worksheet data changes later | Formula remains saved | SQL spill result may need `mbs excel-worksheet calculate` or `mbs workbook calculate` |
-| `mbs excel-worksheet range calculate` | Does not document a persistent save workflow | Useful for preview/debugging a formula result |
+| `mbs excel-worksheet range calculate ... --no-save-result` | Formula/result are not saved | Useful for preview/debugging a formula result |
+| `mbs formula calculate ... --save-result` or `mbs excel-worksheet range calculate ... --save-result` | Calculated formula/result are saved when the backend supports it | Useful for single-cell write-through calculation |
+| Same calculate command with the flag omitted | CLI does not send `save_result` | Backend default applies; avoid relying on this when persistence matters |
 
 Verification should check both layers when precision matters:
 
@@ -103,18 +107,18 @@ Default flow:
 8. Verify the spill result with `excel-worksheet range read`, `excel-table sample`, or `workbook list-worksheets`
 9. Run `excel-worksheet check-error` on the worksheet before claiming the report is healthy
 
-For reusable PG/SheetTable handoff tables, replace steps 6-9 with
+For reusable Base-backed handoff tables, replace steps 6-9 with
 `mbs db-table create-from-query --sql-file ... --verify`, then inspect
 `context.formula_trace` in JSON output and sample the created table. If
 `formula_trace.persisted` is false, report the traceability limitation instead
 of implying the created table still contains the source formula in `A1`.
 
-For temporary validation, use `mbs excel-worksheet range calculate` with the
-`=SQL(...)` formula on a disposable target cell or worksheet.
+For temporary validation, use `mbs excel-worksheet range calculate --no-save-result`
+with the `=SQL(...)` formula on a disposable target cell or worksheet.
 
 ## 5. SQL authoring rules
 
-Prefer PostgreSQL-compatible worksheet SQL, but stay within a conservative subset.
+Prefer Base-compatible worksheet SQL, but stay within a conservative subset.
 
 Recommended default subset:
 
@@ -136,7 +140,7 @@ Recommended default subset:
 
 Practical assumption for this skill:
 
-- The online SQL path is PostgreSQL-backed
+- The online SQL path uses the Base formula runtime
 - Agents should still prefer worksheet SQL that is easy to compile, portable, and easy to rewrite
 
 Hard boundaries:
@@ -153,7 +157,7 @@ Not recommended:
 - MySQL backticks
 - SQL Server `TOP`
 - BigQuery-only structures
-- heavy PostgreSQL-specific features unless you have validated them against the current formula runtime
+- heavy Base-runtime-specific features unless you have validated them against the current formula runtime
 
 Notes:
 
@@ -180,7 +184,7 @@ If `WITH` is rejected by the backend, rewrite it as an inline subquery and recal
 ### Build a regional revenue result table
 
 1. `mbs excel-table schema` or `mbs db-table schema`
-2. Write PostgreSQL-compatible worksheet SQL:
+2. Write Base-compatible worksheet SQL:
 
 ```sql
 select "Region", sum("Revenue") as "Revenue"
@@ -201,7 +205,7 @@ order by "Revenue" desc
 3. `mbs excel-worksheet range read`
 4. `mbs excel-worksheet check-error` when downstream formulas are expected to be stable
 
-If JSON output includes `result.source_info.degraded_success=true`, recalculation completed with available dependencies while skipping stale or missing PG-backed worksheet sources. Inspect `result.source_info.warnings` for `pg_sources[n]`, `gid`, worksheet, and skipped cell details before deciding whether source repair is needed.
+If JSON output includes `result.source_info.degraded_success=true`, recalculation completed with available dependencies while skipping stale or missing Base-backed worksheet sources. Inspect `result.source_info.warnings` for skipped source details before deciding whether source repair is needed.
 
 ### Write formulas into a new report worksheet
 

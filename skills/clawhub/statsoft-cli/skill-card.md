@@ -1,5 +1,5 @@
 ## Description: <br>
-Cross-platform statistical software CLI integration for AI agents, covering 34+ packages including R, Stata, SAS, SPSS, Python, Bayesian, and machine learning tools, with bilingual guidance for activating historical code assets in AI workflow automation. <br>
+Statsoft-CLI helps agents detect, configure, and invoke local statistical software across R, Stata, SAS, SPSS, Python, Bayesian, machine learning, and related tools. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,41 +11,40 @@ MIT <br>
 
 
 ## Use Case: <br>
-Developers, analysts, and statisticians use this skill to detect, configure, and run local statistical software from an agent workflow. It helps reuse existing R scripts, SPSS syntax, SAS macros, Stata do-files, and related project assets as workflow steps. <br>
+Developers, analysts, and external users use this skill to connect AI workflows to local statistical tools, reuse existing scripts, convert datasets, and run confirmed analyses through supported command-line interfaces. It is best suited for trusted local workspaces where the user can review commands before execution. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Setup and detection flows can execute local statistical programs or third-party binaries. <br>
-Mitigation: Review generated commands before execution, prefer a sandbox or disposable environment, and keep STATSOFT_VERIFY unset unless intentional verification is needed. <br>
-Risk: Configuration changes can persist local software paths to config.json. <br>
-Mitigation: Keep STATSOFT_AUTO_WRITE and STATSOFT_CONFIRM unset unless persistence is intended; rely on the documented backup and explicit authorization flow before writing. <br>
-Risk: Running user scripts through R, Stata, SPSS, SAS, CmdStan, or similar tools can execute untrusted code. <br>
-Mitigation: Inspect user scripts first, avoid sensitive projects, and keep STATSOFT_CMDSTAN_RUN unset unless compiling and running a supplied Stan model is intended. <br>
-Risk: Scan and setup output can disclose local installation paths and version details. <br>
-Mitigation: Keep STATSOFT_REVEAL unset unless path and version disclosure is necessary for the task. <br>
+Risk: The skill can run local statistical binaries and user-provided scripts, which may execute code in the user's environment. <br>
+Mitigation: Use trusted workspaces, inspect generated commands, and require explicit confirmation before execution or setting verification/run opt-in flags. <br>
+Risk: Some setup flows can run local statistical binaries during verification without the documented verification opt-in. <br>
+Mitigation: Review setup commands before running them and avoid verification flows in sensitive environments unless local binary execution is acceptable. <br>
+Risk: Configuration writes and dependency downloads can change local state or use the network. <br>
+Mitigation: Keep default detect-only behavior, authorize config writes only when intended, rely on backups for config changes, and confirm any downloads. <br>
 
 
 ## Reference(s): <br>
-- [Statsoft Cli on ClawHub](https://clawhub.ai/medstatstar/skills/statsoft-cli) <br>
-- [Additional Statistical Software Support](ADDITIONAL_SOFTWARE.md) <br>
-- [Command Examples](references/command-examples.md) <br>
-- [Configuration Templates](references/config-templates.md) <br>
-- [Platform Support](references/platform-support.md) <br>
-- [Version Specifics](references/version-specifics.md) <br>
-- [Trust and Safety](references/trust-and-safety.md) <br>
-- [Workflow Gating Detail](references/workflow.md) <br>
+- [ClawHub skill page](https://clawhub.ai/medstatstar/skills/statsoft-cli) <br>
+- [Project homepage](https://github.com/medstatstar/statsoft-cli) <br>
+- [README](README.md) <br>
+- [Advanced reference](ADVANCED.md) <br>
+- [Platform support matrix](references/platform-support.md) <br>
+- [Workflow gating details](references/workflow.md) <br>
+- [Trust and safety](references/trust-and-safety.md) <br>
+- [Command examples](references/command-examples.md) <br>
+- [Configuration templates](references/config-templates.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, markdown] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, code, guidance] <br>
+**Output Format:** [Markdown guidance with proposed shell or PowerShell commands and configuration summaries] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local scan, setup, verification, and execution commands for third-party statistical software; persistence and disclosure controls are opt-in.] <br>
+**Other Properties Related to Output:** [Detection is default; persistent config writes, network installs, binary verification, and user-script execution require explicit user opt-in.] <br>
 
 ## Skill Version(s): <br>
-2.7.1 (source: frontmatter, changelog, release evidence) <br>
+2.8.2 (source: frontmatter and ClawHub release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -17,7 +17,7 @@ siluzan-tso list-accounts [选项]
 | 选项                    | 说明                                                                             |
 | ----------------------- | -------------------------------------------------------------------------------- | ---------------------- |
 | `-m, --media <type>`    | 媒体类型（留空查全部）：`Google \| TikTok \| Yandex \| MetaAd \| BingV2 \| Kwai` |
-| `-k, --keyword <text>`  | 按账户名称或 ID 搜索                                                             |
+| `-k, --keyword <text>`  | 统一模糊搜索：账户名称 **或** ID（含 Google CID 带横杠）；透传 Sammamish `keyword` |
 | `-s, --status <status>` | 账户状态：`normal \| invalid \| all`（默认 all）                                 |
 | `-p, --page <n>`        | 页码（默认 1）                                                                   |
 | `--page-size <n>`       | 每页数量（默认 20）                                                              |
@@ -81,9 +81,12 @@ siluzan-tso list-accounts -m Google --page 2 --page-size 999 --json-out ./snap-p
 | `ma.mediaCustomerName`        | 账户名称（表格「账户名称」）                                                                                                                                  |
 | `ma.mediaAccountState` 等     | 平台开户/审核态（如 Approved / Linked）；**不是** OAuth 是否可用                                                                                              |
 | **`ma.invalidOAuthToken`**    | **OAuth 是否失效**：`true`=失效，`false`=正常。**表格必有「授权状态」列**（✅ 正常 / ⚠️ 失效），与此字段一一对应；判失效、筛 `-s invalid`、走 `reauth` 均看它 |
+| **`ma.scopeActivatedSources`** | **套餐是否已购买/激活**：非空且存在未过期条目（看 `expireAt`）= 已激活；空数组或全部过期 = 未激活。**Google 表格有「套餐激活」列**（✅ 已激活 / 未激活）。未激活时部分读接口（如 `balance`）可能无数据，引导用户先激活套餐；**勿**尝试非 CLI 途径取数 |
 | `ma.TTADInfo.status` 等       | 媒体侧投放/审核细态（TikTok 表格「审核状态」等）；**勿**当成 OAuth 授权状态                                                                                    |
 
 > **Agent**：用户问「哪些授权失效 / OAuth 状态」时，读盘看 `items[].ma.invalidOAuthToken`，表格看「授权状态」列；**不要**用 `mediaAccountState` 或审核状态列代替。
+> 用户问「哪些买了套餐 / 是否激活套餐」时，读盘看 `items[].ma.scopeActivatedSources`，Google 表格看「套餐激活」列；**不要**用 `mediaAccountState` 或授权状态代替。
+> **Google 单户**：若套餐**已激活**，可用 `account check-access -a <mediaCustomerId>` 再确认网关侧授权是否可用（`reauth_required` / `no_permission` 等）；**未激活时不要用 check-access 判断授权过期**（仍可能 `accessible`）。见 `accounts-permissions.md` § check-access。
 
 ---
 

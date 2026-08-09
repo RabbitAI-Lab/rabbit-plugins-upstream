@@ -1,0 +1,17 @@
+name: geoskill-data-catalog-generator
+display_name: 数据目录生成器
+description: |
+  扫描目录中的栅格与矢量文件，提取元数据并分类，生成可浏览的 HTML / CSV 数据目录。Scan raster and vector files in a directory, extract and classify metadata, and generate a browsable HTML / CSV data catalog.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-data-catalog-generator.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - lidar
+  - machine-learning
+  - point-cloud
+  - raster
+  - remote-sensing
+  - vector

@@ -1,0 +1,11 @@
+name: bilibili-video-parser
+description: Parse Bilibili video URLs to extract metadata, download and merge streams, analyze visual frames with VLM, and transcribe speech with ASR.
+version: 1.0.0
+author: 清醒小黑人
+license: MIT
+tags:
+  - bilibili
+  - video
+  - parser
+  - transcription
+  - visual-analysis

@@ -19,6 +19,8 @@
 - `list-accounts` **不含**余额/消耗；列全部账户用 `--page-size 999`，禁止默认 20 再翻页。
 - `entityId`（UUID，分享/delink/账单/`reauth`）≠ `mediaCustomerId`（`balance`/`stats`/`accounts-digest`/`ad` 的 `-a`）。**Yandex 的 mediaCustomerId 形如 `porg-…`，不是 UUID。**
 - MetaAd OAuth 户的 `mediaCustomerId` **须带 `act_` 前缀**。
-- `stats`/`balance` 空结果 + verbose `HTTP 403`：先确认 `-a` 是否为 `ma.mediaCustomerId`；**禁止**把 `entityId` / tokenId 当 `-a`，也**禁止**未确认 `invalidOAuthToken=true` 就 `reauth`。
+- **Google CID**：广告后台展示常为 `XXX-XXX-XXXX`（连字符），`list-accounts` / 网关要的是**纯数字**（无横杠）。`stats`/`balance`/`ad *`/`google-analysis` 的 `-a` 可带连字符（CLI 会去掉）；若仍见 `HTTP 403：123-456-7890` 这类**回显带横杠 ID**，优先改成纯数字重试，**不要**直接当 OAuth 失效去 `reauth`。
+- **禁止臆测授权过期**：403 / 拉数失败时**禁止**口头说「可能授权过期」。须 ID 核验后，对 Google 在套餐已激活前提下执行 `account check-access -a <mediaCustomerId>`，以返回 `status` 为准（见 [`accounts-permissions.md`](accounts-permissions.md)）；非 Google 看 `list-accounts` 的 `invalidOAuthToken`。
+- `stats`/`balance` 空结果 + verbose `HTTP 403`：先确认 `-a` 是否为 `ma.mediaCustomerId`（且 Google 已去连字符）；**禁止**把 `entityId` / tokenId 当 `-a`；未跑 `account check-access`（或未见 `invalidOAuthToken=true`）**禁止** `reauth`。
 - 多账户余额预警用 `balance-scan`（P2），多账户消耗汇总用 `accounts-digest`（P3）；**禁止**外层 for-loop 逐户 `balance`/`stats`。
 - `stats` 默认 `spend` = **区间合计**，不是日消耗；日均看 `balance-scan.dailySpend` 或合计÷天数。

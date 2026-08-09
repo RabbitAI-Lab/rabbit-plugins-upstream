@@ -101,6 +101,14 @@ check, also read `references/project-handoff-schema.md`, use its strict JSON sch
 and run `scripts/validate_project_handoff.py`; never collapse its four independent
 results into one PASS.
 
+## Visual-Source Priority
+
+This ordering governs step 5 below. A unique active enterprise Profile remains a known, previously confirmed visual binding and may be reused with its existing concise notice. For every other route, resolve whether the customer has a specific template, enterprise master, or preferred reference image before presenting any fallback theme. Unless a supported reference is already supplied, a concrete built-in system is already named, or the customer explicitly delegates the built-in choice, ask exactly:
+
+> 本次是否有希望参考的模板、企业母版或喜欢的意向图？有的话请上传静态截图；没有则从内置视觉系统中选择。
+
+A clear “有” enters the supported static-reference route and must produce the existing VI design standards board before project-theme compilation. A clear “没有” enters `references/visual-systems.md`, where TaoHtml displays the complete applicable built-in catalog; it must not recommend, display, or select a fallback theme before the reference decision is known. This visual-source decision is independent from ordinary clarification and must not be bundled with theme or motion selection. A request to replace a reused enterprise Profile also enters this reference-first choice.
+
 ## Required State Flow
 
 Follow the branch selected by the handoff decision before applying this sequence.

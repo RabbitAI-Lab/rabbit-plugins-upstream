@@ -1,0 +1,67 @@
+{
+  "skill": "spatial-etl-pipeline",
+  "skill_version": "1.0.0",
+  "command": "spatial-etl-pipeline --bbox 116 39 117 40 --synthetic --features 30 --output-dir ./_test_cli_run --quiet",
+  "started_at": "2026-08-03T14:48:49.085395Z",
+  "finished_at": "2026-08-03T14:48:49.487713Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "config": null,
+    "synthetic": true,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_run\\etl_output.geojson",
+      "kind": "vector",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": 25,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_run\\etl_report.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "initial_features": 30,
+    "final_features": 25,
+    "dropped_features": 5,
+    "retention": 0.8333,
+    "null_fractions": {
+      "feature_id": 0.0,
+      "value": 0.0,
+      "area": 0.0,
+      "cx": 0.0
+    },
+    "invalid_geometries": 0,
+    "crs": "EPSG:4326",
+    "n_steps": 6
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "spatial-etl-pipeline"
+  },
+  "error": null
+}

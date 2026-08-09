@@ -1,40 +1,62 @@
-## Description: <br>
-Anti-stuck guard for agentic sandboxes that checks for missing packages, binaries, GGUF models, and shims, then guides self-repair before long-running model work proceeds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Anti-stuck and anti-snapshot-wipe guard for agentic sandboxes with a self-healing runner, byte-verified GGUF manifest, native CPU rebuilds, hard timeouts, binary fallbacks, prompt-cache integration, and light-swarm mode.
 
-## Publisher: <br>
-[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw)
 
-## Use Case: <br>
-Developers and agent operators use this skill in disposable or explicitly authorized containerized sandboxes where tools, model files, or system packages may disappear between turns. It helps agents add pre-flight checks, hard timeouts, byte-size verification, and fallback paths so missing runtime assets fail visibly instead of causing silent hangs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may lead an agent to make broad system changes such as installing packages, creating local shims, rebuilding binaries, downloading large model files, or prompting account re-login. <br>
-Mitigation: Use it only in disposable or explicitly authorized sandboxes, require user approval for environment changes and authentication steps, and review generated commands before execution. <br>
-Risk: Automatic self-repair can mask missing or evicted runtime assets if it runs without visible boundaries. <br>
-Mitigation: Keep progress output and repair logs visible, verify downloaded model byte sizes, and stop on failed fallback chains instead of continuing silently. <br>
+## Use Case:
 
+Developers and agent operators use this skill to add bounded self-healing checks around local sandbox inference workflows so missing binaries, missing model files, and long-running calls fail or recover predictably.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/sandbox-selfheal-guard) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code] <br>
-**Output Format:** [Markdown with shell-oriented implementation guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include commands for package installation, model download verification, timeout wrappers, and local runner scripts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata) <br>
+Risk: Security evidence flags the release as suspicious because it can make root-level package changes, alter the user's home PATH, and download large model files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in a disposable or tightly scoped sandbox, review the script first, and require explicit approval for sudo, PATH changes, and home-directory writes.
+
+Risk: The self-heal runner can download large GGUF model files and relies on byte-size checks rather than stronger model integrity verification.
+
+Mitigation: Preinstall dependencies and models manually where possible, pin trusted sources, and verify model integrity with stronger hashes before use.
+
+Risk: Repair commands and logs can modify or expose local environment details, dependencies, credentials, or workspace state.
+
+Mitigation: Use least privilege, keep backups, protect logs, avoid production hosts, and inspect outputs and exit codes after every repair run.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/sandbox-selfheal-guard)
+- [Publisher profile](https://clawhub.ai/user/orionshaowswmw)
+- [Qwen2.5 0.5B Instruct GGUF](https://huggingface.co/second-state/Qwen2.5-0.5B-Instruct-GGUF)
+- [Qwen3 0.6B GGUF](https://huggingface.co/bartowski/Qwen_Qwen3-0.6B-GGUF)
+- [DeepSeek R1 Distill Qwen 1.5B GGUF](https://huggingface.co/bartowski/DeepSeek-R1-Distill-Qwen-1.5B-GGUF)
+- [Qwen2.5 Coder 0.5B Instruct GGUF](https://huggingface.co/bartowski/Qwen2.5-Coder-0.5B-Instruct-GGUF)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May trigger local repair steps, model downloads, timeout-wrapped inference calls, and self-heal logging when used by an agent.]
+
+## Skill Version(s):
+
+2.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

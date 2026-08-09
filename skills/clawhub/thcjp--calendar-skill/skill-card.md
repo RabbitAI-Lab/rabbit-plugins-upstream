@@ -1,5 +1,5 @@
 ## Description: <br>
-Calendar Skill helps agents manage Google Calendar, Microsoft Outlook, and Exchange scheduling workflows, including calendar access, cross-platform views, and meeting scheduling. <br>
+Helps agents manage and synchronize Google Calendar, Microsoft Outlook, and Exchange calendar events with attention to account access and event changes. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,32 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and agent operators use this skill to coordinate calendar actions across Google Calendar, Outlook, and Exchange. It is intended for account-backed scheduling workflows, not offline planning without calendar API access. <br>
+Developers, teams, and automation workflow users can use this skill to coordinate calendar access, cross-platform synchronization, meeting scheduling, and calendar event operations. It is not suitable for offline planning without calendar API access. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may trigger real Google, Outlook, or Exchange calendar changes without enough scoped detail in the artifact. <br>
-Mitigation: Confirm the account scopes before granting access and require explicit user confirmation before event creation, modification, or deletion. <br>
-Risk: The artifact mixes calendar functionality with unrelated security-audit and grading claims. <br>
-Mitigation: Use the skill only for reviewed calendar workflows and do not rely on unrelated audit, scoring, or compliance claims. <br>
+Risk: Calendar accounts and events could be affected by broad API scopes or insufficient confirmation before create, modify, delete, share, or sync actions. <br>
+Mitigation: Use least-privilege calendar scopes, keep credentials out of version control, and require explicit user confirmation before any write, delete, sharing, or cross-platform sync operation. <br>
+Risk: The artifact documentation is broad and internally inconsistent, which can make safeguards for calendar changes unclear. <br>
+Mitigation: Review the skill before deployment and define local approval, logging, and rollback procedures for event-changing workflows. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/calendar-skill) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
+- [Calendar Skill on ClawHub](https://clawhub.ai/thcjp/skills/calendar-skill) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples and shell configuration snippets] <br>
+**Output Type(s):** [guidance, configuration, shell commands, JSON] <br>
+**Output Format:** [Markdown instructions with inline shell commands and JSON response examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May describe calendar actions that should be reviewed before execution against real accounts.] <br>
+**Other Properties Related to Output:** [Requires calendar provider access and explicit handling of account credentials, API scopes, and event write operations.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

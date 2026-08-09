@@ -1,45 +1,61 @@
-## Description: <br>
-Extracts structured JSON from web pages, search results, JavaScript-rendered pages, URL maps, and site crawls through the ZooData WebTools API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Web Extract lets agents extract structured JSON, markdown, or raw HTML from individual pages, JavaScript-rendered pages, Google search results, URL maps, and recursive crawls through ZooData WebTools.
 
-## Publisher: <br>
-[apiclaw](https://clawhub.ai/user/apiclaw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[apiclaw](https://clawhub.ai/user/apiclaw)
 
-## Use Case: <br>
-Developers and agents use Web Extract when they need structured page data, search-result extraction, JavaScript-rendered scraping, URL discovery, or recursive site crawling without a second parsing pass over raw HTML or prose. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Target URLs, search queries, interaction steps, and scraped page content are sent to ZooData. <br>
-Mitigation: Use the skill only for content appropriate to share with ZooData, and avoid secrets, confidential data, and internal-only URLs. <br>
-Risk: The ZooData API key is required for operation. <br>
-Mitigation: Store the key in ZOODATA_API_KEY or a protected config file, and avoid pasting credentials into prompts or generated output. <br>
-Risk: The credential check command consumes one credit. <br>
-Mitigation: Run the check command intentionally and account for credit usage before repeated verification. <br>
+## Use Case:
 
+Developers and agents use this skill to collect structured page data, search-result content, URL inventories, and crawl results from the open web when downstream workflows need machine-readable fields instead of screenshots or prose-only fetches.
 
-## Reference(s): <br>
-- [Web Extract endpoint reference](references/reference.md) <br>
-- [ClawHub skill page](https://clawhub.ai/apiclaw/skills/web-extract) <br>
-- [Publisher homepage](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
-- [ZooData API keys](https://zoodata.ai/en/api-keys) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [json, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [JSON by default, with optional Markdown or raw HTML and Markdown guidance containing shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZOODATA_API_KEY; requests may send target URLs, search queries, interaction steps, and scraped page content to ZooData.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.1 (source: server release evidence and skill metadata) <br>
+Risk: Requested URLs, search queries, crawl options, and the ZooData API key are sent to ZooData.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for data you are permitted to send to ZooData, prefer ZOODATA_API_KEY in the environment, and keep any ~/.zoodata/config.json file private.
+
+Risk: Broad crawls, polling, and deep-scraped searches can consume paid credits.
+
+Mitigation: Confirm crawl scope, result limits, polling intervals, and estimated credit use before submitting large jobs.
+
+Risk: A successful API response can still contain a target site's error page or incomplete extraction.
+
+Mitigation: Check response status metadata and validate extracted fields before relying on results.
+
+## Reference(s):
+
+- [Web Extract endpoint reference](references/reference.md)
+- [ZooData API keys](https://zoodata.ai/en/api-keys)
+- [ZooData pricing](https://zoodata.ai/en/pricing)
+- [Skill homepage](https://github.com/SerendipityOneInc/ZooData-Skills)
+- [ClawHub skill page](https://clawhub.ai/apiclaw/skills/web-extract)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [JSON-first CLI/API responses with optional Markdown or raw HTML page content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZOODATA_API_KEY and may consume ZooData credits for API calls.]
+
+## Skill Version(s):
+
+0.2.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

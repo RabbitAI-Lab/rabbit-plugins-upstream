@@ -1,45 +1,59 @@
-## Description: <br>
-Queries promotional TikTok Shop videos associated with a product and summarizes engagement, estimated sales, GMV, creator, and publishing metadata for product video marketing analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+EchoTik-商品视频查询 helps agents query promotional TikTok Shop videos for a product and summarize engagement, estimated sales, GMV, publish timing, and creator information.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, e-commerce analysts, and commerce-focused agents use this skill to inspect TikTok Shop product videos, compare engagement and estimated sales metrics, and identify influencer content that may be driving product performance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: API-authenticated product-video queries and possible feedback content are sent to LinkFox services. <br>
-Mitigation: Install and use the skill only when that data sharing is acceptable, and avoid including sensitive business context in query or feedback content. <br>
-Risk: Setting LINKFOX_TOOL_GATEWAY can redirect credentialed requests to an alternate endpoint. <br>
-Mitigation: Leave LINKFOX_TOOL_GATEWAY unset unless the alternate endpoint is deliberately configured and trusted. <br>
-Risk: Full API responses are persisted under linkfox/ and cached locally, which may expose sensitive product or market data in workspace files. <br>
-Mitigation: Review and remove saved JSON files after use when needed, and avoid --inline or raw JSON output for sensitive datasets. <br>
-Risk: Repeated lookups consume LinkFox credits. <br>
-Mitigation: Warn users before repeated calls with new parameters and rely on the built-in 24-hour cache for identical requests. <br>
+## Use Case:
 
+External ecommerce sellers, analysts, and agents use this skill to inspect which TikTok videos promote a specific product, compare influencer content performance, and identify videos associated with higher estimated sales or GMV.
 
-## Reference(s): <br>
-- [EchoTik-TikTok商品视频 API 参考](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-product-video) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, JSON, files, markdown] <br>
-**Output Format:** [Markdown guidance with Python command examples; script output is saved JSON plus either full JSON or a compact text summary on stdout.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a productId; supports sorting, time range, influencer filtering, pagination, 24-hour local caching, and optional inline full JSON output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill requires LinkFox/EchoTik API credentials and may guide phone-based account login flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when users intend to grant those credentials, keep API keys in environment variables, and rotate or remove keys when access is no longer needed.
+
+Risk: The skill includes billing and payment helpers for credit purchases.
+
+Mitigation: Require explicit user confirmation before plan selection or order creation, and review credit costs before continuing.
+
+Risk: The skill stores complete API responses locally and can report feedback about skill behavior.
+
+Mitigation: Treat saved result files as potentially sensitive, avoid sharing them unnecessarily, and prefer versions where persistence and feedback reporting are opt-in.
+
+## Reference(s):
+
+- [EchoTik Product Video API reference](references/api.md)
+- [Authentication and credits onboarding](references/onboarding.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-product-video)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown tables and JSON files, with stdout JSON or summaries from the bundled query script.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are written under the workspace linkfox data directory; larger responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

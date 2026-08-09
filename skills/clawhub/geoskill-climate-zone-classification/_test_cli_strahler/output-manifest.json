@@ -1,0 +1,71 @@
+{
+  "skill": "climate-zone-classification",
+  "skill_version": "1.0.0",
+  "command": "climate-zone-classification --bbox 116 39 117 40 --synthetic --classification strahler --quiet --output-dir ./_test_cli_strahler",
+  "started_at": "2026-08-03T14:57:27.798950Z",
+  "finished_at": "2026-08-03T14:57:27.903054Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "input2": null,
+    "classification": "strahler",
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_strahler\\climate_zones.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_strahler\\area_statistics.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "classification": "strahler",
+    "shape": [
+      64,
+      64
+    ],
+    "n_valid_pixels": 4096,
+    "n_classes_present": 6,
+    "dominant_class": "tropical-wet",
+    "synthetic_zones": [
+      "Af",
+      "Aw",
+      "BWh",
+      "Cfa",
+      "Dfb",
+      "ET"
+    ]
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "climate-zone-classification"
+  },
+  "error": null
+}

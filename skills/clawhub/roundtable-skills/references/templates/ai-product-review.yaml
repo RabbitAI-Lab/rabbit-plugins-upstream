@@ -1,0 +1,46 @@
+name: AI 产品评审圆桌
+description: 评估 AI/LLM 产品方案的用户价值、技术可行性、合规风险与商业化
+mode: standard  # 4-5 角色，3 轮
+
+# 领域识别关键词（用于自动匹配此模板）
+domain_keywords:
+  - AI
+  - LLM
+  - 大模型
+  - RAG
+  - Agent
+  - 智能体
+  - GPT
+  - ChatGPT
+  - prompt
+  - 向量
+  - 知识库问答
+
+# L1 必选通用立场（保证对抗）
+required_roles:
+  - roles/devil-advocate      # 系统性找漏洞
+  - roles/user-advocate       # 用户价值锚定
+
+# L2 推荐领域专家（保证深度，系统预判断后供用户确认）
+suggested_experts:
+  - experts/ai-llm/ai-product-manager   # AI 产品化落地
+  - experts/ai-llm/llm-architect        # LLM 技术可行性
+
+# 条件触发专家
+conditional_experts:
+  - when: "检索|知识库|RAG|问答"
+    add: experts/ai-llm/rag-specialist
+  - when: "安全|合规|隐私|C端|面向用户"
+    add: experts/ai-llm/ai-safety-alignment
+  - when: "增长|获客|留存|收费|定价"
+    add: experts/product/growth-pm
+
+# L1 可选角色
+optional_roles:
+  - roles/resource-constraint   # 资源与 ROI
+  - roles/data-evidence         # 数据验证
+  - roles/systems-thinker       # 长期与二阶效应
+
+protocol: protocols/debate-protocol
+
+output_protocol: protocols/synthesis-protocol

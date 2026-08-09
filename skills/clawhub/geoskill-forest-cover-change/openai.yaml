@@ -1,0 +1,17 @@
+name: geoskill-forest-cover-change
+display_name: 森林覆盖变化检测
+description: |
+  多期 NDVI 阈值与变化矢量幅度检测森林损失/增益/稳定，输出变化栅格与年度面积统计
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-forest-cover-change.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - time-series
+  - vector
+  - vegetation

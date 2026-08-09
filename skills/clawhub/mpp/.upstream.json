@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/mpp",
   "slug": "mpp",
   "ownerHandle": null,
-  "version": "0.8.3",
-  "updatedAt": 1784746148965,
-  "contentHash": "5b33d275ec7091824b63c2ce05fe29982a69b26fff2b41ae7719c8c1dfc2612e",
-  "fetchedAt": "2026-07-26T18:07:47.383Z"
+  "version": "0.10.0",
+  "updatedAt": 1786110502059,
+  "contentHash": "299d37b6879170b3ac305a838e315e5652147ed2d02b52e6ac18d5e9743eb129",
+  "fetchedAt": "2026-08-09T08:10:51.813Z"
 }

@@ -1,16 +1,12 @@
 interface:
-  display_name: "AI Delivery Spec"
-  version: "5.4.0"
-  short_description: "需求任一阶段进入，按目标交付可读、可实现、可追溯的最小合格产物。"
+  display_name: "AI Delivery Spec｜需求管理内核"
+  short_description: "Requirement management for human & AI｜人机共用需求管理"
   default_prompt: >
-    使用 $ai-delivery-spec 作为需求管理内核。先从用户语义和已有产物识别 entry_stage 与 target_stage；
-    显式目标和否定约束高于关键词。允许从任一需求阶段进入，并在用户需要的产物完成后停止；
-    只有用户明确要求端到端交付时才持续跨阶段。进入正式准入后再静默判断交付形态和保证强度。
-    除非用户明确覆盖，标题、正文、表格、问题和测试均跟随用户请求语言。默认只生成一份
-    人类可读且 AI Coding 可执行的 PRD，其中包含30秒摘要、任务阅读地图、模块纵切规格和
-    工程/AI索引，不生成互相竞争的两套 PRD。保留稳定 ID、双向追溯、变更影响、可执行验收
-    和真实证据。存量项目重写前先完成 Stage 0；L3 原型必须有稳定区域和浏览器验收证据。
-    编码、发布与运行维护属于下游系统。
+    Use $ai-delivery-spec to enter this requirement task at its current stage,
+    whether it starts from an idea, problem, artifact, change, or acceptance;
+    follow the user's language, deliver the smallest complete target, mark
+    unknowns, and stop there. / 使用 $ai-delivery-spec 从想法、问题、现有产物、
+    变更或验收的当前阶段进入，跟随用户语言，交付最小完整目标，标明未知项并停止。
 
 inputs:
   entry_stage:

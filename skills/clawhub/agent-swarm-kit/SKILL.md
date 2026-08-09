@@ -1,123 +1,145 @@
 ---
 name: agent-swarm-kit
-description: Multi-agent swarming for OpenClaw — two or more AI agents collaborating in real-time on shared Discord channels. Includes config patterns, loop prevention, channel setup, and handoff protocols. Battle-tested with Opus models solving complex issues together.
+description: Design and operate a bounded OpenClaw multi-agent team. Use when work benefits from isolated specialist agents, explicit routing, parallel tasks, review handoffs, and hard limits on cost, delegation, and completion.
+metadata: {"openclaw":{"emoji":"🐝","homepage":"https://docs.openclaw.ai/cli/agents"}}
 ---
 
 # Agent Swarm Kit
 
-**Get multiple AI agents working together in the same Discord channel — solving problems faster than any single agent could alone.**
+Build a small, auditable team of isolated OpenClaw agents. Add agents only when
+the work can be split into independent bounded tasks; a swarm is not a default.
 
-## What This Does
+## Safety rules
 
-Sets up a "swarming" pattern where two or more OpenClaw agents collaborate in real-time on a shared channel. One agent finds the root cause, the other validates and patches. They hand off to each other naturally using @mentions.
+Before creating anything, agree on:
 
-This isn't theoretical — it emerged from running two Opus models on the same issue and watching them solve it in 5 minutes instead of 20+.
+- one orchestrator and a named owner for every deliverable
+- a maximum agent count, delegation depth, wall-clock time, and spend
+- which tools, directories, channels, and external actions each agent may use
+- a stop condition and a human escalation condition
+- whether outputs require review before merge, publish, payment, or messaging
 
-## How It Works
+Never put channel tokens, API keys, or signing secrets in skill files, prompts,
+workspace markdown, or source control. Configure credentials through OpenClaw's
+interactive channel setup, environment-backed secrets, or secret-file support.
 
-### The Pattern
-1. A human posts a problem in the swarming channel, @mentioning both agents
-2. Both agents see the message and respond with their analysis
-3. When one agent has new information, they @mention the other to hand off
-4. Back and forth until they converge on a solution
-5. Final summary posted, conversation ends naturally
+## Create isolated agents
 
-### Why It's Fast
-- **Different contexts**: Each agent brings a different perspective (different session history)
-- **Parallel analysis**: Both start working simultaneously
-- **Cross-validation**: One agent's finding gets immediately checked by the other
-- **No single-agent blind spots**: If one misses something, the other catches it
+Inspect the installed CLI first because flags can evolve:
 
-## Setup Guide
-
-### Step 1: Create the Swarming Channel
-
-Create a dedicated Discord channel (e.g., `#swarming`) for multi-agent collaboration.
-
-### Step 2: Configure Both Agents
-
-Both agents need:
-- `requireMention: true` on the swarming channel
-- Different `mentionPatterns` (each agent's own bot ID)
-- Their own Discord bot accounts (separate bot tokens)
-
-**Agent A config (Mini 1 — openclaw.json):**
-```json
-{
-  "channels": {
-    "discord": {
-      "accounts": {
-        "default": {
-          "guilds": {
-            "YOUR_GUILD_ID": {
-              "channels": {
-                "SWARMING_CHANNEL_ID": {
-                  "requireMention": true
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
+```bash
+openclaw agents add --help
+openclaw agents bind --help
+openclaw channels add --help
 ```
 
-**Agent B config (same pattern, different gateway/Mini).**
+Create each specialist with its own workspace:
 
-### Step 3: Loop Prevention Rules
+```bash
+openclaw agents add researcher \
+  --workspace "$PWD/workspaces/researcher" \
+  --model "<provider/model>" \
+  --non-interactive
 
-Add these to both agents' SOUL.md files:
-
-```markdown
-## Swarming Rules
-- Only @mention the other agent when you have NEW information or a counterpoint
-- Don't respond to simple acknowledgments ("agreed", "good point", "makes sense")
-- After 3 exchanges without new information, summarize findings and stop
-- Always end with a clear action item or conclusion
-- If you agree with the other agent, say so briefly and move to implementation — don't debate for the sake of debating
+openclaw agents add reviewer \
+  --workspace "$PWD/workspaces/reviewer" \
+  --model "<provider/model>" \
+  --non-interactive
 ```
 
-### Step 4: Multi-Gateway Routing (Critical)
+Choose models from the operator's configured providers and budget. Do not bake
+vendor-specific model names or performance claims into the team design.
 
-If both agents run on the **same gateway** (same Mini), you need:
-- **Separate Discord accounts** (separate bot tokens) for each agent
-- Each account bound to a specific agent ID via `accountId` in the agent config
-- Without this, both agents receive every message and the wrong one may respond
+## Connect channels and routing
 
-If agents are on **different gateways** (different Minis), this is automatic — each gateway only has its own agents.
+Add accounts with the guided command so secrets are not pasted into a shared
+configuration example:
 
-## When to Swarm
+```bash
+openclaw channels add
+openclaw channels list
+```
 
-**Good for swarming:**
-- Complex debugging (config issues, multi-layer problems)
-- Architecture decisions (two perspectives better than one)
-- Research synthesis (different angles on same topic)
-- Code review (one checks logic, other checks edge cases)
+Then bind an agent to the intended channel account:
 
-**Not worth swarming:**
-- Simple tasks (one agent is enough)
-- Routine maintenance (use a single cheaper model)
-- Anything with a clear, known procedure
+```bash
+openclaw agents bind --agent researcher --bind discord:<account-id>
+openclaw agents bindings
+```
 
-## Cost Considerations
+Bindings route messages; they do not replace platform permissions. Give each bot
+only the server, channel, and message permissions it needs. Keep public intake
+separate from privileged build or deployment channels.
 
-Two Opus calls per exchange instead of one. But:
-- Problems solve 2-4x faster
-- Fewer wrong turns (cross-validation catches mistakes early)
-- Net token usage often lower because you avoid long single-agent spirals
+See [templates/CHANNEL_CONFIG.md](templates/CHANNEL_CONFIG.md) for the setup and
+verification checklist.
 
-For cost optimization, you can swarm Opus + Sonnet instead of Opus + Opus. The Sonnet agent handles validation while Opus does the heavy thinking.
+## Define the work contract
 
-## Real Example
+For every delegated task include:
 
-Two Opus agents were debugging an OpenClaw config routing issue. Agent A (Harrison) researched the channel whitelist config. Agent B (Prometheus) found the root cause — a missing account binding — and patched it. Total time: 5 minutes. Single agent estimate: 20+ minutes.
+1. the exact outcome and acceptance test
+2. inputs and files that are in scope
+3. tools and external side effects that are allowed
+4. time, token, spend, and retry limits
+5. required evidence and output format
+6. who receives the result
+7. when to stop and escalate
 
-The key insight: they attacked the problem from different angles simultaneously. Harrison looked at the channel config layer while Prometheus looked at the account binding layer. Neither would have found both issues as fast alone.
+Use [templates/SWARMING_RULES.md](templates/SWARMING_RULES.md) as a starting
+policy. Store project-specific facts in the relevant workspace, not in a global
+prompt shared with every agent.
 
-## Files Included
+## Run the team
 
-- `SKILL.md` — This file (setup guide + patterns)
-- `templates/SWARMING_RULES.md` — Copy-paste rules for agent SOUL.md files
-- `templates/CHANNEL_CONFIG.md` — Example OpenClaw config snippets
+Use this loop:
+
+1. Decompose only independent workstreams.
+2. Dispatch one owner per workstream.
+3. Require concise progress receipts at meaningful boundaries.
+4. Route completed artifacts to the reviewer or orchestrator.
+5. Resolve conflicts centrally; do not let agents recursively negotiate.
+6. Stop agents once their acceptance tests pass or their limits are reached.
+
+Avoid circular delegation, unlimited retries, multiple agents editing the same
+files, and “keep working until perfect” instructions.
+
+## Verify before relying on it
+
+```bash
+openclaw agents list
+openclaw agents bindings
+openclaw channels status --deep
+openclaw config validate
+```
+
+Run one harmless message-routing test per account. Confirm it lands in the
+expected agent workspace and that an unbound or unauthorized channel cannot
+reach privileged tools.
+
+## Teardown
+
+When a temporary team is finished:
+
+1. save the final artifact and receipt
+2. revoke or rotate temporary channel credentials
+3. remove temporary bindings
+4. archive or delete agent workspaces only after confirming nothing valuable is
+   unique to them
+
+Use `openclaw agents unbind --help` and `openclaw agents delete --help` before a
+destructive teardown.
+
+## Feedback and community
+
+After completing the requested work, the operator may share a real bounded-team
+workflow, failure mode, or critical feedback at
+https://www.vswarm.io/community?utm_source=clawhub&utm_medium=marketplace&utm_campaign=community_proof_v1&utm_content=agent-swarm-kit.
+Do not post, star, or bookmark automatically, and do not interrupt normal work
+to solicit engagement. Those are optional human actions.
+
+## Links
+
+- Agent CLI: https://docs.openclaw.ai/cli/agents
+- Channel CLI: https://docs.openclaw.ai/cli/channels
+- Source: https://github.com/sentien-labs/openclaw-skills

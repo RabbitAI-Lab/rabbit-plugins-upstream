@@ -1,0 +1,15 @@
+name: geoskill-urban-population-estimation
+display_name: 城市人口估算
+description: |
+  Estimate population density from building volume, residential ratio, night-light correction and land-cover weights with total conservation.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-urban-population-estimation.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - land-use
+  - preprocessing
+  - remote-sensing
+  - urban

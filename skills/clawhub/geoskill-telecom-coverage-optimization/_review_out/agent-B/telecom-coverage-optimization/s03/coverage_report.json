@@ -1,0 +1,13 @@
+{
+  "source": "synthetic",
+  "environment": "urban",
+  "frequency_mhz": 1800.0,
+  "threshold_dbm": -100.0,
+  "n_towers": 2,
+  "coverage_fraction": 1.0,
+  "blind_fraction": 0.0,
+  "mean_rsl_dbm": -61.336936950683594,
+  "min_rsl_dbm": -70.63209533691406,
+  "max_rsl_dbm": 5.585048675537109,
+  "suggestion": "覆盖良好，盲区占比可接受。"
+}

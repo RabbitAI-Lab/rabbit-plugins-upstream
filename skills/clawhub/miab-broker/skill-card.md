@@ -1,42 +1,58 @@
-## Description: <br>
-Operate the Message-in-a-Bottle (MIAB) LIFO callback stack for asynchronous inter-agent delegation, return, resolution, cancellation, listing, and stale-callback reaping. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates the Message-in-a-Bottle (MIAB) LIFO callback stack for async inter-agent delegation, callback routing, wake registration, returns, resolution, and reaping.
 
-## Publisher: <br>
-[albzhu](https://clawhub.ai/user/albzhu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[albzhu](https://clawhub.ai/user/albzhu)
 
-## Use Case: <br>
-Developers and agent operators use this skill to manage file-based MIAB callback lifecycles so delegated agent work can be resumed without polling. It provides guidance and commands for registering wake targets, creating and forwarding callback stacks, returning results, resolving or cancelling callbacks, listing active work, and reaping stale bottles. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Callback state and wake routing are stored and mutated on disk without clear access-control or integrity safeguards. <br>
-Mitigation: Use a private CLAW_HOME directory, restrict filesystem permissions, and run the broker only where agents with access to callback state are trusted. <br>
-Risk: Callback summaries, results, and ledger entries may expose sensitive task context if agents include secrets or private data. <br>
-Mitigation: Avoid placing secrets in callback summaries, resume contexts, results, artifacts, or ledger-retained final notes. <br>
-Risk: The reaper, cancel, return, resolve, and wake flows can alter or route active agent work. <br>
-Mitigation: Review callback state before running mutating commands and only enable reaper or wake automation for trusted agents and scheduler contexts. <br>
+## Use Case:
 
+Developers and agent operators use this skill to coordinate local multi-agent task delegation without polling. It provides command guidance and scripts for creating, forwarding, returning, resolving, listing, and reaping file-backed callback envelopes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/albzhu/skills/miab-broker) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, JSON, text] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands read and mutate callback state under CLAW_HOME/state/callbacks and may emit dispatch messages for agent wake routing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence) <br>
+Risk: ClawScan marked the release suspicious because the package contains an under-documented Discord notifier that can send callback history outside the machine despite no-network claims.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, and do not run or schedule the closed-bottle notifier unless the Discord target, account, channel, and redaction needs have been explicitly reviewed.
+
+Risk: Callback task, summary, result, and resume fields are written to local state and can be copied into dispatch messages.
+
+Mitigation: Do not place secrets in callback fields; reference non-sensitive locations only when needed.
+
+Risk: The broker is intended for a trusted single-user agent setup and does not authenticate agent identity claims.
+
+Mitigation: Use it only with trusted local agents and keep CLAW_HOME private with restrictive permissions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/albzhu/skills/miab-broker)
+- [Publisher profile](https://clawhub.ai/user/albzhu)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON command output from bundled scripts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local callback state under CLAW_HOME and may emit dispatch messages for agent wake routing.]
+
+## Skill Version(s):
+
+1.3.0 (source: server release metadata and changelog, released 2026-08-07)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

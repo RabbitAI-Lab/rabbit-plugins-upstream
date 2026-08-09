@@ -1,0 +1,14 @@
+name: geoskill-sar-ship-detection
+display_name: SAR船舶检测
+description: |
+  SAR 船舶检测：CA/OS-CFAR 恒虚警检测 + 连通域聚类，从单极化 SAR 强度影像提取船舶目标并输出 GeoJSON 矢量与属性表
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-sar-ship-detection.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - remote-sensing
+  - sar
+  - vector

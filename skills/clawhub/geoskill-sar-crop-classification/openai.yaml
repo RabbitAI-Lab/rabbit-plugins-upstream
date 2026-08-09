@@ -1,0 +1,17 @@
+name: geoskill-sar-crop-classification
+display_name: SAR农作物分类
+description: |
+  基于多时相 SAR 后向散射时序的农作物分类：逐像元时序/统计/物候特征 + 随机森林。SAR crop classification from multi-temporal backscatter time series using per-pixel phenological features and Random Forest. 合成模式生成水稻/小麦/玉米三类时序真值并评估精度，输出分类 GeoTIFF + 面积统计 + 混淆矩阵 JSON。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-sar-crop-classification.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - extraction
+  - gis
+  - lidar
+  - machine-learning
+  - point-cloud
+  - raster
+  - remote-sensing

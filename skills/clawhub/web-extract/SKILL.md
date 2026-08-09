@@ -20,7 +20,7 @@ description: >
 
   Requires ZOODATA_API_KEY (free key: https://zoodata.ai/en/api-keys).
 metadata:
-  version: "0.2.1"
+  version: "0.2.4"
   author: SerendipityOneInc
   homepage: https://github.com/SerendipityOneInc/ZooData-Skills
   openclaw: {"requires": {"env": ["ZOODATA_API_KEY"]}, "primaryEnv": "ZOODATA_API_KEY"}
@@ -51,14 +51,23 @@ Backed by the ZooData WebTools API. Six HTTP endpoints. One API key. **Structure
 
 ## Credential
 
-Required: `ZOODATA_API_KEY` (legacy `APICLAW_API_KEY` still works as fallback).
+Required: `ZOODATA_API_KEY`.
 Get a free key (1,000 credits) at [zoodata.ai/en/api-keys](https://zoodata.ai/en/api-keys).
 
 ```bash
 export ZOODATA_API_KEY='hms_live_xxx'
-# OR persist to disk:
-mkdir -p ~/.zoodata && echo '{"api_key":"hms_live_xxx"}' > ~/.zoodata/config.json
+# OR persist to disk (keep the file private — 0600; it holds a bearer credential):
+mkdir -p ~/.zoodata && chmod 700 ~/.zoodata
+(umask 077; echo '{"api_key":"hms_live_xxx"}' > ~/.zoodata/config.json)
 ```
+
+## Capabilities & Data Flow
+
+- **Network**: only `https://api.zoodata.ai` WebTools endpoints (Bearer `ZOODATA_API_KEY`). Target pages are fetched server-side by ZooData, not from this machine.
+- **Execution**: bundled CLI `{skill_base_dir}/scripts/webtools.py` (Python 3, stdlib-only) with exactly the documented subcommands (`scrape`, `interactive`, `search`, `map`, `crawl`, `crawl-status`, `crawl-wait`, `check`) — the full surface is the declared surface.
+- **Local files**: none; reads the optional credential store `~/.zoodata/config.json`.
+- **Sent to the API**: the target URLs, search queries, and crawl options you request.
+- **Credits**: every call consumes credits (crawl bills per page). For large crawls or deep-scrapes, state the estimated cost and confirm before submitting.
 
 ## Two ways to drive it
 
@@ -181,7 +190,7 @@ Full schemas are in `references/reference.md`. Load that when you need exact fie
 
 ## On Missing Key (no credentials configured)
 
-**BEFORE calling any endpoint**, verify a credential is configured. Reliable check: `python {skill_base_dir}/scripts/webtools.py check` — exits 2 if no key is found in env (`ZOODATA_API_KEY` / legacy `APICLAW_API_KEY`) or config files (`~/.zoodata/config.json` / `~/.apiclaw/config.json`). A `[ -z "$ZOODATA_API_KEY" ]` test alone is NOT sufficient.
+**BEFORE calling any endpoint**, verify a credential is configured. Reliable check: `python {skill_base_dir}/scripts/webtools.py check` — exits 2 if no key is found in env (`ZOODATA_API_KEY`) or the config file (`~/.zoodata/config.json`). A `[ -z "$ZOODATA_API_KEY" ]` test alone is NOT sufficient.
 
 When no key is found through any mechanism:
 
@@ -192,7 +201,7 @@ When no key is found through any mechanism:
    - **Get a free key** (1,000 credits, no credit card): https://zoodata.ai/en/api-keys
    - **Configure** via one of:
      - `export ZOODATA_API_KEY='hms_live_xxx'` (session only)
-     - `mkdir -p ~/.zoodata && echo '{"api_key":"hms_live_xxx"}' > ~/.zoodata/config.json` (persistent)
+     - `mkdir -p ~/.zoodata && chmod 700 ~/.zoodata && (umask 077; echo '{"api_key":"hms_live_xxx"}' > ~/.zoodata/config.json)` (persistent; keep the file private — 0600)
 
 ## On 401 Invalid Key
 

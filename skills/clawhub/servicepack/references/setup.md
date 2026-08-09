@@ -42,7 +42,7 @@ Third-party deps pulled in by the framework itself (already in `go.mod`, vendore
 - `github.com/psyb0t/ctxerrors` — error wrapping with file/line/function capture
 - `github.com/psyb0t/goenv` — `dev`/`prod` environment detection
 - `github.com/psyb0t/gonfiguration` — env-var config parsing via struct tags
-- `github.com/psyb0t/slog-configurator` — `log/slog` handler wiring
+- `github.com/psyb0t/slogging` — `log/slog` handler wiring (`slogging/slogconf`)
 - `github.com/spf13/cobra` — CLI command tree
 
 ## Skip the clone entirely — try it in Docker first
@@ -53,7 +53,7 @@ cd servicepack
 make run-dev
 ```
 
-Builds a dev image and runs the shipped example services (`hello-world`, `example-database`, `example-api`, `example-migrator`, `example-optional`, `example-flaky`, `example-crasher`) so you can see retries, dependencies, allowed failures, readiness gating, and a crash-everything failure in action before committing to `make own`.
+Builds a dev image and runs the shipped example services (`hello-world`, `example-database`, `example-api`, `example-migrator`, `example-optional`, `example-flaky`, `example-crasher`, `example-nested/http`, `example-nested/grpc`) so you can see retries, dependencies, allowed failures, readiness gating, and a crash-everything failure in action before committing to `make own`.
 
 ## Environment variables the framework itself reads
 

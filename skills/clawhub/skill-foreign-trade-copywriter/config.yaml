@@ -1,0 +1,35 @@
+name: foreign-trade-copywriter
+version: 1.0.0
+description: >
+  外贸文案全能助手：开发信、报价单、询盘回复、催款函、安抚信、展会邀约、社媒推广、
+  合作伙伴评估、GEO业务咨询。支持31种语言商用级输出，覆盖外贸全场景。
+  输入产品名+目标市场即可生成三版本专业文案+实操建议。
+triggers:
+  - "外贸开发信"
+  - "cold email"
+  - "报价单"
+  - "quotation"
+  - "询盘回复"
+  - "催款函"
+  - "安抚信"
+  - "客诉回复"
+  - "展会邀约"
+  - "社媒推广"
+  - "外贸文案"
+  - "foreign trade"
+  - "export email"
+  - "GEO"
+  - "生成式引擎优化"
+  - "合作伙伴评估"
+  - "写封邮件"
+  - "写开发信"
+category: business
+author: 冠霄出海
+tags:
+  - 外贸
+  - 开发信
+  - 报价单
+  - 多语言
+  - 商务文案
+  - foreign trade
+  - export

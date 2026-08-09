@@ -3,10 +3,10 @@ name: magicbrowse
 description: Browser automation fallback through the magicbrowse CLI with
   goal-driven act as the default primitive and observe/primitives only for
   recovery, with changed page state verified by fresh observation.
-homepage: https://www.npmjs.com/package/@mercuryo-ai/magicbrowse-cli
+homepage: https://www.npmjs.com/package/@nuanu-ai/magicbrowse-cli
 metadata:
   openclaw:
-    homepage: https://github.com/MercuryoAI/skills/blob/main/docs/magicbrowse/openclaw/marketplace/README.md
+    homepage: https://github.com/nuanu-ai/skills/blob/main/docs/magicbrowse/openclaw/marketplace/README.md
     requires:
       bins:
         - magicbrowse
@@ -14,7 +14,7 @@ metadata:
     install:
       - id: npm
         kind: node
-        package: "@mercuryo-ai/magicbrowse-cli@latest"
+        package: "@nuanu-ai/magicbrowse-cli@latest"
         bins:
           - magicbrowse
         label: Install MagicBrowse CLI (npm)
@@ -268,14 +268,14 @@ primitive `completed` is not a substitute for a goal-level completion check.
 Memory-fill handoff details are in `handoff.resumeObjective`. Exit
 code `0` includes `blocked`, `needs_handoff`, and `needs_approval`; it
 does not mean success.
-See [references/statuses.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicbrowse/references/statuses.md).
+See [references/statuses.md](https://github.com/nuanu-ai/skills/blob/main/docs/magicbrowse/references/statuses.md).
 
 ## References
 
-- [references/commands.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicbrowse/references/commands.md) — every CLI command.
-- [references/workflow.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicbrowse/references/workflow.md) — worked end-to-end
+- [references/commands.md](https://github.com/nuanu-ai/skills/blob/main/docs/magicbrowse/references/commands.md) — every CLI command.
+- [references/workflow.md](https://github.com/nuanu-ai/skills/blob/main/docs/magicbrowse/references/workflow.md) — worked end-to-end
   example.
-- [references/guardrails.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicbrowse/references/guardrails.md) — long-form hard
+- [references/guardrails.md](https://github.com/nuanu-ai/skills/blob/main/docs/magicbrowse/references/guardrails.md) — long-form hard
   rules.
-- [references/statuses.md](https://github.com/MercuryoAI/skills/blob/main/docs/magicbrowse/references/statuses.md) — outcome codes and
+- [references/statuses.md](https://github.com/nuanu-ai/skills/blob/main/docs/magicbrowse/references/statuses.md) — outcome codes and
   status handling.
