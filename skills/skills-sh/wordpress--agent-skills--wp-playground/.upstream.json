@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-playground",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-playground",
+  "branch": "trunk",
+  "pushedAt": "2026-08-03T05:26:29Z",
+  "contentHash": "b2380a49b21d73d1a75de7d63b8eb591e04e3b5bda72721fadf972a1e1abfdcc",
+  "fetchedAt": "2026-08-09T08:07:33.439Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/agents-debug",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "agents-debug",
+  "branch": "main",
+  "pushedAt": "2026-08-08T03:07:50Z",
+  "contentHash": "36442465da7bf61b82780681804693c44f7d970b13f7f2bc5a29609f6ba31bf1",
+  "fetchedAt": "2026-08-09T08:07:21.637Z"
+}

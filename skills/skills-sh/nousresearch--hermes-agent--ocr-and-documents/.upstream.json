@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/ocr-and-documents",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "ocr-and-documents",
+  "branch": "main",
+  "pushedAt": "2026-08-09T07:52:10Z",
+  "contentHash": "5a37ff5701b7381dad628f73581c4594853a40ff94c083aafe04e93e14c3051f",
+  "fetchedAt": "2026-08-09T08:07:32.412Z"
+}

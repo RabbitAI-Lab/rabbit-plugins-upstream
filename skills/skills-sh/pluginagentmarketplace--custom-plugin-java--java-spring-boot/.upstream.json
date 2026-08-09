@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/pluginagentmarketplace/custom-plugin-java/java-spring-boot",
+  "repo": "pluginagentmarketplace/custom-plugin-java",
+  "skillId": "java-spring-boot",
+  "branch": "main",
+  "pushedAt": "2026-01-05T11:55:40Z",
+  "contentHash": "af25f0d6535ada883ba90b7ed7c268aaccb2b8d751f206f1c76f7f5cc1d67d24",
+  "fetchedAt": "2026-08-09T08:06:03.261Z"
+}

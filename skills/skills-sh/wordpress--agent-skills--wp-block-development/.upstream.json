@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/wp-block-development",
+  "repo": "wordpress/agent-skills",
+  "skillId": "wp-block-development",
+  "branch": "trunk",
+  "pushedAt": "2026-08-03T05:26:29Z",
+  "contentHash": "0105b544e2a0d07833db9294a22da6523f0f50ba4efc8f0ee72f999ab174e6c8",
+  "fetchedAt": "2026-08-09T08:07:33.433Z"
+}

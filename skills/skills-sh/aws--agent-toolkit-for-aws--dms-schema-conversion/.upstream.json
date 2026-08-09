@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/dms-schema-conversion",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "dms-schema-conversion",
+  "branch": "main",
+  "pushedAt": "2026-08-08T03:07:50Z",
+  "contentHash": "2e2a771e0b267ff4e7e0498f763b3f084a77faf2eae839e2ddffc601b9870a36",
+  "fetchedAt": "2026-08-09T08:07:21.520Z"
+}

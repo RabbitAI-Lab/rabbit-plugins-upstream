@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/gh-address-comments",
+  "repo": "openai/skills",
+  "skillId": "gh-address-comments",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "cd406b1d6f0e0680817b4b3a5b7c77dc5968694c1d3c0901f5288f128972552d",
+  "fetchedAt": "2026-08-09T08:06:05.045Z"
+}

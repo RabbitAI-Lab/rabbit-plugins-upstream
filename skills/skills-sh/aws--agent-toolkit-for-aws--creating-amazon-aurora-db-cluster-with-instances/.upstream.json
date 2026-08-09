@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/creating-amazon-aurora-db-cluster-with-instances",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "creating-amazon-aurora-db-cluster-with-instances",
+  "branch": "main",
+  "pushedAt": "2026-08-08T03:07:50Z",
+  "contentHash": "6d03fb4a03bd020b0421759ae766a497632721042aede15bb5165c69d89e69f7",
+  "fetchedAt": "2026-08-09T08:07:21.276Z"
+}

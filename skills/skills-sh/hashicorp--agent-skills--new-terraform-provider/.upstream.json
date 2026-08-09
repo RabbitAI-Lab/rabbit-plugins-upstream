@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/new-terraform-provider",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "new-terraform-provider",
+  "branch": "main",
+  "pushedAt": "2026-08-04T16:40:32Z",
+  "contentHash": "7bde8f4611dfedb16da2f4330869661998821e3f042b83aa04ce8051aaf414b1",
+  "fetchedAt": "2026-08-09T08:06:28.028Z"
+}

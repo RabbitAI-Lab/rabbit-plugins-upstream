@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/youtube-content",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "youtube-content",
+  "branch": "main",
+  "pushedAt": "2026-08-09T07:52:10Z",
+  "contentHash": "10ffb639f84ee9e874b9f9f94d764991cc69df398b4f911d9834be08eb3c761f",
+  "fetchedAt": "2026-08-09T08:07:32.262Z"
+}

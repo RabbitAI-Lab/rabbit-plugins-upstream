@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/gh-review-requests",
+  "repo": "getsentry/skills",
+  "skillId": "gh-review-requests",
+  "branch": "main",
+  "pushedAt": "2026-08-08T06:33:11Z",
+  "contentHash": "32282972aca56029e5b0fc7bb0840c46a976322a19341337fa0190e77ad57a1e",
+  "fetchedAt": "2026-08-09T08:05:56.525Z"
+}

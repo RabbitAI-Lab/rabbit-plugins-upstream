@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/assistant-ui/skills/copilots",
+  "repo": "assistant-ui/skills",
+  "skillId": "copilots",
+  "branch": "main",
+  "pushedAt": "2026-08-02T08:22:04Z",
+  "contentHash": "43d905ae32a631454f84f96c163a6ba3c47bebaa740de50aa3d858173db692c3",
+  "fetchedAt": "2026-08-09T08:07:34.090Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/deploying-custom-domain-rest-api",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "deploying-custom-domain-rest-api",
+  "branch": "main",
+  "pushedAt": "2026-08-08T03:07:50Z",
+  "contentHash": "56ef22b85c5bb84ef8e499c1e9941936273277b53ae056d2609d7b0c93668bc3",
+  "fetchedAt": "2026-08-09T08:07:21.436Z"
+}
