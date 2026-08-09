@@ -1,40 +1,53 @@
-## Description: <br>
-Ideonomy Engine provides structured creative reasoning prompts through ideonomic lenses for exploring problems from multiple perspectives. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Structured creative reasoning through ideonomic lenses for agents that need fresh perspectives, systematic problem exploration, or multi-angle creative analysis.
 
-## Publisher: <br>
-[morpheis](https://clawhub.ai/user/morpheis) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[morpheis](https://clawhub.ai/user/morpheis)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to invoke the Ideonomy CLI for structured brainstorming, diagnostic reasoning, strategic planning, and perspective exploration when default problem-solving stalls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks users to install an external global npm CLI package. <br>
-Mitigation: Review the @clawdactual/ideonomy-engine package and publisher before use on sensitive systems, and uninstall it when no longer needed. <br>
-Risk: The CLI produces structured prompts rather than final answers. <br>
-Mitigation: Treat generated lenses and questions as reasoning aids and review conclusions before acting on them. <br>
+## Use Case:
 
+Developers, engineers, and agent builders use this skill to run ideonomic reasoning prompts for brainstorming, debugging, strategic analysis, ethical reflection, and other structured problem-exploration workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/morpheis/ideonomy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown-style CLI text, or JSON when --json is selected] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [CLI output includes core questions, guiding questions, cross-domain sparks, and conceptual palettes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.3 (source: server release evidence) <br>
+Risk: The skill asks users to install and run a global npm CLI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only when the npm package publisher is trusted and the package fits the intended environment.
+
+Risk: Problem statements may contain sensitive information.
+
+Mitigation: Avoid sensitive prompts unless the installed CLI's data handling has been separately verified.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/morpheis/skills/ideonomy)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and optional JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill guides use of an npm CLI that returns structured prompts, guiding questions, cross-domain sparks, and conceptual palettes rather than final answers.]
+
+## Skill Version(s):
+
+0.3.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

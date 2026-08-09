@@ -302,6 +302,17 @@ def _read_access(filepath: str, timestamp: str, *, table_name: str | None = None
         conn.close()
 
 
+def _secure_lxml_parser():
+    """构建一个针对 XXE (CVE-2026-41066) 加固的 lxml 解析器。
+
+    不解析外部实体、禁止联网、限制树深，确保解析用户提供的 .wdx / .opju
+    等 XML 时不会读取本地文件或访问网络，即便 lxml 版本偏低也安全。
+    lxml 为可选/扩展依赖，故在此惰性导入。
+    """
+    import lxml.etree as ET
+    return ET.XMLParser(resolve_entities=False, no_network=True, huge_tree=False)
+
+
 # ============================================================
 # Mathematica  .wdx  —— best-effort（lxml 解析 XML）
 # ============================================================
@@ -315,7 +326,7 @@ def _read_wdx(filepath: str, timestamp: str) -> StatFileResult:
     import lxml.etree as ET
 
     try:
-        tree = ET.parse(filepath)
+        tree = ET.parse(filepath, parser=_secure_lxml_parser())
     except Exception as e:  # noqa: BLE001
         raise RuntimeError(
             _bilingual(
@@ -420,7 +431,7 @@ def _read_origin(filepath: str, timestamp: str) -> StatFileResult:
                 if not (n.lower().endswith(".xml") or n.lower().endswith(".xhtml")):
                     continue
                 try:
-                    tree = ET.parse(io.BytesIO(zf.read(n)))
+                    tree = ET.parse(io.BytesIO(zf.read(n)), parser=_secure_lxml_parser())
                 except Exception:  # noqa: BLE001
                     continue
                 root = tree.getroot()
@@ -524,4 +535,9 @@ _read_limdep = _make_unsupported(
 )
 _read_ncss = _make_unsupported(
     "NCSS", ".csv", ".csv"
+)
+_read_sas_ssp = _make_unsupported(
+    "SAS 6 数据集 (.ssp)",
+    ".sas7bdat (SAS 7+) 或 .xpt (SAS XPORT)",
+    ".sas7bdat (SAS 7+) or .xpt (SAS XPORT)",
 )

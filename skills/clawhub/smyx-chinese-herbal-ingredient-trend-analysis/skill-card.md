@@ -1,5 +1,5 @@
 ## Description: <br>
-AI-powered active-ingredient accumulation trend assessment for medicinal herbs using high-resolution leaf images to estimate visual indicators, compare them with cultivar reference features, and report an accumulation trend level for harvest-window decisions. <br>
+Analyzes medicinal herb leaf images or videos to estimate active-ingredient accumulation trends and provide harvest-timing guidance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,39 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users in medicinal herb cultivation bases, GAP planting bases, herb cooperatives, and pharmaceutical raw-material operations use this skill to analyze leaf images or video and receive active-ingredient accumulation trend levels and harvest timing guidance. Agents can also query prior cloud-hosted analysis reports for the same skill workflow. <br>
+External growers, herb cooperatives, GAP cultivation bases, and pharmaceutical raw-material teams use this skill to assess high-resolution medicinal plant leaf media and receive accumulation trend levels, harvest-window guidance, and report links. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill sends media and report-history requests to external services. <br>
-Mitigation: Review destination services, network policy, and data handling requirements before installation or use. <br>
-Risk: The skill can silently create or reuse a service identity and associate reports with that identity. <br>
-Mitigation: Run only in environments where this account linkage is approved, and avoid using sensitive media unless the linked cloud account is acceptable. <br>
-Risk: The skill stores authentication tokens in a local workspace database. <br>
-Mitigation: Limit workspace access, rotate or remove tokens when decommissioning the skill, and avoid shared workspaces unless token persistence is acceptable. <br>
-Risk: The skill includes unrelated pet-health or generic analysis components alongside the herb-analysis workflow. <br>
-Mitigation: Review the packaged components and exposed commands before deployment to confirm only the intended workflow is enabled. <br>
-Risk: The analysis estimates herb quality trends from visual features and does not provide chemical testing data. <br>
-Mitigation: Use results as harvest-decision support and confirm formal quality claims with appropriate chemical or regulatory testing. <br>
+Risk: Uploaded media, network URLs, and history queries may be sent to lifeemergence cloud services. <br>
+Mitigation: Use the skill only with media and URLs that are appropriate for the configured cloud service, and review endpoint trust before processing private cultivation images or operational links. <br>
+Risk: Account-linked history lookup and locally persisted identity tokens may expose report history in shared workspaces. <br>
+Mitigation: Run the skill in a controlled workspace, avoid shared local state for sensitive users, and review local token/database handling before deployment. <br>
+Risk: Visual trend estimates are not a substitute for formal medicinal-herb quality testing. <br>
+Mitigation: Treat the output as harvest-decision support and confirm quality-sensitive decisions with HPLC, pharmacopeia, national-standard, or other professional chemical testing. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-chinese-herbal-ingredient-trend-analysis) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+- [API interface documentation](artifact/references/api_doc.md) <br>
+- [Analysis API interface documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis text with report links and optional saved output files] <br>
+**Output Type(s):** [text, markdown, json, guidance] <br>
+**Output Format:** [Markdown text with structured JSON content and report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call external analysis and report-history services; local inputs are limited to supported image/video formats and documented file-size constraints.] <br>
+**Other Properties Related to Output:** [May write the returned report content to a user-specified output file.] <br>
 
 ## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter reports 1.0.6) <br>
+1.0.7 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

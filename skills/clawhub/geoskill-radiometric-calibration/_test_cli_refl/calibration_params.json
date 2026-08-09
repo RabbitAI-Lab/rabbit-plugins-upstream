@@ -1,0 +1,46 @@
+{
+  "sensor": "sentinel2",
+  "output_type": "toa_reflectance",
+  "solar_zenith_deg": 30.0,
+  "earth_sun_distance": 1.0,
+  "gain": 0.0001,
+  "bias": 0.0,
+  "bands": [
+    {
+      "band_index": 0,
+      "band_name": "blue",
+      "esun": 1950.0,
+      "mean_value": 0.06638312339782715
+    },
+    {
+      "band_index": 1,
+      "band_name": "green",
+      "esun": 1820.0,
+      "mean_value": 0.10427785664796829
+    },
+    {
+      "band_index": 2,
+      "band_name": "red",
+      "esun": 1550.0,
+      "mean_value": 0.1038755550980568
+    },
+    {
+      "band_index": 3,
+      "band_name": "re1",
+      "esun": 1430.0,
+      "mean_value": 0.16481773555278778
+    },
+    {
+      "band_index": 4,
+      "band_name": "nir",
+      "esun": 990.0,
+      "mean_value": 0.3143412470817566
+    },
+    {
+      "band_index": 5,
+      "band_name": "swir1",
+      "esun": 245.0,
+      "mean_value": 0.2214667946100235
+    }
+  ]
+}

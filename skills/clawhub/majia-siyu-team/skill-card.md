@@ -1,45 +1,64 @@
-## Description: <br>
-Routes Chinese private-domain operations requests to onboarding, copywriting, group messaging, conversation, diagnosis, customer-record workflows, or owner-facing setup guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese private-domain operations toolkit that routes users through WeChat content, group messaging, welcome scripts, compliance checks, market research, diagnostics, and local customer archive/report workflows.
 
-## Publisher: <br>
-[maojiebc](https://clawhub.ai/user/maojiebc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[maojiebc](https://clawhub.ai/user/maojiebc)
 
-## Use Case: <br>
-Chinese-speaking private-domain operators, store owners, and small business users use this skill as a single entry point for deciding the next operational step and getting routed guidance or deliverables. It supports onboarding, pre-task routing, post-task navigation, and a zero-dependency restaurant-owner setup guide. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads the current conversation to choose another skill, so incomplete context or ambiguous requests can route work to the wrong next step. <br>
-Mitigation: Use explicit commands or provide the current goal clearly when possible, and review the selected next step before relying on the output. <br>
-Risk: Companion skills such as save, restore, report, and update can affect customer-record workflows or update behavior. <br>
-Mitigation: Review companion skills before installation or use when customer-record storage, retention, reporting, or update behavior matters. <br>
-Risk: Generated operational guidance, marketing copy, SVG, HTML, or shell commands may need business, brand, compliance, or execution review. <br>
-Mitigation: Review outputs before publishing content, sharing customer-facing assets, or running commands. <br>
+## Use Case:
 
+External business operators, consultants, and marketing teams use this skill to plan and produce Chinese private-domain operations work, including WeChat moments posts, group broadcasts, welcome scripts, vendor research snapshots, diagnostics, and shareable reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/maojiebc/skills/majia-siyu-team) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/maojiebc) <br>
-- [New user tutorial](references/新手教程.md) <br>
-- [Owner-facing private-domain setup guide](references/整盘怎么搭-老板版.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Chinese Markdown guidance with routed task instructions, optional SVG/HTML snippets, and inline shell commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Routes to companion siyu skills when available and can produce bundled zero-dependency owner guidance from reference material.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.0 (source: server release metadata and skill metadata) <br>
+Risk: Local customer archives and reports can contain sensitive business or customer information in plaintext.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit save, restore, and report commands only when needed, avoid storing sensitive customer data unless local plaintext files are acceptable, and review reports before sharing.
+
+Risk: Vendor, product, pricing, policy, platform-rule, and company-status guidance can become stale or unverifiable.
+
+Mitigation: Use the market-research flow for these topics, require dated public sources for key claims, and provide only a research framework when current web verification is unavailable.
+
+Risk: Generated private-domain operations materials may introduce compliance or overclaiming issues before deployment.
+
+Mitigation: Run the bundled compliance checks and review customer-facing copy before publishing or sending it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/maojiebc/skills/majia-siyu-team)
+- [Project homepage](https://github.com/maojiebc/majia-siyu-team)
+- [GitHub releases](https://github.com/maojiebc/majia-siyu-team/releases)
+- [README](README.md)
+- [新手教程](references/新手教程.md)
+- [整盘怎么搭-老板版](references/整盘怎么搭-老板版.md)
+- [Module index](modules/index.json)
+- [Knowledge manifest](modules/_knowledge/manifest.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Shell commands, Configuration, Files]
+
+**Output Format:** [Markdown guidance, structured checklists, shell commands, and local Markdown archive/report files when explicitly requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local plaintext customer archives and reports during save, restore, and report workflows.]
+
+## Skill Version(s):
+
+1.4.1 (source: server release metadata and SKILL.md metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

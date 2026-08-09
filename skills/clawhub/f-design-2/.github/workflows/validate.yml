@@ -1,0 +1,125 @@
+name: Validate
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Validate skill frontmatter
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          text = Path("SKILL.md").read_text(encoding="utf-8")
+          if not text.startswith("---\n"):
+              raise SystemExit("SKILL.md must start with YAML frontmatter")
+          end = text.find("\n---\n", 4)
+          if end == -1:
+              raise SystemExit("SKILL.md frontmatter is not closed")
+          frontmatter = text[4:end]
+          required = {"name:", "description:"}
+          missing = [item for item in required if item not in frontmatter]
+          if missing:
+              raise SystemExit(f"Missing frontmatter fields: {', '.join(missing)}")
+          if "name: design-guide" not in frontmatter:
+              raise SystemExit("Expected skill name: design-guide")
+          print("SKILL.md frontmatter OK")
+          PY
+
+      - name: Check shell scripts
+        run: |
+          bash -n scripts/*.sh
+
+      - name: Check Python scripts
+        run: |
+          python3 -m py_compile scripts/*.py
+          python3 scripts/present-design.py --help >/dev/null
+          python3 scripts/capture-audit.py --help >/dev/null
+          python3 scripts/inspect-project.py --help >/dev/null
+          python3 scripts/design-contract.py --help >/dev/null
+          python3 scripts/run-preview.py --help >/dev/null
+          python3 scripts/visual-diff.py --help >/dev/null
+          python3 scripts/verify-ui.py --help >/dev/null
+          python3 scripts/design-guide-doctor.py --help >/dev/null
+          python3 scripts/evaluate-review-output.py --help >/dev/null
+          python3 scripts/design-contract.py validate \
+            tests/fixtures/quality/design-contract.json \
+            --project-root . \
+            --require-approved
+          python3 -m unittest discover -s tests -v
+
+      - name: Verify product journeys
+        run: python3 scripts/verify-product-journeys.py
+
+      - name: Run environment detector
+        run: |
+          bash scripts/detect-frontend-env.sh .
+
+      - name: Check for local path leakage
+        run: python3 scripts/check-secrets.py .
+
+  browser-quality:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Set up Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Set up Node
+        uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+
+      - name: Install browser quality tools
+        run: |
+          python3 -m pip install "playwright>=1.50,<2" "Pillow>=10,<12" "jsonschema>=4,<5"
+          python3 -m playwright install --with-deps chromium
+          npm install --no-save axe-core@4 lighthouse@12
+          echo "$PWD/node_modules/.bin" >> "$GITHUB_PATH"
+          python3 - <<'PY' >> "$GITHUB_ENV"
+          from playwright.sync_api import sync_playwright
+          with sync_playwright() as playwright:
+              print(f"CHROME_PATH={playwright.chromium.executable_path}")
+          PY
+
+      - name: Start quality fixture preview
+        run: |
+          python3 scripts/run-preview.py start \
+            --command "python3 -m http.server 4173 --bind 127.0.0.1" \
+            --url http://127.0.0.1:4173/tests/fixtures/quality/ \
+            --browser never \
+            --wait 10
+
+      - name: Run strict contract-driven browser verification
+        run: |
+          python3 scripts/verify-ui.py http://127.0.0.1:4173/tests/fixtures/quality/ \
+            --contract tests/fixtures/quality/design-contract.json \
+            --project-root . \
+            --out .codex/design-guide/verification
+
+      - name: Stop quality fixture preview
+        if: always()
+        run: |
+          python3 scripts/run-preview.py stop
+
+      - name: Upload browser quality evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: design-guide-browser-quality
+          path: |
+            .codex/design-guide/verification
+            .codex/design-guide/preview.log
+          if-no-files-found: warn

@@ -1,5 +1,5 @@
 ## Description: <br>
-Identity Aiops helps agents operate Keycloak or authentik identity providers for user, event, client, MFA, login-failure, stale-access, and governed account or OAuth administration workflows. <br>
+Identity AIops helps agents operate Keycloak and authentik identity providers by reading realm, user, event, client, MFA, and RCA data and performing audited account or client changes. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,23 +11,24 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Identity, security, and platform operators use this skill to inspect Keycloak or authentik tenants, analyze login failures, stale access, OAuth client configuration, and MFA coverage, and perform audited account or client changes when the connected account is authorized. <br>
+Identity, SSO, and platform operators use this skill to inspect Keycloak or authentik environments, diagnose login failures, stale access, OAuth client misconfiguration, and MFA gaps, and carry out governed remediation when authorized. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact identity and OAuth administration without an in-tool approval gate. <br>
-Mitigation: Install it only where agent-driven identity administration is intended, start with view-only Keycloak or authentik permissions, and grant manage-users or manage-clients only for controlled sessions. <br>
-Risk: Audit approval environment variables are recorded as annotations but are not enforcement controls. <br>
-Mitigation: Use account permissions and the agent's operating instructions as the enforcement layer, and do not rely on approval annotations to block writes. <br>
-Risk: Client-secret rotation and session revocation can cause immediate operational impact and may not be reversible. <br>
-Mitigation: Use dry runs where available, stage dependent deployments before rotating secrets, and review audit and undo records after state-changing operations. <br>
+Risk: The skill can perform high-impact account and OAuth client changes without an enforced approval or read-only gate. <br>
+Mitigation: Use a dedicated least-privileged Keycloak service account or authentik token, start with view-only roles, and grant manage-users or manage-clients only for sessions where writes are intended. <br>
+Risk: Audit approval variables are labels rather than enforcement controls. <br>
+Mitigation: Treat IDENTITY_AUDIT_APPROVED_BY and IDENTITY_AUDIT_RATIONALE as audit metadata, and rely on IdP permissions plus agent instructions to control whether writes are allowed. <br>
+Risk: Local configuration, encrypted secrets, audit logs, and undo records are stored under ~/.identity-aiops by default. <br>
+Mitigation: Protect ~/.identity-aiops permissions, use the encrypted secrets store, and migrate away from the legacy plaintext secret environment fallback. <br>
+Risk: The artifact reports mock validation and no recorded live end-to-end run against a real IdP. <br>
+Mitigation: Run identity-aiops doctor and validate read and write workflows in a lab Keycloak or authentik target before production use. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/identity-aiops) <br>
-- [Project homepage](https://github.com/AIops-tools/Identity-AIops) <br>
+- [Identity AIops source homepage](https://github.com/AIops-tools/Identity-AIops) <br>
 - [Capabilities reference](references/capabilities.md) <br>
 - [CLI reference](references/cli-reference.md) <br>
 - [Setup and security guide](references/setup-guide.md) <br>
@@ -36,12 +37,12 @@ Mitigation: Use dry runs where available, stage dependent deployments before rot
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON or configuration snippets] <br>
+**Output Format:** [Markdown and structured identity-operation results with inline shell commands and configuration snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May describe identity-provider API observations, RCA findings, dry-run write plans, audit implications, and follow-up commands.] <br>
+**Other Properties Related to Output:** [Outputs can include normalized identity-provider records, analysis findings, dry-run previews, audit labels, undo references, and operator guidance.] <br>
 
 ## Skill Version(s): <br>
-0.4.0 (source: evidence.release.version) <br>
+0.6.0 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -1,0 +1,17 @@
+name: geoskill-education-resource-allocation
+display_name: 教育资源空间配置
+description: |
+  Population distribution, accessibility and capacity constraints to optimize school layout and equity
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-education-resource-allocation.py
+runtime: python>=3.9
+tags:
+  - ai
+  - gis
+  - network
+  - optimization
+  - remote-sensing
+  - security
+  - urban
+  - visualization

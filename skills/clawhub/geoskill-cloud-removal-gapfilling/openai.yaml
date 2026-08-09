@@ -1,0 +1,11 @@
+name: geoskill-cloud-removal-gapfilling
+display_name: 去云与间隙填充
+description: |
+  多时相中值/百分位合成去云，生成无云合成影像与云覆盖率统计
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-cloud-removal-gapfilling.py
+runtime: python>=3.9
+tags:
+  - gis
+  - remote-sensing

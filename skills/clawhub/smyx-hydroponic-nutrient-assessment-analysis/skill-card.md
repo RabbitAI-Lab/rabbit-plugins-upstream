@@ -1,43 +1,60 @@
-## Description: <br>
-This skill analyzes hydroponic root and leaf images or videos to qualitatively assess nutrient concentration status and provide adjustment guidance without producing EC or ppm values. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill analyzes hydroponic root and leaf images or videos to qualitatively assess nutrient concentration status and provide directionally appropriate adjustment advice.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Hydroponic growers, plant-factory operators, and developers integrating plant monitoring workflows use this skill to analyze root and leaf media, identify visual stress indicators, and receive qualitative nutrient adjustment advice. It can also query cloud-hosted historical assessment records associated with the local user identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cloud analysis sends selected plant media and account-linked metadata to lifeemergence.com services. <br>
-Mitigation: Use only intended hydroponic media, avoid unrelated private files, and confirm that sharing the media with the external service is acceptable before running analysis. <br>
-Risk: The skill can create or reuse a local identity and store service tokens in the workspace data directory. <br>
-Mitigation: Review or clear data/smyx-api-key.txt and smyx-common-claw.db before use, and restrict access to workspaces where those files may be created. <br>
+## Use Case:
 
+Hydroponic growers, plant-factory operators, home gardeners, and developers integrating ClawHub skills use this agent to review root and leaf media for visual signs of overly concentrated or overly dilute nutrient solution. It returns qualitative findings, adjustment guidance, report links, and history-list output for follow-up review.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-hydroponic-nutrient-assessment-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Interface Documentation](artifact/references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis text with optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include qualitative nutrient status, root and leaf observations, adjustment advice, historical report records, and report links when returned by the service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server-resolved release metadata; artifact frontmatter reports 1.0.7) <br>
+Risk: Hydroponic media inputs or URLs are sent to a lifeemergence.com cloud service for analysis and report retrieval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only intended hydroponic images, videos, or public URLs, and review the cloud-service data handling expectations before installation.
+
+Risk: The skill can create or reuse a local/cloud identity and store authentication tokens for report history.
+
+Mitigation: Check the workspace data directory for retained smyx user or token database files when removing the skill, and avoid sharing workspaces that may contain those files.
+
+Risk: Visual-only nutrient assessment may be incomplete for operational decisions.
+
+Mitigation: Treat results as qualitative growing guidance, and verify severe concentration concerns with direct observation or measurement before making high-impact changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-hydroponic-nutrient-assessment-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Hydroponic nutrient assessment API documentation](references/api_doc.md)
+- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Structured report text or JSON with qualitative nutrient status, visual findings, adjustment advice, and report links; history queries can be formatted as Markdown tables.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local file paths or public media URLs for jpg, png, mp4, avi, and mov inputs up to 10 MB; output can optionally be written to a file.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

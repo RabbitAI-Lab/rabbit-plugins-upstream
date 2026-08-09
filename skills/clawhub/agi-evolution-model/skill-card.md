@@ -1,48 +1,58 @@
-## Description: <br>
-基于双环架构的AGI进化模型，通过意向性分析、人格层映射、元认知检测和错误智慧库实现持续自我演进；当用户需要智能对话、人格定制、复杂问题求解或从错误中学习时使用 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AGI数字伙伴 is a conversational digital companion skill that uses a dual-loop AGI evolution model with intentionality analysis, personality mapping, metacognitive checks, error-wisdom memory, and five-dimensional intelligence tagging to support dialogue, personality customization, complex problem solving, and learning from errors.
 
-## Publisher: <br>
-[kiwifruit13](https://clawhub.ai/user/kiwifruit13) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kiwifruit13](https://clawhub.ai/user/kiwifruit13)
 
-## Use Case: <br>
-External users and developers use this skill as a conversational AGI-style companion framework for personalized dialogue, personality customization, complex problem solving, metacognitive checks, and learning from prior errors. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan flags broad local file, process, system-information, and shell-command powers without tight safeguards. <br>
-Mitigation: Use only in a sandbox or disposable workspace, keep secrets and important files out of reach, and enable command, file, or process tools only when that host-level access is intentional. <br>
-Risk: Release metadata and packaged documentation disagree on the license. <br>
-Mitigation: Confirm the applicable license before deployment or redistribution and align the release metadata with the packaged documentation. <br>
+## Use Case:
 
+Developers and agent users use this skill to add a persistent digital companion workflow for conversation, personality customization, memory-backed reflection, metacognitive checks, error prevention, and dimension-tagged reasoning. It is intended for broad interactive assistance where local workspace access and retained history are explicitly acceptable.
 
-## Reference(s): <br>
-- [ClawHub Release Page](https://clawhub.ai/kiwifruit13/agi-evolution-model) <br>
-- [AGI进化模型架构详解](references/architecture.md) <br>
-- [AGI进化模型能力边界说明](references/capability_boundaries.md) <br>
-- [CLI工具箱完整指南](references/cli-tools-guide.md) <br>
-- [错误智慧库规范](references/error_wisdom_spec.md) <br>
-- [智能体响应规则](references/intelligence-agent-response-rules.md) <br>
-- [人格初始化参数映射对照表](references/personality_mapping.md) <br>
-- [Tool Use 接口设计规范](references/tool_use_spec.md) <br>
-- [使用示例](references/usage-examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, Python script invocations, and generated local configuration or memory files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local AGI memory, personality, history, and error-wisdom files when its scripts are used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill can provide a conversational companion with broad local command, file, process, background activity, and stored-history capabilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only in a constrained workspace or sandbox, and enable CLI execution, file operations, process management, daemons, and archival memory only when they are needed and explicitly accepted.
+
+Risk: Stored interaction history may retain sensitive or long-lived user context.
+
+Mitigation: Use a dedicated memory directory, review retention needs before deployment, and clear or isolate stored history when handling sensitive work.
+
+## Reference(s):
+
+- [AGI数字伙伴 ClawHub listing](https://clawhub.ai/kiwifruit13/skills/agi-evolution-model)
+- [Architecture](references/architecture.md)
+- [Capability Boundaries](references/capability_boundaries.md)
+- [Intelligence Agent Response Rules](references/intelligence-agent-response-rules.md)
+- [CLI Tools Guide](references/cli-tools-guide.md)
+- [Usage Examples](references/usage-examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and plain text with optional code and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update local memory files under the configured memory directory when supporting scripts are used.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata, created 2026-08-07T11:36:01Z)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

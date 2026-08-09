@@ -1,0 +1,53 @@
+{
+  "version": "1.0",
+  "description": "Qualification rules template - users MUST customize entities and rules to match their own business scope. All data here is placeholder/example only.",
+  "entities": {
+    "entity_a": {
+      "name": "主体A（示例：传媒/活动类）",
+      "capabilities": [
+        "广告", "传媒", "活动策划", "会展", "设计", "制作", "宣传",
+        "视频", "影视", "文化", "品牌", "营销", "推广", "印刷",
+        "摄影", "标识", "展示", "装饰", "装修"
+      ],
+      "note": "替换为你的营业执照经营范围关键词"
+    },
+    "entity_b": {
+      "name": "主体B（示例：通用/设备/维修类）",
+      "capabilities": [
+        "设备", "器材", "供应", "销售", "安装", "调试", "维修",
+        "租赁", "运输", "物流", "仓储", "办公", "通用", "机械",
+        "电气", "自动化", "系统集成", "信息技术"
+      ],
+      "note": "替换为你的营业执照经营范围关键词"
+    }
+  },
+  "red_alerts": [
+    "车辆维修", "机动车维修", "劳务派遣", "食品生产", "食品加工",
+    "医疗器械", "建筑施工", "消防", "危险品", "房地产开发",
+    "电信", "互联网信息服务", "爆破", "保安", "安保", "测绘",
+    "勘察", "特种设备", "压力容器", "电梯", "制药", "矿产",
+    "采掘", "冶炼", "钻井", "修井"
+  ],
+  "special_rules": [
+    {
+      "id": "skip_procurement",
+      "description": "采购/采办/询价类不参与（垫资风险）",
+      "match_keywords": ["采购", "采办", "询价", "询比", "竞争性谈判"],
+      "action": "skip",
+      "reason": "垫资类项目不参与"
+    },
+    {
+      "id": "external_qual_allowed",
+      "description": "示例：某类标可外找资质，不依赖自有资质",
+      "match_keywords": ["示例关键词"],
+      "action": "investable",
+      "assigned_entity": "entity_a",
+      "reason": "此类标可外找资质，正常推进"
+    }
+  ],
+  "skip_keywords_result": ["结果公示", "中标公示", "成交公示", "中标公告", "成交公告"],
+  "region_priority": {
+    "high": [],
+    "note": "按需填写重点地区，如 [\"天津\", \"青岛\", \"深圳\"]"
+  }
+}

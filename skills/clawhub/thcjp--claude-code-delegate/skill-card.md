@@ -1,5 +1,5 @@
 ## Description: <br>
-Delegates coding tasks to a local AI coding CLI with non-interactive execution, asynchronous polling, session continuation, independent test verification, environment checks, safety guidance, and result relay. <br>
+Delegates coding, debugging, testing, and development tasks to a local ai-assistant CLI while guiding the host agent to relay results back to the user. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and engineering agents use this skill to delegate code writing, modification, review, testing, and debugging tasks to an external local coding CLI while preserving asynchronous user interaction and requiring independent verification of generated code. <br>
+Developers and engineers use this skill to delegate programming tasks, code review, debugging, test execution, and iterative fixes to a local coding CLI. It is intended for clear technical tasks with an identified project directory and constraints. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can run an external AI coding CLI with broad file-write authority. <br>
-Mitigation: Use only disposable or tightly isolated project directories and avoid repositories containing secrets or account configuration. <br>
-Risk: Write protection is recommended but optional in the artifact behavior. <br>
-Mitigation: Enable a real write guard or sandbox before delegation and review warnings when protection is missing. <br>
-Risk: Automatic delegation can execute coding actions for routine edits. <br>
-Mitigation: Prefer explicit delegation triggers for ordinary edits and review delegated outputs before applying or relaying results. <br>
+Risk: The delegated local CLI may read or modify files broadly when permission bypass is enabled. <br>
+Mitigation: Run it only in an isolated project directory, enable a real write guard or sandbox, and keep it away from home directories, system configuration, and repositories containing secrets. <br>
+Risk: Automatic delegation can execute unclear or overly broad coding tasks against the wrong path. <br>
+Mitigation: Confirm the exact task, target directory, and constraints before delegation, and review the delegated output before acting on it. <br>
+Risk: Delegated code or test results may be incomplete or incorrect. <br>
+Mitigation: Use a fresh independent verification run and review changed files, test output, and reported errors before accepting the result. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/claude-code-delegate) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and plain text with inline shell commands] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown or plain text with shell command examples and delegated CLI results] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include delegated task summaries, changed-file summaries, test results, CLI status polling guidance, and safety warnings.] <br>
+**Other Properties Related to Output:** [Delegated runs may return session identifiers, status updates, test results, error summaries, and file-change summaries.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata; artifact frontmatter lists 0.1.2) <br>
+1.0.2 (source: server release metadata; artifact frontmatter reports 0.1.2) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

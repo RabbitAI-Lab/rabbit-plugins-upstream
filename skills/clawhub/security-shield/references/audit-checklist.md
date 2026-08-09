@@ -23,6 +23,36 @@ cat .gitignore | grep -E "\.env|secrets|keys"
 
 ---
 
+## Download Verification Checklist
+
+Use before trusting or executing anything obtained from outside the system.
+
+- [ ] Source confirmed (official site/registry, verified publisher)
+- [ ] Checksum/hash matches a trusted published reference
+- [ ] Signature verified (sigstore/cosign, GPG, or platform signature)
+- [ ] Provenance recorded (who built it, when, from what)
+- [ ] Scanned with available tools (Trivy, VirusTotal, OSV-Scanner)
+- [ ] Contents inspected (scripts, archives, embedded commands)
+- [ ] Executed in a sandbox/container before normal use
+- [ ] Outcome documented in the security log
+
+**Rule:** missing evidence on any check = content remains untrusted.
+
+---
+
+## Agent & AI Security Checklist
+
+- [ ] Tool/skill source and publisher verified before install
+- [ ] Skills audited for concealed instructions or hidden commands
+- [ ] Agent runs in a sandboxed / containerized environment
+- [ ] External content treated as data, never as directives
+- [ ] No real credentials placed in prompts or model context
+- [ ] High-risk tool actions require human approval
+- [ ] Agent memory cleared between unrelated tasks
+- [ ] Prompt-and-response logs reviewed for data leakage
+
+---
+
 ## Web Application Security Checklist
 
 ### Authentication
@@ -107,6 +137,16 @@ cat .gitignore | grep -E "\.env|secrets|keys"
 - [ ] Supply chain verification (checksums, signatures)
 - [ ] Minimal dependencies (remove unused)
 - [ ] Pin versions (no `*` or `latest`)
+- [ ] SBOM generated (SPDX / CycloneDX) for releases
+- [ ] SLSA provenance recorded and hosted
+- [ ] Images and binaries signed (sigstore / cosign)
+
+### Modern Scanning Tools
+- [ ] Container scan with Trivy / Grype on every image
+- [ ] OSV-Scanner for open-source vulnerability lookups
+- [ ] Secrets scanning with gitleaks / TruffleHog in CI
+- [ ] IaC scan with checkov / tfsec / KICS
+- [ ] License + dependency policy enforcement
 
 ### Logging & Monitoring
 - [ ] No sensitive data in logs

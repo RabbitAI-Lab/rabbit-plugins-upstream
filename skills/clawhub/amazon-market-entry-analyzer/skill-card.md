@@ -1,50 +1,67 @@
-## Description: <br>
-Evaluates Amazon product categories with ZooData market, competitor, price, brand, review, and trend data to produce a GO/CAUTION/AVOID market-entry recommendation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses Amazon market-entry viability for a named keyword or category using ZooData market, competitor, pricing, brand, trend, and review signals to produce a GO, CAUTION, or AVOID recommendation.
 
-## Publisher: <br>
-[apiclaw](https://clawhub.ai/user/apiclaw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[apiclaw](https://clawhub.ai/user/apiclaw)
 
-## Use Case: <br>
-Amazon sellers, ecommerce operators, and market researchers use this skill to evaluate a named product niche or category before entering the market. It produces a viability score, GO/CAUTION/AVOID verdict, competitor and price analysis, consumer insight summary, and data provenance based on ZooData API results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The package exposes a broad ZooData command-line tool beyond the market-entry workflow. <br>
-Mitigation: Use the documented market-entry workflow for this skill and review proposed commands before execution. <br>
-Risk: The skill requires a ZooData API key and can redirect API traffic if ZOODATA_BASE_URL is set. <br>
-Mitigation: Provide only the intended ZooData key, avoid setting ZOODATA_BASE_URL unless redirection is intentional, and remove credentials from the environment after use. <br>
-Risk: The workflow can consume API credits across many endpoints. <br>
-Mitigation: Monitor the API usage table, stop on credit-exhaustion responses, and avoid repeated deep dives without user confirmation. <br>
-Risk: Market-entry recommendations are based on sampled API data and should not be treated as the sole basis for business decisions. <br>
-Mitigation: Validate recommendations with additional sources, supplier economics, compliance review, and seller-specific constraints before acting. <br>
-Risk: Fallback review analysis may create temporary work directories containing review data. <br>
-Mitigation: Delete temporary review work directories after fallback analysis is complete. <br>
+## Use Case:
 
+External Amazon sellers, marketplace analysts, and agent operators use this skill to evaluate whether a specific Amazon product niche or category is commercially attractive before market entry. It supports data-backed category research, competitor comparison, consumer pain-point analysis, and entry-strategy guidance.
 
-## Reference(s): <br>
-- [Market Entry Analyzer API Field Reference](references/reference.md) <br>
-- [ZooData Skills GitHub Repository](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
-- [ZooData API Documentation](https://api.zoodata.ai/api-docs) <br>
-- [ZooData API Key Setup](https://zoodata.ai/en/api-keys) <br>
-- [ClawHub Skill Listing](https://clawhub.ai/apiclaw/skills/amazon-market-entry-analyzer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown report with tables, confidence labels, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZOODATA_API_KEY; API-backed findings include data provenance and API usage tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata and skill metadata) <br>
+Risk: The skill sends Amazon market research inputs, including keywords, category paths, ASINs, marketplace/date values, and review queries, to ZooData.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when those inputs are appropriate to share with ZooData, and avoid including unnecessary sensitive business context in prompts.
+
+Risk: ZooData API calls consume account credits, and the full market-entry workflow can require many API calls.
+
+Mitigation: Estimate credit usage before broad or ambiguous scans, confirm multi-call runs with the user, and use narrower granular commands when a credit cap applies.
+
+Risk: The skill requires a ZooData API key and may read a local credential store if the environment variable is not set.
+
+Mitigation: Prefer setting ZOODATA_API_KEY as an environment variable and avoid persistent credential storage unless local policy permits it.
+
+Risk: Market-entry recommendations depend on sampled ZooData coverage and external API availability.
+
+Mitigation: Review the confidence labels, data provenance, and API usage sections, and do not fabricate results when credentials, credits, or endpoint availability block evidence collection.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/apiclaw/skills/amazon-market-entry-analyzer)
+- [Publisher Profile](https://clawhub.ai/user/apiclaw)
+- [ZooData Skills Homepage](https://github.com/SerendipityOneInc/ZooData-Skills)
+- [ZooData](https://zoodata.ai)
+- [ZooData API Keys](https://zoodata.ai/en/api-keys)
+- [ZooData API Field Reference](references/reference.md)
+- [ZooData CLI Contract](references/cli-contract.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown market-entry assessment with tables, confidence labels, API usage details, and optional shell commands for ZooData CLI execution.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZOODATA_API_KEY. ZooData API calls consume account credits and send market research inputs such as keywords, category paths, ASINs, marketplace/date values, and review queries to ZooData.]
+
+## Skill Version(s):
+
+1.0.9 (source: release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

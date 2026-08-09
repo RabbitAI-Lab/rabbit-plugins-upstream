@@ -1,0 +1,30 @@
+name: douyin-video-parser
+version: "1.1.0"
+license: MIT
+author: 斑斑
+description: 丢个抖音链接，还你一份字幕稿和结构化分析。纯本地、零费用、不依赖任何 API。基于 faster-whisper 离线转写。
+
+triggers:
+  - 抖音视频解析
+  - douyin-video-parser
+  - 拆视频
+  - 视频转文字
+  - 抖音字幕
+  - 视频转写
+  - 字幕分离
+  - 逐字稿
+  - 分析视频
+  - 听视频
+  - 读视频
+
+instructions: SKILL.md
+
+dependencies:
+  pip:
+    - faster-whisper
+
+files:
+  - skill.yaml
+  - scripts/transcribe.py
+  - SKILL.md
+  - LICENSE

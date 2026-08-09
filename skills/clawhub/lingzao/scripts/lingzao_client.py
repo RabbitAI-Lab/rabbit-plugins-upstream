@@ -3,6 +3,8 @@ from __future__ import annotations
 
 import argparse
 import base64
+import hashlib
+import http.client
 import json
 import mimetypes
 import os
@@ -16,8 +18,21 @@ import uuid
 from pathlib import Path
 from typing import Any, Dict, List, Optional, TextIO
 
+try:
+    import fcntl
+except ImportError:  # pragma: no cover - Windows fallback
+    fcntl = None  # type: ignore[assignment]
+
+try:
+    import msvcrt
+except ImportError:  # pragma: no cover - Unix fallback
+    msvcrt = None  # type: ignore[assignment]
+
 
 CONFIG_FILE = Path.home() / ".lingzao" / "config.json"
+GENERATE_IMAGE_REQUEST_JOURNAL_FILE = CONFIG_FILE.parent / "generate-image-requests.json"
+GENERATE_IMAGE_REQUEST_LOCK_FILE = CONFIG_FILE.parent / "generate-image-requests.lock"
+GENERATE_IMAGE_REQUEST_TTL_SECONDS = 24 * 60 * 60
 DEFAULT_TIMEOUT = 180
 GENERATE_IMAGE_POLL_TIMEOUT = 300
 GENERATE_IMAGE_DOWNLOAD_TIMEOUT_BUFFER = 60
@@ -45,6 +60,7 @@ PUBLIC_SERVICE_ERROR_LABELS = {
     "YOUTUBE_CONTENT_TYPE_REQUIRED": "请指定 YouTube 视频类型",
     "YOUTUBE_CONTENT_TYPE_MISMATCH": "YouTube 视频类型与 URL 不一致",
     "UNSUPPORTED_CONTENT_TYPE_HINT": "当前平台不接受该视频类型参数",
+    "INSUFFICIENT_CREDITS": "当前积分不足，请充值后重试。",
     "PROVIDER_UNAVAILABLE": "灵造服务暂时不可用",
     "PROVIDER_TIMEOUT": "灵造服务响应超时",
 }
@@ -250,11 +266,25 @@ def main() -> int:
     generate_image_parser.add_argument("--count", type=int, default=1, help="Number of images to create, 1-5.")
     generate_image_parser.add_argument("--output-format", choices=["png", "jpeg", "webp"], default="png")
     generate_image_parser.add_argument(
+        "--reference-mode",
+        choices=["shared", "one_to_one"],
+        default="shared",
+        help=(
+            "How repeated --image files map to outputs. "
+            "one_to_one requires the number of images to equal --count and supports at most 4 images."
+        ),
+    )
+    generate_image_parser.add_argument(
         "--image",
         action="append",
         help="Optional reference image path. Repeat for multiple reference images.",
     )
     generate_image_parser.add_argument("--output", help="Optional path to write the generated image file")
+    generate_image_parser.add_argument(
+        "--new-request",
+        action="store_true",
+        help="Start a new generation intent instead of resuming an ambiguous pending command.",
+    )
     generate_image_parser.add_argument("--format", choices=["markdown", "json"], default="markdown")
 
     args = parser.parse_args()
@@ -413,37 +443,67 @@ def main() -> int:
                 "output_format": args.output_format,
                 "count": args.count,
             }
+            if args.reference_mode == "one_to_one":
+                body["reference_mode"] = args.reference_mode
             image_paths = getattr(args, "image", None) or []
-            try:
-                if image_paths:
-                    payload = request_multipart(
+            pending_request = begin_generate_image_request(
+                config,
+                body,
+                image_paths,
+                force_new=bool(getattr(args, "new_request", False)),
+            )
+            body["client_request_id"] = pending_request["client_request_id"]
+            pending_batch_id = pending_request.get("batch_id")
+            if pending_batch_id:
+                safe_print(f"恢复未完成的图片生成批次：{pending_batch_id}", file=sys.stderr)
+                payload = request_json(
+                    config,
+                    "GET",
+                    f"/api/v1/research/generate-image/batches/{pending_batch_id}",
+                    timeout=args.timeout,
+                )
+            else:
+                try:
+                    payload = submit_generate_image_batch(
                         config,
-                        "POST",
-                        "/api/v1/research/generate-image",
                         body,
                         image_paths,
                         timeout=args.timeout,
                     )
-                else:
-                    payload = request_json(
+                except LingzaoApiError as error:
+                    active_payload = active_generate_image_batch_payload_from_error(
+                        error,
+                        requested_count=args.count,
+                    )
+                    if not active_payload:
+                        raise
+                    active_data = as_dict(active_payload.get("data"))
+                    safe_print(
+                        "检测到另一个图片生成批次正在运行，"
+                        f"等待其结束后再提交当前请求：{active_data.get('batch_id')}",
+                        file=sys.stderr,
+                    )
+                    wait_for_generate_image_batch(config, active_payload, timeout=args.timeout)
+                    safe_print("已有批次已结束，正在提交当前图片生成请求...", file=sys.stderr)
+                    payload = submit_generate_image_batch(
                         config,
-                        "POST",
-                        "/api/v1/research/generate-image",
                         body,
+                        image_paths,
                         timeout=args.timeout,
                     )
-            except LingzaoApiError as error:
-                payload = active_generate_image_batch_payload_from_error(error, requested_count=args.count)
-                if not payload:
-                    raise
-                data = as_dict(payload.get("data"))
-                safe_print(f"检测到已有图片生成批次，继续轮询：{data.get('batch_id')}", file=sys.stderr)
-                safe_print(
-                    "提示：这可能是重复提交恢复或已有任务保护；请继续轮询该 Batch。"
-                    "同提示词多张图请一次使用 --count N，不要循环重复 --count 1。",
-                    file=sys.stderr,
+            batch_id = first_non_empty_str(as_dict(payload.get("data")).get("batch_id"))
+            if batch_id:
+                remember_generate_image_batch(
+                    pending_request["fingerprint"],
+                    pending_request["client_request_id"],
+                    batch_id,
                 )
             payload = wait_for_generate_image_batch(config, payload, timeout=args.timeout)
+            if is_generate_image_batch_terminal(payload):
+                clear_generate_image_request(
+                    pending_request["fingerprint"],
+                    pending_request["client_request_id"],
+                )
             ensure_generate_image_success(payload)
         else:
             raise RuntimeError(f"Unsupported command: {args.command}")
@@ -589,6 +649,20 @@ def validate_args(args: argparse.Namespace) -> Optional[str]:
         count = getattr(args, "count", 1)
         if count < 1 or count > 5:
             return "generate-image --count must be between 1 and 5."
+        image_paths = getattr(args, "image", None) or []
+        reference_mode = getattr(args, "reference_mode", "shared")
+        if reference_mode == "one_to_one" and count > 4:
+            return "generate-image --reference-mode one_to_one supports at most 4 reference images."
+        if len(image_paths) > 4:
+            return "generate-image accepts at most 4 --image files."
+        if (
+            reference_mode == "one_to_one" and
+            len(image_paths) != count
+        ):
+            return (
+                "generate-image --reference-mode one_to_one requires "
+                "the number of --image files to equal --count."
+            )
         if getattr(args, "format", "markdown") == "markdown" and not getattr(args, "output", None):
             return (
                 "generate-image markdown output requires --output so generated images are saved. "
@@ -644,8 +718,8 @@ def validate_args(args: argparse.Namespace) -> Optional[str]:
         if args.command == "search-notes":
             if getattr(args, "sort", "general") != "general":
                 return "Instagram search-notes supports only --sort general."
-            if getattr(args, "note_type", "不限") != "不限":
-                return "Instagram search-notes supports only --note-type 不限."
+            if getattr(args, "note_type", "不限") not in {"不限", "视频笔记"}:
+                return "Instagram content search is Reels-only; use --note-type 视频笔记."
             if getattr(args, "time_filter", "不限") != "不限":
                 return "Instagram search-notes supports only --time-filter 不限."
         if args.command == "get-note-comments":
@@ -785,6 +859,212 @@ def load_config() -> dict:
         return {}
 
 
+def begin_generate_image_request(
+    config: dict,
+    body: Dict[str, Any],
+    image_paths: List[str],
+    *,
+    force_new: bool = False,
+) -> Dict[str, Optional[str]]:
+    fingerprint = generate_image_request_fingerprint(config, body, image_paths)
+    now = int(time.time())
+    with GenerateImageJournalLock():
+        journal = load_generate_image_request_journal(now)
+        pending = as_dict(journal.get("pending"))
+        existing = as_dict(pending.get(fingerprint))
+        client_request_id = first_non_empty_str(existing.get("client_request_id"))
+        batch_id = first_non_empty_str(existing.get("batch_id"))
+        starts_new_request = force_new or not is_uuid(client_request_id)
+        if starts_new_request:
+            client_request_id = str(uuid.uuid4())
+            batch_id = None
+        pending[fingerprint] = compact({
+            "client_request_id": client_request_id,
+            "batch_id": batch_id,
+            "created_at": (
+                now
+                if starts_new_request
+                else to_positive_int(existing.get("created_at")) or now
+            ),
+            "updated_at": now,
+        })
+        save_generate_image_request_journal({"version": 1, "pending": pending})
+    return {
+        "fingerprint": fingerprint,
+        "client_request_id": client_request_id,
+        "batch_id": batch_id,
+    }
+
+
+def remember_generate_image_batch(fingerprint: str, client_request_id: str, batch_id: str) -> None:
+    now = int(time.time())
+    with GenerateImageJournalLock():
+        journal = load_generate_image_request_journal(now)
+        pending = as_dict(journal.get("pending"))
+        existing = as_dict(pending.get(fingerprint))
+        if existing.get("client_request_id") != client_request_id:
+            return
+        pending[fingerprint] = {
+            **existing,
+            "batch_id": batch_id,
+            "updated_at": now,
+        }
+        save_generate_image_request_journal({"version": 1, "pending": pending})
+
+
+def clear_generate_image_request(fingerprint: str, client_request_id: str) -> None:
+    with GenerateImageJournalLock():
+        journal = load_generate_image_request_journal()
+        pending = as_dict(journal.get("pending"))
+        existing = as_dict(pending.get(fingerprint))
+        if existing.get("client_request_id") != client_request_id:
+            return
+        pending.pop(fingerprint, None)
+        save_generate_image_request_journal({"version": 1, "pending": pending})
+
+
+def generate_image_request_fingerprint(
+    config: dict,
+    body: Dict[str, Any],
+    image_paths: List[str],
+) -> str:
+    reference_images = []
+    for image_path in image_paths:
+        path = Path(image_path).expanduser()
+        if not path.is_file():
+            raise LingzaoError(f"Reference image not found: {path}")
+        mime_type = mimetypes.guess_type(path.name)[0] or "application/octet-stream"
+        if mime_type not in {"image/png", "image/jpeg", "image/webp"}:
+            raise LingzaoError("Reference images must be png, jpeg, or webp files.")
+        try:
+            image_bytes = path.read_bytes()
+        except OSError as error:
+            raise LingzaoError(f"Reference image could not be read: {path}") from error
+        reference_images.append({
+            "mime_type": mime_type,
+            "sha256": sha256_hex(image_bytes),
+        })
+
+    account_scope = sha256_hex(
+        f"{config['base_url']}\0{config['api_key']}".encode("utf-8"),
+    )
+    canonical = {
+        "version": 2,
+        "account_scope": account_scope,
+        "prompt_sha256": sha256_hex(str(body.get("prompt") or "").encode("utf-8")),
+        "size": body.get("size"),
+        "output_format": body.get("output_format"),
+        "count": body.get("count"),
+        "reference_mode": body.get("reference_mode") or "shared",
+        "reference_images": reference_images,
+    }
+    encoded = json.dumps(canonical, ensure_ascii=False, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return sha256_hex(encoded)
+
+
+def sha256_hex(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
+
+
+def load_generate_image_request_journal(now: Optional[int] = None) -> dict:
+    current_time = now or int(time.time())
+    try:
+        value = json.loads(GENERATE_IMAGE_REQUEST_JOURNAL_FILE.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        value = {}
+    pending = as_dict(as_dict(value).get("pending"))
+    active = {}
+    for fingerprint, raw_entry in pending.items():
+        entry = as_dict(raw_entry)
+        updated_at = to_positive_int(entry.get("updated_at"))
+        client_request_id = first_non_empty_str(entry.get("client_request_id"))
+        if (
+            len(fingerprint) == 64
+            and is_uuid(client_request_id)
+            and updated_at is not None
+            and current_time - updated_at <= GENERATE_IMAGE_REQUEST_TTL_SECONDS
+        ):
+            active[fingerprint] = entry
+    return {"version": 1, "pending": active}
+
+
+def save_generate_image_request_journal(journal: dict) -> None:
+    directory = GENERATE_IMAGE_REQUEST_JOURNAL_FILE.parent
+    directory.mkdir(parents=True, exist_ok=True)
+    try:
+        os.chmod(directory, 0o700)
+    except OSError:
+        pass
+    temporary = directory / f".{GENERATE_IMAGE_REQUEST_JOURNAL_FILE.name}.{uuid.uuid4().hex}.tmp"
+    try:
+        temporary.write_text(
+            json.dumps(journal, ensure_ascii=False, sort_keys=True, separators=(",", ":")) + "\n",
+            encoding="utf-8",
+        )
+        try:
+            os.chmod(temporary, 0o600)
+        except OSError:
+            pass
+        os.replace(temporary, GENERATE_IMAGE_REQUEST_JOURNAL_FILE)
+    finally:
+        try:
+            temporary.unlink()
+        except FileNotFoundError:
+            pass
+        except OSError:
+            pass
+
+
+def is_uuid(value: Optional[str]) -> bool:
+    if not value:
+        return False
+    try:
+        return str(uuid.UUID(value)) == value.lower()
+    except (ValueError, AttributeError):
+        return False
+
+
+class GenerateImageJournalLock:
+    def __init__(self) -> None:
+        self.handle: Optional[Any] = None
+
+    def __enter__(self) -> "GenerateImageJournalLock":
+        directory = GENERATE_IMAGE_REQUEST_LOCK_FILE.parent
+        directory.mkdir(parents=True, exist_ok=True)
+        try:
+            os.chmod(directory, 0o700)
+        except OSError:
+            pass
+        self.handle = GENERATE_IMAGE_REQUEST_LOCK_FILE.open("a+b")
+        try:
+            os.chmod(GENERATE_IMAGE_REQUEST_LOCK_FILE, 0o600)
+        except OSError:
+            pass
+        if fcntl is not None:
+            fcntl.flock(self.handle.fileno(), fcntl.LOCK_EX)
+        elif msvcrt is not None:  # pragma: no cover - Windows
+            self.handle.seek(0)
+            if self.handle.read(1) == b"":
+                self.handle.write(b"0")
+                self.handle.flush()
+            self.handle.seek(0)
+            msvcrt.locking(self.handle.fileno(), msvcrt.LK_LOCK, 1)
+        return self
+
+    def __exit__(self, _error_type: Any, _error: Any, _traceback: Any) -> None:
+        if self.handle is None:
+            return
+        try:
+            if fcntl is not None:
+                fcntl.flock(self.handle.fileno(), fcntl.LOCK_UN)
+            elif msvcrt is not None:  # pragma: no cover - Windows
+                self.handle.seek(0)
+                msvcrt.locking(self.handle.fileno(), msvcrt.LK_UNLCK, 1)
+        finally:
+            self.handle.close()
+            self.handle = None
+
+
 def request_json(
     config: dict,
     method: str,
@@ -814,6 +1094,8 @@ def request_json(
         raise LingzaoError(f"Lingzao API network error: {error.reason}") from error
     except (TimeoutError, socket.timeout) as error:
         raise LingzaoError("Lingzao API request timed out.") from error
+    except (OSError, http.client.HTTPException) as error:
+        raise LingzaoError(f"Lingzao API network error: {error}") from error
 
 
 def request_multipart(
@@ -843,6 +1125,32 @@ def request_multipart(
         raise LingzaoError(f"Lingzao API network error: {error.reason}") from error
     except (TimeoutError, socket.timeout) as error:
         raise LingzaoError("Lingzao API request timed out.") from error
+    except (OSError, http.client.HTTPException) as error:
+        raise LingzaoError(f"Lingzao API network error: {error}") from error
+
+
+def submit_generate_image_batch(
+    config: dict,
+    body: Dict[str, Any],
+    image_paths: List[str],
+    timeout: int,
+) -> Dict[str, Any]:
+    if image_paths:
+        return request_multipart(
+            config,
+            "POST",
+            "/api/v1/research/generate-image",
+            body,
+            image_paths,
+            timeout=timeout,
+        )
+    return request_json(
+        config,
+        "POST",
+        "/api/v1/research/generate-image",
+        body,
+        timeout=timeout,
+    )
 
 
 def wait_for_generate_image_batch(config: dict, payload: dict, timeout: int = DEFAULT_TIMEOUT) -> dict:
@@ -869,7 +1177,7 @@ def wait_for_generate_image_batch(config: dict, payload: dict, timeout: int = DE
         if blocked_codes:
             if first_generated_image(current):
                 return current
-            raise LingzaoError(f"Image generation cannot continue: {', '.join(blocked_codes)}.")
+            raise LingzaoError("；".join(public_error_label(code) for code in blocked_codes))
 
         progress = generate_image_progress_signature(current_data)
         if progress != last_progress:
@@ -898,6 +1206,13 @@ def wait_for_generate_image_batch(config: dict, payload: dict, timeout: int = DE
             if is_lingzao_request_timeout(error) and first_generated_image(current):
                 return current
             raise
+
+
+def is_generate_image_batch_terminal(payload: dict) -> bool:
+    data = as_dict(payload.get("data"))
+    status = str(data.get("status") or "").lower()
+    pending_count = to_non_negative_int(data.get("pending_count"))
+    return status in {"completed", "failed"} or (status == "partial" and pending_count == 0)
 
 
 def generate_image_poll_timeout() -> int:
@@ -1215,7 +1530,26 @@ def build_error_guidance(error: dict) -> str:
     invalid_example = first_error_example(error, "invalid_inputs")
     if invalid_example:
         parts.append(f"invalid_example={invalid_example}")
+    failed_items = render_video_copy_error_items(error)
+    if failed_items:
+        parts.append(f"failed_items={failed_items}")
     return f" ({'; '.join(parts)})" if parts else ""
+
+
+def render_video_copy_error_items(error: dict) -> str:
+    rendered = []
+    for index, value in enumerate(as_list(error.get("items")), start=1):
+        item = as_dict(value)
+        if item.get("status") != "failed":
+            continue
+        details = [
+            f"item {index}",
+            f"url={item.get('origin_url')}" if item.get("origin_url") else None,
+            f"error={public_error_label(item.get('error_code')) or item.get('error_code') or '-'}",
+        ]
+        details.extend(line.removeprefix("- ") for line in render_video_copy_item_guidance(item))
+        rendered.append(", ".join(detail for detail in details if detail))
+    return " | ".join(rendered)
 
 
 def build_lingzao_api_error(status_code: int, payload: dict) -> LingzaoApiError:
@@ -1980,13 +2314,16 @@ def render_extract_video_copy(payload: dict) -> str:
     data = as_dict(payload.get("data"))
     batch = as_dict(data.get("batch"))
     items = as_list(data.get("items"))
+    cost_credits = payload.get("cost_credits")
     lines = [
         "# 短视频文案提取",
         "",
         f"- Batch ID: {batch.get('batch_id', '-')}",
         f"- 成功: {batch.get('success_count', 0)} / {batch.get('total_count', len(items))}",
-        "",
     ]
+    if isinstance(cost_credits, int) and not isinstance(cost_credits, bool):
+        lines.append(f"- 本批次实际扣费: {cost_credits} credits")
+    lines.append("")
     for index, item in enumerate(items, start=1):
         record = as_dict(item)
         error_code = record.get("error_code")
@@ -1999,6 +2336,7 @@ def render_extract_video_copy(payload: dict) -> str:
                 f"- 链接: {record.get('origin_url') or record.get('input_url') or '-'}",
                 f"- 状态: {record.get('status') or '-'}",
                 f"- 错误: {error_code_label} / {error_message}",
+                *render_video_copy_item_guidance(record),
                 f"- 时长: {record.get('duration_seconds') or '-'} 秒",
                 "",
                 str(record.get("content") or "未返回文案。"),
@@ -2008,6 +2346,17 @@ def render_extract_video_copy(payload: dict) -> str:
     if not items:
         lines.append("未返回文案提取结果。")
     return "\n".join(lines).strip()
+
+
+def render_video_copy_item_guidance(record: dict) -> List[str]:
+    lines = []
+    if isinstance(record.get("retryable"), bool):
+        lines.append(f"- 是否重试: {'可以稍后重试' if record['retryable'] else '不要重试该链接'}")
+    if record.get("billing_effect") == "no_charge":
+        lines.append("- 扣费: 该失败项未扣文案提取 credits")
+    if record.get("agent_action") == "ask_user_for_shorter_video":
+        lines.append("- 下一步: 请更换较短的视频链接")
+    return lines
 
 
 def render_generate_image(payload: dict) -> str:
@@ -2039,7 +2388,7 @@ def render_generate_image(payload: dict) -> str:
     else:
         lines.append("- 文件: 未保存；下次可加 `--output /tmp/lingzao-image.png`")
     if blocked_codes:
-        lines.append(f"- 未完成: {', '.join(blocked_codes)}")
+        lines.append(f"- 未完成: {', '.join(public_error_label(code) for code in blocked_codes)}")
     if item_errors:
         lines.append(f"- 错误: {', '.join(item_errors)}")
     lines.extend(
@@ -2047,7 +2396,7 @@ def render_generate_image(payload: dict) -> str:
             "",
             "## Agent 提示",
             "",
-            "- 短时间重复提交完全相同的请求会返回同一个 Batch；完全相同包括 `prompt/size/output_format/count` 以及参考图。看到同一个 Batch 时请继续轮询，不要再次 POST 同一请求。",
+            "- CLI 会为一次生成意图保存请求 ID；网络响应不确定或轮询中断时，原命令会恢复同一个 Batch，不会重复生成或扣费。只有用户明确放弃待恢复任务并要求新一轮生成时才使用 `--new-request`。",
             "- 同提示词需要多张图时，一次调用 `generate-image --count N`（N=2..5），不要循环多次 `--count 1`；需要不同概念时请改写 prompt。",
         ]
     )

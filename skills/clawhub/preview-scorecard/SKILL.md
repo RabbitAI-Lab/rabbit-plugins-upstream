@@ -69,10 +69,9 @@ If you set a `secret` in the JSON, append `?secret=<secret>` to that link. For a
   "title": "My Scorecard",         // required
   "description": "Optional intro",
   "language": "en_US",             // form language; default zh_CN. See "language values" in Notes.
-  "personalized": {                // appearance; omit to use defaults (list layout, light theme)
+  "personalized": {                // appearance; omit to use defaults (light theme)
     "key": "default",
-    "theme": { "name": "light" },
-    "layout": "card"               // "list" | "card"
+    "theme": { "name": "light" }
   },
   "indexDisplayMode": "number",    // question numbering: none (default) | number | uppercase | roman
   "fields": [ /* questions — see "Question types" and "Scoring" */ ],
@@ -90,7 +89,7 @@ Key points:
 
 ## Themes
 
-`personalized.theme.name` sets the visual theme. Omit `theme` to default to `light`. Set it as `"personalized": { "key": "default", "theme": { "name": "synthwave" }, "layout": "card" }` (`layout` is still only `list` or `card`).
+`personalized.theme.name` sets the visual theme. Omit `theme` to default to `light`. Set it as `"personalized": { "key": "default", "theme": { "name": "synthwave" } }`. There is no `personalized.layout` — card is the only answering layout. (The per-field `layout` (`list`/`grid`) is a different thing and still valid.)
 
 Pick a theme that fits the questionnaire's topic/mood. **To use a random theme** — when the user asks for one, wants variety, or has no preference — just choose a random `name` from this list when building the JSON (there's no server-side "random" option). Recommended palette:
 
@@ -180,7 +179,7 @@ The `personalized.theme.name` is matched to the topic (see **Themes** above) —
   "scene": "scorecard",
   "title": "Healthy Habits Score",
   "language": "en_US",
-  "personalized": { "key": "default", "theme": { "name": "forest" }, "layout": "card" },
+  "personalized": { "key": "default", "theme": { "name": "forest" } },
   "fields": [
     {
       "type": "SingleCheck", "code": "q1", "name": "How often do you exercise?",

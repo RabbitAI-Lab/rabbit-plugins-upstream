@@ -16,7 +16,7 @@ metadata:
 
 ## Metadata
 
-- **version**: 9.9.1
+- **version**: 9.11.4
 
 ---
 
@@ -34,6 +34,8 @@ Before calling ANY tool (Read, Write, Bash, Edit, Grep, Glob, Task, etc.) in a s
 This is a **HARD GATE**. No tool call may precede the banner + 5 steps. Violating this gate is a correctness bug, not a style preference.
 
 **Why this gate exists**: Audit of 5 prior sessions found 0/5 compliance with activation mandate. LLMs rationalize skipping ("continuation task", "simple task", "save tokens", "user didn't complain last time"). The gate makes skipping impossible to rationalize — you literally cannot call a tool until activation is done.
+
+**Subagent exemption (added v9.11.4)**: This gate applies to the **main agent** only. Subagents in z.ai receive a compressed task prompt from the orchestrator — they do NOT have SKILL.md pre-loaded into context. To learn the gate exists, a subagent would have to call `Skill(command="stellar-trails")`, which is itself a pre-banner tool call (chicken-and-egg). Therefore E4 is structurally unenforceable on subagents. If subagent compliance is required, the orchestrating main agent MUST pre-inject the relevant SKILL.md sections (activation mandate + step bash blocks) into the subagent's task prompt — only then can the subagent comply. Verified by SIM-001/SIM-002 audit (v9.11.3): both `Explore` and `general-purpose` subagents can call `Skill()` and read SKILL.md from disk, but neither prints the banner first because they have no prior knowledge of the mandate.
 
 ### FIRST OUTPUT — Print this banner, then execute Steps 1–5
 
@@ -73,8 +75,8 @@ Every bash block in activation writes/verifies a hash token. LLM cannot proceed 
 Step 1 writes the token. Steps 2-5 verify it at the top of their bash block:
 ```bash
 # Gate check (top of every Step 2+ bash block):
-EXPECTED=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md 2>/dev/null | sha256sum | cut -c1-16)
-ACTUAL=$(cat /tmp/st-active 2>/dev/null)
+EXPECTED=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md | sha256sum | cut -c1-16)
+ACTUAL=$(cat /tmp/st-active)
 if [ "$EXPECTED" != "$ACTUAL" ]; then
   echo "✗ GATE FAILED: activation token missing/invalid — Step 1 must run first"
   exit 1
@@ -82,6 +84,8 @@ fi
 ```
 
 If LLM skips Step 1, token doesn't exist → Step 2 bash exits 1 → LLM cannot complete task. **LLM cannot fake this** because writing the correct hash requires reading SKILL.md (a tool call recorded in transcript).
+
+**Subagent write access caveat (added v9.11.4)**: `/tmp/st-active` is owned by the same user that subagents run as (`-rw-rw-r-- z:z`), so a subagent CAN overwrite the token to bypass the E7 gate. The gate enforces Step 1 → Step 2+ ordering for the **main agent**; it does not prevent a malicious subagent from writing a valid token without running Step 1. Mitigation: the orchestrating main agent should pre-validate that the token was written by Step 1 (not by a subagent) before trusting subsequent steps. This is best-effort enforcement, not tamper-proof.
 
 #### Vektor 2 — TodoWrite Live Marker (E8)
 
@@ -113,6 +117,8 @@ Step 5 writes the log entry. Next session's Step 1 can read the log to verify pr
 
 **This is fraud detection, not prevention** — but it raises the cost of fraud (LLM must fabricate consistent timestamps + session IDs).
 
+**Best-effort caveat (added v9.11.4)**: `/home/user_skills/` is world-writable (`drwxrwxrwx` mode 0777) in the z.ai sandbox, meaning any process — including subagents — can modify or append to the activation log. This vector is fraud-detection (anomalous timestamps or session IDs are visible on audit), not fraud-prevention. A determined attacker with bash access can forge entries that pass monotonicity checks. The real value of E9 is **visibility for the user**, not cryptographic integrity.
+
 #### Vektor 4 — Read Tool Line-Number Proof (E10)
 
 Step 1 must print a specific line from SKILL.md in the format `Read` tool returns (`<line_number>→<content>`). LLM cannot fabricate this format without actually calling Read.
@@ -136,7 +142,9 @@ Step 3 runs `clawhub inspect` — output is ground truth from an external binary
 - Step 4 compares to what LLM claimed in transcript
 - If mismatch → COMPLIANCE FAILURE reported to user
 
-**Why this works**: `clawhub` is a binary outside LLM control. LLM cannot fabricate `/tmp/st-clawhub-oracle.json` without actually running clawhub (which is a tool call recorded in transcript). The file's content is ground truth — LLM's text claims can be verified against it.
+**Why this works**: `clawhub` is a binary outside LLM control. The real protection is that Step 4 **re-runs `clawhub inspect`** and cross-checks the version — that re-run is the actual oracle. The cached file at `/tmp/st-clawhub-oracle.json` is just an optimization to avoid a second network call.
+
+**Fabrication caveat (corrected v9.11.4)**: A previous version of this section claimed "LLM cannot fabricate `/tmp/st-clawhub-oracle.json` without actually running clawhub." This was overstated — the file is plain JSON at `/tmp/` (permissions `-rw-rw-r--`), and any bash command can write arbitrary content to it. The actual protection is Step 4's re-verification via fresh `clawhub inspect` calls, not the file's contents. The file is an audit artifact, not a tamper-proof oracle.
 
 #### Combined Enforcement Matrix
 
@@ -159,31 +167,51 @@ Step 3 runs `clawhub inspect` — output is ground truth from an external binary
 # In the z.ai sandbox this directory usually does not exist (skill is installed
 # via clawhub, not git clone), so SSV is skipped gracefully. Running bare
 # `git fetch` from /home/z/my-project/ would operate on the sandbox workspace
-# repo — explicitly forbidden by knowledge/platform/zai-sandbox.md.
+# repo — explicitly forbidden by knowledge/zai-sandbox.md.
 if [ -d "$HOME/.stellar-trails-repo/.git" ]; then
-  git -C "$HOME/.stellar-trails-repo" fetch origin --quiet 2>/dev/null
-  BRANCH=$(git -C "$HOME/.stellar-trails-repo" branch --show-current 2>/dev/null || echo main)
-  BEHIND=$(git -C "$HOME/.stellar-trails-repo" rev-list --count HEAD..origin/$BRANCH 2>/dev/null)
+  git -C "$HOME/.stellar-trails-repo" fetch origin --quiet
+  BRANCH=$(git -C "$HOME/.stellar-trails-repo" branch --show-current || echo main)
+  BEHIND=$(git -C "$HOME/.stellar-trails-repo" rev-list --count HEAD..origin/$BRANCH)
   if [ -n "$BEHIND" ] && [ "$BEHIND" -gt 0 ]; then echo "✗ Step 1 FAILED: skill repo is $BEHIND commits behind origin — run git -C $HOME/.stellar-trails-repo pull"
-  else echo "✓ Step 1: context refreshed + SSV passed (v$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md 2>/dev/null || echo unknown))"; fi
+  else echo "✓ Step 1: context refreshed + SSV passed (v$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md || echo unknown))"; fi
 else
-  echo "✓ Step 1: context refreshed (v$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md 2>/dev/null || echo unknown)) — SSV skipped (no skill git repo)"
+  echo "✓ Step 1: context refreshed (v$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md || echo unknown)) — SSV skipped (no skill git repo)"
 fi
 # E7: Write hash token — Steps 2-5 verify this token to prove Step 1 ran.
 # Token = sha256(version line)[:16]. LLM cannot fake this without reading SKILL.md.
-grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md 2>/dev/null | sha256sum | cut -c1-16 > /tmp/st-active
+grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md | sha256sum | cut -c1-16 > /tmp/st-active
 # E10: Print line-number proof — user can verify by reading same file.
 SKILL_VERSION_LINE=$(grep -n '^- \*\*version\*\*:' /home/z/my-project/skills/stellar-trails/SKILL.md | head -1 | cut -d: -f1)
 echo "  E7 token: $(cat /tmp/st-active)"
 echo "  E10 line proof: SKILL.md line ${SKILL_VERSION_LINE}: $(sed -n "${SKILL_VERSION_LINE}p" /home/z/my-project/skills/stellar-trails/SKILL.md)"
+# Auto Git Identity Setup (NEW in v9.10.1) — if PAT exists, auto-configure git identity
+# from GitHub API. Fixes: Z User author, credentials gagal, UUID local.
+# Runs automatically every activation — no manual step needed.
+if [ -f /home/z/my-project/upload/PAT ]; then
+  _GH_TOKEN=$(tr -d '[:space:]' < /home/z/my-project/upload/PAT)
+  _OWNER_JSON=$(curl -sS -m 10 -H "Authorization: Bearer $_GH_TOKEN" https://api.github.com/user)
+  _OWNER_LOGIN=$(echo "$_OWNER_JSON" | python3 -c "import json,sys; print(json.load(sys.stdin).get('login',''))")
+  if [ -n "$_OWNER_LOGIN" ]; then
+    _OWNER_NAME=$(echo "$_OWNER_JSON" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('name') or d.get('login',''))")
+    _OWNER_EMAIL="${_OWNER_LOGIN}@users.noreply.github.com"
+    git config --global user.email "$_OWNER_EMAIL"
+    git config --global user.name "$_OWNER_NAME"
+    git config --global credential.helper store
+    echo "https://${_OWNER_LOGIN}:${_GH_TOKEN}@github.com" > ~/.git-credentials
+    chmod 600 ~/.git-credentials
+    export GIT_AUTHOR_NAME="$_OWNER_NAME" GIT_AUTHOR_EMAIL="$_OWNER_EMAIL"
+    export GIT_COMMITTER_NAME="$_OWNER_NAME" GIT_COMMITTER_EMAIL="$_OWNER_EMAIL"
+    echo "  Git identity: $_OWNER_NAME <$_OWNER_EMAIL> (auto-configured from PAT)"
+  fi
+fi
 ```
 
 **Step 2 — Start popup server + verify mascot**: **E7 gate check at top of bash block** — verifies Step 1 ran by checking hash token.
 
 ```bash
 # E7 gate check — proves Step 1 actually ran (token requires reading SKILL.md)
-EXPECTED_TOKEN=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md 2>/dev/null | sha256sum | cut -c1-16)
-ACTUAL_TOKEN=$(cat /tmp/st-active 2>/dev/null)
+EXPECTED_TOKEN=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md | sha256sum | cut -c1-16)
+ACTUAL_TOKEN=$(cat /tmp/st-active)
 if [ "$EXPECTED_TOKEN" != "$ACTUAL_TOKEN" ]; then
   echo "✗ Step 2 GATE FAILED: activation token missing/invalid — Step 1 must run first"
   exit 1
@@ -191,49 +219,54 @@ fi
 SKILL_DIR="/home/z/my-project/skills/stellar-trails"; ZSCRIPTS="/home/z/my-project/.zscripts"
 if [ ! -f "$SKILL_DIR/chibi.svg" ]; then for REPO_CLONE in "/home/z/my-project/stellar-trails/skill/stellar-trails" "/home/z/my-project/.stellar-trails-repo/skill/stellar-trails" "$HOME/.stellar-trails-repo/skill/stellar-trails"; do [ -f "$REPO_CLONE/chibi.svg" ] && cp -f "$REPO_CLONE/chibi.svg" "$SKILL_DIR/chibi.svg" && break; done; fi
 if [ -d "$SKILL_DIR" ]; then mkdir -p "$ZSCRIPTS"; [ -f "$SKILL_DIR/dev.sh" ] && cp -f "$SKILL_DIR/dev.sh" "$ZSCRIPTS/dev.sh" && chmod +x "$ZSCRIPTS/dev.sh"; [ -f "$SKILL_DIR/index.html" ] && cp -f "$SKILL_DIR/index.html" "$ZSCRIPTS/index.html"; [ -f "$SKILL_DIR/chibi.svg" ] && cp -f "$SKILL_DIR/chibi.svg" "$ZSCRIPTS/chibi.svg"; fi
-DEV_SH="$ZSCRIPTS/dev.sh"; [ -f "$DEV_SH" ] && ! ss -tlnp 2>/dev/null | grep -q ':3000 ' && ( setsid bash "$DEV_SH" </dev/null >/dev/null 2>&1 & ) &
+DEV_SH="$ZSCRIPTS/dev.sh"; [ -f "$DEV_SH" ] && ! ss -tlnp | grep -q ':3000 ' && ( setsid bash "$DEV_SH" </dev/null >/dev/null 2>&1 & ) &
 sleep 1
-HTTP=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/ 2>/dev/null)
-MASCOT=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/chibi.svg 2>/dev/null)
+HTTP=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/)
+MASCOT=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/chibi.svg)
 if [ "$HTTP" = "200" ]; then echo "✓ Step 2: popup server running on :3000 (HTTP $HTTP, mascot $MASCOT)"; else echo "✗ Step 2 FAILED: popup server not responding (HTTP $HTTP)"; fi
 ```
 
-**z.ai sandbox note**: The popup server runs on `localhost:3000` inside the sandbox, but z.ai does NOT expose raw ports to the user's browser. The popup is only visible through the z.ai preview URL pattern: `https://preview-<bot-id>.space-z.ai/`. If the sandbox exposes a preview panel, the popup appears there; otherwise the popup runs but is invisible to the user (activation still succeeds — the popup is decorative, not functional). See `knowledge/platform/zai-sandbox.md` for details.
+**z.ai sandbox note**: The popup server runs on `localhost:3000` inside the sandbox, but z.ai does NOT expose raw ports to the user's browser. The popup is only visible through the z.ai preview URL pattern: `https://preview-<bot-id>.space-z.ai/`. If the sandbox exposes a preview panel, the popup appears there; otherwise the popup runs but is invisible to the user (activation still succeeds — the popup is decorative, not functional). See `knowledge/zai-sandbox.md` for details.
 
 **Step 3 — Auto-update via ClawHub**: **E7 gate check + E11 oracle** — clawhub output written to `/tmp/st-clawhub-oracle.json` for Step 4 cross-verification.
 
 ```bash
 # E7 gate check
-EXPECTED_TOKEN=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md 2>/dev/null | sha256sum | cut -c1-16)
-ACTUAL_TOKEN=$(cat /tmp/st-active 2>/dev/null)
+EXPECTED_TOKEN=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md | sha256sum | cut -c1-16)
+ACTUAL_TOKEN=$(cat /tmp/st-active)
 if [ "$EXPECTED_TOKEN" != "$ACTUAL_TOKEN" ]; then
   echo "✗ Step 3 GATE FAILED: activation token missing/invalid — Step 1 must run first"
   exit 1
 fi
-CURRENT=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9]+\.[0-9]+\.[0-9]+' /home/z/my-project/skills/stellar-trails/SKILL.md 2>/dev/null | head -1)
+CURRENT=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9]+\.[0-9]+\.[0-9]+' /home/z/my-project/skills/stellar-trails/SKILL.md | head -1)
 # E11: Write clawhub output to oracle file — Step 4 will cross-verify this.
 # LLM cannot fabricate this file without actually running clawhub (tool call recorded).
-clawhub inspect stellar-trails --json 2>/dev/null > /tmp/st-clawhub-oracle.json
-LATEST=$(python3 -c "import json,sys; d=json.load(sys.stdin); print((d.get('latestVersion') or {}).get('version') or '')" < /tmp/st-clawhub-oracle.json 2>/dev/null || echo "")
+clawhub inspect stellar-trails --json > /tmp/st-clawhub-oracle.json
+LATEST=$(python3 -c "import json,sys; d=json.load(sys.stdin); print((d.get('latestVersion') or {}).get('version') or '')" < /tmp/st-clawhub-oracle.json || echo "")
 if [ -z "$CURRENT" ]; then echo "✗ Step 3 FAILED: could not read current version from SKILL.md"
 elif [ -z "$LATEST" ]; then echo "✗ Step 3 FAILED: could not reach ClawHub registry (network down?)"
 elif [ "$CURRENT" = "$LATEST" ]; then echo "✓ Step 3: up to date (v$CURRENT) — E11 oracle: $(stat -c%s /tmp/st-clawhub-oracle.json) bytes"
 else
-  if clawhub --no-input update stellar-trails --force 2>/dev/null; then
-    # Sync the persistent zip immediately after a successful update.
-    # Without this, the zip stays stale until Step 4e runs — and if a session
-    # reset happens between this update and the next Skill() invoke, the stale
-    # zip re-extracts and downgrades skills/ back to the old version.
-    # (Fixes P2-NEW-1 from v9.2.0 audit.)
-    SKILL_DIR="/home/z/my-project/skills/stellar-trails"
-    USER_SKILLS_DIR="/home/user_skills"
-    if [ -d "$SKILL_DIR" ] && [ -d "$USER_SKILLS_DIR" ]; then
-      cd "$(dirname "$SKILL_DIR")" && zip -qr "$USER_SKILLS_DIR/stellar-trails.zip" "$(basename "$SKILL_DIR")/" 2>/dev/null && echo "✓ Step 3: updated v$CURRENT → v$LATEST (zip synced)" || echo "✓ Step 3: updated v$CURRENT → v$LATEST (zip sync warning)"
-    else
-      echo "✓ Step 3: updated v$CURRENT → v$LATEST"
-    fi
-  else
-    echo "✗ Step 3 FAILED: clawhub update error"
+  echo "⚠️ Step 3: DRIFT DETECTED — local v$CURRENT vs registry v$LATEST — FORCE UPDATING..."
+  clawhub --no-input update stellar-trails --force
+  UPDATE_EXIT=$?
+  if [ $UPDATE_EXIT -ne 0 ]; then
+    echo "✗ Step 3 FAILED: clawhub update exited $UPDATE_EXIT — see error above"
+    exit 1
+  fi
+  # Post-update verification: re-read local version, confirm it changed
+  POST_VERSION=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9]+\.[0-9]+\.[0-9]+' /home/z/my-project/skills/stellar-trails/SKILL.md | head -1)
+  if [ "$POST_VERSION" != "$LATEST" ]; then
+    echo "✗ Step 3 FAILED: update claimed success but local still v$POST_VERSION (expected v$LATEST)"
+    echo "  Possible cause: skill hidden by moderation, or clawhub update silent failure"
+    exit 1
+  fi
+  echo "✓ Step 3: FORCE UPDATE CONFIRMED — local v$POST_VERSION = registry v$LATEST"
+  # Sync the persistent zip immediately after a successful update.
+  SKILL_DIR="/home/z/my-project/skills/stellar-trails"
+  USER_SKILLS_DIR="/home/user_skills"
+  if [ -d "$SKILL_DIR" ] && [ -d "$USER_SKILLS_DIR" ]; then
+    cd "$(dirname "$SKILL_DIR")" && zip -qr "$USER_SKILLS_DIR/stellar-trails.zip" "$(basename "$SKILL_DIR")/" && echo "✓ Step 3: zip synced to v$LATEST" || echo "⚠️ Step 3: zip sync warning"
   fi
 fi
 ```
@@ -244,8 +277,8 @@ If clawhub updated the skill: re-read SKILL.md from disk now. Cached context is 
 
 ```bash
 # E7 gate check
-EXPECTED_TOKEN=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md 2>/dev/null | sha256sum | cut -c1-16)
-ACTUAL_TOKEN=$(cat /tmp/st-active 2>/dev/null)
+EXPECTED_TOKEN=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md | sha256sum | cut -c1-16)
+ACTUAL_TOKEN=$(cat /tmp/st-active)
 if [ "$EXPECTED_TOKEN" != "$ACTUAL_TOKEN" ]; then
   echo "✗ Step 4 GATE FAILED: activation token missing/invalid — Step 1 must run first"
   exit 1
@@ -255,7 +288,7 @@ if [ ! -f /tmp/st-clawhub-oracle.json ]; then
   echo "✗ Step 4 E11 FAILED: clawhub oracle file missing — Step 3 must run first"
   exit 1
 fi
-ORACLE_VERSION=$(python3 -c "import json,sys; d=json.load(sys.stdin); print((d.get('latestVersion') or {}).get('version') or '')" < /tmp/st-clawhub-oracle.json 2>/dev/null || echo "")
+ORACLE_VERSION=$(python3 -c "import json,sys; d=json.load(sys.stdin); print((d.get('latestVersion') or {}).get('version') or '')" < /tmp/st-clawhub-oracle.json || echo "")
 echo "  E11 oracle cross-check: registry latest = v${ORACLE_VERSION:-<parse failed>}"
 SKILL_DIR="/home/z/my-project/skills/stellar-trails"; USER_SKILLS_DIR="/home/user_skills"; ZSCRIPTS="/home/z/my-project/.zscripts"
 FILES_OK="yes"
@@ -266,11 +299,11 @@ mkdir -p "$ZSCRIPTS"
 [ -f "$SKILL_DIR/index.html" ] && cp -f "$SKILL_DIR/index.html" "$ZSCRIPTS/index.html"
 [ -f "$SKILL_DIR/chibi.svg" ] && cp -f "$SKILL_DIR/chibi.svg" "$ZSCRIPTS/chibi.svg"
 echo "✓ Step 4b: .zscripts/ force-overridden with latest files"
-OLD_PID=$(ss -tlnp 2>/dev/null | grep ':3000 ' | grep -oP 'pid=\K[0-9]+' | head -1)
-if [ -n "$OLD_PID" ]; then kill "$OLD_PID" 2>/dev/null; sleep 1; echo "✓ Step 4c: old dev.sh (PID $OLD_PID) killed"; fi
+OLD_PID=$(ss -tlnp | grep ':3000 ' | grep -oP 'pid=\K[0-9]+' | head -1)
+if [ -n "$OLD_PID" ]; then kill "$OLD_PID"; sleep 1; echo "✓ Step 4c: old dev.sh (PID $OLD_PID) killed"; fi
 DEV_SH="$ZSCRIPTS/dev.sh"
 if [ -f "$DEV_SH" ]; then ( setsid bash "$DEV_SH" </dev/null >/dev/null 2>&1 & ) & sleep 1
-  HTTP=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/ 2>/dev/null)
+  HTTP=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/)
   if [ "$HTTP" = "200" ]; then echo "✓ Step 4d: dev.sh restarted on :3000 (HTTP $HTTP)"; else echo "✗ Step 4d FAILED: dev.sh restart failed (HTTP $HTTP)"; fi
 else echo "✗ Step 4d FAILED: dev.sh not found at $DEV_SH"; fi
 if [ -d "$SKILL_DIR" ] && [ -d "$USER_SKILLS_DIR" ]; then cd "$(dirname "$SKILL_DIR")" && zip -qr "$USER_SKILLS_DIR/stellar-trails.zip" "$(basename "$SKILL_DIR")/" && echo "✓ Step 4e: persistent zip synced" || echo "✗ Step 4e FAILED: zip sync error"; else echo "✗ Step 4e FAILED: directory not found"; fi
@@ -280,15 +313,15 @@ if [ -d "$SKILL_DIR" ] && [ -d "$USER_SKILLS_DIR" ]; then cd "$(dirname "$SKILL_
 
 ```bash
 # E7 gate check
-EXPECTED_TOKEN=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md 2>/dev/null | sha256sum | cut -c1-16)
-ACTUAL_TOKEN=$(cat /tmp/st-active 2>/dev/null)
+EXPECTED_TOKEN=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md | sha256sum | cut -c1-16)
+ACTUAL_TOKEN=$(cat /tmp/st-active)
 if [ "$EXPECTED_TOKEN" != "$ACTUAL_TOKEN" ]; then
   echo "✗ Step 5 GATE FAILED: activation token missing/invalid — Step 1 must run first"
   exit 1
 fi
 # E9: Write persistent activation log — user can audit anytime via:
 #   cat /home/user_skills/.st-activation-log
-ST_VERSION=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md 2>/dev/null | head -1)
+ST_VERSION=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' /home/z/my-project/skills/stellar-trails/SKILL.md | head -1)
 ST_TIMESTAMP=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
 ST_TOKEN=$(cat /tmp/st-active)
 echo "${ST_TIMESTAMP} v${ST_VERSION} token=${ST_TOKEN} steps=5/5 banner=YES" >> /home/user_skills/.st-activation-log
@@ -350,7 +383,7 @@ This version adds three deterministic enforcement layers that shift compliance f
 
 Every task passes through all six phases (IDLE → SPECIFY → PLAN → IMPLEMENT → VERIFY → DELIVER). No phase is skipped, even for Minimal tier.
 
-**Mechanism**: Each phase entry requires a phase-marker print of the form `📍 ENTER <PHASE>` before any other phase work. Each phase exit requires `📍 EXIT <PHASE> → <NEXT>`. The DELIVER report's `Phase Trace` field lists every phase-marker pair. Missing markers = compliance bug.
+**Mechanism**: Each phase entry requires a phase-marker print of the form `☄️ ENTER <PHASE>` before any other phase work. Each phase exit requires `☄️ EXIT <PHASE> → <NEXT>`. The DELIVER report's `Phase Trace` field lists every phase-marker pair. Missing markers = compliance bug.
 
 **Why**: Phase skipping is the #1 silent failure mode. The marker print makes skipping visible in the transcript, not invisible in the LLM's hidden reasoning.
 
@@ -410,6 +443,8 @@ For any decision point where the LLM would otherwise guess audience/style/length
 
 **Why**: Guessing audience/style/length causes the most expensive rework in document tasks. One batched 30-second question round prevents hours of regeneration.
 
+**Subagent unavailability (added v9.11.4)**: `AskUserQuestion` is provisioned ONLY to the main agent. Subagent toolsets in z.ai are limited to: `Bash, Glob, Grep, LS, Read, Edit, MultiEdit, Write, TodoWrite, TodoRead, Skill`. If a subagent encounters a decision that would normally require `AskUserQuestion`, it MUST return control to the orchestrating main agent with a clear statement of the decision needed — do NOT guess. The main agent can then invoke `AskUserQuestion` and re-dispatch the subagent with the user's answer.
+
 ---
 
 ## Workflow Phases
@@ -458,6 +493,30 @@ next_step: <what user should do next, or "IDLE - awaiting input">
 
 On context truncation (IDLE): read the last `---` block from `worklog.md`. If the task description matches the current request, resume from the recorded phase.
 
+### Worklog Rotation Policy (NEW in v9.11.4)
+
+**Problem**: `worklog.md` grows unbounded — at ~1KB per DELIVER snapshot, 1000 tasks would produce ~1MB file. Loading 1MB into context for "read last entry" wastes tokens.
+
+**Policy**: When `worklog.md` exceeds 100 entries (≈100KB), rotate:
+1. Rename current `worklog.md` → `worklog-archive-YYYY-MM-DD.md` (date-stamped)
+2. Create new `worklog.md` with the last 5 entries copied from the archived file (preserves continuity for next session)
+3. Archive files accumulate in `/home/z/my-project/` — user can delete old archives anytime
+
+**Rotation bash (run at DELIVER phase, after snapshot append)**:
+```bash
+WORKLOG="/home/z/my-project/worklog.md"
+ENTRY_COUNT=$(grep -c '^---$' "$WORKLOG" 2>/dev/null || echo 0)
+if [ "$ENTRY_COUNT" -gt 100 ]; then
+  ARCHIVE="${WORKLOG%.md}-archive-$(date -u '+%Y-%m-%d').md"
+  mv "$WORKLOG" "$ARCHIVE"
+  # Preserve last 5 entries for continuity
+  awk 'BEGIN{RS="^---$"} {entries[NR]=$0} END{print "---"; for(i=NR-4;i<=NR;i++) if(entries[i]) print entries[i]}' "$ARCHIVE" > "$WORKLOG"
+  echo "✓ Worklog rotated: $ARCHIVE ($(grep -c '^---$' "$ARCHIVE") entries archived), $WORKLOG reset to last 5 entries"
+fi
+```
+
+**Knowledge on-demand loading**: At Step 5 activation, only read the **last 3 entries** of `worklog.md` (not the whole file) — sufficient for continuity check without loading stale history.
+
 ---
 
 ## Task Type Awareness
@@ -500,13 +559,11 @@ Before planning any implementation, verify the approach is grounded in real sour
 
 **Main agent mandate (Standard/Complex)**: BEFORE writing the problem specification, the **main agent** (not a subagent) invokes `Skill(command="web-search")` to find existing solutions, then uses the **Inline Content Retrieval** protocol (see Inline Content Retrieval section, NEW in v9.5.0) to extract content from top 3-5 URLs → ≤500-word summary. **No external extraction skill dependency** — uses native curl + python3.
 
-**Why main agent, not subagent**: The z.ai sandbox mandates "Skill invocation and skill-driven file generation MUST be done by the main agent, NEVER by subagents." Subagents in z.ai do not have access to skill instructions, so a subagent that calls `Skill(command="web-search")` will fail silently. (Removed subagent delegation in v9.1.0 — see audit P0-2.)
+**Why main agent, not subagent**: The z.ai sandbox main agent has the SKILL.md pre-loaded into its context at session start; subagents do not (their context is the orchestrating main agent's task prompt). While subagents CAN invoke `Skill(command="stellar-trails")` after the fact (verified v9.11.4 — see Subagent Compliance Matrix below), doing so consumes ~95K tokens of the subagent's budget just to load the skill — wasteful for a single SADC lookup. The main agent already has SKILL.md in context, so it can perform SADC inline at near-zero marginal cost. Additionally, subagent prompts are compressed by the orchestrator, which may strip nuance needed for SADC source evaluation.
 
 If no existing solution is found, state it explicitly — "searched npm/PyPI/docs, no existing package found" is a valid result. Building from scratch when a library exists is a spec-level defect.
 
 **When subagents ARE appropriate**: Subagents may be used for non-skill tasks (e.g., "summarize these 5 URLs", "compare these 2 code samples"). The main agent fetches content via skills first, then delegates pure-text analysis to subagents. The rule: skills are invoked by the main agent; subagents operate on text the main agent has already retrieved.
-
-Historical subagent delegation template (deprecated): see `references/sadc-subagent-delegation.md`.
 
 ---
 
@@ -673,7 +730,7 @@ python3 << 'PYEOF'
 import re, subprocess, tempfile, os
 with open('skill/stellar-trails/SKILL.md') as f:
     content = f.read()
-blocks = re.findall(r'```bash\n(.*?)```', content, re.DOTALL)
+blocks = re.findall(r'\x60\x60\x60bash\n(.*?)\x60\x60\x60', content, re.DOTALL)
 fail = 0
 for i, block in enumerate(blocks, 1):
     with tempfile.NamedTemporaryFile(mode='w', suffix='.sh', delete=False) as f:
@@ -698,7 +755,7 @@ with open('skill/stellar-trails/SKILL.md') as f:
 blocks = re.findall(r'python3 -c ("[^"]+"|\'[^\']+\')', content)
 fail = 0
 for i, block in enumerate(blocks, 1):
-    cmd = f'echo "{{}}" | python3 -c {block} 2>/dev/null'
+    cmd = f'echo "{{}}" | python3 -c {block}'
     r = subprocess.run(cmd, shell=True, capture_output=True, text=True, timeout=5)
     if r.returncode != 0:
         print(f"✗ python3 -c block {i} FAIL on empty JSON: {r.stderr.strip()[:80]}")
@@ -756,11 +813,11 @@ fi
 ```bash
 # Before push, verify skill is visible on registry (not moderation-hidden)
 # This catches the v9.6.0 bug where publish exit 0 but version didn't register
-REGISTRY_STATE=$(clawhub inspect stellar-trails --json 2>/dev/null)
+REGISTRY_STATE=$(clawhub inspect stellar-trails --json)
 if [ -z "$REGISTRY_STATE" ]; then
   echo "✗ Check 6 FAIL: cannot reach clawhub registry — push may publish to hidden skill"
 else
-  MOD_STATE=$(echo "$REGISTRY_STATE" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('moderation',{}).get('state','unknown'))" 2>/dev/null || echo "unknown")
+  MOD_STATE=$(echo "$REGISTRY_STATE" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('moderation',{}).get('state','unknown'))" || echo "unknown")
   if [ "$MOD_STATE" = "hidden" ] || [ "$MOD_STATE" = "deleted" ]; then
     echo "✗ Check 6 FAIL: skill is $MOD_STATE by moderation — publish will not register"
     echo "  Contact clawhub moderator before pushing"
@@ -772,7 +829,7 @@ fi
 
 #### Check 7: YAML structure valid (if workflow files changed)
 ```bash
-if git diff --cached --name-only HEAD 2>/dev/null | grep -q '\.github/workflows/'; then
+if git diff --cached --name-only HEAD | grep -q '\.github/workflows/'; then
   python3 -c "import yaml; yaml.safe_load(open('.github/workflows/release.yml'))" && \
     echo "✓ Check 7: workflow YAML valid" || echo "✗ Check 7 FAIL: workflow YAML invalid"
 else
@@ -782,7 +839,8 @@ fi
 
 #### Check 8: Markdown fence count is even (no orphan code blocks)
 ```bash
-FENCES=$(grep -c '```' skill/stellar-trails/SKILL.md)
+_F=$(printf '\x60\x60\x60')
+FENCES=$(grep -c "$_F" skill/stellar-trails/SKILL.md)
 if [ $((FENCES % 2)) -eq 0 ]; then
   echo "✓ Check 8: markdown fences even ($FENCES)"
 else
@@ -797,6 +855,47 @@ echo "✓ Check 9: post-push plan acknowledged"
 echo "  After CI succeeds, MUST poll clawhub inspect until latestVersion = $NEW_VERSION"
 echo "  If registry doesn't update within 60s of CI success, fetch CI logs + diagnose"
 echo "  (This catches the v9.6.0 bug: publish exit 0 but version not registered)"
+```
+
+#### Check 10: index.html version matches SKILL.md (NEW v9.10.1)
+```bash
+SKILL_VERSION=$(grep -oP '^- \*\*version\*\*:\s*\K[0-9.]+' skill/stellar-trails/SKILL.md | head -1)
+INDEX_VERSION=$(grep -oP 'v\K[0-9]+\.[0-9]+\.[0-9]+' skill/stellar-trails/index.html | head -1)
+if [ "$SKILL_VERSION" != "$INDEX_VERSION" ]; then
+  echo "✗ Check 10 FAIL: SKILL.md v$SKILL_VERSION vs index.html v$INDEX_VERSION — version drift"
+else
+  echo "✓ Check 10: index.html version matches SKILL.md (v$SKILL_VERSION)"
+fi
+```
+
+#### Check 11: No duplicate knowledge files (NEW v9.11.4)
+```bash
+# Catches byte-identical duplicate files in knowledge/ subdirs (leftover from path-mismatch fixes)
+DUPES=$(find skill/stellar-trails/knowledge/ -type f -name "*.md" -exec md5sum {} \; | sort | uniq -d -w 32 | wc -l)
+if [ "$DUPES" -gt 0 ]; then
+  echo "✗ Check 11 FAIL: $DUPES duplicate knowledge file(s) detected:"
+  find skill/stellar-trails/knowledge/ -type f -name "*.md" -exec md5sum {} \; | sort | uniq -d -w 32
+  echo "  Remove duplicates — only top-level knowledge/*.md should exist (no platform/ or universal/ subdirs)"
+else
+  echo "✓ Check 11: no duplicate knowledge files"
+fi
+```
+
+#### Check 12: phases.md ↔ SKILL.md SADC drift (NEW v9.11.4)
+```bash
+# Catches drift between phases.md SADC step and SKILL.md SADC section
+# Both must agree: main agent inline, NO subagent dispatch, NO crawl4ai/web-reader invocations
+# Note: matches positive invocations only (Skill(command="...") or "dispatched"), not negations like "No crawl4ai"
+PHASES_SUBAGENT=$(grep -cE 'Skill\(command="(crawl4ai|web-reader)"\)|subagent dispatched|Task\(subagent_type' skill/stellar-trails/procedure/phases.md)
+PHASES_SUBAGENT=${PHASES_SUBAGENT:-0}
+PHASES_CRAWL=0  # accounted for in PHASES_SUBAGENT above via Skill(command="...")
+if [ "$PHASES_SUBAGENT" -gt 0 ]; then
+  echo "✗ Check 12 FAIL: phases.md still references removed SADC patterns (count: $PHASES_SUBAGENT)"
+  echo "  SKILL.md removed subagent SADC in v9.1.0 and crawl4ai in v9.5.0 — phases.md must match"
+  grep -nE 'Skill\(command="(crawl4ai|web-reader)"\)|subagent dispatched|Task\(subagent_type' skill/stellar-trails/procedure/phases.md
+else
+  echo "✓ Check 12: phases.md SADC step aligned with SKILL.md (no subagent dispatch, no crawl4ai/web-reader invocations)"
+fi
 ```
 
 ### When to skip Pre-Push Local Verification
@@ -979,8 +1078,8 @@ Replace `Skill(command="crawl4ai")` and `Skill(command="web-reader")` calls with
 # Fetch URL, follow redirects, set user-agent, 10s timeout, capture to file
 URL="<url>"
 OUTFILE="/tmp/st-retrieval-$(echo "$URL" | sha256sum | cut -c1-8).html"
-curl -sSL -m 10 -A "Mozilla/5.0 (compatible; StellarTrails/9.5)" "$URL" -o "$OUTFILE" 2>/dev/null
-HTTP_STATUS=$(curl -sSL -m 10 -o /dev/null -w "%{http_code}" "$URL" 2>/dev/null)
+curl -sSL -m 10 -A "Mozilla/5.0 (compatible; StellarTrails/9.5)" "$URL" -o "$OUTFILE"
+HTTP_STATUS=$(curl -sSL -m 10 -o /dev/null -w "%{http_code}" "$URL")
 [ "$HTTP_STATUS" = "200" ] || { echo "✗ Retrieval failed: HTTP $HTTP_STATUS"; exit 1; }
 echo "✓ Fetched $(stat -c%s "$OUTFILE") bytes from $URL"
 ```
@@ -1102,7 +1201,7 @@ This removes the `Skill(command="crawl4ai")` dependency. web-search is still ext
 # 2. Inline retrieval for top 3 URLs:
 for URL in "$URL1" "$URL2" "$URL3"; do
   OUTFILE="/tmp/st-retrieval-$(echo "$URL" | sha256sum | cut -c1-8).html"
-  curl -sSL -m 10 -A "Mozilla/5.0 (compatible; StellarTrails/9.5)" "$URL" -o "$OUTFILE" 2>/dev/null
+  curl -sSL -m 10 -A "Mozilla/5.0 (compatible; StellarTrails/9.5)" "$URL" -o "$OUTFILE"
   # ... extract text via python3 (Step 2 above) ...
   # ... truncate to 500 words (Step 3 above) ...
 done
@@ -1286,7 +1385,7 @@ curl -sS -L -m 60 -H "Authorization: Bearer $GH_TOKEN" \
 echo "Logs saved to /tmp/gh-logs-$RUN_ID.zip"
 unzip -o -q "/tmp/gh-logs-$RUN_ID.zip" -d "/tmp/gh-logs-$RUN_ID/"
 # Find the failed step log file
-find "/tmp/gh-logs-$RUN_ID/" -name "*Publish*" -o -name "*failed*" 2>/dev/null | head -5
+find "/tmp/gh-logs-$RUN_ID/" -name "*Publish*" -o -name "*failed*" | head -5
 ```
 
 ### Operation 4: API Queries with jq-style Filtering
@@ -1654,6 +1753,140 @@ Phase Trace: IDLE→SPECIFY→PLAN→IMPLEMENT→VERIFY→DELIVER (internal)
 ## Completion Signal
 
 For interactive web development tasks (Next.js, UI components, dashboards), implementation is delegated to fullstack-dev — the DELIVER phase calls the platform's `Complete(project_type="web_dev", summary="...")` tool to finalize. For non-web coding tasks, DELIVER presents output file paths. In all cases, DELIVER appends a Snapshot to `worklog.md`.
+
+---
+
+## Layered Memory Protocol (NEW in v9.11.0 — adapted from TencentDB-Agent-Memory)
+
+**Inspiration**: Adapted from [TencentDB-Agent-Memory](https://github.com/TencentCloud/TencentDB-Agent-Memory) (15K stars, MIT license) by Tencent Cloud. The original project implements a team-level memory hub with 4 memory assets (Chat Memory, Skill, LLM-Wiki, Code-Graph) and layered memory (L0-L3). **Not a wrapper** — adapted to stellar-trails' sandbox-native, no-external-dependency constraints.
+
+**Problem this solves**: stellar-trails worklog is flat (L0 only — raw task state). Across 20+ sessions, reusable patterns are lost. Each session starts from scratch, repeating mistakes that were already solved. The original TencentDB project solves this with vector search + Docker + team-level sharing — too heavy for z.ai sandbox. This adaptation uses structured text files (no vector DB, no Docker).
+
+### Layered Memory Architecture
+
+| Layer | What it stores | stellar-trails file | When written |
+|---|---|---|---|
+| **L0 Task** | Raw task state (what was done, files modified, outcome) | `worklog.md` (existing) | DELIVER phase (existing) |
+| **L1 Pattern** | Reusable facts extracted from task (approach that worked, gotchas, shortcuts) | `knowledge/patterns.md` (NEW) | DELIVER phase (NEW extraction) |
+| **L2 Scenario** | Project-level context blocks (accumulated L1 patterns grouped by project/domain) | `knowledge/scenarios.md` (NEW) | DELIVER phase (NEW, when L1 count ≥5 for same domain) |
+| **L3 Profile** | Stable user preferences, working style, recurring decisions | `knowledge/user-profile.md` (NEW) | DELIVER phase (NEW, when pattern repeats ≥3 times) |
+
+### L1 Pattern Extraction (at DELIVER phase)
+
+After each Standard/Complex task, extract reusable knowledge into `knowledge/patterns.md`:
+
+```bash
+# === L1 Pattern Extraction (NEW in v9.11.0) ===
+# Run at DELIVER phase, after worklog snapshot.
+# Extract: what approach worked, what went wrong, what was learned.
+PATTERNS_FILE="/home/z/my-project/skills/stellar-trails/knowledge/patterns.md"
+if [ ! -f "$PATTERNS_FILE" ]; then
+  echo "# Pattern Library (L1 Memory)" > "$PATTERNS_FILE"
+  echo "" >> "$PATTERNS_FILE"
+  echo "Auto-extracted reusable patterns from stellar-trails tasks." >> "$PATTERNS_FILE"
+  echo "Adapted from TencentDB-Agent-Memory L1 Atom concept." >> "$PATTERNS_FILE"
+  echo "" >> "$PATTERNS_FILE"
+  echo "---" >> "$PATTERNS_FILE"
+fi
+# LLM appends pattern entry (not bash — LLM must think + write):
+# Format:
+# ## [YYYY-MM-DD] <domain>: <pattern-name>
+# **Context**: <when this pattern applies>
+# **Approach**: <what worked>
+# **Gotcha**: <what to avoid>
+# **Source**: <task that produced this pattern>
+```
+
+**LLM responsibility**: The LLM must actively extract patterns, not just append task state. Ask: "What did I learn from this task that would help next time?"
+
+### L2 Scenario Accumulation (auto-triggered)
+
+When L1 patterns accumulate ≥5 entries for the same domain (e.g., "git", "ci", "clawhub", "sandbox"), group them into `knowledge/scenarios.md`:
+
+```markdown
+# Scenario: Git Identity Issues
+## Patterns:
+- [2026-07-09] git: Z User override requires env vars, not just config
+- [2026-07-20] git: ~/.git-credentials not in repo.tar, wiped each session
+- [2026-07-26] git: Auto Git Identity Setup in Step 1 solves both
+## Composite insight: Always run Git Identity Setup at session start if PAT exists
+```
+
+### L3 User Profile (auto-triggered)
+
+When the same decision pattern repeats ≥3 times across sessions, extract to `knowledge/user-profile.md`:
+
+```markdown
+# User Profile (L3 Memory)
+## Preferences:
+- Prefers direct Edit tool over patch files ("junk")
+- PAT kept permanently at /home/z/my-project/upload/PAT
+- Wants version bumps on every change, even small fixes
+- Prefers Indonesian language for explanations, English for code
+```
+
+### Knowledge On-Demand Loading (Step 5 update)
+
+Instead of always loading ALL knowledge files at Step 5, load only relevant ones:
+
+| Task type | Load |
+|---|---|
+| Coding (git/CI) | `knowledge/zai-sandbox.md` + `knowledge/error-patterns.md` + `knowledge/patterns.md` (L1) |
+| Coding (web dev) | `knowledge/zai-sandbox.md` + `knowledge/architecture.md` |
+| Document | `knowledge/conventions.md` + `knowledge/patterns.md` (L1) |
+| Audit/Diagnosis | `knowledge/error-patterns.md` + `knowledge/patterns.md` (L1) + `knowledge/scenarios.md` (L2) |
+| Continuation (same domain) | Only `knowledge/scenarios.md` (L2) for that domain |
+| New session (cold start) | `knowledge/user-profile.md` (L3) + `knowledge/patterns.md` (L1) for bootstrap |
+
+**Rule**: Never load ALL knowledge files unless explicitly needed. Context budget is finite — loading irrelevant knowledge wastes tokens.
+
+### Error Pattern Accumulation
+
+`knowledge/error-patterns.md` (existing file, currently static) should grow dynamically. At DELIVER, if task encountered an error that was fixed:
+
+```bash
+# === Error Pattern Accumulation (NEW in v9.11.0) ===
+ERRORS_FILE="/home/z/my-project/skills/stellar-trails/knowledge/error-patterns.md"
+# LLM appends error entry:
+# Format:
+# ## [YYYY-MM-DD] <error-type>
+# **Symptom**: <what user observed>
+# **Root cause**: <proximate cause, 1 hop>
+# **Fix**: <what resolved it>
+# **Prevention**: <how to avoid next time>
+```
+
+### Anti-patterns (FORBIDDEN)
+
+- ❌ "Just append to worklog, patterns are extra work" — NO. Without L1 extraction, each session repeats mistakes. The 30 seconds of pattern extraction saves hours of re-discovery.
+- ❌ "Load all knowledge files at Step 5 just in case" — NO. Context budget is finite. Load only what's relevant to the task type.
+- ❌ "Skip L2/L3 — they're too complex" — NO. L2/L3 are auto-triggered, not manual. The LLM doesn't decide when to create them — the count threshold triggers them.
+- ❌ "Use vector search instead" — NO. Vector search needs external DB + embedding model. Sandbox-native text search (grep) is sufficient for the pattern volumes stellar-trails generates.
+
+### Integration with existing protocols
+
+- **Worklog Continuity Protocol**: L0 (existing worklog) unchanged. L1-L3 are new files that supplement, not replace.
+- **DELIVER phase**: After worklog snapshot, run L1 Pattern Extraction. If L1 count for domain ≥5, also update L2. If decision pattern repeats ≥3, also update L3.
+- **Step 5 activation**: Knowledge on-demand loading replaces "load all knowledge files" — only load relevant subset.
+- **Proximate Cause Triage**: L1 patterns feed into the Parsimony Audit — past patterns are evidence of what worked.
+- **Pre-Push Local Verification**: No change — pattern files are in `knowledge/` directory, included in skill zip.
+
+### What was NOT adapted (out of scope)
+
+| TencentDB feature | Why not adapted |
+|---|---|
+| Vector search (BM25 + embedding) | Needs external DB + embedding model — not sandbox-native |
+| Team-level sharing (ACL, multi-agent) | stellar-trails is single-agent in z.ai sandbox |
+| Code-Graph (codebase indexer) | Needs AST parser + graph DB — too heavy |
+| Docker deployment | Not sandbox-native |
+| Async pipeline (background processing) | No background process support in z.ai sandbox |
+| L0 Conversation storage | Conversation history is managed by z.ai platform, not skill |
+
+### Honest assessment
+
+This adaptation captures the **concept** of layered memory (L0-L3) and **structured knowledge accumulation**, but NOT the **retrieval quality** of vector search. stellar-trails' pattern retrieval is grep-based — sufficient for ~50-100 patterns, but won't scale to thousands. For the expected pattern volume (1-2 per session, ~50 per 25 sessions), text search is adequate.
+
+**Expected impact**: After 10 sessions, `knowledge/patterns.md` will have ~15-20 entries. Next session's Step 5 loads these patterns → LLM avoids repeating past mistakes → faster task completion, fewer CI cycles wasted on known bugs.
 
 ---
 

@@ -1,0 +1,75 @@
+{
+  "skill": "radiometric-calibration",
+  "skill_version": "1.0.0",
+  "command": "radiometric-calibration --bbox 116 39 117 40 --synthetic --sensor landsat8 --output-type toa_radiance --quiet --output-dir ./_test_cli_radiance",
+  "started_at": "2026-08-03T08:44:43.654806Z",
+  "finished_at": "2026-08-03T08:44:43.793522Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "sensor": "landsat8",
+    "output_type": "toa_radiance",
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_radiance\\toa_radiance.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 6,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_radiance\\calibration_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "sensor": "landsat8",
+    "output_type": "toa_radiance",
+    "n_bands": 6,
+    "mean_value_per_band": [
+      36.04994583129883,
+      52.94957733154297,
+      44.29803466796875,
+      43.208106994628906,
+      21.22991371154785,
+      4.822991371154785
+    ],
+    "overall_mean": 33.759765625,
+    "synthetic_truth_mean_per_band": {
+      "band_0": 0.06638312339782715,
+      "band_1": 0.10427786409854889,
+      "band_2": 0.10387556254863739,
+      "band_3": 0.16481775045394897,
+      "band_4": 0.3143412470817566,
+      "band_5": 0.2214667946100235
+    }
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "radiometric-calibration"
+  },
+  "error": null
+}

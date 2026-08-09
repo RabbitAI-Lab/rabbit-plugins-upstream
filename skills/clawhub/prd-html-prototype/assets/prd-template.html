@@ -19,7 +19,6 @@
   --radius-card:14px; --radius-panel:16px;
 }
 *{box-sizing:border-box}
-html{scroll-behavior:auto} /* 自定义缓动，不要用 auto */
 body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
   background:var(--bg);color:var(--ink-2);line-height:1.6;-webkit-font-smoothing:antialiased}
 
@@ -92,6 +91,10 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang 
 .mp-body{padding:16px}
 .mp-card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px}
 .mp-card h4{margin:0 0 6px;font-size:14px;color:var(--accent-strong)}
+.mp-page{display:none}.mp-page:first-child{display:block}
+.mp-btn{margin-top:10px;padding:8px 14px;border:none;border-radius:9px;background:var(--accent);color:#fff;font-size:13px;cursor:pointer}
+.mp-btn:hover{filter:brightness(1.05)}
+.mp-line{margin-top:8px;font-weight:600;color:var(--accent-strong);font-size:14px}
 
 /* ============ 后台管理原型 ============ */
 .admin-layout{display:flex;flex:1 1 auto;min-height:640px;overflow:hidden;position:relative;
@@ -117,21 +120,36 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang 
   background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:16px 18px;box-shadow:var(--shadow-sm)}
 .stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-card);padding:18px;box-shadow:var(--shadow-sm)}
+
+/* ============ 交互说明悬浮面板 ============ */
+.ix-fab{position:fixed;right:18px;bottom:18px;z-index:80;width:46px;height:46px;border-radius:50%;
+  background:var(--accent-grad);color:#fff;border:none;cursor:pointer;font-size:13px;font-weight:600;
+  box-shadow:var(--shadow-md);display:flex;align-items:center;justify-content:center}
+.ix-fab:hover{filter:brightness(1.05)}
+.ix-panel{position:fixed;right:18px;bottom:74px;z-index:80;width:284px;max-height:62vh;overflow:auto;
+  background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:var(--shadow-md);padding:12px;display:none}
+.ix-panel.open{display:block;animation:fade-in-up .2s ease-out}
+.ix-panel h5{margin:0 0 8px;font-size:11px;color:var(--text-sec);text-transform:uppercase;letter-spacing:.5px}
+.ix-item{padding:8px 10px;border-radius:8px;margin-bottom:6px;background:var(--surface-2);border:1px solid var(--border);cursor:pointer;transition:background .15s}
+.ix-item:hover{background:#eef1f8}
+.ix-item b{display:block;color:var(--accent-strong);margin-bottom:2px;font-size:12.5px}
+.ix-item span{color:var(--text-sec);font-size:12px}
+.ix-empty{color:var(--text-sec);text-align:center;padding:14px;font-size:12.5px}
 </style>
 </head>
 <body>
 <header class="top-bar">
   <div class="brand-mark"><img src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><rect width='40' height='40' rx='9' fill='%236366f1'/></svg>" alt="logo">产品名</div>
   <nav class="tabs" id="tabs">
-    <button class="tab active" data-i="0">PRD 概览</button>
-    <button class="tab" data-i="1">小程序原型</button>
-    <button class="tab" data-i="2">后台管理原型</button>
+    <button class="tab active" data-i="0" data-ix="点击切换顶部标签，下方内容淡入切换" data-ix-title="切换 Tab">PRD 概览</button>
+    <button class="tab" data-i="1" data-ix="点击切换顶部标签，下方内容淡入切换" data-ix-title="切换 Tab">小程序原型</button>
+    <button class="tab" data-i="2" data-ix="点击切换顶部标签，下方内容淡入切换" data-ix-title="切换 Tab">后台管理原型</button>
     <span class="tab-indicator" id="tabIndicator"></span>
   </nav>
   <div class="author-chip">
     <img class="ava" src="data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='40' height='40'><circle cx='20' cy='20' r='20' fill='%234f46e5'/><text x='20' y='26' font-size='16' fill='%23fff' text-anchor='middle' font-family='sans-serif'>然</text></svg>" alt="作者">
-    <div class="author-meta"><span class="nm">产品经理：你的姓名</span><span class="rl">Product Manager</span></div>
-    <span class="badge">v2.1</span>
+    <div class="author-meta"><span class="nm">QQ 965621229</span><span class="rl">原型工具作者</span></div>
+    <span class="badge">v1.4</span>
   </div>
 </header>
 
@@ -153,6 +171,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang 
           <a href="#prd-launch" data-t="prd-launch">上线运营</a>
           <a href="#prd-open" data-t="prd-open">风险与开放问题</a>
           <a href="#prd-glossary" data-t="prd-glossary">术语表</a>
+          <a href="#prd-ix" data-t="prd-ix">交互说明</a>
         </aside>
         <div class="prd-body" id="prdBody">
           <section class="prd-sec" id="prd-hero"><h2>概览</h2><p>占位：标题、定位、版本、作者。</p></section>
@@ -165,6 +184,7 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang 
           <section class="prd-sec" id="prd-launch"><h2>上线与运营计划</h2><p>占位：节奏、灰度、回滚。</p></section>
           <section class="prd-sec" id="prd-open"><h2>风险与开放问题</h2><p>占位：未决项、依赖。</p></section>
           <section class="prd-sec" id="prd-glossary"><h2>术语表</h2><p>占位：缩写与专有名词。</p></section>
+          <section class="prd-sec" id="prd-ix"><h2>交互说明</h2><p>占位：列出关键交互（触发—行为—状态变化），与右下角"交互"悬浮面板里的 data-ix 标注对应。</p></section>
         </div>
       </div>
     </div>
@@ -175,13 +195,17 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang 
     <div class="proto-section">
       <div class="proto-hint">小程序原型（占位页面，按需替换内容）</div>
       <div class="mp-nav" id="mpNav">
-        <span class="chip active" data-i="0">页面1 · 首页/扫码</span>
-        <span class="chip" data-i="1">页面2 · 商品选择</span>
-        <span class="chip" data-i="2">页面3 · 支付</span>
+        <span class="chip active" data-i="0" data-ix="点击切换小程序页面：首页 → 选品 → 支付" data-ix-title="切换页面">页面1 · 首页/扫码</span>
+        <span class="chip" data-i="1" data-ix="点击切换小程序页面：首页 → 选品 → 支付" data-ix-title="切换页面">页面2 · 商品选择</span>
+        <span class="chip" data-i="2" data-ix="点击切换小程序页面：首页 → 选品 → 支付" data-ix-title="切换页面">页面3 · 支付</span>
       </div>
       <div class="phone-frame"><div class="mp-screen">
         <div class="mp-top"><h3 id="mpTitle">首页 / 扫码识别</h3></div>
-        <div class="mp-body" id="mpBody"><div class="mp-card"><h4>页面职责</h4><p>占位内容。</p></div></div>
+        <div class="mp-body" id="mpBody">
+          <div class="mp-page" data-p="0"><div class="mp-card"><h4>扫码识别会员</h4><p>点击「模拟扫码」拉起相机识别会员二维码，自动跳转选品页。</p><button class="mp-btn" id="mpScan" data-ix="点击模拟扫码：识别会员并携带身份跳转到选品页" data-ix-title="模拟扫码">模拟扫码</button></div></div>
+          <div class="mp-page" data-p="1"><div class="mp-card"><h4>选择商品</h4><p>勾选要购买的商品，金额实时计算（状态联动示例）。</p><div class="mp-line">合计：¥<span id="mpTotal">0</span></div><button class="mp-btn" id="mpNext" data-ix="点击去支付：把已选金额带入支付页" data-ix-title="去支付">去支付</button></div></div>
+          <div class="mp-page" data-p="2"><div class="mp-card"><h4>确认支付</h4><p>金额 ¥<span id="mpPay">0</span>，点击确认完成支付并展示结果。</p><button class="mp-btn" id="mpPayBtn" data-ix="点击确认支付：调用支付接口并展示成功状态" data-ix-title="确认支付">确认支付</button></div></div>
+        </div>
       </div></div>
     </div>
   </section>
@@ -212,6 +236,10 @@ body{margin:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang 
     </div>
   </section>
 </main>
+
+<!-- ============ 交互说明悬浮面板 ============ -->
+<button class="ix-fab" id="ixFab" title="交互说明 / Interaction notes" aria-label="交互说明">交互</button>
+<div class="ix-panel" id="ixPanel"><h5>交互说明 / Interactions</h5></div>
 
 <script>
 /* ===== 顶栏 tab 切换（滑动下划线 + 淡入） ===== */
@@ -249,10 +277,27 @@ const secObserver=new IntersectionObserver(es=>{
 },{rootMargin:'-40% 0px -55% 0px'});
 document.querySelectorAll('.prd-sec').forEach(s=>secObserver.observe(s));
 
-/* ===== 原型页面切换（占位） ===== */
-document.querySelectorAll('#mpNav .chip').forEach(c=>c.addEventListener('click',()=>{
-  document.querySelectorAll('#mpNav .chip').forEach(x=>x.classList.toggle('active',x===c));
-}));
+/* ===== 小程序页面切换 + 简单数据联动（demo） ===== */
+const mpPages=[...document.querySelectorAll('#mpBody .mp-page')];
+const mpTitles=['首页 / 扫码识别','商品选择','确认支付'];
+function switchMp(i){
+  document.querySelectorAll('#mpNav .chip').forEach(x=>x.classList.toggle('active',+x.dataset.i===i));
+  mpPages.forEach((p,k)=>p.style.display=k===i?'block':'none');
+  const t=document.getElementById('mpTitle');if(t)t.textContent=mpTitles[i];
+}
+document.querySelectorAll('#mpNav .chip').forEach(c=>c.addEventListener('click',()=>switchMp(+c.dataset.i)));
+let mpAmount=0;
+const mpScan=document.getElementById('mpScan');
+if(mpScan)mpScan.addEventListener('click',()=>{
+  mpAmount=38; // 模拟选中后金额
+  const total=document.getElementById('mpTotal'),pay=document.getElementById('mpPay');
+  if(total)total.textContent=mpAmount; if(pay)pay.textContent=mpAmount;
+  switchMp(1); // 自动跳到选品页
+});
+const mpNext=document.getElementById('mpNext');
+if(mpNext)mpNext.addEventListener('click',()=>switchMp(2));
+const mpPayBtn=document.getElementById('mpPayBtn');
+if(mpPayBtn)mpPayBtn.addEventListener('click',()=>{mpPayBtn.textContent='支付成功 ✓';mpPayBtn.style.background='#16a34a';});
 document.querySelectorAll('.ad-sidebar .ad-nav').forEach(n=>n.addEventListener('click',()=>{
   document.querySelectorAll('.ad-sidebar .ad-nav').forEach(x=>x.classList.toggle('active',x===n));
   requestAnimationFrame(drawLines);
@@ -294,6 +339,32 @@ document.querySelectorAll('.ad-content,.ad-right').forEach(el=>el.addEventListen
 document.querySelectorAll('.tab-pane,.pg').forEach(el=>el.addEventListener('animationend',()=>{
   if(document.getElementById('pane-2').classList.contains('active'))drawLines();
 }));
+
+/* ===== 交互说明面板：自动采集 [data-ix] 标注 ===== */
+(function(){
+  const fab=document.getElementById('ixFab'),panel=document.getElementById('ixPanel');
+  if(!fab||!panel)return;
+  const items=[...document.querySelectorAll('[data-ix]')];
+  const list=document.createElement('div');
+  if(items.length){
+    items.forEach((el,i)=>{
+      const d=document.createElement('div');
+      d.className='ix-item';
+      d.innerHTML='<b>'+(el.dataset.ixTitle||('交互 '+(i+1)))+'</b><span>'+el.dataset.ix+'</span>';
+      d.addEventListener('click',()=>{
+        el.scrollIntoView({behavior:'smooth',block:'center'});
+        const prev=el.style.outline;el.style.outline='2px solid var(--accent)';
+        setTimeout(()=>{el.style.outline=prev;},1200);
+      });
+      list.appendChild(d);
+    });
+  }else{
+    const e=document.createElement('div');e.className='ix-empty';
+    e.textContent='暂无标注交互，可给元素加 data-ix 属性';list.appendChild(e);
+  }
+  panel.appendChild(list);
+  fab.addEventListener('click',()=>panel.classList.toggle('open'));
+})();
 </script>
 </body>
 </html>

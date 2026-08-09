@@ -1,47 +1,70 @@
-## Description: <br>
-Builds, redesigns, and critiques presentation-grade slide decks from user-provided material or researched context, using interview checkpoints, deck-building scripts, and an independent actor-critic review loop. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds, redesigns, and critiques presentation-grade .pptx slide decks using planning, design, rendering, linting, and critic-review workflows.
 
-## Publisher: <br>
-[dong845](https://clawhub.ai/user/dong845) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dong845](https://clawhub.ai/user/dong845)
 
-## Use Case: <br>
-Employees, external users, and developers can use this skill to create, redesign, or review slide decks for research, teaching, meetings, stakeholder readouts, conference talks, and related presentation workflows. It is most useful when the user needs a structured content plan, visual design direction, generated or prepared assets, a .pptx build, and critique before handoff. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read local materials, write deck assets, perform web research, and generate images. <br>
-Mitigation: Use it only in approved workspaces with appropriate input data, and disable or avoid web and image-generation paths when sensitive material should not leave the environment. <br>
-Risk: The security guidance flags README execution paths and generated HTML previews as areas requiring care with untrusted inputs. <br>
-Mitigation: Avoid README execution paths for untrusted repositories, and open generated HTML previews only when the direction data and source workspace are trusted. <br>
-Risk: Cross-deck preference history may reveal sensitive presentation or style preferences. <br>
-Mitigation: Review, disable, or clear taste.md persistence when user preference history should not be retained. <br>
+## Use Case:
 
+Developers, researchers, educators, and business users use this skill to plan, generate, redesign, and review slide decks while preserving source fidelity, matching audience needs, and producing editable PowerPoint deliverables.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dong845/skills/slide-maker) <br>
-- [Skill Definition](artifact/SKILL.md) <br>
-- [Design Principles](artifact/references/design-principles.md) <br>
-- [Content Plan Specification](artifact/references/content-plan-spec.md) <br>
-- [Review Rubrics](artifact/references/review-rubrics.md) <br>
-- [File Inventory](artifact/references/file-inventory.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance and checkpoint tables, Python and shell commands, generated assets, rendered slide images, and PowerPoint .pptx files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local deck folders, slide renders, image assets, HTML previews, notes exports, and optional final deliverables depending on user approval and available tooling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.0 (source: ClawHub release metadata) <br>
+Risk: The security scan flags broad local execution and file-write authority for rendering decks and creating reusable build artifacts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the skill in a trusted workspace, review generated Python or shell commands before execution, and inspect output folders before sharing deliverables.
+
+Risk: The skill can contact hosted image or version services and may prompt for updates.
+
+Mitigation: Review update prompts before accepting them, keep a single version for a deck build, and avoid generated-image paths for sensitive material unless the session and API data flow are acceptable.
+
+Risk: Optional style-preference persistence can retain user taste signals beyond a single deck.
+
+Mitigation: Use persistence only with explicit user consent and avoid storing confidential project, client, or source-material details in preference records.
+
+Risk: Generated or sourced visual assets can introduce licensing, factuality, or privacy issues in final slides.
+
+Mitigation: Use trusted source material, record image origins and licenses, reject watermarked or unidentified assets, and verify sensitive imagery is de-identified before delivery.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dong845/skills/slide-maker)
+- [Project Details Link](https://github.com/addsumtech/slides_maker)
+- [Design Principles](references/design-principles.md)
+- [Review Rubrics](references/review-rubrics.md)
+- [Deck Setup](references/deck-setup.md)
+- [Image Generation](references/image-generation.md)
+- [Runtime Routing](references/runtime-routing.md)
+- [Codex Runtime](references/codex-runtime.md)
+- [Hand-off and Iteration](references/handoff-and-iteration.md)
+- [Troubleshooting FAQ](references/troubleshooting-faq.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, files, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands plus generated Python, PPTX, asset, render, lint, and review artifacts.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write local deck folders, reusable build scripts, rendered previews, quality-gate outputs, and optional style-preference records.]
+
+## Skill Version(s):
+
+4.6.0 (source: server release metadata and artifact/VERSION)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,60 @@
-## Description: <br>
-Analyzes pet activity media to detect over-excitement behaviors, score excitement level, and return structured calming guidance with report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet activity-area images or videos to assess over-excitement behaviors, produce structured reports, and recommend calming interventions such as voice prompts, gentle tones, lighting changes, or pheromone-device actions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External pet owners, boarding centers, daycare operators, and training schools use this skill to analyze pet activity media for over-excitement behaviors and receive structured calming recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet or household videos and remote video URLs may be sent to external services for analysis. <br>
-Mitigation: Use only media appropriate for cloud processing, and avoid videos that include people, children, private interiors, or sensitive routines unless the service's privacy and retention practices are acceptable. <br>
-Risk: The skill can create or reuse a local identity and cache tokens for report history. <br>
-Mitigation: Review local workspace data handling before installing, and clear cached identity or token data when using shared environments. <br>
-Risk: Calming guidance may be mistaken for veterinary or medical advice. <br>
-Mitigation: Treat outputs as behavior-safety guidance only, and consult a veterinarian or qualified behavior trainer for persistent, severe, or injury-related behavior concerns. <br>
+## Use Case:
 
+External pet owners, boarding centers, daycare staff, and trainers use this skill to review pet activity footage, identify over-excitement patterns, and receive behavior-safety calming guidance. Results are for behavior safety support and are not medical advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-excitement-calming-guide-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and JSON text, with optional local output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include remote report links and historical report lists; media inputs can be local files or URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter declares 1.0.6) <br>
+Risk: Pet-area videos or URLs are processed by lifeemergence.com cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only footage you have permission to process, and avoid sensitive household footage unless consent, retention, deletion, and data-use terms are clear.
+
+Risk: The skill may create or reuse a persistent internal identity and store tokens or profile data in a workspace SQLite database.
+
+Mitigation: Run the skill in an isolated workspace or account, review local token storage before deployment, and clear local credentials when the skill is no longer needed.
+
+Risk: Behavior-safety guidance may be over-relied on for pets that repeatedly cannot calm down or may have health issues.
+
+Mitigation: Treat outputs as behavior-safety guidance only, and involve a veterinarian or qualified behavior trainer when behavior is persistent, severe, or health-related.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-excitement-calming-guide-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Pet excitement calming API documentation](artifact/references/api_doc.md)
+- [Common analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files]
+
+**Output Format:** [Markdown text with structured JSON analysis content and report links; optional saved text output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts local video files or public video URLs; history queries return cloud report records.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

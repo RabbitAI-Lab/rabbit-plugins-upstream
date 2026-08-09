@@ -1,0 +1,17 @@
+name: geoskill-lake-area-change
+display_name: 湖泊面积变化
+description: |
+  多时相 NDWI/MNDWI 水体提取，重建湖泊面积时序曲线并分析变化趋势
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-lake-area-change.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - extraction
+  - gis
+  - hydrology
+  - raster
+  - remote-sensing
+  - time-series
+  - water

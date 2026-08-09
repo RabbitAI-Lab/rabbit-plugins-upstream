@@ -1,0 +1,12 @@
+{
+  "source": "synthetic",
+  "thr_build": 0.5,
+  "thr_damage": 0.3,
+  "labels": [
+    "non_building",
+    "unchanged",
+    "destroyed",
+    "under_construction",
+    "rebuilt"
+  ]
+}

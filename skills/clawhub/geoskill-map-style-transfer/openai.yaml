@@ -1,0 +1,14 @@
+name: geoskill-map-style-transfer
+display_name: 地图风格迁移
+description: |
+  Transfer map styles via color mapping and histogram matching with style templates
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-map-style-transfer.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - visualization

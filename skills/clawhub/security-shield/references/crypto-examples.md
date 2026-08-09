@@ -24,7 +24,7 @@ openssl rand -base64 32
 head -c 32 /dev/urandom | base64
 ```
 
-**Important:** I cannot show you existing keys—only help generate new ones.
+**Important:** I cannot show you existing keys-only help generate new ones.
 
 ---
 
@@ -146,6 +146,64 @@ logger.info(f"Token valid: {valid}, user: {user_id}")
 - Use different keys per environment
 - Audit key usage/access logs
 - Revoke compromised keys immediately
+
+---
+
+## Download Integrity Verification
+
+### Checksum Comparison (never trust a download on its own)
+```bash
+# Download the official checksum and compare - not the one from the same page
+wget -O file.iso https://example.com/file.iso
+wget -O file.iso.sha256 https://example.com/file.iso.sha256
+
+# Verify (fails loudly on any mismatch)
+sha256sum -c file.iso.sha256
+```
+
+### Signature Verification with sigstore / cosign
+```bash
+# Verify a container image signature before pull/use
+cosign verify <registry>/<image>:<digest> --certificate-identity <identity>
+
+# Verify a signed artifact
+cosign verify-blob --signature artifact.sig --certificate cert.pem artifact.bin
+```
+
+### Pin to Digests, Never Tags
+```bash
+# Pull and pin to a specific signed digest
+docker pull <image>@sha256:<digest>
+# Reject floating tags for security-sensitive workloads
+```
+
+---
+
+## Modern Password Hashing
+
+### Argon2id (current recommended KDF - memory-hard)
+```python
+from argon2 import PasswordHasher
+
+ph = PasswordHasher()
+hash = ph.hash("user-password-here")  # placeholder
+ph.verify(hash, "user-password-here")
+```
+
+### Why argon2id over older KDFs
+- Memory-hard: resists GPU/ASIC cracking better than bcrypt/scrypt defaults
+- Configurable memory, iterations, and parallelism parameters
+- Auto-salts and includes a version header in the hash
+
+---
+
+## Passkeys & Passwordless Auth
+
+### WebAuthn / FIDO2 (modern phishing-resistant auth)
+- Passkeys are asymmetric: private key stays on device, public key on server
+- Phishing-resistant - bound to origin, cannot be reused on a lookalike site
+- Use a hardware authenticator (YubiKey) or platform authenticator (Touch ID, Windows Hello)
+- Prefer passkeys over OTP/SMS for anything privileged
 
 ---
 

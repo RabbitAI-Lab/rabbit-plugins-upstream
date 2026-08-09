@@ -1,11 +1,13 @@
 ---
 name: data-ai-daily-brief
-version: "5.0.0"
+version: "5.0.1"
 description: >
   Turn any industry into a daily intelligence briefing. An AI agent searches,
   filters, writes, and delivers structured daily briefs to 9 channels — with
   machine-checked formatting and a business review gate. Ships with a Data+AI
   profile out of the box; switch to any domain via config.
+description_zh: "行业日报生成器：将任意行业转为每日情报简报，AI agent 搜索、筛选、编写并投递至 9 个渠道，含机器格式校验与业务评审门禁；自带 Data+AI 配置，可切换任意领域。"
+
 read_when:
   - daily brief
   - industry report

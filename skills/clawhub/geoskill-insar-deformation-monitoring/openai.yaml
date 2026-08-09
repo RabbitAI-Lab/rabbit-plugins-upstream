@@ -1,0 +1,16 @@
+name: geoskill-insar-deformation-monitoring
+display_name: InSAR形变监测
+description: |
+  简化 D-InSAR 形变监测：从主从 SLC 复影像生成干涉图、相干性与形变量。Simplified D-InSAR: interferogram, coherence and surface deformation from master/slave SLCs. 输入复数 SLC（或用 --synthetic 注入平滑形变相位），输出形变 GeoTIFF + 相干性 GeoTIFF + 参数 JSON。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-insar-deformation-monitoring.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - raster
+  - remote-sensing
+  - sar
+  - tooling
+  - vector

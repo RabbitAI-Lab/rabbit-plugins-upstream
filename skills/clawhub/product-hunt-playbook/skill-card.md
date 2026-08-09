@@ -1,5 +1,5 @@
 ## Description: <br>
-Provides Product Hunt launch strategy guidance, including launch-day operations, ranking factors, supporter outreach, asset preparation, and post-launch momentum planning. <br>
+Provides Product Hunt launch planning guidance for timing, positioning, community engagement, and post-launch conversion tracking. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External makers, startup teams, and launch operators use this skill to plan and review Product Hunt launches, including timing, ranking strategy, outreach hygiene, and post-launch conversion work. <br>
+External founders, marketers, launch teams, investors, and accelerators use this skill to plan Product Hunt launches, refine launch-day execution, and convert launch attention into signups and qualified conversations. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill may activate on generic launch-day wording and return Product Hunt-specific ranking advice when the user intended a broader launch plan. <br>
-Mitigation: Use it when Product Hunt launch strategy is desired, and confirm the target launch channel before following the advice. <br>
-Risk: Vote-mobilization and ranking tactics may conflict with Product Hunt rules or platform expectations if applied mechanically. <br>
-Mitigation: Review recommendations against Product Hunt's current rules before using outreach, upvote, or ranking tactics. <br>
+Risk: Users may treat launch-ranking advice as a guaranteed result. <br>
+Mitigation: Treat outputs as launch-strategy suggestions and track visits, demos, signups, and qualified conversations as primary outcomes. <br>
+Risk: Community mobilization guidance could be misused for coordinated or incentivized voting. <br>
+Mitigation: Ask real users and community members only for honest feedback, and avoid buying votes, fake accounts, rewards, or prescribed voting behavior. <br>
+Risk: Product Hunt rules and ranking logic can change over time. <br>
+Mitigation: Re-check Product Hunt's current official rules before each launch and adjust the plan to remain compliant. <br>
 
 
 ## Reference(s): <br>
-- [Product Hunt Playbook on ClawHub](https://clawhub.ai/gingiris-1031/skills/product-hunt-playbook) <br>
-- [English Product Hunt Launch Playbook](references/en/README.md) <br>
-- [Japanese Product Hunt Launch Playbook](references/ja/README.md) <br>
-- [Korean Product Hunt Launch Playbook](references/ko/README.md) <br>
+- [ClawHub skill listing](https://clawhub.ai/gingiris-1031/skills/product-hunt-playbook) <br>
+- [Publisher profile](https://clawhub.ai/user/gingiris-1031) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, checklists, tables, and launch planning notes] <br>
+**Output Type(s):** [Guidance, Markdown, Shell commands] <br>
+**Output Format:** [Markdown guidance with launch plans, checklists, and occasional inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Static advisory content; Clawscan found no hidden execution, credential access, persistence, or destructive behavior.] <br>
+**Other Properties Related to Output:** [Text-only advice; no executable code, persistence, credential access, or hidden data handling.] <br>
 
 ## Skill Version(s): <br>
-1.6.9 (source: server release evidence) <br>
+1.6.10 (source: ClawHub release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

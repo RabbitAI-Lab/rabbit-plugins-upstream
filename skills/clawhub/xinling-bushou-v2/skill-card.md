@@ -1,48 +1,65 @@
-## Description: <br>
-心灵补手 V3.0 provides six configurable flattery and role-play persona overlays for agents and subagents, including a Liu Bowen divination-themed persona. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Adds selectable Chinese flattery and persona overlays for agent conversations, including a Liu Bowen divination-style companion mode intended for entertainment and emotional support.
 
-## Publisher: <br>
-[william22820785-cmyk](https://clawhub.ai/user/william22820785-cmyk) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[william22820785-cmyk](https://clawhub.ai/user/william22820785-cmyk)
 
-## Use Case: <br>
-External ClawHub users and developers use this skill to install, configure, and activate agent persona overlays for OpenClaw-style agents and subagents. The skill produces prompt fragments, persona configuration, CLI guidance, and adapter launch configuration for supported environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent assistant-persona modification can alter assistant control files such as SOUL.md. <br>
-Mitigation: Install only when the persona overlay is intended, and review SOUL.md changes before restarting the assistant session. <br>
-Risk: The Claude Code adapter can disable permission checks. <br>
-Mitigation: Avoid using the Claude Code adapter unless the permission-bypass flag has been removed. <br>
-Risk: The AI corpus upgrade script can send persona prompts to MiniMax using a local credential file. <br>
-Mitigation: Do not run the corpus upgrade script unless external prompt sharing and local credential use are acceptable. <br>
+## Use Case:
 
+External users and developers use this skill to add persistent Chinese persona styles, praise-heavy tone, and entertainment-focused divination responses to supported agent environments. It is best suited for casual roleplay, encouragement, and companion-style interactions rather than objective professional advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/william22820785-cmyk/xinling-bushou-v2) <br>
-- [Publisher profile](https://clawhub.ai/user/william22820785-cmyk) <br>
-- [Skill definition](artifact/SKILL.md) <br>
-- [Architecture documentation](artifact/architecture.md) <br>
-- [CLAW systems research](artifact/claw-systems-research.md) <br>
-- [Agent Skills standard](https://agentskills.io) <br>
-- [Project homepage](https://aceworld.top) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown prompt fragments, JSON persona and configuration files, Python code snippets, and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May persist persona state and update assistant control files during installation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Persistent persona behavior may be added to OpenClaw SOUL.md or generated IDE/agent configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that behavior is intended, and review SOUL.md, Cursor rules, and generated configuration before applying or sharing them.
+
+Risk: The Claude Code adapter includes an unsafe permission-bypass launch flag.
+
+Mitigation: Remove the permission-bypass flag before using the Claude Code adapter.
+
+Risk: Corpus-upgrader and daily-upgrade scripts can use credentials, call network APIs, and modify local source files.
+
+Mitigation: Do not run those scripts until credential use, network effects, and file modifications have been reviewed.
+
+Risk: Divination-style responses can be mistaken for real predictions.
+
+Mitigation: Treat Liu Bowen outputs as entertainment and emotional support, not as medical, legal, financial, or life-decision advice.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/william22820785-cmyk/skills/xinling-bushou-v2)
+- [Publisher profile](https://clawhub.ai/user/william22820785-cmyk)
+- [Skill README](artifact/SKILL.md)
+- [FAQ](artifact/FAQ.md)
+- [Antipatterns and usage guidance](artifact/ANTIPATTERNS.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, generated configuration fragments, and JSON-backed persona data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May persist selected persona behavior into local agent or IDE configuration when installation or injection scripts are run.]
+
+## Skill Version(s):
+
+3.5.1 (source: ClawHub release metadata; artifact frontmatter reports 3.5.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,4 +1,139 @@
-## [Unreleased]
+## [3.26.1](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.26.0...v3.26.1) (2026-08-07)
+
+
+### Bug Fixes
+
+* **video:** report the MiniMax H3 duration actually delivered instead of a 5-15s range no H3 render can produce ([#28](https://github.com/Sogni-AI/sogni-creative-agent-skill/issues/28)) ([33f1f8b](https://github.com/Sogni-AI/sogni-creative-agent-skill/commit/33f1f8bf4997dd369339ea5f41d5fd45c2572332))
+* **skill:** point plain SKILL.md installs at their host launcher so Hermes renders stop reporting agentFramework "unknown" ([#28](https://github.com/Sogni-AI/sogni-creative-agent-skill/issues/28)) ([33f1f8b](https://github.com/Sogni-AI/sogni-creative-agent-skill/commit/33f1f8bf4997dd369339ea5f41d5fd45c2572332))
+
+
+### Documentation
+
+* document the host launchers in README.md and llm.txt, and note MiniMax H3 duration snapping ([#28](https://github.com/Sogni-AI/sogni-creative-agent-skill/issues/28)) ([33f1f8b](https://github.com/Sogni-AI/sogni-creative-agent-skill/commit/33f1f8bf4997dd369339ea5f41d5fd45c2572332))
+
+# [3.26.0](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.25.0...v3.26.0) (2026-08-04)
+
+
+### Features
+
+* **video:** support MiniMax H3 multimodal workflows ([d9f1737](https://github.com/Sogni-AI/sogni-creative-agent-skill/commit/d9f17378db498d73bf231b286affe34f26b97c57))
+
+# [3.25.0](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.24.0...v3.25.0) (2026-08-04)
+
+
+### Features
+
+* **video:** document MiniMax H3 reference workflows ([22bece3](https://github.com/Sogni-AI/sogni-creative-agent-skill/commit/22bece3815ca9fb684e416a7ad2958ddc815f045))
+
+# [3.24.0](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.23.0...v3.24.0) (2026-08-04)
+
+
+### Features
+
+* **video:** document MiniMax H3 generation ([67b0c5a](https://github.com/Sogni-AI/sogni-creative-agent-skill/commit/67b0c5ae94c7ee784a260d0174008f42d2283038))
+
+# [3.23.0](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.22.0...v3.23.0) (2026-08-03)
+
+
+### Bug Fixes
+
+* **video:** raise the default generation timeout to 30 minutes and explicitly cancel every known Sogni project before reporting a timeout
+* **video:** keep desktop and OpenClaw process safety limits behind the CLI timeout so network cancellation can finish first
+
+
+### Features
+
+* **models:** add MiniMax H3 text-to-video, image-to-video, and first/last-frame aliases with native frame-grid alignment
+
+
+# [3.22.0](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.21.0...v3.22.0) (2026-07-30)
+
+
+### Features
+
+* **images:** route identity-sensitive edits of referenced people and characters
+  through Krea 2 Identity Edit by default while preserving explicit model choices
+* **images:** add concise Krea edit prompting, ordered base/detail references,
+  and worker-owned execution defaults for stronger likeness preservation while
+  preserving deliberate direct-CLI control overrides
+* **models:** add the explicit `ltx23-eros` selector for LTX-2.3 10Eros
+  image-to-video, with required filter acknowledgement and fixed model settings
+* **video:** add start-frame-aware 10Eros cinematic prompting guidance for
+  coherent performance, camera motion, atmosphere, dialogue, and sound
+
+# [3.21.0](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.20.0...v3.21.0) (2026-07-31)
+
+
+### Features
+
+* **telemetry:** identify Codex, Claude Code, Claude Desktop, Hermes Agent, and OpenClaw through fixed host markers and allowlisted MCP client metadata; attach privacy-safe framework, surface, workload, and semantic operation lineage to Sogni-owned requests without sending prompts, user paths, credentials, or headers to presigned uploads
+
+
+### Dependencies
+
+* use `@sogni-ai/sogni-intelligence-client` 3.10.0 and `@sogni-ai/sogni-client` 5.3.0 for the published attribution contract
+
+# [3.20.0](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.19.0...v3.20.0) (2026-07-29)
+
+
+### Bug Fixes
+
+* **deps:** use `@sogni-ai/sogni-intelligence-client` 3.9.0
+
+
+### Features
+
+* **images:** support up to eight ordered Krea 2 Turbo LoRAs with independently
+  validated bipolar strengths, including negative inverse-effect values
+
+# [3.19.0](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.18.1...v3.19.0) (2026-07-28)
+
+
+### Features
+
+* **cli:** lease per-process app IDs from a persistent slot pool ([#26](https://github.com/Sogni-AI/sogni-creative-agent-skill/issues/26)) ([ef0ae8b](https://github.com/Sogni-AI/sogni-creative-agent-skill/commit/ef0ae8b973e65f88a78b775fb1b791daca719d42))
+
+# [3.18.1](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.18.0...v3.18.1) (2026-07-28)
+
+
+### Bug Fixes
+
+* **cli:** persist one recognizable `sogni-agent-<uuid>` application ID across SDK sessions to prevent repeated CLI runs from exhausting the per-address app-ID allowance ([#25](https://github.com/Sogni-AI/sogni-creative-agent-skill/issues/25))
+
+# [3.18.0](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.17.2...v3.18.0) (2026-07-27)
+
+
+### Features
+
+* **video:** default first/last-frame pairs to LTX-2.3 morph ([#24](https://github.com/Sogni-AI/sogni-creative-agent-skill/issues/24)) ([430edf5](https://github.com/Sogni-AI/sogni-creative-agent-skill/commit/430edf58e1d1be1f757824e586a5ba7ef18764fe))
+
+## [3.17.2](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.17.1...v3.17.2) (2026-07-26)
+
+### Bug Fixes
+
+* **billing:** clarify that `tokenType: "spark"` is a denomination rather than proof of a Spark debit;
+  Unlimited coverage is determined by `paymentModel: "subscription"` or explicit subscription-billing
+  success ([d836b49](https://github.com/Sogni-AI/sogni-creative-agent-skill/commit/d836b490bccda5c9e8166b2bb3d928708d2fbae4)).
+* **video:** use an already-compatible local LTX/10Eros reference as the implicit i2v canvas, avoiding
+  misleading intermediate dimension adjustments and no-op resize messages
+  ([d836b49](https://github.com/Sogni-AI/sogni-creative-agent-skill/commit/d836b490bccda5c9e8166b2bb3d928708d2fbae4)).
+
+## [3.17.1](https://github.com/Sogni-AI/sogni-creative-agent-skill/compare/v3.17.0...v3.17.1) (2026-07-26)
+
+### Bug Fixes
+
+* **scripts:** refuse runtime sync on intelligence-client version mismatch ([247da8c](https://github.com/Sogni-AI/sogni-creative-agent-skill/commit/247da8c9cb7b6f0575a25543847ca00f44929c0a))
+* **video:** stop discarding i2v resolution on sparse aspect ratios ([23125f7](https://github.com/Sogni-AI/sogni-creative-agent-skill/commit/23125f780d394ec988012aabd4db7a9e49c63341))
+
+## [3.17.0] - 2026-07-26
+
+### Added
+
+* **video:** add LTX-2.3 10Eros image-to-video support for private mature-theme creativity, including
+  DR34ML4Y v3 video LoRA support through `--lora dr34ml4y-v3`.
+* **models:** move live model discovery to the public Sogni model catalog API, including API-supplied
+  catalog tags, network and media filtering, and five-minute ETag-revalidated caching without requiring
+  an API key.
 
 ## [3.16.1] - 2026-07-25
 

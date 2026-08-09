@@ -1,0 +1,14 @@
+name: geoskill-ecosystem-services-valuation
+display_name: 生态系统服务评估
+description: |
+  用当量因子法评估供给、调节、支持、文化四类生态系统服务价值。Estimates four ecosystem service values with a simplified InVEST plus equivalent-factor method. 输出四类服务价值 GeoTIFF 与总量 JSON。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-ecosystem-services-valuation.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - raster
+  - remote-sensing
+  - vector

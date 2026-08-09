@@ -23,15 +23,18 @@ dimensions:
     kind: conformed_dimension
     business_key: resource_type_code
     parent_dimension: Dim_CloudServiceType
-    source_operations: [BSS/ListResourceTypes, BSS/ListServiceResources]
+    source_operations: [BSS/ListServiceResources, BSS/ListResourceTypes]
     attributes: [resource_type_code, resource_type_name, resource_type_desc, service_type_code]
+    selection_rules:
+      - "优先 ListServiceResources(service_type_code)；多候选让用户选。"
+      - "错 type 可能 Specs 有行但询价失败（CBC.6006 / billing item）。"
 
   - name: Dim_Region
     kind: conformed_dimension
     business_key: region_code
     source_documents: [https://developer.huaweicloud.com/endpoint]
     attributes: [region_code, region_name, site]
-    notes: hcloud 无统一 region 字典 API；以官方 endpoint 页为准
+    notes: 无统一 region 字典 API；以官方 endpoint 页为准
 
   - name: Dim_AvailabilityZone
     kind: snowflake_dimension
@@ -55,14 +58,12 @@ dimensions:
     attributes: [resource_spec, resource_spec_name, cloud_service_type, resource_type, charge_mode, region_code]
     pairing_rules:
       - name: charge_mode_alignment
-        rule: "rfq_period_quote → 1；rfq_ondemand_quote → 3。"
+        rule: "period → 1；on-demand → 3。"
       - name: region_alignment
-        rule: "region_code 必须等于询价 line 的 region。"
+        rule: "region_code = 询价 line 的 region。"
     selection_rules:
-      - "resource_spec 一律取自当次 ListResourceSpecs 返回。"
-      - "OS 后缀已内含在返回值中；同族多 OS 变体按 SKILL.md 默认策略选择并披露。"
-      - "跨规格族多候选时让用户选择，不自动挑。"
+      - "只取当次 ListResourceSpecs；OS 已含在返回值，不拼接。"
+      - "多候选/跨规格族让用户选；有行仍可能不可询价。"
 
 evidence_boundary:
-  - resource_spec 唯一来源为当次 BSS/ListResourceSpecs 响应。
-  - 具体取值与检索纪律只在 references/pricing/commands.md。
+  - resource_spec 唯一来源为当次 ListResourceSpecs；检索纪律在 commands.md。

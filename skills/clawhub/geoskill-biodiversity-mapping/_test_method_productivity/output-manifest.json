@@ -1,0 +1,81 @@
+{
+  "skill": "biodiversity-mapping",
+  "skill_version": "1.0.0",
+  "command": "biodiversity-mapping --bbox 116 39 117 40 --synthetic --method productivity --quiet --output-dir ./_test_method_productivity",
+  "started_at": "2026-08-03T14:38:57.739891Z",
+  "finished_at": "2026-08-03T14:38:57.937228Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "method": "productivity",
+    "window": 5,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_method_productivity\\species_richness.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_method_productivity\\habitat_quality.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_method_productivity\\richness_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "productivity",
+    "n_input_bands": 3,
+    "n_valid_pixels": 16384,
+    "n_total_pixels": 16384,
+    "mean_ndvi": 0.3289760649204254,
+    "mean_habitat_quality": 0.44578856229782104,
+    "mean_richness": 141.66590881347656,
+    "max_richness": 186.29978942871094,
+    "synthetic_veg_fraction": 0.4071044921875
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "biodiversity-mapping"
+  },
+  "error": null
+}

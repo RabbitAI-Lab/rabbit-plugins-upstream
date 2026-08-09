@@ -1,0 +1,61 @@
+{
+  "skill": "temporal-interpolation",
+  "skill_version": "1.0.0",
+  "command": "temporal-interpolation --bbox 116 39 117 40 --synthetic --method spline --n-dates 10 --quiet --output-dir ./_test_spline",
+  "started_at": "2026-08-03T17:11:47.240027Z",
+  "finished_at": "2026-08-03T17:11:47.562448Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "method": "spline",
+    "n_dates": 10,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_spline\\smoothed_series.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 10,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_spline\\smoothing_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "spline",
+    "n_dates": 10,
+    "overall_mean_before": 0.46081361174583435,
+    "overall_mean_after": 0.46081361174583435,
+    "rmse_noisy_vs_clean": 0.09682393819093704,
+    "rmse_smoothed_vs_clean": 0.09854989498853683
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "temporal-interpolation"
+  },
+  "error": null
+}

@@ -433,10 +433,13 @@ if __name__ == '__main__':
             if result['merged']:
                 merged_df = result['data']
                 merge_type = result['merge_type']
-                print(f"合并方式: {merge_type}")
                 if do_summary:
-                    print(json.dumps(parser.get_data_summary(merged_df), ensure_ascii=False, indent=2, default=str))
+                    # summary 模式 stdout 必须是纯 JSON（agent 机器可读），merge_type 放入 JSON 内
+                    summary = parser.get_data_summary(merged_df)
+                    summary['merge_type'] = merge_type
+                    print(json.dumps(summary, ensure_ascii=False, indent=2, default=str))
                 else:
+                    print(f"合并方式: {merge_type}")
                     print(f"合并后: {merged_df.shape[0]} 行, {merged_df.shape[1]} 列")
                     print(f"列名: {list(merged_df.columns)}")
                     print(merged_df.head(5).to_string())

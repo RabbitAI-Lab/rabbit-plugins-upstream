@@ -11,7 +11,7 @@ ppshu — 把一张 HTML 图存入集中管理的「画册」，并按 001-* 序
     # 从文件读取 HTML
     python save_html.py "<一句话描述>" --file diagram.html
 
-    # 指定集中目录（默认 ~/.workbuddy/ppshu）
+    # 指定集中目录（默认当前工作目录下的 .ppshu/，可整目录删除）
     python save_html.py "<描述>" --dir "D:/my/ppshu"
 
 行为
@@ -34,7 +34,12 @@ import sys
 import html as _html
 import datetime
 
-DEFAULT_DIR = os.path.expanduser("~/.workbuddy/ppshu")
+# 默认存到「当前工作目录」下的 .ppshu/ —— 作品落在用户正在做的项目里，好找、可整目录删除。
+DEFAULT_DIR = os.path.join(os.getcwd(), ".ppshu")
+
+# 技能根目录（scripts 的上一级），用于定位随包发布的 assets/mermaid.min.js
+SKILL_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+MERMAID_SRC = os.path.join(SKILL_DIR, "assets", "mermaid.min.js")
 
 
 def kebab(text: str) -> str:
@@ -55,6 +60,19 @@ def next_serial(directory: str) -> str:
             if m:
                 highest = max(highest, int(m.group(1)))
     return f"{highest + 1:03d}"
+
+
+def maybe_copy_mermaid(directory: str, content: str) -> None:
+    """若 HTML 引用了本地 mermaid（用 ./mermaid.min.js），则把随包发布的库复制到
+    同目录，保证生成的流程图离线也能渲染，不依赖任何 CDN。"""
+    if "mermaid.min.js" not in content or not os.path.isfile(MERMAID_SRC):
+        return
+    import shutil
+    dest = os.path.join(directory, "mermaid.min.js")
+    # 已存在且大小一致则跳过，避免每次保存都重写 3.3MB
+    if os.path.exists(dest) and os.path.getsize(dest) == os.path.getsize(MERMAID_SRC):
+        return
+    shutil.copyfile(MERMAID_SRC, dest)
 
 
 def build_index(directory: str) -> str:
@@ -150,6 +168,9 @@ def main() -> None:
     out_path = os.path.join(directory, filename)
     with open(out_path, "w", encoding="utf-8") as f:
         f.write(content)
+
+    # 流程图类会引用 ./mermaid.min.js，这里自动把打包的库补到同目录，离线可用
+    maybe_copy_mermaid(directory, content)
 
     with open(os.path.join(directory, "index.html"), "w", encoding="utf-8") as f:
         f.write(build_index(directory))

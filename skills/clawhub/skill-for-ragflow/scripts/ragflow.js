@@ -1,11 +1,12 @@
 #!/usr/bin/env node
 const fs = require("fs");
 const path = require("path");
-const { createClient } = require("../lib/api.js");
+const { createClient: createApiClient } = require("../lib/api.js");
 
 const args = process.argv.slice(2);
 const command = args[0];
 const outputMode = { jsonOnly: false };
+let activeOptionState = null;
 
 // ── Output helpers ──
 
@@ -111,6 +112,7 @@ function commandErrorJsonPayload(err) {
     payload.retries = retries;
     payload.delete_chunk_diagnostics = details;
   }
+  if (err.response !== undefined) payload.response = err.response;
   return payload;
 }
 
@@ -166,6 +168,45 @@ function parseArgs(argv) {
   return opts;
 }
 
+function optionName(key) {
+  return `--${key.replace(/([A-Z])/g, "-$1").toLowerCase()}`;
+}
+
+function trackOptions(rawOptions) {
+  const consumed = new Set();
+  const options = new Proxy(rawOptions, {
+    get(target, key, receiver) {
+      if (typeof key === "string") consumed.add(key);
+      return Reflect.get(target, key, receiver);
+    },
+  });
+  activeOptionState = { rawOptions, consumed };
+  return options;
+}
+
+function validateUnusedOptions() {
+  if (!activeOptionState) return;
+  const { rawOptions, consumed } = activeOptionState;
+  const unused = Object.keys(rawOptions).find((key) => key !== "_" && !consumed.has(key));
+  if (unused) throw new Error(`Unknown option for ${command}: ${optionName(unused)}`);
+}
+
+function validateOptions(opts) {
+  if (opts._.length) throw new Error(`Unexpected positional argument: ${opts._[0]}`);
+}
+
+function createClient(options = {}) {
+  const client = createApiClient(options);
+  for (const method of ["request", "_streamRequest"]) {
+    const send = client[method].bind(client);
+    client[method] = (...requestArgs) => {
+      validateUnusedOptions();
+      return send(...requestArgs);
+    };
+  }
+  return client;
+}
+
 function listValue(value) {
   const values = Array.isArray(value) ? value : String(value).split(",");
   return values
@@ -200,6 +241,17 @@ function readStdinText() {
     process.stdin.on("end", () => resolve(data));
     process.stdin.on("error", reject);
   });
+}
+
+function providerApiKey(opts, required = false) {
+  let value = opts.apiKey || process.env.RAGFLOW_PROVIDER_API_KEY;
+  if (opts.apiKeyFile) {
+    value = fs.readFileSync(path.resolve(process.cwd(), opts.apiKeyFile), "utf-8").trim();
+  }
+  if (required && !value) {
+    throw new Error("Missing provider API key. Set RAGFLOW_PROVIDER_API_KEY or use --api-key-file");
+  }
+  return value || undefined;
 }
 
 function uploadFileSpec(value) {
@@ -363,6 +415,28 @@ function applyEmbeddedAgentPayloadOptions(data, opts) {
   if (opts.userId) data.user_id = opts.userId;
   if (opts.published || opts.release) data.release = "true";
   if (opts.stream !== undefined) data.stream = boolOption(opts.stream);
+}
+
+function embedCodeOptions(opts) {
+  return {
+    agent: opts.agent,
+    auth: opts.auth,
+    beta: opts.beta,
+    chat: opts.chat,
+    data: opts.data,
+    embedType: opts.embedType,
+    hideAvatar: opts.hideAvatar,
+    locale: opts.locale,
+    origin: opts.origin,
+    published: opts.published,
+    release: opts.release,
+    streaming: opts.streaming,
+    theme: opts.theme,
+    token: opts.token,
+    type: opts.type,
+    userId: opts.userId,
+    visibleAvatar: opts.visibleAvatar,
+  };
 }
 
 const MAX_PAGE_SIZE = 100;
@@ -631,6 +705,16 @@ async function listChunks(opts) {
   json(result);
 }
 
+async function getChunk(opts) {
+  const client = createClient();
+  const dataset = requireOpt(opts, "dataset");
+  const document = requireOpt(opts, "document");
+  const chunk = requireOpt(opts, "chunk");
+  const result = await client.getChunk(dataset, document, chunk);
+  ok(`Chunk fetched: ${chunk}`);
+  json(result);
+}
+
 async function addChunk(opts) {
   const client = createClient();
   const dataset = requireOpt(opts, "dataset");
@@ -734,6 +818,19 @@ async function retrieve(opts) {
   const result = await client.retrieve(params);
   const count = Array.isArray(result) ? result.length : 0;
   ok(`Found ${count} result(s)`);
+  json(result);
+}
+
+async function updateMetadata(opts) {
+  const client = createClient();
+  const dataset = requireOpt(opts, "dataset");
+  const config = requireOpt(opts, "config");
+  const data = jsonOption(config, "--config");
+  if (!data.selector && !data.updates && !data.deletes) {
+    throw new Error("--config must include selector, updates, or deletes");
+  }
+  const result = await client.updateMetadata(dataset, data);
+  ok("Document metadata updated");
   json(result);
 }
 
@@ -896,6 +993,27 @@ async function createSession(opts) {
   info("Creating session...");
   const result = await client.createSession(chat, data);
   ok(`Session created: ${result.id}`);
+  json(result);
+}
+
+async function getSession(opts) {
+  const client = createClient();
+  const chat = requireOpt(opts, "chat");
+  const session = requireOpt(opts, "session");
+  const result = await client.getSession(chat, session);
+  ok(`Session fetched: ${session}`);
+  json(result);
+}
+
+async function updateSession(opts) {
+  const client = createClient();
+  const chat = requireOpt(opts, "chat");
+  const session = requireOpt(opts, "session");
+  const data = opts.config ? jsonOption(opts.config, "--config") : {};
+  if (opts.name) data.name = opts.name;
+  if (!Object.keys(data).length) throw new Error("Provide --name or --config");
+  const result = await client.updateSession(chat, session, data);
+  ok(`Session updated: ${session}`);
   json(result);
 }
 
@@ -1149,22 +1267,25 @@ async function deleteSystemToken(opts) {
 
 async function embedCode(opts) {
   const client = createClient();
-  const tokenInfo = await embedBeta(client, opts);
-  const result = buildEmbedCode(opts, tokenInfo);
+  const embedOpts = embedCodeOptions(opts);
+  const tokenInfo = await embedBeta(client, embedOpts);
+  const result = buildEmbedCode(embedOpts, tokenInfo);
   ok(`Embed code generated for ${result.from} ${result.id}`);
   json(result);
 }
 
 async function embedInfo(opts) {
   const client = createClient();
+  const chatId = opts.chat;
+  const agentId = opts.agent;
   const tokenInfo = await embedBeta(client, opts);
   let result;
-  if (opts.chat && !opts.agent) {
-    info(`Fetching embedded chat info for ${opts.chat}...`);
-    result = await client.getEmbeddedChatInfo(opts.chat, tokenInfo.beta);
-  } else if (opts.agent && !opts.chat) {
-    info(`Fetching embedded agent inputs for ${opts.agent}...`);
-    result = await client.getEmbeddedAgentInputs(opts.agent, tokenInfo.beta);
+  if (chatId && !agentId) {
+    info(`Fetching embedded chat info for ${chatId}...`);
+    result = await client.getEmbeddedChatInfo(chatId, tokenInfo.beta);
+  } else if (agentId && !chatId) {
+    info(`Fetching embedded agent inputs for ${agentId}...`);
+    result = await client.getEmbeddedAgentInputs(agentId, tokenInfo.beta);
   } else {
     throw new Error("Provide exactly one of --chat or --agent");
   }
@@ -1176,9 +1297,9 @@ async function embedChat(opts) {
   const client = createClient();
   const chatId = requireOpt(opts, "chat");
   const question = requireOpt(opts, "question");
-  const tokenInfo = await embedBeta(client, opts);
   const data = { question };
   applyEmbeddedChatPayloadOptions(data, opts);
+  const tokenInfo = await embedBeta(client, opts);
   if (!data.session_id) {
     info("Creating embedded chat session...");
     data.session_id = await client.ensureEmbeddedChatSession(chatId, tokenInfo.beta, data);
@@ -1193,9 +1314,9 @@ async function embedAgentChat(opts) {
   const client = createClient();
   const agentId = requireOpt(opts, "agent");
   const question = requireOpt(opts, "question");
-  const tokenInfo = await embedBeta(client, opts);
   const data = { id: agentId, query: question };
   applyEmbeddedAgentPayloadOptions(data, opts);
+  const tokenInfo = await embedBeta(client, opts);
   info(`Asking embedded agent: "${question}"`);
   const result = await client.embeddedAgentChat(agentId, tokenInfo.beta, data);
   ok("Embedded agent response received");
@@ -1206,8 +1327,11 @@ async function embedAgentChat(opts) {
 
 async function listModels(opts) {
   const client = createClient();
+  const includeDetails = Boolean(opts.includeDetails);
+  const groupBy = opts.groupBy || "type";
+  const includeUnavailable = opts.all;
   const params = {};
-  if (opts.includeDetails) params.include_details = true;
+  if (includeDetails) params.include_details = true;
   info("Fetching available LLM models...");
   let result;
   try {
@@ -1222,8 +1346,6 @@ async function listModels(opts) {
   // Normalize and group models
   const factories = result || {};
   const groups = [];
-  const groupBy = opts.groupBy || "type";
-  const includeUnavailable = opts.all;
   
   for (const [factoryName, factoryPayload] of Object.entries(factories)) {
     if (factoryName.startsWith("__")) continue;
@@ -1248,7 +1370,7 @@ async function listModels(opts) {
         factory: factoryName,
         status: isAvailable ? "available" : "unavailable",
       };
-      if (opts.includeDetails) {
+      if (includeDetails) {
         model.used_token = llm.used_token;
         if (llm.api_base) model.api_base = llm.api_base;
         if (llm.max_tokens) model.max_tokens = llm.max_tokens;
@@ -1343,7 +1465,8 @@ async function listProviderModels(opts) {
   const client = createClient();
   const name = requireOpt(opts, "name");
   const params = {};
-  if (opts.apiKey) params.api_key = opts.apiKey;
+  const apiKey = providerApiKey(opts);
+  if (apiKey) params.api_key = apiKey;
   if (opts.baseUrl) params.base_url = opts.baseUrl;
   info(`Fetching available models for provider ${name}...`);
   const result = await client.listProviderModels(name, params);
@@ -1375,7 +1498,7 @@ async function createProviderInstance(opts) {
   const name = requireOpt(opts, "name");
   const data = {
     instance_name: requireOpt(opts, "instance"),
-    api_key: requireOpt(opts, "apiKey"),
+    api_key: providerApiKey(opts, true),
   };
   if (opts.baseUrl) data.base_url = opts.baseUrl;
   if (opts.region) data.region = opts.region;
@@ -1399,7 +1522,7 @@ async function deleteProviderInstances(opts) {
 async function verifyProvider(opts) {
   const client = createClient();
   const name = requireOpt(opts, "name");
-  const data = { api_key: requireOpt(opts, "apiKey") };
+  const data = { api_key: providerApiKey(opts, true) };
   if (opts.baseUrl) data.base_url = opts.baseUrl;
   if (opts.region) data.region = opts.region;
   if (opts.modelInfo) data.model_info = jsonOption(opts.modelInfo, "--model-info");
@@ -1469,6 +1592,38 @@ async function traceRaptor(opts) {
   json(result);
 }
 
+async function getKnowledgeGraph(opts) {
+  const client = createClient();
+  const dataset = requireOpt(opts, "dataset");
+  const result = await client.getKnowledgeGraph(dataset);
+  ok("Knowledge graph fetched");
+  json(result);
+}
+
+async function deleteKnowledgeGraph(opts) {
+  const client = createClient();
+  const dataset = requireOpt(opts, "dataset");
+  const result = await client.deleteKnowledgeGraph(dataset);
+  ok("Knowledge graph deleted");
+  json(result);
+}
+
+async function runGraphRag(opts) {
+  const client = createClient();
+  const dataset = requireOpt(opts, "dataset");
+  const result = await client.runGraphRag(dataset);
+  ok("GraphRAG construction started");
+  json(result);
+}
+
+async function traceGraphRag(opts) {
+  const client = createClient();
+  const dataset = requireOpt(opts, "dataset");
+  const result = await client.traceGraphRag(dataset);
+  ok(`GraphRAG status: ${result.status || "unknown"}`);
+  json(result);
+}
+
 // ── Command registry ──
 
 async function metadataSummary(opts) {
@@ -1485,6 +1640,13 @@ async function systemVersion() {
   const client = createClient();
   const result = await client.getSystemVersion();
   ok("System version fetched");
+  json(result);
+}
+
+async function systemHealth() {
+  const client = createClient();
+  const result = await client.getSystemHealth();
+  ok("System health fetched");
   json(result);
 }
 
@@ -1527,6 +1689,7 @@ const COMMANDS = {
   "wait-parsing":      { fn: waitParsing,      group: "Parsing",   desc: "Wait for parsing to complete" },
   // Chunk
   "list-chunks":       { fn: listChunks,       group: "Chunk",     desc: "List chunks" },
+  "get-chunk":         { fn: getChunk,         group: "Chunk",     desc: "Get one chunk by ID" },
   "add-chunk":         { fn: addChunk,         group: "Chunk",     desc: "Add a chunk" },
   "update-chunk":      { fn: updateChunk,      group: "Chunk",     desc: "Update a chunk" },
   "delete-chunks":     { fn: deleteChunks,     group: "Chunk",     desc: "Delete chunks" },
@@ -1534,6 +1697,7 @@ const COMMANDS = {
   "delete-document-graph": { fn: deleteDocumentGraph, group: "Chunk", desc: "Delete a document structure graph" },
   // Retrieval
   "retrieve":          { fn: retrieve,         group: "Retrieval", desc: "Retrieve from datasets" },
+  "update-metadata":   { fn: updateMetadata,   group: "Document",  desc: "Batch update or delete document metadata" },
   // Connector
   "list-connectors":   { fn: listConnectors,   group: "Connector", desc: "List connectors" },
   "create-connector":  { fn: createConnector,  group: "Connector", desc: "Create a connector" },
@@ -1543,6 +1707,10 @@ const COMMANDS = {
   // RAPTOR
   "run-raptor":        { fn: runRaptor,        group: "RAPTOR",     desc: "Start RAPTOR processing" },
   "trace-raptor":      { fn: traceRaptor,      group: "RAPTOR",     desc: "Trace RAPTOR progress" },
+  "get-knowledge-graph": { fn: getKnowledgeGraph, group: "GraphRAG", desc: "Get a dataset knowledge graph" },
+  "delete-knowledge-graph": { fn: deleteKnowledgeGraph, group: "GraphRAG", desc: "Delete a dataset knowledge graph" },
+  "run-graphrag":      { fn: runGraphRag,      group: "GraphRAG",  desc: "Start knowledge graph construction" },
+  "trace-graphrag":    { fn: traceGraphRag,    group: "GraphRAG",  desc: "Trace knowledge graph construction" },
   // Chat Assistant
   "list-chats":        { fn: listChatAssistants, group: "Chat",    desc: "List chat assistants" },
   "create-chat":       { fn: createChatAssistant, group: "Chat",   desc: "Create a chat assistant" },
@@ -1553,6 +1721,8 @@ const COMMANDS = {
   // Session
   "list-sessions":     { fn: listSessions,     group: "Session",   desc: "List chat sessions" },
   "create-session":    { fn: createSession,    group: "Session",   desc: "Create a chat session" },
+  "get-session":       { fn: getSession,       group: "Session",   desc: "Get a chat session" },
+  "update-session":    { fn: updateSession,    group: "Session",   desc: "Update a chat session" },
   "delete-sessions":   { fn: deleteSessions,   group: "Session",   desc: "Delete chat sessions" },
   // Chat conversation
   "chat":              { fn: chat,             group: "Chat",      desc: "Chat with an assistant" },
@@ -1600,6 +1770,7 @@ const COMMANDS = {
   // Metadata / System
   "metadata-summary":  { fn: metadataSummary,  group: "Document",  desc: "Summarize document metadata" },
   "system-version":    { fn: systemVersion,    group: "System",    desc: "Get system version" },
+  "system-health":     { fn: systemHealth,     group: "System",    desc: "Check system health" },
   "get-log-levels":    { fn: getLogLevels,     group: "System",    desc: "Get log levels" },
   "set-log-level":     { fn: setLogLevel,      group: "System",    desc: "Set a log level" },
 };
@@ -1688,7 +1859,8 @@ ${C.bold}Common Options:${C.reset}
     --available         List system-available providers (list-providers)
     --instance          Provider instance name
     --instances         Provider instance names (multiple values)
-    --api-key           Provider API key (create-provider-instance, verify-provider)
+    --api-key-file      Read provider API key from a file (recommended)
+    --api-key           Provider API key in argv (legacy; prefer file or RAGFLOW_PROVIDER_API_KEY)
     --base-url          Provider base URL
     --region            Provider region
     --model-info        Provider model_info JSON (provider instance commands)
@@ -1708,7 +1880,7 @@ ${C.bold}Common Options:${C.reset}
 // ── Main ──
 
 async function main() {
-  const opts = parseArgs(args.slice(1));
+  const opts = trackOptions(parseArgs(args.slice(1)));
   outputMode.jsonOnly = Boolean(opts.json);
   if (!command || command === "help" || command === "--help" || command === "-h" || opts.help) {
     printHelp();
@@ -1732,7 +1904,9 @@ async function main() {
   }
 
   try {
+    validateOptions(opts);
     await cmd.fn(opts);
+    validateUnusedOptions();
   } catch (err) {
     if (outputMode.jsonOnly) {
       json(commandErrorJsonPayload(err));

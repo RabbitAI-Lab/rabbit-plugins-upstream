@@ -1,48 +1,67 @@
-## Description: <br>
-Helps agents use LinkFox Temu EU fulfillment APIs for buy-shipping labels, cooperative warehouse fulfillment, seller self-fulfillment, logistics tracking, and self-delivery POD workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Temu EU fulfillment skill for Buy-Shipping labels, co-warehouse fulfillment, self-fulfilled shipment updates, logistics tracking, and self-delivery proof-of-delivery workflows across 30 Partner EU fulfillment APIs.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External developers, sellers, and fulfillment operators use this skill to prepare and execute Temu EU order-shipping workflows through LinkFox gateway calls. It supports label purchase, shipment confirmation, scan forms, pickup reservations, cooperative warehouse fulfillment, tracking, and POD upload workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Europe (Temu EU fulfillment workflows) <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Temu seller fulfillment tokens and LinkFox gateway credentials, which can expose sensitive account access if mishandled. <br>
-Mitigation: Use limited-scope Temu tokens where possible and avoid pasting production secrets into shared chats, logs, or saved transcripts. <br>
-Risk: The skill can change live fulfillment state, including shipment creation, confirmation, cancellation, and POD upload. <br>
-Mitigation: Require human review before executing state-changing fulfillment actions or arbitrary proxy calls. <br>
-Risk: The skill may retain Temu tokens and API response data in local files. <br>
-Mitigation: Review and protect local files under linkfox data directories and ~/.linkfox, and remove retained sensitive data when it is no longer needed. <br>
+## Use Case:
 
+External sellers, operators, and developers use this skill to run Temu Europe fulfillment tasks through LinkFox, including buying shipping labels, confirming shipment, managing pickup reservations, handling co-warehouse fulfillment, tracking packages, and uploading POD evidence.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-fulfillment-eu) <br>
-- [API reference](artifact/references/api.md) <br>
-- [Access token guide](artifact/references/access-token.md) <br>
-- [Authorization flow](artifact/references/authorization-flow.md) <br>
-- [Partner EU fulfillment catalog](artifact/references/partner-eu-catalog.md) <br>
-- [EU fulfillment API index](artifact/references/apis/README.md) <br>
-- [Temu Partner EU documentation](https://partner-eu.temu.com/documentation) <br>
+### Deployment Geography for Use:
 
+Europe
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, JSON files, API calls] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON request or response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts may write full API responses under a local linkfox data directory and print either full JSON or a summary depending on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill can perform live fulfillment operations such as shipment creation, updates, confirmations, cancellations, pickup reservations, and POD upload through LinkFox.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm every shipping, cancellation, pickup, payment, or proof-of-delivery action before running a script with live credentials.
+
+Risk: The skill handles LinkFox tokens and Temu access tokens, including optional local token storage.
+
+Mitigation: Use scoped credentials, avoid pasting real credentials into shared chats or logs, rotate exposed tokens, and review the local token store path before saving tokens.
+
+Risk: Full API responses may be persisted to a local linkfox session data directory and can include order, shipment, or tracking details.
+
+Mitigation: Review saved response locations, avoid sharing generated data folders, and remove stored responses that contain sensitive operational data when no longer needed.
+
+Risk: Environment variables can override the gateway base URL, which could redirect requests away from the expected LinkFox service.
+
+Mitigation: Use gateway URL overrides only in controlled environments and verify the target service before sending tokens or fulfillment payloads.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-fulfillment-eu)
+- [Temu EU fulfillment API reference](references/api.md)
+- [Partner EU fulfillment interface catalog](references/partner-eu-catalog.md)
+- [Fulfillment API document index](references/apis/README.md)
+- [Temu accessToken authorization and retrieval](references/access-token.md)
+- [Authentication and credit onboarding](references/onboarding.md)
+- [Temu Partner EU documentation](https://partner-eu.temu.com/documentation?menu_code=7289390cfd724be4a196f11ebe45a896)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Files, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [JSON responses, saved JSON files, stdout summaries, and Markdown guidance with shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full responses are written to a linkfox session data directory; small responses print in full and large responses print summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

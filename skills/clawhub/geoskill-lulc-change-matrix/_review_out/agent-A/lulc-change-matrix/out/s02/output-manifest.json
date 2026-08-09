@@ -1,0 +1,97 @@
+{
+  "skill": "lulc-change-matrix",
+  "skill_version": "1.0.0",
+  "command": "lulc-change-matrix --bbox 121.0 31.0 122.0 32.0 --synthetic --n-classes 3 --quiet --output-dir _review_out\\agent-A\\lulc-change-matrix\\out\\s02",
+  "started_at": "2026-08-03T21:50:47.569040Z",
+  "finished_at": "2026-08-03T21:50:47.898204Z",
+  "exit_code": 0,
+  "inputs": {
+    "t1": null,
+    "t2": null,
+    "synthetic": true,
+    "bbox": [
+      121.0,
+      31.0,
+      122.0,
+      32.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out\\agent-A\\lulc-change-matrix\\out\\s02\\transition_matrix.csv",
+      "kind": "table",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": 4
+    },
+    {
+      "path": "_review_out\\agent-A\\lulc-change-matrix\\out\\s02\\change_areas.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out\\agent-A\\lulc-change-matrix\\out\\s02\\sankey.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out\\agent-A\\lulc-change-matrix\\out\\s02\\change_map.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        121.0,
+        31.0,
+        122.0,
+        32.0
+      ],
+      "resolution_m": null,
+      "nodata": -1,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_classes": 3,
+    "total_pixels": 9216,
+    "changed_pixels": 2024,
+    "change_fraction": 0.21961805555555555,
+    "changed_area_km2": 2304.8588589794167,
+    "n_transitions": 1,
+    "injected_transition": {
+      "from_class": 1,
+      "to_class": 2,
+      "from_name": "vegetation",
+      "to_name": "cropland",
+      "pixel_count": 2024
+    }
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "lulc-change-matrix"
+  },
+  "error": null
+}

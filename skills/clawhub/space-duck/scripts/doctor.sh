@@ -259,7 +259,10 @@ section "Bridge tunnel"
 TUNNEL_PROC=$(pgrep -fa 'cloudflared\|tryclou' 2>/dev/null | head -1 || true)
 if [[ -n "$TUNNEL_PROC" ]]; then
   ok "Tunnel process running"
-  row "${C_DIM}${TUNNEL_PROC:0:140}${C_RESET}"
+  # [HARDEN-074] Redact before printing: named-tunnel cmdlines can carry
+  # --token <JWT> and full tunnel URLs — both violate "safe to paste publicly".
+  TUNNEL_SAFE=$(echo "$TUNNEL_PROC" | sed -E 's/(--token[= ])[^ ]+/\1<redacted>/g; s|https?://[^ ]+|<url-redacted>|g')
+  row "${C_DIM}${TUNNEL_SAFE:0:140}${C_RESET}"
   if echo "$TUNNEL_PROC" | grep -q 'trycloudflare\|quick'; then
     warn "Quick tunnel detected — URL is ephemeral (will change on restart)"
     hint "Production: switch to named cloudflared tunnel or owner DNS"

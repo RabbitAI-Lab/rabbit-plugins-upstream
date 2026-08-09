@@ -17,10 +17,12 @@ try:
     from jsonschema import Draft202012Validator, FormatChecker
 except ModuleNotFoundError as exc:  # pragma: no cover - clean-machine path
     missing = getattr(exc, "name", "PyYAML/jsonschema")
-    print(
-        f"缺少运行依赖 {missing}。请先执行：python -m pip install -r scripts/requirements.txt",
-        file=sys.stderr,
+    message = (
+        f"Missing runtime dependency {missing}. Run: python -m pip install -r scripts/requirements.txt"
+        if any(value == "en-US" for value in sys.argv) else
+        f"缺少运行依赖 {missing}。请先执行：python -m pip install -r scripts/requirements.txt"
     )
+    print(message, file=sys.stderr)
     raise SystemExit(4) from exc
 
 
@@ -31,6 +33,7 @@ if hasattr(sys.stderr, "reconfigure"):
 
 
 ROOT = Path(__file__).resolve().parents[1]
+MAINTAINER_DIR = ROOT / "maintainer"
 
 
 DELIVERY_DIRS = (
@@ -257,47 +260,39 @@ def init_requirements(args: argparse.Namespace) -> int:
 
 
 def run_check(args: argparse.Namespace) -> int:
-    commands: list[list[str]] = [
+    if not MAINTAINER_DIR.is_dir():
+        print("[SKIP] maintainer-only assurance suite is not shipped in the runtime package")
+        return 0
+    fast_commands: list[list[str]] = [
         [sys.executable, "maintainer/tools/validators/validate_v5_architecture.py"],
         [sys.executable, "scripts/validators/validate_spec_config.py", "examples/spec.config.example.yaml"],
         [sys.executable, "maintainer/tools/validators/validate_runtime_rule_uniqueness.py"],
         [sys.executable, "maintainer/tools/validators/validate_domain_coverage.py"],
+        [sys.executable, "maintainer/tools/validators/validate_eval_catalog.py"],
+        [sys.executable, "maintainer/tests/test_v511_runtime_budget.py"],
+        [sys.executable, "maintainer/tests/test_v540_readme_commands.py"],
+        [sys.executable, "maintainer/tests/test_v541_human_first_gate.py"],
+        [sys.executable, "maintainer/tests/test_product_experience.py"],
+        [sys.executable, "maintainer/tools/validators/validate_release_claims.py"],
+    ]
+    release_only_commands: list[list[str]] = [
         [sys.executable, "maintainer/tools/validators/validate_domain_sources.py"],
         [sys.executable, "maintainer/tools/validators/validate_domain_contracts.py"],
-        [sys.executable, "maintainer/tools/validators/validate_eval_catalog.py"],
-        [sys.executable, "maintainer/tools/validators/validate_github_eval_cases.py"],
-        [sys.executable, "maintainer/tests/test_v502_coding_contract.py"],
         [sys.executable, "maintainer/tests/test_v502_progressive_truth.py"],
         [sys.executable, "maintainer/tests/test_v510_requirement_management.py"],
         [sys.executable, "maintainer/tests/test_v510_unified_prd.py"],
-        [sys.executable, "maintainer/tests/test_v510_semantic_guards.py"],
         [sys.executable, "maintainer/tests/test_v510_lightweight_gate.py"],
         [sys.executable, "maintainer/tests/test_v510_industry_assurance.py"],
-        [sys.executable, "maintainer/tests/test_v511_runtime_budget.py"],
         [sys.executable, "maintainer/tests/test_v511_domain_assurance.py"],
         [sys.executable, "maintainer/tests/test_v515_page_delivery_contract.py"],
-        [sys.executable, "maintainer/tests/test_v516_ai_applicability.py"],
         [sys.executable, "maintainer/tests/test_v530_contracts.py"],
         [sys.executable, "maintainer/tests/test_v540_stage_contracts.py"],
-        [sys.executable, "maintainer/tests/test_v540_readme_commands.py"],
         [sys.executable, "scripts/validators/validate_requirement_patterns.py", "references/patterns/common-requirement-patterns.yaml"],
-        [
-            sys.executable,
-            "maintainer/tools/build_github_validation_matrix.py",
-            "--check",
-            "maintainer/evals/evidence/github-validation-matrix.yaml",
-        ],
-        [sys.executable, "maintainer/tools/validators/validate_release_claims.py"],
-        [sys.executable, "maintainer/tools/build_runtime_package.py", "--check"],
+        [sys.executable, "maintainer/tests/test_v544_human_review_contracts.py"],
         [sys.executable, "maintainer/tests/test_context_planning.py"],
-        [sys.executable, "maintainer/tests/test_evaluation_metrics.py"],
         [sys.executable, "maintainer/tests/test_execution_state.py"],
         [sys.executable, "maintainer/tests/test_cli_init.py"],
-        [sys.executable, "maintainer/tests/test_v5_agent_deadlock.py"],
-        [sys.executable, "maintainer/tests/test_v5_capsule_pollution.py"],
-        [sys.executable, "maintainer/tests/test_v5_change_drift.py"],
-        [sys.executable, "maintainer/tests/test_v5_schema_grill.py"],
-        [sys.executable, "maintainer/tests/test_v5_status.py"],
+        [sys.executable, "maintainer/tests/test_runtime_resilience.py"],
         [
             sys.executable,
             "scripts/validators/validate_project_domain_capsule.py",
@@ -328,11 +323,8 @@ def run_check(args: argparse.Namespace) -> int:
             "maintainer/examples/publishing-learning-v5/delivery/projections/unified-prd.md",
         ],
         [sys.executable, "scripts/validators/validate_unified_prd.py", "maintainer/examples/publishing-learning-v5/delivery/projections/unified-prd.md"],
-        [sys.executable, "maintainer/tools/score_evaluation_run.py", "maintainer/evals/runs/chatwoot-voice-requirement-v5.yaml", "--quiet"],
-        [sys.executable, "maintainer/tools/score_evaluation_run.py", "maintainer/evals/runs/saleor-channel-id-design-v5.yaml", "--quiet"],
-        [sys.executable, "maintainer/tools/score_evaluation_run.py", "maintainer/evals/runs/openedx-reindex-design-v5.yaml", "--quiet"],
-        [sys.executable, "maintainer/tools/score_evaluation_run.py", "maintainer/evals/runs/orangehrm-password-policy-handoff-v5.yaml", "--quiet"],
     ]
+    commands = fast_commands if args.profile == "fast" else fast_commands + release_only_commands
     if args.product_truth:
         commands.append(
             [sys.executable, "scripts/validators/validate_product_truth.py", str(args.product_truth)]
@@ -355,11 +347,6 @@ def run_script(script: str, values: list[str]) -> int:
         [sys.executable, str(ROOT / "scripts" / script), *values],
         cwd=Path.cwd(), text=True,
     ).returncode
-
-
-def run_repo_tool(relative: str, values: list[str]) -> int:
-    """Run an explicitly located repository tool without mixing it into runtime scripts."""
-    return subprocess.run([sys.executable, str(ROOT / relative), *values], cwd=ROOT, text=True).returncode
 
 
 def plan_context(args: argparse.Namespace) -> int:
@@ -400,31 +387,15 @@ def build_trace(args: argparse.Namespace) -> int:
     return run_script("build_traceability_ledger.py", ["--truth", str(args.truth), "--output", str(args.output), "--baseline-version", args.baseline_version])
 
 
-def score_eval(args: argparse.Namespace) -> int:
-    values = [str(args.run)]
-    if args.output:
-        values.extend(["--output", str(args.output)])
-    if args.require_release_pass:
-        values.append("--require-release-pass")
-    if args.quiet:
-        values.append("--quiet")
-    return run_repo_tool("maintainer/tools/score_evaluation_run.py", values)
-
-
-def compare_evals(args: argparse.Namespace) -> int:
-    values = ["--baseline", str(args.baseline), "--candidate", str(args.candidate)]
-    if args.output:
-        values.extend(["--output", str(args.output)])
-    return run_repo_tool("maintainer/tools/compare_evaluation_runs.py", values)
-
-
 def status_report(args: argparse.Namespace) -> int:
+    evals_dir = MAINTAINER_DIR / "evals"
+    if not evals_dir.is_dir():
+        print("[SKIP] maintainer evaluation assets are not shipped in the runtime package")
+        print(f"runtime skill version: {current_version()}")
+        return 0
     coverage = yaml.safe_load((ROOT / "references/domain-coverage.yaml").read_text(encoding="utf-8"))
     fixtures = yaml.safe_load((ROOT / "maintainer/evals/domain-fixtures.yaml").read_text(encoding="utf-8"))
-    github_cases = yaml.safe_load((ROOT / "maintainer/evals/github-cases.yaml").read_text(encoding="utf-8"))
-    matrix = yaml.safe_load((ROOT / "maintainer/evals/evidence/github-validation-matrix.yaml").read_text(encoding="utf-8"))
     catalog = yaml.safe_load((ROOT / "maintainer/evals/eval-catalog.yaml").read_text(encoding="utf-8"))
-    lifecycle_forward = yaml.safe_load((ROOT / "maintainer/evals/evidence/v517-lifecycle-forward-test-2026-07-15.yaml").read_text(encoding="utf-8"))
     maturity: dict[str, int] = {}
     practice: dict[str, int] = {}
     for domain in coverage.get("domains", []):
@@ -450,32 +421,25 @@ def status_report(args: argparse.Namespace) -> int:
             "contract_fixtures_passed": sum(
                 fixture.get("status") == "passed" for fixture in fixtures.get("fixtures", [])
             ),
-            "github_cases": len(github_cases.get("cases", [])),
-            "lifecycle_forward_test_cases": len(lifecycle_forward.get("cases", [])),
             "catalog_status": eval_status,
-            "github_matrix": matrix.get("summary", {}),
         },
         "known_limitations": [
             "five domain methods have owner-attested production practice; all built-in packs pass deterministic contract checks but fresh-agent/expert maturity remains separate",
-            "GitHub 45 stage cells now have exploratory evidence, but every cell remains partial and zero cells are release-passed because independent repetitions, token measurements and real coding acceptance are absent",
+            "v5.4.4 human-review probes are partial; isolated no-skill comparison, fresh-agent repetitions and versioned user feedback remain separate evidence",
             "domain expert, customer, production, legal, safety, and financial correctness are not proven",
-            "lifecycle simulations and private brownfield calibration expose method gaps but do not prove implementation or customer acceptance",
+            "deterministic fixtures and private brownfield calibration expose method gaps but do not prove implementation or customer acceptance",
         ],
     }
     if args.format == "yaml":
         rendered = yaml.safe_dump(report, allow_unicode=True, sort_keys=False)
     else:
-        matrix_summary = report["evaluation_assets"]["github_matrix"]
         rendered = (
             "# AI Delivery Spec Status\n\n"
             f"- Version: `{report['skill_version']}` (`pure_v5`)\n"
             f"- Domain packs: {report['domain_packs']['count']}; maturity: `{maturity}`\n"
             f"- Delivery practice: `{practice}`\n"
             f"- Production claims allowed by built-in packs: {report['domain_packs']['production_claims_allowed']}\n"
-            f"- Domain fixtures: {report['evaluation_assets']['domain_fixtures']}\n"
-            f"- Pinned GitHub cases: {report['evaluation_assets']['github_cases']}\n"
-            f"- GitHub stage cells: passed={matrix_summary.get('passed', 0)}, "
-            f"partial={matrix_summary.get('partial', 0)}, not_run={matrix_summary.get('not_run', 0)}\n\n"
+            f"- Domain fixtures: {report['evaluation_assets']['domain_fixtures']}\n\n"
             "## Known limitations\n\n"
             + "".join(f"- {item}\n" for item in report["known_limitations"])
         )
@@ -512,6 +476,7 @@ def quality_gate(args: argparse.Namespace) -> int:
         values = [
             "gate", "--profile", args.profile, "--format", args.format,
             "--diagnostics", args.diagnostics, "--max-findings", str(args.max_findings),
+            "--language", args.language,
         ]
         for artifact in args.artifact:
             values.extend(["--artifact", str(artifact)])
@@ -521,16 +486,28 @@ def quality_gate(args: argparse.Namespace) -> int:
         and args.requirement
         and args.requirement.suffix.casefold() in {".md", ".markdown"}
     ):
-        print(
-            "BLOCKED: --profile requirement 只校验 YAML 需求登记册；"
-            "Markdown 需求卡或 PRD 请改用："
-            f"python scripts/ai_delivery_spec_cli.py gate --profile prd --prd \"{args.requirement}\""
-        )
+        language = args.language
+        if language == "auto" and args.requirement.is_file():
+            sample = args.requirement.read_text(encoding="utf-8", errors="ignore")[:4000]
+            match = re.search(r"^document_language:\s*([^\s#]+)", sample, re.M)
+            language = "en-US" if match and match.group(1).casefold().startswith("en") else "zh-CN"
+        if language == "en-US":
+            print(
+                "BLOCKED: --profile requirement validates YAML requirement registers only. "
+                "For a Markdown requirement card or PRD, use: "
+                f"python scripts/ai_delivery_spec_cli.py gate --profile prd --prd \"{args.requirement}\" --language en-US"
+            )
+        else:
+            print(
+                "BLOCKED: --profile requirement 只校验 YAML 需求登记册；"
+                "Markdown 需求卡或 PRD 请改用："
+                f"python scripts/ai_delivery_spec_cli.py gate --profile prd --prd \"{args.requirement}\" --language zh-CN"
+            )
         return 2
     values = [
         "--profile", args.profile, "--level", args.level, "--stage", args.stage,
         "--format", args.format, "--diagnostics", args.diagnostics,
-        "--max-findings", str(args.max_findings),
+        "--max-findings", str(args.max_findings), "--language", args.language,
     ]
     for scope_ref in args.scope_ref:
         values.extend(["--scope-ref", scope_ref])
@@ -540,9 +517,11 @@ def quality_gate(args: argparse.Namespace) -> int:
         "requirement": "--requirement",
         "prd": "--prd",
         "prototype": "--prototype",
+        "prototype_baseline": "--prototype-baseline",
         "inventory": "--inventory",
         "manifest": "--manifest",
         "acceptance_run": "--acceptance-run",
+        "review_record": "--review-record",
     }
     for name, option in option_names.items():
         value = getattr(args, name)
@@ -551,6 +530,9 @@ def quality_gate(args: argparse.Namespace) -> int:
                 values.extend([option, str(item)])
         elif value:
             values.extend([option, str(value)])
+    if args.profile == "requirement":
+        for artifact in args.artifact:
+            values.extend(["--register", str(artifact)])
     return run_script("quality_gate.py", values)
 
 
@@ -750,15 +732,30 @@ def assess_candidate(args: argparse.Namespace) -> int:
 
 
 def explain_finding(args: argparse.Namespace) -> int:
-    from quality_gate import guidance_for, repair_example_for
+    from quality_gate import english_guidance_for, english_repair_example_for, guidance_for, repair_example_for
 
-    cause, how_to_fix = guidance_for(args.code)
-    example = repair_example_for(args.code)
-    payload = {"code": args.code, "cause": cause, "how_to_fix": how_to_fix, "repair_example": example}
+    cause_zh, fix_zh = guidance_for(args.code)
+    example_zh = repair_example_for(args.code)
+    cause_en, fix_en = english_guidance_for(args.code)
+    example_en = english_repair_example_for(args.code)
+    english = args.language == "en-US"
+    payload = {
+        "code": args.code,
+        "output_language": "en-US" if english else "zh-CN",
+        "cause": cause_en if english else cause_zh,
+        "how_to_fix": fix_en if english else fix_zh,
+        "repair_example": example_en if english else example_zh,
+        "cause_zh": cause_zh, "fix_zh": fix_zh, "repair_example_zh": example_zh,
+        "cause_en": cause_en, "fix_en": fix_en, "repair_example_en": example_en,
+    }
     if args.format == "json":
         print(json.dumps(payload, ensure_ascii=False, indent=2))
     else:
-        print(f"{args.code}\n原因: {cause}\n修复: {how_to_fix}\n示例: {example}")
+        labels = ("Cause", "Fix", "Example") if english else ("原因", "修复", "示例")
+        print(
+            f"{args.code}\n{labels[0]}: {payload['cause']}\n"
+            f"{labels[1]}: {payload['how_to_fix']}\n{labels[2]}: {payload['repair_example']}"
+        )
     return 0
 
 
@@ -778,10 +775,16 @@ def resume_execution(args: argparse.Namespace) -> int:
             return 2
         state = max(set(candidates), key=lambda path: path.stat().st_mtime)
         print(f"INFO: 自动选择最近快照 {state}")
+    if not state.is_file():
+        print(f"BLOCKED: 执行快照不存在或不是文件：{state}")
+        return 2
     return run_script("manage_execution_state.py", ["resume", "--state", str(state)])
 
 
 def main() -> int:
+    help_language = next((sys.argv[index + 1] for index, value in enumerate(sys.argv[:-1]) if value == "--language"), "zh-CN")
+    english_help = help_language == "en-US"
+    gate_help = lambda en, zh: en if english_help else zh
     parser = argparse.ArgumentParser(prog="ai_delivery_spec_cli.py")
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -811,27 +814,31 @@ def main() -> int:
     custom.add_argument("--force", action="store_true")
     custom.set_defaults(func=init_custom)
 
-    check = sub.add_parser("check", help="Run the maintainer assurance suite and optional artifact validators")
+    check = sub.add_parser("check", help="Run fast release-risk checks by default; use --profile release for the full assurance suite")
+    check.add_argument("--profile", choices=["fast", "release"], default="fast")
     check.add_argument("--product-truth", type=Path)
     check.add_argument("--keep-going", action="store_true")
     check.set_defaults(func=run_check)
 
     gate = sub.add_parser("gate", help="Run the token-free final requirement/PRD/prototype goalkeeper")
     gate.add_argument("--profile", choices=["frame", "explore", "clarify", "requirement", "prd", "prototype", "handoff", "full", "stage0", "agent_handoff"], required=True)
-    gate.add_argument("--artifact", type=Path, action="append", default=[], help="frame/explore/clarify 主产物；可重复提供侧车产物")
+    gate.add_argument("--artifact", type=Path, action="append", default=[], help=gate_help("Main frame/explore/clarify artifact; for profile=requirement repeat it for requirement-register sidecars", "frame/explore/clarify 主产物；profile=requirement 时可重复提供需求登记册侧车"))
     gate.add_argument("--requirement", type=Path)
     gate.add_argument("--prd", type=Path)
     gate.add_argument("--prototype", type=Path, action="append", help="Repeat for admin/H5/multi-surface prototypes")
+    gate.add_argument("--prototype-baseline", type=Path, help=gate_help("Existing HTML baseline; inherited issues become GAP while new regressions still block", "存量 HTML 基线；相同旧问题降为 GAP，本次新增回归仍阻断"))
     gate.add_argument("--inventory", type=Path, help="Stage 0 brownfield inventory YAML")
     gate.add_argument("--manifest", type=Path, help="Agent handoff manifest YAML")
-    gate.add_argument("--acceptance-run", type=Path, action="append", help="已执行的 ARUN-*；L3/L4 原型据此闭合浏览器证据")
+    gate.add_argument("--acceptance-run", type=Path, action="append", help=gate_help("Executed ARUN-*; repeat to close L3/L4 browser evidence", "已执行的 ARUN-*；L3/L4 原型据此闭合浏览器证据"))
+    gate.add_argument("--review-record", type=Path, help=gate_help("Optional review record YAML; validates sign-off closure", "可选评审记录 YAML；用于校验签署闭环"))
     gate.add_argument("--level", choices=["auto", "L0", "L1", "L2", "L3", "L4"], default="auto")
     gate.add_argument("--stage", choices=["inventory", "clarify", "specify", "review", "baseline", "prototype", "implementation", "acceptance", "closed"], default="baseline")
     gate.add_argument("--scope-ref", action="append", default=[])
     gate.add_argument("--format", choices=["concise", "json"], default="concise")
-    gate.add_argument("--diagnostics", choices=["first", "summary", "full"], default="first")
+    gate.add_argument("--language", choices=["auto", "zh-CN", "en-US"], default="auto", help="Human-readable diagnostics; auto follows artifact language")
+    gate.add_argument("--diagnostics", choices=["first", "roots", "summary", "full"], default="roots")
     gate.add_argument("--max-findings", type=int, default=20)
-    gate.add_argument("--custom-root", type=Path, help="本地私有扩展目录；省略时门禁自动发现当前目录 custom/")
+    gate.add_argument("--custom-root", type=Path, help=gate_help("Project-local private extension directory; auto-discovers ./custom when omitted", "本地私有扩展目录；省略时门禁自动发现当前目录 custom/"))
     gate.set_defaults(func=quality_gate)
 
     route = sub.add_parser("route-stage", help="检查显式目标阶段、已有产物和断点；不使用关键词推断意图")
@@ -843,6 +850,7 @@ def main() -> int:
     explain = sub.add_parser("explain-finding", help="Explain one gate code and show a bounded repair direction")
     explain.add_argument("code")
     explain.add_argument("--format", choices=["concise", "json"], default="concise")
+    explain.add_argument("--language", choices=["zh-CN", "en-US"], default="zh-CN")
     explain.set_defaults(func=explain_finding)
 
     resume = sub.add_parser("resume", help="Verify and resume from the last valid large-project checkpoint")
@@ -917,19 +925,6 @@ def main() -> int:
     trace.add_argument("--output", type=Path, required=True)
     trace.add_argument("--baseline-version", default="unversioned")
     trace.set_defaults(func=build_trace)
-
-    score = sub.add_parser("score-eval", help="Maintainer: score one requirement/design/coding evaluation run")
-    score.add_argument("run", type=Path)
-    score.add_argument("--output", type=Path)
-    score.add_argument("--require-release-pass", action="store_true")
-    score.add_argument("--quiet", action="store_true")
-    score.set_defaults(func=score_eval)
-
-    compare = sub.add_parser("compare-evals", help="Maintainer: compare matched baseline and candidate evaluation runs")
-    compare.add_argument("--baseline", type=Path, required=True)
-    compare.add_argument("--candidate", type=Path, required=True)
-    compare.add_argument("--output", type=Path)
-    compare.set_defaults(func=compare_evals)
 
     status = sub.add_parser("status", help="Maintainer: show evidence-backed domain and evaluation status")
     status.add_argument("--format", choices=["markdown", "yaml"], default="markdown")

@@ -1,0 +1,11 @@
+name: geoskill-data-cube-construction
+display_name: 遥感数据立方体构建
+description: |
+  把多时相多波段影像组织为带坐标的 xarray/NetCDF 数据立方体，支持离线合成模式
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-data-cube-construction.py
+runtime: python>=3.9
+tags:
+  - gis
+  - remote-sensing

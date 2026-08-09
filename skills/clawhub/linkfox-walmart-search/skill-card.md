@@ -1,43 +1,60 @@
-## Description: <br>
-Searches and browses Walmart product listings by keyword, category, price range, sort order, store, and device context. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Walmart product listings by keyword, category, price range, sort order, store, and device view, then returns structured listing data for e-commerce research.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-E-commerce sellers, product researchers, and agents use this skill to find current Walmart listings, compare prices, inspect availability, and gather product listing data for market or competitor research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: LinkFox receives Walmart search queries, API credentials, and session metadata. <br>
-Mitigation: Confirm the gateway points to the intended LinkFox domain, avoid sensitive search terms, and install only if this data sharing is acceptable. <br>
-Risk: Full Walmart search results are saved as local LinkFox session data files. <br>
-Mitigation: Review local storage expectations before use and avoid searches that would create sensitive local records. <br>
-Risk: The skill includes guidance to download or install an onboarding skill when credentials or credits are missing. <br>
-Mitigation: Require explicit user approval before downloading or installing any secondary skill. <br>
+## Use Case:
 
+External users, e-commerce sellers, and marketplace researchers use this skill to search Walmart listings, compare prices, check availability, and inspect seller, rating, shipping, and sponsored-placement signals.
 
-## Reference(s): <br>
-- [Walmart API reference](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-walmart-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown tables and JSON tool responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved to local LinkFox session data files; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: LinkFox handles Walmart search queries, API keys, phone-number SMS login, and payment-plan workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if the publisher is trusted; prefer self-service account setup and avoid sharing OTPs unless necessary.
+
+Risk: Endpoint environment variables can affect where requests are sent.
+
+Mitigation: Verify LinkFox endpoint environment variables before use and keep API keys scoped to the intended service.
+
+Risk: Generated API keys and saved response files may contain sensitive account or marketplace research data.
+
+Mitigation: Treat API keys and saved response files as sensitive, store them only in trusted workspaces, and remove them when no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-walmart-search)
+- [Walmart Search API reference](references/api.md)
+- [Authentication and credits onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries and tables with JSON snippets and optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save complete Walmart API responses in the workspace while printing summaries for larger responses.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

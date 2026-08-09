@@ -1,41 +1,58 @@
-## Description: <br>
-Cron Assist helps agents turn natural-language scheduling requests into scheduled task commands, reusable templates, task-management actions, and cost-optimization guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+定时助手 helps agents convert natural-language scheduling requests into cron-style task commands, templates, and task-management actions.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, teams, and non-technical agent users use this skill to create, inspect, pause, resume, delete, and optimize recurring or one-time scheduled jobs through natural-language requests and scheduling templates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent scheduled jobs can be created, deleted, paused, resumed, or changed in bulk without clear confirmation or preview safeguards. <br>
-Mitigation: Require a preview and explicit confirmation before creating jobs, deleting jobs, pausing or resuming all jobs, applying tag-wide changes, or scheduling backups of local data. <br>
-Risk: Generated scheduling commands may run recurring work that affects local data, service costs, or operational state. <br>
-Mitigation: Review generated commands, schedule frequency, model choice, timeout, retry, and backup paths before execution, especially for cost-sensitive or data-moving jobs. <br>
+## Use Case:
 
+External users, developers, and automation teams use this skill to create, inspect, pause, resume, delete, and optimize scheduled reminders, reports, health checks, and workflow tasks from natural-language requests.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cron-assist) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and scheduling configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce commands that create, delete, pause, resume, or bulk-change persistent scheduled jobs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Broad unrelated activation text may encourage use for translation, generic file processing, or unrelated API work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and invoke the skill only for explicit cron, reminder, or workflow scheduling requests.
+
+Risk: Persistent task mutation commands can pause, resume, delete, or bulk-modify scheduled jobs.
+
+Mitigation: Review generated commands before execution and require confirmation for deletes and bulk actions.
+
+Risk: Natural-language scheduling requests can be ambiguous and may produce the wrong time or recurrence.
+
+Mitigation: Confirm interpreted schedules, time zones, and generated cron-style parameters before creating or changing tasks.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cron-assist)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and structured task summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose persistent scheduling changes; generated commands should be reviewed before execution.]
+
+## Skill Version(s):
+
+1.0.1 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

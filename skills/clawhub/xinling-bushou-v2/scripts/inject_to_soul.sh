@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# 心灵补手 V2.0 - SOUL.md自动注入脚本
+# 心灵补手 V3.5.0 - SOUL.md自动注入脚本
 #
 # 功能：将选定人格的谄媚片段自动注入到SOUL.md
 # 用法: ./inject_to_soul.sh [persona_id]
@@ -14,7 +14,7 @@ SOUL_PATH="$HOME/.openclaw/workspace/SOUL.md"
 PERSONA_ID="${1:-songzhiwen}"
 
 echo "============================================"
-echo "  心灵补手 V2.0 - SOUL.md注入程序"
+echo "  心灵补手 V3.5.0 - SOUL.md注入程序"
 echo "============================================"
 echo ""
 
@@ -68,7 +68,7 @@ if grep -q "# 【心灵补手】谄媚模块" "$SOUL_PATH"; then
         # 添加新模块
         cat >> "${SOUL_PATH}.tmp" << 'HEADER'
 
-# 【心灵补手】谄媚模块 v2.0
+# 【心灵补手】谄媚模块 v3.5.0
 > 自动生成 by xinling-bushou-v2 | 注入时间: TIMESTAMP_PLACEHOLDER
 
 HEADER

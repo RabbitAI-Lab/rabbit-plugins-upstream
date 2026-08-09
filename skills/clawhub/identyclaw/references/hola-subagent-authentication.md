@@ -390,10 +390,12 @@ The checksum is calculated on the **canonicalized (uppercase) message + signatur
 const canonicalMessage = message.toUpperCase();
 // Step 2: Add signature and trailing slash
 const checksumPrefix = `${canonicalMessage}${signatureB32}/`;
-// Step 3: Sum ASCII character codes
-const sum = 0;
-sum += checksumPrefix.charCodeAt(i);
-// Step 4: Modulo 16 and convert to hex
+// Step 3: Sum UTF-16 code units (JavaScript charCodeAt)
+let sum = 0;
+for (let i = 0; i < checksumPrefix.length; i++) {
+  sum += checksumPrefix.charCodeAt(i);
+}
+// Step 4: Modulo 23, index into HOLA checksum alphabet (23 chars; not hex)
 const holaChecksumAlphabet = 'ABCDEFGHJKMNPQRSTUVWXYZ';
 const checksum = holaChecksumAlphabet[sum % 23];
 ```

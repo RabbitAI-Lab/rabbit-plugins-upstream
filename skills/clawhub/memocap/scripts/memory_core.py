@@ -72,7 +72,7 @@ BACKUP_FILE = os.path.join(LOCAL_BASE, "memories_backup.jsonl")
 
 EMOTION_WEIGHTS = {"extreme": 1.0, "high": 0.8, "medium": 0.5, "low": 0.2}
 RECALL_DECAY_DAYS = 30.0
-VALID_TYPES = {"emotion", "decision", "task", "time", "preference", "context"}
+VALID_TYPES = {"emotion", "decision", "task", "time", "preference", "context", "skill"}
 VALID_EMOTIONS = {"extreme", "high", "medium", "low"}
 _embedding_client = None
 _embedding_fn = None
@@ -131,18 +131,113 @@ def _install_model():
                         shutil.move(fp, CHROMA_MODEL_DIR)
         return os.path.exists(CHROMA_MODEL_ONNX)
 
+    # 尝试从 Gitee（国内镜像）下载模型文件
+    import urllib.request
+    model_files = [
+        "config.json",
+        "model.onnx",
+        "special_tokens_map.json",
+        "tokenizer_config.json",
+        "tokenizer.json",
+        "vocab.txt",
+    ]
+    gitee_base = "https://gitee.com/hf-models/all-MiniLM-L6-v2-onnx/raw/main"
+    hf_base = "https://hf-mirror.com/sentence-transformers/all-MiniLM-L6-v2/resolve/main"
+
+    os.makedirs(CHROMA_MODEL_DIR, exist_ok=True)
+    all_ok = True
+    for fname in model_files:
+        dst = os.path.join(CHROMA_MODEL_DIR, fname)
+        if os.path.exists(dst) and os.path.getsize(dst) > 100:
+            continue
+
+        # 先试 Gitee，不行再换 hf-mirror
+        urls = [
+            f"{gitee_base}/{fname}",
+            f"{hf_base}/{fname}",
+        ]
+        downloaded = False
+        for url in urls:
+            try:
+                req = urllib.request.Request(url, headers={"User-Agent": "yishi/1.0"})
+                with urllib.request.urlopen(req, timeout=120) as resp:
+                    data = resp.read()
+                if len(data) < 50 and b"violation" in data.lower():
+                    continue  # Gitee 451 拦截，换下一个源
+                with open(dst, "wb") as f:
+                    f.write(data)
+                downloaded = True
+                break
+            except Exception:
+                continue
+        if not downloaded:
+            all_ok = False
+
+    if all_ok and os.path.exists(CHROMA_MODEL_ONNX):
+        return True
     return False
 
 
 def get_embedding_fn():
     global _embedding_fn
     if _embedding_fn is None:
-        from chromadb.utils.embedding_functions.onnx_mini_lm_l6_v2 import ONNXMiniLM_L6_V2
-        _install_model()
-        _embedding_fn = ONNXMiniLM_L6_V2()
-        # ★ 关键：永远指向 skill-local，远离 ~/.cache/chroma/ ★
-        _embedding_fn.DOWNLOAD_PATH = SKILL_MODEL_BASE
+        bge_dir = os.path.join(SKILL_MODEL_BASE, "bge-base-zh-v1.5")
+        if os.path.exists(os.path.join(bge_dir, "onnx", "model.onnx")):
+            with _silent_import():
+                _embedding_fn = _BGEONNX(bge_dir)
+        else:
+            from chromadb.utils.embedding_functions.onnx_mini_lm_l6_v2 import ONNXMiniLM_L6_V2
+            _install_model()
+            _embedding_fn = ONNXMiniLM_L6_V2()
+            # ★ 关键：永远指向 skill-local，远离 ~/.cache/chroma/ ★
+            _embedding_fn.DOWNLOAD_PATH = SKILL_MODEL_BASE
     return _embedding_fn
+
+
+class _BGEONNX:
+    """bge-base-zh-v1.5 ONNX embedding：768 维，CLS pooling，L2 归一化。
+
+    中文语义检索，显著优于英文模型 all-MiniLM-L6-v2。
+    模型目录：{SKILL_MODEL_BASE}/bge-base-zh-v1.5/{onnx/model.onnx, tokenizer.json, ...}
+    """
+
+    def __init__(self, model_dir):
+        import onnxruntime as ort
+        from tokenizers import Tokenizer
+
+        self._np = __import__("numpy")
+        self.session = ort.InferenceSession(
+            os.path.join(model_dir, "onnx", "model.onnx"),
+            providers=["CPUExecutionProvider"],
+        )
+        self.tok = Tokenizer.from_file(os.path.join(model_dir, "tokenizer.json"))
+        self.tok.enable_truncation(max_length=512)
+        self.tok.enable_padding(pad_id=0, pad_token="[PAD]")
+
+    @staticmethod
+    def name():
+        return "bge-base-zh-v1.5"
+
+    def embed_query(self, input):
+        return self.__call__(input)
+
+    def embed_documents(self, input):
+        return self.__call__(input)
+
+    def __call__(self, input):
+        np = self._np
+        enc = self.tok.encode_batch(list(input))
+        ids = [e.ids for e in enc]
+        attn = [e.attention_mask for e in enc]
+        tids = [e.type_ids for e in enc]
+        out = self.session.run(None, {
+            "input_ids": np.array(ids, dtype=np.int64),
+            "attention_mask": np.array(attn, dtype=np.int64),
+            "token_type_ids": np.array(tids, dtype=np.int64),
+        })[0]
+        emb = out[:, 0, :]
+        emb = emb / np.linalg.norm(emb, axis=1, keepdims=True)
+        return emb.astype(np.float32).tolist()
 
 
 def get_client():
@@ -250,6 +345,17 @@ def cmd_store(args):
         "frequency": 1,
         "recall_count": 0,
     }
+    # skill 类型自动追加 "skill" 标签
+    if mem_type == "skill":
+        if "skill" not in (args.keywords or ""):
+            args.keywords = (args.keywords + ",skill") if args.keywords else "skill"
+        metadata["keywords"] = args.keywords
+    # 传播 --skill-* 参数到 metadata
+    for key in ("skill_name", "skill_summary", "skill_strategy", "skill_avoid",
+                 "skill_triggers", "skill_input", "skill_output", "skill_version"):
+        val = getattr(args, key.replace("-", "_"), None)
+        if val is not None:
+            metadata[key] = val
 
     mem_id = str(uuid.uuid4())
     mem_col.add(documents=[args.content], metadatas=[metadata], ids=[mem_id])
@@ -342,6 +448,39 @@ def cmd_recall(args):
             "capsule_unlock_at": meta.get("capsule_unlock_at", ""),
             "frequency": freq, "recall_count": recall_count, "is_expanded": False,
         })
+
+    # === Trigger 关键词匹配（针对 type=skill 记忆） ===
+    try:
+        trigger_results = mem_col.get(where={"type": "skill"})
+        if trigger_results["ids"]:
+            query_lower = query.lower()
+            for i in range(len(trigger_results["ids"])):
+                tid = trigger_results["ids"][i]
+                if tid in seen:
+                    continue
+                meta = trigger_results["metadatas"][i] if trigger_results["metadatas"] else {}
+                kws = meta.get("keywords", "")
+                triggers = [k.strip().split(":", 1)[1] for k in kws.split(",") if k.strip().startswith("trigger:")]
+                if not any(t.lower() in query_lower for t in triggers if t.strip()):
+                    continue
+                doc = trigger_results["documents"][i] if trigger_results["documents"] else ""
+                em_w = float(meta.get("emotion_weight", 0.5))
+                freq = int(meta.get("frequency", 1))
+                rc = int(meta.get("recall_count", 0))
+                created = datetime.fromisoformat(meta.get("created_at", now.isoformat()))
+                scored.append({
+                    "id": tid, "content": doc, "score": 0.85,
+                    "semantic": 0.7, "emotion": meta.get("emotion", "medium"),
+                    "emotion_weight": em_w, "type": "skill",
+                    "created_at": meta.get("created_at", ""), "created_date": meta.get("created_date", ""),
+                    "keywords": kws,
+                    "is_capsule": meta.get("is_capsule", "false") == "true",
+                    "capsule_unlock_at": meta.get("capsule_unlock_at", ""),
+                    "frequency": freq, "recall_count": rc, "is_expanded": True, "is_trigger_match": True,
+                })
+                seen.add(tid)
+    except Exception:
+        pass
 
     # === 联想扩散（两阶段），统一用真实语义值计分 ===
     def _compute_score(semantic, em_w, freq, recall_count, created):
@@ -452,7 +591,7 @@ def cmd_recall(args):
             pass
 
     emoji_map = {"extreme": "🔴", "high": "🟠", "medium": "🟡", "low": "🟢"}
-    type_emoji = {"task": "📋", "decision": "⚖️", "preference": "⭐", "emotion": "💜", "time": "⏰", "context": "📌", "imported": "📥"}
+    type_emoji = {"task": "📋", "decision": "⚖️", "preference": "⭐", "emotion": "💜", "time": "⏰", "context": "📌", "imported": "📥", "skill": "🔧"}
 
     total = len(scored)
     print(f"\n  记忆检索 ── 查询「{query}」 命中 {total} 条\n")
@@ -462,10 +601,11 @@ def cmd_recall(args):
         t_emoji = type_emoji.get(item.get("type", ""), "📄")
         capsule_tag = " 🔒" if item["is_capsule"] else ""
         assoc_tag = " ⟡关联" if item.get("is_expanded") else ""
+        trigger_tag = " ⚡触发" if item.get("is_trigger_match") else ""
         type_label = item['type'].upper()
         score_pct = int(item.get("score", 0) * 100)
 
-        print(f"  {idx}. {e_emoji} {type_label}{capsule_tag}{assoc_tag}  ──  {item['created_date']}  被检索{item['recall_count']}次  匹配{score_pct}%")
+        print(f"  {idx}. {e_emoji} {type_label}{capsule_tag}{assoc_tag}{trigger_tag}  ──  {item['created_date']}  被检索{item['recall_count']}次  匹配{score_pct}%")
 
         kw = item.get("keywords", "")
         if kw:
@@ -888,6 +1028,14 @@ def main():
     p.add_argument("--emotion", choices=VALID_EMOTIONS, help="情绪强度")
     p.add_argument("--keywords", help="关键字")
     p.add_argument("--source", help="来源"); p.add_argument("--session", help="会话ID")
+    p.add_argument("--skill-name", help="技能名称")
+    p.add_argument("--skill-summary", help="技能一句话概括")
+    p.add_argument("--skill-strategy", help="技能策略/步骤")
+    p.add_argument("--skill-avoid", help="技能禁忌/注意事项")
+    p.add_argument("--skill-triggers", help="技能触发关键词")
+    p.add_argument("--skill-input", help="技能输入")
+    p.add_argument("--skill-output", help="技能输出")
+    p.add_argument("--skill-version", default="1.0.0", help="技能版本")
     p.set_defaults(func=cmd_store)
 
     p = sub.add_parser("recall", help="检索记忆")

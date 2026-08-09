@@ -1,0 +1,13 @@
+name: geoskill-map-layout-automation
+display_name: 地图排版自动化
+description: |
+  Automate map layout with title, legend, scale bar and north arrow to PDF or PNG
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-map-layout-automation.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - remote-sensing
+  - visualization

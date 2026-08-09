@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-log-insight",
   "slug": "vmware-log-insight",
   "ownerHandle": null,
-  "version": "1.8.8",
-  "updatedAt": 1784668844696,
-  "contentHash": "b103ce6b8699dcde875ef84ea2cba614a6b5487d7620df1272ba07749c58cc79",
-  "fetchedAt": "2026-07-26T18:08:52.041Z"
+  "version": "1.8.9",
+  "updatedAt": 1785553941316,
+  "contentHash": "75511f47123678561558e024bd5e45b7c4369328602a16e5b45af3cf73168fbb",
+  "fetchedAt": "2026-08-09T08:34:34.640Z"
 }

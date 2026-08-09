@@ -1,5 +1,9 @@
 # De-Sloppify Pattern — Quality Cleanup Pass
 
+> ## ⚠️ Read Before Use
+>
+> This pattern runs a second `claude -p` agent over changes produced by another agent. It reads the full diff of the previous step. Treat that diff as potentially-sensitive — it may contain file paths, internal APIs, or code that hints at proprietary structure. Add the cleanup agent's working files to `.gitignore` before running.
+
 An add-on pattern for any loop: add a dedicated cleanup/refactor step after implementation.
 
 ## The Problem
@@ -46,7 +50,7 @@ for feature in "${features[@]}"; do
   # Implement
   claude -p "Implement $feature with TDD."
 
-  # De-sloppify
+  # De-sloppify (review only, no network writes)
   claude -p "Cleanup: review changes, remove test/code slop, run tests."
 
   # Verify
@@ -148,3 +152,13 @@ Better than:
 - Code review already performed by human
 - Testing is not the focus
 - Time/cost constraints (cleanup pass costs tokens)
+
+## Sensitive-Content Handling
+
+The cleanup agent reads the full diff of the implementation step. Before running:
+
+- **Add the working directory to `.gitignore`** if it isn't already.
+- **Redact secrets** from the diff if the implementation step touched credential-handling code.
+- **Review what the cleanup agent would see** before running it on a repo with proprietary code structure.
+
+The cleanup agent does not write to the network, but it does receive the diff as context. Treat that diff the same way you'd treat a code-review tool with read access to your repository.

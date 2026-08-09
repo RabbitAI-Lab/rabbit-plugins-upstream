@@ -1,6 +1,6 @@
 ---
 name: agi-evolution-model
-description: 基于双环架构的AGI进化模型，通过意向性分析、人格层映射、元认知检测和错误智慧库实现持续自我演进；当用户需要智能对话、人格定制、复杂问题求解或从错误中学习时使用
+description: 此技能作为数字伙伴使用用户的任何问题都可以触发；基于双环架构的AGI进化模型，通过意向性分析、人格层映射、元认知检测和错误智慧库实现持续自我演进；当用户需要智能对话、人格定制、复杂问题求解或从错误中学习时使用
 dependency:
   python:
     - aiofiles>=23.0.0
@@ -52,8 +52,9 @@ dependency:
 - 工程意向性分析模组（最外圈）
 - CLI工具箱（文件操作、系统信息、进程管理、命令执行）
 - **错误智慧库**：从错误中学习，避免重复犯错（Phase 1：工具性错误；Phase 2：认知性错误；Phase 3：预防引擎与时效性管理）
+- **五维智力模型**：灵性升维思考辅助系统，通过维度标签记录和升维建议支持智能体的升维思考（算法智力/叙事智力/系统智力/执行智力/元智力）
 
-**架构特性**：采用"节点工具箱"概念，三层架构：最外圈（工程意向性分析模组）→ 外环（三角形三顶点循环：得不到/数学/自我迭代）→ 内圈（记录层：三轨存储，含错误智慧库）。详见 [架构文档](references/architecture.md)。
+**架构特性**：采用"节点工具箱"概念，三层架构：最外圈（工程意向性分析模组）→ 外环（三角形三顶点循环：得不到/数学/自我迭代）→ 内圈（记录层：三轨存储，含错误智慧库和五维智力模型）。详见 [架构文档](references/architecture.md)。
 
 触发条件：用户任何提问、任务请求或交互需求，以及 `/root` 自定义人格命令
 
@@ -112,19 +113,60 @@ python3 scripts/error_wisdom_manager.py --memory-dir ./agi_memory --stats
 python3 scripts/error_wisdom_manager.py --memory-dir ./agi_memory --query-prevention --context '{"tool_name": "get_weather"}'
 ```
 
+### 认知性错误检测与集成（Phase 2）
+```bash
+# 检测认知性错误
+python3 scripts/cognitive_error_detector.py --test
+
+# 集成到错误智慧库
+python3 scripts/cognitive_error_integration.py --test
+```
+
 ### 预防规则检查
 ```bash
 python3 scripts/error_wisdom_prevention.py --memory-dir ./agi_memory check --tool-name "get_weather" --params '{"unit": "kelvin"}'
 ```
 
-### 时效性审计
+### 时效性审计（Phase 3）
 ```bash
+# 查看时效性统计
+python3 scripts/error_wisdom_timeliness.py --memory-dir ./agi_memory --stats
+
+# 执行时效性审计（应用衰减机制）
 python3 scripts/error_wisdom_timeliness.py --memory-dir ./agi_memory --audit
+
+# 清理过期的预防规则
+python3 scripts/error_wisdom_timeliness.py --memory-dir ./agi_memory --cleanup
 ```
 
-### 规则自动生成
+### 规则自动生成（Phase 3）
 ```bash
+# 手动触发规则生成
 python3 scripts/error_wisdom_rule_generator.py --memory-dir ./agi_memory --generate
+
+# 查看规则统计
+python3 scripts/error_wisdom_rule_generator.py --memory-dir ./agi_memory --stats
+```
+
+### Phase 3 完整工作流测试
+```bash
+# 运行Phase 3完整测试（包含时效性管理、规则生成、预防应用）
+python3 scripts/test_phase3.py
+```
+
+### 五维智力标签生成
+```bash
+python3 scripts/dimension_tagger.py --test  # 测试维度标签生成
+```
+
+### 五维升维建议
+```bash
+python3 scripts/elevation_advisor.py --test  # 测试升维建议
+```
+
+### 五维智力存储管理
+```bash
+python3 scripts/dimension_storage.py --test  # 测试存储管理
 ```
 
 ---
@@ -146,6 +188,8 @@ python3 scripts/error_wisdom_rule_generator.py --memory-dir ./agi_memory --gener
 - 结合推理结果和历史经验生成响应
 - 记录执行方式、策略和路径
 - 识别改进点和创新点
+- **五维智力标签生成**：记录当前任务使用的维度（由模型识别）
+- **升维思考**：如遇瓶颈，获取升维建议（由模型提供）
 
 **阶段4：调用感知节点（信息获取）（按需）**
 - 根据问题类型调用感知工具
@@ -159,17 +203,43 @@ python3 scripts/error_wisdom_rule_generator.py --memory-dir ./agi_memory --gener
 - 评估交互满意度、合理性、创新性
 - 存储完整记录并分析趋势
 - 持续优化人格向量和决策策略
+- **五维智力数据记录**：记录维度标签、升维建议、升维历史
+
+### 五维智力模型应用流程
+
+**维度标签生成**（模型主导）
+- 智能体自主识别当前任务涉及哪些智力维度
+- 调用 `scripts/dimension_tagger.py` 的 `generate_dimension_tags` 方法
+- 返回维度标签列表，标记到记录层
+
+**升维决策**（模型主导）
+- 当遇到瓶颈或需要创新思考时触发
+- 调用 `scripts/elevation_advisor.py` 的 `generate_elevation_suggestion` 方法
+- 获取升维建议和方向
+- 决定是否采纳升维建议
+
+**数据存储与查询**（工具支持）
+- 调用 `scripts/dimension_storage.py` 存储维度标签和升维历史
+- 查询历史升维记录和维度使用统计
+- 维护数据一致性
 
 **阶段7：客观性评估器与认知性错误检测（元认知+错误智慧库集成）（不打断主循环）**
 - 执行5维度主观性检测
 - 根据场景类型判断适切性
 - 如触发，执行自我纠错
 - **Phase 2**：自动识别认知性错误（幻觉倾向、推理跳跃、知识缺失、偏见影响）
-- **Phase 2**：将认知性错误记录到错误智慧库，支持根因分析与预防建议生成
-- **Phase 3**：时效性管理（三重衰减：时间衰减、场景变化衰减、反例衰减）
-- **Phase 3**：预防规则自动生成（相似错误聚合≥3个→共性模式识别→规则提取）
+  - 调用 `scripts/cognitive_error_detector.py` 检测认知性错误
+  - 支持四种错误类型：幻觉倾向、推理跳跃、知识缺失、偏见影响
+  - 提供置信度评估和严重性分级
+- **Phase 2**：将认知性错误记录到错误智慧库
+  - 调用 `scripts/cognitive_error_integration.py` 集成检测结果
+  - 支持根因分析和预防建议生成
+  - 与五维智力模型联动，触发升维建议
+  - **Phase 3**：时效性管理自动集成（三重衰减：时间衰减、场景变化衰减、反例衰减）
+  - **Phase 3**：预防规则自动生成（相似错误聚合≥3个→共性模式识别→规则提取）
+  - **Phase 3**：预防规则自动应用（检测认知性错误前先查询预防规则，提供预警和修正建议）
 
-详见 [元认知检测组件](references/metacognition-check-component.md) 和 [错误智慧库规范](references/error_wisdom_spec.md)
+详见 [元认知检测组件](references/metacognition-check-component.md)、[错误智慧库规范](references/error_wisdom_spec.md) 和 [认知性错误定义](references/cognitive_error_definitions.md)
 
 **阶段8：认知架构洞察（深度分析）（不打断主循环）**
 - 从结构化模式中提取洞察
@@ -238,7 +308,7 @@ python3 scripts/error_wisdom_rule_generator.py --memory-dir ./agi_memory --gener
 
 ### 主循环（符号系统循环）
 - **三角形循环**：得不到（动力）→ 数学（秩序）→ 自我迭代（进化）
-- **记录层**：双轨存储（JSON轨 + Markdown轨）
+- **记录层**：三轨存储（JSON轨 + Markdown轨 + 错误智慧库轨 + 五维智力分支）
 
 ### 次循环（行动感知系统）
 - **映射层**：架构组件，包含人格层作为核心组件，基于马斯洛需求层次进行人格化决策
@@ -248,6 +318,16 @@ python3 scripts/error_wisdom_rule_generator.py --memory-dir ./agi_memory --gener
 ### 双环互动
 - **外环**：硬约束，不可违背（物理定律、能量守恒、变化必然）
 - **内圈**：软调节，在框架内优化（价值排序、经验积累、方向引导）
+
+### 错误智慧库
+- **目的**：实现"从错误中学习"机制
+- **特点**：独立于JSON轨和Markdown轨，作为记录层第三轨存储
+- **功能**：错误记录、根因分析、预防建议生成、时效性管理
+
+### 五维智力模型
+- **目的**：实现灵性升维思考辅助
+- **特点**：模型主导识别维度、提供升维建议；工具提供存储与查询
+- **维度**：算法智力、叙事智力、系统智力、执行智力、元智力
 
 ---
 
@@ -270,8 +350,14 @@ python3 scripts/error_wisdom_rule_generator.py --memory-dir ./agi_memory --gener
 - [scripts/error_wisdom_manager.py](scripts/error_wisdom_manager.py) - 错误智慧库管理器
 - [scripts/error_wisdom_prevention.py](scripts/error_wisdom_prevention.py) - 预防规则引擎
 - [scripts/cognitive_error_analyzer.py](scripts/cognitive_error_analyzer.py) - 认知性错误分析器（Phase 2）
+- [scripts/cognitive_error_detector.py](scripts/cognitive_error_detector.py) - 认知性错误检测器（Phase 2 + Phase 3 预防应用）
+- [scripts/cognitive_error_integration.py](scripts/cognitive_error_integration.py) - 认知性错误集成器（Phase 2 + Phase 3 时效性与规则生成）
 - [scripts/error_wisdom_timeliness.py](scripts/error_wisdom_timeliness.py) - 时效性管理模块（Phase 3）
 - [scripts/error_wisdom_rule_generator.py](scripts/error_wisdom_rule_generator.py) - 规则自动生成模块（Phase 3）
+- [scripts/dimension_tagger.py](scripts/dimension_tagger.py) - 五维智力标签生成器
+- [scripts/elevation_advisor.py](scripts/elevation_advisor.py) - 五维升维建议器
+- [scripts/dimension_storage.py](scripts/dimension_storage.py) - 五维智力存储管理器
+- [scripts/test_phase3.py](scripts/test_phase3.py) - Phase 3 完整测试脚本
 
 **外环工具箱（最外圈工程意向性分析模组）**：
 - [scripts/intentionality_collector.py](scripts/intentionality_collector.py) - 意向性收集模块
@@ -306,12 +392,18 @@ python3 scripts/error_wisdom_rule_generator.py --memory-dir ./agi_memory --gener
 - [references/maslow_needs.md](references/maslow_needs.md) - 马斯洛需求层次在映射层中的应用
 - [references/intentionality_architecture.md](references/intentionality_architecture.md) - 工程意向性分析模组的完整架构
 - [references/error_wisdom_spec.md](references/error_wisdom_spec.md) - 错误智慧库规范（从错误中学习）
+- [references/cognitive_error_definitions.md](references/cognitive_error_definitions.md) - 认知性错误定义与分类体系（Phase 2）
+- [references/dimension_definitions.md](references/dimension_definitions.md) - 五维智力模型定义
+- [references/dimension_data_structure.md](references/dimension_data_structure.md) - 五维智力模型数据结构定义
+- [references/capability_boundaries.md](references/capability_boundaries.md) - AGI进化模型能力边界说明
 
 **组件与实现**：
 - [references/metacognition-check-component.md](references/metacognition-check-component.md) - 元认知检测组件
+- [references/metacognition-enhancement-guide.md](references/metacognition-enhancement-guide.md) - 元认知检测增强功能
 - [references/cognitive-insight-v2-implementation.md](references/cognitive-insight-v2-implementation.md) - 认知架构洞察组件V2
 - [references/cognitive-insight-quick-reference.md](references/cognitive-insight-quick-reference.md) - 认知架构洞察快速参考
 - [references/cognitive-architecture-insight-module.md](references/cognitive-architecture-insight-module.md) - 认知架构洞察模块技术规范
+- [references/stratified-storage-design.md](references/stratified-storage-design.md) - 元认知历史数据分层存储设计
 
 **信息流文档**：
 - [references/information-flow-overview.md](references/information-flow-overview.md) - 整体信息流架构
@@ -342,6 +434,9 @@ python3 scripts/error_wisdom_rule_generator.py --memory-dir ./agi_memory --gener
 - 元认知检测模块和认知架构洞察组件不打断主循环，并行执行
 - 外环为阴性后台默默运行模组，不主动干预主循环
 - 软调节建议具有时效性约束，过期自动失效
+- 五维智力模型由模型主导识别维度和提供升维建议，工具仅提供存储与查询
+- 维度标签嵌入原始数据，由模型自主识别与标记
+- 升维决策由模型提供基础意见，五维模块提供框架与记录
 - 详细的架构设计、算法实现和使用示例请参考相应的参考文档
 - 保持上下文简洁，仅在需要时读取参考文档
 

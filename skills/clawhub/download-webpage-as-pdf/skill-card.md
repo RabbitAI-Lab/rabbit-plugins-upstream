@@ -1,41 +1,58 @@
-## Description: <br>
-Save a live webpage as a high-fidelity PDF that preserves layout and lazy-loaded images using the agent-browser CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Saves live webpages as high-fidelity PDFs that preserve browser layout and lazy-loaded images using the agent-browser CLI.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and agents use this skill to capture browser-faithful PDF archives of webpages, especially JavaScript-heavy pages where lazy-loaded images must be forced to load before printing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill opens requested URLs in a browser automation CLI and saves rendered page contents to local PDF files, which can capture private or authenticated content. <br>
-Mitigation: Use it only for pages the user is comfortable archiving locally, and avoid private or authenticated pages unless capture is explicitly intended. <br>
-Risk: The recipe runs page-local JavaScript and browser automation steps to load images and remove common consent overlays. <br>
-Mitigation: Review the target page and generated PDF before relying on or sharing the capture, especially for pages with dynamic or sensitive content. <br>
+## Use Case:
 
+Developers and agents use this skill to capture user-selected webpages as browser-like PDFs, especially JavaScript-heavy pages with lazy-loaded images.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/download-webpage-as-pdf) <br>
-- [Skill homepage](https://github.com/tenequm/skills/tree/main/skills/download-webpage-as-pdf) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with bash command blocks and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local PDF files through browser automation; optional cleanup guidance may use qpdf and Ghostscript.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.5 (source: frontmatter metadata.version, release metadata, changelog released 2026-07-22) <br>
+Risk: Opening user-provided URLs in a browser can expose the agent workflow to untrusted web content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for user-approved URLs and keep captures isolated to the browser session used for the task.
+
+Risk: Multiple agents sharing the same agent-browser session can interfere with each other's captures.
+
+Mitigation: Use a unique agent-browser session for each concurrent run.
+
+Risk: Cookie-banner removal, footer trimming, or cleanup steps can change the final PDF.
+
+Mitigation: Review the generated PDF and report verification details such as broken-image count, page count, and file size before relying on it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tenequm/skills/download-webpage-as-pdf)
+- [Skill homepage](https://github.com/tenequm/skills/tree/main/skills/download-webpage-as-pdf)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with bash command blocks and local PDF output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces a local PDF and verification details such as broken-image count, page count, and file size.]
+
+## Skill Version(s):
+
+0.1.6 (source: frontmatter metadata and changelog, released 2026-08-07)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

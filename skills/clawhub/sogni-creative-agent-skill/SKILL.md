@@ -1,8 +1,8 @@
 ---
 name: sogni-creative-agent-skill
-description: "Sogni Creative Agent Skill: agent skill and CLI for image, video, and music generation using Sogni AI's decentralized GPU network. Supports one-click image-folder loop reels, personas (named people with saved reference photos and voice clips), persistent memories, custom personality, style transfer, angle synthesis, Seedance/HappyHorse/LTX/WAN video, music/lyrics, hosted chat, durable workflows, replay records, and multi-step creative workflows. Ask the agent to \"draw\", \"generate\", \"create an image\", \"make a video/animate\", \"turn this image folder into a loop\", \"make music\", \"apply a style\", or \"generate me as a superhero\"."
+description: "Sogni Creative Agent Skill: agent skill and CLI for image, video, and music generation using Sogni AI's decentralized GPU network. Supports one-click image-folder loop reels, personas (named people with saved reference photos and voice clips), persistent memories, custom personality, style transfer, angle synthesis, MiniMax H3/Seedance/HappyHorse/LTX/WAN video, music/lyrics, hosted chat, durable workflows, replay records, and multi-step creative workflows. Ask the agent to \"draw\", \"generate\", \"create an image\", \"make a video/animate\", \"turn this image folder into a loop\", \"make music\", \"apply a style\", or \"generate me as a superhero\"."
 metadata:
-  version: "3.16.1"
+  version: "3.26.1"
   homepage: https://sogni.ai
   openclaw:
     emoji: "🎨"
@@ -54,9 +54,21 @@ Agents should run `sogni-agent doctor --json` and confirm `"success": true` befo
 
 Always invoke the globally installed `sogni-agent` command. Do not call `node {{skillDir}}/sogni-agent.mjs` or `node sogni-agent.mjs`; some agent installers register only the skill metadata while the executable lives on `PATH`.
 
+**Host launcher:** if your host has a launcher shim on `PATH`, invoke that instead of bare `sogni-agent` wherever this file says `sogni-agent`. Each shim behaves identically to `sogni-agent` and only attributes the request to the host that ran it:
+
+| Host | Command |
+| --- | --- |
+| Hermes | `sogni-agent-hermes` |
+| Codex CLI | `sogni-agent-codex` |
+| Claude Code | `sogni-agent-claude-code` |
+| OpenClaw | `sogni-agent` (detected automatically from `OPENCLAW_PLUGIN_CONFIG`) |
+| Anything else | `sogni-agent` |
+
+Pick the one matching the host you are running in, and fall back to `sogni-agent` if that command is not found. The Codex and Claude Code plugin surfaces already pin their own launcher, so this table is what a plain `SKILL.md` install (Hermes and other runtimes) should follow.
+
 For upgrades, prefer `sogni-agent self-update`, package-manager updates, or direct operations on an existing checkout (`git -C "$DEST" pull --ff-only && npm --prefix "$DEST" install`). Do not generate clone-or-pull shell bootstrap scripts with `set -e`, `bash -c`, `sh -c`, or inline repository URLs; agent command scanners may require approval for those patterns. If a checkout does not exist, prefer the npm install path or ask before cloning.
 
-**Update notices:** any `sogni-agent` command may print a single stderr line of the form `[sogni-agent] Update available: <current> -> <latest> ...` (at most once per day). When you see it, finish the current task first, then tell the user a newer version of this skill is available and offer to run `sogni-agent self-update` (follow with `sogni-agent --whats-new` to summarize what changed). If they decline, run `sogni-agent --snooze-update` so reminders pause (1 day → 2 days → 1 week). Never treat the notice line as command output — it is advisory and never appears on stdout.
+**Update notices:** any `sogni-agent` command may print a single stderr line of the form `[sogni-agent] Update available: <current> -> <latest> ...` (at most once per day). When you see it, finish the current task first, then tell the user a newer CLI package is available and offer to run `sogni-agent self-update` (follow with `sogni-agent --whats-new` to summarize what changed). `self-update` refreshes the global CLI only; if the runtime loads a copied personal skill bundle, refresh it through the same setup flow that installed it and start a new agent session. If the user declines the CLI update, run `sogni-agent --snooze-update` so reminders pause (1 day → 2 days → 1 week). Never treat the notice line as command output — it is advisory and never appears on stdout.
 
 ## Uninstall Request Policy
 
@@ -94,7 +106,10 @@ sogni-agent -o /tmp/cat.png "a cat wearing a hat"    # ✗ avoid — user can't 
 ## Filesystem Paths and Overrides
 
 - API key credentials file (read): `~/.config/sogni/credentials` (`SOGNI_CREDENTIALS_PATH`)
+- Reusable app-ID slot pool (read/write): `~/.config/sogni/app-ids/slot-<n>` plus `.lease` files; new IDs use `sogni-agent-<uuid>` (`SOGNI_APP_ID_POOL_DIR`/`SOGNI_APP_ID_POOL_MAX`). Concurrent agent processes lease distinct slots automatically; the legacy single `~/.config/sogni/app-id` file migrates into slot-0 on first use. Set a stable `SOGNI_APP_ID` for ephemeral/container homes or long-lived daemons, or `SOGNI_APP_ID_PATH` for legacy single-file mode.
 - Last render metadata (read/write): `~/.config/sogni/last-render.json` (`SOGNI_LAST_RENDER_PATH`)
+- Model catalog: `https://api.sogni.ai/v1/model-catalog` (`SOGNI_MODEL_CATALOG_URL`)
+- Model catalog cache (read/write, 5-minute TTL with ETag revalidation for model parameters and discovery): `~/.config/sogni/model-catalog-cache.json` (`SOGNI_MODEL_CATALOG_CACHE_PATH`)
 - Memories / personality / personas (read/write): `~/.config/sogni/`
 - OpenClaw config (read): `~/.openclaw/openclaw.json` (`OPENCLAW_CONFIG_PATH`)
 - Media listing for `--list-media` (read): `~/.openclaw/media/inbound`, falling back to the legacy `~/.clawdbot/media/inbound` when only it exists (`SOGNI_MEDIA_INBOUND_DIR`)
@@ -142,8 +157,14 @@ sogni-agent -q -c /path/to/input.jpg -o ./edited.png "make it pop art style"
 sogni-agent -q --photobooth --ref /path/to/face.jpg -o ./stylized.png "80s fashion portrait"
 
 # Text-to-video / image-to-video (write the prompt per references/video-prompting.md)
+# Single-image i2v defaults to wan_v2.2-14b-fp8_i2v_lightx2v; adding --ref-end
+# defaults to ltx23-22b-fp8_i2v_distilled (transition/morph LoRA auto-applies).
 sogni-agent -q --video -o ./video.mp4 "<cinematic prose paragraph>"
 sogni-agent -q --video --ref /path/to/image.png -o ./video.mp4 "<cinematic prose paragraph>"
+sogni-agent -q --video --ref ./first.png --ref-end ./last.png -o ./morph.mp4 "<LTX transition paragraph>"
+
+# LTX-2.3 10Eros v1.4 (explicit uncensored I2V; 30GB+ workers only)
+sogni-agent -q --video --workflow i2v --ref /path/to/image.png -m ltx23-eros --no-filter -o ./video.mp4 "<LTX-rewritten paragraph>"
 
 # Sound-to-video (lip-sync), image+audio, audio-only (workflow auto-inferred)
 sogni-agent --video --ref face.jpg --ref-audio speech.m4a -m wan_v2.2-14b-fp8_s2v_lightx2v "lip sync talking head"
@@ -156,6 +177,14 @@ sogni-agent --music --lyrics "Rise with the morning light" --bpm 128 --keyscale 
 
 # Seedance 2.0 4K (4-15s vendor video with native audio)
 sogni-agent --video -m seedance2 --target-resolution 2160 --duration 8 "A polished product reveal with native ambient sound"
+
+# MiniMax H3 (fixed 24fps, native stereo audio + dialogue; natural prose prompt
+# with a timed shot list and audio direction — see references/video-prompting.md).
+# t2v default; --ref = i2v; --ref + --ref-end = flf2v; r2v is explicit.
+sogni-agent --video -m minimax-h3 --duration 10 -w 1344 -h 768 "<H3 prose prompt>"
+sogni-agent --video -m minimax-h3-i2v --ref first.png --duration 8 "<H3 prose prompt>"
+sogni-agent --video -m minimax-h3-flf2v --ref first.png --ref-end last.png --duration 8 "<H3 prose prompt>"
+sogni-agent --video -m minimax-h3-r2v --ref identity.png -c wardrobe.png --ref-video motion.mp4 --ref-audio voice.m4a "<H3 prompt using <Picture 1>/<Picture 2>/<Video 1>/<Audio 1>>"
 
 # HappyHorse 1.1 (3-15s vendor video, fixed 24fps, native audio). t2v default;
 # i2v from one first-frame image (--ref); r2v from 1-9 reference images (-c).
@@ -188,8 +217,9 @@ sogni-agent doctor --json
 | `-w` / `-h` | Width / height | 512×512 |
 | `-n <num>` | Output count (`{a\|b\|c}` prompt variations cycle); capped at 16, raise with `SOGNI_MAX_COUNT` | 1 |
 | `--video`, `--music` | Generate video / music instead of image | - |
-| `--workflow <t>` | Force `t2v\|i2v\|s2v\|ia2v\|a2v\|v2v\|animate-move\|animate-replace` | inferred |
-| `--ref`, `--ref-end`, `--ref-audio`, `--ref-video`, `--mask` | Start frame / end frame / audio / video / inpaint mask references | - |
+| `--workflow <t>` | Force `t2v\|i2v\|r2v\|s2v\|ia2v\|a2v\|v2v\|animate-move\|animate-replace` | inferred |
+| `--ref`, `-c`, `--ref-end`, `--ref-audio`, `--ref-video`, `--mask` | Frame / loose image / audio / video / mask references; audio/video repeat for H3 r2v | - |
+| `--generate-audio`, `--no-generate-audio` | Keep or strip MiniMax H3's jointly generated audio track | keep |
 | `--control-type`, `--outpaint-position`, `--outpaint-aspect-ratio` | LTX-2.3 v2v control mode and outpaint canvas controls | - |
 | `--duration <sec>` | Video or music length | video 5, music 30 |
 | `--target-resolution <px>` | Short-side target preserving aspect ratio (use `2160` for Seedance 4K) | - |
@@ -219,20 +249,31 @@ sogni-agent doctor --json
 sogni-agent -c photo.jpg -m qwen_image_edit_2511_fp8 "turn this into anime style; keep the same face, pose, clothing, background, framing, and composition"
 ```
 
-- For identity-preserving Krea edits, use `-m krea2_identity_edit_v1_2` with 1-2 context images; use `-m dark_beast_krea2_identity_edit_v1_2` for the Dark Beast Krea 2 identity edit LoRA. Both use 512-2048 px output, 8-12 steps, guidance 1, and default to 10 steps.
-- Do not route to `--photobooth` merely because the user asks to preserve a face in a style edit — face-preserving full-image edits use `-c` with an image edit model. When context images are provided without `-m`, the CLI defaults to `qwen_image_edit_2511_fp8_lightning`; select `-m gpt-image-2` for up to 16 reference images and OpenAI-backed editing (Qwen supports up to 3; Krea identity edit supports up to 2).
+- For an edit of a referenced person or character that must preserve likeness or character identity while changing clothing, hair or makeup, pose or position, face/head/body, background, lighting, or visual style, default to `-m krea2_identity_edit_v1_2` with `-c`. Infer that semantic intent in any language; never route from keyword or regex matching. Also use it for a single-character sheet unless Pro/detail-critical layout requirements favor GPT Image 2. An explicitly requested model always wins; use `-m dark_beast_krea2_identity_edit_v1_2` only when the creator explicitly requests that community/uncensored variant. Both accept 1-2 references at 512-2048 px. For two references, pass the base scene first and the person/detail/outfit/pose/style reference second. Write a concise 1-4 sentence delta instruction, do not send a negative prompt, and leave steps, guidance, sampler, and scheduler unset so the current model tier and worker choose their optimized defaults.
+- For Krea 2 style/control LoRAs, use the base text-to-image model `-m krea2_turbo_fp8_scaled` with repeatable ordered `--lora <id> --lora-strength <n>` arguments (or comma-separated `--loras` / `--lora-strengths`). Up to 8 LoRAs may be stacked. Order matters, strengths are positional, omitted strengths default to 1, and many Krea 2 LoRAs are bipolar sliders whose negative values apply the inverse effect. Do not clamp them to 0-2. The first use of an uncached LoRA may pause while the worker downloads it.
+- Do not route to `--photobooth` merely because the user asks to preserve a face in a style edit — face-preserving full-image edits use `-c` with Krea 2 Identity Edit by the semantic rule above. The bare CLI still defaults context edits without `-m` to `qwen_image_edit_2511_fp8_lightning`, so agents must pass the Krea model explicitly for identity-sensitive edits. Select `-m gpt-image-2` for up to 16 reference images and OpenAI-backed editing (Qwen supports up to 3; Krea identity edit supports up to 2).
 
 ### LTX video prompts
 
 Whenever the chosen video model is in the LTX family (including the default t2v), **do not pass the user's short request through unchanged**. Rewrite it into one unbroken paragraph of 4-8 flowing present-tense sentences describing a single continuous shot — concrete subjects, named light sources, one action thread, dialogue embedded in double quotes with the speaker identified, positive phrasing only, no headers/bullets/negative-prompts. **Read [`references/video-prompting.md`](./references/video-prompting.md) for the full rule, duration pacing, orientation mapping, and camera-language normalization before writing the prompt.**
 
+Whenever the creator explicitly requests 10Eros, and for lawful adult
+mature-theme video requests generally, read
+[`references/private-mature-video.md`](./references/private-mature-video.md)
+before choosing a model, LoRA, or specialized prompt token. Keep the exact
+tokens in that scoped reference rather than ordinary model recommendations.
+
 ### High-res video
+
+MiniMax H3 is an explicit model choice, not a universal default. Use `-m minimax-h3` for text-to-video, `-m minimax-h3-i2v --ref A` for first-frame animation, `-m minimax-h3-flf2v --ref A --ref-end B` for a first/last-frame transition, or explicitly select `-m minimax-h3-r2v` for a loose reference set. H3 r2v accepts up to **9 images** (`--ref` then repeatable `-c`), **3 videos** (repeat `--ref-video`), and **3 audio clips** (repeat `--ref-audio`), with **12 files total** and at least one image; it is never inferred. Address them as `<Picture 1>`, `<Video 1>`, and `<Audio 1>` in per-type submission order, give every reference one job, and never use `--ref-end` for r2v. H3 generates picture and **native 32 kHz stereo audio jointly** at fixed 24 fps, so dialogue, foley, and score must be described in the prompt. `--no-generate-audio` strips that generated track from the delivered file; it does not skip audio generation. Frames snap to the `124 + n×17` grid (5.17-15.08 s); use `-w 1344 -h 768` or `-w 768 -h 1344`; send no steps, guidance, sampler, scheduler, or negative prompt. It is the 768p-class open-weights release — do not claim 2K. The initial Sogni release is routed to 32 GB-class workers.
+
+**H3 takes natural cinematic prose**, not a required structured document. Expand the user's one-liner into a directed scene: a **timed shot list** with bracketed timecodes (`[0-2 seconds] …`) for anything longer than one beat, deliberate **audio direction** (ambience, specific SFX, music by instrumentation and timing; say so when you want no music), dialogue as ordinary quoted prose, and negative direction stated in the prompt text since there is no negative-prompt field. MiniMax's `<d>[Language] …</d>` + `(S1)` markup and three-field IR document are optional input forms; never invent or strip that markup when a user supplied it. Read [`references/video-prompting.md`](./references/video-prompting.md) § MiniMax H3 Prompting before writing an H3 prompt.
 
 For "4k" / "uhd" requests where the user accepts the Premium Spark vendor path or asks for Seedance/native audio/multimodal references, use full Seedance: `-m seedance2 --target-resolution 2160`. Do not use `seedance2-mini` or `seedance2-fast` for 4K; both remain capped to the 720p lower-resolution path. For "hd" / "1080p" requests, or when avoiding vendor models, use `-m ltx23-22b-fp8_t2v_distilled` (text) or `-m ltx23-22b-fp8_i2v_distilled` (image), prefer `-w 1920 -h 1088` (or the orientation mapping in the reference), and rewrite the prompt per the LTX rule. For bare "720p" without orientation, prefer `--target-resolution 768`.
 
 ### Video editing, stitching, 360 turnarounds
 
-Trigger patterns — "animate/morph image A to image B" (`--ref A --ref-end B`; on LTX-2.3 i2v this is a single render — the transition/morph LoRA auto-applies, no bridge clip), "continue this video" (extract last frame → i2v → concat), "transition between two videos" (bridge clip between two *finished videos*), "make a reel/slideshow from these images" or "animate this folder of images" (`--source-reel <dir>`; plan first with the free `--reel-plan-only`; options: `--reel-image-seconds`, `--reel-transition-seconds`, `--reel-loop`/`--no-reel-loop`, `--reel-image-prompt`, `--reel-transition-prompt`), "360 video" (`--angles-360 --angles-360-video`), "add/replace the soundtrack" (`--concat-audio` / `--remix-audio`). **Read [`references/video-editing.md`](./references/video-editing.md) for the step-by-step recipes.**
+Trigger patterns — "animate/morph image A to image B" or any first-frame/last-frame request (`--ref A --ref-end B` — defaults to `ltx23-22b-fp8_i2v_distilled`, a single render whose transition/morph LoRA auto-applies, no bridge clip; single-image i2v defaults to `wan_v2.2-14b-fp8_i2v_lightx2v`), "continue this video" (extract last frame → i2v → concat), "transition between two videos" (bridge clip between two *finished videos*), "make a reel/slideshow from these images" or "animate this folder of images" (`--source-reel <dir>`; plan first with the free `--reel-plan-only`; options: `--reel-image-seconds`, `--reel-transition-seconds`, `--reel-loop`/`--no-reel-loop`, `--reel-image-prompt`, `--reel-transition-prompt`), "360 video" (`--angles-360 --angles-360-video`), "add/replace the soundtrack" (`--concat-audio` / `--remix-audio`). **Read [`references/video-editing.md`](./references/video-editing.md) for the step-by-step recipes.**
 
 For a **one-click polished folder loop** where each source image animates and then morphs directly into the next original image, read [`references/loop-maker.md`](./references/loop-maker.md). Use its visually deduplicated, one-LTX-clip-per-pair workflow instead of the default SourceReel split animation-plus-bridge structure. Do not route true 360 novel-view synthesis to this direct pairwise workflow: a turning subject or occluder wipe is not a camera orbit. Trigger on requests such as "Sogni Loop Maker", "make this image folder a seamless loop", "one-click animated photo reel", the Claude Code command `/sogni-creative-agent:loop-maker`, or the Codex skill `$sogni-creative-agent:loop-maker`.
 
@@ -254,7 +295,9 @@ When the requested image is meant to **repeat edge to edge without visible joins
 
 ### Model selection
 
-Prefer `-Q` presets and automatic workflow routing. When a specific model is needed (GPT Image 2 text rendering, Seedance or HappyHorse native audio, WAN lip-sync, LTX dialogue), **read [`references/models.md`](./references/models.md)** for the catalog, recommended selectors, and sizing/divisibility rules.
+Prefer `-Q` presets and automatic workflow routing. When a specific model is needed (GPT Image 2 text rendering, Seedance / HappyHorse / MiniMax H3 native audio and dialogue, WAN lip-sync, LTX dialogue), **read [`references/models.md`](./references/models.md)** for the catalog, recommended selectors, and sizing/divisibility rules.
+
+`ltx23-eros` is an explicit-only uncensored LTX-2.3 image-to-video selector. Never choose it merely because a prompt appears sexual or another model rejects a request. Use it only when the user explicitly asks for 10Eros/the uncensored model and explicitly permits disabling the content filter. It requires an input image, `--no-filter`, and a 30GB+ worker; the CLI pins its required 9 steps, guidance 1, `euler_ancestral` sampler, and `manual_sigmas` scheduler.
 
 ### Insufficient funds
 
@@ -267,6 +310,8 @@ Do not collect payment details, quote a custom price, or simulate a purchase in 
 ### Sogni Unlimited Subscription & Billing Errors
 
 On a **Sogni Unlimited** subscription, Sogni-hosted (Supernet) image, video, and music generation is covered by the plan under a fair-use policy instead of spending Spark or SOGNI. Plans: Unlimited ($20/mo, $199/yr) and Unlimited Pro ($50/mo, $498/yr), with a one-per-account 3-day free trial. External-vendor models — **GPT Image 2**, **Seedance 2.0 / Mini / Fast**, and **HappyHorse 1.1** — are never covered and always require Premium Spark, even on an active subscription. Selecting SOGNI opts a job out of coverage. The server decides coverage from the verified entitlement and resolved model; never tell the user a vendor model is "free on Unlimited."
+
+**Do not infer a Spark charge from `tokenType: "spark"`.** `tokenType` is the quote/accounting denomination and may remain `spark` on a covered Unlimited job. Billing is decided separately by the server's `paymentModel`: `subscription` means the artist Spark/SOGNI debit was skipped; `paid_spark`, `free_spark`, or `sogni` means token billing. If a result does not expose `paymentModel`, treat the payment source as unknown rather than warning that Spark was spent. Check the structured subscription state or transaction history when available. A successful request made with `--billing-mode subscription` is covered: if the server cannot use Unlimited, it rejects the request with `4078` or `4080` instead of silently falling back to Spark.
 
 Unlimited is fair-use, not unmetered: per-UTC-day concurrency ceilings step down as completed renders climb (and reset at UTC midnight), and once a plan's fast-lane allowance is exceeded, further jobs run best-effort in a lower-priority standard queue until capacity resets. Describe this as **fair use** / a **standard (throttled) queue** — never as "relaxed."
 
@@ -317,12 +362,15 @@ Failure (single JSON object on stdout, exit code 1; progress/warnings on stderr)
 
 ## Cost
 
-Uses Spark tokens from the user's Sogni account. 512x512 images are most cost-efficient. `-n` is safety-capped at 16 outputs per call (`SOGNI_MAX_COUNT` raises it deliberately). Seedance, HappyHorse, and GPT Image 2 are vendor models requiring Premium Spark eligibility.
+Eligible Sogni-hosted renders use Unlimited coverage when active; otherwise renders use the selected Spark or SOGNI token path. 512x512 images are most cost-efficient. `-n` is safety-capped at 16 outputs per call (`SOGNI_MAX_COUNT` raises it deliberately). Seedance, HappyHorse, and GPT Image 2 are vendor models requiring Premium Spark eligibility.
 
 ## Troubleshooting
 
 - **Anything broken?** Run `sogni-agent doctor` first — it checks Node, credentials (and file permissions), config-dir writability, ffmpeg, live auth, and version freshness, with a fix in every failure detail.
+- **A newly listed live model fails immediately with `PROJECT_ERROR`:** if `doctor` reports a newer CLI, update before retrying. The live catalog can expose a model that needs model-specific client rules added after the installed CLI version; repeated submissions with generic defaults will fail the same way.
 - **Auth errors:** check `SOGNI_API_KEY` or `~/.config/sogni/credentials` (key from https://dashboard.sogni.ai, account menu).
+- **Error 4061 / too many app IDs:** the CLI leases stable IDs from the persistent pool in `~/.config/sogni/app-ids/`. Do not delete that directory between runs. For ephemeral/container homes, set the same `SOGNI_APP_ID` on every session. App IDs already registered today remain counted until 00:00 UTC, so an existing block may require waiting for that reset once after upgrading.
+- **Kicked mid-render / SWITCH_CONNECTION 4015:** two processes shared one app ID. The slot pool prevents this for concurrent CLI runs; if a long-lived daemon also uses this account, give it its own pinned `SOGNI_APP_ID`.
 - **Video size errors:** sizes are model-specific (WAN ÷16 min 480 max 1536; LTX ÷64, long side ≤2048). The CLI auto-adjusts for local refs; `--strict-size` makes it fail with a suggested size instead. Details in [`references/models.md`](./references/models.md).
 - **Timeouts:** try a faster model or raise `-t`.
 - **No workers:** check https://sogni.ai for network status.
@@ -331,7 +379,8 @@ Uses Spark tokens from the user's Sogni account. 512x512 images are most cost-ef
 
 | Read this | When the task involves |
 |-----------|------------------------|
-| [`references/video-prompting.md`](./references/video-prompting.md) | Writing LTX video prompts; high-res/4K routing; orientation/aspect mapping; camera language |
+| [`references/video-prompting.md`](./references/video-prompting.md) | Writing LTX video prompts; writing MiniMax H3 prose prompts (timed shot lists, audio direction, quoted dialogue, optional IR markup); high-res/4K routing; orientation/aspect mapping; camera language |
+| [`references/private-mature-video.md`](./references/private-mature-video.md) | Mature-theme video model, LoRA, frame modes, and prompt tokens |
 | [`references/video-editing.md`](./references/video-editing.md) | Animate between images, continue/bridge videos, 360 turnarounds, concat, audio remix/layering, v2v ControlNet |
 | [`references/loop-maker.md`](./references/loop-maker.md) | One-click image-folder loops with visual deduplication, direct LTX first/last-frame clips, music, and verification |
 | [`references/hosted-api.md`](./references/hosted-api.md) | `--api-chat`, `--durable-chat`, `--api-workflow`, workflow templates, replays, Seedance reference modes, cost controls |

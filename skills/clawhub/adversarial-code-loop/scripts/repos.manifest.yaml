@@ -1,0 +1,22 @@
+# Integration gate manifest: the 5 adversarial skill repos and how to test them.
+# Paths are relative to the workspace root (the directory containing all
+# adversarial-* skill repos as siblings, e.g. ~/.hermes/skills).
+- name: adversarial-code-loop
+  path: adversarial-code-loop
+  test_cmd: python3 -m pytest && bash tests/run_all.sh
+
+- name: adversarial-code-review
+  path: adversarial-code-review
+  test_cmd: python3 -m pytest
+
+- name: adversarial-common
+  path: adversarial-common
+  test_cmd: python3 -m pytest
+
+- name: adversarial-plan
+  path: adversarial-plan
+  test_cmd: python3 -m pytest
+
+- name: adversarial-spec
+  path: adversarial-spec
+  test_cmd: python3 -m pytest

@@ -1,46 +1,64 @@
-## Description: <br>
-Queries the Jungle Scout Product Database through LinkFox to filter Amazon products across 10 marketplaces by category, price, sales, revenue, reviews, rating, BSR, LQS, seller type, and related criteria. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Jungle Scout-商品库 helps agents filter Amazon products across 10 marketplaces by category, price, sales, revenue, reviews, rating, BSR rank, LQS, seller type, and related criteria.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers and e-commerce researchers use this skill to build filtered Amazon product research queries and review Jungle Scout Product Database results for Amazon product discovery and competitive screening. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: LinkFox receives product queries, API-key-authenticated requests, session/app metadata, and possible automatic feedback content. <br>
-Mitigation: Use the skill only when that external sharing is acceptable, keep sensitive business details out of queries and feedback, and review any feedback content before it is sent. <br>
-Risk: Queries can consume LinkFox credits, and the skill states that dynamic pricing may make a single request costly. <br>
-Mitigation: Confirm marketplace, filters, and expected credit cost with the user before running paid searches; avoid repeated exploratory calls after failures or empty results. <br>
-Risk: Full API responses and cached results may be written to local linkfox data directories. <br>
-Mitigation: Run the skill only in an appropriate workspace, treat saved result files as potentially sensitive commercial research, and remove cached or session files when they are no longer needed. <br>
-Risk: The tool gateway can be changed through environment configuration. <br>
-Mitigation: Use the default or another trusted gateway only, and inspect gateway-related environment variables before use in sensitive environments. <br>
+## Use Case:
 
+External sellers and ecommerce operators use this skill to discover and compare Amazon products by market, category, sales, price, competition, listing quality, and fulfillment filters. Agents use it to build LinkFox Jungle Scout product database queries, present product results, and guide credential or billing recovery when required.
 
-## Reference(s): <br>
-- [Jungle Scout Product Database API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-junglescout-product-database) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; API responses are JSON and may be printed or saved to local result files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses LinkFox API-key authentication, may consume LinkFox credits, caches repeated requests for 24 hours, and writes full responses under a local linkfox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill uses LinkFox API credentials and can help create or retrieve API keys through phone and SMS login flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated LinkFox account or scoped credential when possible, and provide phone numbers or SMS codes only when you intend to link that account.
+
+Risk: The onboarding flow can list paid plans, create orders, and render payment QR codes for LinkFox billing.
+
+Mitigation: Confirm the selected plan and payment method with the user before ordering, and do not submit payment choices unless the user intends to fund the account.
+
+Risk: Product query results are written locally under linkfox session data directories and repeated query responses may be cached for 24 hours.
+
+Mitigation: Avoid sensitive product searches unless local storage is acceptable, review where response files are saved, and remove local result or cache files when retention is not desired.
+
+Risk: The skill includes automatic feedback reporting when behavior, results, or user sentiment indicate feedback should be sent.
+
+Mitigation: Do not include sensitive user or product-research details in feedback content, and review feedback payloads before sending when the agent workflow allows.
+
+## Reference(s):
+
+- [Jungle Scout 产品数据库查询 API 参考](artifact/references/api.md)
+- [解决认证和积分问题](artifact/references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-junglescout-product-database)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance, files]
+
+**Output Format:** [Markdown guidance with JSON API parameters, tabular product summaries, shell commands, and saved JSON response files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The product query script saves complete responses under a linkfox session data directory, uses a 24-hour local cache for repeated parameter sets, and summarizes responses larger than 8 KB unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

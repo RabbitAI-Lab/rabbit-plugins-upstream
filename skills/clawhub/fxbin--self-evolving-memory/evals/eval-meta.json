@@ -1,0 +1,49 @@
+{
+  "router_command": "python scripts/route_request.py --text {prompt}",
+  "skill_name": "self-evolving-memory",
+  "version": "v7.3.3",
+  "minimum_confusion_coverage": 0.75,
+  "stability_fields": [
+    "should_trigger",
+    "workflow_bundle",
+    "primary_module"
+  ],
+  "routing_fields": [
+    "should_trigger",
+    "archetype",
+    "primary_module",
+    "workflow_bundle"
+  ],
+  "eval_categories": [
+    "primary-path",
+    "promotion",
+    "evidence-ledger",
+    "recall-planner",
+    "dpm-enhancement",
+    "active-exploration",
+    "causal-graph",
+    "self-reference",
+    "skill-cooldown",
+    "topic-index",
+    "edge-case",
+    "retrieval",
+    "consolidation",
+    "lightweight-record",
+    "security",
+    "transaction",
+    "initialization",
+    "capability-fallback",
+    "routing-adversarial",
+    "negative"
+  ],
+  "bundle_map": {
+    "init": "Initialize or repair a memory system for an agent",
+    "consolidation": "Run daily or event-driven consolidation with snapshot and rollback",
+    "promotion": "Evaluate whether a memory item should be promoted to a higher layer",
+    "retrieval": "Retrieve and verify memories using the recall planner, evidence ledger, and four-level retrieval loop",
+    "growth": "Active exploration, self-reference evolution, and cognitive stretching",
+    "lightweight_record": "Record one memory safely without starting a lifecycle workflow",
+    "security_migration": "Stop plaintext-secret use, rotate, and migrate to a handle-only locator",
+    "capability_fallback": "Use manual scheduling and allowlisted local retrieval when optional host capabilities are missing"
+  }
+}

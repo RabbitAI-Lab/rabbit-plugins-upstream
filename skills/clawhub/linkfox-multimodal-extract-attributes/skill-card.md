@@ -1,47 +1,72 @@
-## Description: <br>
-Uses multimodal AI to analyze product main images and extract structured visual attributes, groupings, and image prompts for e-commerce product records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Extracts structured visual attributes and prompt-style descriptions from e-commerce product images using LinkFox multimodal analysis.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, analysts, and agent developers use this skill to turn product image URLs and product records into structured visual attributes such as color, material, shape, style, and prompt-like descriptions. It is suited for product image analysis, visual grouping, and factual attribute summaries when upstream product data is available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product image URLs, prompts, product records, and feedback content may be sent to LinkFox services. <br>
-Mitigation: Install and run only when that data sharing is acceptable; avoid submitting sensitive product or business data unless authorized. <br>
-Risk: Generated response and cache files may retain product or business data locally. <br>
-Mitigation: Review the generated LinkFox output and cache files after use, and delete them when retention is not appropriate. <br>
-Risk: API keys and gateway settings control access to LinkFox services. <br>
-Mitigation: Keep LINKFOX_AGENT_API_KEY, LINKFOXAGENT_API_KEY, and LINKFOX_TOOL_GATEWAY restricted to trusted environments. <br>
-Risk: The skill can report feedback automatically based on user reactions or perceived mismatches. <br>
-Mitigation: Review feedback behavior before deployment and avoid including sensitive user or product details in feedback content. <br>
-Risk: Image analysis consumes LinkFox credits and can become costly for large batches or additional images. <br>
-Mitigation: Warn users before running credit-consuming analysis and confirm scope before repeated or expanded calls. <br>
+## Use Case:
 
+E-commerce sellers and analysts use this skill to analyze product main images and optional additional images, extracting visual attributes such as color, material, shape, style, and image-prompt descriptions into structured product rows and attribute groupings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-multimodal-extract-attributes) <br>
-- [分析商品主图 API 参考](references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown tables and summaries with JSON response files and optional shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires product records with accessible image URLs; may persist full LinkFox API responses and cache files locally while printing summaries for large responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill sends product images, upstream product data, userInput, and API credentials to LinkFox-controlled services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only when LinkFox is trusted with those inputs, and keep API keys in the documented environment variables rather than pasting them into prompts.
+
+Risk: Image analysis consumes paid credits and may create a large charge when many images or dimensions are analyzed.
+
+Mitigation: Ask for explicit user confirmation before paid analysis, explain that credits will be consumed, and avoid automatic retries or expanded searches after failures.
+
+Risk: The onboarding flow can collect phone-based login details and create payment orders.
+
+Mitigation: Use onboarding only for authentication or billing errors, require explicit confirmation before SMS login or order creation, and do not poll payment status without user direction.
+
+Risk: Configurable LinkFox endpoint environment variables can redirect traffic away from the expected service.
+
+Mitigation: Use endpoint override variables only when they point to verified LinkFox hosts.
+
+Risk: The skill stores full API responses and cache data in the workspace.
+
+Mitigation: Review saved JSON files for sensitive product or user data and remove them when they are no longer needed.
+
+Risk: The skill can automatically submit feedback about user satisfaction or skill behavior.
+
+Mitigation: Require explicit confirmation before feedback submission when it may include user intent, result details, or other sensitive context.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-multimodal-extract-attributes)
+- [API reference](artifact/references/api.md)
+- [Authentication and billing onboarding](artifact/references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance, files]
+
+**Output Format:** [Markdown summaries and tables, JSON API responses, stdout summaries, and saved JSON files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full responses are saved under the current workspace linkfox session directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

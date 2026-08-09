@@ -4,9 +4,11 @@
 
 **让 Agent 用最少的 token 做最准的事**
 
+> ⚔️ **将军受命，君必先谋于庙，行令于廷，君身以斧钺授将。曰：左、右、中军皆有分职；若逾分而上请者死；军无二令，二令者诛；留令者诛；失令者诛。**
+>
 > 💬 **用不完，根本用不完，妈妈再也不用担心我缺 token 了。**
 
-[![Version](https://img.shields.io/badge/version-1.8.2-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.9.1-blue.svg)]()
 [![License](https://img.shields.io/badge/license-GPL--3.0-green.svg)](LICENSE)
 [![Author](https://img.shields.io/badge/author-phoenixlucky-orange.svg)]()
 </div>
@@ -292,6 +294,7 @@ install-source --source https://clawhub.ai/phoenixlucky/zerotoken-skill
 
 - 📐 **快速决策表** — 按请求类型匹配模式与工具链
 - 🧭 **核心原则** — 先分类再预算、压缩提示词、渐进读取、先给结果、不复述
+- ⚔️ **AI 编程总纲（尉缭子十原则）** — 权限边界、单一指令、责任明确、执行一致，附 System Prompt 总纲
 - 📝 **精准提示词模板** — 目标 → 输入 → 约束 → 输出
 - 🔄 **六种任务模式详解 (A-F)** — 每种模式的完整行为规范
 - 🖥️ **F. Windows/PowerShell 环境适配** — 8 条已知陷阱与解决方案

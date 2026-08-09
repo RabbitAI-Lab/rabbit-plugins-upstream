@@ -1,44 +1,63 @@
-## Description: <br>
-Provides agent access to OurFamilyWizard co-parenting messages, calendar events, shared expenses, and journal entries through an MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps an agent work with OurFamilyWizard co-parenting data, including messages, calendar events, expenses, and journal entries.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill to connect an agent to their OurFamilyWizard account, review co-parenting records, and perform message, calendar, expense, and journal workflows with appropriate confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can grant an agent broad access to sensitive OurFamilyWizard co-parenting records. <br>
-Mitigation: Install only when agent access to the OFW account is intended, use explicit OFW requests, and avoid background checks. <br>
-Risk: Cached OFW data can be stale while still appearing usable. <br>
-Mitigation: Check the provided freshness signals before relying on cached messages, drafts, or other OFW state. <br>
-Risk: Some operations can write, upload, send, delete, or change read and last-seen status in a legal-family record system. <br>
-Mitigation: Require user confirmation before writes, uploads, sends, deletes, or status-changing reads. <br>
+## Use Case:
 
+External users and agents use this skill for explicit OurFamilyWizard tasks such as checking co-parenting messages, reviewing calendar events, managing shared expenses, and drafting or sending OFW communications.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/ofw-mcp) <br>
-- [npm package](https://www.npmjs.com/package/ofw-mcp) <br>
-- [Source repository](https://github.com/chrischall/ofw-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with JSON and shell command examples; MCP tool results may include text and structured data.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May access or modify OFW records through MCP tools; cached read results include freshness signals that should be checked before relying on current state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.7.0 (source: server release evidence) <br>
+Risk: The broad trigger could activate sensitive OurFamilyWizard read/write tools for general co-parenting requests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for explicit OFW tasks and confirm user intent before accessing account data.
+
+Risk: Some reads can change user-visible state, such as last-seen status or marking unread messages as read.
+
+Mitigation: Warn the user and require confirmation before calling notifications or reading unread messages when visible status could change.
+
+Risk: Write operations can affect legal co-parenting records, including sent messages, drafts, events, expenses, and journal entries.
+
+Mitigation: Require clear confirmation before sending messages, deleting drafts or events, creating expenses or journal entries, or updating calendar data.
+
+Risk: Cached message or draft state can be stale and lead to incorrect statements about current OFW records.
+
+Mitigation: Use live status, freshness, and completeness checks before reporting current states, counts, or whether a draft still exists.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/chrischall/skills/ofw-mcp)
+- [npm Package](https://www.npmjs.com/package/ofw-mcp)
+- [Artifact-Linked GitHub Repository](https://github.com/chrischall/ofw-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown responses with inline JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May use OFW tools that read or update sensitive account data; require clear user confirmation before operations that change records or visible read status.]
+
+## Skill Version(s):
+
+2.10.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

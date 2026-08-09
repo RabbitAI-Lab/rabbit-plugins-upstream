@@ -7,14 +7,16 @@ depends-on:
   - git-repo
 description: |
   Analyze staged/committed changes and recommend split, squash, or commit-message strategy.
-  Topics — interactive-amend (worktree-based amend+rebase loop),
+  Topics — hunk-split (non-interactive single-hunk staging via git apply --cached when git add -p isn't usable),
+  interactive-amend (worktree-based amend+rebase loop),
   soft-reset-amend (soft-reset top N + selective re-commit),
   staging-discipline (`git diff --cached --name-only` audit + sensitive-dir gate for rules/agents/docs),
   security-scan (PUBLIC repo 4-grep secret pattern check before commit),
   message-discipline (Conventional Commit tags, PUBLIC English enforcement, operation-type continuity, --amend refresh, source-code .md behavior verbs).
   Use when: "commit split", "squash commits", "tidy commits", "amend earlier", "interactive amend",
   "soft reset", "rewrite commits", "PUBLIC repo commit", "secret in commit", "commit message",
-  "commit author identity", "commit message English", "staging discipline".
+  "commit author identity", "commit message English", "staging discipline", "hunk split",
+  "stage one hunk", "git apply --cached", "non-interactive git add -p".
 ---
 
 # Commit Tidy
@@ -23,6 +25,7 @@ description: |
 
 | Topic | Description | Guide |
 |-------|-------------|-------|
+| hunk-split | Non-interactive single-hunk staging via `git apply --cached` when `git add -p` isn't usable | [hunk-split.md](./hunk-split.md) |
 | interactive-amend | Worktree-based amend+rebase loop for earlier/multiple commits | [interactive-amend.md](./interactive-amend.md) |
 | message-discipline | Commit message conventions — Conventional Commit tags, PUBLIC English enforcement, --amend refresh, source-code .md behavior verbs, operation-type continuity | [message-discipline.md](./message-discipline.md) |
 | security-scan | PUBLIC repo commit body 4-grep secret pattern check (PAT/Vault/API key/Base64) before commit | [security-scan.md](./security-scan.md) |
@@ -37,6 +40,10 @@ Analyze staged/unstaged changes and recommend whether to split into multiple com
 - User asks "should I split this commit?"
 - Reviewing changes that touch many files
 - Ensuring atomic, reviewable commits
+
+## Squash-scan scope (HARD STOP)
+
+**A user-named commit range is the minimum scope, never the maximum.** The moment any squash candidate is found — whether self-discovered or pointed at by the user — scan the *entire* unpushed range (`git log --name-only @{u}..HEAD`) grouped by file for the same repeated-single-file pattern before proposing a squash plan. See `staging-discipline.md` "Full-range squash-candidate scan" for the procedure. Presenting a squash plan for only the range the user mentioned, while an identical streak sits elsewhere in the same unpushed history, is a violation — the assistant surfaces the full picture, not just the part the user already knew about.
 
 ## Split Decision Criteria
 

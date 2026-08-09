@@ -1,0 +1,346 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-hub:virtual-intelligent-dev-team:benchmark-evals.schema",
+  "title": "Virtual Intelligent Dev Team Benchmark Evals",
+  "type": "object",
+  "required": [
+    "skill_name",
+    "evals"
+  ],
+  "properties": {
+    "skill_name": {
+      "const": "virtual-intelligent-dev-team"
+    },
+    "evals": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/eval_case"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "string_array": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "release_gate_summary": {
+      "type": "object",
+      "required": [
+        "tests_passed",
+        "validator_passed",
+        "evals_passed",
+        "offline_drill_enabled",
+        "offline_drill_passed",
+        "overall_passed"
+      ],
+      "properties": {
+        "tests_passed": {
+          "type": "boolean"
+        },
+        "validator_passed": {
+          "type": "boolean"
+        },
+        "evals_passed": {
+          "type": "boolean"
+        },
+        "offline_drill_enabled": {
+          "type": "boolean"
+        },
+        "offline_drill_passed": {
+          "type": [
+            "boolean",
+            "null"
+          ]
+        },
+        "overall_passed": {
+          "type": "boolean"
+        }
+      },
+      "additionalProperties": false
+    },
+    "release_gate_beta": {
+      "type": "object",
+      "required": [
+        "decision"
+      ],
+      "properties": {
+        "decision": {
+          "enum": [
+            "advance",
+            "hold",
+            "escalate"
+          ]
+        },
+        "round_id": {
+          "type": "string"
+        },
+        "reason": {
+          "type": "string"
+        },
+        "success_rate": {
+          "type": "number"
+        },
+        "blocker_issue_count": {
+          "type": "integer"
+        },
+        "critical_issue_count": {
+          "type": "integer"
+        },
+        "high_severity_issue_count": {
+          "type": "integer"
+        },
+        "top_feedback_themes": {
+          "$ref": "#/$defs/string_array"
+        },
+        "next_action": {
+          "type": "string"
+        },
+        "release_governance_recommended": {
+          "type": "boolean"
+        },
+        "next_round_recommended": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "release_gate_completion_evidence": {
+      "type": "object",
+      "properties": {
+        "status": {
+          "enum": [
+            "passed",
+            "failed",
+            "partial",
+            "not_run"
+          ]
+        },
+        "confidence_grade": {
+          "enum": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        "covered_scope": {
+          "$ref": "#/$defs/string_array"
+        },
+        "uncovered_scope": {
+          "$ref": "#/$defs/string_array"
+        },
+        "residual_risk": {
+          "$ref": "#/$defs/string_array"
+        },
+        "evidence_refs": {
+          "$ref": "#/$defs/string_array"
+        }
+      },
+      "additionalProperties": false
+    },
+    "eval_case": {
+      "type": "object",
+      "required": [
+        "id",
+        "prompt",
+        "expected_output",
+        "files",
+        "expectations",
+        "categories"
+      ],
+      "properties": {
+        "id": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "runner": {
+          "enum": [
+            "route",
+            "verify_action",
+            "release_gate",
+            "stress_scenarios"
+          ]
+        },
+        "prompt": {
+          "type": "string",
+          "minLength": 1
+        },
+        "expected_output": {
+          "type": "string",
+          "minLength": 1
+        },
+        "files": {
+          "$ref": "#/$defs/string_array"
+        },
+        "expectations": {
+          "$ref": "#/$defs/string_array",
+          "minItems": 1
+        },
+        "categories": {
+          "$ref": "#/$defs/string_array",
+          "minItems": 1,
+          "uniqueItems": true
+        },
+        "negative": {
+          "type": "boolean",
+          "description": "Marks a boundary-guard eval whose expectations describe what should NOT route a certain way. Used by skill-forge blind audit for grouping/reporting only."
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Provenance of the gold answer, e.g. doc:SKILL.md#section or regression:CASE-id. Enables traceability for blind audits."
+        },
+        "runtime_dependent": {
+          "type": "boolean",
+          "description": "Marks an eval whose assertions depend on host runtime capabilities (e.g. real subagent spawn, external backend availability) rather than routing correctness. Skill-forge blind audit skips these gracefully."
+        },
+        "check": {
+          "enum": [
+            "process-skill",
+            "git-workflow",
+            "worktree",
+            "lead-assignment",
+            "release-gate",
+            "iteration",
+            "workflow-bundle",
+            "bundle-bootstrap",
+            "assistant-delta-contract",
+            "auto-mode",
+            "micro-practice-ledger",
+            "completion-evidence",
+            "file-handoff",
+            "spec-violation",
+            "lead-prejudgment",
+            "yagni",
+            "breaker-status",
+            "contract-lock",
+            "observability-schema"
+          ]
+        },
+        "fixture": {
+          "enum": [
+            "missing-handoff",
+            "invalid-handoff-metadata",
+            "missing-completion-evidence",
+            "completion-same-model-review",
+            "lead-prejudgment",
+            "breaker-closed",
+            "breaker-open",
+            "yagni-abstraction",
+            "java-spec-violation"
+          ]
+        },
+        "handoff_type": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dispatch_text": {
+          "type": "string",
+          "minLength": 1
+        },
+        "breaker_layer": {
+          "type": "string",
+          "minLength": 1
+        },
+        "process_skill": {
+          "type": "string",
+          "minLength": 1
+        },
+        "lead_agent": {
+          "type": "string",
+          "minLength": 1
+        },
+        "assistant_agents": {
+          "$ref": "#/$defs/string_array"
+        },
+        "release_gate_summary": {
+          "$ref": "#/$defs/release_gate_summary"
+        },
+        "release_gate_beta": {
+          "$ref": "#/$defs/release_gate_beta"
+        },
+        "release_gate_completion_evidence": {
+          "$ref": "#/$defs/release_gate_completion_evidence"
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "runner": {
+                "const": "verify_action"
+              }
+            },
+            "required": [
+              "runner"
+            ]
+          },
+          "then": {
+            "required": [
+              "check"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "check": {
+                "const": "process-skill"
+              }
+            },
+            "required": [
+              "check"
+            ]
+          },
+          "then": {
+            "required": [
+              "process_skill"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "check": {
+                "const": "lead-assignment"
+              }
+            },
+            "required": [
+              "check"
+            ]
+          },
+          "then": {
+            "required": [
+              "lead_agent"
+            ]
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "runner": {
+                "const": "release_gate"
+              }
+            },
+            "required": [
+              "runner"
+            ]
+          },
+          "then": {
+            "required": [
+              "release_gate_summary"
+            ]
+          }
+        }
+      ],
+      "additionalProperties": false
+    }
+  }
+}

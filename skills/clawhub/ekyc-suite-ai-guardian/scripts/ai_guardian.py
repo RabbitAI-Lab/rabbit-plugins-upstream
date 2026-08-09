@@ -13,7 +13,7 @@ from urllib.parse import urlparse
 
 import requests
 
-CLIENT_VERSION = "1.0.9"
+CLIENT_VERSION = "1.0.15"
 MAX_RAW_BYTES = 20 * 1024 * 1024
 
 if sys.stdout.encoding != "utf-8":

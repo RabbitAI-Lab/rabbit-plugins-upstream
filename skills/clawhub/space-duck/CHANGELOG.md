@@ -1,5 +1,145 @@
 # Space Duck skill — changelog
 
+## 0.7.7 — 2026-08-09
+
+- `[AUTOUP-077]` **Deep-critique hardening pass over the auto-update layer** (second self-audit, pre-final):
+  - **Crash-safety**: the entire update-trigger hook is now exception-proof — `_deliver` runs unguarded in the poll loop, so a malformed config.json or odd event shape could previously kill peck delivery entirely.
+  - **Config authority**: the hook now receives the AUTHENTICATED config the poll loop already resolved instead of re-reading first-path-on-disk (the Sam/Wayne stale-multi-path config bug class).
+  - **Type-hardened `update_senders`**: a bare-string value made `in` do substring matching (partial-id match); now coerced to an exact-match list.
+  - **Beak key off curl argv** in `version_check_daemon.sh` (both the new auto path and the pre-existing nudge path) — was visible in `ps` during the notify call, violating HARDEN-071 doctrine. Key now fed via `curl --config` on stdin (`notify_owner()` helper).
+  - **Consent survives re-pair**: `pair.py` now preserves an existing `auto_update` choice from config.json instead of silently resetting it to `ask` on re-pair/rekey.
+
+## 0.7.6 — 2026-08-09
+
+- `[AUTOUP-076]` **Self-critique hardening of the 0.7.5 auto-update layer** (pre-rollout security pass):
+  - **Sender gate now default-closed.** 0.7.5 honored `[SPACE-DUCK-UPDATE]` triggers from ANY connected peer when `update_senders` was unset — a peer could force an update + listener bounce (restart-timing control, 1×/h). Triggers now default to the official Spaceduckling release duck only (`OFFICIAL_UPDATE_SENDERS`), config-overridable.
+  - **Security invariant documented in code**: the trigger hook is poll-path only (beak_key-authenticated transport); the unauthenticated HTTP push handler must never call it (`sender_spaceduck_id` there is attacker-controlled).
+  - Debounce stamp no longer written before the `update.sh` existence check (a missing script burned the 1-hour window).
+  - `version_check_daemon.sh` auto path now treats update.sh exit 13 (install succeeded, listener restart skipped) as success-with-note instead of failure.
+
+## 0.7.5 — 2026-08-09
+
+- `[AUTOUP-075]` **Consent-based auto-update** (Josh, post-0.7.4 rollout: "if your skill worked, they would update on your command"). New `config.json` key `auto_update`:
+  - `"ask"` (default) — unchanged behavior: version nudges + update pecks are notifications only; the owner runs `update.sh`.
+  - `"auto"` — standing owner consent: the duck self-updates via its own `update.sh` when (a) the daily `version_check_daemon.sh` sees a genuine upgrade, or (b) a peck containing the `[SPACE-DUCK-UPDATE]` marker arrives. Result is reported to the owner via `/beak/tg/notify` (daemon path) and `~/.space-duck/logs/self_update.log`.
+- Consent capture: `pair.py` now asks "Approve automatic skill updates from Spaceduckling? [y/N]" at pair time (TTY only; `SPACEDUCK_AUTO_UPDATE=auto|ask` env override for headless installs; default stays `ask`).
+- Safety: trigger pecks are signals, never commands — the only action is `update.sh` (official registry latest, no-ops when current). Optional `update_senders` allowlist gates who can trigger; 1-hour debounce; updater spawned `start_new_session` so the listener bounce doesn't kill it. Lane A doctrine intact: consent lives only in the duck's local config; the platform never executes on the box.
+
+## 0.7.4 — 2026-08-08
+
+- `[HARDEN-074]` **doctor.sh honors its "safe to paste publicly" claim** (Cash doc-accuracy finding, upgraded to a real fix): the Bridge-tunnel section printed the raw cloudflared process cmdline, which can carry a named-tunnel `--token <JWT>` credential and the full tunnel URL. Both now redacted before printing.
+- `[HARDEN-074]` **SKILL.md security model completed**: documents the operator-opt-in hook surface (`--on-peck`/`--on-message`), the `send_peck.py` auto-grant-on-403 default (+ `--no-auto-grant`), and doctor's redaction guarantees.
+- Verified (no change needed): `status.py` docstring matches behavior — two authenticated GETs to the official backend, nothing more.
+
+## 0.7.3 — 2026-08-08
+
+- `[HARDEN-073]` **peck_critic.py internal fallbacks now fail CLOSED** (Cash field finding, post-0.7.2 verification). 0.7.2 made the *caller* (`peck_responder._run_critic`) fail closed, but `peck_critic.py` itself still emitted a valid `{"verdict": "PASS"}` with exit 0 on its own failures — claude CLI timeout, CLI missing, CLI nonzero exit, unparseable model output, unknown verdict, bad stdin. The responder saw clean JSON PASS and sent unreviewed replies. All six internal fallback paths now emit `HOLD`, which the responder holds + owner-notifies. Behaviorally tested (CLI-missing and bad-stdin paths).
+
+## 0.7.2 — 2026-08-08
+
+**Security hardening release (marker `[HARDEN-071]`, supersedes unreleased 0.7.1).** Responds to
+independent field reports (two Lane A ducks) flagging credential-exfil
+and fail-open surfaces.
+
+- **api_base pinning** (`scripts/_apiguard.py`, new). Every script that
+  sends the Beak Key now validates `cfg['api_base']` at config load: only
+  `spaceduckling.com` / `*.spaceduckling.com` pass. Any other host is a
+  hard stop (exit 3) with a tamper warning — unless the operator opts out
+  via `"allow_custom_api": true` in `~/.space-duck/config.json` or
+  `SPACEDUCK_ALLOW_CUSTOM_API=1` (self-hosted/staging), which still
+  prints a one-line stderr warning. Wired into 21 scripts including
+  `telegram_listener.py` (env-sourced `SPACE_DUCK_API`), `mcp_server.py`,
+  `peck_listener.py`, `_preflight.py`, `bind_telegram.py` (`--api` flag),
+  `doctor_fix.py`, and `workspace_bridge.py` (run + status-report paths).
+  Suffix-spoof hosts (`evilspaceduckling.com`) are rejected. `pair.py` /
+  `setup.py` use a hardcoded official constant (no override path — not
+  guarded by design).
+- **Beak Key off argv** (`byob_hmac.py`, `setup_byob_bridge.sh`). `--key`
+  is deprecated (still works, warns) in favour of the `SPACEDUCK_BEAK_KEY`
+  env var, so the key no longer appears in `ps` output. The bridge setup
+  script and its printed manual-verify snippet both use the env form.
+- **Critic fails CLOSED** (`peck_responder.py`). Previously a missing/
+  crashing/non-JSON critic returned PASS and the unreviewed draft
+  shipped. Now those paths return HOLD: the reply is withheld, the owner
+  is notified with the reason, and the peck exits cleanly. Rationale:
+  the critic only runs when the owner opted in via `critic_mode`, so
+  silence-on-failure violated the owner's stated intent.
+- **Duplicate-listener guard** (`setup_listeners_supervised.sh`). If
+  nohup listeners are already running, install now ABORTS (previously it
+  continued, producing endless `Address already in use` restart-loop
+  noise in the `.err` logs). Override: `SPACEDUCK_ALLOW_DUP_LISTENERS=1`.
+- **Dual-supervisord race guard** (`setup_listeners_supervised.sh`). The
+  pidfile-only check raced: two same-second invocations both saw no
+  pidfile and each launched a daemon on the same conf/socket (field
+  incident: dual daemons, one listener crash-looping on :8788, and the
+  survivor left unmanageable after the rogue's exit unlinked the shared
+  socket). Install now also pgreps for any supervisord using our conf
+  and refuses to start a second.
+- **No downgrade nudges** (`version_check_daemon.sh`). Nudged on ANY
+  version mismatch, so a lagging registry produced "update available
+  0.7.0 → 0.4.12". Now compares with `sort -V` and only nudges on a
+  genuine upgrade.
+- Clarification (no code change): the `shell=True` surface in
+  `telegram_listener.py` executes owner-APPROVED commands only (inline
+  Approve/Deny consent flow); it is not an unattended exec path.
+
+## 0.6.1 — 2026-07-27
+
+**Autonomous sign-key rotation for Lane A boxes (Beak v3 Phase 2d,
+marker `[BEAK-V3-P2D]`).** Previously the only rotate endpoint was
+owner-JWT + old-key attestation — a browser job. `sign_key.py rotate` was
+therefore print-only guidance. It now drives a real rotate.
+
+- `scripts/sign_key.py rotate` is functional. It requires an on-disk
+  sign key (the OLD one — used to sign the attestation) and the
+  `cryptography` package. It generates a fresh Ed25519 pair in memory,
+  builds a 10-field v3 canonical attestation envelope
+  (`intent='key_rotation'`, `from_spaceduck_id=<own sdid>`,
+  `message_hash=sha256(new_kid)`, `sender_key_id=<OLD kid>`, `timestamp=now`,
+  `protocol_caps=['v3']`), signs it with the OLD private key via `sign_v3`,
+  and POSTs `{sign_pubkey, attestation:{envelope, signature}}` with
+  `X-Beak-Key` to the new backend route `POST /beak/duck/sign-key/rotate`.
+  Only after the server returns 200 does the script atomically replace
+  `~/.space-duck/sign_key.hex` (temp-file + `os.replace`, chmod 600) and
+  update `config.sign_key_id`. Any earlier failure — attestation error,
+  transport error, non-200 response — leaves the local key file
+  **untouched**, so the OLD key stays live and matches what the server
+  still holds. Own-`spaceduck_id` is read from `~/.space-duck/config.json`
+  (the same key `pair.py` writes and `send_peck.py` reads); a
+  `--spaceduck-id` flag exists for the rare override case.
+- On successful rotate the server sets a 24 h owner-revert window
+  (`sign_revert_until = now + 86400`). The skill prints the exact
+  Mission Control revert lane and the endpoint
+  (`POST /beak/duck/<sdid>/sign-key/rotate/revert`, owner-JWT). While
+  that window is open a second rotate is blocked server-side with 409
+  `rotate_pending_window` — this is a **feature**, not a bug: it means a
+  stolen key that self-rotates cannot chain-rotate to escape revert. The
+  skill surfaces the 409 with the remaining window countdown.
+- `scripts/_envelope.py` unchanged — this release only imports
+  `canonical_v3` / `sign_v3` (already shipped in 0.5.0) into
+  `sign_key.py` alongside `derive_key_id` / `load_sign_key`.
+
+## 0.6.0 — 2026-07-26
+
+**Envelope v3 flipped to preferred-by-default (Phase 3, spec §7).**
+
+- `scripts/send_peck.py` now signs each peck v3 whenever a local Ed25519
+  sign key loads — the previous `envelope_v3: true` opt-in is now an
+  opt-OUT (`envelope_v3: false` explicitly disables v3; absent/true keeps
+  it on). No key on disk still falls through to v2 byte-identically, as
+  does any v3 signing exception. Rationale: the platform is the verifier
+  and dual-accepts v2/v3, and v3 recipients treat unknown/extra envelope
+  fields tolerantly, so a v3-capable sender is always safe to default.
+- **Server pairing (v993, `[BEAK-V3-P3]`).** Peck delivery 200 responses
+  now advertise `'v3'` in `target_capabilities` when the target carries a
+  registered `sign_pubkey`. New public `GET /beak/duck/<sdid>/sign-key`
+  capability probe (no auth — pubkeys are public by definition, same
+  trust model as `/beak/peck/verify`) returns
+  `{v3, sign_pubkey, sign_key_id, sign_scheme, protocol_caps,
+  registered_at}` for a duck with a key, or `{v3: false, protocol_caps: []}`
+  for a duck without one. Private material (`sign_privkey_enc`,
+  `beak_key`) is never surfaced.
+
 ## 0.5.0 — 2026-07-26
 
 **Envelope v3 signing (Ed25519, asymmetric identity) — private key stays

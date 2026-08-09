@@ -1,7 +1,7 @@
 ---
 name: cargo
 description: Router and overview for the Cargo CLI agent skills. Explains the fifteen skills (this router + one onboarding skill cargo-quickstart + one outcome skill cargo-gtm + twelve capability skills, including cargo-cdk for declarative workspace-as-code and cargo-diagnostics for run/batch/cost forensics), when to use the declarative CDK vs the imperative CLI, the UUID flow between them, async polling, end-to-end use cases (enrich one record, enrich and sync to CRM, AI lead scoring, custom workflow, error monitoring, fresh-workspace bootstrap, segment export, GTM context authoring), and common gotchas (`conjonction` spelling, run vs batch, model-uuid vs segment-uuid). Load first whenever working with the Cargo CLI, when unsure which sub-skill applies, when stitching multiple sub-skills together, when bootstrapping a workspace, or when the user asks about Cargo skills in general.
-version: "1.15.0"
+version: "1.16.0"
 compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
@@ -279,7 +279,7 @@ The CLI exposes several domains that no capability skill wraps yet. Reach for th
 - `cargo-context` is **orthogonal** to the workflow-execution flow. It touches the git-backed GTM knowledge base (markdown/MDX), not storage or workflow runs. Use it for capturing/editing the workspace's prose context — personas, plays, proof, objections, signals — and for inspecting the typed knowledge graph.
 - For SQL queries against storage, use `cargo-ai storage query execute "<sql>"` (tables as `<datasetSlug>.<modelSlug>`). Load `cargo-storage` to discover dataset and model slugs, and to fetch the DDL when you need column types or the SQL dialect.
 - For SQL queries against orchestration runtime tables (`runs`, `batches`, `spans`, `records`) — error rates, per-node failures, time-series — use `cargo-ai orchestration query execute "<sql>"`. Workspace scoping is automatic; tables are referenced without a schema prefix.
-- Before building a workflow node graph, load `cargo-connection` to get `connectorUuid` and `actionSlug`.
+- Before building a workflow node graph, load `cargo-connection` to get `connectorUuid` and `actionSlug`. If any node calls a **credits-based provider action**, also load `cargo-gtm` and read that provider's playbook (`../cargo-gtm/provider-playbooks/<slug>.md`) — including its **Recurring use** section whenever the workflow is a scheduled tool or play, since a bad config or wrong cadence re-bills on every run. This applies even when the task arrived through `cargo-orchestration` or `cargo-cdk` directly, without a GTM framing.
 - Before executing a workflow that uses an agent node, load `cargo-ai` to get `agentUuid`.
 - After runs complete, load `cargo-analytics` to download results or measure performance. **For action output retrieval, prefer `cargo-ai orchestration run download-outputs` over `run download` — the former returns a signed-URL CSV/JSON of just the output node's data.**
 - Load `cargo-billing` to understand credit consumption for any of the above.
@@ -329,6 +329,8 @@ The CLI exposes several domains that no capability skill wraps yet. Reach for th
 **Critical rules:**
 
 - See the decision flowchart at the top of `../cargo-orchestration/SKILL.md` for when to use `action execute` vs `run create` vs `batch create`.
+- **Never enroll a full batch on the first attempt.** `batch create` / `action execute-batch` fan out across every record in the source. Sample **10–20 records**, report observed cost + hit-rate, then ask the user to approve the full enrollment — quoting the **record count** and the **credit estimate**. Mechanics: `../cargo-orchestration/SKILL.md` → "Create a batch"; spend rules: `../cargo-gtm/references/cost-discipline.md` §1.
+- **`action execute` is the default for running an operation; `node execute` is debug-only.** Use `node execute` only to test a single node of a workflow you're authoring — it requires `--workflow-uuid`, `--release-uuid`, `--node`, `--computed-config` and `--context` (all five). Anything else — enrich a record, call a connector action, invoke a tool or agent — goes through `action execute` / `action execute-batch`.
 - **Prefer built-in actions + expressions when building a node graph.** Avoid `python`, `script` (JS), and raw HTTP nodes unless necessary: use `variables` for transforms, the native `agent` node for LLM calls, the integration's dedicated connector action for APIs, and `branch`/`filter`/`switch` for routing. See `../cargo-orchestration/references/node-selection.md`.
 - Filter JSON uses `conjonction` (not `conjunction`) — breaks silently if misspelled.
 - Query orchestration runtime tables (ClickHouse) with `cargo-ai orchestration query execute "<sql>"` against `runs`, `batches`, `spans`, `records` (no schema prefix; workspace scoping is automatic).
@@ -514,6 +516,10 @@ against the workspace) → author `define*` files → `cdk plan` (offline diff) 
 - **`--yes`** is required for non-interactive `deploy`/`destroy` (CI).
 - **Run `cargo-ai cdk types`** after workspace integrations change so config
   type-checks; typing is a bonus, deploy works without it.
+- **`definePlay`/`defineTool` graphs with credits-based connector actions:** read
+  the provider's playbook in `../cargo-gtm/provider-playbooks/` (esp. its
+  **Recurring use** section) before `cdk deploy` — a deployed play re-bills its
+  nodes on every scheduled run.
 
 **Recipes shipped:** `recipes/scaffold-a-workspace.md`, `add-connector-and-model.md`,
 `build-an-agent.md`, `migrate-existing-workspace.md`, `deploy-from-ci.md`.

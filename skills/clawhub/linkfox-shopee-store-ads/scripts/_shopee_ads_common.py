@@ -1,4 +1,4 @@
-"""Shared helpers for linkfox-shopee-store-ads (storeTokens + developerProxy)."""
+"""Shared helpers for linkfox-shopee-store-ads (developerProxy only; token server-side)."""
 
 from __future__ import annotations
 
@@ -16,7 +16,6 @@ from urllib.parse import quote
 from urllib.request import Request, urlopen
 
 API_BASE_URL = os.environ.get("LINKFOX_TOOL_GATEWAY") or os.environ.get("SHOPEE_API_BASE_URL") or "https://tool-gateway.linkfox.com"
-STORE_TOKENS_ENDPOINT = f"{API_BASE_URL.rstrip('/')}/shopee/storeTokens"
 DEVELOPER_PROXY_ENDPOINT = f"{API_BASE_URL.rstrip('/')}/shopee/developerProxy"
 
 REQUIRED_SKILL = "linkfox-shopee-store-auth"
@@ -90,22 +89,7 @@ def call_api(endpoint: str, params: dict) -> dict:
         return {"error": f"Connection failed: {e.reason}"}
 
 
-def resolve_store_tokens(params: dict) -> dict:
-    shop_id = params.get("shopId")
-    merchant_id = params.get("merchantId")
-    if not shop_id and not merchant_id:
-        print("Missing required field: shopId OR merchantId", file=sys.stderr)
-        sys.exit(1)
-    token_req: dict[str, str] = {}
-    if shop_id:
-        token_req["shopId"] = str(shop_id)
-    if merchant_id:
-        token_req["merchantId"] = str(merchant_id)
-    return call_api(STORE_TOKENS_ENDPOINT, token_req)
-
-
 def developer_proxy_call(
-    access_token: str,
     path: str,
     method: str,
     shop_id: Optional[str] = None,
@@ -114,13 +98,17 @@ def developer_proxy_call(
     body: Optional[str] = None,
     content_type: str = "application/json",
 ) -> dict:
+    """Forward Ads API via developerProxy; server resolves AD token from shopId path."""
     if not path.startswith("api/v2"):
         print(f"Error: path must start with 'api/v2', got {path!r}", file=sys.stderr)
         sys.exit(1)
+    if not shop_id and not merchant_id:
+        print("Missing required field: shopId OR merchantId", file=sys.stderr)
+        sys.exit(1)
+    # Do not send accessToken (deprecated) or appType (server routes by path).
     proxy: dict[str, Any] = {
         "path": path,
         "method": method,
-        "accessToken": access_token,
     }
     if shop_id:
         proxy["shopId"] = str(shop_id)
@@ -132,6 +120,8 @@ def developer_proxy_call(
         proxy["body"] = body
         proxy["contentType"] = content_type
     return call_api(DEVELOPER_PROXY_ENDPOINT, proxy)
+
+
 
 
 def qs_add(parts: list[str], key: str, value: str) -> None:

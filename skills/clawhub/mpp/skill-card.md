@@ -1,53 +1,74 @@
-## Description: <br>
-MPP helps developers build Machine Payments Protocol integrations for HTTP 402 paid APIs, payment-gated content, AI agent payments, MCP tool payments, and streaming or session-based billing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build with MPP (Machine Payments Protocol) - the open protocol for machine-to-machine payments over HTTP 402. Use when building paid APIs, payment-gated content or endpoints, AI agent payment flows, MCP tool payments, pay-per-token streaming, or metered pay-as-you-go billing. Covers the mppx TypeScript SDK (Hono/Express/Next.js/Elysia middleware), pympp Python SDK, and mpp Rust SDK, with Tempo stablecoins, Stripe cards, Lightning Bitcoin, and custom payment rails.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill to implement, test, and troubleshoot HTTP 402 machine-payment flows for paid APIs, payment-gated services, MCP tools, and agentic payment workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Wallet keys, mnemonics, Stripe keys, Privy secrets, and upstream API keys may be exposed or misused when adapting examples. <br>
-Mitigation: Use environment variables or a secret manager, avoid hardcoding credentials, and treat all payment and upstream API credentials as production secrets. <br>
-Risk: Automatic payment handling can spend real funds or retry paid requests unexpectedly. <br>
-Mitigation: Start with sandbox or testnet flows, restrict payment clients to trusted origins, set spend limits, and require confirmation or logging for automatic retries. <br>
-Risk: Generated integration code or guidance can misconfigure payment challenges, sessions, or SDK versions. <br>
-Mitigation: Review proposed changes before execution, test against the referenced protocol and SDK documentation, and keep client and server payment flows on compatible versions. <br>
+## Use Case:
 
+Developers and engineers use this skill to build payment-enabled HTTP APIs, paid content endpoints, agent payment flows, MCP tool payments, streaming metering, and pay-as-you-go billing with MPP SDKs and payment rails.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/mpp) <br>
-- [ClawHub metadata homepage](https://github.com/tenequm/skills/tree/main/skills/mpp) <br>
-- [MPP website](https://mpp.dev) <br>
-- [Payment HTTP Authentication Scheme](https://datatracker.ietf.org/doc/draft-ryan-httpauth-payment/) <br>
-- [Protocol spec](references/protocol-spec.md) <br>
-- [TypeScript SDK](references/typescript-sdk.md) <br>
-- [Python SDK](references/python-sdk.md) <br>
-- [Rust SDK](references/rust-sdk.md) <br>
-- [Sessions](references/sessions.md) <br>
-- [Transports](references/transports.md) <br>
-- [Tempo payment method](references/tempo-method.md) <br>
-- [Stripe payment method](references/stripe-method.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with code snippets, shell commands, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference credential environment variables and payment settings that require user-supplied secrets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.3 (source: server release metadata, SKILL.md frontmatter, CHANGELOG.md; released 2026-07-22) <br>
+Risk: Payment flows can spend real funds or authorize access to payment rails.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with testnet or regtest, use explicit spending limits, and avoid auto-approval with mainnet funds unless limits and authorization policies are in place.
+
+Risk: The skill discusses mnemonics, private keys, Stripe keys, and MPP signing secrets.
+
+Mitigation: Keep secrets out of logs and source control, and store operational credentials in a managed secret store.
+
+Risk: Session and settlement settings can affect whether channels are closed and vouchers are redeemed.
+
+Mitigation: Review session storage, recovery, and settlement schedules before production deployment.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/mpp)
+- [Metadata Homepage](https://github.com/tenequm/skills/tree/main/skills/mpp)
+- [Payment HTTP Authentication Scheme](https://datatracker.ietf.org/doc/draft-ryan-httpauth-payment/)
+- [Tempo Documentation](https://docs.tempo.xyz)
+- [MPP Core Protocol Specification](references/protocol-spec.md)
+- [mppx TypeScript SDK Reference](references/typescript-sdk.md)
+- [pympp Python SDK](references/python-sdk.md)
+- [mpp Rust SDK](references/rust-sdk.md)
+- [mppx CLI](references/cli.md)
+- [Tempo Payment Method](references/tempo-method.md)
+- [Stripe Payment Method](references/stripe-method.md)
+- [Lightning Payment Method](references/lightning-method.md)
+- [Custom Payment Methods](references/custom-methods.md)
+- [Sessions](references/sessions.md)
+- [Subscription Intent (Tempo)](references/subscriptions.md)
+- [Discovery and the Payments Proxy](references/discovery-and-proxy.md)
+- [Transports](references/transports.md)
+- [Production Gotchas](references/production-gotchas.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with code snippets and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include payment, network, SDK, session, and secret-management configuration guidance.]
+
+## Skill Version(s):
+
+0.10.0 (source: frontmatter, changelog, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

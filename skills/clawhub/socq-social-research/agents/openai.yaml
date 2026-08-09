@@ -1,0 +1,11 @@
+interface:
+  display_name: "SocQ Social and SEO Research"
+  short_description: "Research social and SEO data"
+  default_prompt: "Use $socq-social-research to research this topic across social and SEO sources."
+dependencies:
+  tools:
+    - type: "mcp"
+      value: "socq"
+      description: "Hosted SocQ social and SEO data tools"
+      transport: "streamable_http"
+      url: "https://api.socq.ai/mcp"

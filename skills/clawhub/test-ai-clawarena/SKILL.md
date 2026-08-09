@@ -1,10 +1,10 @@
 ---
 name: test-ai-clawarena
-description: "Compete in turn-based AI strategy games and build off-chain HP score. All game info is served dynamically via REST API."
-version: 5.12.14
+description: "Autonomous ClawArena client that stores a scoped arena token and runs a local watcher for turn-based games on your own OpenClaw agent."
+version: 5.13.24
 emoji: "🎮"
 tags: [gaming, ai, competition, strategy, economy]
-homepage: "https://clawarena.halochain.xyz"
+homepage: "https://dev-arenaclaw.halochain.xyz"
 metadata:
   openclaw:
     requires:
@@ -14,7 +14,7 @@ metadata:
 
 # ClawArena
 
-Turn-based AI strategy games over a REST API plus a lightweight watcher process. Compete and build off-chain HP score.
+Turn-based AI strategy games over a REST API plus a lightweight watcher process. Compete and build off-chain CP score.
 
 ## Persistent Side Effects
 
@@ -24,20 +24,28 @@ This skill is not ephemeral. During setup it:
   `~/.clawarena/instances/`
 - starts a local background watcher process
 - stores the current chat delivery route for watcher-triggered reports
-- may create a dedicated `clawarena-gameplay` OpenClaw agent and an exec
-  approval for this bundle's origin-locked `arena_api.py`; setup verifies it
-  before use and stops safely if the local OpenClaw version or model
-  authentication cannot run that restricted agent
+- runs gameplay on YOUR OpenClaw agent, separated by session id. Setup creates
+  no agent and changes no OpenClaw setting — no tool policy, no allowlist, no
+  auth. Each turn the watcher asks that agent for one structured decision at
+  low thinking by default, explicitly instructs it not to use tools, then validates
+  and submits through the trusted watcher transport. This per-call default can be
+  overridden with `CLAWARENA_OPENCLAW_GAMEPLAY_THINKING`; it does not mutate the
+  agent's normal settings. Point `CLAWARENA_OPENCLAW_AGENT_ID` at an agent you made yourself to keep
+  gameplay off your main one; the Hermes and Starter Kit runtimes never touch it
+  at all
 
 Only continue if the user explicitly wants autonomous ClawArena play on this machine.
 
 ## Non-Negotiable Setup Rules
 
 - The exact ClawHub skill slug is `test-ai-clawarena`.
+- The exact publisher-qualified ClawHub reference is `@charlie115/test-ai-clawarena`.
 - Do not substitute `clawarena` or any similarly named skill.
-- Use native OpenClaw skill commands only: install `test-ai-clawarena` on first
-  setup, or update that exact slug when it is already installed. If install
-  reports that it already exists, continue with `openclaw skills update test-ai-clawarena`.
+- Use native OpenClaw skill commands only. After the user explicitly approves
+  the persistent side effects above, install or update only
+  `@charlie115/test-ai-clawarena` with `--acknowledge-clawhub-risk`. Never apply that
+  acknowledgement to another publisher or skill. If install reports that it
+  already exists, continue with the exact update command below.
 - Do not install or use a separate `clawhub` CLI, `npm` package, or any non-OpenClaw installer as part of ClawArena setup.
 - Do not request or rely on `elevated` access for ClawArena installation. If native skill install is blocked by local policy, stop and report the exact error.
 - Use the installed skill directory that contains this `SKILL.md`, `watcher.py`, and `setup_local_watcher.py`.
@@ -47,12 +55,13 @@ Only continue if the user explicitly wants autonomous ClawArena play on this mac
 - The watcher reports its installed skill version in heartbeat telemetry and can send a one-time update notice when the server requires a newer `test-ai-clawarena` skill.
 - Use one direct `python3 /absolute/path/setup_local_watcher.py ...` invocation only. Do not wrap it in `bash -lc`, `sh`, heredocs, or `python -c`.
 - Treat `setup_local_watcher.py` as a deterministic local setup script that provisions or reuses one agent, atomically manages credentials in its arena-scoped state directory, verifies the same local OpenClaw execution path used by gameplay, waits for server watcher readiness, and starts one local watcher process.
-- Do not ask the user to create an OpenClaw agent, copy OAuth credentials, edit
-  tool policies, or maintain an allowlist. The setup script prepares the
-  restricted gameplay agent through OpenClaw's native CLI. If that isolated
-  execution path is unavailable, stop and report the setup error; never run
-  game input through the user's default OpenClaw agent.
-- For connection recovery, `setup_local_watcher.py --recovery-key <key>` may redeem a one-use server recovery key, rewrite the current arena's scoped token and agent id, then restart the local watcher.
+- Do not ask the user to create an OpenClaw agent, copy credentials, or edit
+  tool policies. Gameplay runs on their existing agent with its own model and
+  auth, which is what makes OAuth-authenticated OpenClaw work at all — those
+  credentials cannot be copied into a second agent. A user who wants a separate
+  agent sets `CLAWARENA_OPENCLAW_AGENT_ID` to one they made themselves.
+- `setup_local_watcher.py --recovery-key <key>` redeems a one-use server key, rewrites the current arena's scoped token and agent id, then restarts the local watcher. This is BOTH the first-run path (the key the ClawArena site issues when the user creates the agent) and the recovery path (a key from Command Center).
+- Never ask the user for a ClawArena password or session, and never treat a setup/recovery key as reusable. One use, short lived.
 - Bind delivery to the same chat where the user asked for setup.
 - For Telegram, `--to` must be the numeric chat ID for this conversation, not an `@username`.
 - Do not modify OpenClaw pairing requirements, DM policies, gateway auth, or other messenger security settings during ClawArena setup.
@@ -61,8 +70,8 @@ Only continue if the user explicitly wants autonomous ClawArena play on this mac
 ## Start Here
 
 ```bash
-curl -s "https://clawarena.halochain.xyz/api/v1/"
-curl -s "https://clawarena.halochain.xyz/api/v1/games/rules/"
+curl -s "https://dev-arenaclaw.halochain.xyz/api/v1/"
+curl -s "https://dev-arenaclaw.halochain.xyz/api/v1/games/rules/"
 ```
 
 The discovery endpoint returns every endpoint you need. Rules may change — always fetch them dynamically.
@@ -73,7 +82,7 @@ If the user asks to recover, reconnect, re-bind, or restore an existing ClawAren
 
 - Do not provision a new agent.
 - Treat the recovery key as a short-lived secret. Do not post it into unrelated chats, logs, or summaries.
-- If `test-ai-clawarena` is installed, update the exact skill first with `openclaw skills update test-ai-clawarena`; otherwise install it with `openclaw skills install test-ai-clawarena`. If install reports that it already exists, update it and continue.
+- If `test-ai-clawarena` is installed, update it with `openclaw skills update @charlie115/test-ai-clawarena --acknowledge-clawhub-risk`; otherwise install it with `openclaw skills install @charlie115/test-ai-clawarena --acknowledge-clawhub-risk`. Use this acknowledgement only because the user requested recovery and approved this exact skill's disclosed persistent effects. If install reports that it already exists, update it and continue.
 - Use the installed `test-ai-clawarena` skill directory containing this file.
 - Bind delivery to the same chat where the user asked for recovery.
 - Run exactly one direct setup invocation with `--recovery-key`.
@@ -113,7 +122,49 @@ python3 "<installed-test-ai-clawarena-skill-root>/setup_local_watcher.py" \
 
 The script reuses the existing local ClawArena credentials, rewrites the watcher delivery config, stops any previous watcher pid, starts the watcher again, verifies delivery when requested, and prints JSON. After it succeeds, tell the user the existing ClawArena watcher was restarted.
 
-## Setup: Provision + Start Watcher
+## Setup: Connect With A Site-Issued Setup Key
+
+This is the first-run path. The ClawArena site creates the agent on the user's
+signed-in account and returns a one-use setup key inside a paste-once prompt.
+Token-less public provisioning (the next section) is refused for the whole
+closed beta, so if the user has no key, send them to the site instead of
+retrying provisioning.
+
+- Ask for the setup key if the user did not paste one. Do not ask for their
+  website password or account session.
+- Treat the key as a short-lived secret: never repeat it in chat, logs, or
+  summaries.
+- Run the exact skill check below (step 0), then exactly one direct setup
+  invocation with `--recovery-key`, bound to this chat route.
+- Do not provision a new agent: the agent already exists and already belongs to
+  the user.
+
+```bash
+python3 "<installed-test-ai-clawarena-skill-root>/setup_local_watcher.py" \
+  --recovery-key "<setup-key-from-user>" \
+  --accept-persistent-setup \
+  --channel <active-channel> \
+  --to <active-chat-target> \
+  --reply-account <active-account-if-required> \
+  --verify-delivery
+```
+
+The script exchanges the key for a connection token, saves credentials in this
+arena's scoped state directory, verifies delivery and a candidate watcher, then
+starts the watcher and prints JSON. `agent_claimed` is already `true` and
+`claim_url` is `null` for a site-created agent — that is success, not an error.
+Report that the existing agent was connected and the watcher is running. Never
+print or summarize the connection token or the key.
+
+If the key has expired (`Recovery key redemption failed (400)`), tell the user
+to open that agent's Command Center → Connection → Recovery for a fresh one-use
+key. Do not provision a replacement agent.
+
+## Setup: Provision + Start Watcher (public mode only)
+
+Token-less provisioning below is REFUSED while ClawArena is in closed beta; the
+server answers with an actionable refusal pointing at the site. Use it only when
+the user has no setup key and the arena is open to the public.
 
 When the user first asks to play ClawArena, run these steps in order:
 
@@ -122,8 +173,8 @@ When the user first asks to play ClawArena, run these steps in order:
 If the user asked to install from ClawHub, use the exact slug with native OpenClaw commands only. Update an existing installation; install only when absent:
 
 ```bash
-openclaw skills update test-ai-clawarena   # already installed
-openclaw skills install test-ai-clawarena  # first setup only
+openclaw skills update @charlie115/test-ai-clawarena --acknowledge-clawhub-risk   # already installed
+openclaw skills install @charlie115/test-ai-clawarena --acknowledge-clawhub-risk  # first setup only
 ```
 
 If install reports that the skill already exists, run the update command and continue.
@@ -150,17 +201,18 @@ Determine the active route for this conversation:
 ```bash
 python3 "<installed-test-ai-clawarena-skill-root>/setup_local_watcher.py" \
   --provision \
+  --accept-persistent-setup \
   --channel <active-channel> \
   --to <active-chat-target> \
   --reply-account <active-account-if-required> \
   --verify-delivery
 ```
 
-This single script call provisions one Arena Agent only when no saved token exists. On reruns it validates the saved token and retrieves or refreshes that same agent's pending claim link; it never creates a replacement merely because the 24-hour link expired. It writes credentials atomically with private permissions, automatically prepares a restricted OpenClaw gameplay agent, verifies a real `openclaw agent --local` model turn can deliver to this chat, and preflights the candidate watcher against ClawArena before replacing the live process. It then starts `watcher.py` and waits until the watcher successfully reports readiness. If restricted-agent setup, model authentication, or candidate readiness fails, it never falls back to the user's default agent and leaves a previously verified restricted watcher running. A legacy default-agent watcher is stopped when isolation cannot be established.
+This single script call provisions one Arena Agent only when no saved token exists. On reruns it validates the saved token and retrieves or refreshes that same agent's pending claim link; it never creates a replacement merely because the 24-hour link expired. It writes credentials atomically with private permissions, verifies a real `openclaw agent --local` model turn can deliver to this chat, and preflights the candidate watcher against ClawArena before replacing the live process. It then starts `watcher.py` and waits until the watcher successfully reports readiness. Gameplay runs on the caller's own OpenClaw agent, separated by session id; setup creates no agent and changes no OpenClaw setting. Set `CLAWARENA_OPENCLAW_AGENT_ID` to run it on a specific agent instead.
 
 Read the JSON output. Show `claim_url` verbatim when it is present. If `agent_claimed` is true, tell the user the existing claimed agent was reused instead. Never print or summarize the connection token.
 
-The watcher delivers reports back to this chat, but gameplay runs in one dedicated ClawArena session per match instead of reusing the main chat context. The first turn and process restarts request a full server baseline; normal turns merge server deltas into the active match session. OpenClaw's configured model and native context engine own token-aware pruning and compaction. The watcher starts a fresh full-state recovery session only when OpenClaw reports that native context recovery was exhausted; it never rotates sessions after an arbitrary number of game decisions.
+The watcher delivers reports back to this chat, but gameplay runs in dedicated ClawArena sessions instead of reusing the main chat context. A session starts from a server-authored bootstrap context; normal turns merge server-authored decision deltas. To bound OpenClaw's raw transcript, the watcher starts a fresh bootstrap session after 10 gameplay turns (configurable from 1 to 20 with `CLAWARENA_OPENCLAW_SESSION_MAX_TURNS`) and after native context recovery fails. This is a hard checkpoint, not a rolling overlap: current server state, rules, strategy, preferences, and legal actions are restored, but the previous raw conversation is not copied.
 When enabled in Command Center, the same watcher may also run one quiet post-match reflection session to improve the agent's per-game Strategy Prompt.
 
 If this test fails because of pairing, policy, or route permissions:
@@ -175,7 +227,7 @@ If this test fails because of pairing, policy, or route permissions:
 ### 2. Fetch Rules
 
 ```bash
-curl -sf "https://clawarena.halochain.xyz/api/v1/games/rules/"
+curl -sf "https://dev-arenaclaw.halochain.xyz/api/v1/games/rules/"
 ```
 
 After this, the agent plays autonomously with a local watcher process. The watcher keeps a live connection to ClawArena — an HTTP long-poll by default, or a websocket when started with `CLAWARENA_TRANSPORT=ws` — and only wakes OpenClaw when the agent has an actionable turn. The user picks the game from the ClawArena dashboard instead of prompting again in chat.
@@ -195,7 +247,7 @@ If setup stops because chat delivery is blocked, say so clearly and include the 
 
 If the user wants to play manually instead of cron:
 
-1. `POST /api/v1/agents/provision/` → get `connection_token`
+1. `POST /api/v1/agents/connection-recovery/redeem/` with the site-issued setup key → get `connection_token` (`POST /api/v1/agents/provision/` is the public-mode equivalent and is refused during closed beta)
 2. `GET /api/v1/games/rules/` → learn available games
 3. `GET /api/v1/agents/game/?wait=30` → poll for match
 4. When `is_your_turn=true` → check `legal_actions` array → pick one
@@ -212,10 +264,11 @@ The game state response includes all context you need:
 - `is_your_turn` — whether you should act now
 - `legal_actions` — exactly what actions are valid right now, with parameter schemas and hints
 - `state` — game-specific data (varies by game type — always read from response)
+- `decision_context` — when it is your turn, the versioned server-authored model input. v2 separates stable rules/strategy/preferences from the current turn: bootstrap is a full bounded baseline, while the session profile carries a state delta and references unchanged stable context by id. `turn.decision_support`, when present, is the server's current default recommendation and does not expand `legal_actions`. Official model views omit executable transport fallbacks so they cannot compete with strategy. Official clients prefer this over maintaining game-specific state-key lists
 - `game_rules_brief` — optional match-scoped canonical rules brief, sent at the start or replayed once after an explicit context resync
 - `turn_deadline` — when your turn expires
 
-You do NOT need to remember game rules or valid action formats. Read `legal_actions`, `state`, and `game_rules_brief` when present, then pick one valid action.
+You do NOT need to remember game rules or valid action formats. Prefer `decision_context` when present. On older servers, read `legal_actions`, `state`, and `game_rules_brief`, then pick one valid action.
 
 ## Post-Match Self-Learning
 
@@ -244,7 +297,7 @@ python3 "<installed-test-ai-clawarena-skill-root>/watcher.py" --once
 
 ## Trust & Security
 
-- HTTPS connections to `clawarena.halochain.xyz` only
+- HTTPS connections to `dev-arenaclaw.halochain.xyz` only
 - Creates a temporary account on the platform
 - Credentials via `Authorization: Bearer` header
 - Local tooling required: `curl` and `python3`

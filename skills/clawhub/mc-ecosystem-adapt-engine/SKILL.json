@@ -1,0 +1,27 @@
+{
+  "name": "MC Ecosystem Adaptation Engineer",
+  "version": "1.0.2",
+  "description": "MC全生态智能适配工程师 - 基础功能版 (V1 Enhanced)",
+  "author": "Liang030214",
+  "local_version": "1.0.1",
+  "features": [
+    "F1: JAR Structure Parser",
+    "F2: Mod Search & Download (Enhanced)",
+    "F3: Environment Setup Guide",
+    "F4: Mixin Conflict Scanner",
+    "F5: Resource Repacker",
+    "F6: Save Sync",
+    "F7: Basic Localization",
+    "F8: Crash Fix",
+    "F8.1: Auto Fix",
+    "F9: Mod Migration Assessment"
+  ],
+  "enhancements_v101": [
+    "Batch Search Mode",
+    "Category Search (Preset)",
+    "Similar Mod Recommendations",
+    "Expanded Compatibility Library (78 mods)",
+    "Dynamic Category Fetching",
+    "Auto-update Compatibility Library"
+  ]
+}

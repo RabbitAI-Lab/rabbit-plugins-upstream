@@ -1,0 +1,17 @@
+name: geoskill-precision-forestry-monitoring
+display_name: 精准林业遥感监测
+description: |
+  CHM tree height and crown width allometric volume, NDVI/NDRE health grading and SAR biomass fusion for precision forestry
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-precision-forestry-monitoring.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - analysis
+  - gis
+  - preprocessing
+  - raster
+  - remote-sensing
+  - sar
+  - vegetation

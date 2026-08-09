@@ -1,0 +1,13 @@
+name: geoskill-urban-sprawl-analysis
+display_name: 城市蔓延分析
+description: |
+  多期城市边界量化蔓延形态指标：紧凑度、分形维数、重心迁移与扩张面积速率
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-urban-sprawl-analysis.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - remote-sensing
+  - urban

@@ -1,0 +1,98 @@
+{
+  "skill": "telecom-coverage-optimization",
+  "skill_version": "1.0.0",
+  "command": "telecom-coverage-optimization --bbox 121.0 31.0 122.0 32.0 --synthetic --environment suburban --frequency 900 --quiet --output-dir _review_out\\agent-B\\telecom-coverage-optimization\\s02",
+  "started_at": "2026-08-03T17:08:43.805366Z",
+  "finished_at": "2026-08-03T17:08:44.000853Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "environment": "suburban",
+    "synthetic": true,
+    "bbox": [
+      121.0,
+      31.0,
+      122.0,
+      32.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out\\agent-B\\telecom-coverage-optimization\\s02\\signal_strength.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        121.0,
+        31.0,
+        122.0,
+        32.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out\\agent-B\\telecom-coverage-optimization\\s02\\coverage_mask.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        121.0,
+        31.0,
+        122.0,
+        32.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out\\agent-B\\telecom-coverage-optimization\\s02\\towers.geojson",
+      "kind": "vector",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        121.0,
+        31.0,
+        122.0,
+        32.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": 2,
+      "row_count": null
+    },
+    {
+      "path": "_review_out\\agent-B\\telecom-coverage-optimization\\s02\\coverage_report.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "coverage_fraction": 0.01812744140625,
+    "blind_fraction": 0.98187255859375,
+    "n_towers": 2,
+    "mean_rsl_dbm": -113.28306579589844
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "telecom-coverage-optimization"
+  },
+  "error": null
+}

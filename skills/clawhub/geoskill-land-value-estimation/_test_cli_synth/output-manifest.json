@@ -1,0 +1,73 @@
+{
+  "skill": "land-value-estimation",
+  "skill_version": "1.0.0",
+  "command": "land-value-estimation --bbox 116 39 117 40 --synthetic --output-dir Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\land-value-estimation\\_test_cli_synth --quiet",
+  "started_at": "2026-08-03T21:29:12.969813Z",
+  "finished_at": "2026-08-03T21:29:13.090902Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "decay": 30.0,
+    "intercept": 1000.0,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\land-value-estimation\\_test_cli_synth\\land_value.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\land-value-estimation\\_test_cli_synth\\hedonic_coefficients.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\land-value-estimation\\_test_cli_synth\\value_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "mean_value": 2957.510986328125,
+    "max_value": 8245.43359375,
+    "min_value": 1374.967041015625,
+    "mean_accessibility": 0.23687675595283508,
+    "n_valid_pixels": 16384,
+    "n_total_pixels": 16384
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "land-value-estimation"
+  },
+  "error": null
+}
