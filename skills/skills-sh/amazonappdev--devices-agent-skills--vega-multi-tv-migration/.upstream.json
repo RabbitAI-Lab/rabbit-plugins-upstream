@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/amazonappdev/devices-agent-skills/vega-multi-tv-migration",
+  "repo": "amazonappdev/devices-agent-skills",
+  "skillId": "vega-multi-tv-migration",
+  "branch": "main",
+  "pushedAt": "2026-06-30T10:41:35Z",
+  "contentHash": "e78f8b7e07da244831029cca132a571cc08355cf9a8e3cd2b0c0d4a9ef6261d4",
+  "fetchedAt": "2026-08-10T08:55:46.886Z"
+}

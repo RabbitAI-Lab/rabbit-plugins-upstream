@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aurora-dsql",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aurora-dsql",
+  "branch": "main",
+  "pushedAt": "2026-08-10T08:53:25Z",
+  "contentHash": "8f7bbf3908367e3e9de4be7d68e1b72476ba76f8b50f5a983d70d99dc512a738",
+  "fetchedAt": "2026-08-10T08:55:31.175Z"
+}

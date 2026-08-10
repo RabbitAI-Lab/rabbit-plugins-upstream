@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/security-headers-configuration",
+  "repo": "secondsky/claude-skills",
+  "skillId": "security-headers-configuration",
+  "branch": "main",
+  "pushedAt": "2026-08-08T14:43:58Z",
+  "contentHash": "1a45b16752c9cc52025359bd058f17a5dfac299a9e588c36a923834c6525f399",
+  "fetchedAt": "2026-08-10T08:55:12.531Z"
+}

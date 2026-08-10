@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/querying-aws-sagemaker-catalog",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "querying-aws-sagemaker-catalog",
+  "branch": "main",
+  "pushedAt": "2026-08-10T08:53:25Z",
+  "contentHash": "992c0c0655c090e8cf40debcbe336c21c25cc5d437fe5fcd7b3f15f26d262e23",
+  "fetchedAt": "2026-08-10T08:55:31.130Z"
+}

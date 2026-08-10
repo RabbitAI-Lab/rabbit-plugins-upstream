@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/securing-s3-buckets",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "securing-s3-buckets",
+  "branch": "main",
+  "pushedAt": "2026-08-10T08:53:25Z",
+  "contentHash": "bb272d5896deeb4ea782b65d06d94935ce48d89c65fd9024173f854b0450fdae",
+  "fetchedAt": "2026-08-10T08:55:30.845Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/new-branch-and-pr",
+  "repo": "cursor/plugins",
+  "skillId": "new-branch-and-pr",
+  "branch": "main",
+  "pushedAt": "2026-08-08T20:13:57Z",
+  "contentHash": "6669b419736af5f002039b6d52268a53a97a447c83521cfa1abaae7ff4a65d51",
+  "fetchedAt": "2026-08-10T08:54:41.127Z"
+}

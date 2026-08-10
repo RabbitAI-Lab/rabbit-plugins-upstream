@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wordpress/agent-skills/blueprint",
+  "repo": "wordpress/agent-skills",
+  "skillId": "blueprint",
+  "branch": "trunk",
+  "pushedAt": "2026-08-10T04:49:13Z",
+  "contentHash": "8b4131844592207d7133e6c67d32dc066fce2a969ca850fbbda71cd38881e630",
+  "fetchedAt": "2026-08-10T08:55:42.192Z"
+}

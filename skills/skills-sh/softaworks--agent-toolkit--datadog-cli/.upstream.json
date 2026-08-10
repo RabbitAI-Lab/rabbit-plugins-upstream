@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/softaworks/agent-toolkit/datadog-cli",
+  "repo": "softaworks/agent-toolkit",
+  "skillId": "datadog-cli",
+  "branch": "main",
+  "pushedAt": "2026-03-05T16:46:24Z",
+  "contentHash": "4f3af7063dfddc434b9522f3804fad1848a637f1570d31a8123d0c659109ad21",
+  "fetchedAt": "2026-08-10T08:55:44.390Z"
+}
