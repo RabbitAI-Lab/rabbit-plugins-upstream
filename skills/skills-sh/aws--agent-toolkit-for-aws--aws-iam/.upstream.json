@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-iam",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-iam",
+  "branch": "main",
+  "pushedAt": "2026-08-10T08:53:25Z",
+  "contentHash": "f28e94775ec23f036d9136f77cf0785dbfac46a86939e54ae9e28710b51ad109",
+  "fetchedAt": "2026-08-10T08:55:30.742Z"
+}

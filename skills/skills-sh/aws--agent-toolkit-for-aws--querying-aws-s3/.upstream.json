@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/querying-aws-s3",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "querying-aws-s3",
+  "branch": "main",
+  "pushedAt": "2026-08-10T08:53:25Z",
+  "contentHash": "696b413bfa86287acfbbec151efbd271116b3d497ce2d22903d552d4e6fba168",
+  "fetchedAt": "2026-08-10T08:55:31.029Z"
+}

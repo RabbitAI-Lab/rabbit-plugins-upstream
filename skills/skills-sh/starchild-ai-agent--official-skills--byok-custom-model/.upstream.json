@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/byok-custom-model",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "byok-custom-model",
+  "branch": "main",
+  "pushedAt": "2026-08-08T14:37:32Z",
+  "contentHash": "e329a6783a6679367c64c182ef0df8ebb236334b8d3eb27a8a71ee70a225c58e",
+  "fetchedAt": "2026-08-10T08:54:28.091Z"
+}

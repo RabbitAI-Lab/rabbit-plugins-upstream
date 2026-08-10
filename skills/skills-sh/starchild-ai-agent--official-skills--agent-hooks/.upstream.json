@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/agent-hooks",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "agent-hooks",
+  "branch": "main",
+  "pushedAt": "2026-08-08T14:37:32Z",
+  "contentHash": "ea7729210177b5c04920a411b3cf7493f01b63a2a590c34da447515d98fd2dc1",
+  "fetchedAt": "2026-08-10T08:54:28.107Z"
+}

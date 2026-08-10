@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/trailofbits/skills/cargo-fuzz",
+  "repo": "trailofbits/skills",
+  "skillId": "cargo-fuzz",
+  "branch": "main",
+  "pushedAt": "2026-08-08T22:00:44Z",
+  "contentHash": "d2d84d5ae99b16fa926db0bc476c5286689cb4edfa270254c2975ab33675ea66",
+  "fetchedAt": "2026-08-10T08:55:11.011Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/onewave-ai/claude-skills/cold-email-sequence-generator",
+  "repo": "onewave-ai/claude-skills",
+  "skillId": "cold-email-sequence-generator",
+  "branch": "main",
+  "pushedAt": "2026-08-10T05:00:34Z",
+  "contentHash": "7587d709f1fabfea884fcfdab04f977c262a6453e6bf133212122618cdb3d32e",
+  "fetchedAt": "2026-08-10T08:55:32.793Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/nousresearch/hermes-agent/dogfood",
+  "repo": "nousresearch/hermes-agent",
+  "skillId": "dogfood",
+  "branch": "main",
+  "pushedAt": "2026-08-10T08:50:40Z",
+  "contentHash": "aab80d77ff70f74009b07dbfe5316b98c29c6e861d49ed171021b46365bcb715",
+  "fetchedAt": "2026-08-10T08:55:39.276Z"
+}

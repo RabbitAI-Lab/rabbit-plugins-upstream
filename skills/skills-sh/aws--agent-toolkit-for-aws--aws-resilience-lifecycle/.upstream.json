@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-resilience-lifecycle",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-resilience-lifecycle",
+  "branch": "main",
+  "pushedAt": "2026-08-10T08:53:25Z",
+  "contentHash": "cf42f2f42eb2335688e34c8cca7ff56d23a1945e4372a3c7b574ebd56807e2ee",
+  "fetchedAt": "2026-08-10T08:55:31.294Z"
+}
