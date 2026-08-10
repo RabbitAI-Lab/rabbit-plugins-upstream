@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/mlops/training/unsloth",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "e8288a28874cb382883235fdf0b2315c5a1a84a7e1ab747b253062b2d5046426",
-  "fetchedAt": "2026-07-26T17:03:57.029Z"
+  "pushedAt": "2026-08-10T08:50:40Z",
+  "contentHash": "eb9e6df75079cf2f0ece24aa781f26222342c98c756dd16cc65390afe000ee1b",
+  "fetchedAt": "2026-08-10T08:54:54.630Z"
 }

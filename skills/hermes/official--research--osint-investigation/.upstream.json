@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/research/osint-investigation",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "e609f9dae3389d1cd021a4e3ccaf2518d722eb23c301b1d34a854507ef922e80",
-  "fetchedAt": "2026-07-26T17:03:57.004Z"
+  "pushedAt": "2026-08-10T08:50:40Z",
+  "contentHash": "fd832dbaf9d3fe52aeafa14a7a8c058e69e32936a2c71a98c097d241a4d0fb8e",
+  "fetchedAt": "2026-08-10T08:54:54.611Z"
 }
