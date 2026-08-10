@@ -5,7 +5,7 @@
   "repo": "huggingface/skills",
   "path": "skills/hf-cloud-sagemaker-deployment-planner",
   "branch": "main",
-  "pushedAt": "2026-07-25T04:31:32Z",
-  "contentHash": "a74e44ef1c6ed89b2f543441750e73d302c6bac5f86e291529cc7d79d6a35320",
-  "fetchedAt": "2026-07-26T17:03:50.908Z"
+  "pushedAt": "2026-08-07T13:44:54Z",
+  "contentHash": "bac0f6366f18cd0476ba4eb3c21bf1f4134149a95fbe5932142a13c4ec58379b",
+  "fetchedAt": "2026-08-10T08:54:30.795Z"
 }
