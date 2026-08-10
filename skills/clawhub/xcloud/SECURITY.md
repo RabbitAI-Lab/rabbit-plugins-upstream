@@ -2,7 +2,7 @@
 
 ## Overview
 
-This repository packages the official xCloud Public API skills for AI agents. It contains Markdown skill instructions, marketplace metadata, a small shell wrapper, and supporting documentation.
+This repository packages the official xCloud Public API skills for AI agents. The ClawHub package contains Markdown skill instructions, marketplace metadata, runtime references, assets, and a small shell wrapper. Repository-only docs, generated builds, legacy source helpers, and smoke tests are excluded from the marketplace artifact.
 
 The package does not include real API tokens and does not run API calls during installation. Network requests occur only when a user or agent explicitly invokes an xCloud skill with `XCLOUD_API_TOKEN` configured in the runtime.
 
@@ -30,9 +30,7 @@ Verdict: false positive when the package contains no real credentials. The token
 | `plugins/xcloud/skills/*/SKILL.md` | Domain skill instructions | Documentation and command examples; no credentials |
 | `plugins/xcloud/reference/*.md` | Shared auth and API conventions | Documentation only; token values are placeholders |
 | `plugins/xcloud/scripts/xcloud.sh` | Explicit API wrapper used by the skills | Reads `XCLOUD_API_TOKEN`; does not store or exfiltrate tokens |
-| `docs/**/*.md` | User guides, scenarios, operations docs | Documentation only |
-| `docs/scalar/*` | Static API documentation viewer assets | Local docs assets; no secrets |
-| `src/*` | Legacy SDK/CLI helpers retained for users | Explicit user-run helpers; no bundled credentials |
+| `docs/**`, `dist/**`, `src/**`, `WORK_STEP_GUIDES.md`, test scripts | Repository-only development and support material | Excluded from the ClawHub package by `.clawhubignore` |
 
 ## What This Package Does
 
@@ -85,9 +83,10 @@ test -f .clawhubignore
 test -f .clawhubsafe
 
 # Confirm version alignment.
-grep "^version:" SKILL.md
-grep "version-3.0.2" README.md
-grep "3.0.2" .clawhubinfo.json .claude-plugin/marketplace.json plugins/xcloud/.claude-plugin/plugin.json CHANGELOG.md .clawhubsafe
+VERSION=$(awk '/^version:/{print $2; exit}' SKILL.md)
+test -n "$VERSION"
+grep "version-$VERSION" README.md
+grep "$VERSION" .clawhubinfo.json .claude-plugin/marketplace.json plugins/xcloud/.claude-plugin/plugin.json CHANGELOG.md .clawhubsafe
 
 # Look for common real-secret patterns.
 git ls-files -z | grep -zv -E '^(README.md|SECURITY.md)$' \

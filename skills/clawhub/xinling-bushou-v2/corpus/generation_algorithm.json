@@ -1,7 +1,7 @@
 {
   "version": "2.0",
   "last_updated": "2026-04-09",
-  "name": "心灵补手V2.0语料生成算法",
+  "name": "心灵补手V3.5.0语料生成算法",
   "description": "基于种子语料的智能扩展规则体系",
 
   "corpus_structure": {

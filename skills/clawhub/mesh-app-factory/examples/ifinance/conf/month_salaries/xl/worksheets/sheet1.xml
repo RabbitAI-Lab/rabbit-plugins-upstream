@@ -1,0 +1,98 @@
+js: 
+const sal_types={
+    SALARY:'工资',
+    SUBSIDY:'补贴',
+    EXPENSE:'报销',
+    BONUS:'奖金',
+    SHARE:'分红',
+    TAX:'个人所得税',
+    OLD:'养老保险',
+    MEDICARE:'医疗保险',
+    JOB:'失业保险',
+    INJURY:'工伤保险',
+    PCREATION:'生育保险',
+    HOUSE:'住房公积金'
+};
+
+var salaries=@{!salaries};//uid->account
+var list=@{!banks}; //uid->bank,account,name,idno
+var items=@{!items};//[uid,type,val]
+
+var ln;
+for(var uid in list) {
+	ln=list[uid];
+	ln.employee=salaries[uid];
+}
+var type,uid,pos;
+for(var item of items) {
+    uid=item[0];
+	type=item[1];
+	pos=type.indexOf('-');//不必区分个人交与公司交
+	if(pos>0) type=type.substring(0,pos);
+	ln=list[uid];
+	if(ln[type])ln[type]+=item[2];
+	else ln[type]=item[2];
+	ln[type]=ln[type].toFixed(2);
+}
+var txt=[`<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<worksheet xmlns="http://schemas.openxmlformats.org/spreadsheetml/2006/main" 
+xmlns:r="http://schemas.openxmlformats.org/officeDocument/2006/relationships" 
+xmlns:xdr="http://schemas.openxmlformats.org/drawingml/2006/spreadsheetDrawing" 
+xmlns:x14="http://schemas.microsoft.com/office/spreadsheetml/2009/9/main" 
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+xmlns:etc="http://www.wps.cn/officeDocument/2017/etCustomData"><sheetPr/>
+<dimension ref="A1:M9"/>
+<sheetViews>
+<sheetView tabSelected="1" workbookViewId="0">
+<pane ySplit="1" topLeftCell="A2" activePane="bottomLeft" state="frozen"/>
+<selection/>
+<selection pane="bottomLeft" activeCell="D4" sqref="D4"/>
+</sheetView>
+</sheetViews>
+<sheetFormatPr defaultColWidth="9" defaultRowHeight="14.4"/>
+<cols>`]
+
+var colNum=5+Object.keys(sal_types).length;
+txt.push('<col min="1" max="', colNum, '" width="13" customWidth="1" style="2"/>'); //style="2",每一列都是文本
+
+txt.push(`</cols>
+<sheetData>
+<row r="1">
+<c r="A1"><v>员工帐号</v></c>
+<c r="B1"><v>发薪银行</v></c>
+<c r="C1"><v>银行帐号</v></c>
+<c r="D1"><v>账户姓名</v></c>
+<c r="E1"><v>身份证号</v></c>`);
+
+const F='F'.charCodeAt(0);
+var c=F;
+for(var tp in sal_types) {
+    txt.push(`<c r="`, String.fromCharCode(c), `1"><v>`, sal_types[tp], `</v></c>`);
+    c++;
+}
+txt.push('</row>');
+
+var i=2;
+for(var id in list) {
+    ln=list[id]
+	txt.push('<row r="', i, '">',
+	'<c r="A',i,'"><v>', ln.employee, '</v></c>',
+	'<c r="B',i,'"><v>', ln.bank, '</v></c>',
+	`<c r="C',i,'"><v>'`, ln.account, '</v></c>', //前面加单引号，强制以文本显示
+	'<c r="D',i,'"><v>',  ln.name, '</v></c>',
+	`<c r="E',i,'"><v>'`, ln.idno, '</v></c>');
+	c=F;
+	for(var tp in sal_types) {
+		txt.push(`<c r="`, String.fromCharCode(c), i, `"><v>`, ln[tp], `</v></c>`);
+		c++;
+	}
+	txt.push('</row>');
+	i++;
+}
+
+txt.push(`</sheetData>
+<pageMargins left="0.7" right="0.7" top="0.75" bottom="0.75" header="0.3" footer="0.3"/>
+<pageSetup paperSize="9" orientation="portrait"/>
+<headerFooter/>
+</worksheet>`);
+txt.join('');

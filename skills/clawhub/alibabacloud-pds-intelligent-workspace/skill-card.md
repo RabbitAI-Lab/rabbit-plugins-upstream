@@ -1,55 +1,72 @@
-## Description: <br>
-This skill helps agents operate Alibaba Cloud PDS cloud drives, including file search, upload, download, archive download, document and media analysis, image editing, visual search, mount app workflows, and share link management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides agent guidance for Alibaba Cloud PDS file operations, including search, upload, download, rename, move, copy, folder creation, metadata updates, share links, archive download, file analysis, image editing, and visual similar search.
 
-## Publisher: <br>
-[sdk-team](https://clawhub.ai/user/sdk-team) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdk-team](https://clawhub.ai/user/sdk-team)
 
-## Use Case: <br>
-Developers and external users use this skill to automate Alibaba Cloud PDS file operations through Aliyun CLI workflows. It is intended for credentialed PDS environments where users need controlled search, transfer, analysis, sharing, archive, image-processing, or mount operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill enables broad credentialed access to Alibaba Cloud PDS drives. <br>
-Mitigation: Install only when PDS automation is intended, use least-privilege RAM users or short-lived tokens, and avoid root or administrator cloud credentials. <br>
-Risk: Credential setup and CLI workflows can expose sensitive access keys or tokens if handled in chat, shell history, logs, or plaintext configuration. <br>
-Mitigation: Configure credentials outside the agent session, do not print AK/SK values, and use only status checks such as `aliyun configure list` during agent workflows. <br>
-Risk: Share links and signed download URLs can expose private files. <br>
-Mitigation: Review generated share links before sending them and keep raw analysis JSON and signed URLs out of shared logs or temporary public locations. <br>
-Risk: Mount-app installation can add persistent host-level background software. <br>
-Mitigation: Treat mount-app installation as an administrative action, verify the vendor source, and require manual approval before installation. <br>
+## Use Case:
 
+Developers and agent users use this skill when they need an agent to operate files and spaces in Alibaba Cloud PDS through documented CLI workflows. It is intended for concrete PDS actions such as finding, moving, downloading, sharing, analyzing, or processing cloud files rather than general product Q&A.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sdk-team/alibabacloud-pds-intelligent-workspace) <br>
-- [CLI Installation Guide](references/cli-installation-guide.md) <br>
-- [PDS Aliyun CLI Configuration Guide](references/config.md) <br>
-- [RAM Permission Policies](references/ram-policies.md) <br>
-- [PDS Drive Operations](references/drive.md) <br>
-- [PDS Upload Guide](references/upload-file.md) <br>
-- [PDS Download Guide](references/download-file.md) <br>
-- [PDS Archive Download Guide](references/archive-download.md) <br>
-- [PDS Share Link Guide](references/share-link.md) <br>
-- [PDS Mount App Guide](references/mountapp.md) <br>
-- [Aliyun CLI Documentation](https://help.aliyun.com/zh/cli/) <br>
-- [Alibaba Cloud PDS Mount Drives Documentation](https://help.aliyun.com/zh/pds/drive-and-photo-service-ent/user-guide/mount-drives) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, Code, Files, Markdown, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands, JSON examples, and file outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or download local files, generate signed URLs, run Python helper scripts, and invoke Aliyun CLI commands with a required skill user agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.5 (source: server release evidence) <br>
+Risk: The skill can guide cloud-file mutations such as overwrites, renames, moves, copies, share-link creation, and archive/download actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require a unique target and user confirmation before side-effecting operations, especially overwrites and ambiguous file matches.
+
+Risk: Share links can expose PDS files, including links without expiration or weak access controls.
+
+Mitigation: Prefer expiring, password-protected, or login-required shares and avoid exposing phone, email, or long-lived credentials in shared sessions.
+
+Risk: Mount app installation, startup enablement, and uninstall workflows affect the local host and can introduce persistent drive mounting behavior.
+
+Mitigation: Allow mount app installation, startup persistence, or uninstall actions only after the user explicitly requests that host-level behavior.
+
+## Reference(s):
+
+- [Skill source](artifact/SKILL.md)
+- [CLI Installation Guide](artifact/references/cli-installation-guide.md)
+- [PDS Aliyun CLI Configuration Guide](artifact/references/config.md)
+- [PDS Drive Concepts and API Reference](artifact/references/drive.md)
+- [PDS File Management](artifact/references/file-management.md)
+- [PDS File Search](artifact/references/search-file.md)
+- [PDS File Upload Guide](artifact/references/upload-file.md)
+- [PDS File Download Guide](artifact/references/download-file.md)
+- [PDS Archive Download Guide](artifact/references/archive-download.md)
+- [File Sharing](artifact/references/share-link.md)
+- [PDS Image Editing Guide](artifact/references/image-editing.md)
+- [PDS Visual Similar Search Guide](artifact/references/visual-similar-search.md)
+- [PDS Multianalysis File Guide](artifact/references/multianalysis-file.md)
+- [RAM Permission Policies](artifact/references/ram-policies.md)
+- [Resolve Path Guide](artifact/references/resolve-path.md)
+- [Mount App Guide](artifact/references/mountapp.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Markdown, Text]
+
+**Output Format:** [Markdown guidance with inline shell commands and CLI result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce or modify PDS cloud files and may save downloaded files or archives locally when explicitly requested.]
+
+## Skill Version(s):
+
+0.0.6 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,5 @@
 ## Description: <br>
-Adaptive Hyperliquid perps execution engine for OpenClaw agents. Provides research, pre-trade simulation, predictive funding shifts, and zero-custody EIP-712 order routing with forensic telemetry. Scout (5/day), Pioneer (unlimited), and Syndicate (unlimited) execution supported. <br>
+Research, size, and route user-signed Hyperliquid perpetual futures with funding analysis, drawdown guards, EIP-712, and zero custody. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and OpenClaw agents use this skill to research Hyperliquid perpetual futures markets, simulate strategies, size positions, and prepare order or cancellation requests. State-changing actions require explicit user confirmation and a fresh user-signed EIP-712 payload. <br>
+External users and agents use this skill to research Hyperliquid perpetual futures, inspect account risk, size candidate trades, and route user-approved EIP-712 signed orders or cancellations. It is intended for zero-custody workflows where every state-changing action requires fresh manual confirmation. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prepared futures orders can cause financial loss, liquidation, or unwanted exposure if confirmed with incorrect details. <br>
-Mitigation: Before every execution or cancellation, verify the asset, side, size, leverage, stop, liquidation estimate, margin impact, and order IDs before signing or confirming. <br>
-Risk: Private key, seed phrase, mnemonic, or raw wallet export disclosure would compromise the user's funds. <br>
-Mitigation: Do not provide wallet secrets to the agent or FarmDash; use only fresh local EIP-712 signatures from the user's Hyperliquid API wallet. <br>
-Risk: Stale strategy data or mutated order parameters can make a signed request unsafe or invalid. <br>
-Mitigation: Re-run strategy analysis when quotes are stale, and use nonce, expiresAt, and intentHash checks so signed actions match the presented order. <br>
-Risk: Oracle latency, price deviation, low liquidity, or conflicting signals can make leveraged execution unsuitable. <br>
-Mitigation: Respect no-trade outcomes, oracle-latency and deviation guardrails, adaptive risk reductions, and explicit user review before any non-reduce-only action. <br>
+Risk: The skill can help place real perpetual futures trades or cancel active orders, which can change market exposure and cause financial loss. <br>
+Mitigation: Review every proposed trade or cancellation, including asset, side, size, leverage, stop, order type, signature details, and builder fee, before giving fresh manual confirmation. <br>
+Risk: Wallet secrets or raw private key material would create custody and account-compromise risk if shared with an agent. <br>
+Mitigation: Use only public account addresses, optional FarmDash bearer access, and user-signed EIP-712 payloads; never provide private keys, seed phrases, wallet exports, or raw wallet secrets. <br>
 
 
 ## Reference(s): <br>
-- [FarmDash agents homepage](https://www.farmdash.one/agents) <br>
-- [ClawHub skill page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-futures-strategist) <br>
-- [Bundled OpenAPI contract](artifact/openapi.yaml) <br>
+- [ClawHub Skill Page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-futures-strategist) <br>
+- [FarmDash Agents Homepage](https://www.farmdash.one/agents) <br>
+- [Bundled OpenAPI Contract](artifact/openapi.yaml) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Analysis, Guidance, JSON, API Calls, Shell commands] <br>
-**Output Format:** [Markdown guidance with structured JSON strategy, sizing, simulation, receipt, and order or cancellation payloads] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown and structured JSON from agent tool workflows] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scout tier supports up to 5 execution or analysis requests per day; state-changing actions require explicit user confirmation and user-signed EIP-712 authorization.] <br>
+**Other Properties Related to Output:** [Can include market analysis, position sizing, account-risk summaries, execution or cancellation request parameters, and confirmation prompts.] <br>
 
 ## Skill Version(s): <br>
-1.0.20 (source: server release metadata; artifact frontmatter version 3.0.1) <br>
+1.0.21 (source: ClawHub release evidence; artifact frontmatter reports 3.2.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/story-import",
   "slug": "story-import",
   "ownerHandle": null,
-  "version": "1.0.12",
-  "updatedAt": 1784916824506,
-  "contentHash": "c3ca997b882f6c83e2c91becee50385e9b1d375b2cda90d2bce2ac001d37696d",
-  "fetchedAt": "2026-07-26T18:04:29.484Z"
+  "version": "1.0.16",
+  "updatedAt": 1786126336996,
+  "contentHash": "9e40003cda5e534ec69ad460359bdb77bca1a31a7aa4c225c474b5314bfcbec3",
+  "fetchedAt": "2026-08-10T09:26:08.086Z"
 }

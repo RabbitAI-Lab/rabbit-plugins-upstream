@@ -1,42 +1,58 @@
-## Description: <br>
-Accounting Finance helps finance analysts, institutional investors, and corporate finance teams perform valuation modeling, financial analysis, risk assessment, batch processing, and automated report generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+财务分析专业套件 helps analysts, institutional investors, and corporate finance teams perform valuation modeling, financial analysis, risk assessment, batch processing, and automated report generation.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and finance professionals use this skill to automate financial modeling, valuation analysis, risk checks, and report drafting for securities, companies, and portfolios. It is intended for analytical workflow support, with human review of financial conclusions before use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local execution and file writes can affect the user's workspace. <br>
-Mitigation: Review generated scripts and shell commands before running them, and execute the skill in a controlled workspace. <br>
-Risk: API keys and private financial data may be handled during analysis workflows. <br>
-Mitigation: Keep credentials and private financial data in controlled local configuration and avoid sharing generated artifacts outside approved channels. <br>
-Risk: Financial analysis outputs may be incomplete, stale, or unsuitable for direct decision-making. <br>
-Mitigation: Validate assumptions, data sources, and conclusions with qualified human review before using reports for business or investment decisions. <br>
+## Use Case:
 
+External analysts, institutional investors, corporate finance teams, and agent developers use this skill to automate financial statement analysis, valuation workflows, risk checks, batch analysis, and report generation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/accounting-finance) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, JSON-style result objects, Python execution steps, configuration notes, and generated report files such as Excel, PDF, DOCX, or HTML.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May run local Python and write report or configuration files; review generated commands, scripts, and outputs before relying on them.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter lists 1.0.1) <br>
+Risk: Broad read, execute, and write authority could affect local files or run unreviewed code during finance workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed commands and scripts before execution, run in a sandboxed or least-privileged workspace, and require confirmation before Python execution, batch processing, or report generation.
+
+Risk: External data-provider credentials and generated reports or caches may expose sensitive financial data.
+
+Mitigation: Store API keys with least privilege outside shared configuration files, avoid committing secrets, and inspect reports and caches before sharing or retaining them.
+
+Risk: Financial analysis, valuation, and risk outputs may be misleading when source data, assumptions, or model parameters are wrong.
+
+Mitigation: Have qualified users review data sources, assumptions, model parameters, and generated reports before investment, audit, or business decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/accounting-finance)
+- [Skill homepage](https://skillhub.cn/skill/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON examples, Python and YAML code blocks, configuration recommendations, and generated financial reports.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May generate reports, Excel matrices, caches, and configuration-driven batch outputs; review outputs for sensitive financial data.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata; artifact frontmatter lists 1.0.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

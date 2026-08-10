@@ -679,7 +679,7 @@ def main():
     )
 
     # 通用参数
-    create_parser.add_argument("--region", default="ap-guangzhou", help="地域（默认 ap-guangzhou）")
+    create_parser.add_argument("--region", default=os.getenv('TENCENTCLOUD_REGION', 'ap-guangzhou'), help="地域（默认 ap-guangzhou）")
     create_parser.add_argument("--json", action="store_true", help="JSON 格式输出")
     create_parser.add_argument("--dry-run", action="store_true", help="预览请求参数，不实际执行")
     create_parser.add_argument("--no-wait", action="store_true", help="仅提交任务，不等待结果")

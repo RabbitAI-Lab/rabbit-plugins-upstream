@@ -69,7 +69,7 @@ Typical shape:
       {
         "gid": 0,
         "sheet_name": "订单",
-        "data_engine": "pg",
+        "data_engine": "base",
         "sample_rows": [
           ["日期", "订单号"],
           ["2026-06-01", "SO-1"]
@@ -118,9 +118,10 @@ Cache behavior:
 2. Call `mbs excel-table schema` or `mbs db-table schema` on likely source tables
 3. Optionally call `mbs excel-worksheet range read`, `mbs excel-table sample`, or `mbs db-table sample` for representative rows
 4. Draft SQL
-5. Convert the SQL into a `=SQL("...")` formula
-6. Use `mbs excel-worksheet range set-formula` on the report worksheet
-7. Verify the spill result with `mbs excel-worksheet range read`
+5. Save the raw SQL with `mbs sql config set --sql-file ...`
+6. Preview with `mbs sql preview`
+7. Materialize with `mbs sql overwrite --confirm-overwrite`
+8. Verify the result with `mbs excel-worksheet range read`
 
 ## 6. Limitations and recovery
 

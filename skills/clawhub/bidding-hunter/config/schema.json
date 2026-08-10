@@ -1,0 +1,146 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Bidding Hunter Configuration",
+  "type": "object",
+  "required": ["matching"],
+  "properties": {
+    "matching": {
+      "type": "object",
+      "required": ["tiers", "blacklist"],
+      "properties": {
+        "search_queries": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "minItems": 1
+        },
+        "tiers": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "required": ["label", "keywords"],
+            "properties": {
+              "label": { "type": "string" },
+              "description": { "type": "string" },
+              "keywords": {
+                "type": "array",
+                "items": { "type": "string", "minLength": 1 },
+                "minItems": 1
+              }
+            }
+          }
+        },
+        "blacklist": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "case_sensitive": { "type": "boolean", "default": false }
+      }
+    },
+    "database": {
+      "type": "object",
+      "properties": {
+        "path": { "type": "string", "default": "~/.bidding-hunter/data.db" },
+        "backup_before_scan": { "type": "boolean", "default": true }
+      }
+    },
+    "scan": {
+      "type": "object",
+      "properties": {
+        "date_window": { "type": "integer", "minimum": 1, "maximum": 30, "default": 2 },
+        "max_pages": { "type": "integer", "minimum": 1, "maximum": 50, "default": 15 },
+        "concurrency": { "type": "integer", "minimum": 1, "maximum": 10, "default": 3 },
+        "retry_stairs": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["timeout", "wait_until"],
+            "properties": {
+              "timeout": { "type": "integer", "minimum": 5000 },
+              "wait_until": { "enum": ["load", "domcontentloaded", "networkidle"] }
+            }
+          }
+        },
+        "polite_delay": { "type": "integer", "minimum": 0, "default": 2500 },
+        "results_dir": { "type": "string" },
+        "user_agent": { "type": "string" }
+      }
+    },
+    "platforms": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "custom_paths": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "overrides": { "type": "object" }
+      }
+    },
+    "detail_fetch": {
+      "type": "object",
+      "properties": {
+        "enabled": { "type": "boolean", "default": true },
+        "concurrency": { "type": "integer", "minimum": 1, "maximum": 5, "default": 2 },
+        "skip_if_has_deadlines": { "type": "boolean", "default": true },
+        "skip_today_retry": { "type": "boolean", "default": true },
+        "max_age_days": { "type": "integer", "minimum": 1, "default": 30 }
+      }
+    },
+    "reminders": {
+      "type": "object",
+      "properties": {
+        "urgent_days": { "type": "integer", "minimum": 1, "maximum": 30, "default": 7 },
+        "include_yesterday": { "type": "boolean", "default": true }
+      }
+    },
+    "notifications": {
+      "type": "object",
+      "properties": {
+        "channels": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "report": {
+      "type": "object",
+      "properties": {
+        "max_title_length": { "type": "integer", "minimum": 10, "maximum": 200, "default": 60 },
+        "show_stats": { "type": "boolean", "default": true },
+        "show_reminders": { "type": "boolean", "default": true },
+        "show_undecided_prompt": { "type": "boolean", "default": true }
+      }
+    },
+    "schedule": {
+      "type": "object",
+      "properties": {
+        "cron": { "type": "string" },
+        "timezone": { "type": "string" }
+      }
+    },
+    "sessions": {
+      "type": "object",
+      "properties": {
+        "max_tokens": { "type": "integer", "minimum": 1000, "default": 60000 }
+      }
+    },
+    "logging": {
+      "type": "object",
+      "properties": {
+        "level": { "enum": ["debug", "info", "warn", "error"], "default": "info" },
+        "file": { "type": "string" },
+        "stderr": { "type": "boolean", "default": true }
+      }
+    }
+  }
+}

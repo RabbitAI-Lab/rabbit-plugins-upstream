@@ -1,0 +1,27 @@
+{
+  "nodes": [
+    {
+      "id": "from:3",
+      "name": "built_up (from)",
+      "class_index": 3,
+      "side": "from"
+    },
+    {
+      "id": "to:4",
+      "name": "bare_soil (to)",
+      "class_index": 4,
+      "side": "to"
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "target": 1,
+      "from_class": 3,
+      "to_class": 4,
+      "from_name": "built_up",
+      "to_name": "bare_soil",
+      "value": 444
+    }
+  ]
+}

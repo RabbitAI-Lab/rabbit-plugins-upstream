@@ -1,51 +1,65 @@
-## Description: <br>
-Use when user asks for keyword expansion or ad keyword filtering; single keyword analysis or keyword deep dive; whether a keyword is worth bidding on; which keywords drive traffic to an ASIN; ASIN keyword health, keyword traffic changes, or why an ASIN changed under a keyword. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyze Amazon keyword demand, market structure, weekly trends, observed SERP signals, and ASIN keyword visibility or traffic observations.
 
-## Publisher: <br>
-[apiclaw](https://clawhub.ai/user/apiclaw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[apiclaw](https://clawhub.ai/user/apiclaw)
 
-## Use Case: <br>
-External marketplace operators, analysts, and agent users use this skill to perform ZooData-backed Amazon keyword expansion, single-keyword analysis, reverse-ASIN keyword review, and ASIN keyword-traffic diagnosis. It helps frame directional keyword and traffic decisions while requiring seller-side evidence before final budget, bid, profitability, or conversion conclusions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a ZooData API key for endpoint access. <br>
-Mitigation: Provide the key through ZOODATA_API_KEY and keep it scoped to trusted agent sessions. <br>
-Risk: The bundled CLI exposes broader ZooData product, market, pricing, and review commands beyond the keyword workflows. <br>
-Mitigation: Use the documented Amazon keyword and ASIN traffic workflows unless the broader CLI behavior is intentionally needed. <br>
-Risk: Keyword and traffic outputs can be mistaken for final conversion, profitability, bid, or budget decisions. <br>
-Mitigation: Treat ZooData-derived conclusions as directional until seller-side ABA Search Query Performance or ads performance evidence is provided. <br>
+## Use Case:
 
+External sellers, analysts, and agent operators use this skill to investigate Amazon keyword demand, market structure, traffic-term discovery, and evidence-bounded ASIN keyword or traffic diagnosis.
 
-## Reference(s): <br>
-- [Skill README](artifact/README.md) <br>
-- [ZooData API Reference](artifact/references/reference.md) <br>
-- [Execution Guide](artifact/references/execution-guide.md) <br>
-- [Keyword Expansion Scenario](artifact/references/scenarios-expand.md) <br>
-- [Single Keyword Analysis Scenario](artifact/references/scenarios-keyword-analysis.md) <br>
-- [Reverse ASIN Keyword Analysis Scenario](artifact/references/scenarios-reverse-asin.md) <br>
-- [Keyword Traffic Diagnosis Scenario](artifact/references/scenarios-keyword-traffic-diagnosis.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/apiclaw/skills/amazon-keyword-traffic-analysis) <br>
-- [ZooData API Keys](https://zoodata.ai/en/api-keys) <br>
-- [ZooData Pricing](https://zoodata.ai/en/pricing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with concise findings, data notes, API usage notes, and bounded recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZOODATA_API_KEY and uses ZooData keyword and ASIN traffic endpoints; conclusions remain bounded by available market, ASIN observation, and seller-provided evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: release evidence and frontmatter) <br>
+Risk: ZooData requests may consume credits and send requested keywords, ASINs, dates, marketplaces, public page URLs, and optional seller exports to ZooData.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with a ZooData account approved for this work, review requested inputs before execution, and provide SQP or Ads exports only when seller-funnel or advertising analysis is required.
+
+Risk: The skill produces evidence-bounded traffic and keyword analysis, not direct bid, budget, pause, or negative-keyword decisions.
+
+Mitigation: Treat outputs as validation priorities and require seller ABA-SQP or Amazon Ads data before operational advertising decisions.
+
+Risk: A valid ZOODATA_API_KEY is required for normal operation.
+
+Mitigation: Provide the key through the declared environment variable, limit access to authorized operators, and rotate or revoke credentials according to the publisher's credential policy.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/apiclaw/skills/amazon-keyword-traffic-analysis)
+- [Publisher profile](https://clawhub.ai/user/apiclaw)
+- [Metadata homepage](https://github.com/SerendipityOneInc/ZooData-Skills)
+- [README](README.md)
+- [Production API and acquisition-surface contract](references/reference.md)
+- [Execution guide](references/execution-guide.md)
+- [Evidence protocols](references/evidence-protocols.md)
+- [Output rules](references/output-rules.md)
+- [SQP field semantics](references/sqp-field-semantics.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports with evidence-bounded analysis and inline command guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZOODATA_API_KEY; ZooData API calls may consume credits.]
+
+## Skill Version(s):
+
+0.1.6 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

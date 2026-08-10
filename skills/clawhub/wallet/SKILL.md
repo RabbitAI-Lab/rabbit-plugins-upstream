@@ -1,0 +1,284 @@
+---
+name: rustok-wallet-tui
+description: Self-custody Ethereum agent wallet. Installs with one command and runs entirely on your machine as a single container image (MCP over stdio); private keys never leave it. Read wallet context, balances and DeFi positions (Aave v3, ERC-4626); preview transactions and sign messages. Sending funds on-chain is gated in a separate terminal console, never inside the agent chat: you approve each payment, or confirm autonomous mode once and the wallet sends on its own after that; message signing is not console-gated. You assume all risk for funds on the agent wallet — there are no hard-coded spending limits.
+version: 0.9.3
+metadata:
+  openclaw:
+    emoji: "🦀"
+    homepage: https://github.com/rustok-org/mcp
+---
+
+# rustok-wallet-tui
+
+> **License note:** this OpenClaw skill package (`skills/rustok-wallet-tui/`) is MIT-0
+> per ClawHub requirements. The Rustok wallet core itself is proprietary; only the
+> compiled binary image is distributed.
+
+You are connected to a **self-custody** Ethereum agent wallet that runs entirely
+on the user's machine as a single Docker image (`ghcr.io/rustok-org/rustok-wallet-tui`).
+The container runs the wallet core + gateway and speaks MCP over **stdio**; the
+private keys live only in the user's local Docker volume and never leave it.
+
+> ⚠️ **Self-custody, real funds, your risk.** This wallet has **no hard-coded
+> spending limits or budgets** — the user consciously accepts that funds sent to
+> the agent wallet are at risk. txguard still flags risky transactions, but it
+> does not block them. All supported chains the user enables are live (incl.
+> Ethereum mainnet). Always preview before executing and show the user the details.
+
+## What's protected — and what isn't (be honest with the user)
+
+The wallet's guarantee is narrow and specific. State it plainly; do not oversell it.
+
+The full list of boundaries — password delivery, updates, what we do not verify at
+all — lives in [docs/CAVEATS.md](https://github.com/rustok-org/mcp/blob/main/docs/CAVEATS.md).
+
+| | |
+|---|---|
+| **Protected** | Private keys stay in the user's **local Docker volume** and never leave the machine. **Sending funds on-chain** (`execute_transaction`) is gated in a **separate console window** (`rustok console`, opened by the user — see below): parked for the user's approval, with a PIN for high-risk items — unless the user has confirmed **autonomous mode** there, a confirmation only they can give, once per wallet. |
+| **Not gated by the console** | `sign_message` (EIP-191) returns a signature **without** console approval. The wallet refuses to sign a **raw hex blob** (which could hide a transaction, an approval, or typed data), but it **will** sign an ordinary plaintext message (e.g. a sign-in or an off-chain order). Treat message signing as unprotected: don't connect this wallet to an agent you wouldn't trust to sign a message. |
+| **Outside the model** | An agent with **shell / `docker exec` access to the container** can read the gateway key and reach the full signing surface (including EIP-712 permits — a classic drain). That is why the console is a **separate window, not an agent command**. Trusting your own agent is the user's call, the same as never pasting a seed phrase into an untrusted tool. |
+
+**Never claim** the agent (or a prompt-injected agent) "cannot move funds." What is
+true: keys stay local, and **on-chain sends** are human-gated in the console.
+
+### Autonomous mode, and why a send may park once
+
+A wallet can be in **autonomous** mode, in which it sends without asking each
+time. That only happens after a human has confirmed the mode **in the console**:
+press **`c`**, enter the PIN, once per wallet. The agent cannot give that
+confirmation, and neither can an environment variable or a launch flag.
+
+Until it is confirmed, an autonomous wallet **parks every send** exactly like a
+supervised one. The console shows this on every screen and offers the
+confirmation on the Dashboard.
+
+**If a send parks unexpectedly, this is the first thing to check, and the honest
+thing to tell the user:** the wallet is autonomous but unconfirmed, and one
+confirmation in the console clears it for good. Do not describe it as an error
+and do not retry the payment — a retry adds a second parked copy under a
+different nonce, and confirming the mode does not release either of them.
+
+Confirmation from a messenger is not in this release.
+
+## Prerequisites
+
+- **Podman** (recommended) or **Docker**. **cosign is optional** — the installer
+  pulls the image **by digest** (you get exactly those bytes or nothing), and
+  uses cosign, when it is present and runnable, to verify *who built* it
+  (provenance). A missing or broken cosign is reported and skipped, not treated
+  as a failure; a working cosign that disagrees still stops the install. Use
+  cosign 3+ if you install it — 2.x cannot read our signatures.
+- An Ethereum RPC URL (an Alchemy key URL is best; a public RPC works for testing).
+
+## One-time onboarding (the user does this in their own terminal, once)
+
+Three commands, in a **terminal the agent cannot see** — the full guide is
+[docs/INSTALL.md](https://github.com/rustok-org/mcp/blob/main/docs/INSTALL.md).
+
+**1. Install the `rustok` command.** Fetch the installer to a file, read that
+file, then run **that same file** — what you read is exactly what runs. This is a
+wallet: fetching a script straight into a shell means running code you never saw,
+and one look costs less than that trade.
+
+```bash
+curl --proto '=https' --tlsv1.2 -fsSL \
+  https://raw.githubusercontent.com/rustok-org/mcp/wallet-tui-v0.9.3/scripts/install.sh -o install.sh
+less install.sh      # ~150 lines of POSIX sh
+sh install.sh
+```
+
+It pulls the wallet image **by digest** (those bytes or nothing) and verifies who
+built it with cosign when cosign is available. The release notes for that tag
+publish the script's `sha256` if you would rather check the bytes than read them.
+
+<details>
+<summary>The one-liner, if you have already read the script</summary>
+
+```bash
+curl --proto '=https' --tlsv1.2 -fsSL \
+  https://raw.githubusercontent.com/rustok-org/mcp/wallet-tui-v0.9.3/scripts/install.sh | sh
+```
+
+Piping to a shell runs whatever the URL serves at that moment, unreviewed. The
+tag pins a *version*, not the bytes — the identities bound to exact bytes live
+**inside** the script (the image digest and the shim's commit SHA). Fine once you
+have read it; not the way to meet it.
+</details>
+
+**2. Create the wallet** — prints the 12-word phrase and the approval PIN ONCE:
+
+```bash
+rustok init
+```
+
+**3. Register this wallet with the agent client:**
+
+```bash
+rustok connect claude
+```
+
+`rustok init` asks for a keyring password and stores it in the engine's secret
+store, so it never reaches shell history, `inspect` or any config file. It prints
+two things exactly once:
+
+- the **12-word recovery phrase**;
+- the **6-digit approval PIN** — required for every high-risk approval and for
+  unlocking the console session.
+
+Write both down offline. Recovery = the 12 words (importable into any standard
+wallet) or the wallet volume + password. If the PIN is lost, reset it in the
+running wallet with `core-server set-pin` (needs the keyring password and a real
+terminal).
+
+> **Rule of two windows:** never run `rustok init` or the approval console
+> through an agent shell/command — the seed and PIN would leak into the agent's
+> context. These belong only in the user's own terminal (window 2).
+
+## How the agent runs the wallet
+
+`rustok connect claude` writes this registration for the user, so normally none of
+it is typed by hand. It is reproduced here as the reference for what a correct
+setup looks like — and for setups built without the shim.
+
+The MCP client launches the image over stdio (keys stay local). **Never put the
+keyring password in the MCP config or shell history.** On podman, store it once in
+the secret store; on docker, keep it in a private `0600` file and pass its *path*:
+
+```bash
+# One-time (podman): the value never touches history, inspect or configs.
+read -r -s -p "Keyring password: " pw &&
+  printf '%s' "$pw" | podman secret create rustok-keyring-claude -
+unset pw
+
+podman run -i --rm \
+  --label rustok=wallet --label rustok.agent=claude \
+  -v rustok-wallet-tui:/data \
+  --secret rustok-keyring-claude,type=mount,mode=0400,uid=1000,gid=1000 \
+  -e RUSTOK_KEYRING_PASSWORD_FILE=/run/secrets/rustok-keyring-claude \
+  -e RUSTOK_ALLOWED_CHAINS="1,8453" \
+  -e RUSTOK_RPC_URLS_1="https://your-rpc" \
+  ghcr.io/rustok-org/rustok-wallet-tui:v0.9.3
+```
+
+```bash
+# Docker variant: a 0600 file + RUSTOK_KEYRING_PASSWORD_FILE (path, not value).
+umask 077
+read -r -s -p "Keyring password: " pw &&
+  printf '%s' "$pw" > ~/.rustok-keyring-pass
+unset pw
+
+docker run -i --rm \
+  --label rustok=wallet --label rustok.agent=claude \
+  -v rustok-wallet-tui:/data \
+  -v ~/.rustok-keyring-pass:/run/keyring-pass:ro \
+  -e RUSTOK_KEYRING_PASSWORD_FILE=/run/keyring-pass \
+  -e RUSTOK_ALLOWED_CHAINS="1,8453" \
+  -e RUSTOK_RPC_URLS_1="https://your-rpc" \
+  ghcr.io/rustok-org/rustok-wallet-tui:v0.9.3
+```
+
+> Legacy `--env-file` delivery still works but is deprecated: the value lands in
+> `inspect`, and quotes inside an env-file become part of the password (a silent
+> unlock failure). Migrate to the secret / `_FILE` delivery above.
+
+> **Labels, not `--name`:** the agent launches this itself, and a fixed name
+> collides with health probes / a second `mcp list`. The `rustok.agent` sub-label
+> also lets a second agent run its **own** wallet (own volume) alongside.
+
+> The container automatically mints an ephemeral `RUSTOK_MCP_API_KEY` for the
+> loopback gateway↔mcp hop, so no API key configuration is needed for stdio use.
+> Set `RUSTOK_MCP_API_KEY` yourself **only** when exposing the gateway over a
+> network (not the default stdio setup).
+
+When the agent asks the user to approve a transaction, the user opens the
+console in a **second terminal** (window 2), never through the agent session:
+
+```bash
+rustok console
+```
+
+Without the shim, the container runs under an auto-generated name (labels, not
+`--name`), so it is found by label:
+
+```bash
+docker exec -it "$(docker ps -q --filter label=rustok=wallet --filter label=rustok.agent=claude)" rustok-console
+```
+
+The console shows the decoded transaction from the wallet core and waits for
+`y/N` (high-risk items also ask for the per-transaction PIN).
+
+For **Claude Desktop / Cursor** (stdio MCP), this is the entry `rustok connect`
+writes — or that the user adds by hand to the MCP config. The keyring
+password is delivered by the podman secret (or the docker `_FILE` mount) above,
+**never in this config file** — only the non-secret RPC URL lives here:
+
+```json
+{
+  "mcpServers": {
+    "rustok": {
+      "command": "podman",
+      "args": ["run", "-i", "--rm",
+               "--label", "rustok=wallet", "--label", "rustok.agent=claude",
+               "-v", "rustok-wallet-tui:/data",
+               "--secret", "rustok-keyring-claude,type=mount,mode=0400,uid=1000,gid=1000",
+               "-e", "RUSTOK_KEYRING_PASSWORD_FILE=/run/secrets/rustok-keyring-claude",
+               "-e", "RUSTOK_ALLOWED_CHAINS=1,8453",
+               "-e", "RUSTOK_RPC_URLS_1",
+               "ghcr.io/rustok-org/rustok-wallet-tui:v0.9.3"],
+      "env": {
+        "RUSTOK_RPC_URLS_1": "https://your-rpc"
+      }
+    }
+  }
+}
+```
+
+## Why Rustok exists
+
+Rustok gives an AI agent a wallet of its own — self-custody, no middleman — so agents can begin
+to take part in the economy directly: weighing what's worth paying for, covering the compute,
+data, and tools they rely on, and in time commissioning and paying the people who help them.
+
+## Tools
+
+The stdio wallet image is process-trusted and exposes **all** tools by default.
+To run a restricted agent, set `RUSTOK_MCP_CAPABILITIES` to a subset
+(`read_wallet` / `preview_tx` / `execute_tx`) — e.g. `read_wallet` for read-only.
+The ceiling is enforced by the gateway, on the path every request takes: it
+covers the MCP tools below **and** the HTTP routes behind them, so a session
+cannot reach past its capabilities by calling the gateway directly. Until this
+release it was checked in the MCP layer only, which left every route reachable
+beside it — on this edition the core refused signing for its own unrelated
+reasons, but a session narrowed away from `read_wallet` still read the wallet
+address and every balance. A client may narrow its own session further in
+`initialize`, and can never widen it.
+
+| Tool | Capability | What it does |
+|------|-----------|--------------|
+| `get_wallet_context` | read_wallet | Active wallet address, per-chain balances, allowed chains |
+| `get_balances` | read_wallet | Token balances for the active wallet, or `{address, chain_id}` |
+| `get_positions` | read_wallet | DeFi positions — Aave v3 (collateral/debt/health factor/LTV) + ERC-4626 vaults; optional `{address}` |
+| `preview_transaction` | preview_tx | Preview any transaction `{to, value, chain_id, data?}` → decoded call (who/what is authorized), pre-sign simulation (revert check), gas, risk level |
+| `execute_transaction` | execute_tx | Submit a previewed transaction `{preview_id}` — parked for human approval on a supervised wallet, released by the core on one whose owner confirmed autonomous mode; a `pending` result carries `next_step` for the human |
+| `get_execution_status` | execute_tx | Poll a parked execution `{preview_id}` → `pending` / `executed` (+`tx_hash`) / `denied` / `expired` / `failed` (+`error_reason`), with the `not_after_unix` deadline |
+| `sign_message` | execute_tx | Sign a plaintext message (EIP-191). **Not console-gated** — returns a signature without the approval window; refuses raw hex blobs but signs ordinary messages (see "What's protected"). |
+
+## Behavioral guidelines
+
+1. **Always `preview_transaction` first** and show its decoded call + simulation (revert check) + risk level so the user gives informed approval.
+2. **The money path is preview → summary card → `execute_transaction` → human.**
+   `execute_transaction` only parks the transaction (`state: "pending"`) — the user
+   releases it in a separate terminal window by running `rustok console` (see
+   the onboarding above). Never offer to run the console command yourself
+   and never ask the user to paste the approval PIN into this chat.
+3. **Poll `get_execution_status` reasonably**: when the user asks, or every ~15–30
+   seconds until the `not_after_unix` deadline (if it is `null` — only on request).
+   Stop on any terminal state: `executed`, `denied`, `expired`, `failed`. A
+   `denied` outcome is the human's answer — do not re-submit the same transaction;
+   a not-found error means the id is no longer retained — stop polling.
+4. **Surface what the preview decoded** (who/what is authorized, amount, revert check, estimated cost, risk level) before the user acts on it.
+5. **Use `get_wallet_context` first** so you don't hallucinate balances or chains.
+6. If a tool needs a capability the session lacks, it returns an authorization
+   error — explain that to the user rather than retrying.
+7. If the wallet is unreachable, tell the user the wallet container/onboarding may
+   not be set up (see onboarding above).

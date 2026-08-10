@@ -1,45 +1,65 @@
-## Description: <br>
-Analyzes infant diaper or stool images or URLs to classify stool color, flag clay-pale or bloody appearances, and return visual screening guidance without making a medical diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes infant diaper or stool images and URLs through a cloud health-analysis service to classify stool color, flag clay-pale or bloody/tarry appearances, and return risk guidance with report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, developers, and care workflows can use this skill to submit infant diaper or stool images for visual color screening and receive a structured report with color class, risk level, confidence, recommended action, and report links. It is for visual screening support only and does not replace pediatric or surgical medical evaluation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Infant-related images or URLs may be sent to external cloud services. <br>
-Mitigation: Use the skill only when external processing is acceptable and guardian consent has been obtained for the media being processed. <br>
-Risk: The skill may create or reuse a persistent local identity and store authentication tokens in a workspace SQLite database. <br>
-Mitigation: Review local identity and token storage before deployment, restrict workspace access, and clear stored credentials when they are no longer needed. <br>
-Risk: The skill can retrieve cloud history automatically with limited user-facing control. <br>
-Mitigation: Disclose the history retrieval behavior to users and verify that account or identity boundaries are appropriate before enabling history queries. <br>
-Risk: Image quality, lighting, filters, or color cast can lead to misleading visual screening results. <br>
-Mitigation: Require clear images in natural white or cool white light, avoid filters, and direct users to seek medical evaluation for clay-pale, bloody, or otherwise concerning results. <br>
+## Use Case:
 
+External users, developers, and infant-care workflows use this skill to submit diaper or stool imagery for visual color screening and receive structured risk reminders. It supports new-parent, pediatric clinic, postpartum care, and smart infant-care device scenarios, but its output is only screening guidance and not a medical diagnosis.
 
-## Reference(s): <br>
-- [Infant stool color API reference](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON screening report with color class, risk level, confidence, recommended action, alert text, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the report to a local output file when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server-resolved release metadata; SKILL.md frontmatter reports 1.0.0) <br>
+Risk: Sensitive infant diaper or stool images, URLs, metadata, and report queries may be sent to configured cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit guardian consent, approved cloud endpoints, and clear retention and deletion expectations.
+
+Risk: The skill silently creates or reuses account identity and can store tokens locally.
+
+Mitigation: Review identity and token storage behavior before installation, and run only in environments where silent account management is acceptable.
+
+Risk: Network URL inputs could expose private-network or unrelated resources to the service.
+
+Mitigation: Provide only intended public image URLs or vetted local files, and avoid private-network URLs.
+
+Risk: Visual color screening can be affected by lighting, filters, image quality, or medical context outside the image.
+
+Mitigation: Treat outputs as screening guidance, retake poor-quality images in neutral light, and route abnormal or uncertain results to qualified pediatric care.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-infant-stool-color-abnormality-analysis)
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [Infant stool color API documentation](artifact/references/api_doc.md)
+- [SMYX analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Structured report text or JSON, with Markdown tables for history listings and report export links when available.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include color classification, risk level, confidence, recommended action, alert text, and cloud report links.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

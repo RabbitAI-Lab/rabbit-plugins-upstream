@@ -1,47 +1,64 @@
-## Description: <br>
-Helps LinkFox users run authorized 1688 procurement workflows, including OAuth checks, SKU and address lookup, order preview, guarded order creation, payment URL retrieval, order tracking, logistics, cancellation, and receipt confirmation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps LinkFox users run authorized 1688 procurement workflows, including OAuth checks, SKU and address lookup, order preview, guarded order creation, payment link retrieval, tracking, cancellation, receipt confirmation, and invoicing.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External LinkFox users and procurement operators use this skill to manage authorized 1688 sourcing fulfillment steps through LinkFox, from authorization and order preview through payment, logistics, cancellation, and receipt confirmation. It is intended for accounts that are allowed to operate the relevant 1688 procurement workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact procurement actions such as creating orders, retrieving payment URLs, cancelling orders, and confirming receipt. <br>
-Mitigation: Require a separate Chinese natural-language confirmation immediately before each high-risk action, and rely on the script-level boolean confirmation gates before network calls. <br>
-Risk: The skill depends on a LinkFox API key and optional gateway environment variable that authorize account-scoped procurement operations. <br>
-Mitigation: Keep LINKFOX_AGENT_API_KEY or LINKFOXAGENT_API_KEY and LINKFOX_TOOL_GATEWAY under user control, and do not expose API keys, tokens, callback codes, app secrets, session keys, or Authorization headers. <br>
-Risk: Procurement responses may contain order, address, logistics, or other sensitive business data and may be saved when responses are large or saving is requested. <br>
-Mitigation: Avoid saving responses unless needed, use no-save controls for sensitive sessions, and review saved redacted JSON before sharing or retaining it. <br>
-Risk: Gateway calls may consume LinkFox credits and repeated retries or polling can increase cost or duplicate operational impact. <br>
-Mitigation: Do not automatically retry failed, empty, unauthorized, or high-risk write operations; explain cost before additional calls and ask before continuing. <br>
-Risk: Feedback about mismatches or user reactions may be reported to LinkFox. <br>
-Mitigation: Be aware of the feedback-reporting behavior and avoid including unnecessary sensitive procurement details in feedback content. <br>
+## Use Case:
 
+External procurement operators and agents use this skill to complete authorized 1688 purchasing tasks through LinkFox, from authorization and order preparation through payment-link retrieval, logistics tracking, cancellation, receipt confirmation, and invoice application. The skill is intended for request-by-request assistance rather than unattended end-to-end purchasing.
 
-## Reference(s): <br>
-- [1688 Procurement Workflow Map](artifact/references/workflow.md) <br>
-- [1688 Procurement API Reference](artifact/references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with Python command examples and redacted JSON responses or summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Small responses are printed inline; larger redacted responses may be saved under a LinkFox workspace data directory unless saving is disabled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill can initiate procurement, payment-link, cancellation, receipt-confirmation, invoice, account onboarding, API-key generation, and billing-plan flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation for order creation, payment-link retrieval, cancellation, receipt confirmation, invoice application, and plan-purchase actions.
+
+Risk: Flexible credential-bearing network calls can expose procurement or account data if pointed at untrusted hosts.
+
+Mitigation: Verify LINKFOX_* base URL environment variables point to official LinkFox hosts before use and treat generated API keys as secrets.
+
+Risk: Procurement actions may consume credits and repeated retries can increase cost.
+
+Mitigation: Avoid automatic retries or polling after failures, empty results, incomplete parameters, or authorization issues; explain possible additional cost before continuing.
+
+Risk: Onboarding and billing recovery flows can reveal sensitive account details in shared logs.
+
+Mitigation: Avoid running onboarding in shared logs and redact API keys, tokens, full addresses, phone numbers, and payment URLs from user-facing output and feedback.
+
+## Reference(s):
+
+- [1688 Procurement API Reference](artifact/references/api.md)
+- [1688 Procurement Workflow](artifact/references/workflow.md)
+- [Authentication and Billing Onboarding](artifact/references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-1688-procurement)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON, Configuration]
+
+**Output Format:** [Markdown guidance with Python command examples and JSON script responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Large responses may be saved as redacted JSON files; high-risk write actions require separate user confirmation before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,7 +3,7 @@ name: narrated-multi-scene
 description: Use when someone wants a multi-part story with voiceover — episodic B-roll, chaptered promo, or several linked video scenes without on-camera dialogue.
 license: MIT
 metadata:
-  version: "1.0.7"
+  version: "1.0.9"
   package: pruna-skills
 ---
 
@@ -13,7 +13,7 @@ Install and load these skills before generating (skip if already in context via 
 
 | Skill | Description | Install |
 | --- | --- | --- |
-| `p-image` | Use when someone wants a fast AI image — product shots, hero visuals, mood boards, or draft photos from a text prompt. | `npx skills add PrunaAI/pruna-skills@p-image -y` |
+| `p-image` | Use when someone explicitly wants the fastest, cheapest photo generation — mood boards, bulk panels, or quick iterations — not when controlled photoreal or in-image text is needed. | `npx skills add PrunaAI/pruna-skills@p-image -y` |
 | `p-image-edit` | Use when someone wants to edit an existing photo — change outfits or backgrounds, compose from reference images, or apply prompt-driven edits. | `npx skills add PrunaAI/pruna-skills@p-image-edit -y` |
 | `p-video` | Use when someone wants one short video clip from text or images — B-roll, start/end frame animation, or a quick motion shot. Not for full multi-scene films or lip-synced hosts. | `npx skills add PrunaAI/pruna-skills@p-video -y` |
 | `gemini-3.1-flash-tts` | Use when someone needs spoken narration or voiceover — explainer tracks, documentary lines, or voice to pair with generated video. | `npx skills add PrunaAI/pruna-skills@gemini-3.1-flash-tts -y` |
@@ -41,12 +41,16 @@ Execute phases with parallel curl batches — **never** batch `p-video` before s
 
 ## Intake: ask before generating
 
+Open intake → **`generation-diversity`** clarification intake.
+
 **Do not** start scene 1 until the **whole** scene plan exists in writing (manifest or table):
 
 | Topic | Questions |
 |-------|-----------|
 | **Story** | Order of scenes (1…N)? What changes between scenes (location, time, emotion)? |
-| **Per scene *i*** | Primary `prompt`? **First frame** (`image`), **last frame** (`last_frame_image`), **narration** (`audio` URL)? `resolution` / `fps` / `draft`? |
+| **Media source** | Per scene: **generate** stills/TTS with Pruna tools vs **upload** user frames or VO? |
+| **Format** | Global `aspect_ratio`; default video **`720p` / `1080p`** and `fps` for triple scenes? |
+| **Per scene *i*** | Primary `prompt`? **First frame** (`image`), **last frame** (`last_frame_image`), **narration** (`audio` URL)? Scene-level `resolution` / `fps` / `draft` overrides? |
 | **Continuity** | Per scene: **`chain_from_previous`** only when motion continues (same moment/location). Otherwise composed OPENING still + hard cut. End stills via `p-image-edit`; extract last frame when chaining. |
 | **Audio** | **Scene anchor triple (preferred):** TTS → upload → **`p-video`** with `image` + `last_frame_image` + **`audio`** (omit `duration`; `save_audio: true`). **Each scene line ≤ ~19s** — P-API caps audio-led clips at **20s**. Optional **Stable Audio** bed in post only. |
 | **Visual style** | Locked `style_bible`? **One specific subject/location per still**? Avoid unrelated branding unless the brief asks for it |

@@ -74,9 +74,12 @@ python3 "<scripts_dir>/wxpublic_list.py" "<app_id>" "<secure_key>" "<name>" "<st
 ```json
 {
   "urls": ["https://mp.weixin.qq.com/s/...", ...],
+  "date": ["2026-08-04", ...],
   "count": 3
 }
 ```
+
+`date` 中每一项是对应文章的发布时间（`yyyy-MM-dd`），与 `urls` 按相同下标一一对应。例如 `urls[0]` 的发布日期为 `date[0]`。
 
 解析 stdout 中的 JSON：
 - 如果包含 `"error"` 字段：

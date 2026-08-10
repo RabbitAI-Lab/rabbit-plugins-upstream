@@ -1,12 +1,12 @@
-# Report IR 试运行工作流
+# Report IR 工程工作流
 
-仅在当前工程或项目已有明确的内部试运行授权时读取本文件。Report IR 仍是研究工程路线，
+仅在当前工程或项目已有明确的 Report IR 授权时读取本文件。Report IR 是正式可用的工程路线，
 不是客户需要理解、选择或确认的新产品步骤。没有授权时，继续执行 `SKILL.md` 中现有的
-direct-HTML 正式流程；不得根据项目类型、模型偏好或 Report IR 文件存在来推断授权。
+direct-HTML 默认流程；不得根据项目类型、模型偏好或 Report IR 文件存在来推断授权。
 
 ## 路由合同
 
-试运行授权必须是当前任务根目录内的 JSON 文件，且只包含以下字段：
+Report IR 授权必须是当前任务根目录内的 JSON 文件，且只包含以下字段：
 
 ```json
 {
@@ -21,16 +21,17 @@ direct-HTML 正式流程；不得根据项目类型、模型偏好或 Report IR 
 ```
 
 向客户继续使用原有想法、Word/PDF、PPT/HTML 入口、材料理解、设计选择和简报确认流程。
-不要询问“是否使用 IR”，不要展示 JSON 字段，也不要增加一次 IR 确认。试运行授权是内部
-工程状态，不是客户决策。授权文件一旦传给编排器，就已选择 pilot；任何后续失败都必须
-留在 pilot 路由修正或停止，禁止回退 direct HTML。
+不要询问“是否使用 IR”，不要展示 JSON 字段，也不要增加一次 IR 确认。Report IR 授权是
+内部工程状态，不是客户决策。授权文件一旦传给编排器，就已选择该工程路线；任何后续失败
+都必须留在该路线修正或停止，禁止回退 direct HTML。JSON 内的 `pilot` 值仅为兼容既有
+编排器的机器字段，不代表 Report IR 处于试点状态。
 
 ## 从已确认简报派生 IR
 
 只有 `check_production_authorization.py --action formal-html` 对当前任务、当前文件返回允许后，
 才创建 Report IR。读取 `references/report-ir-v1.md`，从已确认简报和已有选择派生 Report IR：
 
-- 新建 pilot 使用 `report_ir_version=1.1`，把简报中已确认的主 Workflow Profile
+- 新建 Report IR 工程使用 `report_ir_version=1.1`，把简报中已确认的主 Workflow Profile
   稳定 id、`definition_version=2.0`、语义选择依据和 bounded capability overlays
   写入一个通用顶层 `workflow_profile`；不复制完整 Profile 或场景特有简报；
 - 既有 `1.0` 工程仅作为 `legacy_unbound` 继续验证/编译，不从简报、标题、主题、
@@ -48,8 +49,8 @@ direct-HTML 正式流程；不得根据项目类型、模型偏好或 Report IR 
 客户选择或明确委托时，Production Authorization 必须先阻塞，不能由 IR 补猜。模型负责把
 已确认内容表达成 IR，但不得在 IR 之后再次完整手写 HTML。
 
-Profile binding、设计简报确认、pilot 授权与 current-file Production Authorization 是
-独立事实：binding 不授权 pilot，pilot 授权不确认简报，简报确认也不替代
+Profile binding、设计简报确认、Report IR 授权与 current-file Production Authorization 是
+独立事实：binding 不授权 Report IR 工程，Report IR 授权不确认简报，简报确认也不替代
 Production Authorization。普通 direct-HTML 路由不读取或创建 binding。
 
 ## 确定性编排
@@ -68,7 +69,7 @@ python scripts/orchestrate_report_ir_pilot.py \
 
 客户参考或企业模板路线另传已验证的 `--project-theme-dir`。编排器会按顺序：
 
-1. 验证项目级 pilot 授权并绑定 `task_id`；
+1. 验证项目级 Report IR 授权并绑定 `task_id`；
 2. 复用 Production Authorization 检查当前 confirmed brief、其绑定当前主题/不适用状态与动效决定的 canonical digest，以及 `formal-html` 权限；
 3. 要求 IR 的简报路径和哈希、内置主题（适用时）及动效密度与当前 Production Authorization 决定完全一致；
 4. 复用 Report IR Validator 的四层结果；
@@ -115,4 +116,4 @@ Runtime/editor、追踪和 delivery verification 流程。使用现有 Project H
 
 不传 `--pilot-authorization` 时，编排器只写入 `direct_html_unchanged`，不读取 IR、不创建
 build，也不改变现有正式制作流程。普通项目不需要运行本脚本；保留该直接路由主要用于审计
-和自动化验证，不能把它当作启用 pilot 的默认入口。
+和自动化验证，不能把它当作启用 Report IR 的默认入口。

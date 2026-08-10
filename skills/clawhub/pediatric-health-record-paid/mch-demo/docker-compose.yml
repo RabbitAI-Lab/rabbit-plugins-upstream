@@ -1,0 +1,16 @@
+services:
+  mch-demo:
+    build: .
+    container_name: mch-demo
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "8080:8080"
+    volumes:
+      # 把微信支付私钥挂进容器，路径与 .env 的 PRIVATE_KEY_PATH 一致
+      - "./apiclient_key.pem:/Users/weiwu/cert/1749040075_20260805_cert/apiclient_key.pem:ro"
+      # SkillHub 开发者私钥（PEM），对应 .env 的 SKILLHUB_PRIVATE_KEY_FILE
+      - "./skillhub_private_key.pem:/app/skillhub_private_key.pem:ro"
+      # 微信支付公钥（公钥模式验签用），对应 .env 的 WX_PUB_KEY_FILE / WX_PUB_KEY_ID
+      - "./wechat_pub_key.pem:/app/wechat_pub_key.pem:ro"

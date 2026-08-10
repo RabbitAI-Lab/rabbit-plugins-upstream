@@ -1,43 +1,63 @@
-## Description: <br>
-Searches the Zhihuiya patent database by public image URL to find visually similar utility model patents and support patent-risk review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supports image-based similarity search for utility model patents using Zhihuiya/PatSnap data, including URL-based search, optional local image upload, result summarization, and authentication or billing guidance.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and patent-review agents use this skill to search for utility model patents that visually resemble a product image, then review similarity scores, patent metadata, and images before deciding whether specialist legal review is needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send product images, search parameters, and feedback to LinkFox or Zhihuiya services. <br>
-Mitigation: Use only images and search terms that are acceptable to share with those services, and avoid confidential local product images unless public upload is acceptable. <br>
-Risk: Searches consume paid credits and repeated calls may increase cost. <br>
-Mitigation: Confirm paid searches before running them and rely on the skill's cache or saved results instead of repeating equivalent requests. <br>
-Risk: The security review flags high-impact upload, persistence, feedback, and installation behaviors for review before use. <br>
-Mitigation: Review the skill before installing, inspect saved outputs, and make a separate trust decision before installing any onboarding package. <br>
+## Use Case:
 
+External users and agents use this skill to compare a product image against utility model patent images, prioritize similar patents by score, and support prior-art or infringement-risk review before consulting a patent professional.
 
-## Reference(s): <br>
-- [Zhihuiya Patent Image Search API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-utility-patent-image-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON request examples, shell commands, and saved JSON search results.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search results are sorted by visual similarity score when available; large API responses are saved to local JSON files and summarized in stdout.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Patent-search images and local image files may be sent to LinkFox services and local images may be uploaded to a public URL.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only images that are acceptable to share with LinkFox and avoid confidential unreleased product images unless that exposure is approved.
+
+Risk: The skill handles API keys, phone-based onboarding, and paid credit purchase flows.
+
+Mitigation: Review shell configuration changes, protect API keys, and confirm credit costs before running additional searches or billing commands.
+
+Risk: Search responses and summaries can be saved persistently in the workspace.
+
+Mitigation: Review generated linkfox files before sharing the workspace and remove sensitive result logs when they are no longer needed.
+
+Risk: Patent image similarity scores can support review but are not legal determinations.
+
+Mitigation: Treat results as triage evidence and consult a qualified patent professional before making infringement or freedom-to-operate decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-zhihuiya-utility-patent-image-search)
+- [Zhihuiya patent image search API reference](artifact/references/api.md)
+- [Authentication and billing onboarding guide](artifact/references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON API parameters, shell commands, and saved JSON result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write full API responses and cache files under a local linkfox directory; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

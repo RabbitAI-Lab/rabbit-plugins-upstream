@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>人一旦开窍，做什么都顺 · 深度解析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: oklch(0.975 0.005 90);
+    --surface: #fff;
+    --text: oklch(0.18 0.01 90);
+    --text-secondary: oklch(0.42 0.01 90);
+    --text-muted: oklch(0.58 0.01 90);
+    --accent: oklch(0.48 0.18 25);
+    --accent-light: oklch(0.70 0.12 30);
+    --accent-bg: oklch(0.92 0.04 35);
+    --border: oklch(0.88 0.01 85);
+    --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.06);
+    --shadow-md: 0 4px 16px oklch(0 0 0 / 0.08);
+    --shadow-lg: 0 8px 32px oklch(0 0 0 / 0.10);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans SC', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  .hero { text-align: center; padding: 80px 0 48px; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: 999px; background: oklch(0.94 0.02 30 / 0.5); border: 1px solid oklch(0.85 0.06 30 / 0.3); font-size: 13px; color: var(--accent); font-weight: 500; letter-spacing: 0.5px; margin-bottom: 28px; }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .hero h1 { font-family: 'Noto Serif SC', serif; font-size: clamp(1.6rem, 4.5vw, 2.6rem); font-weight: 900; line-height: 1.3; letter-spacing: 0.03em; margin-bottom: 16px; }
+  .hero-meta { font-size: 13px; color: var(--text-muted); display: flex; justify-content: center; gap: 24px; }
+
+  .summary-card { background: var(--surface); border-radius: var(--radius-lg); padding: 48px 40px; margin: 0 0 56px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); position: relative; overflow: hidden; }
+  .summary-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, var(--accent), var(--accent-light)); border-radius: 4px 0 0 4px; }
+  .summary-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); font-weight: 600; margin-bottom: 16px; }
+  .summary-card .big-text { font-family: 'Noto Serif SC', serif; font-size: clamp(1.15rem, 2.2vw, 1.45rem); font-weight: 600; color: var(--text); line-height: 1.9; }
+  .summary-card .big-text em { font-style: normal; color: var(--accent); font-weight: 700; }
+
+  .quotes-section { margin-bottom: 64px; }
+  .section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+  .section-head .icon { width: 32px; height: 32px; border-radius: 8px; background: var(--accent-bg); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .section-head h2 { font-family: 'Noto Serif SC', serif; font-size: 1.4rem; font-weight: 700; color: var(--text); }
+  .quotes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .quote-card { background: var(--surface); border-radius: var(--radius-md); padding: 36px 28px 32px; box-shadow: var(--shadow-md); border: 1px solid var(--border); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .quote-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .quote-card .quote-mark { font-family: 'Noto Serif SC', serif; font-size: 4rem; font-weight: 900; color: var(--accent-bg); line-height: 0.6; margin-bottom: 8px; }
+  .quote-card .quote-text { font-family: 'Noto Serif SC', serif; font-size: 1.15rem; font-weight: 700; color: var(--text); line-height: 1.75; }
+
+  .bookshelf-section { margin-bottom: 64px; }
+  .capsule-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .capsule { background: var(--surface); border-radius: var(--radius-md); padding: 24px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); cursor: pointer; transition: all 0.25s ease; }
+  .capsule:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); border-color: var(--accent-light); }
+  .capsule .cap-icon { font-size: 1.6rem; margin-bottom: 12px; display: block; }
+  .capsule .cap-title { font-family: 'Noto Serif SC', serif; font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .capsule .cap-sub { font-size: 12px; color: var(--text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  .capsule-detail { display: none; margin-top: 16px; background: var(--surface); border-radius: var(--radius-lg); padding: 40px 36px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); position: relative; animation: slideUp 0.3s ease; }
+  .capsule-detail.active { display: block; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .capsule-detail .close-btn { position: absolute; top: 16px; right: 20px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: all 0.2s; }
+  .capsule-detail .close-btn:hover { background: oklch(0.94 0.005 85); color: var(--text); }
+  .capsule-detail .detail-title { font-family: 'Noto Serif SC', serif; font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 24px; padding-right: 40px; }
+
+  .points-list { display: flex; flex-direction: column; gap: 20px; }
+  .point-item { display: flex; gap: 16px; align-items: flex-start; }
+  .point-item .point-num { flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px; background: var(--accent-bg); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: var(--accent); }
+  .point-item .point-content h4 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .point-item .point-content p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7; }
+
+  .struct-list { display: flex; flex-direction: column; gap: 16px; }
+  .struct-item { display: flex; gap: 16px; align-items: baseline; }
+  .struct-item .struct-label { flex-shrink: 0; font-weight: 700; font-size: 0.88rem; color: var(--accent); min-width: 72px; }
+  .struct-item .struct-content { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; }
+
+  .judge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .judge-mini { padding: 20px; background: oklch(0.97 0.005 88); border-radius: var(--radius-sm); }
+  .judge-mini .jm-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+  .judge-mini .jm-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; color: var(--text); }
+  .judge-mini .jm-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.7; }
+
+  .footer { text-align: center; padding: 48px 0; border-top: 1px solid var(--border); margin-top: 32px; color: var(--text-muted); font-size: 13px; line-height: 1.8; }
+
+  @media (max-width: 640px) {
+    .summary-card { padding: 32px 24px; }
+    .capsule-grid { grid-template-columns: repeat(2, 1fr); }
+    .capsule-detail { padding: 28px 20px; }
+    .hero { padding: 48px 0 32px; }
+    .quote-card { padding: 28px 20px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="hero">
+    <div class="hero-badge"><span class="dot"></span>抖音视频 · 深度解析</div>
+    <h1>人一旦开窍，做什么都顺</h1>
+    <div class="hero-meta">
+      <span>约 4 分 41 秒</span>
+      <span>认知成长</span>
+      <span>2026.08.07</span>
+    </div>
+  </header>
+
+  <div class="summary-card">
+    <div class="label">一句话总结</div>
+    <p class="big-text">开窍就是学会区分「手练型技能」和「认知型能力」，不再靠蛮力和运气，而是用<em>底层规律作为导航系统</em>，在关键点上发力——顺规律者顺，逆规律者累。</p>
+  </div>
+
+  <section class="quotes-section">
+    <div class="section-head">
+      <div class="icon">✦</div>
+      <h2>金句卡片</h2>
+    </div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">认知是我们这个时代普通人手里最容易被低估的一根杠杆。</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">人和人的差距从来不在勤奋，而在是否开了窍。</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">不按规律走，你就只能拼运气，而运气这东西从不偏袒任何人。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bookshelf-section">
+    <div class="section-head">
+      <div class="icon">📚</div>
+      <h2>深度解析：点击查看详情</h2>
+    </div>
+    <div class="capsule-grid">
+      <div class="capsule" onclick="openCapsule('points')">
+        <span class="cap-icon">💡</span>
+        <div class="cap-title">五个核心观点</div>
+        <div class="cap-sub">手练型 vs 认知型、底层规律、系统导航</div>
+      </div>
+      <div class="capsule" onclick="openCapsule('structure')">
+        <span class="cap-icon">🎬</span>
+        <div class="cap-title">视频结构拆解</div>
+        <div class="cap-sub">二分框架、对比论证、递进升华</div>
+      </div>
+      <div class="capsule" onclick="openCapsule('contrast')">
+        <span class="cap-icon">⚖️</span>
+        <div class="cap-title">手练型 vs 认知型</div>
+        <div class="cap-sub">两种技能的本质差异对比</div>
+      </div>
+      <div class="capsule" onclick="openCapsule('judgment')">
+        <span class="cap-icon">🔍</span>
+        <div class="cap-title">内容判断</div>
+        <div class="cap-sub">立场、可信度、可借鉴点</div>
+      </div>
+    </div>
+
+    <!-- Core Points -->
+    <div class="capsule-detail" id="detail-points">
+      <button class="close-btn" onclick="closeCapsule()">×</button>
+      <div class="detail-title">五个核心观点</div>
+      <div class="points-list">
+        <div class="point-item">
+          <div class="point-num">01</div>
+          <div class="point-content">
+            <h4>世界上的事分两类：手练型和认知型</h4>
+            <p>做饭、开车、搬砖属于「手练型」——靠重复就能熟练，天花板低。创业、管理、判断趋势属于「认知型」——重复一千次不如看对一次方向。</p>
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-num">02</div>
+          <div class="point-content">
+            <h4>勤奋无法替代认知</h4>
+            <p>方向错的时候越努力越离谱。十年经验和三年的差别不过是快一点稳一点，并没有本质的跃迁。人和人的差距从来不在勤奋，而在于是否开了窍。</p>
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-num">03</div>
+          <div class="point-content">
+            <h4>开窍就是凡事问一句"底层逻辑是什么"</h4>
+            <p>开窍的人做事前先研究核心逻辑，找准关键环节再集中发力。不开窍的人上来就埋头苦干，哪个环节容易就扑哪里，最后最重要的那件事始终没碰。</p>
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-num">04</div>
+          <div class="point-content">
+            <h4>规律跨领域相通</h4>
+            <p>赚钱是资源交换的效率，人际是边界感+共赢思维，成长是持续输入+刻意练习。看似不相关的领域，底层规律极其相通。</p>
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-num">05</div>
+          <div class="point-content">
+            <h4>自律不是对抗，是顺应</h4>
+            <p>夜猫子逼自己五点起床，撑三天就崩——这不是不自律，是违背了自己的生理规律。真正顺着规律走，做事是舒服的、顺畅的、越做越有劲的。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Structure -->
+    <div class="capsule-detail" id="detail-structure">
+      <button class="close-btn" onclick="closeCapsule()">×</button>
+      <div class="detail-title">视频结构拆解</div>
+      <div class="struct-list">
+        <div class="struct-item">
+          <div class="struct-label">标题钩子</div>
+          <div class="struct-content">「人一旦开窍，做什么都顺，规律是这个世界最公道的东西」——用「开窍」这个高唤醒词+确定性承诺，直接击中每一个"感觉努力却原地踏步"的人。</div>
+        </div>
+        <div class="struct-item">
+          <div class="struct-label">二分框架</div>
+          <div class="struct-content">建立「手练型技能」vs「认知型能力」的二分法，用做饭/开车/搬砖 vs 创业/管理/判断趋势做对比，让观众立刻对号入座。</div>
+        </div>
+        <div class="struct-item">
+          <div class="struct-label">对比论证</div>
+          <div class="struct-content">开窍者（先研究规律再发力）vs 不开窍者（埋头苦干乱发力），用同一件事两种做法形成鲜明反差，强化观点。</div>
+        </div>
+        <div class="struct-item">
+          <div class="struct-label">跨域举证</div>
+          <div class="struct-content">赚钱、人际、学习、管理——四个领域都用"底层规律相通"串起来，让观点从单一领域升维到普适真理。</div>
+        </div>
+        <div class="struct-item">
+          <div class="struct-label">心理共鸣收尾</div>
+          <div class="struct-content">用「自律不是对抗天性」打碎观众的自我苛责，从"你不够努力"翻转为"你只是没找到规律"，情绪从焦虑转向释然。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contrast -->
+    <div class="capsule-detail" id="detail-contrast">
+      <button class="close-btn" onclick="closeCapsule()">×</button>
+      <div class="detail-title">手练型 vs 认知型 对比</div>
+      <div class="judge-grid" style="grid-template-columns:1fr 1fr;">
+        <div class="judge-mini" style="background:oklch(0.96 0.01 85);">
+          <div class="jm-label" style="color:var(--text-muted);">手练型技能</div>
+          <div class="jm-title" style="font-size:1rem;">靠重复就能熟练</div>
+          <div class="jm-desc">
+            做饭 · 开车 · 搬砖<br>
+            多练自然顺手，天花板低<br>
+            做了十年和三年差别不大<br>
+            能养家糊口，难脱颖而出
+          </div>
+        </div>
+        <div class="judge-mini" style="background:var(--accent-bg);">
+          <div class="jm-label">认知型能力</div>
+          <div class="jm-title" style="font-size:1rem;">靠看清规律才能掌握</div>
+          <div class="jm-desc">
+            创业 · 管理 · 判断趋势<br>
+            重复一千次不如看对一次方向<br>
+            一眼看到底，看懂底层规律<br>
+            拉开人与人间差距的关键
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Judgment -->
+    <div class="capsule-detail" id="detail-judgment">
+      <button class="close-btn" onclick="closeCapsule()">×</button>
+      <div class="detail-title">内容判断 · 创作者视角</div>
+      <div class="judge-grid">
+        <div class="judge-mini">
+          <div class="jm-label">立场</div>
+          <div class="jm-title">认知成长赛道创作者</div>
+          <div class="jm-desc">站在"过来人"视角，面向正在努力但感到迷茫的普通人。核心叙事是"你不是不努力，是方法不对"，极具情感共鸣力。</div>
+        </div>
+        <div class="judge-mini">
+          <div class="jm-label">可信度</div>
+          <div class="jm-title">观点有力，缺乏实证</div>
+          <div class="jm-desc">二分法框架清晰有启发，但未引用研究或数据支撑。属于经验感悟型内容，而非学术论证。对普通观众的说服力够用，专业人士会觉得过于简化。</div>
+        </div>
+        <div class="judge-mini">
+          <div class="jm-label">可借鉴</div>
+          <div class="jm-title">选题+结构双优</div>
+          <div class="jm-desc">「开窍」是极强的高唤醒选题词；二分法+跨域举证的结构天然适合知识口播；结尾情绪翻转（从焦虑→释然）是金句生效的关键节奏，值得直接复用。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p style="font-weight:600;color:var(--text)">video-parser</p>
+    <p style="font-size:12px;margin-top:2px">丢个链接，还你一份结构化分析</p>
+  </footer>
+
+</div>
+
+<script>
+let activeCapsule = null;
+function openCapsule(id) {
+  if (activeCapsule) activeCapsule.classList.remove('active');
+  const detail = document.getElementById('detail-' + id);
+  detail.classList.add('active');
+  detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  activeCapsule = detail;
+}
+function closeCapsule() {
+  if (activeCapsule) { activeCapsule.classList.remove('active'); activeCapsule = null; }
+}
+</script>
+
+</body>
+</html>

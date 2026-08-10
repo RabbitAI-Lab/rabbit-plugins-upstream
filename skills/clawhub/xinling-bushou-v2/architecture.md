@@ -1,6 +1,6 @@
-# 心灵补手 V2.0 架构设计文档
+# 心灵补手 V3.5.0 架构设计文档
 
-> 版本：2.0.0  
+> 版本：3.5.0  
 > 作者：思远（架构师）🧠  
 > 日期：2026-04-09  
 > 状态：初稿  
@@ -48,7 +48,7 @@
 
 #### 1.1.2 与 V1.0 SOUL.md 插入模式的区别
 
-| 维度 | V1.0 SOUL.md 插入 | V2.0 子代理人格 |
+| 维度 | V1.0 SOUL.md 插入 | V3.5.0 子代理人格 |
 |------|------------------|----------------|
 | 注入方式 | 字符串追加到 SOUL.md | 独立配置文件 + 启动参数 |
 | 人格数量 | 1个（叠加层） | N个（可并发加载） |
@@ -648,7 +648,7 @@ class PromptCompiler:
         phrases = persona_def.get("phrases", {})
         
         lines = []
-        lines.append("## 【心灵补手】谄媚模块 v2.0")
+        lines.append("## 【心灵补手】谄媚模块 v3.5.0")
         lines.append(f"**人格**: {meta.get('name', meta['id'])}")
         lines.append("")
         lines.append("### 身份")
@@ -1047,7 +1047,7 @@ class CursorAdapter(PlatformAdapter):
         """生成 Cursor 规则文件"""
         return f"""# 心灵补手 - {persona.name}
 
-> 由心灵补手 V2.0 自动生成
+> 由心灵补手 V3.5.0 自动生成
 > 人格 ID: {persona.id}
 > 谄媚程度: {persona.level}/10
 
@@ -1300,4 +1300,4 @@ xinling-bushou-v2/
 
 ---
 
-*文档版本：2.0.0 | 最后更新：2026-04-09 | 作者：思远 🧠*
+*文档版本：3.5.0 | 最后更新：2026-08-07 | 作者：思远 🧠*

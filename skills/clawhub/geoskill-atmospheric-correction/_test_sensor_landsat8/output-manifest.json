@@ -1,0 +1,75 @@
+{
+  "skill": "atmospheric-correction",
+  "skill_version": "1.0.0",
+  "command": "atmospheric-correction --bbox 116 39 117 40 --synthetic --sensor landsat8 --quiet --output-dir ./_test_sensor_landsat8",
+  "started_at": "2026-08-03T13:38:39.175529Z",
+  "finished_at": "2026-08-03T13:38:41.829699Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "sensor": "landsat8",
+    "method": "dos",
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_sensor_landsat8\\surface_reflectance.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 6,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_sensor_landsat8\\correction_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "dos",
+    "sensor": "landsat8",
+    "n_bands": 6,
+    "mean_reflectance_per_band": [
+      0.04618356376886368,
+      0.061066702008247375,
+      0.08098854124546051,
+      0.16203412413597107,
+      0.3143412172794342,
+      0.22146688401699066
+    ],
+    "overall_mean_reflectance": 0.14768017828464508,
+    "synthetic_truth_mean_per_band": {
+      "band_0": 0.06638312339782715,
+      "band_1": 0.10427786409854889,
+      "band_2": 0.10387556254863739,
+      "band_3": 0.16481775045394897,
+      "band_4": 0.3143412470817566,
+      "band_5": 0.2214667946100235
+    }
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "atmospheric-correction"
+  },
+  "error": null
+}

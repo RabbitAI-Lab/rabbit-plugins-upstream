@@ -1,0 +1,4 @@
+interface:
+  display_name: "通用责任边界"
+  short_description: "跨行业依据合同、履约和因果证据判断当前责任状态与边界"
+  default_prompt: "Use $zayn-general-responsibility to assess responsibility boundaries without premature admission."

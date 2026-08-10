@@ -1,0 +1,55 @@
+{
+  "name": "@rozoai/checkout",
+  "version": "0.1.6",
+  "type": "module",
+  "description": "Pay an OpenRouter Coinbase Payment Link with BTC Lightning, or USDT/USDC on Solana, BNB Chain, Ethereum, Polygon, Base or Stellar.",
+  "license": "MIT",
+  "author": "Rozo AI",
+  "homepage": "https://github.com/RozoAI/rozo-checkout-skill#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/RozoAI/rozo-checkout-skill.git"
+  },
+  "bugs": {
+    "url": "https://github.com/RozoAI/rozo-checkout-skill/issues"
+  },
+  "keywords": [
+    "openrouter",
+    "coinbase",
+    "x402",
+    "lightning",
+    "solana",
+    "usdt",
+    "usdc",
+    "crypto-payments"
+  ],
+  "bin": {
+    "rozo-checkout": "scripts/dist/cli.js"
+  },
+  "files": [
+    "scripts/dist",
+    "docs/*.md",
+    "!docs/reviews",
+    "llms.txt",
+    "README.md",
+    "LICENSE"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test test/*.test.mjs",
+    "check": "npm run build && npm test",
+    "prepack": "npm run build"
+  },
+  "devDependencies": {
+    "@solana/spl-token": "^0.4.9",
+    "@solana/web3.js": "^1.95.0",
+    "esbuild": "^0.28.2",
+    "viem": "^2.21.0"
+  }
+}

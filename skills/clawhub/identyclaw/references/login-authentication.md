@@ -304,6 +304,8 @@ curl https://api.identyclaw.com/api/login/timestamp
 
 ## Step 2: Sign the Message
 
+⚠️ **Secret handling:** Read `private_key` only from a local credentials file on the signing host. Never paste keys into chat, prompts, tickets, CI logs, or shell history. Prefer the OpenClaw plugin (`identyclaw_ensure_session`) so the model never sees the key or JWT.
+
 **Message to sign** (UTF-8 bytes):
 ```
 accountid + timestamp_iso
@@ -387,7 +389,7 @@ For **roditid** login (12-letter Passport ID), use `roditid` and `roditid_base64
 **Success Response Pattern**:
 ```json
 {
-  "jwt_token": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9...",
+  "jwt_token": "<jwt_token>",
   "requestId": "01HQXYZ..."
 }
 ```
@@ -459,9 +461,9 @@ Signing (Step 2) is local Ed25519 over `accountid + timestamp_iso`; see [Step 2]
 Include JWT in `Authorization` header for protected endpoints:
 
 ```bash
-# Use YOUR freshly obtained JWT token
+# Use YOUR freshly obtained JWT token (never paste real tokens into docs/chat/logs)
 curl https://api.identyclaw.com/api/me/identity \
-  -H "Authorization: Bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9..."
+  -H "Authorization: Bearer <jwt_token>"
 ```
 
 **Common Protected Endpoints**:

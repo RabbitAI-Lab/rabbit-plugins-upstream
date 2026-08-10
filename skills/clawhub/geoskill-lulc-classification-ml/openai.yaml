@@ -1,0 +1,17 @@
+name: geoskill-lulc-classification-ml
+display_name: 机器学习土地覆被分类
+description: |
+  多波段特征逐像元 RandomForest/梯度提升土地覆被分类，含精度评估、面积统计与众数滤波去盐噪
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-lulc-classification-ml.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - land-use
+  - lidar
+  - machine-learning
+  - point-cloud
+  - remote-sensing
+  - vegetation

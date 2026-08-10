@@ -248,7 +248,10 @@
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      font-size: 20px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      line-height: 1;
     }
 
     .more {
@@ -270,8 +273,32 @@
 
     .more > button {
       width: 40px;
+      height: 40px;
+      min-height: 40px;
       border-radius: 50%;
-      font-size: 20px;
+      display: grid;
+      place-items: center;
+      padding: 0;
+      line-height: 1;
+    }
+
+    .runtime-icon {
+      display: block;
+      width: 18px;
+      height: 18px;
+      pointer-events: none;
+    }
+
+    .runtime-icon path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .runtime-icon circle {
+      fill: currentColor;
     }
 
     .more-menu {
@@ -416,16 +443,16 @@
     <!-- TAOHTML_SLIDES_END -->
 
     <div class="nav controls" data-taohtml-edit-lock>
-      <button id="prev" aria-label="Previous page">&lsaquo;</button>
-      <button id="next" aria-label="Next page">&rsaquo;</button>
+      <button id="prev" aria-label="上一页"><svg class="runtime-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M15.5 5.5 8.5 12l7 6.5"/></svg></button>
+      <button id="next" aria-label="下一页"><svg class="runtime-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M8.5 5.5 15.5 12l-7 6.5"/></svg></button>
     </div>
 
     <div class="more controls" data-taohtml-edit-lock>
-      <button id="moreToggle" aria-label="More options" aria-expanded="false">&hellip;</button>
+      <button id="moreToggle" aria-label="更多操作" aria-expanded="false"><svg class="runtime-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="5" cy="12" r="1.8"/><circle cx="12" cy="12" r="1.8"/><circle cx="19" cy="12" r="1.8"/></svg></button>
       <div class="more-menu" id="moreMenu" hidden>
         <button id="editToggle">编辑模式</button>
-        <button id="modeToggle">Switch to reading mode</button>
-        <button id="fullscreenToggle">Enter fullscreen</button>
+        <button id="modeToggle">切换到阅读模式</button>
+        <button id="fullscreenToggle">打开全屏</button>
       </div>
     </div>
 
@@ -566,8 +593,8 @@
       });
       pageIndicator.textContent = `${String(state.index + 1).padStart(2, '0')} / ${String(slides.length).padStart(2, '0')}`;
       modeToggle.textContent = state.mode === 'reading'
-        ? 'Switch to presentation mode'
-        : 'Switch to reading mode';
+        ? '切换到演示模式'
+        : '切换到阅读模式';
       history.replaceState(null, '', `#${state.index + 1}`);
       emitState();
     }
@@ -762,7 +789,7 @@
     document.addEventListener('fullscreenchange', () => {
       closeMoreMenu({ rearm: false });
       if (document.activeElement?.closest?.('.controls')) document.activeElement.blur();
-      fullscreenToggle.textContent = document.fullscreenElement ? 'Exit fullscreen' : 'Enter fullscreen';
+      fullscreenToggle.textContent = document.fullscreenElement ? '退出全屏' : '打开全屏';
       syncControlsForContext({ fullscreenChanged: true });
     });
     document.querySelectorAll('.source-btn').forEach(button => {

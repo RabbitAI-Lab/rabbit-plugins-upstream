@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cron-assist",
   "slug": "cron-assist",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1784327186817,
-  "contentHash": "648bd2ea2bd15fc86bbefcde029d796596fd67fe6ec84e455b1f662771f49c6b",
-  "fetchedAt": "2026-07-26T18:11:23.643Z"
+  "version": "1.0.1",
+  "updatedAt": 1786204274112,
+  "contentHash": "c1b22a64c5191eba990f1aed907ce29de269f433e8fc5d615d0faa350425d968",
+  "fetchedAt": "2026-08-10T09:25:11.696Z"
 }

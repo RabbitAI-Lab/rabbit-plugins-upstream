@@ -1,0 +1,91 @@
+# Changelog / 变更日志
+
+All notable changes to the `meta-analysis` skill are recorded here. Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), versioning follows [Semantic Versioning](https://semver.org/).
+
+---
+
+## [1.8.0] — 2026-08-02
+
+### Added / 新增
+- **ct-base alignment**: comprehensive alignment with `ct-base` BASE.md specification.
+  - Added `AGENTS.md` (English-only agent-facing rules: environment, execution, language, security, reuse, menu triage, traceability).
+  - Added `CHANGELOG.md` (this file).
+  - Added `references/units.md` (atomic task unit index for pipeline).
+  - Added `scripts/i18n.py` (from ct-base — bilingual EN/ZH helper with auto locale detection).
+  - Added `scripts/r_libs.py` (from ct-base — R invocation + validation + sanitization helper).
+  - Added `references/language_policy.md` (from ct-base — detailed bilingual policy).
+  - Added `references/report_template.md` (from ct-base — report skeleton reference).
+
+### Changed / 变更
+- **SKILL.md**: frontmatter enriched with `required_commands: [Rscript, python]`. Body remains English-only agent-facing.
+- **README files**: renamed `README_ZH.md` → `README_zh-CN.md` per ct-base naming convention.
+- **Language detection**: migrated to `i18n.py`'s unified `is_chinese_os()` (covers env vars + Windows API + Python locale fallback).
+- **User menus & README (UI polish)**: SKILL.md Triage §5.2 now explicitly lists the "③ Can't decide? → explain the differences between these choices" routing-menu entry; README Complex popup-menu / Vague grill-me examples made more human-friendly so carbon-based users find it easier to use.
+
+### Fixed / 修复
+- Removed stale `README_ZH.md` references across SKILL.md, README.md, README_zh-CN.md.
+- **English README untranslated Chinese**: translated all residual Chinese in `README.md` (Example 1 "You say", Scenario Index "Try saying" tables, §4 title) to English; synced version string to `1.8.0` in both READMEs.
+- **Security-audit doc alignment** (SkillSpector 10 Medium/Low findings — all documentation-consistency, no malicious code):
+  - Removed the `Confidentiality Notice` block from `README.md` — eliminates the "summary stats only" vs "supports IPD patient-level data" trust-boundary contradiction, and also complies with the earlier user instruction that non-`ct-` skills omit confidentiality statements (the zh-CN README never had it).
+  - Added PDF-batch-download warnings (network access / local write / copyright) in both READMEs (§7).
+  - Clarified the high-friction trigger rule in both READMEs' FAQ: code runs only when you explicitly say "execute"/"请直接计算"; casual mentions do not trigger execution.
+  - Clarified the language-switch note: default follows OS locale and only affects display language, no extra authorization needed.
+  - Tightened `SKILL.md` Memory-read scope note: "(R config keys only; no personal info is read or sent)".
+- **ClawHub display-name fix**: republished with a clean top-level directory name `meta-analysis` so the ClawHub page title shows the correct skill name instead of the previous temp publish-folder name "Meta Analysis Strip V180".
+
+---
+
+## [1.8.1] — 2026-08-02
+
+### Fixed / 修复
+- **ClawHub display-name fix**: republished with a clean top-level directory name `meta-analysis`, correcting the ClawHub page title that wrongly showed "Meta Analysis Strip V180" (caused by the previous temp publish-folder name, which ClawHub used as the display name fallback).
+- **Carries the v1.8.0 GitHub documentation-alignment to the marketplaces**: English README residual Chinese fully translated; `Confidentiality Notice` removed (resolves IPD-vs-summary-stats trust-boundary contradiction, complies with the non-`ct` no-confidentiality rule); added PDF-batch-download warnings, high-friction trigger clarification, and language-switch note in both READMEs; tightened `SKILL.md` Memory-read scope note.
+
+---
+
+## [1.8.3] — 2026-08-02
+
+### Fixed / 修复
+- **IPD trust-boundary contradiction (SkillSpector finding)**: rewrote `AGENTS.md` §4 security red-line — the old line stated "no patient-level data" while the skill advertises IPD meta. New wording clarifies that **all data you provide, including IPD, is processed locally from your own files and never uploaded or sent anywhere**; IPD is fully supported and handled the same local-only way. This closes the real source of the "summary stats vs IPD" divergence finding (the earlier `README.md` Confidentiality Notice removal addressed a duplicate copy of the same phrase).
+
+---
+
+## [1.7.0] — 2026-08-01
+
+### Added / 新增
+- Full bilingual auto-switch: default English, auto-switch to Chinese on `zh-*` locale (`.msg(en, zh)` pattern in R files + Python i18n).
+- `permissions` block declaration in SKILL.md frontmatter.
+- `references/svg_editing.md` — SVG editing tools & journal format conversion guide.
+- `references/advanced_api.md` — reusable API reference for TSA / dose-response / survival / Bayesian NMA wrappers.
+
+### Changed / 变更
+- Effect size conversion module (`esc`) expanded: d ↔ g ↔ logOR ↔ r ↔ Fisher's z, batch mode + Hedges' g correction.
+
+---
+
+## [1.6.0] — 2026-07-25
+
+### Added / 新增
+- Bayesian NMA: `multinma` (Stan) + `gemtc` (JAGS) full workflows.
+- TSA: self-implemented `run_tsa()` with O'Brien-Fleming boundaries.
+- Survival meta: `survmeta` wrapper + KM pseudo-IPD reconstruction.
+- Dose-response: `dosresmeta` wrapper.
+
+---
+
+## [1.5.0] — 2026-07-15
+
+### Added / 新增
+- Initial public release on GitHub / ClawHub / SkillHub.
+- Full RevMan 5.x 1:1 code mapping.
+- Stata `metareg` / `mvmeta` equivalents.
+- Network meta: `netmeta` + `gemtc` + `multinma`.
+- Single-group meta: `metaprop` / `metamean` / `metainc` / `metacor`.
+- Diagnostic meta: `mada::reitsma` bivariate + SROC.
+
+---
+
+## [1.0.0] — 2026-06-01
+
+### Added / 新增
+- Initial version. Core pairwise meta-analysis with `metafor` / `meta`.

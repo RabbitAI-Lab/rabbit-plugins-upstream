@@ -1,4 +1,4 @@
-"""Shared helpers for linkfox-tiktok-video-products (accountTokens + developerProxy)."""
+"""Shared helpers for linkfox-tiktok-video-products (openId + developerProxy)."""
 
 from __future__ import annotations
 
@@ -89,23 +89,6 @@ def call_api(endpoint: str, params: dict) -> dict:
         return {"error": f"Connection failed: {e.reason}"}
 
 
-def resolve_account_tokens(params: dict) -> dict:
-    if params.get("ttsAccessToken"):
-        return {"accessToken": str(params["ttsAccessToken"]).strip()}
-
-    open_id = params.get("openId")
-    if not open_id or not str(open_id).strip():
-        print("Missing required field: openId OR ttsAccessToken", file=sys.stderr)
-        sys.exit(1)
-
-    result = call_api(ACCOUNT_TOKENS_ENDPOINT, {"openId": str(open_id).strip()})
-    if result.get("errcode"):
-        return result
-    if "accessToken" not in result:
-        return {"error": "accountTokens response missing accessToken", "details": result}
-    return result
-
-
 def assert_path_allowed(path: str) -> None:
     normalized = path.lstrip("/").replace("\\", "/")
     if ".." in normalized or "//" in normalized:
@@ -123,7 +106,7 @@ def assert_path_allowed(path: str) -> None:
 
 
 def developer_proxy_call(
-    tts_access_token: str,
+    open_id: str,
     path: str,
     method: str,
     region: Optional[str] = None,
@@ -135,7 +118,7 @@ def developer_proxy_call(
     proxy: dict[str, Any] = {
         "path": path.lstrip("/"),
         "method": method,
-        "ttsAccessToken": tts_access_token,
+        "openId": open_id,
     }
     if region:
         proxy["region"] = str(region)
@@ -145,6 +128,16 @@ def developer_proxy_call(
         proxy["body"] = body
         proxy["contentType"] = content_type
     return call_api(DEVELOPER_PROXY_ENDPOINT, proxy)
+
+
+def require_open_id(params: dict) -> str:
+    open_id = params.get("openId")
+    if not open_id or not str(open_id).strip():
+        print("Missing required field: openId", file=sys.stderr)
+        sys.exit(1)
+    return str(open_id).strip()
+
+
 
 
 def qs_add(parts: list[str], key: str, value: str) -> None:

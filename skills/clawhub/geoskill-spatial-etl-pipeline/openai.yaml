@@ -1,0 +1,13 @@
+name: geoskill-spatial-etl-pipeline
+display_name: 空间ETL流水线
+description: |
+  配置驱动的提取-转换-加载流水线，含分步日志与质量报告。Config-driven extract-transform-load pipeline with per-step logging and a quality report.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-spatial-etl-pipeline.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - remote-sensing
+  - tooling

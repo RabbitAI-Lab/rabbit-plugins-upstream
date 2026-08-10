@@ -1,39 +1,40 @@
 ## Description: <br>
-AI dashboard and web app generation powered by CellCog, including interactive dashboards, KPI trackers, data visualizations, analytics apps, data explorers, calculators, games, and responsive HTML apps with real-time filters. <br>
+Generates interactive dashboards, KPI trackers, data visualizations, analytics apps, data explorers, calculators, games, and responsive HTML web apps using CellCog. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
 ## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+[cellcog](https://clawhub.ai/user/cellcog) <br>
 
 ### License/Terms of Use: <br>
 MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and business users use this skill to generate interactive dashboards, KPI trackers, data explorers, charts, and responsive web apps through CellCog. It supports prompts that include inline data, uploaded files, or generated sample data. <br>
+Developers and agents use this skill to ask CellCog to create interactive dashboards, KPI trackers, data explorers, charts, calculators, games, and responsive web apps from prompts or supplied data. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Prompts and uploaded data may be sent to CellCog as an external AI service. <br>
-Mitigation: Use mock or redacted data for demos, and upload confidential, customer, HR, financial, log, or regulated data only when authorized and aligned with CellCog data handling terms. <br>
+Risk: The skill requires a CELLCOG_API_KEY and may send prompts or uploaded datasets to CellCog. <br>
+Mitigation: Confirm the publisher is trusted and avoid uploading confidential business or personal datasets unless the CellCog account and data-handling terms allow it. <br>
 
 
 ## Reference(s): <br>
-- [CellCog homepage](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/dashboard-web-app-cellcog) <br>
+- [CellCog Homepage](https://cellcog.ai) <br>
+- [ClawHub Skill Page](https://clawhub.ai/cellcog/skills/dashboard-web-app-cellcog) <br>
+- [CellCog Publisher Profile](https://clawhub.ai/user/cellcog) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Code, Files, Markdown, Guidance] <br>
-**Output Format:** [Markdown responses with generated dashboard or web app code and files] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with Python examples and setup commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and CELLCOG_API_KEY; may use uploaded CSV, JSON, or Excel data when provided.] <br>
+**Other Properties Related to Output:** [Requires python3, the cellcog dependency, and CELLCOG_API_KEY for CellCog API access.] <br>
 
 ## Skill Version(s): <br>
-1.0.13 (source: server release evidence) <br>
+1.0.15 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

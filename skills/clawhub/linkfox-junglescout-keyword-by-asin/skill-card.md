@@ -1,46 +1,63 @@
-## Description: <br>
-Looks up Jungle Scout keyword data for up to 10 Amazon ASINs, including search volume, ranking, competition, PPC bid, and relevancy metrics across supported marketplaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Looks up Amazon keywords associated with up to 10 ASINs via Jungle Scout data and returns search volume, ranking, competition, PPC bid, and relevance metrics across supported marketplaces.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, marketplace analysts, and agents use this skill to analyze competitor ASIN keyword coverage, discover traffic keywords, compare ASIN rankings, and prepare keyword or advertising research for Amazon marketplaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: ASINs, marketplace choices, query filters, API credentials, and workflow metadata are sent to LinkFox. <br>
-Mitigation: Install and run only when this data sharing is acceptable; avoid including secrets or sensitive business context in queries or feedback. <br>
-Risk: Queries can consume LinkFox credits, and the documented dynamic cost can be high for larger requests. <br>
-Mitigation: Confirm marketplace, ASIN count, result count, and expected credit cost with the user before each chargeable query. <br>
-Risk: Full and cached API responses are persisted locally under the LinkFox output directories. <br>
-Mitigation: Check the configured output path before use in shared or regulated workspaces and remove cached or saved JSON files when they are no longer needed. <br>
-Risk: Automatic feedback behavior may report user sentiment or workflow details to LinkFox. <br>
-Mitigation: Keep feedback content minimal and do not include confidential product, credential, or account information. <br>
+## Use Case:
 
+Amazon sellers, e-commerce analysts, and agents supporting external users use this skill to find competitor and target-ASIN search keywords, compare search volume, ranking, competition, and PPC bid metrics, and identify keyword opportunities.
 
-## Reference(s): <br>
-- [Jungle Scout ASIN Keyword API Reference](artifact/references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-junglescout-keyword-by-asin) <br>
-- [Publisher Profile](https://clawhub.ai/user/linkfox-ai) <br>
+### Deployment Geography for Use:
 
+Global, with data access limited to the supported Amazon marketplaces: US, UK, Germany, India, Canada, France, Italy, Spain, Mexico, and Japan.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries and tables with saved JSON response files and optional inline JSON output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox API credentials; accepts marketplace, ASIN list, count, sorting, variant, and keyword filter parameters.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: release evidence) <br>
+Risk: The scanner summary reports that the skill handles LinkFox account setup, SMS login, API key generation, billing, payment QR flows, feedback reporting, and broad local persistence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use it only when those LinkFox flows are intended; do not provide phone codes or start payments unless the user explicitly requests that action.
+
+Risk: Full keyword responses are written to local linkfox session data files and may contain sensitive product, ASIN, or competitive research data.
+
+Mitigation: Review saved linkfox data before sharing a workspace or artifacts, and remove sensitive response files when they are no longer needed.
+
+Risk: The security guidance warns against untrusted environment overrides for LinkFox endpoints.
+
+Mitigation: Use official LinkFox endpoints and avoid setting LinkFox API base URL environment variables from untrusted sources.
+
+Risk: The skill consumes LinkFox credits and documented billing behavior can create payment or cost exposure.
+
+Mitigation: Confirm credit use before additional queries, avoid repeated exploratory calls, and rely on the documented cache for repeated parameter combinations.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-junglescout-keyword-by-asin)
+- [Jungle Scout ASIN Keyword API Reference](references/api.md)
+- [LinkFox Authentication and Billing Onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, JSON files]
+
+**Output Format:** [Markdown summaries and tables, JSON API responses, shell command examples, and local JSON data files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are saved locally under a linkfox session data directory; large responses print a compact stdout summary unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

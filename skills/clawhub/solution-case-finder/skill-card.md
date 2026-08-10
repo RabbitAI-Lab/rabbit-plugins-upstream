@@ -1,42 +1,59 @@
-## Description: <br>
-Search PatSnap's TRIZ case library through its hosted MCP endpoint using plain HTTP, including keyword, technical-contradiction, SVOP, efficacy, Oxford-effect, patent-office, legal-status, applicant, and IPC/CPC criteria. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search PatSnap's TRIZ case library through its hosted MCP endpoint using plain HTTP, including keyword, technical-contradiction, SVOP, efficacy, Oxford-effect, patent-office, legal-status, applicant, and IPC/CPC criteria.
 
-## Publisher: <br>
-[wwt1995](https://clawhub.ai/user/wwt1995) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wwt1995](https://clawhub.ai/user/wwt1995)
 
-## Use Case: <br>
-Developers and technical teams use this skill to search for analogous TRIZ solution cases, cross-domain mechanisms, invention principles, scientific effects, and prior solution patterns for a technical problem. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search criteria and technical problem details are sent to PatSnap's hosted endpoint. <br>
-Mitigation: Redact sensitive information and avoid trade secrets, NDA-protected details, personal information, unreleased proprietary technology, and export-controlled content unless the organization has approved that data flow. <br>
-Risk: Analogous case-search results may be mistaken for proof of feasibility, freedom to operate, or legal clearance. <br>
-Mitigation: Use retrieved cases as inspiration only and require separate engineering validation, patent review, and legal review before relying on the results. <br>
+## Use Case:
 
+Developers and engineers use this skill to search PatSnap's TRIZ case library for analogous technical cases, cross-domain solution patterns, applied invention principles, and scientific effects relevant to an engineering problem.
 
-## Reference(s): <br>
-- [Solution Case Finder on ClawHub](https://clawhub.ai/wwt1995/skills/solution-case-finder) <br>
-- [PatSnap TRIZ Case Library MCP endpoint](https://ai-fabric.patsnap.com/mcp/patsnap-triz-case-library?APP_ID=Patsnap) <br>
-- [Eureka RD](https://eureka.patsnap.com/rd/#/agentic?type=triz&start_from=hub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON, Markdown] <br>
-**Output Format:** [Markdown guidance with bash examples and JSON tool results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results should include case identifiers, problem and solution mechanisms, TRIZ principles or effects, transferable insights, and limitations when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence) <br>
+Risk: User-provided technical search criteria are sent to PatSnap/Eureka RD.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting trade secrets, NDA-protected details, personal data, proprietary technology, or export-controlled content; abstract or redact sensitive details before searching.
+
+Risk: The HTTP helper depends on Bash, curl, jq, and a fixed hosted endpoint.
+
+Mitigation: Review dependency availability and outbound network policy before installing or running the skill.
+
+Risk: Analogous case results may be useful for inspiration but do not prove feasibility, freedom to operate, or legal safety.
+
+Mitigation: Validate engineering fit independently and seek appropriate patent or legal review before relying on a case for product decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wwt1995/skills/solution-case-finder)
+- [Eureka RD TRIZ case finder](https://eureka.patsnap.com/rd/#/agentic?type=triz&start_from=clawhub&utm_source=clawhub&utm_medium=skill_listing&utm_campaign=triz_case_finder)
+- [PatSnap TRIZ case MCP endpoint](https://ai-fabric.patsnap.com/mcp/patsnap-triz-case-library?APP_ID=Patsnap)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown with inline shell commands and structured case-result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include JSON results from the hosted MCP endpoint when using HTTP mode.]
+
+## Skill Version(s):
+
+1.1.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

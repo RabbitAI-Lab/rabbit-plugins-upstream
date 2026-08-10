@@ -1,45 +1,59 @@
-## Description: <br>
-Analyzes pet defecation-area videos or URLs to detect a pet entering, defecating, and leaving, then returns a cleanup trigger signal and structured report for robot-vacuum integration; it does not provide medical diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet defecation-zone video or image inputs to detect poop-cleaning events and return a robot-vacuum cleaning trigger signal with a structured report.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and smart-home developers can use this skill to analyze indoor dog-toilet or pet-area footage and decide when a separate robot-vacuum integration should be triggered for cleanup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Household pet-area media or URLs are sent to cloud services for analysis. <br>
-Mitigation: Use only when users accept cloud processing; avoid sensitive private footage unless retention, deletion, and access terms are documented. <br>
-Risk: The skill silently creates or reuses an internal identity and stores API tokens locally. <br>
-Mitigation: Review token storage and account-linking behavior before deployment; restrict workspace access and rotate or delete stored credentials when no longer needed. <br>
-Risk: Historical reports and exports may expose prior household media analysis results. <br>
-Mitigation: Limit access to report-list and export functions to authorized users and verify report deletion and retention controls. <br>
+## Use Case:
 
+Pet owners, smart-home developers, and agent operators use this skill to analyze dog-toilet or fixed pet defecation-zone media, identify a defecation event, and produce a cleaning trigger/report that can be connected to a robot-vacuum workflow. It is not intended for medical diagnosis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-poop-clean-trigger-analysis) <br>
-- [Pet Poop Trigger API Documentation](references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown reports and tables with optional JSON detail and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cleanup trigger event flags, event timestamps, pet type, recommendations, and cloud report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Pet-area images, videos, or media URLs may be sent to configured Lifeemergence cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media you are comfortable sharing with that service, prefer a test account, and review the service's retention and access controls before using private household footage.
+
+Risk: The skill can automatically access per-user report history.
+
+Mitigation: Review account linkage and history-query behavior before installation, and avoid using shared or sensitive accounts unless that access pattern is acceptable.
+
+Risk: The skill can create a local SQLite user/token store in the workspace data directory.
+
+Mitigation: Protect the workspace data directory, avoid committing local token stores, and rotate or remove stored credentials when testing is complete.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-poop-clean-trigger-analysis)
+- [API interface notes](artifact/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and text reports, with optional JSON-detail output and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return cleaning trigger flags and report links; actual robot-vacuum control requires a user-side smart-home gateway or robot-vacuum API integration.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release evidence; artifact frontmatter lists 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

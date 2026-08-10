@@ -1,0 +1,11 @@
+{
+  "name": "github-autosetup",
+  "description": "Automated GitHub/git setup for coding agents, driven purely through Git Bash: probe → channel decision (https/GCM or SSH) → browser-OAuth auth → passphrase SSH key + agent → repo create/push → post-commit auto-push + scheduled task. Zero plaintext secrets (sensitive-info SOP built in).",
+  "version": "2.0.0",
+  "author": {
+    "name": "Sgt_BaiXiao"
+  },
+  "homepage": "https://github.com/SgtBaixiao/github-autosetup",
+  "repository": "https://github.com/SgtBaixiao/github-autosetup",
+  "license": "MIT"
+}

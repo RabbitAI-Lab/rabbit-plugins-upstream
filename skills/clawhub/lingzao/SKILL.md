@@ -1,6 +1,6 @@
 ---
 name: lingzao
-description: 灵造是给 WorkBuddy、OpenClaw、Codex 等 Agent 使用的小红书、抖音、TikTok、Instagram 与 YouTube 创作者研究及自媒体运营 Skill。安装免费，可先做选题、标题、封面、账号诊断、发布检查和复盘；查询公开内容、评论、短视频文案、公众号文章数据或生成图片时需要灵造积分和 API Key。
+description: 灵造是给 WorkBuddy、OpenClaw、Codex 等 Agent 使用的跨平台创作者研究与自媒体运营 Skill。安装免费，可先做选题、标题、封面、账号诊断、发布检查、复盘，以及公众号对标适配判断和原创写作；查询公开内容、评论、短视频文案、公众号文章数据或生成图片时需要灵造积分和 API Key。
 ---
 
 # 灵造：跨平台创作者研究与自媒体运营 Skill
@@ -30,6 +30,7 @@ description: 灵造是给 WorkBuddy、OpenClaw、Codex 等 Agent 使用的小红
 | 做发布前检查 | “发布前帮我检查标题、封面、前 3 行、关键词和用户点击理由。” |
 | 做发布后复盘 | “根据这条内容的数据和评论，帮我判断下次要调整什么。” |
 | 做每周内容包 | “用灵造把我这一周的素材整理成 5 个母题，并分发成小红书、公众号、播客和短口播。” |
+| 校准公众号对标 | “我发几篇喜欢的公众号文章和一篇自己的内容，你先判断适不适合我学，不适合再补找对标，然后帮我写成自己的文章。” |
 | 做图片素材 | “先帮我设计封面/配图方向；如果需要生成图片，再确认积分后调用图片生成。” |
 | 保存长结果 | “把这份分析整理成 Word、网页预览或知识库 Markdown 版本。” |
 
@@ -112,7 +113,8 @@ description: 灵造是给 WorkBuddy、OpenClaw、Codex 等 Agent 使用的小红
 网络状态；图片生成或短视频文案提取这类异步任务可能需要等待轮询完成。
 如果灵造返回服务暂时不可用或响应超时，只用固定话术告诉用户：“灵造服务暂时
 不可用，请稍后重试。”如果返回了 `error_id`，可以附上 `error_id`，方便后续排查。
-不要额外展开。
+如果返回积分不足，明确告诉用户当前积分不足、需要充值后重试，不要把它描述成网络、
+图片生成或内容研究服务故障，也不要在余额未变化时自动重试。不要额外展开。
 
 ## Agent Playbooks
 
@@ -120,207 +122,53 @@ For higher-level creator strategy tasks, use the playbooks in
 `<skill_root>/playbooks/` before answering. They turn Lingzao's public-content
 tools into creator workflows instead of isolated lookups.
 
-Use these playbooks when relevant:
+## Playbook Routing Contract
 
-- `lingzao-progressive-interaction-map.md`: route vague user inputs, homepage
-  links, note links, drafts, and reference-image requests with light questions.
-- `search-credit-notice.md`: explain basic vs deep search scope before paid
-  lookups and avoid silently expanding credit usage.
-- `copy-paste-prompt-scope-boundary.md`: when users ask how to prompt Lingzao,
-  or paste broad requests such as finding benchmark accounts, one-stop content,
-  cover/image generation, post-publish review, Brief/sponsored content, or
-  cross-platform distribution, rewrite the request into a scoped copy-paste
-  prompt with quantity, time range, quality gate, depth boundary, stop
-  condition, and next step.
-- `atian-creator-judgment-framework.md`: apply A Tian's account-stage,
-  memory-anchor, content-mainline, and bottleneck judgment.
-- `creator-case-general-analysis-framework.md`: analyze any creator case across
-  tracks by identifying the account archetype, memory anchor, new narrative,
-  proof system, audience desire, content engine, format engine, comment demand,
-  commercial entry, hidden resources, learnable parts, non-copyable parts, and
-  user-fit tests.
-- `account-report-evidence-visual-contract.md`: apply this evidence and
-  deliverable contract to formal own-account diagnosis, comparable-account
-  breakdown, same-stage peer diagnosis, and creator distillation reports. It
-  requires one-screen conclusions, public-data/sample boundaries, direct
-  account/note links, real cover audit, viral asset reuse, account-evolution
-  evidence, no fake backend metrics, and Word/HTML/Feishu/knowledge-base
-  packaging when the user asks for a formal report.
-- `zero-beginner-onboarding-gate.md`: use before normal topic search or
-  benchmark discovery when a user says they know nothing about self-media,
-  wants to start Xiaohongshu from zero, or does not know what to post. Give
-  the minimum Xiaohongshu cognition, ask one compact five-signal intake
-  question, then deliver 3 possible directions, 1 recommended 7-day test, and
-  the first minimum publishable note instead of sending them to a course.
-- `beginner-account-start-and-topic-radar.md`: handle zero-to-one creator
-  questions, topic discovery, keyword trees, and low-follower viral references.
-- `keyword-insight-report-template.md`: create scoped keyword insight reports
-  from a main keyword plus confirmed related/dropdown terms, with clear credit
-  estimates before expanding.
-- `keyword-to-publishable-content-package.md`: turn a keyword, vague topic,
-  note link, screenshot, reference image, saved note, or inspiration material
-  into publishable Xiaohongshu content packages with selected references,
-  topic angles, titles, cover copy, 4-7 page graphic-note text, spoken scripts,
-  Vlog storyboards, body copy, 10 publishing keywords, pinned content, and a
-  pre/post-publish review loop. When users say "一条龙", "直接出内容", "把这个拆成
-  内容给我发", or "从灵感素材到选题到稿子", produce a minimum usable package first
-  instead of stopping at clarification.
-- `brand-brief-to-content-workflow.md`: turn an advertising, brand cooperation,
-  campaign, product, or content Brief into creator content. Use it when users
-  say "拆 Brief", "品牌 Brief 发来了", "这个商单怎么写", or "Brief 进去后帮我出
-  选题/标题/封面/正文". It extracts brand goals, required points, forbidden
-  claims, audience, creator fit, and deliverables, then searches recent public
-  references when confirmed, chooses content angles, produces Xiaohongshu
-  graphic-note/spoken/Vlog packages, and checks brand-delivery/compliance risk.
-- `mother-content-cross-platform-distribution.md`: turn one topic, draft,
-  note breakdown, product update, screenshot, transcript, or oral idea into a
-  one-stop cross-platform distribution package. When users say "一条龙",
-  "全平台同步", "分发包", or "一个模板发多个平台", start with the basic
-  Xiaohongshu + Moments + WeChat public-account package, then offer optional
-  expansion to podcast, X, Knowledge Planet, Bilibili, video account/Douyin,
-  Xiaohongshu image package, or knowledge-base/SOP.
-- `weekly-content-motherpack-distributor.md`: turn one week of creator
-  materials into a weekly content update package. When users say "每周内容更新包",
-  "周更内容包", "下周发什么", "整理这一周素材", or "帮我做 5 个母题",
-  first compress the week into 5 mother topics, park weak ideas in a debt pool,
-  then distribute the strongest topics to Xiaohongshu, WeChat public account,
-  podcast/short scripts, community posts, and knowledge-base packaging with
-  delivery statuses, image readiness, review gates, and folder/Word/HTML
-  packaging options.
-- `pre-publish-readiness-check.md`: before posting, ask whether the content is
-  already finished and then check content clarity, image/page readiness, cover
-  recognition, title clickability, first 3 lines or first 3 seconds, and natural
-  keyword embedding. It should call the Xiaohongshu compliance risk gate before
-  final publishable copy is returned.
-- `xhs-platform-management-risk-baseline.md`: apply the management-level
-  Xiaohongshu baseline before content operations, commercial copy, Brand Briefs,
-  cover/image generation, pinned content, and post-publish advice. The default
-  principle is public value first, product name later, and no diversion action;
-  use Xiaohongshu's official community norms as the floor for contact, link,
-  QR-code, and off-platform diversion risks.
-- `xhs-content-compliance-risk-gate.md`: before producing Xiaohongshu-facing
-  copy, scan and rewrite risky wording around off-platform diversion, WeChat or
-  private-contact guidance, incentivized comment interaction, exaggerated
-  guarantees, and sensitive category claims. Use it for titles, cover copy,
-  body/caption, page text, scripts, pinned comments, keywords, Briefs, one-stop
-  packages, and Xiaohongshu sections of cross-platform packages.
-- `audience-persona-fit-check.md`: before titles, keywords, account operation,
-  or content-package decisions, infer or ask who the content is for, who will
-  click, who will not click, and which audience/city/life-stage keywords should
-  shape the output.
-- `xhs-title-design-check.md`: design or diagnose Xiaohongshu titles after the
-  user sends a topic, draft, cover copy, reference note, or content package;
-  default to 3 strongest titles with keyword anchor and click reason instead
-  of a 10-title pool.
-- `xhs-profile-bio-design.md`: write or diagnose Xiaohongshu 100-character
-  profile bios and homepage introductions that clarify who the account is for,
-  what it shares, why to follow, and how it connects to nickname, pinned notes,
-  account stage, audience keywords, city keywords, and light commercial paths.
-- `benchmark-account-discovery-quality-gate.md`: find or judge benchmark
-  accounts with a default quality gate: still updating, recent high-performing
-  works, track/audience fit, stage fit, account-level proof, follower-range
-  fit, and clear learnable parts; stale accounts should be marked as historical
-  references, not main benchmarks. Accounts with only around 100 followers and
-  a few hundred total likes should not be called benchmark accounts for
-  ordinary users; label them as single-note samples or reject them unless the
-  user explicitly asks for seed-account observation.
-  User-facing results should show direct creator profile links and the specific
-  recent high-interaction works. Keep the returned `users[].id` available for
-  follow-up profile commands, but do not derive Xiaohongshu IDs from `RED ID`
-  bios. The first discovery round should return up to 3 strong starter
-  accounts, not 10-20 accounts; expand to 5 or more only after the user
-  confirms follower range, stage, city, audience, format, or asks for more.
-  Include follower count, total liked count, latest update, recent 30-day hit
-  works with note metrics, content format, and why each account is worth
-  learning; sort visible recommendations by follower count from high to low
-  when available.
-- `self-account-peer-horizontal-diagnosis.md`: compare the user's own account
-  with same-track, same-stage, or same-follower-range peer accounts when the
-  user explicitly asks for peer comparison, such as "横向对比", "同级账号",
-  "对标账号", "找 5-15w 粉账号和我比", or "和同赛道账号比我差在哪里". Generic
-  own-account concerns such as "看看我现在的问题" or "我是不是说话太快" should
-  stay on `self-account-diagnosis-report-template.md` unless the user also asks
-  to compare against peers. It combines own-account diagnosis, active benchmark
-  selection, peer-account tables, title/cover/opening/speech/content-system
-  comparison, real cover audit, viral asset reuse comparison, top gaps, 30-day
-  adjustment plans, evidence links, and a human next-step loop.
-- `single-note-breakdown-workflow.md`: break down one Xiaohongshu/Douyin note
-  link by title, cover, outline/script, shooting/editing layer when visible,
-  comment demand, viral mechanism, learnable parts, non-copyable parts, and
-  adaptation into the user's own graphic note, spoken script, Vlog storyboard,
-  or knowledge-base card. User phrases such as "完整分析这条笔记", "深度拆解",
-  "拆细一点", "拍摄手法", "分镜", or "剪辑节奏" should trigger the deeper
-  breakdown instead of a short summary.
-- `publishing-keyword-design-check.md`: design the final 10 Xiaohongshu
-  publishing keywords for a finished draft and check whether title, cover copy,
-  opening lines, and keyword field carry the keywords naturally.
-- `track-difficulty-judgment-library.md`: judge common tracks such as female
-  growth, career, good products, local life, health, fashion, and AI tools.
-- `monetization-path-judgment-library.md`: answer whether a track or account
-  can monetize through ads, courses, community, consulting, lead generation,
-  products, stores, or enterprise conversion.
-- `self-account-diagnosis-report-template.md`: structure own-account diagnosis
-  reports, follow-up actions, and a human closing with "人情味" that turns
-  sharp diagnosis into one small next experiment instead of ending at a cold
-  action list. Own-account diagnosis should also include a share-worthy
-  conclusion card, action advice, psychological reassurance, public sample
-  boundaries, real cover audit, viral asset reuse, and direct evidence links in
-  formal reports.
-- `comparable-account-breakdown-report-template.md`: decide whether another
-  account is worth learning from, what can be learned, what cannot be copied,
-  which real cover/title/content assets are repeatable, and how to adapt them
-  into the user's own version without copying the creator's identity or assets.
-- `draft-rewrite-and-benchmark-workflow.md`: rewrite drafts, adapt viral
-  formulas, extract benchmark-copy templates into structure/style/slot
-  frameworks, fill the user's own content into those frameworks, and review
-  multiple content ideas without only polishing sentences.
-- `reference-image-graphic-note-workflow.md`: turn reference images into
-  Xiaohongshu 4-page or 7-page graphic-note packages.
-- `visual-generation-and-cover-workflow.md`: route Xiaohongshu covers, graphic
-  notes, WeChat image packs, no-person knowledge cards, and product/ecommerce
-  visuals into image generation or ready-to-use prompt packages.
-- `travel-handdrawn-map-visual-workflow.md`: create Xiaohongshu handdrawn
-  travel maps, food maps, city-walk maps, illustrated route maps, and check-in
-  order images. Use it when users want a city/destination route image such as
-  "长沙美食地图", "贵州旅游地图", "一天从早吃到晚", "5 天游路线", or "打卡路线图".
-- `image-generation-execution-workflow.md`: when image generation is available,
-  turn the visual route into actual images, run a visual-director quality gate,
-  and repair ugly/crowded/generic generations instead of leaving ordinary users
-  with prompt-only drafts.
-- `image-generation-agent-integration-guide.md`: model-agnostic rules for
-  domestic Agent wrappers, including stable generation input/output fields,
-  good-vs-bad image standards, reference-image usage, known generation bugs,
-  friendly failure handling, and A Tian's example-collection homework.
-- `visual-reference-style-library.md`: classify A Tian's curated visual
-  reference groups into travel/food covers, WeChat article images, AI-person
-  infographics, Lingzao no-person knowledge cards, product conversion images,
-  face-led keyword video covers, interaction prompt covers, text-dense
-  screenshot graphic notes, room-as-identity lifestyle covers, and handdrawn
-  travel/food route maps.
-- `post-publish-data-review-workflow.md`: review published Xiaohongshu notes
-  from note links, backend screenshots, scripts, covers, and 24h/48h/7d data.
-- `content-knowledge-base-workflow.md`: turn saved notes, public creator links,
-  keyword results, viral examples, and creator distillation requests into
-  user-owned topic, title, cover, structure, account-reference,
-  creator-research, and publishing-review libraries.
-- `retention-and-follow-up-loop.md`: end useful outputs with one concrete next
-  step such as published-note data review, reusable reference-search templates,
-  draft feedback, or a post-diagnosis small experiment with a return loop. It
-  also defines the SOP for not letting the user's words drop on the floor:
-  acknowledge resistance, lower the next action, and ask one concrete
-  next-step question. Dense outputs should offer Word, HTML/webpage preview, or
-  knowledge-base-ready packaging instead of leaving users with a wall of chat
-  text. When users say the diagnosis is accurate but they lack action, route to
-  a post-diagnosis activation package instead of adding more pressure.
-- `product-judgment-and-feedback-loop.md`: judge where users are really stuck,
-  explain Lingzao in human language, build content/sales narratives, turn user
-  feedback into product iteration, and decide which requests are worth building
-  versus noise.
-- `xhs-operation-task-tree.md`: route Lingzao users by concrete Xiaohongshu
-  operation tasks instead of course lists, covering homepage diagnosis,
-  benchmark discovery, viral-note adaptation, topic generation, content
-  production, cover/image work, pre-publish checks, post-publish review,
-  acquisition paths, and knowledge-base automation.
+Before reading a playbook, read `<skill_root>/playbooks/router-index.json`. Do not scan every playbook or use the long progressive map as an always-on prompt.
+
+Route in this order:
+
+1. Classify `input_shape`: homepage, single content, keyword, draft, image, Brief, metrics, or vague request.
+2. Classify `platform`: Xiaohongshu, Douyin, TikTok, Instagram, YouTube, WeChat, cross-platform, or unknown.
+3. Classify `content_stage`: no content, in progress, finished before publishing, published, or recurring system.
+4. Classify `intent`: direction, benchmark, diagnosis, production, visual, publish check, review, distribution, or knowledge base.
+5. Classify `requested_output`: chat judgment, report, publishable copy, image brief, saved files, or reusable library.
+
+Then select:
+
+- exactly 1 primary playbook when a workflow is needed
+- no more than 2 gate/support playbooks
+- 0 primary playbooks when a direct CLI command or simple answer is sufficient
+
+If confidence is high, load only the selected files and proceed. If two primary routes remain plausible, ask one question that requests the material that changes the route. Do not show users the internal playbook list.
+
+Each entry in `router-index.json` is the centralized route card for one playbook:
+
+- `role`: router, primary, gate, or support
+- `category` and `platforms`
+- user-like `signals`
+- `required_inputs`
+- expected `outputs`
+- `avoid_when`
+- allowed `companions`
+
+Use the specialized routers only when needed:
+
+- vague or link-only input -> `progressive-interaction`
+- unclear Xiaohongshu operation stage -> `xhs-operation-tree`
+- paid lookup -> add `search-credit-notice`
+- final Xiaohongshu-facing content -> add the relevant management/compliance gate
+- formal evidence-backed report -> add `report-evidence-contract`
+
+Never select a gate or support playbook as the main workflow. Never load more files merely because they are related.
+
+The registry is complete only when this command passes:
+
+```bash
+python3 <skill_root>/scripts/check_playbook_router.py
+```
+
+`router-cases.json` contains representative user prompts and expected primary routes for regression checks.
 
 Keep public wording focused on creator-content research and workflow support.
 Do not promise viral growth, guaranteed monetization, full monitoring, bulk data
@@ -569,13 +417,15 @@ parameters if they did not already specify them.
   are returned. Reuse `next_cursor` unchanged and repeat the same `--sort` on
   every next-page request; omitting it after `most_liked` defaults to `latest`
   and invalidates the cursor without charge.
-- Instagram `search-notes` supports only `--sort general`, `--note-type 不限`,
-  and `--time-filter 不限`. Do not silently drop unsupported filters.
+- Instagram content search is Reels-only. Use `--sort general`,
+  `--note-type 视频笔记`, and `--time-filter 不限`; `--note-type 不限` remains a
+  compatibility input but is executed and reported as 视频笔记. Do not use
+  `search-notes` for account records; use `search-users`.
 - Instagram profile, posted-note, and detail results may include public avatar,
   cover, carousel-image, and video URLs from the current response. Current
-  `search-notes` evidence supports image/reel identity, canonical URL, author
-  identity, and author avatar only, so do not expect it to supplement text,
-  metrics, or content media. These URLs can expire; use or save needed public
+  `search-notes` returns Reels identity, canonical URL, author identity, and
+  author avatar only, so do not expect it to supplement text, metrics, or
+  content media. These URLs can expire; use or save needed public
   references promptly and do not treat them as permanent asset storage.
 - For TikTok and Instagram `search-notes`, `search-users`,
   `get-user-posted-notes`, and
@@ -583,8 +433,8 @@ parameters if they did not already specify them.
   `--cursor` to fetch one next page. Repeat the original search keyword and
   filters, creator, or content item for that cursor; never reuse it for another
   request identity. Never parse the opaque cursor or hide multi-page fanout.
-  TikTok cursors created before Skill `0.1.92` and Instagram cursors created
-  before Skill `0.1.93` are invalid: discard them and restart from the first
+  TikTok cursors created before Skill `0.1.92` and Instagram search cursors
+  created before Skill `0.1.95` are invalid: discard them and restart from the first
   page. If Lingzao returns `PAGINATION_CURSOR_STALE`, also discard
   that cursor and restart from the first page; do not loop it.
 - Xiaohongshu list-style commands (`search-notes`, `get-user-posted-notes`,
@@ -618,12 +468,13 @@ flows.
 ~/.lingzao/bin/lingzao search-notes --platform youtube --keyword "creator workflow" --sort general --note-type "视频笔记" --time-filter "一周内"
 ~/.lingzao/bin/lingzao search-notes --platform tiktok --keyword "AI gadgets" --sort most_liked --note-type "视频笔记"
 ~/.lingzao/bin/lingzao search-notes --platform tiktok --keyword "AI gadgets" --sort most_liked --note-type "视频笔记" --cursor "next_cursor_from_previous_response"
-~/.lingzao/bin/lingzao search-notes --platform instagram --keyword "creative coding"
+~/.lingzao/bin/lingzao search-notes --platform instagram --keyword "creative coding" --sort general --note-type "视频笔记" --time-filter "不限"
 ```
 
 Use this when the user wants public notes around a topic.
 Before calling, ask the user for `--sort`, `--note-type`, and `--time-filter`
 when they have not specified those preferences.
+Instagram content search always means Reels search; choose `--note-type 视频笔记`.
 For TikTok pagination, repeat the same keyword, sort, note type, and time filter
 with the returned cursor.
 `search-suggestions` has been retired. For keyword expansion or topic discovery,
@@ -783,6 +634,9 @@ into the conversation.
 ```
 
 Use this when the user asks for short-video spoken copy, transcript, subtitles, or口播文案.
+If one item reports that the video is too large, do not retry that URL. Explain
+that only the failed item was not charged, report any successful-item cost in
+the same batch, and ask for a shorter video link.
 
 ### Generate Image
 
@@ -790,6 +644,7 @@ Use this when the user asks for short-video spoken copy, transcript, subtitles, 
 ~/.lingzao/bin/lingzao generate-image --prompt "一张小红书封面图，主题是 AI 生图新手避坑，干净明亮，中文大标题留白" --output /tmp/lingzao-image.png
 ~/.lingzao/bin/lingzao generate-image --prompt "极简产品海报，白底，柔和阴影" --size 1024x1536 --output /tmp/poster.png
 ~/.lingzao/bin/lingzao generate-image --prompt "参考两张图，保留人物风格，把产品界面换成灵造首页截图" --size 1536x2048 --image /tmp/style.png --image /tmp/product.png --output /tmp/poster.png
+~/.lingzao/bin/lingzao generate-image --prompt "每张参考封面分别改成 AI 工作台主题，替换原人物身份、原文字和品牌" --count 3 --reference-mode one_to_one --image /tmp/top-1.png --image /tmp/top-2.png --image /tmp/top-3.png --size 1024x1536 --output /tmp/poster.png
 ~/.lingzao/bin/lingzao generate-image --prompt "批量生成 3 张封面草稿" --count 3 --size 1024x1536 --output /tmp/poster.png
 ~/.lingzao/bin/lingzao generate-image --prompt-file /tmp/lingzao-prompt.txt --output /tmp/poster.png
 ```
@@ -799,10 +654,22 @@ research, do not call image generation automatically.
 
 When the user wants N images from the same prompt, call `generate-image` once
 with `--count N` for N=2..5. Do not loop the same prompt as multiple
-`--count 1` calls: Lingzao treats short-window identical requests, including
-same-count retries, as duplicate POST recovery and returns the same batch
-instead of creating new images. If the user wants distinct concepts, vary the
-prompt for each concept or use one counted batch for same-prompt variants.
+`--count 1` calls. The CLI prints a stable request ID before submitting that
+batch. If a POST response is ambiguous or polling is interrupted, the Agent
+must save that UUID and repeat the same command with
+`--client-request-id <UUID>`; keep the prompt, size, count, output format,
+reference mode, and reference images unchanged. Omit `--client-request-id` for
+every new generation intent. Do not reuse an old ID for new content and do not
+invent another network-retry loop. The server retains idempotency and the
+one-active-batch limit. If the user wants distinct concepts, vary the prompt
+for each concept or use one counted batch for same-prompt variants.
+When each reference image should produce its own corresponding output, pass the
+references in output order, set `--count` to the same number, and add
+`--reference-mode one_to_one`. The CLI rejects mismatched counts before the API
+request. One-to-one batches support 1-4 reference images; `count=5` remains
+available only for prompt-only or shared-reference generation. Without that
+option, repeated `--image` inputs are shared references that jointly influence
+every output.
 
 Before calling `generate-image`, run the minimal intake gate. If the user only
 says something like "给我做一张某某海报图" or provides only a broad topic, do
@@ -875,9 +742,13 @@ provide. For `--count` greater than 1, `--output /tmp/poster.png` writes every
 successful image as numbered files such as `/tmp/poster-1.png`,
 `/tmp/poster-2.png`, and so on. Default Markdown output requires `--output` so
 paid generated images are saved locally. If a direct API caller receives
-`GENERATION_IN_PROGRESS` with a returned `poll_url`, use it to poll the active
-batch instead of POSTing again. If no `poll_url` is returned, wait briefly and
-retry. Use `--format json` only when you need structured automation data.
+`GENERATION_IN_PROGRESS` with a returned `poll_url`, that active batch belongs
+to another intent: poll it only until the concurrency slot is free, then submit
+the current request again with its original `client_request_id`. Do not return
+the other batch as the current request's result. If no `poll_url` is returned,
+wait briefly and retry with the same ID. The CLI handles both cases
+automatically. Use `--format json` only when you need structured automation
+data.
 
 ## Usage Notes
 

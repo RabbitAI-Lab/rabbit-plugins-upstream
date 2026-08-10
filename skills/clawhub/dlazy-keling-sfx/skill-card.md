@@ -1,44 +1,60 @@
-## Description: <br>
-Generate matching scene sound effects from text descriptions or video frames using Kling SFX. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate matching scene sound effects from text descriptions or video frames using Kling SFX through dLazy.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to generate sound effects or background audio cues for scenes from prompts or a single reference video through the dLazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media paths supplied to the skill may be uploaded to the dLazy cloud API and media storage. <br>
-Mitigation: Avoid submitting sensitive prompts or media unless the user's workflow permits cloud processing by dLazy. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Use normal secret-handling practices, restrict local config access, and rotate or revoke the key from the dLazy dashboard when needed. <br>
-Risk: The documented sample output shows image/png even though this is an audio sound-effect skill. <br>
-Mitigation: Validate actual CLI outputs in the target workflow and treat the sample output format as inaccurate. <br>
+## Use Case:
 
+External users and developers use this skill to request short sound effects or background audio prompts for scenes, either from text or from one reference video.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-keling-sfx) <br>
-- [dLazy CLI repository](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON result envelopes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return asynchronous task identifiers or hosted media URLs from files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and release evidence) <br>
+Risk: Prompts and media passed to the CLI may be sent to dLazy's hosted API and file service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user is comfortable with hosted processing and avoid submitting sensitive media unless approved.
+
+Risk: The skill requires a dLazy API key that may be stored locally or supplied through the environment.
+
+Mitigation: Use `dlazy login`, `dlazy auth set`, or `DLAZY_API_KEY` intentionally, and rotate or revoke keys from the dLazy dashboard when needed.
+
+Risk: Broad trigger wording such as generic dubbing requests could invoke the skill when a user did not intend a Kling or dLazy sound-effect workflow.
+
+Mitigation: Prefer explicit requests for Kling or dLazy SFX generation before using the CLI.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-keling-sfx)
+- [dLazy CLI source](https://github.com/dlazyai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON result references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return hosted result URLs or an asynchronous generateId for later polling.]
+
+## Skill Version(s):
+
+1.3.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/mcp-config",
   "slug": "mcp-config",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1780488779625,
-  "contentHash": "6447e30a2fc5048b0d3c40409d367eab76d36b2edbeae0d01958936d94abd053",
-  "fetchedAt": "2026-07-26T18:35:58.844Z"
+  "version": "0.3.1",
+  "updatedAt": 1786008177864,
+  "contentHash": "b0dd3b186bb03e12499792faadba6320112a93055e4290592d5987ba65513cca",
+  "fetchedAt": "2026-08-10T09:30:24.790Z"
 }

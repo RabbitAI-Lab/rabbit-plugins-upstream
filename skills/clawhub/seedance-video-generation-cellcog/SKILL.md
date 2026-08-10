@@ -1,6 +1,6 @@
 ---
 name: seedance-video-generation-cellcog
-description: "AI video generation powered by CellCog via Seedance. Cinematic 1080p video with smooth motion, multi-shot narratives, lipsync, voice synthesis, scoring. Complete videos from a single prompt via ByteDance's Seedance model."
+description: "AI video generation powered by CellCog via Seedance 2.5. Complete multi-minute videos from a single prompt: scripting, voice synthesis, lipsync, scoring, editing, with locked character consistency via 50 reference files. Full productions, not just clips, via ByteDance's Seedance model."
 metadata:
   openclaw:
     emoji: "🌱"
@@ -16,7 +16,7 @@ dependencies: [cellcog]
 
 **Seedance × CellCog.** ByteDance's #1 video model meets the frontier of multi-agent coordination.
 
-Seedance generates the smoothest motion in AI video — cinematic 1080p with physics that look real. CellCog orchestrates it with scripting, voice synthesis, lipsync, scoring, and editing to produce complete videos from a single prompt. Not just clips — full productions.
+CellCog's core: complete multi-minute films from a single prompt. Seedance 2.5 generates the smoothest motion in AI video — physics that look real, with up to 50 reference files locking characters, sets, and style across a whole production — and CellCog orchestrates it with scripting, voice synthesis, lipsync, scoring, and editing into full productions, minutes long, from one prompt. Not just clips — finished films.
 
 ## How to Use
 
@@ -107,10 +107,11 @@ Script Writing → Scene Planning → Frame Generation → Voice Synthesis
 
 | Spec | Details |
 |------|---------|
-| **Resolution** | Up to 1080p |
-| **Duration** | 3 seconds to 4 minutes |
+| **Resolution** | 720p (the AI-video production standard) |
+| **Duration** | Complete multi-minute productions (4+ minutes) from a single prompt; individual generated takes up to 30 seconds |
+| **References** | Up to 50 files (30 images, 10 videos, 10 audio) for character, set, and style consistency |
 | **Styles** | Photorealistic, cinematic, anime, stylized, documentary |
-| **Audio** | Voice synthesis, background music, sound effects |
+| **Audio** | Voice synthesis, background music, sound effects, lip-synced dialogue |
 | **Output** | MP4 |
 
 ---
@@ -143,6 +144,7 @@ Script Writing → Scene Planning → Frame Generation → Voice Synthesis
 
 ## If CellCog is not installed
 
-Run `/cellcog-setup` (or `/cellcog:cellcog-setup` depending on your tool) to install and authenticate.
-**OpenClaw users:** Run `clawhub install cellcog` instead.
+**Claude Code, Cursor, Codex + 70 more agents:** `npx skills add cellcog/skills --skill cellcog`
+**OpenClaw:** `clawhub install cellcog`
+**CellCog plugin users:** run `/cellcog-setup` (or `/cellcog:cellcog-setup` depending on your tool)
 **Manual setup:** `pip install -U cellcog` and set `CELLCOG_API_KEY`. See the **cellcog** skill for SDK reference.

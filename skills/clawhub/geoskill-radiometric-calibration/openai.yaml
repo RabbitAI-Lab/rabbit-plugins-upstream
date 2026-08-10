@@ -1,0 +1,12 @@
+name: geoskill-radiometric-calibration
+display_name: 辐射定标
+description: |
+  DN 转辐射亮度或 TOA 反射率，应用增益/偏移/ESUN 定标参数
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-radiometric-calibration.py
+runtime: python>=3.9
+tags:
+  - gis
+  - preprocessing
+  - remote-sensing

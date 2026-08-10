@@ -1,0 +1,12 @@
+name: geoskill-cloud-shadow-detection
+display_name: 云与云影检测
+description: |
+  基于光谱阈值和太阳方位投影检测云与云影，生成云掩膜与覆盖率统计
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-cloud-shadow-detection.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - remote-sensing

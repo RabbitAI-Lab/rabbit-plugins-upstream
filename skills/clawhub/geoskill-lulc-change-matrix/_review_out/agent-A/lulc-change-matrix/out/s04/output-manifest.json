@@ -1,0 +1,97 @@
+{
+  "skill": "lulc-change-matrix",
+  "skill_version": "1.0.0",
+  "command": "lulc-change-matrix --bbox 116.39 39.90 116.40 39.91 --synthetic --quiet --output-dir _review_out\\agent-A\\lulc-change-matrix\\out\\s04",
+  "started_at": "2026-08-03T21:50:48.294664Z",
+  "finished_at": "2026-08-03T21:50:48.621792Z",
+  "exit_code": 0,
+  "inputs": {
+    "t1": null,
+    "t2": null,
+    "synthetic": true,
+    "bbox": [
+      116.39,
+      39.9,
+      116.4,
+      39.91
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out\\agent-A\\lulc-change-matrix\\out\\s04\\transition_matrix.csv",
+      "kind": "table",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": 6
+    },
+    {
+      "path": "_review_out\\agent-A\\lulc-change-matrix\\out\\s04\\change_areas.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out\\agent-A\\lulc-change-matrix\\out\\s04\\sankey.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out\\agent-A\\lulc-change-matrix\\out\\s04\\change_map.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.39,
+        39.9,
+        116.4,
+        39.91
+      ],
+      "resolution_m": null,
+      "nodata": -1,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_classes": 5,
+    "total_pixels": 9216,
+    "changed_pixels": 444,
+    "change_fraction": 0.048177083333333336,
+    "changed_area_km2": 0.04548918821882595,
+    "n_transitions": 1,
+    "injected_transition": {
+      "from_class": 3,
+      "to_class": 4,
+      "from_name": "built_up",
+      "to_name": "bare_soil",
+      "pixel_count": 444
+    }
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "lulc-change-matrix"
+  },
+  "error": null
+}

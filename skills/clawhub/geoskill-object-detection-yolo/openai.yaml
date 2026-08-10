@@ -1,0 +1,13 @@
+name: geoskill-object-detection-yolo
+display_name: 遥感目标检测
+description: |
+  滑窗+HOG/阈值特征+NMS+地理编码，输出检测框GeoJSON（离线numpy等价实现）
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-object-detection-yolo.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - remote-sensing
+  - vector

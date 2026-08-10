@@ -29,9 +29,10 @@ Choose one profile from user intent and content. Do not infer unsupported facts.
 
 ## Life · 生活记录
 
-- **Structure:** 2–4 moments organized by time, event, or emotion; assign opening, development, climax, return, and detail roles as supported.
-- **Visual language:** natural notes, highlights, tape, gentle offsets, at least 20% whitespace; warm white, pencil gray, sage, soft apricot.
-- **Copy:** layered opening, image-linked notes, one reflection, marginalia, and closing. Do not manufacture lived experience.
+- **Structure:** 2–4 narrative groups organized by time, event, or emotion; assign opening, development, climax, return, and detail roles as supported. Use one dominant hero and one lower-page emotional anchor instead of a uniform photo wall.
+- **Visual language:** natural notes, verbatim highlights, contextual paper or Polaroid frames, 1–3 tape accents, gentle offsets, and controlled transparent-person overlap; warm white, pencil gray, sage, soft apricot, or a reference-supported deep paper color.
+- **Copy:** when the user supplies a story, score factual fidelity, narrative structure, and sentence selection before refining it. Use a layered opening, image-linked notes, one reflection, marginalia, and closing. Do not manufacture lived experience.
+- **Typography:** establish at least three sizes and two font voices. Use highlight marks sparingly for real numbers, distances, people counts, achievements, turns, or distinctive original wording.
 - **Theme shift:** for distance, mountains, sea, sky, or road, switch to mist blue, mountain green, and dawn white. Remove unrelated legacy motifs.
 
 ## Fashion · 穿搭与美妆
@@ -49,6 +50,7 @@ Choose one profile from user intent and content. Do not infer unsupported facts.
 ## Shared selection rules
 
 - Use a profile's information order before its decoration.
+- Derive the canvas ratio from an explicit target or reference before material count; do not lengthen a page merely because it has more assets.
 - Let the intention modify palette and atmosphere without violating factual boundaries.
 - Prefer a different profile only when the user's goal changes, not because an old background is convenient.
 - For hybrid content, choose one dominant profile and borrow at most two secondary devices.

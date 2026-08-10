@@ -1,44 +1,71 @@
-## Description: <br>
-Helps agents manage Shopee Shop Category operations through LinkFox scripts for listing, creating, updating, and deleting shop categories and their item lists. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Shopee Shop Category operations through LinkFox scripts for creating, listing, updating, and deleting shop categories and category item lists.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers, operators, and ecommerce agents use this skill to call Shopee Shop Category APIs for authorized stores, including category management and category item-list updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Shopee shop-category data. <br>
-Mitigation: Review the intended store, category, and item-list changes before running mutating operations. <br>
-Risk: API responses may contain sensitive store or business data and are saved locally. <br>
-Mitigation: Run the skill in a private workspace, treat saved LinkFox response files as sensitive, and delete them when no longer needed. <br>
-Risk: The skill depends on LinkFox/Shopee authorization and API-key access. <br>
-Mitigation: Install and configure only the required authorization skill and keep LinkFox API keys out of shared shells, logs, and repositories. <br>
+## Use Case:
 
+Developers and ecommerce operators use this skill to manage Shopee store categories and the products assigned to those categories after store authorization is configured.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-shop-category) <br>
-- [Shopee Shop Category API reference](https://open.shopee.com/documents/v2/v2.shop_category.add_shop_category?module=101&type=1) <br>
-- [Artifact API reference](artifact/references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON] <br>
-**Output Format:** [Markdown guidance with Python command examples and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses are saved to a local LinkFox session directory; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill can run mutating Shopee category and item-list operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact shop, category, and item IDs before running add, update, or delete scripts.
+
+Risk: The onboarding flow can handle phone-based login, API-key generation, and billing actions.
+
+Mitigation: Install and run it only when the user trusts LinkFox with account access, API keys, and payment-related actions.
+
+Risk: Full API responses are persistently saved to linkfox session data files.
+
+Mitigation: Treat saved response files as sensitive business records and protect or remove them according to the user's data-handling policy.
+
+Risk: Environment overrides can change the LinkFox API hosts used by the scripts.
+
+Mitigation: Avoid host override environment variables unless the target endpoint is controlled and expected.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-shop-category)
+- [Shopee Shop Category API index](https://open.shopee.com/documents/v2/v2.shop_category.add_shop_category?module=101&type=1)
+- [API reference](references/api.md)
+- [Onboarding and billing guidance](references/onboarding.md)
+- [Add shop category](references/apis/add-shop-category.md)
+- [Get shop category list](references/apis/get-shop-category-list.md)
+- [Update shop category](references/apis/update-shop-category.md)
+- [Delete shop category](references/apis/delete-shop-category.md)
+- [Add item list](references/apis/add-item-list.md)
+- [Get item list](references/apis/get-item-list.md)
+- [Delete item list](references/apis/delete-item-list.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, JSON files, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses saved to files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Small responses are printed in full; larger responses are summarized while the complete JSON response is saved under a linkfox session data directory.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,88 @@
+{
+  "skill": "multi-hazard-risk-assessment",
+  "skill_version": "1.0.0",
+  "command": "multi-hazard-risk-assessment --bbox 116 39 117 40 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-03T22:21:23.406820Z",
+  "finished_at": "2026-08-03T22:21:23.530835Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ],
+    "hazards": 3,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\risk_index.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\risk_zones.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\risk_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_hazards": 3,
+    "mean_risk": 0.09358474612236023,
+    "max_risk": 0.6208183169364929,
+    "zone_area_fraction": {
+      "zone_0": 0.83203125,
+      "zone_1": 0.110107421875,
+      "zone_2": 0.055908203125,
+      "zone_3": 0.001953125,
+      "zone_4": 0.0
+    },
+    "high_risk_fraction": 0.0
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "multi-hazard-risk-assessment"
+  },
+  "error": null
+}

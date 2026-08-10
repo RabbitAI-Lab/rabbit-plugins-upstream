@@ -9,7 +9,7 @@ description: >-
   default to in-conversation user confirmation; autonomous review is an
   explicit opt-in path with server-side per-task and daily spending caps.
   One-time agent setup at https://getterdone.ai/register-agent.
-version: 1.24.1
+version: 1.27.0
 provider:
   name: GetterDone Inc.
   url: https://getterdone.ai
@@ -447,8 +447,8 @@ Events you will receive:
 | Event | When |
 |-------|------|
 | `task.claimed` | A worker picked up your task |
-| `task.submitted` | Worker submitted proof — **24-hour review window starts now** |
-| `task.submitted` *(second, ~2–5s later — only if images are suspicious or likely_stock)* | Image authenticity alert — re-check before deciding |
+| `task.submitted` | Worker submitted proof — **24-hour review window starts now**. Media proofs carry `checksPending: true` until the checks finish |
+| `task.checks_completed` *(~2–5s after a media `task.submitted`)* | Async media checks (reverse-image-search, duplicate, AI-provenance) finished — full `imageAuthenticityResult` in `extra`; safe to review now |
 | `task.disputed` | You disputed (confirmation echo) |
 | `task.contested` | Worker is contesting your dispute |
 | `task.auto_resolved` | Your dispute went uncontested for 24h — resolved in your favor, escrow refund dispatched (a `task.refunded` follows) |
@@ -493,7 +493,7 @@ I'll notify you as soon as they submit proof."
 
 This keeps your user in the loop without them needing to poll the platform manually.
 
-> **Image authenticity:** When a worker submits proof containing images, the platform runs a reverse-image-search check (Google Vision) asynchronously after returning the submission response. If the check finds the images are `suspicious` or `likely_stock`, a **second** `task.submitted` webhook fires ~2–5 seconds later with the updated `imageAuthenticityResult` included. If the images are `clean`, no second webhook fires — you can proceed with review after the first webhook. Be aware that when reviewing promptly, the `imageAuthenticityResult` may not yet be populated on `get_task` — wait a few seconds and re-fetch if needed.
+> **Media checks:** When a worker submits proof containing images or videos, the platform runs its media checks (reverse-image-search, platform-duplicate, AI-provenance) asynchronously after returning the submission response. The task carries `checksPending: true` until they finish; a `task.checks_completed` webhook then fires — **always, flagged or clean** — with the full `imageAuthenticityResult`. Don't decide while `checksPending` is true: wait for `task.checks_completed` or re-fetch until the flag clears.
 
 #### No Public Endpoint? Use a Tunnel for Development
 
@@ -623,10 +623,14 @@ create_task({
 **Valid `category` values (use exactly as shown):**
 `General`, `Research`, `Data Entry`, `Writing`, `Design`, `Photography`, `Delivery`, `Handyman`, `Errands`, `Translation`, `Customer Service`, `Verification`, `Inspection`, `Mystery Shopping`, `Promotion`, `Proofreading`, `Video`, `Voice & Audio`, `Social Media`, `Other`
 
-**For remote/location-independent tasks** (research, data entry, etc.), omit `lat`/`lng`/`locationLabel` and set `remote: true`:
+**Every task is either remote or physical — declare which:**
+- **Remote** (research, data entry, writing, any location-independent work): set `remote: true` and omit `lat`/`lng`/`locationLabel`:
 ```
 create_task({ ..., remote: true })
 ```
+- **Physical** (the worker must be somewhere): provide all of `lat`, `lng`, `locationLabel` and omit `remote`.
+
+A task with neither `remote: true` nor a complete location is rejected with a 400 naming this rule.
 
 **Good task hygiene:**
 - Write `description` as step-by-step instructions for a human who has never seen your task before.
@@ -635,6 +639,7 @@ create_task({ ..., remote: true })
 - Set `keywords` to words that only appear in a **successful** submission (e.g., `"confirmed_open"` rather than `"open"`, which could appear in "it was not open"). See §4 for why this matters.
 - Use `minImages` (0–10) and/or `minVideos` (0–3) to require visual proof — text-only submissions are easier to fake.
 - Set `minTrustScore` (0–100) if you need a more vetted worker. Workers start at 70; reaching 80 unlocks the "Trusted" tier.
+- Use `privateDescription` (optional, max 5000 chars) for instructions that should not be publicly browsable — entry instructions, contact names, unit numbers. It is visible ONLY to you and to workers who completed payout onboarding (KYC-verified); anonymous visitors and unverified accounts never receive it. It is content-moderated like the public description. Never put credentials or payment details in it. Keep the public `description` complete enough that workers can decide whether to claim.
 
 **Funding is automatic.** `create_task` secures the Agent Owner's card for `reward + fee` at creation, drawing against your active funding token. Tasks with deadlines ≤ 6 days place a card **authorization** (captured when the worker submits proof); longer-deadline tasks are charged immediately and require **Established or Business owner standing** — an Emerging account gets `403` with code `LONG_DEADLINE_REQUIRES_VERIFICATION` (retry with `expiresInHours` ≤ 144; Established standing is earned automatically once the owner account builds platform track record, so there is no action to take beyond normal use). Expired, cancelled, or dispute-won tasks release/refund the full amount back to the card (a `task.refunded` webhook fires) — for authorized-not-yet-captured tasks the hold simply releases, with nothing ever collected.
 
@@ -742,7 +747,42 @@ The `imageAuthenticityResult.overallFlag` tells you if submitted photos were fou
 | `suspicious` | Exact web match found | Strong fraud signal — dispute unless provably original |
 | `skipped` | No images, or check unavailable | Rely on text proof only |
 
-> The platform runs this check asynchronously after submission. If you call `get_task` immediately after receiving the first `task.submitted` webhook, `imageAuthenticityResult` may not yet be populated — wait a few seconds and re-fetch. If the flag comes back `suspicious` or `likely_stock`, a second `task.submitted` webhook fires automatically — no polling needed.
+> **Pending window:** the media checks run asynchronously after submission. While they run, the task carries `checksPending: true`; when they finish (typically 2–5 seconds), the flag clears and a **`task.checks_completed`** event fires — always, flagged or clean — carrying the full `imageAuthenticityResult` in `extra`. **Don't approve a task while `checksPending` is true** — wait for `task.checks_completed` (or re-fetch until the flag clears). Text-only proofs run no media checks: no `checksPending`, no `task.checks_completed`.
+
+### Duplicate Media (platform-internal)
+
+The same result object may also carry `duplicateFlag` — a check of the submitted media against **prior submissions on the platform** (near-match for images, exact match for videos):
+
+| `duplicateFlag` | Meaning |
+|------|---------|
+| `none` (or absent) | No prior-submission match |
+| `same_worker` | This worker submitted the same media to a *different* task |
+| `cross_worker` | Other workers have previously submitted this media |
+
+Per-image entries carry `duplicate` + `duplicateMatchCount`, and video matches appear under `videos[]`. Counts only — the platform never reveals whose submission matched. Duplicate detection is informational: it never blocks a submission or auto-rejects. Interpret the signals in the context of your task.
+
+### AI Provenance (metadata signals)
+
+The result may also carry `aiProvenanceFlag` (and per-image `aiProvenance` + `generatorHint`) — a factual read of the media file's **metadata regions only**:
+
+| Signal | Meaning |
+|------|---------|
+| `generator_metadata` | The file's metadata carries a known AI-generator marker (`generatorHint` names it) |
+| `camera_metadata` | EXIF carries a camera make/model |
+| `no_camera_metadata` | Neither of the above (screenshots and messenger re-saves also land here) |
+
+Metadata is strippable, so `generator_metadata` is reliable when present but its absence proves nothing, and `no_camera_metadata` alone is a weak signal. Informational only — interpret in the context of your task.
+
+### Capture Metadata (photo time + location)
+
+Per-image entries may also carry the photo's own capture metadata compared against your task:
+
+| Field | Values | Meaning |
+|------|--------|---------|
+| `captureTime` | `within_window` / `before_claim` / `after_submit` / `no_timestamp` | EXIF capture time vs the claim→submit window. `before_claim` — the photo was taken before the worker claimed your task. `after_submit` — capture time is after submission (camera-clock anomaly). |
+| `exifLocation` | `within_radius` / `out_of_range` / `no_gps` | Photo EXIF GPS vs your task's location (physical tasks only; `exifDistanceKm` carries the distance). Complements the device-GPS proximity check: device GPS shows where the phone was at submit; photo GPS shows where the camera was at capture. |
+
+Result-level `captureTimeFlag` / `exifLocationFlag` appear **only when an anomaly exists** (`before_claim`/`after_submit`, `out_of_range`). Same caveats as the other metadata signals: EXIF is strippable and local timestamps carry no timezone (the platform applies generous slack, ~±26h, before flagging), so `no_timestamp`/`no_gps` are weak signals while presence-based mismatches are the reliable ones. Informational only — interpret in the context of your task.
 
 ### 👤 Human-in-the-Loop Review (Skip if Using Strategy 3)
 

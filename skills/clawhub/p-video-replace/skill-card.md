@@ -11,34 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators and developers use this skill to prepare Pruna video replacement requests that swap people, clothing, or products in source footage while preserving camera motion, audio, and unrequested scene elements. <br>
+External developers and creative automation agents use this skill to guide video replacement jobs through Pruna's API, including prompt drafting, required asset intake, and curl-based upload and prediction calls. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Source videos, reference images, prompts, and generated file URLs are sent to Pruna's external API. <br>
-Mitigation: Use the skill only with media that may be shared with Pruna and review Pruna's retention and deletion terms before processing sensitive footage. <br>
-Risk: Video replacement can involve identity, likeness, clothing, product, or other consent-sensitive media changes. <br>
-Mitigation: Confirm rights and consent for the source video and all reference images before making replacement requests. <br>
-Risk: The optional disable_safety_checker field may reduce automated safety controls. <br>
-Mitigation: Leave safety checks enabled unless a reviewed policy exception applies. <br>
+Risk: The workflow uploads source videos and reference images to Pruna's external API. <br>
+Mitigation: Avoid sensitive or non-consensual footage and identity images, and confirm asset choices before starting generation. <br>
+Risk: The skill requires PRUNA_API_KEY for API requests. <br>
+Mitigation: Keep the API key private and avoid exposing it in prompts, logs, shared terminals, or generated artifacts. <br>
+Risk: Video replacement can incur paid generation costs and may produce unwanted changes if the prompt is vague. <br>
+Mitigation: Review the instruction prompt, asset mapping, and generation settings before making a paid API call. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/p-video-replace) <br>
-- [Pruna file upload API endpoint](https://api.pruna.ai/v1/files) <br>
-- [Pruna predictions API endpoint](https://api.pruna.ai/v1/predictions) <br>
+- [ClawHub skill page for p-video-replace](https://clawhub.ai/pruna-ai/skills/p-video-replace) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with curl commands, JSON request bodies, and prompt guidance] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration, API calls] <br>
+**Output Format:** [Markdown with curl command examples and JSON request bodies] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides the agent to collect a source video URL, one to four reference image URLs, replacement intent, optional resolution and frame-rate settings, and an instruction prompt before calling Pruna.] <br>
+**Other Properties Related to Output:** [Requires PRUNA_API_KEY plus user-provided source video and 1 to 4 reference image URLs.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill frontmatter metadata) <br>
+1.0.9 (source: server release evidence and SKILL.md metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

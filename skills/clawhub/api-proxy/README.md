@@ -2,6 +2,8 @@
 
 Smart proxy for external API calls with retry logic, caching, circuit breaker, and rate limiting.
 
+> ⚠️ **DATA LEAVES TO A THIRD PARTY:** every `--call` sends your request (URL, headers, body, prompts) to the provider endpoint *you* specify — a separate external service. Responses come back from that provider and may be retained by them per their own policy. This skill is NOT a transparent pass-through; it centralizes collection, storage, and forwarding of potentially sensitive data. Only call endpoints you trust. By default only request **metadata** (provider, status class, timestamp) and cache **metadata** are written to disk; the full response body is written only if you enable `--cache-full <provider>`.
+
 ## Features
 
 - **HTTP Proxy** — Make API calls with automatic retry and timeout handling

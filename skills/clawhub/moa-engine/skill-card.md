@@ -1,44 +1,65 @@
-## Description: <br>
-Moa Engine helps an agent decompose complex requests into a staged virtual expert-team workflow with specialist proposals, structured critique, revision, and a synthesized final answer. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+moa-engine orchestrates multi-role expert reasoning with structured adversarial review, XML-tagged information flow, intelligent routing, and recursive self-improvement guidance for complex analysis and design tasks.
 
-## Publisher: <br>
-[kiwifruit13](https://clawhub.ai/user/kiwifruit13) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kiwifruit13](https://clawhub.ai/user/kiwifruit13)
 
-## Use Case: <br>
-External users and developers use this skill when they need deeper analysis, technical design, product planning, creative ideation, or other complex work broken into expert subproblems and reconciled into one final answer. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The staged expert-and-critic workflow can be unnecessarily verbose or heavy for simple, single-domain requests. <br>
-Mitigation: Use the MoA protocol only for complex tasks; answer directly when the user's request is simple or narrow. <br>
-Risk: The skill is optimized for Chinese-language structured analysis, which may not match every user's preferred language or level of detail. <br>
-Mitigation: Adapt the response language and depth to the user's request, and summarize staged reasoning when a shorter answer is more useful. <br>
-Risk: Synthesized expert-role output can sound authoritative even when it is based on assumptions or incomplete evidence. <br>
-Mitigation: Mark assumptions, preserve uncertainty, and review high-impact recommendations before relying on them. <br>
+## Use Case:
 
+Developers, architects, and AI practitioners use this skill to structure complex cross-domain analysis, architecture review, high-risk decision scrutiny, and multi-perspective solution design through explicit expert, critic, and synthesis roles.
 
-## Reference(s): <br>
-- [MoA System Guide](references/moa-system-guide.md) <br>
-- [MoA Meta Prompt](references/moa-meta-prompt.md) <br>
-- [MoA Case Study](references/moa-case-study.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Structured Markdown response with staged expert, critic, revision, decision, and final-answer sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompt-only skill; optimized for verbose Chinese-language structured analysis unless adapted by the agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release metadata) <br>
+Risk: The workflow and reference material are primarily Chinese-language, which can make review difficult for teams that cannot read Chinese.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when reviewers can understand the Chinese-language workflow or have translated and reviewed the prompts and references before use.
+
+Risk: The RHI self-improvement material can involve retaining logs, building failure databases, or patching agent behavior as an opt-in design pattern.
+
+Mitigation: Before adopting RHI practices, confirm the storage location, review path, rollback process, and user approval requirements.
+
+Risk: For privacy, finance, medical, security, or compliance tasks, the artifact calls for audit logging and human confirmation around high-risk decisions.
+
+Mitigation: Use the skill's high-risk path only with explicit review checkpoints, decision-chain audit records, and human final confirmation for critical decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kiwifruit13/skills/moa-engine)
+- [PROJECT_OVERVIEW.md](references/PROJECT_OVERVIEW.md)
+- [moa-system-guide.md](references/moa-system-guide.md)
+- [moa-tag-system.md](references/moa-tag-system.md)
+- [moa-routing-design.md](references/moa-routing-design.md)
+- [moa-meta-prompt.md](references/moa-meta-prompt.md)
+- [moa-rhi-guide.md](references/moa-rhi-guide.md)
+- [moa-phase-transition.md](references/moa-phase-transition.md)
+- [moa-case-study.md](references/moa-case-study.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance, configuration]
+
+**Output Format:** [Markdown guidance with XML-tagged reasoning templates and reference-document navigation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable installer or hidden data-access behavior was found in the security evidence.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata; artifact SKILL.md frontmatter states 2.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

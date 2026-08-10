@@ -1,0 +1,14 @@
+name: geoskill-multi-hazard-risk-assessment
+display_name: 多灾种综合风险评估
+description: |
+  多灾种危险性×暴露度×脆弱性综合风险指数计算与分区
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-multi-hazard-risk-assessment.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - disaster
+  - gis
+  - remote-sensing
+  - risk

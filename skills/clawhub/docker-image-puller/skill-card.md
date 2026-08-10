@@ -1,41 +1,57 @@
-## Description: <br>
-Downloads Docker images with a Python script and packages them as tar files for offline docker load use, supporting SOCKS5 proxy downloads and mirror acceleration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Downloads Docker images from registries with a Python helper and packages them as tar archives for offline docker load use.
 
-## Publisher: <br>
-[zhaohaixin](https://clawhub.ai/user/zhaohaixin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhaohaixin](https://clawhub.ai/user/zhaohaixin)
 
-## Use Case: <br>
-Developers and engineers use this skill to pull Docker images from registries and package them as offline tar archives for transfer or later docker load. It is intended for explicit image download requests with configurable architecture, proxy, or mirror settings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Background Docker image downloads can consume significant network bandwidth and disk space. <br>
-Mitigation: Install only when image downloading is desired, use explicit Docker image requests, and monitor disk and network usage. <br>
-Risk: Private registry passwords may be exposed through terminal prompting. <br>
-Mitigation: Avoid entering private registry passwords unless the prompt is changed to hidden input, or use limited-scope pull-only credentials. <br>
-Risk: A stale local config path can point the skill at the wrong script location after installation. <br>
-Mitigation: Reset the config path after install before running downloads. <br>
+## Use Case:
 
+Developers and engineers use this skill to pull Docker images through a SOCKS5 proxy or registry mirror and produce tar archives for offline loading. It is useful when images need to be transferred to environments that cannot pull directly from the registry.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Files, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown status updates with shell commands and generated Docker image tar files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates tar archives under an images directory and reports docker load commands after download completion.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: server release metadata and script VERSION) <br>
+Risk: The skill can run background Docker image downloads and write tar archives, which may consume network bandwidth and disk space.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the requested image, monitor the background task, and confirm sufficient disk space before large downloads.
+
+Risk: Private registry passwords may be handled unsafely.
+
+Mitigation: Avoid entering sensitive registry passwords unless the skill is updated to use hidden password entry or token-based authentication.
+
+Risk: The configured script path and download mode affect what code runs and which registries or mirrors are contacted.
+
+Mitigation: Verify config.json, the script path, proxy settings, mirror settings, and target architecture before first use or after configuration changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhaohaixin/skills/docker-image-puller)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, Files]
+
+**Output Format:** [Markdown status messages with shell commands and file paths]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces Docker image tar archives under an images directory and reports docker load commands.]
+
+## Skill Version(s):
+
+1.3.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

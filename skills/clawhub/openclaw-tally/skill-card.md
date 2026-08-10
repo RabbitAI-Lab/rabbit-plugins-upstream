@@ -1,43 +1,45 @@
 ## Description: <br>
-Tokens tell you how much you paid. Tasks tell you what you got. Tally tracks every OpenClaw task from start to finish -- cost, complexity, and efficiency score. <br>
+Develop, test, or integrate the OpenClaw Tally Node.js library for task-level cost, complexity, and efficiency analytics. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
 ## Publisher: <br>
-[JonathanJing](https://clawhub.ai/user/JonathanJing) <br>
+[jonathanjing](https://clawhub.ai/user/jonathanjing) <br>
 
 ### License/Terms of Use: <br>
-MIT <br>
+MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use OpenClaw Tally to track OpenClaw tasks, token costs, task complexity, and task efficiency scores through a local analytics ledger. <br>
+Developers and operators use this skill to work on or explicitly integrate OpenClaw Tally, a local Node.js library for detecting task boundaries, recording task cost metadata in SQLite, and computing task efficiency analytics. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The message-post hook reads every OpenClaw message to classify task activity. <br>
-Mitigation: Install only where local message inspection is acceptable, and review the security declaration before enabling the hook. <br>
-Risk: The local SQLite database can reveal sessions, models, costs, task history, and potentially high-level task summaries. <br>
-Mitigation: Treat ~/.openclaw/tally/tally.db as private local data and apply normal workstation access controls and backup hygiene. <br>
+Risk: A runtime hook integration can observe message streams before the library can classify task boundaries. <br>
+Mitigation: Enable the library only through an explicit plugin or operator-owned hook and disclose the observed event scope before activation. <br>
+Risk: The local ledger may store task summaries, costs, model names, session IDs, tool metadata, and cron or task history. <br>
+Mitigation: Confirm the SQLite database path before use and treat the ledger as local usage telemetry. <br>
+Risk: Installing native dependencies may download a signed prebuild or compile a local Node.js addon. <br>
+Mitigation: Review the Node.js 22 and better-sqlite3 installation path in the target environment before enabling the library. <br>
 
 
 ## Reference(s): <br>
-- [OpenClaw Tally on ClawHub](https://clawhub.ai/JonathanJing/openclaw-tally) <br>
-- [Publisher profile](https://clawhub.ai/user/JonathanJing) <br>
-- [README](README.md) <br>
+- [ClawHub release page](https://clawhub.ai/jonathanjing/skills/openclaw-tally) <br>
+- [Publisher profile](https://clawhub.ai/user/jonathanjing) <br>
+- [Project homepage](https://github.com/JonathanJing/openclaw-tally) <br>
 - [Product requirements document](PRD.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and command-style task analytics responses] <br>
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
+**Output Format:** [Markdown with inline code and shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Stores task and cost metadata locally in SQLite under ~/.openclaw/tally/.] <br>
+**Other Properties Related to Output:** [Produces local integration guidance for a library-only release; runtime integrations must be explicitly enabled outside the skill bundle.] <br>
 
 ## Skill Version(s): <br>
-0.3.1 (source: frontmatter and package.json) <br>
+0.3.2 (source: server release metadata, SKILL.md metadata, skill.json, package.json, src/index.js) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

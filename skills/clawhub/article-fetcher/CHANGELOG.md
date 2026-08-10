@@ -1,5 +1,39 @@
 # Changelog
 
+## v1.3.6 (2026-08-08)
+
+### 🔒 安全修复（基于 ClawHub SkillSpector 审计）
+
+- **P0 — lxml XXE 漏洞（High）**：`requirements.txt` 中 `lxml==6.0.4` → `lxml==6.1.0`，修复 CVE-2026-41066（`iterparse` / `ETCompatXMLParser` 默认配置 XXE）。经核查代码未使用 lxml 解析不可信 XML（MHTML 走 `email` 库、HTML 走 `BeautifulSoup('html.parser')`），升级即消除风险面。
+- **P1 — 校正误导性「零网络外发」声明（Medium, Intent-Code Divergence）**：删除 README / SKILL 中「Obsidian 数据完全本地 / 零网络外发 / 不经过网络」等绝对化表述，统一为「Obsidian `.md` 本地落盘 + 文章图片上传阿里云 OSS（必需）」的准确描述。
+- **P2 — LLM 外发声明补强（Medium, External Transmission）**：在 `utils/tag_extractor.py` 的 LLM 调用处补充安全注释（可选触发 / endpoint 来自 `LLM_BASE_URL` 配置 / 仅外发前 12000 字符）；README 安全说明新增 LLM 文本外发条目，SKILL `securityNote` 同步声明。
+- **P3 — 删除「绕过安全拦截」笔记**：移除 `references/tirith-blocking.md`（审计报告指出的 bypass-prior-blocking 笔记），并确认无其它文件引用。
+
+## v1.3.5 (2026-08-08)
+
+### ✨ 离线输入（HTML / MHTML）
+
+- **新增 `fetchers/offline_parser.py`**：将 HTML 文本 / `.mhtml` 文件解析为标准 `article_data`，复用既有后半段管线（OSS 上传 → 替换 URL → 打标 → 字数 → Obsidian/Notion 归档）
+- **`main.py` 抽出 `process_and_archive(article_data, platform, url, tags)`**：URL 抓取与离线输入共用同一归档流程，行为零变化
+- **新增离线入口**：`archive_from_html()` / `archive_from_mhtml()`
+- **CLI 扩展（`sys.argv` 手动解析，不使用 argparse，遵循安全合规约定）**：`--html`（支持 `-` 读 stdin）/`--mhtml`/`--platform`（默认 wechat）/`--url`（可选）
+- **三陷阱修复（源自 wechat-article-capture 技能沉淀）**：
+  - 微信懒加载：`data-src`→`src` 并 `del data-src`，根治 markdownify 读占位符
+  - MHTML 编码：`get_payload(decode=True)` 取 bytes 后按 `get_content_charset()` 或 `utf-8` 解码，避免乱码
+  - `data:image/svg+xml` 占位符过滤，图片列表归一化（去 query、去重）确保 URL 替换可命中
+
+### 🔧 本地适配
+
+- **Vault 去序号**：存档目录从 `1-收件箱/` 改为 `收件箱/`（知衍库 2026-07 架构调整）
+- **移除 `distilled: false`**：蒸馏状态判定已改为文件存在性模型，不再依赖 frontmatter 标记
+- **裁撤 `wechat-article-capture` 技能**：v1.3.5 的 MHTML/HTML 离线模式已覆盖其全部功能，无需单独维护
+
+### 🐛 已知问题
+
+- ~~**Notion 转换**：`### | title` 格式标题会被 Notion API 误判为表格分隔符~~ **已修复 (v1.3.5-local)**：根因为 `_parse_inline_html` 将内联 `<img>` 当作 image block 塞入 `rich_text`，导致 `text` 字段缺失。修复为内联图片转文本链接 `[alt](url)`。
+
+---
+
 ## v1.3.4 (2026-07-19)
 
 ### 🔒 Tirith `requires.env` 补全

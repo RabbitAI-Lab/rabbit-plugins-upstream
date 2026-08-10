@@ -1,45 +1,64 @@
-## Description: <br>
-Analyzes reptile enclosure images or video frames to identify urate size, color, and texture plus feces morphology, then returns a structured visual assessment with alert guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Through a fixed camera in the reptile enclosure, the system captures a high-definition image (or a static video frame) once excrement is found, and uses AI visual analysis to identify urate (white/milky-white crystals or paste, common in lizards, geckos, etc.) - including its size (pixel area) - and to identify the morphology of feces (normally formed log, soft pasty, watery, or bloody).
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External reptile keepers, breeders, and enclosure app developers use this skill to analyze reptile excrement images or video frames, retrieve cloud report history, and generate structured visual-health observations with recommended next actions. The skill is framed as visual assessment support, not disease diagnosis or prescription guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reptile media and report history are processed by LifeEmergence cloud services. <br>
-Mitigation: Use only media appropriate for cloud processing, avoid sensitive backgrounds or identifying information, and confirm data retention expectations before deployment. <br>
-Risk: The skill can create or reuse a local identity and store service tokens in the workspace. <br>
-Mitigation: Run it in a private, controlled workspace and remove the skill data directory or credentials when access is no longer needed. <br>
-Risk: History queries can return identity-linked report records. <br>
-Mitigation: Restrict use in shared environments and verify that the active workspace identity is the intended one before querying report history. <br>
+## Use Case:
 
+External reptile keepers, vivarium operators, farms, and app developers use this skill to analyze enclosure images or video frames of reptile excrement before cleaning. It produces visual assessment reports for urate size/color and feces morphology, flags unreliable imagery, and suggests observation or veterinary follow-up without providing diagnoses or prescriptions.
 
-## Reference(s): <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill source documentation](artifact/SKILL.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-reptile-excrement-analysis-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance, Files] <br>
-**Output Format:** [Structured text or JSON with report fields, Markdown tables for history lists, and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, alert levels, recommended actions, and disclaimers; depends on LifeEmergence cloud API responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter states 1.0.6) <br>
+Risk: Submitted media and history queries are handled through cloud analysis services and may be associated with an automatically created or reused identity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only when cloud analysis and account-linked history are approved for the media; avoid sensitive facility images unless those data flows are acceptable.
+
+Risk: The security evidence reports local token storage, silent identity creation or reuse, and possible workspace API-key file access.
+
+Mitigation: Review identity, token, and credential handling before deployment, and restrict use to environments where those controls are acceptable.
+
+Risk: Visual assessment can be unreliable when images are obstructed, color-shifted, below 1080p, or missing a size reference.
+
+Mitigation: Treat such cases as unreliable and request a clear overhead image with complete urate and feces regions, white lighting, and a known-size reference.
+
+Risk: The skill provides visual health prompts that could be mistaken for veterinary diagnosis or treatment advice.
+
+Mitigation: Keep outputs limited to visual assessment, avoid drug names, dosages, and procedures, and direct significant abnormalities to a qualified reptile veterinarian.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-reptile-excrement-analysis-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Reptile excrement analysis API documentation](artifact/references/api_doc.md)
+- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown-style report text with structured JSON analysis content and optional report export link]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports local image/video-frame files, media URLs, and account-linked historical report listing through the skill's command-line workflow.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release metadata; artifact SKILL.md frontmatter reports 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

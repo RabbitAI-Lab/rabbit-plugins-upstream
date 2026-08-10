@@ -49,7 +49,7 @@ infer or reveal hidden Memory values from the error text.
 - Use `magicpay status` before a new MagicPay Memory fill task.
 - If `status` reports a missing or invalid API key, run `magicpay init`.
 - If `status` reports `cliUpdate`, use only
-  `npm i -g @mercuryo-ai/magicpay-cli@latest`, then rerun `status`.
+  `npm i -g @nuanu-ai/magicpay-cli@latest`, then rerun `status`.
 - Use `doctor` only when local config still looks broken after `init`.
 - Normal product work starts with `magicpay start-session` before
   `magicpay launch` or `magicpay attach`.
@@ -110,7 +110,8 @@ still visible.
 - Use `magicpay apply-fill` to fill and stop before final commitment controls.
 - Use `magicpay fill-field` only as value-free recovery when the higher-level
   plan/apply path missed a visible field or chose the wrong target. The agent
-  may bind Memory refs to observed target refs; it must not pass raw values.
+  may bind one Memory field ref to one observed target id; it must not pass raw
+  values.
 - If Memory candidates are ambiguous, explain the displayed candidate facts to
   the user and submit the selected `choiceId` with
   `magicpay choose-memory --choice <choiceId>`. Do not use labels or list

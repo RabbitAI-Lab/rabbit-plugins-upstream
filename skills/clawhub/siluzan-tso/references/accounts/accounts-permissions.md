@@ -33,9 +33,25 @@ siluzan-tso account me --check-phone 15130150466 --json-out ./snap-me
 
 ### check-access — Google 账户访问权限校验
 
-校验当前丝路赞凭据是否对指定 **Google** 广告账户有访问权限**403 通常表示该 Google 账户不在当前丝路赞账号下**（或未分享给你），应在拉数/诊断前调用，避免误用他户 ID。
+校验当前丝路赞凭据是否对指定 **Google** 广告账户有访问权限。应在拉数/诊断前调用，避免误用他户 ID。
+
+> **硬约束**：**禁止**凭 403、空结果或经验臆测「授权/OAuth 过期」。要对用户下「授权不可用 / 需重授权」结论前，**必须**先跑本命令（并满足下方套餐已激活前提），以 CLI 返回的 `status` 为准；**禁止**跳过本命令直接 `reauth` 或口头推断。
+
+**前提（查授权是否过期时）**：须先确认该户 **套餐已激活**（`list-accounts` 的 `ma.scopeActivatedSources` 有未过期条目，或 Google 表格「套餐激活」= ✅ 已激活）。在已激活前提下，**必须**用本命令检查授权是否可用：
+
+| 结果 | 含义（套餐已激活时） |
+| ---- | -------------------- |
+| `accessible`（200 / `true`） | 授权可用，可继续拉数/操作 |
+| `reauth_required`（200 / `false`） | 已绑定但 Google OAuth 不可用 → 走重授权 |
+| `no_permission`（403 / 账户 ID） | 网关不可访问；可与 `list-accounts` 的 `invalidOAuthToken` 交叉确认是否授权失效或不在本账号下 |
+
+**未激活套餐时不要用本命令判断授权过期**：未激活户仍可能返回 `accessible`，无法据此下结论。套餐状态见 `accounts-list.md` 的 `scopeActivatedSources`。
 
 ```bash
+# 1) 先确认套餐已激活
+siluzan-tso list-accounts -m Google -k <mediaCustomerId> --json-out ./snap
+
+# 2) 已激活后再查网关访问 / 授权是否可用
 siluzan-tso account check-access -a <mediaCustomerId>
 siluzan-tso account check-access -a 4256317784 --json-out ./snap-access
 ```
@@ -44,11 +60,11 @@ siluzan-tso account check-access -a 4256317784 --json-out ./snap-access
 | ---- | --------------- | ---------------------------- | --------------------------------------------- |
 | 200  | `true`          | 可访问                       | `accessible`（exit 0）                        |
 | 200  | `false`         | 已绑定但 Google OAuth 不可用 | `reauth_required` → Agent 优先 `present_reauth`；备选 `account reauth` |
-| 403  | 账户 ID         | 无权限（多不在本账号下）     | `no_permission`（exit 1）                                             |
+| 403  | 账户 ID         | 无权限（多不在本账号下；授权失效时也可能出现） | `no_permission`（exit 1）                                             |
 | 403  | `token不能为空` | 未绑定 Google 媒体           | `google_not_bound` → Agent 优先平台授权；备选 `account auth -m Google` |
 | 401  | 空              | 丝路赞 Token 失效            | `siluzan_token_invalid` → 重新 login          |
 
-> 与 `list-accounts -k` 互补：`list-accounts` 查「是否出现在账户列表」；本接口查「Google 网关是否允许当前凭据访问该 mediaCustomerId」。
+> 与 `list-accounts -k` 互补：`list-accounts` 查「是否在列表 / 套餐是否激活 / `invalidOAuthToken`」；本接口查「Google 网关是否允许当前凭据访问该 mediaCustomerId」。列表批量筛失效仍优先看 `invalidOAuthToken`；单户深查在**已激活**后用本命令。
 
 ---
 

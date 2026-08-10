@@ -1,0 +1,17 @@
+name: geoskill-evapotranspiration-estimation
+display_name: 蒸散发估算
+description: |
+  Priestley-Taylor 与简化 SEBAL 蒸散发估算，从净辐射/气温/LST/NDVI 计算 ET (mm/day)。Priestley-Taylor and simplified SEBAL evapotranspiration estimation from net radiation/air temperature/LST/NDVI. 输出 ET 栅格 + 统计 JSON。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-evapotranspiration-estimation.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - ai
+  - analysis
+  - climate
+  - energy
+  - gis
+  - raster
+  - remote-sensing

@@ -1,7 +1,7 @@
 ---
 name: scavio-x
 description: Search X, read tweets and their replies and retweeters, pull user profiles and their tweets, replies, media, followers, and followings, and get trending topics as structured JSON. 11 endpoints.
-version: 1.0.0
+version: 1.0.1
 tags: x, social, tweets, search, profiles, followers, trending, sentiment, brand-monitoring, agents, langchain, crewai, autogen, structured-data, json, ai-agents, research
 metadata:
   openclaw:
@@ -216,4 +216,3 @@ pip install langchain-scavio
 from langchain_scavio import ScavioSearchTool
 tool = ScavioSearchTool(engine="x")
 ```
-</content>

@@ -706,6 +706,21 @@ def read_stat_file(
     # 分区 Parquet 目录（含 part-*.parquet）：直接走专用读入，无需扩展名
     if os.path.isdir(filepath):
         from . import reader_science
+        import glob
+
+        # 校验确为 Parquet 分区目录，避免任意目录（如误传路径、命名 .sav 的目录）
+        # 被静默当作 Parquet 读取而产生令人困惑的底层错误。
+        has_parquet = (
+            glob.glob(os.path.join(filepath, "**", "*.parquet"), recursive=True)
+            or glob.glob(os.path.join(filepath, "**", "*.pq"), recursive=True)
+        )
+        if not has_parquet:
+            raise ValueError(_bilingual(
+                f"Directory is not a Parquet partition: {filepath}\n"
+                f"No .parquet files found inside. Please pass a real data file or a Parquet partition directory.",
+                f"目录不是 Parquet 分区目录: {filepath}\n"
+                f"内部未发现 .parquet 文件。请传入真实的数据文件或 Parquet 分区目录。",
+            ))
         return reader_science._read_parquet_partitioned(filepath, timestamp)
 
     # 延迟导入所有 handler（避免循环依赖）
@@ -730,6 +745,7 @@ def read_stat_file(
         ".json": "json_json", ".xml": "xml_xml", ".ods": "ods_ods",
         ".html": "html_html",
         ".csv": "csv_csv",
+        ".tsv": "csv_tsv",                              # 制表符分隔 (与 writer 对称)
         ".odm": "odm_odm",
         ".sas7bcat": "sas_catalog",
         ".jmp": "jmp_jmp",
@@ -762,6 +778,7 @@ def read_stat_file(
         ".px": "paradox_px",
         ".lpw": "limdep_lpw",                 # LIMDEP/NLOGIT (占位: 需导出)
         ".ncss": "ncss_ncss",                 # NCSS (占位: 需导出)
+        ".ssp": "sas_ssp",                    # SAS 6 数据集 (Windows), 占位: 需 SAS 导出 .sas7bdat/.xpt
     }
 
     file_format = format_map.get(ext)
@@ -806,6 +823,7 @@ def read_stat_file(
         "ods_ods": lambda: reader_modern._read_ods(filepath, timestamp),
         "html_html": lambda: reader_modern._read_html(filepath, timestamp),
         "csv_csv": lambda: reader_modern._read_csv(filepath, timestamp, encoding=encoding),
+        "csv_tsv": lambda: reader_modern._read_csv(filepath, timestamp, encoding=encoding, sep="\t"),
         "odm_odm": lambda: reader_odm._read_odm(filepath, timestamp),
         "jmp_jmp": lambda: reader_v14._read_jmp(filepath, timestamp),
         "minitab_mtw": lambda: reader_v14._read_minitab(filepath, timestamp,
@@ -838,6 +856,7 @@ def read_stat_file(
         "origin_opju": lambda: reader_legacy._read_origin(filepath, timestamp),
         "origin_oggu": lambda: reader_legacy._read_origin(filepath, timestamp),
         "sas_cport": lambda: reader_legacy._read_cport(filepath, timestamp),
+        "sas_ssp": lambda: reader_legacy._read_sas_ssp(filepath, timestamp),
         "statistica_sta": lambda: reader_legacy._read_statistica(filepath, timestamp),
         "oxmetrics_in7": lambda: reader_legacy._read_oxmetrics(filepath, timestamp),
         "systat_sys": lambda: reader_legacy._read_systat(filepath, timestamp),

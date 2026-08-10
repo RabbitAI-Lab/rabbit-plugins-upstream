@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-company-fit"
+  short_description: "结合企业研究、合作风险与我方能力判断业务合作匹配程度"
+  default_prompt: "使用 $zayn-company-fit 判断目标企业与我方业务的匹配程度。"

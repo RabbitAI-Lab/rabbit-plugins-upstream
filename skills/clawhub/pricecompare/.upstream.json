@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/pricecompare",
   "slug": "pricecompare",
   "ownerHandle": null,
-  "version": "1.5.5",
-  "updatedAt": 1783863889795,
-  "contentHash": "401b8d5f1dbd1112f1a5662bf4baf57b3303adf62d4119fb92cf8e4efd4f9173",
-  "fetchedAt": "2026-07-26T18:16:26.031Z"
+  "version": "1.5.6",
+  "updatedAt": 1785987282435,
+  "contentHash": "57bd54a777982c6779ae59c4a10fda16534cd00f9032e520c5c62ddef367ed02",
+  "fetchedAt": "2026-08-10T09:30:59.772Z"
 }

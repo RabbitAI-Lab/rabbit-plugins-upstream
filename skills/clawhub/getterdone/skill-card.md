@@ -1,49 +1,65 @@
-## Description: <br>
-GetterDone lets an agent hire paid human workers for physical-world tasks or specialized human work, then review submitted proof before releasing payment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hire a human gig worker via USD bounty for tasks an AI agent cannot do alone, including physical presence tasks such as storefront photos, deliveries, on-site verification, and mystery shopping, or specialized human work such as writing, design, translation, proofreading, and video.
 
-## Publisher: <br>
-[getterdone](https://clawhub.ai/user/getterdone) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[getterdone](https://clawhub.ai/user/getterdone)
 
-## Use Case: <br>
-External users and developers use GetterDone when an AI agent needs human help for physical errands, on-site verification, delivery, photography, or specialized work such as writing, design, translation, proofreading, and video. The skill guides setup, task posting, proof review, approval, dispute, and worker rating flows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Paid actions can spend user funds or release escrow to a worker. <br>
-Mitigation: Require explicit confirmation for task creation, approval, and dispute actions unless the owner has deliberately opted into autonomous review; keep per-task and daily spending caps low. <br>
-Risk: Task instructions, locations, and attachments may expose sensitive information to workers. <br>
-Mitigation: Review each task and attachment for sensitive details before posting or uploading, and redact or cancel when the user has not approved disclosure. <br>
-Risk: A compromised or floating MCP server dependency could increase supply-chain or credential risk. <br>
-Mitigation: Install only from trusted GetterDone sources, pin the MCP server version for production, and use the scoped, revocable GETTERDONE_API_KEY. <br>
-Risk: Automated proof checks are syntactic and may miss semantic failures. <br>
-Mitigation: Use human review by default; for autonomous review, require strict review criteria and the agent's own proof evaluation before approving or disputing. <br>
-Risk: Webhook tunnels can expose a local development endpoint. <br>
-Mitigation: Avoid tunnels unless intentionally needed for local development, and use stable HTTPS infrastructure for production webhook handling. <br>
+## Use Case:
 
+External users and agent developers use GetterDone when a request requires paid human labor, physical presence, or specialized human judgment that an AI agent cannot complete alone. The skill helps agents set up the GetterDone service, post tasks, monitor asynchronous worker progress, review submitted proof, and approve or dispute payment.
 
-## Reference(s): <br>
-- [GetterDone platform](https://getterdone.ai) <br>
-- [Agent registration](https://getterdone.ai/register-agent) <br>
-- [GetterDone MCP server package](https://www.npmjs.com/package/@getterdone/mcp-server) <br>
-- [GetterDone skill document API](https://getterdone.ai/api/docs/spec?doc=skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API Calls, Markdown] <br>
-**Output Format:** [Markdown instructions with inline code, shell commands, JSON configuration examples, and MCP tool calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires GETTERDONE_API_KEY; paid task creation, approval, and dispute actions default to explicit user confirmation, with an opt-in autonomous review path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.24.1 (source: frontmatter and release evidence) <br>
+Risk: The skill can create real paid tasks using the user's configured GetterDone account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation for paid actions by default, keep conservative per-task and daily spending caps, and review task scope and cost before posting.
+
+Risk: The GetterDone API key authorizes the agent to interact with the user's GetterDone account.
+
+Mitigation: Keep GETTERDONE_API_KEY private, configure it only in trusted agent or MCP host settings, and rotate or revoke it from the GetterDone dashboard if exposure is suspected.
+
+Risk: Task details, attachments, photos, videos, or submitted proof can contain sensitive information.
+
+Mitigation: Review task instructions, locations, attachments, and proof requirements for sensitive data before posting or approving work.
+
+Risk: Autonomous approval or dispute can release or contest payment without a human reviewing semantic task quality.
+
+Mitigation: Use autonomous review only for narrowly defined workflows where the owner has opted in and accepts automatic approve or dispute decisions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/getterdone/skills/getterdone)
+- [GetterDone Platform](https://getterdone.ai)
+- [GetterDone Agent Registration](https://getterdone.ai/register-agent)
+- [GetterDone Skill Spec](https://getterdone.ai/api/docs/spec?doc=skill)
+- [GetterDone MCP Server Package](https://www.npmjs.com/package/@getterdone/mcp-server)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, API calls, guidance]
+
+**Output Format:** [Markdown instructions with inline shell commands, JSON configuration examples, and structured tool-call guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires GETTERDONE_API_KEY for paid actions; read-only task inspection may be available without paid-action authorization.]
+
+## Skill Version(s):
+
+1.27.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

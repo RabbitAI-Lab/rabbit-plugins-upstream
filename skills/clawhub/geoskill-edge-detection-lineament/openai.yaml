@@ -1,0 +1,14 @@
+name: geoskill-edge-detection-lineament
+display_name: 边缘检测与线性构造提取
+description: |
+  Canny/Sobel边缘检测+概率Hough变换提取线性构造，输出边缘栅格与线段GeoJSON
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-edge-detection-lineament.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - vector

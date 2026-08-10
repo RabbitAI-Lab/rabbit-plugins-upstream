@@ -1,0 +1,304 @@
+shared:
+  common_heading_suffix: "<card name>"
+  common_yaml_keys:
+    - card_name
+    - issuer
+    - network
+    - card_family
+    - card_variant
+    - sources
+    - confidence_notes
+  output_rules:
+    - YAML is internal only; never include a YAML block in user-facing output.
+    - Keep `sources` in the hidden YAML block only. Do not show a visible sources footer.
+    - Use one emoji per section heading.
+    - Use numbered lists for list-heavy sections.
+    - Omit the Card Identity section when the card match is confident.
+    - Show a Card Identity section only when the match is ambiguous or unconfirmed.
+    - Keep section content to condensed facts only.
+commands:
+  card-full:
+    heading_prefix: "# "
+    sections:
+      - "## 💰 Fees"
+      - "## 🎁 Welcome Offer"
+      - "## 📈 Earning Rates"
+      - "## 🔄 Redemption"
+      - "## 🏷️ Credits"
+      - "## ✈️ Travel Benefits"
+      - "## 🛡️ Protections"
+      - "## ⚙️ Account Mechanics"
+      - "## ✅ Eligibility"
+      - "## 🧭 Strategy"
+      - "## 👤 Who Is This Card For?"
+      - "## 🃏 Similar Cards"
+      - "## 📋 Confidence Notes"
+    required_top_level_keys:
+      - card_name
+      - issuer
+      - network
+      - card_family
+      - card_variant
+      - core_economics
+      - welcome_offer
+      - earning_structure
+      - redemption_value
+      - statement_credits
+      - travel_benefits
+      - purchase_and_protection_benefits
+      - account_mechanics
+      - approval_and_eligibility
+      - long_term_strategy
+      - sources
+      - confidence_notes
+    list_keys:
+      - sources
+      - confidence_notes
+    object_keys:
+      - core_economics
+      - welcome_offer
+      - earning_structure
+      - redemption_value
+      - statement_credits
+      - travel_benefits
+      - purchase_and_protection_benefits
+      - account_mechanics
+      - approval_and_eligibility
+      - long_term_strategy
+    composition_rules:
+      - full_key: earning_structure
+        source_command: card-rate
+        source_key: rate_summary
+      - full_key: redemption_value
+        source_command: card-transfer
+        source_key: transfer_program
+      - full_key: statement_credits
+        source_command: card-credits
+        source_key: credits_summary
+  card-transfer:
+    heading_prefix: "# "
+    sections:
+      - "## 🔄 Transfer Program"
+      - "## 🤝 Transfer Partners"
+      - "## ⚠️ Transfer Caveats"
+      - "## 📋 Confidence Notes"
+    required_top_level_keys:
+      - card_name
+      - issuer
+      - network
+      - card_family
+      - card_variant
+      - transfer_program
+      - transfer_partners
+      - transfer_notes
+      - sources
+      - confidence_notes
+    list_keys:
+      - transfer_partners
+      - transfer_notes
+      - sources
+      - confidence_notes
+    object_keys:
+      - transfer_program
+  card-rate:
+    heading_prefix: "# "
+    sections:
+      - "## 📊 Rate Summary"
+      - "## 📈 Earning Categories"
+      - "## 🚫 Caps And Exclusions"
+      - "## 📋 Confidence Notes"
+    required_top_level_keys:
+      - card_name
+      - issuer
+      - network
+      - card_family
+      - card_variant
+      - rate_summary
+      - earning_categories
+      - caps_and_exclusions
+      - sources
+      - confidence_notes
+    list_keys:
+      - earning_categories
+      - caps_and_exclusions
+      - sources
+      - confidence_notes
+    object_keys:
+      - rate_summary
+  card-news:
+    heading_prefix: "# "
+    sections:
+      - "## 📅 News Window"
+      - "## 📰 Recent Updates"
+      - "## 📝 Summary"
+      - "## 📋 Confidence Notes"
+    required_top_level_keys:
+      - card_name
+      - issuer
+      - network
+      - card_family
+      - card_variant
+      - news_window
+      - material_updates
+      - change_summary
+      - sources
+      - confidence_notes
+    list_keys:
+      - material_updates
+      - sources
+      - confidence_notes
+    object_keys:
+      - news_window
+      - change_summary
+  card-credits:
+    heading_prefix: "# "
+    sections:
+      - "## 💳 Credits Overview"
+      - "## 🏷️ Credit Details"
+      - "## 📏 Usage Rules"
+      - "## 📋 Confidence Notes"
+    required_top_level_keys:
+      - card_name
+      - issuer
+      - network
+      - card_family
+      - card_variant
+      - credits_summary
+      - credits
+      - usage_rules
+      - sources
+      - confidence_notes
+    list_keys:
+      - credits
+      - usage_rules
+      - sources
+      - confidence_notes
+    object_keys:
+      - credits_summary
+  card-compare:
+    heading_prefix: "# "
+    sections:
+      - "## 💰 Fees"
+      - "## 📈 Earning Rates"
+      - "## 🏷️ Credits"
+      - "## 🔄 Transfer Partners"
+      - "## ✈️ Key Benefits"
+      - "## 🏆 Bottom Line"
+      - "## 📋 Confidence Notes"
+    required_top_level_keys:
+      - card_a
+      - card_b
+      - fees_comparison
+      - earning_comparison
+      - credits_comparison
+      - transfer_comparison
+      - benefits_comparison
+      - bottom_line
+      - sources
+      - confidence_notes
+    list_keys:
+      - sources
+      - confidence_notes
+    object_keys:
+      - card_a
+      - card_b
+      - fees_comparison
+      - earning_comparison
+      - credits_comparison
+      - transfer_comparison
+      - benefits_comparison
+      - bottom_line
+  card-value:
+    heading_prefix: "# "
+    sections:
+      - "## 💳 Spend Profile"
+      - "## 🎁 Welcome Bonus"
+      - "## 📈 Annual Earn"
+      - "## 🏷️ Credits"
+      - "## 💰 Net First-Year Value"
+      - "## 📋 Confidence Notes"
+    required_top_level_keys:
+      - card_name
+      - issuer
+      - network
+      - card_family
+      - card_variant
+      - spend_profile
+      - welcome_bonus
+      - annual_earn
+      - credits_offset
+      - annual_fee
+      - net_first_year_value
+      - sources
+      - confidence_notes
+    list_keys:
+      - sources
+      - confidence_notes
+    object_keys:
+      - spend_profile
+      - welcome_bonus
+      - annual_earn
+      - credits_offset
+  card-wallet:
+    heading_prefix: "# "
+    sections:
+      - "## 💰 Annual Cost"
+      - "## 📈 Earning Map"
+      - "## 🏷️ Credits Stack"
+      - "## 🔁 Overlap"
+      - "## 🕳️ Gaps"
+      - "## 📋 Confidence Notes"
+    required_top_level_keys:
+      - cards
+      - total_annual_fees
+      - earning_map
+      - credits_stack
+      - overlap
+      - gaps
+      - sources
+      - confidence_notes
+    list_keys:
+      - cards
+      - overlap
+      - gaps
+      - sources
+      - confidence_notes
+    object_keys:
+      - earning_map
+      - credits_stack
+  card-profile-recommend:
+    heading_prefix: "# "
+    sections:
+      - "## 🃏 Cards Entered"
+      - "## 📊 Portfolio Summary"
+      - "## 🏅 Card Grades"
+      - "## 🗺️ Earning Map"
+      - "## 🔻 Consider Dropping"
+      - "## 🕳️ Portfolio Gaps"
+      - "## ➕ Recommended Additions"
+      - "## 🎯 Signup Bonus Strategy"
+      - "## ⚖️ Issuer Rules Check"
+      - "## 🔍 Confidence Notes"
+    required_top_level_keys:
+      - cards
+      - portfolio_economics
+      - earning_map
+      - gaps
+      - recommendations
+      - issuer_rules
+      - application_sequence
+      - sources
+      - confidence_notes
+    list_keys:
+      - cards
+      - gaps
+      - recommendations
+      - application_sequence
+      - sources
+      - confidence_notes
+    object_keys:
+      - portfolio_economics
+      - earning_map
+      - issuer_rules
+    optional_sections:
+      - "## 🔻 Consider Dropping"

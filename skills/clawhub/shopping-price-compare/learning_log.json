@@ -1,0 +1,100 @@
+[
+  {
+    "ts": "2026-07-30",
+    "type": "pref",
+    "changes": [
+      "categoryPrefs.clothing += 纯棉"
+    ]
+  },
+  {
+    "ts": "2026-07-30",
+    "type": "pref",
+    "changes": [
+      "categoryPrefs.clothing += 纯棉"
+    ]
+  },
+  {
+    "ts": "2026-07-30",
+    "type": "pref",
+    "changes": [
+      "globalPrefs += 看重销量"
+    ]
+  },
+  {
+    "ts": "2026-07-30",
+    "type": "pref",
+    "changes": [
+      "excludedPlatforms += pdd"
+    ]
+  },
+  {
+    "ts": "2026-08-06",
+    "type": "pref",
+    "changes": [
+      "globalPrefs += 常规大品牌"
+    ]
+  },
+  {
+    "ts": "2026-08-06",
+    "type": "pref",
+    "changes": [
+      "globalPrefs += 不要溢价高"
+    ]
+  },
+  {
+    "ts": "2026-08-06",
+    "type": "pref",
+    "changes": [
+      "categoryPrefs.food += 猫粮常规大牌"
+    ]
+  },
+  {
+    "ts": "2026-08-06",
+    "type": "pref",
+    "changes": [
+      "categoryPrefs.unknown += 猫砂少尘"
+    ]
+  },
+  {
+    "ts": "2026-08-06",
+    "type": "pref",
+    "changes": [
+      "globalPrefs += 每月采购猫粮猫砂"
+    ]
+  },
+  {
+    "ts": "2026-08-06",
+    "type": "pref",
+    "changes": [
+      "globalPrefs += 每月30天提醒猫粮猫砂"
+    ]
+  },
+  {
+    "ts": "2026-08-06",
+    "type": "pref",
+    "changes": [
+      "categoryPrefs.food += 优先顽皮麦富迪网易严选"
+    ]
+  },
+  {
+    "ts": "2026-08-06",
+    "type": "pref",
+    "changes": [
+      "categoryPrefs.unknown += 优先N1豆腐砂或低尘矿砂"
+    ]
+  },
+  {
+    "ts": "2026-08-06",
+    "type": "pref",
+    "changes": [
+      "categoryPrefs.food += 不敢吃超低价粮"
+    ]
+  },
+  {
+    "ts": "2026-08-06",
+    "type": "pref",
+    "changes": [
+      "categoryPrefs.food += 优先皇家冠能等中档大牌自营"
+    ]
+  }
+]

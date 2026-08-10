@@ -1,0 +1,67 @@
+{
+  "skill": "urban-canyon-analysis",
+  "skill_version": "1.0.0",
+  "command": "urban-canyon-analysis --bbox 116 39 117 40 --synthetic --output-dir Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\urban-canyon-analysis\\_test_cli_synth --quiet",
+  "started_at": "2026-08-03T17:40:34.194498Z",
+  "finished_at": "2026-08-03T17:40:34.394680Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "dtm": null,
+    "threshold": 2.0,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\urban-canyon-analysis\\_test_cli_synth\\urban_canyon.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 3,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "Z:\\Mywork\\自媒体\\公众号\\我的产品推文\\第二批skill\\urban-canyon-analysis\\_test_cli_synth\\canyon_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_total_pixels": 16384,
+    "n_valid_pixels": 16384,
+    "input_nodata_handling": "NoData->NaN",
+    "n_building_pixels": 8464,
+    "n_street_pixels": 7920,
+    "mean_building_height_m": 19.99917984008789,
+    "mean_street_width_m": 7.569154739379883,
+    "mean_hw_ratio_street": 0.007461478002369404,
+    "mean_svf_street": 0.9998681545257568,
+    "min_svf": 0.9911947250366211,
+    "max_svf": 1.0,
+    "synthetic_expected_hw": 1.6666666666666667
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "urban-canyon-analysis"
+  },
+  "error": null
+}

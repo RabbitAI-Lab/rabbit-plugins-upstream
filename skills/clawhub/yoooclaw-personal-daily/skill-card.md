@@ -1,42 +1,54 @@
-## Description: <br>
-Generates a personalized daily news briefing from configured user interest topics, using bounded web searches and strict recency and source-quality filters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates a personalized Chinese daily news digest from configured interest topics using current-day search results.
 
-## Publisher: <br>
-[vivalavida-say-hi](https://clawhub.ai/user/vivalavida-say-hi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vivalavida-say-hi](https://clawhub.ai/user/vivalavida-say-hi)
 
-## Use Case: <br>
-External users use this skill to turn selected topics, such as AI models, electric vehicles, startup financing, humanoid robotics, companies, or products, into a concise daily news digest with links to selected sources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Configured interest topics may be exposed through web searches. <br>
-Mitigation: Avoid confidential or highly sensitive topics in the interests file or scheduled message. <br>
-Risk: Daily search filtering can miss relevant current news or exclude items without explicit date signals. <br>
-Mitigation: Treat the briefing as a high-density digest and follow source URLs before relying on a news item for decisions. <br>
-Risk: Accidental activation could run searches using saved interests. <br>
-Mitigation: Use explicit prompts for personalized daily reports and review configured topics before scheduled use. <br>
+## Use Case:
 
+External users use this skill to turn their configured topics of interest into a concise daily news briefing with grouped stories, source URLs, and a short trend summary.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/vivalavida-say-hi/yoooclaw-personal-daily) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-like conversational briefing text with topic sections, source URLs, summaries, and a fallback message when no current news is found.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs no files; target length is under 1500 Chinese characters with each item summarized in no more than three sentences.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill reads configured interest topics and sends derived search terms to web search tools.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure only topics you are comfortable using for web search, and narrow trigger wording if the digest should run only on explicit request.
+
+Risk: News digests can include stale, low-quality, or misleading search results if source quality or date signals are weak.
+
+Mitigation: Review included source URLs before relying on the digest for decisions; the skill is designed to filter non-current news and skip sparse topics instead of inventing items.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/vivalavida-say-hi/skills/yoooclaw-personal-daily)
+- [ClawHub publisher profile](https://clawhub.ai/user/vivalavida-say-hi)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown-style conversational text in Chinese with source URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs a daily digest capped at about 1500 Chinese characters, or a short fallback message when no relevant current-day news is found.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

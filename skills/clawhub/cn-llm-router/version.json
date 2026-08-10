@@ -1,1 +1,1 @@
-{"version": "2.1.0", "homepage": "https://skillhub.cn/skill/cn-llm-router", "notes": "v2.1.0：新增 MiniMax、零一万物 Yi、百川、阶跃 Step-2 四家厂商（覆盖扩至 12 家 32 款模型）；补 DeepSeek V3 能力画像；auto 策略改由能力画像（推理/代码/长文得分）智能选型；分类器新增流式适配判断；修复流式输出 token 计费恒为 0 的问题。"}
+{"version": "2.3.0", "homepage": "https://skillhub.cn/skill/cn-llm-router", "notes": "v2.3.0：优化路由准确度——静态画像(60%)+动态胜率(40%)加权，新模型上线后无需手填画像；合并 route/chat 建议模式为统一 --dry-run；优化缓存误命中——可选 sentence-transformers embedding 相似度（不装时降级 difflib）"}

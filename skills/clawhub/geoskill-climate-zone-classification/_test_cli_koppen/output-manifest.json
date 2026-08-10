@@ -1,0 +1,71 @@
+{
+  "skill": "climate-zone-classification",
+  "skill_version": "1.0.0",
+  "command": "climate-zone-classification --bbox 116 39 117 40 --synthetic --classification koppen --quiet --output-dir ./_test_cli_koppen",
+  "started_at": "2026-08-03T14:57:27.557647Z",
+  "finished_at": "2026-08-03T14:57:27.663653Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "input2": null,
+    "classification": "koppen",
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_koppen\\climate_zones.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_koppen\\area_statistics.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "classification": "koppen",
+    "shape": [
+      64,
+      64
+    ],
+    "n_valid_pixels": 4096,
+    "n_classes_present": 6,
+    "dominant_class": "ET",
+    "synthetic_zones": [
+      "Af",
+      "Aw",
+      "BWh",
+      "Cfa",
+      "Dfb",
+      "ET"
+    ]
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "climate-zone-classification"
+  },
+  "error": null
+}

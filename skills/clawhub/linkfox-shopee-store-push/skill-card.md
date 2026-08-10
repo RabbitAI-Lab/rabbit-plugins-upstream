@@ -1,47 +1,67 @@
-## Description: <br>
-Provides agent-facing guidance and Python entry points for Shopee Open Platform Push operations through LinkFox, including push callback configuration, current configuration lookup, lost push message retrieval, and consumed-message confirmation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to configure and inspect Shopee Open Platform Push settings, retrieve lost push messages, and confirm consumed lost messages through LinkFox's Shopee developer proxy.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and ecommerce operators use this skill to configure Shopee Push webhooks, inspect app push settings, retrieve lost push messages, and confirm consumed replay messages through LinkFox-managed Shopee API access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform state-changing Shopee Push operations such as setting webhook configuration and confirming consumed lost messages. <br>
-Mitigation: Confirm the target shop or merchant, request body, and intended state change before running POST operations. <br>
-Risk: Full API responses are retained locally in plaintext and may contain webhook, shop, merchant, or message data. <br>
-Mitigation: Store generated linkfox data files outside source control, review them for sensitive contents, and delete or protect them according to local data handling requirements. <br>
-Risk: The skill requires LinkFox API credentials and Shopee merchant access. <br>
-Mitigation: Use least-privilege credentials where available and avoid sharing command output or saved response files that contain merchant data. <br>
+## Use Case:
 
+Developers and operators working with Shopee stores use this skill to manage Push callback configuration and recover missed Push messages through LinkFox-mediated API calls.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-push) <br>
-- [API reference](references/api.md) <br>
-- [Shopee Push set_app_push_config documentation](https://open.shopee.com/documents/v2/v2.push.set_app_push_config?module=105&type=1) <br>
-- [Shopee Push get_app_push_config documentation](https://open.shopee.com/documents/v2/v2.push.get_app_push_config?module=105&type=1) <br>
-- [Shopee Push get_lost_push_message documentation](https://open.shopee.com/documents/v2/v2.push.get_lost_push_message?module=105&type=1) <br>
-- [Shopee Push confirm_consumed_lost_push_message documentation](https://open.shopee.com/documents/v2/v2.push.confirm_consumed_lost_push_message?module=105&type=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON, Files] <br>
-**Output Format:** [Markdown guidance with Python command examples and JSON API responses saved to local files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are saved under a local linkfox session data directory; small responses may also be printed to stdout, while larger responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill sends Shopee store requests through LinkFox and requires LinkFox API key access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in environments where LinkFox is trusted, keep API keys in controlled environment variables, and avoid exposing workspace logs or saved outputs.
+
+Risk: Onboarding and billing recovery can use or generate LinkFox API keys and may create payment orders.
+
+Mitigation: Use onboarding only when authentication or billing recovery is needed, review any payment step before proceeding, and keep generated credentials private.
+
+Risk: Saved response files may contain store, webhook, or Push message data.
+
+Mitigation: Run the skill in a private workspace and delete, restrict, or encrypt saved linkfox response files after use.
+
+Risk: Endpoint override environment variables can redirect API traffic.
+
+Mitigation: Do not set endpoint override variables unless intentionally routing to a trusted endpoint.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-push)
+- [Shopee Push set_app_push_config](https://open.shopee.com/documents/v2/v2.push.set_app_push_config?module=105&type=1)
+- [Shopee Push get_app_push_config](https://open.shopee.com/documents/v2/v2.push.get_app_push_config?module=105&type=1)
+- [Shopee Push get_lost_push_message](https://open.shopee.com/documents/v2/v2.push.get_lost_push_message?module=105&type=1)
+- [Shopee Push confirm_consumed_lost_push_message](https://open.shopee.com/documents/v2/v2.push.confirm_consumed_lost_push_message?module=105&type=1)
+- [API Reference](references/api.md)
+- [Onboarding and Billing Recovery](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, JSON, Files, Shell commands, Guidance]
+
+**Output Format:** [JSON responses, saved response files, and Markdown guidance with shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses are written to local linkfox response files; small responses may also be printed inline, while larger responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

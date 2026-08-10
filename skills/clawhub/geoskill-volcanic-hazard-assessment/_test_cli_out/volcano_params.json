@@ -1,0 +1,14 @@
+{
+  "source": "synthetic",
+  "baseline": 290.0,
+  "years_since": 20.0,
+  "recency": 0.6703200460356393,
+  "recency_tau": 50.0,
+  "labels": [
+    "normal",
+    "advisory",
+    "watch",
+    "warning",
+    "extreme"
+  ]
+}

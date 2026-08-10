@@ -1,43 +1,59 @@
-## Description: <br>
-Real-time market data, portfolio tracking, trade journaling, screening, and news for stocks, crypto, ETFs, commodities, and forex - no API key required to start. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Retrieves market data through mkts.io and, with explicit user confirmation, manages portfolio, journal, and watchlist records for stocks, crypto, ETFs, commodities, and forex.
 
-## Publisher: <br>
-[sdliriano](https://clawhub.ai/user/sdliriano) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sdliriano](https://clawhub.ai/user/sdliriano)
 
-## Use Case: <br>
-Developers and agents use this skill to retrieve market data, screen assets, compare tickers, summarize financial news, and manage portfolio, journal, and watchlist records through mkts.io API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Market queries and portfolio, journal, or watchlist content may be sent to mkts.io. <br>
-Mitigation: Send only the data needed for the user request, avoid unnecessary private details, and confirm before transmitting sensitive portfolio or journal content. <br>
-Risk: Portfolio, journal, and watchlist endpoints can create, update, delete, or clear user records. <br>
-Mitigation: Treat POST, PATCH, and DELETE commands as state-changing operations; confirm the action, target IDs, and affected counts with the user before execution. <br>
-Risk: The optional MKTS_API_KEY grants higher limits and access to authenticated endpoints. <br>
-Mitigation: Keep MKTS_API_KEY private, pass it through the environment or request header only, and avoid printing or storing it in generated output. <br>
+## Use Case:
 
+External users and agent developers use this skill to retrieve quotes, market overviews, historical prices, news, screeners, and related market research, and to perform user-confirmed portfolio, journal, and watchlist workflows through mkts.io.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sdliriano/mkts-market-data) <br>
-- [mkts API base URL](https://mkts.io/api/v1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Guidance] <br>
-**Output Format:** [Markdown with curl commands and JSON response guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires curl; MKTS_API_KEY is optional for basic market data and required for portfolio, journal, watchlist, portfolio card, and ask endpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release evidence) <br>
+Risk: Market queries and any chosen portfolio, journal, or watchlist data are sent to mkts.io and may include sensitive financial interests.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill's documented data minimization guidance, avoid unnecessary personal data, and disclose the external transmission before account workflows.
+
+Risk: Portfolio, journal, and watchlist mutations can persist account data or delete records without a documented undo.
+
+Mitigation: Display the exact target and payload or affected count, resolve server-generated IDs before deletion, and obtain explicit confirmation immediately before each mutation.
+
+Risk: The optional MKTS_API_KEY credential could be exposed if printed, embedded in URLs or bodies, or stored insecurely.
+
+Mitigation: Use MKTS_API_KEY only from an environment variable and send it only in the X-API-Key header to https://mkts.io/api/v1.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sdliriano/skills/mkts-market-data)
+- [Publisher profile](https://clawhub.ai/user/sdliriano)
+- [mkts.io API base](https://mkts.io/api/v1)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with curl command examples and JSON response descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May call external mkts.io endpoints; portfolio, journal, watchlist, registration, and AI query workflows require explicit user confirmation where documented.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

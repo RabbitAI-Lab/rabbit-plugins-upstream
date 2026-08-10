@@ -1,0 +1,59 @@
+# Guardian Cronjob Template
+#
+# Deploys a recurring self-check that monitors agent cognitive state
+# during autonomous/long-running work and alerts the user if degraded.
+#
+# Usage with Hermes Agent cronjob system:
+#   hermes cron create --schedule "every 10m" --script scripts/self_check.py
+#
+# Or as a YAML config for other cron systems:
+
+schedule: "*/10 * * * *"  # Every 10 minutes
+description: "Agent cognitive state guardian — alerts on degradation"
+timeout: 30
+
+# The guardian runs self_check.py with parameters sourced from the
+# active session state. In Hermes, this would be:
+#
+# cronjob:
+#   name: cognitive-guardian
+#   schedule: every 10m
+#   script: scripts/self_check.py
+#   no_agent: true
+#   # Script outputs alert only when severity >= medium
+#   # Empty output = silent (no alert)
+#   # Non-empty output = delivered to user
+#
+# For non-Hermes systems, use crontab:
+#
+# */10 * * * * /usr/bin/python3 /path/to/scripts/self_check.py \
+#   --context-tokens $(wc -c < /tmp/agent-session.log) \
+#   --format json >> /var/log/agent-cognitive.log 2>&1
+
+alert_threshold: medium  # none, low, medium, high
+delivery: origin  # Where alerts go: origin (same chat), telegram, local
+
+# ─── What the guardian does ──────────────────────────────────────────────────
+#
+# 1. Reads session state (token usage, turn count, failure count)
+# 2. Runs all 6 cognitive state detectors
+# 3. If any state >= alert_threshold: delivers report to user
+# 4. If all states below threshold: silent (no output, no alert)
+# 5. Logs full report to file for post-hoc analysis
+
+log_file: "~/.agent-cognitive-states.log"
+
+# ─── Alert message template ──────────────────────────────────────────────────
+#
+# When triggered, the guardian delivers:
+#
+# ⚠️ Agent cognitive state degraded during autonomous work:
+#
+# 🥱 Context Fatigue [🟠 medium, score 72]
+#    94k/128k tokens (73%) — suggest session split
+#
+# 😤 Confidence Erosion [🟠 medium, score 66]
+#    3 consecutive failed tool calls — different approach needed
+#
+# CLI: 69/100 (🟠 Strained)
+# Recommendation: pause autonomous work and check in with user.

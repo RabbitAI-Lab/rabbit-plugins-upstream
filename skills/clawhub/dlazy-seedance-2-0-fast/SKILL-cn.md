@@ -1,11 +1,11 @@
 ---
 name: dlazy-seedance-2.0-fast
 version: 1.3.4
-description: Fast version of ByteDance's Seedance 2.0. Generates videos faster with support for multi-modal references, first/last frame, and text-to-video.
+description: "Fast version of ByteDance's Seedance 2.0. Generates videos faster with support for multi-modal references, first/last frame, and text-to-video."
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy seedance-2.0-fast -h 查看帮助信息。"}}
 ---
 
-# dlazy-seedance-2.0-fast
+# 快速视频生成 Seedance 2.0 Fast
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

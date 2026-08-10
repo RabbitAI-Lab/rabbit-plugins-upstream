@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes a Go/Weiqi board photo or text board, runs local KataGo analysis, and recommends the next move at beginner, intermediate, advanced, or all strength levels. <br>
+Analyzes Go/Weiqi board photos or text boards and uses local KataGo analysis to recommend the next move at beginner, intermediate, or advanced playing strength. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Go players, reviewers, and agents assisting them use this skill to convert a photographed or ASCII 19x19 board into a KataGo-backed next-move recommendation with candidate comparisons, engine metrics, and recognition overlays. <br>
+Go players, coaches, and agent users use this skill to analyze a 19x19 Go board from an image or text board, choose the side to move, and receive an auditable KataGo-backed next-move recommendation with candidate comparisons. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill runs a local KataGo subprocess and reads or writes files selected for analysis and image output. <br>
-Mitigation: Use explicit, non-sensitive board inputs and choose output paths carefully, especially in shared workspaces. <br>
-Risk: Photo recognition errors or an uncertain side to move can make the recommendation unreliable. <br>
-Mitigation: Review the generated recognition overlay, provide the side to move, and treat recommendations as unreliable until the board state is corrected. <br>
-Risk: No-capture continuation overlays do not model captures, ko, or ambiguous state changes. <br>
-Mitigation: Re-shoot or reset the board after captures or state ambiguity before requesting the next analysis. <br>
+Risk: Local Python/OpenCV code and a local KataGo subprocess run on board images supplied by the user. <br>
+Mitigation: Install and run the skill only in a trusted local environment with the required python3 and katago binaries. <br>
+Risk: Annotated board images may be written to temporary output paths or to a local recognition-label folder during correction retries. <br>
+Mitigation: Use private local output directories for sensitive board images and remove generated overlays or labels when they are no longer needed. <br>
+Risk: Incorrect board recognition, side-to-move ambiguity, captures, or ko/state ambiguity can make a move recommendation unreliable. <br>
+Mitigation: Confirm the side to move, compare the rendered board and source overlay against the real board, and re-shoot or reset the board when captures or state ambiguity are present. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/imcaptor/skills/go-next-move) <br>
-- [Publisher profile](https://clawhub.ai/user/imcaptor) <br>
+- [ClawHub publisher profile](https://clawhub.ai/user/imcaptor) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, files, guidance] <br>
-**Output Format:** [Markdown response with a recommended move, KataGo metrics, candidate comparisons, JSON helper output, and optional generated image file paths.] <br>
+**Output Type(s):** [guidance, shell commands, configuration, text, json, image files] <br>
+**Output Format:** [Markdown guidance with shell commands, JSON analysis data, and optional annotated image file paths.] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write recognition and recommendation images to user-selected paths or a system temporary directory.] <br>
+**Other Properties Related to Output:** [Recommendations include the selected move, candidate moves, winrate and score information, principal variation, recognition metadata for image input, and optional overlay/result images.] <br>
 
 ## Skill Version(s): <br>
-0.0.16 (source: server release metadata; artifact frontmatter reports 0.1.0) <br>
+0.1.2 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

@@ -12,12 +12,19 @@
 //
 // Lifecycle:
 //   - bin/browse.js spawns this with `detached: true` + `unref()` on launch.
-//   - State (port, pid) is written to ~/.cache/pricewin-hotel-deal-finder/state.json
+//   - State (port, pid, token) is written to
+//     ~/.cache/pricewin-hotel-deal-finder/session-default.json (0600)
 //   - SIGTERM (sent by `browse close`) → clean shutdown.
+//
+// Security: this endpoint drives a real browser and returns page content, so it
+// is treated as privileged. It binds loopback only, requires a per-run bearer
+// token that lives in the 0600 state file, and rejects non-loopback Host headers
+// (DNS-rebinding defence — a web page cannot reach it even knowing the port).
 // ----------------------------------------------------------------------------
 
 import http from 'node:http';
 import net from 'node:net';
+import crypto from 'node:crypto';
 import { chromium } from 'patchright';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -27,6 +34,30 @@ import { extractWithSelectors, isExtractionHealthy } from '../lib/dom-extract.js
 import { saveState, clearState } from '../lib/browser-state.js';
 
 const CACHE_DIR = path.join(os.homedir(), '.cache', 'pricewin-hotel-deal-finder');
+
+// Per-run bearer token. Generated here, handed to clients only through the 0600
+// state file, so a process that cannot read that file cannot drive the browser.
+const AUTH_HEADER = 'x-pricewin-token';
+const AUTH_TOKEN = crypto.randomBytes(32).toString('hex');
+
+function isAuthorized(req) {
+  const got = req.headers[AUTH_HEADER];
+  if (typeof got !== 'string') return false;
+  const a = Buffer.from(got);
+  const b = Buffer.from(AUTH_TOKEN);
+  // timingSafeEqual throws on length mismatch, so compare lengths first.
+  return a.length === b.length && crypto.timingSafeEqual(a, b);
+}
+
+// Reject anything whose Host is not loopback. Without this, a page in any
+// browser could POST to http://<attacker-domain>/ resolving to 127.0.0.1 and
+// hit the daemon; with it, only a client that already knows to say "127.0.0.1"
+// (and holds the token) gets through.
+function isLoopbackHost(req) {
+  const host = String(req.headers.host || '');
+  const name = host.replace(/:\d+$/, '').replace(/^\[|\]$/g, '');
+  return name === '127.0.0.1' || name === 'localhost' || name === '::1';
+}
 
 let browser;
 let context;
@@ -126,6 +157,29 @@ async function resolveRef(page, ref) {
   return sel;
 }
 
+// Chromium's own sandbox is the last line of defence between a hostile OTA page
+// and the user's machine, so we keep it ON by default. It genuinely cannot run
+// as root on Linux, and most container images lack the user namespaces it needs
+// — those two cases (and only those) drop it, loudly.
+function browserArgs() {
+  const args = [
+    '--disable-dev-shm-usage',
+    '--password-store=basic',
+    '--use-mock-keychain',
+    '--disable-blink-features=AutomationControlled',
+  ];
+  const isLinuxRoot = process.platform === 'linux'
+    && typeof process.getuid === 'function'
+    && process.getuid() === 0;
+  if (process.env.PRICEWIN_NO_SANDBOX === '1' || isLinuxRoot) {
+    process.stderr.write(
+      `[daemon] WARNING: launching Chromium with --no-sandbox (${isLinuxRoot ? 'running as root on Linux' : 'PRICEWIN_NO_SANDBOX=1'})\n`,
+    );
+    args.unshift('--no-sandbox');
+  }
+  return args;
+}
+
 async function ensurePage() {
   if (!browser) {
     // Default headless. Override via PRICEWIN_HEADED=1 for local debugging
@@ -133,13 +187,7 @@ async function ensurePage() {
     const headless = process.env.PRICEWIN_HEADED !== '1';
     browser = await chromium.launch({
       headless,
-      args: [
-        '--no-sandbox',
-        '--disable-dev-shm-usage',
-        '--password-store=basic',
-        '--use-mock-keychain',
-        '--disable-blink-features=AutomationControlled',
-      ],
+      args: browserArgs(),
     });
     process.stderr.write(`[daemon] browser launched (headless=${headless})\n`);
   }
@@ -502,6 +550,18 @@ async function main() {
 
   const port = await findFreePort();
   const server = http.createServer(async (req, res) => {
+    // Gate every endpoint, /ping included — an unauthenticated liveness probe
+    // is still a way to fingerprint the daemon.
+    if (!isLoopbackHost(req)) {
+      res.writeHead(403, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: 'forbidden: non-loopback Host' }));
+      return;
+    }
+    if (!isAuthorized(req)) {
+      res.writeHead(401, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ error: `unauthorized: missing or bad ${AUTH_HEADER}` }));
+      return;
+    }
     try {
       const result = await handle(req);
       res.writeHead(200, { 'Content-Type': 'application/json' });
@@ -512,7 +572,7 @@ async function main() {
     }
   });
   server.listen(port, '127.0.0.1', async () => {
-    await saveState({ port, pid: process.pid, createdAt: new Date().toISOString() });
+    await saveState({ port, pid: process.pid, token: AUTH_TOKEN, createdAt: new Date().toISOString() });
     process.stderr.write(`[daemon] ready on port ${port} (pid ${process.pid})\n`);
   });
 

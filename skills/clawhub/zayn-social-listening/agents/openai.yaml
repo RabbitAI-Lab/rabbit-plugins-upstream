@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-social-listening"
+  short_description: "分析品牌社媒、新闻、论坛、客户评论与员工评价公开信号"
+  default_prompt: "使用 $zayn-social-listening 分析目标品牌的公开舆情与社媒表现。"

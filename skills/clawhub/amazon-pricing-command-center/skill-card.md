@@ -1,47 +1,62 @@
-## Description: <br>
-Amazon Pricing Command Center analyzes Amazon ASINs with ZooData data to produce RAISE/HOLD/LOWER pricing signals, competitor context, trend summaries, and profit simulations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Data-driven pricing strategy engine for Amazon sellers that analyzes ASINs with ZooData API data and returns RAISE, HOLD, or LOWER pricing guidance with profit simulation.
 
-## Publisher: <br>
-[apiclaw](https://clawhub.ai/user/apiclaw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[apiclaw](https://clawhub.ai/user/apiclaw)
 
-## Use Case: <br>
-External Amazon sellers and ecommerce operators use this skill to evaluate product pricing, compare category competition, simulate margins, and decide whether to raise, hold, or lower prices for one or more ASINs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Amazon ASINs, category or keyword queries, and related pricing or market-research inputs are sent to ZooData. <br>
-Mitigation: Use the skill only with product and market data you are comfortable sending to ZooData. <br>
-Risk: The bundled script exposes broader market, review, keyword, monitoring, opportunity, and listing-audit workflows beyond the pricing-focused description. <br>
-Mitigation: Invoke only pricing-relevant commands unless you explicitly intend those broader analyses. <br>
-Risk: Credential handling can use environment variables or local config files. <br>
-Mitigation: Prefer the ZOODATA_API_KEY environment variable and avoid storing API keys in plaintext project files. <br>
+## Use Case:
 
+External Amazon sellers, marketplace operators, and supporting agents use this skill to evaluate ASIN pricing, competitor positioning, sales trends, and profit scenarios before making repricing decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/apiclaw/skills/amazon-pricing-command-center) <br>
-- [ZooData API documentation](https://api.zoodata.ai/api-docs) <br>
-- [ZooData API key setup](https://zoodata.ai/en/api-keys) <br>
-- [ZooData homepage](https://zoodata.ai) <br>
-- [Repository homepage](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
-- [Field reference](references/reference.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown reports with tables, shell command invocations, and JSON API results.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZOODATA_API_KEY; reports should include data provenance and API usage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.3 (source: server release metadata and skill metadata) <br>
+Risk: The skill sends ASINs, category paths, keywords, marketplace/date values, and numeric filters to ZooData under the user's API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that data sharing is acceptable, and prefer the ZOODATA_API_KEY environment variable over a persistent shared config file.
+
+Risk: API calls consume ZooData account credits, and batch or broad analyses can scale by ASIN count and category count.
+
+Mitigation: Confirm expected credit cost before batch or broad analysis and stop when credential or credit errors are returned.
+
+Risk: Pricing signals and recommended prices are decision support and may be misleading if treated as the sole basis for business action.
+
+Mitigation: Use the report's confidence labels and validate pricing, FBA fees, demand, and competitive context with additional sources before acting.
+
+## Reference(s):
+
+- [Skill README](artifact/README.md)
+- [ZooData CLI Contract](artifact/references/cli-contract.md)
+- [ZooData API Field Reference](artifact/references/reference.md)
+- [ZooData API Documentation](https://api.zoodata.ai/api-docs)
+- [ZooData](https://zoodata.ai)
+- [Metadata Homepage](https://github.com/SerendipityOneInc/ZooData-Skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown report with tables, command references, pricing signals, provenance, and API usage summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports should match the user's language and label conclusions as data-backed, inferred, or directional.]
+
+## Skill Version(s):
+
+1.1.8 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

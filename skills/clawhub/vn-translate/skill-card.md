@@ -1,38 +1,56 @@
-## Description: <br>
-Supports a Vietnamese story-translation workflow by converting source files to Markdown, splitting long manuscripts, guiding consistent terminology and pronoun choices, and merging translated parts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Translate fiction from a source language into Vietnamese using a streaming pipeline that reads raw Markdown in chunks, writes translated parts, tracks progress, maintains naming and address glossaries, and can merge or export the result as EPUB.
 
-## Publisher: <br>
-[kaibazax-dev](https://clawhub.ai/user/kaibazax-dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kaibazax-dev](https://clawhub.ai/user/kaibazax-dev)
 
-## Use Case: <br>
-Writers, translators, and agents use this skill to translate stories into Vietnamese while keeping proper names, places, terms, and character forms of address consistent across many manuscript parts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kaibazax-dev/vn-translate) <br>
-- [Publisher Profile](https://clawhub.ai/user/kaibazax-dev) <br>
+External users and developers use this skill to translate long-form fiction into Vietnamese while preserving chapter structure, paragraph boundaries, character names, and forms of address across a resumable workflow.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and local Markdown files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces raw/part_*.md, out/part_*.md, TenRieng.md, XungHo.md, and full.md; check for existing same-name files before running helper scripts because local translation work can be overwritten.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The workflow reads local source text and writes translated Markdown and state files in the active project.
+
+Mitigation: Install and run it only in projects where that local file access and output generation are intended.
+
+Risk: Cleanup commands can remove matching zero-byte Markdown outputs under the translation output directory.
+
+Mitigation: List matching files before deletion and confirm they are broken generated outputs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/kaibazax-dev/skills/vn-translate)
+- [Worked translation-session example](references/session-worked-example.md)
+- [Vietnamese idiom and terminology reference](references/thanh-ngu-va-tu-ngu.md)
+- [Token-usage diagnostics](references/token-usage-diagnostics.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown files, JSON progress state, shell commands, and optional EPUB output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces resumable translated parts, glossary updates, merged Markdown, and optional EPUB packaging.]
+
+## Skill Version(s):
+
+1.1.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

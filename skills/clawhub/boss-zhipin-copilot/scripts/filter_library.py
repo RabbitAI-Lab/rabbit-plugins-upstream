@@ -1,0 +1,265 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+filter_library.py - profile 驱动的岗位过滤 + 评分 + （可选）入库。
+用法:
+  python3 scripts/filter_library.py --profile profile.yaml --input candidates.csv \
+      [--out 评估结果.json] [--library target_library.csv] [--id-prefix BJ]
+
+说明:
+  - input: candidates 岗位 CSV（搜索结果导出，或现有库）。按表头字典映射，列名灵活。
+  - profile: 驱动硬排除 / 门槛 / 加分关键词（见 references/profile_schema.md）。
+  - 若给 --library，则把「通过」且库中无同 URL 的岗位追加进库（状态=已收藏(感兴趣)）。
+  - 输出 JSON: {passed:[...], rejected:[...], summary:{...}}
+"""
+import argparse, csv, json, re, sys, datetime, os
+
+try:
+    import yaml
+except ImportError:
+    sys.exit("FAIL_LOUD: 需要 pyyaml，请先 `pip install pyyaml`")
+
+# 逻辑字段 -> 候选列名（别名表，大小写不敏感）。解决「列名灵活」的自相矛盾（C4）。
+FIELD_ALIASES = {
+    "城市":     ["城市", "city", "城市名"],
+    "薪资":     ["薪资", "salary", "薪酬", "月薪", "工资"],
+    "经验要求": ["经验要求", "experience", "经验", "工作年限"],
+    "公司阶段": ["公司阶段", "stage", "融资阶段", "融资"],
+    "公司规模": ["公司规模", "size", "规模", "人数", "员工数"],
+    "类型":     ["类型", "type", "职能", "岗位类型"],
+    "URL":      ["URL", "url", "链接", "链接地址", "link", "url_link"],
+    "岗位名":   ["岗位名", "title", "职位", "岗位", "job_title", "jobtitle", "job name"],
+    "公司名":   ["公司名", "company", "公司"],
+}
+# 必需列：完全缺失时应清晰 WARNING，而非静默全拒（C4）。
+# 注意：搜索产出的 candidates.csv 不含「薪资」列（卡片薪资被反爬混淆，须从 JD 详情页取，
+# 见 search_jobs.sh 注释）。故薪资不列入 REQUIRED——否则每次过滤都刷「薪资缺失」WARNING，
+# 且 salary_floor 门控本就靠 colmap 有无「薪资」列自行生效（有列才判、无列跳过，不误杀）。
+# 薪资门槛仅在「JD 富化后含薪资列」的库上生效；纯搜索候选池无法做薪资过滤（数据缺失），属已知限制。
+REQUIRED_FIELDS = ["URL"]
+
+def build_colmap(header):
+    """根据 CSV 表头解析每个逻辑字段对应的真实列名（优先首个匹配的别名）。"""
+    norm = {}
+    for h in (header or []):
+        if h is None:
+            continue
+        norm[(str(h).strip().lower())] = h
+    colmap = {}
+    for logical, alist in FIELD_ALIASES.items():
+        for alias in alist:
+            key = alias.lower()
+            if key in norm:
+                colmap[logical] = norm[key]
+                break
+    return colmap
+
+def gf(row, colmap, logical, default=""):
+    """按逻辑字段取真实列的值。"""
+    col = colmap.get(logical)
+    if col is None:
+        return default
+    return row.get(col, default)
+
+def parse_salary(s):
+    m = re.search(r"(\d+(?:\.\d+)?)\s*[Kk]", s)
+    if m:
+        return int(float(m.group(1)) * 1000)
+    m = re.search(r"(\d+(?:\.\d+)?)\s*万", s)
+    if m:
+        return int(float(m.group(1)) * 10000)
+    return None
+
+def parse_seniority(s):
+    # F1: 与 build_profile C13 对齐——限制 1-2 位数字（排除「2026年校招」这类 4 位年份误取为年限）
+    m = re.search(r"(?<!\d)(\d{1,2})\s*年以上", s) \
+        or re.search(r"(?<!\d)(\d{1,2})\s*年(?![\d])", s)
+    return int(m.group(1)) if m else None
+
+def parse_scale(s):
+    m = re.search(r"(\d+)", s)
+    return int(m.group(1)) if m else None
+
+def evaluate(row, profile, colmap):
+    reasons = []
+    blob = " ".join(str(v) for v in row.values())
+
+    # 硬排除（容错：schema 要求 {category,keywords[]}；若遇字符串条目，按「类别：JD含 k1/k2」尽力解析，
+    # 解析不出关键词则跳过并不 crash——曾因 profile 手写为字符串列表导致 AttributeError 全量崩溃）
+    for cat in profile.get("hard_exclude", []) or []:
+        if isinstance(cat, str):
+            part = re.split(r"[:：]", cat, maxsplit=1)
+            label = part[0].strip()
+            kws = []
+            if len(part) > 1:
+                tail = re.sub(r"^\s*JD含\s*", "", part[1].strip())
+                kws = [k.strip() for k in re.split(r"[/、,，;；]", tail) if k.strip()]
+            cat = {"category": label, "keywords": kws}
+        hits = [k for k in (cat.get("keywords", []) or []) if k and k in blob]
+        if hits:
+            reasons.append(f"硬排除[{cat.get('category','')}]:{','.join(hits)}")
+
+    th = profile.get("thresholds", {}) or {}
+    city = (th.get("city") or "").strip()
+    if city and city not in str(gf(row, colmap, "城市")):
+        reasons.append(f"城市不符(期望{city})")
+
+    floor = int(th.get("salary_floor", 0) or 0)
+    # 仅当「薪资列存在」时才做薪资门控；列缺失已在 main 中 WARNING 且不静默全拒（C4）
+    sal = None
+    if floor and "薪资" in colmap:
+        sal = parse_salary(str(gf(row, colmap, "薪资")))
+        # N1: 薪资无法解析（如「面议/薪资面议」，多为高端岗）按「未知」处理，不当「低于门槛」误杀；
+        #     仅当能解析出数值且确实低于 floor 时才排除。
+        if sal is not None and sal < floor:
+            reasons.append(f"薪资低于{floor}(实测:{sal})")
+
+    sy = int(th.get("seniority_years", 0) or 0)
+    yrs = None
+    if sy:
+        yrs = parse_seniority(str(gf(row, colmap, "经验要求")))
+        # 未知（列缺失/解析不出）≠ 不达标：跳过该维度，不误杀（与薪资 N1 同理）
+        if yrs is not None and yrs < sy:
+            reasons.append(f"经验不足{sy}年(实测:{yrs})")
+
+    allow = th.get("stage_allow", []) or []
+    stage_val = str(gf(row, colmap, "公司阶段")).strip()
+    # 阶段未知（搜索卡片无此字段）≠ 违规：跳过该维度，待读 JD 详情页后再判
+    if allow and stage_val and stage_val not in allow:
+        reasons.append(f"阶段不在白名单{allow}")
+
+    smax = int(th.get("scale_max", 0) or 0)
+    if smax:
+        scl = parse_scale(str(gf(row, colmap, "公司规模")))
+        if scl and scl > smax:
+            reasons.append(f"规模>{smax}(实测:{scl})")
+
+    et = (th.get("employment_type") or "").strip()
+    if et and et not in str(gf(row, colmap, "类型")) and et not in blob:
+        reasons.append(f"雇佣类型不符(期望{et})")
+
+    # 评分
+    score = 50
+    hits = []
+    if not reasons:
+        boost = profile.get("boost_keywords", []) or []
+        hits = [k for k in boost if k and k in blob]
+        score += len(hits) * 5
+        if city and city in str(gf(row, colmap, "城市")):
+            score += 10
+        if floor and "薪资" in colmap:
+            # F3: 复用门控已解析的 sal（不再重复 parse_salary）
+            if sal and sal >= floor:
+                score += 10
+        if sy:
+            # F3: 复用门控已解析的 yrs（不再重复 parse_seniority）
+            if yrs and yrs >= sy:
+                score += 10
+    score = min(score, 100)
+
+    decision = "reject" if reasons else "collect"
+    return decision, score, reasons, hits
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--profile", default="profile.yaml")
+    ap.add_argument("--input", required=True, help="candidates CSV")
+    ap.add_argument("--out", default=".work/eval_result.json")
+    ap.add_argument("--library", help="可选：通过项追加进此库 CSV")
+    ap.add_argument("--id-prefix", default="BJ")
+    args = ap.parse_args()
+
+    with open(args.profile, encoding="utf-8") as f:
+        profile = yaml.safe_load(f)
+    reader = csv.DictReader(open(args.input, encoding="utf-8-sig"))
+    rows = list(reader)
+    colmap = build_colmap(reader.fieldnames)
+
+    # 必需列完全缺失：清晰 WARNING（stderr），而非静默全拒（C4）
+    for req in REQUIRED_FIELDS:
+        if req not in colmap:
+            sys.stderr.write(
+                f"WARNING: 必需的列缺失: {req}（候选别名 {FIELD_ALIASES[req]}）。"
+                f"该维度不参与评估，请检查 CSV 表头；其余维度照常过滤。\n"
+            )
+
+    passed, rejected = [], []
+    for r in rows:
+        decision, score, reasons, hits = evaluate(r, profile, colmap)
+        rec = {k: r.get(k, "") for k in r}
+        # 规范化关键字段为 canonical 名，便于下游/入库（兼容英文表头）（C4）
+        for logical in ["URL", "岗位名", "公司名", "城市", "薪资", "经验要求", "公司阶段", "公司规模", "类型"]:
+            if logical in colmap:
+                rec[logical] = r.get(colmap[logical], "")
+        rec["评分"] = score
+        rec["排除原因"] = "; ".join(reasons)
+        rec["命中加分词"] = ",".join(hits)
+        if decision == "collect":
+            passed.append(rec)
+        else:
+            rejected.append(rec)
+
+    out = {
+        "summary": {
+            "total": len(rows), "passed": len(passed), "rejected": len(rejected),
+            "evaluated_at": datetime.datetime.now().isoformat(),
+        },
+        "passed": passed,
+        "rejected": rejected,
+    }
+    os.makedirs(os.path.dirname(args.out) or ".", exist_ok=True)
+    json.dump(out, open(args.out, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+
+    # 入库
+    if args.library:
+        lib_rows = []
+        fieldnames = None
+        existing_urls = set()
+        if os.path.exists(args.library):
+            with open(args.library, encoding="utf-8-sig") as f:
+                rd = csv.DictReader(f)
+                fieldnames = rd.fieldnames
+                for lr in rd:
+                    lib_rows.append(lr)
+                    existing_urls.add((lr.get("URL", "") or "").strip())
+        if not fieldnames:
+            fieldnames = ["岗位ID", "岗位名", "公司名", "公司规模", "公司阶段",
+                          "行业", "城市", "薪资", "经验要求", "类型", "状态", "URL"]
+        # 确保有扩展列（含入库必须的 岗位ID / 状态）
+        for col in ["岗位ID", "状态", "评分", "排除原因", "招聘方", "更新时间"]:
+            if col not in fieldnames:
+                fieldnames.append(col)
+        max_id = 0
+        for lr in lib_rows:
+            m = re.search(r"(\d+)", str(lr.get("岗位ID", "")))
+            if m:
+                max_id = max(max_id, int(m.group(1)))
+        added = 0
+        for p in passed:
+            url = (p.get("URL", "") or "").strip()
+            if not url:
+                # C8：URL 空/缺失 -> 该行无法去重（每轮会重复入库），打印 WARNING 但不 fatal
+                sys.stderr.write(
+                    f"WARNING: 通过岗「{p.get('岗位名', p.get('title', ''))}」缺少 URL，"
+                    f"不去重（可能每轮重复入库），请补全 URL 列。\n"
+                )
+            if url and url in existing_urls:
+                continue
+            max_id += 1
+            new = {c: p.get(c, "") for c in fieldnames}
+            new["岗位ID"] = f"{args.id_prefix}-{max_id:04d}"
+            new["状态"] = "已收藏(感兴趣)"
+            new["更新时间"] = datetime.date.today().isoformat()
+            lib_rows.append(new)
+            existing_urls.add(url)
+            added += 1
+        with open(args.library, "w", encoding="utf-8-sig", newline="") as f:
+            w = csv.DictWriter(f, fieldnames=fieldnames)
+            w.writeheader()
+            w.writerows(lib_rows)
+        print(f"[ok] 追加 {added} 岗进库 -> {args.library}")
+
+    print(f"[ok] 评估完成 total={len(rows)} passed={len(passed)} rejected={len(rejected)} -> {args.out}")
+
+if __name__ == "__main__":
+    main()

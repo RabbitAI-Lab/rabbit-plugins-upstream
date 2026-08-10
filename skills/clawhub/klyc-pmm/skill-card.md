@@ -1,46 +1,65 @@
-## Description: <br>
-KLYC-PMM gives agents a shell-based workflow for writing, classifying, encrypting, uploading, searching, and recovering persistent memory. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+KLYC-PMM is an AI-agent memory management skill that helps persist, search, synchronize, and recover text memories using local shell scripts and authenticated HTTPS communication with kunlunyaochi.com.
 
-## Publisher: <br>
-[sylncn](https://clawhub.ai/user/sylncn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sylncn](https://clawhub.ai/user/sylncn)
 
-## Use Case: <br>
-Developers and agent operators use this skill to let an AI agent preserve useful decisions and identity files across restarts, workspace resets, and recovery events while using local shell commands and cloud-backed memory storage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can retain and upload broad local and cloud memory, including watched files selected by the operator. <br>
-Mitigation: Review the watched and backed-up file list before enabling it, exclude secrets or regulated data, and limit use to intended workspaces. <br>
-Risk: Remote hooks, daemon behavior, and update flows may change local prompts or scripts after installation. <br>
-Mitigation: Disable those flows unless the operator trusts the service, and review fetched hooks or updates before allowing them to run. <br>
-Risk: The scanner guidance says not to rely on stated encryption guarantees for every upload path. <br>
-Mitigation: Treat cloud upload paths as requiring review, validate the configured endpoint and encryption behavior, and avoid sensitive data until that review is complete. <br>
+## Use Case:
 
+External developers and AI-agent operators use this skill to give agents durable, searchable text memory that can survive restarts, workspace resets, and migrations. It also supports paid upgrade flows for guarded memory and memory-clone features.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sylncn/skills/klyc-pmm) <br>
-- [README](artifact/README.md) <br>
-- [Skill usage guide](artifact/klyc-pmm/SKILL.md) <br>
-- [Security policy](artifact/SECURITY.md) <br>
-- [Changelog](artifact/klyc-pmm/CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and shell command guidance with local files and JSON configuration] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires jq and curl; memory and recovery flows may create or update local files and send selected content to the configured service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-7.0.3 (source: server release metadata, SKILL.md frontmatter, skill.json, and _meta.json) <br>
+Risk: Selected memory and identity files may contain sensitive information and can be sent to kunlunyaochi.com by the skill's sync flows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only in workspaces where those files have been reviewed and scrubbed of secrets, regulated data, private client data, and credentials.
+
+Risk: The optional daemon can persistently monitor file changes and sync selected files after installation.
+
+Mitigation: Prefer dry-run or manual setup, review the generated systemd user service, and enable persistent watch mode only after confirming the intended files and API endpoint.
+
+Risk: The recovery URL functions like a credential for restoring memory.
+
+Mitigation: Treat the recovery URL as a password and avoid placing it in MEMORY.md, repositories, chat logs, or other shared records.
+
+Risk: Non-dry-run distillation can mark redundant or conflicting memory records as soft-deleted.
+
+Mitigation: Run distillation in dry-run mode first and review proposed changes before allowing automatic memory cleanup.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/sylncn/skills/klyc-pmm)
+- [SKILL.md](artifact/SKILL.md)
+- [Security Policy](artifact/SECURITY.md)
+- [PMM Full Architecture](artifact/klyc-pmm-src/references/pmm-full-architecture.md)
+- [Pay Skill Specification](artifact/klyc-pmm-src/references/pay-skill-spec.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash command examples, configuration details, and JSON/API response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose commands that create local configuration, install a user service, and send selected memory files to a remote HTTPS API when executed.]
+
+## Skill Version(s):
+
+9.2.2 (source: server release metadata, SKILL.md frontmatter, skill.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

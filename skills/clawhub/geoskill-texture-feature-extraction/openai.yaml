@@ -1,0 +1,14 @@
+name: geoskill-texture-feature-extraction
+display_name: 纹理特征提取
+description: |
+  基于GLCM灰度共生矩阵提取contrast/homogeneity/energy等纹理特征，多方向平均输出纹理栅格
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-texture-feature-extraction.py
+runtime: python>=3.9
+tags:
+  - energy
+  - extraction
+  - gis
+  - raster
+  - remote-sensing

@@ -1,0 +1,56 @@
+{
+  "summary": {
+    "total": 6,
+    "passed": 6,
+    "failed": 0,
+    "skipped": 0,
+    "pass_rate": 100.0
+  },
+  "tests": [
+    {
+      "test_id": 1,
+      "name": "批量搜索模式",
+      "status": "passed",
+      "duration": "5.361s",
+      "message": "批量搜索功能正常"
+    },
+    {
+      "test_id": 2,
+      "name": "分类搜索 - 预定义分类",
+      "status": "passed",
+      "duration": "2.55s",
+      "message": "预定义分类搜索正常"
+    },
+    {
+      "test_id": 3,
+      "name": "同类模组推荐",
+      "status": "passed",
+      "duration": "0.001s",
+      "message": "同类推荐功能正常"
+    },
+    {
+      "test_id": 4,
+      "name": "兼容规则库数据完整性",
+      "status": "passed",
+      "duration": "0.003s",
+      "message": "兼容规则库数据完整"
+    },
+    {
+      "test_id": 5,
+      "name": "动态分类获取",
+      "status": "passed",
+      "duration": "2.074s",
+      "message": "动态分类获取功能正常"
+    },
+    {
+      "test_id": 6,
+      "name": "自动更新兼容规则库",
+      "status": "passed",
+      "duration": "3.262s",
+      "message": "自动更新功能正常"
+    }
+  ],
+  "timestamp": "2026-08-07",
+  "local_version": "1.0.1",
+  "market_version": "1.0.2"
+}

@@ -1,0 +1,17 @@
+name: geoskill-urban-growth-boundary
+display_name: 城市增长边界
+description: |
+  Delineate urban growth boundaries from historical expansion rate and direction plus terrain, cropland and ecological constraints.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-urban-growth-boundary.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - ai
+  - biodiversity
+  - dem
+  - gis
+  - remote-sensing
+  - terrain
+  - urban

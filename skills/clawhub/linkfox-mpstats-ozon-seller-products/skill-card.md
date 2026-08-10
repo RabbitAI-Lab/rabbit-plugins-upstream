@@ -1,46 +1,67 @@
-## Description: <br>
-Retrieves seller-scoped Ozon Russia product metrics from MPSTATS, including per-SKU sales, revenue, price, ratings, stock, turnover, lost-profit, filtering, sorting, and currency conversion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Queries MPSTATS Ozon Russia seller-product data by numeric seller ID and returns per-SKU sales, revenue, pricing, ratings, inventory, turnover, lost sales, filtering, sorting, and currency-conversion views.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External marketplace analysts, sellers, and agents use this skill to audit a numeric Ozon seller ID, inspect the seller's SKU mix, identify bestsellers and stockout losses, and compare seller-level product performance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Ozon seller-analysis requests and the LinkFox API key are sent to the configured LinkFox gateway. <br>
-Mitigation: Use only in environments where sending those requests to LinkFox is acceptable, and verify the configured gateway before use. <br>
-Risk: Full API responses may be saved locally, including cached responses and session data files. <br>
-Mitigation: Run the skill in an appropriate workspace, review generated linkfox data and cache files, and avoid sensitive workspaces unless local storage is acceptable. <br>
-Risk: The feedback workflow can report broad user feedback or observed behavior to the LinkFox feedback API. <br>
-Mitigation: Review or disable feedback reporting in sensitive workflows before deploying the skill. <br>
-Risk: Queries consume LinkFox credits and repeated exploratory calls can increase cost. <br>
-Mitigation: Inform users before extra calls, rely on the built-in cache for identical parameters, and prefer tighter filters before deep pagination. <br>
+## Use Case:
 
+External e-commerce analysts, marketplace operators, and developers use this skill to audit an Ozon seller's SKU portfolio, identify top products, inspect stockout and turnover signals, and compare competitor stores using seller-scoped product metrics.
 
-## Reference(s): <br>
-- [MPSTATS Ozon Seller Products API Reference](references/api.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-mpstats-ozon-seller-products) <br>
-- [LinkFox Publisher Profile](https://clawhub.ai/user/linkfox-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API parameters, shell command examples, compact tables, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes full API responses to local JSON files, prints small responses inline, summarizes large responses, and uses a 24-hour local cache for repeated parameter sets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill handles LinkFox API keys and can guide phone/SMS onboarding.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer self-service API-key setup through LinkFox, avoid sharing phone or SMS data unless onboarding is explicitly required, and restart the agent session after configuring the key.
+
+Risk: Endpoint environment variables can change where LinkFox requests are sent.
+
+Mitigation: Before running the skill, verify LINKFOX_* endpoint variables point to official LinkFox domains or leave them unset to use the documented defaults.
+
+Risk: The billing and order flow can create payment actions.
+
+Mitigation: Use billing commands only after the user explicitly requests a purchase path, and validate the plan and payment method before placing an order.
+
+Risk: Full API responses are saved locally and may include detailed seller-query results.
+
+Mitigation: Treat generated linkfox session files as local data artifacts, review their contents before sharing, and remove them when no longer needed.
+
+Risk: Seller-product queries consume LinkFox credits and repeated calls can increase cost.
+
+Mitigation: Confirm credit cost before execution, rely on the 24-hour cache for repeated identical requests, and avoid automatic retries with modified parameters.
+
+## Reference(s):
+
+- [MPSTATS Ozon seller-products API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-mpstats-ozon-seller-products)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, JSON]
+
+**Output Format:** [Markdown summaries and JSON API responses saved to local files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The script writes the full API response to a local linkfox session data file and prints either the full JSON or a compact summary depending on response size.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

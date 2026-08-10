@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/olk",
   "slug": "olk",
   "ownerHandle": null,
-  "version": "1.9.6",
-  "updatedAt": 1781065259921,
-  "contentHash": "9965f25fed43cffaaea5517ef59b37dd336e26653dc2931c68b05b904524b66d",
-  "fetchedAt": "2026-07-26T18:30:09.973Z"
+  "version": "1.11.0",
+  "updatedAt": 1785532933643,
+  "contentHash": "9a24427911cc6cf3f2a2226cb0d510045062b9fa49432f7b907c6c97de9abf5f",
+  "fetchedAt": "2026-08-10T09:42:04.666Z"
 }

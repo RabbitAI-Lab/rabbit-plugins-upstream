@@ -1,0 +1,29 @@
+{
+  "name": "ccpa-check",
+  "version": "2.0.3",
+  "description": "CCPA/CPRA compliance check (free skill + cloud scoring, 100 free calls)",
+  "author": "CQDev",
+  "license": "MIT",
+  "permissions": {
+    "network": ["https://compliancehub.cn"],
+    "filesystem": {
+      "write": ["~/.config/compliancehub"]
+    },
+    "env": ["COMPLIANCEHUB_API_KEY"]
+  },
+  "openclaw": {
+    "category": "compliance",
+    "region": "global",
+    "emoji": "🔒",
+    "displayName": "CCPA/CPRA Compliance Check",
+    "keywords": ["CCPA", "CPRA", "privacy", "California", "compliance", "data-protection", "US-privacy"],
+    "files": ["SKILL.md", "scripts/ccpa-check.py", "package.json"],
+    "permissions": {
+      "network": ["https://compliancehub.cn"],
+      "filesystem": {
+        "write": ["~/.config/compliancehub"]
+      },
+      "env": ["COMPLIANCEHUB_API_KEY"]
+    }
+  }
+}

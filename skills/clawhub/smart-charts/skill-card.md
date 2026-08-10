@@ -1,43 +1,58 @@
-## Description: <br>
-Smart Charts reads user-supplied CSV, Excel, and JSON files, analyzes data characteristics with LLM assistance, recommends chart types, and generates interactive ECharts HTML visualizations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Intelligent chart generation and data analysis skill. Reads user-supplied data files (CSV/Excel/JSON), analyzes data characteristics with LLM assistance, auto-recommends and generates interactive ECharts visualizations.
 
-## Publisher: <br>
-[neuhanli](https://clawhub.ai/user/neuhanli) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[neuhanli](https://clawhub.ai/user/neuhanli)
 
-## Use Case: <br>
-Developers, analysts, and external users use this skill to turn uploaded tabular data into recommended interactive charts and lightweight data summaries. It is most useful for CSV, Excel, and JSON datasets that can be parsed locally and rendered as ECharts HTML. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated pandas transform code may run against user data without an explicit confirmation gate. <br>
-Mitigation: Run the skill in a constrained environment and review transform code before execution, especially for sensitive datasets. <br>
-Risk: Generated HTML loads JavaScript from public CDNs. <br>
-Mitigation: Use the generated charts only where public CDN access is acceptable, or require a trusted offline asset path before using the skill in restricted environments. <br>
+## Use Case:
 
+Developers, analysts, and other agent users use this skill to inspect CSV, Excel, or JSON data, choose an appropriate chart type, and generate interactive ECharts HTML visualizations.
 
-## Reference(s): <br>
-- [Smart Charts Skill Documentation](artifact/SKILL.md) <br>
-- [Smart Charts CLI Reference](artifact/REFERENCE.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/neuhanli/skills/smart-charts) <br>
-- [Publisher Profile](https://clawhub.ai/user/neuhanli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files] <br>
-**Output Format:** [Markdown guidance with shell commands, structured JSON status, and generated HTML chart files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated HTML loads ECharts from public CDNs and is usually written under smart_charts_output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Generated transformation code is executed in-process.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated transform code when possible and run the skill in an isolated workspace, especially for sensitive or high-impact data.
+
+Risk: Generated HTML charts may persist or expose user data.
+
+Mitigation: Use non-sensitive data where possible and avoid sharing generated HTML files that contain private records.
+
+Risk: Generated charts may load ECharts assets from public CDNs.
+
+Mitigation: Use an offline or pinned local ECharts asset when generated charts may contain private data or when network dependency is undesirable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/neuhanli/skills/smart-charts)
+- [Smart Charts reference](REFERENCE.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and generated HTML chart files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated chart HTML may load ECharts from a CDN and may include transformed user data.]
+
+## Skill Version(s):
+
+5.0.0 (source: server release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

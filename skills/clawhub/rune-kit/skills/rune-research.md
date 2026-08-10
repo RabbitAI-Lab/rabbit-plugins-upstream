@@ -1,6 +1,6 @@
 # rune-research
 
-> Rune L3 Skill | knowledge | model: tier:light
+> Rune L3 Skill | knowledge | model: tier:mid
 
 
 # research
