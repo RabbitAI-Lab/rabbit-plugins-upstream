@@ -1,0 +1,14 @@
+name: geoskill-spatial-index-builder
+display_name: 空间索引构建
+description: |
+  构建 R-tree / Quadtree / GeoHash 空间索引并统计查询性能，结果与暴力搜索对齐。Build R-tree / Quadtree / GeoHash spatial indexes, benchmark query performance and align results with brute-force search.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-spatial-index-builder.py
+runtime: python>=3.9
+tags:
+  - gis
+  - preprocessing
+  - raster
+  - remote-sensing
+  - vegetation

@@ -1249,6 +1249,9 @@ def main(argv=None):
               f'(or pass --unsafe-skip-hmac for local debug).', file=sys.stderr)
         return 1
 
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base({'api_base': DEFAULT_API_BASE})
+
     _Handler.config = {
         'beak_key': beak_key,
         'on_message': args.on_message,

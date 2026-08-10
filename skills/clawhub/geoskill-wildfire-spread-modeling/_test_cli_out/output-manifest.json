@@ -1,0 +1,81 @@
+{
+  "skill": "wildfire-spread-modeling",
+  "skill_version": "1.0.0",
+  "command": "wildfire-spread-modeling --bbox 116 39 117 40 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-03T21:13:43.475952Z",
+  "finished_at": "2026-08-03T21:13:43.603873Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ],
+    "steps": 15,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\burned_area.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\arrival_time.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\fire_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "burned_pixels": 396,
+    "burned_fraction": 0.0966796875,
+    "max_arrival_step": 15,
+    "final_area": 396
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "wildfire-spread-modeling"
+  },
+  "error": null
+}

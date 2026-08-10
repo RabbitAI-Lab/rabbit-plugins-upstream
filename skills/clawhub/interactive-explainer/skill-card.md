@@ -1,5 +1,5 @@
 ## Description: <br>
-Use when someone wants an educational explainer with a host and characters, such as history or science shorts with dialogue rather than voiceover-only B-roll. <br>
+Use when someone wants an educational explainer with a host and characters for history or science shorts with dialogue, not voiceover-only B-roll. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,38 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators, educators, and developers use this skill to plan educational short videos that alternate host narration with on-camera expert or character dialogue. It supports history, science, nature, how-it-works, and children's explainer workflows with staged review gates before generation. <br>
+External creators and developers use this skill to plan and run educational short-form explainers that alternate host narration with expert or character dialogue. It guides intake, scene planning, still generation, TTS, video generation, review gates, and final assembly. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The workflow depends on prerequisite Pruna media-generation skills that may make paid API calls. <br>
-Mitigation: Confirm the prerequisite skills, expected API usage, and approval gates before generating stills, audio, video, or music. <br>
-Risk: The artifact uses binary persona gender and voice-matching fields for avatar scenes. <br>
-Mitigation: Review cast and voice requirements before use, and adapt the plan manually when nonbinary, unspecified, or user-selected voice handling is needed. <br>
-Risk: Generated educational videos can become misleading if the scene plan lacks factual depth or causal structure. <br>
-Mitigation: Review the scene table and stand-alone test at the plan gate before approving media generation. <br>
+Risk: The workflow can spend generation credits through image, TTS, video, avatar, and audio generation steps. <br>
+Mitigation: Use the documented approval gates before paid calls: approve plan, approve stills, and approve clips. <br>
+Risk: User-provided cast photos, location images, or reference media may be uploaded to generation providers. <br>
+Mitigation: Confirm the media source and user approval before using uploaded reference assets in generation steps. <br>
+Risk: Generated educational explainers can become misleading if the scene plan lacks factual grounding or review. <br>
+Mitigation: Review the full scene table, dialogue arc, and final clips before assembly and delivery. <br>
+Risk: The avatar workflow currently assumes binary persona gender and voice categories. <br>
+Mitigation: Override or avoid those cast fields when they do not fit the subject or intended representation. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/pruna-ai/skills/interactive-explainer) <br>
-- [Educational Explainer Scenes](artifact/references/interactive-explainer-scenes.md) <br>
-- [Educational Explainer Motion](artifact/references/interactive-explainer-motion.md) <br>
-- [Interactive Explainer Prompts](artifact/references/interactive-explainer-prompts.md) <br>
-- [Explainer Plan Template](artifact/templates/explainer-plan.template.json) <br>
+- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/interactive-explainer) <br>
+- [Educational explainer scenes](references/interactive-explainer-scenes.md) <br>
+- [Educational explainer motion](references/interactive-explainer-motion.md) <br>
+- [Interactive explainer prompts](references/interactive-explainer-prompts.md) <br>
+- [Explainer plan template](templates/explainer-plan.template.json) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON plan structure and shell command snippets] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JSON plan files and shell command snippets] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides staged media generation with user approval gates before paid calls.] <br>
+**Other Properties Related to Output:** [Can guide approved generation of still images, TTS audio, video clips, and assembled MP4 deliverables.] <br>
 
 ## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill frontmatter) <br>
+1.0.9 (source: artifact frontmatter and server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

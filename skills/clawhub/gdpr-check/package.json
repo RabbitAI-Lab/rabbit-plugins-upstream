@@ -1,0 +1,46 @@
+{
+  "name": "gdpr-check",
+  "version": "1.0.4",
+  "type": "skill",
+  "description": "GDPR 欧盟隐私合规检查。仅在用户明确要求 GDPR 合规检查 / 欧盟隐私审查时激活。免费 检查（云端评分），12 项核心检查。",
+  "warnings": [
+    "云端评分：运行评分审计时，你的答题内容会发送至 compliancehub.cn 进行评分（可加 --non-interactive 完全离线预览，不联网）。",
+    "API Key：仅在你主动运行 --login 后写入 ~/.config/compliancehub（0600）；也可通过 COMPLIANCEHUB_API_KEY 环境变量提供。",
+    "可选的 --login 会收集 email/password，用于在 compliancehub.cn 创建账号并签发免费 API Key。"
+  ],
+  "author": "CQDev",
+  "license": "MIT",
+  "homepage": "https://compliancehub.cn/account.html?skill=gdpr-check",
+  "permissions": {
+    "network": [
+      "https://compliancehub.cn"
+    ],
+    "filesystem": {
+      "write": [
+        "~/.config/compliancehub"
+      ]
+    },
+    "env": [
+      "COMPLIANCEHUB_API_KEY"
+    ]
+  },
+  "openclaw": {
+    "displayName": "GDPR 欧盟隐私合规检查",
+    "category": "compliance",
+    "pricing": "free",
+    "points": 1,
+    "permissions": {
+      "network": [
+        "https://compliancehub.cn"
+      ],
+      "filesystem": {
+        "write": [
+          "~/.config/compliancehub"
+        ]
+      },
+      "env": [
+        "COMPLIANCEHUB_API_KEY"
+      ]
+    }
+  }
+}

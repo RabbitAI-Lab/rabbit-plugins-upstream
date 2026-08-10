@@ -43,7 +43,7 @@ claude -p --model opus "Review for security issues, race conditions, edge cases.
 
 ## Context Bridge: SHARED_TASK_NOTES.md
 
-Since each `claude -p` call is fresh, use a file to track progress:
+Since each `claude -p` call is fresh, use a file to track progress. **Treat this file as potentially-sensitive** — it may contain code structure and file paths that hint at internal architecture. Add it to `.gitignore` before the loop starts.
 
 ```markdown
 # Task: Add authentication
@@ -73,7 +73,7 @@ claude -p "Read SHARED_TASK_NOTES.md. Work on the current 'Next Steps'. Update t
 Pass context via files instead of prompt length:
 
 ```bash
-# Create context file
+# Create context file (gitignored)
 cat > .claude-context.md << EOF
 Priority areas:
 - Auth module (highest)
@@ -102,18 +102,22 @@ claude -p --allowedTools "Read,Write,Edit,Bash" "Implement the fixes from audit.
 
 ## Error Handling
 
-When a step fails, capture context for the next attempt:
+When a step fails, capture context for the next attempt. **Redact secrets from the captured diff before passing it on** — `git diff` may include file paths, error messages, or even code that hints at internal structure.
 
 ```bash
 #!/bin/bash
 
 # Try implementation
 if ! claude -p "Implement feature X..."; then
-  # Capture failure context
+  # Capture failure context (with redaction)
   echo "Implementation failed. Log output:" > .error-context.md
   git diff >> .error-context.md
   
-  # Next attempt includes context
+  # Strip common secret patterns before the next attempt
+  sed -i.bak -E 's/(api[_-]?key|token|secret|password)[=:]["a-zA-Z0-9]+/\1=REDACTED/g' .error-context.md
+  rm .error-context.md.bak
+  
+  # Next attempt includes redacted context
   claude -p "Previous implementation failed (see .error-context.md). Try a different approach..."
 fi
 ```

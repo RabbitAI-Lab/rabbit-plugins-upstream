@@ -1,46 +1,60 @@
-## Description: <br>
-Calls the Flyelep Image-2 async free-creation API to generate product or creative images from prompts and optional public reference image URLs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses Flyelep's asynchronous free-creation API to generate product or creative images with the Image-2 model from a prompt and optional reference image URLs.
 
-## Publisher: <br>
-[flyelepai](https://clawhub.ai/user/flyelepai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[flyelepai](https://clawhub.ai/user/flyelepai)
 
-## Use Case: <br>
-Developers and agents use this skill to create Flyelep image-generation tasks from a prompt, optional reference image URLs, image count, and aspect ratio, then poll the task API and return generated image URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, public reference image URLs, and the Flyelep API key are sent to a third-party service. <br>
-Mitigation: Use the skill only when that disclosure is acceptable, provide the API key at runtime, and avoid storing the key in files or shared logs. <br>
-Risk: The artifact instructs agents to poll an asynchronous API and handle task failures. <br>
-Mitigation: Check task status before presenting results, show only successful executeResult URLs, and report failed task items clearly. <br>
-Risk: Requests outside documented limits can fail, including more than 4 images, unsupported aspect ratios, inaccessible reference URLs, or prompts over 1000 characters. <br>
-Mitigation: Validate image count, aspect ratio, prompt length, and public reference image accessibility before sending the request. <br>
+## Use Case:
 
+External users and developers use this skill to collect image-generation parameters, call Flyelep's async Image-2 creation API, poll for task results, and return generated image URLs.
 
-## Reference(s): <br>
-- [Flyelep async free-creation task endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/allAroundCreationAsync) <br>
-- [Flyelep task result query endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/queryTaskResult) <br>
-- [Flyelep controlboard](https://www.flyelep.cn/controlboard) <br>
-- [ClawHub skill page](https://clawhub.ai/flyelepai/async-free-creation) <br>
-- [Publisher profile](https://clawhub.ai/user/flyelepai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON payloads, curl examples, and generated image URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Asynchronous task flow returns a task ID first, then generated image URLs after polling; supports 1 to 4 images per request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Prompts and reference image URLs are sent to Flyelep's external image-generation API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use prompts and public image URLs that are appropriate to share with Flyelep; avoid sensitive, private, or internal-only content.
+
+Risk: The skill requires a Flyelep secretKey for API authentication.
+
+Mitigation: Provide the secretKey only at runtime and do not store it in skill files, examples, repositories, or persistent configuration.
+
+Risk: Temporary payload files can contain prompts, reference image URLs, or task identifiers when the Windows/PowerShell flow is used.
+
+Mitigation: Create temporary payload files only when needed, write them with UTF-8 encoding, and remove them after the API call completes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/flyelepai/skills/async-free-creation)
+- [Flyelep open platform](https://www.flyelep.cn/controlboard)
+- [Flyelep async creation API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/allAroundCreationAsync)
+- [Flyelep task result API endpoint](https://www.flyelep.cn/prod-api/poster-design/api/v1/poster/queryTaskResult)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with JSON and shell command examples plus generated image URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a runtime secretKey, prompt text, image count, aspect ratio, and optional public reference image URLs.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

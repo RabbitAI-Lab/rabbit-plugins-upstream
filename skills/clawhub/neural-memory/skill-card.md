@@ -1,43 +1,50 @@
-## Description: <br>
-Neural Memory provides an associative persistent memory layer for storing, recalling, and auto-capturing agent context across sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Associative memory with spreading activation for persistent, intelligent recall across sessions.
 
-## Publisher: <br>
-[nhadaututtheky](https://clawhub.ai/user/nhadaututtheky) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nhadaututtheky](https://clawhub.ai/user/nhadaututtheky)
 
-## Use Case: <br>
-Developers and agent users use this skill to add local persistent memory to agent workflows, retrieve relevant past context, and capture decisions, errors, preferences, and TODOs for future recall. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic capture and reuse of conversation-derived memories can persist sensitive or unintended context across agent runs. <br>
-Mitigation: Before enabling autoContext or autoCapture, decide which conversations may be saved and establish a process to inspect or delete saved memories. <br>
-Risk: A shared brain can mix context across projects or users. <br>
-Mitigation: Use separate brain names for different projects or users and verify NEURALMEMORY_BRAIN before running the skill. <br>
-Risk: Optional embedding providers could send memory content outside the local machine. <br>
-Mitigation: Keep local operation unless an external embedding provider is explicitly approved for the data being stored. <br>
+## Use Case:
 
+Developers and agents use this skill to add persistent local memory that can store, recall, and manage facts, decisions, preferences, errors, TODOs, and recent context across sessions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/nhadaututtheky/skills/neural-memory) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/nhadaututtheky) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes install commands, OpenClaw plugin configuration, MCP configuration, and memory-tool usage examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.59.1 (source: server release evidence) <br>
+Risk: Auto-capture and auto-context can persist and later reuse conversation-derived facts, decisions, preferences, errors, and TODOs without clear sensitivity limits or consent controls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when persistent memory is desired; consider disabling autoCapture or autoContext, using separate brains for sensitive projects, and avoiding secrets or regulated information unless review and deletion processes are in place.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/nhadaututtheky/skills/neural-memory)
+- [NeuralMemory homepage](https://github.com/nhadaututtheky/neural-memory)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON configuration examples, and memory tool call examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May persist conversation-derived memories across sessions in a local brain.]
+
+## Skill Version(s):
+
+4.61.0 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

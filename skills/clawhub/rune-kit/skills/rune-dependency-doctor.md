@@ -1,6 +1,6 @@
 # rune-dependency-doctor
 
-> Rune L3 Skill | deps | model: tier:light
+> Rune L3 Skill | deps | model: tier:mid
 
 
 # dependency-doctor

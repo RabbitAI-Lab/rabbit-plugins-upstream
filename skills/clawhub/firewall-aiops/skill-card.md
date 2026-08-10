@@ -1,47 +1,66 @@
-## Description: <br>
-Firewall Aiops helps agents inspect and operate OPNsense and pfSense firewalls, including health checks, rules, NAT, aliases, VPN, DHCP, firewall logs, RCA workflows, and governed write operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Governed OPNsense and pfSense firewall operations for health checks, rules, NAT, VPN, DHCP, root-cause analysis, and audited changes.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, operators, and agents use this skill to query OPNsense or pfSense firewall state, investigate gateway, rule, and blocked-traffic issues, and perform audited firewall changes during planned operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: High-impact firewall writes, apply operations, reconfiguration, and reboot can run when the connected API account has permission, and the skill does not provide an in-tool approval or read-only gate. <br>
-Mitigation: Use a read-only OPNsense or pfSense API account by default, grant write scope only during planned change windows, and require explicit operator confirmation before write, apply, reconfigure, or reboot actions. <br>
-Risk: Firewall credentials and local configuration can expose administrative access if stored or handled incorrectly. <br>
-Mitigation: Keep ~/.firewall-aiops protected, use the encrypted secrets store, avoid the legacy plaintext secret environment variable, and rotate or migrate secrets when needed. <br>
-Risk: Production firewall access can be weakened by insecure transport settings or unverified API behavior. <br>
-Mitigation: Enable SSL verification for production targets and validate connectivity and platform behavior with firewall-aiops doctor before relying on operational results. <br>
+## Use Case:
 
+Developers, operators, and managed service teams use this skill to inspect and operate OPNsense or pfSense firewalls, including health checks, rules, NAT, aliases, VPN, DHCP, logs, state tables, and common RCA workflows. It can also guide governed firewall changes such as toggling rules, editing alias entries, applying staged changes, restarting services, killing states, and rebooting when appropriate.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/firewall-aiops) <br>
-- [Project homepage](https://github.com/AIops-tools/Firewall-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured tool guidance with inline shell commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include firewall observations, RCA findings, dry-run previews, audit-oriented change guidance, and rollback guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release evidence) <br>
+Risk: The skill can make high-impact firewall changes without an in-tool approval gate or read-only mode.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with a dedicated read-only OPNsense/pfSense API account, grant write permissions only when needed, and require external human approval for apply_changes, reconfigure, reboot, service restarts, and state kills.
+
+Risk: Firewall credentials, encrypted stores, and master-password environment variables are sensitive operational secrets.
+
+Mitigation: Protect ~/.firewall-aiops, FIREWALL_AIOPS_MASTER_PASSWORD, and any legacy secret environment variables, and restrict filesystem access to the operator account.
+
+Risk: TLS misconfiguration can expose firewall API traffic in production.
+
+Mitigation: Verify TLS in production and reserve relaxed certificate settings for controlled lab environments.
+
+Risk: Some operations are irreversible or audit-only, including reboot and committed firewall changes.
+
+Mitigation: Use dry-run previews where available, confirm change windows externally, keep console or out-of-band access for high-risk operations, and validate the firewall state after each change.
+
+## Reference(s):
+
+- [Capabilities reference](artifact/references/capabilities.md)
+- [Setup and security guide](artifact/references/setup-guide.md)
+- [CLI reference](artifact/references/cli-reference.md)
+- [Agent guardrails](artifact/references/agent-guardrails.md)
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/firewall-aiops)
+- [Project homepage](https://github.com/AIops-tools/Firewall-AIops)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured firewall-operation summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include firewall state summaries, RCA findings, dry-run previews, audit-aware change guidance, and configuration steps.]
+
+## Skill Version(s):
+
+0.9.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

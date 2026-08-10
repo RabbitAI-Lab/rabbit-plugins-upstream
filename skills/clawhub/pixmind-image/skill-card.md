@@ -1,46 +1,56 @@
-## Description: <br>
-Generate or edit AI images via Pixmind API for text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate or edit AI images via Pixmind API (text-to-image and image-to-image).
 
-## Publisher: <br>
-[fuyunzhishang](https://clawhub.ai/user/fuyunzhishang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fuyunzhishang](https://clawhub.ai/user/fuyunzhishang)
 
-## Use Case: <br>
-Developers and agent users use this skill to generate new images, edit reference images, create variations, upscale outputs, and poll Pixmind tasks until generated image URLs are available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, generation settings, and reference image URLs are sent to Pixmind. <br>
-Mitigation: Use the skill only when Pixmind's terms and data handling are acceptable for the content being generated or edited. <br>
-Risk: Confidential, regulated, proprietary, internal, or signed image URLs could be exposed to Pixmind if used as references. <br>
-Mitigation: Avoid those inputs unless they are approved for external processing, and prefer non-sensitive reference URLs. <br>
-Risk: The skill depends on a Pixmind API key. <br>
-Mitigation: Store PIXMIND_API_KEY in the agent environment and avoid placing it in prompts, logs, or shared files. <br>
+## Use Case:
 
+External users and developers use this skill to generate, edit, vary, or upscale images through Pixmind models from natural-language prompts and optional reference image URLs.
 
-## Reference(s): <br>
-- [Pixmind Image skill page](https://clawhub.ai/fuyunzhishang/skills/pixmind-image) <br>
-- [Pixmind homepage](https://www.pixmind.io) <br>
-- [Pixmind API keys](https://www.pixmind.io/api-keys) <br>
-- [Pixmind image generation endpoint](https://aihub-admin.aimix.pro/open-api/v1/image/generate) <br>
-- [Skill source](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Pixmind task IDs, polling status, progress, and generated image URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.0 (source: server release metadata) <br>
+Risk: Prompts, generation settings, and reference image URLs are sent to Pixmind's remote API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when external Pixmind processing is acceptable, and avoid secrets, private internal URLs, and sensitive personal content in prompts or reference images.
+
+Risk: The skill requires a PIXMIND_API_KEY.
+
+Mitigation: Scope the key to Pixmind, provide it through the environment, and avoid exposing it in prompts, shared command text, or logs.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/fuyunzhishang/skills/pixmind-image)
+- [Pixmind Homepage](https://www.pixmind.io)
+- [Pixmind API Key Management](https://www.pixmind.io/api-keys)
+- [Pixmind Image Generation Endpoint](https://aihub-admin.aimix.pro/open-api/v1/image/generate)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance, API calls]
+
+**Output Format:** [Markdown with inline shell commands and JSON or image URL results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires PIXMIND_API_KEY; generation may return a task ID first and generated image URLs after polling.]
+
+## Skill Version(s):
+
+2.2.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

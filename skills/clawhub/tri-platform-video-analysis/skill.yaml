@@ -1,0 +1,42 @@
+name: tri-platform-video-analysis
+version: "1.0.0"
+license: MIT
+author: 小黑人
+description: 丢个视频链接，还你字幕稿和结构化分析。支持 B站/抖音/小红书。纯本地转写，零 API Key 也能跑，配 Key 可开启 LLM 深度分析。
+
+triggers:
+  - 视频解析
+  - video-analysis
+  - tri-platform-video-analysis
+  - 拆视频
+  - 视频转文字
+  - 视频字幕
+  - 视频转写
+  - 字幕分离
+  - 逐字稿
+  - 分析视频
+  - 听视频
+  - 读视频
+  - 拆B站
+  - 拆抖音
+  - 拆小红书
+  - B站视频
+  - 抖音视频
+
+instructions: skill.md
+
+dependencies:
+  pip:
+    - faster-whisper
+    - yt-dlp
+    - openai
+
+files:
+  - skill.yaml
+  - skill.md
+  - LICENSE
+  - README.md
+  - scripts/parse.py
+  - screenshots/screenshot_bilibili.png
+  - screenshots/screenshot_douyin.png
+  - screenshots/screenshot_xiaohongshu.png

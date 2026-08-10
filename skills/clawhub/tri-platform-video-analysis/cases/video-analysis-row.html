@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>哑铃单臂划船精讲 · 深度解析</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: oklch(0.975 0.005 90);
+    --surface: #fff;
+    --text: oklch(0.18 0.01 90);
+    --text-secondary: oklch(0.42 0.01 90);
+    --text-muted: oklch(0.58 0.01 90);
+    --accent: oklch(0.48 0.18 25);
+    --accent-light: oklch(0.70 0.12 30);
+    --accent-bg: oklch(0.92 0.04 35);
+    --border: oklch(0.88 0.01 85);
+    --shadow-sm: 0 1px 3px oklch(0 0 0 / 0.06);
+    --shadow-md: 0 4px 16px oklch(0 0 0 / 0.08);
+    --shadow-lg: 0 8px 32px oklch(0 0 0 / 0.10);
+    --radius-sm: 8px;
+    --radius-md: 14px;
+    --radius-lg: 22px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Noto Sans SC', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  .hero { text-align: center; padding: 80px 0 48px; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 18px; border-radius: 999px; background: oklch(0.94 0.02 30 / 0.5); border: 1px solid oklch(0.85 0.06 30 / 0.3); font-size: 13px; color: var(--accent); font-weight: 500; letter-spacing: 0.5px; margin-bottom: 28px; }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .hero h1 { font-family: 'Noto Serif SC', serif; font-size: clamp(1.6rem, 4.5vw, 2.6rem); font-weight: 900; line-height: 1.3; letter-spacing: 0.03em; margin-bottom: 16px; }
+  .hero-meta { font-size: 13px; color: var(--text-muted); display: flex; justify-content: center; gap: 24px; }
+
+  .summary-card { background: var(--surface); border-radius: var(--radius-lg); padding: 48px 40px; margin: 0 0 56px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); position: relative; overflow: hidden; }
+  .summary-card::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: linear-gradient(180deg, var(--accent), var(--accent-light)); border-radius: 4px 0 0 4px; }
+  .summary-card .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--accent); font-weight: 600; margin-bottom: 16px; }
+  .summary-card .big-text { font-family: 'Noto Serif SC', serif; font-size: clamp(1.15rem, 2.2vw, 1.45rem); font-weight: 600; color: var(--text); line-height: 1.9; }
+  .summary-card .big-text em { font-style: normal; color: var(--accent); font-weight: 700; }
+
+  .quotes-section { margin-bottom: 64px; }
+  .section-head { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+  .section-head .icon { width: 32px; height: 32px; border-radius: 8px; background: var(--accent-bg); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .section-head h2 { font-family: 'Noto Serif SC', serif; font-size: 1.4rem; font-weight: 700; color: var(--text); }
+  .quotes-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .quote-card { background: var(--surface); border-radius: var(--radius-md); padding: 36px 28px 32px; box-shadow: var(--shadow-md); border: 1px solid var(--border); transition: transform 0.2s ease, box-shadow 0.2s ease; }
+  .quote-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
+  .quote-card .quote-mark { font-family: 'Noto Serif SC', serif; font-size: 4rem; font-weight: 900; color: var(--accent-bg); line-height: 0.6; margin-bottom: 8px; }
+  .quote-card .quote-text { font-family: 'Noto Serif SC', serif; font-size: 1.15rem; font-weight: 700; color: var(--text); line-height: 1.75; }
+
+  .bookshelf-section { margin-bottom: 64px; }
+  .capsule-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .capsule { background: var(--surface); border-radius: var(--radius-md); padding: 24px 20px; box-shadow: var(--shadow-sm); border: 1px solid var(--border); cursor: pointer; transition: all 0.25s ease; }
+  .capsule:hover { box-shadow: var(--shadow-md); transform: translateY(-1px); border-color: var(--accent-light); }
+  .capsule .cap-icon { font-size: 1.6rem; margin-bottom: 12px; display: block; }
+  .capsule .cap-title { font-family: 'Noto Serif SC', serif; font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .capsule .cap-sub { font-size: 12px; color: var(--text-muted); line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+
+  .capsule-detail { display: none; margin-top: 16px; background: var(--surface); border-radius: var(--radius-lg); padding: 40px 36px; box-shadow: var(--shadow-lg); border: 1px solid var(--border); position: relative; animation: slideUp 0.3s ease; }
+  .capsule-detail.active { display: block; }
+  @keyframes slideUp { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+  .capsule-detail .close-btn { position: absolute; top: 16px; right: 20px; width: 36px; height: 36px; border-radius: 50%; border: 1px solid var(--border); background: var(--surface); cursor: pointer; font-size: 18px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); transition: all 0.2s; }
+  .capsule-detail .close-btn:hover { background: oklch(0.94 0.005 85); color: var(--text); }
+  .capsule-detail .detail-title { font-family: 'Noto Serif SC', serif; font-size: 1.3rem; font-weight: 700; color: var(--text); margin-bottom: 24px; padding-right: 40px; }
+
+  .points-list { display: flex; flex-direction: column; gap: 20px; }
+  .point-item { display: flex; gap: 16px; align-items: flex-start; }
+  .point-item .point-num { flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px; background: var(--accent-bg); display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 14px; color: var(--accent); }
+  .point-item .point-content h4 { font-size: 0.95rem; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .point-item .point-content p { font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7; }
+
+  .struct-list { display: flex; flex-direction: column; gap: 16px; }
+  .struct-item { display: flex; gap: 16px; align-items: baseline; }
+  .struct-item .struct-label { flex-shrink: 0; font-weight: 700; font-size: 0.88rem; color: var(--accent); min-width: 80px; }
+  .struct-item .struct-content { font-size: 0.9rem; color: var(--text-secondary); line-height: 1.7; }
+
+  .judge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+  .judge-mini { padding: 20px; background: oklch(0.97 0.005 88); border-radius: var(--radius-sm); }
+  .judge-mini .jm-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); font-weight: 600; margin-bottom: 8px; }
+  .judge-mini .jm-title { font-weight: 700; font-size: 0.9rem; margin-bottom: 6px; color: var(--text); }
+  .judge-mini .jm-desc { font-size: 0.82rem; color: var(--text-secondary); line-height: 1.7; }
+
+  .footer { text-align: center; padding: 48px 0; border-top: 1px solid var(--border); margin-top: 32px; color: var(--text-muted); font-size: 13px; line-height: 1.8; }
+
+  @media (max-width: 640px) {
+    .summary-card { padding: 32px 24px; }
+    .capsule-grid { grid-template-columns: repeat(2, 1fr); }
+    .capsule-detail { padding: 28px 20px; }
+    .hero { padding: 48px 0 32px; }
+    .quote-card { padding: 28px 20px 24px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+  <header class="hero">
+    <div class="hero-badge"><span class="dot"></span>小红书 · 深度解析</div>
+    <h1>哑铃单臂划船精讲。居家健身房通用练背动</h1>
+    <div class="hero-meta">
+      <span>Mls 美利斯</span>
+      <span>约 1 分 37 秒</span>
+      <span>居家健身</span>
+      <span>2026.08.10</span>
+    </div>
+  </header>
+
+  <div class="summary-card">
+    <div class="label">一句话总结</div>
+    <p class="big-text">哑铃单臂划船最全细节拆解：<em>肩胛骨先动、躯干不动、大臂贴身体</em>，掌握这三个要点，彻底告别斜方肌代偿和侧腰酸痛。</p>
+  </div>
+
+  <section class="quotes-section">
+    <div class="section-head">
+      <div class="icon">✦</div>
+      <h2>金句卡片</h2>
+    </div>
+    <div class="quotes-grid">
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">发力的时候先要注意，双肩下沉的情况下，肩胛骨向后去收缩，来带动你的大臂和哑铃向后向上滑。</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">向上滑的时候，你的躯干不可以这样去拧转，这样子的话你的侧腰就会非常的酸。</div>
+      </div>
+      <div class="quote-card">
+        <div class="quote-mark">"</div>
+        <div class="quote-text">如果你能把这些细节注意到，那么你的发力点肯定是在背上。</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="bookshelf-section">
+    <div class="section-head">
+      <div class="icon">📚</div>
+      <h2>深度解析：点击查看详情</h2>
+    </div>
+    <div class="capsule-grid">
+      <div class="capsule" onclick="openCapsule('points')">
+        <span class="cap-icon">💡</span>
+        <div class="cap-title">三个核心观点</div>
+        <div class="cap-sub">发力顺序、躯干稳定、握法细节</div>
+      </div>
+      <div class="capsule" onclick="openCapsule('structure')">
+        <span class="cap-icon">🎬</span>
+        <div class="cap-title">动作逐段拆解</div>
+        <div class="cap-sub">准备→发力→回落，四阶段全拆</div>
+      </div>
+      <div class="capsule" onclick="openCapsule('keys')">
+        <span class="cap-icon">⚡</span>
+        <div class="cap-title">三大核心要点</div>
+        <div class="cap-sub">脊柱、肩胛、躯干三位一体</div>
+      </div>
+      <div class="capsule" onclick="openCapsule('judgment')">
+        <span class="cap-icon">🔍</span>
+        <div class="cap-title">内容判断</div>
+        <div class="cap-sub">干货纯度、适用人群、可借鉴点</div>
+      </div>
+    </div>
+
+    <!-- Core Points -->
+    <div class="capsule-detail" id="detail-points">
+      <button class="close-btn" onclick="closeCapsule()">×</button>
+      <div class="detail-title">三个核心观点</div>
+      <div class="points-list">
+        <div class="point-item">
+          <div class="point-num">01</div>
+          <div class="point-content">
+            <h4>发力顺序决定练的是背还是手臂</h4>
+            <p>正确的顺序是：肩胛骨后缩→带动大臂向后向上滑动，而非手臂主动发力。肩胛骨不动、只靠手臂勾，结果就是胳膊和肩膀酸。这是区分背部训练和手臂训练的最核心区别。</p>
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-num">02</div>
+          <div class="point-content">
+            <h4>躯干稳定是所有动作的前提</h4>
+            <p>脊柱必须保持中立位——不塌腰、不弓背，腰腹核心始终保持收紧。一旦躯干随着哑铃运动而旋转，力量就会泄露到侧腰，导致侧腰酸痛，背部反而没感觉。</p>
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-num">03</div>
+          <div class="point-content">
+            <h4>握法细节决定小臂是否先力竭</h4>
+            <p>拇指绕过哑铃、其余四指轻勾即可，不要死死攥紧。握得太紧会导致小臂提前酸胀，影响背部训练效果。手只是一个"钩子"，发力主体是背部。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Structure -->
+    <div class="capsule-detail" id="detail-structure">
+      <button class="close-btn" onclick="closeCapsule()">×</button>
+      <div class="detail-title">动作逐段拆解</div>
+      <div class="struct-list">
+        <div class="struct-item">
+          <div class="struct-label">准备姿势</div>
+          <div class="struct-content">单腿跪于平板凳、双脚分开距离稍大以保证下盘稳定。拇指绕过哑铃手柄、其余手指轻勾，不要握紧。</div>
+        </div>
+        <div class="struct-item">
+          <div class="struct-label">脊柱核心</div>
+          <div class="struct-content">保持腰背中立位——不塌腰、不弓背。腰腹核心收紧，这条在整个动作过程中始终不变。</div>
+        </div>
+        <div class="struct-item">
+          <div class="struct-label">发力阶段</div>
+          <div class="struct-content">先沉肩→肩胛骨后缩→呼气→大臂贴着躯干向后向上滑行→滑到与背部齐平即可，不需要再往上。全程躯干保持不动。</div>
+        </div>
+        <div class="struct-item">
+          <div class="struct-label">回落控制</div>
+          <div class="struct-content">吸气→夹着背缓慢下落→对抗重力、不要突然松手掉下去→始终保持一定张力，不是完全松掉。离心阶段同样关键。</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Key Principles -->
+    <div class="capsule-detail" id="detail-keys">
+      <button class="close-btn" onclick="closeCapsule()">×</button>
+      <div class="detail-title">三大核心要点 · 检查清单</div>
+      <div class="points-list">
+        <div class="point-item">
+          <div class="point-num">①</div>
+          <div class="point-content">
+            <h4>脊柱始终中立</h4>
+            <p>不能塌腰，不能弓背。腰腹核心全程收紧，这是所有力量训练的基础前提。腰一旦松了，力就从背上跑了。</p>
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-num">②</div>
+          <div class="point-content">
+            <h4>肩胛骨主导发力</h4>
+            <p>先沉肩、再收缩肩胛骨。肩胛骨的收缩带动大臂和小臂向后向上滑，手臂只是跟随者，不是主力。大臂要紧贴身体，不能外展。</p>
+          </div>
+        </div>
+        <div class="point-item">
+          <div class="point-num">③</div>
+          <div class="point-content">
+            <h4>躯干不能随轨迹动</h4>
+            <p>躯干必须保持稳定，不能随着手臂的运动轨迹旋转或晃动。这是最常见的错误——一转动侧腰就酸，背部反而没练到。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Judgment -->
+    <div class="capsule-detail" id="detail-judgment">
+      <button class="close-btn" onclick="closeCapsule()">×</button>
+      <div class="detail-title">内容判断 · 教学视角</div>
+      <div class="judge-grid">
+        <div class="judge-mini">
+          <div class="jm-label">定位</div>
+          <div class="jm-title">纯干货健身教学</div>
+          <div class="jm-desc">无带货、无软广、无废话。97秒内完成从准备姿势到三大要点总结的完整教学闭环。节奏紧凑，每句话都有信息量。</div>
+        </div>
+        <div class="judge-mini">
+          <div class="jm-label">可信度</div>
+          <div class="jm-title">解剖学思路清晰</div>
+          <div class="jm-desc">每个动作细节都有对应的解剖学解释——肩胛收缩、脊柱中立、躯干稳定——而非只有"跟着做就行"。对健身新手有参考价值。</div>
+        </div>
+        <div class="judge-mini">
+          <div class="jm-label">适用人群</div>
+          <div class="jm-title">居家 & 健身房通用</div>
+          <div class="jm-desc">只需要一副哑铃和一条平板凳，完全适合居家场景。动作要点也适用于健身房固定器械。对女生练背和新手入门尤其友好。</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <p style="font-weight:600;color:var(--text)">video-parser</p>
+    <p style="font-size:12px;margin-top:2px">丢个链接，还你一份结构化分析</p>
+  </footer>
+
+</div>
+
+<script>
+let activeCapsule = null;
+function openCapsule(id) {
+  if (activeCapsule) activeCapsule.classList.remove('active');
+  const detail = document.getElementById('detail-' + id);
+  detail.classList.add('active');
+  detail.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  activeCapsule = detail;
+}
+function closeCapsule() {
+  if (activeCapsule) { activeCapsule.classList.remove('active'); activeCapsule = null; }
+}
+</script>
+
+</body>
+</html>

@@ -1,41 +1,58 @@
-## Description: <br>
-Imports programming contest problems from online judges such as AtCoder and Codeforces, generates standardized problem packages, and can create test data from user-provided problem statements. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+从 OJ 平台搬运题目（含AtCoder/Codeforces等），生成标准化题目文件包；也可根据用户提供的题目仅生成测试数据。
 
-## Publisher: <br>
-[fslong520](https://clawhub.ai/user/fslong520) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fslong520](https://clawhub.ai/user/fslong520)
 
-## Use Case: <br>
-Competitive programming educators, contest maintainers, and developers use this skill to import OJ problems, translate or normalize problem statements, generate standard solutions, design test data, audit package completeness, and produce distributable problem archives. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, rename, delete, compile, and execute files in a Desktop work directory. <br>
-Mitigation: Use it in a disposable or sandboxed workspace and review planned file operations before execution. <br>
-Risk: Generated C++ solution and test-data files may be incorrect or unsafe to compile and run without review. <br>
-Mitigation: Review generated std.cpp and mkin.h before compiling or executing them, and avoid invoking the skill on untrusted local problem packages. <br>
+## Use Case:
 
+Developers, educators, and contest maintainers use this skill to import OJ programming problems, translate and normalize problem statements, generate standard solutions, create 25-case test data sets, and package HydroOJ-compatible problem archives.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fslong520/skills/ojimport) <br>
-- [Test Data Design Reference](artifact/references/testdata-design.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with generated files, C++ code, YAML configuration, shell commands, and ZIP package paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces problem statements, std.cpp, mkin.h, testdata/config.yaml, .in/.out test files, and packaged ZIP archives when executed by an agent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.5.4 (source: frontmatter and server release evidence) <br>
+Risk: The skill may create Desktop work folders and delete prior work_* or testdata outputs during setup and cleanup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it in a disposable workspace or sandbox, confirm target paths before cleanup or packaging, and keep backups of any existing contest work.
+
+Risk: The skill compiles and runs generated C++ locally to produce expected outputs.
+
+Mitigation: Review std.cpp, mkin.h, and mkdata.cpp before execution, and compile/run them only in an isolated environment you are comfortable using.
+
+Risk: Generated problem statements, scoring metadata, and test data can be wrong if the source problem is parsed incorrectly.
+
+Mitigation: Verify imported statements, samples, problem.yaml, testdata/config.yaml, and the generated .in/.out pairs before publishing or uploading a package.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fslong520/skills/ojimport)
+- [Test Data Design Reference](references/testdata-design.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown problem statements, C++ source files, YAML configuration, generated .in/.out test data, and ZIP archives]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces standardized OJ problem packages and testdata.zip files after local generation, verification, and packaging steps.]
+
+## Skill Version(s):
+
+2.6.0 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

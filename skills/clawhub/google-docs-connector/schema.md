@@ -12,7 +12,7 @@ Action slug: `batch-update`
 
 Price: `5` credits
 
-Execute raw Google Docs API batch update requests for advanced operations not covered by other actions.
+Execute raw Google Docs API batch update requests. Put tabId inside each raw range or location when targeting a non-first tab.
 
 Parameters:
 
@@ -209,18 +209,20 @@ Parameters:
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `document_id` | `string` | yes | Google Docs document ID. |
-| `range_end` | `integer` | yes | End index of the range (1-based). |
+| `range_end` | `integer` | yes | Zero-based exclusive UTF-16 code-unit end index. |
 | `range_name` | `string` | yes | Name for the named range/bookmark. |
-| `range_start` | `integer` | yes | Start index of the range (1-based). |
+| `range_start` | `integer` | yes | Zero-based inclusive UTF-16 code-unit start index. |
+| `tab_id` | `string` | no | Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab. |
 
 Sample parameters:
 
 ```json
 {
   "document_id": "example document id",
-  "range_end": 1,
+  "range_end": 0,
   "range_name": "example range name",
-  "range_start": 1
+  "range_start": 0,
+  "tab_id": "example tab id"
 }
 ```
 
@@ -234,8 +236,8 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "range_end": {
-    "description": "End index of the range (1-based).",
-    "minimum": 1,
+    "description": "Zero-based exclusive UTF-16 code-unit end index.",
+    "minimum": 0,
     "required": true,
     "type": "integer"
   },
@@ -245,10 +247,15 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "range_start": {
-    "description": "Start index of the range (1-based).",
-    "minimum": 1,
+    "description": "Zero-based inclusive UTF-16 code-unit start index.",
+    "minimum": 0,
     "required": true,
     "type": "integer"
+  },
+  "tab_id": {
+    "description": "Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab.",
+    "required": false,
+    "type": "string"
   }
 }
 ```
@@ -267,8 +274,9 @@ Parameters:
 |---|---|---|---|
 | `columns` | `integer` | no | Number of table columns (1-20). Not needed if table_data is provided. |
 | `document_id` | `string` | yes | Google Docs document ID. |
-| `location` | `integer` | no | 1-based character index for table insertion. Defaults to 1. |
+| `location` | `integer` | no | Zero-based UTF-16 code-unit index. Defaults to 1, normally the beginning of a tab body. |
 | `rows` | `integer` | no | Number of table rows (1-100). Not needed if table_data is provided. |
+| `tab_id` | `string` | no | Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab. |
 | `table_data` | `array` | no | 2D array of strings representing table cell data. |
 
 Sample parameters:
@@ -277,8 +285,9 @@ Sample parameters:
 {
   "columns": 1,
   "document_id": "example document id",
-  "location": 1,
+  "location": 0,
   "rows": 1,
+  "tab_id": "example tab id",
   "table_data": [
     [
       "example table data"
@@ -304,8 +313,8 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "location": {
-    "description": "1-based character index for table insertion. Defaults to 1.",
-    "minimum": 1,
+    "description": "Zero-based UTF-16 code-unit index. Defaults to 1, normally the beginning of a tab body.",
+    "minimum": 0,
     "required": false,
     "type": "integer"
   },
@@ -315,6 +324,11 @@ Generated JSON parameter schema:
     "minimum": 1,
     "required": false,
     "type": "integer"
+  },
+  "tab_id": {
+    "description": "Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab.",
+    "required": false,
+    "type": "string"
   },
   "table_data": {
     "description": "2D array of strings representing table cell data.",
@@ -387,17 +401,18 @@ Action slug: `format-text`
 
 Price: `5` credits
 
-Apply text and/or paragraph styling to a character range in a document.
+Apply text and/or paragraph styling to a zero-based UTF-16 range in a specific document tab. Provide at least one non-empty style object.
 
 Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `document_id` | `string` | yes | Google Docs document ID. |
-| `paragraph_style` | `object` | no | Paragraph styling options. |
-| `range_end` | `integer` | yes | End index of the range to format (1-based). |
-| `range_start` | `integer` | yes | Start index of the range to format (1-based). |
-| `text_style` | `object` | yes | Text styling options. |
+| `paragraph_style` | `object` | no | Paragraph styling options, including real Google Docs named heading styles. |
+| `range_end` | `integer` | yes | Zero-based exclusive UTF-16 code-unit end index. |
+| `range_start` | `integer` | yes | Zero-based inclusive UTF-16 code-unit start index. |
+| `tab_id` | `string` | no | Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab. |
+| `text_style` | `object` | no | Text styling options. |
 
 Sample parameters:
 
@@ -409,10 +424,13 @@ Sample parameters:
     "indent_end": {},
     "indent_first_line": {},
     "indent_start": {},
-    "line_spacing": 1
+    "line_spacing": 1,
+    "named_style_type": "NORMAL_TEXT",
+    "spacing_mode": "NEVER_COLLAPSE"
   },
-  "range_end": 1,
-  "range_start": 1,
+  "range_end": 0,
+  "range_start": 0,
+  "tab_id": "example tab id",
   "text_style": {
     "background_color": {},
     "bold": true,
@@ -439,7 +457,7 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "paragraph_style": {
-    "description": "Paragraph styling options.",
+    "description": "Paragraph styling options, including real Google Docs named heading styles.",
     "properties": {
       "alignment": {
         "description": "Text alignment.",
@@ -471,22 +489,52 @@ Generated JSON parameter schema:
         "description": "Line spacing (100=single, 150=1.5x, 200=double).",
         "required": false,
         "type": "number"
+      },
+      "named_style_type": {
+        "description": "Google Docs named paragraph style.",
+        "enum": [
+          "NORMAL_TEXT",
+          "TITLE",
+          "SUBTITLE",
+          "HEADING_1",
+          "HEADING_2",
+          "HEADING_3",
+          "HEADING_4",
+          "HEADING_5",
+          "HEADING_6"
+        ],
+        "required": false,
+        "type": "string"
+      },
+      "spacing_mode": {
+        "description": "Paragraph spacing mode.",
+        "enum": [
+          "NEVER_COLLAPSE",
+          "COLLAPSE_LISTS"
+        ],
+        "required": false,
+        "type": "string"
       }
     },
     "required": false,
     "type": "object"
   },
   "range_end": {
-    "description": "End index of the range to format (1-based).",
-    "minimum": 1,
+    "description": "Zero-based exclusive UTF-16 code-unit end index.",
+    "minimum": 0,
     "required": true,
     "type": "integer"
   },
   "range_start": {
-    "description": "Start index of the range to format (1-based).",
-    "minimum": 1,
+    "description": "Zero-based inclusive UTF-16 code-unit start index.",
+    "minimum": 0,
     "required": true,
     "type": "integer"
+  },
+  "tab_id": {
+    "description": "Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab.",
+    "required": false,
+    "type": "string"
   },
   "text_style": {
     "description": "Text styling options.",
@@ -549,7 +597,7 @@ Generated JSON parameter schema:
         "type": "boolean"
       }
     },
-    "required": true,
+    "required": false,
     "type": "object"
   }
 }
@@ -561,7 +609,7 @@ Action slug: `get-document`
 
 Price: `5` credits
 
-Retrieve a document's full content, text, word count, and structure.
+Retrieve content and indexed structure from every document tab, including nested child tabs.
 
 Parameters:
 
@@ -638,7 +686,8 @@ Parameters:
 | `document_id` | `string` | yes | Google Docs document ID. |
 | `height` | `integer` | no | Image height in pixels. |
 | `image_url` | `string` | yes | Publicly accessible URL of the image to insert. |
-| `location` | `integer` | no | 1-based character index for insertion. Defaults to 1. |
+| `location` | `integer` | no | Zero-based UTF-16 code-unit index. Defaults to 1, normally the beginning of a tab body. |
+| `tab_id` | `string` | no | Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab. |
 | `width` | `integer` | no | Image width in pixels. |
 
 Sample parameters:
@@ -648,7 +697,8 @@ Sample parameters:
   "document_id": "example document id",
   "height": 1,
   "image_url": "https://example.com",
-  "location": 1,
+  "location": 0,
+  "tab_id": "example tab id",
   "width": 1
 }
 ```
@@ -674,10 +724,15 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "location": {
-    "description": "1-based character index for insertion. Defaults to 1.",
-    "minimum": 1,
+    "description": "Zero-based UTF-16 code-unit index. Defaults to 1, normally the beginning of a tab body.",
+    "minimum": 0,
     "required": false,
     "type": "integer"
+  },
+  "tab_id": {
+    "description": "Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab.",
+    "required": false,
+    "type": "string"
   },
   "width": {
     "description": "Image width in pixels.",
@@ -701,14 +756,16 @@ Parameters:
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `document_id` | `string` | yes | Google Docs document ID. |
-| `location` | `integer` | no | 1-based character index for the page break. Defaults to 1. |
+| `location` | `integer` | no | Zero-based UTF-16 code-unit index. Defaults to 1, normally the beginning of a tab body. |
+| `tab_id` | `string` | no | Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab. |
 
 Sample parameters:
 
 ```json
 {
   "document_id": "example document id",
-  "location": 1
+  "location": 0,
+  "tab_id": "example tab id"
 }
 ```
 
@@ -722,10 +779,15 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "location": {
-    "description": "1-based character index for the page break. Defaults to 1.",
-    "minimum": 1,
+    "description": "Zero-based UTF-16 code-unit index. Defaults to 1, normally the beginning of a tab body.",
+    "minimum": 0,
     "required": false,
     "type": "integer"
+  },
+  "tab_id": {
+    "description": "Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab.",
+    "required": false,
+    "type": "string"
   }
 }
 ```
@@ -743,14 +805,16 @@ Parameters:
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `document_id` | `string` | yes | Google Docs document ID. |
-| `location` | `integer` | no | 1-based character index for the section break. Defaults to 1. |
+| `location` | `integer` | no | Zero-based UTF-16 code-unit index. Defaults to 1, normally the beginning of a tab body. |
+| `tab_id` | `string` | no | Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab. |
 
 Sample parameters:
 
 ```json
 {
   "document_id": "example document id",
-  "location": 1
+  "location": 0,
+  "tab_id": "example tab id"
 }
 ```
 
@@ -764,10 +828,15 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "location": {
-    "description": "1-based character index for the section break. Defaults to 1.",
-    "minimum": 1,
+    "description": "Zero-based UTF-16 code-unit index. Defaults to 1, normally the beginning of a tab body.",
+    "minimum": 0,
     "required": false,
     "type": "integer"
+  },
+  "tab_id": {
+    "description": "Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab.",
+    "required": false,
+    "type": "string"
   }
 }
 ```
@@ -785,7 +854,8 @@ Parameters:
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `document_id` | `string` | yes | Google Docs document ID. |
-| `location` | `integer` | no | 1-based character index for insertion. Defaults to 1 (beginning of document). |
+| `location` | `integer` | no | Zero-based UTF-16 code-unit index. Defaults to 1, normally the beginning of a tab body. |
+| `tab_id` | `string` | no | Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab. |
 | `text` | `string` | yes | Text content to insert. |
 
 Sample parameters:
@@ -793,7 +863,8 @@ Sample parameters:
 ```json
 {
   "document_id": "example document id",
-  "location": 1,
+  "location": 0,
+  "tab_id": "example tab id",
   "text": "example text"
 }
 ```
@@ -808,10 +879,15 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "location": {
-    "description": "1-based character index for insertion. Defaults to 1 (beginning of document).",
-    "minimum": 1,
+    "description": "Zero-based UTF-16 code-unit index. Defaults to 1, normally the beginning of a tab body.",
+    "minimum": 0,
     "required": false,
     "type": "integer"
+  },
+  "tab_id": {
+    "description": "Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab.",
+    "required": false,
+    "type": "string"
   },
   "text": {
     "description": "Text content to insert.",
@@ -868,7 +944,7 @@ Action slug: `replace-text`
 
 Price: `5` credits
 
-Find and replace all occurrences of text in a document.
+Find and replace text in one tab, or in all tabs when tab_id is omitted.
 
 Parameters:
 
@@ -878,6 +954,7 @@ Parameters:
 | `match_case` | `boolean` | no | Whether to use case-sensitive search. |
 | `replace_with` | `string` | yes | Replacement text. |
 | `search_text` | `string` | yes | Text to search for. |
+| `tab_id` | `string` | no | Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, replacement applies to all tabs. |
 
 Sample parameters:
 
@@ -886,7 +963,8 @@ Sample parameters:
   "document_id": "example document id",
   "match_case": false,
   "replace_with": "example replace with",
-  "search_text": "example search query"
+  "search_text": "example search query",
+  "tab_id": "example tab id"
 }
 ```
 
@@ -913,6 +991,11 @@ Generated JSON parameter schema:
   "search_text": {
     "description": "Text to search for.",
     "required": true,
+    "type": "string"
+  },
+  "tab_id": {
+    "description": "Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, replacement applies to all tabs.",
+    "required": false,
     "type": "string"
   }
 }
@@ -1067,27 +1150,49 @@ Action slug: `update-style`
 
 Price: `5` credits
 
-Alias for format_text. Apply text and/or paragraph styling to a character range.
+Alias for format_text. Apply text and/or paragraph styling to a zero-based UTF-16 range in a specific tab.
 
 Parameters:
 
 | Parameter | Type | Required | Description |
 |---|---|---|---|
 | `document_id` | `string` | yes | Google Docs document ID. |
-| `paragraph_style` | `object` | no | Paragraph styling options (alignment, line_spacing, indents). |
-| `range_end` | `integer` | yes | End index of the range to format (1-based). |
-| `range_start` | `integer` | yes | Start index of the range to format (1-based). |
-| `text_style` | `object` | yes | Text styling options (bold, italic, underline, strikethrough, font_family, font_size, foreground_color, background_color, link). |
+| `paragraph_style` | `object` | no | Paragraph styling options, including real Google Docs named heading styles. |
+| `range_end` | `integer` | yes | Zero-based exclusive UTF-16 code-unit end index. |
+| `range_start` | `integer` | yes | Zero-based inclusive UTF-16 code-unit start index. |
+| `tab_id` | `string` | no | Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab. |
+| `text_style` | `object` | no | Text styling options. |
 
 Sample parameters:
 
 ```json
 {
   "document_id": "example document id",
-  "paragraph_style": {},
-  "range_end": 1,
-  "range_start": 1,
-  "text_style": {}
+  "paragraph_style": {
+    "alignment": "START",
+    "indent_end": {},
+    "indent_first_line": {},
+    "indent_start": {},
+    "line_spacing": 1,
+    "named_style_type": "NORMAL_TEXT",
+    "spacing_mode": "NEVER_COLLAPSE"
+  },
+  "range_end": 0,
+  "range_start": 0,
+  "tab_id": "example tab id",
+  "text_style": {
+    "background_color": {},
+    "bold": true,
+    "font_family": "example font family",
+    "font_size": {
+      "magnitude": 1,
+      "unit": "example unit"
+    },
+    "foreground_color": {},
+    "italic": true,
+    "link": "example link",
+    "strikethrough": true
+  }
 }
 ```
 
@@ -1101,25 +1206,147 @@ Generated JSON parameter schema:
     "type": "string"
   },
   "paragraph_style": {
-    "description": "Paragraph styling options (alignment, line_spacing, indents).",
+    "description": "Paragraph styling options, including real Google Docs named heading styles.",
+    "properties": {
+      "alignment": {
+        "description": "Text alignment.",
+        "enum": [
+          "START",
+          "CENTER",
+          "END",
+          "JUSTIFIED"
+        ],
+        "required": false,
+        "type": "string"
+      },
+      "indent_end": {
+        "description": "Right indent with magnitude and unit.",
+        "required": false,
+        "type": "object"
+      },
+      "indent_first_line": {
+        "description": "First line indent with magnitude and unit.",
+        "required": false,
+        "type": "object"
+      },
+      "indent_start": {
+        "description": "Left indent with magnitude and unit.",
+        "required": false,
+        "type": "object"
+      },
+      "line_spacing": {
+        "description": "Line spacing (100=single, 150=1.5x, 200=double).",
+        "required": false,
+        "type": "number"
+      },
+      "named_style_type": {
+        "description": "Google Docs named paragraph style.",
+        "enum": [
+          "NORMAL_TEXT",
+          "TITLE",
+          "SUBTITLE",
+          "HEADING_1",
+          "HEADING_2",
+          "HEADING_3",
+          "HEADING_4",
+          "HEADING_5",
+          "HEADING_6"
+        ],
+        "required": false,
+        "type": "string"
+      },
+      "spacing_mode": {
+        "description": "Paragraph spacing mode.",
+        "enum": [
+          "NEVER_COLLAPSE",
+          "COLLAPSE_LISTS"
+        ],
+        "required": false,
+        "type": "string"
+      }
+    },
     "required": false,
     "type": "object"
   },
   "range_end": {
-    "description": "End index of the range to format (1-based).",
-    "minimum": 1,
+    "description": "Zero-based exclusive UTF-16 code-unit end index.",
+    "minimum": 0,
     "required": true,
     "type": "integer"
   },
   "range_start": {
-    "description": "Start index of the range to format (1-based).",
-    "minimum": 1,
+    "description": "Zero-based inclusive UTF-16 code-unit start index.",
+    "minimum": 0,
     "required": true,
     "type": "integer"
   },
+  "tab_id": {
+    "description": "Target Google Docs tab ID from get_document tabs[].tab_id. If omitted, this indexed update targets the first tab.",
+    "required": false,
+    "type": "string"
+  },
   "text_style": {
-    "description": "Text styling options (bold, italic, underline, strikethrough, font_family, font_size, foreground_color, background_color, link).",
-    "required": true,
+    "description": "Text styling options.",
+    "properties": {
+      "background_color": {
+        "description": "Text highlight color as RGB values (0-1).",
+        "required": false,
+        "type": "object"
+      },
+      "bold": {
+        "description": "Apply bold formatting.",
+        "required": false,
+        "type": "boolean"
+      },
+      "font_family": {
+        "description": "Font family name (e.g., 'Arial', 'Times New Roman').",
+        "required": false,
+        "type": "string"
+      },
+      "font_size": {
+        "description": "Font size with magnitude and unit.",
+        "properties": {
+          "magnitude": {
+            "description": "Size value.",
+            "required": true,
+            "type": "number"
+          },
+          "unit": {
+            "description": "Size unit (typically 'PT').",
+            "required": true,
+            "type": "string"
+          }
+        },
+        "required": false,
+        "type": "object"
+      },
+      "foreground_color": {
+        "description": "Text color as RGB values (0-1).",
+        "required": false,
+        "type": "object"
+      },
+      "italic": {
+        "description": "Apply italic formatting.",
+        "required": false,
+        "type": "boolean"
+      },
+      "link": {
+        "description": "URL to create a hyperlink.",
+        "required": false,
+        "type": "string"
+      },
+      "strikethrough": {
+        "description": "Apply strikethrough formatting.",
+        "required": false,
+        "type": "boolean"
+      },
+      "underline": {
+        "description": "Apply underline formatting.",
+        "required": false,
+        "type": "boolean"
+      }
+    },
+    "required": false,
     "type": "object"
   }
 }

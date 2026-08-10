@@ -1,45 +1,63 @@
-## Description: <br>
-Reviews code changes against Android, iOS, and general engineering rules, including local diffs, commits, branch comparisons, and remote pull request URLs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Review code changes against Android, iOS, TypeScript, Go, general, and agent-skill review rules with structured severity findings.
 
-## Publisher: <br>
-[timeaground](https://clawhub.ai/user/timeaground) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[timeaground](https://clawhub.ai/user/timeaground)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to review proposed code changes before merge, with platform-aware findings, severity ratings, and concrete fix suggestions. It is especially suited for Android, iOS, general software, security-focused, and agent-skill review workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads repository diffs and nearby code context, which may include sensitive implementation details. <br>
-Mitigation: Install and run it only in repositories where assistant access to the targeted diff and surrounding code is acceptable. <br>
-Risk: Optional HTML report generation writes files under .code-reviews/, may update .gitignore, and can open a browser. <br>
-Mitigation: Request report generation only after reviewing and accepting those local side effects. <br>
+## Use Case:
 
+Developers and engineers use this skill to review local commits, staged or unstaged changes, branches, and GitHub or GitLab pull requests before merging. It provides platform-aware findings with severity, file locations, reasoning, and suggested fixes.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/timeaground/skills/pro-code-reviewer) <br>
-- [README](artifact/README.md) <br>
-- [General review rules](artifact/references/review-general.md) <br>
-- [Android review rules](artifact/references/review-android.md) <br>
-- [iOS review rules](artifact/references/review-ios.md) <br>
-- [Agent skill security review rules](artifact/references/review-skill-vetter.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown review findings with optional standalone HTML report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Findings are grouped by P0, P1, and P2 severity; optional reports are written under .code-reviews/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server-resolved release evidence) <br>
+Risk: The skill reads code diffs and nearby changed-code context, which may expose sensitive code or secrets to an AI assistant.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only on repositories whose code can be reviewed by the assistant, and avoid using it on repositories containing secrets or sensitive code that should not be shared.
+
+Risk: Inside a git repository, saying "review" is intended to review uncommitted changes.
+
+Mitigation: Use explicit review scopes such as "review staged", a commit hash, a branch comparison, or a pull request URL when the intended scope is narrower.
+
+Risk: Remote pull request review requires reading repository or PR diffs from declared code hosting domains.
+
+Mitigation: Use remote PR review only when access to GitHub or GitLab diffs is acceptable for the repository being reviewed.
+
+## Reference(s):
+
+- [Code Reviewer ClawHub page](https://clawhub.ai/timeaground/skills/pro-code-reviewer)
+- [General Review Rules](references/review-general.md)
+- [Android Review Rules](references/review-android.md)
+- [iOS Review Rules](references/review-ios.md)
+- [TypeScript Review Rules](references/review-typescript.md)
+- [Go Review Rules](references/review-go.md)
+- [Agent Skill Security Review Rules](references/review-skill-vetter.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, guidance]
+
+**Output Format:** [Markdown review report with severity-ranked findings, file locations, reasoning, and fix suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only review output; findings are organized by P0, P1, and P2 severity.]
+
+## Skill Version(s):
+
+1.3.1 (source: frontmatter, CHANGELOG, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

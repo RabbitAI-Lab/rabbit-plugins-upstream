@@ -1,0 +1,17 @@
+name: geoskill-air-quality-dispersion
+display_name: 空气质量扩散模拟
+description: |
+  高斯烟羽模型模拟点源污染物浓度场，Pasquill-Gifford A-F 稳定度参数化 σy/σz，叠加 DEM 地形修正。Simulates pollutant concentration fields with a Gaussian plume model plus terrain correction. 输出浓度场 GeoTIFF + 参数 JSON。
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-air-quality-dispersion.py
+runtime: python>=3.9
+tags:
+  - ai
+  - analysis
+  - climate
+  - dem
+  - gis
+  - preprocessing
+  - raster
+  - remote-sensing

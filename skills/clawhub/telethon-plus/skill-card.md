@@ -1,5 +1,5 @@
 ## Description: <br>
-telethon-plus lets an agent control a user-owned Telethon MTProto account through JSON HTTP and MCP endpoints for reading, sending, editing, deleting, forwarding, media handling, chat administration, polls, and incoming-event forwarding. <br>
+HTTP and MCP control plane for operating a real Telegram MTProto user account through a Telethon-backed API, including message, media, dialog, chat administration, polling, webhook, and throttling workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,41 +11,41 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and external users use this skill to let an agent operate their own already-authorized Telegram account over HTTP or MCP for message, media, dialog, chat, admin, poll, and webhook workflows. It is appropriate only for accounts and actions the user is authorized to control. <br>
+Developers and operators use this skill to let an agent interact with an already running, user-owned telethon-plus server for authorized Telegram account workflows such as reading chats, sending messages, managing media, and performing chat administration. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can read, write, delete, forward, and administer content as a real Telegram user account. <br>
-Mitigation: Use only a user-owned or explicitly authorized instance, and require exact user confirmation before delete, admin, join, leave, or bulk actions. <br>
-Risk: Exposing the HTTP API or MCP endpoint without controls grants full account control to anyone who can reach it. <br>
-Mitigation: Keep the service on localhost or behind TLS, set TELETHON_AUTH_KEY before exposure, and do not expose /api/ or /mcp/ to untrusted agents or networks. <br>
-Risk: Session strings, API hashes, bearer keys, phone numbers, and message contents are sensitive account data. <br>
-Mitigation: Do not print, log, echo, or persist secrets or private message content beyond what the task requires. <br>
-Risk: TELETHON_POST_TO_URL can forward every incoming Telegram event, including content and metadata, to an external endpoint. <br>
-Mitigation: Leave TELETHON_POST_TO_URL unset unless needed, and use only a trusted HTTPS endpoint controlled by the operator. <br>
-Risk: Server-side file_url fetching can probe network locations reachable from the container. <br>
-Mitigation: Do not pass arbitrary caller-supplied URLs; restrict file_url to trusted HTTPS domains or prefer direct uploads after client-side validation. <br>
-Risk: Spam, mass outreach, scraping, or aggressive joins can violate Telegram rules or trigger account rate limits. <br>
-Mitigation: Use read-only or dry-run mode for testing, check account risk before bursts, respect throttling, and back off when flood risk rises. <br>
+Risk: The skill can operate a real Telegram user account with read, write, and administration access. <br>
+Mitigation: Use only with an account and telethon-plus instance the user owns or is explicitly authorized to operate, and require explicit confirmation before destructive or administrative actions. <br>
+Risk: An exposed API or MCP endpoint can grant full account control to anyone who can reach it. <br>
+Mitigation: Run the endpoint on a trusted local or TLS-protected surface and set TELETHON_AUTH_KEY before exposing it beyond a private environment. <br>
+Risk: Session strings, API hashes, bearer tokens, phone numbers, and message contents are sensitive. <br>
+Mitigation: Keep secrets private, avoid logging or echoing them, and limit message content disclosure to what the task requires. <br>
+Risk: TELETHON_POST_TO_URL forwards incoming Telegram activity to a configured webhook. <br>
+Mitigation: Enable webhook forwarding only for trusted HTTPS endpoints that the operator controls. <br>
+Risk: Caller-supplied file_url values are fetched by the server and may reach destinations visible from the container. <br>
+Mitigation: Avoid untrusted file_url values; prefer trusted HTTPS sources or local upload patterns when sending media. <br>
+Risk: Automated high-volume messaging, joining, resolving, or scraping can violate platform rules or trigger account limits. <br>
+Mitigation: Use the built-in throttling conservatively, prefer read-only or dry-run mode when possible, and avoid spam, mass outreach, or unauthorized scraping. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/telethon-plus) <br>
 - [telethon-plus setup](references/setup.md) <br>
 - [Telethon](https://codeberg.org/Lonami/Telethon) <br>
-- [MCP streamable HTTP transport](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http) <br>
+- [Model Context Protocol streamable HTTP transport](https://modelcontextprotocol.io/specification/2025-03-26/basic/transports#streamable-http) <br>
+- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/telethon-plus) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON HTTP requests, shell command examples, and MCP usage; runtime calls return JSON, raw bytes, or base64 media payloads.] <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration, JSON, API calls] <br>
+**Output Format:** [Markdown guidance with curl commands, shell commands, configuration examples, and JSON request or response examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires TELETHON_PLUS_URL and optionally TELETHON_AUTH_KEY; setup examples require docker and curl.] <br>
+**Other Properties Related to Output:** [Outputs may act on a real Telegram account through the configured telethon-plus endpoint.] <br>
 
 ## Skill Version(s): <br>
-0.5.2 (source: server release evidence) <br>
+0.5.7 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

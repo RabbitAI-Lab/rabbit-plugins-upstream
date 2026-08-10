@@ -1,7 +1,7 @@
 ---
 name: "AI Image & Video Generator — GPT Image 2, Seedance, ComfyUI"
-description: Generate images and videos from text with multi-provider routing — supports GPT Image 2.0 (near-perfect text rendering), Nanobanana 2, Seedream 5.0, Midjourney V8.1 (unified photorealistic + anime), Flux 2 Klein (cheap drafts), Seedance 2.0 / Happyhorse 1.0 / Veo 3.1 video, and local ComfyUI workflows. Includes 1,446 curated prompts and style-aware prompt enhancement. Use when users want to create images/videos, design assets, animate photos, enhance prompts, or manage AI art workflows. NOT for: generic chat, code generation, document writing, video editing of existing footage, audio/TTS, or any task unrelated to AI image/video creation.
-version: 1.0.36
+description: Generate images and videos from text with multi-provider routing — supports GPT Image 2.0 (near-perfect text rendering), Nanobanana 2, Seedream 5.0, Midjourney V8.1 (unified photorealistic + anime), Flux 2 Klein (cheap drafts), Seedance 2.0 / Veo 3.1 / Grok Video / Agnes Video, and local ComfyUI workflows. Includes 1,446 curated prompts and style-aware prompt enhancement. Use when users want to create images/videos, design assets, animate photos, enhance prompts, or manage AI art workflows. NOT for: generic chat, code generation, document writing, video editing of existing footage, audio/TTS, or any task unrelated to AI image/video creation.
+version: 1.0.37
 homepage: https://github.com/jau123/MeiGen-AI-Design-MCP
 metadata: {"clawdbot":{"emoji":"🎨","requires":{"bins":["mcporter","npx","node"]}}}
 ---
@@ -19,7 +19,7 @@ Add the MCP server to your mcporter config (`~/.config/mcporter/config.json`):
   "mcpServers": {
     "creative-toolkit": {
       "command": "npx",
-      "args": ["-y", "meigen@1.3.3"]
+      "args": ["-y", "meigen@1.4.0"]
     }
   }
 }
@@ -60,6 +60,8 @@ Set credentials in `~/.clawdbot/.env`, `~/.config/meigen/config.json`, or add an
 | Tool | What it does |
 |------|-------------|
 | `generate_image` | Generate an image from a text prompt. Routes to the best available provider. Supports aspect ratio, seed, and reference images. |
+| `generate_video` | Generate a video via MeiGen (Seedance/Veo/Grok/Agnes; requires API key). Polls until the server reports a terminal state. |
+| `check_generation` | Check a generation by ID — follow-up after interrupted polling; retry this instead of re-submitting to avoid double charges. |
 | `generate_image` (with local paths) | Pass local file paths directly in `referenceImages` — images are auto-compressed locally (max 2MB, 2048px) and prepared for the selected provider. ComfyUI handles local files entirely within the local workflow. |
 | `comfyui_workflow` | List, view, import, modify, and delete ComfyUI workflow templates. Adjust steps, CFG scale, sampler, and checkpoint without editing JSON. |
 | `manage_preferences` | Save and load user preferences (default style, aspect ratio, style notes, favorite prompts). |

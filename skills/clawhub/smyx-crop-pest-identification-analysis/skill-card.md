@@ -1,45 +1,60 @@
-## Description: <br>
-Identifies common crop pests from crop leaf, bud, or fruit images and videos by sending the media to server-side APIs, then returns pest types, counts, confidence scores, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Triggers when a user provides images or videos of crop leaves, buds or fruits for pest identification, calls server-side APIs to detect common agricultural pests, and outputs pest types with confidence scores.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze crop imagery for early pest identification and to retrieve structured pest reports for tomato, corn, peanut, cotton, or other supported crops. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Submitted images, videos, or URLs are sent to the provider's cloud service for analysis. <br>
-Mitigation: Review the provider's handling of farm imagery and report history before installing, and submit only media that is approved for cloud processing. <br>
-Risk: The skill can silently create or reuse a backend identity and persist authentication tokens in a local SQLite database. <br>
-Mitigation: Install only in trusted workspaces, review local identity and token persistence, and clear stored credentials according to workspace policy. <br>
-Risk: Pest identification results are advisory and may be incorrect or incomplete. <br>
-Mitigation: Use the output as observation support and confirm treatment decisions with qualified agronomy or local plant-protection guidance. <br>
+## Use Case:
 
+External users and developers use this skill to analyze crop leaf, bud, or fruit images and videos for common pest identification, quantity estimates, confidence scores, and report links. The skill is intended to support early pest observation and farm decision workflows, not to prescribe pesticide treatment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-crop-pest-identification-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, API Calls, Markdown, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown or JSON text with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes pest labels, estimated counts, confidence scores, report links, and historical report tables when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence; artifact frontmatter states 1.0.2) <br>
+Risk: Crop media or media URLs are sent to a cloud-backed analysis service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with media that the user is permitted to upload, avoid unrelated sensitive content, and run the skill in an environment with reviewed network access.
+
+Risk: The skill can create or reuse a local identity and store authentication tokens in a workspace SQLite database.
+
+Mitigation: Review the local data directory before installation, protect or clear stored credentials between users, and prefer an isolated workspace for evaluation.
+
+Risk: The skill can retrieve prior analysis reports tied to the local identity.
+
+Mitigation: Confirm history lookup is expected before using report-list features and restrict access to workspaces that may contain another user's report history.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-crop-pest-identification-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Crop pest API documentation](references/api_doc.md)
+- [Common analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files, Guidance]
+
+**Output Format:** [Markdown or JSON pest analysis report with confidence scores and report links; optional saved output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are generated from server-side analysis of a local media upload or remote media URL and may include cloud report history for the current local identity.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata; artifact frontmatter reports 1.0.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

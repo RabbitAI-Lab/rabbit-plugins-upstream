@@ -52,7 +52,7 @@ The model separates three layers:
 
 1. **Structural candidate**: prior close of `$0.30–$5.00`, 20-day median dollar volume no higher than `$1.00m`, and low float or total shares.
 2. **Event confirmation**: premarket strength, official opening gap, supply turnover, and VWAP structure.
-3. **Executable trade**: first-five-minute structure, spread, halt status, and dilution overhang must all pass.
+3. **Executable trade**: first-five-minute structure, spread, halt status, and the premarket share-supply review must all pass; confirmed supply risk is an immediate `EXCLUDE`.
 
 Core formulas:
 
@@ -113,7 +113,7 @@ Primary inputs include:
 - Premarket: `pre_price`, `pre_high`, `pre_volume`, `bid`, `ask`
 - Open: `open_price`, `last_price`, `regular_volume`, `vwap`, `first_5m_structure`
 - CPHI path: `prior_abnormal_volume_warmup`, `turnover_expanding`
-- Risk: `split_today`, `post_split`, `halted`, `dilution_overhang`
+- Risk: `split_today`, `post_split`, `halted`, `dilution_overhang`, `premarket_supply_risk`, and `supply_risk_type/source/checked_at`
 
 Additional JSON output:
 
@@ -129,7 +129,7 @@ Additional JSON output:
 | `WAIT_OPEN` | Strong premarket candidate awaiting the official open |
 | `WAIT_DATA` | Required fields are missing |
 | `WATCH` | Partial match, failed execution gate, or active halt |
-| `EXCLUDE` | Security type, same-day split, structure, or event-strength gate failed |
+| `EXCLUDE` | Security type, same-day split, structure/event-strength failure, or confirmed premarket share-supply risk |
 
 ## Risk Controls
 

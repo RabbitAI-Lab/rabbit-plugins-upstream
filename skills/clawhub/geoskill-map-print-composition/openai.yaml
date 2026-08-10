@@ -1,0 +1,14 @@
+name: geoskill-map-print-composition
+display_name: 地图打印合成
+description: |
+  Compose multi-layer maps with cartographic decoration and high-resolution render to TIFF or PDF
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-map-print-composition.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - visualization

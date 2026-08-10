@@ -1,49 +1,49 @@
-## Description: <br>
-國際政治評論員 helps users collect political news, analyze events from multiple perspectives, and generate political commentary in article, script, social post, visual card, or newsletter formats. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language political commentary assistant that helps users gather public political news, analyze selected stories, and draft commentary in multiple formats.
 
-## Publisher: <br>
-[qpooqp777](https://clawhub.ai/user/qpooqp777) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qpooqp777](https://clawhub.ai/user/qpooqp777)
 
-## Use Case: <br>
-External users and content creators use this skill to collect current political news, select topics of interest, analyze events through structured frameworks, and draft political commentary in several publication formats. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can retain sensitive political interests in local preference memory. <br>
-Mitigation: Review or disable memory and topic-tracking features before use when political-interest profiling is not desired. <br>
-Risk: News and search requests may reach external public sources and reveal political topics of interest. <br>
-Mitigation: Use approved search/news tooling, avoid submitting sensitive personal context, and disclose external lookup behavior to users. <br>
-Risk: Generated political commentary can be incomplete, biased, outdated, or misleading. <br>
-Mitigation: Verify source material, preserve multiple viewpoints, and require human review before publication or redistribution. <br>
-Risk: The README clone URL is a placeholder, which can make package source verification unclear. <br>
-Mitigation: Install only from the ClawHub release or another verified source matching the published file hashes. <br>
+## Use Case:
 
+External users use this skill to collect public political-news topics, choose issues of interest, and generate political commentary such as long-form articles, spoken scripts, short social posts, analysis cards, or newsletter copy.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qpooqp777/skills/topskill) <br>
-- [News sources](references/news-sources.md) <br>
-- [Analysis framework](references/analysis-framework.md) <br>
-- [Article template](references/templates/article-template.md) <br>
-- [Script template](references/templates/script-template.md) <br>
-- [Social template](references/templates/social-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and plain text, with optional shell commands and local preference configuration] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can use public news/search sources and local preference memory when enabled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Political searches, selected topics, and saved preferences can reveal sensitive political interests to external sites or local memory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Ask for consent before external searches or preference storage, keep preference saving and tracking disabled unless the user opts in, and support link-only analysis and preference clearing.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qpooqp777/skills/topskill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown and plain text commentary drafts, news summaries, analysis frameworks, and user-facing prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce article drafts, spoken scripts, social posts, analysis-card content, newsletters, and preference-management guidance.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -2,6 +2,146 @@
 
 All notable changes to this skill will be documented in this file.
 
+## [2.8.0] - 2026-08-05
+
+### 新增：security_scan.py 五类新检测
+
+- **Taint Tracking**：文件内流不敏感污点分析，追踪 `os.environ` / `sys.argv` / `input()` / 网络 / 文件读取来源的值是否流入 `subprocess` 命令/参数（sticky taint + 方法调用/三元/列表传播）。已复现 SkillSpector 的 "cmd from os.environ.get → subprocess.run" finding（md2word `chart_handler.py`、funasr `init_env.py`）。
+- **文档级 scope creep（Description-Behavior Mismatch）**：从 frontmatter description+标题+正文提取宣称用途，检测 SKILL.md/references 引导执行未披露的高风险动作（`clawhub publish`/`npm publish`/发布类 High；`sync-allowlist`/`force-push`/`filter-repo`/重写历史 Medium）。已复现 SkillSpector 对 git-batch-commit 的完整 finding（10 publish + 5 allowlist）。不误判依赖安装说明与安全文档概念性描述。
+- **Unicode Deception**：零宽字符（ZWSP/ZWNJ/ZWJ/BOM）与 RTL/LTR 覆盖符、双向嵌入符检测；emoji ZWJ 序列（如 👨\u200d💼）判定为合法不报。
+- **File System Enumeration**：`os.walk`/`listdir`/`glob` 扫描用户主目录或敏感目录（~/.ssh/.aws/.env 等）。
+- **MCP 通配权限**：MCP 配置文件（`mcp.json`/`.mcp.json`/`mcp-servers.json`）中 `tools`/`permissions` 使用 `*` 通配。
+
+### 改进
+
+- 全量扫描 54 个 skills 结果：0 critical / 15 high（git-batch-commit publish ×10、patent-download 自动安装 ×3、workbuddy-checkin 自动安装 ×2），其余为 WARN。
+- `references/security-assessment-standards.md` 增加新能力映射表、scope creep 判定说明与更新后的局限说明。
+
+### 待办事项
+
+- Taint 分析为单文件近似，跨模块/动态导入调用链暂不覆盖。
+- scope creep 对宣称用途含糊的技能可能漏报，需人工复核。
+
+## [2.7.0] - 2026-08-05
+
+### 新增：确定性安全静态扫描（security_scan.py）
+
+- 新增 `scripts/security_scan.py`，把安全评估从"LLM 读规范自行判断"升级为可复算的静态门禁，覆盖 NVIDIA SkillSpector 主要漏洞模式：
+  - 危险执行：`subprocess` / `os.system` / `eval` / `exec` / 动态导入（AST 级别，带行号）
+  - 数据外传：`urllib` / `requests` / `httpx` / `socket` / `websocket` 网络请求
+  - 凭证访问：`os.environ` 读取、`.env`/SSH/AWS/凭据文件访问
+  - 供应链：运行时自动安装（`pip`/`npm`/`playwright install`，判 High）、`curl|sh` 下载并执行（Critical）、未固定版本依赖、`--online` 时 OSV CVE 查询
+  - 硬编码凭证：真实 API Key/Token/私钥/密码（Critical），跳过占位符与 `.example`
+  - 提示注入：指令式"忽略上层指令/绕过限制/隐藏执行"检测，排除安全文档的描述性上下文
+  - 披露缺口：能力存在但文档未披露（Missing User Warnings）、SKILL.md 无权限声明章节（MCP Least Privilege）、轻量描述+未披露重型能力（Context-Inappropriate Capability）
+- 支持单 Skill `audit` 与集合 `batch`，输出结构化 JSON；critical/high 存在时退出码 1（FAIL），未发现 SKILL.md 退出码 2。
+- 新增 12 项回归测试（`test_security_scan.py`），与既有 64 项门禁测试一并通过。
+
+### 改进
+
+- `references/security-assessment-standards.md` 增加扫描器使用说明、模式对应表与已知局限（文档级 scope creep、跨文件污点、在线 CVE 依赖 pin）。
+- SKILL.md「安全性评估」步骤明确"先跑扫描器，再用规范判断误报"。
+
+### 待办事项
+
+- 将 `--online` OSV CVE 检查接入 CI 前需评估依赖版本 pin 覆盖度。
+- 考虑为 references 级"scope creep"（如 commit 技能引用发布流程）补充文档语义审查清单。
+
+## [2.6.2] - 2026-07-30
+
+### 修复：官方 metadata.version 兼容
+
+- `instruction_stability_gate.py` 的候选身份校验同时接受顶层 `version` 与官方兼容的 `metadata.version`，避免已通过 Codex frontmatter 校验的 Skill 被误报为 `ISG-007`。
+- 当两个位置同时声明且值不一致时保持 fail-closed；新增嵌套版本通过与冲突阻断回归，防止兼容逻辑掩盖身份歧义。
+- 同步 frontmatter 策略、稳定性标准、README 与 Marketplace 版本信息。
+
+## [2.6.1] - 2026-07-30
+
+### 修复：结构化资料集目录误报
+
+- 将 `references/` 审查规则从“必须完全扁平”调整为“受控层级”：普通参考文件继续扁平；尼斯分类、审查指南、法规合集、行业标准等大型且内部结构稳定的资料集，允许使用一层集合目录。
+- 要求合法集合目录具备稳定语义、集合索引和从 `SKILL.md` 到索引、再按类别/章节下钻的明确路由；无索引、多层嵌套或普通文件随意分目录仍应提示。
+- 同步 `references/skill-dev-guide.md` 与项目 `docs/SKILL-DEV-GUIDE.md`，避免对合法的渐进式披露结构重复误报。
+
+## [2.6.0] - 2026-07-26
+
+### 新增：领域 checker 双向充分性边界
+
+- 明确 Skill Lint 只审查领域 checker 的约束映射、验证模态、产物阶段和候选绑定证据，不代替目标 Skill 判断 draw.io 几何、法律引用或其他领域算法正确性。
+- 新增“最小违规反例 + 合法近似正例”双向门禁原则：前者锁定漏报，后者锁定误报；已知边界不得用普通干净正例替代。
+- 新增 `CHECKER-MINIMAL-VIOLATION` 与 `CHECKER-LEGAL-NEAR-MISS` 两类通用历史失效族。
+
+### 改进
+
+- `instruction_stability_gate.py assess` 的 `ISG-002` 现在返回规范来源、行号与摘录，并明确该 finding 只表示视觉验证闭环缺失，不表示已经发现具体图面错误。
+- 补充回归测试，锁定视觉证据来源和领域边界提示，继续排除 TASKS、DECISIONS、CHANGELOG 等历史讨论误触发。
+
+## [2.5.0] - 2026-07-25
+
+### 新增：具体 Harness 失效模式批量审查
+
+- 新增 `scripts/harness_failure_audit.py`，支持单 Skill `audit` 和 Skill 集合 `batch`；递归发现最小 Skill 单元并输出含文件、行号、证据、影响和修正建议的稳定 JSON，hard finding 非零退出，零 Skill 范围 fail-closed。
+- 新增 HFA/HRA 确定性规则，覆盖 checker 异常吞噬、eval 丢退出码、process substitution、虚假成功声明、双零计数、state 作用域/副作用、baseline 未执行、CLI/config fail-open、raw JSON、Git/PR 副作用、破坏性 trim 及 config 漂移。
+- 新增去具体化 bad/good twin、批量发现、稳定输出、空范围和视觉语义误报回归；与原 52 项门禁一并进入 CI。
+
+### 修复
+
+- `instruction_stability_gate.py assess` 现同时返回 ISG 结构性 finding 与 HFA/HRA 具体 finding。
+- 静态视觉/几何语义只读取 `SKILL.md` 与 `references/**/*.md`，并要求规范性硬约束局部共现；TASKS、DECISIONS、CHANGELOG 的历史 SVG 讨论不再误触发 `ISG-002`。
+
+### 安全边界
+
+- 本版本只新增静态审查，不执行未知候选、不安装依赖、不联网；可信候选动态故障探针继续登记为后续任务。
+
+## [2.4.0] - 2026-07-23
+
+### 新增：旧版指令失稳与产出漂移门禁
+
+- 新增 `references/instruction-stability-standards.md`，把“规则写了但仍漏项”拆成约束追踪、验证模态、真实产物阶段、历史回归和多轮 observable 五类可审计关系。
+- 新增 `scripts/instruction_stability_gate.py assess`：未知第三方或旧版 Skill 无需执行候选代码，即可识别多维审阅无重复证据、视觉/几何约束无 render/geometry/visual 验证、完成声明无稳定性回执以及“有脚本但无覆盖证明”等结构性风险。
+- 新增正式 `verify`：先复算当前候选的 `HARNESS_REVIEW_VERIFIED`，再对至少三轮真实产物重跑 active checker；checker 必须绑定 artifact SHA-256、逐项报告 constraint measurement，并比较合同声明的 exact / set_equal / numeric_tolerance observables。该步骤只生成 `INSTRUCTION_STABILITY_EVIDENCE_READY` 草稿。
+- 新增合同、evaluator-signed 候选外硬约束基线和 held-out cases 示例：门禁自动发现 `SKILL.md` 与 `references/**/*.md` 的硬要求信号文件，签名基线必须完整枚举 sources/exclusions，并让显式来源锚点、合同 hard constraints、基线 source refs、隐藏正反例和当前候选哈希完全一致。
+- 三轮证据新增 evaluation ID、相同 input/config SHA-256、唯一 execution nonce、独立 run 目录和 evaluator-signed producer log；日志同时绑定当前完整候选、producer ID 与实现清单哈希，阻断跨候选/跨 producer 重放、复用路径、篡改 runner attestation 或把不同输入混作稳定性样本。
+- 正负例和真实 run artifact 都先复制到同类随机临时目录及随机文件名再交给 checker；负向 case 限定为单 constraint / 单 checker，并要求结构化 `failed_constraint_ids`、fixture SHA-256 和 measurement 精确命中目标，减少按公开/隐藏/run 类别路径分支和任意非零退出码冒充覆盖。
+- evaluator 证据从进程内共享 HMAC 改为离线 Ed25519 签名：候选动态验证只持公钥，私钥不进入 producer/checker 进程树。新增 `verify-receipt`，只有离线签名草稿重新绑定当前候选、policy、外部证据、producer logs 与真实产物后才输出 `INSTRUCTION_STABILITY_VERIFIED`。
+- measurement 合同新增值类型、condition 和 expected 阈值；正例/真实 run 必须满足，负例必须实际违反，不再接受任意非空 measurement 字典。
+- 新增 38 个历史失效、漂移与逃逸回归测试，覆盖旧版 writing review、旧版 SVG、整份 requirements 文件漏列、合同漏项、签名基线/held-out/producer log 篡改与重放、样本类别路径泄漏、签名工具不可覆盖、最终回执验签、Harness evidence 陈旧、policy override、measurement 阈值、几何模态和阶段错配、负向误命中、三轮伪复用、集合/数值漂移、产物篡改、路径逃逸、原子回执和可信候选确认。
+- 新增 `.github/workflows/skill-lint-harness.yml`，在 PR 和 main 变更时自动运行原有 14 项证据门禁与新增 38 项稳定性回归（共 52 项），并检查 Python 编译、JSON 与发布版本同步。
+
+### 改进
+
+- 正式完成语义仍分 `HARNESS_REVIEW_VERIFIED`、`INSTRUCTION_STABILITY_VERIFIED`、`DOMAIN_VERIFIED` 三层；中间态 `INSTRUCTION_STABILITY_EVIDENCE_READY` 明确不得冒充完成。“稳定完成”至少需要前两层，业务正确性声明再要求第三层。
+- 候选绑定策略清单纳入指令稳定性标准；策略更新后旧 Harness review snapshot 自动失效。
+- 更新审查索引、业务流、工作流、报告规范、质量意见模板和 review profile，把 verification modality、artifact stage、逐约束覆盖和重复运行证据纳入 Hard Fail。
+- 固化真实历史失效类别：文字自报关闭、空 active scope、陈旧状态、读集不完整、SVG 几何目检漂移、生产器与文档冲突、负向 canary 和组合契约冲突。
+
+## [2.3.0] - 2026-07-22
+
+### 新增：从格式审查升级为可验证 Harness 预检
+
+- 新增 `references/harness-reliability-standards.md`，用 Contract / Producer / Verifier / Evidence Binding / Fault Injection / Closure / Composition 七层模型审查 Skill 的真实可靠性。
+- 新增创建预检模式：创建或重大改造 Skill 前先定义结果属性、生产者/验证者、Hard Fail、失败回炉和逃逸反例；实现完成后再进入正式验收。
+- 新增 `scripts/harness_evidence_gate.py`，用完整候选清单、策略读集和 SHA-256 绑定审查证据，并在 `verify` 时亲自重跑候选内 checker；不读取 JSON 自填的退出码、PASS 或日志结论。
+- 新增 14 个故障注入回归测试，覆盖候选漂移、范围漏项、空清单、策略漂移、自报结果、反例未阻断、未知层/runtime/checker、checker 篡改候选、证据覆盖、可信候选确认、敏感环境隔离和不适用理由不足。
+
+### 改进
+
+- 将“执行器自报完成”“只有正常样例”“空范围或检查异常 fail-open”“跨 Skill 无契约”等纳入 Hard Fail。
+- 审查报告新增 Harness 七层、成熟度和证据等级，强制区分 `HARNESS_REVIEW_VERIFIED`、`DOMAIN_VERIFIED` 与 `NOT_VERIFIED`。
+- 更新 review profile、模块路由、业务流与工作流规则，使客观缺陷走硬门禁，语义质量保留人工判断。
+- 更新 `skill-dev-guide.md`，把七层预检前移到创建前，并要求实现后由实时 checker 正式验收。
+- 动态 checker 仅允许用户显式确认的自有/可信候选，默认使用最小环境白名单和临时 HOME；未知第三方候选保持 `NOT_VERIFIED`，门禁不冒充代码沙箱。
+
+## [2.2.0] - 2026-06-25
+
+### 新增:Skill 本质审查 + 报告教学化升级(基于 skill-lint 自迭代 golden 测试)
+
+- **business-flow-rubric 新增 §0「Skill 的本质」**:明确 skill = 渐进式披露 + 可执行处理流程 / 工作规范;知识库型(原始文本 / 知识堆砌、无抽象规范、无可执行流程)违反本质,判 Hard Fail。沉淀知识必须抽成抽象规范,不是塞原文。审查**不做"类型分类"**,所有 skill 按本质统一审。
+- **Hard Fail 新增「知识堆砌」**:把原始文本 / 知识 / 语料 / 法条 / 书稿成堆塞进 skill,未抽成可执行抽象规范(知识库型典型问题)——skill 不是知识仓库。
+- **去掉"工具类降低要求"的分类措辞**:改为"按任务脆弱性调严格度,不按 skill 类型分类"(统一本质审)。
+- **报告教学化升级**:finding 的"设计理念"(一句话)升级为「为什么错(原理)」+「最优设计(该怎么设计才对,给范例)」两段——使用者不仅知道改什么,还学到为什么这么设计才对。`reporting-standards.md` + 质量意见报告模板同步。
+- 来源:agent-eval-lab 自迭代 r7 用 5 个 golden mini-skill 样本测试 skill-lint,发现"不分类型判太重 + 报告不够教学"两点,据此 patch;retest sample-03 验证有效。
+
 ## [2.1.0] - 2026-06-19
 
 ### 新增

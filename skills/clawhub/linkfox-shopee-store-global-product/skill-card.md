@@ -1,44 +1,64 @@
-## Description: <br>
-Provides agent-facing commands for managing Shopee cross-border GlobalProduct catalog workflows through LinkFox's Shopee developer proxy, including category lookup, global item and SKU operations, publishing, price, and stock updates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shopee global product management skill for authorized merchants, covering Shopee Open Platform GlobalProduct APIs for category lookup, global item and SKU management, publishing, price, and stock updates.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External developers and ecommerce operators use this skill to inspect and manage authorized Shopee merchant GlobalProduct data, including global item creation, SKU management, publishing to local shops, and price or stock updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change live Shopee merchant products through delete, update, publish, price, and stock operations. <br>
-Mitigation: Require explicit user confirmation before any write, delete, publish, price, or stock operation. <br>
-Risk: Full Shopee API responses may be stored locally and can include merchant or product data. <br>
-Mitigation: Use only in workspaces where local plaintext Shopee merchant data is acceptable, and verify the output directory behavior before use. <br>
-Risk: The skill contains contradictory credit guidance. <br>
-Mitigation: Assume API calls may consume credits until the publisher or service confirms the actual charging behavior. <br>
+## Use Case:
 
+External Shopee merchants and ecommerce operators use this skill to query, create, update, publish, and manage cross-border GlobalProduct listings through LinkFox-assisted Shopee API calls.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-global-product) <br>
-- [Bundled GlobalProduct API reference](artifact/references/api.md) <br>
-- [Shopee Open Platform GlobalProduct documentation](https://open.shopee.com/documents/v2/v2.global_product.get_category?module=90&type=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [JSON files plus stdout JSON or summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are written under a linkfox session data directory; small responses print in full, while larger responses print a summary unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill can affect Shopee merchant catalog state through price, stock, publish, update, and delete operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before any price, stock, publish, update, or delete action.
+
+Risk: The skill handles LinkFox credentials, SMS verification, generated API keys, and Shopee merchant data.
+
+Mitigation: Use only trusted credential channels, install only if LinkFox is trusted with this data, and avoid exposing API keys in shared logs or prompts.
+
+Risk: The skill persists full LinkFox responses and payment or QR-related outputs in local session files.
+
+Mitigation: Periodically review and remove locally saved LinkFox response and QR files that may contain sensitive business or payment data.
+
+Risk: Environment URL overrides could route requests away from the expected LinkFox gateway.
+
+Mitigation: Avoid environment URL overrides unless the endpoint is independently trusted and intentionally configured.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-global-product)
+- [GlobalProduct API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [Shopee Open Platform GlobalProduct documentation](https://open.shopee.com/documents/v2/v2.global_product.get_category?module=90&type=1)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Files, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [JSON responses saved to files, with stdout JSON for small responses and concise text summaries for large responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a LinkFox API key and an authorized Shopee merchant or shop; full responses are persisted under a local linkfox session data directory.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

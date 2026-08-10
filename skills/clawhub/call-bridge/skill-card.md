@@ -1,5 +1,5 @@
 ## Description: <br>
-Call Bridge helps an agent plan and operate AI-assisted phone workflows, including parallel outbound calls, live handoff, inbound call preferences, campaign follow-up, voice settings, and error recovery guidance. <br>
+Call Bridge helps an agent place and manage real phone calls, including parallel outbound calls, live handoff, inbound call preferences, voice settings, and call follow-up state. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,36 +11,35 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Teams and individuals can use this skill to prepare outbound call tasks, compare information across multiple calls, bridge a user into sensitive conversations, configure inbound handling rules, and manage follow-up state for telephony campaigns. <br>
+External users and teams use this skill to have an agent collect information by phone, compare options across multiple businesses, configure inbound handling, or bridge the user into live calls when human approval or sensitive decisions are needed. <br>
 
 ### Deployment Geography for Use: <br>
-Use where Call Bridge service access, U.S. +1 phone numbers, and local calling, recording, consent, privacy, and telemarketing requirements are satisfied. <br>
+United States <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can place, bridge, forward, and retry real phone calls. <br>
-Mitigation: Require explicit user confirmation before each outbound call, bridge, forwarding change, retry, or campaign action. <br>
-Risk: API keys and sign-in links may expose control of the telephony service. <br>
-Mitigation: Protect stored keys, restrict file permissions, avoid logging secrets, and rotate keys if disclosure is suspected. <br>
-Risk: Transcripts and campaign state may contain sensitive personal, financial, or identity-verification details. <br>
-Mitigation: Minimize stored transcript content, avoid retaining sensitive details, and review privacy and consent obligations before use. <br>
-Risk: The package includes unrelated review and scoring documentation, creating confusion about the skill's behavior. <br>
-Mitigation: Review the skill text before broad deployment and remove or correct unrelated documentation. <br>
+Risk: The skill can direct an agent to place real phone calls and bridge the user into live calls. <br>
+Mitigation: Require explicit confirmation before every call or handoff, including the phone number, purpose, participant, and allowed commitments. <br>
+Risk: Live calls, inbound forwarding, and transcript reuse can create consent and privacy exposure. <br>
+Mitigation: Confirm participant consent where required, limit transcript retention, and reuse transcript content only when it is necessary for the user's stated task. <br>
+Risk: Call Bridge credentials and sign-in URLs can expose account access if stored or logged unsafely. <br>
+Mitigation: Use trusted credential storage, avoid placing keys or tokens in logs or shared files, and restrict local credential-file permissions. <br>
+Risk: The server security summary says the documentation lacks clear safeguards for consent, live calls, credentials, and transcript reuse. <br>
+Mitigation: Review the skill carefully before installation and set strict operating limits for calls, handoffs, credential handling, and transcript replay. <br>
 
 
 ## Reference(s): <br>
-- [Call Bridge skill listing](https://clawhub.ai/thcjp/skills/call-bridge) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/call-bridge) <br>
+- [Call Bridge API](https://api.call-bridge.dev) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with cURL examples, JSON configuration snippets, call-state structures, and operational guidance.] <br>
-**Output Parameters:** [Call targets, task instructions, bridge_number, voice, personality, greeting, inbound instructions, handoff_number, API key, campaign state, and transcript context.] <br>
-**Other Properties Related to Output:** [The skill may guide agents to make or manage real calls, bridge users into live calls, configure forwarding behavior, poll call history, and handle stored API keys or transcript-derived campaign state.] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with JSON examples and bash/curl command snippets] <br>
+**Output Parameters:** [1D] <br>
+**Other Properties Related to Output:** [May include API calls, call summaries, transcript-derived follow-up state, and configuration instructions.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

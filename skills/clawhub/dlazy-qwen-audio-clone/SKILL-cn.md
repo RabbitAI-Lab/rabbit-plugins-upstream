@@ -1,11 +1,11 @@
 ---
 name: dlazy-qwen-audio-clone
 version: 1.3.4
-description: 阿里云百炼 qwen3-tts 声音复刻，上传一段干净人声样本即可复刻自定义音色，可在后续 TTS 中使用。
+description: "阿里云百炼 qwen3-tts 声音复刻，上传一段干净人声样本即可复刻自定义音色，可在后续 TTS 中使用。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，可以使用 dlazy qwen-audio-clone -h 查看帮助信息。"}}
 ---
 
-# dlazy-qwen-audio-clone
+# 声音克隆 通义 Qwen Audio Clone
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

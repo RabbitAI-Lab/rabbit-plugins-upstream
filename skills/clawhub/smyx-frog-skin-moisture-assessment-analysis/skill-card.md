@@ -1,44 +1,59 @@
-## Description: <br>
-Assesses frog skin moisture from clear images or videos by analyzing glossiness, wrinkles, white film, species humidity context, and image quality to produce structured alerts and care recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses frog skin moisture from dorsal or lateral images or videos by analyzing visual glossiness, wrinkles, white film, species context, and image quality to produce structured hydration-risk reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External keepers, amphibian farms, animal hospitals, and developers integrating vivarium cameras use this skill to analyze frog skin media for moisture status, dehydration risk alerts, and historical report lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends frog images, videos, URLs, identity values, and report-history requests to configured lifeemergence.com services. <br>
-Mitigation: Review before installing, prefer non-sensitive media, and confirm cloud retention, account deletion, and token revocation practices before use. <br>
-Risk: The skill persists service tokens in the workspace data directory. <br>
-Mitigation: Use only in trusted workspaces, protect workspace storage, and revoke or rotate tokens if the workspace is shared or compromised. <br>
-Risk: The security verdict is suspicious because the skill automatically handles identity, uploads media or URLs, queries cloud history, and lacks sufficient user control or disclosure. <br>
-Mitigation: Require user review of cloud-backed behavior and disclosures before deployment, and avoid using sensitive animal hospital or farm media unless approved. <br>
+## Use Case:
 
+External users, amphibian keepers, farms, animal hospitals, and developers use this skill to analyze frog skin images or videos for visual moisture indicators and retrieve structured historical assessment reports.
 
-## Reference(s): <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-frog-skin-moisture-assessment-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and JSON-backed structured reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links and historical report tables; input media can be local files or URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter says 1.0.6) <br>
+Risk: Frog images, videos, supplied URLs, and history queries may be sent to a configured cloud service and associated with an internal identity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media and URLs appropriate for cloud analysis, avoid private/internal URLs or sensitive local files, and review this behavior before installation.
+
+Risk: The skill may create a local workspace database containing reusable service tokens.
+
+Mitigation: Protect the workspace, avoid shared or untrusted machines, and remove local token storage when the skill is no longer needed.
+
+Risk: Visual moisture assessments can be unreliable under poor lighting, low resolution, immersion, recent misting, shedding, or burrowing contexts.
+
+Mitigation: Use clear 1080p or higher dorsal or lateral media under even neutral lighting, return unreliable results for unsuitable frames, and treat severe-risk outputs as prompts to contact a qualified amphibian veterinarian rather than as diagnoses.
+
+## Reference(s):
+
+- [Frog Skin Moisture Assessment API Documentation](artifact/references/api_doc.md)
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-frog-skin-moisture-assessment-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-style structured analysis reports with optional saved result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include hydration-risk classifications, visual scores, recommended non-prescriptive actions, disclaimers, and report links.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata; artifact frontmatter states 1.0.9)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

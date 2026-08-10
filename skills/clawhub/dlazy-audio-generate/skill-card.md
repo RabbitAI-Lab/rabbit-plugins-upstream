@@ -1,43 +1,64 @@
-## Description: <br>
-Audio generation skill that selects an appropriate dlazy CLI audio or text-to-speech model based on the user's prompt. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates speech, music, sound effects, and cloned-voice audio by selecting an appropriate dLazy CLI audio model for the user's prompt.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to generate speech, music, sound effects, dialogue, or cloned-voice audio through the dLazy hosted CLI service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, generation parameters, and media files supplied for audio or voice cloning may be uploaded to dLazy hosted services. <br>
-Mitigation: Avoid sending sensitive prompts or media, and use the service only when cloud processing is acceptable. <br>
-Risk: Using login or manual authentication can persist an API key in the local dLazy CLI configuration. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY or npx when less persistent setup is preferred, and rotate or revoke API keys as needed. <br>
+## Use Case:
 
+External users, developers, and content teams use this skill to route audio-generation requests to dLazy CLI models for text-to-speech, music, sound effects, dialogue, and voice-cloning workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-audio-generate) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON command outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated audio is returned through hosted result URLs from the dLazy service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.7 (source: frontmatter and server release metadata) <br>
+Risk: dLazy generation can use paid credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm account balance and expected cost before running generation commands.
+
+Risk: Prompts and selected media files are sent to dLazy hosted services.
+
+Mitigation: Avoid submitting confidential, regulated, or unapproved media unless the user's policy permits use of the dLazy service.
+
+Risk: API keys may be persisted in local CLI configuration.
+
+Mitigation: Use the DLAZY_API_KEY environment variable or npx invocation when users do not want a global install or stored key.
+
+Risk: Voice-cloning commands can upload voice samples and generate cloned voices.
+
+Mitigation: Use only voice samples where the user has rights and consent for cloning and downstream use.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-audio-generate)
+- [dLazy CLI Source](https://github.com/dlazyai/cli)
+- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy Homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash commands and JSON CLI output references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media outputs are returned by the dLazy CLI as hosted URLs on files.dlazy.com.]
+
+## Skill Version(s):
+
+1.3.9 (source: server release metadata; artifact frontmatter says 1.3.7)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

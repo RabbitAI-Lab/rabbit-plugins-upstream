@@ -1,40 +1,66 @@
-## Description: <br>
-Calls Shopee Open Platform Public APIs through LinkFox scripts for partner shops, merchants, OAuth token exchange, token refresh, resend-code tokens, and IP range lookup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Shopee Public module helper for calling six Shopee Open API public endpoints through LinkFox, including partner shop and merchant lookup, OAuth token exchange and refresh, resend-code token retrieval, and Shopee IP range lookup.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Developers and e-commerce operators use this skill to call Shopee Public module endpoints for authorized shop and merchant lookup, token exchange and refresh, resend-code token retrieval, and Shopee IP range discovery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review says token-related API requests and responses are saved locally in full without redaction or retention controls. <br>
-Mitigation: Use only in trusted workspaces, avoid shared machines, inspect generated linkfox data files after use, and delete saved token-related responses when they are no longer needed. <br>
+## Use Case:
 
+Developers and e-commerce operators use this skill to query Shopee Public API data and complete lower-level partner or OAuth operations when the regular authorization skill is not the right entry point. It is intended for LinkFox-backed Shopee workflows that need scripted public endpoint calls and response summaries.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-public) <br>
-- [Shopee Public API Reference](references/api.md) <br>
-- [Shopee Open Platform Public API index](https://open.shopee.com/documents/v2/v2.public.get_shops_by_partner?module=104&type=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with Python shell commands and saved JSON API responses.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes complete API responses to a local linkfox session data directory and prints full JSON or a summary based on response size.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server evidence) <br>
+Risk: The skill handles LinkFox API keys, Shopee OAuth and token responses, and phone-number based onboarding.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use approved credentials only, avoid unnecessary production secrets, and rotate any credential that may have been exposed through logs or saved responses.
+
+Risk: Full API responses may be saved locally under the workspace or home LinkFox directory.
+
+Mitigation: Review saved JSON files after use and delete sensitive response files when retention is not required.
+
+Risk: Billing onboarding can include optional payment-order flows.
+
+Mitigation: Confirm the selected plan, payment method, and order details with the user before creating or sharing payment orders.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-public)
+- [Shopee Public API Index](https://open.shopee.com/documents/v2/v2.public.get_shops_by_partner?module=104&type=1)
+- [API Reference](references/api.md)
+- [Onboarding Reference](references/onboarding.md)
+- [get_access_token Reference](references/apis/get-access-token.md)
+- [get_merchants_by_partner Reference](references/apis/get-merchants-by-partner.md)
+- [get_shopee_ip_ranges Reference](references/apis/get-shopee-ip-ranges.md)
+- [get_shops_by_partner Reference](references/apis/get-shops-by-partner.md)
+- [get_token_by_resend_code Reference](references/apis/get-token-by-resend-code.md)
+- [refresh_access_token Reference](references/apis/refresh-access-token.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses or saved JSON files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses are summarized when large; full responses may be saved locally for later inspection.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

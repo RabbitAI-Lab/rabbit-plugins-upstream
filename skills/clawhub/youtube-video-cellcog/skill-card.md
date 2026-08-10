@@ -1,44 +1,43 @@
 ## Description: <br>
-AI YouTube content creation powered by CellCog. YouTube videos, Shorts, thumbnails, video scripts, tutorials, vlogs, educational videos, product reviews, video essays. From script to finished video with voiceover and music. <br>
+Creates YouTube videos, Shorts, thumbnails, scripts, tutorials, reviews, essays, and related content using CellCog. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
 ## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+[cellcog](https://clawhub.ai/user/cellcog) <br>
 
 ### License/Terms of Use: <br>
 MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators, marketers, educators, and developers use this skill to ask an agent to create YouTube videos, Shorts, thumbnails, scripts, outlines, tutorials, reviews, and essays through CellCog. <br>
+External creators, content teams, and developers use this skill to ask an agent to generate YouTube Shorts, long-form videos, thumbnails, scripts, outlines, and related content through CellCog. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: YouTube content requests are sent to CellCog and require a CELLCOG_API_KEY. <br>
-Mitigation: Use the skill only when your organization permits sending the requested content to CellCog, and avoid including secrets, regulated data, or proprietary material in prompts. <br>
-Risk: AI video generation can consume significant credits and may not produce usable results. <br>
-Mitigation: Start with smaller or lower-risk prompts, monitor credit usage, and review outputs before publication. <br>
-Risk: Generated videos, scripts, thumbnails, and outlines may be inaccurate, misleading, or unsuitable for the intended audience. <br>
-Mitigation: Review and edit generated content for factual accuracy, policy compliance, rights, and brand fit before use. <br>
+Risk: Prompts, requested media details, and task context may be sent to CellCog. <br>
+Mitigation: Use this skill only for content appropriate to process with CellCog, and avoid sending secrets or private media unless approved by policy. <br>
+Risk: The CELLCOG_API_KEY could be exposed or used in ways that consume credits unexpectedly. <br>
+Mitigation: Keep the API key private, store it in environment configuration, monitor credit usage, and rotate the key if exposure is suspected. <br>
+Risk: AI video generation quality and cost are not guaranteed. <br>
+Mitigation: Start with small, specific requests, review outputs before publication, and set budget or credit controls where available. <br>
 
 
 ## Reference(s): <br>
+- [ClawHub skill page](https://clawhub.ai/cellcog/skills/youtube-video-cellcog) <br>
 - [CellCog homepage](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/youtube-video-cellcog) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/nitishgargiitd) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python code snippets and shell setup commands] <br>
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with Python examples and shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May initiate CellCog agent tasks that generate video, thumbnail, script, outline, or content-planning outputs. Requires CELLCOG_API_KEY and python3.] <br>
+**Other Properties Related to Output:** [May initiate CellCog tasks that generate videos, thumbnails, scripts, outlines, or related YouTube content.] <br>
 
 ## Skill Version(s): <br>
-1.0.13 (source: server release evidence) <br>
+1.0.15 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

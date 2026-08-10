@@ -1,46 +1,63 @@
-## Description: <br>
-Looks up Amazon SP-API Catalog Items through LinkFox for category, keyword, identifier, and ASIN catalog queries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+亚马逊店铺商品目录 Catalog（与 linkfox-amazon-store-auth / report / listings / pricing / orders / feeds 同系列），经 /spApi/developerProxy 调用 SP-API Catalog Items：v0 listCatalogCategories；v2022-04-01（默认）或 v2020-12-01 的 searchCatalogItems、getCatalogItem。当用户提到亚马逊目录、Catalog Items、listCatalogCategories、searchCatalogItems、getCatalogItem、按 ASIN 查目录、关键词搜商品目录、类目节点、includedData、summaries/images 时触发。
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External ecommerce operators and developers use this skill to retrieve Amazon product catalog categories and item metadata through LinkFox-authenticated SP-API Catalog Items calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Full authenticated Amazon catalog API responses may include sensitive seller, SKU, query, or returned product metadata and are automatically stored locally. <br>
-Mitigation: Run the skill only in workspaces where local LinkFox data files are acceptable, avoid sharing generated files, and periodically delete saved linkfox data files that are no longer needed. <br>
-Risk: Using --inline can place complete API responses into the agent transcript or logs. <br>
-Mitigation: Use the default summarized output for sensitive catalog lookups and inspect saved JSON selectively with tools such as jq when specific fields are needed. <br>
-Risk: Catalog lookups depend on LinkFox gateway authentication and an installed Amazon store auth skill. <br>
-Mitigation: Verify the LinkFox gateway, API key, and required auth skill before providing credentials or running catalog requests. <br>
+## Use Case:
 
+External Amazon sellers and marketplace operators use this skill to let an agent retrieve Amazon SP-API Catalog Items data through LinkFox, including category lookup, keyword or identifier search, and ASIN-level catalog item retrieval.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-catalog) <br>
-- [references/api.md](references/api.md) <br>
-- [Amazon SP-API listCatalogCategories](https://developer-docs.amazon.com/sp-api/reference/listcatalogcategories) <br>
-- [Amazon SP-API searchCatalogItems](https://developer-docs.amazon.com/sp-api/reference/searchcatalogitems) <br>
-- [Amazon SP-API getCatalogItem](https://developer-docs.amazon.com/sp-api/reference/getcatalogitem) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON files, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples; scripts emit JSON to stdout and save full JSON responses locally.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Large responses are summarized unless --inline is used; full responses are saved under a local linkfox session data directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Full API responses are saved locally and may contain catalog or account-related data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the generated linkfox data directory out of source control and inspect only the response fields needed for the task.
+
+Risk: The onboarding helper can assist with LinkFox login, API-key generation, and paid credit purchase flows.
+
+Mitigation: Require explicit user confirmation before running token-generation, plan selection, order creation, or payment-related commands.
+
+Risk: Endpoint environment variables can redirect requests away from the default LinkFox gateway.
+
+Mitigation: Verify LinkFox gateway and API environment variables before execution.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-store-catalog)
+- [API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [Amazon SP-API listCatalogCategories](https://developer-docs.amazon.com/sp-api/reference/listcatalogcategories)
+- [Amazon SP-API searchCatalogItems](https://developer-docs.amazon.com/sp-api/reference/searchcatalogitems)
+- [Amazon SP-API getCatalogItem](https://developer-docs.amazon.com/sp-api/reference/getcatalogitem)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, shell commands, and JSON responses or summaries with full response files saved locally]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Catalog scripts save complete LinkFox API responses under the current working directory and summarize large responses on stdout unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

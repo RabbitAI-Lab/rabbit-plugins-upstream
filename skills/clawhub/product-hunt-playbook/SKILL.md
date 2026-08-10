@@ -1,31 +1,36 @@
 ---
-name: product-hunt-playbook
-version: 1.6.0
+name: product-hunt-launch-playbook-win-1-daily
+version: 1.2.0
 description: |
-  It's 11pm before your launch. Your PH page is ready but you have no idea what actually moves the ranking algorithm. Upvotes? Comments? Time-of-day? This is the hour-by-hour operations manual from someone who's coached 30+ #1 finishes.
+  Win #1 Product of the Day on Product Hunt. Completely reverse-engineered from 30x daily winner and 3x weekly winner campaigns — ranking algorithm decoded, launch timing optimized, hunter selection guide, community engagement approach, and post-launch momentum playbook.
 
-  What's inside:
-  • Ranking algorithm deep-dive (it's not just upvotes — weighted factors decoded)
-  • Launch day minute-by-minute checklist (PST timing, first 3 hours are critical)
-  • Voter mobilization strategies (ethical, anti-spam-safe approaches)
-  • Asset preparation templates (gallery, tagline ≤60 chars, maker comments)
-  • Post-launch 72h momentum plan (convert PH traffic → retained users)
+  Use this if you're: (1) already read PH launch guides but still can't break into Top 5 and need algorithm-level deep optimization, (2) targeting Daily #1 and 5,000+ sign-ups with a proven 30+ case validated approach, or (3) an investor/accelerator coaching portfolio companies on PH launches.
 
-  Built from: 30+ PH #1 daily wins, 10+ weekly top 3, 2 monthly top 5. 3,000-5,000+ upvotes per launch.
+  What's inside: PH ranking algorithm decoded: weighted factors for first 3 hours, 24 hours, and weekly ranking · Pre-launch preparation: gallery optimization, product URL selection, tagline refinement (≤60 chars) · Launch timing optimization: exact PST launch windows + scheduling guide · Community engagement KPIs: upvote targets, comment response time, maker comment strategy · Platform compliance guide: understanding PH's quality signals and organic growth · Post-launch 72-hour plan: maintaining momentum, conditions for Weekly #1 · Case studies: 3 different categories (AI Tool, App, SaaS) dissected
 
-  Triggers: "Product Hunt" | "PH launch" | "Product Hunt #1" | "PH ranking" | "Product Hunt strategy" | "PH upvotes" | "launch day" | "PH打榜" | "Product Hunt攻略" | "PH ranking algorithm"
-source: https://github.com/Gingiris-1031/gingiris-skills/tree/main/skills/product-hunt-playbook
+  Expected outcomes: Product Hunt Daily #1 ranking · strong community engagement on launch day · 3,000–10,000+ sign-ups (depending on product-market fit)
+
+  🇨🇳 Product Hunt 打榜完整攻略 | 🇯🇵 Product Hunt ローンチガイド | 🇰🇷 Product Hunt 런칭 가이드
+
+  Keywords: Product Hunt #1, Product Hunt launch strategy, PH ranking algorithm, PH #1 daily winner, Product Hunt tips, product launch, startup launch, ranking optimization, PH gallery optimization, Community engagement strategy, maker community engagement, product strategy, launch tactics, how to win Product Hunt, product hunt best practices
+when_to_use: |
+  Use this skill when you need to: win Product Hunt Daily #1, decode PH ranking algorithm,
+  optimize gallery and tagline, select hunters, nail maker comment strategy, build community
+  mobilization plan, or execute post-launch 72-hour momentum to capture Weekly #1.
+  Trigger phrases: "Product Hunt #1" | "PH launch" | "win Product Hunt" | "hunter selection" |
+  "PH ranking algorithm" | "Product Hunt打榜" | "发PH" | "maker comment"
+source: https://github.com/Gingiris-1031/gingiris-skills/tree/main/skills/product-hunt-launch-playbook-win-1-daily
 tags:
   - product-hunt
   - launch
-  - ph-strategy
   - daily-1
+  - ph-strategy
   - hunter
   - upvotes
-  - product-launch
+  - launch-day
   - startup-launch
   - makers
-  - go-to-market
+  - community
   - claude-code
   - ai-agent-skill
   - agent-skill
@@ -38,22 +43,7 @@ tags:
 
 ---
 
-## 📦 Install
-
-```bash
-clawhub install product-hunt-playbook
-```
-
-**What you get after installing:**
-- 24-hour battle plan with hour-by-hour tactics for launch day
-- Ranking algorithm deep-dive — weighted factors decoded (it's not just upvotes)
-- Post-launch 72h momentum plan to convert PH traffic into retained users
-
----
-
 # Product Hunt Launch Playbook
-
-> 🌍 **Language / 语言**: [中文](#中文版) | [English](references/en/README.md) | [日本語](references/ja/README.md) | [한국어](references/ko/README.md)
 
 > **30x Daily #1 | 3x Weekly #1 | 1x Monthly #1**
 
@@ -69,9 +59,9 @@ clawhub install product-hunt-playbook
 
 **GitHub Playbook (Free):**
 ```bash
-clawhub install gingiris-launch
+clawhub install product-hunt-launch-playbook-win-1-daily
 ```
-Or read: [Gingiris Launch Playbook](https://github.com/Gingiris-1031/gingiris-skills/tree/main/skills/gingiris-launch)
+Or read: [Gingiris Launch Playbook](https://github.com/Gingiris-1031/gingiris-launch)
 
 ## 💎 Premium Deep-Dive
 
@@ -95,46 +85,37 @@ Or read: [Gingiris Launch Playbook](https://github.com/Gingiris-1031/gingiris-sk
 
 👉 **Book now: [gingiris.tools/services](https://gingiris.tools)**
 
-## Launch-Day Ops Addendum (2026 field data)
+## Field Notes 2026 — Policy-Safe Launch Operations & Budget Math
 
-### Hour-by-hour vote hygiene
+### Authentic support, not ranking manipulation
 
-1. Watch your inflow **rate**, not just the total. Healthy pattern: a steady ~50 votes/hour. Danger pattern: bursts past 100/hour overall, or any one channel dumping 30+/hour.
-2. Expect the platform to prune votes about every two hours — if your count suddenly dips, that's the sweep, not a bug. Don't panic-blast your mailing list to compensate; that creates exactly the spike that gets pruned.
-3. Brief supporters *before* launch day: vote from their own device on mobile data, comment in their own words. A wall of same-minute votes from one network erases itself.
+Product Hunt enforcement and ranking logic change over time; do not treat anecdotal thresholds as a way to game them. Ask your real users and community to visit the launch, try the product, and leave honest feedback—never buy votes, coordinate fake accounts, prescribe network/device tactics, or promise rewards for votes. Track visits, demos, signups and qualified conversations as primary outcomes; placement is secondary. Re-check Product Hunt's current official rules before every launch.
 
-### Decide which badge you're buying before you spend
+### Which leaderboard is worth fighting for
 
-Daily, weekly and monthly are not the same prize: weekly exposure ≈ 7x daily, monthly ≈ 30x. Aiming monthly → launch the second or third Tuesday of the month. Only need the daily badge → Friday–Sunday competition is thinner.
+Exposure scales non-linearly: a **weekly badge delivers ~7x** the impressions of a daily badge, a **monthly badge ~30x**. If you can time the launch into a soft week, the weekly badge is often a better prize than grinding out daily #1 on a brutal Tuesday. Chasing monthly? Launch on a Tuesday in the second or third week of the month.
 
-### Budget reality check
+### Spend-to-outcome reference (field data, 2025–2026)
 
-- ~$5K is the floor at which ~1,800 votes/24h becomes reachable — but volume without pacing is a trap: one campaign hit daily #1 at that level and had the badge revoked in a retroactive vote sweep.
-- Below that, redirect the money: ~10 Twitter KOC collabs beat a PH campaign on signups — PH exposure→upvote runs about 1%, while Reddit open-source promo converts exposure→stars at 5–8%.
-- One anonymized field case (an AI Agent product, 2025-12): a 500K-visit launch day engineered across Twitter/Reddit/YouTube/groups produced ~800 signups at $6.25 CAC. Traffic ≠ conversion — plan the funnel, not just the spike.
+| Spend level | What it realistically buys |
+|---|---|
+| ~$1,000 | A few hundred signups via micro-ads + niche communities — PH optional |
+| ~$5,000 | Creator, community and demo distribution sufficient for a broad test; do not translate spend into a vote target |
+| $10,000–20,000 | Roughly 1M impressions, low-thousands of signups |
+| Under $20,000 | A 10k-star open-source debut (lean team of ≤5) |
 
-### Split launch day and leaderboard day
+**Honest math:** PH impressions convert to upvotes at roughly 1%. The same dollars spread across ~10 Twitter KOC partnerships routinely beat PH on both reach and signups (Reddit open-source promo converts exposure→stars at 5–8%). If budget is tight, PH is a badge, not a growth channel.
 
-Route half your amplifiers to the website on announcement day, the other half to PH on badge day. Cramming both goals into 24 hours makes each dilute the other.
+### Hacker News sibling rule
+
+The HN front page is decided fast: you need **~30 points and ~10 comments inside the first 30 minutes** — no movement by minute 40 means it's gone. Post during US morning hours, and skip the ~$500/post HN agencies (verified poor ROI). Prepare 2–3 posts with different angles so you get more than one shot.
 
 ## Related Skills
 
-- [gingiris-launch](https://github.com/Gingiris-1031/gingiris-skills/tree/main/skills/gingiris-launch) — Full GTM playbook
-- [gingiris-opensource](https://github.com/Gingiris-1031/gingiris-skills/tree/main/skills/gingiris-opensource) — OSS marketing
-- [gingiris-b2b-growth](https://github.com/Gingiris-1031/gingiris-skills/tree/main/skills/gingiris-b2b-growth) — B2B SaaS growth
+- [gingiris-launch](https://github.com/Gingiris-1031/gingiris-launch) — Full GTM playbook
+- [gingiris-opensource](https://github.com/Gingiris-1031/gingiris-opensource) — OSS marketing
+- [gingiris-b2b-growth](https://github.com/Gingiris-1031/gingiris-b2b-growth) — B2B SaaS growth
 
 ---
 
 *Author: Iris (生姜iris) | [gingiris.tools](https://gingiris.tools)*
-
----
-
-## 🔗 About the Author
-
-**Iris Wei** — Growth consultant for 150+ AI startups. Ex-COO at AFFiNE (69K GitHub stars).
-
-- 🐦 Twitter: [@WeiYipei](https://twitter.com/WeiYipei) — Daily growth tactics
-- 💬 Consulting: [@Iris_carrot on Telegram](https://t.me/Iris_carrot)
-- 🛒 Premium (templates + case studies): [Get on Gumroad](https://gingiris.gumroad.com/l/zxamur)
-- 📦 Full Bundle ($249): [All 5 Playbooks](https://gingiris.gumroad.com/l/gingiris-complete-global-launch-bundle)
-- 📚 40+ Free Playbooks: [gingiris.tools/skills](https://gingiris.tools/skills/)

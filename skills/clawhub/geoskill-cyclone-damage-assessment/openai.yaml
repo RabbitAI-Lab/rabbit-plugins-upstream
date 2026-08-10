@@ -1,0 +1,14 @@
+name: geoskill-cyclone-damage-assessment
+display_name: 台风/气旋灾害评估
+description: |
+  Holland风场衰减叠加降水风暴潮与暴露度的损失估算
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-cyclone-damage-assessment.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - disaster
+  - gis
+  - remote-sensing
+  - risk

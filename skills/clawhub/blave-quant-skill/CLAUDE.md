@@ -17,7 +17,7 @@ This repo contains one skill covering sixteen capabilities:
 10. **Binance** — Agent calls the Binance API for spot and USDS-M futures trading
 11. **Bitfinex** — Agent calls the Bitfinex API for spot, margin, and funding/lending
 12. **KuCoin** — Agent calls the KuCoin API for spot and futures/perpetual contract trading
-13. **TWSE / TPEX（台股）** — Agent queries Taiwan stock market data (stock code lookup, quotes, PE/yield/PB) via public APIs; no API key required
+13. **Taiwan stock lookup/quote/PE** — Agent queries stock code/name lookup, daily quotes, PE/yield/PB via **Blave API** (`studio/market/twstock/list`, `/info`, `/price`, `/quote`, `/per`), NOT the raw TWSE/TPEX public API. That public API (no key required) is used only as a fallback for the two things Blave has no endpoint for: trading-halt status and a one-shot full-market PE/yield/PB scan
 14. **台股分點買賣超** — Agent calls Blave API `GET /studio/market/twstock/broker/stock/<stock_id>` (by stock) or `GET /studio/market/twstock/broker/trader/<trader_id>` (by broker branch) for daily buy/sell data; no CAPTCHA required
 15. **Taiwan Futures** — Agent calls Blave API `GET /studio/market/twfutures/ohlcv/TXF/<schema>` for TXF OHLCV; schemas: 1d/1m/5m/15m/30m/60m; 1d from 2013-12-30, intraday from 2014-01-02
 16. **Gate.io** — Agent calls the Gate.io APIv4 for spot and USDT-settled perpetual futures trading
@@ -56,7 +56,7 @@ No CLI or wrapper involved. All API calls are made directly by the agent.
 | `references/bitmart-signature.md` | Python HMAC-SHA256 signature implementation + common mistakes |
 | `references/hyperliquid-api.md` | Hyperliquid API — all 9 endpoints with params, response format, cache times |
 | `references/tradingview-stream.md` | TradingView SSE stream — webhook setup, Python streaming client with reconnect |
-| `references/bingx-api-reference.md` | BingX 59 endpoints, Python signature, spot + perpetual swap |
+| `references/bingx-api-reference.md` | BingX 63 endpoints, Python signature, public market data + spot + perpetual swap |
 | `references/bitget-api-reference.md` | Bitget spot + futures endpoints, Python signature |
 | `references/binance-api-reference.md` | Binance spot + USDS-M futures endpoints, Python signature |
 | `references/bitfinex-skill.md` | Bitfinex spot, margin, funding/lending endpoints, HMAC-SHA384 signature |
@@ -65,8 +65,8 @@ No CLI or wrapper involved. All API calls are made directly by the agent.
 | `references/kucoin-bpp.md` | KuCoin Broker Pro Program — commission tiers, referral bonuses, dashboard guide |
 | `references/gateio-skill.md` | Gate.io spot + futures overview — auth, broker channel header, operation flow, quick reference |
 | `references/gateio-api-reference.md` | Gate.io spot + futures full endpoints, Python signature + broker channel header |
-| `references/twse-skill.md` | TWSE/TPEX 台股查詢 — 快速參考：endpoints、欄位說明、Python 搜尋範例 |
-| `references/twse-api-reference.md` | TWSE/TPEX 完整 API 參考：上市/上櫃清單、行情、停復牌、民國年轉換 |
+| `references/twse-skill.md` | 停復牌狀態 + 全市場 PE 批次掃描（Blave API 沒有對應端點時才用）— 快速參考 |
+| `references/twse-api-reference.md` | 同上，完整 API 參考：欄位說明、Python 範例、民國年轉換 |
 | `references/twse-bsr-reference.md` | 台股分點買賣超 — Blave API endpoints（by stock / by trader）、欄位說明、Python 範例 |
 
 ## Blave API Endpoints
@@ -91,6 +91,8 @@ Base URL: `https://api.blave.org`
 - `liquidation/get_alpha` — 爆倉指標 Liquidation alpha time series + stat; `timeframe` default `24h`
 - `liquidation/get_map` — liquidation heatmap: price levels vs USD exposure (`labels`, `liquidation`, `cumsum`, `oi_value`, `price`)
 - `liquidation/get_map_change` — recent liquidation events by time window (`hist_0_1h`, `hist_1_8h`, `hist_8_24h`)
+- `studio/market/twstock/list` — Taiwan stock universe (上市+上櫃, incl. ETFs): `[{stock_id, name, close, industry_code, listing_date}, ...]`; `industry_code` is TWSE/TPEx's raw numeric 產業別 code (e.g. `24`=半導體業), not a decoded name; `listing_date` is `YYYY-MM-DD`; ETFs/non-company securities have both as `null`; Redis-cached 24h — use for universe building / industry-based sampling, not for per-stock lookups
+- `studio/market/twstock/info/<stock_id>` — single-stock basic info, same shape as one row of `/list`; 404 if not a currently-active listing
 - `studio/market/twstock/price/<stock_id>` — Taiwan stock raw daily OHLCV; `start`/`end` optional (YYYY-MM-DD); data from 2000-01-04
 - `studio/market/twstock/price_adj/<stock_id>` — Taiwan stock forward-adjusted (向後調整/後復權) daily OHLCV; same params; use for backtesting total return
 - `studio/market/twstock/institutional/<stock_id>` — Taiwan stock 三大法人每日買賣超 (wide format: foreign / investment trust / dealer self / dealer hedging × buy / sell, in shares); `start`/`end` optional
@@ -101,11 +103,13 @@ Base URL: `https://api.blave.org`
 - `studio/market/twstock/cashflow/<stock_id>` — 現金流量表 quarterly fundamental; same schema
 - `studio/market/twstock/monthly_revenue/<stock_id>` — 月營收 monthly revenue (`date`, `stock_id`, `country`, `revenue` in thousands NTD, `revenue_month`, `revenue_year`); `start`/`end` optional; data from 2000-01-01; Redis-cached 24 h
 - `studio/market/twstock/foreign_shareholding/<stock_id>` — 外資持股表（日頻）: `ForeignInvestmentSharesRatio`（持股比率%）、`ForeignInvestmentShares`（持股股數）、`ForeignInvestmentRemainingShares`、`ForeignInvestmentRemainRatio`、`NumberOfSharesIssued`; `start`/`end` optional; Redis-cached 24h
-- `studio/market/twstock/batch/<data_type>` — **批次查詢（大型 universe 用）**: `data_type` ∈ {`price_adj`, `institutional`, `shareholding`, `foreign_shareholding`, `financials`, `balance_sheet`, `monthly_revenue`}; `?stock_ids=2330,2317,...`（最多 50 支）+ `start`/`end`（視類型而定）; 回傳 `{"data_type": "...", "data": {"2330": [...], ...}}`; server-side 平行 fetch + Redis cache；在 BlaveClaw 中用對應 `_batch` lib 函式而非直接呼叫此 endpoint
+- `studio/market/twstock/batch/<data_type>` — **批次查詢（大型 universe / 選股用）**: `data_type` ∈ {`price`, `price_adj`, `per`, `institutional`, `shareholding`, `foreign_shareholding`, `financials`, `balance_sheet`, `monthly_revenue`}; `?stock_ids=2330,2317,...`（最多 50 支）+ `start`/`end`（視類型而定）; 回傳 `{"data_type": "...", "data": {"2330": [...], ...}, "failed": [...]}`——`failed` 是 server 端抓取失敗（rate limit 或上游錯誤）的股票,呼叫端應重試;不在 `data` 也不在 `failed` 才是真的沒資料; 每型欄位與對應單檔 endpoint 完全一致; server-side 平行 fetch + Redis cache；在 Blave Agent 中用對應 `_batch` lib 函式而非直接呼叫此 endpoint。多股篩選一律用 batch,不要對單檔 endpoint fan-out（會 429）
 - `studio/market/twstock/broker/search` — 券商分點代碼查詢: fuzzy search by `name` param; returns `[{broker_id, broker_name}]`; 1007 branches
 - `studio/market/twstock/broker/stock/<stock_id>` — 分點買賣超 by stock (single day): all broker branches for the given stock (`broker_id`, `broker_name`, `price`, `buy`, `sell`); `date` optional (YYYY-MM-DD, defaults to today); for multi-day, call once per day
 - `studio/market/twstock/broker/trader/<trader_id>` — 分點買賣超 by broker branch (single day): all stocks traded by the given branch (`stock_id`, `broker_name`, `price`, `buy`, `sell`); `date` optional; trader_id supports alphanumeric (e.g. `920A`)
 - `studio/market/twstock/kbar/<stock_id>` — 分K（1分鐘 OHLCV）: `start`/`end` YYYY-MM-DD required; max 31 days per request; fields: `date`, `minute` (HH:MM:SS), `open`, `high`, `low`, `close`, `volume`; data from 2019-01-01; Sponsor only
+- `studio/market/twstock/minute/ohlcv/<stock_id>/<schema>` — 現股分線 minute-line OHLCV: `schema` ∈ `1m`/`5m`/`15m`/`30m`/`60m`/`1d`; `start`/`end` optional (YYYY-MM-DD); `adjust` optional (`0`/`1`/`true`/`false`, default `0` = raw traded prices; `1` = forward-adjusted 後復權 OHLC via the same factor pipeline as `/twstock/price_adj`, volume never adjusted, 503 fail-loud if factors unavailable); max range per request 1m 31d / 5m 62d / 15m 93d / 30m 186d / 60m 365d / 1d 3650d (400 `date_range_too_large` beyond); `ts` UTC ISO minute-start label (13:30 Taipei bar = closing auction); `volume` in lots (張); data from 2019-01; coverage demand-driven — first query of a listed stock auto-seeds ~30 recent days + enrolls it for intraday live collection and daily official correction, deep history backfills afterwards
+- `studio/market/twstock/minute/ohlcv/symbols` — stock ids that currently have minute-line data on disk (the covered set for the endpoint above)
 - `studio/market/twstock/quote/<stock_id>` — 即時報價 real-time last-quote snapshot (~10s refresh, no history — always "now"); no `start`/`end`; fields: `open`/`high`/`low`/`close` (today so far), `change_price`, `change_rate`, `average_price`, `volume` (latest tick), `total_volume` (day cumulative), `amount`, `total_amount`, `yesterday_volume`, `buy_price`/`buy_volume` (best bid), `sell_price`/`sell_volume` (best ask), `volume_ratio`, `quote_time` (full timestamp, unlike every other endpoint's bare-date `date`), `tick_type` (0=indeterminate/1=sell-initiated/2=buy-initiated); returns a flat object (`"data": {...}`), not a list; Sponsor only
 - `studio/market/twstock/quote?stock_ids=<a>,<b>` — batch real-time quote; max 50 ids; `"data": {"<id>": {...}, ...}`
 - `studio/market/twstock/quote/all` — real-time quote for the entire market (~2839 stocks) in one call; `"data": [{...}, ...]`
@@ -125,6 +129,7 @@ Base URL: `https://api.blave.org`
 - `studio/market/twfutures/daily/<futures_id>` — Taiwan futures daily OHLCV by contract (FinMind); `futures_id`: TX, MTX, TE, TF, etc. — also accepts any of the 231 individual stock futures ids (股票期貨, e.g. `CDF`); `start`/`end` optional (YYYY-MM-DD); data from 1998-07-21; multiple rows/day (all contract months × trading_session: position/after_market); fields: `date`, `futures_id`, `contract_date`, `open`, `max`, `min`, `close`, `spread`, `spread_per`, `volume`, `settlement_price`, `open_interest`, `trading_session`
 - `studio/market/twfutures/stock_futures/batch/daily` — batch form of `daily/<futures_id>` scoped to stock futures ids; `futures_ids` required (comma-separated, max 250, must be valid stock-futures ids — 400 otherwise); `start`/`end` optional; returns `{"data": {futures_id: [...]}, "failed": [...]}` (`failed` = ids dropped after persistent upstream rate-limiting, not a genuine empty result)
 - `studio/market/twfutures/option/pcr` — official TAIFEX 台指選擇權買賣權未平倉量比率 (OI-based put/call ratio); one row/day (trading days only); `start`/`end` optional (YYYY-MM-DD); data from 2001-12-24; fields: `date`, `pcr` (買賣權未平倉量比率%); NOT derived from option institutional / large-trader data
+- `studio/market/anue/economic_calendar` — 總經事件行事曆 (global macro calendar, licensed feed): release time, market consensus (`predict`), prior (`last`), actual (`real`, `null` until released); all params optional — `start`/`end` (YYYY-MM-DD, Taipei dates, inclusive), `country` (ISO-2, comma-separated), `max_priority`, `limit`, `lang` (`zh`/`en`); unfiltered returns ~1,400 rows so always filter; `time` is Taipei `HH:MM` (`null` when unpublished), `startDate` is the epoch-seconds of the event's Taipei date. **`priority` is inverted from the intuitive reading — 1 is the MOST important** (non-farm payrolls, rate decisions), 3 the least (rig counts), and `max_priority` keeps `priority <=` it, so the big events are `max_priority=1`. Coverage is a rolling ~5-week window, not a history archive; an out-of-window range returns an empty list, not an error. **The only source for macro events and their numbers — never substitute a web search or a remembered value**
 - `screener/get_saved_conditions` — user's saved screener conditions
 - `screener/get_saved_condition_result` — symbols matching a saved condition (`condition_id` required)
 - `hyperliquid/leaderboard` — top 100 Hyperliquid traders (`sort_by` param)
@@ -239,20 +244,15 @@ Affiliate code: `"meta": {"aff_code": "ZZDLtrXMF"}` on every order
 
 ## TWSE / TPEX — 台股市場查詢
 
-**No API key required.** Public data, no authentication.
+**Blave API first.** Stock code/name lookup (`studio/market/twstock/list`, `/info/<stock_id>`), daily
+quote/price (`/price/<stock_id>`, `/quote/<stock_id>`), and single-stock PE/yield/PB (`/per/<stock_id>`)
+all go through Blave API — see `references/blave-api.md`. The raw TWSE/TPEX public API below (no key
+required) is a fallback for only two things Blave has no endpoint for:
 
-| Market | Base URL |
+| Need | Base URL / endpoint |
 |---|---|
-| TWSE 上市 | `https://openapi.twse.com.tw` |
-| TPEX 上櫃 | `https://www.tpex.org.tw` |
-
-Key endpoints:
-- `GET /v1/exchangeReport/BWIBBU_ALL` — all listed stocks: `Code`, `Name`, `PEratio`, `DividendYield`, `PBratio`
-- `GET /v1/exchangeReport/STOCK_DAY_ALL` — all listed stocks daily quote: open/high/low/close, volume
-- `GET https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes` — all OTC stocks: `SecuritiesCompanyCode`, `CompanyName`, quote data
-
-**Lookup flow:** Download full list → filter locally by `Code` or `Name` keyword.
-When market is unknown, query both TWSE and TPEX and merge results.
+| Trading-halt status | `GET https://openapi.twse.com.tw/v1/exchangeReport/TWTB4U` |
+| One-shot full-market PE/yield/PB scan (not per-stock) | `GET https://openapi.twse.com.tw/v1/exchangeReport/BWIBBU_ALL` (TWSE) / `GET https://www.tpex.org.tw/openapi/v1/tpex_mainboard_quotes` (TPEX) |
 
 Date format: ROC calendar — `1150507` = 2026/05/07 (民國115年05月07日)
 

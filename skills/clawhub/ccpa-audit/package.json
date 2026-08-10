@@ -1,0 +1,46 @@
+{
+  "name": "ccpa-audit",
+  "version": "1.0.6",
+  "type": "skill",
+  "description": "CCPA 合规深度审计。仅在用户明确要求 CCPA 合规审计 / 加州隐私审计时激活。免费 审计（云端评分），20 项核心检查。",
+  "warnings": [
+    "云端评分：运行评分审计时，你的答题内容会发送至 compliancehub.cn 进行评分（可加 --non-interactive 完全离线预览，不联网）。",
+    "API Key：仅在你主动运行 --login 后写入 ~/.config/compliancehub（0600）；也可通过 COMPLIANCEHUB_API_KEY 环境变量提供。",
+    "可选的 --login 会收集 email/password，用于在 compliancehub.cn 创建账号并签发免费 API Key。"
+  ],
+  "author": "CQDev",
+  "license": "MIT",
+  "homepage": "https://compliancehub.cn/account.html?skill=ccpa-audit",
+  "permissions": {
+    "network": [
+      "https://compliancehub.cn"
+    ],
+    "filesystem": {
+      "write": [
+        "~/.config/compliancehub"
+      ]
+    },
+    "env": [
+      "COMPLIANCEHUB_API_KEY"
+    ]
+  },
+  "openclaw": {
+    "displayName": "CCPA 合规深度审计",
+    "category": "compliance",
+    "pricing": "free",
+    "points": 10,
+    "permissions": {
+      "network": [
+        "https://compliancehub.cn"
+      ],
+      "filesystem": {
+        "write": [
+          "~/.config/compliancehub"
+        ]
+      },
+      "env": [
+        "COMPLIANCEHUB_API_KEY"
+      ]
+    }
+  }
+}

@@ -1,0 +1,11 @@
+# 蒸馏角色索引
+# 意图识别时优先推荐 best_scenarios 匹配且 usage_count 高的角色
+#
+# 角色来源（见 tools/distill-character.md）：
+#   - god-skills 蒸馏（硬前置，未安装则拒绝）
+#   - external-import（外部导入，经格式+纯净性校验）
+#
+# 每条记录字段：
+#   name / display_name / source / created / best_scenarios / usage_count / last_used
+
+characters: []

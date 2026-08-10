@@ -1,0 +1,75 @@
+{
+  "skill": "image-fusion-pan-sharpening",
+  "skill_version": "1.0.0",
+  "command": "image-fusion-pan-sharpening --bbox 116 39 117 40 --synthetic --method brovey --scale 2 --quiet --output-dir ./_test_cli_brovey",
+  "started_at": "2026-08-03T17:47:53.766986Z",
+  "finished_at": "2026-08-03T17:47:53.975595Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "pan": null,
+    "method": "brovey",
+    "scale": 2,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_brovey\\fused_pansharpened.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 3,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_brovey\\fusion_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "brovey",
+    "scale": 2,
+    "n_bands": 3,
+    "output_shape": [
+      3,
+      128,
+      128
+    ],
+    "mean_value_per_band": [
+      0.15656225383281708,
+      0.1732887625694275,
+      0.18983684480190277
+    ],
+    "overall_mean": 0.17322929203510284,
+    "synthetic_truth_mean_per_band": [
+      0.4699171185493469,
+      0.5202598571777344,
+      0.5698263645172119
+    ]
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "image-fusion-pan-sharpening"
+  },
+  "error": null
+}

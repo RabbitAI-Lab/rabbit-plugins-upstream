@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/azure-gateway-cli",
   "slug": "azure-gateway-cli",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1784871492406,
-  "contentHash": "4554e7fcf7b6adf012e632c0902cf89b3fc18ab4c17b800f4bd0b3949fc3de7f",
-  "fetchedAt": "2026-07-26T18:06:04.103Z"
+  "version": "1.0.2",
+  "updatedAt": 1785664319221,
+  "contentHash": "6de013c490119282554a30641ff1189272b4c0f916844b149bf6aa6da8da4e1f",
+  "fetchedAt": "2026-08-10T09:39:32.538Z"
 }

@@ -1,43 +1,59 @@
-## Description: <br>
-Creates product requirements documents that pair a structured written PRD with an interactive single-file HTML prototype for mini-program and back-office workflows, plus GitHub Pages deployment guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turn a one-line idea into a clickable, demo-ready PRD with text requirements and a single-file HTML prototype for local preview or optional sharing.
 
-## Publisher: <br>
-[yrainy9321](https://clawhub.ai/user/yrainy9321) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yrainy9321](https://clawhub.ai/user/yrainy9321)
 
-## Use Case: <br>
-Product managers and product teams use this skill to diagnose or complete PRD drafts, add interactive HTML prototypes, and prepare a static review artifact for GitHub Pages. It is especially suited to Chinese PRD workflows that need both written requirements and clickable mini-program or admin screens. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Publishing a PRD/prototype to GitHub Pages can expose draft product plans or internal requirements. <br>
-Mitigation: Confirm repository visibility, GitHub Pages settings, and the intended audience before deployment. <br>
-Risk: The deployment workflow can overwrite index.html and add .nojekyll in the target repository. <br>
-Mitigation: Verify the target repository and current index.html before publishing, and use the current remote blob SHA when updating through the GitHub Contents API. <br>
+## Use Case:
 
+Product managers, founders, business stakeholders, and developers use this skill to turn rough product ideas or PRD drafts into bilingual product requirements and a clickable single-file HTML prototype for review, alignment, and optional static-site sharing.
 
-## Reference(s): <br>
-- [PRD Structure Checklist and Diagnostics](artifact/references/prd-structure.md) <br>
-- [Deploy Single-File HTML to GitHub Pages](artifact/references/deploy-github-pages.md) <br>
-- [PRD HTML Prototype Template](artifact/assets/prd-template.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/yrainy9321/skills/prd-html-prototype) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with a reusable single-file HTML template and inline shell/API commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or update index.html and .nojekyll when the user deploys the prototype to GitHub Pages.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Generated prototypes are active HTML files with inline JavaScript.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Preview locally and review the generated HTML and JavaScript before sharing or deploying.
+
+Risk: Optional static-site publishing can overwrite a target site file.
+
+Mitigation: Publish only after explicit user confirmation and verify the target repository or site before writing remote content.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/yrainy9321/skills/prd-html-prototype)
+- [Onboarding](references/ONBOARDING.md)
+- [PRD structure](references/prd-structure.md)
+- [Product methodology](references/product-methodology.md)
+- [Deploy to GitHub Pages](references/deploy-github-pages.md)
+- [Runnable example](references/example-full.html)
+- [PRD HTML template](assets/prd-template.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance plus generated single-file HTML prototype code]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local preview files by default; optional static publishing requires user confirmation.]
+
+## Skill Version(s):
+
+1.4.0 (source: frontmatter, README, CHANGELOG, release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,89 @@
+{
+  "skill": "post-disaster-reconstruction",
+  "skill_version": "1.0.0",
+  "command": "post-disaster-reconstruction --bbox 116 39 117 40 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-03T10:33:09.051524Z",
+  "finished_at": "2026-08-03T10:33:09.175541Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ],
+    "recovery": 0.7,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\progress_class.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\recovery_progress.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\reconstruction_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "category_fraction": {
+      "non_building": 0.681884765625,
+      "unchanged": 0.318115234375,
+      "destroyed": 0.0,
+      "under_construction": 0.0,
+      "rebuilt": 0.0
+    },
+    "mean_recovery_progress": 0.0,
+    "rebuilt_fraction": 0.0,
+    "destroyed_fraction": 0.0,
+    "n_valid_pixels": 4096,
+    "n_total_pixels": 4096
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "post-disaster-reconstruction"
+  },
+  "error": null
+}

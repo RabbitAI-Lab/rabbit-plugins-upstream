@@ -29,8 +29,8 @@ From unclear positioning to monetization struggles, from topic confusion to upda
 ## API Key Acquisition & Security
 
 - This skill requires the environment variable: `REDFOX_API_KEY`.
-- `REDFOX_API_KEY` is provided by [RedFoxHub](https://redfox.hk/settings/api-keys?souce=github) (`https://redfox.hk`).
-- Register at [RedFoxHub](https://redfox.hk?souce=github) to obtain your `REDFOX_API_KEY`.
+- `REDFOX_API_KEY` is provided by [RedFoxHub](https://redfox.hk/settings/api-keys?source=clawhub) (`https://redfox.hk`).
+- Register at [RedFoxHub](https://redfox.hk?source=clawhub) to obtain your `REDFOX_API_KEY`.
 - Configure `REDFOX_API_KEY` as a device environment variable before using this skill.
 - Before providing your key, confirm its source, available scope, validity period, and whether reset/revocation is supported.
 - Do not hard-code or expose the key in plaintext in code, prompts, logs, or output files.
@@ -51,7 +51,7 @@ From unclear positioning to monetization struggles, from topic confusion to upda
 ### Input format
 
 **⚠️ You must provide the Xiaohongshu account ID (digits or alphanumeric), not a Chinese nickname**
-![alt text](image.png)
+![alt text](图片)
 
 | Valid input      | Example                              |
 | ---------------- | ------------------------------------ |

@@ -1,46 +1,62 @@
-## Description: <br>
-Manages Amazon Ads Sponsored Products, Sponsored Brands, and Sponsored Display entities through LinkFox scripts for listing, creating, and updating campaigns, ad groups, ads, keywords, targets, creatives, and budget rules. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages Amazon Ads Sponsored Products, Sponsored Brands, and Sponsored Display entities by listing, creating, and updating campaigns, ad groups, ads, keywords, targets, product ads, creatives, negative criteria, and budget rules.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External users and advertising operators use this skill to inspect and manage Amazon Ads account entities across Sponsored Products, Sponsored Brands, and Sponsored Display. It supports operational workflows that need ad entity metadata, campaign setup, bid or budget changes, targeting changes, and budget rule management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create and update operations can immediately change Amazon Ads campaigns, bids, budgets, targeting, creatives, and budget rules. <br>
-Mitigation: Require explicit user confirmation for spend-affecting actions and review the proposed entity scope and field changes before execution. <br>
-Risk: Full API responses may contain ad-account data and are written as plaintext files in the current workspace. <br>
-Mitigation: Run the skill only in workspaces approved for advertising account data and review or remove response files according to local data handling policy. <br>
-Risk: The skill requires LinkFox authorization with authority over Amazon Ads entities. <br>
-Mitigation: Install and use it only with accounts where that authority is intended, and protect the required LinkFox API key environment variables. <br>
+## Use Case:
 
+External users and advertising operators use this skill to manage Amazon Ads account entities across Sponsored Products, Sponsored Brands, and Sponsored Display. It supports account-specific profile selection, entity lookup, and controlled create or update operations that can affect campaign state and spend.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-ads-manager) <br>
-- [Amazon Ads Manager API Overview](references/api.md) <br>
-- [Sponsored Products API Reference](references/api/sp.md) <br>
-- [Sponsored Brands API Reference](references/api/sb.md) <br>
-- [Sponsored Display API Reference](references/api/sd.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [JSON files and stdout JSON or summaries, with Markdown confirmation and result text from the agent] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses are written under the current workspace's linkfox data directory; large responses are summarized on stdout unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Create and update actions can change live Amazon Ads campaign state, bids, budgets, and related entities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require an explicit confirmation summary before create or update operations unless the user has already authorized automatic execution for the task.
+
+Risk: The skill handles API keys, account login flows, phone-based onboarding, and billing or payment steps.
+
+Mitigation: Install only in a dedicated workspace and proceed only when the user is comfortable with LinkFox handling those flows.
+
+Risk: Full API responses are saved persistently under the workspace and may contain sensitive advertising account data.
+
+Mitigation: Review saved linkfox response files for sensitive data and limit workspace access to users who should see the account information.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-amazon-ads-manager)
+- [Amazon Ads manager API overview](references/api.md)
+- [Sponsored Products API reference](references/api/sp.md)
+- [Sponsored Brands API reference](references/api/sb.md)
+- [Sponsored Display API reference](references/api/sd.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples; scripts return JSON responses and save response files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Query results include entity metadata, pagination summaries, and saved response-file paths when output is large.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

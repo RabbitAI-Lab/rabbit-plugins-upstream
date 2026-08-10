@@ -1,0 +1,62 @@
+{
+  "skill": "image-mosaicking",
+  "skill_version": "1.0.0",
+  "command": "image-mosaicking --bbox 116 39 117 40 --synthetic --method average --quiet --output-dir ./_test_cli_average",
+  "started_at": "2026-08-03T17:49:15.677244Z",
+  "finished_at": "2026-08-03T17:49:15.804193Z",
+  "exit_code": 0,
+  "inputs": {
+    "inputs": null,
+    "method": "average",
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_average\\mosaic.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 3,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "average",
+    "n_tiles": 2,
+    "canvas_shape": [
+      128,
+      128
+    ],
+    "coverage_fraction": 1.0,
+    "mean_value_per_band": [
+      0.47491714358329773,
+      0.515259861946106,
+      0.5548262596130371
+    ],
+    "overlap_cols": 32,
+    "reconstruction_max_abs_err": 0.0,
+    "reconstruction_mean_abs_err": 0.0,
+    "synthetic_truth_mean_per_band": [
+      0.47491714358329773,
+      0.515259861946106,
+      0.5548262596130371
+    ]
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "image-mosaicking"
+  },
+  "error": null
+}

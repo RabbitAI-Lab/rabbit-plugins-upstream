@@ -1,52 +1,65 @@
-## Description: <br>
-Integrates Privy authentication, embedded wallets, and agent payment protocols into web and agentic apps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Integrates Privy authentication, embedded wallets, and agent payment protocols into web and agentic apps.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill to add Privy authentication, embedded wallets, smart wallets, Solana support, and agent payment protocols such as x402 and MPP to web or agentic applications. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Payment and wallet examples can enable automatic crypto payments or autonomous spending if copied into production without limits. <br>
-Mitigation: Use testnets or small balances first, require explicit user confirmation, set spend caps, and allowlist payment destinations and contracts. <br>
-Risk: Server-side signing, private-key handling, account deletion, and webhook examples can affect account control if credentials or authorization checks are mishandled. <br>
-Mitigation: Keep PRIVY_APP_SECRET server-only, verify webhooks, validate transactions before signing, and wrap account creation or deletion in authorization, consent, logging, and recovery controls. <br>
+## Use Case:
 
+Developers and engineers use this skill to add Privy authentication, embedded wallets, smart-wallet controls, server-side token verification, and x402 or MPP payment flows to web and agentic applications.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/privy-integration) <br>
-- [Skill Homepage](https://github.com/tenequm/skills/tree/main/skills/privy-integration) <br>
-- [React SDK Reference](references/react-sdk.md) <br>
-- [Server SDK Reference](references/server-sdk.md) <br>
-- [Wallets Reference](references/wallets.md) <br>
-- [Solana Integration Reference](references/solana.md) <br>
-- [Agent Payments Reference](references/agent-payments.md) <br>
-- [Agent Auth and Agentic Wallets Reference](references/agent-auth.md) <br>
-- [Privy Documentation Index](https://docs.privy.io/llms-full.txt) <br>
-- [Privy Documentation](https://docs.privy.io) <br>
-- [x402 Protocol](https://x402.org) <br>
-- [MPP Protocol](https://mpp.dev) <br>
-- [Agent Auth Protocol](https://agentauthprotocol.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline code and shell command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; examples should be reviewed before production use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.2 (source: SKILL.md metadata and CHANGELOG, released 2026-07-22) <br>
+Risk: The skill includes examples for wallet transactions and paid HTTP requests that could spend funds if copied into live systems.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use testnets and sandbox wallets first, and require explicit approval before transaction broadcasts or paid fetches.
+
+Risk: Privy app secrets, webhook signing secrets, and private-key material may be exposed if placed in client code, logs, or prompts.
+
+Mitigation: Keep secrets server-side, avoid logging sensitive values, and prevent agents from echoing credentials into prompts or generated files.
+
+Risk: Agentic wallet, gas sponsorship, KYC, and recipient lookup flows can create authorization or compliance exposure if policies are too broad.
+
+Mitigation: Define strict wallet policies, spending limits, recipient controls, and human approval gates before production use.
+
+## Reference(s):
+
+- [React SDK Reference](references/react-sdk.md)
+- [Server SDK Reference](references/server-sdk.md)
+- [Wallets Reference](references/wallets.md)
+- [Solana Reference](references/solana.md)
+- [Agent Payments Reference](references/agent-payments.md)
+- [Agent Auth Reference](references/agent-auth.md)
+- [Privy LLM Documentation Index](https://docs.privy.io/llms-full.txt)
+- [Privy Integration Homepage](https://github.com/tenequm/skills/tree/main/skills/privy-integration)
+- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/privy-integration)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline TypeScript, JavaScript, JSON, and bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include environment variable names and security guidance for wallet, payment, webhook, and authentication integrations.]
+
+## Skill Version(s):
+
+0.4.3 (source: SKILL.md frontmatter and CHANGELOG.md, released 2026-08-07)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

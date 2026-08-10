@@ -1,0 +1,17 @@
+{
+  "id": "44444444-5555-4666-8777-888888888888",
+  "status": "payment_unpaid",
+  "expiresAt": "2026-08-08T11:00:00.000Z",
+  "source": {
+    "chainId": "lightning",
+    "tokenSymbol": "BTC",
+    "amount": "8421",
+    "amountUnit": "sats",
+    "receiverAddress": "",
+    "receiverMemo": null,
+    "txHash": null,
+    "amountReceived": null,
+    "confirmedAt": null
+  },
+  "destination": { "chainId": "8453", "tokenSymbol": "USDC", "amount": "5.000000" }
+}

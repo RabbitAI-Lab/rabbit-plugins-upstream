@@ -1,47 +1,60 @@
-## Description: <br>
-Analyzes fixed-camera home video or video URLs for solo-living elder monitoring, detects prolonged lack of visible activity, and returns structured long-term immobility alerts and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed multi-zone home camera video for solo-living elder activity and raises a long-term no-activity alert when no movement is detected for the configured window, defaulting to 12 hours.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External caregivers, family members, community elder-care teams, and developers use this skill to submit home-monitoring video for long-term no-activity analysis and to retrieve structured alert reports. It is intended as an auxiliary monitoring workflow and does not provide medical diagnosis or rescue instructions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Home-monitoring video or video URLs are sent to a remote Life Emergence service for processing. <br>
-Mitigation: Use only with informed consent from the monitored person or authorized family, avoid visual coverage of highly sensitive areas when possible, and submit only approved video sources. <br>
-Risk: The skill may silently create or reuse a local identity, log in to a remote account, and store tokens in a local SQLite database under the workspace data directory. <br>
-Mitigation: Review account-linkage behavior before installation, protect the workspace data directory, and clear stored tokens or local user records when the skill is no longer needed. <br>
-Risk: The security verdict is suspicious because the skill handles sensitive home video while performing remote account and token management. <br>
-Mitigation: Review and scan the skill before deployment, restrict execution to trusted environments, and confirm the remote service relationship is acceptable for the organization. <br>
-Risk: Long-term immobility alerts are auxiliary visual activity signals, not medical diagnoses or emergency response instructions. <br>
-Mitigation: Manually verify any alert by phone or an in-person check and do not rely on the skill as the sole emergency response mechanism. <br>
+## Use Case:
 
+External caregivers, community elder-care operators, and developers integrating elder-safety monitoring workflows use this skill to analyze home camera files or URLs for prolonged inactivity and produce alerts, structured reports, and report links. It is an auxiliary monitoring tool and does not provide medical diagnosis or rescue instructions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-long-term-immobility-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API error reference](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON text containing structured activity analysis, alert status, history records, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the returned report text to a user-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter states 1.0.6) <br>
+Risk: Sensitive home video and report history are sent through cloud APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with consent from the monitored person or authorized caregivers, and avoid visual monitoring in sensitive areas when a less invasive sensor can satisfy the use case.
+
+Risk: Local workspace data may contain identity records and tokens.
+
+Mitigation: Treat the workspace data directory as sensitive, restrict access, apply retention controls, and prefer an explicit managed account over silent default identity behavior.
+
+Risk: A long-term no-activity alert may be incorrect, delayed, or incomplete.
+
+Mitigation: Use alerts as auxiliary monitoring signals, require human verification, and do not treat the output as medical diagnosis or a rescue plan.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-long-term-immobility-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](references/api_doc.md)
+- [Analysis API error-code reference](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-like structured report text, with optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include activity timestamps, idle duration, active zones, alert levels, suggested contacts, and report links; history queries return Markdown tables.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence; artifact SKILL.md frontmatter reports 1.0.10)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

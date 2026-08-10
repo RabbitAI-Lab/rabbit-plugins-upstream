@@ -1,0 +1,16 @@
+name: geoskill-informal-settlement-detection
+display_name: 非正规聚居区检测
+description: |
+  Detect informal settlements by fusing texture irregularity, building morphology and spectral mixing into a classification score.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-informal-settlement-detection.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - lidar
+  - machine-learning
+  - point-cloud
+  - remote-sensing
+  - urban

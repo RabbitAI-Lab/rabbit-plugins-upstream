@@ -1,44 +1,67 @@
-## Description: <br>
-Sports Inc SportsLink API adapter for retrieving dealer invoice documents, normalizing them for payables workflows, and marking successfully imported documents as consumed. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sports Inc SportsLink API adapter that retrieves dealer invoice documents from SportsWeb, normalizes invoice line and charge data, recovers scanned invoice lines through PDF/OCR review, and marks documents consumed after import.
 
-## Publisher: <br>
-[zmtucker](https://clawhub.ai/user/zmtucker) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zmtucker](https://clawhub.ai/user/zmtucker)
 
-## Use Case: <br>
-Accounts payable agents and operations teams use this skill to fetch Sports Inc invoice documents, normalize invoice fields for downstream matching, and mark only successfully imported documents historical. It is intended as a source adapter paired with a payables workflow or ERP adapter. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a SportsLink API key to access dealer invoice data. <br>
-Mitigation: Install it only for agents that should access the dealer's Sports Inc invoices and share SPORTSINC_API_KEY only through the intended credential mechanism. <br>
-Risk: Including historical documents can broaden retrieval beyond the active unimported invoice inbox. <br>
-Mitigation: Keep include_historical disabled unless historical or consumed documents are explicitly needed. <br>
-Risk: mark-historical changes document status and can hide invoices from the active workflow if used too early. <br>
-Mitigation: Run mark-historical only after the downstream bill or import succeeds; use SPORTSINC_DRY_RUN when validating the flow. <br>
+## Use Case:
 
+Developers and payables agents use this skill to pull Sports Inc invoice documents, recover line detail for scanned documents, and hand normalized invoice data to a payables matching workflow. It is intended for controlled Sports Inc dealer payables environments with configured API and portal credentials.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zmtucker/skills/sportsinc-sportslink) <br>
-- [Sports Inc homepage](https://www.sportsinc.com) <br>
-- [SportsLink API reference](artifact/references/sportslink_api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Shell commands, Guidance] <br>
-**Output Format:** [JSON objects from a Python CLI, with Markdown usage guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, requests, and SPORTSINC_API_KEY; SPORTSINC_API_URL and SPORTSINC_DRY_RUN are optional.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.2 (source: release metadata and SKILL.md frontmatter) <br>
+Risk: The skill handles SportsLink API keys, SportsWeb portal credentials, and optional persisted browser sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege dealer credentials, keep saved session state in a protected secret location, and rotate or delete saved sessions after use.
+
+Risk: The skill can mark invoice documents consumed, which could hide an invoice before billing if used incorrectly.
+
+Mitigation: Enable SPORTSINC_DRY_RUN during testing and mark documents historical only after the downstream bill has been created and verified.
+
+Risk: SportsWeb browser automation may be sensitive to portal policy, MFA, device verification, or environment changes.
+
+Mitigation: Confirm the portal owner permits this automation, test it in a controlled dealer environment, and use manual PDF retrieval when automation is blocked.
+
+Risk: OCR or manual extraction of scanned invoice lines can misread quantities, prices, or document identity.
+
+Mitigation: Reconcile extracted lines against the SportsLink header totals, inspect image pages when OCR confidence or variance is concerning, and escalate any needs_review result.
+
+## Reference(s):
+
+- [SportsLink API reference](references/sportslink_api.md)
+- [SportsWeb portal invoice PDF flow](references/sportsweb_flow_notes.md)
+- [Reading a Sports Inc invoice PDF](references/pdf_extraction.md)
+- [Sports Inc homepage](https://www.sportsinc.com)
+- [SportsLink API base URL](https://api.sportsinc.com/)
+- [SportsWeb home](https://swv3.sportsinc.com/home)
+- [SportsWeb Invoice Center](https://swv2h.sportsinc.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [JSON command responses, compact Markdown summaries, and Markdown with inline bash commands.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce local PDF and image paths for scanned invoice review; requires Sports Inc API and optional SportsWeb portal credential environment variables.]
+
+## Skill Version(s):
+
+0.7.1 (source: artifact/SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

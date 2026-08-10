@@ -1,0 +1,83 @@
+{
+  "skill": "earthquake-liquefaction-risk",
+  "skill_version": "1.0.0",
+  "command": "earthquake-liquefaction-risk --bbox 116 39 117 40 --synthetic --output-dir ./_test_cli_out --quiet",
+  "started_at": "2026-08-03T13:06:43.707696Z",
+  "finished_at": "2026-08-03T13:06:43.835682Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ],
+    "depth": 3.0,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_out\\liquefaction_index.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\factor_of_safety.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_out\\liquefaction_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "mean_lpi": 0.003981531597673893,
+    "max_lpi": 4.241547584533691,
+    "liquefied_fraction": 0.00244140625,
+    "high_lpi_fraction": 0.0,
+    "n_valid_pixels": 4096,
+    "n_total_pixels": 4096
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "earthquake-liquefaction-risk"
+  },
+  "error": null
+}

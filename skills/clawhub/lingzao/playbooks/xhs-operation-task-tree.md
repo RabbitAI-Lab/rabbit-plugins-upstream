@@ -1,5 +1,9 @@
 # Xiaohongshu Operation Task Tree
 
+Read `router-index.json` first. Load this task tree only when the platform is
+Xiaohongshu and the user's concrete operating stage or next task is still
+unclear. Once a primary playbook is selected, stop scanning this tree.
+
 Use this playbook when a Lingzao user wants to operate a Xiaohongshu account but
 does not need another "course list". The goal is to route the user to a concrete
 creator-operation task and produce a result.

@@ -1,0 +1,17 @@
+name: geoskill-logistics-optimization
+display_name: 物流路径优化
+description: |
+  VRP/TSP with time windows and capacity constraints to compute optimal routes and cost for logistics
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-logistics-optimization.py
+runtime: python>=3.9
+tags:
+  - ai
+  - energy
+  - gis
+  - network
+  - optimization
+  - remote-sensing
+  - urban
+  - vector

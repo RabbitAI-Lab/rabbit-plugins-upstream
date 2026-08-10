@@ -1,5 +1,5 @@
 ## Description: <br>
-Search YouTube and retrieve video metadata. Use for finding videos, checking view counts, channel info, or AI training suitability. <br>
+Search YouTube and retrieve videos, shorts, comments, transcripts, streams, and channel data as structured JSON. 15 endpoints across video and channel surfaces. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,34 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers and agents use this skill to search YouTube, retrieve structured video metadata, and check whether videos have transcript or license signals relevant to AI training workflows. <br>
+External users and developers use this skill to search YouTube through Scavio and retrieve structured video, comment, transcript, stream, and channel data for content research and agent workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill sends YouTube search terms and video IDs to Scavio APIs. <br>
-Mitigation: Use it only when sharing those queries and identifiers with Scavio is acceptable for the workflow. <br>
-Risk: The skill requires a Scavio API key stored in the agent environment. <br>
-Mitigation: Store SCAVIO_API_KEY in a managed secret or environment variable and avoid committing it to files or prompts. <br>
-Risk: Optional LangChain integration adds an extra package dependency. <br>
-Mitigation: Install langchain-scavio only when that integration is needed. <br>
+Risk: Use requires a third-party Scavio API key and can spend API credits. <br>
+Mitigation: Confirm SCAVIO_API_KEY is approved for the workspace and warn before broad pagination, transcript retrieval, or other credit-heavy requests. <br>
+Risk: The streams endpoint can return direct playable or downloadable URLs for YouTube content. <br>
+Mitigation: Use stream URLs only where the user has the right to access or download the content, and treat returned URLs as time-limited. <br>
+Risk: Search terms and requested video or channel data are sent to Scavio. <br>
+Mitigation: Avoid submitting private or sensitive search intent unless that use is acceptable under Scavio terms and privacy practices. <br>
 
 
 ## Reference(s): <br>
 - [Scavio Documentation](https://scavio.dev/docs) <br>
-- [Scavio Youtube ClawHub Listing](https://clawhub.ai/scavio-ai/scavio-youtube) <br>
+- [Scavio Rate Limits](https://scavio.dev/docs/rate-limits) <br>
+- [ClawHub Skill Page](https://clawhub.ai/scavio-ai/skills/scavio-youtube) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [API Calls, JSON, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with API examples, shell commands, and structured JSON response descriptions] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown guidance with JSON API shapes and inline bash/Python examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCAVIO_API_KEY; configured timeout is 90 seconds and throttle is 1 request per second.] <br>
+**Other Properties Related to Output:** [Uses SCAVIO_API_KEY and returns Scavio API responses as structured JSON when executed by an agent.] <br>
 
 ## Skill Version(s): <br>
-2.1.3 (source: frontmatter and server release evidence) <br>
+3.0.0 (source: frontmatter and server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

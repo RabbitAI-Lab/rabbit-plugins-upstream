@@ -21,6 +21,25 @@ content, executes **no** downloaded code, and takes **no** command input from we
 pages — the browser flow is fixed in this repo's source. `npm install` / `npx`
 appear **only** at install time to fetch the `patchright` dependency (see below).
 
+The skill's whole source is three files in `bin/` and four in `lib/`: no minified
+blobs, no obfuscation, no `eval`, no post-install script that fetches code (the
+`postinstall` hook only prints a reminder). Every source file is auditable in the
+public repo
+<https://github.com/Price-Win/pricewin-skills-hub>.
+
+## Why a "stealth" browser
+
+The word is doing narrow work here. Patchright masks the CDP-level automation
+fingerprint so a **normal, logged-out page view** of a public listing is not
+mistaken for a scraping bot and served an empty or blocked page. It exists to
+read public prices reliably from bot-hardened cities, not to evade security
+controls: the skill does not bypass authentication, solve CAPTCHAs, defeat
+rate limits with proxy rotation, hide from the user, or persist beyond the
+session (`browse close`, `SIGTERM`, or the state file disappearing all stop it).
+Nothing about it is aimed at endpoint security software, and it makes no attempt
+to conceal what it is doing on the user's own machine — the daemon logs to
+stderr and its state file is in plain sight under `~/.cache/`.
+
 ## What it downloads
 
 | Item | When | Source | Purpose |
@@ -43,6 +62,27 @@ account data, credentials, cookies from other sites, files, or PII are transmitt
 | `open.er-api.com` | none (public `GET /latest/USD`) | Live VND→USD FX rate for price normalization |
 
 There is no telemetry, analytics, or callback to PriceWin servers.
+
+## The local daemon (`bin/daemon.js`)
+
+`search.js` drives one long-running local process that owns the Chromium
+instance and answers commands over HTTP. It is privileged — it can navigate and
+read any page — so it is locked down on four axes:
+
+| Control | Implementation |
+|---|---|
+| Loopback only | `server.listen(port, '127.0.0.1')` — never reachable from the LAN or internet |
+| Authenticated | Every request (including `/ping`) must carry `x-pricewin-token`, a 32-byte random token minted per daemon run and compared with `crypto.timingSafeEqual` |
+| Token not readable by other users | The token lives only in `~/.cache/pricewin-hotel-deal-finder/session-default.json`, written `0600` inside a `0700` directory |
+| Anti-DNS-rebinding | Requests whose `Host` header is not `127.0.0.1` / `localhost` / `::1` are rejected `403`, so a web page cannot reach the daemon even if it guesses the port |
+
+Ephemeral port, chosen at startup; no fixed port to scan for. The daemon exits on
+`SIGTERM`/`SIGINT` and on `browse close`, clearing its state file.
+
+**Chromium sandbox stays ON.** `--no-sandbox` is *not* passed by default. It is
+added only when the sandbox provably cannot work — running as root on Linux, or
+an explicit `PRICEWIN_NO_SANDBOX=1` — and the daemon prints a warning to stderr
+when it does.
 
 ## Untrusted content containment (indirect prompt injection)
 

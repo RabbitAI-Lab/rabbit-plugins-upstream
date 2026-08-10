@@ -113,6 +113,48 @@ def _pyreadstat_value_labels(val_labels: dict, columns: list) -> dict | None:
     return result if result else None
 
 
+def _label_limit_warnings(metadata: dict, var_label_limit: int,
+                          value_label_name_limit: int = 0,
+                          by_bytes: bool = True) -> list:
+    """检查变量标签 / 值标签是否超过目标格式上限。
+
+    返回告警列表（双语）。若未超上限则返回空列表。
+    目的：目标格式（SPSS 255 字节、Stata 变量标签 80 字符等）会在写入时
+    **静默截断**标签，导致无声数据丢失；此处显式告警，让用户知情。
+
+    Parameters
+    ----------
+    var_label_limit : 上限值
+    by_bytes : True 按 UTF-8 字节计（SPSS）；False 按字符计（Stata）
+    """
+    if not metadata:
+        return []
+    warnings = []
+    var_labels = _get_variable_labels(metadata)
+    for col, lab in var_labels.items():
+        if not lab:
+            continue
+        s = str(lab)
+        n = len(s.encode("utf-8", "ignore")) if by_bytes else len(s)
+        unit = "字节" if by_bytes else "字符"
+        if n > var_label_limit:
+            warnings.append(_bilingual(
+                f"变量 '{col}' 的变量标签为 {n} {unit}，超过 {var_label_limit} {unit}上限，"
+                f"写入时将被静默截断 | Variable label for '{col}' is {n} {unit}, exceeds "
+                f"{var_label_limit}-{unit} limit and will be silently truncated on write",
+                f"变量 '{col}' 的变量标签为 {n} {unit}，超过 {var_label_limit} {unit}上限，写入时将被静默截断",
+            ))
+    val_labels = _get_value_labels(metadata)
+    for col, mapping in val_labels.items():
+        if value_label_name_limit and len(str(col)) > value_label_name_limit:
+            warnings.append(_bilingual(
+                f"值标签名 '{col}' 长度为 {len(str(col))}，超过 Stata {value_label_name_limit} 字符上限，"
+                f"将被静默截断 | Value-label name '{col}' exceeds Stata {value_label_name_limit}-char limit",
+                f"值标签名 '{col}' 长度为 {len(str(col))}，超过 Stata {value_label_name_limit} 字符上限，将被静默截断",
+            ))
+    return warnings
+
+
 def _try_stata_version(version: int) -> int:
     """检查 pyreadstat 是否支持指定的 Stata 版本"""
     try:
@@ -220,6 +262,10 @@ def _write_sav(df, filepath, metadata=None, *, compress_zsav=False):
         **kwargs_write,
     )
 
+    # SPSS 变量标签上限 255 字节，超限会被 pyreadstat 静默截断；显式告警避免无声数据丢失
+    warnings = _label_limit_warnings(metadata, var_label_limit=255, by_bytes=True)
+    return warnings
+
 
 # ============================================================
 # Stata .dta 写入
@@ -277,6 +323,11 @@ def _write_stata(df, filepath, metadata=None, *, version=15):
         df, filepath,
         **kwargs_write,
     )
+
+    # Stata 变量标签上限 80 字符、值标签名上限 32 字符，超限会被静默截断；显式告警
+    warnings = _label_limit_warnings(metadata, var_label_limit=80,
+                                     value_label_name_limit=32, by_bytes=False)
+    return warnings
 
 
 # ============================================================
@@ -541,9 +592,19 @@ def _write_parquet(df, filepath, metadata=None):
     """
     import pyarrow as pa
     import pyarrow.parquet as pq
-    
-    table = pa.Table.from_pandas(df)
-    
+
+    try:
+        table = pa.Table.from_pandas(df)
+    except pa.ArrowInvalid:
+        # 混合类型 object 列（如数值 + 空串 '' + NaN 混存）会让 pyarrow 推断为
+        # double 后遭遇空串而失败（ArrowInvalid: Could not convert '' ... to double）。
+        # 回退：将全部 object 列转为 nullable string 类型后重试，避免数据丢失，
+        # 同时把该列作为文本保存（空串与缺失值可同时保留）。
+        df = df.copy()
+        for col in df.select_dtypes(include="object").columns:
+            df[col] = df[col].astype("string")
+        table = pa.Table.from_pandas(df)
+
     if metadata:
         full_meta = _build_full_meta(metadata)
         if full_meta:

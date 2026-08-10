@@ -1,50 +1,67 @@
-## Description: <br>
-Amazon competitor intelligence engine for one-shot competitor teardowns and recurring per-competitor monitoring with alerts using ZooData API data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Amazon competitor intelligence engine that produces focused one-shot competitor teardowns or ongoing per-competitor monitoring with alerts for a defined keyword, ASIN, brand, or competitor set.
 
-## Publisher: <br>
-[apiclaw](https://clawhub.ai/user/apiclaw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[apiclaw](https://clawhub.ai/user/apiclaw)
 
-## Use Case: <br>
-External sellers, brand operators, and commerce analysts use this skill to analyze identified Amazon competitors by keyword, ASIN, or brand and to monitor tracked ASINs for price, ranking, listing, review, and fulfillment changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bundled monitor-data includes a pre-filled collagen peptides configuration and baseline with tracked ASINs. <br>
-Mitigation: Inspect or clear monitor-data before installing, then create monitoring state only for competitors selected by the user. <br>
-Risk: Recurring Quick Checks may spend ZooData API credits or continue tracking products that are not relevant to the user's current task. <br>
-Mitigation: Enable scheduled checks only after explicit user selection, review tracked ASINs, and monitor API credit usage. <br>
-Risk: Keywords, ASINs, categories, and review requests are sent to ZooData for analysis. <br>
-Mitigation: Treat those inputs as third-party API data and avoid submitting sensitive or unauthorized competitor lists. <br>
-Risk: API credentials may be exposed if entered directly into prompts or persisted in local files. <br>
-Mitigation: Prefer the ZOODATA_API_KEY environment variable and avoid embedding keys in generated reports or shared configuration. <br>
+## Use Case:
 
+External sellers, brand operators, and marketplace analysts use this skill to compare identified Amazon competitors, monitor ASIN or brand changes, and generate battle-card style recommendations from ZooData API evidence.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/apiclaw/skills/amazon-competitor-intelligence-monitor) <br>
-- [Publisher Profile](https://clawhub.ai/user/apiclaw) <br>
-- [ZooData Skills Homepage](https://github.com/SerendipityOneInc/ZooData-Skills) <br>
-- [ZooData](https://zoodata.ai) <br>
-- [ZooData API Documentation](https://api.zoodata.ai/api-docs) <br>
-- [API Key Setup](https://zoodata.ai/en/api-keys) <br>
-- [API Field Reference](references/reference.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, API calls, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports with tables, alerts, data provenance, API usage summaries, and inline shell commands when setup or scheduled checks are needed.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZOODATA_API_KEY; full scans consume about 28-35 credits and quick checks consume about 5-10 credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: evidence release, artifact frontmatter, target metadata) <br>
+Risk: The skill sends Amazon identifiers and market filters to the ZooData API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when sharing ASINs, keywords, category paths, marketplace/date values, and numeric filters with ZooData is acceptable.
+
+Risk: API calls consume ZooData account credits, and broad scans or scheduled monitoring can create recurring cost.
+
+Mitigation: Review credit estimates before broad scans and enable scheduled monitoring only when recurring API use is intended.
+
+Risk: Monitoring mode retains local baseline, history, and alert files.
+
+Mitigation: Delete the skill's monitor-data folder when retained monitoring state should be reset or removed.
+
+Risk: The skill requires a ZooData API key and can use an optional local config file.
+
+Mitigation: Prefer setting ZOODATA_API_KEY in the environment over relying on ~/.zoodata/config.json.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/apiclaw/skills/amazon-competitor-intelligence-monitor)
+- [Project Homepage](https://github.com/SerendipityOneInc/ZooData-Skills)
+- [ZooData API Field Reference](references/reference.md)
+- [ZooData CLI Contract](references/cli-contract.md)
+- [ZooData API Keys](https://zoodata.ai/en/api-keys)
+- [ZooData Pricing](https://zoodata.ai/en/pricing)
+- [ZooData](https://zoodata.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports with tables, alerts, disclaimers, data provenance, and API usage summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires ZOODATA_API_KEY, consumes ZooData API credits, and may retain local monitoring baselines, history, and alerts.]
+
+## Skill Version(s):
+
+1.1.9 (source: server evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

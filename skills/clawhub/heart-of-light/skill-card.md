@@ -1,38 +1,56 @@
-## Description: <br>
-Heart of Light is an opt-in ethics and communication style overlay that helps an agent prioritize honesty, dignity, calm refusal, verification, and careful task communication. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+heart-of-light provides an opt-in ethical communication framework for agents, with guidance for honesty, dignity, verification, calm refusal, and self-review.
 
-## Publisher: <br>
-[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw)
 
-## Use Case: <br>
-Operators use this documentation-only skill when they want an agent to apply an ethical reflection and communication posture to writing, research, code review, planning, and hard conversations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users could treat the skill's ethical or spiritual framing as professional, religious, or safety authority. <br>
-Mitigation: Use it only as an opt-in communication overlay; keep host instructions, professional advice, and safety controls authoritative. <br>
+## Use Case:
 
+External users and developers use this documentation-only skill as an ethical companion for agent communication, research, code review, writing, data analysis, and hard conversations. It is intended to guide tone, uncertainty handling, verification habits, and refusal behavior after explicit opt-in.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/heart-of-light) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or plain-text guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; no file, shell, or network access required by default.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.5 (source: server release evidence) <br>
+Risk: The artifact is documentation-only but describes helper scripts and prompt/config changes that are not present in the published files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect the installed package before running any referenced command, and do not rely on absent helpers for activation, logging, or configuration changes.
+
+Risk: The security summary flags inconsistent local-only and network statements.
+
+Mitigation: Treat privacy and network claims as unconfirmed until the publisher clarifies them; use least privilege and avoid secrets or network access unless verified.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/heart-of-light)
+- [SKILL.md](artifact/SKILL.md)
+- [README.md](artifact/README.md)
+- [AGENT_DISCOVERY.md](artifact/AGENT_DISCOVERY.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with optional shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only; activation is opt-in via HEART_OF_LIGHT_MODE=ON.]
+
+## Skill Version(s):
+
+2.0.13 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

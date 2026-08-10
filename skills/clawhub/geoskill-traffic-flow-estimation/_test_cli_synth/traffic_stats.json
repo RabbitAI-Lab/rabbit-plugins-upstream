@@ -1,0 +1,10 @@
+{
+  "count_t1": 20,
+  "count_t2": 20,
+  "avg_count": 20.0,
+  "dt_minutes": 5.0,
+  "flow_veh_per_hour": 240.0,
+  "displacement_px": 6.0,
+  "speed_m_per_s": 0.02,
+  "speed_km_per_h": 0.07200000000000001
+}

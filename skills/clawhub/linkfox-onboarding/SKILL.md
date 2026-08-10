@@ -188,7 +188,7 @@ source ~/.zshrc   # 或 source ~/.bashrc
 
 - Python 3（标准库 urllib/json/os）
 - `requests`：登录链路 HTTP 调用（生产 WAF 对 urllib 敏感），`pip install requests`
-- `qrcode` + `pillow`：二维码 PNG 生成，`pip install qrcode pillow`
+- 二维码 PNG / ASCII 生成：内置 `scripts/_qrgen.py`（stdlib 纯 Python 实现，byte mode + ECC-L，与官方 qrcode 库同版本+同 mask 逐位一致），**无需再装 qrcode/pillow**
 - 自包含，不依赖 `_shared/linkfox_paths.py`
 
 ## 接口契约

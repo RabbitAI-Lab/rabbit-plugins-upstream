@@ -1,0 +1,41 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+*.tmp
+*.tmp-*
+*.bak
+
+# Database files (user data)
+*.db
+*.db-journal
+*.db-wal
+
+# Scan results (user data)
+scan_results/
+
+# Lock files
+.bidding-hunter.lock
+.lock
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Logs
+*.log
+!CHANGELOG.md

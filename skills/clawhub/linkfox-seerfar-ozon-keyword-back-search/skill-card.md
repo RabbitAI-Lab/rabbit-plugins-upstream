@@ -1,44 +1,60 @@
-## Description: <br>
-Seerfar-Ozon关键词反查 helps agents use LinkFox's Seerfar Ozon keyword back-search API to reverse-look up organic and ad search terms for up to 20 Ozon product SKUs and return market metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Seerfar Ozon keyword back-search reverse-lookups Ozon and available Wildberries search keywords for up to 20 product SKU IDs, returning organic and advertising keyword metrics for listing optimization, competitor traffic-word discovery, and ad-word analysis.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External e-commerce operators, marketplace analysts, and agents use this skill to investigate which Ozon and available Wildberries search terms a product SKU appears under, then review search volume, rank, exposure, conversion, seller, and competition metrics for listing and advertising analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports that SKU lookup requests, session metadata, and full API responses may be shared with LinkFox services or stored locally by default. <br>
-Mitigation: Use the skill only for data appropriate to share with LinkFox, configure credentials deliberately, and review or remove saved response files according to local data-handling policy. <br>
-Risk: The security scan flags remote onboarding package download behavior and automatic feedback reporting as reasons for review before installation. <br>
-Mitigation: Review the feedback workflow and any onboarding package source before enabling those paths, and install only when the publisher and downloaded materials are trusted. <br>
-Risk: The skill consumes LinkFox credits for API calls and can incur extra cost when queries are repeated or paginated. <br>
-Mitigation: Confirm expected cost before additional calls and reuse cached or saved responses when they are sufficient. <br>
+## Use Case:
 
+External marketplace operators, ecommerce analysts, and agent users use this skill to reverse-look up search terms for Ozon product SKUs and compare organic, advertising, demand, competition, pricing, and conversion metrics. It supports SKU-driven keyword research for listing optimization and competitor traffic analysis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-seerfar-ozon-keyword-back-search) <br>
-- [Seerfar Ozon keyword back-search API reference](references/api.md) <br>
-- [LinkFox tool gateway endpoint](https://tool-gateway.linkfox.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, JSON files, guidance] <br>
-**Output Format:** [Markdown tables and summaries with saved JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LinkFox API credentials; full responses are written to local JSON files, with small responses also printed inline.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill requires LinkFox account credentials and may touch account login, API-key, billing, and feedback workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the publisher is trusted; prefer session-scoped API-key configuration and review onboarding or payment commands before running them.
+
+Risk: Keyword lookup calls consume paid credits and repeated lookup attempts can increase cost.
+
+Mitigation: Confirm user intent before additional paid calls, rely on the 24-hour local cache where applicable, and avoid automatic retries with changed parameters.
+
+Risk: The lookup script writes full API responses to local session files.
+
+Mitigation: Review the output path and stored response files before sharing or committing workspace contents.
+
+## Reference(s):
+
+- [API Reference](references/api.md)
+- [Authentication and Billing Onboarding](references/onboarding.md)
+- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-seerfar-ozon-keyword-back-search)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [JSON response files plus stdout JSON or concise text summaries suitable for markdown tables.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are saved under a session-scoped linkfox data directory; responses over 8 KB are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

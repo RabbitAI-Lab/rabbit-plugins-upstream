@@ -7,6 +7,178 @@ and this skill adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.14.1] - 2026-08-07
+
+### Fixed
+
+- Completeness audit against the pre-split originals rescued three items that the condensation
+  would otherwise have dropped: the OpenTelemetry-metrics subsection (the only text unique to
+  the embedded performance-guide copy, now its own Part A section); the "authoritative in-repo
+  sources" pointer from the old reference preamble (now in the `lance-reference.md` index); and
+  the generated per-language SDK docs URL (restored to the ecosystem paragraph in `SKILL.md`).
+  Verified by line-level `comm` against `git show HEAD:` originals: zero content lines, zero of
+  57 section headings, zero of 271 PR citations, and zero of 48 measured-figure tokens lost.
+
+## [0.14.0] - 2026-08-07
+
+### Changed
+- Consolidated the skill's structure. No upstream re-grounding: still `v11.0.0-beta.2`, and no
+  benchmark-verified figure was removed - every relocated fact is cited below.
+- `SKILL.md` 32,029 -> ~14.6k chars. The four "What's new in v9 / v9.1 / v10 / v11" sections
+  collapsed into a `Version landscape` table (one row per major, naming its breaking theme) plus
+  a compressed `The v11 delta`; all 66 PR citations were verified present in the reference files
+  before cutting. The 45-row docs-mirror file map became one row per directory with a file count
+  (the "Not mirrored" paragraph is unchanged, verbatim). The crate-workspace section, the
+  release-train prose, and `Navigating the reference` were compressed; the sparse
+  auto-selection deep dive was dropped in favour of the fuller treatment in section 3.1.
+- `references/lance-reference.md` (170,653 chars) split into five topic files, each with its own
+  table of contents: `format-file.md` (sections 1-4), `format-table.md` (5-10), `indexes.md`
+  (11-12), `ops.md` (13, 15, 16), `changelog-v7-v11.md` (14). `lance-reference.md` is now a stub
+  mapping the original 16 section numbers onto those files, so existing "see section N"
+  cross-references still resolve.
+- `references/performance.md` 69,077 -> ~38.6k chars, and gained a table of contents. Part A no
+  longer re-copies text that already exists byte-identically in `references/docs/`: the embedded
+  `guide/performance.md` copy, the full-text-search "Performance Tips", the JSON "Performance
+  Considerations", and the transaction "CreateIndex Compatibility" block are replaced by a
+  routing table pointing at the mirrored files and headings. The OpenTelemetry-metrics
+  subsection, which was the only content unique to the embedded copy, was relocated to its own
+  section in Part A. Both "Performance changes not in the guide" subsections and all of Part B
+  are unchanged.
+
+### Added
+- `references/maintenance.md` - the refresh workflow moved out of `SKILL.md`, extended with the
+  reference-file layout table.
+
+
+## [0.13.0] - 2026-08-07
+
+### Changed
+- Re-grounded against upstream `v10.0.0-beta.7` -> `v11.0.0-beta.2` (128 commits, 9
+  breaking-labeled PRs). Retitled "Lance v10" -> "Lance v11"; bumped the workspace pin,
+  permalink base, and citation tag across `SKILL.md`, both references, and `skill-card.md`.
+- **Release-line correction**: `v10.0.0` FINAL was never tagged - `release/v10.0` sits at
+  `10.0.0-rc.3` and branched exactly at `v10.0.0-beta.7`. The `10.1.0-beta.*` line was
+  re-rooted in place as `11.0.0-beta.*` by the release bot; both release-root tags share
+  base `10.0.0-rc.1`. The stable pin is now **`v9.0.1`** (2026-08-06), matching crates.io.
+- **Module reorganization** (section 2.1, new): `lance-encoding::version` deleted -
+  `LanceFileVersion` and `ConcreteFileVersion` now live in `lance-file::version`. `FileWriter`
+  became an enum, `lance_io::encodings` and `lance-encoding::previous` were removed, and
+  per-version `versions/v2_{0,1,2,3}` / `array_encoding` trees replaced them.
+- **Breaking (format-level)**: fragment ids are now a dataset-lifetime high-water mark -
+  overwrite no longer restarts at 0, overwrite fragments carrying a deletion file are
+  rejected, and duplicate fragment ids block all commits (#8206).
+- Commit-handler routing table corrected: `goosefs` (#8134) plus the already-missing
+  `abfss` / `tos` / `shared-memory` all route to `ConditionalPutCommitHandler`.
+- Dependency pins: `opendal 0.57 -> 0.58.1`, `object_store_opendal 0.58`; `strum` and
+  `goosefs-sdk` dropped from workspace deps; `rust-stemmers -> frostem` (Greek panic fix).
+- Doc mirror resynced: 4 changed files (`guide/migration.md`, `guide/object_store.md`,
+  `guide/observability.md`, `quickstart/full-text-search.md`). No files added or removed.
+- Compressed the v9/v8/v7 history sections in `SKILL.md` to make room for v11 under the
+  repo's 500-line cap; stripped stale "(current tag)" labels from historical delta headings.
+
+### Added
+- New FTS index axis: `DocumentGranularity` (ROW / LIST_ELEMENT), `posting_format_version`,
+  the `_doc_index` column, and `list_element` as a third trigger requiring FTS format v3.
+- Zone map `has_null_bitmap` (making `IS NOT NULL` scan-free) and all-type support, with
+  null counts only for nested types.
+- Compound FTS scoring core - Boolean/Phrase/Boost composition, public `CompoundQueryExec`,
+  cost-ordered conjunctions; `AND` clauses are scoring `MUST` clauses that affect `_score`.
+- Manifest transaction spilling above 20 MiB; pluggable cache-backend registry (`moka://`);
+  `CacheBackend::deep_size_of_entries` and its effect on reported cache sizes.
+- Object store: `aws_provider_scheme` (token / ecs / irsa); the GooseFS conditional-put
+  migration and its mixed-version overwrite hazard; multipart-retry part-identity fix.
+- Query-time vector knobs `nprobes` and `refine_factor`; the `when_not_matched_by_source_*`
+  merge-insert family; the FTS 18-language roster and text-vs-json document types;
+  jieba/lindera user dictionaries; MemWAL GC and reader-consistency semantics; dense-vs-sparse
+  data-overlay shapes; the JSON projection limitation; the Blob v2 rewrite-migration path; and
+  the wider ecosystem (Flink, pglance, Lance Graph, named catalog implementations).
+- `performance.md`: a new "Local-filesystem crash safety and recovery" subsection (no
+  fallback to version N-1 on a corrupt manifest; `latest_version_hint.json` is not read on
+  local; `count_rows` cannot validate integrity), plus auto-cleanup gating economics,
+  `LANCE_MEM_POOL_SIZE` sizing, `optimize_indices` delta-collapse semantics, WORM/Object Lock
+  incompatibility, and `memory://` vs `shared-memory://` test-isolation traps.
+- `lance-reference.md`: the SQL/DataFusion surface has no kNN; dataset *creation* is not
+  OCC-protected; the FRI is not per-index coverage; NGRAM vs FM-Index matching semantics; the
+  benign IVF_PQ empty-partition warning; volume-independent scalar-index pushdown.
+
+### Fixed
+- Sparse-writer citation corrected to `encoding.md:373-375`.
+- ACORN-1 nuance added: skipped when the prefilter mask passes all rows or leaves under 10%,
+  with fallback to `search_basic`.
+
+Verified against: lance-format/lance@v11.0.0-beta.2
+
+## [0.12.0] - 2026-07-30
+
+### Changed
+- Re-grounded against upstream `v9.1.0-beta.8` -> `v10.0.0-beta.7` (78 commits, 4 breaking);
+  bumped workspace version pin, permalink base, and citation tag. Retitled "Lance v9" ->
+  "Lance v10". Resynced the 5 changed doc-mirror files.
+- **Release-line correction**: `v9.0.0` FINAL shipped 2026-07-24 and is now the stable pin
+  (supersedes `v8.0.0`). The `9.1.0-beta.*` dev line was mechanically re-rooted as
+  `10.0.0-beta.*` by CI breaking-change detection, so `v9.1.0` was never tagged. `v9.0.0`
+  lives on `release/v9.0` (now `9.0.1-beta.0`) and is not an ancestor of `main`. crates.io
+  publishes finals only - newest is `lance 9.0.0`, so beta pins are git dependencies.
+- **Crate pins**: `lance-arrow-stats` is also pinned `=58.0.0` (the skill previously named only
+  `lance-arrow-scalar`); new workspace dep `blake3 1.8.5`.
+- File format 2.3: sparse structural pages are now **auto-selected** by the 2.3 writer under a
+  rep/def budget heuristic (PR #7756); `structural-encoding` reworded "Select" -> "Force".
+- MemWAL vocabulary overhaul across spec, Rust, Python, Java, and proto (section 10), with a
+  full rename map.
+- `performance.md`: corrected the "`cleanup_older_than` defaults to ~1 hour" claim - Python
+  `cleanup_old_versions` defaults `older_than` to 14 days; the 3600s figure is the docs'
+  `lance.auto_cleanup.older_than` example, not a library default.
+
+### Added
+- Section 14: `v9.1.0-beta.8 -> v10.0.0-beta.7` delta subsection.
+- Section 3.6: `ConcreteFileVersion` exact-identity type, the DataFile encode/decode wire
+  table, and the byte-exact writer fixtures.
+- Section 3.5: `read_blob_ranges` as the fourth blob read path, plus the null-preservation
+  signature table.
+- Section 9.4: cache keys and backend - `CACHE_KEY_FORMAT = "blake3-128-v1"`, removed cache
+  APIs, `QuickCacheBackend`, and the per-shard admission ceiling that silently refuses
+  oversized entries.
+- Section 11.1: ACORN-1 prefiltered HNSW traversal (opt-in, `approx_mode="fast"`) with its
+  documented recall regression; vector append across heterogeneous segment models.
+- Section 11.2/12: segmented index family extended to BLOOMFILTER, RTREE, NGRAM, LABEL_LIST;
+  `IndexSegment::new` signature change; the NGRAM merge-before-commit constraint.
+- Section 11.3: FTS `total_tokens` metadata key, `LANCE_FTS_SEARCH_CHUNK`, top-k row-id
+  resolution, deterministic tie ordering, `bm25_search` removal.
+- Sections 5.5/9.1: data-overlay/index correctness work and the proto-rename impact.
+- Section 13: `memory://` fix, env-var validation, tokio-shutdown fix, and the namespace
+  error-classification change.
+- `performance.md` Part A: a source-derived "Performance changes not in the guide" subsection
+  (cache admission ceiling, FTS chunking, top-k row-id resolution, concurrent segment commit).
+- `performance.md` Part B: `Dataset::versions()` O(history) manifest reads, the 7-day
+  unverified-file floor, transient index-set doubling on `replace=true`, typed commit-conflict
+  errors, `merge_insert` mode switching on source schema shape, bitmap-index prefix-LIKE
+  erroring, blob-column SQL descriptors, and local-FS durability delegation.
+- SKILL.md: an explicit note that `docs/src/images/` is not mirrored.
+
+### Changed (breaking, upstream)
+- **Blob APIs preserve null selections** (#7903, the PR that triggered the v10 bump): Rust
+  `take_blobs*` -> `Vec<Option<BlobFile>>`, `ReadBlob::data` -> `Option<Bytes>`; Python
+  `read_blobs -> List[Tuple[int, Optional[bytes]]]`, `take_blobs -> List[Optional[BlobFile]]`;
+  Java lists may contain null elements.
+- **Cache keys are an opaque 16-byte BLAKE3 digest** (#7878) - all warm/persisted caches
+  cold-miss after upgrade, no legacy fallback; `invalidate_prefix`, `LanceCache::keys`, and
+  `Session::*_cache_keys` removed.
+- **`IndexRemapperOptions::create_remapper` is now async**, returning
+  `Result<Option<Box<dyn IndexRemapper>>>` (#7778).
+- **MemWAL renames** (#7943, #7957): proto `FlushedGeneration` -> `SsTable`,
+  `MergedGeneration` -> `CompactedSsTable`, `flushed_generations` -> `sstables`,
+  `merged_generations` -> `compacted_sstables`. Wire-compatible (field numbers unchanged) but
+  every generated symbol and binding name changes; no deprecation shims.
+- `LanceFileVersion::try_from_major_minor` and `to_numbers` removed (#7879).
+- `InvertedPartition::bm25_search` removed (#7863).
+- Directory namespace no longer collapses storage failures into `TableNotFound` (#7931).
+
+### Security
+- `quinn-proto` 0.11.14 -> 0.11.16 (Dependabot security alert) across the root workspace,
+  `/python`, and `/java/lance-jni` (#7983, #7984, #7982).
+
+Verified against: lance-format/lance@v10.0.0-beta.7
+
 ## [0.11.1] - 2026-07-22
 
 ### Added

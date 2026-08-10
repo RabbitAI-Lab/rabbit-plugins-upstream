@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/clawhub-sync",
   "slug": "clawhub-sync",
   "ownerHandle": null,
-  "version": "1.4.1",
-  "updatedAt": 1778492158429,
-  "contentHash": "a5bbdfd1153fecfe090dde2acf3ee359485b265ffaa0bdb9aaac6225c81eaa2a",
-  "fetchedAt": "2026-07-26T19:50:33.268Z"
+  "version": "1.6.0",
+  "updatedAt": 1785764231323,
+  "contentHash": "c3827cf90ebed1df4e22c55caf35de6aeb4492de02b5091ace644c51f635dbdf",
+  "fetchedAt": "2026-08-10T09:37:08.961Z"
 }

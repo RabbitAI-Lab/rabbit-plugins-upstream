@@ -1,0 +1,17 @@
+{
+  "n_scenes": 5,
+  "n_bands": 4,
+  "per_scene_cloud_fraction": [
+    0.25,
+    0.25,
+    0.25,
+    0.25,
+    0.25
+  ],
+  "mean_cloud_fraction": 0.25,
+  "full_gap_fraction": 0.00177001953125,
+  "method": "median",
+  "percentile": 50.0,
+  "residual_gap_pixels": 116,
+  "composite_valid_fraction": 0.99822998046875
+}

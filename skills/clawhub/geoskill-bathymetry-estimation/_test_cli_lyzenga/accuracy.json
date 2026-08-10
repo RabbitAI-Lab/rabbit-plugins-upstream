@@ -1,0 +1,21 @@
+{
+  "method": "lyzenga",
+  "blue_index": 0,
+  "green_index": 1,
+  "coefficients": {
+    "c0": -2.757586,
+    "c1": -3.737645,
+    "c2": -0.184543
+  },
+  "calibrated": true,
+  "n_calibration": 200,
+  "max_depth": 40.0,
+  "water_pixels": 2874,
+  "mean_depth": 3.5846,
+  "accuracy": {
+    "rmse": 0.06,
+    "mae": 0.046,
+    "r2": 0.997898,
+    "n_valid": 2874
+  }
+}

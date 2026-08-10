@@ -1,0 +1,4 @@
+interface:
+  display_name: "通用可用性判断"
+  short_description: "跨行业判断产品、服务与各类资源的真实可用状态和条件"
+  default_prompt: "Use $zayn-general-availability to assess availability and state what can be promised."

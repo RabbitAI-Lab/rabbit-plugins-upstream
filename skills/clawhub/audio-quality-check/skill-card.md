@@ -1,42 +1,54 @@
-## Description: <br>
-Audio Quality Check helps agents analyze local audio recordings for echo, loudness, speech intelligibility, SNR, spectral characteristics, and related quality issues. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes audio recording quality - echo detection, loudness, speech intelligibility, SNR, and spectral analysis.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers, engineers, and audio reviewers use this skill to run local recording diagnostics, interpret metrics, and identify likely causes of poor call audio such as echo, bleed, noise, or AEC degradation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Call recordings may contain private speech or sensitive meeting content. <br>
-Mitigation: Run the analyzer only on recordings the user is authorized to inspect, and avoid sharing generated reports outside the intended review context. <br>
-Risk: The skill depends on local audio-analysis tooling and Python packages that must be installed before use. <br>
-Mitigation: Install dependencies from trusted package sources and review the local environment before running analysis commands. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect call recordings, diagnose echo or duplication, compare original and processed tracks, and summarize loudness, intelligibility, spectral, and SNR findings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/audio-quality-check) <br>
-- [Project homepage](https://github.com/tenequm/skills/tree/main/skills/audio-quality-check) <br>
-- [Apache License 2.0](https://www.apache.org/licenses/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, code, guidance] <br>
-**Output Format:** [Markdown guidance with bash and Python snippets plus terminal report text from the bundled analyzer] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user-selected local audio recordings and ffmpeg/ffprobe; analysis is performed locally according to the reviewed artifacts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: evidence.release.version and artifact metadata.version) <br>
+Risk: Terminal output can expose sensitive details from private recordings, including metadata, speaker names, and quality metrics.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the skill only on intended recording folders and review or redact analysis output before sharing it outside the trusted workspace.
+
+Risk: The skill invokes local audio tooling and Python libraries over user-selected media files.
+
+Mitigation: Install dependencies from trusted package sources and analyze only trusted local media in a controlled environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tenequm/skills/audio-quality-check)
+- [OpenClaw homepage](https://github.com/tenequm/skills/tree/main/skills/audio-quality-check)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown with inline shell commands and terminal analysis summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include local recording metadata, speaker names, track information, and audio quality metrics when present in selected files.]
+
+## Skill Version(s):
+
+0.1.3 (source: SKILL.md frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

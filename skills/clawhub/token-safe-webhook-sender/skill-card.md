@@ -1,42 +1,55 @@
-## Description: <br>
-Secure webhook token management using MGC Blackbox for DingTalk, WeCom, Feishu, Telegram, Slack, and similar notification webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Secure webhook token management using MGC Blackbox for DingTalk, WeCom, Feishu, Telegram, Slack, and similar notification targets while guiding agents toward token handling patterns that avoid exposing webhook secrets to the model.
 
-## Publisher: <br>
-[zkeviny](https://clawhub.ai/user/zkeviny) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zkeviny](https://clawhub.ai/user/zkeviny)
 
-## Use Case: <br>
-Developers and operators use this documentation skill to store webhook credentials in MGC Blackbox and retrieve them when sending deployment, CI/CD, monitoring, collaboration, or workflow notifications. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The scanner reports that this credential-management workflow can give agents enough detail to read a local MGC auth token and retrieve stored secrets despite zero-exposure claims. <br>
-Mitigation: Prefer the WebUI for entering secrets, do not let agents read the MGC token file directly, and restrict agent access to secret-retrieval tools unless the workflow requires it. <br>
-Risk: Temporary plaintext token files or logs can expose webhook credentials during setup or troubleshooting. <br>
-Mitigation: Avoid plaintext token files where possible, never log webhook tokens, and delete any temporary token files immediately after import. <br>
+## Use Case:
 
+Developers and operators use this skill to configure agents to send webhook notifications while keeping service tokens in MGC Blackbox rather than in prompts, logs, or generated code. It is suited for deployment alerts, monitoring notifications, CI/CD updates, and team collaboration bots.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zkeviny/skills/token-safe-webhook-sender) <br>
-- [MGC Blackbox project](https://github.com/zkeviny/MGC-Blackbox) <br>
-- [MGC Blackbox issues](https://github.com/zkeviny/MGC-Blackbox/issues) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration, shell commands, code] <br>
-**Output Format:** [Markdown guidance with JSON examples, shell commands, and conceptual code] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; no executable code is included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence and artifact frontmatter) <br>
+Risk: The security scan reports that the skill is documentation-only but provides a concrete path that could retrieve stored webhook secrets despite zero-exposure claims.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the WebUI and mgc_run flow, avoid granting agents plaintext retrieval access, and review stored scripts before sealing or running them.
+
+Risk: Webhook notification flows can disclose sensitive operational data if messages or bot permissions are too broad.
+
+Mitigation: Use send-only or least-privilege webhook credentials, separate tokens per platform or bot, and rotate tokens regularly.
+
+## Reference(s):
+
+- [MGC Blackbox](https://github.com/zkeviny/MGC-Blackbox)
+- [MGC Blackbox Issues](https://github.com/zkeviny/MGC-Blackbox/issues)
+- [ClawHub Skill Page](https://clawhub.ai/zkeviny/skills/token-safe-webhook-sender)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with JSON examples, shell commands, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces instructions for storing webhook tokens, invoking MGC tools, and passing runtime message content without exposing plaintext secrets to the model.]
+
+## Skill Version(s):
+
+1.2.0 (source: frontmatter, manifest, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
