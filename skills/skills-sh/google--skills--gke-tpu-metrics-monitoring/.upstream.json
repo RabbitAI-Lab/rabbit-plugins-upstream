@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-tpu-metrics-monitoring",
+  "repo": "google/skills",
+  "skillId": "gke-tpu-metrics-monitoring",
+  "branch": "main",
+  "pushedAt": "2026-08-11T01:59:50Z",
+  "contentHash": "75ccfbe91bc5261586b3bfc9ccf0259d5d9f98723a931d3f24d4b4c5fb7d69ce",
+  "fetchedAt": "2026-08-11T08:19:52.504Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/skill-creator",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "skill-creator",
+  "branch": "main",
+  "pushedAt": "2026-08-10T11:52:05Z",
+  "contentHash": "a723a0e06fff97b56cf7c0ba334aa3b531d9f1e701cc32232ddb2c5ae31c482a",
+  "fetchedAt": "2026-08-11T08:19:57.937Z"
+}
