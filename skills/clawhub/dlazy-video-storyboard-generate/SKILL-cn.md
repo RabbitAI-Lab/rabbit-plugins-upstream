@@ -1,7 +1,7 @@
 ---
 name: dlazy-video-storyboard-generate
 version: 1.2.3
-description: 1. Get the storyboard info
+description: "1. Get the storyboard info"
 triggers:
   - Storyboard Video Generation Pipeline
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当你需要使用此技能时，请严格遵循此技能提供的指南进行规划和执行。你可以通过调用 dlazy CLI 的各类生成模型（如 dlazy seedream-4.5 等）来完成实际的图片渲染。注意：Windows PowerShell 中不允许使用 `&` 或 `&&` 进行命令串联或后台运行，请单独且同步地执行命令。"}}
@@ -65,7 +65,7 @@ name: 'video-storyboard-generate'
 description: 'Convert the contents of a storyboard into a video-generation pipeline that the user can add to the canvas.'
 ---
 
-# Storyboard Video Generation Pipeline
+# 分镜视频生成 Storyboard Video
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

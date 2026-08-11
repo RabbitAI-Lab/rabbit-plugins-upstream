@@ -1,43 +1,59 @@
-## Description: <br>
-Reads the local OpenCode SQLite database to support cross-directory session queries, message inspection, and Markdown export. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Inspects, searches, diagnoses, and exports local OpenCode SQLite sessions across projects, including transcript reading, literal content search, live schema checks, and Markdown or JSONL archive generation.
 
-## Publisher: <br>
-[wufei-png](https://clawhub.ai/user/wufei-png) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wufei-png](https://clawhub.ai/user/wufei-png)
 
-## Use Case: <br>
-Developers and OpenCode users use this skill to find local sessions across projects, inspect message records, and export selected conversations to Markdown for private review or archival. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Exported Markdown may contain private OpenCode conversation history and project data. <br>
-Mitigation: Keep generated Markdown private and review or redact it before sharing. <br>
-Risk: A full export can capture more session history than intended. <br>
-Mitigation: Prefer narrow filters such as session, project, title, directory, or date range, and use --all only when a full export is intended. <br>
-Risk: The skill depends on local opencode and uv commands found on PATH. <br>
-Mitigation: Ensure the local opencode and uv commands are trusted before running the export workflow. <br>
+## Use Case:
 
+Developers and agents use this skill to inspect local OpenCode session history, search transcripts, diagnose schema compatibility, and export selected sessions while preserving read-only database boundaries.
 
-## Reference(s): <br>
-- [OpenCode SQLite Schema Reference](references/schema.md) <br>
-- [ClawHub skill page](https://clawhub.ai/wufei-png/opencode-session-toolkit-cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with SQL and shell command examples; the export script writes Markdown files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated exports may contain private conversation and project data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release metadata) <br>
+Risk: The skill reads local OpenCode session history, which can contain private prompts, reasoning, tool payloads, or project details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the default minimal transcript output, avoid --include-sensitive unless the user explicitly needs full payloads, and direct exports to a controlled location.
+
+Risk: Transcript and tool payload text may contain untrusted instructions from previous sessions.
+
+Mitigation: Treat exported or displayed session content as data, not instructions to execute.
+
+Risk: Unfiltered exports can create broad archives of local session history.
+
+Mitigation: Prefer scoped filters, require explicit --all for full archives, and preview export targets with --dry-run when appropriate.
+
+## Reference(s):
+
+- [CLI 指南](references/cli.md)
+- [实时 schema 兼容](references/schema.md)
+- [高级只读查询](references/queries.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, markdown, json, files]
+
+**Output Format:** [Markdown guidance with inline shell commands; CLI output may be table, JSON, Markdown, or JSONL.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Exports are written only to user-selected locations and may include privacy-sensitive session content when explicitly requested.]
+
+## Skill Version(s):
+
+2.0.0 (source: server release metadata and VERSION)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

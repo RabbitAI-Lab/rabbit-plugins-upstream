@@ -1,43 +1,56 @@
-## Description: <br>
-Enables agents to call Gemini models through RunAPI using OpenAI-compatible chat completions or Gemini contents clients for chat, streaming, multimodal input, Google Search grounding, structured output, and reasoning-effort workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Call the Gemini API through RunAPI using OpenAI-compatible clients or Gemini contents clients for chat, streaming completions, multimodal vision input, Google Search grounding, structured output, and reasoning-effort workflows.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to connect existing OpenAI or Gemini client code to Gemini models through RunAPI, including streaming, multimodal, grounding, structured-output, and model-list workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, images, files, and other request content may be sent to an external RunAPI-backed Gemini service. <br>
-Mitigation: Avoid sending secrets, regulated data, or confidential business material unless that data sharing is approved for the use case. <br>
-Risk: Long Gemini generations can keep an agent waiting on a blocking response. <br>
-Mitigation: Use streaming for longer responses as directed by the skill guidance. <br>
+## Use Case:
 
+Developers and agents use this skill to configure Gemini requests through RunAPI, including OpenAI-compatible chat completions and native Gemini contents routes. It is intended for building or adapting applications that need Gemini text, streaming, multimodal, grounding, structured-output, or reasoning examples through a RunAPI key.
 
-## Reference(s): <br>
-- [RunAPI Gemini model documentation](https://runapi.ai/models/gemini.md) <br>
-- [RunAPI Gemini model page](https://runapi.ai/models/gemini) <br>
-- [RunAPI Google provider documentation](https://runapi.ai/providers/google.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline code blocks, API request examples, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces integration guidance for RunAPI-backed Gemini requests; the skill itself does not execute hidden commands or perform destructive actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.11 (source: server release metadata) <br>
+Risk: Prompts, images, request payloads, and API credentials may be sent to RunAPI and Gemini when following this skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with an approved provider path, keep RUNAPI_TOKEN secret, and avoid secrets, personal data, or regulated content unless organizational policy permits that use.
+
+Risk: The skill provides integration guidance and examples, so generated calls or model choices may need review before use in an application.
+
+Mitigation: Review generated code and shell commands before execution, and verify current model availability, pricing, quotas, and rate limits against the linked RunAPI documentation.
+
+## Reference(s):
+
+- [RunAPI Gemini model page](https://runapi.ai/models/gemini)
+- [RunAPI Gemini documentation](https://runapi.ai/models/gemini.md)
+- [RunAPI Google provider page](https://runapi.ai/providers/google.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline code, JSON examples, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a RunAPI API key supplied through RUNAPI_TOKEN; optional Gemini-compatible environment aliases are GOOGLE_API_KEY and GOOGLE_GENAI_BASE_URL.]
+
+## Skill Version(s):
+
+0.2.13 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

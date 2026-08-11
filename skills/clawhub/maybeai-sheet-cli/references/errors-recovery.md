@@ -14,6 +14,8 @@
 10. Dashboard chart write ambiguity
 11. Pre-delivery verification
 12. Full refresh changed numeric-string precision
+13. Full refresh returned `written_unverified`
+14. Required worksheet identity changed
 
 ## 1. When to use this
 
@@ -74,14 +76,14 @@ Common causes:
 
 - misspelled column names
 - worksheet names not wrapped in double quotes
-- SQL dialect is too exotic or outside the current conservative PG worksheet SQL subset
+- SQL dialect is too exotic or outside the current conservative Base worksheet SQL subset
 - `WITH` or a more complex structure is rejected by the backend
 
 Recovery:
 
 1. `mbs excel-table schema` or `mbs db-table schema`
 2. optionally use a small `mbs excel-worksheet range read`
-3. rewrite the query toward the conservative PG worksheet SQL subset
+3. rewrite the query toward the conservative Base worksheet SQL subset
 4. compile first, then write the SQL result
 
 ## 6. Formula or spill result shows worksheet errors
@@ -99,7 +101,7 @@ Recovery:
 2. if the formula text itself may be wrong, inspect it with `mbs formula read`
 3. rerun `mbs excel-worksheet calculate` or `mbs workbook calculate` when the workbook should recache results
 4. read the affected range with `mbs excel-worksheet read --output table`
-5. if the error came from `=SQL(...)`, validate headers with `mbs excel-table schema` or `mbs db-table schema` and simplify the SQL
+5. if the error came from a legacy `=SQL(...)` cell, validate headers with `mbs excel-table schema` or `mbs db-table schema` and simplify the SQL
 
 Do not claim a report or model worksheet is healthy based only on a successful
 formula write; verify the result range is free of worksheet errors.
@@ -203,3 +205,61 @@ Recovery:
 3. If exact text is required, do not use the full-refresh command for that
    field; write an exact bounded range through the RAW range-write path.
 4. Re-read the affected cells and confirm no column misalignment occurred.
+
+## 13. Full refresh returned `written_unverified`
+
+Common symptoms:
+
+- `mbs worksheet import ... --strategy replace --verify` exits nonzero
+- stdout includes `written_unverified` or `verify failed`
+- the response has `error: null`
+
+This is an indeterminate verification result, not proof that the write failed.
+Do not say the online sheet remains unchanged, set the task to `BLOCKED`, or
+ask the user to select a recovery path until live values have been compared.
+
+Recovery:
+
+1. Read the refreshed footprint or, for a large sheet, header row plus known
+   changed sentinels and the previous last row. Do not inspect only an unrelated
+   prefix such as `A1:F5` when the claimed change is elsewhere.
+2. Compare live cells with source JSON by header. Use exact comparison for text
+   and a documented tolerance for Excel-normalized numeric/date values.
+3. A changed entity/service set does not by itself change the JSON key set when
+   keys are date-column headers; do not use that as a failure explanation.
+4. If values match, report success with the CLI verification warning. If they
+   differ, automatically use range clear + range write when it preserves the
+   required worksheet behavior. When the user required the original worksheet,
+   snapshot the latest history entry and formula cells first, then re-read that
+   history entry immediately before fallback. Stop the automatic fallback when
+   it changed, collaborators are actively editing, or a schema change alters
+   formula semantics; the CLI has no lock/revision precondition and must not
+   overwrite those changes. Otherwise pass
+   `--gid <RECORDED_GID>` to every range mutation, calculate, and error check;
+   do not delete, recreate, copy, import, or rename-swap worksheets. Exclude
+   formula cells from raw clear/write. For a changed header/schema, clear and
+   write the owned value/header ranges from `A1`, including the new header row;
+   use `A2` only when headers are unchanged. Recalculate and scan formula
+   results for errors before reporting success.
+
+## 14. Required worksheet identity changed
+
+Common symptoms:
+
+- the target worksheet has the same name after a refresh, but a different `gid`
+- a recovery deleted, recreated, copied, imported, or rename-swapped a sheet
+- a user asked to overwrite the original data or not to create another sheet
+
+This is a failed outcome even when the visible data looks correct. A worksheet
+name is not its identity.
+
+Recovery:
+
+1. Before a write, record the target name and `gid` with `mbs workbook list-worksheets`.
+2. For full refreshes, prefer `worksheet import --strategy replace`; when that
+   is unsuitable, use `excel-worksheet range clear` and `range write` on the
+   same recorded worksheet. Before each range mutation, confirm the target name
+   still maps to the recorded `gid` and pass `--gid <RECORDED_GID>`; for a
+   header/schema change, cover the owned value/header range beginning at `A1`.
+3. Run `workbook list-worksheets` after the write. Report success only when the
+   original name still maps to the recorded `gid`.

@@ -1,41 +1,48 @@
-## Description: <br>
-Keeps English Markdown and Chinese Markdown pairs in structural and topical sync, with reciprocal language links at the top of each file. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Keeps English Markdown and Chinese Markdown pairs in structural and topical sync, with reciprocal language links at the top of each file.
 
-## Publisher: <br>
-[haodong-lei-ray](https://clawhub.ai/user/haodong-lei-ray) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[haodong-lei-ray](https://clawhub.ai/user/haodong-lei-ray)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and documentation maintainers use this skill to keep paired English and Chinese Markdown files aligned in structure, topic coverage, code examples, and reciprocal language links.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The agent may update the paired Markdown file when the user intended only a one-off translation or single-file edit.
+
+Mitigation: Ask the user whether the paired file should be changed or left alone when the request is ambiguous.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and documentation maintainers use this skill to keep paired English and Chinese Markdown files aligned after edits, including headings, lists, code blocks, frontmatter, and reciprocal language-switch links. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Markdown, Code, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may select the wrong source or counterpart Markdown file when naming conventions differ from the default. <br>
-Mitigation: Confirm the exact source and paired target paths before accepting edits. <br>
-Risk: Generated translations or language-switch badge snippets may be inaccurate, stale, or point to the wrong paired document. <br>
-Mitigation: Review translated prose, relative links, and badge href targets before committing changes. <br>
+**Output Format:** [Markdown edits, structured review notes, and inline code or configuration blocks when needed]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/haodong-lei-ray/bilingual-md-sync) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/haodong-lei-ray) <br>
+**Other Properties Related to Output:** [Preserves code blocks, commands, paths, URLs, configuration keys, and user-specified verbatim text while synchronizing paired documents.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown edits and guidance with inline Markdown, HTML, and code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce paired document updates, translated prose, relative language-switch links, and optional shields.io badge snippets.] <br>
+1.4.0 (source: server release metadata and artifact _meta.json)
 
-## Skill Version(s): <br>
-1.3.0 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

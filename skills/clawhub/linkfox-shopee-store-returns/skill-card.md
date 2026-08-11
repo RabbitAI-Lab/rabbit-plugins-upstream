@@ -1,44 +1,60 @@
-## Description: <br>
-Helps agents query and manage Shopee store return and refund workflows through the Shopee Open API Returns module, including return lists, details, confirmations, disputes, offers, proof upload, and reverse tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents query and manage Shopee store return and refund workflows through LinkFox's Shopee Returns API scripts, including return lists, details, confirmations, disputes, offers, proof uploads, and reverse tracking.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and support agents use this skill to inspect and process authorized Shopee store return and refund cases. It is intended for return/refund lookup, seller decisions, dispute handling, proof management, and reverse logistics tracking after the required Shopee store authorization skill is available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change merchant return or refund state through actions such as confirm, dispute, offer, accept_offer, cancel_dispute, and upload operations. <br>
-Mitigation: Require explicit user confirmation before running state-changing actions and review the request body for the intended shop, return_sn, and seller decision. <br>
-Risk: Full API responses may contain sensitive business or customer data and can be saved in local linkfox output folders. <br>
-Mitigation: Review saved response files after use, delete data that is no longer needed, and avoid sharing saved outputs unless they have been checked for sensitive information. <br>
-Risk: The skill depends on an authorized Shopee store token supplied through the companion auth skill. <br>
-Mitigation: Install and authorize only the intended Shopee store, keep LinkFox API keys scoped to the operator's role, and stop if the dependency check reports a missing or unexpected auth setup. <br>
+## Use Case:
 
+External sellers, operators, and support agents use this skill to inspect and act on Shopee store return and refund cases after the store authorization dependency is available. It is suited for workflows that require return detail lookup, seller decisions, dispute handling, proof upload, or reverse-logistics tracking.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-returns) <br>
-- [Shopee Returns API reference](references/api.md) <br>
-- [Shopee Open Platform Returns index](https://open.shopee.com/documents/v2/v2.returns.get_return_list?module=102&type=1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown guidance, shell command examples, stdout JSON or summaries, and saved JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a LinkFox API key and the linkfox-shopee-store-auth dependency for authorized store tokens; large responses may be summarized on stdout while full responses are saved locally.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release evidence) <br>
+Risk: The skill uses a LinkFox API key and can call live Shopee return and refund APIs through LinkFox.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after reviewing the skill, store API keys in the documented environment variables, and require explicit user confirmation before live return, refund, dispute, offer, or proof-upload actions.
+
+Risk: The bundled onboarding flow can perform phone/SMS login, API-key generation, and payment-order steps.
+
+Mitigation: Use onboarding only when account setup or billing is intentionally part of the task, and ask the user before sending codes, logging in, generating keys, creating orders, or presenting payment options.
+
+Risk: Full API responses are written to local session files and may contain sensitive store, return, buyer, logistics, or dispute data.
+
+Mitigation: Keep generated response files in an appropriate workspace, limit sharing of saved JSON outputs, and remove files that are no longer needed under the user's data-retention policy.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-shopee-store-returns)
+- [Shopee Returns API reference](https://open.shopee.com/documents/v2/v2.returns.get_return_list?module=102&type=1)
+- [LinkFox returns API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance, JSON files]
+
+**Output Format:** [Markdown guidance with shell commands and JSON API responses saved to local files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are persisted under a linkfox session data directory; small responses may also be printed inline, while larger responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

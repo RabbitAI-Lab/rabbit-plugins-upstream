@@ -52,7 +52,7 @@ flowchart LR
 
 1. **结构候选**：前收 `$0.30–$5.00`、20日中位成交额不超过 `$1.00m`、低 float 或低总股本。
 2. **事件确认**：盘前强度、正式开盘 Gap、供应周转和 VWAP 结构。
-3. **可执行交易**：首个5分钟结构、spread、停牌和 dilution overhang 全部通过。
+3. **可执行交易**：首个5分钟结构、spread、停牌和盘前供给风险核验全部通过；确认存在供给风险直接 `EXCLUDE`。
 
 核心公式：
 
@@ -113,7 +113,7 @@ python .\scripts\score_candidates.py .\candidates.json --format json
 - 盘前：`pre_price`、`pre_high`、`pre_volume`、`bid`、`ask`
 - 开盘：`open_price`、`last_price`、`regular_volume`、`vwap`、`first_5m_structure`
 - CPHI路径：`prior_abnormal_volume_warmup`、`turnover_expanding`
-- 风险：`split_today`、`post_split`、`halted`、`dilution_overhang`
+- 风险：`split_today`、`post_split`、`halted`、`dilution_overhang`、`premarket_supply_risk`、`supply_risk_type/source/checked_at`
 
 JSON输出增加：
 
@@ -129,7 +129,7 @@ JSON输出增加：
 | `WAIT_OPEN` | 强盘前候选，等待正式开盘 |
 | `WAIT_DATA` | 关键字段缺失 |
 | `WATCH` | 部分因子符合、执行门槛失败或正在停牌 |
-| `EXCLUDE` | 证券类型、当日split、结构或事件强度失败 |
+| `EXCLUDE` | 证券类型、当日split、结构/事件强度失败，或正式来源确认存在盘前供给风险 |
 
 ## 风控
 

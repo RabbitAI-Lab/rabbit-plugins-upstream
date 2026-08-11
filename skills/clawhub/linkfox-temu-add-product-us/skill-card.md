@@ -1,49 +1,71 @@
-## Description: <br>
-Helps agents use LinkFox's gateway and bundled scripts to publish and manage Temu Partner US product listings, including V2 add-product flows, category attributes, images, listing queries, edits, stock, and supply-price operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use LinkFox gateway scripts and references to publish and manage Temu Partner US products, including V2 product creation, category attributes, specifications, image upload, listings, edits, category mapping, SKU inventory, and supply pricing.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and developers use this skill to prepare and execute Temu US product-management workflows through LinkFox, including product creation, catalog lookup, image upload, inventory updates, and pricing checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authenticated Temu product-management operations can create or modify listings, stock, pricing, migration state, and other commerce data. <br>
-Mitigation: Use least-privilege Temu and LinkFox tokens, review commands and JSON payloads before execution, and avoid broad proxy calls unless the requested operation is clear. <br>
-Risk: Tokens and API responses may be stored or printed in plaintext by the bundled scripts. <br>
-Mitigation: Avoid sharing production tokens in chats or shell history, keep token-store and response directories out of source control, and delete or protect local output files after use. <br>
+## Use Case:
 
+External sellers, ecommerce operators, and developers use this skill to prepare Temu US product publishing workflows and run LinkFox-proxied Partner US product API scripts for product creation, catalog lookup, editing, stock, and price tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-add-product-us) <br>
-- [API reference](references/api.md) <br>
-- [Access token authorization](references/access-token.md) <br>
-- [Authorization flow](references/authorization-flow.md) <br>
-- [Partner US catalog](references/partner-us-catalog.md) <br>
-- [Product publish APIs](references/product-publish-apis.md) <br>
-- [Product query APIs](references/product-query-apis.md) <br>
-- [Product edit APIs](references/product-edit-apis.md) <br>
-- [Category and specification APIs](references/category-spec-apis.md) <br>
-- [Stock and price APIs](references/stock-price-apis.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON files, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON request or response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts save full LinkFox responses under a local linkfox session directory and may print small responses or summaries to stdout.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill handles LinkFox account keys and Temu seller access tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only when the publisher is trusted, use appropriately scoped credentials, and prefer a secret manager or protected environment variables for sensitive tokens.
+
+Risk: The skill can store Temu tokens and full API responses in local LinkFox files that may include business data or credentials.
+
+Mitigation: Protect or delete the generated linkfox and ~/.linkfox files when they contain sensitive data, and use a secured token-store path when local storage is necessary.
+
+Risk: Gateway override environment variables can redirect requests away from the default LinkFox gateway.
+
+Mitigation: Use gateway overrides only in trusted testing environments and clear them before normal commercial use.
+
+Risk: The broader LinkFox helper scripts include billing or order actions and product mutation workflows that can affect an account.
+
+Mitigation: Review commands and JSON payloads before execution, avoid blind retries, and require user confirmation before actions that spend credits or modify catalog, stock, price, billing, or order state.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-add-product-us)
+- [API reference](references/api.md)
+- [Temu access token authorization](references/access-token.md)
+- [Authorization flow](references/authorization-flow.md)
+- [Onboarding and account setup](references/onboarding.md)
+- [Partner US catalog](references/partner-us-catalog.md)
+- [Product publish APIs](references/product-publish-apis.md)
+- [Product query APIs](references/product-query-apis.md)
+- [Product edit APIs](references/product-edit-apis.md)
+- [Category, attribute, and specification APIs](references/category-spec-apis.md)
+- [Stock and price APIs](references/stock-price-apis.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration, JSON files, Guidance]
+
+**Output Format:** [Markdown guidance with bash commands and JSON request/response examples; scripts write full JSON responses to local files and print small responses or summaries to stdout.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires LinkFox and Temu credentials; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

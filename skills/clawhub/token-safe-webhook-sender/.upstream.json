@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/token-safe-webhook-sender",
   "slug": "token-safe-webhook-sender",
   "ownerHandle": null,
-  "version": "1.1.0",
-  "updatedAt": 1782785222628,
-  "contentHash": "400f950d627840c5182310f368e16aa2bc2bd5273681ae1deaec4db35e330c04",
-  "fetchedAt": "2026-07-26T18:22:20.081Z"
+  "version": "1.2.0",
+  "updatedAt": 1786084521744,
+  "contentHash": "21ae5a9052b093a461d0c3ad939184d8ad8bf153e0c0a2c0ea1fe9c2045129f9",
+  "fetchedAt": "2026-08-11T08:36:33.208Z"
 }

@@ -1,49 +1,56 @@
-## Description: <br>
-ShieldSwarm is a defensive multi-agent SRE, SecOps, red-team, and purple-team resilience commander for authorized OpenClaw and Arena-like services. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A defensive SRE/SecOps resilience skill that provides authorization-gated guidance and templates for red-team and purple-team planning, incident response, rollback, postmortems, and model-resilience reviews.
 
-## Publisher: <br>
-[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[orionshaowswmw](https://clawhub.ai/user/orionshaowswmw)
 
-## Use Case: <br>
-External developers, SREs, SecOps teams, and authorized operators use this skill to plan defensive resilience work, incident response, model fallback review, red-team or purple-team exercises, rollback planning, and postmortems with explicit authorization and evidence-handling gates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill could be misapplied to attack traffic, bypass testing, credential handling, or unapproved production changes. <br>
-Mitigation: Use it only for authorized defensive operations or resilience planning, and confirm scope, approvers, rollback ownership, and data redaction rules before real-system work. <br>
-Risk: Operational recommendations could expose sensitive logs, prompts, screenshots, HAR data, customer data, or secrets if evidence is not sanitized. <br>
-Mitigation: Require redacted evidence summaries, avoid collecting credentials or raw tokens, and apply the bundled redaction and evidence-handling templates before sharing artifacts. <br>
-Risk: Defensive red-team or incident-response plans can still disrupt production if executed without approval gates. <br>
-Mitigation: Use rules of engagement, explicit abort conditions, human approval, dry runs, one-change-at-a-time execution, and documented rollback ownership before risky changes. <br>
+## Use Case:
 
+Security, SRE, SecOps, and platform operators use this skill to structure authorized defensive resilience work, including rules of engagement, approval records, rollback planning, evidence redaction, stakeholder updates, and postmortems. It is best treated as a documentation and template package unless missing executable controls are added and reviewed.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/orionshaowswmw/skills/shieldswarm-redteam-resilience) <br>
-- [Publisher profile](https://clawhub.ai/user/orionshaowswmw) <br>
-- [Agent discovery card](artifact/AGENT_DISCOVERY.md) <br>
-- [Quickstart template](artifact/templates/quickstart.md) <br>
-- [Operator authorization template](artifact/templates/operator_authorization.yaml) <br>
-- [Red-team rules of engagement template](artifact/templates/red_team_roe.yaml) <br>
-- [Model resilience policy template](artifact/templates/model_resilience_policy.yaml) <br>
-- [Local self-test harness](artifact/tools/shieldswarm_selftest.py) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration, Shell commands] <br>
-**Output Format:** [Markdown guidance with YAML templates, local reports, checklists, diffs, and approval artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are intended for human review before execution and may include redacted evidence summaries, rollback plans, incident updates, and validation logs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The package claims approval gates, validators, timeout wrappers, and self-heal integrations that are not fully bundled or permission-scoped.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the release as templates and guidance only until the missing executable controls are added, reviewed, and tested in the target environment.
+
+Risk: Operational resilience exercises can affect production or staging systems if scope, approvers, rollback owners, and abort conditions are not concrete.
+
+Mitigation: Require written rules of engagement, named approvers, rollback plans, and bounded validation metrics before any exercise or configuration change.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/orionshaowswmw/skills/shieldswarm-redteam-resilience)
+- [README](artifact/README.md)
+- [Skill Definition](artifact/SKILL.md)
+- [Agent Discovery](artifact/AGENT_DISCOVERY.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, configuration, shell commands]
+
+**Output Format:** [Markdown templates, YAML configuration templates, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs require human authorization, review, and environment-specific scoping before operational use.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

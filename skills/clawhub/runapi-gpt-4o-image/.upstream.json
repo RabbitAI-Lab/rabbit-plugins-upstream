@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-gpt-4o-image",
   "slug": "runapi-gpt-4o-image",
   "ownerHandle": null,
-  "version": "0.2.4",
-  "updatedAt": 1779441285907,
-  "contentHash": "b3d46c30a83c623d115f35bbd8834b1d4270cd75dbc16752aa44a4a9b2a118f6",
-  "fetchedAt": "2026-07-26T18:41:20.661Z"
+  "version": "0.2.8",
+  "updatedAt": 1786370708564,
+  "contentHash": "25bca48ce6ac06b86a8b75d2a89fb8cdd53c94de07f375a59fea320520ea194b",
+  "fetchedAt": "2026-08-11T08:22:37.936Z"
 }

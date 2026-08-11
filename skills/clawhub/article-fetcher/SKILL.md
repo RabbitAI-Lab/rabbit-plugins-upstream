@@ -3,10 +3,10 @@ name: article-fetcher
 description: "抓取微信公众号、小红书、豆瓣、知乎文章，自动上传 OSS 图片，LLM 智能提取关键词，一键存档到 Obsidian 本地知识库（可选 Notion）"
 homepage: https://github.com/AjayHao/article-fetcher
 metadata:
-  { "hermes": { "emoji": "📰", "version": "1.3.4", "requires": { "bins": ["python3"], "env": ["ALIYUN_OSS_AK", "ALIYUN_OSS_SK", "ALIYUN_OSS_BUCKET_ID", "ALIYUN_OSS_ENDPOINT", "NOTION_API_KEY", "LLM_API_KEY"] }, "primaryEnv": "OBSIDIAN_VAULT_PATH", "permissions": ["env:read", "net:outbound", "fs:write"], "allowedEnv": ["ALIYUN_OSS_AK", "ALIYUN_OSS_SK", "ALIYUN_OSS_BUCKET_ID", "ALIYUN_OSS_ENDPOINT", "OBSIDIAN_VAULT_PATH", "NOTION_API_KEY", "NOTION_ARTICLE_DATABASE_ID", "LLM_API_KEY", "LLM_BASE_URL", "LLM_MODEL", "WECHAT_COOKIES_FILE", "ZHIHU_COOKIES_FILE"], "securityNote": "OSS 凭证用于图片上传存储；Notion 和 LLM 为可选集成，不配置则跳过对应功能", "install": [{ "id": "pip", "kind": "pip", "packages": "requests oss2 python-dotenv beautifulsoup4 lxml notion-client markdownify pyyaml", "label": "Install Python dependencies" }, { "id": "playwright", "kind": "shell", "command": "playwright install chromium", "label": "Install Playwright Chromium browser" }] } }
+  { "hermes": { "emoji": "📰", "version": "1.3.6", "requires": { "bins": ["python3"], "env": ["ALIYUN_OSS_AK", "ALIYUN_OSS_SK", "ALIYUN_OSS_BUCKET_ID", "ALIYUN_OSS_ENDPOINT", "NOTION_API_KEY", "LLM_API_KEY"] }, "primaryEnv": "OBSIDIAN_VAULT_PATH", "permissions": ["env:read", "net:outbound", "fs:write"], "allowedEnv": ["ALIYUN_OSS_AK", "ALIYUN_OSS_SK", "ALIYUN_OSS_BUCKET_ID", "ALIYUN_OSS_ENDPOINT", "OBSIDIAN_VAULT_PATH", "NOTION_API_KEY", "NOTION_ARTICLE_DATABASE_ID", "LLM_API_KEY", "LLM_BASE_URL", "LLM_MODEL", "WECHAT_COOKIES_FILE", "ZHIHU_COOKIES_FILE"], "securityNote": "OSS 凭证用于图片上传存储（图片外发至阿里云 OSS 为必需）；Notion 和 LLM 为可选集成，不配置则跳过对应功能；配置 LLM 时文章文本（前 12000 字符）会发送至你配置的 LLM API 端点", "install": [{ "id": "pip", "kind": "pip", "packages": "requests oss2 python-dotenv beautifulsoup4 lxml notion-client markdownify pyyaml", "label": "Install Python dependencies" }, { "id": "playwright", "kind": "shell", "command": "playwright install chromium", "label": "Install Playwright Chromium browser" }] } }
 ---
 
-# Article Fetcher v1.3.4
+# Article Fetcher v1.3.6
 
 抓取微信公众号、小红书、豆瓣、知乎文章，自动上传 OSS 图床，LLM 智能关键词提取，默认存档到 Obsidian 本地知识库（可选 Notion 双写）。
 
@@ -78,6 +78,25 @@ python3 main.py "文章 URL" [标签1] [标签2]
 
 **支持平台**：微信公众号 (`mp.weixin.qq.com`)、小红书 (`xiaohongshu.com` / `xhslink.com`)、豆瓣 (`douban.com`)、知乎 (`zhihu.com`)
 
+## 离线输入（HTML / MHTML）
+
+除 URL 外，支持直接喂入 HTML 文本或 `.mhtml` 文件（源自 wechat-article-capture 技能的三级策略），由 article-fetcher 负责图片上传 OSS、替换 URL 与归档。解析层已内置三处陷阱修复：微信懒加载 `data-src`→`src` 并删除 `data-src`、MHTML 编码乱码（charset 探测）、`data:image/svg+xml` 占位符过滤。
+
+```bash
+# 三级：MHTML 文件
+python3 main.py --mhtml page.mhtml --url https://mp.weixin.qq.com/s/xxx 标签1
+
+# 二级：粘贴 HTML（stdin）
+cat page.html | python3 main.py --html - --url https://mp.weixin.qq.com/s/xxx
+
+# 一级 / 原路径（不变）
+python3 main.py "https://mp.weixin.qq.com/s/xxx" 标签1
+```
+
+- `--platform` 默认 `wechat`（直传 HTML/MHTML 无 URL，无法自动探测平台）
+- `--url` 可选：作为图片下载 Referer 与归档 link；不传时回退平台默认 Referer（微信 `mp.weixin.qq.com`）
+- 解析产出标准 `article_data`，后半段管线（OSS 上传 → 替换 → 打标 → 字数 → 归档）与 URL 模式完全复用
+
 ## 处理流程
 
 ```
@@ -92,7 +111,9 @@ URL → 平台识别 → 内容抓取 → 图片上传 OSS → 关键词提取 (
 
 ## Obsidian 存档格式
 
-文章存入 `{OBSIDIAN_VAULT_PATH}/1-收件箱/`，命名规则 `{YYYY-MM-DD}_{title}.md`。
+文章存入 `{OBSIDIAN_VAULT_PATH}/收件箱/`，命名规则 `{YYYY-MM-DD}_{title}.md`。
+
+> 💡 **本地适配**：Vault 去序号后，存档目录从 `1-收件箱/` 改为 `收件箱/`（`obsidian_archiver.py` 已同步修正）。
 
 ### 文件示例
 
@@ -149,7 +170,7 @@ article_id: "uuid"
 - **图片**：上传失败不阻断，成功多少记录多少
 - **时间**：统一 `YYYY-MM-DD HH:MM:SS`，缺失时留空（不伪造）
 - **模块**：`main.py` 可作 Python 模块调用：`from main import fetch_and_archive_article`
-- **Obsidian 数据本地存储**：`.md` 文件写入本地磁盘，不经过网络。LLM 关键词提取为可选功能，启用时文章摘要会发送至配置的 API 端点
+- **Obsidian 本地落盘 + 图片 OSS 上传**：`.md` 笔记写入本地磁盘，但文章图片会上传至阿里云 OSS 图床（必需）后再嵌入，并非纯本地；LLM 关键词提取为可选功能，启用时文章文本（前 12000 字符）会发送至配置的 API 端点
 
 ## 安全与隐私
 
@@ -158,7 +179,7 @@ article_id: "uuid"
 - **LLM 数据外发**：配置 `LLM_API_KEY` 时，文章内容（前 12000 字符）会发送至配置的 API 端点（仅用于关键词提取）。不配置则不发送
 - **图片下载**：自动下载原文图片并上传 OSS，过程中会请求第三方图片服务器，请确保有权抓取目标文章
 - **敏感信息**：AK/SK/Key 等仅存储于本地，skill 不会外泄
-- **Obsidian 数据本地**：`.md` 文件写入本地磁盘，零网络外发
+- **Obsidian 本地落盘**：`.md` 文件写入本地磁盘；但文章图片需上传阿里云 OSS（必需），因此并非「零网络外发」
 - **权限最小化**：OSS Bucket 建议仅授予 PutObject/GetObject；Notion Integration 仅授予目标数据库读写权限
 - **依赖锁定**：requirements.txt 使用精确版本号，避免供应链风险
 

@@ -1,0 +1,19 @@
+{
+  "model": "logreg",
+  "n_samples": 16384,
+  "n_features": 4,
+  "prevalence": 0.1639404296875,
+  "cv_auc": 0.7683843981767315,
+  "variable_importance": {
+    "temperature": 0.061266508372923134,
+    "precipitation": 0.028330047230408925,
+    "ndvi": 0.8690600195738472,
+    "elevation": 0.04134342482282081
+  },
+  "band_names": [
+    "temperature",
+    "precipitation",
+    "ndvi",
+    "elevation"
+  ]
+}

@@ -1,0 +1,65 @@
+# Spacing & Sizing — {STYLE_TITLE}
+
+> Extracted from: {SOURCE_DESC} | Evidence quality: {EVIDENCE_QUALITY_LEVEL}
+
+## Primitive: Spacing Scale
+
+Base unit: {BASE_UNIT_DESCRIPTION}
+
+| Token | px | rem | Evidence | Notes |
+|-------|----|-----|----------|-------|
+{SPACING_SCALE_ROWS}
+
+## Primitive: Border Radius Scale
+
+| Token | Value | Evidence | Typical Usage |
+|-------|-------|----------|---------------|
+{BORDER_RADIUS_ROWS}
+
+## Primitive: Shadow Scale
+
+| Token | CSS Box-Shadow | Evidence | Typical Usage |
+|-------|----------------|----------|---------------|
+{SHADOW_SCALE_ROWS}
+
+## Primitive: Z-Index Scale
+
+| Token | Value | Evidence | Typical Usage |
+|-------|-------|----------|---------------|
+{Z_INDEX_ROWS}
+
+## Semantic: Layout Roles
+
+| Token | Maps To | Evidence | Notes |
+|-------|---------|----------|-------|
+{LAYOUT_ROLE_ROWS}
+
+## Container Widths
+
+| Token | Max Width | Evidence | Notes |
+|-------|-----------|----------|-------|
+{CONTAINER_WIDTH_ROWS}
+
+## Responsive Breakpoints
+
+| Token | Min Width | Evidence | Notes |
+|-------|-----------|----------|-------|
+{BREAKPOINT_ROWS}
+
+## CSS Variables
+
+```css
+:root {
+  /* === Primitive: Spacing === */
+{SPACING_CSS}
+
+  /* === Primitive: Border Radius === */
+{RADIUS_CSS}
+
+  /* === Primitive: Shadows === */
+{SHADOW_CSS}
+
+  /* === Semantic: Layout === */
+{LAYOUT_CSS}
+}
+```

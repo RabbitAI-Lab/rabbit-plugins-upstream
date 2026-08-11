@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-producer",
   "slug": "runapi-producer",
   "ownerHandle": null,
-  "version": "0.2.0",
-  "updatedAt": 1784798004084,
-  "contentHash": "ecb4aa8cb5da3be5050388afe9fd78169072d0e7ba6f3c95eb00541af701ab89",
-  "fetchedAt": "2026-07-26T18:07:12.608Z"
+  "version": "0.2.1",
+  "updatedAt": 1786371063012,
+  "contentHash": "e062be317b6695318d12f476584b601ef59944fc6027e8a3aa62c29165b56372",
+  "fetchedAt": "2026-08-11T08:22:29.555Z"
 }

@@ -1,46 +1,59 @@
-## Description: <br>
-股海罗盘 helps agents collect A-share market data, run quantitative stock analysis, summarize historical signal matching and patterns, and generate DOCX reports with charts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A self-learning quantitative analysis skill for A-share stocks that gathers market, technical, capital-flow, research, financial, and governance data, computes historical signal match rates and pattern summaries, and can generate structured DOCX reports.
 
-## Publisher: <br>
-[sunbinpy](https://clawhub.ai/user/sunbinpy) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sunbinpy](https://clawhub.ai/user/sunbinpy)
 
-## Use Case: <br>
-External users and agents use this skill to gather public A-share market data, request quantitative signal summaries, review broker research and ETF flow context, and generate stock-analysis reports. It is intended for historical data review and report drafting, not investment advice or guaranteed future-price prediction. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes a local API key in generated links and logs. <br>
-Mitigation: Use only isolated test environments with disposable credentials until API keys are removed from URLs, logs, transcripts, reports, and browser history. <br>
-Risk: The security scan reports hardcoded database credentials. <br>
-Mitigation: Do not deploy in a normal workspace until the publisher removes embedded credentials and replaces them with documented, revocable secret handling. <br>
-Risk: The skill performs network calls and writes local configuration, data, chart, and DOCX report files. <br>
-Mitigation: Review and constrain network access and filesystem writes before use; require clear documentation of all external endpoints and created files. <br>
-Risk: Stock-analysis output may be mistaken for investment advice. <br>
-Mitigation: Keep the historical-data disclaimer visible and review generated text so it does not present recommendations, price predictions, or buy/sell/hold guidance. <br>
+## Use Case:
 
+External users and developers use this skill to analyze Chinese A-share stocks, retrieve multi-source market and company data, compare historical signal outcomes, and produce concise analysis or DOCX reports. It is intended for statistical reference and report generation, not investment advice or guaranteed forecasting.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sunbinpy/skills/gh-data) <br>
-- [Publisher profile](https://clawhub.ai/user/sunbinpy) <br>
-- [Product homepage](https://www.oraskl.com/ghdata-admin) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files] <br>
-**Output Format:** [Markdown analysis text, Python snippets or shell commands, configuration JSON, DOCX reports, and chart image files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include historical market statistics, signal summaries, generated purchase links, DOCX report paths, and chart image paths.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.44 (source: server release evidence) <br>
+Risk: The security scan reports unsafe API-key handling, including local key creation and generated reports or logs that may contain a full API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated, rotatable key; review ~/.ghdata/ghdataapikey, logs, and generated reports before sharing; rotate the key after testing or if exposure is suspected.
+
+Risk: The security scan reports undisclosed hardcoded database credentials that are not necessary for normal stock analysis.
+
+Mitigation: Review and remove or disable bundled direct database credentials before deployment, and block database network access unless it is explicitly required.
+
+Risk: The security guidance notes broad outbound network calls to public stock-data sources and a WebAPI endpoint.
+
+Mitigation: Run the skill in a network-controlled environment, approve expected stock-data and WebAPI domains, and monitor outbound requests during evaluation.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sunbinpy/skills/gh-data)
+- [Publisher profile](https://clawhub.ai/user/sunbinpy)
+- [股海罗盘 homepage](https://www.oraskl.com/ghdata-admin)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown stock-analysis summaries with Python snippets and optional DOCX report files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local API-key state, charts, logs, and DOCX reports; results depend on outbound stock-data and WebAPI availability.]
+
+## Skill Version(s):
+
+2.2.49 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

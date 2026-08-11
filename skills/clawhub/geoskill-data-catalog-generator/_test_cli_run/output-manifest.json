@@ -1,0 +1,77 @@
+{
+  "skill": "data-catalog-generator",
+  "skill_version": "1.0.0",
+  "command": "data-catalog-generator --bbox 116 39 117 40 --synthetic --output-dir ./_test_cli_run --quiet",
+  "started_at": "2026-08-03T12:41:33.620518Z",
+  "finished_at": "2026-08-03T12:41:34.110185Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "recursive": false,
+    "synthetic": true,
+    "bbox": [
+      116.0,
+      39.0,
+      117.0,
+      40.0
+    ]
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_run\\catalog.csv",
+      "kind": "table",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": 5
+    },
+    {
+      "path": "./_test_cli_run\\catalog.html",
+      "kind": "text",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_run\\catalog.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_files": 5,
+    "n_readable": 5,
+    "total_vector_features": 11,
+    "categories": {
+      "Single-band raster": 1,
+      "Point vector": 1,
+      "Multispectral raster": 1,
+      "Line vector": 1,
+      "Polygon vector": 1
+    }
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "data-catalog-generator"
+  },
+  "error": null
+}

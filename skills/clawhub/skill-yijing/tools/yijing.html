@@ -1,0 +1,1136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>天玑八卦盘 — Skill.AiEPCO</title>
+<style>
+/* ═══════════════════════════════════════════ */
+/* 天玑八卦盘 — 占卦交互界面 */
+/* ═══════════════════════════════════════════ */
+:root {
+  --bg: #0c0914;
+  --surface: #161120;
+  --card: #1a1528;
+  --border: #2a2040;
+  --accent: #f59e0b;
+  --accent-light: rgba(245,158,11,0.12);
+  --accent-glow: rgba(245,158,11,0.3);
+  --text: #e7e5e4;
+  --text-muted: #8b8b8b;
+  --success: #22c55e;
+  --danger: #ef4444;
+  --font-mono: 'SF Mono', 'JetBrains Mono', monospace;
+  --transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ──── Header ──── */
+.header {
+  width: 100%; max-width: 800px;
+  padding: 24px 20px 0;
+  text-align: center;
+}
+.brand {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 14px; color: var(--text-muted);
+  text-decoration: none; margin-bottom: 12px;
+}
+.brand:hover { color: var(--accent); }
+.title {
+  font-size: 32px; font-weight: 800; margin-bottom: 4px;
+  background: linear-gradient(135deg, #f59e0b, #d97706, #b45309);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.subtitle { color: var(--text-muted); font-size: 14px; }
+
+/* ──── API Key Bar ──── */
+.keybar {
+  width: 100%; max-width: 800px;
+  margin: 16px 20px 0; padding: 12px 16px;
+  background: var(--surface); border-radius: 12px;
+  display: flex; gap: 8px; align-items: center;
+  border: 1px solid var(--border);
+}
+.keybar input {
+  flex: 1; background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); padding: 8px 12px; border-radius: 8px;
+  font-size: 13px; font-family: var(--font-mono);
+  outline: none; transition: var(--transition);
+}
+.keybar input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light); }
+.keybar .key-status {
+  font-size: 11px; padding: 4px 10px; border-radius: 6px;
+  white-space: nowrap; font-weight: 500;
+}
+.key-status.valid { background: rgba(34,197,94,0.12); color: var(--success); }
+.key-status.missing { background: rgba(239,68,68,0.12); color: var(--danger); }
+.key-status.checking { background: rgba(245,158,11,0.12); color: var(--accent); }
+
+/* ──── Main Container ──── */
+.container {
+  width: 100%; max-width: 800px;
+  padding: 20px; display: flex; flex-direction: column; gap: 20px;
+}
+
+/* ──── Step 1: Method Selection ──── */
+.section-title {
+  font-size: 12px; text-transform: uppercase; letter-spacing: 2px;
+  color: var(--text-muted); font-weight: 600; margin-bottom: 4px;
+}
+.method-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px;
+}
+@media (max-width: 600px) { .method-grid { grid-template-columns: repeat(2, 1fr); } }
+
+.method-card {
+  background: var(--card); border: 2px solid var(--border);
+  border-radius: 16px; padding: 24px 12px; text-align: center;
+  cursor: pointer; transition: all var(--transition);
+  position: relative; overflow: hidden;
+}
+.method-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(245,158,11,0.1);
+}
+.method-card.selected {
+  border-color: var(--accent);
+  background: var(--accent-light);
+  box-shadow: 0 0 24px var(--accent-glow);
+}
+.method-card .icon { font-size: 36px; margin-bottom: 8px; display: block; }
+.method-card .name { font-size: 15px; font-weight: 700; margin-bottom: 2px; }
+.method-card .desc { font-size: 11px; color: var(--text-muted); }
+.method-card .check {
+  position: absolute; top: 10px; right: 10px;
+  width: 22px; height: 22px; border-radius: 50%;
+  background: var(--accent); color: #000;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700;
+  opacity: 0; transform: scale(0);
+  transition: all var(--transition);
+}
+.method-card.selected .check { opacity: 1; transform: scale(1); }
+
+/* ──── Step 2: Input Area ──── */
+.input-area {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; padding: 24px;
+}
+.input-area.hidden { display: none; }
+.input-area label {
+  display: block; font-size: 13px; font-weight: 600;
+  margin-bottom: 6px; color: var(--text-muted);
+}
+.number-inputs {
+  display: flex; gap: 12px; margin-bottom: 16px;
+}
+.number-inputs input {
+  flex: 1; background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); font-size: 24px; font-weight: 700;
+  text-align: center; padding: 16px; border-radius: 12px;
+  outline: none; transition: var(--transition);
+  font-family: var(--font-mono);
+}
+.number-inputs input:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light);
+}
+.question-input {
+  width: 100%; background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); padding: 14px 16px; border-radius: 12px;
+  font-size: 15px; outline: none; resize: vertical;
+  min-height: 60px; font-family: inherit; transition: var(--transition);
+}
+.question-input:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light);
+}
+.question-input::placeholder { color: var(--text-muted); opacity: 0.5; }
+
+/* ──── Cast Button ──── */
+.cast-btn {
+  width: 100%; padding: 20px; border: none; border-radius: 16px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000; font-size: 18px; font-weight: 800; cursor: pointer;
+  transition: all var(--transition); letter-spacing: 1px;
+  position: relative; overflow: hidden;
+}
+.cast-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(245,158,11,0.35);
+}
+.cast-btn:disabled {
+  opacity: 0.4; cursor: not-allowed;
+}
+.cast-btn.casting {
+  pointer-events: none;
+  background: linear-gradient(135deg, #1c1917, #292524);
+  color: var(--accent);
+}
+
+/* ──── Result Area ──── */
+.result-area {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+}
+.result-area.hidden { display: none; }
+
+.result-hexagram {
+  padding: 40px 24px; text-align: center;
+  background: linear-gradient(180deg, rgba(245,158,11,0.06) 0%, transparent 100%);
+  border-bottom: 1px solid var(--border);
+  position: relative;
+}
+.hex-number {
+  font-size: 11px; color: var(--accent); font-weight: 600;
+  letter-spacing: 2px; text-transform: uppercase; margin-bottom: 8px;
+}
+.hex-name { font-size: 28px; font-weight: 800; margin-bottom: 4px; }
+.hex-trigrams { font-size: 48px; margin: 16px 0; letter-spacing: 8px; }
+.hex-judgment {
+  font-size: 14px; color: var(--text-muted);
+  max-width: 500px; margin: 0 auto; line-height: 1.6;
+}
+
+/* 六爻线 */
+.lines-display {
+  padding: 32px 24px; display: flex; flex-direction: column;
+  gap: 12px; align-items: center;
+}
+.line-row {
+  display: flex; align-items: center; gap: 16px;
+  transition: all 0.5s ease;
+}
+.line-label {
+  font-size: 11px; color: var(--text-muted); width: 32px; text-align: right;
+  font-weight: 600;
+}
+.line-visual {
+  width: 280px; height: 8px; border-radius: 4px;
+  transition: all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.line-visual.yang { background: linear-gradient(90deg, #f59e0b, #d97706); }
+.line-visual.yin {
+  background: transparent; position: relative;
+  display: flex; gap: 8px; justify-content: center;
+}
+.line-visual.yin::before, .line-visual.yin::after {
+  content: ''; width: 120px; height: 8px; border-radius: 4px;
+  background: linear-gradient(90deg, #f59e0b, #d97706);
+}
+.line-visual.changing_yang {
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  position: relative;
+}
+.line-visual.changing_yang::after {
+  content: '○'; position: absolute; right: -20px; top: -6px;
+  font-size: 14px; color: var(--success);
+}
+.line-visual.changing_yin {
+  background: transparent; position: relative;
+  display: flex; gap: 6px; justify-content: center;
+}
+.line-visual.changing_yin::before, .line-visual.changing_yin::after {
+  content: ''; width: 118px; height: 6px; border-radius: 3px;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+}
+.line-visual.changing_yin .change-mark {
+  position: absolute; right: -24px; top: -8px;
+  font-size: 16px; color: var(--success); font-weight: 700;
+}
+.line-type {
+  font-size: 10px; color: var(--text-muted); width: 56px;
+}
+.line-type.changing {
+  color: var(--success); font-weight: 600;
+}
+
+/* ──── Changed Hexagram ──── */
+.changed-section {
+  padding: 20px 24px; border-top: 1px solid var(--border);
+  text-align: center; background: rgba(34,197,94,0.03);
+}
+.changed-section .label {
+  font-size: 11px; color: var(--success); font-weight: 600;
+  letter-spacing: 2px; margin-bottom: 8px;
+}
+.changed-name { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+.changed-trigrams { font-size: 36px; margin: 8px 0; letter-spacing: 6px; }
+
+/* ──── AI Interpretation ──── */
+.interpret-section {
+  padding: 24px; border-top: 1px solid var(--border);
+}
+.interpret-section h3 {
+  font-size: 16px; margin-bottom: 16px;
+  display: flex; align-items: center; gap: 8px;
+}
+.interpret-content {
+  line-height: 1.8; font-size: 14px; color: var(--text);
+  white-space: pre-wrap;
+}
+.interpret-content.loading {
+  color: var(--text-muted);
+  display: flex; align-items: center; gap: 8px;
+}
+.loading::after {
+  content: '';
+  width: 12px; height: 12px; border: 2px solid var(--text-muted);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* ──── Animated Casting Overlay ──── */
+.casting-overlay {
+  position: fixed; inset: 0; background: rgba(12,9,20,0.9);
+  display: flex; flex-direction: column; align-items: center;
+  justify-content: center; z-index: 100;
+}
+.casting-overlay.hidden { display: none; }
+.coin-animation {
+  width: 120px; height: 120px; position: relative;
+  perspective: 600px;
+}
+.coin {
+  width: 100px; height: 100px; position: absolute;
+  top: 10px; left: 10px; border-radius: 50%;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px;
+  animation: coinFling 1.5s infinite;
+  box-shadow: 0 4px 24px rgba(245,158,11,0.4),
+              inset 0 2px 4px rgba(0,0,0,0.3);
+}
+@keyframes coinFling {
+  0% { transform: rotateY(0deg) rotateX(0deg) translateY(0); }
+  25% { transform: rotateY(180deg) rotateX(20deg) translateY(-40px); }
+  50% { transform: rotateY(360deg) rotateX(0deg) translateY(0); }
+  75% { transform: rotateY(540deg) rotateX(-20deg) translateY(-20px); }
+  100% { transform: rotateY(720deg) rotateX(0deg) translateY(0); }
+}
+.casting-text {
+  margin-top: 24px; font-size: 16px; color: var(--accent);
+  font-weight: 600; letter-spacing: 1px;
+}
+
+/* ──── Error ──── */
+.error-toast {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--danger); color: #fff; padding: 12px 24px;
+  border-radius: 12px; font-size: 14px; font-weight: 600;
+  z-index: 200; box-shadow: 0 8px 32px rgba(239,68,68,0.3);
+  animation: slideDown 0.3s ease;
+}
+.error-toast.hidden { display: none; }
+@keyframes slideDown { from { opacity: 0; transform: translateX(-50%) translateY(-20px); } }
+
+/* ──── History ──── */
+.history-toggle {
+  font-size: 13px; color: var(--text-muted); cursor: pointer;
+  padding: 8px 16px; border-radius: 8px; transition: var(--transition);
+  background: var(--surface); border: 1px solid var(--border);
+  display: inline-flex; align-items: center; gap: 6px;
+}
+.history-toggle:hover { color: var(--accent); border-color: var(--accent); }
+
+.history-panel {
+  background: var(--card); border: 1px solid var(--border);
+  border-radius: 16px; overflow: hidden;
+}
+.history-panel.hidden { display: none; }
+.history-item {
+  padding: 16px 20px; border-bottom: 1px solid var(--border);
+  cursor: pointer; transition: var(--transition);
+  display: flex; align-items: center; gap: 12px;
+}
+.history-item:hover { background: var(--surface); }
+.history-item:last-child { border-bottom: none; }
+.history-num { font-size: 20px; font-weight: 800; color: var(--accent); min-width: 28px; }
+.history-name { font-size: 14px; font-weight: 600; }
+.history-method { font-size: 11px; color: var(--text-muted); }
+.history-time { font-size: 11px; color: var(--text-muted); margin-left: auto; }
+.history-empty {
+  padding: 32px; text-align: center; color: var(--text-muted); font-size: 14px;
+}
+
+/* ──── Buy Tokens Banner ──── */
+.buy-banner {
+  background: var(--surface); border: 1px solid var(--accent);
+  border-radius: 12px; padding: 16px 20px;
+  display: flex; align-items: center; gap: 16px;
+}
+.buy-banner.hidden { display: none; }
+.buy-banner .text { flex: 1; font-size: 14px; }
+.buy-banner .text strong { color: var(--accent); }
+.buy-banner a {
+  text-decoration: none; padding: 8px 20px;
+  background: var(--accent); color: #000;
+  border-radius: 8px; font-weight: 700; font-size: 14px;
+  white-space: nowrap; transition: var(--transition);
+}
+.buy-banner a:hover { filter: brightness(1.1); }
+
+/* ──── Footer ──── */
+.footer {
+  padding: 40px 20px; text-align: center;
+  color: var(--text-muted); font-size: 12px;
+}
+.footer a { color: var(--accent); text-decoration: none; }
+.footer a:hover { text-decoration: underline; }
+
+/* ──── Settings Panel ──── */
+.settings-trigger {
+  position: fixed; top: 16px; right: 16px; z-index: 50;
+  width: 40px; height: 40px; border-radius: 12px;
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text-muted); display: flex; align-items: center;
+  justify-content: center; cursor: pointer; font-size: 18px;
+  transition: var(--transition);
+}
+.settings-trigger:hover { border-color: var(--accent); color: var(--accent); }
+
+.settings-overlay {
+  position: fixed; inset: 0; background: rgba(12,9,20,0.8);
+  z-index: 90; display: flex; align-items: center; justify-content: center;
+  animation: fadeIn 0.2s ease;
+}
+.settings-overlay.hidden { display: none; }
+@keyframes fadeIn { from { opacity: 0; } }
+
+.settings-panel {
+  width: 90%; max-width: 420px; background: var(--card);
+  border: 1px solid var(--border); border-radius: 20px;
+  padding: 28px; animation: slideUp 0.3s ease;
+}
+@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } }
+
+.settings-panel h3 {
+  font-size: 18px; margin-bottom: 20px;
+  display: flex; align-items: center; gap: 8px;
+}
+.settings-panel label {
+  display: block; font-size: 12px; color: var(--text-muted);
+  margin-bottom: 4px; font-weight: 600; letter-spacing: 0.5px;
+}
+.settings-panel input {
+  width: 100%; background: var(--bg); border: 1px solid var(--border);
+  color: var(--text); padding: 10px 14px; border-radius: 10px;
+  font-size: 14px; outline: none; margin-bottom: 14px;
+  transition: var(--transition); font-family: var(--font-mono);
+}
+.settings-panel input:focus {
+  border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-light);
+}
+.settings-panel .btn-row {
+  display: flex; gap: 10px; justify-content: flex-end; margin-top: 6px;
+}
+.settings-panel .btn-save {
+  padding: 10px 24px; border: none; border-radius: 10px;
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  color: #000; font-weight: 700; cursor: pointer; font-size: 14px;
+  transition: var(--transition);
+}
+.settings-panel .btn-cancel {
+  padding: 10px 24px; border: 1px solid var(--border); border-radius: 10px;
+  background: transparent; color: var(--text-muted);
+  cursor: pointer; font-size: 14px; transition: var(--transition);
+}
+.settings-panel .btn-save:hover { filter: brightness(1.1); }
+.settings-panel .btn-cancel:hover { border-color: var(--accent); color: var(--text); }
+.settings-error {
+  color: var(--danger); font-size: 12px; margin-bottom: 12px;
+  padding: 8px 12px; background: rgba(239,68,68,0.1);
+  border-radius: 8px; display: none;
+}
+.settings-success {
+  color: var(--success); font-size: 12px; margin-bottom: 12px;
+  padding: 8px 12px; background: rgba(34,197,94,0.1);
+  border-radius: 8px; display: none;
+}
+
+/* ──── Welcome Toast ──── */
+.welcome-toast {
+  position: fixed; top: 20px; left: 50%; transform: translateX(-50%);
+  background: var(--card); border: 2px solid var(--accent);
+  border-radius: 16px; padding: 20px 28px; z-index: 200;
+  box-shadow: 0 16px 48px rgba(0,0,0,0.5), 0 0 32px rgba(245,158,11,0.15);
+  max-width: 420px; width: 90%;
+  animation: welcomeIn 0.5s ease;
+}
+@keyframes welcomeIn {
+  0% { opacity: 0; transform: translateX(-50%) translateY(-40px) scale(0.9); }
+  100% { opacity: 1; transform: translateX(-50%) translateY(0) scale(1); }
+}
+.welcome-toast.hidden { display: none; }
+.welcome-toast h3 {
+  font-size: 16px; color: var(--accent); margin-bottom: 12px;
+  display: flex; align-items: center; gap: 8px;
+}
+.welcome-toast .cred-row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0; border-bottom: 1px solid var(--border);
+  font-size: 13px;
+}
+.welcome-toast .cred-row:last-of-type { border-bottom: none; }
+.welcome-toast .cred-label { color: var(--text-muted); }
+.welcome-toast .cred-value {
+  font-family: var(--font-mono); font-size: 13px;
+  display: flex; align-items: center; gap: 6px;
+}
+.welcome-toast .cred-value button {
+  background: var(--surface); border: 1px solid var(--border);
+  color: var(--text-muted); padding: 2px 8px; border-radius: 6px;
+  cursor: pointer; font-size: 11px; transition: var(--transition);
+}
+.welcome-toast .cred-value button:hover { border-color: var(--accent); color: var(--accent); }
+.welcome-toast .warn {
+  margin-top: 12px; padding: 10px 12px; background: rgba(245,158,11,0.08);
+  border-radius: 8px; font-size: 12px; color: var(--accent);
+  border: 1px solid rgba(245,158,11,0.2);
+}
+.welcome-toast .btn-close {
+  display: block; width: 100%; margin-top: 14px; padding: 10px;
+  border: none; border-radius: 10px; background: var(--accent);
+  color: #000; font-weight: 700; font-size: 14px; cursor: pointer;
+  transition: var(--transition);
+}
+.welcome-toast .btn-close:hover { filter: brightness(1.1); }
+
+.toast-copied {
+  position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+  background: var(--success); color: #000; padding: 8px 20px;
+  border-radius: 8px; font-size: 13px; font-weight: 600;
+  z-index: 210; animation: toastPop 1.5s ease forwards;
+}
+.toast-copied.hidden { display: none; }
+@keyframes toastPop {
+  0% { opacity: 0; transform: translateX(-50%) translateY(10px); }
+  20% { opacity: 1; transform: translateX(-50%) translateY(0); }
+  80% { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+</style>
+</head>
+<body>
+
+
+<!-- Settings Gear -->
+<button class="settings-trigger" id="settingsTrigger" onclick="toggleSettings()">⚙️</button>
+
+<!-- Settings Panel -->
+<div class="settings-overlay hidden" id="settingsOverlay" onclick="closeSettings(event)">
+  <div class="settings-panel" onclick="event.stopPropagation()">
+    <h3>⚙️ 账户设置</h3>
+    <div class="settings-error" id="settingsError"></div>
+    <div class="settings-success" id="settingsSuccess"></div>
+    <label>用户名</label>
+    <input type="text" id="settingsUsername" placeholder="修改用户名">
+    <label>邮箱 <span id="emailLabelHint" style="font-weight:400;color:var(--text-muted);">（仅可修改一次）</span></label>
+    <input type="email" id="settingsEmail" placeholder="your@email.com">
+    <div id="emailLocked" style="display:none;font-size:11px;color:var(--accent);margin-bottom:14px;padding:8px 12px;background:rgba(245,158,11,0.08);border-radius:8px;border:1px solid rgba(245,158,11,0.2);">🔒 邮箱已绑定真实地址，不可再次修改</div>
+    <label>新密码（留空不修改）</label>
+    <input type="password" id="settingsNewPass" placeholder="至少6位">
+    <label>当前密码（修改密码时必填）</label>
+    <input type="password" id="settingsCurrPass" placeholder="输入当前密码">
+    <div class="btn-row">
+      <button class="btn-cancel" onclick="toggleSettings()">取消</button>
+      <button class="btn-save" onclick="saveProfile()">保存修改</button>
+    </div>
+  </div>
+</div>
+
+<!-- Welcome Toast -->
+<div class="welcome-toast hidden" id="welcomeToast">
+  <h3>🎉 账号已自动创建！</h3>
+  <div class="cred-row">
+    <span class="cred-label">👤 用户名</span>
+    <span class="cred-value" id="welcomeUser">--</span>
+  </div>
+  <div class="cred-row">
+    <span class="cred-label">🔑 密码</span>
+    <span class="cred-value">
+      <span id="welcomePass">--</span>
+      <button onclick="copyText('welcomePass')">复制</button>
+    </span>
+  </div>
+  <div class="cred-row">
+    <span class="cred-label">🎫 API Key</span>
+    <span class="cred-value">
+      <span id="welcomeKey" style="font-size:11px;">--</span>
+      <button onclick="copyText('welcomeKey')">复制</button>
+    </span>
+  </div>
+  <div class="cred-row">
+    <span class="cred-label">🪙 Token</span>
+    <span class="cred-value" style="color:var(--accent);">20</span>
+  </div>
+  <div class="warn">⚠️ 密码仅显示这一次，请务必保存！可在右上角 ⚙️ 设置中修改。</div>
+  <button class="btn-close" onclick="dismissWelcome()">知道了，开始占卦 ✨</button>
+</div>
+
+<div class="toast-copied hidden" id="copiedToast">已复制 ✓</div>
+
+<div class="header">
+  <a href="/" class="brand">☯️ Skill.AiEPCO</a>
+  <h1 class="title">天玑八卦盘</h1>
+  <p class="subtitle">千年东方智慧 × 现代 AI — 选择你的起卦方式，让 DeepSeek 为你解卦</p>
+</div>
+
+<!-- API Key Bar -->
+<div class="keybar">
+  <span style="font-size:13px;color:var(--text-muted);white-space:nowrap;">🔑 API Key</span>
+  <input type="password" id="apiKeyInput" placeholder="sk-..." autocomplete="off">
+  <span class="key-status missing" id="keyStatus">未配置</span>
+</div>
+
+<div class="container">
+
+  <!-- Step 1: Method Selection -->
+  <div>
+    <p class="section-title">第一步 · 选择起卦方式</p>
+    <div class="method-grid" id="methodGrid">
+      <div class="method-card selected" data-method="coins">
+        <span class="check">✓</span>
+        <span class="icon">🪙</span>
+        <div class="name">铜钱起卦</div>
+        <div class="desc">传统三铜钱 · 六爻法</div>
+      </div>
+      <div class="method-card" data-method="time">
+        <span class="check">✓</span>
+        <span class="icon">🕐</span>
+        <div class="name">时间起卦</div>
+        <div class="desc">梅花易数 · 年月日时</div>
+      </div>
+      <div class="method-card" data-method="number">
+        <span class="check">✓</span>
+        <span class="icon">🔢</span>
+        <div class="name">数字起卦</div>
+        <div class="desc">自选三数 · 心意主导</div>
+      </div>
+      <div class="method-card" data-method="random">
+        <span class="check">✓</span>
+        <span class="icon">🎲</span>
+        <div class="name">随机起卦</div>
+        <div class="desc">完全随机 · 无执无着</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 2: Details Input -->
+  <div class="input-area" id="inputArea">
+    <!-- Number inputs (only shown for number method) -->
+    <div id="numberInputs" style="display:none;">
+      <label>输入三个数字（1-999）</label>
+      <div class="number-inputs">
+        <input type="number" id="num1" placeholder="上卦" min="1" max="999">
+        <input type="number" id="num2" placeholder="下卦" min="1" max="999">
+        <input type="number" id="num3" placeholder="动爻" min="1" max="999">
+      </div>
+    </div>
+    <label for="questionInput">你想问什么？（可选）</label>
+    <textarea class="question-input" id="questionInput"
+      placeholder="例如：这个项目应该在下个月启动吗？我和他的关系会如何发展？..."></textarea>
+  </div>
+
+  <!-- Cast Button -->
+  <button class="cast-btn" id="castBtn" disabled>🔮 开始起卦</button>
+
+  <!-- Result Area -->
+  <div class="result-area hidden" id="resultArea"></div>
+
+  <!-- Buy Tokens Banner -->
+  <div class="buy-banner hidden" id="buyBanner">
+    <span style="font-size:24px;">🪙</span>
+    <div class="text"><strong>Token 不足？</strong> 起卦需要 10T，解卦需要 20T。新用户注册即送 20T！</div>
+    <a href="/pricing" target="_blank">购买 Token</a>
+  </div>
+
+  <!-- History -->
+  <div style="display:flex;align-items:center;justify-content:space-between;">
+    <button class="history-toggle" id="historyToggle" onclick="toggleHistory()">
+      📋 占卦历史 <span id="historyCount">0</span> 条
+    </button>
+  </div>
+  <div class="history-panel hidden" id="historyPanel"></div>
+
+</div>
+
+<div class="footer">
+  Powered by <a href="https://skill.aiepco.com" target="_blank">Skill.AiEPCO</a>
+  · <a href="/docs" target="_blank">API 文档</a>
+  · <a href="/register" target="_blank">免费注册</a>
+</div>
+
+<!-- Casting Overlay -->
+<div class="hidden" id="castingOverlay">
+  <div class="coin-animation"><div class="coin">☯️</div></div>
+  <div class="casting-text">天机运转中...</div>
+</div>
+
+<!-- Error Toast -->
+<div class="error-toast hidden" id="errorToast"></div>
+
+<script>
+// ═══════════════════════════════════════════
+// 天玑八卦盘 — 交互逻辑
+// ═══════════════════════════════════════════
+
+const API_BASE = window.location.origin;
+let selectedMethod = 'coins';
+let apiKey = localStorage.getItem('yijing_api_key') || '';
+
+// ──── DOM refs ────
+const $ = id => document.getElementById(id);
+const apiKeyInput = $('apiKeyInput');
+const keyStatus = $('keyStatus');
+const castBtn = $('castBtn');
+const resultArea = $('resultArea');
+const buyBanner = $('buyBanner');
+const historyPanel = $('historyPanel');
+const historyCount = $('historyCount');
+const historyToggle = $('historyToggle');
+const castingOverlayEl = $('castingOverlay');
+const errorToast = $('errorToast');
+const numberInputs = $('numberInputs');
+
+// ──── Init ────
+apiKeyInput.value = apiKey;
+updateKeyStatus();
+checkApiKey();
+
+// Method selection
+document.querySelectorAll('.method-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.method-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    selectedMethod = card.dataset.method;
+    // Show/hide number inputs
+    numberInputs.style.display = selectedMethod === 'number' ? 'block' : 'none';
+    updateCastButton();
+  });
+});
+
+// API Key input
+apiKeyInput.addEventListener('input', () => {
+  apiKey = apiKeyInput.value.trim();
+  localStorage.setItem('yijing_api_key', apiKey);
+  updateKeyStatus();
+  checkApiKey();
+});
+apiKeyInput.addEventListener('focus', () => { if (apiKeyInput.type === 'password') apiKeyInput.type = 'text'; });
+apiKeyInput.addEventListener('blur', () => { if (apiKeyInput.type === 'text') apiKeyInput.type = 'password'; });
+
+// Cast button
+castBtn.addEventListener('click', doCast);
+
+// ══════ Key Management ══════
+function updateKeyStatus() {
+  if (!apiKey) {
+    keyStatus.textContent = '未配置';
+    keyStatus.className = 'key-status missing';
+  } else {
+    keyStatus.textContent = '检查中...';
+    keyStatus.className = 'key-status checking';
+  }
+}
+
+async function checkApiKey() {
+  if (!apiKey || !apiKey.startsWith('sk-')) {
+    updateCastButton();
+    return;
+  }
+  try {
+    const resp = await fetch(`${API_BASE}/api/health`);
+    if (resp.ok) {
+      keyStatus.textContent = '已配置';
+      keyStatus.className = 'key-status valid';
+    } else {
+      keyStatus.textContent = '未配置';
+      keyStatus.className = 'key-status missing';
+    }
+  } catch (e) {
+    keyStatus.textContent = '离线';
+    keyStatus.className = 'key-status checking';
+  }
+  updateCastButton();
+}
+
+function updateCastButton() {
+  castBtn.disabled = !apiKey || !apiKey.startsWith('sk-');
+
+  // For number method, also validate number inputs
+  if (selectedMethod === 'number') {
+    const n1 = parseInt($('num1').value);
+    const n2 = parseInt($('num2').value);
+    const n3 = parseInt($('num3').value);
+    if (isNaN(n1) || isNaN(n2) || isNaN(n3) || n1 < 1 || n2 < 1 || n3 < 1) {
+      castBtn.disabled = true;
+    }
+  }
+}
+
+// Number input validation
+['num1', 'num2', 'num3'].forEach(id => {
+  const el = $(id);
+  if (el) el.addEventListener('input', updateCastButton);
+});
+
+// ══════ Cast ══════
+async function doCast() {
+  if (!apiKey || !apiKey.startsWith('sk-')) {
+    showError('请先配置 API Key（在控制台获取 sk- 开头的密钥）');
+    return;
+  }
+
+  const question = $('questionInput').value.trim();
+
+  // Build request body
+  const body = { method: selectedMethod };
+  if (selectedMethod === 'number') {
+    body.params = {
+      n1: parseInt($('num1').value),
+      n2: parseInt($('num2').value),
+      n3: parseInt($('num3').value),
+    };
+  }
+
+  // Show casting animation
+  showCasting(true);
+  castBtn.classList.add('casting');
+  castBtn.textContent = '☯️ 天机运转中...';
+  resultArea.classList.add('hidden');
+  buyBanner.classList.add('hidden');
+
+  try {
+    // 1. Cast
+    const castResp = await fetch(`${API_BASE}/api/yijing/cast`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify(body),
+    });
+
+    const castData = await castResp.json();
+
+    if (!castResp.ok) {
+      if (castResp.status === 402) {
+        showCasting(false);
+        buyBanner.classList.remove('hidden');
+        showError('Token 余额不足！起卦需要 10T，请充值');
+        return;
+      }
+      if (castResp.status === 401) {
+        showCasting(false);
+        showError(castData.error || 'API Key 无效');
+        return;
+      }
+      showCasting(false);
+      showError(castData.error || `起卦失败 (${castResp.status})`);
+      return;
+    }
+
+    const hexData = castData.data;
+    const remaining = castData.usage?.remaining || 0;
+
+    // 2. Render result immediately
+    renderHexagram(hexData, remaining);
+    saveToHistory(hexData, remaining);
+
+    // 3. Request AI interpretation if there's a question
+    if (question) {
+      await requestInterpretation(hexData, question);
+    } else {
+      // Show prompt to ask question
+      renderInterpretation('💡 输入你的问题后点击"开始起卦"，DeepSeek AI 将为你深度解卦。\n\n提示：你也可以不输入问题直接起卦，查看卦象本身的意义。', false);
+    }
+
+    showCasting(false);
+
+  } catch (err) {
+    showCasting(false);
+    showError(`网络错误: ${err.message}`);
+  }
+
+  castBtn.classList.remove('casting');
+  castBtn.textContent = '🔮 再次起卦';
+  resultArea.classList.remove('hidden');
+  resultArea.scrollIntoView({ behavior: 'smooth' });
+}
+
+// ══════ AI Interpretation ══════
+async function requestInterpretation(hexData, question) {
+  renderInterpretation('', true); // Show loading
+
+  try {
+    const readResp = await fetch(`${API_BASE}/api/yijing/read`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${apiKey}`,
+      },
+      body: JSON.stringify({
+        hexagram: hexData.original_hexagram,
+        changed_hexagram: hexData.changed_hexagram,
+        changing_lines: hexData.changing_lines,
+        lines: hexData.lines,
+        method: hexData.method,
+        question: question,
+      }),
+    });
+
+    const readData = await readResp.json();
+
+    if (!readResp.ok) {
+      if (readResp.status === 402) {
+        renderInterpretation('⚠️ Token 余额不足，无法完成 AI 解卦（需要 20T）。已为你展示卦象基本信息。\n\n💡 点击下方链接购买 Token 或访问控制台充值。', false);
+        buyBanner.classList.remove('hidden');
+        return;
+      }
+      renderInterpretation(`⚠️ AI 解卦暂时不可用: ${readData.error}\n\n已为你展示卦象基本信息。`, false);
+      return;
+    }
+
+    renderInterpretation(readData.data?.interpretation || '', false);
+
+    // Update remaining tokens
+    const remaining = readData.usage?.remaining;
+    if (remaining !== undefined) {
+      const remEl = document.querySelector('.remaining-tokens');
+      if (remEl) remEl.textContent = `剩余 Token: ${remaining}`;
+    }
+  } catch (err) {
+    renderInterpretation(`⚠️ AI 解卦请求失败: ${err.message}`, false);
+  }
+}
+
+// ══════ Render Hexagram ══════
+function renderHexagram(hexData, remaining) {
+  const hex = hexData.original_hexagram;
+  const changed = hexData.changed_hexagram;
+  const lines = hexData.lines;
+  const changingLines = hexData.changing_lines;
+  const methodLabels = { coins: '铜钱起卦（六爻法）', time: '时间起卦（梅花易数）', number: '数字起卦', random: '随机起卦' };
+
+  // Line types
+  // lines array: [6,7,8,9,6,7] from bottom to top
+  // 6=老阴(变阳), 7=少阳, 8=少阴, 9=老阳(变阴)
+  const lineLabels = ['初', '二', '三', '四', '五', '上'];
+  const lineTypes = ['', '', '', '', '', ''];
+
+  for (let i = 0; i < 6; i++) {
+    const l = lines[i];
+    if (l === 6) lineTypes[i] = 'changing_yin';
+    else if (l === 7) lineTypes[i] = 'yang';
+    else if (l === 8) lineTypes[i] = 'yin';
+    else if (l === 9) lineTypes[i] = 'changing_yang';
+  }
+
+  const linesHTML = lineLabels.map((label, i) => {
+    const type = lineTypes[i];
+    const isChanging = type === 'changing_yang' || type === 'changing_yin';
+    let typeLabel = '';
+    let visualClass = '';
+    if (type === 'yang') { typeLabel = '少阳 ▅▅▅▅▅'; visualClass = 'yang'; }
+    else if (type === 'yin') { typeLabel = '少阴 ▅▅  ▅▅'; visualClass = 'yin'; }
+    else if (type === 'changing_yang') { typeLabel = '老阳 ▅▅▅▅▅ ○'; visualClass = 'changing_yang'; }
+    else if (type === 'changing_yin') { typeLabel = '老阴 ▅▅  ▅▅ ✕'; visualClass = 'changing_yin'; }
+
+    return `
+      <div class="line-row" style="animation-delay:${i * 0.1}s; animation: fadeIn 0.6s ease both;">
+        <span class="line-label">${label}爻</span>
+        <div class="line-visual ${visualClass}">
+          ${type === 'changing_yin' ? '<span class="change-mark">✕</span>' : ''}
+        </div>
+        <span class="line-type ${isChanging ? 'changing' : ''}">${isChanging ? '⚡' : ''} ${typeLabel}</span>
+      </div>`;
+  }).reverse().join(''); // Reverse: top line first in display
+
+  // Find changed hexagram if any
+  const changingInfo = changingLines && changingLines.length > 0
+    ? `<span style="color:var(--success);font-size:12px;">动爻：第${changingLines.join('、')}爻</span>`
+    : '';
+
+  const changedHTML = changed ? `
+    <div class="changed-section">
+      <div class="label">✦ 之卦（变卦）</div>
+      <div class="changed-trigrams">${changed.upper}${changed.lower}</div>
+      <div class="changed-name">第${changed.number}卦 · ${changed.name}</div>
+      <div style="font-size:12px;color:var(--text-muted);margin-top:4px;">${changed.judgment || ''}</div>
+    </div>` : '';
+
+  resultArea.innerHTML = `
+    <div class="result-hexagram">
+      <div class="hex-number">第 ${hex.number} 卦 · ${methodLabels[hexData.method] || hexData.method}</div>
+      <div class="hex-name">${hex.name}</div>
+      <div class="hex-trigrams">${hex.upper}${hex.lower}</div>
+      <div class="hex-judgment">${hex.judgment || ''}</div>
+      ${hex.brief ? `<div style="margin-top:8px;font-size:13px;color:var(--text-muted);">${hex.brief}</div>` : ''}
+      ${changingInfo ? `<div style="margin-top:8px;">${changingInfo}</div>` : ''}
+      <div class="remaining-tokens" style="position:absolute;top:16px;right:20px;font-size:11px;color:var(--text-muted);">
+        剩余 Token: ${remaining}
+      </div>
+    </div>
+    <div class="lines-display">
+      <div class="section-title" style="text-align:center;margin-bottom:8px;">六爻</div>
+      ${linesHTML}
+    </div>
+    ${changedHTML}
+    <div class="interpret-section" id="interpretSection">
+      <h3>🤖 AI 深度解卦</h3>
+      <div class="interpret-content" id="interpretContent"></div>
+    </div>
+  `;
+}
+
+// ══════ Render Interpretation ══════
+function renderInterpretation(text, isLoading) {
+  const el = document.getElementById('interpretContent');
+  if (!el) return;
+
+  if (isLoading) {
+    el.className = 'interpret-content loading';
+    el.textContent = 'AI 正在深度解卦，请稍候...';
+  } else {
+    el.className = 'interpret-content';
+    el.textContent = text;
+
+    // Simple markdown-like rendering for headings
+    let formatted = text
+      .replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--accent);">$1</strong>')
+      .replace(/^# (.*$)/gm, '<h3 style="font-size:18px;margin:20px 0 8px;color:var(--accent);">$1</h3>')
+      .replace(/^## (.*$)/gm, '<h4 style="font-size:16px;margin:16px 0 6px;color:var(--text);">$1</h4>')
+      .replace(/^### (.*$)/gm, '<h5 style="font-size:14px;margin:12px 0 4px;color:var(--text-muted);">$1</h5>')
+      .replace(/\n\n/g, '<br><br>')
+      .replace(/\n/g, '<br>');
+
+    el.innerHTML = formatted;
+  }
+}
+
+// ══════ Casting Overlay ══════
+function showCasting(show) {
+  if (show) {
+    castingOverlayEl.classList.remove('hidden');
+  } else {
+    castingOverlayEl.classList.add('hidden');
+  }
+}
+
+// ══════ Error Toast ══════
+function showError(msg) {
+  errorToast.textContent = msg;
+  errorToast.classList.remove('hidden');
+  setTimeout(() => errorToast.classList.add('hidden'), 4000);
+}
+
+// ══════ History ══════
+function saveToHistory(hexData, remaining) {
+  const history = JSON.parse(localStorage.getItem('yijing_history') || '[]');
+  history.unshift({
+    time: new Date().toISOString(),
+    method: hexData.method,
+    hex_name: hexData.original_hexagram.name,
+    hex_number: hexData.original_hexagram.number,
+    hex_upper: hexData.original_hexagram.upper,
+    hex_lower: hexData.original_hexagram.lower,
+    changing_lines: hexData.changing_lines,
+    changed_name: hexData.changed_hexagram?.name || null,
+    question: $('questionInput').value.trim(),
+    remaining: remaining,
+  });
+  // Keep max 50 entries
+  if (history.length > 50) history.length = 50;
+  localStorage.setItem('yijing_history', JSON.stringify(history));
+  updateHistoryCount();
+}
+
+function loadHistory() {
+  const history = JSON.parse(localStorage.getItem('yijing_history') || '[]');
+  if (history.length === 0) {
+    historyPanel.innerHTML = '<div class="history-empty">☯️ 还没有占卦记录，开始你的第一次起卦吧</div>';
+    return;
+  }
+  const methodLabels = { coins: '🪙', time: '🕐', number: '🔢', random: '🎲' };
+  historyPanel.innerHTML = history.map(h => `
+    <div class="history-item" onclick="viewHistoryItem('${h.time}')">
+      <div class="history-num">${h.hex_number}</div>
+      <div>
+        <div class="history-name">${h.hex_name}</div>
+        <div class="history-method">${methodLabels[h.method] || h.method} · ${h.hex_upper}${h.hex_lower}</div>
+      </div>
+      <div class="history-time">${formatTime(h.time)}</div>
+    </div>
+  `).join('');
+}
+
+function viewHistoryItem(time) {
+  const history = JSON.parse(localStorage.getItem('yijing_history') || '[]');
+  const item = history.find(h => h.time === time);
+  if (!item) return;
+
+  $('questionInput').value = item.question || '';
+  // Switch to the method used
+  selectedMethod = item.method;
+  document.querySelectorAll('.method-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.method === item.method);
+  });
+  numberInputs.style.display = item.method === 'number' ? 'block' : 'none';
+  updateCastButton();
+  historyPanel.classList.add('hidden');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function updateHistoryCount() {
+  const history = JSON.parse(localStorage.getItem('yijing_history') || '[]');
+  historyCount.textContent = history.length;
+}
+
+function toggleHistory() {
+  historyPanel.classList.toggle('hidden');
+  if (!historyPanel.classList.contains('hidden')) {
+    loadHistory();
+    historyPanel.scrollIntoView({ behavior: 'smooth' });
+  }
+}
+
+function formatTime(iso) {
+  const d = new Date(iso);
+  const now = new Date();
+  const diff = now - d;
+  if (diff < 60000) return '刚刚';
+  if (diff < 3600000) return `${Math.floor(diff/60000)}分钟前`;
+  if (diff < 86400000) return `${Math.floor(diff/3600000)}小时前`;
+  return `${d.getMonth()+1}/${d.getDate()} ${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+}
+
+// ══════ Init ══════
+updateCastButton();
+updateHistoryCount();
+
+// URL hash: if ?api_key=sk-xxx is present, auto-fill
+const urlParams = new URLSearchParams(window.location.search);
+const hashKey = urlParams.get('api_key');
+if (hashKey && hashKey.startsWith('sk-')) {
+  apiKeyInput.value = hashKey;
+  apiKey = hashKey;
+  localStorage.setItem('yijing_api_key', apiKey);
+  updateKeyStatus();
+  checkApiKey();
+}
+</script>
+</body>
+</html>

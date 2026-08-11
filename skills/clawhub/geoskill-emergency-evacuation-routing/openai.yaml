@@ -1,0 +1,11 @@
+name: geoskill-emergency-evacuation-routing
+display_name: 应急疏散路径规划
+description: |
+  最短路径叠加灾害阻断与容量约束的多起点疏散规划
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-emergency-evacuation-routing.py
+runtime: python>=3.9
+tags:
+  - gis
+  - remote-sensing

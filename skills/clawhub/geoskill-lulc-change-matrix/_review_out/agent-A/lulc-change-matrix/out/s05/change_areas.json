@@ -1,0 +1,85 @@
+{
+  "classes": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "summary": {
+    "total_pixels": 9216,
+    "changed_pixels": 444,
+    "unchanged_pixels": 8772,
+    "change_fraction": 0.048177083333333336,
+    "pixel_area_km2": -472.89550157165365,
+    "total_area_km2": -4358204.94248436,
+    "changed_area_km2": -209965.60269781423,
+    "per_class": [
+      {
+        "class_index": 0,
+        "class_name": "water",
+        "t1_pixels": 786,
+        "t2_pixels": 786,
+        "persistent_pixels": 786,
+        "gross_loss_pixels": 0,
+        "gross_gain_pixels": 0,
+        "net_change_pixels": 0,
+        "t1_area_km2": -371695.8642353198,
+        "t2_area_km2": -371695.8642353198,
+        "net_change_area_km2": -0.0
+      },
+      {
+        "class_index": 1,
+        "class_name": "vegetation",
+        "t1_pixels": 2288,
+        "t2_pixels": 2288,
+        "persistent_pixels": 2288,
+        "gross_loss_pixels": 0,
+        "gross_gain_pixels": 0,
+        "net_change_pixels": 0,
+        "t1_area_km2": -1081984.9075959437,
+        "t2_area_km2": -1081984.9075959437,
+        "net_change_area_km2": -0.0
+      },
+      {
+        "class_index": 2,
+        "class_name": "cropland",
+        "t1_pixels": 3038,
+        "t2_pixels": 3038,
+        "persistent_pixels": 3038,
+        "gross_loss_pixels": 0,
+        "gross_gain_pixels": 0,
+        "net_change_pixels": 0,
+        "t1_area_km2": -1436656.5337746837,
+        "t2_area_km2": -1436656.5337746837,
+        "net_change_area_km2": -0.0
+      },
+      {
+        "class_index": 3,
+        "class_name": "built_up",
+        "t1_pixels": 2304,
+        "t2_pixels": 1860,
+        "persistent_pixels": 1860,
+        "gross_loss_pixels": 444,
+        "gross_gain_pixels": 0,
+        "net_change_pixels": -444,
+        "t1_area_km2": -1089551.23562109,
+        "t2_area_km2": -879585.6329232758,
+        "net_change_area_km2": 209965.60269781423
+      },
+      {
+        "class_index": 4,
+        "class_name": "bare_soil",
+        "t1_pixels": 800,
+        "t2_pixels": 1244,
+        "persistent_pixels": 800,
+        "gross_loss_pixels": 0,
+        "gross_gain_pixels": 444,
+        "net_change_pixels": 444,
+        "t1_area_km2": -378316.4012573229,
+        "t2_area_km2": -588282.0039551371,
+        "net_change_area_km2": -209965.60269781423
+      }
+    ]
+  }
+}

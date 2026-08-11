@@ -13,6 +13,7 @@ import os
 import html
 import json
 import re
+import shlex
 import tempfile
 import time
 from pathlib import Path
@@ -20,16 +21,16 @@ from pathlib import Path
 from . import brand
 from .catalog import (
     BY_ID,
-    FAMILY_LABEL, FAMILY_OF, FAMILY_ORDER,
     SUBJECT_LABEL, SUBJECT_OF, SUBJECT_ORDER,
     ATTESTED, CRITICAL, FAIL, HIGH, LOW, MEDIUM, PASS, UNKNOWN, WARN, Finding, ast_for, owasp_for, remediation_for,
 )
 from .ansi import paint
-from .brand import BRAND_RED, LOGO_SVG, SEVERITY, WORDMARK, grade_ansi, grade_hex
+from .brand import BRAND_RED, FAVICON_DATA_URI, LOGO_SVG, SEVERITY, WORDMARK, grade_ansi, grade_hex
 from .dedup import deduplicate_findings
 from .dossier import AXIS_LABEL
 from .guide import suggest_actions
 from .scoring import ScoreResult, assessment_coverage
+from .textnorm import ASCII_MAP, asciify
 
 # Findings, skill names, decoded payload previews and native-audit fields are UNTRUSTED
 # data. Strip terminal-control sequences (ANSI/OSC incl. OSC-52 clipboard), bidi overrides
@@ -52,6 +53,35 @@ def _sanitize(s: str) -> str:
     # accidentally implemented for JSON while remaining absent from text/SARIF/HTML.
     from .logsafe import redact  # noqa: PLC0415
     return redact(s)
+
+
+# B-381: an absolute path under a user's home directory carries the operator's OS
+# username (e.g. "/home/dave/.npm-global/..."). Fine inside the full report / --save
+# file (stays on the owner's own machine), but --dashboard --full's card is explicitly
+# designed to be pasted into chat (Telegram et al.) -- CLAUDE.md §8 "No PII... in logs,
+# reports, fixtures, or test output" applies to that card specifically. Reproduced: a
+# MEDIUM-confidence "Native binary PATH safety" finding's `detail` embeds the operator's
+# npm-global install path under /home/<user>/... . Scoped to a leading "~" so the
+# remainder of the path (still useful context, e.g. ".npm-global/lib/node_modules") is
+# preserved -- only the username-bearing prefix is removed, matching the well-known
+# shell convention for "my home dir" rather than inventing a new placeholder syntax.
+_HOME_PATH_RE = re.compile(
+    r"/home/[^/\s]+|/Users/[^/\s]+|[A-Za-z]:\\+Users\\+[^\\\s]+"
+)
+
+
+def _redact_home_paths(text: str) -> str:
+    """Collapse a leading user-home path segment to '~' (B-381).
+
+    Applied only to the --dashboard --full "Worth a glance" card section (the
+    MEDIUM/ATTESTED-confidence findings render_dashboard_findings's own HIGH-confidence
+    filter deliberately excludes) -- the rest of the report/--save/--html output keeps
+    full paths, which is correct there: those stay on the owner's own machine and a
+    real path is exactly what an owner debugging their own config needs to see.
+    """
+    if not text:
+        return text
+    return _HOME_PATH_RE.sub("~", text)
 
 
 def _sanitize_tree(value):
@@ -103,6 +133,183 @@ def _runtime_cap_phrase(reason: str | None) -> str:
     return "a corroborated runtime signal"
 
 
+def _live_injection_cap_phrase(reason: str | None) -> str:
+    """Plain-English rendering of scoring's stable ``live_injection_cap_reason`` label.
+
+    `reason` is a bounded, allow-listed ``"tool:id[; tool:id ...]"`` string (see
+    `pipeline.live_test_cap_signal`) — already safe to embed directly (no free text ever
+    reaches it), but this still routes through the same "report.py owns the sentence,
+    the scoring layer only names a stable label" discipline as `_runtime_cap_phrase`.
+    """
+    if not reason:
+        return "a live injection-test scenario reported VULNERABLE"
+    return f"a live injection-test scenario reported VULNERABLE ({reason})"
+
+
+def _behavioral_cap_phrase(reason: str | None) -> str:
+    """Plain-English rendering of scoring's stable ``behavioral_cap_reason`` label.
+
+    `reason` is one of `scoring._BEHAVIORAL_LABELS`'s values (e.g. "T1 behavioral
+    trifecta"), joined with "; " when more than one detector fired — already safe to
+    embed directly (bounded, never free text), but this still routes through the same
+    "report.py owns the sentence, the scoring layer only names a stable label"
+    discipline as `_runtime_cap_phrase`/`_live_injection_cap_phrase`.
+    """
+    if not reason:
+        return "a behavioral detector fired"
+    return f"a behavioral detector fired ({reason})"
+
+
+# ── Cap-reason cascade (B-380) ──────────────────────────────────────────
+#
+# Six independent cap-only signals can each tighten a score below its raw value —
+# severity FAILs, a blind/unreadable config, a degraded (crashed/timed-out) check, a
+# corroborated runtime signal, a submitted VULNERABLE live-injection-test verdict, and
+# a fired behavioral detector. `compute()` (scoring.py) documents every one of the
+# `*_capped` fields as True ONLY when that specific signal actually bound (tightened
+# the score further than whatever had already applied) — `cap_severity` has the
+# identical property by construction (only set when its own cap loop actually reduced
+# the score) — so more than one of these six can be True on the SAME ScoreResult.
+#
+# `render_report` and `render_html` used to each hand-roll their own five-branch
+# "elif" ladder plus a private "_extra = []; if X: _extra.append(...)" block per
+# branch — ten near-identical copies of the same six-signal enumeration, hand-edited
+# separately every time a new signal type was added. That duplication is what let two
+# real defects ship green: `render_html`'s runtime branch tested `score.capped or
+# _rt_capped` (true for ANY cap, not just a runtime one, so a behavioral-only cap fell
+# through to it and fabricated a runtime-signal claim), and neither renderer's
+# severity-cap branch named a co-occurring runtime cap even when the runtime cap was
+# the one that actually set the final number.
+#
+# `_CAP_SIGNAL_TABLE` is the ONE ordered (flag, phrase) table both renderers read, and
+# `_cap_cascade()` is the ONE place that decides which signal leads (the primary
+# reason) and which other active signals are named as "also" mentions. A new signal
+# type is added to the table exactly once and both renderers pick it up automatically
+# — the defect class above becomes structurally impossible to reintroduce.
+_CAP_LIVE = "live"
+_CAP_CONFIG_BLIND = "config_blind"
+_CAP_DEGRADED = "degraded"
+_CAP_SEVERITY = "severity"
+_CAP_RUNTIME = "runtime"
+_CAP_BEHAVIORAL = "behavioral"
+
+# Display-priority order (highest first): also the order in which `_cap_cascade` picks
+# the PRIMARY reason, and the order "also" mentions are listed in. This mirrors the
+# existing, deliberate priority render_report already used (live > config-blind >
+# degraded > severity > runtime > behavioral) — a direct, positive proof of a
+# successful attack outranks "cannot rule out a CRITICAL condition", which outranks an
+# actual open FAIL, which outranks a corroborated-but-indirect runtime signal, which
+# outranks the weakest/most-heuristic behavioral layer.
+#
+# Each entry's `phrase(score)` returns the unescaped English "also ..." wording for
+# that signal — never called unless the signal is active (`_cap_signal_active` below).
+# Deliberately free of "(capped from N - ...)" framing and of HTML escaping: both
+# renderers reuse the identical English, and `render_html` applies `esc()` itself so
+# nothing here duplicates that decision.
+_CAP_SIGNAL_TABLE = (
+    (_CAP_LIVE, lambda score: _live_injection_cap_phrase(
+        getattr(score, "live_injection_cap_reason", None))),
+    (_CAP_CONFIG_BLIND, lambda score: "a blind/unreadable config"),
+    (_CAP_DEGRADED, lambda score: f"{getattr(score, 'degraded_count', 0)} degraded check(s)"),
+    (_CAP_SEVERITY, lambda score: f"an open {score.cap_severity} finding"),
+    (_CAP_RUNTIME, lambda score: (
+        f"a corroborated runtime signal ({_runtime_cap_phrase(score.runtime_cap_reason)})")),
+    (_CAP_BEHAVIORAL, lambda score: _behavioral_cap_phrase(
+        getattr(score, "behavioral_cap_reason", None))),
+)
+
+
+def _cap_signal_active(score: ScoreResult) -> dict:
+    """Which of the six cap-only signals actually bound the score on *score*.
+
+    `getattr(score, name, default)` throughout — never direct attribute access —
+    because some tests build minimal duck-typed ScoreResult stand-ins that predate the
+    newer fields; this is the same tolerance every call site already established
+    individually (see the B-306/F-154/F-155 comments this replaces).
+    """
+    return {
+        _CAP_LIVE: bool(getattr(score, "live_injection_capped", False)),
+        _CAP_CONFIG_BLIND: bool(getattr(score, "config_blind_capped", False)),
+        _CAP_DEGRADED: bool(getattr(score, "degraded_capped", False)),
+        _CAP_SEVERITY: bool(getattr(score, "cap_severity", None)),
+        _CAP_RUNTIME: bool(getattr(score, "runtime_capped", False)),
+        _CAP_BEHAVIORAL: bool(getattr(score, "behavioral_capped", False)),
+    }
+
+
+def _cap_cascade(score: ScoreResult) -> tuple[str | None, list[str]]:
+    """Decide the primary cap-reason signal and the co-occurring "also" phrases.
+
+    Returns ``(primary, extra_phrases)``: *primary* is one of the six ``_CAP_*``
+    names — the highest-priority ACTIVE signal, per `_CAP_SIGNAL_TABLE`'s order — or
+    ``None`` when nothing capped the score at all. *extra_phrases* is every OTHER
+    active signal's "also ..." wording, already in priority order and ready to
+    ``", ".join(...)``.
+
+    This is the ONE place that makes the primary/co-occurring decision — both
+    `render_report` and `render_html` call it instead of maintaining their own copy of
+    the same six-signal priority ladder (B-380).
+    """
+    active = _cap_signal_active(score)
+    order = [name for name, _phrase in _CAP_SIGNAL_TABLE]
+    primary = next((name for name in order if active[name]), None)
+    if primary is None:
+        return None, []
+    extras = [
+        phrase(score)
+        for name, phrase in _CAP_SIGNAL_TABLE
+        if name != primary and active[name]
+    ]
+    return primary, extras
+
+
+def _cap_also_clause(extras: list[str]) -> str:
+    """``"; also X, Y"`` (or ``""``) — the join both renderers used to hand-roll."""
+    return f"; also {', '.join(extras)}" if extras else ""
+
+
+def _cap_primary_reason_text(primary: str, score: ScoreResult, *,
+                             audited_path=None) -> str:
+    """The middle clause of "(capped from N - <this>...)" for whichever signal
+    `_cap_cascade` chose as primary.
+
+    Unescaped English — `render_html` applies `esc()` around the result;
+    `render_report` uses it as-is. `audited_path` is only ever meaningful for the
+    config-blind "absent" case (`render_report` passes the resolved would-be config
+    path when it has one; `render_html`'s signature has no ctx/path available, so it
+    always passes ``None`` and the HTML text stays path-free — matching the pre-
+    existing per-renderer wording exactly).
+    """
+    if primary == _CAP_LIVE:
+        return _live_injection_cap_phrase(getattr(score, "live_injection_cap_reason", None))
+    if primary == _CAP_CONFIG_BLIND:
+        # B-363: word the two config-blind states distinctly — "absent" (nothing to
+        # read at all) is strictly less information than "unreadable" (present but
+        # broken), so it must never read as if a file was found and opened.
+        if getattr(score, "config_blind_reason", None) == "absent":
+            if audited_path is not None:
+                text = f"no OpenClaw config found at {audited_path}"
+            else:
+                text = "no OpenClaw config found"
+        else:
+            text = "openclaw.json unreadable/unparseable this run"
+        return f"{text}: cannot rule out a CRITICAL condition"
+    if primary == _CAP_DEGRADED:
+        # B-399: this cap now also fires on an engine-side-degraded UNKNOWN (a check
+        # that ran but couldn't reach a verdict because its own input was unreadable/
+        # corrupt) alongside a crashed/timed-out check -- "could not reach a reliable
+        # verdict" covers both without claiming a crash/timeout that didn't happen.
+        n = getattr(score, "degraded_count", 0)
+        return f"{n} check(s) could not reach a reliable verdict this run: cannot rule out a CRITICAL condition"
+    if primary == _CAP_SEVERITY:
+        return f"open {score.cap_severity} finding"
+    if primary == _CAP_RUNTIME:
+        return f"corroborated runtime signal: {_runtime_cap_phrase(score.runtime_cap_reason)}"
+    if primary == _CAP_BEHAVIORAL:
+        return _behavioral_cap_phrase(getattr(score, "behavioral_cap_reason", None))
+    raise ValueError(f"unknown cap-cascade primary: {primary!r}")  # pragma: no cover
+
+
 _SEV_ORDER = {CRITICAL: 0, HIGH: 1, MEDIUM: 2, LOW: 3}
 # Within a family: FAIL/WARN (the actionable items) before PASS/UNKNOWN (context).
 _STATUS_ORDER = {FAIL: 0, WARN: 1, UNKNOWN: 2, PASS: 3}
@@ -116,12 +323,12 @@ _ICON_ASCII = {FAIL: "[X]", WARN: "[!]", PASS: "[OK]", UNKNOWN: "[?]", "SKILL_AR
 _SEV_GLYPH = {CRITICAL: "🔴", HIGH: "🟠", MEDIUM: "🟡", LOW: "⚪"}
 _SEV_COLOR = {CRITICAL: "red", HIGH: "red", MEDIUM: "yellow", LOW: "grey"}
 
-# Family → emoji for the chat Dashboard paste ONLY (SKILL.md Step-3 table). The CLI
-# report's family headers deliberately stay emoji-less (design-system.md Layer-2 decision).
-_FAMILY_EMOJI = {
-    "exposure": "🌐", "privilege": "🔑", "supply_chain": "📦",
-    "content_integrity": "📝", "secrets": "🔒", "detection": "🛰️",
-    "automation": "🔧",
+# Subject → emoji for the chat Dashboard paste ONLY (SKILL.md Step-3 table). The CLI
+# report / HTML / PDF subject headers deliberately stay emoji-less (design-system.md
+# Layer-2 decision); only the chat card carries the emoji.
+_SUBJECT_EMOJI = {
+    "openclaw": "⚙️", "host": "🖥️", "agents": "🤖", "skills": "🧩",
+    "mcp": "🔌", "plugins": "📦", "channels": "📡", "logs": "📝",
 }
 
 
@@ -234,15 +441,12 @@ def _coverage_lines(findings: list[Finding], *, ascii_only: bool = False,
         lines.append(f"{_g('roadmap')} roadmap {len(roadmap)} (no check yet): {names}")
     return lines
 
-_ASCII_MAP = str.maketrans({
-    "×": "x", "≤": "<=", "≥": ">=", "—": "-", "–": "-", "…": "...",
-    "’": "'", "‘": "'", "“": '"', "”": '"', "≈": "~", "→": "->", "•": "*",
-})
-
-
-def _asciify(text: str) -> str:
-    """Fold the unicode we emit down to pure ASCII for legacy consoles."""
-    return text.translate(_ASCII_MAP).encode("ascii", "replace").decode("ascii")
+# B-483: the table and the function now live in the `textnorm` leaf, because five other
+# modules folded output to ASCII too and only one of them mapped anything. Re-exported
+# under the private names this module has always used so every existing importer (tests
+# included) is unaffected.
+_ASCII_MAP = ASCII_MAP
+_asciify = asciify
 
 
 def compute_scan_receipt(findings) -> str:
@@ -293,10 +497,10 @@ def _capability_graph(ctx) -> dict:
         SENSITIVE_TOOL_HINTS,
         _agent_legs,
         _enabled_tools,
+        _external_input_channels,
         _hint,
         _mcp_has_remote,
         _mcp_servers,
-        _untrusted_input_channels,
         _web_fetch_enabled,
     )
     from .collector import dig  # noqa: PLC0415
@@ -306,8 +510,16 @@ def _capability_graph(ctx) -> dict:
     nodes: list[dict] = []
     edges: list[tuple[str, str]] = []
 
+    # B-297/B-371: _external_input_channels (not the narrower _untrusted_input_channels)
+    # is what A1/B41/B46/RiskPaths already treat as "untrusted input" for every
+    # non-hard-FAIL consumer -- it additionally sees a channel open via an unrestricted
+    # groups["*"] entry with no dmPolicy/groupPolicy at all (_open_wildcard_group_channels),
+    # the commonest real open-group config (coding_telegram_insecure). Using the narrower
+    # helper here left this presentation-only graph showing an inert, edgeless "input" node
+    # on a config A1 correctly FAILs as 3/3 trifecta -- a real finding vs. capability_graph
+    # invariant mismatch (ClawRange hunt.py, 2026-07-31).
     input_surfaces = sorted({
-        *_untrusted_input_channels(cfg),
+        *_external_input_channels(cfg),
         *[t for t in _enabled_tools(cfg) if _hint([t], INPUT_TOOL_HINTS)],
         *(["web.fetch"] if _web_fetch_enabled(cfg) else []),
     })
@@ -415,6 +627,25 @@ def _capability_graph_lines(ctx) -> list[str]:
     return lines
 
 
+def _credential_surface_rel(path: Path, home_path: Path | None) -> str:
+    """Render `path` as evidence text for the credential-surface map without ever
+    disclosing an absolute filesystem path (username, mount points, directory
+    layout). ClawHub security-audit finding (2026-07-27, v3.58.0, Intent-Code
+    Divergence): the previous inline closure fell back to `str(path)` — the
+    absolute path — whenever `relative_to()` failed. No call site in
+    `_credential_surface_map` actually triggered that fallback (every candidate is
+    built as `home_path / suffix`), but that was an invariant of the callers, not
+    one this helper enforced — a future credential-surface source could pass an
+    out-of-home path and leak silently. Falling back to `path.name` still tells
+    the reader WHAT was found, never WHERE on disk."""
+    if home_path is not None:
+        try:
+            return str(path.relative_to(home_path))
+        except ValueError:
+            pass
+    return path.name
+
+
 def _credential_surface_map(ctx) -> list[dict]:
     """Path-existence inventory of credential stores reachable from the agent home.
 
@@ -433,10 +664,7 @@ def _credential_surface_map(ctx) -> list[dict]:
     home_path = Path(home) if home is not None else None
 
     def _rel(path: Path) -> str:
-        try:
-            return str(path.relative_to(home_path)) if home_path is not None else str(path)
-        except Exception:
-            return str(path)
+        return _credential_surface_rel(path, home_path)
 
     def _summarize(items: list[str], label: str) -> str:
         if not items:
@@ -602,33 +830,125 @@ def compute_blast_radius(cfg: dict, finding_cid: str) -> dict:  # noqa: ARG001
     }
 
 
-def _family_of(f) -> str | None:
-    """Map a finding to one of the 7 Dashboard families via its catalog surface.
-
-    A1 (Lethal Trifecta) is cross-cutting in the catalog (surface="trifecta", no
-    family bucket) but it IS an agent-behavior signal, so the Dashboard routes it
-    to Privilege & Execution rather than giving it a standalone headline (F-044).
-    Findings with an id outside CATALOG (native-audit passthrough, test doubles)
-    return None -> the "Other" bucket, so nothing is ever silently dropped.
-    """
-    if f.id == "A1":
-        return "privilege"
-    meta = BY_ID.get(f.id)
-    if meta is None:
-        return None
-    return FAMILY_OF.get(meta.surface)
-
-
 def _subject_of(f) -> str | None:
-    """Map a finding to one of the 5 Inventory-by-subject buckets (F-131 §4.2) via its
-    catalog surface. Unlike `_family_of`, A1 needs no special case: its surface is
+    """Map a finding to one of the 8 Inventory-by-subject buckets (F-131 §4.2) via its
+    catalog surface. A1 (Lethal Trifecta) needs no special case: its surface is
     "trifecta", already present in SUBJECT_OF (routed to "agents" — an agent-behavior
-    signal). Findings with an id outside CATALOG return None (dropped from every bucket,
-    same "nothing silently counted" stance as _family_of's "Other" fallback)."""
+    signal). Findings with an id outside CATALOG (native-audit passthrough, test doubles)
+    return None -> the trailing "Other" bucket in _group_issues_by_subject, so nothing is
+    ever silently dropped (C-372 promoted subjects to the single report/HTML/PDF/dashboard
+    grouping, retiring the old 7-family view)."""
     meta = BY_ID.get(f.id)
     if meta is None:
         return None
     return SUBJECT_OF.get(meta.surface)
+
+
+def _group_issues_by_subject(issues):
+    """Group findings by their Inventory subject (catalog.SUBJECT_ORDER), lossless: every
+    finding lands in exactly one bucket, and any finding whose `_subject_of` is None (an id
+    outside CATALOG) falls into a trailing "Other" bucket so nothing is ever silently
+    dropped (B-444 class). Returns an ordered list of `(subject_key, label, [findings])`
+    for each subject that has >=1 member; empty subjects are skipped so the detail view
+    stays focused (the per-subject summary above still names all of them). This is the
+    single grouping the terminal, HTML, PDF and chat-dashboard renderers all consume, so
+    they cannot drift (F-131 subject taxonomy, promoted from summary-only to every detail
+    view — C-372, retiring the old 7-family grouping)."""
+    grouped: dict = {}
+    for f in issues:
+        grouped.setdefault(_subject_of(f), []).append(f)
+    out = []
+    for subj_key in SUBJECT_ORDER:
+        members = grouped.get(subj_key)
+        if members:
+            out.append((subj_key, SUBJECT_LABEL.get(subj_key, subj_key), members))
+    other = grouped.get(None)
+    if other:
+        out.append((None, "Other", other))
+    return out
+
+
+def _subject_count_text(n_issues: int, n_unassessed: int) -> str:
+    """The one phrase every subject rollup uses for "how did this subject do".
+
+    Golden Rule #4: a subject whose checks could not reach a verdict is NOT clear. Saying
+    "clear" next to an UNKNOWN marker reads as an assessed all-good — the exact fake-PASS
+    this project refuses to emit — and B-472 found the terminal inventory block and the
+    by-subject detail header doing precisely that while the card summary (the first caller
+    of this rule) already got it right: `Logs & trajectories — [?] clear` printed directly
+    above `3 not assessed (config can't tell)` for the same three findings.
+
+    Shared rather than repeated so the three surfaces cannot drift again. `n_unassessed`
+    counts genuine UNKNOWNs only — a `not_applicable` finding IS an assessment (the
+    surface was positively confirmed absent), so it must not turn a clean subject into an
+    unassessed one."""
+    if n_issues:
+        return f"{n_issues} issue(s)"
+    if n_unassessed:
+        return "not assessed"
+    return "clear"
+
+
+def _subject_summary_rows(findings, ctx, *, plugin_sweep=None):
+    """Uniform per-subject summary rows — one `(label, status, count_text)` tuple per
+    catalog.SUBJECT_ORDER entry — for the HTML and PDF report headers. Derived entirely
+    from `build_inventory()`, so this summary can never disagree with the JSON `inventory`
+    payload or the terminal "Inventory by subject" block (`render_subject_inventory`).
+    Returns [] when `ctx` is unavailable (same skip-don't-guess stance those surfaces
+    already take)."""
+    if ctx is None:
+        return []
+    inv = build_inventory(findings, ctx, plugin_sweep=plugin_sweep)
+
+    def _issues_count(subj):
+        bucket = inv[subj]
+        return _subject_count_text(len(bucket.get("findings") or []),
+                                   int(bucket.get("unassessed") or 0))
+
+    rows = [
+        (SUBJECT_LABEL["openclaw"], inv["openclaw"]["status"], _issues_count("openclaw")),
+        (SUBJECT_LABEL["host"], inv["host"]["status"], _issues_count("host")),
+    ]
+    ag = inv["agents"]
+    n_ag = len(ag.get("roster") or [])
+    rows.append((SUBJECT_LABEL["agents"], ag["status"],
+                 f"{_issues_count('agents')} · {n_ag} agent{'' if n_ag == 1 else 's'}"))
+
+    skills = inv["skills"]
+    sk_flagged = [s for s in skills if s.get("status") in (FAIL, WARN, UNKNOWN)]
+    sk_status = _worst_of_statuses(s.get("status") for s in sk_flagged) if sk_flagged else PASS
+    sk_count = f"{len(sk_flagged)} flagged · {len(skills)} installed" if skills else "none installed"
+    rows.append((SUBJECT_LABEL["skills"], sk_status, sk_count))
+
+    mcp = inv["mcp"]
+    mcp_bad = [m for m in mcp if m.get("verdict") != "ok"]
+    mcp_status = _worst_of_statuses(m.get("verdict") for m in mcp_bad) if mcp_bad else PASS
+    mcp_count = f"{len(mcp_bad)} flagged · {len(mcp)} configured" if mcp else "none configured"
+    rows.append((SUBJECT_LABEL["mcp"], mcp_status, mcp_count))
+
+    plug = inv["plugins"]
+    if not plug.get("scanned"):
+        # Distinguish "no sweep ran" from "a sweep ran and found no plugin index" —
+        # telling a user who just ran --full to "run --full" is a lie about what happened.
+        note = "not scanned — run --full" if plugin_sweep is None else "no plugin index found"
+        rows.append((SUBJECT_LABEL["plugins"], UNKNOWN, note))
+    else:
+        prows = plug.get("rows") or []
+        # Fold TRUNCATED/SKIPPED into UNKNOWN for the rollup, as _plugins_inventory_lines
+        # does — _worst_of_statuses only recognizes FAIL/WARN/UNKNOWN/PASS (_STATUS_ORDER).
+        pstat = [r["status"] if r["status"] in _STATUS_ORDER else UNKNOWN for r in prows]
+        p_flagged = sum(1 for s in pstat if s in (FAIL, WARN, UNKNOWN))
+        p_status = _worst_of_statuses(pstat) if prows else PASS
+        p_count = f"{p_flagged} flagged · {len(prows)} installed" if prows else "none installed"
+        rows.append((SUBJECT_LABEL["plugins"], p_status, p_count))
+
+    ch = inv["channels"]
+    n_ch = len(ch.get("roster") or [])
+    ch_count = _issues_count("channels") + (f" · {n_ch} channel{'' if n_ch == 1 else 's'}" if n_ch else "")
+    rows.append((SUBJECT_LABEL["channels"], ch["status"], ch_count))
+
+    rows.append((SUBJECT_LABEL["logs"], inv["logs"]["status"], _issues_count("logs")))
+    return rows
 
 
 def _render_finding_compact(lines, icon, f):
@@ -636,8 +956,82 @@ def _render_finding_compact(lines, icon, f):
     lines.append(f"  {icon[f.status]} [{f.severity}] {_sanitize(f.title)}")
 
 
+# B-381: --dashboard --full --compact's per-finding "why" text, word-boundary
+# truncated so a bad config's Section-2 Findings block (which scales with FAIL/WARN
+# count, unlike every other section render_dashboard's docstring already calls
+# "already short") can fit the Telegram ~4096-char budget. Tuned against the two
+# fixtures --compact is measured against (fixtures/home_safe, fixtures/home_vuln):
+# before this fix, --dashboard --full --compact measured 4775/7936 chars respectively
+# (already over budget on the CLEAN config too, let alone the 25-issue bad one); after
+# this fix (this limit + dropped evidence bullets + a narrower family-frame border
+# rule + a lower "Worth a glance" limit under compact), 1976/3788 chars -- both under
+# 4096 with headroom. Re-measure and retune if a future change grows a section this
+# doesn't already trim.
+_COMPACT_WHY_LIMIT = 36
+
+# B-405: the per-item trims above (this file, tuned against two fixtures) are NOT a
+# hard guarantee -- a real fleet config with more FAIL/WARN findings than either
+# fixture measured this against (many findings * a few chars each still adds up) blew
+# straight through the budget (5641 chars measured against a real ~/.openclaw before
+# this fix). render_dashboard now enforces the budget itself at render time, as a
+# deterministic last line of defence rather than trusting per-item tuning to always be
+# enough: the documented Telegram cap.
+_COMPACT_CHAR_BUDGET = 4096
+
+# B-405: render_dashboard's reduction ladder once _COMPACT_CHAR_BUDGET is still
+# exceeded after the existing per-item trims. Each level is CUMULATIVE and widens
+# `why_drop_severities` (dropping the whole why line, not just narrowing it) for one
+# more severity, weakest first -- LOW detail is the first thing a reader loses,
+# CRITICAL detail is the last. Findings' titles/severity/family structure are never
+# dropped by this ladder; only the "why" explanatory line is.
+_COMPACT_WHY_DROP_LEVELS = (
+    frozenset({LOW}),
+    frozenset({LOW, MEDIUM}),
+    frozenset({LOW, MEDIUM, HIGH}),
+    frozenset({LOW, MEDIUM, HIGH, CRITICAL}),
+)
+
+
+def _hard_truncate_compact(out: str, budget: int = _COMPACT_CHAR_BUDGET) -> str:
+    """Absolute last-resort guarantee (B-405): reached only if a config has so many
+    findings that even dropping every why line (all four severities) still leaves the
+    bare title/family-frame lines over budget. Cuts deterministically at the last
+    newline at-or-before the budget (reserving room for the trailing marker) so the
+    render NEVER exceeds its own documented cap, even in this pathological case.
+
+    This runs AFTER _finalize_compact_dashboard's own _asciify step (it is the final
+    fallback in that function, not wrapped by it -- see _finalize_compact_dashboard),
+    so the marker itself must always be pure ASCII: a raw "…" here would silently
+    break the documented ascii_only contract in exactly this extreme-fallback case.
+    """
+    if len(out) <= budget:
+        return out
+    marker = "\n...(truncated to fit budget)\n"
+    room = max(budget - len(marker), 0)
+    cut = out[:room]
+    nl = cut.rfind("\n")
+    if nl > 0:
+        cut = cut[:nl]
+    result = cut + marker
+    return result[:budget] if len(result) > budget else result
+
+
+def _compact_detail(text: str, limit: int) -> str:
+    """Truncate *text* to at most ~*limit* chars at a word boundary, appending an
+    ellipsis when cut. Never splits mid-word; falls back to a hard cut only when the
+    first word alone already exceeds *limit* (never returns emptystring for
+    nonempty input)."""
+    if len(text) <= limit:
+        return text
+    cut = text[:limit].rsplit(" ", 1)[0].rstrip()
+    if not cut:
+        cut = text[:limit].rstrip()
+    return f"{cut}…"
+
+
 def _render_finding(lines, f, cfg: dict | None = None, *,
-                    ascii_only: bool = False, color: bool = False):
+                    ascii_only: bool = False, color: bool = False,
+                    compact: bool = False, why_drop_severities: frozenset = frozenset()):
     conf = getattr(f, "confidence", "HIGH")
     tag = f"  (confidence: {conf.lower()})" if conf != "HIGH" and f.status in (FAIL, WARN) else ""
     pc = getattr(f, "pass_confidence", None)
@@ -647,14 +1041,24 @@ def _render_finding(lines, f, cfg: dict | None = None, *,
     lines.append(f"{_sev_token(f.severity, ascii_only=ascii_only, color=color)}  "
                  f"{_sanitize(f.title)}{tag}{pass_tag}")
     why_text = _sanitize(f.detail) if f.detail else ""
-    if why_text:
-        lines.append(f"    why: {why_text}")
+    # B-405: when the per-item --compact trim below still isn't enough to fit the
+    # documented 4096-char budget on a large real config, render_dashboard retries
+    # with progressively larger `why_drop_severities` sets -- dropping the why line
+    # ENTIRELY for the named severities, weakest first, so CRITICAL/HIGH detail is the
+    # last thing to go. Default (empty set) reproduces the exact prior behaviour.
+    if why_text and not (compact and f.severity in why_drop_severities):
+        # B-381: --compact trims the detail text itself -- the growth driver on a bad
+        # config is many findings' full "why" paragraphs, not any single fixed section.
+        shown_why = _compact_detail(why_text, _COMPACT_WHY_LIMIT) if compact else why_text
+        lines.append(f"    why: {shown_why}")
     # Surface the concrete evidence (e.g. the exact verbs B43/B44 flagged) when a
     # FAIL/WARN carries it — naming the specific item is the value of the finding.
     # B-078: many checks build `detail` by joining their evidence, so a bullet that is
     # already quoted verbatim inside the why line is pure duplication — skip it. Bullets
     # survive only when they ADD something the why line doesn't literally contain.
-    if f.evidence and f.status in (FAIL, WARN):
+    # B-381: --compact drops evidence bullets entirely -- the same "headline only"
+    # trim already applied to Plugins/MCP/RISK-chain detail under --compact.
+    if f.evidence and f.status in (FAIL, WARN) and not compact:
         for ev in f.evidence[:12]:
             ev_s = _sanitize(ev)
             if ev_s and ev_s not in why_text:
@@ -833,11 +1237,26 @@ def _skill_inventory(ctx) -> list[dict]:
             d = _sanitize(fx.detail) if fx.detail else ""
             if d and d not in reasons:
                 reasons.append(d)
+        shown_reasons = reasons[:3]
+        # C-307: the coverage-gap reason is STICKY — a ring that produced 3+ real
+        # findings before being cut short would otherwise push it out of the [:3]
+        # window purely by pool order, silently hiding "this scan was incomplete"
+        # from the row even though the row still carries an incomplete verdict.
+        # Two distinct sources land a VET-COVERAGE finding in `pool`: this frame's
+        # own `ring_gap` (appended just above) AND one `_run_content_ring` already
+        # folded into `ring` on its OWN internal truncation (checks/_vet.py) —
+        # either way, its reason must survive the [:3] window.
+        for fx in pool:
+            if fx.id != "VET-COVERAGE" or not fx.detail:
+                continue
+            cov_reason = _sanitize(fx.detail)
+            if cov_reason not in shown_reasons:
+                shown_reasons = [*shown_reasons[:2], cov_reason]
         out.append({
             "name": name,
             "verdict": _VET_VERDICT.get(primary.status, str(primary.status)),
             "status": primary.status if primary.status in (FAIL, WARN, PASS, UNKNOWN) else UNKNOWN,
-            "reasons": reasons[:3],
+            "reasons": shown_reasons,
         })
     return out
 
@@ -914,20 +1333,51 @@ def _empty_inventory() -> dict:
     """A fresh, all-clear inventory shape — every nested list/dict is newly allocated
     per call (no shared mutable state across callers) — for when `ctx` is unavailable."""
     return {
-        "system": {"status": PASS, "findings": []},
-        "agents": {"status": PASS, "findings": [], "roster": [], "attested": False},
+        "openclaw": {"status": PASS, "findings": [], "unassessed": 0},
+        "host": {"status": PASS, "findings": [], "unassessed": 0},
+        "agents": {"status": PASS, "findings": [], "unassessed": 0,
+                   "roster": [], "attested": False},
         "skills": [],
         "mcp": [],
-        "channels": {"status": PASS, "findings": [], "roster": []},
+        "plugins": {"scanned": False, "rows": []},
+        "channels": {"status": PASS, "findings": [], "unassessed": 0, "roster": []},
+        "logs": {"status": PASS, "findings": [], "unassessed": 0},
     }
 
 
-def build_inventory(findings: list[Finding], ctx) -> dict:
-    """Build the additive `"inventory"` JSON payload (design §4.6). Presentation-only:
-    reads only what the main audit already collected on `ctx`, and re-groups the SAME
-    `findings` list the family view (above) renders — never alters score/grade, never
-    emits a new Finding. Every SURFACES slug routes to exactly one of the 5 subjects
-    (SUBJECT_OF coherence, mirrored by tests/test_subject_inventory.py)."""
+def _plugin_inventory(plugin_sweep) -> dict:
+    """The `"plugins"` inventory bucket (F-163) — the additive-JSON counterpart to
+    `_plugins_inventory_lines` (the text/dashboard renderer), built from the SAME
+    duck-typed `PluginSweep`-shaped object (`.no_roots`/`.no_targets`/`.rows`), never
+    imported here (same report<->pipeline import-cycle precedent that function's own
+    docstring sets out).
+
+    `plugin_sweep` is only ever populated by a `--full` run (the plugin sweep phase) —
+    a plain audit() never scans plugins at all, so "not scanned" is the honest default,
+    not an empty/clear verdict. Present-but-empty (`"scanned": True, "rows": []`) is
+    reserved for a real sweep that found zero installed plugins — distinct from
+    "scanned": False (never swept this run), matching the same "MCP servers (none
+    configured)" vs. "not applicable" distinction `_mcp_inventory` already draws.
+    """
+    if plugin_sweep is None or getattr(plugin_sweep, "no_roots", True):
+        return {"scanned": False, "rows": []}
+    if getattr(plugin_sweep, "no_targets", True):
+        return {"scanned": True, "rows": []}
+    return {
+        "scanned": True,
+        "rows": [
+            {"name": name, "status": status} for name, status, _ev in plugin_sweep.rows
+        ],
+    }
+
+
+def build_inventory(findings: list[Finding], ctx, *, plugin_sweep=None) -> dict:
+    """Build the additive `"inventory"` JSON payload (design §4.6, extended by F-163).
+    Presentation-only: reads only what the main audit already collected on `ctx` (plus
+    the optional `--full`-only `plugin_sweep`), and re-groups the SAME `findings` list
+    the family view (above) renders — never alters score/grade, never emits a new
+    Finding. Every SURFACES slug routes to exactly one of the 8 subjects (SUBJECT_OF
+    coherence, mirrored by tests/test_subject_inventory.py)."""
     if ctx is None:
         return _empty_inventory()
     unsuppressed = [f for f in findings if not getattr(f, "suppressed", False)]
@@ -940,9 +1390,23 @@ def build_inventory(findings: list[Finding], ctx) -> dict:
     def _bucket(subject: str) -> dict:
         members = by_subject.get(subject, [])
         issues = [f for f in members if f.status in (FAIL, WARN)]
-        return {"status": _worst_status(members), "findings": [f.id for f in issues]}
+        # B-472: `unassessed` is carried separately from `status` because neither of the
+        # two existing fields can answer "was this subject actually looked at". `status`
+        # rolls UNKNOWN up over PASS, so it cannot tell one unreachable check among ten
+        # clean ones from a subject nothing could read; and it also folds in
+        # `not_applicable` members (a surface positively confirmed absent), which ARE
+        # assessed. Additive key — every existing consumer of `status`/`findings` is
+        # unchanged.
+        return {
+            "status": _worst_status(members),
+            "findings": [f.id for f in issues],
+            "unassessed": sum(1 for f in members
+                              if f.status == UNKNOWN and not getattr(f, "not_applicable", False)),
+        }
 
-    system = _bucket("system")
+    openclaw = _bucket("openclaw")
+    host = _bucket("host")
+    logs = _bucket("logs")
 
     agents_roster, attested = _agents_roster(ctx)
     agents = _bucket("agents")
@@ -953,11 +1417,14 @@ def build_inventory(findings: list[Finding], ctx) -> dict:
     channels["roster"] = _channels_roster(ctx)
 
     return {
-        "system": system,
+        "openclaw": openclaw,
+        "host": host,
         "agents": agents,
         "skills": _skill_inventory(ctx),
         "mcp": _mcp_inventory(ctx),
+        "plugins": _plugin_inventory(plugin_sweep),
         "channels": channels,
+        "logs": logs,
     }
 
 
@@ -966,7 +1433,7 @@ def _inventory_bucket_lines(label: str, bucket: dict, by_id: dict, *, ascii_only
     status = bucket.get("status", PASS)
     fids = bucket.get("findings") or []
     marker = icon.get(status, icon.get(UNKNOWN, "?"))
-    count_text = f"{len(fids)} issue(s)" if fids else "clear"
+    count_text = _subject_count_text(len(fids), int(bucket.get("unassessed") or 0))
     out = [f" {label} — {marker} {count_text}"]
     for fid in fids:
         f = by_id.get(fid)
@@ -976,37 +1443,16 @@ def _inventory_bucket_lines(label: str, bucket: dict, by_id: dict, *, ascii_only
     return out
 
 
-def render_subject_inventory(findings: list[Finding], ctx, *, ascii_only: bool = False,
-                              color: bool = False) -> str:
-    """Owner-facing "Inventory by subject" block (F-131 Phase 1) -- System / Agents /
-    Skills / MCP / Channels, each with a rolled-up status; Skills and MCP additionally
-    get a per-instance verdict (design §4.4/§4.5). Purely additive/presentation: `--ascii`
-    degrades cleanly (no unicode/color), and this returns "" when `ctx` is unavailable —
-    same "skip, don't guess" precedent `render_report` already uses for the capability-
-    graph / credential-surface sections below."""
-    if ctx is None:
-        return ""
-    inv = build_inventory(findings, ctx)
-    by_id = {f.id: f for f in findings}
+def _skills_inventory_lines(inv: dict, ctx, *, ascii_only: bool = False,
+                            clean_roster_limit=None) -> list[str]:
+    """Per-skill verdict lines (design §4.4) -- single source of truth shared by
+    render_subject_inventory (full report's "Inventory by subject" block) and
+    render_dashboard (B-356: the same verdicts, compact, in the chat-pasted card)."""
     icon = _ICON_ASCII if ascii_only else _ICON
-    rule_char = "=" if ascii_only else "═"
-    lines: list[str] = ["== INVENTORY BY SUBJECT " + rule_char * 44]
-
-    lines.extend(_inventory_bucket_lines(SUBJECT_LABEL["system"], inv["system"], by_id,
-                                          ascii_only=ascii_only))
-
-    ag = inv["agents"]
-    roster = ag.get("roster") or []
-    n = len(roster)
-    ag_label = f"{SUBJECT_LABEL['agents']} ({n} agent{'s' if n != 1 else ''}" + (
-        ")" if ag.get("attested") else " - roster not attested)"
-    )
-    lines.extend(_inventory_bucket_lines(ag_label, ag, by_id, ascii_only=ascii_only))
-    if not ag.get("attested"):
-        lines.append("   note  attest (--attest) for per-agent separation (B45/B47)")
-
     skills = inv["skills"]
     n_skills = len(skills)
+    if n_skills == 0:
+        return [f" {SUBJECT_LABEL['skills']} (none installed)"]
     # B-268: `inv["skills"]` is built from ctx.installed_skills, which the collector caps at
     # _MAX_SKILLS. Printing its length as "(N installed)" reported the CAP as the inventory
     # total — a home with 311 skills on disk rendered "Skills (300 installed)", and the 11
@@ -1019,41 +1465,115 @@ def render_subject_inventory(findings: list[Finding], ctx, *, ascii_only: bool =
     )
     flagged = [s for s in skills if s.get("status") in (FAIL, WARN, UNKNOWN)]
     flagged_names = {s["name"] for s in flagged}
-    if n_skills == 0:
-        lines.append(f" {SUBJECT_LABEL['skills']} (none installed)")
-    else:
-        sk_marker = icon.get(_worst_of_statuses(s["status"] for s in flagged), "?")
-        count_text = f"{len(flagged)} flagged" if flagged else "clear"
-        lines.append(f" {SUBJECT_LABEL['skills']} ({installed_text}) — {sk_marker} {count_text}")
-        if n_skipped:
-            lines.append(
-                f"   {icon.get(UNKNOWN, '?')} {n_skipped} skill(s) beyond the inspection "
-                "cap were not scanned; their verdict is unknown, not clean")
-        # Skill/server/channel names are untrusted (directory names, config keys) --
-        # _sanitize() every one before it reaches a line, same as finding title/detail
-        # elsewhere in this file (B164: no raw ANSI/control chars may reach the terminal).
-        clean = [_sanitize(s["name"]) for s in skills if s["name"] not in flagged_names]
-        if clean:
-            lines.append(f"   {icon.get(PASS, '?')} {len(clean)} clean: " + ", ".join(clean))
-        for s in flagged:
-            reason_text = "; ".join(s.get("reasons") or []) or s["verdict"]
-            lines.append(f"   {icon.get(s['status'], '?')} {_sanitize(s['name'])}  {s['verdict']} - {reason_text}")
+    sk_marker = icon.get(_worst_of_statuses(s["status"] for s in flagged), "?")
+    count_text = f"{len(flagged)} flagged" if flagged else "clear"
+    lines = [f" {SUBJECT_LABEL['skills']} ({installed_text}) — {sk_marker} {count_text}"]
+    if n_skipped:
+        lines.append(
+            f"   {icon.get(UNKNOWN, '?')} {n_skipped} skill(s) beyond the inspection "
+            "cap were not scanned; their verdict is unknown, not clean")
+    # Skill names are untrusted (directory names) -- _sanitize() every one before it
+    # reaches a line, same as finding title/detail elsewhere in this file (B164: no raw
+    # ANSI/control chars may reach the terminal).
+    # C-373: the clean roster is the one UNBOUNDED part of this block — it names every
+    # clean skill, so a home with hundreds of them produces thousands of characters on
+    # its own. The chat card (which must fit ~4096 chars in total) passes a
+    # `clean_roster_limit` so the names still appear — B-356 added them deliberately, and
+    # a home with a handful of skills should still see them — but a 300-skill home cannot
+    # blow the budget with a name list. The count stays exact either way, and the overflow
+    # is disclosed, never silently cut. `None` (the full report, `--dashboard --full`)
+    # lists them all, exactly as before.
+    clean = [_sanitize(s["name"]) for s in skills if s["name"] not in flagged_names]
+    if clean:
+        shown = clean if clean_roster_limit is None else clean[:clean_roster_limit]
+        roster = ", ".join(shown)
+        if len(shown) < len(clean):
+            roster += f", +{len(clean) - len(shown)} more"
+        lines.append(f"   {icon.get(PASS, '?')} {len(clean)} clean: " + roster)
+    for s in flagged:
+        reason_text = "; ".join(s.get("reasons") or []) or s["verdict"]
+        lines.append(f"   {icon.get(s['status'], '?')} {_sanitize(s['name'])}  {s['verdict']} - {reason_text}")
+    return lines
 
+
+def _mcp_inventory_lines(inv: dict, *, ascii_only: bool = False, compact: bool = False) -> list[str]:
+    """Per-server verdict lines (design §4.5) -- the MCP counterpart to
+    _skills_inventory_lines: single source of truth shared by render_subject_inventory
+    (full report's "Inventory by subject" block, always `compact=False`) and
+    render_dashboard (F-153: the same verdicts in the chat-pasted combined pipeline
+    card, `compact=True` under --compact collapsing to the headline count only)."""
+    icon = _ICON_ASCII if ascii_only else _ICON
     mcp = inv["mcp"]
     n_mcp = len(mcp)
     if n_mcp == 0:
-        lines.append(f" {SUBJECT_LABEL['mcp']} (none configured)")
+        return [f" {SUBJECT_LABEL['mcp']} (none configured)"]
+    mcp_ok = [_sanitize(m["name"]) for m in mcp if m["verdict"] == "ok"]
+    mcp_bad = [m for m in mcp if m["verdict"] != "ok"]
+    mcp_marker = icon.get(_worst_of_statuses(m["verdict"] for m in mcp_bad), "?")
+    count_text = f"{len(mcp_bad)} flagged" if mcp_bad else "clear"
+    lines = [f" {SUBJECT_LABEL['mcp']} ({n_mcp}) — {mcp_marker} {count_text}"]
+    if compact:
+        return lines
+    if mcp_ok:
+        lines.append(f"   {icon.get(PASS, '?')} " + " | ".join(mcp_ok))
+    for m in mcp_bad:
+        reason_text = "; ".join(m.get("reasons") or []) or m["verdict"]
+        lines.append(f"   {icon.get(m['verdict'], '?')} {_sanitize(m['name'])}  {reason_text}")
+    return lines
+
+
+def render_subject_inventory(findings: list[Finding], ctx, *, ascii_only: bool = False,
+                              color: bool = False, plugin_sweep=None,
+                              plugins_deferred: bool = False) -> str:
+    """Owner-facing "Inventory by subject" block (F-131 Phase 1, extended by F-163) --
+    OpenClaw core / Host machine / Agents / Skills / MCP / Plugins / Channels / Logs &
+    trajectories, each with a rolled-up status; Skills, MCP and Plugins additionally get
+    a per-instance verdict (design §4.4/§4.5). Purely additive/presentation: `--ascii`
+    degrades cleanly (no unicode/color), and this returns "" when `ctx` is unavailable —
+    same "skip, don't guess" precedent `render_report` already uses for the capability-
+    graph / credential-surface sections below. `plugin_sweep` is `--full`-only (same
+    duck-typed object `render_dashboard` already accepts) — omitted on a plain audit,
+    where the Plugins bucket honestly reports "not scanned" rather than a fake clear."""
+    if ctx is None:
+        return ""
+    inv = build_inventory(findings, ctx, plugin_sweep=plugin_sweep)
+    by_id = {f.id: f for f in findings}
+    rule_char = "=" if ascii_only else "═"
+    lines: list[str] = ["== INVENTORY BY SUBJECT " + rule_char * 44]
+
+    lines.extend(_inventory_bucket_lines(SUBJECT_LABEL["openclaw"], inv["openclaw"], by_id,
+                                          ascii_only=ascii_only))
+
+    lines.extend(_inventory_bucket_lines(SUBJECT_LABEL["host"], inv["host"], by_id,
+                                          ascii_only=ascii_only))
+
+    ag = inv["agents"]
+    roster = ag.get("roster") or []
+    n = len(roster)
+    ag_label = f"{SUBJECT_LABEL['agents']} ({n} agent{'s' if n != 1 else ''}" + (
+        ")" if ag.get("attested") else " - roster not attested)"
+    )
+    lines.extend(_inventory_bucket_lines(ag_label, ag, by_id, ascii_only=ascii_only))
+    if not ag.get("attested"):
+        lines.append("   note  attest (--attest) for per-agent separation (B45/B47)")
+
+    lines.extend(_skills_inventory_lines(inv, ctx, ascii_only=ascii_only))
+
+    lines.extend(_mcp_inventory_lines(inv, ascii_only=ascii_only))
+
+    if inv["plugins"]["scanned"]:
+        lines.extend(_plugins_inventory_lines(plugin_sweep, ascii_only=ascii_only))
+    elif plugins_deferred:
+        # B-473: on a plain `--full` text run the plugin sweep is pipeline phase P7, which
+        # runs AFTER this body is assembled (deliberately — the report-body byte order is
+        # the prefix `--full --quiet` is compared against), so this renderer genuinely has
+        # no sweep object to show. Printing "run --full to include" there told the reader
+        # to run the very flag they had just run, about a sweep whose results were printed
+        # a few hundred lines further down the same output.
+        lines.append(f" {SUBJECT_LABEL['plugins']} (swept later in this run — "
+                     "see the PLUGIN SWEEP section below)")
     else:
-        mcp_ok = [_sanitize(m["name"]) for m in mcp if m["verdict"] == "ok"]
-        mcp_bad = [m for m in mcp if m["verdict"] != "ok"]
-        mcp_marker = icon.get(_worst_of_statuses(m["verdict"] for m in mcp_bad), "?")
-        count_text = f"{len(mcp_bad)} flagged" if mcp_bad else "clear"
-        lines.append(f" {SUBJECT_LABEL['mcp']} ({n_mcp}) — {mcp_marker} {count_text}")
-        if mcp_ok:
-            lines.append(f"   {icon.get(PASS, '?')} " + " | ".join(mcp_ok))
-        for m in mcp_bad:
-            reason_text = "; ".join(m.get("reasons") or []) or m["verdict"]
-            lines.append(f"   {icon.get(m['verdict'], '?')} {_sanitize(m['name'])}  {reason_text}")
+        lines.append(f" {SUBJECT_LABEL['plugins']} (not scanned — run --full to include)")
 
     ch = inv["channels"]
     croster = ch.get("roster") or []
@@ -1063,8 +1583,11 @@ def render_subject_inventory(findings: list[Finding], ctx, *, ascii_only: bool =
     if croster:
         lines.append(f"   roster: {', '.join(_sanitize(c) for c in croster)}")
 
+    lines.extend(_inventory_bucket_lines(SUBJECT_LABEL["logs"], inv["logs"], by_id,
+                                          ascii_only=ascii_only))
+
     lines.append(rule_char * 68)
-    lines.append(" (details by security family below)")
+    lines.append(" (details by subject below)")
     out = "\n".join(lines).rstrip() + "\n"
     if ascii_only:
         return _asciify(out)
@@ -1077,7 +1600,8 @@ def render_report(findings: list[Finding], score: ScoreResult,
                   freshness_notice: list[str] | None = None,
                   openclaw_detected: bool = True, ctx=None,
                   verbose: bool = False, color: bool = False,
-                  tamper: ScoreResult | None = None) -> str:
+                  tamper: ScoreResult | None = None, plugin_sweep=None,
+                  plugins_deferred: bool = False) -> str:
     findings = deduplicate_findings(findings)
     icon = _color_icons(_ICON_ASCII if ascii_only else _ICON, color)
     ok = "[OK]" if ascii_only else "✅"
@@ -1096,21 +1620,24 @@ def render_report(findings: list[Finding], score: ScoreResult,
     # --ascii drops the mascot and folds the separator (brand.header()).
     head = brand.header(subtitle="OpenClaw Security Audit", ascii_only=ascii_only)
     lines = [head, "=" * 44]
-    # B-313: disclosed ABOVE the grade, unconditionally whenever any check degraded this
-    # run (crashed or timed out) — regardless of whether DEGRADED_CHECK_CAP ended up
-    # strictly "binding" (a tighter cap, e.g. a genuine CRITICAL FAIL, may already apply).
-    # The reader still needs to know coverage was incomplete even when the number on
-    # screen would have been just as bad anyway; getattr/default tolerates the older
-    # duck-typed ScoreResult stand-ins some tests build (same tolerance B-306 established
-    # for config_blind_capped/runtime_capped below).
+    # B-313/B-399: disclosed ABOVE the grade, unconditionally whenever any check degraded
+    # this run (crashed, timed out, or — B-399 — ran to completion but could not reach a
+    # verdict for an engine-side reason, e.g. an input it expected to read that turned out
+    # unreadable/corrupt) — regardless of whether DEGRADED_CHECK_CAP ended up strictly
+    # "binding" (a tighter cap, e.g. a genuine CRITICAL FAIL, may already apply). The
+    # reader still needs to know coverage was incomplete even when the number on screen
+    # would have been just as bad anyway; getattr/default tolerates the older duck-typed
+    # ScoreResult stand-ins some tests build (same tolerance B-306 established for
+    # config_blind_capped/runtime_capped below).
     _degraded_n = getattr(score, "degraded_count", 0)
     if _degraded_n:
         warn_icon = "[!]" if ascii_only else "⚠️ "
         _plural = "check" if _degraded_n == 1 else "checks"
         lines.append(
-            f"{warn_icon}{_degraded_n} {_plural} did not run (crashed or timed out) —"
-            " this grade is incomplete. Re-run with --debug to see why, or on a quieter"
-            " machine if it was a timeout."
+            f"{warn_icon}{_degraded_n} {_plural} could not reach a reliable verdict this"
+            " run (crashed, timed out, or hit unreadable/corrupted input) — this grade is"
+            " incomplete. Re-run with --debug for a crash/timeout traceback, or review the"
+            " affected finding(s) below for an unreadable-input detail."
         )
     lines.append(f"Score: {score.score}/100   Grade: {grade_disp}")
     lines.append(_score_bar(score.score, score.grade, ascii_only=ascii_only, color=color))
@@ -1125,46 +1652,31 @@ def render_report(findings: list[Finding], score: ScoreResult,
     # the scenario B-306 exists to make loud — this is a rendering-gate fix, not a
     # scoring.py semantics change, so the JSON contract/docs above stay exactly as
     # documented.
-    _degraded_capped = getattr(score, "degraded_capped", False)
-    if score.capped or score.config_blind_capped or score.runtime_capped or _degraded_capped:
-        if score.config_blind_capped:
-            # B-306 (C-135 follow-up): takes display priority over cap_severity/runtime/
-            # degraded — when more than one signal fires, this names every one that did
-            # so the reader never loses a co-occurring reason (the `total == 0` branch
-            # above is the only place more than one of these can be True at once; the
-            # ordinary severity-cap path keeps them mutually exclusive because
-            # CONFIG_BLIND_CAP/DEGRADED_CHECK_CAP <= RUNTIME_SIGNAL_CAP always wins first).
-            _extra = []
-            if score.cap_severity:
-                _extra.append(f"an open {score.cap_severity} finding")
-            if _degraded_capped or _degraded_n:
-                _extra.append(f"{_degraded_n} degraded check(s)")
-            if score.runtime_capped:
-                _extra.append(
-                    f"a corroborated runtime signal ({_runtime_cap_phrase(score.runtime_cap_reason)})"
-                )
-            _also = f"; also {', '.join(_extra)}" if _extra else ""
-            lines.append(
-                f"(capped from {score.raw_score} - openclaw.json unreadable/unparseable"
-                f" this run: cannot rule out a CRITICAL condition{_also})"
-            )
-        elif _degraded_capped:
-            # B-313: no config-blind signal, but at least one check crashed/timed out and
-            # that alone drove the cap — same "cannot rule out a CRITICAL" reasoning,
-            # applied at check-granularity (see DEGRADED_CHECK_CAP's docstring).
-            lines.append(
-                f"(capped from {score.raw_score} - {_degraded_n} check(s) crashed or timed"
-                " out this run: cannot rule out a CRITICAL condition)"
-            )
-        elif score.cap_severity:
-            lines.append(f"(capped from {score.raw_score} - open {score.cap_severity} finding)")
-        else:
-            # I-025/B-309: no scored FAIL drove this cap — only a corroborated runtime
-            # signal can, and only as a cap (never an ordinary scored point).
-            lines.append(
-                f"(capped from {score.raw_score} - corroborated runtime signal: "
-                f"{_runtime_cap_phrase(score.runtime_cap_reason)})"
-            )
+    # B-281 (ENV-1)/B-363: computed here (ahead of both the cap-reason text below and the
+    # "Audited config:" line further down) so both agree on whether a config was ever
+    # actually read this run. `_audited_path` is the resolved-or-canonical path either
+    # way (see resolve_config_in_home) — `_cfg_found` is what distinguishes "we read
+    # this file" from "we looked for this file and it wasn't there".
+    _audited_path = getattr(ctx, "config_path", None) if ctx is not None else None
+    _cfg_found = getattr(ctx, "config_found", True) if ctx is not None else True
+    # B-380: the five-branch "elif" ladder + ten near-identical
+    # "_extra = []; if X: _extra.append(...)" blocks that used to live here (one per
+    # branch, hand-edited separately every time a signal type was added) are gone —
+    # `_cap_cascade` is the single, shared decision both render_report and render_html
+    # defer to now. It reads exactly the same six signals the old gate condition named
+    # (`score.capped` covers the ordinary severity-cap path; the granular flags cover
+    # every cap-only signal, including the `total == 0` branch where `capped` stays
+    # False by design — see the B-306 comment this replaces), so `_primary is not
+    # None` is the correct, single-source-of-truth gate. B-399: `_CAP_DEGRADED`'s own
+    # text (`_cap_primary_reason_text`) already covers an engine-side-degraded UNKNOWN
+    # generically ("could not reach a reliable verdict") alongside crashed/timed-out --
+    # no renderer-side change needed for the new cause, only scoring.py's cap trigger.
+    _primary, _extras = _cap_cascade(score)
+    if _primary is not None:
+        _reason_text = _cap_primary_reason_text(_primary, score, audited_path=_audited_path)
+        lines.append(
+            f"(capped from {score.raw_score} - {_reason_text}{_cap_also_clause(_extras)})"
+        )
 
     # B-281 (ENV-1): name the file this grade actually describes. OpenClaw resolves its
     # config through OPENCLAW_CONFIG_PATH / OPENCLAW_HOME / OPENCLAW_STATE_DIR (what
@@ -1172,8 +1684,12 @@ def render_report(findings: list[Finding], score: ScoreResult,
     # audited file is a RESOLVED path, not a foregone conclusion. Printing it is what lets
     # a reader notice that a grade describes a stale, dormant config; B183 does the
     # comparison, but this line stands on its own and costs nothing when they agree.
-    _audited_path = getattr(ctx, "config_path", None) if ctx is not None else None
-    if _audited_path is not None:
+    # B-363: only when a config was actually FOUND and read — `_audited_path` is set to
+    # the canonical would-be path even when nothing was there (resolve_config_in_home),
+    # so printing it unconditionally used to claim a file was audited when the collector
+    # never opened anything at all. `_cfg_found`/`_audited_path` were both computed above,
+    # ahead of the cap-reason block, so this line and that one can never disagree.
+    if _audited_path is not None and _cfg_found:
         lines.append(f"Audited config: {_audited_path}")
 
     # B-306 safe-symlink split: openclaw.json is a symlink whose target leaves ~/.openclaw,
@@ -1229,6 +1745,21 @@ def render_report(findings: list[Finding], score: ScoreResult,
         f" — {n_pass} pass, {n_warn} warn (half weight), {n_fail} fail."
         " UNKNOWN/advisory checks are excluded."
     )
+    # B-464: because UNKNOWNs are excluded, switching a subsystem OFF removes its checks
+    # from the denominator — and if any of them were WARNing, the score goes UP (measured:
+    # 97 -> 98 with --no-host). Nothing in the number itself reveals that, so a
+    # deliberately-narrowed run was indistinguishable from a better-configured one. Name
+    # the opt-outs so the figure is not read as comparable to a full audit.
+    # Read from an explicit opt-out list the CLI sets, NOT from `ctx.include_host`:
+    # that field defaults to False, so a plain library `audit(home)` call would have
+    # printed this note while naming a flag the caller never passed.
+    _opted_out = list(getattr(ctx, "cli_opt_outs", ()) or ())
+    if _opted_out:
+        lines.append(
+            "Note: " + " and ".join(_opted_out) + " removed whole check groups from that "
+            "denominator, so this score is NOT comparable to a full audit — opting a "
+            "subsystem out can raise the number without changing your setup."
+        )
     if n_fail > 0 or n_warn > 0:
         _sev_counts: dict[str, int] = {}
         for f in scored_findings:
@@ -1261,26 +1792,61 @@ def render_report(findings: list[Finding], score: ScoreResult,
         " grade means \"not statically lethal-capable\", not \"runtime-proof\". Use the live"
         " tests above to probe actual resistance."
     )
-    # I-025/B-309: the ONE exception to "this grade never reflects runtime behaviour"
-    # above. Honest labelling, exhaustive per Dave's 2026-07-22 ruling: a trajaudit-
-    # style skill/bootstrap indicator match (--analyze-trajectory) MAY CAP this grade —
-    # never raise it, never earn/cost an ordinary scored point. Every OTHER runtime-
-    # consuming signal (T1/T2/T3 under --behavioral, B83, B84, B85, B180, and every
-    # B164 corroboration including exfil_evidence, same-line or cross-line) still
-    # cannot move this grade at all, in either direction — see
+    # I-025/B-309: an exception to "this grade never reflects runtime behaviour" above —
+    # a trajaudit-style skill/bootstrap indicator match (--analyze-trajectory) MAY CAP
+    # this grade — never raise it, never earn/cost an ordinary scored point. B83, B84,
+    # B85, B180, and every B164 corroboration (including exfil_evidence, same-line or
+    # cross-line) still cannot move this grade at all, in either direction — see
     # tests/test_i025_runtime_cap.py for the pinned enumeration. (B164's exfil_evidence
     # class was briefly cap-eligible under Dave's original 2026-07-20 ruling; retracted
     # after four C-135 rounds proved no sound host/verb gate exists for this tool's own
-    # audience — see logscan.py's retraction note.)
+    # audience — see logscan.py's retraction note.) F-154: T1/T2/T3/B191 are NO LONGER
+    # in the "cannot move it at all" set — see the behavioral exception further below —
+    # so this paragraph's own claim is narrowed to name only what it still covers.
     lines.append(
         "Runtime exception (I-025): a trajectory-indicator match MAY CAP this grade"
-        " (never raise it) — every other runtime-observed signal still cannot move the"
-        " grade at all."
+        " (never raise it) — every other capability-vs-runtime corroboration still"
+        " cannot move the grade at all; the behavioral verb-sequence/audit-trail layer"
+        " below has a separate exception of its own."
     )
     if score.runtime_capped:
         lines.append(
             f"  This run's grade WAS capped by that exception: "
             f"{_runtime_cap_phrase(score.runtime_cap_reason)}."
+        )
+    # F-155: a SECOND exception to "this grade never reflects runtime behaviour" — a
+    # submitted VULNERABLE verdict from a live injection-test harness (canary/dryrun/
+    # redteam/multiturn) MAY CAP this grade, never raise it, and only when actually
+    # submitted (self-attestation guard: RESISTANT or no submission at all has ZERO
+    # effect — see scoring.LIVE_INJECTION_CAP). Distinct from the I-025 exception above:
+    # that one is the engine corroborating its OWN trajectory sidecar; this one is the
+    # agent under test self-reporting the outcome of an ACTIVE probe it just ran.
+    #
+    # Deliberately gated on `live_injection_capped` (unlike the I-025 paragraph above,
+    # which is unconditional) — this task's own test plan requires a run with nothing
+    # submitted to render byte-identically to before this feature existed, so no new line
+    # may appear here unless a VULNERABLE verdict actually capped this run.
+    if getattr(score, "live_injection_capped", False):
+        lines.append(
+            "Live-test exception (F-155): this run's grade WAS capped by a submitted "
+            f"VULNERABLE verdict — {_live_injection_cap_phrase(score.live_injection_cap_reason)}."
+            " RESISTANT or no submission would have changed nothing."
+        )
+    # F-154: a THIRD exception to "this grade never reflects runtime behaviour" — a
+    # fired T1/T2/T3/B191 behavioral detector (--behavioral or --full) MAY CAP this
+    # grade, never raise it, never earn/cost an ordinary scored point. Distinct from
+    # both exceptions above: this is proven-by-LOG observation over the trajectory
+    # sidecar's own verb sequence/outcome/drift/audit-trail — not a corroborated
+    # indicator match (I-025) and not a self-reported ACTIVE-probe verdict (F-155).
+    #
+    # Deliberately gated on `behavioral_capped` (same discipline as the F-155 paragraph
+    # above, unlike the I-025 one) — a run that never executed --behavioral/--full sees
+    # no new line here, byte-identical to before this task existed.
+    if getattr(score, "behavioral_capped", False):
+        lines.append(
+            "Behavioral exception (F-154): this run's grade WAS capped by a fired "
+            f"behavioral detector — {_behavioral_cap_phrase(score.behavioral_cap_reason)}."
+            " A clean --behavioral/--full replay would have changed nothing."
         )
     # B-306 (C-135 follow-up): openclaw.json itself went dark this run (present but
     # unparseable, or unreadable) — every config-derived check (A1/B41/B1/B11/...)
@@ -1342,7 +1908,9 @@ def render_report(findings: list[Finding], score: ScoreResult,
     # grade underneath ~40 lines of findings, which is the one thing that decision
     # forbade ("nothing existing is restructured"). Presentational only, and "" when ctx
     # is unavailable (mirrors the ctx-gated sections above).
-    inv_text = render_subject_inventory(findings, ctx, ascii_only=ascii_only, color=color)
+    inv_text = render_subject_inventory(findings, ctx, ascii_only=ascii_only, color=color,
+                                         plugin_sweep=plugin_sweep,
+                                         plugins_deferred=plugins_deferred)
     if inv_text:
         lines.append("")
         lines.extend(inv_text.split("\n"))
@@ -1352,27 +1920,37 @@ def render_report(findings: list[Finding], score: ScoreResult,
         lines.append(f"No known attack pattern matched. Keep it that way. {ok}")
     else:
         if issues:
-            lines.append(f"{len(issues)} issue(s), grouped by area — most urgent first within each:")
+            lines.append(f"{len(issues)} issue(s), grouped by subject — most urgent first within each:")
         else:
             lines.append(f"No known attack pattern matched. Keep it that way. {ok}")
         lines.append("")
-        # Group EVERY finding (not just FAIL/WARN) by its OpenClaw surface family so the
-        # Dashboard reads as coverage-by-category rather than a flat severity dump, and so
-        # the Lethal Trifecta (A1) shows up as one Privilege & Execution finding among
-        # others instead of a standalone headline (F-044). PASS/UNKNOWN are collapsed to a
-        # one-line roster per family — still listed (nothing hidden), just not walled in green.
+        # Group EVERY finding (not just FAIL/WARN) by its Inventory subject (OpenClaw core /
+        # Host / Agents / Skills / MCP / Channels / Logs) so the report reads as coverage-
+        # by-subject — matching the "Inventory by subject" block directly above — rather
+        # than a flat severity dump. A1 (Lethal Trifecta) routes to Agents via its
+        # "trifecta" surface (SUBJECT_OF), so it shows up as one Agents finding among others
+        # instead of a standalone headline (F-044). Findings with an id outside CATALOG fall
+        # into a trailing "Other" bucket (nothing silently dropped). PASS/UNKNOWN are
+        # collapsed to a one-line roster per subject — still listed, just not walled in green.
         grouped: dict[str | None, list[Finding]] = {}
         for f in unsuppressed_all:
-            grouped.setdefault(_family_of(f), []).append(f)
-        for fam_key in (*FAMILY_ORDER, None):
-            members = grouped.get(fam_key)
+            grouped.setdefault(_subject_of(f), []).append(f)
+        for subj_key in (*SUBJECT_ORDER, None):
+            members = grouped.get(subj_key)
             if not members:
                 continue
             members.sort(key=lambda f: (_STATUS_ORDER.get(f.status, 9), _SEV_ORDER.get(f.severity, 9)))
-            label = FAMILY_LABEL.get(fam_key, "Other")
+            label = SUBJECT_LABEL.get(subj_key, "Other")
             label_disp = paint(label, "bold", enabled=True) if color else label
             n_bad = sum(1 for f in members if f.status in (FAIL, WARN))
-            count_text = f"{n_bad} issue(s)" if n_bad else "clear"
+            # B-472: this header used a bare `else "clear"` and so contradicted the
+            # "N not assessed (config can't tell)" line this same block prints a few lines
+            # below, for the same members. Same rule as the inventory block above.
+            count_text = _subject_count_text(
+                n_bad,
+                sum(1 for f in members
+                    if f.status == UNKNOWN and not getattr(f, "not_applicable", False)),
+            )
             if ascii_only:
                 lines.append(f"[{label_disp}] — {count_text}")
             else:
@@ -1381,6 +1959,7 @@ def render_report(findings: list[Finding], score: ScoreResult,
                 lines.append(f"│ {label_disp} — {count_text}")
                 lines.append(f"└{_rule}")
             n_unknown = 0
+            n_na = 0
             for f in members:
                 if f.status in (FAIL, WARN):
                     _render_finding(lines, f, cfg=_blast_cfg,
@@ -1391,11 +1970,20 @@ def render_report(findings: list[Finding], score: ScoreResult,
                     # UNKNOWN: tallied, not enumerated one-by-one — a wall of near-identical
                     # "not assessed" lines adds noise, not information; the honest count is
                     # what matters (nothing hidden, just not spelled out per check).
-                    n_unknown += 1
+                    # F-139/B2: split off not_applicable (surface positively confirmed
+                    # absent, e.g. no MCP servers) — the --ask/--attest advice below is
+                    # meaningless for those, so they get their own line with no advice.
+                    if getattr(f, "not_applicable", False):
+                        n_na += 1
+                    else:
+                        n_unknown += 1
             if n_unknown:
                 unk_icon = icon.get(UNKNOWN, "?")
                 lines.append(f"  {unk_icon} {n_unknown} not assessed (config can't tell) —"
                              " resolve via `--ask` then `--attest`")
+            if n_na:
+                na_icon = _AXIS_ICON_ASCII["N/A"] if ascii_only else _AXIS_ICON_UNI["N/A"]
+                lines.append(f"  {na_icon} {n_na} not applicable (no such surface in your config)")
             lines.append("")
 
     # Coverage map — "check OpenClaw the platform" framing: how many config surfaces this
@@ -1503,7 +2091,9 @@ def render_report(findings: list[Finding], score: ScoreResult,
     return out
 
 
-def render_dashboard_findings(findings: list[Finding], *, ascii_only: bool = False) -> str:
+def render_dashboard_findings(findings: list[Finding], *, ascii_only: bool = False,
+                              compact: bool = False,
+                              why_drop_severities: frozenset = frozenset()) -> str:
     """Deterministic, framed Findings block for the chat Dashboard (SKILL.md Step 3, Section 3).
 
     Emits ONLY what Section 3 must contain, so the host agent PASTES this verbatim instead
@@ -1512,6 +2102,22 @@ def render_dashboard_findings(findings: list[Finding], *, ascii_only: bool = Fal
       - MEDIUM/ATTESTED-confidence findings excluded (they surface in Section 4);
       - families with no qualifying finding are omitted (no empty "— clear" headers);
       - each family under the same open 3-sided frame render_report uses.
+
+    `compact=True` (B-381) is render_dashboard's --dashboard --full --compact mode:
+    this block is the one section that SCALES with FAIL/WARN count (a bad config has
+    many), so it is the real driver of the Telegram ~4096-char budget being missed —
+    every other combined-pipeline section is already bounded/short. `compact` threads
+    into `_render_finding`, which trims each finding's "why" text and drops its
+    evidence bullets; the family frames, titles and severity tokens are unchanged
+    (still the exact literal block the host agent pastes verbatim). Default False
+    reproduces the exact prior byte-identical output for every existing caller
+    (the standalone `--dashboard-findings` command, and every test).
+
+    `why_drop_severities` (B-405) is render_dashboard's final, hard 4096-char budget
+    enforcement: when the per-item trim above still isn't enough on a large real
+    config, the caller re-renders with this set widened (weakest severity first) so
+    entire why lines are dropped rather than merely narrowed. Empty by default,
+    reproducing the exact prior output.
     """
     findings = deduplicate_findings(findings)
     qualifying = [
@@ -1525,46 +2131,482 @@ def render_dashboard_findings(findings: list[Finding], *, ascii_only: bool = Fal
         out = f"No high-confidence issues to fix. {ok}\n"
         return _asciify(out) if ascii_only else out
 
-    grouped: dict = {}
-    for f in qualifying:
-        grouped.setdefault(_family_of(f), []).append(f)
-
     lines: list = []
-    for fam_key in (*FAMILY_ORDER, None):
-        members = grouped.get(fam_key)
-        if not members:
-            continue
+    for subj_key, label, members in _group_issues_by_subject(qualifying):
         members.sort(key=lambda f: (_STATUS_ORDER.get(f.status, 9), _SEV_ORDER.get(f.severity, 9)))
-        label = FAMILY_LABEL.get(fam_key, "Other")
         count_text = f"{len(members)} issue(s)"
         if ascii_only:
             lines.append(f"[{label}] — {count_text}")
         else:
-            # Chat paste carries the family emoji (SKILL.md Step-3 table, B-077);
-            # the CLI report's family headers stay emoji-less by design.
-            emoji = _FAMILY_EMOJI.get(fam_key)
+            # Chat paste carries the subject emoji (SKILL.md Step-3 table, B-077);
+            # the CLI report / HTML / PDF subject headers stay emoji-less by design.
+            emoji = _SUBJECT_EMOJI.get(subj_key)
             head = f"{emoji} {label}" if emoji else label
-            _rule = "─" * 30
+            # B-381: --compact narrows the frame's own border rule (still an open
+            # 3-sided box -- same shape, fewer dashes) -- one of several small per-
+            # family savings that add up across a bad config's many families/findings.
+            _rule = "─" * (10 if compact else 30)
             lines.append(f"┌{_rule}")
             lines.append(f"│ {head} — {count_text}")
             lines.append(f"└{_rule}")
         for f in members:
-            _render_finding(lines, f, cfg=None, ascii_only=ascii_only)
+            _render_finding(lines, f, cfg=None, ascii_only=ascii_only, compact=compact,
+                            why_drop_severities=why_drop_severities)
         lines.append("")
 
     out = "\n".join(lines).rstrip() + "\n"
     return _asciify(out) if ascii_only else out
 
 
+def _plugins_inventory_lines(sweep, *, ascii_only: bool = False, compact: bool = False) -> list[str]:
+    """Per-plugin verdict lines for the combined pipeline Dashboard (F-153) — the
+    Plugins counterpart to _skills_inventory_lines/_mcp_inventory_lines. `sweep` is
+    duck-typed on checks._mcp.PluginSweep's published surface (.no_roots/.no_targets/
+    .counts()/.rows/.findings) and is never imported here — mirrors the precedent
+    pipeline.record_skill_sweep's own docstring already sets out for exactly this
+    Layer-2/Layer-3 hand-off (and, in this direction, avoids the report<->pipeline
+    import cycle: pipeline.py already imports report._sanitize/_sanitize_tree).
+
+    Returns [] when there is genuinely nothing to sweep (no installed-plugin index
+    found, or an index naming zero plugins) — the caller omits the whole "Plugins"
+    block then, same as "Skills" already does when inv["skills"] is empty.
+    `compact=True` (--compact) collapses this to the headline count line plus the
+    not-scanned disclosure (when there is one) — the per-plugin roster/reason lines
+    are what gets dropped, not the disclosure (B-381).
+
+    B-381 (Golden Rule #4): SKIPPED/TRUNCATED rows are folded into "flagged" for the
+    headline marker/count, the same precedent `_skills_inventory_lines` already sets
+    for its own UNKNOWN rows. `_worst_of_statuses` only recognizes FAIL/WARN/UNKNOWN/
+    PASS (`_STATUS_ORDER`) — "SKIPPED"/"TRUNCATED" aren't in that table, so they used
+    to be silently ignored by the rollup, and a sweep where EVERY row was
+    SKIPPED/TRUNCATED (no FAIL/WARN at all) rolled up to a bare PASS and rendered a
+    green "clear" headline for a sweep that scanned nothing — the exact opposite of
+    the truth. Also: the headline count is `len(sweep.rows)`, not `counts()['total']`
+    — `counts()` defines `scanned = rows where status != 'SKIPPED'` and `total =
+    len(scanned)`, so a sweep with any SKIPPED row under-reported the installed count
+    (the same defect B-268 already fixed once for `_skills_inventory_lines`).
+    """
+    if sweep is None or sweep.no_roots or sweep.no_targets:
+        return []
+    icon = _ICON_ASCII if ascii_only else _ICON
+    by_name = dict(sweep.findings)
+    fail_warn = [(name, status) for name, status, _ev in sweep.rows if status in (FAIL, WARN)]
+    not_scanned = [name for name, status, _ev in sweep.rows if status in ("TRUNCATED", "SKIPPED")]
+    clean = [name for name, status, _ev in sweep.rows if status == PASS]
+    flagged_n = len(fail_warn) + len(not_scanned)
+    # UNKNOWN stands in for SKIPPED/TRUNCATED in the rollup -- _worst_of_statuses
+    # doesn't recognize those two strings, so without this substitution an
+    # all-unscanned sweep (fail_warn empty) rolls up to bare PASS.
+    worst_statuses = [s for _n, s in fail_warn] + ([UNKNOWN] * len(not_scanned))
+    marker = icon.get(_worst_of_statuses(worst_statuses), "?")
+    count_text = f"{flagged_n} flagged" if flagged_n else "clear"
+    lines = [f" Plugins ({len(sweep.rows)} installed) — {marker} {count_text}"]
+    if not_scanned:
+        lines.append(
+            f"   {icon.get(UNKNOWN, '?')} {len(not_scanned)} plugin(s) not (fully) "
+            "scanned — their verdict is unknown, not clean"
+        )
+    if compact:
+        return lines
+    if clean:
+        lines.append(f"   {icon.get(PASS, '?')} {len(clean)} clean: "
+                     + ", ".join(_sanitize(n) for n in clean))
+    for name, status in fail_warn:
+        f = by_name.get(name)
+        verdict = _VET_VERDICT.get(status, status)
+        reason = _sanitize(f.detail) if f is not None and f.detail else verdict
+        lines.append(f"   {icon.get(status, '?')} {_sanitize(name)}  {verdict} - {reason}")
+    return lines
+
+
+def _risk_chain_lines(paths, *, ascii_only: bool = False, compact: bool = False,
+                      limit: int = 8) -> list[str]:
+    """Highest-risk capability-chain lines for the combined pipeline Dashboard
+    (F-153). `paths` is the same list[RiskPath] risk.risk_paths() already produces —
+    duck-typed on .id/.severity/.title/.chain/.why only, so risk.py need not be
+    imported here (report.py already renders RISK-chain text for --risk-paths via
+    risk.render_risk_paths, which this deliberately does NOT call: that renderer's
+    own "No dangerous capability chains detected" sentence is the RIGHT answer for a
+    standalone `--risk-paths` run, but on a combined chat card a clean run is the
+    common case, Section 2's own findings already speak to it, and repeating it
+    here on every single run would just be more channel-limit noise).
+
+    Returns [] when `paths` is empty — the block is omitted entirely, matching the
+    other "nothing to show" blocks. `compact=True` (the --compact Telegram-safe
+    layout) drops the chain/why detail lines, keeping one line per chain.
+    """
+    if not paths:
+        return []
+    arrow = " -> " if ascii_only else " → "
+    shown = paths[:limit]
+    lines: list[str] = []
+    for p in shown:
+        lines.append(f"[{_sanitize(p.severity)}] {_sanitize(p.id)}: {_sanitize(p.title)}")
+        if not compact:
+            lines.append(f"   chain: {arrow.join(_sanitize(step) for step in p.chain)}")
+            lines.append(f"   why: {_sanitize(p.why)}")
+    if len(paths) > limit:
+        lines.append(f"  (+{len(paths) - limit} more — see --risk-paths)")
+    return lines
+
+
+def _behavioral_block_lines(phase, *, ascii_only: bool = False) -> list[str]:
+    """One-paragraph behavioural-replay summary for the combined pipeline Dashboard
+    (F-153). `phase` is duck-typed on pipeline.PhaseResult's published surface
+    (.ran/.detail/.lines) and is never imported here (pipeline.py already imports
+    report.py the other way — report.py importing pipeline.py back would be the
+    exact cycle pipeline.py's own module docstring says P6 must not reintroduce).
+
+    Always rendered when `phase` is supplied — never silently omitted, even when
+    nothing fired. Golden Rule #4: "not run" / "nothing found" are real answers a
+    security tool must say out loud, never leave the reader to read a missing
+    section as a clean pass.
+    """
+    if phase is None:
+        return []
+    marker = "*" if ascii_only else "•"
+    lines = [f"{marker} {_sanitize(phase.detail)}"]
+    if phase.ran and any("INCIDENT SIGNAL" in ln for ln in phase.lines):
+        lines.append(f"{marker} Full detail: --behavioral / --analyze-trajectory.")
+    return lines
+
+
+def _second_opinion_lines(phase, *, ascii_only: bool = False) -> list[str]:
+    """One-paragraph adjudication ("Second opinion (advisory)") summary for the
+    combined pipeline Dashboard (F-153). Same duck-typing note as
+    _behavioral_block_lines; always rendered when `phase` is supplied."""
+    if phase is None:
+        return []
+    marker = "*" if ascii_only else "•"
+    return [f"{marker} {_sanitize(phase.detail)}"]
+
+
+def _second_opinion_item_lines(phase, *, limit: int = 60) -> list[str]:
+    """The PER-ITEM judge verdicts behind the Second-opinion summary count (B-470).
+
+    `_second_opinion_lines` renders one summary line, which is right for a chat-sized
+    card. But that count was the ONLY thing rendered anywhere: a mandatory judge fan-out
+    over dozens of items produced `86 of 86 borderline item(s) judged` and nothing else,
+    in the card AND in the PDF, while SKILL.md promised "real per-item verdicts rather
+    than a bare pending count" and "per-item annotations". The rows exist all along on
+    the phase (`data["secondOpinion"]`, one dict per item) — nothing consumed them.
+
+    The PDF is the right home: it is the attachment, so it has the room the card does not.
+    Bounded, with the drop disclosed (Golden Rule #4 — no silent caps).
+    """
+    data = getattr(phase, "data", None) or {}
+    rows = [r for r in (data.get("secondOpinion") or []) if r.get("judge_verdict")]
+    if not rows:
+        return []
+    lines = []
+    for row in rows[:limit]:
+        target = row.get("target")
+        # A config-scoped item's target IS its finding id; printing "B100 [B100]" is noise.
+        where = ("" if not target or str(target) == str(row.get("finding_id"))
+                 else f" [{_sanitize(str(target))}]")
+        line = (f"  - {_sanitize(str(row.get('finding_id')))}{where}: "
+                f"{_sanitize(str(row.get('engine_disposition')))} -> "
+                f"{_sanitize(str(row.get('judge_verdict')))}")
+        note = row.get("annotation")
+        if note:
+            line += f" ({_sanitize(str(note))})"
+        lines.append(line)
+    if len(rows) > limit:
+        lines.append(f"  - (+{len(rows) - limit} more judged item(s) not listed)")
+    return lines
+
+
+def _glance_qualifying_findings(findings: list[Finding]) -> list[Finding]:
+    """The non-suppressed, MEDIUM/ATTESTED-confidence FAIL/WARN findings —
+    render_dashboard_findings's own HIGH-confidence filter excludes exactly this set
+    from Section 2 (B-444's `_worth_a_glance_lines` renders it instead, `full=True`
+    only). Factored out so `_worth_a_glance_lines` and render_dashboard's own
+    count-vs-render disclosure (B-444, `full=False`) share ONE filter rather than two
+    that could drift apart on the confidence/suppressed rule."""
+    return [
+        f for f in findings
+        if f.status in (FAIL, WARN)
+        and not getattr(f, "suppressed", False)
+        and getattr(f, "confidence", "HIGH") in (MEDIUM, ATTESTED)
+    ]
+
+
+def _worth_a_glance_lines(findings: list[Finding], *, ascii_only: bool = False,
+                          limit: int = 12, compact: bool = False,
+                          why_drop_severities: frozenset = frozenset()) -> list[str]:
+    """MEDIUM/ATTESTED-confidence findings for the combined pipeline Dashboard
+    (F-153) — the exact complement of render_dashboard_findings's own filter (which
+    excludes these from Section 2), so nothing is shown twice and nothing is
+    dropped. Reuses _render_finding, the SAME per-finding renderer Section 2 uses,
+    so the two blocks stay one system rather than two hand-written formatters that
+    can drift apart on why/evidence text or the confidence tag.
+
+    B-381 (PII / CLAUDE.md §8): render_dashboard_findings's HIGH-confidence filter has
+    always kept MEDIUM/ATTESTED findings off the --dashboard card; this block is the
+    deliberate exception (F-153's "nothing dropped" design) and needs its own guard —
+    a MEDIUM-confidence "Native binary PATH safety" finding's `detail` embeds an
+    absolute path under the operator's home directory (username included), and this
+    card is explicitly designed to be pasted into chat (Telegram et al). Every line is
+    passed through `_redact_home_paths` before it is returned; keeping these findings
+    (redacted) rather than dropping them entirely was the deliberate call here — this
+    section exists specifically so a lower-confidence signal is never silently
+    invisible, and that "worth a glance" is genuinely useful (e.g. an over-permissive
+    npm-global install dir) even once the path is collapsed to '~'.
+
+    `compact=True` (B-381) also lowers the effective `limit` (the caller passes a
+    smaller value) and threads `compact` into `_render_finding`, same trims Section 2
+    applies under --compact — this block is unbounded by FAIL/WARN family structure,
+    so a bad config with many MEDIUM/ATTESTED findings could otherwise blow the
+    Telegram ~4096-char budget on its own. `why_drop_severities` (B-405) threads the
+    same final-budget-enforcement drop set Section 2 gets — see
+    `render_dashboard_findings`'s docstring.
+    """
+    qualifying = _glance_qualifying_findings(findings)
+    if not qualifying:
+        return []
+    qualifying.sort(key=lambda f: (_STATUS_ORDER.get(f.status, 9), _SEV_ORDER.get(f.severity, 9)))
+    lines: list[str] = []
+    for f in qualifying[:limit]:
+        raw: list[str] = []
+        _render_finding(raw, f, cfg=None, ascii_only=ascii_only, compact=compact,
+                        why_drop_severities=why_drop_severities)
+        lines.extend(_redact_home_paths(ln) for ln in raw)
+    if len(qualifying) > limit:
+        lines.append(f"(+{len(qualifying) - limit} more)")
+    return lines
+
+
+def _finalize_compact_dashboard(assemble, *, compact: bool, ascii_only: bool) -> str:
+    """B-405: render_dashboard's hard budget enforcement.
+
+    `assemble(why_drop_severities)` builds the full (non-asciified) card for a given
+    drop set; this wrapper renders it, applies `_asciify` when requested (the length
+    check below runs on the ACTUAL final string the caller emits, not a pre-ascii
+    proxy for it — `_asciify` can change length, e.g. "…" -> "..."), and — only when
+    `compact=True` — retries with a progressively more aggressive drop set from
+    `_COMPACT_WHY_DROP_LEVELS` until the result fits `_COMPACT_CHAR_BUDGET`. If the
+    most aggressive level still doesn't fit, `_hard_truncate_compact` is the
+    deterministic last resort that guarantees the return value is never over budget.
+
+    `compact=False` (every pre-existing caller) calls `assemble()` exactly once and
+    returns it untouched — byte-identical to the pre-B-405 behaviour.
+    """
+    def _final(why_drop_severities: frozenset = frozenset()) -> str:
+        out = assemble(why_drop_severities)
+        return _asciify(out) if ascii_only else out
+
+    result = _final()
+    if not compact or len(result) <= _COMPACT_CHAR_BUDGET:
+        return result
+    for drop_set in _COMPACT_WHY_DROP_LEVELS:
+        result = _final(drop_set)
+        if len(result) <= _COMPACT_CHAR_BUDGET:
+            return result
+    return _hard_truncate_compact(result, _COMPACT_CHAR_BUDGET)
+
+
+# ── C-373: the default chat card is an OVERVIEW, not the full findings dump ──────────
+#
+# Measured on dev@2a78be6: plain `--dashboard` rendered 7225 chars on fixtures/home_vuln
+# and 3946 on the CLEAN fixtures/home_safe, against the ~4096 chars a Telegram message
+# holds — and the B-381/B-405 budget machinery was unreachable there (`--compact` is a
+# no-op without `--full`, so the one output SKILL.md tells the host agent to paste had no
+# size control at all). The card now leads with the per-subject overview, names only the
+# most urgent findings, and routes full detail to the attachable PDF report.
+_CARD_TOP_URGENT = 5
+# Longest finding title the card prints, so one long title cannot drive the card's size.
+_CARD_TITLE_LIMIT = 78
+# Reduction ladder if the card still doesn't fit: fewer named findings, never the
+# overview or the where-is-the-detail pointer (those are what make the card useful at
+# all). `_hard_truncate_compact` stays the deterministic last resort.
+_CARD_TOP_URGENT_LEVELS = (_CARD_TOP_URGENT, 3, 0)
+# Most clean skill names the card's Skills block lists by name before collapsing the
+# rest to a "+N more" count (see _skills_inventory_lines' clean_roster_limit).
+_CARD_CLEAN_SKILLS = 10
+
+
+def _card_trim_title(title: str, limit: int = _CARD_TITLE_LIMIT) -> str:
+    """Word-boundary trim for a card title line. Never raises; returns *title* unchanged
+    when it already fits."""
+    t = _sanitize(title)
+    if len(t) <= limit:
+        return t
+    cut = t[:limit].rsplit(" ", 1)[0].rstrip(" ,;:-")
+    return (cut or t[:limit]) + "…"
+
+
+def _card_summary_lines(findings, ctx, *, plugin_sweep=None, ascii_only: bool = False) -> list[str]:
+    """Per-subject overview lines for the chat card — built from the SAME
+    `_subject_summary_rows` the HTML and PDF summary tables use, so all three surfaces
+    (and the JSON `inventory`) can never disagree. Returns [] when `ctx` is unavailable,
+    the same skip-don't-guess stance `render_subject_inventory` already takes."""
+    rows = _subject_summary_rows(findings, ctx, plugin_sweep=plugin_sweep)
+    if not rows:
+        return []
+    icon = _ICON_ASCII if ascii_only else _ICON
+    # Label -> subject key, so each row can carry its subject emoji. Chat-paste only:
+    # the CLI report / HTML / PDF subject headers stay emoji-less by design.
+    key_of = {label: key for key, label in SUBJECT_LABEL.items()}
+    out = []
+    for label, status, count_text in rows:
+        marker = icon.get(status, icon.get(UNKNOWN, "?"))
+        emoji = "" if ascii_only else f"{_SUBJECT_EMOJI.get(key_of.get(label), '')} "
+        out.append(f" {emoji}{label} — {marker} {count_text}")
+    return out
+
+
+def _card_top_urgent_lines(findings, *, limit: int = _CARD_TOP_URGENT,
+                           ascii_only: bool = False) -> tuple[list[str], int]:
+    """The most urgent findings as ONE line each (severity token + trimmed title, no
+    `why:` and no evidence bullets — that is what the PDF is for).
+
+    Draws from the same qualifying set `render_dashboard_findings` renders
+    (non-suppressed FAIL/WARN, excluding MEDIUM/ATTESTED confidence) and sorts it the
+    same way, so the card's "most urgent" and the full block agree on what is worst.
+    Returns `(lines, n_named)`; the caller reconciles `n_named` against the header's own
+    issue count and DISCLOSES the difference (Golden Rule #4 — a card that quietly names
+    5 of 26 findings would read as a complete list)."""
+    qualifying = [
+        f for f in findings
+        if f.status in (FAIL, WARN)
+        and not getattr(f, "suppressed", False)
+        and getattr(f, "confidence", "HIGH") not in (MEDIUM, ATTESTED)
+    ]
+    qualifying.sort(key=lambda f: (_SEV_ORDER.get(f.severity, 9), _STATUS_ORDER.get(f.status, 9)))
+    named = qualifying[:limit] if limit else []
+    lines = [
+        f"{_sev_token(f.severity, ascii_only=ascii_only)}  {_card_trim_title(f.title)}"
+        for f in named
+    ]
+    return lines, len(named)
+
+
+def _card_detail_pointer_lines(n_more: int, pdf_path=None, *, ascii_only: bool = False,
+                               full: bool = False) -> list[str]:
+    """Where the rest of the detail is. Two jobs: disclose how many findings the card did
+    NOT name, and point at the full report.
+
+    B-468: this text is PASTED VERBATIM into a chat by the host agent, so it may contain
+    only what a human reader should see. It used to carry the absolute report path and the
+    line "Attach that PDF file itself into the chat; do not paste its path or re-render its
+    contents" — an instruction aimed at the agent, sitting inside the very block the agent
+    is ordered to reproduce word for word. That is a contradiction the model has to resolve
+    on its own, and the observed resolution was the one this project least wants: a real
+    session where the agent handed the user a link, twice, before ever attaching the file.
+    The path and the instruction now go to stderr (cli.py), which is the agent's channel;
+    the card states only that the report is attached."""
+    lines: list[str] = []
+    # Under --full the PDF additionally carries the pipeline blocks (Skills/Plugins/MCP/
+    # RISK chains/Behavioural/Second opinion/Coverage/Worth a glance) — say so, so the
+    # reader knows the attachment is the whole run, not just a findings list.
+    full_pipeline = (", plus the skills/plugins/MCP, RISK-chain, behavioural,"
+                     " second-opinion and coverage blocks") if full else ""
+    if n_more > 0:
+        word = "finding" if n_more == 1 else "findings"
+        lines.append(f"(+{n_more} more {word} not named above — the full list is in the report.)")
+    if pdf_path:
+        lines.append(f"Full detail — every finding, with its why and evidence{full_pipeline}"
+                     " — is in the attached PDF report.")
+    else:
+        lines.append("For the full detail, re-run with `--pdf <path>` (an attachable report)"
+                     " — or `--save <path>` / `--html <path>`.")
+    return lines
+
+
+def _finalize_card(assemble_with_limit, *, ascii_only: bool) -> str:
+    """Hard budget guarantee for the default chat card (C-373).
+
+    Unlike `_finalize_compact_dashboard` (whose ladder drops `why:` lines, which this
+    card does not have), the card reduces by naming FEWER findings — the per-subject
+    overview and the detail pointer are never what gets dropped, since a card without
+    them is a grade and nothing else. `_hard_truncate_compact` remains the deterministic
+    last resort, so the return value is never over budget on any input."""
+    out = ""
+    for limit in _CARD_TOP_URGENT_LEVELS:
+        out = assemble_with_limit(limit)
+        out = _asciify(out) if ascii_only else out
+        if len(out) <= _COMPACT_CHAR_BUDGET:
+            return out
+    return _hard_truncate_compact(out, _COMPACT_CHAR_BUDGET)
+
+
 def render_dashboard(findings: list[Finding], score: ScoreResult, *,
-                     ascii_only: bool = False) -> str:
-    """Deterministic chat Dashboard card — Sections 1-2 of SKILL.md Step 3, pasted verbatim.
+                     ascii_only: bool = False, ctx=None, full: bool = False,
+                     risk=None, plugin_sweep=None, behavioral=None,
+                     adjudication=None, compact: bool = False, pdf_path=None) -> str:
+    """Deterministic chat Dashboard card — Sections 1-2 of SKILL.md Step 3, pasted verbatim,
+    plus an optional Section 3 (B-356) with per-skill vet verdicts, plus (F-153) the rest
+    of --full's pipeline when `full=True`.
 
     Live testing (F-070) showed the host LLM silently drops the 🦞 header and the family
     frame when asked to *compose* them, so the whole card is code-rendered (B-077): grade
     card + score-bar + issue count, then the framed findings block. Reports-only (F-074):
     the card names what is wrong and why — it carries no remediation and no fix offers.
     The host agent pastes this output and only writes its own prose *around* it.
+
+    B-356: `--full`'s per-skill sweep (v3.57.0) never reached this card, so a user going
+    through the normal guided flow never saw it. `ctx` is optional and additive — passing
+    None (every pre-existing caller) reproduces the exact prior Sections 1-2 output,
+    byte-identical. When `ctx` carries installed skills, a compact "Skills" section is
+    appended below Findings, reusing the SAME per-skill verdict lines
+    (`_skills_inventory_lines`) the full report's "Inventory by subject" block already
+    shows — one source of truth, not a second formatter to drift out of sync.
+
+    F-153: `full=False` (every pre-existing caller, and every `--dashboard` invocation
+    that doesn't also pass `--full`) reproduces Sections 1-2 plus the optional Skills
+    block, nothing else. (B-444 superseded the "byte-identical" claim this docstring
+    used to make here in two deliberate ways: the header now always routes through
+    `brand.header()` — bug B, the wordmark was missing — and Section 2 appends a
+    "(+N more — run --full for the rest)" disclosure line whenever `n_issues` counts
+    MEDIUM/ATTESTED-confidence FAIL/WARN findings that `render_dashboard_findings`
+    excludes and `full=False` never reaches `_worth_a_glance_lines` to show instead —
+    bug A, the header count and the render used to silently disagree.) Dave settled
+    2026-07-30
+    that `--dashboard` must fully render everything `--full` does rather than the
+    additive-append shape `--full` itself grew first (F-150/F-151/F-152); this is that
+    render, reached only via `--dashboard --full`. The fixed order is: Skills (vet) ·
+    Plugins (vet) · MCP · RISK chains · Behavioural · "Second opinion (advisory)" ·
+    Coverage · "Worth a glance" — each block independently omitted when there is
+    genuinely nothing to show for it (Plugins/MCP/RISK chains), except Behavioural and
+    Second opinion, which — per Golden Rule #4 — are shown whenever a phase result was
+    supplied, even to report "nothing fired". `risk`/`plugin_sweep`/`behavioral`/
+    `adjudication` are each independently optional: a caller that skipped a phase
+    (`--fast`, or the phase's own budget) passes None for it and only that ONE block
+    drops, mirroring the pre-existing `ctx=None` contract for Skills. This function
+    never triggers any of that computation itself — cli.py computes each phase once,
+    the same functions `--full` already uses, and hands the results in; nothing here
+    re-scans anything, so calling this with `full=True` costs only string formatting
+    over data the caller already has.
+
+    `compact=True` is ClawSecCheck's Telegram-safe ~4096-char layout (F-153 point 3;
+    the spec's suggested flag name `--card` was already taken by the pre-existing
+    shareable-badge flag, so the CLI flag is `--compact`). It trims the Plugins/MCP/
+    RISK-chain blocks to headline counts only and appends a save-to-file pointer;
+    Skills, Behavioural, Second opinion and Coverage are already short (a handful of
+    lines) and unaffected.
+
+    B-381: Section 2 (Findings) is NOT one of the short/unaffected sections above — it
+    scales with FAIL/WARN count, exactly what a bad config has many of, and measured
+    out as the actual driver of --compact missing its own ~4096-char budget (5058/7551
+    chars measured for a clean/bad home before this fix, against a documented ~4096
+    target Telegram itself enforces). `compact=True` now also threads into
+    `render_dashboard_findings` (trims each finding's "why" text and drops evidence
+    bullets, narrows the family frame's border rule) and into `_worth_a_glance_lines`
+    (lower `limit`, same per-finding trim) — see `_COMPACT_WHY_LIMIT`'s own comment for
+    the tuned value and the fixtures it was measured against.
+
+    B-405: the per-item trims above were tuned against two fixtures and are NOT a hard
+    guarantee — a real config with more FAIL/WARN findings than either fixture still
+    busted the ~4096 budget (5641 chars measured against a real fleet config). When
+    `compact=True`, this function now enforces `_COMPACT_CHAR_BUDGET` on the actual
+    final rendered string (post-`_asciify`) as a hard cap: if the first render is over
+    budget, it retries with `_COMPACT_WHY_DROP_LEVELS` (dropping whole why-lines,
+    weakest severity first) until it fits, and if even the most aggressive level still
+    doesn't fit, `_hard_truncate_compact` deterministically cuts the string to the
+    budget as an absolute last resort. `full=False` output is included in this
+    enforcement too (Section 2 alone can already be large); the byte-identical
+    guarantees above still hold whenever `compact=False` (the default), since the
+    budget loop is a no-op in that case.
     """
     findings = deduplicate_findings(findings)
     n_issues = sum(
@@ -1575,18 +2617,168 @@ def render_dashboard(findings: list[Finding], score: ScoreResult, *,
     # Grade"/"— Findings —" spots, a middle-dot for the "Grade F · 49/100" spot) — a
     # visible drift within the same string. One brand separator everywhere now.
     sep = brand.ASCII_SEPARATOR.strip() if ascii_only else brand.SEPARATOR.strip()
-    mascot = "" if ascii_only else f"{brand.MASCOT} "
     issues_word = "issue" if n_issues == 1 else "issues"
-    lines = [
-        f"{mascot}OpenClaw Security Audit {sep} Grade {score.grade} {sep} {score.score}/100",
+    # B-444 bug B: this used to hand-assemble "{mascot}OpenClaw Security Audit" as an
+    # f-string, bypassing brand.header() entirely -- so brand.WORDMARK ("ClawSecCheck")
+    # never reached the single most-seen surface (the card a host agent pastes into
+    # chat), unlike render_report's header (which already routes through
+    # brand.header()). Routing through brand.header() here keeps all three brand tiers
+    # consistent and, since brand.header() itself drops the mascot under ascii_only,
+    # the wordmark still lands on the ascii path (mascot alone used to become empty
+    # there with nothing to replace it).
+    head = brand.header(subtitle="OpenClaw Security Audit", ascii_only=ascii_only)
+    grade_lines = [
+        f"{head} {sep} Grade {score.grade} {sep} {score.score}/100",
         f"{_score_bar(score.score, score.grade, ascii_only=ascii_only)}"
         f"  {sep}  {n_issues} {issues_word}",
     ]
-    lines.append("")
-    lines.append(f"{sep} Findings {sep}")
-    body = render_dashboard_findings(findings, ascii_only=ascii_only).rstrip("\n")
-    out = "\n".join(lines) + "\n" + body + "\n"
-    return _asciify(out) if ascii_only else out
+    # B-465 / B-467: the card is the ONLY artifact SKILL.md tells the agent to paste, and it
+    # was the one renderer that dropped WHY the grade is what it is. Two measured shapes:
+    # a directory with no OpenClaw in it produced a confident `Grade F · 49/100 · 4 issues`
+    # (a failing verdict on a setup the tool never located), and a submitted liveTest
+    # VULNERABLE self-report took home_safe from `Grade A · 97/100` to `Grade F · 49/100`
+    # over the same 11 findings with no explanation anywhere in the card. The terminal
+    # report has disclosed both all along, through this exact shared cascade — the card
+    # simply never called it. Golden Rule #4.
+    _mark = "!" if ascii_only else "⚠️"
+    _cap_primary, _cap_extras = _cap_cascade(score)
+    if _cap_primary is not None:
+        grade_lines.append(
+            f"{_mark} capped from {score.raw_score}/100 — "
+            f"{_cap_primary_reason_text(_cap_primary, score)}{_cap_also_clause(_cap_extras)}"
+        )
+    if getattr(score, "config_blind_capped", False):
+        grade_lines.append(
+            "   This grade reflects what could NOT be checked, not a verdict on your "
+            "setup — point --home at the directory that holds your OpenClaw config."
+        )
+    # `--full` keeps its existing header (grade card + the "· Findings ·" section label
+    # immediately below); the C-373 default card opens with the grade lines only and
+    # labels its own sections as it goes.
+    header_block = "\n".join([*grade_lines, "", f"{sep} Findings {sep}"]) + "\n"
+    card_header_block = "\n".join(grade_lines) + "\n"
+
+    # Skills is a fixed block (unaffected by why_drop_severities): computed once.
+    inv = None
+    skills_block = ""
+    card_skills_block = ""
+    if ctx is not None:
+        inv = build_inventory(findings, ctx, plugin_sweep=plugin_sweep)
+        if inv["skills"]:
+            skill_lines = _skills_inventory_lines(inv, ctx, ascii_only=ascii_only)
+            skills_block = "\n" + f"{sep} Skills {sep}" + "\n" + "\n".join(skill_lines) + "\n"
+            # C-373: the card caps the clean roster (the one unbounded part — see
+            # _skills_inventory_lines); flagged skills are always named in full, since
+            # those are the ones the reader has to act on.
+            card_skill_lines = _skills_inventory_lines(
+                inv, ctx, ascii_only=ascii_only, clean_roster_limit=_CARD_CLEAN_SKILLS)
+            card_skills_block = ("\n" + f"{sep} Skills {sep}" + "\n"
+                                 + "\n".join(card_skill_lines) + "\n")
+
+    # C-374: `--dashboard --full --pdf <path>` ALSO renders the overview card. Under
+    # `--full` the PDF now carries the whole pipeline (Skills/Plugins/MCP/RISK/
+    # Behavioural/Second opinion/Coverage/Worth a glance), so collapsing the card no
+    # longer hides anything — it moves it into the attachment. Without `--pdf`, `--full`
+    # still renders every block inline: nothing becomes unreachable just because the
+    # user didn't ask for a file.
+    if not full or pdf_path:
+        # C-373: the default card is an OVERVIEW — grade, the per-subject inventory, and
+        # only the most urgent findings by name; the full findings list (with why and
+        # evidence) lives in the PDF report this run may have written. The old shape
+        # pasted the entire grouped findings block and measured 7225 chars against
+        # Telegram's ~4096 (see _CARD_TOP_URGENT's comment). `--dashboard-findings` still
+        # prints the complete grouped block for anyone who wants it inline, and
+        # `--dashboard --full` still renders the whole pipeline.
+        #
+        # Disclosure (Golden Rule #4, the B-444 lesson): `n_issues` counts EVERY
+        # non-suppressed FAIL/WARN, while the named lines come from the HIGH-confidence
+        # subset. The pointer block reconciles the two out loud ("+N more not named
+        # above") instead of letting the header count and the rendered list silently
+        # disagree — and every one of those N IS in the PDF, which renders all
+        # FAIL/WARN regardless of confidence.
+        summary_lines = _card_summary_lines(findings, ctx, plugin_sweep=plugin_sweep,
+                                            ascii_only=ascii_only)
+        ok = "[OK]" if ascii_only else "✅"
+
+        def _assemble_card(limit: int) -> str:
+            top_lines, n_named = _card_top_urgent_lines(
+                findings, limit=limit, ascii_only=ascii_only)
+            out = card_header_block
+            if summary_lines:
+                out += ("\n" + f"{sep} Inventory by subject {sep}" + "\n"
+                        + "\n".join(summary_lines) + "\n")
+            if top_lines:
+                out += ("\n" + f"{sep} Most urgent {sep}" + "\n"
+                        + "\n".join(top_lines) + "\n")
+            elif n_issues == 0:
+                out += f"\nNo known attack pattern matched. Keep it that way. {ok}\n"
+            out += ("\n" + "\n".join(_card_detail_pointer_lines(
+                n_issues - n_named, pdf_path, ascii_only=ascii_only, full=full)) + "\n")
+            return out + card_skills_block
+
+        return _finalize_card(_assemble_card, ascii_only=ascii_only)
+
+    # F-153: the rest of --full's pipeline, fixed order, each block independently
+    # omitted when there is genuinely nothing to show for it (see the docstring).
+    # None of these depend on why_drop_severities, so they're computed once, outside
+    # the budget-retry loop below.
+    tail_block = ""
+    plugin_lines = _plugins_inventory_lines(plugin_sweep, ascii_only=ascii_only, compact=compact)
+    if plugin_lines:
+        tail_block += "\n" + f"{sep} Plugins {sep}" + "\n" + "\n".join(plugin_lines) + "\n"
+
+    if inv is not None and inv["mcp"]:
+        mcp_lines = _mcp_inventory_lines(inv, ascii_only=ascii_only, compact=compact)
+        tail_block += "\n" + f"{sep} MCP {sep}" + "\n" + "\n".join(mcp_lines) + "\n"
+
+    risk_lines = _risk_chain_lines(risk or [], ascii_only=ascii_only, compact=compact)
+    if risk_lines:
+        tail_block += "\n" + f"{sep} RISK Chains {sep}" + "\n" + "\n".join(risk_lines) + "\n"
+
+    behavioral_lines = _behavioral_block_lines(behavioral, ascii_only=ascii_only)
+    if behavioral_lines:
+        tail_block += "\n" + f"{sep} Behavioural {sep}" + "\n" + "\n".join(behavioral_lines) + "\n"
+
+    second_opinion_lines = _second_opinion_lines(adjudication, ascii_only=ascii_only)
+    if second_opinion_lines:
+        tail_block += ("\n" + f"{sep} Second opinion (advisory) {sep}" + "\n"
+               + "\n".join(second_opinion_lines) + "\n")
+
+    coverage_lines = _coverage_lines(findings, ascii_only=ascii_only)
+    if coverage_lines:
+        tail_block += "\n" + "\n".join(coverage_lines) + "\n"
+
+    glance_marker = "" if ascii_only else "👀 "
+    footer_block = "\nFull pipeline detail: --save <path> or --html <path>.\n" if compact else ""
+
+    def _assemble(why_drop_severities: frozenset = frozenset()) -> str:
+        body = render_dashboard_findings(
+            findings, ascii_only=ascii_only, compact=compact,
+            why_drop_severities=why_drop_severities).rstrip("\n")
+        out = header_block + body + "\n" + skills_block + tail_block
+
+        # B-381: --compact also tightens the "Worth a glance" limit (12 -> 6) -- this
+        # block is unbounded by family structure, so a bad config with many MEDIUM/
+        # ATTESTED findings could blow the char budget on its own even after Section 2
+        # is trimmed.
+        glance_lines = _worth_a_glance_lines(
+            findings, ascii_only=ascii_only, limit=6 if compact else 12, compact=compact,
+            why_drop_severities=why_drop_severities)
+        if glance_lines:
+            out += ("\n" + f"{sep} {glance_marker}Worth a glance {sep}" + "\n"
+                   + "\n".join(glance_lines) + "\n")
+
+        # C-373: `--dashboard --full --pdf <path>` wrote an attachable report this run —
+        # say so here rather than letting cli.py print a note the host agent would paste
+        # along with the card. n_more is 0: the full card already renders every finding,
+        # so this is purely "the attachment exists", not a truncation disclosure.
+        if pdf_path:
+            out += "\n" + "\n".join(
+                _card_detail_pointer_lines(0, pdf_path, ascii_only=ascii_only)) + "\n"
+
+        return out + footer_block
+
+    return _finalize_compact_dashboard(_assemble, compact=compact, ascii_only=ascii_only)
 
 
 def render_card(score: ScoreResult, findings: list[Finding], ascii_only: bool = False) -> str:
@@ -1630,7 +2822,7 @@ def _header_rule_width(header_line: str, ascii_only: bool) -> int:
 
 def render_monitor(alerts, score: ScoreResult, ascii_only: bool = False,
                    baseline: bool = False, persisted: bool = True,
-                   baseline_corrupt: bool = False) -> str:
+                   baseline_corrupt: bool = False, live_test_skipped: bool = False) -> str:
     """Render the --monitor body.
 
     *baseline* — this was a genuine first run (no prior state file at all).
@@ -1649,7 +2841,16 @@ def render_monitor(alerts, score: ScoreResult, ascii_only: bool = False,
     this flag adds is the closing note that a replacement baseline now exists — which is
     printed only when it actually got written.
 
-    All three default to the pre-B-270/B-271 behaviour, so existing callers are unchanged.
+    *live_test_skipped* — B-379: the F-155 seed gate deliberately excluded this run from
+    the journal/baseline (an unseeded/unreproducible VULNERABLE verdict), NOT a write
+    failure — `persisted` is False here too (nothing WAS written), but the CLI does not
+    treat this as an error (no stderr, exit 0), so this function must not read `persisted=
+    False` alone as "the write failed" the way it otherwise would. When True, an explicit
+    "not persisted because..." line replaces the generic silence `persisted=False` would
+    otherwise produce, so the reader is told WHY rather than left to infer a crash.
+
+    All four default to the pre-B-270/B-271/B-379 behaviour, so existing callers are
+    unchanged.
     """
     # LOW is a real catalog severity and must outrank INFO: a LOW check that regressed to
     # FAIL is a security finding, while INFO is an informational counter. Omitting it made
@@ -1673,6 +2874,13 @@ def render_monitor(alerts, score: ScoreResult, ascii_only: bool = False,
         # B-271: nothing was written, so make no claim about the baseline either way.
         if alerts:
             lines += _alert_lines()
+        if live_test_skipped:
+            # B-379: distinguish "deliberately not persisted" from "write failed" —
+            # the CLI does not treat this as an error, and neither should this text.
+            lines += ["", "Not persisted: this run's grade was capped by an unseeded "
+                          "(unreproducible) live injection-test verdict — recording it "
+                          "would manufacture drift where none exists. Re-run without a "
+                          "seed-less verdict, or with a seeded one, to resume monitoring."]
     elif baseline:
         lines += ["", "Baseline saved. Future runs will alert on what changes since now."]
     else:
@@ -1803,7 +3011,8 @@ def _finding_to_dict(f: Finding) -> dict:
             "ast": list(ast_for(f.id)),
             "remediation": remediation_for(f.id),
             "evidence": [_sanitize(e) for e in (f.evidence or [])],
-            "surface": _meta.surface if _meta is not None else ""}
+            "surface": _meta.surface if _meta is not None else "",
+            "not_applicable": bool(getattr(f, "not_applicable", False))}
 
 
 # Per-axis status icons for the risk dossier (5 states incl. N/A).
@@ -1917,6 +3126,60 @@ def _advise_reasons(profile, limit: int = 5) -> list[str]:
     return [f"{f.id} ({f.status}): {_sanitize(f.detail)}" for f in worst_first[:limit]]
 
 
+# B-487, second round: `shlex.quote` is necessary but NOT sufficient here, because these
+# commands are consumed LINE BY LINE (a printed block a host agent copies, per
+# docs/FLOW_CHOICES.md). A target carrying a newline is quoted correctly as ONE shell
+# argument, yet the quoted token spans two rendered LINES — so the plan's line structure
+# becomes attacker-controlled. In the `#`-commented ecosystem branches that is a real
+# shell-level escape, not a cosmetic one: `#` comments to end of LINE only, so the tail of
+# a newline-bearing target lands on an UNcommented line and reaches command position.
+# Found by this change's own test matrix, not by the original report.
+#
+# No legitimate target — package name, URL, git ref, or slug — contains a control
+# character, so refusing is free of false positives and is itself the honest answer:
+# fabricating a command for such a target is exactly the "no fabricated facts" failure the
+# project forbids. Refuse the command block and say why.
+_CONTROL_CHAR_RE = re.compile(r"[\x00-\x1f\x7f]")
+
+
+def _refuse_command_plan(target: str) -> str:
+    """The --vet-plan output for a target carrying a control character: no commands.
+
+    Renders the same 4-step plain-language preamble (a reader still deserves to know what
+    the flow does) but replaces every command line with a refusal. The target is shown
+    with its control characters escaped via `repr`, so the refusal itself cannot smuggle a
+    line break into the output it is protecting.
+    """
+    return "\n".join([
+        "I will not build a fetch plan for this target.",
+        "",
+        f"  target (escaped): {target!r}",
+        "",
+        "It contains a control character (a newline, carriage return, or similar). No real",
+        "package name, URL, git ref, or skill slug does. Because these commands are meant to",
+        "be copied and run line by line, a target that spans lines would let the target's own",
+        "text land on a line of its own — which is how injected text reaches command position.",
+        "",
+        "Treat this as a strong signal about the target itself: something produced an",
+        "identifier that cannot be one. Check where it came from before going further.",
+    ])
+
+
+def _shq(value) -> str:
+    """Shell-quote *value* for safe interpolation into a printed command line.
+
+    B-487: every renderer in this module that stitches a caller-supplied string (a
+    --vet-plan target, an --advise target/profile.target, …) into a shell command line
+    MUST route it through this helper rather than interpolating it raw. `docs/
+    FLOW_CHOICES.md` tells the host agent to actually run these printed commands, so an
+    unquoted field is a command-injection sink, not just a display glitch. `shlex.quote`
+    is a no-op on already-safe strings (letters/digits/`-_./=:@`), so ordinary targets
+    render byte-identically to before this fix — only strings carrying shell
+    metacharacters change output at all.
+    """
+    return shlex.quote(str(value))
+
+
 def _looks_like_quarantine(target: str) -> bool:
     """True if *target* sits under the system temp dir (a --vet-plan quarantine copy),
     False otherwise. --advise can be pointed at ANY path, including a real installed
@@ -1964,16 +3227,29 @@ def render_advise(profile, ascii_only: bool = False) -> str:
     lines.append("Next steps:")
     if verdict != "INSTALL":
         lines.append("  Review the reasons above before proceeding; when you're done:")
-    if _looks_like_quarantine(profile.target):
-        lines.append(f"  rm -rf {profile.target}    # remove the quarantine copy — do this either way")
+    if _CONTROL_CHAR_RE.search(str(profile.target)):
+        # B-487: same line-structure hazard as --vet-plan. A quoted token carrying a
+        # newline spans two rendered lines, so the path's own text would land on a line of
+        # its own inside a copy-and-run block. Name the path escaped and emit no command.
+        lines.append(f"  This path contains a control character: {str(profile.target)!r}")
+        lines.append("  No cleanup command is printed for it — a `rm -rf` spanning two lines")
+        lines.append("  is not safe to copy. Remove it by hand if it is a quarantine copy.")
+    elif _looks_like_quarantine(profile.target):
+        lines.append(f"  rm -rf {_shq(profile.target)}    # remove the quarantine copy — do this either way")
     else:
         lines.append(f"  '{profile.target}' is not under the system temp dir — this does not")
         lines.append("  look like a --vet-plan quarantine copy. If it IS one, remove it with:")
-        lines.append(f"    rm -rf {profile.target}")
+        lines.append(f"    rm -rf {_shq(profile.target)}")
         lines.append("  If this is your real installed skill, do NOT delete it — act on the")
         lines.append("  verdict above instead (e.g. uninstall through your normal flow).")
     lines.append("  (run --json for the full finding list + axis breakdown)")
-    return "\n".join(lines)
+    out = "\n".join(lines)
+    # B-483: this renderer read `ascii_only` for its icon table and its `dash` variable and
+    # then emitted hardcoded em dashes anyway (the verdict headline, the CAUTION fallback),
+    # plus whatever unicode a finding's own text carries — so `--advise --ascii` was the one
+    # mode that still printed raw unicode. Same closing guard every other renderer here ends
+    # with, so nothing depends on remembering to use `dash`.
+    return asciify(out) if ascii_only else out
 
 
 def render_advise_json(profile, *, version: str) -> str:
@@ -1986,12 +3262,19 @@ def render_advise_json(profile, *, version: str) -> str:
     payload["advise_verdict"] = _ADVISE_VERDICT.get(profile.overall_status, "CAUTION")
     payload["reasons"] = _advise_reasons(profile)
     payload["is_quarantine_path"] = is_quarantine
-    payload["cleanup"] = (
-        f"rm -rf {profile.target}" if is_quarantine else
-        f"# '{profile.target}' is not under the system temp dir — only run "
-        f"'rm -rf {profile.target}' if you're sure this is a --vet-plan quarantine "
-        "copy, not your real installed skill"
-    )
+    if _CONTROL_CHAR_RE.search(str(profile.target)):
+        # B-487: no command for a path that would break the line it is printed on.
+        payload["cleanup"] = (
+            f"# path contains a control character ({str(profile.target)!r}) — no cleanup "
+            "command is emitted; remove it by hand if it is a quarantine copy"
+        )
+    else:
+        payload["cleanup"] = (
+            f"rm -rf {_shq(profile.target)}" if is_quarantine else
+            f"# '{profile.target}' is not under the system temp dir — only run "
+            f"'rm -rf {_shq(profile.target)}' if you're sure this is a --vet-plan quarantine "
+            "copy, not your real installed skill"
+        )
     payload["coverage"] = _coverage(profile.findings)
     return json.dumps(_sanitize_tree(payload), ensure_ascii=True, indent=2)
 
@@ -2012,14 +3295,20 @@ def render_advise_json(profile, *, version: str) -> str:
 def render_vet_plan(target: str) -> str:
     from .checks import _parse_source_target  # noqa: PLC0415
 
+    if _CONTROL_CHAR_RE.search(target):
+        return _refuse_command_plan(target)
+
     info = _parse_source_target(target)
     eco, name, version = info["ecosystem"], info["name"], info.get("version")
     ver_suffix = f"@{version}" if version else ""
 
     if eco == "npm":
-        fetch = f"npm pack {name}{ver_suffix} --pack-destination \"$QUARANTINE\""
+        # `name + ver_suffix` (e.g. "left-pad@1.0.0") is ONE npm package-spec argument —
+        # quote it as a single unit so quoting can't split it into two shell words.
+        fetch = f"npm pack {_shq(name + ver_suffix)} --pack-destination \"$QUARANTINE\""
     elif eco == "pypi":
-        fetch = f"pip download --no-deps -d \"$QUARANTINE\" {name}{'==' + version if version else ''}"
+        fetch = (f"pip download --no-deps -d \"$QUARANTINE\" "
+                  f"{_shq(name + ('==' + version if version else ''))}")
     elif eco == "git":
         # info only keeps host + the repo-name tail, not the full owner/repo path — pull
         # host/path back out of the raw "git:<host>/<path>[@ref]" target instead of
@@ -2028,13 +3317,13 @@ def render_vet_plan(target: str) -> str:
         ref = info.get("ref")
         if ref:
             path = path.rsplit("@", 1)[0]
-        branch_flag = f" --branch {ref}" if ref else ""
-        fetch = f"git clone --depth 1{branch_flag} https://{path} \"$QUARANTINE/repo\""
+        branch_flag = f" --branch {_shq(ref)}" if ref else ""
+        fetch = f"git clone --depth 1{branch_flag} https://{_shq(path)} \"$QUARANTINE/repo\""
     elif eco == "clawhub":
         fetch = (f"# resolve '{name}' via your ClawHub client's normal pull/install path, "
                   "but redirect the output into \"$QUARANTINE\" instead of the live skills dir")
     else:  # "url" or an unresolved bare "registry" name
-        fetch = (f"curl -fsSL {target} -o \"$QUARANTINE/download\"" if eco == "url" else
+        fetch = (f"curl -fsSL {_shq(target)} -o \"$QUARANTINE/download\"" if eco == "url" else
                   f"# '{name}' has no resolvable ecosystem — fetch via your package manager's "
                   "normal lookup, into \"$QUARANTINE\"")
     # the concrete-command ecosystems get a shared "this line varies" annotation; the
@@ -2056,7 +3345,7 @@ def render_vet_plan(target: str) -> str:
         "",
         "Commands (for the agent — clawseccheck never touches the network itself):",
         "",
-        f"  clawseccheck --vet-source {target}   # 1: reputation, zero network",
+        f"  clawseccheck --vet-source {_shq(target)}   # 1: reputation, zero network",
         "  QUARANTINE=$(mktemp -d)   # 2: throwaway, outside auto-load",
         f"  {fetch}{fetch_note}",
         "  clawseccheck --advise \"$QUARANTINE\"   # 3: verdict",
@@ -2196,7 +3485,9 @@ def render_permission_manifest(ctx, target: str) -> str:
 
 
 def render_json(findings: list[Finding], score: ScoreResult, *, risk=None,
-                ctx=None) -> str:
+                ctx=None, skill_sweep: dict | None = None, plugin_sweep=None,
+                live_test_vulnerable: bool = False, live_test_reason: str | None = None,
+                behavioral_fired_ids=frozenset()) -> str:
     actions = suggest_actions(findings, score)
     _json_cfg: dict | None = (getattr(ctx, "config", {}) or {}) if ctx is not None else None
 
@@ -2218,12 +3509,31 @@ def render_json(findings: list[Finding], score: ScoreResult, *, risk=None,
         "runtime_cap_reason": score.runtime_cap_reason,
         # B-306 (C-135 follow-up): true when openclaw.json was unreadable/unparseable
         # this run and that alone hard-capped the grade — see scoring.CONFIG_BLIND_CAP.
+        # B-363: also true when openclaw.json was simply ABSENT (no target found at
+        # all) — `config_blind_reason` ("unreadable" | "absent" | null) distinguishes
+        # the two states without a JSON consumer having to re-derive it from config_found.
         "config_blind_capped": score.config_blind_capped,
-        # B-313: true when a crashed/timed-out check alone hard-capped the grade — see
-        # scoring.DEGRADED_CHECK_CAP. `degraded_count` is unconditional (checks did/didn't
-        # run this many times) even when this bool is False because a tighter cap won.
+        "config_blind_reason": getattr(score, "config_blind_reason", None),
+        # B-313/B-399: true when a check that could not reach a reliable verdict this run
+        # (crashed, timed out, or hit an engine-side-degraded UNKNOWN — Finding.id
+        # prefixed "ERR:", or any UNKNOWN finding with engine_degraded=True) alone
+        # hard-capped the grade — see scoring.DEGRADED_CHECK_CAP. `degraded_count` is
+        # unconditional (checks did/didn't reach a verdict this many times) even when this
+        # bool is False because a tighter cap won.
         "degraded_capped": getattr(score, "degraded_capped", False),
         "degraded_count": getattr(score, "degraded_count", 0),
+        # F-155: true when a submitted VULNERABLE live injection-test verdict (canary/
+        # dryrun/redteam/multiturn, via --judged-bundle's "liveTest" bucket) alone
+        # hard-capped the grade — see scoring.LIVE_INJECTION_CAP. RESISTANT or no
+        # submission at all always leaves this False (self-attestation guard).
+        "live_injection_capped": getattr(score, "live_injection_capped", False),
+        "live_injection_cap_reason": getattr(score, "live_injection_cap_reason", None),
+        # F-154: true when a fired T1/T2/T3/B191 behavioral detector (--behavioral or
+        # --full, which already runs the analysis) alone hard-capped the grade — see
+        # scoring.BEHAVIORAL_SIGNAL_CAP. Always False when the analysis never ran this
+        # invocation (the default — a plain audit never sets it).
+        "behavioral_capped": getattr(score, "behavioral_capped", False),
+        "behavioral_cap_reason": getattr(score, "behavioral_cap_reason", None),
         "assessable": bool(score.assessable),
         "trifecta": _trifecta_ratio(findings),
         "findings": [
@@ -2262,7 +3572,14 @@ def render_json(findings: list[Finding], score: ScoreResult, *, risk=None,
     from .coverage import coverage as _coverage  # noqa: PLC0415
     from .scoring import project as _project  # noqa: PLC0415
     payload["coverage"] = _coverage(findings)
-    payload["projection"] = _project(findings, ctx)
+    # B-379: thread the SAME cap inputs `score` (above) was computed with, so
+    # projection.current can never disagree with the top-level score/grade for a
+    # capped run — see this function's `behavioral_fired_ids`/`live_test_*` params.
+    payload["projection"] = _project(
+        findings, ctx,
+        live_test_vulnerable=live_test_vulnerable, live_test_reason=live_test_reason,
+        behavioral_fired_ids=behavioral_fired_ids,
+    )
     # B-166: config read/parse state is machine-visible. A broken openclaw.json must not
     # read as a silent all-clear — config_parse_error is a clean gating boolean and errors
     # carries the human-readable parse message(s) that were previously only in the text run.
@@ -2283,12 +3600,19 @@ def render_json(findings: list[Finding], score: ScoreResult, *, risk=None,
     # F-131 Phase 1: "Inventory by subject" — additive top-level key (design §4.6).
     # Presentation-only: never alters score/grade/findings above; empty/UNKNOWN-shaped
     # when ctx is unavailable (build_inventory's own ctx-is-None fallback).
-    payload["inventory"] = build_inventory(findings, ctx)
+    payload["inventory"] = build_inventory(findings, ctx, plugin_sweep=plugin_sweep)
+    # F-149 JSON gap: present ONLY under --full (the caller passes None otherwise) —
+    # matches the printed SKILL SWEEP section, which likewise only exists under
+    # --full. Visibility only, same as the printed section: never folded into
+    # score/grade/findings above.
+    if skill_sweep is not None:
+        payload["skill_sweep"] = skill_sweep
     payload["scan_receipt"] = f"sha256:{compute_scan_receipt(findings)}"
     return json.dumps(_sanitize_tree(payload), ensure_ascii=True, indent=2)
 
 
-def render_html(findings: list[Finding], score: ScoreResult, native=None) -> str:
+def render_html(findings: list[Finding], score: ScoreResult, native=None,
+                *, ctx=None, plugin_sweep=None) -> str:
     """Standalone self-contained HTML report (inline CSS, no external assets).
 
     Includes the brand mark + wordmark, a grade badge (colored via
@@ -2352,8 +3676,8 @@ def render_html(findings: list[Finding], score: ScoreResult, native=None) -> str
                     {why_html}
                 </article>'''
 
-    # Build the findings body: grouped by the 7 OpenClaw surface families so a long
-    # list (dozens of findings) reads as coverage-by-area, matching the Dashboard.
+    # Build the findings body: grouped by Inventory subject so a long list (dozens of
+    # findings) reads as coverage-by-subject, matching the summary table above.
     if not issues:
         no_issues_text = esc(
             "No known attack pattern matched across the audited surfaces. Keep it that way."
@@ -2361,25 +3685,17 @@ def render_html(findings: list[Finding], score: ScoreResult, native=None) -> str
         findings_html = f'<div class="all-clear">✓ {no_issues_text}</div>'
         nav_html = ""
     else:
-        grouped: dict = {}
-        for f in issues:
-            grouped.setdefault(_family_of(f), []).append(f)
-
         nav_items = []
         sections = []
-        for fam_key in (*FAMILY_ORDER, None):
-            fam_issues = grouped.get(fam_key)
-            if not fam_issues:
-                continue
-            label = FAMILY_LABEL.get(fam_key, "Other")
-            anchor = "fam-" + (fam_key or "other")
+        for subj_key, label, subj_issues in _group_issues_by_subject(issues):
+            anchor = "subj-" + (subj_key or "other")
             nav_items.append(
                 f'<a class="nav-chip" href="#{anchor}">{esc(label)} '
-                f'<span class="nav-count">{len(fam_issues)}</span></a>')
-            cards = "".join(_finding_card(f) for f in fam_issues)
+                f'<span class="nav-count">{len(subj_issues)}</span></a>')
+            cards = "".join(_finding_card(f) for f in subj_issues)
             sections.append(f'''
             <section class="family" id="{anchor}">
-                <h3 class="family-head">{esc(label)}<span class="family-count">{len(fam_issues)}</span></h3>
+                <h3 class="family-head">{esc(label)}<span class="family-count">{len(subj_issues)}</span></h3>
                 {cards}
             </section>''')
         nav_html = f'<nav class="famnav" aria-label="Jump to finding group">{"".join(nav_items)}</nav>'
@@ -2392,6 +3708,27 @@ def render_html(findings: list[Finding], score: ScoreResult, native=None) -> str
         for sev, n in sev_counts.items() if n)
     summary_html = f'<div class="summary">{summary_chips}</div>' if summary_chips else ""
 
+    # F-131 subject taxonomy, promoted into the HTML export: a compact "Inventory by
+    # subject" table above the findings, derived from the SAME build_inventory() the JSON
+    # payload and the terminal "Inventory by subject" block use (single source of truth).
+    # "" when ctx is unavailable (a bare render_html(findings, score) call) — degrades to
+    # no table, never a fabricated one.
+    summary_rows = _subject_summary_rows(findings, ctx, plugin_sweep=plugin_sweep)
+    if summary_rows:
+        _st_color = {FAIL: "#d9534f", WARN: "#d9a406", PASS: "#1a7f37", UNKNOWN: "#8a8f98"}
+        _inv_rows = "".join(
+            f'<tr><td class="subj-name">{esc(label)}</td>'
+            f'<td class="subj-count">{esc(count_text)}</td>'
+            f'<td class="subj-status"><span class="subj-dot" style="--dot:{_st_color.get(status, "#8a8f98")};"></span>'
+            f'{esc(status)}</td></tr>'
+            for label, status, count_text in summary_rows)
+        subject_inventory_html = (
+            '<section class="inventory" aria-label="Inventory by subject">'
+            '<h2 class="section-title">Inventory by subject</h2>'
+            f'<table class="subj-table"><tbody>{_inv_rows}</tbody></table></section>')
+    else:
+        subject_inventory_html = ""
+
     # B-306 (C-135 follow-up #3, 2026-07-21): gate on the granular cap signals, not
     # `score.capped` alone — see the matching comment in render_report for why
     # `score.capped` can be False here while `config_blind_capped`/`runtime_capped` are
@@ -2401,52 +3738,33 @@ def render_html(findings: list[Finding], score: ScoreResult, native=None) -> str
     # a minimal duck-typed ScoreResult stand-in that predates these fields, and the OLD
     # code never touched them because `score.capped and ...` short-circuited past them —
     # preserve that tolerance instead of demanding every caller supply every field.
-    _cfg_blind = getattr(score, "config_blind_capped", False)
-    _rt_capped = getattr(score, "runtime_capped", False)
-    _rt_reason = getattr(score, "runtime_cap_reason", None)
-    # B-313: same "unconditional, above the grade" disclosure as render_report's text
-    # banner — a degraded check count is shown whenever it's nonzero, independent of
-    # whether it ended up strictly binding the cap (see _degraded_capped below).
+    # B-313/B-399: same "unconditional, above the grade" disclosure as render_report's
+    # text banner — a degraded check count is shown whenever it's nonzero, independent of
+    # whether it ended up strictly binding the cap.
     _degraded_n = getattr(score, "degraded_count", 0)
-    _degraded_capped = getattr(score, "degraded_capped", False)
     degraded_html = ""
     if _degraded_n:
         _plural = "check" if _degraded_n == 1 else "checks"
         degraded_html = (
             f'<p class="degraded"><strong>⚠️ Incomplete:</strong> {_degraded_n} {_plural}'
-            ' did not run (crashed or timed out) — this grade is incomplete.</p>'
+            ' could not reach a reliable verdict this run (crashed, timed out, or hit'
+            ' unreadable/corrupted input) — this grade is incomplete.</p>'
         )
-    if _cfg_blind:
-        # B-306 (C-135 follow-up): display priority over cap_severity/runtime/degraded —
-        # see render_report for why more than one signal can co-occur only in that branch.
-        _extra = []
-        if score.cap_severity:
-            _extra.append(f'an open {esc(score.cap_severity)} finding')
-        if _degraded_capped or _degraded_n:
-            _extra.append(f'{_degraded_n} degraded check(s)')
-        if _rt_capped:
-            _extra.append(
-                f'a corroborated runtime signal ({esc(_runtime_cap_phrase(_rt_reason))})'
-            )
-        _also = f'; also {", ".join(_extra)}' if _extra else ''
+    # B-380: same shared `_cap_cascade` decision render_report now uses
+    # (see the comment there) — this renderer used to keep its OWN five-branch "elif"
+    # ladder, which is exactly how it drifted out of sync with render_report: its
+    # runtime branch tested `score.capped or _rt_capped` (true for ANY cap, so a
+    # behavioral-only cap fell through to it and fabricated a runtime-signal claim —
+    # B-380 item 1), and its severity branch never named a co-occurring
+    # runtime cap (item 2). Both are structurally impossible now: the primary/extras
+    # decision lives in exactly one place. B-399's engine-side-degraded UNKNOWN cause
+    # needs no change here either, for the same reason noted in render_report.
+    _primary, _extras = _cap_cascade(score)
+    if _primary is not None:
+        _reason_html = esc(_cap_primary_reason_text(_primary, score))
+        _also_html = _cap_also_clause([esc(p) for p in _extras])
         capped_html = (f'<p class="capped"><strong>{esc(label_capped)}</strong> '
-                       f'from {score.raw_score} (openclaw.json unreadable/unparseable this run: '
-                       f'cannot rule out a CRITICAL condition{_also})</p>')
-    elif _degraded_capped:
-        # B-313: no config-blind signal, but at least one check crashed/timed out and
-        # that alone drove the cap.
-        capped_html = (f'<p class="capped"><strong>{esc(label_capped)}</strong> '
-                       f'from {score.raw_score} ({_degraded_n} check(s) crashed or timed out '
-                       f'this run: cannot rule out a CRITICAL condition)</p>')
-    elif score.capped and score.cap_severity:
-        capped_html = (f'<p class="capped"><strong>{esc(label_capped)}</strong> '
-                       f'from {score.raw_score} (open {esc(score.cap_severity)} finding)</p>')
-    elif score.capped or _rt_capped:
-        # I-025/B-309: no scored FAIL drove this cap — only a corroborated runtime signal
-        # can, and only as a cap (never an ordinary scored point).
-        _reason = esc(_runtime_cap_phrase(_rt_reason))
-        capped_html = (f'<p class="capped"><strong>{esc(label_capped)}</strong> '
-                       f'from {score.raw_score} (corroborated runtime signal: {_reason})</p>')
+                       f'from {score.raw_score} ({_reason_html}{_also_html})</p>')
     else:
         capped_html = ""
     capped_html = degraded_html + capped_html
@@ -2459,6 +3777,7 @@ def render_html(findings: list[Finding], score: ScoreResult, native=None) -> str
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <title>{esc(title_text)}</title>
+    <link rel="icon" type="image/png" href="{FAVICON_DATA_URI}">
     <style>
         :root {{
             --bg: #eef1f5;
@@ -2584,6 +3903,14 @@ def render_html(findings: list[Finding], score: ScoreResult, native=None) -> str
             color: #1a7f37; background: color-mix(in srgb, #1a7f37 12%, transparent);
             border: 1px solid color-mix(in srgb, #1a7f37 35%, transparent);
         }}
+        .inventory {{ margin: 1.75rem 0 0; }}
+        .subj-table {{ width: 100%; border-collapse: collapse; font-size: 0.92rem; margin-top: 0.5rem; }}
+        .subj-table td {{ padding: 0.5rem 0; border-bottom: 1px solid var(--line); }}
+        .subj-name {{ font-weight: 700; color: var(--ink); }}
+        .subj-count {{ color: var(--muted); }}
+        .subj-status {{ text-align: right; white-space: nowrap; color: var(--muted); }}
+        .subj-dot {{ display: inline-block; width: 0.6rem; height: 0.6rem; border-radius: 50%;
+            background: var(--dot); margin-right: 0.4rem; vertical-align: middle; }}
         .footer {{ margin-top: 2rem; padding-top: 1.25rem; border-top: 1px solid var(--line);
             text-align: center; color: var(--muted); font-size: 0.8rem; }}
         @media (max-width: 560px) {{ .container {{ padding: 1.4rem; }} .header h1 {{ font-size: 1.3rem; }} }}
@@ -2608,11 +3935,13 @@ def render_html(findings: list[Finding], score: ScoreResult, native=None) -> str
             <span>{private_body} Use the shareable badge instead (available via <code>--badge</code>).</span>
         </div>
 
+        {subject_inventory_html}
+
         <h2 class="section-title">{esc(section_findings)}</h2>
         {nav_html}
         {findings_html}
 
-        <footer class="footer">Generated locally by ClawSecCheck · read-only · this report never leaves your machine</footer>
+        <footer class="footer">Generated locally by ClawSecCheck · read-only against your OpenClaw config · this report never leaves your machine</footer>
     </main>
 </body>
 </html>'''

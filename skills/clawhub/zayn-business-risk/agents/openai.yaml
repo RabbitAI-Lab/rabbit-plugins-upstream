@@ -1,0 +1,4 @@
+interface:
+  display_name: "zayn-business-risk"
+  short_description: "调查企业诉讼、处罚、制裁、信用及其他公开合作风险信号"
+  default_prompt: "使用 $zayn-business-risk 调查目标企业的公开合作风险信号。"

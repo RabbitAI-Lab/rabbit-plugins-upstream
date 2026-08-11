@@ -1,0 +1,20 @@
+interface:
+  display_name: "Virtual Intelligent Dev Team"
+  short_description: "Route complex software work with bounded, evidence-backed loops."
+  # Keep this compact activation prompt in sync with skills-index.json.
+  default_prompt: "Use $virtual-intelligent-dev-team for complex software work crossing implementation, architecture, product scope, UX, release readiness, Git workflow, or technical governance. Classify task shape and risk, then choose the smallest defensible workflow bundle with one semantic lead. Use quick-slice for narrow fixes, audit-fix-deliver for batched audit findings, pre-development planning for rewrites/migrations, bounded iteration for optimization loops, and the formal ship/hold gate for release questions. For code-facing routes, apply Team Engine Lite inside Delivery: Worker produces, Verifier independently checks, and Lead accepts only from a DeliveryCycleReport backed by file handoffs. When the user explicitly asks for multi-agent execution, select the runtime tier from the request candidate ceiling and the host's complete atomic capability chain; never upgrade beyond evidence and fail closed when any capability or smoke test is missing. Return one unified result with scope boundary, evidence, risks, next action, and resume anchor. Use references/playbook-index.md and references/tooling-command-index.md to load detailed protocols."
+
+  triggers:
+
+    - "复杂开发任务"
+
+    - "架构重构"
+
+    - "技术治理"
+
+    - "发布前 gate"
+
+    - "研发协作"
+
+    - "代码审查"
+    - "virtual-intelligent-dev-team"

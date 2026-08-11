@@ -1,0 +1,17 @@
+name: geoskill-traffic-flow-estimation
+display_name: 交通流量估算
+description: |
+  Estimate traffic flow and speed from multi-temporal vehicle detection, counting and cross-correlation displacement.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-traffic-flow-estimation.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - dem
+  - extraction
+  - gis
+  - network
+  - remote-sensing
+  - terrain
+  - time-series

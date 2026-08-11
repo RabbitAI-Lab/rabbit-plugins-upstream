@@ -1,46 +1,68 @@
-## Description: <br>
-Analyzes Amazon keyword-level competition by querying LinkFox SIF data for search volume, product counts, ad competition, popularity rank, and supply-demand ratio. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill queries LinkFox SIF keyword overview data to help Amazon sellers analyze keyword-level competition, search volume, advertising presence, and supply-demand ratios across supported marketplaces.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, marketplace analysts, and agents use this skill to evaluate keyword competition across supported Amazon marketplaces and present the returned SIF metrics in concise tables or summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Amazon keyword queries, API credentials, and session or app metadata are sent to LinkFox services. <br>
-Mitigation: Install and run the skill only when that data sharing is acceptable, and restrict credentials to the minimum required scope. <br>
-Risk: Full API responses are saved locally and may contain sensitive keyword research. <br>
-Mitigation: Review the configured output location and periodically clean LinkFox cache and output directories for sensitive projects. <br>
-Risk: Feedback reporting can send user comments or task context to LinkFox services. <br>
-Mitigation: Review or disable feedback-reporting behavior before use in workflows with private or regulated content. <br>
-Risk: API calls consume LinkFox credits. <br>
-Mitigation: Warn users before repeated or multi-marketplace calls and reuse cached results when appropriate. <br>
+## Use Case:
 
+External Amazon sellers and marketplace analysts use this skill to request LinkFox SIF keyword metrics and present objective competition, search-volume, ad-count, and supply-demand summaries for product research.
 
-## Reference(s): <br>
-- [SIF keyword API reference](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-sif-keyword-overview) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown summaries and tables, shell command examples, and JSON API responses saved to local files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a single keyword per request, supports 13 Amazon marketplaces, and stores full API responses locally while summarizing large responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The skill requires a LinkFox API key and sends Amazon keyword queries to LinkFox services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user accepts sharing those queries with LinkFox and keep API keys in approved credential storage or scoped environment variables.
+
+Risk: The onboarding flow may collect a phone number and SMS code, issue or reveal an API key, create payment orders, and display payment QR codes.
+
+Mitigation: Review onboarding prompts before proceeding, confirm any billing action with the user, and avoid exposing SMS codes or generated credentials outside the trusted flow.
+
+Risk: Custom LinkFox gateway URL environment variables can redirect requests to a different endpoint.
+
+Mitigation: Leave custom gateway overrides unset unless the endpoint has been reviewed and approved.
+
+Risk: Saved LinkFox output directories may contain business-sensitive keyword research data or credentials.
+
+Mitigation: Treat saved outputs as sensitive and apply appropriate workspace access, retention, and cleanup controls.
+
+Risk: Automatic feedback reporting can send information about skill behavior or user reactions to LinkFox.
+
+Mitigation: Review feedback content before submission when the workflow surfaces feedback-worthy events.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-sif-keyword-overview)
+- [SIF keyword overview API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON request and response data plus optional shell command examples.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes full API responses to a local linkfox data directory; responses over 8 KB are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

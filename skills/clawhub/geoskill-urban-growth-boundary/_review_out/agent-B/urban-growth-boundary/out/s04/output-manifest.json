@@ -1,0 +1,63 @@
+{
+  "skill": "urban-growth-boundary",
+  "skill_version": "1.0.0",
+  "command": "urban-growth-boundary --bbox 179.5 -10 -179.5 -9 --synthetic --output-dir _review_out/agent-B/urban-growth-boundary/out/s04 --quiet",
+  "started_at": "2026-08-03T17:41:50.928537Z",
+  "finished_at": "2026-08-03T17:41:51.118068Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "built_t1": null,
+    "years": 10.0,
+    "threshold": 0.3,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out/agent-B/urban-growth-boundary/out/s04\\growth_suitability.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        179.5,
+        -10.0,
+        -179.5,
+        -9.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 2,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out/agent-B/urban-growth-boundary/out/s04\\growth_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "area_t1_px": 1162.0,
+    "area_t2_px": 5760.0,
+    "expansion_rate_per_year": 0.39569707401032705,
+    "mean_suitability": 0.23827198147773743,
+    "boundary_fraction": 0.29229736328125,
+    "years": 10.0,
+    "threshold": 0.3
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "urban-growth-boundary"
+  },
+  "error": null
+}

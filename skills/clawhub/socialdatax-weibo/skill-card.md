@@ -1,41 +1,55 @@
-## Description: <br>
-用于微博数据助手、微博热搜、微博内容研究、帖子详情、评论分析、评论回复观察、转赞互动、创作者资料和创作者内容列表。覆盖 Weibo post research，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents retrieve and analyze Weibo hot searches, post search results, post details, comments, replies, engagement lists, creator profiles, and creator post lists through SocialDataX.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and developers use this skill to retrieve read-only Weibo hot-search, post, comment, reply, engagement, creator profile, and creator post-list data through SocialDataX. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses SOCIALDATAX_API_KEY with a CLI/API workflow. <br>
-Mitigation: Install only when comfortable exposing the API key to SocialDataX, and keep key permissions and billing limits appropriate. <br>
-Risk: The skill runs the npm package socialdatax-skills at latest. <br>
-Mitigation: Review package trust before installation and pin or audit the package where deployment policy requires it. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent for read-only Weibo research, including trend review, post discovery, comment analysis, engagement review, and creator profile or post-list lookup.
 
-## Reference(s): <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and API-key setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY and node/npm to call the SocialDataX CLI or matching MCP tools.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: The workflow sends requests to SocialDataX using SOCIALDATAX_API_KEY and makes network calls to a third-party service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only after reviewing the SocialDataX package, service terms, and whether the API key and social-data workflow fit the deployment's data-handling requirements.
+
+Risk: Incorrect credentials, malformed Weibo IDs or URLs, or account balance issues can prevent successful data retrieval.
+
+Mitigation: Check SOCIALDATAX_API_KEY, parameters, and returned error messages; do not repeatedly retry insufficient-balance errors before the user resolves the balance condition.
+
+## Reference(s):
+
+- [SocialDataX API access and documentation](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo)
+- [Publisher profile](https://clawhub.ai/user/devinchen2014)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and guidance for read-only SocialDataX Weibo data calls]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY plus node and npm; API responses may include Weibo data returned by SocialDataX.]
+
+## Skill Version(s):
+
+0.1.17 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

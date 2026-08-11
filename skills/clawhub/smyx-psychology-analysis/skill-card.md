@@ -1,5 +1,5 @@
 ## Description: <br>
-Analyzes video inputs for mental-health and behavioral signals, returning structured psychological analysis reports, risk indicators, improvement suggestions, and report links. <br>
+Analyzes human mental health and psychological behavior, supports identifying common psychological problem tendencies through video analysis, and provides structured mental health analysis reports and improvement suggestions. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,37 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers can use this skill to submit local video files or video URLs to a cloud analysis service for mental-health tendency analysis and to retrieve prior reports. It is positioned for employee care, campus screening, and home health monitoring workflows where outputs are treated as reference material rather than clinical diagnosis. <br>
+External users and developers use this skill to submit mental-health-related video files or video URLs for cloud analysis, receive structured reports, and query prior reports. It is intended as a wellness reference and does not replace professional mental-health diagnosis or treatment. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Sensitive video or image inputs and psychological analysis results are processed by the publisher's cloud service and may be linked to an internal identity. <br>
-Mitigation: Use only with informed consent, approved data handling, and clear retention, deletion, and account-isolation terms before applying it to real mental-health, workplace, or campus screening data. <br>
-Risk: The skill can silently create or reuse local authentication state and user identity. <br>
-Mitigation: Review token storage and identity isolation before deployment, and run the skill in an isolated account or environment for each intended user population. <br>
-Risk: Psychological analysis outputs may be mistaken for clinical diagnosis or treatment advice. <br>
-Mitigation: Present outputs as reference-only screening information and require professional review or referral for users with meaningful psychological distress. <br>
+Risk: Sensitive mental-health videos or video URLs are sent to a configured cloud service. <br>
+Mitigation: Use the skill only with informed consent, avoid uploading other people's media, and use a separate workspace or account for testing. <br>
+Risk: Reports are associated with an automatically selected identity and prior reports can be queried from the cloud service. <br>
+Mitigation: Review the active workspace and account context before use, and avoid mixing test reports with production or personal reports. <br>
+Risk: Service tokens may persist in the local workspace database. <br>
+Mitigation: Limit workspace access, remove or rotate credentials after evaluation, and avoid sharing workspaces that have run the skill. <br>
+Risk: Mental-health analysis output may be mistaken for clinical diagnosis or treatment advice. <br>
+Mitigation: Present results as a wellness reference only and direct users with mental-health concerns to qualified professionals. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-psychology-analysis) <br>
-- [API interface documentation](references/api_doc.md) <br>
 - [Skill demo](https://lifeemergence.com/sample.html) <br>
+- [API documentation](references/api_doc.md) <br>
+- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown reports or JSON, with optional saved output files] <br>
+**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
+**Output Format:** [Markdown text with optional structured JSON report content and report links] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local mp4, avi, and mov files or video URLs; documented file size limit is 10 MB.] <br>
+**Other Properties Related to Output:** [Can save report output to a user-specified local file when requested.] <br>
 
 ## Skill Version(s): <br>
-1.0.13 (source: server release metadata and auto changelog; artifact frontmatter lists 1.0.7) <br>
+1.0.15 (source: server release metadata; artifact frontmatter reports 1.0.10) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

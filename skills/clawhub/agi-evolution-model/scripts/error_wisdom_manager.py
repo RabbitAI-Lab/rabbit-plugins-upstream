@@ -188,14 +188,8 @@ class ErrorWisdomManager:
         self.rules = self._load_json(self.rules_file, {"rules": {}, "metadata": {"total_count": 0}})
         self.patterns = self._load_json(self.patterns_file, {"patterns": {}, "metadata": {"total_count": 0}})
         self.stats = self._load_json(self.stats_file, self._default_stats())
-        
-        # ===== Phase 3: 集成时效性管理器 =====
-        try:
-            from error_wisdom_timeliness import TimelinessManager
-            self.timeliness_manager = TimelinessManager(memory_dir)
-        except ImportError:
-            self.timeliness_manager = None
-        # ===== 时效性集成结束 =====
+
+        # 注意：时效性管理器由 CognitiveErrorIntegrator 单独管理，不在此处初始化
     
     def _load_json(self, filepath: str, default: dict) -> dict:
         """加载JSON文件"""
@@ -305,12 +299,7 @@ class ErrorWisdomManager:
         
         # 更新统计
         self._update_stats(entry)
-        
-        # ===== Phase 3: 同步时效性管理器 =====
-        if self.timeliness_manager:
-            self.timeliness_manager._initialize_entry(entry_id, base_confidence=0.85)
-        # ===== 时效性同步结束 =====
-        
+
         # 检查是否需要生成预防规则
         self._check_and_generate_rule(error_type, error_subtype)
         

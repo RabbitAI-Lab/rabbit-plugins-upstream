@@ -1,47 +1,61 @@
-## Description: <br>
-Generate and edit images with Seedream through RunAPI for one-off CLI tasks or application integrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images with Seedream through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to generate or edit Seedream images through RunAPI. It guides agents toward the RunAPI CLI for one-off generation and SDKs for app or backend integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agents may spend RunAPI account quota or incur costs when generating or editing images. <br>
-Mitigation: Install and enable the skill only in environments intended to use RunAPI for Seedream, and review account costs before use. <br>
-Risk: RUNAPI_API_KEY or saved CLI login could expose RunAPI access to agents that should not have it. <br>
-Mitigation: Provide RunAPI credentials only in trusted environments where the agent is authorized to use that account. <br>
-Risk: Generated RunAPI file URLs are temporary and may not be suitable as durable assets. <br>
-Mitigation: Download and store generated outputs in durable storage within the retention window described by the skill. <br>
+## Use Case:
 
+Developers and agents use this skill to generate, edit, or transform images with Seedream through RunAPI, using CLI guidance for one-off tasks and SDK guidance for application integrations.
 
-## Reference(s): <br>
-- [RunAPI Seedream Model Overview](https://runapi.ai/models/seedream) <br>
-- [RunAPI Seedream Documentation](https://runapi.ai/models/seedream.md) <br>
-- [RunAPI Model Catalog](https://runapi.ai/models.md) <br>
-- [ByteDance Provider Page](https://runapi.ai/providers/bytedance.md) <br>
-- [RunAPI CLI Skill](https://github.com/runapi-ai/cli-skill) <br>
-- [ClawHub Skill Page](https://clawhub.ai/runapi-ai/skills/runapi-seedream) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with shell and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include RunAPI CLI commands, SDK package names, request JSON, and credential setup guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.9 (source: server release evidence) <br>
+Risk: Prompts and source image URLs may be sent to RunAPI's Seedream service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm RunAPI provider use is acceptable before installation and avoid sending sensitive prompts or private source image URLs unless the workflow permits it.
+
+Risk: Interactive browser login may not fit headless agent workflows and can place credentials in CLI configuration.
+
+Mitigation: Prefer RUNAPI_API_KEY or explicit CLI token import for headless runs; use browser login only when it matches the user's workflow.
+
+Risk: Generated file URLs are temporary and should not be treated as durable assets.
+
+Mitigation: Download generated outputs and store them in durable storage within the documented retention window.
+
+## Reference(s):
+
+- [RunAPI Seedream homepage](https://runapi.ai/models/seedream)
+- [RunAPI Seedream model documentation](https://runapi.ai/models/seedream.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI ByteDance provider documentation](https://runapi.ai/providers/bytedance.md)
+- [RunAPI CLI skill](https://github.com/runapi-ai/cli-skill)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with inline shell, JSON, and SDK package references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides agents toward CLI use for one-off tasks and SDK use for application integrations.]
+
+## Skill Version(s):
+
+0.2.10 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

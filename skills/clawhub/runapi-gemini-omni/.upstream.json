@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-gemini-omni",
   "slug": "runapi-gemini-omni",
   "ownerHandle": null,
-  "version": "0.3.0",
-  "updatedAt": 1784551756030,
-  "contentHash": "e4b5edbaff833031d359f17e227e5592cb61b0e28f133c02b8046cc020b4fd64",
-  "fetchedAt": "2026-07-26T18:10:03.864Z"
+  "version": "0.3.1",
+  "updatedAt": 1786370862632,
+  "contentHash": "c5a0764994609adcaf526e0ba1760f0023e6ea1ff1b6d83f7b73d06986573111",
+  "fetchedAt": "2026-08-11T08:22:34.020Z"
 }

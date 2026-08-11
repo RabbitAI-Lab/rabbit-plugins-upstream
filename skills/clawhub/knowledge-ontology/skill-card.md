@@ -1,43 +1,55 @@
-## Description: <br>
-Knowledge Ontology helps agents model local memory as a typed knowledge graph with entity relationships, constraint checks, schema evolution, and graph traversal planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+知识本体 helps agents model local knowledge as typed entities and relationships with constraint validation, schema evolution, and graph traversal planning.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent builders use this skill to structure agent memory, model entity relationships, analyze dependencies and impacts, and plan multi-step operations through typed graph commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review found capability mismatches in the documentation, including unrelated paid-feature claims. <br>
-Mitigation: Review the documented capabilities before installation and rely only on behavior that is supported by the artifact and release evidence. <br>
-Risk: The skill accepts an optional callback URL even though the release is described as primarily local. <br>
-Mitigation: Do not provide callback URLs or secrets unless network behavior is clearly documented and constrained for the deployment environment. <br>
-Risk: Command examples can create, migrate, or modify local knowledge-graph files. <br>
-Mitigation: Review generated commands and run them in a controlled workspace with backups before applying them to important data. <br>
+## Use Case:
 
+Developers and agent operators can use this skill when they need an agent to create, query, validate, and evolve a local ontology or knowledge graph for project memory, dependency analysis, and impact analysis.
 
-## Reference(s): <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/knowledge-ontology) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON result structures] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include graph schemas, entity records, validation reports, traversal results, and migration guidance for local knowledge-graph files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The security review flags inconsistent API credential guidance without a clear external integration boundary.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for explicit knowledge-graph or ontology tasks, and do not provide API keys unless the publisher clarifies a specific external integration.
+
+Risk: The skill requests exec and write capabilities that can mutate local graph files.
+
+Mitigation: Review planned file and command actions before execution, restrict work to the intended ontology directory, and keep recoverable backups or append-only history.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/knowledge-ontology)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+- [Skill homepage](https://skillhub.cn/skill/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May describe local ontology file changes, validation results, migrations, traversal plans, and command-line steps.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

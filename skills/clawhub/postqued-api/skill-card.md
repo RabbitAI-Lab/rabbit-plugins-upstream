@@ -1,43 +1,68 @@
-## Description: <br>
-PostQued social media scheduling API integration for uploading content, publishing or drafting posts to TikTok and other platforms, managing platform accounts, and checking publish status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate Postqued through its remote MCP server or v2 REST API for social content uploads, multi-platform publishing and scheduling, calendar status, analytics, engagement, approval workflows, revisions, caption suggestions, client reviews, collaborators, connected accounts, workspaces, and billing capability checks.
 
-## Publisher: <br>
-[syeddhasnainn](https://clawhub.ai/user/syeddhasnainn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[syeddhasnainn](https://clawhub.ai/user/syeddhasnainn)
 
-## Use Case: <br>
-Developers and content operations teams use this skill to guide agent-driven PostQued API calls for uploading media, preparing TikTok drafts, scheduling posts, publishing content, and checking publishing status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: API keys and bearer tokens could be exposed or over-permissioned. <br>
-Mitigation: Keep POSTQUED_API_KEY private, scope it for the intended PostQued use, and avoid placing secrets in prompts, logs, or shared files. <br>
-Risk: An agent could upload or publish the wrong file, caption, account, privacy setting, intent, or dispatch time. <br>
-Mitigation: Confirm the exact file, caption, target account, privacy setting, intent, and schedule before running upload or publish requests. <br>
-Risk: Direct publication may post content publicly before final human review. <br>
-Mitigation: Prefer draft mode unless the user explicitly requests direct publication. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent operate Postqued workspaces through MCP or the v2 REST API for publishing, scheduling, approvals, analytics, engagement, collaboration, and client review workflows.
 
-## Reference(s): <br>
-- [PostQued OpenAPI specification](https://api.postqued.com/v1/docs/openapi.json) <br>
-- [PostQued console](https://postqued.com/console) <br>
-- [ClawHub release page](https://clawhub.ai/syeddhasnainn/postqued-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with curl examples and JSON request bodies] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a POSTQUED_API_KEY bearer token and user confirmation before upload or publish calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: ClawHub release evidence) <br>
+Risk: The skill can perform externally visible publishing, scheduling, moderation, collaborator, approval, disconnect, and delete actions in Postqued.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use dry-run validation where available and require confirmation of the workspace, connected accounts, captions, destinations, times, and exact action before live changes.
+
+Risk: A Postqued organization API key, presigned upload URL, access token, or private response field could be exposed in user-facing output or logs.
+
+Mitigation: Store the API key in POSTQUED_API_KEY, never place it in query parameters or storage uploads, and redact credentials, presigned URLs, and private fields from summaries.
+
+Risk: Actions could be applied to the wrong organization or client workspace if scope is ambiguous.
+
+Mitigation: Resolve scope with list_workspaces or GET /v2/mcp/context first, pass explicit workspaceId values, include the exact organizationId when creating workspaces, and ask the user when a workspace is ambiguous.
+
+Risk: Retries or stale approval mutations could duplicate live requests or overwrite newer review work.
+
+Mitigation: Use a fresh UUID idempotency key per distinct live publish, poll durable status before retrying after timeouts, and reread approval posts before mutations that require current revision and version values.
+
+## Reference(s):
+
+- [Postqued OpenClaw setup](https://postqued.com/openclaw)
+- [Postqued MCP server](https://mcp.postqued.com/mcp)
+- [Postqued v2 OpenAPI](https://api.postqued.com/v2/docs/openapi.json)
+- [Postqued MCP tool catalog](references/mcp-tools.md)
+- [Postqued publishing targets](references/platforms.md)
+- [Postqued v2 REST API reference](references/api.md)
+- [ClawHub skill page](https://clawhub.ai/syeddhasnainn/skills/postqued-api)
+- [Publisher profile](https://clawhub.ai/user/syeddhasnainn)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown, JSON, and inline code or shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include proposed MCP tool calls, REST request examples, workspace-scoped summaries, and confirmation prompts for high-impact actions.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

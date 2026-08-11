@@ -1,46 +1,63 @@
-## Description: <br>
-Automates synchronization, packaging, release creation, and marketplace publishing for skills and agents across Gitee, GitHub, ClawHub, SkillHub, and PyPI, with file filtering and sensitive-data sanitization. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+git-sync is a cross-platform release automation skill for synchronizing and publishing skills and agents to Gitee, GitHub, ClawHub, SkillHub, PyPI, and release channels with file filtering and sensitive-data sanitization.
 
-## Publisher: <br>
-[ldxs001](https://clawhub.ai/user/ldxs001) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ldxs001](https://clawhub.ai/user/ldxs001)
 
-## Use Case: <br>
-Developers and release maintainers use git-sync to package, sanitize, version-check, and publish skills or agents across supported repositories and marketplaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automated publishing can push code or packages to remote repositories and marketplaces. <br>
-Mitigation: Review the target repository and release intent before execution, and use --skip-market unless marketplace publishing is explicitly intended. <br>
-Risk: Git credential handling can persistently weaken credential settings or expose overly broad tokens. <br>
-Mitigation: Use scoped tokens, avoid embedded tokens in git remotes, and check global Git credential settings after running the skill. <br>
-Risk: The skill handles files that may contain sensitive information before publishing. <br>
-Mitigation: Keep the mandatory sensitive-data scan enabled and review sanitization results before publishing public artifacts. <br>
+## Use Case:
 
+Developers and release maintainers use git-sync to synchronize, package, and publish skills or agents across repository, marketplace, package, and release workflows. It supports version checks, repository updates, packaging, LLM-assisted file filtering, and sensitive-data sanitization decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ldxs001/skills/git-sync) <br>
-- [Guide](references/guide.md) <br>
-- [Command reference](references/reference.md) <br>
-- [Permissions and tests](references/permissions.md) <br>
-- [Changelog](references/changelog.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and terminal text with shell commands, JSON snippets, and generated files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create package archives, release tags, repository updates, and marketplace publication commands depending on selected options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.32.0 (source: frontmatter, _meta.json, changelog, server release metadata) <br>
+Risk: The skill can publish code, push repositories, create releases, upload packages, and read local publishing credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only on trusted projects with reviewed configuration, and use --skip-market or pack-only modes when marketplace or package publishing is not intended.
+
+Risk: The security evidence flags Git credential handling changes and shell command execution built from project metadata.
+
+Mitigation: Avoid untrusted skill metadata, review repository and credential settings before execution, and confirm that command construction and credential-helper behavior have been fixed before broad use.
+
+Risk: The workflow can pause for file-filtering or sensitive-data sanitization decisions, and incorrect decisions can publish unwanted files or retained secrets.
+
+Mitigation: Review generated decision JSON carefully and sanitize critical secrets before rerunning the release command.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ldxs001/skills/git-sync)
+- [Publisher profile](https://clawhub.ai/user/ldxs001)
+- [Usage guide](references/guide.md)
+- [Command reference](references/reference.md)
+- [Permissions and test report](references/permissions.md)
+- [Changelog](references/changelog.md)
+- [Blueprint rules](references/blueprint_rules.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON decision snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require follow-up decision JSON for file filtering or sensitive-data sanitization before rerunning the same release command.]
+
+## Skill Version(s):
+
+2.45.6 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

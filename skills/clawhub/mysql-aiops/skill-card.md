@@ -1,47 +1,62 @@
-## Description: <br>
-Mysql Aiops helps agents operate and troubleshoot MySQL 8.x and MariaDB 10.6+ servers with governed DBA workflows for health checks, slow-query analysis, lock waits, replication lag, fragmentation, index health, and audited maintenance actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+mysql-aiops helps agents operate and troubleshoot MySQL 8.x and MariaDB 10.6+ servers with health checks, root-cause analyses for slow queries, locks, replication lag, fragmentation, and guarded maintenance actions.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, database administrators, and operations teams use this skill to inspect MySQL or MariaDB server state, diagnose performance and replication issues, and prepare governed maintenance actions with audit records and dry-run previews. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes powerful MySQL/MariaDB write operations such as killing sessions, changing global variables, optimizing tables, and creating or dropping indexes. <br>
-Mitigation: Start with a least-privilege read-only account for monitoring, grant write privileges only when needed, use dry-run previews, and rely on the skill's audit records and reversible-operation undo descriptors where available. <br>
-Risk: Database credentials and the master password protect access to production systems. <br>
-Mitigation: Protect MYSQL_AIOPS_MASTER_PASSWORD and the ~/.mysql-aiops directory carefully, and use the encrypted secrets store rather than legacy plaintext password environment variables. <br>
-Risk: Some diagnostic behavior depends on database configuration and live validation, including performance_schema availability and MySQL versus MariaDB feature differences. <br>
-Mitigation: Run mysql-aiops doctor before relying on live diagnostics, confirm performance_schema is enabled for query-stat workflows, and review flavor-specific results before applying remediation. <br>
+## Use Case:
 
+Developers, DBAs, and operations engineers use this skill to inspect MySQL/MariaDB health, diagnose query, lock, replication, and fragmentation issues, and prepare or execute governed maintenance actions when the connected account has privileges.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/mysql-aiops) <br>
-- [Project homepage](https://github.com/AIops-tools/MySQL-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured diagnostic summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dry-run maintenance previews, measured database findings, audit-oriented context, and configuration guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: server release metadata) <br>
+Risk: The skill can change live MySQL/MariaDB databases when connected with write privileges, including killing sessions, changing indexes, running OPTIMIZE or ANALYZE, resetting query statistics, and setting global variables.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with a least-privilege read-only monitoring account and grant write privileges only for planned maintenance; use dry-run previews, CLI confirmations, and maintenance windows for potentially blocking operations.
+
+Risk: Database credentials or the mysql-aiops master password could be exposed through shell history, CI logs, or unprotected runtime environments.
+
+Mitigation: Use the encrypted secrets store and protected secret injection, and avoid placing passwords directly in commands, shell history, or logs.
+
+Risk: Some behavior is mock-validated and may vary against a live MySQL or MariaDB server configuration.
+
+Mitigation: Run mysql-aiops doctor and validate access, server flavor, performance_schema availability, and replica status on the intended target before relying on analysis or remediation.
+
+## Reference(s):
+
+- [mysql-aiops capabilities](references/capabilities.md)
+- [mysql-aiops CLI reference](references/cli-reference.md)
+- [mysql-aiops setup and security guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+- [Project homepage from ClawHub metadata](https://github.com/AIops-tools/MySQL-AIops)
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/mysql-aiops)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown or text guidance with shell commands and structured tool-result summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include measured database observations, risk labels, dry-run statements, and configuration paths.]
+
+## Skill Version(s):
+
+0.8.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

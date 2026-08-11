@@ -13,6 +13,8 @@ metadata: {"openclaw":{"source":"https://github.com/worldwonderer/oh-story-claud
 ---
 
 > Agent 兼容性：检查专业 agent 是否可用时，按 `.claude/agents/{agent}.md` → `.opencode/agents/{agent}.md` → `.codex/agents/{agent}.toml` 的顺序查找。Codex 原生子代理调用优先使用同名 `agent_type`；如果当前 Codex 运行时返回 `unknown agent_type` 或未暴露 custom-agent registry，必须降级为 solo/direct。检测到 `.zcode/` 时同样直接 solo/direct，因为 ZCode 3.3.4 不执行项目 custom agents；报告 `Fallback: project custom agents unavailable -> solo`。Claude/OpenCode 兼容面保留 `subagent_type`。
+>
+> Spawn 版本提示（不阻断 spawn）：先读取项目根 `.story-deployed` 的 `agents_version`。与本版 `agents_version: 24` 不一致时（标记缺失、字段缺失/非整数、小于或大于 24）**照常按文件存在性检查并 spawn**，同时报告 `Notice: agents bundle 版本不匹配（项目 {N}，本版 24）` 并提示重新运行 `/story-setup` 后新开会话；大于 24 时额外提示先更新 oh-story-claudecode，不要用本地旧版 setup 降级覆盖。只有 agent 文件缺失、或运行时不暴露 custom agent 时才降级 solo/direct，报告 `Fallback: ... -> solo`。
 
 ## 核心哲学
 
@@ -61,8 +63,9 @@ AI味不按语法错误处理，也不需要"修正"。它属于风格问题：�
 ### 自然文本特征（与AI味对比）
 | 维度 | 自然文本 | AI味文本 |
 |------|----------|--------|
-| 段落长度 | 1-3句为主，偶尔1句独占1行 | 每段4-6句，整齐均匀 |
-| 对话标签 | 60%+无标签，用动作替代"说" | 几乎每句都有"说道/问道" |
+| 段落长度 | 随 beat 长短不一：爽点/转折压短，推理/氛围/情绪链放长 | 通篇同一长度，整齐均匀 |
+| 句内节奏 | 叙述以逗号长句为主（逗号之间 8-12 字、整句 20-30 字，见 anti-ai-writing.md 规则 3） | 要么长句臃肿，要么通篇碎句像提纲 |
+| 对话标签 | 标签低频且不公式化，多用动作/上下文引出；普通"说"可保留 | 几乎每句都有"说道/问道/笑道" |
 | 情绪表达 | 动作展示（"手在抖"） | 直接告诉（"很紧张"） |
 | 比喻 | 生活化（"像哈士奇护食"） | 文学化（"如寒冰般"） |
 | 语气词 | "嘤""嘶""靠""行吧" | 几乎没有 |
@@ -118,8 +121,8 @@ AI味不按语法错误处理，也不需要"修正"。它属于风格问题：�
 node scripts/check-ai-patterns.js --check --fail-on=blocking <正文文件...>
 ```
 
-- severity=blocking 的类别（`not-is-comparison` / `em-dash` / `voice-contrast` / `negation-parade` / `reverse-not-is` / `trailer-ending`）并入 Gate B，属于写作/去 AI 味时优先处理的 blocking 类问题。
-- 其他 findings（碎句号、长段落、微动作、动作清单、抽象总结、套词、比喻密度、解释链、公文腔、过度精炼、低连接密度、引号强调滥用）只作读感提示；完整类别和修法见 `references/anti-ai-writing.md`。
+- severity=blocking 的类别（`not-is-comparison` / `em-dash` / `voice-contrast` / `negation-parade` / `reverse-not-is` / `trailer-ending` / `trailer-summary`）并入 Gate B，属于写作/去 AI 味时优先处理的 blocking 类问题。
+- 其他 findings（碎句号、长段落、微动作、动作清单、抽象总结、套词、比喻密度、解释链、公文腔、过度精炼、低连接密度、引号强调滥用、`formulaic-parallelism` 工整并列）只作读感提示；完整类别和修法见 `references/anti-ai-writing.md`。其中工整并列会扫描台词，必须读语境判断，不能因为 hook 对台词低误报豁免就跳过。
 - 处理方式：删掉否定铺垫，直接写后项；或改成角色动作、物件细节、身体反应来呈现。
 - 若用户只要检测，保留报告不改文。若执行去 AI 味，只改确实损害读感且无叙事功能的问题；功能性写法标 `[需复核]` 并保留。
 
@@ -237,6 +240,8 @@ node scripts/check-ai-patterns.js --check --fail-on=blocking <正文文件...>
 | 句式 | 问题 | 替代方案 |
 |------|------|----------|
 | 否定铺垫后接肯定翻转 | **最毒** 中文 AI 句式之一 | 直接写后项，或改成动作/细节呈现 |
+| 跨段「不是A / 也不是B / 只是C」 | 可能是工整铺排，也可能是辩解、悬念排除或情绪递进 | `formulaic-parallelism` advisory；通读语境，仅在重复提纲或拖慢画面时压缩 |
+| 「至于X不X，怎么X」/同动词「不V A，不V B」 | 工整决策栏、否定清单；正常台词也可能出现 | 结合语境复核；若只是复述前文或细纲，压成一次判断或只留一项 |
 | "...，带着..." | 万能状语，AI最爱 | 用独立短句或动作描写 |
 | "声音不大，却带着……" | AI 最爱声音描写 | 直接写声音特征或动作 |
 | 陈词滥调/万能比喻 | 公式化比喻会显 AI 腔 | 优先直接白描；确需比喻时只留少数生活化、角色化比喻 |
@@ -314,6 +319,7 @@ AI写的对话特征：每句话都信息完整、逻辑清晰、表达精准。
 - 适当打断对话（角色可以答非所问）；对话被打断或拖长时用动作、换行或短句处理，不用 `——`
 - 用动作穿插对话（"她喝了口水。'然后呢？'"）
 - 删掉解释性对话（角色不会把自己的动机说清楚）
+- Gate B 同样检查台词：连续工整否定、`至于X不X，怎么X`、同动词 `不V A，不V B` 不能因脚本的台词豁免而漏审；有明确人物/任务功能才保留
 - 不为凑比例硬扩台词；番茄对话占比随题材波动，台词只在角色此刻真会说、必须说时增加
 - 口误、停顿、粗话和重复要服务人物身份与情绪，不作为“真人感”装饰批量添加
 - 不把所有对话末尾改成句号：质问保留问号，爆发峰值保留少量感叹；吞回去/没说完用动作停顿、短句或换行，不用 `……`
@@ -353,7 +359,7 @@ node scripts/normalize-punctuation.js <正文文件...>
 ```
 
 作用边界：
-- `check-ai-patterns.js` 只报告不改写：severity=blocking 的类别（`not-is-comparison` / `em-dash` / `voice-contrast` / `negation-parade` / `reverse-not-is` / `trailer-ending`）优先改正文并复扫；advisory 先通读判断，确属提纲感、解释腔或模板腔再改，功能性写法标 `[需复核]`。
+- `check-ai-patterns.js` 只报告不改写：severity=blocking 的类别（`not-is-comparison` / `em-dash` / `voice-contrast` / `negation-parade` / `reverse-not-is` / `trailer-ending` / `trailer-summary`）优先改正文并复扫；advisory 先通读判断，确属提纲感、解释腔或模板腔再改，功能性写法标 `[需复核]`。
 - 它只是读感提示；完整类别、例外和修法见 `references/anti-ai-writing.md`。
 - `check-degeneration.js` 报告模型退化（逐字复读/打转、末尾截断、占位符、工程词泄漏 `细纲`/`情节点` 等），每条带 `severity: blocking|advisory`。blocking 是退化信号，去AI味改不掉，应回去重新生成那一段再 deslop；advisory（tier2 章节/歧义词）只提示。
 - `normalize-punctuation.js` 机械兜底：清除残留的 `……`、漏网破折号 `——`/`—`、双连字符 `--` 和独立行 `---`；默认不改变引号风格，也不把有功能的 `？` / 少量 `！` 改成句号。

@@ -203,6 +203,11 @@ def classify(row: dict[str, Any]) -> dict[str, Any]:
     post_split = parse_bool(row.get("post_split"))
     halted = parse_bool(row.get("halted"))
     dilution_risk = parse_dilution_risk(row.get("dilution_overhang"))
+    premarket_supply_raw = row.get("premarket_supply_risk")
+    premarket_supply_risk = parse_dilution_risk(premarket_supply_raw)
+    supply_risk_type = str(row.get("supply_risk_type") or "UNKNOWN").strip()
+    supply_risk_source = str(row.get("supply_risk_source") or "UNKNOWN").strip()
+    supply_risk_checked_at = str(row.get("supply_risk_checked_at") or "UNKNOWN").strip()
     open_price = parse_number(row.get("open_price"))
     last_price = parse_number(row.get("last_price"))
     regular_volume = parse_number(row.get("regular_volume"))
@@ -263,11 +268,22 @@ def classify(row: dict[str, Any]) -> dict[str, Any]:
         structure_gates, passed, failed, unknown
     )
 
-    hard_exclude = security_ok is False or split_today is True
+    # The new premarket field represents a point-in-time news/filing review. For
+    # backward compatibility, old datasets may fall back to dilution_overhang.
+    # A confirmed legacy dilution flag still overrides a clean premarket flag.
+    supply_risk_fallback = premarket_supply_raw in (None, "")
+    if dilution_risk is True or premarket_supply_risk is True:
+        effective_supply_risk = True
+    elif supply_risk_fallback:
+        effective_supply_risk = dilution_risk
+    else:
+        effective_supply_risk = premarket_supply_risk
+
+    hard_exclude = security_ok is False or split_today is True or effective_supply_risk is True
     above_vwap = None if last_price is None or vwap is None else last_price >= vwap
     execution_liquid = None if spread_pct is None else spread_pct <= 2.50
     regular_supply_confirmed = None if regular_turnover is None else regular_turnover >= 1.00
-    dilution_clear = None if dilution_risk is None else not dilution_risk
+    supply_risk_clear = None if effective_supply_risk is None else not effective_supply_risk
 
     if official_gap_pct is not None and official_gap_pct >= 100:
         path_type = "CONVENTIONAL_GAP"
@@ -293,12 +309,18 @@ def classify(row: dict[str, Any]) -> dict[str, Any]:
     if hard_exclude:
         evidence_score = 0
 
-    if hard_exclude or structure_failed:
+    if effective_supply_risk is True:
+        status = "EXCLUDE"
+        reason = "confirmed premarket share-supply risk"
+    elif hard_exclude or structure_failed:
         status = "EXCLUDE"
         reason = "security type, split, or structural gate failed"
     elif halted is True:
         status = "WATCH"
         reason = "trading is halted; wait for resumption and rebuild execution gates"
+    elif effective_supply_risk is None:
+        status = "WAIT_DATA"
+        reason = "premarket share-supply review is missing or unresolved"
     elif open_price is not None:
         if path_type == "CONVENTIONAL_GAP":
             execution_gates = {
@@ -306,7 +328,7 @@ def classify(row: dict[str, Any]) -> dict[str, Any]:
                 "regular_turnover>=1": regular_supply_confirmed,
                 "spread<=2.5%": execution_liquid,
                 "first_5m_structure": first_5m_confirmed,
-                "dilution_clear": dilution_clear,
+                "supply_risk_clear": supply_risk_clear,
             }
             execution_ready, execution_failed, execution_unknown = evaluate_required_gates(
                 execution_gates, passed, failed, unknown
@@ -331,7 +353,7 @@ def classify(row: dict[str, Any]) -> dict[str, Any]:
                 "prior_abnormal_volume_warmup": prior_warmup,
                 "spread<=2.5%": execution_liquid,
                 "first_5m_structure": first_5m_confirmed,
-                "dilution_clear": dilution_clear,
+                "supply_risk_clear": supply_risk_clear,
             }
             cphi_ready, cphi_failed, cphi_unknown = evaluate_required_gates(
                 cphi_gates, passed, failed, unknown
@@ -367,7 +389,7 @@ def classify(row: dict[str, Any]) -> dict[str, Any]:
             "pre_high_fade>=-20%": (
                 None if pre_high_fade_pct is None else pre_high_fade_pct >= -20.00
             ),
-            "dilution_clear": dilution_clear,
+            "supply_risk_clear": supply_risk_clear,
         }
         premarket_ready, premarket_failed, premarket_unknown = evaluate_required_gates(
             premarket_gates, passed, failed, unknown
@@ -397,6 +419,14 @@ def classify(row: dict[str, Any]) -> dict[str, Any]:
         add_unique(risk_flags, "DILUTION_OVERHANG")
     elif dilution_risk is None:
         add_unique(risk_flags, "DILUTION_UNKNOWN")
+    if effective_supply_risk is True:
+        add_unique(risk_flags, "SUPPLY_RISK_CONFIRMED")
+        if premarket_supply_risk is True:
+            add_unique(risk_flags, "PREMARKET_SUPPLY_RISK")
+    elif effective_supply_risk is None:
+        add_unique(risk_flags, "SUPPLY_RISK_UNKNOWN")
+    if supply_risk_fallback:
+        add_unique(risk_flags, "SUPPLY_RISK_LEGACY_FALLBACK")
     if post_split is True:
         add_unique(risk_flags, "POST_SPLIT")
     if supply_source != "float_shares":
@@ -432,6 +462,15 @@ def classify(row: dict[str, Any]) -> dict[str, Any]:
         "failed": failed,
         "unknown": unknown,
         "risk_flags": risk_flags,
+        "premarket_supply_risk": (
+            row.get("premarket_supply_risk")
+            if row.get("premarket_supply_risk") not in (None, "")
+            else "UNKNOWN"
+        ),
+        "effective_supply_risk": effective_supply_risk,
+        "supply_risk_type": supply_risk_type,
+        "supply_risk_source": supply_risk_source,
+        "supply_risk_checked_at": supply_risk_checked_at,
         "dilution_overhang": row.get("dilution_overhang") if row.get("dilution_overhang") not in (None, "") else "UNKNOWN",
         "catalyst": row.get("catalyst") or "UNKNOWN",
     }

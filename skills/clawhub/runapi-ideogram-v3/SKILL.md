@@ -18,27 +18,37 @@ metadata:
     envVars:
     - name: RUNAPI_API_KEY
       required: false
-      description: Optional RunAPI API key; runapi login or saved CLI config can also authenticate the runapi binary.
+      description: Optional RunAPI API key; agents should prefer environment auth or saved CLI config. Browser login is interactive fallback only.
 ---
 
 # Ideogram V3 on RunAPI
 
-Generate and edit images with Ideogram V3 through RunAPI. The default path for one-off agent tasks is the `runapi` CLI; SDKs are for application integration.
+Generate, edit, remix, and reframe images with Ideogram V3 through RunAPI. The default path for one-off agent tasks is the `runapi` CLI; SDKs are for application integration.
 
-## Routing decision
+## Critical: Integration Runtime
 
-- One-off generation, editing, or transformation for the user → use the **CLI path** with the `runapi` binary.
-- Building an app, backend, worker, library, or production codebase → use the **SDK integration path**.
+- Integration work (app, backend, worker, library, Rails service, Node service, Go service, webhook pipeline, or production codebase) uses the **SDK integration path** for the target language.
+- One-off generation, editing, transformation, manual smoke tests, debugging, or user-requested CLI runs use the **CLI path** with the `runapi` binary. For full CLI-specific agent guidance, see https://github.com/runapi-ai/cli-skill.
+- Never shell out to the `runapi` CLI as the production runtime integration layer.
+
+## SDK integration path
+
+When integrating Ideogram V3 into an app, backend, worker, library, Rails service, Node service, Go service, webhook pipeline, or production workflow, start by checking the current SDK package and official usage. Confirm install commands, client methods (`create`, `get`, `run`), request fields, response shape, and error classes before using CLI help or raw HTTP examples. Use a RunAPI SDK package:
+
+- JavaScript / TypeScript: `@runapi.ai/ideogram-v3`
+- Ruby: `runapi-ideogram-v3`
+- Go: `github.com/runapi-ai/ideogram-v3-sdk/go`
 
 ## CLI path
 
-The `runapi` binary is the runtime dependency. Authenticate with `runapi login` (browser) or set `RUNAPI_API_KEY`; a saved CLI config also works — no required environment variable.
+The `runapi` binary is the one-off and manual testing runtime dependency. For full CLI-specific agent guidance, see https://github.com/runapi-ai/cli-skill. Run `runapi auth status` first. For agents and headless runs, prefer `RUNAPI_API_KEY` or import it into saved config with `printf '%s' "$RUNAPI_API_KEY" | runapi auth import-token --token -`. Use `runapi login` only when the user explicitly wants interactive browser auth.
 
-Inspect the available actions and request fields with CLI help:
+Inspect the available commands and request fields with CLI help:
 
 ```shell
 runapi ideogram-v3 --help
 runapi ideogram-v3 text-to-image --help
+runapi ideogram-v3 reframe-image --help
 ```
 
 Run a one-off task (synchronous — polls until the task completes):
@@ -54,15 +64,11 @@ runapi ideogram-v3 text-to-image --async --input-file request.json
 runapi wait <task-id> --service ideogram-v3 --action text-to-image
 ```
 
-Available actions: `text-to-image`, `edit-image`, `remix-image`.
+Available commands: `text-to-image`, `edit-image`, `remix-image`, `reframe-image`.
 
-## SDK integration path
+## Generated file storage
 
-When integrating Ideogram V3 into an app, backend, worker, or library — not for one-off tasks — use a RunAPI SDK package:
-
-- JavaScript / TypeScript: `@runapi.ai/ideogram-v3`
-- Ruby: `runapi-ideogram_v3`
-- Go: `github.com/runapi-ai/ideogram-v3-sdk/go`
+RunAPI-generated file URLs are temporary. Download and store generated images, videos, audio, or other files in your own durable storage within 7 days; do not treat returned URLs as long-term assets.
 
 ## References
 
@@ -75,4 +81,7 @@ When integrating Ideogram V3 into an app, backend, worker, or library — not fo
 - [Text to image](https://runapi.ai/models/ideogram-v3/text-to-image.md)
 - [Edit](https://runapi.ai/models/ideogram-v3/edit.md)
 - [Remix](https://runapi.ai/models/ideogram-v3/remix.md)
-
+- [Character](https://runapi.ai/models/ideogram-v3/character.md)
+- [Character edit](https://runapi.ai/models/ideogram-v3/character-edit.md)
+- [Character remix](https://runapi.ai/models/ideogram-v3/character-remix.md)
+- [Reframe](https://runapi.ai/models/ideogram-v3/reframe.md)

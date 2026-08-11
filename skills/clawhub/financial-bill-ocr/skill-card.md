@@ -1,41 +1,61 @@
-## Description: <br>
-Financial Bill Ocr sends user-selected financial bill images or documents to the Scnet OCR API and returns structured recognition results for drafts, checks, receipts, deposit slips, transfer vouchers, payment vouchers, and mobile payment statements. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recognizes supported financial and trade document images or PDFs with SCNet OCR and returns structured extracted fields.
 
-## Publisher: <br>
-[scnet-sugon](https://clawhub.ai/user/scnet-sugon) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[scnet-sugon](https://clawhub.ai/user/scnet-sugon)
 
-## Use Case: <br>
-Developers and agents use this skill to extract structured fields from supported financial bills by providing an OCR type and local file path. Users should treat uploads as sensitive financial documents and confirm that Scnet's data handling terms fit their requirements before use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/scnet-sugon/financial-bill-ocr) <br>
-- [Scnet Publisher Profile](https://clawhub.ai/user/scnet-sugon) <br>
-- [Sugon-Scnet OCR API Documentation Summary](references/api-docs.md) <br>
-- [Supported Financial Bill Fields](assets/templates/fields-summary.md) <br>
-- [Scnet Website](https://www.scnet.cn) <br>
+Developers and agents use this skill to submit local financial or trade document files to SCNet OCR and receive structured JSON fields for downstream review or workflow automation.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Text, Shell commands, Configuration] <br>
-**Output Format:** [Structured JSON on standard output with user-facing error text on failure] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCNET_API_KEY and uploads the selected local document to Scnet's remote OCR service.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.0 (source: server release, frontmatter, changelog, skill.yaml) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Sensitive financial document images or PDFs may be sent to SCNet's remote OCR service.
+
+Mitigation: Use only files approved for SCNet processing, confirm each local file path before execution, and avoid regulated or confidential records unless SCNet has been approved for that data.
+
+Risk: The skill requires an SCNet API key for remote OCR requests.
+
+Mitigation: Store SCNET_API_KEY in a protected local config file or environment variable and do not paste the key into chat.
+
+Risk: Users may not notice the remote-upload behavior before submitting a financial document.
+
+Mitigation: Present a clear consent check or operator review step before sending documents to the remote OCR service.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/scnet-sugon/skills/financial-bill-ocr)
+- [Sugon-Scnet OCR API Docs](references/api-docs.md)
+- [Financial OCR Field Summary](assets/templates/fields-summary.md)
+- [SCNet website](https://www.scnet.cn)
+- [SCNet OCR API endpoint](https://api.scnet.cn/api/llm/v1/ocr/recognize)
+
+## Skill Output:
+
+**Output Type(s):** [json, text]
+
+**Output Format:** [Structured JSON emitted to standard output; errors are plain text messages.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an ocrType and local filePath; response fields vary by document type.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter, skill.yaml, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

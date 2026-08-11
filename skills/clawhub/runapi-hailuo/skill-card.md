@@ -1,46 +1,61 @@
-## Description: <br>
-Generate and edit video with Hailuo through RunAPI, routing one-off generation tasks to the RunAPI CLI and application or backend integrations to SDKs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit video with Hailuo through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agent users use this skill to generate, edit, or transform video with Hailuo through the RunAPI CLI for one-off tasks, or to choose SDK packages when integrating RunAPI into an application or backend. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on the third-party RunAPI CLI and Homebrew tap. <br>
-Mitigation: Confirm the RunAPI CLI and Homebrew tap are trusted before installation or execution. <br>
-Risk: Video prompts, images, and request files may be sent to RunAPI/Hailuo. <br>
-Mitigation: Review RunAPI and Hailuo pricing and data-handling terms before sending sensitive or proprietary inputs. <br>
-Risk: Authentication may use a RunAPI API key. <br>
-Mitigation: Prefer a scoped API key when possible and avoid embedding credentials in prompts, source files, or logs. <br>
+## Use Case:
 
+Developers and agents use this skill to generate, edit, or transform video with Hailuo through RunAPI. It supports one-off CLI video generation and points developers to SDKs for application or backend integration.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/runapi-hailuo) <br>
-- [RunAPI Hailuo model overview](https://runapi.ai/models/hailuo) <br>
-- [RunAPI Hailuo model documentation](https://runapi.ai/models/hailuo.md) <br>
-- [RunAPI Minimax provider documentation](https://runapi.ai/providers/minimax.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and package names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to use the runapi CLI for one-off video tasks and SDK package names for application integration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release evidence) <br>
+Risk: Video prompts or source media may be sent to RunAPI/Hailuo.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user is comfortable with external processing before submitting sensitive prompts or media.
+
+Risk: RunAPI authentication uses an API key or CLI login.
+
+Mitigation: Prefer environment-based or saved CLI authentication and avoid exposing the API key in command output, logs, or committed files.
+
+Risk: Generated file URLs are temporary.
+
+Mitigation: Download needed generated assets into durable storage within the documented retention window.
+
+## Reference(s):
+
+- [RunAPI Hailuo model page](https://runapi.ai/models/hailuo)
+- [RunAPI Hailuo documentation](https://runapi.ai/models/hailuo.md)
+- [RunAPI Minimax provider comparison](https://runapi.ai/providers/minimax.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI CLI skill reference](https://github.com/runapi-ai/cli-skill)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown with inline shell commands and SDK package names]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide agents to generate video files through RunAPI; returned file URLs are temporary and should be downloaded for durable storage.]
+
+## Skill Version(s):
+
+0.2.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

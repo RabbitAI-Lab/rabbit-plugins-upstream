@@ -1,0 +1,14 @@
+name: geoskill-vector-simplification
+display_name: 矢量简化
+description: |
+  用 Douglas-Peucker / Visvalingam 算法简化矢量几何，统计顶点减少与面积保持。Simplify vector geometries with Douglas-Peucker / Visvalingam and report vertex reduction and area retention.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-vector-simplification.py
+runtime: python>=3.9
+tags:
+  - gis
+  - lidar
+  - point-cloud
+  - remote-sensing
+  - vector

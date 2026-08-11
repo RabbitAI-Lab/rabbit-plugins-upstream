@@ -1,0 +1,27 @@
+{
+  "nodes": [
+    {
+      "id": "from:1",
+      "name": "vegetation (from)",
+      "class_index": 1,
+      "side": "from"
+    },
+    {
+      "id": "to:2",
+      "name": "cropland (to)",
+      "class_index": 2,
+      "side": "to"
+    }
+  ],
+  "links": [
+    {
+      "source": 0,
+      "target": 1,
+      "from_class": 1,
+      "to_class": 2,
+      "from_name": "vegetation",
+      "to_name": "cropland",
+      "value": 2024
+    }
+  ]
+}

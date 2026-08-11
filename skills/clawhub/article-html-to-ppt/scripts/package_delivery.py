@@ -8,6 +8,7 @@ import math
 import os
 import re
 import shutil
+import subprocess
 import sys
 import zipfile
 from datetime import datetime, timezone
@@ -75,6 +76,23 @@ PRIVATE_PATTERNS = [
 
 def iso_now() -> str:
     return datetime.now(timezone.utc).astimezone().isoformat(timespec="seconds")
+
+
+def git_commit() -> str | None:
+    """Return the Git HEAD of the PPTSmith source that produced this delivery."""
+    try:
+        completed = subprocess.run(
+            ["git", "-C", str(Path(__file__).resolve().parent), "rev-parse", "HEAD"],
+            text=True,
+            capture_output=True,
+            check=False,
+        )
+    except OSError:
+        return None
+    if completed.returncode != 0:
+        return None
+    value = completed.stdout.strip()
+    return value if re.fullmatch(r"[0-9a-f]{40}", value) else None
 
 
 def load_json(path: Path | None) -> dict[str, Any] | None:
@@ -200,6 +218,7 @@ def build_delivery_manifest(
     files: list[dict[str, Any]],
     privacy: dict[str, Any],
     zip_path: Path | None,
+    commit_sha: str | None,
 ) -> dict[str, Any]:
     renderer = {"name": None, "version": None}
     render_report = _render_report(qa_report)
@@ -239,6 +258,8 @@ def build_delivery_manifest(
     }
     if zip_path is not None:
         manifest["package_zip"] = {"path": zip_path.name, "hash": sha256_file(zip_path)}
+    if commit_sha is not None:
+        manifest["commit_sha"] = commit_sha
     return manifest
 
 
@@ -508,14 +529,14 @@ def package_delivery(args: argparse.Namespace) -> tuple[int, list[str]]:
         files=files,
         privacy=privacy,
         zip_path=zip_path,
+        commit_sha=git_commit(),
     )
     manifest_in_output = args.manifest.parent.resolve() == output
     staged_manifest = staging / args.manifest.name if manifest_in_output else staging / "delivery-manifest.json"
     staged_manifest.write_text(json.dumps(manifest, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
-    if manifest_in_output:
-        files.append({"role": "delivery_manifest", "path": args.manifest.name, "required": True, "hash": sha256_file(staged_manifest)})
-        manifest["files"] = files
-        staged_manifest.write_text(json.dumps(manifest, indent=2, ensure_ascii=False, sort_keys=True) + "\n", encoding="utf-8")
+    # The manifest must not claim a hash for itself. Rewriting the file after
+    # computing that hash changes its bytes, so a self-entry can never be
+    # truthful. External release checksums may cover the manifest as a whole.
     staging.replace(output)
     if not manifest_in_output:
         args.manifest.parent.mkdir(parents=True, exist_ok=True)

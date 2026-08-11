@@ -3,7 +3,10 @@
 Exposed as the `clawseccheck` console script (see pyproject.toml), as `python -m clawseccheck`,
 and via the bundled skill entrypoint `python3 {baseDir}/audit.py`.
 
-Read-only with respect to OpenClaw config.
+Read-only with respect to OpenClaw config, with exactly one named, opt-in,
+confirmation-gated exception: --apply-ignore-proposals appends previously-proposed
+entries to <home>/.clawseccheckignore (see its own --help text) and never invents one.
+No other flag writes inside the audited OpenClaw home.
 Writes local ~/.clawseccheck score history by default; opt out with --no-history.
 C-251: --trend and --monitor are NOT suppressors of that write — they are the two modes
 that record a history point unconditionally, as part of their own job, so --no-history
@@ -13,6 +16,7 @@ No network. Pure stdlib. Cross-platform.
 from __future__ import annotations
 
 import argparse
+import contextlib
 import json
 import os
 import secrets
@@ -30,7 +34,10 @@ from . import (
 )
 from . import __released__, __version__
 from .brand import WORDMARK
-from .collector import SKILL_DIRS
+# B-460: same rationale as the .monitor import below — taken from the submodule so this
+# internal resolver does not have to widen the curated public API in __init__.py.
+from .checks import resolve_skill_target
+from .collector import LIMIT_DOMAIN_SKILL, Context, collect, limit_hits_for
 # B-270: the shared baseline predicate. Imported from the submodule rather than the package
 # root so the new vocabulary does not have to widen the curated public API in __init__.py.
 from .monitor import (
@@ -38,6 +45,8 @@ from .monitor import (
 )
 from .update import update_notice
 from .ledger import freshness_notice as _compute_freshness, load_ledger, record_run
+from .iocdb import coverage_notice as _iocdb_coverage_notice
+from .iocdb import freshness_notice as _iocdb_freshness_notice
 from . import risk as _risk
 from .guide import render_next_actions, suggest_actions
 from .integrity import package_digest
@@ -59,18 +68,22 @@ from .adjudication import (
     render_vet_judge_packet_json,
 )
 from .scanbudget import (
-    DEFAULT_VET_ALL_BUDGET_S, ScanBudgetExceeded, budget_deadline, budget_exceeded,
+    DEFAULT_FULL_BUDGET_S, DEFAULT_VET_ALL_BUDGET_S, ScanBudgetExceeded, budget_deadline,
+    budget_exceeded,
 )
+from . import pipeline as _pipeline
 from .baseline import append_entries, is_fingerprint
 from .catalog import Finding
 from .dossier import build_profile
 from .ansi import should_color, strip_ansi
 from .monitor import DEFAULT_EVENTS, DEFAULT_STATE, verify_chain
 from .tamperscore import tamper_subgrade
+from .scoring import compute
 from .redteam import make_suite, render_suite
 from .dryrun import make_scenarios, render_dryrun
 from .multiturn import make_multiturn, render_multiturn
 from .sarif import render_sarif
+from .pdf import render_pdf
 from .history import (
     DEFAULT_HISTORY,
     load as history_load,
@@ -82,9 +95,13 @@ from .menu import compute_ages, render_menu, render_onboarding
 from .palette import render_palette
 from .percentile import render_percentile
 from .logsafe import get_logger
-from .safeio import secure_write_text
+from .safeio import secure_write_bytes, secure_write_text
+from .textnorm import asciify
 from .incident import render_incident
 from .trajaudit import render_trajectory_analysis
+from .behavioral import analyze as _behavioral_analyze
+from .behavioral import explicit_path_problem as _behavioral_path_problem
+from .behavioral import grade_cap_signal as _behavioral_grade_cap_signal
 from .behavioral import render_behavioral_analysis
 from .sbom import render_sbom
 
@@ -101,12 +118,41 @@ def _unicode_ok() -> bool:
         return False
 
 
+# B-351: when set, every _emit() line is also appended here. The appended --full
+# sections are printed as they are produced — the skill sweep in particular narrates
+# per-target because progress feedback matters on a run that can take minutes — so a
+# caller assembling the combined report cannot recover those lines after the fact.
+# A tee rather than an `emit=` parameter on each producer, deliberately: threading a
+# sink argument through would change published call signatures (and break every test
+# double written against the current one) to solve a problem that belongs entirely to
+# this one output path. Always installed via _tee_emitted(), which restores it.
+_EMIT_TEE: list[str] | None = None
+
+
 def _emit(text: str) -> None:
     """Print, falling back to ASCII-safe bytes if the console can't encode it."""
+    if _EMIT_TEE is not None:
+        _EMIT_TEE.append(text)
     try:
         print(text)
     except UnicodeEncodeError:
-        print(text.encode("ascii", "replace").decode("ascii"))
+        print(asciify(text))
+
+
+@contextlib.contextmanager
+def _tee_emitted(sink: list[str]):
+    """Collect every _emit() line into ``sink`` for the duration of the block.
+
+    Restores the previous tee on the way out, including on an exception — a leaked tee
+    would keep accumulating another run's output in a long-lived process.
+    """
+    global _EMIT_TEE
+    prev = _EMIT_TEE
+    _EMIT_TEE = sink
+    try:
+        yield
+    finally:
+        _EMIT_TEE = prev
 
 
 def _record_run(capability: str, args) -> None:
@@ -204,18 +250,53 @@ class SkillSweep:
     ``rows`` holds ``(sanitized name, row status, evidence count)`` for every target
     the sweep accounted for — including the ones it never scanned, which carry the
     SKIPPED/TRUNCATED states from ``_SWEEP_VERDICT`` rather than being dropped.
-    ``findings`` carries the primary :class:`~clawseccheck.catalog.Finding` for each
-    target that produced one, so a later consumer never has to re-vet to get at the
-    evidence.
+    ``findings`` carries ``(sanitized display name, resolved absolute path, primary
+    Finding)`` for every target that produced one, so a later consumer never has to
+    re-vet to get at the evidence.
+
+    2026-08-01: the path used to live in a SEPARATE dict,
+    ``target_paths``, keyed by that same sanitized display name — needed because a
+    judge packet binds its verdicts to a target's RESOLVED PATH, not its bare name.
+    That was itself unsafe: sanitizing strips zero-width/bidi characters (report.py's
+    ``_sanitize``), so two skill directories differing ONLY by an invisible character
+    (a real obfuscation an attacker-planted skill can use to visually impersonate an
+    existing one) sanitized down to the IDENTICAL name. The second write to
+    ``target_paths[name]`` then silently overwrote the first, and ``vet_targets()``'s
+    name-keyed lookup handed BOTH findings the SAME (impostor's) path — a verdict a
+    judge submitted for one target's fingerprint would then escalate the OTHER
+    target's finding too. Confirmed by direct repro before this fix (two skills,
+    ``helper`` and ``help<ZWSP>er``, under different roots: both findings resolved to
+    the same path, ``len({p for p, _f in vet_targets()}) == 1`` instead of 2). Storing
+    the path directly alongside its own Finding, atomically, in the one loop that
+    produces both, removes the lossy name-keyed indirection entirely rather than
+    re-keying it by something else — there is no longer a shared mutable map for two
+    unrelated targets to collide in.
     """
 
     home_dir: Path
     checked_dirs: list[Path] = field(default_factory=list)
     rows: list[tuple[str, str, int]] = field(default_factory=list)
-    findings: list[tuple[str, Finding]] = field(default_factory=list)
+    findings: list[tuple[str, str, Finding]] = field(default_factory=list)
     truncated: bool = False
     worst: str = "PASS"
     budget_s: float = 0.0
+    # B-404: the concrete reason(s) skill DISCOVERY ITSELF could not be
+    # confirmed complete — collector.limit_hits_for(ctx, LIMIT_DOMAIN_SKILL), the same
+    # signal check_installed_skills (B13) already uses. Distinct from a per-target
+    # SKIPPED/TRUNCATED row (a target we KNOW about but could not finish scanning):
+    # this is "the walk that finds targets in the first place did not finish", which
+    # can be non-empty even when every row found so far scanned cleanly. Empty for a
+    # sweep whose discovery genuinely completed.
+    discovery_incomplete_reasons: list[str] = field(default_factory=list)
+
+    def vet_targets(self) -> list[tuple[str, Finding]]:
+        """``(vetted path, primary finding)`` for every target that produced one —
+        the input the adjudication phase needs to build a per-target judge packet.
+
+        Reads the path straight off ``findings`` (see its docstring above)
+        — never through a name-keyed map, which is exactly what let two different
+        targets collide onto one path before."""
+        return [(path, f) for _name, path, f in self.findings]
 
     @property
     def no_roots(self) -> bool:
@@ -270,20 +351,67 @@ class SkillSweep:
         return [n for n, s, _e in self.rows if s in ("SKIPPED", "TRUNCATED")]
 
 
+def _discovery_gap_note(reasons: list[str]) -> str:
+    """One narration line naming why skill DISCOVERY ITSELF — not any one target's own
+    scan — was incomplete (B-404). Printed before the per-skill/aggregate
+    output so the caveat is seen first, never buried after results that may themselves
+    look clean."""
+    extra = f" (+{len(reasons) - 6} more)" if len(reasons) > 6 else ""
+    return (
+        "(skill discovery was incomplete — this sweep cannot claim full coverage: "
+        + "; ".join(reasons[:6]) + extra + ")"
+    )
+
+
+def _discovery_gap_suffix(sweep: SkillSweep) -> str:
+    """A short trailing caveat for the ``--quiet`` one-liner, which (unlike the verbose
+    branch) never sees ``sweep_installed_skills``'s own live narration. Empty when
+    discovery completed, so every pre-existing caller is unaffected."""
+    if not sweep.discovery_incomplete_reasons:
+        return ""
+    return (
+        " Skill discovery was incomplete — coverage may be missing target(s): "
+        + sweep.discovery_incomplete_reasons[0] + "."
+    )
+
+
 def sweep_installed_skills(
     home_dir: Path,
     ascii_only: bool = False,
     sweep_budget_s: float = DEFAULT_VET_ALL_BUDGET_S,
     narrate: bool = True,
+    ctx: Context | None = None,
 ) -> SkillSweep:
-    """Vet every installed skill discovered under any of collector.SKILL_DIRS.
+    """Vet every installed skill the collector engine itself discovered.
 
-    Mirrors the real OpenClaw skill-discovery locations the full audit engine
-    already uses (skills/, workspace/skills/, workspace-home/skills/,
-    workspace-work/skills/, .agents/skills/ — see collector.SKILL_DIRS), not
-    just the single legacy home_dir/skills/ path (B-147). Finds all
-    subdirectories across those roots that contain a SKILL.md file, dedups by
-    resolved path and runs vet_skill on each.
+    B-404: this used to run its OWN, second, flat ``iterdir()`` over
+    ``collector.SKILL_DIRS`` — exactly one level deep, requiring
+    ``<root>/<entry>/SKILL.md``. A GROUPED skill layout (a vendor-pack directory
+    nesting a skill one level further down, e.g.
+    ``skills/vendor-pack/grouped-skill/SKILL.md``) was therefore silently invisible
+    to both ``--full``'s SKILL SWEEP and ``--vet-all`` — while the sweep still
+    reported itself ``complete``. ``collector.py``'s own ``_read_installed_skills``
+    already resolves grouped (and every config-declared) layout correctly, via the
+    dedicated, bounded, cycle-safe ``skilldiscovery.py`` walk, and is what the MAIN
+    audit is scored against. So this now CONSUMES that same result —
+    ``ctx.installed_skill_dirs`` — instead of re-deriving a second, narrower view
+    that can silently drift from it. Passing an already-collected *ctx* (as the
+    ``--full`` call site does — it already ran ``collect()`` for the audit above
+    it) skips a second, redundant collection pass over the same home; when *ctx* is
+    omitted (the ``--vet-all`` call site, which runs before any audit) one is
+    collected here.
+
+    Completeness is read off the SAME signal ``check_installed_skills`` (B13)
+    already uses to decide "was the skill scan complete" —
+    ``limit_hits_for(ctx, LIMIT_DOMAIN_SKILL)`` — rather than inventing a second
+    notion of "truncated" for this one CLI surface. Any genuine enumeration
+    failure the collector recorded (a permission-denied skill root or
+    sub-directory, the discovery engine's own directory-count cap, the
+    installed-skill collection cap) surfaces here as a named reason
+    (``SkillSweep.discovery_incomplete_reasons``) and forces ``complete`` to
+    False — even when zero skills were found at all, because an empty result
+    from a walk that could not finish is not the same claim as an empty result
+    from a walk that finished and genuinely found nothing.
 
     With ``narrate`` (the default) it prints the per-skill verdict blocks as it
     goes — progress feedback matters on a sweep that can run for minutes — and
@@ -320,51 +448,63 @@ def sweep_installed_skills(
       ``skillast`` also raises it cooperatively for its own reached-sinks cap, which
       is not a clock at all. Either way the target was not fully inspected, which is
       all this caller needs to know — and it must never fall into a bare
-      ``except Exception``, since that plain-Exception subclass would otherwise read
-      as a generic vetting error and get bucketed the way a clean result would.
+      ``except Exception``, which would read as a generic vetting error and get
+      bucketed the way a clean result would. Since B-352 the type derives from
+      ``BaseException``, so no such handler can take it by accident.
     """
-    skill_paths: list[Path] = []
-    seen: set[Path] = set()
-    checked_dirs: list[Path] = []
-    for rel in SKILL_DIRS:
-        skills_dir = home_dir / rel
-        try:
-            if not skills_dir.is_dir():
-                continue
-            checked_dirs.append(skills_dir)
-            for entry in sorted(skills_dir.iterdir()):
-                if not (entry.is_dir() and (entry / "SKILL.md").exists()):
-                    continue
-                try:
-                    resolved = entry.resolve()
-                except OSError:
-                    resolved = entry
-                if resolved in seen:
-                    continue
-                seen.add(resolved)
-                skill_paths.append(entry)
-        except PermissionError as exc:
-            if narrate:
-                _emit(f"(could not read skills directory {skills_dir}: {exc})")
-            continue
+    if ctx is None:
+        ctx = collect(home_dir)
+
+    # B-404: the single discovery implementation — see this function's
+    # docstring. ``checked_dirs`` is every root the collector itself confirmed exists
+    # and walked (a superset of the old static SKILL_DIRS list: it also covers every
+    # config-declared workspace/extraDirs/plugins.load.paths root, the personal
+    # ~/.agents/skills tier, a bundled-root override, and plugin-skills).
+    # ``ctx.installed_skill_dirs`` is keyed by the collector's own collision-safe
+    # name (its own dedup, richer than a bare directory basename); sorted here purely
+    # for a stable, predictable sweep ordering independent of tier/root plumbing.
+    checked_dirs: list[Path] = list(ctx.installed_skill_roots)
+    skill_items = sorted(ctx.installed_skill_dirs.items())
+    skill_paths: list[Path] = [path for _name, path in skill_items]
+    skill_names: list[str] = [name for name, _path in skill_items]
+
+    # B-404: the collector's own record of "discovery could not finish"
+    # — see the docstring above. Read BEFORE the roots/targets early-returns below, so
+    # a root that exists but could not be enumerated (permission denied, or a cyclic/
+    # malformed structure past skilldiscovery's own caps) is never reported as a
+    # clean, complete "nothing found", regardless of whether it left any OTHER target
+    # scannable.
+    discovery_gaps = limit_hits_for(ctx, LIMIT_DOMAIN_SKILL)
 
     sweep = SkillSweep(home_dir=home_dir, checked_dirs=checked_dirs,
                        budget_s=sweep_budget_s)
+    if discovery_gaps:
+        sweep.truncated = True
+        sweep.discovery_incomplete_reasons = list(discovery_gaps)
 
     if not checked_dirs:
         if narrate:
             _emit(f"No skills directory found under {home_dir}")
+            if discovery_gaps:
+                _emit(_discovery_gap_note(discovery_gaps))
         return sweep
 
     if not skill_paths:
         if narrate:
             dirs_str = ", ".join(str(d) for d in checked_dirs)
             _emit(f"No skills found under {dirs_str}")
+            if discovery_gaps:
+                _emit(_discovery_gap_note(discovery_gaps))
         return sweep
+
+    if narrate and discovery_gaps:
+        _emit(_discovery_gap_note(discovery_gaps))
 
     results = sweep.rows  # (sanitized name, status, evidence_count)
     worst = "PASS"
-    truncated = False  # F-148: True once the sweep budget cut the run short
+    # F-148 + B-404: True once the sweep budget cuts the run short, OR
+    # discovery itself was already known incomplete (seeded above).
+    truncated = sweep.truncated
 
     # F-148: a monotonic deadline for the WHOLE sweep, checked before every target
     # (including the first) — never mid-target, so a target already underway always
@@ -374,23 +514,23 @@ def sweep_installed_skills(
     for idx, skill_dir in enumerate(skill_paths):
         if budget_exceeded(deadline):
             truncated = True
-            remaining = skill_paths[idx:]
+            remaining_names = skill_names[idx:]
             if narrate:
                 bullet = "*" if ascii_only else "•"
                 _emit("")
                 _emit(
                     f"(sweep budget of {sweep_budget_s:g}s exceeded — "
-                    f"{len(remaining)} skill(s) NOT scanned; listed below, not counted as safe)"
+                    f"{len(remaining_names)} skill(s) NOT scanned; listed below, not counted as safe)"
                 )
-                for skipped_dir in remaining[:12]:
-                    _emit(f"  {bullet} {_sanitize(skipped_dir.name)}")
-                if len(remaining) > 12:
-                    _emit(f"  {bullet} (+{len(remaining) - 12} more)")
+                for skipped_name in remaining_names[:12]:
+                    _emit(f"  {bullet} {_sanitize(skipped_name)}")
+                if len(remaining_names) > 12:
+                    _emit(f"  {bullet} (+{len(remaining_names) - 12} more)")
             # Every skipped target still gets its own row in the aggregate table
             # below, even the ones elided from the printed list above (no silent
             # caps on the machine-checkable summary, only on the narrative print).
-            for skipped_dir in remaining:
-                results.append((_sanitize(skipped_dir.name), "SKIPPED", 0))
+            for skipped_name in remaining_names:
+                results.append((_sanitize(skipped_name), "SKIPPED", 0))
             break
 
         # C8: the skill NAME is attacker-controlled (it is a directory name inside
@@ -398,7 +538,7 @@ def sweep_installed_skills(
         # sanitized form is what both the narrative and the aggregate table use —
         # sanitizing only at print time let a raw name reach the table and set its
         # column width.
-        skill_name = _sanitize(skill_dir.name)
+        skill_name = _sanitize(skill_names[idx])
         if narrate:
             _emit(f"\n=== {skill_name} ===")
         try:
@@ -407,11 +547,12 @@ def sweep_installed_skills(
             # Adversarial-review blocker: _run_content_ring deliberately RE-RAISES
             # ScanBudgetExceeded past vet_skill (see checks/_vet.py) so the caller that
             # owns the per-target deadline can report it honestly instead of it being
-            # swallowed into a false clean verdict. It MUST be caught here, BEFORE the
-            # bare `except Exception` below — ScanBudgetExceeded is a plain Exception
-            # subclass, and that bare handler would otherwise catch it, print it as a
-            # generic "(error vetting …)" row, and bucket it UNKNOWN, which — same as a
-            # plain PASS/UNKNOWN — currently reads as "safe" in the tally below. Treat
+            # swallowed into a false clean verdict. It MUST be caught here by NAME: the
+            # bare `except Exception` below would otherwise print it as a generic
+            # "(error vetting …)" row and bucket it UNKNOWN, which — same as a plain
+            # PASS/UNKNOWN — currently reads as "safe" in the tally below. Since B-352
+            # the type derives from BaseException, so that misfiling is now structurally
+            # impossible too; this arm is what turns the signal into a verdict. Treat
             # it exactly like the finding-shaped per-target truncation just below:
             # named, excluded from "safe", and it forces a non-zero return.
             if narrate:
@@ -471,7 +612,7 @@ def sweep_installed_skills(
             _emit("\n".join(lines))
 
         results.append((skill_name, row_status, len(f.evidence) if f.evidence else 0))
-        sweep.findings.append((skill_name, f))
+        sweep.findings.append((skill_name, str(skill_dir), f))
 
     sweep.truncated = truncated
     sweep.worst = worst
@@ -498,9 +639,29 @@ def _sweep_summary_lines(sweep: SkillSweep, ascii_only: bool = False) -> list[st
     verdict_w = max(len(_SWEEP_VERDICT[r[1]]) for r in results) + 1
     lines.append(f"  {'Skill':<{col_w}} {'Verdict':<{verdict_w}} Evidence items")
     lines.append(f"  {'-' * col_w} {'-' * verdict_w} --------------")
+    # C-307: a FAIL/WARN row whose OWN scan was also truncated used to render with
+    # the finding's row state only — "this verdict is based on an incomplete scan"
+    # stayed visible in the per-skill narration above but silently dropped out of
+    # this row. `row_status` above only demotes to TRUNCATED when the finding is
+    # NOT already FAIL/WARN (a real danger signal must never be buried), so recover
+    # the fact here instead, from `sweep.findings` (populated for every completed
+    # vet) — a marker suffix, not a change to `status` itself, since that value is
+    # load-bearing for the icon lookup and `sweep.counts()`'s tally.
+    # Display-only lookup: a name collision here (e.g. two skills sanitizing to the
+    # same visible name) means the LATER entry wins, same as a plain dict(...) would
+    # have — this is a cosmetic annotation on an already name-deduplicated printed
+    # row, not the adjudication binding path (see SkillSweep.findings/vet_targets()
+    # docstrings for that fix).
+    findings_by_name = {name: f for name, _path, f in sweep.findings}
+    partial_marker = "[~ partial: coverage incomplete]" if ascii_only else "⏳ partial: coverage incomplete"
     for name, status, ev_count in results:
+        marker = ""
+        if status in ("FAIL", "WARN"):
+            f = findings_by_name.get(name)
+            if f is not None and _vet_coverage_incomplete(f):
+                marker = f"  {partial_marker}"
         lines.append(
-            f"  {name:<{col_w}} {icons[status]} {_SWEEP_VERDICT[status]:<{verdict_w}} {ev_count}"
+            f"  {name:<{col_w}} {icons[status]} {_SWEEP_VERDICT[status]:<{verdict_w}} {ev_count}{marker}"
         )
 
     # F-148: unscanned targets get their own tally bucket — folding them into
@@ -530,10 +691,12 @@ def _sweep_quiet_line(sweep: SkillSweep) -> str:
     partial sweep for a clean one.
     """
     if sweep.no_roots:
-        return f"SKILL SWEEP: no skills directory found under {_sanitize(str(sweep.home_dir))}."
+        line = f"SKILL SWEEP: no skills directory found under {_sanitize(str(sweep.home_dir))}."
+        return line + _discovery_gap_suffix(sweep)
     if sweep.no_targets:
         dirs_str = ", ".join(_sanitize(str(d)) for d in sweep.checked_dirs)
-        return f"SKILL SWEEP: no installed skills found under {dirs_str}."
+        line = f"SKILL SWEEP: no installed skills found under {dirs_str}."
+        return line + _discovery_gap_suffix(sweep)
     c = sweep.counts()
     line = (f"SKILL SWEEP: {c['total']} installed skill(s) vetted — "
             f"{c['fails']} dangerous, {c['warns']} suspicious, {c['safe']} no known issue")
@@ -548,7 +711,31 @@ def _sweep_quiet_line(sweep: SkillSweep) -> str:
         if len(dangerous) > 3:
             named += f", +{len(dangerous) - 3} more"
         line += f" Dangerous: {named}."
-    return line + " Full detail: --vet-all."
+    return line + _discovery_gap_suffix(sweep) + " Full detail: --vet-all."
+
+
+def _sweep_to_json(sweep: SkillSweep) -> dict:
+    """Machine-readable form of a finished :class:`SkillSweep`, for ``--full --json``.
+
+    Same underlying data as :func:`_sweep_summary_lines`/:func:`_sweep_quiet_line`
+    (``sweep.rows``/``sweep.counts()``), never their prose — no string here is meant
+    for a terminal. Skill names are already sanitized once, in ``sweep.rows``
+    (C8, sweep_installed_skills) — not re-sanitized here.
+    """
+    return {
+        "checked_dirs": [str(d) for d in sweep.checked_dirs],
+        "no_roots": sweep.no_roots,
+        "no_targets": sweep.no_targets,
+        "truncated": sweep.truncated,
+        "complete": sweep.complete,
+        "worst": sweep.worst,
+        "counts": sweep.counts(),
+        "targets": [
+            {"name": name, "status": status, "evidence_count": ev}
+            for name, status, ev in sweep.rows
+        ],
+        "not_scanned": sweep.not_scanned(),
+    }
 
 
 def vet_all(
@@ -565,7 +752,11 @@ def vet_all(
     sweep = sweep_installed_skills(home_dir, ascii_only=ascii_only,
                                    sweep_budget_s=sweep_budget_s, narrate=True)
     if sweep.no_targets:
-        return 0
+        # B-404: "no targets" is not "clean" when discovery itself could
+        # not be confirmed complete (e.g. a permission-denied skill root) — that has
+        # no basis for the same 0 a genuinely-empty, fully-enumerated fleet gets. The
+        # reason was already narrated above (sweep_installed_skills ran narrate=True).
+        return 1 if sweep.truncated else 0
     for line in _sweep_summary_lines(sweep, ascii_only=ascii_only):
         _emit(line)
 
@@ -593,6 +784,127 @@ def vet_all(
     if sweep.truncated:
         return 1
     return 0 if sweep.worst in ("PASS", "UNKNOWN") else 1
+
+
+def _resolve_runtime_caps(ctx, findings, score, args):
+    """F-153: shared by `--full`'s own cap computation and `--dashboard --full`'s —
+    the exact same two cap-only signals (F-154 behavioral, F-155 live-injection),
+    computed identically, so the two output surfaces can never show a different
+    grade for the same run. Pure extraction of the pre-existing `--full` logic;
+    behaviour is unchanged for that call site.
+
+    Returns `(score, full_deadline, judged_bundle, live_signal, behavioral_fired_ids)`.
+    `score` is the SAME object passed in when neither cap fires, a freshly recomputed
+    one otherwise (mirrors `scoring.compute`'s own "never mutate, always return"
+    contract). `live_signal` is returned (not just consumed here) because the caller
+    also uses it afterwards to decide whether an unreproducible live-test verdict must
+    be kept OUT of history/trend/baseline (see the F-155 note at the history-record
+    call). `behavioral_fired_ids` is returned too (B-379) so callers building a
+    "what-if" projection (`scoring.project`) over the same findings can thread the
+    IDENTICAL cap inputs through their own `compute()` calls — this function already
+    has them; re-deriving them a second time is what caused `scoring.project()`'s
+    "projection" block to silently disagree with the top-level capped score before.
+
+    Known, deliberate scope limit carried over unchanged from the pre-F-153 code
+    this replaces: this re-runs `behavioral.analyze(ctx)` a second time when the P8
+    phase later renders its OWN section (both `--full` and `--dashboard --full`
+    render one) — there is no cheap way to thread the result through without
+    widening `run_pipeline`/`run_behavioral`'s signatures, and P8's own budget
+    check runs at a different point in the pipeline than this early call can see.
+    """
+    # F-153: the pipeline's wall-clock window opens HERE, before the first appended
+    # phase, so the time the earlier phases spend is charged against the same window
+    # the later ones draw from. Cooperative (a plain monotonic float) — never a nested
+    # check_deadline block, whose disarm-on-exit would delete an outer deadline.
+    full_deadline = _pipeline.start_deadline(DEFAULT_FULL_BUDGET_S) if args.full else None
+    judged_bundle = (
+        _judged_bundle(args.judged_bundle)
+        if (args.full and args.judged_bundle is not None) else None
+    )
+    # F-155: a VULNERABLE live injection-test verdict (canary/dryrun/redteam/multiturn),
+    # fed back through the SAME --judged-bundle file the "judged"/"vetJudged" buckets
+    # already use (no second submission channel) — never a second CLI flag. Only present
+    # when --full carried one; every other invocation sees `live_signal.hit is False` and
+    # this whole function is a no-op, which is what keeps every non---full path (a plain
+    # --dashboard with no --full, --trend, --monitor, the plain report) byte-identical to
+    # before this feature existed. `--dashboard --full` (F-153) is a DELIBERATE new
+    # exception: it calls this helper too, so its card shows the identical capped grade
+    # `--full`'s own report/--json would for the same run.
+    live_test_bucket = judged_bundle.get("liveTest") if judged_bundle else None
+    live_signal = _pipeline.live_test_cap_signal(live_test_bucket)
+    # F-154: the behavioral cap-only signal (T1/T2/T3/B191), gated on THIS invocation
+    # having ACTUALLY run `behavioral.analyze(ctx)` — mirrors --fast's own skip of P8
+    # (`_pipeline.run_pipeline`'s `run_behavioral`), so a --full --fast run (or any
+    # non---full invocation) sees byte-identical behaviour to before this cap existed:
+    # no analysis run == no cap, never a guess.
+    #
+    # B-378: `behavioral.analyze(ctx)` is wrapped the same way `pipeline.run_behavioral`
+    # already wraps its own call to it (that phase's own comment: "one phase must not
+    # break the whole card"). Before this guard, ANY exception here — e.g. a schema-
+    # drifted `channels.<provider>.accounts` shaped as a list instead of a dict, which
+    # `behavioral.py`'s own ingress-classification helpers can raise on — propagated
+    # out of `_resolve_runtime_caps` before a single line of the report had been
+    # printed, so `--full`/`--dashboard --full` exited 1 with zero report, zero grade,
+    # zero findings. A security tool that produces NO verdict at all on a schema-
+    # drifted config is strictly worse than one that degrades a phase: on failure, the
+    # behavioural cap is simply not resolved (treated as "nothing fired"), exactly as
+    # it already is for every non---full / --fast invocation above.
+    behavioral_fired_ids: "frozenset[str]" = frozenset()
+    if args.full and not args.fast:
+        try:
+            behavioral_fired_ids = _behavioral_grade_cap_signal(_behavioral_analyze(ctx))
+        except Exception:  # noqa: BLE001 — see run_behavioral's identical containment
+            behavioral_fired_ids = frozenset()
+    if live_signal.hit or behavioral_fired_ids:
+        score = compute(findings, ctx, live_test_vulnerable=live_signal.hit,
+                        live_test_reason=live_signal.reason,
+                        behavioral_fired_ids=behavioral_fired_ids)
+    return score, full_deadline, judged_bundle, live_signal, behavioral_fired_ids
+
+
+def _apply_live_test_cap(ctx, findings, score, args):
+    """F-155 fix (C-135): `--trend` and `--monitor` both return from `_main`'s dispatch
+    cascade BEFORE `_resolve_runtime_caps` ever runs (that call sits after both branches,
+    reached only by the default `--full` report/--json path and by `--dashboard --full`)
+    — so a VULNERABLE live-test verdict, seeded or not, could never bind
+    `LIVE_INJECTION_CAP` for these two modes. That contradicts SKILL.md,
+    docs/OUTPUT_SCHEMA.md §12, and docs/USAGE.md, which all promise a seeded liveTest
+    verdict reaches `--trend`/`--monitor` (and that an unseeded one still caps the run
+    without being recorded). This helper is called from inside each of those two
+    branches, before they compute/print/record anything that reads `score`.
+
+    Deliberately narrower than `_resolve_runtime_caps`: this resolves ONLY the liveTest
+    bucket — never the F-154 behavioral cap (`behavioral.analyze(ctx)` is not re-run
+    here) and never the `judged`/`vetJudged` buckets. Neither has a matching documented
+    promise for `--trend`/`--monitor` (both stay visibility/advisory-only there, exactly
+    as before this fix), so folding them in here would be undocumented scope creep, not
+    a fix for this defect.
+
+    Returns `(score, live_signal)` — `score` is the SAME object passed in when the
+    signal does not hit, a freshly recomputed one otherwise (the same "never mutate,
+    always return" contract `_resolve_runtime_caps`/`scoring.compute` already follow).
+    The caller uses `live_signal.hit and not live_signal.reproducible` to decide whether
+    this run must be excluded from history/the monitor baseline (an unseeded verdict
+    still caps THIS run's displayed score, but must never be recorded — see the F-155
+    note at `_resolve_runtime_caps`'s own history-record call site).
+
+    B-379: reads `args.judged_bundle` regardless of `args.full`. This helper exists
+    SPECIFICALLY to reach `--trend`/`--monitor`/`--percentile`/`--next`, none of which
+    require `--full` — gating the read on `args.full` (as an earlier version of this
+    function did) meant `--trend --judged-bundle X` (no `--full`) silently dropped the
+    bundle with no warning and recorded an UNCAPPED score, exactly the defect this
+    function was written to close.
+    """
+    judged_bundle = (
+        _judged_bundle(args.judged_bundle)
+        if args.judged_bundle is not None else None
+    )
+    live_test_bucket = judged_bundle.get("liveTest") if judged_bundle else None
+    live_signal = _pipeline.live_test_cap_signal(live_test_bucket)
+    if live_signal.hit:
+        score = compute(findings, ctx, live_test_vulnerable=True,
+                        live_test_reason=live_signal.reason)
+    return score, live_signal
 
 
 def _run_vet_mcp(target, args, ascii_only: bool) -> int:
@@ -671,6 +983,7 @@ _PRIMARY_MODES = [
     ("badge", "--badge", "opt"),
     ("html", "--html", "opt"),
     ("sarif", "--sarif", "opt"),
+    ("pdf", "--pdf", "opt"),
     ("trend", "--trend", "bool"),
     ("percentile", "--percentile", "bool"),
     ("next", "--next", "bool"),
@@ -696,6 +1009,27 @@ _MODE_HONORS = {
     "vet_mcp": frozenset({"json"}),
     "vet_source": frozenset({"json"}),
     "advise": frozenset({"json"}),
+    # F-153: --dashboard --full renders the whole combined pipeline report (the
+    # phases --full itself runs); --compact only ever modifies THAT combined render.
+    "dashboard": frozenset({"full", "compact"}),
+    # C-374: --pdf wins the mode race over --dashboard (it is earlier in _PRIMARY_MODES),
+    # but both are honored now — and under `--dashboard --full --pdf` the --full phases
+    # are what the PDF's pipeline blocks are rendered FROM, so --full genuinely has an
+    # effect here. Saying "no effect" was true of the findings-only PDF, not this one.
+    "pdf": frozenset({"full", "compact"}),
+    # F-155 fix (C-135): --judged-bundle's `liveTest` bucket now caps the score
+    # reaching --trend/--monitor too (see _apply_live_test_cap) — a SEPARATE honor
+    # from "full", deliberately not folded into it the way --dashboard's is: --full/
+    # --quiet/--fast genuinely still have no effect here (no deep phase ever runs for
+    # --trend/--monitor), only --judged-bundle does, so the "full"-bundle no_effect
+    # check below is given its own "judged_bundle" escape hatch rather than reusing
+    # "full" (which would wrongly silence the still-true --full/--quiet/--fast notes).
+    "trend": frozenset({"judged_bundle"}),
+    "monitor": frozenset({"judged_bundle"}),
+    # B-379: --percentile/--next now resolve the liveTest cap the same way
+    # --trend/--monitor already did (see _apply_live_test_cap's call sites below).
+    "percentile": frozenset({"judged_bundle"}),
+    "next": frozenset({"judged_bundle"}),
 }
 
 # Primary modes that run AFTER the --attest block in main()'s cascade: their ctx and
@@ -710,7 +1044,7 @@ _MODE_HONORS = {
 # direction, since T3 reads ctx.attestation. "sbom", "incident", "judge_packet",
 # "judged" and "analyze_trajectory" were missing for the same reason.
 _ATTEST_CONSUMERS = frozenset({
-    "risk_paths", "badge", "html", "sarif", "trend", "percentile",
+    "risk_paths", "badge", "html", "sarif", "pdf", "trend", "percentile",
     "next", "dashboard", "dashboard_findings", "sbom", "incident",
     "judge_packet", "judged", "propose_ignore", "analyze_trajectory",
     "behavioral", "monitor",
@@ -734,12 +1068,38 @@ def _flag_coherence_notes(args) -> list[str]:
         # --quiet only collapses --full's appended sections; alone it has nothing to do.
         if bool(getattr(args, "quiet", False)) and not bool(getattr(args, "full", False)):
             notes.append("note: --quiet has no effect without --full")
+        # --fast / --judged-bundle are --full modifiers on exactly the same terms:
+        # --fast drops --full's deep phases, --judged-bundle answers their judge packet.
+        # Without --full there are no phases to drop and no packet to answer, so both
+        # would be silently dropped — the B-068 bug class this block exists to prevent.
+        if bool(getattr(args, "fast", False)) and not bool(getattr(args, "full", False)):
+            notes.append("note: --fast has no effect without --full")
+        if (getattr(args, "judged_bundle", None) is not None
+                and not bool(getattr(args, "full", False))):
+            notes.append("note: --judged-bundle has no effect without --full")
+        # F-153: --compact only ever modifies --dashboard --full's combined render;
+        # with no primary mode active here, --dashboard cannot be the one that ran.
+        if bool(getattr(args, "compact", False)):
+            notes.append("note: --compact has no effect without --dashboard --full")
+        # B-482: --purge / --apply-ignore-proposals are the only two consumers of --yes,
+        # and both are primary modes — so reaching HERE at all means no mode that can
+        # honor it ran. Checked in this branch too (not only the winning-mode one below),
+        # because the default report path is exactly where a scripted `--yes` most often
+        # lands, believing it disabled a confirmation gate it never reached.
+        if bool(getattr(args, "yes", False)):
+            notes.append("note: --yes has no effect without --purge or "
+                         "--apply-ignore-proposals")
         return notes  # the default path honors every tracked global modifier
     win_attr, win_flag = active[0]
     ignored = [
         f for a, f in active[1:]
         # --sarif is a side output under --vet/--vet-mcp, not an ignored mode.
         if not (a == "sarif" and win_attr in ("vet", "vet_skill", "vet_plugin", "vet_mcp"))
+        # C-373: --pdf and --dashboard COMPOSE rather than supersede — the card is the
+        # chat message that fits, the PDF is the attachment it points at, and both are
+        # produced in one run. Reporting "--dashboard ignored (running --pdf)" was true
+        # of the old early-return dispatch and is a lie about the new one.
+        and not (a == "dashboard" and win_attr == "pdf")
     ]
     # --card is a default-path output selector; any primary mode supersedes it.
     if bool(getattr(args, "card", False)):
@@ -747,6 +1107,12 @@ def _flag_coherence_notes(args) -> list[str]:
     if ignored:
         notes.append(f"note: {', '.join(ignored)} ignored (running {win_flag})")
     honored = _MODE_HONORS.get(win_attr, frozenset())
+    # C-374: --pdf consumes --full/--compact ONLY alongside --dashboard — that is the
+    # path which computes the pipeline phases the PDF's blocks are rendered from. A bare
+    # `--pdf --full` genuinely ignores --full, and must keep saying so; silencing that
+    # note for every --pdf run would trade one lie for another.
+    if win_attr == "pdf" and not bool(getattr(args, "dashboard", False)):
+        honored = honored - {"full", "compact"}
     no_effect: list[str] = []
     if bool(getattr(args, "json", False)) and "json" not in honored:
         no_effect.append("--json")
@@ -766,13 +1132,54 @@ def _flag_coherence_notes(args) -> list[str]:
     # --quiet is a --full modifier; a winning primary mode drops --full, so --quiet too.
     if bool(getattr(args, "quiet", False)) and "full" not in honored:
         no_effect.append("--quiet")
+    # Same for the other two --full modifiers (C7): they are modifiers, never primary
+    # modes, so they are never in _PRIMARY_MODES and never get their own top-level
+    # dispatch branch — a winning mode drops --full, and takes them with it.
+    if bool(getattr(args, "fast", False)) and "full" not in honored:
+        no_effect.append("--fast")
+    # F-155 fix (C-135): --trend/--monitor now genuinely honor --judged-bundle's
+    # liveTest bucket (the cap reaches them — see _apply_live_test_cap) even though
+    # --full itself still has no effect there, so this checks its OWN "judged_bundle"
+    # honor rather than reusing "full" the way --dashboard's does (which would wrongly
+    # silence the still-true --full/--quiet/--fast notes above for --trend/--monitor).
+    if (getattr(args, "judged_bundle", None) is not None
+            and "full" not in honored and "judged_bundle" not in honored):
+        no_effect.append("--judged-bundle")
+    # F-153: --quiet has no --dashboard analogue — --compact is the dashboard's own
+    # channel-limit lever — so it stays un-honored there even though --fast /
+    # --judged-bundle now genuinely are (checked above via the generic "full" gate,
+    # which --dashboard --full's honored set now includes).
+    if bool(getattr(args, "quiet", False)) and win_attr == "dashboard":
+        no_effect.append("--quiet")
+    # F-153: --compact only ever modifies --dashboard --full's combined render —
+    # both halves are required, so a winning --dashboard without --full still
+    # leaves it with no effect, same as any other winning mode.
+    if (bool(getattr(args, "compact", False))
+            and not (win_attr == "dashboard" and bool(getattr(args, "full", False)))):
+        no_effect.append("--compact")
     if getattr(args, "attest", None) is not None and win_attr not in _ATTEST_CONSUMERS:
         no_effect.append("--attest")
+    # F-164: --exhaustive is consumed by the same audit() call --attest's consumers
+    # already share downstream, plus --show-suppressed (which re-runs audit() itself
+    # to keep B164/B180 fingerprints matching a real --exhaustive run — see its own
+    # comment). Every other mode (vet/menu/live-test family, etc.) never touches a
+    # real check-execution audit() call, so --exhaustive genuinely has no effect there.
+    if (bool(getattr(args, "exhaustive", False))
+            and win_attr not in _ATTEST_CONSUMERS and win_attr != "show_suppressed"):
+        no_effect.append("--exhaustive")
     # --trend / --monitor record a score-history point as part of their job, so
     # --no-history cannot suppress it there (every other mode either records on the
     # default path or writes no history at all, where --no-history is a no-op).
     if win_attr in ("trend", "monitor") and bool(getattr(args, "no_history", False)):
         no_effect.append("--no-history")
+    # B-482: --yes skips the confirmation prompt for exactly two commands, and its own
+    # help already says "has no effect without one of those two" — but nothing enforced
+    # that, so passing it anywhere else was silently accepted. That is the specific
+    # failure this whole warn-and-continue mechanism exists to prevent: a scripted run
+    # that believes it disabled an interactive gate it never reached.
+    if (bool(getattr(args, "yes", False))
+            and win_attr not in ("purge", "apply_ignore_proposals")):
+        no_effect.append("--yes")
     if no_effect:
         notes.append(f"note: {', '.join(no_effect)} has no effect with {win_flag}")
     return notes
@@ -803,7 +1210,21 @@ def _onboarding_reason(home: Path) -> str | None:
 # (locking.journal_lock creates "<file>.lock" next to history.jsonl/events.jsonl).
 # Deliberately a fixed whitelist, never a glob/rmtree of the store directory —
 # an unrelated file a user happens to keep in ~/.clawseccheck/ must never be at risk.
-_PURGE_FILENAMES = ("history.jsonl", "events.jsonl", "state.json", "coverage.json")
+#
+# F-162: --badge/--html/--sarif/--pdf all take an explicit --flag PATH, so nothing
+# writes into the store automatically today — but SKILL.md's own promise ("writes only
+# its own local report/history, removable with --purge") reads as covering any report
+# artifact an agent is told to write there by convention, and a purge test with a
+# populated store previously left a badge file untouched among the survivors. Rather
+# than let that gap grow with every new output format, the conventional default
+# filenames for all four report renderers are whitelisted here too — inert (a plain
+# no-op) until/unless something actually writes one of them, same as any other
+# not-yet-created whitelist entry.
+_PURGE_FILENAMES = (
+    "history.jsonl", "events.jsonl", "state.json", "coverage.json",
+    "openclaw-security-badge.svg", "openclaw-security-report.html",
+    "openclaw-security-report.sarif", "openclaw-security-report.pdf",
+)
 
 
 def _confirm_purge(paths: "list[Path]") -> "tuple[bool, bool]":
@@ -939,6 +1360,21 @@ def _run_apply_ignore_proposals(args) -> int:
         return 0
 
     ignore_path = Path(args.home).expanduser() / ".clawseccheckignore"
+    # B-478: `append_entries` skips entries the file already holds, so a second apply of
+    # the same proposals printed the full list under "will be appended to ..." and then
+    # "Applied 0" — which reads as a failed write, not as the idempotency it actually is.
+    # Split the two here so the confirmation asks about what will really be written, and
+    # the outcome line accounts for every entry. `written` below stays authoritative
+    # (append_entries re-reads the file, so a concurrent edit is reflected there, not here).
+    # Read the file ONCE: `load_ignore` inside the comprehension would re-read it per
+    # entry, and would also compare different entries against different on-disk states.
+    _existing = load_ignore(args.home)
+    already = [e for e in entries if e in _existing]
+    entries = [e for e in entries if e not in _existing]
+    if not entries:
+        _emit(f"Nothing to apply — all {len(already)} proposed "
+              f"entr{'y is' if len(already) == 1 else 'ies are'} already in {ignore_path}.")
+        return 0
     if not args.yes:
         proceed, eof = _confirm_apply_ignore(entries, ignore_path)
         if not proceed:
@@ -962,8 +1398,14 @@ def _run_apply_ignore_proposals(args) -> int:
         # writing through it — surface that plainly instead of a generic crash.
         _emit(f"clawseccheck: could not write {ignore_path} ({type(exc).__name__}); nothing applied.")
         return 1
-    _emit(f"Applied {written} judge-proposed suppression(s) to {ignore_path}.")
+    tail = (f" ({len(already)} more were already present.)" if already else "")
+    _emit(f"Applied {written} judge-proposed suppression(s) to {ignore_path}.{tail}")
     return 0
+
+
+#: C-314: printed by both main() error arms below, and mirrored in
+#: docs/TROUBLESHOOTING.md's "how to file a good report" section — keep in sync.
+_ISSUES_URL = "https://github.com/gl0di/clawseccheck/issues"
 
 
 def main(argv=None) -> int:
@@ -974,24 +1416,86 @@ def main(argv=None) -> int:
     shown only under --debug. KeyboardInterrupt / SystemExit propagate untouched —
     they derive from BaseException, not Exception. Only the exception *type* is
     named, never its message, so a path or config value can't leak (§8, B-076).
+
+    ``ScanBudgetExceeded`` also derives from BaseException (B-352), so it needs its
+    own arm to stay inside that no-raw-traceback contract. Reaching here at all means
+    every designated per-check / per-target / phase handler failed to claim its own
+    deadline, which should not happen by design — but "should not happen" is not
+    "print a traceback at a user", so it degrades the same way: one line, and a
+    NON-ZERO exit, because a run cut short mid-scan produced no verdict anyone may
+    read as clean. It is reported separately from a crash rather than folded into the
+    generic message, since a truncated scan and a bug are different things to a user.
+
+    C-314: the Python-version check runs before anything else in this
+    function — including the try/except below — because an unpacked (non-pip)
+    install on Python <3.9 parses cleanly (no clean ImportError) but can fail later
+    with a confusing runtime error; see docs/TROUBLESHOOTING.md.
     """
+    if sys.version_info < (3, 9):
+        print(
+            "clawseccheck: needs Python 3.9+ (found "
+            f"{sys.version_info[0]}.{sys.version_info[1]}); see "
+            "docs/TROUBLESHOOTING.md for how to point the skill at a newer interpreter.",
+            file=sys.stderr,
+        )
+        return 1
     try:
         return _main(argv)
+    except ScanBudgetExceeded:
+        raw = list(sys.argv[1:] if argv is None else argv)
+        if "--debug" in raw:
+            raise
+        print(
+            "clawseccheck: the scan was cut short by its own time budget and did not "
+            "complete; no verdict from this run is reliable. Re-run with --debug for "
+            "the traceback, or narrower (--fast, or a targeted --vet <path>). If this "
+            f"keeps happening, see docs/TROUBLESHOOTING.md or open an issue: {_ISSUES_URL}",
+            file=sys.stderr,
+        )
+        return 1
     except Exception as exc:  # noqa: BLE001 — a security tool must fail readably, not crash
         raw = list(sys.argv[1:] if argv is None else argv)
         if "--debug" in raw:
             raise
         print(
             f"clawseccheck: unexpected internal error ({type(exc).__name__}); "
-            "re-run with --debug for the traceback.",
+            "re-run with --debug for the traceback. If this keeps happening, see "
+            f"docs/TROUBLESHOOTING.md or open an issue: {_ISSUES_URL}",
             file=sys.stderr,
         )
         return 1
 
 
+_JUDGED_BUNDLE_CACHE: dict = {}
+
+
+def _judged_bundle(path: str) -> dict:
+    """``pipeline.read_judged_bundle`` memoized for the duration of ONE run.
+
+    B-476: ``--judged-bundle -`` reads stdin, and stdin can be consumed exactly once —
+    but the bundle already had two independent readers (``_resolve_runtime_caps`` and
+    the --trend/--monitor cap helper), and B-476 added a third (the ``attestation``
+    bucket, which must be resolved BEFORE ``audit()`` so B43/B44 can see it). Whoever
+    read second got an empty document and silently lost every bucket. Caching also
+    removes the pre-existing redundant re-read of a bundle FILE on the branches that
+    call both helpers.
+
+    Cleared at the top of every ``_main`` so an in-process second run (the whole test
+    suite, and any library caller) never inherits the previous run's bundle."""
+    if path not in _JUDGED_BUNDLE_CACHE:
+        _JUDGED_BUNDLE_CACHE[path] = _pipeline.read_judged_bundle(path)
+    return _JUDGED_BUNDLE_CACHE[path]
+
+
 def _main(argv=None) -> int:
-    p = argparse.ArgumentParser(prog="clawseccheck",
-                                description="ClawSecCheck OpenClaw security self-audit (read-only).")
+    _JUDGED_BUNDLE_CACHE.clear()
+    p = argparse.ArgumentParser(
+        prog="clawseccheck",
+        description=(
+            "ClawSecCheck OpenClaw security self-audit — read-only with respect to your "
+            "OpenClaw config; see --apply-ignore-proposals below for the one named exception."
+        ),
+    )
     p.add_argument("--version", action="version",
                    version=f"%(prog)s {__version__} ({__released__})",
                    help="print version and exit")
@@ -1011,6 +1515,16 @@ def _main(argv=None) -> int:
                    help="do not also run the built-in `openclaw security audit`")
     p.add_argument("--no-host", action="store_true",
                    help="skip host-monitor detection (IDS / audit / FIM / EDR / firewall posture)")
+    p.add_argument("--no-sockets", action="store_true",
+                   help="skip the effective-bind socket scan (B340: corroborates gateway.bind "
+                        "against /proc/net/tcp{,6}, plus a read-only /proc/*/fd walk for "
+                        "process-identity correlation)")
+    p.add_argument("--no-deptree", action="store_true",
+                   help="skip the OpenClaw dependency-tree walk (B349: a package in "
+                        "node_modules whose install-time target — a lifecycle hook or a "
+                        "binding.gyp command-expansion — carries a code-execution signal). "
+                        "The walk is read-only and offline, but traverses the whole installed "
+                        "tree, so this is the escape hatch on a very large one")
     p.add_argument("--save", metavar="PATH", help="also write the report to a file")
     p.add_argument("--monitor", action="store_true",
                    help="monitor mode: alert on what changed since the last check")
@@ -1087,23 +1601,67 @@ def _main(argv=None) -> int:
     p.add_argument("--redteam", action="store_true",
                    help="print a live red-team payload suite for adversarial self-testing")
     p.add_argument("--seed", default=None, metavar="VALUE",
-                   help="fixed seed for --redteam tokens (reproducible CI runs); "
-                        "default is a fresh random seed each run")
+                   # B-475: this reached make_suite only, so `--seed X --self-test` gave
+                   # reproducible red-team tokens and freshly random canary/dry-run/
+                   # multi-turn ones in the same output — three of the four harnesses
+                   # silently ignored it, though all four have taken a seed all along.
+                   help="fixed seed for the self-test harness tokens — --canary, "
+                        "--redteam, --dryrun, --multiturn and the --self-test/--full "
+                        "sections that render them (reproducible CI runs, and the seed a "
+                        "--judged-bundle liveTest verdict must carry to be eligible for "
+                        "history/trend); default is a fresh random seed each run")
     p.add_argument("--dryrun", action="store_true",
                    help="print a behavioral dry-run harness (prompt-injection self-test across all sources)")
     p.add_argument("--multiturn", action="store_true",
                    help="print a two-phase multi-turn taint harness (plant a poisoned rule, "
                         "then trigger it in a later turn)")
     p.add_argument("--self-test", action="store_true",
-                   help="run canary + live red-team + dry-run harnesses together")
+                   # B-480: this named three of the four harnesses it renders — the
+                   # multi-turn plant/trigger harness has always been in this mode's
+                   # output and was missing from its own description.
+                   help="render all four self-test harnesses together: canary + live "
+                        "red-team + dry-run + multi-turn (use --seed for reproducible "
+                        "tokens)")
     p.add_argument("--full", action="store_true",
-                   help="run audit + self-test + vet-mcp in one command "
-                        "(human output path; self-test emits deterministic test material only, "
-                        "does not attack; extra sections skipped in --json / --card mode)")
+                   # B-480: "extra sections skipped in --json / --card" was half wrong.
+                   # --json runs the whole pipeline and merges its output as additional
+                   # top-level keys (judgePacket, coveragePage, phases, vetPackets, ...);
+                   # only --card drops them. Telling a CI user their --json run skips the
+                   # deep phases misdescribes both its cost and its content.
+                   help="run audit + self-test + vet-mcp + the deep phases in one command "
+                        "(self-test emits deterministic test material only, does not "
+                        "attack; --json delivers the extra sections as additional keys "
+                        "rather than printed blocks, --card drops them)")
     p.add_argument("--quiet", action="store_true",
                    help="only with --full: collapse the appended self-test and vet-mcp "
                         "sections to one-line summaries (lighter for CI logs / scroll); the "
                         "full detail stays available via --self-test / --vet-mcp")
+    p.add_argument("--fast", action="store_true",
+                   help="only with --full: skip the deep phases (installed-skill sweep, "
+                        "installed-plugin sweep, behavioural/trajectory replay) and run "
+                        "only the audit + self-test + vet-mcp sections — this is today's "
+                        "--full shape, for CI runs the deep phases are too slow for. The "
+                        "judge packet is still emitted; it re-runs no check and is free")
+    p.add_argument("--exhaustive", action="store_true",
+                   help="F-164: raise the trajectory-file / log-sink / per-line scan caps "
+                        "instead of today's interactive-fast defaults, and scan the full "
+                        "byte range of over-length log lines via overlapping windows instead "
+                        "of only their head/tail. Applies to B164/B180, which run on every "
+                        "audit (not only --full) — so this has effect with or without --full. "
+                        "The per-check and whole-audit wall-clock budgets are raised in the "
+                        "same step so a wider scan cannot degrade a check into a capped "
+                        "UNKNOWN. Slower; use when a normal run flagged something suspicious "
+                        "and you want maximum coverage")
+    p.add_argument("--judged-bundle", metavar="PATH", dest="judged_bundle",
+                   help="only with --full: feed back one file holding a host-agent judge's "
+                        "answers to a prior '--full --json' packet — an 'attestation' "
+                        "object, a 'judged' verdicts object for your own config (advisory: "
+                        "the grade and findings stay unchanged), a 'vetJudged' array of "
+                        "per-target verdicts for swept content (which may only ESCALATE a "
+                        "finding, never lower one), and a 'liveTest' object carrying a "
+                        "canary/dryrun/redteam/multiturn VULNERABLE|RESISTANT verdict (only "
+                        "VULNERABLE ever caps the grade; a seeded 'seed' makes the verdict "
+                        "reproducible and eligible for history/trend); use '-' to read from stdin")
     p.add_argument("--ask", action="store_true",
                    help="emit an attestation template (JSON) for the agent to self-report "
                         "facts the config can't show; fill it, then pass --attest")
@@ -1118,6 +1676,10 @@ def _main(argv=None) -> int:
                    help="print the SHA-256 digest of the ClawSecCheck engine source for tamper detection")
     p.add_argument("--sarif", metavar="PATH",
                    help="write a SARIF 2.1.0 report to PATH")
+    p.add_argument("--pdf", metavar="PATH",
+                   help="write the complete audit as a paginated PDF to PATH — attach the "
+                        "file itself into chat (a mobile client opens it inline; do not "
+                        "paste the path or re-render its contents)")
     p.add_argument("--fail-under", metavar="N", type=int, default=None,
                    help="exit 1 if score is below N")
     p.add_argument("--exit-code", action="store_true",
@@ -1154,13 +1716,27 @@ def _main(argv=None) -> int:
                    help="suppress the offline 'your build may be stale' reminder "
                         "(also suppressible via CLAWSECCHECK_NO_UPDATE_NOTICE=1; offline, never a network call)")
     p.add_argument("--no-freshness-notice", action="store_true",
-                   help="suppress the coverage-freshness reminder for opt-in tests "
+                   help="suppress the coverage-freshness reminder for opt-in tests and the "
+                        "IOC dataset's own staleness and coverage-gap notices "
                         "(also suppressible via CLAWSECCHECK_NO_FRESHNESS_NOTICE=1; offline, never a network call)")
     p.add_argument("--next", action="store_true",
                    help="print recommended next actions based on the audit result")
     p.add_argument("--dashboard", action="store_true",
-                   help="print the deterministic chat Dashboard card (grade + FIX FIRST "
-                        "projection + framed findings, Sections 1-3) and exit")
+                   help="print the deterministic chat Dashboard card (grade + framed "
+                        "findings, Sections 1-2, + a Skills block when any are installed) "
+                        "and exit; add --full to render the WHOLE combined pipeline report "
+                        "(Skills/Plugins/MCP vet, RISK chains, behavioural replay, "
+                        "adjudication, coverage, worth-a-glance) in one fixed-order card "
+                        "instead of --full's own separate appended sections (F-153)")
+    p.add_argument("--compact", action="store_true",
+                   help="only with --dashboard --full: a condensed, ~4096-char "
+                        "Telegram-safe layout of the combined pipeline report — headline "
+                        "counts only for Plugins/MCP/RISK chains, trimmed why-text/no "
+                        "evidence bullets for Findings and Worth-a-glance (nothing "
+                        "dropped, just condensed), plus a pointer to --save/--html for "
+                        "the full detail (F-153; named --compact rather than the spec's "
+                        "suggested --card, which already means the shareable "
+                        "grade+score+trifecta badge above)")
     p.add_argument("--dashboard-findings", action="store_true",
                    help="print only the framed Section-2 Findings block for the chat Dashboard "
                         "(FAIL/WARN, high-confidence, grouped by family) and exit")
@@ -1187,7 +1763,9 @@ def _main(argv=None) -> int:
     p.add_argument("--debug", action="store_true",
                    help="emit DEBUG-level log breadcrumbs to stderr")
     p.add_argument("--log", metavar="PATH", default=None,
-                   help="also write log output to PATH (only when given)")
+                   help="also write INFO-level log output to PATH (only when given; "
+                        "raises the FILE's level to INFO, never the console's — pass "
+                        "--verbose/--debug for that)")
     args = p.parse_args(argv)
 
     # Surface (on stderr) any second mode flag or global modifier the resolved mode
@@ -1292,6 +1870,25 @@ def _main(argv=None) -> int:
     # F-072 (D1): --vet autodetects the artifact type by content and routes to the
     # right engine; --vet-skill / --vet-plugin / --vet-mcp are the explicit escape
     # hatches. The detected-type note goes to stderr so machine stdout stays clean.
+    # B-466: an EMPTY target ("--vet ''") used to be falsy here, so the vet dispatch was
+    # skipped entirely and the run fell through to a full audit of the local machine —
+    # printing a normal grade and exiting 0. The user asked to vet something and got a
+    # verdict about something else, with nothing saying so.
+    #
+    # `--vet-mcp` is deliberately absent from this list: it is declared nargs="?" const="",
+    # so an empty value is its documented "every configured MCP server" form.
+    _empty_target = [
+        flag for flag, attr in (
+            ("--vet", "vet"), ("--vet-skill", "vet_skill"), ("--vet-plugin", "vet_plugin"),
+            ("--vet-source", "vet_source"), ("--advise", "advise"),
+        )
+        if getattr(args, attr, None) is not None and not str(getattr(args, attr)).strip()
+    ]
+    if _empty_target:
+        print(f"{_empty_target[0]} needs a target — got an empty value. "
+              "Pass a path, slug, or URL.", file=sys.stderr)
+        return 2
+
     _vet_route = None  # (kind, target) with kind in {"skill", "plugin", "mcp"}
     if args.vet:
         detected = detect_vet_type(args.vet, home=args.home)
@@ -1320,6 +1917,11 @@ def _main(argv=None) -> int:
 
     if _vet_route and _vet_route[0] in ("skill", "plugin"):
         vet_kind, vet_path = _vet_route
+        # B-460: a SKILL.md target resolves to the skill DIRECTORY that contains it. Relabel
+        # here too, from the same helper the engine uses, so the dossier names what was
+        # actually scanned rather than what was typed (it read "skill 'SKILL.md'" before).
+        if vet_kind == "skill":
+            vet_path = str(resolve_skill_target(vet_path))
         vet_target = Path(vet_path).expanduser()
         f = vet_skill(vet_path) if vet_kind == "skill" else vet_plugin(vet_path)
         # C-254: use with --vet/--vet-skill/--vet-plugin only (checked above) — a
@@ -1400,6 +2002,15 @@ def _main(argv=None) -> int:
         profile = build_profile(f, args.vet_source, "source")
         _src_rc = 1 if profile.overall_status in ("FAIL", "WARN") else 0
         _record_run("vet_source", args)
+        # B-385: the IOC dataset's own staleness advisory is renderer-only — it never
+        # enters `f`/`profile`/Finding.evidence (see checks/_vet.py's vet_source), so it
+        # cannot drift a fingerprint or make --json output change day to day. Printed to
+        # STDERR only: it is presentation metadata about the audit tool's own dataset,
+        # not part of either the human dossier's or --json's result payload. Reuses
+        # --no-freshness-notice — the same opt-out the config-age notice already uses.
+        if not args.no_freshness_notice and not os.environ.get("CLAWSECCHECK_NO_FRESHNESS_NOTICE"):
+            for _line in _iocdb_freshness_notice() + _iocdb_coverage_notice():
+                print(_line, file=sys.stderr)
         if args.json:
             _emit(render_vet_json(profile, mode="vet-source", version=__version__))
             return _src_rc
@@ -1423,7 +2034,7 @@ def _main(argv=None) -> int:
         return _advise_rc
 
     if args.canary:
-        _emit(render_canary(make_canary(), ascii_only))
+        _emit(render_canary(make_canary(args.seed), ascii_only))
         _record_run("self_test", args)
         return 0
 
@@ -1434,24 +2045,24 @@ def _main(argv=None) -> int:
         return 0
 
     if args.dryrun:
-        _emit(render_dryrun(make_scenarios(), ascii_only))
+        _emit(render_dryrun(make_scenarios(args.seed), ascii_only))
         _record_run("self_test", args)
         return 0
 
     if args.multiturn:
-        _emit(render_multiturn(make_multiturn(), ascii_only))
+        _emit(render_multiturn(make_multiturn(args.seed), ascii_only))
         _record_run("self_test", args)
         return 0
 
     if args.self_test:
         seed = args.seed if args.seed is not None else secrets.token_hex(8)
-        _emit(render_canary(make_canary(), ascii_only))
+        _emit(render_canary(make_canary(args.seed), ascii_only))
         _emit("")
         _emit(render_suite(make_suite(seed), ascii_only, seed=seed))
         _emit("")
-        _emit(render_dryrun(make_scenarios(), ascii_only))
+        _emit(render_dryrun(make_scenarios(args.seed), ascii_only))
         _emit("")
-        _emit(render_multiturn(make_multiturn(), ascii_only))
+        _emit(render_multiturn(make_multiturn(args.seed), ascii_only))
         _record_run("self_test", args)
         return 0
 
@@ -1466,26 +2077,73 @@ def _main(argv=None) -> int:
         if not ignore:
             _emit("No .clawseccheckignore entries found.")
         else:
-            _emit(f"{len(ignore)} suppressed entry/entries in .clawseccheckignore:")
-            ctx, findings, _ = audit(args.home, include_native=False)
+            _emit(f"{len(ignore)} entry/entries in .clawseccheckignore.")
+            # B-379: match the real audit path's include_sockets, or B340's finding
+            # detail differs here from a normal run (ctx.sockets is None => a
+            # different "socket scan was not run" UNKNOWN text) — since
+            # fingerprint() hashes the detail, a suppression captured from a real run
+            # was silently never found here, and the reverse also held. F-164:
+            # --exhaustive changes B164/B180's disclosure text the same way, so it
+            # needs the same mirroring or an --exhaustive suppression stops matching
+            # here.
+            # B-474 (C-135 on B-474's own fix): include_host/include_native must be
+            # mirrored too, for the reason B-379 already gave for include_sockets —
+            # fingerprint() hashes the finding DETAIL, and a subsystem that did not run
+            # here produces different detail text (or no finding at all) than it does on a
+            # real run. Before this, a suppression captured from a normal run of a host
+            # (B50-B54) or native (`openclaw security audit`) finding simply never matched
+            # here. That was merely invisible while this command only listed matches; the
+            # moment it began NAMING unmatched entries it would have become an active
+            # false claim — "this entry matches nothing", about an entry that matches
+            # perfectly well on every real run. Fidelity beats speed here, same call
+            # B-379 made: the point of this command is to answer what IS suppressed.
+            ctx, findings, _ = audit(args.home, include_native=not args.no_native,
+                                     include_host=not args.no_host,
+                                     include_sockets=not args.no_sockets,
+                                     include_deptree=not args.no_deptree,
+                                     exhaustive=args.exhaustive)
             suppressed = [f for f in findings if getattr(f, "suppressed", False)]
             # B-154: a bare "RISK-NN" entry matches a RiskPath.id, not any Finding —
             # surface those explicitly too, or --show-suppressed silently missed them.
             suppressed_risk = [p for p in _risk.risk_paths(ctx, findings, ignore=ignore)
                                 if p.suppressed]
+            # B-474: the headline counted ENTRIES IN THE FILE and the list below showed
+            # MATCHED FINDINGS, so "3 suppressed entry/entries" printed above a single
+            # line was routine — and the two entries that matched nothing were invisible
+            # in the one command whose job is to show what is suppressed. A dead entry is
+            # not cosmetic: it means the finding is gone (fixed) or its fingerprint has
+            # drifted (the suppression silently stopped working and the finding is live
+            # again). Both are things the owner of the file needs told.
+            matched_entries: set[str] = set()
+            for f in suppressed:
+                matched_entries.update({f.id, fingerprint(f)} & ignore)
+            for p in suppressed_risk:
+                matched_entries.update({p.id} & ignore)
+            dead = sorted(ignore - matched_entries)
             if suppressed or suppressed_risk:
+                _emit(f"{len(suppressed) + len(suppressed_risk)} suppressed in this run:")
                 for f in suppressed:
                     _emit(f"  {f.id}  {fingerprint(f)}  ({f.title})")
                 for p in suppressed_risk:
                     _emit(f"  {p.id}  ({p.title})")
-            else:
-                for entry in sorted(ignore):
+            if dead:
+                _emit("")
+                _emit(f"{len(dead)} entry/entries match nothing in this run — the finding "
+                      "is either fixed, or its fingerprint changed and the suppression is "
+                      "no longer in effect:")
+                for entry in dead:
                     _emit(f"  {entry}")
         return 0
 
     if args.watch_log:
         _emit(render_events(load_events(args.events), ascii_only))
         return 0
+
+    # B-476: read the bundle's attestation bucket at most once — `--judged-bundle -` reads
+    # stdin, and stdin can only be consumed once.
+    _bundle_att = None
+    if args.full and args.judged_bundle is not None and args.attest != "-":
+        _bundle_att = _judged_bundle(args.judged_bundle).get("attestation")
 
     attestation = None
     if args.attest:
@@ -1502,6 +2160,32 @@ def _main(argv=None) -> int:
             print(f"⚠ could not read a valid attestation from {src} "
                   "(ignored; B43/B44 stay UNKNOWN). See 'clawseccheck --ask'.",
                   file=sys.stderr)
+    elif args.full and args.judged_bundle is not None:
+        # B-476: --judged-bundle's own --help promises four buckets, and
+        # `split_judged_bundle` has always parsed all four — but nothing in the codebase
+        # ever read the `attestation` one. An agent that answered the judge packet by
+        # filling in the attestation object alongside its verdicts got B43/B44 left at
+        # UNKNOWN with no indication its answers had been dropped: a documented input,
+        # silently discarded. Routed through the SAME parse_attestation() the --attest
+        # file path uses, so an invalid object degrades identically rather than being
+        # trusted because it arrived by a different door.
+        #
+        # Gated on --full to match the flag's documented "only with --full" contract and
+        # `_resolve_runtime_caps`'s own gate — a bucket honored where the flag itself is
+        # reported as having no effect would be a new incoherence, not a fix for one.
+        # --attest wins when both are given (an explicit flag beats an embedded bucket),
+        # which is why this is `elif`; the note below says so rather than dropping it
+        # silently.
+        from . import attest as _attest  # noqa: PLC0415
+        if _bundle_att is not None:
+            attestation = _attest.parse_attestation(_bundle_att)
+            if not attestation:
+                print("⚠ the --judged-bundle 'attestation' object is not a valid "
+                      "attestation (ignored; B43/B44 stay UNKNOWN). "
+                      "See 'clawseccheck --ask'.", file=sys.stderr)
+    if args.attest and _bundle_att is not None:
+        print("note: --attest was given, so the --judged-bundle 'attestation' object "
+              "was not used.", file=sys.stderr)
 
     # First-run onboarding (Screen 13): when there is genuinely nothing to audit —
     # ~/.openclaw missing, or an empty directory — don't render a wall of UNKNOWNs;
@@ -1530,11 +2214,26 @@ def _main(argv=None) -> int:
     try:
         ctx, findings, score = audit(args.home, include_native=not args.no_native,
                                      include_host=not args.no_host,
-                                     attestation=attestation)
+                                     include_sockets=not args.no_sockets,
+                                     include_deptree=not args.no_deptree,
+                                     attestation=attestation,
+                                     exhaustive=args.exhaustive)
     except (PermissionError, OSError) as exc:
         _emit(f"Cannot read the OpenClaw home at {_sanitize(args.home)}: {_sanitize(str(exc))}")
         _emit("Fix the permissions (or run as the owning user) and re-run the audit.")
         return 1
+    # B-464: record which subsystems the OPERATOR opted out of, so the score rationale can
+    # disclose that its denominator was narrowed. Set here, from the parsed flags, because
+    # ctx.include_host/native default to "off" and cannot tell an explicit opt-out from an
+    # ordinary library audit() call.
+    ctx.cli_opt_outs = tuple(
+        flag for flag, passed in (
+            ("--no-host", args.no_host),
+            ("--no-native", args.no_native),
+            ("--no-sockets", args.no_sockets),
+            ("--no-deptree", args.no_deptree),
+        ) if passed
+    )
     logger.debug("ran %d checks", len(findings))
     logger.info("score=%s grade=%s", score.score, score.grade)
 
@@ -1549,9 +2248,31 @@ def _main(argv=None) -> int:
         _emit(_risk.render_risk_paths(paths, ascii_only=ascii_only))
         return 0
 
+    def _report_dest(raw: str) -> Path:
+        """Resolve a user-requested report path, creating its directory if it is missing.
+
+        B-459: SKILL.md's guided flow hardcodes ``--pdf ~/.clawseccheck/report.pdf``, but
+        none of the commands that precede it create ``~/.clawseccheck`` — so on a first run
+        the very command the docs tell the host agent to run died with ENOENT from
+        ``mkstemp``, and (because the card had already been collapsed in anticipation of the
+        attachment) the whole audit was discarded: 118 bytes of stdout, exit 1, no grade and
+        no findings. Every first-time user hit that.
+
+        Only a directory we create ourselves is touched, and it is created 0700 because a
+        report carries the user's audit detail. A parent that already exists is left exactly
+        as it is — ``secure_dir`` would ``chmod 0700`` it, which for a shared parent like
+        ``/tmp`` (``--pdf /tmp/report.pdf``) would be a destructive surprise well outside
+        what this tool is allowed to do to the user's machine.
+        """
+        p = Path(raw).expanduser()
+        parent = p.parent
+        if not parent.exists():
+            parent.mkdir(mode=0o700, parents=True, exist_ok=True)
+        return p
+
     if args.badge:
         try:
-            secure_write_text(Path(args.badge).expanduser(), render_svg(score, findings))
+            secure_write_text(_report_dest(args.badge), render_svg(score, findings))
             _emit(
                 f"(badge written to {args.badge} — attach this SVG file as-is; "
                 "do not redraw, rasterize, or generate your own badge image)"
@@ -1564,8 +2285,8 @@ def _main(argv=None) -> int:
     if args.html:
         try:
             secure_write_text(
-                Path(args.html).expanduser(),
-                render_html(findings, score, native=ctx.native),
+                _report_dest(args.html),
+                render_html(findings, score, native=ctx.native, ctx=ctx),
             )
             _emit(f"(HTML report written to {args.html})")
             return 0
@@ -1575,33 +2296,191 @@ def _main(argv=None) -> int:
 
     if args.sarif:
         try:
-            secure_write_text(Path(args.sarif).expanduser(), render_sarif(findings, score, __version__, ctx=ctx))
+            secure_write_text(_report_dest(args.sarif), render_sarif(findings, score, __version__, ctx=ctx))
             _emit(f"(SARIF written to {args.sarif})")
             return 0
         except OSError as exc:
             _emit(f"(could not write SARIF: {exc})")
             return 1
 
+    # C-373: `--dashboard --pdf <path>` is the chat delivery PAIR — the card is the
+    # message that fits, the PDF is the attachment carrying every finding with its why
+    # and evidence. When both are asked for, write the file here and fall through to the
+    # dashboard branch (which points the card at this exact path) instead of returning;
+    # `--pdf` on its own keeps its pre-existing standalone behaviour, byte-identical.
+    pdf_written = None
+
+    def _emit_attach_instruction(path):
+        """B-468: tell the HOST AGENT what to do with the report — on stderr.
+
+        stdout is the card the agent pastes verbatim into a chat, so an instruction
+        addressed to the agent must not sit inside it. That contradiction is not
+        theoretical: in a real session the agent, handed "attach this file" inside text it
+        had been ordered to reproduce word for word, resolved it by sending the user a
+        link — twice — before ever attaching anything. ClawSecCheck is local-only (Golden
+        Rule #1): there is no URL, only a file to send.
+        """
+        if not path:
+            return
+        print(f"note: report written to {path} — attach this PDF file itself into the "
+              "chat. Do not paste its path, do not send a link (there is none — the tool "
+              "is local-only), and do not re-render its contents.", file=sys.stderr)
+    # C-374: under `--dashboard --full` the PDF must also carry the pipeline blocks, and
+    # those phases are computed further down (in the dashboard branch). Defer the write
+    # to there rather than emitting a findings-only PDF the card would then describe as
+    # complete.
+    _defer_pdf = bool(args.pdf) and args.dashboard and args.full
+    if args.pdf and not _defer_pdf:
+        try:
+            _pdf_dest = _report_dest(args.pdf)
+            secure_write_bytes(_pdf_dest,
+                               render_pdf(findings, score, native=ctx.native, ctx=ctx))
+            pdf_written = str(_pdf_dest)
+        except OSError as exc:
+            _emit(f"(could not write PDF report: {exc})")
+            return 1
+        if not args.dashboard:
+            _emit(
+                f"(PDF report written to {args.pdf} — attach this file itself into the "
+                "chat, do not re-render its contents or paste the path; a mobile client "
+                "opens a PDF inline where an HTML attachment would just be a download)"
+            )
+            return 0
+
     if args.trend:
+        # F-155 fix (C-135): resolve the liveTest cap BEFORE recording/rendering, so a
+        # VULNERABLE verdict binds here too, not just on the default --full --json path
+        # (see _apply_live_test_cap's own docstring for why this is scoped to ONLY the
+        # liveTest bucket). A seeded (reproducible) verdict is capped AND recorded; an
+        # unseeded one still caps THIS run's shown/percentile score but is excluded from
+        # history — the same seed-gate the default path already applies below.
+        score, _live_signal = _apply_live_test_cap(ctx, findings, score, args)
+        _skip_live_test_history = _live_signal.hit and not _live_signal.reproducible
         # --trend's job is to record the point AND show the trend, so it records even
         # under --no-history (a documented, tested contract). The conflict is surfaced
         # as a stderr note by _flag_coherence_notes rather than silently honored (B-066).
-        history_record(score, args.history)
+        if not _skip_live_test_history:
+            history_record(score, args.history)
         rows = history_load(args.history)
         _emit(render_trend(rows, ascii_only))
         _emit(render_percentile(score.score, ascii_only))
         return 0
 
     if args.percentile:
+        # B-379: resolve the liveTest cap before ranking — previously this returned
+        # before any cap resolution ran at all, so a run --full would grade F was
+        # ranked against the recorded distribution as though it were an uncapped A.
+        score, _live_signal = _apply_live_test_cap(ctx, findings, score, args)
         _emit(render_percentile(score.score, ascii_only))
         return 0
 
     if args.next:
+        # B-379: same cap-resolution gap as --percentile above — suggested next actions
+        # should reflect the capped grade, not an uncapped one.
+        score, _live_signal = _apply_live_test_cap(ctx, findings, score, args)
         _emit(render_next_actions(suggest_actions(findings, score), ascii_only))
         return 0
 
     if args.dashboard:
-        _emit(render_dashboard(findings, score, ascii_only=ascii_only))
+        if not args.full:
+            # Byte-identical to before F-153: the overwhelming majority of callers
+            # (every pre-existing test, and every plain `--dashboard` invocation)
+            # never asked for the rest of the pipeline, so nothing extra is computed.
+            _emit(render_dashboard(findings, score, ascii_only=ascii_only, ctx=ctx,
+                                   pdf_path=pdf_written))
+            _emit_attach_instruction(pdf_written)
+            return 0
+        # F-153: Dave settled 2026-07-30 that --dashboard must fully render
+        # everything --full does, in the fixed order (Skills · Plugins · MCP · RISK
+        # chains · Behavioural · "Second opinion (advisory)" · Coverage · "Worth a
+        # glance"), replacing --full's own additive-append shape as the ONE combined
+        # pipeline report. The open mechanism call this task owns: does --dashboard
+        # itself repeat the expensive phases Step 2's `--full --attest` already ran
+        # in the same guided-flow turn, or does the flow feed Step 2's artifact in
+        # instead? Chosen here: --dashboard --full computes the phases itself, ONCE,
+        # using the exact same functions --full uses (no second engine, no risk of
+        # the two renderers drifting) — and the guided flow (SKILL.md, C-297) drops
+        # the separate discarded `--full --attest` call and merges Steps 2+3 into
+        # this one command instead, so a guided-flow turn still computes each phase
+        # exactly once, never twice. That is simpler and safer than a second code
+        # path that re-hydrates Finding objects from a saved --full --json artifact
+        # just to avoid a second process invocation — this project's own precedent
+        # (B-356's Skills block reusing _skills_inventory_lines) is "one source of
+        # truth, not a second formatter to drift out of sync", and a JSON-rehydration
+        # renderer would be exactly that second formatter.
+        #
+        # _resolve_runtime_caps also applies here (not just to --full's own report/
+        # --json branch below) so --dashboard --full shows the IDENTICAL F-154/F-155
+        # capped grade a plain --full run of the same config would.
+        score, full_deadline, judged_bundle, _live_signal, _behavioral_fired_ids = (
+            _resolve_runtime_caps(ctx, findings, score, args)
+        )
+        sweep_home = Path(args.home).expanduser()
+        plugin_sweep = None
+        # B-405: also swept for adjudication's own-target corpus (below) — NOT for a
+        # separate SKILL SWEEP section (the Skills section above already came from
+        # `ctx`/`build_inventory`, unaffected by this). Before this fix, this branch
+        # fed P9 ONLY plugin_sweep.vet_targets() — a plain `--full` (human/json) fed
+        # P9 only its SKILL sweep's targets via `run_pipeline`'s own P6/P7 union (see
+        # that function's docstring) — so the SAME audit run's judge packet covered
+        # plugins-only here and skills-only there. Computing the skill sweep here too,
+        # exactly the way `--full` already does, closes that gap: both renderers now
+        # union skills + plugins into the SAME corpus.
+        skill_sweep = None
+        if not args.fast:
+            _plugin_sweep_fn = _pipeline.resolve_plugin_sweep()
+            if _plugin_sweep_fn is not None and not budget_exceeded(full_deadline):
+                _sweep_budget_s = _pipeline.sub_budget(full_deadline, DEFAULT_VET_ALL_BUDGET_S)
+                try:
+                    plugin_sweep = _plugin_sweep_fn(
+                        sweep_home, ascii_only=ascii_only,
+                        sweep_budget_s=_sweep_budget_s, narrate=False)
+                except Exception:  # noqa: BLE001 — one phase must not break the whole card
+                    plugin_sweep = None
+            if not budget_exceeded(full_deadline):
+                _skill_sweep_budget_s = _pipeline.sub_budget(full_deadline, DEFAULT_VET_ALL_BUDGET_S)
+                try:
+                    # B-404: reuse the SAME ctx the audit above already collected —
+                    # same pattern the --full (human/json) call sites use.
+                    skill_sweep = sweep_installed_skills(
+                        sweep_home, ascii_only=ascii_only,
+                        sweep_budget_s=_skill_sweep_budget_s, narrate=False, ctx=ctx)
+                except Exception:  # noqa: BLE001 — one phase must not break the whole card
+                    skill_sweep = None
+        behavioral_phase = None
+        if not args.fast and not budget_exceeded(full_deadline):
+            behavioral_phase = _pipeline.run_behavioral(ctx, ascii_only=ascii_only)
+        # P9 (adjudication) is deliberately NOT gated on --fast or the budget, same as
+        # --full's own P9: it re-runs no check, so there is no expense to skip.
+        _dashboard_vet_targets = (
+            list(plugin_sweep.vet_targets()) if plugin_sweep is not None else []
+        ) + (
+            list(skill_sweep.vet_targets()) if skill_sweep is not None else []
+        )
+        adjudication_phase = _pipeline.run_adjudication(
+            ctx, findings,
+            vet_targets=_dashboard_vet_targets,
+            version=__version__, bundle=judged_bundle)
+        if _defer_pdf:
+            try:
+                _pdf_dest = _report_dest(args.pdf)
+                secure_write_bytes(_pdf_dest, render_pdf(
+                    findings, score, native=ctx.native, ctx=ctx,
+                    plugin_sweep=plugin_sweep, risk=paths,
+                    behavioral=behavioral_phase, adjudication=adjudication_phase))
+                pdf_written = str(_pdf_dest)
+            except OSError as exc:
+                # B-459: the PDF is the DELIVERY of this audit, not the audit. Failing to
+                # write it must never destroy the analysis: fall through with
+                # pdf_written=None so render_dashboard renders every section inline
+                # instead of collapsing to a card that points at a file we never wrote.
+                _emit(f"(could not write PDF report: {exc} — showing the full report inline)")
+        _emit(render_dashboard(
+            findings, score, ascii_only=ascii_only, ctx=ctx, full=True,
+            risk=paths, plugin_sweep=plugin_sweep, behavioral=behavioral_phase,
+            adjudication=adjudication_phase, compact=args.compact,
+            pdf_path=pdf_written))
+        _emit_attach_instruction(pdf_written)
         return 0
 
     if args.dashboard_findings:
@@ -1631,7 +2510,12 @@ def _main(argv=None) -> int:
                 verdicts_raw = Path(args.judged).expanduser().read_text(encoding="utf-8")
             except OSError:
                 verdicts_raw = ""
-        _emit(render_judged_json(ctx, findings, score, verdicts_raw=verdicts_raw))
+        # B-355: `paths` (the RISK-* attack-chain data, computed above) was never
+        # threaded through, so --judged silently omitted the risk_paths key entirely
+        # (not an empty list -- absent) even though plain --json on the same run
+        # carries it. Mirror the plain --json call site below (:~1737), which already
+        # passes risk=paths.
+        _emit(render_judged_json(ctx, findings, score, verdicts_raw=verdicts_raw, risk=paths))
         return 0
 
     if args.propose_ignore:
@@ -1652,11 +2536,28 @@ def _main(argv=None) -> int:
 
     if args.behavioral is not None:
         _record_run("behavioral", args)
+        _behavioral_target = args.behavioral or None
         _emit(render_behavioral_analysis(
-            ctx, explicit_path=args.behavioral or None, ascii_only=ascii_only))
+            ctx, explicit_path=_behavioral_target, ascii_only=ascii_only))
+        # B-462: a path the user named that does not resolve is an operational failure of
+        # THIS invocation, not an inconclusive audit — exit non-zero so a typo in a script
+        # cannot pass for a clean behavioural run.
+        if _behavioral_path_problem(_behavioral_target):
+            return 1
         return 0
 
     if args.monitor:
+        # F-155 fix (C-135): resolve the liveTest cap BEFORE the snapshot is taken, so a
+        # VULNERABLE verdict is baked into the drift baseline capped — not the uncapped
+        # score --monitor recorded before this fix (this branch returned before the
+        # liveTest bucket in --judged-bundle was ever parsed; see _apply_live_test_cap's
+        # own docstring for why this is scoped to ONLY the liveTest bucket). An unseeded
+        # (non-reproducible) VULNERABLE verdict still caps what THIS run reports, but —
+        # per the same seed-gate the default --full path already applies
+        # (docs/OUTPUT_SCHEMA.md §12) — is excluded from the persisted baseline/history
+        # below, so a random token can never manufacture drift on the next run.
+        score, _live_signal = _apply_live_test_cap(ctx, findings, score, args)
+        _skip_live_test_persist = _live_signal.hit and not _live_signal.reproducible
         # B-270: ONE predicate decides what "no usable baseline" means, and it tells
         # *absent* (a real first run) apart from *corrupt* (a prior baseline existed and is
         # gone). Both used to collapse into `prev is None`, so a destroyed baseline
@@ -1686,26 +2587,38 @@ def _main(argv=None) -> int:
         # next run re-detects the same drift and journals it a second time. A duplicated
         # line in the timeline is strictly recoverable; a missing one is not, and the
         # duplicate only follows a failure that is now loud and non-zero anyway.
-        journal_err = record_events(alerts, args.events)
+        # B-379: gate the journal write behind the SAME F-155 seed-gate that already
+        # guards save_state/history_record below — this write used to run
+        # unconditionally, so an unseeded VULNERABLE verdict re-journaled the identical
+        # "score dropped" alert on every single run forever (the baseline never
+        # advances, so nothing ever consumes it), which is exactly the manufactured-
+        # drift failure mode the seed gate exists to prevent.
+        journal_err = record_events(alerts, args.events) if not _skip_live_test_persist else None
         state_err = None
-        if journal_err is None:
+        # F-155: an unseeded VULNERABLE verdict must never be recorded, so the baseline
+        # advance is skipped exactly like a write failure would skip it — except this is
+        # not a failure (state_err stays None; no stderr, no non-zero exit below).
+        if journal_err is None and not _skip_live_test_persist:
             try:
                 save_state(args.state, snap)
             except OSError as exc:
                 state_err = str(exc)
-        persisted = journal_err is None and state_err is None
+        persisted = journal_err is None and state_err is None and not _skip_live_test_persist
         # B-271: render AFTER the writes, and tell the renderer whether they landed — the
         # success wording used to be printed before the save was even attempted.
         _emit(render_monitor(alerts, score, ascii_only,
                              baseline=base_status == BASELINE_ABSENT,
                              persisted=persisted,
-                             baseline_corrupt=base_status == BASELINE_CORRUPT))
+                             baseline_corrupt=base_status == BASELINE_CORRUPT,
+                             live_test_skipped=_skip_live_test_persist))
         # --monitor records a score-history point as part of tracking drift, even under
         # --no-history; the conflict is surfaced as a stderr note (B-066), not silently
         # honored, to keep monitor's drift baseline intact. Recorded even on the failure
         # paths below: this run's score was really measured, and the trend should not gain
-        # a hole because a different file was unwritable.
-        history_record(score, args.history)
+        # a hole because a different file was unwritable. Skipped only for the same F-155
+        # unseeded-live-test exclusion as the baseline advance above.
+        if not _skip_live_test_persist:
+            history_record(score, args.history)
         # B-271/B-278: a write mode that could not write must not report success. --badge /
         # --html / --sarif / --save all return 1 on OSError; --monitor was the sole outlier,
         # returning 0 forever while persisting nothing, so cron saw a healthy job.
@@ -1725,8 +2638,79 @@ def _main(argv=None) -> int:
             return 1
         return 0
 
+    vm_has_fail = False
+    sweep_has_fail = False
+    pipeline_has_fail = False
+    # `score` was already computed once, above, by `audit()`; `_resolve_runtime_caps`
+    # returns the SAME object when neither cap-only signal fires, a freshly recomputed
+    # one (never mutated in place) otherwise — see its own docstring for the F-154/
+    # F-155 detail this used to carry inline.
+    #
+    # B-379: `render_json`'s "projection" (what-if FIX FIRST) sub-block used to call
+    # `scoring.project` -> `scoring.compute` a second time over (findings, ctx) ALONE,
+    # with no live-test/behavioral signal threaded through — unlike the three earlier
+    # cap-only signals (config-blind/degraded/runtime), which are fully derivable from
+    # (findings, ctx) alone and so already agreed with `score` for free, F-154/F-155
+    # need the external input resolved right here. Now threaded through explicitly
+    # (see the `render_json` call below) so `payload["projection"]["current"]` can
+    # never disagree with `payload["score"]`/`payload["grade"]` for the same run.
+    score, full_deadline, judged_bundle, live_signal, behavioral_fired_ids = (
+        _resolve_runtime_caps(ctx, findings, score, args)
+    )
     if args.json:
-        body = render_json(findings, score, risk=paths, ctx=ctx)
+        # F-149 JSON gap: --full's printed SKILL SWEEP section had no machine-readable
+        # counterpart — the whole self-test/vet-mcp/sweep block below is skipped
+        # outright for --json (it is gated on `not args.json`), so a --full --json
+        # consumer could not see per-skill vet verdicts at all. Scope stays to the
+        # sweep only (self-test/vet-mcp are a separate, pre-existing --json gap this
+        # task does not cover — see docs/OUTPUT_SCHEMA.md). Silent (narrate=False),
+        # matching the --quiet collapse: JSON output must never carry the narrative
+        # prose a human report prints.
+        #
+        # F-153: --full --json is ALSO the phase-1 carrier — the one artifact handed to a
+        # host-agent judge — so it runs the whole pipeline, not just the sweep, and gains
+        # the pipeline's additive top-level keys below. C2 is untouched by this: C2 gates
+        # printed SECTIONS on `not args.json`, and nothing here prints.
+        full_sweep_json = None
+        full_pipeline = None
+        if args.full:
+            sweep_home = Path(args.home).expanduser()
+            sweep = None
+            if not args.fast:
+                # B-404: reuse the SAME ctx the audit above already collected
+                # (ctx.home == sweep_home) instead of a second, redundant collect()
+                # pass — and, just as importantly, so the sweep's view of "what
+                # skills exist" can never disagree with what the score was actually
+                # computed against.
+                sweep = sweep_installed_skills(
+                    sweep_home, ascii_only=ascii_only,
+                    sweep_budget_s=_pipeline.sub_budget(
+                        full_deadline, DEFAULT_VET_ALL_BUDGET_S),
+                    narrate=False, ctx=ctx)
+                full_sweep_json = _sweep_to_json(sweep)
+                sweep_has_fail = sweep.has_fail
+                _record_run("vet", args)
+            full_pipeline = _pipeline.run_pipeline(
+                ctx, findings, home_dir=sweep_home, skill_sweep=sweep,
+                vet_targets=sweep.vet_targets() if sweep is not None else (),
+                deadline=full_deadline, budget_s=DEFAULT_FULL_BUDGET_S,
+                fast=args.fast, ascii_only=ascii_only, version=__version__,
+                bundle=judged_bundle)
+            pipeline_has_fail = full_pipeline.has_fail
+            if not args.fast:
+                _record_run("behavioral", args)
+        body = render_json(findings, score, risk=paths, ctx=ctx, skill_sweep=full_sweep_json,
+                           live_test_vulnerable=live_signal.hit,
+                           live_test_reason=live_signal.reason,
+                           behavioral_fired_ids=behavioral_fired_ids)
+        if full_pipeline is not None:
+            # Additive merge, done here rather than by widening render_json's signature:
+            # these keys belong to the pipeline, not to the audit payload, and every
+            # existing key keeps its meaning and its value. Re-serialized with the same
+            # dumps() settings render_json uses, so the base document is unchanged.
+            _doc = json.loads(body)
+            _doc.update(full_pipeline.to_json())
+            body = json.dumps(_doc, ensure_ascii=True, indent=2)
     elif args.card:
         body = render_card(score, findings, ascii_only)
     else:
@@ -1746,6 +2730,12 @@ def _main(argv=None) -> int:
             # above the sections that run them (the freshness is computed pre-run).
             _refreshed = ("self_test", "vet_mcp") if args.full else ()
             f_notice = _compute_freshness(load_ledger(), skip=_refreshed)
+            # C-361: the IOC dataset's own age and coverage reached only --vet-source
+            # before this, so a normal audit said nothing about how much a clean
+            # identity result is worth. Same advisory list render_report already
+            # treats as never touching score/grade/findings; same --no-freshness-notice
+            # opt-out (this whole block is already inside it). NEVER a Finding (B-385).
+            f_notice = f_notice + _iocdb_freshness_notice() + _iocdb_coverage_notice()
         # Tamper Score sub-grade — human report only; presentation-layer only, never
         # alters score/grade/findings. mon_present reflects whether a --monitor
         # baseline snapshot already exists on disk for this state file.
@@ -1758,7 +2748,15 @@ def _main(argv=None) -> int:
         parts = [render_report(findings, score, ascii_only, native=ctx.native,
                                risk=paths, update_notice=notice, freshness_notice=f_notice,
                                openclaw_detected=ctx.config_found, ctx=ctx, color=use_color,
-                               tamper=tamper),
+                               tamper=tamper,
+                               # B-473: the plugin sweep is pipeline phase P7, which runs
+                               # BELOW this body (the tee block). There is no sweep object
+                               # to render here, but "not scanned — run --full" is a lie on
+                               # a run that is about to print the sweep a few hundred lines
+                               # down. --fast drops P7/P8 and the pipeline prints its own
+                               # honest "skipped" line in that slot, so the section exists
+                               # either way and the pointer stays true.
+                               plugins_deferred=args.full),
                  "", render_card(score, findings, ascii_only)]
         if ctx.errors:
             parts.append("\nnotes:\n" + "\n".join(f"  - {_sanitize(e)}" for e in ctx.errors))
@@ -1769,140 +2767,202 @@ def _main(argv=None) -> int:
 
     _emit(body)
 
-    vm_has_fail = False
-    sweep_has_fail = False
-    if args.full and not args.json and not args.card:
-        seed = args.seed if args.seed is not None else secrets.token_hex(8)
-        # F-149: the installed-skill sweep runs under the same wall-clock ceiling
-        # --vet-all uses. Cost is driven by content hostility, not skill count, so a
-        # hostile fleet is what this bounds. Kept as the phase default rather than a
-        # new flag, following the precedent that vet_all()'s sweep_budget_s is a
-        # Python parameter the CLI deliberately does not expose.
-        sweep_home = Path(args.home).expanduser()
-        sweep_budget_s = DEFAULT_VET_ALL_BUDGET_S
-        if args.quiet:
-            # C-110: --full --quiet — the appended self-test material + per-server
-            # vet-mcp detail are what push --full to ~700 lines; collapse each to a
-            # single honest summary line (the concise report above is unchanged).
-            # The self-test harnesses emit generated adversarial *scenarios* for the
-            # agent to run — there is no PASS/score the tool computes, so the summary
-            # states counts, not a verdict (Golden Rule #4: no fabricated result).
-            # record_run() / vm_has_fail still fire, so ledger freshness and
-            # --exit-code behave identically to the verbose path.
-            n_rt = len(make_suite(seed))
-            n_dr = len(make_scenarios())
-            n_mt = len(make_multiturn())
-            _emit("")
-            _emit(f"SELF-TEST: 1 canary + {n_rt} red-team + {n_dr} dry-run + {n_mt} multi-turn "
-                  "injection scenario(s) generated — run them against your agent "
-                  "(RESISTANT = good). Full harness: --self-test.")
-            _record_run("self_test", args)
-            vm_findings = vet_mcp(target=None, home=args.home)
-            vm_has_fail = any(vmf.status == "FAIL" for vmf in vm_findings)
-            if len(vm_findings) == 1 and vm_findings[0].status == "UNKNOWN":
-                _emit(f"VET-MCP: {_sanitize(vm_findings[0].detail)}")
-            else:
-                _vc = {st: sum(1 for v in vm_findings if v.status == st)
-                       for st in ("FAIL", "WARN", "PASS", "UNKNOWN")}
-                _summary = (f"VET-MCP: {len(vm_findings)} server-check(s) — "
-                            f"{_vc['FAIL']} FAIL, {_vc['WARN']} WARN, {_vc['PASS']} PASS")
-                if _vc["UNKNOWN"]:
-                    _summary += f", {_vc['UNKNOWN']} UNKNOWN"
-                _emit(_summary + ". Full detail: --vet-mcp.")
-            _record_run("vet_mcp", args)
-            # F-149: the installed-skill sweep, collapsed the same way. narrate=False
-            # keeps the sweep completely silent; the single line below is the whole
-            # section. sweep.has_fail is read from the SAME SkillSweep object the
-            # verbose branch reads, so --exit-code cannot diverge between the two.
-            sweep = sweep_installed_skills(
-                sweep_home, ascii_only=ascii_only,
-                sweep_budget_s=sweep_budget_s, narrate=False)
-            _emit(_sweep_quiet_line(sweep))
-            sweep_has_fail = sweep.has_fail
-            _record_run("vet", args)
-        else:
-            # --- Self-test section (canary + red-team + dry-run) ---
-            _emit("")
-            _emit("=" * 60)
-            _emit("CLAWSECCHECK SELF-TEST")
-            _emit("=" * 60)
-            _emit(render_canary(make_canary(), ascii_only))
-            _emit("")
-            _emit(render_suite(make_suite(seed), ascii_only, seed=seed))
-            _emit("")
-            _emit(render_dryrun(make_scenarios(), ascii_only))
-            _emit("")
-            _emit(render_multiturn(make_multiturn(), ascii_only))
-            _record_run("self_test", args)
-            # --- vet-mcp section ---
-            _emit("")
-            _emit("=" * 60)
-            _emit("CLAWSECCHECK VET-MCP")
-            _emit("=" * 60)
-            vm_findings = vet_mcp(target=None, home=args.home)
-            if len(vm_findings) == 1 and vm_findings[0].status == "UNKNOWN":
-                vmf = vm_findings[0]
-                vm_icon = "[?]" if ascii_only else "❔"
-                _emit(f"{vm_icon} {vmf.detail}")
-            else:
+    # B-351: --save must write the WHOLE combined report. `body` is assembled above,
+    # BEFORE these sections are emitted, so a saved --full report used to stop at the
+    # report body — the self-test, vet-mcp, sweep and pipeline sections silently never
+    # reached the file, and nothing said so. The tee collects them as they print.
+    _full_lines: list[str] = []
+    with _tee_emitted(_full_lines):
+        if args.full and not args.json and not args.card:
+            seed = args.seed if args.seed is not None else secrets.token_hex(8)
+            # F-149: the installed-skill sweep runs under the same wall-clock ceiling
+            # --vet-all uses. Cost is driven by content hostility, not skill count, so a
+            # hostile fleet is what this bounds. Kept as the phase default rather than a
+            # new flag, following the precedent that vet_all()'s sweep_budget_s is a
+            # Python parameter the CLI deliberately does not expose.
+            #
+            # F-153: clamped to whatever is left of the pipeline's outer wall-clock window
+            # (min(own default, remaining)). An unclamped phase would defeat the outer
+            # budget entirely — it could spend the whole window on its own and leave every
+            # later phase reporting "not reached" on a run that was in fact healthy. The
+            # clamp is cooperative arithmetic on a monotonic float, never a nested
+            # check_deadline block; the deadline is consulted BETWEEN targets, inside the
+            # sweep, so a target already underway always finishes.
+            sweep_home = Path(args.home).expanduser()
+            sweep_budget_s = _pipeline.sub_budget(full_deadline, DEFAULT_VET_ALL_BUDGET_S)
+            sweep = None
+            if args.quiet:
+                # C-110: --full --quiet — the appended self-test material + per-server
+                # vet-mcp detail are what push --full to ~700 lines; collapse each to a
+                # single honest summary line (the concise report above is unchanged).
+                # The self-test harnesses emit generated adversarial *scenarios* for the
+                # agent to run — there is no PASS/score the tool computes, so the summary
+                # states counts, not a verdict (Golden Rule #4: no fabricated result).
+                # record_run() / vm_has_fail still fire, so ledger freshness and
+                # --exit-code behave identically to the verbose path.
+                n_rt = len(make_suite(seed))
+                n_dr = len(make_scenarios(args.seed))
+                n_mt = len(make_multiturn(args.seed))
+                _emit("")
+                _emit(f"SELF-TEST: 1 canary + {n_rt} red-team + {n_dr} dry-run + {n_mt} multi-turn "
+                      "injection scenario(s) generated — run them against your agent "
+                      "(RESISTANT = good). Full harness: --self-test.")
+                _record_run("self_test", args)
+                vm_findings = vet_mcp(target=None, home=args.home)
                 vm_has_fail = any(vmf.status == "FAIL" for vmf in vm_findings)
-                for vmf in vm_findings:
-                    vm_icon = _VET_ICON_ASCII[vmf.status] if ascii_only else _VET_ICON_UNI[vmf.status]
-                    vm_verdict = _VET_VERDICT[vmf.status]
-                    _emit(f"{vm_icon} {vm_verdict}: {_sanitize(vmf.title)}")
-                    if vmf.evidence:
-                        for vm_ev in vmf.evidence[:4]:
-                            _emit(f"    - {_sanitize(vm_ev)}")
-                    _emit(f"    fix: {_sanitize(vmf.fix)}")
+                if len(vm_findings) == 1 and vm_findings[0].status == "UNKNOWN":
+                    _emit(f"VET-MCP: {_sanitize(vm_findings[0].detail)}")
+                else:
+                    _vc = {st: sum(1 for v in vm_findings if v.status == st)
+                           for st in ("FAIL", "WARN", "PASS", "UNKNOWN")}
+                    _summary = (f"VET-MCP: {len(vm_findings)} server-check(s) — "
+                                f"{_vc['FAIL']} FAIL, {_vc['WARN']} WARN, {_vc['PASS']} PASS")
+                    if _vc["UNKNOWN"]:
+                        _summary += f", {_vc['UNKNOWN']} UNKNOWN"
+                    _emit(_summary + ". Full detail: --vet-mcp.")
+                _record_run("vet_mcp", args)
+                # F-149: the installed-skill sweep, collapsed the same way. narrate=False
+                # keeps the sweep completely silent; the single line below is the whole
+                # section. sweep.has_fail is read from the SAME SkillSweep object the
+                # verbose branch reads, so --exit-code cannot diverge between the two.
+                #
+                # F-153: --fast drops this phase (and P7/P8) entirely. The pipeline then
+                # prints its own honest "skipped — --fast was given" line in this slot, so
+                # the section never simply vanishes.
+                if not args.fast:
+                    # B-404: reuse the SAME ctx the audit above already collected —
+                    # see the matching comment at the --json call site above.
+                    sweep = sweep_installed_skills(
+                        sweep_home, ascii_only=ascii_only,
+                        sweep_budget_s=sweep_budget_s, narrate=False, ctx=ctx)
+                    _emit(_sweep_quiet_line(sweep))
+                    sweep_has_fail = sweep.has_fail
+                    _record_run("vet", args)
+            else:
+                # --- Self-test section (canary + red-team + dry-run) ---
+                _emit("")
+                _emit("=" * 60)
+                _emit("CLAWSECCHECK SELF-TEST")
+                _emit("=" * 60)
+                _emit(render_canary(make_canary(args.seed), ascii_only))
+                _emit("")
+                _emit(render_suite(make_suite(seed), ascii_only, seed=seed))
+                _emit("")
+                _emit(render_dryrun(make_scenarios(args.seed), ascii_only))
+                _emit("")
+                _emit(render_multiturn(make_multiturn(args.seed), ascii_only))
+                _record_run("self_test", args)
+                # --- vet-mcp section ---
+                _emit("")
+                _emit("=" * 60)
+                _emit("CLAWSECCHECK VET-MCP")
+                _emit("=" * 60)
+                vm_findings = vet_mcp(target=None, home=args.home)
+                if len(vm_findings) == 1 and vm_findings[0].status == "UNKNOWN":
+                    vmf = vm_findings[0]
+                    vm_icon = "[?]" if ascii_only else "❔"
+                    _emit(f"{vm_icon} {_sanitize(vmf.detail)}")
+                else:
+                    vm_has_fail = any(vmf.status == "FAIL" for vmf in vm_findings)
+                    for vmf in vm_findings:
+                        vm_icon = _VET_ICON_ASCII[vmf.status] if ascii_only else _VET_ICON_UNI[vmf.status]
+                        vm_verdict = _VET_VERDICT[vmf.status]
+                        _emit(f"{vm_icon} {vm_verdict}: {_sanitize(vmf.title)}")
+                        if vmf.evidence:
+                            for vm_ev in vmf.evidence[:4]:
+                                _emit(f"    - {_sanitize(vm_ev)}")
+                        _emit(f"    fix: {_sanitize(vmf.fix)}")
+                        _emit("")
+                _record_run("vet_mcp", args)
+                # --- installed-skill sweep section (F-149) ---
+                # Appended LAST on purpose. Everything above it — the report body, the
+                # SELF-TEST section, the VET-MCP section — keeps the byte-for-byte shape
+                # and order it has always had; a new section inserted higher up would
+                # break the report-body prefix --full --quiet is compared against.
+                #
+                # What this adds on top of the audit, since the audit already inspects
+                # skill content (the surface="skills" checks plus the shared content
+                # ring): the audit answers "is anything wrong across this fleet", as
+                # findings attributed to the HOME. The sweep answers "which skill, and
+                # how bad is THAT skill" — one merged verdict per installed skill, from
+                # the vet engine, which builds its own Context per target precisely
+                # because a skill is untrusted third-party content and must not share
+                # the audit's. So the unit of the answer differs, and that unit is what
+                # an owner acts on: you uninstall a skill, not a finding.
+                #
+                # Visibility only: these verdicts are deliberately NOT folded into the
+                # audit score or grade. Changing a scoring rule is a separate, explicit
+                # decision — it is not something a new section gets to do as a side
+                # effect. The one place the sweep does reach the outside world is
+                # --exit-code, FAIL-only, exactly as the vet-mcp section already does.
+                if not args.fast:
                     _emit("")
-            _record_run("vet_mcp", args)
-            # --- installed-skill sweep section (F-149) ---
-            # Appended LAST on purpose. Everything above it — the report body, the
-            # SELF-TEST section, the VET-MCP section — keeps the byte-for-byte shape
-            # and order it has always had; a new section inserted higher up would
-            # break the report-body prefix --full --quiet is compared against.
-            #
-            # What this adds on top of the audit, since the audit already inspects
-            # skill content (the surface="skills" checks plus the shared content
-            # ring): the audit answers "is anything wrong across this fleet", as
-            # findings attributed to the HOME. The sweep answers "which skill, and
-            # how bad is THAT skill" — one merged verdict per installed skill, from
-            # the vet engine, which builds its own Context per target precisely
-            # because a skill is untrusted third-party content and must not share
-            # the audit's. So the unit of the answer differs, and that unit is what
-            # an owner acts on: you uninstall a skill, not a finding.
-            #
-            # Visibility only: these verdicts are deliberately NOT folded into the
-            # audit score or grade. Changing a scoring rule is a separate, explicit
-            # decision — it is not something a new section gets to do as a side
-            # effect. The one place the sweep does reach the outside world is
-            # --exit-code, FAIL-only, exactly as the vet-mcp section already does.
-            _emit("")
-            _emit("=" * 60)
-            _emit("CLAWSECCHECK SKILL SWEEP")
-            _emit("=" * 60)
-            _emit("Per-skill verdict for every installed skill. Not folded into the "
-                  "score or grade above; per-skill dossier: --vet <path>.")
-            sweep = sweep_installed_skills(
-                sweep_home, ascii_only=ascii_only,
-                sweep_budget_s=sweep_budget_s, narrate=True)
-            for _sweep_line in _sweep_summary_lines(sweep, ascii_only=ascii_only):
-                _emit(_sweep_line)
-            sweep_has_fail = sweep.has_fail
-            _record_run("vet", args)
+                    _emit("=" * 60)
+                    _emit("CLAWSECCHECK SKILL SWEEP")
+                    _emit("=" * 60)
+                    _emit("Per-skill verdict for every installed skill. Not folded into the "
+                         "score or grade above; per-skill dossier: --vet <path>.")
+                    # B-404: reuse the SAME ctx the audit above already collected —
+                    # see the matching comment at the --json call site above.
+                    sweep = sweep_installed_skills(
+                        sweep_home, ascii_only=ascii_only,
+                        sweep_budget_s=sweep_budget_s, narrate=True, ctx=ctx)
+                    for _sweep_line in _sweep_summary_lines(sweep, ascii_only=ascii_only):
+                        _emit(_sweep_line)
+                    sweep_has_fail = sweep.has_fail
+                    _record_run("vet", args)
+
+            # --- pipeline phases P7-P9 + the combined roll-up (P10) ------------------
+            # Appended after everything above, for the same reason the skill sweep is: the
+            # report body, SELF-TEST and VET-MCP keep the byte-for-byte shape and order they
+            # have always had. Nothing new is printed between the report body and the
+            # SELF-TEST line, which is the prefix --full --quiet is compared against.
+            full_pipeline = _pipeline.run_pipeline(
+                ctx, findings, home_dir=sweep_home, skill_sweep=sweep,
+                vet_targets=sweep.vet_targets() if sweep is not None else (),
+                deadline=full_deadline, budget_s=DEFAULT_FULL_BUDGET_S,
+                fast=args.fast, ascii_only=ascii_only, version=__version__,
+                bundle=judged_bundle)
+            # C5: read from the SAME PipelineResult on both branches, so --exit-code cannot
+            # diverge between quiet and verbose — the property the sweep already guarantees.
+            pipeline_has_fail = full_pipeline.has_fail
+            _rendered = (_pipeline.quiet_lines(full_pipeline) if args.quiet
+                         else _pipeline.render_sections(full_pipeline, ascii_only=ascii_only))
+            for _pipeline_line in _rendered:
+                _emit(_pipeline_line)
+            if not args.fast:
+                # C1: ledger writes route through _record_run, never ledger.record_run —
+                # so --no-history suppresses them here exactly as everywhere else.
+                _record_run("behavioral", args)
 
     _save_failed = False
     if args.save:
         try:
             # Persist plain text — a saved report must never carry ANSI escape codes,
             # even when the on-screen copy was colourised for the terminal.
-            secure_write_text(Path(args.save).expanduser(), strip_ansi(body))
+            #
+            # B-351: the WHOLE combined output, not just `body`. `body` is assembled
+            # before the appended --full sections are emitted, so a saved --full report
+            # used to stop at the report body — the self-test, vet-mcp, sweep and
+            # pipeline sections silently never reached the file, and nothing said so.
+            # `_full_lines` is empty on every non---full path, so this is exactly
+            # today's behaviour there.
+            _saved = "\n".join([body, *_full_lines]) if _full_lines else body
+            secure_write_text(_report_dest(args.save), strip_ansi(_saved))
             _emit(f"\n(report saved to {args.save})")
         except OSError as exc:
             _emit(f"\n(could not save report: {exc})")
             _save_failed = True
 
-    if not args.no_history and not args.trend and not args.monitor:
+    # F-155: a live-test verdict that fired the cap but was NOT reproducible (no usable
+    # seed — see LiveTestSignal.reproducible / LIVE_INJECTION_CAP's docstring) must still
+    # cap THIS run's score/grade above, but must never be written to history.jsonl/trend/
+    # baseline — those exist to show drift across runs, and a random, unrepeatable signal
+    # recorded there would manufacture drift where none exists and let the grade oscillate
+    # on its own every time the harness is re-run with a fresh token. A seeded (or absent)
+    # live-test signal records exactly as before this feature existed.
+    _skip_history_for_live_test = live_signal.hit and not live_signal.reproducible
+    if not args.no_history and not args.trend and not args.monitor and not _skip_history_for_live_test:
         history_record(score, args.history)
 
     if _save_failed:
@@ -1926,14 +2986,29 @@ def _main(argv=None) -> int:
         # F-149: sweep_has_fail joins the disjunction on exactly the terms vm_has_fail
         # already sits on — FAIL-only. A SUSPICIOUS (WARN) skill does not redden the
         # gate, and neither does an incomplete sweep: the contract this gate keeps is
-        # "a FAIL verdict from any of the four sources below, plus an unreadable
+        # "a FAIL verdict from any of the six sources below, plus an unreadable
         # config" — an ABSENT verdict is not a FAIL, and flipping the gate on
         # truncation would silently redden every CI run that passes today. An
         # incomplete sweep is reported honestly in its printed section instead.
-        # docs/USAGE.md ("CI / automation") and references/cli-flags.md state all four
-        # sources; keep them in step with this disjunction if a fifth is ever added.
-        if (has_fail or vm_has_fail or sweep_has_fail
-                or getattr(ctx, "config_parse_error", False)):
+        # docs/USAGE.md ("CI / automation") and references/cli-flags.md state all six
+        # sources; keep them in step with this disjunction if a seventh is ever added.
+        #
+        # F-153: pipeline_has_fail joins on identical terms — FAIL-only, aggregated
+        # across the pipeline phases. A phase that was skipped (--fast), never reached
+        # (budget), unavailable in this build or errored contributes nothing: an ABSENT
+        # verdict is not a FAIL. Truncation is reported by the printed section and by
+        # the JSON "complete"/"notScanned" keys, never by reddening a gate that would
+        # otherwise be green.
+        #
+        # B-363: a wholly ABSENT openclaw.json (no target found at all — strictly LESS
+        # information than a present-but-unparseable one) must trip this gate exactly
+        # like config_parse_error already does, or `--exit-code` stays 0 on a run that
+        # never read anything. `config_found` defaults True via getattr so a duck-typed
+        # ScoreResult/ctx stand-in some tests build (which predates this field) stays
+        # inert, same tolerance as the config_parse_error term above.
+        if (has_fail or vm_has_fail or sweep_has_fail or pipeline_has_fail
+                or getattr(ctx, "config_parse_error", False)
+                or not getattr(ctx, "config_found", True)):
             return 1
 
     return 0

@@ -1,0 +1,16 @@
+name: geoskill-crop-health-diagnosis
+display_name: 作物健康诊断
+description: |
+  融合 NDVI/NDRE/LST 多指数健康评分、历史偏差异常检测与空间聚类，输出作物健康等级栅格。Fuses NDVI/NDRE/LST into a health score with historical anomaly detection and spatial clustering.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-crop-health-diagnosis.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - extraction
+  - gis
+  - machine-learning
+  - raster
+  - remote-sensing
+  - vegetation

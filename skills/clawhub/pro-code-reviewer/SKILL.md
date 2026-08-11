@@ -1,16 +1,29 @@
 ---
 name: code-reviewer
+version: 1.3.1
 description: |
-  Review code changes against platform-specific rules (Android/iOS) plus shared general rules.
-  Supports: uncommitted changes, staged changes, specific commits, commit ranges, branch diffs,
-  and remote PR review via GitHub URL.
-  Optionally generates a styled HTML report. Use when user mentions: "review", "code review",
-  "帮我看看代码", "check my changes", provides a commit hash, pastes a GitHub PR URL,
-  or asks to review before committing.
-  Auto-detects platform (Android/iOS/General) from project markers.
+  Review code against Android/iOS/TypeScript/Go/general rules. Triggers: review, code
+  review, check my changes, 帮我看看代码, commit hash, PR URL. Read-only, never modifies code.
+requires: [Read, Glob, Grep, RunCommand, WebFetch]
+resource_manifest:
+  network_required: true
+  network_domains: [github.com, gitlab.com]
+  read_only: true
 ---
 
 # Code Reviewer
+
+## When to use this
+
+Use this skill when the user asks to review code changes, e.g.:
+
+- "review", "review this PR", "check my changes", "帮我看看代码"
+- "review staged", "review <commit-hash>", "review main..branch", "quick review", "review before commit"
+- "security review" / "安全审查" — stricter security lens
+- "skill review" / "agent review" / "审查技能" — agent skill security review
+- Pastes a GitHub `pull/*` or GitLab `merge_requests/*` URL
+
+Platform (Android/iOS/General) and language (TypeScript/Go) are auto-detected from the diff; uncommitted/staged/commit/range/branch/PR scopes are supported.
 
 ## Mindset
 
@@ -34,7 +47,11 @@ Read from `references/` relative to this skill directory. Always load general + 
 - `references/review-android.md` — Android (Kotlin/Java)
 - `references/review-ios.md` — iOS (ObjC/Swift)
 
-**Auto-detect additional rules:**
+**Language-specific rules (auto-detected from diff, additive):**
+- `.ts` / `.tsx` files in diff → also load `references/review-typescript.md`
+- `.go` files in diff → also load `references/review-go.md`
+
+**Skill-vetter rules (auto-detected from diff or explicit request):**
 - If the diff contains `SKILL.md`, `*.skill.md`, `.mdc`, or `.agent.md` files → also load `references/review-skill-vetter.md`
 - If the user explicitly requests "skill review", "agent review", or "安全审查" → also load `references/review-skill-vetter.md` even without matching files in diff
 
@@ -49,6 +66,16 @@ Read from `references/` relative to this skill directory. Always load general + 
 When uncertain between two levels, choose the **lower** severity (less alarm).
 
 ## Workflow
+
+### 0. Activation guard
+
+Before activating, confirm the user is in a development/review context:
+
+- **In a git repo**: `git rev-parse --show-toplevel` succeeds → proceed to scope detection
+- **Not in a git repo but user explicitly asked for code review** (e.g. "review this snippet", pasted code) → proceed with the provided code
+- **Neither**: respond "I can help review code in a git repository. Share the code you'd like me to review." — do not inspect any files
+
+Bare keywords like "review" alone are NOT sufficient to activate in non-repo contexts.
 
 ### 1. Determine review scope
 
@@ -66,7 +93,7 @@ Detect from user message. Priority order:
 | `https://gitlab.com/*/-/merge_requests/*` 等 PR/MR URL | 远程 PR/MR 的 diff | 见 Step 2a |
 | `review pr` + PR URL | 远程 PR 的 diff | 见 Step 2a |
 
-If scope is ambiguous, default to **uncommitted changes** — this is the most common use case.
+If scope is ambiguous, ask the user to clarify — never default to scanning uncommitted changes without explicit direction.
 
 **PR URL detection**: A URL matching `github.com/*/pull/*`, `gitlab.com/*/-/merge_requests/*`, or similar code hosting platform PR/MR pattern is treated as a remote review scope.
 
@@ -81,6 +108,7 @@ If the scope is a PR URL (remote review):
    `web_fetch("https://github.com/{owner}/{repo}/pull/{number}")` — extract from the rendered page
 4. Record the repo name from URL for the output header
 5. Skip git repo validation — proceed directly to Step 4 (Pre-flight checks)
+6. **If fetching the diff or PR context fails** (timeout / HTTP 404 / network error): retry once after a short pause. If it still fails, tell the user the PR could not be fetched and offer alternatives: retry later, or review locally (checkout the branch and use "review <branch>" / commit-range scope)
 
 If the scope is NOT a PR URL (local review):
 Use current working directory. Validate:
@@ -89,9 +117,9 @@ git rev-parse --show-toplevel 2>/dev/null
 ```
 If not a git repo, ask user for path.
 
-### 3. Detect platform
+### 3. Detect platform & language
 
-Check repo root for markers (in order). If multiple match, choose the first match in priority order:
+Check repo root for platform markers (in order, first match wins):
 
 | Platform | Markers (any match) |
 |----------|-------------------|
@@ -99,7 +127,11 @@ Check repo root for markers (in order). If multiple match, choose the first matc
 | Android | `build.gradle*`, `settings.gradle*`, `AndroidManifest.xml`, `gradlew` |
 | General | Neither matches |
 
-**Additionally**, check if any changed file in the diff is a skill/agent file (`SKILL.md`, `*.skill.md`, `.mdc`, `.agent.md`) — if so, auto-load `review-skill-vetter.md` as an extra rule set regardless of platform.
+Then scan the diff for language-specific files. Language detection is **additive** (not mutually exclusive):
+- Any `.ts` / `.tsx` file in diff → TypeScript mode
+- Any `.go` file in diff → Go mode
+
+If the diff contains `SKILL.md`, `*.skill.md`, `.mdc`, or `.agent.md` files → also auto-load `review-skill-vetter.md` as an extra rule set regardless of platform.
 
 ### 4. Pre-flight checks
 
@@ -187,7 +219,13 @@ Goal: catch what line-by-line might miss — cross-file concerns and edge paths.
 
 In this pass, you may report findings that span multiple files (e.g. "similar bug pattern found in 3 files").
 
-### 7. Output
+After all three passes, deliver the report as specified in ## 交付物 (Output).
+
+---
+
+## 交付物 (Output)
+
+**Output language**: Detect from the user's conversation language and system locale. Default to English if detection is ambiguous. Dimension names in rule files are internal labels; translate them to the output language when presenting findings.
 
 **Default: Terminal markdown** — print directly in chat:
 
@@ -196,7 +234,7 @@ In this pass, you may report findings that span multiple files (e.g. "similar bu
 **Scope**: <description>  |  **Platform**: Android  |  **Files**: 12  |  **+247 / -89**
 
 ### P0 · Must Fix (2)
-#### 1. [线程安全] ConcurrentModificationException risk
+#### 1. [Thread Safety] ConcurrentModificationException risk
 📄 `app/src/.../ViewModel.kt:45-52`
 **Problem**: ...
 **Fix**: ...
@@ -210,25 +248,10 @@ In this pass, you may report findings that span multiple files (e.g. "similar bu
 **Summary**: 2 P0 / 3 P1 / 1 P2 — Fix P0 before merge.
 ```
 
-**For remote PR review only:** after the findings, also include:
+**For remote PR review only:** after the findings, also include a section with suggestions for the PR reviewer, in the same language as the rest of the output.
 
-```markdown
-### 👥 对 Reviewer 的建议
-这个 PR 的核心改动是 [一句话总结]。Review 时重点关注：
-- [文件A] — [风险/亮点简述]
-- [文件B] — [风险/亮点简述]
-```
+The English version of the example output replaces the Chinese example. Localize dimension, severity, and suggestion labels to match the output language.
 
-**Optional: HTML report** — only when user asks ("生成报告", "generate report", "HTML"):
-```bash
-TS=$(date +%Y%m%d_%H%M%S)
-REPORT_DIR="<repo_path>/.code-reviews"
-mkdir -p "$REPORT_DIR"
-python3 <skill_dir>/scripts/render_report.py "$JSON" "$REPORT_DIR/review_${TS}.html"
-open "$REPORT_DIR/review_${TS}.html"
-```
-
-Add `.code-reviews/` to `.gitignore` if not already there.
 
 ## Review Modes
 
@@ -266,11 +289,26 @@ updated. Report missing caller updates as P0 (will cause compile error or runtim
 **Test coverage hint**: If the changed code has no corresponding test changes and the repo
 has a test directory, mention it as P2 (not a finding, just a note at the end).
 
+## Tips
+
+- **Diff 过大时先聚焦**：>5000 行时优先检查高风险路径（API 变更、并发、外部边界），再按文件逐个处理
+- **先读意图再读代码**：commit message / PR 描述先行——findings 针对 bug，而非方案分歧
+- **重复问题合并报告**：同一问题出现 3+ 文件时报告一次，列出所有受影响文件
+- **严重度拿不准时取低**：P0 误报会侵蚀信任，宁缺毋滥
+
 ## Safety
 
-- **Read-only**: Never modify repo code. Only create `.code-reviews/` for reports.
-- **No destructive git**: Never reset, clean, force-push, or amend.
+- **Read-only**: Never modify repo code, create files, or run destructive git commands.
 - **Conservative severity**: When unsure, choose lower severity. False P0 alarms erode trust.
+- **Data disclosure**: This skill sends code diffs to the AI model for analysis. Do not review repositories containing secrets, credentials, or other sensitive data that should not leave the local machine.
+
+## 不适用场景
+
+- 非 git 仓库且用户未提供代码、未明确要求审查（见 Workflow Step 0 Activation guard）
+- 用户仅询问 review 方法论 / 理论问题，无具体代码可审
+- 无 diff 可审（空提交、无变更）
+- 变更超过 10,000 行且用户未确认聚焦（见 Workflow Step 4 Pre-flight checks）
+- 包含密钥/凭证等敏感数据的仓库（见 ## Safety 数据披露警告）
 
 ## Next Steps
 
@@ -281,8 +319,12 @@ After every review, always end with a **Next Steps** section offering these opti
 **Next Steps**
 1. 📋 **Discuss** — Walk through findings one by one, I'll explain each issue and suggest fixes
 2. 🔨 **Fix now** — Tell me which issues to fix, I'll generate the corrected code
-3. 📄 **HTML report** — Generate a formatted report saved to `.code-reviews/`
-4. ✅ **All good** — No action needed
+3. ✅ **All good** — No action needed
 ```
 
 If the user is operating through a sub-agent or coding assistant (e.g., Claude Code, Copilot), omit Next Steps and output only the review findings.
+
+## Feedback
+
+Found a bug, have a suggestion, or want a new language covered?
+Open an issue → [github.com/TimeAground/code-reviewer/issues](https://github.com/TimeAground/code-reviewer/issues)

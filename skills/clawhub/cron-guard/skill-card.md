@@ -1,39 +1,58 @@
-## Description: <br>
-定时守护 helps agents harden cron jobs and unattended background scripts by applying script-first execution, explicit environment setup, quiet-success behavior, cross-platform templates, and troubleshooting patterns for common scheduled-task failures. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+定时守护 helps agents create and harden cron jobs and background tasks with script-first structure, explicit runtime environment setup, quiet success behavior, cross-platform POSIX and PowerShell patterns, and pre-release reliability checks.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and engineers use this skill to review, write, and harden cron jobs, CI scheduled tasks, background workers, and long-running agent scripts so they behave predictably across POSIX and Windows environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated cron or background-job scripts may be run unattended and can affect scheduled execution, environment variables, filesystem cleanup, or git push behavior. <br>
-Mitigation: Review generated scripts before running them, test in a cron-like minimal environment, document required environment variables, avoid force-push, and keep cleanup commands narrowly scoped. <br>
-Risk: The skill may trigger on broad shell or reliability requests outside cron or unattended-script hardening. <br>
-Mitigation: Use it for cron jobs, scheduled tasks, background workers, and unattended-script reliability work; verify relevance before applying its checklists to unrelated shell tasks. <br>
+## Use Case:
 
+Developers and operators use this skill to draft, review, and harden cron jobs, scheduled scripts, and unattended background tasks. It focuses on shell quoting failures, cwd and PATH drift, environment variable checks, quiet success output, cleanup traps, file locks, and safe git-push recovery patterns.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell, Python, and PowerShell snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include checklists, hardening templates, and troubleshooting guidance for scheduled jobs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and artifact frontmatter) <br>
+Risk: The skill requests read, write, and exec authority while providing cron and command-execution guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval before state-changing commands and keep generated cron jobs scoped to known files and commands.
+
+Risk: The security summary flags API key, credential, network, and execution guidance as broader than the stated cron reliability purpose.
+
+Mitigation: Do not provide API keys unless a specific guarded script truly needs them, and prefer documented environment variables over embedded credentials.
+
+Risk: Generated cron jobs or background scripts can run unattended and repeatedly.
+
+Mitigation: Review proposed scripts and cron entries before installation, including PATH, cwd, cleanup, locking, and failure-notification behavior.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cron-guard)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON examples and bash, PowerShell, and cron code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose cron entries, script templates, environment checks, locking patterns, and reliability review checklists.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

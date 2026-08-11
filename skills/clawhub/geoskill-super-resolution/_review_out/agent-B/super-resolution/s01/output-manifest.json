@@ -1,0 +1,78 @@
+{
+  "skill": "super-resolution",
+  "skill_version": "1.0.0",
+  "command": "super-resolution --bbox 116.0 39.0 117.0 40.0 --synthetic --output-dir _review_out\\agent-B\\super-resolution\\s01",
+  "started_at": "2026-08-03T17:02:57.628572Z",
+  "finished_at": "2026-08-03T17:02:57.937640Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "scale": 2,
+    "method": "bicubic",
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "_review_out\\agent-B\\super-resolution\\s01\\super_resolved.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 3,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "_review_out\\agent-B\\super-resolution\\s01\\qa.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "bicubic",
+    "scale": 2,
+    "input_shape": [
+      3,
+      64,
+      64
+    ],
+    "output_shape": [
+      3,
+      128,
+      128
+    ],
+    "mean_value_per_band": [
+      0.5404157638549805,
+      0.5705295205116272,
+      0.6003785133361816
+    ],
+    "psnr_db_per_band": [
+      46.33388162773906,
+      46.31237151950101,
+      46.404602197234084
+    ],
+    "psnr_db_overall": 46.35010670152866
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "super-resolution"
+  },
+  "error": null
+}

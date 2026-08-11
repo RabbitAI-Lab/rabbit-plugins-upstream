@@ -1,43 +1,60 @@
-## Description: <br>
-Captures learnings, errors, and corrections to enable continuous improvement for the agent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures learnings, errors, and corrections to enable continuous improvement.
 
-## Publisher: <br>
-[pskoett](https://clawhub.ai/user/pskoett) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pskoett](https://clawhub.ai/user/pskoett)
 
-## Use Case: <br>
-Developers and agent users use this skill to capture corrections, command failures, feature requests, and reusable workflow lessons in local learning files. OpenClaw users can optionally enable a hook that injects reminders and scans ended sessions for error snippets to triage later. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent local learning files may contain sensitive project context if users or agents log too much detail. <br>
-Mitigation: Keep .learnings out of version control, review entries before sharing workspaces, and record short redacted summaries rather than secrets, raw transcripts, or full command output. <br>
-Risk: The optional OpenClaw hook can scan ended session transcripts for error snippets. <br>
-Mitigation: Enable the hook only in trusted workspaces, avoid it for sessions containing credentials or customer data, and rely on its opt-in .learnings directory behavior to disable scanning when needed. <br>
+## Use Case:
 
+Developers and agent users use this skill to capture corrections, command failures, feature requests, and recurring workflow lessons as workspace-local Markdown records. OpenClaw users can optionally enable a hook that reminds agents to review learnings and performs session-end error sweeps.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pskoett/skills/self-improving-agent) <br>
-- [OpenClaw integration guide](references/openclaw-integration.md) <br>
-- [Entry examples](references/examples.md) <br>
-- [Uninstall guide](references/uninstall.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and file templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or appends local learning files when used; optional OpenClaw hook writes redacted session-end error excerpts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.1 (source: server release metadata; artifact frontmatter reports 4.0.0) <br>
+Risk: The skill can store potentially sensitive work history in .learnings/ files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat .learnings/ as sensitive workspace data, keep it out of version control unless intentionally shared, and periodically review or delete stale entries.
+
+Risk: The optional OpenClaw hook can sweep ended session transcripts and append redacted error excerpts, but redaction is best effort.
+
+Mitigation: Enable the hook only in trusted workspaces, avoid logging secrets or raw transcripts, and review pending auto-detected entries before promoting them.
+
+Risk: Captured corrections or lessons can be incorrect or too context-specific if promoted without review.
+
+Mitigation: Review entries before promoting them into SOUL.md, TOOLS.md, AGENTS.md, or reusable skills.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/pskoett/skills/self-improving-agent)
+- [OpenClaw Integration](references/openclaw-integration.md)
+- [Entry Examples](references/examples.md)
+- [Uninstall Guide](references/uninstall.md)
+
+## Skill Output:
+
+**Output Type(s):** [markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and workspace file templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes or appends local .learnings Markdown files when used by an agent; optional OpenClaw hook can add redacted session-end error entries.]
+
+## Skill Version(s):
+
+4.0.2 (source: frontmatter, changelog, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -112,12 +112,12 @@ curl -X POST \
   }'
 ```
 
-For `gemini-3-flash-preview` and `gemini-3.5-flash`, RunAPI uses the native
-Gemini `streamGenerateContent` route. For other callable Gemini models, RunAPI
-accepts Gemini `contents` requests and bridges them to the OpenAI-compatible
-chat request format. Use the official Gemini SDKs when an existing application
-already sends `contents` requests; for new app code, prefer the
-OpenAI-compatible setup.
+For `gemini-3.6-flash`, `gemini-3.5-flash`, and `gemini-3-flash-preview`, RunAPI
+uses the native Gemini `streamGenerateContent` route. For other callable Gemini
+models, RunAPI accepts Gemini `contents` requests and bridges them to the
+OpenAI-compatible chat request format. Use the official Gemini SDKs when an
+existing application already sends `contents` requests; for new app code,
+prefer the OpenAI-compatible setup.
 
 ## Streaming (OpenAI-compatible)
 
@@ -215,6 +215,7 @@ curl https://runapi.ai/v1/models \
 
 | Model ID | Capabilities |
 |---|---|
+| `gemini-3.6-flash` | Streaming `contents` and OpenAI-compatible chat, multimodal, function calling |
 | `gemini-3.5-flash` | Streaming `contents` requests, multimodal, function calling, thoughts |
 | `gemini-3.1-pro-preview` | Chat, multimodal, structured output, reasoning effort |
 | `gemini-3-flash-preview` | Chat, multimodal, function calling, structured output, reasoning effort |
@@ -235,9 +236,9 @@ gemini
 
 - Use the OpenAI-compatible endpoint for new app code. Use Gemini `contents`
   paths when an existing client already sends `contents` requests.
-- Native Gemini streaming is available for `gemini-3-flash-preview` and
-  `gemini-3.5-flash`; other callable Gemini models accept `contents` requests
-  through a RunAPI protocol bridge.
+- Native Gemini streaming is available for `gemini-3.6-flash`,
+  `gemini-3.5-flash`, and `gemini-3-flash-preview`; other callable Gemini models
+  accept `contents` requests through a RunAPI protocol bridge.
 - Use streaming for any response longer than a few hundred tokens. Do not
   hold the agent on a long blocking request.
 - Google Search grounding uses a `googleSearch` function tool.

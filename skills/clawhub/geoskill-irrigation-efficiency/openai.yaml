@@ -1,0 +1,12 @@
+name: geoskill-irrigation-efficiency
+display_name: 灌溉效率评估
+description: |
+  基于作物蒸散发与有效降水计算灌溉需水量，并评估灌溉效率空间分布
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-irrigation-efficiency.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - gis
+  - remote-sensing

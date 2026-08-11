@@ -1,11 +1,11 @@
 ---
 name: dlazy-veo-3.1
 version: 1.3.5
-description: Generate high-quality cinematic effects videos with Google Veo 3.1. 使用 Google Veo 3.1 模型，生成高质量的电影级特效视频，支持文生视频与图生视频。
+description: "Generate high-quality cinematic effects videos with Google Veo 3.1. 使用 Google Veo 3.1 模型，生成高质量的电影级特效视频，支持文生视频与图生视频。"
 metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy veo-3.1 -h for help."}}
 ---
 
-# dlazy-veo-3.1
+# 视频生成 Veo 3.1
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

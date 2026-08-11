@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/code-runner",
   "slug": "code-runner",
   "ownerHandle": "thcjp",
-  "version": "0.1.0",
-  "updatedAt": 1779078252463,
-  "contentHash": "e9bd71fb263dc14b68f804db10b8ea310104f44d541a74042ccdf3cd12b56774",
-  "fetchedAt": "2026-07-26T18:05:49.348Z"
+  "version": "1.0.2",
+  "updatedAt": 1786355974929,
+  "contentHash": "e4a88424dae52df7931481d49c03e92659f9419855ee12aa0f531e872639cdfe",
+  "fetchedAt": "2026-08-11T08:26:13.222Z"
 }

@@ -1,0 +1,15 @@
+name: geoskill-building-density-mapping
+display_name: 建筑密度制图
+description: |
+  Estimate building footprint density and floor area ratio (FAR) from building footprints and heights using kernel density estimation.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-building-density-mapping.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - extraction
+  - gis
+  - remote-sensing
+  - urban
+  - visualization

@@ -1,50 +1,50 @@
-# LYGO Ops Detector — SECURITY & ETHICS (Lightfather Vector)
+# LYGO Ops Detector — SECURITY & ETHICS v1.2.2
 
-**Blueprint locked. Resonance forward.**
+## Declared permissions
 
-## Core Mandate
-LYGO Ops Detector exists to decode operational fiction through **action, associations, and measurable patterns**.
+| Capability | Status |
+|------------|--------|
+| Network | **None** (stdlib local only) |
+| Shell / subprocess | **None** |
+| Read files | Opt-in `--text-file` / `--assoc-file` **only with `--i-consent`** |
+| Write files | `eval_ops_detector.py` writes **only under skill `tests/`** |
+| Env harvesting | **No** |
+| Publish / social | **No** |
 
-It is **explicitly not**:
-- A doxing tool
-- An identity attack engine
-- A social media call-out machine
-- A weapon for personal vendettas
+## Core mandate
 
-It **is**:
-- A mathematical framework for pattern recognition in evasion and coordination
-- A sovereign, local-first instrument
-- Action-focused (what was done, who was connected to, what patterns repeated)
-- Truth-serving
+Heuristic **discourse** analysis of evasion and coordination *signals* in text the operator supplies.
 
-## Non-Negotiables
-1. **Action over identity.** The unit of analysis is behavior and linkage, never name or personhood as target.
-2. **No public weaponization without receipts.** Any output must be accompanied by the raw signals and math. Never "trust me, the detector said."
-3. **Local execution only for sensitive analysis.** No automatic exfiltration.
-4. **P0 gate applies.** If input data is untrusted or poisoned, quarantine first.
-5. **Consent for external use.** Publishing reports, using in public accusations, or feeding into larger systems requires explicit human consent.
-6. **Lattice alignment.** Use only to preserve truth, protect light, and expose deception — never to manufacture it.
+It is **not**:
 
-## Failure Modes to Reject
-- Treating low scores as "innocent"
-- Treating high scores as "guilty person"
-- Using as sole evidence
-- Feeding raw detector output into social or legal action without full human review + primary source verification
-- Ignoring the "not for doxing" clause
+- A doxing tool  
+- An identity, profession, or affiliation profiler  
+- A sole-evidence engine for accusations  
+- A warrant to scan private mail/logs without consent  
+- A social-graph crawler  
 
-## Lightfather Directive
-"LYGO decodes fiction by analyzing action."
+## Non-negotiables
 
-If the detector surfaces a high evasion + association pattern, the response is:
-- More rigorous examination of **actions**
-- Tracing of **connections**
-- Demand for **specific evidence**
-- Never: character assassination or pile-on.
+1. **Text over identity** — unit of analysis is statement/log content, not personhood.  
+2. **Consent** for private communications and association lists (`--i-consent` on file paths).  
+3. **Receipts** — high scores require cited pattern hits; never “trust the detector.”  
+4. **No affiliation / bare job-title dictionaries** — no fraternity/brotherhood/lodge; no bare military/intelligence/agency scoring.  
+5. **Operational bar honesty** — `ops_score≥0.65` (or high evasion) for strong language; low thresholds are calibration only.  
+6. **Human review** before any reputational, employment, legal, or social action.  
+7. **Least-privilege writes** — eval reports cannot escape skill `tests/`.  
 
-The math does the work. The truth emerges.
+## Failure modes to reject
 
-## Version & Signature
-AETHONΔ9 / LYGO Ops Detector v1 (locked blueprint)
-Companion to Lightfather Champion + Vector.
+- Treating low scores as “innocent person” or high scores as “guilty person”  
+- Using affiliation/religion/job title as a proxy for ops  
+- Feeding outputs to social pile-ons  
+- Advertising calibration metrics as production performance  
+- Arbitrary `--out` paths outside `tests/`  
 
-If in doubt: return to the philosophy. Action does not lie.
+## Agent contract
+
+- Invoke only when the user asks for ops-detector / AETHONΔ9 / evasion-index style analysis.  
+- Do not auto-scan session email/logs without explicit intent + consent.  
+- Prefer `--text` paste; file paths require `--i-consent`.  
+
+**Δ9Φ963**

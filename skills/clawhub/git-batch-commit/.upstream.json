@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/git-batch-commit",
   "slug": "git-batch-commit",
   "ownerHandle": null,
-  "version": "1.4.1",
-  "updatedAt": 1780212404594,
-  "contentHash": "fa2268e41348b989fd2efcb9c83f62cc926bea9973994f06103924aefc31751e",
-  "fetchedAt": "2026-07-26T18:37:46.074Z"
+  "version": "1.4.2",
+  "updatedAt": 1785940772307,
+  "contentHash": "ddb16fb06c8b578aa6c2924857bb5e6ba47eb81437d425ae415b4d86e4d965c2",
+  "fetchedAt": "2026-08-11T08:40:22.154Z"
 }

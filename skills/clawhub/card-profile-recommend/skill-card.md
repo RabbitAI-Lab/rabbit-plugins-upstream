@@ -1,42 +1,58 @@
-## Description: <br>
-Analyzes a multi-card credit-card portfolio, grades each card, recommends 2-3 new additions with signup-bonus strategy, checks issuer rules, and sequences applications across major U.S. issuers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes a multi-card portfolio, grades current cards, and recommends 2-3 next personal cards with signup-bonus strategy and issuer-rule checks.
 
-## Publisher: <br>
-[jiahongc](https://clawhub.ai/user/jiahongc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jiahongc](https://clawhub.ai/user/jiahongc)
 
-## Use Case: <br>
-External users and personal-finance researchers use this skill to audit current credit-card portfolios, identify weak or overlapping cards, and plan new personal-card applications under issuer eligibility rules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credit-card offers, fees, rewards, issuer rules, and eligibility terms can change or be misread. <br>
-Mitigation: Verify current issuer terms, fees, offers, eligibility rules, and secondary research before acting on recommendations. <br>
-Risk: The skill may request or process sensitive financial context while researching card recommendations. <br>
-Mitigation: Do not provide card numbers, Social Security numbers, banking logins, wallet credentials, or other secrets; only provide BRAVE_API_KEY when comfortable using it for search queries. <br>
-Risk: Recommendations may influence financial decisions but are generated as research assistance. <br>
-Mitigation: Treat outputs as financial research, review assumptions and confidence notes, and make final decisions independently. <br>
+## Use Case:
 
+External users use this skill to audit an existing credit-card wallet, identify portfolio gaps, and choose a short sequence of next personal-card applications.
 
-## Reference(s): <br>
-- [ClawHub Release Page](https://clawhub.ai/jiahongc/card-profile-recommend) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown report with tables, numbered lists, sourced links, and occasional shell command examples for optional Brave Search use.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask clarifying questions for ambiguous cards; uses web search/fetch and optional BRAVE_API_KEY for current card terms.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Credit-card recommendations can affect application timing, fees, eligibility, rewards value, and credit impact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the output for planning and verify annual fees, welcome offers, eligibility rules, and credit impact with the issuer or a qualified advisor before applying.
+
+Risk: Issuer rules and offers may be partially unknown or change after the skill researches them.
+
+Mitigation: Review the confidence notes and confirm issuer rules and offer terms directly with current issuer sources before acting.
+
+Risk: Sensitive personal or financial identifiers could be unnecessary for a wallet audit.
+
+Mitigation: Provide card names and opening dates when needed, but do not provide login credentials, Social Security numbers, or full account details unless a separate trusted workflow explicitly requires them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/jiahongc/skills/card-profile-recommend)
+- [Publisher profile](https://clawhub.ai/user/jiahongc)
+
+## Skill Output:
+
+**Output Type(s):** [analysis, markdown, guidance]
+
+**Output Format:** [Markdown portfolio audit with card grades, earning map, recommendations, signup-bonus strategy, issuer-rule checks, and confidence notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable code or persistent data output; sources are kept in hidden YAML by the skill contract.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

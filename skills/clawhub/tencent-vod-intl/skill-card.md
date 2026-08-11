@@ -1,56 +1,70 @@
-## Description: <br>
-Generates Python shell commands for Tencent Cloud VOD upload, query, media processing, AIGC, search, image processing, task, and sub-application workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tencent VOD Intl. helps agents generate Python commands for Tencent Cloud VOD uploads, media processing, AIGC media generation, metadata queries, search, token management, and task or sub-application workflows.
 
-## Publisher: <br>
-[tencent-mpaas-skills](https://clawhub.ai/user/tencent-mpaas-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[tencent-mpaas-skills](https://clawhub.ai/user/tencent-mpaas-skills)
 
-## Use Case: <br>
-Developers and operators use this skill to turn Tencent Cloud VOD requests into executable Python commands for uploads, media queries, transcoding, enhancement, AIGC generation, semantic search, and task management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill works with Tencent Cloud credentials and paid VOD or AIGC APIs. <br>
-Mitigation: Review generated commands before execution, require confirmation for processing tasks, and prefer --dry-run for costly or uncertain operations. <br>
-Risk: Running scripts may change the Python environment by upgrading packages. <br>
-Mitigation: Run the skill in an isolated environment and review dependency changes before applying upgrades. <br>
-Risk: Tokens, task metadata, prompts, URLs, or media-related context may be stored locally or sent to Tencent Cloud services. <br>
-Mitigation: Avoid placing secrets or personal data in prompts, URLs, or session context, and review local plaintext files created by the scripts. <br>
+## Use Case:
 
+Developers and cloud media operators use this skill to turn Tencent Cloud VOD requests into executable Python CLI commands for upload, processing, AIGC generation, querying, search, and token workflows. It is intended for users who already have authority to operate the target Tencent Cloud account and media assets.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tencent-mpaas-skills/skills/tencent-vod-intl) <br>
-- [Tencent Cloud VOD Pricing](https://cloud.tencent.com/document/product/266/2838) <br>
-- [Tencent Cloud Billing Budget Center](https://console.cloud.tencent.com/expense/budget) <br>
-- [VOD Upload Documentation](https://cloud.tencent.com/document/api/266/31766) <br>
-- [VOD Pull Upload Documentation](https://cloud.tencent.com/document/api/266/35575) <br>
-- [DescribeMediaInfos Documentation](https://cloud.tencent.com/document/product/266/31763) <br>
-- [ProcessMedia Documentation](https://cloud.tencent.com/document/product/266/33427) <br>
-- [Create AIGC Image Task Documentation](https://cloud.tencent.com/document/api/266/126240) <br>
-- [Create AIGC Video Task Documentation](https://cloud.tencent.com/document/api/266/126239) <br>
-- [AIGC Token Management Documentation](https://cloud.tencent.com/document/api/266/128054) <br>
-- [Semantic Search Documentation](https://cloud.tencent.com/document/product/266/126287) <br>
-- [vod_upload.md](references/vod_upload.md) <br>
-- [vod_process_media.md](references/vod_process_media.md) <br>
-- [vod_aigc_image.md](references/vod_aigc_image.md) <br>
-- [vod_aigc_video.md](references/vod_aigc_video.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Markdown, Configuration guidance] <br>
-**Output Format:** [Plain text commands with Markdown hyperlinks for generated links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands use python3 scripts/<script-name>.py and may include dry-run or confirmation guidance before paid processing tasks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: frontmatter and ClawHub release metadata) <br>
+Risk: Generated commands can submit billable Tencent Cloud VOD processing or AIGC jobs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use dry-run first, require explicit confirmation before processing commands, and configure budget alerts or spending caps for the Tencent Cloud account.
+
+Risk: Commands may upload media, query account metadata, or process confidential or biometric content in Tencent Cloud.
+
+Mitigation: Run the skill only for media the user is authorized to process and avoid sending sensitive content unless the account, region, and data handling requirements are approved.
+
+Risk: The scripts can load cloud credentials from dotenv files and save AIGC tokens locally.
+
+Mitigation: Use a dedicated dotenv file with least-privilege Tencent Cloud credentials, restrict file permissions, and rotate tokens when no longer needed.
+
+Risk: The scripts can auto-install or upgrade Python packages in the execution environment.
+
+Mitigation: Run in a trusted, isolated Python environment and review dependency changes before using the skill on production systems.
+
+## Reference(s):
+
+- [Tencent VOD Intl. ClawHub release page](https://clawhub.ai/tencent-mpaas-skills/skills/tencent-vod-intl)
+- [Tencent Cloud VOD pricing](https://cloud.tencent.com/document/product/266/2838)
+- [Tencent Cloud VOD Apply Upload API](https://cloud.tencent.com/document/api/266/31767)
+- [Tencent Cloud VOD Process Media API](https://cloud.tencent.com/document/product/266/33427)
+- [Tencent Cloud VOD Describe Media Infos API](https://cloud.tencent.com/document/product/266/31763)
+- [Tencent Cloud VOD CreateAIGCTask Image API](https://cloud.tencent.com/document/product/266/126240)
+- [Tencent Cloud VOD CreateAIGCTask Video API](https://cloud.tencent.com/document/product/266/126239)
+- [Tencent Cloud VOD AIGC Token Management API](https://cloud.tencent.com/document/api/266/128054)
+- [vod_aigc_audio.md](references/vod_aigc_audio.md)
+- [vod_process_media.md](references/vod_process_media.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Markdown, Configuration guidance]
+
+**Output Format:** [Plain text commands with Markdown links for returned media URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands target Python scripts under scripts/ and may include dry-run flags or confirmation prompts for billable processing.]
+
+## Skill Version(s):
+
+1.1.3 (source: evidence release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,10 @@
+{
+  "flow_veh_h": 1000.0,
+  "speed_km_h": 60.0,
+  "source_level_dB": 61.583624920952495,
+  "source_type": "point",
+  "pixel_m": 770.3798774325039,
+  "mean_noise_dB": 0.9947435259819031,
+  "max_noise_dB": 61.58362579345703,
+  "min_noise_dB": 0.0
+}

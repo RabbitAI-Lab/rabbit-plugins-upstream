@@ -11,7 +11,7 @@ installer:
   package: vmware-monitor
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["VMWARE_MONITOR_CONFIG"],"bins":["vmware-monitor"],"config":["~/.vmware-monitor/config.yaml","~/.vmware-monitor/.env"]},"optional":{"env":["VMWARE_TARGET_PASSWORD","VMWARE_<TARGET>_USERNAME","SLACK_WEBHOOK_URL","DISCORD_WEBHOOK_URL","VMWARE_AUDIT_APPROVED_BY"],"bins":["vmware-policy"]},"primaryEnv":"VMWARE_MONITOR_CONFIG","homepage":"https://github.com/zw008/VMware-Monitor","emoji":"📊","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"env":["VMWARE_MONITOR_CONFIG"],"bins":["vmware-monitor"],"config":["~/.vmware-monitor/config.yaml","~/.vmware-monitor/.env"]},"optional":{"env":["VMWARE_TARGET_PASSWORD","VMWARE_<TARGET>_USERNAME","SLACK_WEBHOOK_URL","DISCORD_WEBHOOK_URL","VMWARE_AUDIT_APPROVED_BY"],"bins":["vmware-policy"]},"primaryEnv":"VMWARE_MONITOR_CONFIG","homepage":"https://github.com/vmware-skills/VMware-Monitor","emoji":"📊","os":["macos","linux"]}}
 compatibility: >
   vmware-policy auto-installed as Python dependency (provides @vmware_tool decorator and audit logging). All operations audited to ~/.vmware/audit.db.
   Credentials: Each vCenter/ESXi target requires a per-target password env var in ~/.vmware-monitor/.env following the pattern VMWARE_<TARGET_NAME_UPPER>_PASSWORD (e.g., target "vcenter-prod" → VMWARE_VCENTER_PROD_PASSWORD). SLACK_WEBHOOK_URL and DISCORD_WEBHOOK_URL are optional — disabled by default, user-configured only, used solely by the opt-in daemon scanner. Daemon: the background scanner (vmware-monitor daemon start) is user-initiated only, never auto-started. Webhook payloads contain only aggregated alert metadata (alarm counts, event types) — no credentials, IPs, or PII.
@@ -19,17 +19,17 @@ compatibility: >
 
 # VMware Monitor (Read-Only)
 
-> **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "vSphere" are trademarks of Broadcom. Source code is publicly auditable at [github.com/zw008/VMware-Monitor](https://github.com/zw008/VMware-Monitor) under the MIT license.
+> **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "vSphere" are trademarks of Broadcom. Source code is publicly auditable at [github.com/vmware-skills/VMware-Monitor](https://github.com/vmware-skills/VMware-Monitor) under the MIT license.
 
-Read-only VMware vCenter/ESXi monitoring — 27 MCP tools, zero destructive code.
+Read-only VMware vCenter/ESXi monitoring — 31 MCP tools, zero destructive code.
 
 > **Code-level safety**: This skill contains NO power, create, delete, snapshot, or modify operations. Not disabled — they don't exist in the codebase.
-> **Companion skills**: [vmware-aiops](https://github.com/zw008/VMware-AIops) (VM lifecycle), [vmware-storage](https://github.com/zw008/VMware-Storage) (iSCSI/vSAN), [vmware-vks](https://github.com/zw008/VMware-VKS) (Tanzu Kubernetes), [vmware-nsx](https://github.com/zw008/VMware-NSX) (NSX networking), [vmware-nsx-security](https://github.com/zw008/VMware-NSX-Security) (DFW/firewall), [vmware-aria](https://github.com/zw008/VMware-Aria) (metrics/alerts/capacity), [vmware-avi](https://github.com/zw008/VMware-AVI) (AVI/ALB/AKO), [vmware-harden](https://github.com/zw008/VMware-Harden) (compliance baselines).
+> **Companion skills**: [vmware-aiops](https://github.com/vmware-skills/VMware-AIops) (VM lifecycle), [vmware-storage](https://github.com/vmware-skills/VMware-Storage) (iSCSI/vSAN), [vmware-vks](https://github.com/vmware-skills/VMware-VKS) (Tanzu Kubernetes), [vmware-nsx](https://github.com/vmware-skills/VMware-NSX) (NSX networking), [vmware-nsx-security](https://github.com/vmware-skills/VMware-NSX-Security) (DFW/firewall), [vmware-aria](https://github.com/vmware-skills/VMware-Aria) (metrics/alerts/capacity), [vmware-avi](https://github.com/vmware-skills/VMware-AVI) (AVI/ALB/AKO), [vmware-harden](https://github.com/vmware-skills/VMware-Harden) (compliance baselines).
 > | [vmware-pilot](../vmware-pilot/SKILL.md) (workflow orchestration) | [vmware-policy](../vmware-policy/SKILL.md) (audit/policy)
 
 ## What This Skill Does
 
-All 27 tools are **read-only**.
+All 31 tools are **read-only**.
 
 | Category | Capabilities |
 |----------|-------------|
@@ -44,6 +44,7 @@ All 27 tools are **read-only**.
 | **Activity** | In-flight tasks, active login sessions |
 | **VM Details** | CPU, memory, disks, NICs, snapshots, guest OS, IP |
 | **Scanning** | Scheduled alarm/log scanning with Slack/Discord webhooks |
+| **vSphere 9.1** | Host memory tiering (DRAM/NVMe uplift), vLCM cluster patch compliance & last-apply result, vCenter deployment size |
 
 ## Quick Install
 
@@ -156,7 +157,7 @@ Offer the levels progressively — do **not** ask for details the environment al
 | Cloud models (Claude, GPT-4o) | Either | MCP gives structured JSON I/O |
 | Automated pipelines | **MCP** | Type-safe parameters, structured output |
 
-## MCP Tools (27 — all read-only)
+## MCP Tools (31 — all read-only)
 
 | Tool | Description |
 |------|------------|
@@ -187,6 +188,12 @@ Offer the levels progressively — do **not** ask for details the environment al
 | `active_tasks` | In-flight (and recently completed) vCenter tasks with progress/errors |
 | `active_sessions` | Currently authenticated vCenter/ESXi sessions (who is logged in) |
 | `host_log_scan` | Scan recent ESXi host syslog (hostd/vmkernel/vpxa) for error/warning patterns; returns only matching lines, optionally filtered to one host |
+| `host_memory_tiering` | **vSphere 9.1** — per-host memory tiering (DRAM/NVMe tiers) + NVMe uplift ratio (pyVmomi `hardware.memoryTierInfo`, needs ESXi 8.0U3+). Params: `host_name`, `limit`. Returns the list envelope |
+| `cluster_patch_compliance` | **vSphere 9.1** — vLCM software (patch) compliance for one cluster over vSphere Automation REST. Param: `cluster` (MoID, e.g. `domain-c123`). `available:false` = vCenter answered 503 (likely mid-patch), not an error; `non_compliant_hosts` is `null` when the host-status field is unknown, never a false 0 |
+| `cluster_last_apply_result` | **vSphere 9.1** — result of the last vLCM remediation (apply) on one cluster (REST). Param: `cluster` (MoID). Reports outcome only; never runs a remediation |
+| `vcenter_deployment_size` | **vSphere 9.1** — vCenter appliance deployment size class (REST, NEW in 9.1). `available:false` on 503 |
+
+> **vSphere 9.1 field-parse honesty**: the 3 REST tools' *endpoints* are spec-verified, but their JSON field names have NOT yet been replayed against a live 9.1 vCenter — every field is read defensively and each result self-labels via its `note` (`endpoint verified; field parse best-effort pending live 9.1 vCenter`). `host_memory_tiering` requires vCenter/ESXi 8.0U3+; older targets raise a teaching error naming the missing property.
 
 All tools are **read-only**. No tool can modify, create, or delete any resource.
 Performance/capacity readings are point-in-time samples — this skill retains no
@@ -194,7 +201,7 @@ history, so it never reports a fabricated "trend" or runway date.
 
 ### List result shape
 
-The 20 row-listing tools above return the family list envelope
+The 21 row-listing tools above (including `host_memory_tiering`) return the family list envelope
 `{items, returned, limit, total, truncated, hint}`, not a bare array. Read
 `truncated` before summarising: `true` means more rows exist — never call
 `items` the whole picture; `false` states the result is complete — including
@@ -205,40 +212,28 @@ example payload: `references/capabilities.md`.
 
 ## Read-Only by Design
 
-All 27 tools here are reads — there is no write, create, or delete surface at
+All 31 tools here are reads — there is no write, create, or delete surface at
 all. Running with local or small models? See
 [`references/agent-guardrails.md`](references/agent-guardrails.md).
 
 ## CLI Quick Reference
 
 ```bash
-vmware-monitor summary [--top 10] [--cluster <substr>] [--no-vms] [--html | --html-path <f>] [--target <t>]
-vmware-monitor inventory vms [--target <t>] [--limit 20] [--power-state poweredOn]
-vmware-monitor inventory hosts [--target <t>]
-vmware-monitor inventory datastores [--target <t>]
-vmware-monitor inventory clusters [--target <t>]
-vmware-monitor inventory networks [--target <t>]
-vmware-monitor health alarms [--target <t>]
-vmware-monitor health events [--hours 24] [--severity warning]
-vmware-monitor health sensors [--target <t>]
-vmware-monitor health services [--host <esxi>] [--target <t>]
-vmware-monitor perf hosts [--host <esxi>] [--target <t>]
-vmware-monitor perf vms [--vm <name>] [--limit 25] [--target <t>]
-vmware-monitor capacity datastores [--target <t>]
-vmware-monitor capacity pools [--target <t>]
-vmware-monitor infra certs [--warn-days 30] [--target <t>]
-vmware-monitor infra licenses [--target <t>]
-vmware-monitor infra ntp [--host <esxi>] [--target <t>]
-vmware-monitor snapshots aging [--threshold 30] [--only-old] [--target <t>]
-vmware-monitor activity tasks [--active-only] [--target <t>]
-vmware-monitor activity sessions [--target <t>]
+vmware-monitor summary [--top 10] [--cluster <substr>] [--html] [--target <t>]
+vmware-monitor inventory vms|hosts|datastores|clusters|networks [--target <t>]
+vmware-monitor health alarms|events|sensors|services [--target <t>]
+vmware-monitor perf hosts|vms [--target <t>]
+vmware-monitor capacity datastores|pools [--target <t>]
+vmware-monitor infra certs|licenses|ntp [--target <t>]
+vmware-monitor snapshots aging [--only-old] [--target <t>]
 vmware-monitor vm info <vm-name> [--target <t>]
-vmware-monitor scan now [--target <t>]
-vmware-monitor daemon start|stop|status
-vmware-monitor doctor [--skip-auth]
+vmware-monitor memory tiering [--host <esxi>] [--target <t>]        # vSphere 9.1
+vmware-monitor patch compliance|last-apply <cluster-moid> [--target <t>]   # vSphere 9.1 (vLCM)
+vmware-monitor deployment-size [--target <t>]                      # vSphere 9.1
+vmware-monitor scan now | daemon start|stop|status | doctor [--skip-auth]
 ```
 
-> Full CLI reference: see `references/cli-reference.md`
+> Full CLI reference (all flags + activity/tasks/sessions): see `references/cli-reference.md`
 
 ## Troubleshooting
 
@@ -297,4 +292,4 @@ vmware-policy is automatically installed as a dependency — no manual setup nee
 
 ## License
 
-MIT — [github.com/zw008/VMware-Monitor](https://github.com/zw008/VMware-Monitor)
+MIT — [github.com/vmware-skills/VMware-Monitor](https://github.com/vmware-skills/VMware-Monitor)

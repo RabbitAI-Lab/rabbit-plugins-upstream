@@ -1,0 +1,5 @@
+interface:
+  display_name: Reddapi Reddit Search
+  short_description: The original reddapi.dev Reddit search skill (vector search, semantic search, trends, subreddit discovery), no Reddit OAuth or app registration needed.
+  icon_small: assets/icon.svg
+  icon_large: assets/icon.svg

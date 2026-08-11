@@ -1,4 +1,4 @@
 interface:
-  display_name: "拾光册记忆手帐"
-  short_description: "从关键帧、版式参考到可整理记忆手帐的完整 Agent 工作流"
-  default_prompt: "使用 $shiguang-memory-journal，将关键帧和来源整理为可安全借鉴版式、可继续编辑、可归档检索并回到原内容的故事手帐。"
+  display_name: "拾光册视频海报与记忆手帐"
+  short_description: "视频故事驱动的可编辑海报、文字设计、记忆手帐与对抗审稿"
+  default_prompt: "使用 $shiguang-memory-journal，把视频故事转译为有证据、文字有传播力且可编辑的海报。"

@@ -1,0 +1,15 @@
+name: geoskill-pasture-quality-assessment
+display_name: 草地质量评估
+description: |
+  基于 NDVI 覆盖度、物候生长季与峰值及退化指数评估草地质量。Assesses pasture quality from NDVI cover, phenology (season and peak) and a degradation index.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-pasture-quality-assessment.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - analysis
+  - gis
+  - raster
+  - remote-sensing
+  - vegetation

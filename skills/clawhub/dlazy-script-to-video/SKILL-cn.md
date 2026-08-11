@@ -5,7 +5,7 @@ description: "剧本转视频、脚本转视频、分镜脚本转视频——把
 metadata: {"clawdbot":{"emoji":"🎞️","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"当调用此技能时，新任务运行 'dlazy chat --skill storyboard --prompt ...'，继续已有项目用 'dlazy chat --project <id> --prompt ...'（用 'dlazy projects list' 查 id）；不要同时传 --skill 和 --project。"}}
 ---
 
-# script-to-video
+# 脚本转视频 Script to Video
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

@@ -1,0 +1,13 @@
+name: geoskill-post-disaster-reconstruction
+display_name: 灾后重建遥感监测
+description: |
+  多期高分辨率影像建筑变化与重建进度分类
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-post-disaster-reconstruction.py
+runtime: python>=3.9
+tags:
+  - disaster
+  - gis
+  - remote-sensing
+  - risk

@@ -1,73 +1,101 @@
 ---
 name: "xhs-content-research"
-description: "用于小红书内容研究、热门笔记样本、内容角度、关键词调研、选题参考、竞品内容观察和趋势素材整理。覆盖 Xiaohongshu / XHS / RedNote note research，来自 SocialDataX 社媒数据助手。"
+description: "面向内容运营、品牌调研和创作者的小红书内容研究辅助技能。适用于 RedNote / XHS / Xiaohongshu（小红书）内容研究、选题分析、关键词观察、趋势判断、竞品内容对比和素材整理。"
 source_client: "socialdatax-skills"
 source_platform: "clawhub"
 source_skill: "xhs-content-research"
-metadata: {"openclaw":{"requires":{"env":["SOCIALDATAX_API_KEY"],"bins":["node","npm"]},"primaryEnv":"SOCIALDATAX_API_KEY","install":[{"kind":"node","package":"socialdatax-skills","bins":[]}],"emoji":"🔎","homepage":"https://socialdatax.com/ai?from=clawhub"}}
+metadata: {"openclaw":{"requires":{"env":["SOCIALDATAX_API_KEY"],"bins":["node","npm"]},"primaryEnv":"SOCIALDATAX_API_KEY","install":[{"kind":"node","package":"socialdatax-skills","bins":[]}],"emoji":"📌","homepage":"https://socialdatax.com/ai?from=clawhub"}}
 ---
 <!-- AUTO-GENERATED from socialdatax-skill-source. Do not edit directly; run `node scripts/generate_socialdatax_skills.mjs`. -->
 
 # 小红书内容研究
 
-Use this skill when the user wants 小红书内容研究, 小红书内容分析, 小红书笔记分析, Xiaohongshu / XHS / RedNote content research, note sample research, content angle discovery, topic inspiration, competitor content observation, or trend material collection.
+## 适用场景
 
-## API Key
+面向内容运营、品牌调研和创作者的小红书内容研究辅助技能。适用于 RedNote / XHS / Xiaohongshu（小红书）内容研究、选题分析、关键词观察、趋势判断、竞品内容对比和素材整理。
 
-Use `SOCIALDATAX_API_KEY` for data calls. The only official website for requesting or managing API access is <https://socialdatax.com/ai?from=clawhub>. If a user asks where to get a key, provide only this URL; do not infer alternate domains.
-获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名；do not infer alternate domains。
+## 快速开始
 
-## Preferred Direct CLI
+- 先给出当前 skill 支持的输入：关键词或选题方向。
+- 如果你只想先看样本，先取 1 页；要继续扩大，再按参数说明使用分页或 `--max-items`。
+- 你通常会得到：相关标题、作者或账号、链接或内容 ID，以及可继续追问的角度。
 
-Prefer the direct CLI when the agent can run shell commands. It does not require MCP server configuration:
+## API Key 获取
+
+获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名。
+
+## 直接调用命令
+
+优先使用 direct CLI；能运行 shell 命令的 Agent 不需要额外配置 MCP server：
 
 ```bash
 npx -y socialdatax-skills@latest xhs search \
-  --keyword "<keyword>" --sort-type like_count_descending --pages 2 --max-items 20 \
-  --pretty --source-client socialdatax-skills --source-platform clawhub \
-  --source-skill xhs-content-research
+  --keyword "<keyword>" --pretty --source-client socialdatax-skills \
+  --source-platform clawhub --source-skill xhs-content-research
+
+npx -y socialdatax-skills@latest xhs search \
+  --keyword "<keyword>" --pages 3 --pretty --source-client socialdatax-skills \
+  --source-platform clawhub --source-skill xhs-content-research
 ```
 
-Required arguments:
+## 参数说明
 
-- `--keyword <text>`: required; use the user's product, category, topic, scenario, or competitor keyword. Keep the keyword focused and avoid broad filler words.
+搜索：
+- 必填：`--keyword <text>`：内容研究主题；使用用户真实意图，去掉多余空格，并保持关键词聚焦。
+- 可选：`--sort-type <general|time_descending|like_count_descending|comment_count_descending|collect_count_descending>`：可选排序参数；不传就使用默认排序。
+- 可选：`--note-type <all|image|video>`：可选内容类型筛选；默认是 `all`。
+- 可选：`--publish-time-range <all|day|week|half_year>`：可选发布时间筛选；默认是 `all`。
+- 可选：`--pages <n>`：从当前起点继续获取并合并 N 页搜索结果；如果返回了 `next_page_token`，可继续续页。
+- 可选：`--max-items <n>`：收集到 N 条搜索结果后停止。
+- 可选：`--since-days <1-365>`：只保留最近 N 天内公开 `publish_time` 落在范围内的搜索结果；搜索范围仍受 `--pages` 限制。
 
-Optional arguments:
+通用：
+- 可选：`--page-token <next_page_token>`：这是不透明的分页 token；第一页不要传。继续同一条搜索链路时，只能原样传回完整返回的 `next_page_token`，不能截断、改写、脱敏、重建，或用省略号替换中间内容。
+- 可选：`--pretty`：只影响输出格式，不改变实际请求结果。
+- 可选：`--source-client socialdatax-skills --source-platform clawhub --source-skill xhs-content-research`：这是当前 Agent Skill 的来源标记；按本 Skill 示例执行时保持这些值不变。
 
-- `--sort-type <general|time_descending|like_count_descending|comment_count_descending|collect_count_descending>`: optional; for sample research, prefer `like_count_descending` unless the user asks for newest content.
-- `--note-type <all|image|video>`: optional note type filter; default is `all`.
-- `--publish-time-range <all|day|week|half_year>`: optional publish-time range; default is `all`.
-- `--page-token <next_page_token>`: opaque pagination token; pass the complete returned token back unchanged for the same keyword and filter chain.
-- `--pages <n>`: fetch and merge N pages from the current starting point.
-- `--max-items <n>`: stop after collecting N results.
-- `--since-days <1-365>`: keep only returned items whose public `publish_time` is within the last N days; still limited by the requested pages.
-- `--pretty`: output formatting only.
-- `--source-client socialdatax-skills --source-platform clawhub --source-skill xhs-content-research`: usage attribution for this Agent Skill; keep these values unchanged when running examples from this Skill.
+## 输出建议
 
-## Safety Boundary
+优先输出可直接复盘的结果：相关样本和主要角度，并标出下一步可继续追问的问题。
 
-This skill is read-only. It uses `SOCIALDATAX_API_KEY` from the user's environment at runtime. Generated Skill files do not contain API keys. It does not read local browser data or perform login, posting, liking, commenting, or account changes.
+先把可见证据和你的判断分开写；当用户需要可追溯结论时，重点整理话题模式、内容角度、受众反馈、创作者定位和可引用样本。
+对于 XHS 搜索结果里的 `note_url`，无论是在最终回答、展示、引用、存储、输出还是转发时，都要保留完整原始 URL，包括其中的 `xsec_token` 查询参数；不要改写、截断、脱敏、重建，也不要只根据 `note_id` 去拼链接。
+对于 XHS `note_id`，要完整复制 24 位小写十六进制 ID；不要只传或只展示前缀。
+当用户要看最近话题时，优先使用 CLI 的 `--since-days 7`，或者按用户指定的天数窗口执行；不要把当前返回页范围说成全平台完整覆盖。
 
-## MCP Tools
+## MCP 工具
 
-MCP tools matching the direct CLI commands above:
+与上面 direct CLI 命令对应的 MCP 工具：
 
 - `xhs_search_notes`
 
-For XHS, call `xhs_search_notes` with `keyword`, optional `page_token`, `sort_type`, `note_type`, and `publish_time_range`.
+在 XHS 搜索场景中，调用 `xhs_search_notes` 时传 `keyword`，可选传 `page_token`、`sort_type`、`note_type` 和 `publish_time_range`。
 
-Do not pass `page` to `xhs_search_notes`; omit `page_token` on the first request.
-Continue pagination only when `next_page_token` is not empty, and pass the complete returned `next_page_token` back unchanged as `page_token` for the same keyword, sort, note type, publish-time range, and caller chain.
+调用 `xhs_search_notes` 时不要传 `page`；第一页也不要传 `page_token`。
+只有在 `next_page_token` 非空时才继续翻页；并且在同一个关键词、排序、内容类型、发布时间范围和调用链路下，把完整返回的 `next_page_token` 原样作为 `page_token` 传回。
 
-## Output Guidance
+小红书搜索参数命名提醒：direct CLI 使用 `--sort-type`、`--publish-time-range`、`--note-type`；MCP 工具 `xhs_search_notes` 使用 `sort_type`、`publish_time_range`、`note_type`。不要传 `sortType`、`publishTimeRange` 或 `noteType`。
 
-输出为小红书内容研究报告：样本表、标题钩子、内容角度、互动信号、可复用选题、完整原始 URL 和完整 `note_id`。
-只基于当前搜索关键词和当前返回页范围内的公开结果做判断；不承诺全平台完整覆盖、账号诊断、发布操作、封面制作或确定性流量结果。
-For XHS search results, in every use of a returned `note_url`, such as final answers, display, references, storage, output, or forwarding, preserve it exactly as the full URL, including `xsec_token` query parameters. Do not modify, truncate, redact, mask, normalize, rebuild, or synthesize the URL from `note_id`.
-For XHS `note_id`, copy the complete 24-character lowercase hexadecimal ID exactly; do not pass or display only a prefix.
+## 安全边界
 
-## Troubleshooting
+这是只读 skill。运行时使用用户环境变量中的 `SOCIALDATAX_API_KEY`；生成的 Skill 文件不包含 API Key。不会读取本地浏览器数据，也不会执行登录、发帖、点赞、评论或账号修改。
 
-- For non-balance network or API errors, preserve the error message, check `SOCIALDATAX_API_KEY`, parameters, and link or ID format, then retry once when appropriate.
-- If the response returns `insufficient_balance` or says the balance/credits are insufficient, do not retry repeatedly. Show the recharge URL from the error exactly as returned, then continue the same command after the user recharges.
-- If the user has recharged but still sees insufficient balance, confirm `SOCIALDATAX_API_KEY` belongs to the same account that was recharged; if needed, copy a fresh API Key from the official dashboard.
+## 示例结果
+
+- 示例展示格式，不代表固定字段：内容样本=标题/作者/链接或 ID；判断=相关原因和下一步。
+
+## 异常处理
+
+- 如果出现 SDK/依赖缺失、npm 网络、Node.js/npm/npx 不可用或执行权限错误：这是本地运行环境、依赖安装、网络或 AI 平台授权问题，不是 SocialDataX API Key 或业务数据返回错误；有权限时可自动安装或修复；需要网络或执行授权时提醒用户同意或完成授权；处理后继续原命令；不要改用公开网页搜索替代 SocialDataX 数据。
+- 非余额不足的网络或 API 异常：保留错误信息，检查 `SOCIALDATAX_API_KEY`、参数和链接格式后原样重试一次。
+- 如果返回 `insufficient_balance` 或“积分不足”：不要重复重试；把错误里的充值链接原样展示给用户，并提醒用户充值后继续执行刚才同一条命令。
+- 如果用户已经充值但仍提示余额不足：确认当前环境变量 `SOCIALDATAX_API_KEY` 是否来自刚充值的同一个账号；必要时重新复制官网后台的 API Key。
+- 分页中断：保留已取得的结果；重试仍失败：说明当前调用不可用，请用户补充或更换关键词、链接、ID 等输入后再重试。
+
+## 常见问题
+
+- 没结果：放宽关键词、减少限定，或换成更贴近用户表达的词。
+- 结果太多：补场景、人群、品牌、时间范围或账号名。
+- 调用失败：先确认 `SOCIALDATAX_API_KEY` 已配置；如果是 `insufficient_balance` 或“积分不足”，按错误里的充值链接充值后继续原命令，不要反复重试。
+- 担心账号安全：这是只读能力，不登录、不发帖、不点赞、不评论。
+- 想继续分析：把最相关的 1-3 条结果发回来，继续缩小范围。

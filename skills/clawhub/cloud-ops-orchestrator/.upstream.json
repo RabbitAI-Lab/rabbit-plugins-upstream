@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cloud-ops-orchestrator",
   "slug": "cloud-ops-orchestrator",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1784327126031,
-  "contentHash": "b6c4115afdef43c3c894fd8b226b4eee4434199af4b10a18565a45fd96888824",
-  "fetchedAt": "2026-07-26T18:11:23.888Z"
+  "version": "1.0.1",
+  "updatedAt": 1786204128549,
+  "contentHash": "5f26a5d60c86cf2766dd52d14c2e60b686b479070bcb2d046415b5ba28385de5",
+  "fetchedAt": "2026-08-11T08:32:37.567Z"
 }

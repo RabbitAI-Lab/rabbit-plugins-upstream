@@ -1,46 +1,61 @@
-## Description: <br>
-Generate and edit images with GPT-4o Image through RunAPI, using the RunAPI CLI for one-off tasks and RunAPI SDKs for application integration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates and edits images with GPT-4o Image through RunAPI, guiding agents to use the CLI for one-off tasks and SDKs for application integration.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-External developers and agents use this skill to route GPT-4o image generation and editing requests through RunAPI. It helps agents choose the CLI for one-off tasks and SDK packages for application or backend integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Image prompts, inputs, and generated content may be sent to RunAPI when the CLI or SDK is used. <br>
-Mitigation: Review RunAPI pricing, privacy terms, and account settings before authenticating or submitting sensitive material. <br>
-Risk: The skill can rely on a saved RunAPI login or optional RUNAPI_API_KEY. <br>
-Mitigation: Use trusted environments, avoid exposing API keys in logs or prompts, and rotate credentials if they may have been disclosed. <br>
-Risk: The workflow depends on the RunAPI command-line tool. <br>
-Mitigation: Install the CLI only from the declared runapi-ai/tap/runapi Homebrew source and review commands before execution. <br>
+## Use Case:
 
+Developers and external users use this skill to create, edit, or transform images through RunAPI. It helps agents choose CLI commands for one-off generation and SDK guidance for app, backend, worker, or service integration.
 
-## Reference(s): <br>
-- [RunAPI GPT-4o Image model overview](https://runapi.ai/models/gpt-4o-image) <br>
-- [RunAPI GPT-4o Image documentation](https://runapi.ai/models/gpt-4o-image.md) <br>
-- [RunAPI OpenAI provider comparison](https://runapi.ai/providers/openai.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [ClawHub skill listing](https://clawhub.ai/runapi-ai/runapi-gpt-4o-image) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with CLI command examples and integration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference request JSON files, RunAPI task IDs, and optional RunAPI authentication.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release evidence) <br>
+Risk: Prompts and generated content are sent to RunAPI as part of normal image generation and editing workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm that using RunAPI as a third-party image generation provider is acceptable before installing or invoking the skill.
+
+Risk: The skill may require installing the RunAPI CLI or SDKs and using a RunAPI API key.
+
+Mitigation: Install dependencies from the documented RunAPI sources and prefer environment or saved-token authentication for agent and headless runs.
+
+Risk: RunAPI-generated file URLs are temporary and should not be treated as durable assets.
+
+Mitigation: Download generated images or other returned files into user-controlled durable storage within 7 days.
+
+## Reference(s):
+
+- [RunAPI GPT-4o Image model docs](https://runapi.ai/models/gpt-4o-image.md)
+- [RunAPI GPT-4o Image homepage](https://runapi.ai/models/gpt-4o-image)
+- [RunAPI OpenAI provider page](https://runapi.ai/providers/openai.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI CLI skill](https://github.com/runapi-ai/cli-skill)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and SDK package references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance distinguishes one-off CLI usage from production SDK integration and notes that generated file URLs are temporary.]
+
+## Skill Version(s):
+
+0.2.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

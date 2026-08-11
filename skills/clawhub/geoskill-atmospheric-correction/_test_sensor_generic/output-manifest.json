@@ -1,0 +1,71 @@
+{
+  "skill": "atmospheric-correction",
+  "skill_version": "1.0.0",
+  "command": "atmospheric-correction --bbox 116 39 117 40 --synthetic --sensor generic --quiet --output-dir ./_test_sensor_generic",
+  "started_at": "2026-08-03T13:38:44.336363Z",
+  "finished_at": "2026-08-03T13:38:45.953303Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "sensor": "generic",
+    "method": "dos",
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_sensor_generic\\surface_reflectance.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 4,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_sensor_generic\\correction_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "dos",
+    "sensor": "generic",
+    "n_bands": 4,
+    "mean_reflectance_per_band": [
+      0.04618353769183159,
+      0.06106669828295708,
+      0.08098852634429932,
+      0.16203412413597107
+    ],
+    "overall_mean_reflectance": 0.08756822347640991,
+    "synthetic_truth_mean_per_band": {
+      "band_0": 0.06638312339782715,
+      "band_1": 0.10427786409854889,
+      "band_2": 0.10387556254863739,
+      "band_3": 0.16481775045394897
+    }
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "atmospheric-correction"
+  },
+  "error": null
+}

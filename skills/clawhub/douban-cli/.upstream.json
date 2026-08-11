@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/douban-cli",
   "slug": "douban-cli",
   "ownerHandle": null,
-  "version": "0.2.5",
-  "updatedAt": 1779001705102,
-  "contentHash": "8d44372c5cd909c2b10a27ada829b3d731af49efc23182f3f9864793d810f6f6",
-  "fetchedAt": "2026-07-26T19:03:24.186Z"
+  "version": "0.3.0",
+  "updatedAt": 1786371168578,
+  "contentHash": "fc365dd33afecdc28bf19fac42a55025e02f33205c8773d75ff70b2805cc56f6",
+  "fetchedAt": "2026-08-11T08:22:27.827Z"
 }

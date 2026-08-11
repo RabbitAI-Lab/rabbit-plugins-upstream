@@ -1,40 +1,57 @@
-## Description: <br>
-定时调度专家 helps agents define and maintain local recurring or one-time scheduled jobs with timezone locking, previews, retries, cleanup, and audit history. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+定时调度专家 helps agents manage local recurring and one-time scheduled tasks with timezone confirmation, run previews, cleanup, file-lock based writes, retry, and circuit-breaker guidance.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent users use this skill to turn recurring checks, reminders, reports, data syncs, and health probes into auditable local schedules. It is suited for agents that need predictable task timing without relying on cloud scheduling services. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Scheduled jobs can repeatedly run tasks that read private files, call APIs, sync data, or write reports beyond the user's intent. <br>
-Mitigation: Review each task before creating a job, especially tasks with file, API, sync, or reporting behavior. <br>
-Risk: Persistent local job records can accumulate active or outdated automations if they are not reviewed. <br>
-Mitigation: Use the skill's documented list, pause, archive, stats, and cleanup workflows to audit active and archived jobs regularly. <br>
+## Use Case:
 
+Developers and agent operators use this skill to turn natural-language schedule requests into local job definitions and operational guidance for recurring checks, reports, reminders, and health checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cron-scheduler-pro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline Python and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local scheduling guidance, command patterns, job configuration examples, and audit workflows for agent-maintained cron-style tasks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release and skill frontmatter) <br>
+Risk: The skill asks for local write and command-execution authority for persistent scheduled Agent tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in trusted workspaces, review scheduled job definitions before enabling them, and inspect the local job store regularly.
+
+Risk: The security evidence notes conflicting documentation about local-only behavior, API keys, and execution mode.
+
+Mitigation: Confirm whether the release is truly local-only before use and avoid providing API keys unless a specific scheduled task explicitly requires them.
+
+Risk: Cleanup and lock-file actions can affect persisted scheduler state.
+
+Mitigation: Back up the scheduler memory directory before cleanup and remove lock files only after confirming no scheduler process is using them.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cron-scheduler-pro)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON examples and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Describes local job-store files, scheduler commands, execution status, and operational checks.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

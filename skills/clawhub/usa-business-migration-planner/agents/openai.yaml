@@ -1,0 +1,7 @@
+interface:
+  display_name: "USA Business Migration Planner"
+  short_description: "Helps with People repeatedly need a practical, repeatable way..."
+  default_prompt: "Use $usa-business-migration-planner to help me People repeatedly need a practical, repeatable way to handle 开源 AI SQL 客户端 SqlKit： 70+ 数据库一个搞定， AI Agent + MCP 内置，秒开."
+
+policy:
+  allow_implicit_invocation: true

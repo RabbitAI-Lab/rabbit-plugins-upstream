@@ -37,6 +37,9 @@ def base_candidate() -> dict[str, object]:
         "split_today": False,
         "post_split": False,
         "halted": False,
+        "premarket_supply_risk": False,
+        "supply_risk_source": "SEC EDGAR checked",
+        "supply_risk_checked_at": "2026-07-22T08:30:00-04:00",
         "dilution_overhang": False,
     }
 
@@ -133,12 +136,43 @@ class ClassificationTests(unittest.TestCase):
         self.assertEqual(result["status"], "WATCH")
         self.assertIn("HALTED", result["risk_flags"])
 
-    def test_dilution_blocks_execution(self) -> None:
+    def test_confirmed_premarket_supply_risk_excludes(self) -> None:
         row = conventional_candidate()
+        row.update(
+            {
+                "premarket_supply_risk": True,
+                "supply_risk_type": "ACTIVE_ATM",
+                "supply_risk_source": "SEC 424B5",
+            }
+        )
+        result = classify(row)
+        self.assertEqual(result["status"], "EXCLUDE")
+        self.assertIn("SUPPLY_RISK_CONFIRMED", result["risk_flags"])
+        self.assertIn("PREMARKET_SUPPLY_RISK", result["risk_flags"])
+
+    def test_legacy_dilution_risk_also_excludes(self) -> None:
+        row = conventional_candidate()
+        row.pop("premarket_supply_risk")
         row["dilution_overhang"] = "active ATM and warrants"
         result = classify(row)
-        self.assertEqual(result["status"], "WATCH")
+        self.assertEqual(result["status"], "EXCLUDE")
         self.assertIn("DILUTION_OVERHANG", result["risk_flags"])
+        self.assertIn("SUPPLY_RISK_LEGACY_FALLBACK", result["risk_flags"])
+
+    def test_unknown_premarket_supply_review_waits_for_data(self) -> None:
+        row = conventional_candidate()
+        row["premarket_supply_risk"] = "UNKNOWN"
+        row["dilution_overhang"] = False
+        result = classify(row)
+        self.assertEqual(result["status"], "WAIT_DATA")
+        self.assertIn("SUPPLY_RISK_UNKNOWN", result["risk_flags"])
+
+    def test_legacy_clean_dilution_field_remains_compatible(self) -> None:
+        row = conventional_candidate()
+        row.pop("premarket_supply_risk")
+        result = classify(row)
+        self.assertEqual(result["status"], "EXECUTE")
+        self.assertIn("SUPPLY_RISK_LEGACY_FALLBACK", result["risk_flags"])
 
     def test_missing_fields_remain_unknown(self) -> None:
         result = classify({"symbol": "MISS"})

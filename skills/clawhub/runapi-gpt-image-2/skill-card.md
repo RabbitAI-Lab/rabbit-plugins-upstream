@@ -1,45 +1,66 @@
-## Description: <br>
-Generate and edit images with GPT Image 2 through RunAPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images with GPT Image 2 through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Agents use this skill to route image generation, editing, and transformation requests to GPT Image 2 through RunAPI. It guides one-off CLI use and points developers to SDK packages when integrating the model into an app or backend. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The RunAPI CLI may use a saved account session or API key. <br>
-Mitigation: Review which account or RUNAPI_API_KEY the CLI will use before running image generation or editing commands. <br>
-Risk: Prompts and source images may contain confidential or sensitive content. <br>
-Mitigation: Submit confidential prompts or private images only when RunAPI's data handling is acceptable for the use case. <br>
+## Use Case:
 
+Developers and agents use this skill to generate, edit, or transform images with GPT Image 2 through RunAPI, using the CLI for one-off tasks and SDKs for application integration.
 
-## Reference(s): <br>
-- [RunAPI GPT Image 2 model overview](https://runapi.ai/models/gpt-image-2.md) <br>
-- [RunAPI GPT Image 2 homepage](https://runapi.ai/models/gpt-image-2) <br>
-- [RunAPI OpenAI provider comparison](https://runapi.ai/providers/openai.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [GPT Image 2 text-to-image variant](https://runapi.ai/models/gpt-image-2/text-to-image.md) <br>
-- [GPT Image 2 image-to-image variant](https://runapi.ai/models/gpt-image-2/image-to-image.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with shell command examples and SDK package names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the runapi CLI for the CLI path; RUNAPI_API_KEY is optional because login or saved CLI configuration can authenticate the binary.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release evidence) <br>
+Risk: Prompts and image inputs may be submitted to RunAPI/OpenAI-backed services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review provider terms and avoid sending sensitive prompts or images unless the deployment requirements allow it.
+
+Risk: The skill may use a RunAPI API key or saved CLI login.
+
+Mitigation: Prefer environment-based or saved CLI authentication, keep credentials out of prompts and files, and rotate credentials if exposed.
+
+Risk: Generated file URLs are temporary and may not serve as durable storage.
+
+Mitigation: Download generated outputs and store them in approved durable storage within the retention window.
+
+Risk: Image generation and editing can incur provider costs.
+
+Mitigation: Review pricing, rate limits, and usage controls before running high-volume tasks.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-gpt-image-2)
+- [RunAPI GPT Image 2 model overview](https://runapi.ai/models/gpt-image-2.md)
+- [RunAPI GPT Image 2 homepage](https://runapi.ai/models/gpt-image-2)
+- [RunAPI OpenAI provider comparison](https://runapi.ai/providers/openai.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI CLI skill](https://github.com/runapi-ai/cli-skill)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown with inline shell commands and SDK package guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide agents to generate or edit image files through RunAPI and to download temporary generated file URLs into durable storage.]
+
+## Skill Version(s):
+
+0.2.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -15,20 +15,17 @@ from urllib.error import HTTPError, URLError
 
 
 API_BASE_URL = os.environ.get(
-    "LINKFOX_TOOL_GATEWAY", "https://tool-gateway.linkfox.com"
+    "TIKTOK_VIDEO_API_BASE_URL", "https://tool-gateway.linkfox.com"
 )
 API_ENDPOINT = f"{API_BASE_URL}/tiktokVideo/accountTokens"
 
 
 def get_api_key():
-    """
-获取配置在环境变量的API Key。
-如果获取不到，按 SKILL.md 的 **## 解决认证和积分问题** 处理。
-"""
     key = os.environ.get("LINKFOXAGENT_API_KEY")
     if not key:
         print(
-            "API Key 未配置",
+            "API Key not configured. Please set the environment variable:\n"
+            "  export LINKFOXAGENT_API_KEY=your-key-here",
             file=sys.stderr,
         )
         sys.exit(1)

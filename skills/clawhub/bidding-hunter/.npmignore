@@ -1,0 +1,19 @@
+# npm publish ignores
+tests/
+scripts/
+templates/
+.github/
+config/schema.json
+.bidding-hunter*
+*.tmp
+*.tmp-*
+*.bak
+*.db
+*.db-journal
+*.db-wal
+.lock
+
+# Dev files
+DESIGN.md
+CONTRIBUTING.md
+CHANGELOG.md

@@ -1,45 +1,61 @@
-## Description: <br>
-Generate multi-speaker speech with Gemini TTS through RunAPI, using the RunAPI CLI for one-off generation and the language SDK for application integration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate multi-speaker speech with Gemini TTS through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to generate multi-speaker Gemini TTS audio through RunAPI, either by issuing one-off CLI commands or by integrating the RunAPI SDK into an application or service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: TTS prompts and dialogue content are processed by RunAPI and its provider. <br>
-Mitigation: Review the content before submission and avoid sending data that should not be processed by those services. <br>
-Risk: RunAPI credentials could be exposed if placed in prompts, source files, logs, or command history. <br>
-Mitigation: Store the API key only in RUNAPI_API_KEY or trusted CLI configuration, as the skill and security guidance recommend. <br>
-Risk: Using the CLI as a production integration layer can make application behavior harder to maintain. <br>
-Mitigation: Use the SDK integration path for applications, services, workers, and production workflows; reserve the CLI path for one-off generation, smoke tests, and debugging. <br>
+## Use Case:
 
+Developers and engineers use this skill to guide agents that synthesize Gemini TTS dialogue through RunAPI or integrate Gemini TTS into applications using language SDKs.
 
-## Reference(s): <br>
-- [Gemini TTS model overview, pricing, and rate limits](https://runapi.ai/models/gemini-tts.md) <br>
-- [RunAPI Gemini TTS homepage](https://runapi.ai/models/gemini-tts) <br>
-- [Google provider comparison](https://runapi.ai/providers/google.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and SDK package names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide agents to create JSON request files and use RUNAPI_API_KEY or saved CLI configuration for authentication.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Generated text, generated audio, and request files may be sent to RunAPI or an upstream provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm trust in RunAPI before installation and avoid sending sensitive content unless approved for that service.
+
+Risk: RUNAPI_API_KEY may be exposed if stored directly in prompts, scripts, or shared files.
+
+Mitigation: Store credentials in environment variables or saved CLI configuration and avoid committing secrets.
+
+Risk: Pricing, rate limits, and model availability can affect production use.
+
+Mitigation: Review RunAPI pricing and rate limits for the selected Gemini TTS model before deployment.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/runapi-ai/skills/runapi-gemini-tts)
+- [RunAPI Gemini TTS Model Overview](https://runapi.ai/models/gemini-tts)
+- [RunAPI Gemini TTS Documentation](https://runapi.ai/models/gemini-tts.md)
+- [RunAPI Google Provider Comparison](https://runapi.ai/providers/google.md)
+- [RunAPI Model Catalog](https://runapi.ai/models.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and code guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference RunAPI CLI authentication, request files, SDK packages, and Gemini TTS model variants.]
+
+## Skill Version(s):
+
+0.1.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

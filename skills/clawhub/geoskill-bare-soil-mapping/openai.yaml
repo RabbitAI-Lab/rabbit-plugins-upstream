@@ -1,0 +1,15 @@
+name: geoskill-bare-soil-mapping
+display_name: 裸土/裸地制图
+description: |
+  融合裸土指数 BSI、亮度与局部纹理（裸土低对比度）阈值提取裸土/裸地分布，支持 Otsu 自动阈值，输出裸土 GeoTIFF、BSI 栅格与面积统计。Maps bare soil by fusing BSI, brightness and local texture.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-bare-soil-mapping.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - mining
+  - raster
+  - remote-sensing
+  - visualization

@@ -1,46 +1,59 @@
-## Description: <br>
-Analyzes cat scratch-post area videos or video URLs through publisher-hosted APIs to identify scratching behavior, estimate frequency, duration, and relative intensity, and return structured observations about stress level and claw health without disease diagnosis or behavior-correction advice. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes cat scratch post videos or video URLs to estimate scratching frequency, session duration, and relative intensity, then returns structured behavioral observations for stress and claw-health monitoring without disease diagnosis or behavior-correction advice.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to process cat scratch-post footage for structured behavior observations, including scratch frequency, session duration, relative intensity, stress-level signals, claw-health observations, and cloud history lookups. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet videos, video URLs, and derived analysis results are sent to publisher-operated remote services. <br>
-Mitigation: Use only footage appropriate for third-party processing and confirm the publisher's retention and handling practices before use with sensitive home recordings. <br>
-Risk: The skill may create or reuse an internal identity, query cloud history, and persist account or token data in the workspace. <br>
-Mitigation: Run in an isolated workspace when evaluating the skill, review local workspace data before reuse or sharing, and avoid installation where silent account-linking or token persistence is unacceptable. <br>
-Risk: The output includes behavioral and claw-health observations but is not a veterinary diagnosis or behavior-correction plan. <br>
-Mitigation: Treat results as observational signals and route health, injury, or abnormal-behavior concerns to qualified professional review. <br>
+## Use Case:
 
+External users and agent developers use this skill to analyze cat scratch post footage, produce structured scratch behavior reports, and query historical reports for smart scratch post or multi-cat household monitoring workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-scratch-frequency-intensity-analysis) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill usage demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON text returned by command-line scripts and remote API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured analysis data, cloud report lists, and report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter says 1.0.4) <br>
+Risk: Pet videos or video URLs are sent to external Life Emergence services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only footage that is acceptable to share with that service, and review the service's retention and access controls before deployment.
+
+Risk: Reports can be associated with an internal user identity that is created or reused automatically.
+
+Mitigation: Deploy only in environments where automatic identity association is expected, documented, and covered by user consent or internal policy.
+
+Risk: Account or session tokens may be persisted in the workspace data area.
+
+Mitigation: Restrict workspace access, rotate credentials when removing the skill, and inspect local data storage before sharing the workspace.
+
+## Reference(s):
+
+- [Pet health analysis API documentation](artifact/references/api_doc.md)
+- [Shared analysis API error reference](artifact/skills/smyx_analysis/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON-style structured report text, with optional CLI commands and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save analysis output to a file when an output path is provided; historical report queries are returned as Markdown tables.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

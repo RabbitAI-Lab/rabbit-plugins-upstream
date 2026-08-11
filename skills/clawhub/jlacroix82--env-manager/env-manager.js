@@ -37,27 +37,54 @@ const path = require('path');
 // the command and runs it (or not) using its own shell tool.
 
 const DEFAULT_ACCEPTED_BINARIES = [
-  'python3', 'node', 'npm', 'docker', 'go',
-  'rustc', 'pip3', 'lsof', 'which', 'mkdir',
-  'mvn', 'gradle', 'cargo', 'ruby', 'pip',
-  'make', 'gcc', 'g++', 'clang', 'cmake',
-  'java', 'javac', 'dotnet', 'go1',
-  'perl', 'php', 'lua', 'tclsh',
+  // Declared scope: Python / Node / Docker / Go / Rust scaffolding only.
+  'python3', 'pip3',          // Python
+  'node', 'npm',              // Node
+  'docker',                   // Docker
+  'go',                       // Go
+  'rustc', 'cargo',           // Rust
+  // Read-only inspection helpers (no execution of project code).
+  'lsof', 'which', 'mkdir',
 ];
 
 // ─── Workspace helpers ─────────────────────────────────────────────────────
 //
-// The workspace root is fixed: the parent directory of this skill. There is
-// no runtime path redirection via environment variable or CLI flag. This
-// keeps the file-write surface predictable and auditable.
+// The workspace root is the project root that contains this skill — the
+// grandparent of this file (skills/env-manager/ -> repo root). It is fixed and
+// resolved deterministically; there is NO upward walk searching for markers.
+//
+// An explicit ENV_MANAGER_WORKSPACE override IS permitted (for CI/relocation),
+// but it is confined: it MUST be an absolute path that is a descendant of the
+// fixed repo root. Anything outside the repo (e.g. /tmp, /home, /etc) is
+// rejected so a caller cannot redirect writes outside the intended workspace.
+// This keeps the file-write surface predictable and auditable.
+const REPO_ROOT = (() => {
+  // This file lives at <repo>/skills/env-manager/env-manager.js
+  return path.resolve(__dirname, '..', '..');
+})();
+
+function isInsideRepo(p) {
+  const root = REPO_ROOT;
+  const rel = path.relative(root, p);
+  return rel === '' || (!rel.startsWith('..') && !path.isAbsolute(rel));
+}
 
 function getWorkspace() {
-  let dir = __dirname;
-  for (let i = 0; i < 10; i++) {
-    if (fs.existsSync(path.join(dir, 'MEMORY.md'))) return dir;
-    dir = path.resolve(dir, '..');
+  if (process.env.ENV_MANAGER_WORKSPACE) {
+    const o = path.resolve(process.env.ENV_MANAGER_WORKSPACE);
+    if (!path.isAbsolute(o)) {
+      throw new Error('ENV_MANAGER_WORKSPACE must be an absolute path');
+    }
+    if (!isInsideRepo(o)) {
+      throw new Error(
+        'ENV_MANAGER_WORKSPACE must be inside the repo root (' + REPO_ROOT +
+        '). Refusing to write outside the project workspace.'
+      );
+    }
+    return o;
   }
-  return path.resolve(__dirname, '..', '..');
+  // Fixed: two levels up from this file — no upward walk.
+  return REPO_ROOT;
 }
 
 function getDataDir() {

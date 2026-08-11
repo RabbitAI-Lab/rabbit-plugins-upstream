@@ -1,5 +1,36 @@
 # Changelog
 
+## [0.5.3](https://github.com/es6kr/skills/compare/claudify-v0.5.2...claudify-v0.5.3) (2026-08-09)
+
+
+### Bug Fixes
+
+* **claudify:** narrow topic-dispatch carve-out to declared topics only ([#260](https://github.com/es6kr/skills/issues/260)) ([ca87372](https://github.com/es6kr/skills/commit/ca87372594647e79ca8e623c4157429e3d9f0c87))
+* promote accumulated next-fix fixes to main ([95656e9](https://github.com/es6kr/skills/commit/95656e9b551ee0bb77904a0a571d49c53bc01cc9))
+
+## [0.5.2](https://github.com/es6kr/skills/compare/claudify-v0.5.1...claudify-v0.5.2) (2026-08-05)
+
+
+### Bug Fixes
+
+* **claudify:** add assistant-triggered PR creation to notification matrix ([#205](https://github.com/es6kr/skills/issues/205)) ([50c5079](https://github.com/es6kr/skills/commit/50c5079a7095a6d44b5cc7ef1576955d043a3e1c))
+* **claudify:** check canonical skill dirs before recommending plugin bundle activation ([b302055](https://github.com/es6kr/skills/commit/b30205549727b6f6486abab693298f8657f17fcb))
+* **claudify:** extend idle-cache-ttl discipline to TaskOutput's own block/timeout ([#203](https://github.com/es6kr/skills/issues/203)) ([2112e0b](https://github.com/es6kr/skills/commit/2112e0b0ad17f22f709662da81761e65a9f9aa25))
+* **claudify:** stale-plugin-bundle check + self-improve reinforcements ([eebff5b](https://github.com/es6kr/skills/commit/eebff5b8d2b45d24d8b820bd814f4cf03f2a48e3))
+* **claudify:** strengthen self-check enumeration + TaskOutput ceiling + storage routing ([a8fb3c8](https://github.com/es6kr/skills/commit/a8fb3c8ddfdfb092260f1d2f51deecce4a495f20))
+* promote next-fix staging (38 fixes across 16 skills) ([94f8c33](https://github.com/es6kr/skills/commit/94f8c33800ce411ae63e22c5259cdae8435508a4))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([951c1e6](https://github.com/es6kr/skills/commit/951c1e6871e78e226757c6a7ae5ae53efeb7bfb0))
+
+## [0.5.1](https://github.com/es6kr/skills/compare/claudify-v0.5.0...claudify-v0.5.1) (2026-07-28)
+
+
+### Bug Fixes
+
+* **claudify:** add Topic Dispatch section routing topic args to their files ([5a8bf80](https://github.com/es6kr/skills/commit/5a8bf80297802fb1339121a003d736f276f20381))
+* **next-fix:** promote staged fixes across hook-kit, next, cleanup, fix-plan ([34f1c67](https://github.com/es6kr/skills/commit/34f1c67beee3a8279e0e80de4ab3a87ba2223d5c))
+* resolve PR [#197](https://github.com/es6kr/skills/issues/197) review findings (CodeRabbit + Copilot + Internal Review) ([b54236a](https://github.com/es6kr/skills/commit/b54236a4fa4b3fef23645dfc3b184916980b7f65))
+* staging bundle — meta-task registration, next-call-gap, bash-guard consolidation, hook-kit FP fixes ([dc1b790](https://github.com/es6kr/skills/commit/dc1b790688808df7649ef390a22caa5f66a8aa40))
+
 ## [0.5.0](https://github.com/es6kr/skills/compare/claudify-v0.4.0...claudify-v0.5.0) (2026-07-23)
 
 

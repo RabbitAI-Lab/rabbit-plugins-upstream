@@ -137,9 +137,9 @@ Branch on `reason` and optional `error`:
 ## `fill-field`
 
 Use `fill-field` only when the higher-automation path missed a field or chose
-the wrong target and the agent can point to a specific observed `targetRef`.
-It accepts value-free assignments from Memory item/field refs to browser
-targets and returns the same apply-style result shape as `apply-fill`.
+the wrong target and the agent can point to a specific observed target id. It
+accepts one value-free Memory field binding per invocation and returns the same
+apply-style result shape as `apply-fill`.
 
 Success or partial shape:
 

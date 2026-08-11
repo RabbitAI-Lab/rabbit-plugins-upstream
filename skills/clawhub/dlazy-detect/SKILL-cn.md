@@ -1,7 +1,7 @@
 ---
 name: dlazy-detect
 version: 1.0.5
-description: 检测图片、视频或音频是否由 AI 生成：包含人脸 deepfake 识别与疑似生成模型归因（Midjourney、Stable Diffusion、Sora 等），返回可用于判定的置信度分数。
+description: "检测图片、视频或音频是否由 AI 生成：包含人脸 deepfake 识别与疑似生成模型归因（Midjourney、Stable Diffusion、Sora 等），返回可用于判定的置信度分数。"
 metadata:
   {
     'clawdbot':
@@ -22,7 +22,7 @@ metadata:
   }
 ---
 
-# dlazy-detect
+# AI 内容检测 AI Detect
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

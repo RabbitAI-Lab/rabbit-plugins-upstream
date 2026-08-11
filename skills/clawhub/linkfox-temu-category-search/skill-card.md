@@ -1,43 +1,58 @@
-## Description: <br>
-Searches synchronized Temu category records by keyword to find Chinese names, English names, and category IDs for Temu product or shop filtering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches locally synchronized Temu category data by keyword to return matching Chinese names, English names, category IDs, and hierarchy metadata for product or store filtering.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External marketplace users and agents use this skill when they need Temu category IDs from synchronized category data before filtering product or shop queries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security evidence reports a suspicious review concern because queries, API keys, and session metadata may be sent to a remote LinkFox gateway. <br>
-Mitigation: Install only when the user accepts LinkFox gateway use, protect LinkFox API keys in environment variables, and avoid submitting sensitive category-search terms. <br>
-Risk: The script may write or cache full response data under local linkfox directories. <br>
-Mitigation: Review generated data files and cache locations after use, and remove stored responses when category results or session metadata should not persist. <br>
-Risk: The skill depends on synchronized Temu category data, so results can be empty or stale if synchronization has not run recently. <br>
-Mitigation: Run the documented Temu category synchronization before relying on search results for product or shop filtering. <br>
+## Use Case:
 
+External marketplace operators, developers, and agents use this skill to find Temu category IDs after category data has been synchronized into the LinkFox local category store. The returned IDs can support downstream product, shop, or category filters.
 
-## Reference(s): <br>
-- [Temu category API reference](artifact/references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-temu-category-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API results and optional shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full API responses may be saved as JSON data files; large responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata) <br>
+Risk: The skill performs remote authenticated API calls and depends on LinkFox API keys.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when LinkFox is trusted for the task, keep API keys scoped to the intended environment, and avoid exposing session metadata or credentials in shared workspaces.
+
+Risk: The included onboarding flow can request phone/SMS registration, generate API keys, and handle billing or payment orders.
+
+Mitigation: Run onboarding and payment commands only with explicit user intent, verify plan and payment details before ordering, and avoid using the skill where billing actions must be tightly restricted.
+
+Risk: Server evidence marks the release security verdict as suspicious because its behavior extends beyond category lookup.
+
+Mitigation: Review the skill before installation and limit use to environments where remote authenticated requests, onboarding, and billing workflows are acceptable.
+
+## Reference(s):
+
+- [Temu category search API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [json, files, shell commands, configuration, guidance]
+
+**Output Format:** [JSON responses and concise Markdown guidance; large responses may be saved as JSON files with summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a keyword and optional pagination parameters; authenticated calls use LINKFOX_AGENT_API_KEY or LINKFOXAGENT_API_KEY.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
