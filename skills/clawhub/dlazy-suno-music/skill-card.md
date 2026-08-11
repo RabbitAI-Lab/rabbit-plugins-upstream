@@ -1,45 +1,56 @@
-## Description: <br>
-Generates Suno music through the dLazy CLI, supporting inspiration mode, custom lyrics, vocals, or instrumental output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+音乐生成 Suno Music generates Suno-style music from prompts, supporting inspiration mode with automatic lyrics and custom mode with manual lyrics for vocal or instrumental output.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators, developers, and agents use this skill to generate music through dLazy's hosted Suno music service from prompts, custom lyrics, style controls, and vocal or instrumental settings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, generation parameters, and local files explicitly passed to media fields may be sent to dLazy's hosted service. <br>
-Mitigation: Avoid submitting sensitive content unless approved for the third-party service and review dLazy's service terms before use. <br>
-Risk: Authentication through `dlazy login` or `dlazy auth set` stores the API key in the local dLazy configuration file. <br>
-Mitigation: Use `DLAZY_API_KEY` per invocation when the key should not be saved in the local config file, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: The skill depends on a third-party CLI package installed through npm or run with npx. <br>
-Mitigation: Review the pinned `@dlazy/cli` package and source before installation, and use the documented pinned version. <br>
+## Use Case:
 
+External users and developers use this skill to call dLazy's Suno music generation workflow from an agent, creating vocal or instrumental music from prompt, style, title, and lyric settings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-suno-music) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown instructions with bash commands and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return generated media URLs or an async generateId for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and files explicitly passed to the skill may be uploaded to dLazy services for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sending sensitive prompts or files unless the user's organization has approved dLazy for that data.
+
+Risk: Login may save a dLazy API key in the local CLI configuration.
+
+Mitigation: Use per-invocation credentials or npx when persistence is undesirable, keep the config file restricted to the OS user, and rotate or revoke the key if exposure is suspected.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-suno-music)
+- [dLazy homepage](https://dlazy.com)
+- [dLazy CLI source](https://github.com/dlazyai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Files, Guidance]
+
+**Output Format:** [JSON responses with generated media URLs or asynchronous task status, plus concise user-facing guidance for authentication, balance, or API failures]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated outputs are hosted as dLazy file URLs; prompts and explicit media inputs are sent to dLazy's hosted API.]
+
+## Skill Version(s):
+
+1.3.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

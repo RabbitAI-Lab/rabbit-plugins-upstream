@@ -1,46 +1,64 @@
-## Description: <br>
-Guides an agent to query LinkFox/Jiimore Amazon niche-market review data by keyword and summarize consumer sentiment, pain points, review topics, and demand signals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Jiimore helps Amazon sellers query niche-market review topics and consumer sentiment from keywords for the US, Japan, and Germany Amazon marketplaces.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-Amazon sellers, e-commerce operators, and market researchers use this skill to retrieve niche-level review sentiment for a keyword and identify customer pain points, positive themes, and product improvement opportunities. It is intended for supported Amazon marketplaces and should not be used for individual ASIN review analysis or unrelated advertising, pricing, or sales-forecasting tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, with marketplace data limited to Amazon US, JP, and DE. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends keywords, API credentials, and session or app metadata to LinkFox-configured endpoints. <br>
-Mitigation: Use only trusted LinkFox gateway settings, avoid sensitive keywords unless necessary, and confirm the API key is intended for this data-sharing context. <br>
-Risk: The skill stores full API responses and cached responses locally, which may retain market research data longer than expected. <br>
-Mitigation: Review saved LinkFox data locations after use and delete response or cache files that should not remain in the workspace. <br>
-Risk: Onboarding and feedback flows may involve remote downloads or submissions outside the main review-query workflow. <br>
-Mitigation: Require explicit user approval before any onboarding download or feedback submission. <br>
-Risk: Each API call consumes LinkFox credits, and repeated or exploratory queries may create unexpected cost. <br>
-Mitigation: Explain credit use before additional searches and reuse cached same-parameter results when appropriate. <br>
+## Use Case:
 
+External Amazon sellers and market researchers use this skill to analyze customer sentiment, pain points, and frequently mentioned review topics for keyword-defined Amazon niche markets.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/linkfox-ai/skills/linkfox-jiimore-get-niche-review-from-keyword) <br>
-- [Jiimore Amazon Niche Review API Reference](references/api.md) <br>
-- [LinkFox Skills](https://skill.linkfox.com/) <br>
+### Deployment Geography for Use:
 
+Global; data queries are limited to the US, Japan, and Germany Amazon marketplaces.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON parameters, shell commands, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Full responses are saved locally as JSON; small responses may also print in full, while larger responses are summarized unless inline output is requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The skill handles LinkFox API credentials, phone login codes, account tokens, payment QR generation, paid plan purchase flows, automatic feedback reporting, and local response persistence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when those behaviors are acceptable, prefer LinkFox official self-service pages for login and billing, and review any credential or payment steps before use.
+
+Risk: Environment-configured base URLs and API credentials affect where account and review requests are sent.
+
+Mitigation: Verify LinkFox environment variables and base URLs before running the scripts, especially in shared or managed workspaces.
+
+Risk: Saved response and cache files may contain sensitive business data from niche-market research.
+
+Mitigation: Delete local linkfox output and cache files when the data is no longer needed or when working in a shared environment.
+
+Risk: API calls consume LinkFox credits and repeated use may create additional cost.
+
+Mitigation: Confirm user intent before repeated calls, rely on the built-in cache for repeated parameter sets, and avoid automatic retries with changed search parameters.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-jiimore-get-niche-review-from-keyword)
+- [API reference](references/api.md)
+- [Authentication and billing onboarding](references/onboarding.md)
+- [LinkFox Skills](https://skill.linkfox.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, shell commands, and JSON response files or summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full API responses are saved locally; large responses are summarized unless inline output is requested.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

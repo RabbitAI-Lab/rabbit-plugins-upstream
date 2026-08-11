@@ -1,46 +1,65 @@
-## Description: <br>
-Generate and edit video with InfiniteTalk through RunAPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit video with InfiniteTalk through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to run InfiniteTalk video generation or editing jobs through the RunAPI CLI, and to identify SDK packages when integrating RunAPI into an application or backend. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: RunAPI credentials or saved CLI login state could be exposed if agents echo secrets, write them into shared files, or run in an untrusted environment. <br>
-Mitigation: Treat RUNAPI_API_KEY and CLI login state as sensitive credentials; avoid printing secrets, scope access to trusted workspaces, and rotate credentials if exposure is suspected. <br>
-Risk: Video generation inputs are sent to RunAPI and may incur usage costs or be subject to RunAPI rate limits and data handling terms. <br>
-Mitigation: Review RunAPI pricing, rate limits, and data handling before running jobs, especially for large media inputs or automated workflows. <br>
-Risk: Generated or edited video may not match the user's intent or may require review before use in downstream materials. <br>
-Mitigation: Inspect generated outputs before publication or handoff, and rerun or revise request JSON when the result is unsuitable. <br>
+## Use Case:
 
+Developers and agents use this skill to create, edit, or transform video with InfiniteTalk through RunAPI, using the CLI for one-off generation and SDKs for application integration.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/runapi-infinitetalk) <br>
-- [RunAPI InfiniteTalk model overview](https://runapi.ai/models/infinitetalk) <br>
-- [RunAPI InfiniteTalk model documentation](https://runapi.ai/models/infinitetalk.md) <br>
-- [RunAPI Meigen AI provider comparison](https://runapi.ai/providers/meigen-ai.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Code] <br>
-**Output Format:** [Markdown with inline shell commands and SDK package names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference RunAPI CLI authentication, request JSON files, asynchronous task IDs, and SDK package choices.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server evidence release.version) <br>
+Risk: Prompts, input files, and generated media may be sent to an external provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review data sensitivity, expected retention, and user authorization before using RunAPI for a generation task.
+
+Risk: Video generation can incur provider costs.
+
+Mitigation: Review expected pricing and rate limits before submitting jobs.
+
+Risk: Generated file URLs are temporary and should not be treated as durable assets.
+
+Mitigation: Download generated media into durable storage within the stated seven-day window when long-term access is required.
+
+Risk: Saved CLI credentials can persist beyond a single task.
+
+Mitigation: Prefer environment-based API-key authentication for agents and headless runs unless saved CLI credentials are intentional.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/runapi-ai/skills/runapi-infinitetalk)
+- [RunAPI InfiniteTalk Homepage](https://runapi.ai/models/infinitetalk)
+- [RunAPI InfiniteTalk Model Overview](https://runapi.ai/models/infinitetalk.md)
+- [RunAPI Meigen AI Provider Comparison](https://runapi.ai/providers/meigen-ai.md)
+- [RunAPI Model Catalog](https://runapi.ai/models.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and SDK package names]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May involve external RunAPI service calls that create temporary generated-media URLs.]
+
+## Skill Version(s):
+
+0.2.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

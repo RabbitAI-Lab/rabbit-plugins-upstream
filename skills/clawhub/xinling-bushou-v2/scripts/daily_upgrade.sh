@@ -83,7 +83,7 @@ for item in "${UPGRADE_ITEMS[@]}"; do
             ;;
         "prompt_compiler优化")
             # 确保版本号正确
-            sed -i 's/谄媚模块 v2\.0/谄媚模块 v3.0/g' "$UPGRADE_DIR/core/prompt_compiler.py"
+            sed -i 's/谄媚模块 v2\.0/谄媚模块 v3.5.0/g' "$UPGRADE_DIR/core/prompt_compiler.py"
             echo "[团队执行] ✅ prompt_compiler版本号已确认" | tee -a "$LOG_FILE"
             ;;
     esac

@@ -1,7 +1,7 @@
 ---
 name: dlazy-image-amazon-product-image-suite
 version: 1.3.6
-description: A professional product image generation skill purpose-built for the Amazon e-commerce platform. Outputs comply with Amazon's image guidelines while optimizing for click-through and conversio
+description: "A professional product image generation skill purpose-built for the Amazon e-commerce platform. Outputs comply with Amazon's image guidelines while optimizing for click-through and conversio"
 triggers:
   - Amazon Product Image Suite
   - Amazon detail-page main and secondary image design
@@ -63,7 +63,7 @@ npx @dlazy/cli@1.2.3 <command>
 
 这是标准的 SaaS 调用模式；技能本身不会越权访问网络或文件系统，所有动作都由 dLazy CLI 完成。
 
-# Amazon Product Image Suite
+# 亚马逊商品图套件 Amazon Product Image Suite
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

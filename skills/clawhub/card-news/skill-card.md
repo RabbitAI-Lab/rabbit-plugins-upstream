@@ -1,39 +1,52 @@
-## Description: <br>
-Return material news about one major-US credit card from the last 3 months, including direct card changes, issuer updates, and major coverage across 11 major US issuers and co-branded hotel and airline cards. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Returns material news about one major US credit card from the last three months, including direct card changes, relevant issuer updates, and major approved-site coverage.
 
-## Publisher: <br>
-[jiahongc](https://clawhub.ai/user/jiahongc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[jiahongc](https://clawhub.ai/user/jiahongc)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External users use this skill to get a concise, current news brief for one exact major US credit card variant, focused on changes that materially affect how the card should be understood.
+
+### Deployment Geography for Use:
+
+United States
+
+## Known Risks and Mitigations:
+
+Risk: Current web lookups can surface outdated or low-quality card news if source freshness or materiality checks are missed.
+
+Mitigation: Use issuer-first source selection, the three-month inclusion window, and date confirmation against issuer newsroom or approved secondary coverage.
+
+Risk: The artifact relies on shared card-policy files for source selection and formatting that are not included in this release evidence.
+
+Mitigation: Review the shared card-policy dependencies before deployment when full transparency into source rules is required.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users and agents use this skill to summarize recent material news for one specific major U.S. credit card before card-benefit or issuer-change analysis. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-United States <br>
+**Output Type(s):** [text, markdown, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use an optional BRAVE_API_KEY when present. <br>
-Mitigation: Review whether the runtime should expose BRAVE_API_KEY before enabling the skill. <br>
-Risk: Broad trigger phrases such as "recent news" may activate the skill outside a credit-card context. <br>
-Mitigation: Use host routing or user clarification so activation requires a specific credit-card news request. <br>
+**Output Format:** [Markdown sections with hidden YAML sources]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Focused on a single exact card variant and a three-month news window.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown report with a news window, numbered recent updates, summary, confidence notes, and sources.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a three-month lookback window and may ask for clarification when the requested card variant is ambiguous.] <br>
+1.0.7 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.0.6 (source: server-resolved release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

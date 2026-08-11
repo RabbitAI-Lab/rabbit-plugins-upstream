@@ -41,12 +41,23 @@ print(response.json())
 ## Kline
 
 ```python
-params = {"symbol": "BTCUSDT", "period": "1h", "start_date": "2025-01-01", "end_date": "2025-03-01"}
+params = {"symbol": "BTCUSDT", "period": "1h", "start_date": "2026-08-04", "end_date": "2026-08-07"}
 response = requests.get(f"{BASE_URL}/kline", headers=headers, params=params, timeout=60)
 raw = response.json()
 # returns a list directly (NOT {"data": [...]}):
-# [{"date": "2025-01-01 00:00:00", "open": 94000.0, "high": 95500.0, "low": 93200.0, "close": 95000.0, "volume": 1234.5}, ...]
+# [{"time": 1785801600.0, "open": 63497.1, "high": 63558.8, "low": 63290.2, "close": 63337.6, "volume": 4583.87}, ...]
+# time is Unix seconds UTC+0; volume is base-asset volume
 data = raw if isinstance(raw, list) else raw.get("data", [])
+```
+
+Sub-5min periods (`1min`/`2min`/`3min`/`4min`) are supported with tighter limits:
+max 30 days per request, and data only goes back 45 days (400 with an explanatory
+error beyond either). 5min and above keep the normal 1-year-per-request limit.
+
+```python
+params = {"symbol": "BTCUSDT", "period": "1min", "start_date": "2026-08-04", "end_date": "2026-08-07"}
+response = requests.get(f"{BASE_URL}/kline", headers=headers, params=params, timeout=60)
+# [{"time": 1785801600.0, "open": 63497.1, "high": 63513.1, "low": 63458.5, "close": 63464.4, "volume": 94.226}, ...]
 ```
 
 ---
@@ -170,8 +181,34 @@ print(response.json())
 ## Sector Rotation
 
 ```python
+# Rolling alpha history per sector (time series)
 response = requests.get(f"{BASE_URL}/sector_rotation/get_history_data", headers=headers, timeout=60)
 print(response.json())
+
+# Heat-map snapshot: per-sector % change over 7 timeframes, with per-token breakdown
+response = requests.get(f"{BASE_URL}/sector_rotation/get_overview_data", headers=headers, timeout=60)
+data = response.json()["data"]
+# {"AI": {"name_en": "AI", "name_zh": "人工智能",
+#         "data": {"1h": {"pct_change": ...}, "8h": ..., "24h": ..., "3d": ..., "7d": ..., "30d": ..., "90d": ...},
+#         "symbols": {"0G": {"id": 38337, "data": {"1h": {"pct_change": ...}, ...}}, ...}},
+#  ...}  # ~48 sectors; pct_change is a decimal (0.0061 = +0.61%)
+```
+
+---
+
+## OI Imbalance
+
+Open-interest-to-market-cap ranking across all listed tokens (snapshot, sorted by
+`alpha` descending). `alpha = oi_total / market_cap`; `oi_total` sums Binance/OKX/BingX
+futures OI in USD. High alpha = OI crowded relative to size — squeeze/volatility risk.
+The `/alpha_table` field `oi_imbalance` carries only the final `alpha`; this endpoint
+returns the full detail table.
+
+```python
+response = requests.get(f"{BASE_URL}/oi_imbalance/get_overview_data", headers=headers, timeout=60)
+data = response.json()["data"]
+# [{"token": "TSLA", "token_id": 39618, "token_price": 313.33, "token_chg": 0.031,
+#   "market_cap": 40415.98, "oi_total": 59916616.78, "alpha": 1482.5}, ...]
 ```
 
 ---
@@ -183,6 +220,35 @@ params = {"period": "1h", "start_date": "2025-01-01", "end_date": "2025-03-01"}
 response = requests.get(f"{BASE_URL}/blave_top_trader/get_exposure", headers=headers, params=params, timeout=60)
 print(response.json())
 ```
+
+---
+
+## Taiwan Stock Universe / Basic Info — 股票清單/基本資料
+
+Full-market list (上市+上櫃, incl. ETFs), or a single-stock lookup with the same shape.
+Both are basic company data, not a time series — Redis-cached 24h server-side.
+
+```python
+response = requests.get(f"{BASE_URL}/studio/market/twstock/list", headers=headers, timeout=60)
+data = response.json()["data"]
+# [{"stock_id": "2330", "name": "台積電", "close": 2410.0, "industry_code": "24", "listing_date": "1994-09-05"}, ...]
+
+response = requests.get(f"{BASE_URL}/studio/market/twstock/info/2330", headers=headers, timeout=30)
+info = response.json()["data"]
+# {"stock_id": "2330", "name": "台積電", "close": 2410.0, "industry_code": "24", "listing_date": "1994-09-05"}
+# 404 {"error": "Stock not found"} if stock_id isn't a currently-active listing
+```
+
+**Field meanings:**
+| Field | Description |
+|---|---|
+| `close` | Most recent daily closing price (`null` if upstream field was missing, e.g. halted stock) |
+| `industry_code` | TWSE/TPEx raw numeric 產業別 code, passthrough (not decoded to a name) — group/filter by it, don't hardcode a label mapping. `null` for ETFs/non-company securities. Common codes: `15` 航運業, `17` 金融保險業, `22` 生技醫療業, `24` 半導體業, `25` 電腦及週邊設備業, `26` 光電業, `27` 通信網路業, `28` 電子零組件業, `29` 電子通路業, `30` 資訊服務業, `31` 其他電子業 |
+| `listing_date` | `YYYY-MM-DD`, `null` for ETFs/non-company securities |
+
+Use `/list` for universe building / industry-based sampling (must sample across
+industries — stock IDs are grouped by sector, so `[:N]` truncation concentrates in a
+few sectors). Use `/info/<stock_id>` for a single-stock lookup only.
 
 ---
 
@@ -267,6 +333,125 @@ data = response.json()["data"]
 
 Use for 盤中報價查詢、下單前確認現價、多檔持股即時檢查. Do **not** use for backtesting —
 there is no history, only the current snapshot.
+
+---
+
+## Taiwan Stock Minute-Line OHLCV — 台股現股分線
+
+```
+GET /studio/market/twstock/minute/ohlcv/<stock_id>/<schema>
+GET /studio/market/twstock/minute/ohlcv/symbols
+```
+
+`schema` ∈ `1m` / `5m` / `15m` / `30m` / `60m` / `1d`. `start` / `end` optional
+(YYYY-MM-DD; default `end` = today, default `start` = `end` minus the schema's max
+range). `adjust` optional (`0`/`1`/`true`/`false`, default `0` = raw traded prices):
+`adjust=1` returns forward-adjusted (後復權) OHLC — same factor pipeline as the
+Studio daily adjusted series (`/twstock/price_adj`), numbers match exactly; `volume`
+is never adjusted. If the factor source is unavailable the API returns 503 — it
+never silently serves unadjusted prices as adjusted. History from 2019-01 (FinMind
+official data, backfilled per stock).
+Timestamps are UTC ISO, minute-START labels — the 13:30 Taipei bar is the closing
+auction. **`volume` is in lots (張), not shares.** Requires API plan auth.
+
+| `schema` | max range per request |
+|---|---|
+| `1d` | 3650 days |
+| `1m` | 31 days |
+| `5m` | 62 days |
+| `15m` | 93 days |
+| `30m` | 186 days |
+| `60m` | 365 days |
+
+Beyond the cap → 400 `{"error": "date_range_too_large", "max_days": <n>}`. Split
+longer spans into chunks (same pattern as `fetch_txf_chunked` below).
+
+**Coverage is demand-driven.** `/ohlcv/symbols` lists the stock_ids that already have
+minute-line data. Any listed TWSE/TPEx stock_id can be queried though — the first-ever
+query auto-seeds recent data (~30 days) and enrolls the stock for ongoing tracking:
+from the next day onward it gets intraday real-time bars plus a daily official
+correction after market close. Deep history (2019-01 →) backfills server-side after
+first touch, so check `/ohlcv/symbols` before requesting years of history.
+
+```python
+response = requests.get(f"{BASE_URL}/studio/market/twstock/minute/ohlcv/symbols", headers=headers, timeout=30)
+print(response.json())
+# {"data": ["2330"]}
+
+params = {"start": "2026-08-06", "end": "2026-08-06"}
+response = requests.get(
+    f"{BASE_URL}/studio/market/twstock/minute/ohlcv/2330/1m",
+    headers=headers, params=params, timeout=60,
+)
+body = response.json()
+# {"stock_id": "2330", "schema": "1m", "data": [
+#   {"close": 2385.0, "high": 2395.0, "low": 2385.0, "open": 2395.0, "ts": "2026-08-06 01:00:00+00:00", "volume": 2540},
+#   {"close": 2385.0, "high": 2385.0, "low": 2380.0, "open": 2380.0, "ts": "2026-08-06 01:01:00+00:00", "volume": 204},
+#   ...
+#   {"close": 2365.0, "high": 2365.0, "low": 2365.0, "open": 2365.0, "ts": "2026-08-06 05:30:00+00:00", "volume": 4217}]}
+```
+
+**Response fields:**
+| Field | Description |
+|---|---|
+| `ts` | Bar open time (UTC ISO string, minute-start label) |
+| `open` / `high` / `low` / `close` | Price (TWD) |
+| `volume` | Lots (張) |
+
+A still-forming bar is never returned — the last bar of the current interval is
+dropped until it closes. Use `/studio/market/twstock/quote/<stock_id>` for the live
+tick instead.
+
+---
+
+## Taiwan Stock PE / PB / Dividend Yield — 本益比/淨值比/殖利率
+
+Single-stock daily PE ratio, PB ratio, and dividend yield. `start`/`end` optional (omit for
+full history); data from 2005-10-01. For value screens across many stocks use
+`batch/per` (see *Taiwan Stock Batch Fetch* below) — the whole market is ~40 batch calls.
+
+```python
+response = requests.get(
+    f"{BASE_URL}/studio/market/twstock/per/2330",
+    headers=headers, params={"start": "2026-01-01", "end": "2026-07-22"}, timeout=60,
+)
+data = response.json()["data"]
+# [{"date": "2026-07-21", "dividend_yield": 0.95, "PER": 34.87, "PBR": 11.05}, ...]
+```
+
+---
+
+## Taiwan Stock Batch Fetch — 批次查詢（選股/大型 universe）
+
+One call fetches up to **50 stocks** of the same data type — the right tool for any
+multi-stock screen. Never fan out per-stock endpoints across a universe (rate limits);
+the whole market (~2,000 stocks) is ~40 batch calls.
+
+`data_type` ∈ `price` (raw daily OHLCV incl. High/Low — KD/breakout screens) /
+`price_adj` / `per` (value screens) / `institutional` / `shareholding` /
+`foreign_shareholding` / `financials` / `balance_sheet` / `monthly_revenue`.
+Per-id rows are identical to the corresponding single-stock endpoint; `start`/`end`
+as per type.
+
+```python
+response = requests.get(
+    f"{BASE_URL}/studio/market/twstock/batch/per",
+    headers=headers,
+    params={"stock_ids": "2330,6182", "start": "2026-08-04", "end": "2026-08-08"},
+    timeout=120,
+)
+payload = response.json()
+# {"data_type": "per",
+#  "data": {"2330": [{"date": "2026-08-04", "dividend_yield": 0.95, "PER": 31.19,
+#                     "PBR": 10.21, "stock_id": "2330"}, ...],
+#           "6182": [...]},
+#  "failed": []}
+```
+
+`failed` lists stock_ids whose server-side fetch failed (rate limit or upstream error) —
+retry those. A stock absent from both `data` and `failed` genuinely has no data in the
+range. `batch/price` rows carry `open/high/low/close/volume` plus `spread`,
+`turnover_count`, `turnover_value` — same as `/twstock/price/<stock_id>`.
 
 ---
 
@@ -501,6 +686,52 @@ df = df.sort_values("date").reset_index(drop=True)
 df["mom_pct"] = df["revenue"].pct_change() * 100          # month-over-month %
 df["yoy_pct"] = df["revenue"].pct_change(periods=12) * 100  # year-over-year %
 ```
+
+---
+
+## Taiwan Market-Wide — 大盤
+
+Whole-market series (no `stock_id` dimension). Four endpoints, all daily, all with optional
+`start` / `end` (omit for full history) and all returning `{"data": [...]}` sorted by date.
+Do **not** sum the per-stock endpoints above as a substitute — coverage and units differ.
+
+```python
+params = {"start": "2024-01-01", "end": "2024-12-31"}
+
+# 加權指數 TAIEX 日 OHLC — from 1999-01-05. TAIEX is the only supported index id (else 400).
+r = requests.get(f"{BASE_URL}/studio/market/twmarket/index/TAIEX", headers=headers, params=params, timeout=60)
+# {"index_id": "TAIEX", "data": [{"date": "2024-01-02", "open": 17939.79, "high": 17956.74,
+#                                 "low": 17784.97, "close": 17853.76}, ...]}
+
+# 全市場成交量值 — from 1990-01-04
+r = requests.get(f"{BASE_URL}/studio/market/twmarket/turnover", headers=headers, params=params, timeout=60)
+# [{"date": "2024-01-02", "volume": 6411778806.0, "value": 301290668897.0, "trades": 2267660.0}, ...]
+
+# 全市場三大法人買賣超 — from 2004-04-07
+r = requests.get(f"{BASE_URL}/studio/market/twmarket/institutional", headers=headers, params=params, timeout=60)
+# [{"date": "2024-01-02", "foreign": 1047078183.0, "investment_trust": 189637635.0,
+#   "dealer": -4447440583.0, "total": -3211404085.0}, ...]
+
+# 全市場融資融券餘額 — from 2001-01-03
+r = requests.get(f"{BASE_URL}/studio/market/twmarket/margin", headers=headers, params=params, timeout=60)
+# [{"date": "2024-01-02", "margin_balance": 8012561, "margin_balance_prev": 7999081,
+#   "margin_balance_value": 248424271000, "short_balance": 369678,
+#   "short_balance_prev": 359738}, ...]
+```
+
+**Field meanings:**
+| Endpoint | Field | Unit |
+|---|---|---|
+| `index/TAIEX` | `open` `high` `low` `close` | index points (no volume — use `turnover`) |
+| `turnover` | `volume` / `value` / `trades` | 成交股數 shares / 成交金額 TWD 元 / 成交筆數 count |
+| `institutional` | `foreign` `investment_trust` `dealer` `total` | TWD 元, **net** (buy − sell) |
+| `margin` | `margin_balance` `margin_balance_prev` `short_balance` `short_balance_prev` | 張 (lots) |
+| `margin` | `margin_balance_value` | TWD 元 |
+
+外資自營商 (foreign dealers' own account) is bucketed into `dealer`, not `foreign` — same
+convention FinMind uses, so `foreign` here is 外資及陸資(不含外資自營商).
+
+TXO put/call ratio is a futures/options dataset — see *Taiwan Option Put/Call Ratio* below.
 
 ---
 
@@ -757,6 +988,53 @@ Note: 資料有約 4 小時延遲，最新幾小時不可用。
 
 ---
 
+## Economic Calendar — 總經事件行事曆
+
+```
+GET /studio/market/anue/economic_calendar
+```
+
+全球總經事件的發布時間、市場預期值、前值與實際值（授權資料源）。所有參數皆選填；不帶參數時回傳完整清單（約 1,400 筆），**務必用參數篩選**。
+
+| Param | Description |
+|---|---|
+| `start` / `end` | `YYYY-MM-DD`，台北日期，含頭含尾 |
+| `country` | ISO 兩碼，逗號分隔，如 `US,CN,TW` |
+| `max_priority` | 只回 `priority <=` 此值。**1 最重要、3 最不重要**，所以「只要大事件」是 `max_priority=1` |
+| `limit` | 筆數上限（依事件時間排序後截斷） |
+| `lang` | `zh` / `en`，指標與國名的顯示語言；伺服器只換掉對照表裡有的名稱，`en` 會拿到中英混雜 |
+
+資料是**滾動約五週的窗口**（前一個月加未來數週），不是歷史庫；區間落在窗外會回空陣列而非錯誤。
+
+```python
+params = {"start": "2026-07-28", "end": "2026-07-31", "country": "US,CN", "max_priority": 2}
+response = requests.get(
+    f"{BASE_URL}/studio/market/anue/economic_calendar",
+    headers=headers, params=params, timeout=60,
+)
+data = response.json()
+# [{"startDate": 1785715200, "time": "20:30", "countryId": "US", "countryName": "美國",
+#   "subjectTitle": "<2季>", "subject": "GDP成長率(QoQ)初值", "unit": "%",
+#   "predict": 1.6, "last": 2.1, "real": None, "priority": 3}, ...]
+```
+
+**Response fields:**
+| Field | Description |
+|---|---|
+| `startDate` | 事件當天（台北日期）的 epoch 秒 |
+| `time` | `HH:MM`，**台北時間**；部分事件未公布時間，為 `null` |
+| `countryId` / `countryName` | ISO 兩碼 / 中文國名 |
+| `subject` / `subjectTitle` | 指標名稱 / 期別（如 `<7月>`、`<2季>`） |
+| `predict` | 市場預期值（consensus）；未提供為 `null` |
+| `last` | 前值 |
+| `real` | 實際值；尚未公布為 `null` |
+| `unit` | 單位（`%`、`point`、`億USD` …） |
+| `priority` | 1–3，**1 最重要**（1 = 非農/利率決議，3 = 鑽機數這類） |
+
+**這是總經事件與其數字的唯一來源——不要改用網路搜尋，也不要憑記憶填數字。** 泛用搜尋會撿到行事曆聚合站,那些表格本身就有錯（實測有站把已公布的實際值當成預期值），沒被頁面涵蓋的欄位則會被訓練資料填空：連「前值」這種唯一解的數字都寫錯過。這支查不到的就說查不到。
+
+---
+
 ## alpha_table Field Reference
 
 Each symbol in `/alpha_table` contains:
@@ -769,7 +1047,7 @@ Each symbol in `/alpha_table` contains:
 | `market_cap` | `{"-": 1234567890}` — USD market cap |
 | `market_cap_percentile` | `{"-": 85.3}` — percentile among all listed coins |
 | `funding_rate` | `{"binance": -0.01, ...}` — per exchange |
-| `oi_imbalance` | `{"-": 0.12}` — OI imbalance |
+| `oi_imbalance` | `{"-": 0.12}` — OI imbalance (full detail table: `/oi_imbalance/get_overview_data`) |
 
 `fields` = indicator metadata. `note` = color ranges. `""` = insufficient data.
 

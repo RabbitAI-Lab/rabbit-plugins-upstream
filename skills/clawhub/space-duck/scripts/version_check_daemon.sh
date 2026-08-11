@@ -36,6 +36,21 @@ log() {
 
 log "== version_check_daemon start =="
 
+# [AUTOUP-077] POST to /beak/tg/notify without the beak key on argv (HARDEN-071
+# doctrine: secrets never visible in `ps`). Key is fed via curl --config on
+# stdin. Args: $1 = message body. Echoes "HTTPCODE\nBODY…" like the old inline
+# call. Requires BEAK_KEY, SD_ID, API_BASE set by the caller.
+notify_owner() {
+  local msg_json
+  msg_json=$(python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))' <<< "$1")
+  curl -s -m 10 -w "\n%{http_code}" \
+    --config /dev/stdin \
+    -H "Content-Type: application/json" \
+    -X POST "$API_BASE/beak/tg/notify" \
+    -d "{\"spaceduck_id\":\"$SD_ID\",\"message\":$msg_json}" \
+    <<< "header = \"X-Beak-Key: $BEAK_KEY\"" 2>&1
+}
+
 # ─── Prereqs ──────────────────────────────────────────────────────────────────
 if [[ ! -f "$CFG" ]]; then
   log "no config.json — skipping (duck not paired)"
@@ -83,6 +98,52 @@ if [[ "$CUR_VER" == "$LATEST_VER" ]]; then
   exit 0
 fi
 
+# [HARDEN-071] only nudge on a genuine UPGRADE. A stale/lagging registry
+# value must not produce a downgrade nudge (seen in field: "0.7.0 -> 0.4.12").
+HIGHEST=$(printf '%s\n%s\n' "$CUR_VER" "$LATEST_VER" | sort -V | tail -1)
+if [[ "$HIGHEST" == "$CUR_VER" ]]; then
+  log "installed $CUR_VER is >= registry $LATEST_VER — no nudge (registry lag)"
+  exit 0
+fi
+
+# ─── [AUTOUP-075] Owner-approved auto-update path ─────────────────────────────
+# config.json auto_update: "auto" = standing consent, self-update instead of
+# nudging. Default/absent = "ask" (nudge only). Consent is set at pair time
+# or by the owner editing config.json — never by the platform.
+AUTO_MODE=$(python3 -c "import json; print((json.load(open('$CFG')).get('auto_update') or 'ask').lower())" 2>/dev/null || echo "ask")
+if [[ "$AUTO_MODE" == "auto" ]]; then
+  log "auto_update=auto — running update.sh ($CUR_VER -> $LATEST_VER)"
+  UPDATE_SH="$(dirname "$0")/update.sh"
+  if [[ -f "$UPDATE_SH" ]]; then
+    UP_LOG="$SD_DIR/logs/self_update.log"
+    bash "$UPDATE_SH" >> "$UP_LOG" 2>&1
+    RC=$?
+    if [[ "$RC" == "0" ]]; then
+      log "self-update OK -> $LATEST_VER"
+      echo "$LATEST_VER" > "$NUDGE_STATE"
+      MSG_BODY="🦆 Space Duck auto-updated to v$LATEST_VER (was v$CUR_VER). Doctor: run scripts/doctor.sh to verify."
+    elif [[ "$RC" == "13" ]]; then
+      # [AUTOUP-076] exit 13 = install SUCCEEDED, listener restart skipped
+      log "self-update installed $LATEST_VER but listener restart skipped (exit 13)"
+      echo "$LATEST_VER" > "$NUDGE_STATE"
+      MSG_BODY="🦆 Space Duck updated to v$LATEST_VER (was v$CUR_VER) — restart your listeners manually (scripts/setup_listeners_supervised.sh)."
+    else
+      log "self-update FAILED (exit $RC) — falling back to nudge"
+      MSG_BODY="⚠️ Space Duck auto-update to v$LATEST_VER failed (exit $RC). Log: $UP_LOG — run /update manually."
+    fi
+    BEAK_KEY=$(python3 -c "import json; print(json.load(open('$CFG')).get('beak_key',''))" 2>/dev/null)
+    SD_ID=$(python3 -c "import json; print(json.load(open('$CFG')).get('spaceduck_id',''))" 2>/dev/null)
+    if [[ -n "$BEAK_KEY" && -n "$SD_ID" ]]; then
+      API_BASE="${SPACEDUCK_API_BASE:-https://beak.spaceduckling.com}"
+      notify_owner "$MSG_BODY" > /dev/null || true  # [AUTOUP-077] key off argv
+    fi
+    log "== version_check_daemon end (auto path) =="
+    exit 0
+  else
+    log "update.sh missing — falling back to nudge"
+  fi
+fi
+
 # ─── Idempotency: don't re-nudge same version ─────────────────────────────────
 if [[ -f "$NUDGE_STATE" ]]; then
   LAST_NUDGED=$(cat "$NUDGE_STATE" 2>/dev/null | head -1 | tr -d ' \n')
@@ -121,11 +182,7 @@ fi
 
 # Use the existing /beak/tg/notify endpoint (sends to owner's TG via platform)
 API_BASE="${SPACEDUCK_API_BASE:-https://beak.spaceduckling.com}"
-RESP=$(curl -s -m 10 -w "\n%{http_code}" \
-  -H "X-Beak-Key: $BEAK_KEY" \
-  -H "Content-Type: application/json" \
-  -X POST "$API_BASE/beak/tg/notify" \
-  -d "{\"spaceduck_id\":\"$SD_ID\",\"message\":$(python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))' <<< "$MSG_BODY")}" 2>&1)
+RESP=$(notify_owner "$MSG_BODY")  # [AUTOUP-077] key off argv
 HTTP_CODE=$(echo "$RESP" | tail -1)
 RESP_BODY=$(echo "$RESP" | head -n -1)
 

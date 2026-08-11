@@ -5,7 +5,7 @@ description: "product video, product demo video, product ad video, product showc
 metadata: {"clawdbot":{"emoji":"🛒","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When this skill is called, run 'dlazy chat --skill product-to-ecommerce-video --prompt ...' for a new task, or 'dlazy chat --project <id> --prompt ...' to continue (discover ids via 'dlazy projects list'). Never pass both --skill and --project."}}
 ---
 
-# product-video
+# 产品视频生成 Product Video
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

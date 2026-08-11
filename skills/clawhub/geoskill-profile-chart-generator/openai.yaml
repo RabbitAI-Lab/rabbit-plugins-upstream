@@ -1,0 +1,13 @@
+name: geoskill-profile-chart-generator
+display_name: 剖面图生成器
+description: |
+  Sample elevation or imagery values along a path and produce profile charts and CSV
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-profile-chart-generator.py
+runtime: python>=3.9
+tags:
+  - dem
+  - gis
+  - remote-sensing
+  - terrain

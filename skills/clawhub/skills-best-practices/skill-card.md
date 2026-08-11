@@ -1,53 +1,63 @@
-## Description: <br>
-Build high-quality Agent Skills for Claude following official Anthropic best practices. Covers SKILL.md structure, frontmatter, description writing, progressive disclosure, testing, patterns, troubleshooting, and distribution across all surfaces (Claude.ai, Claude Code, API, Agent SDK). Use when creating a skill, reviewing skill quality, debugging why a skill won't trigger, structuring skill directories, or writing skill descriptions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Skills Best Practices guides agents in creating, reviewing, debugging, structuring, and publishing high-quality Agent Skills across Claude.ai, Claude Code, API, Agent SDK, and ClawHub.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and skill authors use this skill to create, review, troubleshoot, test, and publish Agent Skills for Claude and ClawHub. It provides practical guidance for SKILL.md structure, descriptions, progressive disclosure, reference organization, validation, security considerations, and distribution across supported surfaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Example shell, ClawHub CLI, API, MCP, or dynamic-injection commands may be copied into a user's own environment without review. <br>
-Mitigation: Review and approve any example commands before running them, and scan skills before deployment. <br>
-Risk: Documentation about dynamic-injection syntax can be hazardous if copied into a load-time context where it may execute. <br>
-Mitigation: Keep dynamic-injection examples in reference files or otherwise separate trigger syntax from executable load-time content. <br>
+## Use Case:
 
+Developers, skill authors, and reviewers use this skill to write, assess, troubleshoot, and publish portable Agent Skills with clear frontmatter, concise instructions, validation checks, and ClawHub publishing guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/skills-best-practices) <br>
-- [Project homepage](https://github.com/tenequm/skills/tree/main/skills/skills-best-practices) <br>
-- [Description writing guide](references/description-guide.md) <br>
-- [Patterns and workflows](references/patterns.md) <br>
-- [Claude Code features](references/claude-code-features.md) <br>
-- [Quality checklist](references/checklist.md) <br>
-- [ClawHub publishing](references/clawhub-publishing.md) <br>
-- [Agent Skills Spec](https://agentskills.io/specification) <br>
-- [Claude Code Skills Docs](https://code.claude.com/docs/en/skills) <br>
-- [API Skills Guide](https://platform.claude.com/docs/en/build-with-claude/skills-guide) <br>
-- [Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices) <br>
-- [Anthropic Skills Repo](https://github.com/anthropics/skills) <br>
-- [Engineering Blog: Agent Skills](https://claude.com/blog/equipping-agents-for-the-real-world-with-agent-skills) <br>
-- [Complete Guide PDF](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with examples, checklists, and command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; no bundled executables or hidden automatic behavior were found in security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.3 (source: server release evidence, SKILL.md metadata, and changelog, released 2026-07-22) <br>
+Risk: Examples may include commands that contact ClawHub or use a ClawHub token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands and token usage before execution; run only commands appropriate for the active publisher account and environment.
+
+Risk: Skill-authoring guidance can become stale as Agent Skills, Claude Code, API, and ClawHub behavior changes.
+
+Mitigation: Validate against current official documentation and run the recommended skill validator before publishing or relying on version-specific guidance.
+
+Risk: Incorrect or overly broad guidance could cause a generated skill to trigger at the wrong time or include unsafe examples.
+
+Mitigation: Test triggering, review examples, and scan the final skill before deployment.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/skills-best-practices)
+- [Source Homepage](https://github.com/tenequm/skills/tree/main/skills/skills-best-practices)
+- [ClawHub Publishing Reference](references/clawhub-publishing.md)
+- [Agent Skills Specification](https://agentskills.io/specification)
+- [Claude Code Skills Docs](https://code.claude.com/docs/en/skills)
+- [Anthropic Agent Skills Best Practices](https://platform.claude.com/docs/en/agents-and-tools/agent-skills/best-practices)
+- [Anthropic Skills Repository](https://github.com/anthropics/skills)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with inline examples, YAML snippets, command examples, checklists, and reference links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only skill; it does not install code or run commands automatically.]
+
+## Skill Version(s):
+
+0.8.0 (source: evidence.release.version, SKILL.md metadata.version, CHANGELOG released 2026-08-07)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

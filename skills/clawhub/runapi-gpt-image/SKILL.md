@@ -18,23 +18,32 @@ metadata:
     envVars:
     - name: RUNAPI_API_KEY
       required: false
-      description: Optional RunAPI API key; runapi login or saved CLI config can also authenticate the runapi binary.
+      description: Optional RunAPI API key; agents should prefer environment auth or saved CLI config. Browser login is interactive fallback only.
 ---
 
 # GPT Image on RunAPI
 
 Generate and edit images with GPT Image through RunAPI. The default path for one-off agent tasks is the `runapi` CLI; SDKs are for application integration.
 
-## Routing decision
+## Critical: Integration Runtime
 
-- One-off generation, editing, or transformation for the user → use the **CLI path** with the `runapi` binary.
-- Building an app, backend, worker, library, or production codebase → use the **SDK integration path**.
+- Integration work (app, backend, worker, library, Rails service, Node service, Go service, webhook pipeline, or production codebase) uses the **SDK integration path** for the target language.
+- One-off generation, editing, transformation, manual smoke tests, debugging, or user-requested CLI runs use the **CLI path** with the `runapi` binary. For full CLI-specific agent guidance, see https://github.com/runapi-ai/cli-skill.
+- Never shell out to the `runapi` CLI as the production runtime integration layer.
+
+## SDK integration path
+
+When integrating GPT Image into an app, backend, worker, library, Rails service, Node service, Go service, webhook pipeline, or production workflow, start by checking the current SDK package and official usage. Confirm install commands, client methods (`create`, `get`, `run`), request fields, response shape, and error classes before using CLI help or raw HTTP examples. Use a RunAPI SDK package:
+
+- JavaScript / TypeScript: `@runapi.ai/gpt-image`
+- Ruby: `runapi-gpt-image`
+- Go: `github.com/runapi-ai/gpt-image-sdk/go`
 
 ## CLI path
 
-The `runapi` binary is the runtime dependency. Authenticate with `runapi login` (browser) or set `RUNAPI_API_KEY`; a saved CLI config also works — no required environment variable.
+The `runapi` binary is the one-off and manual testing runtime dependency. For full CLI-specific agent guidance, see https://github.com/runapi-ai/cli-skill. Run `runapi auth status` first. For agents and headless runs, prefer `RUNAPI_API_KEY` or import it into saved config with `printf '%s' "$RUNAPI_API_KEY" | runapi auth import-token --token -`. Use `runapi login` only when the user explicitly wants interactive browser auth.
 
-Inspect the available actions and request fields with CLI help:
+Inspect the available commands and request fields with CLI help:
 
 ```shell
 runapi gpt-image --help
@@ -54,15 +63,11 @@ runapi gpt-image text-to-image --async --input-file request.json
 runapi wait <task-id> --service gpt-image --action text-to-image
 ```
 
-Available actions: `text-to-image`, `edit-image`.
+Available commands: `text-to-image`, `edit-image`.
 
-## SDK integration path
+## Generated file storage
 
-When integrating GPT Image into an app, backend, worker, or library — not for one-off tasks — use a RunAPI SDK package:
-
-- JavaScript / TypeScript: `@runapi.ai/gpt-image`
-- Ruby: `runapi-gpt_image`
-- Go: `github.com/runapi-ai/gpt-image-sdk/go`
+RunAPI-generated file URLs are temporary. Download and store generated images, videos, audio, or other files in your own durable storage within 7 days; do not treat returned URLs as long-term assets.
 
 ## References
 
@@ -70,8 +75,6 @@ When integrating GPT Image into an app, backend, worker, or library — not for 
 - Provider comparison: https://runapi.ai/providers/openai.md
 - Full model catalog: https://runapi.ai/models.md
 
-## Variants
+## Model
 
-- [GPT Image 1.5 text to image](https://runapi.ai/models/gpt-image/1.5-text-to-image.md)
-- [GPT Image 1.5 image to image](https://runapi.ai/models/gpt-image/1.5-image-to-image.md)
-
+- [GPT Image 1.5](https://runapi.ai/models/gpt-image.md)

@@ -1,41 +1,59 @@
-## Description: <br>
-用于小红书评论分析、小红书用户反馈、小红书需求挖掘、痛点总结、购买顾虑整理、FAQ 提炼、口碑分析、评论回复观察和内容讨论复盘，基于用户提供的小红书笔记链接或完整 note_id 下的评论结果，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes Xiaohongshu comments from a user-provided note link or note_id to extract themes, user feedback, pain points, purchase concerns, FAQs, reputation signals, and actionable insights for content, product, brand, and creator research.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-Content operations, product research, brand research, and customer-insight teams use this skill to fetch and analyze Xiaohongshu / XHS / RedNote comments and replies for a user-provided note link or complete note_id. It helps turn returned comments into themes, pain points, purchase objections, FAQs, representative quotes, and actionable recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends the provided Xiaohongshu note, URL, or comment identifiers to SocialDataX using the user's API key. <br>
-Mitigation: Confirm the user is comfortable sharing those identifiers with SocialDataX and keep SOCIALDATAX_API_KEY in the runtime environment rather than in skill files. <br>
-Risk: Broad pagination, --all, or reply expansion can increase API usage or credit consumption. <br>
-Mitigation: Use --max-items or --pages when full collection is not required. <br>
+## Use Case:
 
+External users, content operators, product researchers, brand researchers, and creators use this skill to collect and summarize Xiaohongshu comment feedback into themes, pain points, purchase concerns, FAQs, and action recommendations. It supports bounded or paginated review of comments and replies from a supplied Xiaohongshu note URL, complete note_id, or comment_id.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/xhs-comment-insights) <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON data returned by SocialDataX CLI or MCP tools] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY and node/npm; output should state whether comments are a partial sample, multi-page result, or include replies.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.3 (source: server release evidence) <br>
+Risk: Using the skill sends the supplied Xiaohongshu URL or IDs, pagination tokens, and the user's SocialDataX API key to SocialDataX-hosted services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run the skill only when that data transfer is acceptable, and keep SOCIALDATAX_API_KEY in the user's environment instead of embedding it in skill files or prompts.
+
+Risk: Unbounded collection can occur when using the all-pages option.
+
+Mitigation: Use bounded collection controls such as --pages or --max-items when a limited sample is sufficient.
+
+Risk: Comment insights may overstate coverage when only the first page or a partial set of replies was collected.
+
+Mitigation: State the collection scope in the output and distinguish returned comment text from inferred themes or recommendations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/xhs-comment-insights)
+- [SocialDataX AI homepage](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub publisher profile](https://clawhub.ai/user/devinchen2014)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown summaries with optional shell command examples and JSON-derived evidence notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should state the comment coverage used, separate visible comment evidence from analysis, and avoid treating partial samples as full-platform coverage.]
+
+## Skill Version(s):
+
+0.1.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

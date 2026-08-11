@@ -1,43 +1,54 @@
-## Description: <br>
-This skill helps agents search Taobao, JD, and Pinduoduo products, compare prices, find coupons, parse e-commerce share text, and convert product links into discount purchase links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+购物省钱宝 helps agents search Taobao, JD, and Pinduoduo products, compare prices, find coupons, parse shopping share text, and convert product links into discount links.
 
-## Publisher: <br>
-[zhangjiun1](https://clawhub.ai/user/zhangjiun1) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhangjiun1](https://clawhub.ai/user/zhangjiun1)
 
-## Use Case: <br>
-External shopping assistants and personal agents use this skill to answer price comparison, coupon lookup, share-code parsing, and discount-link conversion requests for Taobao, JD, and Pinduoduo. It is intended for users who provide product keywords, product links, or e-commerce share text and want concise purchase options. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Shopping queries, product links, and pasted e-commerce share text are sent to op.squirrel2.cn for processing. <br>
-Mitigation: Install only when this data sharing is acceptable, and avoid pasting unrelated personal text into the skill. <br>
-Risk: The skill performs an automatic ClawHub update check that is under-disclosed in the artifact. <br>
-Mitigation: Set PRICECOMPARE_NO_VERSION_CHECK when automatic version checks are not desired. <br>
-Risk: Product prices, coupons, and generated purchase links depend on external shopping API data and may change or become unavailable. <br>
-Mitigation: Have the agent present results as current offers and advise users to verify price and coupon details before purchase. <br>
+## Use Case:
 
+External shoppers and shopping assistants use this skill to compare prices, discover coupons, parse e-commerce share messages, and generate discount purchase links across JD, Taobao, and Pinduoduo.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhangjiun1/skills/pricecompare) <br>
-- [Publisher Profile](https://clawhub.ai/user/zhangjiun1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-formatted text with product details, prices, coupon information, and purchase links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns formatted strings for direct presentation by the agent; external shopping API responses determine product availability and pricing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.5 (source: frontmatter and server release evidence) <br>
+Risk: Shopping messages, product links, and share text may be sent to op.squirrel2.cn for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when users and operators are comfortable sending that shopping content to the remote service; avoid submitting unrelated sensitive text.
+
+Risk: The skill automatically checks ClawHub for updates unless PRICECOMPARE_NO_VERSION_CHECK is set.
+
+Mitigation: Set PRICECOMPARE_NO_VERSION_CHECK in environments where automatic update checks or extra outbound contact are not desired.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/zhangjiun1/skills/pricecompare)
+- [Publisher Profile](https://clawhub.ai/user/zhangjiun1)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown-formatted text with product summaries, coupon details, comparison results, and purchase links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may include product names, prices, coupon information, sales text, platform labels, and promotion links returned by the remote shopping service.]
+
+## Skill Version(s):
+
+1.5.6 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

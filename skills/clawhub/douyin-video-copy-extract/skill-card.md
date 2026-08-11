@@ -1,42 +1,58 @@
-## Description: <br>
-用于抖音文案提取、抖音文案一键提取、抖音视频文案提取、抖音视频转文字、抖音口播转文字和抖音逐字稿，用户粘贴抖音视频链接、分享文案或 aweme_id 后，提取视频上下文、原视频简介和口播逐字稿，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于抖音文案提取、抖音文案一键提取、抖音视频文案提取、抖音视频转文字、抖音口播转文字和抖音逐字稿。用户粘贴抖音视频链接、分享文案或 aweme_id 后，提取视频上下文、原视频简介和口播逐字稿，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and agents use this skill to submit or check Douyin speech-to-text transcript jobs from a video URL, share text, aweme_id, or existing job_id. The skill returns visible video context, the original description, transcript text, copy-ready text, a concise version, and task status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends the provided Douyin URL, share text, aweme_id, or job_id to SocialDataX using SOCIALDATAX_API_KEY. <br>
-Mitigation: Use it only when the user is comfortable sharing that input with SocialDataX and has configured the intended SOCIALDATAX_API_KEY. <br>
-Risk: Transcript jobs may remain in progress after the initial command. <br>
-Mitigation: Keep the returned job_id and poll the same job instead of submitting duplicate transcript jobs. <br>
-Risk: Insufficient balance errors can lead to repeated failed submissions. <br>
-Mitigation: Stop submitting or polling after an insufficient balance response, show the recharge URL returned by the service, and resume only after the same account is funded. <br>
+## Use Case:
 
+Agents use this skill to help users submit or continue bounded Douyin speech-to-text transcript jobs from a Douyin URL, share text, aweme_id, or job_id. It returns visible video context, the original description, transcript text, copy-ready prose, a concise version, and task status.
 
-## Reference(s): <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured transcript sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include a job_id, current status, and a follow-up polling command when transcript processing is not complete.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.5 (source: server release evidence) <br>
+Risk: Douyin content submitted for transcription is sent to SocialDataX.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with Douyin content the user intends to send to SocialDataX.
+
+Risk: Duplicate submissions while a transcript job is pending can create redundant work.
+
+Mitigation: Keep the returned job_id and continue polling that same job instead of submitting the same video again.
+
+Risk: The workflow requires a SocialDataX API key in the runtime environment.
+
+Mitigation: Confirm the user is comfortable providing SOCIALDATAX_API_KEY before installing or running the CLI.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/douyin-video-copy-extract)
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown sections with inline shell commands; transcript job responses may include JSON-like status fields.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY and node/npm for the preferred direct CLI workflow.]
+
+## Skill Version(s):
+
+0.1.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

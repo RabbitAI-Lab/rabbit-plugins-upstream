@@ -1,43 +1,67 @@
-## Description: <br>
-Screens publicly accessible product image URLs with Ruiguan image similarity search to identify potential product policy-compliance violations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Screens product image URLs with Ruiguan visual similarity search to identify potential matches against known policy-violating products.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, marketplace operators, and compliance reviewers use this skill to pre-screen product images for similarity to known prohibited or policy-violating items before listing or review. It presents detection results as compliance signals, not legal conclusions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product images and related user content are sent to LinkFox services for compliance checking. <br>
-Mitigation: Use the skill only with images the user is comfortable sharing with LinkFox, and avoid private or unreleased product images unless that exposure is acceptable. <br>
-Risk: Local image files are uploaded to obtain a public URL that is valid for a limited time. <br>
-Mitigation: Confirm that temporary public exposure is acceptable before uploading local files, and prefer already public product-image URLs when possible. <br>
-Risk: The skill consumes paid credits and stores full response data locally. <br>
-Mitigation: Inform users before repeated or batch checks, rely on the built-in cache for duplicate requests, and review saved response files for sensitive result data. <br>
+## Use Case:
 
+External sellers, marketplace operators, and compliance reviewers use this skill to pre-screen product images before listing or review. It helps identify visually similar known violations, but it does not provide a final legal or platform-policy determination.
 
-## Reference(s): <br>
-- [睿观-图片合规检测 API 参考](references/api.md) <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-gun-parts-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Files, JSON, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses and saved response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns matched violation records with image URLs, similarity scores, titles, detection IDs, and token cost; large responses are summarized after the full JSON is saved locally.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server-resolved release evidence) <br>
+Risk: Product image URLs, and local images uploaded to obtain public URLs, are sent to LinkFox/Ruiguan for compliance screening.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only images whose third-party processing and temporary public-link exposure are acceptable; avoid private, signed, proprietary, or regulated images.
+
+Risk: Full API responses and cache files may be stored locally, including submitted image URLs, matched violation images, product titles, detection IDs, and token cost data.
+
+Mitigation: Review local retention and access controls for the generated linkfox data and cache directories, and remove stored responses when they are no longer needed.
+
+Risk: The skill includes account, token, and billing helpers, and normal detection calls consume credits.
+
+Mitigation: Confirm expected credit use before repeated calls, review any onboarding or payment action before running it, and keep API keys out of shared logs or transcripts.
+
+Risk: Endpoint override environment variables can redirect requests away from the default LinkFox endpoints.
+
+Mitigation: Leave endpoint overrides unset unless the destination is explicitly trusted and approved for the data being processed.
+
+Risk: Similarity matches are screening signals, not definitive policy or legal rulings.
+
+Mitigation: Treat high-similarity results as triage findings and verify final decisions against the applicable marketplace or platform policy.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-ruiguan-gun-parts-search)
+- [Ruiguan image compliance API reference](references/api.md)
+- [Authentication and billing onboarding reference](references/onboarding.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON/API result summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts a publicly reachable imageUrl up to 1000 characters. Small responses may be printed in full; larger responses are summarized while the complete JSON response is saved locally.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -21,6 +21,8 @@ IdentyClaw Passports on the NEAR blockchain contain comprehensive metadata for:
 - Geographic restrictions
 - Webhook configuration
 
+**Privacy:** Passport metadata can include DN attributes, ContactURI, geographic restrictions, and facial/biometric-style encodings. Treat these as sensitive personal data: collect only what you need, do not log full identity payloads, and follow applicable consent/retention rules. Example strings in this doc are fictional placeholders.
+
 **Technical Implementation**: IdentyClaw Passports are implemented as non-fungible tokens on the NEAR blockchain, ensuring each passport is unique and transferable.
 
 ## Uniqueness and exclusivity
@@ -83,7 +85,7 @@ Each Passport DN carries **one** `ContactURI`. Pick the channel you monitor most
 
 | Scheme | Example | Notes |
 | --- | --- | --- |
-| `email` | `email:example.com:IdentyClaw@example.com` | Preferred for async agent mail; pairs with [`inter-agent-communication.md`](inter-agent-communication.md) |
+| `email` | `email:example.com:IdentyClaw@example.com` | Preferred for async agent mail; optional patterns in MCP `doc:reference:inter-agent-communication` (not part of this ClawHub skill) |
 | `twitter` | `twitter:x.com:username` | Public @handle |
 | `telegram` | `telegram:telegram.com:username` | Bot or user handle without `@` |
 | `phone` | `phone:ES:34683493049` | Country code + national number (no `+`) |
@@ -463,7 +465,7 @@ IdentyClaw Passports contain comprehensive API access control metadata:
   "token_id": "bfskljshznld",
   "owner_id": "abc123...def.near",
   "userselected_dn": "NNSWF=Alice,ContactURI=email:example.com:alice@example.com",
-  "facial_description": "pale-skinned Nordic oval-faced teenage-person...",
+  "facial_description": "<facial-description-placeholder>",
   "metadata": {
   "openapijson_url": "https://api.identyclaw.com/openapi.json",
   "not_after": "2027-04-19T00:00:00Z",

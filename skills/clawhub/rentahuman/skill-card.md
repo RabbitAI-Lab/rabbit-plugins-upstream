@@ -1,44 +1,59 @@
-## Description: <br>
-Hire humans for physical-world tasks via RentAHuman.ai. Search available humans by skill, post bounties, start conversations, and coordinate real-world work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hire humans for physical-world tasks via RentAHuman.ai by searching available humans, posting bounties, starting conversations, and coordinating real-world work.
 
-## Publisher: <br>
-[alexanderliteplo](https://clawhub.ai/user/alexanderliteplo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[alexanderliteplo](https://clawhub.ai/user/alexanderliteplo)
 
-## Use Case: <br>
-External developers and agents use this skill to find human workers, post bounties, start conversations, and coordinate real-world tasks such as package pickup, event attendance, photography, errands, and taste testing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can support high-impact real-world, account, messaging, payment, and webhook workflows. <br>
-Mitigation: Require explicit user confirmation before public posts, payments, messaging, webhook registration, wallet changes, or other money-moving and account-level actions. <br>
-Risk: Task descriptions and messages may expose sensitive physical-world information such as home addresses, access codes, tracking numbers, IDs, or schedules. <br>
-Mitigation: Share only the minimum information required for the task and avoid sending sensitive personal or access details unless the user has reviewed and approved them. <br>
-Risk: Using a broad RentAHuman API key may grant an agent account-level authority beyond simple browsing. <br>
-Mitigation: Install and run the skill only with an API key the user is comfortable delegating, and keep read-only browsing separate from authenticated actions where possible. <br>
+## Use Case:
 
+External users and developers use this skill to find people on RentAHuman.ai, review profiles and reviews, create bounties, message candidates, and manage application decisions for real-world tasks.
 
-## Reference(s): <br>
-- [RentAHuman homepage](https://rentahuman.ai) <br>
-- [RentAHuman API reference](references/API.md) <br>
-- [ClawHub skill page](https://clawhub.ai/alexanderliteplo/skills/rentahuman) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, code, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, JSON payload examples, and setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only browsing can use public endpoints; bounty, messaging, application, payment, webhook, and account-related actions require a RentAHuman API key and explicit user review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.19.0 (source: server-resolved release metadata) <br>
+Risk: Authenticated use can coordinate real-world work and affect bounties, messages, payments, and application decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm every bounty, message, payment, and application decision before allowing an agent to proceed.
+
+Risk: Task descriptions and messages can expose sensitive personal data such as home addresses, IDs, package identifiers, private schedules, or other unnecessary details.
+
+Mitigation: Share only the minimum details needed for the task, and avoid unnecessary personal data in initial posts or messages.
+
+Risk: RENTAHUMAN_API_KEY and local identity keys are credentials that can authorize account actions.
+
+Mitigation: Store credentials securely, do not commit them, and enable admin or broad MCP tooling only when intentionally needed.
+
+## Reference(s):
+
+- [RentAHuman API Reference](references/API.md)
+- [RentAHuman homepage](https://rentahuman.ai)
+- [ClawHub skill page](https://clawhub.ai/alexanderliteplo/skills/rentahuman)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, API calls]
+
+**Output Format:** [Markdown with inline bash commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce commands that call RentAHuman APIs; authenticated write operations require RENTAHUMAN_API_KEY.]
+
+## Skill Version(s):
+
+1.23.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

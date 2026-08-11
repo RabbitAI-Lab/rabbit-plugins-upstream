@@ -1,41 +1,58 @@
-## Description: <br>
-用于快手达人数据、快手达人信息、账号资料、创作者画像、主页信息和粉丝规模查询。覆盖 Kuaishou / Kwai creator profiles，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents look up Kuaishou / Kwai creator profiles, account basics, creator positioning, audience scale, and related public profile information through SocialDataX.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and agents use this skill to search Kuaishou creator accounts and retrieve profile facts such as identifiers, bio, verification, follower counts, following counts, received likes, IP location, and gender when available. It supports discovery by keyword before profile lookup when only a creator name, account keyword, or niche is known. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Kuaishou lookup terms, profile URLs, or user IDs are sent to SocialDataX under the user's API key. <br>
-Mitigation: Confirm the user is comfortable with SocialDataX data handling before lookup and keep SOCIALDATAX_API_KEY scoped to the runtime environment. <br>
-Risk: The direct CLI path runs the SocialDataX npm package with npx. <br>
-Mitigation: Review the npm package and run the command in a controlled environment before production use. <br>
+## Use Case:
 
+Agents and developers use this skill to search for Kuaishou creator candidates and retrieve profile facts such as names, platform IDs, bios, verification status, follower counts, following counts, received likes, IP location, and gender when available.
 
-## Reference(s): <br>
-- [SocialDataX API access page](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-kuaishou-creator-profile) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY plus node and npm when using the direct CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: Creator keywords, profile URLs, and account identifiers are sent to SocialDataX during lookups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only creator lookup data that is appropriate to share with the provider, and avoid including unrelated secrets or private personal data in query text.
+
+Risk: The skill depends on the socialdatax-skills npm package and a SOCIALDATAX_API_KEY at runtime.
+
+Mitigation: Install only when you trust SocialDataX, keep the API key in the runtime environment, and rotate the key if it may have been exposed.
+
+Risk: Profile facts can be incomplete, stale, or returned for a candidate account rather than a confirmed intended creator.
+
+Mitigation: Separate candidate search results from confirmed profile facts, and verify the selected user_id or profile URL before relying on the output.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-kuaishou-creator-profile)
+- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON response descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The underlying commands print JSON with platform, tool, arguments, and data fields.]
+
+## Skill Version(s):
+
+0.1.17 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

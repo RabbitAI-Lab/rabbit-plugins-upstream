@@ -1,52 +1,72 @@
-## Description: <br>
-Opinionated Python development setup with uv, ty, ruff, pytest, and just for creating or modernizing Python projects and configuring linting, type checking, testing, and build tooling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Opinionated Python development setup with uv, ty, ruff, pytest, and just. Use when creating a new Python project, writing or fixing pyproject.toml, or configuring linting, formatting, type checking, testing, pre-commit hooks, or build and CI tooling.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill to bootstrap or modernize Python projects with a consistent uv, ty, ruff, pytest, pre-commit, and just workflow. It provides setup guidance, configuration templates, shell commands, and reference material for common project maintenance tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Suggested setup and maintenance commands can change project files or developer environment state. <br>
-Mitigation: Review generated templates and commands before applying them, especially ruff --fix, uv lock --upgrade, uv sync --all-groups, pre-commit install, cleanup commands, global Python pinning, and publishing commands. <br>
-Risk: The ty type checker is described by the artifact as beta software and may produce false positives for heavily typed frameworks. <br>
-Mitigation: For projects that require stable type checking, review ty results carefully or swap ty for pyright while keeping the rest of the stack. <br>
+## Use Case:
 
+Developers and engineers use this skill to create or modernize Python projects with an opinionated uv, ty, ruff, pytest, pre-commit, and just workflow. It helps produce project configuration, command recipes, CI snippets, and migration guidance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/python-dev) <br>
-- [Publisher Profile](https://clawhub.ai/user/tenequm) <br>
-- [OpenClaw Homepage](https://github.com/tenequm/skills/tree/main/skills/python-dev) <br>
-- [uv Reference](references/uv-reference.md) <br>
-- [ty Reference](references/ty-reference.md) <br>
-- [ruff Reference](references/ruff-reference.md) <br>
-- [pytest Reference](references/pytest-reference.md) <br>
-- [justfile Reference](references/justfile-reference.md) <br>
-- [uv Documentation](https://docs.astral.sh/uv/) <br>
-- [ty Documentation](https://docs.astral.sh/ty/) <br>
-- [ruff Documentation](https://docs.astral.sh/ruff/) <br>
-- [pytest Documentation](https://docs.pytest.org/en/stable/) <br>
-- [just Manual](https://just.systems/man/en/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with TOML, YAML, justfile, and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces project setup guidance and editable templates for Python project configuration, CI, pre-commit hooks, and local development commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.3 (source: frontmatter, changelog, release metadata) <br>
+Risk: Generated project configuration can overwrite or conflict with an existing Python project's conventions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review pyproject.toml, Justfile, pre-commit, and CI snippets before applying them to an existing repository.
+
+Risk: The clean recipe deletes build, cache, coverage, and __pycache__ directories from the current project tree.
+
+Mitigation: Run cleanup commands only from the intended project root and inspect the recipe before execution.
+
+Risk: The update recipe can change locked dependencies.
+
+Mitigation: Review dependency changes and test the project after running update commands.
+
+Risk: ty is beta software and may produce false positives or miss behavior in heavily typed frameworks.
+
+Mitigation: Use pyright instead of ty for projects that need mature type checking, as the skill itself recommends.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/python-dev)
+- [Source Homepage](https://github.com/tenequm/skills/tree/main/skills/python-dev)
+- [uv Reference](references/uv-reference.md)
+- [ty Reference](references/ty-reference.md)
+- [ruff Reference](references/ruff-reference.md)
+- [pytest Reference](references/pytest-reference.md)
+- [Justfile Reference](references/justfile-reference.md)
+- [uv Documentation](https://docs.astral.sh/uv/)
+- [ty Documentation](https://docs.astral.sh/ty/)
+- [ruff Documentation](https://docs.astral.sh/ruff/)
+- [pytest Documentation](https://docs.pytest.org/en/stable/)
+- [just Manual](https://just.systems/man/en/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash, TOML, YAML, and Justfile code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project-scoped setup and migration guidance; generated configuration should be reviewed before use in an existing repository.]
+
+## Skill Version(s):
+
+0.2.4 (source: SKILL.md frontmatter and CHANGELOG, released 2026-08-07)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

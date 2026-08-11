@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """
 InvAssistant — 入场引擎 v1.5
 支持双模式入场：模式A（恐慌入场/三红线）+ 模式B（趋势确认入场）。
@@ -492,24 +491,32 @@ def run_trend_check(df, market_data, params=None, market_params=None):
     high_period = df_copy["High"].tail(break_period).max()
     vol_avg_5 = df_copy["Volume"].tail(5).mean()
     today_vol = latest["Volume"]
-    if close >= high_period and today_vol >= vol_avg_5 * vol_surge:
+    # Finding fix: breakout requires BOTH price breakout AND volume surge (no elif bypass)
+    price_breakout = close >= high_period
+    volume_surge_ok = today_vol >= vol_avg_5 * vol_surge
+    if price_breakout and volume_surge_ok:
         trend2_pass = True
-        trend2_detail = f"✓ 突破{break_period}日高点+放量"
-    elif close >= high_period:
-        trend2_pass = True
-        trend2_detail = f"✓ 突破{break_period}日高点（放量不足）"
+        trend2_detail = f"✓ 突破{break_period}日高点+放量(≥{vol_surge}x5日均量)"
+    elif price_breakout and not volume_surge_ok:
+        trend2_detail = f"✗ 突破{break_period}日高点但放量不足(需≥{vol_surge}x5日均量)"
     if not trend2_pass:
-        failed_conditions.append("突破未确认")
+        failed_conditions.append("突破未确认(需价格+放量同时满足)")
 
     # 条件3：基本面
     fundamental_ok = params.get("fundamental_ok", False) if params else False
     trend3_pass = fundamental_ok
     trend3_detail = "✓ 基本面支持" if fundamental_ok else "✗ 未配置基本面确认"
 
-    # 条件4：估值
+    # 条件4：估值 (Finding fix: no longer hardcoded pass; requires explicit valuation_ok)
     valuation_category = params.get("valuation_category", "standard") if params else "standard"
-    trend4_pass = True  # 传统标的默认通过，叙事股需手动确认
-    trend4_detail = f"✓ 估值类别: {valuation_category}"
+    valuation_ok = bool(params.get("valuation_ok", False)) if params else False
+    trend4_pass = valuation_ok
+    if trend4_pass:
+        trend4_detail = f"✓ 估值确认通过 (类别: {valuation_category})"
+    else:
+        trend4_detail = f"✗ 估值未确认 (valuation_ok=False, 类别: {valuation_category})"
+    if not trend4_pass:
+        failed_conditions.append("估值未确认")
 
     all_passed = trend1_pass and trend2_pass and trend3_pass and trend4_pass
 

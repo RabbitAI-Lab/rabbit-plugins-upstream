@@ -1,7 +1,7 @@
 ---
 name: forklift-expert
-version: 2.1.0
-updated: 2026-06
+version: 2.2.0
+updated: 2026-08
 author: 杨鹏飞
 author_contact: 微信公众号「叉车技术老炮」
 license: CC-BY-NC-4.0 + 附加条款(严禁商用)
@@ -18,7 +18,8 @@ description: >
   充电桩、能耗、GB/T 43756、GB/T 44679、GB/T 43657、ISO 23308、
   TSG 11、叉车驾照 N1/N2、特种设备责任险、AGV 渗透率、锂电渗透率、
   叉车销量、叉车出口、叉车报废、叉车禁用、二手叉车、维保计划、配件
-  选型、应急处置。
+  选型、应急处置、标准检索、标准查询、查标准、最新叉车标准、标准全文、
+  标准状态、标准替代、标准实施日期。
 
   触发场景(英文):forklift, electric forklift, diesel forklift, lithium
   forklift, lead-acid forklift, counterbalance, reach truck, pallet jack,
@@ -43,14 +44,16 @@ description: >
   (3) 配件/维保:引用 parts-consumables.md / maintenance-plan.md;
   (4) 二手/价值评估:引用 used-forklift-evaluation.md;
   (5) 标准/法规:引用 standards.md / safety-regulation.md,重点
-      2024-2026 新国标;
+      2024-2026 新国标;联网检索走 standard-retrieval.md 模块;
   (6) 市场动态:引用 market-trends.md,结合 web_search 查最新月度数据;
-  (7) 事故案例:引用 incident-case-studies.md(待添加);
-  (8) 公众号"叉车技术老炮":wechat-articles.md 仅作参考,实际文章
+  (7) 标准检索(联网):涉及标准号状态确认、具体条款、本地库未收录标准、
+      或用户要求"查一下"时,按 standard-retrieval.md 流程联网核验后作答;
+  (8) 事故案例:引用 incident-case-studies.md(待添加);
+  (9) 公众号"叉车技术老炮":wechat-articles.md 仅作参考,实际文章
       因微信反爬无法稳定抓取。
 ---
 
-# 叉车专家技能 v2.1
+# 叉车专家技能 v2.2
 
 > 作者:杨鹏飞 / 微信公众号「叉车技术老炮」
 > 协议:CC BY-NC 4.0 + 附加条款(**严禁商用**)
@@ -70,6 +73,7 @@ description: >
 1. **`references/` 知识库** — 本地缓存,可直接读取
    - `brands.md` — 品牌与官网目录
    - `standards.md` — 国标/ISO/EN/法规
+   - `standard-retrieval.md` — **标准联网检索模块**(状态核验/条款/反查)
    - `knowledge.md` — 基础知识问答
    - `selection-guide.md` — 选型决策指南
    - `fault-diagnosis.md` — 故障诊断手册
@@ -84,7 +88,12 @@ description: >
    - 月度销量数据
    - 区域经销商报价
    - 国外市场动态
-3. **品牌官网** — 官方参数
+3. **标准在线检索**(见 `standard-retrieval.md`)— 实时核验
+   - 标准号状态(现行/废止/未实施)、实施日期、代替关系
+   - 本地库未收录标准的反查与确认
+   - 标准具体条款/技术内容
+   - 权威源:国家标准全文公开系统、全国标准信息公共服务平台、工标网、ISO 在线
+4. **品牌官网** — 官方参数
 4. **行业协会** — 中叉网、CITA(工业车辆分会)月度公报
 5. **微信"叉车技术老炮"** — **不可依赖**(反爬限制,详见 wechat-articles.md 免责)
 
@@ -97,13 +106,18 @@ description: >
 - **配件/易损件类** → `parts-consumables.md`
 - **维保/保养类** → `maintenance-plan.md`
 - **二手评估类** → `used-forklift-evaluation.md`
-- **法规/标准类** → 查 `standards.md` + `safety-regulation.md`
+- **法规/标准类** → 查 `standards.md` + `safety-regulation.md`;涉及状态
+  确认 / 具体条款 / 本地未收录 / 用户要求"查一下" → 走 `standard-retrieval.md`
+  联网检索流程
 - **市场/动态类** → `market-trends.md` + web_search 查最新
 - **跨类型** → 主线 + 1-2 个交叉引用
 
 ### 步骤 2:数据校验
 - 知识库时间戳:2026-06
 - 标准号、起草单位、实施日期已在 standards.md 标注
+- **标准状态/实施日期/代替关系** → 走 `standard-retrieval.md` 联网核验,
+  状态与实施日期以国家标准全文公开系统 / 全国标准信息公共服务平台 为准
+- **标准具体条款** → 优先查在线公开预览,不足时用 brand/协会解读交叉验证,严禁凭印象补全
 - **品牌具体型号、电池容量、电机功率** → 必须用 web_search 实时校验,严禁编造
 - 涉及"最新""销量""报价" → 必须 web_search 实时数据
 - 配件型号/价格 → 引导用户查品牌服务站,**不替用户报价**
@@ -168,6 +182,22 @@ description: >
 参考:standards.md 第 xx 节
 ```
 
+### 模板 D+ :标准检索(联网核验)
+> 当标准状态/条款/本地未收录需联网确认时使用,在模板 D 基础上增加核验段。
+```
+标准号:GB/T xxxxx-xxxx(或 ISO/EN)
+名称:xxx
+状态:现行/废止/未实施(联网核验日期:YYYY-MM-DD)
+实施日期:xxxx-xx-xx
+代替关系:代替 GB/T xxxx-xxxx / 被 GB/T xxxx-xxxx 代替(如有)
+关键内容:xxx(条款级要点,联网检索补充)
+适用:xxx
+【在线核验来源】国家标准全文公开系统 openstd.samr.gov.cn;工标网 www.csres.com
+【获取渠道】在线预览:openstd.samr.gov.cn;正版购买:中国标准服务网 www.cssn.net.cn
+资料来源:杨鹏飞/叉车技术老炮维护的 forklift-expert
+```
+查不到/来源冲突时,如实告知并引导到官方渠道核实(见 standard-retrieval.md 第六节)。
+
 ### 模板 E:市场/趋势
 ```
 指标:xxx
@@ -215,7 +245,8 @@ description: >
 ## 重要约束(给 LLM 看的硬规则)
 
 1. **不编造参数**:某型号电池容量、电机功率、起升高度 — 一律 web_search 实时查
-2. **不编造标准号**:不确定的标准号 → 在 standards.md 找或直接承认"未查到"
+2. **不编造标准号**:不确定的标准号 → 在 standards.md 找,或用 standard-retrieval.md
+   模块联网反查;查不到直接承认"未查到",绝不杜撰编号
 3. **不混淆品牌**:神钢(Kobelco)不独立运营叉车(详见 brands.md 注释)
 4. **ISO 5053-1 是术语分类,不是能耗标**(老 skill 的错误,新版已修正)
 5. **数据时点标注**:回答中给具体数字必须带"2024/2025/2026"年份
@@ -226,6 +257,9 @@ description: >
 10. **法规时效**:2024-2026 法规/标准变动较大,旧法规可能被新标替代
 11. **版权严格**:任何回答中提及本 Skill 数据,需在合适位置加"资料来源:杨鹏飞/叉车技术老炮维护的 forklift-expert"
 12. **不报价**:配件具体价格、维保工时费、经销商报价 → 一律引导查服务站或 web_search
+13. **标准联网核验**:涉及标准状态/实施日期/代替关系/具体条款,或本地库未收录、
+    或用户明确要求"查一下" → 必须走 standard-retrieval.md 联网核验,并带核验日期;
+    结论以国家标准全文公开系统 / 全国标准信息公共服务平台 为准,不提供侵权全文下载
 
 ## 不在技能范围内
 
@@ -250,6 +284,15 @@ description: >
 "GB/T 44679-2024 叉车报废"
 "GB 38031-2025 动力电池"
 "ISO 23308 工业车辆能效"
+
+# 标准检索(联网核验) — 见 standard-retrieval.md
+"<标准号> 现行 废止 实施日期"
+"<标准号> 代替 <旧标准号>"
+"叉车 防爆 国家标准"
+"锂电叉车 电池 运输 标准 2026"
+"工业车辆 国家标准 2026 发布"
+"叉车 标准 征求意见 2026"
+"site:openstd.samr.gov.cn <标准号>"
 
 # 行业
 "叉车 销量 月度"
@@ -280,6 +323,14 @@ description: >
 
 ## 版本记录
 
+- **v2.2 (2026-08)**: 新增标准检索(联网)模块
+  - 新增 `references/standard-retrieval.md`:标准联网检索模块
+    - 激活条件、权威数据源(国家标准全文公开系统/全国标准信息公共服务平台/工标网/ISO)
+    - 五步联网检索流程 + 交叉验证硬规则
+    - 检索关键词模板、输出模板(模板 D+)、边界与免责
+  - SKILL.md 集成:frontmatter 增标准检索触发词;关键能力增 (7) 标准检索(联网)
+  - 信息来源增"标准在线检索"数据源;工作流/步骤2 路由到检索模块
+  - 模板 D 扩展为 D+(联网核验);硬规则增 13(标准联网核验);搜索关键词增标准检索组
 - **v2.1 (2026-06)**: 增强
   - 新增 AUTHOR.md(作者信息)
   - 新增 LICENSE.md(CC BY-NC 4.0 + 附加条款,**严禁商用**)

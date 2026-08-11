@@ -1,43 +1,63 @@
-## Description: <br>
-用于快手数据分析、快手作品研究、关键词观察、内容调研、竞品分析和趋势研究。覆盖 Kuaishou / Kwai work research，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search Kuaishou/Kwai works for keyword discovery, content research, competitor analysis, and trend scanning using SocialDataX.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and agents use this skill to search Kuaishou works and short videos for keyword research, content research, competitor analysis, and trend scanning through SocialDataX. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a user-provided SOCIALDATAX_API_KEY for the SocialDataX CLI/API workflow. <br>
-Mitigation: Use only the documented SocialDataX access page for API key management, keep the key in the environment, and install only when SocialDataX access is intended. <br>
-Risk: Kuaishou search results can be incomplete or paginated, so a single page may not represent full platform coverage. <br>
-Mitigation: Use the returned next_page_token unchanged for continued searches and present visible evidence separately from interpretation. <br>
-Risk: This is a third-party read-only integration, so users should understand what service receives the API key and query parameters. <br>
-Mitigation: Review the server-provided security guidance and the skill's safety boundary before deployment; the artifact does not request local browser data, login, posting, liking, commenting, or account changes. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent for Kuaishou/Kwai public-content search, keyword discovery, content research, competitor analysis, and trend scanning. The agent can return traceable result summaries with content IDs, URLs, authors, visible counts, and publish times when available.
 
-## Reference(s): <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-kuaishou-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY and node/npm; Kuaishou search results may include content IDs, URLs, titles or descriptions, author facts, counts, publish times, pagination markers, and visible-evidence summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: Search terms and API-key-backed requests are sent to the SocialDataX service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for Kuaishou research that is appropriate to send to SocialDataX, and provide the SOCIALDATAX_API_KEY intentionally through the runtime environment.
+
+Risk: The direct CLI path uses npm to fetch the declared socialdatax-skills package.
+
+Mitigation: Install and run the CLI only in environments where fetching that package is acceptable.
+
+Risk: Paging through search results can consume API balance or credits.
+
+Mitigation: Set practical page or item limits, monitor balance, and avoid repeated retries when an insufficient-balance response is returned.
+
+Risk: Requests outside read-only Kuaishou search could exceed the skill's stated boundary.
+
+Mitigation: Keep usage to public-content search and do not use this skill for login, posting, liking, commenting, or account changes.
+
+## Reference(s):
+
+- [SocialDataX API access and homepage](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-kuaishou-search)
+- [ClawHub publisher profile](https://clawhub.ai/user/devinchen2014)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Guidance]
+
+**Output Format:** [Markdown guidance with CLI examples and JSON search-result data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports keyword search, optional pagination tokens, page limits, max-item limits, and traceable Kuaishou result fields such as photo IDs and share URLs.]
+
+## Skill Version(s):
+
+0.1.17 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

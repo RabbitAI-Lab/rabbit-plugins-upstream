@@ -1,6 +1,6 @@
 ---
 name: fish-audio
-description: Generate MP3 speech with Fish Audio through RunAPI. Use for one-off speech generation or application integration. Prefer the RunAPI CLI for one-off requests and the target-language SDK for production integration.
+description: Generate MP3 or WAV speech with Fish Audio through RunAPI. Use for one-off speech generation or application integration. Prefer the RunAPI CLI for one-off requests and the target-language SDK for production integration.
 documentation: https://runapi.ai/models/fish-audio.md
 provider_page: https://runapi.ai/providers/fish-audio.md
 catalog: https://runapi.ai/models.md
@@ -23,7 +23,7 @@ metadata:
 
 # Fish Audio on RunAPI
 
-Generate synchronous MP3 speech with `s1` or `s2-pro`. Use the target-language SDK for application integration and the `runapi` CLI for one-off speech generation or manual verification.
+Generate synchronous MP3 or WAV speech. Prefer `s2.1-pro` for production TTS with 83-language support and natural-language expression control; `s2-pro` remains available as a previous-generation option. Use the target-language SDK for application integration and the `runapi` CLI for one-off speech generation or manual verification.
 
 ## Critical: Integration Runtime
 
@@ -42,7 +42,7 @@ When integrating Fish Audio into an application or production workflow, check th
 - Java: `ai.runapi:runapi-fish-audio`
 - PHP: `runapi-ai/fish-audio`
 
-The synchronous `text_to_speech` resource accepts `model`, `text`, and optional request-scoped `references`. Each reference requires base64-encoded raw audio bytes in `audio` and its exact transcript in `text`. The resource returns a completed response with RunAPI-managed `audios`.
+The synchronous `text_to_speech` resource accepts `model`, `text`, optional request-scoped `references`, `output_format`, `sample_rate_hz`, and MP3-only `bitrate_kbps`. `output_format` defaults to `mp3`; it also accepts `wav`. Each reference requires base64-encoded raw audio bytes in `audio` and its exact transcript in `text`. The resource returns a completed response with RunAPI-managed `audios`.
 
 ## CLI path
 
@@ -56,12 +56,13 @@ runapi fish-audio text-to-speech --help
 runapi fish-audio text-to-speech --input-file request.json
 ```
 
-The request file contains `model`, `text`, and optional `references` entries with `audio` and `text`. `references` applies only to that request; reusable `reference_id` values are not supported. The command returns one completed response, so do not add `--async` or call `runapi wait`.
+The request file contains `model`, `text`, and optional `references` entries with `audio` and `text`. It may also select `output_format`, `sample_rate_hz`, and MP3-only `bitrate_kbps`; inspect command help for the current constraints. `references` applies only to that request; reusable `reference_id` values are not supported. The command returns one completed response, so do not add `--async` or call `runapi wait`.
 
 ## Variants
 
 - `s1`: https://runapi.ai/models/fish-audio/s1.md
 - `s2-pro`: https://runapi.ai/models/fish-audio/s2-pro.md
+- `s2.1-pro`: https://runapi.ai/models/fish-audio/s2.1-pro.md
 
 ## Result handling
 
@@ -72,5 +73,6 @@ The response contains `id`, `status`, and one `audios` entry with `url`, `format
 - Model overview: https://runapi.ai/models/fish-audio.md
 - s1: https://runapi.ai/models/fish-audio/s1.md
 - s2-pro: https://runapi.ai/models/fish-audio/s2-pro.md
+- s2.1-pro: https://runapi.ai/models/fish-audio/s2.1-pro.md
 - Provider page: https://runapi.ai/providers/fish-audio.md
 - Full catalog: https://runapi.ai/models.md

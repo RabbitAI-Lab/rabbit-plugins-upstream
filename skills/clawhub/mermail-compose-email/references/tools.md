@@ -9,4 +9,61 @@
 | Forward email | `forward_email` | External effect |
 | Schedule delivery | `schedule_email_send` | Deferred external effect |
 
-Inspect each tool's current input schema through MCP `tools/list`. Do not invent body fields from this reference.
+## MCP argument nesting
+
+Always pass Sold API fields under the tool's `body` argument (path params like `mailboxId` stay top-level). Flat Sold fields are also accepted and folded into `body`.
+
+`mailboxId` accepts `public_id` (UUID), hosted alias id, or current email — prefer `public_id` from `list_mailboxes`.
+
+## Recipients (`to` / `cc` / `bcc`)
+
+| Surface | Accepted shapes |
+| --- | --- |
+| `send_email` / `reply_to_email` / `forward_email` | One email string **or** a JSON array of emails |
+| `save_draft` / `schedule_email_send` | String fields (single address or comma-separated list) |
+
+MCP does **not** expose `replyAll` and does **not** derive Reply / Reply All recipients from thread headers. Pass explicit `to` / `cc` / `bcc` on every write. If To is missing on a new compose, ask the user before calling these tools.
+
+### Send / reply / forward
+
+Content fields are **`html` and/or `text`** — not `body` or `content`. `from` is required.
+
+```json
+{
+  "mailboxId": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+  "idempotencyKey": "send-2026-07-21-a1",
+  "body": {
+    "to": "customer@example.com",
+    "cc": ["manager@example.com", "ops@example.com"],
+    "bcc": ["audit@example.com"],
+    "from": "you@mermail.app",
+    "subject": "Hello",
+    "text": "Plain text body"
+  }
+}
+```
+
+Aliases accepted for send-like tools: `body` or `content` string → `text` (or `html` if the string looks like HTML).
+
+### Draft / schedule
+
+Content field is the string **`body`** (HTML or text). Do not use `html`/`text` for drafts.
+
+```json
+{
+  "mailboxId": "aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee",
+  "body": {
+    "to": "customer@example.com",
+    "cc": "manager@example.com, ops@example.com",
+    "bcc": "audit@example.com",
+    "subject": "Hello",
+    "body": "<p>Draft HTML</p>"
+  }
+}
+```
+
+Schedule also requires `scheduled_send_at` (ISO datetime) on `body`.
+
+### If you see `Invalid request`
+
+Read `code: "validation_failed"` and the `details` array from the tool result — they name the missing or wrong fields (for example `body: Either 'html' or 'text' must be provided`).

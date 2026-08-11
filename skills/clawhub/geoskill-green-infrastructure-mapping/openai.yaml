@@ -1,0 +1,17 @@
+name: geoskill-green-infrastructure-mapping
+display_name: 绿色基础设施制图
+description: |
+  Map green infrastructure from high-resolution NDVI, tree crown detection, green-space classification and patch connectivity.
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-green-infrastructure-mapping.py
+runtime: python>=3.9
+tags:
+  - agriculture
+  - extraction
+  - gis
+  - lidar
+  - machine-learning
+  - point-cloud
+  - raster
+  - remote-sensing

@@ -6,6 +6,27 @@ Install: `pip install maybeai-sheet-cli`
 
 Required env: `MAYBEAI_API_TOKEN`
 
+## Target Model Gate
+
+The first command for an unfamiliar target is metadata, not a write:
+
+```bash
+mbs workbook metadata --doc-id <DOC_ID> --output json
+mbs workbook list-worksheets --doc-id <DOC_ID> --output json
+```
+
+Choose one model from the returned metadata:
+
+| Model | Required identity | Allowed command family |
+|---|---|---|
+| Excel Sheet | `worksheet_name`, optionally `gid` | `excel-worksheet`, `excel-table`, Sheet aliases, A1/cell Formula |
+| Base Table | `table_id`, `field_id`, `record_id` or record key | P5 `base-table` records and column Formula |
+| Worksheet SQL Config | result worksheet and config | `sql config`, `sql preview`, `sql overwrite` with raw SQL |
+
+`mbs base-table` is the P5 command group for native Base records and column
+Formula. Do not replace it with a range/cell, keep-headers, or worksheet-import
+write. Use `mbs base-table --help` before relying on an unfamiliar flag.
+
 ## Shared Options
 
 These flags work at the root, on most command groups, or on the leaf command:
@@ -31,7 +52,7 @@ Always pass a leaf subcommand. `mbs workbook --doc-id <id>` alone is invalid.
 mbs workbook create --title "Board Pack"
 mbs workbook create --title "Board Pack" --sheet-name Summary --data rows.json
 
-# Default Excelize/workbook-fidelity import. No engine field is sent.
+# Default Excel/workbook-fidelity import. No engine field is sent.
 mbs workbook import ./report.xlsx
 mbs workbook create-from-file ./report.xlsx
 
@@ -39,40 +60,40 @@ mbs workbook create-from-file ./report.xlsx
 mbs workbook import ./mixed-workbook.xlsx --engine auto
 
 # Explicit per-worksheet engines by worksheet index.
-mbs workbook import ./mixed-workbook.xlsx --engine "postgres,excel,excel,postgres"
+mbs workbook import ./mixed-workbook.xlsx --engine "base,sheet,sheet,base"
 
-# SheetTable/PG import for large flat table-like files.
-mbs workbook import ./large-table.xlsx --engine postgres
-mbs workbook create-from-file ./large-table.xlsx --engine pg
+# Base Mode import for large flat table-like files.
+mbs workbook import ./large-table.xlsx --engine base
+mbs workbook create-from-file ./large-table.xlsx --engine base
 
 # Remote HTTPS Excel URL into a new workbook via /api/v1/excel/import_by_url.
 mbs workbook import "https://static.example.com/imports/report.xlsx" --engine auto
-mbs workbook import "https://static.example.com/download?id=123" --source-type xlsx --filename report.xlsx --engine excelize
+mbs workbook import "https://static.example.com/download?id=123" --source-type xlsx --filename report.xlsx --engine sheet
 
 # CSV/TSV/Google Sheet import-source flow into a new workbook.
-mbs workbook import ./orders.csv --engine postgres
-mbs workbook import ./orders.tsv --engine excelize
-mbs workbook import "https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit#gid=0" --engine postgres
-mbs workbook import "https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit#gid=0" --source-worksheet-name "1店" --worksheet-name "Store 1" --engine excelize
+mbs workbook import ./orders.csv --engine base
+mbs workbook import ./orders.tsv --engine sheet
+mbs workbook import "https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit#gid=0" --engine base
+mbs workbook import "https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit#gid=0" --source-worksheet-name "1店" --worksheet-name "Store 1" --engine sheet
 mbs workbook import ./orders.csv --preview-only --output json
 
 # Import source worksheets/tabs into an existing workbook.
 # Omit --source-worksheet-name to import all previewed worksheets/tabs.
-mbs worksheet import --strategy create ./report.xlsx --doc-id <TARGET_DOC_ID> --engine postgres
-mbs worksheet import --strategy create ./orders.csv --doc-id <TARGET_DOC_ID> --engine postgres
-mbs worksheet import --strategy create "https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit#gid=0" --doc-id <TARGET_DOC_ID> --engine excelize
+mbs worksheet import --strategy create ./report.xlsx --doc-id <TARGET_DOC_ID> --engine base
+mbs worksheet import --strategy create ./orders.csv --doc-id <TARGET_DOC_ID> --engine base
+mbs worksheet import --strategy create "https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit#gid=0" --doc-id <TARGET_DOC_ID> --engine sheet
 
 # Pass one --source-worksheet-name to import one source worksheet/tab, optionally renamed.
-mbs worksheet import --strategy create ./report.xlsx --doc-id <TARGET_DOC_ID> --source-worksheet-name "联盟" --target-worksheet-name "联盟导入" --engine postgres
-mbs worksheet import --strategy create ./orders.csv --doc-id <TARGET_DOC_ID> --source-worksheet-name orders --target-worksheet-name Orders --engine postgres
-mbs worksheet import --strategy create "https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit#gid=0" --doc-id <TARGET_DOC_ID> --source-worksheet-name "1店" --target-worksheet-name "Store 1" --engine excelize
+mbs worksheet import --strategy create ./report.xlsx --doc-id <TARGET_DOC_ID> --source-worksheet-name "联盟" --target-worksheet-name "联盟导入" --engine base
+mbs worksheet import --strategy create ./orders.csv --doc-id <TARGET_DOC_ID> --source-worksheet-name orders --target-worksheet-name Orders --engine base
+mbs worksheet import --strategy create "https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit#gid=0" --doc-id <TARGET_DOC_ID> --source-worksheet-name "1店" --target-worksheet-name "Store 1" --engine sheet
 
 # Repeat --source-worksheet-name to import multiple selected source worksheets/tabs.
-mbs worksheet import --strategy create ./report.xlsx --doc-id <TARGET_DOC_ID> --source-worksheet-name "联盟" --source-worksheet-name "订单" --engine postgres
-mbs worksheet import --strategy create ./orders.tsv --doc-id <TARGET_DOC_ID> --source-worksheet-name orders --source-worksheet-name refunds --engine postgres
-mbs worksheet import --strategy create "https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit#gid=0" --doc-id <TARGET_DOC_ID> --source-worksheet-name "1店" --source-worksheet-name "2店" --engine excelize
+mbs worksheet import --strategy create ./report.xlsx --doc-id <TARGET_DOC_ID> --source-worksheet-name "联盟" --source-worksheet-name "订单" --engine base
+mbs worksheet import --strategy create ./orders.tsv --doc-id <TARGET_DOC_ID> --source-worksheet-name orders --source-worksheet-name refunds --engine base
+mbs worksheet import --strategy create "https://docs.google.com/spreadsheets/d/<SPREADSHEET_ID>/edit#gid=0" --doc-id <TARGET_DOC_ID> --source-worksheet-name "1店" --source-worksheet-name "2店" --engine sheet
 
-# Cross-workbook worksheet -> raw PG/db-table surface import.
+# Cross-workbook worksheet -> raw Base-backed db-table surface import.
 mbs worksheet import --strategy create --doc-id <TARGET_DOC_ID> --source-doc-id <SOURCE_DOC_ID> --source-worksheet-name "1店" --verify
 mbs worksheet import --strategy create --doc-id <TARGET_DOC_ID> --source-doc-id <SOURCE_DOC_ID> --source-worksheet-name "1店" --source-worksheet-name "2店" --verify
 
@@ -80,8 +101,13 @@ mbs worksheet import --strategy create --doc-id <TARGET_DOC_ID> --source-doc-id 
 mbs worksheet import --strategy create --transfer-mode native --doc-id <TARGET_DOC_ID> --source-doc-id <SOURCE_DOC_ID> --source-worksheet-name "工作表3" --source-worksheet-name "工作簿1" --verify
 mbs worksheet import --strategy create --transfer-mode native --doc-id <TARGET_DOC_ID> --source-doc-id <SOURCE_DOC_ID> --verify
 
-# Replace data rows in one existing worksheet from a JSON object array.
+# Sheet only: replace data rows in one existing worksheet from a JSON object array.
 mbs worksheet import ./rows.json --strategy replace --doc-id <TARGET_DOC_ID> --worksheet-name Students --verify
+
+# Convert one existing Sheet-backed worksheet to Base. Always preflight first.
+mbs worksheet convert-to-base --doc-id <DOC_ID> --worksheet-name Orders --dry-run
+mbs worksheet convert-to-base --doc-id <DOC_ID> --gid <GID> --yes --verify
+mbs worksheet convert-to-base --url "https://www.maybe.ai/docs/spreadsheets/d/<DOC_ID>?gid=<GID>" --yes --verify
 
 mbs workbook metadata --doc-id <DOC_ID>
 mbs workbook manifest --doc-id <DOC_ID>        # compatibility alias
@@ -97,15 +123,15 @@ mbs file list --limit 20
 mbs file search --query "q2 forecast" --limit 20
 ```
 
-Accepted import engine values are omitted/`excelize` for the default Excelize
-route, `pg`/`postgres`/`postgresql` for SheetTable, `auto` for backend
-per-worksheet detection, or a comma-separated per-worksheet list such as
-`postgres,excel,excel,postgres`. `auto` and comma-separated engines apply to
-whole local Excel workbook imports. Remote Excel URL imports accept one of
-`excelize`, `postgres`, or `auto`; comma-separated engines are rejected. Local Excel worksheet append into an
-existing workbook supports `excelize` or `postgres`/`pg`. CSV/TSV/Google Sheet
-import-source selections support `excelize`, `postgres`/`pg`, or `auto`.
-SheetTable owns DB-import preprocessing; the CLI only forwards the requested
+Accepted import engine values are omitted/`sheet` for the default Sheet mode
+route, `base` for Base mode, `auto` for backend per-worksheet detection, or a
+comma-separated per-worksheet list such as `base,sheet,sheet,base`. `auto` and
+comma-separated engines apply to whole local Excel workbook imports. Remote
+Excel URL imports accept one of `sheet`, `base`, or `auto`; comma-separated
+engines are rejected. Local Excel worksheet append into an existing workbook
+supports `sheet` or `base`. CSV/TSV/Google Sheet import-source selections
+support `sheet`, `base`, or `auto`.
+Base import owns DB-import preprocessing; the CLI only forwards the requested
 engine intent.
 
 Import routing:
@@ -115,17 +141,32 @@ Import routing:
 - `worksheet import` for `.xls` / `.xlsx` / `.xlsm` with `--doc-id` / `--url` / `--uri`: `/api/v1/excel/import_worksheet_preview` then `/api/v1/excel/import_worksheet_data`. Omit `--source-worksheet-name` to import all previewed worksheets, or repeat it to select worksheets.
 - `.csv` / `.tsv` / public Google Sheet URL without a target workbook: `/api/v1/excel/import_sources/preview` then commit with `target.mode = new_workbook`. With no explicit selection, the backend imports all previewed worksheets/tabs.
 - `.csv` / `.tsv` / public Google Sheet URL with `--doc-id` / `--url` / `--uri`: same preview route then commit with `target.mode = existing_workbook`; the CLI sends non-empty `selections`. Omit `--worksheet-name` to select all previewed worksheets/tabs, or repeat `--worksheet-name` to select specific worksheet/tab names. Missing requested names fail before commit and return the available worksheet names.
-- No local/URL source plus `--source-doc-id` / `--source-url` and `--transfer-mode values`: CLI-composed cross-workbook raw PG/db-table surface import.
+- No local/URL source plus `--source-doc-id` / `--source-url` and `--transfer-mode values`: CLI-composed cross-workbook raw Base-backed db-table surface import.
 - No local/URL source plus `--source-doc-id` / `--source-url` and `--transfer-mode native`: metadata-driven native worksheet import. Do not pass `--engine`.
 - Both Maybe Sheet source modes accept repeated `--source-worksheet-name`; omitting it selects all metadata worksheets.
 
 For existing-workbook imports, `--target-worksheet-name` is only valid when
 exactly one source worksheet/tab is selected.
 
-For JSON replace, `--worksheet-name` identifies the existing target worksheet.
-The command keeps row 1 and calls `/api/v1/excel/update_data_keep_headers`.
-The JSON file must be a non-empty object array with keys matching existing
-headers. Do not pass `--engine`, `--transfer-mode`, or source worksheet options.
+For JSON replace, metadata must first confirm a Sheet target. `--worksheet-name`
+identifies the existing target worksheet. The command keeps row 1 and calls
+`/api/v1/excel/update_data_keep_headers`. The JSON file must be a non-empty
+object array with keys matching existing headers. Do not pass `--engine`,
+`--transfer-mode`, or source worksheet options. It is invalid for Base; Base
+replacement must use P5 field-mapped record replace/upsert.
+
+`worksheet convert-to-base` migrates one existing Sheet-backed worksheet to
+Base through `/api/v1/excel/convert_to_base_mode`. Supply a workbook through
+`--doc-id`, `--url`, or `--uri` and select the target by `--gid` or
+`--worksheet-name`; a MaybeAI URL with `?gid=<GID>` can provide both. It is a
+destructive, one-way data migration, so the command requires `--yes` unless
+running `--dry-run`. Always run the dry run first. `--verify` reads selected
+worksheet metadata and requires `data_engine: base`; it cannot be combined
+with `--dry-run`. Use `--recalculate` to recalculate immediately after a real
+migration. The default `--scrub-source-workbook` removes the old Sheet-engine
+cell content after migration while preserving styles. Pass `--keep-sheet-source`
+only when that source content must remain. There is no Base-to-Sheet conversion
+command or backend endpoint.
 
 For import-source existing-workbook commits that return exactly one worksheet,
 the CLI top-level `target` should include `gid` and `worksheet_name` from
@@ -172,6 +213,10 @@ mbs excel-worksheet delete --doc-id <DOC_ID> --worksheet-name Temp --yes
 mbs excel-worksheet copy --doc-id <DOC_ID> --worksheet-name Sheet1 --new-name Copy
 mbs excel-worksheet copy --doc-id <SOURCE_DOC_ID> --worksheet-name Sheet1 --target-doc-id <TARGET_DOC_ID> --new-name Copy  # fails fast; use db-table create-from-range
 mbs excel-worksheet move --doc-id <DOC_ID> --worksheet-name Summary --index 0
+
+# One-way Sheet -> Base engine migration. Use the dry run before --yes.
+mbs worksheet convert-to-base --doc-id <DOC_ID> --worksheet-name Orders --dry-run
+mbs worksheet convert-to-base --doc-id <DOC_ID> --gid <GID> --yes --verify
 ```
 
 `excel-worksheet range write` defaults to RAW value handling through the backend. Numeric-looking
@@ -184,25 +229,35 @@ check more practical.
 
 ## Excel Tables
 
-Use `excel-table` for worksheet-backed Excelize table/range views. The
-`--table-id` comes from workbook/table metadata and defaults to `1` only when the
-worksheet target is unambiguous.
+Use `excel-table` for persistent Sheet-backed worksheet tables. Obtain
+`--table-id` from `excel-table metadata` or `excel-worksheet list-table`; it is
+the backend persistent ID, not a table position such as `1`. Omit it only when
+selecting the first active table on an unambiguous worksheet. `--range` is not
+supported for these commands.
 
 ```bash
-mbs excel-table metadata --doc-id <DOC_ID> --worksheet-name Orders --table-id 1
-mbs excel-table schema --doc-id <DOC_ID> --worksheet-name Orders --table-id 1
-mbs excel-table sample --doc-id <DOC_ID> --worksheet-name Orders --table-id 1 --limit 50
-mbs excel-table read --doc-id <DOC_ID> --worksheet-name Orders --table-id 1 --limit 100 --output table
-mbs excel-table insert --doc-id <DOC_ID> --worksheet-name Orders --table-id 1 --rows rows.json
+mbs excel-table metadata --doc-id <DOC_ID> --worksheet-name Orders --table-id <PERSISTENT_TABLE_ID>
+mbs excel-table schema --doc-id <DOC_ID> --worksheet-name Orders --table-id <PERSISTENT_TABLE_ID>
+mbs excel-table sample --doc-id <DOC_ID> --worksheet-name Orders --table-id <PERSISTENT_TABLE_ID> --limit 50
+mbs excel-table read --doc-id <DOC_ID> --worksheet-name Orders --table-id <PERSISTENT_TABLE_ID> --limit 100 --output table
+mbs excel-table insert --doc-id <DOC_ID> --worksheet-name Orders --table-id <PERSISTENT_TABLE_ID> --rows rows.json
 ```
 
-Use `--range A1:D100` only as an advanced override when metadata lacks the table
-range.
+`metadata` returns the current persistent table range. `read --limit N` returns
+the header plus at most `N` data rows. `sample --limit N` returns named row
+objects plus `sample_truncated` when more rows exist.
 
-## DB Tables
+`rows.json` must be a non-empty array of objects whose keys exactly match the
+current persistent table headers. The CLI validates every object, then appends
+them to the next contiguous table rows. A 10-object file therefore appends 10
+rows in one command. Insert has no `--verify`; read the table or the returned
+range afterward. Re-read metadata immediately before a later insert if rows
+were inserted or deleted, because the current table range can change.
 
-Use `db-table` for PG/SheetTable-backed worksheets created through PG import or
-`db-table create`.
+## Base Tables
+
+Use the current `db-table` commands for Base discovery, creation, and field
+display metadata. They are not the P5 record/column-Formula mutation surface.
 Prefer human-readable `--name`; use `--backend-id` only when metadata requires
 it.
 
@@ -212,21 +267,19 @@ mbs db-table metadata --doc-id <DOC_ID> --name orders_large --include-headers --
 mbs db-table schema --doc-id <DOC_ID> --name orders_large
 mbs db-table sample --doc-id <DOC_ID> --name orders_large --limit 50
 mbs db-table read --doc-id <DOC_ID> --name orders_large --limit 100 --output table
-mbs db-table insert --doc-id <DOC_ID> --name orders_large --rows rows.json
 mbs db-table create --doc-id <DOC_ID> --name Orders --rows orders.json
 mbs db-table create --doc-id <DOC_ID> --name Orders --columns columns.json --rows rows.json --if-exists adopt --verify
 mbs db-table create --doc-id <DOC_ID> --name Orders --columns columns.json --rows rows.json --adopt-existing --verify
 mbs db-table create-from-range --doc-id <TARGET_DOC_ID> --name R_OrderLines_Store1 --source-doc-id <SOURCE_DOC_ID> --worksheet-name "1店" --range A2:AR423 --header-row 0 --use-header-names --if-exists adopt --verify
-mbs db-table create-from-query --doc-id <DOC_ID> --worksheet-name Orders --name OrderSummary --sql-file order_summary.sql --if-exists adopt --verify
-mbs db-table create-from-query --doc-id <DOC_ID> --worksheet-name B_FxSettlement --name S1_RevenueStructureInput --sql-file s1_revenue_structure_input.sql --if-exists adopt --verify
-mbs db-table create-from-query --doc-id <DOC_ID> --name OrderDetailsStructureInput --sql-file order_details_structure.sql --no-preserve-formula
-mbs db-table range set-formula --doc-id <DOC_ID> --name orders_large --cell G2 --formula '=SQL("select * from orders_large limit 10")'
+mbs db-table create-from-query --doc-id <DOC_ID> --name OrderSummary --sql-file order_summary.sql --if-exists adopt --verify
+mbs db-table create-from-query --doc-id <DOC_ID> --name S1_RevenueStructureInput --sql-file s1_revenue_structure_input.sql --if-exists adopt --verify
+mbs db-table create-from-query --doc-id <DOC_ID> --name OrderDetailsStructureInput --sql-file order_details_structure.sql
 mbs db-table field metadata --doc-id <DOC_ID> --name orders_large --output json
 mbs db-table field update --doc-id <DOC_ID> --name orders_large --field revenue --logical-type number --formatter "$#,##0.00" --width 144 --verify
 mbs db-table field batch-update --doc-id <DOC_ID> --name orders_large --updates field-updates.json --verify
 ```
 
-`db-table metadata` targets one PG/SheetTable-backed worksheet. Pass `--name`
+`db-table metadata` targets one Base-backed worksheet. Pass `--name`
 or `--backend-id`; calling it with only `--doc-id` is invalid. Add
 `--include-headers` when exact header text is needed. The CLI resolves the
 table through `/api/v1/excel/worksheet/metadata`, then merges targeted
@@ -239,29 +292,74 @@ unknown.
 CLI infers column names and logical types from those rows, then calls
 `/api/v1/excel/db_table/create`. Pass `--columns columns.json` when rows are
 empty or when the schema must be explicit. `--if-exists adopt` and
-`--adopt-existing` adopt a matching existing PG table after a 409 response; use
-`--verify` to confirm the workbook registry reports a PG/SheetTable-backed
+`--adopt-existing` adopt a matching existing Base-backed table after a 409 response; use
+`--verify` to confirm the workbook registry reports a Base-backed
 worksheet. `db-table create-from-range` is for cross-document raw `R_*`
 surfaces: it reads a source worksheet range, treats `--header-row` as a
 0-based index inside the returned values matrix, optionally uses header text
 via `--use-header-names` (otherwise `raw_col_NNN`), drops blank rows, and
-creates the named PG table on the target `--doc-id`. Prefer it over
+creates the named Base-backed table on the target `--doc-id`. Prefer it over
 hand-written import Python. For merged-title sheets, start `--range` at the
-semantic header row. `db-table create-from-query` is for SQL-materialized PG
-handoff tables. It wraps the SQL text as `=SQL(...)`, calls
-`/api/v1/excel/calc-formula`, parses table-shaped `values` / `range_values`,
-then creates the named PG table through `/api/v1/excel/db_table/create`.
-Current CLI versions then try to persist that same `=SQL(...)` formula into
-the final table cell, defaulting to `A1`, and report the result in
-`context.formula_trace`. Use `--worksheet-name` as the SQL evaluation context
-and `--sql-file` for auditable ETL templates. Keep default formula
-preservation when traceability matters; use `--no-preserve-formula` only when
-the extra formula write should be skipped. After create, inspect JSON output
-for `context.formula_trace.persisted`, then verify with `db-table metadata`,
-`db-table sample`, or `workbook list-worksheets`. `db-table update` and
-`db-table delete` are still planned stubs in the current CLI.
+semantic header row. `db-table create-from-query` is for SQL-materialized Base-backed
+handoff tables. It sends raw SQL to `/api/v1/excel/sql/result/query`, derives
+the source relations from `FROM`/`JOIN`, parses table-shaped `values` /
+`range_values`, then creates the `--name` output table through
+`/api/v1/excel/db_table/create`. It does not accept `--worksheet-name`; `--gid`
+is optional compatibility context and does not choose a source relation. In a
+Base source, select quoted field display names, not `field_id` values such as
+`col_000001`; `SELECT *` returns each display column exactly once. Use
+`--sql-file` for auditable ETL templates. The deprecated `--preserve-formula`
+flag is ignored; attach a query to a worksheet with `mbs sql config set` when
+traceability must remain live. After create, verify with `db-table metadata`,
+`db-table sample`, or `workbook list-worksheets`. `db-table update` and `db-table delete` are
+still planned/incomplete compatibility commands; they are not P5 record
+operations.
 
-Use `db-table field metadata` / `update` / `batch-update` for PG/SheetTable
+### P5 Base mutations
+
+The command names are `base-table read`, `base-table record replace`,
+`base-table record upsert`, `base-table field list`, and `base-table formula
+compile/set/recalculate`.
+
+```bash
+mbs base-table read --doc-id <DOC_ID> --table-id <TABLE_ID> --limit 100 --output table
+mbs base-table field list --doc-id <DOC_ID> --table-id <TABLE_ID> --output json
+mbs base-table record replace --doc-id <DOC_ID> --table-id <TABLE_ID> --records records.json
+mbs base-table record upsert --doc-id <DOC_ID> --table-id <TABLE_ID> --key-field-id <KEY_FIELD_ID> --records records.json
+mbs base-table formula compile --doc-id <DOC_ID> --table-id <TABLE_ID> --field-id <FIELD_ID> --expression '<EXPRESSION>'
+mbs base-table formula set --doc-id <DOC_ID> --table-id <TABLE_ID> --field-id <FIELD_ID> --expression '<EXPRESSION>'
+mbs base-table formula recalculate --doc-id <DOC_ID> --worksheet-name <BASE_WORKSHEET> --table-id <TABLE_ID>
+```
+
+A Base mutation must resolve `table_id`, writable `field_id`s, and a `record_id`
+or stable record key. `records.json` is a JSON array with `field_id` keys;
+Formula/read-only fields are not data-write targets. Use `--expected-revision`
+when the write must enforce optimistic concurrency. Do not replace any of these
+with a Sheet-style write.
+
+## SQL
+
+Use `mbs sql` for first-class Worksheet SQL Config and raw SQL query execution.
+
+```bash
+mbs sql config get --doc-id <DOC_ID> --worksheet-name SqlResult
+mbs sql config set --doc-id <DOC_ID> --worksheet-name SqlResult --sql-file result.sql --auto-refresh
+mbs sql config delete --doc-id <DOC_ID> --worksheet-name SqlResult
+mbs sql preview --doc-id <DOC_ID> --worksheet-name SqlResult --sql-file result.sql --output table
+mbs sql query --doc-id <DOC_ID> --sql-file result.sql --limit 100 --output table
+mbs sql overwrite --doc-id <DOC_ID> --worksheet-name SqlResult --confirm-overwrite
+mbs sql migration preview --doc-id <DOC_ID>
+mbs sql migration commit --doc-id <DOC_ID> --candidate-id <CANDIDATE_ID> --allow-manual-candidates
+```
+
+`sql config set`, `sql preview`, `sql query`, and `sql overwrite` accept raw
+SQL via `--sql` or `--sql-file` and reject legacy wrapped formula input.
+`sql preview` is read-only. `sql overwrite` materializes the current reviewed
+raw-SQL result to its configured target. It must not be represented as a cell
+formula or as a Base column Formula. Review the preview or backend impact
+response before materialization.
+
+Use `db-table field metadata` / `update` / `batch-update` for Base-backed
 field display metadata. `property.formatter` controls the column display
 format, `property.style` controls data-cell text/background/width, and
 `property.headerStyle` controls header appearance. For multiple columns,
@@ -290,9 +388,9 @@ generate one JSON array and use `batch-update --verify`:
 ]
 ```
 
-After PG field style updates, read the worksheet with `excel-worksheet read
+After Base field style updates, read the worksheet with `excel-worksheet read
 --output json` and confirm `formatting.frozen_rows`,
-`formatting.auto_filter`, and `db_table.fields[*].property`. PG/db-table
+`formatting.auto_filter`, and `db_table.fields[*].property`. Base-backed db-table
 header freeze/filter should come from backend readback. Header dark background
 is a beautify or explicit `headerStyle` result, not a frontend default.
 
@@ -302,7 +400,10 @@ succeeds, use that stdout as the existence proof. Only run one representative
 `db-table sample --limit 2` per family when a human needs quick shape
 confirmation.
 
-## Rows, Columns, Formulas, Styles
+## Sheet Rows, Columns, Formulas, and Styles
+
+Everything in this section requires `engine=sheet`. Base Tables do not accept
+row/column coordinates, A1 ranges, cell Formula, or worksheet calculation.
 
 ```bash
 mbs excel-worksheet row insert --doc-id <DOC_ID> --worksheet-name Sheet1 --row 10 --count 2
@@ -320,7 +421,8 @@ mbs excel-worksheet range set-formula --doc-id <DOC_ID> --operations ops.json --
 mbs formula batch-set --doc-id <DOC_ID> --operations ops.json --recalculate-mode worksheet
 mbs workbook calculate --doc-id <DOC_ID>
 mbs excel-worksheet calculate --doc-id <DOC_ID> --worksheet-name Model
-mbs excel-worksheet range calculate --doc-id <DOC_ID> --worksheet-name Model --cell E2 --formula '=SUM(B2:D2)'
+mbs excel-worksheet range calculate --doc-id <DOC_ID> --worksheet-name Model --cell E2 --formula '=SUM(B2:D2)' --no-save-result
+mbs formula calculate --doc-id <DOC_ID> --worksheet-name Model --cell E2 --formula '=SUM(B2:D2)' --save-result
 mbs excel-worksheet check-error --doc-id <DOC_ID> --worksheet-name Model
 mbs formula lineage --doc-id <DOC_ID> --worksheet-name Model --cell E2 --format tree
 
@@ -344,8 +446,8 @@ structural edits.
 
 `mbs style beautify` is the recommended one-command report/table polish path.
 It inspects metadata first, classifies columns from Chinese/English headers and
-sample values, applies header freeze/filter and semantic styles for Excelize,
-and applies PG/SheetTable formatter/style/header metadata through batched field
+sample values, applies header freeze/filter and semantic styles for Sheet worksheets,
+and applies Base-backed formatter/style/header metadata through batched field
 updates when possible. Use `--dry-run --output json` to inspect each column's
 category, formatter, confidence, and reasons before mutation.
 
@@ -377,6 +479,7 @@ mbs excel-worksheet dashboard refresh --doc-id <DOC_ID> --spec dashboard.json --
 mbs excel-worksheet dashboard manifest --doc-id <DOC_ID> --worksheet-name Dashboard
 mbs excel-worksheet dashboard create-config --doc-id <DOC_ID> --spec dashboard.json --create-worksheet
 mbs excel-worksheet dashboard refresh --doc-id <DOC_ID> --spec dashboard.json
+mbs excel-worksheet dashboard export-template --doc-id <DOC_ID> --worksheet-name Dashboard --template-id <template-id> --out-dir <analysis-style-system-skill-dir>/dashboard-templates/<template-id> --force
 ```
 
 `picture-format.json` uses the same anchor model as chart layout:
@@ -394,13 +497,14 @@ Use zero-based `row` / `col` indexes in the format JSON. Keep the outer
 Notes:
 
 - For dashboard authoring, prefer: `sheet-dashboard` generates `dashboard.json`, then `mbs excel-worksheet dashboard validate/refresh/manifest` executes and verifies it.
+- For reusable dashboard HTML template extraction, use `dashboard export-template`; it requires a `sheet` dashboard canvas, selects one persisted `chart.type=html` chart, and writes `template.json`, `html/dashboard.template.html`, and `html/runtime-payload.schema.json` for `analysis-style-system/dashboard-templates/<template-id>`.
 - If `dashboard_style_pack` is present in `dashboard.json`, also include the matching `industry_style` and `dashboard_story`; `dashboard validate` now checks this style linkage explicitly.
 - Author `chart.json` with top-level `"type": "json"` and renderer code in `html`.
 - `chart-with-cell.json` may be either flat `{cell,type,sql,html,...}` or `{cell,chart:{type,sql,html,...}}`.
 - Do not default to authoring chart specs as top-level `"type": "line"`, `"bar"`, or `"pie"`.
 - `chart get` resolves one chart by `--cell` or `--chart-id` after reading the worksheet chart inventory.
 - Images are floating worksheet objects like charts, not values inserted inside cells.
-- Images require an Excelize worksheet. Check `workbook list-worksheets --output json` first; PG-only worksheets do not support `add_picture`, and `excel-worksheet create` in a PG workbook may create a PG-only sheet. For a new image canvas, import a small blank `.xlsx` with `--engine excelize`.
+- Images require an Sheet-backed worksheet. Check `workbook list-worksheets --output json` first; Base-only worksheets do not support `add_picture`, and `excel-worksheet create` in a Base Mode workbook may create a Base-only sheet. For a new image canvas, import a small blank `.xlsx` with `--engine sheet`.
 - `image list` extracts picture metadata from worksheet formatting; use returned URL/media fields, anchor cell, picture id, and chart-compatible format/position fields for display and later updates.
 - `image read` reads one concrete picture by `--cell` or `--picture-id`.
 - `image insert` and `image set` should include `--format picture-format.json` when layout matters; `cell` alone is only an anchor and is not enough to preserve drag/resize position.
@@ -494,7 +598,7 @@ and pause for a supported command or backend route.
 
 ## Legacy Aliases
 
-The `sheet` group remains for compatibility:
+The `sheet` group remains for **Sheet-only** compatibility:
 
 ```bash
 mbs sheet read --doc-id <DOC_ID> --worksheet-name Sheet1 --range A1:D20
@@ -506,12 +610,11 @@ mbs sheet append --doc-id <DOC_ID> --gid 0 --rows rows.json --verify
 mbs sheet upsert --doc-id <DOC_ID> --gid 0 --key order_id --rows rows.json --verify
 ```
 
-`update-data-keep-headers` is the supported full-refresh command even though it
-lives under `sheet`. It accepts only a non-empty JSON object array, performs a
-header preflight, rejects unknown keys, preserves formulas and recalculates by
-default, and clears stale rows after the replacement dataset. Run `--dry-run`
-before the first write and `--verify` on execution. The two flags cannot be
-combined. Prefer the object-specific groups above for other new workflows.
+`update-data-keep-headers` is the supported Sheet full-refresh command even
+though it lives under `sheet`. It accepts only a non-empty JSON object array,
+performs a header preflight, preserves Sheet formulas, and clears stale Sheet
+rows after the replacement dataset. Run `--dry-run` before the first write and
+`--verify` on execution. The two flags cannot be combined. Reject it for Base.
 
 ## Help Discovery
 

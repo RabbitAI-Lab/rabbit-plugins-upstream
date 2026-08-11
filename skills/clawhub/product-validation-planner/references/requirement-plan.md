@@ -2,7 +2,7 @@
 
 ## Live Requirement
 
-Validated demand: Founders and builders need a repeatable way to turn rough product ideas into validated plans, prototypes, and user-facing positioning. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+Validated demand: Founders and builders need a repeatable way to turn rough product ideas into validated plans, prototypes, and user-facing positioning. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
 ## Audience
 
@@ -20,30 +20,30 @@ Demand: 70/70
 
 Local feasibility: 30/30
 
-Evidence coverage: 12 signals across 3 source families.
+Evidence coverage: 12 signals across 4 source families.
 
 Scoring rationale:
 
 - Evidence count: 12; required minimum: 3.
-- Distinct source families: 3; sources: github, hacker-news, segmentfault.
+- Distinct source families: 4; sources: github, hacker-news, segmentfault, v2ex.
 - Demand score: 70/70 based on corroboration, source diversity, and professional/community signal.
 - Local feasibility score: 30/30.
 - Implementation is a documentation, workflow, code, or analysis skill that can run on ordinary CPU hardware.
 
 ## Evidence
 
-- hacker-news-ask-hn (2026-07-25T07:19:48+00:00): [Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49045271)
-- github-issues (2026-07-19T07:13:07+00:00): [RFC-0002 Slice 14/17: certify Lotus Idea data-product, trust telemetry, and canonical proof in platform gates](https://github.com/sgajbi/lotus-platform/issues/598)
-- segmentfault-search (2026-07-26T12:06:25.434289+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search (2026-07-26T12:06:25.434289+00:00): [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search (2026-07-26T12:06:25.434289+00:00): [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search (2026-07-26T12:06:25.434289+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search (2026-07-26T12:06:25.434914+00:00): [问： 属性或方法“$v”未使用 Vuelidate 定义](https://segmentfault.com/q/1010000042816440)
-- segmentfault-search (2026-07-26T12:06:25.435423+00:00): [问： 从JDK 1.8切换到JDK 21时遇到NoProviderFoundException如何解决？](https://segmentfault.com/q/1010000047230462)
-- segmentfault-search (2026-07-26T12:06:25.435423+00:00): [问： laravel validator验证不通过返回The given data was invalid，而不是返回定义的提示信息](https://segmentfault.com/q/1010000018250396)
-- github-issues (2026-07-17T18:34:14+00:00): [Follow-up: extend meta validation config across the CMS](https://github.com/novaramedia/novaramedia-com/issues/572)
-- github-issues (2026-07-26T12:01:45+00:00): [Correct Tool Contract startup-validation claim](https://github.com/Nokia-Bell-Labs/declarative-agents/issues/1006)
-- hacker-news-search (2026-07-20T05:18:14+00:00): [What I learned selling 2,500 MIDI recorders: Hardware is not so hard](https://news.ycombinator.com/item?id=48974605)
+- v2ex-latest (2026-08-10T03:41:48+00:00): [Surge 新的订阅版本 v6.8.0 发布了](https://www.v2ex.com/t/1233204)
+- hacker-news-search (2026-07-30T09:54:05+00:00): [Ventora Expands Its AI Business Builder to Help Solo Founders](https://news.ycombinator.com/item?id=49107855)
+- github-issues (2026-08-04T05:19:20+00:00): [Brainstorm persona happy-path harness options](https://github.com/FundLoop/fundloop-website/issues/97)
+- segmentfault-search (2026-08-10T04:04:47.355012+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
+- segmentfault-search (2026-08-10T04:04:47.355012+00:00): [javascript](https://segmentfault.com/t/javascript)
+- segmentfault-search (2026-08-10T04:04:47.355515+00:00): [typescript](https://segmentfault.com/t/typescript)
+- segmentfault-search (2026-08-10T04:04:47.355515+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
+- segmentfault-search (2026-08-10T04:04:47.355515+00:00): [问： 属性或方法“$v”未使用 Vuelidate 定义](https://segmentfault.com/q/1010000042816440)
+- segmentfault-search (2026-08-10T04:04:47.355515+00:00): [问： 从JDK 1.8切换到JDK 21时遇到NoProviderFoundException如何解决？](https://segmentfault.com/q/1010000047230462)
+- segmentfault-search (2026-08-10T04:04:47.355515+00:00): [问： laravel validator验证不通过返回The given data was invalid，而不是返回定义的提示信息](https://segmentfault.com/q/1010000018250396)
+- github-issues (2026-07-31T03:26:53+00:00): [Epic: skills the model can self-create, find, choose, and use skills that actually pay off (subset of #6565, fully measured)](https://github.com/nearai/ironclaw/issues/6941)
+- github-issues (2026-07-27T19:31:58+00:00): [[cool idea] Emit deterministic SARIF for CI-native lint findings](https://github.com/flyingrobots/colorful-language/issues/188)
 
 ## How The Skill Meets The Requirement
 

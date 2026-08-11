@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/openclaw-nextcloud",
   "slug": "openclaw-nextcloud",
   "ownerHandle": null,
-  "version": "0.3.1",
-  "updatedAt": 1783786127087,
-  "contentHash": "242294c5d96d43641212b725081aa7bb7d62283a25a272250fa6bbebd7269d3d",
-  "fetchedAt": "2026-07-26T18:16:42.566Z"
+  "version": "0.4.2",
+  "updatedAt": 1786188641212,
+  "contentHash": "8d4c4ab66e5fc2ce6440b2fbbb7aad0a21c34e39daa866ccf0dbc2bfc34b9143",
+  "fetchedAt": "2026-08-11T08:32:56.210Z"
 }

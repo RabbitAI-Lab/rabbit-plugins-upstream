@@ -1,44 +1,62 @@
-## Description: <br>
-Generate speech, dialogue, sound effects, transcriptions, and audio isolation with ElevenLabs through RunAPI, using the CLI for one-off tasks and SDKs for app or backend integrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate speech, dialogue, sound effects, and audio transcription with ElevenLabs through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to create speech, dialogue, and sound effects, transcribe audio, or isolate audio through ElevenLabs on RunAPI. It supports one-off CLI workflows and SDK-based application integrations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Requests are sent to cloud services through RunAPI and ElevenLabs and may use sensitive RunAPI credentials. <br>
-Mitigation: Use this skill only for approved cloud audio tasks, review request files before execution, and protect RUNAPI_API_KEY or saved runapi login state as sensitive credentials. <br>
-Risk: Audio prompts or source files could contain secrets, regulated data, or confidential personal or business information. <br>
-Mitigation: Avoid submitting secrets or regulated data unless the use case and provider handling are approved. <br>
+## Use Case:
 
+Developers and agents use this skill to create ElevenLabs speech, dialogue, sound effects, transcription, and audio isolation outputs through RunAPI. It supports one-off generation through the RunAPI CLI and application integration through RunAPI SDKs.
 
-## Reference(s): <br>
-- [RunAPI ElevenLabs model homepage](https://runapi.ai/models/elevenlabs) <br>
-- [RunAPI ElevenLabs model overview, pricing, and rate limits](https://runapi.ai/models/elevenlabs.md) <br>
-- [RunAPI ElevenLabs provider comparison](https://runapi.ai/providers/elevenlabs.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/runapi-elevenlabs) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration, code] <br>
-**Output Format:** [Markdown with inline shell commands, request-file guidance, and SDK package references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference RUNAPI_API_KEY or saved runapi login state for authentication.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release metadata) <br>
+Risk: The skill can require RunAPI CLI authentication or an optional RunAPI API key for agent or headless execution.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm RunAPI account and credential handling before installation, prefer environment or saved CLI auth, and avoid exposing RUNAPI_API_KEY in logs or shell history.
+
+Risk: Generated audio file URLs returned by RunAPI are temporary.
+
+Mitigation: Download generated files promptly and move them to durable storage when the output must be retained.
+
+Risk: Using the CLI as a production runtime integration layer can create brittle application behavior.
+
+Mitigation: Use the RunAPI SDK path for application, backend, worker, webhook, or production integration work.
+
+## Reference(s):
+
+- [RunAPI ElevenLabs model page](https://runapi.ai/models/elevenlabs)
+- [RunAPI ElevenLabs model documentation](https://runapi.ai/models/elevenlabs.md)
+- [RunAPI ElevenLabs provider comparison](https://runapi.ai/providers/elevenlabs.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-elevenlabs)
+- [RunAPI publisher profile](https://clawhub.ai/user/runapi-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, SDK package names, and configuration notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide agents to produce or retrieve audio files through RunAPI; returned generated-file URLs are temporary.]
+
+## Skill Version(s):
+
+0.2.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -4,7 +4,15 @@
     "maverick-stripe-mcp": {
       "baseUrl": "https://mcp.stripe.com",
       "transport": "http",
-      "bearerTokenEnv": "MAVERICK_STRIPE_MCP_ACCESS_TOKEN"
+      "auth": "oauth",
+      "allowedTools": [
+        "stripe_api_search",
+        "stripe_api_details",
+        "stripe_api_read",
+        "get_stripe_account_info",
+        "search_stripe_documentation",
+        "stripe_implementation_planner"
+      ]
     }
   }
 }

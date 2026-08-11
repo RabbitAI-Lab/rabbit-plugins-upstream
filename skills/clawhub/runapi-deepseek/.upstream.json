@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-deepseek",
   "slug": "runapi-deepseek",
   "ownerHandle": null,
-  "version": "0.1.1",
-  "updatedAt": 1784798018287,
-  "contentHash": "e2381fa8324b405d3d4be4789e9a3cdc9c8ac88b36578f78a258fbfcce9ab4a5",
-  "fetchedAt": "2026-07-26T18:07:12.160Z"
+  "version": "0.1.2",
+  "updatedAt": 1786371325670,
+  "contentHash": "47243f00b07151b063b9d98faf2cb7d8f2844200dfe36d19c04eddf7d7a5277a",
+  "fetchedAt": "2026-08-11T08:22:24.772Z"
 }

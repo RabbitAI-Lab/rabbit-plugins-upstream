@@ -1,45 +1,59 @@
-## Description: <br>
-Videosays helps agents submit video links or share text to the Videosays CLI and retrieve transcript text, subtitles, credit balance, or transcription history. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Videosays video transcription, video to text, speech to text, subtitle extraction, caption transcription, YouTube transcript, TikTok transcript, Instagram Reels transcript, X or Twitter video transcript, Douyin transcript, Xiaohongshu transcript, WeChat Channels transcript, and AI agent video transcription.
 
-## Publisher: <br>
-[wegofuture](https://clawhub.ai/user/wegofuture) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wegofuture](https://clawhub.ai/user/wegofuture)
 
-## Use Case: <br>
-Developers, operators, and external users use this skill to transcribe one or more online videos through Videosays, check task or batch status, and retrieve transcript or subtitle output without duplicate submissions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Submitted video links, share text, and authentication data are sent to the third-party Videosays service. <br>
-Mitigation: Use the skill only when Videosays' privacy and retention terms fit the data being submitted, avoid private videos unless appropriate, and never print or reveal API keys. <br>
-Risk: Repeating a transcribe or batch submission can create additional tasks or batches and may consume extra credits. <br>
-Mitigation: Capture task or batch IDs, use status and history commands to recover ambiguous outcomes, and ask before creating a replacement submission. <br>
-Risk: The skill depends on an external npm CLI package and Videosays service availability. <br>
-Mitigation: Review the npm package provenance before first use and surface stable CLI errors, network failures, or media access problems to the user instead of treating them as transcript output. <br>
+## Use Case:
 
+External users and developers use this skill to submit one or more video links or share-text snippets to Videosays, then retrieve transcripts, subtitles, account balance, or transcription history.
 
-## Reference(s): <br>
-- [Videosays Website](https://videosays.com) <br>
-- [Videosays API](https://api.videosays.com) <br>
-- [Videosays CLI](https://www.npmjs.com/package/videosays) <br>
-- [ClawHub Skill Page](https://clawhub.ai/wegofuture/skills/videosays) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and transcript or subtitle text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Videosays task IDs, batch IDs, status messages, transcript text, SRT, VTT, timeline output, balance, history, or error guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: server release evidence) <br>
+Risk: Submitted video links, share text, and authenticated requests are sent to the Videosays service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for content the user is comfortable sending to Videosays, and never print or reveal the Videosays API key.
+
+Risk: Transcription can consume account credits, especially when forcing a fresh transcription.
+
+Mitigation: Use the default reuse and status-check workflow, check recent history after ambiguous retries, and use --force-new only when the user explicitly requests a fresh transcription.
+
+Risk: Insufficient credits can pause batch processing while preserving completed tasks.
+
+Mitigation: Report the balance issue and recharge URL, ask the user to top up, then continue the same batch ID after confirmation.
+
+## Reference(s):
+
+- [Videosays website](https://videosays.com/?utm_source=videosays_skill&utm_medium=agent_skill&utm_campaign=videosays_agent_skill)
+- [Videosays API docs](https://videosays.com/docs?utm_source=videosays_skill&utm_medium=agent_skill&utm_campaign=videosays_agent_skill&utm_content=api_docs)
+- [Videosays CLI package](https://www.npmjs.com/package/videosays)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash commands and transcript or subtitle text from the Videosays CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include task IDs, batch IDs, status messages, transcript text, subtitles, balance information, history entries, or error guidance.]
+
+## Skill Version(s):
+
+1.2.3 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

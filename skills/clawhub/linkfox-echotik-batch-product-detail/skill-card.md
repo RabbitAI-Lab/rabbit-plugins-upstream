@@ -1,43 +1,59 @@
-## Description: <br>
-Looks up known TikTok Shop products by ID or URL and returns batch product performance metrics, including sales, GMV, livestream, video, influencer, price, rating, commission, and status data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetches detailed TikTok Shop product analytics for known product IDs or TikTok Shop URLs, including multi-period sales, GMV, live-stream, video, influencer, pricing, rating, commission, and product-status metrics.
 
-## Publisher: <br>
-[linkfox-ai](https://clawhub.ai/user/linkfox-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linkfox-ai](https://clawhub.ai/user/linkfox-ai)
 
-## Use Case: <br>
-External sellers, operators, and analysts use this skill to compare known TikTok Shop products side by side using multi-period sales, GMV, live commerce, video, influencer, price, review, commission, and product status metrics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: TikTok product IDs, product URLs, and analytics requests are sent to LinkFox. <br>
-Mitigation: Use the skill only for product research data you are comfortable sharing with LinkFox. <br>
-Risk: Full API responses are stored locally and may include sensitive product research results. <br>
-Mitigation: Run the skill in a dedicated workspace and clean the generated linkfox data and cache directories when results are no longer needed. <br>
-Risk: The skill may submit feedback to LinkFox and may guide installation of a separate onboarding skill for account or credit issues. <br>
-Mitigation: Review feedback behavior and approve any onboarding skill installation only when you trust the source. <br>
+## Use Case:
 
+External sellers, operators, and e-commerce analysts use this skill to compare known TikTok Shop products side by side using sales, GMV, pricing, rating, review, commission, live-stream, video, and influencer metrics.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-batch-product-detail) <br>
-- [EchoTik-TikTok商品批量详情 API 参考](references/api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, files, guidance] <br>
-**Output Format:** [Markdown guidance, shell command examples, stdout JSON or summaries, and saved JSON response files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes full responses under a local linkfox session data directory, uses a 24-hour local cache by default, and can print full responses with --inline.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill sends TikTok product IDs or URLs and session metadata to LinkFox and stores full response files locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when sharing those product identifiers with LinkFox is acceptable, and review or delete saved linkfox response files when they contain sensitive business data.
+
+Risk: The skill consumes paid credits and may guide users through phone or SMS login, API-key creation, and payment order flows.
+
+Mitigation: Confirm cost expectations before repeated calls, treat API keys as secrets, and use official LinkFox endpoints for account and billing actions.
+
+Risk: Configurable LINKFOX_* API URL variables can redirect requests away from official LinkFox services.
+
+Mitigation: Avoid custom LINKFOX_* API URL variables unless the destination is fully trusted.
+
+## Reference(s):
+
+- [EchoTik batch product detail API reference](artifact/references/api.md)
+- [LinkFox authentication and billing onboarding](artifact/references/onboarding.md)
+- [ClawHub skill listing](https://clawhub.ai/linkfox-ai/skills/linkfox-echotik-batch-product-detail)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, JSON API responses, saved JSON files, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill can save full LinkFox API responses under a local linkfox session directory, print small JSON responses inline, and summarize larger responses.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

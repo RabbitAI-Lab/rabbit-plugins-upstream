@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/hotel-recommendation",
   "slug": "hotel-recommendation",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778491876821,
-  "contentHash": "630cdb7e00a6c89a4b6b3cfca099aacc021c036435e790fc7cd06aba617972d5",
-  "fetchedAt": "2026-07-26T20:08:17.142Z"
+  "version": "1.0.1",
+  "updatedAt": 1785898979105,
+  "contentHash": "b7dde67af58a13d9478f157b05dbf58b25475342d5d288155f3b9acab495ca8a",
+  "fetchedAt": "2026-08-11T08:41:24.702Z"
 }

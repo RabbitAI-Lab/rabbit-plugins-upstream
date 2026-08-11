@@ -50,7 +50,8 @@ Network, firewall zone, WiFi SSID, and an isolation policy in one script:
 #!/usr/bin/env bash
 set -euo pipefail
 
-# 1. Create the network
+# 1. Create the network. Create commands print the created entity on
+#    stdout in the requested format, so the ID captures directly.
 NETWORK_ID=$(unifly networks create \
   --name "IoT" \
   --vlan 30 \
@@ -62,9 +63,7 @@ NETWORK_ID=$(unifly networks create \
 
 # 2. Create a firewall zone that owns it
 ZONE_ID=$(unifly firewall zones create \
-  --name "IoT Zone" \
-  --networks "$NETWORK_ID" \
-  -o json | jq -r '.id')
+  --name "IoT Zone" --networks "$NETWORK_ID" -o json | jq -r '.id')
 
 # 3. Grab the Internal zone ID (default LAN zone)
 INTERNAL_ZONE_ID=$(unifly firewall zones list -o json | \
@@ -94,14 +93,14 @@ echo "IoT VLAN 30 provisioned: network=$NETWORK_ID zone=$ZONE_ID"
 
 ```bash
 # CSV format: domain,type,value,ttl
+# --record-type values are lowercase (a, aaaa, cname, ...), so normalize.
 while IFS=',' read -r domain type value ttl; do
   [ "$domain" = "domain" ] && continue  # skip header
   unifly dns create \
     --domain "$domain" \
-    --record-type "$type" \
+    --record-type "$(echo "$type" | tr '[:upper:]' '[:lower:]')" \
     --value "$value" \
-    --ttl "${ttl:-3600}" \
-    -o json
+    --ttl "${ttl:-3600}"
 done < dns_records.csv
 ```
 
@@ -138,14 +137,14 @@ done
 
 ## Port Forwarding via NAT Policies
 
-Port forwarding is `nat policies create --nat-type destination`. No
+Port forwarding is `nat policies create --type destination`. No
 dedicated `port-forward` command exists.
 
 ```bash
 # Forward external TCP 443 -> internal 10.0.10.50:8443
 unifly nat policies create \
   --name "HTTPS to webserver" \
-  --nat-type destination \
+  --type destination \
   --protocol tcp \
   --dst-port 443 \
   --translated-address 10.0.10.50 \
@@ -184,8 +183,9 @@ unifly events watch --types Device
 
 ```bash
 # Forward warning-level client events to a webhook as line-delimited JSON
+# (severity serializes PascalCase: Info, Warning, Error, Critical)
 unifly events watch --types Client -o json | \
-  jq -c 'select(.severity == "warning" or .severity == "error")' | \
+  jq -c 'select(.severity == "Warning" or .severity == "Error")' | \
   while read -r event; do
     curl -fsSL -X POST "$SLACK_WEBHOOK" \
       -H "Content-Type: application/json" \
@@ -196,12 +196,12 @@ unifly events watch --types Client -o json | \
 ### Incident Triage Loop
 
 ```bash
-# Watch for firewall events and correlate with the blocked source IP
+# Watch for firewall events and correlate the client MAC when present
 unifly events watch --types Firewall -o json | while read -r event; do
-  src=$(echo "$event" | jq -r '.src_ip // empty')
-  [ -z "$src" ] && continue
-  echo "Firewall hit from $src"
-  unifly clients find "$src" -o json | jq '.[] | {name, hostname, mac, vlan}'
+  mac=$(echo "$event" | jq -r '.client_mac // empty')
+  [ -z "$mac" ] && continue
+  echo "Firewall event for $mac"
+  unifly clients find "$mac" -o json | jq '.[] | {name, hostname, mac, ip}'
 done
 ```
 
@@ -242,11 +242,11 @@ and a DNS policy to redirect them. Most competing tools cannot touch the
 modern Policy Table.
 
 ```bash
-# 1. Create a traffic list of domains (or use IPs/ports)
+# 1. Create a traffic list of sinkhole targets (or use ports)
 unifly traffic-lists create \
   --name "AdDomains" \
   --list-type ipv4 \
-  --values "0.0.0.0,127.0.0.1"
+  --items "0.0.0.0,127.0.0.1"
 
 # 2. Create DNS records that sinkhole each bad domain
 # (driven from a curated blocklist file)
@@ -254,7 +254,7 @@ while read -r domain; do
   [ -z "$domain" ] || [[ "$domain" =~ ^# ]] && continue
   unifly dns create \
     --domain "$domain" \
-    --record-type A \
+    --record-type a \
     --value "0.0.0.0" \
     --ttl 300
 done < blocklist.txt
@@ -268,11 +268,13 @@ Generate vouchers, export as a printable list with QR codes.
 #!/usr/bin/env bash
 set -euo pipefail
 
+BATCH="Cafe-$(date +%Y-%m-%d)"
+# hotspot create prints the generated vouchers (codes included) on stdout
 VOUCHERS=$(unifly hotspot create \
-  --name "Cafe-$(date +%Y-%m-%d)" \
+  --name "$BATCH" \
   --count 20 \
   --minutes 1440 \
-  --up-rate 5000 --down-rate 20000 \
+  --rx-limit-kbps 20000 --tx-limit-kbps 5000 \
   -o json)
 
 # Extract codes
@@ -295,8 +297,9 @@ unifly hotspot purge --filter "status.eq('UNUSED') && created_at.lt('$(date -d '
 
 ```bash
 # Upgrade all online switches with 30s between operations
+# (device_type is "Switch"/"AccessPoint"/"Gateway"; state is PascalCase)
 unifly devices list --all -o json | \
-  jq -r '.[] | select(.type == "USW" and .state == "ONLINE") | .mac' | \
+  jq -r '.[] | select(.device_type == "Switch" and .state == "Online") | .mac' | \
 while read -r mac; do
   echo "Upgrading $mac..."
   unifly devices upgrade "$mac" --yes
@@ -374,22 +377,24 @@ unifly events list --within 1 -o json | \
 #!/usr/bin/env bash
 set -euo pipefail
 
-HEALTH=$(unifly system health -o json)
-STATUS=$(echo "$HEALTH" | jq -r '.status // "unknown"')
+# system health returns an ARRAY of per-subsystem summaries
+UNHEALTHY=$(unifly system health -o json | \
+  jq '[.[] | select(.status != "ok")]')
 
-if [ "$STATUS" != "ok" ]; then
-  echo "ALERT: Site health is $STATUS"
+if [ "$(echo "$UNHEALTHY" | jq 'length')" -gt 0 ]; then
+  echo "ALERT: unhealthy subsystems:"
+  echo "$UNHEALTHY" | jq .
   # Hand off to alerting (PagerDuty, Slack, etc.)
 fi
 
-# Check for offline devices
+# Check for offline devices (state serializes PascalCase)
 OFFLINE=$(unifly devices list --all -o json | \
-  jq '[.[] | select(.state == "OFFLINE")] | length')
+  jq '[.[] | select(.state == "Offline")] | length')
 
 if [ "$OFFLINE" -gt 0 ]; then
   echo "ALERT: $OFFLINE devices offline"
   unifly devices list --all -o json | \
-    jq '.[] | select(.state == "OFFLINE") | {name, mac, last_seen}'
+    jq '.[] | select(.state == "Offline") | {name, mac, last_seen}'
 fi
 ```
 
@@ -440,17 +445,17 @@ unifly system backup list -o json | \
 ### Firewall Policy Audit
 
 ```bash
-# All allow policies (potential exposure)
-unifly firewall policies list -o json | \
-  jq '.[] | select(.action == "ALLOW") | {description, source_zone, dest_zone}'
+# All allow policies (potential exposure); enums serialize PascalCase
+unifly firewall policies list --all -o json | \
+  jq '.[] | select(.action == "Allow") | {name, source, destination}'
 
 # Policies without logging (blind spots)
-unifly firewall policies list -o json | \
-  jq '.[] | select(.logging == false) | {id, description}'
+unifly firewall policies list --all -o json | \
+  jq '.[] | select(.logging_enabled == false) | {id, name}'
 
 # Detect open WiFi SSIDs
 unifly wifi list -o json | \
-  jq '.[] | select(.security == "open") | {name, id}'
+  jq '.[] | select(.security == "Open") | {name, id}'
 ```
 
 ### Unused Network Detection
@@ -459,8 +464,9 @@ unifly wifi list -o json | \
 unifly networks list --all -o json | jq -c '.[]' | while read -r net; do
   NET_ID=$(echo "$net" | jq -r '.id')
   NAME=$(echo "$net" | jq -r '.name')
+  # refs returns an object of reference categories; count all values
   REFS=$(unifly networks refs "$NET_ID" -o json 2>/dev/null)
-  if [ "$(echo "$REFS" | jq 'length')" -eq 0 ]; then
+  if [ "$(echo "$REFS" | jq '[.. | arrays | length] | add // 0')" -eq 0 ]; then
     echo "Unused network: $NAME ($NET_ID)"
   fi
 done
@@ -582,8 +588,10 @@ unifly --no-cache devices list
 
 1. **Inspect before mutating.** Always `get` or `list` an entity before
    `create`, `update`, or `delete`.
-2. **Capture IDs from create operations.** `unifly ... create -o json |
-jq -r '.id'`.
+2. **Capture IDs from create output.** Create commands print the created
+   entity on stdout: `unifly ... create -o json | jq -r '.id'`, or
+   `-o plain` for the bare ID. (Exception: `sites create` returns no
+   record from the controller.)
 3. **Verify after changes.** Re-fetch to confirm state.
 4. **Stagger bulk device operations.** Add `sleep` between restarts,
    upgrades, and port cycles to avoid overwhelming the controller.

@@ -50,6 +50,7 @@ Inspect the available commands and request fields with CLI help:
 runapi suno --help
 runapi suno text-to-music --help
 runapi suno blend-lyrics --help
+runapi suno inspire-music --help
 runapi suno separate-audio-stems --help
 runapi suno voice-to-validation-phrase --help
 runapi suno regenerate-validation-phrase --help
@@ -62,6 +63,7 @@ Run a one-off task (synchronous — polls until the task completes):
 ```shell
 runapi suno text-to-music --input-file request.json
 runapi suno blend-lyrics --input-file lyrics.json
+runapi suno inspire-music --input-file inspiration.json
 runapi suno voice-to-validation-phrase --input-file voice-phrase.json
 runapi suno generate-voice --input-file generate-voice.json
 runapi suno check-voice --input-file check-voice.json
@@ -76,7 +78,7 @@ runapi suno text-to-music --async --input-file request.json
 runapi wait <task-id> --service suno --action text-to-music
 ```
 
-Available commands: `text-to-music`, `extend-music`, `generate-artwork`, `cover-audio`, `add-instrumental`, `add-vocals`, `separate-audio-stems`, `generate-midi`, `convert-audio`, `visualize-music`, `generate-lyrics`, `blend-lyrics`, `get-timestamped-lyrics`, `replace-section`, `create-mashup`, `text-to-sound`, `voice-to-validation-phrase`, `regenerate-validation-phrase`, `generate-voice`, `check-voice`, `generate-persona`, `boost-style`.
+Available commands: `text-to-music`, `inspire-music`, `extend-music`, `generate-artwork`, `cover-audio`, `add-instrumental`, `add-vocals`, `separate-audio-stems`, `generate-midi`, `convert-audio`, `visualize-music`, `generate-lyrics`, `blend-lyrics`, `get-timestamped-lyrics`, `replace-section`, `create-mashup`, `text-to-sound`, `voice-to-validation-phrase`, `regenerate-validation-phrase`, `generate-voice`, `check-voice`, `generate-persona`, `boost-style`.
 
 For custom voice workflows: generate or regenerate a validation phrase, create a custom voice with `generate-voice`, then use the completed `voice_id` as `persona_id` with `persona_type: "voice"` on supported Suno v5 music generation endpoints. Use `check-voice` to confirm availability before depending on that voice in a generation request.
 

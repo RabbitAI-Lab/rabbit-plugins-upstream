@@ -1,0 +1,12 @@
+name: geoskill-geometric-correction
+display_name: 几何精校正
+description: |
+  基于 GCP 的多项式几何精校正，输出校正影像与 RMS 误差报告
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-geometric-correction.py
+runtime: python>=3.9
+tags:
+  - gis
+  - preprocessing
+  - remote-sensing

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-qwen-image",
   "slug": "runapi-qwen-image",
   "ownerHandle": null,
-  "version": "0.1.0",
-  "updatedAt": 1784761709869,
-  "contentHash": "490a7909db62747da252d1fe088f69f561ae5b4245ef6589f01707ff40910b2d",
-  "fetchedAt": "2026-07-26T18:07:42.632Z"
+  "version": "0.1.1",
+  "updatedAt": 1786371033079,
+  "contentHash": "28d5ac78baa673a621463129cb0b32ea0f36f513c1ca49b25039814d6f18d00c",
+  "fetchedAt": "2026-08-11T08:22:29.622Z"
 }

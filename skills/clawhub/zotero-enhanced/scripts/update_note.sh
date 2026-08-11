@@ -45,7 +45,7 @@ EOF
             exit 0
             ;;
         --version)
-            echo "zotero-enhanced update_note.sh v1.3.8"
+            echo "zotero-enhanced update_note.sh v1.3.7"
             exit 0
             ;;
         --dry-run)

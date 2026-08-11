@@ -141,6 +141,14 @@ If no valid credentials are available, offer browser login, manual setup, or an
 approved secret path and wait for the user to select one. After the selected
 login succeeds, rerun `flowus --json doctor` and `flowus --json whoami`.
 
+If `flowus --json doctor`, `flowus --json whoami`, or an API command reports an
+authentication failure (including HTTP 401), treat the active credential as
+invalid or expired. Check whether `--token` or `FLOWUS_TOKEN` is overriding
+saved credentials. Have the user update or remove an invalid override through
+an approved secret path, then offer the login or credential path above and wait
+for their explicit choice. Do not retry API work until `doctor` and `whoami`
+verify authentication.
+
 Common environment variables:
 
 - `FLOWUS_TOKEN` - bearer token for API calls.
@@ -286,7 +294,8 @@ headers such as `If-Match`; never put credentials or sessions in headers.
 
 - Command not found: offer the official installer at `https://cdn2.flowus.cn/flowus-cli/install` and wait for explicit approval before using it.
 - Unknown command or option: ask approval before running `flowus update`, then run `flowus <command> --help`.
-- Authentication failure: run `flowus --json doctor`, then offer an approved
-  credential or login path.
+- Authentication failure or HTTP 401: follow the invalid/expired credential
+  recovery rule above; do not retry API work until `doctor` and `whoami` verify
+  authentication.
 - Unexpected API shape: run `flowus api --docs <PATH> -X <METHOD>` and
   `flowus api --spec <PATH> -X <METHOD>` before retrying.

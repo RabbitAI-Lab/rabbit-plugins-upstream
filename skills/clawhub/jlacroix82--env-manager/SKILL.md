@@ -1,6 +1,6 @@
 ---
 name: env-manager
-description: Scaffolds dev project files (package.json, Dockerfile, Cargo.toml, etc.) for Python, Node, Docker, Go, and Rust. Returns a list of toolchain commands for the calling agent to run. Writes files only inside the agent workspace.
+description: Scaffolds dev project files (package.json, Dockerfile, Cargo.toml, etc.) for Python, Node, Docker, Go, and Rust, AND tracks project service/port inventory and runtime state (metadata only — no process control). Returns a list of toolchain commands for the calling agent to run. Writes scaffold files and JSON state (environments/ports/services) only inside the project workspace (repo root), or a descendant directory set via the ENV_MANAGER_WORKSPACE env var (confined to within the repo root).
 ---
 
 # Env Manager
@@ -24,9 +24,11 @@ For each language (`python`, `node`, `docker`, `go`, `rust`), it:
 
 - It does not run shell commands, scripts, or binaries.
 - It does not start any system process.
-- It does not modify files outside the agent workspace.
-- It does not touch `ENV_DIR` from the environment or accept a `--dir` flag for runtime path redirection.
-- It does not provide its own network or file-system scanning.
+- It does not modify files outside the project workspace (repo root). An optional
+  `ENV_MANAGER_WORKSPACE` env var can relocate the workspace, but it is
+  CONFINED to a descendant of the repo root — paths outside the repo are refused.
+- It does not accept a `--dir` CLI flag for runtime path redirection.
+- It does not perform network scanning or file-system traversal. Note: it DOES maintain service/port inventory and runtime-state metadata (services.json, ports.json) inside the workspace — `startService`/`stopService` only toggle a `running` flag; they never signal or control a real OS process.
 
 ## Important: file writes happen on every call
 
@@ -114,7 +116,9 @@ All state is written to `memory/environments/` inside the agent workspace:
 - `ports.json` — port tracking
 - `services.json` — service metadata (name, port, type, running flag)
 
-The data directory is the only thing the skill writes to. No other paths are touched.
+In addition, `--setup` writes the scaffold starter files (see the table in README.md)
+into a per-project directory (`environments/<name>/`). All writes stay inside the
+project workspace; no other paths are touched.
 
 ## Trust model
 

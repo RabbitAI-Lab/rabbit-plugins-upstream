@@ -1,44 +1,62 @@
-## Description: <br>
-Generate and edit images with Z-Image through RunAPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images with Z-Image through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-External developers and agent users use this skill to route one-off Z-Image generation or editing through the RunAPI CLI and to choose SDKs when integrating Z-Image into an application or backend. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and related request data may be sent to RunAPI under an API key or saved CLI login. <br>
-Mitigation: Use trusted RunAPI credentials, review prompt content before submission, and avoid sending sensitive data unless approved for that service. <br>
-Risk: The workflow depends on the external runapi binary and RunAPI service behavior. <br>
-Mitigation: Install the CLI from the disclosed source, confirm authentication, and inspect current CLI help or model documentation before use. <br>
+## Use Case:
 
+Developers and agents use this skill to generate, edit, or transform images with Z-Image through RunAPI, using the CLI for one-off tasks and SDKs for application integration.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/runapi-ai/runapi-z-image) <br>
-- [RunAPI Z-Image Model Overview](https://runapi.ai/models/z-image) <br>
-- [RunAPI Z-Image Model Documentation](https://runapi.ai/models/z-image.md) <br>
-- [RunAPI Alibaba Provider Comparison](https://runapi.ai/providers/alibaba.md) <br>
-- [RunAPI Model Catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code] <br>
-**Output Format:** [Markdown with inline shell commands and package names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide API-authenticated RunAPI CLI or SDK use for generated image tasks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release evidence) <br>
+Risk: The skill relies on RunAPI services, API-key or saved CLI authentication, and a Homebrew-installed CLI or SDKs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm RunAPI account access and authentication before use, and review RunAPI pricing and data handling for the intended workflow.
+
+Risk: Generated file URLs are temporary and should not be treated as durable assets.
+
+Mitigation: Download generated files and store them in durable storage within the documented retention window.
+
+Risk: Using the CLI as a production integration layer can create fragile application behavior.
+
+Mitigation: Use the documented SDK integration path for apps, backends, workers, and production codebases.
+
+## Reference(s):
+
+- [RunAPI Z-Image model overview](https://runapi.ai/models/z-image.md)
+- [RunAPI Z-Image homepage](https://runapi.ai/models/z-image)
+- [RunAPI Alibaba provider page](https://runapi.ai/providers/alibaba.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI CLI skill](https://github.com/runapi-ai/cli-skill)
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-z-image)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands and SDK package names]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide use of the RunAPI CLI, SDKs, API key authentication, and durable storage for generated image files.]
+
+## Skill Version(s):
+
+0.2.8 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

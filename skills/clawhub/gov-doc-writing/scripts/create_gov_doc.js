@@ -201,6 +201,9 @@ const FONT_SIZES = {
 const LINE_SPACING_EXACT_28 = { line: 560, lineRule: "exact" };
 const LINE_SPACING_SINGLE = { line: 276, lineRule: "auto" };
 
+// 字符宽度常数 (小三号字体, 1字符 = 15pt = 300 twips)
+const CHAR_WIDTH = FONT_SIZES['小三号'] * 10;
+
 // 页边距 (单位: DXA, 1440 DXA = 1英寸 = 2.54厘米)
 // A4: 宽度 11906 DXA, 高度 16838 DXA
 const PAGE_MARGINS = {
@@ -285,6 +288,35 @@ function createBodyStyle() {
       alignment: AlignmentType.JUSTIFIED,
       spacing: { before: 0, after: 0, line: 560, lineRule: "exact" },
       indent: { firstLine: 2 * FONT_SIZES['小三号'] * 10 }, // 首行缩进2字符: 2 * 15pt * 20twips/pt = 600twips
+    }
+  };
+}
+
+/**
+ * 创建正文无缩进样式（无首行缩进，大纲级别一级）
+ * 用于附件分页标题等需要出现在导航窗格中的正文级段落
+ */
+function createBodyNoIndentStyle() {
+  return {
+    id: "正文无缩进",
+    name: "正文无缩进",
+    basedOn: "Normal",
+    next: "Normal",
+    quickFormat: true,
+    run: {
+      font: {
+        eastAsia: CHINESE_FONTS.FZFangSong,
+        ascii: CHINESE_FONTS.TimesNewRoman,
+        hAnsi: CHINESE_FONTS.TimesNewRoman,
+        cs: CHINESE_FONTS.TimesNewRoman,
+      },
+      size: FONT_SIZES['小三号'],
+    },
+    paragraph: {
+      alignment: AlignmentType.LEFT,
+      spacing: { before: 0, after: 0, line: 560, lineRule: "exact" },
+      indent: { firstLine: 0 },
+      outlineLevel: 0, // 大纲级别：1级（出现在导航窗格）
     }
   };
 }
@@ -492,6 +524,14 @@ function createDocument(options = {}) {
   const firstLineChars = 2;
   const charWidth = FONT_SIZES['小三号'] * 10; // 30 半磅 * 10 = 300 twips = 1字符宽度
 
+  // 标题后自动插入空行（正文有缩进样式）
+  if (sections.length > 0) {
+    sections.splice(1, 0, new Paragraph({
+      style: "正文有缩进",
+      children: [new TextRun({ text: "" })]
+    }));
+  }
+
   const doc = new Document({
     creator: author,
     title: title,
@@ -519,6 +559,7 @@ function createDocument(options = {}) {
         createPageNumberStyle(),
         createTitleStyle(),
         createBodyStyle(),
+        createBodyNoIndentStyle(),
         createLevel1HeadingStyle(),
         createLevel2HeadingStyle(),
         createLevel3HeadingStyle(),
@@ -959,7 +1000,7 @@ function createSignatureParagraph(text, options = {}) {
 }
 
 /**
- * 创建落款块（部门名称 + 日期，与正文间隔一行）
+ * 创建落款块（部门名称 + 日期，与正文间隔三行空行）
  * 两行均右顶格对齐，不加任何缩进，日期自然向左延伸
  * @param {string} department - 部门名称
  * @param {string} date - 日期
@@ -969,11 +1010,13 @@ function createSignatureBlock(department, date, options = {}) {
   const { boldDepartment = false } = options;
   const paragraphs = [];
 
-  // 与正文间隔一行（空行）
-  paragraphs.push(new Paragraph({
-    style: "落款-部门",
-    children: [new TextRun({ text: "" })]
-  }));
+  // 与正文间隔三行空行
+  for (let i = 0; i < 3; i++) {
+    paragraphs.push(new Paragraph({
+      style: "落款-部门",
+      children: [new TextRun({ text: "" })]
+    }));
+  }
 
   // 部门名称（右顶格）
   paragraphs.push(createSignatureParagraph(department, {
@@ -985,6 +1028,108 @@ function createSignatureBlock(department, date, options = {}) {
   paragraphs.push(createSignatureParagraph(date, {
     styleName: "落款-日期"
   }));
+
+  return paragraphs;
+}
+
+/**
+ * 创建附件块（用于落款上方的附件说明）
+ * 格式示例（2 个附件）：
+ *   附件：1.附件标题一
+ *          2.附件标题二
+ *
+ * 规则：
+ *   1. 第一个附件与"附件："写在同一段："附件：1.附件名称"（冒号后直接跟序号，不加空格）
+ *   2. 附件名称后不加任何标点符号
+ *   3. 全部附件使用「正文有缩进」样式（首行缩进 2 字符）
+ *   4. 从附件 2 开始，覆盖首行缩进为 5 字符，使序号 "2." 与第一段 "1." 纵向对齐
+ *   5. 只有 1 个附件时，段落保持正文默认首行缩进 2 字符
+ *
+ * @param {string[]} attachments - 附件名称数组（不含序号、不含末尾标点）
+ * @returns {Paragraph[]} 附件段落数组
+ */
+function createAttachmentBlock(attachments) {
+  if (!Array.isArray(attachments) || attachments.length === 0) {
+    return [];
+  }
+
+  const paragraphs = [];
+  // 后续段首行缩进 5 字符（= 1500 twips），覆盖正文默认的 2 字符缩进
+  const subsequentFirstLine = CHAR_WIDTH * 5;
+
+  // 附件清单前空一行（正文有缩进）
+  paragraphs.push(new Paragraph({
+    style: "正文有缩进",
+    children: [new TextRun({ text: "" })]
+  }));
+
+  // 第一段："附件：1.附件名称"（使用正文有缩进样式，默认首行缩进 2 字符）
+  paragraphs.push(new Paragraph({
+    style: "正文有缩进",
+    children: createTextRunsFromSegments(
+      `附件：1.${attachments[0]}`,
+      CHINESE_FONTS.FZFangSong,
+      CHINESE_FONTS.TimesNewRoman,
+      FONT_SIZES['小三号']
+    )
+  }));
+
+  // 后续段："2.附件名称" 等（正文有缩进样式，首行缩进覆盖为 5 字符）
+  for (let i = 1; i < attachments.length; i++) {
+    paragraphs.push(new Paragraph({
+      style: "正文有缩进",
+      indent: { firstLine: subsequentFirstLine },
+      children: createTextRunsFromSegments(
+        `${i + 1}.${attachments[i]}`,
+        CHINESE_FONTS.FZFangSong,
+        CHINESE_FONTS.TimesNewRoman,
+        FONT_SIZES['小三号']
+      )
+    }));
+  }
+
+  return paragraphs;
+}
+
+/**
+ * 创建附件独立分页（位于落款之后，每个附件独占一页用于图片/表格插入）
+ *
+ * 格式：每页分页 → 标题"附件1"（正文无缩进样式、加粗、大纲一级）→ 正文有缩进空行供手动插入内容
+ *
+ * @param {string[]} attachments - 附件名称数组（与 createAttachmentBlock 相同）
+ * @returns {Paragraph[]} 附件分页段落数组
+ */
+function createAttachmentPages(attachments) {
+  if (!Array.isArray(attachments) || attachments.length === 0) {
+    return [];
+  }
+
+  const paragraphs = [];
+
+  for (let i = 0; i < attachments.length; i++) {
+    // 分页符
+    paragraphs.push(new Paragraph({
+      children: [new PageBreak()],
+    }));
+
+    // 附件标题："附件1"（正文无缩进样式、加粗、大纲级别一级）
+    paragraphs.push(new Paragraph({
+      style: "正文无缩进",
+      children: createTextRunsFromSegments(
+        `附件${i + 1}`,
+        CHINESE_FONTS.FZFangSong,
+        CHINESE_FONTS.TimesNewRoman,
+        FONT_SIZES['小三号'],
+        { bold: true }
+      )
+    }));
+
+    // 正文有缩进空行，供手动插入图片或表格
+    paragraphs.push(new Paragraph({
+      style: "正文有缩进",
+      children: [new TextRun({ text: "" })]
+    }));
+  }
 
   return paragraphs;
 }
@@ -1159,6 +1304,21 @@ async function createGovDocument(content, outputPath) {
           paragraphs.push(createSignatureParagraph(section.text, section.options || {}));
         }
         break;
+      case 'attachment':
+        // 附件块：attachments 为附件名称数组
+        if (Array.isArray(section.attachments) && section.attachments.length > 0) {
+          paragraphs.push(...createAttachmentBlock(section.attachments));
+        } else if (section.text) {
+          // 单条附件，兼容旧用法（仅 1 个附件时）
+          paragraphs.push(...createAttachmentBlock([section.text]));
+        }
+        break;
+      case 'attachment_pages':
+        // 附件独立分页：每个附件独占一页（用于图片/表格插入）
+        if (Array.isArray(section.attachments) && section.attachments.length > 0) {
+          paragraphs.push(...createAttachmentPages(section.attachments));
+        }
+        break;
     }
   }
   
@@ -1195,6 +1355,8 @@ module.exports = {
   createImageParagraph,
   createSignatureParagraph,
   createSignatureBlock,
+  createAttachmentBlock,
+  createAttachmentPages,
   calcDisplayWidth,
   createTable,
   createTableHeaderRow,

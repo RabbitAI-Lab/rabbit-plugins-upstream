@@ -1,42 +1,59 @@
-## Description: <br>
-Multi Agent Dev guides an agent to execute a clear implementation plan by decomposing tasks, coordinating fresh subagents, choosing serial or parallel execution, and applying staged reviews. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+多代理开发框架 guides an agent to execute implementation plans by decomposing tasks, dispatching fresh subagents, coordinating selective parallel work, and applying staged specification and code-quality review.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to carry out planned multi-task code changes with task decomposition, subagent coordination, review loops, and completion workflow guidance. It is best suited to clear implementation plans where tasks can be classified by dependency and file overlap. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can coordinate file reads and development command execution, so broad or vague requests may lead to unintended code changes. <br>
-Mitigation: Use it on a branch or worktree with a clear implementation plan, and review planned tasks before execution. <br>
-Risk: Parallel subagent work can conflict when tasks touch the same files. <br>
-Mitigation: Parallelize only independent tasks, serialize shared-file work, and fall back to serial execution when conflicts appear. <br>
-Risk: Generated code or reviews may miss integration or quality issues. <br>
-Mitigation: Keep the staged review flow and run relevant tests before merging or releasing changes. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to coordinate multi-task software implementation from a clear plan, including task decomposition, subagent execution, staged review, testing, and completion of a development branch.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/multi-agent-dev) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with task plans, review findings, command examples, and implementation guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May coordinate file reads and development commands through the hosting agent platform.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill can cause an agent to read repository files, edit code, run commands or tests, coordinate subagents, and create commits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in repositories where active coding automation is intended; use a worktree or sandbox, review generated changes, and require tests before merge.
+
+Risk: Server security evidence flags a pure-Markdown classification mismatch around write and execution authority.
+
+Mitigation: Treat the skill as an active coding workflow, not passive documentation, and review its behavior before installation.
+
+Risk: The artifact mentions callback URLs and API-key configuration that may expose data if used without review.
+
+Mitigation: Avoid callback URLs and API keys unless required, scope any credentials narrowly, and check what data the agent may send.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/multi-agent-dev)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+- [Skill homepage](https://skillhub.cn/skill/)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, code, shell commands, configuration]
+
+**Output Format:** [Markdown guidance with code, command, review, and workflow instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct an agent to read files, edit code, run tests or commands, coordinate subagents, and produce review notes or commits.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

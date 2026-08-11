@@ -1,46 +1,63 @@
-## Description: <br>
-Upscale and enhance media with Topaz through RunAPI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Upscale and enhance media with Topaz through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to upscale or enhance images and videos with Topaz through RunAPI. It supports one-off CLI tasks and points developers to SDKs for application integration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected images, videos, and request metadata are sent to an external RunAPI/Topaz service for processing. <br>
-Mitigation: Use the skill only for media appropriate for external processing, and review the service privacy, retention, and authentication terms before using sensitive private media. <br>
-Risk: The skill relies on the RunAPI CLI and optional API-key authentication. <br>
-Mitigation: Install the RunAPI CLI from the declared Homebrew tap, authenticate with runapi login or RUNAPI_API_KEY, and keep credentials out of generated files and shared logs. <br>
+## Use Case:
 
+Developers and agents use this skill to upscale or enhance images and videos with Topaz through RunAPI. It supports one-off CLI tasks and points application integrations toward RunAPI SDKs.
 
-## Reference(s): <br>
-- [RunAPI Topaz homepage](https://runapi.ai/models/topaz) <br>
-- [Topaz model overview, pricing, and rate limits](https://runapi.ai/models/topaz.md) <br>
-- [Topaz provider comparison](https://runapi.ai/providers/topaz.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [Topaz image upscale](https://runapi.ai/models/topaz/image-upscale.md) <br>
-- [Topaz video upscale](https://runapi.ai/models/topaz/video-upscale.md) <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/runapi-topaz) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code] <br>
-**Output Format:** [Markdown with inline shell commands and package names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents toward RunAPI CLI usage for one-off tasks and SDK usage for application integration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release evidence) <br>
+Risk: Selected images or videos may be sent to RunAPI/Topaz for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the skill only when third-party media processing is acceptable for the user's data and workflow.
+
+Risk: API tokens may be saved locally when imported into CLI configuration.
+
+Mitigation: Prefer environment-based authentication with RUNAPI_API_KEY for agent and headless runs when possible.
+
+Risk: Generated file URLs are temporary and may expire.
+
+Mitigation: Download and store generated media in durable storage within 7 days.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-topaz)
+- [RunAPI Topaz model overview](https://runapi.ai/models/topaz)
+- [Topaz model documentation](https://runapi.ai/models/topaz.md)
+- [Topaz provider comparison](https://runapi.ai/providers/topaz.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [Image upscale variant](https://runapi.ai/models/topaz/upscale-image.md)
+- [Video upscale variant](https://runapi.ai/models/topaz/upscale-video.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown with inline shell commands and SDK guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May reference temporary generated media URLs that should be downloaded to durable storage within 7 days.]
+
+## Skill Version(s):
+
+0.2.8 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

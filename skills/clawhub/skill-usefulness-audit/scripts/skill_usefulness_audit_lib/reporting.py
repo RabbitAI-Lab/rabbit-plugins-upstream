@@ -50,8 +50,8 @@ ACTION_ADVICE = {
 }
 
 ACTION_ADVICE_ZH_CN = {
-    "delete": "Agent 复核后建议移除；先按报告里的证据再确认一遍。",
-    "merge-delete": "Agent 复核后建议合并再移除；先把有用部分并到更强的重叠技能。",
+    "delete": "人工复核后建议移除；先按报告里的证据再确认一遍。",
+    "merge-delete": "人工复核后建议合并再移除；先把有用部分并到更强的重叠技能。",
     "merge-or-review": "先和重叠技能对比，再决定留下哪一个。",
     "observe-30d": "建议暂时保留，继续看真实使用情况。",
     "quarantine-review": "建议先暂停使用；查清高风险文件后，再决定是否保留。",
@@ -96,33 +96,34 @@ REPORT_TEXT = {
         "community_files": "Community files",
         "report_mode": "Report mode",
         "recommended_actions": "Skills needing follow-up",
-        "delete_candidates": "Recommended delete candidates",
+        "delete_candidates": "Recommended deletion candidates",
         "decision_summary": "Decision Summary",
         "decision_intro": "Start with the findings; the evidence tables explain each one.",
         "useful_count": "Useful enough to keep",
         "observe_count": "Keep watching for now",
         "review_count": "Needs manual review",
         "removal_count": "Possible duplicates or low-value skills",
-        "install_gate_count": "Risk needs attention",
+        "install_gate_count": "Of these, risk needs attention",
         "useful_group": "Useful enough to keep",
         "observe_group": "Keep watching for now",
         "review_group": "Needs manual review",
         "removal_group": "Possible duplicates or low-value skills",
-        "install_gate_group": "Risk needs attention",
+        "install_gate_group": "Risk subset requiring attention",
         "none": "None.",
-        "more": "+{count} more in the evidence tables.",
+        "more": "{count} more skills are listed in the evidence tables.",
         "score_word": "score",
         "call": "call",
         "calls": "calls",
         "recent_call": "recent call",
         "recent_calls": "recent calls",
-        "no_usage": "no matched usage record",
+        "no_usage": "no matching usage record",
         "missing_ablation": "no ablation result yet",
         "risk": "risk",
         "quality": "quality",
         "missing_env": "missing env",
         "install_gate": "risk note",
         "score_table": "Score Table",
+        "score_axes_note": "Verdict is the score and evidence band. Action is the recommended next step after confidence, risk, and burden rules.",
         "cost_ablation_plan": "Cost-Efficient Ablation Plan",
         "strategy": "Strategy",
         "eligible_general_skills": "Eligible general skills",
@@ -155,12 +156,12 @@ REPORT_TEXT = {
         "observe_count": "建议暂时观察",
         "review_count": "建议人工复核",
         "removal_count": "疑似重复或低价值技能",
-        "install_gate_count": "需注意存在风险",
+        "install_gate_count": "其中需注意风险",
         "useful_group": "建议保留",
         "observe_group": "建议暂时观察",
         "review_group": "建议人工复核",
         "removal_group": "疑似重复或低价值技能",
-        "install_gate_group": "需注意存在风险",
+        "install_gate_group": "需注意的风险",
         "none": "无。",
         "more": "其余 {count} 个见后面的证据表。",
         "score_word": "分数",
@@ -175,6 +176,7 @@ REPORT_TEXT = {
         "missing_env": "缺少环境变量",
         "install_gate": "风险提示",
         "score_table": "评分表",
+        "score_axes_note": "结论表示分数和证据所处区间；建议是在此基础上结合置信度、风险和维护负担给出的下一步。",
         "cost_ablation_plan": "低成本消融计划",
         "strategy": "策略",
         "eligible_general_skills": "符合条件的通用技能",
@@ -201,12 +203,12 @@ REPORT_TABLE_HEADERS = {
             "Source",
             "Kind",
             "Calls",
-            "Recent30",
+            "30-day calls",
             "Usage",
             "Unique",
             "Impact",
-            "Comm",
-            "Conf",
+            "Community",
+            "Confidence",
             "Risk",
             "Local",
             "Burden",
@@ -245,8 +247,8 @@ REPORT_TABLE_HEADERS = {
         "zh-CN": ["技能", "社区分", "置信度", "组成"],
     },
     "quality": {
-        "en": ["Skill", "Cost", "Raw cost", "Flags", "Notes"],
-        "zh-CN": ["技能", "成本", "原始成本", "问题", "说明"],
+        "en": ["Skill", "Cost", "Raw cost", "Main flags", "Notes"],
+        "zh-CN": ["技能", "成本", "原始成本", "主要问题", "说明"],
     },
     "risk": {
         "en": ["Skill", "Risk", "Flags", "Risk note", "Note"],
@@ -278,7 +280,7 @@ MISSING_EVIDENCE_LABELS = {
 INSTALL_GATE_LABELS = {
     "en": {
         "block-before-install": "high risk; pause use and fix it",
-        "review-before-install": "risk present; check before continued use",
+        "review-before-install": "risk present; check before continuing",
         "warn-before-install": "low risk; confirm it is expected",
         "no-static-risk-gate": "no static-risk block",
     },
@@ -332,13 +334,13 @@ ACTION_REASON_LABELS = {
 QUALITY_REASON_ZH_CN = {
     "empty-skill-contract": "SKILL.md 没说清楚这个技能具体怎么用",
     "prompt-bloat": "SKILL.md 偏长，会占用较多共享上下文",
-    "broad-trigger-surface": "description 的触发范围偏宽",
-    "description-bloat": "description 偏长，路由不够清爽",
-    "reference-disclosure-gap": "SKILL.md 没把 reference 的加载路径说清楚",
-    "reference-link-broken": "SKILL.md 指向了不存在的 reference 文件",
-    "reference-bloat": "reference 偏大，加载时容易浪费上下文",
-    "long-reference-without-toc": "长 reference 缺少目录",
-    "reference-content-pollution": "reference 里混入了广告、推荐或无关内容",
+    "broad-trigger-surface": "入口说明的触发范围偏宽",
+    "description-bloat": "入口说明偏长，路由不够清爽",
+    "reference-disclosure-gap": "SKILL.md 没说清参考文件的加载路径",
+    "reference-link-broken": "SKILL.md 指向了不存在的参考文件",
+    "reference-bloat": "参考文件偏大，加载时容易浪费上下文",
+    "long-reference-without-toc": "较长的参考文件缺少目录",
+    "reference-content-pollution": "参考文件里混入了广告、推荐或无关内容",
     "asset-bloat": "assets 目录偏重",
     "vague-resource-names": "资源文件名太泛，不利于按需加载",
     "private-bundle-artifact": "包里有疑似私有或环境相关文件",
@@ -351,7 +353,7 @@ QUALITY_REASON_ZH_CN = {
     "overtrigger-low-execution": "触发很多，但真正执行很少",
     "overtrigger-misfire": "使用记录显示误触发偏多",
     "overtrigger-no-impact": "经常触发，但消融里收益不明显",
-    "reference-overload": "使用记录显示 reference 加载偏重",
+    "reference-overload": "使用记录显示参考文件加载偏重",
     "script-failure-burden": "使用记录显示脚本失败",
     "agent-repair-burden": "使用记录显示需要反复修补",
     "missing-required-env": "必需环境变量没有配置",
@@ -396,11 +398,11 @@ def description_load_notice(
 ) -> str:
     if normalize_report_language(language) == "zh-CN":
         return (
-            f"> 本次审计纳入 {skill_count} 个 Skill；当前加载这些 Skill 的入口提示词共 "
+            f"> 本次审计纳入 {skill_count} 个 Skill；当前因这些 Skill 加载的入口描述共 "
             f"{character_count} 个字符，约合 {context_units} 个 token。"
         )
     skill_label = "skill" if skill_count == 1 else "skills"
-    prompt_label = "Its loaded entry prompt contains" if skill_count == 1 else "Their loaded entry prompts contain"
+    prompt_label = "Its loaded entry description contains" if skill_count == 1 else "Their loaded entry descriptions total"
     return (
         f"> This audit covers {skill_count} {skill_label}. {prompt_label} {character_count} characters, "
         f"about {context_units} tokens."
@@ -410,6 +412,11 @@ def description_load_notice(
 def report_text(language: str, key: str) -> str:
     normalized = normalize_report_language(language)
     return REPORT_TEXT.get(normalized, REPORT_TEXT["en"]).get(key, REPORT_TEXT["en"][key])
+
+
+def report_pair(language: str, label: str, value: object) -> str:
+    separator = "：" if normalize_report_language(language) == "zh-CN" else ": "
+    return f"{label}{separator}{value}"
 
 
 def report_headers(language: str, table: str) -> list[str]:
@@ -491,12 +498,13 @@ def _deletion_evidence_parts(
     parts: list[str] = []
 
     calls = coerce_int(item.get("calls")) or 0
-    if calls == 0:
+    usage_missing = bool(item.get("missing_usage")) or str(item.get("usage_source") or "") == "missing"
+    if calls == 0 and not usage_missing:
         parts.append("没有使用记录" if normalized_language == "zh-CN" else "no recorded use")
 
     overlap = coerce_float(item.get("overlap_value"))
     peer = str(item.get("overlap_peer") or "").strip()
-    if overlap is not None and overlap >= 0.65:
+    if overlap is not None and overlap >= HIGH_OVERLAP_THRESHOLD:
         if normalized_language == "zh-CN":
             parts.append(f"和 {peer} 高度重叠" if peer else "和其他技能高度重叠")
         else:
@@ -507,7 +515,7 @@ def _deletion_evidence_parts(
         cases = coerce_int(ablation.get("cases")) or 0
         consistency = coerce_float(ablation.get("consistency_rate")) or 0.0
         better = coerce_float(ablation.get("better_rate")) or 0.0
-        if cases and consistency >= 0.85 and better <= 0.10:
+        if cases and consistency >= NO_IMPACT_CONSISTENCY_THRESHOLD and better <= NO_IMPACT_BETTER_THRESHOLD:
             parts.append(
                 "消融结果没有看到收益"
                 if normalized_language == "zh-CN"
@@ -529,7 +537,7 @@ def action_advice_for_item(item: dict[str, object], language: str = "en") -> str
     if action in REMOVE_ACTIONS or bool(item.get("delete_candidate")):
         parts = _deletion_evidence_parts(item, normalized_language)
         if normalized_language == "zh-CN":
-            prefix = "Agent 复核后建议合并后移除" if action == "merge-delete" else "Agent 复核后建议移除"
+            prefix = "人工复核后建议合并后移除" if action == "merge-delete" else "人工复核后建议移除"
             return f"{prefix}：{'；'.join(parts)}。" if parts else action_advice_for_report(action, str(item.get("action_reason") or ""), normalized_language)
         prefix = "After agent review, merge then remove it" if action == "merge-delete" else "After agent review, remove it"
         return f"{prefix}: {'; '.join(parts)}." if parts else action_advice_for_report(action, str(item.get("action_reason") or ""), normalized_language)
@@ -564,7 +572,7 @@ def _summary_reason(item: dict[str, object], language: str = "en") -> str:
     removal_action = action in REMOVE_ACTIONS or bool(item.get("delete_candidate"))
     final_score = coerce_float(item.get("final_score"))
     if final_score is not None:
-        parts.append(f"{report_text(normalized_language, 'score_word')} {final_score:.1f}")
+        parts.append(f"{report_text(normalized_language, 'score_word')} {fmt_score(final_score)}")
 
     calls = coerce_int(item.get("calls")) or 0
     recent_30d = coerce_int(item.get("recent_30d_calls"))
@@ -595,27 +603,37 @@ def _summary_reason(item: dict[str, object], language: str = "en") -> str:
         flags = short_risk_flags([str(flag) for flag in risk_flags])
         if normalized_language == "zh-CN":
             risk_label = {"high": "高", "medium": "中", "low": "低"}.get(risk_level, risk_level)
-            parts.append(f"{risk_label}{report_text(normalized_language, 'risk')}" + (f": {flags}" if flags else ""))
+            parts.append(f"{risk_label}{report_text(normalized_language, 'risk')}" + (f"：{flags}" if flags else ""))
         else:
             parts.append(f"{risk_level} {report_text(normalized_language, 'risk')}" + (f": {flags}" if flags else ""))
 
     quality_flags = [str(flag) for flag in list(item.get("quality_flags") or [])]
     if quality_flags and not removal_action:
-        parts.append(f"{report_text(normalized_language, 'quality')}: {short_risk_flags(quality_flags)}")
+        parts.append(report_pair(normalized_language, report_text(normalized_language, "quality"), short_risk_flags(quality_flags)))
 
     missing_env = [str(name) for name in list(item.get("missing_required_env") or [])]
     if missing_env:
         suffix = f"+{len(missing_env) - 2} more" if len(missing_env) > 2 else ""
         env_summary = ",".join(missing_env[:2])
-        parts.append(f"{report_text(normalized_language, 'missing_env')}: {env_summary}" + (f",{suffix}" if suffix else ""))
+        parts.append(
+            report_pair(normalized_language, report_text(normalized_language, "missing_env"), env_summary)
+            + (f",{suffix}" if suffix else "")
+        )
 
     install_gate = _item_install_gate_verdict(item)
     if install_gate in SUMMARY_INSTALL_GATE_VERDICTS:
-        parts.append(f"{report_text(normalized_language, 'install_gate')}: {install_gate_label(install_gate, normalized_language)}")
+        parts.append(
+            report_pair(
+                normalized_language,
+                report_text(normalized_language, "install_gate"),
+                install_gate_label(install_gate, normalized_language),
+            )
+        )
 
     if not parts:
         parts.append(action_advice_for_report(action, str(item.get("action_reason") or ""), normalized_language))
-    return "; ".join(dict.fromkeys(part for part in parts if part))
+    separator = "；" if normalized_language == "zh-CN" else "; "
+    return separator.join(dict.fromkeys(part for part in parts if part))
 
 
 def _summary_group(title_key: str, items: list[dict[str, object]], limit: int, language: str) -> list[str]:
@@ -626,10 +644,14 @@ def _summary_group(title_key: str, items: list[dict[str, object]], limit: int, l
         return lines
     sentence_end = "。" if normalized_language == "zh-CN" else "."
     action_separator = "。" if normalized_language == "zh-CN" else ". "
+    name_separator = "：" if normalized_language == "zh-CN" else ": "
     for item in items[:limit]:
+        reason = _summary_reason(item, normalized_language)
+        if normalized_language == "en" and reason:
+            reason = reason[:1].upper() + reason[1:]
         lines.append(
-            f"- {_item_display_name(item)}: `{_item_action(item)}`"
-            f"{action_separator}{_summary_reason(item, normalized_language)}{sentence_end}"
+            f"- {_item_display_name(item)}{name_separator}`{_item_action(item)}`"
+            f"{action_separator}{reason}{sentence_end}"
         )
     if len(items) > limit:
         lines.append(f"- {report_text(normalized_language, 'more').format(count=len(items) - limit)}")
@@ -657,11 +679,11 @@ def decision_summary(ranked: list[dict[str, object]], limit: int = 5, language: 
         "",
         report_text(normalized_language, "decision_intro"),
         "",
-        f"- {report_text(normalized_language, 'useful_count')}: {len(useful)}",
-        f"- {report_text(normalized_language, 'observe_count')}: {len(observe)}",
-        f"- {report_text(normalized_language, 'review_count')}: {len(review)}",
-        f"- {report_text(normalized_language, 'removal_count')}: {len(removal)}",
-        f"- {report_text(normalized_language, 'install_gate_count')}: {len(install_gate)}",
+        f"- {report_pair(normalized_language, report_text(normalized_language, 'useful_count'), len(useful))}",
+        f"- {report_pair(normalized_language, report_text(normalized_language, 'observe_count'), len(observe))}",
+        f"- {report_pair(normalized_language, report_text(normalized_language, 'review_count'), len(review))}",
+        f"- {report_pair(normalized_language, report_text(normalized_language, 'removal_count'), len(removal))}",
+        f"- {report_pair(normalized_language, report_text(normalized_language, 'install_gate_count'), len(install_gate))}",
         "",
     ]
     for group in (
@@ -745,7 +767,7 @@ def _concise_review_reason(item: dict[str, object], language: str) -> str:
             continue
         allowed.append(part)
     if allowed:
-        separator = "，" if normalized_language == "zh-CN" else ", and "
+        separator = "，" if normalized_language == "zh-CN" else "; "
         return separator.join(allowed)
     return "现有记录显示作用有限" if normalized_language == "zh-CN" else "the current evidence shows limited value"
 
@@ -764,100 +786,141 @@ def concise_report(
     review = [item for item in ranked if bool(item.get("delete_candidate"))]
     used = [item for item in ranked if _has_direct_usage(item)]
     undecided = [item for item in ranked if item not in review and item not in used]
-
+    headline_args = (len(ranked), len(used), len(undecided), len(review), entry_prompt_characters, entry_prompt_tokens)
     if normalized_language == "zh-CN":
-        headline = (
-            f"本次审计了{len(ranked)}个技能。当前加载这些技能的入口提示词共"
-            f"{entry_prompt_characters}个字符，约合{entry_prompt_tokens}个token。"
-        )
-        status_present = False
-        if used and len(used) == len(ranked):
-            headline += "这个技能有明确使用记录。" if len(ranked) == 1 else "这些技能都有明确使用记录。"
-            status_present = True
-        elif undecided and len(undecided) == len(ranked):
-            headline += "这个技能的使用情况目前还不清楚。" if len(ranked) == 1 else "这些技能的使用情况目前都不清楚。"
-            status_present = True
-        else:
-            status_parts = []
-            if used:
-                status_parts.append(f"{len(used)}个有明确使用记录")
-            if undecided:
-                status_parts.append(f"{len(undecided)}个的使用情况仍不清楚")
-            if status_parts:
-                headline += "其中" + "，".join(status_parts) + "。"
-                status_present = True
-        if review:
-            connector = "同时有" if status_present else "其中有"
-            headline += f"{connector}{len(review)}个达到重点复查条件。"
-        lines = [headline]
-        if used:
-            lines.append(f"常用技能：{_concise_usage_list(used, normalized_language, limit)}。")
-        if undecided:
-            lines.append(
-                f"暂时无法判断：{_concise_name_list(undecided, normalized_language, limit)}。"
-                "现有记录不足，暂不建议移除。"
-            )
-        for item in review[:limit]:
-            lines.append(
-                f"建议复查：{_item_display_name(item)}。{_concise_review_reason(item, normalized_language)}；"
-                "是否移除仍需人工确认。"
-            )
-        if len(review) > limit:
-            lines.append(f"另外{len(review) - limit}个复查对象见完整依据。")
-        if not_audited_count:
-            lines.append(f"另有{not_audited_count}个目录未纳入判断，原因见完整依据。")
-        if markdown_path is not None:
-            lines.append(f"完整依据已保存到：{markdown_path}。")
-        return "\n".join(lines)
+        headline = _concise_headline_zh_cn(*headline_args)
+    else:
+        headline = _concise_headline_en(*headline_args)
+    lines = [headline]
+    lines.extend(
+        _concise_section_lines(used, undecided, review, not_audited_count, markdown_path, limit, normalized_language)
+    )
+    return "\n".join(lines)
 
-    skill_word = "skill" if len(ranked) == 1 else "skills"
-    prompt_noun = "prompt contains" if len(ranked) == 1 else "prompts contain"
+
+def _concise_headline_zh_cn(
+    ranked_count: int,
+    used_count: int,
+    undecided_count: int,
+    review_count: int,
+    entry_prompt_characters: int,
+    entry_prompt_tokens: int,
+) -> str:
     headline = (
-        f"This audit reviewed {len(ranked)} {skill_word}. The loaded skill entry {prompt_noun} "
+        f"本次审计了{ranked_count}个技能。当前因这些技能加载的入口描述共"
+        f"{entry_prompt_characters}个字符，约合{entry_prompt_tokens}个token。"
+    )
+    status_present = False
+    if used_count and used_count == ranked_count:
+        headline += "这个技能有明确使用记录。" if ranked_count == 1 else "这些技能都有明确使用记录。"
+        status_present = True
+    elif undecided_count and undecided_count == ranked_count:
+        headline += "这个技能的使用情况目前还不清楚。" if ranked_count == 1 else "这些技能的使用情况目前都不清楚。"
+        status_present = True
+    else:
+        status_parts = []
+        if used_count:
+            status_parts.append(f"{used_count}个有明确使用记录")
+        if undecided_count:
+            status_parts.append(f"{undecided_count}个的使用情况仍不清楚")
+        if status_parts:
+            headline += "其中" + "，".join(status_parts) + "。"
+            status_present = True
+    if review_count:
+        connector = "同时有" if status_present else "其中有"
+        headline += f"{connector}{review_count}个达到重点复查条件。"
+    return headline
+
+
+def _concise_headline_en(
+    ranked_count: int,
+    used_count: int,
+    undecided_count: int,
+    review_count: int,
+    entry_prompt_characters: int,
+    entry_prompt_tokens: int,
+) -> str:
+    skill_word = "skill" if ranked_count == 1 else "skills"
+    description_noun = "description contains" if ranked_count == 1 else "descriptions contain"
+    headline = (
+        f"This audit reviewed {ranked_count} {skill_word}. The loaded skill entry {description_noun} "
         f"{entry_prompt_characters} characters, about {entry_prompt_tokens} tokens."
     )
     status_present = False
-    if used and len(used) == len(ranked):
-        headline += " It has clear usage evidence." if len(ranked) == 1 else " All of them have clear usage evidence."
+    if used_count and used_count == ranked_count:
+        headline += " It has clear usage evidence." if ranked_count == 1 else " All of them have clear usage evidence."
         status_present = True
-    elif undecided and len(undecided) == len(ranked):
-        headline += " Its usage remains unclear." if len(ranked) == 1 else " Their usage remains unclear."
+    elif undecided_count and undecided_count == ranked_count:
+        headline += " Its usage remains unclear." if ranked_count == 1 else " Their usage remains unclear."
         status_present = True
-    elif used:
-        used_word = "skill has" if len(used) == 1 else "skills have"
-        headline += f" {len(used)} {used_word} clear usage evidence."
+    elif used_count:
+        used_word = "skill has" if used_count == 1 else "skills have"
+        headline += f" {used_count} {used_word} clear usage evidence."
         status_present = True
-    if undecided:
-        if len(undecided) != len(ranked):
-            undecided_word = "skill remains" if len(undecided) == 1 else "skills remain"
-            headline += f" {len(undecided)} {undecided_word} undecided."
+    if undecided_count:
+        if undecided_count != ranked_count:
+            undecided_word = "skill remains" if undecided_count == 1 else "skills remain"
+            headline += f" {undecided_count} {undecided_word} undecided."
             status_present = True
-    if review:
-        review_noun = "skill" if len(review) == 1 else "skills"
-        review_verb = "needs" if len(review) == 1 else "need"
+    if review_count:
+        review_noun = "skill" if review_count == 1 else "skills"
+        review_verb = "needs" if review_count == 1 else "need"
         adverb = " also" if status_present else ""
-        headline += f" {len(review)} {review_noun}{adverb} {review_verb} closer review."
-    lines = [headline]
+        headline += f" {review_count} {review_noun}{adverb} {review_verb} closer review."
+    return headline
+
+
+def _concise_section_lines(
+    used: list[dict[str, object]],
+    undecided: list[dict[str, object]],
+    review: list[dict[str, object]],
+    not_audited_count: int,
+    markdown_path: Path | None,
+    limit: int,
+    normalized_language: str,
+) -> list[str]:
+    lines: list[str] = []
     if used:
-        lines.append(f"Frequently used skills: {_concise_usage_list(used, normalized_language, limit)}.")
+        usage_list = _concise_usage_list(used, normalized_language, limit)
+        if normalized_language == "zh-CN":
+            lines.append(f"常用技能：{usage_list}。")
+        else:
+            lines.append(f"Frequently used skills: {usage_list}.")
     if undecided:
-        lines.append(
-            f"Undecided: {_concise_name_list(undecided, normalized_language, limit)}. "
-            "The available records are not enough to support removal."
-        )
+        name_list = _concise_name_list(undecided, normalized_language, limit)
+        if normalized_language == "zh-CN":
+            lines.append(f"暂时无法判断：{name_list}。现有记录不足，暂不建议移除。")
+        else:
+            lines.append(f"Undecided: {name_list}. The available records are not enough to support removal.")
     for item in review[:limit]:
-        lines.append(
-            f"Review closely: {_item_display_name(item)}. {_concise_review_reason(item, normalized_language)}; "
-            "confirm the evidence before removing it."
-        )
+        reason = _concise_review_reason(item, normalized_language)
+        if normalized_language == "zh-CN":
+            lines.append(f"建议复查：{_item_display_name(item)}。{reason}；是否移除仍需人工确认。")
+        else:
+            reason = reason[:1].upper() + reason[1:]
+            lines.append(
+                f"Review closely: {_item_display_name(item)}. {reason}; "
+                "confirm the evidence before removing it."
+            )
     if len(review) > limit:
-        lines.append(f"The full evidence lists {len(review) - limit} more skills for review.")
+        extra = len(review) - limit
+        if normalized_language == "zh-CN":
+            lines.append(f"另外{extra}个复查对象见完整依据。")
+        else:
+            extra_word = "skill" if extra == 1 else "skills"
+            lines.append(f"The full evidence lists {extra} more {extra_word} for review.")
     if not_audited_count:
-        directory_word = "directory was" if not_audited_count == 1 else "directories were"
-        lines.append(f"{not_audited_count} {directory_word} not included; the full evidence explains why.")
+        if normalized_language == "zh-CN":
+            lines.append(f"另有{not_audited_count}个目录未纳入判断，原因见完整依据。")
+        else:
+            directory_word = "directory was" if not_audited_count == 1 else "directories were"
+            lines.append(f"{not_audited_count} {directory_word} not included; the full evidence explains why.")
     if markdown_path is not None:
-        lines.append(f"Full evidence: {markdown_path}.")
-    return "\n".join(lines)
+        if normalized_language == "zh-CN":
+            lines.append(f"完整依据已保存到：{markdown_path}。")
+        else:
+            lines.append(f"Full evidence: {markdown_path}.")
+    return lines
 
 
 def risk_review_summary(level: str, evidence: list[dict[str, object]]) -> str:
@@ -888,7 +951,7 @@ def risk_review_summary_for_report(level: str, evidence: list[dict[str, object]]
         "medium": "中风险：先查清楚风险，再决定是否使用或保留。",
         "low": "低风险：确认这是预期行为。",
     }.get(level, "建议先查清楚。")
-    return f"{prefix} " + " ".join(dict.fromkeys(guidance))
+    return prefix + "".join(dict.fromkeys(guidance))
 
 
 def install_gate_summary(level: str, evidence: list[dict[str, object]]) -> dict[str, str]:
@@ -987,6 +1050,16 @@ def fmt_optional_float(value, digits: int = 2) -> str:
     return "-" if coerced is None else f"{coerced:.{digits}f}"
 
 
+def fmt_score(value) -> str:
+    coerced = coerce_float(value)
+    if coerced is None:
+        return "-"
+    one_decimal = f"{coerced:.1f}"
+    if abs(coerced - float(one_decimal)) < 1e-9:
+        return one_decimal
+    return f"{coerced:.2f}"
+
+
 def fmt_breakdown_components(breakdown: dict[str, float]) -> str:
     if not breakdown:
         return "-"
@@ -1016,11 +1089,17 @@ def summarize_quality_evidence(evidence: list[dict[str, object]], limit: int = 3
         else:
             reason = str(item.get("reason", "")).strip()
         penalty = fmt_optional_float(item.get("penalty"))
-        parts.append(f"{label}({penalty}): {reason}" if reason else f"{label}({penalty})")
+        detail_separator = "：" if normalized_language == "zh-CN" else ": "
+        parts.append(
+            f"{label}({penalty}){detail_separator}{reason}"
+            if reason
+            else f"{label}({penalty})"
+        )
     if len(evidence) > limit:
         suffix = f"+{len(evidence) - limit} 项" if normalized_language == "zh-CN" else f"+{len(evidence) - limit} more"
         parts.append(suffix)
-    return "; ".join(parts)
+    separator = "；" if normalized_language == "zh-CN" else "; "
+    return separator.join(parts)
 
 
 def determine_report_mode(
@@ -1044,8 +1123,8 @@ def ablation_priority(item: dict[str, object]) -> tuple[float, list[str]]:
     consistency = float((ablation or {}).get("consistency_rate", 0.0)) if isinstance(ablation, dict) else 0.0
     better = float((ablation or {}).get("better_rate", 0.0)) if isinstance(ablation, dict) else 0.0
     has_review_signal = (
-        float(item["final_score"]) < 6.0
-        or float(item["overlap_value"]) >= 0.65
+        float(item["final_score"]) < SCORE_KEEP_NARROW_THRESHOLD
+        or float(item["overlap_value"]) >= HIGH_OVERLAP_THRESHOLD
         or float(item["quality_penalty"]) > 0
         or str(item["action"]) not in {"keep", "keep-narrow", "keep-system"}
     )
@@ -1057,19 +1136,19 @@ def ablation_priority(item: dict[str, object]) -> tuple[float, list[str]]:
     if cases >= 5:
         score += 1.0
         reasons.append("refresh existing ablation")
-        if consistency >= 0.85 and better <= 0.10:
+        if consistency >= NO_IMPACT_CONSISTENCY_THRESHOLD and better <= NO_IMPACT_BETTER_THRESHOLD:
             score += 1.0
             reasons.append("prior no-impact ablation")
     if item["missing_ablation"]:
         score += 2
         reasons.append("missing ablation")
-    if float(item["final_score"]) < 6.0:
+    if float(item["final_score"]) < SCORE_KEEP_NARROW_THRESHOLD:
         score += 2
         reasons.append("weak final score")
-    if float(item["overlap_value"]) >= 0.65:
+    if float(item["overlap_value"]) >= HIGH_OVERLAP_THRESHOLD:
         score += 2
         reasons.append("high overlap")
-    if float(item["quality_penalty"]) >= 0.6:
+    if float(item["quality_penalty"]) >= QUALITY_BURDEN_HIGH_THRESHOLD:
         score += 2
         reasons.append("high quality burden")
     elif float(item["quality_penalty"]) > 0:
@@ -1084,7 +1163,7 @@ def ablation_priority(item: dict[str, object]) -> tuple[float, list[str]]:
     elif str(item["usage_source"]) == "history":
         score += 0.5
         reasons.append("history-only usage evidence")
-    if float(item["confidence_score"]) < 0.55:
+    if float(item["confidence_score"]) < LOW_CONFIDENCE_THRESHOLD:
         score += 1
         reasons.append("low confidence")
     if str(item["action"]) not in {"keep", "keep-narrow", "keep-system"}:
@@ -1109,7 +1188,11 @@ def accuracy_impact(candidates: list[dict[str, object]], deferred: list[dict[str
         for item in deferred
         if item["kind"] == "general"
         and item["missing_ablation"]
-        and (float(item["final_score"]) < 6.0 or float(item["overlap_value"]) >= 0.65 or float(item["quality_penalty"]) >= 0.6)
+        and (
+            float(item["final_score"]) < SCORE_KEEP_NARROW_THRESHOLD
+            or float(item["overlap_value"]) >= HIGH_OVERLAP_THRESHOLD
+            or float(item["quality_penalty"]) >= QUALITY_BURDEN_HIGH_THRESHOLD
+        )
     ]
     if not candidates:
         level = "high"

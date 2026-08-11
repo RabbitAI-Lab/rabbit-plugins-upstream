@@ -1,0 +1,69 @@
+{
+  "skill": "band-ratio-analysis",
+  "skill_version": "1.0.0",
+  "command": "band-ratio-analysis --bbox 116 39 117 40 --synthetic --indices ndvi --quiet --output-dir ./_test_idx_ndvi",
+  "started_at": "2026-08-03T13:38:39.534880Z",
+  "finished_at": "2026-08-03T13:38:41.745437Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "indices": "ndvi",
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_idx_ndvi\\ndvi.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 1,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_idx_ndvi\\index_stats.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "n_indices": 1,
+    "indices": [
+      "ndvi"
+    ],
+    "mean_per_index": {
+      "ndvi": 0.3766196668148041
+    },
+    "synthetic_mean_per_band": {
+      "blue": 0.06638312339782715,
+      "green": 0.10427786409854889,
+      "red": 0.10387556254863739,
+      "nir": 0.31490564346313477,
+      "swir1": 0.2312028408050537,
+      "swir2": 0.18889844417572021
+    }
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "band-ratio-analysis"
+  },
+  "error": null
+}

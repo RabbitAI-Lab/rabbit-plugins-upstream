@@ -1,0 +1,15 @@
+name: geoskill-hyperspectral-vegetation-stress
+display_name: 高光谱植被胁迫检测
+description: |
+  用红边指数NDRE/REP/PRI与光谱角SAM检测植被胁迫，输出胁迫等级栅格与异常区矢量
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-hyperspectral-vegetation-stress.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - raster
+  - remote-sensing
+  - vector
+  - vegetation

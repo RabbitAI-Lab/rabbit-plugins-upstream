@@ -1,0 +1,90 @@
+---
+name: brand-style-{STYLE_NAME}
+description: Reusable UI style skill extracted from {SOURCE_DESC}. Contains three-layer design tokens (Primitive → Semantic → Component) with evidence grading. Load this skill when generating UI that should match the {STYLE_NAME} visual language.
+version: "1.0"
+source: {SOURCE_URL_OR_PATH}
+source_type: {URL_OR_SCREENSHOT_OR_PROJECT}
+extracted_at: {EXTRACTION_DATE}
+evidence_summary:
+  defined: {DEFINED_COUNT}
+  measured: {MEASURED_COUNT}
+  inferred: {INFERRED_COUNT}
+  assumed: {ASSUMED_COUNT}
+token_summary:
+  primitive_colors: {PRIMITIVE_COLOR_COUNT}
+  semantic_colors: {SEMANTIC_COLOR_COUNT}
+  primitive_typography: {TYPOGRAPHY_COUNT}
+  semantic_typography: {SEMANTIC_TYPOGRAPHY_COUNT}
+  primitive_spacing: {SPACING_COUNT}
+  semantic_spacing: {SEMANTIC_SPACING_COUNT}
+  components: {COMPONENT_COUNT}
+theme_support: {THEME_SUPPORT_NONE_LIGHT_DARK_MULTI}
+---
+
+# {STYLE_TITLE} Design Style
+
+{STYLE_OVERVIEW}
+
+## Token Architecture
+
+This style uses a three-layer token system. **Components reference Semantic tokens. Semantic tokens reference Primitive tokens. Never reference Primitive tokens directly from components.**
+
+| Layer | Purpose | Count | Example |
+|-------|---------|-------|---------|
+| **Primitive** | Raw design materials (color scales, spacing steps, font sizes) | {P_COUNT} | `color.blue.500`, `space.4`, `radius.md` |
+| **Semantic** | Design roles (backgrounds, text, actions, statuses) | {S_COUNT} | `color.action.primary`, `color.bg.surface` |
+| **Component** | Per-component overrides (only where semantic defaults don't fit) | {C_COUNT} | `button.height.default`, `dialog.shadow` |
+
+## Quick Reference — CSS Variables
+
+```css
+:root {
+  /* === Primitive Tokens === */
+  {PRIMITIVE_CSS_VARIABLES}
+
+  /* === Semantic Tokens === */
+  {SEMANTIC_CSS_VARIABLES}
+
+  /* === Component Tokens === */
+  {COMPONENT_CSS_VARIABLES}
+}
+```
+
+## Theme Mappings
+
+{THEME_MAPPINGS_SECTION}
+
+## Using This Style
+
+To generate UI matching this style:
+
+1. **Always reference semantic tokens** in your component styles (e.g., `color.action.primary`, not `color.blue.500`)
+2. **Primitive tokens** are raw materials — access them only through semantic aliases
+3. **Component tokens** are overrides — use only when a component has a genuinely independent value
+4. **Check theme mappings** — the same semantic token resolves to different primitives in light vs dark mode
+
+### Do's and Don'ts
+
+| Do ✅ | Don't ❌ |
+|-------|---------|
+| `background: var(--color-bg-surface)` | `background: #FFFFFF` (hardcoded) |
+| `background: var(--color-action-primary)` | `background: var(--color-blue-500)` (bypassing semantic layer) |
+| Create new semantic token if role is missing | Create component token when semantic token would work |
+| Check light AND dark theme mappings | Assume one theme's value works for the other |
+
+## Evidence Quality
+
+| Grade | Count | Meaning |
+|-------|-------|---------|
+| **D** (Defined) | {EVIDENCE_D} | Found in CSS variables, theme config, or token files |
+| **M** (Measured) | {EVIDENCE_M} | Confirmed from source code or browser computed styles |
+| **I** (Inferred) | {EVIDENCE_I} | Deduced from repeated patterns across components |
+| **A** (Assumed) | {EVIDENCE_A} | Best guess — verify before production use |
+
+## References
+
+- `references/colors.md` — Primitive color scales + Semantic color roles + Theme mappings
+- `references/typography.md` — Primitive font scale + Semantic text roles
+- `references/spacing.md` — Primitive spacing/radius/shadow scales + Semantic layout roles
+- `references/components.md` — Component tokens, patterns, variants, and state mappings
+- `references/known-gaps.md` — Unresolved discrepancies, exceptions, and assumptions needing review

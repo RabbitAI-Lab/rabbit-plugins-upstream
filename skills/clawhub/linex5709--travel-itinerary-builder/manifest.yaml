@@ -1,0 +1,20 @@
+name: travel-itinerary-builder
+version: 1.0.0
+author: Linex
+license: MIT
+description: >
+  旅行行程规划专家。自动生成自包含 HTML 旅行手册，包含每日时间线、景点卡片
+  （图片/交通/流程/贴士）、能量趋势图、后勤工具箱。适配航班窗口、当地天气、
+  儿童年龄。零外部 CDN 依赖，国内网络环境直开可用。
+categories:
+  - travel
+  - productivity
+tags:
+  - travel
+  - itinerary
+  - trip-planning
+  - family
+  - 旅行
+  - 行程规划
+  - 亲子游
+  - 攻略

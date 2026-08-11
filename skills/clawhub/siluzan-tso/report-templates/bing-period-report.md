@@ -67,10 +67,10 @@ siluzan-tso bing-analysis render \
 
 `render` 传 `--snapshot-dir` 时，CLI 自动补全：
 
-1. `meta` / `kpis`（含余额、日均、环比；本期 KPI 优先 campaigns 累加）
-2. `tables.*`（按上表落盘形状映射；Agent 已填字段不覆盖）
+1. `meta`（仅补空字段）
+2. **`kpis` / `tables.*` 一律以 CLI 快照覆盖**（有对应 section 时；本期 KPI 优先 campaigns 累加）——数值口径不以 Agent 预填为准
 
-Agent 只需撰写 `narrative`；**禁止手写 HTML**。`ctr` / `conversionRate` 落盘已为 0~1 小数。
+Agent 只需撰写 `narrative`；**禁止手写 HTML**，也**禁止**自填 `kpis`/`tables` 数值（尤其 `ctr` 须为 CLI 落盘的 0~1 小数）。
 
 ---
 

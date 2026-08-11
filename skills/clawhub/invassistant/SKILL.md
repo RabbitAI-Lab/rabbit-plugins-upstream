@@ -1,9 +1,23 @@
----
 name: invassistant
 description: >
   Multi-asset investment portfolio management framework with A/B/C asset-class differentiated rules,
   7 red-line portfolio risk controls, and 4-factor QMS quality scoring.
   Covers US, A-share (China), and HK stocks with disciplined entry/exit logic.
+description_zh: "多资产投资组合管理框架：A/B/C 类资产差异化规则、7 条红线组合风险控制、四因子质量管理；覆盖美股、A 股、港股，纪律化进出场逻辑。"
+version: "2.3.6"
+read_when:
+  - "User requests portfolio review, A/B/C asset classification, or 7-red-line risk check for their holdings"
+  - "User asks about entry/exit logic for US stocks, A-shares (China), or HK stocks under the framework"
+  - "User requests QMS (quality scoring) evaluation of a stock candidate"
+  - "User asks about portfolio risk controls, warning lines, or position sizing rules"
+  - "User wants to log a trade or review trade history against the framework"
+not_for:
+  - "Real-time trading signals or market timing predictions"
+  - "Specific stock buy/sell recommendations without portfolio context"
+  - "Tax, legal, or regulatory advice — this is a portfolio management framework, not financial advice"
+  - "Analysis of assets outside US / A-share / HK stocks (crypto, commodities, fixed income) without adaptation"
+
+
 allowed-tools:
   - read_file
   - write_to_file
@@ -30,8 +44,11 @@ metadata:
 
 # InvAssistant
 
-> Multi-asset investment portfolio management framework — current version v2.1.2 (2026-06-06).
+> Multi-asset investment portfolio management framework — current version v2.3.6 (2026-08-07).
 > Core philosophy: portfolio before stock-picking, discipline before inspiration. Rules are guardrails, not cages.
+
+> ⚠️ **Risk Warning**: This is a decision-support framework, not financial advice. AI guidance is probabilistic; executable rules can take action (red-line reductions, Mode B entries); `send_*.py` pushes holdings to external messaging platforms — review before pushing. Author assumes no liability for trading losses.
+
 
 ---
 
@@ -199,6 +216,8 @@ QMS = 0.35 × Earnings Trend
 
 | Version | Date | Summary |
 |---------|------|---------|
+| v2.3.3 | 2026-08-07 | Sync SKILL.md version declaration with ClawHub package metadata |
+| v2.3.2 | 2026-06-06 | Fix display name (remove Clean suffix) |
 | v2.1.2 | 2026-06-06 | Audit cleanup: bilingual README, remove legacy files |
 | v2.1.1 | 2026-06-04 | Mode D: A-class candidate zone entry (no observation delay) |
 | v2.1 | 2026-05-18 | A/B/C asset classification; 7 red lines; 4-factor QMS; trailing stop removed from A-class |

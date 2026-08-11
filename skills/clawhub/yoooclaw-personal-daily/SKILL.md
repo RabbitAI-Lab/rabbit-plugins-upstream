@@ -16,10 +16,15 @@ description: 当用户需要根据自己关注的话题生成一份个性化新�
 
 ## 工作流程
 
-1. 读取关注话题配置 `/Users/xinyu/.openclaw/个性化日报/interests.md`；如果定时任务 message 中携带了关注话题，以 message 为准。
+1. 读取关注话题配置：如果定时任务 message 中携带了关注话题，以 message 为准。否则按平台读取本地配置：
+   - OpenClaw：`~/.openclaw/个性化日报/interests.md`
+   - Hermes：`~/.hermes/个性化日报/interests.md`
 2. 如果两处都没有关注话题，输出"关注话题尚未配置，请先在场景设置中配置"，然后停止。
 3. 从话题列表中提取搜索关键词，整理出 5-8 组搜索词。
-4. 对每组关键词使用 `byted-web-search` 执行定向搜索（中文一次 + 英文一次）。
+4. 对每组关键词执行联网搜索（中文一次 + 英文一次）：
+   - Hermes：使用内置的 `web_search` 工具
+   - OpenClaw：使用 `byted-web-search`
+   - 以上均不可用时，使用 `rss-content-flow` 兜底
 5. 严格过滤非当日新闻，丢弃旧闻、广告、软文、标题党。
 6. 同一事件的多条报道只保留最佳来源，不逐条堆砌。
 7. 按话题分组整理，输出结构化日报。
@@ -28,7 +33,10 @@ description: 当用户需要根据自己关注的话题生成一份个性化新�
 
 ### 搜索工具
 
-使用 `byted-web-search`（火山引擎联网搜索）执行所有搜索。
+根据所在平台选择搜索工具：
+- Hermes：使用内置的 `web_search` 工具
+- OpenClaw：使用 `byted-web-search`（火山引擎联网搜索）
+- 以上方式均不可用时，使用 `rss-content-flow` 从预配置 RSS 源抓取内容作为兜底
 
 ### 搜索策略
 

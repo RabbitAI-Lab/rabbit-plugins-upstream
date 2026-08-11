@@ -1,0 +1,147 @@
+# rozo-checkout
+
+> Pay an OpenRouter Coinbase Payment Link (payments.coinbase.com/payment-links/pl_* or
+> /payment-sessions/paymentSession_*) with BTC over Lightning, or USDT/USDC on Solana,
+> BNB Chain, Ethereum, Polygon, Base, or Stellar. Public HTTP endpoints, no API key.
+> The payer funds a one-time deposit address; a bridge and a funder wallet settle the
+> Coinbase link automatically. No discount: you pay the invoice amount, plus the
+> deposit normally carries a small bridge/source-chain fee on top.
+
+This file teaches the whole flow to any agent or script. Repo (scripts, safety rails,
+full docs): https://github.com/RozoAI/rozo-checkout-skill — see docs/QUICKSTART.md.
+
+## Fastest path: the CLI (npm @rozoai/checkout)
+
+If you can run commands, skip the raw HTTP below — the CLI performs the same four
+calls with every safety rule already enforced:
+
+  npx @rozoai/checkout pay <coinbase-link> --with usdt-solana
+  npx @rozoai/checkout quote <coinbase-link>
+  npx @rozoai/checkout status <rozoPaymentId | coinbase-link>
+
+--with accepts usdt-solana, usdc-solana, usdt-bnb, usdc-bnb, usdt-ethereum,
+usdc-ethereum, usdt-polygon, usdc-polygon, usdc-base, usdc-stellar, btc-lightning
+(or raw: --chain 900 --token USDT).
+
+DEFAULT PATH NEEDS NO KEY: `pay` prints a deposit address for the user to pay from
+any wallet. No private key, no environment variable, no configuration. Only the
+optional --send flag signs locally. Its key comes from the first source that
+exists: --keyfile <path>; then ~/.config/solana/id.json (the keypair
+solana-keygen already wrote) for Solana or ROZO_CHECKOUT_EVM_KEYSTORE (an
+encrypted V3 keystore, passphrase prompted, never argv) for EVM; then a raw key
+in ROZO_CHECKOUT_SOL_KEY / ROZO_CHECKOUT_EVM_KEY, which is the unattended-
+automation option. Those settings may also come from a .env in the working
+directory (or --env-file <path>): only ROZO_CHECKOUT_* keys are read from it, it
+is parsed as text and never shell-evaluated, and the real environment wins.
+Key files and .env must be chmod 600 and untracked by git.
+
+## Local wallet setup for --send (not needed for the default keyless path)
+
+.env keys (only ROZO_CHECKOUT_* are read; real env wins; chmod 600; gitignore):
+  ROZO_CHECKOUT_SOL_KEY               base58 string OR JSON byte array
+  ROZO_CHECKOUT_EVM_KEY               64 hex chars, 0x prefix optional
+  ROZO_CHECKOUT_EVM_KEYSTORE          path to an encrypted V3 keystore
+  ROZO_CHECKOUT_KEYSTORE_PASSPHRASE   unattended runs only; else prompted
+  ROZO_CHECKOUT_RPC_<chainId>         e.g. ROZO_CHECKOUT_RPC_8453 (Base),
+                                      ROZO_CHECKOUT_RPC_900 (Solana)
+
+Where the material comes from:
+- Solana: `solana-keygen new` -> ~/.config/solana/id.json, found automatically
+  (preferred). Phantom exports base58; Solflare exports base58 (current) or a
+  JSON byte array (older). Both accepted.
+- EVM: MetaMask/Rabby export 64 hex chars with no 0x prefix; paste as-is, the
+  prefix is optional. For an encrypted keystore, Foundry's
+  `cast wallet import <name> --interactive` writes a V3 keystore to
+  ~/.foundry/keystores/<name>; `geth account import` also writes one. Browser
+  wallets do not export keystores, only raw keys.
+- --send supports EVM chains and Solana ONLY. Stellar and Lightning are paid
+  from the user's own wallet (Mode A); there is no local signing for them.
+- Hardware wallets, WalletConnect-only wallets and exchange accounts CANNOT be
+  used with --send. Those users take the default keyless path, which works with
+  any wallet.
+With --send, one limit applies: a single payment may not exceed $1,100, with no
+override; larger invoices go through the keyless path.
+
+Other flags: --yes (skip the interactive confirm; required when stdin is not a
+TTY), --dry-run, --json (exactly one JSON object on stdout), --no-watch,
+--timeout <s>. Exit codes: 0 success, 1 refused/failed (read error.code),
+2 usage, 3 submitted but unconfirmed.
+
+`pay` withholds the full deposit address until you confirm, then prints it as a
+copy-pastable block. Creating an order moves no money; an unfunded order expires.
+
+## Supported sources
+
+chainId "1" Ethereum (USDC, USDT) · "56" BNB Chain (USDC, USDT; 18-decimals) ·
+"137" Polygon (USDC, USDT) · "8453" Base (USDC) · "900" Solana (USDC, USDT) ·
+"1500" Stellar (USDC; deposit memo REQUIRED) · "lightning" (BTC; BOLT11 invoice,
+amounts in integer satoshis via source.amountUnit=="sats").
+Native SOL/ETH/BNB are NOT supported — stablecoins (or Lightning BTC) only.
+
+WALLET: one wallet on one of these chains is enough — not one per chain. Any
+wallet, or an exchange withdrawal, can fund the deposit address; nothing
+connects to a site. Stellar is the exception that must be able to set a memo,
+and Lightning pays a BOLT11 invoice rather than an address. Only --send needs a
+private key (EVM and Solana only); every other path is keyless.
+
+## Flow (4 HTTP calls, all public)
+
+1) Quote (read-only, safe):
+   curl -X POST https://apiserver.mpprouter.dev/v1/services/rozo-agent-api/quote-invoice \
+     -H 'content-type: application/json' \
+     -d '{"url":"https://payments.coinbase.com/payment-links/pl_XXXX"}'
+   -> { linkId, merchant, original, callerPays, discount:"0", quoteReceipt, ... }
+   callerPays always equals the invoice amount (discount is always "0").
+
+2) Create (or reuse) the order:
+   curl -X POST https://apiserver.mpprouter.dev/v1/services/rozo-agent-api/create-invoice \
+     -H 'content-type: application/json' \
+     -d '{"url":"https://payments.coinbase.com/payment-links/pl_XXXX",
+          "source":{"chainId":"900","tokenSymbol":"USDT"}}'
+   -> { ok, reused, linkId, rozoPaymentId, paymentLink, expiresAt, source, ... }
+   WARNING: if an unexpired order already exists for this link it is REUSED as-is,
+   even with a different chain/token than you asked for. Always verify the returned
+   source matches your request; abort on mismatch.
+
+3) Fetch authoritative deposit instructions (public, keyless GET):
+   curl https://intentapiv4.rozo.ai/functions/v1/payment-api/payments/<rozoPaymentId>
+   -> { status, expiresAt, source:{ receiverAddress, receiverMemo, amount, amountUnit,
+        lnInvoice, txHash, amountReceived, confirmedAt, ... }, destination:{...} }
+   Pay EXACTLY source.amount of the requested token on the requested chain to
+   source.receiverAddress, including every other field the block carries (Stellar
+   routes on a shared hub address plus source.receiverMemo, so omitting the memo
+   loses the payment). The Stellar memo is ALWAYS MEMO_TEXT, even when it is all
+   digits (e.g. 65371582) — sending it as MEMO_ID produces a different memo and
+   the payment will not match. The deposit block reports this as
+   receiverMemoType. Orders expire: deposit.expiresIn / status expiry.expiresIn
+   give the remaining validity as a duration.
+   For Lightning, pay the BOLT11 in source.lnInvoice (receiverAddress is empty).
+
+4) Poll until settled:
+   curl "https://apiserver.mpprouter.dev/v1/services/rozo-agent-api/invoice-status?payment_id=<linkId>"
+   and re-GET the payments/<rozoPaymentId> URL above. The Coinbase link is settled
+   only when the router reports paid / coinbase.settled — an intents status of
+   payment_completed alone is the bridge lifecycle, not final settlement.
+
+## Safety rules (encode these, they prevent fund loss)
+
+- Before paying, require: status == "payment_unpaid" AND source.txHash == null AND
+  source.amountReceived in {null,"0"} AND source.confirmedAt == null. Anything else
+  means the order is already funded — do NOT pay again; escalate for reconciliation.
+- Deposit addresses are one-time and quote-bound. Never reuse an address from an old
+  order, a cached response, or a document. Always re-fetch step 3 in the same run.
+- Respect expiry with margin: do not send if now > min(order expiresAt, Coinbase
+  link expiry) minus a safety margin (10 min EVM/Stellar, 5 min Solana; Lightning:
+  only pay a BOLT11 with >= 10 min validity left).
+- Re-check step 4 payability immediately before broadcasting a transaction: the
+  Coinbase link can be consumed by another payer at any moment.
+- Wrong token, wrong network, wrong amount, or paying twice is usually unrecoverable.
+- After any on-chain payment is detected, never retry into a new order and never
+  label the payment a normal failure — keep the tx hash and rozoPaymentId, keep
+  polling, and escalate if it stays stuck.
+
+## Errors
+
+409 = link already used · 410 = link expired · UNSUPPORTED_SOURCE = the response's
+"supported" object lists valid (chainId, tokenSymbol) pairs (Lightning is supported
+but omitted from that list) · RATE_LIMITED = per-IP creation cap, retry later.

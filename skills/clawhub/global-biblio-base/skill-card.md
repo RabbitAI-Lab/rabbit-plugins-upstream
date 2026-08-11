@@ -1,48 +1,64 @@
-## Description: <br>
-This skill lets an agent search SmartLib's Chinese and global literature indexes, review article metadata and source links, and retrieve authorized Chinese journal PDFs or open-access full text through supported channels. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill lets an agent search SmartLib academic literature records, retrieve article details, and provide PDF download links for authorized Chinese journals and open-access foreign literature.
 
-## Publisher: <br>
-[j-levee](https://clawhub.ai/user/j-levee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[j-levee](https://clawhub.ai/user/j-levee)
 
-## Use Case: <br>
-External researchers, students, librarians, and other knowledge workers use this skill to find academic literature, inspect citation metadata, trace source database links, and request full-text downloads when available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill creates and uses an external SmartLib account and stores the user's email in local configuration. <br>
-Mitigation: Ask for only the email needed for SmartLib registration and quota management, and keep local configuration private. <br>
-Risk: The skill sends literature queries to SmartLib Gateway and related open-access services. <br>
-Mitigation: Avoid submitting sensitive, confidential, or unpublished research details unless the user accepts those external service dependencies. <br>
-Risk: The skill supports paid quota flows and may present payment QR codes or gateway-provided links. <br>
-Mitigation: Verify the destination, plan, amount, and order details before paying or clicking links. <br>
-Risk: Gateway-provided notices and links may be forwarded into the chat. <br>
-Mitigation: Treat forwarded notices as external service messages and review links before acting on them. <br>
+## Use Case:
 
+External users and researchers use this skill to find academic papers, patents, standards, theses, and supporting citations through natural-language requests. Agents can return search results, article details, source links, and available PDF download links while tracking SmartLib quota and download limits.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/j-levee/skills/global-biblio-base) <br>
-- [README.md](README.md) <br>
-- [PIPELINE.md](PIPELINE.md) <br>
-- [SmartLib account and billing reference](references/account.md) <br>
-- [SmartLib website](https://www.vipslib.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown search results with article metadata, source links, quota notices, and optional PDF or full-text download outputs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on SmartLib account status, available quota, network access, and whether the requested document is authorized or open access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.9.3 (source: SKILL.md frontmatter and server release metadata, released 2026-07-22) <br>
+Risk: The skill can register a SmartLib account and tie usage to a user email.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Ask for explicit user consent before account registration and explain that the email is used for quota and service access.
+
+Risk: The skill can spend quota and present payment flows during a conversation.
+
+Mitigation: Confirm with the user before any paid action and show quota or download impact before executing chargeable operations.
+
+Risk: The skill can fetch PDF files from SmartLib and external open-access channels.
+
+Mitigation: Review download destinations, avoid untrusted notification links, and use this only in environments where file download behavior is acceptable.
+
+Risk: The security evidence recommends review before installation.
+
+Mitigation: Run installation review and security scanning before deployment, and check that stored configuration does not expose secrets to users.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/j-levee/skills/global-biblio-base)
+- [SmartLib Account and Billing Reference](artifact/references/account.md)
+- [SmartLib Pipeline Optimization Guide](artifact/PIPELINE.md)
+- [SmartLib Website](https://www.vipslib.com/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, API calls, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown responses with search-result lists, article metadata, links, quota notices, and occasional shell-command guidance for downloads.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include PDF download links, source URLs, payment or quota status prompts, and user-facing notices returned by the SmartLib gateway.]
+
+## Skill Version(s):
+
+3.9.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

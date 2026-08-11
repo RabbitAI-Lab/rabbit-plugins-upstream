@@ -1,108 +1,41 @@
-# Swarming Channel Config — OpenClaw Examples
+# Channel and routing checklist
 
-## Single Guild, Two Agents on Different Gateways
+Use this checklist for each OpenClaw agent/channel binding.
 
-### Gateway 1 (Agent A — e.g., Harrison on Mini 1)
-```json
-{
-  "channels": {
-    "discord": {
-      "accounts": {
-        "default": {
-          "guilds": {
-            "YOUR_GUILD_ID": {
-              "requireMention": true,
-              "channels": {
-                "SWARMING_CHANNEL_ID": {
-                  "requireMention": true
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "agents": {
-    "list": [
-      {
-        "id": "agent-a",
-        "name": "AgentA",
-        "groupChat": {
-          "mentionPatterns": [
-            "<@BOT_USER_ID_A>",
-            "<@!BOT_USER_ID_A>"
-          ]
-        }
-      }
-    ]
-  }
-}
+## Account
+
+- Account ID: `<non-secret-id>`
+- Platform: `<discord|telegram|slack|other>`
+- Owning agent: `<agent-id>`
+- Intended channels or chats: `<allow-list>`
+- Credential source: `<interactive|environment|secret-file>`
+- Credential owner and rotation date: `<operator/date>`
+
+Do not record the credential value here.
+
+## Least privilege
+
+- Bot is present only in required servers/workspaces.
+- Channel access is allow-listed.
+- Administrative, member-management, and unrelated message-history permissions
+  are disabled.
+- Privileged deployment or payment tools are unavailable to public intake.
+- The agent workspace contains only the context required for its role.
+
+## Configure
+
+```bash
+openclaw channels add
+openclaw channels list
+openclaw agents bind --agent <agent-id> --bind <channel>:<account-id>
+openclaw agents bindings
+openclaw config validate
 ```
 
-### Gateway 2 (Agent B — e.g., Prometheus on Mini 3)
-Same structure, different bot ID and agent ID.
+## Verify
 
-## Two Agents on the Same Gateway (Advanced)
-
-When both agents share one gateway, you need separate Discord accounts:
-
-```json
-{
-  "channels": {
-    "discord": {
-      "accounts": {
-        "default": {
-          "token": "BOT_TOKEN_A",
-          "guilds": {
-            "YOUR_GUILD_ID": {
-              "requireMention": true,
-              "channels": {
-                "SWARMING_CHANNEL_ID": { "requireMention": true }
-              }
-            }
-          }
-        },
-        "secondary": {
-          "token": "BOT_TOKEN_B",
-          "guilds": {
-            "YOUR_GUILD_ID": {
-              "requireMention": true,
-              "channels": {
-                "SWARMING_CHANNEL_ID": { "requireMention": true }
-              }
-            }
-          }
-        }
-      }
-    }
-  },
-  "agents": {
-    "list": [
-      {
-        "id": "agent-a",
-        "accountId": "default",
-        "groupChat": {
-          "mentionPatterns": ["<@BOT_USER_ID_A>"]
-        }
-      },
-      {
-        "id": "agent-b",
-        "accountId": "secondary",
-        "groupChat": {
-          "mentionPatterns": ["<@BOT_USER_ID_B>"]
-        }
-      }
-    ]
-  }
-}
-```
-
-**Key**: The `accountId` field binds each agent to its own Discord bot account. Without this, messages may route to the wrong agent.
-
-## Channel Permissions
-
-In Discord Server Settings → Channels → #swarming:
-- Both bot roles need: View Channel, Send Messages, Read Message History, Add Reactions
-- Set channel topic to describe its purpose (helps agents understand context)
-- Consider slow mode (5-10 seconds) to prevent rapid-fire loops during development
+- A harmless test message reaches exactly one expected agent.
+- The reply returns through the expected account.
+- An unauthorized channel cannot invoke the agent.
+- Secrets do not appear in the config output, logs, workspace, or shell history.
+- `openclaw channels status --deep` reports the account healthy.

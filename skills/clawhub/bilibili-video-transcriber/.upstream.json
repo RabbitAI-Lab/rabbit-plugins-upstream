@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/bilibili-video-transcriber",
   "slug": "bilibili-video-transcriber",
   "ownerHandle": null,
-  "version": "2.4.0",
-  "updatedAt": 1780115638513,
-  "contentHash": "f0b1333bc73b650a3643cfc6c8c9f56ec6e9c2834f99f2a1c974f4a1a24418b8",
-  "fetchedAt": "2026-07-26T18:38:02.507Z"
+  "version": "3.0.0",
+  "updatedAt": 1786268692329,
+  "contentHash": "cb97cc14cba51f16405765752033cfb8064c0317097535c0f63361d6b9cbbb0b",
+  "fetchedAt": "2026-08-11T08:30:23.114Z"
 }

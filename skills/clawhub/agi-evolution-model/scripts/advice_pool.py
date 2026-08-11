@@ -308,7 +308,7 @@ class AdvicePool:
             相关性得分（0.0-1.0）
         """
         if not context:
-            return 0.5
+            return 0.6  # 无context时返回较高值，确保建议不被过滤
         
         based_on = suggestion.get('based_on_intentionality', {})
         context_intentionality = context.get('intentionality', {})

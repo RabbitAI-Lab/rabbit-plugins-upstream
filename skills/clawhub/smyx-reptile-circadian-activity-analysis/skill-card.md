@@ -1,43 +1,60 @@
-## Description: <br>
-Analyzes fixed-camera reptile enclosure video to summarize 24-hour activity patterns, flag circadian rhythm disruption, and provide husbandry-oriented guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Through a fixed camera in a reptile enclosure, the skill analyzes 24-hour video with motion-detection techniques to estimate hourly activity, identify activity peaks, compare behavior with the species' natural rhythm, and produce a circadian activity report.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External reptile keepers, breeders, researchers, and developers use this skill to analyze enclosure video or video URLs, produce circadian activity reports, review historical reports, and decide whether lighting or environmental conditions need follow-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cloud video analysis may send reptile enclosure media or video URLs to an external service. <br>
-Mitigation: Use only footage appropriate for cloud processing, avoid sensitive shared-space media, and review the service relationship before use. <br>
-Risk: The skill may automatically create or reuse an identity, query cloud report history, and persist backend tokens in a local workspace database. <br>
-Mitigation: Prefer explicit account controls, avoid shared workspaces for sensitive reports, and clear the local database or stored tokens when access should end. <br>
+## Use Case:
 
+External reptile keepers, enclosure operators, breeders, and researchers use this skill to analyze fixed-camera reptile enclosure video for daily activity distribution, rhythm alignment, possible day/night inversion, and environment-review guidance. It supports current analysis and cloud-backed historical report lookup for the associated analysis identity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-reptile-circadian-activity-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with activity summaries, alerts, recommended actions, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save report output to a user-specified file and may query cloud history for prior reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: ClawHub release evidence; artifact frontmatter says 1.0.5) <br>
+Risk: Reptile enclosure videos or video URLs are sent to the Life Emergence cloud service, and analysis history is tied to an internally managed identity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with footage approved for cloud processing, and confirm consent, retention, deletion, and history-access controls before using private or sensitive footage.
+
+Risk: The skill performs silent account setup and persists identity tokens with limited user-facing control.
+
+Mitigation: Review identity and token storage before installation, restrict local workspace access, and clear stored credentials or history through available platform controls when decommissioning.
+
+Risk: Motion-based circadian analysis can be misleading when video requirements are not met or when biological context explains activity changes.
+
+Mitigation: Require fixed-camera footage covering at least 24 hours with stable IR night vision, species rhythm metadata, lighting schedule, and context such as shedding, brumation, egg laying, or recent environment changes; treat health concerns as a reason to contact a reptile veterinarian.
+
+## Reference(s):
+
+- [Reptile Circadian Activity Analysis API Documentation](references/api_doc.md)
+- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+- [Life Emergence Skill Demo](https://lifeemergence.com/sample.html)
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-reptile-circadian-activity-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [JSON or Markdown report text with analysis fields and an optional report export link]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include hourly activity arrays, peak and quiet hours, day/night activity ratios, rhythm classification, consistency score, alert level, recommended actions, disclaimers, and historical report records.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release metadata; artifact SKILL.md frontmatter lists 1.0.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

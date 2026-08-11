@@ -1,0 +1,11 @@
+{
+  "method": "visvalingam",
+  "tolerance": 0.0001,
+  "target_vertices": null,
+  "input_vertices": 259,
+  "output_vertices": 92,
+  "vertex_reduction": 167,
+  "vertex_reduction_pct": 64.48,
+  "area_retention": 0.965914,
+  "source": "synthetic"
+}

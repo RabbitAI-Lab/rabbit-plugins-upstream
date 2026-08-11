@@ -2,7 +2,7 @@
 
 ## Live Requirement
 
-Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
 ## Audience
 
@@ -20,30 +20,30 @@ Demand: 70/70
 
 Local feasibility: 30/30
 
-Evidence coverage: 12 signals across 3 source families.
+Evidence coverage: 12 signals across 4 source families.
 
 Scoring rationale:
 
 - Evidence count: 12; required minimum: 3.
-- Distinct source families: 3; sources: csdn, github, segmentfault.
+- Distinct source families: 4; sources: csdn, github, segmentfault, v2ex.
 - Demand score: 70/70 based on corroboration, source diversity, and professional/community signal.
 - Local feasibility score: 30/30.
 - Implementation is a documentation, workflow, code, or analysis skill that can run on ordinary CPU hardware.
 
 ## Evidence
 
-- csdn-search (2026-03-13T00:00:00+00:00): [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search (2025-09-05T00:00:00+00:00): [Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues (2026-07-12T05:32:50+00:00): [Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues (2026-07-25T08:25:57+00:00): [[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues (2026-07-26T05:12:50+00:00): [Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- csdn-search (2026-03-13T00:00:00+00:00): [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=984db71f50cf4c639d723df421ca2787&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base1&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- csdn-search (2025-09-05T00:00:00+00:00): [Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=984db71f50cf4c639d723df421ca2787&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base1&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues (2026-08-10T23:49:54+00:00): [[E67.29] Land the 5xx error-envelope redaction chokepoint: the design is worked and implemented on an abandoned run branch, with one known guard gap (single-hop alias under an admitted details key) still open](https://github.com/kuhlman-labs/fishhawk/issues/2631)
+- github-issues (2026-08-09T17:09:40+00:00): [Add a resumable ComicVine hydrator for the user's existing ComicPile issues](https://github.com/JoshCLWren/comic-pile/issues/1025)
+- github-issues (2026-08-08T19:11:27+00:00): [Migrate production cache invalidation away from SCAN](https://github.com/JoshCLWren/comic-pile/issues/959)
+- v2ex-latest (2026-08-11T03:04:38+00:00): [量化主站，抢 7 天体验权限](https://www.v2ex.com/t/1233473)
+- github-issues (2026-08-03T15:38:57+00:00): [[Feature]: Add Swagger/OpenAPI documentation for all REST endpoints across Java and Python backends](https://github.com/Ayushh-Sharmaa/NexaSphere/issues/4311)
+- segmentfault-search (2026-08-11T04:06:00.990317+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
+- segmentfault-search (2026-08-11T04:06:00.990317+00:00): [javascript](https://segmentfault.com/t/javascript)
+- segmentfault-search (2026-08-11T04:06:00.990317+00:00): [typescript](https://segmentfault.com/t/typescript)
+- segmentfault-search (2026-08-11T04:06:00.990317+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
+- segmentfault-search (2026-08-11T04:06:00.990980+00:00): [答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
 
 ## How The Skill Meets The Requirement
 

@@ -1,0 +1,13 @@
+name: geoskill-virtual-globe-export
+display_name: 虚拟地球导出
+description: |
+  Export data to KML or CZML with time attributes and popup info for virtual globes
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-virtual-globe-export.py
+runtime: python>=3.9
+tags:
+  - gis
+  - machine-learning
+  - remote-sensing
+  - vector

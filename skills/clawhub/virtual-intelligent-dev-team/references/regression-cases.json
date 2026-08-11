@@ -1,0 +1,1271 @@
+{
+  "routing_cases": [
+    {
+      "name": "review_java_gc",
+      "text": "请 review 这个 Java GC 问题并给出建议",
+      "expect": {
+        "lead_agent": "Code Audit Council",
+        "assistant_agents_contains": [
+          "Java Virtuoso"
+        ],
+        "needs_git_workflow": false,
+        "workflow_bundle": "audit-fix-deliver",
+        "resume_artifacts_contains": [
+          ".vidt/iterations/current-round-memory.md"
+        ],
+        "priority_agent": "Code Audit Council"
+      }
+    },
+    {
+      "name": "pr_audit_review",
+      "text": "这是 PR，帮我做安全审计和重构建议",
+      "expect": {
+        "lead_agent": "Code Audit Council",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "process_skills": [],
+        "priority_agent": "Code Audit Council"
+      }
+    },
+    {
+      "name": "ui_review",
+      "text": "给 React 页面做 UI review",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "checkout_ux_accessibility_audit",
+      "text": "Audit this checkout UX for accessibility and mobile responsiveness.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "process_skills": [],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "rebase_conflict",
+      "text": "解决 rebase 冲突并给出最稳妥处理路径",
+      "expect": {
+        "lead_agent": "Git Workflow Guardian",
+        "assistant_agents_contains": [
+          "Sentinel Architect (NB)"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": "Git Workflow Guardian"
+      }
+    },
+    {
+      "name": "product_scope_with_backend_copilot",
+      "text": "Define the onboarding user flow, acceptance criteria, and backend contract for this signup revamp.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "workflow_bundle": "product-spec-deliver",
+        "bundle_bootstrap_commands_contains": [
+          "python scripts/init_product_delivery.py --root . --pretty"
+        ],
+        "bundle_bootstrap_artifacts_contains": [
+          ".vidt/product/current-slice.md"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "product_discovery_council_overlay",
+      "text": "用产品专家团帮我做这个 AI coding 工具的 PRD、用户研究、竞品分析和路线图。",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "workflow_bundle": "product-spec-deliver",
+        "stage_council_enabled": true,
+        "active_councils_contains": [
+          "product-discovery-council"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "prototype_design_council_overlay",
+      "text": "用原型设计专家团做一个高保真 HTML 原型，包含设计系统和可访问性审查。",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "workflow_bundle": "product-spec-deliver",
+        "stage_council_enabled": true,
+        "active_councils_contains": [
+          "prototype-design-council"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "governance_bundle_with_git_lead",
+      "text": "Define the rollback plan and branch delivery flow for this core refactor.",
+      "expect": {
+        "lead_agent": "Git Workflow Guardian",
+        "needs_git_workflow": true,
+        "workflow_bundle": "govern-change-safely",
+        "bundle_bootstrap_commands_contains": [
+          "python scripts/init_technical_governance.py --root . --pretty"
+        ],
+        "bundle_bootstrap_artifacts_contains": [
+          ".vidt/governance/change-plan.md"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "beta_validation_with_staged_cohorts",
+      "text": "这个产品开发前后都要做内测，分三轮递增用户，并模拟不同类型的内测用户来收集反馈。",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "workflow_bundle": "beta-feedback-ramp",
+        "bundle_bootstrap_commands_contains": [
+          "python scripts/init_beta_validation.py --root . --pretty"
+        ],
+        "bundle_bootstrap_artifacts_contains": [
+          ".vidt/beta/program-overview.md"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "post_release_feedback_close_loop",
+      "text": "版本已经上线了，帮我把用户反馈、telemetry 和 support 信号收回来，判断是继续观察、 reopen 迭代，还是升级治理。",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "workflow_bundle": "post-release-close-loop",
+        "bundle_bootstrap_commands_contains": [
+          "python scripts/init_post_release_feedback.py --root . --pretty"
+        ],
+        "bundle_bootstrap_artifacts_contains": [
+          ".vidt/post-release/triage-summary.md"
+        ],
+        "resume_artifacts_contains": [
+          ".vidt/post-release/current-signals.json"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "auto_root_cause_setup_mode",
+      "text": "/auto fix this repeated regression until stable and keep benchmark evidence",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "workflow_bundle": "root-cause-remediate",
+        "auto_mode_enabled": true,
+        "execution_mode": "auto-setup",
+        "resume_artifacts_contains": [
+          ".vidt/iterations/current-round-memory.md"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "auto_background_safe_setup_mode",
+      "text": "/auto background safe fix this repeated regression until stable and keep benchmark evidence",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "workflow_bundle": "root-cause-remediate",
+        "auto_mode_enabled": true,
+        "execution_mode": "auto-setup",
+        "resume_artifacts_contains": [
+          ".vidt/iterations/current-round-memory.md"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "python_fastapi_design",
+      "text": "Use Python and FastAPI to build a backend service.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "quick_slice_checkout_fix",
+      "text": "Implement the checkout API fix and verify the regression test.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "needs_git_workflow": false,
+        "workflow_bundle": "quick-slice-deliver",
+        "bundle_bootstrap_commands_contains": [
+          "python scripts/init_project_context.py --root . --pretty",
+          "python scripts/init_quick_slice.py --root . --pretty"
+        ],
+        "bundle_bootstrap_artifacts_contains": [
+          ".vidt/context/project-context.md",
+          ".vidt/delivery/current-slice.md",
+          ".vidt/delivery/status.yaml"
+        ],
+        "resume_artifacts_contains": [
+          ".vidt/delivery/current-slice.md",
+          ".vidt/context/project-context.md"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "chinese_quick_fix_run_regression",
+      "text": "这个小 bug 直接修一下并跑回归。",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "needs_iteration": false,
+        "process_skills_excludes": [
+          "bounded-iteration"
+        ],
+        "workflow_bundle": "quick-slice-deliver",
+        "micro_practice_names_contains": [
+          "feedback-loop-first"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "rewrite_plan_first_bundle",
+      "text": "Rewrite this project in Rust, but plan before coding and keep a progress tracker for later sessions.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "workflow_bundle": "plan-first-build",
+        "bundle_confidence": 0.96,
+        "progress_anchor_recommended": "docs/progress/MASTER.md",
+        "resume_artifacts_contains": [
+          "docs/progress/MASTER.md"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "unknown_request_low_confidence",
+      "text": "Help me figure out what to do with this requirement.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "assistant_agents": [],
+        "intent_confirmation_required": true,
+        "intent_option_ids_contains": [
+          "product-opportunity",
+          "technical-feasibility"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "fuzzy_idea_requires_intent_confirmation",
+      "text": "我有个模糊猜想，不确定是该做产品验证、原型还是技术可行性，你先帮我判断方向。",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "intent_confirmation_required": true,
+        "intent_option_ids_contains": [
+          "product-opportunity",
+          "prototype-exploration",
+          "technical-feasibility"
+        ],
+        "stage_council_enabled": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "process_only_release_gate_low_confidence",
+      "text": "Run the formal release gate.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "assistant_agents": [],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "python_django_review",
+      "text": "Review this Django API for security issues.",
+      "expect": {
+        "lead_agent": "Code Audit Council",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": false,
+        "workflow_bundle": "audit-fix-deliver",
+        "priority_agent": "Code Audit Council"
+      }
+    },
+    {
+      "name": "python_flask_git_workflow",
+      "text": "Refactor this Flask service and then commit and push the branch.",
+      "expect": {
+        "lead_agent": "Git Workflow Guardian",
+        "assistant_agents": [],
+        "needs_git_workflow": true,
+        "priority_agent": "Git Workflow Guardian"
+      }
+    },
+    {
+      "name": "python_celery_design",
+      "text": "Design a Python service with Celery workers and reliability guardrails.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "python_pr_audit_review",
+      "text": "This is a PR. Review this Django service for security issues before merge.",
+      "expect": {
+        "lead_agent": "Code Audit Council",
+        "assistant_agents_contains": [
+          "Git Workflow Guardian",
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": "Code Audit Council"
+      }
+    },
+    {
+      "name": "python_fastapi_worktree_git",
+      "text": "Use FastAPI for a backend service, then commit, push, and isolate the work in a worktree.",
+      "expect": {
+        "lead_agent": "Git Workflow Guardian",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": "Git Workflow Guardian"
+      }
+    },
+    {
+      "name": "go_gin_design",
+      "text": "Design a Go service with Gin and improve concurrency.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "go_pr_audit_review",
+      "text": "Review this Go API for security issues before merge.",
+      "expect": {
+        "lead_agent": "Code Audit Council",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": "Code Audit Council"
+      }
+    },
+    {
+      "name": "go_gin_worktree_git",
+      "text": "Use Go with Gin, then commit, push, and isolate the work in a worktree.",
+      "expect": {
+        "lead_agent": "Git Workflow Guardian",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": "Git Workflow Guardian"
+      }
+    },
+    {
+      "name": "node_nest_design",
+      "text": "Design a Node.js service with NestJS.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "node_pr_audit_review",
+      "text": "Review this NestJS API for security issues before merge.",
+      "expect": {
+        "lead_agent": "Code Audit Council",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": "Code Audit Council"
+      }
+    },
+    {
+      "name": "node_nest_worktree_git",
+      "text": "Use Node.js with NestJS, then commit, push, and isolate the work in a worktree.",
+      "expect": {
+        "lead_agent": "Git Workflow Guardian",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": "Git Workflow Guardian"
+      }
+    },
+    {
+      "name": "frontend_react_redesign",
+      "text": "Redesign this React dashboard UI and improve the interaction flow.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "frontend_dashboard_responsive",
+      "text": "Redesign this analytics dashboard for mobile responsiveness and better information hierarchy.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "frontend_next_shadcn_design",
+      "text": "Design a Next.js admin console with shadcn/ui and Tailwind.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "frontend_motion_design",
+      "text": "Improve the Framer Motion transitions and loading states in this React onboarding flow.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "frontend_form_ux_accessibility",
+      "text": "Audit this signup form UX for accessibility, validation, and conversion friction.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "frontend_backend_contract",
+      "text": "Redesign this React admin page and align the frontend flow with the backend API contract.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "API Contract Sentinel",
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "frontend_auth_api_error_states",
+      "text": "Redesign the login flow, align auth UX with the backend API, and handle error states clearly.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "frontend_chinese_next_tailwind",
+      "text": "用 Next.js 和 Tailwind 重做这个后台页面的交互和视觉层次。",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "frontend_chinese_form_api_feedback",
+      "text": "优化这个表单的错误提示、空状态和接口失败反馈，并和后端 API 契约对齐。",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "git_dashboard_mixed_request",
+      "text": "帮我提个 commit 然后 push，那个 dashboard 也顺手改下。",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "Git Workflow Guardian"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "product_colloquial_contract_alignment",
+      "text": "把这个注册流程需求拆一下，验收标准和接口契约也一起落一下。",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": false,
+        "workflow_bundle": "product-spec-deliver",
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "review_nest_auth_flow",
+      "text": "review 下这个 nest 接口，顺便看下 auth flow。",
+      "expect": {
+        "lead_agent": "Code Audit Council",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": false,
+        "priority_agent": "Code Audit Council"
+      }
+    },
+    {
+      "name": "review_djagno_form_api_contract",
+      "text": "给这个 djagno 登录表单做个 ux review，并和后端 api 对齐。",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "frontend_tailwind_worktree_git",
+      "text": "Improve the Tailwind admin UI, then commit, push, and isolate the work in a worktree.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "Git Workflow Guardian"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "java_spring_design",
+      "text": "Design a Java Spring Boot service for order processing.",
+      "expect": {
+        "lead_agent": "Java Virtuoso",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "java_spring_pr_audit_review",
+      "text": "Review this Spring Boot API for security issues before merge.",
+      "expect": {
+        "lead_agent": "Code Audit Council",
+        "assistant_agents_contains": [
+          "Java Virtuoso",
+          "Git Workflow Guardian"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": "Code Audit Council"
+      }
+    },
+    {
+      "name": "java_spring_worktree_git",
+      "text": "Use Java with Spring Boot, then commit, push, and isolate the work in a worktree.",
+      "expect": {
+        "lead_agent": "Git Workflow Guardian",
+        "assistant_agents_contains": [
+          "Java Virtuoso"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": "Git Workflow Guardian"
+      }
+    },
+    {
+      "name": "startup_mvp_runbook_shape",
+      "text": "We need an onboarding MVP with product scope, acceptance criteria, and backend delivery.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "workflow_bundle": "product-spec-deliver",
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "rewrite_project_planning_branch",
+      "text": "Rewrite this project in Rust, plan before coding, and keep a progress tracker we can resume later.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "process_skills": [
+          "pre-development-planning"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "audit_fix_handoff_shape",
+      "text": "This is a PR. Review this Django service for security issues, then tell me the exact fixes and the safest next delivery step.",
+      "expect": {
+        "lead_agent": "Code Audit Council",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": false,
+        "priority_agent": "Code Audit Council"
+      }
+    },
+    {
+      "name": "business_strategy_out_of_scope",
+      "text": "Set the pricing strategy and growth plan for this SaaS.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "assistant_agents": [],
+        "confidence": 0.0,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "frontend_backend_runbook_shape",
+      "text": "Redesign the billing settings UX, align it with the backend API contract, and make the states responsive.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "high_risk_production_change_shape",
+      "text": "This is a production-critical payment migration. Research first, stage it, define rollback, and handle the PR safely.",
+      "expect": {
+        "lead_agent": "Sentinel Architect (NB)",
+        "assistant_agents_contains": [
+          "Git Workflow Guardian"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "review_git_language_conflict_shape",
+      "text": "Review this Spring Boot PR, then commit and push the fixes.",
+      "expect": {
+        "lead_agent": "Code Audit Council",
+        "assistant_agents_contains": [
+          "Git Workflow Guardian",
+          "Java Virtuoso",
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": "Code Audit Council"
+      }
+    },
+    {
+      "name": "frontend_backend_git_conflict_shape",
+      "text": "Redesign the dashboard UX, align it with the backend API, then commit and push.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "Technical Trinity",
+          "Git Workflow Guardian"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "product_implementation_git_conflict_shape",
+      "text": "Define the onboarding flow, then define the implementation plan and rollout PR flow.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "Git Workflow Guardian",
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": true,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "governance_git_conflict_shape",
+      "text": "Define the rollback plan, then open the PR and define rollback for this refactor.",
+      "expect": {
+        "lead_agent": "Git Workflow Guardian",
+        "needs_git_workflow": true,
+        "workflow_bundle": "govern-change-safely",
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "repeated_failure_root_cause_debugging",
+      "text": "We already tried two fixes. It still fails in production. Stop guessing, inspect the logs, find the root cause, and only then propose the next step.",
+      "expect": {
+        "lead_agent": "Sentinel Architect (NB)",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "mcp_registration_root_cause_debugging",
+      "text": "This MCP server registration still fails after multiple attempts. Read the logs, inspect the config, identify the root cause, and stage the safest fix.",
+      "expect": {
+        "lead_agent": "Sentinel Architect (NB)",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "needs_git_workflow": false,
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "bounded_iteration_process_only",
+      "text": "Run another iteration, benchmark it against the baseline, and stop if the result regresses.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "assistant_agents": [],
+        "needs_git_workflow": false,
+        "process_skills": [
+          "bounded-iteration"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "release_readiness_process_only",
+      "text": "Is this version ready to ship? Do not answer from benchmark alone. Run the formal release gate.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "assistant_agents": [],
+        "needs_release_gate": true,
+        "needs_git_workflow": false,
+        "process_skills": [
+          "release-gate"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "chinese_release_readiness_suppresses_git_submit",
+      "text": "这版现在能不能提交/发版？不要只看 benchmark，通过正式 release gate 做提交前验收。",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "assistant_agents": [],
+        "needs_release_gate": true,
+        "needs_git_workflow": false,
+        "process_skills": [
+          "release-gate"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "bug_slice_feedback_loop_first_micro_practice",
+      "text": "Fix the checkout API regression by first reproducing it with a failing test.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "needs_git_workflow": false,
+        "workflow_bundle": "root-cause-remediate",
+        "resume_artifacts_contains": [
+          ".vidt/practices/micro-practice-ledger.json"
+        ],
+        "bundle_bootstrap_commands_contains": [
+          "python scripts/init_micro_practices.py --root . --text \"<user request>\" --pretty"
+        ],
+        "bundle_bootstrap_artifacts_contains": [
+          ".vidt/practices/micro-practice-ledger.json"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "product_vertical_slice_micro_practices",
+      "text": "Turn this signup revamp into AFK/HITL vertical slices with acceptance criteria and backend contract questions.",
+      "expect": {
+        "lead_agent": "World-Class Product Architect",
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ],
+        "workflow_bundle": "product-spec-deliver",
+        "resume_artifacts_contains": [
+          ".vidt/practices/micro-practice-ledger.json"
+        ],
+        "bundle_bootstrap_commands_contains": [
+          "python scripts/init_micro_practices.py --root . --text \"<user request>\" --pretty"
+        ],
+        "bundle_bootstrap_artifacts_contains": [
+          ".vidt/practices/micro-practice-ledger.json"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "architecture_migration_system_map_practices",
+      "text": "Before planning this migration, zoom out and map the relevant modules, callers, and seams.",
+      "expect": {
+        "lead_agent": "Technical Trinity",
+        "needs_git_workflow": false,
+        "process_skills": [
+          "pre-development-planning"
+        ],
+        "workflow_bundle": "plan-first-build",
+        "progress_anchor_recommended": "docs/progress/MASTER.md",
+        "resume_artifacts_contains": [
+          "docs/progress/MASTER.md",
+          ".vidt/practices/micro-practice-ledger.json"
+        ],
+        "bundle_bootstrap_commands_contains": [
+          "python scripts/init_micro_practices.py --root . --text \"<user request>\" --pretty"
+        ],
+        "bundle_bootstrap_artifacts_contains": [
+          ".vidt/practices/micro-practice-ledger.json"
+        ],
+        "priority_agent": null
+      }
+    },
+    {
+      "name": "project_knowledge_capture_agents_context",
+      "text": "帮当前代码库补 AGENTS.md 和项目本地 .agents/skills，让后续 AI agents 理解架构、命令、测试、复用点和高风险区域，避免重复造轮子。",
+      "expect": {
+        "lead_agent": "Sentinel Architect (NB)",
+        "needs_git_workflow": false,
+        "process_skills": [
+          "project-knowledge-capture"
+        ],
+        "workflow_bundle": "capture-project-knowledge",
+        "progress_anchor_recommended": "AGENTS.md",
+        "bundle_bootstrap_commands_contains": [
+          "rg --files",
+          "python validate.py --repo-only"
+        ],
+        "bundle_bootstrap_artifacts_contains": [
+          "AGENTS.md",
+          ".agents/skills/"
+        ],
+        "resume_artifacts_contains": [
+          "AGENTS.md",
+          ".agents/skills/",
+          "skill-forge/references/project-knowledge-capture-protocol.md"
+        ],
+        "priority_agent": null,
+        "assistant_agents_contains": [
+          "Technical Trinity"
+        ]
+      }
+    }
+  ],
+  "process_plan_cases": [
+    {
+      "name": "worktree_master_branch",
+      "needs_worktree": true,
+      "needs_git_workflow": false,
+      "repo_strategy": {
+        "strategy": "trunk-master",
+        "base_branch": "master"
+      },
+      "expect": {
+        "commands_contains": [
+          "git worktree add ../wt-<task> -b <branch> master"
+        ]
+      }
+    },
+    {
+      "name": "git_workflow_guardrail_order",
+      "needs_worktree": false,
+      "needs_git_workflow": true,
+      "repo_strategy": {
+        "strategy": "trunk-master",
+        "base_branch": "master"
+      },
+      "expect": {
+        "ordered_pairs": [
+          [
+            "python scripts/git_workflow_guardrail.py --repo . --stage G3 --pretty",
+            "git pull --rebase origin master"
+          ],
+          [
+            "python scripts/git_workflow_guardrail.py --repo . --stage G4 --pretty",
+            "git push -u origin feat/<ticket>-<summary>"
+          ]
+        ]
+      }
+    },
+    {
+      "name": "bounded_iteration_plan",
+      "needs_iteration": true,
+      "needs_worktree": false,
+      "needs_git_workflow": false,
+      "repo_strategy": {
+        "strategy": "trunk-main",
+        "base_branch": "main"
+      },
+      "expect": {
+        "commands_contains": [
+          "python scripts/init_project_memory.py --root . --mode iteration --pretty",
+          "mkdir -p .vidt/iterations",
+          "cp assets/iteration-plan-template.json .vidt/iterations/iteration-plan.json",
+          "python scripts/register_benchmark_baseline.py --workspace .vidt/iterations --label stable --report <baseline-report> --pretty",
+          "python scripts/run_iteration_cycle.py --workspace .vidt/iterations --round-id round-01 --objective \"<goal>\" --baseline-label stable --owner \"<lead-owner>\" --candidate \"<candidate-change>\" --candidate-worktree ../wt-round-01 --candidate-output-dir .tmp-iteration-round-01 --pretty",
+          "python scripts/compare_benchmark_results.py --baseline .vidt/iterations/baselines/stable/benchmark-results.json --candidate .tmp-iteration-round-01/benchmark-results.json --pretty",
+          "python scripts/promote_iteration_baseline.py --workspace .vidt/iterations --round-id round-01 --label accepted-round-01 --pretty",
+          "python scripts/sync_distilled_patterns.py --workspace .vidt/iterations --pretty",
+          "python scripts/run_iteration_loop.py --workspace .vidt/iterations --plan .vidt/iterations/iteration-plan.json --pretty"
+        ]
+      }
+    },
+    {
+      "name": "release_gate_plan",
+      "needs_iteration": false,
+      "needs_worktree": false,
+      "needs_release_gate": true,
+      "needs_git_workflow": false,
+      "repo_strategy": {
+        "strategy": "trunk-main",
+        "base_branch": "main"
+      },
+      "expect": {
+        "commands_contains": [
+          "python scripts/run_release_gate.py --output-dir evals/release-gate --pretty",
+          "python scripts/run_release_gate.py --output-dir evals/release-gate --previous-output evals/benchmark-results/benchmark-results.json --pretty",
+          "python scripts/run_release_gate.py --output-dir evals/release-gate --iteration-workspace .vidt/iterations --release-label release-ready --pretty",
+          "python scripts/run_release_gate.py --output-dir evals/release-gate --iteration-workspace .vidt/iterations --auto-run-next-iteration-on-hold --hold-loop-max-rounds 3 --pretty"
+        ]
+      }
+    },
+    {
+      "name": "pre_development_planning_plan",
+      "needs_pre_development_planning": true,
+      "needs_iteration": false,
+      "needs_worktree": false,
+      "needs_git_workflow": false,
+      "repo_strategy": {
+        "strategy": "trunk-main",
+        "base_branch": "main"
+      },
+      "expect": {
+        "commands_contains": [
+          "python scripts/init_project_memory.py --root . --mode planning --pretty",
+          "python scripts/init_pre_development_plan.py --root . --task-name \"<task-name>\" --task-description \"<task-description>\" --phase-name foundation --pretty"
+        ],
+        "artifacts_contains": [
+          "docs/progress/phase-4-cutover.md"
+        ]
+      }
+    }
+  ],
+  "guardrail_cases": [
+    {
+      "name": "command_policy",
+      "type": "command_policy",
+      "commands": [
+        "git status",
+        "git push",
+        "git push --force"
+      ],
+      "expect": {
+        "max_risk": "high",
+        "decisions": {
+          "git status": "low",
+          "git push": "medium",
+          "git push --force": "high"
+        }
+      }
+    },
+    {
+      "name": "g0_staged_should_fail",
+      "type": "g0_staged_should_fail"
+    },
+    {
+      "name": "g3_behind_should_report_sync",
+      "type": "g3_behind_should_report_sync"
+    }
+  ],
+  "workflow_quality_cases": [
+    {
+      "name": "playbook_index_links_core_protocols",
+      "path": "references/playbook-index.md",
+      "expect": {
+        "contains": [
+          "agent-catalog.md",
+          "team-engine-lite-protocol.md",
+          "quick-slice-delivery-playbook.md"
+        ]
+      }
+    },
+    {
+      "name": "skill_md_requires_output_template",
+      "path": "SKILL.md",
+      "expect": {
+        "contains": [
+          "## Output template",
+          "Selected route",
+          "Fallback",
+          "Next step"
+        ]
+      }
+    },
+    {
+      "name": "release_gate_requires_verifiable_completion_refs",
+      "path": "references/release-gate-playbook.md",
+      "expect": {
+        "contains": [
+          "evidence_refs",
+          "verifiable command",
+          "existing local artifact path"
+        ]
+      }
+    },
+    {
+      "name": "runtime_contract_uses_explicit_completion_evidence_path",
+      "path": "references/runtime-operation-contract.md",
+      "expect": {
+        "contains": [
+          "--check completion-evidence --completion-evidence .vidt/evidence/completion-evidence.json --pretty"
+        ]
+      }
+    },
+    {
+      "name": "workflow_bundles_defined_in_reference",
+      "path": "references/workflow-bundles.md",
+      "expect": {
+        "contains": [
+          "# Workflow Bundles",
+          "plan-first-build",
+          "product-spec-deliver",
+          "audit-fix-deliver"
+        ]
+      }
+    },
+    {
+      "name": "technical_governance_blocks_entropy_growth",
+      "path": "references/technical-governance-playbook.md",
+      "expect": {
+        "contains": [
+          "anti-entropy-governance.md",
+          "Do not add another fallback",
+          "Do not execute irreversible persistent-state deletion"
+        ]
+      }
+    },
+    {
+      "name": "workflow_quality_preserves_authority_boundary",
+      "path": "references/workflow-quality-baseline.md",
+      "expect": {
+        "contains": [
+          "Fast-Path Cheapness",
+          "Evidence Freshness",
+          "Artifact Laziness",
+          "Authority Boundary",
+          "It cannot produce host-independent final authority"
+        ]
+      }
+    },
+    {
+      "name": "trigger_health_keeps_entry_light",
+      "path": "references/trigger-health-baseline.md",
+      "expect": {
+        "contains": [
+          "False Positive Control",
+          "Repair Rule",
+          "Do not fix trigger problems by making `SKILL.md` longer by default"
+        ]
+      }
+    }
+  ],
+  "verify_action_cases": [
+    {
+      "name": "verify_pre_development_planning_allowed",
+      "text": "Rewrite this project in Rust, but plan before coding and keep a progress tracker for later sessions.",
+      "check": "process-skill",
+      "process_skill": "pre-development-planning",
+      "expect": {
+        "allowed": true,
+        "summary_contains": "allowed",
+        "recommended_next_step_contains": "process_plan"
+      }
+    },
+    {
+      "name": "verify_release_gate_allowed",
+      "text": "Is this version ready to ship? Do not answer from benchmark alone. Run the formal release gate.",
+      "check": "release-gate",
+      "expect": {
+        "allowed": true,
+        "summary_contains": "required",
+        "recommended_next_step_contains": "run_release_gate.py"
+      }
+    },
+    {
+      "name": "verify_iteration_profile_requires_registered_baseline",
+      "text": "Run another iteration, benchmark it against the baseline, and stop if the result regresses.",
+      "check": "iteration",
+      "expect": {
+        "allowed": false,
+        "summary_contains": "baseline registry",
+        "detail_equals": {
+          "needs_iteration": true
+        }
+      }
+    },
+    {
+      "name": "verify_workflow_bundle_allowed",
+      "text": "Rewrite this project in Rust, but plan before coding and keep a progress tracker for later sessions.",
+      "check": "workflow-bundle",
+      "expect": {
+        "allowed": true,
+        "summary_contains": "plan-first-build",
+        "detail_equals": {
+          "workflow_bundle": "plan-first-build",
+          "bundle_confidence": 0.96,
+          "workflow_bundle_source": "process-skill",
+          "progress_anchor_recommended": "docs/progress/MASTER.md"
+        }
+      }
+    },
+    {
+      "name": "verify_bundle_bootstrap_allowed",
+      "text": "Define the onboarding user flow, acceptance criteria, and backend contract for this signup revamp.",
+      "check": "bundle-bootstrap",
+      "expect": {
+        "allowed": true,
+        "summary_contains": "contract-complete",
+        "detail_equals": {
+          "workflow_bundle": "product-spec-deliver",
+          "bootstrap_required": true,
+          "progress_anchor_recommended": ".vidt/product/current-slice.md",
+          "progress_anchor_matches_resume_anchor": true,
+          "resume_anchor_in_artifacts": true,
+          "resume_anchor_in_resume_artifacts": true,
+          "workspace_state": "missing",
+          "workspace_ready": false,
+          "resume_anchor_exists": false,
+          "bootstrap_command_required_now": true
+        }
+      }
+    },
+    {
+      "name": "verify_assistant_delta_contract_allowed",
+      "text": "Define the onboarding user flow, acceptance criteria, and backend contract for this signup revamp.",
+      "check": "assistant-delta-contract",
+      "expect": {
+        "allowed": true,
+        "summary_contains": "structurally valid",
+        "detail_equals": {
+          "assistant_count": 1
+        }
+      }
+    },
+    {
+      "name": "verify_git_workflow_allowed",
+      "text": "Refactor this Flask service and then commit and push the branch.",
+      "check": "git-workflow",
+      "expect": {
+        "allowed": true,
+        "summary_contains": "required",
+        "detail_equals": {
+          "needs_git_workflow": true
+        }
+      }
+    },
+    {
+      "name": "verify_worktree_allowed",
+      "text": "Use FastAPI for a backend service, then commit, push, and isolate the work in a worktree.",
+      "check": "worktree",
+      "expect": {
+        "allowed": true,
+        "summary_contains": "required",
+        "detail_equals": {
+          "needs_worktree": true
+        }
+      }
+    },
+    {
+      "name": "verify_micro_practice_ledger_missing_blocks_completion",
+      "text": "Fix the checkout API regression by first reproducing it with a failing test.",
+      "check": "micro-practice-ledger",
+      "expect": {
+        "allowed": false,
+        "summary_contains": "missing",
+        "recommended_next_step_contains": "Initialize the micro-practice ledger",
+        "detail_equals": {
+          "micro_practice_required": true,
+          "ledger_exists": false,
+          "decision": "missing",
+          "completion_allowed": false
+        }
+      }
+    },
+    {
+      "name": "verify_completion_evidence_missing_blocks_completion",
+      "text": "Fix the checkout API regression by first reproducing it with a failing test.",
+      "check": "completion-evidence",
+      "expect": {
+        "allowed": false,
+        "summary_contains": "missing",
+        "recommended_next_step_contains": "Create completion evidence",
+        "detail_equals": {
+          "completion_evidence_required": true,
+          "evidence_exists": false,
+          "decision": "missing",
+          "completion_allowed": false
+        }
+      }
+    },
+    {
+      "name": "verify_wrong_lead_rejected",
+      "text": "Review this Django API for security issues.",
+      "check": "lead-assignment",
+      "lead_agent": "Technical Trinity",
+      "assistant_agents": [],
+      "expect": {
+        "allowed": false,
+        "summary_contains": "conflicts",
+        "recommended_next_step_contains": "Code Audit Council"
+      }
+    },
+    {
+      "name": "verify_auto_mode_requires_setup_first",
+      "text": "/auto go Is this version ready to ship? Run the formal release gate.",
+      "check": "auto-mode",
+      "expect": {
+        "allowed": false,
+        "summary_contains": "saved auto-run plan does not exist",
+        "recommended_next_step_contains": "Run auto setup first"
+      }
+    },
+    {
+      "name": "verify_auto_mode_background_resume_contract",
+      "text": "/auto resume background safe fix this repeated regression until stable and keep benchmark evidence.",
+      "check": "auto-mode",
+      "expect": {
+        "allowed": true,
+        "summary_contains": "ready to generate a setup plan",
+        "recommended_next_step_contains": "run_auto_workflow.py"
+      }
+    }
+  ]
+}

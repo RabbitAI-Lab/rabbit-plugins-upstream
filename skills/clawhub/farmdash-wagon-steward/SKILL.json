@@ -1,31 +1,26 @@
 {
   "name": "FarmDash Wagon Steward",
-  "version": "0.6.1",
-  "description": "Read-only DeFi portfolio aggregation skill for OpenClaw agents. Returns wallet balances across EVM chains, scores capital efficiency, surfaces idle stablecoins, tracks position drift versus a target allocation, and produces rebalancing proposals as research output. Strict read-only surface: every tool is a GET endpoint that returns analysis. The user's separately-installed execution skill is responsible for any on-chain action under its own ClawScan-reviewed contract.",
+  "version": "0.7.1",
+  "description": "Analyze read-only multichain EVM portfolios, wallet balances, idle stablecoins, capital efficiency, allocation drift, and rebalance proposals.",
   "tags": [
     "defi",
-    "ai-agent",
-    "autonomous-agent",
-    "openclaw",
-    "clawhub",
-    "mcp",
-    "crypto",
-    "web3",
-    "onchain",
-    "portfolio",
-    "wallet",
+    "defi-portfolio",
+    "crypto-portfolio-tracker",
     "wallet-analytics",
-    "position-tracker",
+    "multichain-portfolio",
+    "evm-wallet",
+    "portfolio-analysis",
+    "asset-allocation",
+    "portfolio-rebalancing",
     "capital-efficiency",
-    "rebalancing",
-    "yield-farming",
-    "airdrop",
-    "evm",
-    "multi-chain",
+    "idle-stablecoins",
+    "position-tracking",
+    "onchain-portfolio",
     "read-only",
-    "zero-custody",
-    "farmdash",
-    "wagon-steward"
+    "openclaw",
+    "ai-agent",
+    "mcp",
+    "farmdash"
   ],
   "author": "FarmDash Pioneers (@Parmasanandgarlic)",
   "homepage": "https://www.farmdash.one/agents",
@@ -33,7 +28,7 @@
   "tools": [
     {
       "name": "get_portfolio_summary",
-      "description": "(Pioneer)\n\nTop-level snapshot. Use this first — it grounds every other recommendation.\n\n**",
+      "description": "(Pioneer)\r\n\r\nTop-level snapshot. Use this first — it grounds every other recommendation.\r\n\r\n**",
       "inputSchema": {
         "type": "object",
         "properties": {}
@@ -43,7 +38,7 @@
     },
     {
       "name": "get_position_health",
-      "description": "(Pioneer)\n\nPer-position deep-dive: APR, age, unrealized P&L, IL exposure, and a rebalance hint.\n\n**",
+      "description": "(compatibility alias; Pioneer)\n\nDespite its legacy name, the current MCP mapping calls `/api/v1/agent/performance`. It returns FarmDash activity metrics (swap count, volume, fees, average size, protocol diversity, active days), Trail Cred/ranking data, daily activity, and a timestamp.\n\nIt does **not** return farming positions, APR, unrealized or realized P&L, impermanent loss, collateral health, liquidation distance, or rebalance hints. Never use it to claim a DeFi position is healthy. For a real position review, obtain protocol-native position/debt data and authoritative prices; if those tools are unavailable, say position health is unavailable.\n\r\n---",
       "inputSchema": {
         "type": "object",
         "properties": {}
@@ -53,7 +48,7 @@
     },
     {
       "name": "get_idle_capital",
-      "description": "(Pioneer)\n\nSurfaces stablecoins or unstaked native assets sitting unused.\n\n**",
+      "description": "(Pioneer)\r\n\r\nSurfaces stablecoins or unstaked native assets sitting unused.\r\n\r\n**",
       "inputSchema": {
         "type": "object",
         "properties": {}

@@ -1,0 +1,14 @@
+name: geoskill-spatial-storytelling
+display_name: 空间叙事 / 故事地图
+description: |
+  Weave multiple maps, text and charts into a scroll-driven storytelling HTML page
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-spatial-storytelling.py
+runtime: python>=3.9
+tags:
+  - extraction
+  - gis
+  - machine-learning
+  - remote-sensing
+  - visualization

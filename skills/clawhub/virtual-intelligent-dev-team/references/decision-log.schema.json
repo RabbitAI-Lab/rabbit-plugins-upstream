@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:skill-hub:virtual-intelligent-dev-team:decision-log.schema",
+  "title": "Virtual Intelligent Dev Team Decision Log Entry",
+  "description": "Canonical append-only governance decision log. One JSON object per line, written to .vidt/metrics/decision-log.jsonl.",
+  "type": "object",
+  "required": [
+    "decision",
+    "lead_agent",
+    "mode_hint",
+    "risk_level",
+    "selected_track",
+    "timestamp",
+    "verifier"
+  ],
+  "properties": {
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp with seconds precision. Produced by datetime.now().isoformat(timespec='seconds') in route_request.py."
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "route_selected",
+        "delivery_accepted",
+        "delivery_held",
+        "release_ship",
+        "release_hold",
+        "fast_track_engaged",
+        "fallback_engaged",
+        "intent_confirmation_requested"
+      ],
+      "description": "Semantic decision kind emitted by the current decision-log contract."
+    },
+    "lead_agent": {
+      "type": "string",
+      "description": "Selected lead agent display string (must match agent_rules keys, e.g. 'Technical Trinity', 'Sentinel Architect (NB)')."
+    },
+    "verifier": {
+      "type": "string",
+      "enum": [
+        "pass",
+        "fail",
+        "hold",
+        "n_a"
+      ],
+      "description": "Independent verification outcome. n_a means no verifier ran (typical for routing-only entries)."
+    },
+    "risk_level": {
+      "type": "string",
+      "enum": [
+        "low",
+        "medium",
+        "high"
+      ],
+      "description": "Risk tier inferred by governance layer (or default low)."
+    },
+    "selected_track": {
+      "type": "string",
+      "enum": [
+        "regular track",
+        "fast track"
+      ],
+      "description": "Privy council track selection. 'regular track' = full dual-sign flow; 'fast track' = quota-gated expedited flow."
+    },
+    "reason": {
+      "type": "string",
+      "minLength": 0,
+      "description": "Short human-readable rationale. Free-form prose, not validated."
+    },
+    "evidence": {
+      "type": "string",
+      "minLength": 0,
+      "description": "Optional evidence pointer — test IDs, command outputs, gate statuses, or '||'-joined fragments. Optional; not required."
+    },
+    "mode_hint": {
+      "type": "string",
+      "description": "Producer tag indicating which script/branch emitted the entry (e.g. 'route_request', 'release_gate')."
+    }
+  },
+  "additionalProperties": false
+}

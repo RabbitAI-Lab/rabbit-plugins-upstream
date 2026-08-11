@@ -1,0 +1,6 @@
+# 把 <你的域名> 换成真实域名；其 A/AAAA 记录需指向本机公网 IP
+# Caddy 会自动向 Let's Encrypt 申请并续期 TLS 证书（需 80/443 端口对外可达）
+<你的域名> {
+    # 反代到同机运行的 mch-demo 容器（已把 8080 发布到宿主机）
+    reverse_proxy localhost:8080
+}

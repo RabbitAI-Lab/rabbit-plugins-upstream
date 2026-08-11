@@ -1,0 +1,75 @@
+{
+  "skill": "image-fusion-pan-sharpening",
+  "skill_version": "1.0.0",
+  "command": "image-fusion-pan-sharpening --bbox 116 39 117 40 --synthetic --method ihs --scale 4 --quiet --output-dir ./_test_cli_ihs",
+  "started_at": "2026-08-03T17:47:54.113282Z",
+  "finished_at": "2026-08-03T17:47:54.361312Z",
+  "exit_code": 0,
+  "inputs": {
+    "input": null,
+    "pan": null,
+    "method": "ihs",
+    "scale": 4,
+    "synthetic": true
+  },
+  "aoi": null,
+  "datasets": [],
+  "outputs": [
+    {
+      "path": "./_test_cli_ihs\\fused_pansharpened.tif",
+      "kind": "raster",
+      "size_bytes": null,
+      "crs_epsg": 4326,
+      "bbox_wgs84": [
+        116.0,
+        39.0,
+        117.0,
+        40.0
+      ],
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": 3,
+      "feature_count": null,
+      "row_count": null
+    },
+    {
+      "path": "./_test_cli_ihs\\fusion_params.json",
+      "kind": "json",
+      "size_bytes": null,
+      "crs_epsg": null,
+      "bbox_wgs84": null,
+      "resolution_m": null,
+      "nodata": null,
+      "band_count": null,
+      "feature_count": null,
+      "row_count": null
+    }
+  ],
+  "qa": {
+    "source": "synthetic",
+    "method": "ihs",
+    "scale": 4,
+    "n_bands": 3,
+    "output_shape": [
+      3,
+      256,
+      256
+    ],
+    "mean_value_per_band": [
+      0.4700375497341156,
+      0.5199985504150391,
+      0.5700653791427612
+    ],
+    "overall_mean": 0.5200337767601013,
+    "synthetic_truth_mean_per_band": [
+      0.4699852764606476,
+      0.5199418067932129,
+      0.5700520277023315
+    ]
+  },
+  "software": {
+    "python": "3.9.21",
+    "skill": "image-fusion-pan-sharpening"
+  },
+  "error": null
+}

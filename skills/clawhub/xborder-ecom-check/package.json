@@ -1,0 +1,48 @@
+{
+  "name": "xborder-ecom-check",
+  "version": "1.2.0",
+  "type": "skill",
+  "description": "Cross-Border E-Commerce Compliance Check / 跨境电商合规检查（双语 bilingual：默认中文指引，英文可按需提供）。仅在用户显式要求运行 xborder-ecom-check 时激活。免费 检查（云端评分），12 项核心检查。",
+  "language": "bilingual (zh-CN default for guidance; English on request)",
+  "warnings": [
+    "云端评分：仅 scored 运行（提供 API Key 时）才会联网——拉取最新题目并向 compliancehub.cn 提交答案评分。--non-interactive / --non-interactive-json 预览**完全离线**，使用内置 12 项题目，绝不联网、不泄露 IP/UA。",
+    "API Key：由你自行在账户页获取（免费 100 次），通过 COMPLIANCEHUB_API_KEY 环境变量或 ~/.config/compliancehub/xborder-ecom-check.key（0600）提供；本 skill 不代你注册、不收集任何 email/password。",
+    "语言 Language：默认中文指引，英文法律条款保留原文；可随时要求英文输出 / Chinese by default, English on request.",
+    "默认不联网发送答案、不创建账号、不持久化状态：本 skill 不创建账号、不保存凭据，仅读取你提供的 API Key（环境变量或 key 文件，非自动启动/会话/后台进程）。"
+  ],
+  "author": "CQDev",
+  "license": "MIT",
+  "homepage": "https://compliancehub.cn/account.html?skill=xborder-ecom-check",
+  "permissions": {
+    "network": [
+      "https://compliancehub.cn"
+    ],
+    "filesystem": {
+      "write": [
+        "~/.config/compliancehub"
+      ]
+    },
+    "env": [
+      "COMPLIANCEHUB_API_KEY"
+    ]
+  },
+  "openclaw": {
+    "displayName": "跨境电商合规检查",
+    "category": "compliance",
+    "pricing": "free",
+    "points": 1,
+    "permissions": {
+      "network": [
+        "https://compliancehub.cn"
+      ],
+      "filesystem": {
+        "write": [
+          "~/.config/compliancehub"
+        ]
+      },
+      "env": [
+        "COMPLIANCEHUB_API_KEY"
+      ]
+    }
+  }
+}

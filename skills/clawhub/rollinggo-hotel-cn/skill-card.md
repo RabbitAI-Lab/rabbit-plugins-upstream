@@ -1,45 +1,58 @@
-## Description: <br>
-Uses the RollingGo CLI to search hotels, filter results, read hotel tags, and fetch room pricing based on destination, dates, star ratings, budget, tags, and distance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+RollingGo hotel booking assistant helps users search, compare, check real-time room prices, and prepare hotel bookings through RollingGo hotel services.
 
-## Publisher: <br>
-[dreamtzlong](https://clawhub.ai/user/dreamtzlong) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dreamtzlong](https://clawhub.ai/user/dreamtzlong)
 
-## Use Case: <br>
-External users and travel-planning agents use this skill to find and compare hotels, retrieve current room and price details, and guide users to booking links using RollingGo data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a RollingGo API key and sends hotel-search details to the RollingGo service. <br>
-Mitigation: Use a dedicated RollingGo API key, keep it in skill-scoped environment configuration, and avoid placing real keys directly in command examples. <br>
-Risk: The documented default execution path uses the latest RollingGo package, which can change over time. <br>
-Mitigation: Pin or review the RollingGo package when tighter supply-chain control is required. <br>
+## Use Case:
 
+External travelers and travel assistants use this skill to find accommodations, compare hotels and room rates, and prepare hotel bookings after explicit user confirmation.
 
-## Reference(s): <br>
-- [RollingGo NPX reference](references/rollinggo-npx.md) <br>
-- [RollingGo UV reference](references/rollinggo-uv.md) <br>
-- [Claw host environment reference](references/claw-host-env.md) <br>
-- [RollingGo service homepage](https://mcp.agentichotel.cn) <br>
-- [RollingGo API key application](https://mcp.agentichotel.cn/apply) <br>
-- [ClawHub skill page](https://clawhub.ai/dreamtzlong/rollinggo-hotel-cn) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Text, JSON] <br>
-**Output Format:** [Markdown guidance with CLI command examples and RollingGo JSON or table outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires RollingGo_API_KEY and a RollingGo CLI runtime through rollinggo, npx, node, uvx, or uv.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Installer and upgrade flows can pull and run the latest RollingGo CLI from npm or GitHub without integrity checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from trusted RollingGo sources, review or pin the CLI where possible, and verify downloaded binaries before execution.
+
+Risk: The skill can collect guest names and email addresses and guide actions that create real hotel bookings or payment links.
+
+Mitigation: Require explicit user confirmation before price locking, order creation, and payment-link handling; enter personal information only when the user intends to book.
+
+Risk: Hotel search prices are reference prices and locked booking references expire after a short window.
+
+Mitigation: Reconfirm real-time price, cancellation policy, dates, guest details, and total amount before creating an order, and re-lock pricing after expiration.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dreamtzlong/skills/rollinggo-hotel-cn)
+- [CLI parameter reference](references/cli-params.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown summaries for hotel search, room rates, and booking steps, with shell commands used for local CLI setup and invocation.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include hotel images and payment links returned by RollingGo services; internal command details and booking identifiers are intended to be hidden from end users.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter lists 1.1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

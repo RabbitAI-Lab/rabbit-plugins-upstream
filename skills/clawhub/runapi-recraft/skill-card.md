@@ -1,46 +1,61 @@
-## Description: <br>
-Generate and edit images with Recraft through RunAPI for one-off CLI tasks or SDK integrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images with Recraft through RunAPI.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agent users use this skill to route Recraft image generation, upscaling, background removal, and image-editing requests through the RunAPI CLI or SDKs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can rely on RUNAPI_API_KEY or a saved RunAPI CLI login, which are sensitive credentials. <br>
-Mitigation: Keep API keys and saved CLI credentials out of prompts, logs, generated files, and version control; rotate credentials if exposed. <br>
-Risk: Image prompts, source images, or edited outputs may be sent to an external RunAPI/Recraft service. <br>
-Mitigation: Review RunAPI and Recraft terms, pricing, rate limits, and data handling before sending private or regulated content. <br>
+## Use Case:
 
+Developers and agent users use this skill to generate, edit, upscale, or remove backgrounds from images with Recraft through RunAPI. It guides agents to use the RunAPI CLI for one-off work and SDKs for application or backend integrations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/runapi-recraft) <br>
-- [RunAPI Recraft homepage](https://runapi.ai/models/recraft) <br>
-- [RunAPI Recraft model overview, pricing, and rate limits](https://runapi.ai/models/recraft.md) <br>
-- [RunAPI Recraft provider comparison](https://runapi.ai/providers/recraft.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
-- [Recraft crisp upscale variant](https://runapi.ai/models/recraft/crisp-upscale.md) <br>
-- [Recraft remove background variant](https://runapi.ai/models/recraft/remove-background.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and SDK package names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include RunAPI CLI commands, request-file guidance, asynchronous polling steps, authentication guidance, and SDK package references.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.4 (source: server release evidence) <br>
+Risk: Image prompts, source images, generated outputs, and account credentials may be handled by RunAPI/Recraft during use.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when the user accepts that provider handling; prefer RUNAPI_API_KEY or saved CLI configuration and avoid interactive browser login in headless agent runs.
+
+Risk: Returned RunAPI file URLs are temporary and should not be treated as durable storage.
+
+Mitigation: Download and store generated images or edited files in user-controlled durable storage within 7 days.
+
+Risk: Using the CLI as a production runtime integration layer can create brittle application behavior.
+
+Mitigation: Use the appropriate RunAPI SDK package for app, backend, worker, library, or webhook integrations.
+
+## Reference(s):
+
+- [RunAPI Recraft model page](https://runapi.ai/models/recraft)
+- [Recraft model documentation](https://runapi.ai/models/recraft.md)
+- [Recraft provider documentation](https://runapi.ai/providers/recraft.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [RunAPI CLI skill](https://github.com/runapi-ai/cli-skill)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with inline shell commands and SDK package names]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May direct agents to produce RunAPI request files, CLI commands, SDK integration code, and generated image assets returned by RunAPI/Recraft.]
+
+## Skill Version(s):
+
+0.2.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

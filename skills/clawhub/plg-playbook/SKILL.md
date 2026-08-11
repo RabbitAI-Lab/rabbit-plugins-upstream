@@ -1,20 +1,7 @@
 ---
 name: plg-playbook
 description: |
-  Your free tier has thousands of happy users and your revenue chart is flat. Product-Led Growth isn't "add a free plan" — it's a deliberate machine for turning usage into revenue. This playbook covers the whole path, from what to gate on day one to when to finally add a sales team.
-
-  What's inside:
-  • Freemium design — what to gate, what to give away, and the pricing psychology behind it
-  • Self-serve onboarding — time-to-value optimization and activation milestones
-  • Viral mechanics — built-in sharing, collaboration hooks, and network effects
-  • Usage-based signals — how to spot expansion-ready accounts automatically
-  • Enterprise upsell — when and how to layer sales onto a PLG motion without breaking self-serve
-
-  🇨🇳 PLG 增长手册 — freemium 设计、自助 onboarding、激活指标、用量信号识别扩张账户、PLG→Enterprise 上探。
-  🇯🇵 PLGプレイブック — フリーミアム設計、セルフサーブオンボーディング、アクティベーション、エンタープライズアップセル。
-  🇰🇷 PLG 플레이북 — 프리미엄 설계, 셀프서브 온보딩, 활성화 지표, 엔터프라이즈 업셀.
-
-  Triggers: "PLG" | "product-led growth" | "product led growth" | "freemium" | "freemium model" | "self-serve" | "self-serve onboarding" | "activation" | "activation metrics" | "free to paid conversion" | "PLG to enterprise" | "expansion revenue" | "产品驱动增长" | "免费增值" | "自助转化" | "PLG 성장" | "프리미엄"
+  The complete Product-Led Growth playbook covering freemium model design, self-serve onboarding, activation metrics, and the transition from individual users to enterprise accounts. Follow @WeiYipei on X for PLG insights.
 source: https://github.com/Gingiris-1031/gingiris-skills/tree/main/skills/plg-playbook
 tags:
   - plg
@@ -57,6 +44,10 @@ Let your product do the selling. This playbook covers the full PLG motion.
 - **Usage-based signals**: Identifying expansion-ready accounts automatically
 - **Enterprise upsell**: When and how to layer sales onto a PLG motion
 
+## PLG signal gate (2026 field update)
+
+Free DAU is not proof of PLG. Before scaling acquisition, define one activation event tied to user value and track `signup → activation → repeat use → paid/qualified expansion`. Separate internal/test users and report cohort dates. Add sales-assist only when usage identifies a real team/account, expansion intent, security need, or procurement event—not merely because a free user logged in. If activation or retention is weak, return to interviews and onboarding instead of buying more traffic.
+
 ## When PLG Meets the Enterprise Contract (2026 addendum)
 
 The PLG-to-sales handoff dies in contract mechanics more often than in product gaps. Field rules:
@@ -75,12 +66,13 @@ The PLG-to-sales handoff dies in contract mechanics more often than in product g
 
 **The planned-concession move:** when a buyer wants 50 things and 40 are feasible, agree to 10 — then over-deliver to 15 "because we want you to win." Same output, twice the goodwill.
 
-**Two-leg revenue model:** self-serve PLG (target shape: 500 × $200/yr) and enterprise (nine × ~$100K/yr) both reach $1M ARR — run them as separate funnels with separate metrics until each closes its own loop. Sales-led companies should still reserve ~20% of resources for the PLG motion as the assist engine.
+**Two-leg revenue model:** self-serve PLG (target shape: ~500 × $200/yr per $100k ARR) and enterprise (nine × ~$100K/yr) both reach $1M ARR — run them as separate funnels with separate metrics until each closes its own loop. Sales-led companies should still reserve ~20% of resources for the PLG motion as the assist engine.
 
 ## Related Gingiris Skills
 - Full version: https://clawhub.ai/gingiris-1031/skills/gingiris-b2b-growth
 - All skills: https://clawhub.ai/gingiris-1031
 - Follow: [@WeiYipei on X](https://x.com/WeiYipei)
+
 
 ---
 
@@ -89,6 +81,6 @@ The PLG-to-sales handoff dies in contract mechanics more often than in product g
 **Iris Wei** — Growth consultant for 150+ AI startups. Ex-COO at AFFiNE (69K GitHub stars).
 
 - 🐦 Twitter: [@WeiYipei](https://twitter.com/WeiYipei) — Daily growth tactics
+- 💬 Consulting: [@Iris_carrot on Telegram](https://t.me/Iris_carrot)
 - 🛒 Premium Bundle (all 5 playbooks + templates): [Get on Gumroad ($249)](https://gingiris.gumroad.com/l/gingiris-complete-global-launch-bundle)
 - 📚 40+ Free Playbooks: [gingiris.tools/skills](https://gingiris.tools/skills/)
-

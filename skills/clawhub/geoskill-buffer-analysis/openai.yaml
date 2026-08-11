@@ -1,0 +1,13 @@
+name: geoskill-buffer-analysis
+display_name: 缓冲区分析
+description: |
+  矢量缓冲区生成+融合+叠加分析+面积统计
+version: 0.1.0
+author: Mavis
+entrypoint: geoskill-buffer-analysis.py
+runtime: python>=3.9
+tags:
+  - analysis
+  - gis
+  - remote-sensing
+  - vector

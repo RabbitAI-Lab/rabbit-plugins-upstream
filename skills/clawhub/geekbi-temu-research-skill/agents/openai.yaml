@@ -1,0 +1,4 @@
+interface:
+  display_name: "极鲸云Temu数据分析与市场调研"
+  short_description: "整合商品、图搜同款、店铺、类目、关键词和评论数据完成 Temu 选品调研"
+  default_prompt: "使用极鲸云分析 Temu 市场机会，并结合商品、图搜同款、店铺、类目、关键词和评论数据给出选品建议。"

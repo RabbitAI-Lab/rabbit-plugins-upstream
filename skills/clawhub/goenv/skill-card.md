@@ -1,42 +1,55 @@
-## Description: <br>
-Goenv guides agents in helping Go developers install and use the github.com/psyb0t/goenv library, a two-state ENV-based prod/dev helper with default-to-prod behavior. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Goenv helps agents add or explain a small Go prod/dev environment switch based on the ENV variable, where only the exact value "dev" returns dev and all other values return prod.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and engineers use this skill to add or review a small prod/dev switch in Go applications, including install commands, import examples, and ENV behavior checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The ENV switch only distinguishes exact lowercase dev from prod, so staging, test, empty, or mistyped values resolve to prod. <br>
-Mitigation: Confirm that a two-state dev/prod model and default-to-prod behavior match the application's deployment semantics before adopting it. <br>
-Risk: The skill guides installation of a third-party Go module. <br>
-Mitigation: Review and pin the module as part of normal dependency intake before use in production code. <br>
+## Use Case:
 
+Developers and engineers use this skill when they want an agent to help install, import, or apply github.com/psyb0t/goenv in a Go program for a simple prod/dev branch. It is suited to projects that accept a fixed ENV variable and two environment states.
 
-## Reference(s): <br>
-- [Goenv ClawHub skill page](https://clawhub.ai/psyb0t/skills/goenv) <br>
-- [goenv repository homepage](https://github.com/psyb0t/goenv) <br>
-- [setup & reference](references/setup.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with Go and shell snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Focuses on the ENV variable, Go toolchain usage, and the library's exact dev/prod behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Installing the library may add an external Go dependency and run go get, which can fetch from the configured Go module proxy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the dependency is desired, review the module source through normal project dependency controls, and pin it through Go modules before deployment.
+
+Risk: Only ENV=dev is treated as dev; unset, misspelled, uppercase, or other values default to prod.
+
+Mitigation: Document the exact accepted ENV value and test launch configuration for each environment that relies on dev behavior.
+
+## Reference(s):
+
+- [goenv setup and reference](references/setup.md)
+- [goenv GitHub repository](https://github.com/psyb0t/goenv)
+- [Goenv on ClawHub](https://clawhub.ai/psyb0t/skills/goenv)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with Go and shell snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May suggest go get, Go imports, ENV configuration, and small source edits in the user's current Go project.]
+
+## Skill Version(s):
+
+1.0.10 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
