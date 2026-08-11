@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/rorkai/app-store-connect-cli-skills/asc-testflight-orchestration",
+  "repo": "rorkai/app-store-connect-cli-skills",
+  "skillId": "asc-testflight-orchestration",
+  "branch": "main",
+  "pushedAt": "2026-08-11T05:36:53Z",
+  "contentHash": "d94a0d9fcefdd063013e9c28c8597f96bd4064f9afd5c62379457e0e15a640a2",
+  "fetchedAt": "2026-08-11T08:20:43.629Z"
+}

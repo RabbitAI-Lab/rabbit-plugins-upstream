@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/astrolicious/agent-skills/astro",
+  "repo": "astrolicious/agent-skills",
+  "skillId": "astro",
+  "branch": "main",
+  "pushedAt": "2026-03-20T16:06:14Z",
+  "contentHash": "5740d97b167c9359771d56ca98bc31956f9264286a7fe6a64c24f6619ae27d26",
+  "fetchedAt": "2026-08-11T08:18:27.373Z"
+}
