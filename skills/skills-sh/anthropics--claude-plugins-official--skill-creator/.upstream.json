@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/skill-creator",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "skill-creator",
+  "branch": "main",
+  "pushedAt": "2026-08-12T07:58:11Z",
+  "contentHash": "887b2027e7eeb09e4e6bcc48f2a0f7f76adc8033462139260a77c6d39799b779",
+  "fetchedAt": "2026-08-12T08:43:25.867Z"
+}

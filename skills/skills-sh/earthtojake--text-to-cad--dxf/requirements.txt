@@ -1,0 +1,3 @@
+cadgen==0.4.5
+ezdxf
+shapely
