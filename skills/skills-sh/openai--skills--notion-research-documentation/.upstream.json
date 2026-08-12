@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/notion-research-documentation",
+  "repo": "openai/skills",
+  "skillId": "notion-research-documentation",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "b6fe75b4b1bc66497648f77011f5c19e47e74c9f659844ff99e4fd2bab6fbce4",
+  "fetchedAt": "2026-08-12T08:45:03.364Z"
+}

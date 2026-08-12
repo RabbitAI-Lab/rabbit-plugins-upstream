@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/secondsky/claude-skills/model-deployment",
+  "repo": "secondsky/claude-skills",
+  "skillId": "model-deployment",
+  "branch": "main",
+  "pushedAt": "2026-08-10T14:37:58Z",
+  "contentHash": "9431442d14cb464525e3c0fde3ac145afc3d66eac5f79599013f44e454e28595",
+  "fetchedAt": "2026-08-12T08:46:00.393Z"
+}

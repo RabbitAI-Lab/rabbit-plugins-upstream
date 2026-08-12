@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/image-bg-remove",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "image-bg-remove",
+  "branch": "main",
+  "pushedAt": "2026-08-11T17:00:38Z",
+  "contentHash": "387d23c3d418c518f59deeab20bede2aa9d0e653dcba36a4ce4be35c16b2efcc",
+  "fetchedAt": "2026-08-12T08:45:08.750Z"
+}

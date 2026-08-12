@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/figma-generate-library",
+  "repo": "openai/skills",
+  "skillId": "figma-generate-library",
+  "branch": "main",
+  "pushedAt": "2026-07-14T16:47:46Z",
+  "contentHash": "f84e10f3bbf80e848b3c0f29dfa442aad4ab0ee36f0cd2a341f542ed8915574a",
+  "fetchedAt": "2026-08-12T08:45:03.453Z"
+}

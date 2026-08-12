@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/build-mcp-server",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "build-mcp-server",
+  "branch": "main",
+  "pushedAt": "2026-08-12T07:58:11Z",
+  "contentHash": "af733dde56bbdcac1447e5871e68a4d68c9771163849718f737945ca9eef4cce",
+  "fetchedAt": "2026-08-12T08:43:25.898Z"
+}
